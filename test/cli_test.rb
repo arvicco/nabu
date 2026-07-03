@@ -133,7 +133,53 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- progress reporting (P2-6) -------------------------------------------
+
+  # When $stderr is a tty, the loader's per-document ticks render a \r-updating
+  # "loading…" counter on $stderr; the final counts still land on $stdout.
+  def test_sync_progress_hits_stderr_when_tty_stdout_counts_unchanged
+    with_sync_env(enabled: true) do |config|
+      out, err = with_config(config) do
+        capture_with_tty(stderr_tty: true) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
+      end
+      assert_match(/loading…/, err, "tty progress must write the counter to $stderr")
+      assert_match(/corpus\s+parse-only/, out, "final counts stay on $stdout")
+      assert_match(/\+2 added/, out)
+      refute_match(/loading…/, out, "progress must not leak into $stdout")
+    end
+  end
+
+  # Non-tty (the default in the suite): a small corpus stays completely silent
+  # on $stderr — the per-100-docs line never triggers for two documents.
+  def test_sync_non_tty_small_corpus_emits_no_progress
+    with_sync_env(enabled: true) do |config|
+      _out, err = with_config(config) do
+        capture_with_tty(stderr_tty: false) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
+      end
+      assert_empty err, "non-tty small corpus must not emit progress"
+    end
+  end
+
   private
+
+  # capture_io, but with tty? forced on the swapped StringIO streams so the
+  # tty-gated progress paths can be exercised (Minitest 6 has no Mock; this is
+  # the house swap-singleton pattern). Returns [stdout_string, stderr_string].
+  def capture_with_tty(stderr_tty:)
+    out = StringIO.new
+    err = StringIO.new
+    out.define_singleton_method(:tty?) { false }
+    err.define_singleton_method(:tty?) { stderr_tty }
+    old_out = $stdout
+    old_err = $stderr
+    $stdout = out
+    $stderr = err
+    yield
+    [out.string, err.string]
+  ensure
+    $stdout = old_out
+    $stderr = old_err
+  end
 
   # One TestAdapter source "corpus" (two documents) with canonical data; the
   # caller stubs Config.load with the yielded config. +enabled+ seeds the row.

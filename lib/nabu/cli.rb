@@ -62,7 +62,13 @@ module Nabu
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
 
       rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
-      options[:dry_run] ? print_plan(rebuilder.plan) : print_result(rebuilder.run)
+      if options[:dry_run]
+        print_plan(rebuilder.plan)
+      else
+        result = rebuilder.run(progress: progress_reporter)
+        finish_progress
+        print_result(result)
+      end
     end
 
     desc "search QUERY", "Search the corpus (not yet implemented)"
@@ -80,6 +86,42 @@ module Nabu
         raise Thor::Error, "#{command}: not implemented"
       end
 
+      # A print-free runner needs a sink for live progress; the CLI owns all
+      # formatting and tty decisions here. Progress goes to $stderr (final counts
+      # go to $stdout via `say`, so scripts piping stdout are unaffected). When
+      # $stderr is a tty: git output streams raw (its own \r overwrites the line)
+      # and a \r-updating "loading…" counter refreshes each tick. Non-tty: no git
+      # streaming (callbacks stay nil) and one plain line per 100 documents.
+      def progress_reporter
+        tty = $stderr.tty?
+        Nabu::ProgressReporter.new(
+          on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
+          on_load_tick: load_tick(tty)
+        )
+      end
+
+      def load_tick(tty)
+        last = 0
+        lambda do |processed, errored|
+          if tty
+            $stderr.print("\r#{loading_line(processed, errored)}  ")
+          elsif processed - last >= 100
+            last = processed
+            warn(loading_line(processed, errored))
+          end
+        end
+      end
+
+      def loading_line(processed, errored)
+        suffix = errored.positive? ? " (#{errored} quarantined)" : ""
+        "  loading… #{processed} docs#{suffix}"
+      end
+
+      # Break off the \r-updated counter line before the final counts, tty only.
+      def finish_progress
+        $stderr.print("\n") if $stderr.tty?
+      end
+
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
       # note). A tripped breaker prints its counts + the --force hint and exits 1.
       def sync_one(runner, registry, slug)
@@ -87,7 +129,9 @@ module Nabu
 
         entry = registry[slug]
         say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
-        outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force])
+        outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
+                                    progress: progress_reporter)
+        finish_progress
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
         say format_sync_outcome(outcome)
@@ -96,7 +140,9 @@ module Nabu
       # sync --all: enabled + live sources only; report each, never abort the
       # batch on one source's error.
       def sync_all(runner)
-        results = runner.sync_all(parse_only: options[:parse_only], force: options[:force])
+        results = runner.sync_all(parse_only: options[:parse_only], force: options[:force],
+                                  progress: progress_reporter)
+        finish_progress
         return say("Nothing to sync: no enabled, live sources.") if results.empty?
 
         results.each { |slug, result| say("  #{sync_all_line(slug, result)}") }
