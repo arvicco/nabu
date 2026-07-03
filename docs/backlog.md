@@ -128,7 +128,7 @@ Acceptance: parser-family unit tests against the Perseus fixtures (passage
       counts, known snippets, urn scheme, NFC), streaming proven (no DOM
       of the whole document), green suite + lint.
 
-## P2-3 · Perseus adapter  [tier: opus] [status: ready] [deps: P2-2]
+## P2-3 · Perseus adapter  [tier: opus] [status: done] [deps: P2-2]
 Goal: `lib/nabu/adapters/perseus.rb` — composes EpidocParser + repo-layout
       knowledge: discover walks data/<tg>/<work>/ for original-language
       editions (grc/lat pattern in filename), resolves titles/urns via
