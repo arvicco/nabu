@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "nabu/version"
+require_relative "nabu/errors"
+require_relative "nabu/shell"
+require_relative "nabu/normalize"
 require_relative "nabu/config"
 require_relative "nabu/cli"
 
