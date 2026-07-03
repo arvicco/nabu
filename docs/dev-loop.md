@@ -50,7 +50,7 @@ Each iteration, regardless of execution vehicle (§5):
 4. **Verify**: `rake test` + `rake lint` green, then a `/code-review` (medium) pass; fix findings.
 5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update backlog + worklog.
 6. **Escalate on failure**: two failed attempts at a packet → mark `blocked` with a diagnosis, move to the next packet. Never thrash. `blocked` packets are adjudicated by Fable at the next gate (or sooner if everything else is blocked → stop and notify the owner).
-7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The next phase's packets are elaborated in detail only after the merge.
+7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, **updates `README.md`** — the user-facing document describing the capabilities and commands implemented up to this point (honest about what doesn't work yet; a newcomer reading only the README should know exactly what `bin/nabu` can do today) — then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The next phase's packets are elaborated in detail only after the merge.
 
 ## 5. Execution vehicles — two stages
 
