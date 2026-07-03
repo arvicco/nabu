@@ -1,0 +1,133 @@
+# frozen_string_literal: true
+
+# Shared conformance suite for source adapters (CLAUDE.md testing
+# conventions; architecture §3). Every adapter's test includes this module —
+# passing it is the price of admission for a new source.
+#
+# Include into a Minitest::Test and provide two hooks:
+#
+#   conformance_adapter  -> a fresh adapter instance. Called several times
+#                           per test run (the stability test parses twice on
+#                           independent instances), so it must not return
+#                           memoized shared state.
+#   conformance_workdir  -> the fixture dir discover scans
+#                           (test/fixtures/<source>/ — no network, ever).
+#
+# Optional hook:
+#
+#   conformance_expected_source_id -> the id this source is registered under
+#                           (config/sources.yml, once P1-6 lands). Default
+#                           nil skips the check; the manifest-id ↔ ref
+#                           source_id agreement is asserted regardless.
+#
+# What P1-1's valid-by-construction model already guarantees (NFC text,
+# non-empty text, license_class enum, within-document urn/sequence
+# uniqueness) is asserted here as type checks plus belt-and-braces direct
+# assertions; what the model *cannot* see — uniqueness and stability across
+# the whole discover set — is this suite's real job.
+module AdapterConformance
+  # Hook defaults: flunk with instructions rather than NoMethodError.
+  def conformance_adapter
+    flunk "#{self.class} must define #conformance_adapter returning a fresh adapter instance per call"
+  end
+
+  def conformance_workdir
+    flunk "#{self.class} must define #conformance_workdir returning the fixture dir discover scans"
+  end
+
+  def conformance_expected_source_id
+    nil
+  end
+
+  def test_conformance_manifest_is_a_valid_source_manifest
+    manifest = conformance_adapter.manifest
+    assert_kind_of Nabu::SourceManifest, manifest
+    expected = conformance_expected_source_id
+    return if expected.nil?
+
+    assert_equal expected, manifest.id,
+                 "manifest id must match the id this source is registered under"
+  end
+
+  def test_conformance_manifest_declares_a_license_class
+    manifest = conformance_adapter.manifest
+    assert_kind_of Nabu::SourceManifest, manifest
+    assert_includes Nabu::SourceManifest::LICENSE_CLASSES, manifest.license_class
+  end
+
+  def test_conformance_discover_yields_document_refs_for_this_source
+    adapter = conformance_adapter
+    refs = adapter.discover(conformance_workdir).to_a
+    refute_empty refs, "discover must yield at least one DocumentRef from #{conformance_workdir}"
+    refs.each do |ref|
+      assert_kind_of Nabu::DocumentRef, ref
+      assert_equal adapter.manifest.id, ref.source_id,
+                   "ref #{ref.id.inspect}: source_id must match the manifest id"
+    end
+  end
+
+  def test_conformance_parse_yields_documents_with_at_least_one_passage
+    each_parsed_document(conformance_adapter) do |ref, document|
+      assert_kind_of Nabu::Document, document
+      refute_empty document,
+                   "document #{document.urn.inspect} (ref #{ref.id.inspect}) parsed to zero passages"
+    end
+  end
+
+  def test_conformance_passages_are_nfc_and_non_empty
+    each_parsed_document(conformance_adapter) do |_ref, document|
+      document.each do |passage|
+        # Nabu::Passage is valid by construction — NFC, non-empty — so the
+        # type check is the guarantee; the direct assertions make any future
+        # subversion of construction fail vividly rather than silently.
+        assert_kind_of Nabu::Passage, passage
+        refute_empty passage.text, "passage #{passage.urn.inspect} has empty text"
+        assert passage.text.unicode_normalized?(:nfc),
+               "passage #{passage.urn.inspect} text is not NFC"
+        assert passage.text_normalized.unicode_normalized?(:nfc),
+               "passage #{passage.urn.inspect} text_normalized is not NFC"
+      end
+    end
+  end
+
+  # P1-1's Document only guards uniqueness *within* one document; whole-corpus
+  # uniqueness across the discover set is checked here and nowhere else.
+  def test_conformance_urns_are_unique_across_the_discover_set
+    document_urns = []
+    passage_urns = []
+    each_parsed_document(conformance_adapter) do |_ref, document|
+      document_urns << document.urn
+      document.each { |passage| passage_urns << passage.urn }
+    end
+    assert_empty duplicates(document_urns), "duplicate document urns across the discover set"
+    assert_empty duplicates(passage_urns), "duplicate passage urns across the discover set"
+  end
+
+  # Urn stability is what the loader's upsert-on-urn (P1-4) rests on: two
+  # independent discover+parse passes must mint identical urns.
+  def test_conformance_urns_are_stable_across_independent_parses
+    first = urn_snapshot(conformance_adapter)
+    second = urn_snapshot(conformance_adapter)
+    assert_equal first, second,
+                 "document and passage urns must be identical across two independent discover+parse passes"
+  end
+
+  private
+
+  def each_parsed_document(adapter)
+    refs = adapter.discover(conformance_workdir).to_a
+    refute_empty refs, "discover must yield at least one DocumentRef from #{conformance_workdir}"
+    refs.each { |ref| yield ref, adapter.parse(ref) }
+  end
+
+  def urn_snapshot(adapter)
+    adapter.discover(conformance_workdir).map do |ref|
+      document = adapter.parse(ref)
+      [document.urn, document.map(&:urn)]
+    end
+  end
+
+  def duplicates(values)
+    values.tally.select { |_urn, count| count > 1 }.keys
+  end
+end
