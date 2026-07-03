@@ -104,11 +104,64 @@ Acceptance: registry parsing/validation tests (unknown adapter class → clear
 
 ---
 
-## Phase 2+ — outline only (elaborated at the Phase 1 gate)
+## Phase 2 — Perseus reference adapter (branch: phase-2)
 
-Phase 2 (Perseus reference adapter): fixture acquisition plan → owner approval →
-fetch; EpidocParser [fable]; Perseus adapter [opus]; SyncRunner + circuit breaker
-[opus]; first real sync [human].
+## P2-1 · Perseus fixtures: plan → approval → fetch  [tier: loop] [status: ready] [deps: —]
+Goal: Fixture acquisition plan (exact raw URLs from PerseusDL canonical-greekLit
+      + canonical-latinLit, sizes, license confirmation) presented to the owner;
+      on approval the loop fetches 2–3 small greekLit + 1 latinLit TEI editions
+      plus their __cts__.xml metadata, trims each to header + first ~2 citation
+      units (structurally intact), writes test/fixtures/perseus/ with a README
+      (retrieval date, URLs, license, trim notes).
+Acceptance: fixtures on disk, valid XML after trimming, README complete;
+      no fetch outside the approved URL list.
+
+## P2-2 · EpidocParser (SAX)  [tier: fable] [status: ready] [deps: P2-1]
+Goal: `lib/nabu/adapters/epidoc_parser.rb` — standalone parser family
+      (architecture §3): Nokogiri SAX/Reader (never DOM — Perseus has >5 MB
+      files), consumes a TEI EpiDoc/CapiTainS edition file + its CTS urn,
+      emits a Nabu::Document with Passages at the lowest citation level per
+      the refsDecl; NFC-normalizes at this boundary; text extraction rules
+      (element text sans notes/apparatus) documented in the file header
+      comment with the upstream quirks discovered.
+Acceptance: parser-family unit tests against the Perseus fixtures (passage
+      counts, known snippets, urn scheme, NFC), streaming proven (no DOM
+      of the whole document), green suite + lint.
+
+## P2-3 · Perseus adapter  [tier: opus] [status: ready] [deps: P2-2]
+Goal: `lib/nabu/adapters/perseus.rb` — composes EpidocParser + repo-layout
+      knowledge: discover walks data/<tg>/<work>/ for original-language
+      editions (grc/lat pattern in filename), resolves titles/urns via
+      __cts__.xml; fetch = git clone/pull via Nabu::Shell (unit-tested against
+      a local fixture git dir or stubbed Shell — no network in tests);
+      manifest (CC BY-SA 4.0, license_class attribution). Register
+      perseus-greek (enabled: false) in config/sources.yml.
+Acceptance: passes AdapterConformance against test/fixtures/perseus/ +
+      source-specific tests (expected urns, counts, snippet); green + lint.
+
+## P2-4 · SyncRunner + circuit breaker  [tier: opus, fable-review] [status: ready] [deps: P2-3]
+Goal: `lib/nabu/sync_runner.rb`: fetch (respecting sync_policy: frozen/manual
+      excluded from --all; fetch skipped with --parse-only) → load_from via
+      Loader + RunRecorder → update sources.last_sync_at/last_sync_sha.
+      FetchReport value (architecture §3). Circuit breaker (architecture §8):
+      abort before the withdrawal sweep if it would withdraw >20% of a
+      source's documents, unless --force. CLI: `nabu sync <slug>|--all
+      [--parse-only] [--force]`.
+Acceptance: runner tests with TestAdapter (+ fetch-counting subclass);
+      breaker triggers at threshold, --force overrides, run row records
+      aborted; --parse-only never calls fetch; green + lint.
+
+## P2-5 · First real sync  [tier: human] [status: ready] [deps: P2-4]
+Goal: Owner (or loop with owner watching) runs `bin/nabu sync perseus-greek`
+      for real: clone upstream, load, eyeball `nabu status` + a few random
+      passages, then flip enabled: true.
+Acceptance: owner sign-off; sources.yml updated; docs/02-sources.md status
+      column updated for Perseus.
+
+---
+
+## Phase 3+ — outline only (elaborated at the Phase 2 gate)
+
 Phase 3 (family expansion): First1KGreek, ConlluParser + UD, ProielParser +
 PROIEL/TOROT, Papyri.info [all opus].
 Phase 4 (query surface): FTS5 + search/show/export, golden queries, verify [opus].
