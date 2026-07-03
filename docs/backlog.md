@@ -204,7 +204,7 @@ Goal: One consolidated acquisition plan (dev-loop §8) covering: First1KGreek
       writes test/fixtures/<source>/ trees + READMEs.
 Acceptance: fixtures on disk + READMEs; no fetch outside the approved list.
 
-## P3-2 · First1KGreek adapter  [tier: opus] [status: ready] [deps: P3-0, P3-1]
+## P3-2 · First1KGreek adapter  [tier: opus] [status: done] [deps: P3-0, P3-1]
 Goal: OpenGreekAndLatin First1KGreek — same CapiTainS/EpiDoc conventions as
       Perseus ("nearly free"): adapter reusing EpidocParser + Perseus layout
       knowledge (subclass or shared module — implementer's call, justify).
