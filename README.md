@@ -8,8 +8,11 @@ Mesopotamian god of scribes, patron of the tablet house.
 A pipeline plus a database, operated from the command line: upstream corpora
 live as files in a git-tracked **canonical layer**; SQLite (catalog, FTS,
 vectors) is entirely **derived** and can be rebuilt from canonical data at any
-time. See `docs/01-concept.md` for the full vision and
-`docs/architecture.md` for the design.
+time. See `docs/01-concept.md` for the full vision,
+`docs/architecture.md` for the design, and `docs/conventions.md` for the
+field notes (Unicode/NFC, citation systems, editions, licensing) that explain
+*why* the code enforces what it enforces — start there if you're new to
+ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and the first real adapter exists:
