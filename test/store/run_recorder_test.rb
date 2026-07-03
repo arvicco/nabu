@@ -61,6 +61,21 @@ module Store
       refute_nil run.finished_at
     end
 
+    def test_sync_aborted_records_aborted_status_and_reraises
+      error = assert_raises(Nabu::SyncAborted) do
+        Nabu::Store::RunRecorder.record(db: @db, source: @source) do
+          raise Nabu::SyncAborted.new(existing_count: 5, would_withdraw_count: 3, threshold: 0.2)
+        end
+      end
+      assert_match(/circuit breaker/i, error.message)
+
+      assert_equal 1, Nabu::Store::Run.count
+      run = Nabu::Store::Run.first
+      assert_equal "aborted", run.status # not "failed"
+      assert_match(/withdraw 3 of 5/, run.notes)
+      refute_nil run.finished_at
+    end
+
     def test_clock_seam_pins_timestamps
       instant = Time.utc(2026, 7, 3, 12, 0, 0)
       run = Nabu::Store::RunRecorder.record(db: @db, source: @source, clock: -> { instant }) { nil }

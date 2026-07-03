@@ -39,8 +39,9 @@ class CLITest < Minitest::Test
     assert Nabu::CLI.exit_on_failure?
   end
 
-  # Every stub subcommand must announce it is not implemented and fail (exit 1).
-  %w[sync search show].each do |command|
+  # Every remaining stub subcommand must announce it is not implemented and
+  # fail (exit 1). (sync is implemented as of P2-4.)
+  %w[search show].each do |command|
     define_method(:"test_#{command}_stub_is_not_implemented") do
       _out, err, status = run_cli([command])
       assert_equal 1, status, "#{command} should exit with status 1"
@@ -92,7 +93,64 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- sync (P2-4) ---------------------------------------------------------
+
+  def test_sync_without_slug_or_all_fails
+    with_empty_registry_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync]) }
+      assert_equal 1, status
+      assert_match(/slug or --all/i, err)
+    end
+  end
+
+  def test_sync_unknown_slug_fails
+    with_empty_registry_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source/i, err)
+    end
+  end
+
+  # --parse-only skips fetch, so TestAdapter (whose #fetch is unimplemented)
+  # loads straight off the canonical dir and the counts are reported.
+  def test_sync_parse_only_loads_and_reports_counts
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil status
+      assert_match(/corpus\s+parse-only/, out)
+      assert_match(/\+2 added/, out)
+    end
+  end
+
+  # Explicit beats config: a disabled source named by slug still syncs, with a
+  # printed note.
+  def test_sync_disabled_source_by_slug_prints_note_and_runs
+    with_sync_env(enabled: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil status
+      assert_match(/disabled; syncing anyway/i, out)
+      assert_match(/\+2 added/, out)
+    end
+  end
+
   private
+
+  # One TestAdapter source "corpus" (two documents) with canonical data; the
+  # caller stubs Config.load with the yielded config. +enabled+ seeds the row.
+  def with_sync_env(enabled:)
+    Dir.mktmpdir("nabu-cli-sync") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: #{enabled}\n  sync_policy: live\n")
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
 
   # Minitest 6 dropped Minitest::Mock (and it is outside the dependency budget),
   # so pin Config.load to +config+ by swapping the singleton method, restoring
