@@ -299,6 +299,34 @@ module Store
       assert_equal "deliberately corrupt document", params.fetch("error")
     end
 
+    # -- progress ticks (P2-6) -----------------------------------------------
+
+    def test_on_document_ticks_once_per_document_with_running_counts
+      ticks = []
+      report = @loader.load([alpha, beta], on_document: ->(processed, errored) { ticks << [processed, errored] })
+
+      assert_report report, added: 2
+      assert_equal [[1, 0], [2, 0]], ticks
+    end
+
+    def test_on_document_ticks_for_quarantined_documents_too
+      # QuarantiningAdapter's fixture dir has alpha, beta, gamma; beta quarantines.
+      ticks = []
+      report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES,
+                                                          on_document: ->(p, e) { ticks << [p, e] })
+
+      assert_report report, added: 2, errored: 1
+      # alpha loads (errored 0), beta quarantines (errored ticks to 1), gamma
+      # loads (running errored stays 1) — one tick per document, quarantines
+      # included, errored count cumulative.
+      assert_equal [[1, 0], [2, 1], [3, 1]], ticks
+    end
+
+    def test_on_document_is_optional_and_nil_is_a_no_op
+      report = @loader.load([alpha, beta]) # no on_document
+      assert_report report, added: 2
+    end
+
     def test_load_from_is_idempotent_through_the_adapter
       @loader.load_from(TestAdapter.new, workdir: FIXTURES)
       documents_before = snapshot(Nabu::Store::Document)

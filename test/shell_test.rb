@@ -36,4 +36,56 @@ class ShellTest < Minitest::Test
       Nabu::Shell.run("/nonexistent/nabu-definitely-not-here")
     end
   end
+
+  # --- stream -------------------------------------------------------------
+
+  def test_stream_forwards_each_line_as_it_arrives
+    lines = []
+    result = Nabu::Shell.stream("/bin/sh", "-c", "printf 'one\\ntwo\\nthree\\n'") { |line| lines << line }
+    assert_nil result, "stream returns nil on success"
+    assert_equal "one\ntwo\nthree\n".lines, lines
+  end
+
+  def test_stream_merges_stderr_into_the_forwarded_stream
+    # git writes progress to stderr; popen2e must merge it into the block.
+    lines = []
+    Nabu::Shell.stream("/bin/sh", "-c", "printf 'out\\n'; printf 'err\\n' >&2") { |line| lines << line }
+    assert_includes lines, "out\n"
+    assert_includes lines, "err\n"
+  end
+
+  def test_stream_splits_on_carriage_return_so_progress_forwards_live
+    # git --progress overwrites with \r and no trailing newline until the end.
+    lines = []
+    Nabu::Shell.stream("/bin/sh", "-c", "printf '10%%\\r50%%\\r100%%\\n'") { |line| lines << line }
+    assert_equal ["10%\r", "50%\r", "100%\n"], lines
+  end
+
+  def test_stream_yields_unterminated_trailing_fragment
+    lines = []
+    Nabu::Shell.stream("/bin/sh", "-c", "printf 'no-newline'") { |line| lines << line }
+    assert_equal ["no-newline"], lines
+  end
+
+  def test_stream_raises_shell_error_with_captured_output_on_failure
+    lines = []
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.stream("/bin/sh", "-c", "printf 'partial\\nkaboom\\n'; exit 4") { |line| lines << line }
+    end
+    assert_equal 4, error.status
+    # Everything forwarded is also captured for the error diagnostic.
+    assert_equal "partial\nkaboom\n", error.stderr
+    assert_equal "partial\nkaboom\n".lines, lines
+  end
+
+  def test_stream_without_a_block_still_runs_and_checks_exit_status
+    assert_nil Nabu::Shell.stream("/bin/sh", "-c", "printf 'ignored\\n'")
+    assert_raises(Nabu::Shell::Error) { Nabu::Shell.stream("/usr/bin/false") }
+  end
+
+  def test_stream_unknown_command_raises_nabu_error
+    assert_raises(Nabu::Error) do
+      Nabu::Shell.stream("/nonexistent/nabu-definitely-not-here") { |line| line }
+    end
+  end
 end

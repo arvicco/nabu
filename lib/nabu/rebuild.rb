@@ -59,8 +59,10 @@ module Nabu
 
     # Delete the catalog db file, re-migrate a fresh one, and replay every
     # source that has local canonical data. Returns a Result. Never touches
-    # canonical/.
-    def run
+    # canonical/. +progress+ (a Nabu::ProgressReporter or nil) is threaded into
+    # each source's loader for live per-document ticks; the runner stays
+    # print-free.
+    def run(progress: nil)
       db_existed = File.exist?(db_path)
       FileUtils.rm_f(db_path)
       db = fresh_db
@@ -68,7 +70,7 @@ module Nabu
       skips = []
       @registry.each_source do |entry|
         if replayable?(entry)
-          outcomes << replay(db, entry)
+          outcomes << replay(db, entry, progress)
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
         end
@@ -84,12 +86,15 @@ module Nabu
     # Reconcile the source row from the manifest, then replay its canonical
     # snapshot under a runs row. The RunRecorder block returns the LoadReport
     # (feeding the run counts); we keep it for the Outcome too.
-    def replay(db, entry)
+    def replay(db, entry, progress)
       source = entry.sync_source!(db)
       report = nil
       Store::RunRecorder.record(db: db, source: source) do
-        report = Store::Loader.new(db: db, source: source)
-                              .load_from(entry.adapter_class.new, workdir: workdir_for(entry.slug), full: true)
+        report = Store::Loader.new(db: db, source: source).load_from(
+          entry.adapter_class.new,
+          workdir: workdir_for(entry.slug), full: true,
+          on_document: progress&.method(:load_tick)
+        )
       end
       Outcome.new(slug: entry.slug, report: report)
     end

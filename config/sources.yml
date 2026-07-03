@@ -8,13 +8,17 @@
 #                                        #   authoritative after the first sync
 #     sync_policy: live                  # live | manual | frozen (default: manual)
 #
-# No sources are registered yet: the first real entry lands with the Perseus
-# adapter in Phase 2. Until then this file is intentionally comments-only, which
-# the registry loads as an empty, valid registry.
+# Registered sources follow. `enabled: false` until a first real sync is
+# verified by hand (CLAUDE.md "add a new adapter" checklist).
+
+perseus-greek:
+  adapter: Nabu::Adapters::Perseus
+  enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
+  sync_policy: live
+
+# Template for the next source (leave commented until its adapter exists):
 #
-# Example (leave commented until the adapter exists):
-#
-# perseus-greek:
-#   adapter: Nabu::Adapters::Perseus
+# <slug>:
+#   adapter: Nabu::Adapters::SomeAdapter
 #   enabled: false
 #   sync_policy: live
