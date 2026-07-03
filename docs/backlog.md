@@ -236,11 +236,16 @@ Goal: TOROT (Tromsø OCS + Old Russian) — PROIEL XML reuse; adapter is thin
 Acceptance: AdapterConformance + OCS-specific assertions (chu language tag,
       known Marianus snippet); green + lint.
 
-## P3-6 · Papyri.info adapter  [tier: opus] [status: ready] [deps: P3-2] 
-Goal: idp.data (DDbDP) EpiDoc — reuses EpidocParser; documentary papyri
-      exercise Leiden/EpiDoc markup (gap/supplied/unclear — implement the
-      deferred TODO policy: supplied included, gaps marked, document in
-      parser header; fable reviews this policy at gate). Register papyri
-      (enabled: false, manual).
+## P3-6 · DdbdpParser + Papyri.info adapter  [tier: fable] [status: ready] [deps: P3-1]
+Goal: RETIERED opus→fable after research: DDbDP is NOT CapiTainS (no
+      __cts__.xml, no refsDecl, no CTS urns) — a new parser family, not
+      EpidocParser reuse. Identity via <idno> (filename/ddb-hybrid/HGV/TM);
+      citation via <lb n> lines inside <ab>; heavy documentary markup
+      (app/lem/rdg, choice/reg/orig, subst/add/del, gap+quantity, supplied,
+      unclear, expan/ex, handShift). Parser implements the deferred Leiden
+      text-extraction policy (keep lem+reg+supplied, drop rdg/orig/del,
+      mark gaps) and documents it; adapter walks collection/volume dirs,
+      urn:nabu:ddbdp:<ddb-hybrid> minting (frozen once used). Register
+      papyri-ddbdp (enabled: false, manual).
 Acceptance: AdapterConformance + Leiden-markup extraction tests on real
       fixtures; green + lint.
