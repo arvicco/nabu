@@ -25,6 +25,18 @@
 # uniqueness) is asserted here as type checks plus belt-and-braces direct
 # assertions; what the model *cannot* see — uniqueness and stability across
 # the whole discover set — is this suite's real job.
+#
+# Checks (one test method each):
+#   - manifest is a valid SourceManifest (and matches the registered id)
+#   - manifest declares a known license_class
+#   - discover yields DocumentRefs whose source_id matches the manifest
+#   - parse yields Documents with at least one passage
+#   - passages are NFC and non-empty
+#   - ref.id IS the document urn (parse(ref).urn == ref.id) — the identity the
+#     sync circuit breaker (SyncRunner §8) relies on to predict withdrawals
+#     from cheap discover ids without parsing
+#   - urns are unique across the whole discover set
+#   - urns are stable across two independent discover+parse passes
 module AdapterConformance
   # Hook defaults: flunk with instructions rather than NoMethodError.
   def conformance_adapter
@@ -87,6 +99,21 @@ module AdapterConformance
         assert passage.text_normalized.unicode_normalized?(:nfc),
                "passage #{passage.urn.inspect} text_normalized is not NFC"
       end
+    end
+  end
+
+  # The DocumentRef id IS the document urn. The sync circuit breaker
+  # (SyncRunner §8) predicts a mass-withdrawal by set-differencing existing
+  # document urns against the ids discover() yields — cheap directory walking,
+  # no parse. That prediction is only exact when parse(ref).urn == ref.id; an
+  # adapter that mints a urn diverging from its discover id would let the
+  # breaker under-count withdrawals and silently weaken the mass-withdrawal
+  # guard. Assert the identity here so no adapter can drift from it unnoticed.
+  def test_conformance_ref_id_is_the_document_urn
+    each_parsed_document(conformance_adapter) do |ref, document|
+      assert_equal ref.id, document.urn,
+                   "parse(#{ref.id.inspect}).urn is #{document.urn.inspect}: the DocumentRef id must " \
+                   "equal the document urn, or the sync breaker's discover-id withdrawal prediction drifts"
     end
   end
 

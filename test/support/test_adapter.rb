@@ -7,7 +7,10 @@
 # test/fixtures/test_adapter/ are hand-written.
 #
 # Document format: line 1 is the title; each subsequent non-blank line is one
-# passage. Urns are minted from the filename, so they are stable across runs.
+# passage. The DocumentRef id IS the document urn (minted from the filename,
+# stable across runs) — the identity the sync circuit breaker relies on and the
+# conformance suite asserts. parse reads the file via the ref path and takes the
+# urn straight from the ref id.
 class TestAdapter < Nabu::Adapter
   SOURCE_ID = "test_adapter"
 
@@ -34,7 +37,7 @@ class TestAdapter < Nabu::Adapter
     Dir.glob("*.txt", base: workdir).sort.each do |filename|
       yield Nabu::DocumentRef.new(
         source_id: SOURCE_ID,
-        id: filename,
+        id: document_urn(File.basename(filename, ".txt")),
         path: File.join(workdir, filename)
       )
     end
@@ -42,7 +45,7 @@ class TestAdapter < Nabu::Adapter
 
   def parse(document_ref)
     title, *body = File.read(document_ref.path, encoding: Encoding::UTF_8).lines.map(&:strip)
-    urn = document_urn(File.basename(document_ref.id, ".txt"))
+    urn = document_ref.id
     document = Nabu::Document.new(
       urn: urn,
       language: "grc",

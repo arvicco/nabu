@@ -13,7 +13,7 @@ class RebuildTest < Minitest::Test
   # regression" on rebuild). Top-level-resolvable via its full nested name.
   class PoisonAdapter < TestAdapter
     def parse(document_ref)
-      raise Nabu::ParseError, "poisoned" if document_ref.id == "bad.txt"
+      raise Nabu::ParseError, "poisoned" if document_ref.id == "urn:nabu:test_adapter:bad"
 
       super
     end

@@ -20,15 +20,16 @@ class TestAdapterConformanceTest < Minitest::Test
     "test_adapter"
   end
 
-  # Source-specific spot checks, as a real adapter test would add.
+  # Source-specific spot checks, as a real adapter test would add. Ref ids ARE
+  # the document urns (the identity the conformance suite now asserts).
   def test_discovers_the_three_fixture_documents
     ids = conformance_adapter.discover(conformance_workdir).map(&:id)
-    assert_equal %w[alpha.txt beta.txt gamma.txt], ids
+    assert_equal %w[urn:nabu:test_adapter:alpha urn:nabu:test_adapter:beta urn:nabu:test_adapter:gamma], ids
   end
 
   def test_parses_a_known_passage
     adapter = conformance_adapter
-    ref = adapter.discover(conformance_workdir).find { |r| r.id == "alpha.txt" }
+    ref = adapter.discover(conformance_workdir).find { |r| r.id == "urn:nabu:test_adapter:alpha" }
     document = adapter.parse(ref)
     assert_equal "urn:nabu:test_adapter:alpha", document.urn
     assert_equal "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος", document.passages.first.text
@@ -90,6 +91,18 @@ class AdapterConformanceMetaTest < Minitest::Test
     end
   end
 
+  # The parsed document urn diverges from the ref id: the discover id and the
+  # minted urn disagree, exactly what would let the sync breaker under-count
+  # withdrawals. Passages are untouched, so uniqueness/stability still hold.
+  class MismatchedUrnAdapter < TestAdapter
+    include RewritesParses
+
+    def parse(document_ref)
+      original = super
+      rebuild(original, urn: "#{original.urn}.mismatch") { |passage| passage }
+    end
+  end
+
   # Every document parses to zero passages.
   class EmptyDocumentAdapter < TestAdapter
     def parse(document_ref)
@@ -126,6 +139,18 @@ class AdapterConformanceMetaTest < Minitest::Test
                              /identical across two independent/
     # Each parse is internally consistent, so uniqueness still passes.
     assert_passes_conformance UnstableUrnAdapter, :test_conformance_urns_are_unique_across_the_discover_set
+  end
+
+  def test_mismatched_urn_fails_the_ref_id_identity_assertion
+    assert_fails_conformance MismatchedUrnAdapter,
+                             :test_conformance_ref_id_is_the_document_urn,
+                             /must equal the document urn/
+    # Only that one: the divergent urns are still unique and deterministic, and
+    # every document still has its passages.
+    assert_passes_conformance MismatchedUrnAdapter, :test_conformance_urns_are_unique_across_the_discover_set
+    assert_passes_conformance MismatchedUrnAdapter, :test_conformance_urns_are_stable_across_independent_parses
+    assert_passes_conformance MismatchedUrnAdapter,
+                              :test_conformance_parse_yields_documents_with_at_least_one_passage
   end
 
   def test_empty_documents_fail_the_at_least_one_passage_assertion

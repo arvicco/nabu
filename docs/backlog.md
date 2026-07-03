@@ -187,7 +187,7 @@ Acceptance: unit tests for Shell.stream (lines forwarded, error carries
 
 ## Phase 3 — Family expansion (branch: phase-3)
 
-## P3-0 · Conformance: ref.id ↔ document.urn identity  [tier: opus] [status: ready] [deps: —]
+## P3-0 · Conformance: ref.id ↔ document.urn identity  [tier: opus] [status: done] [deps: —]
 Goal: The sync circuit breaker predicts withdrawals via discover() ref ids
       standing in for document urns (P2-4 gate note). Promote that identity
       into test/support/adapter_conformance.rb: assert parse(ref).urn ==
