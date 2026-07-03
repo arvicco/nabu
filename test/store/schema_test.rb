@@ -1,0 +1,119 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+module Store
+  class SchemaTest < Minitest::Test
+    include StoreTestDB
+
+    def setup
+      @db = store_test_db
+    end
+
+    def test_migrations_create_all_tables
+      %i[sources documents passages provenance enrichments runs].each do |table|
+        assert @db.table_exists?(table), "expected table #{table} to exist"
+      end
+    end
+
+    def test_sources_slug_unique_index_present
+      assert(@db.indexes(:sources).values.any? { |i| i[:columns] == [:slug] && i[:unique] })
+    end
+
+    def test_documents_urn_unique_index_present
+      assert(@db.indexes(:documents).values.any? { |i| i[:columns] == [:urn] && i[:unique] })
+    end
+
+    def test_passages_composite_unique_index_present
+      assert(@db.indexes(:passages).values.any? { |i| i[:columns] == %i[document_id sequence] && i[:unique] })
+    end
+
+    def test_enrichments_composite_index_present
+      assert(@db.indexes(:enrichments).values.any? { |i| i[:columns] == %i[passage_id kind] })
+    end
+
+    def test_provenance_passage_id_index_present
+      assert(@db.indexes(:provenance).values.any? { |i| i[:columns] == [:passage_id] })
+    end
+
+    def test_license_class_check_rejects_bad_value
+      error = assert_raises(Sequel::DatabaseError) do
+        @db[:sources].insert(
+          slug: "bad", name: "Bad", adapter_class: "X", license_class: "bogus"
+        )
+      end
+      assert_match(/constraint/i, error.message)
+    end
+
+    def test_license_class_check_accepts_all_five_values
+      %w[open attribution nc research_private restricted].each_with_index do |lc, i|
+        @db[:sources].insert(slug: "s#{i}", name: "S", adapter_class: "X", license_class: lc)
+      end
+      assert_equal 5, @db[:sources].count
+    end
+
+    def test_documents_license_override_check_allows_null_and_valid
+      source_id = insert_source
+      @db[:documents].insert(document_row(source_id).merge(license_override: nil))
+      @db[:documents].insert(document_row(source_id, urn: "urn:doc:2").merge(license_override: "nc"))
+      assert_equal 2, @db[:documents].count
+    end
+
+    def test_documents_license_override_check_rejects_bad_value
+      source_id = insert_source
+      assert_raises(Sequel::DatabaseError) do
+        @db[:documents].insert(document_row(source_id).merge(license_override: "bogus"))
+      end
+    end
+
+    def test_runs_status_check_rejects_bad_value
+      source_id = insert_source
+      assert_raises(Sequel::DatabaseError) do
+        @db[:runs].insert(source_id: source_id, started_at: Time.now, status: "bogus")
+      end
+    end
+
+    def test_documents_urn_unique_rejects_duplicates
+      source_id = insert_source
+      @db[:documents].insert(document_row(source_id))
+      assert_raises(Sequel::DatabaseError) do
+        @db[:documents].insert(document_row(source_id))
+      end
+    end
+
+    def test_foreign_key_enforced_on_passages
+      assert_raises(Sequel::DatabaseError) do
+        @db[:passages].insert(
+          document_id: 9999, urn: "urn:p:1", sequence: 1,
+          text: "x", text_normalized: "x", content_sha256: "abc"
+        )
+      end
+    end
+
+    def test_passages_composite_uniqueness_enforced
+      source_id = insert_source
+      document_id = @db[:documents].insert(document_row(source_id))
+      @db[:passages].insert(passage_row(document_id, sequence: 1, urn: "urn:p:1"))
+      assert_raises(Sequel::DatabaseError) do
+        @db[:passages].insert(passage_row(document_id, sequence: 1, urn: "urn:p:2"))
+      end
+    end
+
+    private
+
+    def insert_source
+      @db[:sources].insert(slug: "s", name: "S", adapter_class: "X", license_class: "open")
+    end
+
+    def document_row(source_id, urn: "urn:doc:1")
+      { source_id: source_id, urn: urn, content_sha256: "abc" }
+    end
+
+    def passage_row(document_id, sequence:, urn:)
+      {
+        document_id: document_id, urn: urn, sequence: sequence,
+        text: "x", text_normalized: "x", content_sha256: "abc"
+      }
+    end
+  end
+end

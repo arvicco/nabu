@@ -45,7 +45,7 @@ Acceptance: unit tests for hierarchy and Shell (success, failure, stderr capture
 
 ## Phase 1 — Core domain (branch: phase-1; elaborated, starts after Phase 0 PR merges)
 
-## P1-1 · Value objects: Passage, DocumentRef, SourceManifest, Document  [tier: fable] [status: ready] [deps: P0-4]
+## P1-1 · Value objects: Passage, DocumentRef, SourceManifest, Document  [tier: fable] [status: done] [deps: P0-4]
 Goal: `Data.define` value objects per architecture §3: `Passage` (urn, language,
       text, text_normalized, annotations, sequence, document_id-less at parse time),
       `DocumentRef`, `SourceManifest` (id, name, license, license_class enum,
@@ -55,7 +55,7 @@ Goal: `Data.define` value objects per architecture §3: `Passage` (urn, language
 Acceptance: construction + validation tests; invalid language/URN/non-NFC text
       rejected with meaningful errors; green suite + lint.
 
-## P1-2 · Adapter contract + conformance suite  [tier: fable] [status: ready] [deps: P1-1]
+## P1-2 · Adapter contract + conformance suite  [tier: fable] [status: done] [deps: P1-1]
 Goal: `Nabu::Adapter` base class: `fetch(workdir)`, `discover(workdir)`,
       `parse(document_ref)`, `self.manifest` — abstract methods raise
       `NotImplementedError`. `test/support/adapter_conformance.rb`: manifest
@@ -65,7 +65,7 @@ Goal: `Nabu::Adapter` base class: `fetch(workdir)`, `discover(workdir)`,
 Acceptance: conformance suite passes against TestAdapter; deliberately-broken
       variants fail the right assertions (meta-tested); green suite + lint.
 
-## P1-3 · Store: schema migrations + Sequel models  [tier: fable-design/opus-impl] [status: ready] [deps: P1-1]
+## P1-3 · Store: schema migrations + Sequel models  [tier: fable-design/opus-impl] [status: done] [deps: P1-1]
 Goal: Numbered forward-only Sequel migrations in `db/migrate/` creating
       sources, documents, passages, provenance, enrichments, runs
       (architecture §5, including content_sha256, revision, withdrawn,
@@ -74,7 +74,7 @@ Goal: Numbered forward-only Sequel migrations in `db/migrate/` creating
 Acceptance: migrations apply cleanly on in-memory SQLite; model associations
       and license_class enum constraint tested; green suite + lint.
 
-## P1-4 · Loader: upsert, hashing, revisions, withdrawal  [tier: fable] [status: ready] [deps: P1-2, P1-3]
+## P1-4 · Loader: upsert, hashing, revisions, withdrawal  [tier: fable] [status: done] [deps: P1-2, P1-3]
 Goal: `Nabu::Store::Loader` takes `Document`s from an adapter and persists:
       upsert on urn; unchanged content (content_sha256 match) skipped; changed
       content bumps revision and journals the old hash to provenance; documents
@@ -84,7 +84,7 @@ Goal: `Nabu::Store::Loader` takes `Document`s from an adapter and persists:
 Acceptance: idempotency test (load twice → identical counts/revisions);
       revision-bump test; withdrawal test; quarantine test; green suite + lint.
 
-## P1-5 · nabu rebuild  [tier: opus] [status: ready] [deps: P1-4]
+## P1-5 · nabu rebuild  [tier: opus] [status: done] [deps: P1-4]
 Goal: `bin/nabu rebuild` — drop db/, re-apply migrations, re-parse + reload
       everything from canonical/ via registered adapters (`--parse-only`
       semantics: no fetch). `--dry-run` prints what would happen. Enrichment
@@ -92,7 +92,9 @@ Goal: `bin/nabu rebuild` — drop db/, re-apply migrations, re-parse + reload
 Acceptance: round-trip test on a fixture canonical dir — build, rebuild, assert
       identical passage rows (modulo ids); green suite + lint.
 
-## P1-6 · Source registry + runs + nabu status  [tier: opus] [status: ready] [deps: P1-3]
+## P1-6 · Source registry + runs + nabu status  [tier: opus] [status: done] [deps: P1-3]
+<!-- ran before P1-5 by design — rebuild consumes the registry -->
+
 Goal: `config/sources.yml` registry (adapter class, upstream, license,
       enabled, sync_policy) with loader + validation; `runs` table written with
       Fetch/LoadReport counts; `bin/nabu status` prints per-source last sync,

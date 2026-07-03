@@ -19,6 +19,12 @@ class ErrorsTest < Minitest::Test
     assert_equal "upstream down", caught.message
   end
 
+  def test_validation_error_is_rescuable_as_nabu_error
+    assert_operator Nabu::ValidationError, :<, Nabu::Error
+    caught = assert_raises(Nabu::Error) { raise Nabu::ValidationError, "urn must not be empty" }
+    assert_equal "urn must not be empty", caught.message
+  end
+
   def test_shell_error_is_rescuable_as_nabu_error
     assert_operator Nabu::Shell::Error, :<, Nabu::Error
     assert_raises(Nabu::Error) { raise Nabu::Shell::Error.new("boom", status: 1, stderr: "") }

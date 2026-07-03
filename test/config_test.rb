@@ -66,6 +66,31 @@ class ConfigTest < Minitest::Test
     assert_equal File.join(Nabu::Config::PROJECT_ROOT, "db"), config.db_dir
   end
 
+  def test_sources_path_defaults_under_config
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config", "sources.yml"), config.sources_path
+    end
+  end
+
+  def test_sources_path_override_resolves_against_root
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        paths:
+          sources: registry/corpora.yml
+      YAML
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "registry", "corpora.yml"), config.sources_path
+    end
+  end
+
+  def test_catalog_path_is_under_db_dir
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "db", "catalog.sqlite3"), config.catalog_path
+    end
+  end
+
   private
 
   def write_config(root, contents)
