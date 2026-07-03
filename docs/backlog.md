@@ -166,7 +166,7 @@ Phase 3 (family expansion): First1KGreek, ConlluParser + UD, ProielParser +
 PROIEL/TOROT, Papyri.info [all opus].
 Phase 4 (query surface): FTS5 + search/show/export, golden queries, verify [opus].
 
-## P2-6 · Sync/rebuild progress reporting  [tier: opus] [status: ready] [deps: P2-4]
+## P2-6 · Sync/rebuild progress reporting  [tier: opus] [status: done] [deps: P2-4]
 Goal: Long operations show live progress (owner feedback from first real sync:
       several minutes of silence). (a) Nabu::Shell.stream(*argv, &on_line) —
       popen3 variant forwarding merged output lines live to a block, same

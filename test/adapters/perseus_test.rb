@@ -160,6 +160,32 @@ class PerseusTest < Minitest::Test
     end
   end
 
+  # The progress callback path (P2-6): clone + pull with --progress, streaming
+  # git output to a collector. Still against a LOCAL tmpdir repo, no network.
+  def test_fetch_with_progress_streams_lines_and_still_returns_fetch_report
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      make_git_repo(upstream, "one")
+      head = git(upstream, "rev-parse", "HEAD")
+
+      workdir = File.join(root, "work")
+      adapter = perseus_pointing_at(upstream)
+
+      lines = []
+      report = adapter.fetch(workdir, progress: ->(line) { lines << line })
+
+      assert_instance_of Nabu::FetchReport, report
+      assert_equal head, report.sha
+      refute_empty lines, "progress callback must receive lines during the clone"
+      assert(lines.any? { |line| line.include?("Cloning") }, "expected the human 'Cloning…' banner")
+
+      # Pull path with progress against an up-to-date repo also streams + reports.
+      pull_lines = []
+      assert_equal head, adapter.fetch(workdir, progress: ->(line) { pull_lines << line }).sha
+      refute_empty pull_lines
+    end
+  end
+
   def test_fetch_wraps_shell_failure_in_fetch_error
     Dir.mktmpdir do |root|
       workdir = File.join(root, "work")

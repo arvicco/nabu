@@ -35,7 +35,7 @@ class SyncRunnerTest < Minitest::Test
     )
     def self.manifest = MANIFEST
 
-    def fetch(_workdir)
+    def fetch(_workdir, **)
       self.class.fetch_count += 1
       raise Nabu::FetchError, "boom" if self.class.fetch_error
 
@@ -72,7 +72,7 @@ class SyncRunnerTest < Minitest::Test
       )
     end
 
-    def fetch(_workdir)
+    def fetch(_workdir, **)
       self.class.bump!
       Nabu::FetchReport.new(sha: "sha-#{self.class.slug}", fetched_at: Time.now, notes: nil)
     end
@@ -99,7 +99,7 @@ class SyncRunnerTest < Minitest::Test
 
   class FailingLive < CountingSource
     def self.slug = "failing-live"
-    def fetch(_workdir) = raise(Nabu::FetchError, "down")
+    def fetch(_workdir, **) = raise(Nabu::FetchError, "down")
   end
 
   def setup

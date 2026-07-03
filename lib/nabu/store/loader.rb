@@ -43,9 +43,11 @@ module Nabu
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
-      # across documents (for withdrawal detection).
-      def load(documents, full: true)
-        run(full: full) do |process, _quarantine|
+      # across documents (for withdrawal detection). +on_document+, when given,
+      # is called after each processed document with (processed_count,
+      # errored_count) — a live-progress hook, nil-safe (no behaviour change).
+      def load(documents, full: true, on_document: nil)
+        run(full: full, on_document: on_document) do |process, _quarantine|
           documents.each { |document| process.call(document) }
         end
       end
@@ -53,9 +55,10 @@ module Nabu
       # discover → parse → load straight off an adapter. Nabu::ParseError
       # quarantines that document (journaled, counted as errored) and the
       # batch continues; any other Nabu::Error (fetch-level trouble)
-      # propagates and aborts.
-      def load_from(adapter, workdir:, full: true)
-        run(full: full) do |process, quarantine|
+      # propagates and aborts. +on_document+ ticks after every processed OR
+      # quarantined document (see #load).
+      def load_from(adapter, workdir:, full: true, on_document: nil)
+        run(full: full, on_document: on_document) do |process, quarantine|
           adapter.discover(workdir).each do |ref|
             document =
               begin
@@ -71,18 +74,25 @@ module Nabu
 
       private
 
-      def run(full:)
+      def run(full:, on_document: nil)
         counts = Hash.new(0)
         seen_urns = Set.new
+        processed = 0
+        tick = lambda do
+          processed += 1
+          on_document&.call(processed, counts[:errored])
+        end
         process = lambda do |document|
           # Even a document that fails to persist was present upstream, so its
           # urn still shields the existing row from the withdrawal sweep.
           seen_urns.add(document.urn)
           load_document(document, counts)
+          tick.call
         end
         quarantine = lambda do |ref, error|
           counts[:errored] += 1
           journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
+          tick.call
         end
         yield(process, quarantine)
         sweep_withdrawn(seen_urns, counts) if full

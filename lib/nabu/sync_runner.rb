@@ -57,21 +57,21 @@ module Nabu
     # unknown slug is a ValidationError. Returns an Outcome; a tripped breaker
     # returns Outcome#aborted? (the `runs` row is recorded "aborted"). Any other
     # Nabu::Error (fetch failure, ...) propagates after its failure is recorded.
-    def sync(slug, parse_only: false, force: false)
+    def sync(slug, parse_only: false, force: false, progress: nil)
       entry = @registry[slug]
       raise ValidationError, "unknown source #{slug.inspect}" if entry.nil?
 
-      sync_entry(entry, parse_only: parse_only, force: force)
+      sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
     end
 
     # Sync every ENABLED, sync_policy "live" source. Returns { slug => Outcome |
     # Nabu::Error }: a source that raises is captured in the hash so the batch
     # runs to completion (one failure never stops the others).
-    def sync_all(parse_only: false, force: false)
+    def sync_all(parse_only: false, force: false, progress: nil)
       live_enabled.to_h do |entry|
         result =
           begin
-            sync_entry(entry, parse_only: parse_only, force: force)
+            sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
           rescue Nabu::Error => e
             e
           end
@@ -85,7 +85,7 @@ module Nabu
       @registry.each_source.select { |entry| entry.enabled && entry.sync_policy == "live" }
     end
 
-    def sync_entry(entry, parse_only:, force:)
+    def sync_entry(entry, parse_only:, force:, progress:)
       source = entry.sync_source!(@db)
       adapter = entry.adapter_class.new
       workdir = workdir_for(entry.slug)
@@ -94,9 +94,9 @@ module Nabu
 
       begin
         Store::RunRecorder.record(db: @db, source: source) do
-          fetch_report = adapter.fetch(workdir) unless parse_only
+          fetch_report = adapter.fetch(workdir, progress: progress&.method(:fetch_line)) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
-          load_report = load(source, adapter, workdir)
+          load_report = load(source, adapter, workdir, progress)
         end
       rescue Nabu::SyncAborted => e
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
@@ -108,8 +108,9 @@ module Nabu
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report, breaker: nil)
     end
 
-    def load(source, adapter, workdir)
-      Store::Loader.new(db: @db, source: source).load_from(adapter, workdir: workdir, full: true)
+    def load(source, adapter, workdir, progress)
+      Store::Loader.new(db: @db, source: source)
+                   .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
     end
 
     # Predict the withdrawal sweep and refuse if it exceeds the threshold. Runs
