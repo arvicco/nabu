@@ -84,7 +84,7 @@ Goal: `Nabu::Store::Loader` takes `Document`s from an adapter and persists:
 Acceptance: idempotency test (load twice → identical counts/revisions);
       revision-bump test; withdrawal test; quarantine test; green suite + lint.
 
-## P1-5 · nabu rebuild  [tier: opus] [status: ready] [deps: P1-4]
+## P1-5 · nabu rebuild  [tier: opus] [status: done] [deps: P1-4]
 Goal: `bin/nabu rebuild` — drop db/, re-apply migrations, re-parse + reload
       everything from canonical/ via registered adapters (`--parse-only`
       semantics: no fetch). `--dry-run` prints what would happen. Enrichment

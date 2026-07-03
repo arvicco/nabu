@@ -33,9 +33,16 @@ module Nabu
     # SQLite enforces foreign keys per-connection; Sequel's SQLite adapter
     # turns the pragma on by default, and we assert it explicitly here.
     def connect(url)
-      db = Sequel.connect(url)
+      db = Sequel.connect(sqlite_url(url))
       db.run("PRAGMA foreign_keys = ON") if db.database_type == :sqlite
       db
+    end
+
+    # A bare filesystem path (no "scheme:" prefix) is taken as a SQLite file so
+    # callers can hand us config.catalog_path directly; real connection strings
+    # ("sqlite::memory:", "postgres://…") pass through untouched.
+    def sqlite_url(url)
+      url.match?(/\A[a-z][a-z0-9+.-]*:/i) ? url : "sqlite://#{url}"
     end
 
     # Apply all pending migrations from db/migrate to +db+. Returns +db+.
