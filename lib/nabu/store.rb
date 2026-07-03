@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+require "sequel"
+
+module Nabu
+  # Persistence boundary for the derived catalog (architecture §5). Owns the
+  # DB connection, the migration runner, and the Sequel model classes.
+  #
+  # Model/DB binding: Sequel model classes bind to a database at
+  # class-definition time, but the suite needs a fresh migrated in-memory DB
+  # per store test while production uses a file DB. The standard Sequel
+  # solution is used here: models are defined against Sequel::Model.db and
+  # rebound with #set_dataset. Store.setup!(db) sets Sequel::Model.db, loads
+  # the model files once, and on every (idempotent) call rebinds each model's
+  # dataset to the given handle — so any db handle works and tests can swap in
+  # a fresh in-memory database between runs.
+  module Store
+    MIGRATIONS_DIR = File.expand_path("../../db/migrate", __dir__)
+
+    # Model constant => backing table. Order matters only for readability.
+    MODELS = {
+      Source: :sources,
+      Document: :documents,
+      Passage: :passages,
+      Provenance: :provenance,
+      Enrichment: :enrichments,
+      Run: :runs
+    }.freeze
+
+    module_function
+
+    # Open a Sequel database for +url+ (e.g. "sqlite::memory:" or a file path).
+    # SQLite enforces foreign keys per-connection; Sequel's SQLite adapter
+    # turns the pragma on by default, and we assert it explicitly here.
+    def connect(url)
+      db = Sequel.connect(url)
+      db.run("PRAGMA foreign_keys = ON") if db.database_type == :sqlite
+      db
+    end
+
+    # Apply all pending migrations from db/migrate to +db+. Returns +db+.
+    def migrate!(db)
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, MIGRATIONS_DIR)
+      db
+    end
+
+    # Bind the store's models to +db+. Idempotent: first call loads the model
+    # files (defining Nabu::Store::Source etc.), later calls just rebind their
+    # datasets to +db+. Returns +db+.
+    def setup!(db)
+      Sequel::Model.db = db
+      if @models_loaded
+        MODELS.each_key { |const| const_get(const).set_dataset(db[MODELS.fetch(const)]) }
+      else
+        require_relative "store/source"
+        require_relative "store/document"
+        require_relative "store/passage"
+        require_relative "store/provenance"
+        require_relative "store/enrichment"
+        require_relative "store/run"
+        @models_loaded = true
+      end
+      db
+    end
+  end
+end

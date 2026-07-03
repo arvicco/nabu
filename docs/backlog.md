@@ -65,7 +65,7 @@ Goal: `Nabu::Adapter` base class: `fetch(workdir)`, `discover(workdir)`,
 Acceptance: conformance suite passes against TestAdapter; deliberately-broken
       variants fail the right assertions (meta-tested); green suite + lint.
 
-## P1-3 · Store: schema migrations + Sequel models  [tier: fable-design/opus-impl] [status: ready] [deps: P1-1]
+## P1-3 · Store: schema migrations + Sequel models  [tier: fable-design/opus-impl] [status: done] [deps: P1-1]
 Goal: Numbered forward-only Sequel migrations in `db/migrate/` creating
       sources, documents, passages, provenance, enrichments, runs
       (architecture §5, including content_sha256, revision, withdrawn,
