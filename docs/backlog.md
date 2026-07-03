@@ -74,7 +74,7 @@ Goal: Numbered forward-only Sequel migrations in `db/migrate/` creating
 Acceptance: migrations apply cleanly on in-memory SQLite; model associations
       and license_class enum constraint tested; green suite + lint.
 
-## P1-4 · Loader: upsert, hashing, revisions, withdrawal  [tier: fable] [status: ready] [deps: P1-2, P1-3]
+## P1-4 · Loader: upsert, hashing, revisions, withdrawal  [tier: fable] [status: done] [deps: P1-2, P1-3]
 Goal: `Nabu::Store::Loader` takes `Document`s from an adapter and persists:
       upsert on urn; unchanged content (content_sha256 match) skipped; changed
       content bumps revision and journals the old hash to provenance; documents

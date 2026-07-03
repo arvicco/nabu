@@ -65,3 +65,5 @@ module Nabu
     end
   end
 end
+
+require_relative "store/loader"
