@@ -34,9 +34,19 @@ module Nabu
       db&.disconnect
     end
 
-    desc "rebuild", "Rebuild the derived db/ from canonical/ (not yet implemented)"
-    def rebuild(*_args)
-      not_implemented!("rebuild")
+    desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
+    option :dry_run, type: :boolean, default: false,
+                     desc: "Print what would happen and change nothing"
+    def rebuild
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      # db/ is derived data by design (architecture §1); dropping it is the whole
+      # point, so a real run needs no confirmation. An empty registry has nothing
+      # to replay.
+      return say("Nothing to rebuild: no sources registered.") if registry.empty?
+
+      rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
+      options[:dry_run] ? print_plan(rebuilder.plan) : print_result(rebuilder.run)
     end
 
     desc "search QUERY", "Search the corpus (not yet implemented)"
@@ -52,6 +62,41 @@ module Nabu
     no_commands do
       def not_implemented!(command)
         raise Thor::Error, "#{command}: not implemented"
+      end
+
+      # --dry-run: report the plan, touch nothing.
+      def print_plan(plan)
+        say "Dry run — nothing will change."
+        say "Would drop catalog db: #{plan.db_path} (#{plan.db_exists ? 'exists' : 'absent'})"
+        plan.items.each do |slug, action|
+          say(action == :replay ? "  replay  #{slug}" : "  skip    #{slug} (no canonical data)")
+        end
+      end
+
+      # Real run: per-source counts, skips, warnings, then a grand total.
+      def print_result(result)
+        existed = result.db_existed ? "" : " (did not exist)"
+        say "Dropped catalog db: #{result.db_path}#{existed}"
+        result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
+        result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        result.warnings.each do |outcome|
+          say "  WARNING: #{outcome.slug} quarantined #{outcome.report.errored} document(s) — parser regression?"
+        end
+        say "  #{format_report('TOTAL', total_report(result))}"
+      end
+
+      def format_report(label, report)
+        "#{label.ljust(24)} +#{report.added} added  ~#{report.updated} updated  " \
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored"
+      end
+
+      def total_report(result)
+        reports = result.outcomes.map(&:report)
+        Nabu::Store::LoadReport.new(
+          added: reports.sum(&:added), updated: reports.sum(&:updated),
+          skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
+          errored: reports.sum(&:errored)
+        )
       end
 
       # Open the catalog db for reading if it has been built; nil otherwise so
