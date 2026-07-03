@@ -32,7 +32,7 @@ Goal: `.github/workflows/ci.yml`: on push + pull_request, macOS-agnostic
       version pin (3.3), bundler cache, run `rake test` then `rake lint`.
 Acceptance: workflow YAML is valid; first PR run green (verified at the phase gate).
 
-## P0-4 · Core primitives: errors, Shell, Normalize  [tier: opus] [status: ready] [deps: P0-1]
+## P0-4 · Core primitives: errors, Shell, Normalize  [tier: opus] [status: done] [deps: P0-1]
 Goal: `Nabu::Error` < StandardError; `Nabu::ParseError`, `Nabu::FetchError`.
       `Nabu::Shell.run(*argv)` — captures stdout/stderr, raises `Nabu::Shell::Error`
       (carrying status + stderr) on nonzero exit; no backticks, use Open3.
