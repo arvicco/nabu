@@ -17,8 +17,10 @@ module Nabu
 
     DEFAULT_CANONICAL_DIR = "canonical"
     DEFAULT_DB_DIR = "db"
+    DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
+    CATALOG_DB_FILENAME = "catalog.sqlite3"
 
-    attr_reader :canonical_dir, :db_dir, :config_path
+    attr_reader :canonical_dir, :db_dir, :sources_path, :config_path
 
     # Build a Config from a YAML file. Relative paths in the file resolve
     # against +root+; absolute paths are used verbatim.
@@ -28,6 +30,7 @@ module Nabu
       new(
         canonical_dir: resolve(paths["canonical"], default: DEFAULT_CANONICAL_DIR, root: root),
         db_dir: resolve(paths["db"], default: DEFAULT_DB_DIR, root: root),
+        sources_path: resolve(paths["sources"], default: DEFAULT_SOURCES_PATH, root: root),
         config_path: path
       )
     end
@@ -38,10 +41,16 @@ module Nabu
     end
     private_class_method :resolve
 
-    def initialize(canonical_dir:, db_dir:, config_path:)
+    def initialize(canonical_dir:, db_dir:, sources_path:, config_path:)
       @canonical_dir = canonical_dir
       @db_dir = db_dir
+      @sources_path = sources_path
       @config_path = config_path
+    end
+
+    # The catalog SQLite file (architecture §5), derived from db_dir.
+    def catalog_path
+      File.join(db_dir, CATALOG_DB_FILENAME)
     end
   end
 end

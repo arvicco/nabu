@@ -38,11 +38,20 @@ class CLITest < Minitest::Test
   end
 
   # Every stub subcommand must announce it is not implemented and fail (exit 1).
-  %w[sync status rebuild search show].each do |command|
+  %w[sync rebuild search show].each do |command|
     define_method(:"test_#{command}_stub_is_not_implemented") do
       _out, err, status = run_cli([command])
       assert_equal 1, status, "#{command} should exit with status 1"
       assert_match(/not implemented/i, err, "#{command} should report not implemented on stderr")
     end
+  end
+
+  # status is implemented (P1-6). With the shipped comments-only sources.yml
+  # the registry is empty and no catalog db exists, so it reports "no sources"
+  # and exits cleanly (0).
+  def test_status_reports_no_sources_and_succeeds
+    out, _err, status = run_cli(["status"])
+    assert_nil status, "status should not signal failure with an empty registry"
+    assert_match(/no sources registered/i, out)
   end
 end

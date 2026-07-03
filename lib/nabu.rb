@@ -12,6 +12,8 @@ require_relative "nabu/model/document"
 require_relative "nabu/adapter"
 require_relative "nabu/store"
 require_relative "nabu/config"
+require_relative "nabu/source_registry"
+require_relative "nabu/status_report"
 require_relative "nabu/cli"
 
 # Nabu: personal research infrastructure for ingesting ancient-text corpora
