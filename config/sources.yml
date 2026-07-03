@@ -13,7 +13,7 @@
 
 perseus-greek:
   adapter: Nabu::Adapters::Perseus
-  enabled: false
+  enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
 
 # Template for the next source (leave commented until its adapter exists):
