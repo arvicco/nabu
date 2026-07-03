@@ -6,7 +6,7 @@ Work packets for the dev loop (see `docs/dev-loop.md`). Statuses: `ready` → `i
 
 ## Phase 0 — Scaffold (branch: phase-0)
 
-## P0-1 · Project skeleton: Gemfile, Rakefile, RuboCop, test harness  [tier: opus] [status: ready] [deps: —]
+## P0-1 · Project skeleton: Gemfile, Rakefile, RuboCop, test harness  [tier: opus] [status: done] [deps: —]
 Goal: Ruby 3.3+ project skeleton. Gemfile with the approved dependency budget only
       (thor, sequel, sqlite3, nokogiri, faraday, minitest, webmock, rubocop, rake).
       Rakefile with `test` (default), `lint`, `lint:fix` tasks. `.rubocop.yml`

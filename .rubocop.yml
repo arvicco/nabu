@@ -1,0 +1,39 @@
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  SuggestExtensions: false
+
+# Enforce frozen string literal magic comment in every Ruby file.
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+# Project uses double quotes consistently.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Documentation of every class/module is noise for a small internal tool.
+Style/Documentation:
+  Enabled: false
+
+# Metrics cops are noisy for parser/adapter code; disable rather than
+# litter the codebase with inline directives.
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
