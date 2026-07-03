@@ -27,7 +27,14 @@ module Nabu
 
     # Bring upstream to the local canonical dir at +workdir+ (git pull,
     # rsync, HTTP crawl with cache). Must be resumable and rate-limit polite.
-    def fetch(workdir)
+    # Returns a Nabu::FetchReport (sha, fetched_at, notes); raises
+    # Nabu::FetchError on failure, which aborts the sync.
+    #
+    # +progress+ is an optional callable receiving short human-readable lines
+    # ("Cloning…", raw git progress lines) as the fetch proceeds, so callers can
+    # show live progress on long fetches. It is nil-safe: adapters that cannot
+    # report progress ignore it and behave exactly as before.
+    def fetch(workdir, progress: nil)
       raise NotImplementedError, "#{self.class} must implement #fetch"
     end
 
