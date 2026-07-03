@@ -106,7 +106,7 @@ Acceptance: registry parsing/validation tests (unknown adapter class → clear
 
 ## Phase 2 — Perseus reference adapter (branch: phase-2)
 
-## P2-1 · Perseus fixtures: plan → approval → fetch  [tier: loop] [status: ready] [deps: —]
+## P2-1 · Perseus fixtures: plan → approval → fetch  [tier: loop] [status: done] [deps: —]
 Goal: Fixture acquisition plan (exact raw URLs from PerseusDL canonical-greekLit
       + canonical-latinLit, sizes, license confirmation) presented to the owner;
       on approval the loop fetches 2–3 small greekLit + 1 latinLit TEI editions
