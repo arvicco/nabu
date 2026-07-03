@@ -116,7 +116,7 @@ Goal: Fixture acquisition plan (exact raw URLs from PerseusDL canonical-greekLit
 Acceptance: fixtures on disk, valid XML after trimming, README complete;
       no fetch outside the approved URL list.
 
-## P2-2 · EpidocParser (SAX)  [tier: fable] [status: ready] [deps: P2-1]
+## P2-2 · EpidocParser (SAX)  [tier: fable] [status: done] [deps: P2-1]
 Goal: `lib/nabu/adapters/epidoc_parser.rb` — standalone parser family
       (architecture §3): Nokogiri SAX/Reader (never DOM — Perseus has >5 MB
       files), consumes a TEI EpiDoc/CapiTainS edition file + its CTS urn,
