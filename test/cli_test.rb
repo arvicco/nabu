@@ -48,21 +48,25 @@ class CLITest < Minitest::Test
     end
   end
 
-  # status is implemented (P1-6). With the shipped comments-only sources.yml
-  # the registry is empty and no catalog db exists, so it reports "no sources"
-  # and exits cleanly (0).
+  # status is implemented (P1-6). Against an empty registry with no catalog db,
+  # it reports "no sources" and exits cleanly (0). (The shipped sources.yml now
+  # registers perseus-greek, so this behaviour is tested against an isolated
+  # empty registry rather than the real config.)
   def test_status_reports_no_sources_and_succeeds
-    out, _err, status = run_cli(["status"])
-    assert_nil status, "status should not signal failure with an empty registry"
-    assert_match(/no sources registered/i, out)
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(["status"]) }
+      assert_nil status, "status should not signal failure with an empty registry"
+      assert_match(/no sources registered/i, out)
+    end
   end
 
-  # rebuild with the shipped comments-only sources.yml: empty registry, nothing
-  # to replay, clean exit (0).
+  # rebuild against an empty registry: nothing to replay, clean exit (0).
   def test_rebuild_empty_registry_says_nothing_to_rebuild
-    out, _err, status = run_cli(["rebuild"])
-    assert_nil status, "rebuild should not signal failure with an empty registry"
-    assert_match(/nothing to rebuild/i, out)
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(["rebuild"]) }
+      assert_nil status, "rebuild should not signal failure with an empty registry"
+      assert_match(/nothing to rebuild/i, out)
+    end
   end
 
   def test_rebuild_dry_run_lists_plan_and_changes_nothing
@@ -99,6 +103,19 @@ class CLITest < Minitest::Test
     yield
   ensure
     Nabu::Config.define_singleton_method(:load, original)
+  end
+
+  # Build a throwaway config with an empty (comments-only) registry and no
+  # catalog db, and yield it.
+  def with_empty_registry_env
+    Dir.mktmpdir("nabu-cli-empty") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# no sources registered\n")
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
   end
 
   # Build a throwaway config with one replayable TestAdapter source ("corpus",
