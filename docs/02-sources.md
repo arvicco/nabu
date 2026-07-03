@@ -6,7 +6,7 @@ Sources that need (or may eventually need) dedicated adapters. Scores are 1–5,
 
 | # | Source | Content | Format | Size | Value | Ease | License | Notes |
 |---|--------|---------|--------|:----:|:-----:|:----:|:-------:|-------|
-| 1 | **PerseusDL canonical-greekLit / canonical-latinLit** | Core classical Greek & Latin literature | TEI XML (EpiDoc/CapiTainS), CTS URNs, git | 5 | 5 | 5 | 5 (CC BY-SA) | The backbone. Clean, versioned, citation scheme built in. Adapter here defines the reference implementation. |
+| 1 | **PerseusDL canonical-greekLit / canonical-latinLit** | Core classical Greek & Latin literature | TEI XML (EpiDoc/CapiTainS), CTS URNs, git | 5 | 5 | 5 | 5 (CC BY-SA) | The backbone. Clean, versioned, citation scheme built in. Adapter here defines the reference implementation. **Status: LIVE (greekLit)** — first sync 2026-07-03: 744 docs / 238,525 passages, 25 quarantined (upstream `@n` gaps); latinLit pending a sibling subclass. |
 | 2 | **OpenGreekAndLatin / First1KGreek** | Greek works not in Perseus (first 1,000 years CE) | TEI XML, CTS, git | 4 | 5 | 5 | 5 (CC BY-SA) | Same conventions as Perseus — nearly free once adapter #1 exists. |
 | 3 | **PROIEL treebanks** | Gothic (Wulfila), OCS Codex Marianus, Greek NT, Classical Armenian, Latin — fully lemmatized/parsed | PROIEL XML, git | 3 | 5 | 4 | 5 (CC BY-NC-SA) | Highest linguistic value per byte for comparative IE work. NC clause: record it. |
 | 4 | **Universal Dependencies (ancient treebanks)** | Ancient Greek, Latin, OCS, Old East Slavic, Vedic Sanskrit, Gothic, Coptic, Classical Chinese | CoNLL-U, git | 4 | 5 | 5 | 4–5 (mostly CC) | One parser handles a dozen languages. Overlaps PROIEL (TOROT/PROIEL data appear here too) — dedupe by document ID. |

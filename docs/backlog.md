@@ -151,7 +151,7 @@ Acceptance: runner tests with TestAdapter (+ fetch-counting subclass);
       breaker triggers at threshold, --force overrides, run row records
       aborted; --parse-only never calls fetch; green + lint.
 
-## P2-5 · First real sync  [tier: human] [status: ready] [deps: P2-4]
+## P2-5 · First real sync  [tier: human] [status: done] [deps: P2-4]
 Goal: Owner (or loop with owner watching) runs `bin/nabu sync perseus-greek`
       for real: clone upstream, load, eyeball `nabu status` + a few random
       passages, then flip enabled: true.
