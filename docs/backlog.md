@@ -139,7 +139,7 @@ Goal: `lib/nabu/adapters/perseus.rb` — composes EpidocParser + repo-layout
 Acceptance: passes AdapterConformance against test/fixtures/perseus/ +
       source-specific tests (expected urns, counts, snippet); green + lint.
 
-## P2-4 · SyncRunner + circuit breaker  [tier: opus, fable-review] [status: ready] [deps: P2-3]
+## P2-4 · SyncRunner + circuit breaker  [tier: opus, fable-review] [status: done] [deps: P2-3]
 Goal: `lib/nabu/sync_runner.rb`: fetch (respecting sync_policy: frozen/manual
       excluded from --all; fetch skipped with --parse-only) → load_from via
       Loader + RunRecorder → update sources.last_sync_at/last_sync_sha.

@@ -27,6 +27,8 @@ module Nabu
 
     # Bring upstream to the local canonical dir at +workdir+ (git pull,
     # rsync, HTTP crawl with cache). Must be resumable and rate-limit polite.
+    # Returns a Nabu::FetchReport (sha, fetched_at, notes); raises
+    # Nabu::FetchError on failure, which aborts the sync.
     def fetch(workdir)
       raise NotImplementedError, "#{self.class} must implement #fetch"
     end

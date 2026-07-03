@@ -130,7 +130,7 @@ class PerseusTest < Minitest::Test
 
   # --- fetch (local git only, no network) ---------------------------------
 
-  def test_fetch_clones_when_no_local_repo_then_pulls_and_returns_head_sha
+  def test_fetch_clones_when_no_local_repo_then_pulls_and_returns_fetch_report
     Dir.mktmpdir do |root|
       upstream = File.join(root, "upstream")
       make_git_repo(upstream, "one")
@@ -139,12 +139,16 @@ class PerseusTest < Minitest::Test
       workdir = File.join(root, "work")
       adapter = perseus_pointing_at(upstream)
 
-      # No .git yet → clone path.
-      assert_equal head, adapter.fetch(workdir)
+      # No .git yet → clone path. fetch returns a FetchReport (architecture §3).
+      report = adapter.fetch(workdir)
+      assert_instance_of Nabu::FetchReport, report
+      assert_equal head, report.sha
+      assert_instance_of Time, report.fetched_at
+      assert_nil report.notes
       assert File.directory?(File.join(workdir, ".git")), "clone must create a .git dir"
 
       # Second call with .git present → pull path (ff-only, up to date).
-      assert_equal head, adapter.fetch(workdir)
+      assert_equal head, adapter.fetch(workdir).sha
 
       # A new upstream commit is pulled and reflected in the returned sha.
       File.write(File.join(upstream, "two.txt"), "two\n")
@@ -152,7 +156,7 @@ class PerseusTest < Minitest::Test
       git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-m", "two")
       new_head = git(upstream, "rev-parse", "HEAD")
       refute_equal head, new_head
-      assert_equal new_head, adapter.fetch(workdir)
+      assert_equal new_head, adapter.fetch(workdir).sha
     end
   end
 

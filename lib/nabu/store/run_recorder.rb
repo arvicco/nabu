@@ -5,9 +5,11 @@ module Nabu
     # Wraps a sync/rebuild in a `runs` row (architecture §8). Inserts the row as
     # "running" up front, yields it, and on normal return finalizes it to
     # "succeeded" with the LoadReport counts; on any error it records "failed"
-    # (with the message as notes) and re-raises. The run row is deliberately
-    # *not* wrapped in the caller's transaction — a failed sync must leave a
-    # durable, queryable failure record, not roll it back.
+    # (with the message as notes) and re-raises — except Nabu::SyncAborted (the
+    # withdrawal circuit breaker), which records the durable status "aborted" so
+    # a tripped breaker is distinguishable from a genuine failure. The run row is
+    # deliberately *not* wrapped in the caller's transaction — a failed or
+    # aborted sync must leave a durable, queryable record, not roll it back.
     #
     #   RunRecorder.record(db: db, source: source) do |run|
     #     loader.load_from(adapter, workdir: dir)   # => LoadReport
@@ -37,7 +39,8 @@ module Nabu
         run.update(finished_at: @clock.call, status: "succeeded", **counts_from(result))
         run
       rescue StandardError => e
-        run&.update(finished_at: @clock.call, status: "failed", notes: e.message)
+        status = e.is_a?(Nabu::SyncAborted) ? "aborted" : "failed"
+        run&.update(finished_at: @clock.call, status: status, notes: e.message)
         raise
       end
 

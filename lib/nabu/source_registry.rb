@@ -48,7 +48,12 @@ module Nabu
         }
         db.transaction do
           row = Store::Source.first(slug: slug)
-          next row.update(attrs) if row
+          if row
+            # Sequel's #update returns nil when no column actually changed
+            # (unchanged re-sync), so return the row itself, not #update's value.
+            row.update(attrs)
+            next row
+          end
 
           Store::Source.create(**attrs, slug: slug, enabled: enabled)
         end

@@ -109,21 +109,18 @@ module Nabu
       end
 
       # Bring the vendored upstream snapshot up to date with a git clone (first
-      # time) or ff-only pull, and return the resulting HEAD sha (String). No
-      # network in tests: exercised against local fixture git repos. A Shell
-      # failure (bad remote, non-ff history, ...) aborts the sync as a
-      # Nabu::FetchError.
-      #
-      # NOTE for SyncRunner (P2-4): the return value is the bare 40-char HEAD
-      # sha String — the runner is responsible for wrapping it into a
-      # FetchReport and writing sources.last_sync_sha.
+      # time) or ff-only pull, and return a Nabu::FetchReport pinning the
+      # resulting HEAD sha (architecture §3). No network in tests: exercised
+      # against local fixture git repos. A Shell failure (bad remote, non-ff
+      # history, ...) aborts the sync as a Nabu::FetchError.
       def fetch(workdir)
         if Dir.exist?(File.join(workdir, ".git"))
           Nabu::Shell.run("git", "-C", workdir, "pull", "--ff-only")
         else
           Nabu::Shell.run("git", "clone", "--depth", "1", manifest.upstream_url, workdir)
         end
-        Nabu::Shell.run("git", "-C", workdir, "rev-parse", "HEAD").strip
+        sha = Nabu::Shell.run("git", "-C", workdir, "rev-parse", "HEAD").strip
+        Nabu::FetchReport.new(sha: sha, fetched_at: Time.now, notes: nil)
       rescue Nabu::Shell::Error => e
         raise Nabu::FetchError, "perseus fetch failed for #{manifest.upstream_url} into #{workdir}: #{e.message}"
       end
