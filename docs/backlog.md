@@ -26,7 +26,7 @@ Acceptance: `bin/nabu version` prints VERSION; `bin/nabu --help` lists commands;
       CLI tests capture output (no shelling out needed); config defaults +
       file-override tested; `rake test`/`rake lint` green.
 
-## P0-3 · CI: GitHub Actions  [tier: opus] [status: ready] [deps: P0-1]
+## P0-3 · CI: GitHub Actions  [tier: opus] [status: done] [deps: P0-1]
 Goal: `.github/workflows/ci.yml`: on push + pull_request, macOS-agnostic
       (ubuntu-latest fine), ruby/setup-ruby with `.ruby-version`-independent
       version pin (3.3), bundler cache, run `rake test` then `rake lint`.

@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Cancel superseded runs on the same ref so pushes don't pile up.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # Explicit pin: .ruby-version is gitignored, so don't depend on it.
+          ruby-version: "3.3"
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake test
+      - name: Run linter
+        run: bundle exec rake lint
