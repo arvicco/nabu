@@ -67,3 +67,4 @@ module Nabu
 end
 
 require_relative "store/loader"
+require_relative "store/run_recorder"

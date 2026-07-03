@@ -92,7 +92,9 @@ Goal: `bin/nabu rebuild` — drop db/, re-apply migrations, re-parse + reload
 Acceptance: round-trip test on a fixture canonical dir — build, rebuild, assert
       identical passage rows (modulo ids); green suite + lint.
 
-## P1-6 · Source registry + runs + nabu status  [tier: opus] [status: ready] [deps: P1-3]
+## P1-6 · Source registry + runs + nabu status  [tier: opus] [status: done] [deps: P1-3]
+<!-- ran before P1-5 by design — rebuild consumes the registry -->
+
 Goal: `config/sources.yml` registry (adapter class, upstream, license,
       enabled, sync_policy) with loader + validation; `runs` table written with
       Fetch/LoadReport counts; `bin/nabu status` prints per-source last sync,

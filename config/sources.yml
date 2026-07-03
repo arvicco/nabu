@@ -1,0 +1,20 @@
+# Nabu source registry (see docs/architecture.md §5).
+#
+# One entry per corpus, keyed by its slug (lowercase [a-z0-9_-]). Shape:
+#
+#   <slug>:
+#     adapter: Nabu::Adapters::Perseus   # adapter class name (resolved lazily)
+#     enabled: false                     # seeds runtime state; the db is
+#                                        #   authoritative after the first sync
+#     sync_policy: live                  # live | manual | frozen (default: manual)
+#
+# No sources are registered yet: the first real entry lands with the Perseus
+# adapter in Phase 2. Until then this file is intentionally comments-only, which
+# the registry loads as an empty, valid registry.
+#
+# Example (leave commented until the adapter exists):
+#
+# perseus-greek:
+#   adapter: Nabu::Adapters::Perseus
+#   enabled: false
+#   sync_policy: live

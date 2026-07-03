@@ -24,9 +24,14 @@ module Nabu
       not_implemented!("sync")
     end
 
-    desc "status", "Show per-source sync status and passage counts (not yet implemented)"
-    def status(*_args)
-      not_implemented!("status")
+    desc "status", "Show per-source sync status and passage counts"
+    def status
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      db = open_catalog(config)
+      say Nabu::StatusReport.render(registry: registry, db: db)
+    ensure
+      db&.disconnect
     end
 
     desc "rebuild", "Rebuild the derived db/ from canonical/ (not yet implemented)"
@@ -47,6 +52,16 @@ module Nabu
     no_commands do
       def not_implemented!(command)
         raise Thor::Error, "#{command}: not implemented"
+      end
+
+      # Open the catalog db for reading if it has been built; nil otherwise so
+      # status degrades gracefully to registry-only output.
+      def open_catalog(config)
+        return nil unless File.exist?(config.catalog_path)
+
+        db = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.setup!(db)
+        db
       end
     end
   end
