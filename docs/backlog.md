@@ -45,7 +45,7 @@ Acceptance: unit tests for hierarchy and Shell (success, failure, stderr capture
 
 ## Phase 1 — Core domain (branch: phase-1; elaborated, starts after Phase 0 PR merges)
 
-## P1-1 · Value objects: Passage, DocumentRef, SourceManifest, Document  [tier: fable] [status: ready] [deps: P0-4]
+## P1-1 · Value objects: Passage, DocumentRef, SourceManifest, Document  [tier: fable] [status: done] [deps: P0-4]
 Goal: `Data.define` value objects per architecture §3: `Passage` (urn, language,
       text, text_normalized, annotations, sequence, document_id-less at parse time),
       `DocumentRef`, `SourceManifest` (id, name, license, license_class enum,
