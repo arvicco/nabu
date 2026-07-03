@@ -196,7 +196,7 @@ Goal: The sync circuit breaker predicts withdrawals via discover() ref ids
 Acceptance: new conformance assertion + meta-test; all existing adapters
       still pass; green + lint.
 
-## P3-1 · Phase 3 fixtures: plan → approval → fetch  [tier: loop] [status: ready] [deps: —]
+## P3-1 · Phase 3 fixtures: plan → approval → fetch  [tier: loop] [status: done] [deps: —]
 Goal: One consolidated acquisition plan (dev-loop §8) covering: First1KGreek
       (OpenGreekAndLatin), UD ancient treebanks (2–3 languages, CoNLL-U),
       PROIEL treebank, TOROT, Papyri.info (idp.data) — exact raw URLs, small
