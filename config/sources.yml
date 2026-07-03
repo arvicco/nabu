@@ -16,6 +16,11 @@ perseus-greek:
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
 
+first1k-greek:
+  adapter: Nabu::Adapters::First1kGreek
+  enabled: false   # awaiting first real sync + owner sign-off (P3-2)
+  sync_policy: live
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
