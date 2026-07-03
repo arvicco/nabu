@@ -12,4 +12,9 @@ module Nabu
   # An upstream fetch failed. This aborts the sync — we do not persist a
   # partial or stale corpus.
   class FetchError < Error; end
+
+  # A domain value failed validation at construction time (empty URN,
+  # implausible language tag, non-NFC text, unknown license class, ...).
+  # Domain objects are valid by construction; this is how they refuse.
+  class ValidationError < Error; end
 end
