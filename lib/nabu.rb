@@ -9,6 +9,7 @@ require_relative "nabu/model/passage"
 require_relative "nabu/model/document_ref"
 require_relative "nabu/model/source_manifest"
 require_relative "nabu/model/document"
+require_relative "nabu/adapter"
 require_relative "nabu/config"
 require_relative "nabu/cli"
 

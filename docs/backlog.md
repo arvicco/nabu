@@ -55,7 +55,7 @@ Goal: `Data.define` value objects per architecture §3: `Passage` (urn, language
 Acceptance: construction + validation tests; invalid language/URN/non-NFC text
       rejected with meaningful errors; green suite + lint.
 
-## P1-2 · Adapter contract + conformance suite  [tier: fable] [status: ready] [deps: P1-1]
+## P1-2 · Adapter contract + conformance suite  [tier: fable] [status: done] [deps: P1-1]
 Goal: `Nabu::Adapter` base class: `fetch(workdir)`, `discover(workdir)`,
       `parse(document_ref)`, `self.manifest` — abstract methods raise
       `NotImplementedError`. `test/support/adapter_conformance.rb`: manifest
