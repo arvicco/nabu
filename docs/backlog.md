@@ -165,3 +165,20 @@ Acceptance: owner sign-off; sources.yml updated; docs/02-sources.md status
 Phase 3 (family expansion): First1KGreek, ConlluParser + UD, ProielParser +
 PROIEL/TOROT, Papyri.info [all opus].
 Phase 4 (query surface): FTS5 + search/show/export, golden queries, verify [opus].
+
+## P2-6 · Sync/rebuild progress reporting  [tier: opus] [status: ready] [deps: P2-4]
+Goal: Long operations show live progress (owner feedback from first real sync:
+      several minutes of silence). (a) Nabu::Shell.stream(*argv, &on_line) —
+      popen3 variant forwarding merged output lines live to a block, same
+      Shell::Error semantics; run() unchanged. (b) Perseus#fetch passes
+      --progress to git and streams via an optional progress: callback kwarg
+      (base contract gains fetch(workdir, progress: nil) — nil-safe, ignored
+      by adapters that don't support it). (c) Loader#load_from gains
+      on_document: callback (called with running doc count + errored count
+      after each document). (d) CLI sync/rebuild: when $stderr is a tty,
+      \r-updating counter lines ("fetching… <git line>" / "loading… N docs,
+      E quarantined"); final counts line unchanged. Non-tty: one line per 100
+      docs. No progress output in tests (not a tty; callbacks tested directly).
+Acceptance: unit tests for Shell.stream (lines forwarded, error carries
+      stderr), Loader callback counts, CLI progress gated on tty (stub
+      $stderr.tty?); existing output assertions unchanged; green + lint.
