@@ -16,7 +16,7 @@ Goal: Ruby 3.3+ project skeleton. Gemfile with the approved dependency budget on
 Acceptance: `bundle install` succeeds; `rake test` runs green including one test
       asserting that any HTTP attempt raises; `rake lint` green; Gemfile.lock committed.
 
-## P0-2 · CLI skeleton: bin/nabu, config loading  [tier: opus] [status: ready] [deps: P0-1]
+## P0-2 · CLI skeleton: bin/nabu, config loading  [tier: opus] [status: done] [deps: P0-1]
 Goal: Executable `bin/nabu` (Thor). `Nabu::CLI` with `version` command and stub
       subcommands (`sync`, `status`, `rebuild`, `search`, `show`) that print
       "not implemented" and exit 1. `Nabu::Config` loads `config/nabu.yml`

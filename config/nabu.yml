@@ -1,0 +1,19 @@
+# Nabu configuration.
+#
+# Every key below is optional. The values shown are the built-in defaults, so
+# this file is safe to commit and a fresh checkout works without editing it.
+# Delete a key to fall back to its default; edit a value to override it.
+#
+# Relative paths are resolved against the project root; absolute paths are used
+# verbatim (handy for keeping the canonical corpus on a larger disk).
+
+paths:
+  # Canonical corpus — the permanent, immutable asset (files, git-tracked).
+  # Application code is read-only here except through the adapter/ad-hoc
+  # pipeline. Default: <project>/canonical
+  canonical: canonical
+
+  # Derived SQLite layer (catalog.sqlite3, vectors.sqlite3). Fully rebuildable
+  # from canonical/ via `nabu rebuild`, so it is safe to delete.
+  # Default: <project>/db
+  db: db
