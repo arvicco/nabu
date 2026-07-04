@@ -99,6 +99,42 @@ module Nabu
     end
 
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
+    long_desc <<~HELP, wrap: false
+      Full-text search over every live passage, bm25-ranked. Matching is
+      diacritic- and case-insensitive on BOTH sides: μηνιν finds μῆνιν,
+      ΜΗΝΙΝ finds both — type without accents, breathings, or iota
+      subscripts and still hit the polytonic editions.
+
+      Query syntax (SQLite FTS5 over the folded text):
+        μηνιν αειδε          all words must appear in the passage (implicit AND)
+        '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
+        μηνι*                prefix match (μῆνιν, μηνίω, μήνιμα, …)
+      Boolean OR/NOT are not supported: operators are folded to lowercase
+      and become ordinary search terms.
+
+      Each hit prints the passage urn, its language, and a folded snippet
+      with the match in [brackets]. The snippet is the SEARCH form, not the
+      edition text — `nabu show <urn>` gives the pristine passage. DDbDP
+      papyri render lost text as the […] gap marker.
+
+      Filters (combinable):
+        --lang     ISO-639-3 passage language: grc, lat, got, chu, orv, san, …
+        --license  effective license class (document override beats source):
+                   open, attribution, nc, research_private, restricted
+        --limit    maximum hits, default 20
+
+      Examples:
+        nabu search μηνιν                          # finds μῆνιν, accents optional
+        nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
+                                                   #   papyri that quote it
+        nabu search sapientia --lang lat           # Latin corpus only
+        nabu search μηνι* --lang grc               # every derivative of the stem
+        nabu search αγαπη --license attribution    # only freely re-usable hits
+
+      Use cases: find a half-remembered line; concordance-style scans of a
+      word across six corpora at once; checking which sources attest a term
+      (and under what license) before an export.
+    HELP
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
@@ -125,6 +161,41 @@ module Nabu
     end
 
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
+    long_desc <<~HELP, wrap: false
+      Inspect one passage or one whole document by urn. Unlike search and
+      export, show hides nothing: withdrawn and retired-upstream items
+      appear too, honestly labeled — this is the "what does my collection
+      actually hold" lens.
+
+      A PASSAGE urn prints the pristine text, its document, effective
+      license, revision, and the full provenance trail (loaded / revised /
+      withdrawn / restored / retired events with timestamps) — the
+      passage's complete life story.
+
+      A DOCUMENT urn prints the header (title, language, source, license,
+      revision, any withdrawn/retired flag) and every passage in citation
+      order, listed as :suffixes relative to the document urn printed once
+      above; --full-urn restores absolute urns for copy-paste. Long
+      documents: pipe to less.
+
+      urn shapes across the corpus:
+        CTS editions   urn:cts:greekLit:tlg0012.tlg002.perseus-grc2       (document)
+                       urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1   (book 1, line 1)
+        papyri (DDbDP) urn:nabu:ddbdp:aegyptus:89:240:b2:5
+                       (:b2 = implicit restart block — an unlabeled column/
+                        fragment where the edition's line numbers restart)
+        treebanks      urn:nabu:proiel:afnik:194690                     (sentence)
+                       urn:nabu:ud:gothic-proiel:got_proiel-ud-dev:37589
+
+      Examples:
+        nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+        nabu show urn:nabu:ddbdp:aegyptus:89:240            # whole papyrus
+        nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
+
+      Use cases: read the real edition text behind a search snippet; audit
+      a document's revision/provenance history after a sync; eyeball what
+      "withdrawn" or "retired upstream" actually holds.
+    HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
     def show(urn = nil)
@@ -144,6 +215,33 @@ module Nabu
     end
 
     desc "export", "Stream non-withdrawn passages as plain text or JSONL"
+    long_desc <<~HELP, wrap: false
+      Stream the live corpus to stdout, one passage per line — the
+      longevity-hedge exit formats: the data must survive the code.
+      Withdrawn passages are excluded; retired-upstream documents are
+      INCLUDED (they are part of your collection — that is the point of
+      keeping them). Streaming end to end: constant memory at any corpus
+      size, so piping a million passages is fine.
+
+      Formats:
+        plain   text only, internal newlines collapsed to one space
+        jsonl   one JSON object per line: urn, language, text,
+                text_normalized, annotations — annotations is a real nested
+                object carrying lemmas/morphology where the source provides
+                them (the treebanks: UD, PROIEL, TOROT)
+        conllu  arrives with the enrichment phase (needs the token model)
+
+      Same --lang / --license filters as search.
+
+      Examples:
+        nabu export --format plain --lang got > gothic.txt
+        nabu export --format jsonl --license open | jq -r .urn
+        nabu export --format jsonl --lang chu | jq '.annotations' | head
+
+      Use cases: feed a corpus slice to external NLP tooling; a license-clean
+      subset for anything you plan to publish; plain-text dumps for grep-scale
+      workflows or personal backups independent of nabu itself.
+    HELP
     option :format, type: :string, required: true, desc: "plain | jsonl"
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,

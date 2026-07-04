@@ -39,6 +39,37 @@ class CLITest < Minitest::Test
     assert Nabu::CLI.exit_on_failure?
   end
 
+  # -- inline subcommand help (owner UX) -----------------------------------
+  # `nabu help <command>` must teach the command, not just name it: query
+  # syntax, real urn shapes, worked examples. Anchors only — prose may move.
+
+  def test_help_search_documents_syntax_filters_and_examples
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/implicit AND/, out, "must state the multi-term semantics")
+    assert_match(/μῆνιν/, out, "must show the diacritic-folding promise")
+    assert_match(/prefix/, out, "must document the * prefix form")
+    assert_match(%r{OR/NOT are not supported}i, out, "must be honest about booleans")
+    assert_match(/Examples:/, out)
+    assert_match(/--lang/, out)
+  end
+
+  def test_help_show_documents_urn_shapes_and_full_urn
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/provenance/, out, "must explain the passage view")
+    assert_match(/:suffixes/, out, "must explain the document listing form")
+    assert_match(/--full-urn/, out)
+    assert_match(/urn:cts:greekLit:/, out, "must show a real CTS urn shape")
+    assert_match(/restart block/, out, "must explain papyri :b<k> segments")
+    assert_match(/Examples:/, out)
+  end
+
+  def test_help_export_documents_formats_and_filters
+    out, _err, _status = run_cli(%w[help export])
+    assert_match(/jsonl/, out)
+    assert_match(/annotations/, out, "must say what rides in jsonl lines")
+    assert_match(/Examples:/, out)
+  end
+
   # status is implemented (P1-6). Against an empty registry with no catalog db,
   # it reports "no sources" and exits cleanly (0). (The shipped sources.yml now
   # registers perseus-greek, so this behaviour is tested against an isolated
