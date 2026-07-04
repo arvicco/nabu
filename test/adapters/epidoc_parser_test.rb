@@ -86,13 +86,17 @@ class EpidocParserTest < Minitest::Test
     end
   end
 
-  def test_hh13_text_normalized_is_downcased_nfc
+  def test_hh13_text_normalized_is_the_minted_search_form
     doc = parse_hh13
 
     doc.passages.each do |passage|
-      assert_equal Nabu::Normalize.nfc(passage.text.downcase), passage.text_normalized
+      assert_equal Nabu::Normalize.search_form(passage.text, language: "grc"),
+                   passage.text_normalized
     end
-    assert_includes doc.passages[0].text_normalized, "δημήτηρ"
+    # Boundary-minted (P6-4): marks stripped + downcased ("Δημήτηρ’" → "δημητηρ’").
+    assert_includes doc.passages[0].text_normalized, "δημητηρ"
+    # Final sigma normalizes: line 3 ends "ἀοιδῆς." → "αοιδησ."
+    assert_includes doc.passages[2].text_normalized, "αοιδησ"
   end
 
   def test_hh13_parses_from_an_open_io

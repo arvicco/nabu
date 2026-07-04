@@ -36,11 +36,14 @@ module Query
       )
     end
 
+    # text_normalized is minted the way the adapter boundary mints it
+    # (Passage.new → Normalize.search_form), so every search test exercises
+    # the real per-language document form (P6-4).
     def make_passage(document, urn:, text:, sequence:, language: "grc", withdrawn: false)
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
-        text: text, text_normalized: text, content_sha256: "x",
-        revision: 1, withdrawn: withdrawn
+        text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
+        content_sha256: "x", revision: 1, withdrawn: withdrawn
       )
     end
 
@@ -76,6 +79,56 @@ module Query
       results = search("μηνιν")
       assert_equal 1, results.size
       assert_equal "urn:d:1:1", results.first.urn
+    end
+
+    # -- per-language fold-both-sides (P6-4) ---------------------------------
+
+    # Greek final sigma: the passage ends the word in ς, the doc-side fold
+    # stores σ, and BOTH query spellings find it (the grc query variant folds
+    # ς→σ; the accented spelling additionally proves marks + sigma compose).
+    def test_final_sigma_query_spellings_both_match
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "ἄρχε δ’ ἀοιδῆς", sequence: 0)
+      rebuild!
+
+      assert_equal %w[urn:d:1:1], search("αοιδησ").map(&:urn), "internal-sigma spelling"
+      assert_equal %w[urn:d:1:1], search("ἀοιδῆς").map(&:urn), "accented final-sigma spelling"
+    end
+
+    # Latin v/u and j/i: the document keeps the editor's spelling in text,
+    # folds to u/i in the search form, and both query spellings find it.
+    def test_latin_v_u_and_j_i_query_spellings_both_match
+      doc = make_document(source: @open, urn: "urn:d:1", language: "lat")
+      make_passage(doc, urn: "urn:d:1:1", sequence: 0, language: "lat", text: "Arma virumque iustitiamque")
+      rebuild!
+
+      assert_equal %w[urn:d:1:1], search("virumque").map(&:urn), "v spelling"
+      assert_equal %w[urn:d:1:1], search("uirumque").map(&:urn), "u spelling"
+      assert_equal %w[urn:d:1:1], search("justitiamque").map(&:urn), "j spelling"
+      assert_equal %w[urn:d:1:1], search("iustitiamque").map(&:urn), "i spelling"
+    end
+
+    # THE union regression: Gothic (generic fold, j is a real letter) must not
+    # be broken by the lat j→i query variant — the generic variant still
+    # matches because the variants are ORed.
+    def test_gothic_j_words_stay_findable_despite_the_latin_query_variant
+      doc = make_document(source: @open, urn: "urn:d:1", language: "got")
+      make_passage(doc, urn: "urn:d:1:1", text: "jah qiþands", sequence: 0, language: "got")
+      rebuild!
+
+      assert_equal %w[urn:d:1:1], search("jah").map(&:urn)
+      assert_equal %w[urn:d:1:1], search("Jah").map(&:urn)
+    end
+
+    # OCS: real TOROT titlo (U+0483) strips at the boundary; the bare query
+    # and the titlo-carrying query both find the passage.
+    def test_ocs_titlo_query_spellings_both_match
+      doc = make_document(source: @open, urn: "urn:d:1", language: "chu")
+      make_passage(doc, urn: "urn:d:1:1", text: "дх҃омь ст҃ъꙇмь", sequence: 0, language: "chu")
+      rebuild!
+
+      assert_equal %w[urn:d:1:1], search("дхомь").map(&:urn), "bare spelling"
+      assert_equal %w[urn:d:1:1], search("дх҃омь").map(&:urn), "titlo spelling"
     end
 
     def test_snippet_marks_the_match_in_the_folded_form

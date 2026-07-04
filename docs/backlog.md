@@ -492,7 +492,7 @@ Acceptance: migration + model tests; UD sync records per-repo shas (fixture
       git repos); probe reports per-repo drift/license for UD and unchanged
       behavior for single-repo sources; suite + lint green.
 
-## P6-4 · Per-language folding at the adapter boundary  [tier: fable-design/opus-impl] [status: ready] [deps: P6-1, P6-2]
+## P6-4 · Per-language folding at the adapter boundary  [tier: fable-design/opus-impl] [status: done] [deps: P6-1, P6-2]
 Goal: text_normalized currently carries only downcasing; diacritic folding
       happens at index time and query time (P4-1 stopgap, architecture §3
       note). Move folding to the adapter boundary with per-language rules

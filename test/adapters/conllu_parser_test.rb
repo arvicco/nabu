@@ -81,12 +81,13 @@ class ConlluParserTest < Minitest::Test
 
   # --- NFC: greek proiel --------------------------------------------------
 
-  def test_greek_text_is_nfc_and_normalized_form_is_downcased_nfc
+  def test_greek_text_is_nfc_and_normalized_form_is_the_minted_search_form
     first = parse(GREEK, urn: "urn:nabu:ud:greek-proiel:grc", language: "grc").first
     assert_equal "Δελφῶν οἶδα ἐγὼ οὕτω ἀκούσας γενέσθαι", first.text
     assert first.text.unicode_normalized?(:nfc), "text must be NFC"
     assert first.text_normalized.unicode_normalized?(:nfc), "text_normalized must be NFC"
-    assert_equal first.text.downcase.unicode_normalize(:nfc), first.text_normalized
+    # Boundary-minted (P6-4): marks stripped, downcased, final sigma → σ.
+    assert_equal "δελφων οιδα εγω ουτω ακουσασ γενεσθαι", first.text_normalized
   end
 
   # --- error paths (string-surgery tempfiles) ----------------------------

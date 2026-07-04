@@ -53,8 +53,8 @@ module Nabu
     # - text = per token, presentation-before + form + presentation-after
     #   concatenated (PROIEL's surface-text encoding: the presentation attrs ARE
     #   the inter-token spacing and punctuation). NFC at this boundary.
-    #   text_normalized = NFC(text.downcase) — the re-NFC matters because case
-    #   folding can denormalize (same discipline as the other parsers).
+    #   text_normalized is minted by Passage.new (P6-4 per-language search
+    #   form, Normalize.search_form) — the parser passes only pristine text.
     #
     # == Empty tokens
     #
@@ -158,7 +158,6 @@ module Nabu
             urn: "#{urn}:#{sentence.id}",
             language: language,
             text: text,
-            text_normalized: Normalize.nfc(text.downcase),
             annotations: annotations(sentence),
             sequence: sequence
           )

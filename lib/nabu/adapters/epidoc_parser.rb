@@ -72,9 +72,10 @@ module Nabu
     # - Whitespace runs collapse to one space; ends are stripped; NFC via
     #   Nabu::Normalize.nfc at this boundary. Units left empty after cleaning
     #   are skipped, but a document yielding zero passages is a ParseError.
-    # - text_normalized is just NFC(text.downcase) for now — per-language
-    #   diacritic folding is a later enrichment concern. The re-normalization
-    #   matters: Greek case mapping can produce non-NFC sequences.
+    # - text_normalized is minted by Passage.new itself (P6-4): the
+    #   per-language search form via Normalize.search_form — marks stripped,
+    #   downcased, grc final-sigma / lat v-u,j-i rules; conventions.md §9.
+    #   The parser passes only the pristine NFC text.
     #
     # == Upstream quirks (verified against test/fixtures/perseus/)
     #
@@ -189,7 +190,6 @@ module Nabu
             urn: "#{urn}:#{unit.citation}",
             language: language,
             text: unit.text,
-            text_normalized: Normalize.nfc(unit.text.downcase),
             annotations: {},
             sequence: sequence
           )
