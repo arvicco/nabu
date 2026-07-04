@@ -266,7 +266,7 @@ Acceptance: indexer unit tests (index count == live passages; withdrawn
       excluded; reindex idempotent); sync/rebuild integration test proves
       auto-index; green + lint.
 
-## P4-2 · nabu search  [tier: opus] [status: ready] [deps: P4-1]
+## P4-2 · nabu search  [tier: opus] [status: done] [deps: P4-1]
 Goal: `nabu search QUERY [--lang X] [--license open|attribution|nc|…]
       [--limit N]` — FTS5 MATCH over text_normalized (query lowercased+NFC),
       joined to catalog for urn/language/license filtering (ATTACH or

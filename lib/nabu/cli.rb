@@ -71,9 +71,30 @@ module Nabu
       end
     end
 
-    desc "search QUERY", "Search the corpus (not yet implemented)"
-    def search(*_args)
-      not_implemented!("search")
+    desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
+    def search(query = nil)
+      query = query.to_s.strip
+      raise Thor::Error, "search: give a query" if query.empty?
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      # Either half of the derived store missing means the corpus was never
+      # built/indexed; a search cannot run.
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+                                   .run(query, lang: options[:lang], license: options[:license],
+                                               limit: options[:limit].to_i)
+      print_search_results(results)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
     end
 
     desc "show URN", "Show a passage or document (not yet implemented)"
@@ -84,6 +105,43 @@ module Nabu
     no_commands do
       def not_implemented!(command)
         raise Thor::Error, "#{command}: not implemented"
+      end
+
+      # Reject an unknown --license up front (before opening any db) with the
+      # closed enum of valid classes, so the user sees the choices.
+      def validate_license!(license)
+        return if license.nil?
+        return if Nabu::SourceManifest::LICENSE_CLASSES.include?(license)
+
+        raise Thor::Error,
+              "search: unknown license #{license.inspect} " \
+              "(choose from #{Nabu::SourceManifest::LICENSE_CLASSES.join(', ')})"
+      end
+
+      # Open the fulltext index for reading; nil when the file is absent OR the
+      # FTS table was never built (both mean "no index" → the sync/rebuild hint).
+      def open_fulltext(config)
+        return nil unless File.exist?(config.fulltext_path)
+
+        db = Nabu::Store.connect_fulltext(config.fulltext_path)
+        return db if db.table_exists?(Nabu::Store::Indexer::TABLE)
+
+        db.disconnect
+        nil
+      end
+
+      # Render hits: urn + optional [language] header, then the FTS snippet
+      # (diacritic-folded highlight). The footer labels that so nobody reads the
+      # stripped accents in the highlight as corpus truth.
+      def print_search_results(results)
+        return say("no matches") if results.empty?
+
+        results.each do |result|
+          say "#{result.urn}#{" [#{result.language}]" if result.language}"
+          say "  #{result.snippet}"
+        end
+        say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
+            "(highlights are diacritic-folded)"
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all
