@@ -230,7 +230,7 @@ Goal: PROIEL XML parser family (sentence = passage; token lemma/morphology →
 Acceptance: parser unit tests + AdapterConformance on real fixtures;
       green + lint.
 
-## P3-5 · TOROT adapter  [tier: opus] [status: ready] [deps: P3-4]
+## P3-5 · TOROT adapter  [tier: opus] [status: done] [deps: P3-4]
 Goal: TOROT (Tromsø OCS + Old Russian) — PROIEL XML reuse; adapter is thin
       composition. Register torot (enabled: false, manual).
 Acceptance: AdapterConformance + OCS-specific assertions (chu language tag,

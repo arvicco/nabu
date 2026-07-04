@@ -84,16 +84,18 @@ module Nabu
         sha = Nabu::Shell.run("git", "-C", workdir, "rev-parse", "HEAD").strip
         Nabu::FetchReport.new(sha: sha, fetched_at: Time.now, notes: nil)
       rescue Nabu::Shell::Error => e
-        raise Nabu::FetchError, "proiel fetch failed for #{repo_url} into #{workdir}: #{e.message}"
+        raise Nabu::FetchError, "#{manifest.id} fetch failed for #{repo_url} into #{workdir}: #{e.message}"
       end
 
       private
 
-      # The upstream repo URL. Split out so fetch tests can point a singleton at
-      # a local git tmpdir (the Perseus/UD test pattern), keeping fetch off the
-      # network.
+      # The upstream repo URL. Resolved through the overridable #manifest (not
+      # the lexical MANIFEST constant) so subclasses — TOROT (P3-5) — fetch
+      # THEIR own repo, not proiel-treebank. Split out so fetch tests can point a
+      # singleton at a local git tmpdir (the Perseus/UD test pattern), keeping
+      # fetch off the network.
       def repo_url
-        MANIFEST.upstream_url
+        manifest.upstream_url
       end
 
       def git_clone(workdir, progress)
@@ -116,7 +118,11 @@ module Nabu
           next unless header
 
           Nabu::DocumentRef.new(
-            source_id: MANIFEST.id,
+            # source_id follows the (possibly subclassed) manifest — "torot" for
+            # the TOROT sibling — while the urn namespace stays the literal
+            # "proiel": TOROT's source ids share the PROIEL id-space, so both
+            # corpora mint under one namespace on purpose (see Torot's header).
+            source_id: manifest.id,
             id: "urn:nabu:proiel:#{header[:id]}",
             path: File.expand_path(path),
             metadata: { "language" => header[:language], "title" => header[:title] }
