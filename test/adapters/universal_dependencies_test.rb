@@ -152,6 +152,55 @@ class UniversalDependenciesTest < Minitest::Test
     end
   end
 
+  # --- retention across N repos (P5-2) -------------------------------------
+  #
+  # UD is the multi-repo shape: the breaker must see the deletions of ALL
+  # treebanks before ANY repo merges (a trip in the last repo may not leave
+  # the first repo already mutated), and atticked files land under the
+  # source-level attic — <workdir>/.attic/<treebank>/<file> — so the
+  # adapter's own discover finds them there.
+  def test_fetch_guards_deletions_across_all_repos_before_any_merge_and_force_attics
+    Dir.mktmpdir do |root|
+      slugs = Nabu::Adapters::UniversalDependencies::TREEBANKS.keys
+      upstreams = slugs.to_h do |slug|
+        upstream = File.join(root, "upstream-#{slug}")
+        make_git_repo(upstream, slug)
+        File.write(File.join(upstream, "#{slug}.conllu"), conllu_stub(slug))
+        git(upstream, "add", ".")
+        git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "conllu")
+        [slug, upstream]
+      end
+      workdir = File.join(root, "work")
+      adapter = ud_pointing_at(upstreams)
+      adapter.fetch(workdir)
+
+      # First repo gains a file; LAST repo loses its only treebank file
+      # (1 of 4 ingestible files = 25% > 20% → trip).
+      first = slugs.first
+      last = slugs.last
+      File.write(File.join(upstreams[first], "new.txt"), "new\n")
+      git(upstreams[first], "add", ".")
+      git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
+      git(upstreams[last], "rm", "-q", "#{last}.conllu")
+      git(upstreams[last], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "scrap")
+
+      assert_raises(Nabu::SyncAborted) { adapter.fetch(workdir) }
+      assert File.file?(File.join(workdir, last, "#{last}.conllu")), "no repo merged on a trip"
+      refute File.exist?(File.join(workdir, first, "new.txt")),
+             "the trip must precede EVERY repo's merge, not just the deleting one"
+      refute Dir.exist?(File.join(workdir, ".attic"))
+
+      report = adapter.fetch(workdir, force: true)
+      assert_includes report.notes, "atticked 1"
+      assert File.file?(File.join(workdir, ".attic", last, "#{last}.conllu")),
+             "the attic preserves the <treebank>/<file> shape discover expects"
+      assert File.file?(File.join(workdir, first, "new.txt"))
+
+      retained = adapter.discover_with_attic(workdir).select { |ref| ref.metadata["retained"] }
+      assert_equal ["urn:nabu:ud:#{last}:#{last}"], retained.map(&:id)
+    end
+  end
+
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_ud_and_manifest_agrees
@@ -179,6 +228,11 @@ class UniversalDependenciesTest < Minitest::Test
     File.write(File.join(dir, "#{seed}.txt"), "#{seed}\n")
     git(dir, "add", ".")
     git(dir, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", seed)
+  end
+
+  # Minimal CoNLL-U body — discover only globs filenames, so shape suffices.
+  def conllu_stub(slug)
+    "# sent_id = #{slug}-1\n# text = x\n1\tx\tx\tX\t_\t_\t0\troot\t_\t_\n\n"
   end
 
   def git(dir, *)

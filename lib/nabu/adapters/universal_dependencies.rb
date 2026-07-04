@@ -86,24 +86,27 @@ module Nabu
         )
       end
 
-      # Clone (first time) or ff-only pull (thereafter) each in-scope treebank
-      # into <workdir>/<slug>, then return a single Nabu::FetchReport pinning the
-      # last treebank's HEAD, with the full per-repo sha summary in notes. No
-      # network in tests: exercised against local fixture git repos. Any Shell
-      # failure aborts the sync as Nabu::FetchError.
-      def fetch(workdir, progress: nil)
-        shas = {}
-        TREEBANKS.each_key do |slug|
-          repo = repo_url(slug)
-          dir = File.join(workdir, slug)
-          sync_repo(repo, dir, progress)
-          shas[slug] = Nabu::Shell.run("git", "-C", dir, "rev-parse", "HEAD").strip
-        end
-        Nabu::FetchReport.new(
-          sha: shas.values.last,
-          fetched_at: Time.now,
-          notes: shas.map { |slug, sha| "#{slug}=#{sha}" }.join(" ")
-        )
+      # Clone or non-destructively pull each in-scope treebank into
+      # <workdir>/<slug> via the shared Nabu::GitFetch phases (P5-2), then
+      # return a single Nabu::FetchReport pinning the last treebank's HEAD,
+      # with the full per-repo sha summary (and any attic activity) in notes.
+      #
+      # The two-phase choreography matters here: ALL repos are prepared
+      # (objects fetched, tree untouched) and the mass-deletion breaker sees
+      # the deletions of the whole SET before ANY repo merges — so a trip
+      # caused by the last treebank leaves the first one byte-unchanged too.
+      # Upstream-deleted files are atticked under the source-level attic,
+      # <workdir>/.attic/<slug>/<file>, preserving the exact relative shape
+      # discover walks. No network in tests: exercised against local fixture
+      # git repos. Any Shell failure aborts the sync as Nabu::FetchError; a
+      # tripped breaker as Nabu::SyncAborted (+force+ overrides).
+      def fetch(workdir, progress: nil, force: false)
+        pulls = git_pulls(workdir, progress)
+        pulls.each_value(&:prepare!)
+        guard_mass_deletion!(workdir, pulls.values.flat_map(&:doomed_paths), force: force)
+        pulls.each_value(&:complete!)
+        shas = pulls.transform_values(&:head_sha)
+        Nabu::FetchReport.new(sha: shas.values.last, fetched_at: Time.now, notes: fetch_notes(shas, pulls))
       rescue Nabu::Shell::Error => e
         raise Nabu::FetchError, "ud fetch failed into #{workdir}: #{e.message}"
       end
@@ -116,26 +119,19 @@ module Nabu
         TREEBANKS.fetch(slug)[:repo]
       end
 
-      def sync_repo(repo, dir, progress)
-        if Dir.exist?(File.join(dir, ".git"))
-          git_pull(repo, dir, progress)
-        else
-          git_clone(repo, dir, progress)
+      def git_pulls(workdir, progress)
+        TREEBANKS.keys.to_h do |slug|
+          [slug, Nabu::GitFetch.new(
+            repo_url: repo_url(slug), dir: File.join(workdir, slug),
+            attic_dir: File.join(workdir, ATTIC_DIRNAME, slug), progress: progress
+          )]
         end
       end
 
-      def git_clone(repo, dir, progress)
-        return Nabu::Shell.run("git", "clone", "--depth", "1", repo, dir) unless progress
-
-        progress.call("Cloning #{repo}…")
-        Nabu::Shell.stream("git", "clone", "--progress", "--depth", "1", repo, dir) { |line| progress.call(line) }
-      end
-
-      def git_pull(repo, dir, progress)
-        return Nabu::Shell.run("git", "-C", dir, "pull", "--ff-only") unless progress
-
-        progress.call("Pulling #{repo}…")
-        Nabu::Shell.stream("git", "-C", dir, "pull", "--progress", "--ff-only") { |line| progress.call(line) }
+      def fetch_notes(shas, pulls)
+        notes = shas.map { |slug, sha| "#{slug}=#{sha}" }.join(" ")
+        atticked = pulls.values.sum { |pull| pull.atticked.size }
+        atticked.positive? ? "#{notes} · atticked #{atticked} upstream-deleted file(s)" : notes
       end
 
       def document_refs(workdir)
