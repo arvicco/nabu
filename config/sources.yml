@@ -21,6 +21,11 @@ first1k-greek:
   enabled: false   # awaiting first real sync + owner sign-off (P3-2)
   sync_policy: live
 
+ud:
+  adapter: Nabu::Adapters::UniversalDependencies
+  enabled: false   # awaiting first real sync + owner sign-off (P3-3)
+  sync_policy: manual   # treebanks version independently and change rarely
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

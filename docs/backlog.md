@@ -212,7 +212,7 @@ Goal: OpenGreekAndLatin First1KGreek — same CapiTainS/EpiDoc conventions as
 Acceptance: AdapterConformance + source-specific tests on real fixtures;
       green + lint.
 
-## P3-3 · ConlluParser + UD adapter  [tier: opus, fable-review] [status: ready] [deps: P3-0, P3-1]
+## P3-3 · ConlluParser + UD adapter  [tier: opus, fable-review] [status: done] [deps: P3-0, P3-1]
 Goal: CoNLL-U parser family (line-based TSV: 10 columns, sentence = passage,
       lemma/upos/feats → annotations; follows the EpidocParser family
       template) + Universal Dependencies adapter over per-treebank git repos
