@@ -20,8 +20,8 @@ across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
 Leiden): Perseus canonical Greek (**live** — 744 documents / 238k passages
 synced), First1KGreek, Universal Dependencies ancient treebanks, PROIEL,
 TOROT, and Papyri.info DDbDP (each awaiting its first owner-verified sync).
-Querying is not implemented yet — Nabu can ingest and rebuild, not yet
-search.
+**The full CLI surface is now real** — sync, status, rebuild, search
+(diacritic-insensitive FTS), show, export, verify; no stubs remain.
 
 ## Requirements
 
@@ -41,7 +41,10 @@ search.
 | `bin/nabu sync --all` | Sync every *enabled* source with `sync_policy: live` — the unattended path; one source's failure doesn't stop the others |
 | `… --parse-only` | Re-parse the existing local snapshot without touching the network (after parser fixes) |
 | `… --force` | Override the safety breaker that aborts any sync which would withdraw >20% of a source's documents (upstream restructures look like mass deletions) |
-| `bin/nabu search` / `show` | **Not implemented yet** — stubs that say so and exit 1 (search arrives in Phase 4) |
+| `bin/nabu search QUERY [--lang X] [--license CLASS] [--limit N]` | Full-text search over the corpus (FTS5, bm25-ranked). Diacritic-insensitive: `μηνιν` finds `μῆνιν`. Prints urn, language, highlighted snippet per hit. |
+| `bin/nabu show URN` | Inspect a passage (text, document, license, revision, full provenance trail) or a whole document (ordered passages). Shows withdrawn items, honestly labeled. |
+| `bin/nabu export --format plain\|jsonl [--lang X] [--license CLASS]` | Stream the live corpus to stdout — the longevity-hedge exit formats (CoNLL-U arrives with the enrichment phase) |
+| `bin/nabu verify` | Re-parse every canonical file and compare content hashes against the catalog — the cronnable bitrot/tamper check. Exit 0 clean, 1 on any mismatch. |
 
 Configuration lives in `config/nabu.yml` (paths; commented example shipped)
 and `config/sources.yml` (source registry: adapter class, enabled flag,
