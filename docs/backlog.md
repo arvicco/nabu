@@ -277,7 +277,7 @@ Acceptance: CLI tests against seeded fixture corpus (Greek hit via
       diacritic-insensitive query proves remove_diacritics; lang + license
       filters; limit); green + lint.
 
-## P4-3 · nabu show + export  [tier: opus] [status: ready] [deps: —]
+## P4-3 · nabu show + export  [tier: opus] [status: done] [deps: —]
 Goal: `nabu show URN` — passage (text, document title, language, revision,
       provenance events) or whole document (ordered passages) when the urn
       is a document's. `nabu export [--lang X] [--license Y] --format

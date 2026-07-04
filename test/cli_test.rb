@@ -30,23 +30,13 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild search show].each do |command|
+    %w[version sync status rebuild search show export].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
 
   def test_exit_on_failure_is_enabled
     assert Nabu::CLI.exit_on_failure?
-  end
-
-  # Every remaining stub subcommand must announce it is not implemented and
-  # fail (exit 1). (sync is implemented as of P2-4; search as of P4-2.)
-  %w[show].each do |command|
-    define_method(:"test_#{command}_stub_is_not_implemented") do
-      _out, err, status = run_cli([command])
-      assert_equal 1, status, "#{command} should exit with status 1"
-      assert_match(/not implemented/i, err, "#{command} should report not implemented on stderr")
-    end
   end
 
   # status is implemented (P1-6). Against an empty registry with no catalog db,
@@ -199,6 +189,78 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[search anything]) }
       assert_equal 1, status
       assert_match(/no index.*sync.*rebuild/i, err)
+    end
+  end
+
+  # -- show (P4-3) ---------------------------------------------------------
+
+  def test_show_passage_prints_text_document_and_provenance
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1]) }
+      assert_nil status, "a resolved urn exits 0"
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
+      assert_match(/μῆνιν/, out, "the pristine passage text is shown")
+      assert_match(/document: urn:nabu:test_adapter:one/, out)
+      assert_match(/provenance:/, out)
+      assert_match(/loaded/, out, "the loader's provenance event is listed")
+    end
+  end
+
+  def test_show_document_lists_passages_in_sequence
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one]) }
+      assert_nil status
+      assert_match(/passages \(2\):/, out)
+      assert_match(/urn:nabu:test_adapter:one:1/, out)
+      assert_match(/urn:nabu:test_adapter:one:2/, out)
+    end
+  end
+
+  def test_show_unknown_urn_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:nope]) }
+      assert_equal 1, status
+      assert_match(/urn not found/i, err)
+    end
+  end
+
+  # -- export (P4-3) -------------------------------------------------------
+
+  def test_export_plain_streams_one_line_per_passage
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[export --format plain]) }
+      assert_nil status
+      lines = out.split("\n")
+      assert_equal 3, lines.size, "three live passages, one line each"
+      assert_includes lines, "μῆνιν"
+    end
+  end
+
+  def test_export_jsonl_emits_valid_json_objects
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[export --format jsonl]) }
+      assert_nil status
+      records = out.split("\n").map { |line| JSON.parse(line) }
+      assert_equal 3, records.size
+      record = records.first
+      assert_equal %w[annotations language text text_normalized urn].sort, record.keys.sort
+      assert_kind_of Hash, record.fetch("annotations")
+    end
+  end
+
+  def test_export_conllu_is_deferred
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[export --format conllu]) }
+      assert_equal 1, status
+      assert_match(/deferred until the enrichment phase/i, err)
+    end
+  end
+
+  def test_export_bad_license_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[export --format plain --license bogus]) }
+      assert_equal 1, status
+      assert_match(/unknown license/i, err)
     end
   end
 
