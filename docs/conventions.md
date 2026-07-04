@@ -167,6 +167,42 @@ counts, hand shifts) lives in per-passage `"leiden"` annotations. The
 authoritative, exhaustively documented version of the policy is the
 `DdbdpParser` file header (`lib/nabu/adapters/ddbdp_parser.rb`).
 
+**Cancelled documents and `⟦…⟧` (P6-2 amendment).** In print practice
+Leiden double brackets `⟦αβγ⟧` mean *deleted in antiquity but legible*:
+the scribe crossed the text out (cross-strokes, slashes, wash-out), yet
+the editor can still read every letter — so the edition prints the text,
+inside the brackets. Cancelled is not deleted, and for the historian the
+distinction matters: a crossed-out receipt is still a receipt someone
+wrote — the cancellation is itself a documented event (the debt was paid,
+the draft was superseded), not an absence of text. About 40 DDbDP
+documents are cancellations end to end (every line inside
+`<del rend="cross-strokes"|"slashes"|"erasure">`; exemplar o.claud.3.457,
+also cpr.6.3, bgu.1.179, apf.59.139); under the blanket drop-`<del>`
+policy they extracted zero citable lines and quarantined — the parser
+erased documents that print editions publish. The rule adopted:
+
+- **When a document's edition extracts zero citable lines under the
+  standard policy — and only then — it is re-read once with `<del>`
+  content kept, wrapped in `⟦…⟧`** ("⟦" where the cancellation opens,
+  "⟧" where it closes, gap-marker style, so a multi-line cancellation
+  carries one opening and one closing bracket exactly as a print edition
+  sets it). Everything else about the policy still applies inside the
+  kept del; every line touched carries `"leiden": {"cancelled": true}`.
+  A document still empty after the retry quarantines honestly.
+
+The rule is document-scoped on purpose: it engages precisely for the class
+the old policy erased, and provably never for a document that already
+loaded (a loaded document has at least one passage, so the retry never
+runs and its frozen urns/text stay byte-identical).
+
+**Recorded future-work question (owner decision):** should `<del>`
+*always* render in `⟦…⟧`, partial cancellations included? Papyrologically
+that is the more faithful reading — Leiden treats `⟦⟧` as reading text,
+not apparatus. But adopting it rewrites every already-loaded passage that
+contains a partial del: a corpus-wide, journaled revision (bumped
+revisions, provenance entries), to be scheduled deliberately — not
+smuggled in through a parser patch.
+
 ## 6. Lemmas and morphology — why treebanks are precious
 
 Ancient IE languages are heavily inflected: one Greek verb inflects into
