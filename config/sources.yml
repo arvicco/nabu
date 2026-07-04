@@ -16,6 +16,38 @@ perseus-greek:
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
 
+first1k-greek:
+  adapter: Nabu::Adapters::First1kGreek
+  enabled: false   # awaiting first real sync + owner sign-off (P3-2)
+  sync_policy: live
+
+ud:
+  adapter: Nabu::Adapters::UniversalDependencies
+  enabled: false   # awaiting first real sync + owner sign-off (P3-3)
+  sync_policy: manual   # treebanks version independently and change rarely
+
+proiel:
+  adapter: Nabu::Adapters::Proiel
+  enabled: false   # awaiting first real sync + owner sign-off (P3-4)
+  # Upstream proiel-treebank is frozen at release 20180408; its successor is
+  # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
+  sync_policy: frozen
+
+torot:
+  adapter: Nabu::Adapters::Torot
+  enabled: false   # awaiting first real sync + owner sign-off (P3-5)
+  # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
+  # unlike the frozen proiel-treebank it still gets occasional releases:
+  # re-syncable, just not on a live schedule.
+  sync_policy: manual
+
+papyri-ddbdp:
+  adapter: Nabu::Adapters::Papyri
+  enabled: false   # awaiting first real sync + owner sign-off (P3-6)
+  # idp.data updates continuously (born-digital editing platform), but a
+  # multi-GB clone/re-sync is an owner decision, not a scheduled one.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
