@@ -198,6 +198,15 @@ photographs of manuscripts. Hence:
 - The "unlock by reconstruction" strategy (docs/03): when a restricted
   database and an out-of-copyright print edition contain the same text, HTR
   on the PD scan yields a legally clean copy — same words, your labor.
+- **Local retention beats upstream retraction — the owner's deliberate
+  policy** (architecture §8). When upstream scraps a document (deletion,
+  license change, disagreement), the canonical file is preserved under
+  `canonical/<slug>/.attic/` and the document stays live, flagged
+  `retired_upstream`. A retained document keeps the license class it was
+  *fetched* under — recorded per document, as above, so filters keep
+  working — and the collection is a personal research corpus: retention is
+  local use, never republication. Protecting the collection from
+  degradation by upstream churn is the point.
 
 ## 8. Small print that saves future debugging
 

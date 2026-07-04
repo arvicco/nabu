@@ -57,11 +57,14 @@ module Nabu
 
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
       # +lang+ filters on passage language; +license+ on effective license class.
-      def run(query, lang: nil, license: nil, limit: 20)
+      # +urn+ restricts the match to one passage — a ranking-independent
+      # "is this passage findable by this query" probe (the health golden
+      # replay), not a pagination knob.
+      def run(query, lang: nil, license: nil, limit: 20, urn: nil)
         folded = Nabu::Normalize.fold_diacritics(query.to_s).downcase
         return [] if folded.strip.empty?
 
-        hits = fts_hits(folded, inner_limit: limit * INNER_LIMIT_FACTOR)
+        hits = fts_hits(folded, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -82,9 +85,11 @@ module Nabu
       # MATCH fragment (the one raw-SQL exception, per the Indexer class note);
       # bm25()/snippet() are FTS auxiliary functions with no Sequel dataset API,
       # so they ride along as literal fragments with no user input.
-      def fts_hits(folded, inner_limit:)
-        @fulltext[Store::Indexer::TABLE]
-          .where(Sequel.lit("passages_fts MATCH ?", folded))
+      def fts_hits(folded, inner_limit:, urn: nil)
+        dataset = @fulltext[Store::Indexer::TABLE]
+                  .where(Sequel.lit("passages_fts MATCH ?", folded))
+        dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
+        dataset
           .select(:passage_id, Sequel.lit(SNIPPET_SQL).as(:snippet))
           .order(Sequel.lit(RANK_SQL))
           .limit(inner_limit)

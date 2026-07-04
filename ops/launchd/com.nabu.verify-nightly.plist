@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Nabu nightly integrity check (maintenance §1).
+
+  Runs `nabu verify` — re-hashes every canonical file against the catalog and
+  exits 1 on any bitrot/tamper mismatch. Read-only, no network.
+
+  TEMPLATE. Copy to ~/Library/LaunchAgents/, substitute the two placeholders,
+  then bootstrap it. See docs/ops.md for the exact steps.
+
+    __NABU_ROOT__      absolute path to this repo checkout
+                       (e.g. /Users/vb/Dev/nabu)
+    __RUBY_BIN_DIR__   directory holding the ruby/bundle that runs the suite
+                       (launchd has no shell profile, rbenv shims, or Homebrew
+                       PATH — you MUST give it the real bindir here).
+                       Find it with:  dirname "$(cd __NABU_ROOT__ && which ruby)"
+                       Homebrew example: /opt/homebrew/bin
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nabu.verify-nightly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>exec bundle exec bin/nabu verify</string>
+  </array>
+
+  <!-- Bundler finds the Gemfile and the adapters find canonical/ relative to here. -->
+  <key>WorkingDirectory</key>
+  <string>__NABU_ROOT__</string>
+
+  <!-- launchd starts jobs with a bare PATH and none of your login shell's setup.
+       Prepend the ruby/bundle bindir so `bundle`, `bin/nabu`'s `env ruby`
+       shebang, and `git` all resolve. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>__RUBY_BIN_DIR__:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- Nightly at 03:15. Adjust freely. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>3</integer>
+    <key>Minute</key>
+    <integer>15</integer>
+  </dict>
+
+  <!-- stdout/stderr land in the repo's gitignored log/ dir. -->
+  <key>StandardOutPath</key>
+  <string>__NABU_ROOT__/log/verify-nightly.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__NABU_ROOT__/log/verify-nightly.err.log</string>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

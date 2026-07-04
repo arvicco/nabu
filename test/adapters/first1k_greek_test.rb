@@ -18,7 +18,7 @@ require "fileutils"
 class First1kGreekTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = File.expand_path("../fixtures/first1k", __dir__)
+  FIXTURES = Nabu::TestSupport.fixtures("first1k") # NABU_FIXTURE_DIR-aware (fixtures:check)
   GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
 
   # The three fixture editions prove BOTH slug families are accepted: two

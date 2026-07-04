@@ -15,7 +15,7 @@ require "fileutils"
 class PapyriTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = File.expand_path("../fixtures/ddbdp", __dir__)
+  FIXTURES = Nabu::TestSupport.fixtures("ddbdp") # NABU_FIXTURE_DIR-aware (fixtures:check)
 
   # --- AdapterConformance hooks -------------------------------------------
 

@@ -39,6 +39,37 @@ class CLITest < Minitest::Test
     assert Nabu::CLI.exit_on_failure?
   end
 
+  # -- inline subcommand help (owner UX) -----------------------------------
+  # `nabu help <command>` must teach the command, not just name it: query
+  # syntax, real urn shapes, worked examples. Anchors only — prose may move.
+
+  def test_help_search_documents_syntax_filters_and_examples
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/implicit AND/, out, "must state the multi-term semantics")
+    assert_match(/μῆνιν/, out, "must show the diacritic-folding promise")
+    assert_match(/prefix/, out, "must document the * prefix form")
+    assert_match(%r{OR/NOT are not supported}i, out, "must be honest about booleans")
+    assert_match(/Examples:/, out)
+    assert_match(/--lang/, out)
+  end
+
+  def test_help_show_documents_urn_shapes_and_full_urn
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/provenance/, out, "must explain the passage view")
+    assert_match(/:suffixes/, out, "must explain the document listing form")
+    assert_match(/--full-urn/, out)
+    assert_match(/urn:cts:greekLit:/, out, "must show a real CTS urn shape")
+    assert_match(/restart block/, out, "must explain papyri :b<k> segments")
+    assert_match(/Examples:/, out)
+  end
+
+  def test_help_export_documents_formats_and_filters
+    out, _err, _status = run_cli(%w[help export])
+    assert_match(/jsonl/, out)
+    assert_match(/annotations/, out, "must say what rides in jsonl lines")
+    assert_match(/Examples:/, out)
+  end
+
   # status is implemented (P1-6). Against an empty registry with no catalog db,
   # it reports "no sources" and exits cleanly (0). (The shipped sources.yml now
   # registers perseus-greek, so this behaviour is tested against an isolated
@@ -190,6 +221,71 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- health (P5-3 remote, P5-5 local) ------------------------------------
+
+  # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
+  # queries all skipped (the TestAdapter corpus holds none of the golden urns),
+  # exit 0.
+  def test_health_local_healthy_corpus_exits_zero
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status, "a healthy corpus is exit 0"
+      assert_match(/corpus\s+ok/, out)
+      assert_match(/golden replay:/, out)
+      assert_match(/health: OK/, out)
+      assert_match(/health --remote/, out, "bare health hints at the upstream probe")
+    end
+  end
+
+  # A seeded quarantine spike in the run history is a loud finding: exit 1.
+  def test_health_local_seeded_spike_exits_one
+    with_indexed_corpus do |config|
+      seed_spike_runs(config)
+      out, err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status, "a quarantine spike fails health"
+      assert_match(/ANOMALY/, out)
+      assert_match(/quarantine spike/i, out)
+      assert_match(/loud finding/i, err)
+    end
+  end
+
+  # No catalog on disk: an informational "no corpus" note, exit 0.
+  def test_health_local_no_corpus_notes_and_exits_zero
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status
+      assert_match(/no corpus/i, out)
+      assert_match(/health: OK/, out)
+    end
+  end
+
+  # --remote, every upstream alive → the table lands on stdout and exit is 0.
+  # TestAdapter's upstream is non-github, so the license check stays unchecked
+  # (no HTTP), and with no catalog built drift reads never-synced.
+  def test_health_remote_all_alive_exits_zero
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) do
+        with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[health --remote]) }
+      end
+      assert_nil status, "all-alive is exit 0"
+      assert_match(/corpus\s+alive/, out)
+      assert_match(/1 source, 1 alive/, out)
+    end
+  end
+
+  # --remote, a gone upstream → GONE in the table (stdout) and exit 1.
+  def test_health_remote_gone_upstream_exits_one
+    with_sync_env(enabled: true) do |config|
+      dead = ->(*_argv) { raise Nabu::Shell::Error.new("x", status: 128, stderr: "remote: Repository not found.") }
+      out, err, status = with_config(config) do
+        with_stubbed_shell(dead) { run_cli(%w[health --remote]) }
+      end
+      assert_equal 1, status
+      assert_match(/corpus\s+GONE/, out)
+      assert_match(/upstream.*gone/i, err)
+    end
+  end
+
   # -- search (P4-2) -------------------------------------------------------
 
   # Build the store (catalog + fulltext index) via a real parse-only sync, then
@@ -243,13 +339,24 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_show_document_lists_passages_in_sequence
+  def test_show_document_lists_passages_as_suffixes
     with_indexed_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one]) }
       assert_nil status
       assert_match(/passages \(2\):/, out)
-      assert_match(/urn:nabu:test_adapter:one:1/, out)
-      assert_match(/urn:nabu:test_adapter:one:2/, out)
+      assert_match(/^ +:1  /, out, "passage lines carry only the suffix relative to the document urn")
+      assert_match(/^ +:2  /, out)
+      refute_match(/^ +urn:nabu:test_adapter:one:1\b/, out,
+                   "the document urn is printed once in the header, not per line")
+    end
+  end
+
+  def test_show_document_full_urn_flag_restores_absolute_urns
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one --full-urn]) }
+      assert_nil status
+      assert_match(/^ +urn:nabu:test_adapter:one:1\b/, out)
+      assert_match(/^ +urn:nabu:test_adapter:one:2\b/, out)
     end
   end
 
@@ -314,6 +421,23 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Append three succeeded runs to the just-synced "corpus" source so the latest
+  # errored count (90) towers over the recent norm — a quarantine spike. Writes
+  # to the on-disk catalog through its own connection, then hands back so the CLI
+  # opens it fresh.
+  def seed_spike_runs(config)
+    db = Nabu::Store.connect(config.catalog_path)
+    Nabu::Store.setup!(db)
+    source = Nabu::Store::Source.first(slug: "corpus")
+    now = Time.now
+    [2, 3, 90].each do |errored|
+      Nabu::Store::Run.create(source_id: source.id, started_at: now, finished_at: now,
+                              added: 1, updated: 0, errored: errored, status: "succeeded")
+    end
+  ensure
+    db&.disconnect
+  end
+
   # capture_io, but with tty? forced on the swapped StringIO streams so the
   # tty-gated progress paths can be exercised (Minitest 6 has no Mock; this is
   # the house swap-singleton pattern). Returns [stdout_string, stderr_string].
@@ -348,6 +472,16 @@ class CLITest < Minitest::Test
         sources_path: sources, config_path: "(test)"
       )
     end
+  end
+
+  # Swap Nabu::Shell.run for +impl+ (a proc) so the health probe sees canned
+  # ls-remote output/failures with no network, restoring the original after.
+  def with_stubbed_shell(impl)
+    original = Nabu::Shell.method(:run)
+    Nabu::Shell.define_singleton_method(:run) { |*argv| impl.call(*argv) }
+    yield
+  ensure
+    Nabu::Shell.define_singleton_method(:run, original)
   end
 
   # Minitest 6 dropped Minitest::Mock (and it is outside the dependency budget),

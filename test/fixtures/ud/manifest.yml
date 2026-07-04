@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every fixture here is a TRIM (first 50 sentence blocks) of a much larger
+# upstream *-ud-test.conllu, so whole: false — a fresh GET returns the full
+# file and is fetched for URL-liveness only, never byte-compared. adapter_test
+# is null: the UD adapter test asserts trimmed-block counts, which an untrimmed
+# upstream file would false-fail. Re-trim per the README procedure after any
+# refresh (refresh overwrites the trim with the full upstream file).
+source: ud
+adapter_test:
+retrieved: 2026-07-03
+files:
+  - path: gothic-proiel/got_proiel-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Gothic-PROIEL/master/got_proiel-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of got_proiel-ud-test.conllu (970,958 B -> 48,093 B)
+  - path: greek-proiel/grc_proiel-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ancient_Greek-PROIEL/master/grc_proiel-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of grc_proiel-ud-test.conllu (1,465,264 B -> 91,320 B)
+  - path: sanskrit-vedic/sa_vedic-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Sanskrit-Vedic/master/sa_vedic-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of sa_vedic-ud-test.conllu (3,035,277 B -> 72,407 B)
+  - path: latin-ittb/la_ittb-ud-test-head50+mwt.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Latin-ITTB/master/la_ittb-ud-test.conllu
+    whole: false
+    trim: first 50 blocks of la_ittb-ud-test.conllu (both MWT sentences fell within the head 50; 0 appended) (3,184,535 B -> 61,008 B)

@@ -91,6 +91,29 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # Quarantines every discovered ref (parse always raises ParseError), so a sync
+  # yields a high errored count with 0 added — used to trip the inline P5-5
+  # quarantine-spike warning against a seeded low-errored history.
+  class SpikeAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "spike", name: "Spike", license: "CC0 1.0", license_class: "open",
+      upstream_url: "https://example.invalid/spike", parser_family: "plaintext"
+    )
+    def self.manifest = MANIFEST
+
+    def fetch(_workdir, **) = Nabu::FetchReport.new(sha: "s", fetched_at: Time.now, notes: nil)
+
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      90.times do |i|
+        yield Nabu::DocumentRef.new(source_id: MANIFEST.id, id: "urn:spike:#{i}", path: File.join(workdir, "x"))
+      end
+    end
+
+    def parse(_ref) = raise(Nabu::ParseError, "bad")
+  end
+
   class LiveEnabled  < CountingSource; def self.slug = "live-enabled";  end
   class LiveDisabled < CountingSource; def self.slug = "live-disabled"; end
   class ManualSrc    < CountingSource; def self.slug = "manual-src";    end
@@ -259,6 +282,35 @@ class SyncRunnerTest < Minitest::Test
     aborted = runner.sync("breaker")
     assert aborted.aborted?
     assert_nil aborted.indexed
+  end
+
+  # --- inline deviation warnings (P5-5) -----------------------------------
+
+  # A sync whose fresh LoadReport quarantines far above the source's recent norm
+  # emits an inline quarantine-spike warning — advisory: the sync still succeeds.
+  def test_sync_emits_inline_quarantine_spike_warning
+    source = Nabu::Store::Source.create(
+      slug: "spiky", name: "spiky", adapter_class: "x", license_class: "open"
+    )
+    [0, 1, 2].each do |errored|
+      Nabu::Store::Run.create(source_id: source.id, started_at: Time.now, finished_at: Time.now,
+                              added: 5, updated: 0, errored: errored, status: "succeeded")
+    end
+    FileUtils.mkdir_p(File.join(@canonical, "spiky"))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+
+    outcome = runner.sync("spiky", parse_only: true)
+    refute outcome.aborted?, "an advisory warning must never fail the sync"
+    assert_equal 90, outcome.load_report.errored
+    assert_includes outcome.warnings.map(&:kind), :quarantine_spike
+    assert_equal "succeeded", last_run_status
+  end
+
+  # A clean sync against no history carries no warnings.
+  def test_clean_sync_has_no_warnings
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    assert_empty runner.sync("breaker").warnings
   end
 
   # --- sync_all policy filtering ------------------------------------------
