@@ -236,7 +236,7 @@ Goal: TOROT (Tromsø OCS + Old Russian) — PROIEL XML reuse; adapter is thin
 Acceptance: AdapterConformance + OCS-specific assertions (chu language tag,
       known Marianus snippet); green + lint.
 
-## P3-6 · DdbdpParser + Papyri.info adapter  [tier: fable] [status: ready] [deps: P3-1]
+## P3-6 · DdbdpParser + Papyri.info adapter  [tier: fable] [status: done] [deps: P3-1]
 Goal: RETIERED opus→fable after research: DDbDP is NOT CapiTainS (no
       __cts__.xml, no refsDecl, no CTS urns) — a new parser family, not
       EpidocParser reuse. Identity via <idno> (filename/ddb-hybrid/HGV/TM);
