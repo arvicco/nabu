@@ -307,7 +307,7 @@ from the already-synced local `canonical/papyri-ddbdp` snapshot (license
 recorded at the Phase 3 approval); fixture READMEs note trim provenance and
 the original fetch date.*
 
-## P5-1 · DdbdpParser: restart-aware URN minting  [tier: fable] [status: ready] [deps: —]
+## P5-1 · DdbdpParser: restart-aware URN minting  [tier: fable] [status: done] [deps: —]
 Goal: Fix the duplicate-urn quarantine class from the 2026-07-04 first sync
       (12,288 of 21,641 quarantines): DDbDP files where line numbering restarts
       mid-document (multiple `<lb n="1"/>`) with NO textpart divs to
