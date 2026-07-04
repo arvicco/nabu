@@ -114,6 +114,44 @@ class SyncRunnerTest < Minitest::Test
     def parse(_ref) = raise(Nabu::ParseError, "bad")
   end
 
+  # A multi-repo source (UD shape): fetch returns a FetchReport whose +repos+
+  # maps each upstream repo_url to its HEAD sha, so update_source_state pins one
+  # source_repos row per repo. Class-level +repos+ so a re-sync can drop a repo
+  # (stale-pin removal) or advance a sha. discover yields one doc so the load
+  # path runs.
+  class MultiRepoAdapter < Nabu::Adapter
+    class << self
+      attr_accessor :repos
+
+      def reset!(repos: {})
+        self.repos = repos
+      end
+    end
+
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "multi", name: "Multi", license: "CC0 1.0", license_class: "open",
+      upstream_url: "https://github.com/acme", parser_family: "plaintext"
+    )
+    def self.manifest = MANIFEST
+
+    def fetch(_workdir, **)
+      Nabu::FetchReport.new(sha: self.class.repos.values.last, fetched_at: Time.now,
+                            notes: nil, repos: self.class.repos)
+    end
+
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      yield Nabu::DocumentRef.new(source_id: MANIFEST.id, id: "urn:multi:1", path: File.join(workdir, "x"))
+    end
+
+    def parse(ref)
+      doc = Nabu::Document.new(urn: ref.id, language: "grc", title: "t", canonical_path: ref.path)
+      doc << Nabu::Passage.new(urn: "#{ref.id}:1", language: "grc", text: "α", text_normalized: "α", sequence: 0)
+      doc
+    end
+  end
+
   class LiveEnabled  < CountingSource; def self.slug = "live-enabled";  end
   class LiveDisabled < CountingSource; def self.slug = "live-disabled"; end
   class ManualSrc    < CountingSource; def self.slug = "manual-src";    end
@@ -219,6 +257,53 @@ class SyncRunnerTest < Minitest::Test
     refute_nil row.last_sync_at
     assert_equal "sha-head", row.last_sync_sha
     assert_equal "succeeded", last_run_status
+  end
+
+  # --- per-repo pins for multi-repo sources (P6-3) ------------------------
+
+  def test_multi_repo_sync_records_a_source_repos_row_per_repo
+    MultiRepoAdapter.reset!(repos: {
+                              "https://github.com/acme/one" => "sha-one",
+                              "https://github.com/acme/two" => "sha-two"
+                            })
+    runner = make_runner(registry(entry("multi", MultiRepoAdapter, enabled: true)))
+    runner.sync("multi")
+
+    pins = source_repo_pins("multi")
+    assert_equal({ "https://github.com/acme/one" => "sha-one",
+                   "https://github.com/acme/two" => "sha-two" }, pins)
+  end
+
+  def test_resync_upserts_shas_and_removes_stale_repo_rows
+    source = "multi"
+    MultiRepoAdapter.reset!(repos: {
+                              "https://github.com/acme/one" => "sha-one",
+                              "https://github.com/acme/two" => "sha-two"
+                            })
+    runner = make_runner(registry(entry(source, MultiRepoAdapter, enabled: true)))
+    runner.sync(source)
+
+    # A probe recorded a license baseline on the "one" row; a sync must not wipe it.
+    Nabu::Store::SourceRepo.first(repo_url: "https://github.com/acme/one")
+                           .update(license_baseline_sha256: "baseline-one")
+
+    # Next manifest advances "one" and drops "two" entirely.
+    MultiRepoAdapter.repos = { "https://github.com/acme/one" => "sha-one-v2" }
+    runner.sync(source)
+
+    pins = source_repo_pins(source)
+    assert_equal({ "https://github.com/acme/one" => "sha-one-v2" }, pins,
+                 "the vanished repo's stale pin must be removed")
+    kept = Nabu::Store::SourceRepo.first(repo_url: "https://github.com/acme/one")
+    assert_equal "baseline-one", kept.license_baseline_sha256, "upsert must preserve the license baseline"
+  end
+
+  def test_single_repo_sync_records_no_source_repos_rows
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner.sync("breaker")
+
+    assert_equal 0, Nabu::Store::SourceRepo.count, "single-repo sources write nothing to source_repos"
   end
 
   # --- errors -------------------------------------------------------------
@@ -369,6 +454,11 @@ class SyncRunnerTest < Minitest::Test
   end
 
   def source_row(slug) = Nabu::Store::Source.first(slug: slug)
+
+  def source_repo_pins(slug)
+    source_id = source_row(slug).id
+    Nabu::Store::SourceRepo.where(source_id: source_id).select_hash(:repo_url, :last_sync_sha)
+  end
 
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
 

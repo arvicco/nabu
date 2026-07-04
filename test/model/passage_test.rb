@@ -35,6 +35,29 @@ class PassageTest < Minitest::Test
     assert_equal({}, build.annotations)
   end
 
+  # -- text_normalized minting (P6-4: the ONE folding boundary) --------------
+
+  def test_text_normalized_defaults_to_the_per_language_search_form
+    passage = Nabu::Passage.new(
+      urn: "urn:x:1", language: "grc", text: "μῆνις Ἀχιλῆος", sequence: 0
+    )
+    assert_equal "μηνισ αχιληοσ", passage.text_normalized,
+                 "omitted text_normalized must mint Normalize.search_form (marks, case, final sigma)"
+  end
+
+  def test_text_normalized_minting_applies_the_language_rule
+    latin = Nabu::Passage.new(urn: "urn:x:1", language: "lat", text: "Arma Virumque", sequence: 0)
+    assert_equal "arma uirumque", latin.text_normalized
+    gothic = Nabu::Passage.new(urn: "urn:x:1", language: "got", text: "jah qiþands", sequence: 0)
+    assert_equal "jah qiþands", gothic.text_normalized, "generic-fold languages keep j"
+  end
+
+  def test_explicit_text_normalized_is_still_honored
+    # Store plumbing and tests may supply the value; adapters must not (the
+    # conformance suite pins every adapter to the minted form).
+    assert_equal "ανδρα", build(text_normalized: "ανδρα").text_normalized
+  end
+
   def test_value_is_frozen
     assert_predicate build, :frozen?
   end

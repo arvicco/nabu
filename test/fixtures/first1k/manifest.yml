@@ -1,11 +1,32 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
 # base https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/
-# joined to each file's path under greekLit/data/. All files kept whole.
+# joined to each file's path under greekLit/data/. All files kept whole except
+# the Nicomachus P6-1 exemplar (whole: false, documented trim below).
 source: first1k
-adapter_test: test/adapters/first1k_greek_test.rb
+# adapter_test is null since P6-1: the Nicomachus edition below is a documented
+# TRIM (whole: false), and a count-based adapter test re-run against the full
+# upstream file would false-fail (see the schema note in perseus/manifest.yml).
+adapter_test: null
 retrieved: 2026-07-03
 files:
+  - path: greekLit/data/tlg0358/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg0358/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata; copied from the local canonical snapshot, P6-1)
+  - path: greekLit/data/tlg0358/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg0358/tlg001/__cts__.xml
+    whole: true
+    trim: none (work metadata; copied from the local canonical snapshot, P6-1)
+  - path: greekLit/data/tlg0358/tlg001/tlg0358.tlg001.1st1K-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg0358/tlg001/tlg0358.tlg001.1st1K-grc1.xml
+    whole: false
+    trim: >-
+      Nicomachus structural-retry exemplar (P6-1), trimmed from the local
+      canonical snapshot (canonical/first1k-greek/data/tlg0358/tlg001/, synced
+      2026-07-03): full teiHeader + edition div kept; chapter 1 reduced to
+      section 1, chapter 2 to section 1 (preserving the chapter boundary);
+      chapter 3 and the remaining sections removed.
   - path: greekLit/data/tlg2139/__cts__.xml
     url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2139/__cts__.xml
     whole: true

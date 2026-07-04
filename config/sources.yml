@@ -4,8 +4,9 @@
 #
 #   <slug>:
 #     adapter: Nabu::Adapters::Perseus   # adapter class name (resolved lazily)
-#     enabled: false                     # seeds runtime state; the db is
-#                                        #   authoritative after the first sync
+#     enabled: false                     # THIS FILE is authoritative — flips
+#                                        #   here reach the db on any
+#                                        #   sync/rebuild/health reconcile
 #     sync_policy: live                  # live | manual | frozen (default: manual)
 #
 # Registered sources follow. `enabled: false` until a first real sync is
@@ -43,7 +44,7 @@ torot:
 
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
-  enabled: false  # first sync 2026-07-04: 49060 loaded, 21641 quarantined — held pending P5 DDbDP line-restart minting fix
+  enabled: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
   # idp.data updates continuously (born-digital editing platform), but a
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
   sync_policy: manual

@@ -35,6 +35,19 @@ module Store
       assert_equal [enrichment.id], passage.enrichments.map(&:id)
     end
 
+    # P6-3: per-repo pins for a multi-repo source.
+    def test_source_has_many_source_repos
+      source = Nabu::Store::Source.create(slug: "ud", name: "UD", adapter_class: "X", license_class: "nc")
+      repo = Nabu::Store::SourceRepo.create(
+        source_id: source.id, repo_url: "https://github.com/UniversalDependencies/UD_Latin-ITTB",
+        last_sync_sha: "abc123"
+      )
+
+      assert_equal [repo.id], source.source_repos.map(&:id)
+      assert_equal source.id, repo.source.id
+      assert_nil repo.license_baseline_sha256
+    end
+
     def test_source_has_many_runs
       source = Nabu::Store::Source.create(slug: "s", name: "S", adapter_class: "X", license_class: "open")
       run = Nabu::Store::Run.create(source_id: source.id, started_at: Time.now)

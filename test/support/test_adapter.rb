@@ -64,7 +64,6 @@ class TestAdapter < Nabu::Adapter
         urn: "#{urn}:#{index + 1}",
         language: "grc",
         text: text,
-        text_normalized: Nabu::Normalize.nfc(text.downcase),
         sequence: index
       )
     end

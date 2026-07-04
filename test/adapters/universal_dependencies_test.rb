@@ -144,6 +144,27 @@ class UniversalDependenciesTest < Minitest::Test
     end
   end
 
+  # P6-3: the FetchReport carries per-repo pins { repo_url => head sha } so the
+  # sync path can record one source_repos row per treebank. Keyed by the SAME
+  # repo_url the remote probe reads (here the local tmpdirs the test points at).
+  def test_fetch_reports_per_repo_pins_keyed_by_repo_url
+    Dir.mktmpdir do |root|
+      upstreams = {}
+      Nabu::Adapters::UniversalDependencies::TREEBANKS.each_key do |slug|
+        upstream = File.join(root, "upstream-#{slug}")
+        make_git_repo(upstream, slug)
+        upstreams[slug] = upstream
+      end
+      adapter = ud_pointing_at(upstreams)
+
+      report = adapter.fetch(File.join(root, "work"))
+
+      expected = upstreams.values.to_h { |upstream| [upstream, git(upstream, "rev-parse", "HEAD")] }
+      assert_equal expected, report.repos
+      assert_equal report.sha, report.repos.values.last, "sha still pins the last treebank"
+    end
+  end
+
   def test_fetch_wraps_shell_failure_in_fetch_error
     Dir.mktmpdir do |root|
       workdir = File.join(root, "work")

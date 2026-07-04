@@ -67,3 +67,20 @@
   note: >-
     First1kGreek (grc) — the Seikilos epitaph. Exercises the sixth adapter and,
     with no `lang`, the unfiltered search path (lang is optional).
+
+- query: "αοιδησ"
+  lang: grc
+  expect_urn: "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2:3"
+  note: >-
+    FINAL SIGMA (P6-4). Hymn 13 line 3 ends "ἀοιδῆς." (word-final ς); the query
+    is typed with an ordinary σ. The grc boundary fold maps ς→σ (TLG Beta Code
+    encodes both as one letter) and the query-side grc variant folds the same
+    way, so word-internal vs final sigma never splits a search.
+
+- query: "uidemur"
+  lang: lat
+  expect_urn: "urn:nabu:proiel:cic-off:86001"
+  note: >-
+    LATIN v→u (P6-4). PROIEL Cicero sentence 86001 reads "videmur"; the
+    u-spelling query still finds it because the lat boundary fold maps v→u and
+    j→i (PHI/Perseus practice: Latin search does not distinguish u/v or i/j).

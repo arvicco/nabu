@@ -35,20 +35,30 @@ module Nabu
     #      (never an error — this is best-effort). The baseline is runtime state
     #      like last_sync_sha, so storing it keeps rebuild-purity (migration 003).
     #
-    # == Multi-repo sources (the UD decision)
+    # == Multi-repo sources (the UD decision, per-repo pinning — P6-3)
     #
     # Most adapters pull one git repo (the manifest URL). UD is one repo PER
     # treebank and its manifest URL is the GitHub *org* — un-probeable as a repo,
     # so probing it literally would be a permanent false "gone". Decision: probe
     # EVERY repo an adapter declares (Adapter.upstream_repo_urls; UD overrides
-    # with its treebank repos) for LIVENESS — the packet's first priority, so a
-    # single dead treebank is caught. A multi-repo source is :alive only if all
-    # its repos are; :gone/:moved if any is (the offending repos named in the
-    # detail). DRIFT and LICENSE are deliberately NOT computed for multi-repo
-    # sources (drift → :multi, license → :unchecked "multi-repo"): the catalog
-    # stores exactly one last_sync_sha and one license baseline per source, which
-    # by UD's own fetch contract pins only the last treebank and cannot describe
-    # N repos honestly. Per-repo drift is left to a future packet.
+    # with its treebank repos) for LIVENESS — a single dead treebank is caught.
+    # A multi-repo source is :alive only if all its repos are; :gone/:moved if
+    # any is (the offending repos named in the detail).
+    #
+    # DRIFT and LICENSE are now computed PER REPO against the source_repos table
+    # (P6-3), which the sync path pins one row per repo into. For each repo:
+    # drift = its ls-remote HEAD vs its source_repos pin (:current/:behind/
+    # :never_synced/:unknown), and the source-level drift is the WORST of them
+    # (offending :behind repos named in +drift_detail+, as liveness names its
+    # offenders); license = the same raw.githubusercontent.com fetch as the
+    # single-repo case but with the baseline stored on the repo's row, and the
+    # source-level license is :changed if ANY repo changed (offenders named),
+    # else :baseline_recorded if any was newly recorded, else :unchanged, else
+    # :unchecked. A multi-repo source with NO pins yet (never synced under P6-3)
+    # still reads drift → :multi and license → :unchecked("multi-repo") — there
+    # is nothing per-repo to compare against until the next sync records rows.
+    # Single-repo sources are unchanged: they read the sources columns exactly
+    # as before.
     class RemoteProbe
       # Tried in order at the remote HEAD sha; first 200 wins. Lowercase
       # variants are real: PerseusDL and First1KGreek ship "license.md".
@@ -65,8 +75,13 @@ module Nabu
       Liveness = Data.define(:status, :detail)
       # status: :baseline_recorded | :unchanged | :changed | :unchecked
       License = Data.define(:status, :detail)
-      # drift: :current | :behind | :never_synced | :unknown | :multi
-      SourceHealth = Data.define(:slug, :enabled, :upstream, :liveness, :drift, :license)
+      # status: :current | :behind | :never_synced | :unknown | :multi.
+      # +detail+ names the offending repos for a multi-repo :behind (nil
+      # otherwise); the single-repo path always leaves it nil.
+      Drift = Data.define(:status, :detail)
+      # drift is the Drift#status symbol (single-repo behavior unchanged);
+      # drift_detail is Drift#detail — the multi-repo offender line, else nil.
+      SourceHealth = Data.define(:slug, :enabled, :upstream, :liveness, :drift, :drift_detail, :license)
 
       Report = Data.define(:rows) do
         # The exit-code gate: any upstream fully gone fails the probe (exit 1).
@@ -97,12 +112,13 @@ module Nabu
         urls = entry.adapter_class.upstream_repo_urls
         probes = urls.map { |url| probe_repo(url) }
         multi = probes.size > 1
+        drift = drift_status(entry, probes, multi: multi)
         SourceHealth.new(
           slug: entry.slug, enabled: entry.enabled,
           upstream: multi ? "#{urls.size} repos" : urls.first,
           liveness: aggregate_liveness(probes),
-          drift: drift_status(entry, probes.first, multi: multi),
-          license: license_status(entry, probes.first, multi: multi)
+          drift: drift.status, drift_detail: drift.detail,
+          license: license_status(entry, probes, multi: multi)
         )
       end
 
@@ -141,24 +157,88 @@ module Nabu
         end
       end
 
-      def drift_status(entry, probe, multi:)
-        return :multi if multi
-        return :unknown unless probe.liveness.status == :alive && probe.head
+      # Worst-wins ordering for a multi-repo source's per-repo drift.
+      DRIFT_SEVERITY = { behind: 3, never_synced: 2, unknown: 1, current: 0 }.freeze
+      private_constant :DRIFT_SEVERITY
 
-        last = source_row(entry)&.last_sync_sha
-        return :never_synced if last.nil? || last.empty?
+      def drift_status(entry, probes, multi:)
+        return single_repo_drift(entry, probes.first) unless multi
 
-        last == probe.head ? :current : :behind
+        multi_repo_drift(entry, probes)
       end
 
-      def license_status(entry, probe, multi:)
-        return unchecked("multi-repo") if multi
+      def single_repo_drift(entry, probe)
+        return Drift.new(status: :unknown, detail: nil) unless probe.liveness.status == :alive && probe.head
+
+        last = source_row(entry)&.last_sync_sha
+        return Drift.new(status: :never_synced, detail: nil) if last.nil? || last.empty?
+
+        Drift.new(status: last == probe.head ? :current : :behind, detail: nil)
+      end
+
+      # No per-repo pins yet → :multi (nothing to compare against until the next
+      # sync records rows). Otherwise the worst per-repo drift wins, with the
+      # :behind repos named in the detail.
+      def multi_repo_drift(entry, probes)
+        pins = source_repo_pins(entry)
+        return Drift.new(status: :multi, detail: "no per-repo pins yet — sync to record") if pins.empty?
+
+        per_repo = probes.map { |probe| [probe, repo_drift(probe, pins[probe.url])] }
+        worst = per_repo.map { |_probe, status| status }.max_by { |status| DRIFT_SEVERITY.fetch(status) }
+        behind = per_repo.select { |_probe, status| status == :behind }.map { |probe, _status| probe.url }
+        Drift.new(status: worst, detail: behind.empty? ? nil : "behind: #{behind.join(', ')}")
+      end
+
+      def repo_drift(probe, pin)
+        return :unknown unless probe.liveness.status == :alive && probe.head
+        return :never_synced if pin.nil? || pin.last_sync_sha.nil? || pin.last_sync_sha.empty?
+
+        pin.last_sync_sha == probe.head ? :current : :behind
+      end
+
+      def license_status(entry, probes, multi:)
+        return single_repo_license(entry, probes.first) unless multi
+
+        multi_repo_license(entry, probes)
+      end
+
+      def single_repo_license(entry, probe)
+        row = source_row(entry)
+        repo_license(probe, row)
+      end
+
+      # Per-repo license baselines stored on the source_repos rows. Source-level
+      # status: :changed if ANY repo changed (offenders named), else
+      # :baseline_recorded if any was newly recorded, else :unchanged if any
+      # matched, else :unchecked (no pins / nothing checkable).
+      def multi_repo_license(entry, probes)
+        pins = source_repo_pins(entry)
+        return unchecked("multi-repo") if pins.empty?
+
+        results = probes.map { |probe| [probe, repo_license(probe, pins[probe.url])] }
+        changed = results.select { |_probe, lic| lic.status == :changed }.map { |probe, _lic| probe.url }
+        return License.new(status: :changed, detail: license_changed_detail(changed)) unless changed.empty?
+
+        statuses = results.map { |_probe, lic| lic.status }
+        return License.new(status: :baseline_recorded, detail: nil) if statuses.include?(:baseline_recorded)
+        return License.new(status: :unchanged, detail: nil) if statuses.include?(:unchanged)
+
+        unchecked("multi-repo")
+      end
+
+      def license_changed_detail(urls)
+        "license file changed — review upstream: #{urls.join(', ')}"
+      end
+
+      # Compare (and record) the license baseline for one repo against +row+
+      # (a Source for the single-repo case, a SourceRepo for a multi-repo one —
+      # both carry license_baseline_sha256 and #update). +row+ nil means the
+      # repo has no pin yet (never synced), so nothing is checkable.
+      def repo_license(probe, row)
         return unchecked("upstream unreachable") unless probe.liveness.status == :alive && probe.head
 
         owner_repo = github_owner_repo(probe.url)
         return unchecked("non-github") unless owner_repo
-
-        row = source_row(entry)
         return unchecked("never synced") unless row
 
         sha = license_sha256(*owner_repo, probe.head)
@@ -207,6 +287,16 @@ module Nabu
         return nil unless @db
 
         Nabu::Store::Source.first(slug: entry.slug)
+      end
+
+      # { repo_url => SourceRepo } for a multi-repo source's pins. Empty when
+      # there is no catalog, no source row, or the source was never synced
+      # under P6-3 (no rows recorded yet).
+      def source_repo_pins(entry)
+        source = source_row(entry)
+        return {} unless source
+
+        Nabu::Store::SourceRepo.where(source_id: source.id).to_hash(:repo_url)
       end
     end
   end

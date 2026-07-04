@@ -31,8 +31,8 @@ module Nabu
     # - text = the `# text = …` comment (the authoritative surface string),
     #   NFC-normalized. Absent (not the case in any fixture, but legal), it is
     #   reconstructed from the FORM column honoring `SpaceAfter=No` in MISC.
-    #   text_normalized = NFC(text.downcase) — the downcase can denormalize
-    #   Greek, so it is re-normalized (same discipline as EpidocParser).
+    #   text_normalized is minted by Passage.new (P6-4 per-language search
+    #   form, Normalize.search_form) — the parser passes only pristine text.
     #
     # == Annotations (the payload that makes treebanks worth ingesting)
     #
@@ -165,7 +165,6 @@ module Nabu
           urn: "#{document_urn}:#{sent_id}",
           language: language,
           text: text,
-          text_normalized: Nabu::Normalize.nfc(text.downcase),
           annotations: annotations(block),
           sequence: sequence
         )

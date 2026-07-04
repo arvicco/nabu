@@ -102,6 +102,20 @@ module AdapterConformance
     end
   end
 
+  # P6-4: text_normalized is minted at the ONE folding boundary (Passage.new →
+  # Normalize.search_form with the passage's own language). An adapter that
+  # passed its own text_normalized would bypass the per-language rule table;
+  # this pins every adapter's output to the minted form.
+  def test_conformance_text_normalized_is_the_minted_search_form
+    each_parsed_document(conformance_adapter) do |_ref, document|
+      document.each do |passage|
+        expected = Nabu::Normalize.search_form(passage.text, language: passage.language)
+        assert_equal expected, passage.text_normalized,
+                     "passage #{passage.urn.inspect} text_normalized must be the per-language search form"
+      end
+    end
+  end
+
   # The DocumentRef id IS the document urn. The sync circuit breaker
   # (SyncRunner §8) predicts a mass-withdrawal by set-differencing existing
   # document urns against the ids discover() yields — cheap directory walking,

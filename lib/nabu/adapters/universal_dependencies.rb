@@ -113,7 +113,8 @@ module Nabu
         guard_mass_deletion!(workdir, pulls.values.flat_map(&:doomed_paths), force: force)
         pulls.each_value(&:complete!)
         shas = pulls.transform_values(&:head_sha)
-        Nabu::FetchReport.new(sha: shas.values.last, fetched_at: Time.now, notes: fetch_notes(shas, pulls))
+        Nabu::FetchReport.new(sha: shas.values.last, fetched_at: Time.now,
+                              notes: fetch_notes(shas, pulls), repos: repo_pins(shas))
       rescue Nabu::Shell::Error => e
         raise Nabu::FetchError, "ud fetch failed into #{workdir}: #{e.message}"
       end
@@ -133,6 +134,14 @@ module Nabu
             attic_dir: File.join(workdir, ATTIC_DIRNAME, slug), progress: progress
           )]
         end
+      end
+
+      # { repo_url => head_sha } from the per-slug shas — the FetchReport.repos
+      # payload SyncRunner pins into source_repos (P6-3). Keyed by the SAME
+      # repo_url the remote probe reads from Adapter.upstream_repo_urls, so the
+      # pin and the probe line up per repo.
+      def repo_pins(shas)
+        shas.to_h { |slug, sha| [repo_url(slug), sha] }
       end
 
       def fetch_notes(shas, pulls)

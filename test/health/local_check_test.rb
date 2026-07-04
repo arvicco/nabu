@@ -227,7 +227,10 @@ class LocalCheckTest < Minitest::Test
     )
     passage = Nabu::Store::Passage.create(
       document_id: doc.id, urn: "urn:test:doc:1", sequence: 0, language: "grc",
-      text: text, text_normalized: text, content_sha256: "x"
+      # text_normalized carries the boundary-minted search form (P6-4), as a
+      # real corpus row would.
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "x"
     )
     @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @db, fulltext: @fulltext)

@@ -17,18 +17,20 @@ ancient-text corpora.
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and **six source adapters** exist
 across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
-Leiden): **five sources live** — Perseus and First1KGreek (canonical Greek),
-Universal Dependencies ancient treebanks, PROIEL, and TOROT — and
-Papyri.info DDbDP now fully loaded (61k documents, restart-aware line URNs)
-awaiting its enable flip, totalling **~1.55 million searchable passages**.
+Leiden): **all six sources live** — Perseus (the Iliad included), First1KGreek,
+Universal Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info
+DDbDP (61k documents, restart-aware line URNs, cancelled texts kept in ⟦⟧) —
+totalling **~1.6 million searchable passages**.
 **The collection is protected**: upstream deletions land in a local attic
 and those documents stay searchable, labeled "retired upstream" — nothing
 the corpus once held can be destroyed by upstream removals, license
 reversals, or a rebuild. **The full CLI surface is real** — sync, status,
-rebuild, search (diacritic-insensitive FTS), show, export, verify, and
-health (local anomaly trends plus a no-clone upstream probe); fixture drift
-is checked by `rake fixtures:check`, and `docs/ops.md` ships launchd
-templates for the nightly/weekly maintenance cadence.
+rebuild, search (diacritic-insensitive, with per-language search forms:
+Greek final-sigma, Latin v/u–j/i — see `docs/conventions.md` §9), show,
+export, verify, and health (local anomaly trends plus a no-clone upstream
+probe with per-repo drift pins); fixture drift is checked by
+`rake fixtures:check`, and `docs/ops.md` ships launchd templates for the
+nightly/weekly maintenance cadence.
 
 ## Requirements
 

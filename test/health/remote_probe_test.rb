@@ -72,6 +72,13 @@ class RemoteProbeTest < Minitest::Test
     )
   end
 
+  def seed_repo(source:, repo_url:, last_sync_sha: nil, license_baseline_sha256: nil)
+    Nabu::Store::SourceRepo.create(
+      source_id: source.id, repo_url: repo_url,
+      last_sync_sha: last_sync_sha, license_baseline_sha256: license_baseline_sha256
+    )
+  end
+
   def probe(registry, shell)
     Nabu::Health::RemoteProbe.new(registry: registry, db: @db, shell: shell).run
   end
@@ -212,7 +219,10 @@ class RemoteProbeTest < Minitest::Test
 
   # -- multi-repo (UD shape) ----------------------------------------------
 
-  def test_multi_repo_all_alive_probes_each_and_marks_drift_multi
+  # A multi-repo source with NO per-repo pins yet (never synced under P6-3)
+  # still reads :multi / :unchecked — there is nothing per-repo to compare
+  # against until the next sync records source_repos rows.
+  def test_multi_repo_all_alive_but_unpinned_marks_drift_multi
     seed_source(slug: "multi", adapter: "ProbeMultiAdapter", last_sync_sha: "x")
     shell = FakeShell.new(
       "https://github.com/acme/one" => "aaa\tHEAD\n",
@@ -223,6 +233,95 @@ class RemoteProbeTest < Minitest::Test
     assert_equal :alive, row.liveness.status
     assert_equal :multi, row.drift
     assert_equal :unchecked, row.license.status
+  end
+
+  # Stub every license-filename lookup for owner/repo at +sha+ to 404, so a
+  # drift-focused multi-repo test's license pass reaches :unchecked without
+  # touching the network (each pinned github repo is still license-probed).
+  def stub_no_license(owner, repo, sha)
+    Nabu::Health::RemoteProbe::LICENSE_FILENAMES.each do |name|
+      stub_request(:get, "https://raw.githubusercontent.com/#{owner}/#{repo}/#{sha}/#{name}").to_return(status: 404)
+    end
+  end
+
+  # P6-3: with per-repo pins, drift is computed PER REPO — one behind, one
+  # current → source-level :behind (worst wins), the behind repo named.
+  def test_multi_repo_per_repo_drift_one_behind_one_current
+    source = seed_source(slug: "multi", adapter: "ProbeMultiAdapter", last_sync_sha: "x")
+    seed_repo(source: source, repo_url: "https://github.com/acme/one", last_sync_sha: "aaa")
+    seed_repo(source: source, repo_url: "https://github.com/acme/two", last_sync_sha: "old")
+    shell = FakeShell.new(
+      "https://github.com/acme/one" => "aaa\tHEAD\n", # current
+      "https://github.com/acme/two" => "new\tHEAD\n"  # behind (moved past pin)
+    )
+    stub_no_license("acme", "one", "aaa")
+    stub_no_license("acme", "two", "new")
+    row = probe(registry_of(["multi", "ProbeMultiAdapter", true]), shell).rows.first
+
+    assert_equal :alive, row.liveness.status
+    assert_equal :behind, row.drift
+    assert_match(%r{acme/two}, row.drift_detail)
+    refute_match(%r{acme/one}, row.drift_detail.to_s)
+  end
+
+  def test_multi_repo_all_repos_current_reads_current
+    source = seed_source(slug: "multi", adapter: "ProbeMultiAdapter", last_sync_sha: "x")
+    seed_repo(source: source, repo_url: "https://github.com/acme/one", last_sync_sha: "aaa")
+    seed_repo(source: source, repo_url: "https://github.com/acme/two", last_sync_sha: "bbb")
+    shell = FakeShell.new(
+      "https://github.com/acme/one" => "aaa\tHEAD\n",
+      "https://github.com/acme/two" => "bbb\tHEAD\n"
+    )
+    stub_no_license("acme", "one", "aaa")
+    stub_no_license("acme", "two", "bbb")
+    row = probe(registry_of(["multi", "ProbeMultiAdapter", true]), shell).rows.first
+
+    assert_equal :current, row.drift
+    assert_nil row.drift_detail
+  end
+
+  # Per-repo license baselines live on the source_repos rows. One repo's
+  # license changed vs its stored baseline → source-level :changed, named.
+  def test_multi_repo_per_repo_license_one_changed
+    source = seed_source(slug: "multi", adapter: "ProbeMultiAdapter", last_sync_sha: "x")
+    seed_repo(source: source, repo_url: "https://github.com/acme/one", last_sync_sha: "aaa",
+              license_baseline_sha256: Digest::SHA256.hexdigest(LICENSE_BODY))
+    seed_repo(source: source, repo_url: "https://github.com/acme/two", last_sync_sha: "bbb",
+              license_baseline_sha256: "00stale00")
+    shell = FakeShell.new(
+      "https://github.com/acme/one" => "aaa\tHEAD\n",
+      "https://github.com/acme/two" => "bbb\tHEAD\n"
+    )
+    stub_request(:get, "https://raw.githubusercontent.com/acme/one/aaa/LICENSE")
+      .to_return(status: 200, body: LICENSE_BODY)
+    stub_request(:get, "https://raw.githubusercontent.com/acme/two/bbb/LICENSE")
+      .to_return(status: 200, body: LICENSE_BODY) # differs from "00stale00" → changed
+    row = probe(registry_of(["multi", "ProbeMultiAdapter", true]), shell).rows.first
+
+    assert_equal :changed, row.license.status
+    assert_match(%r{acme/two}, row.license.detail)
+  end
+
+  # A newly-recorded baseline on any repo (none changed) reads :baseline_recorded
+  # and the sha lands on that repo's row.
+  def test_multi_repo_per_repo_license_baseline_recorded
+    source = seed_source(slug: "multi", adapter: "ProbeMultiAdapter", last_sync_sha: "x")
+    seed_repo(source: source, repo_url: "https://github.com/acme/one", last_sync_sha: "aaa",
+              license_baseline_sha256: Digest::SHA256.hexdigest(LICENSE_BODY))
+    seed_repo(source: source, repo_url: "https://github.com/acme/two", last_sync_sha: "bbb") # no baseline yet
+    shell = FakeShell.new(
+      "https://github.com/acme/one" => "aaa\tHEAD\n",
+      "https://github.com/acme/two" => "bbb\tHEAD\n"
+    )
+    stub_request(:get, "https://raw.githubusercontent.com/acme/one/aaa/LICENSE")
+      .to_return(status: 200, body: LICENSE_BODY)
+    stub_request(:get, "https://raw.githubusercontent.com/acme/two/bbb/LICENSE")
+      .to_return(status: 200, body: LICENSE_BODY)
+    row = probe(registry_of(["multi", "ProbeMultiAdapter", true]), shell).rows.first
+
+    assert_equal :baseline_recorded, row.license.status
+    stored = Nabu::Store::SourceRepo.first(repo_url: "https://github.com/acme/two").license_baseline_sha256
+    assert_equal Digest::SHA256.hexdigest(LICENSE_BODY), stored
   end
 
   def test_multi_repo_one_gone_makes_the_source_gone
