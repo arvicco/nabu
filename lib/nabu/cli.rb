@@ -160,7 +160,8 @@ module Nabu
         report = outcome.load_report
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
-          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored"
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored  " \
+          "indexed #{outcome.indexed} passages"
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -182,6 +183,7 @@ module Nabu
           say "  WARNING: #{outcome.slug} quarantined #{outcome.report.errored} document(s) — parser regression?"
         end
         say "  #{format_report('TOTAL', total_report(result))}"
+        say "  indexed #{result.indexed} passages"
       end
 
       def format_report(label, report)

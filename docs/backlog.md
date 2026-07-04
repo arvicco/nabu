@@ -254,7 +254,7 @@ Acceptance: AdapterConformance + Leiden-markup extraction tests on real
 
 ## Phase 4 — Query surface (branch: phase-4)
 
-## P4-1 · FTS5 index + Indexer  [tier: opus, fable-spec] [status: ready] [deps: —]
+## P4-1 · FTS5 index + Indexer  [tier: opus, fable-spec] [status: done] [deps: —]
 Goal: db/fulltext.sqlite3 (architecture §2/§5): contentless FTS5 table keyed
       by passage id over text_normalized (+ urn column unindexed), tokenizer
       unicode61 remove_diacritics 2 (folds Greek/Latin diacritics at query
