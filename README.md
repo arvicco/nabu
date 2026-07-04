@@ -17,10 +17,10 @@ ancient-text corpora.
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and **six source adapters** exist
 across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
-Leiden): **five sources live** — Perseus and First1KGreek (canonical Greek),
-Universal Dependencies ancient treebanks, PROIEL, and TOROT — and
-Papyri.info DDbDP now fully loaded (61k documents, restart-aware line URNs)
-awaiting its enable flip, totalling **~1.55 million searchable passages**.
+Leiden): **all six sources live** — Perseus, First1KGreek, Universal
+Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info DDbDP
+(61k documents, restart-aware line URNs) — totalling **~1.55 million
+searchable passages**.
 **The collection is protected**: upstream deletions land in a local attic
 and those documents stay searchable, labeled "retired upstream" — nothing
 the corpus once held can be destroyed by upstream removals, license
