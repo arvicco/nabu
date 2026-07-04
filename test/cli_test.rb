@@ -40,8 +40,8 @@ class CLITest < Minitest::Test
   end
 
   # Every remaining stub subcommand must announce it is not implemented and
-  # fail (exit 1). (sync is implemented as of P2-4.)
-  %w[search show].each do |command|
+  # fail (exit 1). (sync is implemented as of P2-4; search as of P4-2.)
+  %w[show].each do |command|
     define_method(:"test_#{command}_stub_is_not_implemented") do
       _out, err, status = run_cli([command])
       assert_equal 1, status, "#{command} should exit with status 1"
@@ -163,7 +163,57 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search (P4-2) -------------------------------------------------------
+
+  # Build the store (catalog + fulltext index) via a real parse-only sync, then
+  # search. The unaccented query "μηνιν" must find the accented passage μῆνιν —
+  # proving query and index share the diacritic fold.
+  def test_search_finds_greek_passage_via_unaccented_query
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν]) }
+      assert_nil status, "a successful search exits 0"
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
+      assert_match(/\[μηνιν\]/, out, "the folded match is highlighted")
+      assert_match(/1 hit\b/, out)
+    end
+  end
+
+  def test_search_zero_hits_says_no_matches_and_succeeds
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search zzzznotfound]) }
+      assert_nil status, "zero hits is not a failure"
+      assert_match(/no matches/i, out)
+    end
+  end
+
+  def test_search_bad_license_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --license bogus]) }
+      assert_equal 1, status
+      assert_match(/unknown license/i, err)
+    end
+  end
+
+  def test_search_without_index_hints_to_sync_or_rebuild
+    with_empty_registry_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search anything]) }
+      assert_equal 1, status
+      assert_match(/no index.*sync.*rebuild/i, err)
+    end
+  end
+
   private
+
+  # A config whose db/ has been fully built (catalog + fulltext index) by a real
+  # parse-only sync of the two-document TestAdapter corpus. Yields the config.
+  def with_indexed_corpus
+    with_sync_env(enabled: true) do |config|
+      with_config(config) do
+        capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) }
+      end
+      yield config
+    end
+  end
 
   # capture_io, but with tty? forced on the swapped StringIO streams so the
   # tty-gated progress paths can be exercised (Minitest 6 has no Mock; this is
