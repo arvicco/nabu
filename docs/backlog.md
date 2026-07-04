@@ -249,3 +249,70 @@ Goal: RETIERED opus→fable after research: DDbDP is NOT CapiTainS (no
       papyri-ddbdp (enabled: false, manual).
 Acceptance: AdapterConformance + Leiden-markup extraction tests on real
       fixtures; green + lint.
+
+---
+
+## Phase 4 — Query surface (branch: phase-4)
+
+## P4-1 · FTS5 index + Indexer  [tier: opus, fable-spec] [status: done] [deps: —]
+Goal: db/fulltext.sqlite3 (architecture §2/§5): contentless FTS5 table keyed
+      by passage id over text_normalized (+ urn column unindexed), tokenizer
+      unicode61 remove_diacritics 2 (folds Greek/Latin diacritics at query
+      time; trigram deferred until CJK). Nabu::Store::Indexer.rebuild!(catalog:,
+      fulltext:) — full reindex of non-withdrawn passages (bulk, transactional,
+      drop+recreate); wired automatically into the tail of sync and rebuild
+      (a fresh index is part of "loaded"). Store.connect_fulltext helper.
+Acceptance: indexer unit tests (index count == live passages; withdrawn
+      excluded; reindex idempotent); sync/rebuild integration test proves
+      auto-index; green + lint.
+
+## P4-2 · nabu search  [tier: opus] [status: done] [deps: P4-1]
+Goal: `nabu search QUERY [--lang X] [--license open|attribution|nc|…]
+      [--limit N]` — FTS5 MATCH over text_normalized (query lowercased+NFC),
+      joined to catalog for urn/language/license filtering (ATTACH or
+      two-step id join — implementer's call, no SQL strings outside Sequel).
+      Output: urn, language, snippet() highlight per hit; count line. No
+      hits → message + exit 0. Missing index → hint to run sync/rebuild.
+Acceptance: CLI tests against seeded fixture corpus (Greek hit via
+      diacritic-insensitive query proves remove_diacritics; lang + license
+      filters; limit); green + lint.
+
+## P4-3 · nabu show + export  [tier: opus] [status: done] [deps: —]
+Goal: `nabu show URN` — passage (text, document title, language, revision,
+      provenance events) or whole document (ordered passages) when the urn
+      is a document's. `nabu export [--lang X] [--license Y] --format
+      plain|jsonl` — streams non-withdrawn passages (plain: text lines;
+      jsonl: urn/language/text/text_normalized/annotations). CoNLL-U export
+      deferred to enrichment phase (needs token model) — note in backlog.
+Acceptance: CLI tests on seeded corpus (passage show, document show,
+      unknown urn exit 1; export filters + valid JSONL); green + lint.
+
+## P4-4 · Golden queries + nabu verify  [tier: opus] [status: done] [deps: P4-1, P4-2]
+Goal: test/golden/golden_queries.yml — known query → expected-urn-in-results
+      pairs run against the full fixture corpus (all six adapters loaded into
+      one store) as a smoke suite (test/golden_test.rb); catches
+      loader/normalizer/indexer regressions unit tests miss. `nabu verify` —
+      re-hash canonical files against catalog content_sha256 per architecture
+      §8 (bitrot/tamper check, cronnable): OK/exit 0, mismatches listed/exit 1.
+Acceptance: golden suite green with ≥6 queries spanning grc/lat/got/chu/orv
+      (incl. one diacritic-folded and one Leiden-gap-adjacent); verify tests
+      (clean, corrupted-file, missing-file); green + lint.
+
+---
+
+## Phase 5 — Source health & upstream drift (outline; elaborated at the Phase 4 gate)
+
+P5-1 · Upstream probe: `nabu health --remote` — ls-remote liveness + HEAD-vs-last_sync_sha
+      + license-file change detection per live source; no cloning. [opus]
+P5-2 · Fixture sentinel: per-source fixture manifests (formalizing the approved
+      acquisition-plan URLs), `rake fixtures:check[source]` (fetch→tmp, diff,
+      run adapter tests against refreshed copies, report — never overwrites) and
+      `rake fixtures:refresh[source]` (explicit adoption). The failing tests ARE
+      the drift report (maintenance §6). [fable-spec/opus-impl]
+P5-3 · Post-sync anomaly detection: `nabu health` — per-source run-history trends
+      (quarantine spikes, added collapse, withdrawal creep, stale sources);
+      SyncRunner inline deviation warnings; golden queries replayed against the
+      live corpus post-sync. [opus]
+P5-4 · Ops wiring: docs/ops.md + launchd plist templates for the maintenance §1
+      cadence (nightly verify, weekly sync --all + health); ntfy hook optional,
+      owner-configured. [opus]

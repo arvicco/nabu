@@ -19,6 +19,7 @@ module Nabu
     DEFAULT_DB_DIR = "db"
     DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
     CATALOG_DB_FILENAME = "catalog.sqlite3"
+    FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :sources_path, :config_path
 
@@ -51,6 +52,13 @@ module Nabu
     # The catalog SQLite file (architecture §5), derived from db_dir.
     def catalog_path
       File.join(db_dir, CATALOG_DB_FILENAME)
+    end
+
+    # The FTS5 fulltext index (architecture §2: "one SQLite file per concern").
+    # Separate from the catalog on purpose — the catalog is small and precious,
+    # the index is derived-of-derived and rebuilt at will.
+    def fulltext_path
+      File.join(db_dir, FULLTEXT_DB_FILENAME)
     end
   end
 end
