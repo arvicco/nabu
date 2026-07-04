@@ -114,6 +114,8 @@ module Nabu
     end
 
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
+    option :full_urn, type: :boolean, default: false,
+                      desc: "List document passages with absolute urns instead of :suffixes"
     def show(urn = nil)
       urn = urn.to_s.strip
       raise Thor::Error, "show: give a urn" if urn.empty?
@@ -241,8 +243,20 @@ module Nabu
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
-          say "    #{line.urn}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+          say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
         end
+      end
+
+      # Print practice: the document urn appears once in the header, each
+      # passage line carries only its changing :suffix (":b2:5"). --full-urn
+      # restores absolute urns (copy-paste into `show`/scripts). A passage
+      # whose urn doesn't extend the document urn (never minted by our
+      # adapters, but data is data) falls back to the full urn.
+      def passage_label(document, line)
+        return line.urn if options[:full_urn]
+
+        suffix = line.urn.delete_prefix(document.urn)
+        suffix == line.urn || suffix.empty? ? line.urn : suffix
       end
 
       def withdrawn_tag(withdrawn)
