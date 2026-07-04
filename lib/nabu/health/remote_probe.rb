@@ -50,8 +50,9 @@ module Nabu
     # by UD's own fetch contract pins only the last treebank and cannot describe
     # N repos honestly. Per-repo drift is left to a future packet.
     class RemoteProbe
-      # Tried in order at the remote HEAD sha; first 200 wins.
-      LICENSE_FILENAMES = %w[LICENSE LICENSE.md COPYING].freeze
+      # Tried in order at the remote HEAD sha; first 200 wins. Lowercase
+      # variants are real: PerseusDL and First1KGreek ship "license.md".
+      LICENSE_FILENAMES = %w[LICENSE LICENSE.md LICENSE.txt license.md license.txt COPYING].freeze
       RAW_HOST = "https://raw.githubusercontent.com"
 
       # owner/repo out of an https or ssh github URL, tolerant of a .git suffix

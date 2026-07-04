@@ -178,7 +178,9 @@ class RemoteProbeTest < Minitest::Test
 
   def test_license_falls_back_through_filenames_then_unchecked_when_absent
     seed_source(slug: "gh", adapter: "ProbeGithubAdapter", last_sync_sha: "deadbeef")
-    %w[LICENSE LICENSE.md COPYING].each { |name| stub_request(:get, raw_url(name)).to_return(status: 404) }
+    Nabu::Health::RemoteProbe::LICENSE_FILENAMES.each do |name|
+      stub_request(:get, raw_url(name)).to_return(status: 404)
+    end
     row = probe(registry_of(["gh", "ProbeGithubAdapter", true]), stub_github_alive).rows.first
 
     assert_equal :unchecked, row.license.status
@@ -186,9 +188,23 @@ class RemoteProbeTest < Minitest::Test
 
   def test_license_uses_copying_when_that_is_the_only_file
     seed_source(slug: "gh", adapter: "ProbeGithubAdapter", last_sync_sha: "deadbeef")
-    stub_request(:get, raw_url("LICENSE")).to_return(status: 404)
-    stub_request(:get, raw_url("LICENSE.md")).to_return(status: 404)
-    stub_request(:get, raw_url("COPYING")).to_return(status: 200, body: LICENSE_BODY)
+    Nabu::Health::RemoteProbe::LICENSE_FILENAMES.each do |name|
+      status = name == "COPYING" ? { status: 200, body: LICENSE_BODY } : { status: 404 }
+      stub_request(:get, raw_url(name)).to_return(status)
+    end
+    row = probe(registry_of(["gh", "ProbeGithubAdapter", true]), stub_github_alive).rows.first
+
+    assert_equal :baseline_recorded, row.license.status
+  end
+
+  # PerseusDL and First1KGreek name theirs lowercase "license.md" — found on
+  # the live upstreams, so the list must carry the lowercase variants too.
+  def test_license_finds_lowercase_license_md
+    seed_source(slug: "gh", adapter: "ProbeGithubAdapter", last_sync_sha: "deadbeef")
+    Nabu::Health::RemoteProbe::LICENSE_FILENAMES.each do |name|
+      status = name == "license.md" ? { status: 200, body: LICENSE_BODY } : { status: 404 }
+      stub_request(:get, raw_url(name)).to_return(status)
+    end
     row = probe(registry_of(["gh", "ProbeGithubAdapter", true]), stub_github_alive).rows.first
 
     assert_equal :baseline_recorded, row.license.status
