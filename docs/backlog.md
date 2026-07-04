@@ -297,3 +297,22 @@ Goal: test/golden/golden_queries.yml — known query → expected-urn-in-results
 Acceptance: golden suite green with ≥6 queries spanning grc/lat/got/chu/orv
       (incl. one diacritic-folded and one Leiden-gap-adjacent); verify tests
       (clean, corrupted-file, missing-file); green + lint.
+
+---
+
+## Phase 5 — Source health & upstream drift (outline; elaborated at the Phase 4 gate)
+
+P5-1 · Upstream probe: `nabu health --remote` — ls-remote liveness + HEAD-vs-last_sync_sha
+      + license-file change detection per live source; no cloning. [opus]
+P5-2 · Fixture sentinel: per-source fixture manifests (formalizing the approved
+      acquisition-plan URLs), `rake fixtures:check[source]` (fetch→tmp, diff,
+      run adapter tests against refreshed copies, report — never overwrites) and
+      `rake fixtures:refresh[source]` (explicit adoption). The failing tests ARE
+      the drift report (maintenance §6). [fable-spec/opus-impl]
+P5-3 · Post-sync anomaly detection: `nabu health` — per-source run-history trends
+      (quarantine spikes, added collapse, withdrawal creep, stale sources);
+      SyncRunner inline deviation warnings; golden queries replayed against the
+      live corpus post-sync. [opus]
+P5-4 · Ops wiring: docs/ops.md + launchd plist templates for the maintenance §1
+      cadence (nightly verify, weekly sync --all + health); ntfy hook optional,
+      owner-configured. [opus]
