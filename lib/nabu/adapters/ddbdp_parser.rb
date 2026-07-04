@@ -53,7 +53,8 @@ module Nabu
     #   <rdg>       rejected variant readings
     #   <orig>      pre-regularization spellings
     #   <del>       erased text — both inside <subst> and standalone; erasure
-    #               may nest (<del><del>…</del></del>) and drops wholesale
+    #               may nest (<del><del>…</del></del>) and drops wholesale.
+    #               EXCEPTION: the cancelled-document fallback below.
     #   <note>, <figure>   editorial noise
     #   <handShift> a metadata milestone — the hand id goes to annotations
     #   <g>         glyph placeholders (interpuncts, <g type="middot"/>):
@@ -134,8 +135,9 @@ module Nabu
     # significant for RECONSTRUCTING the markup stream (word spacing lives in
     # text nodes between elements, and we honor every one of them while
     # accumulating) — but the final passage text still gets the house
-    # whitespace treatment: runs collapse to one space, ends strip, NFC, and
-    # text_normalized = NFC(text.downcase). The tension is deliberate: inside
+    # whitespace treatment: runs collapse to one space, ends strip, NFC
+    # (text_normalized is minted by Passage.new — the P6-4 per-language
+    # search form). The tension is deliberate: inside
     # extraction the preserved spacing decides word boundaries; after
     # extraction the passage is normal prose and follows house rules.
     #
@@ -143,6 +145,43 @@ module Nabu
     # skipped; a document with zero citable lines is a ParseError. Content
     # inside <ab> before the first <lb> is not citable (upstream puts only
     # whitespace there) and is discarded.
+    #
+    # == Cancelled-document fallback (P6-2; conventions.md §5)
+    #
+    # ~40 DDbDP documents are entirely ancient cancellations: every line of
+    # the edition sits inside <del rend="cross-strokes"|"slashes"|"erasure">
+    # — the scribe crossed the text out, but it is fully legible and fully
+    # edited, and print editions read it inside Leiden double brackets ⟦…⟧.
+    # Under the blanket drop-<del> policy such a document extracts zero
+    # citable lines and quarantines, erasing it entirely (o.claud.3.457,
+    # cpr.6.3, bgu.1.179, apf.59.139).
+    #
+    # The rule: when (and ONLY when) the standard pass extracts ZERO citable
+    # lines, the document is re-read once in fallback mode, where <del>
+    # content is KEPT and wrapped in ⟦…⟧ — "⟦" where the del opens, "⟧"
+    # where it closes, exactly the gap-marker philosophy (a multi-line
+    # cancellation prints one opening and one closing bracket, as in print
+    # practice; nested dels nest their brackets). Everything else about the
+    # policy is unchanged inside the kept del: rdg/orig/note/figure still
+    # drop, gaps still mark, lbs still delimit (restart blocks included).
+    # Every line whose content lies in a cancellation carries
+    # {"leiden" => {"cancelled" => true}}. A document that is still empty
+    # after the fallback quarantines exactly as before.
+    #
+    # DOCUMENT-scoped on purpose — the frozen-text argument: the fallback
+    # engages iff the standard pass yields zero lines, i.e. iff the document
+    # quarantined before P6-2. Every already-loaded document has ≥1 passage,
+    # so for it the fallback provably never runs and its urns AND text stay
+    # byte-identical (the standard-pass code path is untouched). A per-line
+    # rule ("keep the del when the line would otherwise be empty") would
+    # resurrect skipped lines inside LOADED documents, shifting frozen
+    # sequences; the honest general rule ("render every <del> in ⟦⟧") would
+    # rewrite loaded passages containing partial dels. FUTURE WORK (owner
+    # decision, corpus-wide revision): should <del> ALWAYS render in ⟦⟧?
+    # Papyrologically it is the more faithful reading (⟦⟧ is reading text in
+    # Leiden), but adopting it means revising every loaded passage with a
+    # partial del — a deliberate, journaled corpus revision, not a parser
+    # patch. Recorded in conventions.md §5.
     #
     # == Annotations (lean; only non-empty keys)
     #
@@ -179,6 +218,12 @@ module Nabu
       # The single lacuna marker every <gap> contributes (see file header).
       GAP_MARKER = "[…]"
 
+      # Leiden double brackets — ancient cancellation, legible text. Emitted
+      # around kept <del> content by the cancelled-document fallback only
+      # (see file header).
+      CANCELLATION_OPEN = "⟦"
+      CANCELLATION_CLOSE = "⟧"
+
       # Map an upstream xml:lang tag to Nabu's ISO 639-3 form. nil-safe.
       def self.normalize_language(tag)
         return nil if tag.nil? || tag.empty?
@@ -198,6 +243,7 @@ module Nabu
       def parse(source, urn:, language:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
         lines = extract_lines(source, path: path, urn: urn, language: language)
+        lines = cancelled_document_retry(source, path: path, urn: urn, language: language) if lines.empty?
         build_document(lines, urn: urn, language: language, title: title, path: path)
       end
 
@@ -211,14 +257,23 @@ module Nabu
         raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
       end
 
-      def extract_lines(source, path:, urn:, language:)
+      def extract_lines(source, path:, urn:, language:, cancelled_fallback: false)
         with_io(source) do |io|
           Extraction.new(
-            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language
+            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language,
+            cancelled_fallback: cancelled_fallback
           ).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
+      end
+
+      # The cancelled-document fallback (see file header): a second pass with
+      # <del> kept in ⟦…⟧, run ONLY when the standard pass extracted zero
+      # citable lines — the class that would otherwise quarantine wholesale.
+      def cancelled_document_retry(source, path:, urn:, language:)
+        source.rewind if source.respond_to?(:rewind)
+        extract_lines(source, path: path, urn: urn, language: language, cancelled_fallback: true)
       end
 
       def with_io(source, &)
@@ -232,7 +287,6 @@ module Nabu
             urn: "#{urn}:#{line.urn_suffix}",
             language: language,
             text: line.text,
-            text_normalized: Normalize.nfc(line.text.downcase),
             annotations: annotations(line),
             sequence: sequence
           )
@@ -266,11 +320,13 @@ module Nabu
         DROPPED_ELEMENTS = %w[rdg orig del note figure].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        def initialize(reader:, path:, urn:, language:)
+        def initialize(reader:, path:, urn:, language:, cancelled_fallback: false)
           @reader = reader
           @path = path
           @urn = urn
           @language = language
+          @cancelled_fallback = cancelled_fallback
+          @del_depths = [] # open kept-<del> depths, fallback mode only
           @hybrid = nil
           @capture_idno = false
           @edition_seen = false
@@ -321,6 +377,8 @@ module Nabu
         # text nodes stream past and accumulate via #text_node.
         def edition_element(node)
           name = local_name(node)
+          return open_cancellation(node) if name == "del" && @cancelled_fallback
+
           if DROPPED_ELEMENTS.include?(name)
             @drop_depth = node.depth unless node.empty_element?
             return
@@ -347,6 +405,7 @@ module Nabu
           when "idno" then @capture_idno = false
           when "ab" then finish_line
           when "div" then end_div(node)
+          when "del" then close_cancellation(node) # fallback mode only (standard dels drop above)
           when "supplied" then @supplied_depths.pop if @supplied_depths.last == node.depth
           when "unclear" then @unclear_depths.pop if @unclear_depths.last == node.depth
           end
@@ -420,7 +479,8 @@ module Nabu
           finish_line
           @current = {
             n: n, textpath: @textparts.map { |part| part[:n] },
-            buffer: +"", gaps: [], supplied: 0, unclear: 0, hands: [], languages: []
+            buffer: +"", gaps: [], supplied: 0, unclear: 0, hands: [], languages: [],
+            cancelled: !@del_depths.empty? # line opened inside a kept cancellation
           }
         end
 
@@ -464,7 +524,34 @@ module Nabu
           result["supplied_chars"] = current[:supplied] if current[:supplied].positive?
           result["unclear_chars"] = current[:unclear] if current[:unclear].positive?
           result["hands"] = current[:hands] unless current[:hands].empty?
+          result["cancelled"] = true if current[:cancelled]
           result
+        end
+
+        # -- cancelled-document fallback (P6-2; see file header) -----------------
+
+        # Fallback mode's <del> start: keep the content, open the Leiden
+        # double bracket in place (the marker sits exactly where the
+        # cancellation begins, gap-marker style).
+        def open_cancellation(node)
+          return if node.empty_element?
+
+          @del_depths << node.depth
+          mark_cancelled(CANCELLATION_OPEN)
+        end
+
+        def close_cancellation(node)
+          return unless @del_depths.last == node.depth
+
+          @del_depths.pop
+          mark_cancelled(CANCELLATION_CLOSE)
+        end
+
+        def mark_cancelled(marker)
+          return unless @current
+
+          @current[:buffer] << marker
+          @current[:cancelled] = true
         end
 
         # -- leiden milestones ---------------------------------------------------

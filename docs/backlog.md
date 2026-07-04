@@ -426,23 +426,90 @@ Acceptance: plists are valid (plutil -lint in tests via tmp copies), commands
 
 ---
 
-## Phase 6 candidates (found in the field; elaborated at the Phase 5 gate or later)
+## Phase 6 — Corpus completeness & fidelity (branch: phase-6; elaborated 2026-07-04)
 
-- **The Iliad is quarantined** (found 2026-07-04 while writing `help search`
-  examples): perseus-greek tlg0012.tlg001.perseus-grc2 fails EpidocParser
-  with "citation depth mismatch: refsDecl declares 2 component(s), found 1
-  ([\"1\"])" — likely one of Perseus's ~37 first-sync quarantines sharing a
-  structural class (refsDecl says book.line but the file's top div layout
-  differs). THE flagship text of the corpus is missing; diagnose the class,
-  fix the parser or per-family fallback, `sync perseus-greek --parse-only`.
-- **Cancelled-but-legible papyri** (P5-1 stub audit): ~40 DDbDP docs whose
-  entire edition is wrapped in <del rend="cross-strokes"|"slashes"> (+ a few
-  whole-doc erasures) — print practice reads these in ⟦⟧; the blanket
-  drop-<del> policy erases the whole document. Needs a Leiden policy
-  amendment (conventions §5) + fixture from the P5-1 list (cpr.6.3,
-  bgu.1.179, apf.59.139, o.claud.3.457).
-- **Per-repo drift/license for multi-repo sources** (P5-3): UD probes each
-  treebank for liveness but drift/license read :multi/:unchecked — needs
-  per-repo pinning.
-- **Adapter-boundary per-language diacritic folding** (P4-1 note): fold at
-  parse time instead of index time; needs a corpus reload.
+*All packets work the LOCAL snapshot (parse-only resyncs, no bulk fetches);
+fixtures are trimmed from local canonical, as in Phase 5. Enrichment (API
+keys, sidecars, human review) is deliberately NOT this phase — it is planned
+at this phase's gate with the owner as originally intended.*
+
+## P6-1 · The Iliad: EpidocParser citation-depth quarantine class  [tier: fable] [status: done] [deps: —]
+Goal: tlg0012.tlg001.perseus-grc2 (THE Iliad) quarantines with "citation
+      depth mismatch: refsDecl declares 2 component(s), found 1 ([\"1\"])" —
+      found 2026-07-04 while verifying help examples. Diagnose ALL current
+      EpiDoc quarantines first (perseus !25, first1k !37 — query the
+      provenance journal, classify by error shape), then fix the dominant
+      class(es) in EpidocParser. Likely shape: files whose refsDecl declares
+      book.line but whose text nests divs differently (or numbers lines via
+      milestones) — inspect the actual Iliad XML before deciding; do not
+      guess upstream formats. HARD CONSTRAINT (frozen-urn, as P5-1):
+      documents that parsed cleanly before must mint byte-identical URNs and
+      text (re-parse as "skipped"); quarantined docs are unconstrained.
+      Classes that are genuinely malformed upstream stay quarantined —
+      honesty over count. Fixture: trim the Iliad exemplar (+1 more of the
+      dominant class if it differs) from local canonical into
+      test/fixtures/perseus/ (README + manifest updated; whole:false trim).
+Acceptance: quarantine census reported (error shape → count → fixed or
+      why-not); Iliad fixture parses with book.line URNs stable across two
+      parses; existing perseus/first1k fixture URN lists byte-identical
+      (golden regression); conformance + suite + lint green; worklog notes
+      recovered-doc counts after the orchestrator's --parse-only resync.
+
+## P6-2 · Cancelled-but-legible papyri: Leiden <del> policy amendment  [tier: fable] [status: done] [deps: —]
+Goal: ~40 DDbDP docs whose ENTIRE edition sits inside <del
+      rend="cross-strokes"|"slashes"> (+ a few whole-doc erasures) quarantine
+      as "no citable lines" — the blanket drop-<del> policy erases documents
+      that print practice reads in ⟦⟧ (ancient cancellation, fully legible:
+      P5-1 audit; exemplars cpr.6.3, bgu.1.179, apf.59.139, o.claud.3.457).
+      Amend the DdbdpParser Leiden policy (fable decision — it is a
+      text-fidelity contract): keep <del> content wrapped in ⟦…⟧ — decide
+      the exact scope deliberately. HARD CONSTRAINT: passages of
+      already-loaded documents must be byte-identical after the change —
+      if the honest policy is "always render <del> in ⟦⟧", that changes
+      loaded passages containing partial dels and is NOT acceptable in this
+      packet; scope to the whole-document class (or an equally safe rule)
+      and record the general-policy question for the conventions doc.
+      Fixture: trim one exemplar from local canonical. conventions.md §5
+      updated in the same change.
+Acceptance: exemplar fixture parses with ⟦⟧-wrapped text, urns stable;
+      existing papyri fixture URN lists AND text byte-identical (golden);
+      genuinely empty stubs (chrest.wilck.101) still quarantine; docs
+      updated; suite + lint green.
+
+## P6-3 · Per-repo drift & license for multi-repo sources  [tier: opus] [status: done] [deps: —]
+Goal: UD probes each treebank repo for liveness but drift reads :multi and
+      license :unchecked (P5-3 deferral) because sources carry ONE
+      last_sync_sha + ONE license baseline. Add per-repo pinning: a
+      source_repos table (forward-only migration: source_id, repo_url,
+      last_sync_sha, license_baseline_sha256) written by the UD fetch path
+      (extend the FetchReport/GitFetch result plumbing minimally) and read
+      by RemoteProbe — per-repo drift (:current/:behind) and license
+      baselines, offenders named per repo. Single-repo sources keep the
+      existing columns (no migration of behavior); rebuild-purity: the
+      table is runtime state like last_sync_*, dropped and re-pinned by the
+      next sync.
+Acceptance: migration + model tests; UD sync records per-repo shas (fixture
+      git repos); probe reports per-repo drift/license for UD and unchanged
+      behavior for single-repo sources; suite + lint green.
+
+## P6-4 · Per-language folding at the adapter boundary  [tier: fable-design/opus-impl] [status: done] [deps: P6-1, P6-2]
+Goal: text_normalized currently carries only downcasing; diacritic folding
+      happens at index time and query time (P4-1 stopgap, architecture §3
+      note). Move folding to the adapter boundary with per-language rules
+      (fable designs the rule table: Greek fold marks + final-sigma
+      normalization; Latin v→u/j→i decision; Cyrillic/OCS titlo and
+      yer questions — research what the field does, document in
+      conventions.md; when in doubt per language, fold conservatively =
+      current behavior). Passage.text_normalized becomes the true search
+      form; Indexer/Search drop their fold calls (query folds by the SAME
+      per-language… decide: query folding without a lang hint applies the
+      union/conservative fold — document). Then the orchestrator runs
+      `nabu rebuild` to re-derive the corpus (LOCAL, no network) and replays
+      golden queries. Deps on P6-1/P6-2 so the reload happens once, after
+      recovered docs land.
+Acceptance: rule-table unit tests per language incl. final-sigma and the
+      documented Latin/Slavic decisions; fold-both-sides contract tests
+      still green; golden queries green against a fixture corpus built the
+      new way; architecture §3 updated (stopgap note removed); suite +
+      lint green; worklog notes the rebuild + golden replay results.
+

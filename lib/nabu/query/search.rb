@@ -5,18 +5,25 @@ require_relative "../normalize"
 module Nabu
   # Query surface over the derived store (architecture §2: lib/nabu/query/).
   module Query
-    # Full-text search: FTS5 MATCH over the diacritic-folded index (P4-1), then
-    # a catalog join for display text, language, and license filtering.
+    # Full-text search: FTS5 MATCH over the index of boundary-folded search
+    # forms (P6-4), then a catalog join for display text, language, and
+    # license filtering.
     #
-    # == Why the query is folded the same way the index is
+    # == Why the query matches a UNION of folds
     #
-    # The Indexer stores Normalize.fold_diacritics(text_normalized), because the
-    # FTS tokenizer's `remove_diacritics 2` cannot fold precomposed polytonic
-    # Greek (see Normalize.fold_diacritics). So the QUERY must pass through the
-    # exact same fold — otherwise "μῆνιν" (indexed folded as "μηνιν") would not
-    # be found by an accented query, nor an unaccented one by an accented index.
-    # We also downcase; unicode61 case-folds both sides, but downcasing keeps the
-    # MATCH term canonical regardless of tokenizer settings.
+    # The index carries text_normalized exactly as stored: the per-language
+    # search form minted at the adapter boundary (Passage.new →
+    # Normalize.search_form — generic mark-strip + downcase everywhere, plus
+    # grc final-sigma ς→σ and lat v→u/j→i; conventions.md §9). A query
+    # carries NO language, so no single per-language fold can be picked.
+    # Normalize.query_forms therefore returns every distinct variant (generic
+    # + each language rule applied to the generic form) and we OR them in the
+    # MATCH. This cannot miss: a passage in language L is indexed as
+    # extra_L(generic(text)), and the variant set always contains
+    # extra_L(generic(query)) — the query folds, on that variant, exactly the
+    # way the document was folded. And it cannot over-fold: variants are
+    # ORed, so the generic variant still matches languages with no extra rule
+    # (a Gothic "jah" stays findable even though the lat variant reads "iah").
     #
     # == Two-step id join, not ATTACH
     #
@@ -61,10 +68,10 @@ module Nabu
       # "is this passage findable by this query" probe (the health golden
       # replay), not a pagination knob.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil)
-        folded = Nabu::Normalize.fold_diacritics(query.to_s).downcase
-        return [] if folded.strip.empty?
+        variants = Nabu::Normalize.query_forms(query.to_s)
+        return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        hits = fts_hits(folded, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
+        hits = fts_hits(match_expression(variants), inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -81,13 +88,23 @@ module Nabu
 
       private
 
+      # One variant passes through untouched (preserving the user's own FTS
+      # syntax exactly as before); multiple variants are each parenthesized
+      # and ORed, so whatever expression the user typed stays intact inside
+      # each variant.
+      def match_expression(variants)
+        return variants.first if variants.one?
+
+        variants.map { |variant| "(#{variant})" }.join(" OR ")
+      end
+
       # FTS5 MATCH. The user's text reaches SQL only as a bound parameter in the
       # MATCH fragment (the one raw-SQL exception, per the Indexer class note);
       # bm25()/snippet() are FTS auxiliary functions with no Sequel dataset API,
       # so they ride along as literal fragments with no user input.
-      def fts_hits(folded, inner_limit:, urn: nil)
+      def fts_hits(match, inner_limit:, urn: nil)
         dataset = @fulltext[Store::Indexer::TABLE]
-                  .where(Sequel.lit("passages_fts MATCH ?", folded))
+                  .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
         dataset
           .select(:passage_id, Sequel.lit(SNIPPET_SQL).as(:snippet))

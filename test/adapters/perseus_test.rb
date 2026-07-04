@@ -19,6 +19,7 @@ class PerseusTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("perseus") # NABU_FIXTURE_DIR-aware (fixtures:check)
   GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
 
+  ILIAD_URN = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2"
   HH13_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2"
   HH14_URN = "urn:cts:greekLit:tlg0013.tlg014.perseus-grc2"
   JOHN2_URN = "urn:cts:greekLit:tlg0031.tlg024.perseus-grc2"
@@ -55,9 +56,9 @@ class PerseusTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_the_three_greeklit_editions_sorted
+  def test_discover_finds_exactly_the_four_greeklit_editions_sorted
     refs = Nabu::Adapters::Perseus.new.discover(GREEK_WORKDIR).to_a
-    assert_equal [HH13_URN, HH14_URN, JOHN2_URN], refs.map(&:id)
+    assert_equal [ILIAD_URN, HH13_URN, HH14_URN, JOHN2_URN], refs.map(&:id)
   end
 
   def test_discover_sets_source_id_language_and_absolute_path
@@ -72,6 +73,7 @@ class PerseusTest < Minitest::Test
 
   def test_discover_resolves_titles_from_cts_metadata_preferring_english
     titles = Nabu::Adapters::Perseus.new.discover(GREEK_WORKDIR).to_a.to_h { |r| [r.id, r.metadata["title"]] }
+    assert_equal "Iliad", titles.fetch(ILIAD_URN)
     assert_equal "Hymn 13 to Demeter", titles.fetch(HH13_URN)
     assert_equal "Hymn 14 to the Mother of the Gods", titles.fetch(HH14_URN)
     # 2 John has four <ti:title> aliases; the first eng one wins.

@@ -29,6 +29,37 @@ module Nabu
     # cRefPattern unit name — that is the CapiTainS convention, and it is what
     # keeps structural divs out of the citation path.
     #
+    # == Structural retry (P6-1) — when the subtype convention fails
+    #
+    # A large quarantine class (the Iliad among it) declares a sound citation
+    # scheme whose cRefPattern unit names do NOT match the body's div
+    # subtypes: case shifts (unit "book" vs subtype "Book" — the Iliad),
+    # renamed labels (unit "book" vs subtype "chapter" — Nicomachus), unit
+    # names absent from the header (<cRefPattern> with no @n at all —
+    # Diodorus grc6). For all of them the deepest cRefPattern's
+    # replacementPattern xpath still states the real citation structure
+    # explicitly: which elements carry the citation components ($1..$D) and
+    # which are structural (bare steps, e.g. Ausonius' section div appears as
+    # a bare tei:div step). So when — and ONLY when — the subtype pass raises
+    # a citation-shape ParseError (depth mismatch, missing @n, no citable
+    # passages, duplicate urn), the file is re-read matching the body against
+    # that xpath with strict axis semantics: a child-axis step must match a
+    # direct child of the previous match, a descendant-axis step may match at
+    # any depth below it, and an element that fails a required predicate (a
+    # $-bound step missing @n) is not selected — exactly what a CTS resolver
+    # evaluating the declared xpath would do. Files whose declaration
+    # genuinely contradicts the body fail both passes and stay quarantined,
+    # with a message naming both failures.
+    #
+    # FROZEN-URN SAFETY: the retry runs strictly after the subtype pass has
+    # raised. Every document that parsed cleanly before P6-1 succeeds in the
+    # unchanged first pass and never reaches the retry, so its urns and
+    # passage text are byte-identical by construction; documents that were
+    # quarantined never entered the catalog, so their urns are free to
+    # define. (Verified empirically against the live catalog before commit:
+    # read-only re-parse of all loaded perseus/first1k documents → identical
+    # urns + text; see the P6-1 worklog entry.)
+    #
     # == Text extraction rules
     #
     # - Mixed content is concatenated; <note> subtrees are dropped (editorial
@@ -41,9 +72,10 @@ module Nabu
     # - Whitespace runs collapse to one space; ends are stripped; NFC via
     #   Nabu::Normalize.nfc at this boundary. Units left empty after cleaning
     #   are skipped, but a document yielding zero passages is a ParseError.
-    # - text_normalized is just NFC(text.downcase) for now — per-language
-    #   diacritic folding is a later enrichment concern. The re-normalization
-    #   matters: Greek case mapping can produce non-NFC sequences.
+    # - text_normalized is minted by Passage.new itself (P6-4): the
+    #   per-language search form via Normalize.search_form — marks stripped,
+    #   downcased, grc final-sigma / lat v-u,j-i rules; conventions.md §9.
+    #   The parser passes only the pristine NFC text.
     #
     # == Upstream quirks (verified against test/fixtures/perseus/)
     #
@@ -80,16 +112,55 @@ module Nabu
       Unit = Data.define(:citation, :text)
       private_constant :Unit
 
+      # Citation-shape failures of the subtype pass that the structural retry
+      # may honestly recover (see the file header). Everything else (malformed
+      # XML, missing refsDecl, no edition div, urn mismatch) is final.
+      RETRYABLE_ERRORS = [
+        /citation depth mismatch/,
+        /citation unit <[^>]+> is missing @n/,
+        /no citable passages found/,
+        /duplicate passage urn/
+      ].freeze
+      private_constant :RETRYABLE_ERRORS
+
       # Parse one edition file into a Nabu::Document with ordered Passages at
       # the lowest citation level. Raises Nabu::ParseError on malformed XML,
       # missing/empty CTS refsDecl, urn mismatch, or zero citable passages.
       def parse(source, urn:, language:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
-        units = extract_units(source, path: path, urn: urn)
-        build_document(units, urn: urn, language: language, title: title, path: path)
+        attempt(source, path: path, urn: urn, language: language, title: title, structural: false)
+      rescue ParseError => e
+        raise unless RETRYABLE_ERRORS.any? { |pattern| pattern.match?(e.message) } && rewind_for_retry(source)
+
+        begin
+          attempt(source, path: path, urn: urn, language: language, title: title, structural: true)
+        rescue ParseError => retry_error
+          raise ParseError, "#{e.message}; structural retry (refsDecl replacementPattern xpath) " \
+                            "also failed: #{retry_error.message.delete_prefix("#{path}: ")}"
+        end
       end
 
       private
+
+      def attempt(source, path:, urn:, language:, title:, structural:)
+        units = extract_units(source, path: path, urn: urn, structural: structural)
+        build_document(units, urn: urn, language: language, title: title, path: path)
+      end
+
+      # The retry re-reads the document: trivially possible for a file path,
+      # possible for rewindable IOs, impossible for streams (the original
+      # error stands).
+      def rewind_for_retry(source)
+        return true if source.is_a?(String)
+        return false unless source.respond_to?(:rewind)
+
+        begin
+          source.rewind
+          true
+        rescue SystemCallError, IOError
+          false
+        end
+      end
 
       def resolve_canonical_path(source, canonical_path)
         return canonical_path if canonical_path
@@ -99,9 +170,10 @@ module Nabu
         raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
       end
 
-      def extract_units(source, path:, urn:)
+      def extract_units(source, path:, urn:, structural:)
         with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn).call
+          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn,
+                         structural: structural).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
@@ -118,7 +190,6 @@ module Nabu
             urn: "#{urn}:#{unit.citation}",
             language: language,
             text: unit.text,
-            text_normalized: Normalize.nfc(unit.text.downcase),
             annotations: {},
             sequence: sequence
           )
@@ -147,14 +218,30 @@ module Nabu
         CRefPattern = Data.define(:unit, :depth, :replacement)
         Scheme = Data.define(:depth, :leaf_element, :unit_names, :deepest_unit)
         Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, keyword_init: true)
-        private_constant :CRefPattern, :Scheme, :Capture
+        # One xpath step of the structural scheme: element name, axis
+        # (:child for /, :desc for //), the citation component it binds
+        # ($k → k, nil for structural steps), and literal attribute
+        # predicates it requires (e.g. {"subtype" => "fragment"}).
+        Step = Data.define(:name, :axis, :binds, :predicates)
+        StructuralScheme = Data.define(:steps) do
+          def leaf_name = steps.last.name
+        end
+        private_constant :CRefPattern, :Scheme, :Capture, :Step, :StructuralScheme
 
-        def initialize(reader:, path:, urn:)
+        # Structural-frame state marking a subtree that can no longer match
+        # any step (a broken child-axis chain — xpath would select nothing
+        # below it).
+        DEAD = -1
+        private_constant :DEAD
+
+        def initialize(reader:, path:, urn:, structural: false)
           @reader = reader
           @path = path
           @urn = urn
+          @structural = structural
           @patterns = []
           @div_stack = []
+          @frames = [] # structural mode: one frame per open element inside the edition
           @in_edition = false
           @edition_seen = false
           @capture = nil
@@ -182,10 +269,16 @@ module Nabu
           name = local_name(node)
           return captured_start(node, name) if @capture
 
-          case name
-          when "cRefPattern" then record_pattern(node)
-          when "div" then start_div(node)
-          else start_leaf(node) if leaf_start?(name)
+          if name == "cRefPattern"
+            record_pattern(node)
+          elsif name == "div" && node.attribute("type") == "edition"
+            enter_edition(node)
+          elsif @structural
+            structural_start(node, name) if @in_edition
+          elsif name == "div"
+            start_div(node)
+          elsif leaf_start?(name)
+            start_leaf(node)
           end
         end
 
@@ -193,6 +286,10 @@ module Nabu
           name = local_name(node)
           if @capture
             captured_end(node, name)
+          elsif @structural
+            # END_ELEMENT only fires for non-empty elements — exactly the ones
+            # structural_start pushed a frame for.
+            structural_end if @in_edition
           elsif name == "div"
             entry = @div_stack.pop
             @in_edition = false if entry && entry[:edition]
@@ -223,12 +320,7 @@ module Nabu
         end
 
         def build_scheme
-          usable = @patterns.select { |pattern| pattern.depth.positive? }
-          if usable.empty?
-            raise ParseError, "#{@path}: no CTS cRefPattern found (missing or empty refsDecl in teiHeader)"
-          end
-
-          deepest = usable.max_by(&:depth)
+          deepest = deepest_pattern
           leaf = deepest.replacement.to_s.scan(/tei:([A-Za-z][\w.-]*)/).flatten.last
           unless leaf
             raise ParseError,
@@ -236,15 +328,13 @@ module Nabu
           end
 
           Scheme.new(depth: deepest.depth, leaf_element: leaf,
-                     unit_names: usable.map(&:unit).compact, deepest_unit: deepest.unit)
+                     unit_names: usable_patterns.map(&:unit).compact, deepest_unit: deepest.unit)
         end
 
-        # -- body: div tracking and leaf capture ------------------------------
+        # -- body: div tracking and leaf capture (subtype pass) ---------------
 
         def start_div(node)
-          if node.attribute("type") == "edition"
-            enter_edition(node)
-          elsif @in_edition && leaf_div?(node)
+          if @in_edition && leaf_div?(node)
             begin_capture(node, node.attribute("n"))
           else
             push_div(node, edition: false, citation: @in_edition && citation_div?(node))
@@ -252,7 +342,8 @@ module Nabu
         end
 
         def enter_edition(node)
-          scheme # force refsDecl validation before any body work
+          # Force refsDecl validation before any body work.
+          @structural ? structural_scheme : scheme
           actual = node.attribute("n")
           unless actual == @urn
             raise ParseError, "#{@path}: edition urn mismatch: expected #{@urn.inspect}, " \
@@ -263,7 +354,11 @@ module Nabu
           return if node.empty_element?
 
           @in_edition = true
-          push_div(node, edition: true, citation: false)
+          if @structural
+            @frames << { state: 0, component: nil, edition: true }
+          else
+            push_div(node, edition: true, citation: false)
+          end
         end
 
         def push_div(node, edition:, citation:)
@@ -291,7 +386,11 @@ module Nabu
         end
 
         def begin_capture(node, leaf_n)
-          citation = citation_components(node, leaf_n).join(".")
+          begin_capture_at(node, citation_components(node, leaf_n))
+        end
+
+        def begin_capture_at(node, components)
+          citation = components.join(".")
           return if node.empty_element? # nothing to capture; empty unit → skipped
 
           @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [])
@@ -310,6 +409,140 @@ module Nabu
           components
         end
 
+        # -- body: strict xpath matching (structural retry) -------------------
+        #
+        # One frame per open element inside the edition div; frame[:state] is
+        # the number of xpath steps matched by the chain of ancestors (DEAD
+        # when a child-axis step broke), frame[:component] the citation value
+        # this element bound. Greedy: the first element that can match the
+        # next step does; ambiguous re-anchoring under descendant axes is not
+        # explored (unneeded by any observed refsDecl shape).
+
+        def structural_start(node, name)
+          state = @frames.last ? @frames.last[:state] : DEAD
+          step = state == DEAD ? nil : structural_scheme.steps[state]
+          frame = { state: DEAD, component: nil }
+
+          if step && step_matches?(step, node, name)
+            return structural_match(node, step, state, frame)
+          elsif step && step.axis == :desc
+            frame[:state] = state # descendants may still match this step
+          end
+
+          @frames << frame unless node.empty_element?
+        end
+
+        def structural_match(node, step, state, frame)
+          return begin_capture_at(node, structural_components(node)) if state == structural_scheme.steps.size - 1
+
+          frame[:state] = state + 1
+          frame[:component] = node.attribute("n") if step.binds
+          @frames << frame unless node.empty_element?
+        end
+
+        # A step matches when the element name agrees, every literal
+        # predicate holds, and — for $-bound steps — @n is present (an
+        # element without @n is not selected by [@n='...']; it is structural
+        # noise, exactly as an xpath engine would treat it).
+        def step_matches?(step, node, name)
+          return false unless name == step.name
+          return false if step.binds && blank?(node.attribute("n"))
+
+          step.predicates.all? { |attribute, value| node.attribute(attribute) == value }
+        end
+
+        def structural_components(node)
+          @frames.filter_map { |frame| frame[:component] } << node.attribute("n")
+        end
+
+        def structural_end
+          frame = @frames.pop
+          @in_edition = false if frame && frame[:edition]
+        end
+
+        def structural_scheme
+          @structural_scheme ||= build_structural_scheme
+        end
+
+        # Derive the strict step list from the deepest cRefPattern's
+        # replacementPattern. The prefix (/tei:TEI/tei:text/tei:body and the
+        # unbound div step naming the edition) is dropped — the streaming
+        # pass anchors at div[@type="edition"] regardless.
+        def build_structural_scheme
+          deepest = deepest_pattern
+          steps = parse_xpath_steps(deepest.replacement.to_s)
+          steps.shift while steps.first && %w[TEI text body].include?(steps.first.name) && steps.first.binds.nil?
+          steps.shift if steps.first && steps.first.name == "div" && steps.first.binds.nil? && steps.size > 1
+
+          binds = steps.map(&:binds).compact
+          unless steps.any? && steps.last.binds && binds == (1..binds.size).to_a
+            raise ParseError, "#{@path}: replacementPattern #{deepest.replacement.inspect} does not bind " \
+                              "citation components $1..$n in order along its xpath"
+          end
+          unless binds.size == deepest.depth
+            raise ParseError, "#{@path}: replacementPattern binds #{binds.size} component(s) but " \
+                              "matchPattern declares #{deepest.depth}"
+          end
+
+          StructuralScheme.new(steps: steps)
+        end
+
+        def parse_xpath_steps(raw)
+          inner = raw.gsub("\\'", "'")[/#xpath\((.*)\)/m, 1]
+          raise ParseError, "#{@path}: cannot parse replacementPattern #{raw.inspect} as an #xpath(...)" unless inner
+
+          matches = inner.scan(%r{(/{1,2})tei:([A-Za-z][\w.-]*)((?:\[[^\]]*\])*)})
+          parsed = matches.map { |axis, name, preds| [axis, name, preds] }
+          unless parsed.map { |axis, name, preds| "#{axis}tei:#{name}#{preds}" }.join == inner
+            raise ParseError, "#{@path}: unsupported replacementPattern xpath #{inner.inspect}"
+          end
+
+          parsed.map do |axis, name, preds|
+            binds, predicates = parse_predicates(preds, context: inner)
+            Step.new(name: name, axis: axis == "//" ? :desc : :child, binds: binds, predicates: predicates)
+          end
+        end
+
+        def parse_predicates(preds, context:)
+          pairs = preds.scan(/\[@([\w:]+)=['"]([^'"\]]*)['"]\]/)
+          unless pairs.map { |attribute, value| "[@#{attribute}='#{value}']" }.join == preds ||
+                 pairs.map { |attribute, value| "[@#{attribute}=\"#{value}\"]" }.join == preds
+            raise ParseError, "#{@path}: unsupported predicate #{preds.inspect} in replacementPattern " \
+                              "xpath #{context.inspect}"
+          end
+
+          binds = nil
+          predicates = {}
+          pairs.each do |attribute, value|
+            if value =~ /\A\$(\d+)\z/
+              unless attribute == "n"
+                raise ParseError, "#{@path}: citation component bound to @#{attribute} (not @n) in " \
+                                  "replacementPattern xpath #{context.inspect}"
+              end
+              binds = Regexp.last_match(1).to_i
+            else
+              predicates[attribute] = value
+            end
+          end
+          [binds, predicates]
+        end
+
+        def usable_patterns
+          @usable_patterns ||= @patterns.select { |pattern| pattern.depth.positive? }
+        end
+
+        def deepest_pattern
+          if usable_patterns.empty?
+            raise ParseError, "#{@path}: no CTS cRefPattern found (missing or empty refsDecl in teiHeader)"
+          end
+
+          usable_patterns.max_by(&:depth)
+        end
+
+        def blank?(value)
+          value.nil? || value.empty?
+        end
+
         def captured_start(node, name)
           if DROPPED_ELEMENTS.include?(name)
             @capture.drop_depths << node.depth unless node.empty_element?
@@ -321,11 +554,15 @@ module Nabu
         end
 
         def captured_end(node, name)
-          if name == scheme.leaf_element && node.depth == @capture.depth
+          if name == leaf_name && node.depth == @capture.depth
             finish_capture
           elsif DROPPED_ELEMENTS.include?(name) && @capture.drop_depths.last == node.depth
             @capture.drop_depths.pop
           end
+        end
+
+        def leaf_name
+          @structural ? structural_scheme.leaf_name : scheme.leaf_element
         end
 
         def finish_capture

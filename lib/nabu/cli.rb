@@ -668,6 +668,7 @@ module Nabu
       def health_detail(row)
         bits = []
         bits << row.liveness.detail if row.liveness.detail && row.liveness.status != :alive
+        bits << row.drift_detail if row.drift_detail && row.drift == :behind
         bits << row.license.detail if row.license.status == :changed
         bits.empty? ? "" : "   #{bits.join(' · ')}"
       end

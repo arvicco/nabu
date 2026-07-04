@@ -1,7 +1,9 @@
 # First1KGreek fixtures
 
 Real upstream samples from OpenGreekAndLatin's First1KGreek corpus
-(CLAUDE.md fixture rules). All files are small and kept **whole** — no trimming.
+(CLAUDE.md fixture rules). All files are kept **whole** except the Nicomachus
+edition (P6-1), a documented trim of a 442 KB file — see its table row and
+manifest.yml.
 
 - **Retrieved:** 2026-07-03, from `master` of
   [OpenGreekAndLatin/First1KGreek](https://github.com/OpenGreekAndLatin/First1KGreek)
@@ -25,6 +27,9 @@ Real upstream samples from OpenGreekAndLatin's First1KGreek corpus
 | `tlg2959/__cts__.xml` | 162 | textgroup metadata |
 | `tlg2959/tlg008/__cts__.xml` | 535 | work metadata |
 | `tlg2959/tlg008/tlg2959.tlg008.opp-grc1.xml` | 4649 | *De Martyribus (Fragmenta)*, citation unit `fragment`, edition slug `opp-grc1` |
+| `tlg0358/__cts__.xml` | — | textgroup metadata (Nicomachus; copied whole from the local canonical snapshot, P6-1) |
+| `tlg0358/tlg001/__cts__.xml` | — | work metadata (copied whole from the local canonical snapshot, P6-1) |
+| `tlg0358/tlg001/tlg0358.tlg001.1st1K-grc1.xml` | 12131 | *Introductio arithmetica* (**trimmed**, P6-1): structural-retry exemplar — refsDecl units `book`/`section` vs body `div[@subtype="chapter"]` (renamed label); recovered from the replacementPattern xpath. Trimmed 2026-07-04 from the local canonical snapshot (synced 2026-07-03): teiHeader whole, chapter 1 reduced to section 1, chapter 2 to section 1 (chapter boundary kept), chapter 3 and remaining sections removed |
 
 The `tlg2959` set was **conditional** in the approved plan (fetch the edition only
 if both `__cts__.xml` probes returned 200). Both returned 200 on 2026-07-03, so all
