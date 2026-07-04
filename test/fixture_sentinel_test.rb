@@ -52,6 +52,26 @@ class FixtureSentinelTest < Minitest::Test
     end
   end
 
+  # Regression (found on the first live run): Faraday hands the body back
+  # UTF-8-flavored while the checked-in fixture is binread BINARY — Ruby's
+  # String#== is false for byte-identical strings in different encodings
+  # unless they are pure ASCII. Greek/Cyrillic fixtures false-reported drift.
+  def test_identical_non_ascii_fetch_is_clean_not_false_drift
+    Dir.mktmpdir do |root|
+      greek = "μῆνιν ἄειδε θεά"
+      build_source(root, "demo", files: [file("a.xml", disk: greek, url: "#{BASE}/a.xml")])
+      stub_request(:get, "#{BASE}/a.xml")
+        .to_return(status: 200, body: greek,
+                   headers: { "Content-Type" => "text/plain; charset=utf-8" })
+
+      result = sentinel(root).check("demo")
+
+      assert_equal :identical, result.files.first.status,
+                   "byte-identical non-ASCII content must not read as drift"
+      assert result.ok?
+    end
+  end
+
   def test_changed_body_is_drift_and_flags_nonzero
     Dir.mktmpdir do |root|
       build_source(root, "demo", files: [file("a.xml", disk: "hello", url: "#{BASE}/a.xml")])
