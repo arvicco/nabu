@@ -300,19 +300,149 @@ Acceptance: golden suite green with ≥6 queries spanning grc/lat/got/chu/orv
 
 ---
 
-## Phase 5 — Source health & upstream drift (outline; elaborated at the Phase 4 gate)
+## Phase 5 — Collection protection & source health (branch: phase-5; elaborated 2026-07-04)
 
-P5-1 · Upstream probe: `nabu health --remote` — ls-remote liveness + HEAD-vs-last_sync_sha
-      + license-file change detection per live source; no cloning. [opus]
-P5-2 · Fixture sentinel: per-source fixture manifests (formalizing the approved
-      acquisition-plan URLs), `rake fixtures:check[source]` (fetch→tmp, diff,
-      run adapter tests against refreshed copies, report — never overwrites) and
-      `rake fixtures:refresh[source]` (explicit adoption). The failing tests ARE
-      the drift report (maintenance §6). [fable-spec/opus-impl]
-P5-3 · Post-sync anomaly detection: `nabu health` — per-source run-history trends
-      (quarantine spikes, added collapse, withdrawal creep, stale sources);
-      SyncRunner inline deviation warnings; golden queries replayed against the
-      live corpus post-sync. [opus]
-P5-4 · Ops wiring: docs/ops.md + launchd plist templates for the maintenance §1
-      cadence (nightly verify, weekly sync --all + health); ntfy hook optional,
-      owner-configured. [opus]
+*Fixture note: this phase fetches NOTHING. The only new fixtures are trimmed
+from the already-synced local `canonical/papyri-ddbdp` snapshot (license
+recorded at the Phase 3 approval); fixture READMEs note trim provenance and
+the original fetch date.*
+
+## P5-1 · DdbdpParser: restart-aware URN minting  [tier: fable] [status: done] [deps: —]
+Goal: Fix the duplicate-urn quarantine class from the 2026-07-04 first sync
+      (12,288 of 21,641 quarantines): DDbDP files where line numbering restarts
+      mid-document (multiple `<lb n="1"/>`) with NO textpart divs to
+      disambiguate — exemplar: `aegyptus/aegyptus.89/aegyptus.89.240.xml`
+      (two `<lb n="1"`, one `<ab>`, zero textparts). Design the minting policy
+      (fable decision): passage URNs within such documents must be unique and
+      stable across parses (e.g. an implicit block index per restart) —
+      documents WITH textparts keep their current minting untouched.
+      HARD CONSTRAINT — frozen-urn safety: documents that parsed cleanly
+      before the fix must mint byte-identical URNs after it (the 49,060 loaded
+      docs re-parse as "skipped", never "revised"); restart docs never entered
+      the catalog, so their URNs are unconstrained.
+      Also: sample the OTHER quarantine class ("no citable lines", 9,351 docs)
+      — inspect ≥10 canonical files drawn from the quarantine journal
+      (provenance events) and confirm they are genuinely text-less stubs;
+      if a recoverable subclass emerges, REPORT it (own packet later), don't
+      scope-creep this fix.
+      Fixtures: trim the restart exemplar + one text-less stub from local
+      canonical into `test/fixtures/papyri-ddbdp/`.
+Acceptance: restart fixture parses (no quarantine) with unique URNs, stable
+      across two parses; pre-fix URN lists of all existing papyri fixtures
+      asserted unchanged (golden regression); stub fixture still quarantines
+      with a clear message; conformance + full suite + lint green; stub-sample
+      findings reported in the worklog line.
+
+## P5-2 · Retention contract: the canonical attic  [tier: fable] [status: done] [deps: —]
+Goal: Owner requirement (2026-07-04): if a document/source is scrapped
+      upstream (deletion, license change, disagreement), local storage marks
+      it but KEEPS it usable. Today this holds only in the catalog — `fetch`
+      (git pull) deletes canonical FILES, and rebuild = pure function of
+      canonical/, so any rebuild after an upstream deletion silently loses the
+      withdrawn documents (canonical/ is gitignored, clones are --depth 1: no
+      net). Fetch also mutates canonical BEFORE the breaker runs.
+      Design (the attic):
+      (a) Non-destructive fetch — `git fetch` first (objects only), diff
+          HEAD..FETCH_HEAD --diff-filter=D, copy doomed files to
+          `canonical/<slug>/.attic/<relpath>` (first copy wins, journaled),
+          THEN ff-merge. Attic lives inside canonical/, so the rebuild
+          invariant (db = f(canonical)) survives unchanged and attic docs
+          replay through every rebuild.
+      (b) Attic discovery in the Adapter base so all six adapters inherit it:
+          attic refs flagged retained; a URN discovered both live and in the
+          attic → live wins, attic copy superseded + journaled (restructures/
+          renames self-heal instead of duplicating).
+      (c) Schema (forward-only migration): `documents.retired_upstream`,
+          distinct from `withdrawn`. Retired docs stay LIVE — searchable,
+          exportable, indexed (the point of keeping them) — labeled in
+          status/show; provenance "retired" records the upstream sha where
+          they vanished. `withdrawn` keeps meaning "absent from canonical
+          entirely"; intra-document edition changes stay revision-journaled,
+          not atticked (upstream typo fixes are not scrapping).
+      (d) Breaker prediction moves before the merge — an aborted sync leaves
+          the canonical working tree truly unchanged.
+      Docs in the same change: architecture §3/§8 retention contract;
+      conventions.md licensing note (retained docs keep the license they were
+      fetched under); CLAUDE.md anti-patterns. Out of scope (state in docs):
+      passage-level old text on revision is journaled by sha only; attic
+      protects against upstream loss, not local disk loss (backups remain the
+      answer).
+Acceptance: fixture-git-repo test — upstream deletes a file → post-sync the
+      file exists under .attic, its document loads live with
+      retired_upstream=true + "retired" provenance; rebuild replays the attic
+      (doc survives, still flagged); live-beats-attic dedup test; breaker-abort
+      test asserts canonical tree byte-unchanged; search/export include and
+      status/show label retired docs; migration + models tested; docs updated;
+      full suite + lint green.
+
+## P5-3 · Upstream probe: nabu health --remote  [tier: opus] [status: done] [deps: —]
+Goal: `bin/nabu health --remote` — per registered source (enabled or not):
+      `git ls-remote` liveness (alive / moved / gone / auth-trouble), remote
+      HEAD vs last_sync_sha (current / behind), and a no-clone license-drift
+      check (fetch the upstream license file raw where the host allows;
+      tolerate absence gracefully). Table output; exit 1 if any upstream is
+      gone. No cloning, no fetching corpora. Tests mock Shell/HTTP (WebMock).
+Acceptance: probe tests for alive/moved/gone/behind/license-changed paths
+      against mocked responses; exit codes tested; suite + lint green.
+
+## P5-4 · Fixture sentinel  [tier: opus] [status: done] [deps: —]
+Goal: Formalize the approved fixture-acquisition URLs as per-source fixture
+      manifests (`test/fixtures/<source>/manifest.yml`: URLs, retrieval date,
+      trim notes). `rake fixtures:check[source]` — fetch to tmp, diff against
+      checked-in fixtures, run the source's adapter tests against the fresh
+      copies, report; NEVER overwrites (the failing tests ARE the drift
+      report, maintenance §6). `rake fixtures:refresh[source]` — explicit
+      adoption. Rake tasks are manual/network; the test suite itself stays
+      network-free (task logic tested with mocked fetches + tmp dirs).
+Acceptance: manifests for all six sources (papyri entries note the local-trim
+      provenance); check/refresh behavior tested with WebMock + tmp fixtures;
+      check exits nonzero on drift, refresh only on explicit invocation;
+      suite + lint green.
+
+## P5-5 · Post-sync anomaly detection: nabu health  [tier: opus] [status: done] [deps: P5-3]
+Goal: `bin/nabu health` (local, no network) — per-source run-history trends
+      from the runs table: quarantine spikes vs prior runs, added-count
+      collapse, withdrawal/retirement creep, stale sources (last_sync_at older
+      than the source's cadence expectation); plus replay of
+      test/golden/golden_queries.yml against the LIVE corpus (catalog +
+      fulltext on disk) reporting any query that lost its expected URN.
+      SyncRunner gains inline deviation warnings on the same signals at sync
+      time. Exit 1 on any red finding.
+Acceptance: trend detection tested against seeded runs histories (spike,
+      collapse, creep, stale, healthy); live golden replay tested against a
+      fixture-built corpus; SyncRunner warning test; suite + lint green.
+
+## P5-6 · Ops wiring  [tier: opus] [status: done] [deps: P5-3, P5-5]
+Goal: `docs/ops.md` — the operating manual for the maintenance §1 cadence
+      (nightly `nabu verify`, weekly `sync --all` + `health` + `health
+      --remote`), with launchd plist templates under `ops/launchd/` the owner
+      can install (paths parameterized, install steps documented, nothing
+      auto-installed). Optional ntfy notification hook documented as
+      owner-configured. No code changes beyond what the templates invoke.
+Acceptance: plists are valid (plutil -lint in tests via tmp copies), commands
+      they reference exist; docs/ops.md complete enough that a newcomer could
+      wire the cadence; suite + lint green.
+
+
+---
+
+## Phase 6 candidates (found in the field; elaborated at the Phase 5 gate or later)
+
+- **The Iliad is quarantined** (found 2026-07-04 while writing `help search`
+  examples): perseus-greek tlg0012.tlg001.perseus-grc2 fails EpidocParser
+  with "citation depth mismatch: refsDecl declares 2 component(s), found 1
+  ([\"1\"])" — likely one of Perseus's ~37 first-sync quarantines sharing a
+  structural class (refsDecl says book.line but the file's top div layout
+  differs). THE flagship text of the corpus is missing; diagnose the class,
+  fix the parser or per-family fallback, `sync perseus-greek --parse-only`.
+- **Cancelled-but-legible papyri** (P5-1 stub audit): ~40 DDbDP docs whose
+  entire edition is wrapped in <del rend="cross-strokes"|"slashes"> (+ a few
+  whole-doc erasures) — print practice reads these in ⟦⟧; the blanket
+  drop-<del> policy erases the whole document. Needs a Leiden policy
+  amendment (conventions §5) + fixture from the P5-1 list (cpr.6.3,
+  bgu.1.179, apf.59.139, o.claud.3.457).
+- **Per-repo drift/license for multi-repo sources** (P5-3): UD probes each
+  treebank for liveness but drift/license read :multi/:unchecked — needs
+  per-repo pinning.
+- **Adapter-boundary per-language diacritic folding** (P4-1 note): fold at
+  parse time instead of index time; needs a corpus reload.

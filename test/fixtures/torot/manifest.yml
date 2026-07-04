@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# base https://raw.githubusercontent.com/torottreebank/treebank-releases/master/
+#
+# peter.xml is whole (byte-exact); zogr-head40.xml is a PROIEL-surgery trim.
+# adapter_test is null because torot's conformance runs over BOTH fixtures and
+# asserts sentence counts, which the untrimmed upstream zogr.xml would
+# false-fail; the drift signal for torot is fetch-liveness + the eyeballed diff
+# (and peter's whole-file byte-diff). Re-apply the README trim to zogr after a
+# refresh (refresh overwrites the trim with the full upstream file).
+source: torot
+adapter_test:
+retrieved: 2026-07-03
+files:
+  - path: peter.xml
+    url: https://raw.githubusercontent.com/torottreebank/treebank-releases/master/peter.xml
+    whole: true
+    trim: none (Correspondence of Peter the Great, orv — kept whole, byte-exact)
+  - path: zogr-head40.xml
+    url: https://raw.githubusercontent.com/torottreebank/treebank-releases/master/zogr.xml
+    whole: false
+    trim: PROIEL surgery — declaration + root + whole <annotation> + <source> metadata + leading whole <div>s to >=40 sentences (2 divs, 62 sentences); 237,070 B -> 105,227 B

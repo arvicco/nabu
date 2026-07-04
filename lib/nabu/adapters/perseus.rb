@@ -111,45 +111,25 @@ module Nabu
         )
       end
 
-      # Bring the vendored upstream snapshot up to date with a git clone (first
-      # time) or ff-only pull, and return a Nabu::FetchReport pinning the
-      # resulting HEAD sha (architecture §3). No network in tests: exercised
-      # against local fixture git repos. A Shell failure (bad remote, non-ff
-      # history, ...) aborts the sync as a Nabu::FetchError.
+      # Bring the vendored upstream snapshot up to date via the shared
+      # non-destructive git path (Nabu::GitFetch through Adapter#git_fetch!,
+      # P5-2): fetch objects, run the mass-deletion breaker on the pending
+      # deletions, attic upstream-deleted files, ff-merge — returning a
+      # Nabu::FetchReport pinning the resulting HEAD sha (architecture §3).
+      # No network in tests: exercised against local fixture git repos. A
+      # Shell failure (bad remote, non-ff history, ...) aborts the sync as a
+      # Nabu::FetchError; a tripped breaker as Nabu::SyncAborted with the
+      # canonical tree byte-unchanged (+force+ overrides).
       #
       # When +progress+ is given, git is asked for `--progress` and its output
       # is streamed line by line to the callback (a clone of the multi-GB
       # PerseusDL repo is minutes of otherwise-silent work); when nil, the quiet
       # Shell.run path — the one conformance exercises — is used unchanged.
-      def fetch(workdir, progress: nil)
-        if Dir.exist?(File.join(workdir, ".git"))
-          git_pull(workdir, progress)
-        else
-          git_clone(workdir, progress)
-        end
-        sha = Nabu::Shell.run("git", "-C", workdir, "rev-parse", "HEAD").strip
-        Nabu::FetchReport.new(sha: sha, fetched_at: Time.now, notes: nil)
-      rescue Nabu::Shell::Error => e
-        raise Nabu::FetchError, "perseus fetch failed for #{manifest.upstream_url} into #{workdir}: #{e.message}"
+      def fetch(workdir, progress: nil, force: false)
+        git_fetch!(repo_url: manifest.upstream_url, workdir: workdir, progress: progress, force: force)
       end
 
       private
-
-      def git_clone(workdir, progress)
-        return Nabu::Shell.run("git", "clone", "--depth", "1", manifest.upstream_url, workdir) unless progress
-
-        progress.call("Cloning #{manifest.upstream_url}…")
-        Nabu::Shell.stream("git", "clone", "--progress", "--depth", "1", manifest.upstream_url, workdir) do |line|
-          progress.call(line)
-        end
-      end
-
-      def git_pull(workdir, progress)
-        return Nabu::Shell.run("git", "-C", workdir, "pull", "--ff-only") unless progress
-
-        progress.call("Pulling #{manifest.upstream_url}…")
-        Nabu::Shell.stream("git", "-C", workdir, "pull", "--progress", "--ff-only") { |line| progress.call(line) }
-      end
 
       # One discoverable edition before ref construction.
       Candidate = Data.define(:textgroup, :work, :edition, :version, :path)

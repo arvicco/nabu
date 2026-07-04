@@ -87,7 +87,54 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "health", "Source health checks (run-history trends + live golden replay; --remote for the upstream probe)"
+    option :remote, type: :boolean, default: false,
+                    desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
+    def health
+      # Bare `health` is the local, no-network P5-5 check (run-history trends +
+      # live golden replay). --remote is the P5-3 upstream probe. The two share
+      # nothing at runtime, so keep them in separate helpers with their own db
+      # lifetimes and exit-code raises.
+      options[:remote] ? run_remote_health : run_local_health
+    end
+
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
+    long_desc <<~HELP, wrap: false
+      Full-text search over every live passage, bm25-ranked. Matching is
+      diacritic- and case-insensitive on BOTH sides: μηνιν finds μῆνιν,
+      ΜΗΝΙΝ finds both — type without accents, breathings, or iota
+      subscripts and still hit the polytonic editions.
+
+      Query syntax (SQLite FTS5 over the folded text):
+        μηνιν αειδε          all words must appear in the passage (implicit AND)
+        '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
+        μηνι*                prefix match (μῆνιν, μηνίω, μήνιμα, …)
+      Boolean OR/NOT are not supported: operators are folded to lowercase
+      and become ordinary search terms.
+
+      Each hit prints the passage urn, its language, and a folded snippet
+      with the match in [brackets]. The snippet is the SEARCH form, not the
+      edition text — `nabu show <urn>` gives the pristine passage. DDbDP
+      papyri render lost text as the […] gap marker.
+
+      Filters (combinable):
+        --lang     ISO-639-3 passage language: grc, lat, got, chu, orv, san, …
+        --license  effective license class (document override beats source):
+                   open, attribution, nc, research_private, restricted
+        --limit    maximum hits, default 20
+
+      Examples:
+        nabu search μηνιν                          # finds μῆνιν, accents optional
+        nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
+                                                   #   papyri that quote it
+        nabu search sapientia --lang lat           # Latin corpus only
+        nabu search μηνι* --lang grc               # every derivative of the stem
+        nabu search αγαπη --license attribution    # only freely re-usable hits
+
+      Use cases: find a half-remembered line; concordance-style scans of a
+      word across six corpora at once; checking which sources attest a term
+      (and under what license) before an export.
+    HELP
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
@@ -114,6 +161,43 @@ module Nabu
     end
 
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
+    long_desc <<~HELP, wrap: false
+      Inspect one passage or one whole document by urn. Unlike search and
+      export, show hides nothing: withdrawn and retired-upstream items
+      appear too, honestly labeled — this is the "what does my collection
+      actually hold" lens.
+
+      A PASSAGE urn prints the pristine text, its document, effective
+      license, revision, and the full provenance trail (loaded / revised /
+      withdrawn / restored / retired events with timestamps) — the
+      passage's complete life story.
+
+      A DOCUMENT urn prints the header (title, language, source, license,
+      revision, any withdrawn/retired flag) and every passage in citation
+      order, listed as :suffixes relative to the document urn printed once
+      above; --full-urn restores absolute urns for copy-paste. Long
+      documents: pipe to less.
+
+      urn shapes across the corpus:
+        CTS editions   urn:cts:greekLit:tlg0012.tlg002.perseus-grc2       (document)
+                       urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1   (book 1, line 1)
+        papyri (DDbDP) urn:nabu:ddbdp:aegyptus:89:240:b2:5
+                       (:b2 = implicit restart block — an unlabeled column/
+                        fragment where the edition's line numbers restart)
+        treebanks      urn:nabu:proiel:afnik:194690                     (sentence)
+                       urn:nabu:ud:gothic-proiel:got_proiel-ud-dev:37589
+
+      Examples:
+        nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+        nabu show urn:nabu:ddbdp:aegyptus:89:240            # whole papyrus
+        nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
+
+      Use cases: read the real edition text behind a search snippet; audit
+      a document's revision/provenance history after a sync; eyeball what
+      "withdrawn" or "retired upstream" actually holds.
+    HELP
+    option :full_urn, type: :boolean, default: false,
+                      desc: "List document passages with absolute urns instead of :suffixes"
     def show(urn = nil)
       urn = urn.to_s.strip
       raise Thor::Error, "show: give a urn" if urn.empty?
@@ -131,6 +215,33 @@ module Nabu
     end
 
     desc "export", "Stream non-withdrawn passages as plain text or JSONL"
+    long_desc <<~HELP, wrap: false
+      Stream the live corpus to stdout, one passage per line — the
+      longevity-hedge exit formats: the data must survive the code.
+      Withdrawn passages are excluded; retired-upstream documents are
+      INCLUDED (they are part of your collection — that is the point of
+      keeping them). Streaming end to end: constant memory at any corpus
+      size, so piping a million passages is fine.
+
+      Formats:
+        plain   text only, internal newlines collapsed to one space
+        jsonl   one JSON object per line: urn, language, text,
+                text_normalized, annotations — annotations is a real nested
+                object carrying lemmas/morphology where the source provides
+                them (the treebanks: UD, PROIEL, TOROT)
+        conllu  arrives with the enrichment phase (needs the token model)
+
+      Same --lang / --license filters as search.
+
+      Examples:
+        nabu export --format plain --lang got > gothic.txt
+        nabu export --format jsonl --license open | jq -r .urn
+        nabu export --format jsonl --lang chu | jq '.annotations' | head
+
+      Use cases: feed a corpus slice to external NLP tooling; a license-clean
+      subset for anything you plan to publish; plain-text dumps for grep-scale
+      workflows or personal backups independent of nabu itself.
+    HELP
     option :format, type: :string, required: true, desc: "plain | jsonl"
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
@@ -237,16 +348,33 @@ module Nabu
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
-        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}"
+        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
-          say "    #{line.urn}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+          say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
         end
+      end
+
+      # Print practice: the document urn appears once in the header, each
+      # passage line carries only its changing :suffix (":b2:5"). --full-urn
+      # restores absolute urns (copy-paste into `show`/scripts). A passage
+      # whose urn doesn't extend the document urn (never minted by our
+      # adapters, but data is data) falls back to the full urn.
+      def passage_label(document, line)
+        return line.urn if options[:full_urn]
+
+        suffix = line.urn.delete_prefix(document.urn)
+        suffix == line.urn || suffix.empty? ? line.urn : suffix
       end
 
       def withdrawn_tag(withdrawn)
         withdrawn ? "  (withdrawn)" : ""
+      end
+
+      # P5-2: upstream scrapped the file; the attic kept it. Live, labeled.
+      def retired_tag(document)
+        document.retired_upstream ? "  (retired upstream)" : ""
       end
 
       # Open the fulltext index for reading; nil when the file is absent OR the
@@ -324,6 +452,7 @@ module Nabu
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
         say format_sync_outcome(outcome)
+        print_sync_warnings(outcome)
       end
 
       # sync --all: enabled + live sources only; report each, never abort the
@@ -334,7 +463,10 @@ module Nabu
         finish_progress
         return say("Nothing to sync: no enabled, live sources.") if results.empty?
 
-        results.each { |slug, result| say("  #{sync_all_line(slug, result)}") }
+        results.each do |slug, result|
+          say("  #{sync_all_line(slug, result)}")
+          print_sync_warnings(result) if result.is_a?(Nabu::SyncRunner::Outcome)
+        end
       end
 
       def sync_all_line(slug, result)
@@ -342,6 +474,12 @@ module Nabu
         return "#{slug.ljust(24)} ABORTED — #{result.breaker.message}" if result.aborted?
 
         format_sync_outcome(result)
+      end
+
+      # P5-5 inline deviation warnings: advisory one-liners after the counts line,
+      # in yellow, never affecting the exit code. Empty on a clean sync.
+      def print_sync_warnings(outcome)
+        outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
       end
 
       def format_sync_outcome(outcome)
@@ -387,6 +525,168 @@ module Nabu
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
           errored: reports.sum(&:errored)
         )
+      end
+
+      # --remote (P5-3): the no-clone upstream probe. Its own db handle (migrated
+      # so the license-baseline column exists), its own exit-1 raise.
+      def run_remote_health
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        db = open_catalog_for_health(config)
+        report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
+        print_remote_health(report)
+        # A gone upstream is the only red finding; the table is already on stdout,
+        # so raise for the exit-1 signal (Thor prints the summary to stderr).
+        raise Thor::Error, remote_health_failure(report) if report.any_gone?
+      ensure
+        db&.disconnect
+      end
+
+      # Bare health (P5-5): run-history trends + live golden replay, no network.
+      # open_catalog binds the Store models the LocalCheck queries. Exit 1 on any
+      # loud finding (quarantine spike, >15% creep, a lost golden query); soft
+      # warnings (collapse, 5–15% creep, stale) stay exit 0.
+      def run_local_health
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        catalog = open_catalog(config)
+        fulltext = catalog ? open_fulltext(config) : nil
+        report = Nabu::Health::LocalCheck.new(
+          registry: registry, catalog: catalog, fulltext: fulltext,
+          golden_queries: Nabu::Health::LocalCheck.golden_queries
+        ).run
+        print_local_health(report)
+        raise Thor::Error, local_health_failure(report) if report.any_loud?
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Per-source trend rows, then the golden-replay section, then the verdict
+      # and a hint toward the upstream probe.
+      def print_local_health(report)
+        print_source_health(report.sources)
+        print_golden_health(report)
+        say local_health_verdict(report)
+        say "Hint: run `nabu health --remote` for the no-clone upstream probe."
+      end
+
+      def print_source_health(sources)
+        return say("No sources registered.") if sources.empty?
+
+        width = sources.map { |source| source.slug.length }.max
+        sources.each { |source| print_source_row(source, width) }
+      end
+
+      # A healthy source is one "ok" line; a flagged one repeats its slug column
+      # blank for continuation findings so multi-finding sources stay aligned.
+      def print_source_row(source, width)
+        return say("#{source.slug.ljust(width)}  ok") if source.findings.empty?
+
+        source.findings.each_with_index do |finding, index|
+          label = index.zero? ? source.slug.ljust(width) : " " * width
+          say "#{label}  #{finding_tag(finding)} #{finding.message}"
+        end
+      end
+
+      def finding_tag(finding)
+        { loud: "ANOMALY", soft: "warning", info: "note" }.fetch(finding.severity)
+      end
+
+      def print_golden_health(report)
+        case report.corpus
+        when :absent
+          return say("golden replay: no corpus — run nabu sync or nabu rebuild")
+        when :no_index
+          return say("golden replay: no fulltext index — run nabu sync or nabu rebuild")
+        end
+
+        lost = report.golden.select(&:lost?)
+        lost.each { |result| say "golden query lost: #{result.query}  (expected #{result.expect_urn})" }
+        found = report.golden.count { |result| result.status == :found }
+        skipped = report.golden.count { |result| result.status == :skipped }
+        say "golden replay: #{found} found, #{lost.size} lost, #{skipped} skipped (source not in this corpus)"
+      end
+
+      def local_health_verdict(report)
+        return "health: #{report.loud_count} anomaly finding(s) — see above (exit 1)" if report.any_loud?
+        return "health: OK, #{pluralize(report.soft_count, 'warning')}" if report.soft_count.positive?
+
+        "health: OK"
+      end
+
+      def local_health_failure(report)
+        "health: #{report.loud_count} loud finding(s) — see the report above"
+      end
+
+      # Like open_catalog, but also applies pending migrations so the P5-3
+      # license-baseline column exists on catalogs built before it (add_column
+      # is idempotent — only pending migrations run). nil when no catalog has
+      # been built yet: the probe then treats every source as never-synced and
+      # records no baseline.
+      def open_catalog_for_health(config)
+        return nil unless File.exist?(config.catalog_path)
+
+        db = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(db)
+        Nabu::Store.setup!(db)
+        db
+      end
+
+      # Render the remote probe: one aligned row per source (slug, liveness,
+      # drift, license) plus any trailing detail, then a one-line summary.
+      def print_remote_health(report)
+        rows = report.rows
+        return say("No sources registered.") if rows.empty?
+
+        slug_w = rows.map { |row| row.slug.length }.max
+        live_w = rows.map { |row| live_cell(row.liveness).length }.max
+        drift_w = rows.map { |row| drift_cell(row.drift).length }.max
+        rows.each do |row|
+          say "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
+              "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+        end
+        say remote_health_summary(report)
+      end
+
+      def live_cell(liveness)
+        { alive: "alive", moved: "MOVED", gone: "GONE" }.fetch(liveness.status)
+      end
+
+      def drift_cell(drift)
+        { current: "current", behind: "behind", never_synced: "never-synced",
+          unknown: "—", multi: "multi-repo" }.fetch(drift)
+      end
+
+      def license_cell(license)
+        { baseline_recorded: "license: baseline recorded", unchanged: "license: ok",
+          changed: "license: CHANGED", unchecked: "license: unchecked" }.fetch(license.status)
+      end
+
+      # Trailing context: why an upstream is not alive, or why a license row is
+      # flagged. Kept off the aligned columns so the table stays readable.
+      def health_detail(row)
+        bits = []
+        bits << row.liveness.detail if row.liveness.detail && row.liveness.status != :alive
+        bits << row.license.detail if row.license.status == :changed
+        bits.empty? ? "" : "   #{bits.join(' · ')}"
+      end
+
+      def remote_health_summary(report)
+        rows = report.rows
+        counts = { alive: 0, moved: 0, gone: 0 }
+        rows.each { |row| counts[row.liveness.status] += 1 }
+        behind = rows.count { |row| row.drift == :behind }
+        parts = [pluralize(rows.size, "source"), "#{counts[:alive]} alive"]
+        parts << "#{counts[:moved]} moved" if counts[:moved].positive?
+        parts << "#{counts[:gone]} gone" if counts[:gone].positive?
+        parts << "#{behind} behind" if behind.positive?
+        parts.join(", ")
+      end
+
+      def remote_health_failure(report)
+        gone = report.rows.count { |row| row.liveness.status == :gone }
+        "health: #{pluralize(gone, 'upstream')} gone — see the table above"
       end
 
       # Open the catalog db for reading if it has been built; nil otherwise so

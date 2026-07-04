@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The single fixture is a trim (PROIEL surgery -> 4 whole divs, 18 sentences)
+# of the 1.98 MB cic-off.xml, so whole: false — fetched for URL-liveness only,
+# never byte-compared. adapter_test null (a count-based test against the full
+# upstream file would false-fail); re-apply the README trim after any refresh.
+source: proiel
+adapter_test:
+retrieved: 2026-07-03
+files:
+  - path: cic-off-head15.xml
+    url: https://raw.githubusercontent.com/proiel/proiel-treebank/master/cic-off.xml
+    whole: false
+    trim: PROIEL surgery — declaration + root + whole <annotation> + <source> metadata + leading whole <div>s to >=15 sentences (4 divs, 18 sentences); 1,984,040 B -> 93,767 B

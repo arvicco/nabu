@@ -16,7 +16,7 @@ require "fileutils"
 class PerseusTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = File.expand_path("../fixtures/perseus", __dir__)
+  FIXTURES = Nabu::TestSupport.fixtures("perseus") # NABU_FIXTURE_DIR-aware (fixtures:check)
   GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
 
   HH13_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2"
@@ -194,6 +194,45 @@ class PerseusTest < Minitest::Test
     end
   end
 
+  # --- retention: attic + pre-merge breaker (P5-2) --------------------------
+
+  # Upstream deleting an ingestible edition beyond the threshold (here 1 of 2,
+  # 50% > 20%) trips the mass-deletion breaker BEFORE the merge: the canonical
+  # tree keeps the file, no attic appears. --force proceeds: the file is
+  # atticked (relative path preserved), the merge applies, and the adapter
+  # rediscovers the document from the attic as retained.
+  def test_fetch_guards_upstream_deletions_and_force_attics_them
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      doomed_rel = File.join("data", "tlg0001", "tlg001", "tlg0001.tlg001.perseus-grc2.xml")
+      make_git_repo_with(upstream,
+                         doomed_rel => "<TEI/>\n",
+                         File.join("data", "tlg0002", "tlg002", "tlg0002.tlg002.perseus-grc2.xml") => "<TEI/>\n")
+      workdir = File.join(root, "work")
+      adapter = perseus_pointing_at(upstream)
+      adapter.fetch(workdir)
+
+      git(upstream, "rm", "-q", doomed_rel)
+      git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "scrap")
+
+      assert_raises(Nabu::SyncAborted) { adapter.fetch(workdir) }
+      assert File.file?(File.join(workdir, doomed_rel)), "a tripped breaker leaves the tree unchanged"
+      refute Dir.exist?(File.join(workdir, ".attic"))
+
+      report = adapter.fetch(workdir, force: true)
+      assert_includes report.notes, "atticked 1"
+      refute File.exist?(File.join(workdir, doomed_rel))
+      assert File.file?(File.join(workdir, ".attic", doomed_rel))
+
+      refs = adapter.discover_with_attic(workdir).to_a
+      assert_equal ["urn:cts:greekLit:tlg0001.tlg001.perseus-grc2",
+                    "urn:cts:greekLit:tlg0002.tlg002.perseus-grc2"], refs.map(&:id).sort
+      retained = refs.find { |ref| ref.id.include?("tlg0001") }
+      assert_equal true, retained.metadata["retained"]
+      assert_equal git(upstream, "rev-parse", "HEAD"), retained.metadata["retired_sha"]
+    end
+  end
+
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_perseus_and_manifest_agrees
@@ -224,6 +263,17 @@ class PerseusTest < Minitest::Test
     File.write(File.join(dir, "#{seed}.txt"), "#{seed}\n")
     git(dir, "add", ".")
     git(dir, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", seed)
+  end
+
+  def make_git_repo_with(dir, files)
+    FileUtils.mkdir_p(dir)
+    git(dir, "init", "-q")
+    files.each do |rel, content|
+      FileUtils.mkdir_p(File.join(dir, File.dirname(rel)))
+      File.write(File.join(dir, rel), content)
+    end
+    git(dir, "add", ".")
+    git(dir, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
   end
 
   def git(dir, *)

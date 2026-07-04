@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Nabu weekly maintenance (maintenance §1).
+
+  Runs, in order:
+    nabu sync --all       fetch + load every enabled, live source
+    nabu health           local run-history trends + live golden replay
+    nabu health --remote  no-clone upstream liveness / drift / license probe
+
+  The three run sequentially regardless of each other's exit code (health
+  exits 1 on a red finding — we still want the remote probe to run), so read
+  the log to see what happened.
+
+  IMPORTANT — deliberately NOT enabled by default. `sync --all` fetches from
+  upstream and mutates canonical/; per CLAUDE.md real syncs are eyeball-verified
+  events. Bootstrap this job only once you have decided to let the weekly sync
+  run unattended (the >20% withdrawal circuit-breaker is your guard, but it is
+  not a substitute for occasionally watching a run). See docs/ops.md.
+
+  TEMPLATE — substitute the placeholders (see the nightly template's header for
+  __NABU_ROOT__ / __RUBY_BIN_DIR__).
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nabu.weekly-maintenance</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>bundle exec bin/nabu sync --all
+bundle exec bin/nabu health
+bundle exec bin/nabu health --remote</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__NABU_ROOT__</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>__RUBY_BIN_DIR__:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- Sundays at 04:00. Weekday 0 == Sunday. Adjust freely. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>
+    <key>Hour</key>
+    <integer>4</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>__NABU_ROOT__/log/weekly-maintenance.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__NABU_ROOT__/log/weekly-maintenance.err.log</string>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

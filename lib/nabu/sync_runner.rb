@@ -15,35 +15,47 @@ module Nabu
   # (docs/maintenance-and-extension.md §2), and one source's failure never stops
   # the others.
   #
-  # == The withdrawal circuit breaker (architecture §8)
+  # == The circuit breakers (architecture §8, relocated in P5-2)
   #
-  # Upstream restructures (repo renames, path moves) can make a whole corpus look
-  # deleted; a naive full load would then mark everything withdrawn. So BEFORE
-  # loading anything, we predict the withdrawal: the set-difference of this
-  # source's existing non-withdrawn document urns and the ids discover() yields
-  # (cheap directory walking — no parse, no fetch reuse). If that would withdraw
-  # more than WITHDRAWAL_THRESHOLD of the source, we raise Nabu::SyncAborted and
-  # write NOTHING. `--force` overrides. The prediction is exact for adapters
-  # whose DocumentRef#id IS the document urn (Perseus, the reference case);
-  # that identity is why discover can stand in for a parse here.
+  # The PRIMARY mass-deletion breaker now lives in the fetch path
+  # (Adapter#guard_mass_deletion!, driven by Nabu::GitFetch): it predicts from
+  # the HEAD..FETCH_HEAD deletion diff and trips BEFORE the merge, so an
+  # aborted sync leaves the canonical working tree byte-unchanged — a plain
+  # `--force` then attics the deleted files and retires (never loses) their
+  # documents.
+  #
+  # The load-side guard here remains as the second line of defense: before
+  # loading anything it predicts the withdrawal sweep as the set-difference of
+  # this source's existing non-withdrawn document urns and the ids
+  # discover_with_attic() yields (cheap directory walking — no parse; attic
+  # documents count as PRESENT, so retained corpora never false-trip). It
+  # covers what the fetch breaker cannot see: --parse-only over a damaged
+  # snapshot, discover regressions, and future non-git adapters. If it would
+  # withdraw more than WITHDRAWAL_THRESHOLD of the source, we raise
+  # Nabu::SyncAborted and write NOTHING. `--force` overrides both breakers.
+  # The prediction is exact for adapters whose DocumentRef#id IS the document
+  # urn (Perseus, the reference case); that identity is why discover can stand
+  # in for a parse here.
   #
   # == parse-only
   #
   # `--parse-only` skips fetch entirely (Adapter#fetch is never called) and
   # re-parses whatever snapshot is already on disk — the same "no network" stance
-  # as Rebuild, but scoped to one source and still under the breaker. The prior
-  # last_sync_sha is preserved (there was no new fetch to pin).
+  # as Rebuild, but scoped to one source and still under the load-side breaker.
+  # The prior last_sync_sha is preserved (there was no new fetch to pin).
   class SyncRunner
-    # Trip the breaker when a sync would withdraw strictly more than this
-    # fraction of a source's live documents.
-    WITHDRAWAL_THRESHOLD = 0.2
+    # Trip the load-side breaker when a sync would withdraw strictly more than
+    # this fraction of a source's live documents. Shares the fetch-side value.
+    WITHDRAWAL_THRESHOLD = Nabu::Adapter::MASS_DELETION_THRESHOLD
 
     # What one source's sync did. Mirrors Rebuild::Outcome. On a tripped breaker
     # load_report is nil and #aborted? is true, with +breaker+ carrying the
     # Nabu::SyncAborted (its counts + message) for reporting; otherwise breaker
     # is nil, fetch_report is present (nil under --parse-only) and load_report
-    # holds the Loader's counts.
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed) do
+    # holds the Loader's counts. +warnings+ carries any inline deviation Findings
+    # (P5-5) computed from the fresh LoadReport against the source's history —
+    # advisory only, never failing the sync (empty on an aborted run).
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings) do
       def aborted? = !breaker.nil?
     end
 
@@ -94,7 +106,7 @@ module Nabu
 
       begin
         Store::RunRecorder.record(db: @db, source: source) do
-          fetch_report = adapter.fetch(workdir, progress: progress&.method(:fetch_line)) unless parse_only
+          fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
         end
@@ -102,7 +114,7 @@ module Nabu
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
         # untouched. Report it rather than crashing the batch.
         return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
-                           breaker: e, indexed: nil)
+                           breaker: e, indexed: nil, warnings: [])
       end
 
       update_source_state(source, fetch_report)
@@ -113,7 +125,28 @@ module Nabu
       # incremental per-source indexing is the future optimization.
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
-                  breaker: nil, indexed: indexed)
+                  breaker: nil, indexed: indexed, warnings: deviation_warnings(source, load_report))
+    end
+
+    # P5-5: after a successful sync, run the SAME trend rules the `nabu health`
+    # LocalCheck uses against this fresh LoadReport — a quarantine spike versus
+    # the source's recent run history, and a single-sync mass-withdrawal sweep.
+    # Advisory only: these are returned in the Outcome for the CLI to print, they
+    # never fail the sync (the >20% breaker is the only thing that stops a sync).
+    # Cheap: two small aggregate queries reusing Health::TrendRules — no new
+    # thresholds. The just-finished run is already recorded "succeeded", so it is
+    # runs.first here; prior runs form the spike norm.
+    def deviation_warnings(source, load_report)
+      return [] unless load_report
+
+      errored = Store::Run.where(source_id: source.id, status: "succeeded")
+                          .order(Sequel.desc(:id)).select_map(:errored)
+      prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
+      total = Store::Document.where(source_id: source.id).count
+      [
+        Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior),
+        Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)
+      ].compact
     end
 
     # Rebuild the whole FTS5 index from the (now-updated) catalog into the
@@ -128,20 +161,26 @@ module Nabu
       fulltext&.disconnect
     end
 
+    def fetch(adapter, workdir, force:, progress:)
+      adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+    end
+
     def load(source, adapter, workdir, progress)
       Store::Loader.new(db: @db, source: source)
                    .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
     end
 
     # Predict the withdrawal sweep and refuse if it exceeds the threshold. Runs
-    # before any load, so a tripped breaker leaves the corpus untouched.
+    # before any load, so a tripped breaker loads nothing (the canonical tree
+    # was already protected by the fetch-side breaker). Attic documents are
+    # discovered too, so retained corpora count as present, never withdrawn.
     def guard_withdrawal!(adapter, source, workdir, force:)
       return if force
 
       existing = Store::Document.where(source_id: source.id, withdrawn: false).select_map(:urn)
       return if existing.empty?
 
-      discovered = adapter.discover(workdir).to_set(&:id)
+      discovered = adapter.discover_with_attic(workdir).to_set(&:id)
       would_withdraw = existing.count { |urn| !discovered.include?(urn) }
       return unless would_withdraw > WITHDRAWAL_THRESHOLD * existing.size
 

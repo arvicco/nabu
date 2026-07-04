@@ -22,6 +22,16 @@ class DdbdpParserTest < Minitest::Test
   # ";"→":" minting rule preserves it as an empty urn segment ("::").
   CEL10_URN = "urn:nabu:ddbdp:c.epist.lat::10"
 
+  # P5-1 fixtures (copied whole 2026-07-04 from the locally synced snapshot;
+  # see test/fixtures/papyri-ddbdp/README.md): the line-number-restart
+  # exemplar and a genuinely text-less cross-reference stub.
+  PAPYRI_FIXTURES = File.expand_path("../fixtures/papyri-ddbdp/DDB_EpiDoc_XML", __dir__)
+  AEG240 = File.join(PAPYRI_FIXTURES, "aegyptus", "aegyptus.89", "aegyptus.89.240.xml")
+  CW101 = File.join(PAPYRI_FIXTURES, "chrest.wilck", "chrest.wilck.101.xml")
+
+  AEG240_URN = "urn:nabu:ddbdp:aegyptus:89:240"
+  CW101_URN = "urn:nabu:ddbdp:chrest.wilck::101"
+
   def parser
     Nabu::Adapters::DdbdpParser.new
   end
@@ -204,6 +214,73 @@ class DdbdpParserTest < Minitest::Test
 
   def test_verso_line
     assert_equal "Chio Caesaris", parse_cel10.to_a.last.text
+  end
+
+  # --- restart-aware minting (P5-1): implicit blocks on urn collision -------
+
+  def parse_aeg240
+    parser.parse(AEG240, urn: AEG240_URN, language: "grc", title: "aegyptus.89.240")
+  end
+
+  def test_restart_document_parses_with_unique_block_indexed_urns
+    # aegyptus.89.240: one flat <ab>, NO textpart divs, and the line
+    # numbering restarts twice — <lb n="1"/> appears twice (a lost-line
+    # marker block, then the main text 1..11) and <lb n="11"/> appears twice
+    # (line 11, then a trailing lost-line marker block). Before P5-1 this
+    # was the duplicate-passage-urn quarantine class (12,288 docs in the
+    # 2026-07-04 sync). Policy: the first collision opens implicit block
+    # "b2", the next one "b3" — every line from a collision on carries its
+    # block segment between textpart path and line number.
+    document = parse_aeg240
+    expected = ["#{AEG240_URN}:1"] +
+               (1..11).map { |n| "#{AEG240_URN}:b2:#{n}" } +
+               ["#{AEG240_URN}:b3:11"]
+    assert_equal expected, document.map(&:urn)
+    assert_equal document.map(&:urn), document.map(&:urn).uniq, "urns must be unique"
+  end
+
+  def test_restart_document_line_texts_spot_checks
+    document = parse_aeg240.to_a
+    # Both restart blocks are lost-line markers: a single <gap unit="line"/>.
+    assert_equal "[…]", document.first.text
+    assert_equal "[…]", document.last.text
+    # A real text line from the main block (b2, line 5), derived from the
+    # fixture bytes: plain text + one <supplied reason="lost"> restoration.
+    line5 = document.find { |passage| passage.urn == "#{AEG240_URN}:b2:5" }
+    assert_equal "θώτου, λιβὸς δημοσία ῥύμη ἐν ᾗ εἴσοδος καὶ ἔξοδος τῆς οἰκίας δεῖνος", line5.text
+  end
+
+  def test_restart_urns_are_stable_across_two_independent_parses
+    assert_equal parse_aeg240.map(&:urn), parse_aeg240.map(&:urn)
+  end
+
+  # --- golden regression (P5-1 frozen-urn safety) ----------------------------
+  #
+  # Restart-aware minting must leave every document that parsed cleanly
+  # before P5-1 byte-identical: block segments appear ONLY after a
+  # within-document urn collision, which by definition never happens in a
+  # cleanly parsed document. These three lists are the complete known-good
+  # urns of all pre-P5-1 papyri fixtures, captured before the change.
+  def test_golden_urn_lists_of_pre_existing_fixtures_are_byte_identical
+    assert_equal (1..9).map { |n| "#{BGU102_URN}:#{n}" }, parse102.map(&:urn),
+                 "bgu.1.102 (flat, no restarts) urns must be unchanged by restart-aware minting"
+    assert_equal (1..12).map { |n| "#{BGU100_URN}:#{n}" }, parse100.map(&:urn),
+                 "bgu.1.100 (flat, no restarts) urns must be unchanged by restart-aware minting"
+    assert_equal (1..10).map { |n| "#{CEL10_URN}:r:#{n}" } + ["#{CEL10_URN}:v:1"], parse_cel10.map(&:urn),
+                 "c.epist.lat.10 (textpart divs) urns must be unchanged by restart-aware minting"
+  end
+
+  # --- text-less stubs still quarantine (P5-1) -------------------------------
+
+  def test_text_less_stub_still_quarantines_with_a_clear_message
+    # chrest.wilck.101 is a cross-reference stub (empty <ab/>; the header
+    # points at the reprint, P.Enteux. 13). It must keep quarantining — the
+    # restart fix must not widen what counts as citable.
+    error = assert_raises(Nabu::ParseError) do
+      parser.parse(CW101, urn: CW101_URN, language: "grc", title: "chrest.wilck.101")
+    end
+    assert_match(/no citable lines/, error.message)
+    assert_includes error.message, CW101, "the message must name the offending file"
   end
 
   # --- inline language annotation (string surgery; none in the fixtures) ----

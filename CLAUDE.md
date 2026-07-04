@@ -69,3 +69,4 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 - Cross-adapter shared state or clever registries with autoloading magic — explicit `require` + explicit registry in `sources.yml`.
 - Storing embeddings or big JSON in `catalog.sqlite3` — vectors go in `vectors.sqlite3`, bulky derived payloads in `enrichments`.
 - Hard-deleting anything from the catalog. Withdraw, revise, journal.
+- Destructive fetch — a plain `git pull` in canonical/. A pull deletes working-tree files upstream scrapped, and since `db/` is a pure function of `canonical/`, the next rebuild silently loses those documents. All git fetching goes through `Nabu::GitFetch` (fetch objects → breaker → attic upstream deletions under `canonical/<slug>/.attic/` → ff-merge); see architecture §8.

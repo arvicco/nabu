@@ -157,5 +157,21 @@ module Query
 
       assert_empty search("nonexistentword")
     end
+
+    # Regression (found live, P5-5): the health golden replay must be
+    # ranking-independent. With a urn: filter the expected passage is found
+    # even when it would rank below the limit among many denser matches.
+    def test_urn_filter_finds_a_passage_regardless_of_rank
+      doc = make_document(source: @open, urn: "urn:d:1")
+      25.times { |i| make_passage(doc, urn: "urn:d:1:noise#{i}", text: "aurora aurora aurora", sequence: i) }
+      make_passage(doc, urn: "urn:d:1:target", text: "sola aurora inter multa", sequence: 25)
+      rebuild!
+
+      refute_includes search("aurora", limit: 10).map(&:urn), "urn:d:1:target",
+                      "precondition: the target ranks below the page without the filter"
+      assert_equal %w[urn:d:1:target], search("aurora", limit: 1, urn: "urn:d:1:target").map(&:urn)
+      assert_empty search("nonexistentword", urn: "urn:d:1:target"),
+                   "the urn filter still requires the query to match"
+    end
   end
 end
