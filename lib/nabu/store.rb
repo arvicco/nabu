@@ -20,6 +20,7 @@ module Nabu
     # Model constant => backing table. Order matters only for readability.
     MODELS = {
       Source: :sources,
+      SourceRepo: :source_repos,
       Document: :documents,
       Passage: :passages,
       Provenance: :provenance,
@@ -70,6 +71,7 @@ module Nabu
         MODELS.each_key { |const| const_get(const).set_dataset(db[MODELS.fetch(const)]) }
       else
         require_relative "store/source"
+        require_relative "store/source_repo"
         require_relative "store/document"
         require_relative "store/passage"
         require_relative "store/provenance"

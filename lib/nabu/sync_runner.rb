@@ -190,11 +190,34 @@ module Nabu
     end
 
     # On success, stamp the sync time and pin the fetched sha. A --parse-only
-    # run has no fetch_report, so its prior last_sync_sha is preserved.
+    # run has no fetch_report, so its prior last_sync_sha is preserved. A
+    # multi-repo fetch also carries per-repo shas — pin those into source_repos.
     def update_source_state(source, fetch_report)
       attrs = { last_sync_at: Time.now }
       attrs[:last_sync_sha] = fetch_report.sha if fetch_report
       source.update(attrs)
+      update_source_repos(source, fetch_report.repos) if fetch_report
+    end
+
+    # Upsert one source_repos row per repo the fetch reported (on the unique
+    # (source_id, repo_url)), touching only last_sync_sha so a license baseline
+    # the probe recorded on the row survives the sync. Rows for repos that
+    # vanished from the manifest list are deleted — a stale pin must never
+    # linger and read as drift against a repo the source no longer tracks.
+    # Single-repo sources report no repos (+repos+ nil) and write nothing here:
+    # their sources.last_sync_sha stays the whole contract.
+    def update_source_repos(source, repos)
+      return if repos.nil? || repos.empty?
+
+      repos.each do |repo_url, sha|
+        row = Store::SourceRepo.first(source_id: source.id, repo_url: repo_url)
+        if row
+          row.update(last_sync_sha: sha)
+        else
+          Store::SourceRepo.create(source_id: source.id, repo_url: repo_url, last_sync_sha: sha)
+        end
+      end
+      Store::SourceRepo.where(source_id: source.id).exclude(repo_url: repos.keys).delete
     end
 
     def workdir_for(slug) = File.join(@config.canonical_dir, slug)
