@@ -38,13 +38,17 @@ module Nabu
 
       # Upsert this source's row from slug + manifest. Registry is authoritative
       # for identity/metadata (name, adapter_class, license, license_class,
-      # upstream_url); the db is authoritative for runtime state, so an existing
-      # row keeps its enabled/last_sync_* columns. Returns the Store::Source row.
+      # upstream_url) AND for `enabled` — the owner flips enabled in
+      # sources.yml with a sign-off comment, and `sync --all` reads the yaml,
+      # so the db row mirrors it on every reconcile (revised 2026-07-04; the
+      # original db-owns-enabled split left `status` showing stale rows
+      # forever). The db stays authoritative for sync history (last_sync_*).
+      # Returns the Store::Source row.
       def sync_source!(db)
         attrs = {
           name: manifest.name, adapter_class: adapter_class_name,
           license: manifest.license, license_class: manifest.license_class,
-          upstream_url: manifest.upstream_url
+          upstream_url: manifest.upstream_url, enabled: enabled
         }
         db.transaction do
           row = Store::Source.first(slug: slug)
@@ -55,7 +59,7 @@ module Nabu
             next row
           end
 
-          Store::Source.create(**attrs, slug: slug, enabled: enabled)
+          Store::Source.create(**attrs, slug: slug)
         end
       end
     end

@@ -188,24 +188,30 @@ class SourceRegistryTest < Minitest::Test
     assert source.enabled, "enabled seeds from the registry entry on create"
   end
 
-  def test_sync_source_preserves_runtime_state_on_update
+  # Spec REVISED 2026-07-04 (owner sign-off workflow): the registry yaml is
+  # authoritative for `enabled` — the owner flips it there with a sign-off
+  # comment, and `sync --all` already reads the yaml. The db mirrors it on
+  # every reconcile (the original "db owns enabled" split left status showing
+  # stale rows forever). Sync history (last_sync_*) stays db-owned.
+  def test_sync_source_reconciles_enabled_from_registry_preserving_history
     db = store_test_db
     Nabu::Store::Source.create(
       slug: "fake-src", name: "STALE NAME", adapter_class: "Stale",
-      license_class: "restricted", enabled: true, last_sync_sha: "deadbeef"
+      license_class: "restricted", enabled: false, last_sync_sha: "deadbeef"
     )
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:
         adapter: SourceRegistryTest::FakeAdapter
-        enabled: false
+        enabled: true
     YAML
 
     source = entry.sync_source!(db)
     # metadata refreshed from the manifest...
     assert_equal "Fake Source", source.name
     assert_equal "attribution", source.license_class
-    # ...runtime state (db-owned) preserved.
-    assert source.enabled, "existing enabled must not be clobbered by the entry"
+    # ...enabled reconciled from the registry (the owner's flip lands)...
+    assert source.enabled, "a registry enabled flip must reach the db row"
+    # ...sync history (db-owned) preserved.
     assert_equal "deadbeef", source.last_sync_sha
     assert_equal 1, Nabu::Store::Source.count
   end
