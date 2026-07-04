@@ -243,13 +243,24 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_show_document_lists_passages_in_sequence
+  def test_show_document_lists_passages_as_suffixes
     with_indexed_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one]) }
       assert_nil status
       assert_match(/passages \(2\):/, out)
-      assert_match(/urn:nabu:test_adapter:one:1/, out)
-      assert_match(/urn:nabu:test_adapter:one:2/, out)
+      assert_match(/^ +:1  /, out, "passage lines carry only the suffix relative to the document urn")
+      assert_match(/^ +:2  /, out)
+      refute_match(/^ +urn:nabu:test_adapter:one:1\b/, out,
+                   "the document urn is printed once in the header, not per line")
+    end
+  end
+
+  def test_show_document_full_urn_flag_restores_absolute_urns
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one --full-urn]) }
+      assert_nil status
+      assert_match(/^ +urn:nabu:test_adapter:one:1\b/, out)
+      assert_match(/^ +urn:nabu:test_adapter:one:2\b/, out)
     end
   end
 
