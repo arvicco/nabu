@@ -399,7 +399,7 @@ Acceptance: manifests for all six sources (papyri entries note the local-trim
       check exits nonzero on drift, refresh only on explicit invocation;
       suite + lint green.
 
-## P5-5 · Post-sync anomaly detection: nabu health  [tier: opus] [status: ready] [deps: P5-3]
+## P5-5 · Post-sync anomaly detection: nabu health  [tier: opus] [status: done] [deps: P5-3]
 Goal: `bin/nabu health` (local, no network) — per-source run-history trends
       from the runs table: quarantine spikes vs prior runs, added-count
       collapse, withdrawal/retirement creep, stale sources (last_sync_at older

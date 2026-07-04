@@ -190,14 +190,42 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- health (P5-3) -------------------------------------------------------
+  # -- health (P5-3 remote, P5-5 local) ------------------------------------
 
-  # Bare `health` is the P5-5 placeholder: a clear note, exit 0.
-  def test_health_without_remote_notes_p5_5_and_exits_zero
-    out, _err, status = run_cli(%w[health])
-    assert_nil status, "the P5-5 stub must not signal failure"
-    assert_match(/P5-5/, out)
-    assert_match(/health --remote/, out)
+  # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
+  # queries all skipped (the TestAdapter corpus holds none of the golden urns),
+  # exit 0.
+  def test_health_local_healthy_corpus_exits_zero
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status, "a healthy corpus is exit 0"
+      assert_match(/corpus\s+ok/, out)
+      assert_match(/golden replay:/, out)
+      assert_match(/health: OK/, out)
+      assert_match(/health --remote/, out, "bare health hints at the upstream probe")
+    end
+  end
+
+  # A seeded quarantine spike in the run history is a loud finding: exit 1.
+  def test_health_local_seeded_spike_exits_one
+    with_indexed_corpus do |config|
+      seed_spike_runs(config)
+      out, err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status, "a quarantine spike fails health"
+      assert_match(/ANOMALY/, out)
+      assert_match(/quarantine spike/i, out)
+      assert_match(/loud finding/i, err)
+    end
+  end
+
+  # No catalog on disk: an informational "no corpus" note, exit 0.
+  def test_health_local_no_corpus_notes_and_exits_zero
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status
+      assert_match(/no corpus/i, out)
+      assert_match(/health: OK/, out)
+    end
   end
 
   # --remote, every upstream alive → the table lands on stdout and exit is 0.
@@ -360,6 +388,23 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # Append three succeeded runs to the just-synced "corpus" source so the latest
+  # errored count (90) towers over the recent norm — a quarantine spike. Writes
+  # to the on-disk catalog through its own connection, then hands back so the CLI
+  # opens it fresh.
+  def seed_spike_runs(config)
+    db = Nabu::Store.connect(config.catalog_path)
+    Nabu::Store.setup!(db)
+    source = Nabu::Store::Source.first(slug: "corpus")
+    now = Time.now
+    [2, 3, 90].each do |errored|
+      Nabu::Store::Run.create(source_id: source.id, started_at: now, finished_at: now,
+                              added: 1, updated: 0, errored: errored, status: "succeeded")
+    end
+  ensure
+    db&.disconnect
   end
 
   # capture_io, but with tty? forced on the swapped StringIO streams so the
