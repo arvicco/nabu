@@ -302,6 +302,49 @@ Acceptance: golden suite green with ≥6 queries spanning grc/lat/got/chu/orv
 
 ## Phase 5 — Source health & upstream drift (outline; elaborated at the Phase 4 gate)
 
+*Elaboration note (2026-07-04): the DDbDP line-restart URN-minting fix goes FIRST
+(fable — minting policy, frozen-urn-safe since affected docs never entered the
+catalog), followed by `sync papyri-ddbdp --parse-only` to recover ~12k docs and
+a sample audit of the 9,351 "no citable lines" quarantines.*
+
+P5-0 · Retention contract: upstream deletion never destroys local data — end to end.
+      Owner requirement (2026-07-04): if a document/source is scrapped upstream
+      (deletion, license change, disagreement), local storage marks it but KEEPS
+      it usable. Today this holds only in the catalog (withdrawn rows retain
+      text) — but `fetch` (git pull) deletes the canonical FILES, and rebuild =
+      pure function of canonical/, so any rebuild after an upstream deletion
+      silently loses the withdrawn documents. canonical/ is gitignored and
+      clones are --depth 1: no safety net. Also: fetch mutates canonical BEFORE
+      the withdrawal breaker runs, so a "tripped, nothing written" abort has
+      already degraded the asset.
+      Design (the attic):
+      (a) Non-destructive fetch — `git fetch` first (objects only), diff
+          HEAD..FETCH_HEAD --diff-filter=D, copy doomed files to
+          canonical/<slug>/.attic/<relpath> (first copy wins, journaled), THEN
+          ff-merge. Attic is inside canonical/, so the rebuild invariant
+          (db = f(canonical)) survives unchanged and attic docs replay forever.
+      (b) Shared attic discovery in the Adapter base (all six adapters inherit):
+          attic refs flagged retained; a URN discovered both live and in attic →
+          live wins, attic copy superseded + journaled (restructures/renames
+          self-heal instead of duplicating).
+      (c) Schema: documents.retired_upstream flag, distinct from withdrawn.
+          Retired docs stay LIVE — searchable, exportable, indexed (the point
+          of keeping them) — but labeled in status/show; provenance "retired"
+          with the upstream sha where they vanished. `withdrawn` keeps meaning
+          "absent from canonical entirely" (e.g. intra-document edition changes;
+          those remain revision-journaled, not atticked — typo fixes upstream
+          are not scrapping).
+      (d) Breaker: prediction moves before the merge (truthful "nothing changed"
+          on abort); mass upstream deletion becomes mass retirement, never loss.
+      Docs: architecture §3/§8 retention contract; conventions.md licensing
+      note (retained docs keep the license they were fetched under);
+      CLAUDE.md anti-patterns. Out of scope, note explicitly: passage-level old
+      TEXT on revision is journaled by sha only (full content history = a
+      future versioned-store decision); attic protects against upstream loss,
+      not local disk loss (backups per architecture §8 remain the answer).
+      [fable — retention semantics are contract-level: adapter contract, loader,
+      schema, breaker all move together]
+
 P5-1 · Upstream probe: `nabu health --remote` — ls-remote liveness + HEAD-vs-last_sync_sha
       + license-file change detection per live source; no cloning. [opus]
 P5-2 · Fixture sentinel: per-source fixture manifests (formalizing the approved
