@@ -222,7 +222,7 @@ Goal: CoNLL-U parser family (line-based TSV: 10 columns, sentence = passage,
 Acceptance: parser unit tests (columns, multiword tokens skipped/handled,
       comments, annotations JSON) + AdapterConformance; green + lint.
 
-## P3-4 · ProielParser + PROIEL adapter  [tier: opus, fable-review] [status: ready] [deps: P3-0, P3-1]
+## P3-4 · ProielParser + PROIEL adapter  [tier: opus, fable-review] [status: done] [deps: P3-0, P3-1]
 Goal: PROIEL XML parser family (sentence = passage; token lemma/morphology →
       annotations; citation ids from source metadata) + PROIEL treebank
       adapter (proiel-treebank repo). Register proiel (enabled: false,

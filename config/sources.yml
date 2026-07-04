@@ -26,6 +26,13 @@ ud:
   enabled: false   # awaiting first real sync + owner sign-off (P3-3)
   sync_policy: manual   # treebanks version independently and change rarely
 
+proiel:
+  adapter: Nabu::Adapters::Proiel
+  enabled: false   # awaiting first real sync + owner sign-off (P3-4)
+  # Upstream proiel-treebank is frozen at release 20180408; its successor is
+  # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
+  sync_policy: frozen
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
