@@ -45,6 +45,11 @@ class TestAdapter < Nabu::Adapter
 
   def parse(document_ref)
     title, *body = File.read(document_ref.path, encoding: Encoding::UTF_8).lines.map(&:strip)
+    # An empty (or whitespace-only) file has no title line: that is a malformed
+    # document, so raise ParseError — the same "unparseable" signal a real
+    # adapter emits on broken XML/CoNLL-U (exercised by `nabu verify`).
+    raise Nabu::ParseError, "#{document_ref.path}: empty document (no title line)" if title.nil? || title.empty?
+
     urn = document_ref.id
     document = Nabu::Document.new(
       urn: urn,

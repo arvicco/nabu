@@ -1,0 +1,69 @@
+# Golden-query smoke suite (docs/maintenance-and-extension.md §6).
+#
+# Each entry is a known query with the passage urn it MUST return (membership
+# in the result set — not rank, not snippet). The list is run against a full
+# fixture corpus with all six adapters loaded into one store and indexed
+# (test/golden_test.rb), so it doubles as the cross-adapter integration test:
+# if any adapter's urns collide or an indexer/search seam breaks, this fails.
+#
+# Every expectation is derived from the ACTUAL fixture bytes (open the file).
+# `lang` is optional; when present it also exercises the language filter.
+#
+# Fields: query, expect_urn, lang (optional), note.
+---
+- query: "ἠύκομον"
+  lang: grc
+  expect_urn: "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2:1"
+  note: >-
+    Perseus (grc) — Homeric Hymn 13 to Demeter, line 1 "Δημήτηρ’ ἠύκομον…".
+    A plain accented word proves the Perseus/EpiDoc path loads and indexes.
+
+- query: "δημητηρ"
+  lang: grc
+  expect_urn: "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2:1"
+  note: >-
+    THE DIACRITIC FOLD. The corpus reads "Δημήτηρ’" (accented); this UNACCENTED,
+    lowercase query still finds it because query and index pass through the same
+    Normalize.fold_diacritics. Regression guard for the fold contract (P4-1/P4-2).
+
+- query: "philosophandi"
+  lang: lat
+  expect_urn: "urn:nabu:proiel:cic-off:86006"
+  note: >-
+    PROIEL (lat) — Cicero, De Officiis I. Proves the PROIEL treebank adapter and
+    its shared urn:nabu:proiel: namespace (distinct from TOROT's, which shares it).
+
+- query: "þiudangardja"
+  lang: got
+  expect_urn: "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50:46938"
+  note: >-
+    Universal Dependencies (got) — Gothic Matthew (# text = reconstructed
+    sentence). Non-Latin letters (þ) survive CoNLL-U # text extraction + indexing.
+
+- query: "крьститъ"
+  lang: chu
+  expect_urn: "urn:nabu:proiel:zogr:75108"
+  note: >-
+    TOROT (chu) — Codex Zographensis, Old Church Slavonic. Cyrillic + combining
+    marks round-trip through parse → NFC → fold → FTS.
+
+- query: "Петрушъка"
+  lang: orv
+  expect_urn: "urn:nabu:proiel:peter:219390"
+  note: >-
+    TOROT (orv) — Peter the Great's letter, Old East Slavic. Proves the second
+    TOROT language and that peter/zogr do not collide inside the shared namespace.
+
+- query: "Αἴλιος"
+  lang: grc
+  expect_urn: "urn:nabu:ddbdp:bgu:1:102:7"
+  note: >-
+    DDbDP (grc) — BGU 1 102, line 7 "Αἴλιος [gap]θως …". The word sits immediately
+    before a <gap>; finding "Αἴλιος" as its own token proves Leiden extraction did
+    NOT fuse it across the lacuna into "Αἴλιος…θως". Gap-adjacency regression guard.
+
+- query: "Σείκιλος"
+  expect_urn: "urn:cts:greekLit:tlg2139.tlg001.1st1K-grc1:1"
+  note: >-
+    First1kGreek (grc) — the Seikilos epitaph. Exercises the sixth adapter and,
+    with no `lang`, the unfiltered search path (lang is optional).

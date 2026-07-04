@@ -30,7 +30,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild search show export].each do |command|
+    %w[version sync status rebuild verify search show export].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -82,6 +82,43 @@ class CLITest < Minitest::Test
       assert_match(/indexed 3 passages/, out) # μῆνιν, ἄειδε, ἄνδρα
       assert File.exist?(config.fulltext_path), "a real run builds the fulltext index"
       assert File.exist?(config.catalog_path), "a real run builds the db"
+    end
+  end
+
+  # -- verify (P4-4) -------------------------------------------------------
+
+  def test_verify_clean_corpus_reports_ok_and_exits_zero
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) } # build the catalog first
+      out, _err, status = with_config(config) { run_cli(%w[verify]) }
+
+      assert_nil status, "a clean verify exits 0"
+      assert_match(/OK\s+corpus\s+\(2 documents verified\)/, out)
+      assert_match(/All canonical documents verified/, out)
+    end
+  end
+
+  def test_verify_corrupted_file_reports_mismatch_and_exits_one
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      # Change a word in one canonical file (filename unchanged ⇒ same urn).
+      File.write(File.join(config.canonical_dir, "corpus", "one.txt"), "Iliad\nμῆνιν\nΧΧΧ\n")
+
+      out, err, status = with_config(config) { run_cli(%w[verify]) }
+
+      assert_equal 1, status
+      assert_match(/FAILED\s+corpus/, out)
+      assert_match(/MISMATCH\s+urn:nabu:test_adapter:one/, out)
+      assert_match(/Integrity check FAILED/, out)
+      assert_match(/failed the integrity check/, err)
+    end
+  end
+
+  def test_verify_without_catalog_hints_to_sync_or_rebuild
+    with_rebuild_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[verify]) }
+      assert_equal 1, status
+      assert_match(/no catalog/i, err)
     end
   end
 

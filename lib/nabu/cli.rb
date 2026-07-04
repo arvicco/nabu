@@ -71,6 +71,22 @@ module Nabu
       end
     end
 
+    desc "verify", "Re-hash canonical files against the catalog (bitrot/tamper check; cronnable)"
+    def verify
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Verify.new(config: config, registry: registry, db: catalog).run
+      print_verify(result)
+      # A clean run returns normally (exit 0); any mismatch/missing/unparseable
+      # exits 1 via the shared Thor::Error path, the report already on stdout.
+      raise Thor::Error, verify_failure_summary(result) unless result.clean?
+    ensure
+      catalog&.disconnect
+    end
+
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
@@ -159,6 +175,41 @@ module Nabu
               "export: unknown format #{format.inspect} " \
               "(choose from #{Nabu::Query::Export::FORMATS.join(', ')})"
       end
+
+      # Render `verify`: one line per source (OK with a count, or FAILED with
+      # its itemized issues), then any never-synced skips, then a verdict.
+      def print_verify(result)
+        result.outcomes.each { |outcome| print_verify_outcome(outcome) }
+        result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        say(result.clean? ? "All canonical documents verified against the catalog." : "Integrity check FAILED.")
+      end
+
+      def print_verify_outcome(outcome)
+        if outcome.ok?
+          say "  OK      #{outcome.slug}  (#{pluralize(outcome.verified, 'document')} verified)"
+        else
+          say "  FAILED  #{outcome.slug}  (#{outcome.verified} checked, #{pluralize(outcome.issues.size, 'issue')})"
+          outcome.issues.each { |issue| say "    #{format_verify_issue(issue)}" }
+        end
+      end
+
+      def format_verify_issue(issue)
+        case issue.kind
+        when :mismatch
+          "MISMATCH    #{issue.urn}  stored #{issue.detail.fetch(:stored)[0, 12]} != " \
+          "recomputed #{issue.detail.fetch(:recomputed)[0, 12]}  (#{issue.canonical_path})"
+        when :missing
+          "MISSING     #{issue.urn}  (#{issue.canonical_path})"
+        when :unparseable
+          "UNPARSEABLE #{issue.urn}  #{issue.detail}  (#{issue.canonical_path})"
+        end
+      end
+
+      def verify_failure_summary(result)
+        "verify: #{pluralize(result.issues.size, 'document')} failed the integrity check"
+      end
+
+      def pluralize(count, noun) = "#{count} #{noun}#{'s' unless count == 1}"
 
       # Render `show`: a passage in the context of its document, or a document
       # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
