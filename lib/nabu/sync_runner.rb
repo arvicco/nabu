@@ -52,8 +52,10 @@ module Nabu
     # load_report is nil and #aborted? is true, with +breaker+ carrying the
     # Nabu::SyncAborted (its counts + message) for reporting; otherwise breaker
     # is nil, fetch_report is present (nil under --parse-only) and load_report
-    # holds the Loader's counts.
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed) do
+    # holds the Loader's counts. +warnings+ carries any inline deviation Findings
+    # (P5-5) computed from the fresh LoadReport against the source's history —
+    # advisory only, never failing the sync (empty on an aborted run).
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings) do
       def aborted? = !breaker.nil?
     end
 
@@ -112,7 +114,7 @@ module Nabu
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
         # untouched. Report it rather than crashing the batch.
         return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
-                           breaker: e, indexed: nil)
+                           breaker: e, indexed: nil, warnings: [])
       end
 
       update_source_state(source, fetch_report)
@@ -123,7 +125,28 @@ module Nabu
       # incremental per-source indexing is the future optimization.
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
-                  breaker: nil, indexed: indexed)
+                  breaker: nil, indexed: indexed, warnings: deviation_warnings(source, load_report))
+    end
+
+    # P5-5: after a successful sync, run the SAME trend rules the `nabu health`
+    # LocalCheck uses against this fresh LoadReport — a quarantine spike versus
+    # the source's recent run history, and a single-sync mass-withdrawal sweep.
+    # Advisory only: these are returned in the Outcome for the CLI to print, they
+    # never fail the sync (the >20% breaker is the only thing that stops a sync).
+    # Cheap: two small aggregate queries reusing Health::TrendRules — no new
+    # thresholds. The just-finished run is already recorded "succeeded", so it is
+    # runs.first here; prior runs form the spike norm.
+    def deviation_warnings(source, load_report)
+      return [] unless load_report
+
+      errored = Store::Run.where(source_id: source.id, status: "succeeded")
+                          .order(Sequel.desc(:id)).select_map(:errored)
+      prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
+      total = Store::Document.where(source_id: source.id).count
+      [
+        Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior),
+        Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)
+      ].compact
     end
 
     # Rebuild the whole FTS5 index from the (now-updated) catalog into the

@@ -1,0 +1,236 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+# LocalCheck (P5-5): run-history trends + live golden replay, in-memory. Seeds
+# sources/runs/documents directly and, for the golden half, builds a tiny real
+# indexed corpus so Query::Search runs against it exactly as production does.
+class LocalCheckTest < Minitest::Test
+  include StoreTestDB
+
+  def setup
+    @db = store_test_db
+    @now = Time.utc(2026, 7, 4)
+  end
+
+  # -- run-history trends --------------------------------------------------
+
+  def test_never_synced_source_is_informational_not_red
+    seed_source(slug: "quiet", enabled: true)
+    report = check(registry_of(["quiet", { enabled: true }]))
+    findings = report.sources.first.findings
+
+    assert_equal :never_synced, findings.first.kind
+    refute report.any_loud?
+  end
+
+  def test_healthy_source_has_no_findings
+    source = seed_source(slug: "ok", enabled: true, last_sync_at: @now - 86_400)
+    3.times { seed_run(source, added: 4, updated: 1, errored: 0) }
+    seed_docs(source, live: 20)
+
+    report = check(registry_of(["ok", { enabled: true }]))
+    assert_empty report.sources.first.findings
+    refute report.any_loud?
+  end
+
+  def test_quarantine_spike_is_a_loud_finding_and_sets_exit
+    source = seed_source(slug: "spiky", enabled: true, last_sync_at: @now - 86_400)
+    seed_run(source, added: 5, updated: 0, errored: 1)
+    seed_run(source, added: 5, updated: 0, errored: 2)
+    seed_run(source, added: 5, updated: 0, errored: 80) # latest: huge jump
+
+    report = check(registry_of(["spiky", { enabled: true }]))
+    kinds = report.sources.first.findings.map(&:kind)
+    assert_includes kinds, :quarantine_spike
+    assert report.any_loud?, "a quarantine spike must fail the health check"
+  end
+
+  # 0→1 quarantine across otherwise-clean runs must NOT flag.
+  def test_no_spike_on_a_single_stray_quarantine
+    source = seed_source(slug: "calm", enabled: true, last_sync_at: @now - 86_400)
+    seed_run(source, added: 3, updated: 0, errored: 0)
+    seed_run(source, added: 3, updated: 0, errored: 0)
+    seed_run(source, added: 3, updated: 0, errored: 1)
+
+    report = check(registry_of(["calm", { enabled: true }]))
+    refute report.any_loud?
+    refute_includes report.sources.first.findings.map(&:kind), :quarantine_spike
+  end
+
+  def test_added_collapse_is_a_soft_warning
+    source = seed_source(slug: "dead", enabled: true, last_sync_at: @now - 86_400)
+    seed_run(source, added: 9, updated: 2, errored: 0) # historically active
+    seed_run(source, added: 0, updated: 0, errored: 0)
+    seed_run(source, added: 0, updated: 0, errored: 0)
+    seed_run(source, added: 0, updated: 0, errored: 0)
+
+    report = check(registry_of(["dead", { enabled: true }]))
+    findings = report.sources.first.findings
+    assert_includes findings.map(&:kind), :added_collapse
+    refute report.any_loud?, "added collapse is soft — exit 0"
+    assert_operator report.soft_count, :>=, 1
+  end
+
+  def test_withdrawal_creep_soft_then_loud
+    soft = seed_source(slug: "shedding", enabled: true, last_sync_at: @now - 86_400)
+    seed_run(soft, added: 100, updated: 0, errored: 0)
+    seed_docs(soft, live: 90, withdrawn: 10) # 10% → soft
+    soft_report = check(registry_of(["shedding", { enabled: true }]))
+    soft_finding = soft_report.sources.first.findings.find { |f| f.kind == :withdrawal_creep }
+    assert soft_finding.soft?
+    refute soft_report.any_loud?
+
+    @db[:documents].where(source_id: soft.id).delete
+    seed_docs(soft, live: 80, retired: 20) # 20% (retired counts) → loud
+    loud_report = check(registry_of(["shedding", { enabled: true }]))
+    loud_finding = loud_report.sources.first.findings.find { |f| f.kind == :withdrawal_creep }
+    assert loud_finding.loud?
+    assert loud_report.any_loud?
+  end
+
+  def test_stale_enabled_live_source_is_flagged
+    source = seed_source(slug: "old", enabled: true, last_sync_at: @now - (30 * 86_400))
+    seed_run(source, added: 5, updated: 0, errored: 0)
+    seed_docs(source, live: 5)
+
+    report = check(registry_of(["old", { enabled: true, sync_policy: "live" }]))
+    assert_includes report.sources.first.findings.map(&:kind), :stale
+    refute report.any_loud?
+  end
+
+  # A manual/frozen source is expected to sit still — never "stale".
+  def test_manual_source_not_flagged_stale
+    source = seed_source(slug: "manual", enabled: true, last_sync_at: @now - (400 * 86_400))
+    seed_run(source, added: 5, updated: 0, errored: 0)
+    seed_docs(source, live: 5)
+
+    report = check(registry_of(["manual", { enabled: true, sync_policy: "manual" }]))
+    refute_includes report.sources.first.findings.map(&:kind), :stale
+  end
+
+  # -- live golden replay --------------------------------------------------
+
+  def test_golden_all_found_is_clean
+    urn = build_indexed_passage(text: "μῆνιν")
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "query" => "μηνιν", "expect_urn" => urn }])
+
+    assert_equal :present, report.corpus
+    assert_equal :found, report.golden.first.status
+    refute report.any_loud?
+  end
+
+  # The doc is in the catalog but dropped from the index ⇒ search misses ⇒ lost.
+  def test_golden_lost_when_indexed_doc_disappears_is_red
+    urn = build_indexed_passage(text: "μῆνιν")
+    Nabu::Store::Document.first(urn: "urn:test:doc").update(withdrawn: true)
+    Nabu::Store::Indexer.rebuild!(catalog: @db, fulltext: @fulltext)
+
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "query" => "μηνιν", "expect_urn" => urn }])
+    assert_equal :lost, report.golden.first.status
+    assert report.any_loud?, "a lost golden query fails the health check"
+  end
+
+  # A urn whose source was never synced into this corpus is skipped, not lost.
+  def test_golden_skipped_when_expected_urn_absent_from_catalog
+    build_indexed_passage(text: "μῆνιν")
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "query" => "anything", "expect_urn" => "urn:not:in:catalog:1" }])
+
+    assert_equal :skipped, report.golden.first.status
+    refute report.any_loud?
+  end
+
+  def test_no_corpus_reports_absent_and_skips_replay
+    report = Nabu::Health::LocalCheck.new(
+      registry: registry_of, catalog: nil, fulltext: nil, golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
+    ).run
+    assert_equal :absent, report.corpus
+    assert_empty report.golden
+    refute report.any_loud?
+  end
+
+  def test_catalog_without_index_reports_no_index
+    seed_source(slug: "s", enabled: true)
+    report = Nabu::Health::LocalCheck.new(
+      registry: registry_of(["s", { enabled: true }]), catalog: @db, fulltext: nil,
+      golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
+    ).run
+    assert_equal :no_index, report.corpus
+    assert_empty report.golden
+  end
+
+  def test_golden_queries_loads_the_repo_file
+    queries = Nabu::Health::LocalCheck.golden_queries
+    assert_operator queries.size, :>=, 6
+    assert(queries.all? { |entry| entry.key?("query") && entry.key?("expect_urn") })
+  end
+
+  private
+
+  def check(registry, fulltext: nil, golden: [])
+    Nabu::Health::LocalCheck.new(
+      registry: registry, catalog: @db, fulltext: fulltext, golden_queries: golden, now: @now
+    ).run
+  end
+
+  # Registry over [slug, enabled:, sync_policy:] tuples; adapter class is never
+  # resolved by LocalCheck (it reads only slug/enabled/sync_policy).
+  def registry_of(*specs)
+    entries = specs.map do |slug, opts|
+      opts ||= {}
+      Nabu::SourceRegistry::Entry.new(
+        slug: slug, adapter_class_name: "TestAdapter",
+        enabled: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "live")
+      )
+    end
+    Nabu::SourceRegistry.new(entries)
+  end
+
+  def seed_source(slug:, enabled:, last_sync_at: nil)
+    Nabu::Store::Source.create(
+      slug: slug, name: slug, adapter_class: "TestAdapter", license_class: "open",
+      enabled: enabled, last_sync_at: last_sync_at
+    )
+  end
+
+  def seed_run(source, added:, updated:, errored:, status: "succeeded")
+    Nabu::Store::Run.create(
+      source_id: source.id, started_at: @now, finished_at: @now,
+      added: added, updated: updated, errored: errored, status: status
+    )
+  end
+
+  def seed_docs(source, live: 0, withdrawn: 0, retired: 0)
+    make_docs(source, live, withdrawn: false, retired: false)
+    make_docs(source, withdrawn, withdrawn: true, retired: false)
+    make_docs(source, retired, withdrawn: false, retired: true)
+  end
+
+  def make_docs(source, count, withdrawn:, retired:)
+    count.times do
+      @seq = (@seq || 0) + 1
+      Nabu::Store::Document.create(
+        source_id: source.id, urn: "urn:test:#{source.slug}:#{@seq}", content_sha256: "x",
+        withdrawn: withdrawn, retired_upstream: retired
+      )
+    end
+  end
+
+  # Build one live, indexed passage; returns its urn. Sets @fulltext.
+  def build_indexed_passage(text:)
+    source = seed_source(slug: "corpus", enabled: true, last_sync_at: @now)
+    doc = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:test:doc", content_sha256: "x"
+    )
+    passage = Nabu::Store::Passage.create(
+      document_id: doc.id, urn: "urn:test:doc:1", sequence: 0, language: "grc",
+      text: text, text_normalized: text, content_sha256: "x"
+    )
+    @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @db, fulltext: @fulltext)
+    passage.urn
+  end
+end

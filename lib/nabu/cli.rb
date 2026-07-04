@@ -87,24 +87,15 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "health", "Source health checks (pass --remote for the no-clone upstream probe)"
+    desc "health", "Source health checks (run-history trends + live golden replay; --remote for the upstream probe)"
     option :remote, type: :boolean, default: false,
                     desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
     def health
-      # The bare, local health checks (run-history trends, live golden replay)
-      # are P5-5; until then say so and exit 0. --remote is the P5-3 probe.
-      return say(local_health_stub) unless options[:remote]
-
-      config = Nabu::Config.load
-      registry = Nabu::SourceRegistry.load(config.sources_path)
-      db = open_catalog_for_health(config)
-      report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
-      print_remote_health(report)
-      # A gone upstream is the only red finding; the table is already on stdout,
-      # so raise for the exit-1 signal (Thor prints the summary to stderr).
-      raise Thor::Error, remote_health_failure(report) if report.any_gone?
-    ensure
-      db&.disconnect
+      # Bare `health` is the local, no-network P5-5 check (run-history trends +
+      # live golden replay). --remote is the P5-3 upstream probe. The two share
+      # nothing at runtime, so keep them in separate helpers with their own db
+      # lifetimes and exit-code raises.
+      options[:remote] ? run_remote_health : run_local_health
     end
 
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
@@ -363,6 +354,7 @@ module Nabu
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
         say format_sync_outcome(outcome)
+        print_sync_warnings(outcome)
       end
 
       # sync --all: enabled + live sources only; report each, never abort the
@@ -373,7 +365,10 @@ module Nabu
         finish_progress
         return say("Nothing to sync: no enabled, live sources.") if results.empty?
 
-        results.each { |slug, result| say("  #{sync_all_line(slug, result)}") }
+        results.each do |slug, result|
+          say("  #{sync_all_line(slug, result)}")
+          print_sync_warnings(result) if result.is_a?(Nabu::SyncRunner::Outcome)
+        end
       end
 
       def sync_all_line(slug, result)
@@ -381,6 +376,12 @@ module Nabu
         return "#{slug.ljust(24)} ABORTED — #{result.breaker.message}" if result.aborted?
 
         format_sync_outcome(result)
+      end
+
+      # P5-5 inline deviation warnings: advisory one-liners after the counts line,
+      # in yellow, never affecting the exit code. Empty on a clean sync.
+      def print_sync_warnings(outcome)
+        outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
       end
 
       def format_sync_outcome(outcome)
@@ -428,9 +429,96 @@ module Nabu
         )
       end
 
-      def local_health_stub
-        "nabu health: local health checks arrive with P5-5. " \
-          "For the upstream probe today, run: nabu health --remote"
+      # --remote (P5-3): the no-clone upstream probe. Its own db handle (migrated
+      # so the license-baseline column exists), its own exit-1 raise.
+      def run_remote_health
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        db = open_catalog_for_health(config)
+        report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
+        print_remote_health(report)
+        # A gone upstream is the only red finding; the table is already on stdout,
+        # so raise for the exit-1 signal (Thor prints the summary to stderr).
+        raise Thor::Error, remote_health_failure(report) if report.any_gone?
+      ensure
+        db&.disconnect
+      end
+
+      # Bare health (P5-5): run-history trends + live golden replay, no network.
+      # open_catalog binds the Store models the LocalCheck queries. Exit 1 on any
+      # loud finding (quarantine spike, >15% creep, a lost golden query); soft
+      # warnings (collapse, 5–15% creep, stale) stay exit 0.
+      def run_local_health
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        catalog = open_catalog(config)
+        fulltext = catalog ? open_fulltext(config) : nil
+        report = Nabu::Health::LocalCheck.new(
+          registry: registry, catalog: catalog, fulltext: fulltext,
+          golden_queries: Nabu::Health::LocalCheck.golden_queries
+        ).run
+        print_local_health(report)
+        raise Thor::Error, local_health_failure(report) if report.any_loud?
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Per-source trend rows, then the golden-replay section, then the verdict
+      # and a hint toward the upstream probe.
+      def print_local_health(report)
+        print_source_health(report.sources)
+        print_golden_health(report)
+        say local_health_verdict(report)
+        say "Hint: run `nabu health --remote` for the no-clone upstream probe."
+      end
+
+      def print_source_health(sources)
+        return say("No sources registered.") if sources.empty?
+
+        width = sources.map { |source| source.slug.length }.max
+        sources.each { |source| print_source_row(source, width) }
+      end
+
+      # A healthy source is one "ok" line; a flagged one repeats its slug column
+      # blank for continuation findings so multi-finding sources stay aligned.
+      def print_source_row(source, width)
+        return say("#{source.slug.ljust(width)}  ok") if source.findings.empty?
+
+        source.findings.each_with_index do |finding, index|
+          label = index.zero? ? source.slug.ljust(width) : " " * width
+          say "#{label}  #{finding_tag(finding)} #{finding.message}"
+        end
+      end
+
+      def finding_tag(finding)
+        { loud: "ANOMALY", soft: "warning", info: "note" }.fetch(finding.severity)
+      end
+
+      def print_golden_health(report)
+        case report.corpus
+        when :absent
+          return say("golden replay: no corpus — run nabu sync or nabu rebuild")
+        when :no_index
+          return say("golden replay: no fulltext index — run nabu sync or nabu rebuild")
+        end
+
+        lost = report.golden.select(&:lost?)
+        lost.each { |result| say "golden query lost: #{result.query}  (expected #{result.expect_urn})" }
+        found = report.golden.count { |result| result.status == :found }
+        skipped = report.golden.count { |result| result.status == :skipped }
+        say "golden replay: #{found} found, #{lost.size} lost, #{skipped} skipped (source not in this corpus)"
+      end
+
+      def local_health_verdict(report)
+        return "health: #{report.loud_count} anomaly finding(s) — see above (exit 1)" if report.any_loud?
+        return "health: OK, #{pluralize(report.soft_count, 'warning')}" if report.soft_count.positive?
+
+        "health: OK"
+      end
+
+      def local_health_failure(report)
+        "health: #{report.loud_count} loud finding(s) — see the report above"
       end
 
       # Like open_catalog, but also applies pending migrations so the P5-3
