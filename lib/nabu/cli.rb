@@ -71,19 +71,208 @@ module Nabu
       end
     end
 
-    desc "search QUERY", "Search the corpus (not yet implemented)"
-    def search(*_args)
-      not_implemented!("search")
+    desc "verify", "Re-hash canonical files against the catalog (bitrot/tamper check; cronnable)"
+    def verify
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Verify.new(config: config, registry: registry, db: catalog).run
+      print_verify(result)
+      # A clean run returns normally (exit 0); any mismatch/missing/unparseable
+      # exits 1 via the shared Thor::Error path, the report already on stdout.
+      raise Thor::Error, verify_failure_summary(result) unless result.clean?
+    ensure
+      catalog&.disconnect
     end
 
-    desc "show URN", "Show a passage or document (not yet implemented)"
-    def show(*_args)
-      not_implemented!("show")
+    desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
+    def search(query = nil)
+      query = query.to_s.strip
+      raise Thor::Error, "search: give a query" if query.empty?
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      # Either half of the derived store missing means the corpus was never
+      # built/indexed; a search cannot run.
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+                                   .run(query, lang: options[:lang], license: options[:license],
+                                               limit: options[:limit].to_i)
+      print_search_results(results)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
+    def show(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "show: give a urn" if urn.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Show.new(catalog: catalog).run(urn)
+      raise Thor::Error, "urn not found: #{urn}" if result.nil?
+
+      print_show(result)
+    ensure
+      catalog&.disconnect
+    end
+
+    desc "export", "Stream non-withdrawn passages as plain text or JSONL"
+    option :format, type: :string, required: true, desc: "plain | jsonl"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    def export
+      format = validate_format!(options[:format])
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      lines = Nabu::Query::Export.new(catalog: catalog)
+                                 .run(format: format, lang: options[:lang], license: options[:license])
+      # Stream: write each serialized line as it arrives — never join a
+      # 238k-passage corpus into one string.
+      lines.each { |line| $stdout.puts(line) }
+    ensure
+      catalog&.disconnect
     end
 
     no_commands do
-      def not_implemented!(command)
-        raise Thor::Error, "#{command}: not implemented"
+      # Reject an unknown --license up front (before opening any db) with the
+      # closed enum of valid classes, so the user sees the choices. Shared by
+      # search and export.
+      def validate_license!(license)
+        return if license.nil?
+        return if Nabu::SourceManifest::LICENSE_CLASSES.include?(license)
+
+        raise Thor::Error,
+              "unknown license #{license.inspect} " \
+              "(choose from #{Nabu::SourceManifest::LICENSE_CLASSES.join(', ')})"
+      end
+
+      # Export format gate. CoNLL-U is a first-class exit format (maintenance
+      # §7) but needs the token model, so it is deferred to the enrichment
+      # phase with an explicit message rather than a generic "unknown format".
+      def validate_format!(format)
+        raise Thor::Error, "export: --format conllu is deferred until the enrichment phase" if format == "conllu"
+        return format if Nabu::Query::Export::FORMATS.include?(format)
+
+        raise Thor::Error,
+              "export: unknown format #{format.inspect} " \
+              "(choose from #{Nabu::Query::Export::FORMATS.join(', ')})"
+      end
+
+      # Render `verify`: one line per source (OK with a count, or FAILED with
+      # its itemized issues), then any never-synced skips, then a verdict.
+      def print_verify(result)
+        result.outcomes.each { |outcome| print_verify_outcome(outcome) }
+        result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        say(result.clean? ? "All canonical documents verified against the catalog." : "Integrity check FAILED.")
+      end
+
+      def print_verify_outcome(outcome)
+        if outcome.ok?
+          say "  OK      #{outcome.slug}  (#{pluralize(outcome.verified, 'document')} verified)"
+        else
+          say "  FAILED  #{outcome.slug}  (#{outcome.verified} checked, #{pluralize(outcome.issues.size, 'issue')})"
+          outcome.issues.each { |issue| say "    #{format_verify_issue(issue)}" }
+        end
+      end
+
+      def format_verify_issue(issue)
+        case issue.kind
+        when :mismatch
+          "MISMATCH    #{issue.urn}  stored #{issue.detail.fetch(:stored)[0, 12]} != " \
+          "recomputed #{issue.detail.fetch(:recomputed)[0, 12]}  (#{issue.canonical_path})"
+        when :missing
+          "MISSING     #{issue.urn}  (#{issue.canonical_path})"
+        when :unparseable
+          "UNPARSEABLE #{issue.urn}  #{issue.detail}  (#{issue.canonical_path})"
+        end
+      end
+
+      def verify_failure_summary(result)
+        "verify: #{pluralize(result.issues.size, 'document')} failed the integrity check"
+      end
+
+      def pluralize(count, noun) = "#{count} #{noun}#{'s' unless count == 1}"
+
+      # Render `show`: a passage in the context of its document, or a document
+      # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
+      def print_show(result)
+        case result
+        when Nabu::Query::Show::PassageResult then print_show_passage(result)
+        when Nabu::Query::Show::DocumentResult then print_show_document(result)
+        end
+      end
+
+      def print_show_passage(passage)
+        say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
+        say "  #{passage.text}"
+        say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
+        say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
+            "sequence: #{passage.sequence}   revision: #{passage.revision}"
+        return if passage.provenance.empty?
+
+        say "  provenance:"
+        passage.provenance.each do |event|
+          say "    #{event.at}  #{event.event}#{"  #{event.tool}" if event.tool}"
+        end
+      end
+
+      def print_show_document(document)
+        title = document.title ? " — #{document.title}" : ""
+        lang = document.language ? " [#{document.language}]" : ""
+        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}"
+        say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
+        say "  passages (#{document.passages.size}):"
+        document.passages.each do |line|
+          say "    #{line.urn}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
+      def withdrawn_tag(withdrawn)
+        withdrawn ? "  (withdrawn)" : ""
+      end
+
+      # Open the fulltext index for reading; nil when the file is absent OR the
+      # FTS table was never built (both mean "no index" → the sync/rebuild hint).
+      def open_fulltext(config)
+        return nil unless File.exist?(config.fulltext_path)
+
+        db = Nabu::Store.connect_fulltext(config.fulltext_path)
+        return db if db.table_exists?(Nabu::Store::Indexer::TABLE)
+
+        db.disconnect
+        nil
+      end
+
+      # Render hits: urn + optional [language] header, then the FTS snippet
+      # (diacritic-folded highlight). The footer labels that so nobody reads the
+      # stripped accents in the highlight as corpus truth.
+      def print_search_results(results)
+        return say("no matches") if results.empty?
+
+        results.each do |result|
+          say "#{result.urn}#{" [#{result.language}]" if result.language}"
+          say "  #{result.snippet}"
+        end
+        say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
+            "(highlights are diacritic-folded)"
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all
@@ -160,7 +349,8 @@ module Nabu
         report = outcome.load_report
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
-          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored"
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored  " \
+          "indexed #{outcome.indexed} passages"
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -182,6 +372,7 @@ module Nabu
           say "  WARNING: #{outcome.slug} quarantined #{outcome.report.errored} document(s) — parser regression?"
         end
         say "  #{format_report('TOTAL', total_report(result))}"
+        say "  indexed #{result.indexed} passages"
       end
 
       def format_report(label, report)

@@ -43,7 +43,7 @@ module Nabu
     # Nabu::SyncAborted (its counts + message) for reporting; otherwise breaker
     # is nil, fetch_report is present (nil under --parse-only) and load_report
     # holds the Loader's counts.
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker) do
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed) do
       def aborted? = !breaker.nil?
     end
 
@@ -101,11 +101,31 @@ module Nabu
       rescue Nabu::SyncAborted => e
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
         # untouched. Report it rather than crashing the batch.
-        return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil, breaker: e)
+        return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
+                           breaker: e, indexed: nil)
       end
 
       update_source_state(source, fetch_report)
-      Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report, breaker: nil)
+      # Reindex the fulltext AFTER the RunRecorder block: the index is
+      # corpus-wide, not per-source, so it must not live inside a source's run
+      # row (an indexing failure surfaces as its own error, never a falsified
+      # run). A full rebuild per successful source is simple and correct;
+      # incremental per-source indexing is the future optimization.
+      indexed = reindex!
+      Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
+                  breaker: nil, indexed: indexed)
+    end
+
+    # Rebuild the whole FTS5 index from the (now-updated) catalog into the
+    # fulltext db. Opens its own short-lived connection to config.fulltext_path
+    # so callers need not thread a handle through. Returns the passage count.
+    def reindex!
+      require "fileutils"
+      FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
+      fulltext = Store.connect_fulltext(@config.fulltext_path)
+      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext)
+    ensure
+      fulltext&.disconnect
     end
 
     def load(source, adapter, workdir, progress)
