@@ -287,7 +287,7 @@ Goal: `nabu show URN` — passage (text, document title, language, revision,
 Acceptance: CLI tests on seeded corpus (passage show, document show,
       unknown urn exit 1; export filters + valid JSONL); green + lint.
 
-## P4-4 · Golden queries + nabu verify  [tier: opus] [status: ready] [deps: P4-1, P4-2]
+## P4-4 · Golden queries + nabu verify  [tier: opus] [status: done] [deps: P4-1, P4-2]
 Goal: test/golden/golden_queries.yml — known query → expected-urn-in-results
       pairs run against the full fixture corpus (all six adapters loaded into
       one store) as a smoke suite (test/golden_test.rb); catches

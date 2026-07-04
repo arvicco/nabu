@@ -30,6 +30,7 @@ require_relative "nabu/config"
 require_relative "nabu/source_registry"
 require_relative "nabu/status_report"
 require_relative "nabu/rebuild"
+require_relative "nabu/verify"
 require_relative "nabu/sync_runner"
 require_relative "nabu/cli"
 
