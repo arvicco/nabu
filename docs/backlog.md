@@ -412,7 +412,7 @@ Acceptance: trend detection tested against seeded runs histories (spike,
       collapse, creep, stale, healthy); live golden replay tested against a
       fixture-built corpus; SyncRunner warning test; suite + lint green.
 
-## P5-6 · Ops wiring  [tier: opus] [status: ready] [deps: P5-3, P5-5]
+## P5-6 · Ops wiring  [tier: opus] [status: done] [deps: P5-3, P5-5]
 Goal: `docs/ops.md` — the operating manual for the maintenance §1 cadence
       (nightly `nabu verify`, weekly `sync --all` + `health` + `health
       --remote`), with launchd plist templates under `ops/launchd/` the owner
