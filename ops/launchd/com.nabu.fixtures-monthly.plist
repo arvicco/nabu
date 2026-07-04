@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Nabu monthly fixture drift check (maintenance §1 optional / §6).
+
+  Runs `rake fixtures:check` — re-fetches the small upstream fixture samples to
+  a tmp dir, diffs them against the checked-in fixtures, and re-runs the
+  affected adapter tests. It NEVER overwrites anything; the report (and any
+  failing fresh-copy adapter test) IS the drift signal. Touches the network
+  (small raw-file GETs only — never a corpus sync).
+
+  OPTIONAL. Fixture drift is slow-moving; monthly is generous. Skip this job
+  entirely if you would rather run `rake fixtures:check` by hand quarterly.
+
+  TEMPLATE — substitute the placeholders (see the nightly template's header for
+  __NABU_ROOT__ / __RUBY_BIN_DIR__).
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nabu.fixtures-monthly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>exec bundle exec rake fixtures:check</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__NABU_ROOT__</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>__RUBY_BIN_DIR__:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- 1st of the month at 05:00. Adjust freely. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Day</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>5</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>__NABU_ROOT__/log/fixtures-monthly.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__NABU_ROOT__/log/fixtures-monthly.err.log</string>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>
