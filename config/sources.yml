@@ -41,6 +41,13 @@ torot:
   # re-syncable, just not on a live schedule.
   sync_policy: manual
 
+papyri-ddbdp:
+  adapter: Nabu::Adapters::Papyri
+  enabled: false   # awaiting first real sync + owner sign-off (P3-6)
+  # idp.data updates continuously (born-digital editing platform), but a
+  # multi-GB clone/re-sync is an owner decision, not a scheduled one.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
