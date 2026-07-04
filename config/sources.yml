@@ -33,6 +33,14 @@ proiel:
   # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
   sync_policy: frozen
 
+torot:
+  adapter: Nabu::Adapters::Torot
+  enabled: false   # awaiting first real sync + owner sign-off (P3-5)
+  # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
+  # unlike the frozen proiel-treebank it still gets occasional releases:
+  # re-syncable, just not on a live schedule.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
