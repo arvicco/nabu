@@ -82,11 +82,46 @@ module Nabu
     # The citable unit of papyrology is the line ("P.Oxy. 123, line 7"). A
     # passage is everything extracted between consecutive <lb> milestones:
     #
-    #   urn = <document-urn>[:<textpart-path>]:<lb n>
+    #   urn = <document-urn>[:<textpart-path>][:b<k>]:<lb n>
     #
     # The textpart path (ancestor div[@type="textpart"]/@n values, in order)
     # appears only when textpart divs exist — :r:3 for recto line 3, plain :3
-    # for an unpartitioned papyrus. <lb break="no"/> means the word continues
+    # for an unpartitioned papyrus.
+    #
+    # The :b<k> segment (k ≥ 2) is the IMPLICIT RESTART BLOCK (P5-1). Some
+    # DDbDP files restart their line numbering mid-document — multiple
+    # <lb n="1"/> inside one <ab>, with no textpart divs to disambiguate
+    # (aegyptus.89.240 is the exemplar; 12,288 documents quarantined on
+    # duplicate urns in the 2026-07-04 first sync). Papyrologically such a
+    # restart usually IS a new text block — a column, fragment, or recto/
+    # verso the encoder left unpartitioned — so the urn treats it as one: an
+    # implicit block segment, shaped like a synthetic textpart, sits between
+    # the textpart path and the line number. Blocks are detected by URN
+    # COLLISION, not by numeric comparison: when a line's default suffix
+    # equals one already minted in this document (within the same textpart
+    # context — the counter resets at every textpart boundary), the next
+    # block opens (b2, then b3, …) and the line is re-minted inside it,
+    # looping until unique. The first block never carries a label.
+    #
+    # Collision-triggered (rather than "n is not monotonically increasing")
+    # is a FROZEN-URN safety decision: these urns are frozen forever once
+    # loaded, and any document that parsed cleanly before P5-1 had, by
+    # definition, zero suffix collisions — so the mechanism provably never
+    # engages for it and its urns stay byte-identical (the 49,060 documents
+    # loaded before the fix re-parse as "skipped"). A monotonicity heuristic
+    # could fire on already-loaded documents with odd-but-unique numbering
+    # (non-numeric @n like "12/13", out-of-order editorial numbering) and
+    # silently re-mint frozen urns. Restart documents themselves never
+    # entered the catalog (they quarantined), so their urns were free to
+    # define here. Trade-off accepted: when a restarted block begins at a
+    # number the previous block never reached (block one is lines 5-7,
+    # block two restarts at 1), its first lines land in the previous
+    # block's namespace and the block opens only at the first collision —
+    # urns stay unique and stable, merely blind to the block boundary; and
+    # a real textpart literally named "b2" cannot collide with a synthetic
+    # block because every minted suffix passes the same uniqueness check.
+    #
+    # <lb break="no"/> means the word continues
     # across the boundary; in the line-passage model both lb forms delimit
     # identically (the split word simply ends line n and continues on line
     # n+1, exactly as the print edition's margins have it) — break="no" only
@@ -247,6 +282,8 @@ module Nabu
           @current = nil # the open line's accumulation state
           @lb_ordinal = 0
           @lines = []
+          @block = 1 # implicit restart-block ordinal (see file header)
+          @seen_suffixes = {} # suffix => true, for collision-triggered blocks
         end
 
         def call
@@ -396,9 +433,29 @@ module Nabu
           return if text.empty? # everything dropped/lost: not a citable line
 
           @lines << Line.new(
-            urn_suffix: (current[:textpath] + [current[:n]]).join(":"),
+            urn_suffix: mint_suffix(current),
             text: text, leiden: leiden(current), languages: current[:languages]
           )
+        end
+
+        # Restart-aware suffix minting (see "Passage = the LINE" in the file
+        # header). The default shape <textpart-path?>:<lb n> is tried first;
+        # a collision with an already-minted suffix means the line numbering
+        # restarted, so the next implicit block opens (b2, b3, …) and the
+        # line is re-minted inside it, looping until unique. Documents whose
+        # suffixes never collide — everything that parsed cleanly before
+        # P5-1 — never enter the loop body and mint byte-identically.
+        def mint_suffix(current)
+          loop do
+            block = @block > 1 ? ["b#{@block}"] : []
+            suffix = (current[:textpath] + block + [current[:n]]).join(":")
+            if @seen_suffixes.key?(suffix)
+              @block += 1
+            else
+              @seen_suffixes[suffix] = true
+              return suffix
+            end
+          end
         end
 
         def leiden(current)
@@ -459,6 +516,7 @@ module Nabu
           return if node.empty_element?
 
           @textparts << { n: n, depth: node.depth }
+          @block = 1 # a textpart is its own line-numbering universe
         end
 
         def end_div(node)
@@ -468,6 +526,7 @@ module Nabu
           elsif @textparts.last && @textparts.last[:depth] == node.depth
             finish_line # lines never span textparts
             @textparts.pop
+            @block = 1 # a textpart is its own line-numbering universe
           end
         end
 

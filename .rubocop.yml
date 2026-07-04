@@ -2,6 +2,11 @@ AllCops:
   TargetRubyVersion: 3.3
   NewCops: enable
   SuggestExtensions: false
+  Exclude:
+    # canonical/ is gitignored upstream corpus data, not project code; real
+    # syncs pull sources (e.g. torot) that ship their own .rb tooling, which
+    # must never fail our lint.
+    - canonical/**/*
 
 # Enforce frozen string literal magic comment in every Ruby file.
 Style/FrozenStringLiteralComment:
