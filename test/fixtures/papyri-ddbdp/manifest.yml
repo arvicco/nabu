@@ -1,11 +1,12 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# LOCAL-TRIM PROVENANCE. These two P5-1 line-restart quarantine exemplars were
-# NOT fetched by a raw GET — they were copied 2026-07-04 (whole, byte-identical)
-# from the locally synced canonical snapshot canonical/papyri-ddbdp/. There is
+# LOCAL-TRIM PROVENANCE. These quarantine exemplars (P5-1 line-restart classes,
+# P6-2 cancelled-document class) were NOT fetched by a raw GET — they were
+# copied 2026-07-04 (whole, byte-identical) from the locally synced canonical
+# snapshot canonical/papyri-ddbdp/. There is
 # no raw URL to re-GET: re-acquiring them means a full multi-GB idp.data corpus
-# sync into canonical/, not a raw file fetch. So both entries are
+# sync into canonical/, not a raw file fetch. So every entry is
 # refetchable: false — `fixtures:check` SKIPS them (printing the reason) and
 # `fixtures:refresh` refuses to touch them. Each records its canonical-relative
 # source path and the upstream repo instead of a url.
@@ -30,3 +31,12 @@ files:
     copied: 2026-07-04
     whole: true
     trim: none (text-less stub exemplar, copied whole)
+  - path: DDB_EpiDoc_XML/o.claud/o.claud.3/o.claud.3.457.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/DDB_EpiDoc_XML/o.claud/o.claud.3/o.claud.3.457.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-04
+    whole: true
+    trim: none (cancelled-document exemplar, copied whole)

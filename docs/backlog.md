@@ -455,7 +455,7 @@ Acceptance: quarantine census reported (error shape → count → fixed or
       (golden regression); conformance + suite + lint green; worklog notes
       recovered-doc counts after the orchestrator's --parse-only resync.
 
-## P6-2 · Cancelled-but-legible papyri: Leiden <del> policy amendment  [tier: fable] [status: ready] [deps: —]
+## P6-2 · Cancelled-but-legible papyri: Leiden <del> policy amendment  [tier: fable] [status: done] [deps: —]
 Goal: ~40 DDbDP docs whose ENTIRE edition sits inside <del
       rend="cross-strokes"|"slashes"> (+ a few whole-doc erasures) quarantine
       as "no citable lines" — the blanket drop-<del> policy erases documents
