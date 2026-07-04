@@ -10,7 +10,10 @@ module Nabu
     #
     #   1. Repo walking — data/<textgroup>/<work>/<tg>.<work>.<edition>.xml,
     #      selecting the ORIGINAL-language edition (grc for greekLit, lat for
-    #      latinLit) and skipping translations (perseus-eng*).
+    #      latinLit) and skipping translations (perseus-eng*). The acceptance
+    #      rule is data-driven — `#edition_slug_pattern` names which edition
+    #      slugs count — so sibling corpora with other slug families (First1K's
+    #      1st1K-grcN / opp-grcN) subclass and override just that one method.
     #   2. Metadata resolution — titles/urns from the work-level __cts__.xml
     #      (CTS namespace), which the streaming parser never reads.
     #   3. fetch — a git clone/pull of the vendored upstream snapshot.
@@ -172,30 +175,58 @@ module Nabu
       def best_editions(workdir)
         candidates(workdir)
           .group_by { |candidate| [candidate.textgroup, candidate.work] }
-          .map { |_work, group| group.max_by(&:version) }
+          .map { |_work, group| group.max_by { |candidate| version_key(candidate.version) } }
       end
 
+      # Filename shape: <tg>.<work>.<edition-slug>.xml — slugs never contain
+      # dots, so the three components split cleanly. Whether a slug is an
+      # original-language edition we ingest (and its version token) is decided
+      # by `#edition_slug_pattern`; anything else (translations, other langs) is
+      # filtered out here.
+      FILENAME = /\A(?<textgroup>[^.]+)\.(?<work>[^.]+)\.(?<edition>[^.]+)\.xml\z/
+      private_constant :FILENAME
+
       def candidates(workdir)
-        pattern = edition_filename_pattern
         Dir.glob(File.join(workdir, "data", "*", "*", "*.xml")).filter_map do |path|
-          match = File.basename(path).match(pattern)
-          next unless match
+          name = File.basename(path).match(FILENAME)
+          next unless name
+
+          version = edition_version(name[:edition])
+          next unless version
 
           Candidate.new(
-            textgroup: match[:textgroup],
-            work: match[:work],
-            edition: match[:edition],
-            version: match[:version].to_i,
+            textgroup: name[:textgroup],
+            work: name[:work],
+            edition: name[:edition],
+            version: version,
             path: File.expand_path(path)
           )
         end
       end
 
-      # Filename shape: <tg>.<work>.perseus-<lang><version>.xml. The language
-      # gate here is what excludes perseus-eng* translations.
-      def edition_filename_pattern
+      # The version token if +slug+ is an original-language edition this adapter
+      # ingests, else nil. The language gate (perseus-<lang>) is what excludes
+      # perseus-eng* translations.
+      def edition_version(slug)
+        match = slug.match(edition_slug_pattern)
+        match && match[:version]
+      end
+
+      # Which edition slugs count as original-language, with a named :version
+      # capture. Perseus ingests exactly perseus-<lang><n> (grc/lat). Subclasses
+      # over other slug families (First1K) override this alone.
+      def edition_slug_pattern
         lang = LANGUAGES.fetch(@namespace)
-        /\A(?<textgroup>[^.]+)\.(?<work>[^.]+)\.(?<edition>perseus-#{lang}(?<version>\d+))\.xml\z/
+        /\Aperseus-#{lang}(?<version>\d+)\z/
+      end
+
+      # Comparable key for highest-version selection: numeric part first, then
+      # any letter suffix, so grc2 < grc2a (grc2a wins). Handles Perseus's
+      # pure-numeric tokens ("2" => [2, ""]) and First1K's letter-suffixed ones
+      # ("2a" => [2, "a"]) uniformly.
+      def version_key(token)
+        digits, letter = token.match(/\A(?<digits>\d+)(?<letter>[a-z]?)\z/).captures
+        [digits.to_i, letter]
       end
 
       # Title from the work-level __cts__.xml, preferring the English <ti:title>

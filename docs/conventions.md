@@ -155,10 +155,17 @@ adapter lands, its text will be full of these:
 | `αβγ̣` (underdot) | `<unclear>` | traces visible, reading uncertain |
 | `[...]` / `lacuna` | `<gap>` | lost text of known/unknown length |
 
-The parser policy question these pose — is restored text "text"? — is
-deferred until a source exercises it (per "don't invent upstream formats"),
-but the likely answer mirrors print practice: include supplied text in
-`text`, and let `text_normalized`/annotations carry certainty flags.
+The parser policy question these pose — is restored text "text"? — was
+fixed when the Papyri.info adapter landed (P3-6), and it mirrors print
+practice: a passage's `text` is what a print edition's main text would
+read. Keep `<lem>`, `<reg>`, `<add>`, `<supplied>`, `<unclear>` and
+`<expan>` (including its `<ex>` expansions); drop `<rdg>`, `<orig>` and
+`<del>` (apparatus, not reading text); every `<gap>` becomes the single
+marker `[…]` so a search hit can never match across a lacuna as if the
+text were contiguous. Certainty data (gap extents, supplied/unclear letter
+counts, hand shifts) lives in per-passage `"leiden"` annotations. The
+authoritative, exhaustively documented version of the policy is the
+`DdbdpParser` file header (`lib/nabu/adapters/ddbdp_parser.rb`).
 
 ## 6. Lemmas and morphology — why treebanks are precious
 

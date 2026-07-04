@@ -12,7 +12,7 @@ module Store
     # quarantine path's rig.
     class QuarantiningAdapter < TestAdapter
       def parse(document_ref)
-        raise Nabu::ParseError, "deliberately corrupt document" if document_ref.id == "beta.txt"
+        raise Nabu::ParseError, "deliberately corrupt document" if document_ref.id == "urn:nabu:test_adapter:beta"
 
         super
       end
@@ -295,7 +295,7 @@ module Store
       events = provenance_events(event: "quarantined")
       assert_equal 1, events.size
       params = JSON.parse(events.first.params_json)
-      assert_equal "beta.txt", params.fetch("ref_id")
+      assert_equal "urn:nabu:test_adapter:beta", params.fetch("ref_id")
       assert_equal "deliberately corrupt document", params.fetch("error")
     end
 

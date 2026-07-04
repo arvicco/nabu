@@ -15,10 +15,13 @@ field notes (Unicode/NFC, citation systems, editions, licensing) that explain
 ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
-catalog store, idempotent loader, rebuild) and the first real adapter exists:
-**Perseus canonical Greek literature** (EpiDoc/CTS parser family + git-based
-sync with a mass-withdrawal circuit breaker). Querying is not implemented yet
-— Nabu can ingest and rebuild, not yet search.
+catalog store, idempotent loader, rebuild) and **six source adapters** exist
+across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
+Leiden): Perseus canonical Greek (**live** — 744 documents / 238k passages
+synced), First1KGreek, Universal Dependencies ancient treebanks, PROIEL,
+TOROT, and Papyri.info DDbDP (each awaiting its first owner-verified sync).
+Querying is not implemented yet — Nabu can ingest and rebuild, not yet
+search.
 
 ## Requirements
 
@@ -53,10 +56,13 @@ adapter lands).
 - **Adapter contract** — one small base class (`fetch` / `discover` / `parse` /
   `manifest`); every future adapter must pass a shared conformance suite
   (URN uniqueness across the corpus, URN stability across parses, NFC output).
-- **EpiDoc parser family + Perseus adapter** — streaming (SAX-style) TEI
-  parsing driven by each file's CTS `refsDecl`, tested against real upstream
-  fixtures; `perseus-greek` is registered (`enabled: false` until its first
-  verified sync).
+- **Four parser families, six adapters** — all streaming, all tested against
+  real upstream fixtures: EpiDoc/CTS (Perseus **live**, First1KGreek),
+  CoNLL-U (Universal Dependencies treebanks: Gothic, Ancient Greek, Vedic
+  Sanskrit, Latin — lemmas and morphology preserved in annotations), PROIEL
+  XML (PROIEL, TOROT — Old Church Slavonic and Old Russian), and DDbDP
+  (Papyri.info documentary papyri, with a print-practice Leiden
+  text-extraction policy — see `docs/conventions.md` §5).
 - **Catalog store** — SQLite via Sequel: sources, documents, passages,
   provenance, enrichments, runs; forward-only migrations.
 - **Loader** — content-hash idempotency: re-loading unchanged data writes

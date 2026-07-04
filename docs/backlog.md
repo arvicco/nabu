@@ -182,3 +182,70 @@ Goal: Long operations show live progress (owner feedback from first real sync:
 Acceptance: unit tests for Shell.stream (lines forwarded, error carries
       stderr), Loader callback counts, CLI progress gated on tty (stub
       $stderr.tty?); existing output assertions unchanged; green + lint.
+
+---
+
+## Phase 3 — Family expansion (branch: phase-3)
+
+## P3-0 · Conformance: ref.id ↔ document.urn identity  [tier: opus] [status: done] [deps: —]
+Goal: The sync circuit breaker predicts withdrawals via discover() ref ids
+      standing in for document urns (P2-4 gate note). Promote that identity
+      into test/support/adapter_conformance.rb: assert parse(ref).urn ==
+      ref.id for every discovered ref; meta-test a violating adapter fails
+      it. Align TestAdapter/fixture rigs if needed.
+Acceptance: new conformance assertion + meta-test; all existing adapters
+      still pass; green + lint.
+
+## P3-1 · Phase 3 fixtures: plan → approval → fetch  [tier: loop] [status: done] [deps: —]
+Goal: One consolidated acquisition plan (dev-loop §8) covering: First1KGreek
+      (OpenGreekAndLatin), UD ancient treebanks (2–3 languages, CoNLL-U),
+      PROIEL treebank, TOROT, Papyri.info (idp.data) — exact raw URLs, small
+      real samples, licenses verified. Owner approves once; loop fetches,
+      writes test/fixtures/<source>/ trees + READMEs.
+Acceptance: fixtures on disk + READMEs; no fetch outside the approved list.
+
+## P3-2 · First1KGreek adapter  [tier: opus] [status: done] [deps: P3-0, P3-1]
+Goal: OpenGreekAndLatin First1KGreek — same CapiTainS/EpiDoc conventions as
+      Perseus ("nearly free"): adapter reusing EpidocParser + Perseus layout
+      knowledge (subclass or shared module — implementer's call, justify).
+      Register first1k-greek (enabled: false, live).
+Acceptance: AdapterConformance + source-specific tests on real fixtures;
+      green + lint.
+
+## P3-3 · ConlluParser + UD adapter  [tier: opus, fable-review] [status: done] [deps: P3-0, P3-1]
+Goal: CoNLL-U parser family (line-based TSV: 10 columns, sentence = passage,
+      lemma/upos/feats → annotations; follows the EpidocParser family
+      template) + Universal Dependencies adapter over per-treebank git repos
+      (start: 2–3 ancient-language treebanks from fixtures). URN minting:
+      urn:nabu:ud:<treebank>:<sent_id> (frozen once used). Register
+      ud (enabled: false, manual).
+Acceptance: parser unit tests (columns, multiword tokens skipped/handled,
+      comments, annotations JSON) + AdapterConformance; green + lint.
+
+## P3-4 · ProielParser + PROIEL adapter  [tier: opus, fable-review] [status: done] [deps: P3-0, P3-1]
+Goal: PROIEL XML parser family (sentence = passage; token lemma/morphology →
+      annotations; citation ids from source metadata) + PROIEL treebank
+      adapter (proiel-treebank repo). Register proiel (enabled: false,
+      manual). NC license class recorded (nc).
+Acceptance: parser unit tests + AdapterConformance on real fixtures;
+      green + lint.
+
+## P3-5 · TOROT adapter  [tier: opus] [status: done] [deps: P3-4]
+Goal: TOROT (Tromsø OCS + Old Russian) — PROIEL XML reuse; adapter is thin
+      composition. Register torot (enabled: false, manual).
+Acceptance: AdapterConformance + OCS-specific assertions (chu language tag,
+      known Marianus snippet); green + lint.
+
+## P3-6 · DdbdpParser + Papyri.info adapter  [tier: fable] [status: done] [deps: P3-1]
+Goal: RETIERED opus→fable after research: DDbDP is NOT CapiTainS (no
+      __cts__.xml, no refsDecl, no CTS urns) — a new parser family, not
+      EpidocParser reuse. Identity via <idno> (filename/ddb-hybrid/HGV/TM);
+      citation via <lb n> lines inside <ab>; heavy documentary markup
+      (app/lem/rdg, choice/reg/orig, subst/add/del, gap+quantity, supplied,
+      unclear, expan/ex, handShift). Parser implements the deferred Leiden
+      text-extraction policy (keep lem+reg+supplied, drop rdg/orig/del,
+      mark gaps) and documents it; adapter walks collection/volume dirs,
+      urn:nabu:ddbdp:<ddb-hybrid> minting (frozen once used). Register
+      papyri-ddbdp (enabled: false, manual).
+Acceptance: AdapterConformance + Leiden-markup extraction tests on real
+      fixtures; green + lint.
