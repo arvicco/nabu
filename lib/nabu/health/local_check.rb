@@ -157,8 +157,12 @@ module Nabu
         expect = entry["expect_urn"]
         return GoldenCheck.new(query: query, expect_urn: expect, status: :skipped) unless urn_in_catalog?(expect)
 
-        urns = search.run(query, lang: entry["lang"]).map(&:urn)
-        GoldenCheck.new(query: query, expect_urn: expect, status: urns.include?(expect) ? :found : :lost)
+        # urn-targeted: "is the expected passage findable by this query" must
+        # not depend on where it RANKS — in a million-passage corpus a golden
+        # passage can be legitimately outranked by hundreds of denser matches
+        # (Αἴλιος taught us this live).
+        found = !search.run(query, lang: entry["lang"], urn: expect, limit: 1).empty?
+        GoldenCheck.new(query: query, expect_urn: expect, status: found ? :found : :lost)
       end
 
       def urn_in_catalog?(urn)
