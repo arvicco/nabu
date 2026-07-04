@@ -95,15 +95,18 @@ module Nabu
       SourceOutcome.new(slug: entry.slug, verified: documents.size, issues: issues)
     end
 
-    # discover→parse the workdir. Returns [recomputed, unparseable]:
-    # recomputed maps document urn => freshly recomputed content hash;
-    # unparseable maps ref id (== document urn for every adapter) => error
-    # message for files that raised Nabu::ParseError. A non-parse Nabu::Error
-    # (fetch-level trouble) is left to propagate, exactly as the loader does.
+    # discover→parse the workdir — attic included (P5-2): retired documents
+    # are live catalog rows whose canonical_path points under .attic, so they
+    # carry the same integrity obligation as any other. Returns [recomputed,
+    # unparseable]: recomputed maps document urn => freshly recomputed content
+    # hash; unparseable maps ref id (== document urn for every adapter) =>
+    # error message for files that raised Nabu::ParseError. A non-parse
+    # Nabu::Error (fetch-level trouble) is left to propagate, exactly as the
+    # loader does.
     def reparse(adapter, workdir)
       recomputed = {}
       unparseable = {}
-      adapter.discover(workdir).each do |ref|
+      adapter.discover_with_attic(workdir).each do |ref|
         document =
           begin
             adapter.parse(ref)

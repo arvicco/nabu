@@ -333,7 +333,7 @@ Acceptance: restart fixture parses (no quarantine) with unique URNs, stable
       with a clear message; conformance + full suite + lint green; stub-sample
       findings reported in the worklog line.
 
-## P5-2 · Retention contract: the canonical attic  [tier: fable] [status: ready] [deps: —]
+## P5-2 · Retention contract: the canonical attic  [tier: fable] [status: done] [deps: —]
 Goal: Owner requirement (2026-07-04): if a document/source is scrapped
       upstream (deletion, license change, disagreement), local storage marks
       it but KEEPS it usable. Today this holds only in the catalog — `fetch`

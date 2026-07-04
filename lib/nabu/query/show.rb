@@ -39,9 +39,11 @@ module Nabu
       PassageLine = Data.define(:urn, :text, :withdrawn)
 
       # A document header plus its passages in sequence order.
+      # retired_upstream (P5-2): upstream scrapped the canonical file, the
+      # attic kept it — the document is live, labeled honestly.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :passages
+        :revision, :withdrawn, :retired_upstream, :passages
       )
 
       def initialize(catalog:)
@@ -94,6 +96,7 @@ module Nabu
           urn: row.fetch(:urn), title: row.fetch(:title), language: row.fetch(:language),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           revision: row.fetch(:revision), withdrawn: truthy?(row.fetch(:withdrawn)),
+          retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id))
         )
       end
@@ -150,6 +153,7 @@ module Nabu
           Sequel[:documents][:language],
           Sequel[:documents][:revision],
           Sequel[:documents][:withdrawn],
+          Sequel[:documents][:retired_upstream],
           Sequel[:sources][:slug].as(:source_slug),
           license_expr.as(:license_class)
         ]

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
+require "fileutils"
+require "json"
 
 module Store
   class LoaderTest < Minitest::Test
@@ -344,6 +347,103 @@ module Store
         @loader.load_from(BrokenDiscoverAdapter.new, workdir: FIXTURES)
       end
       assert_equal 0, Nabu::Store::Document.count
+    end
+
+    # -- retention: the canonical attic (P5-2) -------------------------------
+
+    def write(workdir, relpath, content)
+      path = File.join(workdir, relpath)
+      FileUtils.mkdir_p(File.dirname(path))
+      File.write(path, content)
+    end
+
+    # A tmp TestAdapter workdir with one live doc and one attic doc.
+    def with_retention_workdir
+      Dir.mktmpdir do |workdir|
+        write(workdir, "alpha.txt", "Alpha\nμῆνιν\n")
+        write(workdir, ".attic/ghost.txt", "Ghost\nεἴδωλον\n")
+        write(workdir, ".attic/.attic.json", JSON.generate("ghost.txt" => "cafe1234"))
+        yield workdir
+      end
+    end
+
+    def ghost_row = Nabu::Store::Document.first(urn: "urn:nabu:test_adapter:ghost")
+
+    def test_attic_document_loads_live_with_retired_flag_and_provenance
+      with_retention_workdir do |workdir|
+        report = @loader.load_from(TestAdapter.new, workdir: workdir)
+
+        assert_report report, added: 2
+        row = ghost_row
+        assert row.retired_upstream
+        refute row.withdrawn, "retired is not withdrawn: the document stays live"
+        assert_includes row.canonical_path, "/.attic/"
+        refute Nabu::Store::Passage.first(urn: "urn:nabu:test_adapter:ghost:1").withdrawn
+        events = provenance_events(document_id: row.id, event: "retired")
+        assert_equal 1, events.size
+        assert_equal({ "upstream_sha" => "cafe1234" }, JSON.parse(events.first.params_json))
+
+        # Idempotent: a second identical load writes nothing.
+        provenance_before = snapshot(Nabu::Store::Provenance)
+        assert_report @loader.load_from(TestAdapter.new, workdir: workdir), skipped: 2
+        assert_equal provenance_before, snapshot(Nabu::Store::Provenance)
+        assert ghost_row.retired_upstream
+      end
+    end
+
+    def test_live_document_moving_to_the_attic_is_retired_not_withdrawn
+      Dir.mktmpdir do |workdir|
+        write(workdir, "alpha.txt", "Alpha\nμῆνιν\n")
+        write(workdir, "ghost.txt", "Ghost\nεἴδωλον\n")
+        @loader.load_from(TestAdapter.new, workdir: workdir)
+        refute ghost_row.retired_upstream
+
+        # Upstream scraps ghost.txt; the fetch layer atticked it.
+        FileUtils.mkdir_p(File.join(workdir, ".attic"))
+        FileUtils.mv(File.join(workdir, "ghost.txt"), File.join(workdir, ".attic", "ghost.txt"))
+        report = @loader.load_from(TestAdapter.new, workdir: workdir, full: true)
+
+        # canonical_path moved into the attic → a revision, plus retirement.
+        assert_report report, updated: 1, skipped: 1
+        row = ghost_row
+        assert row.retired_upstream
+        refute row.withdrawn
+        assert_equal 2, row.revision
+        assert_equal 1, provenance_events(document_id: row.id, event: "retired").size
+        # No sha available without an attic manifest: journaled without params.
+        assert_nil provenance_events(document_id: row.id, event: "retired").first.params_json
+        assert_empty provenance_events(event: "withdrawn")
+      end
+    end
+
+    def test_retired_document_reappearing_live_is_unretired_and_attic_copy_superseded
+      with_retention_workdir do |workdir|
+        @loader.load_from(TestAdapter.new, workdir: workdir)
+        assert ghost_row.retired_upstream
+
+        # Upstream restores the document; the attic copy stays (first copy wins).
+        write(workdir, "ghost.txt", "Ghost\nεἴδωλον\n")
+        report = @loader.load_from(TestAdapter.new, workdir: workdir)
+
+        assert_report report, updated: 1, skipped: 1
+        row = ghost_row
+        refute row.retired_upstream, "a urn discovered live again flips back"
+        refute row.withdrawn
+        assert_equal 1, provenance_events(document_id: row.id, event: "unretired").size
+        superseded = provenance_events(document_id: row.id, event: "superseded")
+        assert_equal 1, superseded.size
+        assert_includes JSON.parse(superseded.first.params_json).fetch("attic_path"), "/.attic/"
+
+        # Steady state stays silent: no superseded/unretired spam per load.
+        assert_report @loader.load_from(TestAdapter.new, workdir: workdir), skipped: 2
+        assert_equal 1, provenance_events(document_id: row.id, event: "superseded").size
+        assert_equal 1, provenance_events(document_id: row.id, event: "unretired").size
+      end
+    end
+
+    def test_plain_document_loads_never_retire
+      @loader.load([alpha])
+      refute doc_row("alpha").retired_upstream
     end
 
     def test_constraint_violation_is_isolated_per_document

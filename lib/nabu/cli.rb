@@ -237,7 +237,7 @@ module Nabu
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
-        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}"
+        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
@@ -247,6 +247,11 @@ module Nabu
 
       def withdrawn_tag(withdrawn)
         withdrawn ? "  (withdrawn)" : ""
+      end
+
+      # P5-2: upstream scrapped the file; the attic kept it. Live, labeled.
+      def retired_tag(document)
+        document.retired_upstream ? "  (retired upstream)" : ""
       end
 
       # Open the fulltext index for reading; nil when the file is absent OR the

@@ -85,8 +85,20 @@ module Query
       assert_equal "src", result.source_slug
       assert_equal "open", result.license_class
       refute result.withdrawn
+      refute result.retired_upstream
       assert_equal %w[urn:d:1:1 urn:d:1:2 urn:d:1:3], result.passages.map(&:urn)
       assert_equal %w[μῆνιν ἄειδε θεά], result.passages.map(&:text)
+    end
+
+    # A retired document (upstream scrapped it; the attic kept it — P5-2) is
+    # shown live, honestly labeled.
+    def test_retired_document_is_shown_and_flagged
+      load_document("1", [%w[1 μῆνιν]])
+      Nabu::Store::Document.first(urn: "urn:d:1").update(retired_upstream: true)
+
+      result = show("urn:d:1")
+      assert result.retired_upstream
+      refute result.withdrawn, "retired is not withdrawn"
     end
 
     # -- edges ---------------------------------------------------------------

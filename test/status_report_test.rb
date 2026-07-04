@@ -88,6 +88,22 @@ class StatusReportTest < Minitest::Test
     assert_match(/docs=0 passages=0/, out)
   end
 
+  # P5-2: retired (upstream-scrapped, attic-kept) documents stay in the live
+  # counts AND are surfaced as their own count.
+  def test_retired_documents_counted_live_and_reported
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+    YAML
+    source = registry["fake-src"].sync_source!(db)
+    Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
+    Nabu::Store::Document.first(urn: "urn:nabu:fake:doc1").update(retired_upstream: true)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db)
+    assert_match(/docs=1 passages=2 retired=1/, out)
+  end
+
   private
 
   def seed_document

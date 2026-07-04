@@ -23,9 +23,12 @@ module Nabu
       source = Store::Source.first(slug: entry.slug)
       return "#{head}  docs=0 passages=0  never synced" if source.nil?
 
-      docs = Store::Document.where(source_id: source.id, withdrawn: false).count
+      live = Store::Document.where(source_id: source.id, withdrawn: false)
+      # retired (upstream-scrapped, attic-kept — P5-2) documents are live and
+      # inside docs=; the extra count keeps upstream attrition visible.
       "#{entry.slug.ljust(width)}  #{state(source.enabled).ljust(8)}  #{entry.sync_policy.ljust(6)}  " \
-        "docs=#{docs} passages=#{passage_count(source.id)}  #{last_run(source.id)}"
+        "docs=#{live.count} passages=#{passage_count(source.id)} " \
+        "retired=#{live.where(retired_upstream: true).count}  #{last_run(source.id)}"
     end
 
     def passage_count(source_id)

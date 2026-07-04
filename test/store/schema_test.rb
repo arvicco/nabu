@@ -36,6 +36,18 @@ module Store
       assert(@db.indexes(:provenance).values.any? { |i| i[:columns] == [:passage_id] })
     end
 
+    # P5-2: documents carry retired_upstream (upstream scrapped the file; the
+    # attic kept it) — distinct from withdrawn, NOT NULL, default false.
+    def test_documents_retired_upstream_column_defaults_false
+      column = @db.schema(:documents).to_h[:retired_upstream]
+      refute_nil column, "documents.retired_upstream must exist (migration 002)"
+      refute column[:allow_null]
+
+      source_id = insert_source
+      id = @db[:documents].insert(document_row(source_id))
+      assert_equal false, @db[:documents].first(id: id)[:retired_upstream]
+    end
+
     def test_license_class_check_rejects_bad_value
       error = assert_raises(Sequel::DatabaseError) do
         @db[:sources].insert(

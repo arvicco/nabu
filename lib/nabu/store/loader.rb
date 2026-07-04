@@ -25,6 +25,16 @@ module Nabu
     #   a revised document, passages missing from the new parse are withdrawn
     #   the same way. Withdrawn rows that reappear are restored (+ provenance
     #   "restored"), bumping revision only if content also changed.
+    # - Retention (P5-2): a document discovered from the attic (its canonical
+    #   file was scrapped upstream; Adapter#discover_with_attic flags the ref
+    #   retained) loads LIVE with retired_upstream=true + provenance "retired"
+    #   (params carry the upstream sha it vanished at when the attic manifest
+    #   knows it; otherwise the event is journaled without params). Retired ≠
+    #   withdrawn: the urn is present, so the withdrawal sweep never touches
+    #   it and its passages index/search/export normally. A retired urn later
+    #   discovered live again flips back (+ provenance "unretired"), and its
+    #   now-stale attic duplicate is journaled "superseded" — once, not per
+    #   load (steady state stays silent, like re-withdrawals).
     # - One transaction per document: a quarantined or constraint-violating
     #   document never rolls back its batch siblings. The withdrawal sweep
     #   runs in its own transaction at the end.
@@ -52,14 +62,16 @@ module Nabu
         end
       end
 
-      # discover → parse → load straight off an adapter. Nabu::ParseError
-      # quarantines that document (journaled, counted as errored) and the
-      # batch continues; any other Nabu::Error (fetch-level trouble)
-      # propagates and aborts. +on_document+ ticks after every processed OR
-      # quarantined document (see #load).
+      # discover → parse → load straight off an adapter, attic included
+      # (Adapter#discover_with_attic): retained refs load as retired
+      # documents, attic duplicates of live urns are journaled "superseded".
+      # Nabu::ParseError quarantines that document (journaled, counted as
+      # errored) and the batch continues; any other Nabu::Error (fetch-level
+      # trouble) propagates and aborts. +on_document+ ticks after every
+      # processed OR quarantined document (see #load).
       def load_from(adapter, workdir:, full: true, on_document: nil)
         run(full: full, on_document: on_document) do |process, quarantine|
-          adapter.discover(workdir).each do |ref|
+          adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
               begin
                 adapter.parse(ref)
@@ -67,7 +79,7 @@ module Nabu
                 quarantine.call(ref, e)
                 next
               end
-            process.call(document)
+            process.call(document, retained_params(ref))
           end
         end
       end
@@ -82,11 +94,11 @@ module Nabu
           processed += 1
           on_document&.call(processed, counts[:errored])
         end
-        process = lambda do |document|
+        process = lambda do |document, retained = nil|
           # Even a document that fails to persist was present upstream, so its
           # urn still shields the existing row from the withdrawal sweep.
           seen_urns.add(document.urn)
-          load_document(document, counts)
+          load_document(document, counts, retained)
           tick.call
         end
         quarantine = lambda do |ref, error|
@@ -103,54 +115,112 @@ module Nabu
       end
 
       # One transaction per document; a constraint violation rolls back only
-      # this document, is journaled, and the batch moves on.
-      def load_document(document, counts)
-        outcome = @db.transaction { upsert_document(document) }
+      # this document, is journaled, and the batch moves on. +retained+ is
+      # nil for live documents, or the "retired" provenance params (possibly
+      # empty) for documents rediscovered from the attic.
+      def load_document(document, counts, retained = nil)
+        outcome = @db.transaction { upsert_document(document, retained) }
         counts[outcome] += 1
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1
         journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
       end
 
-      def upsert_document(document)
+      def upsert_document(document, retained)
         passages = document.passages
         passage_shas = passages.to_h { |passage| [passage.urn, ContentHash.passage(passage)] }
         doc_sha = ContentHash.document(document, passage_shas.values)
 
         row = Document.first(source_id: @source.id, urn: document.urn)
-        return insert_document(document, passage_shas, doc_sha) if row.nil?
+        return insert_document(document, passage_shas, doc_sha, retained) if row.nil?
 
         if row.content_sha256 == doc_sha
-          return :skipped unless row.withdrawn
-
-          restore(row) # unchanged content: no revision bump, no passage work
+          # Unchanged content: no revision bump, no passage work — only the
+          # visibility flags may need reconciling.
+          restored = row.withdrawn && restore(row)
+          return :skipped unless reconcile_retirement?(row, retained) || restored
         else
-          revise_document(row, document, passage_shas, doc_sha)
+          revise_document(row, document, passage_shas, doc_sha, retained)
         end
         :updated
       end
 
-      def insert_document(document, passage_shas, doc_sha)
+      def insert_document(document, passage_shas, doc_sha, retained)
         row = Document.create(
           source_id: @source.id, urn: document.urn, title: document.title,
           language: document.language, canonical_path: document.canonical_path,
-          content_sha256: doc_sha, revision: 1, withdrawn: false
+          content_sha256: doc_sha, revision: 1, withdrawn: false, retired_upstream: !retained.nil?
         )
         journal(event: "loaded", document_id: row.id)
+        journal_retirement_flip(row, false, retained)
         document.passages.each { |passage| insert_passage(row.id, passage, passage_shas.fetch(passage.urn)) }
         :added
       end
 
-      def revise_document(row, document, passage_shas, doc_sha)
+      def revise_document(row, document, passage_shas, doc_sha, retained)
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
+        was_retired = row.retired_upstream
         row.update(
           title: document.title, language: document.language, canonical_path: document.canonical_path,
-          content_sha256: doc_sha, revision: row.revision + 1, withdrawn: false
+          content_sha256: doc_sha, revision: row.revision + 1, withdrawn: false,
+          retired_upstream: !retained.nil?
         )
         journal(event: "revised", document_id: row.id, params: { "old_sha" => old_sha, "new_sha" => doc_sha })
         journal(event: "restored", document_id: row.id) if was_withdrawn
+        journal_retirement_flip(row, was_retired, retained)
         upsert_passages(row, document, passage_shas)
+      end
+
+      # -- retention (P5-2) ----------------------------------------------------
+
+      # The "retired" provenance params for an attic ref, or nil for a live
+      # one. The upstream sha the file vanished at rides in the ref metadata
+      # when the fetch layer's attic manifest recorded it (GitFetch); without
+      # it the retirement is journaled without params — a documented decision:
+      # the loader stays fetch-independent, so rebuilds replay identically.
+      def retained_params(ref)
+        return nil unless ref.metadata[Nabu::Adapter::RETAINED_KEY]
+
+        sha = ref.metadata[Nabu::Adapter::RETIRED_SHA_KEY]
+        sha ? { "upstream_sha" => sha } : {}
+      end
+
+      # Same-content path: flip retired_upstream when where-we-found-it
+      # (attic vs live) disagrees with the row. Returns whether it changed.
+      def reconcile_retirement?(row, retained)
+        return false if row.retired_upstream == !retained.nil?
+
+        was_retired = row.retired_upstream
+        row.update(retired_upstream: !retained.nil?)
+        journal_retirement_flip(row, was_retired, retained)
+        true
+      end
+
+      def journal_retirement_flip(row, was_retired, retained)
+        return if was_retired == !retained.nil?
+
+        if retained
+          journal(event: "retired", document_id: row.id, params: retained.empty? ? nil : retained)
+        else
+          journal(event: "unretired", document_id: row.id)
+        end
+      end
+
+      # An attic duplicate of a urn that is also live (Adapter's live-wins
+      # dedup): journal it once so restructures are visible, then stay silent
+      # — a steady live+attic pair must not grow provenance every sync.
+      def journal_superseded(ref)
+        row = Document.first(source_id: @source.id, urn: ref.id)
+        params = { "ref_id" => ref.id, "attic_path" => ref.path }
+        return if row && already_superseded?(row.id, params)
+
+        journal(event: "superseded", document_id: row&.id, params: params)
+      end
+
+      def already_superseded?(document_id, params)
+        !Provenance.where(document_id: document_id, event: "superseded",
+                          params_json: JSON.generate(params)).empty?
       end
 
       def upsert_passages(doc_row, document, passage_shas)

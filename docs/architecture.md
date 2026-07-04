@@ -68,9 +68,11 @@ Every adapter is one class implementing four methods. This contract is the exten
 
 ```ruby
 class Nabu::Adapter
-  # Bring upstream to local canonical/<source>/ (git pull, rsync,
-  # HTTP crawl with cache). Must be resumable and rate-limit polite.
-  def fetch(workdir) -> FetchReport
+  # Bring upstream to local canonical/<source>/ (git fetch+merge, rsync,
+  # HTTP crawl with cache). Must be resumable, rate-limit polite, and
+  # NON-DESTRUCTIVE (see §8: upstream deletions land in the attic; a mass
+  # deletion trips the breaker before the tree changes unless force).
+  def fetch(workdir, progress: nil, force: false) -> FetchReport
 
   # Enumerate ingestible documents found in workdir.
   def discover(workdir) -> Enumerator<DocumentRef>
@@ -89,6 +91,7 @@ Key decisions:
 - **Passage = the citable unit.** For CTS sources, the smallest citation level (line, section). For treebanks, the sentence. For ad-hoc, the page or editor-defined chunk. Fields: `urn`, `language` (BCP-47 with ISO-639-3, e.g. `grc`, `chu`, `hit`), `text` (NFC Unicode), `text_normalized` (search form: lowercased at the adapter boundary; diacritic folding currently happens at index time via `Normalize.fold_diacritics` — per-language folding at the boundary is planned and needs a corpus reload), `annotations` (JSON: lemmas, morphology if source provides), `sequence`, `document_id`.
 - **Parser families as components.** `EpidocParser`, `ProielParser`, `ConlluParser`, `AtfParser` are standalone, individually tested classes; adapters are thin compositions (Perseus ≈ EpidocParser + repo layout knowledge + URN extraction). New source in a known family ≈ 100 lines.
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete.
+- **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
 
 ## 4. Ad-hoc pipeline
@@ -112,7 +115,7 @@ new → pages_added → transcribed → reviewed → committed
 sources(id, name, adapter_class, license, license_class, upstream_url,
         enabled, last_sync_at, last_sync_sha)
 documents(id, source_id, urn, title, language, edition, license_override,
-          canonical_path, content_sha256, revision, withdrawn)
+          canonical_path, content_sha256, revision, withdrawn, retired_upstream)
 passages(id, document_id, urn, sequence, language, text, text_normalized,
          annotations_json, content_sha256, revision)
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
@@ -147,7 +150,9 @@ enrichments(id, passage_id, kind, model, model_version, payload_json, at)
 
 ## 8. Failure & integrity
 
-- Every sync writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to a `runs` table; `nabu status` reads it. A sync that would withdraw >20% of a source's passages aborts and demands `--force` (upstream restructures happen; don't silently gut the corpus).
+- **The retention contract (the attic).** If upstream scraps a document — deletion, license change, disagreement — local storage marks it and KEEPS it usable. Git-based fetch is non-destructive (`Nabu::GitFetch`): `git fetch` first (objects only, working tree untouched), then each file the `HEAD..FETCH_HEAD` diff deletes is copied to `canonical/<slug>/.attic/<same relative path>` before the ff-only merge. First copy wins — an attic file is never overwritten — and a per-attic `.attic.json` manifest records the upstream sha each file vanished at. The attic lives *inside* canonical/, so `db = f(canonical)` holds unchanged: every rebuild replays attic documents (as `retired_upstream` rows with "retired" provenance carrying that sha). Renames are not scrapping (`--find-renames` is explicit): content surviving at a new path is not atticked. Retired documents stay fully live — indexed, searchable, exportable — and `status`/`show` label them; only intra-document edition changes stay revision-journaled (an upstream typo fix is not scrapping). Out of scope, deliberately: a revised passage's *old text* is journaled by sha only (not stored), and the attic protects against upstream loss, not local disk loss — backups remain the answer there.
+- **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
+- Every sync writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to a `runs` table; `nabu status` reads it.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
-- `nabu verify` re-hashes canonical files against the catalog — bitrot/tamper check, cronnable.
+- `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
 - Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); db/ is disposable but nightly-snapshotted anyway (cheap).
