@@ -65,6 +65,13 @@ module Nabu
         MANIFEST
       end
 
+      # P5-3: UD is one git repo per treebank, so the remote health probe must
+      # ls-remote each (the manifest URL is the GitHub org, not a repo). Ordered
+      # by TREEBANKS so the probe output is stable.
+      def self.upstream_repo_urls
+        TREEBANKS.values.map { |treebank| treebank[:repo] }
+      end
+
       # Walk <workdir>/<treebank-slug>/*.conllu (sorted), one DocumentRef per
       # file. Subdirectories not in TREEBANKS are skipped silently (forward
       # compatibility — a new treebank on disk without a code entry is ignored,

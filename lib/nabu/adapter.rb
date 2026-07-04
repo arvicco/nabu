@@ -52,6 +52,16 @@ module Nabu
       self.class.manifest
     end
 
+    # The concrete upstream git repositories this source pulls from — what the
+    # P5-3 remote health probe runs `git ls-remote` against. Single-repo
+    # adapters (the common case) use the manifest URL; multi-repo adapters (UD,
+    # one git repo per treebank) override to list every repo, so a dead
+    # treebank is caught individually rather than hidden behind an un-probeable
+    # org URL. Ordered and stable.
+    def self.upstream_repo_urls
+      [manifest.upstream_url]
+    end
+
     # Bring upstream to the local canonical dir at +workdir+ (git pull,
     # rsync, HTTP crawl with cache). Must be resumable, rate-limit polite,
     # and NON-DESTRUCTIVE: upstream deletions are preserved under the attic

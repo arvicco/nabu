@@ -375,7 +375,7 @@ Acceptance: fixture-git-repo test — upstream deletes a file → post-sync the
       status/show label retired docs; migration + models tested; docs updated;
       full suite + lint green.
 
-## P5-3 · Upstream probe: nabu health --remote  [tier: opus] [status: ready] [deps: —]
+## P5-3 · Upstream probe: nabu health --remote  [tier: opus] [status: done] [deps: —]
 Goal: `bin/nabu health --remote` — per registered source (enabled or not):
       `git ls-remote` liveness (alive / moved / gone / auth-trouble), remote
       HEAD vs last_sync_sha (current / behind), and a no-clone license-drift
