@@ -476,7 +476,7 @@ Acceptance: exemplar fixture parses with ⟦⟧-wrapped text, urns stable;
       genuinely empty stubs (chrest.wilck.101) still quarantine; docs
       updated; suite + lint green.
 
-## P6-3 · Per-repo drift & license for multi-repo sources  [tier: opus] [status: ready] [deps: —]
+## P6-3 · Per-repo drift & license for multi-repo sources  [tier: opus] [status: done] [deps: —]
 Goal: UD probes each treebank repo for liveness but drift reads :multi and
       license :unchecked (P5-3 deferral) because sources carry ONE
       last_sync_sha + ONE license baseline. Add per-repo pinning: a

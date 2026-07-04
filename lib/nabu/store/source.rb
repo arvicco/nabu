@@ -7,6 +7,7 @@ module Nabu
     class Source < Sequel::Model(:sources)
       one_to_many :documents, class: "Nabu::Store::Document", key: :source_id
       one_to_many :runs, class: "Nabu::Store::Run", key: :source_id
+      one_to_many :source_repos, class: "Nabu::Store::SourceRepo", key: :source_id
     end
   end
 end
