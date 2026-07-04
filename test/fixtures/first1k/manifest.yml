@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
+# base https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/
+# joined to each file's path under greekLit/data/. All files kept whole.
+source: first1k
+adapter_test: test/adapters/first1k_greek_test.rb
+retrieved: 2026-07-03
+files:
+  - path: greekLit/data/tlg2139/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2139/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata, Sicilus)
+  - path: greekLit/data/tlg2139/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2139/tlg001/__cts__.xml
+    whole: true
+    trim: none (work metadata)
+  - path: greekLit/data/tlg2139/tlg001/tlg2139.tlg001.1st1K-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2139/tlg001/tlg2139.tlg001.1st1K-grc1.xml
+    whole: true
+    trim: none (Sicili Epitaphium / Seikilos, kept whole)
+  - path: greekLit/data/tlg1126/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg1126/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata)
+  - path: greekLit/data/tlg1126/tlg003/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg1126/tlg003/__cts__.xml
+    whole: true
+    trim: none (work metadata)
+  - path: greekLit/data/tlg1126/tlg003/tlg1126.tlg003.1st1K-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg1126/tlg003/tlg1126.tlg003.1st1K-grc1.xml
+    whole: true
+    trim: none (Fragmenta, single-level citation, kept whole)
+  - path: greekLit/data/tlg2959/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2959/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata)
+  - path: greekLit/data/tlg2959/tlg008/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2959/tlg008/__cts__.xml
+    whole: true
+    trim: none (work metadata)
+  - path: greekLit/data/tlg2959/tlg008/tlg2959.tlg008.opp-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2959/tlg008/tlg2959.tlg008.opp-grc1.xml
+    whole: true
+    trim: none (De Martyribus — opp-grc1 edition slug, kept whole)
