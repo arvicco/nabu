@@ -17,9 +17,10 @@ ancient-text corpora.
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and **six source adapters** exist
 across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
-Leiden): Perseus canonical Greek (**live** — 744 documents / 238k passages
-synced), First1KGreek, Universal Dependencies ancient treebanks, PROIEL,
-TOROT, and Papyri.info DDbDP (each awaiting its first owner-verified sync).
+Leiden): **five sources live** — Perseus and First1KGreek (canonical Greek),
+Universal Dependencies ancient treebanks, PROIEL, and TOROT — totalling
+**~1.25 million searchable passages**; Papyri.info DDbDP is partially loaded
+(49k documents) pending a line-numbering fix for its long tail.
 **The full CLI surface is now real** — sync, status, rebuild, search
 (diacritic-insensitive FTS), show, export, verify; no stubs remain.
 
