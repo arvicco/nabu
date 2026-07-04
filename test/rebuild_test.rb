@@ -59,6 +59,27 @@ class RebuildTest < Minitest::Test
     assert_equal %w[corpus], second.outcomes.map(&:slug)
   end
 
+  # -- fulltext index is rebuilt too (P4-1) --------------------------------
+
+  def test_rebuild_populates_the_fulltext_index
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    result = rebuilder.run
+
+    assert_equal 3, result.indexed, "μῆνιν, ἄειδε, ἄνδρα indexed"
+    with_fulltext do |ft|
+      assert_equal 3, ft[:passages_fts].count
+      # Diacritic-stripped query finds the polytonic passage (Indexer folds).
+      hits = ft[:passages_fts].where(Sequel.lit("passages_fts MATCH ?", "μηνιν")).all
+      assert_equal 1, hits.size
+    end
+  end
+
   # -- dry-run touches nothing ---------------------------------------------
 
   def test_plan_lists_actions_and_changes_nothing
@@ -207,6 +228,14 @@ class RebuildTest < Minitest::Test
     yield db
   ensure
     db&.disconnect
+  end
+
+  # Reconnect to the rebuilt fulltext index file and yield the handle.
+  def with_fulltext
+    ft = Nabu::Store.connect_fulltext(config.fulltext_path)
+    yield ft
+  ensure
+    ft&.disconnect
   end
 
   # Passage rows reduced to the content-bearing columns (ids excluded).

@@ -89,6 +89,8 @@ class CLITest < Minitest::Test
       assert_match(/Dropped catalog db/, out)
       assert_match(/corpus.*\+2 added/, out)
       assert_match(/TOTAL.*\+2 added/, out)
+      assert_match(/indexed 3 passages/, out) # μῆνιν, ἄειδε, ἄνδρα
+      assert File.exist?(config.fulltext_path), "a real run builds the fulltext index"
       assert File.exist?(config.catalog_path), "a real run builds the db"
     end
   end
@@ -119,6 +121,7 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/corpus\s+parse-only/, out)
       assert_match(/\+2 added/, out)
+      assert_match(/indexed 3 passages/, out) # μῆνιν, ἄειδε, ἄνδρα
     end
   end
 

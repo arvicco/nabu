@@ -38,6 +38,15 @@ module Nabu
       db
     end
 
+    # Open the fulltext index database (architecture §2: a SEPARATE SQLite file
+    # from the catalog). Same scheme-less-path handling as #connect so callers
+    # can pass config.fulltext_path directly. No foreign_keys pragma: the index
+    # is a standalone FTS5 table with no relational integrity to enforce (its
+    # only link to the catalog is the UNINDEXED passage_id column).
+    def connect_fulltext(url)
+      Sequel.connect(sqlite_url(url))
+    end
+
     # A bare filesystem path (no "scheme:" prefix) is taken as a SQLite file so
     # callers can hand us config.catalog_path directly; real connection strings
     # ("sqlite::memory:", "postgres://…") pass through untouched.
@@ -75,3 +84,4 @@ end
 
 require_relative "store/loader"
 require_relative "store/run_recorder"
+require_relative "store/indexer"

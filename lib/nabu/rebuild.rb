@@ -31,8 +31,9 @@ module Nabu
     # A source left untouched because it has no local canonical data yet.
     Skip = Data.define(:slug, :reason)
 
-    # What a rebuild did.
-    Result = Data.define(:db_path, :db_existed, :outcomes, :skips) do
+    # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
+    # fulltext index (architecture §2): a fresh index is part of "loaded".
+    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed) do
       # Outcomes that quarantined at least one document (parser regressions).
       def warnings = outcomes.select(&:warning?)
     end
@@ -65,7 +66,9 @@ module Nabu
     def run(progress: nil)
       db_existed = File.exist?(db_path)
       FileUtils.rm_f(db_path)
+      FileUtils.rm_f(fulltext_path) # the index is derived-of-derived; drop it too
       db = fresh_db
+      fulltext = Store.connect_fulltext(fulltext_path)
       outcomes = []
       skips = []
       @registry.each_source do |entry|
@@ -76,9 +79,12 @@ module Nabu
         end
       end
       replay_enrichments(db)
-      Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes, skips: skips)
+      # Reindex ONCE after all sources are back — the index is corpus-wide.
+      indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes, skips: skips, indexed: indexed)
     ensure
       db&.disconnect
+      fulltext&.disconnect
     end
 
     private
@@ -122,5 +128,7 @@ module Nabu
     def workdir_for(slug) = File.join(@config.canonical_dir, slug)
 
     def db_path = @config.catalog_path
+
+    def fulltext_path = @config.fulltext_path
   end
 end

@@ -215,6 +215,52 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, live_docs, "a failed fetch loads nothing"
   end
 
+  # --- fulltext auto-indexing (P4-1) --------------------------------------
+
+  # A successful sync reindexes the corpus into the fulltext db: the passages
+  # just loaded are findable via FTS5 MATCH, and the count rides in the Outcome.
+  def test_sync_populates_the_fulltext_index
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    outcome = runner.sync("breaker")
+    assert_equal 2, outcome.indexed, "the Outcome carries the indexed count"
+
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert_equal 2, fulltext[:passages_fts].count
+    hits = fulltext[:passages_fts].where(Sequel.lit("passages_fts MATCH ?", "α")).all
+    assert_equal 2, hits.size, "the loaded passages are searchable"
+  ensure
+    fulltext&.disconnect
+  end
+
+  # --parse-only still reindexes (content may have changed).
+  def test_parse_only_sync_reindexes
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    outcome = runner.sync("breaker", parse_only: true)
+    assert_equal 1, outcome.indexed
+
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert_equal 1, fulltext[:passages_fts].count
+  ensure
+    fulltext&.disconnect
+  end
+
+  # A tripped breaker loads nothing and its Outcome has no index count.
+  def test_aborted_sync_reports_no_index_count
+    urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
+    BreakerAdapter.reset!(urns: urns)
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner.sync("breaker")
+
+    BreakerAdapter.urns = urns.first(2) # would withdraw 3 of 5 → trips
+    aborted = runner.sync("breaker")
+    assert aborted.aborted?
+    assert_nil aborted.indexed
+  end
+
   # --- sync_all policy filtering ------------------------------------------
 
   def test_sync_all_runs_only_enabled_live_sources
