@@ -423,3 +423,26 @@ Acceptance: plists are valid (plutil -lint in tests via tmp copies), commands
       they reference exist; docs/ops.md complete enough that a newcomer could
       wire the cadence; suite + lint green.
 
+
+---
+
+## Phase 6 candidates (found in the field; elaborated at the Phase 5 gate or later)
+
+- **The Iliad is quarantined** (found 2026-07-04 while writing `help search`
+  examples): perseus-greek tlg0012.tlg001.perseus-grc2 fails EpidocParser
+  with "citation depth mismatch: refsDecl declares 2 component(s), found 1
+  ([\"1\"])" — likely one of Perseus's ~37 first-sync quarantines sharing a
+  structural class (refsDecl says book.line but the file's top div layout
+  differs). THE flagship text of the corpus is missing; diagnose the class,
+  fix the parser or per-family fallback, `sync perseus-greek --parse-only`.
+- **Cancelled-but-legible papyri** (P5-1 stub audit): ~40 DDbDP docs whose
+  entire edition is wrapped in <del rend="cross-strokes"|"slashes"> (+ a few
+  whole-doc erasures) — print practice reads these in ⟦⟧; the blanket
+  drop-<del> policy erases the whole document. Needs a Leiden policy
+  amendment (conventions §5) + fixture from the P5-1 list (cpr.6.3,
+  bgu.1.179, apf.59.139, o.claud.3.457).
+- **Per-repo drift/license for multi-repo sources** (P5-3): UD probes each
+  treebank for liveness but drift/license read :multi/:unchecked — needs
+  per-repo pinning.
+- **Adapter-boundary per-language diacritic folding** (P4-1 note): fold at
+  parse time instead of index time; needs a corpus reload.

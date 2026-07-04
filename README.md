@@ -56,6 +56,10 @@ templates for the nightly/weekly maintenance cadence.
 | `bin/nabu health --remote` | No-clone upstream probe: `ls-remote` liveness, remote-HEAD-vs-last-sync drift, and best-effort license-file change detection per source. Exit 1 only if an upstream is gone. |
 | `rake fixtures:check[source]` | Re-fetch pinned fixture URLs into tmp, byte-diff against the checked-in fixtures, and run the adapter tests against the fresh copies — the upstream-format drift report. Never overwrites; `fixtures:refresh[source]` is the explicit adoption path. |
 
+Every query command carries worked examples and syntax notes inline:
+`bin/nabu help search` (FTS5 syntax, filters), `help show` (urn shapes
+across all six corpora), `help export` (formats, jq recipes).
+
 Configuration lives in `config/nabu.yml` (paths; commented example shipped)
 and `config/sources.yml` (the six-source registry: adapter class, enabled
 flag, sync policy — with per-source sign-off notes). `docs/ops.md` documents
