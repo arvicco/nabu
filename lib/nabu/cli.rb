@@ -97,25 +97,105 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "show URN", "Show a passage or document (not yet implemented)"
-    def show(*_args)
-      not_implemented!("show")
+    desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
+    def show(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "show: give a urn" if urn.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Show.new(catalog: catalog).run(urn)
+      raise Thor::Error, "urn not found: #{urn}" if result.nil?
+
+      print_show(result)
+    ensure
+      catalog&.disconnect
+    end
+
+    desc "export", "Stream non-withdrawn passages as plain text or JSONL"
+    option :format, type: :string, required: true, desc: "plain | jsonl"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    def export
+      format = validate_format!(options[:format])
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      lines = Nabu::Query::Export.new(catalog: catalog)
+                                 .run(format: format, lang: options[:lang], license: options[:license])
+      # Stream: write each serialized line as it arrives — never join a
+      # 238k-passage corpus into one string.
+      lines.each { |line| $stdout.puts(line) }
+    ensure
+      catalog&.disconnect
     end
 
     no_commands do
-      def not_implemented!(command)
-        raise Thor::Error, "#{command}: not implemented"
-      end
-
       # Reject an unknown --license up front (before opening any db) with the
-      # closed enum of valid classes, so the user sees the choices.
+      # closed enum of valid classes, so the user sees the choices. Shared by
+      # search and export.
       def validate_license!(license)
         return if license.nil?
         return if Nabu::SourceManifest::LICENSE_CLASSES.include?(license)
 
         raise Thor::Error,
-              "search: unknown license #{license.inspect} " \
+              "unknown license #{license.inspect} " \
               "(choose from #{Nabu::SourceManifest::LICENSE_CLASSES.join(', ')})"
+      end
+
+      # Export format gate. CoNLL-U is a first-class exit format (maintenance
+      # §7) but needs the token model, so it is deferred to the enrichment
+      # phase with an explicit message rather than a generic "unknown format".
+      def validate_format!(format)
+        raise Thor::Error, "export: --format conllu is deferred until the enrichment phase" if format == "conllu"
+        return format if Nabu::Query::Export::FORMATS.include?(format)
+
+        raise Thor::Error,
+              "export: unknown format #{format.inspect} " \
+              "(choose from #{Nabu::Query::Export::FORMATS.join(', ')})"
+      end
+
+      # Render `show`: a passage in the context of its document, or a document
+      # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
+      def print_show(result)
+        case result
+        when Nabu::Query::Show::PassageResult then print_show_passage(result)
+        when Nabu::Query::Show::DocumentResult then print_show_document(result)
+        end
+      end
+
+      def print_show_passage(passage)
+        say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
+        say "  #{passage.text}"
+        say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
+        say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
+            "sequence: #{passage.sequence}   revision: #{passage.revision}"
+        return if passage.provenance.empty?
+
+        say "  provenance:"
+        passage.provenance.each do |event|
+          say "    #{event.at}  #{event.event}#{"  #{event.tool}" if event.tool}"
+        end
+      end
+
+      def print_show_document(document)
+        title = document.title ? " — #{document.title}" : ""
+        lang = document.language ? " [#{document.language}]" : ""
+        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}"
+        say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
+        say "  passages (#{document.passages.size}):"
+        document.passages.each do |line|
+          say "    #{line.urn}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
+      def withdrawn_tag(withdrawn)
+        withdrawn ? "  (withdrawn)" : ""
       end
 
       # Open the fulltext index for reading; nil when the file is absent OR the
