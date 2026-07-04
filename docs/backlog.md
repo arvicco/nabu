@@ -433,7 +433,7 @@ fixtures are trimmed from local canonical, as in Phase 5. Enrichment (API
 keys, sidecars, human review) is deliberately NOT this phase — it is planned
 at this phase's gate with the owner as originally intended.*
 
-## P6-1 · The Iliad: EpidocParser citation-depth quarantine class  [tier: fable] [status: ready] [deps: —]
+## P6-1 · The Iliad: EpidocParser citation-depth quarantine class  [tier: fable] [status: done] [deps: —]
 Goal: tlg0012.tlg001.perseus-grc2 (THE Iliad) quarantines with "citation
       depth mismatch: refsDecl declares 2 component(s), found 1 ([\"1\"])" —
       found 2026-07-04 while verifying help examples. Diagnose ALL current

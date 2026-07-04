@@ -37,9 +37,29 @@
 #   reason:      required when refetchable: false — why it cannot be re-GET.
 #
 source: perseus
-adapter_test: test/adapters/perseus_test.rb
+# adapter_test is null since P6-1: the Iliad edition below is a documented TRIM
+# (whole: false), and a count-based adapter test re-run against the full
+# upstream file would false-fail (see the schema note above).
+adapter_test: null
 retrieved: 2026-07-03
 files:
+  - path: greekLit/data/tlg0012/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0012/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole; copied from the local canonical snapshot, P6-1)
+  - path: greekLit/data/tlg0012/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0012/tlg001/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole; copied from the local canonical snapshot, P6-1)
+  - path: greekLit/data/tlg0012/tlg001/tlg0012.tlg001.perseus-grc2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0012/tlg001/tlg0012.tlg001.perseus-grc2.xml
+    whole: false
+    trim: >-
+      Iliad structural-retry exemplar (P6-1), trimmed from the local canonical
+      snapshot (canonical/perseus-greek/data/tlg0012/tlg001/, synced
+      2026-07-03): full teiHeader + edition div kept; book 1 reduced to lines
+      1-10 and 607-611, book 2 to lines 1-19 (preserving the book boundary and
+      a <q>-wrapped line run); books 3-24 removed.
   - path: greekLit/data/tlg0013/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/__cts__.xml
     whole: true

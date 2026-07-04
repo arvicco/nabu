@@ -21,11 +21,13 @@ class First1kGreekTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("first1k") # NABU_FIXTURE_DIR-aware (fixtures:check)
   GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
 
-  # The three fixture editions prove BOTH slug families are accepted: two
-  # `1st1K-grc1` and one `opp-grc1`.
+  # The fixture editions prove BOTH slug families are accepted: three
+  # `1st1K-grc1` and one `opp-grc1`. Nicomachus (P6-1) exercises the
+  # structural-retry citation path through the adapter seam.
   SEIKILOS_URN = "urn:cts:greekLit:tlg2139.tlg001.1st1K-grc1"
   ANUBION_URN = "urn:cts:greekLit:tlg1126.tlg003.1st1K-grc1"
   METHODIUS_URN = "urn:cts:greekLit:tlg2959.tlg008.opp-grc1"
+  NICOMACHUS_URN = "urn:cts:greekLit:tlg0358.tlg001.1st1K-grc1"
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -63,9 +65,9 @@ class First1kGreekTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_the_three_fixture_editions_across_slug_families
+  def test_discover_finds_exactly_the_four_fixture_editions_across_slug_families
     refs = Nabu::Adapters::First1kGreek.new.discover(GREEK_WORKDIR).to_a
-    assert_equal [ANUBION_URN, SEIKILOS_URN, METHODIUS_URN], refs.map(&:id).sort
+    assert_equal [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN], refs.map(&:id).sort
   end
 
   def test_discover_sets_source_id_language_and_absolute_path
@@ -83,6 +85,7 @@ class First1kGreekTest < Minitest::Test
     assert_equal "Sicili Epitaphium", titles.fetch(SEIKILOS_URN)
     assert_equal "Fragmenta", titles.fetch(ANUBION_URN)
     assert_equal "De Martyribus (Fragmenta)", titles.fetch(METHODIUS_URN)
+    assert_equal "Introductio arithmetica", titles.fetch(NICOMACHUS_URN)
   end
 
   def test_discover_returns_an_enumerator_without_a_block
