@@ -87,6 +87,26 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "health", "Source health checks (pass --remote for the no-clone upstream probe)"
+    option :remote, type: :boolean, default: false,
+                    desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
+    def health
+      # The bare, local health checks (run-history trends, live golden replay)
+      # are P5-5; until then say so and exit 0. --remote is the P5-3 probe.
+      return say(local_health_stub) unless options[:remote]
+
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      db = open_catalog_for_health(config)
+      report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
+      print_remote_health(report)
+      # A gone upstream is the only red finding; the table is already on stdout,
+      # so raise for the exit-1 signal (Thor prints the summary to stderr).
+      raise Thor::Error, remote_health_failure(report) if report.any_gone?
+    ensure
+      db&.disconnect
+    end
+
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
@@ -406,6 +426,81 @@ module Nabu
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
           errored: reports.sum(&:errored)
         )
+      end
+
+      def local_health_stub
+        "nabu health: local health checks arrive with P5-5. " \
+          "For the upstream probe today, run: nabu health --remote"
+      end
+
+      # Like open_catalog, but also applies pending migrations so the P5-3
+      # license-baseline column exists on catalogs built before it (add_column
+      # is idempotent — only pending migrations run). nil when no catalog has
+      # been built yet: the probe then treats every source as never-synced and
+      # records no baseline.
+      def open_catalog_for_health(config)
+        return nil unless File.exist?(config.catalog_path)
+
+        db = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(db)
+        Nabu::Store.setup!(db)
+        db
+      end
+
+      # Render the remote probe: one aligned row per source (slug, liveness,
+      # drift, license) plus any trailing detail, then a one-line summary.
+      def print_remote_health(report)
+        rows = report.rows
+        return say("No sources registered.") if rows.empty?
+
+        slug_w = rows.map { |row| row.slug.length }.max
+        live_w = rows.map { |row| live_cell(row.liveness).length }.max
+        drift_w = rows.map { |row| drift_cell(row.drift).length }.max
+        rows.each do |row|
+          say "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
+              "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+        end
+        say remote_health_summary(report)
+      end
+
+      def live_cell(liveness)
+        { alive: "alive", moved: "MOVED", gone: "GONE" }.fetch(liveness.status)
+      end
+
+      def drift_cell(drift)
+        { current: "current", behind: "behind", never_synced: "never-synced",
+          unknown: "—", multi: "multi-repo" }.fetch(drift)
+      end
+
+      def license_cell(license)
+        { baseline_recorded: "license: baseline recorded", unchanged: "license: ok",
+          changed: "license: CHANGED", unchecked: "license: unchecked" }.fetch(license.status)
+      end
+
+      # Trailing context: why an upstream is not alive, or why a license row is
+      # flagged. Kept off the aligned columns so the table stays readable.
+      def health_detail(row)
+        bits = []
+        bits << row.liveness.detail if row.liveness.detail && row.liveness.status != :alive
+        bits << row.license.detail if row.license.status == :changed
+        bits.empty? ? "" : "   #{bits.join(' · ')}"
+      end
+
+      def remote_health_summary(report)
+        rows = report.rows
+        counts = { alive: 0, moved: 0, gone: 0 }
+        rows.each { |row| counts[row.liveness.status] += 1 }
+        behind = rows.count { |row| row.drift == :behind }
+        parts = [pluralize(rows.size, "source"), "#{counts[:alive]} alive"]
+        parts << "#{counts[:moved]} moved" if counts[:moved].positive?
+        parts << "#{counts[:gone]} gone" if counts[:gone].positive?
+        parts << "#{behind} behind" if behind.positive?
+        parts.join(", ")
+      end
+
+      def remote_health_failure(report)
+        gone = report.rows.count { |row| row.liveness.status == :gone }
+        "health: #{pluralize(gone, 'upstream')} gone — see the table above"
       end
 
       # Open the catalog db for reading if it has been built; nil otherwise so

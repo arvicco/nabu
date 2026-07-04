@@ -190,6 +190,43 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- health (P5-3) -------------------------------------------------------
+
+  # Bare `health` is the P5-5 placeholder: a clear note, exit 0.
+  def test_health_without_remote_notes_p5_5_and_exits_zero
+    out, _err, status = run_cli(%w[health])
+    assert_nil status, "the P5-5 stub must not signal failure"
+    assert_match(/P5-5/, out)
+    assert_match(/health --remote/, out)
+  end
+
+  # --remote, every upstream alive → the table lands on stdout and exit is 0.
+  # TestAdapter's upstream is non-github, so the license check stays unchecked
+  # (no HTTP), and with no catalog built drift reads never-synced.
+  def test_health_remote_all_alive_exits_zero
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) do
+        with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[health --remote]) }
+      end
+      assert_nil status, "all-alive is exit 0"
+      assert_match(/corpus\s+alive/, out)
+      assert_match(/1 source, 1 alive/, out)
+    end
+  end
+
+  # --remote, a gone upstream → GONE in the table (stdout) and exit 1.
+  def test_health_remote_gone_upstream_exits_one
+    with_sync_env(enabled: true) do |config|
+      dead = ->(*_argv) { raise Nabu::Shell::Error.new("x", status: 128, stderr: "remote: Repository not found.") }
+      out, err, status = with_config(config) do
+        with_stubbed_shell(dead) { run_cli(%w[health --remote]) }
+      end
+      assert_equal 1, status
+      assert_match(/corpus\s+GONE/, out)
+      assert_match(/upstream.*gone/i, err)
+    end
+  end
+
   # -- search (P4-2) -------------------------------------------------------
 
   # Build the store (catalog + fulltext index) via a real parse-only sync, then
@@ -359,6 +396,16 @@ class CLITest < Minitest::Test
         sources_path: sources, config_path: "(test)"
       )
     end
+  end
+
+  # Swap Nabu::Shell.run for +impl+ (a proc) so the health probe sees canned
+  # ls-remote output/failures with no network, restoring the original after.
+  def with_stubbed_shell(impl)
+    original = Nabu::Shell.method(:run)
+    Nabu::Shell.define_singleton_method(:run) { |*argv| impl.call(*argv) }
+    yield
+  ensure
+    Nabu::Shell.define_singleton_method(:run, original)
   end
 
   # Minitest 6 dropped Minitest::Mock (and it is outside the dependency budget),
