@@ -174,7 +174,10 @@ module Nabu
       end
 
       checked_in = File.binread(manifest.file_path(entry))
-      if checked_in == body
+      # Compare BYTES: binread is BINARY, Faraday bodies are UTF-8-flavored,
+      # and String#== is false across encodings for non-ASCII content even
+      # when the bytes are identical (Greek fixtures false-drifted otherwise).
+      if checked_in == body.b
         FileResult.new(path: entry.path, status: :identical, detail: nil)
       else
         FileResult.new(path: entry.path, status: :differs,
