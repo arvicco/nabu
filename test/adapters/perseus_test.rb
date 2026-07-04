@@ -16,7 +16,7 @@ require "fileutils"
 class PerseusTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = File.expand_path("../fixtures/perseus", __dir__)
+  FIXTURES = Nabu::TestSupport.fixtures("perseus") # NABU_FIXTURE_DIR-aware (fixtures:check)
   GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
 
   HH13_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-grc2"

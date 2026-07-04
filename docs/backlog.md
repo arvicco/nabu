@@ -385,7 +385,7 @@ Goal: `bin/nabu health --remote` — per registered source (enabled or not):
 Acceptance: probe tests for alive/moved/gone/behind/license-changed paths
       against mocked responses; exit codes tested; suite + lint green.
 
-## P5-4 · Fixture sentinel  [tier: opus] [status: ready] [deps: —]
+## P5-4 · Fixture sentinel  [tier: opus] [status: done] [deps: —]
 Goal: Formalize the approved fixture-acquisition URLs as per-source fixture
       manifests (`test/fixtures/<source>/manifest.yml`: URLs, retrieval date,
       trim notes). `rake fixtures:check[source]` — fetch to tmp, diff against

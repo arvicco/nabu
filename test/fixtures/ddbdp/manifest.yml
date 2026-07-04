@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
+# base https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/
+# joined to each file's path under DDB_EpiDoc_XML/. All files kept whole.
+#
+# These are the P3-6 clean-parse DDbDP fixtures (bgu.1.100, bgu.1.102,
+# c.epist.lat.10) and the papyri adapter's conformance workdir. The P5-1
+# line-restart quarantine exemplars live in ../papyri-ddbdp/ (local-trim,
+# non-refetchable). The papyri adapter test (papyri_test.rb) drives THIS dir.
+source: ddbdp
+adapter_test: test/adapters/papyri_test.rb
+retrieved: 2026-07-03
+files:
+  - path: DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
+    whole: true
+    trim: none (ddb-hybrid bgu;1;100, kept whole)
+  - path: DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
+    whole: true
+    trim: none (ddb-hybrid bgu;1;102, kept whole)
+  - path: DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
+    whole: true
+    trim: none (ddb-hybrid c.epist.lat;;10 — empty volume segment, kept whole)

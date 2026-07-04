@@ -1,0 +1,86 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel").
+#
+# Records where every checked-in fixture in this directory came from, so
+#   `rake fixtures:check[<source>]`   can re-fetch upstream, byte-diff, and
+#                                     re-run this source's adapter test against
+#                                     the fresh copies (never overwriting), and
+#   `rake fixtures:refresh[<source>]` can explicitly re-adopt upstream.
+# This file is DATA only; the logic lives in lib/nabu/fixture_sentinel.rb.
+# Built from the facts recorded in this directory's README.md — no URL was
+# invented; where a README gives a base + exact path convention the raw URL is
+# that base joined to the file's checked-in path.
+#
+# Schema
+# ------
+# source:        fixture-dir name (matches test/fixtures/<source>/).
+# adapter_test:  the adapter test file `check` re-runs against freshly fetched
+#                copies (path relative to repo root), or null to skip the re-run.
+#                Only set for sources whose fixtures are ALL `whole: true` — a
+#                count-based adapter test run against an untrimmed upstream file
+#                would false-fail, so trimmed sources leave this null (the drift
+#                signal there is fetch-liveness + the operator's eyeballed diff).
+# retrieved:     default ISO-8601 acquisition date for refetchable entries.
+# files:         one entry per checked-in fixture file:
+#   path:        path relative to THIS directory (also the on-disk location).
+#   url:         exact upstream raw URL. Required unless refetchable: false.
+#   whole:       true  -> byte-identical copy of upstream; a fresh fetch that
+#                         DIFFERS is real drift (flags nonzero).
+#                false -> a documented trim of a larger upstream file (see
+#                         `trim`); a fresh fetch returns the FULL file, so it is
+#                         fetched for URL-liveness only and NOT byte-compared.
+#   trim:        human note on any trimming ("none" for whole files).
+#   refetchable: default true. false -> `check` SKIPS the entry (printing the
+#                reason) and `refresh` refuses to touch it.
+#   provenance:  raw-get (default) | local-trim (copied from a local canonical
+#                sync, not fetchable by a raw GET; uses `copied`/`canonical`/
+#                `upstream` instead of `url`/`retrieved`).
+#   reason:      required when refetchable: false — why it cannot be re-GET.
+#
+source: perseus
+adapter_test: test/adapters/perseus_test.rb
+retrieved: 2026-07-03
+files:
+  - path: greekLit/data/tlg0013/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: greekLit/data/tlg0013/tlg013/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: greekLit/data/tlg0013/tlg013/tlg0013.tlg013.perseus-grc2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/tlg0013.tlg013.perseus-grc2.xml
+    whole: true
+    trim: none (Homeric Hymn 13, small edition kept whole)
+  - path: greekLit/data/tlg0013/tlg014/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg014/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: greekLit/data/tlg0013/tlg014/tlg0013.tlg014.perseus-grc2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg014/tlg0013.tlg014.perseus-grc2.xml
+    whole: true
+    trim: none (Homeric Hymn 14, small edition kept whole)
+  - path: greekLit/data/tlg0031/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: greekLit/data/tlg0031/tlg024/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: greekLit/data/tlg0031/tlg024/tlg0031.tlg024.perseus-grc2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/tlg0031.tlg024.perseus-grc2.xml
+    whole: true
+    trim: none (New Testament, 2 John — two-level citation, kept whole)
+  - path: latinLit/data/stoa0045/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: latinLit/data/stoa0045/stoa013/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/stoa013/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: latinLit/data/stoa0045/stoa013/stoa0045.stoa013.perseus-lat2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/stoa013/stoa0045.stoa013.perseus-lat2.xml
+    whole: true
+    trim: none (Ausonius Genethliacon — structural non-citeable div, kept whole)
