@@ -143,9 +143,10 @@ class DdbdpParserTest < Minitest::Test
 
   # --- text_normalized -------------------------------------------------------
 
-  def test_text_normalized_is_downcased_and_nfc
+  def test_text_normalized_is_the_minted_search_form
     line = parse102.first
-    assert_equal "θεόφιλος λουκιφέρου καίσαρος οἰκονόμου οὐικάριος", line.text_normalized
+    # Boundary-minted (P6-4): marks stripped, downcased, final sigma → σ.
+    assert_equal "θεοφιλοσ λουκιφερου καισαροσ οικονομου ουικαριοσ", line.text_normalized
     assert line.text_normalized.unicode_normalized?(:nfc)
   end
 

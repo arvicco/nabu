@@ -64,12 +64,21 @@ class ProielParserTest < Minitest::Test
     assert text.end_with?("orationis facultate."), "unexpected tail: #{text[-40..].inspect}"
   end
 
-  def test_text_normalized_is_downcased_and_nfc
+  def test_text_normalized_is_the_minted_search_form
     first = parse.first
-    assert_equal first.text.downcase, first.text_normalized
+    assert_equal Nabu::Normalize.search_form(first.text, language: "lat"), first.text_normalized
     assert first.text_normalized.unicode_normalized?(:nfc)
     assert first.text.start_with?("Quamquam")
     assert first.text_normalized.start_with?("quamquam")
+  end
+
+  # The lat rule (v→u, j→i) reaches PROIEL passages through Passage minting:
+  # sentence 86001 reads "videmur" in the fixture, "uidemur" in the search form.
+  def test_latin_search_form_folds_v_to_u
+    passage = parse.find { |p| p.urn.end_with?(":86001") }
+    refute_nil passage
+    assert_includes passage.text, "videmur", "pristine text keeps the editor's v"
+    assert_includes passage.text_normalized, "uidemur"
   end
 
   def test_presentation_before_is_honoured

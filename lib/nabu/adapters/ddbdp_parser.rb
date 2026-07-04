@@ -135,8 +135,9 @@ module Nabu
     # significant for RECONSTRUCTING the markup stream (word spacing lives in
     # text nodes between elements, and we honor every one of them while
     # accumulating) — but the final passage text still gets the house
-    # whitespace treatment: runs collapse to one space, ends strip, NFC, and
-    # text_normalized = NFC(text.downcase). The tension is deliberate: inside
+    # whitespace treatment: runs collapse to one space, ends strip, NFC
+    # (text_normalized is minted by Passage.new — the P6-4 per-language
+    # search form). The tension is deliberate: inside
     # extraction the preserved spacing decides word boundaries; after
     # extraction the passage is normal prose and follows house rules.
     #
@@ -286,7 +287,6 @@ module Nabu
             urn: "#{urn}:#{line.urn_suffix}",
             language: language,
             text: line.text,
-            text_normalized: Normalize.nfc(line.text.downcase),
             annotations: annotations(line),
             sequence: sequence
           )

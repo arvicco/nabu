@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../normalize"
-
 module Nabu
   module Store
     # Builds the FTS5 fulltext index (architecture §2/§5) from the catalog.
@@ -23,13 +21,18 @@ module Nabu
     # dataset API, so CREATE_TABLE below is a raw db.run heredoc. This is scoped
     # to DDL only; no query logic is ever hand-written in SQL.
     #
-    # == Diacritic folding (the search form)
+    # == No folding here (P6-4)
     #
-    # We index Normalize.fold_diacritics(text_normalized), NOT the raw
-    # text_normalized. The tokenizer's `remove_diacritics 2` cannot fold
-    # precomposed polytonic Greek (see Normalize.fold_diacritics); folding the
-    # content application-side is what actually makes "μῆνιν" findable by
-    # "μηνιν". P4-2 search MUST fold the query with the same function.
+    # text_normalized is indexed exactly AS STORED: it is already the true
+    # per-language search form, minted once at the adapter boundary
+    # (Passage.new → Normalize.search_form — marks stripped, downcased, plus
+    # grc final-sigma / lat v-u,j-i rules; conventions.md §9). The tokenizer's
+    # `remove_diacritics 2` still cannot fold precomposed polytonic Greek
+    # (see Normalize.fold_diacritics), which is exactly why the folding lives
+    # application-side at all — just upstream of here now, not in the index
+    # build. Query::Search matches the query against the UNION of the
+    # per-language folds (Normalize.query_forms), since queries carry no
+    # language.
     module Indexer
       TABLE = :passages_fts
 
@@ -86,12 +89,12 @@ module Nabu
           )
       end
 
-      # Turn a catalog row into an index row, folding diacritics into the
-      # search form (class note). Kept separate so the mapping is testable and
-      # obviously the only transform applied.
+      # Turn a catalog row into an index row — a pure column mapping, NO text
+      # transform (class note: text_normalized is already the search form).
+      # Kept separate so that invariant is testable and obvious.
       def index_row(row)
         {
-          text_normalized: Nabu::Normalize.fold_diacritics(row.fetch(:text_normalized)),
+          text_normalized: row.fetch(:text_normalized),
           urn: row.fetch(:urn),
           passage_id: row.fetch(:passage_id)
         }

@@ -46,8 +46,8 @@ Related traps worth knowing:
   `U+02BC`. These are *not* unified by NFC either; treat them as upstream
   reality and never "fix" them in canonical data (see §3).
 - **Final sigma.** Greek σ becomes ς word-finally — two codepoints for one
-  letter, both legitimate. Search folding (a later enrichment) has to know;
-  byte-level tools don't.
+  letter, both legitimate. The search form normalizes them to one (§9);
+  byte-level tools on the pristine text still see two.
 
 ## 2. Citations — how texts without page numbers are addressed
 
@@ -257,3 +257,71 @@ photographs of manuscripts. Hence:
   authors. The loader's quarantine + provenance journal exists precisely so
   upstream imperfection is recorded, skipped, and recoverable — never
   silently "fixed" and never fatal.
+
+## 9. Search folding — the per-language rule table (P6-4)
+
+`text_normalized` is the *search form* of a passage: what the FTS index
+carries and what queries are matched against. It is minted exactly once, at
+the adapter boundary — `Passage.new` derives it from the pristine text via
+`Normalize.search_form(text, language:)` — so the rule table below lives in
+one place (`Normalize::LANGUAGE_FOLDS`), not in six adapters. The pristine
+`text` is never touched: folding is a derived column, and byte-identical
+canonical text remains the permanent asset.
+
+**The generic fold (every language, the conservative baseline):** NFC →
+downcase → NFD → strip every nonspacing mark (`\p{Mn}`) → NFC. This is what
+makes "μηνιν" find "μῆνιν": polytonic accents, breathings, iota *subscript*
+(U+0345 is Mn), dialytika, Latin accents, Cyrillic titla, and IAST dots and
+macrons all fall to the same strip.
+
+**Per-language extras, applied on top:**
+
+| language | extra rule | rationale |
+| --- | --- | --- |
+| `grc` | final sigma ς→σ | σ/ς are one letter in two positional shapes; TLG Beta Code encodes both as a single `S`, i.e. the field's canonical searchable form does not distinguish them. Without this, a word-final match depends on where the word sits in the query. |
+| `lat` | v→u, j→i | The classical Latin search convention: PHI's search "is not case-sensitive, nor does it distinguish i from j or u from v," and Perseus-lineage tooling treats the pairs as orthographic variants (editors disagree per edition: *virumque*/*uirumque*). Folding to the u/i base makes every edition findable by every spelling. |
+| everything else (`chu`, `orv`, `got`, `san`, unknown) | none — generic fold only | See below. |
+
+**Why the query can't just pick a rule:** queries carry no language, so
+`Normalize.query_forms` returns the *union* — the generic form plus each
+language rule's variant when it differs — and `Query::Search` ORs them in
+the FTS MATCH. A passage in language L is indexed as
+`extra_L(generic(text))`, and the union always contains
+`extra_L(generic(query))`, so per-language documents are always findable;
+and because the variants are ORed, the generic variant still matches
+languages with no extra rule — Gothic "jah" stays findable even though the
+lat variant of that query reads "iah".
+
+**Deliberately conservative decisions (the open questions):**
+
+- **Greek adscript iota.** The combining subscript (ᾳ = α + U+0345) strips
+  with the marks; adscript spelled as a full letter iota (αι) is *not*
+  folded away. Folding it would require dictionary knowledge (real
+  diphthongs vs adscript) — left alone.
+- **OCS / Old East Slavic letterforms.** The zogr fixture's real titla
+  (U+0483) and palatalization marks (U+0484) strip as Mn — verified against
+  TOROT text (дх҃омь → дхомь). But letterform variants (ꙇ vs и vs і, ѡ vs о,
+  оу vs у) are kept distinct: they are orthographically meaningful to Slavic
+  editors and no established search-normalization practice was found to
+  cite. If corpus experience shows misses, a letterform table is a
+  one-place change here. Note one side effect: й folds to и (its breve is
+  Mn) — acceptable, standard Russian search behavior.
+- **Sanskrit (Vedic, IAST romanization).** IAST diacritics are *phonemic*
+  (ā vs a distinguishes words), and the generic strip conflates them
+  (kṛṣṇa → krsna). That is the accepted price of diacritic-insensitive
+  search — same tradeoff as Greek accents — and the pristine text keeps the
+  full IAST. No extra rules.
+- **Gothic.** Romanized with j and þ as real letters; generic fold only
+  (þ survives, j is protected from the lat rule by the query union).
+- **Elision apostrophes** (U+02BC vs U+2019 vs U+0027, §1) are *not*
+  unified — upstream reality, and unicode61 treats them all as token
+  separators anyway.
+
+Changing any rule here changes every `text_normalized` and therefore every
+passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not
+a parse-only sync, or the loader will read the change as a corpus-wide
+revision storm.
+
+References: PHI Latin search help (latin.packhum.org/help/search); TLG Beta
+Code manual (S for all sigmas); Unicode TR#15 (NFC/NFD); verified fixture
+behavior in test/normalize_test.rb.

@@ -44,8 +44,10 @@ module Store
 
     def fts = @fulltext[:passages_fts]
 
+    # Raw MATCH: the Indexer's contract is index-as-stored, so tests query
+    # with the already-folded form (query-side folding is Search's job).
     def match(query)
-      fts.where(Sequel.lit("passages_fts MATCH ?", Nabu::Normalize.fold_diacritics(query))).all
+      fts.where(Sequel.lit("passages_fts MATCH ?", query)).all
     end
 
     # -- tests ---------------------------------------------------------------
@@ -91,17 +93,29 @@ module Store
       assert_equal 2, fts.count, "drop+recreate leaves no duplicate rows"
     end
 
-    # remove_diacritics 2 alone cannot fold precomposed polytonic Greek, so the
-    # Indexer folds the search form (Normalize.fold_diacritics). Proof: a
-    # passage stored with its polytonic accents intact is found by a
-    # diacritic-stripped query.
-    def test_greek_passage_findable_by_diacritic_stripped_query
+    # P6-4: text_normalized is already the boundary-minted search form, so the
+    # Indexer applies NO transform — what the catalog stores is byte-for-byte
+    # what the index carries.
+    def test_indexes_text_normalized_as_stored
       doc = make_document(urn: "urn:d:1")
+      # Deliberately accented: if the Indexer still folded, the stored index
+      # form would differ from the catalog column.
       make_passage(doc, urn: "urn:d:1:1", text_normalized: "μῆνιν", sequence: 0)
       rebuild!
 
+      assert_equal "μῆνιν", fts.first.fetch(:text_normalized),
+                   "index must carry text_normalized exactly as stored"
+    end
+
+    # The boundary-folded form is findable by its own bytes (the end-to-end
+    # accent-insensitive contract now lives in Search + Normalize.search_form).
+    def test_folded_search_form_findable_as_indexed
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "μηνιν", sequence: 0)
+      rebuild!
+
       hits = match("μηνιν")
-      assert_equal 1, hits.size, "μῆνιν must be found by the diacritic-stripped μηνιν"
+      assert_equal 1, hits.size
       assert_equal "urn:d:1:1", hits.first.fetch(:urn)
     end
 
