@@ -20,6 +20,7 @@ module Nabu
     DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
     CATALOG_DB_FILENAME = "catalog.sqlite3"
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
+    HISTORY_DB_FILENAME = "history.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :sources_path, :config_path
 
@@ -59,6 +60,13 @@ module Nabu
     # the index is derived-of-derived and rebuilt at will.
     def fulltext_path
       File.join(db_dir, FULLTEXT_DB_FILENAME)
+    end
+
+    # The history ledger (architecture §5, P7-1): runs, pins, license
+    # baselines, durable revisions. NOT derived from canonical/ — the one db
+    # under db/ that `nabu rebuild` never touches and backups must include.
+    def history_path
+      File.join(db_dir, HISTORY_DB_FILENAME)
     end
   end
 end

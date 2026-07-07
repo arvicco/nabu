@@ -35,6 +35,7 @@ class RetentionTest < Minitest::Test
   end
 
   def setup
+    @ledger = ledger_test_db
     @db = store_test_db
     @root = Dir.mktmpdir("nabu-retention")
     @canonical = File.join(@root, "canonical")
@@ -42,7 +43,7 @@ class RetentionTest < Minitest::Test
     FileUtils.mkdir_p(@canonical)
     make_repo(@upstream, DOCS)
     GitTestAdapter.upstream_url = @upstream
-    @runner = Nabu::SyncRunner.new(config: config, registry: registry, db: @db)
+    @runner = Nabu::SyncRunner.new(config: config, registry: registry, db: @db, ledger: @ledger)
   end
 
   def teardown
@@ -84,7 +85,7 @@ class RetentionTest < Minitest::Test
     assert(export.any? { |line| line.include?("μῆνιν") }, "retired passages export normally")
 
     # status counts it; show labels it.
-    status = Nabu::StatusReport.render(registry: registry, db: @db)
+    status = Nabu::StatusReport.render(registry: registry, db: @db, ledger: @ledger)
     assert_match(/docs=5 passages=5 retired=1/, status)
     shown = Nabu::Query::Show.new(catalog: @db).run(urn("alpha"))
     assert shown.retired_upstream

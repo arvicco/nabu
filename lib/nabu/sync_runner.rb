@@ -59,10 +59,14 @@ module Nabu
       def aborted? = !breaker.nil?
     end
 
-    def initialize(config:, registry:, db:)
+    # +db+ is the catalog; +ledger+ the history ledger (Store::Ledger, P7-1) —
+    # runs, per-repo pins, and durable revisions are recorded there, keyed by
+    # slug/url/urn so they survive `nabu rebuild`.
+    def initialize(config:, registry:, db:, ledger:)
       @config = config
       @registry = registry
       @db = db
+      @ledger = ledger
     end
 
     # Sync exactly the named source, disabled or not (explicit request). An
@@ -105,7 +109,7 @@ module Nabu
       load_report = nil
 
       begin
-        Store::RunRecorder.record(db: @db, source: source) do
+        Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
@@ -117,7 +121,7 @@ module Nabu
                            breaker: e, indexed: nil, warnings: [])
       end
 
-      update_source_state(source, fetch_report)
+      update_source_state(source, entry, fetch_report)
       # Reindex the fulltext AFTER the RunRecorder block: the index is
       # corpus-wide, not per-source, so it must not live inside a source's run
       # row (an indexing failure surfaces as its own error, never a falsified
@@ -139,7 +143,7 @@ module Nabu
     def deviation_warnings(source, load_report)
       return [] unless load_report
 
-      errored = Store::Run.where(source_id: source.id, status: "succeeded")
+      errored = Store::Run.where(source_slug: source.slug, kind: "sync", status: "succeeded")
                           .order(Sequel.desc(:id)).select_map(:errored)
       prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
       total = Store::Document.where(source_id: source.id).count
@@ -166,7 +170,7 @@ module Nabu
     end
 
     def load(source, adapter, workdir, progress)
-      Store::Loader.new(db: @db, source: source)
+      Store::Loader.new(db: @db, source: source, ledger: @ledger)
                    .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
     end
 
@@ -189,35 +193,45 @@ module Nabu
       )
     end
 
-    # On success, stamp the sync time and pin the fetched sha. A --parse-only
-    # run has no fetch_report, so its prior last_sync_sha is preserved. A
-    # multi-repo fetch also carries per-repo shas — pin those into source_repos.
-    def update_source_state(source, fetch_report)
+    # On success, stamp the sync time (and mirror the fetched sha onto the
+    # source row — display-only convenience; the AUTHORITATIVE pins live in
+    # the ledger, below). A --parse-only run has no fetch_report, so both the
+    # sources mirror and the ledger pins are preserved untouched.
+    def update_source_state(source, entry, fetch_report)
       attrs = { last_sync_at: Time.now }
       attrs[:last_sync_sha] = fetch_report.sha if fetch_report
       source.update(attrs)
-      update_source_repos(source, fetch_report.repos) if fetch_report
+      update_pins(entry, fetch_report) if fetch_report
     end
 
-    # Upsert one source_repos row per repo the fetch reported (on the unique
-    # (source_id, repo_url)), touching only last_sync_sha so a license baseline
-    # the probe recorded on the row survives the sync. Rows for repos that
-    # vanished from the manifest list are deleted — a stale pin must never
-    # linger and read as drift against a repo the source no longer tracks.
-    # Single-repo sources report no repos (+repos+ nil) and write nothing here:
-    # their sources.last_sync_sha stays the whole contract.
-    def update_source_repos(source, repos)
-      return if repos.nil? || repos.empty?
+    # Upsert one ledger pin per upstream repo, keyed (source_slug, repo_url) —
+    # P7-1: pins moved out of the rebuild-dropped catalog. Multi-repo fetches
+    # report per-repo shas in FetchReport#repos; single-repo sources pin their
+    # one declared repo (Adapter.upstream_repo_urls, the same url the remote
+    # probe ls-remotes). Only last_sync_sha is touched, so a license baseline
+    # the probe recorded on the pin survives the sync. Pins for repos no
+    # longer in the reported set are deleted — a stale pin must never linger
+    # and read as phantom drift.
+    def update_pins(entry, fetch_report)
+      repos = fetch_report.repos
+      repos = single_repo_pin(entry, fetch_report) if repos.nil? || repos.empty?
+      return if repos.empty?
 
+      slug = entry.slug
       repos.each do |repo_url, sha|
-        row = Store::SourceRepo.first(source_id: source.id, repo_url: repo_url)
+        row = Store::Pin.first(source_slug: slug, repo_url: repo_url)
         if row
           row.update(last_sync_sha: sha)
         else
-          Store::SourceRepo.create(source_id: source.id, repo_url: repo_url, last_sync_sha: sha)
+          Store::Pin.create(source_slug: slug, repo_url: repo_url, last_sync_sha: sha)
         end
       end
-      Store::SourceRepo.where(source_id: source.id).exclude(repo_url: repos.keys).delete
+      Store::Pin.where(source_slug: slug).exclude(repo_url: repos.keys).delete
+    end
+
+    def single_repo_pin(entry, fetch_report)
+      url = entry.adapter_class.upstream_repo_urls.first
+      url ? { url => fetch_report.sha } : {}
     end
 
     def workdir_for(slug) = File.join(@config.canonical_dir, slug)

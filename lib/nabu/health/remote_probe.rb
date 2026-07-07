@@ -21,19 +21,22 @@ module Nabu
     #      git reports the redirect as the failure). Only :gone sets the exit-1
     #      flag; :moved is a soft "your stored URL is stale" signal.
     #
-    #   2. Drift — remote HEAD vs the catalog's last_sync_sha: :current, :behind
-    #      (upstream has new commits), or :never_synced (no row / no sha). Not
-    #      alive → :unknown (nothing to compare).
+    #   2. Drift — remote HEAD vs the repo's ledger pin (Store::Pin, P7-1):
+    #      :current, :behind (upstream has new commits), or :never_synced (no
+    #      pin / no sha). Not alive → :unknown (nothing to compare).
     #
     #   3. License drift (best-effort, no clone) — for github.com upstreams,
     #      fetch the license file via raw.githubusercontent.com at the remote
     #      HEAD sha (LICENSE, LICENSE.md, COPYING in order) and compare its
-    #      sha256 to a per-source baseline stored in the sources table. First
+    #      sha256 to a per-repo baseline stored on the ledger pin. First
     #      sight records the baseline (:baseline_recorded, not a false alarm);
     #      a differing hash is :changed; a match is :unchanged. Non-github, no
     #      license file, an unreachable upstream, or a fetch error → :unchecked
-    #      (never an error — this is best-effort). The baseline is runtime state
-    #      like last_sync_sha, so storing it keeps rebuild-purity (migration 003).
+    #      (never an error — this is best-effort). Baselines and pins live in
+    #      the history ledger (db/history.sqlite3), NOT the catalog, so they
+    #      survive `nabu rebuild` — the drift blindspot the pre-P7-1 layout
+    #      had (rebuild wiped the baseline; the next probe silently re-recorded
+    #      whatever upstream had become) is closed.
     #
     # == Multi-repo sources (the UD decision, per-repo pinning — P6-3)
     #
@@ -45,20 +48,20 @@ module Nabu
     # A multi-repo source is :alive only if all its repos are; :gone/:moved if
     # any is (the offending repos named in the detail).
     #
-    # DRIFT and LICENSE are now computed PER REPO against the source_repos table
-    # (P6-3), which the sync path pins one row per repo into. For each repo:
-    # drift = its ls-remote HEAD vs its source_repos pin (:current/:behind/
-    # :never_synced/:unknown), and the source-level drift is the WORST of them
-    # (offending :behind repos named in +drift_detail+, as liveness names its
-    # offenders); license = the same raw.githubusercontent.com fetch as the
-    # single-repo case but with the baseline stored on the repo's row, and the
-    # source-level license is :changed if ANY repo changed (offenders named),
-    # else :baseline_recorded if any was newly recorded, else :unchanged, else
-    # :unchecked. A multi-repo source with NO pins yet (never synced under P6-3)
-    # still reads drift → :multi and license → :unchecked("multi-repo") — there
-    # is nothing per-repo to compare against until the next sync records rows.
-    # Single-repo sources are unchanged: they read the sources columns exactly
-    # as before.
+    # DRIFT and LICENSE are computed PER REPO against the ledger pins (P6-3,
+    # moved to the ledger by P7-1), which the sync path records one row per
+    # repo into — single-repo sources included (their one declared repo gets a
+    # pin too). For each repo: drift = its ls-remote HEAD vs its pin
+    # (:current/:behind/:never_synced/:unknown), and the source-level drift is
+    # the WORST of them (offending :behind repos named in +drift_detail+, as
+    # liveness names its offenders); license = the same
+    # raw.githubusercontent.com fetch for every pinned github repo, baseline
+    # on the pin, and the source-level license is :changed if ANY repo changed
+    # (offenders named), else :baseline_recorded if any was newly recorded,
+    # else :unchanged, else :unchecked. A multi-repo source with NO pins yet
+    # (never synced under P6-3) still reads drift → :multi and license →
+    # :unchecked("multi-repo") — there is nothing per-repo to compare against
+    # until the next sync records pins.
     class RemoteProbe
       # Tried in order at the remote HEAD sha; first 200 wins. Lowercase
       # variants are real: PerseusDL and First1KGreek ship "license.md".
@@ -88,12 +91,13 @@ module Nabu
         def any_gone? = rows.any? { |row| row.liveness.status == :gone }
       end
 
-      # +db+ may be nil (no catalog built yet): every source then reads as
+      # +ledger+ is the history db holding the pins (Store::Ledger bound); it
+      # may be nil (fresh machine, no ledger yet): every source then reads as
       # never-synced and no baseline is recorded. +shell+ is injectable so unit
       # tests can feed canned ls-remote output/failures without a network.
-      def initialize(registry:, db:, shell: Nabu::Shell)
+      def initialize(registry:, ledger:, shell: Nabu::Shell)
         @registry = registry
-        @db = db
+        @ledger = ledger
         @shell = shell
       end
 
@@ -110,15 +114,16 @@ module Nabu
 
       def probe_source(entry)
         urls = entry.adapter_class.upstream_repo_urls
+        pins = pins_for(entry.slug)
         probes = urls.map { |url| probe_repo(url) }
         multi = probes.size > 1
-        drift = drift_status(entry, probes, multi: multi)
+        drift = drift_status(probes, pins, multi: multi)
         SourceHealth.new(
           slug: entry.slug, enabled: entry.enabled,
           upstream: multi ? "#{urls.size} repos" : urls.first,
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,
-          license: license_status(entry, probes, multi: multi)
+          license: license_status(probes, pins, multi: multi)
         )
       end
 
@@ -161,26 +166,22 @@ module Nabu
       DRIFT_SEVERITY = { behind: 3, never_synced: 2, unknown: 1, current: 0 }.freeze
       private_constant :DRIFT_SEVERITY
 
-      def drift_status(entry, probes, multi:)
-        return single_repo_drift(entry, probes.first) unless multi
+      def drift_status(probes, pins, multi:)
+        return single_repo_drift(probes.first, pins) unless multi
 
-        multi_repo_drift(entry, probes)
+        multi_repo_drift(probes, pins)
       end
 
-      def single_repo_drift(entry, probe)
-        return Drift.new(status: :unknown, detail: nil) unless probe.liveness.status == :alive && probe.head
-
-        last = source_row(entry)&.last_sync_sha
-        return Drift.new(status: :never_synced, detail: nil) if last.nil? || last.empty?
-
-        Drift.new(status: last == probe.head ? :current : :behind, detail: nil)
+      # repo_drift already yields :unknown (not alive) / :never_synced (no pin)
+      # / :current / :behind — the single-repo status verbatim.
+      def single_repo_drift(probe, pins)
+        Drift.new(status: repo_drift(probe, pins[probe.url]), detail: nil)
       end
 
       # No per-repo pins yet → :multi (nothing to compare against until the next
       # sync records rows). Otherwise the worst per-repo drift wins, with the
       # :behind repos named in the detail.
-      def multi_repo_drift(entry, probes)
-        pins = source_repo_pins(entry)
+      def multi_repo_drift(probes, pins)
         return Drift.new(status: :multi, detail: "no per-repo pins yet — sync to record") if pins.empty?
 
         per_repo = probes.map { |probe| [probe, repo_drift(probe, pins[probe.url])] }
@@ -196,23 +197,17 @@ module Nabu
         pin.last_sync_sha == probe.head ? :current : :behind
       end
 
-      def license_status(entry, probes, multi:)
-        return single_repo_license(entry, probes.first) unless multi
+      def license_status(probes, pins, multi:)
+        return repo_license(probes.first, pins[probes.first.url]) unless multi
 
-        multi_repo_license(entry, probes)
+        multi_repo_license(probes, pins)
       end
 
-      def single_repo_license(entry, probe)
-        row = source_row(entry)
-        repo_license(probe, row)
-      end
-
-      # Per-repo license baselines stored on the source_repos rows. Source-level
+      # Per-repo license baselines stored on the ledger pins. Source-level
       # status: :changed if ANY repo changed (offenders named), else
       # :baseline_recorded if any was newly recorded, else :unchanged if any
       # matched, else :unchecked (no pins / nothing checkable).
-      def multi_repo_license(entry, probes)
-        pins = source_repo_pins(entry)
+      def multi_repo_license(probes, pins)
         return unchecked("multi-repo") if pins.empty?
 
         results = probes.map { |probe| [probe, repo_license(probe, pins[probe.url])] }
@@ -231,9 +226,9 @@ module Nabu
       end
 
       # Compare (and record) the license baseline for one repo against +row+
-      # (a Source for the single-repo case, a SourceRepo for a multi-repo one —
-      # both carry license_baseline_sha256 and #update). +row+ nil means the
-      # repo has no pin yet (never synced), so nothing is checkable.
+      # (its Store::Pin in the ledger). +row+ nil means the repo has no pin
+      # yet (never synced), so nothing is checkable — the probe never mints
+      # pins itself; baselines attach to pins the sync path created.
       def repo_license(probe, row)
         return unchecked("upstream unreachable") unless probe.liveness.status == :alive && probe.head
 
@@ -283,20 +278,13 @@ module Nabu
         match && [match[:owner], match[:repo]]
       end
 
-      def source_row(entry)
-        return nil unless @db
+      # { repo_url => Store::Pin } for a source's ledger pins. Empty when
+      # there is no ledger yet (fresh machine) or the source was never synced
+      # (no pins recorded yet).
+      def pins_for(slug)
+        return {} unless @ledger
 
-        Nabu::Store::Source.first(slug: entry.slug)
-      end
-
-      # { repo_url => SourceRepo } for a multi-repo source's pins. Empty when
-      # there is no catalog, no source row, or the source was never synced
-      # under P6-3 (no rows recorded yet).
-      def source_repo_pins(entry)
-        source = source_row(entry)
-        return {} unless source
-
-        Nabu::Store::SourceRepo.where(source_id: source.id).to_hash(:repo_url)
+        Nabu::Store::Pin.where(source_slug: slug).to_hash(:repo_url)
       end
     end
   end

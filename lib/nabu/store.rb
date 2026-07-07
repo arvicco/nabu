@@ -17,15 +17,16 @@ module Nabu
   module Store
     MIGRATIONS_DIR = File.expand_path("../../db/migrate", __dir__)
 
-    # Model constant => backing table. Order matters only for readability.
+    # Model constant => backing CATALOG table. Order matters only for
+    # readability. Runs, pins, and revisions are LEDGER models — see
+    # Store::Ledger (P7-1): they live in db/history.sqlite3, which rebuild
+    # never drops, and are bound by Ledger.setup!.
     MODELS = {
       Source: :sources,
-      SourceRepo: :source_repos,
       Document: :documents,
       Passage: :passages,
       Provenance: :provenance,
-      Enrichment: :enrichments,
-      Run: :runs
+      Enrichment: :enrichments
     }.freeze
 
     module_function
@@ -71,12 +72,10 @@ module Nabu
         MODELS.each_key { |const| const_get(const).set_dataset(db[MODELS.fetch(const)]) }
       else
         require_relative "store/source"
-        require_relative "store/source_repo"
         require_relative "store/document"
         require_relative "store/passage"
         require_relative "store/provenance"
         require_relative "store/enrichment"
-        require_relative "store/run"
         @models_loaded = true
       end
       db
@@ -84,6 +83,7 @@ module Nabu
   end
 end
 
+require_relative "store/ledger"
 require_relative "store/loader"
 require_relative "store/run_recorder"
 require_relative "store/indexer"

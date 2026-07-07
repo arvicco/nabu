@@ -60,11 +60,16 @@ module Nabu
 
     # Delete the catalog db file, re-migrate a fresh one, and replay every
     # source that has local canonical data. Returns a Result. Never touches
-    # canonical/. +progress+ (a Nabu::ProgressReporter or nil) is threaded into
-    # each source's loader for live per-document ticks; the runner stays
-    # print-free.
+    # canonical/ — and NEVER touches the history ledger (P7-1): the ledger is
+    # opened (created on a fresh machine; a pre-P7-1 catalog's history is
+    # lifted into it first, BEFORE the file is deleted) but only appended to,
+    # via the per-source "rebuild"-kind run rows. Runs/pins/revisions recorded
+    # before the rebuild survive it by construction. +progress+ (a
+    # Nabu::ProgressReporter or nil) is threaded into each source's loader for
+    # live per-document ticks; the runner stays print-free.
     def run(progress: nil)
       db_existed = File.exist?(db_path)
+      ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
       FileUtils.rm_f(db_path)
       FileUtils.rm_f(fulltext_path) # the index is derived-of-derived; drop it too
       db = fresh_db
@@ -73,7 +78,7 @@ module Nabu
       skips = []
       @registry.each_source do |entry|
         if replayable?(entry)
-          outcomes << replay(db, entry, progress)
+          outcomes << replay(db, ledger, entry, progress)
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
         end
@@ -85,18 +90,23 @@ module Nabu
     ensure
       db&.disconnect
       fulltext&.disconnect
+      ledger&.disconnect
     end
 
     private
 
     # Reconcile the source row from the manifest, then replay its canonical
-    # snapshot under a runs row. The RunRecorder block returns the LoadReport
-    # (feeding the run counts); we keep it for the Outcome too.
-    def replay(db, entry, progress)
+    # snapshot under a "rebuild"-kind ledger run row (slug-keyed; health
+    # trends read kind=sync only, so replay counts never poison them). The
+    # RunRecorder block returns the LoadReport (feeding the run counts); we
+    # keep it for the Outcome too. The loader gets the ledger for durable
+    # revision journaling — a replay into a fresh catalog only INSERTS, so it
+    # writes no revisions (tested), but the seam stays uniform.
+    def replay(db, ledger, entry, progress)
       source = entry.sync_source!(db)
       report = nil
-      Store::RunRecorder.record(db: db, source: source) do
-        report = Store::Loader.new(db: db, source: source).load_from(
+      Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
+        report = Store::Loader.new(db: db, source: source, ledger: ledger).load_from(
           entry.adapter_class.new,
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
@@ -130,5 +140,7 @@ module Nabu
     def db_path = @config.catalog_path
 
     def fulltext_path = @config.fulltext_path
+
+    def history_path = @config.history_path
   end
 end

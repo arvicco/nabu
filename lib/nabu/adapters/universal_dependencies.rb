@@ -137,7 +137,7 @@ module Nabu
       end
 
       # { repo_url => head_sha } from the per-slug shas — the FetchReport.repos
-      # payload SyncRunner pins into source_repos (P6-3). Keyed by the SAME
+      # payload SyncRunner pins into the ledger (P6-3/P7-1). Keyed by the SAME
       # repo_url the remote probe reads from Adapter.upstream_repo_urls, so the
       # pin and the probe line up per repo.
       def repo_pins(shas)

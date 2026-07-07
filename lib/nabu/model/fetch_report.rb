@@ -12,10 +12,10 @@ module Nabu
   #   rate-limit pause, a resumed crawl. Surfaced by `nabu status`, never load
   #   logic.
   # - +repos+: per-repo pins for a MULTI-repo source (UD), a { repo_url => sha }
-  #   hash so SyncRunner can record one source_repos row per upstream repo and
+  #   hash so SyncRunner can record one ledger pin per upstream repo and
   #   the remote probe can report drift/license per repo (P6-3). Nil for the
   #   common single-repo case — those adapters keep pinning only +sha+ into
-  #   sources.last_sync_sha and write nothing to source_repos (behavior
+  #   their one declared repo's pin via the aggregate +sha+ (behavior
   #   byte-identical to before this field existed).
   FetchReport = Data.define(:sha, :fetched_at, :notes, :repos) do
     def initialize(sha:, fetched_at:, notes: nil, repos: nil)

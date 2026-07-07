@@ -221,6 +221,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the history ledger at the CLI seam (P7-1) ----------------------------
+
+  # Fresh bootstrap: no ledger file exists; status degrades honestly, the
+  # first sync creates it, and the recorded run shows up in status.
+  def test_first_sync_creates_the_ledger_and_status_reads_it
+    with_sync_env(enabled: true) do |config|
+      refute File.exist?(config.history_path), "no ledger before the first sync"
+
+      with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+
+      assert File.exist?(config.history_path), "the first sync creates the ledger"
+      out, _err, status = with_config(config) { run_cli(["status"]) }
+      assert_nil status
+      assert_match(/corpus.*last run .*succeeded \(\+2 ~0 -0 !0\)/, out)
+    end
+  end
+
+  # A catalog built without any run history (e.g. restored derived dbs, no
+  # ledger): status stays functional and says so instead of inventing history.
+  def test_status_without_ledger_reports_no_run_history
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      File.delete(config.history_path) # simulate a ledger-less derived set
+
+      out, _err, status = with_config(config) { run_cli(["status"]) }
+      assert_nil status
+      assert_match(/corpus.*docs=2.*no run history/, out)
+    end
+  end
+
   # -- health (P5-3 remote, P5-5 local) ------------------------------------
 
   # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
@@ -421,17 +451,15 @@ class CLITest < Minitest::Test
     end
   end
 
-  # Append three succeeded runs to the just-synced "corpus" source so the latest
-  # errored count (90) towers over the recent norm — a quarantine spike. Writes
-  # to the on-disk catalog through its own connection, then hands back so the CLI
-  # opens it fresh.
+  # Append three succeeded runs for the just-synced "corpus" source so the
+  # latest errored count (90) towers over the recent norm — a quarantine spike.
+  # Runs live in the history ledger (P7-1), slug-keyed; writes through its own
+  # connection, then hands back so the CLI opens it fresh.
   def seed_spike_runs(config)
-    db = Nabu::Store.connect(config.catalog_path)
-    Nabu::Store.setup!(db)
-    source = Nabu::Store::Source.first(slug: "corpus")
+    db = Nabu::Store::Ledger.open!(config.history_path)
     now = Time.now
     [2, 3, 90].each do |errored|
-      Nabu::Store::Run.create(source_id: source.id, started_at: now, finished_at: now,
+      Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: now, finished_at: now,
                               added: 1, updated: 0, errored: errored, status: "succeeded")
     end
   ensure

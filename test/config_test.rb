@@ -91,6 +91,14 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P7-1: the history ledger rides in the same (config-driven) db dir.
+  def test_history_path_is_under_db_dir
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "db", "history.sqlite3"), config.history_path
+    end
+  end
+
   private
 
   def write_config(root, contents)
