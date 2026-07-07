@@ -8,6 +8,9 @@
 #                                        #   here reach the db on any
 #                                        #   sync/rebuild/health reconcile
 #     sync_policy: live                  # live | manual | frozen (default: manual)
+#     translations: true                 # ALSO ingest parallel translations
+#                                        #   (perseus-eng*) as aligned documents
+#                                        #   (P7-4; default false — original-only)
 #
 # Registered sources follow. `enabled: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
@@ -16,6 +19,15 @@ perseus-greek:
   adapter: Nabu::Adapters::Perseus
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
+  # P7-4, owner-approved strategic review: ingest the English editions already
+  # in the cloned repo as aligned parallel documents (highest perseus-eng<n>
+  # per work, language eng, CC BY-SA unchanged). Recovery: parse-only resync.
+  translations: true
+
+perseus-latin:
+  adapter: Nabu::Adapters::PerseusLatin
+  enabled: false  # awaiting owner-initiated first sync (multi-GB clone of canonical-latinLit); flip after sign-off (P7-3)
+  sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek

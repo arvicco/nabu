@@ -21,7 +21,7 @@ class StatusReportTest < Minitest::Test
 
   def test_empty_registry_says_so
     registry = load_registry("# nothing\n")
-    assert_equal "No sources registered.", Nabu::StatusReport.render(registry: registry, db: nil)
+    assert_equal "No sources registered.", Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
   end
 
   def test_registry_without_db_notes_missing_database
@@ -32,7 +32,7 @@ class StatusReportTest < Minitest::Test
         sync_policy: live
     YAML
 
-    out = Nabu::StatusReport.render(registry: registry, db: nil)
+    out = Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
     assert_match(/fake-src/, out)
     assert_match(/enabled/, out)
     assert_match(/live/, out)
@@ -41,6 +41,7 @@ class StatusReportTest < Minitest::Test
 
   def test_seeded_db_reports_counts_and_last_run
     db = store_test_db
+    ledger = ledger_test_db
     registry = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
@@ -53,11 +54,11 @@ class StatusReportTest < Minitest::Test
     source = registry["fake-src"].sync_source!(db)
     Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
     Nabu::Store::Run.create(
-      source_id: source.id, started_at: Time.now - 60, finished_at: Time.now,
+      source_slug: source.slug, kind: "sync", started_at: Time.now - 60, finished_at: Time.now,
       status: "succeeded", added: 1, updated: 0, withdrawn_count: 0, errored: 0
     )
 
-    out = Nabu::StatusReport.render(registry: registry, db: db)
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     lines = out.lines.map(&:chomp)
 
     fake = lines.grep(/fake-src/).first
@@ -84,7 +85,7 @@ class StatusReportTest < Minitest::Test
     # Re-load an empty batch: the document (and its passages) get withdrawn.
     loader.load([])
 
-    out = Nabu::StatusReport.render(registry: registry, db: db)
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
     assert_match(/docs=0 passages=0/, out)
   end
 
@@ -100,8 +101,22 @@ class StatusReportTest < Minitest::Test
     Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
     Nabu::Store::Document.first(urn: "urn:nabu:fake:doc1").update(retired_upstream: true)
 
-    out = Nabu::StatusReport.render(registry: registry, db: db)
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
     assert_match(/docs=1 passages=2 retired=1/, out)
+  end
+
+  # P7-1: a catalog without a ledger (fresh machine mid-bootstrap, or a
+  # rebuild-only setup that never synced) reports "no run history" honestly.
+  def test_missing_ledger_reports_no_run_history
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+    YAML
+    registry["fake-src"].sync_source!(db)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: nil)
+    assert_match(/no run history/, out)
   end
 
   private

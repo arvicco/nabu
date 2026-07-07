@@ -513,3 +513,165 @@ Acceptance: rule-table unit tests per language incl. final-sigma and the
       new way; architecture §3 updated (stopgap note removed); suite +
       lint green; worklog notes the rebuild + golden replay results.
 
+
+---
+
+## Phase 7 — Collection durability & the readable corpus (branch: phase-7; elaborated 2026-07-07)
+
+*Owner direction (2026-07-07): integrate better research capabilities,
+archiving/protection, and an MCP server as the next phases. Mapping: Phase 7
+delivers protection (the concept's own backup promise, still unmet) plus the
+research foundations that need NO new keys/APIs (corpus expansion, lemma
+search, ranges, parallel translations — all local or already-cloned data);
+Phase 8 delivers the research surface (MCP first) with the API/hardware
+decisions gated to the owner at the Phase 7 gate. The only bulk fetch in
+Phase 7 is the first latinLit sync (owner-initiated at the gate); P7-4's
+English editions are already on disk in the cloned Perseus repos.*
+
+## P7-1 · Durable history: split what rebuild must never destroy  [tier: fable] [status: done] [deps: —]
+Goal: runtime history currently dies with the derived catalog — watched live
+      at the P6-4 reload: runs (health trends), license baselines, per-repo
+      pins, and the provenance journal all reset, because they live in the
+      db that rebuild drops. Design the storage split (fable decision):
+      catalog.sqlite3 stays a pure derivation of canonical/; precious
+      history moves to a non-derived ledger db (e.g. db/history.sqlite3)
+      that rebuild NEVER touches. Fixed constraints: runs, license
+      baselines, and source_repos pins MUST survive rebuild; a fresh
+      machine with no ledger bootstraps cleanly (empty ledger, everything
+      works); migrations forward-only per db. The open design question
+      (decide deliberately, document): revision provenance — its rows key
+      on passage/document ids that a rebuild re-mints, so either (a) an
+      urn-keyed append-only revisions ledger survives rebuilds, or (b)
+      provenance stays derived and resets, documented honestly. Weigh
+      P8's enrichments (expensive API output — their journal MUST be
+      durable; design the ledger so enrichment replay can live there).
+Acceptance: seed runs/baselines/pins → rebuild → still present (test);
+      health trends read the ledger; status unaffected; fresh-bootstrap
+      test; architecture §1/§2/§5/§8 updated truthfully (the invariant
+      statement gains the ledger clause); suite + lint green.
+
+## P7-2 · Backup & the restore drill  [tier: opus] [status: done] [deps: P7-1]
+Goal: the concept promises "restorable from an rsync backup with zero
+      services" — make it true. `bin/nabu backup` — file-level snapshot
+      (rsync -a --delete via Nabu::Shell) of canonical/ (the attic rides
+      along — NOTE: per-slug git mirrors would MISS .attic/, which is
+      exactly the data that exists nowhere else; file-level or nothing),
+      db/history ledger, config/, and (default-on, flag-off) the derived
+      dbs, to a config-driven target (config/nabu.yml `backup: target:` —
+      the OWNER wires the real destination). OWNER DECISION 2026-07-07:
+      target is a locally mounted external volume; a virtual volume
+      (hdiutil sparsebundle mounted under /Volumes) simulates it until
+      real hardware is wired. Because the target is a mount point, the
+      backup MUST refuse to run when the volume is not actually mounted
+      (verify the path is a real mount point, not an empty directory on
+      the boot disk — the classic rsync-into-the-mountpoint footgun that
+      silently "backs up" to the wrong disk and later shadows the real
+      volume). `--dry-run` prints the rsync plan.
+      docs/ops.md gains the backup section + an optional launchd template;
+      restore procedure documented step-by-step. `rake ops:drill` — the
+      fresh-machine drill, LOCAL: back up to a tmp target, "restore" into
+      a tmp root, rebuild from restored canonical, run verify + the golden
+      replay, report — proving the concept's fresh-machine criterion
+      without touching the live setup. Orchestrator runs the drill at
+      acceptance.
+Acceptance: backup to a tmp target in tests (attic + ledger + config
+      present, exclusions honored); dry-run changes nothing; drill task
+      green end-to-end locally; ops.md complete; suite + lint green.
+
+## P7-3 · Perseus Latin  [tier: opus] [status: done] [deps: —]
+Goal: the designed one-line sibling — `PerseusLatin < Perseus` with
+      NAMESPACE latinLit (manifest perseus-latin already defined in
+      MANIFESTS), registry entry `enabled: false`, conformance + adapter
+      tests against the existing latinLit fixture (stoa0045, fetched at
+      P2-1). Extend the fixture set from the already-cloned repo only if
+      a test genuinely needs it (no network).
+      The first real sync (multi-GB clone) is OWNER-INITIATED at the gate
+      per CLAUDE.md; the packet ships everything up to that.
+Acceptance: conformance green for the new adapter; registry + docs
+      (02-sources status row: READY, awaiting first sync); manifest
+      updated; suite + lint green.
+
+## P7-4 · Parallel translations: the readable corpus  [tier: fable] [status: done] [deps: —]
+Goal: Perseus ships English editions IN THE REPOS WE ALREADY CLONED —
+      the language gate drops them (`perseus-eng*`). Ingest them as
+      aligned parallel documents: same work, own edition urn, language
+      "eng" — CTS citation makes passage-level alignment free
+      (…perseus-grc2:1.1 ↔ …perseus-eng4:1.1). Fable decisions: opt-in
+      mechanism (per-source registry flag, e.g. `translations: true`, so
+      corpora stay original-only by default); edition selection (highest
+      eng version, mirroring the grc rule); alignment surface —
+      `nabu show <urn> --parallel [lang]` renders original and
+      translation line-by-line by citation suffix across editions of the
+      same work (unmatched suffixes shown honestly one-sided); search
+      includes eng passages (lang filter separates; per-language folding:
+      generic). License unchanged (CC BY-SA). FROZEN-URN: new documents
+      only — existing docs byte-identical (verify read-only, the
+      standing standard). Recovery is a parse-only resync (files on
+      disk, zero network) run by the orchestrator.
+Acceptance: eng editions discovered/parsed only when the flag is on;
+      alignment fixture (trim an eng sibling of an existing grc fixture
+      from local canonical — e.g. the Odyssey's) renders side-by-side in
+      show --parallel; one golden parallel query; conformance green;
+      help show/search updated; suite + lint green.
+
+## P7-5 · Lemma search: exploit the gold treebanks  [tier: fable] [status: done] [deps: —]
+Goal: ~161k passages (UD, PROIEL, TOROT) carry gold lemmas + morphology
+      in annotations_json — dead weight to search today. Design the lemma
+      index (fable — first index of its kind): lemma→passage table in
+      fulltext.sqlite3 (derived-of-derived, rebuilt by the Indexer from
+      annotations), lemma matching folded consistently with the
+      per-language rules (a lemma is a dictionary form; query folds the
+      same way). `bin/nabu search --lemma <form> [--lang]` — every
+      inflected attestation, hits annotated with the surface form that
+      matched. `help search` teaches it with real examples (e.g. --lemma
+      λέγω across PROIEL). Non-treebank passages simply have no lemma
+      rows (honest absence); the future P8 MCP tool reuses this path.
+Acceptance: index builds from the fixture corpus; --lemma finds
+      inflected forms across all three treebank families' fixtures;
+      folding consistency tested (accented/unaccented lemma queries);
+      plain search unaffected; help + goldens extended; suite+lint green.
+
+## P7-6 · show ranges  [tier: opus] [status: done] [deps: P7-4]
+Goal: the concept's own syntax — `nabu show urn:…:1.1-1.10`. A range is
+      an inclusive, sequence-ordered slice of one document between two
+      resolved citation suffixes (endpoints must both exist; clear error
+      otherwise). Composes with --parallel (dep P7-4) and --full-urn.
+      Keep semantics simple and documented: the slice is by stored
+      sequence between the endpoints, whatever citation shapes lie
+      between (papyri blocks included).
+Acceptance: ranges over CTS (1.1-1.10) and papyri (:1-:b2:2) fixtures;
+      endpoint errors; parallel+range composition; help show updated;
+      suite + lint green.
+
+---
+
+## Phase 8 — Research surface (outline; elaborated at the Phase 7 gate)
+
+P8-1 · MCP tool contract [fable]: read-only stdio server surface —
+      nabu_search / nabu_show / nabu_lemma_search / nabu_status. The
+      contract IS the packet: bounded outputs (snippet-first, honest
+      "N matches, showing k"), license_class + attribution + urn on every
+      passage returned, research_private/restricted default-EXCLUDED
+      (future ad-hoc material never leaks into a conversational surface),
+      negative results carry corpus-coverage notes (nabu_status data), a
+      mid-reindex query degrades gracefully ("index rebuilding — retry").
+      DECIDED (owner, 2026-07-07): hand-rolled stdio JSON-RPC, no gem —
+      the field moves fast and we keep control of the surface; the
+      protocol core (initialize / tools/list / tools/call over
+      newline-delimited JSON-RPC 2.0 on stdio) is small and ours.
+P8-2 · MCP implementation [opus]: `bin/nabu mcp` (stdio), registration
+      docs (.mcp.json / Claude Code + Desktop), stdio-harness tests, ops
+      note. This is also the dress rehearsal for the concept's read-only
+      nabu.ac endpoint.
+P8-3 · Concordance [opus]: `nabu concord <query>` — KWIC lines (aligned
+      keyword-in-context) over FTS hits, --lemma composition once P7-5
+      exists; exposed as an MCP tool once stable.
+P8-4 · Semantic search [GATED — owner decisions: embedding model +
+      hardware (local on the DGX Sparks per the concept vs API), the
+      sqlite-vec gem, embed-scope (literary corpora first ~640k passages,
+      papyri long tail later)]. vectors.sqlite3 per architecture §5;
+      enrichment journal durability comes from P7-1's ledger.
+P8-5 · Lazy glossing [GATED — owner API key]: gloss at the point of
+      reading (MCP/show-driven), cached in enrichments with provenance,
+      never batch; parallel translations (P7-4) reduce its surface to
+      works with no human translation.

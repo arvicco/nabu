@@ -37,9 +37,15 @@
 #   reason:      required when refetchable: false — why it cannot be re-GET.
 #
 source: perseus
-# adapter_test is null since P6-1: the Iliad edition below is a documented TRIM
+# This dir backs BOTH Perseus adapters: the greekLit files exercise
+# perseus_test.rb and the latinLit files (stoa0045, below) exercise
+# perseus_latin_test.rb (P7-3). adapter_test names a SINGLE file to re-run and
+# stays null since P6-1: the Iliad edition below is a documented TRIM
 # (whole: false), and a count-based adapter test re-run against the full
-# upstream file would false-fail (see the schema note above).
+# upstream file would false-fail (see the schema note above). That directory-
+# level trim forces null regardless of the PerseusLatin twin — the latinLit
+# files are all whole:true, but `check` re-runs at most one test per dir and the
+# greek trim already disqualifies it.
 adapter_test: null
 retrieved: 2026-07-03
 files:
@@ -72,6 +78,13 @@ files:
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/tlg0013.tlg013.perseus-grc2.xml
     whole: true
     trim: none (Homeric Hymn 13, small edition kept whole)
+  - path: greekLit/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml
+    whole: true
+    trim: >-
+      none (Homeric Hymn 13 English translation, kept whole; copied from the
+      local canonical snapshot, P7-4 — one merged eng line covering the grc
+      edition's three, exercising one-sided alignment)
   - path: greekLit/data/tlg0013/tlg014/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg014/__cts__.xml
     whole: true
@@ -92,6 +105,13 @@ files:
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/tlg0031.tlg024.perseus-grc2.xml
     whole: true
     trim: none (New Testament, 2 John — two-level citation, kept whole)
+  - path: greekLit/data/tlg0031/tlg024/tlg0031.tlg024.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/tlg0031.tlg024.perseus-eng2.xml
+    whole: true
+    trim: >-
+      none (2 John English translation, kept whole; copied from the local
+      canonical snapshot, P7-4 — verse-for-verse aligned with the grc edition,
+      13 verses each, exercising full citation-suffix pairing)
   - path: latinLit/data/stoa0045/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/__cts__.xml
     whole: true

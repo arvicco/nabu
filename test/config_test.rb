@@ -91,7 +91,87 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P7-1: the history ledger rides in the same (config-driven) db dir.
+  def test_history_path_is_under_db_dir
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "db", "history.sqlite3"), config.history_path
+    end
+  end
+
+  # P7-2: the backup target is optional and has no default (nil until wired).
+  def test_backup_target_absent_by_default
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_nil config.backup_target
+    end
+  end
+
+  def test_backup_target_relative_resolves_against_root
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        backup:
+          target: backups/here
+      YAML
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "backups", "here"), config.backup_target
+    end
+  end
+
+  def test_backup_target_absolute_used_verbatim
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        backup:
+          target: /Volumes/NabuBackup/nabu
+      YAML
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal "/Volumes/NabuBackup/nabu", config.backup_target
+    end
+  end
+
+  # P7-2: config/ is the backup set's config section; config_dir follows the
+  # config file's own location (so a restored/relocated tree is honest).
+  def test_config_dir_is_the_config_files_directory
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config"), config.config_dir
+    end
+  end
+
+  # P7-2 fresh-machine plumbing: NABU_CONFIG / NABU_ROOT drive the defaults so a
+  # restored install needs no code edit. Explicit kwargs still win.
+  def test_env_overrides_config_path_and_root
+    Dir.mktmpdir do |root|
+      path = write_config(root, "paths:\n  canonical: corpus\n")
+      with_env("NABU_CONFIG" => path, "NABU_ROOT" => root) do
+        config = Nabu::Config.load
+        assert_equal path, config.config_path
+        assert_equal File.join(root, "corpus"), config.canonical_dir
+      end
+    end
+  end
+
+  def test_explicit_args_win_over_env
+    Dir.mktmpdir do |root|
+      other = File.join(root, "elsewhere", "nabu.yml")
+      with_env("NABU_CONFIG" => "/nope/nabu.yml", "NABU_ROOT" => "/nope") do
+        config = Nabu::Config.load(path: other, root: root)
+        assert_equal other, config.config_path
+        assert_equal File.join(root, "canonical"), config.canonical_dir
+      end
+    end
+  end
+
   private
+
+  def with_env(vars)
+    saved = vars.transform_values { |_| :__unset__ }
+    vars.each_key { |key| saved[key] = ENV.key?(key) ? ENV[key] : :__unset__ }
+    vars.each { |key, value| ENV[key] = value }
+    yield
+  ensure
+    saved.each { |key, value| value == :__unset__ ? ENV.delete(key) : ENV[key] = value }
+  end
 
   def write_config(root, contents)
     dir = File.join(root, "config")

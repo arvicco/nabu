@@ -15,22 +15,28 @@ field notes (Unicode/NFC, citation systems, editions, licensing) that explain
 ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
-catalog store, idempotent loader, rebuild) and **six source adapters** exist
-across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML, DDbDP
-Leiden): **all six sources live** — Perseus (the Iliad included), First1KGreek,
-Universal Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info
-DDbDP (61k documents, restart-aware line URNs, cancelled texts kept in ⟦⟧) —
-totalling **~1.6 million searchable passages**.
-**The collection is protected**: upstream deletions land in a local attic
-and those documents stay searchable, labeled "retired upstream" — nothing
-the corpus once held can be destroyed by upstream removals, license
-reversals, or a rebuild. **The full CLI surface is real** — sync, status,
-rebuild, search (diacritic-insensitive, with per-language search forms:
-Greek final-sigma, Latin v/u–j/i — see `docs/conventions.md` §9), show,
-export, verify, and health (local anomaly trends plus a no-clone upstream
-probe with per-repo drift pins); fixture drift is checked by
-`rake fixtures:check`, and `docs/ops.md` ships launchd templates for the
-nightly/weekly maintenance cadence.
+catalog store, idempotent loader, rebuild) and **seven source adapters**
+exist across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
+DDbDP Leiden): **six sources live** — Perseus Greek (the Iliad included,
+**with 650 aligned English translations**: `show <urn> --parallel`),
+First1KGreek, Universal Dependencies ancient treebanks, PROIEL, TOROT, and
+Papyri.info DDbDP (61k documents, restart-aware line URNs, cancelled texts
+kept in ⟦⟧) — totalling **~1.7 million searchable passages**; Perseus Latin
+is shipped and awaits its first sync.
+**The collection is protected end to end**: upstream deletions land in a
+local attic and stay searchable ("retired upstream"); run history, license
+baselines, and revision records live in a ledger no rebuild can wipe; and
+`nabu backup` snapshots everything to a mounted external volume — with a
+restore drill (`rake ops:drill`) that has actually passed against the full
+corpus: backup → fresh-root restore → rebuild → verify → RESTORABLE.
+**The research surface is growing**: search is diacritic-insensitive with
+per-language search forms (Greek final-sigma, Latin v/u–j/i — conventions
+§9) and now **lemma-aware** — `search --lemma λέγω` finds every inflected
+attestation (εἶπον, ῥηθέντος, …) across the 161k gold-annotated treebank
+passages; `show` renders passages, documents, **citation ranges**
+(`urn:…:1.1-1.10`), and parallel translations. Health (local trends +
+no-clone upstream probe), fixture drift checks, and launchd ops templates
+round out the custodial surface.
 
 ## Requirements
 
@@ -51,19 +57,23 @@ nightly/weekly maintenance cadence.
 | `… --parse-only` | Re-parse the existing local snapshot without touching the network (after parser fixes) |
 | `… --force` | Override the safety breaker that aborts any sync which would withdraw >20% of a source's documents (upstream restructures look like mass deletions) |
 | `bin/nabu search QUERY [--lang X] [--license CLASS] [--limit N]` | Full-text search over the corpus (FTS5, bm25-ranked). Diacritic-insensitive: `μηνιν` finds `μῆνιν`. Prints urn, language, highlighted snippet per hit. |
-| `bin/nabu show URN` | Inspect a passage (text, document, license, revision, full provenance trail) or a whole document (passages listed as `:suffixes` relative to the document urn; `--full-urn` for absolutes). Withdrawn and retired items shown, honestly labeled. |
+| `bin/nabu search --lemma FORM [--lang X]` | Dictionary-form search over the gold treebank annotations (~161k passages, 1.6M lemma rows): `--lemma λέγω` finds εἶπον, ῥηθέντος and the rest of the paradigm, showing the matched surface forms per hit. |
+| `bin/nabu show URN` | Inspect a passage (text, document, license, revision, full provenance trail), a whole document (passages as `:suffixes`; `--full-urn` for absolutes), or a citation range (`urn:…:1.1-1.10`, inclusive, cross-block). Withdrawn and retired items shown, honestly labeled. |
+| `bin/nabu show URN --parallel [LANG]` | Render a passage/document/range aligned with its translation edition of the same work (default eng), paired by citation; unmatched lines shown honestly one-sided. |
 | `bin/nabu export --format plain\|jsonl [--lang X] [--license CLASS]` | Stream the live corpus to stdout — the longevity-hedge exit formats (CoNLL-U arrives with the enrichment phase) |
 | `bin/nabu verify` | Re-parse every canonical file (attic included) and compare content hashes against the catalog — the cronnable bitrot/tamper check. Exit 0 clean, 1 on any mismatch. |
 | `bin/nabu health` | Local anomaly report, no network: per-source run-history trends (quarantine spikes, added-collapse, withdrawal/retirement creep, staleness) plus a replay of the golden queries against the live corpus. Exit 1 on any loud finding. |
 | `bin/nabu health --remote` | No-clone upstream probe: `ls-remote` liveness, remote-HEAD-vs-last-sync drift, and best-effort license-file change detection per source. Exit 1 only if an upstream is gone. |
 | `rake fixtures:check[source]` | Re-fetch pinned fixture URLs into tmp, byte-diff against the checked-in fixtures, and run the adapter tests against the fresh copies — the upstream-format drift report. Never overwrites; `fixtures:refresh[source]` is the explicit adoption path. |
+| `bin/nabu backup [--dry-run] [--skip-derived]` | File-level rsync of everything not re-derivable (canonical + attic, the history ledger, config; derived dbs by default) to the configured external volume. Refuses to run when the volume is not mounted. |
+| `rake ops:drill` | The fresh-machine restore drill: backup → restore into a tmp root → rebuild → verify → golden replay → counts cross-check. Exit 0 = RESTORABLE. |
 
 Every query command carries worked examples and syntax notes inline:
 `bin/nabu help search` (FTS5 syntax, filters), `help show` (urn shapes
-across all six corpora), `help export` (formats, jq recipes).
+across the corpora, ranges, --parallel), `help export` (formats, jq recipes).
 
 Configuration lives in `config/nabu.yml` (paths; commented example shipped)
-and `config/sources.yml` (the six-source registry: adapter class, enabled
+and `config/sources.yml` (the source registry: adapter class, enabled
 flag, sync policy — with per-source sign-off notes). `docs/ops.md` documents
 the maintenance cadence (nightly verify, weekly sync + health) with
 ready-to-install launchd templates under `ops/launchd/` — nothing runs
@@ -77,8 +87,8 @@ unless you install it.
 - **Adapter contract** — one small base class (`fetch` / `discover` / `parse` /
   `manifest`); every future adapter must pass a shared conformance suite
   (URN uniqueness across the corpus, URN stability across parses, NFC output).
-- **Four parser families, six adapters** — all streaming, all tested against
-  real upstream fixtures: EpiDoc/CTS (Perseus, First1KGreek), CoNLL-U
+- **Four parser families, seven adapters** — all streaming, all tested against
+  real upstream fixtures: EpiDoc/CTS (Perseus Greek + Latin, First1KGreek), CoNLL-U
   (Universal Dependencies treebanks: Gothic, Ancient Greek, Vedic Sanskrit,
   Latin — lemmas and morphology preserved in annotations), PROIEL XML
   (PROIEL, TOROT — Old Church Slavonic and Old Russian), and DDbDP

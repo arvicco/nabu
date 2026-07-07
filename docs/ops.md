@@ -18,6 +18,7 @@ built `db/`.
 
 | Frequency | Command | What it guards against | Job |
 |---|---|---|---|
+| Nightly | `nabu backup` | local disk loss — the attic protects against *upstream* deletion, not a dead SSD (§9) | `com.nabu.backup-nightly` |
 | Nightly | `nabu verify` | bitrot / tamper — canonical files silently changing under the catalog | `com.nabu.verify-nightly` |
 | Weekly | `nabu sync --all` → `nabu health` → `nabu health --remote` | upstream drift, quarantine spikes, dead/moved/relicensed upstreams | `com.nabu.weekly-maintenance` |
 | Monthly *(optional)* | `rake fixtures:check` | upstream **format** drift the fixtures no longer match | `com.nabu.fixtures-monthly` |
@@ -42,6 +43,11 @@ What each command does and its exit contract:
   stay exit 0.
 - **`rake fixtures:check`** — re-fetches the small fixture samples, diffs them,
   re-runs the affected adapter tests. Never overwrites. Nonzero on drift.
+- **`nabu backup`** — file-level rsync of canonical/ (attic included), the
+  history ledger, config/, and (default-on) the derived dbs to a mounted
+  external volume. Read-only on canonical/. **Exit 1** if the target volume is
+  not mounted (the mount-point guard, §9) or any rsync section fails. Full
+  detail — the external-volume workflow, the guard, restore, the drill — is §9.
 
 ### What is NOT automated (on purpose)
 
@@ -192,6 +198,7 @@ The templates ship with sensible, adjustable times:
 
 | Job | Default schedule | Key |
 |---|---|---|
+| `com.nabu.backup-nightly` | daily 02:30 | `StartCalendarInterval` `Hour`/`Minute` |
 | `com.nabu.verify-nightly` | daily 03:15 | `StartCalendarInterval` `Hour`/`Minute` |
 | `com.nabu.weekly-maintenance` | Sundays 04:00 | `Weekday` `0` + `Hour`/`Minute` |
 | `com.nabu.fixtures-monthly` | 1st of month 05:00 | `Day` `1` + `Hour`/`Minute` |
@@ -214,6 +221,7 @@ Notes:
 Each job redirects stdout and stderr to the repo's **gitignored** `log/` dir:
 
 ```
+log/backup-nightly.out.log        log/backup-nightly.err.log
 log/verify-nightly.out.log        log/verify-nightly.err.log
 log/weekly-maintenance.out.log    log/weekly-maintenance.err.log
 log/fixtures-monthly.out.log      log/fixtures-monthly.err.log
@@ -334,11 +342,13 @@ secrets (topic URLs, tokens), and don't belong in a committed template.
 
 ```sh
 # Run the cadence by hand (no launchd needed):
+bundle exec bin/nabu backup                                   # nightly (§9)
 bundle exec bin/nabu verify                                   # nightly
 bundle exec bin/nabu sync --all && \
   bundle exec bin/nabu health && \
   bundle exec bin/nabu health --remote                        # weekly
 bundle exec rake fixtures:check                               # monthly (optional)
+bundle exec rake ops:drill                                    # restore drill (§9)
 
 # Install / test-fire / remove a job (repeat per label):
 sed -e "s#__NABU_ROOT__#$PWD#g" \
@@ -350,3 +360,205 @@ launchctl kickstart -k "gui/$(id -u)/com.nabu.verify-nightly"   # fire now
 launchctl print "gui/$(id -u)/com.nabu.verify-nightly"          # inspect
 launchctl bootout "gui/$(id -u)/com.nabu.verify-nightly"        # uninstall
 ```
+
+---
+
+## 9. Backup & the restore drill (P7-2)
+
+The attic (architecture §8) protects the corpus against *upstream* deletion.
+It does **nothing** for *local* disk loss — a dead SSD takes canonical/, the
+history ledger, and the derived dbs with it. `nabu backup` is the answer the
+concept always promised: **"restorable from an rsync backup with zero
+services."** File-level, no database dump, no daemon — just files on another
+disk that a bare `rsync` (or Finder drag) could restore.
+
+### What gets backed up (the non-derivable set)
+
+| Section | Source | Why it is in the set |
+|---|---|---|
+| `canonical/` | the corpus tree | The permanent asset — **including every `.attic/`** |
+| `db/history.sqlite3` | the ledger (P7-1) | Run history, sync pins, license baselines, durable revisions — the **only** copy |
+| `config/` | nabu.yml + sources.yml | The registry that defines what the corpus *is* |
+| `db/catalog.sqlite3`, `db/fulltext.sqlite3` | the derived dbs | **Default-on** — a file copy beats an hour of rebuild; `--skip-derived` omits them |
+
+**Why file-level, not git mirrors.** The obvious "back up canonical/ by pushing
+each slug's git to a bare mirror" silently drops the `.attic/` — it is a plain
+directory inside the working tree, not a branch or a tracked path, and it holds
+the documents that exist **nowhere else** (upstream scrapped them; the clone is
+`--depth 1`). File-level rsync copies the attic for free. So: file-level, or the
+backup is a lie.
+
+The derived dbs are cheap insurance. Restoring them means the corpus is queryable
+the instant the rsync finishes; omit them with `--skip-derived` and a single
+`nabu rebuild` reconstitutes them from canonical/ byte-for-byte.
+
+### The target: a mounted external volume
+
+The destination is a path **under a mounted external volume**, wired in
+`config/nabu.yml`:
+
+```yaml
+backup:
+  target: /Volumes/NabuBackup/nabu
+```
+
+`--to PATH` overrides it per-run. The owner points this at the real backup disk;
+swapping to different hardware later is **just this one line** — no code change.
+
+Until the real disk is wired, a **virtual volume** simulates it exactly (same
+`/Volumes` mount-point semantics, so the guard and the workflow are identical):
+
+```sh
+# Create a 20 GB APFS sparsebundle (grows as needed; adjust -size to taste).
+hdiutil create -size 20g -type SPARSEBUNDLE -fs APFS \
+  -volname NabuBackup "$HOME/NabuBackup.sparsebundle"
+
+# Attach it — mounts at /Volumes/NabuBackup.
+hdiutil attach "$HOME/NabuBackup.sparsebundle"
+
+# Detach when done (or before ejecting/unplugging the real disk later).
+hdiutil detach /Volumes/NabuBackup
+```
+
+With the volume attached, `backup: target: /Volumes/NabuBackup/nabu` and a plain
+`nabu backup` works. When real hardware arrives, `hdiutil detach`, plug in the
+disk (it mounts under `/Volumes/<name>`), and change the one config line.
+
+### The mount-point guard (why an unmounted target is refused)
+
+This is the difference between a backup and a silent disaster. If the volume is
+**not** mounted, `/Volumes/NabuBackup` is either absent or — worse — a bare empty
+directory sitting on the **boot disk**. An unguarded `rsync` would happily write
+the entire corpus there, reporting success, filling your boot disk; and then when
+the real volume *does* mount, its mountpoint is **shadowed** by that stale
+directory. You discover the problem when you need the backup and it isn't there.
+
+So before any rsync, `nabu backup` verifies the target lives on a **real mount
+point**: it ascends from the target to its volume root and checks that the
+volume root's device id differs from its parent's (a genuine mount boundary). A
+target on the boot disk ascends all the way to `/` with no device change — its
+"volume root" is `/`, which is refused:
+
+```
+$ nabu backup                 # volume detached
+backup: volume not mounted — refusing to back up onto the boot disk.
+The target /Volumes/NabuBackup/nabu is not on a mounted external volume. …
+(exit 1)
+```
+
+`--allow-unmounted` bypasses the guard for a **deliberately** local target (the
+drill uses it; a same-disk scratch copy might too). Never pass it to the nightly
+job — a failed nightly backup because the disk is detached is a *feature*: it
+shows up red in the log instead of quietly corrupting your only copy.
+
+`rsync -a --delete` is scoped to each section's **subdirectory** of the target
+(`…/nabu/canonical`, `…/nabu/config`, `…/nabu/db`), never to the volume root —
+so a file sitting beside the target is never swept, and even with the guard
+bypassed the blast radius is contained.
+
+### Usage
+
+```sh
+nabu backup                       # to the configured volume (guarded)
+nabu backup --to /Volumes/X/nabu  # explicit target
+nabu backup --dry-run             # print the rsync plan, change nothing
+nabu backup --skip-derived        # canonical + ledger + config only
+```
+
+Each run prints one line per section (files, size, duration) and a summary; any
+section's failure makes the whole run exit 1 with an honest per-section report.
+
+### Restore procedure (fresh machine, step by step)
+
+The promise is a machine with *nothing* but a clone and the backup disk:
+
+1. **Clone the repo and install deps** (this brings the code, the migrations,
+   and the *committed* config — but not your data):
+   ```sh
+   git clone <nabu-repo-url> nabu && cd nabu
+   bundle install
+   ```
+2. **Attach the backup volume** (`hdiutil attach …` for the sparsebundle, or
+   just plug in the real disk).
+3. **rsync the data back** from the backup into the checkout:
+   ```sh
+   rsync -a /Volumes/NabuBackup/nabu/canonical/  ./canonical/
+   rsync -a /Volumes/NabuBackup/nabu/db/         ./db/
+   rsync -a /Volumes/NabuBackup/nabu/config/     ./config/
+   ```
+   (Restoring *into a different root*? Point nabu at it without editing code:
+   `export NABU_ROOT=/restored NABU_CONFIG=/restored/config/nabu.yml` and run
+   the commands below from anywhere — `Config.load` honours both.)
+4. **Bring up the derived layer.** Two honest options:
+   - **Trust the restored derived dbs** (fastest — they came along by default):
+     do nothing; `nabu status` / `nabu search` work immediately.
+   - **Rebuild from canonical** (the belt-and-suspenders proof, and mandatory if
+     you restored with `--skip-derived`):
+     ```sh
+     bundle exec bin/nabu rebuild
+     ```
+     Rebuild drops and re-derives catalog + fulltext from canonical/ alone; the
+     ledger (history.sqlite3) is *never* touched, so run history/pins/baselines
+     survive.
+5. **Verify integrity:**
+   ```sh
+   bundle exec bin/nabu verify     # re-hash canonical against the catalog → exit 0 clean
+   bundle exec bin/nabu health     # trends + golden-query replay against the live corpus
+   ```
+
+That is the whole fresh-machine path: clone, install, rsync, (rebuild), verify.
+No services, no database server, no cloud.
+
+### The restore drill — prove it without waiting for a disaster
+
+`rake ops:drill` runs that entire chain **locally, against a throwaway copy**, so
+you never find out at 3 a.m. that the backup wasn't restorable:
+
+```sh
+bundle exec rake ops:drill
+```
+
+It backs up the live tree to a tmp target (`--allow-unmounted`, because the tmp
+target is same-disk on purpose), **restores** into a fresh tmp "machine",
+**rebuilds** the derived db from the restored canonical/ alone, **verifies**,
+**replays** the golden queries, and cross-checks the restored document/passage
+counts against the source of truth (the live catalog). It only **reads** the
+live corpus — backup is read-only on its sources — and writes exclusively under
+a tmp workspace, so it is safe to run against the live install any time. Output:
+
+```
+Restore drill
+  backup     → /…/target  (5/5 sections, 61347 files, OK)
+  restore    → /…/machine
+  rebuild    quarantined 0 document(s)
+  verify     clean
+  golden     6 found, 0 lost, 0 skipped
+  counts     source=61347 docs / 920766 passages  restored=61347 docs / 920766 passages  MATCH
+  => RESTORABLE
+```
+
+A non-zero exit (`NOT RESTORABLE`) means the backup would not restore cleanly —
+investigate before trusting it. Run the drill after any change to the backup set,
+the loader, or the rebuild path.
+
+### The nightly backup job
+
+`ops/launchd/com.nabu.backup-nightly.plist` runs `nabu backup` nightly (02:30 by
+default, before the 03:15 verify). Install it exactly like the others (§3),
+substituting the same two placeholders:
+
+```sh
+LABEL="com.nabu.backup-nightly"
+DEST="$HOME/Library/LaunchAgents/$LABEL.plist"
+sed -e "s#__NABU_ROOT__#$NABU_ROOT#g" \
+    -e "s#__RUBY_BIN_DIR__#$RUBY_BIN_DIR#g" \
+    "$NABU_ROOT/ops/launchd/$LABEL.plist" > "$DEST"
+plutil -lint "$DEST"
+launchctl bootstrap "gui/$(id -u)" "$DEST"
+launchctl kickstart -k "gui/$(id -u)/$LABEL"        # fire once now to prove it
+```
+
+Because the guard exits 1 when the volume is detached, a nightly fire while the
+backup disk is unplugged lands as a clear failure in
+`log/backup-nightly.err.log` — exactly the signal you want. Wire an ntfy hook
+(§7) on that job if you want to be pushed the news.

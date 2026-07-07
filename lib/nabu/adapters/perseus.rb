@@ -14,6 +14,13 @@ module Nabu
     #      rule is data-driven — `#edition_slug_pattern` names which edition
     #      slugs count — so sibling corpora with other slug families (First1K's
     #      1st1K-grcN / opp-grcN) subclass and override just that one method.
+    #      With `translations: true` (P7-4, per-source registry opt-in routed
+    #      through SourceRegistry::Entry#build_adapter) the walk ALSO accepts
+    #      English translations (`#translation_slug_pattern`, perseus-eng<n>),
+    #      selected highest-version-per-work independently of the original, as
+    #      ordinary documents: language "eng", their own edition urns — the
+    #      shared CTS citation scheme is what makes passage-level alignment
+    #      (…perseus-grc2:1.1 ↔ …perseus-eng4:1.1) free downstream.
     #   2. Metadata resolution — titles/urns from the work-level __cts__.xml
     #      (CTS namespace), which the streaming parser never reads.
     #   3. fetch — a git clone/pull of the vendored upstream snapshot.
@@ -47,8 +54,20 @@ module Nabu
       NAMESPACE = "greekLit"
 
       # Original-language edition slug per CTS namespace. Translations
-      # (perseus-eng*) are skipped; only these are ingested.
+      # (perseus-eng*) are skipped unless the adapter was built with
+      # `translations: true`.
       LANGUAGES = { "greekLit" => "grc", "latinLit" => "lat" }.freeze
+
+      # The language tag translation passages carry (BCP-47). English only:
+      # that is what PerseusDL ships at scale (786 perseus-eng files in
+      # canonical-greekLit; the scattered fre/ger files belong to other slug
+      # families and stay out). Folding for eng is the generic rule (P6-4).
+      TRANSLATION_LANGUAGE = "eng"
+
+      # Translation bodies live in div[@type="translation"] (785 of 786
+      # upstream eng files); the lone edition-typed outlier is accepted by the
+      # fallback. Ordered: the shape actually shipped first.
+      TRANSLATION_DIVISION_TYPES = %w[translation edition].freeze
 
       # Static manifests per namespace (architecture §5). CC BY-SA 4.0 →
       # license_class "attribution".
@@ -79,9 +98,15 @@ module Nabu
         MANIFESTS.fetch(self::NAMESPACE)
       end
 
-      def initialize(namespace: self.class::NAMESPACE)
+      # +translations+ (P7-4): when true, discover also yields the highest
+      # perseus-eng<n> edition per work and parse reads translation divs. The
+      # default (false) is provably inert — see #classify_edition. No-arg
+      # construction stays the registry contract; the flag arrives via
+      # SourceRegistry::Entry#build_adapter for opted-in sources only.
+      def initialize(namespace: self.class::NAMESPACE, translations: false)
         super()
         @namespace = namespace
+        @translations = translations
       end
 
       # Instance manifest tracks the instance's namespace (which defaults to,
@@ -101,13 +126,19 @@ module Nabu
       end
 
       # Delegate to the EpidocParser, feeding it the urn/language/title that
-      # discover resolved from the repo layout and __cts__.xml.
+      # discover resolved from the repo layout and __cts__.xml. Translation
+      # refs (language "eng") anchor on div[@type="translation"] with an
+      # edition-typed fallback; originals keep the parser's default — so a
+      # flag-off adapter never constructs a non-default parser call.
       def parse(document_ref)
+        language = document_ref.metadata["language"]
+        options = language == TRANSLATION_LANGUAGE ? { division_types: TRANSLATION_DIVISION_TYPES } : {}
         EpidocParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
-          language: document_ref.metadata["language"],
-          title: document_ref.metadata["title"]
+          language: language,
+          title: document_ref.metadata["title"],
+          **options
         )
       end
 
@@ -131,8 +162,10 @@ module Nabu
 
       private
 
-      # One discoverable edition before ref construction.
-      Candidate = Data.define(:textgroup, :work, :edition, :version, :path)
+      # One discoverable edition before ref construction. +language+ is the
+      # passage language the edition will carry: the namespace original, or
+      # TRANSLATION_LANGUAGE for an accepted translation.
+      Candidate = Data.define(:textgroup, :work, :edition, :version, :language, :path)
       private_constant :Candidate
 
       def edition_refs(workdir)
@@ -145,16 +178,18 @@ module Nabu
             path: candidate.path,
             metadata: {
               "title" => resolve_title(work_dir, fallback: urn.split(":").last),
-              "language" => LANGUAGES.fetch(@namespace)
+              "language" => candidate.language
             }
           )
         end.sort_by(&:id)
       end
 
-      # All original-language editions, reduced to the highest version per work.
+      # All accepted editions, reduced to the highest version per work AND
+      # language — the eng pick never competes with the original's (a work
+      # keeps its grc2 even when eng4 > 2, and vice versa).
       def best_editions(workdir)
         candidates(workdir)
-          .group_by { |candidate| [candidate.textgroup, candidate.work] }
+          .group_by { |candidate| [candidate.textgroup, candidate.work, candidate.language] }
           .map { |_work, group| group.max_by { |candidate| version_key(candidate.version) } }
       end
 
@@ -171,7 +206,7 @@ module Nabu
           name = File.basename(path).match(FILENAME)
           next unless name
 
-          version = edition_version(name[:edition])
+          version, language = classify_edition(name[:edition])
           next unless version
 
           Candidate.new(
@@ -179,17 +214,25 @@ module Nabu
             work: name[:work],
             edition: name[:edition],
             version: version,
+            language: language,
             path: File.expand_path(path)
           )
         end
       end
 
-      # The version token if +slug+ is an original-language edition this adapter
-      # ingests, else nil. The language gate (perseus-<lang>) is what excludes
-      # perseus-eng* translations.
-      def edition_version(slug)
+      # [version token, passage language] if +slug+ is an edition this adapter
+      # ingests, else nil. The original-language gate (perseus-<lang>) runs
+      # first and is the ONLY probe when translations are off — the flag-off
+      # filter is character-for-character the pre-P7-4 one, which is the
+      # structural half of the frozen-urn argument. The translation probe only
+      # exists behind the flag.
+      def classify_edition(slug)
         match = slug.match(edition_slug_pattern)
-        match && match[:version]
+        return [match[:version], LANGUAGES.fetch(@namespace)] if match
+        return nil unless @translations
+
+        match = slug.match(translation_slug_pattern)
+        match && [match[:version], TRANSLATION_LANGUAGE]
       end
 
       # Which edition slugs count as original-language, with a named :version
@@ -198,6 +241,15 @@ module Nabu
       def edition_slug_pattern
         lang = LANGUAGES.fetch(@namespace)
         /\Aperseus-#{lang}(?<version>\d+)\z/
+      end
+
+      # Which slugs count as ingestible translations when the flag is on:
+      # exactly perseus-eng<n> (all 786 upstream eng version tokens are pure
+      # digits; other languages and slug families stay excluded). Subclasses
+      # inherit this unchanged — the flag defaults off everywhere, so First1K
+      # and PerseusLatin behavior only shifts if a source opts in.
+      def translation_slug_pattern
+        /\Aperseus-#{TRANSLATION_LANGUAGE}(?<version>\d+)\z/
       end
 
       # Comparable key for highest-version selection: numeric part first, then

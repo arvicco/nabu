@@ -89,7 +89,7 @@ module Nabu
     # Re-parse the whole canonical dir once, then reconcile every non-withdrawn
     # catalog document of this source against the fresh parse.
     def verify_source(entry, workdir)
-      recomputed, unparseable = reparse(entry.adapter_class.new, workdir)
+      recomputed, unparseable = reparse(entry.build_adapter, workdir)
       documents = documents_for(entry.slug)
       issues = documents.filter_map { |doc| classify(doc, recomputed, unparseable) }
       SourceOutcome.new(slug: entry.slug, verified: documents.size, issues: issues)

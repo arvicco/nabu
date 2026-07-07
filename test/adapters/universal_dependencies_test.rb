@@ -145,7 +145,7 @@ class UniversalDependenciesTest < Minitest::Test
   end
 
   # P6-3: the FetchReport carries per-repo pins { repo_url => head sha } so the
-  # sync path can record one source_repos row per treebank. Keyed by the SAME
+  # sync path can record one ledger pin per treebank. Keyed by the SAME
   # repo_url the remote probe reads (here the local tmpdirs the test points at).
   def test_fetch_reports_per_repo_pins_keyed_by_repo_url
     Dir.mktmpdir do |root|

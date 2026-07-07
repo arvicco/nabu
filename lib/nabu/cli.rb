@@ -29,8 +29,11 @@ module Nabu
     def sync(slug = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
+      # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
+      # before open_or_create_catalog migrates the moved tables away.
+      ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
-      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db)
+      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
       options[:all] ? sync_all(runner) : sync_one(runner, registry, slug)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
@@ -38,6 +41,7 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       db&.disconnect
+      ledger&.disconnect
     end
 
     desc "status", "Show per-source sync status and passage counts"
@@ -45,9 +49,11 @@ module Nabu
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       db = open_catalog(config)
-      say Nabu::StatusReport.render(registry: registry, db: db)
+      ledger = open_ledger(config)
+      say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     ensure
       db&.disconnect
+      ledger&.disconnect
     end
 
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
@@ -123,6 +129,23 @@ module Nabu
                    open, attribution, nc, research_private, restricted
         --limit    maximum hits, default 20
 
+      LEMMA SEARCH (--lemma FORM): exact dictionary-form lookup over the
+      gold treebank annotations (UD, PROIEL, TOROT — the sources that carry
+      per-token lemmas). One lemma finds every inflected attestation, even
+      suppletive stems no text query can reach: --lemma λέγω hits λέγουσι,
+      λέγοιεν, AND εἶπας/εἰπεῖν. Hits show the dictionary form, the surface
+      form(s) that matched, and the pristine passage line. Diacritics are
+      optional on the query, exactly as in text search (λεγω works; so does
+      final-sigma-insensitive λόγος/λογοσ). --lemma REPLACES the text query
+      (combining both is not supported); it composes with --lang, --limit,
+      and --license. Passages outside the treebanks carry no lemma
+      annotations and are honestly absent here.
+
+      Sources ingesting parallel translations (registry `translations: true`,
+      P7-4) make those English passages ordinary search hits; --lang eng
+      scopes to them, --lang grc keeps them out. `show <hit> --parallel`
+      jumps from either side to the aligned line in the other.
+
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
         nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
@@ -130,6 +153,10 @@ module Nabu
         nabu search sapientia --lang lat           # Latin corpus only
         nabu search μηνι* --lang grc               # every derivative of the stem
         nabu search αγαπη --license attribution    # only freely re-usable hits
+        nabu search "rich-haired" --lang eng       # the ingested translations
+        nabu search --lemma λέγω --lang grc        # every attestation in the Greek
+                                                   #   treebank: λέγουσι, εἶπας, εἰπεῖν…
+        nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -139,8 +166,11 @@ module Nabu
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
+    option :lemma, type: :string, banner: "FORM",
+                   desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     def search(query = nil)
       query = query.to_s.strip
+      return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
@@ -187,17 +217,53 @@ module Nabu
         treebanks      urn:nabu:proiel:afnik:194690                     (sentence)
                        urn:nabu:ud:gothic-proiel:got_proiel-ud-dev:37589
 
+      RANGES (URN:<start>-<end>): a document urn plus two citation suffixes
+      joined by a hyphen prints an INCLUSIVE, sequence-ordered slice of that
+      one document between the endpoints — both endpoints must resolve to
+      existing passages of the same document (a clear error names whichever
+      fails; a start after its end is refused, suggesting a swap). The slice
+      is by STORED sequence, whatever citation shapes lie between: a papyri
+      restart block (:b2, an implicit column/fragment) is sliced straight
+      through. Precedence: a literal passage urn is resolved FIRST, so a urn
+      that itself contains a hyphen is never misparsed as a range; the range
+      split is on the LAST hyphen (citation suffixes never contain one, the
+      version segment perseus-grc2 does). Ranges compose with --full-urn and
+      with --parallel (the range slices the queried edition; pairing then
+      applies to the sliced rows only).
+
+      PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
+      document or passage urn, find the sibling edition of the SAME work in
+      LANG (sources ingest translations only when their registry entry sets
+      `translations: true`) and render the two aligned by citation suffix —
+      :1.1 in the Greek next to :1.1 in the English. Alignment is exact
+      suffix equality: a suffix present in only one edition renders honestly
+      one-sided (translations often merge lines), never fuzzed. Works with
+      --full-urn.
+
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10
+                                                  # Iliad 1.1–1.10, one slice
+        nabu show urn:nabu:ddbdp:aegyptus:89:240:1-b2:2
+                                                  # a papyrus slice across a restart block
         nabu show urn:nabu:ddbdp:aegyptus:89:240            # whole papyrus
         nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
+        nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-grc2 --parallel
+                                                  # Greek + eng, line by line
+        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10 --parallel
+                                                  # a slice, Greek + eng aligned
+        nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
+                                                  # one translated line + its original
 
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
-      "withdrawn" or "retired upstream" actually holds.
+      "withdrawn" or "retired upstream" actually holds; read a Greek work
+      you can't sight-read next to its English translation.
     HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
+    option :parallel, type: :string, lazy_default: "eng", banner: "[LANG]",
+                      desc: "Align with the same work's LANG edition by citation suffix (default eng)"
     def show(urn = nil)
       urn = urn.to_s.strip
       raise Thor::Error, "show: give a urn" if urn.empty?
@@ -206,10 +272,16 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
+      return show_parallel(catalog, urn, options[:parallel]) if options[:parallel]
+
       result = Nabu::Query::Show.new(catalog: catalog).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+    rescue Nabu::Query::Range::Error => e
+      # A range urn that names two endpoints but can't be honoured (endpoint
+      # missing, or reversed): a clean stderr message + exit 1.
+      raise Thor::Error, e.message
     ensure
       catalog&.disconnect
     end
@@ -260,6 +332,58 @@ module Nabu
       lines.each { |line| $stdout.puts(line) }
     ensure
       catalog&.disconnect
+    end
+
+    desc "backup", "Snapshot canonical/, the history ledger, config/, and the derived dbs to an external volume"
+    long_desc <<~HELP, wrap: false
+      File-level rsync backup (architecture §8, P7-2) — the concept's promise:
+      restorable from a plain rsync copy with zero services running. Backs up
+      everything that is NOT re-derivable:
+
+        canonical/   the permanent asset, INCLUDING every .attic/ (upstream-
+                     scrapped files that exist nowhere else — a per-slug git
+                     mirror would miss them; file-level or nothing)
+        db/history.sqlite3   the ledger: run history, sync pins, license
+                     baselines, durable revisions (the only copy)
+        config/      nabu.yml + sources.yml
+        db/catalog + db/fulltext   the derived dbs — included by DEFAULT
+                     (a file copy beats an hour of rebuild); --skip-derived omits
+                     them (canonical/ + `nabu rebuild` reconstitutes them)
+
+      Target: config/nabu.yml `backup: target:` (a path under a mounted external
+      volume), overridable with --to PATH.
+
+      THE MOUNT-POINT GUARD: the target must live on a REAL mounted volume. If
+      the volume is not mounted, the path is a bare directory on the boot disk,
+      and rsync would silently back up onto it — then shadow the real volume once
+      it mounts. backup REFUSES this unless --allow-unmounted (for deliberately
+      local targets: the drill, a scratch copy).
+
+      --dry-run prints the rsync plan and changes nothing.
+
+      Examples:
+        nabu backup                                   # to the configured volume
+        nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
+        nabu backup --dry-run                          # show the plan
+        nabu backup --skip-derived                     # canonical + ledger + config only
+    HELP
+    option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
+    option :skip_derived, type: :boolean, default: false,
+                          desc: "Omit the derived dbs (catalog + fulltext); restore rebuilds them"
+    option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
+    option :allow_unmounted, type: :boolean, default: false,
+                             desc: "Skip the mount-point guard (for a deliberately-local target)"
+    def backup
+      config = Nabu::Config.load
+      result = Nabu::Backup.new(
+        config: config, target: options[:to], skip_derived: options[:skip_derived],
+        dry_run: options[:dry_run], allow_unmounted: options[:allow_unmounted]
+      ).run
+      print_backup(result)
+      raise Thor::Error, backup_failure_summary(result) unless result.ok?
+    rescue Nabu::Backup::Error => e
+      # No target, or the mount-point guard tripped: a clean stderr message + exit 1.
+      raise Thor::Error, e.message
     end
 
     no_commands do
@@ -322,12 +446,56 @@ module Nabu
 
       def pluralize(count, noun) = "#{count} #{noun}#{'s' unless count == 1}"
 
+      # Render `backup`: the target + mode banner, one line per section (name,
+      # status, files/size/duration or the failure detail), then a summary.
+      def print_backup(result)
+        say "#{result.dry_run ? 'Backup plan (dry run — nothing changes)' : 'Backup'} → #{result.target}"
+        result.sections.each { |section| say "  #{format_backup_section(section)}" }
+        say "  #{backup_summary(result)}"
+      end
+
+      def format_backup_section(section)
+        label = section.name.ljust(10)
+        case section.status
+        when :ok
+          "#{label} #{section.status.to_s.ljust(8)} #{pluralize(section.files, 'file')}, " \
+          "#{human_bytes(section.bytes)}  (#{format('%.2fs', section.duration)}) → #{section.dest}"
+        when :skipped
+          "#{label} #{'skipped'.ljust(8)} #{section.detail} (#{section.source})"
+        else
+          "#{label} #{'FAILED'.ljust(8)} #{section.detail}"
+        end
+      end
+
+      def backup_summary(result)
+        verb = result.dry_run ? "would back up" : "backed up"
+        base = "#{verb} #{pluralize(result.files, 'file')}, #{human_bytes(result.bytes)} " \
+               "in #{format('%.2fs', result.duration)}"
+        result.ok? ? "#{base} — OK" : "#{base} — #{pluralize(result.failed.size, 'section')} FAILED"
+      end
+
+      def backup_failure_summary(result)
+        "backup: #{pluralize(result.failed.size, 'section')} failed — #{result.failed.map(&:name).join(', ')}"
+      end
+
+      def human_bytes(bytes)
+        units = %w[B KB MB GB TB]
+        size = bytes.to_f
+        unit = 0
+        while size >= 1024 && unit < units.size - 1
+          size /= 1024
+          unit += 1
+        end
+        unit.zero? ? "#{bytes} B" : "#{format('%.1f', size)} #{units[unit]}"
+      end
+
       # Render `show`: a passage in the context of its document, or a document
       # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
       def print_show(result)
         case result
         when Nabu::Query::Show::PassageResult then print_show_passage(result)
         when Nabu::Query::Show::DocumentResult then print_show_document(result)
+        when Nabu::Query::Show::RangeResult then print_show_range(result)
         end
       end
 
@@ -356,6 +524,21 @@ module Nabu
         end
       end
 
+      # Render a range (P7-6): the document header like a document listing, an
+      # honest "[N of M passages]" note plus the two endpoint urns, then the
+      # inclusive slice as :suffixes (--full-urn restores absolute urns).
+      def print_show_range(range)
+        title = range.title ? " — #{range.title}" : ""
+        lang = range.language ? " [#{range.language}]" : ""
+        say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
+        say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
+        say "  range: #{range.start_urn} … #{range.end_urn}  " \
+            "[#{range.passages.size} of #{range.total} passages]"
+        range.passages.each do |line|
+          say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
       # Print practice: the document urn appears once in the header, each
       # passage line carries only its changing :suffix (":b2:5"). --full-urn
       # restores absolute urns (copy-paste into `show`/scripts). A passage
@@ -366,6 +549,62 @@ module Nabu
 
         suffix = line.urn.delete_prefix(document.urn)
         suffix == line.urn || suffix.empty? ? line.urn : suffix
+      end
+
+      # -- show --parallel (P7-4) ------------------------------------------
+
+      # Resolve + align + render, with the two honest failure modes: unknown
+      # urn (exit 1, same message as plain show) and no LANG sibling of the
+      # work in the catalog (exit 1, names the language).
+      def show_parallel(catalog, urn, lang)
+        result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        raise Thor::Error, "urn not found: #{urn}" if result.nil?
+        if result.right.nil?
+          raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
+                             "(alignment needs sibling CTS editions; is `translations: true` set " \
+                             "and the source resynced?)"
+        end
+
+        print_parallel(result)
+      end
+
+      # Render the alignment: both document headers, the pair/one-sided
+      # counts, then one block per row — the citation suffix (or absolute urn
+      # under --full-urn) over one line per language, "—" where an edition
+      # lacks the suffix. Withdrawn passages are shown, tagged (show-family).
+      def print_parallel(result)
+        say format_parallel_side(result.left)
+        say "  parallel: #{format_parallel_side(result.right)}"
+        say "  #{parallel_counts(result)}"
+        width = [result.left.language.to_s.length, result.right.language.to_s.length].max + 2
+        result.rows.each do |row|
+          say "  #{parallel_row_label(row)}"
+          say "    #{parallel_line(result.left.language, row.left, width)}"
+          say "    #{parallel_line(result.right.language, row.right, width)}"
+        end
+      end
+
+      def format_parallel_side(side)
+        "#{side.urn}#{" — #{side.title}" if side.title}#{" [#{side.language}]" if side.language}"
+      end
+
+      def parallel_counts(result)
+        paired = result.rows.count { |row| row.left && row.right }
+        left_only = result.rows.count { |row| row.right.nil? }
+        right_only = result.rows.count { |row| row.left.nil? }
+        "aligned by citation: #{paired} paired, #{left_only} #{result.left.language} only, " \
+          "#{right_only} #{result.right.language} only"
+      end
+
+      def parallel_row_label(row)
+        options[:full_urn] ? (row.left || row.right).urn : row.suffix
+      end
+
+      def parallel_line(language, line, width)
+        label = language.to_s.ljust(width)
+        return "#{label}—" if line.nil?
+
+        "#{label}#{line.text}#{withdrawn_tag(line.withdrawn)}"
       end
 
       def withdrawn_tag(withdrawn)
@@ -401,6 +640,59 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)"
+      end
+
+      # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma
+      # index. Replaces the FTS query (simplest honest v1 — combining both is
+      # future work); composes with --lang/--license/--limit. A fulltext file
+      # predating P7-5 lacks the lemma table, so that gets its own honest hint.
+      def lemma_search(positional_query)
+        unless positional_query.empty?
+          raise Thor::Error, "search: --lemma replaces the text query — give one or the other"
+        end
+
+        lemma = options[:lemma].strip
+        raise Thor::Error, "search: --lemma needs a lemma" if lemma.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+          raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+                                          .run(lemma, lang: options[:lang], license: options[:license],
+                                                      limit: options[:limit].to_i)
+        print_lemma_results(results)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render lemma hits: urn + language, the dictionary form with the surface
+      # form(s) that attest it, then the PRISTINE passage line (truncated) —
+      # the surface form already marks the match, so readability wins over a
+      # folded snippet here.
+      def print_lemma_results(results)
+        return say("no matches") if results.empty?
+
+        results.each do |result|
+          forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}"
+          say "  #{truncate_line(result.text)}"
+        end
+        say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+      end
+
+      # One display line of pristine text: newlines flattened, capped at 100
+      # chars (treebank sentences are single lines; the cap guards outliers).
+      def truncate_line(text, max = 100)
+        line = text.tr("\n", " ")
+        line.length > max ? "#{line[0, max]}…" : line
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all
@@ -527,32 +819,35 @@ module Nabu
         )
       end
 
-      # --remote (P5-3): the no-clone upstream probe. Its own db handle (migrated
-      # so the license-baseline column exists), its own exit-1 raise.
+      # --remote (P5-3): the no-clone upstream probe. Pins + baselines live in
+      # the history ledger (P7-1), which the probe writes (baseline recording),
+      # so this is a write path: create + migrate + lift. Its own exit-1 raise.
       def run_remote_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        db = open_catalog_for_health(config)
-        report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
+        ledger = open_or_create_ledger(config)
+        report = Nabu::Health::RemoteProbe.new(registry: registry, ledger: ledger).run
         print_remote_health(report)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
-        db&.disconnect
+        ledger&.disconnect
       end
 
       # Bare health (P5-5): run-history trends + live golden replay, no network.
-      # open_catalog binds the Store models the LocalCheck queries. Exit 1 on any
-      # loud finding (quarantine spike, >15% creep, a lost golden query); soft
-      # warnings (collapse, 5–15% creep, stale) stay exit 0.
+      # open_catalog binds the Store models the LocalCheck queries; open_ledger
+      # binds the run history (absent ledger = empty history, honestly). Exit 1
+      # on any loud finding (quarantine spike, >15% creep, a lost golden query);
+      # soft warnings (collapse, 5–15% creep, stale) stay exit 0.
       def run_local_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
         catalog = open_catalog(config)
         fulltext = catalog ? open_fulltext(config) : nil
+        ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
-          registry: registry, catalog: catalog, fulltext: fulltext,
+          registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries
         ).run
         print_local_health(report)
@@ -560,6 +855,7 @@ module Nabu
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+        ledger&.disconnect
       end
 
       # Per-source trend rows, then the golden-replay section, then the verdict
@@ -617,20 +913,6 @@ module Nabu
 
       def local_health_failure(report)
         "health: #{report.loud_count} loud finding(s) — see the report above"
-      end
-
-      # Like open_catalog, but also applies pending migrations so the P5-3
-      # license-baseline column exists on catalogs built before it (add_column
-      # is idempotent — only pending migrations run). nil when no catalog has
-      # been built yet: the probe then treats every source as never-synced and
-      # records no baseline.
-      def open_catalog_for_health(config)
-        return nil unless File.exist?(config.catalog_path)
-
-        db = Nabu::Store.connect(config.catalog_path)
-        Nabu::Store.migrate!(db)
-        Nabu::Store.setup!(db)
-        db
       end
 
       # Render the remote probe: one aligned row per source (slug, liveness,
@@ -702,7 +984,9 @@ module Nabu
 
       # Open the catalog for writing, creating + migrating it if this is the
       # first sync before any rebuild. Migrations are idempotent (only pending
-      # ones run), so this is safe on an existing db too.
+      # ones run), so this is safe on an existing db too. Callers that also
+      # open the ledger MUST open it first (open_or_create_ledger lifts a
+      # pre-P7-1 catalog's history before migration 005 drops those tables).
       def open_or_create_catalog(config)
         require "fileutils"
         FileUtils.mkdir_p(File.dirname(config.catalog_path))
@@ -710,6 +994,27 @@ module Nabu
         Nabu::Store.migrate!(db)
         Nabu::Store.setup!(db)
         db
+      end
+
+      # Open the history ledger for reading; nil when absent (fresh machine —
+      # read paths treat that as empty history) or not yet migrated.
+      def open_ledger(config)
+        return nil unless File.exist?(config.history_path)
+
+        db = Nabu::Store::Ledger.connect(config.history_path)
+        return Nabu::Store::Ledger.setup!(db) if db.table_exists?(:runs)
+
+        db.disconnect
+        nil
+      end
+
+      # Open the history ledger for writing: create + migrate it, and lift a
+      # pre-P7-1 catalog's runs/pins/baselines into it (one-shot; the catalog
+      # is then migrated forward, dropping the moved tables).
+      def open_or_create_ledger(config)
+        Nabu::Store::Ledger.open_with_lift!(
+          history_path: config.history_path, catalog_path: config.catalog_path
+        )
       end
     end
   end

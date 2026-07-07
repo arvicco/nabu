@@ -20,21 +20,43 @@ module Nabu
     DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
     CATALOG_DB_FILENAME = "catalog.sqlite3"
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
+    HISTORY_DB_FILENAME = "history.sqlite3"
 
-    attr_reader :canonical_dir, :db_dir, :sources_path, :config_path
+    attr_reader :canonical_dir, :db_dir, :sources_path, :config_path, :backup_target
 
     # Build a Config from a YAML file. Relative paths in the file resolve
     # against +root+; absolute paths are used verbatim.
-    def self.load(path: DEFAULT_CONFIG_PATH, root: PROJECT_ROOT)
+    #
+    # Fresh-machine plumbing (P7-2): the config path and root default from the
+    # environment (NABU_CONFIG / NABU_ROOT) so an operator restoring onto a new
+    # machine can point every `nabu` command at the restored tree without
+    # editing code — `NABU_ROOT=/restored NABU_CONFIG=/restored/config/nabu.yml
+    # bundle exec bin/nabu rebuild`. Explicit keyword args (the whole test
+    # suite, the drill) always win over the environment.
+    def self.load(path: env_config_path, root: env_root)
       data = File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
       paths = data.fetch("paths", nil) || {}
+      backup = data.fetch("backup", nil) || {}
       new(
         canonical_dir: resolve(paths["canonical"], default: DEFAULT_CANONICAL_DIR, root: root),
         db_dir: resolve(paths["db"], default: DEFAULT_DB_DIR, root: root),
         sources_path: resolve(paths["sources"], default: DEFAULT_SOURCES_PATH, root: root),
-        config_path: path
+        config_path: path,
+        backup_target: resolve_optional(backup["target"], root: root)
       )
     end
+
+    def self.env_config_path
+      value = ENV.fetch("NABU_CONFIG", nil)
+      value.to_s.strip.empty? ? DEFAULT_CONFIG_PATH : value
+    end
+    private_class_method :env_config_path
+
+    def self.env_root
+      value = ENV.fetch("NABU_ROOT", nil)
+      value.to_s.strip.empty? ? PROJECT_ROOT : value
+    end
+    private_class_method :env_root
 
     def self.resolve(value, default:, root:)
       relative = value.to_s.strip.empty? ? default : value.to_s
@@ -42,11 +64,28 @@ module Nabu
     end
     private_class_method :resolve
 
-    def initialize(canonical_dir:, db_dir:, sources_path:, config_path:)
+    # A path that stays nil when unset (the backup target has no default — the
+    # owner wires the real external-volume destination, or passes --to).
+    def self.resolve_optional(value, root:)
+      return nil if value.to_s.strip.empty?
+
+      File.expand_path(value.to_s, root)
+    end
+    private_class_method :resolve_optional
+
+    def initialize(canonical_dir:, db_dir:, sources_path:, config_path:, backup_target: nil)
       @canonical_dir = canonical_dir
       @db_dir = db_dir
       @sources_path = sources_path
       @config_path = config_path
+      @backup_target = backup_target
+    end
+
+    # The directory holding the config files (nabu.yml + sources.yml) — the
+    # `config/` section of the backup set (P7-2). Derived from the config file's
+    # own location so it follows a restored/relocated tree.
+    def config_dir
+      File.dirname(config_path)
     end
 
     # The catalog SQLite file (architecture §5), derived from db_dir.
@@ -59,6 +98,13 @@ module Nabu
     # the index is derived-of-derived and rebuilt at will.
     def fulltext_path
       File.join(db_dir, FULLTEXT_DB_FILENAME)
+    end
+
+    # The history ledger (architecture §5, P7-1): runs, pins, license
+    # baselines, durable revisions. NOT derived from canonical/ — the one db
+    # under db/ that `nabu rebuild` never touches and backups must include.
+    def history_path
+      File.join(db_dir, HISTORY_DB_FILENAME)
     end
   end
 end
