@@ -30,5 +30,8 @@ paths:
 #     -volname NabuBackup ~/NabuBackup.sparsebundle
 #   hdiutil attach ~/NabuBackup.sparsebundle          # mounts /Volumes/NabuBackup
 #
-# backup:
-#   target: /Volumes/NabuBackup/nabu
+# Wired 2026-07-07 (owner decision): the NabuBackup sparsebundle volume
+# simulates the external disk; swapping in real hardware = change nothing
+# (mount the real disk under the same volume name) or edit this path.
+backup:
+  target: /Volumes/NabuBackup/nabu

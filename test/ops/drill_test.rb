@@ -42,6 +42,24 @@ class DrillTest < Minitest::Test
     end
   end
 
+  # Found on the first LIVE drill (2026-07-07): the real corpus carries 9,316
+  # honest quarantines (text-less papyri stubs etc.), and a faithful restore
+  # REPRODUCES them — the drill must not read that as "not restorable". The
+  # counts cross-check is the fidelity oracle: a genuinely lost document
+  # shows up as a count mismatch, not as a quarantine tally.
+  def test_drill_is_restorable_when_quarantines_match_the_source_expectation
+    File.write(File.join(@root, "canonical", "corpus", "broken.txt"), "")
+    Nabu::Rebuild.new(config: live_config, registry: registry).run # source of truth rebuilt WITH the honest quarantine
+
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
+
+      assert_equal 1, report.rebuild_quarantined, "the restored corpus reproduces the source's quarantine"
+      assert_equal report.source_counts, report.restored_counts
+      assert_predicate report, :ok?, "quarantines faithful to the source are not a restore failure"
+    end
+  end
+
   def test_drill_writes_only_under_the_workspace_and_leaves_the_source_untouched
     before = source_snapshot
     Dir.mktmpdir("nabu-drill-work") do |workspace|
