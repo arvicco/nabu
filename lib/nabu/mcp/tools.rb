@@ -7,13 +7,14 @@ require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
 require_relative "../query/lemma_search"
+require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
 
 module Nabu
   module MCP
-    # The MCP tool table (P8-1): name + description + JSON Schema + handler
-    # for the three read-only tools. Pure translation — all query logic stays
+    # The MCP tool table (P8-1, extended P8-3): name + description + JSON Schema
+    # + handler for the read-only tools. Pure translation — all query logic stays
     # in the Query classes; this layer only validates arguments, applies the
     # conversational-surface contract, and shapes JSON for a model to read.
     #
@@ -43,9 +44,14 @@ module Nabu
     # is picked up without a restart. Connections must be opened read-only
     # (Store.connect readonly: true) by the caller; nothing here writes.
     #
-    # == Extending (P8-3: nabu_concord)
+    # == P8-3: nabu_concord
     #
-    # Add one TOOLS entry (schema + description) and one handler method.
+    # One more TOOLS entry + handler, the same bounded/license contract as
+    # nabu_search: query XOR lemma, default-excluded restricted classes,
+    # bounded rows with an honest truncation note, urn + language +
+    # license_class + source on every row. It is a KWIC formatter over the same
+    # Query::Search / Query::LemmaSearch, exposed as structured left/keyword/
+    # right rows in corpus order.
     class Tools
       # tools/call with a name not in the table. The SERVER maps this to a
       # JSON-RPC -32602 protocol error (spec: unknown tools are protocol
@@ -67,6 +73,10 @@ module Nabu
       SEARCH_MAX_LIMIT = 50
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
+      CONCORD_DEFAULT_LIMIT = 10
+      CONCORD_MAX_LIMIT = 50
+      CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
+      CONCORD_MAX_WIDTH = 120
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       BUSY_ATTEMPTS = 3
@@ -109,6 +119,19 @@ module Nabu
         "max_passages (default #{SHOW_DEFAULT_MAX_PASSAGES}, cap #{SHOW_MAX_PASSAGES_CAP}) " \
         "with an honest truncation note. Every passage carries urn, language, and " \
         "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged.".freeze
+
+      CONCORD_DESCRIPTION =
+        "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
+        "left context / matched keyword / right context, the keyword located in the PRISTINE " \
+        "edition text (accents intact). Give EXACTLY ONE of `query` (full-text, same syntax as " \
+        "nabu_search: words AND, \"phrase\", prefix*, diacritics optional) or `lemma` (exact " \
+        "dictionary form over the treebanks). Rows come in CORPUS order (urn/citation), not " \
+        "relevance — this is for scanning a word's usage, not ranking. Context is trimmed to " \
+        "`width` characters per side (default #{CONCORD_DEFAULT_WIDTH}, max #{CONCORD_MAX_WIDTH}; " \
+        "… marks clipped context). Bounded (default #{CONCORD_DEFAULT_LIMIT}, max " \
+        "#{CONCORD_MAX_LIMIT}) with an honest 'showing k' note; each row carries urn, language, " \
+        "license_class, and source — PRESERVE the license fields when quoting. Use nabu_show for " \
+        "a hit's full passage, nabu_search when you want ranked relevance rather than a scan.".freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -159,12 +182,37 @@ module Nabu
 
       STATUS_SCHEMA = { type: "object", properties: {}, additionalProperties: false }.freeze
 
-      # The tool table. P8-3 (nabu_concord) extends this hash + one handler.
+      CONCORD_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "Full-text query. Mutually exclusive with lemma." },
+          lemma: { type: "string",
+                   description: "Dictionary form for exact-lemma treebank concordance. " \
+                                "Mutually exclusive with query." },
+          lang: { type: "string",
+                  description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
+          license: { type: "string", enum: LICENSE_CLASSES,
+                     description: "Exact effective license class filter." },
+          limit: { type: "integer", minimum: 1, maximum: CONCORD_MAX_LIMIT,
+                   default: CONCORD_DEFAULT_LIMIT, description: "Maximum KWIC rows returned." },
+          width: { type: "integer", minimum: 1, maximum: CONCORD_MAX_WIDTH,
+                   default: CONCORD_DEFAULT_WIDTH,
+                   description: "Context characters per side (left and right)." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        additionalProperties: false
+      }.freeze
+
+      # The tool table. P8-3 adds nabu_concord (a KWIC formatter over the same
+      # Query classes) as a fourth entry with its own handler.
       TOOLS = {
         "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
                            handler: :search },
         "nabu_show" => { description: SHOW_DESCRIPTION, input_schema: SHOW_SCHEMA,
                          handler: :show },
+        "nabu_concord" => { description: CONCORD_DESCRIPTION, input_schema: CONCORD_SCHEMA,
+                            handler: :concord },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -235,6 +283,29 @@ module Nabu
         end
       rescue Query::Range::Error => e
         tool_error(e.message)
+      end
+
+      def concord(args)
+        term, mode = search_term(args)
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
+          return note("license class #{license} is excluded by default from this surface " \
+                      "(it must never leak casually); pass include_restricted: true to " \
+                      "concord it deliberately")
+        end
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
+
+        limit = clamp(args["limit"], default: CONCORD_DEFAULT_LIMIT, max: CONCORD_MAX_LIMIT)
+        width = clamp(args["width"], default: CONCORD_DEFAULT_WIDTH, max: CONCORD_MAX_WIDTH)
+        rows = Query::Concord.new(catalog: catalog, fulltext: fulltext).run(
+          mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
+                                       lang: args["lang"], license: license, limit: limit + 1, width: width
+        )
+        rows = rows.reject { |row| EXCLUDED_LICENSE_CLASSES.include?(row.license_class) } unless include_restricted
+        render_concord(rows, limit: limit, width: width, catalog: catalog)
       end
 
       def status(_args)
@@ -310,6 +381,33 @@ module Nabu
         else
           base.merge(snippet: result.snippet)
         end
+      end
+
+      # -- concord internals -------------------------------------------------------
+
+      def render_concord(rows, limit:, width:, catalog:)
+        return json(rows: [], note: "no matches", coverage: coverage_hint(catalog)) if rows.empty?
+
+        shown = rows.first(limit)
+        sources = sources_by_urn(catalog, shown.map(&:urn))
+        json(
+          width: width,
+          rows: shown.map { |row| concord_row_payload(row, sources) },
+          note: if rows.size > limit
+                  "more than #{limit} rows, showing #{limit} — raise limit " \
+                    "(max #{CONCORD_MAX_LIMIT}) or refine"
+                else
+                  "#{shown.size} rows, showing #{shown.size}"
+                end
+        )
+      end
+
+      # Left/keyword/right are already width-trimmed by Concord; the model can
+      # reassemble the KWIC line or read the keyword in isolation. license
+      # fields ride on every row, per contract.
+      def concord_row_payload(row, sources)
+        { urn: row.urn, language: row.language, license_class: row.license_class,
+          source: sources[row.urn], left: row.left, keyword: row.keyword, right: row.right }
       end
 
       # One line that makes "no matches" interpretable without a second call.

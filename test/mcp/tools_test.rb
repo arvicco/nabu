@@ -98,9 +98,9 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_three_tools_with_json_schemas
+    def test_definitions_lists_the_four_tools_with_json_schemas
       defs = tools.definitions
-      assert_equal(%w[nabu_search nabu_show nabu_status], defs.map { |d| d[:name] })
+      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_status], defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
         schema = definition[:inputSchema]
@@ -162,7 +162,7 @@ module MCP
     end
 
     def test_unknown_tool_raises
-      assert_raises(Nabu::MCP::Tools::UnknownTool) { call("nabu_concord", {}) }
+      assert_raises(Nabu::MCP::Tools::UnknownTool) { call("nabu_frobnicate", {}) }
     end
 
     def test_search_truncates_at_the_limit_with_an_honest_note
@@ -363,6 +363,83 @@ module MCP
       assert_equal({ "open" => 4 }, body.fetch("license_classes"))
     end
 
+    # -- nabu_concord (P8-3) -------------------------------------------------------
+
+    def test_concord_returns_kwic_rows_with_urn_language_and_license
+      seed_corpus
+      body = payload(call("nabu_concord", { "query" => "μηνιν", "width" => 6 }))
+      rows = body.fetch("rows")
+      assert_equal 1, rows.size
+      row = rows.first
+      assert_equal "#{@grc.urn}:1.1", row.fetch("urn")
+      assert_equal "grc", row.fetch("language")
+      assert_equal "open", row.fetch("license_class")
+      assert_equal "perseus", row.fetch("source")
+      assert_equal "μῆνιν", row.fetch("keyword"), "the pristine accented keyword"
+      assert row.key?("left") && row.key?("right"), "structured KWIC context"
+      assert_equal 6, body.fetch("width")
+    end
+
+    def test_concord_lemma_mode_locates_the_surface_form
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,
+                        lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+
+      rows = payload(call("nabu_concord", { "lemma" => "λέγω" })).fetch("rows")
+      assert_equal(%w[urn:d:tb:1], rows.map { |r| r.fetch("urn") })
+      assert_equal "εἶπας", rows.first.fetch("keyword")
+    end
+
+    def test_concord_requires_exactly_one_of_query_and_lemma
+      seed_corpus
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_concord", {}) }
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_concord", { "query" => "a", "lemma" => "b" })
+      end
+    end
+
+    def test_concord_truncates_at_the_limit_with_an_honest_note
+      doc = make_document(urn: "urn:d:many")
+      12.times { |i| make_passage(doc, urn: "urn:d:many:#{i}", text: "aurora venit", sequence: i) }
+      rebuild!
+
+      body = payload(call("nabu_concord", { "query" => "aurora", "limit" => 5 }))
+      assert_equal 5, body.fetch("rows").size
+      assert_match(/showing 5/i, body.fetch("note"))
+      assert_match(/more/i, body.fetch("note"))
+    end
+
+    def test_concord_hides_research_private_rows_by_default
+      seed_corpus
+      body = payload(call("nabu_concord", { "query" => "αειδε" }))
+      urns = body.fetch("rows").map { |r| r.fetch("urn") }
+      refute_includes urns, "urn:nabu:adhoc:notes:1"
+      refute_match(/μυστικον/, JSON.generate(body), "no private text leaks")
+    end
+
+    def test_concord_include_restricted_opts_in
+      seed_corpus
+      body = payload(call("nabu_concord", { "query" => "μυστικον", "include_restricted" => true }))
+      assert_equal(%w[urn:nabu:adhoc:notes:1], body.fetch("rows").map { |r| r.fetch("urn") })
+      assert_equal "research_private", body.fetch("rows").first.fetch("license_class")
+    end
+
+    def test_concord_no_match_carries_a_coverage_hint
+      seed_corpus
+      body = payload(call("nabu_concord", { "query" => "nonexistentword" }))
+      assert_empty body.fetch("rows")
+      assert_match(/grc/, body.fetch("coverage"))
+    end
+
+    def test_concord_with_a_missing_fts_table_degrades_gracefully
+      seed_corpus
+      @fulltext.drop_table(Nabu::Store::Indexer::TABLE)
+      result = call("nabu_concord", { "query" => "μηνιν" })
+      refute result[:isError], "a rebuild window is a state, not a fault"
+      assert_match(/rebuilding.*retry shortly/i, text_of(result))
+    end
+
     # -- degradation ---------------------------------------------------------------
 
     def test_search_with_a_missing_fts_table_degrades_to_a_retry_note
@@ -383,9 +460,9 @@ module MCP
 
     def test_missing_catalog_degrades_to_a_no_corpus_note
       absent = tools(catalog: nil, fulltext: nil)
-      %w[nabu_search nabu_show nabu_status].each do |name|
+      %w[nabu_search nabu_show nabu_concord nabu_status].each do |name|
         args = { "nabu_search" => { "query" => "x" }, "nabu_show" => { "urn" => "urn:x" },
-                 "nabu_status" => {} }.fetch(name)
+                 "nabu_concord" => { "query" => "x" }, "nabu_status" => {} }.fetch(name)
         result = absent.call(name, args)
         refute result[:isError]
         assert_match(/no corpus.*sync.*rebuild/im, result[:content].fetch(0).fetch(:text))

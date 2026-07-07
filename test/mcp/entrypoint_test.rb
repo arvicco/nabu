@@ -116,7 +116,7 @@ module MCP
 
     def assert_tools_list(list)
       names = list.fetch("result").fetch("tools").map { |tool| tool["name"] }
-      assert_equal %w[nabu_search nabu_show nabu_status].sort, names.sort
+      assert_equal %w[nabu_search nabu_show nabu_concord nabu_status].sort, names.sort
     end
 
     def assert_status_call(call)

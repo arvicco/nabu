@@ -190,6 +190,82 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "concord QUERY", "Concordance (KWIC): keyword-in-context lines, one per hit"
+    long_desc <<~HELP, wrap: false
+      Keyword-in-context concordance: every hit as one line — left context, the
+      matched keyword, right context — with the keyword aligned in a fixed
+      column so you can scan a word's usage down the page. The keyword is
+      located in the PRISTINE edition text (accents and all), not the folded
+      search form: a concordance is for reading real usage.
+
+      Matching is exactly `nabu search`: diacritic- and case-insensitive on both
+      sides (μηνιν finds μῆνιν), implicit-AND multiple words, "quoted phrase",
+      prefix* — and --lemma FORM for exact dictionary-form lookup over the gold
+      treebanks (finds every inflected attestation). Rows come in CORPUS order
+      (urn/citation), not relevance order — the point is scanning, not ranking.
+      One row per passage: a passage with the keyword twice shows its first
+      occurrence.
+
+      Layout: left context is trimmed to --width characters per side (default
+      40) and right-justified so the keyword column lines up; the right context
+      is trimmed to the same width; clipped context is marked with …. Each row
+      ends with the passage urn and [language]. Alignment counts display
+      characters (fine for grc/lat/chu); it does not model East-Asian width.
+
+      Filters (as in search): --lang, --license, --limit (default 20).
+
+      Examples:
+        nabu concord μῆνιν                       # every attestation of μῆνιν, KWIC
+        nabu concord μηνιν --width 30            # tighter context, accents optional
+        nabu concord ἄειδε --lang grc --limit 50
+        nabu concord --lemma λέγω --lang grc     # every inflection in context:
+                                                 #   λέγουσι, εἶπας, εἰπεῖν…
+        nabu concord sapientia --lang lat        # a Latin word across the corpus
+
+      Use cases: see how a word is actually used across six corpora at once;
+      spot collocations and formulae; build a hand concordance for a term before
+      writing about it.
+    HELP
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 20, desc: "Maximum number of KWIC lines"
+    option :width, type: :numeric, default: Nabu::Query::Concord::DEFAULT_WIDTH,
+                   desc: "Context characters per side (default #{Nabu::Query::Concord::DEFAULT_WIDTH})"
+    option :lemma, type: :string, banner: "FORM",
+                   desc: "Exact-lemma concordance over the gold treebanks (replaces the text query)"
+    def concord(query = nil)
+      query = query.to_s.strip
+      lemma = options[:lemma]
+      if lemma
+        raise Thor::Error, "concord: --lemma replaces the text query — give one or the other" unless query.empty?
+
+        lemma = lemma.strip
+        raise Thor::Error, "concord: --lemma needs a lemma" if lemma.empty?
+      elsif query.empty?
+        raise Thor::Error, "concord: give a query"
+      end
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+      if lemma && !fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+        raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                           "run nabu sync or nabu rebuild"
+      end
+
+      rows = Nabu::Query::Concord.new(catalog: catalog, fulltext: fulltext).run(
+        query.empty? ? nil : query, lemma: lemma, lang: options[:lang],
+                                    license: options[:license], limit: options[:limit].to_i, width: options[:width].to_i
+      )
+      print_concord_rows(rows)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
     long_desc <<~HELP, wrap: false
       Inspect one passage or one whole document by urn. Unlike search and
@@ -753,6 +829,18 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)"
+      end
+
+      # Render KWIC rows (P8-3): left + keyword + right (each side already
+      # trimmed to width by Concord), then the urn + [language] tag. The left
+      # context is a fixed width, so keyword columns align down the page.
+      def print_concord_rows(rows)
+        return say("no matches") if rows.empty?
+
+        rows.each do |row|
+          say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}"
+        end
+        say "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
       end
 
       # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma

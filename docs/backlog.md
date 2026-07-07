@@ -702,7 +702,7 @@ Acceptance: process-level smoke test (spawn bin/nabu mcp, speak the
       clean EOF shutdown); .mcp.json valid; docs complete; suite + lint
       green.
 
-## P8-3 · Concordance: nabu concord  [tier: opus] [status: ready] [deps: P8-1]
+## P8-3 · Concordance: nabu concord  [tier: opus] [status: done] [deps: P8-1]
 Goal: `bin/nabu concord QUERY|--lemma FORM [--lang/--license/--limit/
       --width N]` — KWIC lines: one row per hit, keyword column aligned,
       left/right context trimmed to --width chars (default sensible),
