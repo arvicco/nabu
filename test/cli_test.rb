@@ -570,30 +570,81 @@ class CLITest < Minitest::Test
     with_parallel_corpus do |config|
       out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1-2", "--parallel"]) }
       assert_nil status
-      assert_match(/1 paired, 1 grc only, 0 eng only/, out, "pairing applies to the sliced rows only")
+      # eng :1 owns grc :1 and :2 as ONE block; :3 is outside the slice.
+      assert_match(/0 paired, 1 block covering 2 lines, 0 grc only, 0 eng only/, out)
       assert_match(/grc {2}μῆνιν/, out)
-      assert_match(/eng {2}Wrath/, out)
-      assert_match(/grc {2}ἄειδε/, out, "the in-slice grc-only line still shows")
+      assert_match(/grc {2}ἄειδε/, out, "the whole span shows, not just the anchor line")
+      assert_match(/eng \[:1 — covers :1–:2\]/, out, "the block is labeled by its coverage")
+      assert_match(/Wrath/, out)
       refute_match(/θεά/, out, ":3 is outside the slice")
     end
   end
 
-  # -- show --parallel (P7-4) ------------------------------------------------
+  # -- show --parallel (P7-4, span-grouped P8-1b) ----------------------------
 
   GRC_URN = "urn:cts:greekLit:tg1.w1.perseus-grc2"
   ENG_URN = "urn:cts:greekLit:tg1.w1.perseus-eng2"
 
-  def test_show_parallel_renders_aligned_pairs_and_one_sided_rows
-    with_parallel_corpus do |config|
+  # A verse-for-verse translation renders byte-identically to pre-P8-1b: every
+  # anchor is a 1:1 pair, no blocks clause, the compact two-line pair form.
+  def test_show_parallel_verse_output_is_byte_identical_to_the_pair_form
+    with_verse_corpus do |config|
       out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel"]) }
       assert_nil status
-      assert_match(/#{Regexp.escape(GRC_URN)}.*\[grc\]/, out)
-      assert_match(/#{Regexp.escape(ENG_URN)}.*\[eng\]/, out)
-      assert_match(/2 paired, 1 grc only, 0 eng only/, out)
-      assert_match(/^ +:1$/, out, "each row is labeled by its citation suffix")
-      assert_match(/grc {2}μῆνιν/, out)
-      assert_match(/eng {2}Wrath/, out)
-      assert_match(/eng {2}—/, out, "an unmatched suffix renders honestly one-sided")
+      expected = <<~OUT
+        #{GRC_URN} — Iliad [grc]
+          parallel: #{ENG_URN} — Iliad [eng]
+          aligned by citation: 3 paired, 0 grc only, 0 eng only
+          :1
+            grc  μῆνιν
+            eng  Wrath
+          :2
+            grc  ἄειδε
+            eng  sing
+          :3
+            grc  θεά
+            eng  goddess
+      OUT
+      assert_equal expected, out
+    end
+  end
+
+  # A card-cited coarse translation: the whole span of original lines, then the
+  # translation block ONCE with its coverage label — no wall of dashes.
+  def test_show_parallel_full_document_coarse_render
+    with_card_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel"]) }
+      assert_nil status
+      assert_match(/aligned by citation: 0 paired, 2 blocks covering 8 lines, 0 grc only, 0 eng only/, out)
+      assert_match(/eng \[:1\.1 — covers :1\.1–:1\.4\]\n {4}Block one/, out)
+      assert_match(/eng \[:1\.5 — covers :1\.5–:1\.8\]\n {4}Block two/, out)
+      assert_match(/^ +:1\.4\n {4}grc {2}grc4$/, out, "each owned original line is shown once, suffix-labeled")
+      refute_match(/eng {2}—/, out, "no per-line dashes under a coarse block")
+    end
+  end
+
+  def test_show_parallel_mid_card_range_clips_with_a_note
+    with_card_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1.2-1.3", "--parallel"]) }
+      assert_nil status
+      assert_match(/0 paired, 1 block covering 2 lines/, out)
+      assert_match(/eng \[:1\.1 — covers :1\.1–:1\.4; range shows :1\.2–:1\.3\]/, out)
+      assert_match(/grc {2}grc2/, out)
+      refute_match(/grc1|grc4/, out, "only the in-slice originals are listed")
+    end
+  end
+
+  # The regression the owner hit: a range that STARTS inside a card — the
+  # owning anchor lies outside the slice, yet the block still renders (it used
+  # to dash every line).
+  def test_show_parallel_range_starting_inside_a_card_still_shows_the_block
+    with_card_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1.3-1.6", "--parallel"]) }
+      assert_nil status
+      assert_match(/eng \[:1\.1 — covers :1\.1–:1\.4; range shows :1\.3–:1\.4\]\n {4}Block one/, out,
+                   "the card anchored at 1.1 (outside the slice) still renders its block")
+      assert_match(/eng \[:1\.5 — covers :1\.5–:1\.8; range shows :1\.5–:1\.6\]\n {4}Block two/, out)
+      refute_match(/eng {2}—/, out)
     end
   end
 
@@ -602,17 +653,18 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(["show", ENG_URN, "--parallel", "grc"]) }
       assert_nil status
       assert_match(/#{Regexp.escape(GRC_URN)}/, out)
-      assert_match(/grc {2}ἄειδε/, out)
+      assert_match(/grc {2}ἄειδε/, out, "grc :2, absent from the eng original, stays one-sided")
     end
   end
 
-  def test_show_parallel_passage_urn_scopes_to_one_row
+  def test_show_parallel_passage_urn_scopes_to_the_owning_block
     with_parallel_corpus do |config|
       out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1", "--parallel"]) }
       assert_nil status
       assert_match(/grc {2}μῆνιν/, out)
-      assert_match(/eng {2}Wrath/, out)
-      refute_match(/ἄειδε/, out, "a passage urn aligns only its own suffix")
+      assert_match(/eng \[:1 — covers :1–:2; range shows :1–:1\]/, out, "the owning block, clipped to the line")
+      assert_match(/Wrath/, out)
+      refute_match(/ἄειδε/, out, "a passage urn shows only its own line of the block")
     end
   end
 
@@ -782,6 +834,43 @@ class CLITest < Minitest::Test
       document << Nabu::Passage.new(urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index)
     end
     document
+  end
+
+  # A verse-for-verse corpus (grc :1/:2/:3 ↔ eng :1/:2/:3, all 1:1) for the
+  # byte-identical pair-form regression pin.
+  def with_verse_corpus(&)
+    build_parallel_corpus(
+      parallel_document(GRC_URN, "grc", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]]),
+      parallel_document(ENG_URN, "eng", [%w[1 Wrath], %w[2 sing], %w[3 goddess]]), &
+    )
+  end
+
+  # A card-cited corpus: grc lines 1.1..1.8, eng cards anchored at 1.1 (owns
+  # 1.1–1.4) and 1.5 (owns 1.5–1.8) — the coarse span-grouped case.
+  def with_card_corpus(&)
+    build_parallel_corpus(
+      parallel_document(GRC_URN, "grc", (1..8).map { |n| ["1.#{n}", "grc#{n}"] }),
+      parallel_document(ENG_URN, "eng", [["1.1", "Block one"], ["1.5", "Block two"]]), &
+    )
+  end
+
+  def build_parallel_corpus(*documents)
+    Dir.mktmpdir("nabu-cli-parallel") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "src", name: "Source", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+      Nabu::Store::Loader.new(db: db, source: source).load(documents, full: false)
+      db.disconnect
+      yield config
+    end
   end
 
   # One TestAdapter source "corpus" (two documents) with canonical data; the

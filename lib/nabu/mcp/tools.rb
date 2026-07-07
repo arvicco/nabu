@@ -397,14 +397,14 @@ module Nabu
       end
 
       def parallel_payload(result, bound, left_license, right_license)
-        shown = result.rows.first(bound)
+        shown = result.groups.first(bound)
         {
           type: "parallel",
           left: side_payload(result.left, left_license),
           right: side_payload(result.right, right_license),
-          rows: shown.map { |row| parallel_row(row, result, left_license, right_license) },
-          note: "#{shown.size} of #{result.rows.size} aligned rows" +
-            (result.rows.size > bound ? " (truncated at #{bound} — use a range urn to slice)" : "")
+          rows: shown.map { |group| parallel_row(group, result, left_license, right_license) },
+          note: "#{shown.size} of #{result.groups.size} aligned rows" +
+            (result.groups.size > bound ? " (truncated at #{bound} — use a range urn to slice)" : "")
         }
       end
 
@@ -412,12 +412,24 @@ module Nabu
         { urn: side.urn, title: side.title, language: side.language, license_class: license }
       end
 
-      def parallel_row(row, result, left_license, right_license)
-        {
-          suffix: row.suffix,
-          left: parallel_line(row.left, result.left.language, left_license),
-          right: parallel_line(row.right, result.right.language, right_license)
+      # One aligned row per span-group (P8-1b). left is the anchor/original
+      # line, right the translation; a coarse block also carries the coverage
+      # fields (anchor + the covered original suffix span, and the clip note
+      # when a slice shows only part of it) so a model knows one translation
+      # block owns the whole Greek span, not just the one line quoted as left.
+      def parallel_row(group, result, left_license, right_license)
+        original = group.originals.first
+        row = {
+          suffix: original&.suffix || group.anchor,
+          left: parallel_line(original, result.left.language, left_license),
+          right: parallel_line(group.translation, result.right.language, right_license)
         }
+        return row unless group.kind == :block
+
+        row.merge!(anchor: group.anchor, covers_first: group.covers_first,
+                   covers_last: group.covers_last, clipped: group.clipped)
+        row.merge!(shown_first: group.shown_first, shown_last: group.shown_last) if group.clipped
+        row
       end
 
       def parallel_line(line, language, license)

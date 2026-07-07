@@ -748,7 +748,7 @@ OWNER DECISION MENU (pick to unblock):
       renders; passages with human parallel translations (P7-4) render
       those first, glossing is the fallback.
 
-## P8-1b · Owner feedback: span-grouped parallel display  [tier: opus] [status: ready] [deps: —]
+## P8-1b · Owner feedback: span-grouped parallel display  [tier: opus] [status: done] [deps: —]
 Goal: card-cited prose translations (both English Homers — no line-cited
       alternative exists upstream) render as a wall of text paired at the
       block's first line, with every following original line dashed "—"

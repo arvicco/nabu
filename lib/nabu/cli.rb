@@ -234,11 +234,14 @@ module Nabu
       PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
       document or passage urn, find the sibling edition of the SAME work in
       LANG (sources ingest translations only when their registry entry sets
-      `translations: true`) and render the two aligned by citation suffix —
-      :1.1 in the Greek next to :1.1 in the English. Alignment is exact
-      suffix equality: a suffix present in only one edition renders honestly
-      one-sided (translations often merge lines), never fuzzed. Works with
-      --full-urn.
+      `translations: true`) and render the two SPAN-GROUPED by citation suffix.
+      A verse-for-verse translation pairs line by line — :1.1 Greek next to
+      :1.1 English. A card-cited prose translation (both English Homers) anchors
+      one block of text at a card's first line: the original lines are listed,
+      then the translation ONCE, labeled with its coverage in the original's
+      numbering (`eng [:1.1 — covers :1.1–:1.43]`) plus a clip note when a range
+      shows only part of a card. A suffix present in only one edition renders
+      honestly one-sided, never fuzzed. Works with --full-urn.
 
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -250,8 +253,9 @@ module Nabu
         nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-grc2 --parallel
                                                   # Greek + eng, line by line
-        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10 --parallel
-                                                  # a slice, Greek + eng aligned
+        nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.5-1.10 --parallel
+                                                  # a mid-card slice: the eng block labeled
+                                                  #   "covers :1.1–:1.43; range shows :1.5–:1.10"
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
 
@@ -568,36 +572,97 @@ module Nabu
         print_parallel(result)
       end
 
-      # Render the alignment: both document headers, the pair/one-sided
-      # counts, then one block per row — the citation suffix (or absolute urn
-      # under --full-urn) over one line per language, "—" where an edition
-      # lacks the suffix. Withdrawn passages are shown, tagged (show-family).
+      # Render the alignment (P8-1b span-grouped): both document headers, the
+      # paired/blocks/one-sided counts, then one span-group at a time. A verse
+      # pair keeps the compact pair form (byte-identical to pre-P8-1b); a coarse
+      # block prints the original lines first, then the translation once with
+      # its full coverage (and a clip note when a slice shows only part of it);
+      # one-sided rows dash the missing side. Withdrawn passages are shown,
+      # tagged (show-family).
       def print_parallel(result)
         say format_parallel_side(result.left)
         say "  parallel: #{format_parallel_side(result.right)}"
         say "  #{parallel_counts(result)}"
         width = [result.left.language.to_s.length, result.right.language.to_s.length].max + 2
-        result.rows.each do |row|
-          say "  #{parallel_row_label(row)}"
-          say "    #{parallel_line(result.left.language, row.left, width)}"
-          say "    #{parallel_line(result.right.language, row.right, width)}"
+        result.groups.each { |group| print_parallel_group(group, result, width) }
+      end
+
+      def print_parallel_group(group, result, width)
+        case group.kind
+        when :pair        then print_parallel_pair(group, result, width)
+        when :block       then print_parallel_block(group, result, width)
+        when :original    then print_parallel_one_sided(group, result, width, side: :left)
+        when :translation then print_parallel_one_sided(group, result, width, side: :right)
         end
+      end
+
+      # Verse pair / one-sided rows: the pre-P8-1b two-line form, the suffix (or
+      # absolute urn under --full-urn) over one line per language, "—" for the
+      # absent side. Kept byte-identical so verse-for-verse output never shifts.
+      def print_parallel_pair(group, result, width)
+        line = group.originals.first
+        say "  #{options[:full_urn] ? line.urn : group.anchor}"
+        say "    #{parallel_line(result.left.language, line, width)}"
+        say "    #{parallel_line(result.right.language, group.translation, width)}"
+      end
+
+      def print_parallel_one_sided(group, result, width, side:)
+        present = side == :left ? group.originals.first : group.translation
+        say "  #{options[:full_urn] ? present.urn : present.suffix}"
+        left = side == :left ? present : nil
+        right = side == :right ? present : nil
+        say "    #{parallel_line(result.left.language, left, width)}"
+        say "    #{parallel_line(result.right.language, right, width)}"
+      end
+
+      # Coarse block: each owned original as a suffix-labeled left line, then
+      # the translation once, labeled with its full coverage in the original's
+      # numbering plus a clip note when the shown slice is only part of it.
+      def print_parallel_block(group, result, width)
+        group.originals.each do |line|
+          say "  #{options[:full_urn] ? line.urn : line.suffix}"
+          say "    #{parallel_line(result.left.language, line, width)}"
+        end
+        say "  #{result.right.language} #{block_coverage(group)}"
+        say "    #{group.translation.text}#{withdrawn_tag(group.translation.withdrawn)}"
+      end
+
+      # `[:1.1 — covers :1.1–:1.43; range shows :1.5–:1.10]` — the anchor, the
+      # full ownership span, and (only when clipped) the shown sub-range.
+      def block_coverage(group)
+        covers = "covers #{group.covers_first}–#{group.covers_last}"
+        clip = group.clipped ? "; range shows #{group.shown_first}–#{group.shown_last}" : ""
+        "[#{group.anchor} — #{covers}#{clip}]"
       end
 
       def format_parallel_side(side)
         "#{side.urn}#{" — #{side.title}" if side.title}#{" [#{side.language}]" if side.language}"
       end
 
+      # Honest grouped arithmetic: paired counts 1:1 verse pairs; the blocks
+      # clause (and its owned-line total) appears only when there ARE coarse
+      # blocks, so verse-for-verse output stays byte-identical to pre-P8-1b.
       def parallel_counts(result)
-        paired = result.rows.count { |row| row.left && row.right }
-        left_only = result.rows.count { |row| row.right.nil? }
-        right_only = result.rows.count { |row| row.left.nil? }
-        "aligned by citation: #{paired} paired, #{left_only} #{result.left.language} only, " \
-          "#{right_only} #{result.right.language} only"
+        paired = result.groups.count { |group| group.kind == :pair }
+        blocks = result.groups.select { |group| group.kind == :block }
+        left_only = result.groups.count { |group| group.kind == :original }
+        right_only = result.groups.count { |group| group.kind == :translation }
+        block_lines = blocks.sum { |group| group.originals.size }
+        blocks_clause = blocks_clause(blocks.size, block_lines)
+        "aligned by citation: #{paired} paired, #{blocks_clause}" \
+          "#{left_only} #{result.left.language} only, #{right_only} #{result.right.language} only"
       end
 
-      def parallel_row_label(row)
-        options[:full_urn] ? (row.left || row.right).urn : row.suffix
+      # The blocks clause appears only when there ARE coarse blocks, so
+      # verse-for-verse output stays byte-identical to the pre-P8-1b header.
+      def blocks_clause(blocks, lines)
+        return "" if blocks.zero?
+
+        "#{plural(blocks, 'block')} covering #{plural(lines, 'line')}, "
+      end
+
+      def plural(count, noun)
+        "#{count} #{noun}#{'s' unless count == 1}"
       end
 
       def parallel_line(language, line, width)
