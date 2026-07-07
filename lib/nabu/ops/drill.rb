@@ -32,14 +32,19 @@ module Nabu
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
         :source_counts, :restored_counts
       ) do
-        # A rebuild off restored canonical must quarantine nothing new, verify
-        # must be clean, no golden query may be lost, and — when the live
-        # catalog was available to compare — the restored counts must match it.
+        # Verify must be clean, no golden query may be lost, and — when the
+        # live catalog was available to compare — the restored counts must
+        # match it. Quarantines are NOT a failure when the counts oracle is
+        # available: a faithful restore REPRODUCES the source's honest
+        # quarantines (the live corpus carries thousands of text-less papyri
+        # stubs), and a genuinely lost document surfaces as a count mismatch.
+        # Without a source to compare (no live catalog), fall back to the
+        # conservative zero-quarantine requirement.
         def counts_match? = source_counts.nil? || source_counts == restored_counts
 
         def ok?
-          backup.ok? && rebuild_quarantined.zero? && verify_clean &&
-            golden_lost.zero? && counts_match?
+          backup.ok? && verify_clean && golden_lost.zero? && counts_match? &&
+            (source_counts ? true : rebuild_quarantined.zero?)
         end
       end
 
