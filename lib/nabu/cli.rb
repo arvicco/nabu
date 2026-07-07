@@ -29,8 +29,11 @@ module Nabu
     def sync(slug = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
+      # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
+      # before open_or_create_catalog migrates the moved tables away.
+      ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
-      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db)
+      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
       options[:all] ? sync_all(runner) : sync_one(runner, registry, slug)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
@@ -38,6 +41,7 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       db&.disconnect
+      ledger&.disconnect
     end
 
     desc "status", "Show per-source sync status and passage counts"
@@ -45,9 +49,11 @@ module Nabu
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       db = open_catalog(config)
-      say Nabu::StatusReport.render(registry: registry, db: db)
+      ledger = open_ledger(config)
+      say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     ensure
       db&.disconnect
+      ledger&.disconnect
     end
 
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
@@ -527,32 +533,35 @@ module Nabu
         )
       end
 
-      # --remote (P5-3): the no-clone upstream probe. Its own db handle (migrated
-      # so the license-baseline column exists), its own exit-1 raise.
+      # --remote (P5-3): the no-clone upstream probe. Pins + baselines live in
+      # the history ledger (P7-1), which the probe writes (baseline recording),
+      # so this is a write path: create + migrate + lift. Its own exit-1 raise.
       def run_remote_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        db = open_catalog_for_health(config)
-        report = Nabu::Health::RemoteProbe.new(registry: registry, db: db).run
+        ledger = open_or_create_ledger(config)
+        report = Nabu::Health::RemoteProbe.new(registry: registry, ledger: ledger).run
         print_remote_health(report)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
-        db&.disconnect
+        ledger&.disconnect
       end
 
       # Bare health (P5-5): run-history trends + live golden replay, no network.
-      # open_catalog binds the Store models the LocalCheck queries. Exit 1 on any
-      # loud finding (quarantine spike, >15% creep, a lost golden query); soft
-      # warnings (collapse, 5–15% creep, stale) stay exit 0.
+      # open_catalog binds the Store models the LocalCheck queries; open_ledger
+      # binds the run history (absent ledger = empty history, honestly). Exit 1
+      # on any loud finding (quarantine spike, >15% creep, a lost golden query);
+      # soft warnings (collapse, 5–15% creep, stale) stay exit 0.
       def run_local_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
         catalog = open_catalog(config)
         fulltext = catalog ? open_fulltext(config) : nil
+        ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
-          registry: registry, catalog: catalog, fulltext: fulltext,
+          registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries
         ).run
         print_local_health(report)
@@ -560,6 +569,7 @@ module Nabu
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+        ledger&.disconnect
       end
 
       # Per-source trend rows, then the golden-replay section, then the verdict
@@ -617,20 +627,6 @@ module Nabu
 
       def local_health_failure(report)
         "health: #{report.loud_count} loud finding(s) — see the report above"
-      end
-
-      # Like open_catalog, but also applies pending migrations so the P5-3
-      # license-baseline column exists on catalogs built before it (add_column
-      # is idempotent — only pending migrations run). nil when no catalog has
-      # been built yet: the probe then treats every source as never-synced and
-      # records no baseline.
-      def open_catalog_for_health(config)
-        return nil unless File.exist?(config.catalog_path)
-
-        db = Nabu::Store.connect(config.catalog_path)
-        Nabu::Store.migrate!(db)
-        Nabu::Store.setup!(db)
-        db
       end
 
       # Render the remote probe: one aligned row per source (slug, liveness,
@@ -702,7 +698,9 @@ module Nabu
 
       # Open the catalog for writing, creating + migrating it if this is the
       # first sync before any rebuild. Migrations are idempotent (only pending
-      # ones run), so this is safe on an existing db too.
+      # ones run), so this is safe on an existing db too. Callers that also
+      # open the ledger MUST open it first (open_or_create_ledger lifts a
+      # pre-P7-1 catalog's history before migration 005 drops those tables).
       def open_or_create_catalog(config)
         require "fileutils"
         FileUtils.mkdir_p(File.dirname(config.catalog_path))
@@ -710,6 +708,27 @@ module Nabu
         Nabu::Store.migrate!(db)
         Nabu::Store.setup!(db)
         db
+      end
+
+      # Open the history ledger for reading; nil when absent (fresh machine —
+      # read paths treat that as empty history) or not yet migrated.
+      def open_ledger(config)
+        return nil unless File.exist?(config.history_path)
+
+        db = Nabu::Store::Ledger.connect(config.history_path)
+        return Nabu::Store::Ledger.setup!(db) if db.table_exists?(:runs)
+
+        db.disconnect
+        nil
+      end
+
+      # Open the history ledger for writing: create + migrate it, and lift a
+      # pre-P7-1 catalog's runs/pins/baselines into it (one-shot; the catalog
+      # is then migrated forward, dropping the moved tables).
+      def open_or_create_ledger(config)
+        Nabu::Store::Ledger.open_with_lift!(
+          history_path: config.history_path, catalog_path: config.catalog_path
+        )
       end
     end
   end

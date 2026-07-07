@@ -528,7 +528,7 @@ decisions gated to the owner at the Phase 7 gate. The only bulk fetch in
 Phase 7 is the first latinLit sync (owner-initiated at the gate); P7-4's
 English editions are already on disk in the cloned Perseus repos.*
 
-## P7-1 · Durable history: split what rebuild must never destroy  [tier: fable] [status: ready] [deps: —]
+## P7-1 · Durable history: split what rebuild must never destroy  [tier: fable] [status: done] [deps: —]
 Goal: runtime history currently dies with the derived catalog — watched live
       at the P6-4 reload: runs (health trends), license baselines, per-repo
       pins, and the provenance journal all reset, because they live in the

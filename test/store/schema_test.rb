@@ -11,29 +11,18 @@ module Store
     end
 
     def test_migrations_create_all_tables
-      %i[sources documents passages provenance enrichments runs source_repos].each do |table|
+      %i[sources documents passages provenance enrichments].each do |table|
         assert @db.table_exists?(table), "expected table #{table} to exist"
       end
     end
 
-    # P6-3: source_repos pins one row per upstream repo of a multi-repo source,
-    # keyed uniquely on (source_id, repo_url).
-    def test_source_repos_composite_unique_index_present
-      assert(@db.indexes(:source_repos).values.any? { |i| i[:columns] == %i[source_id repo_url] && i[:unique] })
-    end
-
-    def test_source_repos_foreign_key_enforced
-      assert_raises(Sequel::DatabaseError) do
-        @db[:source_repos].insert(source_id: 9999, repo_url: "https://example/x")
-      end
-    end
-
-    def test_source_repos_composite_uniqueness_enforced
-      source_id = insert_source
-      @db[:source_repos].insert(source_id: source_id, repo_url: "https://example/x")
-      assert_raises(Sequel::DatabaseError) do
-        @db[:source_repos].insert(source_id: source_id, repo_url: "https://example/x")
-      end
+    # P7-1: runs and source_repos moved to the history ledger (as slug-keyed
+    # runs and pins — see ledger_test.rb); migration 005 drops them from the
+    # catalog, along with the license baseline column.
+    def test_history_tables_are_not_in_the_catalog
+      refute @db.table_exists?(:runs), "runs live in db/history.sqlite3 now"
+      refute @db.table_exists?(:source_repos), "pins live in db/history.sqlite3 now"
+      refute @db[:sources].columns.include?(:license_baseline_sha256)
     end
 
     def test_sources_slug_unique_index_present
@@ -95,13 +84,6 @@ module Store
       source_id = insert_source
       assert_raises(Sequel::DatabaseError) do
         @db[:documents].insert(document_row(source_id).merge(license_override: "bogus"))
-      end
-    end
-
-    def test_runs_status_check_rejects_bad_value
-      source_id = insert_source
-      assert_raises(Sequel::DatabaseError) do
-        @db[:runs].insert(source_id: source_id, started_at: Time.now, status: "bogus")
       end
     end
 

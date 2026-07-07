@@ -30,12 +30,13 @@ module Store
     end
 
     def setup
+      @ledger = ledger_test_db
       @db = store_test_db
       @source = Nabu::Store::Source.create(
         slug: "test_adapter", name: "Conformance Test Adapter",
         adapter_class: "TestAdapter", license_class: "open"
       )
-      @loader = Nabu::Store::Loader.new(db: @db, source: @source)
+      @loader = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger)
     end
 
     # -- helpers -------------------------------------------------------------
@@ -63,6 +64,11 @@ module Store
     def passage_row(slug, suffix) = Nabu::Store::Passage.first(urn: "#{doc_urn(slug)}:#{suffix}")
 
     def provenance_events(**filter) = Nabu::Store::Provenance.where(**filter).order(:id).all
+
+    def revisions(**filter)
+      dataset = filter.empty? ? Nabu::Store::Revision.dataset : Nabu::Store::Revision.where(**filter)
+      dataset.order(:id).all
+    end
 
     def snapshot(model) = model.order(:id).all.map(&:values)
 
@@ -444,6 +450,101 @@ module Store
     def test_plain_document_loads_never_retire
       @loader.load([alpha])
       refute doc_row("alpha").retired_upstream
+    end
+
+    # -- the durable revisions ledger (P7-1) ----------------------------------
+    #
+    # Catalog provenance is derived-run journaling: it resets with the catalog
+    # on rebuild. Content TRANSITIONS of existing rows additionally land in the
+    # ledger's urn-keyed revisions table, which survives rebuilds. Fresh
+    # inserts (including every rebuild replay, which only inserts into a fresh
+    # catalog) write NOTHING durable — so a rebuild leaves the ledger intact
+    # and un-spammed.
+
+    def test_fresh_inserts_write_no_durable_revisions
+      @loader.load([alpha, beta])
+      assert_empty revisions, "loaded is per-load noise; only transitions go durable"
+    end
+
+    def test_idempotent_reload_writes_no_durable_revisions
+      @loader.load([alpha, beta])
+      @loader.load([alpha, beta])
+      assert_empty revisions
+    end
+
+    def test_revised_content_journals_durable_revisions_by_urn
+      @loader.load([alpha])
+      old_doc_sha = doc_row("alpha").content_sha256
+      old_passage_sha = passage_row("alpha", "2").content_sha256
+
+      @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 θεά]])])
+
+      doc_rev = revisions(urn: doc_urn("alpha"), event: "revised").last
+      assert_equal old_doc_sha, doc_rev.old_sha
+      assert_equal doc_row("alpha").content_sha256, doc_rev.new_sha
+      refute_nil doc_rev.at
+
+      passage_rev = revisions(urn: "#{doc_urn('alpha')}:2", event: "revised").last
+      assert_equal old_passage_sha, passage_rev.old_sha
+      assert_equal passage_row("alpha", "2").content_sha256, passage_rev.new_sha
+      assert_empty revisions(urn: "#{doc_urn('alpha')}:1"), "the unchanged sibling stays silent"
+    end
+
+    def test_withdrawal_and_restore_transitions_are_durable
+      @loader.load([alpha, beta])
+      beta_sha = doc_row("beta").content_sha256
+
+      @loader.load([alpha], full: true) # beta withdrawn
+      withdrawn = revisions(urn: doc_urn("beta"), event: "withdrawn")
+      assert_equal 1, withdrawn.size
+      assert_equal beta_sha, withdrawn.first.old_sha
+
+      @loader.load([alpha], full: true) # already withdrawn: silent
+      assert_equal 1, revisions(urn: doc_urn("beta"), event: "withdrawn").size
+
+      @loader.load([alpha, beta]) # beta reappears unchanged: restored
+      restored = revisions(urn: doc_urn("beta"), event: "restored")
+      assert_equal 1, restored.size
+      assert_equal beta_sha, restored.first.new_sha
+    end
+
+    def test_passage_withdrawal_within_a_revised_document_is_durable
+      @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]])])
+      vanished_sha = passage_row("alpha", "2").content_sha256
+
+      @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[3 θεά]])])
+
+      withdrawn = revisions(urn: "#{doc_urn('alpha')}:2", event: "withdrawn")
+      assert_equal 1, withdrawn.size
+      assert_equal vanished_sha, withdrawn.first.old_sha
+    end
+
+    def test_retirement_transitions_are_durable_but_attic_inserts_are_not
+      with_retention_workdir do |workdir|
+        @loader.load_from(TestAdapter.new, workdir: workdir)
+        # ghost was INSERTED retired (the rebuild-replay shape): not a
+        # transition, nothing durable.
+        assert_empty revisions(urn: "urn:nabu:test_adapter:ghost", event: "retired")
+
+        # Upstream restores it live: unretired IS a transition.
+        write(workdir, "ghost.txt", "Ghost\nεἴδωλον\n")
+        @loader.load_from(TestAdapter.new, workdir: workdir)
+        assert_equal 1, revisions(urn: "urn:nabu:test_adapter:ghost", event: "unretired").size
+
+        # And scrapping it again journals a durable retirement.
+        FileUtils.rm(File.join(workdir, "ghost.txt"))
+        @loader.load_from(TestAdapter.new, workdir: workdir, full: true)
+        assert_equal 1, revisions(urn: "urn:nabu:test_adapter:ghost", event: "retired").size
+      end
+    end
+
+    def test_loader_without_a_ledger_journals_catalog_provenance_only
+      loader = Nabu::Store::Loader.new(db: @db, source: @source, ledger: nil)
+      loader.load([alpha])
+      loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 θεά]])])
+
+      assert_equal 2, doc_row("alpha").revision
+      assert_empty revisions
     end
 
     def test_constraint_violation_is_isolated_per_document

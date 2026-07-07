@@ -9,6 +9,7 @@ class LocalCheckTest < Minitest::Test
   include StoreTestDB
 
   def setup
+    @ledger = ledger_test_db
     @db = store_test_db
     @now = Time.utc(2026, 7, 4)
   end
@@ -25,8 +26,8 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_healthy_source_has_no_findings
-    source = seed_source(slug: "ok", enabled: true, last_sync_at: @now - 86_400)
-    3.times { seed_run(source, added: 4, updated: 1, errored: 0) }
+    source = seed_source(slug: "ok", enabled: true)
+    3.times { seed_run(source, added: 4, updated: 1, errored: 0, finished_at: @now - 86_400) }
     seed_docs(source, live: 20)
 
     report = check(registry_of(["ok", { enabled: true }]))
@@ -35,7 +36,7 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_quarantine_spike_is_a_loud_finding_and_sets_exit
-    source = seed_source(slug: "spiky", enabled: true, last_sync_at: @now - 86_400)
+    source = seed_source(slug: "spiky", enabled: true)
     seed_run(source, added: 5, updated: 0, errored: 1)
     seed_run(source, added: 5, updated: 0, errored: 2)
     seed_run(source, added: 5, updated: 0, errored: 80) # latest: huge jump
@@ -48,7 +49,7 @@ class LocalCheckTest < Minitest::Test
 
   # 0→1 quarantine across otherwise-clean runs must NOT flag.
   def test_no_spike_on_a_single_stray_quarantine
-    source = seed_source(slug: "calm", enabled: true, last_sync_at: @now - 86_400)
+    source = seed_source(slug: "calm", enabled: true)
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 1)
@@ -59,7 +60,7 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_added_collapse_is_a_soft_warning
-    source = seed_source(slug: "dead", enabled: true, last_sync_at: @now - 86_400)
+    source = seed_source(slug: "dead", enabled: true)
     seed_run(source, added: 9, updated: 2, errored: 0) # historically active
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_run(source, added: 0, updated: 0, errored: 0)
@@ -73,7 +74,7 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_withdrawal_creep_soft_then_loud
-    soft = seed_source(slug: "shedding", enabled: true, last_sync_at: @now - 86_400)
+    soft = seed_source(slug: "shedding", enabled: true)
     seed_run(soft, added: 100, updated: 0, errored: 0)
     seed_docs(soft, live: 90, withdrawn: 10) # 10% → soft
     soft_report = check(registry_of(["shedding", { enabled: true }]))
@@ -90,8 +91,8 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_stale_enabled_live_source_is_flagged
-    source = seed_source(slug: "old", enabled: true, last_sync_at: @now - (30 * 86_400))
-    seed_run(source, added: 5, updated: 0, errored: 0)
+    source = seed_source(slug: "old", enabled: true)
+    seed_run(source, added: 5, updated: 0, errored: 0, finished_at: @now - (30 * 86_400))
     seed_docs(source, live: 5)
 
     report = check(registry_of(["old", { enabled: true, sync_policy: "live" }]))
@@ -101,12 +102,41 @@ class LocalCheckTest < Minitest::Test
 
   # A manual/frozen source is expected to sit still — never "stale".
   def test_manual_source_not_flagged_stale
-    source = seed_source(slug: "manual", enabled: true, last_sync_at: @now - (400 * 86_400))
-    seed_run(source, added: 5, updated: 0, errored: 0)
+    source = seed_source(slug: "manual", enabled: true)
+    seed_run(source, added: 5, updated: 0, errored: 0, finished_at: @now - (400 * 86_400))
     seed_docs(source, live: 5)
 
     report = check(registry_of(["manual", { enabled: true, sync_policy: "manual" }]))
     refute_includes report.sources.first.findings.map(&:kind), :stale
+  end
+
+  # P7-1: a fresh machine has no ledger at all — every source degrades to the
+  # honest informational "never synced", never an error, never loud.
+  def test_missing_ledger_reads_as_no_history
+    seed_source(slug: "quiet", enabled: true)
+    report = check(registry_of(["quiet", { enabled: true }]), ledger: nil)
+
+    finding = report.sources.first.findings.first
+    assert_equal :never_synced, finding.kind
+    assert_match(/no run history/, finding.message)
+    refute report.any_loud?
+  end
+
+  # P7-1: rebuild replays are recorded kind=rebuild and excluded from trends —
+  # a replay re-adds the whole corpus, which must not read as sync history.
+  def test_rebuild_runs_do_not_feed_trends
+    source = seed_source(slug: "rebuilt", enabled: true)
+    # Only rebuild-kind history: trend-wise this source was never synced.
+    seed_run(source, added: 60_000, updated: 0, errored: 90, kind: "rebuild")
+    report = check(registry_of(["rebuilt", { enabled: true }]))
+    assert_equal :never_synced, report.sources.first.findings.first.kind
+
+    # A giant rebuild between two modest syncs neither spikes nor collapses.
+    seed_run(source, added: 5, updated: 0, errored: 1)
+    seed_run(source, added: 60_000, updated: 0, errored: 90, kind: "rebuild")
+    seed_run(source, added: 4, updated: 1, errored: 0, finished_at: @now - 86_400)
+    report = check(registry_of(["rebuilt", { enabled: true }]))
+    assert_empty report.sources.first.findings
   end
 
   # -- live golden replay --------------------------------------------------
@@ -145,7 +175,8 @@ class LocalCheckTest < Minitest::Test
 
   def test_no_corpus_reports_absent_and_skips_replay
     report = Nabu::Health::LocalCheck.new(
-      registry: registry_of, catalog: nil, fulltext: nil, golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
+      registry: registry_of, catalog: nil, fulltext: nil, ledger: nil,
+      golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
     ).run
     assert_equal :absent, report.corpus
     assert_empty report.golden
@@ -155,7 +186,7 @@ class LocalCheckTest < Minitest::Test
   def test_catalog_without_index_reports_no_index
     seed_source(slug: "s", enabled: true)
     report = Nabu::Health::LocalCheck.new(
-      registry: registry_of(["s", { enabled: true }]), catalog: @db, fulltext: nil,
+      registry: registry_of(["s", { enabled: true }]), catalog: @db, fulltext: nil, ledger: @ledger,
       golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
     ).run
     assert_equal :no_index, report.corpus
@@ -170,9 +201,10 @@ class LocalCheckTest < Minitest::Test
 
   private
 
-  def check(registry, fulltext: nil, golden: [])
+  def check(registry, fulltext: nil, golden: [], ledger: @ledger)
     Nabu::Health::LocalCheck.new(
-      registry: registry, catalog: @db, fulltext: fulltext, golden_queries: golden, now: @now
+      registry: registry, catalog: @db, fulltext: fulltext, ledger: ledger,
+      golden_queries: golden, now: @now
     ).run
   end
 
@@ -196,9 +228,11 @@ class LocalCheckTest < Minitest::Test
     )
   end
 
-  def seed_run(source, added:, updated:, errored:, status: "succeeded")
+  # Runs live in the history ledger, slug-keyed (P7-1). +finished_at+ drives
+  # the stale rule (it reads the latest successful sync's timestamp).
+  def seed_run(source, added:, updated:, errored:, status: "succeeded", kind: "sync", finished_at: @now)
     Nabu::Store::Run.create(
-      source_id: source.id, started_at: @now, finished_at: @now,
+      source_slug: source.slug, kind: kind, started_at: finished_at, finished_at: finished_at,
       added: added, updated: updated, errored: errored, status: status
     )
   end
@@ -221,7 +255,7 @@ class LocalCheckTest < Minitest::Test
 
   # Build one live, indexed passage; returns its urn. Sets @fulltext.
   def build_indexed_passage(text:)
-    source = seed_source(slug: "corpus", enabled: true, last_sync_at: @now)
+    source = seed_source(slug: "corpus", enabled: true)
     doc = Nabu::Store::Document.create(
       source_id: source.id, urn: "urn:test:doc", content_sha256: "x"
     )

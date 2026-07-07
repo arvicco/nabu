@@ -10,10 +10,17 @@ module Nabu
     # returns data; the CLI formats it and owns the exit code. Two independent
     # halves fold into one Report:
     #
-    # 1. Per-source run-history trends (TrendRules) read from the runs + documents
-    #    tables: quarantine spike, added collapse, withdrawal/retirement creep,
-    #    stale source. A source with no runs at all reports :never_synced (info,
-    #    not red); a source with runs and no anomalies reports no findings ("ok").
+    # 1. Per-source run-history trends (TrendRules) read from the history
+    #    LEDGER's runs (slug-keyed, kind=sync only — rebuild replays re-add the
+    #    whole corpus and would poison every baseline) plus the catalog's
+    #    document counts: quarantine spike, added collapse, withdrawal/
+    #    retirement creep, stale source. Because the ledger survives `nabu
+    #    rebuild` (P7-1), trends read continuously across rebuild boundaries.
+    #    A source with no ledger runs — including the fresh-machine case of no
+    #    ledger at all — reports :never_synced (info, not red); a source with
+    #    runs and no anomalies reports no findings ("ok"). Staleness is judged
+    #    from the latest successful sync run's finished_at (ledger truth), not
+    #    the catalog's resettable last_sync_at column.
     #
     # 2. Live golden replay — each query in test/golden/golden_queries.yml run
     #    against the LIVE catalog + fulltext index (read-only) via Query::Search.
@@ -61,13 +68,15 @@ module Nabu
         File.exist?(path) ? (YAML.safe_load_file(path) || []) : []
       end
 
-      # +catalog+ / +fulltext+ are Sequel DBs or nil (not built yet). Store models
-      # are assumed bound to +catalog+ by the caller (Store.setup!), matching the
+      # +catalog+ / +fulltext+ / +ledger+ are Sequel DBs or nil (not built
+      # yet). Store models are assumed bound to +catalog+ (Store.setup!) and
+      # ledger models to +ledger+ (Ledger.setup!) by the caller, matching the
       # RemoteProbe convention. +now+ is injected so the stale rule is testable.
-      def initialize(registry:, catalog:, fulltext:, golden_queries:, now: Time.now)
+      def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
+        @ledger = ledger
         @golden_queries = golden_queries
         @now = now
       end
@@ -90,47 +99,62 @@ module Nabu
       end
 
       def check_source(entry)
-        source = @catalog && Store::Source.first(slug: entry.slug)
-        return never_synced(entry.slug) if source.nil?
-
-        runs = successful_runs(source)
+        runs = successful_sync_runs(entry.slug)
         return never_synced(entry.slug) if runs.empty?
 
-        SourceCheck.new(slug: entry.slug, findings: findings_for(entry, source, runs))
+        SourceCheck.new(slug: entry.slug, findings: findings_for(entry, runs))
       end
 
-      def findings_for(entry, source, runs)
+      def findings_for(entry, runs)
         latest = runs.first
         prior = runs.drop(1).first(TrendRules::SPIKE_WINDOW).map { |run| run[:errored] }
         [
           TrendRules.quarantine_spike(latest_errored: latest[:errored], prior_errored: prior),
           TrendRules.added_collapse(successful_runs: runs),
-          TrendRules.withdrawal_creep(shed: shed_count(source), total: total_count(source)),
-          stale_finding(entry, source)
+          creep_finding(entry),
+          stale_finding(entry, latest[:finished_at])
         ].compact
       end
 
+      # Cumulative shed needs the catalog's document counts; without a catalog
+      # (or before this source's first load) there is nothing to measure.
+      def creep_finding(entry)
+        source = @catalog && Store::Source.first(slug: entry.slug)
+        return nil if source.nil?
+
+        TrendRules.withdrawal_creep(shed: shed_count(source), total: total_count(source))
+      end
+
       # Only enabled, live-policy sources are held to the cadence; manual/frozen
-      # sources are expected to sit still (maintenance §2).
-      def stale_finding(entry, source)
+      # sources are expected to sit still (maintenance §2). +finished_at+ is the
+      # latest successful SYNC run's timestamp from the ledger — unlike
+      # sources.last_sync_at it survives rebuilds, so a rebuild neither hides
+      # nor causes staleness.
+      def stale_finding(entry, finished_at)
         return nil unless entry.enabled && entry.sync_policy == "live"
 
-        TrendRules.stale_source(last_sync_at: source.last_sync_at, now: @now)
+        TrendRules.stale_source(last_sync_at: finished_at, now: @now)
       end
 
       def never_synced(slug)
         SourceCheck.new(
           slug: slug,
-          findings: [Finding.new(kind: :never_synced, severity: :info, message: "never synced")]
+          findings: [Finding.new(kind: :never_synced, severity: :info, message: "never synced (no run history)")]
         )
       end
 
-      # Newest-first, so runs.first is the latest successful run.
-      def successful_runs(source)
-        Store::Run.where(source_id: source.id, status: "succeeded")
+      # Newest-first, so runs.first is the latest successful sync run. Ledger
+      # absent (fresh machine) → empty history, honestly. kind=rebuild rows are
+      # excluded: a replay's added=everything is not a sync trend.
+      def successful_sync_runs(slug)
+        return [] unless @ledger
+
+        Store::Run.where(source_slug: slug, kind: "sync", status: "succeeded")
                   .order(Sequel.desc(:id))
-                  .select_map(%i[added updated errored])
-                  .map { |added, updated, errored| { added: added, updated: updated, errored: errored } }
+                  .select_map(%i[added updated errored finished_at])
+                  .map do |added, updated, errored, finished_at|
+                    { added: added, updated: updated, errored: errored, finished_at: finished_at }
+                  end
       end
 
       def total_count(source)

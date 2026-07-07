@@ -42,14 +42,31 @@ module Nabu
     # Documents are looked up scoped to this loader's source: one source's
     # load can never mutate (or withdraw) another source's rows; a cross-source
     # urn collision surfaces as a unique-constraint error on that document.
+    #
+    # == The durable revisions ledger (P7-1)
+    #
+    # The provenance journal above lives in the CATALOG and therefore resets
+    # with it on rebuild — it is derived-run journaling, honest but ephemeral.
+    # Content TRANSITIONS of existing rows (revised, withdrawn, restored,
+    # retired, unretired) are additionally journaled urn-keyed into the history
+    # ledger's revisions table (Store::Ledger), which rebuild never drops.
+    # Fresh INSERTS write nothing durable on purpose: a rebuild replays the
+    # whole corpus as inserts into an empty catalog, so insert-path journaling
+    # would spam the ledger with 60k "loaded"/"retired" rows per rebuild; the
+    # transitions that matter were journaled by the sync that first saw them.
+    # One extra insert per transition is loader-hot-path cheap. +ledger+ may be
+    # nil (no durable journal — tests without one); every production caller
+    # (SyncRunner, Rebuild) passes the open ledger.
     class Loader
       TOOL = "nabu-loader"
 
       # db: the Sequel database (Store.setup! already applied);
-      # source: the Store::Source row this load belongs to.
-      def initialize(db:, source:)
+      # source: the Store::Source row this load belongs to;
+      # ledger: the history ledger db (Ledger.setup! applied) or nil.
+      def initialize(db:, source:, ledger: nil)
         @db = db
         @source = source
+        @ledger = ledger
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -152,7 +169,8 @@ module Nabu
           content_sha256: doc_sha, revision: 1, withdrawn: false, retired_upstream: !retained.nil?
         )
         journal(event: "loaded", document_id: row.id)
-        journal_retirement_flip(row, false, retained)
+        # durable: false — an insert is not a transition (see class comment).
+        journal_retirement_flip(row, false, retained, durable: false)
         document.passages.each { |passage| insert_passage(row.id, passage, passage_shas.fetch(passage.urn)) }
         :added
       end
@@ -167,7 +185,11 @@ module Nabu
           retired_upstream: !retained.nil?
         )
         journal(event: "revised", document_id: row.id, params: { "old_sha" => old_sha, "new_sha" => doc_sha })
-        journal(event: "restored", document_id: row.id) if was_withdrawn
+        durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: doc_sha)
+        if was_withdrawn
+          journal(event: "restored", document_id: row.id)
+          durable(event: "restored", urn: row.urn, new_sha: doc_sha)
+        end
         journal_retirement_flip(row, was_retired, retained)
         upsert_passages(row, document, passage_shas)
       end
@@ -197,13 +219,15 @@ module Nabu
         true
       end
 
-      def journal_retirement_flip(row, was_retired, retained)
+      def journal_retirement_flip(row, was_retired, retained, durable: true)
         return if was_retired == !retained.nil?
 
         if retained
           journal(event: "retired", document_id: row.id, params: retained.empty? ? nil : retained)
+          durable(event: "retired", urn: row.urn) if durable
         else
           journal(event: "unretired", document_id: row.id)
+          durable(event: "unretired", urn: row.urn) if durable
         end
       end
 
@@ -253,7 +277,11 @@ module Nabu
           content_sha256: sha, revision: row.revision + 1, withdrawn: false
         )
         journal(event: "revised", passage_id: row.id, params: { "old_sha" => old_sha, "new_sha" => sha })
-        journal(event: "restored", passage_id: row.id) if was_withdrawn
+        durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: sha)
+        return unless was_withdrawn
+
+        journal(event: "restored", passage_id: row.id)
+        durable(event: "restored", urn: row.urn, new_sha: sha)
       end
 
       # Passages whose urns vanished from the new parse: withdraw (journaled;
@@ -273,6 +301,7 @@ module Nabu
           else
             row.update(updates.merge(withdrawn: true))
             journal(event: "withdrawn", passage_id: row.id)
+            durable(event: "withdrawn", urn: row.urn, old_sha: row.content_sha256)
           end
         end
       end
@@ -305,6 +334,7 @@ module Nabu
         row.update(withdrawn: false)
         id_column = row.is_a?(Document) ? :document_id : :passage_id
         journal(event: "restored", id_column => row.id)
+        durable(event: "restored", urn: row.urn, new_sha: row.content_sha256)
       end
 
       # Full loads assert completeness: this source's active documents whose
@@ -312,11 +342,13 @@ module Nabu
       # one final transaction of their own.
       def sweep_withdrawn(seen_urns, counts)
         @db.transaction do
-          Document.where(source_id: @source.id, withdrawn: false).select_map(%i[id urn]).each do |id, urn|
+          Document.where(source_id: @source.id, withdrawn: false)
+                  .select_map(%i[id urn content_sha256]).each do |id, urn, sha|
             next if seen_urns.include?(urn)
 
             Document.where(id: id).update(withdrawn: true)
             journal(event: "withdrawn", document_id: id)
+            durable(event: "withdrawn", urn: urn, old_sha: sha)
             counts[:withdrawn] += 1
           end
         end
@@ -329,6 +361,14 @@ module Nabu
           params_json: params && JSON.generate(params),
           at: Time.now
         )
+      end
+
+      # One urn-keyed row in the history ledger's revisions table (see class
+      # comment). No-op without a ledger.
+      def durable(event:, urn:, old_sha: nil, new_sha: nil)
+        return unless @ledger
+
+        Revision.create(urn: urn, event: event, old_sha: old_sha, new_sha: new_sha, at: Time.now)
       end
     end
   end
