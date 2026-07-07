@@ -44,7 +44,7 @@ nabu/
 │   ├── adhoc/                   # intake, HTR drivers, review, commit
 │   └── query/                   # FTS, vector, concordance
 ├── config/
-│   ├── sources.yml              # registry: adapter class, upstream, license, enabled
+│   ├── sources.yml              # registry: adapter class, upstream, license, enabled, translations opt-in
 │   └── nabu.yml               # paths, models, API settings
 ├── canonical/                   # git repo (possibly separate) — the asset
 │   ├── perseus-greek/           # vendored upstream snapshot or submodule
@@ -96,6 +96,7 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided).
 
 ## 4. Ad-hoc pipeline
 

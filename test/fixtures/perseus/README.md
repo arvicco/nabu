@@ -14,7 +14,7 @@ rules). All files are byte-identical upstream copies except the Iliad edition
   University.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P2-1).
 
-## Editions (5) — chosen to cover the parser's hard cases
+## Editions (7) — chosen to cover the parser's hard cases
 
 | File | Work | Lang | Why this one |
 |---|---|---|---|
@@ -23,6 +23,8 @@ rules). All files are byte-identical upstream copies except the Iliad edition
 | `greekLit/data/tlg0013/tlg014/tlg0013.tlg014.perseus-grc2.xml` | Homeric Hymn 14 (Mother of the Gods) | grc | Second document of the same scheme → multi-document corpus for conformance |
 | `greekLit/data/tlg0031/tlg024/tlg0031.tlg024.perseus-grc2.xml` | New Testament, 2 John | grc | Two-level `chapter`/`verse` citation via nested `div[@subtype]`; multiple `<ti:title>` aliases in work metadata |
 | `latinLit/data/stoa0045/stoa013/stoa0045.stoa013.perseus-lat2.xml` | Ausonius, Genethliacon | lat | `line` citation nested under a structural, NON-citeable `div[@subtype=section]`; older EpiDoc schema declaration (8.19 + schematron PI) |
+| `greekLit/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml` | Homeric Hymn 13, Evelyn-White translation | eng | Parallel-translations fixture (P7-4): `div[@type="translation"]`, ONE merged `<l n="1">` covering the grc edition's three lines — the honest one-sided alignment case. Copied whole from the local canonical snapshot 2026-07-07 |
+| `greekLit/data/tlg0031/tlg024/tlg0031.tlg024.perseus-eng2.xml` | 2 John, World English Bible translation | eng | Parallel-translations fixture (P7-4): `div[@type="translation"]` with the same two-level `chapter`/`verse` citation as the grc edition, 13 verses each — full citation-suffix pairing. Copied whole from the local canonical snapshot 2026-07-07 |
 
 Each edition is accompanied by its work-level `__cts__.xml` and the
 textgroup-level `__cts__.xml` (9 metadata files total) — the adapter resolves
@@ -39,6 +41,15 @@ files were copied whole from the local canonical snapshot (P6-1).
 - Edition slugs encode language + version (`perseus-grc2`, `perseus-lat2`);
   translations (`perseus-eng*`) sit as sibling files in the same work dir,
   distinguished in `__cts__.xml` as `<ti:translation>` vs `<ti:edition>`.
+- Translation bodies use `div[@type="translation"]` where original-language
+  editions use `div[@type="edition"]` (785 of 786 `perseus-eng*` files in the
+  canonical snapshot; the lone exception, tlg0057.tlg010.perseus-eng2, uses
+  `edition`). Version tokens on `perseus-eng<n>` are pure digits upstream
+  (eng1–eng6; no letter suffixes as of the 2026-07-03 snapshot).
+- English translations may merge the original's citation units: Hymn 13's
+  translation is a single `<l n="1">` covering the Greek's three lines; the
+  Iliad translations (not fixtured) cite by `book`/`card` where the Greek
+  cites by `book`/`line`, so only card-initial suffixes coincide.
 - Mixed content inside citation units: editorial `<milestone unit="card|Para">`
   markers appear inside `<l>` elements.
 - Some upstream works lack `__cts__.xml` entirely (e.g. phi0692) — these

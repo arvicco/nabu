@@ -103,7 +103,7 @@ module Nabu
 
     def sync_entry(entry, parse_only:, force:, progress:)
       source = entry.sync_source!(@db)
-      adapter = entry.adapter_class.new
+      adapter = entry.build_adapter
       workdir = workdir_for(entry.slug)
       fetch_report = nil
       load_report = nil

@@ -129,6 +129,11 @@ module Nabu
                    open, attribution, nc, research_private, restricted
         --limit    maximum hits, default 20
 
+      Sources ingesting parallel translations (registry `translations: true`,
+      P7-4) make those English passages ordinary search hits; --lang eng
+      scopes to them, --lang grc keeps them out. `show <hit> --parallel`
+      jumps from either side to the aligned line in the other.
+
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
         nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
@@ -136,6 +141,7 @@ module Nabu
         nabu search sapientia --lang lat           # Latin corpus only
         nabu search μηνι* --lang grc               # every derivative of the stem
         nabu search αγαπη --license attribution    # only freely re-usable hits
+        nabu search "rich-haired" --lang eng       # the ingested translations
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -193,17 +199,33 @@ module Nabu
         treebanks      urn:nabu:proiel:afnik:194690                     (sentence)
                        urn:nabu:ud:gothic-proiel:got_proiel-ud-dev:37589
 
+      PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
+      document or passage urn, find the sibling edition of the SAME work in
+      LANG (sources ingest translations only when their registry entry sets
+      `translations: true`) and render the two aligned by citation suffix —
+      :1.1 in the Greek next to :1.1 in the English. Alignment is exact
+      suffix equality: a suffix present in only one edition renders honestly
+      one-sided (translations often merge lines), never fuzzed. Works with
+      --full-urn.
+
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
         nabu show urn:nabu:ddbdp:aegyptus:89:240            # whole papyrus
         nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
+        nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-grc2 --parallel
+                                                  # Greek + eng, line by line
+        nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
+                                                  # one translated line + its original
 
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
-      "withdrawn" or "retired upstream" actually holds.
+      "withdrawn" or "retired upstream" actually holds; read a Greek work
+      you can't sight-read next to its English translation.
     HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
+    option :parallel, type: :string, lazy_default: "eng", banner: "[LANG]",
+                      desc: "Align with the same work's LANG edition by citation suffix (default eng)"
     def show(urn = nil)
       urn = urn.to_s.strip
       raise Thor::Error, "show: give a urn" if urn.empty?
@@ -211,6 +233,8 @@ module Nabu
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      return show_parallel(catalog, urn, options[:parallel]) if options[:parallel]
 
       result = Nabu::Query::Show.new(catalog: catalog).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
@@ -467,6 +491,62 @@ module Nabu
 
         suffix = line.urn.delete_prefix(document.urn)
         suffix == line.urn || suffix.empty? ? line.urn : suffix
+      end
+
+      # -- show --parallel (P7-4) ------------------------------------------
+
+      # Resolve + align + render, with the two honest failure modes: unknown
+      # urn (exit 1, same message as plain show) and no LANG sibling of the
+      # work in the catalog (exit 1, names the language).
+      def show_parallel(catalog, urn, lang)
+        result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        raise Thor::Error, "urn not found: #{urn}" if result.nil?
+        if result.right.nil?
+          raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
+                             "(alignment needs sibling CTS editions; is `translations: true` set " \
+                             "and the source resynced?)"
+        end
+
+        print_parallel(result)
+      end
+
+      # Render the alignment: both document headers, the pair/one-sided
+      # counts, then one block per row — the citation suffix (or absolute urn
+      # under --full-urn) over one line per language, "—" where an edition
+      # lacks the suffix. Withdrawn passages are shown, tagged (show-family).
+      def print_parallel(result)
+        say format_parallel_side(result.left)
+        say "  parallel: #{format_parallel_side(result.right)}"
+        say "  #{parallel_counts(result)}"
+        width = [result.left.language.to_s.length, result.right.language.to_s.length].max + 2
+        result.rows.each do |row|
+          say "  #{parallel_row_label(row)}"
+          say "    #{parallel_line(result.left.language, row.left, width)}"
+          say "    #{parallel_line(result.right.language, row.right, width)}"
+        end
+      end
+
+      def format_parallel_side(side)
+        "#{side.urn}#{" — #{side.title}" if side.title}#{" [#{side.language}]" if side.language}"
+      end
+
+      def parallel_counts(result)
+        paired = result.rows.count { |row| row.left && row.right }
+        left_only = result.rows.count { |row| row.right.nil? }
+        right_only = result.rows.count { |row| row.left.nil? }
+        "aligned by citation: #{paired} paired, #{left_only} #{result.left.language} only, " \
+          "#{right_only} #{result.right.language} only"
+      end
+
+      def parallel_row_label(row)
+        options[:full_urn] ? (row.left || row.right).urn : row.suffix
+      end
+
+      def parallel_line(language, line, width)
+        label = language.to_s.ljust(width)
+        return "#{label}—" if line.nil?
+
+        "#{label}#{line.text}#{withdrawn_tag(line.withdrawn)}"
       end
 
       def withdrawn_tag(withdrawn)

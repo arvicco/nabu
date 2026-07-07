@@ -246,6 +246,19 @@ class PerseusTest < Minitest::Test
     assert_equal Nabu::Adapters::Perseus.manifest, entry.manifest
   end
 
+  # --- translations flag off: provably inert (P7-4) ------------------------
+
+  # The frozen-urn pin: with the flag off (default), discover over a fixture
+  # dir that NOW CONTAINS eng translation files yields the identical ref list
+  # a pre-P7-4 adapter produced — same urns, paths, titles, languages, order.
+  def test_discover_with_flag_off_is_identical_to_default_despite_eng_files_on_disk
+    default_refs = Nabu::Adapters::Perseus.new.discover(GREEK_WORKDIR).to_a
+    flag_off_refs = Nabu::Adapters::Perseus.new(translations: false).discover(GREEK_WORKDIR).to_a
+    assert_equal default_refs, flag_off_refs
+    assert_equal [ILIAD_URN, HH13_URN, HH14_URN, JOHN2_URN], default_refs.map(&:id)
+    assert(default_refs.all? { |ref| ref.metadata["language"] == "grc" })
+  end
+
   private
 
   def perseus_pointing_at(upstream_url)
@@ -280,5 +293,126 @@ class PerseusTest < Minitest::Test
 
   def git(dir, *)
     Nabu::Shell.run("git", "-C", dir, *).strip
+  end
+end
+
+# The translations-on adapter (P7-4): `Perseus.new(translations: true)`
+# additionally discovers the highest perseus-eng<n> edition per work as an
+# ordinary aligned document — language "eng", its own edition urn, parsed from
+# div[@type="translation"]. Everything below exercises exactly that surface;
+# flag-off inertness is pinned in PerseusTest above.
+class PerseusTranslationsTest < Minitest::Test
+  FIXTURES = Nabu::TestSupport.fixtures("perseus")
+  GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
+
+  HH13_ENG_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-eng2"
+  JOHN2_ENG_URN = "urn:cts:greekLit:tlg0031.tlg024.perseus-eng2"
+  GRC_URNS = %w[
+    urn:cts:greekLit:tlg0012.tlg001.perseus-grc2
+    urn:cts:greekLit:tlg0013.tlg013.perseus-grc2
+    urn:cts:greekLit:tlg0013.tlg014.perseus-grc2
+    urn:cts:greekLit:tlg0031.tlg024.perseus-grc2
+  ].freeze
+
+  def adapter
+    Nabu::Adapters::Perseus.new(translations: true)
+  end
+
+  # --- discover -------------------------------------------------------------
+
+  def test_discover_adds_eng_editions_alongside_originals_sorted_by_urn
+    refs = adapter.discover(GREEK_WORKDIR).to_a
+    assert_equal (GRC_URNS + [HH13_ENG_URN, JOHN2_ENG_URN]).sort, refs.map(&:id)
+    assert_equal refs.map(&:id).sort, refs.map(&:id), "discover stays urn-sorted"
+  end
+
+  def test_translation_refs_carry_eng_language_and_the_work_title
+    refs = adapter.discover(GREEK_WORKDIR).to_a
+    eng = refs.select { |ref| ref.metadata["language"] == "eng" }
+    assert_equal [HH13_ENG_URN, JOHN2_ENG_URN], eng.map(&:id).sort
+    titles = eng.to_h { |ref| [ref.id, ref.metadata["title"]] }
+    assert_equal "Hymn 13 to Demeter", titles.fetch(HH13_ENG_URN)
+    assert_equal "2 John", titles.fetch(JOHN2_ENG_URN)
+    eng.each { |ref| assert_equal "perseus-greek", ref.source_id }
+  end
+
+  def test_discover_prefers_the_highest_eng_version_independently_of_the_original
+    Dir.mktmpdir do |dir|
+      work = File.join(dir, "data", "tlg9999", "tlg001")
+      FileUtils.mkdir_p(work)
+      %w[perseus-grc1 perseus-grc3 perseus-eng2 perseus-eng4].each do |slug|
+        FileUtils.touch(File.join(work, "tlg9999.tlg001.#{slug}.xml"))
+      end
+      refs = adapter.discover(dir).to_a
+      assert_equal %w[urn:cts:greekLit:tlg9999.tlg001.perseus-eng4
+                      urn:cts:greekLit:tlg9999.tlg001.perseus-grc3], refs.map(&:id)
+    end
+  end
+
+  def test_non_eng_translation_slugs_are_still_skipped
+    Dir.mktmpdir do |dir|
+      work = File.join(dir, "data", "tlg9999", "tlg001")
+      FileUtils.mkdir_p(work)
+      %w[perseus-grc2 perseus-fre1 perseus-ger1 1st1K-eng2].each do |slug|
+        FileUtils.touch(File.join(work, "tlg9999.tlg001.#{slug}.xml"))
+      end
+      refs = adapter.discover(dir).to_a
+      assert_equal %w[urn:cts:greekLit:tlg9999.tlg001.perseus-grc2], refs.map(&:id)
+    end
+  end
+
+  # --- parse ------------------------------------------------------------------
+
+  # Hymn 13's translation is ONE merged <l n="1"> inside div[@type="translation"]
+  # covering the Greek's three lines — the honest one-sided alignment case.
+  def test_parse_hh13_translation_yields_one_eng_passage_from_the_translation_div
+    document = parse_ref(HH13_ENG_URN)
+    assert_equal HH13_ENG_URN, document.urn
+    assert_equal "eng", document.language
+    assert_equal 1, document.size
+    passage = document.first
+    assert_equal "#{HH13_ENG_URN}:1", passage.urn
+    assert_equal "eng", passage.language
+    assert_includes passage.text, "rich-haired Demeter"
+    assert_equal Nabu::Normalize.search_form(passage.text, language: "eng"), passage.text_normalized
+  end
+
+  # 2 John translates verse for verse: the eng edition mints exactly the same
+  # citation suffixes as the grc edition — passage-level alignment for free.
+  def test_parse_john2_translation_aligns_verse_suffixes_with_the_original
+    eng = parse_ref(JOHN2_ENG_URN)
+    grc = parse_ref("urn:cts:greekLit:tlg0031.tlg024.perseus-grc2")
+    suffixes = ->(doc) { doc.map { |p| p.urn.delete_prefix(doc.urn) } }
+    assert_equal 13, eng.size
+    assert_equal suffixes.call(grc), suffixes.call(eng)
+  end
+
+  private
+
+  def parse_ref(urn)
+    a = adapter
+    ref = a.discover(GREEK_WORKDIR).find { |r| r.id == urn }
+    refute_nil ref, "expected discover to yield #{urn}"
+    a.parse(ref)
+  end
+end
+
+# The shared conformance suite against a translations-on Perseus instance:
+# eng documents must satisfy every adapter guarantee (urn uniqueness across
+# the widened discover set, stability, NFC, minted search form, ref-id ==
+# document urn) exactly like originals.
+class PerseusTranslationsConformanceTest < Minitest::Test
+  include AdapterConformance
+
+  def conformance_adapter
+    Nabu::Adapters::Perseus.new(translations: true)
+  end
+
+  def conformance_workdir
+    File.join(Nabu::TestSupport.fixtures("perseus"), "greekLit")
+  end
+
+  def conformance_expected_source_id
+    "perseus-greek"
   end
 end

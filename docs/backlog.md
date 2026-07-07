@@ -591,7 +591,7 @@ Acceptance: conformance green for the new adapter; registry + docs
       (02-sources status row: READY, awaiting first sync); manifest
       updated; suite + lint green.
 
-## P7-4 · Parallel translations: the readable corpus  [tier: fable] [status: ready] [deps: —]
+## P7-4 · Parallel translations: the readable corpus  [tier: fable] [status: done] [deps: —]
 Goal: Perseus ships English editions IN THE REPOS WE ALREADY CLONED —
       the language gate drops them (`perseus-eng*`). Ingest them as
       aligned parallel documents: same work, own edition urn, language

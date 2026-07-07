@@ -78,6 +78,13 @@ files:
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/tlg0013.tlg013.perseus-grc2.xml
     whole: true
     trim: none (Homeric Hymn 13, small edition kept whole)
+  - path: greekLit/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml
+    whole: true
+    trim: >-
+      none (Homeric Hymn 13 English translation, kept whole; copied from the
+      local canonical snapshot, P7-4 — one merged eng line covering the grc
+      edition's three, exercising one-sided alignment)
   - path: greekLit/data/tlg0013/tlg014/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/tlg014/__cts__.xml
     whole: true
@@ -98,6 +105,13 @@ files:
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/tlg0031.tlg024.perseus-grc2.xml
     whole: true
     trim: none (New Testament, 2 John — two-level citation, kept whole)
+  - path: greekLit/data/tlg0031/tlg024/tlg0031.tlg024.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0031/tlg024/tlg0031.tlg024.perseus-eng2.xml
+    whole: true
+    trim: >-
+      none (2 John English translation, kept whole; copied from the local
+      canonical snapshot, P7-4 — verse-for-verse aligned with the grc edition,
+      13 verses each, exercising full citation-suffix pairing)
   - path: latinLit/data/stoa0045/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/__cts__.xml
     whole: true

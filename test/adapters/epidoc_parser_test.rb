@@ -381,6 +381,38 @@ class EpidocParserTest < Minitest::Test
     end
   end
 
+  # --- Translation divs (P7-4) ------------------------------------------------
+  # English editions anchor their body in div[@type="translation"]; acceptance
+  # is per-parse via division_types: so composite original-language files that
+  # ALSO embed a translation div (3 exist upstream) stay byte-identical under
+  # the default ["edition"].
+
+  HH13_ENG_PATH = File.join(FIXTURES, "greekLit/data/tlg0013/tlg013/tlg0013.tlg013.perseus-eng2.xml")
+  HH13_ENG_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-eng2"
+
+  def test_translation_div_is_not_accepted_by_default
+    error = assert_raises(Nabu::ParseError) do
+      parser.parse(HH13_ENG_PATH, urn: HH13_ENG_URN, language: "eng")
+    end
+    assert_match(/no div\[@type="edition"\] found/, error.message)
+  end
+
+  def test_translation_div_parses_with_division_types
+    doc = parser.parse(HH13_ENG_PATH, urn: HH13_ENG_URN, language: "eng",
+                                      division_types: %w[translation edition])
+    assert_equal HH13_ENG_URN, doc.urn
+    assert_equal "eng", doc.language
+    assert_equal ["#{HH13_ENG_URN}:1"], doc.passages.map(&:urn)
+    assert_includes doc.passages[0].text, "rich-haired Demeter"
+  end
+
+  def test_translation_division_types_error_message_names_the_accepted_types
+    error = assert_raises(Nabu::ParseError) do
+      parser.parse(HH13_PATH, urn: HH13_URN, language: "grc", division_types: ["translation"])
+    end
+    assert_match(/no div\[@type="translation"\] found/, error.message)
+  end
+
   # --- Streaming proof --------------------------------------------------------
 
   def test_implementation_streams_and_never_builds_a_full_document_dom
