@@ -97,6 +97,62 @@ module Nabu
     # - Editorial <milestone unit="card|Para|para"/> markers appear INSIDE
     #   citation units (mixed content); see the space rule above.
     #
+    # == P4 fallback (P9-2) — legacy pre-P5 TEI
+    #
+    # A third acceptance strategy for the pre-P5 Perseus vintage (167
+    # perseus-latin files at census): documents with NO citation root div and
+    # NO CTS cRefPattern — either true TEI P4 (<TEI.2> DOCTYPE, unnamespaced,
+    # numbered <div1>/<div2> containers, undefined ISO entities) or P5-
+    # namespace conversions that kept the legacy <refState>-only refsDecl
+    # (body = <div type="book"> containers + <milestone unit="chapter|
+    # section" n=".."/> streams). It engages when — and ONLY when — the
+    # subtype pass raised its "no div[@type=...] found" error (an error the
+    # structural retry never handles, so the two strategies trigger on
+    # disjoint shapes) AND the header declared no usable cRefPattern: a P5
+    # document without an edition div (the first1k commentary class) makes
+    # the fallback DECLINE and the original error re-raise byte-identical.
+    #
+    # The legacy declarations are NOT trusted for citation: the census shows
+    # them contradicting the body wholesale (phi0692 declares
+    # book.chapter.section over lb-numbered verse; stoa0045 declares the same
+    # over letter divs), so citation is minted from the body itself, on a
+    # three-rung ladder where each rung runs only if the previous minted
+    # nothing:
+    #
+    # 1. Containers + milestones. Every body div/div1..div9 is a citation
+    #    container; its component is @n, else @type + 1-based ordinal among
+    #    same-type siblings ("poem2"), else "d" + ordinal. Milestones with
+    #    @unit and non-empty @n segment WITHIN the innermost container: units
+    #    form a hierarchy in first-appearance order (Livy: chapter before
+    #    section), a milestone clears all deeper components, and any div
+    #    boundary clears them all. Citation = div path + set milestone
+    #    components, dot-joined; text accumulating while at least one
+    #    component is set flushes at every boundary; consecutive flushes with
+    #    the SAME citation merge (a boundary that does not change the
+    #    citation did not create a new unit) — NON-adjacent repeats are
+    #    honest duplicate-urn quarantines (8 files at census, e.g. Cato's
+    #    praefatio div labeled chapter n="1" colliding with the real one).
+    # 2. Numbered <lb n/> marks as per-line citation (Appendix Vergiliana
+    #    verse: no divs, no milestones, lines as lb marks).
+    # 3. Bare <p> ordinals, 1-based over ALL p elements in body order
+    #    (Boethius tractates: no apparatus at all; empty p's keep their
+    #    ordinal and mint nothing).
+    #
+    # All rungs share the P5 text discipline (notes dropped, breaks space,
+    # whitespace collapsed, NFC) plus two P4-specific rules: <head> subtrees
+    # are dropped (title apparatus, and the P5 pass excludes them
+    # structurally anyway), and undefined entity references — the P4 DTD is
+    # never fetched — resolve through a fixed table of the ISO Latin-1/pub
+    # names observed at census (&aelig; &mdash; ...; unknown names become a
+    # space so words never fuse). No urn cross-check is possible: P4 bodies
+    # carry no edition urn, the caller-supplied urn is authoritative.
+    #
+    # FROZEN-URN SAFETY: same argument as the structural retry — the fallback
+    # runs strictly after the unchanged first pass raised, so every document
+    # that parses cleanly today never reaches it; quarantined documents never
+    # entered the catalog. (Verified read-only against the live catalog; see
+    # the P9-2 worklog entry.)
+    #
     # == Public API
     #
     #   Nabu::Adapters::EpidocParser.new.parse(
@@ -136,6 +192,19 @@ module Nabu
       ].freeze
       private_constant :RETRYABLE_ERRORS
 
+      # The subtype pass's no-citation-root error — the P4 fallback's trigger
+      # (see the file header). Disjoint from RETRYABLE_ERRORS: the structural
+      # retry and the P4 fallback can never race for the same document.
+      NO_DIVISION_ERROR = /: no div\[@type=.*\] found\z/
+      private_constant :NO_DIVISION_ERROR
+
+      # Raised internally by P4Extraction when the header declares a usable
+      # CTS cRefPattern: the document is P5 territory and the original error
+      # must stand byte-identical.
+      class P4Declined < StandardError
+      end
+      private_constant :P4Declined
+
       # The default citation-root acceptance: original-language editions.
       DIVISION_TYPES = ["edition"].freeze
 
@@ -147,14 +216,13 @@ module Nabu
         attempt(source, path: path, urn: urn, language: language, title: title,
                         division_types: division_types, structural: false)
       rescue ParseError => e
-        raise unless RETRYABLE_ERRORS.any? { |pattern| pattern.match?(e.message) } && rewind_for_retry(source)
-
-        begin
-          attempt(source, path: path, urn: urn, language: language, title: title,
-                          division_types: division_types, structural: true)
-        rescue ParseError => retry_error
-          raise ParseError, "#{e.message}; structural retry (refsDecl replacementPattern xpath) " \
-                            "also failed: #{retry_error.message.delete_prefix("#{path}: ")}"
+        if RETRYABLE_ERRORS.any? { |pattern| pattern.match?(e.message) } && rewind_for_retry(source)
+          structural_retry(source, path: path, urn: urn, language: language, title: title,
+                                   division_types: division_types, original: e)
+        elsif NO_DIVISION_ERROR.match?(e.message) && rewind_for_retry(source)
+          p4_retry(source, path: path, urn: urn, language: language, title: title, original: e)
+        else
+          raise
         end
       end
 
@@ -164,6 +232,44 @@ module Nabu
         units = extract_units(source, path: path, urn: urn, division_types: division_types, structural: structural)
         build_document(units, urn: urn, language: language, title: title, path: path,
                               division_types: division_types)
+      end
+
+      def structural_retry(source, path:, urn:, language:, title:, division_types:, original:)
+        attempt(source, path: path, urn: urn, language: language, title: title,
+                        division_types: division_types, structural: true)
+      rescue ParseError => e
+        raise ParseError, "#{original.message}; structural retry (refsDecl replacementPattern xpath) " \
+                          "also failed: #{e.message.delete_prefix("#{path}: ")}"
+      end
+
+      # The P4 fallback ladder (see the file header): each rung re-reads the
+      # document and runs only if the previous one minted nothing. A usable
+      # cRefPattern in the header raises P4Declined out of the first read —
+      # the original P5 error stands byte-identical.
+      def p4_retry(source, path:, urn:, language:, title:, original:)
+        P4Extraction::MODES.each_with_index do |mode, index|
+          break if index.positive? && !rewind_for_retry(source)
+
+          units = extract_p4_units(source, path: path, mode: mode)
+          next if units.empty?
+
+          return build_document(units, urn: urn, language: language, title: title, path: path)
+        end
+        raise ParseError, "#{path}: no citable passages found by any rung (numbered divs/milestones, " \
+                          "lb lines, p ordinals)"
+      rescue P4Declined
+        raise original
+      rescue ParseError => e
+        raise ParseError, "#{original.message}; P4 retry (legacy numbered-div/milestone citation) " \
+                          "also failed: #{e.message.delete_prefix("#{path}: ")}"
+      end
+
+      def extract_p4_units(source, path:, mode:)
+        with_io(source) do |io|
+          P4Extraction.new(reader: Nokogiri::XML::Reader(io, path), mode: mode).call
+        end
+      rescue Nokogiri::XML::SyntaxError => e
+        raise ParseError, "#{path}: malformed XML: #{e.message}"
       end
 
       # The retry re-reads the document: trivially possible for a file path,
@@ -608,6 +714,219 @@ module Nabu
         end
       end
       private_constant :Extraction
+
+      # One rung of the P4 fallback ladder (file header, "P4 fallback"): a
+      # single streaming pass minting citation units from the body's own
+      # structure — numbered container divs + milestone streams (:containers),
+      # numbered lb marks (:lines), or bare p ordinals (:paragraphs). Raises
+      # P4Declined the moment the header shows a usable CTS cRefPattern.
+      class P4Extraction
+        MODES = %i[containers lines paragraphs].freeze
+
+        READER = Nokogiri::XML::Reader
+        TEXT_NODE_TYPES = Extraction::TEXT_NODE_TYPES
+        # <note> parity with the P5 pass; <head> is title apparatus that the
+        # P5 pass excludes structurally (it sits outside citation units) but a
+        # P4 container div would otherwise swallow.
+        DROPPED_ELEMENTS = %w[note head].freeze
+        CONTAINER_DIV = /\Adiv[1-9]?\z/
+        # Undefined entity references observed at census across all 167 P4
+        # files — the standard ISO Latin-1/pub names their unfetchable DTD
+        # would define. Unknown names resolve to a space (words never fuse).
+        ENTITIES = {
+          "aelig" => "æ", "AElig" => "Æ", "oelig" => "œ", "OElig" => "Œ",
+          "aacute" => "á", "Aacute" => "Á", "agrave" => "à", "acirc" => "â", "auml" => "ä",
+          "eacute" => "é", "egrave" => "è", "ecirc" => "ê", "euml" => "ë", "Euml" => "Ë",
+          "emacr" => "ē", "iacute" => "í", "Iacute" => "Í", "igrave" => "ì", "icirc" => "î",
+          "iuml" => "ï", "Iuml" => "Ï", "oacute" => "ó", "ograve" => "ò", "ocirc" => "ô",
+          "ouml" => "ö", "Ouml" => "Ö", "uacute" => "ú", "ugrave" => "ù", "ucirc" => "û",
+          "uuml" => "ü", "Uuml" => "Ü", "yacute" => "ý", "yuml" => "ÿ", "ntilde" => "ñ",
+          "ccedil" => "ç", "racute" => "ŕ", "mdash" => "—", "ndash" => "–", "dagger" => "†",
+          "sect" => "§", "deg" => "°", "pound" => "£", "prime" => "′", "cdot" => "·",
+          "lsquo" => "‘", "rsquo" => "’", "ldquo" => "“", "rdquo" => "”"
+        }.freeze
+
+        def initialize(reader:, mode:)
+          @reader = reader
+          @mode = mode
+          @body_depth = 0
+          @drop_depth = 0
+          @frames = [] # one per open container div: { component:, counters: }
+          @counters = Hash.new(0) # ordinal fallbacks for divs directly under body
+          @milestone_units = []   # hierarchy in first-appearance order
+          @milestone_values = {}
+          @paragraph = 0
+          @in_paragraph = false
+          @buffer = +""
+          @segments = [] # [citation, raw text] — merged + NFC'd at the end
+        end
+
+        def call
+          @reader.each { |node| process(node) }
+          @segments.map { |citation, text| Unit.new(citation: citation, text: Normalize.nfc(text)) }
+        end
+
+        private
+
+        def process(node)
+          case node.node_type
+          when READER::TYPE_ELEMENT then start_element(node)
+          when READER::TYPE_END_ELEMENT then end_element(node)
+          when READER::TYPE_ENTITY_REFERENCE
+            @buffer << ENTITIES.fetch(node.name, " ") if capturing?
+          when *TEXT_NODE_TYPES
+            @buffer << node.value.to_s if capturing?
+          end
+        end
+
+        def capturing?
+          @body_depth.positive? && @drop_depth.zero? && citable?
+        end
+
+        def citable?
+          return @in_paragraph if @mode == :paragraphs
+
+          @frames.any? || @milestone_values.any?
+        end
+
+        def start_element(node)
+          name = local_name(node)
+          raise P4Declined if name == "cRefPattern" && usable_cref_pattern?(node)
+          return enter_body(node) if name == "body"
+          return if @body_depth.zero?
+          return open_drop(node) if @drop_depth.positive? || DROPPED_ELEMENTS.include?(name)
+
+          dispatch_start(node, name)
+        end
+
+        def dispatch_start(node, name)
+          if CONTAINER_DIV.match?(name) && @mode != :paragraphs
+            open_container(node)
+          elsif citation_milestone?(node, name)
+            milestone_event(name == "lb" ? "line" : node.attribute("unit"), node.attribute("n"))
+          elsif name == "p" && @mode == :paragraphs
+            flush
+            @paragraph += 1
+            @in_paragraph = true unless node.empty_element?
+          elsif Extraction::BREAK_ELEMENTS.include?(name) && capturing?
+            @buffer << " "
+          end
+        end
+
+        def end_element(node)
+          name = local_name(node)
+          if name == "body"
+            flush
+            @body_depth -= 1
+          elsif @body_depth.zero?
+            nil
+          elsif @drop_depth.positive?
+            @drop_depth -= 1
+          elsif CONTAINER_DIV.match?(name) && @mode != :paragraphs
+            close_container
+          elsif name == "p" && @mode == :paragraphs
+            flush
+            @in_paragraph = false
+          end
+        end
+
+        def enter_body(node)
+          @body_depth += 1 unless node.empty_element?
+        end
+
+        def open_drop(node)
+          @drop_depth += 1 unless node.empty_element?
+        end
+
+        # -- containers + milestones (rungs 1 and 2) --------------------------
+
+        def open_container(node)
+          flush
+          component = component_for(node)
+          clear_milestones
+          @frames << { component: component, counters: Hash.new(0) } unless node.empty_element?
+        end
+
+        def close_container
+          flush
+          @frames.pop
+          clear_milestones
+        end
+
+        # Component minting (file header): @n, else @type + ordinal among
+        # same-type siblings of the parent, else "d" + ordinal.
+        def component_for(node)
+          n = node.attribute("n")
+          return n unless n.nil? || n.empty?
+
+          type = node.attribute("type").to_s
+          counters = @frames.empty? ? @counters : @frames.last[:counters]
+          counters[type] += 1
+          type.empty? ? "d#{counters[type]}" : "#{type}#{counters[type]}"
+        end
+
+        # A milestone with @unit and non-empty @n is a citation event; on the
+        # :lines rung, numbered <lb/> marks join as the pseudo-unit "line".
+        def citation_milestone?(node, name)
+          return false if @mode == :paragraphs
+          return false if blank?(node.attribute("n"))
+
+          (name == "milestone" && !blank?(node.attribute("unit"))) || (name == "lb" && @mode == :lines)
+        end
+
+        def milestone_event(unit, value)
+          flush
+          index = @milestone_units.index(unit) || ((@milestone_units << unit).size - 1)
+          @milestone_values[unit] = value
+          @milestone_units[(index + 1)..].each { |deeper| @milestone_values.delete(deeper) }
+        end
+
+        def clear_milestones
+          @milestone_units.clear
+          @milestone_values.clear
+        end
+
+        # -- flushing ----------------------------------------------------------
+
+        def citation
+          return @paragraph.to_s if @mode == :paragraphs
+
+          (@frames.map { |frame| frame[:component] } +
+            @milestone_units.filter_map { |unit| @milestone_values[unit] }).join(".")
+        end
+
+        def flush
+          text = @buffer.gsub(/[[:space:]]+/, " ").strip
+          @buffer = +""
+          return if text.empty?
+
+          label = citation
+          return if label.empty?
+
+          # A boundary that did not change the citation did not create a new
+          # unit: consecutive same-citation segments merge. Non-adjacent
+          # repeats survive to the duplicate-urn check — honest quarantine.
+          if @segments.last&.first == label
+            @segments.last[1] << " " << text
+          else
+            @segments << [label, text]
+          end
+        end
+
+        def usable_cref_pattern?(node)
+          match = node.attribute("matchPattern")
+          match ? match.scan(/(?<!\\)\(/).size.positive? : false
+        end
+
+        def blank?(value)
+          value.nil? || value.empty?
+        end
+
+        def local_name(node)
+          node.name.split(":").last
+        end
+      end
+      private_constant :P4Extraction
     end
   end
 end

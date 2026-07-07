@@ -804,7 +804,7 @@ Acceptance: eng editions discovered only with the flag; conformance green;
       existing fixture URN lists unchanged; parallel render test over the new
       fixture pair; suite + lint green.
 
-## P9-2 · Legacy P4-TEI parser support  [tier: fable] [status: ready] [deps: —]
+## P9-2 · Legacy P4-TEI parser support  [tier: fable] [status: done] [deps: —]
 Goal: 101 perseus-latin English editions (and census whatever else across
       all sources shares the shape) quarantine as pre-P5 TEI: numbered
       <div1/div2 type="poem|book|chapter"> containers instead of
