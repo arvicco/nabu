@@ -558,8 +558,15 @@ Goal: the concept promises "restorable from an rsync backup with zero
       exactly the data that exists nowhere else; file-level or nothing),
       db/history ledger, config/, and (default-on, flag-off) the derived
       dbs, to a config-driven target (config/nabu.yml `backup: target:` —
-      the OWNER wires the real destination, local disk or Tailscale host;
-      the loop never invents one). `--dry-run` prints the rsync plan.
+      the OWNER wires the real destination). OWNER DECISION 2026-07-07:
+      target is a locally mounted external volume; a virtual volume
+      (hdiutil sparsebundle mounted under /Volumes) simulates it until
+      real hardware is wired. Because the target is a mount point, the
+      backup MUST refuse to run when the volume is not actually mounted
+      (verify the path is a real mount point, not an empty directory on
+      the boot disk — the classic rsync-into-the-mountpoint footgun that
+      silently "backs up" to the wrong disk and later shadows the real
+      volume). `--dry-run` prints the rsync plan.
       docs/ops.md gains the backup section + an optional launchd template;
       restore procedure documented step-by-step. `rake ops:drill` — the
       fresh-machine drill, LOCAL: back up to a tmp target, "restore" into
@@ -648,8 +655,10 @@ P8-1 · MCP tool contract [fable]: read-only stdio server surface —
       (future ad-hoc material never leaks into a conversational surface),
       negative results carry corpus-coverage notes (nabu_status data), a
       mid-reindex query degrades gracefully ("index rebuilding — retry").
-      OWNER DECISION AT DISPATCH: official `mcp` gem vs hand-rolled stdio
-      JSON-RPC (CLAUDE.md ask-first rule).
+      DECIDED (owner, 2026-07-07): hand-rolled stdio JSON-RPC, no gem —
+      the field moves fast and we keep control of the surface; the
+      protocol core (initialize / tools/list / tools/call over
+      newline-delimited JSON-RPC 2.0 on stdio) is small and ours.
 P8-2 · MCP implementation [opus]: `bin/nabu mcp` (stdio), registration
       docs (.mcp.json / Claude Code + Desktop), stdio-harness tests, ops
       note. This is also the dress rehearsal for the concept's read-only
