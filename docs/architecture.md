@@ -20,7 +20,7 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Invariant:** data flows one way. Adapters/HTR produce canonical files; the loader derives SQLite from canonical files; enrichers write only to derived tables. `nabu rebuild` proves the invariant by regenerating `db/` from `canonical/` byte-for-byte-equivalently (modulo enrichment, which replays from its own journal).
+**Invariant:** data flows one way. Adapters/HTR produce canonical files; the loader derives SQLite from canonical files; enrichers write only to derived tables. catalog + fulltext + vectors = f(canonical): `nabu rebuild` proves it by regenerating them from `canonical/` byte-for-byte-equivalently (modulo enrichment, which replays from its own journal). **history.sqlite3 is the exception by design** (P7-1): an append-only operational ledger (run history, per-repo sync pins, license baselines, durable revision events — later the enrichment journal) that is *never* derived, *never* dropped by rebuild, and part of the backup set. It is keyed by durable identity (source slug, repo url, passage/document urn), never by catalog row ids, which every rebuild re-mints.
 
 ## 2. Directory layout
 
@@ -44,23 +44,26 @@ nabu/
 │   ├── adhoc/                   # intake, HTR drivers, review, commit
 │   └── query/                   # FTS, vector, concordance
 ├── config/
-│   ├── sources.yml              # registry: adapter class, upstream, license, enabled
+│   ├── sources.yml              # registry: adapter class, upstream, license, enabled, translations opt-in
 │   └── nabu.yml               # paths, models, API settings
 ├── canonical/                   # git repo (possibly separate) — the asset
 │   ├── perseus-greek/           # vendored upstream snapshot or submodule
 │   ├── adhoc/<slug>/            #   pages/ (images) + transcription/ + manifest.yml
 │   └── ...
 ├── db/
-│   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
-│   ├── fulltext.sqlite3         # FTS5 (contentless, keyed by passage id)
-│   └── vectors.sqlite3          # sqlite-vec embeddings, per model-version table
+│   ├── catalog.sqlite3          # DERIVED: sources, documents, passages, provenance, licenses
+│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas (both keyed by passage id)
+│   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
+│   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
+│   ├── migrate/                 # catalog migration track (forward-only)
+│   └── ledger_migrate/          # ledger migration track (own schema_info per file)
 ├── test/
 │   ├── fixtures/<source>/       # small real upstream samples, checked in
 │   └── ...
 └── Rakefile
 ```
 
-Canonical layer on the big disk, `db/` rebuildable anywhere, both rsync/git-friendly. Keeping three SQLite files separates concerns and keeps the precious catalog small; ATTACH handles cross-db queries.
+Canonical layer on the big disk; the derived dbs rebuildable anywhere; the history ledger small, precious, and backed up alongside canonical/. One SQLite file per concern; cross-db reads thread separate connections (the established catalog/fulltext pattern — status and health take catalog + ledger handles the same way; ATTACH remains available if a real cross-db join ever appears).
 
 ## 3. The adapter contract
 
@@ -93,6 +96,7 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided).
 
 ## 4. Ad-hoc pipeline
 
@@ -109,11 +113,14 @@ new → pages_added → transcribed → reviewed → committed
 - **Review:** `nabu adhoc review` generates a static HTML page (image left, editable text right) served from a local port; saved edits write back to `transcription/`. Human sign-off flips state to `reviewed`.
 - **Commit:** transcription becomes a canonical document (minted URN `urn:nabu:adhoc:<slug>:<page>`), enters the store through the standard loader. Source images stay forever — they are the actual primary source.
 
-## 5. Storage schema (catalog.sqlite3, conceptual)
+## 5. Storage schema (conceptual)
+
+The DERIVED catalog (catalog.sqlite3 — dropped and regenerated by `nabu rebuild`):
 
 ```
 sources(id, name, adapter_class, license, license_class, upstream_url,
-        enabled, last_sync_at, last_sync_sha)
+        enabled, last_sync_at, last_sync_sha)   -- last_sync_* are display mirrors;
+                                                -- the authoritative pins are in the ledger
 documents(id, source_id, urn, title, language, edition, license_override,
           canonical_path, content_sha256, revision, withdrawn, retired_upstream)
 passages(id, document_id, urn, sequence, language, text, text_normalized,
@@ -123,9 +130,27 @@ enrichments(id, passage_id, kind, model, model_version, payload_json, at)
    -- lemmas, glosses; embeddings live in vectors.sqlite3 keyed by passage id
 ```
 
+The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
+
+```
+runs(id, source_slug, kind[sync|rebuild], started_at, finished_at,
+     added, updated, withdrawn_count, errored, status, notes)
+pins(id, source_slug, repo_url, last_sync_sha, license_baseline_sha256)
+   -- one row per upstream repo (single- and multi-repo sources alike);
+   -- written by sync (sha) and the remote probe (baseline)
+revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
+          old_sha, new_sha, at)
+   -- the durable revision history: content transitions of existing rows only
+```
+
+- Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.
+- Provenance is deliberately NOT durable (decision, P7-1): it journals per-load noise ("loaded" × 60k docs per rebuild replay, "quarantined", "superseded") that describes the *derivation*, so it honestly resets with the derivation. The compact `revisions` ledger carries the part with lasting value — which passages changed when, old/new shas. The loader writes both: catalog provenance for everything, one ledger row per content transition of an *existing* row (inserts — including every rebuild replay — write nothing durable, so rebuilds leave the ledger byte-identical).
+- Runs carry `kind`: rebuild replays are honest history but re-add the whole corpus, so trend queries (health, sync deviation warnings) read `kind=sync` only; `status` shows the latest run of any kind.
+- Phase 8 (enrichments — paid API output that must survive rebuilds): the enrichment journal lives in the ledger, urn-keyed like `revisions` (passage urn + kind + model identity), and `nabu enrich --replay` re-applies it into the catalog after a rebuild. The identity scheme above is the contract; the tables land with Phase 8.
+- Migration tracks are per-db and forward-only: `db/migrate/` for the catalog, `db/ledger_migrate/` for the ledger — each SQLite file keeps its own `schema_info`, so the counters cannot collide. One-shot lift-and-shift: every write path opens the ledger via `Ledger.open_with_lift!`, which copies a pre-P7-1 catalog's runs/pins/baselines into the ledger (re-keyed by slug/url) and only then migrates the catalog forward (005 drops the moved tables). A fresh machine with no ledger bootstraps clean: read paths treat the absent file as empty history ("no run history", never an error); the first sync creates it.
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
+- `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the gold-treebank lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output).
 - `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
-- Migrations via Sequel's migration framework, numbered, forward-only.
 - `license_class` enum (`open`, `attribution`, `nc`, `research_private`, `restricted`) drives query/export filters.
 
 ## 6. Enrichment
@@ -152,7 +177,7 @@ enrichments(id, passage_id, kind, model, model_version, payload_json, at)
 
 - **The retention contract (the attic).** If upstream scraps a document — deletion, license change, disagreement — local storage marks it and KEEPS it usable. Git-based fetch is non-destructive (`Nabu::GitFetch`): `git fetch` first (objects only, working tree untouched), then each file the `HEAD..FETCH_HEAD` diff deletes is copied to `canonical/<slug>/.attic/<same relative path>` before the ff-only merge. First copy wins — an attic file is never overwritten — and a per-attic `.attic.json` manifest records the upstream sha each file vanished at. The attic lives *inside* canonical/, so `db = f(canonical)` holds unchanged: every rebuild replays attic documents (as `retired_upstream` rows with "retired" provenance carrying that sha). Renames are not scrapping (`--find-renames` is explicit): content surviving at a new path is not atticked. Retired documents stay fully live — indexed, searchable, exportable — and `status`/`show` label them; only intra-document edition changes stay revision-journaled (an upstream typo fix is not scrapping). Out of scope, deliberately: a revised passage's *old text* is journaled by sha only (not stored), and the attic protects against upstream loss, not local disk loss — backups remain the answer there.
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
-- Every sync writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to a `runs` table; `nabu status` reads it.
+- Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
-- Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); db/ is disposable but nightly-snapshotted anyway (cheap).
+- Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational).

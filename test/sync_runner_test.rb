@@ -116,7 +116,7 @@ class SyncRunnerTest < Minitest::Test
 
   # A multi-repo source (UD shape): fetch returns a FetchReport whose +repos+
   # maps each upstream repo_url to its HEAD sha, so update_source_state pins one
-  # source_repos row per repo. Class-level +repos+ so a re-sync can drop a repo
+  # ledger pin per repo. Class-level +repos+ so a re-sync can drop a repo
   # (stale-pin removal) or advance a sha. discover yields one doc so the load
   # path runs.
   class MultiRepoAdapter < Nabu::Adapter
@@ -164,6 +164,7 @@ class SyncRunnerTest < Minitest::Test
   end
 
   def setup
+    @ledger = ledger_test_db
     @db = store_test_db
     @root = Dir.mktmpdir("nabu-sync")
     @canonical = File.join(@root, "canonical")
@@ -259,9 +260,9 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "succeeded", last_run_status
   end
 
-  # --- per-repo pins for multi-repo sources (P6-3) ------------------------
+  # --- per-repo pins in the history ledger (P6-3, moved by P7-1) ----------
 
-  def test_multi_repo_sync_records_a_source_repos_row_per_repo
+  def test_multi_repo_sync_records_a_ledger_pin_per_repo
     MultiRepoAdapter.reset!(repos: {
                               "https://github.com/acme/one" => "sha-one",
                               "https://github.com/acme/two" => "sha-two"
@@ -269,12 +270,11 @@ class SyncRunnerTest < Minitest::Test
     runner = make_runner(registry(entry("multi", MultiRepoAdapter, enabled: true)))
     runner.sync("multi")
 
-    pins = source_repo_pins("multi")
     assert_equal({ "https://github.com/acme/one" => "sha-one",
-                   "https://github.com/acme/two" => "sha-two" }, pins)
+                   "https://github.com/acme/two" => "sha-two" }, ledger_pins("multi"))
   end
 
-  def test_resync_upserts_shas_and_removes_stale_repo_rows
+  def test_resync_upserts_shas_and_removes_stale_pins
     source = "multi"
     MultiRepoAdapter.reset!(repos: {
                               "https://github.com/acme/one" => "sha-one",
@@ -283,27 +283,43 @@ class SyncRunnerTest < Minitest::Test
     runner = make_runner(registry(entry(source, MultiRepoAdapter, enabled: true)))
     runner.sync(source)
 
-    # A probe recorded a license baseline on the "one" row; a sync must not wipe it.
-    Nabu::Store::SourceRepo.first(repo_url: "https://github.com/acme/one")
-                           .update(license_baseline_sha256: "baseline-one")
+    # A probe recorded a license baseline on the "one" pin; a sync must not wipe it.
+    Nabu::Store::Pin.first(repo_url: "https://github.com/acme/one")
+                    .update(license_baseline_sha256: "baseline-one")
 
     # Next manifest advances "one" and drops "two" entirely.
     MultiRepoAdapter.repos = { "https://github.com/acme/one" => "sha-one-v2" }
     runner.sync(source)
 
-    pins = source_repo_pins(source)
-    assert_equal({ "https://github.com/acme/one" => "sha-one-v2" }, pins,
+    assert_equal({ "https://github.com/acme/one" => "sha-one-v2" }, ledger_pins(source),
                  "the vanished repo's stale pin must be removed")
-    kept = Nabu::Store::SourceRepo.first(repo_url: "https://github.com/acme/one")
+    kept = Nabu::Store::Pin.first(repo_url: "https://github.com/acme/one")
     assert_equal "baseline-one", kept.license_baseline_sha256, "upsert must preserve the license baseline"
   end
 
-  def test_single_repo_sync_records_no_source_repos_rows
+  # P7-1: single-repo sources pin their one declared repo in the ledger too
+  # (pre-P7-1 they pinned only sources.last_sync_sha, which rebuild wiped).
+  def test_single_repo_sync_pins_its_declared_repo
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    BreakerAdapter.fetch_sha = "sha-head"
     runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
     runner.sync("breaker")
 
-    assert_equal 0, Nabu::Store::SourceRepo.count, "single-repo sources write nothing to source_repos"
+    assert_equal({ "https://example.invalid/breaker" => "sha-head" }, ledger_pins("breaker"),
+                 "the pin is keyed by the same url the remote probe ls-remotes")
+  end
+
+  def test_parse_only_leaves_ledger_pins_untouched
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    BreakerAdapter.fetch_sha = "sha-abc"
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner.sync("breaker")
+    assert_equal({ "https://example.invalid/breaker" => "sha-abc" }, ledger_pins("breaker"))
+
+    BreakerAdapter.fetch_sha = "sha-xyz"
+    runner.sync("breaker", parse_only: true)
+    assert_equal({ "https://example.invalid/breaker" => "sha-abc" }, ledger_pins("breaker"),
+                 "no fetch, no re-pin")
   end
 
   # --- errors -------------------------------------------------------------
@@ -374,11 +390,8 @@ class SyncRunnerTest < Minitest::Test
   # A sync whose fresh LoadReport quarantines far above the source's recent norm
   # emits an inline quarantine-spike warning — advisory: the sync still succeeds.
   def test_sync_emits_inline_quarantine_spike_warning
-    source = Nabu::Store::Source.create(
-      slug: "spiky", name: "spiky", adapter_class: "x", license_class: "open"
-    )
     [0, 1, 2].each do |errored|
-      Nabu::Store::Run.create(source_id: source.id, started_at: Time.now, finished_at: Time.now,
+      Nabu::Store::Run.create(source_slug: "spiky", kind: "sync", started_at: Time.now, finished_at: Time.now,
                               added: 5, updated: 0, errored: errored, status: "succeeded")
     end
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
@@ -436,7 +449,7 @@ class SyncRunnerTest < Minitest::Test
   private
 
   def make_runner(reg)
-    Nabu::SyncRunner.new(config: config, registry: reg, db: @db)
+    Nabu::SyncRunner.new(config: config, registry: reg, db: @db, ledger: @ledger)
   end
 
   def config
@@ -455,9 +468,9 @@ class SyncRunnerTest < Minitest::Test
 
   def source_row(slug) = Nabu::Store::Source.first(slug: slug)
 
-  def source_repo_pins(slug)
-    source_id = source_row(slug).id
-    Nabu::Store::SourceRepo.where(source_id: source_id).select_hash(:repo_url, :last_sync_sha)
+  # Ledger pins for +slug+ (P7-1: pins live in the history ledger, slug-keyed).
+  def ledger_pins(slug)
+    Nabu::Store::Pin.where(source_slug: slug).select_hash(:repo_url, :last_sync_sha)
   end
 
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count

@@ -48,6 +48,20 @@ Each iteration, regardless of execution vehicle (§5):
 2. **Dispatch** at the packet's tier (session model or `Agent` model override).
 3. **Implement TDD**: failing test first, then code, then refactor. CLAUDE.md rules apply in full (no assertion-weakening, no opportunistic refactors, no invented upstream formats).
 4. **Verify**: `rake test` + `rake lint` green, then a `/code-review` (medium) pass; fix findings.
+   Conventions earned in Phases 5–6 (each caught real bugs green suites missed):
+   - **Live smoke at acceptance** — for any packet touching real data or the
+     outside world, the orchestrator runs at least one real invocation against
+     the live corpus/upstream before accepting the packet (mocked tests can't
+     see real bytes, real filenames, real rankings, or CI's environment).
+   - **Census first** — a defect-class packet starts by classifying EVERY
+     instance from the quarantine/provenance journal, then fixes classes;
+     unfixed classes are reported per class — honesty over recovery count.
+   - **Frozen-URN/text is standing acceptance language** for any parser or
+     normalization change: documents that parsed cleanly before must re-parse
+     byte-identical (URNs and text), verified read-only against the live
+     catalog before commit; quarantined documents are unconstrained.
+     Search-form changes instead ride a full rebuild (content hashes cover
+     text_normalized — a parse-only sync would read as a revision storm).
 5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update backlog + worklog.
 6. **Escalate on failure**: two failed attempts at a packet → mark `blocked` with a diagnosis, move to the next packet. Never thrash. `blocked` packets are adjudicated by Fable at the next gate (or sooner if everything else is blocked → stop and notify the owner).
 7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, **updates `README.md`** — the user-facing document describing the capabilities and commands implemented up to this point (honest about what doesn't work yet; a newcomer reading only the README should know exactly what `bin/nabu` can do today) — then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The gate turn ends by arming the owner's attention alarm (sticky mode — see the global convention in `~/.claude/CLAUDE.md`), as does any blocked state needing guidance. The next phase's packets are elaborated in detail only after the merge.

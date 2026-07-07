@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Nabu nightly backup (P7-2, architecture §8).
+
+  Runs `nabu backup` — a file-level rsync of canonical/ (attic included), the
+  history ledger, config/, and the derived dbs to the external-volume target in
+  config/nabu.yml (backup: target:). The mount-point guard REFUSES to run (exit
+  1) when that volume is not mounted, so a nightly fire while the disk is
+  detached fails loudly in the log rather than silently backing up onto the
+  boot disk. Read-only on canonical/.
+
+  TEMPLATE. Copy to ~/Library/LaunchAgents/, substitute the two placeholders,
+  then bootstrap it. See docs/ops.md §9 (backup) for the exact steps and for
+  creating/attaching the simulation sparsebundle.
+
+    __NABU_ROOT__      absolute path to this repo checkout
+                       (e.g. /Users/vb/Dev/nabu)
+    __RUBY_BIN_DIR__   directory holding the ruby/bundle that runs the suite
+                       (launchd has no shell profile, rbenv shims, or Homebrew
+                       PATH — you MUST give it the real bindir here).
+                       Find it with:  dirname "$(cd __NABU_ROOT__ && which ruby)"
+                       Homebrew example: /opt/homebrew/bin
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nabu.backup-nightly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>exec bundle exec bin/nabu backup</string>
+  </array>
+
+  <!-- Bundler finds the Gemfile and the adapters find canonical/ relative to here. -->
+  <key>WorkingDirectory</key>
+  <string>__NABU_ROOT__</string>
+
+  <!-- launchd starts jobs with a bare PATH and none of your login shell's setup.
+       Prepend the ruby/bundle bindir so `bundle`, `bin/nabu`'s `env ruby`
+       shebang, and `rsync` all resolve. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>__RUBY_BIN_DIR__:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- Nightly at 02:30 — comfortably before the 03:15 verify job. Adjust freely. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>2</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <!-- stdout/stderr land in the repo's gitignored log/ dir. -->
+  <key>StandardOutPath</key>
+  <string>__NABU_ROOT__/log/backup-nightly.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__NABU_ROOT__/log/backup-nightly.err.log</string>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

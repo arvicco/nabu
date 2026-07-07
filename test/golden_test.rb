@@ -18,9 +18,13 @@ class GoldenTest < Minitest::Test
   FIXTURES = File.expand_path("fixtures", __dir__)
   QUERIES = YAML.safe_load_file(File.expand_path("golden/golden_queries.yml", __dir__)).freeze
 
-  # slug, adapter class name, fixture workdir (under test/fixtures/).
+  # slug, adapter class name, fixture workdir (under test/fixtures/), optional
+  # adapter construction kwargs. perseus-greek runs translations-on (P7-4) so
+  # the golden corpus carries eng passages — the parallel-translations pipeline
+  # (discover → parse translation divs → index → search) is integration-tested
+  # here alongside everything else.
   SOURCES = [
-    ["perseus-greek", "Nabu::Adapters::Perseus",              %w[perseus greekLit]],
+    ["perseus-greek", "Nabu::Adapters::Perseus",              %w[perseus greekLit], { translations: true }],
     ["first1k",       "Nabu::Adapters::First1kGreek",         %w[first1k greekLit]],
     ["ud",            "Nabu::Adapters::UniversalDependencies", %w[ud]],
     ["proiel",        "Nabu::Adapters::Proiel",               %w[proiel]],
@@ -41,13 +45,13 @@ class GoldenTest < Minitest::Test
       Nabu::Store.migrate!(db)
       Nabu::Store.setup!(db)
       ft = Nabu::Store.connect_fulltext(File.join(dir, "fulltext.sqlite3"))
-      SOURCES.each { |slug, class_name, path| load_source(db, slug, class_name, path) }
+      SOURCES.each { |slug, class_name, path, options| load_source(db, slug, class_name, path, options || {}) }
       Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: ft)
       { db: db, ft: ft }
     end
 
-    def load_source(db, slug, class_name, path)
-      adapter = Object.const_get(class_name).new
+    def load_source(db, slug, class_name, path, options = {})
+      adapter = Object.const_get(class_name).new(**options)
       source = Nabu::Store::Source.create(
         slug: slug, name: slug, adapter_class: class_name, license_class: adapter.manifest.license_class
       )
@@ -62,16 +66,44 @@ class GoldenTest < Minitest::Test
     Nabu::Query::Search.new(catalog: corpus[:db], fulltext: corpus[:ft])
   end
 
+  def lemma_search
+    corpus = self.class.corpus
+    Nabu::Query::LemmaSearch.new(catalog: corpus[:db], fulltext: corpus[:ft])
+  end
+
   # One independent test per YAML entry, so a single failing golden query names
-  # itself in the output.
+  # itself in the output. Entries with a `lemma` key replay through LemmaSearch
+  # over the lemma index (P7-5); the rest through FTS Search.
   QUERIES.each_with_index do |entry, index|
     define_method(:"test_golden_query_#{format('%02d', index)}_#{entry['lang'] || 'nolang'}") do
-      results = search.run(entry["query"], lang: entry["lang"])
+      results = if entry["lemma"]
+                  lemma_search.run(entry["lemma"], lang: entry["lang"])
+                else
+                  search.run(entry["query"], lang: entry["lang"])
+                end
       urns = results.map(&:urn)
+      label = entry["query"] || "--lemma #{entry['lemma']}"
       assert_includes urns, entry["expect_urn"],
-                      "golden query #{entry['query'].inspect} (lang=#{entry['lang'].inspect}) " \
+                      "golden query #{label.inspect} (lang=#{entry['lang'].inspect}) " \
                       "must return #{entry['expect_urn']}; got #{urns.inspect}\nnote: #{entry['note']}"
     end
+  end
+
+  # P7-5 acceptance: all three treebank families contribute lemma rows to the
+  # golden corpus's index (UD via ConlluParser; PROIEL and TOROT via
+  # ProielParser — TOROT shares the urn:nabu:proiel: namespace), and NOTHING
+  # else does — non-treebank passages carry no token lemmas (honest absence).
+  def test_lemma_index_covers_exactly_the_treebank_families
+    lemmas = self.class.corpus[:ft][Nabu::Store::Indexer::LEMMA_TABLE]
+    ["urn:nabu:ud:%", "urn:nabu:proiel:cic-off:%", "urn:nabu:proiel:zogr:%",
+     "urn:nabu:proiel:peter:%"].each do |pattern|
+      assert_operator lemmas.where(Sequel.like(:urn, pattern)).count, :>, 0,
+                      "#{pattern} must contribute lemma rows"
+    end
+    strays = lemmas.exclude(Sequel.like(:urn, "urn:nabu:ud:%"))
+                   .exclude(Sequel.like(:urn, "urn:nabu:proiel:%"))
+    assert_equal 0, strays.count,
+                 "only treebank passages may carry lemma rows; got #{strays.select_map(:urn).first(5).inspect}"
   end
 
   # The packet requires ≥6 queries spanning grc/lat/got/chu/orv, with one

@@ -46,16 +46,66 @@ module Nabu
         :revision, :withdrawn, :retired_upstream, :passages
       )
 
+      # A range (P7-6): the document header, the inclusive slice of passages,
+      # the two endpoint urns, and total (M) so the CLI can print the honest
+      # "[N of M passages]" note. Shaped like DocumentResult so the CLI's
+      # passage_label reuse (it reads +urn+ + +passages+) works unchanged.
+      RangeResult = Data.define(
+        :urn, :title, :language, :source_slug, :license_class, :revision,
+        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn
+      )
+
       def initialize(catalog:)
         @catalog = catalog
       end
 
-      # Resolve +urn+ to a PassageResult, a DocumentResult, or nil.
+      # Resolve +urn+ to a PassageResult, a DocumentResult, a RangeResult, or
+      # nil. Literal-first: a real passage/document wins before a range is even
+      # attempted (a passage urn holding a hyphen is never misparsed as one).
+      # A range with a bad endpoint raises Range::Error (CLI → exit 1).
       def run(urn)
-        passage(urn) || document(urn)
+        passage(urn) || document(urn) || range(urn)
       end
 
       private
+
+      # nil when +urn+ is not a range; otherwise the document header plus the
+      # inclusive slice. Delegates the parse/precedence to Query::Range.
+      def range(urn)
+        slice = Range.new(catalog: @catalog).resolve(urn)
+        return nil if slice.nil?
+
+        header = @catalog[:documents]
+                 .join(:sources, id: Sequel[:documents][:source_id])
+                 .where(Sequel[:documents][:id] => slice.document_id)
+                 .select(*document_columns)
+                 .first
+        build_range(header, slice)
+      end
+
+      def build_range(header, slice)
+        RangeResult.new(
+          urn: header.fetch(:urn), title: header.fetch(:title), language: header.fetch(:language),
+          source_slug: header.fetch(:source_slug), license_class: header.fetch(:license_class),
+          revision: header.fetch(:revision), withdrawn: truthy?(header.fetch(:withdrawn)),
+          retired_upstream: truthy?(header.fetch(:retired_upstream)),
+          passages: slice_passages(slice), total: slice.total,
+          start_urn: slice.start_urn, end_urn: slice.end_urn
+        )
+      end
+
+      # The inclusive [start_seq, end_seq] slice, in sequence order.
+      def slice_passages(slice)
+        @catalog[:passages]
+          .where(document_id: slice.document_id)
+          .where(sequence: slice.start_seq..slice.end_seq)
+          .order(:sequence)
+          .select(:urn, :text, :withdrawn)
+          .map do |r|
+            PassageLine.new(urn: r.fetch(:urn), text: r.fetch(:text),
+                            withdrawn: truthy?(r.fetch(:withdrawn)))
+          end
+      end
 
       def passage(urn)
         row = @catalog[:passages]

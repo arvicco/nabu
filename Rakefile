@@ -50,6 +50,50 @@ namespace :fixtures do
   end
 end
 
+# Fresh-machine restore drill (P7-2). Fully LOCAL: backs up the live tree to a
+# tmp target, restores into a fresh tmp "machine", rebuilds from restored
+# canonical, verifies, replays the golden queries, and cross-checks counts —
+# proving "restorable from an rsync backup with zero services" without touching
+# the live setup (backup is read-only on its sources; all writes go under tmp).
+# The orchestrator runs this against the LIVE corpus at acceptance.
+namespace :ops do
+  desc "Fresh-machine restore drill: back up locally, restore into a tmp root, rebuild+verify+golden replay"
+  task :drill do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "tmpdir"
+
+    config = Nabu::Config.load
+    Dir.mktmpdir("nabu-drill") do |workspace|
+      report = Nabu::Ops::Drill.new(config: config, workspace: workspace).run
+      print_drill_report(report)
+      abort "ops:drill FAILED — the backup is not restorable as-is (see above)" unless report.ok?
+    end
+  end
+end
+
+# Print the drill report to stdout.
+def print_drill_report(report)
+  puts "Restore drill"
+  puts "  backup     → #{report.backup.target}  " \
+       "(#{report.backup.sections.count(&:ran?)}/#{report.backup.sections.size} sections, " \
+       "#{report.backup.files} files, #{report.backup.ok? ? 'OK' : 'FAILED'})"
+  puts "  restore    → #{report.machine_root}"
+  puts "  rebuild    quarantined #{report.rebuild_quarantined} document(s)"
+  puts "  verify     #{report.verify_clean ? 'clean' : 'FAILED'}"
+  puts "  golden     #{report.golden_found} found, #{report.golden_lost} lost, #{report.golden_skipped} skipped"
+  puts "  counts     source=#{count_str(report.source_counts)}  " \
+       "restored=#{count_str(report.restored_counts)}  " \
+       "#{report.counts_match? ? 'MATCH' : 'MISMATCH'}"
+  puts "  => #{report.ok? ? 'RESTORABLE' : 'NOT RESTORABLE'}"
+end
+
+def count_str(counts)
+  return "n/a" if counts.nil?
+
+  "#{counts.documents} docs / #{counts.passages} passages"
+end
+
 # Print one check result to stdout.
 def print_check_report(result)
   puts "[#{result.source}]"

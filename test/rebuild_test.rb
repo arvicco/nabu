@@ -126,10 +126,8 @@ class RebuildTest < Minitest::Test
     assert_equal %w[absent-src empty-src], result.skips.map(&:slug).sort
     assert(result.skips.all? { |skip| skip.reason == :no_canonical })
     # A skip is not a run: only the replayed source gets a runs row / sources row.
-    with_db do
-      assert_equal 1, Nabu::Store::Run.count
-      assert_equal %w[corpus], Nabu::Store::Source.select_order_map(:slug)
-    end
+    with_ledger { assert_equal 1, Nabu::Store::Run.count }
+    with_db { assert_equal %w[corpus], Nabu::Store::Source.select_order_map(:slug) }
   end
 
   # -- errored > 0 surfaces a warning --------------------------------------
@@ -149,7 +147,7 @@ class RebuildTest < Minitest::Test
     assert_predicate outcome, :warning?
     assert_equal [outcome], result.warnings
     # The batch still succeeded (quarantine never aborts): a run row exists.
-    with_db { assert_equal 1, Nabu::Store::Run.where(status: "succeeded").count }
+    with_ledger { assert_equal 1, Nabu::Store::Run.where(status: "succeeded").count }
   end
 
   # -- disabled source with local data is still replayed -------------------
@@ -173,7 +171,7 @@ class RebuildTest < Minitest::Test
 
   # -- one succeeded run row per rebuilt source ----------------------------
 
-  def test_writes_one_succeeded_run_row_per_rebuilt_source
+  def test_writes_one_succeeded_rebuild_run_row_per_rebuilt_source
     write_sources(<<~YAML)
       alpha:
         adapter: TestAdapter
@@ -188,12 +186,101 @@ class RebuildTest < Minitest::Test
     result = rebuilder.run
 
     assert_equal %w[alpha beta], result.outcomes.map(&:slug)
-    runs = with_db do
-      Nabu::Store::Run.order(:id).all.map { |run| [run.source_id, run.status] }
+    runs = with_ledger do
+      Nabu::Store::Run.order(:id).all.map { |run| [run.source_slug, run.kind, run.status] }
     end
-    assert_equal 2, runs.size
-    assert(runs.all? { |(_source_id, status)| status == "succeeded" })
-    assert_equal 2, runs.map(&:first).uniq.size # one per source
+    assert_equal [%w[alpha rebuild succeeded], %w[beta rebuild succeeded]], runs
+  end
+
+  # -- the ledger survives rebuild (P7-1) -----------------------------------
+
+  def test_rebuild_never_touches_seeded_ledger_history
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+    at = Time.utc(2026, 7, 1)
+    seed_ledger do
+      Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: at, finished_at: at,
+                              added: 5, updated: 1, errored: 0, status: "succeeded")
+      Nabu::Store::Pin.create(source_slug: "corpus", repo_url: "https://example/corpus",
+                              last_sync_sha: "pinned-sha", license_baseline_sha256: "lic-sha")
+      Nabu::Store::Revision.create(urn: "urn:nabu:test_adapter:one:1", event: "revised",
+                                   old_sha: "aaa", new_sha: "bbb", at: at)
+    end
+
+    rebuilder.run
+
+    with_ledger do
+      # The seeded sync history is intact; the rebuild appended its own
+      # kind=rebuild run row and nothing else.
+      sync_runs = Nabu::Store::Run.where(source_slug: "corpus", kind: "sync").all
+      assert_equal 1, sync_runs.size
+      assert_equal 5, sync_runs.first.added
+      pin = Nabu::Store::Pin.first(source_slug: "corpus")
+      assert_equal "pinned-sha", pin.last_sync_sha
+      assert_equal "lic-sha", pin.license_baseline_sha256
+      assert_equal 1, Nabu::Store::Revision.count, "a replay only inserts: no new durable revisions"
+      assert_equal "revised", Nabu::Store::Revision.first.event
+      assert_equal 1, Nabu::Store::Run.where(kind: "rebuild").count
+    end
+    # And the catalog really was rebuilt fresh around it.
+    with_db { assert_equal 1, Nabu::Store::Document.where(withdrawn: false).count }
+  end
+
+  # Trend continuity across the rebuild boundary: source ids are re-minted by
+  # the rebuild, but runs are slug-keyed, so history reads continuously.
+  def test_run_history_is_continuous_across_id_reminting
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    rebuilder.run
+    first_id = with_db { Nabu::Store::Source.first(slug: "corpus").id }
+    seed_ledger do
+      Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: Time.now,
+                              finished_at: Time.now, added: 2, status: "succeeded")
+    end
+
+    rebuilder.run # drops the catalog; the source row is re-minted
+
+    second_id = with_db { Nabu::Store::Source.first(slug: "corpus").id }
+    with_ledger do
+      slug_runs = Nabu::Store::Run.where(source_slug: "corpus")
+      assert_equal 1, slug_runs.where(kind: "sync").count, "sync history crossed the rebuild boundary"
+      assert_equal 2, slug_runs.where(kind: "rebuild").count
+    end
+    # The invariant the slug-keying protects against: ids DO change on rebuild
+    # for a fresh file db (both are 1 here — assert only that history never
+    # referenced them).
+    assert_kind_of Integer, first_id
+    assert_kind_of Integer, second_id
+  end
+
+  # A pre-P7-1 catalog still carries runs/source_repos: rebuild must lift them
+  # into the ledger BEFORE deleting the file, or the history dies with it.
+  def test_rebuild_lifts_legacy_history_before_dropping_the_catalog
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+    build_legacy_catalog
+
+    rebuilder.run
+
+    with_ledger do
+      lifted = Nabu::Store::Run.where(source_slug: "corpus", kind: "sync").all
+      assert_equal 1, lifted.size, "the legacy catalog's run history was lifted, not dropped"
+      assert_equal 9, lifted.first.added
+      assert_equal "legacy-sha", Nabu::Store::Pin.first(source_slug: "corpus").last_sync_sha
+    end
   end
 
   # -- helpers -------------------------------------------------------------
@@ -228,6 +315,38 @@ class RebuildTest < Minitest::Test
     yield db
   ensure
     db&.disconnect
+  end
+
+  # Reconnect to the history ledger and yield, rebinding the ledger models.
+  def with_ledger
+    db = Nabu::Store::Ledger.connect(config.history_path)
+    Nabu::Store::Ledger.setup!(db)
+    yield db
+  ensure
+    db&.disconnect
+  end
+
+  # Create (and migrate) the ledger file, run the seeding block, disconnect.
+  def seed_ledger(&)
+    db = Nabu::Store::Ledger.open!(config.history_path)
+    yield
+  ensure
+    db&.disconnect
+  end
+
+  # A pre-P7-1 catalog file (migrations 001–004: runs/source_repos still in
+  # it) seeded with one source + run + last_sync_sha pin.
+  def build_legacy_catalog
+    FileUtils.mkdir_p(File.dirname(catalog_path))
+    db = Nabu::Store.connect(catalog_path)
+    require "sequel/extensions/migration"
+    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 4)
+    sid = db[:sources].insert(slug: "corpus", name: "corpus", adapter_class: "TestAdapter",
+                              license_class: "open", upstream_url: "https://example/corpus",
+                              last_sync_sha: "legacy-sha")
+    db[:runs].insert(source_id: sid, started_at: Time.now, finished_at: Time.now,
+                     added: 9, status: "succeeded")
+    db.disconnect
   end
 
   # Reconnect to the rebuilt fulltext index file and yield the handle.

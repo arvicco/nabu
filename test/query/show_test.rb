@@ -108,6 +108,87 @@ module Query
       assert_nil show("urn:d:nope")
     end
 
+    # -- ranges (P7-6) -------------------------------------------------------
+    # A range urn = a document urn + `:<start-suffix>-<end-suffix>`: an
+    # inclusive, sequence-ordered slice of ONE document between two resolved
+    # citation suffixes. Split rule: literal passage/document FIRST (a real
+    # urn is never misparsed as a range), then split on the LAST hyphen.
+
+    def test_range_returns_inclusive_sequence_ordered_slice
+      load_document("1", [%w[1 α], %w[2 β], %w[3 γ], %w[4 δ], %w[5 ε]])
+
+      result = show("urn:d:1:1-3")
+      assert_kind_of Nabu::Query::Show::RangeResult, result
+      assert_equal "urn:d:1", result.urn, "the range header is the document"
+      assert_equal "Iliad", result.title
+      assert_equal "grc", result.language
+      assert_equal "src", result.source_slug
+      assert_equal %w[urn:d:1:1 urn:d:1:2 urn:d:1:3], result.passages.map(&:urn)
+      assert_equal %w[α β γ], result.passages.map(&:text)
+      assert_equal 3, result.passages.size
+      assert_equal 5, result.total, "the honest [N of M] note counts the whole document"
+      assert_equal "urn:d:1:1", result.start_urn
+      assert_equal "urn:d:1:3", result.end_urn
+    end
+
+    def test_range_endpoints_are_inclusive
+      load_document("1", [%w[1 α], %w[2 β], %w[3 γ]])
+      assert_equal %w[urn:d:1:2 urn:d:1:3], show("urn:d:1:2-3").passages.map(&:urn)
+    end
+
+    def test_single_passage_range_returns_exactly_that_passage
+      load_document("1", [%w[1 α], %w[2 β], %w[3 γ]])
+      result = show("urn:d:1:2-2")
+      assert_equal %w[urn:d:1:2], result.passages.map(&:urn)
+      assert_equal 1, result.passages.size
+    end
+
+    # The slice is by STORED SEQUENCE, whatever citation shapes lie between —
+    # a papyri restart block (P5-1) crossed by the range is sliced through.
+    def test_range_slices_across_a_papyri_restart_block
+      load_document("p", [%w[1 first], ["b2:1", "restart"], ["b2:2", "next"], ["b3:11", "tail"]])
+
+      result = show("urn:d:p:1-b2:2")
+      assert_equal %w[urn:d:p:1 urn:d:p:b2:1 urn:d:p:b2:2], result.passages.map(&:urn)
+      assert_equal "urn:d:p:b2:2", result.end_urn
+    end
+
+    def test_range_end_not_found_names_the_endpoint
+      load_document("1", [%w[1 α], %w[2 β]])
+      error = assert_raises(Nabu::Query::Range::Error) { show("urn:d:1:1-99") }
+      assert_match(/range end not found/i, error.message)
+      assert_match(/urn:d:1:99/, error.message, "the error names the failing endpoint")
+    end
+
+    def test_range_start_not_found_names_the_endpoint
+      load_document("1", [%w[1 α], %w[2 β]])
+      error = assert_raises(Nabu::Query::Range::Error) { show("urn:d:1:9-2") }
+      assert_match(/range start not found/i, error.message)
+      assert_match(/urn:d:1:9/, error.message)
+    end
+
+    def test_reversed_range_errors_and_suggests_swapping
+      load_document("1", [%w[1 α], %w[2 β], %w[3 γ]])
+      error = assert_raises(Nabu::Query::Range::Error) { show("urn:d:1:3-1") }
+      assert_match(/reversed/i, error.message)
+      assert_match(/swap/i, error.message)
+    end
+
+    # Literal-first precedence: a passage urn that CONTAINS a hyphen resolves
+    # to that passage, never a range (existing reachability preserved).
+    def test_literal_passage_urn_with_a_hyphen_is_never_parsed_as_a_range
+      load_document("1", [%w[a-b hyphenated], %w[2 β]])
+      result = show("urn:d:1:a-b")
+      assert_kind_of Nabu::Query::Show::PassageResult, result
+      assert_equal "urn:d:1:a-b", result.urn
+      assert_equal "hyphenated", result.text
+    end
+
+    def test_non_range_unknown_urn_is_still_nil
+      load_document("1", [%w[1 α]])
+      assert_nil show("urn:d:1:nope"), "no hyphen, unknown → nil (urn not found)"
+    end
+
     # Show is an inspection tool, not a corpus view: a withdrawn passage IS
     # returned, honestly flagged (unlike Search/Export, which hide it).
     def test_withdrawn_passage_is_shown_and_flagged

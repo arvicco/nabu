@@ -63,6 +63,37 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  def test_help_show_documents_parallel_with_an_example
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/--parallel/, out)
+    assert_match(/citation suffix/, out, "must explain the alignment rule")
+    assert_match(/--parallel\b.*\n?.*eng/, out, "must show a worked --parallel example")
+    assert_match(/one-sided|only in/i, out, "must be honest about unmatched suffixes")
+  end
+
+  def test_help_show_documents_range_syntax_with_a_papyri_example
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/RANGE|range/, out, "must document the range syntax")
+    assert_match(/1\.1-1\.10/, out, "must show a CTS range example")
+    assert_match(/:1-b2:2|:b2:/, out, "must show a papyri cross-block range example")
+    assert_match(/inclusive/i, out, "must state the endpoints are inclusive")
+  end
+
+  def test_help_search_mentions_translations
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/translation/i, out, "must say eng translations are searchable when ingested")
+    assert_match(/--lang eng/, out)
+  end
+
+  def test_help_search_documents_lemma_search_with_a_real_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--lemma/, out)
+    assert_match(/treebank/i, out, "must scope --lemma to the gold treebanks")
+    assert_match(/--lemma λέγω/, out, "must show a worked Greek example")
+    assert_match(/εἶπας/, out, "must show the suppletive payoff — forms no text query reaches")
+    assert_match(/replaces the text query/i, out, "must be honest that --lemma and a query don't combine")
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -114,6 +145,51 @@ class CLITest < Minitest::Test
       assert File.exist?(config.fulltext_path), "a real run builds the fulltext index"
       assert File.exist?(config.catalog_path), "a real run builds the db"
     end
+  end
+
+  # -- backup (P7-2) -------------------------------------------------------
+
+  def test_backup_runs_to_a_local_target_and_reports_ok
+    with_backup_env do |config, target|
+      out, _err, status = with_config(config) { run_cli(["backup", "--to", target, "--allow-unmounted"]) }
+
+      assert_nil status, "a clean backup exits 0"
+      assert_match(/Backup → #{Regexp.escape(target)}/, out)
+      assert_match(/canonical\s+ok/, out)
+      assert_match(/OK\b/, out)
+      assert File.exist?(File.join(target, "canonical", "corpus", "one.txt"))
+      assert File.exist?(File.join(target, "config", "sources.yml"))
+    end
+  end
+
+  def test_backup_dry_run_prints_plan_and_changes_nothing
+    with_backup_env do |config, target|
+      out, _err, status = with_config(config) { run_cli(["backup", "--to", target, "--allow-unmounted", "--dry-run"]) }
+
+      assert_nil status
+      assert_match(/dry run/i, out)
+      refute File.exist?(File.join(target, "canonical")), "dry-run writes nothing"
+    end
+  end
+
+  # The mount-point guard: a same-device tmp target without --allow-unmounted
+  # is refused loudly (exit 1), and nothing is written.
+  def test_backup_refuses_an_unmounted_target
+    with_backup_env do |config, target|
+      _out, err, status = with_config(config) { run_cli(["backup", "--to", target]) }
+
+      assert_equal 1, status
+      assert_match(/volume not mounted/i, err)
+      refute File.exist?(File.join(target, "canonical"))
+    end
+  end
+
+  def test_help_backup_documents_the_set_guard_and_examples
+    out, _err, _status = run_cli(%w[help backup])
+    assert_match(/mount-point guard/i, out)
+    assert_match(/\.attic/, out, "must explain why the attic rides along")
+    assert_match(/--skip-derived/, out)
+    assert_match(/Examples:/, out)
   end
 
   # -- verify (P4-4) -------------------------------------------------------
@@ -221,6 +297,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the history ledger at the CLI seam (P7-1) ----------------------------
+
+  # Fresh bootstrap: no ledger file exists; status degrades honestly, the
+  # first sync creates it, and the recorded run shows up in status.
+  def test_first_sync_creates_the_ledger_and_status_reads_it
+    with_sync_env(enabled: true) do |config|
+      refute File.exist?(config.history_path), "no ledger before the first sync"
+
+      with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+
+      assert File.exist?(config.history_path), "the first sync creates the ledger"
+      out, _err, status = with_config(config) { run_cli(["status"]) }
+      assert_nil status
+      assert_match(/corpus.*last run .*succeeded \(\+2 ~0 -0 !0\)/, out)
+    end
+  end
+
+  # A catalog built without any run history (e.g. restored derived dbs, no
+  # ledger): status stays functional and says so instead of inventing history.
+  def test_status_without_ledger_reports_no_run_history
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      File.delete(config.history_path) # simulate a ledger-less derived set
+
+      out, _err, status = with_config(config) { run_cli(["status"]) }
+      assert_nil status
+      assert_match(/corpus.*docs=2.*no run history/, out)
+    end
+  end
+
   # -- health (P5-3 remote, P5-5 local) ------------------------------------
 
   # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
@@ -325,6 +431,59 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search --lemma (P7-5) -------------------------------------------------
+
+  # Real UD Ancient Greek PROIEL fixture synced through the real pipeline:
+  # --lemma λέγω must surface the suppletive aorist εἶπας (sentence 64498) —
+  # an attestation no λεγ- text query can reach.
+  def test_search_lemma_finds_inflected_attestations
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --lang grc]) }
+      assert_nil status, "a successful lemma search exits 0"
+      assert_match(/urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50:64498 \[grc\]/, out)
+      assert_match(/λέγω → εἶπας/, out, "the hit names the matched surface form")
+      assert_match(/λέγειν, εἰπεῖν/, out, "multiple forms in one passage aggregate on one hit")
+      assert_match(/exact lemma match/, out, "the footer labels the match kind")
+    end
+  end
+
+  # Fold both sides at the CLI seam: the unaccented spelling still hits.
+  def test_search_lemma_unaccented_query_matches
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λεγω]) }
+      assert_nil status
+      assert_match(/:64498 \[grc\]/, out)
+    end
+  end
+
+  def test_search_lemma_zero_hits_says_no_matches
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma τίθημι]) }
+      assert_nil status, "zero hits is not a failure"
+      assert_match(/no matches/i, out)
+    end
+  end
+
+  def test_search_lemma_with_a_text_query_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --lemma λέγω]) }
+      assert_equal 1, status
+      assert_match(/--lemma replaces the text query/, err)
+    end
+  end
+
+  # A fulltext file built before P7-5 has no lemma table: honest hint, exit 1.
+  def test_search_lemma_against_a_pre_lemma_index_hints_to_reindex
+    with_treebank_corpus do |config|
+      ft = Nabu::Store.connect_fulltext(config.fulltext_path)
+      ft.drop_table(Nabu::Store::Indexer::LEMMA_TABLE)
+      ft.disconnect
+      _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω]) }
+      assert_equal 1, status
+      assert_match(/no lemma index.*sync.*rebuild/i, err)
+    end
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance
@@ -363,6 +522,119 @@ class CLITest < Minitest::Test
   def test_show_unknown_urn_exits_one
     with_indexed_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:nope]) }
+      assert_equal 1, status
+      assert_match(/urn not found/i, err)
+    end
+  end
+
+  # -- show ranges (P7-6) ----------------------------------------------------
+
+  def test_show_range_lists_the_slice_as_suffixes_with_an_honest_count
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-1]) }
+      assert_nil status, "a resolved range exits 0"
+      assert_match(/urn:nabu:test_adapter:one\b/, out, "the document header names the document urn")
+      assert_match(/1 of 2 passages/, out, "the honest [N of M] note")
+      assert_match(/^ +:1  /, out, "slice lines carry only the :suffix")
+      refute_match(/^ +:2  /, out, "the slice excludes passages outside the range")
+    end
+  end
+
+  def test_show_range_full_urn_restores_absolute_urns
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-2 --full-urn]) }
+      assert_nil status
+      assert_match(/^ +urn:nabu:test_adapter:one:1\b/, out)
+      assert_match(/^ +urn:nabu:test_adapter:one:2\b/, out)
+    end
+  end
+
+  def test_show_range_endpoint_not_found_exits_one_naming_the_endpoint
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-99]) }
+      assert_equal 1, status
+      assert_match(/range end not found/i, err)
+      assert_match(/urn:nabu:test_adapter:one:99/, err)
+    end
+  end
+
+  def test_show_reversed_range_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:2-1]) }
+      assert_equal 1, status
+      assert_match(/reversed/i, err)
+    end
+  end
+
+  def test_show_parallel_composes_with_a_range
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1-2", "--parallel"]) }
+      assert_nil status
+      assert_match(/1 paired, 1 grc only, 0 eng only/, out, "pairing applies to the sliced rows only")
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      assert_match(/grc {2}ἄειδε/, out, "the in-slice grc-only line still shows")
+      refute_match(/θεά/, out, ":3 is outside the slice")
+    end
+  end
+
+  # -- show --parallel (P7-4) ------------------------------------------------
+
+  GRC_URN = "urn:cts:greekLit:tg1.w1.perseus-grc2"
+  ENG_URN = "urn:cts:greekLit:tg1.w1.perseus-eng2"
+
+  def test_show_parallel_renders_aligned_pairs_and_one_sided_rows
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel"]) }
+      assert_nil status
+      assert_match(/#{Regexp.escape(GRC_URN)}.*\[grc\]/, out)
+      assert_match(/#{Regexp.escape(ENG_URN)}.*\[eng\]/, out)
+      assert_match(/2 paired, 1 grc only, 0 eng only/, out)
+      assert_match(/^ +:1$/, out, "each row is labeled by its citation suffix")
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      assert_match(/eng {2}—/, out, "an unmatched suffix renders honestly one-sided")
+    end
+  end
+
+  def test_show_parallel_takes_an_explicit_language
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", ENG_URN, "--parallel", "grc"]) }
+      assert_nil status
+      assert_match(/#{Regexp.escape(GRC_URN)}/, out)
+      assert_match(/grc {2}ἄειδε/, out)
+    end
+  end
+
+  def test_show_parallel_passage_urn_scopes_to_one_row
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1", "--parallel"]) }
+      assert_nil status
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      refute_match(/ἄειδε/, out, "a passage urn aligns only its own suffix")
+    end
+  end
+
+  def test_show_parallel_full_urn_restores_absolute_row_labels
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel", "eng", "--full-urn"]) }
+      assert_nil status
+      assert_match(/^ +#{Regexp.escape("#{GRC_URN}:1")}$/, out)
+    end
+  end
+
+  def test_show_parallel_without_a_sibling_exits_one_naming_the_language
+    with_parallel_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel", "lat"]) }
+      assert_equal 1, status
+      assert_match(/no lat parallel edition/i, err)
+    end
+  end
+
+  def test_show_parallel_unknown_urn_exits_one
+    with_parallel_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:cts:greekLit:tg1.w1.nope --parallel]) }
       assert_equal 1, status
       assert_match(/urn not found/i, err)
     end
@@ -421,17 +693,39 @@ class CLITest < Minitest::Test
     end
   end
 
-  # Append three succeeded runs to the just-synced "corpus" source so the latest
-  # errored count (90) towers over the recent norm — a quarantine spike. Writes
-  # to the on-disk catalog through its own connection, then hands back so the CLI
-  # opens it fresh.
+  # A synced-and-indexed corpus of ONE real treebank fixture (UD Ancient Greek
+  # PROIEL), for the --lemma path: the lemma index only has rows when
+  # annotations carry token lemmas, which TestAdapter's plaintext corpus never
+  # does. Same parse-only sync pipeline as with_indexed_corpus.
+  def with_treebank_corpus
+    Dir.mktmpdir("nabu-cli-lemma") do |root|
+      treebank = File.join(root, "canonical", "ud", "greek-proiel")
+      FileUtils.mkdir_p(treebank)
+      FileUtils.cp(File.expand_path("fixtures/ud/greek-proiel/grc_proiel-ud-test-head50.conllu", __dir__),
+                   treebank)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "ud:\n  adapter: Nabu::Adapters::UniversalDependencies\n  " \
+                          "enabled: true\n  sync_policy: live\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      with_config(config) do
+        capture_io { Nabu::CLI.start(%w[sync ud --parse-only]) }
+      end
+      yield config
+    end
+  end
+
+  # Append three succeeded runs for the just-synced "corpus" source so the
+  # latest errored count (90) towers over the recent norm — a quarantine spike.
+  # Runs live in the history ledger (P7-1), slug-keyed; writes through its own
+  # connection, then hands back so the CLI opens it fresh.
   def seed_spike_runs(config)
-    db = Nabu::Store.connect(config.catalog_path)
-    Nabu::Store.setup!(db)
-    source = Nabu::Store::Source.first(slug: "corpus")
+    db = Nabu::Store::Ledger.open!(config.history_path)
     now = Time.now
     [2, 3, 90].each do |errored|
-      Nabu::Store::Run.create(source_id: source.id, started_at: now, finished_at: now,
+      Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: now, finished_at: now,
                               added: 1, updated: 0, errored: errored, status: "succeeded")
     end
   ensure
@@ -455,6 +749,39 @@ class CLITest < Minitest::Test
   ensure
     $stdout = old_out
     $stderr = old_err
+  end
+
+  # A built catalog holding two sibling CTS editions of one work (grc + eng,
+  # aligned suffixes :1/:3, grc-only :2) for the show --parallel surface.
+  def with_parallel_corpus
+    Dir.mktmpdir("nabu-cli-parallel") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "src", name: "Source", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+      loader = Nabu::Store::Loader.new(db: db, source: source)
+      loader.load([parallel_document(GRC_URN, "grc", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]]),
+                   parallel_document(ENG_URN, "eng", [%w[1 Wrath], %w[3 goddess]])], full: false)
+      db.disconnect
+      yield config
+    end
+  end
+
+  def parallel_document(urn, language, passages)
+    document = Nabu::Document.new(
+      urn: urn, language: language, title: "Iliad", canonical_path: "/canonical/src/#{language}.xml"
+    )
+    passages.each_with_index do |(suffix, text), index|
+      document << Nabu::Passage.new(urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index)
+    end
+    document
   end
 
   # One TestAdapter source "corpus" (two documents) with canonical data; the
@@ -505,6 +832,27 @@ class CLITest < Minitest::Test
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
       )
+    end
+  end
+
+  # Build a throwaway config whose config_dir is a REAL tmp dir (so the backup's
+  # config/ section never rsyncs the project root) plus a tiny canonical tree,
+  # and yield [config, target].
+  def with_backup_env
+    Dir.mktmpdir("nabu-cli-backup") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\n")
+      cfg = File.join(root, "config")
+      FileUtils.mkdir_p(cfg)
+      File.write(File.join(cfg, "sources.yml"), "corpus:\n  adapter: TestAdapter\n")
+      File.write(File.join(cfg, "nabu.yml"), "# nabu config\n")
+      target = File.join(root, "backup-target")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(cfg, "sources.yml"), config_path: File.join(cfg, "nabu.yml")
+      )
+      yield config, target
     end
   end
 

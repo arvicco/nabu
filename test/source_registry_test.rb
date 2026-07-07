@@ -141,6 +141,78 @@ class SourceRegistryTest < Minitest::Test
     end
   end
 
+  # -- translations flag (P7-4) ---------------------------------------------
+
+  def test_translations_defaults_false
+    entry = load_registry(<<~YAML)["minimal-src"]
+      minimal-src:
+        adapter: Some::Adapter
+    YAML
+    refute entry.translations
+  end
+
+  def test_translations_flag_parses_true
+    entry = load_registry(<<~YAML)["perseus-greek"]
+      perseus-greek:
+        adapter: Nabu::Adapters::Perseus
+        translations: true
+    YAML
+    assert entry.translations
+  end
+
+  def test_non_boolean_translations_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        my-src:
+          adapter: A
+          translations: sure
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/translations/, error.message)
+  end
+
+  # -- build_adapter ---------------------------------------------------------
+
+  def test_build_adapter_with_flag_off_is_plain_no_arg_construction
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+    YAML
+    assert_instance_of FakeAdapter, entry.build_adapter
+  end
+
+  def test_build_adapter_passes_translations_to_a_supporting_adapter
+    entry = load_registry(<<~YAML)["perseus-greek"]
+      perseus-greek:
+        adapter: Nabu::Adapters::Perseus
+        translations: true
+    YAML
+
+    Dir.mktmpdir do |dir|
+      work = File.join(dir, "data", "tlg9999", "tlg001")
+      FileUtils.mkdir_p(work)
+      FileUtils.touch(File.join(work, "tlg9999.tlg001.perseus-grc2.xml"))
+      FileUtils.touch(File.join(work, "tlg9999.tlg001.perseus-eng2.xml"))
+      refs = entry.build_adapter.discover(dir).to_a
+      assert_equal %w[urn:cts:greekLit:tlg9999.tlg001.perseus-eng2
+                      urn:cts:greekLit:tlg9999.tlg001.perseus-grc2], refs.map(&:id)
+    end
+  end
+
+  def test_build_adapter_translations_on_an_unsupporting_adapter_raises
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+        translations: true
+    YAML
+
+    error = assert_raises(Nabu::ValidationError) { entry.build_adapter }
+    assert_match(/fake-src/, error.message)
+    assert_match(/translations/, error.message)
+    assert_match(/FakeAdapter/, error.message)
+  end
+
   # -- lazy adapter resolution --------------------------------------------
 
   def test_unknown_adapter_class_is_lazy
