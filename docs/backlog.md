@@ -778,3 +778,108 @@ Acceptance: Odyssey-shaped fixture (card-cited eng + line-cited grc):
       regression pin; eng-only suffix case; MCP show parallel payload
       carries coverage; CLI + query tests, help show example updated;
       suite + lint green.
+
+---
+
+## Phase 9 — Corpus breadth (branch: phase-9; elaborated 2026-07-08)
+
+*Owner direction: items 1–6 of the post-P8 plate as one phase. Three local
+packets, two new-corpus tracks (each: scout → owner-approved fixture plan →
+adapter, per dev-loop §8), one scouting survey. Network: scout packets may
+research (WebSearch/WebFetch) but fetch NOTHING bulk; fixture fetches happen
+only after the owner approves each plan; first real syncs owner-fired.*
+
+## P9-1 · First1K English translations  [tier: opus] [status: ready] [deps: —]
+Goal: First1kGreek's repo carries ~45 English editions under the 1st1K-eng<n>
+      slug family; the P7-4 translation classifier keys on the perseus slug
+      shape, so `translations: true` would find nothing. Extend the subclass
+      (mirror how it already overrides edition_slug_pattern for its originals
+      — inspect first; the translation rule should be the same one-method
+      override shape), flip the registry flag, fixture from local canonical
+      (an eng sibling of an existing first1k fixture work if one exists on
+      disk — check; else the smallest real eng file + its grc sibling).
+      Frozen-urn: new docs only, flag-off byte-identical (standing standard).
+      Orchestrator runs the parse-only recovery at acceptance.
+Acceptance: eng editions discovered only with the flag; conformance green;
+      existing fixture URN lists unchanged; parallel render test over the new
+      fixture pair; suite + lint green.
+
+## P9-2 · Legacy P4-TEI parser support  [tier: fable] [status: ready] [deps: —]
+Goal: 101 perseus-latin English editions (and census whatever else across
+      all sources shares the shape) quarantine as pre-P5 TEI: numbered
+      <div1/div2 type="poem|book|chapter"> containers instead of
+      div[@type="edition"|"translation"], typically no refsDecl-driven
+      citation. CENSUS FIRST (provenance journal, all sources, error-shape
+      classification — the P6-1 standard), then design the P4 acceptance
+      path in EpidocParser (or a sibling strategy it delegates to): citation
+      minting from the numbered-div hierarchy (div1/div2/... @n or @type
+      labels — inspect real files, never guess; milestones/cards may appear
+      inside), same NFC/folding discipline, same frozen-urn constraint
+      (clean-parsing docs byte-identical — provably unreached code for
+      them). Genuinely malformed files stay quarantined per class, reported.
+      Fixture: trim 1–2 exemplars from local canonical. Orchestrator runs
+      recovery resyncs at acceptance.
+Acceptance: census table; exemplar parses with stable urns two-parse; all
+      existing fixture urn+text goldens byte-identical; conformance green;
+      suite + lint green; expected recovery counts reported.
+
+## P9-3 · Live-resolvable lemma golden  [tier: opus] [status: ready] [deps: —]
+Goal: the P7-5 lemma golden pins a fixture-only urn (trimmed doc id), so
+      live health never exercises the lemma path. Add one golden whose
+      expected urn exists in BOTH the fixture corpus and the live corpus
+      (a PROIEL-proper sentence urn — fixture doc ids match live ones there;
+      verify read-only), keeping the fixture-only one for suite coverage.
+Acceptance: golden suite green; live `nabu health` (orchestrator runs it)
+      shows the new golden found, not skipped; suite + lint green.
+
+## P9-4a · GRETIL scout + fixture plan  [tier: opus] [status: ready] [deps: —]
+Goal: research GRETIL (Göttingen Register of Electronic Texts in Indian
+      Languages) for adapter feasibility: current corpus format (TEI P5
+      e-library? plain text legacy?), download mechanics (bulk? per-text?),
+      LICENSE (per-text? blanket? — record honestly; nc/research classes
+      exist for a reason), citation structure (what would passages key on —
+      GRETIL texts rarely carry CTS; a minted urn scheme sketch), overlap
+      with the UD Vedic treebank, corpus scale. Produce: docs/02-sources.md
+      row updated + a FIXTURE ACQUISITION PLAN (exact URLs, 2–3 small real
+      texts, trim intent, licenses) appended to this packet in the backlog
+      for OWNER APPROVAL. No bulk fetching; page-level WebFetch research is
+      fine.
+Acceptance: the plan is concrete enough to execute on approval; findings
+      honest about blockers (license or format may kill it — that is a
+      valid outcome).
+
+## P9-4b · GRETIL adapter  [tier: fable-or-opus per 4a findings] [status: blocked: owner fixture-plan approval] [deps: P9-4a]
+Elaborated when 4a lands and the owner approves its plan.
+
+## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: ready] [deps: —]
+Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
+      feasibility: JSON API vs ATF, project structure (oracc.museum.upenn
+      .edu projects — SAAo, RINAP, etc.), license (CC BY-SA 3.0 blanket?
+      verify per project), what a passage is (line? sentence? the
+      transliteration vs normalization vs translation layers — which do we
+      ingest as text; lemmatization is often PRESENT in ORACC JSON — note
+      the annotations opportunity), urn minting sketch (P-numbers/Q-numbers
+      are stable museum ids), corpus scale per project, which 1–2 projects
+      to start with. Produce: 02-sources row + FIXTURE ACQUISITION PLAN for
+      OWNER APPROVAL, as 4a.
+Acceptance: as 4a. This is the founding dream (Nabu's own tablets) — the
+      scout should also honestly size the parser-family effort (ATF/JSON =
+      new family, fable).
+
+## P9-5b · ORACC adapter + parser family  [tier: fable] [status: blocked: owner fixture-plan approval] [deps: P9-5a]
+Elaborated when 5a lands and the owner approves its plan.
+
+## P9-6 · Slavic sources survey  [tier: opus] [status: ready] [deps: —]
+Goal: scouting survey for the owner's Slavic research axis beyond
+      TOROT/PROIEL: what OCS / Old East Slavic / Church Slavonic corpora
+      are digitized, licensed, and machine-readable (candidates to assess:
+      Codex Suprasliensis digital editions, the Ruthenian/RNC historical
+      corpora access model, Obdurodon/Slavonic projects, manuscript
+      libraries with transcriptions, SEENET/eSlavistik e-editions —
+      research broadly, judge licensing honestly incl. "viewable but not
+      redistributable" traps). Produce docs/slavic-survey.md: per-candidate
+      format/license/scale/citation-scheme/effort estimate + a ranked
+      recommendation of at most two for Phase 10. No fetching beyond
+      research pages.
+Acceptance: survey doc complete and honest; 02-sources.md gains candidate
+      rows marked SURVEYED.
