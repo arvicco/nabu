@@ -631,7 +631,7 @@ Acceptance: index builds from the fixture corpus; --lemma finds
       folding consistency tested (accented/unaccented lemma queries);
       plain search unaffected; help + goldens extended; suite+lint green.
 
-## P7-6 · show ranges  [tier: opus] [status: ready] [deps: P7-4]
+## P7-6 · show ranges  [tier: opus] [status: done] [deps: P7-4]
 Goal: the concept's own syntax — `nabu show urn:…:1.1-1.10`. A range is
       an inclusive, sequence-ordered slice of one document between two
       resolved citation suffixes (endpoints must both exist; clear error

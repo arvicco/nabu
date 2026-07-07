@@ -217,6 +217,20 @@ module Nabu
         treebanks      urn:nabu:proiel:afnik:194690                     (sentence)
                        urn:nabu:ud:gothic-proiel:got_proiel-ud-dev:37589
 
+      RANGES (URN:<start>-<end>): a document urn plus two citation suffixes
+      joined by a hyphen prints an INCLUSIVE, sequence-ordered slice of that
+      one document between the endpoints — both endpoints must resolve to
+      existing passages of the same document (a clear error names whichever
+      fails; a start after its end is refused, suggesting a swap). The slice
+      is by STORED sequence, whatever citation shapes lie between: a papyri
+      restart block (:b2, an implicit column/fragment) is sliced straight
+      through. Precedence: a literal passage urn is resolved FIRST, so a urn
+      that itself contains a hyphen is never misparsed as a range; the range
+      split is on the LAST hyphen (citation suffixes never contain one, the
+      version segment perseus-grc2 does). Ranges compose with --full-urn and
+      with --parallel (the range slices the queried edition; pairing then
+      applies to the sliced rows only).
+
       PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
       document or passage urn, find the sibling edition of the SAME work in
       LANG (sources ingest translations only when their registry entry sets
@@ -228,10 +242,16 @@ module Nabu
 
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10
+                                                  # Iliad 1.1–1.10, one slice
+        nabu show urn:nabu:ddbdp:aegyptus:89:240:1-b2:2
+                                                  # a papyrus slice across a restart block
         nabu show urn:nabu:ddbdp:aegyptus:89:240            # whole papyrus
         nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-grc2 --parallel
                                                   # Greek + eng, line by line
+        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10 --parallel
+                                                  # a slice, Greek + eng aligned
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
 
@@ -258,6 +278,10 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+    rescue Nabu::Query::Range::Error => e
+      # A range urn that names two endpoints but can't be honoured (endpoint
+      # missing, or reversed): a clean stderr message + exit 1.
+      raise Thor::Error, e.message
     ensure
       catalog&.disconnect
     end
@@ -471,6 +495,7 @@ module Nabu
         case result
         when Nabu::Query::Show::PassageResult then print_show_passage(result)
         when Nabu::Query::Show::DocumentResult then print_show_document(result)
+        when Nabu::Query::Show::RangeResult then print_show_range(result)
         end
       end
 
@@ -496,6 +521,21 @@ module Nabu
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
+      # Render a range (P7-6): the document header like a document listing, an
+      # honest "[N of M passages]" note plus the two endpoint urns, then the
+      # inclusive slice as :suffixes (--full-urn restores absolute urns).
+      def print_show_range(range)
+        title = range.title ? " — #{range.title}" : ""
+        lang = range.language ? " [#{range.language}]" : ""
+        say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
+        say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
+        say "  range: #{range.start_urn} … #{range.end_urn}  " \
+            "[#{range.passages.size} of #{range.total} passages]"
+        range.passages.each do |line|
+          say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
         end
       end
 

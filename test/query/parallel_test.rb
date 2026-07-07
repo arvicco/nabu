@@ -144,6 +144,29 @@ module Query
       assert_nil run_parallel("urn:cts:greekLit:tg1.w1.nope")
     end
 
+    # -- range composition (P7-6) ------------------------------------------------
+    # A range urn slices the queried document; parallel pairing then applies to
+    # the sliced rows only (unmatched suffixes stay one-sided, as P7-4 renders).
+
+    def test_range_urn_scopes_alignment_to_the_slice
+      load_default_pair # grc [1,2,3]; eng [pref,1,3]
+
+      result = run_parallel("#{GRC_URN}:1-2")
+      assert_equal GRC_URN, result.left.urn
+      assert_equal ENG_URN, result.right.urn
+      # Only :1 and :2 survive the slice; :pref and :3 are outside it.
+      assert_equal [":1", ":2"], result.rows.map(&:suffix)
+      one, two = result.rows
+      assert_equal %w[μῆνιν Wrath], [one.left.text, one.right.text]
+      assert_equal "ἄειδε", two.left.text
+      assert_nil two.right, "an in-slice suffix with no counterpart stays one-sided"
+    end
+
+    def test_range_end_not_found_raises_through_parallel
+      load_default_pair
+      assert_raises(Nabu::Query::Range::Error) { run_parallel("#{GRC_URN}:1-99") }
+    end
+
     # -- visibility (show-family semantics) --------------------------------------
 
     def test_withdrawn_passages_are_included_and_flagged
