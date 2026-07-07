@@ -789,7 +789,7 @@ adapter, per dev-loop §8), one scouting survey. Network: scout packets may
 research (WebSearch/WebFetch) but fetch NOTHING bulk; fixture fetches happen
 only after the owner approves each plan; first real syncs owner-fired.*
 
-## P9-1 · First1K English translations  [tier: opus] [status: ready] [deps: —]
+## P9-1 · First1K English translations  [tier: opus] [status: done] [deps: —]
 Goal: First1kGreek's repo carries ~45 English editions under the 1st1K-eng<n>
       slug family; the P7-4 translation classifier keys on the perseus slug
       shape, so `translations: true` would find nothing. Extend the subclass

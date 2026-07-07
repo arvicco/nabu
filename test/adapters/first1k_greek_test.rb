@@ -28,6 +28,14 @@ class First1kGreekTest < Minitest::Test
   ANUBION_URN = "urn:cts:greekLit:tlg1126.tlg003.1st1K-grc1"
   METHODIUS_URN = "urn:cts:greekLit:tlg2959.tlg008.opp-grc1"
   NICOMACHUS_URN = "urn:cts:greekLit:tlg0358.tlg001.1st1K-grc1"
+  # The P9-1 parallel pair (Anonymus, De Incredibilibus): a grc original and its
+  # eng translation, sharing the `section` citation scheme (see the eng-only
+  # tests below). The grc side is an ordinary original — discovered flag-off too.
+  PARADOX_GRC_URN = "urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1"
+  PARADOX_ENG_URN = "urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1"
+
+  # All five original-language editions the fixture tree carries (flag-off).
+  GRC_URNS = [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN, PARADOX_GRC_URN].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -65,9 +73,22 @@ class First1kGreekTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_the_four_fixture_editions_across_slug_families
+  def test_discover_finds_exactly_the_five_original_editions_across_slug_families
     refs = Nabu::Adapters::First1kGreek.new.discover(GREEK_WORKDIR).to_a
-    assert_equal [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN], refs.map(&:id).sort
+    assert_equal GRC_URNS.sort, refs.map(&:id).sort
+  end
+
+  # Frozen-urn pin (P9-1 standing standard): with the flag off (default),
+  # discover over a fixture tree that NOW CONTAINS an eng translation sibling
+  # (tlg4037 eng1) yields the identical ref list a pre-P9-1 adapter produced —
+  # same urns, all "grc", eng skipped. Toggling translations adds new docs; it
+  # never changes the existing originals' set.
+  def test_discover_with_flag_off_is_identical_to_default_despite_eng_files_on_disk
+    default_refs = Nabu::Adapters::First1kGreek.new.discover(GREEK_WORKDIR).to_a
+    flag_off_refs = Nabu::Adapters::First1kGreek.new(translations: false).discover(GREEK_WORKDIR).to_a
+    assert_equal default_refs, flag_off_refs
+    assert_equal GRC_URNS.sort, default_refs.map(&:id).sort
+    assert(default_refs.all? { |ref| ref.metadata["language"] == "grc" })
   end
 
   def test_discover_sets_source_id_language_and_absolute_path
@@ -169,5 +190,165 @@ class First1kGreekTest < Minitest::Test
     assert_equal Nabu::Adapters::First1kGreek, entry.adapter_class
     assert_equal "first1k-greek", entry.manifest.id
     assert_equal Nabu::Adapters::First1kGreek.manifest, entry.manifest
+  end
+
+  # The registry now opts First1KGreek into translations (P9-1); the built
+  # adapter must actually discover eng editions.
+  def test_registry_builds_a_translations_on_adapter
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    adapter = registry["first1k-greek"].build_adapter
+    langs = adapter.discover(GREEK_WORKDIR).map { |ref| ref.metadata["language"] }
+    assert_includes langs, "eng", "registry-built first1k-greek must discover eng editions"
+  end
+end
+
+# The translations-on First1KGreek (P9-1): `First1kGreek.new(translations: true)`
+# additionally discovers the highest `-eng<n>` edition per work — mirroring the
+# perseus mechanism (P7-4) but over First1K's family-agnostic slug family
+# (1st1K-eng<n>, opp-eng<n>, letter-suffixed). eng bodies anchor on
+# div[@type="translation"]. Flag-off inertness is pinned in First1kGreekTest.
+class First1kGreekTranslationsTest < Minitest::Test
+  FIXTURES = Nabu::TestSupport.fixtures("first1k")
+  GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
+
+  GRC_URNS = First1kGreekTest::GRC_URNS
+  ENG_URN = First1kGreekTest::PARADOX_ENG_URN
+  GRC_URN = First1kGreekTest::PARADOX_GRC_URN
+
+  def adapter
+    Nabu::Adapters::First1kGreek.new(translations: true)
+  end
+
+  # --- discover -------------------------------------------------------------
+
+  def test_discover_adds_the_eng_edition_alongside_originals_sorted_by_urn
+    refs = adapter.discover(GREEK_WORKDIR).to_a
+    assert_equal (GRC_URNS + [ENG_URN]).sort, refs.map(&:id)
+    assert_equal refs.map(&:id).sort, refs.map(&:id), "discover stays urn-sorted"
+  end
+
+  def test_translation_ref_carries_eng_language_title_and_source_id
+    ref = adapter.discover(GREEK_WORKDIR).find { |r| r.metadata["language"] == "eng" }
+    refute_nil ref
+    assert_equal ENG_URN, ref.id
+    assert_equal "first1k-greek", ref.source_id
+    assert_equal "De Incredibilibus (excerpta Vaticana)", ref.metadata["title"]
+  end
+
+  # Family-agnostic acceptance, mirroring the originals' rule: only the
+  # `-eng<version>` tail matters, so opp-eng / letter-suffixed slugs match too,
+  # while non-eng translations (ger/fre/lat) are still skipped.
+  def test_discover_accepts_any_eng_family_and_skips_other_translation_languages
+    Dir.mktmpdir do |dir|
+      work = File.join(dir, "data", "tlg9999", "tlg001")
+      FileUtils.mkdir_p(work)
+      %w[1st1K-grc1 opp-eng2 1st1K-ger1 opp-lat1].each do |slug|
+        FileUtils.touch(File.join(work, "tlg9999.tlg001.#{slug}.xml"))
+      end
+      refs = adapter.discover(dir).to_a
+      assert_equal ["urn:cts:greekLit:tlg9999.tlg001.1st1K-grc1",
+                    "urn:cts:greekLit:tlg9999.tlg001.opp-eng2"], refs.map(&:id).sort
+    end
+  end
+
+  # --- parse ----------------------------------------------------------------
+
+  def test_parse_yields_eng_passages_from_the_translation_div
+    document = parse_ref(ENG_URN)
+    assert_equal ENG_URN, document.urn
+    assert_equal "eng", document.language
+    assert_equal 3, document.size
+    suffixes = document.map { |p| p.urn.delete_prefix(document.urn) }
+    assert_equal %w[:1 :2 :3], suffixes
+    assert_includes document.first.text, "Egyptians"
+    assert_equal Nabu::Normalize.search_form(document.first.text, language: "eng"),
+                 document.first.text_normalized
+  end
+
+  # The pair aligns section-for-section: the eng edition mints exactly the same
+  # citation suffixes as the grc edition — passage-level alignment for free.
+  def test_eng_and_grc_share_the_same_section_suffixes
+    eng = parse_ref(ENG_URN)
+    grc = parse_ref(GRC_URN)
+    suffixes = ->(doc) { doc.map { |p| p.urn.delete_prefix(doc.urn) } }
+    assert_equal %w[:1 :2 :3], suffixes.call(grc)
+    assert_equal suffixes.call(grc), suffixes.call(eng)
+  end
+
+  private
+
+  def parse_ref(urn)
+    a = adapter
+    ref = a.discover(GREEK_WORKDIR).find { |r| r.id == urn }
+    refute_nil ref, "expected discover to yield #{urn}"
+    a.parse(ref)
+  end
+end
+
+# The parallel render (Nabu::Query::Parallel, P7-4 / span-grouped P8-1b) over the
+# real fixture pair: discover → parse both editions, load through the real
+# Loader, and assert the alignment reality gives. tlg4037's grc and eng both
+# cite one `section` level with identical @n, so every anchor is a 1:1 PAIR
+# (verse-for-verse), not a coarse block.
+class First1kGreekParallelRenderTest < Minitest::Test
+  include StoreTestDB
+
+  FIXTURES = Nabu::TestSupport.fixtures("first1k")
+  GREEK_WORKDIR = File.join(FIXTURES, "greekLit")
+  ENG_URN = First1kGreekTest::PARADOX_ENG_URN
+  GRC_URN = First1kGreekTest::PARADOX_GRC_URN
+
+  def setup
+    @catalog = store_test_db
+    source = Nabu::Store::Source.create(
+      slug: "first1k-greek", name: "First1KGreek", adapter_class: "Nabu::Adapters::First1kGreek",
+      license_class: "attribution"
+    )
+    loader = Nabu::Store::Loader.new(db: @catalog, source: source)
+    adapter = Nabu::Adapters::First1kGreek.new(translations: true)
+    docs = adapter.discover(GREEK_WORKDIR)
+                  .select { |ref| ref.id.include?("tlg4037") }
+                  .map { |ref| adapter.parse(ref) }
+    loader.load(docs, full: true)
+  end
+
+  def test_parallel_render_of_the_pair_is_verse_for_verse_pairs
+    result = Nabu::Query::Parallel.new(catalog: @catalog).run(GRC_URN, lang: "eng")
+    refute_nil result.right, "eng sibling of the same CTS work must be found"
+    assert_equal ENG_URN, result.right.urn
+    assert_equal %i[pair pair pair], result.groups.map(&:kind)
+
+    one = result.groups.first
+    assert_equal ":1", one.anchor
+    assert_includes one.originals.first.text, "Ἰστέον"
+    assert_includes one.translation.text, "Egyptians"
+    refute one.clipped
+  end
+
+  def test_parallel_is_symmetric_from_the_translation_side
+    result = Nabu::Query::Parallel.new(catalog: @catalog).run(ENG_URN, lang: "grc")
+    assert_equal ENG_URN, result.left.urn
+    assert_equal GRC_URN, result.right.urn
+    assert_equal %i[pair pair pair], result.groups.map(&:kind)
+  end
+end
+
+# The shared conformance suite against a translations-on First1KGreek instance:
+# the eng document must satisfy every adapter guarantee (urn uniqueness across
+# the widened discover set, stability across two parses, NFC, minted search
+# form) exactly like the originals.
+class First1kGreekTranslationsConformanceTest < Minitest::Test
+  include AdapterConformance
+
+  def conformance_adapter
+    Nabu::Adapters::First1kGreek.new(translations: true)
+  end
+
+  def conformance_workdir
+    File.join(Nabu::TestSupport.fixtures("first1k"), "greekLit")
+  end
+
+  def conformance_expected_source_id
+    "first1k-greek"
   end
 end

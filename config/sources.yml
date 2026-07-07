@@ -34,6 +34,11 @@ first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: live
+  # P9-1, owner-directed 2026-07-08 (Phase 9): ingest the ~45 English editions
+  # already in the cloned repo as aligned parallel documents (highest -eng<n>
+  # per work, language eng, CC BY-SA unchanged; same mechanism as perseus-greek
+  # P7-4). Recovery: parse-only resync.
+  translations: true
 
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
