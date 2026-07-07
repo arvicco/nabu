@@ -173,6 +173,44 @@ class LocalCheckTest < Minitest::Test
     refute report.any_loud?
   end
 
+  # -- lemma goldens (P7-5): entries with a `lemma` key replay via LemmaSearch
+
+  def test_lemma_golden_found_through_the_lemma_index
+    urn = build_indexed_passage(text: "σὺ δὲ εἶπας",
+                                annotations: { "tokens" => [{ "lemma" => "λέγω", "form" => "εἶπας" }] })
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "lemma" => "λέγω", "lang" => "grc", "expect_urn" => urn }])
+
+    golden_check = report.golden.first
+    assert_equal :found, golden_check.status
+    assert_equal "lemma:λέγω", golden_check.query, "the report labels the entry as a lemma probe"
+    refute report.any_loud?
+  end
+
+  # The passage is in the catalog but its annotations carry no such lemma —
+  # the exact loader/indexer regression a lemma golden exists to catch.
+  def test_lemma_golden_lost_when_the_lemma_is_not_findable_is_red
+    urn = build_indexed_passage(text: "σὺ δὲ εἶπας") # no annotations
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "lemma" => "λέγω", "lang" => "grc", "expect_urn" => urn }])
+
+    assert_equal :lost, report.golden.first.status
+    assert report.any_loud?
+  end
+
+  # A live fulltext file that predates P7-5 has no lemma table yet: the lemma
+  # golden is skipped (informational), not a crash and not a loss.
+  def test_lemma_golden_skipped_when_the_lemma_table_is_absent
+    urn = build_indexed_passage(text: "σὺ δὲ εἶπας",
+                                annotations: { "tokens" => [{ "lemma" => "λέγω", "form" => "εἶπας" }] })
+    @fulltext.drop_table(Nabu::Store::Indexer::LEMMA_TABLE)
+    report = check(registry_of, fulltext: @fulltext,
+                                golden: [{ "lemma" => "λέγω", "lang" => "grc", "expect_urn" => urn }])
+
+    assert_equal :skipped, report.golden.first.status
+    refute report.any_loud?
+  end
+
   def test_no_corpus_reports_absent_and_skips_replay
     report = Nabu::Health::LocalCheck.new(
       registry: registry_of, catalog: nil, fulltext: nil, ledger: nil,
@@ -196,7 +234,10 @@ class LocalCheckTest < Minitest::Test
   def test_golden_queries_loads_the_repo_file
     queries = Nabu::Health::LocalCheck.golden_queries
     assert_operator queries.size, :>=, 6
-    assert(queries.all? { |entry| entry.key?("query") && entry.key?("expect_urn") })
+    # Every entry pins an expected urn and probes via EITHER an FTS query or a
+    # lemma (P7-5) — never neither, never both.
+    assert(queries.all? { |entry| entry.key?("expect_urn") })
+    assert(queries.all? { |entry| entry.key?("query") ^ entry.key?("lemma") })
   end
 
   private
@@ -254,7 +295,9 @@ class LocalCheckTest < Minitest::Test
   end
 
   # Build one live, indexed passage; returns its urn. Sets @fulltext.
-  def build_indexed_passage(text:)
+  # +annotations+ (a Hash) rides along as annotations_json so the lemma index
+  # (P7-5) gets rows too.
+  def build_indexed_passage(text:, annotations: nil)
     source = seed_source(slug: "corpus", enabled: true)
     doc = Nabu::Store::Document.create(
       source_id: source.id, urn: "urn:test:doc", content_sha256: "x"
@@ -264,6 +307,7 @@ class LocalCheckTest < Minitest::Test
       # text_normalized carries the boundary-minted search form (P6-4), as a
       # real corpus row would.
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      annotations_json: annotations ? JSON.generate(annotations) : "{}",
       content_sha256: "x"
     )
     @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")

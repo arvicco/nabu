@@ -129,6 +129,18 @@ module Nabu
                    open, attribution, nc, research_private, restricted
         --limit    maximum hits, default 20
 
+      LEMMA SEARCH (--lemma FORM): exact dictionary-form lookup over the
+      gold treebank annotations (UD, PROIEL, TOROT — the sources that carry
+      per-token lemmas). One lemma finds every inflected attestation, even
+      suppletive stems no text query can reach: --lemma λέγω hits λέγουσι,
+      λέγοιεν, AND εἶπας/εἰπεῖν. Hits show the dictionary form, the surface
+      form(s) that matched, and the pristine passage line. Diacritics are
+      optional on the query, exactly as in text search (λεγω works; so does
+      final-sigma-insensitive λόγος/λογοσ). --lemma REPLACES the text query
+      (combining both is not supported); it composes with --lang, --limit,
+      and --license. Passages outside the treebanks carry no lemma
+      annotations and are honestly absent here.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -142,6 +154,9 @@ module Nabu
         nabu search μηνι* --lang grc               # every derivative of the stem
         nabu search αγαπη --license attribution    # only freely re-usable hits
         nabu search "rich-haired" --lang eng       # the ingested translations
+        nabu search --lemma λέγω --lang grc        # every attestation in the Greek
+                                                   #   treebank: λέγουσι, εἶπας, εἰπεῖν…
+        nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -151,8 +166,11 @@ module Nabu
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
+    option :lemma, type: :string, banner: "FORM",
+                   desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     def search(query = nil)
       query = query.to_s.strip
+      return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
@@ -582,6 +600,59 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)"
+      end
+
+      # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma
+      # index. Replaces the FTS query (simplest honest v1 — combining both is
+      # future work); composes with --lang/--license/--limit. A fulltext file
+      # predating P7-5 lacks the lemma table, so that gets its own honest hint.
+      def lemma_search(positional_query)
+        unless positional_query.empty?
+          raise Thor::Error, "search: --lemma replaces the text query — give one or the other"
+        end
+
+        lemma = options[:lemma].strip
+        raise Thor::Error, "search: --lemma needs a lemma" if lemma.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+          raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+                                          .run(lemma, lang: options[:lang], license: options[:license],
+                                                      limit: options[:limit].to_i)
+        print_lemma_results(results)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render lemma hits: urn + language, the dictionary form with the surface
+      # form(s) that attest it, then the PRISTINE passage line (truncated) —
+      # the surface form already marks the match, so readability wins over a
+      # folded snippet here.
+      def print_lemma_results(results)
+        return say("no matches") if results.empty?
+
+        results.each do |result|
+          forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}"
+          say "  #{truncate_line(result.text)}"
+        end
+        say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+      end
+
+      # One display line of pristine text: newlines flattened, capped at 100
+      # chars (treebank sentences are single lines; the cap guards outliers).
+      def truncate_line(text, max = 100)
+        line = text.tr("\n", " ")
+        line.length > max ? "#{line[0, max]}…" : line
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all

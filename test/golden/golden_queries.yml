@@ -9,7 +9,10 @@
 # Every expectation is derived from the ACTUAL fixture bytes (open the file).
 # `lang` is optional; when present it also exercises the language filter.
 #
-# Fields: query, expect_urn, lang (optional), note.
+# Fields: query, expect_urn, lang (optional), note. An entry may carry `lemma`
+# INSTEAD of `query`: it replays through Query::LemmaSearch over the treebank
+# lemma index (P7-5) rather than FTS — same membership assertion, same
+# loader/indexer-regression rationale.
 ---
 - query: "ἠύκομον"
   lang: grc
@@ -95,3 +98,13 @@
     Greek original it aligns with (…perseus-grc2:1 ↔ …perseus-eng2:1). The
     corpus reads "rich-haired"; the unhyphenated query matches because FTS5's
     unicode61 tokenizer splits on the hyphen (a hyphen IN a query is FTS syntax).
+
+- lemma: "λέγω"
+  lang: grc
+  expect_urn: "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50:64498"
+  note: >-
+    LEMMA SEARCH (P7-5). UD Ancient Greek PROIEL sentence 64498 attests λέγω
+    as the suppletive aorist "εἶπας" — reachable by NO surface query on the
+    λεγ- stem, only through the gold token lemma. Proves the whole path:
+    annotations_json extraction → per-language lemma fold → passage_lemmas
+    lookup → catalog join.

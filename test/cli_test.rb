@@ -77,6 +77,15 @@ class CLITest < Minitest::Test
     assert_match(/--lang eng/, out)
   end
 
+  def test_help_search_documents_lemma_search_with_a_real_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--lemma/, out)
+    assert_match(/treebank/i, out, "must scope --lemma to the gold treebanks")
+    assert_match(/--lemma λέγω/, out, "must show a worked Greek example")
+    assert_match(/εἶπας/, out, "must show the suppletive payoff — forms no text query reaches")
+    assert_match(/replaces the text query/i, out, "must be honest that --lemma and a query don't combine")
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -414,6 +423,59 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search --lemma (P7-5) -------------------------------------------------
+
+  # Real UD Ancient Greek PROIEL fixture synced through the real pipeline:
+  # --lemma λέγω must surface the suppletive aorist εἶπας (sentence 64498) —
+  # an attestation no λεγ- text query can reach.
+  def test_search_lemma_finds_inflected_attestations
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --lang grc]) }
+      assert_nil status, "a successful lemma search exits 0"
+      assert_match(/urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50:64498 \[grc\]/, out)
+      assert_match(/λέγω → εἶπας/, out, "the hit names the matched surface form")
+      assert_match(/λέγειν, εἰπεῖν/, out, "multiple forms in one passage aggregate on one hit")
+      assert_match(/exact lemma match/, out, "the footer labels the match kind")
+    end
+  end
+
+  # Fold both sides at the CLI seam: the unaccented spelling still hits.
+  def test_search_lemma_unaccented_query_matches
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λεγω]) }
+      assert_nil status
+      assert_match(/:64498 \[grc\]/, out)
+    end
+  end
+
+  def test_search_lemma_zero_hits_says_no_matches
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma τίθημι]) }
+      assert_nil status, "zero hits is not a failure"
+      assert_match(/no matches/i, out)
+    end
+  end
+
+  def test_search_lemma_with_a_text_query_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --lemma λέγω]) }
+      assert_equal 1, status
+      assert_match(/--lemma replaces the text query/, err)
+    end
+  end
+
+  # A fulltext file built before P7-5 has no lemma table: honest hint, exit 1.
+  def test_search_lemma_against_a_pre_lemma_index_hints_to_reindex
+    with_treebank_corpus do |config|
+      ft = Nabu::Store.connect_fulltext(config.fulltext_path)
+      ft.drop_table(Nabu::Store::Indexer::LEMMA_TABLE)
+      ft.disconnect
+      _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω]) }
+      assert_equal 1, status
+      assert_match(/no lemma index.*sync.*rebuild/i, err)
+    end
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance
@@ -567,6 +629,30 @@ class CLITest < Minitest::Test
     with_sync_env(enabled: true) do |config|
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) }
+      end
+      yield config
+    end
+  end
+
+  # A synced-and-indexed corpus of ONE real treebank fixture (UD Ancient Greek
+  # PROIEL), for the --lemma path: the lemma index only has rows when
+  # annotations carry token lemmas, which TestAdapter's plaintext corpus never
+  # does. Same parse-only sync pipeline as with_indexed_corpus.
+  def with_treebank_corpus
+    Dir.mktmpdir("nabu-cli-lemma") do |root|
+      treebank = File.join(root, "canonical", "ud", "greek-proiel")
+      FileUtils.mkdir_p(treebank)
+      FileUtils.cp(File.expand_path("fixtures/ud/greek-proiel/grc_proiel-ud-test-head50.conllu", __dir__),
+                   treebank)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "ud:\n  adapter: Nabu::Adapters::UniversalDependencies\n  " \
+                          "enabled: true\n  sync_policy: live\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      with_config(config) do
+        capture_io { Nabu::CLI.start(%w[sync ud --parse-only]) }
       end
       yield config
     end

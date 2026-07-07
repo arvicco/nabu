@@ -292,6 +292,13 @@ and because the variants are ORed, the generic variant still matches
 languages with no extra rule — Gothic "jah" stays findable even though the
 lat variant of that query reads "iah".
 
+**Lemmas fold by the same table (P7-5):** a lemma is a dictionary form in
+its passage's language, so the lemma index stores
+`Normalize.search_form(lemma, language)` and `Query::LemmaSearch` matches
+the `query_forms` union — the whole argument above applies verbatim. Note
+Greek dictionary forms routinely *end* in ς (λόγος → λογοσ): consistent
+precisely because BOTH sides fold.
+
 **Deliberately conservative decisions (the open questions):**
 
 - **Greek adscript iota.** The combining subscript (ᾳ = α + U+0345) strips

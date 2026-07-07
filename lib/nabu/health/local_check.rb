@@ -23,7 +23,11 @@ module Nabu
     #    the catalog's resettable last_sync_at column.
     #
     # 2. Live golden replay — each query in test/golden/golden_queries.yml run
-    #    against the LIVE catalog + fulltext index (read-only) via Query::Search.
+    #    against the LIVE catalog + fulltext index (read-only) via Query::Search
+    #    (entries with a `lemma` key replay via Query::LemmaSearch instead —
+    #    same loader/indexer-regression rationale, P7-5; when the fulltext file
+    #    predates the lemma table those entries are SKIPPED, informational,
+    #    like any other not-here-yet corpus state).
     #
     #    Skip rule: the golden queries pin SPECIFIC passage urns (real, trimmed
     #    upstream urns — the fixtures are real bytes). A live corpus only contains
@@ -177,16 +181,33 @@ module Nabu
       end
 
       def replay_one(entry, search)
-        query = entry["query"]
+        query = entry["query"] || "lemma:#{entry['lemma']}"
         expect = entry["expect_urn"]
-        return GoldenCheck.new(query: query, expect_urn: expect, status: :skipped) unless urn_in_catalog?(expect)
+        return GoldenCheck.new(query: query, expect_urn: expect, status: :skipped) unless replayable?(entry, expect)
 
         # urn-targeted: "is the expected passage findable by this query" must
         # not depend on where it RANKS — in a million-passage corpus a golden
         # passage can be legitimately outranked by hundreds of denser matches
         # (Αἴλιος taught us this live).
-        found = !search.run(query, lang: entry["lang"], urn: expect, limit: 1).empty?
+        found = if entry["lemma"]
+                  !lemma_search.run(entry["lemma"], lang: entry["lang"], urn: expect, limit: 1).empty?
+                else
+                  !search.run(entry["query"], lang: entry["lang"], urn: expect, limit: 1).empty?
+                end
         GoldenCheck.new(query: query, expect_urn: expect, status: found ? :found : :lost)
+      end
+
+      # Skip when the expected passage was never loaded here (class note), or —
+      # for lemma entries — when the fulltext file predates the lemma table.
+      def replayable?(entry, expect)
+        return false unless urn_in_catalog?(expect)
+        return @fulltext.table_exists?(Store::Indexer::LEMMA_TABLE) if entry["lemma"]
+
+        true
+      end
+
+      def lemma_search
+        @lemma_search ||= Query::LemmaSearch.new(catalog: @catalog, fulltext: @fulltext)
       end
 
       def urn_in_catalog?(urn)

@@ -614,7 +614,7 @@ Acceptance: eng editions discovered/parsed only when the flag is on;
       show --parallel; one golden parallel query; conformance green;
       help show/search updated; suite + lint green.
 
-## P7-5 · Lemma search: exploit the gold treebanks  [tier: fable] [status: ready] [deps: —]
+## P7-5 · Lemma search: exploit the gold treebanks  [tier: fable] [status: done] [deps: —]
 Goal: ~161k passages (UD, PROIEL, TOROT) carry gold lemmas + morphology
       in annotations_json — dead weight to search today. Design the lemma
       index (fable — first index of its kind): lemma→passage table in

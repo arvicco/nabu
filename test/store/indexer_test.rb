@@ -32,17 +32,28 @@ module Store
     end
 
     # sequence is unique per (document_id, sequence); callers pass distinct seqs.
-    def make_passage(document, urn:, text_normalized:, sequence:, withdrawn: false)
+    def make_passage(document, urn:, text_normalized:, sequence:, withdrawn: false,
+                     language: "grc", annotations: nil)
       Nabu::Store::Passage.create(
-        document_id: document.id, urn: urn, sequence: sequence, language: "grc",
+        document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text_normalized, text_normalized: text_normalized,
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha256: "x", revision: 1, withdrawn: withdrawn,
+        annotations_json: annotations ? JSON.generate(annotations) : "{}"
       )
+    end
+
+    # The stored annotation shape both treebank parser families emit: a
+    # "tokens" array of lean hashes with "lemma"/"form" (ConlluParser keeps the
+    # CoNLL-U LEMMA/FORM columns; ProielParser the token @lemma/@form attrs).
+    def token_annotations(*pairs)
+      { "tokens" => pairs.map { |lemma, form| { "lemma" => lemma, "form" => form }.compact } }
     end
 
     def rebuild! = Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
 
     def fts = @fulltext[:passages_fts]
+
+    def lemmas = @fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
 
     # Raw MATCH: the Indexer's contract is index-as-stored, so tests query
     # with the already-folded form (query-side folding is Search's job).
@@ -125,6 +136,90 @@ module Store
       rebuild!
 
       assert_equal [passage.id], fts.select_map(:passage_id)
+    end
+
+    # -- the lemma index (P7-5) ----------------------------------------------
+
+    def test_lemma_rows_built_from_stored_annotations
+      doc = make_document(urn: "urn:d:1")
+      passage = make_passage(doc, urn: "urn:d:1:1", text_normalized: "λεγουσι", sequence: 0,
+                                  annotations: token_annotations(%w[λέγω λέγουσι]))
+      rebuild!
+
+      row = lemmas.first
+      assert_equal 1, lemmas.count
+      assert_equal "λεγω", row.fetch(:lemma_folded), "the index side folds the lemma (search_form)"
+      assert_equal "λέγω", row.fetch(:lemma_raw), "the upstream spelling is kept for display"
+      assert_equal "λέγουσι", row.fetch(:surface_forms)
+      assert_equal passage.id, row.fetch(:passage_id)
+      assert_equal "urn:d:1:1", row.fetch(:urn)
+      assert_equal "grc", row.fetch(:language)
+    end
+
+    # Non-treebank passages (annotations "{}", or annotations without token
+    # lemmas — e.g. EpiDoc gap info) contribute no rows: honest absence.
+    def test_passages_without_lemma_annotations_contribute_no_rows
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "μηνιν", sequence: 0)
+      make_passage(doc, urn: "urn:d:1:2", text_normalized: "αειδε", sequence: 1,
+                        annotations: { "citation" => "1.1" })
+      # A CoNLL-U MWT range token has form but NO lemma; it must not index.
+      make_passage(doc, urn: "urn:d:1:3", text_normalized: "essetque", sequence: 2,
+                        annotations: { "tokens" => [{ "id" => "14-15", "form" => "essetque" }] })
+      rebuild!
+
+      assert_equal 0, lemmas.count
+    end
+
+    # One row per (passage, folded lemma): repeated attestations aggregate
+    # their distinct surface forms instead of multiplying rows.
+    def test_lemma_rows_dedup_per_passage_with_aggregated_surface_forms
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγειν], %w[λέγω εἰπεῖν], %w[λέγω λέγειν]))
+      rebuild!
+
+      assert_equal 1, lemmas.count
+      assert_equal "λέγειν, εἰπεῖν", lemmas.first.fetch(:surface_forms)
+    end
+
+    # The fold is per-language, like text_normalized: a Latin lemma takes the
+    # lat v→u rule; final-sigma Greek dictionary forms take grc ς→σ (λόγος —
+    # lemmas routinely END in ς — folds to λογοσ, consistent because BOTH
+    # sides fold: Query::LemmaSearch matches the query_forms union).
+    def test_lemma_fold_is_per_language
+      grc = make_document(urn: "urn:d:grc")
+      make_passage(grc, urn: "urn:d:grc:1", text_normalized: "λογον", sequence: 0,
+                        annotations: token_annotations(%w[λόγος λόγον]))
+      lat = make_document(urn: "urn:d:lat")
+      make_passage(lat, urn: "urn:d:lat:1", text_normalized: "uidemur", sequence: 0,
+                        language: "lat", annotations: token_annotations(%w[video videmur]))
+      rebuild!
+
+      assert_equal "λογοσ", lemmas.where(urn: "urn:d:grc:1").get(:lemma_folded),
+                   "grc final sigma folds ς→σ in the dictionary form"
+      assert_equal "uideo", lemmas.where(urn: "urn:d:lat:1").get(:lemma_folded),
+                   "lat folds v→u in the lemma"
+    end
+
+    def test_lemma_rows_of_withdrawn_passages_excluded
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0, withdrawn: true,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      rebuild!
+
+      assert_equal 0, lemmas.count
+    end
+
+    def test_lemma_table_rebuild_is_idempotent
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+
+      rebuild!
+      rebuild!
+
+      assert_equal 1, lemmas.count, "drop+recreate leaves no duplicate lemma rows"
     end
   end
 end

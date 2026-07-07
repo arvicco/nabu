@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "catalog_join"
 
 module Nabu
   # Query surface over the derived store (architecture §2: lib/nabu/query/).
   module Query
     # Full-text search: FTS5 MATCH over the index of boundary-folded search
-    # forms (P6-4), then a catalog join for display text, language, and
-    # license filtering.
+    # forms (P6-4), then a catalog join (the shared CatalogJoin module) for
+    # display text, language, and license filtering.
     #
     # == Why the query matches a UNION of folds
     #
@@ -25,22 +26,11 @@ module Nabu
     # ORed, so the generic variant still matches languages with no extra rule
     # (a Gothic "jah" stays findable even though the lat variant reads "iah").
     #
-    # == Two-step id join, not ATTACH
-    #
-    # The index lives in a separate SQLite file from the catalog (architecture
-    # §2), so a cross-database JOIN would need ATTACH. Instead we take the FTS
-    # hit's passage_ids (in bm25 rank order) and look them up in the catalog with
-    # an ordinary Sequel dataset — no raw SQL, no ATTACH, and the catalog join is
-    # needed anyway for language/license/withdrawn filtering and pristine text.
-    #
-    # == License filter semantics (v1)
-    #
-    # `license: "open"` means EXACTLY the open class — not "at least as open as".
-    # A permissiveness ordering ("open ⊇ attribution ⊇ …") is deliberately out of
-    # scope for v1; exact-match is predictable and easy to reason about. The
-    # effective class is the document's license_override when present, else the
-    # source's license_class (the P1-3 override column).
+    # Two-step id join (not ATTACH) and the exact-class license semantics are
+    # documented on CatalogJoin, which owns that half.
     class Search
+      include CatalogJoin
+
       # One search hit. `text` is the pristine passage text (for display);
       # `snippet` is the FTS-generated highlight over the FOLDED index form, so
       # its accents are stripped — it marks WHERE the match is, not how the
@@ -111,40 +101,6 @@ module Nabu
           .order(Sequel.lit(RANK_SQL))
           .limit(inner_limit)
           .all
-      end
-
-      # Look the FTS passage_ids up in the catalog, applying the two-level
-      # visibility rule (neither passage nor its document withdrawn) plus the
-      # optional language and license filters. No ordering: the caller restores
-      # the FTS rank order from +ordered_ids+.
-      def catalog_rows(passage_ids, lang:, license:)
-        dataset = @catalog[:passages]
-                  .join(:documents, id: Sequel[:passages][:document_id])
-                  .join(:sources, id: Sequel[:documents][:source_id])
-                  .where(Sequel[:passages][:id] => passage_ids)
-                  .where(Sequel[:passages][:withdrawn] => false,
-                         Sequel[:documents][:withdrawn] => false)
-        dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
-        dataset = dataset.where(license_expr => license) if license
-        dataset.select(*catalog_columns).all
-      end
-
-      # Effective license class: document override wins over source class (P1-3).
-      def license_expr
-        Sequel.function(:coalesce,
-                        Sequel[:documents][:license_override],
-                        Sequel[:sources][:license_class])
-      end
-
-      def catalog_columns
-        [
-          Sequel[:passages][:id].as(:passage_id),
-          Sequel[:passages][:urn],
-          Sequel[:passages][:language],
-          Sequel[:passages][:text],
-          Sequel[:documents][:title].as(:document_title),
-          license_expr.as(:license_class)
-        ]
       end
 
       def build_result(row, snippet)
