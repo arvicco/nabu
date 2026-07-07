@@ -84,3 +84,14 @@
     LATIN v→u (P6-4). PROIEL Cicero sentence 86001 reads "videmur"; the
     u-spelling query still finds it because the lat boundary fold maps v→u and
     j→i (PHI/Perseus practice: Latin search does not distinguish u/v or i/j).
+
+- query: "rich haired Demeter"
+  lang: eng
+  expect_urn: "urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1"
+  note: >-
+    PARALLEL TRANSLATIONS (P7-4). Hymn 13's English translation (Evelyn-White),
+    ingested by the translations-on Perseus adapter from div[@type="translation"],
+    is an ordinary searchable eng passage; the lang filter separates it from the
+    Greek original it aligns with (…perseus-grc2:1 ↔ …perseus-eng2:1). The
+    corpus reads "rich-haired"; the unhyphenated query matches because FTS5's
+    unicode61 tokenizer splits on the hyphen (a hyphen IN a query is FTS syntax).

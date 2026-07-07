@@ -104,8 +104,21 @@ module Nabu
     #     urn: "urn:cts:...",        # CTS edition urn (caller knows it)
     #     language: "grc",           # BCP-47, from the edition slug
     #     title: "Hymn 13 ...",      # optional; __cts__.xml is adapter territory
-    #     canonical_path: "..."      # required only for IOs without #path
+    #     canonical_path: "...",     # required only for IOs without #path
+    #     division_types: ["edition"] # body divs accepted as the citation root
     #   ) # => Nabu::Document
+    #
+    # == division_types (P7-4)
+    #
+    # English translation files anchor their body in div[@type="translation"]
+    # where original-language editions use div[@type="edition"]. Acceptance is
+    # a PER-PARSE parameter, not a global widening, because composite
+    # original-language files exist that embed a translation div NEXT TO their
+    # edition div (3 in canonical-greekLit) — under the default ["edition"]
+    # those parse byte-identically to before, the frozen-urn standard. The
+    # Perseus adapter passes ["translation", "edition"] for translation refs
+    # (785 of 786 perseus-eng files use "translation"; one uses "edition"; none
+    # carries both, verified against the 2026-07-03 snapshot).
     class EpidocParser
       # One citable unit as extracted from the stream: citation is the dotted
       # path (e.g. "2", "1.7"), text is cleaned NFC content.
@@ -123,17 +136,22 @@ module Nabu
       ].freeze
       private_constant :RETRYABLE_ERRORS
 
+      # The default citation-root acceptance: original-language editions.
+      DIVISION_TYPES = ["edition"].freeze
+
       # Parse one edition file into a Nabu::Document with ordered Passages at
       # the lowest citation level. Raises Nabu::ParseError on malformed XML,
       # missing/empty CTS refsDecl, urn mismatch, or zero citable passages.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil)
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, division_types: DIVISION_TYPES)
         path = resolve_canonical_path(source, canonical_path)
-        attempt(source, path: path, urn: urn, language: language, title: title, structural: false)
+        attempt(source, path: path, urn: urn, language: language, title: title,
+                        division_types: division_types, structural: false)
       rescue ParseError => e
         raise unless RETRYABLE_ERRORS.any? { |pattern| pattern.match?(e.message) } && rewind_for_retry(source)
 
         begin
-          attempt(source, path: path, urn: urn, language: language, title: title, structural: true)
+          attempt(source, path: path, urn: urn, language: language, title: title,
+                          division_types: division_types, structural: true)
         rescue ParseError => retry_error
           raise ParseError, "#{e.message}; structural retry (refsDecl replacementPattern xpath) " \
                             "also failed: #{retry_error.message.delete_prefix("#{path}: ")}"
@@ -142,9 +160,10 @@ module Nabu
 
       private
 
-      def attempt(source, path:, urn:, language:, title:, structural:)
-        units = extract_units(source, path: path, urn: urn, structural: structural)
-        build_document(units, urn: urn, language: language, title: title, path: path)
+      def attempt(source, path:, urn:, language:, title:, division_types:, structural:)
+        units = extract_units(source, path: path, urn: urn, division_types: division_types, structural: structural)
+        build_document(units, urn: urn, language: language, title: title, path: path,
+                              division_types: division_types)
       end
 
       # The retry re-reads the document: trivially possible for a file path,
@@ -170,10 +189,10 @@ module Nabu
         raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
       end
 
-      def extract_units(source, path:, urn:, structural:)
+      def extract_units(source, path:, urn:, division_types:, structural:)
         with_io(source) do |io|
           Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn,
-                         structural: structural).call
+                         division_types: division_types, structural: structural).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
@@ -183,7 +202,7 @@ module Nabu
         source.is_a?(String) ? File.open(source, "r", &) : yield(source)
       end
 
-      def build_document(units, urn:, language:, title:, path:)
+      def build_document(units, urn:, language:, title:, path:, division_types: DIVISION_TYPES)
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
         units.each_with_index do |unit, sequence|
           document << Passage.new(
@@ -194,7 +213,9 @@ module Nabu
             sequence: sequence
           )
         end
-        raise ParseError, "#{path}: no citable passages found in div[@type=\"edition\"]" if document.empty?
+        if document.empty?
+          raise ParseError, "#{path}: no citable passages found in #{Extraction.divisions_label(division_types)}"
+        end
 
         document
       rescue ValidationError => e
@@ -234,10 +255,18 @@ module Nabu
         DEAD = -1
         private_constant :DEAD
 
-        def initialize(reader:, path:, urn:, structural: false)
+        # "div[@type=\"translation\"] or div[@type=\"edition\"]" — the error
+        # vocabulary for whichever citation roots a parse accepts. With the
+        # default single type this renders the exact pre-P7-4 message.
+        def self.divisions_label(division_types)
+          division_types.map { |type| "div[@type=\"#{type}\"]" }.join(" or ")
+        end
+
+        def initialize(reader:, path:, urn:, division_types: DIVISION_TYPES, structural: false)
           @reader = reader
           @path = path
           @urn = urn
+          @division_types = division_types
           @structural = structural
           @patterns = []
           @div_stack = []
@@ -250,7 +279,7 @@ module Nabu
 
         def call
           @reader.each { |node| process(node) }
-          raise ParseError, "#{@path}: no div[@type=\"edition\"] found" unless @edition_seen
+          raise ParseError, "#{@path}: no #{self.class.divisions_label(@division_types)} found" unless @edition_seen
 
           @units
         end
@@ -271,7 +300,7 @@ module Nabu
 
           if name == "cRefPattern"
             record_pattern(node)
-          elsif name == "div" && node.attribute("type") == "edition"
+          elsif name == "div" && @division_types.include?(node.attribute("type"))
             enter_edition(node)
           elsif @structural
             structural_start(node, name) if @in_edition
@@ -347,7 +376,7 @@ module Nabu
           actual = node.attribute("n")
           unless actual == @urn
             raise ParseError, "#{@path}: edition urn mismatch: expected #{@urn.inspect}, " \
-                              "div[@type=\"edition\"]/@n is #{actual.inspect}"
+                              "div[@type=\"#{node.attribute('type')}\"]/@n is #{actual.inspect}"
           end
 
           @edition_seen = true

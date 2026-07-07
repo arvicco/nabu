@@ -18,9 +18,13 @@ class GoldenTest < Minitest::Test
   FIXTURES = File.expand_path("fixtures", __dir__)
   QUERIES = YAML.safe_load_file(File.expand_path("golden/golden_queries.yml", __dir__)).freeze
 
-  # slug, adapter class name, fixture workdir (under test/fixtures/).
+  # slug, adapter class name, fixture workdir (under test/fixtures/), optional
+  # adapter construction kwargs. perseus-greek runs translations-on (P7-4) so
+  # the golden corpus carries eng passages — the parallel-translations pipeline
+  # (discover → parse translation divs → index → search) is integration-tested
+  # here alongside everything else.
   SOURCES = [
-    ["perseus-greek", "Nabu::Adapters::Perseus",              %w[perseus greekLit]],
+    ["perseus-greek", "Nabu::Adapters::Perseus",              %w[perseus greekLit], { translations: true }],
     ["first1k",       "Nabu::Adapters::First1kGreek",         %w[first1k greekLit]],
     ["ud",            "Nabu::Adapters::UniversalDependencies", %w[ud]],
     ["proiel",        "Nabu::Adapters::Proiel",               %w[proiel]],
@@ -41,13 +45,13 @@ class GoldenTest < Minitest::Test
       Nabu::Store.migrate!(db)
       Nabu::Store.setup!(db)
       ft = Nabu::Store.connect_fulltext(File.join(dir, "fulltext.sqlite3"))
-      SOURCES.each { |slug, class_name, path| load_source(db, slug, class_name, path) }
+      SOURCES.each { |slug, class_name, path, options| load_source(db, slug, class_name, path, options || {}) }
       Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: ft)
       { db: db, ft: ft }
     end
 
-    def load_source(db, slug, class_name, path)
-      adapter = Object.const_get(class_name).new
+    def load_source(db, slug, class_name, path, options = {})
+      adapter = Object.const_get(class_name).new(**options)
       source = Nabu::Store::Source.create(
         slug: slug, name: slug, adapter_class: class_name, license_class: adapter.manifest.license_class
       )

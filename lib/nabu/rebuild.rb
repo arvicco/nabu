@@ -107,7 +107,7 @@ module Nabu
       report = nil
       Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
         report = Store::Loader.new(db: db, source: source, ledger: ledger).load_from(
-          entry.adapter_class.new,
+          entry.build_adapter,
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
         )

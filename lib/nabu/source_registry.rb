@@ -20,7 +20,14 @@ module Nabu
     DEFAULT_SYNC_POLICY = "manual"
 
     # One registry line. adapter_class_name is a String resolved on demand.
-    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy) do
+    # +translations+ (P7-4): per-source opt-in to ingesting parallel
+    # translations (default false — corpora stay original-only unless the
+    # owner flips it in sources.yml).
+    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations) do
+      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false)
+        super
+      end
+
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
       # naming both the class and the source.
@@ -28,6 +35,23 @@ module Nabu
         Object.const_get(adapter_class_name)
       rescue NameError
         raise ValidationError, "unknown adapter class #{adapter_class_name} for source #{slug}"
+      end
+
+      # Construct the adapter this entry configures — THE construction seam
+      # for sync/rebuild/verify, so every pipeline agrees on the flag. Flag
+      # off (the default) is the plain no-arg construction every adapter
+      # supports; flag on passes `translations: true`, and an adapter without
+      # that keyword is a configuration error naming source and class, not an
+      # ArgumentError crash.
+      def build_adapter
+        return adapter_class.new unless translations
+
+        begin
+          adapter_class.new(translations: true)
+        rescue ArgumentError
+          raise ValidationError, "source #{slug}: adapter #{adapter_class_name} does not support " \
+                                 "`translations: true` (no translations: keyword on its initializer)"
+        end
       end
 
       # The adapter's static metadata (Nabu::SourceManifest). Forces
@@ -91,18 +115,24 @@ module Nabu
 
       Entry.new(
         slug: slug, adapter_class_name: adapter,
-        enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config)
+        enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config),
+        translations: boolean!(slug, config, "translations")
       )
     end
     private_class_method :build_entry
 
     def self.enabled!(slug, config)
-      enabled = config.fetch("enabled", false)
-      return enabled if [true, false].include?(enabled)
-
-      raise ValidationError, "source #{slug.inspect}: enabled must be true or false, got #{enabled.inspect}"
+      boolean!(slug, config, "enabled")
     end
     private_class_method :enabled!
+
+    def self.boolean!(slug, config, key)
+      value = config.fetch(key, false)
+      return value if [true, false].include?(value)
+
+      raise ValidationError, "source #{slug.inspect}: #{key} must be true or false, got #{value.inspect}"
+    end
+    private_class_method :boolean!
 
     def self.sync_policy!(slug, config)
       policy = config.fetch("sync_policy", DEFAULT_SYNC_POLICY)

@@ -63,6 +63,20 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  def test_help_show_documents_parallel_with_an_example
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/--parallel/, out)
+    assert_match(/citation suffix/, out, "must explain the alignment rule")
+    assert_match(/--parallel\b.*\n?.*eng/, out, "must show a worked --parallel example")
+    assert_match(/one-sided|only in/i, out, "must be honest about unmatched suffixes")
+  end
+
+  def test_help_search_mentions_translations
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/translation/i, out, "must say eng translations are searchable when ingested")
+    assert_match(/--lang eng/, out)
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -443,6 +457,68 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --parallel (P7-4) ------------------------------------------------
+
+  GRC_URN = "urn:cts:greekLit:tg1.w1.perseus-grc2"
+  ENG_URN = "urn:cts:greekLit:tg1.w1.perseus-eng2"
+
+  def test_show_parallel_renders_aligned_pairs_and_one_sided_rows
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel"]) }
+      assert_nil status
+      assert_match(/#{Regexp.escape(GRC_URN)}.*\[grc\]/, out)
+      assert_match(/#{Regexp.escape(ENG_URN)}.*\[eng\]/, out)
+      assert_match(/2 paired, 1 grc only, 0 eng only/, out)
+      assert_match(/^ +:1$/, out, "each row is labeled by its citation suffix")
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      assert_match(/eng {2}—/, out, "an unmatched suffix renders honestly one-sided")
+    end
+  end
+
+  def test_show_parallel_takes_an_explicit_language
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", ENG_URN, "--parallel", "grc"]) }
+      assert_nil status
+      assert_match(/#{Regexp.escape(GRC_URN)}/, out)
+      assert_match(/grc {2}ἄειδε/, out)
+    end
+  end
+
+  def test_show_parallel_passage_urn_scopes_to_one_row
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1", "--parallel"]) }
+      assert_nil status
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      refute_match(/ἄειδε/, out, "a passage urn aligns only its own suffix")
+    end
+  end
+
+  def test_show_parallel_full_urn_restores_absolute_row_labels
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel", "eng", "--full-urn"]) }
+      assert_nil status
+      assert_match(/^ +#{Regexp.escape("#{GRC_URN}:1")}$/, out)
+    end
+  end
+
+  def test_show_parallel_without_a_sibling_exits_one_naming_the_language
+    with_parallel_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["show", GRC_URN, "--parallel", "lat"]) }
+      assert_equal 1, status
+      assert_match(/no lat parallel edition/i, err)
+    end
+  end
+
+  def test_show_parallel_unknown_urn_exits_one
+    with_parallel_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:cts:greekLit:tg1.w1.nope --parallel]) }
+      assert_equal 1, status
+      assert_match(/urn not found/i, err)
+    end
+  end
+
   # -- export (P4-3) -------------------------------------------------------
 
   def test_export_plain_streams_one_line_per_passage
@@ -528,6 +604,39 @@ class CLITest < Minitest::Test
   ensure
     $stdout = old_out
     $stderr = old_err
+  end
+
+  # A built catalog holding two sibling CTS editions of one work (grc + eng,
+  # aligned suffixes :1/:3, grc-only :2) for the show --parallel surface.
+  def with_parallel_corpus
+    Dir.mktmpdir("nabu-cli-parallel") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "src", name: "Source", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+      loader = Nabu::Store::Loader.new(db: db, source: source)
+      loader.load([parallel_document(GRC_URN, "grc", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]]),
+                   parallel_document(ENG_URN, "eng", [%w[1 Wrath], %w[3 goddess]])], full: false)
+      db.disconnect
+      yield config
+    end
+  end
+
+  def parallel_document(urn, language, passages)
+    document = Nabu::Document.new(
+      urn: urn, language: language, title: "Iliad", canonical_path: "/canonical/src/#{language}.xml"
+    )
+    passages.each_with_index do |(suffix, text), index|
+      document << Nabu::Passage.new(urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index)
+    end
+    document
   end
 
   # One TestAdapter source "corpus" (two documents) with canonical data; the
