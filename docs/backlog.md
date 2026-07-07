@@ -645,33 +645,105 @@ Acceptance: ranges over CTS (1.1-1.10) and papyri (:1-:b2:2) fixtures;
 
 ---
 
-## Phase 8 — Research surface (outline; elaborated at the Phase 7 gate)
+## Phase 8 — Research surface (branch: phase-8; elaborated 2026-07-07)
 
-P8-1 · MCP tool contract [fable]: read-only stdio server surface —
-      nabu_search / nabu_show / nabu_lemma_search / nabu_status. The
-      contract IS the packet: bounded outputs (snippet-first, honest
-      "N matches, showing k"), license_class + attribution + urn on every
-      passage returned, research_private/restricted default-EXCLUDED
-      (future ad-hoc material never leaks into a conversational surface),
-      negative results carry corpus-coverage notes (nabu_status data), a
-      mid-reindex query degrades gracefully ("index rebuilding — retry").
-      DECIDED (owner, 2026-07-07): hand-rolled stdio JSON-RPC, no gem —
-      the field moves fast and we keep control of the surface; the
-      protocol core (initialize / tools/list / tools/call over
-      newline-delimited JSON-RPC 2.0 on stdio) is small and ours.
-P8-2 · MCP implementation [opus]: `bin/nabu mcp` (stdio), registration
-      docs (.mcp.json / Claude Code + Desktop), stdio-harness tests, ops
-      note. This is also the dress rehearsal for the concept's read-only
-      nabu.ac endpoint.
-P8-3 · Concordance [opus]: `nabu concord <query>` — KWIC lines (aligned
-      keyword-in-context) over FTS hits, --lemma composition once P7-5
-      exists; exposed as an MCP tool once stable.
-P8-4 · Semantic search [GATED — owner decisions: embedding model +
-      hardware (local on the DGX Sparks per the concept vs API), the
-      sqlite-vec gem, embed-scope (literary corpora first ~640k passages,
-      papyri long tail later)]. vectors.sqlite3 per architecture §5;
-      enrichment journal durability comes from P7-1's ledger.
-P8-5 · Lazy glossing [GATED — owner API key]: gloss at the point of
-      reading (MCP/show-driven), cached in enrichments with provenance,
-      never batch; parallel translations (P7-4) reduce its surface to
-      works with no human translation.
+*The corpus becomes a tool. MCP first (hand-rolled stdio, owner decision
+2026-07-07), then concordance; the two packets needing owner input
+(embedding model/hardware, glossing API key) carry their decision menus
+below and are dispatched only after the owner picks. Everything else is
+local and read-only against the corpus.*
+
+## P8-1 · MCP tool contract + protocol core  [tier: fable] [status: ready] [deps: —]
+Goal: the read-only conversational surface, hand-rolled (no gem — owner
+      decision: the field moves fast, we keep control; the core is small).
+      Two layers, one packet, because the contract shapes both:
+      (a) Protocol: JSON-RPC 2.0 over stdio (Content-Length framing or
+          newline-delimited — check what current MCP spec + Claude Code
+          actually speak, research allowed; support initialize /
+          notifications/initialized / tools/list / tools/call; clean
+          errors for unknown methods; exit on stdin EOF). Version pinned,
+          documented, ours.
+      (b) The tools (the contract IS the product — descriptions teach the
+          model): nabu_search (query XOR lemma, lang, license, limit),
+          nabu_show (urn — passage/document/range; parallel flag;
+          bounded: max N passages per call with an honest truncation
+          note), nabu_status (corpus coverage: sources, doc/passage
+          counts, languages, license classes — the tool that makes
+          negative results honest). Fixed contract points: bounded
+          outputs, snippet-first with "N matches, showing k";
+          license_class + upstream attribution + urn on EVERY passage
+          returned; license classes research_private/restricted
+          DEFAULT-EXCLUDED (forward-looking — the classes exist; a
+          conversational surface must never leak future ad-hoc material
+          casually); no-match responses carry a coverage hint; a
+          mid-reindex missing FTS table degrades to "index rebuilding —
+          retry shortly", never a crash; read-only db connections,
+          SQLITE_BUSY tolerated with brief retry.
+      All query logic stays in the existing Query classes — the server is
+      translation only. No write tools in this phase, stated in the docs.
+Acceptance: protocol unit tests (in-process IO-pair harness: initialize
+      round-trip, tools/list shape, tools/call success + tool-error +
+      unknown-method + malformed-json paths); tool-contract tests
+      (bounds, license fields present, default exclusion, no-match
+      coverage hint, reindex grace); tool descriptions reviewed as prose
+      (they are UI); suite + lint green; architecture gains the MCP
+      section (read-only surface, nabu.ac rehearsal).
+
+## P8-2 · MCP server: bin/nabu mcp + registration  [tier: opus] [status: ready] [deps: P8-1]
+Goal: `bin/nabu mcp` — the stdio entrypoint wiring P8-1's server to real
+      stdin/stdout (logging to stderr/file, NEVER stdout — stdout is the
+      protocol channel); .mcp.json shipped in-repo (project-scope
+      registration for Claude Code sessions in this repo) + docs/mcp.md:
+      registering in Claude Code (project + user scope), Claude Desktop,
+      what each tool does, example conversation transcripts, the
+      read-only/license stance, and the nabu.ac-rehearsal note.
+Acceptance: process-level smoke test (spawn bin/nabu mcp, speak the
+      protocol over pipes, one real tools/call against a fixture corpus,
+      clean EOF shutdown); .mcp.json valid; docs complete; suite + lint
+      green.
+
+## P8-3 · Concordance: nabu concord  [tier: opus] [status: ready] [deps: P8-1]
+Goal: `bin/nabu concord QUERY|--lemma FORM [--lang/--license/--limit/
+      --width N]` — KWIC lines: one row per hit, keyword column aligned,
+      left/right context trimmed to --width chars (default sensible),
+      urn tag per row; corpus order; reuses Search/LemmaSearch entirely
+      (a formatter, not a new query path). Exposed as MCP tool
+      nabu_concord (extend P8-1's tool table — same bounded/license
+      contract).
+Acceptance: concord over fixture corpus (plain + lemma modes, width,
+      alignment stable for varying-length matches incl. Greek combining
+      chars — width counts on the folded/display string, decide and
+      document); CLI + MCP tool tests; help; suite + lint green.
+
+## P8-4 · Semantic search  [tier: fable-design/opus-impl] [status: blocked: owner decisions] [deps: P8-1]
+OWNER DECISION MENU (pick to unblock; packet elaborated fully on pick):
+      (a) Embedder: LOCAL on the DGX Sparks via an OpenAI-compatible
+          endpoint over Tailscale (concept's local-first; needs a served
+          multilingual embedding model — e.g. bge-m3 class — and the
+          Sparks reachable), or (b) LOCAL on this Mac (ollama/mlx-served
+          small multilingual model; slower, zero infra), or (c) API
+          (managed embeddings; recurring cost, corpus text leaves the
+          box in bulk — license-fine but philosophy-relevant).
+      Scope decision: literary corpora first (~800k passages incl. eng
+      translations) vs all 1.7M (papyri long tail doubles cost/time).
+      Storage: vectors.sqlite3 via sqlite-vec (NEW GEM + native
+      extension — ask-first rule applies) vs brute-force float blobs
+      (no gem, fine at <1M vectors with batched dot products — honest
+      option at our scale).
+      Fixed regardless: embeddings journal in the P7-1 ledger (never
+      wiped by rebuild), embed --changed incrementality, `search
+      --semantic "oath-swearing rituals" --langs grc,chu` per concept.
+
+## P8-5 · Lazy glossing  [tier: fable-design/opus-impl] [status: blocked: owner decisions] [deps: P8-1]
+OWNER DECISION MENU (pick to unblock):
+      API key (ANTHROPIC_API_KEY via env — owner provides; the loop
+      never touches keys), model (default claude-haiku for cost? owner
+      picks), and where glossing may trigger (CLI `show --gloss` only,
+      or also as an MCP tool the model can call mid-conversation —
+      spend-per-conversation implications).
+      Fixed regardless: gloss at the point of reading, NEVER batch;
+      cached in enrichments keyed by (urn, model identity) journaled in
+      the P7-1 ledger (replayed after rebuild, one API call per passage
+      EVER per model); output flagged machine-generated everywhere it
+      renders; passages with human parallel translations (P7-4) render
+      those first, glossing is the fallback.
