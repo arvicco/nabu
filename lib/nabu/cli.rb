@@ -290,6 +290,54 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
+    long_desc <<~HELP, wrap: false
+      Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
+      conversational surface over the local nabu corpus, exposing three tools —
+      nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
+      parallel translations), and nabu_status (coverage) — to any MCP client
+      (Claude Code, Claude Desktop). The catalog and index are opened
+      SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
+
+      This is a plumbing command, not an interactive one. STDOUT IS THE PROTOCOL
+      CHANNEL — it carries newline-delimited JSON-RPC and nothing else.
+      Diagnostics go to stderr, or appended to a file with --log FILE. The
+      openers are lazy and read-only, so a corpus that appears or is rebuilt
+      mid-session is picked up without a restart. The server runs until stdin
+      closes (EOF) or it is signalled (SIGINT/SIGTERM), then exits 0.
+
+      You normally never type this yourself — a client spawns it. This repo ships
+      .mcp.json, so opening Claude Code in the repo registers nabu automatically.
+      User-scope, Claude Desktop, the tool reference, the license/attribution
+      stance, and an example transcript are in docs/mcp.md.
+
+      Examples:
+        nabu mcp                       # a client spawns this; speaks JSON-RPC on stdio
+        nabu mcp --log /tmp/nabu-mcp.log   # tee diagnostics to a file (stdout stays clean)
+    HELP
+    option :log, type: :string, banner: "FILE",
+                 desc: "Append diagnostics to FILE instead of stderr (stdout is the protocol channel)"
+    def mcp
+      config = Nabu::Config.load
+      log = mcp_log(options[:log])
+      # Lazy, memoizing, read-only openers (Procs, per the Tools contract):
+      # resolved on every tool call, so a corpus that appears or is rebuilt
+      # mid-session is picked up without a restart. nil when the file is absent
+      # (Tools renders the graceful "no corpus" / "rebuilding" states).
+      tools = Nabu::MCP::Tools.new(
+        catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
+        fulltext: readonly_opener(config.fulltext_path) do
+          Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+        end
+      )
+      $stdout.sync = true
+      install_mcp_signal_traps
+      # stdout carries protocol only; every diagnostic goes to the log IO.
+      Nabu::MCP::Server.new(tools: tools, log: log).run($stdin, $stdout)
+    ensure
+      log.close if log && !log.equal?($stderr)
+    end
+
     desc "export", "Stream non-withdrawn passages as plain text or JSONL"
     long_desc <<~HELP, wrap: false
       Stream the live corpus to stdout, one passage per line — the
@@ -1035,6 +1083,62 @@ module Nabu
       def remote_health_failure(report)
         gone = report.rows.count { |row| row.liveness.status == :gone }
         "health: #{pluralize(gone, 'upstream')} gone — see the table above"
+      end
+
+      # -- mcp entrypoint plumbing (P8-2) ----------------------------------
+
+      # A lazy, memoizing, read-only opener returned as a PROC (the Tools
+      # contract resolves each connection slot per tool call). On every call:
+      # absent file → nil (Tools renders the "no corpus" state); present file →
+      # an open read-only handle, cached across calls so a long session does not
+      # churn file descriptors. The cached handle is dropped and reopened when
+      # the file's identity changes — `nabu rebuild` deletes and recreates the
+      # catalog, so a mid-session rebuild is genuinely picked up, not served
+      # stale from a handle onto the deleted inode.
+      def readonly_opener(path, &open)
+        handle = nil
+        identity = nil
+        lambda do
+          current = file_identity(path)
+          if current.nil?
+            handle&.disconnect
+            handle = identity = nil
+          elsif current != identity
+            handle&.disconnect
+            handle = open.call
+            identity = current
+          end
+          handle
+        end
+      end
+
+      # (device, inode) — a file replaced in place (delete + recreate) changes
+      # inode, which is how the opener notices a rebuild. nil when absent.
+      def file_identity(path)
+        return nil unless File.exist?(path)
+
+        stat = File.stat(path)
+        [stat.dev, stat.ino]
+      end
+
+      # The diagnostics sink for `nabu mcp`: stderr by default, or a file opened
+      # for append (line-buffered) when --log FILE is given. NEVER stdout —
+      # stdout is the JSON-RPC protocol channel.
+      def mcp_log(path)
+        return $stderr if path.to_s.strip.empty?
+
+        # No block form: the log must stay open for the whole server lifetime;
+        # `mcp` closes it in its ensure.
+        file = File.open(path, "a") # rubocop:disable Style/FileOpen
+        file.sync = true
+        file
+      end
+
+      # SIGINT/SIGTERM → clean shutdown with EOF semantics: exit 0, unwinding the
+      # command's ensure (which closes the log). A client that stops the server
+      # by closing our stdin gets the same path via the run loop reaching EOF.
+      def install_mcp_signal_traps
+        %w[INT TERM].each { |signal| trap(signal) { exit(0) } }
       end
 
       # Open the catalog db for reading if it has been built; nil otherwise so
