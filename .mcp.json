@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "nabu": {
+      "command": "bundle",
+      "args": ["exec", "bin/nabu", "mcp"]
+    }
+  }
+}

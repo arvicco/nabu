@@ -689,7 +689,7 @@ Acceptance: protocol unit tests (in-process IO-pair harness: initialize
       (they are UI); suite + lint green; architecture gains the MCP
       section (read-only surface, nabu.ac rehearsal).
 
-## P8-2 · MCP server: bin/nabu mcp + registration  [tier: opus] [status: ready] [deps: P8-1]
+## P8-2 · MCP server: bin/nabu mcp + registration  [tier: opus] [status: done] [deps: P8-1]
 Goal: `bin/nabu mcp` — the stdio entrypoint wiring P8-1's server to real
       stdin/stdout (logging to stderr/file, NEVER stdout — stdout is the
       protocol channel); .mcp.json shipped in-repo (project-scope
