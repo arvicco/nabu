@@ -1,0 +1,604 @@
+# frozen_string_literal: true
+
+require "json"
+
+require_relative "../errors"
+require_relative "../model/validation"
+require_relative "../store"
+require_relative "../query/search"
+require_relative "../query/lemma_search"
+require_relative "../query/show"
+require_relative "../query/parallel"
+
+module Nabu
+  module MCP
+    # The MCP tool table (P8-1): name + description + JSON Schema + handler
+    # for the three read-only tools. Pure translation — all query logic stays
+    # in the Query classes; this layer only validates arguments, applies the
+    # conversational-surface contract, and shapes JSON for a model to read.
+    #
+    # == The contract (fixed points, docs/backlog.md P8-1)
+    #
+    # - Every passage in every response carries urn + language + license_class
+    #   (+ source slug — attribution is one cheap join away). The descriptions
+    #   tell the model to preserve those fields when quoting.
+    # - license classes research_private/restricted are DEFAULT-EXCLUDED from
+    #   every tool. The classes exist in the enum today even though no synced
+    #   source carries them yet — the exclusion is forward-looking: a
+    #   conversational surface must never leak future ad-hoc material
+    #   casually. include_restricted: true opts in, per call, explicitly.
+    # - Bounded outputs with honest truncation notes ("N total, showing k").
+    #   No-match search responses carry a one-line coverage hint.
+    # - Degradation is a normal tool response, never a crash and never
+    #   isError (these are corpus STATES, not faults): missing catalog →
+    #   "no corpus"; missing FTS table (mid-reindex window) → "index
+    #   rebuilding — retry shortly"; SQLITE_BUSY → brief retry, then the same
+    #   graceful shape.
+    #
+    # == Wiring
+    #
+    # catalog:/fulltext: accept a Sequel database, nil (absent), or a callable
+    # returning either — resolved PER CALL, so the P8-2 entrypoint can hand us
+    # lazy read-only openers and a corpus appearing (or rebuilding) mid-session
+    # is picked up without a restart. Connections must be opened read-only
+    # (Store.connect readonly: true) by the caller; nothing here writes.
+    #
+    # == Extending (P8-3: nabu_concord)
+    #
+    # Add one TOOLS entry (schema + description) and one handler method.
+    class Tools
+      # tools/call with a name not in the table. The SERVER maps this to a
+      # JSON-RPC -32602 protocol error (spec: unknown tools are protocol
+      # errors, not tool results).
+      class UnknownTool < Nabu::Error; end
+
+      # Semantically invalid arguments (query XOR lemma violated, unknown
+      # license class, missing urn). The SERVER maps this to a tool RESULT
+      # with isError:true — per MCP 2025-11-25 (SEP-1303), input validation
+      # errors are tool execution errors so the model can self-correct.
+      class InvalidArguments < Nabu::Error; end
+
+      LICENSE_CLASSES = Nabu::Model::Validation::LICENSE_CLASSES
+
+      # Never served unless include_restricted: true names them explicitly.
+      EXCLUDED_LICENSE_CLASSES = %w[research_private restricted].freeze
+
+      SEARCH_DEFAULT_LIMIT = 10
+      SEARCH_MAX_LIMIT = 50
+      SHOW_DEFAULT_MAX_PASSAGES = 50
+      SHOW_MAX_PASSAGES_CAP = 200
+
+      # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
+      BUSY_ATTEMPTS = 3
+
+      NO_CORPUS_NOTE = "no corpus here yet — run `nabu sync <source>` or `nabu rebuild` " \
+                       "to build it, then retry"
+      REBUILDING_NOTE = "search index rebuilding — retry shortly"
+      LEMMA_REBUILDING_NOTE = "lemma index rebuilding (or the fulltext index predates lemma " \
+                              "search) — retry shortly, or run `nabu rebuild`"
+      BUSY_NOTE = "corpus is busy (a sync or rebuild may be running) — retry shortly"
+
+      INCLUDE_RESTRICTED_SCHEMA = {
+        type: "boolean", default: false,
+        description: "Also serve research_private/restricted material. Default false and " \
+                     "deliberately so: this surface must never leak private or " \
+                     "license-restricted texts casually. Set true only when the requester " \
+                     "understands and will honor the restriction."
+      }.freeze
+
+      SEARCH_DESCRIPTION =
+        "Search nabu, a local corpus of ancient texts (polytonic Greek, Latin, Old Church " \
+        "Slavonic, Gothic, and more: literary editions, documentary papyri, gold treebanks, " \
+        "parallel English translations). Give EXACTLY ONE of: `query` — full-text FTS5 " \
+        "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
+        "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
+        "εἰπεῖν, every inflection). Hits are relevance-ranked and bounded (default " \
+        "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
+        "each carries urn, language, license_class, and source — PRESERVE the license fields " \
+        "when quoting. Use nabu_show with a hit's urn for the full passage, nabu_status for " \
+        "what the corpus covers.".freeze
+
+      SHOW_DESCRIPTION =
+        "Read the nabu corpus by urn: one passage, a whole document, an inclusive range, or " \
+        "a parallel-aligned translation. urn shapes — passage: " \
+        "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1 · document: " \
+        "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2 · range: <document-urn>:1.1-1.10 " \
+        "(inclusive slice) · papyrus: urn:nabu:ddbdp:aegyptus:89:240:b2:5 · treebank " \
+        "sentence: urn:nabu:proiel:afnik:194690. `parallel: true` aligns the same work's " \
+        "`parallel_lang` (default eng) edition line by line. Passage lists are bounded by " \
+        "max_passages (default #{SHOW_DEFAULT_MAX_PASSAGES}, cap #{SHOW_MAX_PASSAGES_CAP}) " \
+        "with an honest truncation note. Every passage carries urn, language, and " \
+        "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged.".freeze
+
+      STATUS_DESCRIPTION =
+        "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
+        "recency, passage counts by language and by license class, index state, and what is " \
+        "excluded by default (research_private/restricted). Call this to interpret an empty " \
+        "search — is the language, source, or period even ingested here? — before concluding " \
+        "a text is unattested. Takes no arguments."
+
+      SEARCH_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "Full-text query. Mutually exclusive with lemma." },
+          lemma: { type: "string",
+                   description: "Dictionary form for exact-lemma treebank search. " \
+                                "Mutually exclusive with query." },
+          lang: { type: "string",
+                  description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
+          license: { type: "string", enum: LICENSE_CLASSES,
+                     description: "Exact effective license class filter." },
+          limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
+                   default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        additionalProperties: false
+      }.freeze
+
+      SHOW_SCHEMA = {
+        type: "object",
+        properties: {
+          urn: { type: "string",
+                 description: "Passage, document, or range urn (see the tool description " \
+                              "for the shapes)." },
+          parallel: { type: "boolean", default: false,
+                      description: "Align with the same work's parallel_lang edition by " \
+                                   "citation suffix." },
+          parallel_lang: { type: "string", default: "eng",
+                           description: "Language of the parallel edition (with parallel: true)." },
+          max_passages: { type: "integer", minimum: 1, maximum: SHOW_MAX_PASSAGES_CAP,
+                          default: SHOW_DEFAULT_MAX_PASSAGES,
+                          description: "Bound on listed passages/rows; truncation is noted " \
+                                       "honestly." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["urn"],
+        additionalProperties: false
+      }.freeze
+
+      STATUS_SCHEMA = { type: "object", properties: {}, additionalProperties: false }.freeze
+
+      # The tool table. P8-3 (nabu_concord) extends this hash + one handler.
+      TOOLS = {
+        "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
+                           handler: :search },
+        "nabu_show" => { description: SHOW_DESCRIPTION, input_schema: SHOW_SCHEMA,
+                         handler: :show },
+        "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
+                           handler: :status }
+      }.freeze
+
+      def initialize(catalog:, fulltext:)
+        @catalog = catalog
+        @fulltext = fulltext
+      end
+
+      # tools/list shape: [{name:, description:, inputSchema:}].
+      def definitions
+        TOOLS.map do |name, tool|
+          { name: name, description: tool.fetch(:description), inputSchema: tool.fetch(:input_schema) }
+        end
+      end
+
+      # Run tool +name+ with +arguments+ (string-keyed hash, as parsed from the
+      # wire). Returns an MCP tool result: { content: [{type:, text:}], isError: }.
+      def call(name, arguments)
+        tool = TOOLS[name] or raise UnknownTool, "Unknown tool: #{name}"
+        raise InvalidArguments, "arguments must be an object" unless arguments.is_a?(Hash)
+
+        with_grace { send(tool.fetch(:handler), arguments) }
+      end
+
+      private
+
+      # -- handlers --------------------------------------------------------------
+
+      def search(args)
+        term, mode = search_term(args)
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
+          return note("license class #{license} is excluded by default from this surface " \
+                      "(it must never leak casually); pass include_restricted: true to " \
+                      "search it deliberately")
+        end
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
+
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        results = run_search(mode, term, catalog: catalog, fulltext: fulltext,
+                                         lang: args["lang"], license: license, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_search(results, limit: limit, catalog: catalog)
+      end
+
+      def show(args)
+        urn = string_arg(args, "urn") or raise InvalidArguments, "nabu_show needs a urn"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        bound = clamp(args["max_passages"], default: SHOW_DEFAULT_MAX_PASSAGES, max: SHOW_MAX_PASSAGES_CAP)
+        include_restricted = args["include_restricted"] == true
+        return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
+
+        result = Query::Show.new(catalog: catalog).run(urn)
+        if result.nil?
+          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
+                      "what this corpus holds")
+        end
+        return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
+
+        case result
+        when Query::Show::PassageResult then json(passage_payload(result))
+        when Query::Show::DocumentResult then json(document_payload(result, bound))
+        when Query::Show::RangeResult then json(range_payload(result, bound))
+        end
+      rescue Query::Range::Error => e
+        tool_error(e.message)
+      end
+
+      def status(_args)
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+
+        json(
+          sources: source_rows(catalog),
+          languages: language_counts(catalog),
+          license_classes: license_counts(catalog, excluded: false),
+          excluded_by_default: license_counts(catalog, excluded: true),
+          totals: { documents: visible_documents(catalog).count,
+                    passages: visible_passages(catalog).count },
+          index: index_state,
+          note: "counts are live passages/documents (withdrawn excluded); " \
+                "research_private/restricted material is excluded from these counts and " \
+                "from every tool by default (see excluded_by_default)"
+        )
+      end
+
+      # -- search internals --------------------------------------------------------
+
+      # [term, :text | :lemma], enforcing the XOR.
+      def search_term(args)
+        query = string_arg(args, "query")
+        lemma = string_arg(args, "lemma")
+        unless [query, lemma].compact.size == 1
+          raise InvalidArguments, "give exactly one of query (full-text) or lemma (dictionary form)"
+        end
+
+        lemma ? [lemma, :lemma] : [query, :text]
+      end
+
+      # The fulltext handle when the index this mode needs is present; nil
+      # during the mid-reindex window (Indexer.rebuild! drops the tables first).
+      def search_index(mode)
+        fulltext = resolve(@fulltext)
+        return nil unless fulltext&.table_exists?(Store::Indexer::TABLE)
+        return nil if mode == :lemma && !fulltext.table_exists?(Store::Indexer::LEMMA_TABLE)
+
+        fulltext
+      end
+
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:)
+        klass = mode == :lemma ? Query::LemmaSearch : Query::Search
+        klass.new(catalog: catalog, fulltext: fulltext)
+             .run(term, lang: lang, license: license, limit: limit)
+      end
+
+      def render_search(results, limit:, catalog:)
+        return json(matches: [], note: "no matches", coverage: coverage_hint(catalog)) if results.empty?
+
+        shown = results.first(limit)
+        sources = sources_by_urn(catalog, shown.map(&:urn))
+        json(
+          matches: shown.map { |result| match_payload(result, sources) },
+          note: if results.size > limit
+                  "more than #{limit} matches, showing #{limit} — raise limit " \
+                    "(max #{SEARCH_MAX_LIMIT}) or refine"
+                else
+                  "#{shown.size} matches, showing #{shown.size}"
+                end
+        )
+      end
+
+      def match_payload(result, sources)
+        base = {
+          urn: result.urn, language: result.language, license_class: result.license_class,
+          source: sources[result.urn], document: result.document_title,
+          text: truncate(result.text)
+        }
+        if result.respond_to?(:lemma)
+          base.merge(lemma: result.lemma, surface_forms: result.surface_forms)
+        else
+          base.merge(snippet: result.snippet)
+        end
+      end
+
+      # One line that makes "no matches" interpretable without a second call.
+      def coverage_hint(catalog)
+        languages = language_counts(catalog)
+        "corpus: #{catalog[:sources].count} sources, #{languages.values.sum} passages; " \
+          "languages: #{languages.keys.join(', ')} — the term may be absent, in an uncovered " \
+          "language, or spelled differently; nabu_status shows full coverage"
+      end
+
+      # -- show internals ------------------------------------------------------------
+
+      def passage_payload(result)
+        {
+          type: "passage", urn: result.urn, language: result.language,
+          license_class: result.license_class, source: result.source_slug,
+          document_urn: result.document_urn, document_title: result.document_title,
+          text: result.text, sequence: result.sequence, revision: result.revision,
+          withdrawn: result.withdrawn,
+          provenance: result.provenance.map { |e| { event: e.event, tool: e.tool, at: e.at.to_s } }
+        }
+      end
+
+      def document_payload(result, bound)
+        total = result.passages.size
+        header(result).merge(
+          type: "document",
+          passages: passage_lines(result, result.passages.first(bound)),
+          note: if total > bound
+                  "showing #{bound} of #{total} passages — use a range urn " \
+                    "#{result.urn}:<start>-<end> to slice the rest"
+                else
+                  "#{total} passages"
+                end
+        )
+      end
+
+      def range_payload(result, bound)
+        shown = result.passages.first(bound)
+        header(result).merge(
+          type: "range", start_urn: result.start_urn, end_urn: result.end_urn,
+          total: result.total, passages: passage_lines(result, shown),
+          note: "#{shown.size} of #{result.total} document passages" +
+                (result.passages.size > bound ? " (range truncated at #{bound} — narrow the range)" : "")
+        )
+      end
+
+      def header(result)
+        {
+          urn: result.urn, title: result.title, language: result.language,
+          license_class: result.license_class, source: result.source_slug,
+          revision: result.revision, withdrawn: result.withdrawn,
+          retired_upstream: result.retired_upstream
+        }
+      end
+
+      # Every listed passage carries language + license_class: both are
+      # document-effective values (a passage's effective license IS its
+      # document's), so the contract holds mechanically.
+      def passage_lines(document, lines)
+        lines.map do |line|
+          { urn: line.urn, language: document.language, license_class: document.license_class,
+            text: line.text, withdrawn: line.withdrawn }
+        end
+      end
+
+      def show_parallel(catalog, urn, args, bound, include_restricted)
+        lang = string_arg(args, "parallel_lang") || "eng"
+        result = Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        if result.nil?
+          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
+                      "what this corpus holds")
+        end
+
+        left_license = document_license(catalog, result.left.urn)
+        return withheld(result.left.urn, left_license) if withhold?(left_license, include_restricted)
+        return note("no #{lang} parallel edition of this work in the catalog for #{urn}") if result.right.nil?
+
+        right_license = document_license(catalog, result.right.urn)
+        return withheld(result.right.urn, right_license) if withhold?(right_license, include_restricted)
+
+        json(parallel_payload(result, bound, left_license, right_license))
+      rescue Query::Range::Error => e
+        tool_error(e.message)
+      end
+
+      def parallel_payload(result, bound, left_license, right_license)
+        shown = result.rows.first(bound)
+        {
+          type: "parallel",
+          left: side_payload(result.left, left_license),
+          right: side_payload(result.right, right_license),
+          rows: shown.map { |row| parallel_row(row, result, left_license, right_license) },
+          note: "#{shown.size} of #{result.rows.size} aligned rows" +
+            (result.rows.size > bound ? " (truncated at #{bound} — use a range urn to slice)" : "")
+        }
+      end
+
+      def side_payload(side, license)
+        { urn: side.urn, title: side.title, language: side.language, license_class: license }
+      end
+
+      def parallel_row(row, result, left_license, right_license)
+        {
+          suffix: row.suffix,
+          left: parallel_line(row.left, result.left.language, left_license),
+          right: parallel_line(row.right, result.right.language, right_license)
+        }
+      end
+
+      def parallel_line(line, language, license)
+        return nil if line.nil?
+
+        { urn: line.urn, language: language, license_class: license,
+          text: line.text, withdrawn: line.withdrawn }
+      end
+
+      # -- the exclusion gate ------------------------------------------------------
+
+      def withhold?(license_class, include_restricted)
+        EXCLUDED_LICENSE_CLASSES.include?(license_class) && !include_restricted
+      end
+
+      def withheld(urn, license_class)
+        note("#{urn} exists but its license class is #{license_class}, which this surface " \
+             "excludes by default (private/restricted material must never leak casually). " \
+             "Pass include_restricted: true only if the requester understands and will honor " \
+             "the restriction.")
+      end
+
+      # Effective license class of the document at +urn+ (override beats source).
+      def document_license(catalog, urn)
+        catalog[:documents]
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:documents][:urn] => urn)
+          .get(license_expr)
+      end
+
+      # -- status internals -----------------------------------------------------------
+
+      def source_rows(catalog)
+        catalog[:sources].order(:slug).map do |source|
+          live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
+          { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
+            license_class: source[:license_class],
+            documents: live_docs.count,
+            passages: catalog[:passages].where(withdrawn: false)
+                                        .where(document_id: live_docs.select(:id)).count,
+            last_sync_at: source[:last_sync_at]&.to_s }
+        end
+      end
+
+      def language_counts(catalog)
+        visible_passages(catalog)
+          .group_and_count(Sequel[:passages][:language])
+          .to_h { |row| [row[:language], row[:count]] }
+      end
+
+      # Live passage counts grouped by effective license class — the visible
+      # classes, or (excluded: true) the default-hidden ones, counted honestly
+      # (aggregate numbers only; no urns, titles, or text).
+      def license_counts(catalog, excluded:)
+        dataset = live_passages(catalog)
+        dataset = if excluded
+                    dataset.where(license_expr => EXCLUDED_LICENSE_CLASSES)
+                  else
+                    dataset.exclude(license_expr => EXCLUDED_LICENSE_CLASSES)
+                  end
+        dataset.group_and_count(license_expr.as(:license_class))
+               .to_h { |row| [row[:license_class], row[:count]] }
+      end
+
+      def index_state
+        fulltext = resolve(@fulltext)
+        fulltext&.table_exists?(Store::Indexer::TABLE) ? "present" : "unavailable (rebuilding or not built)"
+      end
+
+      # Live (two-level visibility) passages, all license classes.
+      def live_passages(catalog)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+      end
+
+      # Live AND default-visible (excluded classes filtered out).
+      def visible_passages(catalog)
+        live_passages(catalog).exclude(license_expr => EXCLUDED_LICENSE_CLASSES)
+      end
+
+      def visible_documents(catalog)
+        catalog[:documents]
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:documents][:withdrawn] => false)
+          .exclude(license_expr => EXCLUDED_LICENSE_CLASSES)
+      end
+
+      def license_expr
+        Sequel.function(:coalesce,
+                        Sequel[:documents][:license_override],
+                        Sequel[:sources][:license_class])
+      end
+
+      def sources_by_urn(catalog, urns)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:urn] => urns)
+          .select_hash(Sequel[:passages][:urn], Sequel[:sources][:slug])
+      end
+
+      # -- argument plumbing -------------------------------------------------------------
+
+      def string_arg(args, key)
+        value = args[key]
+        return nil if value.nil?
+        raise InvalidArguments, "#{key} must be a string" unless value.is_a?(String)
+
+        stripped = value.strip
+        stripped.empty? ? nil : stripped
+      end
+
+      def license_arg(args)
+        license = string_arg(args, "license")
+        return license if license.nil? || LICENSE_CLASSES.include?(license)
+
+        raise InvalidArguments,
+              "unknown license #{license.inspect} (choose from #{LICENSE_CLASSES.join(', ')})"
+      end
+
+      # One bounded hit-text line (papyri passages run long): the full
+      # passage is one nabu_show away, and the description says so.
+      def truncate(text, max = 300)
+        text.length > max ? "#{text[0, max]}…" : text
+      end
+
+      def clamp(value, default:, max:)
+        return default unless value.is_a?(Integer)
+
+        value.clamp(1, max)
+      end
+
+      # -- response shapes + degradation ----------------------------------------------------
+
+      def json(payload)
+        ok(JSON.generate(payload))
+      end
+
+      # A corpus STATE (no corpus, rebuilding, busy, withheld, not-found):
+      # a normal informative response, never isError.
+      def note(text)
+        ok(text)
+      end
+
+      def ok(text)
+        { content: [{ type: "text", text: text }], isError: false }
+      end
+
+      def tool_error(text)
+        { content: [{ type: "text", text: text }], isError: true }
+      end
+
+      # SQLITE_BUSY tolerance (brief retry, then a graceful state response) and
+      # the mid-reindex race (the table_exists? probe passed but the Indexer
+      # dropped the table before our query ran) — both are states, not faults.
+      def with_grace
+        attempts = 0
+        begin
+          yield
+        rescue Sequel::DatabaseError => e
+          return note(REBUILDING_NOTE) if e.message.match?(/no such table/i)
+          raise unless e.message.match?(/busy|locked/i)
+
+          attempts += 1
+          if attempts < BUSY_ATTEMPTS
+            sleep(0.05 * attempts)
+            retry
+          end
+          note(BUSY_NOTE)
+        end
+      end
+
+      # Resolve a connection slot: a Sequel database, nil, or a Proc/lambda
+      # returning either (called per tool invocation — see the class note).
+      # An explicit Proc check, not respond_to?(:call): Sequel::Database has
+      # its own #call (prepared statements) and must pass through as a handle.
+      def resolve(slot)
+        slot.is_a?(Proc) ? slot.call : slot
+      end
+    end
+  end
+end
