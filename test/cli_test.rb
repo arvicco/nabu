@@ -71,6 +71,14 @@ class CLITest < Minitest::Test
     assert_match(/one-sided|only in/i, out, "must be honest about unmatched suffixes")
   end
 
+  def test_help_show_documents_range_syntax_with_a_papyri_example
+    out, _err, _status = run_cli(%w[help show])
+    assert_match(/RANGE|range/, out, "must document the range syntax")
+    assert_match(/1\.1-1\.10/, out, "must show a CTS range example")
+    assert_match(/:1-b2:2|:b2:/, out, "must show a papyri cross-block range example")
+    assert_match(/inclusive/i, out, "must state the endpoints are inclusive")
+  end
+
   def test_help_search_mentions_translations
     out, _err, _status = run_cli(%w[help search])
     assert_match(/translation/i, out, "must say eng translations are searchable when ingested")
@@ -516,6 +524,57 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:nope]) }
       assert_equal 1, status
       assert_match(/urn not found/i, err)
+    end
+  end
+
+  # -- show ranges (P7-6) ----------------------------------------------------
+
+  def test_show_range_lists_the_slice_as_suffixes_with_an_honest_count
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-1]) }
+      assert_nil status, "a resolved range exits 0"
+      assert_match(/urn:nabu:test_adapter:one\b/, out, "the document header names the document urn")
+      assert_match(/1 of 2 passages/, out, "the honest [N of M] note")
+      assert_match(/^ +:1  /, out, "slice lines carry only the :suffix")
+      refute_match(/^ +:2  /, out, "the slice excludes passages outside the range")
+    end
+  end
+
+  def test_show_range_full_urn_restores_absolute_urns
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-2 --full-urn]) }
+      assert_nil status
+      assert_match(/^ +urn:nabu:test_adapter:one:1\b/, out)
+      assert_match(/^ +urn:nabu:test_adapter:one:2\b/, out)
+    end
+  end
+
+  def test_show_range_endpoint_not_found_exits_one_naming_the_endpoint
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1-99]) }
+      assert_equal 1, status
+      assert_match(/range end not found/i, err)
+      assert_match(/urn:nabu:test_adapter:one:99/, err)
+    end
+  end
+
+  def test_show_reversed_range_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:2-1]) }
+      assert_equal 1, status
+      assert_match(/reversed/i, err)
+    end
+  end
+
+  def test_show_parallel_composes_with_a_range
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1-2", "--parallel"]) }
+      assert_nil status
+      assert_match(/1 paired, 1 grc only, 0 eng only/, out, "pairing applies to the sliced rows only")
+      assert_match(/grc {2}μῆνιν/, out)
+      assert_match(/eng {2}Wrath/, out)
+      assert_match(/grc {2}ἄειδε/, out, "the in-slice grc-only line still shows")
+      refute_match(/θεά/, out, ":3 is outside the slice")
     end
   end
 

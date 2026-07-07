@@ -64,10 +64,13 @@ module Nabu
         @catalog = catalog
       end
 
-      # Resolve +urn+ (document or passage, any edition) and align against the
-      # +lang+ sibling. Returns a Result, or nil when the urn is unknown.
+      # Resolve +urn+ (document, passage, or a range urn — P7-6) and align
+      # against the +lang+ sibling. Returns a Result, or nil when the urn is
+      # unknown. A range urn slices the QUERIED document; the pairing then
+      # applies to the sliced rows only (unmatched suffixes stay one-sided). A
+      # range with a bad endpoint raises Range::Error (CLI → exit 1).
       def run(urn, lang: "eng")
-        document, scope = locate(urn)
+        document, scope, slice = locate(urn)
         return nil if document.nil?
 
         sibling = sibling_edition(document, lang)
@@ -75,22 +78,41 @@ module Nabu
 
         rows = align(document, sibling)
         rows = rows.select { |row| row.suffix == scope } if scope
+        rows = rows.select { |row| slice.include?(row.suffix) } if slice
         Result.new(left: side(document), right: side(sibling), rows: rows, scope: scope)
       end
 
       private
 
-      # [document row, scope suffix]: the urn itself as a document, or the
-      # passage's document plus the passage's suffix. nil when unknown.
+      # [document row, scope suffix, slice suffixes]: the urn itself as a
+      # document ([doc, nil, nil]); a passage ([doc, its-suffix, nil]); or a
+      # range ([doc, nil, the slice's suffixes]). nil when unknown.
       def locate(urn)
         row = document_by(urn: urn)
-        return [row, nil] if row
+        return [row, nil, nil] if row
 
         passage = @catalog[:passages].where(urn: urn).select(:urn, :document_id).first
-        return nil if passage.nil?
+        if passage
+          document = document_by(id: passage.fetch(:document_id))
+          return [document, passage.fetch(:urn).delete_prefix(document.fetch(:urn)), nil]
+        end
 
-        document = document_by(id: passage.fetch(:document_id))
-        [document, passage.fetch(:urn).delete_prefix(document.fetch(:urn))]
+        locate_range(urn)
+      end
+
+      # A range urn → its document + the set of in-slice suffixes to filter the
+      # aligned rows by, or nil when the urn is not a range.
+      def locate_range(urn)
+        slice = Range.new(catalog: @catalog).resolve(urn)
+        return nil if slice.nil?
+
+        document = document_by(id: slice.document_id)
+        suffixes = @catalog[:passages]
+                   .where(document_id: slice.document_id)
+                   .where(sequence: slice.start_seq..slice.end_seq)
+                   .select_map(:urn)
+                   .map { |passage_urn| passage_urn.delete_prefix(document.fetch(:urn)) }
+        [document, nil, suffixes]
       end
 
       def document_by(criteria)
