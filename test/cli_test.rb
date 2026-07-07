@@ -116,6 +116,51 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- backup (P7-2) -------------------------------------------------------
+
+  def test_backup_runs_to_a_local_target_and_reports_ok
+    with_backup_env do |config, target|
+      out, _err, status = with_config(config) { run_cli(["backup", "--to", target, "--allow-unmounted"]) }
+
+      assert_nil status, "a clean backup exits 0"
+      assert_match(/Backup → #{Regexp.escape(target)}/, out)
+      assert_match(/canonical\s+ok/, out)
+      assert_match(/OK\b/, out)
+      assert File.exist?(File.join(target, "canonical", "corpus", "one.txt"))
+      assert File.exist?(File.join(target, "config", "sources.yml"))
+    end
+  end
+
+  def test_backup_dry_run_prints_plan_and_changes_nothing
+    with_backup_env do |config, target|
+      out, _err, status = with_config(config) { run_cli(["backup", "--to", target, "--allow-unmounted", "--dry-run"]) }
+
+      assert_nil status
+      assert_match(/dry run/i, out)
+      refute File.exist?(File.join(target, "canonical")), "dry-run writes nothing"
+    end
+  end
+
+  # The mount-point guard: a same-device tmp target without --allow-unmounted
+  # is refused loudly (exit 1), and nothing is written.
+  def test_backup_refuses_an_unmounted_target
+    with_backup_env do |config, target|
+      _out, err, status = with_config(config) { run_cli(["backup", "--to", target]) }
+
+      assert_equal 1, status
+      assert_match(/volume not mounted/i, err)
+      refute File.exist?(File.join(target, "canonical"))
+    end
+  end
+
+  def test_help_backup_documents_the_set_guard_and_examples
+    out, _err, _status = run_cli(%w[help backup])
+    assert_match(/mount-point guard/i, out)
+    assert_match(/\.attic/, out, "must explain why the attic rides along")
+    assert_match(/--skip-derived/, out)
+    assert_match(/Examples:/, out)
+  end
+
   # -- verify (P4-4) -------------------------------------------------------
 
   def test_verify_clean_corpus_reports_ok_and_exits_zero
@@ -533,6 +578,27 @@ class CLITest < Minitest::Test
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
       )
+    end
+  end
+
+  # Build a throwaway config whose config_dir is a REAL tmp dir (so the backup's
+  # config/ section never rsyncs the project root) plus a tiny canonical tree,
+  # and yield [config, target].
+  def with_backup_env
+    Dir.mktmpdir("nabu-cli-backup") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\n")
+      cfg = File.join(root, "config")
+      FileUtils.mkdir_p(cfg)
+      File.write(File.join(cfg, "sources.yml"), "corpus:\n  adapter: TestAdapter\n")
+      File.write(File.join(cfg, "nabu.yml"), "# nabu config\n")
+      target = File.join(root, "backup-target")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(cfg, "sources.yml"), config_path: File.join(cfg, "nabu.yml")
+      )
+      yield config, target
     end
   end
 

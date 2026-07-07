@@ -36,6 +36,8 @@ require_relative "nabu/health/local_check"
 require_relative "nabu/fixture_sentinel"
 require_relative "nabu/rebuild"
 require_relative "nabu/verify"
+require_relative "nabu/backup"
+require_relative "nabu/ops/drill"
 require_relative "nabu/sync_runner"
 require_relative "nabu/cli"
 

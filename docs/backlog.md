@@ -550,7 +550,7 @@ Acceptance: seed runs/baselines/pins → rebuild → still present (test);
       test; architecture §1/§2/§5/§8 updated truthfully (the invariant
       statement gains the ledger clause); suite + lint green.
 
-## P7-2 · Backup & the restore drill  [tier: opus] [status: ready] [deps: P7-1]
+## P7-2 · Backup & the restore drill  [tier: opus] [status: done] [deps: P7-1]
 Goal: the concept promises "restorable from an rsync backup with zero
       services" — make it true. `bin/nabu backup` — file-level snapshot
       (rsync -a --delete via Nabu::Shell) of canonical/ (the attic rides
