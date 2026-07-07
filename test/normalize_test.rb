@@ -157,4 +157,42 @@ class NormalizeTest < Minitest::Test
       end
     end
   end
+
+  # -- fold_with_map: char-aligned fold for KWIC (P8-3) ----------------------
+
+  # THE equality the concordance rests on: the char-by-char fold must produce
+  # byte-identically what search_form produces, so a query folded via
+  # search_form is found in the fold_with_map output.
+  def test_fold_with_map_folded_string_equals_search_form
+    ["μῆνιν ἄειδε θεά", "ἄρχε δ’ ἀοιδῆς", "Arma Virumque Iustitiam",
+     "дх҃омь ст҃ъꙇмь", "jah qiþands"].each do |text|
+      %w[grc grc lat chu got].each do |language|
+        folded, = Nabu::Normalize.fold_with_map(text, language: language)
+        assert_equal Nabu::Normalize.search_form(text, language: language), folded
+      end
+    end
+  end
+
+  # THE mapping-correctness test: locate the folded keyword in a Greek passage
+  # carrying combining marks and map back to the PRISTINE accented span. The
+  # fold is not length-preserving, so a naive index would slice the wrong span.
+  def test_fold_with_map_maps_a_folded_match_back_to_the_pristine_span
+    text = "θεὰ μῆνιν ἄειδε"
+    folded, map = Nabu::Normalize.fold_with_map(text, language: "grc")
+    index = folded.index("μηνιν")
+    start = map[index]
+    finish = map[index + "μηνιν".length - 1] + 1
+    assert_equal "μῆνιν", Nabu::Normalize.nfc(text).chars[start...finish].join
+  end
+
+  # A combining mark that folds away entirely contributes nothing to the map,
+  # keeping every surviving index exact even when the source is decomposed.
+  def test_fold_with_map_handles_a_stripped_combining_mark
+    nfd = "άειδε" # alpha + combining acute + ειδε → "αειδε"
+    folded, map = Nabu::Normalize.fold_with_map(nfd, language: "grc")
+    assert_equal "αειδε", folded
+    assert_equal folded.length, map.length
+    # nfc collapses α+acute into ά (one char), so every folded char maps in range.
+    assert(map.all? { |i| i < Nabu::Normalize.nfc(nfd).chars.length })
+  end
 end

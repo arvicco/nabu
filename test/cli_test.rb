@@ -484,6 +484,83 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- concord (P8-3) ------------------------------------------------------
+
+  def test_concord_prints_kwic_lines_with_the_keyword_located
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord μηνιν --width 10]) }
+      assert_nil status, "a successful concord exits 0"
+      assert_match(/μῆνιν/, out, "the pristine accented keyword appears in the KWIC line")
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out, "the urn + language tag per row")
+      assert_match(/1 line\b/, out, "the footer counts KWIC lines")
+    end
+  end
+
+  # Alignment: the keyword column is identical across rows of varying keyword
+  # length. Two passages, different words matched by one prefix query; the
+  # keyword's left edge sits at the same character offset on both lines.
+  def test_concord_aligns_the_keyword_column
+    with_kwic_corpus do |config|
+      out, _err, _status = with_config(config) { run_cli(%w[concord μηνι* --width 8]) }
+      lines = out.split("\n").select { |line| line.include?("test_adapter:kwic:") }
+      assert_equal 2, lines.size, "two hits with different-length keywords"
+      # Each line begins with an 8-char left context; the keyword's left edge
+      # (the μ of μῆνιν / μηνιτισι) therefore sits at column 8 on both rows.
+      assert lines.all? { |line| line.chars[8] == "μ" }, "keyword column aligned at width"
+    end
+  end
+
+  def test_concord_zero_hits_says_no_matches
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord zzzznotfound]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+    end
+  end
+
+  def test_concord_lemma_mode_finds_inflected_forms_in_context
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord --lemma λέγω --lang grc]) }
+      assert_nil status
+      assert_match(/:64498 \[grc\]/, out)
+      assert_match(/εἶπας/, out, "the located surface form is the inflected attestation")
+    end
+  end
+
+  def test_concord_bad_license_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[concord μηνιν --license bogus]) }
+      assert_equal 1, status
+      assert_match(/unknown license/i, err)
+    end
+  end
+
+  def test_concord_without_index_hints_to_sync_or_rebuild
+    with_empty_registry_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[concord anything]) }
+      assert_equal 1, status
+      assert_match(/no index.*sync.*rebuild/i, err)
+    end
+  end
+
+  def test_concord_lemma_with_a_text_query_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[concord μηνιν --lemma λέγω]) }
+      assert_equal 1, status
+      assert_match(/--lemma replaces the text query/, err)
+    end
+  end
+
+  def test_help_concord_documents_kwic_lemma_and_examples
+    out, _err, _status = run_cli(%w[help concord])
+    assert_match(/KWIC|keyword-in-context/i, out)
+    assert_match(/--width/, out)
+    assert_match(/corpus order/i, out, "must say rows are corpus-ordered, not ranked")
+    assert_match(/nabu concord μῆνιν/, out, "a worked grc example")
+    assert_match(/--lemma λέγω/, out, "a worked lemma example")
+    assert_match(/Examples:/, out)
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance
@@ -741,6 +818,26 @@ class CLITest < Minitest::Test
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
+      yield config
+    end
+  end
+
+  # A synced-and-indexed corpus with one document whose two passages carry the
+  # keyword in different-length words (μῆνιν vs μηνιτισι), matched by one
+  # prefix query — the KWIC alignment rig. Same parse-only sync pipeline.
+  def with_kwic_corpus
+    Dir.mktmpdir("nabu-cli-kwic") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "kwic.txt"),
+                 "KWIC\nalpha μῆνιν beta gamma\ndelta μηνιτισι epsilon\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: live\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      with_config(config) { capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) } }
       yield config
     end
   end

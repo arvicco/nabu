@@ -91,6 +91,40 @@ module Nabu
       [generic, *LANGUAGE_FOLDS.values.map { |extra| extra.call(generic) }].uniq
     end
 
+    # Fold +text+ exactly as search_form does, but return a CHARACTER-INDEX
+    # MAP alongside the folded string so a match located in the folded form
+    # can be pointed back at the pristine display text (P8-3 KWIC concordance).
+    #
+    # Returns [folded, map] where folded == search_form(text, language:) and
+    # map[i] is the index, into nfc(text).chars, of the source character that
+    # produced folded[i]. The fold is NOT length-preserving (NFD + \p{Mn}
+    # strip drops combining marks; a decomposed accent vanishes), so a naive
+    # "same index" mapping would be wrong — hence the explicit map.
+    #
+    # It folds one NFC character at a time and concatenates. This is
+    # byte-identical to the whole-string fold because, once every nonspacing
+    # mark is stripped, no bare letters recombine under NFC across character
+    # boundaries and the per-language rules (ς→σ, v→u/j→i) and downcase are
+    # per-codepoint for our scripts — an equality the Normalize test pins
+    # against Greek with combining marks. A character that folds away entirely
+    # (a lone combining mark) contributes nothing to folded/map, keeping the
+    # surviving indices exact.
+    def self.fold_with_map(text, language:)
+      src = nfc(text)
+      extra = LANGUAGE_FOLDS[primary_subtag(language)]
+      folded = +""
+      map = []
+      src.each_char.with_index do |char, i|
+        piece = fold_diacritics(char.downcase)
+        piece = extra.call(piece) if extra
+        piece.each_char do |folded_char|
+          folded << folded_char
+          map << i
+        end
+      end
+      [folded, map]
+    end
+
     # "grc-Grek" → "grc": rule-table keys are primary subtags only.
     def self.primary_subtag(language)
       language.to_s.split("-").first
