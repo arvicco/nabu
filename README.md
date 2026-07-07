@@ -17,24 +17,29 @@ ancient-text corpora.
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and **seven source adapters**
 exist across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
-DDbDP Leiden): **six sources live** — Perseus Greek (the Iliad included,
-**with 650 aligned English translations**: `show <urn> --parallel`),
-First1KGreek, Universal Dependencies ancient treebanks, PROIEL, TOROT, and
-Papyri.info DDbDP (61k documents, restart-aware line URNs, cancelled texts
-kept in ⟦⟧) — totalling **~1.7 million searchable passages**; Perseus Latin
-is shipped and awaits its first sync.
+DDbDP Leiden): **seven sources live** — Perseus Greek and **Perseus Latin** (Iliad and
+Aeneid included, **with 735 aligned English translations**:
+`show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek,
+Universal Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info
+DDbDP (61k documents, restart-aware line URNs, cancelled texts kept in ⟦⟧)
+— totalling **~2.06 million searchable passages**.
 **The collection is protected end to end**: upstream deletions land in a
 local attic and stay searchable ("retired upstream"); run history, license
 baselines, and revision records live in a ledger no rebuild can wipe; and
 `nabu backup` snapshots everything to a mounted external volume — with a
 restore drill (`rake ops:drill`) that has actually passed against the full
 corpus: backup → fresh-root restore → rebuild → verify → RESTORABLE.
-**The research surface is growing**: search is diacritic-insensitive with
+**The research surface is real**: search is diacritic-insensitive with
 per-language search forms (Greek final-sigma, Latin v/u–j/i — conventions
-§9) and now **lemma-aware** — `search --lemma λέγω` finds every inflected
+§9) and **lemma-aware** — `search --lemma λέγω` finds every inflected
 attestation (εἶπον, ῥηθέντος, …) across the 161k gold-annotated treebank
 passages; `show` renders passages, documents, **citation ranges**
-(`urn:…:1.1-1.10`), and parallel translations. Health (local trends +
+(`urn:…:1.1-1.10`), and parallel translations (span-grouped: prose blocks
+cite exactly which lines they cover); `concord` prints classic KWIC lines
+in pristine text. **And the corpus talks**: a read-only MCP server
+(`bin/nabu mcp`, hand-rolled stdio; `.mcp.json` ships in-repo) gives any
+Claude session four tools — search, show, concord, status — every passage
+carrying its license class; see `docs/mcp.md`. Health (local trends +
 no-clone upstream probe), fixture drift checks, and launchd ops templates
 round out the custodial surface.
 
@@ -66,6 +71,8 @@ round out the custodial surface.
 | `bin/nabu health --remote` | No-clone upstream probe: `ls-remote` liveness, remote-HEAD-vs-last-sync drift, and best-effort license-file change detection per source. Exit 1 only if an upstream is gone. |
 | `rake fixtures:check[source]` | Re-fetch pinned fixture URLs into tmp, byte-diff against the checked-in fixtures, and run the adapter tests against the fresh copies — the upstream-format drift report. Never overwrites; `fixtures:refresh[source]` is the explicit adoption path. |
 | `bin/nabu backup [--dry-run] [--skip-derived]` | File-level rsync of everything not re-derivable (canonical + attic, the history ledger, config; derived dbs by default) to the configured external volume. Refuses to run when the volume is not mounted. |
+| `bin/nabu concord QUERY\|--lemma FORM [--width N]` | Classic KWIC concordance: keyword column-aligned in pristine text, context trimmed per side, corpus order — for scanning usage, not relevance. |
+| `bin/nabu mcp` | The read-only MCP server (stdio): search/show/concord/status as conversational tools for Claude Code/Desktop — registration recipes in `docs/mcp.md`. |
 | `rake ops:drill` | The fresh-machine restore drill: backup → restore into a tmp root → rebuild → verify → golden replay → counts cross-check. Exit 0 = RESTORABLE. |
 
 Every query command carries worked examples and syntax notes inline:
