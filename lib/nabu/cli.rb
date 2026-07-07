@@ -268,6 +268,58 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "backup", "Snapshot canonical/, the history ledger, config/, and the derived dbs to an external volume"
+    long_desc <<~HELP, wrap: false
+      File-level rsync backup (architecture §8, P7-2) — the concept's promise:
+      restorable from a plain rsync copy with zero services running. Backs up
+      everything that is NOT re-derivable:
+
+        canonical/   the permanent asset, INCLUDING every .attic/ (upstream-
+                     scrapped files that exist nowhere else — a per-slug git
+                     mirror would miss them; file-level or nothing)
+        db/history.sqlite3   the ledger: run history, sync pins, license
+                     baselines, durable revisions (the only copy)
+        config/      nabu.yml + sources.yml
+        db/catalog + db/fulltext   the derived dbs — included by DEFAULT
+                     (a file copy beats an hour of rebuild); --skip-derived omits
+                     them (canonical/ + `nabu rebuild` reconstitutes them)
+
+      Target: config/nabu.yml `backup: target:` (a path under a mounted external
+      volume), overridable with --to PATH.
+
+      THE MOUNT-POINT GUARD: the target must live on a REAL mounted volume. If
+      the volume is not mounted, the path is a bare directory on the boot disk,
+      and rsync would silently back up onto it — then shadow the real volume once
+      it mounts. backup REFUSES this unless --allow-unmounted (for deliberately
+      local targets: the drill, a scratch copy).
+
+      --dry-run prints the rsync plan and changes nothing.
+
+      Examples:
+        nabu backup                                   # to the configured volume
+        nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
+        nabu backup --dry-run                          # show the plan
+        nabu backup --skip-derived                     # canonical + ledger + config only
+    HELP
+    option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
+    option :skip_derived, type: :boolean, default: false,
+                          desc: "Omit the derived dbs (catalog + fulltext); restore rebuilds them"
+    option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
+    option :allow_unmounted, type: :boolean, default: false,
+                             desc: "Skip the mount-point guard (for a deliberately-local target)"
+    def backup
+      config = Nabu::Config.load
+      result = Nabu::Backup.new(
+        config: config, target: options[:to], skip_derived: options[:skip_derived],
+        dry_run: options[:dry_run], allow_unmounted: options[:allow_unmounted]
+      ).run
+      print_backup(result)
+      raise Thor::Error, backup_failure_summary(result) unless result.ok?
+    rescue Nabu::Backup::Error => e
+      # No target, or the mount-point guard tripped: a clean stderr message + exit 1.
+      raise Thor::Error, e.message
+    end
+
     no_commands do
       # Reject an unknown --license up front (before opening any db) with the
       # closed enum of valid classes, so the user sees the choices. Shared by
@@ -327,6 +379,49 @@ module Nabu
       end
 
       def pluralize(count, noun) = "#{count} #{noun}#{'s' unless count == 1}"
+
+      # Render `backup`: the target + mode banner, one line per section (name,
+      # status, files/size/duration or the failure detail), then a summary.
+      def print_backup(result)
+        say "#{result.dry_run ? 'Backup plan (dry run — nothing changes)' : 'Backup'} → #{result.target}"
+        result.sections.each { |section| say "  #{format_backup_section(section)}" }
+        say "  #{backup_summary(result)}"
+      end
+
+      def format_backup_section(section)
+        label = section.name.ljust(10)
+        case section.status
+        when :ok
+          "#{label} #{section.status.to_s.ljust(8)} #{pluralize(section.files, 'file')}, " \
+          "#{human_bytes(section.bytes)}  (#{format('%.2fs', section.duration)}) → #{section.dest}"
+        when :skipped
+          "#{label} #{'skipped'.ljust(8)} #{section.detail} (#{section.source})"
+        else
+          "#{label} #{'FAILED'.ljust(8)} #{section.detail}"
+        end
+      end
+
+      def backup_summary(result)
+        verb = result.dry_run ? "would back up" : "backed up"
+        base = "#{verb} #{pluralize(result.files, 'file')}, #{human_bytes(result.bytes)} " \
+               "in #{format('%.2fs', result.duration)}"
+        result.ok? ? "#{base} — OK" : "#{base} — #{pluralize(result.failed.size, 'section')} FAILED"
+      end
+
+      def backup_failure_summary(result)
+        "backup: #{pluralize(result.failed.size, 'section')} failed — #{result.failed.map(&:name).join(', ')}"
+      end
+
+      def human_bytes(bytes)
+        units = %w[B KB MB GB TB]
+        size = bytes.to_f
+        unit = 0
+        while size >= 1024 && unit < units.size - 1
+          size /= 1024
+          unit += 1
+        end
+        unit.zero? ? "#{bytes} B" : "#{format('%.1f', size)} #{units[unit]}"
+      end
 
       # Render `show`: a passage in the context of its document, or a document
       # header plus its passages in sequence. Withdrawn items ARE shown, tagged.

@@ -17,3 +17,18 @@ paths:
   # from canonical/ via `nabu rebuild`, so it is safe to delete.
   # Default: <project>/db
   db: db
+
+# Backup destination for `nabu backup` (P7-2). A path UNDER a mounted external
+# volume — the owner wires the real disk here. `nabu backup` file-level-rsyncs
+# canonical/ (attic included), db/history.sqlite3 (the ledger), config/, and the
+# derived dbs to this target, and REFUSES to run when the volume is not mounted
+# (the mount-point guard: an unmounted target is a bare dir on the boot disk).
+# No default — a backup with neither this key nor --to PATH errors loudly.
+#
+# Until real hardware is wired, a virtual volume simulates it (docs/ops.md §9):
+#   hdiutil create -size 20g -type SPARSEBUNDLE -fs APFS \
+#     -volname NabuBackup ~/NabuBackup.sparsebundle
+#   hdiutil attach ~/NabuBackup.sparsebundle          # mounts /Volumes/NabuBackup
+#
+# backup:
+#   target: /Volumes/NabuBackup/nabu
