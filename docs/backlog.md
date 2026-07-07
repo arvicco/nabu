@@ -747,3 +747,34 @@ OWNER DECISION MENU (pick to unblock):
       EVER per model); output flagged machine-generated everywhere it
       renders; passages with human parallel translations (P7-4) render
       those first, glossing is the fallback.
+
+## P8-1b · Owner feedback: span-grouped parallel display  [tier: opus] [status: ready] [deps: —]
+Goal: card-cited prose translations (both English Homers — no line-cited
+      alternative exists upstream) render as a wall of text paired at the
+      block's first line, with every following original line dashed "—"
+      (owner: "frankly, not that parallel"). Replace pair-only rendering
+      with SPAN-GROUPED display. Semantics (designed at orchestrator
+      review, 2026-07-07):
+      - A translation anchor OWNS original passages from its own suffix
+        up to (not including) the next translation anchor, computed over
+        the FULL sibling documents' suffix orders — not just the queried
+        slice (a range 1.5-1.10 is covered by the card anchored at 1.1
+        even though 1.1 is outside the slice; today that renders all-"—").
+      - Output groups: original lines first, then the owning translation
+        block ONCE, labeled with its full coverage in the original's
+        numbering and an explicit clip note when the queried range shows
+        only part: `eng [:1.1 — covers :1.1–:1.31; range shows :1.5–:1.10]`.
+      - Verse-cited translations (1:1 groups: single original line whose
+        suffix equals the anchor) keep the current compact paired form —
+        the Hymns fixture must render byte-identically to today.
+      - Translation-only suffixes (original lacks the line) stay honest
+        one-sided rows. Blocks whose coverage doesn't intersect the
+        queried slice don't render.
+      - MCP nabu_show inherits via the shared Query::Parallel — its
+        parallel payload gains the coverage fields (bounded as before).
+Acceptance: Odyssey-shaped fixture (card-cited eng + line-cited grc):
+      full-document, mid-card range (block labeled + clip note), and
+      range-starting-inside-a-card cases; Hymns fixture byte-identical
+      regression pin; eng-only suffix case; MCP show parallel payload
+      carries coverage; CLI + query tests, help show example updated;
+      suite + lint green.
