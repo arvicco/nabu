@@ -42,7 +42,8 @@ nabu/
 │   ├── store/                   # Sequel models, loader, schema migrations
 │   ├── enrich/                  # lemmatizer bridge, embedder, glosser
 │   ├── adhoc/                   # intake, HTR drivers, review, commit
-│   └── query/                   # FTS, vector, concordance
+│   ├── query/                   # FTS, vector, concordance
+│   └── mcp/                     # MCP read-only surface: protocol core + tool table (P8-1)
 ├── config/
 │   ├── sources.yml              # registry: adapter class, upstream, license, enabled, translations opt-in
 │   └── nabu.yml               # paths, models, API settings
@@ -181,3 +182,46 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
 - Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational).
+
+## 9. The MCP read-only surface
+
+`lib/nabu/mcp/` exposes the corpus conversationally — to Claude Code and any
+MCP client — and rehearses the eventual `nabu.ac` read-only endpoint
+(concept §"eventual read-only query endpoint"). Hand-rolled, no gem (owner
+decision: the field moves fast, we keep control; the conformant core is
+~150 lines).
+
+- **Protocol** (`mcp/server.rb`): JSON-RPC 2.0 over stdio per MCP spec
+  revision **2025-11-25** (pinned as `Server::PROTOCOL_VERSION`; researched
+  2026-07 against the spec and the Claude Code 2.1.x client). Framing is
+  newline-delimited JSON — one UTF-8 object per line, no Content-Length
+  headers, no batching (removed in spec 2025-06-18). Handles `initialize`
+  (version negotiation by counter-offer), `notifications/initialized` (all
+  notifications swallowed silently), `ping`, `tools/list`, `tools/call`;
+  `-32601` for everything else; malformed lines answer `-32700` without
+  killing the loop. Unknown tool → `-32602` protocol error; semantically bad
+  tool arguments → a tool result with `isError: true` (spec SEP-1303: models
+  self-correct from tool errors, not protocol errors). The core is driven by
+  injected IO/lines; the real stdin/stdout wiring (and stderr logging) is the
+  `bin/nabu mcp` entrypoint's job (P8-2). stdout carries protocol messages
+  ONLY.
+- **Tools** (`mcp/tools.rb`): `nabu_search` (full-text XOR lemma, lang/
+  license/limit), `nabu_show` (passage/document/range urn, `parallel`),
+  `nabu_status` (coverage: sources, counts, languages, license classes,
+  last-sync recency — what makes "no results" interpretable). Translation
+  only: all query logic stays in `lib/nabu/query/`. The tool table is a hash;
+  P8-3 adds `nabu_concord` as one entry + handler.
+- **The contract**: every returned passage carries urn + language +
+  license_class + source; outputs are bounded with honest "N total, showing
+  k" notes; no-match searches carry a one-line coverage hint;
+  `research_private`/`restricted` classes are excluded from every tool unless
+  `include_restricted: true` is passed explicitly (forward-looking: nothing
+  synced carries them yet, but the ad-hoc pipeline will — a conversational
+  surface must never leak that material casually).
+- **Read-only, positively**: connections are opened with
+  `Store.connect(..., readonly: true)` (SQLITE_OPEN_READONLY — the engine
+  refuses writes, not just our code). Corpus states degrade to normal tool
+  responses, never crashes: missing catalog → "no corpus", missing FTS table
+  (the mid-reindex window) → "index rebuilding — retry shortly", SQLITE_BUSY
+  → brief retry then the same graceful shape. No write tools exist in this
+  phase, deliberately.

@@ -190,6 +190,82 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "concord QUERY", "Concordance (KWIC): keyword-in-context lines, one per hit"
+    long_desc <<~HELP, wrap: false
+      Keyword-in-context concordance: every hit as one line — left context, the
+      matched keyword, right context — with the keyword aligned in a fixed
+      column so you can scan a word's usage down the page. The keyword is
+      located in the PRISTINE edition text (accents and all), not the folded
+      search form: a concordance is for reading real usage.
+
+      Matching is exactly `nabu search`: diacritic- and case-insensitive on both
+      sides (μηνιν finds μῆνιν), implicit-AND multiple words, "quoted phrase",
+      prefix* — and --lemma FORM for exact dictionary-form lookup over the gold
+      treebanks (finds every inflected attestation). Rows come in CORPUS order
+      (urn/citation), not relevance order — the point is scanning, not ranking.
+      One row per passage: a passage with the keyword twice shows its first
+      occurrence.
+
+      Layout: left context is trimmed to --width characters per side (default
+      40) and right-justified so the keyword column lines up; the right context
+      is trimmed to the same width; clipped context is marked with …. Each row
+      ends with the passage urn and [language]. Alignment counts display
+      characters (fine for grc/lat/chu); it does not model East-Asian width.
+
+      Filters (as in search): --lang, --license, --limit (default 20).
+
+      Examples:
+        nabu concord μῆνιν                       # every attestation of μῆνιν, KWIC
+        nabu concord μηνιν --width 30            # tighter context, accents optional
+        nabu concord ἄειδε --lang grc --limit 50
+        nabu concord --lemma λέγω --lang grc     # every inflection in context:
+                                                 #   λέγουσι, εἶπας, εἰπεῖν…
+        nabu concord sapientia --lang lat        # a Latin word across the corpus
+
+      Use cases: see how a word is actually used across six corpora at once;
+      spot collocations and formulae; build a hand concordance for a term before
+      writing about it.
+    HELP
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 20, desc: "Maximum number of KWIC lines"
+    option :width, type: :numeric, default: Nabu::Query::Concord::DEFAULT_WIDTH,
+                   desc: "Context characters per side (default #{Nabu::Query::Concord::DEFAULT_WIDTH})"
+    option :lemma, type: :string, banner: "FORM",
+                   desc: "Exact-lemma concordance over the gold treebanks (replaces the text query)"
+    def concord(query = nil)
+      query = query.to_s.strip
+      lemma = options[:lemma]
+      if lemma
+        raise Thor::Error, "concord: --lemma replaces the text query — give one or the other" unless query.empty?
+
+        lemma = lemma.strip
+        raise Thor::Error, "concord: --lemma needs a lemma" if lemma.empty?
+      elsif query.empty?
+        raise Thor::Error, "concord: give a query"
+      end
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+      if lemma && !fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+        raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                           "run nabu sync or nabu rebuild"
+      end
+
+      rows = Nabu::Query::Concord.new(catalog: catalog, fulltext: fulltext).run(
+        query.empty? ? nil : query, lemma: lemma, lang: options[:lang],
+                                    license: options[:license], limit: options[:limit].to_i, width: options[:width].to_i
+      )
+      print_concord_rows(rows)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
     long_desc <<~HELP, wrap: false
       Inspect one passage or one whole document by urn. Unlike search and
@@ -234,11 +310,14 @@ module Nabu
       PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
       document or passage urn, find the sibling edition of the SAME work in
       LANG (sources ingest translations only when their registry entry sets
-      `translations: true`) and render the two aligned by citation suffix —
-      :1.1 in the Greek next to :1.1 in the English. Alignment is exact
-      suffix equality: a suffix present in only one edition renders honestly
-      one-sided (translations often merge lines), never fuzzed. Works with
-      --full-urn.
+      `translations: true`) and render the two SPAN-GROUPED by citation suffix.
+      A verse-for-verse translation pairs line by line — :1.1 Greek next to
+      :1.1 English. A card-cited prose translation (both English Homers) anchors
+      one block of text at a card's first line: the original lines are listed,
+      then the translation ONCE, labeled with its coverage in the original's
+      numbering (`eng [:1.1 — covers :1.1–:1.43]`) plus a clip note when a range
+      shows only part of a card. A suffix present in only one edition renders
+      honestly one-sided, never fuzzed. Works with --full-urn.
 
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -250,8 +329,9 @@ module Nabu
         nabu show urn:nabu:ddbdp:aegyptus:89:240 --full-urn # absolute urns
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-grc2 --parallel
                                                   # Greek + eng, line by line
-        nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.10 --parallel
-                                                  # a slice, Greek + eng aligned
+        nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.5-1.10 --parallel
+                                                  # a mid-card slice: the eng block labeled
+                                                  #   "covers :1.1–:1.43; range shows :1.5–:1.10"
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
 
@@ -284,6 +364,54 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
+    end
+
+    desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
+    long_desc <<~HELP, wrap: false
+      Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
+      conversational surface over the local nabu corpus, exposing three tools —
+      nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
+      parallel translations), and nabu_status (coverage) — to any MCP client
+      (Claude Code, Claude Desktop). The catalog and index are opened
+      SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
+
+      This is a plumbing command, not an interactive one. STDOUT IS THE PROTOCOL
+      CHANNEL — it carries newline-delimited JSON-RPC and nothing else.
+      Diagnostics go to stderr, or appended to a file with --log FILE. The
+      openers are lazy and read-only, so a corpus that appears or is rebuilt
+      mid-session is picked up without a restart. The server runs until stdin
+      closes (EOF) or it is signalled (SIGINT/SIGTERM), then exits 0.
+
+      You normally never type this yourself — a client spawns it. This repo ships
+      .mcp.json, so opening Claude Code in the repo registers nabu automatically.
+      User-scope, Claude Desktop, the tool reference, the license/attribution
+      stance, and an example transcript are in docs/mcp.md.
+
+      Examples:
+        nabu mcp                       # a client spawns this; speaks JSON-RPC on stdio
+        nabu mcp --log /tmp/nabu-mcp.log   # tee diagnostics to a file (stdout stays clean)
+    HELP
+    option :log, type: :string, banner: "FILE",
+                 desc: "Append diagnostics to FILE instead of stderr (stdout is the protocol channel)"
+    def mcp
+      config = Nabu::Config.load
+      log = mcp_log(options[:log])
+      # Lazy, memoizing, read-only openers (Procs, per the Tools contract):
+      # resolved on every tool call, so a corpus that appears or is rebuilt
+      # mid-session is picked up without a restart. nil when the file is absent
+      # (Tools renders the graceful "no corpus" / "rebuilding" states).
+      tools = Nabu::MCP::Tools.new(
+        catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
+        fulltext: readonly_opener(config.fulltext_path) do
+          Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+        end
+      )
+      $stdout.sync = true
+      install_mcp_signal_traps
+      # stdout carries protocol only; every diagnostic goes to the log IO.
+      Nabu::MCP::Server.new(tools: tools, log: log).run($stdin, $stdout)
+    ensure
+      log.close if log && !log.equal?($stderr)
     end
 
     desc "export", "Stream non-withdrawn passages as plain text or JSONL"
@@ -568,36 +696,97 @@ module Nabu
         print_parallel(result)
       end
 
-      # Render the alignment: both document headers, the pair/one-sided
-      # counts, then one block per row — the citation suffix (or absolute urn
-      # under --full-urn) over one line per language, "—" where an edition
-      # lacks the suffix. Withdrawn passages are shown, tagged (show-family).
+      # Render the alignment (P8-1b span-grouped): both document headers, the
+      # paired/blocks/one-sided counts, then one span-group at a time. A verse
+      # pair keeps the compact pair form (byte-identical to pre-P8-1b); a coarse
+      # block prints the original lines first, then the translation once with
+      # its full coverage (and a clip note when a slice shows only part of it);
+      # one-sided rows dash the missing side. Withdrawn passages are shown,
+      # tagged (show-family).
       def print_parallel(result)
         say format_parallel_side(result.left)
         say "  parallel: #{format_parallel_side(result.right)}"
         say "  #{parallel_counts(result)}"
         width = [result.left.language.to_s.length, result.right.language.to_s.length].max + 2
-        result.rows.each do |row|
-          say "  #{parallel_row_label(row)}"
-          say "    #{parallel_line(result.left.language, row.left, width)}"
-          say "    #{parallel_line(result.right.language, row.right, width)}"
+        result.groups.each { |group| print_parallel_group(group, result, width) }
+      end
+
+      def print_parallel_group(group, result, width)
+        case group.kind
+        when :pair        then print_parallel_pair(group, result, width)
+        when :block       then print_parallel_block(group, result, width)
+        when :original    then print_parallel_one_sided(group, result, width, side: :left)
+        when :translation then print_parallel_one_sided(group, result, width, side: :right)
         end
+      end
+
+      # Verse pair / one-sided rows: the pre-P8-1b two-line form, the suffix (or
+      # absolute urn under --full-urn) over one line per language, "—" for the
+      # absent side. Kept byte-identical so verse-for-verse output never shifts.
+      def print_parallel_pair(group, result, width)
+        line = group.originals.first
+        say "  #{options[:full_urn] ? line.urn : group.anchor}"
+        say "    #{parallel_line(result.left.language, line, width)}"
+        say "    #{parallel_line(result.right.language, group.translation, width)}"
+      end
+
+      def print_parallel_one_sided(group, result, width, side:)
+        present = side == :left ? group.originals.first : group.translation
+        say "  #{options[:full_urn] ? present.urn : present.suffix}"
+        left = side == :left ? present : nil
+        right = side == :right ? present : nil
+        say "    #{parallel_line(result.left.language, left, width)}"
+        say "    #{parallel_line(result.right.language, right, width)}"
+      end
+
+      # Coarse block: each owned original as a suffix-labeled left line, then
+      # the translation once, labeled with its full coverage in the original's
+      # numbering plus a clip note when the shown slice is only part of it.
+      def print_parallel_block(group, result, width)
+        group.originals.each do |line|
+          say "  #{options[:full_urn] ? line.urn : line.suffix}"
+          say "    #{parallel_line(result.left.language, line, width)}"
+        end
+        say "  #{result.right.language} #{block_coverage(group)}"
+        say "    #{group.translation.text}#{withdrawn_tag(group.translation.withdrawn)}"
+      end
+
+      # `[:1.1 — covers :1.1–:1.43; range shows :1.5–:1.10]` — the anchor, the
+      # full ownership span, and (only when clipped) the shown sub-range.
+      def block_coverage(group)
+        covers = "covers #{group.covers_first}–#{group.covers_last}"
+        clip = group.clipped ? "; range shows #{group.shown_first}–#{group.shown_last}" : ""
+        "[#{group.anchor} — #{covers}#{clip}]"
       end
 
       def format_parallel_side(side)
         "#{side.urn}#{" — #{side.title}" if side.title}#{" [#{side.language}]" if side.language}"
       end
 
+      # Honest grouped arithmetic: paired counts 1:1 verse pairs; the blocks
+      # clause (and its owned-line total) appears only when there ARE coarse
+      # blocks, so verse-for-verse output stays byte-identical to pre-P8-1b.
       def parallel_counts(result)
-        paired = result.rows.count { |row| row.left && row.right }
-        left_only = result.rows.count { |row| row.right.nil? }
-        right_only = result.rows.count { |row| row.left.nil? }
-        "aligned by citation: #{paired} paired, #{left_only} #{result.left.language} only, " \
-          "#{right_only} #{result.right.language} only"
+        paired = result.groups.count { |group| group.kind == :pair }
+        blocks = result.groups.select { |group| group.kind == :block }
+        left_only = result.groups.count { |group| group.kind == :original }
+        right_only = result.groups.count { |group| group.kind == :translation }
+        block_lines = blocks.sum { |group| group.originals.size }
+        blocks_clause = blocks_clause(blocks.size, block_lines)
+        "aligned by citation: #{paired} paired, #{blocks_clause}" \
+          "#{left_only} #{result.left.language} only, #{right_only} #{result.right.language} only"
       end
 
-      def parallel_row_label(row)
-        options[:full_urn] ? (row.left || row.right).urn : row.suffix
+      # The blocks clause appears only when there ARE coarse blocks, so
+      # verse-for-verse output stays byte-identical to the pre-P8-1b header.
+      def blocks_clause(blocks, lines)
+        return "" if blocks.zero?
+
+        "#{plural(blocks, 'block')} covering #{plural(lines, 'line')}, "
+      end
+
+      def plural(count, noun)
+        "#{count} #{noun}#{'s' unless count == 1}"
       end
 
       def parallel_line(language, line, width)
@@ -640,6 +829,18 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)"
+      end
+
+      # Render KWIC rows (P8-3): left + keyword + right (each side already
+      # trimmed to width by Concord), then the urn + [language] tag. The left
+      # context is a fixed width, so keyword columns align down the page.
+      def print_concord_rows(rows)
+        return say("no matches") if rows.empty?
+
+        rows.each do |row|
+          say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}"
+        end
+        say "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
       end
 
       # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma
@@ -970,6 +1171,62 @@ module Nabu
       def remote_health_failure(report)
         gone = report.rows.count { |row| row.liveness.status == :gone }
         "health: #{pluralize(gone, 'upstream')} gone — see the table above"
+      end
+
+      # -- mcp entrypoint plumbing (P8-2) ----------------------------------
+
+      # A lazy, memoizing, read-only opener returned as a PROC (the Tools
+      # contract resolves each connection slot per tool call). On every call:
+      # absent file → nil (Tools renders the "no corpus" state); present file →
+      # an open read-only handle, cached across calls so a long session does not
+      # churn file descriptors. The cached handle is dropped and reopened when
+      # the file's identity changes — `nabu rebuild` deletes and recreates the
+      # catalog, so a mid-session rebuild is genuinely picked up, not served
+      # stale from a handle onto the deleted inode.
+      def readonly_opener(path, &open)
+        handle = nil
+        identity = nil
+        lambda do
+          current = file_identity(path)
+          if current.nil?
+            handle&.disconnect
+            handle = identity = nil
+          elsif current != identity
+            handle&.disconnect
+            handle = open.call
+            identity = current
+          end
+          handle
+        end
+      end
+
+      # (device, inode) — a file replaced in place (delete + recreate) changes
+      # inode, which is how the opener notices a rebuild. nil when absent.
+      def file_identity(path)
+        return nil unless File.exist?(path)
+
+        stat = File.stat(path)
+        [stat.dev, stat.ino]
+      end
+
+      # The diagnostics sink for `nabu mcp`: stderr by default, or a file opened
+      # for append (line-buffered) when --log FILE is given. NEVER stdout —
+      # stdout is the JSON-RPC protocol channel.
+      def mcp_log(path)
+        return $stderr if path.to_s.strip.empty?
+
+        # No block form: the log must stay open for the whole server lifetime;
+        # `mcp` closes it in its ensure.
+        file = File.open(path, "a") # rubocop:disable Style/FileOpen
+        file.sync = true
+        file
+      end
+
+      # SIGINT/SIGTERM → clean shutdown with EOF semantics: exit 0, unwinding the
+      # command's ensure (which closes the log). A client that stops the server
+      # by closing our stdin gets the same path via the run loop reaching EOF.
+      def install_mcp_signal_traps
+        %w[INT TERM].each { |signal| trap(signal) { exit(0) } }
       end
 
       # Open the catalog db for reading if it has been built; nil otherwise so

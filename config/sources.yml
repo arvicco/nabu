@@ -26,8 +26,9 @@ perseus-greek:
 
 perseus-latin:
   adapter: Nabu::Adapters::PerseusLatin
-  enabled: false  # awaiting owner-initiated first sync (multi-GB clone of canonical-latinLit); flip after sign-off (P7-3)
+  enabled: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
   sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
+  translations: true  # owner 2026-07-07: aligned English editions, same mechanism as perseus-greek (P7-4)
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek

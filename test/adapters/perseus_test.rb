@@ -307,6 +307,8 @@ class PerseusTranslationsTest < Minitest::Test
 
   HH13_ENG_URN = "urn:cts:greekLit:tlg0013.tlg013.perseus-eng2"
   JOHN2_ENG_URN = "urn:cts:greekLit:tlg0031.tlg024.perseus-eng2"
+  ILIAD_ENG_URN = "urn:cts:greekLit:tlg0012.tlg001.perseus-eng4"
+  ENG_URNS = [ILIAD_ENG_URN, HH13_ENG_URN, JOHN2_ENG_URN].freeze
   GRC_URNS = %w[
     urn:cts:greekLit:tlg0012.tlg001.perseus-grc2
     urn:cts:greekLit:tlg0013.tlg013.perseus-grc2
@@ -322,15 +324,16 @@ class PerseusTranslationsTest < Minitest::Test
 
   def test_discover_adds_eng_editions_alongside_originals_sorted_by_urn
     refs = adapter.discover(GREEK_WORKDIR).to_a
-    assert_equal (GRC_URNS + [HH13_ENG_URN, JOHN2_ENG_URN]).sort, refs.map(&:id)
+    assert_equal (GRC_URNS + ENG_URNS).sort, refs.map(&:id)
     assert_equal refs.map(&:id).sort, refs.map(&:id), "discover stays urn-sorted"
   end
 
   def test_translation_refs_carry_eng_language_and_the_work_title
     refs = adapter.discover(GREEK_WORKDIR).to_a
     eng = refs.select { |ref| ref.metadata["language"] == "eng" }
-    assert_equal [HH13_ENG_URN, JOHN2_ENG_URN], eng.map(&:id).sort
+    assert_equal ENG_URNS.sort, eng.map(&:id).sort
     titles = eng.to_h { |ref| [ref.id, ref.metadata["title"]] }
+    assert_equal "Iliad", titles.fetch(ILIAD_ENG_URN)
     assert_equal "Hymn 13 to Demeter", titles.fetch(HH13_ENG_URN)
     assert_equal "2 John", titles.fetch(JOHN2_ENG_URN)
     eng.each { |ref| assert_equal "perseus-greek", ref.source_id }
@@ -385,6 +388,19 @@ class PerseusTranslationsTest < Minitest::Test
     suffixes = ->(doc) { doc.map { |p| p.urn.delete_prefix(doc.urn) } }
     assert_equal 13, eng.size
     assert_equal suffixes.call(grc), suffixes.call(eng)
+  end
+
+  # The Iliad's Butler translation is CARD-cited (book.card), not line-cited:
+  # each card anchors one prose block at its first line — div[@type="card"]
+  # under div[@subtype="book"]. The P8-1b span-grouped display exists for
+  # exactly this shape; this pins that the fixture parses to card suffixes.
+  def test_parse_iliad_translation_yields_card_cited_prose_blocks
+    document = parse_ref(ILIAD_ENG_URN)
+    assert_equal ILIAD_ENG_URN, document.urn
+    assert_equal "eng", document.language
+    suffixes = document.map { |p| p.urn.delete_prefix(document.urn) }
+    assert_equal %w[:1.1 :1.40], suffixes, "book.card suffixes anchored at each card's first line"
+    assert_includes document.first.text, "Sing, O goddess, the anger"
   end
 
   private
