@@ -37,9 +37,15 @@
 #   reason:      required when refetchable: false — why it cannot be re-GET.
 #
 source: perseus
-# adapter_test is null since P6-1: the Iliad edition below is a documented TRIM
+# This dir backs BOTH Perseus adapters: the greekLit files exercise
+# perseus_test.rb and the latinLit files (stoa0045, below) exercise
+# perseus_latin_test.rb (P7-3). adapter_test names a SINGLE file to re-run and
+# stays null since P6-1: the Iliad edition below is a documented TRIM
 # (whole: false), and a count-based adapter test re-run against the full
-# upstream file would false-fail (see the schema note above).
+# upstream file would false-fail (see the schema note above). That directory-
+# level trim forces null regardless of the PerseusLatin twin — the latinLit
+# files are all whole:true, but `check` re-runs at most one test per dir and the
+# greek trim already disqualifies it.
 adapter_test: null
 retrieved: 2026-07-03
 files:

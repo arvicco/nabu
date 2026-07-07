@@ -17,6 +17,11 @@ perseus-greek:
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
 
+perseus-latin:
+  adapter: Nabu::Adapters::PerseusLatin
+  enabled: false  # awaiting owner-initiated first sync (multi-GB clone of canonical-latinLit); flip after sign-off (P7-3)
+  sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
+
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
   enabled: true   # first real sync verified + owner sign-off 2026-07-04

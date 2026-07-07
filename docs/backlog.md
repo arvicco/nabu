@@ -578,7 +578,7 @@ Acceptance: backup to a tmp target in tests (attic + ledger + config
       present, exclusions honored); dry-run changes nothing; drill task
       green end-to-end locally; ops.md complete; suite + lint green.
 
-## P7-3 · Perseus Latin  [tier: opus] [status: ready] [deps: —]
+## P7-3 · Perseus Latin  [tier: opus] [status: done] [deps: —]
 Goal: the designed one-line sibling — `PerseusLatin < Perseus` with
       NAMESPACE latinLit (manifest perseus-latin already defined in
       MANIFESTS), registry entry `enabled: false`, conformance + adapter
