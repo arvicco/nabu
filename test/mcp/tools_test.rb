@@ -319,6 +319,33 @@ module MCP
       end
     end
 
+    # P8-1b: the seed eng edition is ONE card (:1.1) owning three grc lines —
+    # a coarse block. Its row carries the coverage fields so a model knows the
+    # single translation block owns the whole grc span, not just line 1.1.
+    def test_show_parallel_coarse_block_carries_coverage_fields
+      seed_corpus
+      body = payload(call("nabu_show", { "urn" => @grc.urn, "parallel" => true }))
+      assert_equal "parallel", body.fetch("type")
+      row = body.fetch("rows").fetch(0)
+      assert_equal ":1.1", row.fetch("anchor")
+      assert_equal ":1.1", row.fetch("covers_first")
+      assert_equal ":1.3", row.fetch("covers_last")
+      assert_equal false, row.fetch("clipped")
+      assert_equal "Sing, goddess, the wrath", row.fetch("right").fetch("text")
+      %w[urn language license_class].each { |k| assert row.fetch("left").key?(k) }
+    end
+
+    def test_show_parallel_range_clip_reports_the_shown_subrange
+      seed_corpus
+      body = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.2-1.3", "parallel" => true }))
+      row = body.fetch("rows").fetch(0)
+      assert row.fetch("clipped"), "the block extends past the sliced range"
+      assert_equal ":1.1", row.fetch("covers_first")
+      assert_equal ":1.3", row.fetch("covers_last")
+      assert_equal ":1.2", row.fetch("shown_first")
+      assert_equal ":1.3", row.fetch("shown_last")
+    end
+
     def test_show_requires_a_urn
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_show", {}) }
     end

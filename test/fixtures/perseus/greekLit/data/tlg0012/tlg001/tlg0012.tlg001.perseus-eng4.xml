@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>The Iliad</title>
+            <title type="sub">Revised edition</title>
+            <author>Homer</author>
+            <editor role="translator">Samuel Butler</editor>
+            <respStmt>
+               <resp>revised by</resp>
+               <name>Timothy Power</name>
+               <name>Gregory Nagy</name>
+            </respStmt>
+         </titleStmt>
+
+         <publicationStmt>
+            <publisher>Trustees of Tufts University</publisher>
+            <pubPlace>Medford, MA</pubPlace>
+            <authority>Perseus Project</authority>
+         </publicationStmt>
+
+
+         <notesStmt>
+            <note anchored="true">Based on public domain editon of Samuel Butler, revised by Timothy
+               Power and Gregory Nagy.</note>
+         </notesStmt>
+         <sourceDesc>
+            <biblStruct>
+               <monogr>
+                  <author>Homer</author>
+                  <title>The Iliad of Homer</title>
+                  <title type="sub">Rendered into English prose for the use of those who
+                     cannot read the original</title>
+                  <editor role="translator">Samuel Butler</editor>
+                  <imprint>
+                     <pubPlace>London</pubPlace>
+                     <pubPlace>New York</pubPlace>
+                     <pubPlace>Bombay</pubPlace>
+                     <publisher>Longmans, Green and Co.</publisher>
+                     <date>1898</date>
+                  </imprint>
+               </monogr>
+               <ref target="https://hdl.handle.net/2027/coo1.ark:/13960/t1zc8h28j">HathiTrust</ref> 
+            </biblStruct>
+            <bibl>
+               <idno type="isbn">0486408833</idno>
+            </bibl>
+         </sourceDesc>
+
+
+      </fileDesc>
+
+      <encodingDesc>
+         <refsDecl n="CTS">
+            <cRefPattern n="card" matchPattern="(\w+).(\w+)"
+               replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']/tei:div[@n='$2'])">
+               <p>This pointer pattern extracts book and card</p>
+            </cRefPattern>
+            <cRefPattern n="book" matchPattern="(\w+)"
+               replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])">
+               <p>This pointer pattern extracts book</p>
+            </cRefPattern>
+         </refsDecl>
+      </encodingDesc>
+
+      <profileDesc>
+         <langUsage>
+            <language ident="eng">English </language>
+            <language ident="grc">Transliterated Greek </language>
+         </langUsage>
+      </profileDesc>
+   </teiHeader>
+
+   <text>
+      <body>
+         <div xml:lang="eng" type="translation" n="urn:cts:greekLit:tlg0012.tlg001.perseus-eng4">
+            <div type="textpart" n="1" subtype="book">
+               <head>Scroll 1</head>
+               <div type="textpart" n="1" subtype="card">
+                  <p>
+                     <milestone n="1" unit="line"/>Sing, O goddess, the anger [<term xml:lang="grc"
+                        >mênis</term>] of Achilles son of Peleus, that brought countless ills upon
+                     the Achaeans. Many a brave soul [<term xml:lang="grc">psukhê</term>] did it
+                     send hurrying down to Hades, and many a hero did it yield a prey to dogs </p>
+
+                  <p>
+                     <milestone n="5" unit="line"/>and vultures, for so was the will of Zeus
+                     fulfilled from the day on which the son of Atreus, king of men, and great
+                     Achilles, first fell out with one another. And which of the gods was it that
+                     set them on to quarrel? It was the son of Zeus and Leto; for he was angry with
+                     the king </p>
+
+                  <p>
+                     <milestone n="10" unit="line"/>and sent a pestilence upon the host to plague
+                     the people, because the son of Atreus had dishonored Chryses his priest. Now
+                     Chryses had come to the ships of the Achaeans to free his daughter, and had
+                     brought with him a great ransom: moreover he bore in his hand the scepter of
+                     Apollo wreathed with a suppliant's wreath </p>
+
+                  <p>
+                     <milestone n="15" unit="line"/>and he besought the Achaeans, but most of all
+                     the two sons of Atreus, who were their chiefs. "Sons of Atreus," he cried, "and
+                     all other Achaeans, may the gods who dwell in <placeName key="tgn,7011019"
+                        >Olympus</placeName> grant you to sack the city of Priam, and to reach your
+                     homes in safety; </p>
+
+                  <p>
+                     <milestone n="20" unit="line"/>but free my daughter, and accept a ransom for
+                     her, in reverence to Apollo, son of Zeus." On this the rest of the Achaeans
+                     with one voice were for respecting the priest and taking the ransom that he
+                     offered; but not so Agamemnon, </p>
+
+                  <p>
+                     <milestone n="25" unit="line"/>who spoke fiercely to him and sent him roughly
+                     away. "Old man," said he, "let me not find you tarrying about our ships, nor
+                     yet coming hereafter. Your scepter of the god and your wreath shall profit you
+                     nothing. I will not free her. She shall grow old </p>
+
+                  <p>
+                     <milestone n="30" unit="line"/>in my house at <placeName key="perseus,Argos"
+                        >Argos</placeName> far from her own home, busying herself with her loom and
+                     visiting my couch; so go, and do not provoke me or it shall be the worse for
+                     you." The old man feared him and obeyed. Not a word he spoke, but went by the
+                     shore of the sounding sea </p>
+
+                  <p>
+                     <milestone n="35" unit="line"/>and prayed apart to King Apollo whom lovely Leto
+                     had borne. "Hear me," he cried, "O god of the silver bow, you who protect
+                        <placeName key="perseus,Chryse">Chryse</placeName> and holy Cilla and rule
+                        <placeName key="perseus,Tenedos">Tenedos</placeName> with your might, hear
+                     me O god of Sminthe. If I have ever decked your temple with garlands, </p>
+               </div>
+
+               <div type="textpart" n="40" subtype="card">
+                  <p>
+                     <milestone n="40" unit="line"/>or burned for you thigh-bones in fat of bulls or
+                     goats, grant my prayer, and let your arrows avenge these my tears upon the
+                     Danaans." Thus did he pray, and Apollo heard his prayer. He came down furious
+                     from the summits of <placeName key="tgn,7011019">Olympus</placeName>, </p>
+
+                  <p>
+                     <milestone n="45" unit="line"/>with his bow and his quiver upon his shoulder,
+                     and the arrows rattled on his back with the rage that trembled within him. He
+                     sat himself down away from the ships with a face as dark as night, and his
+                     silver bow rang death as he shot his arrow in the midst of them. </p>
+
+                  <p>
+                     <milestone n="50" unit="line"/>First he smote their mules and their hounds, but
+                     presently he aimed his shafts at the people themselves, and all day long the
+                     pyres of the dead were burning. For nine whole days he shot his arrows among
+                     the people, but upon the tenth day Achilles called them in assembly - </p>
+
+                  <p>
+                     <milestone n="55" unit="line"/>moved thereto by Hera, who saw the Achaeans in
+                     their death-throes and had compassion upon them. Then, when they were got
+                     together, he rose and spoke among them. "Son of Atreus," said he, "I deem that
+                     we should now </p>
+
+                  <p>
+                     <milestone n="60" unit="line"/>turn roving home if we would escape destruction,
+                     for we are being cut down by war and pestilence at once. Let us ask some priest
+                     or seer [<term xml:lang="grc">mantis</term>], or some reader of dreams (for
+                     dreams, too, are of Zeus) who can tell us why Phoebus Apollo is so angry, and
+                     say </p>
+
+                  <p>
+                     <milestone n="65" unit="line"/>whether it is for some vow that we have broken,
+                     or hecatomb that we have not offered, and whether he will accept the savor of
+                     lambs and goats without blemish, so as to take away the plague from us." With
+                     these words he sat down, and Kalkhas son of Thestor, wisest of augurs, </p>
+
+                  <p>
+                     <milestone n="70" unit="line"/>who knew things past present and to come, rose
+                     to speak. He it was who had guided the Achaeans with their fleet to <placeName
+                        key="tgn,7002329">Ilion</placeName>, through the prophesyings with which
+                     Phoebus Apollo had inspired him. With all sincerity and goodwill he addressed
+                     them thus: - "Achilles, loved of heaven, you bid me tell you about the </p>
+
+                  <p>
+                     <milestone n="75" unit="line"/>anger [<term xml:lang="grc">mênis</term>] of
+                     King Apollo, I will therefore do so; but consider first and swear that you will
+                     stand by me heartily in word and deed, for I know that I shall offend one who
+                     rules the Argives with might, to whom all the Achaeans are in subjection. </p>
+               </div>
+            </div>
+         </div>
+      </body>
+   </text>
+</TEI>

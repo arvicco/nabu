@@ -66,6 +66,18 @@ files:
       2026-07-03): full teiHeader + edition div kept; book 1 reduced to lines
       1-10 and 607-611, book 2 to lines 1-19 (preserving the book boundary and
       a <q>-wrapped line run); books 3-24 removed.
+  - path: greekLit/data/tlg0012/tlg001/tlg0012.tlg001.perseus-eng4.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0012/tlg001/tlg0012.tlg001.perseus-eng4.xml
+    whole: false
+    trim: >-
+      Iliad Butler translation (P8-1b), CARD-cited prose — the span-grouped
+      parallel-display fixture. Trimmed from the local canonical snapshot
+      (canonical/perseus-greek/data/tlg0012/tlg001/, synced 2026-07-03): full
+      teiHeader + translation div kept; book 1 reduced to its first two cards
+      (1.1 and 1.40, div[@subtype="card"] under div[@subtype="book"]); cards
+      1.80-1.600 and books 2-24 removed. Pairs with the grc2 sibling above (a
+      card anchors one prose block at its first line: eng :1.1 covers grc
+      1.1-1.39), the shape the P8-1b coarse renderer exists for.
   - path: greekLit/data/tlg0013/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0013/__cts__.xml
     whole: true
