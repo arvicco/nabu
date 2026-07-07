@@ -52,7 +52,7 @@ nabu/
 │   └── ...
 ├── db/
 │   ├── catalog.sqlite3          # DERIVED: sources, documents, passages, provenance, licenses
-│   ├── fulltext.sqlite3         # DERIVED: FTS5 (contentless, keyed by passage id)
+│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas (both keyed by passage id)
 │   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
 │   ├── migrate/                 # catalog migration track (forward-only)
@@ -149,6 +149,7 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 - Phase 8 (enrichments — paid API output that must survive rebuilds): the enrichment journal lives in the ledger, urn-keyed like `revisions` (passage urn + kind + model identity), and `nabu enrich --replay` re-applies it into the catalog after a rebuild. The identity scheme above is the contract; the tables land with Phase 8.
 - Migration tracks are per-db and forward-only: `db/migrate/` for the catalog, `db/ledger_migrate/` for the ledger — each SQLite file keeps its own `schema_info`, so the counters cannot collide. One-shot lift-and-shift: every write path opens the ledger via `Ledger.open_with_lift!`, which copies a pre-P7-1 catalog's runs/pins/baselines into the ledger (re-keyed by slug/url) and only then migrates the catalog forward (005 drops the moved tables). A fresh machine with no ledger bootstraps clean: read paths treat the absent file as empty history ("no run history", never an error); the first sync creates it.
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
+- `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the gold-treebank lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output).
 - `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
 - `license_class` enum (`open`, `attribution`, `nc`, `research_private`, `restricted`) drives query/export filters.
 

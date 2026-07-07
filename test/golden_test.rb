@@ -66,16 +66,44 @@ class GoldenTest < Minitest::Test
     Nabu::Query::Search.new(catalog: corpus[:db], fulltext: corpus[:ft])
   end
 
+  def lemma_search
+    corpus = self.class.corpus
+    Nabu::Query::LemmaSearch.new(catalog: corpus[:db], fulltext: corpus[:ft])
+  end
+
   # One independent test per YAML entry, so a single failing golden query names
-  # itself in the output.
+  # itself in the output. Entries with a `lemma` key replay through LemmaSearch
+  # over the lemma index (P7-5); the rest through FTS Search.
   QUERIES.each_with_index do |entry, index|
     define_method(:"test_golden_query_#{format('%02d', index)}_#{entry['lang'] || 'nolang'}") do
-      results = search.run(entry["query"], lang: entry["lang"])
+      results = if entry["lemma"]
+                  lemma_search.run(entry["lemma"], lang: entry["lang"])
+                else
+                  search.run(entry["query"], lang: entry["lang"])
+                end
       urns = results.map(&:urn)
+      label = entry["query"] || "--lemma #{entry['lemma']}"
       assert_includes urns, entry["expect_urn"],
-                      "golden query #{entry['query'].inspect} (lang=#{entry['lang'].inspect}) " \
+                      "golden query #{label.inspect} (lang=#{entry['lang'].inspect}) " \
                       "must return #{entry['expect_urn']}; got #{urns.inspect}\nnote: #{entry['note']}"
     end
+  end
+
+  # P7-5 acceptance: all three treebank families contribute lemma rows to the
+  # golden corpus's index (UD via ConlluParser; PROIEL and TOROT via
+  # ProielParser — TOROT shares the urn:nabu:proiel: namespace), and NOTHING
+  # else does — non-treebank passages carry no token lemmas (honest absence).
+  def test_lemma_index_covers_exactly_the_treebank_families
+    lemmas = self.class.corpus[:ft][Nabu::Store::Indexer::LEMMA_TABLE]
+    ["urn:nabu:ud:%", "urn:nabu:proiel:cic-off:%", "urn:nabu:proiel:zogr:%",
+     "urn:nabu:proiel:peter:%"].each do |pattern|
+      assert_operator lemmas.where(Sequel.like(:urn, pattern)).count, :>, 0,
+                      "#{pattern} must contribute lemma rows"
+    end
+    strays = lemmas.exclude(Sequel.like(:urn, "urn:nabu:ud:%"))
+                   .exclude(Sequel.like(:urn, "urn:nabu:proiel:%"))
+    assert_equal 0, strays.count,
+                 "only treebank passages may carry lemma rows; got #{strays.select_map(:urn).first(5).inspect}"
   end
 
   # The packet requires ≥6 queries spanning grc/lat/got/chu/orv, with one
