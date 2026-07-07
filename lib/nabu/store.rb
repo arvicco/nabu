@@ -34,8 +34,11 @@ module Nabu
     # Open a Sequel database for +url+ (e.g. "sqlite::memory:" or a file path).
     # SQLite enforces foreign keys per-connection; Sequel's SQLite adapter
     # turns the pragma on by default, and we assert it explicitly here.
-    def connect(url)
-      db = Sequel.connect(sqlite_url(url))
+    # +readonly+ opens the file with SQLITE_OPEN_READONLY (P8-1: the MCP
+    # surface must be POSITIVELY unable to write — the engine refuses, not
+    # just our code declining to).
+    def connect(url, readonly: false)
+      db = Sequel.connect(sqlite_url(url), readonly: readonly)
       db.run("PRAGMA foreign_keys = ON") if db.database_type == :sqlite
       db
     end
@@ -45,8 +48,8 @@ module Nabu
     # can pass config.fulltext_path directly. No foreign_keys pragma: the index
     # is a standalone FTS5 table with no relational integrity to enforce (its
     # only link to the catalog is the UNINDEXED passage_id column).
-    def connect_fulltext(url)
-      Sequel.connect(sqlite_url(url))
+    def connect_fulltext(url, readonly: false)
+      Sequel.connect(sqlite_url(url), readonly: readonly)
     end
 
     # A bare filesystem path (no "scheme:" prefix) is taken as a SQLite file so

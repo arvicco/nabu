@@ -653,7 +653,7 @@ Acceptance: ranges over CTS (1.1-1.10) and papyri (:1-:b2:2) fixtures;
 below and are dispatched only after the owner picks. Everything else is
 local and read-only against the corpus.*
 
-## P8-1 · MCP tool contract + protocol core  [tier: fable] [status: ready] [deps: —]
+## P8-1 · MCP tool contract + protocol core  [tier: fable] [status: done] [deps: —]
 Goal: the read-only conversational surface, hand-rolled (no gem — owner
       decision: the field moves fast, we keep control; the core is small).
       Two layers, one packet, because the contract shapes both:
