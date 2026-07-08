@@ -413,6 +413,166 @@ class EpidocParserTest < Minitest::Test
     assert_match(/no div\[@type="translation"\] found/, error.message)
   end
 
+  # --- P4 fallback: legacy pre-P5 TEI (P9-2) ---------------------------------
+  #
+  # 167 perseus-latin files are pre-P5 TEI: no div[@type="edition"|
+  # "translation"], no CTS cRefPattern — citation lives in numbered container
+  # divs (<div1 type="book">, plain <div type="book">) and <milestone
+  # unit="chapter|section" n="..."/> streams, or (verse) in numbered <lb/>
+  # marks, or (flat tractates) in nothing but <p> order. The P4 fallback
+  # engages only after the P5 pass raised "no div[...] found" AND the header
+  # declares no usable cRefPattern (a P5 doc without an edition div — the
+  # first1k commentary class — must keep its exact quarantine message).
+
+  LIVY_PATH = File.join(FIXTURES, "latinLit/data/phi0914/phi0011/phi0914.phi0011.perseus-lat3.xml")
+  TACITUS_PATH = File.join(FIXTURES, "latinLit/data/phi1351/phi004/phi1351.phi004.perseus-eng1.xml")
+  DIRAE_PATH = File.join(FIXTURES, "latinLit/data/phi0692/phi012/phi0692.phi012.perseus-lat1.xml")
+  BOETHIUS_PATH = File.join(FIXTURES, "latinLit/data/stoa0058/stoa028/stoa0058.stoa028.perseus-eng1.xml")
+
+  LIVY_URN = "urn:cts:latinLit:phi0914.phi0011.perseus-lat3"
+  TACITUS_URN = "urn:cts:latinLit:phi1351.phi004.perseus-eng1"
+  DIRAE_URN = "urn:cts:latinLit:phi0692.phi012.perseus-lat1"
+  BOETHIUS_URN = "urn:cts:latinLit:stoa0058.stoa028.perseus-eng1"
+
+  def parse_livy
+    parser.parse(LIVY_PATH, urn: LIVY_URN, language: "lat", title: "Ab Urbe Condita, Liber I")
+  end
+
+  # Livy: the dominant P4 sub-shape (~64 of the 167) — P5 namespace but a
+  # legacy <refState>-only refsDecl; one <div type="book" n="1"> container
+  # with <milestone unit="chapter"> / <milestone unit="section"> streams
+  # inside. Citation = div @n + milestone components in first-appearance
+  # order; chapter milestones clear the deeper section component. The
+  # praefatio chapter is n="pr" — non-numeric labels mint as-is.
+  LIVY_SUFFIXES = ((1..13).map { |n| "1.pr.#{n}" } + (1..11).map { |n| "1.1.#{n}" } +
+                   (1..6).map { |n| "1.2.#{n}" }).freeze
+
+  def test_livy_p4_milestone_citation_mints_book_chapter_section
+    doc = parse_livy
+
+    assert_equal 30, doc.size
+    assert_equal LIVY_SUFFIXES.map { |s| "#{LIVY_URN}:#{s}" }, doc.passages.map(&:urn)
+    assert_equal (0..29).to_a, doc.passages.map(&:sequence)
+  end
+
+  def test_livy_p4_text_spot_checks
+    doc = parse_livy
+    by_suffix = doc.passages.to_h { |p| [p.urn.sub("#{LIVY_URN}:", ""), p] }
+
+    # Praef. 1 — the famous opening of Ab Urbe Condita.
+    assert_includes by_suffix.fetch("1.pr.1").text, "facturusne operae pretium sim"
+    # Chapter boundary: 1.1.1 starts the Aeneas narrative.
+    assert_includes by_suffix.fetch("1.1.1").text, "iam primum omnium satis constat Troia capta"
+    assert_includes by_suffix.fetch("1.2.6").text, "Iouem indigetem appellant"
+    doc.passages.each do |passage|
+      assert_equal "lat", passage.language
+      refute_match(/\s\s/, passage.text)
+    end
+  end
+
+  def test_livy_p4_urns_and_texts_are_stable_across_two_parses
+    first = parse_livy
+    second = parse_livy
+
+    assert_equal first.passages.map(&:urn), second.passages.map(&:urn)
+    assert_equal first.passages.map(&:text), second.passages.map(&:text)
+  end
+
+  # Tacitus Histories: true TEI P4 (<TEI.2> DOCTYPE, no namespace), numbered
+  # <div1 type="book" n>/<div2 type="chapter" n> containers, undefined ISO
+  # entities in text (&aelig; — the DTD is never fetched).
+  def test_tacitus_tei2_numbered_div_citation
+    doc = parser.parse(TACITUS_PATH, urn: TACITUS_URN, language: "eng")
+
+    assert_equal %w[1.1 1.2 2.1 2.2].map { |s| "#{TACITUS_URN}:#{s}" }, doc.passages.map(&:urn)
+    assert_includes doc.passages[0].text, "I BEGIN my work with the time when Servius Galba"
+    # Book boundary: 2.1 is the first chapter of book 2.
+    assert_includes doc.passages[2].text, "IN a distant part of the world fortune was now preparing"
+  end
+
+  def test_tacitus_iso_entities_resolve_and_heads_are_dropped
+    doc = parser.parse(TACITUS_PATH, urn: TACITUS_URN, language: "eng")
+
+    # &aelig; must resolve to æ, not vanish (which would fuse "Sarmat rose").
+    assert_includes doc.passages[1].text, "the Suevi and the Sarmatæ rose"
+    # <head>BOOK I</head> / <head>JANUARY&mdash;MARCH ...</head> are title
+    # apparatus, not passage text.
+    doc.passages.each do |passage|
+      refute_includes passage.text, "BOOK"
+      refute_includes passage.text, "JANUARY"
+    end
+  end
+
+  # Dirae-class verse (Appendix Vergiliana): no divs, no milestones — the
+  # poem's lines are numbered <lb n="1"/>..<lb n="26"/> marks. Second ladder
+  # rung: per-line citation from the lb stream.
+  def test_lb_verse_mints_per_line_citations
+    doc = parser.parse(DIRAE_PATH, urn: DIRAE_URN, language: "lat")
+
+    assert_equal (1..26).map { |n| "#{DIRAE_URN}:#{n}" }, doc.passages.map(&:urn)
+    assert_includes doc.passages[0].text, "vir bonus et sapiens"
+  end
+
+  # Boethius tractates: bare <p> bodies — no citation apparatus at all. Third
+  # ladder rung: 1-based <p> ordinals (the first p is empty and mints nothing,
+  # so citations start at 2 — ordinals stay faithful to document structure).
+  def test_bare_paragraph_body_mints_p_ordinals
+    doc = parser.parse(BOETHIUS_PATH, urn: BOETHIUS_URN, language: "eng")
+
+    assert_equal (2..7).map { |n| "#{BOETHIUS_URN}:#{n}" }, doc.passages.map(&:urn)
+    assert_includes doc.passages[0].text, "whether Father"
+  end
+
+  # A P5 document without an edition div (the first1k commentary class) has a
+  # usable cRefPattern: the P4 fallback must DECLINE and re-raise the original
+  # error byte-identical — those quarantines are load-bearing reports (P9-1).
+  # (test_translation_div_is_not_accepted_by_default above pins the same
+  # decline on a real P5 translation file.)
+  def test_p4_fallback_declines_p5_documents_with_a_cref_pattern
+    error = assert_raises(Nabu::ParseError) do
+      parser.parse(HH13_ENG_PATH, urn: HH13_ENG_URN, language: "eng")
+    end
+
+    assert_equal "#{HH13_ENG_PATH}: no div[@type=\"edition\"] found", error.message
+  end
+
+  # Genuinely contradictory P4 citation labels stay quarantined precisely: the
+  # census found 8 such files (e.g. Cato's praefatio div labeled chapter n="1"
+  # colliding with the real chapter 1). String surgery on the Livy fixture
+  # reproduces the shape: a repeated section milestone n collides.
+  def test_p4_duplicate_citation_labels_still_quarantine_with_a_precise_message
+    xml = File.read(LIVY_PATH).sub('<milestone n="3" unit="section"/>',
+                                   '<milestone n="1" unit="section"/>')
+
+    with_tempfile(xml) do |path|
+      error = assert_raises(Nabu::ParseError) do
+        parser.parse(path, urn: LIVY_URN, language: "lat")
+      end
+
+      assert_includes error.message, File.basename(path)
+      assert_match(/no div\[@type=/, error.message)
+      assert_match(/P4 retry/, error.message)
+      assert_match(/duplicate passage urn/, error.message)
+    end
+  end
+
+  # A legacy file where every ladder rung comes up empty stays quarantined
+  # with a message naming both failures.
+  def test_p4_file_with_no_citable_structure_stays_quarantined
+    xml = File.read(BOETHIUS_PATH).gsub(%r{<p>.*?</p>}m, "").gsub(/<lb[^>]*>/, "")
+
+    with_tempfile(xml) do |path|
+      error = assert_raises(Nabu::ParseError) do
+        parser.parse(path, urn: BOETHIUS_URN, language: "eng")
+      end
+
+      assert_includes error.message, File.basename(path)
+      assert_match(/no div\[@type=/, error.message)
+      assert_match(/P4 retry/, error.message)
+      assert_match(/no citable passages/, error.message)
+    end
+  end
+
   # --- Streaming proof --------------------------------------------------------
 
   def test_implementation_streams_and_never_builds_a_full_document_dom

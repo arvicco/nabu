@@ -66,6 +66,30 @@ module Nabu
       def edition_slug_pattern
         /-grc(?<version>\d+[a-z]?)\z/
       end
+
+      # Which slugs count as ingestible English translations when
+      # `translations: true` (P9-1). First1KGreek's eng editions are NOT the
+      # uniform perseus-eng<n> the base class matches: the ~45 upstream eng
+      # files are dominantly 1st1K-eng<n>, with an opp-eng<n> and letter-suffixed
+      # versions (1st1K-eng1a/1b). So — exactly mirroring #edition_slug_pattern's
+      # family-agnostic shape — accept ANY `-eng<version>` tail; the leading
+      # family segment is free. The :version capture feeds the inherited
+      # highest-version-per-work selection (Perseus#version_key).
+      #
+      # KNOWN honest quarantine (owner-directed 2026-07-08, P9-1): tlg0527.tlg048
+      # ships three eng slugs — 1st1K-eng1 (the real translation, a
+      # div[@type="translation"]), 1st1K-eng1a (a div[@type="commentary"]
+      # subtype=notes) and 1st1K-eng1b (a div[@type="commentary"]
+      # subtype=appendix). version_key picks the highest (eng1b), whose
+      # commentary body matches neither "translation" nor "edition"
+      # (TRANSLATION_DIVISION_TYPES), so it yields zero passages and quarantines
+      # as a ParseError. That is the honest reflection of a mis-slugged upstream
+      # appendix — not folded in as if it were a translation. All other eng
+      # files anchor on div[@type="translation"]; no "edition"-typed eng file
+      # exists in the corpus (the base fallback stays inert here).
+      def translation_slug_pattern
+        /-#{TRANSLATION_LANGUAGE}(?<version>\d+[a-z]?)\z/
+      end
     end
   end
 end

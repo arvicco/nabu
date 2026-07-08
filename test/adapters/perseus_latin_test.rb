@@ -23,6 +23,10 @@ class PerseusLatinTest < Minitest::Test
   LATIN_WORKDIR = File.join(FIXTURES, "latinLit")
 
   AUSONIUS_URN = "urn:cts:latinLit:stoa0045.stoa013.perseus-lat2"
+  # P4-fallback fixtures (P9-2): legacy pre-P5 TEI, recovered by the parser's
+  # P4 ladder — lb-numbered verse and a milestone-cited Livy book.
+  DIRAE_CLASS_URN = "urn:cts:latinLit:phi0692.phi012.perseus-lat1"
+  LIVY_URN = "urn:cts:latinLit:phi0914.phi0011.perseus-lat3"
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -62,11 +66,13 @@ class PerseusLatinTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_the_stoa0045_edition_with_a_lat_language_ref
+  def test_discover_finds_the_lat_editions_with_lat_language_refs
     refs = Nabu::Adapters::PerseusLatin.new.discover(LATIN_WORKDIR).to_a
-    assert_equal [AUSONIUS_URN], refs.map(&:id)
+    # The eng fixtures (phi1351, stoa0058) are translations: skipped with the
+    # default flag. The two P4 lat fixtures are ordinary editions.
+    assert_equal [DIRAE_CLASS_URN, LIVY_URN, AUSONIUS_URN], refs.map(&:id).sort
 
-    ref = refs.fetch(0)
+    ref = refs.find { |r| r.id == AUSONIUS_URN }
     assert_equal "perseus-latin", ref.source_id
     assert_equal "lat", ref.metadata["language"]
     assert_equal "Genethliacon ad Ausonium Nepotem", ref.metadata["title"]
@@ -109,6 +115,19 @@ class PerseusLatinTest < Minitest::Test
     assert_equal "#{AUSONIUS_URN}:1", document.first.urn
     # Opening hexameter of the Genethliacon.
     assert_equal "carmina prima tibi eum iam puerilibus annis", document.first.text
+  end
+
+  # The P4 fallback through the full adapter path (P9-2): Livy's legacy
+  # book/chapter/section milestones mint, praefatio chapter included.
+  def test_parse_round_trips_the_p4_livy_fixture
+    adapter = Nabu::Adapters::PerseusLatin.new
+    ref = adapter.discover(LATIN_WORKDIR).find { |r| r.id == LIVY_URN }
+    document = adapter.parse(ref)
+    assert_equal LIVY_URN, document.urn
+    assert_equal "lat", document.language
+    assert_equal 30, document.size
+    assert_equal "#{LIVY_URN}:1.pr.1", document.first.urn
+    assert_includes document.first.text, "facturusne operae pretium sim"
   end
 
   # --- registry round-trip ------------------------------------------------

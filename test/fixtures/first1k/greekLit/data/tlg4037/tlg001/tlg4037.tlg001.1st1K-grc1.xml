@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+                        <teiHeader xml:lang="eng">
+                        <fileDesc>
+                                    <titleStmt>
+                                                <title xml:lang="lat">Peri Apiston</title>
+                                                <author xml:lang="lat">Anonymi Paradoxographi</author>
+                                                <editor>Nicola Festa</editor>
+                                                <sponsor>Center for Hellenic Studies</sponsor>
+                                                <respStmt>
+                                                            <resp>Published original versions of the electronic texts</resp>
+                                                            <orgName ref="https://www.opengreekandlatin.org">Open Greek and Latin</orgName>
+                                                            <persName role="principal">Gregory Crane</persName>
+                                                            <persName role="principal">Leonard Muellner</persName>
+                                                            <persName role="principal">Bruce Robertson</persName>
+                                                </respStmt>
+                                                <respStmt>
+                                                            <persName>Lia Hanhardt</persName>
+                                                            <orgName>Center for Hellenic Studies</orgName>
+                                                            <resp>Digital Editor</resp>
+                                                </respStmt>
+                                    </titleStmt>
+                                    <publicationStmt>
+                                                <authority>The Center for Hellenic Studies</authority>
+                                                <idno type="filename">tlg4037.tlg001.1st1K-grc1.xml</idno>
+                                                <availability>
+                                                            <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence>
+                                                </availability>
+                                    </publicationStmt>
+                                    <sourceDesc>
+                                                <biblStruct>
+                                                            <monogr>
+                                                                        <author xml:lang="lat">Anonymi Paradoxographi</author>
+                                                                        <title xml:lang="lat">Mythographi Graeci</title>
+                                                                        <editor>Nicola Festa</editor>
+                                                                        <imprint>
+                                                                                    <pubPlace>Leipzig</pubPlace>
+                                                                                    <publisher>Teubner</publisher>
+                                                                                    <date>1902</date>
+                                                                        </imprint>
+                                                                        <biblScope unit="volume">3.2</biblScope>
+                                                            </monogr>
+
+                                                            <ref target="https://archive.org/details/mythographigrae00heragoog/page/n61/mode/2up">The Internet Archive</ref>                                                
+                                                </biblStruct>
+                                    </sourceDesc>
+                        </fileDesc>
+                                    <encodingDesc>
+                                                <p>The following text is encoded in accordance with EpiDoc standards and with the CTS/CITE Architecture</p>
+                                                <refsDecl n="CTS">
+                                                            <cRefPattern matchPattern="(\w+)" n="section" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])">
+                                                                        <p>This pointer pattern extracts section.</p>
+                                                            </cRefPattern>
+                                                </refsDecl>
+                                                
+                                    </encodingDesc>
+                        <profileDesc>
+                                    <langUsage>
+                                                <language ident="grc">Greek</language>
+                                                <language ident="lat">Latin</language>
+                                                <language ident="eng">English</language>
+                                    </langUsage>
+                        </profileDesc>
+            </teiHeader>
+                        <text>
+                                    <body>
+                                                <div type="edition" xml:lang="grc" n="urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1">
+                                                <head xml:lang="lat">EXCERPTA VATICANA.(Vulgo Anonymus De incredibilibus)</head>
+                                                            <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1" n="1"> <p>Ἰστέον ὅτι ἀρχαιοτάτους ἀνθρώπων οἱ μὲν Αἰγυπτίους, οἱ δὲ Φρύγας φασίν, Ἑλλήνων δὲ ἀρχαιοτάτους Ἀθηναίους καὶ τοὺς πρὶν Πελασγούς, νῦν δὲ Ἀρκάδας, ἐν δὲ πόλεσι τήν τε Ἀθηναίων ἀκρόπολιν ὑπὸ Κέκροπος τοῦ αὐτόχθονος κτισθεῖσαν τοῦ διφυοῦς καὶ δευτέραν τὴν ὑπὸ Φορωνέως τοῦ Ἰνάχου [κτισθεῖσαν], τρίτην δὲ ‹τὴν› Ἴτωνος ἐν Θεσσαλίᾳ ὑπὸ Δευκαλίωνος τοῦ Προμηθέως.</p></div> 
+                                                            <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1" n="2"><head> Τὰ ἑπτὰ θεάματα.</head>
+                                                            <list rend="numbered">
+                                                             <item>ὁ ἐν Ὀλυμπίᾳ Ζεὺς πήχεων λϛʹ.</item>
+                                                             <item>ὁ τῆς Ἐφεσίας Ἀρτέμιδος ναός.</item>
+                                                              <item>ὁ ἐν Δήλῳ κεράτινος βωμός, ὃς λέγεται γενέσθαι ἐκ θυμάτων τοῦ θεοῦ μιᾶς ἡμέρας δεξιῶν κεράτων.</item>
+                                                                <item>τὸ Μαυσώλειον τὸ ἐν Ἁλικαρνασῷ.</item>
+                                                                <item>αἱ ἐν Αἰγύπτῳ πυραμίδες, ὧν ἡ μείζων πήχεις ἔχει υʹ.</item>
+                                                               <item>τὰ Βαβυλώνια τείχη.</item>
+                                                              <item>ὁ ἐν Ῥόδῳ κολοσσὸς πήχεων οʹ, ὃν ἐποίησε Χάρης ὁ Λίνδιος.</item>
+                                                             </list>
+ <p>Τινὲς δὲ τάττουσι καὶ τὸν ἐν Ἐπιδαύρῳ Ἀσκληπιὸν καὶ τὸν ἐν Παρίῳ βωμὸν καὶ τοὺς κρεμαστοὺς κήπους καὶ τὴν ἱσταμένην Ἀθηνᾶν ἐν Ἀθήναις καὶ τὰ Κύρου βασίλεια.</p></div> 
+                                                            
+                                                            <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1" n="3"><head>Περὶ τοῦ χρυσοῦ δέρους.</head> <p>Ὅτι τὸ ἐν Κόλχοις φυλασσόμενον οὐκ ἦν δέρας ἀληθῶς χρυσοῦν (τοῦτο γὰρ ποιητικευόμενόν ἐστιν), ἀλλὰ βιβλίον ἐν δέρμασι γεγραμμένον περιέχον ὅπως δεῖ γίνεσθαι διὰ χειμείας χρυσόν. εἰκότως οὖν οἱ τότε χρυσοῦν ὠνόμαζον αὐτὸ διὰ τὴν ἐξ αὐτοῦ ἐνέργειαν.</p></div>
+                                    </div>
+                                    </body> 
+                        </text>
+            </TEI>
