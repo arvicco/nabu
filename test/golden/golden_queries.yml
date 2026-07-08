@@ -108,3 +108,15 @@
     λεγ- stem, only through the gold token lemma. Proves the whole path:
     annotations_json extraction → per-language lemma fold → passage_lemmas
     lookup → catalog join.
+
+- lemma: "affero"
+  lang: lat
+  expect_urn: "urn:nabu:proiel:cic-off:86001"
+  note: >-
+    LEMMA SEARCH, LIVE-RESOLVABLE (P9-3). PROIEL-proper sentence ids match
+    between the cic-off fixture trim and the live corpus (unlike the UD
+    head50 fixture doc id above, which exists only in fixture corpora), so
+    THIS entry exercises the lemma path in live `nabu health` golden
+    replay, not just the suite. Cicero attests affero as the suppletive
+    perfect "attulimus" (ad+fero → attuli) — unreachable by any surface
+    query on the affer- stem.

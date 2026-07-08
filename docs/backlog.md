@@ -823,7 +823,7 @@ Acceptance: census table; exemplar parses with stable urns two-parse; all
       existing fixture urn+text goldens byte-identical; conformance green;
       suite + lint green; expected recovery counts reported.
 
-## P9-3 · Live-resolvable lemma golden  [tier: opus] [status: ready] [deps: —]
+## P9-3 · Live-resolvable lemma golden  [tier: opus] [status: done] [deps: —]
 Goal: the P7-5 lemma golden pins a fixture-only urn (trimmed doc id), so
       live health never exercises the lemma path. Add one golden whose
       expected urn exists in BOTH the fixture corpus and the live corpus
