@@ -778,3 +778,506 @@ Acceptance: Odyssey-shaped fixture (card-cited eng + line-cited grc):
       regression pin; eng-only suffix case; MCP show parallel payload
       carries coverage; CLI + query tests, help show example updated;
       suite + lint green.
+
+---
+
+## Phase 9 — Corpus breadth (branch: phase-9; elaborated 2026-07-08)
+
+*Owner direction: items 1–6 of the post-P8 plate as one phase. Three local
+packets, two new-corpus tracks (each: scout → owner-approved fixture plan →
+adapter, per dev-loop §8), one scouting survey. Network: scout packets may
+research (WebSearch/WebFetch) but fetch NOTHING bulk; fixture fetches happen
+only after the owner approves each plan; first real syncs owner-fired.*
+
+## P9-1 · First1K English translations  [tier: opus] [status: done] [deps: —]
+Goal: First1kGreek's repo carries ~45 English editions under the 1st1K-eng<n>
+      slug family; the P7-4 translation classifier keys on the perseus slug
+      shape, so `translations: true` would find nothing. Extend the subclass
+      (mirror how it already overrides edition_slug_pattern for its originals
+      — inspect first; the translation rule should be the same one-method
+      override shape), flip the registry flag, fixture from local canonical
+      (an eng sibling of an existing first1k fixture work if one exists on
+      disk — check; else the smallest real eng file + its grc sibling).
+      Frozen-urn: new docs only, flag-off byte-identical (standing standard).
+      Orchestrator runs the parse-only recovery at acceptance.
+Acceptance: eng editions discovered only with the flag; conformance green;
+      existing fixture URN lists unchanged; parallel render test over the new
+      fixture pair; suite + lint green.
+
+## P9-2 · Legacy P4-TEI parser support  [tier: fable] [status: done] [deps: —]
+Goal: 101 perseus-latin English editions (and census whatever else across
+      all sources shares the shape) quarantine as pre-P5 TEI: numbered
+      <div1/div2 type="poem|book|chapter"> containers instead of
+      div[@type="edition"|"translation"], typically no refsDecl-driven
+      citation. CENSUS FIRST (provenance journal, all sources, error-shape
+      classification — the P6-1 standard), then design the P4 acceptance
+      path in EpidocParser (or a sibling strategy it delegates to): citation
+      minting from the numbered-div hierarchy (div1/div2/... @n or @type
+      labels — inspect real files, never guess; milestones/cards may appear
+      inside), same NFC/folding discipline, same frozen-urn constraint
+      (clean-parsing docs byte-identical — provably unreached code for
+      them). Genuinely malformed files stay quarantined per class, reported.
+      Fixture: trim 1–2 exemplars from local canonical. Orchestrator runs
+      recovery resyncs at acceptance.
+Acceptance: census table; exemplar parses with stable urns two-parse; all
+      existing fixture urn+text goldens byte-identical; conformance green;
+      suite + lint green; expected recovery counts reported.
+
+## P9-3 · Live-resolvable lemma golden  [tier: opus] [status: done] [deps: —]
+Goal: the P7-5 lemma golden pins a fixture-only urn (trimmed doc id), so
+      live health never exercises the lemma path. Add one golden whose
+      expected urn exists in BOTH the fixture corpus and the live corpus
+      (a PROIEL-proper sentence urn — fixture doc ids match live ones there;
+      verify read-only), keeping the fixture-only one for suite coverage.
+Acceptance: golden suite green; live `nabu health` (orchestrator runs it)
+      shows the new golden found, not skipped; suite + lint green.
+
+## P9-4a · GRETIL scout + fixture plan  [tier: opus] [status: done] [deps: —]
+Goal: research GRETIL (Göttingen Register of Electronic Texts in Indian
+      Languages) for adapter feasibility: current corpus format (TEI P5
+      e-library? plain text legacy?), download mechanics (bulk? per-text?),
+      LICENSE (per-text? blanket? — record honestly; nc/research classes
+      exist for a reason), citation structure (what would passages key on —
+      GRETIL texts rarely carry CTS; a minted urn scheme sketch), overlap
+      with the UD Vedic treebank, corpus scale. Produce: docs/02-sources.md
+      row updated + a FIXTURE ACQUISITION PLAN (exact URLs, 2–3 small real
+      texts, trim intent, licenses) appended to this packet in the backlog
+      for OWNER APPROVAL. No bulk fetching; page-level WebFetch research is
+      fine.
+Acceptance: the plan is concrete enough to execute on approval; findings
+      honest about blockers (license or format may kill it — that is a
+      valid outcome).
+
+## Findings & fixture acquisition plan (P9-4a, 2026-07-08 — AWAITING OWNER APPROVAL)
+
+### Verdict
+
+**Viable, but as a new bespoke parser family, and as `nc` (not `open`).** GRETIL's
+current corpus is mass-converted **TEI P5 — but NOT EpiDoc/CapiTainS**: no
+`refsDecl`, no `cRefPattern`, no CTS URNs, so `EpidocParser` cannot be reused; a
+new small-but-real parser family is required (**opus**, per the acceptance note's
+"stretch toward a family" test). The license is the *good* surprise: every
+mass-converted TEI header carries a uniform **CC BY-NC-SA 4.0** notice, which maps
+cleanly to our existing `nc` class (the same class PROIEL/UD already live under) —
+**not** the feared `research_private`. The real cost is **addressability
+heterogeneity**, not licensing.
+
+### Evidence (cited)
+
+- **Format reality.** TEI P5, `xmlns=tei`, `<TEI>/<teiHeader>/<text><body>`, one
+  file per work. Sample headers/bodies inspected verbatim from the GitHub TEI
+  mirror `mmehner/gretil-corpus-tei@master` (= the same files served at
+  `gretil.sub.uni-goettingen.de/gretil/corpustei/`). Three addressability classes
+  found:
+  1. **Hand-crafted, fully addressable (minority).**
+     `sa_Rgveda-edAufrecht.xml`: `<div type="maṇḍala" n="1"><div type="sūkta"
+     n="001"><lg xml:id="RV_1.001.01"><l n="1.001.01a">…`. Vedic accents encoded
+     via `<orig>̱</orig>` inside `choice` (per the header's normalization decl).
+  2. **Mass-converted verse (the bulk).** `sa_brahmabindUpaniSad.xml`: flat
+     `<body>` of `<lg><l>…</l></lg>` with the verse number **inside the text** as
+     a marker `// BrbUp_1 //` — **no `@n`, no `@xml:id`, no div hierarchy**.
+     Addressable only by parsing the per-text `// Abbr_N //` marker (abbreviation
+     and depth vary per text; some are hierarchical like `RV_1,1.1`).
+  3. **Prose, non-addressable.** `sa_prajJApAramitAhRdayasUtra.xml`: flat sequence
+     of `<p>` with **no numbering of any kind**. Some texts even carry their
+     "REFERENCE SYSTEM" as a prose `<p>` (`sa_sAmavedasaMhitA.xml`).
+  Encoding: **IAST** romanization throughout (`<text xml:lang="sa-Latn">`), Unicode
+  NFC-friendly; the header documents an IAST normalization table. No Devanāgarī, no
+  legacy HK/CSX in the TEI layer (those were the pre-2016 legacy formats).
+- **Download mechanics.** Per-text files (`.xml` TEI + `.html` + `.txt`
+  transforms); site cumulative **`.zip` bundles per language**; **git bulk** via
+  the GitHub mirrors (`mmehner/gretil-corpus-tei` = TEI-only, ~784 XML / ~240 MB;
+  `INDOLOGY/GRETIL-mirror` = full site incl. legacy); **Zenodo DOI snapshots** for
+  citation/archival. Stable direct-file URLs on the site; the directory index
+  itself 403s to bots (individual files fetch fine). An adapter would clone the
+  TEI mirror — exactly the Perseus/UD git pattern.
+- **License, judged honestly.** Uniform in every TEI header:
+  `<licence target="…/by-nc-sa/4.0/">Distributed under a Creative Commons
+  Attribution-NonCommercial-ShareAlike 4.0 International License.</licence>`,
+  preceded by `<availability><p>This e-text was provided to GRETIL in good faith
+  that no copyright rights have been infringed. If anyone wishes to assert
+  copyright over this file, please contact the GRETIL management … The file will be
+  immediately removed pending resolution of the claim.</p>`. GRETIL is an
+  **aggregator, not the rights-holder** (data-entry credited "n.n."), so the CC
+  grant is GRETIL's, under a takedown disclaimer. → **`license_class: nc`.**
+  Practically: ingestable for the owner's local research, indexed/searchable,
+  **default-excluded from the MCP surface** (P8-1 excludes `research_private`/
+  `restricted`; `nc` is shareable-with-attribution-non-commercially but we still
+  never redistribute the corpus). The legacy pre-TEI holdings historically carried
+  restrictive per-contributor notices ("private study only"); those are **out of
+  scope** — we ingest the TEI corpus only, whose license is clean and uniform.
+- **Citation / URN sketch (no CTS upstream, so we mint).**
+  `urn:nabu:gretil:<text-slug>:<division-path>` where `<text-slug>` = the filename
+  stem sans `sa_` (e.g. `brahmabindUpaniSad`, `Rgveda-edAufrecht`). Division path
+  per class: (1) `div @n` join + `lg/@xml:id` or `l/@n` for the addressable
+  minority (`…:Rgveda-edAufrecht:1.001.01`); (2) the parsed `// Abbr_N //` marker
+  for mass-converted verse (`…:brahmabindUpaniSad:1`); (3) a synthetic sequence
+  index `p1, p2…` for non-addressable prose, **flagged in an annotation as
+  non-canonical addressing** so a future re-chunk is honest. Minting frozen once
+  used (standing rule).
+- **Overlap with UD Sanskrit-Vedic.** Complementary, not duplicative. UD Vedic =
+  **4,000 sentences / 27k words** *sampled* from RV, Atharvaveda(Śaunaka),
+  Maitrāyaṇīsaṃhitā, Aitareya- & Śatapatha-Brāhmaṇa, with gold lemma+morphology
+  (its README). GRETIL = the **full running texts** of those works (and hundreds
+  more), **no annotation**. Different layers, different granularity, disjoint URN
+  namespaces (`urn:nabu:ud:sanskrit-vedic:*` vs `urn:nabu:gretil:*`) — no dedup
+  needed; they enrich each other (readable full text ↔ annotated sample).
+- **Scale + effort.** TEI corpus ≈ **784 texts / ~240 MB** (Sanskrit-dominant;
+  Pali/Prakrit/Tibetan largely still legacy, not yet TEI). Adapter effort:
+  **new parser family, opus** — the marker-mining (per-text `// Abbr_N //`
+  extraction) plus three-shape addressability plus the `choice/orig/reg` accent
+  policy are genuinely new work, not an EpidocParser tweak. Sizing is closer to
+  DdbdpParser than to a First1K one-liner.
+
+### FIXTURE ACQUISITION PLAN (owner: approve / amend)
+
+Fetch **3 small real TEI texts** spanning the full addressability spectrum so the
+new parser family is tested against every shape it must survive. Primary source =
+the GRETIL site; the GitHub TEI mirror serves byte-identical copies and is the
+reproducible fetch used for verification.
+
+| # | Text | Site URL (primary) | Mirror URL (raw) | Size | Class | Trim intent |
+|---|------|--------------------|------------------|------|-------|-------------|
+| 1 | Brahmabindu Upaniṣad | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_brahmabindUpaniSad.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_brahmabindUpaniSad.xml` | 12,878 B | mass-converted **verse**, `// BrbUp_N //` markers | **whole** (complete short text, structurally intact) |
+| 2 | Prajñāpāramitā-hṛdaya-sūtra (Heart Sūtra) | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_prajJApAramitAhRdayasUtra.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_prajJApAramitAhRdayasUtra.xml` | 11,002 B | **prose**, flat `<p>`, **no addressing** | **whole** (complete short text) |
+| 3 | Ṛgveda-Saṁhitā (ed. Aufrecht) | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_Rgveda-edAufrecht.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Rgveda-edAufrecht.xml` | ~9 MB | hand-crafted **fully addressable** `div/lg[@xml:id]/l[@n]` + `orig` accents | **trim** to `teiHeader` + Maṇḍala 1, Sūktas 1–3 (`whole: false`; the adapter test asserts trimmed counts, à la UD) |
+
+License notice (identical, quoted once — applies to all three, verbatim from each
+`<availability>`):
+
+> This e-text was provided to GRETIL in good faith that no copyright rights have
+> been infringed. If anyone wishes to assert copyright over this file, please
+> contact the GRETIL management at gretil(at)sub(dot)uni-goettingen(dot)de. The
+> file will be immediately removed pending resolution of the claim.
+> Distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+> International License.
+
+→ recorded `license_class: nc` for the source; fixtures carry the same.
+
+**Target layout** (`test/fixtures/gretil/`):
+
+```
+test/fixtures/gretil/
+  README.md                 # retrieval date, URLs, CC BY-NC-SA 4.0 notice, trim procedure
+  manifest.yml              # P5-4 schema: per-file url, whole:, trim note; adapter_test asserts trimmed counts
+  sa_brahmabindUpaniSad.xml            # whole
+  sa_prajJApAramitAhRdayasUtra.xml     # whole
+  sa_Rgveda-edAufrecht-m1s1-3.xml      # trimmed: header + maṇḍala 1 sūkta 1–3
+```
+
+**README template note:** retrieval date; primary GRETIL URLs + mirror raw URLs;
+the verbatim CC BY-NC-SA 4.0 + good-faith/takedown notice above; per-file trim
+procedure (files 1–2 `whole: true`; file 3 trimmed to header + M1.S1–3, XML kept
+well-formed — close the truncated `div type="maṇḍala"`); a line stating GRETIL is
+an aggregator and the legacy non-TEI holdings are **out of scope**.
+
+**If the owner prefers not to ingest `nc` Sanskrit at all**, P9-4b can be dropped
+without loss to the classical/Slavic axes — GRETIL is breadth, not a blocker. But
+the scout's judgment is that it is worth it: clean uniform license, huge readable
+Sanskrit corpus, complements the existing UD/DCS annotation layers.
+
+## P9-4b · GRETIL adapter + parser family  [tier: opus] [status: done] [deps: P9-4a]
+FIXTURE PLAN OWNER-APPROVED 2026-07-08 ("proceed with 1-3"). Execute the
+P9-4a plan exactly (3 texts, site or byte-identical mirror URLs, nothing
+outside the list), then build: GretilParser (new family) handling the three
+addressability shapes — attribute-cited div/lg/l, in-text `// Abbr_N //`
+verse markers (mined per text), unaddressed prose (paragraph ordinals) —
+IAST text, NFC at the boundary, generic fold (san rules per conventions §9);
+Gretil adapter: per-text HTTP fetch of registered texts? NO — scope
+decision: canonical/gretil/ is populated by fetching the TEI corpus mirror
+via git (mmehner/gretil-corpus-tei — byte-identical, GitFetch-compatible,
+attic and all) — verify the mirror covers the corpus; if it does, fetch
+stays on the shared git path. Registry entry enabled:false, license nc,
+translations n/a. urn:nabu:gretil:<text-slug>:<division-or-marker path>.
+Conformance + fixtures per the approved plan; first real sync owner-fired.
+Acceptance: conformance green; three shapes parse with stable two-parse
+urns; README/manifest per plan; 02-sources GRETIL row → READY; suite+lint
+green.
+
+## P9-4c · GRETIL quarantine recovery  [tier: opus] [status: done] [deps: P9-4b]
+Defect packet (census-first: orchestrator census 2026-07-08 of the 118 files
+quarantined by the first real gretil sync — 663 loaded / 118 quarantined of
+781). Two classes, three fixes:
+
+1. **xml:id rung (~60 files)** — files like sa_RgvidhAna carry the citation
+   only in `xml:id`: `<lg xml:id="RgV_1.1.1">` (often `<l xml:id="RgV_1.1.1a">`
+   children); no `n=` attributes, no `//` markers, sometimes no divs at all.
+   Add a fourth addressability rung: derive citation from the lg-level (or
+   p-level) xml:id by stripping the leading `<Abbr>_` prefix, keeping the
+   dotted path (`RgV_1.1.1` → `1.1.1`). Line-level ids (`…1.1.1a`) are NOT
+   separate passages — the lg is the passage, same as the marker rung.
+   Casualties recovered include Rāmāyaṇa, Buddhacarita, Gītagovinda,
+   Kirātārjunīya, Paippalāda Saṃhitā.
+
+2. **Pipe-marker variant (~13 files)** — sa_bAdarAyaNa-brahmasUtra etc. use
+   `| BBs_1,1.1 |` (single-pipe delimiters, comma level separators) instead
+   of `// Abbr_N //`. Extend the in-text marker recognizer to accept the
+   single-pipe form; commas in the citation normalize to the same separator
+   the `//` rung already emits (keep whatever P9-4b chose — two-parse
+   stability is the contract, cross-file cosmetics are not).
+
+3. **Collision tolerance (45 files)** — parser currently hard-fails the
+   document on the first duplicate citation. Census: ~39 single-prefix
+   collisions = upstream numbering typos (sa_AnandabhaTTa-vallAlacarita runs
+   1.76→1.70→1.78; sa_bhAgavatapurANa has a decade of verses inside chapter
+   3.31 mislabeled 03.32.0xx) or legitimate repeats (sa_harSadeva-nAgAnanda:
+   Prakrit verse + Sanskrit chāyā both numbered Nā_1.19). Fix per ddbdp
+   precedent: on collision, disambiguate deterministically (second occurrence
+   gets a `:b2` suffix, third `:b3`, document order) — never quarantine, never
+   merge. 6 multi-prefix files (sa_Anandavardhana-dhvanyAloka DhvK_/DhvA_,
+   sa_IzvarakRSNa-sAMkhyakArikA-comm ISk_/SkMv_, sa_kuntaka-vakroktijIvita-comm,
+   sa_mAdhava-jaiminIyanyAyamAlAvistara, sa_nAgArjuna-pratItyasamutpAdahRdayavyAkhyAna,
+   plus dhvanyAloka-comm): when a file's markers carry ≥2 distinct prefixes,
+   the prefix joins the citation (`:DhvK.1.1` vs `:DhvA.1.1`) so kārikā and
+   commentary don't collide. Prefixes may contain non-ASCII (KūrmP_, Nā_).
+
+Fixtures: trimmed REAL slices from canonical/gretil/ (already on disk, no
+network): sa_RgvidhAna (xml:id rung), sa_bAdarAyaNa-brahmasUtra (pipe
+markers), sa_AnandabhaTTa-vallAlacarita (single-prefix collision),
+sa_Anandavardhana-dhvanyAloka-comm (multi-prefix). Note in fixture README
+these are cut from the local canonical clone (mmehner/gretil-corpus-tei),
+retrieval date 2026-07-08, license CC BY-NC-SA (nc) — same as P9-4b fixtures.
+
+FROZEN-URN GUARD (standing acceptance): the 663 clean docs must re-parse
+byte-identical — verify with a read-only two-parse census against the live
+catalog before/after (orchestrator will re-verify at review). Fixes 1–2 only
+touch previously-quarantined shapes; fix 3's multi-prefix rule fires only on
+files with ≥2 prefixes (all currently quarantined) — assert that in a test.
+Single-prefix collision suffixing must not alter non-colliding citations.
+
+Acceptance: conformance green for new fixtures; suite+lint green;
+`bin/nabu sync gretil --parse-only` quarantine count 118 → ~0 (orchestrator
+runs the live smoke); frozen-URN census clean; docs/02-sources.md GRETIL row
+notes the recovered classes.
+
+## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: done] [deps: —]
+Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
+      feasibility: JSON API vs ATF, project structure (oracc.museum.upenn
+      .edu projects — SAAo, RINAP, etc.), license (CC BY-SA 3.0 blanket?
+      verify per project), what a passage is (line? sentence? the
+      transliteration vs normalization vs translation layers — which do we
+      ingest as text; lemmatization is often PRESENT in ORACC JSON — note
+      the annotations opportunity), urn minting sketch (P-numbers/Q-numbers
+      are stable museum ids), corpus scale per project, which 1–2 projects
+      to start with. Produce: 02-sources row + FIXTURE ACQUISITION PLAN for
+      OWNER APPROVAL, as 4a.
+Acceptance: as 4a. This is the founding dream (Nabu's own tablets) — the
+      scout should also honestly size the parser-family effort (ATF/JSON =
+      new family, fable).
+
+## Findings & fixture acquisition plan (P9-5a, 2026-07-08 — AWAITING OWNER APPROVAL)
+
+### Verdict
+
+**Viable, and the cleanest new source since Perseus — a new bespoke parser family
+(fable, ~DdbdpParser-tier), license `open` (CC0, better than the CC BY-SA our table
+recorded).** ORACC's open data is **ORACC JSON**: each `corpusjson/<id>.json` is a
+nested `cdl` tree from which a transliteration line reconstructs mechanically, and
+**every word carries gold lemmatization** (`norm`/`cf`/`gw`/`sense`/`pos`) — the
+`annotations_json` lemma-search goldmine the packet hoped for. Two honest
+corrections to the optimistic brief: (1) **prose translations are NOT in the JSON**
+(they live only in the ATF `#tr.en:` source layer — aligned English is a future
+parallel-doc job, not v1); (2) delivery is a **per-project zip over HTTP, not git**,
+so ORACC is the **first adapter that can't reuse the git-clone `fetch`** — it needs
+a small new HTTP-zip fetch path. That second point, plus the non-IE language family
+and the founding-dream weight, is why I recommend P9-5b be **Phase 10's headline,
+not a tail packet in an already-rich Phase 9** (see "Phase shape" below).
+
+### Evidence (cited; all fetched 2026-07-08)
+
+- **Format reality — the cdl tree.** `https://oracc.museum.upenn.edu/json/rimanum.zip`
+  (2.9 MB) → `rimanum/corpusjson/P405432.json` inspected verbatim. Top keys:
+  `type` (`cdl`), `project`, `textid`, `license`, `license-url`, `cdl`. The `cdl`
+  value is a tree of three node kinds: **`c`** (chunk: `text` > `discourse`/`body` >
+  `sentence`, the sentence carrying a human `label` like `"o 1 - r 5"`), **`d`**
+  (discontinuity: `type:"object"` tablet, `type:"surface"` obverse/reverse with
+  `subtype`+`label`, `type:"line-start"` with `n` line-number + `label` like `"o 1"`),
+  **`l`** (lemma: one word). A transliteration line reconstructs by walking the tree
+  and concatenating each `l`-node's `f.form` between `line-start` d-nodes, tracking
+  the current `surface` — verified, e.g. obverse line 1 = `2(BARIG) ZI₃ US₂ a-na GEŠBUN`,
+  determinatives (`du-un-nu-um{ki}`, `{d}EN.ZU-še-mi`, `{iti}KIN.{d}INANNA`) and
+  subscript numerals (`ZI₃`, `E₂`, `U₄`) intact, NFC-clean.
+- **Lemmatization layer (the opportunity).** Every content `l`-node's `f` object
+  carries: `form` (transliteration), `norm` (normalization, e.g. `qēmu`, `Dunnum`),
+  `cf` (citation form / dictionary lemma, e.g. `awīlu`, `bītu`), `gw` + `sense`
+  (English guide word, e.g. `flour`, `man`, `house`), `pos`/`epos` (part of speech),
+  and a `gdl` grapheme-description array (sign readings, determinative/logogram roles,
+  per-grapheme `logolang`). This maps directly onto `Passage#annotations` and the
+  P7-5 lemma index — Akkadian/Sumerian lemma search for free.
+- **What a passage is.** The natural unit is the **line** (the `line-start` d-node,
+  with `label`/`n`) — clean, stable, matches how Assyriologists cite ("obv. 5"). The
+  `sentence` `c`-node is an alternative but its labels span ranges (`"o 1 - r 5"`) and
+  many are `implicit:"yes"`; **line is the right Passage grain**, sentence/clause
+  membership recorded in annotations if wanted. `Passage#text` = the **transliteration**
+  (the scholarly text, per conventions.md §4) reconstructed from `l.form` fragments;
+  `norm`/`cf`/`gw`/`pos` ride in `annotations`. Folding (flag for the adapter packet,
+  don't decide here): the generic fold strips IAST-style diacritics, which for Akkadian
+  norm would conflate ā/a, š→s, ṣ→s, ṭ→t (accepted, same tradeoff as Greek/Sanskrit);
+  but the **transliteration** carries structural punctuation (`{det}`, subscript
+  digits, `.`/`-` sign joins) that a search form should probably strip to bare sign
+  readings — a real new per-language rule (`akk`/`sux`), sketched here, decided in 5b.
+- **Translations — honest finding.** Scanned all **265 `saao/saa01` texts**
+  (`https://oracc.museum.upenn.edu/json/saao-saa01.zip`, 5.0 MB): node types
+  `{c, d, l}` only, **0 prose-translation nodes**. Running English exists in ORACC
+  (SAA is famous for it) but lives in the **ATF source** (`#tr.en:` lines) and the
+  rendered HTML, not the open-data JSON. So: word-glosses (`gw`) yes, aligned
+  sentence translations no — those are a future ATF-parse / parallel-document
+  enhancement (P7-4 shape), explicitly out of the v1 JSON adapter.
+- **URN sketch.** Ids are stable CDLI/ORACC museum numbers of two kinds, both seen:
+  **P-numbers** (physical artifacts — `rimanum`, `saao`) and **Q-numbers** (composite/
+  reconstructed texts — `rinap/rinap1` = 96 Q-texts, `etcsri` = 1456 Q-texts). Sketch:
+  `urn:nabu:oracc:<project>:<P/Q-number>:<line-label>` where `<project>` keeps the
+  subproject slash-path flattened (`saao-saa01`), and `<line-label>` = the `line-start`
+  `label` (`o.1`, `r.5`) — stable, human-legible, matches citation practice. Minting
+  frozen once used (standing rule).
+- **License — machine-readable, and a correction.** Both `metadata.json` AND every
+  `corpusjson/*.json` carry `"license"` + `"license-url"`. All **8 projects sampled**
+  (saao, rinap, etcsri, riao, dcclt, blms, ribo, rimanum) report verbatim
+  `"This data is released under the CC0 license"` +
+  `https://creativecommons.org/publicdomain/zero/1.0/` → **`license_class: open`**
+  (public domain). The ORACC website/docs footer still shows the 2014 blanket
+  *"Creative Commons Attribution Share-Alike license 3.0"* (which our 02-sources row
+  recorded, and a 2018 third-party mirror cited) — the current JSON build supersedes
+  it per-project with CC0. **The adapter reads the per-project `license` field and
+  maps it (CC0→open, CC BY-SA→attribution); it never hardcodes** — future projects may
+  differ.
+- **Network mechanics.** Per-project **zip over HTTP**:
+  `https://oracc.museum.upenn.edu/json/<project>.zip` (subprojects hyphenated,
+  e.g. `saao-saa01.zip`), served `application/zip` with `Last-Modified` (change
+  detection without full re-download). **No git repo** holds the data
+  (`oracc/publicdata` empty/2016, `oracc/json` 404). So `fetch` is a **new
+  HTTP-download-and-unzip path**, not `Nabu::GitFetch` — the one genuinely new
+  plumbing piece (the attic/retention contract still applies to the unpacked files).
+  Sub-project discovery via `https://oracc.museum.upenn.edu/projects.json` (144 public
+  entries). `.atf` per-text endpoints 404 individually; ATF (translations) would be a
+  separate source acquisition — deferred.
+- **Effort sizing.** **New parser family, fable** (the packet's tag stands). The cdl
+  tree walk is *simpler* than DDbDP's Leiden XML mixed-content, but the decision
+  density is comparable: translit line reconstruction + surface/line tracking,
+  P-vs-Q urn policy, the `akk-x-oldbab`/`sux` language question (Sumerian logograms
+  appear *inside* Akkadian words via `gdl.logolang` — per-word lang in annotations,
+  per-text primary lang for `Passage#language`; note `akk-x-oldbab` is valid BCP-47
+  private-use, maps to base `akk`), the annotations schema, and the new translit
+  folding rule. Plus the **new HTTP-zip fetcher** (small, but net-new). Sizing ≈
+  DdbdpParser, not a First1K one-liner.
+
+### FIXTURE ACQUISITION PLAN (owner: approve / amend)
+
+Fetch **two mini-slices from two projects** so the new family is tested against both
+id-schemes (P/Q), both languages (Akkadian/Sumerian), and the full node vocabulary.
+The fetch unit is the whole project zip (small); each fixture is an **extract** from
+it — corpusjson text files kept **whole** (a cdl tree is atomic; trimming breaks the
+JSON and the sentence/lemma structure), `metadata.json` kept **whole** (the adapter
+reads its license + config), `catalogue.json` **trimmed** to the fixtured ids only
+(it lists every project text; keep just the entries the adapter needs for titles).
+
+**Slice A — `rimanum` (Akkadian, P-numbers, CC0)** — zip:
+`https://oracc.museum.upenn.edu/json/rimanum.zip` (2.9 MB):
+
+| Extract | Size | whole? | Note |
+|---|---|---|---|
+| `rimanum/metadata.json` | ~27 KB | whole | license (`CC0`) + project name/config; adapter reads license here |
+| `rimanum/catalogue.json` | 376 KB → few KB | trimmed | keep only the 3 fixtured P-numbers' catalog entries (designation/period/provenience → doc titles) |
+| `rimanum/corpusjson/P405432.json` | 59 KB | whole | the rich exemplar: obverse+reverse surfaces, 25 lemmas, determinatives, subscripts, full `norm`/`cf`/`gw` |
+| `rimanum/corpusjson/P405134.json` | 25 KB | whole | a shorter second Akkadian text |
+| `rimanum/corpusjson/P405254.json` | 0 B | whole | **empty** (catalog-only, no transliteration) — the no-content case the parser must skip/quarantine honestly |
+
+**Slice B — `etcsri` (Sumerian, Q-numbers, CC0)** — zip:
+`https://oracc.museum.upenn.edu/json/etcsri.zip` (12.9 MB):
+
+| Extract | Size | whole? | Note |
+|---|---|---|---|
+| `etcsri/metadata.json` | ~30 KB | whole | license (`CC0`) + config |
+| `etcsri/catalogue.json` | large → few KB | trimmed | keep only the 2 fixtured Q-numbers' entries |
+| `etcsri/corpusjson/Q004151.json` | ~15 KB | whole | Sumerian royal inscription (Amar-Suen), `lang:"sux"`, lemmatized (`cf`/`gw`) — the Q-number + Sumerian case |
+| `etcsri/corpusjson/<one more small Q>.json` | ≤30 KB | whole | second Sumerian text (pick the next smallest non-empty Q at fetch time) |
+
+Total fixture footprint well under **500 KB**. License notice (identical, machine-read,
+quoted once — applies to every file, verbatim from each `metadata.json`/corpusjson):
+
+> This data is released under the CC0 license
+> (https://creativecommons.org/publicdomain/zero/1.0/)
+
+→ recorded `license_class: open` for the source; the adapter reads it per-project.
+
+**Target layout** (`test/fixtures/oracc/`):
+
+```
+test/fixtures/oracc/
+  README.md                 # retrieval date, project-zip URLs, CC0 notice, per-file extract/trim procedure, "translations live in ATF not JSON" note
+  manifest.yml              # P5-4 schema: per-file url (the project zip), whole:, trim note; adapter_test asserts reconstructed line/lemma counts
+  rimanum/
+    metadata.json                     # whole
+    catalogue.json                    # trimmed to the 3 fixtured P-numbers
+    corpusjson/P405432.json           # whole (rich Akkadian)
+    corpusjson/P405134.json           # whole (short Akkadian)
+    corpusjson/P405254.json           # whole (empty / no-content case)
+  etcsri/
+    metadata.json                     # whole
+    catalogue.json                    # trimmed to the 2 fixtured Q-numbers
+    corpusjson/Q004151.json           # whole (Sumerian, Q-number)
+    corpusjson/<Q…>.json              # whole (second Sumerian)
+```
+
+**README template note:** retrieval date; the two project-zip URLs; the verbatim CC0
+notice above; per-file extract procedure (corpusjson + metadata whole, catalogue
+trimmed to fixtured ids only, JSON kept well-formed); the explicit honest notes that
+(a) **prose translations are not in the JSON** (ATF-only, deferred) and (b) the fetch
+is an **HTTP zip**, not a git clone.
+
+**Phase shape (my recommendation).** Keep this scout (P9-5a) in Phase 9; make **P9-5b
+the Phase 10 headline, not a Phase 9 tail packet.** Rationale: 5b carries *two*
+net-new mechanics at once — the bespoke JSON `cdl` parser family **and** the first
+non-git (HTTP-zip) `fetch` path — over a non-IE language family, and it is the
+founding dream (the system is named for Nabu). Phase 9 is already rich (P9-1/2/3
+done, GRETIL adapter P9-4b, Slavic survey P9-6); cramming the largest remaining
+packet into its tail underserves it. Phase 10 headline = ORACC adapter (P9-5b) +
+the top pick(s) from the P9-6 Slavic survey. **If instead the owner wants ORACC in
+Phase 9**, it is fully unblockable on fixture approval — the format is clean and the
+plan above is execution-ready.
+
+## P9-5b · ORACC adapter + parser family  [tier: fable] [status: deferred: Phase 10 headline (owner 2026-07-08)] [deps: P9-5a]
+FIXTURE PLAN OWNER-APPROVED 2026-07-08 (no re-ask needed in Phase 10).
+Carries two net-new mechanics: the JSON cdl parser family and the first
+non-git HTTP-zip fetch path (+ translit folding rules for akk/sux).
+Elaborated fully at the Phase 9 gate as Phase 10's headline.
+
+## P9-6 · Slavic sources survey  [tier: opus] [status: done] [deps: —]
+Goal: scouting survey for the owner's Slavic research axis beyond
+      TOROT/PROIEL: what OCS / Old East Slavic / Church Slavonic corpora
+      are digitized, licensed, and machine-readable (candidates to assess:
+      Codex Suprasliensis digital editions, the Ruthenian/RNC historical
+      corpora access model, Obdurodon/Slavonic projects, manuscript
+      libraries with transcriptions, SEENET/eSlavistik e-editions —
+      research broadly, judge licensing honestly incl. "viewable but not
+      redistributable" traps). Produce docs/slavic-survey.md: per-candidate
+      format/license/scale/citation-scheme/effort estimate + a ranked
+      recommendation of at most two for Phase 10. No fetching beyond
+      research pages.
+Acceptance: survey doc complete and honest; 02-sources.md gains candidate
+      rows marked SURVEYED.
+
+### Findings (P9-6, 2026-07-08 — survey delivered, docs/slavic-survey.md)
+
+RANKED ≤2 FOR PHASE 10: **#1 UD Slavic treebank expansion** (add
+`old-east-slavic-birchbark` + `old-east-slavic-rnc` to the `ud` adapter's
+`TREEBANKS` map — both `CC BY-SA 4.0` CoNLL-U, genuinely-new vernacular OES
+birchbark letters 1025–1500 + Middle Russian 1300–1700, absent from TOROT/PROIEL;
+**zero new parser family**, reuses ConlluParser + UD plumbing; `attribution` =
+MCP-safe; deliberately EXCLUDE the chu-PROIEL/orv-TOROT UD conversions that would
+double-load the native sync). **#2 CCMH** (7 canonical OCS texts, transliteration
++ simple XML, openly downloadable from Kielipankki/CLARIN `Open`; real gain =
+Codex Assemanianus + Savvina kniga, absent from current holdings; needs a small
+new bespoke family; adapter reads the exact CC at ingestion). Honorable mention:
+**obdurodon Codex Suprasliensis** critical edition (richest single OCS ms +
+parallel Greek, but `CC BY-NC-SA 3.0` = `nc`/MCP-excluded, and per-text website
+crawl, and overlaps TOROT's Suprasliensis as a fuller alt-edition).
+NOT-INGESTABLE (SURVEYED-BLOCKED, unblock paths in the survey): TITUS (custom
+scholarly-only/non-commercial terms, no redistribution, legacy encodings →
+`research_private`); RNC full historical corpora (query-only, "cannot be
+distributed" — its `CC BY-SA 4.0` UD releases ARE pick #1); "Манускриптъ"
+manuscripts.ru (retrieval system, no export — write for a grant); Sreznevsky
+Materialy (page scans only, no machine-readable TEI); SEENET/eSlavistik (no
+distinct open corpus located). Phase-10 shape: ORACC stays headline (P9-5b),
+pick #1 rides alongside as the smallest-possible companion packet, pick #2 as the
+follow-on scout→plan→adapter track.

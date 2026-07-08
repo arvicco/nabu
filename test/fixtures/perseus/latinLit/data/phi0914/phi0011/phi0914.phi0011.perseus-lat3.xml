@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Ab urbe condita, books 1-5 - 1</title>
+                
+                <author n="Liv.">Titus Livius (Livy)</author>
+                <sponsor>Perseus Project, Tufts University</sponsor>
+                <principal>Gregory Crane</principal>
+                <respStmt>
+                    <resp>Prepared under the supervision of</resp>
+                    <name>Bridget Almas</name>  
+                    <name>Lisa Cerrato</name>
+                    <name>William Merrill</name>
+                    <name>David Mimno</name>
+                    <name>Rashmi Singhal</name>
+                    <name>David Smith</name>
+                </respStmt>
+                <funder n="org:NEH">The National Endowment for the Humanities</funder>
+            </titleStmt>
+            <extent/>
+            <publicationStmt>
+                <publisher>Trustees of Tufts University</publisher>
+                <pubPlace>Medford, MA</pubPlace>
+                <authority>Perseus Project</authority>
+                <date type="release">1997-10-28</date>
+            </publicationStmt>
+            <sourceDesc default="false">
+                <listBibl default="false">
+                    <biblStruct default="false">
+                        <monogr>
+                            <author>Livy</author>
+                            <title>Ab urbe condita</title>
+                            <editor>Robert Seymour Conway</editor>
+                            <editor>Charles Flamstead Walters</editor>
+                            <imprint>
+                                <pubPlace>Oxford</pubPlace>
+                                <publisher>Oxford University Press</publisher>
+                                <date>1914</date>
+                            </imprint>
+                            <biblScope type="volume">1</biblScope>
+                        </monogr>
+                    </biblStruct>
+                </listBibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <refsDecl>
+                <refState unit="book" delim="."/>
+                <refState unit="chapter" delim="."/>
+                <refState unit="section"/>
+            </refsDecl>
+        </encodingDesc>
+        <profileDesc>
+            <langUsage default="false">
+                <language ident="la">Latin </language>
+                <language ident="en">English </language>
+            </langUsage>
+        </profileDesc>
+        <revisionDesc>
+            <!--
+            <change>
+                <date>10/6/97</date>
+                <respStmt>
+                    <name>David Smith</name>
+                    <resp>ed.</resp>
+                </respStmt>
+                <item>
+                    $Log: livy.oct01-05.xml,v $
+Revision 1.1  2011-01-16 01:35:25  gcrane
+alternate editions
+
+Revision 1.1  2009/12/01 18:17:53  rsingh04
+moved more xml files around based on copyright status
+
+Revision 1.6  2009/05/18 12:45:40  gcrane
+A script went through using Roman praenomina to find likely Personal Names and then tagged these using the TEI P4 tags. Praenomina are foreNames, nomina are surnames and cognomina are addNames. Lucii filius etc. is a genName.
+
+The automated results were quickly scanned and only the most obvious errors corrected.
+
+Revision 1.5  2008/11/14 22:05:57  lcerrato
+fixing author names for consistent sorting
+
+Revision 1.4  2008/11/14 20:52:41  rsingh04
+updated titles
+
+Revision 1.3  2007/01/03 20:07:30  packel
+removed useless book:chapter scheme
+
+Revision 1.2  2006/10/04 13:29:26  gcrane
+small mods
+
+Revision 1.1  2006/10/01 14:15:28  gcrane
+renamed version of livy.oct1-5.xml
+
+Revision 1.4  2006/09/29 19:53:11  packel
+fixes
+
+Revision 1.3  2006/08/31 23:52:48  gcrane
+corrections added
+
+Revision 1.2  2006/07/28 18:02:23  gcrane
+smal fixes
+
+Revision 1.1  2006/07/28 12:00:37  gcrane
+this now contains (1) only the books in liyv oct1 and (2) page numbers to an image book version
+
+Revision 1.5  2006/07/25 13:05:22  gcrane
+The sections have been checked and regularized across editions
+
+Revision 1.4  2006/07/24 01:16:24  gcrane
+small fixes
+
+Revision 1.3  2006/07/13 15:38:45  gcrane
+a few errors fixed
+
+Revision 1.2  2005/08/01 16:16:32  packel
+removed stray item tags
+
+	Revision 1.1  2005/07/25 14:55:34  packel
+	Converted to XML
+	
+Revision 1.6  2003/07/01 22:17:13  yorkc
+Updated texts to TEI P4 and Perseus P4 extensions; minor cleanup (esp. character encodings and typos.)
+
+Revision 1.5  2001/10/01 19:39:49  amahoney
+fix milestone break in middle of word
+
+Revision 1.4  2000/03/04 20:34:48  dasmith
+Added separate funder entity to TEI header.
+
+Revision 1.3  1999/08/04 20:07:33  textgod
+Canonicalized Latin id.
+
+Revision 1.2  1997/10/24 22:05:08  textgod
+Fixed %^&amp;*$* praenomen section breaks.
+
+Revision 1.1  1997/10/06 23:04:12  textgod
+Added to repository. Passed SGML parse.
+                </item>
+            </change>
+        -->
+            <change when="2014-10-09" who="Stella Dee">edited markup</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:lang="la">
+        <body>
+            <div part="N" sample="complete" org="uniform" n="1" type="book">
+                <milestone n="pr" unit="chapter"/>
+                <milestone n="1" unit="section"/>
+                <pb n="p.1001"/>
+                <p> facturusne operae pretium sim si a primordio urbis res populi Romani
+                    perscripserim nec satis scio nec, si sciam, dicere ausim, <milestone n="2"
+                        unit="section"/> quippe qui cum ueterem tum uolgatam esse rem uideam, dum
+                    noui semper scriptores aut in rebus certius aliquid allaturos se aut scribendi
+                    arte rudem uetustatem superaturos credunt. <milestone n="3" unit="section"/>
+                    <pb n="qui nomini off" xml:id="p.1002"/> utcumque erit, iuuabit tamen rerum
+                    gestarum memoriae principis terrarum populi pro uirili parte et ipsum
+                    consuluisse; et si in tanta scriptorum turba mea fama in obscuro sit, nobilitate
+                    ac magnitudine eorum me qui nomini officient meo consoler. <milestone n="4"
+                        unit="section"/> res est praeterea et immensi operis, ut quae supra
+                    septingentesimum annum repetatur et quae ab exiguis profecta initiis eo creuerit
+                    ut iam magnitudine laboret sua; et legentium plerisque haud dubito quin primae
+                    origines proximaque originibus minus praebitura uoluptatis sint, festinantibus
+                    ad haec noua quibus iam pridem praeualentis populi uires se ipsae conficiunt:
+                        <milestone n="5" unit="section"/> ego contra hoc quoque laboris praemium
+                    petam, ut me a conspectu malorum quae nostra tot per annos uidit aetas,
+                    tantisper certe dum prisca [tota] illa mente repeto, auertam, omnis expers curae
+                    quae scribentis animum, etsi non flectere a uero, sollicitum tamen efficere
+                    posset. <milestone n="6" unit="section"/> quae ante conditam condendamue urbem
+                    poeticis magis decora fabulis quam incorruptis rerum gestarum monumentis
+                    traduntur, ea nec adfirmare nec refellere in animo est. <milestone n="7"
+                        unit="section"/> datur haec uenia antiquitati ut miscendo humana diuinis
+                    primordia urbium augustiora faciat; et si cui populo licere oportet consecrare
+                    origines suas et ad deos referre auctores, ea belli gloria est populo Romano ut
+                    cum suum conditorisque sui parentem Martem potissimum ferat, tam et hoc gentes
+                    humanae patiantur aequo animo quam imperium patiuntur. <milestone n="8"
+                        unit="section"/> sed haec et his similia utcumque animaduersa aut existimata
+                    erunt haud in magno equidem ponam discrimine: <milestone n="9" unit="section"/>
+                    <pb n="mores sequatur" xml:id="p.1003"/> ad illa mihi pro se quisque acriter
+                    intendat animum, quae uita, qui mores fuerint, per quos uiros quibusque artibus
+                    domi militiaeque et partum et auctum imperium sit; labente deinde paulatim
+                    disciplina uelut desidentes primo mores sequatur animo, deinde ut magis magisque
+                    lapsi sint, tum ire coeperint praecipites, donec ad haec tempora quibus nec
+                    uitia nostra nec remedia pati possumus peruentum est. <milestone n="10"
+                        unit="section"/> hoc illud est praecipue in cognitione rerum salubre ac
+                    frugiferum. omnis te exempli documenta in inlustri posita monumento intueri;
+                    inde tibi tuaeque rei publicae quod imitere capias, inde foedum inceptu foedum
+                    exitu quod uites. <milestone n="11" unit="section"/> ceterum aut me amor negotii
+                    suscepti fallit, aut nulla unquam res publica nec maior nec sanctior nec bonis
+                    exemplis ditior fuit, nec in quam [ciuitatem] tam serae auaritia luxuriaque
+                    immigrauerint, nec ubi tantus ac tam diu paupertati ac parsimoniae honos fuerit.
+                        <milestone n="12" unit="section"/> adeo quanto rerum minus, tanto minus
+                    cupiditatis erat: nuper diuitiae auaritiam et abundantes uoluptates desiderium
+                    per luxum atque libidinem pereundi perdendique omnia inuexere. sed querellae, ne
+                    tum quidem gratae futurae cum forsitan necessariae erunt, ab initio certe tantae
+                    ordiendae rei absint: <milestone n="13" unit="section"/> cum bonis potius
+                    ominibus uotisque et precationibus deorum dearumque, si, ut poetis, nobis quoque
+                    mos esset, libentius inciperemus, ut orsis tantum operis successus prosperos
+                    darent. <milestone n="1" unit="chapter"/>
+                    <milestone n="1" unit="section"/>
+                    <pb n="p.1004"/>
+                </p>
+                <p> iam primum omnium satis constat Troia capta in ceteros saeuitum esse Troianos,
+                    duobus, Aeneae Antenorique, et uetusti iure hospitii et quia pacis reddendaeque
+                    Helenae semper auctores fuerant, omne ius belli Achiuos abstinuisse; <milestone
+                        n="2" unit="section"/> casibus deinde uariis Antenorem cum multitudine
+                    Enetum, qui seditione ex Paphlagonia pulsi et sedes et ducem rege Pylaemene ad
+                    Troiam amisso quaerebant, uenisse in intimum maris Hadriatici sinum, <milestone
+                        n="3" unit="section"/> Euganeisque qui inter mare Alpesque incolebant pulsis
+                    Enetos Troianosque eas tenuisse terras. et in quem primo egressi sunt locum
+                    Troia uocatur pagoque inde Troiano nomen est: gens uniuersa Ueneti appellati.
+                        <milestone n="4" unit="section"/> Aeneam ab simili clade domo profugum sed
+                    ad maiora rerum initia ducentibus fatis, primo in Macedoniam uenisse, inde in
+                    Siciliam quaerentem sedes delatum, ab Sicilia classe ad Laurentem agrum
+                    tenuisse. <milestone n="5" unit="section"/>
+                    <pb n="ad arcendam ui" xml:id="p.1005"/> Troia et huic loco nomen est. ibi
+                    egressi Troiani, ut quibus ab immenso prope errore nihil praeter arma et naues
+                    superesset, cum praedam ex agris agerent, Latinus rex Aboriginesque qui tum ea
+                    tenebant loca ad arcendam uim aduenarum armati ex urbe atque agris concurrunt.
+                        <milestone n="6" unit="section"/> duplex inde fama est. alii proelio uictum
+                    Latinum pacem cum Aenea, deinde adfinitatem iunxisse tradunt: <milestone n="7"
+                        unit="section"/> alii, cum instructae acies constitissent, priusquam signa
+                    canerent processisse Latinum inter primores ducemque aduenarum euocasse ad
+                    conloquium; percontatum deinde qui mortales essent, unde aut quo casu profecti
+                    domo quidue quaerentes in agrum Laurentinum exissent, <milestone n="8"
+                        unit="section"/> postquam audierit multitudinem Troianos esse, ducem Aeneam
+                    filium Anchisae et Ueneris, cremata patria domo profugos, sedem condendaeque
+                    urbi locum quaerere, et nobilitatem admiratum gentis uirique et animum uel bello
+                    uel paci paratum, dextra data fidem futurae amicitiae sanxisse. <milestone n="9"
+                        unit="section"/> inde foedus ictum inter duces, inter exercitus salutationem
+                    factam. Aeneam apud Latinum fuisse in hospitio; ibi Latinum apud penates deos
+                    domesticum publico adiunxisse foedus filia Aeneae in matrimonium data.
+                        <milestone n="10" unit="section"/> ea res utique Troianis spem adfirmat
+                    tandem stabili certaque sede finiendi erroris. oppidum condunt; <milestone
+                        n="11" unit="section"/> Aeneas ab nomine uxoris Lauinium appellat. breui
+                    stirpis quoque uirilis ex nouo matrimonio fuit, cui Ascanium parentes dixere
+                    nomen. </p>
+                <p>
+                    <milestone n="2" unit="chapter"/>
+                    <milestone n="1" unit="section"/> bello deinde Aborigines Troianique simul
+                    petiti. Turnus rex Rutulorum, cui pacta Lauinia ante aduentum Aeneae fuerat,
+                    praelatum sibi aduenam aegre patiens simul Aeneae Latinoque bellum intulerat.
+                        <milestone n="2" unit="section"/> neutra acies laeta ex eo certamine abiit:
+                    uicti Rutuli: uictores Aborigines Troianique ducem Latinum amisere. <milestone
+                        n="3" unit="section"/>
+                    <pb n="eorum confugiu" xml:id="p.1006"/> inde Turnus Rutulique diffisi rebus ad
+                    florentes opes Etruscorum Mezentiumque regem eorum confugiunt, qui Caere
+                    opulento tum oppido imperitans, iam inde ab initio minime laetus nouae origine
+                    urbis et tum nimio plus quam satis tutum esset accolis rem Troianam crescere
+                    ratus, haud grauatim socia arma Rutulis iunxit. <milestone n="4" unit="section"
+                    /> Aeneas aduersus tanti belli terrorem ut animos Aboriginum sibi conciliaret
+                    nec sub eodem iure solum sed etiam nomine omnes essent, Latinos utramque gentem
+                    appellauit; <milestone n="5" unit="section"/> nec deinde Aborigines Troianis
+                    studio ac fide erga regem Aeneam cessere. fretusque his animis coalescentium in
+                    dies magis duorum populorum Aeneas, quamquam tanta opibus Etruria erat ut iam
+                    non terras solum sed mare etiam per totam Italiae longitudinem ab Alpibus ad
+                    fretum Siculum fama nominis sui implesset, tamen cum moenibus bellum propulsare
+                    posset in aciem copias eduxit. <milestone n="6" unit="section"/> secundum inde
+                    proelium Latinis, Aeneae etiam ultimum operum mortalium fuit. situs est,
+                    quemcumque eum dici ius fasque est super Numicum flumen: Iouem indigetem
+                    appellant. </p>
+            </div>
+        </body>
+    </text>
+</TEI>

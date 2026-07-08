@@ -63,3 +63,43 @@ files:
     url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2959/tlg008/tlg2959.tlg008.opp-grc1.xml
     whole: true
     trim: none (De Martyribus — opp-grc1 edition slug, kept whole)
+  # P9-1 (translations, owner-directed 2026-07-08): a parallel grc+eng pair —
+  # tlg4037.tlg001 (Anonymus, De Incredibilibus / Peri Apiston). The eng edition
+  # (1st1K-eng<n> slug family) is the smallest real English translation on disk
+  # (27 KB) whose grc sibling (1st1K-grc1) shares the exact section citation
+  # scheme, so both trim to matching sections 1–3 and align section-for-section
+  # (verse-style) for the parallel render test.
+  - path: greekLit/data/tlg4037/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg4037/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata, Anonymi Paradoxographi)
+  - path: greekLit/data/tlg4037/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg4037/tlg001/__cts__.xml
+    whole: true
+    trim: none (work metadata; carries both the grc ti:edition and eng ti:translation)
+  - path: greekLit/data/tlg4037/tlg001/tlg4037.tlg001.1st1K-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg4037/tlg001/tlg4037.tlg001.1st1K-grc1.xml
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed edition — a fresh whole-file GET would not byte-match, so it is
+      not refetchable (like the papyri-ddbdp local trims)
+    trim: >-
+      P9-1 parallel-pair original, trimmed from the local canonical snapshot
+      (canonical/first1k-greek/data/tlg4037/tlg001/, synced 2026-07-03): full
+      teiHeader + div[@type="edition"] kept; sections 1–3 kept, sections 4–23
+      removed. Aligns section-for-section with the eng sibling below.
+  - path: greekLit/data/tlg4037/tlg001/tlg4037.tlg001.1st1K-eng1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg4037/tlg001/tlg4037.tlg001.1st1K-eng1.xml
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed translation — a fresh whole-file GET would not byte-match, so it
+      is not refetchable (like the papyri-ddbdp local trims)
+    trim: >-
+      P9-1 parallel-pair translation, trimmed from the local canonical snapshot
+      (canonical/first1k-greek/data/tlg4037/tlg001/, synced 2026-07-03): full
+      teiHeader + div[@type="translation"] kept; sections 1–3 kept, sections
+      4–23 removed. Aligns section-for-section with the grc sibling above.

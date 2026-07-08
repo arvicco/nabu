@@ -124,6 +124,37 @@ files:
       none (2 John English translation, kept whole; copied from the local
       canonical snapshot, P7-4 — verse-for-verse aligned with the grc edition,
       13 verses each, exercising full citation-suffix pairing)
+  - path: latinLit/data/phi0692/phi012/phi0692.phi012.perseus-lat1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0692/phi012/phi0692.phi012.perseus-lat1.xml
+    whole: true
+    trim: >-
+      none (Appendix Vergiliana "De Institutione Viri Boni", kept whole; copied
+      from the local canonical snapshot, P9-2 — legacy TEI P4 verse with NO
+      divs and NO milestones, 26 numbered <lb/> marks: the P4 ladder's
+      lb-per-line rung)
+  - path: latinLit/data/phi0914/phi0011/phi0914.phi0011.perseus-lat3.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0914/phi0011/phi0914.phi0011.perseus-lat3.xml
+    whole: false
+    trim: >-
+      Livy, Ab Urbe Condita book 1 — the dominant P4 sub-shape exemplar
+      (P9-2): P5 namespace but a legacy refState-only refsDecl, one
+      div[@type="book" n="1"] container with milestone unit="chapter"/
+      "section" streams (praefatio chapter n="pr"). Trimmed from the local
+      canonical snapshot (canonical/perseus-latin/data/phi0914/phi0011/,
+      synced 2026-07-07): full teiHeader + book div kept; chapters pr, 1 and
+      2 kept whole (30 sections), chapters 3-60 removed.
+  - path: latinLit/data/phi1351/phi004/phi1351.phi004.perseus-eng1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi1351/phi004/phi1351.phi004.perseus-eng1.xml
+    whole: false
+    trim: >-
+      Tacitus, Histories (Church/Brodribb translation) — the true-TEI-P4
+      sub-shape exemplar (P9-2): TEI.2 DOCTYPE, unnamespaced, numbered
+      div1[@type="book"]/div2[@type="chapter"] containers, undefined ISO
+      entities (&aelig;) in passage text. Trimmed from the local canonical
+      snapshot (canonical/perseus-latin/data/phi1351/phi004/, synced
+      2026-07-07): full teiHeader kept; book 1 reduced to chapters 1-2, book
+      2 to chapters 1-2 (book boundary kept), chapters 3+ and books 3-5
+      removed.
   - path: latinLit/data/stoa0045/__cts__.xml
     url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/__cts__.xml
     whole: true
@@ -136,3 +167,11 @@ files:
     url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/stoa013/stoa0045.stoa013.perseus-lat2.xml
     whole: true
     trim: none (Ausonius Genethliacon — structural non-citeable div, kept whole)
+  - path: latinLit/data/stoa0058/stoa028/stoa0058.stoa028.perseus-eng1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0058/stoa028/stoa0058.stoa028.perseus-eng1.xml
+    whole: true
+    trim: >-
+      none (Boethius, "Whether Father, Son and Holy Spirit..." — Stewart/Rand
+      translation, kept whole; copied from the local canonical snapshot,
+      P9-2 — legacy TEI P4 with a bare <p> body, no citation apparatus at
+      all: the P4 ladder's p-ordinal rung)

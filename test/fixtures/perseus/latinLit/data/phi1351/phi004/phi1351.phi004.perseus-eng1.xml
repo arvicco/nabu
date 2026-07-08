@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!DOCTYPE TEI.2 PUBLIC "-//TEI P4//DTD Main DTD Driver File//EN" "http://www.tei-c.org/Guidelines/DTD/tei2.dtd"[
+<!ENTITY % TEI.XML "INCLUDE">
+<!ENTITY % PersProse PUBLIC "-//Perseus P4//DTD Perseus Prose//EN" "http://www.perseus.tufts.edu/DTD/1.0/PersProse.dtd">
+%PersProse;
+]>
+<TEI.2>
+<teiHeader type="text" status="new">
+<fileDesc>
+<titleStmt>
+<title>The History</title>
+<author>Cornelius Tacitus</author>
+ <editor role="translator">Alfred John Church</editor>
+ <editor role="translator">William Jackson Brodribb</editor>
+ <respStmt>
+  <resp>Prepared under the supervision of</resp>
+  <name>Lisa Cerrato</name>
+  <name>David Smith</name>
+ </respStmt>
+</titleStmt>
+<extent>about 645 K</extent>
+ <publicationStmt>
+  <publisher>Trustees of Tufts University</publisher>
+  <pubPlace>Medford, MA</pubPlace>
+  <authority>Perseus Project</authority>
+  <date type="release">2001-03-12</date>
+ </publicationStmt>
+<sourceDesc>
+<biblStruct>
+<monogr>
+<title>The History of Tacitus</title>
+<author>Tacitus</author>
+<editor role="translator">Alfred John Church</editor>
+<editor role="translator">William Jackson Brodribb</editor>
+<respStmt>
+<name>Sara Bryant</name>
+<resp>edited for Perseus</resp>
+</respStmt>
+ <imprint>
+  <pubPlace>London</pubPlace>
+  <publisher>MacMillan and Co.</publisher>
+  <date>1864</date>
+ </imprint>
+ <imprint>
+  <pubPlace>New York</pubPlace>
+  <publisher>Modern Library</publisher>
+  <date>1942 reprint</date>
+ </imprint>
+</monogr>
+ <ref target="https://hdl.handle.net/2027/uc1.c043994550">HathiTrust</ref>
+</biblStruct>
+</sourceDesc>
+</fileDesc>
+<encodingDesc>
+<refsDecl doctype="TEI.2">
+<state unit="book"/>
+<state n="chunk" unit="chapter"/>
+</refsDecl>
+</encodingDesc>
+<profileDesc>
+<langUsage>
+<language id="en">English</language>
+</langUsage>
+</profileDesc>
+</teiHeader>
+<text>
+<body>
+
+<div1 type="book" n="1">
+<head>BOOK 
+I</head>
+<head>JANUARY&mdash;MARCH, AD <date value="69">69</date></head>
+<div2 type="chapter" n="1"><p>I BEGIN my work with the time when Servius Galba was consul for 
+the second time with Titus Vinius for his colleague. Of the former period, 
+the 820 years dating from the founding of the city, many authors have 
+treated; and while they had to record the transactions of the Roman people, 
+they wrote with equal eloquence and freedom. After the conflict at <placeName key="perseus,Actium,Acarnania">Actium</placeName>, and when it became essential to peace, that all 
+power should be centered in one man, these great intellects passed away. 
+Then too the truthfulness of history was impaired in many ways; at first, 
+through men's ignorance of public affairs, which were now wholly strange to 
+them, then, through their passion for flattery, or, on the other hand, their 
+hatred of their masters. And so between the enmity of the one and the 
+servility of the other, neither had any regard for posterity. But while we 
+instinctively shrink from a writer's adulation, we lend a ready ear to 
+detraction and spite, because flattery involves the shameful imputation of 
+servility, whereas malignity wears the false appearance of honesty. I myself 
+knew nothing of Galba, of <persName>Otho</persName>, or of Vitellius, either from benefits or 
+from injuries. I would not deny that my elevation was begun by Vespasian, 
+augmented by Titus, and still further advanced by Domitian; but those who 
+profess inviolable truthfulness must speak of all without partiality and 
+without hatred. I have reserved as an employment for my old age, should my 
+life be long enough, a subject at once more fruitful and less anxious in the 
+reign of the Divine Nerva and the empire of Trajan, enjoying the rare 
+happiness 
+ 
+of times, when we may think what we please, and express what we think.</p></div2> 
+<div2 type="chapter" n="2"><p>I am entering on the history of a period rich in disasters, frightened in its wars, torn by civil strife, and even in peace full of horrors. Four emperors perished by the sword. There were three civil wars; there were more with foreign 
+enemies; there were often wars that had both characters at once. There was 
+success in the East, and disaster in the West. There were disturbances in 
+ <placeName key="tgn,7016683">Illyricum</placeName>; <placeName key="tgn,1000070">Gaul</placeName> wavered in 
+ its allegiance; <placeName key="tgn,7008653">Britain</placeName> was thoroughly subdued and 
+immediately abandoned; the tribes of the Suevi and the Sarmat&aelig; rose in 
+concert against us; the Dacians had the glory of inflicting as well as 
+suffering defeat; the armies of <placeName key="tgn,7016768">Parthia</placeName> were all but 
+ set in motion by the cheat of a counterfeit Nero. Now too <placeName key="tgn,1000080">Italy</placeName> was prostrated by disasters either entirely novel, 
+or that recurred only after a long succession of ages; cities in <placeName key="tgn,7003005">Campania</placeName>'s 
+richest plains were swallowed up and overwhelmed; <placeName key="perseus,Rome">Rome</placeName> was wasted by conflagrations, its oldest temples 
+consumed, and the Capitol itself fired by the hands of citizens. Sacred 
+rites were profaned; there was profligacy in the highest ranks; the sea was 
+crowded with exiles, and its rocks polluted with bloody deeds. In the 
+capital there were yet worse horrors. Nobility, wealth, the refusal or the 
+acceptance of office, were grounds for accusation, and virtue ensured 
+destruction. The rewards of the informers were no less odious than their 
+crimes; for while some seized on consulships and priestly offices, as their 
+share of the spoil, others on procuratorships, and posts of more 
+confidential authority, they robbed and ruined in every direction amid 
+universal hatred and terror. Slaves were bribed to turn against their 
+masters, and freedmen to betray their patrons; and those who had not an 
+enemy were destroyed by friends.</p></div2> 
+</div1>
+<div1 type="book" n="2">
+<head>BOOK 
+II</head>
+<head>MARCH&mdash;AUGUST, A.D. <date value="69">69</date></head> 
+<div2 type="chapter" n="1"><p>IN a distant part of the world fortune was now preparing the 
+origin and rise of a new dynasty, whose varied destinies brought happiness 
+or misery on the State, prosperity or destruction on the Princes of its 
+line. <persName>Titus</persName> Vespasian had been sent from <placeName key="tgn,7001407">Jud&aelig;a</placeName> 
+by his father while Galba still lived, and alleged as a reason for his 
+journey the homage due to the Emperor, and his age, which now qualified him 
+to compete for office. But the vulgar, ever eager to invent, had spread the 
+report that he was sent for to be adopted. The advanced years and childless 
+condition of the Emperor furnished matter for such gossip, and the country 
+never can refrain from naming many persons until one be chosen. The report 
+gained the more credit from the genius of Titus himself, equal as it was to 
+the most exalted fortune, from the mingled beauty and majesty of his 
+countenance, from the prosperous fortunes of Vespasian, from the prophetic 
+responses of oracles, and even from accidental occurrences which, in the 
+general disposition to belief, were accepted as omens. At <placeName key="perseus,Corinth">Corinth</placeName>, the capital of <placeName key="tgn,7002733">Achaia</placeName>, 
+he received positive information of the death of Galba, and found men who 
+spoke confidently of the revolt of Vitellius and of the fact of war. In the 
+anxiety of his mind, he sent for a few of his friends, and carefully 
+surveyed his position from both points of view. He considered that if he 
+should proceed to <placeName key="perseus,Rome">Rome</placeName>, he should get no thanks for 
+a civility intended for another, while his person would be a hostage in the 
+hands either of Vitellius or of <persName>Otho</persName>; that should he turn back, the 
+conqueror would certainly be offended, but with the issue of the struggle 
+still doubtful, and the father joining the party, the son would be excused; 
+on the other hand, if Vespasian should assume the direc-
+ 
+<note anchored="yes" place="marg">TITUS' MISSION TO <placeName key="perseus,Rome">ROME</placeName></note>
+tion of the 
+state, men who had to think of war would have to forget such causes of 
+offence.</p></div2> 
+<div2 type="chapter" n="2"><p>These and like thoughts made 
+him waver between hope and fear; but hope triumphed. Some supposed that he 
+retraced his steps for love of Queen Berenice, nor was his young heart 
+averse to her charms, but this affection occasioned no hindrance to action. 
+He passed, it is true, a youth enlivened by pleasure, and practised more 
+self-restraint in his own than in his father's reign. So, after coasting <placeName key="tgn,7002733">Achaia</placeName> and <placeName key="tgn,1000004">Asia</placeName>, leaving the 
+ land on his left, he made for the islands of <placeName key="tgn,7011266">Rhodes</placeName> 
+ and <placeName key="tgn,1000112">Cyprus</placeName>, and then by a bolder course for <placeName key="tgn,1000140">Syria</placeName>. Here he conceived a desire to visit and inspect 
+the temple of the Paphian Venus, a place of celebrity both among natives and 
+foreigners. It will not be a tedious digression to record briefly the origin 
+of the worship, the ceremonial of the temple, and the form under which the 
+goddess is adored, a form found in no other place.</p></div2> 
+</div1>
+</body></text></TEI.2>

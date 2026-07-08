@@ -30,6 +30,10 @@ manifest.yml.
 | `tlg0358/__cts__.xml` | — | textgroup metadata (Nicomachus; copied whole from the local canonical snapshot, P6-1) |
 | `tlg0358/tlg001/__cts__.xml` | — | work metadata (copied whole from the local canonical snapshot, P6-1) |
 | `tlg0358/tlg001/tlg0358.tlg001.1st1K-grc1.xml` | 12131 | *Introductio arithmetica* (**trimmed**, P6-1): structural-retry exemplar — refsDecl units `book`/`section` vs body `div[@subtype="chapter"]` (renamed label); recovered from the replacementPattern xpath. Trimmed 2026-07-04 from the local canonical snapshot (synced 2026-07-03): teiHeader whole, chapter 1 reduced to section 1, chapter 2 to section 1 (chapter boundary kept), chapter 3 and remaining sections removed |
+| `tlg4037/__cts__.xml` | — | textgroup metadata (Anonymi Paradoxographi; copied whole from the local canonical snapshot, P9-1) |
+| `tlg4037/tlg001/__cts__.xml` | — | work metadata — carries both the grc `ti:edition` and the eng `ti:translation` (copied whole, P9-1) |
+| `tlg4037/tlg001/tlg4037.tlg001.1st1K-grc1.xml` | — | *De Incredibilibus / Peri Apiston* original (**trimmed**, P9-1): `div[@type="edition"]`, citation unit `section`. Trimmed from the local canonical snapshot (synced 2026-07-03): teiHeader whole, sections 1–3 kept, 4–23 removed |
+| `tlg4037/tlg001/tlg4037.tlg001.1st1K-eng1.xml` | — | *De Incredibilibus* English translation (**trimmed**, P9-1): `div[@type="translation"]`, citation unit `section`. Same trim (sections 1–3), so it aligns section-for-section with the grc original above — the P9-1 parallel-render pair |
 
 The `tlg2959` set was **conditional** in the approved plan (fetch the edition only
 if both `__cts__.xml` probes returned 200). Both returned 200 on 2026-07-03, so all
@@ -49,3 +53,27 @@ three files were fetched.
 - Citation depth varies per work — trust the `refsDecl` `cRefPattern` units
   (`section` / `work` / `fragment` here), not div nesting.
 - All XML parses strict (Nokogiri) as fetched.
+
+## English translations (P9-1)
+
+- With `translations: true` (registry, owner-directed 2026-07-08) the adapter
+  also ingests the corpus's ~45 English editions. Their slug family is **not**
+  the perseus base's `perseus-eng<n>` — it is dominantly `1st1K-eng<n>`, with an
+  `opp-eng<n>` and letter-suffixed variants (`1st1K-eng1a`/`1b`). So
+  `First1kGreek#translation_slug_pattern` mirrors its family-agnostic original
+  rule and matches any `-eng<version>` tail.
+- All eng editions anchor on `div[@type="translation"]` (no `edition`-typed eng
+  file exists in the corpus). Of the 43 eng works a real `--parse-only` sync
+  discovers, 41 parse cleanly; two quarantine **honestly** (upstream oddities,
+  not adapter bugs):
+  - `tlg0527.tlg048` ships letter-suffixed `1st1K-eng1a`/`1b` slugs that are
+    `div[@type="commentary"]` (notes / appendix), not translations —
+    highest-version selection picks the appendix (`eng1b`) and it quarantines
+    (zero citable passages), rather than being folded in as a translation.
+  - `heb0001.heb010.1st1K-eng1` is a Hebrew-namespace work mis-filed in the
+    greekLit repo: its `div[@type="translation"]/@n` is `urn:cts:hebrewlit:…`,
+    so the inherited edition-urn cross-check rejects the greekLit urn discover
+    minted for it. A CTS-namespace mismatch, quarantined honestly.
+- `tlg4037/tlg001` is the checked-in parallel pair: the grc original and its eng
+  translation both cite at a single `section` level with identical `@n` values,
+  so the pair aligns **section-for-section** (verse-style, all 1:1 pairs).

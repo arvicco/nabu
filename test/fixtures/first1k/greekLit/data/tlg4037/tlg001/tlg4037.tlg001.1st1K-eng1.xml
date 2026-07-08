@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+                        <teiHeader xml:lang="eng">
+                                    <fileDesc>
+                                                <titleStmt>
+                                                            <title xml:lang="lat">Excerpta Vaticana</title>
+                                                            <author>Anonymous</author>
+                                                            <editor role="translator">Greta Hawes</editor>
+                                                            <funder/>
+                                                            <sponsor/>
+                                                            <respStmt>
+                                                                        <resp>Published original versions of the electronic texts</resp>
+                                                                        <orgName ref="https://www.opengreekandlatin.org">Open Greek and Latin</orgName>
+                                                                        <persName role="principal">Gregory Crane</persName>
+                                                                        <persName role="principal">Leonard Muellner</persName>
+                                                                        <persName role="principal">Bruce Robertson</persName>
+                                                            </respStmt>
+                                                            <respStmt>
+                                                                        <persName>Lia Hanhardt</persName>
+                                                                        <orgName>Center for Hellenic Studies</orgName>
+                                                                        <resp>Digital Editor</resp>
+                                                            </respStmt>
+                                                </titleStmt>
+                                                <publicationStmt> 
+                                                            <authority>Center for Hellenic Studies</authority>
+                                                            <authority>Canopos</authority>
+                                                            <idno type="filename">tlg4037.tlg001.1st1K-eng1</idno>
+                                                            <availability>
+                                                                        <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence>
+                                                                        <p>Reprinted under the author's reuse arrangements.</p>
+                                                            </availability>
+                                                </publicationStmt>
+                                                <sourceDesc>
+                                                            <biblStruct>
+                                                                        <monogr>
+                                                                                    <author>Greta Hawes</author>
+                                                                                    <title>Rationalizing Myth in Antiquity</title>
+                                                                                    <imprint>
+                                                                                                <pubPlace>Oxford</pubPlace>
+                                                                                                <publisher>Oxford University Press</publisher>
+                                                                                                <date>2014</date>
+                                                                                    </imprint>
+                                                                                    <biblScope unit="appendix">2</biblScope>
+                                                                        </monogr>
+                                                            </biblStruct>
+                                                </sourceDesc>
+                                    </fileDesc>
+                                    <encodingDesc>
+                                                <p>The following text is encoded in accordance with EpiDoc standards and with the CTS/CITE Architecture</p>
+                                                <refsDecl n="CTS">
+                                                            <cRefPattern matchPattern="(\w+)" n="section" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])"/>
+                                                </refsDecl>
+                                                <p>This pointer pattern extracts section.</p>
+                                    </encodingDesc>
+                                    <profileDesc>
+                                                <langUsage>
+                                                            <language ident="grc">Greek</language>
+                                                            <language ident="lat">Latin</language>
+                                                            <language ident="xgrc">Transliterated Greek</language>
+                                                            <language ident="eng">English</language>
+                                                </langUsage>
+                                    </profileDesc>
+                        </teiHeader>
+                        <text>
+                                    <body>
+                                                <div type="translation" xml:lang="eng" n="urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1">
+                                                            <head>Translation of Anonymous, Peri Apiston</head>
+                                                            <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1" n="1">
+                                                                        <p>One should know that some say that the Egyptians were the earliest people; others say the Phrygians, but that, of the Greeks, the oldest were the Athenians and the Pelasgians, who are now called Arcadians. Of the cities, they say that the Athenian Acropolis was founded by Cecrops, the dual-formed, autochthonous hero. The second oldest was the city founded by Phoroneus, son of Inachus, and third was Itonus in Thessaly, founded by Deucalion, son of Prometheus.</p></div>
+                                                            <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1" n="2">
+                                                                        <head>The seven wonders.</head> 
+                                                                        <list rend="numbered">
+                                                <item>The statue of Zeus at Olympia, 36 cubits tall.</item> 
+                                                <item>The temple of Artemis at Ephesus.</item>
+                                                <item>The altar of horn at Delos, said to have been created from the right horns of victims sacrificed to the god in a single day.</item> 
+                                                <item>The Mausoleum at Halicarnassus.</item>
+                                                <item>The pyramids of Egypt, of which the largest is 400 cubits tall.</item> 
+                                                <item>The walls of Babylon.</item>
+                                                <item>The Colossus of Rhodes, 70 cubits tall, which Chares of Lindus built.</item>
+                                                                        </list>
+                                                                        <p>Some include on this list also the Asclepion at Epidauros, the altar at Parion, the hanging gardens, the standing Athena statue in Athens, and the palace of Cyrus.</p></div>
+                                                                        <div type="textpart" subtype="section" xml:base="urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1" n="3">
+                                                                                    <head>The golden fleece.</head>
+                                                                                    <p>It is a poetic fabrication that the object guarded in Colchis was a truly golden fleece; it was a book written on leather containing instructions on how to produce gold through alchemy. And so, in all likelihood, the men of that time called it ‘golden’ because of the alchemical power it possessed.</p></div>
+                                                                        </div>
+                                    </body>
+                        </text>
+            </TEI>
