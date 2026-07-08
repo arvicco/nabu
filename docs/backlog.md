@@ -976,8 +976,23 @@ without loss to the classical/Slavic axes — GRETIL is breadth, not a blocker. 
 the scout's judgment is that it is worth it: clean uniform license, huge readable
 Sanskrit corpus, complements the existing UD/DCS annotation layers.
 
-## P9-4b · GRETIL adapter  [tier: fable-or-opus per 4a findings] [status: blocked: owner fixture-plan approval] [deps: P9-4a]
-Elaborated when 4a lands and the owner approves its plan.
+## P9-4b · GRETIL adapter + parser family  [tier: opus] [status: ready] [deps: P9-4a]
+FIXTURE PLAN OWNER-APPROVED 2026-07-08 ("proceed with 1-3"). Execute the
+P9-4a plan exactly (3 texts, site or byte-identical mirror URLs, nothing
+outside the list), then build: GretilParser (new family) handling the three
+addressability shapes — attribute-cited div/lg/l, in-text `// Abbr_N //`
+verse markers (mined per text), unaddressed prose (paragraph ordinals) —
+IAST text, NFC at the boundary, generic fold (san rules per conventions §9);
+Gretil adapter: per-text HTTP fetch of registered texts? NO — scope
+decision: canonical/gretil/ is populated by fetching the TEI corpus mirror
+via git (mmehner/gretil-corpus-tei — byte-identical, GitFetch-compatible,
+attic and all) — verify the mirror covers the corpus; if it does, fetch
+stays on the shared git path. Registry entry enabled:false, license nc,
+translations n/a. urn:nabu:gretil:<text-slug>:<division-or-marker path>.
+Conformance + fixtures per the approved plan; first real sync owner-fired.
+Acceptance: conformance green; three shapes parse with stable two-parse
+urns; README/manifest per plan; 02-sources GRETIL row → READY; suite+lint
+green.
 
 ## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: done] [deps: —]
 Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
@@ -1165,8 +1180,11 @@ the top pick(s) from the P9-6 Slavic survey. **If instead the owner wants ORACC 
 Phase 9**, it is fully unblockable on fixture approval — the format is clean and the
 plan above is execution-ready.
 
-## P9-5b · ORACC adapter + parser family  [tier: fable] [status: blocked: owner fixture-plan approval] [deps: P9-5a]
-Elaborated when 5a lands and the owner approves its plan.
+## P9-5b · ORACC adapter + parser family  [tier: fable] [status: deferred: Phase 10 headline (owner 2026-07-08)] [deps: P9-5a]
+FIXTURE PLAN OWNER-APPROVED 2026-07-08 (no re-ask needed in Phase 10).
+Carries two net-new mechanics: the JSON cdl parser family and the first
+non-git HTTP-zip fetch path (+ translit folding rules for akk/sux).
+Elaborated fully at the Phase 9 gate as Phase 10's headline.
 
 ## P9-6 · Slavic sources survey  [tier: opus] [status: ready] [deps: —]
 Goal: scouting survey for the owner's Slavic research axis beyond
