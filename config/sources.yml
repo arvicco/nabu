@@ -67,6 +67,16 @@ papyri-ddbdp:
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
   sync_policy: manual
 
+gretil:
+  adapter: Nabu::Adapters::Gretil
+  enabled: false   # P9-4b 2026-07-08: adapter + parser shipped; awaiting first
+                   # real sync (owner-fired). Mirror-scope verified: mmehner/
+                   # gretil-corpus-tei covers the full current TEI corpus (784
+                   # XML, byte-identical to the live site).
+  # nc Sanskrit TEI corpus (~784 texts / ~240 MB); a full clone is an owner
+  # decision, not a scheduled one — and the corpus has been stable since 2021.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
