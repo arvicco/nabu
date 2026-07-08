@@ -1,8 +1,10 @@
-# GRETIL fixtures (P9-4b)
+# GRETIL fixtures (P9-4b + P9-4c)
 
-Three real TEI P5 texts from GRETIL (Göttingen Register of Electronic Texts in
-Indian Languages), spanning the full addressability spectrum the `gretil`
-parser family must survive (P9-4a scout census). Retrieved **2026-07-08**.
+Seven real TEI P5 texts from GRETIL (Göttingen Register of Electronic Texts in
+Indian Languages): three shipped with the adapter (P9-4b, below) spanning the
+original addressability spectrum, plus four (P9-4c) that exercise the
+quarantine-recovery rung + collision handling (see the P9-4c section further
+down). Retrieved **2026-07-08**.
 
 ## Provenance — two byte-identical URL sets
 
@@ -55,7 +57,43 @@ fixture filename carries the trim suffix, its urn is a fixture urn
 (`urn:nabu:gretil:sa_Rgveda-edAufrecht-m1s1-3`); the real corpus file
 `sa_Rgveda-edAufrecht.xml` mints `urn:nabu:gretil:sa_Rgveda-edAufrecht`.
 
-## License (verbatim, identical in all three `<availability>` blocks)
+## P9-4c quarantine-recovery fixtures (4 more, cut from local canonical)
+
+The first GRETIL real sync (P9-4b) quarantined 118/781 files in two classes;
+P9-4c added a fourth addressability rung + collision tolerance to recover them.
+These four fixtures are trimmed REAL slices from the **same local canonical
+clone** (`mmehner/gretil-corpus-tei@master`), retrieved **2026-07-08**, same
+verbatim CC BY-NC-SA 4.0 notice as above (`license_class: nc`). Each keeps the
+actual quirk it exercises:
+
+4. **`sa_RgvidhAna-a1.xml`** — the **xml:id rung** (fix 1). Flat `<lg
+   xml:id="RgV_1.1.1">` with `<l xml:id="RgV_1.1.1a">` children, **no `@n`, no
+   in-text marker, no prose**: the lg IS the passage, citation = the id with
+   the `RgV_` prefix stripped (`1.1.1`). TRIM: teiHeader + upstream lines
+   308..350 (Adhyāya 1, 8 lg) + closing tags. Recovered via the second-pass
+   xml:id fallback (the primary rungs find nothing).
+5. **`sa_bAdarAyaNa-brahmasUtra.xml`** — the **single-pipe marker** variant
+   (fix 2). `<l>… | BBs_1,1.1 |</l>` (single-pipe delimiters, comma level
+   separators) instead of `// Abbr_N //`. `whole: true` (complete short sūtra
+   text, 545 sūtras → citations `1,1.1` … `4,4.22`). Recovered via the pipe
+   fallback pass (kept out of the primary pass so clean docs that merely
+   contain `| … |` reading text are untouched).
+6. **`sa_AnandabhaTTa-vallAlacarita-c1.xml`** — the **single-prefix collision**
+   (fix 3). The real upstream duplicate `// Valc_1.70 //` (two different verses
+   both numbered 1.70). TRIM: teiHeader + upstream lines 698..738 (verses
+   1.70–1.76 + the duplicate 1.70) wrapped in a `<div>`. The second 1.70 is
+   disambiguated to `1.70:b2` (document order); neighbours untouched.
+7. **`sa_Anandavardhana-dhvanyAloka-comm-u1.xml`** — the **multi-prefix**
+   interleave (fix 3). `// DhvK_1.1 //` (kārikā) and `// DhvA_1.1 //`
+   (commentary) collide on bare `1.1`; the prefix joins the citation
+   (`DhvK.1.1` vs `DhvA.1.1`). TRIM: teiHeader + the real DhvK_1.1 / DhvA_1.1 /
+   DhvK_1.2 lg (upstream lines 470–473, 1594–1598, 1857).
+
+All four carry a `-a1`/`-c1`/`-u1` trim suffix (or are whole, file 5) so the
+fixture urn is a fixture urn, never claiming the real corpus file's slug — the
+same convention as file 3.
+
+## License (verbatim, identical in all `<availability>` blocks)
 
 > This e-text was provided to GRETIL in good faith that no copyright rights have
 > been infringed. If anyone wishes to assert copyright over this file, please
