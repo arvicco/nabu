@@ -979,7 +979,7 @@ Sanskrit corpus, complements the existing UD/DCS annotation layers.
 ## P9-4b · GRETIL adapter  [tier: fable-or-opus per 4a findings] [status: blocked: owner fixture-plan approval] [deps: P9-4a]
 Elaborated when 4a lands and the owner approves its plan.
 
-## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: ready] [deps: —]
+## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: done] [deps: —]
 Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
       feasibility: JSON API vs ATF, project structure (oracc.museum.upenn
       .edu projects — SAAo, RINAP, etc.), license (CC BY-SA 3.0 blanket?
@@ -993,6 +993,177 @@ Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
 Acceptance: as 4a. This is the founding dream (Nabu's own tablets) — the
       scout should also honestly size the parser-family effort (ATF/JSON =
       new family, fable).
+
+## Findings & fixture acquisition plan (P9-5a, 2026-07-08 — AWAITING OWNER APPROVAL)
+
+### Verdict
+
+**Viable, and the cleanest new source since Perseus — a new bespoke parser family
+(fable, ~DdbdpParser-tier), license `open` (CC0, better than the CC BY-SA our table
+recorded).** ORACC's open data is **ORACC JSON**: each `corpusjson/<id>.json` is a
+nested `cdl` tree from which a transliteration line reconstructs mechanically, and
+**every word carries gold lemmatization** (`norm`/`cf`/`gw`/`sense`/`pos`) — the
+`annotations_json` lemma-search goldmine the packet hoped for. Two honest
+corrections to the optimistic brief: (1) **prose translations are NOT in the JSON**
+(they live only in the ATF `#tr.en:` source layer — aligned English is a future
+parallel-doc job, not v1); (2) delivery is a **per-project zip over HTTP, not git**,
+so ORACC is the **first adapter that can't reuse the git-clone `fetch`** — it needs
+a small new HTTP-zip fetch path. That second point, plus the non-IE language family
+and the founding-dream weight, is why I recommend P9-5b be **Phase 10's headline,
+not a tail packet in an already-rich Phase 9** (see "Phase shape" below).
+
+### Evidence (cited; all fetched 2026-07-08)
+
+- **Format reality — the cdl tree.** `https://oracc.museum.upenn.edu/json/rimanum.zip`
+  (2.9 MB) → `rimanum/corpusjson/P405432.json` inspected verbatim. Top keys:
+  `type` (`cdl`), `project`, `textid`, `license`, `license-url`, `cdl`. The `cdl`
+  value is a tree of three node kinds: **`c`** (chunk: `text` > `discourse`/`body` >
+  `sentence`, the sentence carrying a human `label` like `"o 1 - r 5"`), **`d`**
+  (discontinuity: `type:"object"` tablet, `type:"surface"` obverse/reverse with
+  `subtype`+`label`, `type:"line-start"` with `n` line-number + `label` like `"o 1"`),
+  **`l`** (lemma: one word). A transliteration line reconstructs by walking the tree
+  and concatenating each `l`-node's `f.form` between `line-start` d-nodes, tracking
+  the current `surface` — verified, e.g. obverse line 1 = `2(BARIG) ZI₃ US₂ a-na GEŠBUN`,
+  determinatives (`du-un-nu-um{ki}`, `{d}EN.ZU-še-mi`, `{iti}KIN.{d}INANNA`) and
+  subscript numerals (`ZI₃`, `E₂`, `U₄`) intact, NFC-clean.
+- **Lemmatization layer (the opportunity).** Every content `l`-node's `f` object
+  carries: `form` (transliteration), `norm` (normalization, e.g. `qēmu`, `Dunnum`),
+  `cf` (citation form / dictionary lemma, e.g. `awīlu`, `bītu`), `gw` + `sense`
+  (English guide word, e.g. `flour`, `man`, `house`), `pos`/`epos` (part of speech),
+  and a `gdl` grapheme-description array (sign readings, determinative/logogram roles,
+  per-grapheme `logolang`). This maps directly onto `Passage#annotations` and the
+  P7-5 lemma index — Akkadian/Sumerian lemma search for free.
+- **What a passage is.** The natural unit is the **line** (the `line-start` d-node,
+  with `label`/`n`) — clean, stable, matches how Assyriologists cite ("obv. 5"). The
+  `sentence` `c`-node is an alternative but its labels span ranges (`"o 1 - r 5"`) and
+  many are `implicit:"yes"`; **line is the right Passage grain**, sentence/clause
+  membership recorded in annotations if wanted. `Passage#text` = the **transliteration**
+  (the scholarly text, per conventions.md §4) reconstructed from `l.form` fragments;
+  `norm`/`cf`/`gw`/`pos` ride in `annotations`. Folding (flag for the adapter packet,
+  don't decide here): the generic fold strips IAST-style diacritics, which for Akkadian
+  norm would conflate ā/a, š→s, ṣ→s, ṭ→t (accepted, same tradeoff as Greek/Sanskrit);
+  but the **transliteration** carries structural punctuation (`{det}`, subscript
+  digits, `.`/`-` sign joins) that a search form should probably strip to bare sign
+  readings — a real new per-language rule (`akk`/`sux`), sketched here, decided in 5b.
+- **Translations — honest finding.** Scanned all **265 `saao/saa01` texts**
+  (`https://oracc.museum.upenn.edu/json/saao-saa01.zip`, 5.0 MB): node types
+  `{c, d, l}` only, **0 prose-translation nodes**. Running English exists in ORACC
+  (SAA is famous for it) but lives in the **ATF source** (`#tr.en:` lines) and the
+  rendered HTML, not the open-data JSON. So: word-glosses (`gw`) yes, aligned
+  sentence translations no — those are a future ATF-parse / parallel-document
+  enhancement (P7-4 shape), explicitly out of the v1 JSON adapter.
+- **URN sketch.** Ids are stable CDLI/ORACC museum numbers of two kinds, both seen:
+  **P-numbers** (physical artifacts — `rimanum`, `saao`) and **Q-numbers** (composite/
+  reconstructed texts — `rinap/rinap1` = 96 Q-texts, `etcsri` = 1456 Q-texts). Sketch:
+  `urn:nabu:oracc:<project>:<P/Q-number>:<line-label>` where `<project>` keeps the
+  subproject slash-path flattened (`saao-saa01`), and `<line-label>` = the `line-start`
+  `label` (`o.1`, `r.5`) — stable, human-legible, matches citation practice. Minting
+  frozen once used (standing rule).
+- **License — machine-readable, and a correction.** Both `metadata.json` AND every
+  `corpusjson/*.json` carry `"license"` + `"license-url"`. All **8 projects sampled**
+  (saao, rinap, etcsri, riao, dcclt, blms, ribo, rimanum) report verbatim
+  `"This data is released under the CC0 license"` +
+  `https://creativecommons.org/publicdomain/zero/1.0/` → **`license_class: open`**
+  (public domain). The ORACC website/docs footer still shows the 2014 blanket
+  *"Creative Commons Attribution Share-Alike license 3.0"* (which our 02-sources row
+  recorded, and a 2018 third-party mirror cited) — the current JSON build supersedes
+  it per-project with CC0. **The adapter reads the per-project `license` field and
+  maps it (CC0→open, CC BY-SA→attribution); it never hardcodes** — future projects may
+  differ.
+- **Network mechanics.** Per-project **zip over HTTP**:
+  `https://oracc.museum.upenn.edu/json/<project>.zip` (subprojects hyphenated,
+  e.g. `saao-saa01.zip`), served `application/zip` with `Last-Modified` (change
+  detection without full re-download). **No git repo** holds the data
+  (`oracc/publicdata` empty/2016, `oracc/json` 404). So `fetch` is a **new
+  HTTP-download-and-unzip path**, not `Nabu::GitFetch` — the one genuinely new
+  plumbing piece (the attic/retention contract still applies to the unpacked files).
+  Sub-project discovery via `https://oracc.museum.upenn.edu/projects.json` (144 public
+  entries). `.atf` per-text endpoints 404 individually; ATF (translations) would be a
+  separate source acquisition — deferred.
+- **Effort sizing.** **New parser family, fable** (the packet's tag stands). The cdl
+  tree walk is *simpler* than DDbDP's Leiden XML mixed-content, but the decision
+  density is comparable: translit line reconstruction + surface/line tracking,
+  P-vs-Q urn policy, the `akk-x-oldbab`/`sux` language question (Sumerian logograms
+  appear *inside* Akkadian words via `gdl.logolang` — per-word lang in annotations,
+  per-text primary lang for `Passage#language`; note `akk-x-oldbab` is valid BCP-47
+  private-use, maps to base `akk`), the annotations schema, and the new translit
+  folding rule. Plus the **new HTTP-zip fetcher** (small, but net-new). Sizing ≈
+  DdbdpParser, not a First1K one-liner.
+
+### FIXTURE ACQUISITION PLAN (owner: approve / amend)
+
+Fetch **two mini-slices from two projects** so the new family is tested against both
+id-schemes (P/Q), both languages (Akkadian/Sumerian), and the full node vocabulary.
+The fetch unit is the whole project zip (small); each fixture is an **extract** from
+it — corpusjson text files kept **whole** (a cdl tree is atomic; trimming breaks the
+JSON and the sentence/lemma structure), `metadata.json` kept **whole** (the adapter
+reads its license + config), `catalogue.json` **trimmed** to the fixtured ids only
+(it lists every project text; keep just the entries the adapter needs for titles).
+
+**Slice A — `rimanum` (Akkadian, P-numbers, CC0)** — zip:
+`https://oracc.museum.upenn.edu/json/rimanum.zip` (2.9 MB):
+
+| Extract | Size | whole? | Note |
+|---|---|---|---|
+| `rimanum/metadata.json` | ~27 KB | whole | license (`CC0`) + project name/config; adapter reads license here |
+| `rimanum/catalogue.json` | 376 KB → few KB | trimmed | keep only the 3 fixtured P-numbers' catalog entries (designation/period/provenience → doc titles) |
+| `rimanum/corpusjson/P405432.json` | 59 KB | whole | the rich exemplar: obverse+reverse surfaces, 25 lemmas, determinatives, subscripts, full `norm`/`cf`/`gw` |
+| `rimanum/corpusjson/P405134.json` | 25 KB | whole | a shorter second Akkadian text |
+| `rimanum/corpusjson/P405254.json` | 0 B | whole | **empty** (catalog-only, no transliteration) — the no-content case the parser must skip/quarantine honestly |
+
+**Slice B — `etcsri` (Sumerian, Q-numbers, CC0)** — zip:
+`https://oracc.museum.upenn.edu/json/etcsri.zip` (12.9 MB):
+
+| Extract | Size | whole? | Note |
+|---|---|---|---|
+| `etcsri/metadata.json` | ~30 KB | whole | license (`CC0`) + config |
+| `etcsri/catalogue.json` | large → few KB | trimmed | keep only the 2 fixtured Q-numbers' entries |
+| `etcsri/corpusjson/Q004151.json` | ~15 KB | whole | Sumerian royal inscription (Amar-Suen), `lang:"sux"`, lemmatized (`cf`/`gw`) — the Q-number + Sumerian case |
+| `etcsri/corpusjson/<one more small Q>.json` | ≤30 KB | whole | second Sumerian text (pick the next smallest non-empty Q at fetch time) |
+
+Total fixture footprint well under **500 KB**. License notice (identical, machine-read,
+quoted once — applies to every file, verbatim from each `metadata.json`/corpusjson):
+
+> This data is released under the CC0 license
+> (https://creativecommons.org/publicdomain/zero/1.0/)
+
+→ recorded `license_class: open` for the source; the adapter reads it per-project.
+
+**Target layout** (`test/fixtures/oracc/`):
+
+```
+test/fixtures/oracc/
+  README.md                 # retrieval date, project-zip URLs, CC0 notice, per-file extract/trim procedure, "translations live in ATF not JSON" note
+  manifest.yml              # P5-4 schema: per-file url (the project zip), whole:, trim note; adapter_test asserts reconstructed line/lemma counts
+  rimanum/
+    metadata.json                     # whole
+    catalogue.json                    # trimmed to the 3 fixtured P-numbers
+    corpusjson/P405432.json           # whole (rich Akkadian)
+    corpusjson/P405134.json           # whole (short Akkadian)
+    corpusjson/P405254.json           # whole (empty / no-content case)
+  etcsri/
+    metadata.json                     # whole
+    catalogue.json                    # trimmed to the 2 fixtured Q-numbers
+    corpusjson/Q004151.json           # whole (Sumerian, Q-number)
+    corpusjson/<Q…>.json              # whole (second Sumerian)
+```
+
+**README template note:** retrieval date; the two project-zip URLs; the verbatim CC0
+notice above; per-file extract procedure (corpusjson + metadata whole, catalogue
+trimmed to fixtured ids only, JSON kept well-formed); the explicit honest notes that
+(a) **prose translations are not in the JSON** (ATF-only, deferred) and (b) the fetch
+is an **HTTP zip**, not a git clone.
+
+**Phase shape (my recommendation).** Keep this scout (P9-5a) in Phase 9; make **P9-5b
+the Phase 10 headline, not a Phase 9 tail packet.** Rationale: 5b carries *two*
+net-new mechanics at once — the bespoke JSON `cdl` parser family **and** the first
+non-git (HTTP-zip) `fetch` path — over a non-IE language family, and it is the
+founding dream (the system is named for Nabu). Phase 9 is already rich (P9-1/2/3
+done, GRETIL adapter P9-4b, Slavic survey P9-6); cramming the largest remaining
+packet into its tail underserves it. Phase 10 headline = ORACC adapter (P9-5b) +
+the top pick(s) from the P9-6 Slavic survey. **If instead the owner wants ORACC in
+Phase 9**, it is fully unblockable on fixture approval — the format is clean and the
+plan above is execution-ready.
 
 ## P9-5b · ORACC adapter + parser family  [tier: fable] [status: blocked: owner fixture-plan approval] [deps: P9-5a]
 Elaborated when 5a lands and the owner approves its plan.
