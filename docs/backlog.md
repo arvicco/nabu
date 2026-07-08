@@ -832,7 +832,7 @@ Goal: the P7-5 lemma golden pins a fixture-only urn (trimmed doc id), so
 Acceptance: golden suite green; live `nabu health` (orchestrator runs it)
       shows the new golden found, not skipped; suite + lint green.
 
-## P9-4a · GRETIL scout + fixture plan  [tier: opus] [status: ready] [deps: —]
+## P9-4a · GRETIL scout + fixture plan  [tier: opus] [status: done] [deps: —]
 Goal: research GRETIL (Göttingen Register of Electronic Texts in Indian
       Languages) for adapter feasibility: current corpus format (TEI P5
       e-library? plain text legacy?), download mechanics (bulk? per-text?),
@@ -847,6 +847,134 @@ Goal: research GRETIL (Göttingen Register of Electronic Texts in Indian
 Acceptance: the plan is concrete enough to execute on approval; findings
       honest about blockers (license or format may kill it — that is a
       valid outcome).
+
+## Findings & fixture acquisition plan (P9-4a, 2026-07-08 — AWAITING OWNER APPROVAL)
+
+### Verdict
+
+**Viable, but as a new bespoke parser family, and as `nc` (not `open`).** GRETIL's
+current corpus is mass-converted **TEI P5 — but NOT EpiDoc/CapiTainS**: no
+`refsDecl`, no `cRefPattern`, no CTS URNs, so `EpidocParser` cannot be reused; a
+new small-but-real parser family is required (**opus**, per the acceptance note's
+"stretch toward a family" test). The license is the *good* surprise: every
+mass-converted TEI header carries a uniform **CC BY-NC-SA 4.0** notice, which maps
+cleanly to our existing `nc` class (the same class PROIEL/UD already live under) —
+**not** the feared `research_private`. The real cost is **addressability
+heterogeneity**, not licensing.
+
+### Evidence (cited)
+
+- **Format reality.** TEI P5, `xmlns=tei`, `<TEI>/<teiHeader>/<text><body>`, one
+  file per work. Sample headers/bodies inspected verbatim from the GitHub TEI
+  mirror `mmehner/gretil-corpus-tei@master` (= the same files served at
+  `gretil.sub.uni-goettingen.de/gretil/corpustei/`). Three addressability classes
+  found:
+  1. **Hand-crafted, fully addressable (minority).**
+     `sa_Rgveda-edAufrecht.xml`: `<div type="maṇḍala" n="1"><div type="sūkta"
+     n="001"><lg xml:id="RV_1.001.01"><l n="1.001.01a">…`. Vedic accents encoded
+     via `<orig>̱</orig>` inside `choice` (per the header's normalization decl).
+  2. **Mass-converted verse (the bulk).** `sa_brahmabindUpaniSad.xml`: flat
+     `<body>` of `<lg><l>…</l></lg>` with the verse number **inside the text** as
+     a marker `// BrbUp_1 //` — **no `@n`, no `@xml:id`, no div hierarchy**.
+     Addressable only by parsing the per-text `// Abbr_N //` marker (abbreviation
+     and depth vary per text; some are hierarchical like `RV_1,1.1`).
+  3. **Prose, non-addressable.** `sa_prajJApAramitAhRdayasUtra.xml`: flat sequence
+     of `<p>` with **no numbering of any kind**. Some texts even carry their
+     "REFERENCE SYSTEM" as a prose `<p>` (`sa_sAmavedasaMhitA.xml`).
+  Encoding: **IAST** romanization throughout (`<text xml:lang="sa-Latn">`), Unicode
+  NFC-friendly; the header documents an IAST normalization table. No Devanāgarī, no
+  legacy HK/CSX in the TEI layer (those were the pre-2016 legacy formats).
+- **Download mechanics.** Per-text files (`.xml` TEI + `.html` + `.txt`
+  transforms); site cumulative **`.zip` bundles per language**; **git bulk** via
+  the GitHub mirrors (`mmehner/gretil-corpus-tei` = TEI-only, ~784 XML / ~240 MB;
+  `INDOLOGY/GRETIL-mirror` = full site incl. legacy); **Zenodo DOI snapshots** for
+  citation/archival. Stable direct-file URLs on the site; the directory index
+  itself 403s to bots (individual files fetch fine). An adapter would clone the
+  TEI mirror — exactly the Perseus/UD git pattern.
+- **License, judged honestly.** Uniform in every TEI header:
+  `<licence target="…/by-nc-sa/4.0/">Distributed under a Creative Commons
+  Attribution-NonCommercial-ShareAlike 4.0 International License.</licence>`,
+  preceded by `<availability><p>This e-text was provided to GRETIL in good faith
+  that no copyright rights have been infringed. If anyone wishes to assert
+  copyright over this file, please contact the GRETIL management … The file will be
+  immediately removed pending resolution of the claim.</p>`. GRETIL is an
+  **aggregator, not the rights-holder** (data-entry credited "n.n."), so the CC
+  grant is GRETIL's, under a takedown disclaimer. → **`license_class: nc`.**
+  Practically: ingestable for the owner's local research, indexed/searchable,
+  **default-excluded from the MCP surface** (P8-1 excludes `research_private`/
+  `restricted`; `nc` is shareable-with-attribution-non-commercially but we still
+  never redistribute the corpus). The legacy pre-TEI holdings historically carried
+  restrictive per-contributor notices ("private study only"); those are **out of
+  scope** — we ingest the TEI corpus only, whose license is clean and uniform.
+- **Citation / URN sketch (no CTS upstream, so we mint).**
+  `urn:nabu:gretil:<text-slug>:<division-path>` where `<text-slug>` = the filename
+  stem sans `sa_` (e.g. `brahmabindUpaniSad`, `Rgveda-edAufrecht`). Division path
+  per class: (1) `div @n` join + `lg/@xml:id` or `l/@n` for the addressable
+  minority (`…:Rgveda-edAufrecht:1.001.01`); (2) the parsed `// Abbr_N //` marker
+  for mass-converted verse (`…:brahmabindUpaniSad:1`); (3) a synthetic sequence
+  index `p1, p2…` for non-addressable prose, **flagged in an annotation as
+  non-canonical addressing** so a future re-chunk is honest. Minting frozen once
+  used (standing rule).
+- **Overlap with UD Sanskrit-Vedic.** Complementary, not duplicative. UD Vedic =
+  **4,000 sentences / 27k words** *sampled* from RV, Atharvaveda(Śaunaka),
+  Maitrāyaṇīsaṃhitā, Aitareya- & Śatapatha-Brāhmaṇa, with gold lemma+morphology
+  (its README). GRETIL = the **full running texts** of those works (and hundreds
+  more), **no annotation**. Different layers, different granularity, disjoint URN
+  namespaces (`urn:nabu:ud:sanskrit-vedic:*` vs `urn:nabu:gretil:*`) — no dedup
+  needed; they enrich each other (readable full text ↔ annotated sample).
+- **Scale + effort.** TEI corpus ≈ **784 texts / ~240 MB** (Sanskrit-dominant;
+  Pali/Prakrit/Tibetan largely still legacy, not yet TEI). Adapter effort:
+  **new parser family, opus** — the marker-mining (per-text `// Abbr_N //`
+  extraction) plus three-shape addressability plus the `choice/orig/reg` accent
+  policy are genuinely new work, not an EpidocParser tweak. Sizing is closer to
+  DdbdpParser than to a First1K one-liner.
+
+### FIXTURE ACQUISITION PLAN (owner: approve / amend)
+
+Fetch **3 small real TEI texts** spanning the full addressability spectrum so the
+new parser family is tested against every shape it must survive. Primary source =
+the GRETIL site; the GitHub TEI mirror serves byte-identical copies and is the
+reproducible fetch used for verification.
+
+| # | Text | Site URL (primary) | Mirror URL (raw) | Size | Class | Trim intent |
+|---|------|--------------------|------------------|------|-------|-------------|
+| 1 | Brahmabindu Upaniṣad | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_brahmabindUpaniSad.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_brahmabindUpaniSad.xml` | 12,878 B | mass-converted **verse**, `// BrbUp_N //` markers | **whole** (complete short text, structurally intact) |
+| 2 | Prajñāpāramitā-hṛdaya-sūtra (Heart Sūtra) | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_prajJApAramitAhRdayasUtra.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_prajJApAramitAhRdayasUtra.xml` | 11,002 B | **prose**, flat `<p>`, **no addressing** | **whole** (complete short text) |
+| 3 | Ṛgveda-Saṁhitā (ed. Aufrecht) | `https://gretil.sub.uni-goettingen.de/gretil/corpustei/sa_Rgveda-edAufrecht.xml` | `https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Rgveda-edAufrecht.xml` | ~9 MB | hand-crafted **fully addressable** `div/lg[@xml:id]/l[@n]` + `orig` accents | **trim** to `teiHeader` + Maṇḍala 1, Sūktas 1–3 (`whole: false`; the adapter test asserts trimmed counts, à la UD) |
+
+License notice (identical, quoted once — applies to all three, verbatim from each
+`<availability>`):
+
+> This e-text was provided to GRETIL in good faith that no copyright rights have
+> been infringed. If anyone wishes to assert copyright over this file, please
+> contact the GRETIL management at gretil(at)sub(dot)uni-goettingen(dot)de. The
+> file will be immediately removed pending resolution of the claim.
+> Distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+> International License.
+
+→ recorded `license_class: nc` for the source; fixtures carry the same.
+
+**Target layout** (`test/fixtures/gretil/`):
+
+```
+test/fixtures/gretil/
+  README.md                 # retrieval date, URLs, CC BY-NC-SA 4.0 notice, trim procedure
+  manifest.yml              # P5-4 schema: per-file url, whole:, trim note; adapter_test asserts trimmed counts
+  sa_brahmabindUpaniSad.xml            # whole
+  sa_prajJApAramitAhRdayasUtra.xml     # whole
+  sa_Rgveda-edAufrecht-m1s1-3.xml      # trimmed: header + maṇḍala 1 sūkta 1–3
+```
+
+**README template note:** retrieval date; primary GRETIL URLs + mirror raw URLs;
+the verbatim CC BY-NC-SA 4.0 + good-faith/takedown notice above; per-file trim
+procedure (files 1–2 `whole: true`; file 3 trimmed to header + M1.S1–3, XML kept
+well-formed — close the truncated `div type="maṇḍala"`); a line stating GRETIL is
+an aggregator and the legacy non-TEI holdings are **out of scope**.
+
+**If the owner prefers not to ingest `nc` Sanskrit at all**, P9-4b can be dropped
+without loss to the classical/Slavic axes — GRETIL is breadth, not a blocker. But
+the scout's judgment is that it is worth it: clean uniform license, huge readable
+Sanskrit corpus, complements the existing UD/DCS annotation layers.
 
 ## P9-4b · GRETIL adapter  [tier: fable-or-opus per 4a findings] [status: blocked: owner fixture-plan approval] [deps: P9-4a]
 Elaborated when 4a lands and the owner approves its plan.
