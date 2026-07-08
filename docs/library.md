@@ -104,7 +104,7 @@ about Greco-Roman Egypt.
 | **Language** | Sanskrit in IAST romanization (`san-Latn`, 770 docs), plus stray Tibetan-transliteration, Tamil and English items |
 | **Period** | Vedic (c. 1200 BCE) to early modern (18th c. CE) — the longest span of any shelf |
 | **Size** | 773 docs / 696,158 passages (second-largest shelf by passages) |
-| **Source** | `gretil` (GRETIL, Göttingen Register of Electronic Texts in Indian Languages, via TEI mirror), license: `nc` (CC BY-NC-SA — local research use; **excluded from MCP by default**) |
+| **Source** | `gretil` (GRETIL, Göttingen Register of Electronic Texts in Indian Languages, via TEI mirror), license: `nc` (CC BY-NC-SA — non-commercial research use; served over MCP with its license label) |
 | **Metadata** | Four addressability rungs (attribute-cited divisions, `// Abbr_N //` in-text verse markers, xml:id citations, prose ordinals); collision-disambiguated URNs (`:b2`) preserve upstream numbering errors instead of hiding them; Vedic accents preserved (keep-`<orig>`) |
 
 Rāmāyaṇa (18,761 verses), Mahābhārata-adjacent texts, Bhāgavata and other
@@ -179,9 +179,11 @@ close reading; teaching materials.
 - **Parallel display** (`show --parallel`): §7.
 - **MCP server** (4 read-only tools: `nabu_search`, `nabu_show`,
   `nabu_status`, `nabu_concord`): exposes the library to Claude and other MCP
-  clients. Every passage carries `license_class` + `source`;
-  `nc`/`research_private`/`restricted` content is **excluded by default** —
-  currently that means GRETIL and the treebanks are local-CLI-only.
+  clients. Every passage carries `license_class` + `source` so quoting
+  decisions are informed. All licensed shelves including `nc` are served;
+  only `research_private`/`restricted` (currently zero documents — a
+  forward-looking privacy gate for the future ad-hoc pipeline) are excluded
+  by default, with per-call `include_restricted: true` opt-in.
 - **Protection stack**: upstream deletions are attic'd, never propagated
   (`retired_upstream` documents stay searchable); content-hash ledger
   (`db/history.sqlite3`) survives rebuilds; rsync backup to mounted volume +
@@ -189,8 +191,10 @@ close reading; teaching materials.
 - **Health**: trend rules (spike/collapse/creep/stale), golden-query replay
   (13 goldens), remote drift + license-baseline probes.
 - **Licensing split**: `attribution` shelf (Perseus ×2, First1K, papyri —
-  ~99% of documents) is shareable/MCP-safe; `nc` shelf (GRETIL, treebanks) is
-  local research use.
+  ~99% of documents) is redistributable with credit; `nc` shelf (GRETIL,
+  treebanks) is non-commercial research use — fine for private/AI-assisted
+  work, not for republishing. Both are served everywhere (CLI and MCP) with
+  per-passage license labels.
 
 ## 9. Review plan
 
