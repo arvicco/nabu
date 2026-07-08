@@ -15,14 +15,18 @@ field notes (Unicode/NFC, citation systems, editions, licensing) that explain
 ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
-catalog store, idempotent loader, rebuild) and **seven source adapters**
+catalog store, idempotent loader, rebuild) and **nine source adapters**
 exist across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
-DDbDP Leiden): **seven sources live** — Perseus Greek and **Perseus Latin** (Iliad and
-Aeneid included, **with 735 aligned English translations**:
+DDbDP Leiden): **seven sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
+and Livy included, **with 872 aligned English translations**:
 `show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek,
 Universal Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info
 DDbDP (61k documents, restart-aware line URNs, cancelled texts kept in ⟦⟧)
-— totalling **~2.06 million searchable passages**.
+— totalling **~2.13 million searchable passages** — plus **GRETIL**
+(Sanskrit: Ṛgveda with Vedic accents preserved, CC BY-NC-SA) shipped and
+awaiting its first sync, and **ORACC** (cuneiform, CC0, gold-lemmatized)
+scouted as the next headline. A Slavic-sources survey
+(`docs/slavic-survey.md`) ranks the axis's expansion candidates.
 **The collection is protected end to end**: upstream deletions land in a
 local attic and stay searchable ("retired upstream"); run history, license
 baselines, and revision records live in a ledger no rebuild can wipe; and
@@ -94,11 +98,12 @@ unless you install it.
 - **Adapter contract** — one small base class (`fetch` / `discover` / `parse` /
   `manifest`); every future adapter must pass a shared conformance suite
   (URN uniqueness across the corpus, URN stability across parses, NFC output).
-- **Four parser families, seven adapters** — all streaming, all tested against
+- **Five parser families, nine adapters** — all streaming, all tested against
   real upstream fixtures: EpiDoc/CTS (Perseus Greek + Latin, First1KGreek), CoNLL-U
   (Universal Dependencies treebanks: Gothic, Ancient Greek, Vedic Sanskrit,
   Latin — lemmas and morphology preserved in annotations), PROIEL XML
-  (PROIEL, TOROT — Old Church Slavonic and Old Russian), and DDbDP
+  (PROIEL, TOROT — Old Church Slavonic and Old Russian), GRETIL TEI
+  (Sanskrit: three addressability rungs, in-text verse-marker mining), and DDbDP
   (Papyri.info documentary papyri: print-practice Leiden text extraction —
   see `docs/conventions.md` §5 — and restart-aware line-URN minting).
 - **Catalog store** — SQLite via Sequel: sources, documents, passages,
