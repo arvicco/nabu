@@ -994,6 +994,62 @@ Acceptance: conformance green; three shapes parse with stable two-parse
 urns; README/manifest per plan; 02-sources GRETIL row → READY; suite+lint
 green.
 
+## P9-4c · GRETIL quarantine recovery  [tier: opus] [status: done] [deps: P9-4b]
+Defect packet (census-first: orchestrator census 2026-07-08 of the 118 files
+quarantined by the first real gretil sync — 663 loaded / 118 quarantined of
+781). Two classes, three fixes:
+
+1. **xml:id rung (~60 files)** — files like sa_RgvidhAna carry the citation
+   only in `xml:id`: `<lg xml:id="RgV_1.1.1">` (often `<l xml:id="RgV_1.1.1a">`
+   children); no `n=` attributes, no `//` markers, sometimes no divs at all.
+   Add a fourth addressability rung: derive citation from the lg-level (or
+   p-level) xml:id by stripping the leading `<Abbr>_` prefix, keeping the
+   dotted path (`RgV_1.1.1` → `1.1.1`). Line-level ids (`…1.1.1a`) are NOT
+   separate passages — the lg is the passage, same as the marker rung.
+   Casualties recovered include Rāmāyaṇa, Buddhacarita, Gītagovinda,
+   Kirātārjunīya, Paippalāda Saṃhitā.
+
+2. **Pipe-marker variant (~13 files)** — sa_bAdarAyaNa-brahmasUtra etc. use
+   `| BBs_1,1.1 |` (single-pipe delimiters, comma level separators) instead
+   of `// Abbr_N //`. Extend the in-text marker recognizer to accept the
+   single-pipe form; commas in the citation normalize to the same separator
+   the `//` rung already emits (keep whatever P9-4b chose — two-parse
+   stability is the contract, cross-file cosmetics are not).
+
+3. **Collision tolerance (45 files)** — parser currently hard-fails the
+   document on the first duplicate citation. Census: ~39 single-prefix
+   collisions = upstream numbering typos (sa_AnandabhaTTa-vallAlacarita runs
+   1.76→1.70→1.78; sa_bhAgavatapurANa has a decade of verses inside chapter
+   3.31 mislabeled 03.32.0xx) or legitimate repeats (sa_harSadeva-nAgAnanda:
+   Prakrit verse + Sanskrit chāyā both numbered Nā_1.19). Fix per ddbdp
+   precedent: on collision, disambiguate deterministically (second occurrence
+   gets a `:b2` suffix, third `:b3`, document order) — never quarantine, never
+   merge. 6 multi-prefix files (sa_Anandavardhana-dhvanyAloka DhvK_/DhvA_,
+   sa_IzvarakRSNa-sAMkhyakArikA-comm ISk_/SkMv_, sa_kuntaka-vakroktijIvita-comm,
+   sa_mAdhava-jaiminIyanyAyamAlAvistara, sa_nAgArjuna-pratItyasamutpAdahRdayavyAkhyAna,
+   plus dhvanyAloka-comm): when a file's markers carry ≥2 distinct prefixes,
+   the prefix joins the citation (`:DhvK.1.1` vs `:DhvA.1.1`) so kārikā and
+   commentary don't collide. Prefixes may contain non-ASCII (KūrmP_, Nā_).
+
+Fixtures: trimmed REAL slices from canonical/gretil/ (already on disk, no
+network): sa_RgvidhAna (xml:id rung), sa_bAdarAyaNa-brahmasUtra (pipe
+markers), sa_AnandabhaTTa-vallAlacarita (single-prefix collision),
+sa_Anandavardhana-dhvanyAloka-comm (multi-prefix). Note in fixture README
+these are cut from the local canonical clone (mmehner/gretil-corpus-tei),
+retrieval date 2026-07-08, license CC BY-NC-SA (nc) — same as P9-4b fixtures.
+
+FROZEN-URN GUARD (standing acceptance): the 663 clean docs must re-parse
+byte-identical — verify with a read-only two-parse census against the live
+catalog before/after (orchestrator will re-verify at review). Fixes 1–2 only
+touch previously-quarantined shapes; fix 3's multi-prefix rule fires only on
+files with ≥2 prefixes (all currently quarantined) — assert that in a test.
+Single-prefix collision suffixing must not alter non-colliding citations.
+
+Acceptance: conformance green for new fixtures; suite+lint green;
+`bin/nabu sync gretil --parse-only` quarantine count 118 → ~0 (orchestrator
+runs the live smoke); frozen-URN census clean; docs/02-sources.md GRETIL row
+notes the recovered classes.
+
 ## P9-5a · ORACC scout + fixture plan  [tier: opus] [status: done] [deps: —]
 Goal: research ORACC (Open Richly Annotated Cuneiform Corpus) for adapter
       feasibility: JSON API vs ATF, project structure (oracc.museum.upenn

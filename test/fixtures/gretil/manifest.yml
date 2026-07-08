@@ -25,3 +25,20 @@ files:
     url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Rgveda-edAufrecht.xml
     whole: false
     trim: teiHeader + Maṇḍala 1 Sūktas 1-3 (upstream lines 1..471 + closing tags; ~5 MB -> ~20 KB; 30 lg / 60 l / 3 sūkta divs, well-formed)
+  # --- P9-4c quarantine-recovery fixtures (cut from local canonical) ---
+  - path: sa_RgvidhAna-a1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_RgvidhAna.xml
+    whole: false
+    trim: teiHeader + Adhyāya 1 lg (upstream lines 308..350 + closing tags; xml:id rung, 8 lg <lg xml:id="RgV_…">)
+  - path: sa_bAdarAyaNa-brahmasUtra.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_bAdarAyaNa-brahmasUtra.xml
+    whole: true
+    trim: none (complete short sūtra text, copied whole; single-pipe "| BBs_1,1.1 |" markers)
+  - path: sa_AnandabhaTTa-vallAlacarita-c1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_AnandabhaTTa-vallAlacarita.xml
+    whole: false
+    trim: teiHeader + verses 1.70-1.76 + the real duplicate 1.70 (upstream lines 698..738 in a <div>; single-prefix collision)
+  - path: sa_Anandavardhana-dhvanyAloka-comm-u1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Anandavardhana-dhvanyAloka-comm.xml
+    whole: false
+    trim: teiHeader + the DhvK_1.1 / DhvA_1.1 / DhvK_1.2 lg (upstream lines 470-473, 1594-1598, 1857; multi-prefix interleave)

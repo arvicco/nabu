@@ -20,6 +20,15 @@ class GretilTest < Minitest::Test
   RGVEDA = "urn:nabu:gretil:sa_Rgveda-edAufrecht-m1s1-3"
   BRAHMABINDU = "urn:nabu:gretil:sa_brahmabindUpaniSad"
   HEART_SUTRA = "urn:nabu:gretil:sa_prajJApAramitAhRdayasUtra"
+  # P9-4c quarantine-recovery fixtures.
+  RGVIDHANA = "urn:nabu:gretil:sa_RgvidhAna-a1" # xml:id rung (fix 1)
+  BRAHMASUTRA = "urn:nabu:gretil:sa_bAdarAyaNa-brahmasUtra" # pipe markers (fix 2)
+  VALLALACARITA = "urn:nabu:gretil:sa_AnandabhaTTa-vallAlacarita-c1" # single-prefix collision (fix 3)
+  DHVANYALOKA = "urn:nabu:gretil:sa_Anandavardhana-dhvanyAloka-comm-u1" # multi-prefix (fix 3)
+
+  ALL_FIXTURES = [
+    RGVEDA, BRAHMABINDU, HEART_SUTRA, RGVIDHANA, BRAHMASUTRA, VALLALACARITA, DHVANYALOKA
+  ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -50,7 +59,7 @@ class GretilTest < Minitest::Test
 
   def test_discover_mints_literal_filename_slugs_and_peeks_language_title
     refs = Nabu::Adapters::Gretil.new.discover(FIXTURES).to_a
-    assert_equal [RGVEDA, BRAHMABINDU, HEART_SUTRA].sort, refs.map(&:id)
+    assert_equal ALL_FIXTURES.sort, refs.map(&:id)
     refs.each do |ref|
       assert_equal "gretil", ref.source_id
       assert File.absolute_path?(ref.path), "path must be absolute: #{ref.path.inspect}"
@@ -125,10 +134,82 @@ class GretilTest < Minitest::Test
     assert_equal "prose-ordinal", first.annotations["addressing"]
   end
 
+  # --- P9-4c fix 1: xml:id rung (lg-level), fallback when primary is empty ---
+
+  def test_rgvidhana_xml_id_lg_rung
+    doc = parse(RGVIDHANA)
+    assert_equal "san-Latn", doc.language
+    # 8 lg groups (Adhyāya 1); the <lg xml:id="RgV_1.1.1"> IS the passage, its
+    # two <l xml:id="…a/…b"> children are pada rows, not separate citations.
+    assert_equal(
+      %w[1.1.1 1.1.2 1.1.3 1.1.4 1.1.5 1.1.6 1.2.7 1.2.8],
+      doc.map { |p| p.urn.split(":").last }
+    )
+    first = doc.to_a.first
+    assert_equal "#{RGVIDHANA}:1.1.1", first.urn
+    assert_equal "xml-id", first.annotations["addressing"]
+    # Citation is the lg @xml:id with the "RgV_" prefix stripped, dotted path kept.
+    assert_equal "svayambhuve.brahmaṇe.viśvagoptre.namaskṛtvā.mantradṛgbhyas.tathaiva./ " \
+                 "vivakṣur.asmy.ṛgvidhānam.purāṇam.purādṛṣṭam.ṛṣibhir.mantra.dṛgbhiḥ.//",
+                 first.text
+    assert_equal "#{RGVIDHANA}:1.2.8", doc.to_a.last.urn
+  end
+
+  # --- P9-4c fix 2: single-pipe "| Abbr_1,1.1 |" markers (fallback pass) -----
+
+  def test_brahmasutra_pipe_markers
+    doc = parse(BRAHMASUTRA)
+    assert_equal 545, doc.size
+    first = doc.to_a.first
+    assert_equal "#{BRAHMASUTRA}:1,1.1", first.urn
+    assert_equal "verse-marker", first.annotations["addressing"]
+    # The single-pipe marker is stripped; the comma level separator survives in
+    # the citation exactly as the "//" rung keeps it.
+    assert_equal "athāto brahmajijñāsā", first.text
+    refute_includes first.text, "|", "the single-pipe marker delimiter must be stripped"
+    refute_includes first.text, "BBs", "the marker abbreviation must be stripped"
+    assert_equal "#{BRAHMASUTRA}:4,4.22", doc.to_a.last.urn
+  end
+
+  # --- P9-4c fix 3: single-prefix collision → deterministic :b<k> suffix -----
+
+  def test_vallalacarita_collision_suffix
+    doc = parse(VALLALACARITA)
+    citations = doc.map { |p| p.urn.delete_prefix("#{VALLALACARITA}:") }
+    # The real upstream duplicate 1.70 (two different verses both numbered
+    # Valc_1.70) is disambiguated in document order; neighbours untouched.
+    assert_equal(%w[1.70 1.71 1.72 1.73 1.74 1.75 1.76 1.70:b2], citations)
+    assert_equal citations.uniq, citations, "collision suffixing must yield unique citations"
+    first_dup, second_dup = doc.to_a.values_at(0, 7)
+    assert_equal "#{VALLALACARITA}:1.70", first_dup.urn
+    assert_equal "#{VALLALACARITA}:1.70:b2", second_dup.urn
+    refute_equal first_dup.text, second_dup.text, "the two 1.70 verses are different text"
+  end
+
+  # --- P9-4c fix 3: multi-prefix join (DhvK_ kārikā vs DhvA_ commentary) -----
+
+  def test_dhvanyaloka_multi_prefix_join
+    doc = parse(DHVANYALOKA)
+    # Two distinct marker prefixes whose bare numbers collide (DhvK_1.1 vs
+    # DhvA_1.1) → the prefix joins the citation so the layers do not share a urn.
+    assert_equal(%w[DhvK.1.1 DhvA.1.1 DhvK.1.2], doc.map { |p| p.urn.delete_prefix("#{DHVANYALOKA}:") })
+    assert_equal "#{DHVANYALOKA}:DhvK.1.1", doc.to_a.first.urn
+    assert_equal "verse-marker", doc.to_a.first.annotations["addressing"]
+  end
+
+  # Guard: multi-prefix handling must NOT fire on a single-prefix file — the
+  # Brahmabindu (all "// BrbUp_N //") keeps bare-number citations, never
+  # "BrbUp.N" (frozen-urn: single-prefix collisions get :b<k>, never a prefix).
+  def test_multi_prefix_does_not_fire_on_single_prefix_file
+    citations = parse(BRAHMABINDU).map { |p| p.urn.split(":").last }
+    assert_equal((1..22).map(&:to_s), citations)
+    citations.each { |c| refute_includes c, "BrbUp", "single-prefix file must not be prefix-joined" }
+  end
+
   # --- urn stability across two independent parses (belt-and-braces) --------
 
   def test_urns_are_stable_across_two_parses_per_rung
-    [RGVEDA, BRAHMABINDU, HEART_SUTRA].each do |urn|
+    ALL_FIXTURES.each do |urn|
       first = parse(urn).map(&:urn)
       second = parse(urn).map(&:urn)
       assert_equal first, second, "#{urn}: passage urns must be identical across two parses"
