@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="sa_Rgveda-edAufrecht">
+  <teiHeader xml:lang="en">
+    <fileDesc>
+      <titleStmt>
+	<title>Ṛgveda-Saṃhitā</title>
+	<author></author>
+	<respStmt>
+	  <resp>data entry</resp>
+	  <name>Barend A. Van Nooten</name>
+	  <name>Gary B. Holland</name>
+	</respStmt>
+	<respStmt>
+	  <resp>conversion and revision</resp>
+	  <name>Detlef Eichler</name>
+	</respStmt>
+	<respStmt>
+	  <resp>contribution to GRETIL</resp>
+	  <name>Detlef Eichler</name>
+	</respStmt>
+	<respStmt>
+	  <resp>initial normalization and conversion to legacy GRETIL formats</resp>
+	  <name>Reinhold Grünendahl</name>
+	  </respStmt><respStmt>
+	  <resp>normalization and conversion to TEI-conformant markup</resp>
+	  <name>Maximilian Mehner</name>
+	</respStmt>
+      </titleStmt>
+
+      <publicationStmt>
+	<publisher>Göttingen Register of Electronic Texts in Indian Languages (GRETIL), SUB Göttingen</publisher>
+	<availability>
+	  <p>This e-text was provided to GRETIL in good faith that no copyright rights have been infringed.
+	  If anyone wishes to assert copyright over this file, please contact the GRETIL management at <email>gretil(at)sub(dot)uni-goettingen(dot)de</email>.
+	  The file will be immediately removed pending resolution of the claim.</p>
+
+	  <licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">Distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.</licence>
+	</availability>
+	<date when-iso="2019-10-03"/>
+      </publicationStmt>
+
+      <notesStmt>
+	<note></note>
+      </notesStmt>
+
+      <sourceDesc>
+	<biblStruct xml:id="Aufrecht1877-1">
+	  <monogr>
+	    <editor>Theodor Aufrecht</editor>
+	    <title>Die Hymnen des Rigveda. Mandala I-VI</title>
+	    <imprint>
+	      <pubPlace>Bonn</pubPlace>
+	      <publisher>Mareus</publisher>
+	      <date when-iso="1877"/>
+	    </imprint>
+	  </monogr>
+	</biblStruct>
+	<biblStruct xml:id="Aufrecht1877-2">
+	  <monogr>
+	    <editor>Theodor Aufrecht</editor>
+	    <title>Die Hymnen des Rigveda. Mandala VII-X</title>
+	    <imprint>
+	      <pubPlace>Bonn</pubPlace>
+	      <publisher>Mareus</publisher>
+	      <date when-iso="1877"/>
+	    </imprint>
+	  </monogr>
+	</biblStruct>
+      </sourceDesc>
+    </fileDesc>
+
+    <encodingDesc>
+      <projectDesc>
+	<p>The Göttingen Register of Electronic Texts in Indian Languages (GRETIL) is a resource platform providing standardized machine-readable texts in Indian languages that have been contributed by various individuals and institutions.</p>
+      </projectDesc>
+
+      <editorialDecl>
+	<correction>
+	  <p>Apparent errors have been silently corrected.</p>
+	</correction>
+
+	<normalization>
+	  <p>GRETIL normalizes all texts contributed consistently for each language.
+	  Sanskrit texts are normalized in accordance with the scheme of the International Alphabet of Sanskrit Transliteration (IAST) in order to facilitate word search across its corpus without additional transformations.</p>
+
+	  <p>All characters that were fully equivalent to an IAST-conformant character in the text file contributed have been made to conform to the character list below.
+	  Non-conformant characters with additional information including accents, capitalization, and whitespace have been preserved as <gi>orig</gi> elements inside <gi>choice</gi> elements with their IAST-conformant equivalent in <gi>reg</gi> elements for the creation of a plain text.
+	  These additional informations will be available only in those transformations of this file that display the original information.</p>
+
+	  <p><table>
+	    <head>Characters Used for the Transliteration of Sanskrit according to IAST</head>
+	    <row role="label">
+	      <cell>Character</cell>
+	      <cell>Character Name</cell>
+	      <cell>Unicode Code Point</cell>
+	    </row>
+	    <row>
+	      <cell>a</cell>
+	      <cell>LATIN SMALL LETTER A</cell>
+	      <cell>U+0061</cell>
+	    </row>
+	    <row>
+	      <cell>ā</cell>
+	      <cell>LATIN SMALL LETTER A WITH MACRON</cell>
+	      <cell>U+0101</cell>
+	    </row>
+	    <row>
+	      <cell>i</cell>
+	      <cell>LATIN SMALL LETTER I</cell>
+	      <cell>U+0069</cell>
+	    </row>
+	    <row>
+	      <cell>ī</cell>
+	      <cell>LATIN SMALL LETTER I WITH MACRON</cell>
+	      <cell>U+012B</cell>
+	    </row>
+	    <row>
+	      <cell>u</cell>
+	      <cell>LATIN SMALL LETTER U</cell>
+	      <cell>U+0075</cell>
+	    </row>
+	    <row>
+	      <cell>ū</cell>
+	      <cell>LATIN SMALL LETTER U WITH MACRON</cell>
+	      <cell>U+016B</cell>
+	    </row>
+	    <row>
+	      <cell>ṛ</cell>
+	      <cell>LATIN SMALL LETTER R WITH DOT BELOW</cell>
+	      <cell>U+1E5B</cell>
+	    </row>
+	    <row>
+	      <cell>ṝ</cell>
+	      <cell>LATIN SMALL LETTER R WITH DOT BELOW AND MACRON</cell>
+	      <cell>U+1E5D</cell>
+	    </row>
+	    <row>
+	      <cell>ḷ</cell>
+	      <cell>LATIN SMALL LETTER L WITH DOT BELOW</cell>
+	      <cell>U+1E37</cell>
+	    </row>
+	    <row>
+	      <cell>ḹ</cell>
+	      <cell>LATIN SMALL LETTER L WITH DOT BELOW AND MACRON</cell>
+	      <cell>U+1E39</cell>
+	    </row>
+	    <row>
+	      <cell>e</cell>
+	      <cell>LATIN SMALL LETTER E</cell>
+	      <cell>U+0065</cell>
+	    </row>
+	    <row>
+	      <cell>o</cell>
+	      <cell>LATIN SMALL LETTER O</cell>
+	      <cell>U+006F</cell>
+	    </row>
+	    <row>
+	      <cell>ṃ</cell>
+	      <cell>LATIN SMALL LETTER M WITH DOT BELOW</cell>
+	      <cell>U+1E43</cell>
+	    </row>
+	    <row>
+	      <cell>ḥ</cell>
+	      <cell>LATIN SMALL LETTER H WITH DOT BELOW</cell>
+	      <cell>U+1E25</cell>
+	    </row>
+	    <row>
+	      <cell>'</cell>
+	      <cell>APOSTROPHE</cell>
+	      <cell>U+0027</cell>
+	    </row>
+	    <row>
+	      <cell>k</cell>
+	      <cell>LATIN SMALL LETTER K</cell>
+	      <cell>U+006B</cell>
+	    </row>
+	    <row>
+	      <cell>g</cell>
+	      <cell>LATIN SMALL LETTER G</cell>
+	      <cell>U+0067</cell>
+	    </row>
+	    <row>
+	      <cell>ṅ</cell>
+	      <cell>LATIN SMALL LETTER N WITH DOT ABOVE</cell>
+	      <cell>U+1E45</cell>
+	    </row>
+	    <row>
+	      <cell>c</cell>
+	      <cell>LATIN SMALL LETTER C</cell>
+	      <cell>U+0063</cell>
+	    </row>
+	    <row>
+	      <cell>j</cell>
+	      <cell>LATIN SMALL LETTER J</cell>
+	      <cell>U+006A</cell>
+	    </row>
+	    <row>
+	      <cell>ñ</cell>
+	      <cell>LATIN SMALL LETTER N WITH TILDE</cell>
+	      <cell>U+00F1</cell>
+	    </row>
+	    <row>
+	      <cell>ṭ</cell>
+	      <cell>LATIN SMALL LETTER T WITH DOT BELOW</cell>
+	      <cell>U+1E6D</cell>
+	    </row>
+	    <row>
+	      <cell>ḍ</cell>
+	      <cell>LATIN SMALL LETTER D WITH DOT BELOW</cell>
+	      <cell>U+1E0D</cell>
+	    </row>
+	    <row>
+	      <cell>ṇ</cell>
+	      <cell>LATIN SMALL LETTER N WITH DOT BELOW</cell>
+	      <cell>U+1E47</cell>
+	    </row>
+	    <row>
+	      <cell>t</cell>
+	      <cell>LATIN SMALL LETTER T</cell>
+	      <cell>U+0074</cell>
+	    </row>
+	    <row>
+	      <cell>d</cell>
+	      <cell>LATIN SMALL LETTER D</cell>
+	      <cell>U+0064</cell>
+	    </row>
+	    <row>
+	      <cell>n</cell>
+	      <cell>LATIN SMALL LETTER N</cell>
+	      <cell>U+006E</cell>
+	    </row>
+	    <row>
+	      <cell>p</cell>
+	      <cell>LATIN SMALL LETTER P</cell>
+	      <cell>U+0070</cell>
+	    </row>
+	    <row>
+	      <cell>b</cell>
+	      <cell>LATIN SMALL LETTER B</cell>
+	      <cell>U+0062</cell>
+	    </row>
+	    <row>
+	      <cell>m</cell>
+	      <cell>LATIN SMALL LETTER M</cell>
+	      <cell>U+006D</cell>
+	    </row>
+	    <row>
+	      <cell>y</cell>
+	      <cell>LATIN SMALL LETTER Y</cell>
+	      <cell>U+0079</cell>
+	    </row>
+	    <row>
+	      <cell>r</cell>
+	      <cell>LATIN SMALL LETTER R</cell>
+	      <cell>U+0072</cell>
+	    </row>
+	    <row>
+	      <cell>l</cell>
+	      <cell>LATIN SMALL LETTER L</cell>
+	      <cell>U+006C</cell>
+	    </row>
+	    <row>
+	      <cell>v</cell>
+	      <cell>LATIN SMALL LETTER V</cell>
+	      <cell>U+0076</cell>
+	    </row>
+	    <row>
+	      <cell>ś</cell>
+	      <cell>LATIN SMALL LETTER S WITH ACUTE</cell>
+	      <cell>U+x015B</cell>
+	    </row>
+	    <row>
+	      <cell>ṣ</cell>
+	      <cell>LATIN SMALL LETTER S WITH DOT BELOW</cell>
+	      <cell>U+1E63</cell>
+	    </row>
+	    <row>
+	      <cell>s</cell>
+	      <cell>LATIN SMALL LETTER S</cell>
+	      <cell>U+0073</cell>
+	    </row>
+	    <row>
+	      <cell>h</cell>
+	      <cell>LATIN SMALL LETTER H</cell>
+	      <cell>U+0068</cell>
+	    </row>
+	  </table>
+	</p>
+      </normalization>
+
+      <quotation marks="some">
+	<p>If indicated unambiguously in the text file contributed quotation marks have been replaced with the <gi>q</gi> element and, in case a reference was provided, have been nested inside a <gi>cit</gi> with the respective reference provided in a <gi>ref</gi> element after the quote.</p>
+      </quotation>
+
+      <segmentation>
+	<p>Unnumbered <gi>div</gi> elements are used to structure the text, using the <att>type</att> and <att>n</att> attributes in accordance with the <gi>refsDecl</gi>.</p>
+      </segmentation>
+
+      <interpretation>
+	<p>Interpretive markup which is visible only in analytic transformations of this file consists of:
+	<list>
+	  <item>Highlighting in <gi>hi</gi> elements,</item>
+	  <item>Corruptions in <gi>sic</gi> elements,</item>
+	  <item>Remarks in <gi>note</gi> elements with the <att>resp</att> attribute identifying the agency.</item>
+	</list></p>
+      </interpretation>
+    </editorialDecl>
+
+    <refsDecl>
+      <p>A reference is given in the <att>xml:id</att> attributes consisting of
+      <list>
+	<item>a pragmatic abbreviation of the <label>title</label>: Ṛgveda-Saṃhitā = RV,</item>
+	<item>the number of the <label type="tocinclude">maṇḍala</label> in arabic numerals,</item>
+	<item>the number of the <label>sūkta</label> in arabic numerals,</item>
+	<item>the number of the <label>verse</label> in arabic numerals.</item>
+      </list>
+      </p>
+    </refsDecl>
+
+  </encodingDesc>
+
+  <profileDesc>
+    <langUsage>
+      <language ident="en">English</language>
+      <language ident="sa-Latn">Sanskrit</language>
+    </langUsage>
+
+    <textClass>
+      <keywords scheme="http://gretil.sub.uni-goettingen.de/">
+	<term>Sanskrit -- Veda -- Saṃhitā</term>
+      </keywords>
+    </textClass>
+  </profileDesc></teiHeader>
+
+  <text xml:lang="sa-Latn" xml:id="RV">
+    <body>
+      <div>
+	<head>Ṛgveda-Saṁhitā</head>
+	<div type="maṇḍala" n="1">
+	  <head>Maṇḍala 1</head>
+	  <div type="sūkta" n="001">
+	    <lg xml:id="RV_1.001.01">
+	      <l n="1.001.01a">a<orig>̱</orig>gnim ī<orig>̍</orig>ḻe pu<orig>̱</orig>rohi<orig>̍</orig>taṁ ya<orig>̱</orig>jñasya<orig>̍</orig> de<orig>̱</orig>vam ṛ<orig>̱</orig>tvija<orig>̍</orig>m |</l>
+	      <l n="1.001.01c">hotā<orig>̍</orig>raṁ ratna<orig>̱</orig>dhāta<orig>̍</orig>mam ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.02">
+	      <l n="1.001.02a">a<orig>̱</orig>gniḥ pūrve<orig>̍</orig>bhi<orig>̱</orig>r ṛṣi<orig>̍</orig>bhi<orig>̱</orig>r īḍyo<orig>̱</orig> nūta<orig>̍</orig>nair u<orig>̱</orig>ta |</l>
+	      <l n="1.001.02c">sa de<orig>̱</orig>vām̐ eha va<orig>̍</orig>kṣati ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.03">
+	      <l n="1.001.03a">a<orig>̱</orig>gninā<orig>̍</orig> ra<orig>̱</orig>yim a<orig>̍</orig>śnava<orig>̱</orig>t poṣa<orig>̍</orig>m e<orig>̱</orig>va di<orig>̱</orig>ve-di<orig>̍</orig>ve |</l>
+	      <l n="1.001.03c">ya<orig>̱</orig>śasa<orig>̍</orig>ṁ vī<orig>̱</orig>rava<orig>̍</orig>ttamam ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.04">
+	      <l n="1.001.04a">agne<orig>̱</orig> yaṁ ya<orig>̱</orig>jñam a<orig>̍</orig>dhva<orig>̱</orig>raṁ vi<orig>̱</orig>śvata<orig>̍</orig>ḥ pari<orig>̱</orig>bhūr asi<orig>̍</orig> |</l>
+	      <l n="1.001.04c">sa id de<orig>̱</orig>veṣu<orig>̍</orig> gacchati ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.05">
+	      <l n="1.001.05a">a<orig>̱</orig>gnir hotā<orig>̍</orig> ka<orig>̱</orig>vikra<orig>̍</orig>tuḥ sa<orig>̱</orig>tyaś ci<orig>̱</orig>traśra<orig>̍</orig>vastamaḥ |</l>
+	      <l n="1.001.05c">de<orig>̱</orig>vo de<orig>̱</orig>vebhi<orig>̱</orig>r ā ga<orig>̍</orig>mat ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.06">
+	      <l n="1.001.06a">yad a<orig>̱</orig>ṅga dā<orig>̱</orig>śuṣe<orig>̱</orig> tvam agne<orig>̍</orig> bha<orig>̱</orig>draṁ ka<orig>̍</orig>ri<orig>̱</orig>ṣyasi<orig>̍</orig> |</l>
+	      <l n="1.001.06c">tavet tat sa<orig>̱</orig>tyam a<orig>̍</orig>ṅgiraḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.07">
+	      <l n="1.001.07a">upa<orig>̍</orig> tvāgne di<orig>̱</orig>ve-di<orig>̍</orig>ve<orig>̱</orig> doṣā<orig>̍</orig>vastar dhi<orig>̱</orig>yā va<orig>̱</orig>yam |</l>
+	      <l n="1.001.07c">namo<orig>̱</orig> bhara<orig>̍</orig>nta<orig>̱</orig> ema<orig>̍</orig>si ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.08">
+	      <l n="1.001.08a">rāja<orig>̍</orig>ntam adhva<orig>̱</orig>rāṇā<orig>̍</orig>ṁ go<orig>̱</orig>pām ṛ<orig>̱</orig>tasya<orig>̱</orig> dīdi<orig>̍</orig>vim |</l>
+	      <l n="1.001.08c">vardha<orig>̍</orig>māna<orig>̱</orig>ṁ sve dame<orig>̍</orig> ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.001.09">
+	      <l n="1.001.09a">sa na<orig>̍</orig>ḥ pi<orig>̱</orig>teva<orig>̍</orig> sū<orig>̱</orig>nave 'gne<orig>̍</orig> sūpāya<orig>̱</orig>no bha<orig>̍</orig>va |</l>
+	      <l n="1.001.09c">saca<orig>̍</orig>svā naḥ sva<orig>̱</orig>staye<orig>̍</orig> ||</l>
+	    </lg>
+
+	  </div>
+	  <div type="sūkta" n="002">
+	    <lg xml:id="RV_1.002.01">
+	      <l n="1.002.01a">vāya<orig>̱</orig>v ā yā<orig>̍</orig>hi darśate<orig>̱</orig>me somā<orig>̱</orig> ara<orig>̍</orig>ṁkṛtāḥ |</l>
+	      <l n="1.002.01c">teṣā<orig>̍</orig>m pāhi śru<orig>̱</orig>dhī hava<orig>̍</orig>m ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.02">
+	      <l n="1.002.02a">vāya<orig>̍</orig> u<orig>̱</orig>kthebhi<orig>̍</orig>r jarante<orig>̱</orig> tvām acchā<orig>̍</orig> jari<orig>̱</orig>tāra<orig>̍</orig>ḥ |</l>
+	      <l n="1.002.02c">su<orig>̱</orig>taso<orig>̍</orig>mā aha<orig>̱</orig>rvida<orig>̍</orig>ḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.03">
+	      <l n="1.002.03a">vāyo<orig>̱</orig> tava<orig>̍</orig> prapṛñca<orig>̱</orig>tī dhenā<orig>̍</orig> jigāti dā<orig>̱</orig>śuṣe<orig>̍</orig> |</l>
+	      <l n="1.002.03c">u<orig>̱</orig>rū<orig>̱</orig>cī soma<orig>̍</orig>pītaye ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.04">
+	      <l n="1.002.04a">indra<orig>̍</orig>vāyū i<orig>̱</orig>me su<orig>̱</orig>tā upa<orig>̱</orig> prayo<orig>̍</orig>bhi<orig>̱</orig>r ā ga<orig>̍</orig>tam |</l>
+	      <l n="1.002.04c">inda<orig>̍</orig>vo vām u<orig>̱</orig>śanti<orig>̱</orig> hi ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.05">
+	      <l n="1.002.05a">vāya<orig>̱</orig>v indra<orig>̍</orig>ś ca cetathaḥ su<orig>̱</orig>tānā<orig>̍</orig>ṁ vājinīvasū |</l>
+	      <l n="1.002.05c">tāv ā yā<orig>̍</orig>ta<orig>̱</orig>m upa<orig>̍</orig> dra<orig>̱</orig>vat ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.06">
+	      <l n="1.002.06a">vāya<orig>̱</orig>v indra<orig>̍</orig>ś ca sunva<orig>̱</orig>ta ā yā<orig>̍</orig>ta<orig>̱</orig>m upa<orig>̍</orig> niṣkṛ<orig>̱</orig>tam |</l>
+	      <l n="1.002.06c">ma<orig>̱</orig>kṣv i1<orig>̱</orig><orig>̍</orig>tthā dhi<orig>̱</orig>yā na<orig>̍</orig>rā ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.07">
+	      <l n="1.002.07a">mi<orig>̱</orig>traṁ hu<orig>̍</orig>ve pū<orig>̱</orig>tada<orig>̍</orig>kṣa<orig>̱</orig>ṁ varu<orig>̍</orig>ṇaṁ ca ri<orig>̱</orig>śāda<orig>̍</orig>sam |</l>
+	      <l n="1.002.07c">dhiya<orig>̍</orig>ṁ ghṛ<orig>̱</orig>tācī<orig>̱</orig>ṁ sādha<orig>̍</orig>ntā ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.08">
+	      <l n="1.002.08a">ṛ<orig>̱</orig>tena<orig>̍</orig> mitrāvaruṇāv ṛtāvṛdhāv ṛtaspṛśā |</l>
+	      <l n="1.002.08c">kratu<orig>̍</orig>m bṛ<orig>̱</orig>hanta<orig>̍</orig>m āśāthe ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.002.09">
+	      <l n="1.002.09a">ka<orig>̱</orig>vī no<orig>̍</orig> mi<orig>̱</orig>trāvaru<orig>̍</orig>ṇā tuvijā<orig>̱</orig>tā u<orig>̍</orig>ru<orig>̱</orig>kṣayā<orig>̍</orig> |</l>
+	      <l n="1.002.09c">dakṣa<orig>̍</orig>ṁ dadhāte a<orig>̱</orig>pasa<orig>̍</orig>m ||</l>
+	    </lg>
+
+	  </div>
+	  <div type="sūkta" n="003">
+	    <lg xml:id="RV_1.003.01">
+	      <l n="1.003.01a">aśvi<orig>̍</orig>nā<orig>̱</orig> yajva<orig>̍</orig>rī<orig>̱</orig>r iṣo<orig>̱</orig> drava<orig>̍</orig>tpāṇī<orig>̱</orig> śubha<orig>̍</orig>s patī |</l>
+	      <l n="1.003.01c">puru<orig>̍</orig>bhujā cana<orig>̱</orig>syata<orig>̍</orig>m ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.02">
+	      <l n="1.003.02a">aśvi<orig>̍</orig>nā<orig>̱</orig> puru<orig>̍</orig>daṁsasā<orig>̱</orig> narā<orig>̱</orig> śavī<orig>̍</orig>rayā dhi<orig>̱</orig>yā |</l>
+	      <l n="1.003.02c">dhiṣṇyā<orig>̱</orig> vana<orig>̍</orig>ta<orig>̱</orig>ṁ gira<orig>̍</orig>ḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.03">
+	      <l n="1.003.03a">dasrā<orig>̍</orig> yu<orig>̱</orig>vāka<orig>̍</orig>vaḥ su<orig>̱</orig>tā nāsa<orig>̍</orig>tyā vṛ<orig>̱</orig>ktaba<orig>̍</orig>rhiṣaḥ |</l>
+	      <l n="1.003.03c">ā yā<orig>̍</orig>taṁ rudravartanī ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.04">
+	      <l n="1.003.04a">indrā yā<orig>̍</orig>hi citrabhāno su<orig>̱</orig>tā i<orig>̱</orig>me tvā<orig>̱</orig>yava<orig>̍</orig>ḥ |</l>
+	      <l n="1.003.04c">aṇvī<orig>̍</orig>bhi<orig>̱</orig>s tanā<orig>̍</orig> pū<orig>̱</orig>tāsa<orig>̍</orig>ḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.05">
+	      <l n="1.003.05a">indrā yā<orig>̍</orig>hi dhi<orig>̱</orig>yeṣi<orig>̱</orig>to vipra<orig>̍</orig>jūtaḥ su<orig>̱</orig>tāva<orig>̍</orig>taḥ |</l>
+	      <l n="1.003.05c">upa<orig>̱</orig> brahmā<orig>̍</orig>ṇi vā<orig>̱</orig>ghata<orig>̍</orig>ḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.06">
+	      <l n="1.003.06a">indrā yā<orig>̍</orig>hi<orig>̱</orig> tūtu<orig>̍</orig>jāna<orig>̱</orig> upa<orig>̱</orig> brahmā<orig>̍</orig>ṇi harivaḥ |</l>
+	      <l n="1.003.06c">su<orig>̱</orig>te da<orig>̍</orig>dhiṣva na<orig>̱</orig>ś cana<orig>̍</orig>ḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.07">
+	      <l n="1.003.07a">omā<orig>̍</orig>saś carṣaṇīdhṛto<orig>̱</orig> viśve<orig>̍</orig> devāsa<orig>̱</orig> ā ga<orig>̍</orig>ta |</l>
+	      <l n="1.003.07c">dā<orig>̱</orig>śvāṁso<orig>̍</orig> dā<orig>̱</orig>śuṣa<orig>̍</orig>ḥ su<orig>̱</orig>tam ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.08">
+	      <l n="1.003.08a">viśve<orig>̍</orig> de<orig>̱</orig>vāso<orig>̍</orig> a<orig>̱</orig>ptura<orig>̍</orig>ḥ su<orig>̱</orig>tam ā ga<orig>̍</orig>nta<orig>̱</orig> tūrṇa<orig>̍</orig>yaḥ |</l>
+	      <l n="1.003.08c">u<orig>̱</orig>srā i<orig>̍</orig>va<orig>̱</orig> svasa<orig>̍</orig>rāṇi ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.09">
+	      <l n="1.003.09a">viśve<orig>̍</orig> de<orig>̱</orig>vāso<orig>̍</orig> a<orig>̱</orig>sridha<orig>̱</orig> ehi<orig>̍</orig>māyāso a<orig>̱</orig>druha<orig>̍</orig>ḥ |</l>
+	      <l n="1.003.09c">medha<orig>̍</orig>ṁ juṣanta<orig>̱</orig> vahna<orig>̍</orig>yaḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.10">
+	      <l n="1.003.10a">pā<orig>̱</orig>va<orig>̱</orig>kā na<orig>̱</orig>ḥ sara<orig>̍</orig>svatī<orig>̱</orig> vāje<orig>̍</orig>bhir vā<orig>̱</orig>jinī<orig>̍</orig>vatī |</l>
+	      <l n="1.003.10c">ya<orig>̱</orig>jñaṁ va<orig>̍</orig>ṣṭu dhi<orig>̱</orig>yāva<orig>̍</orig>suḥ ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.11">
+	      <l n="1.003.11a">co<orig>̱</orig>da<orig>̱</orig>yi<orig>̱</orig>trī sū<orig>̱</orig>nṛtā<orig>̍</orig>nā<orig>̱</orig>ṁ ceta<orig>̍</orig>ntī sumatī<orig>̱</orig>nām |</l>
+	      <l n="1.003.11c">ya<orig>̱</orig>jñaṁ da<orig>̍</orig>dhe<orig>̱</orig> sara<orig>̍</orig>svatī ||</l>
+	    </lg>
+	    <lg xml:id="RV_1.003.12">
+	      <l n="1.003.12a">ma<orig>̱</orig>ho arṇa<orig>̱</orig>ḥ sara<orig>̍</orig>svatī<orig>̱</orig> pra ce<orig>̍</orig>tayati ke<orig>̱</orig>tunā<orig>̍</orig> |</l>
+	      <l n="1.003.12c">dhiyo<orig>̱</orig> viśvā<orig>̱</orig> vi rā<orig>̍</orig>jati ||</l>
+	    </lg>
+
+	  </div>
+	  </div>
+	</div>
+  </body>
+</text>
+</TEI>

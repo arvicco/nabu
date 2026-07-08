@@ -976,7 +976,7 @@ without loss to the classical/Slavic axes — GRETIL is breadth, not a blocker. 
 the scout's judgment is that it is worth it: clean uniform license, huge readable
 Sanskrit corpus, complements the existing UD/DCS annotation layers.
 
-## P9-4b · GRETIL adapter + parser family  [tier: opus] [status: ready] [deps: P9-4a]
+## P9-4b · GRETIL adapter + parser family  [tier: opus] [status: done] [deps: P9-4a]
 FIXTURE PLAN OWNER-APPROVED 2026-07-08 ("proceed with 1-3"). Execute the
 P9-4a plan exactly (3 texts, site or byte-identical mirror URLs, nothing
 outside the list), then build: GretilParser (new family) handling the three

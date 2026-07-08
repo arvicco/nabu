@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Files 1-2 are whole: true (byte-identical to upstream). File 3 is a documented
+# TRIM (whole: false) of the ~5 MB full Ṛgveda to teiHeader + Maṇḍala 1 Sūktas
+# 1-3, so a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared. adapter_test is null: the gretil adapter test
+# asserts the trimmed verse/pada counts, which an untrimmed upstream file would
+# false-fail (same reason as ud/perseus). Re-apply the README trim after any
+# refresh. URLs are the mmehner TEI mirror raw URLs (byte-identical to the
+# GRETIL site; see README for both URL sets and the mirror-scope verification).
+source: gretil
+adapter_test: null
+retrieved: 2026-07-08
+files:
+  - path: sa_brahmabindUpaniSad.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_brahmabindUpaniSad.xml
+    whole: true
+    trim: none (complete short mass-converted verse text, copied whole)
+  - path: sa_prajJApAramitAhRdayasUtra.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_prajJApAramitAhRdayasUtra.xml
+    whole: true
+    trim: none (complete short prose text, copied whole)
+  - path: sa_Rgveda-edAufrecht-m1s1-3.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Rgveda-edAufrecht.xml
+    whole: false
+    trim: teiHeader + Maṇḍala 1 Sūktas 1-3 (upstream lines 1..471 + closing tags; ~5 MB -> ~20 KB; 30 lg / 60 l / 3 sūkta divs, well-formed)
