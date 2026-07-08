@@ -1186,7 +1186,7 @@ Carries two net-new mechanics: the JSON cdl parser family and the first
 non-git HTTP-zip fetch path (+ translit folding rules for akk/sux).
 Elaborated fully at the Phase 9 gate as Phase 10's headline.
 
-## P9-6 · Slavic sources survey  [tier: opus] [status: ready] [deps: —]
+## P9-6 · Slavic sources survey  [tier: opus] [status: done] [deps: —]
 Goal: scouting survey for the owner's Slavic research axis beyond
       TOROT/PROIEL: what OCS / Old East Slavic / Church Slavonic corpora
       are digitized, licensed, and machine-readable (candidates to assess:
@@ -1200,3 +1200,28 @@ Goal: scouting survey for the owner's Slavic research axis beyond
       research pages.
 Acceptance: survey doc complete and honest; 02-sources.md gains candidate
       rows marked SURVEYED.
+
+### Findings (P9-6, 2026-07-08 — survey delivered, docs/slavic-survey.md)
+
+RANKED ≤2 FOR PHASE 10: **#1 UD Slavic treebank expansion** (add
+`old-east-slavic-birchbark` + `old-east-slavic-rnc` to the `ud` adapter's
+`TREEBANKS` map — both `CC BY-SA 4.0` CoNLL-U, genuinely-new vernacular OES
+birchbark letters 1025–1500 + Middle Russian 1300–1700, absent from TOROT/PROIEL;
+**zero new parser family**, reuses ConlluParser + UD plumbing; `attribution` =
+MCP-safe; deliberately EXCLUDE the chu-PROIEL/orv-TOROT UD conversions that would
+double-load the native sync). **#2 CCMH** (7 canonical OCS texts, transliteration
++ simple XML, openly downloadable from Kielipankki/CLARIN `Open`; real gain =
+Codex Assemanianus + Savvina kniga, absent from current holdings; needs a small
+new bespoke family; adapter reads the exact CC at ingestion). Honorable mention:
+**obdurodon Codex Suprasliensis** critical edition (richest single OCS ms +
+parallel Greek, but `CC BY-NC-SA 3.0` = `nc`/MCP-excluded, and per-text website
+crawl, and overlaps TOROT's Suprasliensis as a fuller alt-edition).
+NOT-INGESTABLE (SURVEYED-BLOCKED, unblock paths in the survey): TITUS (custom
+scholarly-only/non-commercial terms, no redistribution, legacy encodings →
+`research_private`); RNC full historical corpora (query-only, "cannot be
+distributed" — its `CC BY-SA 4.0` UD releases ARE pick #1); "Манускриптъ"
+manuscripts.ru (retrieval system, no export — write for a grant); Sreznevsky
+Materialy (page scans only, no machine-readable TEI); SEENET/eSlavistik (no
+distinct open corpus located). Phase-10 shape: ORACC stays headline (P9-5b),
+pick #1 rides alongside as the smallest-possible companion packet, pick #2 as the
+follow-on scout→plan→adapter track.
