@@ -1407,3 +1407,128 @@ documents.license_override.
   MCP that license_class reads attribution.
 Acceptance: suite+lint green; live relabel verified; 02-sources UD row
 notes the split licensing; worklog line (sha —).
+
+## Phase 11 — Philology workbench + Old English axis (branch: phase-11; elaborated 2026-07-09)
+
+Owner shape (2026-07-09): workbench as recommended (alignment hub, dictionary
+shelf, biblical trio) PLUS a new axis — "I didn't mention interest in Old
+English / Anglo-Saxon previously but it does exist, so it's opportune to add
+it to sources search. Also relevant if we move along Philology/Biblic axis."
+Riders: HTTP remote-health probe (the ORACC gap), ORACC project expansion
+(config-only). Morph facets + vocab profiling: stretch, only if the phase
+runs light. Sequential dispatch, live-smoke review between packets, real
+syncs owner-fired.
+
+## P11-1 · Old English / Anglo-Saxon sources survey  [tier: opus] [status: in-progress] [deps: —]
+Scouting only (docs/slavic-survey.md is the pattern and quality bar): no
+code, no bulk fetch — page-level WebSearch/WebFetch + repo metadata only.
+Goal: rank the ingestable OE sources; name the blocked ones honestly with
+unblock paths. Leads to verify (not exhaustive — find more):
+- **ISWOC** (Oslo, Bech/Eide) — PROIEL XML family (we parse it already:
+  proiel + torot adapters); contains Ælfric's Catholic Homilies, Apollonius
+  of Tyre, Orosius, Anglo-Saxon Chronicle (+ Old French/Spanish/Portuguese
+  we'd skip). If format+license check out (expect CC BY-NC-SA like
+  PROIEL/TOROT) this is the near-config-only pick. Verify repo, release
+  state, exact texts, license.
+- **YCOE** (York-Toronto-Helsinki Parsed Corpus of OE Prose) + **YCOEP**
+  (poetry) — Penn-Helsinki bracketed format (NEW parser family if taken);
+  distribution/license historically via the Oxford Text Archive — verify
+  current terms (research-only? redistribution?).
+- **Dictionary of Old English Corpus (DOEC)** — the complete surviving OE
+  record (~3M words) but University of Toronto LICENSED product — expect
+  BLOCKED; document terms + unblock path (institutional/personal license =
+  research_private at best).
+- **West-Saxon Gospels** (the biblical-axis prize — feeds the P11-3
+  alignment hub as the sixth Gospel version): find the best machine-readable
+  edition (ISWOC? YCOE? a TEI edition? Bosworth-Toller-adjacent projects?).
+- **ASPR / OE poetry** (Beowulf, Exeter Book, Junius): open TEI editions?
+  (e.g. "Old English Poetry in Facsimile" project — check data availability
+  and license).
+- **Bosworth-Toller** OE dictionary (germanet-style shelf candidate for
+  P11-4's dictionary pattern; digitized at bosworthtoller.com — check data
+  license/API).
+- UD: is there an Old English treebank? (None known in UD as of scout
+  memory — verify; if one exists it's a config-only UD map add per the
+  P10-2 pattern.)
+Deliverable: docs/oe-survey.md (ranked picks ≤2 for Phase 11/12 ingestion,
+blocked list with unblock paths, biblical-axis note on Gospel versions);
+02-sources.md rows for every surveyed source; backlog status → done +
+Findings block; worklog line (sha —). No adapter work in this packet.
+
+## P11-2 · HTTP remote-health probe  [tier: opus] [status: pending] [deps: —]
+The P10 known gap: health --remote is git-shaped (ls-remote) and reads the
+ORACC HTTP-zip upstream as gone. Teach the remote probe a per-source probe
+strategy keyed off the adapter/manifest (git → ls-remote as today; http-zip
+→ HEAD request checking 200 + Last-Modified drift vs the stored
+.zip-fetch.json pin; license baseline for oracc = per-project metadata.json
+license field re-read on probe? NO network-heavy downloads — HEAD only,
+plus GET of metadata.json ONLY (small) for license drift). Tests stub HTTP.
+02-sources + ops.md updated; probe output shows oracc rows honestly.
+Acceptance: nabu health --remote (owner-run, or stubbed test) no longer
+reports oracc as gone; suite+lint green; worklog line.
+
+## P11-3 · Cross-source alignment hub  [tier: fable] [status: pending] [deps: —]
+improvements.md §1.2 comes due. Design + implement the alignment layer:
+align the SAME work across sources/languages at citation grain. Flagship:
+the parallel New Testament — greek-nt (PROIEL grc) ↔ latin-nt (Vulgate,
+PROIEL lat) ↔ gothic-nt (PROIEL got) ↔ armenian-nt (PROIEL xcl) ↔ marianus
+(OCS, PROIEL chu) — all five already in the catalog with verse-grained
+citations and gold lemmas. Design questions the packet must answer (design
+doc section in architecture.md BEFORE code): alignment table schema
+(work-level registry + citation-mapping rules vs materialized passage
+pairs?); citation normalization across sources (PROIEL sentence ids vs
+book.chapter.verse — check what the proiel adapter actually minted);
+rebuild-safety (alignment = derived data, must replay from a declarative
+registry — enrichment journal or config?); query surface (`show --align`?
+extend --parallel? a new `align` subcommand? MCP tool nabu_align?); how
+GRETIL commentary layers and future West-Saxon Gospels plug in later.
+Scope control: ship the NT five-way as the working proof; the mechanism
+must be registry-driven (adding a sixth version = registry entry, not
+code). Acceptance: a verse (e.g. John 1:1) renders five-way aligned in one
+command with per-version license labels; alignment survives nabu rebuild;
+suite+lint green; architecture §10 written; worklog line.
+
+## P11-4 · Dictionary shelf: LSJ + Lewis & Short  [tier: fable] [status: pending] [deps: —]
+improvements.md §1.3. Ingest the two canonical classical lexica (Perseus
+TEI editions, CC BY-SA — verify at fixture time): LSJ (Greek) and Lewis &
+Short (Latin). NOT passages — a new dictionaries surface (own table(s)):
+entries keyed by folded lemma, senses as structured text. Two capabilities:
+(1) `nabu define <lemma> [--lang]` + MCP nabu_define — lemma search
+integration (a lemma hit can carry its dictionary gloss); (2) citation
+resolution: dictionary entries cite loci (Il. 1.34, Cic. Off. 1.1) — parse
+citations into urns where the work exists in-catalog (resolvable→clickable;
+unresolvable kept as text). Design note first: dictionary data is derived
+from canonical TEI (fetch via git like perseus? verify upstream repo) and
+must be rebuild-replayable. Fixture plan (owner approves before network):
+2-3 entry slices per lexicon. Acceptance: define works for a Greek and a
+Latin lemma end-to-end incl. MCP; ≥1 citation resolves to an in-catalog
+urn; suite+lint green; worklog line.
+
+## P11-5 · Biblical trio  [tier: opus] [status: pending] [deps: P11-3 design]
+improvements.md §2.1: Vulgate (full, not just NT — PROIEL latin-nt is NT
+only), LXX (Septuagint, Rahlfs where openly licensed — verify; CCAT/other
+open editions), SBLGNT (SBL Greek New Testament, free license with
+attribution). Scout+fixture-plan FIRST inside the packet (owner approves
+fixture plan before network, standing rule); adapters likely reuse existing
+parser families (TEI/plain structured). These feed the P11-3 hub as
+additional versions (registry entries). Acceptance: three sources READY
+(enabled:false, owner-fired syncs), hub registry entries prepared;
+suite+lint green; worklog line.
+
+## P11-6 · ORACC project expansion  [tier: opus] [status: pending] [deps: —]
+Config-only rider: extend Oracc::PROJECTS with saao-saa01 (Sargon II
+letters), rinap-rinap1 (Tiglath-pileser III), dcclt (lexical lists) — all
+CC0-verified in P9-5a scouting; adapter reads license per-project anyway.
+Fixture: NONE needed if the parser family covers them (it should — verify
+by parsing a few texts from the owner-fired sync at review; if any new cdl
+node type appears, STOP and report for a follow-up packet instead of
+hacking). Registry scope comment updated. Owner-fired: bin/nabu sync oracc
+after merge pulls the new projects. Acceptance: suite+lint green (no new
+fixtures = no new tests beyond PROJECTS list pin); 02-sources scope updated;
+worklog line.
+
+## P11-gate · Phase 11 gate  [tier: orchestrator] [status: pending] [deps: P11-1..6]
+Full-diff review, library.md refresh (per §9: new capabilities sections for
+alignment + dictionaries; OE survey linked), README truthfulness, PR,
+sticky alarm LAST. Stretch riders (morph facets §1.6, vocab profiling §1.7)
+only if the phase ran light — decide at gate, don't cram.
