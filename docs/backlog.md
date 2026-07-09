@@ -1419,7 +1419,7 @@ Riders: HTTP remote-health probe (the ORACC gap), ORACC project expansion
 runs light. Sequential dispatch, live-smoke review between packets, real
 syncs owner-fired.
 
-## P11-1 · Old English / Anglo-Saxon sources survey  [tier: opus] [status: in-progress] [deps: —]
+## P11-1 · Old English / Anglo-Saxon sources survey  [tier: opus] [status: done] [deps: —]
 Scouting only (docs/slavic-survey.md is the pattern and quality bar): no
 code, no bulk fetch — page-level WebSearch/WebFetch + repo metadata only.
 Goal: rank the ingestable OE sources; name the blocked ones honestly with
@@ -1454,6 +1454,50 @@ Deliverable: docs/oe-survey.md (ranked picks ≤2 for Phase 11/12 ingestion,
 blocked list with unblock paths, biblical-axis note on Gospel versions);
 02-sources.md rows for every surveyed source; backlog status → done +
 Findings block; worklog line (sha —). No adapter work in this packet.
+
+### Findings (P11-1, 2026-07-09 — survey delivered, docs/oe-survey.md)
+
+RANKED ≤2: **#1 ISWOC Treebank** (Oslo, Bech & Eide) — **PROIEL XML 2.1, the
+exact schema proiel/torot already parse** (verified in the raw file:
+`schema-version="2.1"`, same `proiel.xsd`); 5 OE texts ≈ 29,406 gold-annotated
+tokens: Ælfric's **Lives of Saints** (packet lead said Catholic Homilies —
+corrected), Apollonius of Tyre, Anglo-Saxon Chronicles, Orosius, West-Saxon
+Gospels; license verbatim (README): "freely available under a Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 License" + per-source `<license>CC
+BY-NC-SA 3.0</license>` → `nc`, same class as its PROIEL siblings. Adapter =
+TOROT-pattern subclass + `ang` language filter (repo also carries 10 medieval
+Romance texts to skip). Repos: `iswoc/iswoc-treebank` (frozen) → successor
+`syntacticus/syntacticus-treebank-data` (**must scope to `iswoc/` subdir — its
+`proiel/`/`torot/` dirs are the already-synced data**). **BIBLICAL AXIS
+ANSWER:** ISWOC `wscp` is **the Gospel of MARK complete (chs 1–16, 671 verse
+citations) + fragments of Matt 7/John 1** — NOT four Gospels; native
+`citation-part="MARK 1.1"` verse refs are already lifted by ProielParser → OE
+Mark is a drop-in sixth P11-3 hub witness with zero citation plumbing. Full
+tetraevangelion paths (all costly): YCOE `cowsgosp.o3` conversion (Penn format
++ OTA noncommercial terms) or PD reconstruction from Skeat/Bosworth-Waring
+scans; no open TEI OE Gospels edition exists. **#2 ASPR via OTA 3009** — the
+complete six-volume Krapp & Dobbie OE poetry corpus (Beowulf, Junius, Vercelli,
+Exeter, Paris Psalter, Minor Poems incl. Cædmon's Hymn in Northumbrian AND WS
+versions; 374 texts, ~30.5k lines) as ONE 2.2 MB TEI-P5 file, fetched without
+auth; license verbatim in the TEI header itself: "Distributed by the University
+of Oxford under a Creative Commons Attribution-ShareAlike 3.0 Unported License"
+→ `attribution`, the only fully-open structured OE found, MCP-safe. NOT
+EpiDoc/CTS, no `l/@n` → new small bespoke TEI family, ordinal line citations.
+DICTIONARY SHELF (P11-4): **Bosworth-Toller LINDAT dump** hdl 11234/1-3532,
+verbatim "Attribution 4.0 International (CC BY 4.0)", SQL + lemma-keyed CSV
+(`id;headword;body`, body XML) — third lexicon candidate. SURVEYED (later):
+YCOE/YCOEP (~1.5M words OE prose canon + 71k poetry, Penn bracketed = new
+family, OTA "ACA Academic Use" noncommercial with layered copyright, no text
+redistribution grant). BLOCKED: DOEC (subscription; verbatim "Recompiling,
+copying, publication, or republication … only with specific written permission";
+unblock = written permission, or verify the 2000 release on OTA 2488 academic-
+use); OE Poetry in Facsimile (web-app, no reuse grant); Electronic Beowulf (©
+Kiernan + British Library); Jebson ASC ("all rights reserved", XHTML only);
+Digital Ælfric (commercial); CoNE/PASE/LangScape (restricted/metadata). **UD
+has NO Old English treebank** (verified — no config-only add exists). MENOTA
+confirmed no OE. 02-sources: new rows #34 ISWOC / #35 ASPR / #36 B-T / #37
+YCOE+YCOEP (Tier 2), #38 DOEC / #39 OE web-app editions (Tier 3); UD #4 +
+Menota #21 notes.
 
 ## P11-2 · HTTP remote-health probe  [tier: opus] [status: pending] [deps: —]
 The P10 known gap: health --remote is git-shaped (ls-remote) and reads the
