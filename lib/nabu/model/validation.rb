@@ -93,6 +93,13 @@ module Nabu
         -candidate
       end
 
+      # A license_class, or nil for "no per-document override" (the common
+      # case). The db CHECK on documents.license_override is the backstop; this
+      # rejects a bad class at the domain boundary so it never reaches a write.
+      def license_class_or_nil!(value)
+        value.nil? ? nil : license_class!(value)
+      end
+
       # A Hash of pure JSON data (String/Symbol keys; String, Integer, finite
       # Float, true/false/nil, Array, Hash values). Returns a deep, deeply
       # frozen copy so the value object shares no mutable state with the

@@ -153,19 +153,34 @@ module Nabu
 
         if row.content_sha256 == doc_sha
           # Unchanged content: no revision bump, no passage work — only the
-          # visibility flags may need reconciling.
+          # visibility flags and the license override (metadata, P10-4) may
+          # need reconciling.
           restored = row.withdrawn && restore(row)
-          return :skipped unless reconcile_retirement?(row, retained) || restored
+          relabeled = reconcile_license_override?(row, document)
+          return :skipped unless reconcile_retirement?(row, retained) || restored || relabeled
         else
           revise_document(row, document, passage_shas, doc_sha, retained)
         end
         :updated
       end
 
+      # Same-content path: bring documents.license_override into line with what
+      # the adapter now declares (P10-4). A pure metadata update — no revision
+      # bump, content_sha256 untouched — so a license relabel (or an override
+      # removed upstream, reverting to NULL) never fakes a content change.
+      # Returns whether it changed anything.
+      def reconcile_license_override?(row, document)
+        return false if row.license_override == document.license_override
+
+        row.update(license_override: document.license_override)
+        true
+      end
+
       def insert_document(document, passage_shas, doc_sha, retained)
         row = Document.create(
           source_id: @source.id, urn: document.urn, title: document.title,
           language: document.language, canonical_path: document.canonical_path,
+          license_override: document.license_override,
           content_sha256: doc_sha, revision: 1, withdrawn: false, retired_upstream: !retained.nil?
         )
         journal(event: "loaded", document_id: row.id)
@@ -181,6 +196,7 @@ module Nabu
         was_retired = row.retired_upstream
         row.update(
           title: document.title, language: document.language, canonical_path: document.canonical_path,
+          license_override: document.license_override,
           content_sha256: doc_sha, revision: row.revision + 1, withdrawn: false,
           retired_upstream: !retained.nil?
         )

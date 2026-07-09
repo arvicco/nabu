@@ -42,10 +42,10 @@ module Store
     # -- helpers -------------------------------------------------------------
 
     # passages: array of [urn_suffix, text] pairs; sequence is the array index.
-    def build_document(slug, passages, title: "Document #{slug}", annotations: {})
+    def build_document(slug, passages, title: "Document #{slug}", annotations: {}, license_override: nil)
       document = Nabu::Document.new(
         urn: doc_urn(slug), language: "grc", title: title,
-        canonical_path: "/canonical/test_adapter/#{slug}.txt"
+        canonical_path: "/canonical/test_adapter/#{slug}.txt", license_override: license_override
       )
       passages.each_with_index do |(suffix, text), index|
         document << Nabu::Passage.new(
@@ -141,6 +141,89 @@ module Store
 
       assert_report report, skipped: 1
       assert_equal 1, doc_row("alpha").revision
+    end
+
+    # -- license override (P10-4) --------------------------------------------
+    #
+    # A per-document license_override (adapter → Document → documents.license_
+    # override) lets one treebank in an nc source be labelled attribution
+    # without touching the source class. It is METADATA, never content: it must
+    # not enter content_sha256 and relabelling must not bump the revision.
+
+    def test_load_persists_license_override_on_create
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν]], license_override: "attribution")])
+
+      assert_report report, added: 1
+      row = doc_row("alpha")
+      assert_equal "attribution", row.license_override
+      assert_equal 1, row.revision
+    end
+
+    def test_no_override_leaves_license_override_null
+      @loader.load([alpha])
+      assert_nil doc_row("alpha").license_override
+    end
+
+    def test_relabel_on_reload_is_metadata_only_no_revision_bump_no_content_change
+      @loader.load([alpha])
+      row = doc_row("alpha")
+      assert_nil row.license_override
+      sha_before = row.content_sha256
+      passages_before = snapshot(Nabu::Store::Passage)
+
+      # Same content, override newly declared upstream → relabel in place.
+      report = @loader.load([alpha.tap { |d| d.instance_variable_set(:@license_override, "attribution") }])
+
+      assert_report report, updated: 1
+      row = doc_row("alpha")
+      assert_equal "attribution", row.license_override
+      assert_equal 1, row.revision, "a license relabel must not bump the revision"
+      assert_equal sha_before, row.content_sha256, "a license relabel must not fake a content change"
+      assert_equal passages_before, snapshot(Nabu::Store::Passage)
+    end
+
+    def test_reload_with_same_override_is_idempotent
+      overridden = -> { build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε]], license_override: "attribution") }
+      @loader.load([overridden.call])
+      documents_before = snapshot(Nabu::Store::Document)
+
+      report = @loader.load([overridden.call])
+
+      assert_report report, skipped: 1
+      assert_equal documents_before, snapshot(Nabu::Store::Document)
+    end
+
+    def test_override_removed_upstream_reverts_to_null_on_next_load
+      @loader.load([build_document("alpha", [%w[1 μῆνιν]], license_override: "attribution")])
+      assert_equal "attribution", doc_row("alpha").license_override
+
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν]])]) # override gone from the map
+
+      assert_report report, updated: 1
+      row = doc_row("alpha")
+      assert_nil row.license_override, "an override removed upstream must revert to NULL"
+      assert_equal 1, row.revision
+    end
+
+    def test_content_revision_carries_the_current_override
+      @loader.load([build_document("alpha", [%w[1 μῆνιν]], license_override: "attribution")])
+
+      # Content changes AND the override is (still) present: the revised row
+      # keeps the override.
+      report = @loader.load([build_document("alpha", [%w[1 θεά]], license_override: "attribution")])
+
+      assert_report report, updated: 1
+      row = doc_row("alpha")
+      assert_equal 2, row.revision
+      assert_equal "attribution", row.license_override
+    end
+
+    def test_invalid_license_override_is_rejected_before_any_write
+      error = assert_raises(Nabu::ValidationError) do
+        Nabu::Document.new(urn: doc_urn("x"), language: "grc",
+                           canonical_path: "/c/x.txt", license_override: "totally-free")
+      end
+      assert_match(/license_class/, error.message)
     end
 
     # -- revisions -----------------------------------------------------------
