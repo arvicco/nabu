@@ -35,6 +35,14 @@ module Nabu
     RETAINED_KEY = "retained"
     RETIRED_SHA_KEY = "retired_sha"
 
+    # One HTTP-zip remote-probe target (P11-2), for a :http_zip source. Each
+    # fetched unit yields one: +zip_url+ is HEAD'd for reachability +
+    # Last-Modified and is ALSO the ledger-pin key (the sync path pins each
+    # unit by its zip URL); +metadata_url+ is GET'd for the license field;
+    # +state_subdir+ is the unit's dir under the source workdir, holding the
+    # .zip-fetch.json Last-Modified pin the probe diffs against.
+    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir)
+
     # Trip the mass-deletion breaker when an upstream pull would delete
     # strictly more than this fraction of the source's ingestible files.
     # (SyncRunner's load-side withdrawal guard shares this value.)
@@ -61,6 +69,18 @@ module Nabu
     def self.upstream_repo_urls
       [manifest.upstream_url]
     end
+
+    # Remote-health probe strategy (P11-2). Default :git — the probe
+    # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
+    # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to
+    # :http_zip: the probe HEADs each project zip (reachability +
+    # Last-Modified drift vs the on-disk .zip-fetch.json pin) and GETs each
+    # project metadata.json for license drift. See Nabu::Health::RemoteProbe.
+    def self.remote_probe_strategy = :git
+
+    # HTTP-zip probe targets — one HttpProbeTarget per fetched unit. Only
+    # consulted for a :http_zip source; the default (:git) never calls it.
+    def self.http_probe_targets = []
 
     # Bring upstream to the local canonical dir at +workdir+ (git pull,
     # rsync, HTTP crawl with cache). Must be resumable, rate-limit polite,
