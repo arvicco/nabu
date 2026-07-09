@@ -73,7 +73,7 @@ module Nabu
       # slash-paths). Extending scope = adding a path here + owner-fired
       # first sync. Slugs (dir names, urn segments, zip basenames) are the
       # paths hyphen-flattened.
-      PROJECTS = %w[rimanum etcsri].freeze
+      PROJECTS = %w[rimanum etcsri saao/saa01 rinap/rinap1 dcclt].freeze
 
       ZIP_BASE_URL = "https://oracc.museum.upenn.edu/json"
 

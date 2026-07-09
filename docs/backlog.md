@@ -1896,7 +1896,7 @@ CLI phrases the miss neutrally. Verified bare on live data (read-only):
 `align MARK 2.3` → nt 5-of-7, `align GEN 1.1` → ot with Swete attesting.
 Suite 1206/15,303 green, lint clean.
 
-## P11-6 · ORACC project expansion  [tier: opus] [status: pending] [deps: —]
+## P11-6 · ORACC project expansion  [tier: opus] [status: done] [deps: —]
 Config-only rider: extend Oracc::PROJECTS with saao-saa01 (Sargon II
 letters), rinap-rinap1 (Tiglath-pileser III), dcclt (lexical lists) — all
 CC0-verified in P9-5a scouting; adapter reads license per-project anyway.

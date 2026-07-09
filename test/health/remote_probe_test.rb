@@ -545,7 +545,7 @@ class RemoteProbeTest < Minitest::Test
   def test_real_oracc_adapter_probes_over_http_and_is_not_gone
     Dir.mktmpdir do |root|
       Nabu::Adapters::Oracc::PROJECTS.each do |project|
-        stub_zip_head("https://oracc.museum.upenn.edu/json/#{project}.zip", last_modified: LM_OLD)
+        stub_zip_head("https://oracc.museum.upenn.edu/json/#{project.tr('/', '-')}.zip", last_modified: LM_OLD)
       end
       report = probe(registry_of(["oracc", "Nabu::Adapters::Oracc", true]), NO_SHELL, canonical_dir: root)
       row = report.rows.first
