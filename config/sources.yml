@@ -83,7 +83,9 @@ oracc:
   enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
                    # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
-                   # search verified live. Scope: rimanum + etcsri.
+                   # search verified live. Scope: rimanum + etcsri; P11-6
+                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt)
+                   # — owner-fired re-sync after merge pulls the new projects.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual

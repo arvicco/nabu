@@ -125,6 +125,12 @@ module Adapters
     RIMANUM_URL = "https://oracc.museum.upenn.edu/json/rimanum.zip"
     ETCSRI_URL = "https://oracc.museum.upenn.edu/json/etcsri.zip"
 
+    # The two projects with checked-in corpus fixtures; the remaining in-scope
+    # projects (P11-6 expansion — saao/saa01, rinap/rinap1, dcclt) are stubbed
+    # with a metadata-only envelope (no cdl fixtures invented, 0 ingestible
+    # texts) so fetch's per-project plumbing is exercised across the full list.
+    FIXTURED_PROJECTS = %w[rimanum etcsri].freeze
+
     def test_fetch_downloads_and_unpacks_both_project_zips
       Dir.mktmpdir do |root|
         stub_project_zips(root)
@@ -140,7 +146,11 @@ module Adapters
         assert_match(/etcsri=\h{12}/, report.notes)
         assert_match(/1 catalog-only \(empty\)/, report.notes,
                      "the empty-corpusjson count is the honest sync note")
-        assert_equal [RIMANUM_URL, ETCSRI_URL], report.repos.keys
+        # repos pins every in-scope project by its zip URL, subproject
+        # slash-paths hyphen-flattened (saao/saa01 → saao-saa01.zip).
+        assert_equal Nabu::Adapters::Oracc::PROJECTS.map { |project|
+          "https://oracc.museum.upenn.edu/json/#{project.tr('/', '-')}.zip"
+        }, report.repos.keys
       end
     end
 
@@ -224,13 +234,23 @@ module Adapters
     # an upstream deletion in the next build.
     def stub_project_zips(root, drop: nil)
       zips = File.join(root, "zips-#{drop ? 'dropped' : 'full'}")
-      { "rimanum" => RIMANUM_URL, "etcsri" => ETCSRI_URL }.each do |project, url|
-        staging = File.join(zips, project)
+      Nabu::Adapters::Oracc::PROJECTS.each do |project|
+        slug = project.tr("/", "-")
+        url = "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/#{slug}.zip"
+        staging = File.join(zips, slug)
         FileUtils.mkdir_p(File.dirname(staging))
-        FileUtils.cp_r(File.join(FIXTURES, project), staging)
-        FileUtils.rm_f(File.join(zips, drop)) if drop&.start_with?("#{project}/")
-        zip_path = File.join(zips, "#{project}.zip")
-        Nabu::Shell.run("zip", "-q", "-r", zip_path, project, chdir: zips)
+        if FIXTURED_PROJECTS.include?(project)
+          FileUtils.cp_r(File.join(FIXTURES, project), staging)
+        else
+          # No corpus fixture: ship only a real CC0 metadata.json (the license
+          # gate the adapter reads) — a valid, empty project envelope, not
+          # invented cdl data.
+          FileUtils.mkdir_p(staging)
+          FileUtils.cp(File.join(FIXTURES, "rimanum", "metadata.json"), staging)
+        end
+        FileUtils.rm_f(File.join(zips, drop)) if drop&.start_with?("#{slug}/")
+        zip_path = File.join(zips, "#{slug}.zip")
+        Nabu::Shell.run("zip", "-q", "-r", zip_path, slug, chdir: zips)
         stub_request(:get, url).to_return(
           status: 200, body: File.binread(zip_path),
           headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
