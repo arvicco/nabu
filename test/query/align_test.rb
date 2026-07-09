@@ -173,6 +173,136 @@ module Query
       assert_equal(5, result.witnesses.count { |witness| witness.status == :ok })
     end
 
+    # -- multi-document witnesses (P11-5: cts-verse editions) -----------------------
+
+    TRIO_YAML = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - label: sblgnt
+            extractor: cts-verse
+            documents:
+              MARK: urn:nabu:sblgnt:mark
+              JOHN: urn:nabu:sblgnt:john
+    YAML
+
+    def seed_verse_document(doc_urn, language:, title:, verses:, source: @source)
+      @catalog[:documents].insert(
+        source_id: source.id, urn: doc_urn, title: title,
+        language: language, content_sha256: "x", revision: 1, withdrawn: false
+      )
+      doc_id = @catalog[:documents].where(urn: doc_urn).get(:id)
+      verses.each_with_index do |(tail, text), sequence|
+        @catalog[:passages].insert(
+          document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: sequence,
+          language: language, text: text, text_normalized: text, content_sha256: "x",
+          revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
+    end
+
+    def test_a_cts_verse_witness_aligns_beside_the_treebank_with_the_hit_books_header
+      registry = load_registry(TRIO_YAML)
+      seed_five_witnesses
+      seed_verse_document("urn:nabu:sblgnt:mark", language: "grc", title: "ΚΑΤΑ ΜΑΡΚΟΝ",
+                                                  verses: [["2.3", "καὶ ἔρχονται φέροντες πρὸς αὐτὸν παραλυτικὸν"]])
+      reindex!(registry)
+
+      result = align("MARK 2.3", registry: registry)
+      sblgnt = result.witnesses.last
+      assert_equal "sblgnt", sblgnt.label
+      assert_equal :ok, sblgnt.status
+      assert_equal "urn:nabu:sblgnt:mark", sblgnt.document_urn
+      assert_equal "ΚΑΤΑ ΜΑΡΚΟΝ", sblgnt.title, "the hit book's title heads the witness"
+      assert_equal ["urn:nabu:sblgnt:mark:2.3"], sblgnt.sentences.map(&:urn)
+      assert_equal [["MARK 2.3"]], sblgnt.sentences.map(&:refs)
+    end
+
+    def test_a_partially_synced_multi_document_witness_reads_no_match_without_a_misleading_title
+      registry = load_registry(TRIO_YAML)
+      seed_five_witnesses
+      seed_verse_document("urn:nabu:sblgnt:john", language: "grc", title: "ΚΑΤΑ ΙΩΑΝΝΗΝ",
+                                                  verses: [["1.1", "Ἐν ἀρχῇ ἦν ὁ λόγος"]])
+      reindex!(registry)
+
+      sblgnt = align("MARK 2.3", registry: registry).witnesses.last
+      assert_equal :no_match, sblgnt.status
+      assert_nil sblgnt.title, "a multi-book witness must not head a MARK miss with another book's title"
+      assert_equal "grc", sblgnt.language
+      assert_equal "nc", sblgnt.license_class, "license labels ride even on no-match witnesses"
+    end
+
+    def test_a_multi_document_witness_with_no_live_documents_reads_not_synced
+      registry = load_registry(TRIO_YAML)
+      seed_five_witnesses
+      reindex!(registry)
+
+      sblgnt = align("MARK 2.3", registry: registry).witnesses.last
+      assert_equal :not_synced, sblgnt.status
+      assert_nil sblgnt.license_class
+    end
+
+    def test_a_not_synced_multi_document_witness_cites_the_ref_relevant_book_urn
+      registry = load_registry(TRIO_YAML)
+      seed_five_witnesses
+      reindex!(registry)
+
+      # TRIO_YAML maps MARK and JOHN; a JOHN query must not cite the mark urn.
+      add_sentence(@catalog, "urn:nabu:proiel:greek-nt",
+                   urn_tail: "2", sequence: 1, language: "grc",
+                   text: "Ἐν ἀρχῇ ἦν ὁ λόγος", parts: ["JOHN 1.1"])
+      reindex!(registry)
+
+      sblgnt = align("JOHN 1.1", registry: registry).witnesses.last
+      assert_equal :not_synced, sblgnt.status
+      assert_equal "urn:nabu:sblgnt:john", sblgnt.document_urn,
+                   "the not-synced example urn should be the queried ref's book"
+    end
+
+    def test_a_not_synced_multi_document_witness_with_the_book_unmapped_cites_no_urn
+      # TRIO_YAML maps MARK and JOHN only; a LUKE ref has no relevant book
+      # urn to cite — nil, so renderers phrase it neutrally instead of
+      # naming an unrelated book.
+      registry = load_registry(TRIO_YAML)
+      seed_five_witnesses
+      add_sentence(@catalog, "urn:nabu:proiel:greek-nt",
+                   urn_tail: "2", sequence: 1, language: "grc",
+                   text: "λόγον", parts: ["LUKE 1.1"])
+      reindex!(registry)
+
+      sblgnt = align("LUKE 1.1", registry: registry).witnesses.last
+      assert_equal :not_synced, sblgnt.status
+      assert_nil sblgnt.document_urn
+    end
+
+    def test_two_works_index_and_query_independently
+      yaml = TRIO_YAML + <<~YAML
+        ot:
+          witnesses:
+            - label: lxx
+              extractor: cts-verse
+              documents:
+                GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+      YAML
+      registry = load_registry(yaml)
+      seed_five_witnesses
+      seed_verse_document("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1",
+                          language: "grc", title: "Genesis",
+                          verses: [["1.1", "ΕΝ ΑΡΧΗ ἐποίησεν ὁ θεὸς"]])
+      reindex!(registry)
+
+      result = align("GEN 1.1", work: "ot", registry: registry)
+      assert_equal "ot", result.work
+      lxx = result.witnesses.first
+      assert_equal :ok, lxx.status
+      assert_includes lxx.sentences.first.text, "ΕΝ ΑΡΧΗ"
+      # And the ref does not bleed into nt.
+      error = assert_raises(Nabu::Query::Align::Error) do
+        align("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1:1.1", work: "nt", registry: registry)
+      end
+      assert_match(/not aligned/, error.message)
+    end
+
     # -- work resolution -------------------------------------------------------------
 
     def test_sole_work_is_the_default
@@ -189,7 +319,12 @@ module Query
       assert_match(/nt/, error.message, "the error must name the registered works")
     end
 
-    def test_multiple_works_require_an_explicit_work
+    # With several works registered, a bare ref auto-resolves through the
+    # index (P11-5 review fix): unique attesting work → picked; several →
+    # ambiguity error naming ONLY the attesters; none → honest not-found
+    # with the --work hint. Explicit --work keeps precedence.
+
+    def test_bare_ref_auto_resolves_to_the_only_attesting_work
       yaml = REGISTRY_YAML + <<~YAML
         psalter:
           witnesses:
@@ -199,9 +334,53 @@ module Query
       seed_five_witnesses
       reindex!(registry)
 
+      result = align("MARK 2.3", registry: registry)
+      assert_equal "nt", result.work, "the sole attesting work resolves without --work"
+      assert_equal(5, result.witnesses.count { |witness| witness.status == :ok })
+      # A passage urn pivots through the same resolution.
+      assert_equal "nt", align("urn:nabu:proiel:marianus:1", registry: registry).work
+      # Explicit --work keeps precedence.
+      assert_equal "nt", align("MARK 2.3", work: "nt", registry: registry).work
+    end
+
+    def test_bare_ref_attested_in_several_works_names_only_the_attesters
+      yaml = REGISTRY_YAML + <<~YAML
+        harmony:
+          witnesses:
+            - label: verses
+              extractor: cts-verse
+              documents:
+                MARK: urn:nabu:sblgnt:mark
+        psalter:
+          witnesses:
+            - document: urn:nabu:proiel:some-psalter
+      YAML
+      registry = load_registry(yaml)
+      seed_five_witnesses
+      seed_verse_document("urn:nabu:sblgnt:mark", language: "grc", title: "ΚΑΤΑ ΜΑΡΚΟΝ",
+                                                  verses: [["2.3", "καὶ ἔρχονται"]])
+      reindex!(registry)
+
       error = assert_raises(Nabu::Query::Align::Error) { align("MARK 2.3", registry: registry) }
       assert_match(/--work/, error.message)
-      assert_equal "nt", align("MARK 2.3", work: "nt", registry: registry).work
+      assert_match(/nt/, error.message)
+      assert_match(/harmony/, error.message)
+      refute_match(/psalter/, error.message, "a work that does not attest the ref is not offered")
+    end
+
+    def test_bare_ref_attested_nowhere_reads_not_found_with_the_work_hint
+      yaml = REGISTRY_YAML + <<~YAML
+        psalter:
+          witnesses:
+            - document: urn:nabu:proiel:some-psalter
+      YAML
+      registry = load_registry(yaml)
+      seed_five_witnesses
+      reindex!(registry)
+
+      error = assert_raises(Nabu::Query::Align::Error) { align("TOBIT 1.1", registry: registry) }
+      assert_match(/not attested/i, error.message)
+      assert_match(/--work/, error.message)
     end
 
     def test_empty_registry_raises_with_guidance

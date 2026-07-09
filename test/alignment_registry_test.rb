@@ -139,17 +139,134 @@ class AlignmentRegistryTest < Minitest::Test
     assert_match(/books/, error.message)
   end
 
+  # -- multi-document witnesses (P11-5: the cts-verse extractor) ---------------
+
+  MULTI = <<~YAML
+    ot:
+      title: "Old Testament"
+      witnesses:
+        - label: lxx
+          extractor: cts-verse
+          documents:
+            gen: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+            EXO: urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1
+  YAML
+
+  def test_documents_form_loads_urns_in_order_with_normalized_book_tokens
+    witness = load_registry(MULTI).work("ot").witnesses.first
+    assert_equal %w[urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+                    urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1],
+                 witness.document_urns
+    assert_equal "GEN", witness.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
+    assert_equal "EXO", witness.book_for("urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1")
+    assert_equal "lxx", witness.label
+  end
+
+  def test_single_document_form_still_answers_the_multi_document_readers
+    witness = load_registry(VALID).work("nt").witnesses.first
+    assert_equal %w[urn:nabu:proiel:greek-nt], witness.document_urns
+    assert_nil witness.book_for("urn:nabu:proiel:greek-nt")
+  end
+
+  def test_witness_lookup_finds_a_documents_form_witness_by_any_of_its_urns
+    work = load_registry(MULTI).work("ot")
+    assert_equal "lxx", work.witness_for("urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1").label
+  end
+
+  def test_documents_form_requires_a_label
+    yaml = MULTI.sub(/- label: lxx\n\s+extractor/, "- extractor")
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/label/, error.message)
+  end
+
+  def test_documents_form_requires_the_cts_verse_extractor
+    yaml = MULTI.sub("extractor: cts-verse", "extractor: proiel-citation")
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/proiel-citation/, error.message)
+  end
+
+  def test_cts_verse_requires_the_documents_form
+    yaml = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+            extractor: cts-verse
+    YAML
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/cts-verse/, error.message)
+    assert_match(/documents/, error.message)
+  end
+
+  def test_witness_with_both_document_and_documents_fails
+    yaml = <<~YAML
+      ot:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+            label: x
+            extractor: cts-verse
+            documents:
+              GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+    YAML
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/document/, error.message)
+  end
+
+  def test_empty_documents_map_fails
+    yaml = MULTI.sub(/documents:.*\z/m, "documents: {}\n")
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/documents/, error.message)
+  end
+
+  def test_documents_values_must_be_urns
+    yaml = MULTI.sub("urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1", "not-a-urn")
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/urn/, error.message)
+  end
+
+  def test_duplicate_urn_across_witness_forms_fails
+    yaml = <<~YAML
+      ot:
+        witnesses:
+          - document: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+          - label: lxx
+            extractor: cts-verse
+            documents:
+              GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+    YAML
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/duplicate/, error.message)
+  end
+
   # -- the shipped registry -----------------------------------------------------
 
-  def test_shipped_registry_loads_the_five_way_nt
+  def test_shipped_registry_loads_the_five_way_nt_plus_the_biblical_trio
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
     registry = Nabu::AlignmentRegistry.load(path)
     work = registry.work("nt")
     refute_nil work, "config/alignments.yml must register the nt work"
     assert_equal %w[urn:nabu:proiel:greek-nt urn:nabu:proiel:latin-nt urn:nabu:proiel:gothic-nt
                     urn:nabu:proiel:armenian-nt urn:nabu:proiel:marianus],
-                 work.witnesses.map(&:document_urn),
+                 work.witnesses.take(5).map(&:document_urn),
                  "the five-way NT flagship (P11-3) is the shipped proof"
+    assert_equal ["sblgnt", "vulgate (Clementine)"], work.witnesses.drop(5).map(&:label),
+                 "P11-5 adds the SBLGNT and Vulgate NT witnesses"
+    assert_includes work.witnesses[5].document_urns, "urn:nabu:sblgnt:mark"
+    assert_equal "MARK", work.witnesses[5].book_for("urn:nabu:sblgnt:mark")
+    assert_includes work.witnesses[6].document_urns, "urn:nabu:vulgate:mrk"
+    assert_equal "MARK", work.witnesses[6].book_for("urn:nabu:vulgate:mrk")
+  end
+
+  def test_shipped_registry_loads_the_ot_work
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    refute_nil work, "config/alignments.yml must register the ot work (P11-5)"
+    labels = work.witnesses.map(&:label)
+    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)"], labels
+    lxx = work.witnesses.first
+    assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
+    assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
+    vulgate = work.witnesses.last
+    assert_equal "GEN", vulgate.book_for("urn:nabu:vulgate:gen")
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------

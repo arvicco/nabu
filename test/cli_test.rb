@@ -833,6 +833,50 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P11-5: a multi-document (cts-verse) witness that misses the ref heads its
+  # column with the label alone — no arbitrary book title.
+  def test_align_multi_document_witness_miss_renders_label_without_a_title
+    registry = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - label: verses
+            extractor: cts-verse
+            documents:
+              MARK: urn:nabu:proiel:marianus
+              JOHN: urn:nabu:sblgnt:john
+    YAML
+    with_aligned_corpus(registry: registry) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/^verses \[chu\] {3}license: nc/, out)
+      assert_match(/not attested/, out)
+      assert_match(/1 of 2 witnesses/, out)
+    end
+  end
+
+  # …and when the multi-document witness does not even map the queried ref's
+  # book, the not-synced note phrases the miss neutrally (no unrelated urn).
+  def test_align_not_synced_multi_document_witness_with_unmapped_book_reads_neutrally
+    registry = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:marianus
+          - label: verses
+            extractor: cts-verse
+            documents:
+              JOHN: urn:nabu:sblgnt:john
+              ACTS: urn:nabu:sblgnt:acts
+    YAML
+    with_aligned_corpus(registry: registry) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/verses — not synced \(its registered documents are not in the catalog\)/, out)
+      refute_match(/urn:nabu:sblgnt/, out, "no unrelated book urn is named")
+    end
+  end
+
   def test_align_without_index_hints_to_sync_or_rebuild
     with_aligned_corpus(indexed: false) do |config|
       _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }

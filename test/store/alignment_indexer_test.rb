@@ -148,6 +148,94 @@ module Store
       assert_equal 0, rebuild!
     end
 
+    # -- cts-verse (P11-5): verse-grain CTS-style editions ----------------------
+
+    OT_REGISTRY = <<~YAML
+      ot:
+        witnesses:
+          - label: lxx
+            extractor: cts-verse
+            documents:
+              GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+              EXO: urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1
+    YAML
+
+    def make_verse(document, urn:, sequence:)
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: urn, sequence: sequence, language: "grc",
+        text: "t", text_normalized: "t", content_sha256: "x", revision: 1
+      )
+    end
+
+    def test_cts_verse_indexes_book_token_plus_urn_tail_across_a_multi_document_witness
+      genesis = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
+      make_verse(genesis, urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1:1.1", sequence: 0)
+      make_verse(genesis, urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1:1.2", sequence: 1)
+      exodus = make_document(urn: "urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1")
+      make_verse(exodus, urn: "urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1:1.1", sequence: 0)
+
+      assert_equal 3, rebuild!(registry(OT_REGISTRY))
+      assert_equal [["EXO 1.1", "urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1"],
+                    ["GEN 1.1", "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1"],
+                    ["GEN 1.2", "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1"]],
+                   refs.order(:ref).select_map(%i[ref document_urn])
+    end
+
+    def test_cts_verse_needs_no_annotations
+      doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
+      make_verse(doc, urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1:1.1", sequence: 0)
+      refute_includes Nabu::Store::Passage.first[:annotations_json].to_s, "citation"
+
+      assert_equal 1, rebuild!(registry(OT_REGISTRY))
+      assert_equal ["GEN 1.1"], refs.select_map(:ref)
+    end
+
+    def test_cts_verse_indexes_flat_single_level_tails
+      # The Epistula Jeremiae reality: a single-chapter book cites bare verse
+      # numbers — "LJE 5" folds and stays addressable like any other ref.
+      yaml = <<~YAML
+        ot:
+          witnesses:
+            - label: lxx
+              extractor: cts-verse
+              documents:
+                LJE: urn:cts:greekLit:tlg0527.tlg052.1st1K-grc1
+      YAML
+      doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg052.1st1K-grc1")
+      make_verse(doc, urn: "urn:cts:greekLit:tlg0527.tlg052.1st1K-grc1:5", sequence: 0)
+
+      rebuild!(registry(yaml))
+      assert_equal ["LJE 5"], refs.select_map(:ref)
+    end
+
+    def test_cts_verse_skips_a_passage_urn_that_does_not_extend_its_document_urn
+      doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
+      make_verse(doc, urn: "urn:nabu:oddball:1.1", sequence: 0)
+
+      assert_equal 0, rebuild!(registry(OT_REGISTRY))
+    end
+
+    def test_a_work_can_mix_proiel_citation_and_cts_verse_witnesses
+      yaml = <<~YAML
+        nt:
+          witnesses:
+            - document: urn:nabu:proiel:greek-nt
+            - label: sblgnt
+              extractor: cts-verse
+              documents:
+                MARK: urn:nabu:sblgnt:mark
+      YAML
+      treebank = make_document(urn: "urn:nabu:proiel:greek-nt")
+      make_sentence(treebank, urn: "urn:nabu:proiel:greek-nt:1", sequence: 0, parts: ["MARK 2.3"])
+      edition = make_document(urn: "urn:nabu:sblgnt:mark")
+      make_verse(edition, urn: "urn:nabu:sblgnt:mark:2.3", sequence: 0)
+
+      assert_equal 2, rebuild!(registry(yaml))
+      assert_equal [["MARK 2.3", "urn:nabu:proiel:greek-nt:1"],
+                    ["MARK 2.3", "urn:nabu:sblgnt:mark:2.3"]],
+                   refs.order(:passage_urn).select_map(%i[ref passage_urn])
+    end
+
     def test_empty_registry_still_creates_the_table
       rebuild!(registry(""))
       assert @fulltext.table_exists?(Nabu::Store::AlignmentIndexer::TABLE),

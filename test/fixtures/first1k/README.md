@@ -34,6 +34,9 @@ manifest.yml.
 | `tlg4037/tlg001/__cts__.xml` | — | work metadata — carries both the grc `ti:edition` and the eng `ti:translation` (copied whole, P9-1) |
 | `tlg4037/tlg001/tlg4037.tlg001.1st1K-grc1.xml` | — | *De Incredibilibus / Peri Apiston* original (**trimmed**, P9-1): `div[@type="edition"]`, citation unit `section`. Trimmed from the local canonical snapshot (synced 2026-07-03): teiHeader whole, sections 1–3 kept, 4–23 removed |
 | `tlg4037/tlg001/tlg4037.tlg001.1st1K-eng1.xml` | — | *De Incredibilibus* English translation (**trimmed**, P9-1): `div[@type="translation"]`, citation unit `section`. Same trim (sections 1–3), so it aligns section-for-section with the grc original above — the P9-1 parallel-render pair |
+| `tlg0527/__cts__.xml` | 164 | textgroup metadata (Septuaginta; fetched 2026-07-09 at pinned HEAD `4c9c843`, P11-5) |
+| `tlg0527/tlg001/__cts__.xml` | 629 | work metadata (Genesis; Swete edition label Γένεσις) |
+| `tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml` | 16062 | *Genesis* (LXX, Swete 1901; **trimmed**, P11-5): teiHeader whole + chapter 1 whole (verses 1–31, `chapter`/`verse` textparts), chapters 2–50 removed, document closed to the upstream shape. Ranged-fetched 2026-07-09 at pinned HEAD `4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c`. The alignment hub's LXX witness exemplar (cts-verse extractor, P11-5) |
 
 The `tlg2959` set was **conditional** in the approved plan (fetch the edition only
 if both `__cts__.xml` probes returned 200). Both returned 200 on 2026-07-03, so all
