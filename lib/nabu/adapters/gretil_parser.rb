@@ -148,6 +148,26 @@ module Nabu
       # primary pass cannot address are recovered here.
       MARKER_FALLBACK = %r{(?<delim>//|\|)\s*(?<prefix>\p{L}[\p{L}\d]*)_(?<num>\d[\d.,]*)\s*\k<delim>}
 
+      # In-text verse marker, LINE-TERMINATED fallback pass (P10-3). Recovers two
+      # marker shapes the matched-delimiter passes above cannot address, both of
+      # which sit at the END of an <l> and are terminated by the </l> element
+      # boundary rather than a closing delimiter:
+      #   * hyphenated prefix, closed  "… // Abhidh-d_5 //</l>" (sa_vimalamitra-
+      #     abhidharmadIpa) — MARKER/MARKER_FALLBACK reject it because the prefix
+      #     charset excludes "-".
+      #   * leading-"//"-only, unclosed "… // SatvT_1.5</l>"    (sa_sAtvatatantra,
+      #     sa_somAnanda-zAktavijJAna, sa_puruSottamadeva-ekAkSarakoza) — no
+      #     closing delimiter, so the matched-delimiter passes never fire.
+      # Anchored at end-of-line (\z): the prefix admits a hyphen and the closing
+      # "//" is OPTIONAL, so a single line-final marker is captured either way.
+      # Applied per <l> (see LineMarkerExtraction), NOT scanned over the running
+      # buffer — a lone "//" daṇḍa mid-verse can never anchor to \z, and the
+      # _<digit> requirement rules out ordinary reading text. Used ONLY as the
+      # LAST fallback (docs the primary/xml:id/pipe passes all leave empty), so
+      # the two existing marker regexes stay byte-identical and no already-loaded
+      # doc is touched (frozen-urn).
+      LINE_MARKER = %r{//\s*(?<prefix>\p{L}[\p{L}\d-]*)_(?<num>\d[\d.,]*)\s*(?://\s*)?\z}
+
       # Leading "<Abbr>_" prefix of a citation xml:id (RgV_1.1.1 → 1.1.1). A
       # bare id with no such prefix (or one that would strip to empty) is kept
       # verbatim.
@@ -250,7 +270,9 @@ module Nabu
       # every daṇḍa for a "| Abbr_N |" that will never come — quadratic. The
       # xml:id pass (no marker scanning) drains such docs first; the pipe pass
       # then only meets genuine pipe-marked docs, which flush their buffer at
-      # every marker and stay linear.
+      # every marker and stay linear. The line-marker pass (P10-3) runs LAST and
+      # tests its regex per <l> (not over the running buffer), so it stays linear
+      # even on a large markerless flat file that reaches it.
       def extract(source, path:, language:)
         verses = with_io(source) do |io|
           run_extraction(io, path: path, language: language, marker: MARKER)
@@ -262,8 +284,13 @@ module Nabu
         end
         return verses unless verses.empty?
 
-        File.open(path, "r") do |io|
+        verses = File.open(path, "r") do |io|
           run_extraction(io, path: path, language: language, marker: MARKER_FALLBACK)
+        end
+        return verses unless verses.empty?
+
+        File.open(path, "r") do |io|
+          LineMarkerExtraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, language: language).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
@@ -632,6 +659,139 @@ module Nabu
         end
       end
       private_constant :XmlIdExtraction
+
+      # P10-3: the line-terminated verse-marker fallback pass. Recovers the two
+      # marker shapes described on LINE_MARKER — hyphenated closed
+      # "// Abhidh-d_N //" and leading-"//"-only "// SatvT_N" — both of which
+      # sit at the END of an <l>, terminated by the </l> boundary. Text
+      # accumulates across the verse's <l> lines (space-joined, single "/"
+      # daṇḍas kept as reading text, exactly the rung-(b) contract); a line-final
+      # LINE_MARKER closes the verse it follows, the text before it becomes the
+      # passage and the marker's number the citation. The marker is matched
+      # against the CURRENT line only (never the running buffer), so a large
+      # markerless flat file that reaches this pass stays linear. Emits
+      # addressing "verse-marker" with the captured prefix, so the shared
+      # apply_multi_prefix / disambiguate_collisions handling applies unchanged.
+      # Same streaming discipline as Extraction (Reader only, <reg>/<note>
+      # dropped, text confined to <text><body>). Run ONLY when the primary +
+      # xml:id + pipe passes leave the document empty, so it is invisible to
+      # every already-loaded document (frozen-urn).
+      class LineMarkerExtraction
+        READER = Nokogiri::XML::Reader
+        TEXT_NODE_TYPES = [
+          READER::TYPE_TEXT, READER::TYPE_CDATA,
+          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
+        ].freeze
+        DROPPED_ELEMENTS = %w[reg note].freeze
+        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+
+        def initialize(reader:, path:, language:)
+          @reader = reader
+          @path = path
+          @language = language
+          @in_body = false
+          @capturing = false
+          @drop_depth = nil
+          @buffer = +""  # accumulated verse text (completed lines)
+          @line = +""    # current <l> text
+          @verses = []
+        end
+
+        def call
+          @reader.each { |node| process(node) }
+          @verses
+        end
+
+        private
+
+        def process(node)
+          case node.node_type
+          when READER::TYPE_ELEMENT then start_element(node)
+          when READER::TYPE_END_ELEMENT then end_element(node)
+          when *TEXT_NODE_TYPES then text_node(node)
+          end
+        end
+
+        def start_element(node)
+          name = local_name(node)
+          return enter_body(node) if name == "body"
+          return unless @in_body
+          return if dropping?
+
+          if DROPPED_ELEMENTS.include?(name)
+            @drop_depth = node.depth unless node.empty_element?
+            return
+          end
+
+          open_line(node) if name == "l"
+        end
+
+        def end_element(node)
+          if dropping?
+            @drop_depth = nil if node.depth == @drop_depth
+            return
+          end
+          return unless @in_body
+
+          case local_name(node)
+          when "body" then @in_body = false
+          when "l" then close_line
+          end
+        end
+
+        def text_node(node)
+          @line << node.value.to_s if @in_body && @capturing && !dropping?
+        end
+
+        def enter_body(node)
+          @in_body = !node.empty_element?
+        end
+
+        def open_line(node)
+          @line = +""
+          @capturing = !node.empty_element?
+        end
+
+        # A line-final marker closes the verse it follows: append the text before
+        # the marker, then flush the accumulated buffer as one passage. A
+        # markerless line just accumulates (multi-<l> verses, half-verse daṇḍas).
+        def close_line
+          @capturing = false
+          if (match = LINE_MARKER.match(@line))
+            append(@line[0...match.begin(0)])
+            emit(match[:num], match[:prefix])
+          else
+            append(@line)
+          end
+          @line = +""
+        end
+
+        def append(text)
+          return if text.nil? || text.empty?
+
+          @buffer << " " if !@buffer.empty? && !@buffer.end_with?(" ")
+          @buffer << text
+        end
+
+        def emit(num, prefix)
+          text = Normalize.nfc(@buffer.gsub(/[[:space:]]+/, " ").strip)
+          @buffer = +""
+          return if text.empty?
+
+          @verses << Verse.new(
+            citation: num, text: text, addressing: "verse-marker", context: {}, prefix: prefix
+          )
+        end
+
+        def dropping?
+          !@drop_depth.nil?
+        end
+
+        def local_name(node)
+          node.name.split(":").last
+        end
+      end
+      private_constant :LineMarkerExtraction
     end
   end
 end

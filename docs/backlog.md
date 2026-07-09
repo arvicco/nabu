@@ -1352,7 +1352,7 @@ the native proiel/torot syncs). Conformance + idempotency; language codes orv
 fixture load produces lemma rows (orv) via existing plumbing; suite+lint
 green; 02-sources UD row lists 6 treebanks; worklog line.
 
-## P10-3 · GRETIL residue micro-packet  [tier: opus] [status: pending] [deps: P10-1, P10-2 merged order irrelevant — touches only gretil_parser]
+## P10-3 · GRETIL residue micro-packet  [tier: opus] [status: done] [deps: P10-1, P10-2 merged order irrelevant — touches only gretil_parser]
 P9-4c census follow-up: recover the 4 recoverable residue files (target
 quarantines 8 → 4, the remaining 4 being genuinely unaddressable flat lists):
 (a) sa_vimalamitra-abhidharmadIpa — hyphenated marker prefix `// Abhidh-d_N //`
