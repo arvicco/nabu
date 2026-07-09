@@ -58,9 +58,25 @@ module Nabu
     #   lat  v→u and j→i, the classical-orthography merge every major Latin
     #        search tool performs (PHI: "not case-sensitive, nor does it
     #        distinguish i from j or u from v").
+    #   akk/sux  the cuneiform-transliteration fold (P10-1): sign-join
+    #        punctuation (. and -) and determinative braces ({d}, {ki}) open
+    #        to spaces, so every sign reading becomes its own searchable
+    #        token; subscript index digits (₂ ₃ … and ₓ) normalize to ASCII
+    #        (ZI₃ → zi3). Strictly per-codepoint (tr only — no squeeze/strip)
+    #        so fold_with_map's char-by-char equality holds; the resulting
+    #        double/leading/trailing spaces are FTS-invisible (unicode61
+    #        treats separator runs as one). š/ṣ/ṭ and vowel macrons fall to
+    #        the generic mark strip. Trade-off documented in conventions.md
+    #        §9: a determinative sits as its own token between the signs it
+    #        classifies.
+    CUNEIFORM_FOLD = ->(str) { str.tr("₀₁₂₃₄₅₆₇₈₉ₓ", "0123456789x").tr("{}.-", "    ") }
+    private_constant :CUNEIFORM_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
-      "lat" => ->(str) { str.tr("vj", "ui") }
+      "lat" => ->(str) { str.tr("vj", "ui") },
+      "akk" => CUNEIFORM_FOLD,
+      "sux" => CUNEIFORM_FOLD
     }.freeze
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at

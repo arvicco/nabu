@@ -1292,7 +1292,7 @@ live-smoke review between packets, real network syncs owner-fired (EXCEPT the
 two pre-approved fixture zips in P10-1 and the two UD fixture fetches in P10-2,
 which are part of the approved fixture plans).
 
-## P10-1 · ORACC adapter + parser family  [tier: fable] [status: in-progress] [deps: —]
+## P10-1 · ORACC adapter + parser family  [tier: fable] [status: done] [deps: —]
 Execute the P9-5a plan exactly (see "Findings & fixture acquisition plan
 (P9-5a)" above — it is the spec; this packet adds only sequencing notes):
 

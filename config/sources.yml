@@ -78,6 +78,19 @@ gretil:
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
 
+oracc:
+  adapter: Nabu::Adapters::Oracc
+  enabled: false   # P10-1: adapter + fixtures landed; awaiting owner-fired
+                   # first real sync + eyeball before enabling (CLAUDE.md
+                   # adapter checklist step 6). Scope: rimanum + etcsri.
+  # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
+  # owner decision, not a scheduled one.
+  sync_policy: manual
+  # The ORACC JSON carries word glosses but NO prose translations (P9-5a:
+  # they live only in the ATF #tr.en source layer) — nothing to opt into;
+  # aligned English is a future separate acquisition.
+  translations: false
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
