@@ -1,8 +1,9 @@
 # The Library — content review
 
-**As of 2026-07-08** (post Phase 9 + P9-4c recovery, branch phase-9). Live totals:
-**65,307 documents / 2,821,439 passages** across 8 sources, 16 language codes,
-873 aligned English translation editions, 1,599,485 lemma rows in 7 languages.
+**As of 2026-07-09** (post Phase 10, branch phase-10). Live totals:
+**65,311 documents / 2,822,794 passages** across 8 loaded sources (a 9th,
+ORACC, is shipped and awaiting its first sync), 16 language codes, 873
+aligned English translation editions, 1,599,485 lemma rows in 7 languages.
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §9 for the
@@ -103,7 +104,7 @@ about Greco-Roman Egypt.
 | **Category** | Full breadth of Sanskrit literature: Vedic saṃhitās, epics, purāṇas, kāvya, drama, śāstra (philosophy, law, grammar, poetics), tantra, Buddhist and Jain texts, technical treatises |
 | **Language** | Sanskrit in IAST romanization (`san-Latn`, 770 docs), plus stray Tibetan-transliteration, Tamil and English items |
 | **Period** | Vedic (c. 1200 BCE) to early modern (18th c. CE) — the longest span of any shelf |
-| **Size** | 773 docs / 696,158 passages (second-largest shelf by passages) |
+| **Size** | 777 docs / 697,513 passages (second-largest shelf by passages) |
 | **Source** | `gretil` (GRETIL, Göttingen Register of Electronic Texts in Indian Languages, via TEI mirror), license: `nc` (CC BY-NC-SA — non-commercial research use; served over MCP with its license label) |
 | **Metadata** | Four addressability rungs (attribute-cited divisions, `// Abbr_N //` in-text verse markers, xml:id citations, prose ordinals); collision-disambiguated URNs (`:b2`) preserve upstream numbering errors instead of hiding them; Vedic accents preserved (keep-`<orig>`) |
 
@@ -111,8 +112,9 @@ Rāmāyaṇa (18,761 verses), Mahābhārata-adjacent texts, Bhāgavata and other
 purāṇas, Kālidāsa and the kāvya tradition, Brahmasūtra with commentaries and
 sub-commentaries, dharmaśāstra, Nāṭyaśāstra, Dhvanyāloka with its commentary
 layers (kārikā vs. vṛtti separately citable as `:DhvK.…`/`:DhvA.…`),
-Buddhacarita, Gītagovinda. After P9-4c only 8 of 781 upstream files remain
-unparsed (4 genuinely unaddressable, 4 awaiting a micro-packet).
+Buddhacarita, Gītagovinda. After the P9-4c and P10-3 recoveries only 4 of
+781 upstream files remain unparsed — flat verse lists with no numbering of
+any kind, genuinely unaddressable.
 
 **Research uses:** Indology across every genre; commentary-tradition studies
 (base text and commentaries interleaved but separately citable); Vedic accent
@@ -128,7 +130,7 @@ texts that mostly exist as scanned books elsewhere.
 | **Language** | Latin (`lat`), Greek (`grc`), Gothic (`got`), Classical Armenian (`xcl`), Old Church Slavonic (`chu`), Old East Slavic (`orv`), Vedic Sanskrit (`san`) |
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
 | **Size** | 64 docs / 161,048 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (12 / 76,642) |
-| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), Universal Dependencies (gothic-proiel, greek-proiel, latin-ittb, sanskrit-vedic); all license: `nc` |
+| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), Universal Dependencies (gothic-proiel, greek-proiel, latin-ittb, sanskrit-vedic loaded; old-east-slavic-birchbark + old-east-slavic-rnc added in Phase 10, awaiting sync — those two are CC BY-SA/`attribution`); PROIEL/TOROT/legacy-UD license: `nc` |
 | **Metadata** | **This is where the lemma layer comes from**: 1,599,485 rows in `passage_lemmas` (lat 583k, grc 379k, orv 207k, san 190k, chu 123k, got 99k, xcl 18k), searchable via `search lemma:` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
@@ -164,6 +166,18 @@ translation-studies comparisons; quick orientation before committing to a
 close reading; teaching materials.
 
 ---
+
+### Incoming shelf (shipped, not yet synced)
+
+**Cuneiform — ORACC** (`oracc`, CC0/public domain): Akkadian and Sumerian
+tablets and inscriptions, one passage per line (the citable unit of
+Assyriology: `o.1`, `r.5`), transliteration as text with the upstream **gold
+lemmatization** (citation form, normalization, English guide word, POS,
+per-grapheme logogram language) riding into `passage_lemmas` — Akkadian and
+Sumerian lemma search lands the moment the first project syncs. Fetched as
+per-project zips over HTTP (144 public projects to choose from) with full
+attic/retention parity. Awaiting the owner-fired first sync and starter
+project selection. Once loaded this becomes its own numbered section here.
 
 ## 8. Library-wide capabilities
 
