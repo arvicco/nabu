@@ -11,6 +11,7 @@ require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/align"
+require_relative "../query/define"
 
 module Nabu
   module MCP
@@ -78,6 +79,11 @@ module Nabu
       CONCORD_MAX_LIMIT = 50
       CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
       CONCORD_MAX_WIDTH = 120
+      DEFINE_DEFAULT_LIMIT = 3
+      DEFINE_MAX_LIMIT = 10
+      # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
+      DEFINE_BODY_CAP = 6_000
+      DEFINE_MAX_CITATIONS = 40
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       BUSY_ATTEMPTS = 3
@@ -86,6 +92,8 @@ module Nabu
                        "to build it, then retry"
       NO_ALIGNMENTS_NOTE = "no alignment works registered — the owner adds works/witnesses " \
                            "to config/alignments.yml (architecture §10)"
+      NO_SHELF_NOTE = "no dictionary shelf in this catalog yet — run `nabu sync lexica` (or " \
+                      "`nabu rebuild` after one) to build it, then retry"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
@@ -151,6 +159,19 @@ module Nabu
         "boundary lists every ref it covers. Honest absence: a witness lacking the verse reads " \
         "status no_match; a registered-but-unsynced witness reads not_synced."
 
+      DEFINE_DESCRIPTION =
+        "Look up a lemma (dictionary form) in the classical lexica nabu holds locally — LSJ " \
+        "for ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat) picks a shelf when the " \
+        "spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
+        "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
+        "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
+        "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
+        "in the local catalog the citation carries a resolved passage urn (open it with " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
+        "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
+        "separate entries).".freeze
+
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
         "recency, passage counts by language and by license class, index state, and what is " \
@@ -215,6 +236,21 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      DEFINE_SCHEMA = {
+        type: "object",
+        properties: {
+          lemma: { type: "string",
+                   description: "Dictionary form to look up (e.g. λόγος, virtus)." },
+          lang: { type: "string", enum: %w[grc lat],
+                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short." },
+          limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
+                   default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["lemma"],
+        additionalProperties: false
+      }.freeze
+
       CONCORD_SCHEMA = {
         type: "object",
         properties: {
@@ -248,6 +284,8 @@ module Nabu
                             handler: :concord },
         "nabu_align" => { description: ALIGN_DESCRIPTION, input_schema: ALIGN_SCHEMA,
                           handler: :align },
+        "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
+                           handler: :define },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -366,6 +404,23 @@ module Nabu
         tool_error(e.message)
       end
 
+      def define(args)
+        lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
+        lang = string_arg(args, "lang")
+        if lang && !%w[grc lat].include?(lang)
+          raise InvalidArguments, "lang must be grc or lat (the shelves this corpus holds)"
+        end
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        return note(NO_SHELF_NOTE) unless catalog.table_exists?(:dictionary_entries)
+
+        limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
+        include_restricted = args["include_restricted"] == true
+        results = Query::Define.new(catalog: catalog).run(lemma, lang: lang, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_define(results, lemma: lemma, limit: limit)
+      end
+
       def status(_args)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
 
@@ -435,9 +490,57 @@ module Nabu
           text: truncate(result.text)
         }
         if result.respond_to?(:lemma)
-          base.merge(lemma: result.lemma, surface_forms: result.surface_forms)
+          # gloss (P11-4): the dictionary-shelf short gloss, nil-honest.
+          base.merge(lemma: result.lemma, surface_forms: result.surface_forms, gloss: result.gloss)
         else
           base.merge(snippet: result.snippet)
+        end
+      end
+
+      # -- define internals ---------------------------------------------------------
+
+      def render_define(results, lemma:, limit:)
+        if results.empty?
+          return json(entries: [],
+                      note: "no dictionary entry for #{lemma.inspect} — the shelf holds LSJ (grc) " \
+                            "and Lewis & Short (lat); diacritics are optional, but the lemma must " \
+                            "be a dictionary form (nabu_search with lemma: finds attestations)")
+        end
+
+        shown = results.first(limit)
+        json(
+          entries: shown.map { |result| define_payload(result) },
+          note: if results.size > limit
+                  "more than #{limit} entries, showing #{limit} — raise limit (max #{DEFINE_MAX_LIMIT})"
+                else
+                  "#{shown.size} #{shown.size == 1 ? 'entry' : 'entries'}"
+                end
+        )
+      end
+
+      def define_payload(result)
+        body = result.body
+        truncated = body.length > DEFINE_BODY_CAP
+        base = {
+          urn: result.urn, dictionary: result.dictionary_slug,
+          dictionary_title: result.dictionary_title, headword: result.headword,
+          language: result.language, license_class: result.license_class,
+          license: result.license, source: result.source_slug, gloss: result.gloss,
+          body: truncated ? "#{body[0, DEFINE_BODY_CAP]}…" : body,
+          body_truncated: truncated,
+          citations: define_citations(result)
+        }
+        return base unless truncated
+
+        base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
+                         "`nabu define #{result.headword}` (CLI) renders it whole")
+      end
+
+      # Resolved citations first (they are the actionable ones), capped.
+      def define_citations(result)
+        ordered = result.citations.partition(&:resolved_urn).flatten(1)
+        ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
+          { label: citation.label, resolved_urn: citation.resolved_urn }
         end
       end
 

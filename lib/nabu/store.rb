@@ -26,7 +26,10 @@ module Nabu
       Document: :documents,
       Passage: :passages,
       Provenance: :provenance,
-      Enrichment: :enrichments
+      Enrichment: :enrichments,
+      Dictionary: :dictionaries,
+      DictionaryEntry: :dictionary_entries,
+      DictionaryCitation: :dictionary_citations
     }.freeze
 
     module_function
@@ -69,7 +72,23 @@ module Nabu
     # Bind the store's models to +db+. Idempotent: first call loads the model
     # files (defining Nabu::Store::Source etc.), later calls just rebind their
     # datasets to +db+. Returns +db+.
+    #
+    # require_valid_table is switched off (globally, deliberately) BEFORE the
+    # models load: `Sequel::Model(:dictionaries)` introspects its table at
+    # class-definition time, and a LIVE catalog is only migrated on the write
+    # paths (sync, rebuild) — the read surfaces (status/search/define, and
+    # the MCP server, which opens READONLY and can never migrate) must open a
+    # catalog that predates the newest migration without setup! itself
+    # raising "no such table" (the P11-4 review blocker: migration 006 added
+    # tables, and every CLI command crashed against a pre-006 catalog).
+    # Global, not per-model, so the NEXT table-adding migration cannot
+    # reintroduce the bug model by model; the cost — no definition-time
+    # table-name validation — is covered by the suite's freshly-migrated
+    # stores exercising every model. Runtime protection for genuinely absent
+    # tables stays where it always was: the callers' table_exists? guards
+    # (Query::Define, MCP nabu_define, CLI define).
     def setup!(db)
+      Sequel::Model.require_valid_table = false
       Sequel::Model.db = db
       if @models_loaded
         MODELS.each_key { |const| const_get(const).set_dataset(db[MODELS.fetch(const)]) }
@@ -79,6 +98,9 @@ module Nabu
         require_relative "store/passage"
         require_relative "store/provenance"
         require_relative "store/enrichment"
+        require_relative "store/dictionary"
+        require_relative "store/dictionary_entry"
+        require_relative "store/dictionary_citation"
         @models_loaded = true
       end
       db
@@ -88,6 +110,7 @@ end
 
 require_relative "store/ledger"
 require_relative "store/loader"
+require_relative "store/dictionary_loader"
 require_relative "store/run_recorder"
 require_relative "store/indexer"
 require_relative "store/alignment_indexer"

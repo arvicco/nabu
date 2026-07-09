@@ -92,6 +92,17 @@ oracc:
   # aligned English is a future separate acquisition.
   translations: false
 
+lexica:
+  adapter: Nabu::Adapters::Lexica
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync lexica, then
+                   # nabu define μῆνις / officium spot-checks)
+  # PerseusDL/lexica (~160 MB git repo, CC BY-SA 4.0): LSJ + Lewis & Short —
+  # the FIRST dictionary-shaped source (content_kind :dictionary: entries,
+  # not passages; architecture §11). Upstream still gets occasional edits:
+  # re-syncable, but not on a live schedule.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

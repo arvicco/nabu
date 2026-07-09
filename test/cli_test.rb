@@ -30,7 +30,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export].each do |command|
+    %w[version sync status rebuild verify search show export define].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -92,6 +92,18 @@ class CLITest < Minitest::Test
     assert_match(/--lemma λέγω/, out, "must show a worked Greek example")
     assert_match(/εἶπας/, out, "must show the suppletive payoff — forms no text query reaches")
     assert_match(/replaces the text query/i, out, "must be honest that --lemma and a query don't combine")
+  end
+
+  # P11-4: `nabu define` help must teach the shelf, the folding promise, the
+  # citation-resolution behavior, and worked examples in both languages.
+  def test_help_define_documents_the_dictionary_shelf
+    out, _err, _status = run_cli(%w[help define])
+    assert_match(/LSJ/, out)
+    assert_match(/Lewis & Short/, out)
+    assert_match(/μηνις finds μῆνις/, out, "must show the diacritic-folding promise")
+    assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
+    assert_match(/--lang grc\|lat/, out)
+    assert_match(/nabu define virtus/, out, "must show a Latin example")
   end
 
   def test_help_export_documents_formats_and_filters

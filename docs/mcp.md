@@ -2,10 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes five tools — search, read
-by urn, concordance, cross-source alignment, and coverage — so a model can look
-things up in your texts, quote them, and cite them, without any ability to
-change the collection.
+(Claude Code, Claude Desktop) over stdio. It exposes six tools — search, read
+by urn, concordance, cross-source alignment, dictionary lookup, and coverage —
+so a model can look things up in your texts, quote them, and cite them, without
+any ability to change the collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -33,7 +33,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The five tools
+## 2. The six tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, and align rows also carry the **source**
@@ -91,6 +91,19 @@ not attested), `not_synced` (registered, no data yet), or `withheld`
 (license-excluded). Every sentence row carries urn, language, license_class,
 and source — the five NT witnesses are all `nc`, so the labels matter when
 quoting.
+
+### `nabu_define`
+
+The dictionary shelf (P11-4, architecture §11): look a lemma up in the
+classical lexica the corpus holds — LSJ for Greek, Lewis & Short for Latin
+(CC BY-SA, Perseus). Diacritics optional (μηνις finds μῆνις); `lang`
+(grc|lat) picks a shelf. Each entry carries headword, dictionary, license
+fields, a short gloss, the entry body as structured plain text (bounded at
+6 000 chars with an honest note — the CLI `nabu define` prints entries
+whole), and the entry's citations with `resolved_urn` set where the cited
+work is in-catalog (`Il. 1.1` → the actual Iliad line, one `nabu_show`
+away); unresolved citations keep their display text and a null urn. Lemma
+hits from `nabu_search` carry these glosses too.
 
 ### `nabu_status`
 

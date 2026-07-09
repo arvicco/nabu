@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files are documented TRIMS (whole: false) of large upstream lexica
+# files (12.3 MB / 6.7 MB / 77 MB), so a fresh GET returns the full file and is
+# fetched for URL-liveness only, never byte-compared. Kept entries are
+# byte-identical upstream slices; re-apply the README trims after any refresh.
+# URLs are pinned at commit b5e707bdda2d6c8e0bb6c29657454996b4fb04d7 (the
+# retrieval snapshot; master moves).
+source: lexica
+adapter_test: null
+retrieved: 2026-07-09
+files:
+  - path: CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng13.xml
+    url: https://raw.githubusercontent.com/PerseusDL/lexica/b5e707bdda2d6c8e0bb6c29657454996b4fb04d7/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng13.xml
+    whole: false
+    trim: teiHeader + div0 n="*m" + entries mh=nis (n67485) and mhni/skos + closing tags (12.3 MB -> 25 KB)
+  - path: CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng12.xml
+    url: https://raw.githubusercontent.com/PerseusDL/lexica/b5e707bdda2d6c8e0bb6c29657454996b4fb04d7/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng12.xml
+    whole: false
+    trim: teiHeader + div0 n="*l" + entries lo/gos and logosullekta/dhs + closing tags (6.7 MB -> 310 KB; the lo/gos entry alone is ~300 KB and is kept whole as the output-bounds stress case)
+  - path: CTS_XML_TEI/perseus/pdllex/lat/ls/lat.ls.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/lexica/b5e707bdda2d6c8e0bb6c29657454996b4fb04d7/CTS_XML_TEI/perseus/pdllex/lat/ls/lat.ls.perseus-eng2.xml
+    whole: false
+    trim: teiHeader + div0 A (entries a2, Aaron) + div0 O (officium, n32391) + div0 V (virtus, n51108), each with its real div0/head frame + closing tags (77 MB -> 32 KB)

@@ -129,7 +129,8 @@ module Nabu
       # incremental per-source indexing is the future optimization.
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
-                  breaker: nil, indexed: indexed, warnings: deviation_warnings(source, load_report))
+                  breaker: nil, indexed: indexed,
+                  warnings: deviation_warnings(source, load_report, adapter))
     end
 
     # P5-5: after a successful sync, run the SAME trend rules the `nabu health`
@@ -140,17 +141,24 @@ module Nabu
     # Cheap: two small aggregate queries reusing Health::TrendRules — no new
     # thresholds. The just-finished run is already recorded "succeeded", so it is
     # runs.first here; prior runs form the spike norm.
-    def deviation_warnings(source, load_report)
+    def deviation_warnings(source, load_report, adapter)
       return [] unless load_report
+      # Dictionary sources (P11-4): entry-grained counts against a
+      # document-count baseline would be apples-to-oranges — the quarantine
+      # spike still applies (errored counts files either way), the
+      # document-withdrawal sweep rule does not.
+      return quarantine_warnings(source, load_report) if adapter.class.content_kind == :dictionary
 
+      total = Store::Document.where(source_id: source.id).count
+      quarantine_warnings(source, load_report) +
+        [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)].compact
+    end
+
+    def quarantine_warnings(source, load_report)
       errored = Store::Run.where(source_slug: source.slug, kind: "sync", status: "succeeded")
                           .order(Sequel.desc(:id)).select_map(:errored)
       prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
-      total = Store::Document.where(source_id: source.id).count
-      [
-        Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior),
-        Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)
-      ].compact
+      [Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior)].compact
     end
 
     # Rebuild the whole FTS5 index (plus lemma + alignment tables) from the
@@ -171,9 +179,13 @@ module Nabu
       adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
     end
 
+    # Route by the adapter's declared content kind (P11-4, architecture §11):
+    # passage corpora load through Store::Loader, dictionary sources through
+    # Store::DictionaryLoader — same call shape, same LoadReport.
     def load(source, adapter, workdir, progress)
-      Store::Loader.new(db: @db, source: source, ledger: @ledger)
-                   .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
+      loader_class = adapter.class.content_kind == :dictionary ? Store::DictionaryLoader : Store::Loader
+      loader_class.new(db: @db, source: source, ledger: @ledger)
+                  .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
     end
 
     # Predict the withdrawal sweep and refuse if it exceeds the threshold. Runs
