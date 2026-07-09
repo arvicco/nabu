@@ -15,22 +15,28 @@ field notes (Unicode/NFC, citation systems, editions, licensing) that explain
 ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
-catalog store, idempotent loader, rebuild) and **nine source adapters**
-exist across **six parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
-DDbDP Leiden, GRETIL TEI, ORACC JSON): **eight sources live** — Perseus
-Greek and **Perseus Latin** (Iliad, Aeneid, and Livy included, **with 872
-aligned English translations**: `show <urn> --parallel` — Vergil pairs
-line-by-line), First1KGreek, Universal Dependencies ancient treebanks (six,
-including Old East Slavic birchbark letters and Middle Russian), PROIEL,
-TOROT, Papyri.info DDbDP (61k documents, restart-aware line URNs, cancelled
-texts kept in ⟦⟧), and **GRETIL** (Sanskrit: Rāmāyaṇa, Bhāgavata,
-Brahmasūtra, Ṛgveda with Vedic accents preserved; 777 of 781 upstream
-files parse via four addressability rungs) — totalling **~2.82 million
-searchable passages** — plus **ORACC** (cuneiform: Akkadian and Sumerian
-with gold lemmatization riding straight into lemma search, CC0, fetched
-as zips over HTTP with full attic parity) shipped and awaiting its first
-owner-fired sync. A Slavic-sources survey (`docs/slavic-survey.md`) ranks
-the axis's further expansion candidates.
+catalog store, idempotent loader, rebuild) and **twelve source adapters**
+exist across **nine parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
+DDbDP Leiden, GRETIL TEI, ORACC JSON, lexicon TEI, USFX, SBLGNT):
+**nine sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
+and Livy included, **with 872 aligned English translations**:
+`show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek
+(including Swete's Septuagint at verse grain), Universal Dependencies
+ancient treebanks (six, including Old East Slavic birchbark letters and
+Middle Russian), PROIEL, TOROT, Papyri.info DDbDP (61k documents,
+restart-aware line URNs, cancelled texts kept in ⟦⟧), **GRETIL**
+(Sanskrit: Rāmāyaṇa, Bhāgavata, Brahmasūtra, Ṛgveda with Vedic accents
+preserved; 777 of 781 upstream files parse via four addressability rungs),
+and **ORACC** (cuneiform: 1,794 Akkadian and Sumerian texts across five
+projects, gold lemmatization riding straight into lemma search, CC0,
+fetched as zips over HTTP with full attic parity) — totalling
+**~2.85 million searchable passages** — plus three shipped sources
+awaiting their owner-fired first syncs: **lexica** (LSJ + Lewis & Short,
+the dictionary shelf), **vulgate** (full Clementine bible, public domain),
+and **sblgnt** (SBL Greek NT, CC BY 4.0). Axis surveys rank further
+expansion candidates: Slavic (`docs/slavic-survey.md`) and Old English
+(`docs/oe-survey.md` — ISWOC treebank and the complete ASPR poetry corpus
+are the ranked picks).
 **The collection is protected end to end**: upstream deletions land in a
 local attic and stay searchable ("retired upstream"); run history, license
 baselines, and revision records live in a ledger no rebuild can wipe; and
@@ -40,19 +46,24 @@ corpus: backup → fresh-root restore → rebuild → verify → RESTORABLE.
 **The research surface is real**: search is diacritic-insensitive with
 per-language search forms (Greek final-sigma, Latin v/u–j/i — conventions
 §9) and **lemma-aware** — `search --lemma λέγω` finds every inflected
-attestation (εἶπον, ῥηθέντος, …) across the 161k gold-annotated treebank
-passages; `show` renders passages, documents, **citation ranges**
-(`urn:…:1.1-1.10`), and parallel translations (span-grouped: prose blocks
-cite exactly which lines they cover); `concord` prints classic KWIC lines
-in pristine text; `align` renders one citation across every witness of a
-registered work — the five-way parallel New Testament (grc/lat/got/xcl/chu)
-ships as the flagship (`config/alignments.yml`, architecture §10). **And the
-corpus talks**: a read-only MCP server (`bin/nabu mcp`, hand-rolled stdio;
-`.mcp.json` ships in-repo) gives any Claude session five tools — search,
-show, concord, align, status — every passage carrying its license class; see
-`docs/mcp.md`. Health (local trends +
-no-clone upstream probe), fixture drift checks, and launchd ops templates
-round out the custodial surface.
+attestation (εἶπον, ῥηθέντος, …) across **1.78M gold lemma rows in nine
+languages** (Greek, Latin, Sanskrit, Gothic, Armenian, OCS, Old East
+Slavic, Akkadian, Sumerian); `show` renders passages, documents,
+**citation ranges** (`urn:…:1.1-1.10`), and parallel translations
+(span-grouped: prose blocks cite exactly which lines they cover);
+`concord` prints classic KWIC lines in pristine text; `align` renders one
+citation across every witness of a registered work — the parallel New
+Testament (grc/lat/got/xcl/chu live, SBLGNT + Vulgate registered) and the
+Old Testament (Septuagint ↔ Vulgate) ship as flagships
+(`config/alignments.yml`, architecture §10); `define` looks up LSJ and
+Lewis & Short with entry citations resolved to in-catalog passages
+(architecture §11, after `sync lexica`). **And the corpus talks**: a
+read-only MCP server (`bin/nabu mcp`, hand-rolled stdio; `.mcp.json` ships
+in-repo) gives any Claude session six tools — search, show, concord,
+align, define, status — every passage carrying its license class; see
+`docs/mcp.md`. Health (local trends + upstream probes for both git and
+HTTP-zip sources), fixture drift checks, and launchd ops templates round
+out the custodial surface.
 
 ## Requirements
 

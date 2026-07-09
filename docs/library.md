@@ -1,12 +1,13 @@
 # The Library — content review
 
-**As of 2026-07-09** (post Phase 10, branch phase-10). Live totals:
-**65,311 documents / 2,822,794 passages** across 8 loaded sources (a 9th,
-ORACC, is shipped and awaiting its first sync), 16 language codes, 873
-aligned English translation editions, 1,599,485 lemma rows in 7 languages.
+**As of 2026-07-10** (post Phase 11, branch phase-11). Live totals:
+**67,111 documents / 2,853,105 passages** across 9 loaded sources (three
+more — lexica, vulgate, sblgnt — shipped and awaiting first syncs), 18
+language codes, 873 aligned English translation editions, **1,780,553
+lemma rows in 9 languages**.
 
 This is a living document. Numbers are read from the live catalog
-(`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §9 for the
+(`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §10 for the
 review cadence that keeps it truthful.
 
 ---
@@ -167,19 +168,42 @@ close reading; teaching materials.
 
 ---
 
+## 8. Cuneiform (ORACC)
+
+| | |
+|---|---|
+| **Category** | Tablets and inscriptions: administrative/economic records, royal inscriptions, state letters, lexical lists |
+| **Language** | Sumerian (`sux`, 1,458 docs), Akkadian (`akk`, 336; Old Babylonian and later dialects) |
+| **Period** | Third millennium BCE (Ur III royal inscriptions) through the Neo-Assyrian empire (7th c. BCE) |
+| **Size** | 1,794 docs / 21,080 passages (rimanum + etcsri loaded; saao-saa01 Sargon II letters, rinap1 royal inscriptions, dcclt lexical lists registered, next sync pulls them) |
+| **Source** | `oracc` (Open Richly Annotated Cuneiform Corpus), license: **CC0/public domain** (read per-project from upstream metadata, never hardcoded) |
+| **Metadata** | One passage per tablet line (`o.1`, `r.5` — the citable unit of Assyriology); transliteration as text; upstream **gold lemmatization** (citation form, normalization, English guide word, POS, per-grapheme logogram language) in annotations and `passage_lemmas` — Akkadian and Sumerian lemma search works today (36k rows); translit folding strips determinatives/sign-joins for search |
+
+The founding dream: Nabu's own tablets. Fetched as per-project zips over
+HTTP (the first non-git source; full attic/retention parity, TLS chain
+vendor-fixed) from a menu of 144 public projects.
+
+**Research uses:** Assyriology proper (ration lists, year-names, royal
+titulary); gold-lemmatized Akkadian/Sumerian as the only professionally
+lemmatized shelves besides the treebanks; comparative "epigraphic habit"
+studies alongside the papyri; lexical-list traditions (dcclt) as the
+ancient world's own dictionaries.
+
 ### Incoming shelf (shipped, not yet synced)
 
-**Cuneiform — ORACC** (`oracc`, CC0/public domain): Akkadian and Sumerian
-tablets and inscriptions, one passage per line (the citable unit of
-Assyriology: `o.1`, `r.5`), transliteration as text with the upstream **gold
-lemmatization** (citation form, normalization, English guide word, POS,
-per-grapheme logogram language) riding into `passage_lemmas` — Akkadian and
-Sumerian lemma search lands the moment the first project syncs. Fetched as
-per-project zips over HTTP (144 public projects to choose from) with full
-attic/retention parity. Awaiting the owner-fired first sync and starter
-project selection. Once loaded this becomes its own numbered section here.
+- **lexica** (LSJ + Lewis & Short, CC BY-SA 4.0 → `attribution`): the
+  dictionary shelf — `nabu define`/MCP `nabu_define`, entry citations
+  resolved to in-catalog passages, glosses surfacing in lemma search.
+  Owner-fired `sync lexica` (~160 MB clone).
+- **vulgate** (Clementine full bible, public domain → `open`): USFX parser,
+  per-book documents, verse citations; NT + OT witness in the alignment
+  hub. `sync vulgate` (~76 MB clone).
+- **sblgnt** (SBL Greek New Testament, CC BY 4.0 → `attribution`):
+  verse-per-line, seventh NT witness. `sync sblgnt` (~2 MB).
+- (LXX needs no sync — Swete's Septuagint is already live as First1K
+  tlg0527 and is wired into the hub's `ot` work.)
 
-## 8. Library-wide capabilities
+## 9. Library-wide capabilities
 
 - **Full-text search** with per-language folding (Greek final-sigma and
   diacritics, Latin u/v i/j, generic diacritic folding for IAST Sanskrit) —
@@ -210,7 +234,7 @@ project selection. Once loaded this becomes its own numbered section here.
   work, not for republishing. Both are served everywhere (CLI and MCP) with
   per-passage license labels.
 
-## 9. Review plan
+## 10. Review plan
 
 This document goes stale the moment a sync or a phase lands. Standing plan:
 
