@@ -80,9 +80,10 @@ gretil:
 
 oracc:
   adapter: Nabu::Adapters::Oracc
-  enabled: false   # P10-1: adapter + fixtures landed; awaiting owner-fired
-                   # first real sync + eyeball before enabling (CLAUDE.md
-                   # adapter checklist step 6). Scope: rimanum + etcsri.
+  enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
+                   # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
+                   # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
+                   # search verified live. Scope: rimanum + etcsri.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
