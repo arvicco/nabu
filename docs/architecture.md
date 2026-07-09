@@ -226,3 +226,96 @@ decision: the field moves fast, we keep control; the conformant core is
   (the mid-reindex window) → "index rebuilding — retry shortly", SQLITE_BUSY
   → brief retry then the same graceful shape. No write tools exist in this
   phase, deliberately.
+
+## 10. The alignment hub — one work across sources (P11-3)
+
+`nabu align "MARK 2.3"` renders the same verse in every witness the corpus
+holds — the flagship is the five-way parallel New Testament (PROIEL greek-nt
+grc · latin-nt lat · gothic-nt got · armenian-nt xcl · TOROT-family marianus
+chu, all under the proiel source). This section records the design decisions
+and the upstream reality they answer to.
+
+**The citation reality (verified against the live catalog, 2026-07-09).**
+PROIEL passage urns are *sentence ids* (`urn:nabu:proiel:greek-nt:6563`),
+not verses — suffix-equality alignment (§3, Query::Parallel) is structurally
+impossible across these witnesses. Verse identity lives in the stored
+annotations: every token carries `citation_part` ("MARK 2.3"), lifted by
+ProielParser into `annotations_json`; the passage-level `citation` field is
+only the *first* token's part. Sentence↔verse is honestly many-to-many (846
+greek-nt sentences span a verse boundary; a verse is often several
+sentences). The five witnesses share one book vocabulary (MATT, MARK, …),
+but refs are meaningful only *within* a work — PROIEL's Cicero cites a
+bookless "1.1" — and not every ref is numeric (Gothic carries
+"MARK Incipit.0"). Coverage is fragmentary per witness (Armenian holds only
+sampled chapters; John 1:1 is absent from Gothic and Marianus), so absence
+must render honestly, never fuzzed.
+
+**Registry + derived ref index, not materialized pairs.** The declarative
+side is `config/alignments.yml` (Nabu::AlignmentRegistry, validated loudly
+on load like sources.yml): works keyed by id (`nt`), each listing its
+witnesses — document urn, citation `extractor`, optional `books:` alias map
+and display `label`. Adding a witness is a registry entry, never code. The
+materialized side is ONE derived table, `alignment_refs` in
+fulltext.sqlite3: one row per (work, normalized ref, passage) — (work, ref,
+document_urn, passage_id, passage_urn, seq) — built by the Indexer from the
+catalog's stored `annotations_json` (never by re-parsing canonical), exactly
+the P7-5 passage_lemmas pattern: same drop-and-rebuild lifecycle, same
+"not a migration" stance, same file. Materialized passage *pairs* were
+rejected: pairs are O(witnesses²) rows that go stale the day a sixth
+witness lands, while ref rows are O(passages) and the N-way pairing is a
+query-time GROUP BY ref. The catalog schema is untouched.
+
+**Citation normalization.** A ref is an opaque string scoped to its work,
+folded identically on both sides (the §9/P6-4 contract again):
+whitespace-collapsed, uppercased, `:` → `.` — so a query spelled
+"Mark 2:3" finds rows indexed "MARK 2.3". A witness whose book tokens
+differ maps them in its registry `books:` alias table at index time;
+non-verse refs (Incipit.0) fold and index like any other and stay
+addressable. Extractors are a CLOSED, registry-validated set — v1 ships
+`proiel-citation` (the distinct per-token citation_part values of a
+sentence; multi-verse sentences index one row per verse covered). A future
+citation shape (CTS verse suffixes for the P11-5 biblical trio) is one new
+named extractor in code plus registry entries.
+
+**Rebuild-safety.** The registry is config — canonical-adjacent, in git, in
+the backup set, untouched by rebuild. The index is a pure function of
+(catalog, registry) and is rebuilt inside every `Indexer.rebuild!` (both
+call sites: SyncRunner#reindex!, Rebuild) — so `nabu rebuild` regenerates
+alignment for free, id re-minting and all (the index carries re-minted
+passage_ids precisely because it is dropped and rebuilt with them). No
+hand-curated rows exist anywhere in db/.
+
+**Query surface: a new `align` subcommand.** `nabu align REF [--work ID]`
+(REF may also be a passage urn, pivoting from a show/search hit into its
+verse). A new subcommand rather than `show --align` or an extension of
+`--parallel`, deliberately: show/--parallel take a *urn* and resolve
+CTS-sibling editions by suffix equality — a different mechanism with
+document-lookup semantics — while align takes a *citation* and resolves the
+registry; forcing one onto the other would conflate the two lookup models.
+Query::Parallel stays what it is (within-source translation pairing);
+Query::Align is its cross-source sibling. Output: the witnesses in registry
+order, each with title, language, EFFECTIVE license class (override ∘
+source class, resolved at query time — never stored in the index), and its
+sentences in sequence order, labeled with the full ref span when a sentence
+covers more verses than the one asked for. A registered witness absent from
+the catalog renders as "not synced" (the day-one state of the OE Mark
+entry); a synced witness lacking the verse renders "not attested".
+
+**MCP surface: `nabu_align`.** One more entry in the §9 tool table, same
+contract: every sentence row carries urn + language + license_class +
+source (the five NT witnesses are all `nc` — the labels are the point),
+bounded output, research_private/restricted witnesses withheld unless
+`include_restricted`, corpus states degrade gracefully (missing
+alignment_refs table → "alignment index not built — run nabu sync or nabu
+rebuild").
+
+**How later witnesses plug in.** ISWOC's OE Gospel of Mark (P11-1: PROIEL
+XML 2.1, native `citation-part="MARK 1.1"`) is one registry entry under
+`nt` with the same `proiel-citation` extractor — zero code, and the hub
+renders six-way for Mark the day the adapter syncs. The P11-5 biblical trio
+(Vulgate, LXX, SBLGNT) are entries plus, at most, one new extractor for
+their citation shape. GRETIL commentary layers are a *new work* with its
+own ref scheme (works are independent namespaces; nothing NT-shaped is
+hardcoded). Versification swamps (LXX-vs-Masoretic) stay out of scope by
+the same scoping: a work's witnesses must share a citation scheme, and
+whoever registers a witness owns that claim.

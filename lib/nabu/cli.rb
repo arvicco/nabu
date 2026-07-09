@@ -366,12 +366,74 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "align REF", "Render one citation across every witness of a registered work (the alignment hub)"
+    long_desc <<~HELP, wrap: false
+      Cross-source alignment (architecture §10): one citation of a registered
+      WORK rendered in every witness the alignment registry
+      (config/alignments.yml) names — the same verse in Greek, Latin, Gothic,
+      Classical Armenian, and Old Church Slavonic, in one screen. Witnesses
+      render in registry order, each with its language and its EFFECTIVE
+      license class (the five NT witnesses are all nc — mind the labels when
+      quoting).
+
+      REF is a citation in the work's scheme — for the `nt` work,
+      BOOK chapter.verse ("MARK 2.3"; quote it or let Thor join the words).
+      Matching is forgiving: case, extra spaces, and chapter:verse colons all
+      normalize ("mark 2:3" finds MARK 2.3). REF may also be a PASSAGE URN
+      (pivot from a show/search hit): the sentence's verse is looked up and
+      aligned across the other witnesses.
+
+      Alignment is at citation grain over the treebanks' verse annotations,
+      and sentence≠verse: a witness's sentence that spans a verse boundary is
+      shown once, labeled with everything it covers. Honesty rules: a witness
+      that simply lacks the verse (the Armenian sample holds only scattered
+      chapters; Gothic is fragmentary) reads "not attested"; a registered
+      witness whose source was never synced reads "not synced". Adding a
+      witness (say, the ISWOC Old English Mark) is a registry entry, not code.
+
+      --work names the work when several are registered (with exactly one
+      registered work it is optional).
+
+      Examples:
+        nabu align MARK 2.3                 # the paralytic, five ways
+        nabu align "mark 2:3"               # same — refs normalize
+        nabu align urn:nabu:proiel:marianus:36421
+                                            # pivot: this OCS sentence, aligned
+        nabu align MATT 5.25 --work nt      # explicit work id
+
+      Use cases: read the Vorlage beside the translation (THE working method
+      of comparative philology); check how each witness renders a
+      construction; learn OCS/Gothic against the Greek you can already read.
+    HELP
+    option :work, type: :string, banner: "ID",
+                  desc: "Alignment work id from config/alignments.yml (optional when only one is registered)"
+    def align(*ref_parts)
+      ref = ref_parts.join(" ").strip
+      raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+      result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                 .run(ref, work: options[:work])
+      print_align(result)
+    rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing three tools —
+      conversational surface over the local nabu corpus, exposing five tools —
       nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
-      parallel translations), and nabu_status (coverage) — to any MCP client
+      parallel translations), nabu_concord (KWIC), nabu_align (cross-source
+      citation alignment), and nabu_status (coverage) — to any MCP client
       (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
@@ -404,7 +466,10 @@ module Nabu
         catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
         fulltext: readonly_opener(config.fulltext_path) do
           Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
-        end
+        end,
+        # Static config, loaded once — a malformed registry fails HERE, loudly,
+        # not mid-conversation.
+        alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -757,6 +822,45 @@ module Nabu
         covers = "covers #{group.covers_first}–#{group.covers_last}"
         clip = group.clipped ? "; range shows #{group.shown_first}–#{group.shown_last}" : ""
         "[#{group.anchor} — #{covers}#{clip}]"
+      end
+
+      # -- align (P11-3) ----------------------------------------------------
+
+      # Render the cross-source alignment: the ref + work header with an
+      # honest attestation count, then one block per witness in registry
+      # order — title, language, license label, and the sentences (urn line,
+      # text line), a multi-verse sentence labeled with its full span.
+      def print_align(result)
+        attesting = result.witnesses.count { |witness| witness.status == :ok }
+        say "#{result.ref} — #{result.title}"
+        say "  #{attesting} of #{result.witnesses.size} witnesses attest this ref"
+        result.witnesses.each { |witness| print_align_witness(witness, result.ref) }
+      end
+
+      def print_align_witness(witness, ref)
+        say ""
+        if witness.status == :not_synced
+          say "#{witness.label} — not synced (#{witness.document_urn} is registered but " \
+              "not in the catalog)"
+          return
+        end
+
+        say "#{witness.label} — #{witness.title} [#{witness.language}]   " \
+            "license: #{witness.license_class}"
+        return say "  not attested (this witness lacks #{ref})" if witness.status == :no_match
+
+        witness.sentences.each do |sentence|
+          say "  #{sentence.urn}#{align_span_note(sentence, ref)}"
+          say "    #{sentence.text}"
+        end
+      end
+
+      # "  [covers MARK 2.3, MARK 2.4]" — only when the sentence spans beyond
+      # the queried ref (sentence≠verse, stated honestly).
+      def align_span_note(sentence, ref)
+        return "" if sentence.refs == [ref]
+
+        "  [covers #{sentence.refs.join(', ')}]"
       end
 
       def format_parallel_side(side)

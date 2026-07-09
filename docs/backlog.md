@@ -1511,7 +1511,7 @@ plus GET of metadata.json ONLY (small) for license drift). Tests stub HTTP.
 Acceptance: nabu health --remote (owner-run, or stubbed test) no longer
 reports oracc as gone; suite+lint green; worklog line.
 
-## P11-3 · Cross-source alignment hub  [tier: fable] [status: pending] [deps: —]
+## P11-3 · Cross-source alignment hub  [tier: fable] [status: done] [deps: —]
 improvements.md §1.2 comes due. Design + implement the alignment layer:
 align the SAME work across sources/languages at citation grain. Flagship:
 the parallel New Testament — greek-nt (PROIEL grc) ↔ latin-nt (Vulgate,
@@ -1531,6 +1531,34 @@ must be registry-driven (adding a sixth version = registry entry, not
 code). Acceptance: a verse (e.g. John 1:1) renders five-way aligned in one
 command with per-version license labels; alignment survives nabu rebuild;
 suite+lint green; architecture §10 written; worklog line.
+
+### Findings (P11-3, 2026-07-09 — shipped; architecture §10 is the design record)
+
+CITATION REALITY (verified live): passage urns are SENTENCE ids; verse
+identity lives in per-token `citation_part` ("MARK 2.3") in annotations_json
+(the passage-level `citation` is only the first token's part); sentence↔verse
+is many-to-many (846 greek-nt sentences span verses); all five witnesses share
+one book vocabulary but refs are work-scoped (Cicero cites bookless "1.1");
+Gothic carries non-numeric refs (MARK Incipit.0). **The packet's example verse
+John 1:1 is NOT five-way alignable** (absent from gothic-nt and marianus in
+the treebanks) — the shipped demo verse is **MARK 2.3** (present in all five,
+and a Mark verse as the OE-Mark rider requires; MARK 1.1 renders 4-of-5,
+Armenian honestly "not attested"). Design: registry
+(config/alignments.yml, loud-fail loader Nabu::AlignmentRegistry) + derived
+`alignment_refs` table in fulltext.sqlite3 (P7-5 passage_lemmas pattern — one
+row per work/normalized-ref/passage, built by Indexer.rebuild! from stored
+annotations, both call sites) — NOT materialized pairs (O(witnesses²), stale
+on the sixth witness); NO catalog migration. Refs fold both sides
+(upcase/whitespace/':'→'.'; per-witness books: alias map). Query surface: new
+`nabu align REF [--work]` (+ passage-urn pivot) — Parallel stays the separate
+CTS-suffix mechanism. MCP: fifth tool nabu_align (license labels on every
+sentence row, restricted witnesses withheld bodily). Licenses resolve at query
+time (override ∘ source), never stored in the index. OE Mark = uncomment one
+prepared registry line (identical proiel-citation extractor); biblical trio =
+entries + at most one new named extractor; GRETIL commentary = a new work.
+Demo (scratch parse-only store, live db untouched): `nabu align MARK 2.3` →
+5/5 witnesses incl. the Armenian sentence honestly labeled "[covers MARK 2.3,
+MARK 2.4]"; survived a real `nabu rebuild` of the scratch store byte-identically.
 
 ## P11-4 · Dictionary shelf: LSJ + Lewis & Short  [tier: fable] [status: pending] [deps: —]
 improvements.md §1.3. Ingest the two canonical classical lexica (Perseus

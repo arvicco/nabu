@@ -44,10 +44,13 @@ attestation (εἶπον, ῥηθέντος, …) across the 161k gold-annotated
 passages; `show` renders passages, documents, **citation ranges**
 (`urn:…:1.1-1.10`), and parallel translations (span-grouped: prose blocks
 cite exactly which lines they cover); `concord` prints classic KWIC lines
-in pristine text. **And the corpus talks**: a read-only MCP server
-(`bin/nabu mcp`, hand-rolled stdio; `.mcp.json` ships in-repo) gives any
-Claude session four tools — search, show, concord, status — every passage
-carrying its license class; see `docs/mcp.md`. Health (local trends +
+in pristine text; `align` renders one citation across every witness of a
+registered work — the five-way parallel New Testament (grc/lat/got/xcl/chu)
+ships as the flagship (`config/alignments.yml`, architecture §10). **And the
+corpus talks**: a read-only MCP server (`bin/nabu mcp`, hand-rolled stdio;
+`.mcp.json` ships in-repo) gives any Claude session five tools — search,
+show, concord, align, status — every passage carrying its license class; see
+`docs/mcp.md`. Health (local trends +
 no-clone upstream probe), fixture drift checks, and launchd ops templates
 round out the custodial surface.
 
@@ -80,7 +83,8 @@ round out the custodial surface.
 | `rake fixtures:check[source]` | Re-fetch pinned fixture URLs into tmp, byte-diff against the checked-in fixtures, and run the adapter tests against the fresh copies — the upstream-format drift report. Never overwrites; `fixtures:refresh[source]` is the explicit adoption path. |
 | `bin/nabu backup [--dry-run] [--skip-derived]` | File-level rsync of everything not re-derivable (canonical + attic, the history ledger, config; derived dbs by default) to the configured external volume. Refuses to run when the volume is not mounted. |
 | `bin/nabu concord QUERY\|--lemma FORM [--width N]` | Classic KWIC concordance: keyword column-aligned in pristine text, context trimmed per side, corpus order — for scanning usage, not relevance. |
-| `bin/nabu mcp` | The read-only MCP server (stdio): search/show/concord/status as conversational tools for Claude Code/Desktop — registration recipes in `docs/mcp.md`. |
+| `bin/nabu align REF [--work ID]` | Cross-source alignment: one citation across every witness of a registered work (`config/alignments.yml`) — `align MARK 2.3` renders the verse in Greek, Latin, Gothic, Armenian, and OCS at once, each with its license label; absent verses and unsynced witnesses read honestly. REF may be a passage urn (pivot from a hit). |
+| `bin/nabu mcp` | The read-only MCP server (stdio): search/show/concord/align/status as conversational tools for Claude Code/Desktop — registration recipes in `docs/mcp.md`. |
 | `rake ops:drill` | The fresh-machine restore drill: backup → restore into a tmp root → rebuild → verify → golden replay → counts cross-check. Exit 0 = RESTORABLE. |
 
 Every query command carries worked examples and syntax notes inline:

@@ -769,6 +769,99 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- align (P11-3) ---------------------------------------------------------
+
+  def test_align_renders_a_verse_across_witnesses_with_license_labels
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status, "an attested ref exits 0"
+      assert_match(/MARK 2\.3 — New Testament/, out)
+      assert_match(/greek-nt — Greek NT \[grc\] {3}license: nc/, out)
+      assert_match(/marianus — Codex Marianus \[chu\] {3}license: nc/, out)
+      assert_match(/παραλυτικὸν/, out)
+      assert_match(/носѧште/, out)
+      assert(out.index("παραλυτικὸν") < out.index("носѧште"),
+             "witnesses render in registry order")
+      assert_match(/2 of 2 witnesses/, out)
+    end
+  end
+
+  def test_align_normalizes_the_query_ref
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "mark", "2:3"]) }
+      assert_nil status
+      assert_match(/MARK 2\.3/, out)
+    end
+  end
+
+  def test_align_pivots_from_a_passage_urn
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align urn:nabu:proiel:marianus:1]) }
+      assert_nil status
+      assert_match(/MARK 2\.3/, out)
+      assert_match(/παραλυτικὸν/, out)
+    end
+  end
+
+  def test_align_unattested_ref_reads_honestly_and_exits_zero
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "JOHN", "1.1"]) }
+      assert_nil status, "an all-absent ref is a result, not an error"
+      assert_match(/0 of 2 witnesses/, out)
+      assert_match(/not attested/, out)
+    end
+  end
+
+  def test_align_unsynced_witness_reads_not_synced
+    with_aligned_corpus(extra_witness: "urn:nabu:proiel:wscp") do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/wscp — not synced/, out)
+      assert_match(/2 of 3 witnesses/, out)
+    end
+  end
+
+  def test_align_without_index_hints_to_sync_or_rebuild
+    with_aligned_corpus(indexed: false) do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_equal 1, status
+      assert_match(/nabu sync or nabu rebuild/, err)
+    end
+  end
+
+  def test_align_with_no_registry_exits_one_with_guidance
+    with_aligned_corpus(registry: "") do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_equal 1, status
+      assert_match(/no alignment works registered/i, err)
+    end
+  end
+
+  def test_align_unknown_work_exits_one_naming_the_registered
+    with_aligned_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--work", "iliad"]) }
+      assert_equal 1, status
+      assert_match(/iliad/, err)
+      assert_match(/nt/, err)
+    end
+  end
+
+  def test_align_without_a_ref_exits_one
+    with_aligned_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[align]) }
+      assert_equal 1, status
+      assert_match(/give a citation/i, err)
+    end
+  end
+
+  def test_help_align_documents_refs_work_and_examples
+    out, _err, _status = run_cli(%w[help align])
+    assert_match(/MARK 2\.3/, out, "a worked ref example")
+    assert_match(/--work/, out)
+    assert_match(%r{config/alignments\.yml}, out, "must point at the registry")
+    assert_match(/Examples:/, out)
+  end
+
   # -- export (P4-3) -------------------------------------------------------
 
   def test_export_plain_streams_one_line_per_passage
@@ -820,6 +913,77 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # An on-disk two-witness alignment corpus (P11-3): a registry file, a
+  # catalog with the greek-nt/marianus MARK 2.3 sentences (real live-catalog
+  # snippets, sentence-id urns, verse identity in the token citation_parts),
+  # and — unless indexed: false — the fulltext db with alignment_refs built.
+  def with_aligned_corpus(registry: nil, extra_witness: nil, indexed: true)
+    Dir.mktmpdir("nabu-cli-align") do |root|
+      config = aligned_corpus_config(root, registry, extra_witness)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_aligned_witnesses(catalog)
+      index_aligned_corpus(config, catalog) if indexed
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def aligned_corpus_config(root, registry, extra_witness)
+    yaml = registry || <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:marianus
+    YAML
+    yaml += "    - document: #{extra_witness}\n" if extra_witness
+    alignments = File.join(root, "alignments.yml")
+    File.write(alignments, yaml)
+    sources = File.join(root, "sources.yml")
+    File.write(sources, "# none\n")
+    Nabu::Config.new(
+      canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+      sources_path: sources, alignments_path: alignments, config_path: "(test)"
+    )
+  end
+
+  def seed_aligned_witnesses(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter", license_class: "nc",
+      enabled: true
+    )
+    [["greek-nt", "Greek NT", "grc",
+      "καὶ ἔρχονται φέροντες πρὸς αὐτὸν παραλυτικὸν αἰρόμενον ὑπὸ τεσσάρων."],
+     ["marianus", "Codex Marianus", "chu",
+      "Ꙇ придѫ къ немоу носѧште ослабленъ жилами. носимъ четꙑрьми."]].each do |tail, title, lang, text|
+      doc_id = catalog[:documents].insert(
+        source_id: source_id, urn: "urn:nabu:proiel:#{tail}", title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "urn:nabu:proiel:#{tail}:1", sequence: 0, language: lang,
+        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        annotations_json: JSON.generate(
+          "citation" => "MARK 2.3",
+          "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
+        )
+      )
+    end
+  end
+
+  def index_aligned_corpus(config, catalog)
+    FileUtils.mkdir_p(File.dirname(config.fulltext_path))
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    Nabu::Store::Indexer.rebuild!(
+      catalog: catalog, fulltext: fulltext,
+      alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
+    )
+    fulltext.disconnect
   end
 
   # A synced-and-indexed corpus with one document whose two passages carry the

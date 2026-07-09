@@ -10,6 +10,7 @@ require_relative "../query/lemma_search"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
+require_relative "../query/align"
 
 module Nabu
   module MCP
@@ -83,6 +84,10 @@ module Nabu
 
       NO_CORPUS_NOTE = "no corpus here yet — run `nabu sync <source>` or `nabu rebuild` " \
                        "to build it, then retry"
+      NO_ALIGNMENTS_NOTE = "no alignment works registered — the owner adds works/witnesses " \
+                           "to config/alignments.yml (architecture §10)"
+      ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
+                              "alignment hub) — retry shortly, or run `nabu rebuild`"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
       LEMMA_REBUILDING_NOTE = "lemma index rebuilding (or the fulltext index predates lemma " \
                               "search) — retry shortly, or run `nabu rebuild`"
@@ -133,6 +138,19 @@ module Nabu
         "license_class, and source — PRESERVE the license fields when quoting. Use nabu_show for " \
         "a hit's full passage, nabu_search when you want ranked relevance rather than a scan.".freeze
 
+      ALIGN_DESCRIPTION =
+        "Cross-source alignment over the local nabu corpus: one citation of a registered work " \
+        "rendered across EVERY witness the alignment registry names — e.g. the same New " \
+        "Testament verse in Greek, Latin, Gothic, Classical Armenian, and Old Church Slavonic " \
+        "at once. `ref` is a citation in the work's scheme (\"MARK 2.3\"; case/spacing/" \
+        "chapter:verse colons normalize) or a passage urn to pivot from a search/show hit. " \
+        "`work` picks the registry work when several exist (optional with one). Witnesses come " \
+        "in registry order; each carries its language and license_class (the NT witnesses are " \
+        "nc — PRESERVE the license fields when quoting), and every sentence row carries urn + " \
+        "language + license_class + source. Sentence≠verse: a sentence spanning a verse " \
+        "boundary lists every ref it covers. Honest absence: a witness lacking the verse reads " \
+        "status no_match; a registered-but-unsynced witness reads not_synced."
+
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
         "recency, passage counts by language and by license class, index state, and what is " \
@@ -182,6 +200,21 @@ module Nabu
 
       STATUS_SCHEMA = { type: "object", properties: {}, additionalProperties: false }.freeze
 
+      ALIGN_SCHEMA = {
+        type: "object",
+        properties: {
+          ref: { type: "string",
+                 description: "Citation in the work's scheme (e.g. \"MARK 2.3\") or a passage " \
+                              "urn to pivot from." },
+          work: { type: "string",
+                  description: "Alignment work id from the registry (optional when exactly " \
+                               "one work is registered)." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["ref"],
+        additionalProperties: false
+      }.freeze
+
       CONCORD_SCHEMA = {
         type: "object",
         properties: {
@@ -213,13 +246,19 @@ module Nabu
                          handler: :show },
         "nabu_concord" => { description: CONCORD_DESCRIPTION, input_schema: CONCORD_SCHEMA,
                             handler: :concord },
+        "nabu_align" => { description: ALIGN_DESCRIPTION, input_schema: ALIGN_SCHEMA,
+                          handler: :align },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
 
-      def initialize(catalog:, fulltext:)
+      # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
+      # returning one, or nil when the hub is unconfigured) — config-loaded by
+      # the entrypoint, resolved per call like the connection slots.
+      def initialize(catalog:, fulltext:, alignments: nil)
         @catalog = catalog
         @fulltext = fulltext
+        @alignments = alignments
       end
 
       # tools/list shape: [{name:, description:, inputSchema:}].
@@ -306,6 +345,25 @@ module Nabu
         )
         rows = rows.reject { |row| EXCLUDED_LICENSE_CLASSES.include?(row.license_class) } unless include_restricted
         render_concord(rows, limit: limit, width: width, catalog: catalog)
+      end
+
+      def align(args)
+        ref = string_arg(args, "ref") or
+          raise InvalidArguments, "nabu_align needs a ref (a citation like MARK 2.3, or a passage urn)"
+        registry = resolve(@alignments)
+        return note(NO_ALIGNMENTS_NOTE) if registry.nil? || registry.empty?
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = resolve(@fulltext)
+        return note(ALIGN_REBUILDING_NOTE) unless fulltext&.table_exists?(Store::AlignmentIndexer::TABLE)
+
+        result = Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                             .run(ref, work: string_arg(args, "work"))
+        json(align_payload(result, include_restricted: args["include_restricted"] == true))
+      rescue Query::Align::Error => e
+        # Caller-fixable (unknown work, unaligned urn): isError so the model
+        # self-corrects (SEP-1303), same stance as bad arguments.
+        tool_error(e.message)
       end
 
       def status(_args)
@@ -535,6 +593,42 @@ module Nabu
 
         { urn: line.urn, language: language, license_class: license,
           text: line.text, withdrawn: line.withdrawn }
+      end
+
+      # -- align internals ---------------------------------------------------------
+
+      def align_payload(result, include_restricted:)
+        attesting = result.witnesses.count { |witness| witness.status == :ok }
+        {
+          type: "alignment", work: result.work, title: result.title, ref: result.ref,
+          witnesses: result.witnesses.map { |witness| align_witness_payload(witness, include_restricted) },
+          note: "#{attesting} of #{result.witnesses.size} registered witnesses attest #{result.ref}; " \
+                "statuses: ok (sentences follow), no_match (verse absent from that witness), " \
+                "not_synced (registered, no data yet), withheld (license-excluded)"
+        }
+      end
+
+      # One witness column. A witness whose effective license class is
+      # default-excluded is WITHHELD bodily (status + license class only, no
+      # urns, no text) unless include_restricted — the same never-leak stance
+      # as everywhere else on this surface.
+      def align_witness_payload(witness, include_restricted)
+        base = { label: witness.label, document_urn: witness.document_urn,
+                 title: witness.title, language: witness.language,
+                 license_class: witness.license_class, source: witness.source_slug }
+        return base.merge(status: "withheld", sentences: []) if withhold?(witness.license_class, include_restricted)
+
+        base.merge(status: witness.status.to_s,
+                   sentences: witness.sentences.map { |sentence| align_sentence_payload(witness, sentence) })
+      end
+
+      # Every sentence row carries the full contract fields (urn + language +
+      # license_class + source) plus the refs it covers — sentence≠verse,
+      # stated per row.
+      def align_sentence_payload(witness, sentence)
+        { urn: sentence.urn, language: witness.language,
+          license_class: witness.license_class, source: witness.source_slug,
+          text: sentence.text, refs: sentence.refs }
       end
 
       # -- the exclusion gate ------------------------------------------------------
