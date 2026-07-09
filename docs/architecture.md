@@ -252,9 +252,12 @@ must render honestly, never fuzzed.
 
 **Registry + derived ref index, not materialized pairs.** The declarative
 side is `config/alignments.yml` (Nabu::AlignmentRegistry, validated loudly
-on load like sources.yml): works keyed by id (`nt`), each listing its
-witnesses — document urn, citation `extractor`, optional `books:` alias map
-and display `label`. Adding a witness is a registry entry, never code. The
+on load like sources.yml): works keyed by id (`nt`, `ot`), each listing its
+witnesses — one document urn (`document:`) or, since P11-5, a per-book
+document map (`documents:`, work-vocabulary book token → urn: the shape of
+an edition minted one-document-per-book), plus citation `extractor`,
+optional `books:` alias map and display `label`. Adding a witness is a
+registry entry, never code. The
 materialized side is ONE derived table, `alignment_refs` in
 fulltext.sqlite3: one row per (work, normalized ref, passage) — (work, ref,
 document_urn, passage_id, passage_urn, seq) — built by the Indexer from the
@@ -271,11 +274,16 @@ whitespace-collapsed, uppercased, `:` → `.` — so a query spelled
 "Mark 2:3" finds rows indexed "MARK 2.3". A witness whose book tokens
 differ maps them in its registry `books:` alias table at index time;
 non-verse refs (Incipit.0) fold and index like any other and stay
-addressable. Extractors are a CLOSED, registry-validated set — v1 ships
-`proiel-citation` (the distinct per-token citation_part values of a
-sentence; multi-verse sentences index one row per verse covered). A future
-citation shape (CTS verse suffixes for the P11-5 biblical trio) is one new
-named extractor in code plus registry entries.
+addressable. Extractors are a CLOSED, registry-validated set of two:
+`proiel-citation` (P11-3: the distinct per-token citation_part values of a
+sentence; multi-verse sentences index one row per verse covered) and
+`cts-verse` (P11-5: the witness's registry book token + the passage urn's
+citation tail — `…tlg0527.tlg001.1st1K-grc1:1.2` under `GEN:` indexes
+"GEN 1.2" — for verse-grain editions whose verse identity IS the passage
+urn; no annotations read). cts-verse requires the `documents:` witness form
+(the book token comes from the registry, since a per-book document's urn
+tails are bookless); a single-chapter book's flat tail folds to "LJE 5" and
+stays addressable, the Incipit stance again.
 
 **Rebuild-safety.** The registry is config — canonical-adjacent, in git, in
 the backup set, untouched by rebuild. The index is a pure function of
@@ -312,13 +320,22 @@ rebuild").
 **How later witnesses plug in.** ISWOC's OE Gospel of Mark (P11-1: PROIEL
 XML 2.1, native `citation-part="MARK 1.1"`) is one registry entry under
 `nt` with the same `proiel-citation` extractor — zero code, and the hub
-renders six-way for Mark the day the adapter syncs. The P11-5 biblical trio
-(Vulgate, LXX, SBLGNT) are entries plus, at most, one new extractor for
-their citation shape. GRETIL commentary layers are a *new work* with its
-own ref scheme (works are independent namespaces; nothing NT-shaped is
-hardcoded). Versification swamps (LXX-vs-Masoretic) stay out of scope by
-the same scoping: a work's witnesses must share a citation scheme, and
-whoever registers a witness owns that claim.
+renders for Mark the day the adapter syncs. The P11-5 biblical trio landed
+exactly as forecast — entries plus the one `cts-verse` extractor: `nt`
+gained SBLGNT (CC BY, 27 per-book documents) and the Clementine Vulgate's
+NT books (public domain), and a new `ot` work pairs the LXX (Swete —
+ALREADY in the catalog as First1KGreek tlg0527, verse-grain CTS urns; the
+registry-only witness) with the Vulgate's OT books. A multi-document
+witness renders as ONE column: the hit book's document heads it
+(title/urn), a miss shows the label alone (no arbitrary book title), and
+"not synced" appears only when none of its documents are live. GRETIL
+commentary layers are a *new work* with its own ref scheme (works are
+independent namespaces; nothing NT-shaped is hardcoded). Versification
+swamps (LXX-vs-Masoretic) stay out of scope by the same scoping: a work's
+witnesses must share a citation scheme, and whoever registers a witness
+owns that claim — the `ot` registrar's claim rests on both witnesses
+following the Greek tradition (Vulgate Psalms are numbered after the LXX,
+so "PSA 22.1" is the shepherd psalm in both).
 
 ## 11. The dictionary shelf — lexica as data (P11-4)
 

@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: vulgate
+# adapter_test is null: the one fixture is a documented TRIM (whole: false) of
+# the 4.65 MB whole-bible file — a count-based adapter test re-run against the
+# full upstream file would false-fail (see the schema note in
+# perseus/manifest.yml).
+adapter_test: null
+retrieved: 2026-07-09
+files:
+  - path: lat-clementine.usfx.xml
+    url: https://raw.githubusercontent.com/seven1m/open-bibles/8c31c380a9f7af19fbe04e8eaaa6fa74601083d7/lat-clementine.usfx.xml
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed slice assembly — the file was built from ranged HTTP reads of the
+      pinned upstream blob (GEN ch. 1 + MRK chs. 1-2 + JHN 1:1-18, slices
+      byte-identical, plus closing tags); a fresh whole-file GET would not
+      byte-match
+    trim: >-
+      P11-5 (owner-approved 2026-07-09): usfx root + book GEN chapter 1 whole
+      (31 vv, upstream bytes 39-4,122) + book MRK chapters 1-2 whole (73 vv,
+      upstream bytes 3,814,062-3,846,683) + book JHN chapter 1 verses 1-18
+      (upstream bytes 4,028,801-4,030,515); </book> closes appended after each
+      sliced book, </usfx> at the end. Upstream pinned at open-bibles HEAD
+      8c31c380a9f7af19fbe04e8eaaa6fa74601083d7 (2026-06-05).

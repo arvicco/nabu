@@ -103,6 +103,29 @@ lexica:
   # re-syncable, but not on a live schedule.
   sync_policy: manual
 
+vulgate:
+  adapter: Nabu::Adapters::Vulgate
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync vulgate — ~76 MB
+                   # open-bibles clone — then spot-check nabu show
+                   # urn:nabu:vulgate:mrk:2.3 and 5 random verses)
+  # P11-5: the FULL Clementine Latin bible (one USFX file in the open-bibles
+  # collection; public domain). One document per book; both alignment-hub
+  # works (nt + ot) list its books as witnesses. open-bibles is curated and
+  # occasionally updated: re-syncable, not on a live schedule.
+  sync_policy: manual
+
+sblgnt:
+  adapter: Nabu::Adapters::Sblgnt
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
+                   # clone — then spot-check nabu show urn:nabu:sblgnt:mark:2.3)
+  # P11-5: the SBL Greek New Testament (Faithlife/SBLGNT, CC BY 4.0), 27
+  # per-book verse-per-line text files. The nt alignment work's second Greek
+  # witness (beside PROIEL greek-nt). Upstream edits are rare (v1.2 2023):
+  # re-syncable, not on a live schedule.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

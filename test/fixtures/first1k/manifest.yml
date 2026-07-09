@@ -103,3 +103,29 @@ files:
       (canonical/first1k-greek/data/tlg4037/tlg001/, synced 2026-07-03): full
       teiHeader + div[@type="translation"] kept; sections 1–3 kept, sections
       4–23 removed. Aligns section-for-section with the grc sibling above.
+  # P11-5 (biblical trio, owner-approved 2026-07-09): the LXX witness —
+  # tlg0527 is Swete's Septuaginta (1901), already synced live; this Genesis
+  # chapter-1 trim exercises the alignment hub's cts-verse extractor
+  # end-to-end from a real fixture.
+  - path: greekLit/data/tlg0527/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c/data/tlg0527/__cts__.xml
+    whole: true
+    trim: none (textgroup metadata, Septuaginta)
+  - path: greekLit/data/tlg0527/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c/data/tlg0527/tlg001/__cts__.xml
+    whole: true
+    trim: none (work metadata, Genesis — Swete edition label)
+  - path: greekLit/data/tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c/data/tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed edition — a fresh whole-file GET would not byte-match, so it is
+      not refetchable (like the papyri-ddbdp local trims)
+    trim: >-
+      P11-5 LXX-witness exemplar, ranged-fetched at pinned HEAD
+      4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c (2026-05-29): full teiHeader +
+      div[@type="edition"] kept; chapter 1 whole (verses 1-31, upstream bytes
+      0-16,030 rstripped); chapters 2-50 removed; edition div, body, text, TEI
+      closed to match the upstream closing shape.

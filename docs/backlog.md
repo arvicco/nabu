@@ -1700,7 +1700,7 @@ language-agnostic tables, slug bosworth-toller/lang ang, citations empty
 until an OE crosswalk — §11 note written. `lexica` registered
 enabled: false; owner fires the ~160 MB first clone.
 
-## P11-5 · Biblical trio  [tier: opus] [status: pending] [deps: P11-3 design]
+## P11-5 · Biblical trio  [tier: opus] [status: done] [deps: P11-3 design]
 improvements.md §2.1: Vulgate (full, not just NT — PROIEL latin-nt is NT
 only), LXX (Septuagint, Rahlfs where openly licensed — verify; CCAT/other
 open editions), SBLGNT (SBL Greek New Testament, free license with
@@ -1710,6 +1710,191 @@ parser families (TEI/plain structured). These feed the P11-3 hub as
 additional versions (registry entries). Acceptance: three sources READY
 (enabled:false, owner-fired syncs), hub registry entries prepared;
 suite+lint green; worklog line.
+
+### Fixture plan (P11-5 Phase A, 2026-07-09 — OWNER-APPROVED 2026-07-09, "Approved as is")
+
+SCOUTED (page-level reads + gh metadata only, no bulk fetch). The headline
+deviation from the packet framing, stated up front: **the trio is TWO new
+sources + one registry-only witness.** The LXX's best open edition is
+ALREADY IN THE CATALOG — First1KGreek tlg0527 is Swete's Septuaginta (57
+grc book-documents + ~40 perseus-eng translations, synced, verse-grain
+CTS passage urns `…tlg0527.tlg001.1st1K-grc1:1.2`; census: 29,170/29,242
+passages are chapter.verse, the 72 flat refs are all Epistula Jeremiae's
+single-chapter verse numbers). The openly-licensed standalone LXX repo
+(nathans/lxx-swete, CC BY-SA 4.0) is itself *derived from* First1KGreek
+tlg0527 per its own README — ingesting it would duplicate the same
+edition. So: LXX = registry entries + the new extractor, zero fetch,
+zero adapter.
+
+RAHLFS IS BLOCKED, honestly: the 1935 text is PD by age, but every
+machine-readable Rahlfs derives from the CATSS/CCAT morphological
+database, whose user declaration (ccat.sas.upenn.edu …
+/lxxmorph/0-user-declaration.txt) requires verbatim "Not to use or make
+available these materials for commercial purposes without first obtaining
+the written consent of the owners/encoders" and "To control access to
+these materials and require any other party to whom the recipient
+supplies any portion of this material to observe these conditions" — a
+registration-gated no-uncontrolled-redistribution term, below every
+acceptable class. eliranwong/LXX-Rahlfs-1935 relabels this CC-BY-NC-SA in
+README prose but ships NO license file and itself concedes "readers have
+to agree sending CCAT user declaration"; CenterBLC/LXX's MIT covers only
+its Text-Fabric conversion (@Editors=CCAT headers). Rahlfs-Hanhart 2006
+is (c) Deutsche Bibelgesellschaft. STEPBible (CC BY 4.0) ships no Greek
+OT as of HEAD 2026-06-09 (TAGNT + Hebrew TAHOT only; verified in-tree).
+Swete 1909 (PD text, CC BY-SA 4.0 digital edition) is the open LXX, and
+we hold it.
+
+UPSTREAM 1 — VULGATE (full bible, new source `vulgate`):
+**github.com/seven1m/open-bibles**, branch master, HEAD pinned
+`8c31c380a9f7af19fbe04e8eaaa6fa74601083d7` (2026-06-05), ~76 MB
+collection of PD/libre bibles, one file per translation. Ours:
+`lat-clementine.usfx.xml` (4,652,377 B, blob c0e65106…) — the Tweedale
+Clementine Vulgate Project text via eBible.org, Sixto-Clementine 1592
+(NOT the DBG-copyrighted Stuttgart/Weber-Gryson). FULL bible verified:
+book-id sweep runs GEN … MAL, deuterocanon (1MA 2MA …), MAT MRK … REV.
+LICENSE (verbatim): repo README translation table row
+"| lat-clementine.usfx.xml | Latin | USFX | | Clementine Latin Vulgate |
+Public Domain |"; eBible.org details page for this edition: "Public
+Domain"; eBible.org copyright page: "No person, company, or organization
+may claim any kind of copyright or restriction on this version of the
+Bible... even if they make changes." Caveat disclosed: open-bibles has no
+repo-wide LICENSE file (per-file assertion in README) — the PD chain is
+README row + eBible.org + 1592 text age → license_class `open`.
+FORMAT: USFX milestone XML (NOT TEI — new small parser family
+`UsfxParser`, streaming Reader): `<book id="MRK"><h>Marcus</h>
+<c id="1"/><v id="1"/>Initium Evangelii Jesu Christi, Filii Dei.<ve/>`.
+CITATION: OSIS/Paratext 3-letter book codes + numeric c/v milestones →
+native book.chapter.verse. Verified verbatim in-file: MRK 1:1 "Initium
+Evangelii…", MRK 2:3 "Et venerunt ad eum ferentes paralyticum, qui a
+quatuor portabatur.", JHN 1:1 "In principio erat Verbum…". Adapter mints
+one document per book (urn:nabu:vulgate:<osis-code-lc>, e.g.
+urn:nabu:vulgate:mrk), passages per verse (<doc>:<ch>.<v>), language lat.
+First real sync = owner-fired GitFetch clone of open-bibles (~76 MB,
+attic-protected; discovery filtered to the one file), sync_policy manual.
+
+UPSTREAM 2 — SBLGNT (new source `sblgnt`):
+**github.com/Faithlife/SBLGNT** (LogosBible/SBLGNT redirects here),
+branch master, HEAD pinned `c4d241a9c1c479a55b989ba35a4976c1d0b8052c`
+(2025-01-19), ~2.3 MB. The historically restrictive SBLGNT EULA is
+SUPERSEDED: sblgnt.com/license itself now serves CC BY 4.0.
+LICENSE (verbatim): GitHub license detection CC-BY-4.0 (file LICENSE =
+full legalcode); README: "The SBLGNT is licensed under a Creative
+Commons Attribution 4.0 International License. Copyright 2010 by the
+Society of Biblical Literature and Logos Bible Software." Redistribution
+of fixture slices is explicit legalcode §2(a)(1): "reproduce and Share
+the Licensed Material, in whole or in part" → license_class
+`attribution`, MCP-safe. NB the morphgnt/sblgnt sibling's morphology
+layer is CC-BY-SA-3.0 copyleft and its README still points at the old
+EULA — we take the clean Faithlife plain text, no morphology.
+FORMAT: `data/sblgnt/text/*.txt`, 27 book files, verse-per-line TSV
+("Mark 1:1<TAB>Ἀρχὴ τοῦ εὐαγγελίου Ἰησοῦ ⸀χριστοῦ." after a book-title
+first line; ⸀⸂⸃ apparatus sigla are upstream text and stay — canonical
+means canonical). New trivial parser family (verse-per-line TSV; the
+word-level custom XML variant and the sblgntapp apparatus are skipped).
+CITATION: explicit "Book C:V" per line; book tokens (Matt, Mark, 1Cor,
+Phlm…) fold to the PROIEL nt vocabulary (verified against the live
+alignment index: MATT MARK … PHILEM REV) — adapter mints one document
+per book file (urn:nabu:sblgnt:<stem-lc>, e.g. urn:nabu:sblgnt:mark),
+passages per verse (<doc>:<ch>.<v>), language grc. First real sync =
+owner-fired GitFetch clone (~2.3 MB), sync_policy manual.
+
+HUB WIRING (architecture §10 pays out as forecast): ONE new named
+extractor `cts-verse` — ref = the witness's registry book token + " " +
+the passage-urn tail after the document urn (`…tlg001.1st1K-grc1:1.2` →
+"GEN 1.2") — serving all three witnesses. It requires one registry
+extension: a witness may span MULTIPLE documents via a `documents:`
+map (work-vocabulary book token → document urn; the existing single
+`document:` form stays for proiel-citation witnesses — nt entries
+unchanged). Touches: AlignmentRegistry (schema + validation),
+AlignmentIndexer (per-document iteration + the new extractor),
+Query::Align (multi-doc witness header: label as title, language/license
+from the witness's live docs, not_synced only when none are live).
+Registry entries (LIVE, not commented — registering before sync renders
+"not synced" honestly, the registry's documented day-one state):
+`nt` work gains sblgnt (27-doc map) + vulgate-NT (27-doc map, keys MARK:
+urn:nabu:vulgate:mrk …); NEW `ot` work: lxx-swete (57-doc map onto
+tlg0527, keys = OSIS-style tokens, double-recension books get distinct
+tokens e.g. DAN = Theodotion / DAN-OG = translatio Graeca; exact maps
+generated from catalog titles at implementation) + vulgate-OT. LXX↔
+Clementine Psalm numbering both follow the Greek tradition — the
+versification-swamp caveat (§10) stays scoped out, and the ot registrar
+(this packet) owns that claim per the §10 contract.
+
+FIXTURE FILES (Phase B: ranged raw fetches at the pinned shas, trimmed
+locally into structurally intact files, entries byte-identical, trims
+documented in per-dir READMEs with the license quotes above):
+
+1. `test/fixtures/vulgate/lat-clementine.usfx.xml` (~25–40 KB trim of
+   4.65 MB, pin 8c31c38): usfx root + `<book id="GEN">` ch. 1 whole +
+   `<book id="MRK">` chs. 1–2 + `<book id="JHN">` ch. 1:1–18 — OT proof,
+   the MARK 2.3 flagship anchor, and the John prologue.
+   raw.githubusercontent.com/seven1m/open-bibles/8c31c38…/lat-clementine.usfx.xml
+2. `test/fixtures/sblgnt/data/sblgnt/text/Mark.txt` (~4 KB trim, pin
+   c4d241a: title line + Mark 1:1–2:12), `…/3John.txt` (WHOLE book,
+   2,917 B — complete-book round-trip at negligible size), `…/John.txt`
+   (~2 KB trim: John 1:1–18).
+   raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a…/data/sblgnt/text/<Book>.txt
+3. `test/fixtures/first1k/greekLit/data/tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml`
+   (~15–30 KB trim: teiHeader whole + Genesis ch. 1) + the two
+   `__cts__.xml` metadata stubs — the LXX witness exercised end-to-end
+   from a real fixture (epidoc family, existing adapter; first1k tests'
+   pinned URN/title lists updated for the added doc). Upstream:
+   raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek (HEAD pinned
+   at carve time; license already on file: CC BY-SA 4.0, repo license.md).
+4. `test/fixtures/{vulgate,sblgnt}/README.md` + first1k README note —
+   retrieval dates, exact URLs, sha pins, license quotes, trim docs.
+
+Owner-fired first syncs after merge: `nabu sync vulgate` (~76 MB clone),
+`nabu sync sblgnt` (~2.3 MB clone); LXX needs none (already synced —
+`nabu rebuild`/next sync reindexes alignment_refs from the new registry).
+Demo target from fixtures (scratch store, live db untouched):
+`nabu align "MARK 2.3"` renders sblgnt + vulgate + the PROIEL five;
+`nabu align "GEN 1.1" --work ot` renders Swete grc ↔ Clementine lat.
+
+### Findings (P11-5, 2026-07-09 — shipped; architecture §10 updated)
+
+Fixtures fetched exactly per the approved plan (ranged reads at the pinned
+shas; slices byte-identical; first1k tlg0527 pinned at fresh HEAD 4c9c843
+as the plan specified "pinned at carve time"). SHIPPED: two new sources —
+`vulgate` (new UsfxParser family: streaming milestone XML, one document
+per book from the one whole-bible file, urn:nabu:vulgate:<osis-lc>:<ch>.<v>)
+and `sblgnt` (new SblgntParser family: verse-per-line TSV, per-book docs,
+Greek first-line titles; apparatus sigla kept verbatim) — both
+enabled:false, sync_policy manual, conformance-green, fetch = shared
+GitFetch path. HUB: the forecast "one new extractor" landed as `cts-verse`
+(registry book token + passage-urn tail) plus the registry extension it
+needs — a witness may span per-book documents (`documents:` map;
+AlignmentRegistry two witness forms with strict cross-validation,
+AlignmentIndexer per-document iteration, Query::Align multi-doc rendering:
+hit book heads the column, misses show the label alone, not_synced only
+when NO document is live). Registry: nt + sblgnt (27-book map) +
+vulgate-NT (27 codes, all scout-verified); NEW ot work = LXX-Swete
+(55-book map, catalog-verified urns incl. grc2 slugs for SIR/ISA,
+Theodotion-as-plain-token for DAN/SUS/BEL with -OG variants, 2ES = Esdras
+B; tlg030 Ecclesiastes has no grc upstream — honest gap) + vulgate-OT
+(ONLY the 9 scout-verified codes; rest config-only after first sync).
+DEMO (fixture scratch store, live db untouched): MARK 2.3/MARK 1.1/JOHN
+1.1 render sblgnt grc ↔ vulgate lat with the PROIEL five honestly "not
+synced"; GEN 1.1 renders Swete ↔ Clementine 2-of-2. LIVE-witness demo
+(live catalog opened READ-ONLY, index built into scratch memory — no live
+file touched): 68,896 refs; MARK 2.3 = 5-of-7 (trio pending owner syncs);
+GEN 1.1, PSA 22.1 (Κύριος ποιμαίνει με — the Greek-numbering claim
+proven), JON 2.1 attest from the live LXX. Deviations, all argued in the
+plan: trio = 2 sources + registry-only LXX (Rahlfs BLOCKED on the CATSS
+declaration — 02-sources #44 records the verbatim terms; Swete already
+in-catalog, and nathans/lxx-swete derives FROM tlg0527); vulgate-OT
+registry deliberately partial (guessed codes would dangle silently).
+REVIEW FIX (same commit): the second work made every bare `align REF`
+error "pick one with --work" — work resolution now auto-resolves a bare
+ref through the index (unique attesting work → picked, for citations AND
+passage-urn pivots; several → ambiguity naming ONLY the attesters; none
+→ honest not-found with the --work hint; explicit --work keeps
+precedence; MCP inherits via Query::Align). Cosmetic: a not-synced
+multi-book witness cites the ref's OWN book urn ("JOHN 1.1" → …:john),
+and when the map lacks the ref's book entirely it cites nothing — the
+CLI phrases the miss neutrally. Verified bare on live data (read-only):
+`align MARK 2.3` → nt 5-of-7, `align GEN 1.1` → ot with Swete attesting.
+Suite 1206/15,303 green, lint clean.
 
 ## P11-6 · ORACC project expansion  [tier: opus] [status: pending] [deps: —]
 Config-only rider: extend Oracc::PROJECTS with saao-saa01 (Sargon II

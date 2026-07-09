@@ -391,8 +391,10 @@ module Nabu
       witness whose source was never synced reads "not synced". Adding a
       witness (say, the ISWOC Old English Mark) is a registry entry, not code.
 
-      --work names the work when several are registered (with exactly one
-      registered work it is optional).
+      --work names the work explicitly. Without it, a ref resolves through
+      the index: when exactly one registered work attests it, that work is
+      picked automatically (nt for "MARK 2.3", ot for "GEN 1.1"); a ref
+      several works attest asks you to pick among the attesters.
 
       Examples:
         nabu align MARK 2.3                 # the paralytic, five ways
@@ -897,12 +899,19 @@ module Nabu
       def print_align_witness(witness, ref)
         say ""
         if witness.status == :not_synced
-          say "#{witness.label} — not synced (#{witness.document_urn} is registered but " \
-              "not in the catalog)"
+          # A nil urn = a multi-book witness whose map lacks this ref's book;
+          # naming an unrelated book's urn would mislead — phrase neutrally.
+          detail = if witness.document_urn
+                     "#{witness.document_urn} is registered but not in the catalog"
+                   else
+                     "its registered documents are not in the catalog"
+                   end
+          say "#{witness.label} — not synced (#{detail})"
           return
         end
 
-        say "#{witness.label} — #{witness.title} [#{witness.language}]   " \
+        # A multi-document witness misses without a book to name — no title.
+        say "#{witness.label}#{" — #{witness.title}" if witness.title} [#{witness.language}]   " \
             "license: #{witness.license_class}"
         return say "  not attested (this witness lacks #{ref})" if witness.status == :no_match
 

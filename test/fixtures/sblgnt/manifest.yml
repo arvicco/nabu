@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: sblgnt
+# adapter_test is null: two of the three fixtures are documented TRIMS
+# (whole: false) — a count-based adapter test re-run against untrimmed
+# upstream files would false-fail (see the schema note in
+# perseus/manifest.yml).
+adapter_test: null
+retrieved: 2026-07-09
+files:
+  - path: data/sblgnt/text/Mark.txt
+    url: https://raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a9c1c479a55b989ba35a4976c1d0b8052c/data/sblgnt/text/Mark.txt
+    whole: false
+    trim: >-
+      P11-5 (owner-approved 2026-07-09): byte-identical head of the upstream
+      file — title line + Mark 1:1-2:12 (the alignment-hub anchor verses);
+      the rest of the book removed. Pinned at Faithlife/SBLGNT HEAD
+      c4d241a9c1c479a55b989ba35a4976c1d0b8052c (2025-01-19).
+  - path: data/sblgnt/text/John.txt
+    url: https://raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a9c1c479a55b989ba35a4976c1d0b8052c/data/sblgnt/text/John.txt
+    whole: false
+    trim: >-
+      P11-5: byte-identical head of the upstream file — title line +
+      John 1:1-1:18 (the prologue); the rest of the book removed. Same pin.
+  - path: data/sblgnt/text/3John.txt
+    url: https://raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a9c1c479a55b989ba35a4976c1d0b8052c/data/sblgnt/text/3John.txt
+    whole: true
+    trim: none (complete book, kept whole — the round-trip exemplar)

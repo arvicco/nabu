@@ -50,7 +50,11 @@ module Nabu
 
       # One witness column: registry label, document identity (+ source slug
       # for attribution surfaces), effective license, :ok/:no_match/
-      # :not_synced, sentences (empty unless :ok).
+      # :not_synced, sentences (empty unless :ok). A multi-document witness
+      # (P11-5 `documents:` form) answers with the HIT book's document —
+      # document_urn/title name the book that attests the ref; on a miss the
+      # title stays nil (naming an arbitrary other book would mislead) while
+      # language/license still come from the witness's live documents.
       Witness = Data.define(:label, :document_urn, :title, :language, :license_class,
                             :source_slug, :status, :sentences)
 
@@ -69,8 +73,9 @@ module Nabu
       # from) across the witnesses of +work+ (default: the sole registered
       # work). Raises Align::Error on every caller-fixable state.
       def run(ref, work: nil)
-        target = resolve_work(work)
+        ensure_registry!
         ensure_index!
+        target = resolve_work(ref, work)
         normalized = resolve_ref(ref, target)
         Result.new(work: target.id, title: target.title, ref: normalized,
                    witnesses: witnesses(target, normalized))
@@ -78,16 +83,52 @@ module Nabu
 
       private
 
-      def resolve_work(id)
-        if @registry.empty?
-          raise Error, "no alignment works registered — add one to config/alignments.yml " \
-                       "(architecture §10)"
-        end
+      def ensure_registry!
+        return unless @registry.empty?
+
+        raise Error, "no alignment works registered — add one to config/alignments.yml " \
+                     "(architecture §10)"
+      end
+
+      # Explicit --work wins; a sole registered work needs no choosing; with
+      # several works a bare ref auto-resolves through the index — the whole
+      # point of citation lookup is that "MARK 2.3" already says which work
+      # it belongs to when exactly one attests it.
+      def resolve_work(ref, id)
         return found_work(id) if id
 
-        @registry.sole_work ||
-          raise(Error, "several alignment works are registered " \
-                       "(#{@registry.works.map(&:id).join(', ')}) — pick one with --work")
+        @registry.sole_work || attesting_work(ref)
+      end
+
+      # The works that actually attest +ref+ (registry order): one → picked;
+      # several → the honest ambiguity (naming ONLY the attesters); none →
+      # not found, with the --work hint for the fragmentary-coverage case.
+      def attesting_work(ref)
+        attesters = attesting_work_ids(ref)
+        case attesters.size
+        when 1 then found_work(attesters.first)
+        when 0
+          raise Error, "#{describe_ref(ref)} is not attested in any registered work " \
+                       "(#{@registry.works.map(&:id).join(', ')}) — check the ref, or pick " \
+                       "a work with --work"
+        else
+          raise Error, "several works attest #{describe_ref(ref)} " \
+                       "(#{attesters.join(', ')}) — pick one with --work"
+        end
+      end
+
+      def attesting_work_ids(ref)
+        key = if ref.to_s.start_with?("urn:")
+                { passage_urn: ref }
+              else
+                { ref: AlignmentRegistry.normalize_ref(ref) || raise(Error, "align: give a citation ref") }
+              end
+        attested = refs_table.where(key).distinct.select_map(:work)
+        @registry.works.map(&:id).select { |id| attested.include?(id) }
+      end
+
+      def describe_ref(ref)
+        ref.to_s.start_with?("urn:") ? ref : AlignmentRegistry.normalize_ref(ref).to_s
       end
 
       def found_work(id)
@@ -128,17 +169,18 @@ module Nabu
         documents = documents_by_urn(work)
 
         work.witnesses.map do |witness|
-          build_witness(witness, documents[witness.document_urn],
-                        hits.select { |hit| hit.fetch(:document_urn) == witness.document_urn },
-                        rows_by_id, spans)
+          build_witness(witness, documents,
+                        hits.select { |hit| witness.document_urns.include?(hit.fetch(:document_urn)) },
+                        rows_by_id, spans, ref)
         end
       end
 
-      def build_witness(witness, document, hits, rows_by_id, spans)
-        base = { label: witness.label, document_urn: witness.document_urn }
-        if document.nil?
-          return Witness.new(**base, title: nil, language: nil, license_class: nil,
-                                     source_slug: nil, status: :not_synced, sentences: [])
+      def build_witness(witness, documents, hits, rows_by_id, spans, ref)
+        live = witness.document_urns.filter_map { |urn| documents[urn] }
+        if live.empty?
+          return Witness.new(label: witness.label, document_urn: not_synced_urn(witness, ref),
+                             title: nil, language: nil, license_class: nil,
+                             source_slug: nil, status: :not_synced, sentences: [])
         end
 
         sentences = hits.filter_map do |hit|
@@ -148,10 +190,39 @@ module Nabu
           Sentence.new(urn: row.fetch(:urn), text: row.fetch(:text),
                        refs: spans.fetch(hit.fetch(:passage_id)))
         end
-        Witness.new(**base, title: document.fetch(:title), language: document.fetch(:language),
-                            license_class: document.fetch(:license_class),
-                            source_slug: document.fetch(:source_slug),
-                            status: sentences.empty? ? :no_match : :ok, sentences: sentences)
+        attested_witness(witness, documents, hits, live, sentences)
+      end
+
+      # The not-synced example urn: the book the queried ref names, when the
+      # witness's map has it — "PSA 22.1" cites the psa urn, never a random
+      # first book. A multi-document witness whose map lacks the ref's book
+      # has NO relevant urn to cite — nil, so renderers phrase the miss
+      # neutrally; a single-document witness keeps its one urn.
+      def not_synced_urn(witness, ref)
+        book = ref.to_s.split.first
+        match = witness.documents.find { |_urn, token| token == book }
+        return match.first if match
+
+        witness.document_urns.size == 1 ? witness.document_urn : nil
+      end
+
+      # The witness header names the document that ATTESTS the ref: the hit
+      # book for a multi-document witness, the sole document otherwise. On a
+      # multi-document miss no single book may honestly head the column —
+      # title nil, language/license from the live documents (uniform per
+      # edition).
+      def attested_witness(witness, documents, hits, live, sentences)
+        header = hits.first && documents[hits.first.fetch(:document_urn)]
+        header ||= live.first if witness.document_urns.size == 1
+        Witness.new(
+          label: witness.label,
+          document_urn: header ? header.fetch(:urn) : witness.document_urn,
+          title: header&.fetch(:title),
+          language: (header || live.first).fetch(:language),
+          license_class: (header || live.first).fetch(:license_class),
+          source_slug: (header || live.first).fetch(:source_slug),
+          status: sentences.empty? ? :no_match : :ok, sentences: sentences
+        )
       end
 
       # passage_id => every ref that passage covers under this work, in ref
@@ -164,11 +235,12 @@ module Nabu
       end
 
       # Live witness documents by urn, with the effective license class — the
-      # per-witness header data (title, language, license label).
+      # per-witness header data (title, language, license label). Multi-
+      # document witnesses (P11-5) contribute every book document they span.
       def documents_by_urn(work)
         @catalog[:documents]
           .join(:sources, id: Sequel[:documents][:source_id])
-          .where(Sequel[:documents][:urn] => work.witnesses.map(&:document_urn))
+          .where(Sequel[:documents][:urn] => work.witnesses.flat_map(&:document_urns))
           .where(Sequel[:documents][:withdrawn] => false)
           .select(Sequel[:documents][:urn], Sequel[:documents][:title],
                   Sequel[:documents][:language], Sequel[:sources][:slug].as(:source_slug),
