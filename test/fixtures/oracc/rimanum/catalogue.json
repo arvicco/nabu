@@ -1,0 +1,94 @@
+{
+ "type": "catalogue",
+ "project": "rimanum",
+ "source": "http://oracc.org/rimanum",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-06-28T12:43:47",
+ "members": {
+  "P405134": {
+   "project": "rimanum",
+   "id_text": "P405134",
+   "designation": "BagM 27, 377 226",
+   "artifact_type": "tablet",
+   "period": "Old Babylonian",
+   "provenience": "Uruk (mod. Warka)",
+   "seals": "Sx",
+   "museum_no": "HD: W 20052,115C",
+   "provenience_comments": "Sin-kashid palace",
+   "excavation_no": "W 20052,115C",
+   "findspot_square": "Ea XIV-4",
+   "findspot_comments": "Geschlossener Tontafelfund. Raum 30 vor und nahe der Tür zu Hof 23 unter einer starken Schicht verkohlten Palmholzes und Scherben.",
+   "collections": "Heidelberger Orientalisches Seminar, Heidelberg, Germany",
+   "dates": "Rim-Anum.01.09.--",
+   "genres": "Administrative",
+   "materials": "clay",
+   "publications_key": "Sanati-Müller1996",
+   "publications_type": "primary",
+   "publications_exact_ref": "377 226",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P405134",
+   "trans": [
+    "en"
+   ]
+  },
+  "P405254": {
+   "project": "rimanum",
+   "id_text": "P405254",
+   "designation": "Nisaba 04/1, 09",
+   "artifact_type": "tablet",
+   "period": "Old Babylonian",
+   "provenience": "Uruk (mod. Warka)",
+   "museum_no": "BM 023435",
+   "accession_no": "1897-05-15, 0113",
+   "collections": "British Museum, London, UK",
+   "dates": "Rim-Anum.01.11.05",
+   "genres": "Administrative",
+   "materials": "clay",
+   "publications_key": "Rositani2003",
+   "publications_type": "primary",
+   "publications_exact_ref": "/1, 09",
+   "external_resources": "eBL; BM",
+   "external_resources_key": "BM.23435; W_1897-0515-113",
+   "genres_comment": "bit asiri  flour",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P405254",
+   "trans": [
+    "en"
+   ]
+  },
+  "P405432": {
+   "project": "rimanum",
+   "id_text": "P405432",
+   "designation": "UF 10, 152 26",
+   "artifact_type": "tablet",
+   "period": "Old Babylonian",
+   "provenience": "Uruk (mod. Warka)",
+   "seals": "Sx",
+   "museum_no": "BM 014086",
+   "accession_no": "1896-04-02, 0188",
+   "collections": "British Museum, London, UK",
+   "dates": "Rim-Anum.02.06.02",
+   "genres": "Administrative",
+   "languages": "Akkadian",
+   "materials": "clay",
+   "publications_key": "Loretz1978",
+   "publications_type": "primary",
+   "publications_exact_ref": "152 26",
+   "external_resources": "BM",
+   "external_resources_key": "W_1896-0402-188",
+   "genres_comment": "bit asiri  flour",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P405432",
+   "trans": [
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "P405134": "<p id=\"P405134\">rimanum:P405134 = BagM 27, 377 226. Old Babylonian Uruk (mod. Warka) </p>",
+  "P405254": "<p id=\"P405254\">rimanum:P405254 = Nisaba 04/1, 09. Old Babylonian Uruk (mod. Warka) </p>",
+  "P405432": "<p id=\"P405432\">rimanum:P405432 = UF 10, 152 26. Old Babylonian Uruk (mod. Warka) </p>"
+ }
+}

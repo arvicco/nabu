@@ -120,6 +120,26 @@ class NormalizeTest < Minitest::Test
     assert_equal "samdihya", form("saṃdihya", "san")
   end
 
+  def test_akkadian_folds_cuneiform_transliteration_to_bare_sign_readings
+    # P10-1 (conventions.md §9): sign-join punctuation (./-) and determinative
+    # braces open to spaces — each sign reading becomes its own searchable
+    # token — and subscript index digits normalize to ASCII. Double/trailing
+    # spaces are deliberate (the rule is per-codepoint so fold_with_map stays
+    # exact); the FTS tokenizer collapses separator runs anyway.
+    assert_equal "du un nu um ki ", form("du-un-nu-um{ki}", "akk")
+    assert_equal "zi3", form("ZI₃", "akk")
+    assert_equal " d en zu se mi", form("{d}EN.ZU-še-mi", "akk")
+    # š/ṣ/ṭ and vowel macrons fall to the generic mark strip, not this rule
+    assert_equal "gesbun", form("GEŠBUN", "akk")
+    assert_equal "situ", form("ṣītu", "akk")
+    assert_equal "qemu", form("qēmu", "akk")
+  end
+
+  def test_sumerian_shares_the_cuneiform_rule
+    assert_equal " d amar  d suen", form("{d}amar-{d}suen", "sux")
+    assert_equal "urim5 ki  ma", form("urim₅{ki}-ma", "sux")
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end
@@ -140,6 +160,9 @@ class NormalizeTest < Minitest::Test
     assert_equal %w[μηνις μηνισ], Nabu::Normalize.query_forms("μῆνις")
     assert_equal %w[jah iah], Nabu::Normalize.query_forms("jah")
     assert_equal ["aurora"], Nabu::Normalize.query_forms("aurora")
+    # the akk/sux rule shares one lambda, so its variant appears once
+    assert_equal ["a-na", "a na"], Nabu::Normalize.query_forms("a-na")
+    assert_equal ["zi₃", "zi3"], Nabu::Normalize.query_forms("ZI₃")
   end
 
   # THE union invariant that makes every per-language document form findable:
@@ -147,8 +170,8 @@ class NormalizeTest < Minitest::Test
   # query_forms(query) — so a query spelled the way the source spells it
   # always folds (on some variant) to exactly the indexed form.
   def test_query_forms_covers_every_language_rule
-    samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café"]
-    languages = %w[grc lat chu orv got san xx]
+    samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café", "du-un-nu-um{ki}", "ZI₃"]
+    languages = %w[grc lat chu orv got san akk sux xx]
     samples.each do |sample|
       variants = Nabu::Normalize.query_forms(sample)
       languages.each do |language|
