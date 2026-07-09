@@ -1374,3 +1374,36 @@ truthfulness pass (new ORACC section + treebank row update + header totals),
 02-sources statuses, worklog shas, PR, sticky alarm LAST. Owner-fired after
 merge: bin/nabu sync oracc <projects TBD — owner picks starter set> and
 bin/nabu sync ud; then enabled flips with sign-off comments.
+
+## P10-4 · Per-treebank license override plumbing  [tier: opus] [status: in-progress] [deps: P10-2]
+Defect (orchestrator live smoke after the owner-fired `sync ud`, 2026-07-09):
+the two new Slavic treebanks are CC BY-SA 4.0 (verified in-repo, P10-2) but
+`show` reports them `license: nc` — they inherit the ud SOURCE class
+(`nc`, correct for the PROIEL-derived treebanks) because
+`documents.license_override` (the P1-3 column, honored by the entire query
+layer: catalog_join, show, export, MCP) has NO WRITE PATH — no adapter has
+ever set it. Mislabel is in the restrictive direction (no leak), but it
+sells the shareable shelf short: birchbark/RNC are attribution-class and
+should be MCP-labeled as such.
+
+Fix: thread a per-document license override from adapter → loader →
+documents.license_override.
+- TREEBANKS map gains optional license/license_class per treebank; the two
+  Slavic entries set license_class attribution (license "CC BY-SA 4.0").
+- The adapter surfaces it on the parsed document (extend the value object /
+  DocumentRef with an optional license_override field, nil default — decide
+  the cleanest seam after reading adapter.rb + loader).
+- Loader persists it on create AND on re-load (metadata update, like title:
+  NO revision bump, content_sha256 untouched — license relabeling must not
+  fake a content change; pin that in a test).
+- Constraint: value must be a valid class (db CHECK exists) — loader/adapter
+  validates against the enum.
+- Tests: fixture load shows the two Slavic treebanks attribution + the four
+  legacy treebanks still nc (source class, override NULL); idempotency (two
+  loads, no revision drift); a doc whose override is REMOVED from the map
+  reverts to NULL on next load.
+- After the code lands the orchestrator re-runs `sync ud --parse-only`
+  equivalent (owner db) to relabel the six live docs and verifies via show +
+  MCP that license_class reads attribution.
+Acceptance: suite+lint green; live relabel verified; 02-sources UD row
+notes the split licensing; worklog line (sha —).
