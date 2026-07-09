@@ -1908,7 +1908,10 @@ after merge pulls the new projects. Acceptance: suite+lint green (no new
 fixtures = no new tests beyond PROJECTS list pin); 02-sources scope updated;
 worklog line.
 
-## P11-gate · Phase 11 gate  [tier: orchestrator] [status: pending] [deps: P11-1..6]
+## P11-gate · Phase 11 gate  [tier: orchestrator] [status: done 2026-07-10] [deps: P11-1..6]
+Gate decision: stretch riders (morph facets §1.6, vocab profiling §1.7) NOT
+taken — the phase ran full (6 packets + 2 review fixes); they stay in the
+improvements register for a later phase.
 Full-diff review, library.md refresh (per §9: new capabilities sections for
 alignment + dictionaries; OE survey linked), README truthfulness, PR,
 sticky alarm LAST. Stretch riders (morph facets §1.6, vocab profiling §1.7)
