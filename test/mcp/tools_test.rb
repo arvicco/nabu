@@ -98,9 +98,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_five_tools_with_json_schemas
+    def test_definitions_lists_the_six_tools_with_json_schemas
       defs = tools.definitions
-      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_status], defs.map { |d| d[:name] })
+      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_status],
+                   defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
         schema = definition[:inputSchema]
@@ -143,6 +144,23 @@ module MCP
       assert_equal "λέγω", hits.first.fetch("lemma")
       assert_equal "εἶπας", hits.first.fetch("surface_forms")
       assert_equal "open", hits.first.fetch("license_class")
+    end
+
+    def test_search_lemma_hits_carry_their_dictionary_gloss
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,
+                        lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+      shelf = Nabu::Store::Dictionary.create(source_id: @open.id, slug: "lsj",
+                                             title: "LSJ", language: "grc")
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: shelf.id, urn: "urn:nabu:dict:lsj:n1", entry_id: "n1",
+        key_raw: "le/gw", headword: "λέγω", headword_folded: "λεγω",
+        gloss: "say, speak", body: "…", content_sha256: "x", revision: 1, withdrawn: false
+      )
+
+      hits = payload(call("nabu_search", { "lemma" => "λέγω" })).fetch("matches")
+      assert_equal "say, speak", hits.first.fetch("gloss")
     end
 
     def test_search_requires_exactly_one_of_query_and_lemma
@@ -430,6 +448,75 @@ module MCP
       body = payload(call("nabu_concord", { "query" => "nonexistentword" }))
       assert_empty body.fetch("rows")
       assert_match(/grc/, body.fetch("coverage"))
+    end
+
+    # -- nabu_define (P11-4) -----------------------------------------------------
+
+    # The real lexica fixtures, loaded through the real DictionaryLoader.
+    def seed_shelf(source: @open)
+      lexica = Nabu::Store::Source.create(
+        slug: "lexica", name: "Perseus Lexica", adapter_class: "Nabu::Adapters::Lexica",
+        license: "CC BY-SA 4.0", license_class: source.license_class, enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: lexica)
+                                   .load_from(Nabu::Adapters::Lexica.new,
+                                              workdir: Nabu::TestSupport.fixtures("lexica"))
+      lexica
+    end
+
+    def test_define_returns_entries_with_license_labels_and_resolved_citations
+      seed_shelf
+      iliad = make_document(urn: "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2")
+      make_passage(iliad, urn: "#{iliad.urn}:1.1", text: "μῆνιν ἄειδε θεά", sequence: 0)
+
+      entries = payload(call("nabu_define", { "lemma" => "μῆνις" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "μῆνις", entry.fetch("headword")
+      assert_equal "lsj", entry.fetch("dictionary")
+      assert_equal "open", entry.fetch("license_class")
+      assert_equal "lexica", entry.fetch("source")
+      assert_equal "wrath", entry.fetch("gloss")
+      iliad_cite = entry.fetch("citations").find { |c| c.fetch("label") == "Il. 1.1" }
+      assert_equal "#{iliad.urn}:1.1", iliad_cite.fetch("resolved_urn")
+      unresolved = entry.fetch("citations").find { |c| c.fetch("label").start_with?("Pl. R.") }
+      assert_nil unresolved.fetch("resolved_urn")
+    end
+
+    def test_define_truncates_long_bodies_with_an_honest_note
+      seed_shelf
+      entry = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      assert_operator entry.fetch("body").length, :<=, Nabu::MCP::Tools::DEFINE_BODY_CAP + 1
+      assert entry.fetch("body_truncated")
+      assert_match(/nabu define/, entry.fetch("note"), "the note points at the unbounded CLI surface")
+    end
+
+    def test_define_requires_a_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_define", {}) }
+    end
+
+    def test_define_no_match_is_informative
+      seed_shelf
+      result = call("nabu_define", { "lemma" => "βλαβλα" })
+      refute result[:isError]
+      assert_match(/no dictionary entry/i, payload(result).fetch("note"))
+    end
+
+    def test_define_withholds_restricted_dictionaries_by_default
+      seed_shelf(source: @private)
+      result = call("nabu_define", { "lemma" => "μῆνις" })
+      assert_empty payload(result).fetch("entries")
+      revealed = payload(call("nabu_define", { "lemma" => "μῆνις", "include_restricted" => true }))
+      assert_equal 1, revealed.fetch("entries").size
+    end
+
+    def test_define_without_the_shelf_migration_degrades_gracefully
+      bare = Nabu::Store.connect("sqlite::memory:")
+      result = tools(catalog: bare, fulltext: @fulltext).call("nabu_define", { "lemma" => "μῆνις" })
+      refute result[:isError]
+      assert_match(/shelf|dictionar/i, text_of(result))
+    ensure
+      bare&.disconnect
     end
 
     def test_concord_with_a_missing_fts_table_degrades_gracefully

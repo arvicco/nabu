@@ -1560,7 +1560,7 @@ Demo (scratch parse-only store, live db untouched): `nabu align MARK 2.3` →
 5/5 witnesses incl. the Armenian sentence honestly labeled "[covers MARK 2.3,
 MARK 2.4]"; survived a real `nabu rebuild` of the scratch store byte-identically.
 
-## P11-4 · Dictionary shelf: LSJ + Lewis & Short  [tier: fable] [status: pending] [deps: —]
+## P11-4 · Dictionary shelf: LSJ + Lewis & Short  [tier: fable] [status: done] [deps: —]
 improvements.md §1.3. Ingest the two canonical classical lexica (Perseus
 TEI editions, CC BY-SA — verify at fixture time): LSJ (Greek) and Lewis &
 Short (Latin). NOT passages — a new dictionaries surface (own table(s)):
@@ -1575,6 +1575,130 @@ must be rebuild-replayable. Fixture plan (owner approves before network):
 2-3 entry slices per lexicon. Acceptance: define works for a Greek and a
 Latin lemma end-to-end incl. MCP; ≥1 citation resolves to an in-catalog
 urn; suite+lint green; worklog line.
+
+### Fixture plan (P11-4 Phase A, 2026-07-09 — OWNER-APPROVED 2026-07-09, "Approved as-is")
+
+UPSTREAM (verified via gh api + ranged raw reads, no bulk fetch):
+**github.com/PerseusDL/lexica**, branch master, HEAD pinned
+`b5e707bdda2d6c8e0bb6c29657454996b4fb04d7` (2026-05-05) — one git repo,
+~160 MB, still maintained. Layout `CTS_XML_TEI/perseus/pdllex/{grc/lsj,
+lat/ls}/`. LSJ = 27 letter-split TEI files (`grc.lsj.perseus-eng1..27.xml`;
+eng1=alpha 43 MB carries the book's frontmatter prefaces, eng6=digamma 15 KB
+read whole as the structure exemplar, eng12=lambda 6.7 MB, eng13=mu 12.3 MB
+— letters verified by `div0/@n`). L&S = `lat.ls.perseus-eng1.xml` (betacode
+Greek, per-dir README: "for archival purposes only") and
+`lat.ls.perseus-eng2.xml` ("Greek converted to Unicode (use this for
+edits)") — eng2 is ours, 77 MB, all letters as `div0` in one file. A third
+Latin lexicon dir exists (`lat/viaf2845558`) — out of scope.
+
+LICENSE (verbatim): GitHub license detection: CC-BY-SA-4.0; repo `license.md`
+is the full BY-SA 4.0 legalcode; repo README: "Unless otherwise indicated,
+all contents of this repository are licensed under a Creative Commons
+Attribution-ShareAlike 4.0 International License. You must offer Perseus any
+modifications you make." Both per-lexicon READMEs: "This text may be freely
+distributed under a CC BY-SA 4.0 license, subject to the following
+restrictions: You credit Perseus, as follows, whenever you use the document:
+'Text provided under a CC BY-SA license by Perseus Digital Library,
+http://www.perseus.tufts.edu, with funding from The National Endowment for
+the Humanities. Data accessed from https://github.com/PerseusDL/lexica/
+[date of access].'" L&S eng2 additionally carries an in-file
+`<availability>`: "Available under a Creative Commons Attribution-ShareAlike
+4.0 International License." → license_class `attribution`, same as the
+perseus siblings; MCP-safe.
+
+TEI SHAPE (inspected in eng6 whole + eng1/eng12/eng13/ls-eng2 slices): TEI P4
+(`<TEI.2>` DOCTYPE + Perseus PersDict DTD — the P9-2 P4 experience applies),
+UTF-8. Body = `div0[@type="alphabetic letter"]` → `<entryFree id key type>`;
+inside: `orth`, `sense[@n @level]` (nested levels), `tr` glosses, `etym`,
+`gramGrp`, `cit`/`quote`, `xr`/`ref`. LSJ Greek (keys, orth, quotes) is
+BETACODE (`key="mh=nis"`, long/short marks already stripped from keys
+upstream) → the adapter needs a small betacode→Unicode decoder (no gem;
+table-driven, tested). L&S keys are plain Latin with homograph digits
+(`a2`, `volo1`), orth carries macrons/breves (`ăb`); its Greek is Unicode.
+CITATIONS: `<bibl n="urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:1">`
+with `<author>`/`<biblScope>` children — the 2014 revision "replaced most
+abo ids or abbreviations in bibl tags with cts urns". URNs come work-level
+(`tlg0291.tlg001:23:6`), edition-level (`phi0474.phi055.perseus-lat1:1:2:4`
+— editions that may differ from ours: LSJ cites perseus-grc1, we hold
+grc2 → resolve on the WORK prefix, re-anchor to the in-catalog edition),
+and bare work (`phi1236.phi001`); many bibls honestly carry NO urn
+(inscriptions, AP, fragments) and some inherited urns are contextually
+wrong (an "ib."-expansion gave a Corinna quote a Sappho urn) → best-effort
+resolution with an honest miss-rate, unresolved stays text. Known miss:
+L&S cites Livy as `phi0914.phi001` (unified AUC), Perseus canonical splits
+per book (`phi0914.phi0011`) — stays unresolved, documented.
+
+FIXTURE FILES (Phase B: ranged raw-file fetches around the verified byte
+offsets + full teiHeaders — a few MB total, NOT the 96 MB of full files;
+trimmed locally into structurally intact files, entries byte-identical,
+trims documented in the fixture README per house rules; pin sha b5e707b):
+
+1. `test/fixtures/lexica/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng13.xml`
+   (~35 KB trim of the 12.3 MB mu file): teiHeader whole + `div0 n="*m"` +
+   **μῆνις** (`key="mh=nis"`, id n67485 — VERIFIED: cites Il. 1.1 as
+   `n="urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:1"` → resolves against
+   the fixture Iliad tlg0012.tlg001.perseus-grc2:1.1 AND the live catalog;
+   plus unresolvable AP/Alcaeus bibls in the same entry) + 1–2 adjacent
+   small μην- entries (e.g. `mhni/w`) for shape variety.
+2. `.../grc/lsj/grc.lsj.perseus-eng12.xml` (~80–120 KB trim of the 6.7 MB
+   lambda file): teiHeader whole + `div0 n="*l"` + **λόγος** (`key="lo/gos"`
+   — the flagship polysemous entry, pages long: the MCP-bounds stress case
+   and the improvements-§1.3 demo lemma) + one small lambda entry.
+3. `.../lat/ls/lat.ls.perseus-eng2.xml` (~60–90 KB trim of the 77 MB file):
+   teiHeader whole (incl. the `<availability>` license statement) +
+   `div0 n="A"` with **Aaron** (id n3, tiny; cites the Vulgate via a
+   greekLit urn — the cross-namespace edge) and **a2** (2-line homograph) +
+   `div0 n="O"` with **officium** (id n32391 — VERIFIED: cites Cic. Off. as
+   `n="urn:cts:latinLit:phi0474.phi055.perseus-lat1:1:2:4"` and `:1:9:28`;
+   De Officiis perseus-lat1 is IN the live catalog, and `officium` is a
+   lemma of the PROIEL cic-off fixture → the lemma-search gloss-integration
+   test anchor) + `div0 n="V"` with **virtus** (define demo candidate —
+   verify citations at carve time; fallback: any V entry citing an
+   in-catalog Cicero/Vergil work).
+4. `test/fixtures/lexica/README.md` — retrieval date, exact raw URLs, sha
+   pin, license quotes above, trim documentation.
+
+Canonical for real syncs = owner-fired `nabu sync lexica` git-clones the
+whole repo under `canonical/lexica/` via GitFetch (attic-protected,
+sync_policy manual). Fixtures are for the suite only, as ever.
+
+### Findings (P11-4, 2026-07-09 — shipped; architecture §11 is the design record)
+
+Fixtures fetched exactly per the approved plan (ranged reads at pinned
+b5e707b, byte-identical entries; one substitution: the mu neighbor entry is
+μηνίσκος, the actual file-order successor of μῆνις, standing in for the
+plan's "e.g. μηνίω"; the λόγος trim ran 310 KB vs the 80–120 KB estimate —
+the entry alone is ~300 KB and was kept whole per plan). DESIGN (defended
+in §11): dictionaries ARE registry sources with a declared
+`Adapter.content_kind` (:dictionary → Store::DictionaryLoader; SyncRunner +
+Rebuild route in exactly two places) — a parallel mechanism would
+re-implement retention/breakers/ledger/probes; entries live in
+catalog.sqlite3 via migration 006 (Loader-grade idempotency/revision/
+withdraw semantics, provenance + durable ledger under
+urn:nabu:dict:<slug>:<entry_id> — NOT fulltext.sqlite3, whose tables are
+disposable derived-of-derived). Betacode decoded at the boundary
+(Nabu::Betacode, no gem); headwords key FOLDED per conventions §9 from the
+decoded @key, which is what makes lemma-search gloss integration free
+(`search --lemma officium` → "a service", one batched lookup, dictionary
+language must match). CITATION REALITY: bibl/@n CTS urns are work-level,
+edition-level (frequently an edition we don't hold — LSJ anchors at
+perseus-grc1, catalog holds grc2 → resolve on the WORK prefix), bare-work,
+non-CTS, or malformed; resolution is query-time (nothing stale stored),
+original-language-preferred, and falls back once on 3+-part citations to
+(first, last) — the classical chapter/section double citation, discovered
+live: Perseus's De Officiis cites book.section (1.4) where L&S cites
+"1, 2, 4"; the fallback resolves to the verbatim quoted passage (eyeballed:
+"Nulla enim vitae pars … vacare officio potest"). Known honest miss: L&S
+cites Livy as unified phi0914.phi001 vs Perseus's per-book split. Demo
+(scratch store, live db untouched): define μῆνις → wrath + Il. 1.1 →
+…perseus-grc2:1.1; define officium/virtus → Cic. Off. 1,2,4 → :1.4,
+1,9,28 → :1.28, 1,15,46 → :1.46; rebuild-safety pinned (entries+citations
+byte-identical across two rebuilds). MCP nabu_define = sixth tool (6 KB
+body cap, resolved-first citations, restricted shelves withheld). Third
+dictionary (Bosworth-Toller, CC BY 4.0 CSV): own adapter, same
+language-agnostic tables, slug bosworth-toller/lang ang, citations empty
+until an OE crosswalk — §11 note written. `lexica` registered
+enabled: false; owner fires the ~160 MB first clone.
 
 ## P11-5 · Biblical trio  [tier: opus] [status: pending] [deps: P11-3 design]
 improvements.md §2.1: Vulgate (full, not just NT — PROIEL latin-nt is NT

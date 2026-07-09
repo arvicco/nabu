@@ -427,13 +427,70 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ for Greek, Lewis & Short for Latin)"
+    long_desc <<~HELP, wrap: false
+      The dictionary shelf (architecture §11): look a dictionary form up in
+      the classical lexica the corpus holds locally — LSJ (A Greek-English
+      Lexicon, grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA
+      from the Perseus Digital Library. Entries print whole: headword, short
+      gloss, then the full entry body as structured plain text with sense
+      labels on their own lines (the MCP nabu_define surface is the bounded
+      sibling).
+
+      Matching folds like lemma search (conventions §9): diacritics optional
+      (μηνις finds μῆνις), final sigma both ways (λόγος/λογοσ), Latin v/u j/i
+      merged. Homographs are separate entries and all print (volo the verb,
+      volo the flyer). LEMMA must be a dictionary form — `nabu search --lemma`
+      finds the attestations, and its hits carry these glosses.
+
+      Citations inside an entry stay as text; those that point at a work THIS
+      corpus holds are additionally resolved to passage urns and listed at
+      the end of the entry — `nabu show <urn>` opens the cited line. LSJ
+      cites editions we may not hold (perseus-grc1 vs our grc2); resolution
+      re-anchors to the in-catalog edition of the same work, preferring the
+      original language over translations. Unresolvable citations (works not
+      ingested, inscriptions, fragment collections) are honest misses, not
+      links.
+
+      --lang grc|lat restricts to one shelf; --limit caps the entries.
+
+      Examples:
+        nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
+        nabu define λόγος              # the long one, whole
+        nabu define virtus --lang lat  # Lewis & Short only
+    HELP
+    option :lang, type: :string, banner: "grc|lat",
+                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short"
+    option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
+                   desc: "Maximum entries printed (homographs are separate entries)"
+    def define(*lemma_parts)
+      lemma = lemma_parts.join(" ").strip
+      raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
+      raise Thor::Error, "define: --lang must be grc or lat" if options[:lang] && !%w[grc lat].include?(options[:lang])
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_entries)
+        raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync lexica " \
+                           "(or nabu rebuild after one)"
+      end
+
+      results = Nabu::Query::Define.new(catalog: catalog)
+                                   .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+      print_define_results(lemma, results)
+    ensure
+      catalog&.disconnect
+    end
+
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing five tools —
+      conversational surface over the local nabu corpus, exposing six tools —
       nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
       parallel translations), nabu_concord (KWIC), nabu_align (cross-source
-      citation alignment), and nabu_status (coverage) — to any MCP client
+      citation alignment), nabu_define (the dictionary shelf: LSJ + Lewis &
+      Short), and nabu_status (coverage) — to any MCP client
       (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
@@ -987,7 +1044,8 @@ module Nabu
 
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
-          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}"
+          gloss = result.gloss ? "  (#{result.gloss})" : ""
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}"
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
@@ -998,6 +1056,35 @@ module Nabu
       def truncate_line(text, max = 100)
         line = text.tr("\n", " ")
         line.length > max ? "#{line[0, max]}…" : line
+      end
+
+      # Render dictionary entries whole (the CLI is the unbounded surface):
+      # header with license label, gloss, the structured body, then the
+      # resolved citations as show-able urns. Unresolved citations already
+      # read inline in the body text.
+      def print_define_results(lemma, results)
+        if results.empty?
+          return say("no dictionary entry for #{lemma} — the shelf holds LSJ (grc) and " \
+                     "Lewis & Short (lat); give a dictionary form (search --lemma finds attestations)")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]  #{result.urn}"
+          say "  gloss: #{result.gloss}" if result.gloss
+          say ""
+          say result.body
+          print_resolved_citations(result)
+        end
+      end
+
+      def print_resolved_citations(result)
+        resolved = result.citations.select(&:resolved_urn)
+        return if resolved.empty?
+
+        say ""
+        say "resolved citations (in this corpus — nabu show <urn>):"
+        resolved.each { |citation| say "  #{citation.label} → #{citation.resolved_urn}" }
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all

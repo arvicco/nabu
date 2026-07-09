@@ -319,3 +319,103 @@ own ref scheme (works are independent namespaces; nothing NT-shaped is
 hardcoded). Versification swamps (LXX-vs-Masoretic) stay out of scope by
 the same scoping: a work's witnesses must share a citation scheme, and
 whoever registers a witness owns that claim.
+
+## 11. The dictionary shelf — lexica as data (P11-4)
+
+`nabu define μῆνις` prints the LSJ entry — gloss, sense tree as structured
+plain text, and every citation the entry makes, resolved to in-catalog
+passage urns where the cited work is here (`Il. 1.1 →
+urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1` — one `nabu show` away).
+Two dictionaries ship: LSJ (grc) and Lewis & Short (lat), both from
+PerseusDL/lexica (CC BY-SA 4.0 → attribution class). This section records
+the design decisions.
+
+**Dictionaries ARE sources — with a declared content kind.** The lexica are
+a registry source like any other (`lexica` in sources.yml): canonical data
+under `canonical/lexica/`, fetched by GitFetch with the attic and the
+mass-deletion breaker, reconciled/pinned/journaled through the same ledger
+machinery, probed by health like every git source. What differs is only the
+load shape, declared once on the adapter — `Adapter.content_kind`, default
+`:passages`, overridden to `:dictionary` — and routed on in exactly two
+places (SyncRunner#load, Rebuild#replay): dictionary sources load through
+`Store::DictionaryLoader` instead of the passage Loader. A parallel
+fetch/sync mechanism was rejected: it would duplicate retention, breakers,
+run recording, pins and probes to avoid one routing conditional. The
+adapter's parse returns `Nabu::DictionaryDocument` (one FILE's entries —
+LSJ ships 27 letter-split files) — never passages, so dictionary entries
+can never flood full-text search. The passage-shaped conformance suite
+cannot apply; the lexica adapter test mirrors its checks for the dictionary
+shape (manifest, round-trip, id uniqueness/stability, NFC).
+
+**Storage: catalog tables, by migration.** Entries are first-class
+derived-from-canonical data with the same idempotency/revision/withdrawal
+semantics as documents — upsert on (dictionary, entry_id), skip on equal
+content sha, revise+bump on change, withdraw on full-load absence, journal
+to provenance (new nullable `dictionary_entry_id`) and to the durable
+ledger under urn `urn:nabu:dict:<slug>:<entry_id>`. That is
+catalog-shaped, so migration 006 puts `dictionaries`, `dictionary_entries`
+and `dictionary_citations` in catalog.sqlite3. NOT fulltext.sqlite3: that
+file holds disposable derived-of-derived indexes (drop-and-rebuild, no
+revision history); parking the primary copy of entry bodies there would
+invert the layering. NOT a new db file: "one file per concern" cuts at
+real concerns, and entries are the same concern as documents — a fourth
+file would add connection plumbing through every CLI/MCP entry point for
+no boundary. Rebuild-safety is free: `nabu rebuild` drops the catalog and
+replays `canonical/lexica/` through the same loader (pinned by test:
+byte-identical entries and citations across two rebuilds).
+
+**Betacode at the boundary.** LSJ's Greek — keys, orths, quotes — is TLG
+betacode ("mh=nis"); Lewis & Short's Unicode variant (eng2) is ingested and
+its betacode twin (eng1) skipped. `Nabu::Betacode` (table-driven, no gem)
+decodes at the adapter boundary like every other text normalization:
+canonical mark ordering, NFC output, positional sigma. Headwords key the
+shelf FOLDED — `headword_folded = Normalize.search_form(decoded key,
+dictionary language)`, hyphens and homograph digits stripped — the same
+both-sides contract as lemma search (conventions §9), which is exactly what
+lets a treebank lemma hit carry its dictionary gloss (`search --lemma
+officium` shows "a service" — Query::Define#glosses, one batched lookup,
+dictionary language must match the lemma's).
+
+**Citation resolution — query time, best effort, honest misses.** The 2014
+upstream revision put CTS urns in `bibl/@n`; the parser keeps each verbatim
+(`urn_raw`) and derives the resolution keys: a work-level prefix
+(`urn:cts:greekLit:tlg0012.tlg001` — upstream EDITION tokens are dropped,
+because LSJ cites perseus-grc1 while the catalog holds grc2) and a
+dot-joined citation ("1.1"). Resolution happens at QUERY time, never at
+load: works sync after dictionaries and vice versa, rebuilds re-mint ids,
+and nothing stale may be stored (the §10 stance again). A citation resolves
+iff an in-catalog edition of the work has that passage urn — original
+language preferred over translations, then urn order for determinism; a
+3+-part citation that matches nothing retries once as (first, last), the
+classical chapter/section double citation ("Cic. Off. 1, 2, 4" is book 1,
+chapter 2, CONTINUOUS section 4, while Perseus editions cite book.section —
+the fallback lands on the exact quoted passage, verified against the real
+text; a genuinely 3-level edition always wins with the exact form first).
+Everything else — URN-less bibls (inscriptions, AP), non-CTS values
+("Dig. 33.6.9"), malformed upstream urns (`…:Orat::2:27:120`), works not
+ingested — stays as display text with a nil resolution: a lexicon's
+citations are best-effort by upstream reality, and the miss-rate is honest,
+never fuzzed.
+
+**Query surface: `nabu define` + MCP `nabu_define`.** The CLI prints
+entries whole (the λόγος entry is ~300 KB of text — the CLI is the
+unbounded surface) with the license label on every entry header and
+resolved citations listed for the `nabu show` handoff. `nabu_define` is the
+sixth MCP tool, same contract as the rest: license fields on every entry,
+bounded body (6 000 chars, honest truncation note pointing at the CLI),
+bounded citations (resolved first), research_private/restricted shelves
+withheld unless `include_restricted`, and graceful states (no catalog / no
+shelf yet → "run nabu sync lexica").
+
+**How a third dictionary plugs in.** The schema is deliberately
+language-agnostic (dictionaries.language is a column, entries fold by it).
+Bosworth-Toller (Old English; docs/oe-survey.md: official CC BY 4.0 LINDAT
+dump, CSV `id;headword;body` with project-XML bodies) becomes its own
+registry source with a small CSV adapter — same `content_kind :dictionary`,
+same DictionaryDocument/Entry model, dictionary slug `bosworth-toller`,
+language `ang`, betacode off — and `define`/glosses work unchanged. Its
+bodies cite OE works by short title without urns, so its
+`dictionary_citations` start empty until a crosswalk to ISWOC/ASPR urns
+exists; the resolution layer needs nothing new. A second dictionary from
+the SAME repo (Middle Liddell lives beside LSJ upstream) is one entry in
+the adapter's DICTIONARIES map.

@@ -70,6 +70,14 @@ module Nabu
       [manifest.upstream_url]
     end
 
+    # What #parse yields, and therefore which loader a sync/rebuild routes to
+    # (P11-4, architecture §11): :passages (Nabu::Document → Store::Loader,
+    # every text corpus) or :dictionary (Nabu::DictionaryDocument →
+    # Store::DictionaryLoader, the reference shelf). A closed set — a new
+    # kind means a new loader and a deliberate routing decision, never a
+    # silent fall-through.
+    def self.content_kind = :passages
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to
