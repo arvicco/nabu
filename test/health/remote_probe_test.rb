@@ -2,6 +2,9 @@
 
 require "test_helper"
 require "digest"
+require "json"
+require "fileutils"
+require "tmpdir"
 
 # Named adapters the probe resolves via SourceRegistry::Entry#adapter_class.
 # They exist only to carry a manifest (and, for the multi-repo case, override
@@ -29,6 +32,28 @@ class ProbeMultiAdapter < Nabu::Adapter
   )
   def self.manifest = MANIFEST
   def self.upstream_repo_urls = %w[https://github.com/acme/one https://github.com/acme/two]
+end
+
+# An HTTP-zip source (ORACC shape, P11-2): the probe HEADs each project zip
+# and GETs each metadata.json instead of ls-remote. Two projects → multi-unit.
+class ProbeHttpZipAdapter < Nabu::Adapter
+  MANIFEST = Nabu::SourceManifest.new(
+    id: "probe-http", name: "Probe HTTP-zip", license: "CC0", license_class: "open",
+    upstream_url: "https://oracc.example", parser_family: "oracc-json"
+  )
+  def self.manifest = MANIFEST
+  def self.remote_probe_strategy = :http_zip
+
+  def self.http_probe_targets
+    %w[alpha beta].map do |project|
+      Nabu::Adapter::HttpProbeTarget.new(
+        label: project,
+        zip_url: "https://oracc.example/json/#{project}.zip",
+        metadata_url: "https://oracc.example/#{project}/metadata.json",
+        state_subdir: project
+      )
+    end
+  end
 end
 
 class RemoteProbeTest < Minitest::Test
@@ -76,8 +101,25 @@ class RemoteProbeTest < Minitest::Test
     )
   end
 
-  def probe(registry, shell)
-    Nabu::Health::RemoteProbe.new(registry: registry, ledger: @ledger, shell: shell).run
+  def probe(registry, shell, canonical_dir: nil)
+    Nabu::Health::RemoteProbe.new(
+      registry: registry, ledger: @ledger, shell: shell, canonical_dir: canonical_dir
+    ).run
+  end
+
+  # A shell that must never be consulted — the HTTP-zip path does no
+  # ls-remote (a call means the strategy branch is wrong).
+  NO_SHELL = FakeShell.new({})
+
+  # Write a project's .zip-fetch.json Last-Modified pin the way ZipFetch does,
+  # under <canonical>/<source-slug>/<project>/.
+  def write_zip_state(canonical_dir, slug, subdir, last_modified)
+    dir = File.join(canonical_dir, slug, subdir)
+    FileUtils.mkdir_p(dir)
+    File.write(
+      File.join(dir, Nabu::ZipFetch::STATE_FILE),
+      JSON.generate("last_modified" => last_modified, "sha256" => "z", "url" => "u")
+    )
   end
 
   NONGITHUB_URL = "https://gitlab.example/acme/widget"
@@ -344,5 +386,173 @@ class RemoteProbeTest < Minitest::Test
 
   def test_upstream_repo_urls_defaults_to_manifest_url
     assert_equal ["https://github.com/acme/widget"], ProbeGithubAdapter.upstream_repo_urls
+  end
+
+  # -- HTTP-zip probe (P11-2; ORACC shape) --------------------------------
+  #
+  # Honest live shapes recorded 2026-07-09 against oracc.museum.upenn.edu and
+  # replayed here as stubs: a live project zip HEADs 200 + Last-Modified (e.g.
+  # rimanum.zip → "Fri, 28 Jun 2024 12:46:37 GMT"); an unknown project HEADs
+  # 500 (not 404); the standalone /<project>/metadata.json GETs 200 but with
+  # an EMPTY body over HTTP (the real license lives inside the zip), so the
+  # license check degrades to :unchecked live — proven by
+  # test_http_zip_license_unchecked_when_metadata_body_empty. The metadata
+  # JSON shape used below (license field verbatim) is the ORACC build's, per
+  # the Oracc adapter class note and P9-5a scouting.
+
+  ALPHA_ZIP = "https://oracc.example/json/alpha.zip"
+  BETA_ZIP = "https://oracc.example/json/beta.zip"
+  ALPHA_META = "https://oracc.example/alpha/metadata.json"
+  BETA_META = "https://oracc.example/beta/metadata.json"
+  LM_OLD = "Fri, 28 Jun 2024 12:46:37 GMT"
+  LM_NEW = "Wed, 14 Aug 2024 14:47:17 GMT"
+  CC0_STRING = "This data is released under the CC0 license"
+  META_CC0 = JSON.generate(
+    "license" => CC0_STRING,
+    "license-url" => "https://creativecommons.org/publicdomain/zero/1.0/"
+  )
+
+  def http_registry = registry_of(["orx", "ProbeHttpZipAdapter", true])
+
+  def stub_zip_head(url, last_modified: LM_OLD, status: 200)
+    headers = last_modified ? { "Last-Modified" => last_modified } : {}
+    stub_request(:head, url).to_return(status: status, headers: headers)
+  end
+
+  def test_http_zip_reachable_and_current_when_last_modified_matches
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "orx", "alpha", LM_OLD)
+      write_zip_state(root, "orx", "beta", LM_OLD)
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_OLD)
+      stub_zip_head(BETA_ZIP, last_modified: LM_OLD)
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :current, row.drift
+      assert_nil row.drift_detail
+    end
+  end
+
+  def test_http_zip_behind_when_upstream_last_modified_moved
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "orx", "alpha", LM_OLD)
+      write_zip_state(root, "orx", "beta", LM_OLD)
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_NEW) # upstream moved
+      stub_zip_head(BETA_ZIP, last_modified: LM_OLD)  # current
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :behind, row.drift
+      assert_match(/alpha/, row.drift_detail)
+      refute_match(/beta/, row.drift_detail.to_s)
+    end
+  end
+
+  # Acceptance: an unsynced project is reported never-synced, NOT gone and NOT
+  # false drift. No pins, no state files → no metadata GET is even issued.
+  def test_http_zip_never_synced_reads_never_synced_not_gone
+    Dir.mktmpdir do |root|
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_NEW)
+      stub_zip_head(BETA_ZIP, last_modified: LM_NEW)
+      report = probe(http_registry, NO_SHELL, canonical_dir: root)
+      row = report.rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :never_synced, row.drift
+      assert_equal :unchecked, row.license.status
+      refute report.any_gone?
+    end
+  end
+
+  def test_http_zip_gone_when_a_project_head_returns_server_error
+    Dir.mktmpdir do |root|
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_OLD)
+      stub_zip_head(BETA_ZIP, status: 500, last_modified: nil) # ORACC's unknown-project shape
+      report = probe(http_registry, NO_SHELL, canonical_dir: root)
+      row = report.rows.first
+
+      assert_equal :gone, row.liveness.status
+      assert_match(/beta\.zip/, row.liveness.detail)
+      assert report.any_gone?
+    end
+  end
+
+  def test_http_zip_license_baseline_recorded_and_hash_stored_on_pin
+    Dir.mktmpdir do |root|
+      seed_pin(slug: "orx", repo_url: ALPHA_ZIP, last_sync_sha: "s1")
+      seed_pin(slug: "orx", repo_url: BETA_ZIP, last_sync_sha: "s2")
+      write_zip_state(root, "orx", "alpha", LM_OLD)
+      write_zip_state(root, "orx", "beta", LM_OLD)
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_OLD)
+      stub_zip_head(BETA_ZIP, last_modified: LM_OLD)
+      stub_request(:get, ALPHA_META).to_return(status: 200, body: META_CC0)
+      stub_request(:get, BETA_META).to_return(status: 200, body: META_CC0)
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :baseline_recorded, row.license.status
+      stored = Nabu::Store::Pin.first(repo_url: ALPHA_ZIP).license_baseline_sha256
+      assert_equal Digest::SHA256.hexdigest(CC0_STRING), stored
+    end
+  end
+
+  def test_http_zip_license_unchanged_when_field_matches_baseline
+    seed_pin(slug: "orx", repo_url: ALPHA_ZIP, last_sync_sha: "s1",
+             license_baseline_sha256: Digest::SHA256.hexdigest(CC0_STRING))
+    seed_pin(slug: "orx", repo_url: BETA_ZIP, last_sync_sha: "s2",
+             license_baseline_sha256: Digest::SHA256.hexdigest(CC0_STRING))
+    stub_zip_head(ALPHA_ZIP)
+    stub_zip_head(BETA_ZIP)
+    stub_request(:get, ALPHA_META).to_return(status: 200, body: META_CC0)
+    stub_request(:get, BETA_META).to_return(status: 200, body: META_CC0)
+    row = probe(http_registry, NO_SHELL).rows.first
+
+    assert_equal :unchanged, row.license.status
+  end
+
+  def test_http_zip_license_changed_when_field_differs_from_baseline
+    seed_pin(slug: "orx", repo_url: ALPHA_ZIP, last_sync_sha: "s1",
+             license_baseline_sha256: "00stale00")
+    seed_pin(slug: "orx", repo_url: BETA_ZIP, last_sync_sha: "s2",
+             license_baseline_sha256: Digest::SHA256.hexdigest(CC0_STRING))
+    stub_zip_head(ALPHA_ZIP)
+    stub_zip_head(BETA_ZIP)
+    stub_request(:get, ALPHA_META).to_return(status: 200, body: META_CC0)
+    stub_request(:get, BETA_META).to_return(status: 200, body: META_CC0)
+    row = probe(http_registry, NO_SHELL).rows.first
+
+    assert_equal :changed, row.license.status
+    assert_match(/alpha/, row.license.detail)
+  end
+
+  # Live reality: the standalone metadata.json returns 200 with an EMPTY body,
+  # so the license field is unreadable without the zip → best-effort :unchecked
+  # (never an error). Same outcome for a 304, which the plain HEAD never asks
+  # for and the GET path treats as non-200.
+  def test_http_zip_license_unchecked_when_metadata_body_empty
+    seed_pin(slug: "orx", repo_url: ALPHA_ZIP, last_sync_sha: "s1")
+    seed_pin(slug: "orx", repo_url: BETA_ZIP, last_sync_sha: "s2")
+    stub_zip_head(ALPHA_ZIP)
+    stub_zip_head(BETA_ZIP)
+    stub_request(:get, ALPHA_META).to_return(status: 200, body: "")
+    stub_request(:get, BETA_META).to_return(status: 200, body: "")
+    row = probe(http_registry, NO_SHELL).rows.first
+
+    assert_equal :unchecked, row.license.status
+  end
+
+  # The whole point: the REAL Oracc adapter, registered as a source, is probed
+  # over HTTP and reads alive (never-synced), NOT the pre-P11-2 false "gone".
+  def test_real_oracc_adapter_probes_over_http_and_is_not_gone
+    Dir.mktmpdir do |root|
+      Nabu::Adapters::Oracc::PROJECTS.each do |project|
+        stub_zip_head("https://oracc.museum.upenn.edu/json/#{project}.zip", last_modified: LM_OLD)
+      end
+      report = probe(registry_of(["oracc", "Nabu::Adapters::Oracc", true]), NO_SHELL, canonical_dir: root)
+      row = report.rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :never_synced, row.drift
+      refute report.any_gone?
+    end
   end
 end

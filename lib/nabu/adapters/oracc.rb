@@ -55,10 +55,12 @@ module Nabu
     # (arbitrary-but-deterministic, the UD stance); notes carry the honest
     # per-project record: sha prefix, text count, catalog-only empty count.
     #
-    # NB `nabu health --remote` probes upstreams with `git ls-remote`, which
-    # cannot see an HTTP-zip upstream — ORACC will read as gone there until
-    # the probe learns non-git upstreams (flagged at the P10 gate, not
-    # widened into this packet).
+    # `nabu health --remote` probes ORACC over HTTP, not git (P11-2): the
+    # probe HEADs each project zip (reachability + Last-Modified drift vs the
+    # stored .zip-fetch.json pin) and GETs each project metadata.json for
+    # license drift, declared via .remote_probe_strategy / .http_probe_targets
+    # below. Both go through ZipFetch.default_http (the vendored-cert path),
+    # since oracc.museum.upenn.edu serves an incomplete TLS chain.
     #
     # == Translations
     #
@@ -74,6 +76,12 @@ module Nabu
       PROJECTS = %w[rimanum etcsri].freeze
 
       ZIP_BASE_URL = "https://oracc.museum.upenn.edu/json"
+
+      # The standalone per-project metadata.json lives at the project root,
+      # NOT under /json/ (verified live 2026-07-09:
+      # https://oracc.museum.upenn.edu/<project>/metadata.json → 200
+      # application/json; the /json/<project>/metadata.json path 500s).
+      METADATA_BASE_URL = "https://oracc.museum.upenn.edu"
 
       # Upstream license strings → our license_class enum, matched in order.
       # Anything unmatched is a STOP (see class note).
@@ -93,6 +101,27 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # P11-2: ORACC is the HTTP-zip fetch path, so the remote-health probe
+      # HEADs each project zip and GETs each metadata.json instead of
+      # ls-remote (there is no git repo).
+      def self.remote_probe_strategy = :http_zip
+
+      # One probe target per in-scope project. The zip URL doubles as the
+      # ledger-pin key (sync pins each project by its zip URL — see
+      # #report's FetchReport.repos), so per-project drift/license baselines
+      # attach to the same pins the git sources use.
+      def self.http_probe_targets
+        PROJECTS.map do |project|
+          project_slug = project.tr("/", "-")
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: project_slug,
+            zip_url: "#{ZIP_BASE_URL}/#{project_slug}.zip",
+            metadata_url: "#{METADATA_BASE_URL}/#{project}/metadata.json",
+            state_subdir: project_slug
+          )
+        end
       end
 
       # Walk <workdir>/<slug>/corpusjson/*.json for every in-scope project,

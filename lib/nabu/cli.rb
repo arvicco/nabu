@@ -1027,7 +1027,9 @@ module Nabu
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
         ledger = open_or_create_ledger(config)
-        report = Nabu::Health::RemoteProbe.new(registry: registry, ledger: ledger).run
+        report = Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).run
         print_remote_health(report)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).

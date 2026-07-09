@@ -1499,7 +1499,7 @@ confirmed no OE. 02-sources: new rows #34 ISWOC / #35 ASPR / #36 B-T / #37
 YCOE+YCOEP (Tier 2), #38 DOEC / #39 OE web-app editions (Tier 3); UD #4 +
 Menota #21 notes.
 
-## P11-2 · HTTP remote-health probe  [tier: opus] [status: pending] [deps: —]
+## P11-2 · HTTP remote-health probe  [tier: opus] [status: done] [deps: —]
 The P10 known gap: health --remote is git-shaped (ls-remote) and reads the
 ORACC HTTP-zip upstream as gone. Teach the remote probe a per-source probe
 strategy keyed off the adapter/manifest (git → ls-remote as today; http-zip
