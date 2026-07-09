@@ -1,10 +1,12 @@
-# GRETIL fixtures (P9-4b + P9-4c)
+# GRETIL fixtures (P9-4b + P9-4c + P10-3)
 
-Seven real TEI P5 texts from GRETIL (Göttingen Register of Electronic Texts in
+Nine real TEI P5 texts from GRETIL (Göttingen Register of Electronic Texts in
 Indian Languages): three shipped with the adapter (P9-4b, below) spanning the
-original addressability spectrum, plus four (P9-4c) that exercise the
-quarantine-recovery rung + collision handling (see the P9-4c section further
-down). Retrieved **2026-07-08**.
+original addressability spectrum, four (P9-4c) that exercise the
+quarantine-recovery rung + collision handling (see the P9-4c section), plus two
+(P10-3) for the line-terminated marker shapes (see the P10-3 section at the
+bottom). The first seven were retrieved **2026-07-08**; the two P10-3 fixtures
+were cut from the same local canonical clone **2026-07-09**.
 
 ## Provenance — two byte-identical URL sets
 
@@ -107,3 +109,33 @@ entry credited to individual contributors); the CC grant is GRETIL's, under the
 takedown disclaimer above. The legacy pre-TEI HTML/text holdings (with their
 older per-contributor notices) are **out of scope** — this source ingests the
 mass-converted TEI corpus only, whose license is uniform and clean.
+
+## P10-3 line-terminated marker recovery fixtures (2 more, cut from local canonical)
+
+The P9-4c census left 8 files quarantined; 4 were genuinely unaddressable flat
+lists and 4 carried marker shapes the matched-delimiter passes cannot see —
+both variants sit at the **end of an `<l>`, terminated by the `</l>` boundary**.
+P10-3 adds a line-terminated marker fallback pass (LINE_MARKER, `LineMarker-
+Extraction`) to recover those 4. These two fixtures are trimmed REAL slices from
+the **same local canonical clone** (`mmehner/gretil-corpus-tei@master`), cut
+**2026-07-09**, same verbatim CC BY-NC-SA 4.0 notice as above
+(`license_class: nc`):
+
+8. **`sa_vimalamitra-abhidharmadIpa-h1.xml`** — the **hyphenated closed marker**
+   `// Abhidh-d_N //`. The primary `// Abbr_N //` pass rejects it because the
+   prefix charset excludes the hyphen in `Abhidh-d`. TRIM: teiHeader + first
+   4 `<lg>` (upstream lines 1..343 + closing tags) → citations `1`…`4`,
+   addressing `verse-marker`.
+9. **`sa_somAnanda-zAktavijJAna-l1.xml`** — the **leading-`//`-only marker**
+   `// SomSv_N</l>` (no closing delimiter; the `</l>` terminates it). TRIM:
+   teiHeader + first 4 `<lg>` (upstream lines 1..328 + closing tags) →
+   citations `1`…`4`, addressing `verse-marker`. (The other two files of this
+   shape — `sa_sAtvatatantra`, `sa_puruSottamadeva-ekAkSarakoza` — differ only
+   in prefix/number form, e.g. `// SatvT_1.5`, and need no separate fixture.)
+
+Both carry an `-h1`/`-l1` trim suffix so the fixture urn is a fixture urn,
+never claiming the real corpus file's slug — the same convention as the P9-4c
+fixtures above. The remaining 4 quarantines (`sa_abhinavagupta-paramArthasAra`,
+`sa_bIjanighaNTu`, `sa_lagadha-RgvedavedAGgajyotiSa`,
+`sa_vAmadeva-janmamaraNavicAra`) are genuinely unaddressable flat `<lg>`/`<l>`
+with zero `@n`/xml:id/marker/prose and stay quarantined by design.

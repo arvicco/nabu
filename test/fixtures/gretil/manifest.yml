@@ -42,3 +42,12 @@ files:
     url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_Anandavardhana-dhvanyAloka-comm.xml
     whole: false
     trim: teiHeader + the DhvK_1.1 / DhvA_1.1 / DhvK_1.2 lg (upstream lines 470-473, 1594-1598, 1857; multi-prefix interleave)
+  # --- P10-3 line-terminated marker recovery fixtures (cut from local canonical) ---
+  - path: sa_vimalamitra-abhidharmadIpa-h1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_vimalamitra-abhidharmadIpa.xml
+    whole: false
+    trim: teiHeader + first 4 lg (upstream lines 1..343 + closing tags; hyphenated closed markers "// Abhidh-d_N //")
+  - path: sa_somAnanda-zAktavijJAna-l1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_somAnanda-zAktavijJAna.xml
+    whole: false
+    trim: teiHeader + first 4 lg (upstream lines 1..328 + closing tags; leading-"//"-only markers "// SomSv_N")

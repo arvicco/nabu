@@ -1281,3 +1281,129 @@ Materialy (page scans only, no machine-readable TEI); SEENET/eSlavistik (no
 distinct open corpus located). Phase-10 shape: ORACC stays headline (P9-5b),
 pick #1 rides alongside as the smallest-possible companion packet, pick #2 as the
 follow-on scout→plan→adapter track.
+
+## Phase 10 — Cuneiform + Slavic breadth (branch: phase-10; elaborated 2026-07-09)
+
+Owner go: "Merged, let's proceed" (2026-07-09) after PR #10. Headline = ORACC
+(the P9-5b deferral comes due; fixture plan owner-approved 2026-07-08 in P9-5a);
+companion = UD Slavic expansion (P9-6 pick #1); rider = GRETIL residue
+micro-packet (P9-4c census follow-up). Sequential dispatch, orchestrator
+live-smoke review between packets, real network syncs owner-fired (EXCEPT the
+two pre-approved fixture zips in P10-1 and the two UD fixture fetches in P10-2,
+which are part of the approved fixture plans).
+
+## P10-1 · ORACC adapter + parser family  [tier: fable] [status: done] [deps: —]
+Execute the P9-5a plan exactly (see "Findings & fixture acquisition plan
+(P9-5a)" above — it is the spec; this packet adds only sequencing notes):
+
+- FIXTURES FIRST (network, pre-approved): download the two project zips
+  (rimanum 2.9 MB, etcsri 12.9 MB) to scratch, extract EXACTLY the slices in
+  the P9-5a table (corpusjson texts WHOLE incl. the empty P405254.json,
+  metadata.json WHOLE, catalogue.json TRIMMED to fixtured ids), into
+  test/fixtures/oracc/. README with retrieval date + URLs + CC0 note.
+  Nothing else fetched; zips deleted from scratch after extraction.
+- OraccJsonParser (new family): walk the cdl tree (c/d/l nodes); passage =
+  line (d-node line-start, label as citation); Passage#text = transliteration
+  reconstructed from l.form fragments; norm/cf/gw/sense/pos/gdl ride in
+  annotations. Empty corpusjson (P405254) skips honestly (not quarantine —
+  catalog-only artifacts are an upstream norm, not damage; count them in the
+  sync note).
+- Lemmas: cf (citation form) → passage_lemmas rows (language akk/sux), gw as
+  gloss annotation — Akkadian/Sumerian lemma search lands with the adapter.
+- Language: per-text primary lang for Passage#language (akk-x-oldbab → akk
+  base mapping, sux); per-word logolang in annotations only.
+- URNs: urn:nabu:oracc:<project>:<P/Q-number>:<line-label> (o.1, r.5);
+  subproject paths flattened with hyphens (saao-saa01). Frozen once minted.
+- License: READ per-project from metadata.json license field, map
+  CC0→open, CC BY-SA→attribution; never hardcode.
+- Fetch: new HTTP-zip path (NOT GitFetch): download <project>.zip with
+  Last-Modified change detection, unpack to canonical/oracc/<project>/;
+  retention contract holds — files present locally but absent from a fresh
+  zip go to .attic with manifest, never deleted. Zip handling via
+  Nabu::Shell.run unzip (no new gem without asking).
+- Registry: oracc source, enabled: false, sync_policy: manual,
+  translations: false (JSON has no prose translations — P9-5a finding; ATF
+  #tr.en is a future separate acquisition).
+- Folding: new akk/sux search-form rule — strip structural punctuation from
+  transliteration ({det} determinative braces, sign-join ./-, subscript
+  digits normalized) so `search` hits bare sign readings; norm diacritics
+  fold under the generic rule (ā→a, š→s — accepted conflation, same
+  tradeoff as grc/san). Rule documented in conventions.md §9.
+- Acceptance: conformance green (both fixtures parse, two-parse URN
+  stability, NFC, license class present); lemma rows for cf forms present
+  after fixture load; suite+lint green; docs/02-sources.md ORACC row →
+  READY (enabled:false awaiting owner sync); architecture §8 note for the
+  HTTP-zip fetch path; worklog line (sha —).
+
+## P10-2 · UD Slavic treebank expansion  [tier: opus] [status: done] [deps: P10-1]
+P9-6 pick #1 (owner-approved via phase go). Add to the ud adapter's TREEBANKS
+map: old-east-slavic-birchbark (UD_Old_East_Slavic-Birchbark) and
+old-east-slavic-rnc (UD_Old_East_Slavic-RNC, Middle Russian 1300–1700). Both
+CC BY-SA 4.0 (attribution — verify in each repo's README at fixture time and
+record in the fixture README; if either differs, STOP and report). Fixture:
+one trimmed real .conllu slice per treebank (~50 sentences, structurally
+intact multiword/empty-node cases if present) fetched from the UD GitHub
+repos — the ONLY network in this packet. urn:nabu:ud:<treebank>:<sent_id>.
+DEDUP GUARD (the survey's hazard): do NOT add the UD chu-PROIEL or orv-TOROT
+conversions — assert in a test that TREEBANKS excludes them (they double-load
+the native proiel/torot syncs). Conformance + idempotency; language codes orv
+(both treebanks; RNC is Middle Russian under orv in UD). Registry unchanged
+(ud source exists; enabled stays as-is). Acceptance: conformance green;
+fixture load produces lemma rows (orv) via existing plumbing; suite+lint
+green; 02-sources UD row lists 6 treebanks; worklog line.
+
+## P10-3 · GRETIL residue micro-packet  [tier: opus] [status: done] [deps: P10-1, P10-2 merged order irrelevant — touches only gretil_parser]
+P9-4c census follow-up: recover the 4 recoverable residue files (target
+quarantines 8 → 4, the remaining 4 being genuinely unaddressable flat lists):
+(a) sa_vimalamitra-abhidharmadIpa — hyphenated marker prefix `// Abhidh-d_N //`
+(the prefix charset currently rejects `-`); (b) sa_sAtvatatantra,
+sa_somAnanda-zAktavijJAna, sa_puruSottamadeva-ekAkSarakoza — leading-`//`-only
+markers `// Abbr_N</l>` (no closing delimiter; the `</l>` boundary
+terminates). Extend the marker recognizer for both shapes AS FALLBACK-SAFE
+variants (same discipline as P9-4c: primary MARKER regex stays byte-identical;
+new shapes only rescue docs the existing rungs leave empty, proven by the
+frozen-URN census). Fixtures: trimmed real slices of abhidharmadIpa + one
+leading-// file from canonical/gretil/ (no network). Acceptance: two-parse
+stability; read-only frozen census over canonical/gretil/ shows 773 loaded
+docs byte-identical; parse-only sync quarantine 8 → 4; suite+lint green;
+worklog line.
+
+## P10-gate · Phase 10 gate  [tier: orchestrator] [status: pending] [deps: P10-1..3]
+Full-diff review, live smokes already done per-packet, README + library.md
+truthfulness pass (new ORACC section + treebank row update + header totals),
+02-sources statuses, worklog shas, PR, sticky alarm LAST. Owner-fired after
+merge: bin/nabu sync oracc <projects TBD — owner picks starter set> and
+bin/nabu sync ud; then enabled flips with sign-off comments.
+
+## P10-4 · Per-treebank license override plumbing  [tier: opus] [status: done] [deps: P10-2]
+Defect (orchestrator live smoke after the owner-fired `sync ud`, 2026-07-09):
+the two new Slavic treebanks are CC BY-SA 4.0 (verified in-repo, P10-2) but
+`show` reports them `license: nc` — they inherit the ud SOURCE class
+(`nc`, correct for the PROIEL-derived treebanks) because
+`documents.license_override` (the P1-3 column, honored by the entire query
+layer: catalog_join, show, export, MCP) has NO WRITE PATH — no adapter has
+ever set it. Mislabel is in the restrictive direction (no leak), but it
+sells the shareable shelf short: birchbark/RNC are attribution-class and
+should be MCP-labeled as such.
+
+Fix: thread a per-document license override from adapter → loader →
+documents.license_override.
+- TREEBANKS map gains optional license/license_class per treebank; the two
+  Slavic entries set license_class attribution (license "CC BY-SA 4.0").
+- The adapter surfaces it on the parsed document (extend the value object /
+  DocumentRef with an optional license_override field, nil default — decide
+  the cleanest seam after reading adapter.rb + loader).
+- Loader persists it on create AND on re-load (metadata update, like title:
+  NO revision bump, content_sha256 untouched — license relabeling must not
+  fake a content change; pin that in a test).
+- Constraint: value must be a valid class (db CHECK exists) — loader/adapter
+  validates against the enum.
+- Tests: fixture load shows the two Slavic treebanks attribution + the four
+  legacy treebanks still nc (source class, override NULL); idempotency (two
+  loads, no revision drift); a doc whose override is REMOVED from the map
+  reverts to NULL on next load.
+- After the code lands the orchestrator re-runs `sync ud --parse-only`
+  equivalent (owner db) to relabel the six live docs and verifies via show +
+  MCP that license_class reads attribution.
+Acceptance: suite+lint green; live relabel verified; 02-sources UD row
+notes the split licensing; worklog line (sha —).

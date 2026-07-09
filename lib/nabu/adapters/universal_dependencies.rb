@@ -28,8 +28,9 @@ module Nabu
     #
     # Varies per treebank (the fixture README records the verbatim, sometimes
     # self-contradictory, LICENSE files): PROIEL is CC BY-NC-SA, Sanskrit-Vedic
-    # CC BY-SA, Latin-ITTB CC BY-NC-SA. The manifest declares the most
-    # restrictive class present (nc) so query/export filters never over-share.
+    # CC BY-SA, Latin-ITTB CC BY-NC-SA, both Old East Slavic treebanks
+    # (Birchbark, RNC) CC BY-SA 4.0. The manifest declares the most restrictive
+    # class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
       # and in the urn; value = its upstream repo and ISO 639-3 language tag.
@@ -49,6 +50,32 @@ module Nabu
         "latin-ittb" => {
           repo: "https://github.com/UniversalDependencies/UD_Latin-ITTB",
           language: "lat"
+        },
+        # P10-2 (Slavic expansion, survey pick #1): two genuinely-new Old East
+        # Slavic treebanks — vernacular birchbark letters (1025–1500) and the
+        # Middle-Russian RNC sample (1300–1700). Both CC BY-SA 4.0 (license
+        # verified in each repo's README/LICENSE.txt; see the fixture README),
+        # language code orv for both (RNC's Middle Russian is filed under orv in
+        # UD). Their annotation is a conversion of the native RNC scheme, NOT a
+        # re-export of PROIEL/TOROT — so unlike UD_Church_Slavonic-PROIEL and
+        # UD_Old_East_Slavic-TOROT (deliberately EXCLUDED here — see the dedup
+        # guard in the adapter test) they do not double-load the OCS canon Nabu
+        # already ingests natively.
+        #
+        # P10-4: both are CC BY-SA 4.0 (attribution), unlike the PROIEL-derived
+        # treebanks above (nc). They carry a per-treebank license_override so
+        # documents.license_override labels them attribution downstream, while
+        # the SOURCE class stays nc (the most-restrictive present). The four
+        # legacy entries omit :license/:license_class → override NULL → they
+        # inherit the source class. Any :license_class set here must be a valid
+        # class (Model::Validation::LICENSE_CLASSES) — Document validates it.
+        "old-east-slavic-birchbark" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-Birchbark",
+          language: "orv", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        "old-east-slavic-rnc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-RNC",
+          language: "orv", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 
@@ -82,14 +109,17 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
-      # Delegate to the ConlluParser with the urn/language/title discover
-      # resolved from the treebank layout.
+      # Delegate to the ConlluParser with the urn/language/title/license
+      # override discover resolved from the treebank layout. The override is a
+      # discover→parse hint carried in the ref metadata (nil for the legacy
+      # treebanks, which then inherit the source's nc class).
       def parse(document_ref)
         ConlluParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
           language: document_ref.metadata["language"],
-          title: document_ref.metadata["title"]
+          title: document_ref.metadata["title"],
+          license_override: document_ref.metadata["license_class"]
         )
       end
 
@@ -154,15 +184,17 @@ module Nabu
         TREEBANKS.flat_map do |slug, info|
           Dir.glob(File.join(workdir, slug, "*.conllu")).map do |path|
             stem = File.basename(path, ".conllu")
+            metadata = {
+              "language" => info[:language],
+              "treebank" => slug,
+              "title" => "#{repo_name(info[:repo])} (#{stem})"
+            }
+            # Only the treebanks with a declared override carry the key (P10-4);
+            # the legacy ones stay bare so they inherit the source class.
+            metadata["license_class"] = info[:license_class] if info[:license_class]
             Nabu::DocumentRef.new(
-              source_id: MANIFEST.id,
-              id: "urn:nabu:ud:#{slug}:#{stem}",
-              path: File.expand_path(path),
-              metadata: {
-                "language" => info[:language],
-                "treebank" => slug,
-                "title" => "#{repo_name(info[:repo])} (#{stem})"
-              }
+              source_id: MANIFEST.id, id: "urn:nabu:ud:#{slug}:#{stem}",
+              path: File.expand_path(path), metadata: metadata
             )
           end
         end.sort_by(&:id)

@@ -16,17 +16,21 @@ ancient-text corpora.
 
 **Status: early development.** The core domain is built (adapter contract,
 catalog store, idempotent loader, rebuild) and **nine source adapters**
-exist across **four parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
-DDbDP Leiden): **seven sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
-and Livy included, **with 872 aligned English translations**:
-`show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek,
-Universal Dependencies ancient treebanks, PROIEL, TOROT, and Papyri.info
-DDbDP (61k documents, restart-aware line URNs, cancelled texts kept in ⟦⟧)
-— totalling **~2.13 million searchable passages** — plus **GRETIL**
-(Sanskrit: Ṛgveda with Vedic accents preserved, CC BY-NC-SA) shipped and
-awaiting its first sync, and **ORACC** (cuneiform, CC0, gold-lemmatized)
-scouted as the next headline. A Slavic-sources survey
-(`docs/slavic-survey.md`) ranks the axis's expansion candidates.
+exist across **six parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
+DDbDP Leiden, GRETIL TEI, ORACC JSON): **eight sources live** — Perseus
+Greek and **Perseus Latin** (Iliad, Aeneid, and Livy included, **with 872
+aligned English translations**: `show <urn> --parallel` — Vergil pairs
+line-by-line), First1KGreek, Universal Dependencies ancient treebanks (six,
+including Old East Slavic birchbark letters and Middle Russian), PROIEL,
+TOROT, Papyri.info DDbDP (61k documents, restart-aware line URNs, cancelled
+texts kept in ⟦⟧), and **GRETIL** (Sanskrit: Rāmāyaṇa, Bhāgavata,
+Brahmasūtra, Ṛgveda with Vedic accents preserved; 777 of 781 upstream
+files parse via four addressability rungs) — totalling **~2.82 million
+searchable passages** — plus **ORACC** (cuneiform: Akkadian and Sumerian
+with gold lemmatization riding straight into lemma search, CC0, fetched
+as zips over HTTP with full attic parity) shipped and awaiting its first
+owner-fired sync. A Slavic-sources survey (`docs/slavic-survey.md`) ranks
+the axis's further expansion candidates.
 **The collection is protected end to end**: upstream deletions land in a
 local attic and stay searchable ("retired upstream"); run history, license
 baselines, and revision records live in a ledger no rebuild can wipe; and
