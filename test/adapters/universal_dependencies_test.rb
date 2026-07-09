@@ -93,6 +93,55 @@ class UniversalDependenciesTest < Minitest::Test
                  "natively via proiel/torot; a chu UD treebank would double-load it. Found: #{chu.inspect}"
   end
 
+  # --- per-treebank license override (P10-4) ------------------------------
+  #
+  # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
+  # derived treebanks). The two Old East Slavic treebanks (Birchbark, RNC) are
+  # CC BY-SA 4.0 → attribution: they carry a per-document license_override so
+  # the shareable shelf labels them honestly, while the four legacy treebanks
+  # stay bare (source class nc applies, override NULL).
+  SLAVIC_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc].freeze
+  LEGACY_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic].freeze
+
+  def test_treebanks_map_sets_attribution_only_on_the_two_slavic_entries
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    SLAVIC_SLUGS.each do |slug|
+      assert_equal "attribution", treebanks.fetch(slug)[:license_class], "#{slug} must be attribution"
+      assert_equal "CC BY-SA 4.0", treebanks.fetch(slug)[:license]
+    end
+    LEGACY_SLUGS.each do |slug|
+      assert_nil treebanks.fetch(slug)[:license_class], "#{slug} must stay bare (source class applies)"
+    end
+  end
+
+  def test_parse_surfaces_license_override_for_slavic_and_nil_for_legacy
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES).to_h { |ref| [ref.metadata["treebank"], adapter.parse(ref)] }
+
+    SLAVIC_SLUGS.each { |slug| assert_equal "attribution", by_slug.fetch(slug).license_override }
+    LEGACY_SLUGS.each { |slug| assert_nil by_slug.fetch(slug).license_override }
+  end
+
+  # End-to-end: after a fixture load, documents.license_override reads
+  # attribution for the two Slavic treebanks and NULL for the four legacy ones,
+  # while the source class remains nc.
+  def test_fixture_load_writes_attribution_override_only_for_the_slavic_treebanks
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(
+      slug: "ud", name: "Universal Dependencies",
+      adapter_class: "Nabu::Adapters::UniversalDependencies", license_class: "nc"
+    )
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(conformance_adapter, workdir: FIXTURES, full: true)
+
+    override_by_slug = Nabu::Store::Document.where(source_id: source.id).all.to_h do |doc|
+      [doc.urn.split(":")[3], doc.license_override]
+    end
+    SLAVIC_SLUGS.each { |slug| assert_equal "attribution", override_by_slug.fetch(slug) }
+    LEGACY_SLUGS.each { |slug| assert_nil override_by_slug.fetch(slug) }
+    assert_equal "nc", source.license_class, "the source class is unchanged"
+  end
+
   # --- discover -----------------------------------------------------------
 
   def test_discover_finds_exactly_six_files_sorted_by_urn

@@ -1375,7 +1375,7 @@ truthfulness pass (new ORACC section + treebank row update + header totals),
 merge: bin/nabu sync oracc <projects TBD — owner picks starter set> and
 bin/nabu sync ud; then enabled flips with sign-off comments.
 
-## P10-4 · Per-treebank license override plumbing  [tier: opus] [status: in-progress] [deps: P10-2]
+## P10-4 · Per-treebank license override plumbing  [tier: opus] [status: done] [deps: P10-2]
 Defect (orchestrator live smoke after the owner-fired `sync ud`, 2026-07-09):
 the two new Slavic treebanks are CC BY-SA 4.0 (verified in-repo, P10-2) but
 `show` reports them `license: nc` — they inherit the ud SOURCE class
