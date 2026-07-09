@@ -1335,7 +1335,7 @@ Execute the P9-5a plan exactly (see "Findings & fixture acquisition plan
   READY (enabled:false awaiting owner sync); architecture §8 note for the
   HTTP-zip fetch path; worklog line (sha —).
 
-## P10-2 · UD Slavic treebank expansion  [tier: opus] [status: pending] [deps: P10-1]
+## P10-2 · UD Slavic treebank expansion  [tier: opus] [status: done] [deps: P10-1]
 P9-6 pick #1 (owner-approved via phase go). Add to the ud adapter's TREEBANKS
 map: old-east-slavic-birchbark (UD_Old_East_Slavic-Birchbark) and
 old-east-slavic-rnc (UD_Old_East_Slavic-RNC, Middle Russian 1300–1700). Both

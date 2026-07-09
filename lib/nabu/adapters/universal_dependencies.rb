@@ -28,8 +28,9 @@ module Nabu
     #
     # Varies per treebank (the fixture README records the verbatim, sometimes
     # self-contradictory, LICENSE files): PROIEL is CC BY-NC-SA, Sanskrit-Vedic
-    # CC BY-SA, Latin-ITTB CC BY-NC-SA. The manifest declares the most
-    # restrictive class present (nc) so query/export filters never over-share.
+    # CC BY-SA, Latin-ITTB CC BY-NC-SA, both Old East Slavic treebanks
+    # (Birchbark, RNC) CC BY-SA 4.0. The manifest declares the most restrictive
+    # class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
       # and in the urn; value = its upstream repo and ISO 639-3 language tag.
@@ -49,6 +50,24 @@ module Nabu
         "latin-ittb" => {
           repo: "https://github.com/UniversalDependencies/UD_Latin-ITTB",
           language: "lat"
+        },
+        # P10-2 (Slavic expansion, survey pick #1): two genuinely-new Old East
+        # Slavic treebanks — vernacular birchbark letters (1025–1500) and the
+        # Middle-Russian RNC sample (1300–1700). Both CC BY-SA 4.0 (license
+        # verified in each repo's README/LICENSE.txt; see the fixture README),
+        # language code orv for both (RNC's Middle Russian is filed under orv in
+        # UD). Their annotation is a conversion of the native RNC scheme, NOT a
+        # re-export of PROIEL/TOROT — so unlike UD_Church_Slavonic-PROIEL and
+        # UD_Old_East_Slavic-TOROT (deliberately EXCLUDED here — see the dedup
+        # guard in the adapter test) they do not double-load the OCS canon Nabu
+        # already ingests natively.
+        "old-east-slavic-birchbark" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-Birchbark",
+          language: "orv"
+        },
+        "old-east-slavic-rnc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-RNC",
+          language: "orv"
         }
       }.freeze
 

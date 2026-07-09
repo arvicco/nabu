@@ -9,6 +9,8 @@
 # refresh (refresh overwrites the trim with the full upstream file).
 source: ud
 adapter_test:
+# retrieved: first four treebanks 2026-07-03; the two old-east-slavic-* added
+# under P10-2 were retrieved 2026-07-09 (see README).
 retrieved: 2026-07-03
 files:
   - path: gothic-proiel/got_proiel-ud-test-head50.conllu
@@ -27,3 +29,11 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Latin-ITTB/master/la_ittb-ud-test.conllu
     whole: false
     trim: first 50 blocks of la_ittb-ud-test.conllu (both MWT sentences fell within the head 50; 0 appended) (3,184,535 B -> 61,008 B)
+  - path: old-east-slavic-birchbark/orv_birchbark-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_East_Slavic-Birchbark/master/orv_birchbark-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of orv_birchbark-ud-test.conllu (no MWT/empty-node lines in the split; P10-2) (1,446,600 B -> 63,865 B)
+  - path: old-east-slavic-rnc/orv_rnc-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_East_Slavic-RNC/master/orv_rnc-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of orv_rnc-ud-test.conllu (long Middle-Russian sentences, no MWT/empty-node lines; P10-2) (2,483,580 B -> 365,977 B)
