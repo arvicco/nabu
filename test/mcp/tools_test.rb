@@ -98,9 +98,9 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_four_tools_with_json_schemas
+    def test_definitions_lists_the_five_tools_with_json_schemas
       defs = tools.definitions
-      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_status], defs.map { |d| d[:name] })
+      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_status], defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
         schema = definition[:inputSchema]
@@ -490,6 +490,123 @@ module MCP
                .call("nabu_status", {})
       refute result[:isError], "busy is a state, not a fault"
       assert_match(/busy.*retry/im, text_of(result))
+    end
+
+    # -- nabu_align (P11-3) ------------------------------------------------------
+
+    ALIGN_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:marianus
+    YAML
+
+    def align_registry(yaml = ALIGN_REGISTRY_YAML)
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "alignments.yml")
+        File.write(path, yaml)
+        return Nabu::AlignmentRegistry.load(path)
+      end
+    end
+
+    # Two nc witnesses attesting MARK 2.3 (sentence-id urns, verse identity in
+    # the token citation_parts — the live five-way shape, trimmed to two).
+    def seed_aligned_corpus(source: nil)
+      source ||= Nabu::Store::Source.create(
+        slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
+        license_class: "nc", enabled: true
+      )
+      [["greek-nt", "grc", "καὶ ἔρχονται φέροντες πρὸς αὐτὸν παραλυτικὸν"],
+       ["marianus", "chu", "Ꙇ придѫ къ немоу носѧште ослабленъ жилами"]].each do |tail, lang, text|
+        doc = make_document(source: source, urn: "urn:nabu:proiel:#{tail}",
+                            title: tail, language: lang)
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: "#{doc.urn}:1", sequence: 0, language: lang,
+          text: text, text_normalized: text, content_sha256: "x", revision: 1,
+          annotations_json: JSON.generate(
+            "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
+          )
+        )
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: align_registry)
+    end
+
+    def align_tools(registry = align_registry)
+      Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+    end
+
+    def test_align_renders_witnesses_with_the_full_license_contract
+      seed_aligned_corpus
+      result = align_tools.call("nabu_align", { "ref" => "mark 2:3" })
+
+      refute result[:isError]
+      body = payload(result)
+      assert_equal "MARK 2.3", body.fetch("ref"), "the query ref is normalized"
+      witnesses = body.fetch("witnesses")
+      assert_equal(%w[greek-nt marianus], witnesses.map { |witness| witness.fetch("label") })
+      witnesses.each do |witness|
+        assert_equal "nc", witness.fetch("license_class")
+        assert_equal "ok", witness.fetch("status")
+        witness.fetch("sentences").each do |sentence|
+          assert_match(/\Aurn:nabu:proiel:/, sentence.fetch("urn"))
+          assert sentence.key?("language")
+          assert_equal "nc", sentence.fetch("license_class")
+          assert_equal "proiel", sentence.fetch("source")
+        end
+      end
+      assert_match(/2 of 2/, body.fetch("note"))
+    end
+
+    def test_align_missing_ref_is_invalid_arguments
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { align_tools.call("nabu_align", {}) }
+    end
+
+    def test_align_without_a_registry_notes_how_to_register
+      seed_aligned_corpus
+      result = tools.call("nabu_align", { "ref" => "MARK 2.3" })
+      refute result[:isError], "an unconfigured hub is a state, not a fault"
+      assert_match(/no alignment works registered/i, text_of(result))
+    end
+
+    def test_align_with_a_missing_index_table_degrades_gracefully
+      seed_aligned_corpus
+      @fulltext.drop_table?(Nabu::Store::AlignmentIndexer::TABLE)
+      result = align_tools.call("nabu_align", { "ref" => "MARK 2.3" })
+      refute result[:isError]
+      assert_match(/alignment index/i, text_of(result))
+    end
+
+    def test_align_unknown_work_is_a_tool_error
+      seed_aligned_corpus
+      result = align_tools.call("nabu_align", { "ref" => "MARK 2.3", "work" => "iliad" })
+      assert result[:isError], "a bad work id is caller-fixable — isError so the model corrects"
+      assert_match(/iliad/, text_of(result))
+    end
+
+    def test_align_withholds_restricted_witnesses_by_default
+      seed_aligned_corpus(source: @private)
+      result = align_tools.call("nabu_align", { "ref" => "MARK 2.3" })
+
+      refute result[:isError]
+      body = payload(result)
+      body.fetch("witnesses").each do |witness|
+        assert_equal "withheld", witness.fetch("status")
+        assert_empty witness.fetch("sentences")
+      end
+      refute_match(/παραλυτικὸν/, text_of(result), "restricted text must not leak")
+
+      opted = payload(align_tools.call("nabu_align", { "ref" => "MARK 2.3",
+                                                       "include_restricted" => true }))
+      assert_equal(%w[ok ok], opted.fetch("witnesses").map { |witness| witness.fetch("status") })
+    end
+
+    def test_align_missing_catalog_degrades_to_no_corpus
+      result = Nabu::MCP::Tools.new(catalog: nil, fulltext: @fulltext, alignments: align_registry)
+                               .call("nabu_align", { "ref" => "MARK 2.3" })
+      refute result[:isError]
+      assert_match(/no corpus/i, text_of(result))
     end
 
     # -- read-only enforcement ------------------------------------------------------

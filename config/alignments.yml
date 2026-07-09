@@ -1,0 +1,37 @@
+# The alignment-hub registry (P11-3, architecture §10).
+#
+# A WORK groups witnesses that carry the same text under a shared citation
+# scheme; a WITNESS is one catalog document (by urn) plus how its citation
+# refs are read. Adding a witness = adding an entry here (then `nabu sync` or
+# `nabu rebuild` to regenerate the derived alignment_refs index) — never code,
+# unless the witness needs a citation extractor that does not exist yet
+# (known extractors: proiel-citation, the default).
+#
+# Per-witness keys:
+#   document:  the catalog document urn (REQUIRED). Registering a witness
+#              before its source is synced is fine — it renders "not synced".
+#   extractor: how refs are extracted from the stored annotations
+#              (default proiel-citation: the per-token citation_part values).
+#   label:     display label (default: the urn tail, e.g. "greek-nt").
+#   books:     book-token aliases into the work's vocabulary, applied after
+#              the generic ref fold (e.g. MK: MARK).
+#
+# `nabu align "MARK 2.3"` renders a verse across every witness below.
+
+nt:
+  title: "New Testament (parallel witnesses)"
+  witnesses:
+    # The five-way flagship — all PROIEL-family treebanks, all CC BY-NC-SA
+    # (license class nc; labels ride every aligned row). Verse coverage is
+    # honestly fragmentary per witness (the Armenian treebank samples
+    # chapters; Gothic and Marianus are lacunose): absent verses render
+    # "not attested", never fuzzed.
+    - document: urn:nabu:proiel:greek-nt   # grc — the Vorlage
+    - document: urn:nabu:proiel:latin-nt   # lat — Jerome's Vulgate (NT)
+    - document: urn:nabu:proiel:gothic-nt  # got — Wulfila
+    - document: urn:nabu:proiel:armenian-nt # xcl — classical Armenian NT (sampled)
+    - document: urn:nabu:proiel:marianus   # chu — Codex Marianus (OCS)
+    # Sixth witness, ready the day the ISWOC adapter lands (docs/oe-survey.md):
+    # the West-Saxon Gospel of Mark mints native "MARK 1.1" citation-parts —
+    # uncomment when the source syncs.
+    # - document: urn:nabu:proiel:wscp     # ang — OE Gospel of Mark (ISWOC)

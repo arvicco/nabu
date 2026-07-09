@@ -2,9 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes three tools — search, read
-by urn, and coverage — so a model can look things up in your texts, quote them,
-and cite them, without any ability to change the collection.
+(Claude Code, Claude Desktop) over stdio. It exposes five tools — search, read
+by urn, concordance, cross-source alignment, and coverage — so a model can look
+things up in your texts, quote them, and cite them, without any ability to
+change the collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -32,11 +33,11 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The three tools
+## 2. The five tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search hits and `nabu_show` also carry the **source** slug).
-Preserve those fields when you quote — see §6.
+**license_class** (search, concord, and align rows also carry the **source**
+slug). Preserve those fields when you quote — see §6.
 
 ### `nabu_search`
 
@@ -67,6 +68,29 @@ Read the corpus by urn — the pristine edition text behind a search hit:
   translation, aligned line by line / block by block.
 
 Withdrawn and retired-upstream items appear, flagged.
+
+### `nabu_concord`
+
+KWIC concordance over the same search machinery (P8-3): one row per hit as
+left context / matched keyword / right context, located in the pristine
+edition text, in corpus order. Give exactly one of `query`/`lemma`; optional
+`lang`, `license`, `limit` (default 10, max 50), `width` (context characters
+per side, default 40, max 120).
+
+### `nabu_align`
+
+Cross-source alignment (P11-3, architecture §10): one citation of a registered
+work rendered across every witness `config/alignments.yml` names — the
+flagship is the five-way New Testament (grc/lat/got/xcl/chu, all PROIEL-family
+treebanks). `ref` is a citation in the work's scheme (`"MARK 2.3"`;
+case/spacing/`chapter:verse` colons normalize) or a passage urn to pivot from
+a search/show hit; `work` picks the registry work when several exist.
+Witnesses come in registry order, each with status `ok` (sentences follow,
+each listing every ref it covers — sentence≠verse), `no_match` (synced, verse
+not attested), `not_synced` (registered, no data yet), or `withheld`
+(license-excluded). Every sentence row carries urn, language, license_class,
+and source — the five NT witnesses are all `nc`, so the labels matter when
+quoting.
 
 ### `nabu_status`
 

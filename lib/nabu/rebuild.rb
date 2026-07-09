@@ -85,7 +85,10 @@ module Nabu
       end
       replay_enrichments(db)
       # Reindex ONCE after all sources are back — the index is corpus-wide.
-      indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      # The alignment registry (config, not derived) rides in so alignment_refs
+      # regenerates with the re-minted passage ids (architecture §10).
+      indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
+                                        alignments: AlignmentRegistry.load(@config.alignments_path))
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes, skips: skips, indexed: indexed)
     ensure
       db&.disconnect

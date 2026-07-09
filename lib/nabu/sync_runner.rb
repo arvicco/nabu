@@ -153,14 +153,16 @@ module Nabu
       ].compact
     end
 
-    # Rebuild the whole FTS5 index from the (now-updated) catalog into the
-    # fulltext db. Opens its own short-lived connection to config.fulltext_path
-    # so callers need not thread a handle through. Returns the passage count.
+    # Rebuild the whole FTS5 index (plus lemma + alignment tables) from the
+    # (now-updated) catalog into the fulltext db. Opens its own short-lived
+    # connection to config.fulltext_path so callers need not thread a handle
+    # through. Returns the passage count.
     def reindex!
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
-      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext)
+      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext,
+                              alignments: AlignmentRegistry.load(@config.alignments_path))
     ensure
       fulltext&.disconnect
     end
