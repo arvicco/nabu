@@ -15,14 +15,20 @@ module Nabu
   class Document
     include Enumerable
 
-    attr_reader :urn, :language, :title, :canonical_path, :metadata
+    attr_reader :urn, :language, :title, :canonical_path, :metadata, :license_override
 
-    def initialize(urn:, language:, canonical_path:, title: nil, metadata: {})
+    # +license_override+ (P10-4): an optional per-document license class that
+    # supersedes the source's class downstream (documents.license_override,
+    # honored by the whole query layer). nil — the common case — means "inherit
+    # the source class". It is METADATA, never content: it is deliberately kept
+    # out of Store::ContentHash so a relabel never fakes a content revision.
+    def initialize(urn:, language:, canonical_path:, title: nil, metadata: {}, license_override: nil)
       @urn = Model::Validation.urn!(urn)
       @language = Model::Validation.language!(language)
       @title = title.nil? ? nil : Model::Validation.present_string!(title, field: "title")
       @canonical_path = Model::Validation.present_string!(canonical_path, field: "canonical_path")
       @metadata = Model::Validation.json_hash!(metadata, field: "metadata")
+      @license_override = Model::Validation.license_class_or_nil!(license_override)
       @passages_by_urn = {}
       @passages_by_sequence = {}
     end

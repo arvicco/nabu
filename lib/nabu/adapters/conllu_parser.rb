@@ -78,11 +78,13 @@ module Nabu
       MWT_ID = /\A\d+-\d+\z/
       private_constant :MWT_ID
 
-      # Same signature family as EpidocParser#parse.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil)
+      # Same signature family as EpidocParser#parse. +license_override+ (P10-4)
+      # rides through to the Document unchanged (nil default); the parser stays
+      # license-agnostic — the caller decides the per-document class.
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, license_override: nil)
         document = Nabu::Document.new(
           urn: urn, language: language, title: title,
-          canonical_path: canonical_path || source.to_s
+          canonical_path: canonical_path || source.to_s, license_override: license_override
         )
 
         each_block(source) do |block, sequence|

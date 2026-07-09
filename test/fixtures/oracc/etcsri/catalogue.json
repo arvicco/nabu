@@ -1,0 +1,70 @@
+{
+ "type": "catalogue",
+ "project": "etcsri",
+ "source": "http://oracc.org/etcsri",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-08-14T14:36:34",
+ "members": {
+  "Q001299": {
+   "langs": "0x02000000",
+   "project": "etcsri",
+   "designation": "Anonymous Nippur 45",
+   "id_composite": "Q001299",
+   "cdli_composite_id": "P222801",
+   "period": "Early Dynastic",
+   "dynastic_seat": "Nippur",
+   "ruler": "unattributed",
+   "language": "Sumerian",
+   "provenience": "Nippur",
+   "pleiades_id": "912910",
+   "pleiades_coord": "[45.230832,32.126944]",
+   "object_type": "vessel",
+   "material": "stone",
+   "primary_publication": "FAOS 05/2, AnNip 45",
+   "exemplar_info": "unknown (7N-T0399)",
+   "genre": "Royal Inscription",
+   "cdli_id_numbers": "P222801",
+   "collection": "unlocated",
+   "supergenre": "LIT",
+   "trans": [
+    "hun",
+    "en"
+   ]
+  },
+  "Q004151": {
+   "langs": "0x02000000",
+   "project": "etcsri",
+   "designation": "Amar-Suena 2049add / CDLI Seals 000423",
+   "id_composite": "Q004151",
+   "cdli_composite_id": "P430519",
+   "seal_id": "S000423",
+   "period": "Ur III",
+   "dynastic_seat": "Ur",
+   "ruler": "Amar-Suena",
+   "language": "Sumerian",
+   "provenience": "Puzriš-Dagan",
+   "pleiades_id": "359215729",
+   "pleiades_coord": "[45.29101,32.06236]",
+   "object_type": "seal (not impression)",
+   "material": "stone",
+   "rime_no": "RIME 3-2.01.03.2049add",
+   "primary_publication": "CDLI Seals 000423 (composite)",
+   "publication_history": "Tsouparopoulou 2008, 423; Tsouparopoulou, HSAO 16, 412",
+   "exemplar_info": "AUAM 73.1770; AUAM 73.1113; NBC 02226; NYPLC 359 (Eames N09); Ist PD -; AO 05581; PTS 0665; YBC 14612; YBC 15260",
+   "genre": "Royal Inscription",
+   "cdli_id_numbers": "P104483; P104690; P105975; P122767; P125760; P131670; P201021; P210629; P211026",
+   "collection": "Siegfried H. Horn Museum, Institute of Archaeology, Andrews University, Berrien Springs, Michigan, USA; Nies Babylonian Collection, Yale Babylonian Collection, New Haven, Connecticut, USA; New York Public Library, New York, New York, USA; Arkeoloji Müzeleri, Istanbul, Turkey; Louvre Museum, Paris, France; Princeton Theological Seminary, Princeton, New Jersey, USA; Yale Babylonian Collection, New Haven, Connecticut, USA",
+   "supergenre": "LIT",
+   "trans": [
+    "hun",
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "Q001299": "<p id=\"Q001299\">etcsri:Q001299 = Anonymous Nippur 45. Early Dynastic Nippur (Royal Inscription)</p>",
+  "Q004151": "<p id=\"Q004151\">etcsri:Q004151 = Amar-Suena 2049add / CDLI Seals 000423. Ur III Puzriš-Dagan (Royal Inscription)</p>"
+ }
+}

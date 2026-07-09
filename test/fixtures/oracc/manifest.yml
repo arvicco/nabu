@@ -1,0 +1,87 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. ORACC serves NO raw per-file URLs — the open-data
+# delivery unit is the whole per-project zip (rimanum.zip 2.9 MB, etcsri.zip
+# 12.9 MB). Every fixture here was extracted 2026-07-09 from those zips
+# (corpusjson + metadata whole; catalogue trimmed to the fixtured ids — see
+# README). A raw GET of any listed path is impossible, so every entry is
+# refetchable: false: `fixtures:check` SKIPS them (printing the reason) and
+# `fixtures:refresh` refuses to touch them. Re-acquiring means re-downloading
+# the project zip and re-applying the README extract/trim procedure.
+source: oracc
+adapter_test:
+retrieved: 2026-07-09
+files:
+  - path: rimanum/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (license + project config, kept whole)
+  - path: rimanum/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-07-09
+    whole: false
+    trim: members/summaries reduced to P405432, P405134, P405254; envelope keys verbatim (376,041 B -> ~3 KB)
+  - path: rimanum/corpusjson/P405432.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (rich Akkadian exemplar, kept whole — a cdl tree is atomic)
+  - path: rimanum/corpusjson/P405134.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (short Akkadian text, kept whole)
+  - path: rimanum/corpusjson/P405254.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (0 B upstream — the catalog-only/no-content case, kept as-is)
+  - path: etcsri/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/etcsri.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/etcsri.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (license + project config, kept whole; 377 KB upstream reality vs the plan's ~30 KB estimate)
+  - path: etcsri/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/etcsri.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/etcsri.zip
+    copied: 2026-07-09
+    whole: false
+    trim: members/summaries reduced to Q004151, Q001299; envelope keys verbatim (2.1 MB -> ~3 KB)
+  - path: etcsri/corpusjson/Q004151.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/etcsri.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/etcsri.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (Sumerian Q-number exemplar, kept whole)
+  - path: etcsri/corpusjson/Q001299.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/etcsri.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/etcsri.zip
+    copied: 2026-07-09
+    whole: true
+    trim: none (smallest non-empty Q at extraction time — the minimal-document case, kept whole)

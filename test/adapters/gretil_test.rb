@@ -25,9 +25,13 @@ class GretilTest < Minitest::Test
   BRAHMASUTRA = "urn:nabu:gretil:sa_bAdarAyaNa-brahmasUtra" # pipe markers (fix 2)
   VALLALACARITA = "urn:nabu:gretil:sa_AnandabhaTTa-vallAlacarita-c1" # single-prefix collision (fix 3)
   DHVANYALOKA = "urn:nabu:gretil:sa_Anandavardhana-dhvanyAloka-comm-u1" # multi-prefix (fix 3)
+  # P10-3 line-terminated marker recovery fixtures.
+  ABHIDHARMADIPA = "urn:nabu:gretil:sa_vimalamitra-abhidharmadIpa-h1" # hyphenated closed "// Abhidh-d_N //"
+  SOMANANDA = "urn:nabu:gretil:sa_somAnanda-zAktavijJAna-l1" # leading-"//"-only "// SomSv_N</l>"
 
   ALL_FIXTURES = [
-    RGVEDA, BRAHMABINDU, HEART_SUTRA, RGVIDHANA, BRAHMASUTRA, VALLALACARITA, DHVANYALOKA
+    RGVEDA, BRAHMABINDU, HEART_SUTRA, RGVIDHANA, BRAHMASUTRA, VALLALACARITA, DHVANYALOKA,
+    ABHIDHARMADIPA, SOMANANDA
   ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
@@ -195,6 +199,54 @@ class GretilTest < Minitest::Test
     assert_equal(%w[DhvK.1.1 DhvA.1.1 DhvK.1.2], doc.map { |p| p.urn.delete_prefix("#{DHVANYALOKA}:") })
     assert_equal "#{DHVANYALOKA}:DhvK.1.1", doc.to_a.first.urn
     assert_equal "verse-marker", doc.to_a.first.annotations["addressing"]
+  end
+
+  # --- P10-3: hyphenated closed marker "// Abhidh-d_N //" (line-marker pass) --
+
+  def test_abhidharmadipa_hyphenated_closed_markers
+    doc = parse(ABHIDHARMADIPA)
+    assert_equal "san-Latn", doc.language
+    assert_equal 4, doc.size # 4 lg, one "// Abhidh-d_N //" each
+    assert_equal(%w[1 2 3 4], doc.map { |p| p.urn.split(":").last })
+
+    first = doc.to_a.first
+    assert_equal "#{ABHIDHARMADIPA}:1", first.urn
+    assert_equal "verse-marker", first.annotations["addressing"]
+    # Both padas of the verse (across its two <l>) join into one passage; the
+    # hyphenated "// Abhidh-d_1 //" marker is stripped, the half-verse daṇḍa kept.
+    assert_equal "yo duḥkhahetuvyupaśāntimārgaṃ pradarśayāmāsa narāmarebhyaḥ / " \
+                 "taṃ satpathajñaṃ praṇipatya buddhaṃ śāstraṃ kariṣyāmyabhidharmadīpam",
+                 first.text
+    refute_includes first.text, "//", "the verse marker delimiter must be stripped"
+    refute_includes first.text, "Abhidh", "the hyphenated marker abbreviation must be stripped"
+  end
+
+  # --- P10-3: leading-"//"-only marker "// SomSv_N</l>" (line-marker pass) -----
+
+  def test_somananda_leading_only_markers
+    doc = parse(SOMANANDA)
+    assert_equal 4, doc.size # 4 lg, one leading-only "// SomSv_N" each
+    assert_equal(%w[1 2 3 4], doc.map { |p| p.urn.split(":").last })
+
+    first = doc.to_a.first
+    assert_equal "#{SOMANANDA}:1", first.urn
+    assert_equal "verse-marker", first.annotations["addressing"]
+    # No closing "//": the </l> boundary terminates the marker, which is stripped.
+    assert_equal "sthānaṃ praveśo rūpaṃ ca lakṣaṃ lakṣaṇameva ca / " \
+                 "utthāpanaṃ bodhanaṃ ca cakraviśrāmameva ca",
+                 first.text
+    refute_includes first.text, "//", "the leading marker delimiter must be stripped"
+    refute_includes first.text, "SomSv", "the marker abbreviation must be stripped"
+  end
+
+  # Guard: the line-marker fallback must NOT fire on a doc the primary "// … //"
+  # pass already addresses. The Brahmabindu (whole "// BrbUp_N //") is handled by
+  # the PRIMARY pass; if the line-marker pass leaked in-line (or the primary pass
+  # regressed) its citations would change. They stay the bare primary-pass 1..22.
+  def test_line_marker_pass_does_not_fire_on_primary_marker_file
+    doc = parse(BRAHMABINDU)
+    assert_equal((1..22).map(&:to_s), doc.map { |p| p.urn.split(":").last })
+    doc.each { |p| assert_equal "verse-marker", p.annotations["addressing"] }
   end
 
   # Guard: multi-prefix handling must NOT fire on a single-prefix file — the

@@ -9,7 +9,7 @@ require "test_helper"
 # as the completeness check the packet calls for.
 class FixtureManifestsTest < Minitest::Test
   FIXTURES_ROOT = File.expand_path("fixtures", __dir__)
-  EXPECTED = %w[perseus first1k ud proiel torot ddbdp papyri-ddbdp gretil].freeze
+  EXPECTED = %w[perseus first1k ud proiel torot ddbdp papyri-ddbdp gretil oracc].freeze
 
   def real_source_dirs
     Dir.children(FIXTURES_ROOT).select do |name|
