@@ -67,10 +67,33 @@ module Nabu
     # 304 (sha then repeats the stored pin; nothing was touched).
     Result = Data.define(:sha, :atticked, :not_modified)
 
+    # Directory of extra CA certificates vendored with the repo. Some
+    # upstreams (oracc.museum.upenn.edu, first hit 2026-07-09) serve an
+    # incomplete TLS chain — leaf only, intermediate missing. macOS curl
+    # papers over that by AIA-fetching the intermediate; Ruby's OpenSSL does
+    # not, so verification fails. Vendoring the PUBLIC intermediate (it still
+    # chains to a root in the default store — nothing is trusted that wasn't)
+    # closes the chain. Provenance/fingerprints: config/certs/README.md.
+    EXTRA_CERTS_DIR = File.expand_path("../../config/certs", __dir__)
+
+    # Default connection for real fetches: verify_peer with a store that is
+    # the system defaults PLUS the vendored intermediates. Tests inject
+    # +http:+ doubles and never hit this.
+    def self.default_http
+      @default_http ||= Faraday.new(ssl: { verify: true, cert_store: extra_cert_store })
+    end
+
+    def self.extra_cert_store
+      store = OpenSSL::X509::Store.new
+      store.set_default_paths
+      Dir.glob(File.join(EXTRA_CERTS_DIR, "*.pem")).each { |pem| store.add_file(pem) }
+      store
+    end
+
     # One-shot fetch for a single zip. +guard+, when given, is called with
     # the absolute live-tree paths the fresh unpack would delete — BEFORE any
     # tree mutation — and may raise (Nabu::SyncAborted) to abort.
-    def self.sync!(url:, dir:, attic_dir:, http: Faraday, progress: nil, guard: nil)
+    def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil)
       fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress)
       begin
         fetch.prepare!
@@ -82,7 +105,7 @@ module Nabu
       Result.new(sha: fetch.sha, atticked: fetch.atticked, not_modified: fetch.not_modified?)
     end
 
-    def initialize(url:, dir:, attic_dir:, http: Faraday, progress: nil)
+    def initialize(url:, dir:, attic_dir:, http: self.class.default_http, progress: nil)
       @url = url
       @dir = dir
       @attic_dir = attic_dir

@@ -144,3 +144,28 @@ class ZipFetchTest < Minitest::Test
     assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
   end
 end
+
+# Vendored-intermediate contract: the default store must verify every PEM in
+# config/certs/ against the SYSTEM roots alone — proving each is a public
+# intermediate that closes a chain, not a new trust anchor. (The oracc
+# upstream serves a leaf-only chain; see config/certs/README.md.)
+class ZipFetchExtraCertsTest < Minitest::Test
+  def test_extra_certs_chain_to_default_roots
+    pems = Dir.glob(File.join(Nabu::ZipFetch::EXTRA_CERTS_DIR, "*.pem"))
+    refute_empty pems, "expected at least the InCommon intermediate"
+    defaults = OpenSSL::X509::Store.new.tap(&:set_default_paths)
+    pems.each do |pem|
+      cert = OpenSSL::X509::Certificate.new(File.read(pem))
+      assert defaults.verify(cert),
+             "#{File.basename(pem)} does not chain to a default root (#{defaults.error_string}) — " \
+             "vendored certs must never introduce new trust anchors"
+      assert cert.not_after > Time.now, "#{File.basename(pem)} is expired"
+    end
+  end
+
+  def test_default_http_uses_verify_peer_with_the_extra_store
+    conn = Nabu::ZipFetch.default_http
+    assert_equal true, conn.ssl.verify
+    assert_kind_of OpenSSL::X509::Store, conn.ssl.cert_store
+  end
+end
