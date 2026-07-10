@@ -2005,7 +2005,7 @@ proof (parse-only, live db): oracc `+407 added ~0 updated =6469 skipped !0
 errored` (170 → 0 quarantines), gretil recovers the two strays with ~0
 updated. Verify runs clean read-only over the full live catalog.
 
-## P11-8 · Readable aligned scripture: align ranges + English witness  [tier: opus] [status: in-progress] [deps: P11-5, P11-7]
+## P11-8 · Readable aligned scripture: align ranges + English witness  [tier: opus] [status: done] [deps: P11-5, P11-7]
 Owner-requested (2026-07-10, after eyeballing `show urn:nabu:vulgate:jon
 --parallel` and hitting the CTS-sibling wall). Two halves:
 

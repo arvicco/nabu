@@ -114,6 +114,45 @@ nt:
         3JOHN: urn:nabu:vulgate:3jn
         JUDE: urn:nabu:vulgate:jud
         REV: urn:nabu:vulgate:rev
+    # P11-8: the World English Bible's NT books — the readable public-domain
+    # ENGLISH witness beside the Greek/Latin/Gothic (a reader who cannot yet
+    # parse the Vorlage sees the same verse in plain English). WEB is modern PD
+    # worldwide (KJV is Crown-copyright in the UK); complete canon; USFX like
+    # the Vulgate (UsfxParser, zero new parser). urns are the adapter's per-book
+    # minting from the WEB OSIS codes (all 27 NT codes verified upstream at
+    # scout time); tokens are the work vocabulary. NT chapter/verse numbering is
+    # stable across traditions, so these align cleanly. "Not synced" until the
+    # owner-fired first `nabu sync eng-web`.
+    - label: WEB (English)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:eng-web:mat
+        MARK: urn:nabu:eng-web:mrk
+        LUKE: urn:nabu:eng-web:luk
+        JOHN: urn:nabu:eng-web:jhn
+        ACTS: urn:nabu:eng-web:act
+        ROM: urn:nabu:eng-web:rom
+        1COR: urn:nabu:eng-web:1co
+        2COR: urn:nabu:eng-web:2co
+        GAL: urn:nabu:eng-web:gal
+        EPH: urn:nabu:eng-web:eph
+        PHIL: urn:nabu:eng-web:php
+        COL: urn:nabu:eng-web:col
+        1THESS: urn:nabu:eng-web:1th
+        2THESS: urn:nabu:eng-web:2th
+        1TIM: urn:nabu:eng-web:1ti
+        2TIM: urn:nabu:eng-web:2ti
+        TIT: urn:nabu:eng-web:tit
+        PHILEM: urn:nabu:eng-web:phm
+        HEB: urn:nabu:eng-web:heb
+        JAS: urn:nabu:eng-web:jas
+        1PET: urn:nabu:eng-web:1pe
+        2PET: urn:nabu:eng-web:2pe
+        1JOHN: urn:nabu:eng-web:1jn
+        2JOHN: urn:nabu:eng-web:2jn
+        3JOHN: urn:nabu:eng-web:3jn
+        JUDE: urn:nabu:eng-web:jud
+        REV: urn:nabu:eng-web:rev
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.
@@ -207,3 +246,28 @@ ot:
         MAL: urn:nabu:vulgate:mal
         1MA: urn:nabu:vulgate:1ma
         2MA: urn:nabu:vulgate:2ma
+    # P11-8: the World English Bible's OT books — the readable English witness
+    # beside the Septuagint and Vulgate. Versification honesty (the §10
+    # "whoever registers a witness owns the shared-citation claim" contract):
+    # WEB follows the HEBREW/Protestant numbering, which diverges from the LXX
+    # in places (Psalm numbering most of all; Jonah 1:17 ≈ Hebrew/LXX 2:1;
+    # Joel/Malachi chapter splits). So the map is DELIBERATELY conservative —
+    # Genesis plus the minor prophets whose chapter.verse is broadly stable
+    # (and the two the Vulgate OT already maps), giving three-way GEN/NAM/HAB/
+    # ZEP/HAG/ZEC/MAL and English-beside-Greek on JON/OBA. Where a number
+    # genuinely diverges the ref simply attests per-witness and renders
+    # honestly (never a fabricated pairing); Psalms and the deuterocanon are
+    # left out rather than mis-aligned. Extend from the minted urns after the
+    # owner-fired first sync (config-only). "Not synced" until then.
+    - label: WEB (English)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:eng-web:gen
+        JON: urn:nabu:eng-web:jon
+        OBA: urn:nabu:eng-web:oba
+        NAM: urn:nabu:eng-web:nam
+        HAB: urn:nabu:eng-web:hab
+        ZEP: urn:nabu:eng-web:zep
+        HAG: urn:nabu:eng-web:hag
+        ZEC: urn:nabu:eng-web:zec
+        MAL: urn:nabu:eng-web:mal

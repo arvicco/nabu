@@ -910,6 +910,41 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- align ranges / chapters (P11-8) ---------------------------------------
+
+  def test_align_chapter_renders_every_ref_compactly_with_a_witness_legend
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1]) }
+      assert_nil status
+      assert_match(/JON 1 — /, out, "the query heads the block")
+      assert_match(/witnesses:.*full.*partial/m, out, "a one-line legend, titles shown once")
+      # Every attested verse in document order, verse 1 before verse 2 before 10.
+      assert(out.index("JON 1.1") < out.index("JON 1.2"), "refs in document order")
+      assert(out.index("JON 1.2") < out.index("JON 1.10"), "numeric, not lexical, order")
+      assert_match(/full  greek verse 1/, out)
+      assert_match(/partial — not attested/, out, "per-ref attestation honesty")
+    end
+  end
+
+  def test_align_verse_range_renders_the_inclusive_slice
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "JON 1.3-1.5"]) }
+      assert_nil status
+      assert_match(/JON 1\.3/, out)
+      assert_match(/JON 1\.5/, out)
+      refute_match(/JON 1\.6/, out, "the range is inclusive and bounded")
+      refute_match(/JON 1\.2\b/, out)
+    end
+  end
+
+  def test_align_reversed_range_exits_one
+    with_range_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "JON 1.5-1.3"]) }
+      assert_equal 1, status
+      assert_match(/reversed range/, err)
+    end
+  end
+
   def test_help_align_documents_refs_work_and_examples
     out, _err, _status = run_cli(%w[help align])
     assert_match(/MARK 2\.3/, out, "a worked ref example")
@@ -1028,6 +1063,61 @@ class CLITest < Minitest::Test
           "citation" => "MARK 2.3",
           "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
         )
+      )
+    end
+  end
+
+  # A synced+indexed corpus for range/chapter align tests: two cts-verse
+  # witnesses over Jonah 1 — "full" attests vv. 1..10, "partial" only 1 and 3.
+  def range_registry_yaml
+    <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+    YAML
+  end
+
+  def with_range_corpus
+    Dir.mktmpdir("nabu-cli-range") do |root|
+      config = aligned_corpus_config(root, range_registry_yaml, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_range_witnesses(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_range_witnesses(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "open", enabled: true
+    )
+    seed_verse_book(catalog, source_id, "urn:nabu:src-a:jon", "ΙΩΝΑΣ", "grc",
+                    (1..10).map { |v| ["1.#{v}", "greek verse #{v}"] })
+    seed_verse_book(catalog, source_id, "urn:nabu:src-b:jon", "Jonas", "lat",
+                    [["1.1", "latin one"], ["1.3", "latin three"]])
+  end
+
+  def seed_verse_book(catalog, source_id, urn, title, lang, verses)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: title, language: lang,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    verses.each_with_index do |(tail, text), sequence|
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "#{urn}:#{tail}", sequence: sequence, language: lang,
+        text: text, text_normalized: text, content_sha256: "x", revision: 1,
+        withdrawn: false, annotations_json: "{}"
       )
     end
   end

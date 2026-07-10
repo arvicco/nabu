@@ -434,6 +434,96 @@ module Query
       assert_equal "attribution", witness.license_class
     end
 
+    # -- range / chapter queries (P11-8) -------------------------------------------------
+
+    # Two cts-verse witnesses over one book: one attests every verse, the other
+    # only some — so per-ref attestation honesty is exercised across the range.
+    RANGE_YAML = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+    YAML
+
+    def seed_jonah_chapter
+      registry = load_registry(RANGE_YAML)
+      # src-a: JON 1.1..1.16 (all sixteen); src-b: only 1.1 and 1.3.
+      seed_verse_document("urn:nabu:src-a:jon", language: "grc", title: "ΙΩΝΑΣ",
+                                                verses: (1..16).map { |v| ["1.#{v}", "greek verse #{v}"] })
+      seed_verse_document("urn:nabu:src-b:jon", language: "lat", title: "Jonas",
+                                                verses: [["1.1", "latin one"], ["1.3", "latin three"]])
+      reindex!(registry)
+      registry
+    end
+
+    def test_a_chapter_renders_every_attested_ref_in_document_order
+      registry = seed_jonah_chapter
+      result = align("JON 1", registry: registry)
+
+      assert_equal "ot", result.work
+      assert_equal "JON 1", result.query
+      assert_equal 16, result.groups.size, "every attested verse of the chapter"
+      refute result.truncated
+      assert_equal((1..16).map { |v| "JON 1.#{v}" }, result.groups.map(&:ref),
+                   "refs render in numeric (document) order, not lexical")
+      # Per-ref attestation honesty: verse 1 is in both, verse 2 only in src-a.
+      v1 = result.groups.first
+      assert_equal %i[ok ok], v1.witnesses.map(&:status)
+      v2 = result.groups[1]
+      assert_equal %i[ok no_match], v2.witnesses.map(&:status)
+    end
+
+    def test_a_verse_range_renders_the_inclusive_slice
+      registry = seed_jonah_chapter
+      result = align("JON 1.3-1.10", registry: registry)
+      assert_equal((3..10).map { |v| "JON 1.#{v}" }, result.groups.map(&:ref))
+      assert_equal 8, result.total
+    end
+
+    def test_a_reversed_range_raises_naming_the_endpoints
+      registry = seed_jonah_chapter
+      error = assert_raises(Nabu::Query::Align::Error) { align("JON 1.10-1.3", registry: registry) }
+      assert_match(/reversed range/, error.message)
+    end
+
+    def test_a_range_caps_at_the_ceiling_with_a_truncation_flag
+      registry = load_registry(<<~YAML)
+        ot:
+          witnesses:
+            - label: full
+              extractor: cts-verse
+              documents:
+                PSA: urn:nabu:src-a:psa
+      YAML
+      seed_verse_document("urn:nabu:src-a:psa", language: "grc", title: "ΨΑΛΜΟΙ",
+                                                verses: (1..205).map { |v| ["1.#{v}", "verse #{v}"] })
+      reindex!(registry)
+
+      result = align("PSA 1", registry: registry)
+      assert_equal 205, result.total
+      assert_equal Nabu::Query::Align::MAX_REFS, result.groups.size
+      assert result.truncated, "beyond the cap the range is truncated"
+    end
+
+    def test_a_chapter_with_no_attested_refs_raises_honestly
+      registry = seed_jonah_chapter
+      error = assert_raises(Nabu::Query::Align::Error) { align("JON 9", registry: registry) }
+      assert_match(/no attested refs/i, error.message)
+    end
+
+    def test_a_range_auto_resolves_the_only_attesting_work
+      # Two works; JON is attested only under ot — a bare range resolves it.
+      registry = seed_jonah_chapter
+      # (RANGE_YAML registers only ot; assert the resolution names it.)
+      assert_equal "ot", align("JON 1.1-1.2", registry: registry).work
+    end
+
     # -- rebuild safety (the packet's acceptance test) -----------------------------------
 
     def test_alignment_survives_a_rebuild_with_reminted_ids

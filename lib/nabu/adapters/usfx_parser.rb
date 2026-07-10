@@ -33,6 +33,16 @@ module Nabu
     # (ligatures, spaced punctuation — canonical means canonical), NFC at the
     # boundary.
     class UsfxParser
+      # Note-apparatus subtrees whose character data is NOT verse text:
+      # `<f>` footnotes, `<x>` cross-references, `<fe>` endnotes (WEB and other
+      # eBible.org editions carry these inline inside the verse; the Clementine
+      # Vulgate has none). Their text is editorial apparatus — folding it into
+      # the verse would corrupt the reading ("Now Yahweh's<f>…LORD…</f> word"
+      # → the footnote in the middle of Jonah 1:1). Inline formatting tags
+      # (`<w>`, `<q>`, `<p>`, `<add>`, `<nd>`…) wrap genuine verse text and are
+      # kept. Skipping is by subtree, so nested `<fr>`/`<ft>` go too.
+      NOTE_ELEMENTS = %w[f x fe].freeze
+
       # One book of the inventory pass: OSIS/Paratext code + display heading.
       Book = Data.define(:id, :heading)
 
@@ -71,7 +81,7 @@ module Nabu
       # at its <ve/> — and defensively at the next <v>/<c>/book boundary, so a
       # missing close never bleeds one verse's text into the next.
       def extract_book(path, book, urn, language, document)
-        state = { in_book: false, seen: false, chapter: nil, verse: nil, text: +"" }
+        state = { in_book: false, seen: false, chapter: nil, verse: nil, text: +"", note_depth: 0 }
         each_node(path) do |node|
           track_book(node, book, state)
           next unless state[:in_book]
@@ -98,18 +108,26 @@ module Nabu
           state[:verse] = node.attribute("id")
         in [Nokogiri::XML::Reader::TYPE_ELEMENT, "ve"] | [Nokogiri::XML::Reader::TYPE_END_ELEMENT, "book"]
           close_verse(state, &)
+        in [Nokogiri::XML::Reader::TYPE_ELEMENT, name] if NOTE_ELEMENTS.include?(name)
+          state[:note_depth] += 1 unless node.self_closing?
+        in [Nokogiri::XML::Reader::TYPE_END_ELEMENT, name] if NOTE_ELEMENTS.include?(name)
+          state[:note_depth] -= 1 if state[:note_depth].positive?
         in [Nokogiri::XML::Reader::TYPE_TEXT | Nokogiri::XML::Reader::TYPE_CDATA, _]
-          state[:text] << node.value if state[:verse]
+          state[:text] << node.value if state[:verse] && state[:note_depth].zero?
         else
           nil
         end
       end
 
+      # Close the open verse and reset per-verse state — including note_depth,
+      # a backstop so an unbalanced note tag can never leak apparatus across a
+      # verse boundary (notes always close within their verse).
       def close_verse(state)
         verse, chapter = state.values_at(:verse, :chapter)
         text = state[:text].split.join(" ")
         state[:verse] = nil
         state[:text] = +""
+        state[:note_depth] = 0
         yield("#{chapter}.#{verse}", text) if verse && chapter && !text.empty?
       end
 

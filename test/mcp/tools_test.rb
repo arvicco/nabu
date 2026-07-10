@@ -696,6 +696,63 @@ module MCP
       assert_match(/no corpus/i, text_of(result))
     end
 
+    # -- nabu_align ranges / chapters (P11-8) -----------------------------------
+
+    RANGE_REGISTRY_YAML = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+    YAML
+
+    def seed_range_corpus
+      source = Nabu::Store::Source.create(
+        slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "open", enabled: true
+      )
+      full = make_document(source: source, urn: "urn:nabu:src-a:jon", title: "Jonah", language: "grc")
+      (1..10).each { |v| make_passage(full, urn: "#{full.urn}:1.#{v}", text: "greek verse #{v}", sequence: v - 1) }
+      partial = make_document(source: source, urn: "urn:nabu:src-b:jon", title: "Jonas", language: "lat")
+      make_passage(partial, urn: "#{partial.urn}:1.1", text: "latin one", sequence: 0)
+      make_passage(partial, urn: "#{partial.urn}:1.3", text: "latin three", sequence: 1, language: "lat")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: align_registry(RANGE_REGISTRY_YAML))
+    end
+
+    def test_align_chapter_returns_a_refs_array_in_document_order
+      seed_range_corpus
+      body = payload(align_tools(align_registry(RANGE_REGISTRY_YAML)).call("nabu_align", { "ref" => "JON 1" }))
+
+      assert_equal "alignment_range", body.fetch("type")
+      assert_equal "JON 1", body.fetch("query")
+      assert_equal 10, body.fetch("total_refs")
+      assert_equal((1..10).map { |v| "JON 1.#{v}" }, body.fetch("refs").map { |r| r.fetch("ref") })
+      first = body.fetch("refs").first.fetch("witnesses")
+      assert_equal(%w[ok ok], first.map { |w| w.fetch("status") }, "verse 1 attested by both")
+      second = body.fetch("refs")[1].fetch("witnesses")
+      assert_equal(%w[ok no_match], second.map { |w| w.fetch("status") }, "verse 2 only in full")
+    end
+
+    def test_align_range_is_inclusive_and_carries_a_cap_accounting
+      seed_range_corpus
+      body = payload(align_tools(align_registry(RANGE_REGISTRY_YAML)).call("nabu_align", { "ref" => "JON 1.3-1.5" }))
+      assert_equal((3..5).map { |v| "JON 1.#{v}" }, body.fetch("refs").map { |r| r.fetch("ref") })
+      refute body.fetch("truncated")
+      assert_equal 3, body.fetch("shown_refs")
+    end
+
+    def test_align_reversed_range_is_a_tool_error
+      seed_range_corpus
+      result = align_tools(align_registry(RANGE_REGISTRY_YAML)).call("nabu_align", { "ref" => "JON 1.5-1.3" })
+      assert result[:isError]
+      assert_match(/reversed range/, text_of(result))
+    end
+
     # -- read-only enforcement ------------------------------------------------------
 
     def test_readonly_connection_refuses_writes

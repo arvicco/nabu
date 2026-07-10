@@ -71,6 +71,22 @@ class UsfxParserTest < Minitest::Test
     assert_equal FIXTURE, document.canonical_path
   end
 
+  # -- note apparatus (WEB and other footnoted editions) ---------------------
+
+  # WEB carries <f> footnotes inline inside the verse; their text is editorial
+  # apparatus, not scripture, and must not fold into the reading. Jonah 1:1
+  # upstream is "Now Yahweh’s<f caller="+">…rendered "LORD"…</f> word came…".
+  ENG_WEB = File.join(Nabu::TestSupport.fixtures("eng-web"), "eng-web.usfx.xml")
+
+  def test_parse_skips_footnote_apparatus_from_the_verse_text
+    document = parser.parse(ENG_WEB, book: "JON", urn: "urn:nabu:eng-web:jon",
+                                     language: "eng", title: "Jonah")
+    jon11 = document.first
+    assert_equal "Now Yahweh’s word came to Jonah the son of Amittai, saying,", jon11.text
+    refute_includes jon11.text, "LORD", "footnote apparatus must not bleed into the verse"
+    assert(document.all? { |p| p.text.unicode_normalized?(:nfc) })
+  end
+
   def test_parse_of_an_absent_book_raises_parse_error
     error = assert_raises(Nabu::ParseError) do
       parse_book("PSA", urn: "urn:nabu:vulgate:psa", title: "Psalmi")

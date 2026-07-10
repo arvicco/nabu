@@ -248,12 +248,14 @@ class AlignmentRegistryTest < Minitest::Test
                     urn:nabu:proiel:armenian-nt urn:nabu:proiel:marianus],
                  work.witnesses.take(5).map(&:document_urn),
                  "the five-way NT flagship (P11-3) is the shipped proof"
-    assert_equal ["sblgnt", "vulgate (Clementine)"], work.witnesses.drop(5).map(&:label),
-                 "P11-5 adds the SBLGNT and Vulgate NT witnesses"
+    assert_equal ["sblgnt", "vulgate (Clementine)", "WEB (English)"], work.witnesses.drop(5).map(&:label),
+                 "P11-5 adds the SBLGNT and Vulgate NT witnesses; P11-8 the WEB English witness"
     assert_includes work.witnesses[5].document_urns, "urn:nabu:sblgnt:mark"
     assert_equal "MARK", work.witnesses[5].book_for("urn:nabu:sblgnt:mark")
     assert_includes work.witnesses[6].document_urns, "urn:nabu:vulgate:mrk"
     assert_equal "MARK", work.witnesses[6].book_for("urn:nabu:vulgate:mrk")
+    assert_includes work.witnesses[7].document_urns, "urn:nabu:eng-web:mrk"
+    assert_equal "MARK", work.witnesses[7].book_for("urn:nabu:eng-web:mrk")
   end
 
   def test_shipped_registry_loads_the_ot_work
@@ -261,12 +263,14 @@ class AlignmentRegistryTest < Minitest::Test
     work = Nabu::AlignmentRegistry.load(path).work("ot")
     refute_nil work, "config/alignments.yml must register the ot work (P11-5)"
     labels = work.witnesses.map(&:label)
-    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)"], labels
+    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)"], labels
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
-    vulgate = work.witnesses.last
+    vulgate = work.witnesses[1]
     assert_equal "GEN", vulgate.book_for("urn:nabu:vulgate:gen")
+    web = work.witnesses.last
+    assert_equal "JON", web.book_for("urn:nabu:eng-web:jon"), "P11-8 adds the WEB English OT witness"
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
