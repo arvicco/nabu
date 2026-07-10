@@ -2259,7 +2259,7 @@ stubbed peek, but a real Romance header is the CLAUDE.md-preferred evidence.
 - Registered iswoc `enabled: false` / `sync_policy: frozen`; 02-sources
   row 34 → READY. First real sync remains owner-fired.
 
-## P12-2 · ASPR adapter — the OE poetry corpus  [tier: opus] [status: pending] [deps: P12-1]
+## P12-2 · ASPR adapter — the OE poetry corpus  [tier: opus] [status: done] [deps: P12-1]
 The survey's pick #2 and the only fully-open OE: the complete six-volume
 Krapp & Dobbie Anglo-Saxon Poetic Records as ONE 2.2 MB TEI-P5 file on the
 Oxford Text Archive (OTA 3009) — Beowulf, Junius, Vercelli, Exeter Book,
@@ -2276,6 +2276,180 @@ owner approval gate.
 Phase B: small new TEI family (own class + tests first), one document per
 poem, urn:nabu:aspr:<poem-slug>:<line-ordinal>, registry enabled:false,
 02-sources row, worklog. Suite+lint green. One commit, not pushed.
+
+### Phase A findings (2026-07-10) — fixture plan OWNER-APPROVED 2026-07-10 ("Fine as-is, proceed")
+
+**URL + auth + license re-verified (page-level, no re-download beyond the
+survey's one sanctioned sample, which is still in scratch):**
+- Download URL (DSpace bitstream, no handle-page scrape needed):
+  `https://ota.bodleian.ox.ac.uk/repository/xmlui/bitstream/handle/20.500.12024/3009/3009.xml`
+- HEAD → `HTTP/1.1 200 OK`, **no auth** (a JSESSIONID cookie is set but access
+  is granted anonymously), `Content-Type: text/xml;charset=utf-8`,
+  `Content-Length: 2214065` (matches survey exactly), `Last-Modified: Fri,
+  19 Jul 2019 12:07:26 GMT`, `Accept`-less server (Range NOT honoured — the
+  server returns the full body, so the "small ranged read" degraded to the
+  survey's one full-file sample; retained read-only in scratch, sha256
+  `4cf370226d9329e846eceb78fdaa987735113a02ef998980d6070664775ceed5`).
+- License, read verbatim from the in-file teiHeader `<availability
+  status="free">`: `<licence target="http://creativecommons.org/licenses/by-sa/3.0/">
+  Distributed by the University of Oxford under a Creative Commons
+  Attribution-ShareAlike 3.0 Unported License</licence>` → **`license_class:
+  attribution`** (MCP-surface-safe). Still stands.
+
+**Structure map (precise, from the full file):**
+- `<TEI>/<teiHeader>` (3,999 bytes, compact) then `<text><body>` holding
+  **349 flat `<div rend="linenumber" xml:id="…">`, NO nesting** (349 `</div>`,
+  0 nested). Each div = one poem: `<head>` (title) + optional `<bibl>` (Krapp/
+  Dobbie ASPR ref) + a flat run of `<l>` verse lines. 30,550 `<l>` total;
+  **0 `<l>` outside a div**.
+- Line markup: `<caesura/>` mid-line (30,299), `<unclear>` spans (2,613),
+  `<foreign xml:lang="rune">` runic glosses (124), `<gap/>` lacunae (38),
+  `<g>` glyphs (73). **No `<l>/@n` anywhere** (survey confirmed) — but the div
+  carries `rend="linenumber"` and the per-div `<l>` ordinal **equals the
+  canonical printed ASPR line number**: verified Beowulf div = 3,182 `<l>`
+  (ASPR Beowulf is 3182 ll.) and Judith = 349 `<l>` (ASPR Judith is 349 ll.).
+  So the ordinal citation here is *canonical*, not honest-but-noncanonical the
+  way GRETIL prose ordinals are.
+- The survey's "374 texts" = `<head>` count; the extra 25 over 349 divs are
+  **duplicate `<head>` elements** in single poems (Meters of Boethius A6.10–31,
+  Psalm fragments A24.x each repeat their title twice) — NOT multiple poems per
+  div. **div == poem, cleanly.** Parser takes the *first* `<head>` as title.
+
+**Citation design — `<poem-slug>` = the div `xml:id` (Cameron number), verbatim:**
+- The `xml:id` values are the canonical **Cameron/DOE-Corpus record numbers**
+  (A = poetry section): A1 Junius, A2 Vercelli, A3 Exeter, A4 Beowulf+Judith,
+  A5/A6 Paris Psalter + Meters, A12 Rune Poem, A32 Cædmon's Hymn, A33 Bede's
+  Death Song, A43 Metrical Charms, … up to A-values in the 40s. **All 349 are
+  unique** (verified) → urn uniqueness for free.
+- **Title-slugs would collide and are rejected:** A43.5 and A43.10 are *both*
+  `<head>For Loss of Cattle`; Cædmon's Hymn ships as A32.1 (Northumbrian) +
+  A32.2 (West-Saxon) and Bede's Death Song as A33.1/.2/.3 (three dialect
+  witnesses) — the survey's "separate texts" point. The stable, collision-free,
+  scholar-cited id is the Cameron number, so the frozen mint is
+  `urn:nabu:aspr:<xml:id>` (kept verbatim incl. case + dots, the GRETIL
+  "literal upstream slug, no re-slugification" rule), title carried in
+  metadata. Passage urn = `<doc-urn>:<line-ordinal>` (1-based `<l>` count),
+  e.g. **`urn:nabu:aspr:A4.1:1`** = Beowulf line 1 "Hwæt! We Gardena…".
+
+**Fetch path — DECISION: a sibling `Nabu::FileFetch`, NOT extending ZipFetch.**
+- Shared contract to honour either way: conditional GET (`If-Modified-Since`
+  replayed from a `.file-fetch.json` state file storing Last-Modified + sha256
+  + url), sha256 body pin, attic retention with a GitFetch-format manifest, and
+  the `doomed_paths` guard hook — so the adapter base's attic rediscovery and
+  the mass-deletion breaker work unchanged.
+- Why a sibling, not a branch in ZipFetch: ZipFetch is irreducibly zip-shaped —
+  `unpack!` shells to `unzip`, `tree_root` picks the single top dir, the staged
+  tree is a *directory of many files*, and `doomed = live_relpaths -
+  staged_relpaths` is a multi-file set-difference. A single 2.2 MB XML file has
+  none of that: the "tree" is one file, the doomed set is essentially always
+  empty (a single-file source's only "deletion" is the whole file 404-ing,
+  which aborts the fetch — a revised file is an *update*, not an attic-worthy
+  deletion, exactly as git adapters don't attic every changed file). Threading
+  an `is_zip?` mode through unpack!/tree_root/copy_tree would muddy a clean,
+  heavily-documented class and violate "one thing per class / no clever
+  dual-purpose code." FileFetch is smaller and single-purpose: GET → sha →
+  write file → write state; attic path present for contract symmetry but inert
+  in the single-file case. It **reuses `ZipFetch.default_http`** (the
+  vendored-cert Faraday) as-is — the cert-hardened connection is genuine shared
+  infra, one method reference, not dual-mode logic. (OTA's nginx served fine on
+  system certs; reusing the hardened store is belt-and-braces.)
+- Health probe: OTA has no git repo and no per-project metadata.json, so
+  neither `:git` nor `:http_zip` fits. Phase B adds a minimal HEAD-only
+  `remote_probe_strategy` (or reuses the `:http_zip` HEAD target minus the
+  metadata GET) pointed at the bitstream URL for Last-Modified drift; license
+  drift is a re-fetch concern (license lives in-file). Small, flagged.
+- `sync_policy: manual`, `enabled: false` (per packet). Effectively frozen
+  upstream (Last-Modified 2019, header normalised 2010) — manual is honest.
+
+**Parser family shape (the Vulgate single-file-many-docs precedent):**
+- New `Nabu::Adapters::AsprParser` (own class + tests first). Mirrors
+  UsfxParser: `#texts(path)` streams once → inventory `[{id: xml:id, title:
+  first <head>}]` for `discover`; `#parse(path, div_id:, urn:, language:
+  "ang", title:)` re-streams and extracts the one matching div. Sole Nokogiri
+  entry point = `XML::Reader` (house streaming rule; 2.2 MB). One passage per
+  `<l>`, ordinal 1-based, `<caesura/>` kept as a space boundary, `<unclear>`/
+  `<foreign>` text kept inline (canonical), `<gap/>` → nothing, `<g>` glyph
+  kept; NFC at the boundary. Adapter mints `urn:nabu:aspr:<xml:id>`, discover
+  re-reads the one file (Vulgate pattern), 349 documents.
+
+**FIXTURE PLAN — `test/fixtures/aspr/3009.xml` (one trimmed valid TEI file,
+≈13–14 KB, extracted from the scratch sample; owner may trim the tail):**
+- **Extraction method (NOT raw byte ranges — those would split multibyte
+  æ/ð/þ and tag boundaries → invalid XML):** a Phase-B selection script reads
+  the retained scratch `3009.xml`, emits the teiHeader verbatim + `<text>\n
+  <body>`, then for each selected `xml:id` writes the div verbatim (complete
+  divs) or head+bibl+first-N-`<l>`+`</div>` (the Beowulf trim), then
+  `</body></text></TEI>`. Deterministic; `fixtures/aspr/README.md` records
+  retrieval date, URL, source sha256, and the exact div-id + trim list. No new
+  network fetch needed — the scratch sample is the real upstream bytes.
+- **Core slices (the packet's "2–3 poem slices incl. Beowulf"):**
+  1. **A4.1 Beowulf** — head + bibl + `<l>` lines **1–24 contiguous** (ordinals
+     genuine), then `</div>`. Demo line `urn:nabu:aspr:A4.1:1` = "Hwæt! We
+     Gardena // in geardagum,". Covers `<caesura>` (every line) + `<unclear>`
+     (lines 4,6,15,20,21). ≈2 KB.
+  2. **A32.1 + A32.2 Cædmon's Hymn** (Northumbrian + West-Saxon, 9 `<l>` each,
+     complete) — the dialect-witness-as-separate-document design; distinct
+     Cameron ids, near-identical text. ≈1.5 KB.
+  3. **A43.5 + A43.10 "For Loss of Cattle"** (16 + 13 `<l>`, complete) — the
+     **collision proof**: identical `<head>` text, distinct xml:id → asserts
+     `urn:nabu:aspr:A43.5:1` ≠ `urn:nabu:aspr:A43.10:1` where a title-slug
+     would clash. ≈2.8 KB.
+- **Feature-coverage micro-divs (real complete divs, element regression tests;
+  each <1 KB — owner may drop if "2–3 docs" is strict):**
+  4. **A3.34.15** (Exeter Riddle, 2 `<l>`) — `<foreign xml:lang="rune">`.
+  5. **A3.34.22** (Exeter Riddle, 5 `<l>`) — `<gap/>` lacuna.
+  6. **A16** (2 `<l>`) — `<g>` glyph.
+- Total ≈11 documents / ≈90 lines / ≈13–14 KB, structurally intact, covering
+  every element the parser must handle (`head bibl l caesura unclear foreign
+  gap g`), plus the Beowulf demo line and the two collision families.
+
+**STOP — owner approval gate. No fixture written; no Phase B code.**
+
+### Phase B findings (2026-07-10, shipped — one commit, not pushed)
+
+Executed exactly per the approved plan; deviations listed last.
+
+- **Fixture** `test/fixtures/aspr/3009.xml` (12,015 B, well-formed, NFC):
+  teiHeader verbatim + 8 of 349 divs in upstream file order — A3.34.15
+  (Riddles 75, runes), A3.34.22 (Riddles 82, `<gap/>`), **A4.1 Beowulf
+  head+bibl+lines 1–24**, A16 (`<g>` glyphs), A32.1/A32.2 (Cædmon's Hymn
+  dialect pair), A43.5/A43.10 (the "For Loss of Cattle" title-collision
+  pair) — extracted mechanically by div-id from the retained Phase A scratch
+  sample (sha256 recorded in the fixture README + manifest.yml). Fixture
+  archaeology finds: A3.34.22 carries a **div-level `<gap/>` BETWEEN
+  lines** (must not shift ordinals — regression-tested), and Nokogiri's
+  Reader reports whitespace-only text nodes as TYPE_SIGNIFICANT_WHITESPACE
+  (dropping them fused sibling runes: "DNLH." — captured now, so
+  "D N L H."; the collapse keeps `dom<g>ę</g>…` joins tight).
+- **AsprParser** (7th family, the smallest; UsfxParser shape): `#texts`
+  inventory / `#parse(path, div_id:, …)` one-poem extraction, sole entry
+  point XML::Reader, one passage per `<l>` cited by 1-based ordinal (==
+  printed ASPR line number), `<unclear>`/`<foreign>`/`<g>` text kept inline,
+  head/bibl never leak, ParseError on absent div / no lines / malformed XML.
+- **Nabu::FileFetch** (the argued ZipFetch sibling): conditional GET
+  replaying the stored Last-Modified (304 → untouched; wiped tree →
+  unconditional), sha256 body pin in `.file-fetch.json`, guard-before-
+  mutation, attic with GitFetch-format manifest — the one genuine doomed
+  case (a stale differently-named previous download) tested; a changed body
+  is an update, never atticked. Reuses `ZipFetch.default_http` by reference.
+- **Aspr adapter**: one document per poem div, `urn:nabu:aspr:<Cameron>`
+  frozen; fetch via FileFetch wrapped in FetchReport/FetchError; probe rides
+  `:http_zip` with `HttpProbeTarget` gaining an optional `state_file`
+  member (default `.zip-fetch.json` — ORACC unchanged) and a nil
+  `metadata_url` now short-circuiting the license row to honest `unchecked`
+  with NO GET issued (the license lives in-file). Registry `aspr`
+  `enabled: false`, `sync_policy: manual`.
+- **Tests**: 13 parser + 12 FileFetch + 18 adapter (incl. the shared
+  conformance suite: two-parse urn stability, NFC, uniqueness) + 2 probe.
+  Suite 1338 runs / 18,106 assertions green; rubocop 181 files clean.
+- **Deviations from the approved plan, openly:** (1) fixture is ~12.0 KB vs
+  the estimated 13–14 KB (estimate was high; content scope exactly as
+  approved). (2) FileFetch's attic is NOT inert-for-symmetry as the Phase A
+  text sketched — it covers the real FILENAME-migration case (doomed =
+  live files other than the target/state/attic), which is stronger and
+  contract-true. (3) The probe reuses `:http_zip` (per the plan's "or"
+  branch) rather than adding a new strategy symbol — two surgical changes
+  in remote_probe.rb, both tested.
 
 ## P12-3 · Bosworth-Toller onto the reference shelf  [tier: opus] [status: pending] [deps: P12-2]
 The OE dictionary (survey: official LINDAT dump, hdl 11234/1-3532,

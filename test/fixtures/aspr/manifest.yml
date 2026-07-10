@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The single file is a documented TRIM (whole: false) of the 2.2 MB OTA 3009
+# ASPR TEI: teiHeader verbatim + 8 of 349 poem divs (Beowulf cut to its first
+# 24 lines). A fresh GET returns the full file, so it is fetched for
+# URL-liveness only, never byte-compared. adapter_test is null: the aspr
+# adapter test asserts trimmed div/line counts an untrimmed upstream file
+# would false-fail. Re-apply the README trim after any refresh.
+source: aspr
+adapter_test: null
+retrieved: 2026-07-10
+files:
+  - path: 3009.xml
+    url: https://ota.bodleian.ox.ac.uk/repository/xmlui/bitstream/handle/20.500.12024/3009/3009.xml
+    whole: false
+    trim: teiHeader verbatim + <body> with 8 of 349 divs in upstream order (A3.34.15, A3.34.22, A4.1 head+bibl+first 24 of 3182 l, A16, A32.1, A32.2, A43.5, A43.10) + closing tags; 2,214,065 B -> 12,015 B, well-formed

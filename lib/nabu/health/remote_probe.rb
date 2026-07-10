@@ -335,7 +335,7 @@ module Nabu
       end
 
       def probe_zip(slug, target)
-        stored = stored_last_modified(slug, target.state_subdir)
+        stored = stored_last_modified(slug, target)
         liveness, last_modified = head_liveness(target.zip_url)
         ZipProbe.new(
           url: target.zip_url, label: target.label, liveness: liveness,
@@ -413,6 +413,9 @@ module Nabu
       def zip_repo_license(probe, row)
         return unchecked("upstream unreachable") unless probe.liveness.status == :alive
         return unchecked("never synced") unless row
+        # No metadata endpoint at all (ASPR: the license lives inside the
+        # fetched file) → honestly unchecked, no GET issued.
+        return unchecked("no license metadata") unless probe.metadata_url
 
         license = fetch_license_field(probe.metadata_url)
         return unchecked("no license metadata") unless license
@@ -430,13 +433,15 @@ module Nabu
         nil
       end
 
-      # The stored Last-Modified pin for one project:
-      # <canonical_dir>/<source-slug>/<project>/.zip-fetch.json. Missing dir /
+      # The stored Last-Modified pin for one probe target:
+      # <canonical_dir>/<source-slug>/<state_subdir>/<state_file> — the
+      # target names its state file (.zip-fetch.json for zip units,
+      # .file-fetch.json for a FileFetch single-file source). Missing dir /
       # file / key (never synced) → nil.
-      def stored_last_modified(slug, subdir)
+      def stored_last_modified(slug, target)
         return nil unless @canonical_dir
 
-        path = File.join(@canonical_dir, slug, subdir, Nabu::ZipFetch::STATE_FILE)
+        path = File.join(@canonical_dir, slug, target.state_subdir, target.state_file)
         return nil unless File.file?(path)
 
         JSON.parse(File.read(path))["last_modified"]
