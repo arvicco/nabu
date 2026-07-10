@@ -2004,3 +2004,40 @@ skipped-by-rule / unrecognized) at the seam, wired through the Outcome and a
 proof (parse-only, live db): oracc `+407 added ~0 updated =6469 skipped !0
 errored` (170 → 0 quarantines), gretil recovers the two strays with ~0
 updated. Verify runs clean read-only over the full live catalog.
+
+## P11-8 · Readable aligned scripture: align ranges + English witness  [tier: opus] [status: in-progress] [deps: P11-5, P11-7]
+Owner-requested (2026-07-10, after eyeballing `show urn:nabu:vulgate:jon
+--parallel` and hitting the CTS-sibling wall). Two halves:
+
+1. **Range/chapter support for `align`** — `align "JON 1.1-1.16"` (verse
+   range, same-book) and `align "JON 1"` (whole chapter) render every ref
+   in document order, each with its witnesses grouped per the existing
+   single-ref layout (compact: ref header + witness lines; suppress
+   repeated witness titles). Honest handling of refs where witnesses
+   differ in attestation (per-ref counts, the existing not-attested
+   rendering). Same grammar in MCP nabu_align (range/chapter args or ref
+   string — follow the CLI). Guard: cap rendered refs (e.g. 200) with an
+   honest truncation note, mirroring nabu_define's cap style. This also
+   pays out for the future OE Mark witness.
+2. **English witness (World English Bible or sibling PD English)** — the
+   open-bibles repo already vendored for vulgate carries PD English
+   bibles; scout IN-REPO (canonical checkout / pinned sha — page-level
+   raw reads only if the local clone lacks it), verify the license row
+   verbatim (expect Public Domain like lat-clementine), confirm USFX
+   format (UsfxParser reuse — zero new parser), pick the edition (WEB
+   preferred: modern PD, complete OT+NT+deuterocanon coverage vs KJV
+   licensing quirks in the UK — argue briefly). New source `eng-web`
+   (or matching slug), enabled:false, owner-fired sync; registry entries:
+   nt + ot works gain the eng witness (documents: map per P11-5 pattern).
+   FIXTURE GATE: this repo's fixture plan was already owner-approved for
+   vulgate (P11-5, same repo, same pinned sha, same PD assertion
+   mechanism); trimming 2-3 book slices of the chosen English edition
+   from the SAME repo under the SAME approval is in-scope — note it in
+   the fixture README; do NOT fetch anything outside the pinned repo.
+   Cosmetic rider: the `--parallel` error hint ("is translations: true
+   set…") is misleading for non-CTS sources — mention `align` when the
+   work has hub registry entries.
+Acceptance: `align "JON 1"` renders LXX ↔ Vulgate chapter-wise from
+fixtures (and live read-only demo); eng witness READY awaiting owner
+sync; suite+lint green; docs (mcp.md nabu_align args, backlog done,
+worklog sha —); one commit, not pushed.
