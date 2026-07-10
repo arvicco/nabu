@@ -118,7 +118,7 @@ class EngWebTest < Minitest::Test
     entry = registry["eng-web"]
     refute_nil entry, "eng-web must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::EngWeb, entry.adapter_class
-    refute entry.enabled, "eng-web stays enabled: false until the owner-fired first sync is verified"
+    assert entry.enabled, "eng-web is live (owner sign-off 2026-07-10 after first sync + eyeball)"
     assert_equal Nabu::Adapters::EngWeb.manifest, entry.manifest
   end
 
