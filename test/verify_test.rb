@@ -11,6 +11,22 @@ require "fileutils"
 # The catalog is seeded through Rebuild off a TestAdapter corpus (the reference
 # case whose DocumentRef#id IS the document urn); each test then perturbs
 # canonical/ and asserts exactly what Verify reports.
+
+# A TestAdapter whose parse DECLINES one ref by rule (Nabu::DocumentSkipped) —
+# the P11-7 fix-3 shape. Verify must skip it, never crash the run (the regression
+# below). Resolved by the registry via Object.const_get, so top-level.
+class SkippingVerifyAdapter < TestAdapter
+  ODYSSEY_URN = "urn:nabu:test_adapter:two"
+
+  def parse(document_ref)
+    if document_ref.id == ODYSSEY_URN
+      raise Nabu::DocumentSkipped.new("catalog-only skeleton", reason: "catalog-only (no content)")
+    end
+
+    super
+  end
+end
+
 class VerifyTest < Minitest::Test
   ILIAD = "Iliad\nμῆνιν\nἄειδε\n"
   ODYSSEY = "Odyssey\nἄνδρα\n"
@@ -128,6 +144,79 @@ class VerifyTest < Minitest::Test
     assert_equal %w[corpus], result.outcomes.map(&:slug)
     assert_equal %w[ghost], result.skips.map(&:slug)
     assert_equal :no_canonical, result.skips.fetch(0).reason
+  end
+
+  # -- P11-7 fix 3 regression: a DocumentSkipped ref must not crash verify ---
+
+  # The oracc catalog-only skeletons now raise Nabu::DocumentSkipped from parse;
+  # Verify#reparse (the passage path) must skip them, not let the signal abort
+  # the whole run (the same failure mode fix 2 closed for dictionaries — caught
+  # live by the full-catalog verify, not the unit suite, so pinned here).
+  def test_document_skipped_ref_is_skipped_not_a_crash
+    write_sources(<<~YAML)
+      corpus:
+        adapter: SkippingVerifyAdapter
+        enabled: true
+    YAML
+    Nabu::Rebuild.new(config: config, registry: registry).run # seeds only Iliad
+
+    result = verify # must COMPLETE (no NoMethodError/DocumentSkipped escaping)
+
+    assert result.clean?
+    outcome = result.outcomes.fetch(0)
+    assert_equal "corpus", outcome.slug
+    assert_equal 1, outcome.verified # Iliad verified; the skipped Odyssey names no row
+  end
+
+  # -- P11-7 fix 2: dictionary sources verify instead of crashing the run ----
+
+  # Verify#reparse called document.urn on a Nabu::DictionaryDocument (no such
+  # method); the crash aborted the ENTIRE verify run, leaving every source after
+  # lexica unchecked. Verify must now route dictionary sources to entry-level
+  # verification and complete, reporting BOTH kinds.
+  def test_verify_completes_over_both_passage_and_dictionary_sources
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+        enabled: true
+    YAML
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
+    Nabu::Rebuild.new(config: config, registry: registry).run # seed both kinds
+
+    result = verify
+
+    assert result.clean?, "both a passage source and a dictionary source verify clean"
+    slugs = result.outcomes.map(&:slug)
+    assert_includes slugs, "corpus"
+    assert_includes slugs, "lexica"
+    lexica = result.outcomes.find { |outcome| outcome.slug == "lexica" }
+    assert_operator lexica.verified, :>, 0, "dictionary entries must be verified, not skipped"
+    assert_predicate lexica, :ok?
+  end
+
+  def test_verify_flags_a_tampered_dictionary_entry
+    write_sources(<<~YAML)
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+        enabled: true
+    YAML
+    lexica_dir = File.join(@canonical, "lexica")
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), lexica_dir)
+    Nabu::Rebuild.new(config: config, registry: registry).run
+    # Corrupt the stored hash of one entry: verify must catch the divergence.
+    with_catalog do |db|
+      db[:dictionary_entries].where(entry_id: "n67485").update(content_sha256: "tampered")
+    end
+
+    result = verify
+
+    refute result.clean?
+    issue = result.issues.find { |i| i.urn == "urn:nabu:dict:lsj:n67485" }
+    refute_nil issue
+    assert_equal :mismatch, issue.kind
   end
 
   # -- helpers -------------------------------------------------------------

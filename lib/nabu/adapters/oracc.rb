@@ -134,6 +134,29 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
+      # P11-7 discovery census: per in-scope project whose tree is present,
+      # count the 0-byte catalog-only skeletons discover skips (skipped-by-rule)
+      # and flag any project whose tree exists but yields NO corpusjson at all
+      # (unrecognized — the nested-root/unpack signature fix 1 resolves, kept as
+      # a loud guard against its recurrence). The no-content skeletons that DO
+      # parse-skip are counted by the loader, not here. Cheap: Dir globs + 0-byte
+      # stats, no JSON read.
+      def discovery_skips(workdir)
+        skipped = 0
+        notes = []
+        PROJECTS.each do |project|
+          next unless Dir.exist?(File.join(workdir, slug(project)))
+
+          files = Dir.glob(File.join(project_dir(workdir, project), "corpusjson", "*.json"))
+          if files.empty?
+            notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            next
+          end
+          skipped += files.count { |path| File.empty?(path) }
+        end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
+      end
+
       # Delegate to the OraccJsonParser with the title discover resolved from
       # the catalogue. No language: the parser derives the per-text primary
       # language from the data itself.
@@ -169,6 +192,24 @@ module Nabu
 
       def slug(project) = project.tr("/", "-")
 
+      # The directory that actually holds this project's corpusjson/ (and its
+      # metadata.json/catalogue.json), at EITHER depth (P11-7 the headline):
+      # top-level projects unpack to <workdir>/<slug>/, but SUBPROJECT zips
+      # (saao/saa01, rinap/rinap1) unpack with a NESTED ROOT —
+      # <workdir>/saao-saa01/saa01/corpusjson — so discover looking only at
+      # <slug>/corpusjson silently ingested 0 of their 361 texts. Prefer the
+      # top level; fall back to the subproject's last path segment (the nested
+      # root the zip carries). Returns the base dir unchanged when neither holds
+      # corpusjson (never fetched, or damaged) — the caller yields no refs and
+      # the discovery accounting renders that loudly.
+      def project_dir(workdir, project)
+        base = File.join(workdir, slug(project))
+        return base if Dir.exist?(File.join(base, "corpusjson"))
+
+        nested = File.join(base, project.split("/").last)
+        Dir.exist?(File.join(nested, "corpusjson")) ? nested : base
+      end
+
       # The zip URL for a project — split out so tests could repoint a
       # singleton, though the house pattern here is WebMock stubs.
       def zip_url(project) = "#{ZIP_BASE_URL}/#{slug(project)}.zip"
@@ -196,7 +237,7 @@ module Nabu
       # will skip. Attic activity rides along as in the git adapters.
       def fetch_notes(workdir, fetches, shas)
         notes = shas.map do |project, sha|
-          "#{slug(project)}=#{sha[0, 12]} (#{project_counts(File.join(workdir, slug(project)))})"
+          "#{slug(project)}=#{sha[0, 12]} (#{project_counts(project_dir(workdir, project))})"
         end.join(" ")
         atticked = fetches.values.sum { |fetch| fetch.atticked.size }
         atticked.positive? ? "#{notes} · atticked #{atticked} upstream-deleted file(s)" : notes
@@ -214,7 +255,7 @@ module Nabu
       end
 
       def project_refs(workdir, project)
-        dir = File.join(workdir, slug(project))
+        dir = project_dir(workdir, project)
         return [] unless Dir.exist?(dir)
 
         check_license!(dir, project)

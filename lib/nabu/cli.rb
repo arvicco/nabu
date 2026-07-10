@@ -1145,6 +1145,7 @@ module Nabu
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
         say format_sync_outcome(outcome)
+        print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
       end
 
@@ -1158,7 +1159,10 @@ module Nabu
 
         results.each do |slug, result|
           say("  #{sync_all_line(slug, result)}")
-          print_sync_warnings(result) if result.is_a?(Nabu::SyncRunner::Outcome)
+          if result.is_a?(Nabu::SyncRunner::Outcome)
+            print_discovery_accounting(result)
+            print_sync_warnings(result)
+          end
         end
       end
 
@@ -1173,6 +1177,26 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # P11-7 discovery accounting: classify every content-pattern file
+      # selected / skipped-by-rule / unrecognized, combining the loader's fate
+      # of discovered refs (loaded → selected; parse-skipped → skipped-by-rule;
+      # quarantined → unrecognized) with the adapter's discovery census (0-byte
+      # skeletons, non-editions → skipped-by-rule; a tree with no ingestible
+      # content → unrecognized). unrecognized ≥ 1 is rendered loudly, with its
+      # notes, so a silent-ingestion gap can never hide again.
+      def print_discovery_accounting(outcome)
+        report = outcome.load_report
+        discovery = outcome.discovery
+        return unless report && discovery
+
+        selected = report.added + report.updated + report.skipped
+        skipped = report.skipped_by_rule + discovery.skipped_by_rule
+        unrecognized = report.errored + discovery.unrecognized
+        say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
+            "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
+        discovery.notes.each { |note| say("  ! #{note}", :yellow) }
       end
 
       def format_sync_outcome(outcome)
@@ -1216,7 +1240,7 @@ module Nabu
         Nabu::Store::LoadReport.new(
           added: reports.sum(&:added), updated: reports.sum(&:updated),
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
-          errored: reports.sum(&:errored)
+          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule)
         )
       end
 

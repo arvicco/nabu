@@ -55,7 +55,11 @@ module Nabu
     # holds the Loader's counts. +warnings+ carries any inline deviation Findings
     # (P5-5) computed from the fresh LoadReport against the source's history —
     # advisory only, never failing the sync (empty on an aborted run).
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings) do
+    # +discovery+ (P11-7) is the adapter's Nabu::Adapter::DiscoverySkips census
+    # of content-pattern files that never became refs (0-byte skeletons,
+    # non-editions, and loud nested-root/unpack gaps); combined with load_report
+    # it drives the printed discovery accounting. nil on an aborted run.
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings, :discovery) do
       def aborted? = !breaker.nil?
     end
 
@@ -109,7 +113,7 @@ module Nabu
       load_report = nil
 
       begin
-        Store::RunRecorder.record(source_slug: entry.slug) do
+        run = Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
@@ -118,9 +122,11 @@ module Nabu
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
         # untouched. Report it rather than crashing the batch.
         return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
-                           breaker: e, indexed: nil, warnings: [])
+                           breaker: e, indexed: nil, warnings: [], discovery: nil)
       end
 
+      discovery = adapter.discovery_skips(workdir)
+      record_discovery_notes(run, discovery)
       update_source_state(source, entry, fetch_report)
       # Reindex the fulltext AFTER the RunRecorder block: the index is
       # corpus-wide, not per-source, so it must not live inside a source's run
@@ -130,7 +136,17 @@ module Nabu
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
-                  warnings: deviation_warnings(source, load_report, adapter))
+                  warnings: deviation_warnings(source, load_report, adapter), discovery: discovery)
+    end
+
+    # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with
+    # no ingestible content) into the run row so a silent gap leaves a durable,
+    # queryable trace, not just a console line. A clean census leaves runs.notes
+    # untouched (nil on success, as before).
+    def record_discovery_notes(run, discovery)
+      return if run.nil? || discovery.clean?
+
+      run.update(notes: discovery.notes.join("; "))
     end
 
     # P5-5: after a successful sync, run the SAME trend rules the `nabu health`

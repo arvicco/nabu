@@ -56,6 +56,41 @@ module Adapters
       assert_equal "rimanum", refs["urn:nabu:oracc:rimanum:P405432"].metadata["project"]
     end
 
+    # -- P11-7 fix 1: subproject NESTED-ROOT discovery ------------------------
+
+    # The saao/saa01 (and rinap/rinap1) zips unpack with a nested root —
+    # <slug>/saa01/corpusjson, not <slug>/corpusjson — so discover found zero of
+    # their texts and the sync reported success. discover must now find
+    # corpusjson at either depth.
+    DEFECTS = Nabu::TestSupport.fixtures("oracc_p11_7")
+
+    def test_discover_finds_subproject_texts_under_a_nested_root
+      ids = Nabu::Adapters::Oracc.new.discover(DEFECTS).map(&:id)
+      assert_includes ids, "urn:nabu:oracc:saao-saa01:P334176",
+                      "the nested saao-saa01/saa01/corpusjson text must be discovered"
+    end
+
+    # -- P11-7 fix 7: discovery accounting (the systemic skip-visibility fix) --
+
+    def test_discovery_skips_counts_zero_byte_skeletons_by_rule
+      skips = Nabu::Adapters::Oracc.new.discovery_skips(DEFECTS)
+      assert_equal 1, skips.skipped_by_rule, "the 0-byte dcclt file is a by-rule skip"
+      assert_equal 0, skips.unrecognized
+      assert_predicate skips, :clean?
+    end
+
+    def test_discovery_flags_a_project_tree_with_no_corpusjson_loudly
+      Dir.mktmpdir do |root|
+        # rimanum is a registered project: give it a tree but NO corpusjson
+        # (the nested-root/unpack signature) — that must be loud, never silent.
+        FileUtils.mkdir_p(File.join(root, "rimanum"))
+        skips = Nabu::Adapters::Oracc.new.discovery_skips(root)
+        assert_equal 1, skips.unrecognized
+        refute_predicate skips, :clean?
+        assert_match(/rimanum.*no corpusjson/, skips.notes.first)
+      end
+    end
+
     # -- license (read per project, never hardcoded) --------------------------
 
     def test_discover_accepts_the_machine_read_cc0_license

@@ -8,7 +8,17 @@ module Nabu
     # What one load did, in document-level counts (passages are an
     # implementation detail of their document). A Data value: frozen,
     # compared by content.
-    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored)
+    #
+    # +skipped_by_rule+ (P11-7) counts discovered refs the adapter's parse
+    # DELIBERATELY declined as non-documents (Nabu::DocumentSkipped — e.g. an
+    # ORACC catalog-only skeleton with no transcribed lines): honest catalog-
+    # only skips, NOT quarantines (+errored+). Defaults to 0 so every existing
+    # construction and stored count stays valid.
+    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule) do
+      def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0)
+        super
+      end
+    end
 
     # Persists adapter output into the catalog with the idempotency /
     # revision / withdrawal semantics of architecture §3. `nabu rebuild`
@@ -87,11 +97,14 @@ module Nabu
       # trouble) propagates and aborts. +on_document+ ticks after every
       # processed OR quarantined document (see #load).
       def load_from(adapter, workdir:, full: true, on_document: nil)
-        run(full: full, on_document: on_document) do |process, quarantine|
+        run(full: full, on_document: on_document) do |process, quarantine, skip|
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
               begin
                 adapter.parse(ref)
+              rescue Nabu::DocumentSkipped => e
+                skip.call(ref, e)
+                next
               rescue Nabu::ParseError => e
                 quarantine.call(ref, e)
                 next
@@ -123,11 +136,22 @@ module Nabu
           journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
           tick.call
         end
-        yield(process, quarantine)
+        # A discovered ref the parser declined by rule (Nabu::DocumentSkipped):
+        # counted honestly, never quarantined and never journaled per-file — the
+        # steady-state catalog-only skeletons must not spam provenance every sync
+        # (the 0-byte case's stance). Its urn still shields any existing row from
+        # the withdrawal sweep, exactly as a quarantined ref does.
+        skip = lambda do |ref, _reason|
+          counts[:skipped_by_rule] += 1
+          seen_urns.add(ref.id)
+          tick.call
+        end
+        yield(process, quarantine, skip)
         sweep_withdrawn(seen_urns, counts) if full
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
-          withdrawn: counts[:withdrawn], errored: counts[:errored]
+          withdrawn: counts[:withdrawn], errored: counts[:errored],
+          skipped_by_rule: counts[:skipped_by_rule]
         )
       end
 
