@@ -156,6 +156,16 @@ sblgnt:
   # re-syncable, not on a live schedule.
   sync_policy: manual
 
+aspr:
+  adapter: Nabu::Adapters::Aspr
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # ASPR (Anglo-Saxon Poetic Records, OTA 3009): the complete OE poetry corpus
+  # as ONE 2.2 MB TEI file over plain HTTP — the first single-file fetch path
+  # (Nabu::FileFetch). CC BY-SA 3.0 (in-file teiHeader) -> attribution.
+  # Upstream is effectively frozen (Last-Modified 2019, deposit 1993), but the
+  # OTA record is not archive-locked the way a read-only git repo is: manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
