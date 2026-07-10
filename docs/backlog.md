@@ -2646,7 +2646,7 @@ plan approved as is", incl. the ang folding rule æ→ae, þ→th, ð→th).
   Remaining owner action (P12-gate): fire `bin/nabu sync bosworth-toller`
   (~84 MB single GET), eyeball `define` output, flip enabled.
 
-## P12-4 · The public face: README + user-facing docs  [tier: fable] [status: pending] [deps: P12-1..3]
+## P12-4 · The public face: README + user-facing docs  [tier: fable] [status: done] [deps: P12-1..3]
 Owner: the README is the GitHub face of an open source project — it needs
 to attract followers and explain use cases, not just report status. Runs
 LAST so it reflects the OE additions. Scope:
