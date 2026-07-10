@@ -40,7 +40,7 @@ then index, then scorer); cross-language intertext (OCS translating Greek)
 is a research problem, out of v1 scope.
 **Effort.** fable design (scoring + pruning policy) + opus impl; 2–3 packets.
 
-### 1.2 Cross-source alignment hub — parallel Gospels  [candidate — Phase 11 proposal, Slavic-axis flagship]
+### 1.2 Cross-source alignment hub — parallel Gospels  [SHIPPED — Phase 11 P11-3/P11-5: `align` + nabu_align, NT ≤7 witnesses + OT, architecture §10]
 
 **What.** Extend `--parallel` from *editions of one work within a source* to
 *verse-aligned texts across sources*: a citation-mapping layer that knows
@@ -67,7 +67,7 @@ stable). Needs a mapping table design (which source-pairs align, keyed how)
 **Effort.** fable (mapping design + PROIEL citation surfacing) + opus
 (renderer/CLI); 2 packets + optional source adapters.
 
-### 1.3 The reference shelf — dictionaries as data  [candidate — Phase 11 proposal]
+### 1.3 The reference shelf — dictionaries as data  [SHIPPED — Phase 11 P11-4: LSJ + Lewis & Short, define + nabu_define, citation resolution, architecture §11; Bosworth-Toller queued per oe-survey]
 
 **What.** Ingest the openly licensed classical lexica as a queryable layer:
 LSJ, Lewis & Short, Middle Liddell (Perseus lexica repos, CC BY-SA XML),
@@ -209,7 +209,7 @@ approved fixture plan; UD Birchbark + RNC Middle Russian and CCMH ranked
 #1/#2 by the P9-6 survey and queued for Phase 10 consideration. Below:
 the rest of the map.)*
 
-### 2.1 The biblical alignment trio: Vulgate, LXX, Greek NT  [candidate — pairs with 1.2]
+### 2.1 The biblical alignment trio: Vulgate, LXX, Greek NT  [SHIPPED — Phase 11 P11-5: vulgate + sblgnt sources, LXX via in-catalog Swete; Rahlfs blocked on CATSS terms]
 
 **What.** Clementine Vulgate (public domain, multiple clean digital
 sources), Septuagint (e.g. the Swete/Rahlfs-derived open texts; CCAT or
@@ -416,16 +416,24 @@ temperament question; the code quality is already publishable.
 
 ---
 
-## Proposed graduation order (as of 2026-07-08)
+## Proposed graduation order (updated 2026-07-10)
 
-1. **Phase 10** (committed): ORACC adapter + UD Slavic expansion (+ CCMH
-   optional).
-2. **Phase 11 — "the philology workbench"**: alignment hub (1.2) +
-   dictionary shelf (1.3) + biblical trio (2.1); morph facets + vocab
-   (1.6/1.7) as small riders.
-3. **Phase 12 — "the corpus reads itself"**: intertext engine (1.1) +
-   time/place axes (1.4) + fragment search (1.5); links table (1.8) lands
-   with whichever edge-producer ships first.
+1. ~~**Phase 10**: ORACC adapter + UD Slavic expansion~~ **SHIPPED** (PR #11).
+2. ~~**Phase 11 — "the philology workbench"**: alignment hub (1.2) +
+   dictionary shelf (1.3) + biblical trio (2.1)~~ **SHIPPED** (PR #12, incl.
+   align ranges + WEB English witness); morph facets + vocab (1.6/1.7) were
+   NOT taken (phase ran full) — still open, small, cluster-independent.
+3. **Phase 12 candidates** (owner picks the headline):
+   a. **The OE axis lands**: ISWOC adapter (PROIEL family, near-config-only;
+      brings the West-Saxon Mark into the hub as witness #8) + ASPR poetry
+      (small new TEI family — Beowulf, Exeter Book, fully open) +
+      Bosworth-Toller onto the reference shelf (CC BY 4.0 CSV). All three
+      pre-scouted in docs/oe-survey.md.
+   b. **"The corpus reads itself"**: intertext engine (1.1) + time/place
+      axes (1.4) + fragment search (1.5); links table (1.8) lands with
+      whichever edge-producer ships first.
+   c. Riders for either: morph facets (1.6), vocab profiling (1.7), CCMH
+      (2.2-adjacent, Slavic pick #2).
 4. **Cluster arrival** (whenever): lemmatize-all (3.1) FIRST, then
    embeddings (3.2), glossing (3.3), HTR (3.4), NER (3.5).
 5. Continuous: sources 2.2/2.3 slot into any phase as capacity allows;

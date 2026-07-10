@@ -18,22 +18,26 @@ ancient-text corpora.
 catalog store, idempotent loader, rebuild) and **twelve source adapters**
 exist across **nine parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
 DDbDP Leiden, GRETIL TEI, ORACC JSON, lexicon TEI, USFX, SBLGNT):
-**nine sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
+**all twelve sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
 and Livy included, **with 872 aligned English translations**:
 `show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek
 (including Swete's Septuagint at verse grain), Universal Dependencies
 ancient treebanks (six, including Old East Slavic birchbark letters and
 Middle Russian), PROIEL, TOROT, Papyri.info DDbDP (61k documents,
 restart-aware line URNs, cancelled texts kept in ⟦⟧), **GRETIL**
-(Sanskrit: Rāmāyaṇa, Bhāgavata, Brahmasūtra, Ṛgveda with Vedic accents
-preserved; 777 of 781 upstream files parse via four addressability rungs),
-and **ORACC** (cuneiform: 1,794 Akkadian and Sumerian texts across five
-projects, gold lemmatization riding straight into lemma search, CC0,
-fetched as zips over HTTP with full attic parity) — totalling
-**~2.85 million searchable passages** — plus three shipped sources
-awaiting their owner-fired first syncs: **lexica** (LSJ + Lewis & Short,
-the dictionary shelf), **vulgate** (full Clementine bible, public domain),
-and **sblgnt** (SBL Greek NT, CC BY 4.0). Axis surveys rank further
+(Sanskrit: Rāmāyaṇa, Bhāgavata, Brahmasūtra, Mitākṣarā, Ṛgveda with Vedic
+accents preserved; 780 of 784 upstream files parse via five addressability
+rungs), **ORACC at five projects** (6,876 cuneiform texts, proto-cuneiform
+through the Sargon II state correspondence, gold lemmatization riding
+straight into lemma search, CC0, zips over HTTP with full attic parity),
+the **biblical editions** (`vulgate`: the complete
+73-book Clementine canon, public domain; `sblgnt`: SBL Greek NT, CC BY 4.0),
+and the **reference shelf** (`lexica`: LSJ + Lewis & Short, 168k dictionary
+entries) — totalling **~3.07 million searchable passages**. Every sync
+prints a discovery-accounting line (`selected · skipped-by-rule ·
+unrecognized`), so silent ingestion gaps are structurally visible (the
+P11-7 audit recovered 410 silently-dropped documents, including the
+Mitākṣarā and the entire Sargon letters project). Axis surveys rank further
 expansion candidates: Slavic (`docs/slavic-survey.md`) and Old English
 (`docs/oe-survey.md` — ISWOC treebank and the complete ASPR poetry corpus
 are the ranked picks).
@@ -46,9 +50,10 @@ corpus: backup → fresh-root restore → rebuild → verify → RESTORABLE.
 **The research surface is real**: search is diacritic-insensitive with
 per-language search forms (Greek final-sigma, Latin v/u–j/i — conventions
 §9) and **lemma-aware** — `search --lemma λέγω` finds every inflected
-attestation (εἶπον, ῥηθέντος, …) across **1.78M gold lemma rows in nine
+attestation (εἶπον, ῥηθέντος, …) across **1.92M gold lemma rows in twelve
 languages** (Greek, Latin, Sanskrit, Gothic, Armenian, OCS, Old East
-Slavic, Akkadian, Sumerian); `show` renders passages, documents,
+Slavic, Akkadian, Sumerian, and lexical-list scatter in Hittite, Hurrian
+and Ugaritic); `show` renders passages, documents,
 **citation ranges** (`urn:…:1.1-1.10`), and parallel translations
 (span-grouped: prose blocks cite exactly which lines they cover);
 `concord` prints classic KWIC lines in pristine text; `align` renders one
@@ -57,7 +62,7 @@ Testament (grc/lat/got/xcl/chu live, SBLGNT + Vulgate registered) and the
 Old Testament (Septuagint ↔ Vulgate) ship as flagships
 (`config/alignments.yml`, architecture §10); `define` looks up LSJ and
 Lewis & Short with entry citations resolved to in-catalog passages
-(architecture §11, after `sync lexica`). **And the corpus talks**: a
+(architecture §11). **And the corpus talks**: a
 read-only MCP server (`bin/nabu mcp`, hand-rolled stdio; `.mcp.json` ships
 in-repo) gives any Claude session six tools — search, show, concord,
 align, define, status — every passage carrying its license class; see
@@ -84,7 +89,7 @@ out the custodial surface.
 | `… --parse-only` | Re-parse the existing local snapshot without touching the network (after parser fixes) |
 | `… --force` | Override the safety breaker that aborts any sync which would withdraw >20% of a source's documents (upstream restructures look like mass deletions) |
 | `bin/nabu search QUERY [--lang X] [--license CLASS] [--limit N]` | Full-text search over the corpus (FTS5, bm25-ranked). Diacritic-insensitive: `μηνιν` finds `μῆνιν`. Prints urn, language, highlighted snippet per hit. |
-| `bin/nabu search --lemma FORM [--lang X]` | Dictionary-form search over the gold treebank annotations (~161k passages, 1.6M lemma rows): `--lemma λέγω` finds εἶπον, ῥηθέντος and the rest of the paradigm, showing the matched surface forms per hit. |
+| `bin/nabu search --lemma FORM [--lang X]` | Dictionary-form search over the gold lemma layer (treebanks + ORACC; 1.9M rows, 12 languages): `--lemma λέγω` finds εἶπον, ῥηθέντος and the rest of the paradigm, showing the matched surface forms per hit. |
 | `bin/nabu show URN` | Inspect a passage (text, document, license, revision, full provenance trail), a whole document (passages as `:suffixes`; `--full-urn` for absolutes), or a citation range (`urn:…:1.1-1.10`, inclusive, cross-block). Withdrawn and retired items shown, honestly labeled. |
 | `bin/nabu show URN --parallel [LANG]` | Render a passage/document/range aligned with its translation edition of the same work (default eng), paired by citation; unmatched lines shown honestly one-sided. |
 | `bin/nabu export --format plain\|jsonl [--lang X] [--license CLASS]` | Stream the live corpus to stdout — the longevity-hedge exit formats (CoNLL-U arrives with the enrichment phase) |
