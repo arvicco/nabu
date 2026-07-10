@@ -10,12 +10,41 @@ module Adapters
   class OraccJsonParserTest < Minitest::Test
     FIXTURES = Nabu::TestSupport.fixtures("oracc")
 
-    def parse(project, id, urn: nil, title: nil)
+    # The P11-7 defect fixtures (real trimmed dcclt slices) live in their own
+    # tree so the discover-walked main fixtures stay a clean, all-parsing corpus.
+    DEFECTS = Nabu::TestSupport.fixtures("oracc_p11_7")
+
+    def parse(project, id, urn: nil, title: nil, root: FIXTURES)
       Nabu::Adapters::OraccJsonParser.new.parse(
-        File.join(FIXTURES, project, "corpusjson", "#{id}.json"),
+        File.join(root, project, "corpusjson", "#{id}.json"),
         urn: urn || "urn:nabu:oracc:#{project}:#{id}",
         title: title
       )
+    end
+
+    # -- P11-7 fix 3: catalog-only skeleton skips, never quarantines ----------
+
+    def test_no_content_skeleton_is_skipped_not_quarantined
+      error = assert_raises(Nabu::DocumentSkipped) do
+        parse("dcclt", "P000725", root: DEFECTS)
+      end
+      # a DocumentSkipped is NOT a ParseError — the loader counts it honestly
+      # (skipped-by-rule) rather than quarantining it.
+      refute_kind_of Nabu::ParseError, error
+      assert_equal "catalog-only (no content)", error.reason
+    end
+
+    # -- P11-7 fix 4: a label-less line-start falls back to the sentence label -
+
+    def test_label_less_line_start_falls_back_to_enclosing_sentence_label
+      document = parse("dcclt", "P010104", root: DEFECTS)
+      suffixes = document.map { |p| p.urn.split(":").last }
+      # the bare line-start (no @label/@n) recovers the enclosing sentence
+      # c-node's label "r xi' 10'" → suffix "r.xi'.10'", so the whole document
+      # loads instead of quarantining over one upstream data gap.
+      assert_includes suffixes, "r.xi'.10'"
+      assert_includes suffixes, "o.i'.1" # an ordinary labeled line rides alongside
+      refute_empty document
     end
 
     # -- the rich Akkadian exemplar (P405432) --------------------------------

@@ -55,10 +55,12 @@ module Nabu
     # (arbitrary-but-deterministic, the UD stance); notes carry the honest
     # per-project record: sha prefix, text count, catalog-only empty count.
     #
-    # NB `nabu health --remote` probes upstreams with `git ls-remote`, which
-    # cannot see an HTTP-zip upstream — ORACC will read as gone there until
-    # the probe learns non-git upstreams (flagged at the P10 gate, not
-    # widened into this packet).
+    # `nabu health --remote` probes ORACC over HTTP, not git (P11-2): the
+    # probe HEADs each project zip (reachability + Last-Modified drift vs the
+    # stored .zip-fetch.json pin) and GETs each project metadata.json for
+    # license drift, declared via .remote_probe_strategy / .http_probe_targets
+    # below. Both go through ZipFetch.default_http (the vendored-cert path),
+    # since oracc.museum.upenn.edu serves an incomplete TLS chain.
     #
     # == Translations
     #
@@ -71,9 +73,15 @@ module Nabu
       # slash-paths). Extending scope = adding a path here + owner-fired
       # first sync. Slugs (dir names, urn segments, zip basenames) are the
       # paths hyphen-flattened.
-      PROJECTS = %w[rimanum etcsri].freeze
+      PROJECTS = %w[rimanum etcsri saao/saa01 rinap/rinap1 dcclt].freeze
 
       ZIP_BASE_URL = "https://oracc.museum.upenn.edu/json"
+
+      # The standalone per-project metadata.json lives at the project root,
+      # NOT under /json/ (verified live 2026-07-09:
+      # https://oracc.museum.upenn.edu/<project>/metadata.json → 200
+      # application/json; the /json/<project>/metadata.json path 500s).
+      METADATA_BASE_URL = "https://oracc.museum.upenn.edu"
 
       # Upstream license strings → our license_class enum, matched in order.
       # Anything unmatched is a STOP (see class note).
@@ -95,6 +103,27 @@ module Nabu
         MANIFEST
       end
 
+      # P11-2: ORACC is the HTTP-zip fetch path, so the remote-health probe
+      # HEADs each project zip and GETs each metadata.json instead of
+      # ls-remote (there is no git repo).
+      def self.remote_probe_strategy = :http_zip
+
+      # One probe target per in-scope project. The zip URL doubles as the
+      # ledger-pin key (sync pins each project by its zip URL — see
+      # #report's FetchReport.repos), so per-project drift/license baselines
+      # attach to the same pins the git sources use.
+      def self.http_probe_targets
+        PROJECTS.map do |project|
+          project_slug = project.tr("/", "-")
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: project_slug,
+            zip_url: "#{ZIP_BASE_URL}/#{project_slug}.zip",
+            metadata_url: "#{METADATA_BASE_URL}/#{project}/metadata.json",
+            state_subdir: project_slug
+          )
+        end
+      end
+
       # Walk <workdir>/<slug>/corpusjson/*.json for every in-scope project,
       # one DocumentRef per NON-EMPTY file (empty = catalog-only, skipped —
       # see class note), sorted by urn. Reads each project's license gate
@@ -103,6 +132,29 @@ module Nabu
         return enum_for(:discover, workdir) unless block
 
         document_refs(workdir).each(&block)
+      end
+
+      # P11-7 discovery census: per in-scope project whose tree is present,
+      # count the 0-byte catalog-only skeletons discover skips (skipped-by-rule)
+      # and flag any project whose tree exists but yields NO corpusjson at all
+      # (unrecognized — the nested-root/unpack signature fix 1 resolves, kept as
+      # a loud guard against its recurrence). The no-content skeletons that DO
+      # parse-skip are counted by the loader, not here. Cheap: Dir globs + 0-byte
+      # stats, no JSON read.
+      def discovery_skips(workdir)
+        skipped = 0
+        notes = []
+        PROJECTS.each do |project|
+          next unless Dir.exist?(File.join(workdir, slug(project)))
+
+          files = Dir.glob(File.join(project_dir(workdir, project), "corpusjson", "*.json"))
+          if files.empty?
+            notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            next
+          end
+          skipped += files.count { |path| File.empty?(path) }
+        end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
       end
 
       # Delegate to the OraccJsonParser with the title discover resolved from
@@ -140,6 +192,24 @@ module Nabu
 
       def slug(project) = project.tr("/", "-")
 
+      # The directory that actually holds this project's corpusjson/ (and its
+      # metadata.json/catalogue.json), at EITHER depth (P11-7 the headline):
+      # top-level projects unpack to <workdir>/<slug>/, but SUBPROJECT zips
+      # (saao/saa01, rinap/rinap1) unpack with a NESTED ROOT —
+      # <workdir>/saao-saa01/saa01/corpusjson — so discover looking only at
+      # <slug>/corpusjson silently ingested 0 of their 361 texts. Prefer the
+      # top level; fall back to the subproject's last path segment (the nested
+      # root the zip carries). Returns the base dir unchanged when neither holds
+      # corpusjson (never fetched, or damaged) — the caller yields no refs and
+      # the discovery accounting renders that loudly.
+      def project_dir(workdir, project)
+        base = File.join(workdir, slug(project))
+        return base if Dir.exist?(File.join(base, "corpusjson"))
+
+        nested = File.join(base, project.split("/").last)
+        Dir.exist?(File.join(nested, "corpusjson")) ? nested : base
+      end
+
       # The zip URL for a project — split out so tests could repoint a
       # singleton, though the house pattern here is WebMock stubs.
       def zip_url(project) = "#{ZIP_BASE_URL}/#{slug(project)}.zip"
@@ -167,7 +237,7 @@ module Nabu
       # will skip. Attic activity rides along as in the git adapters.
       def fetch_notes(workdir, fetches, shas)
         notes = shas.map do |project, sha|
-          "#{slug(project)}=#{sha[0, 12]} (#{project_counts(File.join(workdir, slug(project)))})"
+          "#{slug(project)}=#{sha[0, 12]} (#{project_counts(project_dir(workdir, project))})"
         end.join(" ")
         atticked = fetches.values.sum { |fetch| fetch.atticked.size }
         atticked.positive? ? "#{notes} · atticked #{atticked} upstream-deleted file(s)" : notes
@@ -185,7 +255,7 @@ module Nabu
       end
 
       def project_refs(workdir, project)
-        dir = File.join(workdir, slug(project))
+        dir = project_dir(workdir, project)
         return [] unless Dir.exist?(dir)
 
         check_license!(dir, project)

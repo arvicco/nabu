@@ -344,24 +344,152 @@ module Nabu
                       desc: "List document passages with absolute urns instead of :suffixes"
     option :parallel, type: :string, lazy_default: "eng", banner: "[LANG]",
                       desc: "Align with the same work's LANG edition by citation suffix (default eng)"
+    option :random, type: :boolean, default: false,
+                    desc: "Show random passages instead of a urn (the eyeball ritual at a source flip)"
+    option :source, type: :string, banner: "SLUG",
+                    desc: "With --random: draw only from this source (default: the whole corpus)"
+    option :count, type: :numeric, default: 1,
+                   desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     def show(urn = nil)
       urn = urn.to_s.strip
-      raise Thor::Error, "show: give a urn" if urn.empty?
-
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      return show_parallel(catalog, urn, options[:parallel]) if options[:parallel]
+      return show_random(catalog, urn) if options[:random]
+      raise Thor::Error, "show: --source requires --random" if options[:source]
+      raise Thor::Error, "show: give a urn" if urn.empty?
+
+      return show_parallel(catalog, urn, options[:parallel], config) if options[:parallel]
 
       result = Nabu::Query::Show.new(catalog: catalog).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
-    rescue Nabu::Query::Range::Error => e
+    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
       # A range urn that names two endpoints but can't be honoured (endpoint
-      # missing, or reversed): a clean stderr message + exit 1.
+      # missing, or reversed), or an unknown --random --source: a clean stderr
+      # message + exit 1.
       raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+    end
+
+    desc "align REF", "Render one citation across every witness of a registered work (the alignment hub)"
+    long_desc <<~HELP, wrap: false
+      Cross-source alignment (architecture §10): one citation of a registered
+      WORK rendered in every witness the alignment registry
+      (config/alignments.yml) names — the same verse in Greek, Latin, Gothic,
+      Classical Armenian, and Old Church Slavonic, in one screen. Witnesses
+      render in registry order, each with its language and its EFFECTIVE
+      license class (the five NT witnesses are all nc — mind the labels when
+      quoting).
+
+      REF is a citation in the work's scheme — for the `nt` work,
+      BOOK chapter.verse ("MARK 2.3"; quote it or let Thor join the words).
+      Matching is forgiving: case, extra spaces, and chapter:verse colons all
+      normalize ("mark 2:3" finds MARK 2.3). REF may also be a PASSAGE URN
+      (pivot from a show/search hit): the sentence's verse is looked up and
+      aligned across the other witnesses.
+
+      Alignment is at citation grain over the treebanks' verse annotations,
+      and sentence≠verse: a witness's sentence that spans a verse boundary is
+      shown once, labeled with everything it covers. Honesty rules: a witness
+      that simply lacks the verse (the Armenian sample holds only scattered
+      chapters; Gothic is fragmentary) reads "not attested"; a registered
+      witness whose source was never synced reads "not synced". Adding a
+      witness (say, the ISWOC Old English Mark) is a registry entry, not code.
+
+      --work names the work explicitly. Without it, a ref resolves through
+      the index: when exactly one registered work attests it, that work is
+      picked automatically (nt for "MARK 2.3", ot for "GEN 1.1"); a ref
+      several works attest asks you to pick among the attesters.
+
+      Examples:
+        nabu align MARK 2.3                 # the paralytic, five ways
+        nabu align "mark 2:3"               # same — refs normalize
+        nabu align urn:nabu:proiel:marianus:36421
+                                            # pivot: this OCS sentence, aligned
+        nabu align MATT 5.25 --work nt      # explicit work id
+
+      Use cases: read the Vorlage beside the translation (THE working method
+      of comparative philology); check how each witness renders a
+      construction; learn OCS/Gothic against the Greek you can already read.
+    HELP
+    option :work, type: :string, banner: "ID",
+                  desc: "Alignment work id from config/alignments.yml (optional when only one is registered)"
+    def align(*ref_parts)
+      ref = ref_parts.join(" ").strip
+      raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+      result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                 .run(ref, work: options[:work])
+      print_align(result)
+    rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ for Greek, Lewis & Short for Latin)"
+    long_desc <<~HELP, wrap: false
+      The dictionary shelf (architecture §11): look a dictionary form up in
+      the classical lexica the corpus holds locally — LSJ (A Greek-English
+      Lexicon, grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA
+      from the Perseus Digital Library. Entries print whole: headword, short
+      gloss, then the full entry body as structured plain text with sense
+      labels on their own lines (the MCP nabu_define surface is the bounded
+      sibling).
+
+      Matching folds like lemma search (conventions §9): diacritics optional
+      (μηνις finds μῆνις), final sigma both ways (λόγος/λογοσ), Latin v/u j/i
+      merged. Homographs are separate entries and all print (volo the verb,
+      volo the flyer). LEMMA must be a dictionary form — `nabu search --lemma`
+      finds the attestations, and its hits carry these glosses.
+
+      Citations inside an entry stay as text; those that point at a work THIS
+      corpus holds are additionally resolved to passage urns and listed at
+      the end of the entry — `nabu show <urn>` opens the cited line. LSJ
+      cites editions we may not hold (perseus-grc1 vs our grc2); resolution
+      re-anchors to the in-catalog edition of the same work, preferring the
+      original language over translations. Unresolvable citations (works not
+      ingested, inscriptions, fragment collections) are honest misses, not
+      links.
+
+      --lang grc|lat restricts to one shelf; --limit caps the entries.
+
+      Examples:
+        nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
+        nabu define λόγος              # the long one, whole
+        nabu define virtus --lang lat  # Lewis & Short only
+    HELP
+    option :lang, type: :string, banner: "grc|lat",
+                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short"
+    option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
+                   desc: "Maximum entries printed (homographs are separate entries)"
+    def define(*lemma_parts)
+      lemma = lemma_parts.join(" ").strip
+      raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
+      raise Thor::Error, "define: --lang must be grc or lat" if options[:lang] && !%w[grc lat].include?(options[:lang])
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_entries)
+        raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync lexica " \
+                           "(or nabu rebuild after one)"
+      end
+
+      results = Nabu::Query::Define.new(catalog: catalog)
+                                   .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+      print_define_results(lemma, results)
     ensure
       catalog&.disconnect
     end
@@ -369,9 +497,11 @@ module Nabu
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing three tools —
+      conversational surface over the local nabu corpus, exposing six tools —
       nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
-      parallel translations), and nabu_status (coverage) — to any MCP client
+      parallel translations), nabu_concord (KWIC), nabu_align (cross-source
+      citation alignment), nabu_define (the dictionary shelf: LSJ + Lewis &
+      Short), and nabu_status (coverage) — to any MCP client
       (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
@@ -404,7 +534,10 @@ module Nabu
         catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
         fulltext: readonly_opener(config.fulltext_path) do
           Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
-        end
+        end,
+        # Static config, loaded once — a malformed registry fails HERE, loudly,
+        # not mid-conversation.
+        alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -617,6 +750,26 @@ module Nabu
         unit.zero? ? "#{bytes} B" : "#{format('%.1f', size)} #{units[unit]}"
       end
 
+      # `show --random` (P11-9): N random visible passages, each in the standard
+      # passage layout — the eyeball ritual at a source flip. A urn alongside
+      # --random is contradictory (it picks passages for you); an empty result
+      # is an honest note, not an error.
+      def show_random(catalog, urn)
+        raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
+
+        results = Nabu::Query::Random.new(catalog: catalog)
+                                     .run(source: options[:source], count: options[:count].to_i)
+        if results.empty?
+          scope = options[:source] ? " in source #{options[:source]}" : ""
+          return say("no passages to show#{scope} (nothing visible — the corpus may be empty or all withdrawn)")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          print_show_passage(result)
+        end
+      end
+
       # Render `show`: a passage in the context of its document, or a document
       # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
       def print_show(result)
@@ -684,16 +837,32 @@ module Nabu
       # Resolve + align + render, with the two honest failure modes: unknown
       # urn (exit 1, same message as plain show) and no LANG sibling of the
       # work in the catalog (exit 1, names the language).
-      def show_parallel(catalog, urn, lang)
+      def show_parallel(catalog, urn, lang, config)
         result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
         raise Thor::Error, "urn not found: #{urn}" if result.nil?
         if result.right.nil?
           raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
-                             "(alignment needs sibling CTS editions; is `translations: true` set " \
-                             "and the source resynced?)"
+                             "(--parallel pairs sibling CTS editions WITHIN one source; is " \
+                             "`translations: true` set and the source resynced?)#{align_hint(urn, config)}"
         end
 
         print_parallel(result)
+      end
+
+      # Cosmetic rider (P11-8): --parallel's "is translations: true set" hint is
+      # misleading for a CROSS-source text (Vulgate/LXX/WEB have no sibling CTS
+      # edition to pair). When the urn is a registered alignment witness, point
+      # at `nabu align` instead — the hub built for exactly this.
+      def align_hint(urn, config)
+        registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+        witnessed = registry.works.any? do |work|
+          work.witnesses.any? do |witness|
+            witness.document_urns.any? { |doc| urn == doc || urn.start_with?("#{doc}:") }
+          end
+        end
+        witnessed ? " — this text is an alignment-hub witness; try `nabu align REF` for cross-source alignment" : ""
+      rescue Nabu::ValidationError
+        ""
       end
 
       # Render the alignment (P8-1b span-grouped): both document headers, the
@@ -757,6 +926,112 @@ module Nabu
         covers = "covers #{group.covers_first}–#{group.covers_last}"
         clip = group.clipped ? "; range shows #{group.shown_first}–#{group.shown_last}" : ""
         "[#{group.anchor} — #{covers}#{clip}]"
+      end
+
+      # -- align (P11-3) ----------------------------------------------------
+
+      # Render the cross-source alignment: the ref + work header with an
+      # honest attestation count, then one block per witness in registry
+      # order — title, language, license label, and the sentences (urn line,
+      # text line), a multi-verse sentence labeled with its full span.
+      def print_align(result)
+        return print_align_range(result) if result.is_a?(Nabu::Query::Align::RangeResult)
+
+        attesting = result.witnesses.count { |witness| witness.status == :ok }
+        say "#{result.ref} — #{result.title}"
+        say "  #{attesting} of #{result.witnesses.size} witnesses attest this ref"
+        result.witnesses.each { |witness| print_align_witness(witness, result.ref) }
+      end
+
+      # A range/chapter query (P11-8): the query header, a one-line witness
+      # legend (title/lang/license shown ONCE, not repeated per ref), then one
+      # compact block per ref in document order — ref line, then one line per
+      # witness (its text, or an honest not-attested/not-synced dash).
+      def print_align_range(result)
+        say "#{result.query} — #{result.title}"
+        say "  #{result.total} refs; witnesses: #{align_range_legend(result).join('; ')}"
+        say "  #{absent_range_summary(result.absent)}" unless result.absent.empty?
+        if result.truncated
+          say "  showing first #{result.groups.size} of #{result.total} refs " \
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range"
+        end
+        result.groups.each { |group| print_align_range_group(group) }
+      end
+
+      # P11-9: witnesses absent from every rendered ref are summarized here once
+      # (grouped by reason) rather than dashed on every ref line — the owner's
+      # readability fix. Partially-attested witnesses stay in the per-ref blocks.
+      def absent_range_summary(absent)
+        by_reason = absent.group_by(&:reason)
+        parts = []
+        if (rows = by_reason[:not_attested])
+          parts << "not attested in this range: #{rows.map(&:label).join(', ')}"
+        end
+        if (rows = by_reason[:not_synced])
+          parts << "not synced: #{rows.map(&:label).join(', ')}"
+        end
+        parts.join("; ")
+      end
+
+      # One legend entry per witness (registry order): its language + license
+      # from the richest view across the shown refs, or "not synced" when the
+      # witness holds no data anywhere in the range.
+      def align_range_legend(result)
+        result.groups.first.witnesses.map(&:label).map do |label|
+          views = result.groups.map { |group| group.witnesses.find { |witness| witness.label == label } }
+          synced = views.find { |witness| witness.status != :not_synced }
+          synced ? "#{label} [#{synced.language}] license: #{synced.license_class}" : "#{label} not synced"
+        end
+      end
+
+      def print_align_range_group(group)
+        say ""
+        say group.ref
+        group.witnesses.each { |witness| print_align_range_witness(witness, group.ref) }
+      end
+
+      def print_align_range_witness(witness, ref)
+        case witness.status
+        when :not_synced then say "    #{witness.label} — not synced"
+        when :no_match   then say "    #{witness.label} — not attested"
+        else
+          witness.sentences.each do |sentence|
+            say "    #{witness.label}  #{sentence.text}#{align_span_note(sentence, ref)}"
+          end
+        end
+      end
+
+      def print_align_witness(witness, ref)
+        say ""
+        if witness.status == :not_synced
+          # A nil urn = a multi-book witness whose map lacks this ref's book;
+          # naming an unrelated book's urn would mislead — phrase neutrally.
+          detail = if witness.document_urn
+                     "#{witness.document_urn} is registered but not in the catalog"
+                   else
+                     "its registered documents are not in the catalog"
+                   end
+          say "#{witness.label} — not synced (#{detail})"
+          return
+        end
+
+        # A multi-document witness misses without a book to name — no title.
+        say "#{witness.label}#{" — #{witness.title}" if witness.title} [#{witness.language}]   " \
+            "license: #{witness.license_class}"
+        return say "  not attested (this witness lacks #{ref})" if witness.status == :no_match
+
+        witness.sentences.each do |sentence|
+          say "  #{sentence.urn}#{align_span_note(sentence, ref)}"
+          say "    #{sentence.text}"
+        end
+      end
+
+      # "  [covers MARK 2.3, MARK 2.4]" — only when the sentence spans beyond
+      # the queried ref (sentence≠verse, stated honestly).
+      def align_span_note(sentence, ref)
+        return "" if sentence.refs == [ref]
+
+        "  [covers #{sentence.refs.join(', ')}]"
       end
 
       def format_parallel_side(side)
@@ -883,7 +1158,8 @@ module Nabu
 
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
-          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}"
+          gloss = result.gloss ? "  (#{result.gloss})" : ""
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}"
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
@@ -894,6 +1170,35 @@ module Nabu
       def truncate_line(text, max = 100)
         line = text.tr("\n", " ")
         line.length > max ? "#{line[0, max]}…" : line
+      end
+
+      # Render dictionary entries whole (the CLI is the unbounded surface):
+      # header with license label, gloss, the structured body, then the
+      # resolved citations as show-able urns. Unresolved citations already
+      # read inline in the body text.
+      def print_define_results(lemma, results)
+        if results.empty?
+          return say("no dictionary entry for #{lemma} — the shelf holds LSJ (grc) and " \
+                     "Lewis & Short (lat); give a dictionary form (search --lemma finds attestations)")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]  #{result.urn}"
+          say "  gloss: #{result.gloss}" if result.gloss
+          say ""
+          say result.body
+          print_resolved_citations(result)
+        end
+      end
+
+      def print_resolved_citations(result)
+        resolved = result.citations.select(&:resolved_urn)
+        return if resolved.empty?
+
+        say ""
+        say "resolved citations (in this corpus — nabu show <urn>):"
+        resolved.each { |citation| say "  #{citation.label} → #{citation.resolved_urn}" }
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all
@@ -945,6 +1250,7 @@ module Nabu
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
         say format_sync_outcome(outcome)
+        print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
       end
 
@@ -958,7 +1264,10 @@ module Nabu
 
         results.each do |slug, result|
           say("  #{sync_all_line(slug, result)}")
-          print_sync_warnings(result) if result.is_a?(Nabu::SyncRunner::Outcome)
+          if result.is_a?(Nabu::SyncRunner::Outcome)
+            print_discovery_accounting(result)
+            print_sync_warnings(result)
+          end
         end
       end
 
@@ -973,6 +1282,26 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # P11-7 discovery accounting: classify every content-pattern file
+      # selected / skipped-by-rule / unrecognized, combining the loader's fate
+      # of discovered refs (loaded → selected; parse-skipped → skipped-by-rule;
+      # quarantined → unrecognized) with the adapter's discovery census (0-byte
+      # skeletons, non-editions → skipped-by-rule; a tree with no ingestible
+      # content → unrecognized). unrecognized ≥ 1 is rendered loudly, with its
+      # notes, so a silent-ingestion gap can never hide again.
+      def print_discovery_accounting(outcome)
+        report = outcome.load_report
+        discovery = outcome.discovery
+        return unless report && discovery
+
+        selected = report.added + report.updated + report.skipped
+        skipped = report.skipped_by_rule + discovery.skipped_by_rule
+        unrecognized = report.errored + discovery.unrecognized
+        say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
+            "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
+        discovery.notes.each { |note| say("  ! #{note}", :yellow) }
       end
 
       def format_sync_outcome(outcome)
@@ -1016,7 +1345,7 @@ module Nabu
         Nabu::Store::LoadReport.new(
           added: reports.sum(&:added), updated: reports.sum(&:updated),
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
-          errored: reports.sum(&:errored)
+          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule)
         )
       end
 
@@ -1027,7 +1356,9 @@ module Nabu
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
         ledger = open_or_create_ledger(config)
-        report = Nabu::Health::RemoteProbe.new(registry: registry, ledger: ledger).run
+        report = Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).run
         print_remote_health(report)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).

@@ -87,12 +87,33 @@ module Nabu
     private
 
     # Re-parse the whole canonical dir once, then reconcile every non-withdrawn
-    # catalog document of this source against the fresh parse.
+    # catalog document of this source against the fresh parse. Routes by the
+    # adapter's declared content_kind (P11-7 fix 2): dictionary sources verify
+    # their ENTRIES (they carry no documents.urn — the old code called
+    # document.urn on a DictionaryDocument and the crash aborted the WHOLE verify
+    # run, leaving every later source unchecked).
     def verify_source(entry, workdir)
-      recomputed, unparseable = reparse(entry.build_adapter, workdir)
+      adapter = entry.build_adapter
+      return verify_dictionary_source(entry, adapter, workdir) if adapter.class.content_kind == :dictionary
+
+      recomputed, unparseable = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
       issues = documents.filter_map { |doc| classify(doc, recomputed, unparseable) }
       SourceOutcome.new(slug: entry.slug, verified: documents.size, issues: issues)
+    end
+
+    # A dictionary source verifies by re-deriving each entry's content hash
+    # (Store::ContentHash.dictionary_entry, the same value DictionaryLoader
+    # stored) and reconciling it against the catalog's dictionary_entries rows
+    # by their urn (urn:nabu:dict:<slug>:<entry_id>). Same fate vocabulary as
+    # documents (ok/mismatch/unparseable); entries carry no per-entry file so
+    # :missing never applies (the source-level workdir check already covers a
+    # vanished clone).
+    def verify_dictionary_source(entry, adapter, workdir)
+      recomputed = reparse_dictionary(adapter, workdir)
+      entries = dictionary_entries_for(entry.slug)
+      issues = entries.filter_map { |row| classify_entry(row, recomputed) }
+      SourceOutcome.new(slug: entry.slug, verified: entries.size, issues: issues)
     end
 
     # discover→parse the workdir — attic included (P5-2): retired documents
@@ -110,6 +131,11 @@ module Nabu
         document =
           begin
             adapter.parse(ref)
+          rescue Nabu::DocumentSkipped
+            # Declined by rule (P11-7): a catalog-only skeleton was never loaded,
+            # so it names no catalog row to verify. Skip it — NOT unparseable,
+            # and above all not a crash that aborts the whole verify run.
+            next
           rescue Nabu::ParseError => e
             unparseable[ref.id] = e.message
             next
@@ -117,6 +143,43 @@ module Nabu
         recomputed[document.urn] = document_hash(document)
       end
       [recomputed, unparseable]
+    end
+
+    # discover→parse a dictionary adapter, mapping each freshly parsed entry's
+    # urn to its recomputed content hash. A file that no longer parses
+    # (Nabu::ParseError) or is declined by rule (Nabu::DocumentSkipped) simply
+    # contributes no entries — its catalog rows then fall to :unparseable below,
+    # the same corruption signal a vanished document raises.
+    def reparse_dictionary(adapter, workdir)
+      recomputed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        document =
+          begin
+            adapter.parse(ref)
+          rescue Nabu::ParseError, Nabu::DocumentSkipped
+            next
+          end
+        document.each do |entry|
+          recomputed["urn:nabu:dict:#{document.slug}:#{entry.entry_id}"] =
+            Store::ContentHash.dictionary_entry(entry)
+        end
+      end
+      recomputed
+    end
+
+    # One dictionary entry row's fate against the fresh parse.
+    def classify_entry(row, recomputed)
+      urn = row.fetch(:urn)
+      stored = row.fetch(:content_sha256)
+      if recomputed.key?(urn)
+        return if recomputed[urn] == stored
+
+        DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                          detail: { stored: stored, recomputed: recomputed[urn] })
+      else
+        DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable,
+                          detail: "entry no longer present in the reparsed dictionary")
+      end
     end
 
     # Decide one catalog document's fate against the fresh parse. Returns a
@@ -158,6 +221,21 @@ module Nabu
       @db[:documents]
         .where(source_id: source.fetch(:id), withdrawn: false)
         .select(:urn, :canonical_path, :content_sha256)
+        .all
+    end
+
+    # Non-withdrawn dictionary_entries rows for this source's dictionaries, as
+    # plain {urn:, content_sha256:} rows.
+    def dictionary_entries_for(slug)
+      source = @db[:sources].where(slug: slug).select(:id).first
+      return [] if source.nil?
+
+      dictionary_ids = @db[:dictionaries].where(source_id: source.fetch(:id)).select_map(:id)
+      return [] if dictionary_ids.empty?
+
+      @db[:dictionary_entries]
+        .where(dictionary_id: dictionary_ids, withdrawn: false)
+        .select(:urn, :content_sha256)
         .all
     end
 

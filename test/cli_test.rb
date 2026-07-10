@@ -30,7 +30,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export].each do |command|
+    %w[version sync status rebuild verify search show export define].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -92,6 +92,18 @@ class CLITest < Minitest::Test
     assert_match(/--lemma λέγω/, out, "must show a worked Greek example")
     assert_match(/εἶπας/, out, "must show the suppletive payoff — forms no text query reaches")
     assert_match(/replaces the text query/i, out, "must be honest that --lemma and a query don't combine")
+  end
+
+  # P11-4: `nabu define` help must teach the shelf, the folding promise, the
+  # citation-resolution behavior, and worked examples in both languages.
+  def test_help_define_documents_the_dictionary_shelf
+    out, _err, _status = run_cli(%w[help define])
+    assert_match(/LSJ/, out)
+    assert_match(/Lewis & Short/, out)
+    assert_match(/μηνις finds μῆνις/, out, "must show the diacritic-folding promise")
+    assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
+    assert_match(/--lang grc\|lat/, out)
+    assert_match(/nabu define virtus/, out, "must show a Latin example")
   end
 
   def test_help_export_documents_formats_and_filters
@@ -604,6 +616,65 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --random (P11-9) -------------------------------------------------
+
+  def test_show_random_prints_a_passage_in_the_standard_layout
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show --random]) }
+      assert_nil status, "a random draw over a non-empty corpus exits 0"
+      assert_match(/urn:nabu:test_adapter:\w+:\d+ \[grc\]/, out, "a passage urn + language header")
+      assert_match(/document: urn:nabu:test_adapter:/, out, "the standard show layout, document line")
+      assert_match(/provenance:/, out, "the full provenance trail, as `show <urn>` renders it")
+    end
+  end
+
+  def test_show_random_count_bounds_the_number_of_passages
+    with_indexed_corpus do |config|
+      # The fixture corpus holds three live passages; --count 3 shows all three.
+      out, _err, status = with_config(config) { run_cli(%w[show --random --count 3]) }
+      assert_nil status
+      headers = out.scan(/^urn:nabu:test_adapter:/).length
+      assert_equal 3, headers, "three passages, three headers"
+    end
+  end
+
+  def test_show_random_scopes_to_a_source
+    with_indexed_corpus do |config|
+      # The fixture source's slug is "corpus" (the sources.yml key); its adapter
+      # mints urn:nabu:test_adapter:… passage urns.
+      out, _err, status = with_config(config) { run_cli(%w[show --random --source corpus --count 3]) }
+      assert_nil status
+      headers = out.scan(/^urn:\S+/)
+      refute_empty headers
+      assert(headers.all? { |urn| urn.start_with?("urn:nabu:test_adapter") },
+             "every drawn passage belongs to the scoped source")
+    end
+  end
+
+  def test_show_random_unknown_source_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show --random --source nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source "nope"/, err)
+    end
+  end
+
+  def test_show_random_rejects_a_urn
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show --random urn:nabu:test_adapter:one:1]) }
+      assert_equal 1, status
+      assert_match(/--random takes no urn/, err)
+    end
+  end
+
+  def test_show_source_without_random_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1 --source test_adapter]) }
+      assert_equal 1, status
+      assert_match(/--source requires --random/, err)
+    end
+  end
+
   # -- show ranges (P7-6) ----------------------------------------------------
 
   def test_show_range_lists_the_slice_as_suffixes_with_an_honest_count
@@ -769,6 +840,189 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- align (P11-3) ---------------------------------------------------------
+
+  def test_align_renders_a_verse_across_witnesses_with_license_labels
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status, "an attested ref exits 0"
+      assert_match(/MARK 2\.3 — New Testament/, out)
+      assert_match(/greek-nt — Greek NT \[grc\] {3}license: nc/, out)
+      assert_match(/marianus — Codex Marianus \[chu\] {3}license: nc/, out)
+      assert_match(/παραλυτικὸν/, out)
+      assert_match(/носѧште/, out)
+      assert(out.index("παραλυτικὸν") < out.index("носѧште"),
+             "witnesses render in registry order")
+      assert_match(/2 of 2 witnesses/, out)
+    end
+  end
+
+  def test_align_normalizes_the_query_ref
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "mark", "2:3"]) }
+      assert_nil status
+      assert_match(/MARK 2\.3/, out)
+    end
+  end
+
+  def test_align_pivots_from_a_passage_urn
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align urn:nabu:proiel:marianus:1]) }
+      assert_nil status
+      assert_match(/MARK 2\.3/, out)
+      assert_match(/παραλυτικὸν/, out)
+    end
+  end
+
+  def test_align_unattested_ref_reads_honestly_and_exits_zero
+    with_aligned_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "JOHN", "1.1"]) }
+      assert_nil status, "an all-absent ref is a result, not an error"
+      assert_match(/0 of 2 witnesses/, out)
+      assert_match(/not attested/, out)
+    end
+  end
+
+  def test_align_unsynced_witness_reads_not_synced
+    with_aligned_corpus(extra_witness: "urn:nabu:proiel:wscp") do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/wscp — not synced/, out)
+      assert_match(/2 of 3 witnesses/, out)
+    end
+  end
+
+  # P11-5: a multi-document (cts-verse) witness that misses the ref heads its
+  # column with the label alone — no arbitrary book title.
+  def test_align_multi_document_witness_miss_renders_label_without_a_title
+    registry = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - label: verses
+            extractor: cts-verse
+            documents:
+              MARK: urn:nabu:proiel:marianus
+              JOHN: urn:nabu:sblgnt:john
+    YAML
+    with_aligned_corpus(registry: registry) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/^verses \[chu\] {3}license: nc/, out)
+      assert_match(/not attested/, out)
+      assert_match(/1 of 2 witnesses/, out)
+    end
+  end
+
+  # …and when the multi-document witness does not even map the queried ref's
+  # book, the not-synced note phrases the miss neutrally (no unrelated urn).
+  def test_align_not_synced_multi_document_witness_with_unmapped_book_reads_neutrally
+    registry = <<~YAML
+      nt:
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:marianus
+          - label: verses
+            extractor: cts-verse
+            documents:
+              JOHN: urn:nabu:sblgnt:john
+              ACTS: urn:nabu:sblgnt:acts
+    YAML
+    with_aligned_corpus(registry: registry) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/verses — not synced \(its registered documents are not in the catalog\)/, out)
+      refute_match(/urn:nabu:sblgnt/, out, "no unrelated book urn is named")
+    end
+  end
+
+  def test_align_without_index_hints_to_sync_or_rebuild
+    with_aligned_corpus(indexed: false) do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_equal 1, status
+      assert_match(/nabu sync or nabu rebuild/, err)
+    end
+  end
+
+  def test_align_with_no_registry_exits_one_with_guidance
+    with_aligned_corpus(registry: "") do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_equal 1, status
+      assert_match(/no alignment works registered/i, err)
+    end
+  end
+
+  def test_align_unknown_work_exits_one_naming_the_registered
+    with_aligned_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--work", "iliad"]) }
+      assert_equal 1, status
+      assert_match(/iliad/, err)
+      assert_match(/nt/, err)
+    end
+  end
+
+  def test_align_without_a_ref_exits_one
+    with_aligned_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[align]) }
+      assert_equal 1, status
+      assert_match(/give a citation/i, err)
+    end
+  end
+
+  # -- align ranges / chapters (P11-8) ---------------------------------------
+
+  def test_align_chapter_renders_every_ref_compactly_with_a_witness_legend
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1]) }
+      assert_nil status
+      assert_match(/JON 1 — /, out, "the query heads the block")
+      assert_match(/witnesses:.*full.*partial/m, out, "a one-line legend, titles shown once")
+      # Every attested verse in document order, verse 1 before verse 2 before 10.
+      assert(out.index("JON 1.1") < out.index("JON 1.2"), "refs in document order")
+      assert(out.index("JON 1.2") < out.index("JON 1.10"), "numeric, not lexical, order")
+      assert_match(/full  greek verse 1/, out)
+      assert_match(/partial — not attested/, out, "per-ref attestation honesty")
+    end
+  end
+
+  def test_align_chapter_summarizes_all_absent_witnesses_once_in_the_header
+    with_absent_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1]) }
+      assert_nil status
+      assert_match(/not synced: ghost/, out, "an all-absent witness is summarized once in the header")
+      assert_equal 1, out.scan("ghost").length, "ghost never repeats down the per-ref blocks"
+      assert_match(/partial — not attested/, out, "a partially-attesting witness stays per-ref")
+      assert_match(/full  greek verse 1/, out, "attesting witnesses render per ref as before")
+    end
+  end
+
+  def test_align_verse_range_renders_the_inclusive_slice
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "JON 1.3-1.5"]) }
+      assert_nil status
+      assert_match(/JON 1\.3/, out)
+      assert_match(/JON 1\.5/, out)
+      refute_match(/JON 1\.6/, out, "the range is inclusive and bounded")
+      refute_match(/JON 1\.2\b/, out)
+    end
+  end
+
+  def test_align_reversed_range_exits_one
+    with_range_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "JON 1.5-1.3"]) }
+      assert_equal 1, status
+      assert_match(/reversed range/, err)
+    end
+  end
+
+  def test_help_align_documents_refs_work_and_examples
+    out, _err, _status = run_cli(%w[help align])
+    assert_match(/MARK 2\.3/, out, "a worked ref example")
+    assert_match(/--work/, out)
+    assert_match(%r{config/alignments\.yml}, out, "must point at the registry")
+    assert_match(/Examples:/, out)
+  end
+
   # -- export (P4-3) -------------------------------------------------------
 
   def test_export_plain_streams_one_line_per_passage
@@ -820,6 +1074,165 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # An on-disk two-witness alignment corpus (P11-3): a registry file, a
+  # catalog with the greek-nt/marianus MARK 2.3 sentences (real live-catalog
+  # snippets, sentence-id urns, verse identity in the token citation_parts),
+  # and — unless indexed: false — the fulltext db with alignment_refs built.
+  def with_aligned_corpus(registry: nil, extra_witness: nil, indexed: true)
+    Dir.mktmpdir("nabu-cli-align") do |root|
+      config = aligned_corpus_config(root, registry, extra_witness)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_aligned_witnesses(catalog)
+      index_aligned_corpus(config, catalog) if indexed
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def aligned_corpus_config(root, registry, extra_witness)
+    yaml = registry || <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:marianus
+    YAML
+    yaml += "    - document: #{extra_witness}\n" if extra_witness
+    alignments = File.join(root, "alignments.yml")
+    File.write(alignments, yaml)
+    sources = File.join(root, "sources.yml")
+    File.write(sources, "# none\n")
+    Nabu::Config.new(
+      canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+      sources_path: sources, alignments_path: alignments, config_path: "(test)"
+    )
+  end
+
+  def seed_aligned_witnesses(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter", license_class: "nc",
+      enabled: true
+    )
+    [["greek-nt", "Greek NT", "grc",
+      "καὶ ἔρχονται φέροντες πρὸς αὐτὸν παραλυτικὸν αἰρόμενον ὑπὸ τεσσάρων."],
+     ["marianus", "Codex Marianus", "chu",
+      "Ꙇ придѫ къ немоу носѧште ослабленъ жилами. носимъ четꙑрьми."]].each do |tail, title, lang, text|
+      doc_id = catalog[:documents].insert(
+        source_id: source_id, urn: "urn:nabu:proiel:#{tail}", title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "urn:nabu:proiel:#{tail}:1", sequence: 0, language: lang,
+        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        annotations_json: JSON.generate(
+          "citation" => "MARK 2.3",
+          "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
+        )
+      )
+    end
+  end
+
+  # A synced+indexed corpus for range/chapter align tests: two cts-verse
+  # witnesses over Jonah 1 — "full" attests vv. 1..10, "partial" only 1 and 3.
+  def range_registry_yaml
+    <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+    YAML
+  end
+
+  def with_range_corpus
+    Dir.mktmpdir("nabu-cli-range") do |root|
+      config = aligned_corpus_config(root, range_registry_yaml, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_range_witnesses(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # Jonah 1 with a THIRD witness (ghost) whose document is never seeded — it is
+  # not_synced across the whole range, so P11-9 lifts it to the header summary
+  # and drops it from every per-ref block. full/partial seed as usual.
+  def with_absent_range_corpus
+    yaml = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+          - label: ghost
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-z:jon
+    YAML
+    Dir.mktmpdir("nabu-cli-absent") do |root|
+      config = aligned_corpus_config(root, yaml, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_range_witnesses(catalog) # src-a + src-b only; src-z stays unsynced
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_range_witnesses(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "open", enabled: true
+    )
+    seed_verse_book(catalog, source_id, "urn:nabu:src-a:jon", "ΙΩΝΑΣ", "grc",
+                    (1..10).map { |v| ["1.#{v}", "greek verse #{v}"] })
+    seed_verse_book(catalog, source_id, "urn:nabu:src-b:jon", "Jonas", "lat",
+                    [["1.1", "latin one"], ["1.3", "latin three"]])
+  end
+
+  def seed_verse_book(catalog, source_id, urn, title, lang, verses)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: title, language: lang,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    verses.each_with_index do |(tail, text), sequence|
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "#{urn}:#{tail}", sequence: sequence, language: lang,
+        text: text, text_normalized: text, content_sha256: "x", revision: 1,
+        withdrawn: false, annotations_json: "{}"
+      )
+    end
+  end
+
+  def index_aligned_corpus(config, catalog)
+    FileUtils.mkdir_p(File.dirname(config.fulltext_path))
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    Nabu::Store::Indexer.rebuild!(
+      catalog: catalog, fulltext: fulltext,
+      alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
+    )
+    fulltext.disconnect
   end
 
   # A synced-and-indexed corpus with one document whose two passages carry the

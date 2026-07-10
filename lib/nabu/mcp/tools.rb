@@ -10,6 +10,8 @@ require_relative "../query/lemma_search"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
+require_relative "../query/align"
+require_relative "../query/define"
 
 module Nabu
   module MCP
@@ -77,12 +79,25 @@ module Nabu
       CONCORD_MAX_LIMIT = 50
       CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
       CONCORD_MAX_WIDTH = 120
+      DEFINE_DEFAULT_LIMIT = 3
+      DEFINE_MAX_LIMIT = 10
+      # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
+      DEFINE_BODY_CAP = 6_000
+      DEFINE_MAX_CITATIONS = 40
+      # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
+      MAX_ALIGN_REFS = Query::Align::MAX_REFS
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       BUSY_ATTEMPTS = 3
 
       NO_CORPUS_NOTE = "no corpus here yet — run `nabu sync <source>` or `nabu rebuild` " \
                        "to build it, then retry"
+      NO_ALIGNMENTS_NOTE = "no alignment works registered — the owner adds works/witnesses " \
+                           "to config/alignments.yml (architecture §10)"
+      NO_SHELF_NOTE = "no dictionary shelf in this catalog yet — run `nabu sync lexica` (or " \
+                      "`nabu rebuild` after one) to build it, then retry"
+      ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
+                              "alignment hub) — retry shortly, or run `nabu rebuild`"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
       LEMMA_REBUILDING_NOTE = "lemma index rebuilding (or the fulltext index predates lemma " \
                               "search) — retry shortly, or run `nabu rebuild`"
@@ -133,6 +148,38 @@ module Nabu
         "license_class, and source — PRESERVE the license fields when quoting. Use nabu_show for " \
         "a hit's full passage, nabu_search when you want ranked relevance rather than a scan.".freeze
 
+      ALIGN_DESCRIPTION =
+        "Cross-source alignment over the local nabu corpus: one citation of a registered work " \
+        "rendered across EVERY witness the alignment registry names — e.g. the same New " \
+        "Testament verse in Greek, Latin, Gothic, Classical Armenian, and Old Church Slavonic " \
+        "at once. `ref` is a citation in the work's scheme (\"MARK 2.3\"; case/spacing/" \
+        "chapter:verse colons normalize) or a passage urn to pivot from a search/show hit. " \
+        "`work` picks the registry work when several exist (optional with one). Witnesses come " \
+        "in registry order; each carries its language and license_class (the NT witnesses are " \
+        "nc — PRESERVE the license fields when quoting), and every sentence row carries urn + " \
+        "language + license_class + source. Sentence≠verse: a sentence spanning a verse " \
+        "boundary lists every ref it covers. Honest absence: a witness lacking the verse reads " \
+        "status no_match; a registered-but-unsynced witness reads not_synced. `ref` may also be " \
+        "a whole CHAPTER (\"JON 1\") or an inclusive same-book verse RANGE (\"JON 1.1-1.16\"): " \
+        "the reply is a `refs` array, one entry per ref in document order (each with the same " \
+        "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note. Witnesses " \
+        "absent from EVERY ref of a range are summarized once in `absent_witnesses` " \
+        "(reason not_attested|not_synced) and omitted from the per-ref columns, so a chapter stays " \
+        "readable.".freeze
+
+      DEFINE_DESCRIPTION =
+        "Look up a lemma (dictionary form) in the classical lexica nabu holds locally — LSJ " \
+        "for ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat) picks a shelf when the " \
+        "spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
+        "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
+        "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
+        "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
+        "in the local catalog the citation carries a resolved passage urn (open it with " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
+        "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
+        "separate entries).".freeze
+
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
         "recency, passage counts by language and by license class, index state, and what is " \
@@ -182,6 +229,37 @@ module Nabu
 
       STATUS_SCHEMA = { type: "object", properties: {}, additionalProperties: false }.freeze
 
+      ALIGN_SCHEMA = {
+        type: "object",
+        properties: {
+          ref: { type: "string",
+                 description: "Citation in the work's scheme (e.g. \"MARK 2.3\"), a whole " \
+                              "chapter (\"JON 1\"), an inclusive same-book verse range " \
+                              "(\"JON 1.1-1.16\"), or a passage urn to pivot from." },
+          work: { type: "string",
+                  description: "Alignment work id from the registry (optional when exactly " \
+                               "one work is registered)." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["ref"],
+        additionalProperties: false
+      }.freeze
+
+      DEFINE_SCHEMA = {
+        type: "object",
+        properties: {
+          lemma: { type: "string",
+                   description: "Dictionary form to look up (e.g. λόγος, virtus)." },
+          lang: { type: "string", enum: %w[grc lat],
+                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short." },
+          limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
+                   default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["lemma"],
+        additionalProperties: false
+      }.freeze
+
       CONCORD_SCHEMA = {
         type: "object",
         properties: {
@@ -213,13 +291,21 @@ module Nabu
                          handler: :show },
         "nabu_concord" => { description: CONCORD_DESCRIPTION, input_schema: CONCORD_SCHEMA,
                             handler: :concord },
+        "nabu_align" => { description: ALIGN_DESCRIPTION, input_schema: ALIGN_SCHEMA,
+                          handler: :align },
+        "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
+                           handler: :define },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
 
-      def initialize(catalog:, fulltext:)
+      # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
+      # returning one, or nil when the hub is unconfigured) — config-loaded by
+      # the entrypoint, resolved per call like the connection slots.
+      def initialize(catalog:, fulltext:, alignments: nil)
         @catalog = catalog
         @fulltext = fulltext
+        @alignments = alignments
       end
 
       # tools/list shape: [{name:, description:, inputSchema:}].
@@ -308,6 +394,47 @@ module Nabu
         render_concord(rows, limit: limit, width: width, catalog: catalog)
       end
 
+      def align(args)
+        ref = string_arg(args, "ref") or
+          raise InvalidArguments, "nabu_align needs a ref (a citation like MARK 2.3, or a passage urn)"
+        registry = resolve(@alignments)
+        return note(NO_ALIGNMENTS_NOTE) if registry.nil? || registry.empty?
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = resolve(@fulltext)
+        return note(ALIGN_REBUILDING_NOTE) unless fulltext&.table_exists?(Store::AlignmentIndexer::TABLE)
+
+        result = Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                             .run(ref, work: string_arg(args, "work"))
+        include_restricted = args["include_restricted"] == true
+        json(if result.is_a?(Query::Align::RangeResult)
+               align_range_payload(result, include_restricted: include_restricted)
+             else
+               align_payload(result, include_restricted: include_restricted)
+             end)
+      rescue Query::Align::Error => e
+        # Caller-fixable (unknown work, unaligned urn): isError so the model
+        # self-corrects (SEP-1303), same stance as bad arguments.
+        tool_error(e.message)
+      end
+
+      def define(args)
+        lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
+        lang = string_arg(args, "lang")
+        if lang && !%w[grc lat].include?(lang)
+          raise InvalidArguments, "lang must be grc or lat (the shelves this corpus holds)"
+        end
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        return note(NO_SHELF_NOTE) unless catalog.table_exists?(:dictionary_entries)
+
+        limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
+        include_restricted = args["include_restricted"] == true
+        results = Query::Define.new(catalog: catalog).run(lemma, lang: lang, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_define(results, lemma: lemma, limit: limit)
+      end
+
       def status(_args)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
 
@@ -317,7 +444,8 @@ module Nabu
           license_classes: license_counts(catalog, excluded: false),
           excluded_by_default: license_counts(catalog, excluded: true),
           totals: { documents: visible_documents(catalog).count,
-                    passages: visible_passages(catalog).count },
+                    passages: visible_passages(catalog).count,
+                    dictionary_entries: dictionary_entry_counts(catalog).values.sum },
           index: index_state,
           note: "counts are live passages/documents (withdrawn excluded); " \
                 "research_private/restricted material is excluded from these counts and " \
@@ -377,9 +505,57 @@ module Nabu
           text: truncate(result.text)
         }
         if result.respond_to?(:lemma)
-          base.merge(lemma: result.lemma, surface_forms: result.surface_forms)
+          # gloss (P11-4): the dictionary-shelf short gloss, nil-honest.
+          base.merge(lemma: result.lemma, surface_forms: result.surface_forms, gloss: result.gloss)
         else
           base.merge(snippet: result.snippet)
+        end
+      end
+
+      # -- define internals ---------------------------------------------------------
+
+      def render_define(results, lemma:, limit:)
+        if results.empty?
+          return json(entries: [],
+                      note: "no dictionary entry for #{lemma.inspect} — the shelf holds LSJ (grc) " \
+                            "and Lewis & Short (lat); diacritics are optional, but the lemma must " \
+                            "be a dictionary form (nabu_search with lemma: finds attestations)")
+        end
+
+        shown = results.first(limit)
+        json(
+          entries: shown.map { |result| define_payload(result) },
+          note: if results.size > limit
+                  "more than #{limit} entries, showing #{limit} — raise limit (max #{DEFINE_MAX_LIMIT})"
+                else
+                  "#{shown.size} #{shown.size == 1 ? 'entry' : 'entries'}"
+                end
+        )
+      end
+
+      def define_payload(result)
+        body = result.body
+        truncated = body.length > DEFINE_BODY_CAP
+        base = {
+          urn: result.urn, dictionary: result.dictionary_slug,
+          dictionary_title: result.dictionary_title, headword: result.headword,
+          language: result.language, license_class: result.license_class,
+          license: result.license, source: result.source_slug, gloss: result.gloss,
+          body: truncated ? "#{body[0, DEFINE_BODY_CAP]}…" : body,
+          body_truncated: truncated,
+          citations: define_citations(result)
+        }
+        return base unless truncated
+
+        base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
+                         "`nabu define #{result.headword}` (CLI) renders it whole")
+      end
+
+      # Resolved citations first (they are the actionable ones), capped.
+      def define_citations(result)
+        ordered = result.citations.partition(&:resolved_urn).flatten(1)
+        ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
+          { label: citation.label, resolved_urn: citation.resolved_urn }
         end
       end
 
@@ -537,6 +713,80 @@ module Nabu
           text: line.text, withdrawn: line.withdrawn }
       end
 
+      # -- align internals ---------------------------------------------------------
+
+      def align_payload(result, include_restricted:)
+        attesting = result.witnesses.count { |witness| witness.status == :ok }
+        {
+          type: "alignment", work: result.work, title: result.title, ref: result.ref,
+          witnesses: result.witnesses.map { |witness| align_witness_payload(witness, include_restricted) },
+          note: "#{attesting} of #{result.witnesses.size} registered witnesses attest #{result.ref}; " \
+                "statuses: ok (sentences follow), no_match (verse absent from that witness), " \
+                "not_synced (registered, no data yet), withheld (license-excluded)"
+        }
+      end
+
+      # A range/chapter query: the query string, the ref groups in document
+      # order (each carrying the same witness columns as a single-ref reply),
+      # and the honest cap accounting — total refs, how many are shown, whether
+      # the ceiling clipped them (nabu_define's cap style).
+      def align_range_payload(result, include_restricted:)
+        {
+          type: "alignment_range", work: result.work, title: result.title, query: result.query,
+          total_refs: result.total, shown_refs: result.groups.size, truncated: result.truncated,
+          # P11-9: witnesses absent from EVERY ref are summarized here once and
+          # dropped from the per-ref witness arrays (the per-ref columns stay
+          # readable). reason: not_attested (live, verses absent) | not_synced.
+          absent_witnesses: result.absent.map { |witness| { label: witness.label, reason: witness.reason.to_s } },
+          refs: result.groups.map do |group|
+            { ref: group.ref,
+              witnesses: group.witnesses.map { |witness| align_witness_payload(witness, include_restricted) } }
+          end,
+          note: range_note(result)
+        }
+      end
+
+      def range_note(result)
+        base = "#{result.query}: #{result.groups.size} refs in document order, each with its witness " \
+               "columns (statuses: ok, no_match, not_synced, withheld)#{absent_note(result.absent)}"
+        return base unless result.truncated
+
+        "#{base} — TRUNCATED at #{MAX_ALIGN_REFS} of #{result.total} refs; narrow the range"
+      end
+
+      # The absent-witness clause (P11-9): present only when witnesses were
+      # lifted out of the per-ref columns, so the model knows to read them off
+      # absent_witnesses rather than expecting them per ref.
+      def absent_note(absent)
+        return "" if absent.empty?
+
+        "; #{absent.size} witness(es) absent from every ref are summarized in absent_witnesses " \
+          "(reason: not_attested|not_synced) and omitted from the per-ref columns"
+      end
+
+      # One witness column. A witness whose effective license class is
+      # default-excluded is WITHHELD bodily (status + license class only, no
+      # urns, no text) unless include_restricted — the same never-leak stance
+      # as everywhere else on this surface.
+      def align_witness_payload(witness, include_restricted)
+        base = { label: witness.label, document_urn: witness.document_urn,
+                 title: witness.title, language: witness.language,
+                 license_class: witness.license_class, source: witness.source_slug }
+        return base.merge(status: "withheld", sentences: []) if withhold?(witness.license_class, include_restricted)
+
+        base.merge(status: witness.status.to_s,
+                   sentences: witness.sentences.map { |sentence| align_sentence_payload(witness, sentence) })
+      end
+
+      # Every sentence row carries the full contract fields (urn + language +
+      # license_class + source) plus the refs it covers — sentence≠verse,
+      # stated per row.
+      def align_sentence_payload(witness, sentence)
+        { urn: sentence.urn, language: witness.language,
+          license_class: witness.license_class, source: witness.source_slug,
+          text: sentence.text, refs: sentence.refs }
+      end
+
       # -- the exclusion gate ------------------------------------------------------
 
       def withhold?(license_class, include_restricted)
@@ -561,6 +811,7 @@ module Nabu
       # -- status internals -----------------------------------------------------------
 
       def source_rows(catalog)
+        entries = dictionary_entry_counts(catalog)
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
           { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
@@ -568,8 +819,25 @@ module Nabu
             documents: live_docs.count,
             passages: catalog[:passages].where(withdrawn: false)
                                         .where(document_id: live_docs.select(:id)).count,
+            # P11-10: a dictionary source's content is entries, not docs/passages;
+            # surfacing the entry count here stops the reference shelf (lexica,
+            # 168k entries) from reading as an empty docs=0 passages=0 source.
+            entries: entries[source[:id]] || 0,
             last_sync_at: source[:last_sync_at]&.to_s }
         end
+      end
+
+      # Live dictionary-entry counts keyed by owning source id — empty when this
+      # catalog has no reference shelf yet (the dictionary tables land with the
+      # first lexica sync, P11-4).
+      def dictionary_entry_counts(catalog)
+        return {} unless catalog.table_exists?(:dictionaries) && catalog.table_exists?(:dictionary_entries)
+
+        catalog[:dictionary_entries]
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .where(Sequel[:dictionary_entries][:withdrawn] => false)
+          .group_and_count(Sequel[:dictionaries][:source_id])
+          .to_h { |row| [row[:source_id], row[:count]] }
       end
 
       def language_counts(catalog)

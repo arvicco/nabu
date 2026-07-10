@@ -36,6 +36,20 @@ module Nabu
         digest(document.urn, document.language, document.title, document.canonical_path, *passage_hashes)
       end
 
+      # sha256 over a dictionary entry's content columns (P11-4) — everything
+      # except revision/withdrawn bookkeeping. Citations are content: a
+      # citation change is a real upstream revision.
+      def dictionary_entry(entry)
+        citations = entry.citations.map do |citation|
+          { "urn_raw" => citation.urn_raw, "cts_work" => citation.cts_work,
+            "citation" => citation.citation, "label" => citation.label }
+        end
+        digest(
+          entry.entry_id, entry.key_raw, entry.language, entry.headword,
+          entry.headword_folded, entry.gloss, entry.body, canonical_json(citations)
+        )
+      end
+
       # JSON with hash keys sorted recursively (by string form), so
       # semantically equal structures serialize — and therefore hash — equal.
       # Also used for the stored annotations_json, keeping rows byte-stable

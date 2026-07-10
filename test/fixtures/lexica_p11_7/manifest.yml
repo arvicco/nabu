@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM P11-7 fixture (real LSJ alpha slice from PerseusDL/lexica). Non-refetchable: re-acquiring = a ~160 MB clone. See README.md.
+source: lexica_p11_7
+adapter_test:
+files:
+  - path: CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml
+    refetchable: false
+    provenance: local-trim
+    reason: "2 real alpha entries in the eng13 TEI envelope; n6454 carries the trailing-colon work-level CTS urn (fix 5)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"

@@ -1,0 +1,9 @@
+{
+ "type": "catalogue",
+ "project": "saao/saa01",
+ "members": {
+  "P334176": {
+   "designation": "SAA 01 001 (nested-root sample)"
+  }
+ }
+}

@@ -81,6 +81,32 @@ class GretilTest < Minitest::Test
     end
   end
 
+  # --- P11-7 fix 6: editions whose <text> lacks @xml:lang are recovered ------
+
+  # sa_haribhadrasUri-zAstravArttAsamuccaya (and the 1.8 MB Mitākṣarā) carry a
+  # <text> with NO @xml:lang — peek_header returned nil and discovery dropped
+  # them INVISIBLY. The language now falls back to <body>/@xml:lang (san-Latn),
+  # so the genuine edition is recovered rather than silently lost.
+  STRAYS = Nabu::TestSupport.fixtures("gretil_p11_7")
+  HARIBHADRA = "urn:nabu:gretil:sa_haribhadrasUri-zAstravArttAsamuccaya"
+
+  def test_edition_without_text_xml_lang_is_recovered_via_body_lang
+    adapter = Nabu::Adapters::Gretil.new
+    ref = adapter.discover(STRAYS).find { |r| r.id == HARIBHADRA }
+    refute_nil ref, "the <text>-lang-less edition must be discovered, not dropped"
+    assert_equal "san-Latn", ref.metadata["language"] # from <body xml:lang="sa-Latn">
+
+    doc = adapter.parse(ref)
+    assert_equal "san-Latn", doc.language
+    refute_empty doc
+    assert_equal(%w[1.1.1 1.1.2 1.1.3], doc.map { |p| p.urn.split(":").last })
+  end
+
+  def test_stray_recovery_leaves_no_silent_discovery_skip
+    skips = Nabu::Adapters::Gretil.new.discovery_skips(STRAYS)
+    assert_equal 0, skips.skipped_by_rule, "the recovered edition must not read as skipped"
+  end
+
   # --- rung (a): attribute-cited <l>/@n, accents preserved pristine ---------
 
   def test_rgveda_attribute_citations_with_pristine_accented_text

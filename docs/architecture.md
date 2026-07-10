@@ -177,7 +177,7 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 ## 8. Failure & integrity
 
 - **The retention contract (the attic).** If upstream scraps a document — deletion, license change, disagreement — local storage marks it and KEEPS it usable. Git-based fetch is non-destructive (`Nabu::GitFetch`): `git fetch` first (objects only, working tree untouched), then each file the `HEAD..FETCH_HEAD` diff deletes is copied to `canonical/<slug>/.attic/<same relative path>` before the ff-only merge. First copy wins — an attic file is never overwritten — and a per-attic `.attic.json` manifest records the upstream sha each file vanished at. The attic lives *inside* canonical/, so `db = f(canonical)` holds unchanged: every rebuild replays attic documents (as `retired_upstream` rows with "retired" provenance carrying that sha). Renames are not scrapping (`--find-renames` is explicit): content surviving at a new path is not atticked. Retired documents stay fully live — indexed, searchable, exportable — and `status`/`show` label them; only intra-document edition changes stay revision-journaled (an upstream typo fix is not scrapping). Out of scope, deliberately: a revised passage's *old text* is journaled by sha only (not stored), and the attic protects against upstream loss, not local disk loss — backups remain the answer there.
-- **The HTTP-zip fetch path (`Nabu::ZipFetch`, P10-1) honors the same contract.** ORACC ships per-project zips over plain HTTP (no upstream git repo), so a second fetch implementation exists — with attic parity, deliberately mirrored phase for phase: download + unpack to a private staging dir first (live tree untouched), doomed files = live files absent from the fresh unpack, guard between the phases (raising aborts byte-unchanged), then attic-before-delete with the SAME `.attic.json` manifest format (rel path → the sha256 of the zip build the file vanished at — the FETCH_HEAD analog, and the sha `FetchReport` pins), first copy and first record win, then the staged tree swaps in. Change detection is `Last-Modified`/`If-Modified-Since` (a `.zip-fetch.json` state file per project dir; 304 = tree current, nothing touched). Zip handling shells out to the system `unzip` via `Nabu::Shell` — no zip gem. One honest gap: the remote health probe is `git ls-remote`-shaped and cannot see an HTTP upstream; ORACC reads as gone in `nabu health --remote` until the probe learns non-git upstreams (flagged P10-gate).
+- **The HTTP-zip fetch path (`Nabu::ZipFetch`, P10-1) honors the same contract.** ORACC ships per-project zips over plain HTTP (no upstream git repo), so a second fetch implementation exists — with attic parity, deliberately mirrored phase for phase: download + unpack to a private staging dir first (live tree untouched), doomed files = live files absent from the fresh unpack, guard between the phases (raising aborts byte-unchanged), then attic-before-delete with the SAME `.attic.json` manifest format (rel path → the sha256 of the zip build the file vanished at — the FETCH_HEAD analog, and the sha `FetchReport` pins), first copy and first record win, then the staged tree swaps in. Change detection is `Last-Modified`/`If-Modified-Since` (a `.zip-fetch.json` state file per project dir; 304 = tree current, nothing touched). Zip handling shells out to the system `unzip` via `Nabu::Shell` — no zip gem. The remote health probe is strategy-keyed per source (P11-2, `Adapter.remote_probe_strategy`): git sources `ls-remote`, HTTP-zip sources (ORACC) HEAD each project zip for reachability + `Last-Modified` drift vs the stored `.zip-fetch.json` pin and GET each `metadata.json` for license drift, both through ZipFetch's vendored-cert path — so ORACC reads honestly (reachable / never-synced / drift), not gone.
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
 - Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
@@ -226,3 +226,213 @@ decision: the field moves fast, we keep control; the conformant core is
   (the mid-reindex window) → "index rebuilding — retry shortly", SQLITE_BUSY
   → brief retry then the same graceful shape. No write tools exist in this
   phase, deliberately.
+
+## 10. The alignment hub — one work across sources (P11-3)
+
+`nabu align "MARK 2.3"` renders the same verse in every witness the corpus
+holds — the flagship is the five-way parallel New Testament (PROIEL greek-nt
+grc · latin-nt lat · gothic-nt got · armenian-nt xcl · TOROT-family marianus
+chu, all under the proiel source). This section records the design decisions
+and the upstream reality they answer to.
+
+**The citation reality (verified against the live catalog, 2026-07-09).**
+PROIEL passage urns are *sentence ids* (`urn:nabu:proiel:greek-nt:6563`),
+not verses — suffix-equality alignment (§3, Query::Parallel) is structurally
+impossible across these witnesses. Verse identity lives in the stored
+annotations: every token carries `citation_part` ("MARK 2.3"), lifted by
+ProielParser into `annotations_json`; the passage-level `citation` field is
+only the *first* token's part. Sentence↔verse is honestly many-to-many (846
+greek-nt sentences span a verse boundary; a verse is often several
+sentences). The five witnesses share one book vocabulary (MATT, MARK, …),
+but refs are meaningful only *within* a work — PROIEL's Cicero cites a
+bookless "1.1" — and not every ref is numeric (Gothic carries
+"MARK Incipit.0"). Coverage is fragmentary per witness (Armenian holds only
+sampled chapters; John 1:1 is absent from Gothic and Marianus), so absence
+must render honestly, never fuzzed.
+
+**Registry + derived ref index, not materialized pairs.** The declarative
+side is `config/alignments.yml` (Nabu::AlignmentRegistry, validated loudly
+on load like sources.yml): works keyed by id (`nt`, `ot`), each listing its
+witnesses — one document urn (`document:`) or, since P11-5, a per-book
+document map (`documents:`, work-vocabulary book token → urn: the shape of
+an edition minted one-document-per-book), plus citation `extractor`,
+optional `books:` alias map and display `label`. Adding a witness is a
+registry entry, never code. The
+materialized side is ONE derived table, `alignment_refs` in
+fulltext.sqlite3: one row per (work, normalized ref, passage) — (work, ref,
+document_urn, passage_id, passage_urn, seq) — built by the Indexer from the
+catalog's stored `annotations_json` (never by re-parsing canonical), exactly
+the P7-5 passage_lemmas pattern: same drop-and-rebuild lifecycle, same
+"not a migration" stance, same file. Materialized passage *pairs* were
+rejected: pairs are O(witnesses²) rows that go stale the day a sixth
+witness lands, while ref rows are O(passages) and the N-way pairing is a
+query-time GROUP BY ref. The catalog schema is untouched.
+
+**Citation normalization.** A ref is an opaque string scoped to its work,
+folded identically on both sides (the §9/P6-4 contract again):
+whitespace-collapsed, uppercased, `:` → `.` — so a query spelled
+"Mark 2:3" finds rows indexed "MARK 2.3". A witness whose book tokens
+differ maps them in its registry `books:` alias table at index time;
+non-verse refs (Incipit.0) fold and index like any other and stay
+addressable. Extractors are a CLOSED, registry-validated set of two:
+`proiel-citation` (P11-3: the distinct per-token citation_part values of a
+sentence; multi-verse sentences index one row per verse covered) and
+`cts-verse` (P11-5: the witness's registry book token + the passage urn's
+citation tail — `…tlg0527.tlg001.1st1K-grc1:1.2` under `GEN:` indexes
+"GEN 1.2" — for verse-grain editions whose verse identity IS the passage
+urn; no annotations read). cts-verse requires the `documents:` witness form
+(the book token comes from the registry, since a per-book document's urn
+tails are bookless); a single-chapter book's flat tail folds to "LJE 5" and
+stays addressable, the Incipit stance again.
+
+**Rebuild-safety.** The registry is config — canonical-adjacent, in git, in
+the backup set, untouched by rebuild. The index is a pure function of
+(catalog, registry) and is rebuilt inside every `Indexer.rebuild!` (both
+call sites: SyncRunner#reindex!, Rebuild) — so `nabu rebuild` regenerates
+alignment for free, id re-minting and all (the index carries re-minted
+passage_ids precisely because it is dropped and rebuilt with them). No
+hand-curated rows exist anywhere in db/.
+
+**Query surface: a new `align` subcommand.** `nabu align REF [--work ID]`
+(REF may also be a passage urn, pivoting from a show/search hit into its
+verse). A new subcommand rather than `show --align` or an extension of
+`--parallel`, deliberately: show/--parallel take a *urn* and resolve
+CTS-sibling editions by suffix equality — a different mechanism with
+document-lookup semantics — while align takes a *citation* and resolves the
+registry; forcing one onto the other would conflate the two lookup models.
+Query::Parallel stays what it is (within-source translation pairing);
+Query::Align is its cross-source sibling. Output: the witnesses in registry
+order, each with title, language, EFFECTIVE license class (override ∘
+source class, resolved at query time — never stored in the index), and its
+sentences in sequence order, labeled with the full ref span when a sentence
+covers more verses than the one asked for. A registered witness absent from
+the catalog renders as "not synced" (the day-one state of the OE Mark
+entry); a synced witness lacking the verse renders "not attested".
+
+**MCP surface: `nabu_align`.** One more entry in the §9 tool table, same
+contract: every sentence row carries urn + language + license_class +
+source (the five NT witnesses are all `nc` — the labels are the point),
+bounded output, research_private/restricted witnesses withheld unless
+`include_restricted`, corpus states degrade gracefully (missing
+alignment_refs table → "alignment index not built — run nabu sync or nabu
+rebuild").
+
+**How later witnesses plug in.** ISWOC's OE Gospel of Mark (P11-1: PROIEL
+XML 2.1, native `citation-part="MARK 1.1"`) is one registry entry under
+`nt` with the same `proiel-citation` extractor — zero code, and the hub
+renders for Mark the day the adapter syncs. The P11-5 biblical trio landed
+exactly as forecast — entries plus the one `cts-verse` extractor: `nt`
+gained SBLGNT (CC BY, 27 per-book documents) and the Clementine Vulgate's
+NT books (public domain), and a new `ot` work pairs the LXX (Swete —
+ALREADY in the catalog as First1KGreek tlg0527, verse-grain CTS urns; the
+registry-only witness) with the Vulgate's OT books. A multi-document
+witness renders as ONE column: the hit book's document heads it
+(title/urn), a miss shows the label alone (no arbitrary book title), and
+"not synced" appears only when none of its documents are live. GRETIL
+commentary layers are a *new work* with its own ref scheme (works are
+independent namespaces; nothing NT-shaped is hardcoded). Versification
+swamps (LXX-vs-Masoretic) stay out of scope by the same scoping: a work's
+witnesses must share a citation scheme, and whoever registers a witness
+owns that claim — the `ot` registrar's claim rests on both witnesses
+following the Greek tradition (Vulgate Psalms are numbered after the LXX,
+so "PSA 22.1" is the shepherd psalm in both).
+
+## 11. The dictionary shelf — lexica as data (P11-4)
+
+`nabu define μῆνις` prints the LSJ entry — gloss, sense tree as structured
+plain text, and every citation the entry makes, resolved to in-catalog
+passage urns where the cited work is here (`Il. 1.1 →
+urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1` — one `nabu show` away).
+Two dictionaries ship: LSJ (grc) and Lewis & Short (lat), both from
+PerseusDL/lexica (CC BY-SA 4.0 → attribution class). This section records
+the design decisions.
+
+**Dictionaries ARE sources — with a declared content kind.** The lexica are
+a registry source like any other (`lexica` in sources.yml): canonical data
+under `canonical/lexica/`, fetched by GitFetch with the attic and the
+mass-deletion breaker, reconciled/pinned/journaled through the same ledger
+machinery, probed by health like every git source. What differs is only the
+load shape, declared once on the adapter — `Adapter.content_kind`, default
+`:passages`, overridden to `:dictionary` — and routed on in exactly two
+places (SyncRunner#load, Rebuild#replay): dictionary sources load through
+`Store::DictionaryLoader` instead of the passage Loader. A parallel
+fetch/sync mechanism was rejected: it would duplicate retention, breakers,
+run recording, pins and probes to avoid one routing conditional. The
+adapter's parse returns `Nabu::DictionaryDocument` (one FILE's entries —
+LSJ ships 27 letter-split files) — never passages, so dictionary entries
+can never flood full-text search. The passage-shaped conformance suite
+cannot apply; the lexica adapter test mirrors its checks for the dictionary
+shape (manifest, round-trip, id uniqueness/stability, NFC).
+
+**Storage: catalog tables, by migration.** Entries are first-class
+derived-from-canonical data with the same idempotency/revision/withdrawal
+semantics as documents — upsert on (dictionary, entry_id), skip on equal
+content sha, revise+bump on change, withdraw on full-load absence, journal
+to provenance (new nullable `dictionary_entry_id`) and to the durable
+ledger under urn `urn:nabu:dict:<slug>:<entry_id>`. That is
+catalog-shaped, so migration 006 puts `dictionaries`, `dictionary_entries`
+and `dictionary_citations` in catalog.sqlite3. NOT fulltext.sqlite3: that
+file holds disposable derived-of-derived indexes (drop-and-rebuild, no
+revision history); parking the primary copy of entry bodies there would
+invert the layering. NOT a new db file: "one file per concern" cuts at
+real concerns, and entries are the same concern as documents — a fourth
+file would add connection plumbing through every CLI/MCP entry point for
+no boundary. Rebuild-safety is free: `nabu rebuild` drops the catalog and
+replays `canonical/lexica/` through the same loader (pinned by test:
+byte-identical entries and citations across two rebuilds).
+
+**Betacode at the boundary.** LSJ's Greek — keys, orths, quotes — is TLG
+betacode ("mh=nis"); Lewis & Short's Unicode variant (eng2) is ingested and
+its betacode twin (eng1) skipped. `Nabu::Betacode` (table-driven, no gem)
+decodes at the adapter boundary like every other text normalization:
+canonical mark ordering, NFC output, positional sigma. Headwords key the
+shelf FOLDED — `headword_folded = Normalize.search_form(decoded key,
+dictionary language)`, hyphens and homograph digits stripped — the same
+both-sides contract as lemma search (conventions §9), which is exactly what
+lets a treebank lemma hit carry its dictionary gloss (`search --lemma
+officium` shows "a service" — Query::Define#glosses, one batched lookup,
+dictionary language must match the lemma's).
+
+**Citation resolution — query time, best effort, honest misses.** The 2014
+upstream revision put CTS urns in `bibl/@n`; the parser keeps each verbatim
+(`urn_raw`) and derives the resolution keys: a work-level prefix
+(`urn:cts:greekLit:tlg0012.tlg001` — upstream EDITION tokens are dropped,
+because LSJ cites perseus-grc1 while the catalog holds grc2) and a
+dot-joined citation ("1.1"). Resolution happens at QUERY time, never at
+load: works sync after dictionaries and vice versa, rebuilds re-mint ids,
+and nothing stale may be stored (the §10 stance again). A citation resolves
+iff an in-catalog edition of the work has that passage urn — original
+language preferred over translations, then urn order for determinism; a
+3+-part citation that matches nothing retries once as (first, last), the
+classical chapter/section double citation ("Cic. Off. 1, 2, 4" is book 1,
+chapter 2, CONTINUOUS section 4, while Perseus editions cite book.section —
+the fallback lands on the exact quoted passage, verified against the real
+text; a genuinely 3-level edition always wins with the exact form first).
+Everything else — URN-less bibls (inscriptions, AP), non-CTS values
+("Dig. 33.6.9"), malformed upstream urns (`…:Orat::2:27:120`), works not
+ingested — stays as display text with a nil resolution: a lexicon's
+citations are best-effort by upstream reality, and the miss-rate is honest,
+never fuzzed.
+
+**Query surface: `nabu define` + MCP `nabu_define`.** The CLI prints
+entries whole (the λόγος entry is ~300 KB of text — the CLI is the
+unbounded surface) with the license label on every entry header and
+resolved citations listed for the `nabu show` handoff. `nabu_define` is the
+sixth MCP tool, same contract as the rest: license fields on every entry,
+bounded body (6 000 chars, honest truncation note pointing at the CLI),
+bounded citations (resolved first), research_private/restricted shelves
+withheld unless `include_restricted`, and graceful states (no catalog / no
+shelf yet → "run nabu sync lexica").
+
+**How a third dictionary plugs in.** The schema is deliberately
+language-agnostic (dictionaries.language is a column, entries fold by it).
+Bosworth-Toller (Old English; docs/oe-survey.md: official CC BY 4.0 LINDAT
+dump, CSV `id;headword;body` with project-XML bodies) becomes its own
+registry source with a small CSV adapter — same `content_kind :dictionary`,
+same DictionaryDocument/Entry model, dictionary slug `bosworth-toller`,
+language `ang`, betacode off — and `define`/glosses work unchanged. Its
+bodies cite OE works by short title without urns, so its
+`dictionary_citations` start empty until a crosswalk to ISWOC/ASPR urns
+exists; the resolution layer needs nothing new. A second dictionary from
+the SAME repo (Middle Liddell lives beside LSJ upstream) is one entry in
+the adapter's DICTIONARIES map.

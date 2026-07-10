@@ -1,0 +1,209 @@
+{
+ "type": "cdl",
+ "project": "dcclt",
+ "source": "http://oracc.org/dcclt",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "textid": "P010104",
+ "cdl": [
+  {
+   "node": "c",
+   "type": "text",
+   "id": "P010104.U0",
+   "cdl": [
+    {
+     "node": "d",
+     "type": "object",
+     "label": "x152"
+    },
+    {
+     "node": "d",
+     "type": "surface",
+     "label": "r"
+    },
+    {
+     "node": "c",
+     "type": "sentence",
+     "implicit": "yes",
+     "id": "P010104.U2",
+     "label": "o i' 1",
+     "cdl": [
+      {
+       "node": "d",
+       "type": "line-start",
+       "ref": "P010104.4",
+       "n": "1",
+       "label": "o i' 1"
+      },
+      {
+       "node": "l",
+       "frag": "x-⸢at⸣{[ki]}",
+       "id": "P010104.l08ff4",
+       "ref": "P010104.4.1",
+       "inst": "%sux:x-at{ki}=",
+       "f": {
+        "lang": "sux",
+        "form": "x-at{ki}",
+        "gdl": [
+         {
+          "v": "x",
+          "oid": "o0000601",
+          "gdl_sign": "X",
+          "utf8": "X",
+          "key": "o0000601..x",
+          "id": "P010104.4.1.0",
+          "delim": "-"
+         },
+         {
+          "v": "at",
+          "oid": "o0000092",
+          "gdl_sign": "AD",
+          "utf8": "𒀜",
+          "key": "o0000092..at",
+          "id": "P010104.4.1.1",
+          "break": "damaged",
+          "queried": "1",
+          "ho": "1",
+          "hc": "1"
+         },
+         {
+          "det": "semantic",
+          "pos": "post",
+          "seq": [
+           {
+            "v": "ki",
+            "oid": "o0000279",
+            "gdl_sign": "KI",
+            "utf8": "𒆠",
+            "key": "o0000279..ki",
+            "id": "P010104.4.1.2",
+            "breakStart": "1",
+            "o": "]",
+            "break": "missing",
+            "breakEnd": "P010104.4.1.2"
+           }
+          ]
+         }
+        ]
+       },
+       "props": [
+        {
+         "name": "field",
+         "group": "env",
+         "ngram": "-1",
+         "ref": "P010104.4.1"
+        },
+        {
+         "name": "discourse",
+         "group": "env",
+         "value": "body",
+         "ngram": "-1",
+         "ref": "P010104.4.1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "node": "c",
+     "type": "sentence",
+     "implicit": "yes",
+     "tag": "#auto",
+     "id": "P010104.U296",
+     "label": "r xi' 10'",
+     "cdl": [
+      {
+       "node": "d",
+       "type": "line-start"
+      },
+      {
+       "node": "l",
+       "frag": "a-ŋeštin-abzu(|ZU+AB|)",
+       "id": "P010104.l09086",
+       "ref": "P010104.173.1",
+       "inst": "%sux:a-ŋeštin-abzu(|ZU+AB|)=",
+       "f": {
+        "lang": "sux",
+        "form": "a-ŋeštin-abzu(|ZU+AB|)",
+        "gdl": [
+         {
+          "v": "a",
+          "oid": "o0000087",
+          "gdl_sign": "A",
+          "utf8": "𒀀",
+          "key": "o0000087..a",
+          "id": "P010104.173.1.0",
+          "delim": "-"
+         },
+         {
+          "v": "ŋeštin",
+          "oid": "o0000208",
+          "gdl_sign": "GEŠTIN",
+          "utf8": "𒃾",
+          "key": "o0000208..ŋeštin",
+          "id": "P010104.173.1.1",
+          "delim": "-"
+         },
+         {
+          "q": "abzu(|ZU+AB|)",
+          "oid": "o0002674",
+          "gdl_sign": "|ZU.AB|",
+          "utf8": "𒍪𒀊",
+          "id": "P010104.173.1.2",
+          "break": "damaged",
+          "ho": "1",
+          "hc": "1",
+          "qualified": [
+           {
+            "v": "abzu",
+            "oid": "o0002674",
+            "gdl_sign": "|ZU.AB|"
+           },
+           {
+            "c": "|ZU+AB|",
+            "oid": "o0002674",
+            "gdl_sign": "|ZU.AB|",
+            "utf8": "𒍪𒀊",
+            "seq": [
+             {
+              "s": "ZU",
+              "oid": "o0000614",
+              "gdl_sign": "ZU"
+             },
+             {
+              "o": "joining"
+             },
+             {
+              "s": "AB",
+              "oid": "o0000088",
+              "gdl_sign": "AB"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "props": [
+        {
+         "name": "field",
+         "group": "env",
+         "ngram": "-1",
+         "ref": "P010104.173.1"
+        },
+        {
+         "name": "discourse",
+         "group": "env",
+         "value": "body",
+         "ngram": "-1",
+         "ref": "P010104.173.1"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "catalog_join"
+require_relative "define"
 
 module Nabu
   module Query
@@ -35,9 +36,13 @@ module Nabu
       # One hit. `lemma` is the index's raw upstream spelling (the dictionary
       # form as the treebank wrote it); `surface_forms` the distinct pristine
       # inflected forms attesting it in this passage (", "-joined); `text` the
-      # pristine passage text for display.
+      # pristine passage text for display; `gloss` (P11-4) the short dictionary
+      # shelf gloss for the lemma in this passage's language, nil when no
+      # dictionary of that language holds it — honest absence.
       Result = Data.define(:urn, :language, :lemma, :surface_forms, :text,
-                           :document_title, :license_class)
+                           :document_title, :license_class, :gloss) do
+        def initialize(gloss: nil, **rest) = super
+      end
 
       # Pull more index hits than the caller's limit so that catalog-side
       # filtering (language/license/withdrawn) can drop rows and still fill
@@ -65,9 +70,10 @@ module Nabu
                .to_h { |row| [row.fetch(:passage_id), row] }
         by_id = hits.to_h { |row| [row.fetch(:passage_id), row] }
 
-        ordered_ids.filter_map { |id| rows[id] }
-                   .first(limit)
-                   .map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
+        results = ordered_ids.filter_map { |id| rows[id] }
+                             .first(limit)
+                             .map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
+        attach_glosses(results)
       end
 
       private
@@ -84,6 +90,19 @@ module Nabu
                .select(:passage_id, :lemma_raw, :surface_forms)
                .all
                .uniq { |row| row.fetch(:passage_id) }
+      end
+
+      # The dictionary-shelf integration (P11-4): one batched lookup fills
+      # each hit's gloss from a dictionary of the hit's language (Define owns
+      # the folding and the missing-shelf degradation).
+      def attach_glosses(results)
+        pairs = results.filter_map { |result| [result.lemma, result.language] if result.language }
+        return results if pairs.empty?
+
+        glosses = Define.new(catalog: @catalog).glosses(pairs)
+        return results if glosses.empty?
+
+        results.map { |result| result.with(gloss: glosses[[result.lemma, result.language]]) }
       end
 
       def build_result(row, hit)

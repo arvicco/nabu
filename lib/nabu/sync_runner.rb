@@ -55,7 +55,11 @@ module Nabu
     # holds the Loader's counts. +warnings+ carries any inline deviation Findings
     # (P5-5) computed from the fresh LoadReport against the source's history —
     # advisory only, never failing the sync (empty on an aborted run).
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings) do
+    # +discovery+ (P11-7) is the adapter's Nabu::Adapter::DiscoverySkips census
+    # of content-pattern files that never became refs (0-byte skeletons,
+    # non-editions, and loud nested-root/unpack gaps); combined with load_report
+    # it drives the printed discovery accounting. nil on an aborted run.
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings, :discovery) do
       def aborted? = !breaker.nil?
     end
 
@@ -109,7 +113,7 @@ module Nabu
       load_report = nil
 
       begin
-        Store::RunRecorder.record(source_slug: entry.slug) do
+        run = Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
@@ -118,9 +122,11 @@ module Nabu
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
         # untouched. Report it rather than crashing the batch.
         return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
-                           breaker: e, indexed: nil, warnings: [])
+                           breaker: e, indexed: nil, warnings: [], discovery: nil)
       end
 
+      discovery = adapter.discovery_skips(workdir)
+      record_discovery_notes(run, discovery)
       update_source_state(source, entry, fetch_report)
       # Reindex the fulltext AFTER the RunRecorder block: the index is
       # corpus-wide, not per-source, so it must not live inside a source's run
@@ -129,7 +135,18 @@ module Nabu
       # incremental per-source indexing is the future optimization.
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
-                  breaker: nil, indexed: indexed, warnings: deviation_warnings(source, load_report))
+                  breaker: nil, indexed: indexed,
+                  warnings: deviation_warnings(source, load_report, adapter), discovery: discovery)
+    end
+
+    # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with
+    # no ingestible content) into the run row so a silent gap leaves a durable,
+    # queryable trace, not just a console line. A clean census leaves runs.notes
+    # untouched (nil on success, as before).
+    def record_discovery_notes(run, discovery)
+      return if run.nil? || discovery.clean?
+
+      run.update(notes: discovery.notes.join("; "))
     end
 
     # P5-5: after a successful sync, run the SAME trend rules the `nabu health`
@@ -140,27 +157,36 @@ module Nabu
     # Cheap: two small aggregate queries reusing Health::TrendRules — no new
     # thresholds. The just-finished run is already recorded "succeeded", so it is
     # runs.first here; prior runs form the spike norm.
-    def deviation_warnings(source, load_report)
+    def deviation_warnings(source, load_report, adapter)
       return [] unless load_report
+      # Dictionary sources (P11-4): entry-grained counts against a
+      # document-count baseline would be apples-to-oranges — the quarantine
+      # spike still applies (errored counts files either way), the
+      # document-withdrawal sweep rule does not.
+      return quarantine_warnings(source, load_report) if adapter.class.content_kind == :dictionary
 
+      total = Store::Document.where(source_id: source.id).count
+      quarantine_warnings(source, load_report) +
+        [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)].compact
+    end
+
+    def quarantine_warnings(source, load_report)
       errored = Store::Run.where(source_slug: source.slug, kind: "sync", status: "succeeded")
                           .order(Sequel.desc(:id)).select_map(:errored)
       prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
-      total = Store::Document.where(source_id: source.id).count
-      [
-        Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior),
-        Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)
-      ].compact
+      [Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior)].compact
     end
 
-    # Rebuild the whole FTS5 index from the (now-updated) catalog into the
-    # fulltext db. Opens its own short-lived connection to config.fulltext_path
-    # so callers need not thread a handle through. Returns the passage count.
+    # Rebuild the whole FTS5 index (plus lemma + alignment tables) from the
+    # (now-updated) catalog into the fulltext db. Opens its own short-lived
+    # connection to config.fulltext_path so callers need not thread a handle
+    # through. Returns the passage count.
     def reindex!
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
-      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext)
+      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext,
+                              alignments: AlignmentRegistry.load(@config.alignments_path))
     ensure
       fulltext&.disconnect
     end
@@ -169,9 +195,13 @@ module Nabu
       adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
     end
 
+    # Route by the adapter's declared content kind (P11-4, architecture §11):
+    # passage corpora load through Store::Loader, dictionary sources through
+    # Store::DictionaryLoader — same call shape, same LoadReport.
     def load(source, adapter, workdir, progress)
-      Store::Loader.new(db: @db, source: source, ledger: @ledger)
-                   .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
+      loader_class = adapter.class.content_kind == :dictionary ? Store::DictionaryLoader : Store::Loader
+      loader_class.new(db: @db, source: source, ledger: @ledger)
+                  .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
     end
 
     # Predict the withdrawal sweep and refuse if it exceeds the threshold. Runs

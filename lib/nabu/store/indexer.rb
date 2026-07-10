@@ -98,15 +98,20 @@ module Nabu
 
       module_function
 
-      # Drop and rebuild the whole index (FTS + lemma table) from +catalog+
-      # into +fulltext+. Indexes every passage that is itself live AND whose
-      # document is live (the two-level visibility rule from P1-4). Bulk +
-      # transactional; one streaming pass feeds both tables. Returns the
-      # number of passages indexed.
+      # Drop and rebuild the whole index (FTS + lemma table + alignment refs)
+      # from +catalog+ into +fulltext+. Indexes every passage that is itself
+      # live AND whose document is live (the two-level visibility rule from
+      # P1-4). Bulk + transactional; one streaming pass feeds the FTS and
+      # lemma tables; the alignment-ref pass (P11-3) walks only the registry's
+      # witness documents. Returns the number of passages indexed.
+      #
+      # +alignments+ is the Nabu::AlignmentRegistry (config/alignments.yml) —
+      # nil still creates the empty alignment table, so queries degrade to
+      # "no rows", never "index missing".
       #
       # Reads the catalog through raw datasets (not the Store models) so it is
       # independent of whichever db the global models are currently bound to.
-      def rebuild!(catalog:, fulltext:)
+      def rebuild!(catalog:, fulltext:, alignments: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.run(CREATE_TABLE)
@@ -120,6 +125,7 @@ module Nabu
             count += batch.size
           end
         end
+        AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
         count
       end
 

@@ -83,7 +83,9 @@ oracc:
   enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
                    # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
-                   # search verified live. Scope: rimanum + etcsri.
+                   # search verified live. Scope: rimanum + etcsri; P11-6
+                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt)
+                   # — owner-fired re-sync after merge pulls the new projects.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
@@ -91,6 +93,53 @@ oracc:
   # they live only in the ATF #tr.en source layer) — nothing to opt into;
   # aligned English is a future separate acquisition.
   translations: false
+
+lexica:
+  adapter: Nabu::Adapters::Lexica
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync lexica, then
+                   # nabu define μῆνις / officium spot-checks)
+  # PerseusDL/lexica (~160 MB git repo, CC BY-SA 4.0): LSJ + Lewis & Short —
+  # the FIRST dictionary-shaped source (content_kind :dictionary: entries,
+  # not passages; architecture §11). Upstream still gets occasional edits:
+  # re-syncable, but not on a live schedule.
+  sync_policy: manual
+
+vulgate:
+  adapter: Nabu::Adapters::Vulgate
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync vulgate — ~76 MB
+                   # open-bibles clone — then spot-check nabu show
+                   # urn:nabu:vulgate:mrk:2.3 and 5 random verses)
+  # P11-5: the FULL Clementine Latin bible (one USFX file in the open-bibles
+  # collection; public domain). One document per book; both alignment-hub
+  # works (nt + ot) list its books as witnesses. open-bibles is curated and
+  # occasionally updated: re-syncable, not on a live schedule.
+  sync_policy: manual
+
+eng-web:
+  adapter: Nabu::Adapters::EngWeb
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
+                   # open-bibles clone, shared with vulgate — then spot-check
+                   # nabu show urn:nabu:eng-web:jon:1.1 and 5 random verses)
+  # P11-8: the World English Bible (WEB, eBible.org; public domain). One USFX
+  # file in the same open-bibles collection as the Clementine Vulgate; one
+  # document per book. The readable English witness of both alignment-hub works
+  # (nt + ot). Upstream is curated and occasionally updated: re-syncable, not on
+  # a live schedule.
+  sync_policy: manual
+
+sblgnt:
+  adapter: Nabu::Adapters::Sblgnt
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
+                   # clone — then spot-check nabu show urn:nabu:sblgnt:mark:2.3)
+  # P11-5: the SBL Greek New Testament (Faithlife/SBLGNT, CC BY 4.0), 27
+  # per-book verse-per-line text files. The nt alignment work's second Greek
+  # witness (beside PROIEL greek-nt). Upstream edits are rare (v1.2 2023):
+  # re-syncable, not on a live schedule.
+  sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
 #

@@ -2,9 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes three tools — search, read
-by urn, and coverage — so a model can look things up in your texts, quote them,
-and cite them, without any ability to change the collection.
+(Claude Code, Claude Desktop) over stdio. It exposes six tools — search, read
+by urn, concordance, cross-source alignment, dictionary lookup, and coverage —
+so a model can look things up in your texts, quote them, and cite them, without
+any ability to change the collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -32,11 +33,11 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The three tools
+## 2. The six tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search hits and `nabu_show` also carry the **source** slug).
-Preserve those fields when you quote — see §6.
+**license_class** (search, concord, and align rows also carry the **source**
+slug). Preserve those fields when you quote — see §6.
 
 ### `nabu_search`
 
@@ -67,6 +68,60 @@ Read the corpus by urn — the pristine edition text behind a search hit:
   translation, aligned line by line / block by block.
 
 Withdrawn and retired-upstream items appear, flagged.
+
+### `nabu_concord`
+
+KWIC concordance over the same search machinery (P8-3): one row per hit as
+left context / matched keyword / right context, located in the pristine
+edition text, in corpus order. Give exactly one of `query`/`lemma`; optional
+`lang`, `license`, `limit` (default 10, max 50), `width` (context characters
+per side, default 40, max 120).
+
+### `nabu_align`
+
+Cross-source alignment (P11-3, architecture §10): one citation of a registered
+work rendered across every witness `config/alignments.yml` names — the
+flagship is the five-way New Testament (grc/lat/got/xcl/chu, all PROIEL-family
+treebanks). `ref` is a citation in the work's scheme (`"MARK 2.3"`;
+case/spacing/`chapter:verse` colons normalize) or a passage urn to pivot from
+a search/show hit; `work` picks the registry work when several exist.
+Witnesses come in registry order, each with status `ok` (sentences follow,
+each listing every ref it covers — sentence≠verse), `no_match` (synced, verse
+not attested), `not_synced` (registered, no data yet), or `withheld`
+(license-excluded). Every sentence row carries urn, language, license_class,
+and source — the five NT witnesses are all `nc`, so the labels matter when
+quoting.
+
+`ref` also accepts a whole **chapter** (`"JON 1"`) or an inclusive same-book
+**verse range** (`"JON 1.1-1.16"`) — the range separator is the last hyphen,
+its tail a bare end suffix against the start's book (the `nabu show` range
+grammar, in citation space). The reply is then a `refs` array (`type:
+"alignment_range"`), one entry per ref in document order, each carrying the
+same witness columns; a witness that attests some refs but not others is
+honest per ref. A witness absent from **every** rendered ref is summarized once
+in a range-level `absent_witnesses` array (each `{label, reason}`, reason
+`not_attested` for a synced witness whose verses are all absent or
+`not_synced` for a registered-but-unsynced one) and **dropped** from the
+per-ref `witnesses` arrays — so a chapter with a not-yet-synced witness stays
+readable instead of repeating the same dash on every ref (P11-9). It is capped
+at 200 rendered refs (`total_refs`/`shown_refs`/`truncated`, with a note —
+narrow the range), mirroring `nabu_define`'s body cap. The CLI `nabu align
+"JON 1"` renders the same, compactly (the witness titles/licenses shown once as
+a legend, the all-absent witnesses summarized once, then one line per present
+witness per ref).
+
+### `nabu_define`
+
+The dictionary shelf (P11-4, architecture §11): look a lemma up in the
+classical lexica the corpus holds — LSJ for Greek, Lewis & Short for Latin
+(CC BY-SA, Perseus). Diacritics optional (μηνις finds μῆνις); `lang`
+(grc|lat) picks a shelf. Each entry carries headword, dictionary, license
+fields, a short gloss, the entry body as structured plain text (bounded at
+6 000 chars with an honest note — the CLI `nabu define` prints entries
+whole), and the entry's citations with `resolved_urn` set where the cited
+work is in-catalog (`Il. 1.1` → the actual Iliad line, one `nabu_show`
+away); unresolved citations keep their display text and a null urn. Lemma
+hits from `nabu_search` carry these glosses too.
 
 ### `nabu_status`
 

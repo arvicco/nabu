@@ -35,15 +35,56 @@ module Nabu
     RETAINED_KEY = "retained"
     RETIRED_SHA_KEY = "retired_sha"
 
+    # One HTTP-zip remote-probe target (P11-2), for a :http_zip source. Each
+    # fetched unit yields one: +zip_url+ is HEAD'd for reachability +
+    # Last-Modified and is ALSO the ledger-pin key (the sync path pins each
+    # unit by its zip URL); +metadata_url+ is GET'd for the license field;
+    # +state_subdir+ is the unit's dir under the source workdir, holding the
+    # .zip-fetch.json Last-Modified pin the probe diffs against.
+    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir)
+
     # Trip the mass-deletion breaker when an upstream pull would delete
     # strictly more than this fraction of the source's ingestible files.
     # (SyncRunner's load-side withdrawal guard shares this value.)
     MASS_DELETION_THRESHOLD = 0.2
 
+    # P11-7 — the systemic skip-visibility value. A cheap discovery-time census
+    # of the content-pattern files discover did NOT turn into refs, so a silent
+    # ingestion gap can never hide again. Two classes:
+    #
+    # - +skipped_by_rule+: an EXPLICIT, benign skip (a 0-byte ORACC catalog-only
+    #   skeleton, a non-edition XML with no <text>) — honest, expected, quiet.
+    # - +unrecognized+: a file, or a whole registered unit, that matches the
+    #   source's shape yet discover cannot account for (an ORACC project whose
+    #   tree exists but yields zero corpusjson — the nested-root signature).
+    #   Rendered PROMINENTLY: unrecognized ≥ 1 is a defect, not a norm.
+    #
+    # +notes+ carries the human lines for the unrecognized cases. This covers
+    # ONLY what never reached the loader; the loader's LoadReport reports the
+    # fate (loaded / skipped-by-rule / quarantined) of every ref discover DID
+    # yield, and the two combine into the printed discovery accounting.
+    DiscoverySkips = Data.define(:skipped_by_rule, :unrecognized, :notes) do
+      def initialize(skipped_by_rule: 0, unrecognized: 0, notes: [])
+        super
+      end
+
+      def clean? = unrecognized.zero?
+    end
+
     # Static metadata for the source: a Nabu::SourceManifest (id, name,
     # license + license_class, upstream URL, parser family).
     def self.manifest
       raise NotImplementedError, "#{self} must implement .manifest"
+    end
+
+    # The discovery census (see DiscoverySkips) over +workdir+. Default: discover
+    # yields exactly one ref per content file, so nothing is skipped or
+    # unaccounted. Adapters with real skip rules (ORACC 0-byte + nested-root,
+    # GRETIL non-editions) override this — cheaply, no content reads beyond the
+    # header peeks discover already does, and called once per sync (never in the
+    # hot guard/load loops).
+    def discovery_skips(_workdir)
+      DiscoverySkips.new
     end
 
     # Instances answer for their manifest too, so callers holding an adapter
@@ -61,6 +102,26 @@ module Nabu
     def self.upstream_repo_urls
       [manifest.upstream_url]
     end
+
+    # What #parse yields, and therefore which loader a sync/rebuild routes to
+    # (P11-4, architecture §11): :passages (Nabu::Document → Store::Loader,
+    # every text corpus) or :dictionary (Nabu::DictionaryDocument →
+    # Store::DictionaryLoader, the reference shelf). A closed set — a new
+    # kind means a new loader and a deliberate routing decision, never a
+    # silent fall-through.
+    def self.content_kind = :passages
+
+    # Remote-health probe strategy (P11-2). Default :git — the probe
+    # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
+    # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to
+    # :http_zip: the probe HEADs each project zip (reachability +
+    # Last-Modified drift vs the on-disk .zip-fetch.json pin) and GETs each
+    # project metadata.json for license drift. See Nabu::Health::RemoteProbe.
+    def self.remote_probe_strategy = :git
+
+    # HTTP-zip probe targets — one HttpProbeTarget per fetched unit. Only
+    # consulted for a :http_zip source; the default (:git) never calls it.
+    def self.http_probe_targets = []
 
     # Bring upstream to the local canonical dir at +workdir+ (git pull,
     # rsync, HTTP crawl with cache). Must be resumable, rate-limit polite,

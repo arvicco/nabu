@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require "digest"
+require "json"
 require "faraday"
+require_relative "../zip_fetch"
 
 module Nabu
   # Source-health probes (docs/backlog.md Phase 5). The remote probe here is
@@ -11,6 +13,18 @@ module Nabu
     # for EVERY registered source (enabled or not: a disabled source's upstream
     # can still die and the owner wants to know). It answers three questions per
     # source and returns data; the CLI does all formatting.
+    #
+    # == Per-source probe strategy (P11-2)
+    #
+    # The strategy is keyed off the adapter (Adapter.remote_probe_strategy):
+    # :git (default) → the ls-remote path below; :http_zip (ORACC, the
+    # non-git ZipFetch path) → HEAD each project zip (reachability +
+    # Last-Modified drift vs the on-disk .zip-fetch.json pin) and GET each
+    # project metadata.json for license drift. The HTTP-zip half fills the
+    # same SourceHealth shape (liveness/drift/license), aggregated identically
+    # (worst-wins liveness/drift, any-changed license), and reuses the ledger
+    # pins + compare_license baseline mechanism — see probe_http_source. Both
+    # halves render through the one CLI table.
     #
     #   1. Liveness — `git ls-remote <url> HEAD` (through the injected Shell).
     #      Success → :alive with the remote HEAD sha. Shell::Error → :gone, or
@@ -95,10 +109,15 @@ module Nabu
       # may be nil (fresh machine, no ledger yet): every source then reads as
       # never-synced and no baseline is recorded. +shell+ is injectable so unit
       # tests can feed canned ls-remote output/failures without a network.
-      def initialize(registry:, ledger:, shell: Nabu::Shell)
+      # +canonical_dir+ (P11-2) is the corpus root the HTTP-zip probe reads the
+      # per-project .zip-fetch.json Last-Modified pins from
+      # (<canonical_dir>/<source-slug>/<project>/.zip-fetch.json). nil (the git
+      # unit tests) → every http-zip project reads as never-synced.
+      def initialize(registry:, ledger:, shell: Nabu::Shell, canonical_dir: nil)
         @registry = registry
         @ledger = ledger
         @shell = shell
+        @canonical_dir = canonical_dir
       end
 
       def run
@@ -107,12 +126,25 @@ module Nabu
 
       private
 
+      # HTTP client for the HTTP-zip probe: the SAME verified path ZipFetch
+      # fetches through (system trust store PLUS the vendored InCommon
+      # intermediate), because oracc.museum.upenn.edu serves an incomplete TLS
+      # chain — a bare Faraday would fail verification exactly as sync did.
+      def http_client = @http_client ||= Nabu::ZipFetch.default_http
+
       # One RepoProbe per upstream repo: its url, liveness, and HEAD sha (nil
       # when not alive).
       RepoProbe = Data.define(:url, :liveness, :head)
       private_constant :RepoProbe
 
       def probe_source(entry)
+        case entry.adapter_class.remote_probe_strategy
+        when :http_zip then probe_http_source(entry)
+        else probe_git_source(entry)
+        end
+      end
+
+      def probe_git_source(entry)
         urls = entry.adapter_class.upstream_repo_urls
         pins = pins_for(entry.slug)
         probes = urls.map { |url| probe_repo(url) }
@@ -277,6 +309,142 @@ module Nabu
         match = GITHUB_URL.match(url.to_s)
         match && [match[:owner], match[:repo]]
       end
+
+      # == HTTP-zip probe (P11-2) ============================================
+      #
+      # Mirrors the git path's SourceHealth shape from HEAD/GET instead of
+      # ls-remote. One ZipProbe per project (its zip URL — also the ledger-pin
+      # key), the HEAD reachability + Last-Modified, and the stored
+      # .zip-fetch.json Last-Modified to diff against.
+      ZipProbe = Data.define(:url, :label, :liveness, :remote_last_modified, :stored_last_modified, :metadata_url)
+      private_constant :ZipProbe
+
+      def probe_http_source(entry)
+        targets = entry.adapter_class.http_probe_targets
+        pins = pins_for(entry.slug)
+        probes = targets.map { |target| probe_zip(entry.slug, target) }
+        multi = probes.size > 1
+        drift = zip_drift(probes, multi: multi)
+        SourceHealth.new(
+          slug: entry.slug, enabled: entry.enabled,
+          upstream: multi ? "#{targets.size} projects" : targets.first&.zip_url,
+          liveness: aggregate_liveness(probes),
+          drift: drift.status, drift_detail: drift.detail,
+          license: zip_license(probes, pins, multi: multi)
+        )
+      end
+
+      def probe_zip(slug, target)
+        stored = stored_last_modified(slug, target.state_subdir)
+        liveness, last_modified = head_liveness(target.zip_url)
+        ZipProbe.new(
+          url: target.zip_url, label: target.label, liveness: liveness,
+          remote_last_modified: last_modified, stored_last_modified: stored,
+          metadata_url: target.metadata_url
+        )
+      end
+
+      # HEAD the zip: 200 → alive (with its Last-Modified); a redirect →
+      # :moved (a soft "your URL is stale" signal, like git's); anything else
+      # (404/500/transport error) → :gone. ORACC serves 200 + Last-Modified
+      # for a live project and 500 (not 404) for an unknown one (live
+      # 2026-07-09), so any non-200/non-redirect is treated as gone.
+      def head_liveness(url)
+        response = http_client.head(url)
+        case response.status
+        when 200
+          [Liveness.new(status: :alive, detail: nil), response.headers["last-modified"]]
+        when 301, 302, 303, 307, 308
+          [Liveness.new(status: :moved, detail: "http: #{response.status} #{url}"), nil]
+        else
+          [Liveness.new(status: :gone, detail: "http: #{response.status} #{url}"), nil]
+        end
+      rescue Faraday::Error => e
+        [Liveness.new(status: :gone, detail: "http: #{e.message}"), nil]
+      end
+
+      # Per-project drift = HEAD Last-Modified vs the stored .zip-fetch.json
+      # pin. No stored pin (never fetched) → :never_synced, reported as such,
+      # not as drift. Not alive, or a HEAD that carried no Last-Modified →
+      # :unknown (nothing to compare). Aggregated worst-wins like the git
+      # multi-repo path; single-project sources leave the detail nil.
+      def zip_drift(probes, multi:)
+        return Drift.new(status: :unknown, detail: nil) if probes.empty?
+
+        per_repo = probes.map { |probe| [probe, zip_repo_drift(probe)] }
+        worst = per_repo.map { |_probe, status| status }.max_by { |status| DRIFT_SEVERITY.fetch(status) }
+        behind = per_repo.select { |_probe, status| status == :behind }.map { |probe, _status| probe.label }
+        detail = multi && !behind.empty? ? "behind: #{behind.join(', ')}" : nil
+        Drift.new(status: worst, detail: detail)
+      end
+
+      def zip_repo_drift(probe)
+        return :unknown unless probe.liveness.status == :alive
+        return :never_synced if blank?(probe.stored_last_modified)
+        return :unknown if blank?(probe.remote_last_modified)
+
+        probe.stored_last_modified == probe.remote_last_modified ? :current : :behind
+      end
+
+      # License drift, per project, aggregated exactly like multi_repo_license:
+      # :changed if ANY project changed (offenders named), else
+      # :baseline_recorded if any was newly recorded, else :unchanged if any
+      # matched, else :unchecked. Baselines live on the ledger pins keyed by
+      # zip URL — the SAME column and mechanism the git sources use.
+      def zip_license(probes, pins, multi:)
+        results = probes.map { |probe| [probe, zip_repo_license(probe, pins[probe.url])] }
+        changed = results.select { |_probe, lic| lic.status == :changed }.map { |probe, _lic| probe.label }
+        return License.new(status: :changed, detail: license_changed_detail(changed)) unless changed.empty?
+
+        statuses = results.map { |_probe, lic| lic.status }
+        return License.new(status: :baseline_recorded, detail: nil) if statuses.include?(:baseline_recorded)
+        return License.new(status: :unchanged, detail: nil) if statuses.include?(:unchanged)
+
+        unchecked(multi ? "http-zip" : "no license metadata")
+      end
+
+      # +row+ nil → never synced (no pin), so nothing is checkable — the probe
+      # never mints pins itself. GET the small metadata.json and compare its
+      # license field (hashed, mirroring the git license baseline) via the
+      # shared compare_license, which records/updates the baseline on the pin.
+      # Best-effort throughout: an unreachable upstream, an empty/non-JSON body
+      # (ORACC's standalone metadata.json returns 200 with NO body live —
+      # 2026-07-09), or a missing license field → :unchecked, never an error.
+      def zip_repo_license(probe, row)
+        return unchecked("upstream unreachable") unless probe.liveness.status == :alive
+        return unchecked("never synced") unless row
+
+        license = fetch_license_field(probe.metadata_url)
+        return unchecked("no license metadata") unless license
+
+        compare_license(row, Digest::SHA256.hexdigest(license))
+      end
+
+      def fetch_license_field(url)
+        response = http_client.get(url)
+        return nil unless response.status == 200
+
+        value = JSON.parse(response.body.to_s)["license"]
+        blank?(value) ? nil : value.to_s
+      rescue Faraday::Error, JSON::ParserError
+        nil
+      end
+
+      # The stored Last-Modified pin for one project:
+      # <canonical_dir>/<source-slug>/<project>/.zip-fetch.json. Missing dir /
+      # file / key (never synced) → nil.
+      def stored_last_modified(slug, subdir)
+        return nil unless @canonical_dir
+
+        path = File.join(@canonical_dir, slug, subdir, Nabu::ZipFetch::STATE_FILE)
+        return nil unless File.file?(path)
+
+        JSON.parse(File.read(path))["last_modified"]
+      rescue JSON::ParserError
+        nil
+      end
+
+      def blank?(value) = value.nil? || value.to_s.empty?
 
       # { repo_url => Store::Pin } for a source's ledger pins. Empty when
       # there is no ledger yet (fresh machine) or the source was never synced

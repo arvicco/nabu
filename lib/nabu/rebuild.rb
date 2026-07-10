@@ -85,7 +85,10 @@ module Nabu
       end
       replay_enrichments(db)
       # Reindex ONCE after all sources are back — the index is corpus-wide.
-      indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      # The alignment registry (config, not derived) rides in so alignment_refs
+      # regenerates with the re-minted passage ids (architecture §10).
+      indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
+                                        alignments: AlignmentRegistry.load(@config.alignments_path))
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes, skips: skips, indexed: indexed)
     ensure
       db&.disconnect
@@ -104,10 +107,14 @@ module Nabu
     # writes no revisions (tested), but the seam stays uniform.
     def replay(db, ledger, entry, progress)
       source = entry.sync_source!(db)
+      adapter = entry.build_adapter
+      # Same content-kind routing as SyncRunner (P11-4, architecture §11):
+      # dictionary sources replay through the DictionaryLoader.
+      loader_class = adapter.class.content_kind == :dictionary ? Store::DictionaryLoader : Store::Loader
       report = nil
       Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
-        report = Store::Loader.new(db: db, source: source, ledger: ledger).load_from(
-          entry.build_adapter,
+        report = loader_class.new(db: db, source: source, ledger: ledger).load_from(
+          adapter,
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
         )

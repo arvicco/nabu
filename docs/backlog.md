@@ -1407,3 +1407,697 @@ documents.license_override.
   MCP that license_class reads attribution.
 Acceptance: suite+lint green; live relabel verified; 02-sources UD row
 notes the split licensing; worklog line (sha —).
+
+## Phase 11 — Philology workbench + Old English axis (branch: phase-11; elaborated 2026-07-09)
+
+Owner shape (2026-07-09): workbench as recommended (alignment hub, dictionary
+shelf, biblical trio) PLUS a new axis — "I didn't mention interest in Old
+English / Anglo-Saxon previously but it does exist, so it's opportune to add
+it to sources search. Also relevant if we move along Philology/Biblic axis."
+Riders: HTTP remote-health probe (the ORACC gap), ORACC project expansion
+(config-only). Morph facets + vocab profiling: stretch, only if the phase
+runs light. Sequential dispatch, live-smoke review between packets, real
+syncs owner-fired.
+
+## P11-1 · Old English / Anglo-Saxon sources survey  [tier: opus] [status: done] [deps: —]
+Scouting only (docs/slavic-survey.md is the pattern and quality bar): no
+code, no bulk fetch — page-level WebSearch/WebFetch + repo metadata only.
+Goal: rank the ingestable OE sources; name the blocked ones honestly with
+unblock paths. Leads to verify (not exhaustive — find more):
+- **ISWOC** (Oslo, Bech/Eide) — PROIEL XML family (we parse it already:
+  proiel + torot adapters); contains Ælfric's Catholic Homilies, Apollonius
+  of Tyre, Orosius, Anglo-Saxon Chronicle (+ Old French/Spanish/Portuguese
+  we'd skip). If format+license check out (expect CC BY-NC-SA like
+  PROIEL/TOROT) this is the near-config-only pick. Verify repo, release
+  state, exact texts, license.
+- **YCOE** (York-Toronto-Helsinki Parsed Corpus of OE Prose) + **YCOEP**
+  (poetry) — Penn-Helsinki bracketed format (NEW parser family if taken);
+  distribution/license historically via the Oxford Text Archive — verify
+  current terms (research-only? redistribution?).
+- **Dictionary of Old English Corpus (DOEC)** — the complete surviving OE
+  record (~3M words) but University of Toronto LICENSED product — expect
+  BLOCKED; document terms + unblock path (institutional/personal license =
+  research_private at best).
+- **West-Saxon Gospels** (the biblical-axis prize — feeds the P11-3
+  alignment hub as the sixth Gospel version): find the best machine-readable
+  edition (ISWOC? YCOE? a TEI edition? Bosworth-Toller-adjacent projects?).
+- **ASPR / OE poetry** (Beowulf, Exeter Book, Junius): open TEI editions?
+  (e.g. "Old English Poetry in Facsimile" project — check data availability
+  and license).
+- **Bosworth-Toller** OE dictionary (germanet-style shelf candidate for
+  P11-4's dictionary pattern; digitized at bosworthtoller.com — check data
+  license/API).
+- UD: is there an Old English treebank? (None known in UD as of scout
+  memory — verify; if one exists it's a config-only UD map add per the
+  P10-2 pattern.)
+Deliverable: docs/oe-survey.md (ranked picks ≤2 for Phase 11/12 ingestion,
+blocked list with unblock paths, biblical-axis note on Gospel versions);
+02-sources.md rows for every surveyed source; backlog status → done +
+Findings block; worklog line (sha —). No adapter work in this packet.
+
+### Findings (P11-1, 2026-07-09 — survey delivered, docs/oe-survey.md)
+
+RANKED ≤2: **#1 ISWOC Treebank** (Oslo, Bech & Eide) — **PROIEL XML 2.1, the
+exact schema proiel/torot already parse** (verified in the raw file:
+`schema-version="2.1"`, same `proiel.xsd`); 5 OE texts ≈ 29,406 gold-annotated
+tokens: Ælfric's **Lives of Saints** (packet lead said Catholic Homilies —
+corrected), Apollonius of Tyre, Anglo-Saxon Chronicles, Orosius, West-Saxon
+Gospels; license verbatim (README): "freely available under a Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 License" + per-source `<license>CC
+BY-NC-SA 3.0</license>` → `nc`, same class as its PROIEL siblings. Adapter =
+TOROT-pattern subclass + `ang` language filter (repo also carries 10 medieval
+Romance texts to skip). Repos: `iswoc/iswoc-treebank` (frozen) → successor
+`syntacticus/syntacticus-treebank-data` (**must scope to `iswoc/` subdir — its
+`proiel/`/`torot/` dirs are the already-synced data**). **BIBLICAL AXIS
+ANSWER:** ISWOC `wscp` is **the Gospel of MARK complete (chs 1–16, 671 verse
+citations) + fragments of Matt 7/John 1** — NOT four Gospels; native
+`citation-part="MARK 1.1"` verse refs are already lifted by ProielParser → OE
+Mark is a drop-in sixth P11-3 hub witness with zero citation plumbing. Full
+tetraevangelion paths (all costly): YCOE `cowsgosp.o3` conversion (Penn format
++ OTA noncommercial terms) or PD reconstruction from Skeat/Bosworth-Waring
+scans; no open TEI OE Gospels edition exists. **#2 ASPR via OTA 3009** — the
+complete six-volume Krapp & Dobbie OE poetry corpus (Beowulf, Junius, Vercelli,
+Exeter, Paris Psalter, Minor Poems incl. Cædmon's Hymn in Northumbrian AND WS
+versions; 374 texts, ~30.5k lines) as ONE 2.2 MB TEI-P5 file, fetched without
+auth; license verbatim in the TEI header itself: "Distributed by the University
+of Oxford under a Creative Commons Attribution-ShareAlike 3.0 Unported License"
+→ `attribution`, the only fully-open structured OE found, MCP-safe. NOT
+EpiDoc/CTS, no `l/@n` → new small bespoke TEI family, ordinal line citations.
+DICTIONARY SHELF (P11-4): **Bosworth-Toller LINDAT dump** hdl 11234/1-3532,
+verbatim "Attribution 4.0 International (CC BY 4.0)", SQL + lemma-keyed CSV
+(`id;headword;body`, body XML) — third lexicon candidate. SURVEYED (later):
+YCOE/YCOEP (~1.5M words OE prose canon + 71k poetry, Penn bracketed = new
+family, OTA "ACA Academic Use" noncommercial with layered copyright, no text
+redistribution grant). BLOCKED: DOEC (subscription; verbatim "Recompiling,
+copying, publication, or republication … only with specific written permission";
+unblock = written permission, or verify the 2000 release on OTA 2488 academic-
+use); OE Poetry in Facsimile (web-app, no reuse grant); Electronic Beowulf (©
+Kiernan + British Library); Jebson ASC ("all rights reserved", XHTML only);
+Digital Ælfric (commercial); CoNE/PASE/LangScape (restricted/metadata). **UD
+has NO Old English treebank** (verified — no config-only add exists). MENOTA
+confirmed no OE. 02-sources: new rows #34 ISWOC / #35 ASPR / #36 B-T / #37
+YCOE+YCOEP (Tier 2), #38 DOEC / #39 OE web-app editions (Tier 3); UD #4 +
+Menota #21 notes.
+
+## P11-2 · HTTP remote-health probe  [tier: opus] [status: done] [deps: —]
+The P10 known gap: health --remote is git-shaped (ls-remote) and reads the
+ORACC HTTP-zip upstream as gone. Teach the remote probe a per-source probe
+strategy keyed off the adapter/manifest (git → ls-remote as today; http-zip
+→ HEAD request checking 200 + Last-Modified drift vs the stored
+.zip-fetch.json pin; license baseline for oracc = per-project metadata.json
+license field re-read on probe? NO network-heavy downloads — HEAD only,
+plus GET of metadata.json ONLY (small) for license drift). Tests stub HTTP.
+02-sources + ops.md updated; probe output shows oracc rows honestly.
+Acceptance: nabu health --remote (owner-run, or stubbed test) no longer
+reports oracc as gone; suite+lint green; worklog line.
+
+## P11-3 · Cross-source alignment hub  [tier: fable] [status: done] [deps: —]
+improvements.md §1.2 comes due. Design + implement the alignment layer:
+align the SAME work across sources/languages at citation grain. Flagship:
+the parallel New Testament — greek-nt (PROIEL grc) ↔ latin-nt (Vulgate,
+PROIEL lat) ↔ gothic-nt (PROIEL got) ↔ armenian-nt (PROIEL xcl) ↔ marianus
+(OCS, PROIEL chu) — all five already in the catalog with verse-grained
+citations and gold lemmas. Design questions the packet must answer (design
+doc section in architecture.md BEFORE code): alignment table schema
+(work-level registry + citation-mapping rules vs materialized passage
+pairs?); citation normalization across sources (PROIEL sentence ids vs
+book.chapter.verse — check what the proiel adapter actually minted);
+rebuild-safety (alignment = derived data, must replay from a declarative
+registry — enrichment journal or config?); query surface (`show --align`?
+extend --parallel? a new `align` subcommand? MCP tool nabu_align?); how
+GRETIL commentary layers and future West-Saxon Gospels plug in later.
+Scope control: ship the NT five-way as the working proof; the mechanism
+must be registry-driven (adding a sixth version = registry entry, not
+code). Acceptance: a verse (e.g. John 1:1) renders five-way aligned in one
+command with per-version license labels; alignment survives nabu rebuild;
+suite+lint green; architecture §10 written; worklog line.
+
+### Findings (P11-3, 2026-07-09 — shipped; architecture §10 is the design record)
+
+CITATION REALITY (verified live): passage urns are SENTENCE ids; verse
+identity lives in per-token `citation_part` ("MARK 2.3") in annotations_json
+(the passage-level `citation` is only the first token's part); sentence↔verse
+is many-to-many (846 greek-nt sentences span verses); all five witnesses share
+one book vocabulary but refs are work-scoped (Cicero cites bookless "1.1");
+Gothic carries non-numeric refs (MARK Incipit.0). **The packet's example verse
+John 1:1 is NOT five-way alignable** (absent from gothic-nt and marianus in
+the treebanks) — the shipped demo verse is **MARK 2.3** (present in all five,
+and a Mark verse as the OE-Mark rider requires; MARK 1.1 renders 4-of-5,
+Armenian honestly "not attested"). Design: registry
+(config/alignments.yml, loud-fail loader Nabu::AlignmentRegistry) + derived
+`alignment_refs` table in fulltext.sqlite3 (P7-5 passage_lemmas pattern — one
+row per work/normalized-ref/passage, built by Indexer.rebuild! from stored
+annotations, both call sites) — NOT materialized pairs (O(witnesses²), stale
+on the sixth witness); NO catalog migration. Refs fold both sides
+(upcase/whitespace/':'→'.'; per-witness books: alias map). Query surface: new
+`nabu align REF [--work]` (+ passage-urn pivot) — Parallel stays the separate
+CTS-suffix mechanism. MCP: fifth tool nabu_align (license labels on every
+sentence row, restricted witnesses withheld bodily). Licenses resolve at query
+time (override ∘ source), never stored in the index. OE Mark = uncomment one
+prepared registry line (identical proiel-citation extractor); biblical trio =
+entries + at most one new named extractor; GRETIL commentary = a new work.
+Demo (scratch parse-only store, live db untouched): `nabu align MARK 2.3` →
+5/5 witnesses incl. the Armenian sentence honestly labeled "[covers MARK 2.3,
+MARK 2.4]"; survived a real `nabu rebuild` of the scratch store byte-identically.
+
+## P11-4 · Dictionary shelf: LSJ + Lewis & Short  [tier: fable] [status: done] [deps: —]
+improvements.md §1.3. Ingest the two canonical classical lexica (Perseus
+TEI editions, CC BY-SA — verify at fixture time): LSJ (Greek) and Lewis &
+Short (Latin). NOT passages — a new dictionaries surface (own table(s)):
+entries keyed by folded lemma, senses as structured text. Two capabilities:
+(1) `nabu define <lemma> [--lang]` + MCP nabu_define — lemma search
+integration (a lemma hit can carry its dictionary gloss); (2) citation
+resolution: dictionary entries cite loci (Il. 1.34, Cic. Off. 1.1) — parse
+citations into urns where the work exists in-catalog (resolvable→clickable;
+unresolvable kept as text). Design note first: dictionary data is derived
+from canonical TEI (fetch via git like perseus? verify upstream repo) and
+must be rebuild-replayable. Fixture plan (owner approves before network):
+2-3 entry slices per lexicon. Acceptance: define works for a Greek and a
+Latin lemma end-to-end incl. MCP; ≥1 citation resolves to an in-catalog
+urn; suite+lint green; worklog line.
+
+### Fixture plan (P11-4 Phase A, 2026-07-09 — OWNER-APPROVED 2026-07-09, "Approved as-is")
+
+UPSTREAM (verified via gh api + ranged raw reads, no bulk fetch):
+**github.com/PerseusDL/lexica**, branch master, HEAD pinned
+`b5e707bdda2d6c8e0bb6c29657454996b4fb04d7` (2026-05-05) — one git repo,
+~160 MB, still maintained. Layout `CTS_XML_TEI/perseus/pdllex/{grc/lsj,
+lat/ls}/`. LSJ = 27 letter-split TEI files (`grc.lsj.perseus-eng1..27.xml`;
+eng1=alpha 43 MB carries the book's frontmatter prefaces, eng6=digamma 15 KB
+read whole as the structure exemplar, eng12=lambda 6.7 MB, eng13=mu 12.3 MB
+— letters verified by `div0/@n`). L&S = `lat.ls.perseus-eng1.xml` (betacode
+Greek, per-dir README: "for archival purposes only") and
+`lat.ls.perseus-eng2.xml` ("Greek converted to Unicode (use this for
+edits)") — eng2 is ours, 77 MB, all letters as `div0` in one file. A third
+Latin lexicon dir exists (`lat/viaf2845558`) — out of scope.
+
+LICENSE (verbatim): GitHub license detection: CC-BY-SA-4.0; repo `license.md`
+is the full BY-SA 4.0 legalcode; repo README: "Unless otherwise indicated,
+all contents of this repository are licensed under a Creative Commons
+Attribution-ShareAlike 4.0 International License. You must offer Perseus any
+modifications you make." Both per-lexicon READMEs: "This text may be freely
+distributed under a CC BY-SA 4.0 license, subject to the following
+restrictions: You credit Perseus, as follows, whenever you use the document:
+'Text provided under a CC BY-SA license by Perseus Digital Library,
+http://www.perseus.tufts.edu, with funding from The National Endowment for
+the Humanities. Data accessed from https://github.com/PerseusDL/lexica/
+[date of access].'" L&S eng2 additionally carries an in-file
+`<availability>`: "Available under a Creative Commons Attribution-ShareAlike
+4.0 International License." → license_class `attribution`, same as the
+perseus siblings; MCP-safe.
+
+TEI SHAPE (inspected in eng6 whole + eng1/eng12/eng13/ls-eng2 slices): TEI P4
+(`<TEI.2>` DOCTYPE + Perseus PersDict DTD — the P9-2 P4 experience applies),
+UTF-8. Body = `div0[@type="alphabetic letter"]` → `<entryFree id key type>`;
+inside: `orth`, `sense[@n @level]` (nested levels), `tr` glosses, `etym`,
+`gramGrp`, `cit`/`quote`, `xr`/`ref`. LSJ Greek (keys, orth, quotes) is
+BETACODE (`key="mh=nis"`, long/short marks already stripped from keys
+upstream) → the adapter needs a small betacode→Unicode decoder (no gem;
+table-driven, tested). L&S keys are plain Latin with homograph digits
+(`a2`, `volo1`), orth carries macrons/breves (`ăb`); its Greek is Unicode.
+CITATIONS: `<bibl n="urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:1">`
+with `<author>`/`<biblScope>` children — the 2014 revision "replaced most
+abo ids or abbreviations in bibl tags with cts urns". URNs come work-level
+(`tlg0291.tlg001:23:6`), edition-level (`phi0474.phi055.perseus-lat1:1:2:4`
+— editions that may differ from ours: LSJ cites perseus-grc1, we hold
+grc2 → resolve on the WORK prefix, re-anchor to the in-catalog edition),
+and bare work (`phi1236.phi001`); many bibls honestly carry NO urn
+(inscriptions, AP, fragments) and some inherited urns are contextually
+wrong (an "ib."-expansion gave a Corinna quote a Sappho urn) → best-effort
+resolution with an honest miss-rate, unresolved stays text. Known miss:
+L&S cites Livy as `phi0914.phi001` (unified AUC), Perseus canonical splits
+per book (`phi0914.phi0011`) — stays unresolved, documented.
+
+FIXTURE FILES (Phase B: ranged raw-file fetches around the verified byte
+offsets + full teiHeaders — a few MB total, NOT the 96 MB of full files;
+trimmed locally into structurally intact files, entries byte-identical,
+trims documented in the fixture README per house rules; pin sha b5e707b):
+
+1. `test/fixtures/lexica/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng13.xml`
+   (~35 KB trim of the 12.3 MB mu file): teiHeader whole + `div0 n="*m"` +
+   **μῆνις** (`key="mh=nis"`, id n67485 — VERIFIED: cites Il. 1.1 as
+   `n="urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:1"` → resolves against
+   the fixture Iliad tlg0012.tlg001.perseus-grc2:1.1 AND the live catalog;
+   plus unresolvable AP/Alcaeus bibls in the same entry) + 1–2 adjacent
+   small μην- entries (e.g. `mhni/w`) for shape variety.
+2. `.../grc/lsj/grc.lsj.perseus-eng12.xml` (~80–120 KB trim of the 6.7 MB
+   lambda file): teiHeader whole + `div0 n="*l"` + **λόγος** (`key="lo/gos"`
+   — the flagship polysemous entry, pages long: the MCP-bounds stress case
+   and the improvements-§1.3 demo lemma) + one small lambda entry.
+3. `.../lat/ls/lat.ls.perseus-eng2.xml` (~60–90 KB trim of the 77 MB file):
+   teiHeader whole (incl. the `<availability>` license statement) +
+   `div0 n="A"` with **Aaron** (id n3, tiny; cites the Vulgate via a
+   greekLit urn — the cross-namespace edge) and **a2** (2-line homograph) +
+   `div0 n="O"` with **officium** (id n32391 — VERIFIED: cites Cic. Off. as
+   `n="urn:cts:latinLit:phi0474.phi055.perseus-lat1:1:2:4"` and `:1:9:28`;
+   De Officiis perseus-lat1 is IN the live catalog, and `officium` is a
+   lemma of the PROIEL cic-off fixture → the lemma-search gloss-integration
+   test anchor) + `div0 n="V"` with **virtus** (define demo candidate —
+   verify citations at carve time; fallback: any V entry citing an
+   in-catalog Cicero/Vergil work).
+4. `test/fixtures/lexica/README.md` — retrieval date, exact raw URLs, sha
+   pin, license quotes above, trim documentation.
+
+Canonical for real syncs = owner-fired `nabu sync lexica` git-clones the
+whole repo under `canonical/lexica/` via GitFetch (attic-protected,
+sync_policy manual). Fixtures are for the suite only, as ever.
+
+### Findings (P11-4, 2026-07-09 — shipped; architecture §11 is the design record)
+
+Fixtures fetched exactly per the approved plan (ranged reads at pinned
+b5e707b, byte-identical entries; one substitution: the mu neighbor entry is
+μηνίσκος, the actual file-order successor of μῆνις, standing in for the
+plan's "e.g. μηνίω"; the λόγος trim ran 310 KB vs the 80–120 KB estimate —
+the entry alone is ~300 KB and was kept whole per plan). DESIGN (defended
+in §11): dictionaries ARE registry sources with a declared
+`Adapter.content_kind` (:dictionary → Store::DictionaryLoader; SyncRunner +
+Rebuild route in exactly two places) — a parallel mechanism would
+re-implement retention/breakers/ledger/probes; entries live in
+catalog.sqlite3 via migration 006 (Loader-grade idempotency/revision/
+withdraw semantics, provenance + durable ledger under
+urn:nabu:dict:<slug>:<entry_id> — NOT fulltext.sqlite3, whose tables are
+disposable derived-of-derived). Betacode decoded at the boundary
+(Nabu::Betacode, no gem); headwords key FOLDED per conventions §9 from the
+decoded @key, which is what makes lemma-search gloss integration free
+(`search --lemma officium` → "a service", one batched lookup, dictionary
+language must match). CITATION REALITY: bibl/@n CTS urns are work-level,
+edition-level (frequently an edition we don't hold — LSJ anchors at
+perseus-grc1, catalog holds grc2 → resolve on the WORK prefix), bare-work,
+non-CTS, or malformed; resolution is query-time (nothing stale stored),
+original-language-preferred, and falls back once on 3+-part citations to
+(first, last) — the classical chapter/section double citation, discovered
+live: Perseus's De Officiis cites book.section (1.4) where L&S cites
+"1, 2, 4"; the fallback resolves to the verbatim quoted passage (eyeballed:
+"Nulla enim vitae pars … vacare officio potest"). Known honest miss: L&S
+cites Livy as unified phi0914.phi001 vs Perseus's per-book split. Demo
+(scratch store, live db untouched): define μῆνις → wrath + Il. 1.1 →
+…perseus-grc2:1.1; define officium/virtus → Cic. Off. 1,2,4 → :1.4,
+1,9,28 → :1.28, 1,15,46 → :1.46; rebuild-safety pinned (entries+citations
+byte-identical across two rebuilds). MCP nabu_define = sixth tool (6 KB
+body cap, resolved-first citations, restricted shelves withheld). Third
+dictionary (Bosworth-Toller, CC BY 4.0 CSV): own adapter, same
+language-agnostic tables, slug bosworth-toller/lang ang, citations empty
+until an OE crosswalk — §11 note written. `lexica` registered
+enabled: false; owner fires the ~160 MB first clone.
+
+## P11-5 · Biblical trio  [tier: opus] [status: done] [deps: P11-3 design]
+improvements.md §2.1: Vulgate (full, not just NT — PROIEL latin-nt is NT
+only), LXX (Septuagint, Rahlfs where openly licensed — verify; CCAT/other
+open editions), SBLGNT (SBL Greek New Testament, free license with
+attribution). Scout+fixture-plan FIRST inside the packet (owner approves
+fixture plan before network, standing rule); adapters likely reuse existing
+parser families (TEI/plain structured). These feed the P11-3 hub as
+additional versions (registry entries). Acceptance: three sources READY
+(enabled:false, owner-fired syncs), hub registry entries prepared;
+suite+lint green; worklog line.
+
+### Fixture plan (P11-5 Phase A, 2026-07-09 — OWNER-APPROVED 2026-07-09, "Approved as is")
+
+SCOUTED (page-level reads + gh metadata only, no bulk fetch). The headline
+deviation from the packet framing, stated up front: **the trio is TWO new
+sources + one registry-only witness.** The LXX's best open edition is
+ALREADY IN THE CATALOG — First1KGreek tlg0527 is Swete's Septuaginta (57
+grc book-documents + ~40 perseus-eng translations, synced, verse-grain
+CTS passage urns `…tlg0527.tlg001.1st1K-grc1:1.2`; census: 29,170/29,242
+passages are chapter.verse, the 72 flat refs are all Epistula Jeremiae's
+single-chapter verse numbers). The openly-licensed standalone LXX repo
+(nathans/lxx-swete, CC BY-SA 4.0) is itself *derived from* First1KGreek
+tlg0527 per its own README — ingesting it would duplicate the same
+edition. So: LXX = registry entries + the new extractor, zero fetch,
+zero adapter.
+
+RAHLFS IS BLOCKED, honestly: the 1935 text is PD by age, but every
+machine-readable Rahlfs derives from the CATSS/CCAT morphological
+database, whose user declaration (ccat.sas.upenn.edu …
+/lxxmorph/0-user-declaration.txt) requires verbatim "Not to use or make
+available these materials for commercial purposes without first obtaining
+the written consent of the owners/encoders" and "To control access to
+these materials and require any other party to whom the recipient
+supplies any portion of this material to observe these conditions" — a
+registration-gated no-uncontrolled-redistribution term, below every
+acceptable class. eliranwong/LXX-Rahlfs-1935 relabels this CC-BY-NC-SA in
+README prose but ships NO license file and itself concedes "readers have
+to agree sending CCAT user declaration"; CenterBLC/LXX's MIT covers only
+its Text-Fabric conversion (@Editors=CCAT headers). Rahlfs-Hanhart 2006
+is (c) Deutsche Bibelgesellschaft. STEPBible (CC BY 4.0) ships no Greek
+OT as of HEAD 2026-06-09 (TAGNT + Hebrew TAHOT only; verified in-tree).
+Swete 1909 (PD text, CC BY-SA 4.0 digital edition) is the open LXX, and
+we hold it.
+
+UPSTREAM 1 — VULGATE (full bible, new source `vulgate`):
+**github.com/seven1m/open-bibles**, branch master, HEAD pinned
+`8c31c380a9f7af19fbe04e8eaaa6fa74601083d7` (2026-06-05), ~76 MB
+collection of PD/libre bibles, one file per translation. Ours:
+`lat-clementine.usfx.xml` (4,652,377 B, blob c0e65106…) — the Tweedale
+Clementine Vulgate Project text via eBible.org, Sixto-Clementine 1592
+(NOT the DBG-copyrighted Stuttgart/Weber-Gryson). FULL bible verified:
+book-id sweep runs GEN … MAL, deuterocanon (1MA 2MA …), MAT MRK … REV.
+LICENSE (verbatim): repo README translation table row
+"| lat-clementine.usfx.xml | Latin | USFX | | Clementine Latin Vulgate |
+Public Domain |"; eBible.org details page for this edition: "Public
+Domain"; eBible.org copyright page: "No person, company, or organization
+may claim any kind of copyright or restriction on this version of the
+Bible... even if they make changes." Caveat disclosed: open-bibles has no
+repo-wide LICENSE file (per-file assertion in README) — the PD chain is
+README row + eBible.org + 1592 text age → license_class `open`.
+FORMAT: USFX milestone XML (NOT TEI — new small parser family
+`UsfxParser`, streaming Reader): `<book id="MRK"><h>Marcus</h>
+<c id="1"/><v id="1"/>Initium Evangelii Jesu Christi, Filii Dei.<ve/>`.
+CITATION: OSIS/Paratext 3-letter book codes + numeric c/v milestones →
+native book.chapter.verse. Verified verbatim in-file: MRK 1:1 "Initium
+Evangelii…", MRK 2:3 "Et venerunt ad eum ferentes paralyticum, qui a
+quatuor portabatur.", JHN 1:1 "In principio erat Verbum…". Adapter mints
+one document per book (urn:nabu:vulgate:<osis-code-lc>, e.g.
+urn:nabu:vulgate:mrk), passages per verse (<doc>:<ch>.<v>), language lat.
+First real sync = owner-fired GitFetch clone of open-bibles (~76 MB,
+attic-protected; discovery filtered to the one file), sync_policy manual.
+
+UPSTREAM 2 — SBLGNT (new source `sblgnt`):
+**github.com/Faithlife/SBLGNT** (LogosBible/SBLGNT redirects here),
+branch master, HEAD pinned `c4d241a9c1c479a55b989ba35a4976c1d0b8052c`
+(2025-01-19), ~2.3 MB. The historically restrictive SBLGNT EULA is
+SUPERSEDED: sblgnt.com/license itself now serves CC BY 4.0.
+LICENSE (verbatim): GitHub license detection CC-BY-4.0 (file LICENSE =
+full legalcode); README: "The SBLGNT is licensed under a Creative
+Commons Attribution 4.0 International License. Copyright 2010 by the
+Society of Biblical Literature and Logos Bible Software." Redistribution
+of fixture slices is explicit legalcode §2(a)(1): "reproduce and Share
+the Licensed Material, in whole or in part" → license_class
+`attribution`, MCP-safe. NB the morphgnt/sblgnt sibling's morphology
+layer is CC-BY-SA-3.0 copyleft and its README still points at the old
+EULA — we take the clean Faithlife plain text, no morphology.
+FORMAT: `data/sblgnt/text/*.txt`, 27 book files, verse-per-line TSV
+("Mark 1:1<TAB>Ἀρχὴ τοῦ εὐαγγελίου Ἰησοῦ ⸀χριστοῦ." after a book-title
+first line; ⸀⸂⸃ apparatus sigla are upstream text and stay — canonical
+means canonical). New trivial parser family (verse-per-line TSV; the
+word-level custom XML variant and the sblgntapp apparatus are skipped).
+CITATION: explicit "Book C:V" per line; book tokens (Matt, Mark, 1Cor,
+Phlm…) fold to the PROIEL nt vocabulary (verified against the live
+alignment index: MATT MARK … PHILEM REV) — adapter mints one document
+per book file (urn:nabu:sblgnt:<stem-lc>, e.g. urn:nabu:sblgnt:mark),
+passages per verse (<doc>:<ch>.<v>), language grc. First real sync =
+owner-fired GitFetch clone (~2.3 MB), sync_policy manual.
+
+HUB WIRING (architecture §10 pays out as forecast): ONE new named
+extractor `cts-verse` — ref = the witness's registry book token + " " +
+the passage-urn tail after the document urn (`…tlg001.1st1K-grc1:1.2` →
+"GEN 1.2") — serving all three witnesses. It requires one registry
+extension: a witness may span MULTIPLE documents via a `documents:`
+map (work-vocabulary book token → document urn; the existing single
+`document:` form stays for proiel-citation witnesses — nt entries
+unchanged). Touches: AlignmentRegistry (schema + validation),
+AlignmentIndexer (per-document iteration + the new extractor),
+Query::Align (multi-doc witness header: label as title, language/license
+from the witness's live docs, not_synced only when none are live).
+Registry entries (LIVE, not commented — registering before sync renders
+"not synced" honestly, the registry's documented day-one state):
+`nt` work gains sblgnt (27-doc map) + vulgate-NT (27-doc map, keys MARK:
+urn:nabu:vulgate:mrk …); NEW `ot` work: lxx-swete (57-doc map onto
+tlg0527, keys = OSIS-style tokens, double-recension books get distinct
+tokens e.g. DAN = Theodotion / DAN-OG = translatio Graeca; exact maps
+generated from catalog titles at implementation) + vulgate-OT. LXX↔
+Clementine Psalm numbering both follow the Greek tradition — the
+versification-swamp caveat (§10) stays scoped out, and the ot registrar
+(this packet) owns that claim per the §10 contract.
+
+FIXTURE FILES (Phase B: ranged raw fetches at the pinned shas, trimmed
+locally into structurally intact files, entries byte-identical, trims
+documented in per-dir READMEs with the license quotes above):
+
+1. `test/fixtures/vulgate/lat-clementine.usfx.xml` (~25–40 KB trim of
+   4.65 MB, pin 8c31c38): usfx root + `<book id="GEN">` ch. 1 whole +
+   `<book id="MRK">` chs. 1–2 + `<book id="JHN">` ch. 1:1–18 — OT proof,
+   the MARK 2.3 flagship anchor, and the John prologue.
+   raw.githubusercontent.com/seven1m/open-bibles/8c31c38…/lat-clementine.usfx.xml
+2. `test/fixtures/sblgnt/data/sblgnt/text/Mark.txt` (~4 KB trim, pin
+   c4d241a: title line + Mark 1:1–2:12), `…/3John.txt` (WHOLE book,
+   2,917 B — complete-book round-trip at negligible size), `…/John.txt`
+   (~2 KB trim: John 1:1–18).
+   raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a…/data/sblgnt/text/<Book>.txt
+3. `test/fixtures/first1k/greekLit/data/tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml`
+   (~15–30 KB trim: teiHeader whole + Genesis ch. 1) + the two
+   `__cts__.xml` metadata stubs — the LXX witness exercised end-to-end
+   from a real fixture (epidoc family, existing adapter; first1k tests'
+   pinned URN/title lists updated for the added doc). Upstream:
+   raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek (HEAD pinned
+   at carve time; license already on file: CC BY-SA 4.0, repo license.md).
+4. `test/fixtures/{vulgate,sblgnt}/README.md` + first1k README note —
+   retrieval dates, exact URLs, sha pins, license quotes, trim docs.
+
+Owner-fired first syncs after merge: `nabu sync vulgate` (~76 MB clone),
+`nabu sync sblgnt` (~2.3 MB clone); LXX needs none (already synced —
+`nabu rebuild`/next sync reindexes alignment_refs from the new registry).
+Demo target from fixtures (scratch store, live db untouched):
+`nabu align "MARK 2.3"` renders sblgnt + vulgate + the PROIEL five;
+`nabu align "GEN 1.1" --work ot` renders Swete grc ↔ Clementine lat.
+
+### Findings (P11-5, 2026-07-09 — shipped; architecture §10 updated)
+
+Fixtures fetched exactly per the approved plan (ranged reads at the pinned
+shas; slices byte-identical; first1k tlg0527 pinned at fresh HEAD 4c9c843
+as the plan specified "pinned at carve time"). SHIPPED: two new sources —
+`vulgate` (new UsfxParser family: streaming milestone XML, one document
+per book from the one whole-bible file, urn:nabu:vulgate:<osis-lc>:<ch>.<v>)
+and `sblgnt` (new SblgntParser family: verse-per-line TSV, per-book docs,
+Greek first-line titles; apparatus sigla kept verbatim) — both
+enabled:false, sync_policy manual, conformance-green, fetch = shared
+GitFetch path. HUB: the forecast "one new extractor" landed as `cts-verse`
+(registry book token + passage-urn tail) plus the registry extension it
+needs — a witness may span per-book documents (`documents:` map;
+AlignmentRegistry two witness forms with strict cross-validation,
+AlignmentIndexer per-document iteration, Query::Align multi-doc rendering:
+hit book heads the column, misses show the label alone, not_synced only
+when NO document is live). Registry: nt + sblgnt (27-book map) +
+vulgate-NT (27 codes, all scout-verified); NEW ot work = LXX-Swete
+(55-book map, catalog-verified urns incl. grc2 slugs for SIR/ISA,
+Theodotion-as-plain-token for DAN/SUS/BEL with -OG variants, 2ES = Esdras
+B; tlg030 Ecclesiastes has no grc upstream — honest gap) + vulgate-OT
+(ONLY the 9 scout-verified codes; rest config-only after first sync).
+DEMO (fixture scratch store, live db untouched): MARK 2.3/MARK 1.1/JOHN
+1.1 render sblgnt grc ↔ vulgate lat with the PROIEL five honestly "not
+synced"; GEN 1.1 renders Swete ↔ Clementine 2-of-2. LIVE-witness demo
+(live catalog opened READ-ONLY, index built into scratch memory — no live
+file touched): 68,896 refs; MARK 2.3 = 5-of-7 (trio pending owner syncs);
+GEN 1.1, PSA 22.1 (Κύριος ποιμαίνει με — the Greek-numbering claim
+proven), JON 2.1 attest from the live LXX. Deviations, all argued in the
+plan: trio = 2 sources + registry-only LXX (Rahlfs BLOCKED on the CATSS
+declaration — 02-sources #44 records the verbatim terms; Swete already
+in-catalog, and nathans/lxx-swete derives FROM tlg0527); vulgate-OT
+registry deliberately partial (guessed codes would dangle silently).
+REVIEW FIX (same commit): the second work made every bare `align REF`
+error "pick one with --work" — work resolution now auto-resolves a bare
+ref through the index (unique attesting work → picked, for citations AND
+passage-urn pivots; several → ambiguity naming ONLY the attesters; none
+→ honest not-found with the --work hint; explicit --work keeps
+precedence; MCP inherits via Query::Align). Cosmetic: a not-synced
+multi-book witness cites the ref's OWN book urn ("JOHN 1.1" → …:john),
+and when the map lacks the ref's book entirely it cites nothing — the
+CLI phrases the miss neutrally. Verified bare on live data (read-only):
+`align MARK 2.3` → nt 5-of-7, `align GEN 1.1` → ot with Swete attesting.
+Suite 1206/15,303 green, lint clean.
+
+## P11-6 · ORACC project expansion  [tier: opus] [status: done] [deps: —]
+Config-only rider: extend Oracc::PROJECTS with saao-saa01 (Sargon II
+letters), rinap-rinap1 (Tiglath-pileser III), dcclt (lexical lists) — all
+CC0-verified in P9-5a scouting; adapter reads license per-project anyway.
+Fixture: NONE needed if the parser family covers them (it should — verify
+by parsing a few texts from the owner-fired sync at review; if any new cdl
+node type appears, STOP and report for a follow-up packet instead of
+hacking). Registry scope comment updated. Owner-fired: bin/nabu sync oracc
+after merge pulls the new projects. Acceptance: suite+lint green (no new
+fixtures = no new tests beyond PROJECTS list pin); 02-sources scope updated;
+worklog line.
+
+## P11-gate · Phase 11 gate  [tier: orchestrator] [status: done 2026-07-10] [deps: P11-1..6]
+Gate decision: stretch riders (morph facets §1.6, vocab profiling §1.7) NOT
+taken — the phase ran full (6 packets + 2 review fixes); they stay in the
+improvements register for a later phase.
+Full-diff review, library.md refresh (per §9: new capabilities sections for
+alignment + dictionaries; OE survey linked), README truthfulness, PR,
+sticky alarm LAST. Stretch riders (morph facets §1.6, vocab profiling §1.7)
+only if the phase ran light — decide at gate, don't cram.
+
+## P11-7 · Silent-ingestion defects + skip visibility  [tier: opus] [status: done] [deps: P11-4, P11-6]
+Defect packet (census-first: orchestrator's 2026-07-10 disk-vs-catalog audit
+across ALL 12 sources after the owner-fired oracc/lexica/vulgate/sblgnt
+syncs; papyri/perseus×2/first1k/proiel/torot/ud/vulgate/sblgnt verified
+clean to the file). Six fixes:
+
+1. **ORACC nested-root (the headline)** — subproject zips unpack with a
+   nested root: canonical/oracc/saao-saa01/saa01/corpusjson/, but discover
+   looks only at <project-dir>/corpusjson → saao-saa01 and rinap-rinap1
+   silently ingested 0 of their 361 texts while the sync reported
+   "succeeded (+4675)". Fix discover to find corpusjson at either depth
+   (or normalize at unpack); AND make it loud: a registered project whose
+   tree exists but yields zero refs is an error-grade sync note, never
+   silence. After the fix the owner re-fires sync oracc.
+2. **Verify broken on dictionary sources** — Verify#reparse calls
+   document.urn on Nabu::DictionaryDocument (no such method): P11-4 routed
+   sync+rebuild via Adapter.content_kind but missed Verify, and the crash
+   at lexica aborts the ENTIRE verify run (sources after it unverified).
+   Teach Verify content_kind :dictionary (reparse dictionary entries by
+   their own identity/hash semantics per DictionaryLoader) — or, minimum
+   acceptable, cleanly skip dictionary sources with an honest per-source
+   "skipped (dictionary)" line; prefer real verification. Regression test:
+   verify over a store containing BOTH kinds completes and reports both.
+3. **dcclt no-content shape (112 files)** — object/surface skeleton with
+   only nonx d-nodes, zero transcribed lines: these are catalog-only
+   cousins of the 0-byte case P10-1 skips honestly. Treat identically:
+   skip at discover, count in the sync note, never quarantine.
+4. **dcclt label-less line-start (58 files)** — e.g. P010104: ~300 labeled
+   lines and ONE line-start with no label/n (upstream data gap; its parent
+   sentence c-node carries the label, "r xi' 10'" in the sample). Fix: fall
+   back to the enclosing sentence's label; if that too is absent, skip THAT
+   LINE honestly (annotation note) — never quarantine the document. Two
+   fixture slices from canonical/oracc/dcclt (real, trimmed; no network).
+5. **LSJ stray editions (2 quarantines)** — grc.lsj.perseus-eng1.xml and
+   eng9 are alternate single-file editions the lexica discover sweeps in
+   alongside the 27 letter-split files; exclude them from discovery by
+   rule (not by name-list if a pattern exists — inspect the repo layout in
+   canonical/lexica), with a test.
+6. **GRETIL silent strays (2 files)** — sa_vijJAnezvara-mitAkSarA (1.8 MB,
+   the Mitākṣarā!) and sa_haribhadrasUri-zAstravArttAsamuccaya: peek_header
+   → nil (no <text xml:lang> in the expected shape) and discovery drops
+   them INVISIBLY. Inspect both files; if ingestible with a small header
+   fallback (e.g. lang from teiHeader or filename sa_ prefix), recover
+   them (fixture slice, frozen-urn census over gretil per the standing
+   guarantee); if genuinely not editions, classify them loudly.
+7. **Skip visibility (the systemic fix)** — sync output + run notes gain
+   per-source discovery accounting: files matching the content pattern
+   that yield no ref are counted and classed (selected / skipped-by-rule /
+   unrecognized), with unrecognized ≥1 rendered prominently. Keep it cheap
+   (discover already walks the tree); wire through FetchReport/run notes;
+   status/health untouched. Design the counting at the Adapter seam so all
+   families inherit it.
+
+FROZEN-URN GUARD: fixes touch discovery/skip paths only; all currently
+loaded docs re-parse byte-identical (targeted two-parse censuses for oracc
++ gretil; =N skipped on parse-only syncs as the loader-level proof).
+Acceptance: suite+lint green; parse-only oracc sync quarantines 170 → ~0
+with honest catalog-only counts (real saao/rinap ingestion is owner-fired
+post-merge); verify completes over the full live catalog (read-only run);
+gretil strays resolved (recovered or loudly classified); worklog line;
+02-sources notes updated.
+
+RESOLUTION (2026-07-10): all seven fixes shipped in one commit; suite+lint
+green (+12 tests). Per-fix: (1) ORACC nested-root — `project_dir` resolves
+`corpusjson/` at either depth; saao/saa01 + rinap/rinap1 (361 texts) now
+ingest; a tree-present-but-no-corpusjson project is a LOUD `unrecognized`
+note. (2) Verify — routes `content_kind :dictionary` to entry-level hash
+reconciliation; a store with both kinds verifies (the `document.urn`-on-
+DictionaryDocument crash that aborted the whole run is gone). (3) dcclt
+no-content — new `Nabu::DocumentSkipped` signal; loader counts it
+`skipped_by_rule`, never quarantines. (4) dcclt label-less line — falls back
+to the enclosing sentence c-node's label, else skips just that line. (5) LSJ
+"strays" — **the census was WRONG: eng1/eng9 are the α (largest, ~18950
+entries) and θ (~1948) letter files, not alternate editions.** They
+quarantined on an empty-citation-suffix bug (`urn:cts:…tlg0088:` → ""
+DictionaryCitation). Excluding them would have DELETED α+θ (~20900 entries);
+the real fix is `cite_parts` minting `citation: nil` for an empty suffix.
+Classified loudly here rather than forcing the packet's exclusion rule. (6)
+GRETIL strays — genuine Sanskrit editions (Mitākṣarā 4788 passages,
+Śāstravārttā 701) whose `<text>` lacks `@xml:lang`; RECOVERED via
+`<body>/@xml:lang` (san-Latn) then filename `sa_` fallback. (7) Skip
+visibility — `Adapter#discovery_skips` (DiscoverySkips: selected /
+skipped-by-rule / unrecognized) at the seam, wired through the Outcome and a
+`discovery:` CLI line, loud notes persisted to `runs.notes`. FROZEN-URN
+proof (parse-only, live db): oracc `+407 added ~0 updated =6469 skipped !0
+errored` (170 → 0 quarantines), gretil recovers the two strays with ~0
+updated. Verify runs clean read-only over the full live catalog.
+
+## P11-8 · Readable aligned scripture: align ranges + English witness  [tier: opus] [status: done] [deps: P11-5, P11-7]
+Owner-requested (2026-07-10, after eyeballing `show urn:nabu:vulgate:jon
+--parallel` and hitting the CTS-sibling wall). Two halves:
+
+1. **Range/chapter support for `align`** — `align "JON 1.1-1.16"` (verse
+   range, same-book) and `align "JON 1"` (whole chapter) render every ref
+   in document order, each with its witnesses grouped per the existing
+   single-ref layout (compact: ref header + witness lines; suppress
+   repeated witness titles). Honest handling of refs where witnesses
+   differ in attestation (per-ref counts, the existing not-attested
+   rendering). Same grammar in MCP nabu_align (range/chapter args or ref
+   string — follow the CLI). Guard: cap rendered refs (e.g. 200) with an
+   honest truncation note, mirroring nabu_define's cap style. This also
+   pays out for the future OE Mark witness.
+2. **English witness (World English Bible or sibling PD English)** — the
+   open-bibles repo already vendored for vulgate carries PD English
+   bibles; scout IN-REPO (canonical checkout / pinned sha — page-level
+   raw reads only if the local clone lacks it), verify the license row
+   verbatim (expect Public Domain like lat-clementine), confirm USFX
+   format (UsfxParser reuse — zero new parser), pick the edition (WEB
+   preferred: modern PD, complete OT+NT+deuterocanon coverage vs KJV
+   licensing quirks in the UK — argue briefly). New source `eng-web`
+   (or matching slug), enabled:false, owner-fired sync; registry entries:
+   nt + ot works gain the eng witness (documents: map per P11-5 pattern).
+   FIXTURE GATE: this repo's fixture plan was already owner-approved for
+   vulgate (P11-5, same repo, same pinned sha, same PD assertion
+   mechanism); trimming 2-3 book slices of the chosen English edition
+   from the SAME repo under the SAME approval is in-scope — note it in
+   the fixture README; do NOT fetch anything outside the pinned repo.
+   Cosmetic rider: the `--parallel` error hint ("is translations: true
+   set…") is misleading for non-CTS sources — mention `align` when the
+   work has hub registry entries.
+Acceptance: `align "JON 1"` renders LXX ↔ Vulgate chapter-wise from
+fixtures (and live read-only demo); eng witness READY awaiting owner
+sync; suite+lint green; docs (mcp.md nabu_align args, backlog done,
+worklog sha —); one commit, not pushed.
+
+## P11-9 · show --random + OT registry completion  [tier: opus] [status: done] [deps: P11-8]
+Owner-requested (2026-07-10): `bin/nabu show --random [--source SLUG]
+[--count N]` — render N (default 1, cap 20) random passages, optionally
+scoped to one source; the standard show layout per hit. Purpose: the
+eyeball ritual at every source flip. Honest randomness over PASSAGES
+(ORDER BY RANDOM() on the passage set after the usual visibility/license
+joins — reuse CatalogJoin; no new query surface). Excluded: withdrawn
+(standard rule). MCP: NOT exposed (a conversational surface has no
+eyeball ritual; keep the tool list tight). Tests: scoping, count cap,
+determinism-free assertions (shape not content), unknown slug error.
+Small: CLI + Query touch only.
+RIDER (config, now unblocked): complete the alignment registry's
+vulgate-OT `documents:` map — P11-5 shipped it deliberately partial
+("guessed codes would dangle silently"); the vulgate is now SYNCED, so
+every one of its 46 OT book documents is verifiable read-only against
+the live catalog (e.g. urn:nabu:vulgate:jon exists but JON is unmapped —
+`align "JON 1"` renders vulgate "not attested" wrongly). Add ONLY
+catalog-verified codes; keep WEB's OT map conservative (versification
+divergence — do NOT expand it beyond what P11-8 shipped). Registry
+loader validation must stay green; live read-only demo: `align "JON 2.1"`
+renders LXX ↔ Vulgate.
+Suite+lint green; docs (README command table row); backlog done;
+worklog line (sha —); one commit, not pushed.
+OWNER FEEDBACK 2026-07-10 (folded into this packet): `align "JON 1"` live
+was unreadable — 16 refs each repeating "vulgate — not attested" and
+"WEB — not synced". Fix (range/chapter path only; single-ref byte-unchanged):
+a witness with ZERO attestation across the whole rendered range is summarized
+ONCE in the header ("not attested in this range: …; not synced: …") and
+OMITTED from every per-ref block; partially-attesting witnesses keep the
+per-ref honest "— not attested" lines. Mirrored in MCP nabu_align range
+results (range-level `absent_witnesses:[{label,reason}]`; per-ref witness
+arrays drop the all-absent witnesses); documented in docs/mcp.md.
+
+## P11-10 · status learns dictionary sources + USFX non-verse books  [tier: opus] [status: done] [deps: P11-9]
+Defect packet (owner report 2026-07-10: "lexica status weirdly zero docs").
+1. **StatusReport content_kind awareness** — lexica renders
+   `docs=0 passages=0` because its content is 168,133 dictionary_entries;
+   the status renderer never learned `content_kind :dictionary` (same
+   missed-surface class as the P11-7 verify fix). Render dictionary
+   sources with their true counts (e.g. `entries=168133` in place of the
+   docs/passages pair; keep the rest of the row shape — enabled/policy/
+   retired/last-run). Check the OTHER status-adjacent surfaces for the
+   same gap while there: MCP nabu_status (does it already carry
+   dictionary counts? P11-4 said status shows "what is excluded by
+   default" — verify), health trends (runs table is fine — kind-agnostic
+   counts — but confirm no misleading zero renders), README table row if
+   it describes status output.
+2. **USFX non-verse books skip rule** — eng-web quarantines FRT (front
+   matter) + GLO (glossary): structural non-scripture books with zero
+   verses. Quarantine implies damage; these are upstream norms → skip by
+   rule (the P11-7 DocumentSkipped signal), counted in the discovery/
+   skip accounting. Test with a trimmed FRT-bearing fixture slice (the
+   vendored repo is on disk; no network). Vulgate unaffected (its file
+   has no FRT/GLO — verify, don't assume).
+Acceptance: live read-only render of status shows lexica entries count
+(the status command only READS); parse-only eng-web sync shows FRT/GLO
+as skipped-by-rule, quarantines 2 → 0, previously-loaded 84 docs
+=skipped (frozen); suite+lint green; backlog done; worklog (sha —); one
+commit, not pushed.

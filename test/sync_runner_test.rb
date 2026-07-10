@@ -411,6 +411,22 @@ class SyncRunnerTest < Minitest::Test
     assert_empty runner.sync("breaker").warnings
   end
 
+  # --- dictionary-shaped sources (P11-4) ------------------------------------
+
+  def test_dictionary_source_routes_to_the_dictionary_loader
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
+    reg = registry(entry("lexica", Nabu::Adapters::Lexica, enabled: true, sync_policy: "manual"))
+
+    outcome = make_runner(reg).sync("lexica", parse_only: true)
+
+    refute outcome.aborted?
+    assert_equal 8, outcome.load_report.added # entry-grained counts
+    assert_equal "succeeded", last_run_status
+    assert_equal 0, Nabu::Store::Document.count, "a dictionary source must create no documents"
+    assert_equal 8, Nabu::Store::DictionaryEntry.count
+    assert_empty outcome.warnings
+  end
+
   # --- sync_all policy filtering ------------------------------------------
 
   def test_sync_all_runs_only_enabled_live_sources
