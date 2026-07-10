@@ -249,8 +249,9 @@ studies over the full entry set.
 - **Concordance** (`concord`): KWIC lines with fold-aware matching that maps
   hits back to pristine (accented) text.
 - **Parallel display** (`show --parallel`): §7.
-- **MCP server** (4 read-only tools: `nabu_search`, `nabu_show`,
-  `nabu_status`, `nabu_concord`): exposes the library to Claude and other MCP
+- **MCP server** (6 read-only tools: `nabu_search`, `nabu_show`,
+  `nabu_concord`, `nabu_align`, `nabu_define`, `nabu_status` — see
+  `docs/mcp.md`): exposes the library to Claude and other MCP
   clients. Every passage carries `license_class` + `source` so quoting
   decisions are informed. All licensed shelves including `nc` are served;
   only `research_private`/`restricted` (currently zero documents — a
