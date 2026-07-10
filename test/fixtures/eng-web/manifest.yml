@@ -16,11 +16,15 @@ files:
     reason: >-
       trimmed slice assembly — built from the already-vendored open-bibles
       checkout (canonical/vulgate/eng-web.usfx.xml, pinned blob) by extracting
-      three whole book elements plus the usfx root wrapper; a fresh whole-file
-      GET would not byte-match
+      three whole book elements plus two trimmed peripheral book elements and
+      the usfx root wrapper; a fresh whole-file GET would not byte-match
     trim: >-
       P11-8 (fixture approval inherited from P11-5, same repo, same pinned sha):
       usfx root + languageCode + whole books JON (Jonah, 4 ch/48 vv), OBA
-      (Obadiah, 1 ch/21 vv), PHM (Philemon, 1 ch/25 vv), each book element
-      byte-identical from the upstream blob. Upstream pinned at open-bibles
-      HEAD 8c31c380a9f7af19fbe04e8eaaa6fa74601083d7 (2026-06-05).
+      (Obadiah, 1 ch/21 vv), PHM (Philemon, 1 ch/25 vv), each scripture book
+      element byte-identical from the upstream blob. P11-10 adds two TRIMMED
+      non-scripture peripheral books — FRT (front matter/preface) first and GLO
+      (glossary) last, each cut to its opening <id>/<h>/<toc> plus two <p>
+      elements from the upstream blob (verbatim, verse-free by nature) — to
+      exercise the skipped-by-rule path. Upstream pinned at open-bibles HEAD
+      8c31c380a9f7af19fbe04e8eaaa6fa74601083d7 (2026-06-05).

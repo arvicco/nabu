@@ -87,6 +87,21 @@ class UsfxParserTest < Minitest::Test
     assert(document.all? { |p| p.text.unicode_normalized?(:nfc) })
   end
 
+  # P11-10: USFX peripheral books (FRT front matter, GLO glossary) are
+  # non-scripture structural matter with zero verses. parse declines them by
+  # rule (Nabu::DocumentSkipped — the P11-7 skip signal the loader counts as
+  # skipped-by-rule), NOT with a ParseError (which would quarantine as damage).
+  def test_parse_of_a_non_scripture_book_is_skipped_by_rule
+    %w[FRT GLO].each do |book|
+      error = assert_raises(Nabu::DocumentSkipped) do
+        parser.parse(ENG_WEB, book: book, urn: "urn:nabu:eng-web:#{book.downcase}",
+                              language: "eng", title: book)
+      end
+      assert_match(/non-scripture book #{book}/, error.reason)
+      refute_kind_of Nabu::ParseError, error, "a skip must not be a quarantine"
+    end
+  end
+
   def test_parse_of_an_absent_book_raises_parse_error
     error = assert_raises(Nabu::ParseError) do
       parse_book("PSA", urn: "urn:nabu:vulgate:psa", title: "Psalmi")

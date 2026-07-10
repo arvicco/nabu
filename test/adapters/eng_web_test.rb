@@ -7,13 +7,18 @@ require "fileutils"
 # EngWeb adapter tests (P11-8): the World English Bible from seven1m/open-bibles
 # (one whole-bible USFX file, the Vulgate's public-domain English sibling),
 # minting one document per book. Includes the shared AdapterConformance suite
-# against the checked-in fixture trim (whole books JON, OBA, PHM). No network:
-# fetch runs against a local git repo.
+# against the checked-in fixture trim (scripture books JON, OBA, PHM plus the
+# non-scripture peripheral books FRT + GLO, P11-10). No network: fetch runs
+# against a local git repo.
 class EngWebTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = Nabu::TestSupport.fixtures("eng-web")
 
+  # discover yields every book, in file order — peripheral (FRT/GLO) included;
+  # parse declines the peripheral ones by rule (see below).
+  ALL_BOOK_URNS = %w[urn:nabu:eng-web:frt urn:nabu:eng-web:jon urn:nabu:eng-web:oba
+                     urn:nabu:eng-web:phm urn:nabu:eng-web:glo].freeze
   BOOK_URNS = %w[urn:nabu:eng-web:jon urn:nabu:eng-web:oba urn:nabu:eng-web:phm].freeze
 
   def conformance_adapter
@@ -43,10 +48,23 @@ class EngWebTest < Minitest::Test
 
   def test_discover_mints_one_ref_per_book_in_canon_order
     refs = Nabu::Adapters::EngWeb.new.discover(FIXTURES).to_a
-    assert_equal BOOK_URNS, refs.map(&:id)
-    assert_equal(%w[JON OBA PHM], refs.map { |r| r.metadata["book"] })
-    assert_equal(%w[Jonah Obadiah Philemon], refs.map { |r| r.metadata["title"] })
+    assert_equal ALL_BOOK_URNS, refs.map(&:id)
+    assert_equal(%w[FRT JON OBA PHM GLO], refs.map { |r| r.metadata["book"] })
+    assert_equal(%w[Preface Jonah Obadiah Philemon Glossary], refs.map { |r| r.metadata["title"] })
     assert(refs.all? { |r| r.source_id == "eng-web" && r.metadata["language"] == "eng" })
+  end
+
+  # P11-10: FRT (front matter) and GLO (glossary) are structural non-scripture
+  # books with zero verses. discover still yields them (honest inventory), but
+  # parse declines them by rule — Nabu::DocumentSkipped, which the loader counts
+  # as skipped-by-rule rather than quarantining as damage.
+  def test_parse_skips_non_scripture_books_by_rule
+    adapter = Nabu::Adapters::EngWeb.new
+    %w[urn:nabu:eng-web:frt urn:nabu:eng-web:glo].each do |urn|
+      ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
+      error = assert_raises(Nabu::DocumentSkipped) { adapter.parse(ref) }
+      assert_match(/non-scripture book/, error.reason)
+    end
   end
 
   def test_discover_of_an_unfetched_workdir_yields_nothing

@@ -40,11 +40,13 @@ both alignment-hub works.
 
 | Path | Bytes | Contents |
 |---|---|---|
-| `eng-web.usfx.xml` | 15,907 | **Trimmed** from the whole-bible upstream file: three WHOLE small books byte-identical from the pinned blob — `<book id="JON">` (Jonah, 4 ch, 48 vv), `<book id="OBA">` (Obadiah, 1 ch, 21 vv), and `<book id="PHM">` (Philemon, 1 ch, 25 vv) — wrapped in the `<usfx>` root + `<languageCode>eng</languageCode>`. Whole books need no mid-book trimming (unlike the Vulgate slice); parses strict (Nokogiri). |
+| `eng-web.usfx.xml` | 16,481 | **Trimmed** from the whole-bible upstream file: three WHOLE small scripture books byte-identical from the pinned blob — `<book id="JON">` (Jonah, 4 ch, 48 vv), `<book id="OBA">` (Obadiah, 1 ch, 21 vv), and `<book id="PHM">` (Philemon, 1 ch, 25 vv) — plus two TRIMMED non-scripture peripheral books `<book id="FRT">` (front matter/preface, first) and `<book id="GLO">` (glossary, last), all wrapped in the `<usfx>` root + `<languageCode>eng</languageCode>`. Scripture books need no mid-book trimming (unlike the Vulgate slice); parses strict (Nokogiri). |
 
 Books chosen: JON aligns with the LXX/Vulgate Old Testament witness (the
 packet's demo verse family, `align "JON 1"`); OBA gives a second one-chapter
-OT book; PHM gives New Testament coverage — all small, all whole.
+OT book; PHM gives New Testament coverage — all small, all whole. FRT + GLO
+(P11-10) are the file's two structural non-scripture books, kept so the
+skipped-by-rule path has real (if trimmed) upstream shapes to test against.
 
 ## Structure notes (UsfxParser, P11-8)
 
@@ -59,3 +61,11 @@ OT book; PHM gives New Testament coverage — all small, all whole.
   survives. Regression: `test/adapters/usfx_parser_test.rb`.
 - Text is kept verbatim (WEB uses “Yahweh” for the divine Name), NFC at the
   boundary.
+- **Non-scripture books (P11-10).** `FRT` (front matter) and `GLO` (glossary)
+  are USFX/Paratext PERIPHERAL books: structural matter with zero `<v>` verses.
+  `discover` still lists them (honest inventory), but `UsfxParser#parse`
+  declines them by rule with `Nabu::DocumentSkipped`
+  (`UsfxParser::NON_SCRIPTURE_BOOKS`) — the P11-7 skip signal the loader counts
+  as skipped-by-rule, never a quarantine (those are for damaged scripture).
+  Regression: `test/adapters/usfx_parser_test.rb`,
+  `test/adapters/eng_web_test.rb`.
