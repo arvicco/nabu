@@ -32,15 +32,25 @@ module Nabu
       # plus the optional language and license filters. No ordering: the
       # caller restores its own index order.
       def catalog_rows(passage_ids, lang:, license:)
+        visible_passages(lang: lang, license: license)
+          .where(Sequel[:passages][:id] => passage_ids)
+          .select(*catalog_columns).all
+      end
+
+      # The passages/documents/sources join with the two-level visibility rule
+      # (neither passage nor its document withdrawn) and the optional
+      # language/license filters — unordered, unselected, so callers add their
+      # own scoping (Random's source filter + ORDER BY RANDOM(), a caller's
+      # id join). One place for the visibility rule so it can never drift.
+      def visible_passages(lang:, license:)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
-                  .where(Sequel[:passages][:id] => passage_ids)
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
         dataset = dataset.where(license_expr => license) if license
-        dataset.select(*catalog_columns).all
+        dataset
       end
 
       # Effective license class: document override wins over source class (P1-3).

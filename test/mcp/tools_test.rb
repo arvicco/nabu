@@ -753,6 +753,40 @@ module MCP
       assert_match(/reversed range/, text_of(result))
     end
 
+    # P11-9: a witness absent from every ref of a range is summarized once in
+    # absent_witnesses and dropped from the per-ref witness columns.
+    ABSENT_RANGE_REGISTRY_YAML = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+          - label: ghost
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-z:jon
+    YAML
+
+    def test_align_range_lifts_all_absent_witnesses_out_of_the_per_ref_columns
+      seed_range_corpus # seeds src-a + src-b; src-z (ghost) is never synced
+      registry = align_registry(ABSENT_RANGE_REGISTRY_YAML)
+      # Re-index so the registry the tools use matches the seeded index.
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+      body = payload(align_tools(registry).call("nabu_align", { "ref" => "JON 1" }))
+
+      assert_equal([{ "label" => "ghost", "reason" => "not_synced" }],
+                   body.fetch("absent_witnesses"))
+      body.fetch("refs").each do |group|
+        labels = group.fetch("witnesses").map { |witness| witness.fetch("label") }
+        assert_equal %w[full partial], labels, "the not_synced witness is gone from every ref"
+      end
+    end
+
     # -- read-only enforcement ------------------------------------------------------
 
     def test_readonly_connection_refuses_writes

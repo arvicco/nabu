@@ -2042,7 +2042,7 @@ fixtures (and live read-only demo); eng witness READY awaiting owner
 sync; suite+lint green; docs (mcp.md nabu_align args, backlog done,
 worklog sha —); one commit, not pushed.
 
-## P11-9 · show --random + OT registry completion  [tier: opus] [status: in-progress] [deps: P11-8]
+## P11-9 · show --random + OT registry completion  [tier: opus] [status: done] [deps: P11-8]
 Owner-requested (2026-07-10): `bin/nabu show --random [--source SLUG]
 [--count N]` — render N (default 1, cap 20) random passages, optionally
 scoped to one source; the standard show layout per hit. Purpose: the
@@ -2065,3 +2065,12 @@ loader validation must stay green; live read-only demo: `align "JON 2.1"`
 renders LXX ↔ Vulgate.
 Suite+lint green; docs (README command table row); backlog done;
 worklog line (sha —); one commit, not pushed.
+OWNER FEEDBACK 2026-07-10 (folded into this packet): `align "JON 1"` live
+was unreadable — 16 refs each repeating "vulgate — not attested" and
+"WEB — not synced". Fix (range/chapter path only; single-ref byte-unchanged):
+a witness with ZERO attestation across the whole rendered range is summarized
+ONCE in the header ("not attested in this range: …; not synced: …") and
+OMITTED from every per-ref block; partially-attesting witnesses keep the
+per-ref honest "— not attested" lines. Mirrored in MCP nabu_align range
+results (range-level `absent_witnesses:[{label,reason}]`; per-ref witness
+arrays drop the all-absent witnesses); documented in docs/mcp.md.

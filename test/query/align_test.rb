@@ -524,6 +524,84 @@ module Query
       assert_equal "ot", align("JON 1.1-1.2", registry: registry).work
     end
 
+    # -- range absent-witness summarization (P11-9) ------------------------------
+    # The owner's readability fix: a witness absent from EVERY ref of a range is
+    # lifted to a header summary and dropped from the per-ref groups; a witness
+    # that attests SOME refs stays per-ref (honest "no_match" and all).
+
+    # full: JON 1.1..1.4 (every ref). partial: only 1.1 (present, stays per-ref).
+    # empty: a LIVE document whose only verse is JON 2.1 — no JON 1 attestation
+    # (not_attested). ghost: its document is never seeded (not_synced).
+    ABSENT_RANGE_YAML = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+          - label: empty
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-c:jon
+          - label: ghost
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-z:jon
+    YAML
+
+    def seed_absent_range
+      registry = load_registry(ABSENT_RANGE_YAML)
+      seed_verse_document("urn:nabu:src-a:jon", language: "grc", title: "full",
+                                                verses: (1..4).map { |v| ["1.#{v}", "greek #{v}"] })
+      seed_verse_document("urn:nabu:src-b:jon", language: "lat", title: "partial",
+                                                verses: [["1.1", "latin one"]])
+      # live, but its only verse sits in chapter 2 — absent from JON 1.
+      seed_verse_document("urn:nabu:src-c:jon", language: "eng", title: "empty",
+                                                verses: [["2.1", "english two-one"]])
+      # src-z:jon is never created → the ghost witness is not_synced.
+      reindex!(registry)
+      registry
+    end
+
+    def test_a_range_lifts_all_absent_witnesses_to_a_header_summary
+      registry = seed_absent_range
+      result = align("JON 1", registry: registry)
+
+      # Only witnesses present somewhere in the range appear per ref.
+      result.groups.each do |group|
+        assert_equal %w[full partial], group.witnesses.map(&:label)
+      end
+      # The two never-attesting witnesses are summarized once, with honest reasons.
+      assert_equal({ "empty" => :not_attested, "ghost" => :not_synced },
+                   result.absent.to_h { |witness| [witness.label, witness.reason] })
+    end
+
+    def test_a_partially_attesting_witness_is_never_lifted
+      registry = seed_absent_range
+      result = align("JON 1", registry: registry)
+      refute_includes result.absent.map(&:label), "partial"
+      # It still reads no_match per ref where it lacks the verse (JON 1.2).
+      partial_v2 = result.groups[1].witnesses.find { |witness| witness.label == "partial" }
+      assert_equal :no_match, partial_v2.status
+    end
+
+    def test_a_range_where_every_witness_attests_carries_no_absent_summary
+      registry = seed_jonah_chapter # full + partial, both attest ≥1 ref
+      assert_empty align("JON 1", registry: registry).absent
+    end
+
+    def test_the_single_ref_path_carries_no_absent_field
+      # Byte-unchanged: the single-ref Result has no :absent member at all.
+      seed_five_witnesses
+      reindex!
+      result = align("MARK 2.3")
+      refute_respond_to result, :absent
+    end
+
     # -- rebuild safety (the packet's acceptance test) -----------------------------------
 
     def test_alignment_survives_a_rebuild_with_reminted_ids

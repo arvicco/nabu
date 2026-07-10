@@ -162,7 +162,10 @@ module Nabu
         "status no_match; a registered-but-unsynced witness reads not_synced. `ref` may also be " \
         "a whole CHAPTER (\"JON 1\") or an inclusive same-book verse RANGE (\"JON 1.1-1.16\"): " \
         "the reply is a `refs` array, one entry per ref in document order (each with the same " \
-        "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note.".freeze
+        "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note. Witnesses " \
+        "absent from EVERY ref of a range are summarized once in `absent_witnesses` " \
+        "(reason not_attested|not_synced) and omitted from the per-ref columns, so a chapter stays " \
+        "readable.".freeze
 
       DEFINE_DESCRIPTION =
         "Look up a lemma (dictionary form) in the classical lexica nabu holds locally — LSJ " \
@@ -730,6 +733,10 @@ module Nabu
         {
           type: "alignment_range", work: result.work, title: result.title, query: result.query,
           total_refs: result.total, shown_refs: result.groups.size, truncated: result.truncated,
+          # P11-9: witnesses absent from EVERY ref are summarized here once and
+          # dropped from the per-ref witness arrays (the per-ref columns stay
+          # readable). reason: not_attested (live, verses absent) | not_synced.
+          absent_witnesses: result.absent.map { |witness| { label: witness.label, reason: witness.reason.to_s } },
           refs: result.groups.map do |group|
             { ref: group.ref,
               witnesses: group.witnesses.map { |witness| align_witness_payload(witness, include_restricted) } }
@@ -740,10 +747,20 @@ module Nabu
 
       def range_note(result)
         base = "#{result.query}: #{result.groups.size} refs in document order, each with its witness " \
-               "columns (statuses: ok, no_match, not_synced, withheld)"
+               "columns (statuses: ok, no_match, not_synced, withheld)#{absent_note(result.absent)}"
         return base unless result.truncated
 
         "#{base} — TRUNCATED at #{MAX_ALIGN_REFS} of #{result.total} refs; narrow the range"
+      end
+
+      # The absent-witness clause (P11-9): present only when witnesses were
+      # lifted out of the per-ref columns, so the model knows to read them off
+      # absent_witnesses rather than expecting them per ref.
+      def absent_note(absent)
+        return "" if absent.empty?
+
+        "; #{absent.size} witness(es) absent from every ref are summarized in absent_witnesses " \
+          "(reason: not_attested|not_synced) and omitted from the per-ref columns"
       end
 
       # One witness column. A witness whose effective license class is

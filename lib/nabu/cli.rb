@@ -344,13 +344,21 @@ module Nabu
                       desc: "List document passages with absolute urns instead of :suffixes"
     option :parallel, type: :string, lazy_default: "eng", banner: "[LANG]",
                       desc: "Align with the same work's LANG edition by citation suffix (default eng)"
+    option :random, type: :boolean, default: false,
+                    desc: "Show random passages instead of a urn (the eyeball ritual at a source flip)"
+    option :source, type: :string, banner: "SLUG",
+                    desc: "With --random: draw only from this source (default: the whole corpus)"
+    option :count, type: :numeric, default: 1,
+                   desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     def show(urn = nil)
       urn = urn.to_s.strip
-      raise Thor::Error, "show: give a urn" if urn.empty?
-
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      return show_random(catalog, urn) if options[:random]
+      raise Thor::Error, "show: --source requires --random" if options[:source]
+      raise Thor::Error, "show: give a urn" if urn.empty?
 
       return show_parallel(catalog, urn, options[:parallel], config) if options[:parallel]
 
@@ -358,9 +366,10 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
-    rescue Nabu::Query::Range::Error => e
+    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
       # A range urn that names two endpoints but can't be honoured (endpoint
-      # missing, or reversed): a clean stderr message + exit 1.
+      # missing, or reversed), or an unknown --random --source: a clean stderr
+      # message + exit 1.
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
@@ -741,6 +750,26 @@ module Nabu
         unit.zero? ? "#{bytes} B" : "#{format('%.1f', size)} #{units[unit]}"
       end
 
+      # `show --random` (P11-9): N random visible passages, each in the standard
+      # passage layout — the eyeball ritual at a source flip. A urn alongside
+      # --random is contradictory (it picks passages for you); an empty result
+      # is an honest note, not an error.
+      def show_random(catalog, urn)
+        raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
+
+        results = Nabu::Query::Random.new(catalog: catalog)
+                                     .run(source: options[:source], count: options[:count].to_i)
+        if results.empty?
+          scope = options[:source] ? " in source #{options[:source]}" : ""
+          return say("no passages to show#{scope} (nothing visible — the corpus may be empty or all withdrawn)")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          print_show_passage(result)
+        end
+      end
+
       # Render `show`: a passage in the context of its document, or a document
       # header plus its passages in sequence. Withdrawn items ARE shown, tagged.
       def print_show(result)
@@ -921,11 +950,27 @@ module Nabu
       def print_align_range(result)
         say "#{result.query} — #{result.title}"
         say "  #{result.total} refs; witnesses: #{align_range_legend(result).join('; ')}"
+        say "  #{absent_range_summary(result.absent)}" unless result.absent.empty?
         if result.truncated
           say "  showing first #{result.groups.size} of #{result.total} refs " \
               "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range"
         end
         result.groups.each { |group| print_align_range_group(group) }
+      end
+
+      # P11-9: witnesses absent from every rendered ref are summarized here once
+      # (grouped by reason) rather than dashed on every ref line — the owner's
+      # readability fix. Partially-attested witnesses stay in the per-ref blocks.
+      def absent_range_summary(absent)
+        by_reason = absent.group_by(&:reason)
+        parts = []
+        if (rows = by_reason[:not_attested])
+          parts << "not attested in this range: #{rows.map(&:label).join(', ')}"
+        end
+        if (rows = by_reason[:not_synced])
+          parts << "not synced: #{rows.map(&:label).join(', ')}"
+        end
+        parts.join("; ")
       end
 
       # One legend entry per witness (registry order): its language + license

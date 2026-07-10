@@ -98,10 +98,17 @@ its tail a bare end suffix against the start's book (the `nabu show` range
 grammar, in citation space). The reply is then a `refs` array (`type:
 "alignment_range"`), one entry per ref in document order, each carrying the
 same witness columns; a witness that attests some refs but not others is
-honest per ref. It is capped at 200 rendered refs (`total_refs`/`shown_refs`/
-`truncated`, with a note — narrow the range), mirroring `nabu_define`'s body
-cap. The CLI `nabu align "JON 1"` renders the same, compactly (the witness
-titles/licenses shown once as a legend, then one line per witness per ref).
+honest per ref. A witness absent from **every** rendered ref is summarized once
+in a range-level `absent_witnesses` array (each `{label, reason}`, reason
+`not_attested` for a synced witness whose verses are all absent or
+`not_synced` for a registered-but-unsynced one) and **dropped** from the
+per-ref `witnesses` arrays — so a chapter with a not-yet-synced witness stays
+readable instead of repeating the same dash on every ref (P11-9). It is capped
+at 200 rendered refs (`total_refs`/`shown_refs`/`truncated`, with a note —
+narrow the range), mirroring `nabu_define`'s body cap. The CLI `nabu align
+"JON 1"` renders the same, compactly (the witness titles/licenses shown once as
+a legend, the all-absent witnesses summarized once, then one line per present
+witness per ref).
 
 ### `nabu_define`
 

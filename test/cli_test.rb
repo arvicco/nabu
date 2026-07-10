@@ -616,6 +616,65 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --random (P11-9) -------------------------------------------------
+
+  def test_show_random_prints_a_passage_in_the_standard_layout
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show --random]) }
+      assert_nil status, "a random draw over a non-empty corpus exits 0"
+      assert_match(/urn:nabu:test_adapter:\w+:\d+ \[grc\]/, out, "a passage urn + language header")
+      assert_match(/document: urn:nabu:test_adapter:/, out, "the standard show layout, document line")
+      assert_match(/provenance:/, out, "the full provenance trail, as `show <urn>` renders it")
+    end
+  end
+
+  def test_show_random_count_bounds_the_number_of_passages
+    with_indexed_corpus do |config|
+      # The fixture corpus holds three live passages; --count 3 shows all three.
+      out, _err, status = with_config(config) { run_cli(%w[show --random --count 3]) }
+      assert_nil status
+      headers = out.scan(/^urn:nabu:test_adapter:/).length
+      assert_equal 3, headers, "three passages, three headers"
+    end
+  end
+
+  def test_show_random_scopes_to_a_source
+    with_indexed_corpus do |config|
+      # The fixture source's slug is "corpus" (the sources.yml key); its adapter
+      # mints urn:nabu:test_adapter:… passage urns.
+      out, _err, status = with_config(config) { run_cli(%w[show --random --source corpus --count 3]) }
+      assert_nil status
+      headers = out.scan(/^urn:\S+/)
+      refute_empty headers
+      assert(headers.all? { |urn| urn.start_with?("urn:nabu:test_adapter") },
+             "every drawn passage belongs to the scoped source")
+    end
+  end
+
+  def test_show_random_unknown_source_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show --random --source nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source "nope"/, err)
+    end
+  end
+
+  def test_show_random_rejects_a_urn
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show --random urn:nabu:test_adapter:one:1]) }
+      assert_equal 1, status
+      assert_match(/--random takes no urn/, err)
+    end
+  end
+
+  def test_show_source_without_random_exits_one
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1 --source test_adapter]) }
+      assert_equal 1, status
+      assert_match(/--source requires --random/, err)
+    end
+  end
+
   # -- show ranges (P7-6) ----------------------------------------------------
 
   def test_show_range_lists_the_slice_as_suffixes_with_an_honest_count
@@ -926,6 +985,17 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_align_chapter_summarizes_all_absent_witnesses_once_in_the_header
+    with_absent_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1]) }
+      assert_nil status
+      assert_match(/not synced: ghost/, out, "an all-absent witness is summarized once in the header")
+      assert_equal 1, out.scan("ghost").length, "ghost never repeats down the per-ref blocks"
+      assert_match(/partial — not attested/, out, "a partially-attesting witness stays per-ref")
+      assert_match(/full  greek verse 1/, out, "attesting witnesses render per ref as before")
+    end
+  end
+
   def test_align_verse_range_renders_the_inclusive_slice
     with_range_corpus do |config|
       out, _err, status = with_config(config) { run_cli(["align", "JON 1.3-1.5"]) }
@@ -1092,6 +1162,39 @@ class CLITest < Minitest::Test
       Nabu::Store.migrate!(catalog)
       Nabu::Store.setup!(catalog)
       seed_range_witnesses(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # Jonah 1 with a THIRD witness (ghost) whose document is never seeded — it is
+  # not_synced across the whole range, so P11-9 lifts it to the header summary
+  # and drops it from every per-ref block. full/partial seed as usual.
+  def with_absent_range_corpus
+    yaml = <<~YAML
+      ot:
+        witnesses:
+          - label: full
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-a:jon
+          - label: partial
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-b:jon
+          - label: ghost
+            extractor: cts-verse
+            documents:
+              JON: urn:nabu:src-z:jon
+    YAML
+    Dir.mktmpdir("nabu-cli-absent") do |root|
+      config = aligned_corpus_config(root, yaml, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_range_witnesses(catalog) # src-a + src-b only; src-z stays unsynced
       index_aligned_corpus(config, catalog)
       catalog.disconnect
       yield config

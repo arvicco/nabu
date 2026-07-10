@@ -229,23 +229,67 @@ ot:
         DAN: urn:cts:greekLit:tlg0527.tlg057.1st1K-grc1  # Daniel, Theodotion
         BEL-OG: urn:cts:greekLit:tlg0527.tlg058.1st1K-grc1
         BEL: urn:cts:greekLit:tlg0527.tlg059.1st1K-grc1
-    # The Clementine Vulgate's OT books. ONLY the codes verified upstream at
-    # scout time are mapped (GEN in-file; the NAM…MAL run and 1MA/2MA from
-    # the book-id sweep) — a guessed code would dangle silently. After the
-    # owner-fired first sync, extend from the minted urns
-    # (`nabu status`/`nabu show urn:nabu:vulgate:…`): config-only, no code.
+    # The Clementine Vulgate's OT books. COMPLETED P11-9: the vulgate is now
+    # synced, so every mapped urn below is verified read-only against the live
+    # catalog (`sqlite3 -readonly db/catalog.sqlite3`) — no guessed code
+    # dangles. Tokens are the work vocabulary (the LXX witness's), so a shared
+    # book aligns LXX ↔ Vulgate; the urn tails are the adapter's USFX per-book
+    # minting. Every OT book the catalog holds AND the LXX vocabulary names is
+    # mapped (43 of the vulgate's 46 OT documents). THREE are deliberately
+    # left unmapped and attest per-witness, honestly: `ezr`/`neh` — the §10
+    # Esdras divergence (LXX 2ES = Esdras B is Ezra-Nehemiah in continuous
+    # chapters; the Vulgate SPLITS them with restarted numbering, so no single
+    # token maps cleanly, and LXX 1ES/Esdras A has no Clementine counterpart);
+    # and `ecc` (Ecclesiastes) — absent from the LXX witness upstream
+    # (tlg0527.tlg030 has no grc edition), so it carries no work token to
+    # align on. The alignment_refs index picks these up at the owner's next
+    # `nabu sync`/`nabu rebuild` (config-only change; index is derived).
     - label: vulgate (Clementine)
       extractor: cts-verse
       documents:
         GEN: urn:nabu:vulgate:gen
+        EXO: urn:nabu:vulgate:exo
+        LEV: urn:nabu:vulgate:lev
+        NUM: urn:nabu:vulgate:num
+        DEU: urn:nabu:vulgate:deu
+        JOS: urn:nabu:vulgate:jos
+        JDG: urn:nabu:vulgate:jdg
+        RUT: urn:nabu:vulgate:rut
+        1SA: urn:nabu:vulgate:1sa  # Regum I
+        2SA: urn:nabu:vulgate:2sa  # Regum II
+        1KI: urn:nabu:vulgate:1ki  # Regum III
+        2KI: urn:nabu:vulgate:2ki  # Regum IV
+        1CH: urn:nabu:vulgate:1ch
+        2CH: urn:nabu:vulgate:2ch
+        EST: urn:nabu:vulgate:est
+        JDT: urn:nabu:vulgate:jdt
+        TOB: urn:nabu:vulgate:tob
+        1MA: urn:nabu:vulgate:1ma
+        2MA: urn:nabu:vulgate:2ma
+        PSA: urn:nabu:vulgate:psa  # Vulgate Psalms follow the LXX numbering
+        PRO: urn:nabu:vulgate:pro
+        SNG: urn:nabu:vulgate:sng
+        JOB: urn:nabu:vulgate:job
+        WIS: urn:nabu:vulgate:wis  # Sapientia
+        SIR: urn:nabu:vulgate:sir  # Ecclesiasticus
+        HOS: urn:nabu:vulgate:hos  # Osee
+        AMO: urn:nabu:vulgate:amo
+        MIC: urn:nabu:vulgate:mic  # Michæa
+        JOL: urn:nabu:vulgate:jol  # Joël
+        OBA: urn:nabu:vulgate:oba  # Abdias
+        JON: urn:nabu:vulgate:jon  # Jonas
         NAM: urn:nabu:vulgate:nam
         HAB: urn:nabu:vulgate:hab
         ZEP: urn:nabu:vulgate:zep
         HAG: urn:nabu:vulgate:hag
         ZEC: urn:nabu:vulgate:zec
         MAL: urn:nabu:vulgate:mal
-        1MA: urn:nabu:vulgate:1ma
-        2MA: urn:nabu:vulgate:2ma
+        ISA: urn:nabu:vulgate:isa  # Isaias
+        JER: urn:nabu:vulgate:jer  # Jeremias
+        BAR: urn:nabu:vulgate:bar
+        LAM: urn:nabu:vulgate:lam
+        EZK: urn:nabu:vulgate:ezk  # Ezechiel
+        DAN: urn:nabu:vulgate:dan  # Daniel (Theodotion token → the Vulgate book)
     # P11-8: the World English Bible's OT books — the readable English witness
     # beside the Septuagint and Vulgate. Versification honesty (the §10
     # "whoever registers a witness owns the shared-citation claim" contract):
