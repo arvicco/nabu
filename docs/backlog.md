@@ -2042,7 +2042,7 @@ fixtures (and live read-only demo); eng witness READY awaiting owner
 sync; suite+lint green; docs (mcp.md nabu_align args, backlog done,
 worklog sha —); one commit, not pushed.
 
-## P11-9 · show --random  [tier: opus] [status: pending] [deps: —]
+## P11-9 · show --random + OT registry completion  [tier: opus] [status: in-progress] [deps: P11-8]
 Owner-requested (2026-07-10): `bin/nabu show --random [--source SLUG]
 [--count N]` — render N (default 1, cap 20) random passages, optionally
 scoped to one source; the standard show layout per hit. Purpose: the
@@ -2052,5 +2052,16 @@ joins — reuse CatalogJoin; no new query surface). Excluded: withdrawn
 (standard rule). MCP: NOT exposed (a conversational surface has no
 eyeball ritual; keep the tool list tight). Tests: scoping, count cap,
 determinism-free assertions (shape not content), unknown slug error.
-Small: CLI + Query touch only. Suite+lint green; docs (README command
-table row); backlog done; worklog line (sha —); one commit, not pushed.
+Small: CLI + Query touch only.
+RIDER (config, now unblocked): complete the alignment registry's
+vulgate-OT `documents:` map — P11-5 shipped it deliberately partial
+("guessed codes would dangle silently"); the vulgate is now SYNCED, so
+every one of its 46 OT book documents is verifiable read-only against
+the live catalog (e.g. urn:nabu:vulgate:jon exists but JON is unmapped —
+`align "JON 1"` renders vulgate "not attested" wrongly). Add ONLY
+catalog-verified codes; keep WEB's OT map conservative (versification
+divergence — do NOT expand it beyond what P11-8 shipped). Registry
+loader validation must stay green; live read-only demo: `align "JON 2.1"`
+renders LXX ↔ Vulgate.
+Suite+lint green; docs (README command table row); backlog done;
+worklog line (sha —); one commit, not pushed.
