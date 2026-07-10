@@ -2041,3 +2041,16 @@ Acceptance: `align "JON 1"` renders LXX ↔ Vulgate chapter-wise from
 fixtures (and live read-only demo); eng witness READY awaiting owner
 sync; suite+lint green; docs (mcp.md nabu_align args, backlog done,
 worklog sha —); one commit, not pushed.
+
+## P11-9 · show --random  [tier: opus] [status: pending] [deps: —]
+Owner-requested (2026-07-10): `bin/nabu show --random [--source SLUG]
+[--count N]` — render N (default 1, cap 20) random passages, optionally
+scoped to one source; the standard show layout per hit. Purpose: the
+eyeball ritual at every source flip. Honest randomness over PASSAGES
+(ORDER BY RANDOM() on the passage set after the usual visibility/license
+joins — reuse CatalogJoin; no new query surface). Excluded: withdrawn
+(standard rule). MCP: NOT exposed (a conversational surface has no
+eyeball ritual; keep the tool list tight). Tests: scoping, count cap,
+determinism-free assertions (shape not content), unknown slug error.
+Small: CLI + Query touch only. Suite+lint green; docs (README command
+table row); backlog done; worklog line (sha —); one commit, not pushed.
