@@ -2074,3 +2074,30 @@ OMITTED from every per-ref block; partially-attesting witnesses keep the
 per-ref honest "— not attested" lines. Mirrored in MCP nabu_align range
 results (range-level `absent_witnesses:[{label,reason}]`; per-ref witness
 arrays drop the all-absent witnesses); documented in docs/mcp.md.
+
+## P11-10 · status learns dictionary sources + USFX non-verse books  [tier: opus] [status: in-progress] [deps: P11-9]
+Defect packet (owner report 2026-07-10: "lexica status weirdly zero docs").
+1. **StatusReport content_kind awareness** — lexica renders
+   `docs=0 passages=0` because its content is 168,133 dictionary_entries;
+   the status renderer never learned `content_kind :dictionary` (same
+   missed-surface class as the P11-7 verify fix). Render dictionary
+   sources with their true counts (e.g. `entries=168133` in place of the
+   docs/passages pair; keep the rest of the row shape — enabled/policy/
+   retired/last-run). Check the OTHER status-adjacent surfaces for the
+   same gap while there: MCP nabu_status (does it already carry
+   dictionary counts? P11-4 said status shows "what is excluded by
+   default" — verify), health trends (runs table is fine — kind-agnostic
+   counts — but confirm no misleading zero renders), README table row if
+   it describes status output.
+2. **USFX non-verse books skip rule** — eng-web quarantines FRT (front
+   matter) + GLO (glossary): structural non-scripture books with zero
+   verses. Quarantine implies damage; these are upstream norms → skip by
+   rule (the P11-7 DocumentSkipped signal), counted in the discovery/
+   skip accounting. Test with a trimmed FRT-bearing fixture slice (the
+   vendored repo is on disk; no network). Vulgate unaffected (its file
+   has no FRT/GLO — verify, don't assume).
+Acceptance: live read-only render of status shows lexica entries count
+(the status command only READS); parse-only eng-web sync shows FRT/GLO
+as skipped-by-rule, quarantines 2 → 0, previously-loaded 84 docs
+=skipped (frozen); suite+lint green; backlog done; worklog (sha —); one
+commit, not pushed.
