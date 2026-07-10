@@ -352,7 +352,7 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      return show_parallel(catalog, urn, options[:parallel]) if options[:parallel]
+      return show_parallel(catalog, urn, options[:parallel], config) if options[:parallel]
 
       result = Nabu::Query::Show.new(catalog: catalog).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
@@ -808,16 +808,32 @@ module Nabu
       # Resolve + align + render, with the two honest failure modes: unknown
       # urn (exit 1, same message as plain show) and no LANG sibling of the
       # work in the catalog (exit 1, names the language).
-      def show_parallel(catalog, urn, lang)
+      def show_parallel(catalog, urn, lang, config)
         result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
         raise Thor::Error, "urn not found: #{urn}" if result.nil?
         if result.right.nil?
           raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
-                             "(alignment needs sibling CTS editions; is `translations: true` set " \
-                             "and the source resynced?)"
+                             "(--parallel pairs sibling CTS editions WITHIN one source; is " \
+                             "`translations: true` set and the source resynced?)#{align_hint(urn, config)}"
         end
 
         print_parallel(result)
+      end
+
+      # Cosmetic rider (P11-8): --parallel's "is translations: true set" hint is
+      # misleading for a CROSS-source text (Vulgate/LXX/WEB have no sibling CTS
+      # edition to pair). When the urn is a registered alignment witness, point
+      # at `nabu align` instead — the hub built for exactly this.
+      def align_hint(urn, config)
+        registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+        witnessed = registry.works.any? do |work|
+          work.witnesses.any? do |witness|
+            witness.document_urns.any? { |doc| urn == doc || urn.start_with?("#{doc}:") }
+          end
+        end
+        witnessed ? " — this text is an alignment-hub witness; try `nabu align REF` for cross-source alignment" : ""
+      rescue Nabu::ValidationError
+        ""
       end
 
       # Render the alignment (P8-1b span-grouped): both document headers, the
@@ -890,10 +906,54 @@ module Nabu
       # order — title, language, license label, and the sentences (urn line,
       # text line), a multi-verse sentence labeled with its full span.
       def print_align(result)
+        return print_align_range(result) if result.is_a?(Nabu::Query::Align::RangeResult)
+
         attesting = result.witnesses.count { |witness| witness.status == :ok }
         say "#{result.ref} — #{result.title}"
         say "  #{attesting} of #{result.witnesses.size} witnesses attest this ref"
         result.witnesses.each { |witness| print_align_witness(witness, result.ref) }
+      end
+
+      # A range/chapter query (P11-8): the query header, a one-line witness
+      # legend (title/lang/license shown ONCE, not repeated per ref), then one
+      # compact block per ref in document order — ref line, then one line per
+      # witness (its text, or an honest not-attested/not-synced dash).
+      def print_align_range(result)
+        say "#{result.query} — #{result.title}"
+        say "  #{result.total} refs; witnesses: #{align_range_legend(result).join('; ')}"
+        if result.truncated
+          say "  showing first #{result.groups.size} of #{result.total} refs " \
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range"
+        end
+        result.groups.each { |group| print_align_range_group(group) }
+      end
+
+      # One legend entry per witness (registry order): its language + license
+      # from the richest view across the shown refs, or "not synced" when the
+      # witness holds no data anywhere in the range.
+      def align_range_legend(result)
+        result.groups.first.witnesses.map(&:label).map do |label|
+          views = result.groups.map { |group| group.witnesses.find { |witness| witness.label == label } }
+          synced = views.find { |witness| witness.status != :not_synced }
+          synced ? "#{label} [#{synced.language}] license: #{synced.license_class}" : "#{label} not synced"
+        end
+      end
+
+      def print_align_range_group(group)
+        say ""
+        say group.ref
+        group.witnesses.each { |witness| print_align_range_witness(witness, group.ref) }
+      end
+
+      def print_align_range_witness(witness, ref)
+        case witness.status
+        when :not_synced then say "    #{witness.label} — not synced"
+        when :no_match   then say "    #{witness.label} — not attested"
+        else
+          witness.sentences.each do |sentence|
+            say "    #{witness.label}  #{sentence.text}#{align_span_note(sentence, ref)}"
+          end
+        end
       end
 
       def print_align_witness(witness, ref)

@@ -92,6 +92,17 @@ not attested), `not_synced` (registered, no data yet), or `withheld`
 and source — the five NT witnesses are all `nc`, so the labels matter when
 quoting.
 
+`ref` also accepts a whole **chapter** (`"JON 1"`) or an inclusive same-book
+**verse range** (`"JON 1.1-1.16"`) — the range separator is the last hyphen,
+its tail a bare end suffix against the start's book (the `nabu show` range
+grammar, in citation space). The reply is then a `refs` array (`type:
+"alignment_range"`), one entry per ref in document order, each carrying the
+same witness columns; a witness that attests some refs but not others is
+honest per ref. It is capped at 200 rendered refs (`total_refs`/`shown_refs`/
+`truncated`, with a note — narrow the range), mirroring `nabu_define`'s body
+cap. The CLI `nabu align "JON 1"` renders the same, compactly (the witness
+titles/licenses shown once as a legend, then one line per witness per ref).
+
 ### `nabu_define`
 
 The dictionary shelf (P11-4, architecture §11): look a lemma up in the

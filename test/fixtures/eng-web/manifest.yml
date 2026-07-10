@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: eng-web
+# adapter_test is null: the one fixture is a documented TRIM (whole: false) of
+# the whole-bible file — a count-based adapter test re-run against the full
+# upstream file would false-fail (see the schema note in
+# perseus/manifest.yml).
+adapter_test: null
+retrieved: 2026-07-10
+files:
+  - path: eng-web.usfx.xml
+    url: https://raw.githubusercontent.com/seven1m/open-bibles/8c31c380a9f7af19fbe04e8eaaa6fa74601083d7/eng-web.usfx.xml
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed slice assembly — built from the already-vendored open-bibles
+      checkout (canonical/vulgate/eng-web.usfx.xml, pinned blob) by extracting
+      three whole book elements plus the usfx root wrapper; a fresh whole-file
+      GET would not byte-match
+    trim: >-
+      P11-8 (fixture approval inherited from P11-5, same repo, same pinned sha):
+      usfx root + languageCode + whole books JON (Jonah, 4 ch/48 vv), OBA
+      (Obadiah, 1 ch/21 vv), PHM (Philemon, 1 ch/25 vv), each book element
+      byte-identical from the upstream blob. Upstream pinned at open-bibles
+      HEAD 8c31c380a9f7af19fbe04e8eaaa6fa74601083d7 (2026-06-05).

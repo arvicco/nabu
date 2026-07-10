@@ -117,6 +117,19 @@ vulgate:
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
 
+eng-web:
+  adapter: Nabu::Adapters::EngWeb
+  enabled: false   # flip after the first real owner-fired sync is eyeballed
+                   # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
+                   # open-bibles clone, shared with vulgate — then spot-check
+                   # nabu show urn:nabu:eng-web:jon:1.1 and 5 random verses)
+  # P11-8: the World English Bible (WEB, eBible.org; public domain). One USFX
+  # file in the same open-bibles collection as the Clementine Vulgate; one
+  # document per book. The readable English witness of both alignment-hub works
+  # (nt + ot). Upstream is curated and occasionally updated: re-syncable, not on
+  # a live schedule.
+  sync_policy: manual
+
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
   enabled: false   # flip after the first real owner-fired sync is eyeballed

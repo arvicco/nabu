@@ -61,6 +61,33 @@ module Nabu
       # work/title identify the registry work; ref is the NORMALIZED citation.
       Result = Data.define(:work, :title, :ref, :witnesses)
 
+      # One ref of a range/chapter query with its witnesses (the single-ref
+      # Result.witnesses shape, per ref).
+      RefGroup = Data.define(:ref, :witnesses)
+
+      # A range/chapter query (P11-8): the work/title, the NORMALIZED query
+      # string ("JON 1", "JON 1.1-1.16"), the rendered ref groups in document
+      # order, the TOTAL matching refs, and whether the cap clipped them.
+      RangeResult = Data.define(:work, :title, :query, :groups, :total, :truncated)
+
+      # Rendered-ref cap for a range/chapter query — an honest ceiling on one
+      # screenful, mirroring nabu_define's body cap. Beyond it the result is
+      # truncated with a note (narrow the range).
+      MAX_REFS = 200
+
+      # The range separator in a citation-range query. As in Query::Range, the
+      # split is on the LAST hyphen: verse citations ("1.16") hold no hyphens,
+      # so the tail is always a bare end suffix reconstructed against the
+      # start's book.
+      RANGE_SEP = "-"
+      private_constant :RANGE_SEP
+
+      # A parsed range/chapter query: the book token, the kind (:chapter or
+      # :range), and the citation bounds (chapter number, or start/end verse
+      # suffixes), plus the normalized query string for display.
+      RangeSpec = Data.define(:book, :kind, :chapter, :start_cite, :end_cite, :query)
+      private_constant :RangeSpec
+
       include CatalogJoin
 
       def initialize(catalog:, fulltext:, registry:)
@@ -75,6 +102,9 @@ module Nabu
       def run(ref, work: nil)
         ensure_registry!
         ensure_index!
+        spec = range_spec(ref)
+        return run_range(spec, work: work) if spec
+
         target = resolve_work(ref, work)
         normalized = resolve_ref(ref, target)
         Result.new(work: target.id, title: target.title, ref: normalized,
@@ -82,6 +112,148 @@ module Nabu
       end
 
       private
+
+      # -- range / chapter (P11-8) ---------------------------------------------
+
+      # Parse +ref+ into a RangeSpec, or nil when it is a single ref / urn
+      # pivot (the existing path). A range holds a hyphen ("JON 1.1-1.16"); a
+      # chapter is a book plus a bare number ("JON 1"). A concrete verse ("JON
+      # 1.1", dotted) and a urn are NOT ranges — they stay single.
+      def range_spec(ref)
+        return nil if ref.to_s.start_with?("urn:")
+
+        norm = AlignmentRegistry.normalize_ref(ref)
+        return nil if norm.nil?
+
+        book, rest = norm.split(" ", 2)
+        return nil if rest.nil? || book.empty?
+
+        if rest.include?(RANGE_SEP)
+          start_cite, _sep, end_cite = rest.rpartition(RANGE_SEP)
+          return nil if start_cite.empty? || end_cite.empty?
+
+          RangeSpec.new(book: book, kind: :range, chapter: nil,
+                        start_cite: start_cite, end_cite: end_cite, query: norm)
+        elsif rest.match?(/\A\d+\z/)
+          RangeSpec.new(book: book, kind: :chapter, chapter: rest,
+                        start_cite: nil, end_cite: nil, query: norm)
+        end
+      end
+
+      def run_range(spec, work:)
+        validate_range!(spec)
+        target = resolve_range_work(spec, work)
+        cites = ordered_cites(target, spec)
+        if cites.empty?
+          raise Error, "no attested refs for #{spec.query} in work #{target.id.inspect} — check the " \
+                       "book/chapter, or that its witnesses are synced (nabu status)"
+        end
+
+        total = cites.size
+        truncated = total > MAX_REFS
+        documents = documents_by_urn(target)
+        groups = (truncated ? cites.first(MAX_REFS) : cites).map do |cite|
+          ref = "#{spec.book} #{cite}"
+          RefGroup.new(ref: ref, witnesses: witnesses(target, ref, documents))
+        end
+        RangeResult.new(work: target.id, title: target.title, query: spec.query,
+                        groups: groups, total: total, truncated: truncated)
+      end
+
+      # A reversed verse range is a caller error, named as Query::Range names
+      # it (endpoint order is independent of which work attests it).
+      def validate_range!(spec)
+        return unless spec.kind == :range
+        return if cite_compare(cite_key(spec.start_cite), cite_key(spec.end_cite)) <= 0
+
+        raise Error, "reversed range: #{spec.book} #{spec.start_cite} comes after " \
+                     "#{spec.book} #{spec.end_cite}; swap the endpoints"
+      end
+
+      # Explicit --work wins; a sole work needs no choosing; otherwise the
+      # query auto-resolves through the index (the works with any matching ref)
+      # — the same three honest outcomes as the single-ref path.
+      def resolve_range_work(spec, id)
+        return found_work(id) if id
+        return @registry.sole_work if @registry.sole_work
+
+        attesters = @registry.works.select { |work| ordered_cites(work, spec).any? }.map(&:id)
+        case attesters.size
+        when 1 then found_work(attesters.first)
+        when 0
+          raise Error, "#{spec.query} is not attested in any registered work " \
+                       "(#{@registry.works.map(&:id).join(', ')}) — check the ref, or pick " \
+                       "a work with --work"
+        else
+          raise Error, "several works attest #{spec.query} " \
+                       "(#{attesters.join(', ')}) — pick one with --work"
+        end
+      end
+
+      # The work's citation suffixes matching +spec+ (chapter members, or the
+      # inclusive verse range), distinct and in document (numeric-citation)
+      # order. Only refs at least one witness attests exist in the index — a
+      # verse no witness holds simply does not appear, which is the honest
+      # coverage of the range.
+      def ordered_cites(work, spec)
+        candidates = candidate_cites(work, spec.book)
+        selected =
+          case spec.kind
+          when :chapter
+            candidates.select { |cite| chapter_member?(cite, spec.chapter) }
+          when :range
+            lo = cite_key(spec.start_cite)
+            hi = cite_key(spec.end_cite)
+            candidates.select do |cite|
+              key = cite_key(cite)
+              cite_compare(lo, key) <= 0 && cite_compare(key, hi) <= 0
+            end
+          end
+        selected.sort { |a, b| cite_compare(cite_key(a), cite_key(b)) }
+      end
+
+      # Distinct citation suffixes (the part after "BOOK ") of the work's refs
+      # for +book+. Book tokens are alphanumeric, so the LIKE pattern carries no
+      # metacharacters of its own.
+      def candidate_cites(work, book)
+        refs_table
+          .where(work: work.id)
+          .where(Sequel.like(:ref, "#{book} %"))
+          .distinct
+          .select_map(:ref)
+          .map { |ref| ref.delete_prefix("#{book} ") }
+      end
+
+      def chapter_member?(cite, chapter)
+        cite == chapter || cite.start_with?("#{chapter}.")
+      end
+
+      # A citation suffix as a comparable key: dot-separated segments, numeric
+      # where they are all digits ("1.16" → [1, 16]), so verses sort in true
+      # numeric (document) order rather than lexically ("1.9" before "1.10").
+      def cite_key(cite)
+        cite.split(".").map { |seg| seg.match?(/\A\d+\z/) ? Integer(seg) : seg }
+      end
+
+      # Element-wise compare of two citation keys, tolerant of mixed segment
+      # types (a subverse "12a" stays a String) — numeric where both segments
+      # are integers, string otherwise; the shorter shared-prefix key sorts
+      # first ("1" before "1.1").
+      def cite_compare(first, second)
+        first.each_index do |i|
+          return 1 if i >= second.length
+
+          cmp = compare_segment(first[i], second[i])
+          return cmp unless cmp.zero?
+        end
+        first.length <=> second.length
+      end
+
+      def compare_segment(left, right)
+        return left <=> right if left.is_a?(Integer) && right.is_a?(Integer)
+
+        left.to_s <=> right.to_s
+      end
 
       def ensure_registry!
         return unless @registry.empty?
@@ -161,12 +333,13 @@ module Nabu
                        "not a known passage urn or not a registered witness's sentence")
       end
 
-      def witnesses(work, ref)
+      # +documents+ is hoisted by the range path (constant across a work's
+      # refs) and defaults to a fresh fetch for the single-ref path.
+      def witnesses(work, ref, documents = documents_by_urn(work))
         hits = refs_table.where(work: work.id, ref: ref).order(:seq).all
         rows_by_id = catalog_rows(hits.map { |hit| hit.fetch(:passage_id) }, lang: nil, license: nil)
                      .to_h { |row| [row.fetch(:passage_id), row] }
         spans = ref_spans(work, hits.map { |hit| hit.fetch(:passage_id) })
-        documents = documents_by_urn(work)
 
         work.witnesses.map do |witness|
           build_witness(witness, documents,

@@ -84,6 +84,8 @@ module Nabu
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
+      # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
+      MAX_ALIGN_REFS = Query::Align::MAX_REFS
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       BUSY_ATTEMPTS = 3
@@ -157,7 +159,10 @@ module Nabu
         "nc — PRESERVE the license fields when quoting), and every sentence row carries urn + " \
         "language + license_class + source. Sentence≠verse: a sentence spanning a verse " \
         "boundary lists every ref it covers. Honest absence: a witness lacking the verse reads " \
-        "status no_match; a registered-but-unsynced witness reads not_synced."
+        "status no_match; a registered-but-unsynced witness reads not_synced. `ref` may also be " \
+        "a whole CHAPTER (\"JON 1\") or an inclusive same-book verse RANGE (\"JON 1.1-1.16\"): " \
+        "the reply is a `refs` array, one entry per ref in document order (each with the same " \
+        "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note.".freeze
 
       DEFINE_DESCRIPTION =
         "Look up a lemma (dictionary form) in the classical lexica nabu holds locally — LSJ " \
@@ -225,8 +230,9 @@ module Nabu
         type: "object",
         properties: {
           ref: { type: "string",
-                 description: "Citation in the work's scheme (e.g. \"MARK 2.3\") or a passage " \
-                              "urn to pivot from." },
+                 description: "Citation in the work's scheme (e.g. \"MARK 2.3\"), a whole " \
+                              "chapter (\"JON 1\"), an inclusive same-book verse range " \
+                              "(\"JON 1.1-1.16\"), or a passage urn to pivot from." },
           work: { type: "string",
                   description: "Alignment work id from the registry (optional when exactly " \
                                "one work is registered)." },
@@ -397,7 +403,12 @@ module Nabu
 
         result = Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
                              .run(ref, work: string_arg(args, "work"))
-        json(align_payload(result, include_restricted: args["include_restricted"] == true))
+        include_restricted = args["include_restricted"] == true
+        json(if result.is_a?(Query::Align::RangeResult)
+               align_range_payload(result, include_restricted: include_restricted)
+             else
+               align_payload(result, include_restricted: include_restricted)
+             end)
       rescue Query::Align::Error => e
         # Caller-fixable (unknown work, unaligned urn): isError so the model
         # self-corrects (SEP-1303), same stance as bad arguments.
@@ -709,6 +720,30 @@ module Nabu
                 "statuses: ok (sentences follow), no_match (verse absent from that witness), " \
                 "not_synced (registered, no data yet), withheld (license-excluded)"
         }
+      end
+
+      # A range/chapter query: the query string, the ref groups in document
+      # order (each carrying the same witness columns as a single-ref reply),
+      # and the honest cap accounting — total refs, how many are shown, whether
+      # the ceiling clipped them (nabu_define's cap style).
+      def align_range_payload(result, include_restricted:)
+        {
+          type: "alignment_range", work: result.work, title: result.title, query: result.query,
+          total_refs: result.total, shown_refs: result.groups.size, truncated: result.truncated,
+          refs: result.groups.map do |group|
+            { ref: group.ref,
+              witnesses: group.witnesses.map { |witness| align_witness_payload(witness, include_restricted) } }
+          end,
+          note: range_note(result)
+        }
+      end
+
+      def range_note(result)
+        base = "#{result.query}: #{result.groups.size} refs in document order, each with its witness " \
+               "columns (statuses: ok, no_match, not_synced, withheld)"
+        return base unless result.truncated
+
+        "#{base} — TRUNCATED at #{MAX_ALIGN_REFS} of #{result.total} refs; narrow the range"
       end
 
       # One witness column. A witness whose effective license class is
