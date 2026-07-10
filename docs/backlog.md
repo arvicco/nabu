@@ -2101,3 +2101,100 @@ Acceptance: live read-only render of status shows lexica entries count
 as skipped-by-rule, quarantines 2 → 0, previously-loaded 84 docs
 =skipped (frozen); suite+lint green; backlog done; worklog (sha —); one
 commit, not pushed.
+
+## Phase 12 — The Old English axis + the public face (branch: phase-12; elaborated 2026-07-10)
+
+Owner shape: "Let's get on the OE axis planning next" + "updating/improving
+user-facing docs and making README better structured and presentable. It's a
+Github face of an open source project… attract followers, explain the use
+cases." Headliners from docs/oe-survey.md (all pre-scouted with verbatim
+license quotes); the presentation packet runs LAST so it reflects the phase's
+own additions. Branch cut from enable-reference-shelf (PR #13) so the flips
+ride along. Sequential dispatch, live-smoke review between packets, real
+syncs owner-fired, fixture plans owner-approved before network (standing).
+
+## P12-1 · ISWOC adapter — Old English treebank  [tier: opus] [status: in-progress] [deps: —]
+The survey's pick #1: five OE texts (~29,406 gold tokens) in PROIEL XML 2.1
+— the exact schema ProielParser already parses. Ælfric's Lives of Saints,
+Apollonius of Tyre, Anglo-Saxon Chronicles, Orosius, West-Saxon Gospel of
+Mark (verse-cited MARK 1.1 style — the hub's witness #8). License CC
+BY-NC-SA 3.0 (verified in README + per-source headers) → nc.
+Phase A (scout + fixture plan, page-level reads only): confirm the current
+canonical repo (survey: successor syntacticus/syntacticus-treebank-data
+carries iswoc/ + proiel/ + torot/ — MUST scope to iswoc/; also verify
+whether the original iswoc repo is the better pin), the five files, the ang
+language code, the Romance texts to filter out; write the fixture plan
+(2 trimmed real slices: one prose text + the wscp Mark for the citation
+path) into this packet block. STOP — owner approval gate.
+Phase B (post-approval): TOROT-pattern adapter subclass (ang filter,
+iswoc/ scoping), registry entry enabled:false, conformance + two-parse,
+uncomment the prepared OE Mark line in config/alignments.yml (it renders
+"not synced" honestly until the owner syncs — P11-9 header-summary
+handles it), 02-sources row → READY, worklog (sha —). Suite+lint green.
+One commit, not pushed.
+
+## P12-2 · ASPR adapter — the OE poetry corpus  [tier: opus] [status: pending] [deps: P12-1]
+The survey's pick #2 and the only fully-open OE: the complete six-volume
+Krapp & Dobbie Anglo-Saxon Poetic Records as ONE 2.2 MB TEI-P5 file on the
+Oxford Text Archive (OTA 3009) — Beowulf, Junius, Vercelli, Exeter Book,
+Paris Psalter, Minor Poems; 374 texts / ~30.5k lines. License quoted from
+the TEI header itself: CC BY-SA 3.0 → attribution (MCP-shareable).
+Phase A: verify the OTA download URL + the in-file license quote still
+stand (survey inspected it 2026-07-09; one small fetch to scratch was the
+survey's sanctioned sample — re-verify page-level), map the internal
+structure (NOT EpiDoc; no l/@n → ordinal line citations per the survey),
+decide the fetch path (single HTTP file — extend ZipFetch's plumbing or a
+sibling FileFetch with the same Last-Modified + attic contract; argue it),
+write the fixture plan (2-3 poem slices incl. a Beowulf passage). STOP —
+owner approval gate.
+Phase B: small new TEI family (own class + tests first), one document per
+poem, urn:nabu:aspr:<poem-slug>:<line-ordinal>, registry enabled:false,
+02-sources row, worklog. Suite+lint green. One commit, not pushed.
+
+## P12-3 · Bosworth-Toller onto the reference shelf  [tier: opus] [status: pending] [deps: P12-2]
+The OE dictionary (survey: official LINDAT dump, hdl 11234/1-3532,
+CC BY 4.0 verbatim, SQL + lemma-keyed CSV id;headword;body). Third
+occupant of the P11-4 shelf — architecture §11 already sketches the
+plug-in: own CSV adapter, content_kind :dictionary, slug bosworth-toller,
+lang ang, betacode off, citations table starts empty (no OE crosswalk
+yet — resolution layer needs nothing new).
+Phase A: verify the LINDAT record + license + dump format (page-level),
+write the fixture plan (a few hundred entry rows trimmed). STOP — owner
+approval gate.
+Phase B: CSV dictionary adapter (new small family — first non-TEI
+dictionary; keep the DictionaryLoader contract), define --lang ang path,
+folded-headword keying for OE (ash/thorn/eth folding rule — conventions
+§9 addition, argued not assumed), registry enabled:false, 02-sources,
+worklog. Suite+lint green. One commit, not pushed.
+
+## P12-4 · The public face: README + user-facing docs  [tier: fable] [status: pending] [deps: P12-1..3]
+Owner: the README is the GitHub face of an open source project — it needs
+to attract followers and explain use cases, not just report status. Runs
+LAST so it reflects the OE additions. Scope:
+- README restructure: a short hero section (what nabu is, in three
+  sentences a stranger understands); a "show me" block early (real
+  commands with real output: trilingual align, define, lemma search,
+  random tablet); use cases by persona (classicist, indologist,
+  assyriologist, digital humanist, AI-tooling builder — MCP angle);
+  clear install/quickstart; corpus table (the library.md summary table,
+  linked); feature tour; protection story (attic/ledger/backup — the
+  "your collection cannot rot" pitch); docs index with one-line
+  descriptions; contributing/status/license sections. Badges only if
+  honest (CI). NO fabricated numbers — pull live counts at write time
+  and date them.
+- docs/quickstart.md: zero-to-first-search walkthrough (install, sync a
+  small source e.g. sblgnt, search/show/align/define), copy-pasteable.
+- Consistency pass over user-facing docs (01-concept, mcp.md intro,
+  library.md → linked coherently from README; no stale claims — verify
+  numbers against the live catalog read-only).
+- The dev-loop/backlog/worklog stay internal (link once under
+  "how this is built", nothing more).
+Acceptance: README renders well on GitHub (check raw markdown structure,
+heading hierarchy, table widths); quickstart executes truthfully on this
+box (each command actually run); suite+lint untouched-green; worklog
+(sha —). One commit, not pushed.
+
+## P12-gate · Phase 12 gate  [tier: orchestrator] [status: pending] [deps: P12-1..4]
+Full-diff review, library.md refresh (OE sections when synced; §10 duty),
+PR, owner-fired syncs queue (iswoc, aspr, bosworth-toller), flips on
+owner word, sticky alarm LAST.
