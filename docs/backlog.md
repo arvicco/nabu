@@ -1916,3 +1916,65 @@ Full-diff review, library.md refresh (per §9: new capabilities sections for
 alignment + dictionaries; OE survey linked), README truthfulness, PR,
 sticky alarm LAST. Stretch riders (morph facets §1.6, vocab profiling §1.7)
 only if the phase ran light — decide at gate, don't cram.
+
+## P11-7 · Silent-ingestion defects + skip visibility  [tier: opus] [status: in-progress] [deps: P11-4, P11-6]
+Defect packet (census-first: orchestrator's 2026-07-10 disk-vs-catalog audit
+across ALL 12 sources after the owner-fired oracc/lexica/vulgate/sblgnt
+syncs; papyri/perseus×2/first1k/proiel/torot/ud/vulgate/sblgnt verified
+clean to the file). Six fixes:
+
+1. **ORACC nested-root (the headline)** — subproject zips unpack with a
+   nested root: canonical/oracc/saao-saa01/saa01/corpusjson/, but discover
+   looks only at <project-dir>/corpusjson → saao-saa01 and rinap-rinap1
+   silently ingested 0 of their 361 texts while the sync reported
+   "succeeded (+4675)". Fix discover to find corpusjson at either depth
+   (or normalize at unpack); AND make it loud: a registered project whose
+   tree exists but yields zero refs is an error-grade sync note, never
+   silence. After the fix the owner re-fires sync oracc.
+2. **Verify broken on dictionary sources** — Verify#reparse calls
+   document.urn on Nabu::DictionaryDocument (no such method): P11-4 routed
+   sync+rebuild via Adapter.content_kind but missed Verify, and the crash
+   at lexica aborts the ENTIRE verify run (sources after it unverified).
+   Teach Verify content_kind :dictionary (reparse dictionary entries by
+   their own identity/hash semantics per DictionaryLoader) — or, minimum
+   acceptable, cleanly skip dictionary sources with an honest per-source
+   "skipped (dictionary)" line; prefer real verification. Regression test:
+   verify over a store containing BOTH kinds completes and reports both.
+3. **dcclt no-content shape (112 files)** — object/surface skeleton with
+   only nonx d-nodes, zero transcribed lines: these are catalog-only
+   cousins of the 0-byte case P10-1 skips honestly. Treat identically:
+   skip at discover, count in the sync note, never quarantine.
+4. **dcclt label-less line-start (58 files)** — e.g. P010104: ~300 labeled
+   lines and ONE line-start with no label/n (upstream data gap; its parent
+   sentence c-node carries the label, "r xi' 10'" in the sample). Fix: fall
+   back to the enclosing sentence's label; if that too is absent, skip THAT
+   LINE honestly (annotation note) — never quarantine the document. Two
+   fixture slices from canonical/oracc/dcclt (real, trimmed; no network).
+5. **LSJ stray editions (2 quarantines)** — grc.lsj.perseus-eng1.xml and
+   eng9 are alternate single-file editions the lexica discover sweeps in
+   alongside the 27 letter-split files; exclude them from discovery by
+   rule (not by name-list if a pattern exists — inspect the repo layout in
+   canonical/lexica), with a test.
+6. **GRETIL silent strays (2 files)** — sa_vijJAnezvara-mitAkSarA (1.8 MB,
+   the Mitākṣarā!) and sa_haribhadrasUri-zAstravArttAsamuccaya: peek_header
+   → nil (no <text xml:lang> in the expected shape) and discovery drops
+   them INVISIBLY. Inspect both files; if ingestible with a small header
+   fallback (e.g. lang from teiHeader or filename sa_ prefix), recover
+   them (fixture slice, frozen-urn census over gretil per the standing
+   guarantee); if genuinely not editions, classify them loudly.
+7. **Skip visibility (the systemic fix)** — sync output + run notes gain
+   per-source discovery accounting: files matching the content pattern
+   that yield no ref are counted and classed (selected / skipped-by-rule /
+   unrecognized), with unrecognized ≥1 rendered prominently. Keep it cheap
+   (discover already walks the tree); wire through FetchReport/run notes;
+   status/health untouched. Design the counting at the Adapter seam so all
+   families inherit it.
+
+FROZEN-URN GUARD: fixes touch discovery/skip paths only; all currently
+loaded docs re-parse byte-identical (targeted two-parse censuses for oracc
++ gretil; =N skipped on parse-only syncs as the loader-level proof).
+Acceptance: suite+lint green; parse-only oracc sync quarantines 170 → ~0
+with honest catalog-only counts (real saao/rinap ingestion is owner-fired
+post-merge); verify completes over the full live catalog (read-only run);
+gretil strays resolved (recovered or loudly classified); worklog line;
+02-sources notes updated.
