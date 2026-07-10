@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one file is a documented TRIM (whole: false) of the 84 MB upstream CSV
+# (270 of ~62k+ rows, selected strata; every kept row byte-verbatim), so a
+# fresh GET returns the full dump and is fetched for URL-liveness only, never
+# byte-compared. Re-apply the README extraction recipe after any refresh.
+# The URL is the DSpace bitstream /content endpoint (uuid is per-deposit
+# stable; the deposit itself is a frozen v0.1, Last-Modified 2021-04-26).
+source: bosworth-toller
+adapter_test: test/adapters/bosworth_toller_test.rb
+retrieved: 2026-07-10
+files:
+  - path: bosworth_entries_export.csv
+    url: https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/3010b742-b2c4-4152-870a-716ce1652e7c/content
+    whole: false
+    trim: header + 270 stratified rows (A-section head ids 1-184; ae-initial incl. the aedhel- block; the Thorn letter entry + run + thing run; homograph groups + shortest bodies) — 88,387,561 B -> 497,144 B; recipe in README.md
