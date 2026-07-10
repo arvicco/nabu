@@ -1,10 +1,10 @@
 # The Library — content review
 
-**As of 2026-07-10** (post Phase 11, branch phase-11). Live totals:
-**67,111 documents / 2,853,105 passages** across 9 loaded sources (three
-more — lexica, vulgate, sblgnt — shipped and awaiting first syncs), 18
-language codes, 873 aligned English translation editions, **1,780,553
-lemma rows in 9 languages**.
+**As of 2026-07-10** (post Phase 11 + owner syncs of oracc/lexica/vulgate/
+sblgnt, branch phase-11). Live totals: **72,296 documents / 3,073,040
+passages** across all 12 sources, plus **168,133 dictionary entries** on the
+new reference shelf, 873 aligned English translation editions, and
+**1,917,694 lemma rows in 12 languages**.
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §10 for the
@@ -105,7 +105,7 @@ about Greco-Roman Egypt.
 | **Category** | Full breadth of Sanskrit literature: Vedic saṃhitās, epics, purāṇas, kāvya, drama, śāstra (philosophy, law, grammar, poetics), tantra, Buddhist and Jain texts, technical treatises |
 | **Language** | Sanskrit in IAST romanization (`san-Latn`, 770 docs), plus stray Tibetan-transliteration, Tamil and English items |
 | **Period** | Vedic (c. 1200 BCE) to early modern (18th c. CE) — the longest span of any shelf |
-| **Size** | 777 docs / 697,513 passages (second-largest shelf by passages) |
+| **Size** | 780 docs / 703,068 passages (second-largest shelf by passages) |
 | **Source** | `gretil` (GRETIL, Göttingen Register of Electronic Texts in Indian Languages, via TEI mirror), license: `nc` (CC BY-NC-SA — non-commercial research use; served over MCP with its license label) |
 | **Metadata** | Four addressability rungs (attribute-cited divisions, `// Abbr_N //` in-text verse markers, xml:id citations, prose ordinals); collision-disambiguated URNs (`:b2`) preserve upstream numbering errors instead of hiding them; Vedic accents preserved (keep-`<orig>`) |
 
@@ -113,9 +113,11 @@ Rāmāyaṇa (18,761 verses), Mahābhārata-adjacent texts, Bhāgavata and other
 purāṇas, Kālidāsa and the kāvya tradition, Brahmasūtra with commentaries and
 sub-commentaries, dharmaśāstra, Nāṭyaśāstra, Dhvanyāloka with its commentary
 layers (kārikā vs. vṛtti separately citable as `:DhvK.…`/`:DhvA.…`),
-Buddhacarita, Gītagovinda. After the P9-4c and P10-3 recoveries only 4 of
-781 upstream files remain unparsed — flat verse lists with no numbering of
-any kind, genuinely unaddressable.
+Buddhacarita, Gītagovinda, and — recovered by the P11-7 silent-skip audit —
+the Mitākṣarā (the standard commentary on Yājñavalkya, 4,788 passages).
+Only 4 of 784 upstream files remain unparsed: flat verse lists with no
+numbering of any kind, genuinely unaddressable (and now loudly reported as
+`unrecognized` in every sync's discovery line).
 
 **Research uses:** Indology across every genre; commentary-tradition studies
 (base text and commentaries interleaved but separately citable); Vedic accent
@@ -130,9 +132,9 @@ texts that mostly exist as scanned books elsewhere.
 | **Category** | Gold-standard linguistically annotated corpora: lemma, morphology, dependency syntax per token |
 | **Language** | Latin (`lat`), Greek (`grc`), Gothic (`got`), Classical Armenian (`xcl`), Old Church Slavonic (`chu`), Old East Slavic (`orv`), Vedic Sanskrit (`san`) |
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
-| **Size** | 64 docs / 161,048 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (12 / 76,642) |
-| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), Universal Dependencies (gothic-proiel, greek-proiel, latin-ittb, sanskrit-vedic loaded; old-east-slavic-birchbark + old-east-slavic-rnc added in Phase 10, awaiting sync — those two are CC BY-SA/`attribution`); PROIEL/TOROT/legacy-UD license: `nc` |
-| **Metadata** | **This is where the lemma layer comes from**: 1,599,485 rows in `passage_lemmas` (lat 583k, grc 379k, orv 207k, san 190k, chu 123k, got 99k, xcl 18k), searchable via `search lemma:` with per-language folding and suppletive-form support (affero → attulimus) |
+| **Size** | 70 docs / 170,279 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (18 / 85,873) |
+| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), Universal Dependencies (six treebanks incl. Old East Slavic birchbark letters + Middle Russian RNC — those two CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/legacy-UD license: `nc` |
+| **Metadata** | The treebank half of the lemma layer: `passage_lemmas` totals **1,917,694 rows in 12 languages** (lat 583k, grc 379k, orv 351k, san 190k, chu 123k, got 99k, xcl 18k from the treebanks; sux 128k, akk 45k + Hurrian/Ugaritic/Hittite scatter from ORACC gold), searchable via `search lemma:` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
 Vulgate + Gothic Wulfila + Classical Armenian + OCS Codex Marianus — five
@@ -173,43 +175,75 @@ close reading; teaching materials.
 | | |
 |---|---|
 | **Category** | Tablets and inscriptions: administrative/economic records, royal inscriptions, state letters, lexical lists |
-| **Language** | Sumerian (`sux`, 1,458 docs), Akkadian (`akk`, 336; Old Babylonian and later dialects) |
-| **Period** | Third millennium BCE (Ur III royal inscriptions) through the Neo-Assyrian empire (7th c. BCE) |
-| **Size** | 1,794 docs / 21,080 passages (rimanum + etcsri loaded; saao-saa01 Sargon II letters, rinap1 royal inscriptions, dcclt lexical lists registered, next sync pulls them) |
+| **Language** | Sumerian (`sux`, 5,160 docs), Akkadian (`akk`, 1,101), proto-cuneiform (`qpc`, 601), plus a scatter of Hittite, Hurrian, Ugaritic, Aramaic from the lexical lists |
+| **Period** | Proto-cuneiform archaic tablets (late 4th millennium BCE!) through the Neo-Assyrian empire (7th c. BCE) |
+| **Size** | 6,876 docs / 191,712 passages across five projects: rimanum (Old Babylonian archive), etcsri (Ur III royal inscriptions), saao-saa01 (Sargon II state letters), rinap1 (Tiglath-pileser III inscriptions), dcclt (lexical lists) |
 | **Source** | `oracc` (Open Richly Annotated Cuneiform Corpus), license: **CC0/public domain** (read per-project from upstream metadata, never hardcoded) |
-| **Metadata** | One passage per tablet line (`o.1`, `r.5` — the citable unit of Assyriology); transliteration as text; upstream **gold lemmatization** (citation form, normalization, English guide word, POS, per-grapheme logogram language) in annotations and `passage_lemmas` — Akkadian and Sumerian lemma search works today (36k rows); translit folding strips determinatives/sign-joins for search |
+| **Metadata** | One passage per tablet line (`o.1`, `r.5` — the citable unit of Assyriology); transliteration as text; upstream **gold lemmatization** (citation form, normalization, English guide word, POS, per-grapheme logogram language) in annotations and `passage_lemmas` — 173k Akkadian/Sumerian lemma rows searchable today; translit folding strips determinatives/sign-joins for search |
 
 The founding dream: Nabu's own tablets. Fetched as per-project zips over
 HTTP (the first non-git source; full attic/retention parity, TLS chain
 vendor-fixed) from a menu of 144 public projects.
 
 **Research uses:** Assyriology proper (ration lists, year-names, royal
-titulary); gold-lemmatized Akkadian/Sumerian as the only professionally
-lemmatized shelves besides the treebanks; comparative "epigraphic habit"
-studies alongside the papyri; lexical-list traditions (dcclt) as the
-ancient world's own dictionaries.
+titulary, the Sargon II state correspondence); gold-lemmatized
+Akkadian/Sumerian as the only professionally lemmatized shelves besides the
+treebanks; comparative "epigraphic habit" studies alongside the papyri;
+lexical-list traditions (dcclt) as the ancient world's own dictionaries —
+including the multilingual lists that carry Hittite, Hurrian and Ugaritic
+column entries.
 
-### Incoming shelf (shipped, not yet synced)
+## 8b. Biblical editions
 
-- **lexica** (LSJ + Lewis & Short, CC BY-SA 4.0 → `attribution`): the
-  dictionary shelf — `nabu define`/MCP `nabu_define`, entry citations
-  resolved to in-catalog passages, glosses surfacing in lemma search.
-  Owner-fired `sync lexica` (~160 MB clone).
-- **vulgate** (Clementine full bible, public domain → `open`): USFX parser,
-  per-book documents, verse citations; NT + OT witness in the alignment
-  hub. `sync vulgate` (~76 MB clone).
-- **sblgnt** (SBL Greek New Testament, CC BY 4.0 → `attribution`):
-  verse-per-line, seventh NT witness. `sync sblgnt` (~2 MB).
-- (LXX needs no sync — Swete's Septuagint is already live as First1K
-  tlg0527 and is wired into the hub's `ot` work.)
+| | |
+|---|---|
+| **Category** | Scripture editions serving the alignment hub (§9) |
+| **Language** | Latin (`lat`), Greek (`grc`) — English witness queued (P11-8) |
+| **Size** | `vulgate`: 73 books / 35,809 verses (the complete Clementine canon, public domain). `sblgnt`: 27 books / 7,939 verses (SBL Greek NT, CC BY 4.0). LXX: no separate source — Swete's Septuagint lives in First1K (§2) and is hub-wired |
+| **Metadata** | Native book.chapter.verse citations (`urn:nabu:vulgate:jon:2.1`); every verse a hub-alignable ref |
+
+With these two, `align MARK 2.3` renders up to seven witnesses (Greek NT,
+Vulgate, Gothic, Armenian, OCS, SBLGNT, Clementine) and `align "GEN 1.1"`
+opens the OT axis (Septuagint ↔ Vulgate). Rahlfs' LXX was honestly blocked
+on CATSS license terms — recorded in 02-sources.
+
+**Research uses:** textual criticism across traditions; Vulgate as the
+bridge between the classical Latin shelf and medieval reception; the NT as
+the densest multi-language alignment laboratory in the library.
+
+## 8c. Reference shelf (dictionaries)
+
+| | |
+|---|---|
+| **Category** | Scholarly lexica — entries, not passages (own tables, own `nabu define` surface) |
+| **Size** | **168,133 entries**: LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636), license CC BY-SA 4.0 (`attribution`) |
+| **Metadata** | Folded-headword keying (diacritic-insensitive lookup); betacode decoded; entry citations parsed and **resolved to in-catalog passages** where the cited work exists (μῆνις → Il. 1.1 as a live urn); glosses surface in `search --lemma` output |
+
+`nabu define λόγος` / `define virtus`, and MCP `nabu_define` for
+AI-assisted reading. Bosworth-Toller (Old English, CC BY 4.0) is the
+designed next occupant per the OE survey.
+
+**Research uses:** the philologist's desk loop (passage → lemma →
+definition → cited parallel passage) closed inside one tool; lexicographic
+studies over the full entry set.
 
 ## 9. Library-wide capabilities
 
 - **Full-text search** with per-language folding (Greek final-sigma and
   diacritics, Latin u/v i/j, generic diacritic folding for IAST Sanskrit) —
   `bin/nabu search`, FTS5 under the hood.
-- **Lemma search** (`search lemma:…`) over the treebank shelf (§6);
-  ranking-independent `urn:` filtering.
+- **Lemma search** (`search lemma:…`) over the treebank shelf (§6) AND the
+  ORACC gold layer (§8) — 12 languages; ranking-independent `urn:`
+  filtering; hits carry dictionary glosses where the reference shelf (§8c)
+  knows the lemma.
+- **Alignment hub** (`align REF`, MCP `nabu_align`): one citation rendered
+  across every witness of a registered work (`config/alignments.yml`) —
+  the parallel NT (up to seven witnesses) and OT (Septuagint ↔ Vulgate);
+  registry-driven, rebuild-safe, per-witness license labels.
+- **Dictionary lookup** (`define LEMMA`, MCP `nabu_define`): §8c.
+- **Discovery accounting** (P11-7): every sync prints
+  `discovery: N selected · M skipped-by-rule · K unrecognized` — silent
+  ingestion gaps are structurally visible.
 - **Citation-native retrieval**: `show <urn>` with range support
   (`:1.1-1.32`), suffix display by default, `--full-urn` for scripts.
 - **Concordance** (`concord`): KWIC lines with fold-aware matching that maps
