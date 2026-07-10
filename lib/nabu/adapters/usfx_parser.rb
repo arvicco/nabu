@@ -43,6 +43,17 @@ module Nabu
       # kept. Skipping is by subtree, so nested `<fr>`/`<ft>` go too.
       NOTE_ELEMENTS = %w[f x fe].freeze
 
+      # USFX/Paratext PERIPHERAL book codes — structural, non-scripture matter
+      # (front/back matter, glossary, indexes, concordance) that carries ZERO
+      # verses by design. eBible.org bibles ship FRT (preface) and GLO
+      # (glossary); the fuller peripheral vocabulary is listed so a future
+      # edition adding INT/BAK/… is skipped by the same rule rather than
+      # quarantined. A peripheral book yielding no verse is an upstream NORM, so
+      # #parse declines it with Nabu::DocumentSkipped (the P11-7 skip signal the
+      # loader counts as skipped-by-rule) — NOT a Nabu::ParseError, which is
+      # reserved for a SCRIPTURE book that unexpectedly yields no verse (damage).
+      NON_SCRIPTURE_BOOKS = %w[FRT INT BAK OTH CNC GLO TDX NDX].freeze
+
       # One book of the inventory pass: OSIS/Paratext code + display heading.
       Book = Data.define(:id, :heading)
 
@@ -65,6 +76,13 @@ module Nabu
       # Extract one +book+ (by its id) into a Nabu::Document. Raises
       # Nabu::ParseError when the book is absent or the XML is malformed.
       def parse(path, book:, urn:, language:, title:)
+        if NON_SCRIPTURE_BOOKS.include?(book)
+          raise Nabu::DocumentSkipped.new(
+            "#{path}: book #{book.inspect} is non-scripture structural matter (no verses)",
+            reason: "non-scripture book #{book}"
+          )
+        end
+
         document = Nabu::Document.new(urn: urn, language: language, title: title,
                                       canonical_path: File.expand_path(path))
         extract_book(path, book, urn, language, document)

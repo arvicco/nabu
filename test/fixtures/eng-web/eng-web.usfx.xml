@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<usfx xmlns:xsi="http://eBible.org/usfx.xsd" xsi:noNamespaceSchemaLocation="usfx.xsd"><languageCode>eng</languageCode><book id="JON"><id id="JON">32-JON-web.sfm World English Bible (WEB)
+<usfx xmlns:xsi="http://eBible.org/usfx.xsd" xsi:noNamespaceSchemaLocation="usfx.xsd"><languageCode>eng</languageCode><book id="FRT"><id id="FRT">Preface to the World English Bible
+</id><ide charset="UTF-8"/><h>Preface
+</h><toc level="1">Preface
+</toc><p sfm="mt">Preface to the World English Bible
+</p><p sfm="ip">The Holy Bible is a collection of books and letters written by many people who were inspired by the Holy Spirit of God.
+</p></book><book id="JON"><id id="JON">32-JON-web.sfm World English Bible (WEB)
 </id><ide charset="UTF-8"/><h>Jonah
 </h><toc level="1">The Book of Jonah
 </toc><toc level="2">Jonah
@@ -138,4 +143,10 @@
 <ve/></p><p><v id="23"/>Epaphras, my fellow prisoner in Christ Jesus, greets you,
 <ve/><v id="24"/>as do Mark, Aristarchus, Demas, and Luke, my fellow workers.
 <ve/><v id="25"/>The grace of our Lord Jesus Christ be with your spirit. Amen.
-<ve/></p></book></usfx>
+<ve/></p></book><book id="GLO"><id id="GLO">
+</id><h>Glossary
+</h><toc level="1">World English Bible Glossary
+</toc><p sfm="mt">World English Bible Glossary
+</p><p sfm="ili"><k>Abaddon</k>
+</p><p sfm="ili" level="2">Abaddon is Hebrew for destruction.
+</p></book></usfx>

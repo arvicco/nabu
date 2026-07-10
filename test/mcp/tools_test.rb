@@ -381,6 +381,24 @@ module MCP
       assert_equal({ "open" => 4 }, body.fetch("license_classes"))
     end
 
+    # P11-10: a dictionary source (lexica) reports its entry count in status —
+    # documents/passages are 0 for the reference shelf, so entries is the count
+    # that stops it reading as an empty source. The totals carry the shelf sum.
+    def test_status_reports_dictionary_entries_for_the_reference_shelf
+      seed_corpus
+      seed_shelf
+      body = payload(call("nabu_status"))
+      lexica = body.fetch("sources").find { |s| s.fetch("slug") == "lexica" }
+      refute_nil lexica, "the lexica shelf must appear in status"
+      assert_equal 0, lexica.fetch("documents")
+      assert_equal 0, lexica.fetch("passages")
+      assert_operator lexica.fetch("entries"), :>, 0, "the shelf's entry count must surface"
+      assert_equal lexica.fetch("entries"), body.fetch("totals").fetch("dictionary_entries")
+      # A passage source carries entries=0, never a nil/absent field.
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal 0, perseus.fetch("entries")
+    end
+
     # -- nabu_concord (P8-3) -------------------------------------------------------
 
     def test_concord_returns_kwic_rows_with_urn_language_and_license

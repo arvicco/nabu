@@ -2075,7 +2075,7 @@ per-ref honest "— not attested" lines. Mirrored in MCP nabu_align range
 results (range-level `absent_witnesses:[{label,reason}]`; per-ref witness
 arrays drop the all-absent witnesses); documented in docs/mcp.md.
 
-## P11-10 · status learns dictionary sources + USFX non-verse books  [tier: opus] [status: in-progress] [deps: P11-9]
+## P11-10 · status learns dictionary sources + USFX non-verse books  [tier: opus] [status: done] [deps: P11-9]
 Defect packet (owner report 2026-07-10: "lexica status weirdly zero docs").
 1. **StatusReport content_kind awareness** — lexica renders
    `docs=0 passages=0` because its content is 168,133 dictionary_entries;

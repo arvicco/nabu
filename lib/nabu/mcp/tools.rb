@@ -444,7 +444,8 @@ module Nabu
           license_classes: license_counts(catalog, excluded: false),
           excluded_by_default: license_counts(catalog, excluded: true),
           totals: { documents: visible_documents(catalog).count,
-                    passages: visible_passages(catalog).count },
+                    passages: visible_passages(catalog).count,
+                    dictionary_entries: dictionary_entry_counts(catalog).values.sum },
           index: index_state,
           note: "counts are live passages/documents (withdrawn excluded); " \
                 "research_private/restricted material is excluded from these counts and " \
@@ -810,6 +811,7 @@ module Nabu
       # -- status internals -----------------------------------------------------------
 
       def source_rows(catalog)
+        entries = dictionary_entry_counts(catalog)
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
           { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
@@ -817,8 +819,25 @@ module Nabu
             documents: live_docs.count,
             passages: catalog[:passages].where(withdrawn: false)
                                         .where(document_id: live_docs.select(:id)).count,
+            # P11-10: a dictionary source's content is entries, not docs/passages;
+            # surfacing the entry count here stops the reference shelf (lexica,
+            # 168k entries) from reading as an empty docs=0 passages=0 source.
+            entries: entries[source[:id]] || 0,
             last_sync_at: source[:last_sync_at]&.to_s }
         end
+      end
+
+      # Live dictionary-entry counts keyed by owning source id — empty when this
+      # catalog has no reference shelf yet (the dictionary tables land with the
+      # first lexica sync, P11-4).
+      def dictionary_entry_counts(catalog)
+        return {} unless catalog.table_exists?(:dictionaries) && catalog.table_exists?(:dictionary_entries)
+
+        catalog[:dictionary_entries]
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .where(Sequel[:dictionary_entries][:withdrawn] => false)
+          .group_and_count(Sequel[:dictionaries][:source_id])
+          .to_h { |row| [row[:source_id], row[:count]] }
       end
 
       def language_counts(catalog)
