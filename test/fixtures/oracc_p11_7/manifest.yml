@@ -1,0 +1,63 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM P11-7 defect fixtures (real ORACC JSON slices from on-disk canonical). Non-refetchable: re-acquiring = a full per-project zip sync, not a raw GET. See README.md.
+source: oracc_p11_7
+adapter_test:
+files:
+  - path: dcclt/catalogue.json
+    refetchable: false
+    provenance: local-trim
+    reason: "minimal catalogue for title resolution"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: dcclt/corpusjson/P000725.json
+    refetchable: false
+    provenance: local-trim
+    reason: "no-content skeleton, copied whole 779B from canonical dcclt (fix 3)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: dcclt/corpusjson/P010104.json
+    refetchable: false
+    provenance: local-trim
+    reason: "trimmed dcclt P010104 - label-less line-start plus one labeled line (fix 4)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: dcclt/corpusjson/P999999.json
+    refetchable: false
+    provenance: local-trim
+    reason: "0-byte catalog-only skip exemplar (discovery skipped-by-rule)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: dcclt/metadata.json
+    refetchable: false
+    provenance: local-trim
+    reason: "real dcclt metadata.json (CC0) for the license gate"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: saao-saa01/saa01/catalogue.json
+    refetchable: false
+    provenance: local-trim
+    reason: "minimal catalogue for title resolution"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: saao-saa01/saa01/corpusjson/P334176.json
+    refetchable: false
+    provenance: local-trim
+    reason: "trimmed saao/saa01 text under the NESTED root layout (fix 1)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
+  - path: saao-saa01/saa01/metadata.json
+    refetchable: false
+    provenance: local-trim
+    reason: "real saao/saa01 metadata.json (CC0)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"

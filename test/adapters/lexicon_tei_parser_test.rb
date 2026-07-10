@@ -106,4 +106,30 @@ class LexiconTeiParserTest < Minitest::Test
     assert_equal "a", a2.headword_folded
     assert_nil a2.gloss # two-line cross-reference entry: nothing to gloss
   end
+
+  # -- P11-7 fix 5: work-level (empty-suffix) CTS urns mint nil, not "" -------
+
+  # The α (eng1) and θ (eng9) LSJ files quarantined the WHOLE file on a bibl
+  # whose @n is a work-level urn with a trailing colon
+  # ("urn:cts:greekLit:tlg0027.tlg0088:"): the empty citation suffix built a
+  # "" DictionaryCitation, which is rejected, ValidationError → ParseError. The
+  # P11-7 census misread α/θ as "alternate editions"; they are the largest and
+  # one ordinary letter sections. The parser now mints a work-level citation
+  # (citation nil), so the file parses whole. Fixture: a real trimmed α slice.
+  LSJ_ALPHA = File.join(
+    Nabu::TestSupport.fixtures("lexica_p11_7"),
+    "CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml"
+  )
+
+  def test_work_level_cts_urn_with_trailing_colon_parses_whole
+    entries = parse(LSJ_ALPHA, language: "grc", betacode: true)
+    # Both entries survive — the trailing-colon bibl no longer quarantines.
+    assert_equal %w[n4 n6454], entries.map(&:entry_id).sort
+
+    offender = entries.find { |e| e.entry_id == "n6454" }
+    work_only = offender.citations.find { |c| c.urn_raw == "urn:cts:greekLit:tlg0027.tlg0088:" }
+    refute_nil work_only, "the work-level bibl must still mint a citation row"
+    assert_equal "urn:cts:greekLit:tlg0027.tlg0088", work_only.cts_work
+    assert_nil work_only.citation, "an empty citation suffix mints nil, not an empty string"
+  end
 end

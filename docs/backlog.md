@@ -1917,7 +1917,7 @@ alignment + dictionaries; OE survey linked), README truthfulness, PR,
 sticky alarm LAST. Stretch riders (morph facets §1.6, vocab profiling §1.7)
 only if the phase ran light — decide at gate, don't cram.
 
-## P11-7 · Silent-ingestion defects + skip visibility  [tier: opus] [status: in-progress] [deps: P11-4, P11-6]
+## P11-7 · Silent-ingestion defects + skip visibility  [tier: opus] [status: done] [deps: P11-4, P11-6]
 Defect packet (census-first: orchestrator's 2026-07-10 disk-vs-catalog audit
 across ALL 12 sources after the owner-fired oracc/lexica/vulgate/sblgnt
 syncs; papyri/perseus×2/first1k/proiel/torot/ud/vulgate/sblgnt verified
@@ -1978,3 +1978,29 @@ with honest catalog-only counts (real saao/rinap ingestion is owner-fired
 post-merge); verify completes over the full live catalog (read-only run);
 gretil strays resolved (recovered or loudly classified); worklog line;
 02-sources notes updated.
+
+RESOLUTION (2026-07-10): all seven fixes shipped in one commit; suite+lint
+green (+12 tests). Per-fix: (1) ORACC nested-root — `project_dir` resolves
+`corpusjson/` at either depth; saao/saa01 + rinap/rinap1 (361 texts) now
+ingest; a tree-present-but-no-corpusjson project is a LOUD `unrecognized`
+note. (2) Verify — routes `content_kind :dictionary` to entry-level hash
+reconciliation; a store with both kinds verifies (the `document.urn`-on-
+DictionaryDocument crash that aborted the whole run is gone). (3) dcclt
+no-content — new `Nabu::DocumentSkipped` signal; loader counts it
+`skipped_by_rule`, never quarantines. (4) dcclt label-less line — falls back
+to the enclosing sentence c-node's label, else skips just that line. (5) LSJ
+"strays" — **the census was WRONG: eng1/eng9 are the α (largest, ~18950
+entries) and θ (~1948) letter files, not alternate editions.** They
+quarantined on an empty-citation-suffix bug (`urn:cts:…tlg0088:` → ""
+DictionaryCitation). Excluding them would have DELETED α+θ (~20900 entries);
+the real fix is `cite_parts` minting `citation: nil` for an empty suffix.
+Classified loudly here rather than forcing the packet's exclusion rule. (6)
+GRETIL strays — genuine Sanskrit editions (Mitākṣarā 4788 passages,
+Śāstravārttā 701) whose `<text>` lacks `@xml:lang`; RECOVERED via
+`<body>/@xml:lang` (san-Latn) then filename `sa_` fallback. (7) Skip
+visibility — `Adapter#discovery_skips` (DiscoverySkips: selected /
+skipped-by-rule / unrecognized) at the seam, wired through the Outcome and a
+`discovery:` CLI line, loud notes persisted to `runs.notes`. FROZEN-URN
+proof (parse-only, live db): oracc `+407 added ~0 updated =6469 skipped !0
+errored` (170 → 0 quarantines), gretil recovers the two strays with ~0
+updated. Verify runs clean read-only over the full live catalog.

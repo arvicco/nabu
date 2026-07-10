@@ -9,6 +9,23 @@ module Nabu
   # surrounding sync/batch continues.
   class ParseError < Error; end
 
+  # A discovered ref is NOT an ingestible document by an explicit rule, not by
+  # damage (P11-7): an ORACC corpusjson skeleton with no transcribed lines (the
+  # catalog-only cousin of the 0-byte case), for instance. Unlike ParseError
+  # this is NOT a quarantine — the loader/verify count it as "skipped by rule"
+  # and move on, exactly as they would a file discover never yielded. +reason+
+  # is a short human tag for the discovery accounting. Adapters raise it from
+  # #parse; callers that do not distinguish it fall through to a quarantine only
+  # if they forget to rescue it, so every load/verify path handles it explicitly.
+  class DocumentSkipped < Error
+    attr_reader :reason
+
+    def initialize(message = nil, reason: "skipped")
+      @reason = reason
+      super(message || reason)
+    end
+  end
+
   # An upstream fetch failed. This aborts the sync — we do not persist a
   # partial or stale corpus.
   class FetchError < Error; end

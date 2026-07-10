@@ -154,12 +154,21 @@ module Nabu
       # dropped from the work prefix (see class note); colon-separated
       # citation parts join with dots (the catalog's citation-suffix shape).
       # Malformed urns still split honestly — they resolve to nothing later.
+      #
+      # A WORK-LEVEL reference carries no passage suffix: either exactly four
+      # parts ("urn:cts:greekLit:tlg0012.tlg001") or a trailing colon that
+      # splits to an empty suffix ("urn:cts:greekLit:tlg0027.tlg00101:" — 61 in
+      # LSJ's α file, some in θ). Both mint citation nil, not "" — an empty
+      # citation is not a valid DictionaryCitation and would quarantine the whole
+      # letter file (the P11-7 census misread α/θ as "alternate editions"; they
+      # are the largest and one ordinary letter sections, ~21k entries).
       def cite_parts(urn_raw)
         parts = urn_raw.split(":", -1)
         return [nil, nil] if parts.length < 4
 
         work = "urn:cts:#{parts[2]}:#{parts[3].split('.').first(2).join('.')}"
         citation = parts.length > 4 ? parts[4..].join(".") : nil
+        citation = nil if citation && citation.empty?
         [work, citation]
       end
 

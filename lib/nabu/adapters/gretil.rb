@@ -80,6 +80,16 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
+      # P11-7 discovery census: count the .xml files discover skips because they
+      # are not GRETIL editions (peek_header nil — no <text> element, or
+      # malformed). After the filename-language fallback above, genuine editions
+      # missing @xml:lang are recovered, so this should be ~0; a non-zero count
+      # is now VISIBLE rather than silent. Runs once per sync.
+      def discovery_skips(workdir)
+        skipped = Dir.glob(File.join(workdir, "**", "*.xml")).count { |path| peek_header(path).nil? }
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped)
+      end
+
       # Delegate to GretilParser with the urn/language/title discover resolved
       # from the header.
       def parse(document_ref)
@@ -124,10 +134,21 @@ module Nabu
 
       # Cheap Reader peek at a file's header: the titleStmt <title> and the
       # <text>/@xml:lang (mapped sa→san), stopping at <body>. Returns nil — skip
-      # the file — when there is no text language (not a GRETIL edition) or the
-      # XML is malformed.
+      # the file — when the file is not a GRETIL edition (no <text> element) or
+      # the XML is malformed.
+      #
+      # LANGUAGE FALLBACK (P11-7): a handful of real editions carry a <text>
+      # with NO @xml:lang (the 1.8 MB Mitākṣarā sa_vijJAnezvara-mitAkSarA and
+      # sa_haribhadrasUri-zAstravArttAsamuccaya — their teiHeader's xml:lang="en"
+      # describes the metadata, not the edition), so read_header falls back to
+      # <body>/@xml:lang (both strays declare "sa-Latn" there → san-Latn, the
+      # accurate corpus form) and, only if THAT is absent too, to the filename's
+      # language prefix ("sa_" → Sanskrit, GRETIL's stable id, already the urn
+      # slug). Either way the edition is recovered rather than dropped INVISIBLY.
+      # A file with no <text> element at all is still skipped (not an edition).
       def peek_header(path)
-        title, language = read_header(path)
+        title, language, saw_text = read_header(path)
+        language ||= language_from_filename(path) if saw_text
         return nil if language.nil?
 
         { title: title, language: language }
@@ -135,8 +156,18 @@ module Nabu
         nil
       end
 
+      # The GRETIL filename's language prefix ("sa_TextName" → sa → san), mapped
+      # through the same table the parser uses. nil for a prefix-less name.
+      def language_from_filename(path)
+        prefix = File.basename(path, ".xml").split("_", 2)
+        return nil if prefix.length < 2 || prefix.first.empty?
+
+        GretilParser.normalize_language(prefix.first)
+      end
+
       def read_header(path)
         title = language = nil
+        saw_text = false
         capture_title = false
         File.open(path, "r") do |io|
           Nokogiri::XML::Reader(io, path).each do |node|
@@ -145,8 +176,13 @@ module Nabu
               case node.name.split(":").last
               when "title" then capture_title = true if title.nil?
               when "text"
+                saw_text = true
                 language = GretilParser.normalize_language(node.attribute("xml:lang"))
-              when "body" then break # the peek never reads into the text body
+              when "body"
+                # The <body>/@xml:lang is the accurate fallback when <text>
+                # carried none; then stop — the peek never reads the text body.
+                language ||= GretilParser.normalize_language(node.attribute("xml:lang"))
+                break
               end
             when Nokogiri::XML::Reader::TYPE_END_ELEMENT
               capture_title = false
@@ -159,7 +195,7 @@ module Nabu
             end
           end
         end
-        [title, language]
+        [title, language, saw_text]
       end
     end
   end

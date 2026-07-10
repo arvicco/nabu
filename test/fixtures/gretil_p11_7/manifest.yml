@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM P11-7 stray fixture (real GRETIL TEI slice, byte-identical to the mmehner mirror). Non-refetchable trim of a 4059-line file. See README.md.
+source: gretil_p11_7
+adapter_test:
+files:
+  - path: sa_haribhadrasUri-zAstravArttAsamuccaya.xml
+    refetchable: false
+    provenance: local-trim
+    reason: "trimmed to teiHeader plus 3 xml:id verse groups; <text> lacks @xml:lang, recovered via <body> lang fallback (fix 6)"
+    copied: 2026-07-10
+    whole: false
+    trim: "P11-7 defect fixture (see README.md)"
