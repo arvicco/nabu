@@ -1,10 +1,11 @@
 # The Library — content review
 
-**As of 2026-07-10** (post Phase 11 + owner syncs of oracc/lexica/vulgate/
-sblgnt, branch phase-11). Live totals: **72,296 documents / 3,073,040
-passages** across all 12 sources, plus **168,133 dictionary entries** on the
-new reference shelf, 873 aligned English translation editions, and
-**1,917,694 lemma rows in 12 languages**.
+**As of 2026-07-11** (post Phase 12 OE syncs, branch phase-12). Live totals:
+**72,734 documents / 3,143,750 passages** across 15 sources (13 loaded;
+bosworth-toller awaits its first sync), plus **168,133 dictionary entries**
+on the reference shelf, 873 aligned English translation editions, and
+**1,942,521 lemma rows in 13 languages** — Old English joined with 24,827
+rows from the ISWOC treebank.
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §10 for the
@@ -133,7 +134,7 @@ texts that mostly exist as scanned books elsewhere.
 | **Language** | Latin (`lat`), Greek (`grc`), Gothic (`got`), Classical Armenian (`xcl`), Old Church Slavonic (`chu`), Old East Slavic (`orv`), Vedic Sanskrit (`san`) |
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
 | **Size** | 70 docs / 170,279 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (18 / 85,873) |
-| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), Universal Dependencies (six treebanks incl. Old East Slavic birchbark letters + Middle Russian RNC — those two CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/legacy-UD license: `nc` |
+| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (six treebanks incl. Old East Slavic birchbark letters + Middle Russian RNC — those two CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
 | **Metadata** | The treebank half of the lemma layer: `passage_lemmas` totals **1,917,694 rows in 12 languages** (lat 583k, grc 379k, orv 351k, san 190k, chu 123k, got 99k, xcl 18k from the treebanks; sux 128k, akk 45k + Hurrian/Ugaritic/Hittite scatter from ORACC gold), searchable via `search lemma:` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
@@ -226,6 +227,24 @@ designed next occupant per the OE survey.
 **Research uses:** the philologist's desk loop (passage → lemma →
 definition → cited parallel passage) closed inside one tool; lexicographic
 studies over the full entry set.
+
+## 8d. Old English
+
+| | |
+|---|---|
+| **Category** | The OE axis (docs/oe-survey.md): poetry corpus + gold treebank + (queued) dictionary |
+| **Language** | Old English (`ang`), ca. 700–1150, West-Saxon and Anglian dialects |
+| **Size** | `aspr`: 349 poems / 30,550 lines — the complete six-volume Anglo-Saxon Poetic Records (Beowulf, Exeter Book, Junius, Vercelli, Paris Psalter, Minor Poems), CC BY-SA → `attribution`. `iswoc`: 5 prose+gospel texts / 2,536 gold-annotated sentences (Ælfric's Lives, Apollonius, Chronicles, Orosius, West-Saxon Gospels), CC BY-NC-SA → `nc` |
+| **Metadata** | ASPR: canonical printed line numbers as citations (`urn:nabu:aspr:A4.1:1` = Beowulf line 1), Cameron/DOE record slugs; ISWOC: PROIEL-family gold lemma+morphology (24,827 `ang` lemma rows), verse-cited Gospel of Mark = **alignment-hub witness #9** (`align MARK 2.3` now renders the West-Saxon) |
+
+Both synced 2026-07-11; enabled flips pending owner sign-off.
+Bosworth-Toller (the OE dictionary, CC BY 4.0, 84 MB CSV) is shipped and
+queued for its first sync — `define --lang ang` with æ→ae/þ,ð→th folding.
+
+**Research uses:** OE philology with canonical citability; comparative
+Germanic (Gothic ↔ OE ↔ ON gap visible); the nine-witness Mark as a
+Germanic-inclusive alignment laboratory; lemma-driven OE vocabulary study
+bridged to definitions once Bosworth-Toller loads.
 
 ## 9. Library-wide capabilities
 
