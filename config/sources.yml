@@ -166,6 +166,18 @@ aspr:
   # OTA record is not archive-locked the way a read-only git repo is: manual.
   sync_policy: manual
 
+bosworth-toller:
+  adapter: Nabu::Adapters::BosworthToller
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Bosworth-Toller (P12-3): An Anglo-Saxon Dictionary from the official
+  # LINDAT dump (hdl 11234/1-3532, CC BY 4.0 -> attribution) — the third
+  # dictionary-shelf occupant (content_kind :dictionary) and the first CSV
+  # dictionary (parser family bosworth-csv). ONE ~84 MB CSV over HTTP
+  # (Nabu::FileFetch, DSpace bitstream /content URL). The deposit is a frozen
+  # v0.1 (Last-Modified 2021-04-26): manual — a re-sync only matters if the
+  # team publishes a new dump version.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

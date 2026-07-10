@@ -520,6 +520,31 @@ module MCP
       assert_match(/no dictionary entry/i, payload(result).fetch("note"))
     end
 
+    # P12-3: the Old English shelf — content_kind inheritance made concrete on
+    # the MCP surface: nabu_define reaches Bosworth-Toller through the same
+    # tool, lang=ang is a legal shelf filter, and the ASCII folded form
+    # (aethele) reaches the æðele entry.
+    def test_define_covers_the_old_english_shelf
+      bt = Nabu::Store::Source.create(
+        slug: "bosworth-toller", name: "Bosworth-Toller",
+        adapter_class: "Nabu::Adapters::BosworthToller",
+        license: "CC BY 4.0", license_class: "attribution", enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: bt)
+                                   .load_from(Nabu::Adapters::BosworthToller.new,
+                                              workdir: Nabu::TestSupport.fixtures("bosworth-toller"))
+
+      entries = payload(call("nabu_define", { "lemma" => "aethele", "lang" => "ang" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "æðele", entry.fetch("headword")
+      assert_equal "bosworth-toller", entry.fetch("dictionary")
+      assert_equal "noble", entry.fetch("gloss")
+      assert_equal "attribution", entry.fetch("license_class")
+      assert_empty entry.fetch("citations"), "no OE crosswalk yet — citations start empty"
+      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "ang"
+    end
+
     def test_define_withholds_restricted_dictionaries_by_default
       seed_shelf(source: @private)
       result = call("nabu_define", { "lemma" => "μῆνις" })

@@ -153,6 +153,35 @@ class StatusReportTest < Minitest::Test
     refute_match(/fake-dict.*docs=/, out)
   end
 
+  # P12-3: the REAL Bosworth-Toller adapter inherits the dictionary status
+  # shape purely through its content_kind declaration — no status code changed
+  # for the third shelf occupant.
+  def test_bosworth_toller_inherits_the_dictionary_status_shape
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      bosworth-toller:
+        adapter: Nabu::Adapters::BosworthToller
+        enabled: false
+        sync_policy: manual
+    YAML
+    source = registry["bosworth-toller"].sync_source!(db)
+    dictionary = Nabu::Store::Dictionary.create(
+      source_id: source.id, slug: "bosworth-toller",
+      title: "An Anglo-Saxon Dictionary (Bosworth & Toller)", language: "ang"
+    )
+    2.times do |i|
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dictionary.id, urn: "urn:nabu:dict:bosworth-toller:#{i + 1}",
+        entry_id: (i + 1).to_s, key_raw: "æ#{i}", headword: "æ#{i}", headword_folded: "ae#{i}",
+        gloss: "g", body: "b", content_sha256: "s#{i}", revision: 1, withdrawn: false
+      )
+    end
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
+    assert_match(/bosworth-toller\s+disabled\s+manual\s+entries=2/, out)
+    refute_match(/bosworth-toller.*docs=/, out)
+  end
+
   # A dictionary source that has never synced still renders honestly as
   # entries=0 (right shape, no misleading docs=0 passages=0).
   def test_unsynced_dictionary_source_reports_zero_entries

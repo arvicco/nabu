@@ -2451,7 +2451,7 @@ Executed exactly per the approved plan; deviations listed last.
   branch) rather than adding a new strategy symbol — two surgical changes
   in remote_probe.rb, both tested.
 
-## P12-3 · Bosworth-Toller onto the reference shelf  [tier: opus] [status: pending] [deps: P12-2]
+## P12-3 · Bosworth-Toller onto the reference shelf  [tier: opus] [status: done] [deps: P12-2]
 The OE dictionary (survey: official LINDAT dump, hdl 11234/1-3532,
 CC BY 4.0 verbatim, SQL + lemma-keyed CSV id;headword;body). Third
 occupant of the P11-4 shelf — architecture §11 already sketches the
@@ -2466,6 +2466,185 @@ dictionary; keep the DictionaryLoader contract), define --lang ang path,
 folded-headword keying for OE (ash/thorn/eth folding rule — conventions
 §9 addition, argued not assumed), registry enabled:false, 02-sources,
 worklog. Suite+lint green. One commit, not pushed.
+
+### Phase A findings (verified 2026-07-10, page-level reads only)
+
+**Record.** LINDAT/CLARIAH-CZ handle `11234/1-3532`, title (dc.title,
+verbatim) "Bosworth-Toller's Anglo-Saxon Dictionary online", handle URI
+`http://hdl.handle.net/11234/1-3532`, source `https://bosworthtoller.com/`.
+The repo migrated to CLARIN-DSpace 7.6.5; the old xmlui handle/bitstream
+URLs now 302-redirect to the Angular UI (an HTML shell), so the survey's
+`.../xmlui/handle/...` link resolves but no longer serves files directly.
+Item uuid `da2f3c19-f5a9-48d2-bb8f-eb84a415f954`.
+
+**License (verbatim, from DSpace REST item metadata).** `dc.rights =
+"Creative Commons - Attribution 4.0 International (CC BY 4.0)"`;
+`dc.rights.uri = http://creativecommons.org/licenses/by/4.0/`;
+`dc.rights.label = PUB`. → `license_class "attribution"`, MCP-surface-safe.
+Confirms the survey; the deposit by the site's own maintainer is the
+authoritative grant (bosworthtoller.com itself carries no readable license).
+
+**Dump contents/format (verbatim from the deposit's own readme.txt, 769 B).**
+Three files in the ORIGINAL bundle:
+- `bosworth_entries_export.csv` — 88,387,561 B (~84 MB), MD5
+  `7c50c0a47ad2365fa0fddea18a54f11d`. THE lemma-keyed CSV. readme: "Encoding:
+  UTF-8 / Data separator: ; / Data enclosed by: \"\" / Contains three
+  columns: \"id\";\"headword\";\"body\" … id = the entry id that can be used
+  to refer to the entry online via http://bosworthtoller.com/id … body = body
+  of the entry tagged in xml".
+- `bosworth_backup_sql.sql` — 634,251,167 B (~605 MB) full DB backup. Out of
+  scope (the CSV carries the id/headword/body we need).
+- `readme.txt` — 769 B, the format spec above.
+readme caveat (verbatim): "Data dump version 0.1. The data is still being
+processed for accuracy and manually tagged with XML structural tags. … Not
+all entries have been checked and/or tagged." → the parser must tolerate
+untagged/degenerate bodies.
+
+**CSV reality (verified on the first 8 KB via HTTP Range — page-level, NOT a
+bulk fetch).** Header row `"id";"headword";"body"`. RFC-style CSV: every
+field quoted (incl. the numeric id and headword), embedded `"` escaped by
+DOUBLING (`""000001""`), and the `body` field is **multi-line XML with
+literal embedded newlines** — so a real CSV reader is mandatory (Ruby stdlib
+`CSV`, `col_sep: ";"`, `quote_char: '"'` handles doubling + multiline
+fields; line-splitting would shred entries). Bodies use a **project-specific
+(non-TEI) schema**: `<entry id=… vid=… …>`, `<form><orth>/<search>/<sort>`,
+`<gramGrp/>`, `<column name="body">`, `<grammar>`, `<page header=… num=…/>`,
+milestone empty-element pairs `<b-s/>…<b-e/>` (bold) and `<i-s/>…<i-e/>`
+(italic), `<def>`, nested `<sense num="N"><snum>N.</snum>…`, `<references>`,
+`<examples><ex><oe>…</oe><trans>…</trans><references>…</references></ex>`,
+`<rune>ᚪ</rune>`, `<br/>`. Entity double-encoding is present
+(`&amp;#39;`→`'`, `&amp;mdash;`); senses nest raggedly and repeat @num — v0.1
+reality the linearizer must tolerate, not assume well-formedness of.
+Note: the CSV `id` column ("1" for headword "A") is the readme's stated
+back-link id; the XML also carries an internal `id="000001"`/`vid=` — Phase B
+spot-checks one CSV id against the live `bosworthtoller.com/<id>` and keys the
+URN on the CSV id (`urn:nabu:dict:bosworth-toller:<csv id>`).
+
+**Fetch-path verdict: FileFetch-ready via the DSpace REST content URL.** The
+stable, auth-free download is the bitstream `/content` endpoint:
+`https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/3010b742-b2c4-4152-870a-716ce1652e7c/content`
+(uuid is per-deposit-stable). HEAD confirms `200`,
+`Content-Type: application/octet-stream;charset=UTF-8`,
+`Content-Length: 88387561`, **`Last-Modified: Mon, 26 Apr 2021 14:04:23 GMT`**,
+`ETag: "7c50c0a47ad2365fa0fddea18a54f11d"`, `Accept-Ranges: bytes` — i.e. the
+conditional-GET + sha-pin contract `Nabu::FileFetch` (P12-2) needs, exactly
+the ASPR wiring: `remote_probe_strategy :http_zip`, one `HttpProbeTarget`
+(zip_url = the content URL, metadata_url nil — license lives in the deposit,
+not an endpoint, so the license row reads unchecked), `state_file
+FileFetch::STATE_FILE`. Dump is frozen (Last-Modified 2021-04-26, v0.1) →
+`sync_policy: manual`. The handle-based xmlui bitstream URL is NOT usable
+(serves the Angular shell); the REST `/content` uuid URL is the one to pin.
+
+**OE headword folding rule (argued — conventions §9 addition
+`LANGUAGE_FOLDS["ang"]`).** On top of the generic fold (downcase → strip
+`\p{Mn}`), apply: **æ→"ae", þ→"th", ð→"th"** (and Æ/Þ/Ð reach these via the
+downcase step that runs first). Argument:
+1. *Vowel-length marks need no rule.* B-T alphabetizes á/é/í/ó/ú/ý and
+   macroned ǣ/ō as their base vowels (length is editorial, not lexical); the
+   generic fold already delivers this — precomposed á → NFD → strip U+0301 →
+   a; ǣ (U+01E3) → NFD → æ + U+0304 → strip → æ, then the ang rule folds the
+   surviving æ. So accents compose correctly with no ang-specific handling.
+2. *æ→"ae".* æ is a real OE letter (its own B-T section after A) but not
+   ASCII-typeable; "ae" is its standard scholarly transliteration and the
+   digraph it historically writes. A user types `nabu define caeg`/`waeter`
+   and must reach cæg/wæter.
+3. *þ→"th", ð→"th".* B-T interfiles þ and ð as ONE letter (after T), and OE
+   scribes used them interchangeably for the same dental fricative; both map
+   to the ASCII "th" a user types. Folding both to "th" mirrors B-T's own
+   interfiling (one search bucket) — ð→"d" was considered and rejected because
+   it would SPLIT the pair B-T unifies. (Wynn ƿ is effectively never in the
+   edited headwords/text — editions already print "w" — so no rule; noted so
+   the absence is deliberate.)
+Both-sides contract: the SAME `LANGUAGE_FOLDS["ang"]` folds ISWOC/ASPR ang
+lemmas, so `search --lemma wæter` (or the ASCII `waeter`) carries the B-T
+gloss — the LSJ/L&S lemma-gloss bridge, verbatim, for OE. Query-union
+pollution (a non-OE query's ang variant, e.g. "þing"→"thing") is the same
+bounded tradeoff §9 already accepts for lat v→u and the cuneiform fold, and
+is harmless here because æ/þ/ð essentially never occur in the other corpora's
+text. No rebuild storm: the rule is added BEFORE any ang corpus is synced
+(aspr + iswoc are both `enabled:false`, zero ang rows in the catalog), so the
+§9 "changing a rule ⇒ plan a rebuild" caveat is satisfied vacuously. Implement
+as a `gsub` lambda (not `tr` — æ→"ae"/þ→"th" are 1→2 expansions;
+`Normalize.fold_with_map` already tolerates non-length-preserving folds).
+
+### FIXTURE PLAN
+
+- **Target:** `test/fixtures/bosworth-toller/bosworth_entries_export.csv`
+  (mirrors the upstream filename so the adapter's `Dir.glob` finds it the same
+  way ASPR finds `3009.xml`) + `test/fixtures/bosworth-toller/README.md`
+  (retrieval date, the CC BY 4.0 verbatim quote above, the content-URL + MD5 +
+  Last-Modified pin, and the selection table below).
+- **Source (Phase B, owner-fired):** the CSV `/content` URL above; verify MD5
+  `7c50c0a47ad2365fa0fddea18a54f11d` on the full download before slicing.
+- **Selection — a stratified ~300-entry sample (values byte-verbatim; only the
+  record SET is trimmed), guaranteeing every folding + parser case:**
+  1. The header row + the first ~180 contiguous records (the "A"/"a-" section):
+     the flagship multi-sense "A" entry (runes, ragged nested `<sense>`,
+     `<examples>`/`<oe>`/`<trans>`, entity double-encoding), accented headwords
+     (ác, á-, etc.) exercising length-mark folding, and prefixed a- verbs.
+  2. ~40 records whose headword begins **æ/Æ** (æ, æcer, æsc, æfter, ælf,
+     æðele — the last also carries ð) — the æ→"ae" fold.
+  3. ~40 records whose headword begins **þ/Þ or ð/Ð** (þ, þæt, þing, þeod, ðes,
+     ðegn) — the þ/ð→"th" fold and the þ/ð interfiling.
+  4. ~20 records covering: any homograph groups seen in the pass (same headword,
+     multiple ids — the DictionaryLoader upsert-by-(dict,entry_id) case), the
+     shortest/most-degenerate bodies found (v0.1 untagged tolerance), and a
+     body with a bare `<references>`/cross-ref stub (nil-gloss honesty).
+- **Extraction method (deterministic, exact):** a Ruby stdlib-`CSV` streaming
+  script — `CSV.foreach(src, col_sep: ";", quote_char: '"', headers: true)`,
+  collect the four strata above (dedupe by id, cap ~300, cap any single body at
+  a sane trim only if it blows the size budget — prefer keeping the "A" entry
+  whole as the stress case), then re-emit with
+  `CSV.generate(col_sep: ";", force_quotes: true)` + the header. Round-tripping
+  through the same CSV semantics the adapter uses keeps every field value
+  identical while trimming only the record selection; `force_quotes` reproduces
+  upstream's quote-all shape. Script lives under the fixture README as the
+  documented recipe (not committed as code — one-shot, like the lexica trims).
+- **Size budget:** aim < ~600 KB (calibrated to the lexica fixtures' ~380 KB;
+  the "A" entry is the one large keep). If over, drop the largest non-essential
+  bodies from stratum 1, never the folding-case headwords.
+
+**FIXTURE PLAN — OWNER-APPROVED 2026-07-10** ("Bosworth-Toller fixture
+plan approved as is", incl. the ang folding rule æ→ae, þ→th, ð→th).
+
+### Phase B findings (2026-07-10, done)
+
+- **Fixture acquired via Range reads only** (~3.4 MB of the 84 MB CSV:
+  bytes 0–1449999, 45600000–46999999, plus small ordering probes — never the
+  full file): 270 stratified entries, 497,144 B, every emitted row asserted
+  **byte-verbatim** against the raw upstream slices. Two plan adjustments,
+  both upstream reality not trim choices: (1) the dump has **no ð-initial
+  headwords** (B-T normalizes headwords to þ-; ð appears medially —
+  ǽg-hwæðer, þeáh-hwæðere — which is where the ð→th fold is exercised);
+  (2) 249/270 bodies have no `<sense>` tag — flat untagged bodies are the
+  NORM, so the linearizer treats tagging as optional. Bonus corroboration
+  found in the data: the dump's own `<sort>` field folds æðele→`aetþele`,
+  þing→`tþing` — B-T itself folds æ→ae and buckets ð/þ identically, the
+  strongest possible evidence for the approved rule.
+- **Shipped:** `BosworthCsvParser` (8th parser family; stdlib CSV streaming,
+  gloss = first `<equiv lang="eng">` else first `<def>` else nil, body
+  linearizer skips `<search>/<sort>/<checked>`, breaks lines on
+  `<sense>`/`<br>`, second-pass decode of the dump's double-encoded entities,
+  NFC; row errors → ParseError) + `BosworthToller` adapter (`content_kind
+  :dictionary`, FileFetch fetch of the DSpace `/content` URL, ASPR-style
+  :http_zip probe with metadata_url nil, `urn:nabu:dict:bosworth-toller:<csv
+  id>` ↔ bosworthtoller.com/<id>) + registry `bosworth-toller`
+  enabled:false sync_policy:manual + conventions §9 `ang` fold + CLI/MCP
+  `lang` gates widened to ang (Query::Define needed zero changes — it was
+  genuinely language-agnostic; the loader/status/verify/rebuild routing
+  inherited purely via content_kind, each pinned by a test against the REAL
+  adapter class).
+- **Gem note:** `csv` added to the Gemfile — the stdlib extraction
+  (ruby-core, zero transitive deps) stopped being a default gem in Ruby 3.4
+  and this box runs 4.0; the approved plan's "stdlib CSV" is exactly this
+  gem.
+- **Demo (scratch catalog built from the fixture; live db untouched):**
+  `define aethele --lang ang` → æðele [attribution] gloss "noble", sense
+  breaks intact; `define thing` → þing "a thing"; `define ae` → the three
+  ǽ homographs (life / river / alas!); `status` → entries=270.
+- Suite 1370 runs / 19,907 assertions green; rubocop 185 files clean.
+  Remaining owner action (P12-gate): fire `bin/nabu sync bosworth-toller`
+  (~84 MB single GET), eyeball `define` output, flip enabled.
 
 ## P12-4 · The public face: README + user-facing docs  [tier: fable] [status: pending] [deps: P12-1..3]
 Owner: the README is the GitHub face of an open source project — it needs
