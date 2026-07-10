@@ -139,7 +139,14 @@ module Nabu
 
       def build_document(lines, urn:, title:, path:)
         lines = lines.reject { |line| line.forms.empty? }
-        raise ParseError, "#{path}: no citable lines (line-start d-nodes with words) found" if lines.empty?
+        # No transcribed lines: an object/surface skeleton catalogued but never
+        # lemmatized (dcclt ships ~112 such files) — the catalog-only cousin of
+        # the 0-byte case, an upstream norm, not damage. Skip it honestly (the
+        # discovery accounting counts it "skipped by rule"), never quarantine.
+        if lines.empty?
+          raise DocumentSkipped.new("#{path}: no transcribed lines (catalog-only skeleton)",
+                                    reason: "catalog-only (no content)")
+        end
 
         language = primary_language(lines)
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
@@ -205,7 +212,7 @@ module Nabu
 
             case node["node"]
             when "c" then chunk(node, sentence: sentence)
-            when "d" then discontinuity(node)
+            when "d" then discontinuity(node, sentence: sentence)
             when "l" then lemma(node, sentence: sentence)
             end
           end
@@ -218,11 +225,21 @@ module Nabu
 
         # Only line-start opens a line; object/surface context already lives
         # in the label ("o 1"), and nonw/nonx fragments are not reading text.
-        def discontinuity(node)
+        #
+        # LABEL-LESS line-start (dcclt ships ~58, e.g. P010104's one bare
+        # line-start amid ~300 labeled ones — an upstream data gap): fall back
+        # to the enclosing sentence c-node's label ("r xi' 10'"). If THAT too is
+        # absent, skip only this line (set no open line so its words are not
+        # citable) — never quarantine the whole document over one gap.
+        def discontinuity(node, sentence:)
           return unless node["type"] == "line-start"
 
           label = node["label"].to_s
-          raise ParseError, "line-start d-node without a label" if label.empty?
+          label = sentence.to_s if label.empty?
+          if label.empty?
+            @current = nil
+            return
+          end
 
           @current = { label: label, forms: [], tokens: [], sentences: [] }
           @lines << @current

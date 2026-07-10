@@ -19,6 +19,22 @@ class StatusReportTest < Minitest::Test
     end
   end
 
+  # A dictionary-shaped source (P11-10): content_kind :dictionary routes the
+  # status row to the entries count instead of docs/passages.
+  class FakeDictAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "fake-dict", name: "Fake Lexicon", license: "CC BY-SA 4.0",
+      license_class: "attribution", upstream_url: "https://example.invalid/dict",
+      parser_family: "lexicon-tei"
+    )
+
+    def self.manifest
+      MANIFEST
+    end
+
+    def self.content_kind = :dictionary
+  end
+
   def test_empty_registry_says_so
     registry = load_registry("# nothing\n")
     assert_equal "No sources registered.", Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
@@ -103,6 +119,52 @@ class StatusReportTest < Minitest::Test
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
     assert_match(/docs=1 passages=2 retired=1/, out)
+  end
+
+  # P11-10: a dictionary source renders its entry count, not docs=0 passages=0
+  # (its 168k entries are dictionary_entries, not documents/passages).
+  def test_dictionary_source_reports_entries_not_docs_passages
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      fake-dict:
+        adapter: StatusReportTest::FakeDictAdapter
+        enabled: true
+        sync_policy: live
+    YAML
+    source = registry["fake-dict"].sync_source!(db)
+    dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: "lsj",
+                                                title: "LSJ", language: "grc")
+    3.times do |i|
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dictionary.id, urn: "urn:nabu:dict:lsj:n#{i}", entry_id: "n#{i}",
+        key_raw: "k#{i}", headword: "h#{i}", headword_folded: "h#{i}",
+        gloss: "g", body: "b", content_sha256: "s#{i}", revision: 1, withdrawn: false
+      )
+    end
+    # A withdrawn entry must not inflate the count.
+    Nabu::Store::DictionaryEntry.create(
+      dictionary_id: dictionary.id, urn: "urn:nabu:dict:lsj:gone", entry_id: "gone",
+      key_raw: "k", headword: "h", headword_folded: "h", gloss: "g", body: "b",
+      content_sha256: "z", revision: 1, withdrawn: true
+    )
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
+    assert_match(/fake-dict\s+enabled\s+live\s+entries=3/, out)
+    refute_match(/fake-dict.*docs=/, out)
+  end
+
+  # A dictionary source that has never synced still renders honestly as
+  # entries=0 (right shape, no misleading docs=0 passages=0).
+  def test_unsynced_dictionary_source_reports_zero_entries
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      fake-dict:
+        adapter: StatusReportTest::FakeDictAdapter
+    YAML
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
+    assert_match(/fake-dict.*entries=0/, out)
+    refute_match(/docs=/, out)
   end
 
   # P7-1: a catalog without a ledger (fresh machine mid-bootstrap, or a

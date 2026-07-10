@@ -84,6 +84,24 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  def test_alignments_path_defaults_under_config
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config", "alignments.yml"), config.alignments_path
+    end
+  end
+
+  def test_alignments_path_override_resolves_against_root
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        paths:
+          alignments: registry/hub.yml
+      YAML
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "registry", "hub.yml"), config.alignments_path
+    end
+  end
+
   def test_catalog_path_is_under_db_dir
     Dir.mktmpdir do |root|
       config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)

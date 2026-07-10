@@ -1,0 +1,12 @@
+{
+ "type": "catalogue",
+ "project": "dcclt",
+ "members": {
+  "P010104": {
+   "designation": "MSL 14, 133 A01 (label-gap sample)"
+  },
+  "P000725": {
+   "designation": "catalog-only skeleton sample"
+  }
+ }
+}

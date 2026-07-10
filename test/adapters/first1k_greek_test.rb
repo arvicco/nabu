@@ -33,9 +33,13 @@ class First1kGreekTest < Minitest::Test
   # tests below). The grc side is an ordinary original — discovered flag-off too.
   PARADOX_GRC_URN = "urn:cts:greekLit:tlg4037.tlg001.1st1K-grc1"
   PARADOX_ENG_URN = "urn:cts:greekLit:tlg4037.tlg001.1st1K-eng1"
+  # The P11-5 LXX witness: tlg0527 is Swete's Septuaginta — Genesis, chapter/
+  # verse citation, the alignment hub's cts-verse extractor exemplar.
+  LXX_GENESIS_URN = "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1"
 
-  # All five original-language editions the fixture tree carries (flag-off).
-  GRC_URNS = [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN, PARADOX_GRC_URN].freeze
+  # All six original-language editions the fixture tree carries (flag-off).
+  GRC_URNS = [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN,
+              PARADOX_GRC_URN, LXX_GENESIS_URN].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -73,7 +77,7 @@ class First1kGreekTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_the_five_original_editions_across_slug_families
+  def test_discover_finds_exactly_the_six_original_editions_across_slug_families
     refs = Nabu::Adapters::First1kGreek.new.discover(GREEK_WORKDIR).to_a
     assert_equal GRC_URNS.sort, refs.map(&:id).sort
   end
@@ -107,6 +111,21 @@ class First1kGreekTest < Minitest::Test
     assert_equal "Fragmenta", titles.fetch(ANUBION_URN)
     assert_equal "De Martyribus (Fragmenta)", titles.fetch(METHODIUS_URN)
     assert_equal "Introductio arithmetica", titles.fetch(NICOMACHUS_URN)
+    assert_equal "Genesis", titles.fetch(LXX_GENESIS_URN)
+  end
+
+  # The LXX witness (P11-5): tlg0527 cites chapter.verse — the passage urn
+  # tails ARE verse refs ("1.1"), which is what the alignment hub's cts-verse
+  # extractor rides on. Pin the shape and the famous opening words.
+  def test_parse_round_trips_lxx_genesis_at_verse_grain
+    adapter = Nabu::Adapters::First1kGreek.new
+    ref = adapter.discover(GREEK_WORKDIR).find { |r| r.id == LXX_GENESIS_URN }
+    document = adapter.parse(ref)
+    assert_equal LXX_GENESIS_URN, document.urn
+    assert_equal 31, document.size
+    assert_equal "#{LXX_GENESIS_URN}:1.1", document.first.urn
+    assert_equal "#{LXX_GENESIS_URN}:1.31", document.to_a.last.urn
+    assert_includes document.first.text, "ΕΝ ΑΡΧΗ ἐποίησεν ὁ θεὸς"
   end
 
   def test_discover_returns_an_enumerator_without_a_block

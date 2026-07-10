@@ -1,0 +1,317 @@
+# The alignment-hub registry (P11-3 + P11-5, architecture §10).
+#
+# A WORK groups witnesses that carry the same text under a shared citation
+# scheme; a WITNESS is one edition — one catalog document (`document:`) or a
+# set of per-book documents (`documents:`) — plus how its citation refs are
+# read. Adding a witness = adding an entry here (then `nabu sync` or
+# `nabu rebuild` to regenerate the derived alignment_refs index) — never code,
+# unless the witness needs a citation extractor that does not exist yet
+# (known extractors: proiel-citation, the default; cts-verse).
+#
+# Per-witness keys:
+#   document:  the catalog document urn (single-document form; refs carry
+#              their own book tokens — proiel-citation). Registering a
+#              witness before its source is synced is fine — it renders
+#              "not synced".
+#   documents: work-vocabulary book token => document urn, for an edition
+#              minted as one document per book (cts-verse: ref = book token
+#              + the passage urn's citation tail, "1.2" -> "GEN 1.2").
+#   extractor: how refs are extracted (default proiel-citation: the
+#              per-token citation_part values of the stored annotations;
+#              cts-verse: registry book token + passage-urn tail).
+#   label:     display label (default: the urn tail, e.g. "greek-nt";
+#              REQUIRED for the documents: form).
+#   books:     book-token aliases into the work's vocabulary, applied after
+#              the generic ref fold (e.g. MK: MARK).
+#
+# `nabu align "MARK 2.3"` renders a verse across every witness below.
+
+nt:
+  title: "New Testament (parallel witnesses)"
+  witnesses:
+    # The five-way flagship — all PROIEL-family treebanks, all CC BY-NC-SA
+    # (license class nc; labels ride every aligned row). Verse coverage is
+    # honestly fragmentary per witness (the Armenian treebank samples
+    # chapters; Gothic and Marianus are lacunose): absent verses render
+    # "not attested", never fuzzed.
+    - document: urn:nabu:proiel:greek-nt   # grc — the Vorlage
+    - document: urn:nabu:proiel:latin-nt   # lat — Jerome's Vulgate (NT)
+    - document: urn:nabu:proiel:gothic-nt  # got — Wulfila
+    - document: urn:nabu:proiel:armenian-nt # xcl — classical Armenian NT (sampled)
+    - document: urn:nabu:proiel:marianus   # chu — Codex Marianus (OCS)
+    # Sixth witness, ready the day the ISWOC adapter lands (docs/oe-survey.md):
+    # the West-Saxon Gospel of Mark mints native "MARK 1.1" citation-parts —
+    # uncomment when the source syncs.
+    # - document: urn:nabu:proiel:wscp     # ang — OE Gospel of Mark (ISWOC)
+    #
+    # P11-5: the SBL Greek New Testament (CC BY 4.0, attribution) — a second
+    # Greek witness beside the PROIEL treebank (distinct edition, never a
+    # dedupe). Per-book documents; work-vocabulary tokens (the PROIEL book
+    # names) key the sblgnt urns. Renders "not synced" until the owner-fired
+    # first `nabu sync sblgnt`.
+    - label: sblgnt
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:sblgnt:matt
+        MARK: urn:nabu:sblgnt:mark
+        LUKE: urn:nabu:sblgnt:luke
+        JOHN: urn:nabu:sblgnt:john
+        ACTS: urn:nabu:sblgnt:acts
+        ROM: urn:nabu:sblgnt:rom
+        1COR: urn:nabu:sblgnt:1cor
+        2COR: urn:nabu:sblgnt:2cor
+        GAL: urn:nabu:sblgnt:gal
+        EPH: urn:nabu:sblgnt:eph
+        PHIL: urn:nabu:sblgnt:phil
+        COL: urn:nabu:sblgnt:col
+        1THESS: urn:nabu:sblgnt:1thess
+        2THESS: urn:nabu:sblgnt:2thess
+        1TIM: urn:nabu:sblgnt:1tim
+        2TIM: urn:nabu:sblgnt:2tim
+        TIT: urn:nabu:sblgnt:titus
+        PHILEM: urn:nabu:sblgnt:phlm
+        HEB: urn:nabu:sblgnt:heb
+        JAS: urn:nabu:sblgnt:jas
+        1PET: urn:nabu:sblgnt:1pet
+        2PET: urn:nabu:sblgnt:2pet
+        1JOHN: urn:nabu:sblgnt:1john
+        2JOHN: urn:nabu:sblgnt:2john
+        3JOHN: urn:nabu:sblgnt:3john
+        JUDE: urn:nabu:sblgnt:jude
+        REV: urn:nabu:sblgnt:rev
+    # P11-5: the Clementine Vulgate's NT books (public domain — the open
+    # counterweight to the five nc treebanks). urns are the adapter's
+    # per-book minting from the USFX book codes (all 27 verified upstream at
+    # scout time); tokens are the work vocabulary. "Not synced" until the
+    # owner-fired first `nabu sync vulgate`.
+    - label: vulgate (Clementine)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:vulgate:mat
+        MARK: urn:nabu:vulgate:mrk
+        LUKE: urn:nabu:vulgate:luk
+        JOHN: urn:nabu:vulgate:jhn
+        ACTS: urn:nabu:vulgate:act
+        ROM: urn:nabu:vulgate:rom
+        1COR: urn:nabu:vulgate:1co
+        2COR: urn:nabu:vulgate:2co
+        GAL: urn:nabu:vulgate:gal
+        EPH: urn:nabu:vulgate:eph
+        PHIL: urn:nabu:vulgate:php
+        COL: urn:nabu:vulgate:col
+        1THESS: urn:nabu:vulgate:1th
+        2THESS: urn:nabu:vulgate:2th
+        1TIM: urn:nabu:vulgate:1ti
+        2TIM: urn:nabu:vulgate:2ti
+        TIT: urn:nabu:vulgate:tit
+        PHILEM: urn:nabu:vulgate:phm
+        HEB: urn:nabu:vulgate:heb
+        JAS: urn:nabu:vulgate:jas
+        1PET: urn:nabu:vulgate:1pe
+        2PET: urn:nabu:vulgate:2pe
+        1JOHN: urn:nabu:vulgate:1jn
+        2JOHN: urn:nabu:vulgate:2jn
+        3JOHN: urn:nabu:vulgate:3jn
+        JUDE: urn:nabu:vulgate:jud
+        REV: urn:nabu:vulgate:rev
+    # P11-8: the World English Bible's NT books — the readable public-domain
+    # ENGLISH witness beside the Greek/Latin/Gothic (a reader who cannot yet
+    # parse the Vorlage sees the same verse in plain English). WEB is modern PD
+    # worldwide (KJV is Crown-copyright in the UK); complete canon; USFX like
+    # the Vulgate (UsfxParser, zero new parser). urns are the adapter's per-book
+    # minting from the WEB OSIS codes (all 27 NT codes verified upstream at
+    # scout time); tokens are the work vocabulary. NT chapter/verse numbering is
+    # stable across traditions, so these align cleanly. "Not synced" until the
+    # owner-fired first `nabu sync eng-web`.
+    - label: WEB (English)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:eng-web:mat
+        MARK: urn:nabu:eng-web:mrk
+        LUKE: urn:nabu:eng-web:luk
+        JOHN: urn:nabu:eng-web:jhn
+        ACTS: urn:nabu:eng-web:act
+        ROM: urn:nabu:eng-web:rom
+        1COR: urn:nabu:eng-web:1co
+        2COR: urn:nabu:eng-web:2co
+        GAL: urn:nabu:eng-web:gal
+        EPH: urn:nabu:eng-web:eph
+        PHIL: urn:nabu:eng-web:php
+        COL: urn:nabu:eng-web:col
+        1THESS: urn:nabu:eng-web:1th
+        2THESS: urn:nabu:eng-web:2th
+        1TIM: urn:nabu:eng-web:1ti
+        2TIM: urn:nabu:eng-web:2ti
+        TIT: urn:nabu:eng-web:tit
+        PHILEM: urn:nabu:eng-web:phm
+        HEB: urn:nabu:eng-web:heb
+        JAS: urn:nabu:eng-web:jas
+        1PET: urn:nabu:eng-web:1pe
+        2PET: urn:nabu:eng-web:2pe
+        1JOHN: urn:nabu:eng-web:1jn
+        2JOHN: urn:nabu:eng-web:2jn
+        3JOHN: urn:nabu:eng-web:3jn
+        JUDE: urn:nabu:eng-web:jud
+        REV: urn:nabu:eng-web:rev
+
+# P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
+# under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.
+# Work vocabulary = OSIS/Paratext-style tokens. Versification note (the §10
+# "whoever registers a witness owns the shared-citation claim" contract):
+# both witnesses follow the GREEK tradition where it bites hardest — Psalm
+# numbering (Vulgate Psalms are numbered after the LXX) — so PSA refs align;
+# books whose schemes genuinely diverge (e.g. Esdras) simply attest
+# per-witness and render honestly.
+ot:
+  title: "Old Testament (Septuagint / Vulgate)"
+  witnesses:
+    # Swete's Septuaginta (1901), First1KGreek tlg0527 — synced, attribution
+    # class. One catalog document per book; tokens for the double-recension
+    # books pick THEODOTION as the plain token (the ecclesiastical text:
+    # DAN/SUS/BEL) and suffix the Old Greek (-OG). 2ES = Swete's Esdras B
+    # (Greek Ezra-Nehemiah, continuous chapters). tlg0527.tlg030
+    # (Ecclesiastes) has no grc edition upstream — absent here, honest gap.
+    - label: LXX (Swete, First1K)
+      extractor: cts-verse
+      documents:
+        GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+        EXO: urn:cts:greekLit:tlg0527.tlg002.1st1K-grc1
+        LEV: urn:cts:greekLit:tlg0527.tlg003.1st1K-grc1
+        NUM: urn:cts:greekLit:tlg0527.tlg004.1st1K-grc1
+        DEU: urn:cts:greekLit:tlg0527.tlg005.1st1K-grc1
+        JOS: urn:cts:greekLit:tlg0527.tlg006.1st1K-grc1
+        JDG: urn:cts:greekLit:tlg0527.tlg008.1st1K-grc1
+        RUT: urn:cts:greekLit:tlg0527.tlg010.1st1K-grc1
+        1SA: urn:cts:greekLit:tlg0527.tlg011.1st1K-grc1  # Regnorum I
+        2SA: urn:cts:greekLit:tlg0527.tlg012.1st1K-grc1  # Regnorum II
+        1KI: urn:cts:greekLit:tlg0527.tlg013.1st1K-grc1  # Regnorum III
+        2KI: urn:cts:greekLit:tlg0527.tlg014.1st1K-grc1  # Regnorum IV
+        1CH: urn:cts:greekLit:tlg0527.tlg015.1st1K-grc1
+        2CH: urn:cts:greekLit:tlg0527.tlg016.1st1K-grc1
+        1ES: urn:cts:greekLit:tlg0527.tlg017.1st1K-grc1  # Esdras A (apocryphus)
+        2ES: urn:cts:greekLit:tlg0527.tlg018.1st1K-grc1  # Esdras B (Ezra-Nehemiah)
+        EST: urn:cts:greekLit:tlg0527.tlg019.1st1K-grc1
+        JDT: urn:cts:greekLit:tlg0527.tlg020.1st1K-grc1
+        TOB: urn:cts:greekLit:tlg0527.tlg021.1st1K-grc1
+        1MA: urn:cts:greekLit:tlg0527.tlg023.1st1K-grc1
+        2MA: urn:cts:greekLit:tlg0527.tlg024.1st1K-grc1
+        3MA: urn:cts:greekLit:tlg0527.tlg025.1st1K-grc1
+        4MA: urn:cts:greekLit:tlg0527.tlg026.1st1K-grc1
+        PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1  # Greek numbering
+        ODA: urn:cts:greekLit:tlg0527.tlg028.1st1K-grc1
+        PRO: urn:cts:greekLit:tlg0527.tlg029.1st1K-grc1
+        SNG: urn:cts:greekLit:tlg0527.tlg031.1st1K-grc1  # Canticum
+        JOB: urn:cts:greekLit:tlg0527.tlg032.1st1K-grc1
+        WIS: urn:cts:greekLit:tlg0527.tlg033.1st1K-grc1
+        SIR: urn:cts:greekLit:tlg0527.tlg034.1st1K-grc2  # NB grc2 edition slug
+        PSS: urn:cts:greekLit:tlg0527.tlg035.1st1K-grc1  # Psalmi Salomonis
+        HOS: urn:cts:greekLit:tlg0527.tlg036.1st1K-grc1  # LXX prophet order
+        AMO: urn:cts:greekLit:tlg0527.tlg037.1st1K-grc1
+        MIC: urn:cts:greekLit:tlg0527.tlg038.1st1K-grc1
+        JOL: urn:cts:greekLit:tlg0527.tlg039.1st1K-grc1
+        OBA: urn:cts:greekLit:tlg0527.tlg040.1st1K-grc1
+        JON: urn:cts:greekLit:tlg0527.tlg041.1st1K-grc1
+        NAM: urn:cts:greekLit:tlg0527.tlg042.1st1K-grc1
+        HAB: urn:cts:greekLit:tlg0527.tlg043.1st1K-grc1
+        ZEP: urn:cts:greekLit:tlg0527.tlg044.1st1K-grc1
+        HAG: urn:cts:greekLit:tlg0527.tlg045.1st1K-grc1
+        ZEC: urn:cts:greekLit:tlg0527.tlg046.1st1K-grc1
+        MAL: urn:cts:greekLit:tlg0527.tlg047.1st1K-grc1
+        ISA: urn:cts:greekLit:tlg0527.tlg048.1st1K-grc2  # NB grc2 edition slug
+        JER: urn:cts:greekLit:tlg0527.tlg049.1st1K-grc1
+        BAR: urn:cts:greekLit:tlg0527.tlg050.1st1K-grc1
+        LAM: urn:cts:greekLit:tlg0527.tlg051.1st1K-grc1
+        LJE: urn:cts:greekLit:tlg0527.tlg052.1st1K-grc1  # single-chapter: flat verse refs
+        EZK: urn:cts:greekLit:tlg0527.tlg053.1st1K-grc1
+        SUS-OG: urn:cts:greekLit:tlg0527.tlg054.1st1K-grc1
+        SUS: urn:cts:greekLit:tlg0527.tlg055.1st1K-grc1
+        DAG: urn:cts:greekLit:tlg0527.tlg056.1st1K-grc1  # Daniel, Old Greek
+        DAN: urn:cts:greekLit:tlg0527.tlg057.1st1K-grc1  # Daniel, Theodotion
+        BEL-OG: urn:cts:greekLit:tlg0527.tlg058.1st1K-grc1
+        BEL: urn:cts:greekLit:tlg0527.tlg059.1st1K-grc1
+    # The Clementine Vulgate's OT books. COMPLETED P11-9: the vulgate is now
+    # synced, so every mapped urn below is verified read-only against the live
+    # catalog (`sqlite3 -readonly db/catalog.sqlite3`) — no guessed code
+    # dangles. Tokens are the work vocabulary (the LXX witness's), so a shared
+    # book aligns LXX ↔ Vulgate; the urn tails are the adapter's USFX per-book
+    # minting. Every OT book the catalog holds AND the LXX vocabulary names is
+    # mapped (43 of the vulgate's 46 OT documents). THREE are deliberately
+    # left unmapped and attest per-witness, honestly: `ezr`/`neh` — the §10
+    # Esdras divergence (LXX 2ES = Esdras B is Ezra-Nehemiah in continuous
+    # chapters; the Vulgate SPLITS them with restarted numbering, so no single
+    # token maps cleanly, and LXX 1ES/Esdras A has no Clementine counterpart);
+    # and `ecc` (Ecclesiastes) — absent from the LXX witness upstream
+    # (tlg0527.tlg030 has no grc edition), so it carries no work token to
+    # align on. The alignment_refs index picks these up at the owner's next
+    # `nabu sync`/`nabu rebuild` (config-only change; index is derived).
+    - label: vulgate (Clementine)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:vulgate:gen
+        EXO: urn:nabu:vulgate:exo
+        LEV: urn:nabu:vulgate:lev
+        NUM: urn:nabu:vulgate:num
+        DEU: urn:nabu:vulgate:deu
+        JOS: urn:nabu:vulgate:jos
+        JDG: urn:nabu:vulgate:jdg
+        RUT: urn:nabu:vulgate:rut
+        1SA: urn:nabu:vulgate:1sa  # Regum I
+        2SA: urn:nabu:vulgate:2sa  # Regum II
+        1KI: urn:nabu:vulgate:1ki  # Regum III
+        2KI: urn:nabu:vulgate:2ki  # Regum IV
+        1CH: urn:nabu:vulgate:1ch
+        2CH: urn:nabu:vulgate:2ch
+        EST: urn:nabu:vulgate:est
+        JDT: urn:nabu:vulgate:jdt
+        TOB: urn:nabu:vulgate:tob
+        1MA: urn:nabu:vulgate:1ma
+        2MA: urn:nabu:vulgate:2ma
+        PSA: urn:nabu:vulgate:psa  # Vulgate Psalms follow the LXX numbering
+        PRO: urn:nabu:vulgate:pro
+        SNG: urn:nabu:vulgate:sng
+        JOB: urn:nabu:vulgate:job
+        WIS: urn:nabu:vulgate:wis  # Sapientia
+        SIR: urn:nabu:vulgate:sir  # Ecclesiasticus
+        HOS: urn:nabu:vulgate:hos  # Osee
+        AMO: urn:nabu:vulgate:amo
+        MIC: urn:nabu:vulgate:mic  # Michæa
+        JOL: urn:nabu:vulgate:jol  # Joël
+        OBA: urn:nabu:vulgate:oba  # Abdias
+        JON: urn:nabu:vulgate:jon  # Jonas
+        NAM: urn:nabu:vulgate:nam
+        HAB: urn:nabu:vulgate:hab
+        ZEP: urn:nabu:vulgate:zep
+        HAG: urn:nabu:vulgate:hag
+        ZEC: urn:nabu:vulgate:zec
+        MAL: urn:nabu:vulgate:mal
+        ISA: urn:nabu:vulgate:isa  # Isaias
+        JER: urn:nabu:vulgate:jer  # Jeremias
+        BAR: urn:nabu:vulgate:bar
+        LAM: urn:nabu:vulgate:lam
+        EZK: urn:nabu:vulgate:ezk  # Ezechiel
+        DAN: urn:nabu:vulgate:dan  # Daniel (Theodotion token → the Vulgate book)
+    # P11-8: the World English Bible's OT books — the readable English witness
+    # beside the Septuagint and Vulgate. Versification honesty (the §10
+    # "whoever registers a witness owns the shared-citation claim" contract):
+    # WEB follows the HEBREW/Protestant numbering, which diverges from the LXX
+    # in places (Psalm numbering most of all; Jonah 1:17 ≈ Hebrew/LXX 2:1;
+    # Joel/Malachi chapter splits). So the map is DELIBERATELY conservative —
+    # Genesis plus the minor prophets whose chapter.verse is broadly stable
+    # (and the two the Vulgate OT already maps), giving three-way GEN/NAM/HAB/
+    # ZEP/HAG/ZEC/MAL and English-beside-Greek on JON/OBA. Where a number
+    # genuinely diverges the ref simply attests per-witness and renders
+    # honestly (never a fabricated pairing); Psalms and the deuterocanon are
+    # left out rather than mis-aligned. Extend from the minted urns after the
+    # owner-fired first sync (config-only). "Not synced" until then.
+    - label: WEB (English)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:eng-web:gen
+        JON: urn:nabu:eng-web:jon
+        OBA: urn:nabu:eng-web:oba
+        NAM: urn:nabu:eng-web:nam
+        HAB: urn:nabu:eng-web:hab
+        ZEP: urn:nabu:eng-web:zep
+        HAG: urn:nabu:eng-web:hag
+        ZEC: urn:nabu:eng-web:zec
+        MAL: urn:nabu:eng-web:mal

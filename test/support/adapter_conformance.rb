@@ -158,14 +158,30 @@ module AdapterConformance
   def each_parsed_document(adapter)
     refs = adapter.discover(conformance_workdir).to_a
     refute_empty refs, "discover must yield at least one DocumentRef from #{conformance_workdir}"
-    refs.each { |ref| yield ref, adapter.parse(ref) }
+    parsed = 0
+    refs.each do |ref|
+      document = parse_or_skip(adapter, ref) or next
+      parsed += 1
+      yield ref, document
+    end
+    refute_equal 0, parsed, "every discovered ref was skipped-by-rule; discover must yield real documents too"
   end
 
   def urn_snapshot(adapter)
-    adapter.discover(conformance_workdir).map do |ref|
-      document = adapter.parse(ref)
+    adapter.discover(conformance_workdir).filter_map do |ref|
+      document = parse_or_skip(adapter, ref) or next
       [document.urn, document.map(&:urn)]
     end
+  end
+
+  # A discovered ref the adapter declines by rule (Nabu::DocumentSkipped, P11-7 —
+  # e.g. a USFX front-matter/glossary book with no verses) is not a document to
+  # round-trip; skip it, exactly as the loader and verify do. Damage
+  # (Nabu::ParseError) still surfaces as a failure.
+  def parse_or_skip(adapter, ref)
+    adapter.parse(ref)
+  rescue Nabu::DocumentSkipped
+    nil
   end
 
   def duplicates(values)

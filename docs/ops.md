@@ -37,10 +37,18 @@ What each command does and its exit contract:
   added-count collapse, withdrawal/retirement creep, stale sources) plus a live
   golden-query replay. **Exit 1** on a loud finding (spike, >15% creep, a lost
   golden query); soft warnings (collapse, 5–15% creep, stale) stay **exit 0**.
-- **`nabu health --remote`** — no-clone upstream probe (`git ls-remote`
-  liveness, HEAD-vs-`last_sync_sha` drift, best-effort license-drift). **Exit 1**
-  iff any upstream is *gone*; *moved*/*behind*/*license changed* are reported but
-  stay exit 0.
+- **`nabu health --remote`** — no-clone upstream probe. The strategy is keyed
+  per source off the adapter: **git** sources use `git ls-remote` (liveness,
+  HEAD-vs-`last_sync_sha` drift, best-effort license-drift via
+  raw.githubusercontent); **HTTP-zip** sources (ORACC) HEAD each project zip
+  (200 = reachable; `Last-Modified` vs the stored `.zip-fetch.json` pin =
+  drift) and GET each project `metadata.json` for license-drift — through the
+  same vendored-cert path ZipFetch fetches on. A never-synced project reads
+  *never-synced*, not gone. **Exit 1** iff any upstream is *gone*;
+  *moved*/*behind*/*license changed* are reported but stay exit 0. (ORACC's
+  standalone `metadata.json` currently serves an empty body over HTTP, so its
+  license row reads *unchecked* until upstream serves it — the drift check via
+  the zip `Last-Modified` is unaffected.)
 - **`rake fixtures:check`** — re-fetches the small fixture samples, diffs them,
   re-runs the affected adapter tests. Never overwrites. Nonzero on drift.
 - **`nabu backup`** — file-level rsync of canonical/ (attic included), the
@@ -284,11 +292,13 @@ Read the report — it names the source and the signal.
   recent changes; `nabu rebuild` to rule out a stale index.
 
 ### `health --remote` shows a gone / moved / license-changed upstream
-- **GONE (exit 1)** — `git ls-remote` failed. Check the URL/repo by hand: did
-  the org rename, the repo move, or the project die? If it's dead, set
-  `sync_policy: frozen` in `config/sources.yml` (stop hitting it; keep what you
-  have — retained docs stay live and searchable). If it moved, update the
-  `upstream_url`.
+- **GONE (exit 1)** — the upstream probe failed: `git ls-remote` for a git
+  source, or a non-200/non-redirect HEAD on a project zip for an HTTP-zip
+  source (ORACC). Check the URL/repo by hand: did the org rename, the repo
+  move, or the project die? If it's dead, set `sync_policy: frozen` in
+  `config/sources.yml` (stop hitting it; keep what you have — retained docs
+  stay live and searchable). If it moved, update the `upstream_url` (git) or
+  the project list / URL shape (HTTP-zip).
 - **MOVED** — best-effort redirect signal; the stored URL may be stale. Update
   it when convenient.
 - **license CHANGED** — the upstream LICENSE file's hash differs from the

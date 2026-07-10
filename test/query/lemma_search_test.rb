@@ -91,6 +91,45 @@ module Query
       assert_empty search(""), "an empty lemma matches nothing"
     end
 
+    # -- dictionary gloss integration (P11-4) ----------------------------------
+
+    # A lemma hit carries its dictionary shelf gloss when a dictionary of the
+    # passage's language holds the folded headword (the real L&S officium /
+    # PROIEL Cicero pair); hits without a shelf entry read nil.
+    def test_lemma_hits_carry_their_dictionary_gloss
+      doc = make_document(urn: "urn:d:lat", language: "lat", title: "De Officiis")
+      make_passage(doc, urn: "urn:d:lat:1", text: "vacare officio", sequence: 0, language: "lat",
+                        lemmas: [%w[vaco vacare], %w[officium officio]])
+      rebuild!
+      dictionary = Nabu::Store::Dictionary.create(
+        source_id: @open.id, slug: "lewis-short", title: "A Latin Dictionary", language: "lat"
+      )
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dictionary.id, urn: "urn:nabu:dict:lewis-short:n32391",
+        entry_id: "n32391", key_raw: "officium", headword: "offĭcĭum",
+        headword_folded: "officium", gloss: "a service", body: "a service …",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+
+      assert_equal ["a service"], search("officium").map(&:gloss)
+      assert_equal [nil], search("vaco").map(&:gloss), "no shelf entry: nil gloss, honest absence"
+    end
+
+    def test_gloss_requires_the_dictionary_language_to_match_the_lemma
+      seed_lego_corpus
+      dictionary = Nabu::Store::Dictionary.create(
+        source_id: @open.id, slug: "lewis-short", title: "A Latin Dictionary", language: "lat"
+      )
+      # A Latin homograph must not gloss a Greek lemma.
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dictionary.id, urn: "urn:nabu:dict:lewis-short:x1",
+        entry_id: "x1", key_raw: "lego2", headword: "lēgo", headword_folded: "λεγω",
+        gloss: "wrong", body: "…", content_sha256: "x", revision: 1, withdrawn: false
+      )
+
+      assert_equal [nil, nil], search("λέγω").map(&:gloss)
+    end
+
     # -- fold both sides (P6-4 applied to lemmas) ------------------------------
 
     # A lemma is a dictionary form: Greek lemmas routinely END in ς (λόγος).

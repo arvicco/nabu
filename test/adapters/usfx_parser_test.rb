@@ -1,0 +1,127 @@
+# frozen_string_literal: true
+
+require "test_helper"
+require "tmpdir"
+
+# UsfxParser (P11-5): streaming parser for one USFX bible file — the eBible.org
+# milestone dialect the Clementine Vulgate ships in (test/fixtures/vulgate).
+# USFX is MILESTONE markup: `<book id="GEN"><h>Genesis</h>` then `<c id="1"/>`
+# chapter milestones and `<v id="1"/>text<ve/>` verse spans; verse text is the
+# character data between the milestones. One verse = one passage; the book to
+# extract is the caller's choice (the Vulgate adapter mints one document per
+# book from one whole-bible file).
+class UsfxParserTest < Minitest::Test
+  FIXTURE = File.join(Nabu::TestSupport.fixtures("vulgate"), "lat-clementine.usfx.xml")
+
+  def parser
+    Nabu::Adapters::UsfxParser.new
+  end
+
+  # -- books (the discover pass) ---------------------------------------------
+
+  def test_books_lists_ids_and_headings_in_file_order
+    books = parser.books(FIXTURE)
+    assert_equal %w[GEN MRK JHN], books.map(&:id)
+    assert_equal %w[Genesis Marcus Joannes], books.map(&:heading)
+  end
+
+  # -- parse -------------------------------------------------------------------
+
+  def test_parse_extracts_one_passage_per_verse_with_chapter_verse_urns
+    document = parse_book("GEN", urn: "urn:nabu:vulgate:gen", title: "Genesis")
+    assert_equal 31, document.size
+    assert_equal "urn:nabu:vulgate:gen:1.1", document.first.urn
+    assert_equal "urn:nabu:vulgate:gen:1.31", document.to_a.last.urn
+    assert_equal "In principio creavit Deus cælum et terram.", document.first.text
+  end
+
+  def test_parse_spans_chapter_boundaries
+    document = parse_book("MRK", urn: "urn:nabu:vulgate:mrk", title: "Marcus")
+    assert_equal 73, document.size # Mark 1 (45 vv) + Mark 2 (28 vv)
+    suffixes = document.map { |p| p.urn.delete_prefix("urn:nabu:vulgate:mrk:") }
+    assert_includes suffixes, "1.45"
+    assert_includes suffixes, "2.1"
+    # The alignment-hub anchor verse, verbatim from the fixture.
+    mark23 = document.find { |p| p.urn.end_with?(":2.3") }
+    assert_equal "Et venerunt ad eum ferentes paralyticum, qui a quatuor portabatur.", mark23.text
+  end
+
+  def test_parse_extracts_only_the_requested_book
+    document = parse_book("JHN", urn: "urn:nabu:vulgate:jhn", title: "Joannes")
+    assert_equal 18, document.size
+    assert_equal "In principio erat Verbum, et Verbum erat apud Deum, et Deus erat Verbum.",
+                 document.first.text
+    assert(document.all? { |p| p.urn.start_with?("urn:nabu:vulgate:jhn:") })
+  end
+
+  def test_parse_keeps_upstream_orthography_and_is_nfc
+    document = parse_book("GEN", urn: "urn:nabu:vulgate:gen", title: "Genesis")
+    verse2 = document.to_a[1]
+    # Ligatures and spaced punctuation are upstream reality — kept verbatim.
+    assert_includes verse2.text, "tenebræ"
+    assert_includes verse2.text, "abyssi :"
+    assert(document.all? { |p| p.text.unicode_normalized?(:nfc) })
+  end
+
+  def test_parse_sets_document_identity
+    document = parse_book("GEN", urn: "urn:nabu:vulgate:gen", title: "Genesis")
+    assert_equal "urn:nabu:vulgate:gen", document.urn
+    assert_equal "lat", document.language
+    assert_equal "Genesis", document.title
+    assert_equal FIXTURE, document.canonical_path
+  end
+
+  # -- note apparatus (WEB and other footnoted editions) ---------------------
+
+  # WEB carries <f> footnotes inline inside the verse; their text is editorial
+  # apparatus, not scripture, and must not fold into the reading. Jonah 1:1
+  # upstream is "Now Yahweh’s<f caller="+">…rendered "LORD"…</f> word came…".
+  ENG_WEB = File.join(Nabu::TestSupport.fixtures("eng-web"), "eng-web.usfx.xml")
+
+  def test_parse_skips_footnote_apparatus_from_the_verse_text
+    document = parser.parse(ENG_WEB, book: "JON", urn: "urn:nabu:eng-web:jon",
+                                     language: "eng", title: "Jonah")
+    jon11 = document.first
+    assert_equal "Now Yahweh’s word came to Jonah the son of Amittai, saying,", jon11.text
+    refute_includes jon11.text, "LORD", "footnote apparatus must not bleed into the verse"
+    assert(document.all? { |p| p.text.unicode_normalized?(:nfc) })
+  end
+
+  # P11-10: USFX peripheral books (FRT front matter, GLO glossary) are
+  # non-scripture structural matter with zero verses. parse declines them by
+  # rule (Nabu::DocumentSkipped — the P11-7 skip signal the loader counts as
+  # skipped-by-rule), NOT with a ParseError (which would quarantine as damage).
+  def test_parse_of_a_non_scripture_book_is_skipped_by_rule
+    %w[FRT GLO].each do |book|
+      error = assert_raises(Nabu::DocumentSkipped) do
+        parser.parse(ENG_WEB, book: book, urn: "urn:nabu:eng-web:#{book.downcase}",
+                              language: "eng", title: book)
+      end
+      assert_match(/non-scripture book #{book}/, error.reason)
+      refute_kind_of Nabu::ParseError, error, "a skip must not be a quarantine"
+    end
+  end
+
+  def test_parse_of_an_absent_book_raises_parse_error
+    error = assert_raises(Nabu::ParseError) do
+      parse_book("PSA", urn: "urn:nabu:vulgate:psa", title: "Psalmi")
+    end
+    assert_match(/PSA/, error.message)
+  end
+
+  def test_parse_of_malformed_xml_raises_parse_error
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "broken.usfx.xml")
+      File.write(path, "<usfx><book id=\"GEN\"><v id=\"1\"/>unclosed")
+      assert_raises(Nabu::ParseError) do
+        parser.parse(path, book: "GEN", urn: "urn:nabu:vulgate:gen", language: "lat", title: "Genesis")
+      end
+    end
+  end
+
+  private
+
+  def parse_book(book, urn:, title:)
+    parser.parse(FIXTURE, book: book, urn: urn, language: "lat", title: title)
+  end
+end

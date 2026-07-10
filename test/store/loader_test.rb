@@ -29,6 +29,19 @@ module Store
       end
     end
 
+    # TestAdapter variant whose parse DECLINES one ref by rule (P11-7): a
+    # Nabu::DocumentSkipped is not a quarantine — the loader counts it
+    # skipped-by-rule and never journals or errors it.
+    class SkippingAdapter < TestAdapter
+      def parse(document_ref)
+        if document_ref.id == "urn:nabu:test_adapter:beta"
+          raise Nabu::DocumentSkipped.new("no content", reason: "catalog-only (no content)")
+        end
+
+        super
+      end
+    end
+
     def setup
       @ledger = ledger_test_db
       @db = store_test_db
@@ -78,9 +91,10 @@ module Store
 
     def beta = build_document("beta", [%w[1 ἄνδρα]])
 
-    def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0)
+    def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0, skipped_by_rule: 0)
       assert_equal(
-        { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn, errored: errored },
+        { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn,
+          errored: errored, skipped_by_rule: skipped_by_rule },
         report.to_h
       )
     end
@@ -389,6 +403,29 @@ module Store
       params = JSON.parse(events.first.params_json)
       assert_equal "urn:nabu:test_adapter:beta", params.fetch("ref_id")
       assert_equal "deliberately corrupt document", params.fetch("error")
+    end
+
+    # -- skipped-by-rule (P11-7 fix 3) ---------------------------------------
+
+    def test_document_skipped_is_counted_by_rule_not_quarantined
+      report = @loader.load_from(SkippingAdapter.new, workdir: FIXTURES)
+
+      # alpha + gamma load; beta is a by-rule skip, NOT an error/quarantine.
+      assert_report report, added: 2, skipped_by_rule: 1
+      assert_equal 0, report.errored
+      assert_nil Nabu::Store::Document.first(urn: "urn:nabu:test_adapter:beta")
+      # a by-rule skip journals nothing (the 0-byte stance) — no quarantine row.
+      assert_empty provenance_events(event: "quarantined")
+    end
+
+    def test_skipped_ref_shields_its_row_from_the_withdrawal_sweep
+      # Load beta as a real document first (via the plain adapter), then a full
+      # load where beta is skipped-by-rule must NOT withdraw the existing row.
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      report = @loader.load_from(SkippingAdapter.new, workdir: FIXTURES, full: true)
+
+      assert_equal 0, report.withdrawn, "a skipped ref is present upstream — never withdrawn"
+      assert_equal 1, report.skipped_by_rule
     end
 
     # -- progress ticks (P2-6) -----------------------------------------------

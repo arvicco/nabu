@@ -169,6 +169,31 @@ class RebuildTest < Minitest::Test
     with_db { refute Nabu::Store::Source.first(slug: "corpus").enabled }
   end
 
+  # -- dictionary sources replay too (P11-4, the rebuild-safety pin) --------
+
+  def test_rebuild_replays_a_dictionary_source_identically
+    write_sources(<<~YAML)
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+        enabled: false
+    YAML
+    FileUtils.mkdir_p(@canonical)
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
+
+    first = rebuilder.run
+    assert_equal %w[lexica], first.outcomes.map(&:slug)
+    assert_equal 8, first.outcomes.first.report.added
+    before = dictionary_snapshot
+    refute_empty before.first, "expected dictionary entries after rebuild"
+
+    rebuilder.run
+
+    # db = f(canonical): a second rebuild re-mints ids but reproduces entries
+    # and citations byte-identically, revisions reset to 1.
+    assert_equal before, dictionary_snapshot
+    with_db { assert(Nabu::Store::DictionaryEntry.all.all? { |row| row.revision == 1 }) }
+  end
+
   # -- one succeeded run row per rebuilt source ----------------------------
 
   def test_writes_one_succeeded_rebuild_run_row_per_rebuilt_source
@@ -358,6 +383,22 @@ class RebuildTest < Minitest::Test
   end
 
   # Passage rows reduced to the content-bearing columns (ids excluded).
+  # Entries + citations modulo re-minted ids: content columns only, citation
+  # rows keyed by their owning entry's urn.
+  def dictionary_snapshot
+    with_db do
+      entries = Nabu::Store::DictionaryEntry.order(:urn).all.map do |entry|
+        entry.values.slice(:urn, :entry_id, :key_raw, :headword, :headword_folded,
+                           :gloss, :body, :content_sha256, :withdrawn)
+      end
+      citations = Nabu::Store::DictionaryCitation
+                  .join(:dictionary_entries, id: :dictionary_entry_id)
+                  .order(Sequel[:dictionary_entries][:urn], Sequel[:dictionary_citations][:seq])
+                  .select_map([Sequel[:dictionary_entries][:urn], :seq, :urn_raw, :cts_work, :citation, :label])
+      [entries, citations]
+    end
+  end
+
   def passage_snapshot
     with_db do
       Nabu::Store::Passage.order(:urn).all.map do |passage|
