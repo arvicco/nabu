@@ -96,7 +96,9 @@ oracc:
 
 lexica:
   adapter: Nabu::Adapters::Lexica
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10 ("flip all sources enabled" after
+                   # P11 merge): synced, 168,133 entries (LSJ + L&S incl. the
+                   # recovered alpha/theta files), define/nabu_define eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync lexica, then
                    # nabu define μῆνις / officium spot-checks)
   # PerseusDL/lexica (~160 MB git repo, CC BY-SA 4.0): LSJ + Lewis & Short —
@@ -107,7 +109,9 @@ lexica:
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
+                   # (complete Clementine canon), align OT witness eyeballed
+                   # (GEN 1.1, JON 1 trilingual).
                    # (CLAUDE.md checklist §6: bin/nabu sync vulgate — ~76 MB
                    # open-bibles clone — then spot-check nabu show
                    # urn:nabu:vulgate:mrk:2.3 and 5 random verses)
@@ -119,7 +123,8 @@ vulgate:
 
 eng-web:
   adapter: Nabu::Adapters::EngWeb
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
+                   # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
                    # open-bibles clone, shared with vulgate — then spot-check
                    # nabu show urn:nabu:eng-web:jon:1.1 and 5 random verses)
@@ -132,7 +137,8 @@ eng-web:
 
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
+                   # NT witness live in align; show --random eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
                    # clone — then spot-check nabu show urn:nabu:sblgnt:mark:2.3)
   # P11-5: the SBL Greek New Testament (Faithlife/SBLGNT, CC BY 4.0), 27
