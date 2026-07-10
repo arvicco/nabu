@@ -239,7 +239,7 @@ class AlignmentRegistryTest < Minitest::Test
 
   # -- the shipped registry -----------------------------------------------------
 
-  def test_shipped_registry_loads_the_five_way_nt_plus_the_biblical_trio
+  def test_shipped_registry_loads_the_five_way_nt_plus_oe_mark_and_the_biblical_trio
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
     registry = Nabu::AlignmentRegistry.load(path)
     work = registry.work("nt")
@@ -248,14 +248,18 @@ class AlignmentRegistryTest < Minitest::Test
                     urn:nabu:proiel:armenian-nt urn:nabu:proiel:marianus],
                  work.witnesses.take(5).map(&:document_urn),
                  "the five-way NT flagship (P11-3) is the shipped proof"
-    assert_equal ["sblgnt", "vulgate (Clementine)", "WEB (English)"], work.witnesses.drop(5).map(&:label),
-                 "P11-5 adds the SBLGNT and Vulgate NT witnesses; P11-8 the WEB English witness"
-    assert_includes work.witnesses[5].document_urns, "urn:nabu:sblgnt:mark"
-    assert_equal "MARK", work.witnesses[5].book_for("urn:nabu:sblgnt:mark")
-    assert_includes work.witnesses[6].document_urns, "urn:nabu:vulgate:mrk"
-    assert_equal "MARK", work.witnesses[6].book_for("urn:nabu:vulgate:mrk")
-    assert_includes work.witnesses[7].document_urns, "urn:nabu:eng-web:mrk"
-    assert_equal "MARK", work.witnesses[7].book_for("urn:nabu:eng-web:mrk")
+    assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)"],
+                 work.witnesses.drop(5).map(&:label),
+                 "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
+                 "Vulgate NT witnesses; P11-8 the WEB English witness"
+    assert_equal "urn:nabu:proiel:wscp", work.witnesses[5].document_urn,
+                 "the P12-1 OE Gospel of Mark rides the shared urn:nabu:proiel: namespace"
+    assert_includes work.witnesses[6].document_urns, "urn:nabu:sblgnt:mark"
+    assert_equal "MARK", work.witnesses[6].book_for("urn:nabu:sblgnt:mark")
+    assert_includes work.witnesses[7].document_urns, "urn:nabu:vulgate:mrk"
+    assert_equal "MARK", work.witnesses[7].book_for("urn:nabu:vulgate:mrk")
+    assert_includes work.witnesses[8].document_urns, "urn:nabu:eng-web:mrk"
+    assert_equal "MARK", work.witnesses[8].book_for("urn:nabu:eng-web:mrk")
   end
 
   def test_shipped_registry_loads_the_ot_work

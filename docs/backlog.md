@@ -2113,7 +2113,7 @@ own additions. Branch cut from enable-reference-shelf (PR #13) so the flips
 ride along. Sequential dispatch, live-smoke review between packets, real
 syncs owner-fired, fixture plans owner-approved before network (standing).
 
-## P12-1 · ISWOC adapter — Old English treebank  [tier: opus] [status: in-progress] [deps: —]
+## P12-1 · ISWOC adapter — Old English treebank  [tier: opus] [status: done] [deps: —]
 The survey's pick #1: five OE texts (~29,406 gold tokens) in PROIEL XML 2.1
 — the exact schema ProielParser already parses. Ælfric's Lives of Saints,
 Apollonius of Tyre, Anglo-Saxon Chronicles, Orosius, West-Saxon Gospel of
@@ -2132,6 +2132,132 @@ uncomment the prepared OE Mark line in config/alignments.yml (it renders
 "not synced" honestly until the owner syncs — P11-9 header-summary
 handles it), 02-sources row → READY, worklog (sha —). Suite+lint green.
 One commit, not pushed.
+
+### FIXTURE PLAN — Phase A findings (scouted 2026-07-10, page-level only)
+### OWNER-APPROVED 2026-07-10 — "Approved as is, including the third fixture"
+
+**Repo verdict: pin the ORIGINAL `iswoc/iswoc-treebank` (the project's own
+repo), NOT the syntacticus successor.** Evidence:
+- Original `iswoc/iswoc-treebank`: default branch `master`, **HEAD sha
+  `574c81cd9dbf8124290e869bc65078c303a36911`** (2023-05-02T11:55:56Z),
+  **`archived: true`** (GitHub read-only → genuinely frozen). Flat repo
+  root: one `<text>.xml` + `<text>.conll` per work.
+- Successor `syntacticus/syntacticus-treebank-data`: default branch `main`,
+  HEAD `525cee4fb40590d7d514376c11acaed1bdd91c15`, last commit
+  **2023-04-26** — i.e. it PREDATES the original's final commit. Not
+  archived, but carries no newer ISWOC data: the `iswoc/` subtree files are
+  byte-*similar* (±a few hundred bytes of export-time/whitespace drift), not
+  newer content. It also bundles `proiel/`, `torot/`, `menotec/` subtrees —
+  the SAME data the Proiel + Torot adapters already sync from their own
+  repos (double-load / urn-collision hazard).
+- Decision rationale: this exactly mirrors the established nabu Proiel
+  precedent (adapters/proiel.rb header): point `upstream_url` at the frozen
+  own-project repo, `sync_policy: frozen`, and note the syntacticus successor
+  for a future migration. Pinning the original means the inherited flat-root
+  `Proiel#discover` works verbatim — **NO `iswoc/`-subdir scoping code
+  needed** (that scoping is only required IF the successor is ever adopted;
+  documented in the adapter header as the future-migration note). The `ang`
+  language filter alone excludes the Romance texts.
+
+**File enumeration (original repo @ pinned sha, verified via `gh api` tree
++ raw `<source>` header peeks):** 15 texts total, 5 OE + 10 Romance.
+- KEEP (5 OE, all `<source language="ang">`): `wscp.xml` (2,735,960 B,
+  West-Saxon Gospels) · `æls.xml` (646,405 B, Ælfric's Lives of Saints;
+  **non-ASCII id `æls`**) · `apt.xml` (1,138,070 B, Apollonius of Tyre) ·
+  `chrona.xml` (1,070,236 B, Anglo-Saxon Chronicles) · `or.xml` (336,862 B,
+  Orosius; **two-letter id `or`**).
+- EXCLUDE (10 Romance, non-`ang`): `eustace` (fro, Old French) · `cge1`,
+  `cge2`, `coutdec-v-8` (por, Portuguese) · `alfonso-xi`, `ce`, `cdeluc`,
+  `ee1`, `ge4`, `varones` (spa, Spanish). All carry the same CC BY-NC-SA
+  header; excluded purely by the `ang` filter, never by name.
+
+**License (re-verified verbatim):**
+- README (github.com/iswoc/iswoc-treebank @ pinned sha): "…is freely
+  available under a [Creative Commons Attribution-NonCommercial-ShareAlike
+  3.0 License](http://creativecommons.org/licenses/by-nc-sa/3.0/us/)." Cite
+  as: "Bech, Kristin and Kristine Eide. 2014. The ISWOC corpus. Department of
+  Literature, Area Studies and European Languages, University of Oslo."
+- Per-source header (`wscp.xml <source>`): `<license>CC BY-NC-SA 3.0</license>`
+  + `<license-url>http://creativecommons.org/licenses/by-nc-sa/3.0/us/</license-url>`
+  (æls/or/apt/chrona headers agree). → `license_class: nc` (proiel/torot
+  sibling). No LICENSE file in the repo.
+
+**OE Mark citation evidence (`wscp.xml`, verified from raw header peek):**
+`<source id="wscp" language="ang"><title>West-Saxon Gospels</title>`; first
+`<div><title>Matthew 7</title>` (boundary fragment, tokens `citation-part="MATT 7.27"`),
+second `<div><title>Mark 1</title>` with tokens `citation-part="MARK 1.1"` —
+the space-separated `BOOK C.V` shape the P11-3 hub's `cts-verse` extractor
+already folds (MK→MARK), lifted by ProielParser into `passage.citation` with
+zero new plumbing. Confirms the prepared `urn:nabu:proiel:wscp` alignments
+line (hub witness #8).
+
+**Fixtures to fetch (STOP — awaiting owner approval; base
+`https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/`):**
+
+| Fixture file | Upstream (full B) | Trim scope | Est. trimmed B |
+|---|---|---|---|
+| `wscp-mark.xml` | `wscp.xml` (2,735,960) | PROIEL surgery: XML decl + `<proiel>` root + whole `<annotation>` + `<source>` metadata, then leading whole `<div>`s — the `Matthew 7` fragment div + `Mark 1` + `Mark 2` divs kept intact (no div/sentence split) | ~90–130 KB |
+| `æls-headN.xml` | `æls.xml` (646,405) | same PROIEL surgery: header + `<annotation>` + `<source>` + leading whole `<div>`s to ≥ ~15 sentences | ~35–55 KB |
+| `eustace-head.xml` | `eustace.xml` (469,127) | **exclusion probe** (see note): header + `<annotation>` + `<source language="fro">` + 1 leading whole `<div>` | ~10–15 KB |
+
+Exact trimmed byte counts recorded at fetch time (torot-manifest precedent).
+
+**Deviation flagged for approval — 3 fixtures, not the packet's 2.** The
+packet named "2 slices (one prose + wscp Mark)". I recommend adding a THIRD
+minimal slice — a trimmed Romance file (`eustace`, `fro`) — because the ONE
+thing this adapter adds over the TOROT pattern is the `ang` language filter,
+and honestly testing that filter's *exclusion* branch requires a non-`ang`
+file physically present in the fixture dir (discover must drop it). Without
+it the exclusion path is untested. It stays out of the conformance count
+(discover filters it before parse). If the owner prefers to hold to 2
+fixtures, the filter's exclusion branch can instead be unit-tested against a
+stubbed peek, but a real Romance header is the CLAUDE.md-preferred evidence.
+
+**Phase B design notes (what differs from TOROT):**
+- Manifest override only, PLUS a private `document_refs` override:
+  `super.select { |ref| ref.metadata["language"] == "ang" }` (few lines;
+  survey's "ang filter"). Everything else — peek_source, parse, git fetch —
+  inherited from Proiel wholesale (TOROT pattern).
+- URN namespace: inherit `urn:nabu:proiel:<source-id>` (TOROT precedent; the
+  ids wscp/æls/apt/chrona/or are disjoint from proiel/torot by upstream
+  convention). This is REQUIRED — the prepared alignments line hard-codes
+  `urn:nabu:proiel:wscp`. Manifest `id: "iswoc"` (source_id on refs), but urn
+  stays literal `proiel`, exactly as Torot does.
+- Non-ASCII-id check: `æls` mints `urn:nabu:proiel:æls` (æ preserved, NFC) —
+  add an explicit URN-mint test.
+- `sync_policy: frozen`, `enabled: false` in config/sources.yml.
+
+### Findings (Phase B, shipped 2026-07-10)
+- Built exactly per the approved plan: `Iswoc < Proiel`
+  (lib/nabu/adapters/iswoc.rb) — manifest override + one private
+  `document_refs` override (`ang` select on peeked header metadata). No
+  subdir scoping needed (original repo pinned). 19-test battery
+  (test/adapters/iswoc_test.rb): full conformance (incl. two-parse URN
+  stability), ang-filter exclusion tested against the real `fro` probe
+  (guarded non-vacuous: the probe file's presence + header are asserted),
+  non-ASCII `urn:nabu:proiel:æls` NFC mint, MARK 1.1 / MATT 7.27
+  citation-part lifting, real OE snippets, repo_url identity, registry
+  round-trip (frozen + disabled).
+- Fixtures in test/fixtures/iswoc/ (upstream sha256s in its README):
+  wscp-mark.xml 305,320 B (3 whole divs: Matthew 7 + Mark 1–2, 150
+  sentences), æls-head20.xml 86,069 B (20 sentences), eustace-head.xml
+  20,899 B (fro exclusion probe, 3 sentences).
+- Honest deviations from the plan text: (1) æls/eustace TRUNCATE their
+  single kept div after N whole sentences — upstream reality (æls div 1 =
+  197/198 sentences ≈ 630 KB; eustace div 1 ≈ 95 KB) made "whole divs" and
+  the approved size envelopes mutually impossible; sentences never split,
+  strict-parse verified, recorded in the fixture README. (2) wscp actual
+  305 KB vs the ~90–130 KB estimate — content scope exactly as approved
+  (the named 3 divs); the Phase A byte estimate was simply low.
+- Hub witness #8 live: urn:nabu:proiel:wscp uncommented in
+  config/alignments.yml; `bin/nabu align "MARK 1.1"` (read-only) renders
+  "wscp — not synced (urn:nabu:proiel:wscp is registered but not in the
+  catalog)" with the P11-9 header honestly counting "7 of 9 witnesses".
+  The shipped-registry pin in test/alignment_registry_test.rb was updated
+  to the new 9-witness truth (wscp at index 5) — a planned expectation
+  change, not a weakening.
+- Registered iswoc `enabled: false` / `sync_policy: frozen`; 02-sources
+  row 34 → READY. First real sync remains owner-fired.
 
 ## P12-2 · ASPR adapter — the OE poetry corpus  [tier: opus] [status: pending] [deps: P12-1]
 The survey's pick #2 and the only fully-open OE: the complete six-volume

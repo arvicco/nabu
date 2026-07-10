@@ -60,6 +60,15 @@ torot:
   # re-syncable, just not on a live schedule.
   sync_policy: manual
 
+iswoc:
+  adapter: Nabu::Adapters::Iswoc
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # ISWOC (Old English treebank, PROIEL 2.1 XML; ang-filtered — the repo's ten
+  # medieval Romance texts are out of corpus scope). Upstream iswoc-treebank is
+  # GitHub-archived at its final commit (2023-05-02): genuinely frozen, the
+  # proiel-treebank precedent. Successor repo note in the adapter header.
+  sync_policy: frozen
+
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
   enabled: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
