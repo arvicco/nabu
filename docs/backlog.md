@@ -2936,7 +2936,7 @@ Deferred honestly: Suprasliensis + the two Vitae (txt-only upstream; a
 future `ccmh-txt` family if wanted). Owner next step: real
 `bin/nabu sync ccmh`, eyeball, flip enabled.
 
-## P13-3 · ORACC expansion II  [tier: opus] [status: pending] [deps: —]
+## P13-3 · ORACC expansion II  [tier: opus] [status: done] [deps: —]
 Config-only breadth per the P11-6 pattern: candidate projects saao/saa02…
 saa19 (the rest of the State Archives of Assyria), riao, ribo, blms, dcclt
 subprojects — Phase A verifies per-project license (CC0 expected but READ
@@ -2945,6 +2945,64 @@ proposes the batch; owner approves the list (sizes matter — this could be
 100+ MB of zips); Phase B: PROJECTS list + scope comment + 02-sources.
 NEW-NODE-TYPE GUARD stands: if the parse-only smoke on owner-synced data
 hits unknown cdl shapes, census + report, do not hack.
+
+### Phase A proposal (2026-07-11) — OWNER-APPROVED 2026-07-11 (all + full-SAA extension)
+
+Scouted via `projects.json` + HEAD on each `json/<slug>.zip` (no zip
+downloads). All 25 packet candidates exist (HTTP 200, `application/zip`,
+`Last-Modified` present). **License is NOT readable in Phase A**: the
+standalone `<project>/metadata.json` serves an empty body over HTTP (200,
+0 bytes) for every candidate — the known upstream quirk already recorded in
+the ORACC row. License expectation is **CC0** for the whole batch, backed by
+(a) the P9-5a family scout (2026-07-08) that sampled every family here —
+saao, riao, ribo, blms, dcclt — and found CC0, and (b) the adapter's
+per-project license gate that STOPS the sync loudly on any non-`open`
+license at ingest (the real guarantee).
+
+| project | slug | zip? | size (MB) | Last-Modified | license evidence |
+|---|---|---|---|---|---|
+| saao/saa02 | saao-saa02 | 200 | 2.5 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa03 | saao-saa03 | 200 | 4.1 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa04 | saao-saa04 | 200 | 7.8 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa05 | saao-saa05 | 200 | 4.7 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa06 | saao-saa06 | 200 | 6.7 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa07 | saao-saa07 | 200 | 3.6 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa08 | saao-saa08 | 200 | 6.9 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa09 | saao-saa09 | 200 | 0.7 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa10 | saao-saa10 | 200 | 8.3 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa11 | saao-saa11 | 200 | 2.2 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa12 | saao-saa12 | 200 | 3.4 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa13 | saao-saa13 | 200 | 3.7 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa14 | saao-saa14 | 200 | 6.1 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa15 | saao-saa15 | 200 | 5.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa16 | saao-saa16 | 200 | 3.9 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa17 | saao-saa17 | 200 | 4.3 | 2023-07-11 | P9-5a saao=CC0; gate at sync |
+| saao/saa18 | saao-saa18 | 200 | 4.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa19 | saao-saa19 | 200 | 5.2 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| riao | riao | 200 | 17.3 | 2024-06-07 | P9-5a riao=CC0; gate at sync |
+| ribo | ribo | 200 | 6.6 | 2023-10-22 | P9-5a ribo=CC0; gate at sync |
+| blms | blms | 200 | 10.5 | 2024-06-28 | P9-5a blms=CC0; gate at sync |
+| dcclt/ebla | dcclt-ebla | 200 | 1.0 | 2024-08-19 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/jena | dcclt-jena | 200 | 0.9 | 2024-08-19 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/nineveh | dcclt-nineveh | 200 | 16.9 | 2024-10-16 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/signlists | dcclt-signlists | 200 | 11.6 | 2025-01-22 | P9-5a dcclt=CC0; gate at sync |
+| saao/saa20 | saao-saa20 | 200 | 4.4 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa21 | saao-saa21 | 200 | 3.6 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saas2 | saao-saas2 | 200 | 1.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+
+**APPROVAL (2026-07-11): all 25 approved — "Approve all 25, full SAA is
+the point" — and, full SAA being the point, the batch EXTENDS past the
+packet's saa02…saa19 cap** with saao/saa20 and saao/saa21 (HEAD-verified
+above: 200, `application/zip`, Last-Modified) and saao/saas2, evaluated
+and INCLUDED: its project page shows a lemmatised text corpus in the saao
+family (the Assyrian Eponym List / Assyrian King List editions from State
+Archives of Assyria Studies 2, Millard 1994, lemmatised by N. Morello
+2019) with a normal 1.5 MB zip — the same functional shape as the SAA
+volumes, not a different series shape. **Final batch: 28 projects,
+158.7 MB of zips** (original 25 = 149.2 MB). ribo subprojects
+(babylon2…10/sources/bab7scores) remain out — the packet says "ribo", the
+top-level project, which has its own 6.6 MB corpus. Parser unchanged; the
+NEW-NODE-TYPE GUARD is the owner-fired sync review gate as in P11-6.
 
 ## P13-4 · ATF translations — cuneiform readable  [tier: fable] [status: pending] [deps: P13-3]
 The SAA letters famously have running English; the JSON carries none of it
