@@ -2768,6 +2768,137 @@ texts properly checked" XML honestly, designs citations (text·chapter·verse
 where the transliteration carries them?), sizes the new small family. STOP
 — owner gate. Phase B: adapter, registry enabled:false, conformance, docs.
 
+### Phase A findings + FIXTURE PLAN — AWAITING OWNER APPROVAL (2026-07-11)
+
+**LICENSE (verbatim).** The PUB `-src` bundle carries its own grant. From
+`https://www.kielipankki.fi/download/ccmh-src/README.txt` verbatim:
+> Corpus Cyrillo-Methodianum Helsingiense: Corpus of Old Church Slavonic
+> texts, source
+> Metadata: http://urn.fi/urn:nbn:fi:lb-20140730106
+> Licence: CC-BY (https://creativecommons.org/licenses/by/4.0)
+> Resource shortname: ccmh-src
+
+The download index (`/download/ccmh-src/`) labels `ccmh-src.zip` (2.1M) **"CC
+BY"**; the Helsinki data catalogue record (`342b3dd2-…`) shows the access
+label **"Open"**. So the catalogue's bare "Open" resolves to **CC BY 4.0**.
+→ `license_class: attribution` (byte-for-byte the sblgnt precedent: "CC BY
+4.0" → `attribution`). The manifest will still read the string from the
+bundle at ingestion, not hardcode a class beyond this verified mapping.
+Attribution required: cite CCMH + `urn:nbn:fi:lb-20140730106`.
+
+**DOWNLOAD-PATH VERDICT — CLEAR (no auth).** PUB, publicly browsable, no
+login. Two equivalent surfaces, both verified reachable:
+- bundle zip: `https://www.kielipankki.fi/download/ccmh-src/ccmh-src.zip` (2.1M)
+- per-file www tree: `https://www.kielipankki.fi/download/ccmh-src/www/<text>.{html,txt,xml}`
+Not a git repo → `fetch_path` is HTTP file/zip (ASPR-`FileFetch` / ORACC-
+`ZipFetch` family), `sync_policy: manual`, `enabled: false`. **Recommend
+per-file FileFetch of the 4 gospel `.xml` files** (stable URLs, no unzip step)
+over the zip. No email/signup anywhere on the path — nothing BLOCKED.
+
+**STRUCTURE MAP (honest).** Each `<text>.html` is a LibreOffice-exported
+*description* page (3–22 KB) that links a `.txt` (7-bit-ASCII data) and, for
+the gospels only, a `.xml`. XML availability is the decisive fact:
+
+| text | .txt | .xml | genre / ref scheme |
+|---|---|---|---|
+| Codex Assemanianus | 317 KB | **563 KB** | gospel lectionary — XML re-sorted to canonical MAT→JOH order |
+| Codex Marianus | 413 KB | **618 KB** | tetraevangelium |
+| Codex Zographensis | 389 KB | **560 KB** | tetraevangelium |
+| Savvina kniga | 198 KB | **359 KB** | gospel lectionary |
+| Codex Suprasliensis | 861 KB | *(none)* | menaion/homilies — prose, folio scheme |
+| Vita Constantini | 71 KB | *(none)* | prose (later copy) |
+| Vita Methodii | 25 KB | *(none)* | prose (later copy) |
+
+The `.xml` is **CES `cesDoc` version 4** — genuinely structured:
+`<div type="book" id="b.MAT">` → `<div type="chapter" id="b.MAT.01">` →
+`<seg type="verse" id="b.MAT.01.01">`. Books are the four gospels, upstream
+codes **MAT / MAR / LUK / JOH** (note MAR not MRK, JOH not JHN — kept verbatim,
+not "corrected"). Two sub-shapes under one schema, both handled by a single
+streaming pass (accumulate all text between `<seg>`…`</seg>`):
+- **Assemanianus, Savvina:** verse text wrapped in `<ver id="1.01.01.0.0">`
+  children (id = the 7-digit gospel·ch·verse·line·parallel code); a seg may
+  hold several `<ver>` (line splits / lectionary parallels) → concatenated.
+- **Marianus, Zographensis:** verse text sits directly in `<seg>` mixed
+  content, no `<ver>`; chapter/seg ids NOT zero-padded (`b.MAT.5.23`).
+
+Quirks confirmed against the real files (to be pinned by fixtures): a
+non-canonical chapter `0` exists (`b.JOH.0.14` — colophon material); duplicate
+`(book,chapter,verse)` seg ids occur and carry **distinct** text (marianus 8,
+assemanianus 1, zographensis 3, savvina 0) → must disambiguate, never merge.
+Text is the corpus's **7-bit ASCII transliteration** (case-significant:
+`&`=big jer, `$`=small jer, `@`=jat, `O`=big jus, `E`=small jus, `w`=omega,
+`x`=xer, `T`=fita, plus editorial marks `*`=capital, `!`=titlo, `'`=poerok,
+`[…]`=interpolation, `%`=editor-flagged uncertainty). Stored **verbatim** (no
+Cyrillic back-transliteration — that is an enrichment, not canonical). ASCII ⇒
+NFC is trivially satisfied; `chu` gets the generic search fold. The catalogue's
+"not properly checked" warning is materially the `%` marks and the dup segs;
+both are handled, not cleaned.
+
+**CITATION / URN DESIGN.** One XML file = one manuscript = up to 4 gospel
+books; mirror the ASPR one-file-many-divs pattern — `discover` yields one
+`DocumentRef` per (manuscript, gospel-book), `parse` extracts that book div.
+- Document URN: `urn:nabu:ccmh:<manuscript>:<book>` e.g.
+  `urn:nabu:ccmh:assemanianus:mat` (book lowercased, sblgnt-style).
+- Passage URN: `…:<chapter>.<verse>` e.g. `urn:nabu:ccmh:assemanianus:mat:1.1`
+  (leading zeros stripped → integers, so shape-A `01` and shape-B `5` unify).
+- Passage grain = verse (`<seg type="verse">`); text = its concatenated
+  `<ver>`/mixed content, NFC.
+- **Uniqueness rule** (conformance): where a `(book,ch,verse)` repeats within a
+  document, append an occurrence suffix (`…:21.25` then `…:21.25#2`) so
+  passage URNs stay unique and stable across two parses. Exact suffix form
+  pinned in Phase B against the fixture dup.
+- `parser_family: ccmh-ces`; language `chu` for all.
+
+**DEDUPE DISCIPLINE (standing rule §3 — NEVER dedupe).** Confirmed against
+holdings: PROIEL already carries `urn:nabu:proiel:marianus`; TOROT carries a
+Zographensis and a Suprasliensis. CCMH's Marianus/Zographensis/Suprasliensis
+are **distinct editions** (Vajs–Kurc / Helsinki transliteration vs the
+treebank editions) → ingested as separate versions, no cross-source dedup.
+The genuine gaps CCMH closes — **Codex Assemanianus + Savvina kniga** — are
+absent from every current holding and both live in the XML core below.
+
+**SCOPE RECOMMENDATION (owner call).** Recommend **v1 = the 4 gospel
+manuscripts via the CES-XML parser** (Assemanianus, Marianus, Zographensis,
+Savvina). This delivers BOTH new prizes (Assemanianus, Savvina) AND 2 clean
+alt-editions (Marianus, Zographensis) with uniform book·ch·verse citations,
+low fixture risk, one small parser family, one small diff. **Defer** the 3
+TXT-only texts (Suprasliensis + the two Vitae): no XML, prose/folio 7-digit
+schemes whose semantics differ per text (fixture archaeology), and the
+Suprasliensis alt-edition value is already queued far richer in the obdurodon
+packet (#30) while TOROT holds one. They can be a later `ccmh-txt` extension
+if wanted. **If the owner prefers full-canon coverage now**, say so at the
+gate and I will add the `.txt` line parser + Suprasliensis/vitae fixtures in
+Phase B (larger diff, more quirk-pinning).
+
+**FIXTURE PLAN** (Phase B; the ONLY network step — trimmed real slices,
+retrieved 2026-07-11, from `…/download/ccmh-src/www/<t>.xml`, byte-identical
+heads/tails, structurally intact). Under `test/fixtures/ccmh/`:
+- `assemanianus.xml` — **shape A + lectionary prize + the dup-seg quirk.**
+  Trim to MAT 1 (genealogy, the `<ver>`-wrapped opening already sampled) +
+  the JOH 21 tail that carries the one duplicate `b.JOH.21.25` seg → exercises
+  `<ver>` concatenation, multi-`<ver>` segs, and the uniqueness-suffix path.
+- `savvina.xml` — **shape A + second prize.** Trim to MAT 1 + one LUK
+  pericope; confirms lectionary-with-`<ver>`, zero dups (control).
+- `marianus.xml` — **shape B + alt-edition + dup-seg + chapter-0.** Trim to
+  MAT 5 (Sermon slice, direct mixed content, no `<ver>`) + the `b.JOH.0.14`
+  colophon dup → exercises shape-B path, non-padded ids, chapter `0`, dup.
+- `zographensis.xml` — **shape B alt-edition control.** One short MAT chapter.
+- `README.md` — retrieval date/URL, license chain verbatim (CC BY 4.0 →
+  `attribution`, README.txt + zip label + catalogue "Open"), per-file table,
+  the transliteration/edito­rial-mark key, and the two sub-shape notes.
+Demo-parse evidence to report at Phase-B close: an Assemanianus verse, e.g.
+`urn:nabu:ccmh:assemanianus:mat:1.1` → `*k$nIg&I !rodstva !!iUxva . !sna
+!ddva . !sna *avra/am/l@ .` (Matthew 1:1, "The book of the generation of
+Jesus Christ, the son of David, the son of Abraham").
+
+Files touched Phase B (planned): `lib/nabu/adapters/ccmh.rb` +
+`lib/nabu/adapters/ccmh_ces_parser.rb`, `test/adapters/ccmh_test.rb`,
+`test/fixtures/ccmh/…`, `config/sources.yml` (ccmh: enabled:false,
+sync_policy:manual), `docs/02-sources.md` (row 19 → READY + alt-edition
+notes), worklog (sha —). One commit, not pushed.
+
+**STOP — FIXTURE PLAN — AWAITING OWNER APPROVAL. No fixtures fetched.**
+
 ## P13-3 · ORACC expansion II  [tier: opus] [status: pending] [deps: —]
 Config-only breadth per the P11-6 pattern: candidate projects saao/saa02…
 saa19 (the rest of the State Archives of Assyria), riao, ribo, blms, dcclt
@@ -2877,3 +3008,40 @@ verbatim, no new parser family, no fetch/discover changes. Dedup guard untouched
 LEMMA-ROW EVIDENCE: fixture load → `passage_lemmas` orv rows via the UNCHANGED
 Indexer plumbing; the opening NOUN lemma `артыкулъ` "article" at
 `…:StatutVKL1566-1` is attested by the pristine uppercase surface form `АРТЫКУЛЪ`.
+
+## P13-9 · Slovenian: goo300k + IMP  [tier: opus] [status: pending] [deps: P13-2]
+Owner scope ruling (2026-07-11): "there isn't much before Early Modern
+Slovenian at all, so it's in-scope." Survey-II picks #3/#4: goo300k
+(CLARIN.SI, gold-annotated, verbatim CC BY 4.0, 294k words 1584–1899) and
+IMP (CC BY-SA 4.0, 17.7M tokens, historical Slovenian). Two-phase, fixture
+gate: Phase A verifies CLARIN.SI download paths + license grants verbatim,
+maps formats (TEI? vertical? — survey II has the leads), decides one
+adapter family or two, proposes which of the two corpora first (or both)
+with sizes; STOP — owner gate. Phase B per approval. Registry
+enabled:false; language code sl (historical); 02-sources rows; worklog.
+
+## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: pending] [deps: P13-2]
+Owner (2026-07-11): "Wiktionary is a good start, could be used for other
+things as a basis. Such as PIE/comparativistics/reconstructions that we
+didn't even start touching yet." Two deliverables:
+(a) kaikki.org Wiktionary-OCS extract (~4,548 senses, "made available
+    under the same licenses as Wiktionary - both CC-BY-SA and GFDL" —
+    dual-license → attribution) onto the reference shelf: JSONL dictionary
+    family (third format after TEI + CSV), slug wiktionary-cu, lang chu,
+    folded-headword keying (Cyrillic OCS — existing chu fold), etymology
+    fields KEPT in the body (they carry the Proto-Slavic links).
+(b) SCOUT NOTE (no implementation): what kaikki offers for the
+    reconstruction axis — Proto-Slavic/Proto-Germanic/PIE reconstruction
+    entries exist in Wiktionary's extracts; survey scope, sizes, licensing
+    (same dual), and how a future "etymology/reconstruction shelf" might
+    join dictionaries (entries whose headwords are *reconstructed forms
+    linked to attested lemmas across the library's languages — the
+    comparativist's dream). Write findings into improvements.md as a new
+    register entry; NO adapter for it in this packet.
+Two-phase, fixture gate on (a). Registry enabled:false; 02-sources;
+worklog.
+
+## Slavic decisions record (owner, 2026-07-11)
+Freising (CC BY-ND): WAIT. Miklosich BCDH email: WAIT. Early Modern
+Slovenian: IN SCOPE (→ P13-9). Wiktionary OCS: GO (→ P13-10, with the
+reconstruction-axis scout note).
