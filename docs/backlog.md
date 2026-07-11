@@ -3420,7 +3420,7 @@ improvements §1.7 (stretch — take only if the phase runs to schedule):
 document/range vs the corpus (distinctive vocabulary, hapax list), gold
 shelves only, honest about coverage. CLI + optional MCP. Small.
 
-## P13-8 · Open-source finishers  [tier: opus] [status: pending] [deps: —]
+## P13-8 · Open-source finishers  [tier: opus] [status: done] [deps: —]
 CI badge in README (the repo HAS GitHub Actions CI — the P12-4 no-CI claim
 was wrong, verify + fix), CONTRIBUTING.md (house rules distilled from
 CLAUDE.md/dev-loop for outside contributors + the DCO note from the MIT
