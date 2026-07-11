@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div xmlns="http://www.tei-c.org/ns/1.0"
+     type="pb"
+     xml:lang="sl-bohoric"
+     xml:id="goo168-ZRC_00001-1584.pb.001"
+     n="ZRC_00001-1584.pb.001_Biblia"
+     facs="#ZRC_00001-001">
+   <ab type="head" xml:id="goo168-ZRC_00001-1584.ab.1">
+      <s part="I">
+         <choice>
+            <orig>
+               <w>X.</w>
+            </orig>
+            <reg>
+               <w lemma="x." ana="#Mr">x.</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>CAP.</w>
+            </orig>
+            <reg>
+               <w lemma="cap." ana="#Y">cap.</w>
+            </reg>
+         </choice>
+      </s>
+   </ab>
+   <ab type="p" xml:id="goo168-ZRC_00001-1584.ab.2">
+      <s>
+         <choice>
+            <orig>
+               <w>INu</w>
+            </orig>
+            <reg>
+               <w lemma="in" ana="#C">in</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="on" ana="#P">on</w>
+         <c> </c>
+         <w lemma="biti" ana="#Va">je</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ſvoje</w>
+            </orig>
+            <reg>
+               <w lemma="svoj" ana="#P">svoje</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>dvanajſt</w>
+            </orig>
+            <reg>
+               <w lemma="dvanajst" ana="#Ml">dvanajst</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Iogre</w>
+            </orig>
+            <reg>
+               <w lemma="joger" ana="#Ncm">jogre</w>
+               <desc>
+                  <gloss>apostol, učenec</gloss>
+                  <bibl>[sskj]</bibl>
+               </desc>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>k'</w>
+            </orig>
+            <reg>
+               <w lemma="k" ana="#S">k</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ſebi</w>
+            </orig>
+            <reg>
+               <w lemma="se" ana="#P">sebi</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>poklizal</w>
+            </orig>
+            <reg>
+               <w lemma="poklicati" ana="#Vme">poklical</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>inu</w>
+            </orig>
+            <reg>
+               <w lemma="in" ana="#C">in</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="biti" ana="#Va">je</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nym</w>
+            </orig>
+            <reg>
+               <w lemma="on" ana="#P">njim</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>oblaſt</w>
+            </orig>
+            <reg>
+               <w lemma="oblast" ana="#Ncf">oblast</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="dati" ana="#Vme">dal</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>zhes</w>
+            </orig>
+            <reg>
+               <w lemma="čez" ana="#S">čez</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nezhiſte</w>
+            </orig>
+            <reg>
+               <w lemma="nečist" ana="#Agp">nečiste</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Duhuve</w>
+            </orig>
+            <reg>
+               <w lemma="duh" ana="#Ncm">duhove</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>de</w>
+            </orig>
+            <reg>
+               <w lemma="da" ana="#C">da</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="biti" ana="#Va">bi</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>teiſte</w>
+            </orig>
+            <reg>
+               <w lemma="taisti" ana="#P">taiste</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>isganjali</w>
+            </orig>
+            <reg>
+               <w lemma="izganjati" ana="#Vmp">izganjali</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>inu</w>
+            </orig>
+            <reg>
+               <w lemma="in" ana="#C">in</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>vſe</w>
+            </orig>
+            <reg>
+               <w lemma="ves" ana="#P">vse</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>shlaht</w>
+            </orig>
+            <reg>
+               <w lemma="žlaht" ana="#Agp">žlaht</w>
+               <desc>
+                  <gloss>vsakovrsten</gloss>
+                  <bibl>Pleteršnik</bibl>
+               </desc>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Beteshe</w>
+            </orig>
+            <reg>
+               <w lemma="betež" ana="#Ncm">beteže</w>
+               <desc>
+                  <gloss>bolečina</gloss>
+                  <bibl>Pleteršnik</bibl>
+               </desc>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>inu</w>
+            </orig>
+            <reg>
+               <w lemma="in" ana="#C">in</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>vſe</w>
+            </orig>
+            <reg>
+               <w lemma="ves" ana="#P">vse</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>shlaht</w>
+            </orig>
+            <reg>
+               <w lemma="žlaht" ana="#Agp">žlaht</w>
+               <desc>
+                  <gloss>vsakovrsten</gloss>
+                  <bibl>Pleteršnik</bibl>
+               </desc>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Bolesni</w>
+            </orig>
+            <reg>
+               <w lemma="bolezen" ana="#Ncf">bolezni</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>osdraulali</w>
+            </orig>
+            <reg>
+               <w lemma="ozdravljati" ana="#Vmp">ozdravljali</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+   </ab>
+</div>

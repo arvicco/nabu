@@ -199,6 +199,31 @@ ccmh:
   # owner decision 2026-07-11. Upstream frozen since 2021: manual.
   sync_policy: manual
 
+goo300k:
+  adapter: Nabu::Adapters::Goo300k
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # goo300k (P13-9, OWNER-APPROVED option B 2026-07-11): the gold reference
+  # corpus of historical Slovene (CLARIN.SI hdl 11356/1025) — 89 texts /
+  # 294k words, 1584-1899, manually validated lemma/MSD/modernization. One
+  # 7.1 MB zip bitstream (Nabu::ZipFetch). CC BY 4.0 (deposit page verbatim)
+  # -> attribution. Passage text = the historical orig spelling; the gold
+  # token layer rides in annotations and feeds passage_lemmas (the sl lemma
+  # axis). Shares documents with imp as ALT-EDITIONS (conventions §3).
+  # Deposit frozen at v1.2 (2015): manual.
+  sync_policy: manual
+
+imp:
+  adapter: Nabu::Adapters::Imp
+  enabled: false  # flip after the owner-fired first real sync (150 MB GET is an owner decision)
+  # IMP (P13-9, same owner approval): goo300k's full-text SILVER sibling
+  # (CLARIN.SI hdl 11356/1031) — 658 texts / 17.7M tokens, 1584-1919, same
+  # imp-tei family. CC BY-SA 4.0 (deposit page verbatim) -> attribution.
+  # SILVER: upstream's own caveat "the annotations are automatic, so they
+  # contain a fair amount of errors" -> TEXT ONLY (owner default
+  # 2026-07-11): no tokens ingested, no lemma-index rows; the lemma index
+  # stays gold-only. Deposit frozen at 1.1 (2015): manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

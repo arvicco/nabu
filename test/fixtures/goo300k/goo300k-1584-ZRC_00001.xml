@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+     xml:id="goo168-ZRC_00001-1584"
+     xml:lang="sl-bohoric">
+   <teiHeader xml:lang="sl">
+      <fileDesc>
+         <titleStmt>
+            <title>goo300k: "Biblia" (1584)</title>
+         </titleStmt>
+         <extent xmlns:xi="http://www.w3.org/2001/XInclude">5969 <term xml:lang="en">words</term>
+            <term xml:lang="sl">besed</term>
+         </extent>
+         <publicationStmt>
+            <distributor>
+               <ref xml:lang="en" target="http://nl.ijs.si/">Natural Language Server, Jožef Stefan Institute</ref>
+            </distributor>
+            <idno>goo168-ZRC_00001-1584</idno>
+            <date>2014-07-28</date>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title type="orig" xml:lang="sl-bohoric">Biblia</title>
+               <title type="reg" xml:lang="sl">Biblija (vzorec)</title>
+               <author>Dalmatin, Jurij</author>
+               <date>1584</date>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p xml:lang="sl">Google nagrada za izdelavo jezikoslovnih modelov za starejšo slovenščino.</p>
+            <p xml:lang="en">Google research award "Language models of historical Slovene"</p>
+         </projectDesc>
+         <editorialDecl>
+            <normalization>
+               <p xml:lang="sl">Napake v OCR besedila popravljene.</p>
+               <p xml:lang="en">OCR mistakes in the text were manually corrected.</p>
+            </normalization>
+         </editorialDecl>
+         <samplingDecl>
+            <p xml:lang="sl">To elektronsko besedilo vsebuje samo strani III, 7b-III, 11a.</p>
+            <p xml:lang="en">This digital text contains only pages III, 7b-III, 11a.</p>
+         </samplingDecl>
+         <tagsDecl xmlns:xi="http://www.w3.org/2001/XInclude">
+            <namespace name="http://www.tei-c.org/ns/1.0">
+               <tagUsage gi="ab" occurs="64"/>
+               <tagUsage gi="bibl" occurs="287"/>
+               <tagUsage gi="body" occurs="1"/>
+               <tagUsage gi="c" occurs="5745"/>
+               <tagUsage gi="choice" occurs="4308"/>
+               <tagUsage gi="desc" occurs="295"/>
+               <tagUsage gi="div" occurs="8"/>
+               <tagUsage gi="facsimile" occurs="1"/>
+               <tagUsage gi="gloss" occurs="287"/>
+               <tagUsage gi="graphic" occurs="32"/>
+               <tagUsage gi="orig" occurs="4308"/>
+               <tagUsage gi="pc" occurs="1211"/>
+               <tagUsage gi="reg" occurs="4308"/>
+               <tagUsage gi="s" occurs="317"/>
+               <tagUsage gi="surface" occurs="8"/>
+               <tagUsage gi="text" occurs="1"/>
+               <tagUsage gi="w" occurs="10292"/>
+            </namespace>
+         </tagsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <textClass>
+            <catRef target="#Text.book"/>
+            <catRef target="#Text.religious"/>
+            <catRef target="#Text.translation"/>
+         </textClass>
+      </profileDesc>
+   </teiHeader>
+   <facsimile xmlns:xi="http://www.w3.org/2001/XInclude">
+      <surface xml:id="ZRC_00001-001"
+               n="ZRC_00001-1584.pb.001_Biblia"
+               corresp="http://nl.ijs.si/imp/zrc/dl/ZRC_00001-1584.html#pb.001">
+         <desc xml:lang="sl">Faksimile ZRC_00001, stran 1</desc>
+         <graphic n="orig"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-001.jpg"/>
+         <graphic n="medium"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-001_m.jpg"/>
+         <graphic n="small"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-001_s.jpg"/>
+         <graphic n="thumb"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-001_t.jpg"/>
+      </surface>
+      <surface xml:id="ZRC_00001-002"
+               n="ZRC_00001-1584.pb.002_Biblia"
+               corresp="http://nl.ijs.si/imp/zrc/dl/ZRC_00001-1584.html#pb.002">
+         <desc xml:lang="sl">Faksimile ZRC_00001, stran 2</desc>
+         <graphic n="orig"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-002.jpg"/>
+         <graphic n="medium"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-002_m.jpg"/>
+         <graphic n="small"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-002_s.jpg"/>
+         <graphic n="thumb"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00001/ZRC_00001-002_t.jpg"/>
+      </surface>
+   </facsimile>
+   <text xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="goo168-ZRC_00001-1584.text"
+         xml:lang="sl-bohoric">
+      <body>
+         <xi:include href="pages/goo168-ZRC_00001-1584.pb.001_Biblia.xml"/>
+         <xi:include href="pages/goo168-ZRC_00001-1584.pb.002_Biblia.xml"/>
+      </body>
+   </text>
+</TEI>
