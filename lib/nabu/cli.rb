@@ -457,13 +457,15 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller)"
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller, Wiktionary-OCS)"
     long_desc <<~HELP, wrap: false
       The dictionary shelf (architecture §11): look a dictionary form up in
       the lexica the corpus holds locally — LSJ (A Greek-English Lexicon,
       grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA from
-      the Perseus Digital Library, and Bosworth-Toller (An Anglo-Saxon
-      Dictionary, ang; CC BY 4.0, LINDAT dump). Entries print whole:
+      the Perseus Digital Library, Bosworth-Toller (An Anglo-Saxon
+      Dictionary, ang; CC BY 4.0, LINDAT dump), and Wiktionary Old Church
+      Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL — etymologies with
+      their Proto-Slavic/PIE chains kept in the body). Entries print whole:
       headword, short gloss, then the full entry body as structured plain
       text with sense labels on their own lines (the MCP nabu_define surface
       is the bounded sibling).
@@ -485,23 +487,25 @@ module Nabu
       ingested, inscriptions, fragment collections) are honest misses, not
       links.
 
-      --lang grc|lat|ang restricts to one shelf; --limit caps the entries.
+      --lang grc|lat|ang|chu restricts to one shelf; --limit caps the entries.
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
         nabu define λόγος              # the long one, whole
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
+        nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
     HELP
-    option :lang, type: :string, banner: "grc|lat|ang",
-                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, ang → Bosworth-Toller"
+    option :lang, type: :string, banner: "grc|lat|ang|chu",
+                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
+                        "ang → Bosworth-Toller, chu → Wiktionary-OCS"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      if options[:lang] && !%w[grc lat ang].include?(options[:lang])
-        raise Thor::Error, "define: --lang must be grc, lat or ang"
+      if options[:lang] && !%w[grc lat ang chu].include?(options[:lang])
+        raise Thor::Error, "define: --lang must be grc, lat, ang or chu"
       end
 
       config = Nabu::Config.load

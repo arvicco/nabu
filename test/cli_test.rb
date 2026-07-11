@@ -103,10 +103,11 @@ class CLITest < Minitest::Test
     assert_match(/LSJ/, out)
     assert_match(/Lewis & Short/, out)
     assert_match(/Bosworth-Toller/, out)
+    assert_match(/Wiktionary/, out, "must document the OCS shelf (P13-10)")
     assert_match(/μηνις finds μῆνις/, out, "must show the diacritic-folding promise")
     assert_match(/aethele finds æðele/, out, "must show the OE ASCII-folding promise")
     assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
-    assert_match(/--lang grc\|lat\|ang/, out)
+    assert_match(/--lang grc\|lat\|ang\|chu/, out)
     assert_match(/nabu define virtus/, out, "must show a Latin example")
   end
 

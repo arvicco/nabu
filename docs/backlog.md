@@ -3491,7 +3491,7 @@ adapter family or two, proposes which of the two corpora first (or both)
 with sizes; STOP — owner gate. Phase B per approval. Registry
 enabled:false; language code sl (historical); 02-sources rows; worklog.
 
-## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: pending] [deps: P13-2]
+## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: done] [deps: P13-2]
 Owner (2026-07-11): "Wiktionary is a good start, could be used for other
 things as a basis. Such as PIE/comparativistics/reconstructions that we
 didn't even start touching yet." Two deliverables:
@@ -3511,6 +3511,159 @@ didn't even start touching yet." Two deliverables:
     register entry; NO adapter for it in this packet.
 Two-phase, fixture gate on (a). Registry enabled:false; 02-sources;
 worklog.
+
+### FIXTURE PLAN — P13-10 Phase A findings (2026-07-11, network-verified)
+
+**OWNER-APPROVED 2026-07-11** (relayed via orchestrator): fixture plan
+approved as written; the "character"-POS single-letter entries are KEPT
+("yes, keep").
+
+**Upstream (a), verified live.** kaikki.org Old Church Slavonic extract.
+Download URL (per-language subdir, relative href resolved):
+`https://kaikki.org/dictionary/Old%20Church%20Slavonic/kaikki.org-dictionary-OldChurchSlavonic.jsonl`
+— HTTP 200, **44.0 MB**, one JSON object per LINE. Page reports **4548
+distinct words** (~5.7k senses across POS breakdown). Source: enwiktionary
+dump 2026-07-06, extracted 2026-07-09 (wiktextract / Ylönen). Ranged GET
+(bytes 0–120000 → HTTP 206) pulled 49 clean records for shape analysis.
+- **Deprecation caveat (surfaced for the owner):** the file is labelled
+  "DEPRECATED, will be removed in the near future" (wiktextract issue
+  #1178). It is the *postprocessed per-language* artifact the site itself
+  builds on and it **serves today**; Ylönen steers bulk re-processors to
+  the 23 GB raw enwiktionary extract instead. Plan: target this live URL
+  (FileFetch sha-pin + conditional GET; a future 404 → clean FetchError),
+  document the deprecation in the adapter note + 02-sources, and record the
+  durable fallback = filter the full enwiktextract by `lang_code == "cu"`.
+  enabled:false + sync_policy:manual means the owner-fired first sync
+  re-confirms availability, exactly the Bosworth-Toller "frozen deposit"
+  posture.
+
+**License — verbatim, located.** On `https://kaikki.org/dictionary/`
+("Copyright and license"): *"This data is made available under the same
+licenses as Wiktionary - both CC-BY-SA and GFDL."* Plus the wiktextract
+academic-citation request. Dual license → `license_class "attribution"`
+(the SA arm governs), MCP-surface-safe. Same grant covers the
+reconstruction extracts below.
+
+**Record shape (confirmed, not assumed).** One record = one WORD × POS ×
+etymology. Top-level keys observed: `word` (Cyrillic headword, e.g. царь,
+о, богъ), `pos` (noun/prep/conj/pron/num/adv/particle/**character**),
+`lang` ("Old Church Slavonic"), `lang_code` **"cu"**, `senses` (array;
+each sense: `glosses` [array of strings], `id`, `links`, optional
+`tags`/`examples`/`categories`/`raw_glosses`), `etymology_text` (plain
+text — **carries the Proto-Slavic/PIE links to KEEP**, e.g. царь →
+"Shortened from Proto-Slavic \*cěsařь … Proto-Germanic \*kaisaraz … Latin
+Caesar"; о → "From Proto-Slavic \*o(b), from Proto-Indo-European
+\*h₃ebʰi"), `etymology_templates`, `etymology_number` (homograph
+disambiguator: 1/2/3), `forms` (canonical + romanization + full paradigm),
+`head_templates`, `related`/`derived`/`synonyms`/`descendants`. NO
+top-level record id; sense `id` is `en-<word>-cu-<pos>-<hash>`.
+- **Mapping to DictionaryEntry:** one record → one entry (senses collapse
+  into the body, the LSJ/B-T precedent). `headword` = `word` NFC;
+  `headword_folded` = `Normalize.search_form(word, language: "chu")` (the
+  EXISTING chu fold = generic downcase+Mn-strip — titlo U+0483 /
+  palatalization U+0484 are `\p{Mn}`, so цар҄ь folds toward царь; NO new §9
+  rule, matching CCMH/P13-2's chu layer). `gloss` = first sense's first
+  gloss, best-effort nil. `body` = `etymology_text` + numbered sense
+  glosses (etymology KEPT — the reconstruction seed), NFC. `citations` = []
+  (Wiktionary quotes unanchored — B-T precedent).
+- **entry_id (unique-per-file, stable):** `word` alone is NOT unique
+  (homographs: и ×3, о/а/е ×2 in the 49-record sample, split by
+  pos/etymology_number). Plan: `"<word>:<pos>"` + `":<etymology_number>"`
+  when present; a residual same-word+pos+no-ety collision (to be measured
+  on the full file at fixture build) gets a positional `":<n>"` suffix.
+  urn `urn:nabu:dict:wiktionary-cu:<entry_id>`, back-link
+  en.wiktionary.org/wiki/<word>#Old_Church_Slavonic.
+- **"character" POS caveat:** single-letter alphabet entries (б, з, к…)
+  are ~half the *alphabetic-head* sample but a small fraction of the 4548
+  overall. They are legitimate glossed Wiktionary entries; plan = **KEEP**
+  (canonical; harmless to `define`), fixture stratified so they do not
+  dominate. Flag for owner if exclusion preferred.
+
+**Fixture plan (Phase B, ~250–350 records, stratified, trimmed real
+JSONL).** Selected deterministically from a full-file download (network
+step, README notes retrieval date + URL + selection method):
+1. multi-sense (о/prep 7 senses; царь 2) — body sense-linearization;
+2. etymology-bearing with Proto-Slavic AND PIE links — the KEEP assertion;
+3. Cyrillic edge cases: titlo/palatalization marks (цар҄ь), yus/jer
+   letters, romanization forms, a `character` entry or two;
+4. homographs (о, и, а, е) — entry_id disambiguation;
+5. POS spread (noun/prep/conj/pron/num/adv/particle/character);
+6. no-etymology and no-gloss records — best-effort nil paths;
+7. **≥1 gospel-frequent lemma for the Phase B `--lang chu` demo** (candidate
+   царь "emperor/tsar", or богъ/человѣкъ/слово) — a TOROT/PROIEL/CCMH gold
+   `chu` lemma whose folded form must equal the Wiktionary folded headword
+   (corpus lemma spelling to be confirmed against the fixture at build).
+
+**Deliverable (b) — reconstruction scout (network-verified, for
+improvements.md).** kaikki ships the same-licensed reconstruction extracts:
+- **Proto-Slavic** `.../Proto-Slavic/kaikki.org-dictionary-ProtoSlavic.jsonl`
+  — 45.4 MB, ~5195 words, `lang_code "sla-pro"`. Record shape ≈ the OCS
+  shape PLUS a **`descendants`** tree: `*kara` → {East Slavic: be/ru/uk
+  ка́ра; South Slavic: **cu** OCS …} with romanizations. **This is the
+  crosswalk edge** — a reconstructed headword linked to attested reflexes
+  across the library's languages.
+- **Proto-Indo-European**
+  `.../Proto-Indo-European/kaikki.org-dictionary-ProtoIndoEuropean.jsonl`
+  — 11.5 MB, ~1781 words, `lang_code "ine-pro"`. (Proto-Germanic
+  `gem-pro` also exists — the царь chain crosses it.)
+- Both same dual CC-BY-SA + GFDL, both same "deprecated" postprocessed
+  label. NO adapter this packet; the improvements.md register entry
+  describes a future "reconstruction/etymology shelf" joining reconstructed
+  headwords to attested lemmas via two signals already in reach: (i) the
+  `etymology_text` links we KEEP in every OCS body (forward, text), and
+  (ii) the structured `descendants` arrays of the Proto-* extracts
+  (reverse, graph) — the comparativist join across chu/orv/ru/got.
+
+### P13-10 findings (Phase B, 2026-07-11)
+
+- **Full-file reality (46,091,411 B, 4,615 lines / 4,548 distinct words,
+  sha256 5bd61e74…, all `lang_code "cu"`):** POS census noun 2439 / verb
+  1284 / adj 385 / pron 107 / adv 101 / name 63 / **character 60** (kept,
+  owner ruling) / num 40 / suffix 39 / prep 36 / prefix 26 / conj 24 /
+  particle+intj 8 / contraction+det+punct 3; 2,617 etymology-bearing
+  (1,797 Proto-Slavic, 279 PIE); 4 records glossless in every sense; max
+  18 senses (слово). **Residual entry-id collisions measured: 10 pairs**
+  (each ×2) under `word:pos[:ety]` — блажимъ:verb, блѧдь:noun, боль:noun,
+  видимъ:verb:2 (collides WITH an ety number), гобина:noun, гобино:noun,
+  начѧтъ:verb, ненавидимъ:verb, привести:verb, ⰿⰾⱑⰽⱁ:noun (Glagolitic) —
+  resolved by the positional `:n` suffix in file order (2nd = `:2`).
+- **Shipped:** `WiktionaryJsonlParser` (9th parser family; streamed
+  line-by-line JSON, entry_id `word:pos[:ety][:n]`, gloss = first gloss
+  string of the first glossed sense with trailing colon trimmed, body =
+  etymology_text KEPT verbatim first + one line per sense (raw_glosses
+  preferred — keeps "(anatomy)"-style labels; nesting path joined " — ";
+  numbered only when >1 sense; glossless senses render their upstream
+  `tags` so bodies are never empty), NFC; malformed line/record →
+  ParseError with line number) + `WiktionaryCu` adapter (`content_kind
+  :dictionary`, FileFetch single-file, :http_zip probe with metadata_url
+  nil, slug wiktionary-cu, lang chu, `urn:nabu:dict:wiktionary-cu:<id>`)
+  + registry enabled:false sync_policy:manual + CLI/MCP define `lang`
+  gates widened to chu (Query::Define again needed ZERO changes) +
+  architecture §11 fourth-occupant paragraph + 02-sources #46
+  SURVEYED→READY + improvements **§1.11** (the reconstruction-shelf
+  register entry from the Phase A scout).
+- **Fold verdict confirmed in data:** the existing generic chu fold
+  suffices — the fixture's ан҃г (titlo U+0483) folds to анг, цар҄ь's
+  U+0484 strips, jers/yuses stay; no conventions §9 entry (the P13-1
+  survey's open question, settled).
+- **Fixture:** 278 stratified byte-verbatim lines (2,252,722 B), all 10
+  collision pairs + TOROT-gold demo lemmas + all 4 glossless + 18-sense
+  слово + 4-per-POS + 25 PIE + 40 Proto-Slavic + every-32nd sweep + 12
+  extra homograph groups; recipe + full-file census in
+  test/fixtures/wiktionary-cu/README.md.
+- **Demo (scratch catalog built from the fixture; live db untouched):**
+  `define богъ --lang chu` → богъ [attribution] gloss "god", body
+  "Inherited from Proto-Slavic *bogъ.\ngod" — богъ is a TOROT
+  Zographensis gold lemma, the define-glosses join proven in-suite too
+  (`Query::Define#glosses` carries "god"/"say, speak" for богъ/глаголати);
+  `define о --lang chu` → both homographs (о:character:1 the letter,
+  о:prep:2 with 7 numbered senses and the PIE chain *h₃ebʰi verbatim);
+  `status` → wiktionary-cu entries=278.
+- Remaining owner action (P13-gate): fire `bin/nabu sync wiktionary-cu`
+  (~44 MB single GET), eyeball `define` output, flip enabled. NOTE the
+  upstream deprecation flag — if the URL is ever pulled, the 02-sources
+  fallback (filter the full enwiktextract by lang_code) becomes a small
+  follow-up packet.
 
 ## Slavic decisions record (owner, 2026-07-11)
 Freising (CC BY-ND): GO — superseding ruling later same day: "BY-ND is
