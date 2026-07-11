@@ -1,0 +1,30 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All four files are documented TRIMS (whole: false) of the CCMH gospel CES
+# XML files: whole chapters/books removed, every retained line byte-identical
+# to upstream, closing tags re-added where a book was cut mid-file. A fresh
+# GET returns the full files, so they are fetched for URL-liveness only,
+# never byte-compared. adapter_test is null: the ccmh adapter test asserts
+# trimmed book/verse counts an untrimmed upstream file would false-fail.
+# Re-apply the README trims after any refresh.
+source: ccmh
+adapter_test: null
+retrieved: 2026-07-11
+files:
+  - path: assemanianus.xml
+    url: https://www.kielipankki.fi/download/ccmh-src/www/assemanianus.xml
+    whole: false
+    trim: header + MAT book cut to chapter b.MAT.01 + JOH book cut to chapter b.JOH.21 (incl. the duplicate b.JOH.21.25 segs and the file tail); 563,453 B -> 13,107 B, well-formed
+  - path: marianus.xml
+    url: https://www.kielipankki.fi/download/ccmh-src/www/marianus.xml
+    whole: false
+    trim: header + MAT book cut to chapter b.MAT.5 + JOH book cut to chapter b.JOH.0 (the heading list with the duplicate b.JOH.0.14 segs) + re-added closing tags; 618,378 B -> 6,255 B, well-formed
+  - path: savvina.xml
+    url: https://www.kielipankki.fi/download/ccmh-src/www/savvina.xml
+    whole: false
+    trim: header + MAT book cut to chapter b.MAT.01 + LUK book cut to chapter b.LUK.01 (opens at verse 32 — lectionary) + re-added closing tags; 358,691 B -> 9,058 B, well-formed
+  - path: zographensis.xml
+    url: https://www.kielipankki.fi/download/ccmh-src/www/zographensis.xml
+    whole: false
+    trim: header + MAT book cut to chapter b.MAT.3 (the lacunose ms's first chapter) + re-added closing tags; 559,818 B -> 1,474 B, well-formed
