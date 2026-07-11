@@ -86,7 +86,7 @@ class RetentionTest < Minitest::Test
 
     # status counts it; show labels it.
     status = Nabu::StatusReport.render(registry: registry, db: @db, ledger: @ledger)
-    assert_match(/docs=5 passages=5 retired=1/, status)
+    assert_match(/docs=5 pass=5 retired=1/, status)
     shown = Nabu::Query::Show.new(catalog: @db).run(urn("alpha"))
     assert shown.retired_upstream
     refute shown.withdrawn
