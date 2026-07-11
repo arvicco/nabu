@@ -101,10 +101,15 @@ oracc:
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
-  # The ORACC JSON carries word glosses but NO prose translations (P9-5a:
-  # they live only in the ATF #tr.en source layer) — nothing to opt into;
-  # aligned English is a future separate acquisition.
-  translations: false
+  # P13-4 (owner-approved 2026-07-11, "Two-stage SAA-first crawl"): the
+  # running English is crawled from the official per-text HTML fragments
+  # (no public bulk ATF carries it) and ingested as -en sibling documents —
+  # `show <tablet> --parallel` renders SAA like the Homers. Stage 1 crawls
+  # the saao projects (Oracc::TRANSLATION_PROJECTS, ~250 MB, owner-fired);
+  # stage 2 extends that list. Translation prose is CC BY-SA 3.0 project
+  # content → per-document license_override "attribution" (source stays
+  # open/CC0).
+  translations: true
 
 lexica:
   adapter: Nabu::Adapters::Lexica

@@ -308,15 +308,18 @@ module Nabu
       applies to the sliced rows only).
 
       PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
-      document or passage urn, find the sibling edition of the SAME work in
-      LANG (sources ingest translations only when their registry entry sets
-      `translations: true`) and render the two SPAN-GROUPED by citation suffix.
-      A verse-for-verse translation pairs line by line — :1.1 Greek next to
-      :1.1 English. A card-cited prose translation (both English Homers) anchors
-      one block of text at a card's first line: the original lines are listed,
-      then the translation ONCE, labeled with its coverage in the original's
-      numbering (`eng [:1.1 — covers :1.1–:1.43]`) plus a clip note when a range
-      shows only part of a card. A suffix present in only one edition renders
+      document or passage urn — or an ORACC tablet, whose translation is the
+      -en sibling document (P13-4) — find the sibling edition of the SAME
+      work in LANG (sources ingest translations only when their registry
+      entry sets `translations: true`) and render the two SPAN-GROUPED by
+      citation suffix. A verse-for-verse translation pairs line by line —
+      :1.1 Greek next to :1.1 English. A card-cited prose translation (both
+      English Homers) anchors one block of text at a card's first line: the
+      original lines are listed, then the translation ONCE, labeled with its
+      coverage in the original's numbering (`eng [:1.1 — covers :1.1–:1.43]`)
+      plus a clip note when a range shows only part of a card. ORACC's
+      paragraph-grained SAA units render as exactly such blocks over the
+      tablet's o.1/r.5 lines. A suffix present in only one edition renders
       honestly one-sided, never fuzzed. Works with --full-urn.
 
       Examples:

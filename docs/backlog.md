@@ -3004,7 +3004,7 @@ volumes, not a different series shape. **Final batch: 28 projects,
 top-level project, which has its own 6.6 MB corpus. Parser unchanged; the
 NEW-NODE-TYPE GUARD is the owner-fired sync review gate as in P11-6.
 
-## P13-4 · ATF translations — cuneiform readable  [tier: fable] [status: pending] [deps: P13-3]
+## P13-4 · ATF translations — cuneiform readable  [tier: fable] [status: done] [deps: P13-3]
 The SAA letters famously have running English; the JSON carries none of it
 (P9-5a: 0 translation nodes; English lives in the ATF #tr.en lines / HTML).
 Phase A (design-heavy scout): find the bulk ATF acquisition path (oracc
@@ -3015,6 +3015,276 @@ citations mirror the tablet lines → --parallel works) vs annotations vs
 hub witnesses — argue, pick, size. STOP — owner gate (this is the
 "cuneiform readable like Homer" payoff and the phase's fable packet).
 Phase B: implement per approved design.
+
+### Findings (P13-4 Phase B, 2026-07-11 — shipped)
+
+Implemented exactly per the approved design (one deviation noted below).
+Suite 1415 runs / 21,684 assertions green; lint clean; one commit, not
+pushed.
+
+- **`OraccTranslationParser`** (new family member, nokogiri): fragment +
+  sibling corpusjson → `-en` Document. All extraction rules are
+  MARKUP-based: prose = `span.cell` text (state-notice cells have none →
+  skipped by rule); the print marker is its own `span.xtr-label` element
+  (excluded by element, no prose regexes); restorations survive verbatim
+  ("[tran]sferred"). Prose at a non-line anchor reattaches to the next
+  line-start row (never silently dropped; unresolvable → loud ParseError);
+  two units on one label JOIN (urn uniqueness). Identity: corpusjson
+  project/textid must mint the caller's urn.
+- **Oracc adapter**: `translations:` kwarg via the established
+  `SourceRegistry::Entry#build_adapter` seam (default provably inert —
+  pre-P13-4 behavior byte-for-byte). Crawl runs after the zip phases,
+  PROJECT-SCOPED (`TRANSLATION_PROJECTS = saao/*`, stage 1); tr-en lists
+  machine-read from metadata formats; fragments land at
+  `<workdir>/html-en/<slug>/` OUTSIDE the zip-managed trees (a build swap
+  can never attic them); sequential + 0.25 s delay, tmp+rename writes,
+  resumable (zip 304 ⇒ missing-only; changed build ⇒ project re-crawl);
+  soft-404 ("404\n" bodies) counted missing, never written; per-project
+  crawl record in fetch notes ("saao-saa01 html-en: 1 fetched, 0 cached,
+  1 missing"). Discover is file-driven (-en ref per fragment with a live
+  tablet corpusjson; orphans counted skipped-by-rule).
+- **`Query::Parallel`**: second work family — `ORACC_DOCUMENT` pattern
+  (tablet urn IS the work; siblings = `<work>-<variant>`), both directions
+  resolve. Span-grouping unchanged: SAA's paragraph units render as :block
+  over the tablet's own o.1/r.5 lines. CLI `show --parallel` + MCP
+  `nabu_show parallel: true` light up with zero renderer changes.
+- **License**: `-en` docs carry `license_override: "attribution"`
+  (CC BY-SA 3.0 SAAo content statement; evidence quoted in the fixtures
+  README) — verified through the Loader into documents.license_override;
+  tablets stay NULL (inherit open/CC0).
+- **Fixtures** (per approved plan): saao-saa01 P224395 pair (corpusjson
+  whole from `saao-saa01.zip` + real 54 KB fragment with the two
+  break-anchored notice cells), fragments for the fixtured rimanum tablets
+  (P405432 13 KB, P405134 7 KB — primed/seal labels), trimmed saa01
+  metadata (tr-en gate: X010028 = the real untranslated text) + catalogue.
+  The saa01 slice ships the REAL NESTED zip root (saao-saa01/saa01/…).
+  DEVIATION from the Phase A table: fixture corpusjson path is
+  `saao-saa01/saa01/corpusjson/…` (nested reality), not the flat path the
+  plan sketched; rimanum fragments came in under estimate.
+- **Demo (scratch store, fixture-loaded)**: `show
+  urn:nabu:oracc:saao-saa01:P224395 --parallel` renders
+  `block [:o.1 — covers :o.1..:o.3]` — akk `a-na LUGAL EN-ia` /
+  `ARAD-ka {1}10-ha-ti` / `lu DI-mu a-na LUGAL EN-ia` then eng "To the
+  king, my lord: Your servant Adda-hati. Good health to the king, my
+  lord!" — cuneiform readable like Homer.
+- **Owner-fired next**: `bin/nabu sync oracc` after merge = stage-1 crawl
+  (saao, ~4.7k texts ≈ 250 MB, ~20 min at the polite delay). Stage 2 =
+  extend `TRANSLATION_PROJECTS`. Hungarian (etcsri tr-hun) remains a
+  config-shaped follow-up.
+
+### Findings & design (P13-4 Phase A, 2026-07-11 — DESIGN + FIXTURE PLAN — AWAITING OWNER APPROVAL)
+
+**Verdict up front.** There is NO public bulk ATF carrying the translations —
+that acquisition path is dead end-to-end (evidence below). The aligned running
+English IS bulk-obtainable, from the official per-text rendered-HTML endpoint
+(`/<project>/<textid>/html`), machine-aligned to the corpusjson we already hold
+via shared node refs. Attachment model: **(a) aligned-translation documents in
+the P7-4 sibling shape** — the SAA unit-grain reality is exactly what the
+P8-1b span-grouped `--parallel` renderer was built for; `show URN --parallel`
+gives the Homer reading experience with near-zero new render machinery.
+License: translations are **CC BY-SA 3.0 → `attribution`** (per-document
+`license_override`, the P10-4 mechanism), NOT the JSON build's CC0.
+
+#### 1. Acquisition — where the English actually lives (all probed 2026-07-11)
+
+Dead ends, each verified:
+- **Project json zips carry no prose translations** (re-confirmed on the
+  sanctioned sample `saao-saa09.zip`, 755 KB/27 files: corpusjson has 0
+  translation nodes, matching P9-5a's saa01 scan). The zip's `index-tra.json`
+  is a STEMMED English search index (instances like
+  `saao/saa09:P333952_project-en.22.9`) — proof translation documents exist in
+  the build, but the index carries word stems, not prose. The 194 KB
+  `saao-saa09-portal.json` is project essays (65 chunks, all `index.html`),
+  not per-text translations.
+- **github.com/oracc/catf** ("Canonical ATF version of Oracc data which is
+  permitted to be released under CC0") covers our exact translation-bearing
+  scope — saao saa01–saa21 + saas2 + saao, rinap, riao, ribo — but is
+  **C-ATF transliteration only: 0 `#tr` lines** (checked saao-saa09.catf
+  whole-file: 11 `&P` texts, no translation protocol lines), and stale
+  (last pushed 2019-09 vs the 2024-06 JSON builds). No etcsri/rimanum/dcclt.
+- **Per-text `.atf`, `.xtf`, `<id>_project-en.json`, and `xml.zip` endpoints
+  are all soft-404s** (HTTP 200 with a literal 4-byte `404\n` body, or 0-byte
+  JSON) on every mirror probed: upenn, build-oracc, LMU Munich. The
+  `oracc/publicdata` repo is empty (2016). P9-5a's ".atf endpoints 404" stands.
+
+The live path:
+- **`https://oracc.museum.upenn.edu/<project>/<textid>/html`** — the official
+  P4 per-text fragment (served with `access-control-allow-origin: *`, i.e.
+  intended for programmatic reads). It interleaves the transliteration rows
+  with translation cells: each transliteration `<tr>` carries
+  `id="P224395.5"` (**the SAME node ref as the corpusjson `line-start`
+  d-node's `ref` field**), and each translation unit anchors at its first row
+  via `data-tlat-ref="P224395_project-en.N"`, its prose in a
+  `<td class="t1 xtr" data-tlit-id="P224395.5">` cell. Alignment is therefore
+  mechanical: HTML ref → corpusjson `line-start` ref → `label` ("o 4") → our
+  frozen passage suffix (`o.4`). Verified on saao/saa01 P224395 against the
+  synced canonical corpusjson: anchors .2/.5/.12/.34 → `o 1`/`o 4`/`o 11`/
+  `r 30`, exact.
+- **Which texts to fetch is machine-readable**: each project's `metadata.json`
+  (in the zips we already sync) carries `formats["tr-en"]` — the exact list of
+  translated text ids. Local evidence: saao-saa01 **264/265**, rimanum
+  **378/378**, etcsri **1448/1456** (+1441 Hungarian `tr-hun` — future
+  option), rinap-rinap1 **88/96**, dcclt 1229/4980 (lexical lists, expectedly
+  partial); saa09 11/11. SAA coverage is effectively total — the famous
+  running English is all there.
+- Sizes: a typical SAA letter fragment ≈ 55 KB (the giant saa09 prophecy
+  compilation P333952: 290 KB). Full 33-project tr-en scope ≈ est. 8–10k
+  texts ≈ **400–500 MB, one-time crawl** (~1.5 h at a polite 2 req/s);
+  SAA-only ≈ ~4.7k texts ≈ 250 MB. No per-file `Last-Modified` on `/html` →
+  freshness gates on the project ZIP's Last-Modified (zip unchanged ⇒ build
+  unchanged ⇒ skip project's crawl entirely). Recommend full in-scope crawl;
+  SAA-first is the fallback if the owner wants a smaller first sync.
+
+#### 2. License — the honest layered reality
+
+- The **CC0 statements attach to the JSON build files** ("This data is
+  released under the CC0 license", in every zip file incl. `index-tra.json`) —
+  and the prose translations are deliberately NOT in those files.
+- **`oracc/catf`'s README wording** — ATF data "which is *permitted* to be
+  released under CC0" — plus the fact that catf strips translations, implies
+  the translation layer is exactly what is NOT under the CC0 umbrella.
+- The **SAAo project footer** states verbatim: "**Content released under a CC
+  BY-SA 3.0 license, 2007-20**" (the site-wide licensing page scopes its CC
+  BY-SA to "this online documentation"; the SAAo statement covers project
+  content). The translations originate in the printed SAA volumes (Helsinki,
+  Parpola et al., 1987–), republished on SAAo.
+- → Translation documents are labeled **`attribution` (CC BY-SA 3.0)** via
+  `documents.license_override` (P10-4 mechanism, as UD birchbark/rnc/
+  ruthenian) while the oracc source stays `open`. Attribution is MCP-safe.
+  Attribution string: "CC BY-SA 3.0 (SAAo/ORACC project content; SAA volume
+  authors per catalogue)".
+
+#### 3. Format — the #tr.en / unit-grain reality
+
+ORACC ATF has three translation forms (doc/help/editinginatf/translations):
+interlinear `#tr.en:` per line, `@translation parallel` (mirrored structure),
+and `@translation labeled` (blocks introduced by `@(o 1)` / `@label o 17 -
+r 2` label or label-RANGE). **SAAo uses labeled translations** — the rendered
+unit structure is the measured reality:
+- saao/saa01 P224395 (typical letter): **39 transliteration lines, 6
+  translation units** — e.g. unit 1 anchors at `o 1` and covers o 1–o 3 ("To
+  the king, my lord: Your servant Adda-hati. Good health to the king, my
+  lord!"), unit 2 at `o 4` covers o 4–o 10, etc. **Paragraph-grained, NOT
+  1:1.**
+- saao/saa09 P333952 (poetry/prophecy): 214 lines, 55 units (~4 lines/unit) —
+  finer, still block-grained. Per-line 1:1 is just the degenerate case.
+- Two P224395 units anchor at NON-line rows ("(Break)", "(Rest destroyed)" —
+  rendered `$`-state notices): prose-free, skipped by rule (counted); a
+  prose-bearing unit anchored at a break row (none seen yet) reattaches to
+  the next line-start row within the unit.
+- Unit prose begins with the print edition's line marker "(1) ", "(4) " —
+  alignment metadata now carried by the citation; stripped at parse, noted in
+  the parser docs (exact rule TDD'd against real fixtures).
+
+#### 4. Design — the attachment argument and pick
+
+**(a) Aligned-translation documents (P7-4 sibling shape) — CHOSEN.**
+One new document per translated text: `urn:nabu:oracc:<slug>:<textid>-en`
+(P/Q ids never contain hyphens; no collision with tablet urns or passage
+suffixes), language `eng`, `license_override: attribution`, title
+"<designation> (English translation)". One passage per translation unit,
+suffix = the ANCHOR line's frozen label suffix (`o.1`, `r.30`) — a suffix
+that exists in the tablet by construction. Then P8-1b span-grouping does the
+rest: the anchor OWNS tablet lines up to the next anchor, a multi-line unit
+renders as a :block (tablet lines then the English once, coverage-labeled), a
+1:1 unit as a :pair — **the ORACC labeled-translation model and the span-group
+ownership rule are the same model**; this is precisely the card-cited-Homer
+case the renderer was rebuilt for. Honest caveat (same as Homer cards): a
+labeled RANGE ending before the next anchor still owns the gap lines — the
+block shows slightly more tablet context than the label claimed, never less.
+One code change needed in `Query::Parallel#sibling_edition`: it is
+CTS-only today; add the ORACC document pattern
+(`\Aurn:nabu:oracc:[^:]+:[PQ][^:.-]+\z` as work; sibling = urn `<work>-…`,
+language = LANG) — ~15 lines + tests. The CLI/MCP surfaces then light up
+unchanged: `nabu show <tablet-urn> --parallel` and MCP `nabu_show`
+`parallel: true, parallel_lang: eng`. Translations are also first-class
+documents: English fulltext `search`, `show`, honest per-document license.
+
+**(b) Annotations on original passages — REJECTED.** Unit prose stuffed into
+the anchor passage's `annotations_json` has no render surface (`show
+--parallel` can't see it; annotations are token/analysis metadata by house
+convention), misrepresents a multi-line unit as a property of one line, makes
+English unsearchable without new plumbing, and cannot carry its own
+(different!) license label. Every honest fix rebuilds model (a) piecemeal.
+
+**(c) Alignment-hub witnesses — REJECTED.** Architecture §10 draws the line
+itself: the hub is CROSS-source, N-way, per-WORK with a shared citation
+vocabulary; Parallel is "within-source translation pairing". Tablets are
+~8–10k independent "works" — a registry entry per tablet is config sprawl the
+registry was never meant for, and the hub renders sentence lists, not the
+interleaved reading page. This is definitionally Parallel's job.
+
+#### 5. Implementation sketch (Phase B)
+
+1. **Fetch** (same oracc source — no cross-source canonical reads): after the
+   zip phase, per project read `metadata.json` `formats["tr-en"]`, crawl
+   `/<project>/<id>/html` → `<workdir>/<slug>/html-en/<id>.html` via
+   `ZipFetch.default_http` (vendored certs), polite rate limit, resumable
+   (skip existing; full re-crawl of a project only when its zip changed);
+   attic contract for upstream-dropped ids; counts in fetch notes. WebMock'd
+   tests. (~100–120 lines)
+2. **Parser** `OraccTranslationParser` (nokogiri, already a dep): input =
+   html fragment + sibling corpusjson path (for ref→label); walk xtr cells in
+   order → units; skip prose-free non-line anchors (counted); strip print
+   markers; NFC; mint `<doc>-en:<label→dots>` passages;
+   `license_override: attribution`. (~180 lines + tests incl. conformance)
+3. **Discover**: emit an `-en` DocumentRef per `html-en/<id>.html` whose
+   sibling corpusjson exists, metadata carrying both paths + title. (~40
+   lines)
+4. **Parallel**: ORACC sibling pattern as above. (~15 lines + tests)
+5. **Docs/registry**: sources.yml oracc `translations: true` note; 02-sources
+   ORACC row (translation acquisition + license layering); architecture §3
+   note (sibling model gains the ORACC pattern — one paragraph); mcp.md line;
+   backlog + worklog.
+   Sizing: **≈ half a P10-1** — a solid fable day, no new gems, schema
+   untouched (license_override exists).
+
+#### 6. Fixture plan (all real upstream, fetched at Phase B fixture time)
+
+Reuse the five existing corpusjson fixtures; add the html fragments + one SAA
+letter pair:
+
+| File (under test/fixtures/oracc/) | Size | whole? | Why |
+|---|---|---|---|
+| `rimanum/html-en/P405432.html` | ~30 KB est | whole | translation for an ALREADY-fixtured corpusjson (rimanum is 378/378 tr-en); Akkadian admin, P-number |
+| `rimanum/html-en/P405134.html` | ~20 KB est | whole | second rimanum pair (short) |
+| `saao-saa01/corpusjson/P224395.json` | 25 KB | whole | the fable case: SAA letter, byte-identical to the synced canonical copy (zip URL noted) |
+| `saao-saa01/html-en/P224395.html` | 55 KB | whole | 6 paragraph units over 39 lines INCLUDING the two break-anchored prose-free cells (the skip rule's regression case) |
+| `saao-saa01/metadata.json` | few KB | trimmed formats | `formats.tr-en` gating test: saa01 has one text with atf but no tr-en (265 vs 264) — keep that id in the trim so the no-translation skip is tested |
+
+HTML fragments are kept WHOLE (trimming rendered HTML risks structural lies);
+if P405432's fragment surprises at >100 KB, substitute the smallest
+translated rimanum text. README notes: retrieval date, endpoint URLs, the
+CC BY-SA 3.0 evidence quotes (SAAo footer verbatim + catf README verbatim),
+the "no public bulk ATF with translations" finding, and the soft-404 record.
+
+#### 7. Acceptance (Phase B)
+
+Conformance + idempotency green for `-en` docs; `bin/nabu show
+urn:nabu:oracc:saao-saa01:P224395 --parallel` renders o.1–o.3 + "To the king,
+my lord…" as a :block (fixture-loaded, demo evidence in the final report);
+`search` hits English prose; license_override attribution visible in show
+output; suite+lint green; one commit, not pushed.
+
+**DESIGN + FIXTURE PLAN — OWNER-APPROVED 2026-07-11** ("Approved design,
+Two-stage SAA-first crawl"): model (a) sibling `-en` documents + per-text
+HTML crawl + `attribution` labeling, as proposed. Crawl staging: TWO-STAGE,
+SAA-FIRST — stage 1 (owner-fired) crawls the saao projects (~250 MB);
+stage 2 (the remaining translated projects: rimanum, etcsri, rinap1, riao,
+ribo, blms, dcclt*) is a later owner-fired run. The crawl path is
+PROJECT-SCOPED from the start: the fetch serves a translation-project list,
+so stage 2 is a list extension (the established `PROJECTS`-scope pattern),
+no machinery change between stages.
+
+Decision points as approved:
+1. **Model (a)** — sibling translation documents, `--parallel` renders tablets
+   like Homer. (b)/(c) rejected with reasons above.
+2. **Acquisition = per-text HTML crawl** (the only public machine path;
+   official endpoint, CORS-open, ref-aligned), SAA-first two-stage as above.
+3. **License: translations labeled `attribution` (CC BY-SA 3.0)** per the
+   SAAo content statement — NOT CC0; per-document override, source stays open.
+4. Hungarian (etcsri, 1441 texts) supported by the same design later — v1 is
+   English only.
 
 ## P13-5 · Psalms alignment work  [tier: opus] [status: pending] [deps: —]
 Cross-shelf gem: new `psalms` work in config/alignments.yml — LXX-Swete

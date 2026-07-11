@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "fileutils"
 require "json"
 
 module Nabu
@@ -62,12 +63,35 @@ module Nabu
     # below. Both go through ZipFetch.default_http (the vendored-cert path),
     # since oracc.museum.upenn.edu serves an incomplete TLS chain.
     #
-    # == Translations
+    # == Translations (P13-4; registry `translations: true`, default inert)
     #
-    # None ingested — the JSON carries word glosses (gw) but NO prose
-    # translations (P9-5a: 0 translation nodes across 265 SAA texts; running
-    # English lives only in the ATF #tr.en source layer). Aligned English is
-    # a future separate acquisition; the registry records translations: false.
+    # The JSON carries word glosses (gw) but NO prose translations (P9-5a: 0
+    # translation nodes across 265 SAA texts) — and no public bulk artifact
+    # does (catf is transliteration-only C-ATF; per-text .atf/.xtf are
+    # soft-404s). The running English is acquired from the official per-text
+    # fragment `/<project>/<textid>/html` and ingested as sibling documents
+    # (`<tablet-urn>-en`, OraccTranslationParser), the P7-4 shape that makes
+    # `show <tablet> --parallel` render like the Homers.
+    #
+    # - CRAWL (fetch, after the zip phases): PROJECT-SCOPED — the served list
+    #   is TRANSLATION_PROJECTS (owner staging 2026-07-11: stage 1 = the saao
+    #   projects; stage 2 extends the list, no machinery change). Which texts
+    #   have English is machine-read from each project metadata.json's
+    #   `formats["tr-en"]`. Fragments land OUTSIDE the zip-managed project
+    #   trees (<workdir>/html-en/<slug>/<id>.html) so a zip swap never attics
+    #   them; the crawl itself never deletes (retention by construction).
+    #   Politeness: sequential, CRAWL_DELAY between GETs, resumable — an
+    #   unchanged build (zip 304) re-fetches only files missing locally, a
+    #   changed build re-crawls the project (no per-fragment Last-Modified
+    #   upstream). A soft-404 body (ORACC answers missing pages with a 200
+    #   "404\n") is counted missing and never written.
+    # - DISCOVER is file-driven: one -en ref per crawled fragment whose
+    #   tablet corpusjson is live (an orphan fragment is skipped by rule and
+    #   counted); so stage-2 fragments ingest the sync after they land.
+    # - LICENSE: the prose is SAAo/ORACC project *content* ("Content released
+    #   under a CC BY-SA 3.0 license" — project footer), NOT the JSON build's
+    #   CC0; translation documents carry license_override "attribution"
+    #   (P10-4) while the source stays "open".
     class Oracc < Nabu::Adapter
       # In-scope project paths (ORACC project ids; subprojects are
       # slash-paths). Extending scope = adding a path here + owner-fired
@@ -91,6 +115,22 @@ module Nabu
         riao ribo blms
         dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
       ].freeze
+
+      # Stage-1 translation-crawl scope (owner: "Two-stage SAA-first crawl",
+      # 2026-07-11): the saao projects. Stage 2 = the remaining translated
+      # projects (rimanum, etcsri, rinap1, riao, ribo, blms, dcclt*), added
+      # here when the owner fires it — a list change, no machinery change.
+      TRANSLATION_PROJECTS = PROJECTS.grep(%r{\Asaao/}).freeze
+
+      # Crawled fragments live OUTSIDE the zip-managed <slug>/ trees: a zip
+      # swap diffs only its own tree, so fragments are never atticked/deleted
+      # by the next build.
+      TRANSLATIONS_DIRNAME = "html-en"
+
+      # Seconds between crawl GETs — sequential and polite against a
+      # university server (~4 texts/s ceiling; the crawl is one-time per
+      # build and resumable).
+      CRAWL_DELAY = 0.25
 
       ZIP_BASE_URL = "https://oracc.museum.upenn.edu/json"
 
@@ -118,6 +158,20 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # +translations+ (P13-4): when true, fetch also crawls the
+      # TRANSLATION_PROJECTS' English fragments and discover yields the -en
+      # sibling documents. The default (false) is provably inert — tablets
+      # only, exactly the pre-P13-4 behavior. No-arg construction stays the
+      # registry contract; the flag arrives via
+      # SourceRegistry::Entry#build_adapter for opted-in sources.
+      # +crawl_delay+ exists for the WebMock'd tests (0); real syncs keep the
+      # polite default.
+      def initialize(translations: false, crawl_delay: CRAWL_DELAY)
+        super()
+        @translations = translations
+        @crawl_delay = crawl_delay
       end
 
       # P11-2: ORACC is the HTTP-zip fetch path, so the remote-health probe
@@ -170,19 +224,29 @@ module Nabu
             next
           end
           skipped += files.count { |path| File.empty?(path) }
+          skipped += orphan_fragment_count(workdir, project) if @translations
         end
         Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
       end
 
-      # Delegate to the OraccJsonParser with the title discover resolved from
-      # the catalogue. No language: the parser derives the per-text primary
-      # language from the data itself.
+      # Tablets go to the OraccJsonParser (title from the catalogue, language
+      # derived from the data); -en refs (metadata "kind" => "translation")
+      # go to the OraccTranslationParser with their sibling corpusjson.
       def parse(document_ref)
-        OraccJsonParser.new.parse(
-          document_ref.path,
-          urn: document_ref.id,
-          title: document_ref.metadata["title"]
-        )
+        if document_ref.metadata["kind"] == "translation"
+          OraccTranslationParser.new.parse(
+            document_ref.path,
+            urn: document_ref.id,
+            corpusjson_path: document_ref.metadata["corpusjson"],
+            title: document_ref.metadata["title"]
+          )
+        else
+          OraccJsonParser.new.parse(
+            document_ref.path,
+            urn: document_ref.id,
+            title: document_ref.metadata["title"]
+          )
+        end
       end
 
       # Download/unpack each project zip into <workdir>/<slug> via the shared
@@ -200,7 +264,8 @@ module Nabu
         ensure
           fetches.each_value(&:cleanup!)
         end
-        report(workdir, fetches)
+        crawl_notes = crawl_translations!(workdir, fetches, progress: progress)
+        report(workdir, fetches, crawl_notes)
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "oracc fetch failed into #{workdir}: #{e.message}"
       end
@@ -240,24 +305,101 @@ module Nabu
         end
       end
 
-      def report(workdir, fetches)
+      def report(workdir, fetches, crawl_notes)
         shas = fetches.transform_values(&:sha)
         Nabu::FetchReport.new(
           sha: shas.values.last, fetched_at: Time.now,
-          notes: fetch_notes(workdir, fetches, shas),
+          notes: fetch_notes(workdir, fetches, shas, crawl_notes),
           repos: shas.transform_keys { |project| zip_url(project) }
         )
       end
 
       # "rimanum=<sha12> (338 texts, 40 catalog-only (empty)) …" — the honest
       # per-project record, including the empty corpusjson files discover
-      # will skip. Attic activity rides along as in the git adapters.
-      def fetch_notes(workdir, fetches, shas)
+      # will skip. Attic activity and the per-project crawl record ride along.
+      def fetch_notes(workdir, fetches, shas, crawl_notes)
         notes = shas.map do |project, sha|
           "#{slug(project)}=#{sha[0, 12]} (#{project_counts(project_dir(workdir, project))})"
         end.join(" ")
         atticked = fetches.values.sum { |fetch| fetch.atticked.size }
-        atticked.positive? ? "#{notes} · atticked #{atticked} upstream-deleted file(s)" : notes
+        notes = "#{notes} · atticked #{atticked} upstream-deleted file(s)" if atticked.positive?
+        crawl_notes.empty? ? notes : "#{notes} · #{crawl_notes.join(' ')}"
+      end
+
+      # -- the stage-scoped translation crawl (P13-4; see class note) --------
+
+      # One pass over TRANSLATION_PROJECTS after the zip phases: GET each
+      # tr-en text's fragment into <workdir>/html-en/<slug>/. Returns the
+      # human note fragments ("saao-saa01 html-en: 264 fetched, 0 cached,
+      # 1 missing"). Silent (empty) when translations are off or nothing is
+      # listed.
+      def crawl_translations!(workdir, fetches, progress: nil)
+        return [] unless @translations
+
+        TRANSLATION_PROJECTS.filter_map do |project|
+          ids = translated_ids(project_dir(workdir, project))
+          next nil if ids.empty?
+
+          progress&.call("Crawling #{project} translations (#{ids.size} texts)…")
+          counts = crawl_project!(workdir, project, ids, zip_changed: !fetches.fetch(project).not_modified?)
+          "#{slug(project)} html-en: #{counts[:fetched]} fetched, " \
+            "#{counts[:cached]} cached, #{counts[:missing]} missing"
+        end
+      end
+
+      # The texts with an English translation, machine-read from the project
+      # metadata's formats block; [] when the tree or the block is absent
+      # (an envelope-only or never-fetched project has nothing to crawl).
+      def translated_ids(dir)
+        path = File.join(dir, "metadata.json")
+        return [] unless File.file?(path)
+
+        Array(JSON.parse(File.read(path)).dig("formats", "tr-en")).map(&:to_s).sort
+      rescue JSON::ParserError
+        []
+      end
+
+      # Sequential, polite, resumable: an unchanged build fetches only what
+      # is missing locally; a changed build refreshes every fragment (no
+      # per-fragment Last-Modified upstream — the zip's is the build's).
+      # Soft-404 bodies are counted missing, never written; a write is
+      # tmp+rename so an interrupted crawl never leaves a torn fragment.
+      def crawl_project!(workdir, project, ids, zip_changed:)
+        dir = File.join(workdir, TRANSLATIONS_DIRNAME, slug(project))
+        FileUtils.mkdir_p(dir)
+        counts = { fetched: 0, cached: 0, missing: 0 }
+        ids.each do |id|
+          target = File.join(dir, "#{id}.html")
+          next counts[:cached] += 1 if File.file?(target) && !zip_changed
+
+          sleep(@crawl_delay) if @crawl_delay.positive? && (counts[:fetched] + counts[:missing]).positive?
+          body = get_fragment(project, id)
+          next counts[:missing] += 1 if soft_404?(body)
+
+          File.binwrite("#{target}.tmp", body)
+          File.rename("#{target}.tmp", target)
+          counts[:fetched] += 1
+        end
+        counts
+      end
+
+      def get_fragment(project, id)
+        url = "#{METADATA_BASE_URL}/#{project}/#{id}/html"
+        response = ZipFetch.default_http.get(url)
+        unless response.status == 200
+          raise Nabu::FetchError, "oracc translation crawl: HTTP #{response.status} for #{url}"
+        end
+
+        response.body.to_s
+      rescue Faraday::Error => e
+        raise Nabu::FetchError, "oracc translation crawl: transport error for #{url}: #{e.message}"
+      end
+
+      # ORACC answers a missing per-text page with a 200 whose body is a
+      # literal "404\n" (verified on .atf/.xtf/fragment endpoints, P13-4
+      # Phase A) — a soft-404, honestly a missing text, not damage.
+      def soft_404?(body)
+        body.strip == "404"
       end
 
       def project_counts(dir)
@@ -277,7 +419,7 @@ module Nabu
 
         check_license!(dir, project)
         titles = catalogue_titles(dir)
-        Dir.glob(File.join(dir, "corpusjson", "*.json")).reject { |path| File.empty?(path) }.map do |path|
+        tablets = Dir.glob(File.join(dir, "corpusjson", "*.json")).reject { |path| File.empty?(path) }.map do |path|
           id = File.basename(path, ".json")
           Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
@@ -285,6 +427,41 @@ module Nabu
             path: File.expand_path(path),
             metadata: { "project" => slug(project), "title" => titles[id] || id }
           )
+        end
+        tablets + translation_refs(workdir, project, dir, titles)
+      end
+
+      # One -en ref per crawled fragment whose tablet corpusjson is live
+      # (file-driven — see the class Translations note); nothing when the
+      # adapter was built without translations. The ref carries the sibling
+      # corpusjson path (ref→label alignment) and the catalogue-derived title.
+      def translation_refs(workdir, project, dir, titles)
+        return [] unless @translations
+
+        Dir.glob(File.join(workdir, TRANSLATIONS_DIRNAME, slug(project), "*.html")).filter_map do |path|
+          id = File.basename(path, ".html")
+          corpusjson = File.join(dir, "corpusjson", "#{id}.json")
+          next nil if !File.file?(corpusjson) || File.empty?(corpusjson)
+
+          Nabu::DocumentRef.new(
+            source_id: MANIFEST.id,
+            id: "urn:nabu:oracc:#{slug(project)}:#{id}-en",
+            path: File.expand_path(path),
+            metadata: { "project" => slug(project), "kind" => "translation",
+                        "corpusjson" => File.expand_path(corpusjson),
+                        "title" => "#{titles[id] || id} (English translation)" }
+          )
+        end
+      end
+
+      # Crawled fragments whose tablet corpusjson is not live: translation_refs
+      # skips them (a translation without its tablet is unrenderable), so the
+      # census counts them by rule.
+      def orphan_fragment_count(workdir, project)
+        dir = project_dir(workdir, project)
+        Dir.glob(File.join(workdir, TRANSLATIONS_DIRNAME, slug(project), "*.html")).count do |path|
+          corpusjson = File.join(dir, "corpusjson", "#{File.basename(path, '.html')}.json")
+          !File.file?(corpusjson) || File.empty?(corpusjson)
         end
       end
 

@@ -245,6 +245,59 @@ module Query
       assert_nil result.right
     end
 
+    # -- ORACC tablets (P13-4): <tablet-urn> ↔ <tablet-urn>-en ------------------
+
+    TABLET_URN = "urn:nabu:oracc:saao-saa01:P224395"
+    TABLET_EN_URN = "urn:nabu:oracc:saao-saa01:P224395-en"
+
+    def load_tablet_pair
+      load_edition(TABLET_URN, "akk",
+                   [["o.1", "a-na LUGAL"], ["o.2", "ARAD-ka"], ["o.3", "lu šul-mu"], ["o.4", "ša LUGAL"]],
+                   title: "SAA 01 175")
+      load_edition(TABLET_EN_URN, "eng",
+                   [["o.1", "To the king, my lord: your servant. Good health!"], ["o.4", "As to the king."]],
+                   title: "SAA 01 175 (English translation)")
+    end
+
+    def test_oracc_tablet_finds_its_en_sibling_and_span_groups_the_units
+      load_tablet_pair
+
+      result = run_parallel(TABLET_URN)
+      assert_equal TABLET_EN_URN, result.right.urn
+      # The paragraph unit anchored at o.1 owns tablet lines o.1..o.3 (up to
+      # the next anchor) — the card-cited-Homer block, on a tablet.
+      assert_equal %i[block pair], kinds(result)
+      block = result.groups.first
+      assert_equal ":o.1", block.covers_first
+      assert_equal ":o.3", block.covers_last
+      assert_equal ["a-na LUGAL", "ARAD-ka", "lu šul-mu"], block.originals.map(&:text)
+      assert_equal "To the king, my lord: your servant. Good health!", block.translation.text
+    end
+
+    def test_oracc_translation_side_resolves_back_to_the_tablet
+      load_tablet_pair
+
+      result = run_parallel(TABLET_EN_URN, lang: "akk")
+      assert_equal TABLET_EN_URN, result.left.urn
+      assert_equal TABLET_URN, result.right.urn
+    end
+
+    def test_oracc_tablet_without_a_translation_has_no_sibling
+      load_edition(TABLET_URN, "akk", [["o.1", "a-na LUGAL"]])
+
+      result = run_parallel(TABLET_URN)
+      assert_nil result.right
+      assert_empty result.groups
+    end
+
+    def test_oracc_sibling_lookup_never_crosses_tablets
+      load_edition(TABLET_URN, "akk", [["o.1", "a-na LUGAL"]])
+      load_edition("urn:nabu:oracc:saao-saa01:P224396-en", "eng", [["o.1", "Other tablet."]])
+
+      result = run_parallel(TABLET_URN)
+      assert_nil result.right, "an -en document of a DIFFERENT tablet is not a sibling"
+    end
+
     def test_unknown_urn_returns_nil
       load_default_pair
       assert_nil run_parallel("urn:cts:greekLit:tg1.w1.nope")
