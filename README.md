@@ -1,5 +1,7 @@
 # Nabu
 
+[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg)](https://github.com/arvicco/nabu/actions/workflows/ci.yml)
+
 **A personal, local, license-honest library of the ancient world — that your
 AI tools can read.**
 
@@ -272,8 +274,9 @@ useful to others.
   known to be Mac-specific except the ops templates (launchd), but no other
   platform is exercised.
 - No packaged release, no gem, no versioned API; CLI flags may still
-  change. No CI badge because there is no public CI — the suite
-  (`rake test`, network-blocked, fast) is the contract.
+  change. GitHub Actions CI runs the full suite plus rubocop
+  (`rake test` + `rake lint`, network-blocked, fast) on every push and pull
+  request — the badge up top is the contract.
 - Corpus numbers above are a snapshot of one live install, dated where they
   appear.
 - The enrichment layer of the original vision (embeddings/semantic search,
@@ -312,7 +315,9 @@ bin/nabu --help
 
 Contributions: the project is early and personal; issues and conversation
 are welcome, but expect the backlog to be driven by the owner's research
-needs. If you want to add a source, `CLAUDE.md` and
+needs. The house rules for outside contributors — TDD, fixture discipline,
+the DCO sign-off — are in [CONTRIBUTING.md](CONTRIBUTING.md); if you want to
+add a source, `CLAUDE.md` and
 [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md)
 describe the adapter checklist end to end.
 
