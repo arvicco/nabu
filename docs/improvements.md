@@ -430,6 +430,17 @@ technical blocks a Tailscale-only JSON endpoint tomorrow; the *public*
 version is a policy decision more than an engineering one. Revisit when
 sharing becomes a goal.
 
+**Permission points** (owner convention 2026-07-11, P13-11: tracked here
+as they are incurred — any future external-access feature must clear each
+entry before launch):
+
+1. **freising (CC BY-ND 2.5 SI, `research_private`)** — ND permits private
+   transformation but forbids distributing adaptations. Any external-access
+   feature must exclude nd-class sources by design (the MCP
+   `research_private` default-exclusion is the model) **or** secure
+   permission first (contact: Matija Ogrin / Tomaž Erjavec, ZRC SAZU — both
+   active CLARIN.SI depositors; a targeted re-license request is plausible).
+
 ### 4.4 Enrichment replay wiring  [queued-by-design: lands with 3.1]
 
 `Rebuild#replay_enrichments` has been a documented no-op hook since P1-5;

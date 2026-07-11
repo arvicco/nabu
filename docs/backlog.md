@@ -3721,7 +3721,7 @@ permission… (tracking permission points for future dev as we include
 them)." → P13-11. Miklosich BCDH email: WAIT. Early Modern Slovenian: IN
 SCOPE (→ P13-9). Wiktionary OCS: GO (→ P13-10).
 
-## P13-11 · Freising Manuscripts (Brizinski spomeniki)  [tier: opus] [status: pending] [deps: P13-9]
+## P13-11 · Freising Manuscripts (Brizinski spomeniki)  [tier: opus] [status: done] [deps: P13-9]
 Owner ruling 2026-07-11: BY-ND in-scope (zero-distribution library; private
 transformations permitted; ND mapped to the research_private posture —
 default-excluded from MCP, per-call opt-in; any future external-access
@@ -3731,6 +3731,12 @@ Latin-script Slavic — text, ~1000 CE, eZISS TEI P4 critical edition
 license VERBATIM in bs.xml: "Priznanje avtorstva-Brez predelav 2.5
 Slovenija" = CC BY-ND 2.5 SI — the English page's BY-SA label is wrong,
 survey II verified in-file).
+OWNER-APPROVED 2026-07-11 (Phase A gate): design + all-six + sl —
+critical transcription = Passage#text; diplomatic/phonetic + all six
+translations (slv/eng/ger/ita/lat/pol) as line-aligned sibling documents;
+passage = manuscript line, display citation "BS I, fol. 78r, l. 1" in
+annotations; language `sl` for transcription layers + slv translation,
+per-language codes for the rest.
 Two-phase, fixture gate: Phase A verifies the eZISS download path, maps
 the P4 TEI (three parallel transcription layers — decide which is the
 Passage text and whether the others ride as annotations or sibling docs;
@@ -3741,3 +3747,34 @@ improvements §4.3). STOP — owner gate. Phase B: adapter (small; family
 per Phase A verdict), registry enabled:false, conformance, 02-sources row
 (SURVEYED-BLOCKED → READY with the ND posture documented), backlog done,
 worklog (sha —). One commit, not pushed.
+DONE 2026-07-11. Findings:
+- **License re-verified in-file**: bs.xml `<availability status="free">`
+  verbatim "Avtorske pravice za besedilo te izdaje ureja licenca Creative
+  Commons Priznanje avtorstva-Brez predelav 2.5 Slovenija"
+  (creativecommons.org/licenses/by-nd/2.5/si/) = CC BY-ND 2.5 SI. Audio
+  © ZRC SAZU/RTVS, facsimiles © BSB München — both excluded (fetch takes
+  bs-text.zip only, 7.5 MB).
+- **Download-path correction over the survey**: the zips live at
+  `nl.ijs.si/e-zrc/bs-text.zip` (parent dir), NOT `/e-zrc/bs/bs-text.zip`
+  (404). Zip layout: single top dir `bs/`, TEI under `bs/tei/` (41 XML).
+- **The structural gift**: all 9 layers share one skeleton
+  div[mon]→page[folio]→line[n] with IDENTICAL line keys (228 lines/layer)
+  — a perfectly aligned parallel corpus; suffix-equality alignment needs
+  no stored links. Master bs.xml composes layers via external entities
+  (never resolved — each layer file parses standalone) and carries the
+  ZRCola charDesc glyph map (no raw PUA in text, only <g corresp> refs).
+- Shipped: FreisingTeiParser (new family freising-tei; corr-over-sic,
+  expan-over-abbr, scribal del-dropped/add-kept, glyph resolution, NFC),
+  Freising adapter (research_private, ZipFetch), Query::Parallel freising
+  work pattern + work-outranks-variants sibling refinement, MCP-exclusion
+  evidence tests (real manifest wired through source→indexer→tools),
+  improvements §4.3 permission point (first occupant), registry
+  enabled:false/manual, 02-sources row 18 → READY, fixtures (trimmed real,
+  famous opening included; demo parse bs1:1 "GLAGOLITE PO NAZ REDKA
+  ZLOUEZA:" / citation "BS I, fol. 78r, l. 1").
+- Deviations: language codes eng/lat per repo precedent instead of the
+  Phase-A en/la proposal (users type --parallel eng; lat v/j fold);
+  ger/ita/pol per upstream TEI ids. Deferred: witness variants (bsCT-mik,
+  bsDT-*, bsPT-grf/rak), glossary bsLX (dictionary-shelf candidate).
+- Owner action queued: fire `bin/nabu sync freising`, eyeball, flip
+  enabled (CLAUDE.md checklist step 6).

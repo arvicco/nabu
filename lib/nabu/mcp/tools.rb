@@ -27,10 +27,10 @@ module Nabu
     #   (+ source slug — attribution is one cheap join away). The descriptions
     #   tell the model to preserve those fields when quoting.
     # - license classes research_private/restricted are DEFAULT-EXCLUDED from
-    #   every tool. The classes exist in the enum today even though no synced
-    #   source carries them yet — the exclusion is forward-looking: a
-    #   conversational surface must never leak future ad-hoc material
-    #   casually. include_restricted: true opts in, per call, explicitly.
+    #   every tool. First real occupant: freising (CC BY-ND 2.5 SI, P13-11) —
+    #   a conversational surface must never leak restricted or ad-hoc
+    #   material casually. include_restricted: true opts in, per call,
+    #   explicitly.
     # - Bounded outputs with honest truncation notes ("N total, showing k").
     #   No-match search responses carry a one-line coverage hint.
     # - Degradation is a normal tool response, never a crash and never
