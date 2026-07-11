@@ -220,6 +220,64 @@ comparative-grammar questions. In Nabu, source-provided analyses ride in
 compute later (CLTK/Stanza lemmatization) are enrichments with tool+version
 provenance, kept strictly apart from upstream's.
 
+### 6.1 Morphology facets — one façade over three tagsets (P13-6)
+
+`search --lemma λόγος --morph case=dat,number=pl` narrows a lemma search to
+attestations whose morphology matches the facets — "every dative plural of
+λόγος", "every subjunctive of *sum*". The design note behind it:
+
+**Tagset reality (measured against the live catalog).** The gold shelves store
+three different morphology dialects per token in `annotations_json`:
+
+| family | field | shape | example |
+| --- | --- | --- | --- |
+| CoNLL-U / UD (grc-perseus, got, …) | `feats` | UD `Key=Value` string, `\|`-joined | `Case=Dat\|Gender=Masc\|Number=Plur` |
+| PROIEL / TOROT (chu, orv, PROIEL grc/lat) | `morphology` | 10-position positional tag | `-p---mgpwi` (plur masc gen pos) |
+| ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
+
+**Vocabulary verdict — unified, not per-family passthrough.** The query
+vocabulary is the **Universal Dependencies feature names** (`case`, `number`,
+`gender`, `person`, `tense`, `mood`, `voice`, `degree`; values `dat`, `pl`/`sg`,
+`masc`, `aor`, `opt`, `sub`…), chosen because UD is (a) a documented public
+standard and (b) already the stored form for the CoNLL-U family, which needs
+zero translation. The two families with inflectional morphology fold into it:
+UD `feats` is parsed as-is (lowercased); the PROIEL positional tag is **decoded
+position-by-position into the same UD names** (a fixed 10×~8 code map in
+`Query::MorphFacets::PROIEL_FIELDS` — the bounded-but-fiddly bit; positions 9–10,
+Germanic strong/weak and the inflecting flag, have no clean UD facet and are
+left undecoded rather than mapped wrongly). ORACC carries no inflectional
+morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
+inflectional facets **never match ORACC** — honest absence, not error. A unified
+`pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and
+welding a third incompatible scheme into the façade for one field would be
+dishonest; it is a clean follow-up. Where a treebank itself encodes a category
+UD's way (grc-perseus writes an aorist as `Aspect=Perf\|Tense=Past`, not
+`Tense=Aor`), the query follows that treebank's convention — a documented
+cross-family divergence, not a bug.
+
+**Where filtering happens — SQL anchor, Ruby post-filter (no new index).**
+Morphology is **not** indexed. Measured verdict against the 1.94M-row live lemma
+index: a dedicated morph-facet table would multiply those rows by the features
+per token *and* need a rebuild, while the lemma anchor already narrows the
+search to just the passages attesting the lemma, so post-filtering their stored
+`annotations_json` in Ruby is cheap. Timings (live db, cold):
+
+| query | candidate passages | filter time (total) |
+| --- | --- | --- |
+| `λόγος` dat pl (a real content-word query) | 996 | **37 ms** (46 hits) |
+| `sum` subjunctive (every subjunctive of *esse*) | 22 344 | 720 ms (4 129 hits) |
+| PROIEL `и` (orv) dat pl | 18 019 | 471 ms (537 hits) |
+| `ὁ` (the article — pathological worst case) dat pl | 25 558 | 757 ms (2 255 hits) |
+
+The realistic case is tens of ms; even morph-filtering the single most common
+lemma in the corpus stays sub-second. The morph test (a cheap string parse)
+runs *before* the per-language fold, so a selective facet folds only the tokens
+that already matched. **Bare morph search (no `--lemma`) is out of scope** — it
+would scan every annotated passage, not a lemma-narrowed handful, and morphology
+without a lemma anchor is rarely the question. Each hit's `surface_forms` and
+its decoded `morph` evidence are restricted to the *matching* tokens, so a
+passage attesting λόγος in two cases surfaces only its dative-plural form.
+
 ## 7. Licensing — old texts, new rights
 
 The ancient *text* is public domain. What carries rights is modern labor: the

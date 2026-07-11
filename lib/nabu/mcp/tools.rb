@@ -7,6 +7,7 @@ require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
 require_relative "../query/lemma_search"
+require_relative "../query/morph_facets"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
@@ -117,7 +118,9 @@ module Nabu
         "parallel English translations). Give EXACTLY ONE of: `query` — full-text FTS5 " \
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
         "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
-        "εἰπεῖν, every inflection). Hits are relevance-ranked and bounded (default " \
+        "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
+        "attestations with that morphology, each hit showing the decoded evidence). Hits are " \
+        "relevance-ranked and bounded (default " \
         "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
         "when quoting. Use nabu_show with a hit's urn for the full passage, nabu_status for " \
@@ -196,6 +199,13 @@ module Nabu
           lemma: { type: "string",
                    description: "Dictionary form for exact-lemma treebank search. " \
                                 "Mutually exclusive with query." },
+          morph: { type: "string",
+                   description: "Morphology facets, only WITH lemma: comma-joined key=value in " \
+                                "Universal Dependencies vocabulary (case, number, gender, person, " \
+                                "tense, mood, voice, degree; values dat, pl/sg, masc, aor, opt, " \
+                                "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
+                                "match on feats, PROIEL/TOROT are decoded to the same names; ORACC " \
+                                "has no inflectional morphology so these facets never match it." },
           lang: { type: "string",
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
@@ -332,6 +342,7 @@ module Nabu
 
       def search(args)
         term, mode = search_term(args)
+        morph = search_morph(args, mode)
         license = license_arg(args)
         include_restricted = args["include_restricted"] == true
         if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
@@ -345,9 +356,11 @@ module Nabu
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         results = run_search(mode, term, catalog: catalog, fulltext: fulltext,
-                                         lang: args["lang"], license: license, limit: limit + 1)
+                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
+      rescue Query::MorphFacets::Error => e
+        raise InvalidArguments, e.message
       end
 
       def show(args)
@@ -468,6 +481,17 @@ module Nabu
         lemma ? [lemma, :lemma] : [query, :text]
       end
 
+      # The morph facet string, only valid WITH a lemma (bare morphology search
+      # is out of scope — it would scan every annotated passage). nil when
+      # absent. Malformed facets raise via the query layer (rescued in #search).
+      def search_morph(args, mode)
+        morph = string_arg(args, "morph")
+        return nil if morph.nil?
+        raise InvalidArguments, "morph requires lemma (morphology search is anchored on a lemma)" unless mode == :lemma
+
+        morph
+      end
+
       # The fulltext handle when the index this mode needs is present; nil
       # during the mid-reindex window (Indexer.rebuild! drops the tables first).
       def search_index(mode)
@@ -478,10 +502,14 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:)
-        klass = mode == :lemma ? Query::LemmaSearch : Query::Search
-        klass.new(catalog: catalog, fulltext: fulltext)
-             .run(term, lang: lang, license: license, limit: limit)
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, morph: nil)
+        if mode == :lemma
+          return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+                                   .run(term, lang: lang, license: license, limit: limit, morph: morph)
+        end
+
+        Query::Search.new(catalog: catalog, fulltext: fulltext)
+                     .run(term, lang: lang, license: license, limit: limit)
       end
 
       def render_search(results, limit:, catalog:)
@@ -508,7 +536,12 @@ module Nabu
         }
         if result.respond_to?(:lemma)
           # gloss (P11-4): the dictionary-shelf short gloss, nil-honest.
-          base.merge(lemma: result.lemma, surface_forms: result.surface_forms, gloss: result.gloss)
+          # morph (P13-6): decoded morphology evidence, present only on a
+          # --morph-filtered hit (nil otherwise, so ordinary lemma hits are
+          # unchanged).
+          lemma_hit = base.merge(lemma: result.lemma, surface_forms: result.surface_forms,
+                                 gloss: result.gloss)
+          result.morph ? lemma_hit.merge(morph: result.morph) : lemma_hit
         else
           base.merge(snippet: result.snippet)
         end

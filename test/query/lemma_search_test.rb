@@ -37,14 +37,16 @@ module Query
     end
 
     # +lemmas+ is [[lemma, form], …] — stored in the annotation shape both
-    # treebank parser families emit (tokens with "lemma"/"form").
-    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: [])
+    # treebank parser families emit (tokens with "lemma"/"form"). +tokens+ (for
+    # the P13-6 morph tests) passes FULL token hashes verbatim — the real
+    # fixture shapes with UD `feats` or PROIEL `morphology` — and is merged
+    # after the lemma pairs.
+    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: [], tokens: [])
+      token_hashes = lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } + tokens
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-        annotations_json: JSON.generate(
-          { "tokens" => lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } }
-        ),
+        annotations_json: JSON.generate({ "tokens" => token_hashes }),
         content_sha256: "x", revision: 1
       )
     end
@@ -224,6 +226,96 @@ module Query
       assert_equal %w[urn:d:grc:64498], search("λέγω", urn: "urn:d:grc:64498", limit: 1).map(&:urn)
       assert_empty search("οἶδα", urn: "urn:d:grc:64498"),
                    "the urn filter still requires the lemma to match"
+    end
+
+    # -- morph facets (P13-6) --------------------------------------------------
+
+    # UD (CoNLL-U) grc: λόγος inflects; --morph case=dat,number=pl keeps only
+    # the dative-plural attestation and shows it with the matching form + the
+    # decoded morph evidence — a passage attesting λόγος in TWO cases must
+    # surface only its dative-plural token, never the nominative one.
+    def test_morph_dative_plural_filters_ud_greek
+      doc = make_document(urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:1", text: "τοῖς λόγοις", sequence: 0, tokens: [
+                     { "lemma" => "ὁ", "form" => "τοῖς", "feats" => "Case=Dat|Number=Plur", "upos" => "DET" },
+                     { "lemma" => "λόγος", "form" => "λόγοις",
+                       "feats" => "Case=Dat|Gender=Masc|Number=Plur", "upos" => "NOUN" }
+                   ])
+      make_passage(doc, urn: "urn:d:grc:2", text: "ὁ λόγος", sequence: 1, tokens: [
+                     { "lemma" => "ὁ", "form" => "ὁ", "feats" => "Case=Nom|Number=Sing", "upos" => "DET" },
+                     { "lemma" => "λόγος", "form" => "λόγος",
+                       "feats" => "Case=Nom|Gender=Masc|Number=Sing", "upos" => "NOUN" }
+                   ])
+      rebuild!
+
+      results = search("λόγος", morph: "case=dat,number=pl")
+      assert_equal %w[urn:d:grc:1], results.map(&:urn), "only the dative-plural passage"
+      assert_equal "λόγοις", results[0].surface_forms, "only the matching token's form"
+      assert_equal "number=plur|gender=masc|case=dat", results[0].morph, "evidence shown per hit"
+    end
+
+    # PROIEL (positional morphology) Old Russian: the same façade over a
+    # different tagset — "-p---mda--i" decodes to dative plural. Proves the
+    # unified vocabulary spans conllu + proiel (the two families the spec names).
+    def test_morph_dative_plural_filters_proiel
+      doc = make_document(urn: "urn:d:orv", language: "orv", title: "PVL")
+      make_passage(doc, urn: "urn:d:orv:1", text: "богомъ", sequence: 0, language: "orv", tokens: [
+                     { "lemma" => "богъ", "form" => "богомъ", "morphology" => "-p---mda--i",
+                       "part_of_speech" => "Nb" }
+                   ])
+      make_passage(doc, urn: "urn:d:orv:2", text: "богъ", sequence: 1, language: "orv", tokens: [
+                     { "lemma" => "богъ", "form" => "богъ", "morphology" => "-s---mn---i",
+                       "part_of_speech" => "Nb" }
+                   ])
+      rebuild!
+
+      results = search("богъ", morph: "case=dat,number=pl")
+      assert_equal %w[urn:d:orv:1], results.map(&:urn)
+      assert_equal "богомъ", results[0].surface_forms
+      assert_equal "number=plur|gender=masc|case=dat", results[0].morph
+    end
+
+    # A morph filter matching no token in any attesting passage is honest empty,
+    # not an error — and ORACC-style pos-only tokens never satisfy an
+    # inflectional facet (no case on a cuneiform pos tag).
+    def test_morph_no_match_is_empty
+      doc = make_document(urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:1", text: "λόγος", sequence: 0, tokens: [
+                     { "lemma" => "λόγος", "form" => "λόγος", "feats" => "Case=Nom|Number=Sing" }
+                   ])
+      akk = make_document(urn: "urn:d:akk", language: "akk", title: "OB")
+      make_passage(akk, urn: "urn:d:akk:1", text: "awilum", sequence: 0, language: "akk", tokens: [
+                     { "lemma" => "awīlu", "form" => "LU₂", "pos" => "N", "norm" => "awīl" }
+                   ])
+      rebuild!
+
+      assert_empty search("λόγος", morph: "case=dat"), "no dative attestation"
+      assert_empty search("awīlu", morph: "case=dat"), "ORACC pos-only: no inflectional match"
+    end
+
+    # Morph composes with the lang filter and honours the limit over the
+    # post-filtered hits (not the pre-filter candidate slice).
+    def test_morph_composes_with_lang_and_limit
+      doc = make_document(urn: "urn:d:grc")
+      3.times do |i|
+        make_passage(doc, urn: "urn:d:grc:#{i}", text: "λόγοις", sequence: i, tokens: [
+                       { "lemma" => "λόγος", "form" => "λόγοις", "feats" => "Case=Dat|Number=Plur" }
+                     ])
+      end
+      got = make_document(urn: "urn:d:got", language: "got")
+      make_passage(got, urn: "urn:d:got:1", text: "waurdam", sequence: 0, language: "got", tokens: [
+                     { "lemma" => "λόγος", "form" => "waurdam", "feats" => "Case=Dat|Number=Plur" }
+                   ])
+      rebuild!
+
+      assert_equal 2, search("λόγος", morph: "case=dat,number=pl", limit: 2).size, "limit caps post-filter hits"
+      assert_equal %w[urn:d:grc:0 urn:d:grc:1 urn:d:grc:2],
+                   search("λόγος", morph: "case=dat", lang: "grc").map(&:urn), "lang filter composes"
+    end
+
+    def test_malformed_morph_raises
+      seed_lego_corpus
+      assert_raises(Nabu::Query::MorphFacets::Error) { search("λέγω", morph: "case") }
     end
   end
 end

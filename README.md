@@ -192,7 +192,7 @@ sync. Ranked expansion candidates live in the axis surveys:
 | | |
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. |
-| `nabu search --lemma FORM` | Dictionary-form search over 1.94M gold lemma rows in 13 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. |
+| `nabu search --lemma FORM` | Dictionary-form search over 1.94M gold lemma rows in 13 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
 | `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. |
 | `nabu define LEMMA` | LSJ and Lewis & Short lookup, entry citations resolved to in-catalog passages. |
