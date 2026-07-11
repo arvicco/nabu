@@ -174,7 +174,9 @@ module Nabu
         "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
         "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
         "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
-        "aethele finds æðele). Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang) " \
+        "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
+        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu) " \
         "picks a shelf when the spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
@@ -261,9 +263,10 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: %w[grc lat ang],
+          lang: { type: "string", enum: %w[grc lat ang chu],
                   description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                               "ang → Bosworth-Toller (Old English)." },
+                               "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
+                               "(Old Church Slavonic)." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -436,8 +439,8 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !%w[grc lat ang].include?(lang)
-          raise InvalidArguments, "lang must be grc, lat or ang (the shelves this corpus holds)"
+        if lang && !%w[grc lat ang chu].include?(lang)
+          raise InvalidArguments, "lang must be grc, lat, ang or chu (the shelves this corpus holds)"
         end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)

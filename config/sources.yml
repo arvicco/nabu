@@ -222,6 +222,19 @@ imp:
   # contain a fair amount of errors" -> TEXT ONLY (owner default
   # 2026-07-11): no tokens ingested, no lemma-index rows; the lemma index
   # stays gold-only. Deposit frozen at 1.1 (2015): manual.
+wiktionary-cu:
+  adapter: Nabu::Adapters::WiktionaryCu
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Wiktionary OCS via kaikki.org (P13-10): English Wiktionary's Old Church
+  # Slavonic entries, wiktextract JSONL ("This data is made available under
+  # the same licenses as Wiktionary - both CC-BY-SA and GFDL" -> attribution)
+  # — the fourth dictionary-shelf occupant and the first JSONL dictionary
+  # (parser family wiktionary-jsonl). ONE ~44 MB JSONL over HTTP
+  # (Nabu::FileFetch). CAVEAT: upstream labels the per-language file
+  # DEPRECATED (wiktextract #1178) though it serves today; fallback = filter
+  # the full enwiktionary extract by lang_code == "cu" (docs/02-sources.md).
+  # kaikki re-extracts weekly, but each re-sync re-mints shelf revisions:
+  # manual — refreshes are an owner call.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

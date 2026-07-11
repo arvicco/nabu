@@ -200,6 +200,57 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [candidate — P13-10 (b) scout, owner axis: "PIE/comparativistics/reconstructions that we didn't even start touching yet"]
+
+**What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
+\*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already
+holds across languages — the comparativist's join: from богъ in the
+Zographensis to \*bogъ to the Iranian loan discussion; from a Gothic
+lemma through Proto-Germanic to the same PIE root an OCS word descends
+from. Query shape: `nabu define *bogъ` (or a `--reconstructed` flag),
+plus the reverse edge on ordinary entries ("descends from \*bogъ; cognates
+in got/orv/ru here").
+
+**The data exists, verified (P13-10 Phase A, 2026-07-11).** kaikki.org
+ships wiktextract JSONL for the reconstruction pseudo-languages, same
+verbatim dual license as the OCS extract ("This data is made available
+under the same licenses as Wiktionary - both CC-BY-SA and GFDL"):
+- **Proto-Slavic** — `kaikki.org/dictionary/Proto-Slavic/…ProtoSlavic.jsonl`,
+  45.4 MB, ~5,195 words, `lang_code "sla-pro"`. Records carry the OCS
+  record shape PLUS a structured **`descendants`** tree: \*kara → {East
+  Slavic: be/ru/uk ка́ра; South Slavic: **cu** …} with romanizations —
+  ready-made reconstruction→attestation edges.
+- **Proto-Indo-European** —
+  `…/Proto-Indo-European/…ProtoIndoEuropean.jsonl`, 11.5 MB, ~1,781 words,
+  `lang_code "ine-pro"`; **Proto-Germanic** (`gem-pro`) also exists (the
+  царь chain crosses it: \*cěsařь ← \*kaisaraz ← Caesar).
+- Same caveat as wiktionary-cu: the per-language files are flagged
+  DEPRECATED (wiktextract #1178) though live; fallback = filter the full
+  extract by `lang_code`.
+
+**Two join signals are already in the library.** (i) Forward/text: every
+wiktionary-cu entry body deliberately KEEPS its `etymology_text` — 2,617
+of 4,615 records carry prose chains naming Proto-Slavic/PIE forms (1,797
+Proto-Slavic, 279 PIE). (ii) Reverse/graph: the Proto-* extracts'
+`descendants` arrays are machine-readable edges to attested reflexes,
+keyed by the same `lang_code`s the catalog speaks (cu→chu, orv, got, ru).
+A future packet would ingest the Proto-* extracts through the SAME
+`wiktionary-jsonl` family (they parse today — the shape matches), mint a
+reconstruction language posture (`sla-pro`/`ine-pro` are not ISO 639-3;
+model/validation and the fold table need a decision), and build the
+descendants crosswalk as its own derived table (query-time joins, the §11
+citation-resolution stance: never store stale links).
+
+**Pros.** License-clean; the parser already exists after P13-10; unique
+capability — no other tool joins reconstructions to a private attested
+corpus; the owner's explicitly named axis.
+**Cons/costs.** Asterisk conventions and cross-extract identity are
+messy (\*o(b) vs \*ob); Wiktionary reconstructions are crowd-curated (not
+Derksen — and Derksen is Brill-blocked, docs/slavic-survey-2.md); the
+language-code posture needs a real design call, not a hack.
+**Effort.** fable (identity/posture design) + opus (adapter config +
+descendants crosswalk); 1–2 packets. NO adapter in P13-10 by owner scope.
+
 ---
 
 ## 2. New sources
