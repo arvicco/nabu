@@ -36,7 +36,7 @@ module Nabu
     # (CC0 → open, CC BY-SA → attribution); a license that maps to a class
     # OTHER than the manifest's declared class — or that does not map at all —
     # STOPS the sync loudly (Nabu::FetchError) instead of mislabeling
-    # documents. Both in-scope projects report CC0 (verbatim: "This data is
+    # documents. All in-scope projects report CC0 (verbatim: "This data is
     # released under the CC0 license") → license_class "open". NB the ORACC
     # website footer still shows the 2014 blanket CC BY-SA 3.0; the JSON
     # build's per-project field supersedes it and is what we read.
@@ -69,11 +69,28 @@ module Nabu
     # English lives only in the ATF #tr.en source layer). Aligned English is
     # a future separate acquisition; the registry records translations: false.
     class Oracc < Nabu::Adapter
-      # In-scope project paths (ORACC project ids; subprojects would be
+      # In-scope project paths (ORACC project ids; subprojects are
       # slash-paths). Extending scope = adding a path here + owner-fired
       # first sync. Slugs (dir names, urn segments, zip basenames) are the
       # paths hyphen-flattened.
-      PROJECTS = %w[rimanum etcsri saao/saa01 rinap/rinap1 dcclt].freeze
+      #
+      # Scope history: P10-1 rimanum+etcsri; P11-6 +saao/saa01, rinap/rinap1,
+      # dcclt; P13-3 (owner-approved 2026-07-11, "full SAA is the point")
+      # +the complete SAA run saa02–saa21 plus saas2 (SAA Studies 2 — the
+      # lemmatised Assyrian Eponym/King List editions, a normal saao corpus
+      # subproject), riao, ribo (top level only; its babylon* subprojects
+      # out of scope), blms, and the four dcclt subprojects — 33 projects,
+      # ~159 MB of zips across the 28 new ones. All CC0-expected per the
+      # P9-5a family scout; the per-project license gate is the guarantee.
+      PROJECTS = %w[
+        rimanum etcsri saao/saa01 rinap/rinap1 dcclt
+        saao/saa02 saao/saa03 saao/saa04 saao/saa05 saao/saa06 saao/saa07
+        saao/saa08 saao/saa09 saao/saa10 saao/saa11 saao/saa12 saao/saa13
+        saao/saa14 saao/saa15 saao/saa16 saao/saa17 saao/saa18 saao/saa19
+        saao/saa20 saao/saa21 saao/saas2
+        riao ribo blms
+        dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
+      ].freeze
 
       ZIP_BASE_URL = "https://oracc.museum.upenn.edu/json"
 

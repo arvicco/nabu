@@ -93,8 +93,11 @@ oracc:
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
                    # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
                    # search verified live. Scope: rimanum + etcsri; P11-6
-                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt)
-                   # — owner-fired re-sync after merge pulls the new projects.
+                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt);
+                   # P13-3 (owner-approved 2026-07-11) extended to 33 — the
+                   # FULL SAA (saa01–saa21 + saas2), riao, ribo, blms, the
+                   # four dcclt subprojects (~159 MB of new zips) — the
+                   # owner-fired re-sync after merge pulls the new projects.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
