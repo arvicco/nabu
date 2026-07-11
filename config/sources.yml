@@ -237,6 +237,24 @@ wiktionary-cu:
   # manual — refreshes are an owner call.
   sync_policy: manual
 
+freising:
+  adapter: Nabu::Adapters::Freising
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Freising Manuscripts / Brizinski spomeniki (P13-11, owner-approved
+  # design 2026-07-11): the oldest Slovene — and oldest Latin-script
+  # Slavic — text (~972-1039 CE), eZISS TEI P4 critical edition (ZRC
+  # SAZU/IJS 2007). ONE 7.5 MB zip (Nabu::ZipFetch, bs-text.zip; the
+  # 341 MB bs.zip with audio + the facsimile zip are EXCLUDED — separately
+  # copyrighted). License VERBATIM in bs.xml <availability>: "Creative
+  # Commons Priznanje avtorstva-Brez predelav 2.5 Slovenija" = CC BY-ND
+  # 2.5 SI -> research_private (ND posture: default-excluded from MCP,
+  # per-call opt-in; permission point logged in improvements 4.3).
+  # Critical transcription = passage text (3 docs bs1-bs3, passage =
+  # manuscript line, citation "BS I, fol. 78r, l. 1"); diplomatic,
+  # phonetic + six translations ride as line-aligned sibling documents.
+  # Edition frozen at 1.0 (2007): manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

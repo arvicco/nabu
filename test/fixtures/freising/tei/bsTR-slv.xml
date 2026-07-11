@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div type="section" id="bsTR-slv">
+  <head>Sodobna slovenščina</head>
+  <docAuthor>Boris <name id="bsTR-slv.name.084" corresp="bs.name.311">Paternu</name>, France <name id="bsTR-slv.name.085" corresp="bs.name.025">Bernik</name>, Jože <name id="bsTR-slv.name.086" corresp="bs.name.087">Faganel</name>, Franc <name id="bsTR-slv.name.087" corresp="bs.name.163">Jakopin</name>, Janko <name id="bsTR-slv.name.088" corresp="bs.name.204">Kos</name>, Tine <name id="bsTR-slv.name.089" corresp="bs.name.237">Logar</name>, Marijan <name id="bsTR-slv.name.090" corresp="bs.name.378">Smolik</name>, Janez <name id="bsTR-slv.name.091" corresp="bs.name.443">Zor</name></docAuthor>
+  <div type="subsection" id="bsTR-in1">
+    <p id="bsTR-in1.p.001">Znotrajjezikovno prevajanje Brižinskih spomenikov v sodobno slovenščino se je spoprijelo z
+        dvojno jezikovno resničnostjo. Na eni strani z občutno drugačnostjo, ki jo je povzročila tisočletna zgodovinska
+        razdalja med jezikom BS in današnjo slovenščino; in na drugi strani z globinsko sorodnostjo še zmeraj žive
+        podobnosti med obema stanjema jezikovnega razvoja. To stanje omogoča, da se prevajanje lahko usmeri k jezikovnim
+        razdaljam ali jezikovnim bližinam med prvotnim in nastajajočim prevodnim besedilom. O zgodovini dosedanjih
+        slovenskih prevodov BS – njihovi prevajalci so Franc <name id="bsTR-in1.name.013" corresp="bs.name.267">Metelko</name> (BS II, III, Laibach 1848), Fran <name id="bsTR-in1.name.014" corresp="bs.name.350">Ramovš</name> (BS I–III, Ljubljana 1937), Franc <name id="bsTR-in1.name.015" corresp="bs.name.119">Grivec</name> (BS I–III, Ljubljana 1942; BS II, Ljubljana 1951) in Jože <name id="bsTR-in1.name.016" corresp="bs.name.334">Pogačnik</name> (BS I–III, München 1968) – bi se dalo reči, da nihajo v obe smeri, k
+        jezikovni historizaciji ali k jezikovni aktualizaciji; pri tem je značilno, da prevladujejo odmiki od
+        prevajalskega historizma in se posebno v zadnjih desetletjih uveljavljajo precej daljnosežni poskusi prelivanja
+        BS v standardne norme sodobnega slovenskega jezika.</p>
+    <p id="bsTR-in1.p.002">Pričujoči znotrajjezikovni prevod poskuša zajeti in spojiti obe omenjeni jezikovni
+        resničnosti, nekdanje in današnje branje spomenikov: glavno izhodišče je čim natančneje posneta semantika
+        besedila. Od vseh dosedanjih prevodov se loči najbolj po tem, da je radikalnejši v arhaizaciji. Prizadeva si
+        ohraniti kar največ izraznih sestavin, stilizmov in bralnih vtisov izvirnika, seveda ob upoštevanju široko
+        razumljene norme sodobne knjižne slovenščine. Pri tem se je dalo opreti na veliko pomembnih dognanj in rešitev,
+        ki jih je okoli BS zbrala slovenska prevajalska kultura. Upoštevani so tudi prevodi v druge slovanske jezike.</p>
+    <p id="bsTR-in1.p.003">Vračanje k izvirniku je že na prvi pogled opazno v zunanji, grafični členitvi besedila BS po
+        prvotnih vrsticah, ki pa so jih dosedanji prevajalci razvezovali v natis navadne prozne oblike. Prvotnemu
+        izražanju v BS je približan celotni jezikovni ustroj prevoda, od izbire besedja in besednih oblik do besednega
+        reda in skladnje; kolikor mogoče sta ohranjeni retorika in stilistika, tako v stavčni kot besedni in glasovni
+        figurativnosti. Tudi stava ločil je prirejena ne le smiselnim enotam besedila, temveč tudi govorniški členitvi,
+        skladno s kritičnim prepisom. Izbira velikih začetnic se ravna tudi po vzvišenem pomenu, ki ga je spovedna
+        molitev ali pridiga dajala božjim osebam in prispodobam.</p>
+    <p id="bsTR-in1.p.004">Vendar je prevajalska arhaizacija morala ostati v mejah razumljivosti za današnjega bralca,
+        torej znotraj širše in gibljivo razumljenega sodobnega slovenskega knjižnega jezika in njegovega pravopisa. Zato
+        je bila glavna skrb namenjena filološko natančnemu in lingvistično utemeljenemu prenosu prvotne vsebine v
+        sodobno besedilo; pri tem je bila posebna pozornost usmerjena v iskanje živih identičnih mest med jezikom BS in
+        sodobno slovenščino. Vsa še zmeraj premalo jasna ali dvoumna mesta poskušajo premostiti jezikovne,
+        kulturnozgodovinske in teološke opombe. Istovrstne opombe so združene v prvi omembi.</p>
+  </div>
+  <div type="mon" n="1" id="bsTR-slv.1">
+    <head>I<milestone unit="mon" corresp="bsWV.1"/></head>
+    <page n="78r" id="bsTR-slv.1.1" corresp="bsFC.1.1">
+      <line n="1" id="bsTR-slv.1.001">GOVORITE ZA NAMI TEH MALO BESED:<milestone unit="phrase"/><milestone unit="sentence"/></line>
+      <line n="2" id="bsTR-slv.1.002">Bog,<milestone unit="phrase" corresp="bsWV.1.2.1"/> Gospod
+                                        milostljivi,<milestone unit="phrase" corresp="bsWV.1.2.2"/> Oče Bog,<milestone unit="phrase" corresp="bsWV.1.2.3"/> Tebi izpovem</line>
+      <line n="3" id="bsTR-slv.1.003">ves moj<note place="end" n="1" id="bsTR-slv.1.note.001">3 moj – Pod vplivom izvirnika in zaradi poudarjene
+                                        svojilnosti zavestno niso uporabljeni povratnosvojilni zaimki. Gl. še I 7, 11,
+                                        18, 30, 31, 33.</note>greh,<milestone unit="phrase" corresp="bsWV.1.2.4"/><note place="end" n="2" id="bsTR-slv.1.note.002">3 greh – Greh (peccatum) v
+                                        nasprotju z grehi (peccata) označuje celoto človekovega grešnega razmerja do
+                                        Boga in do bližnjega. V edninski obliki se uporablja takrat, kadar spomenik
+                                        opozarja na grešno usmerjenost, ki jo človek prizna Bogu samemu (I 3), v
+                                        množinski obliki pa takrat, ko gre za naštevanje posameznih prestopkov, grehov v
+                                        skupni ali osebni spovedi (I 7, 8, 22). Ker pa je tudi spoved duhovniku v
+                                        resnici spoved Bogu, lahko v III 26, 27 govorimo o grehih. Gl. še I,
+                                25.</note>in svetemu Križu,<milestone unit="phrase" corresp="bsWV.1.2.5"/><note place="end" n="3" id="bsTR-slv.1.note.003">3 Križu (zapisano Creztu) –
+                                        Na tem mestu je v zaporedju svetih imen in svetnikov nedvomno mišljen Kristus,
+                                        ki so ga upodabljali trpečega na križu (gl. še <name id="bsTR-slv.name.001" corresp="bs.name.434">Wiehl</name> 1974, 20).</note>in sveti
+                                        Mariji,<milestone unit="phrase" corresp="bsWV.1.2.6"/> in sve-</line>
+      <line n="4" id="bsTR-slv.1.004">temu Mihaelu,<milestone unit="phrase" corresp="bsWV.1.2.7"/> in
+                                vsem krilatcem božjim,<milestone unit="phrase" corresp="bsWV.1.2.8"/> in svetemu Pe-</line>
+      <line n="5" id="bsTR-slv.1.005">tru,<milestone unit="phrase" corresp="bsWV.1.2.9"/> in vsem
+                                        slom<note place="end" n="4" id="bsTR-slv.1.note.004">5 slom – Besedila
+                                        izpovedi poleg Kristusa in Marije vedno naštevajo različne svetnike, vendar
+                                        večinoma ne z imeni kakor v litanijah, ampak po kategorijah. Za sv. <name id="bsTR-slv.name.002" corresp="bs.name.320">Petrom</name>, prvakom
+                                        apostolov, so tu najprej apostoli kot skupnost. Izraz sli je dobesedni prevod
+                                        gr. apostoloi, oz. lat. apostoli t. j. poslanci (gl. še Wiehl
+                                        35–36).</note>božjim,<milestone unit="phrase" corresp="bsWV.1.2.10"/> in vsem
+                                mučenikom božjim,<milestone unit="phrase" corresp="bsWV.1.2.11"/></line>
+      <line n="6" id="bsTR-slv.1.006">in vsem vernikom<note place="end" n="5" id="bsTR-slv.1.note.005">6 vernikom – Na tem mestu v pomenu izpovedovalci vere
+                                        (confessores), kar danes prevajamo s pričevalci za vero (Wiehl
+                                        47–48).</note>božjim,<milestone unit="phrase" corresp="bsWV.1.2.12"/> in
+                                        vsem<milestone unit="phrase" corresp="bsWV.1.2.13"/> devicam
+                                        pravičnim,<milestone unit="phrase" corresp="bsWV.1.2.14"/> in vsem</line>
+      <line n="7" id="bsTR-slv.1.007">pravičnim.<milestone unit="phrase" corresp="bsWV.1.2.15"/><milestone unit="sentence" corresp="bsWV.1.2"/> In tebi,<milestone unit="phrase" corresp="bsWV.1.3.1"/> božji služabnik,<milestone unit="phrase" corresp="bsWV.1.3.2"/><note place="end" n="6" id="bsTR-slv.1.note.006">7 božji služabnik – Pomeni seveda duhovnika, kakor tudi v II 109 in III 46. O
+                                        bibličnem temelju tega izra za gl. Wiehl 33–34.</note>hočem biti <milestone unit="phrase" corresp="bsWV.1.3.3"/> izpovedan<note place="end" n="7" id="bsTR-slv.1.note.007">7 biti izpovedan – Slovenci še danes uporabljamo besedo
+                                        spoved za zakrament sprave, ker je del zakramentalnega opravila izpoved –
+                                        naštevanje in priznanje grehov. V I 7 in III 43 pomeni izraz hkrati spokornikovo
+                                        voljo po izpovedi in njenem učinku. V II 106 inIII 23–24 je zakramentalnost te
+                                        izpovedi še posebej poudarjena z dodatkom "prava" izpoved, torej ne kakršnokoli
+                                        naštevanje, pripovedovanje grehov. Gl. šeII 110 (Prim. Wiehl 71–74).</note>vseh
+                                mojih</line>
+      <line n="8" id="bsTR-slv.1.008">grehov,<milestone unit="phrase" corresp="bsWV.1.3.4"/> in
+                                        verujem,<milestone unit="phrase" corresp="bsWV.1.3.5"/> da mi je,<milestone unit="phrase" corresp="bsWV.1.3.6"/> ko sem na tem svetu bil,<milestone unit="phrase" corresp="bsWV.1.3.7"/> iti na oni</line>
+      <line n="9" id="bsTR-slv.1.009">svet,<milestone unit="phrase" corresp="bsWV.1.3.8"/> pa spet
+                                vstati na sodni dan.<milestone unit="phrase" corresp="bsWV.1.3.9"/><milestone unit="sentence" corresp="bsWV.1.3"/> Imeti mi je življenje<note place="end" n="8" id="bsTR-slv.1.note.008">9–10 Imeti mi je življenje po tem,
+                                        imeti mi je odpustek – Dajalnik z nedoločnikom iz izvirnika je v prevodu
+                                        ohranjen. Doslej so to mesto mdr. prevajali: Trebami je življenja po tem
+                                        (življenju), treba mi je odpuščanja mojih grehov (<name id="bsTR-slv.name.006" corresp="bs.name.350">Ramovš</name> 1937); Če hočem imeti življenje po
+                                        tem (življenju), mi je imeti odpuščanje mojih grehov (<name id="bsTR-slv.name.004" corresp="bs.name.119">Grivec</name> 1942); Imeti
+                                        želim večno življenje, dobiti moram odpuščanje svojih grehov (<name id="bsTR-slv.name.005" corresp="bs.name.334">Pogačnik</name> 1968).
+                                                <name id="bsTR-slv.name.007" corresp="bs.name.421">Vašica</name> 1966
+                                        povezuje ta stavek s prejšnjim: veřím, že se po tomto pobytu na zemi musím
+                                        odebrat na onen svět, znova vstát k soudnému dni, že budumít život po tomto
+                                        vezdejším a že obdržím odpuštění svých hříchů.</note></line>
+      <line n="10" id="bsTR-slv.1.010">po tem,<milestone unit="phrase" corresp="bsWV.1.4.1"/> imeti mi
+                                je odpustek<note place="end" n="9" id="bsTR-slv.1.note.009">10 odpustek –
+                                        Beseda ima danes poseben pomen "zmanjšanja zlasti posmrtne kazni za odpuščene
+                                        grehe", tukaj gre za splošno "odpuščanje" (Wiehl 26–27). Prim. tudi SSKJ III 305
+                                        z oznako zastarelo. Gl. še I, 10.</note>mojih grehov.<milestone unit="phrase" corresp="bsWV.1.4.2"/><milestone unit="sentence" corresp="bsWV.1.4"/> Bog</line>
+      <line n="11" id="bsTR-slv.1.011">milostljivi,<milestone unit="phrase" corresp="bsWV.1.5.1"/>
+                                sprejmi mojo izpoved mojih grehov:<milestone unit="phrase" corresp="bsWV.1.5.2"/> kar</line>
+      <line n="12" id="bsTR-slv.1.012">sem storil zla do tega dne,<milestone unit="phrase" corresp="bsWV.1.5.3"/><note place="end" n="10" id="bsTR-slv.1.note.010">12 do tega dne – Tudi Vašica 1966 ima podobno: co jsem
+                                        zlého napáchal až po tento den, od té‚ doby co jsem byl na svět
+                                uveden.</note>potem ko sem bil na ta svet</line>
+      <line n="13" id="bsTR-slv.1.013">poslan in bil krščen,<milestone unit="phrase" corresp="bsWV.1.5.4"/> kar pomnim ali ne pomnim,<milestone unit="phrase" corresp="bsWV.1.5.5"/> ali</line>
+      <line n="14" id="bsTR-slv.1.014">hote ali ne hote,<milestone unit="phrase" corresp="bsWV.1.5.6"/> ali vede ali ne vede,<milestone unit="phrase" corresp="bsWV.1.5.7"/> ali v kri-</line>
+      <line n="15" id="bsTR-slv.1.015">vi prisegi ali v laži,<milestone unit="phrase" corresp="bsWV.1.5.8"/> ali v tatvini ali v zavisti,<milestone unit="phrase" corresp="bsWV.1.5.9"/> ali v skrunitvi</line>
+      <line n="16" id="bsTR-slv.1.016">ali v nečistovanju,<milestone unit="phrase" corresp="bsWV.1.5.10"/> ali ker se mi je hotelo to,<milestone unit="phrase" corresp="bsWV.1.5.11"/> kar se mi ne bi sme-</line>
+      <line n="17" id="bsTR-slv.1.017">lo hoteti,<milestone unit="phrase" corresp="bsWV.1.5.12"/> ali
+                                v obrekovanju,<milestone unit="phrase" corresp="bsWV.1.5.13"/> ali spe ali ne
+                                        spe,<milestone unit="phrase" corresp="bsWV.1.5.14"/> ali ker</line>
+      <line n="18" id="bsTR-slv.1.018">nisem spoštoval nedelje,<milestone unit="phrase" corresp="bsWV.1.5.15"/><note place="end" n="11" id="bsTR-slv.1.note.011">18 nedelje – Prvi ali osmi dan v tednu je pri vseh
+                                        krščanskih narodih dobil ime po Gospodu (lat. dies dominica, gospodov dan, fr.
+                                        dimanche) ali pa je ohranil staro latinsko ime po soncu (lat. dies solis, nem.
+                                        Sonntag). Slovani so dan poimenovali po ne-delu, kotdela prost dan, morda zato,
+                                        ker jim je v tedanjem družbenem redu zagotovil tedenski počitek. Le Rusi so ga
+                                        po grškem vzorcu imenovali dan vstajenja – voskresenije. Tu gre za skrunjenje
+                                        nedeljskega počitka. Prim. fresko Sveta nedelja v Crngrobu. Gl. op. pri
+                                        fonetičnem prepisu.</note>niti svetega večera,<milestone unit="phrase" corresp="bsWV.1.5.16"/><note place="end" n="12" id="bsTR-slv.1.note.012">18 svetega večera – Tu pomeni večer pred nedeljo ali
+                                        zapovedanim praznikom (lat. vigilia), ko se po obrednih navadah judovstva in
+                                        krščanstva že začenja praznični dan – delopust. Delo ta večer je prav tako greh
+                                        kot delo v nedeljo (gl. še Wiehl 45–47).</note>niti mojega</line>
+      <line n="19" id="bsTR-slv.1.019">posta in drugega mnogega,<milestone unit="phrase" corresp="bsWV.1.5.17"/> kar je proti Bogu in proti moje-</line>
+      <line n="20" id="bsTR-slv.1.020">mu krstu.<milestone unit="phrase" corresp="bsWV.1.5.18"/><milestone unit="sentence" corresp="bsWV.1.5"/> Ti edini,<milestone unit="phrase" corresp="bsWV.1.6.1"/> Bog,<milestone unit="phrase" corresp="bsWV.1.6.2"/> veš,<milestone unit="phrase" corresp="bsWV.1.6.3"/> kako
+                                mi je v tem potre-</line>
+      <line n="21" id="bsTR-slv.1.021">ba velika.<milestone unit="phrase" corresp="bsWV.1.6.4"/><milestone unit="sentence" corresp="bsWV.1.6"/> Bog,<milestone unit="phrase" corresp="bsWV.1.7.1"/> Gospod milostljivi,<milestone unit="phrase" corresp="bsWV.1.7.2"/> Tebe milosti<note place="end" n="13" id="bsTR-slv.1.note.013">21–24 milosti – V pomenu usmiljenja, odpuščanja grehov
+                                        (Wiehl 77), kar je tudi del širšega pomena milosti – nadnaravnega daru (SSKJ II
+                                        779). Gl. še I, 24.</note></line>
+      <line n="22" id="bsTR-slv.1.022">prosim za te naštete grehe in za druge mnoge,<milestone unit="phrase" corresp="bsWV.1.7.3"/></line>
+      <line n="23" id="bsTR-slv.1.023">in večje in manjše,<milestone unit="phrase" corresp="bsWV.1.7.4"/> ki sem jih storil.<milestone unit="phrase" corresp="bsWV.1.7.5"/><milestone unit="sentence" corresp="bsWV.1.7"/> Za té‚
+                                Tebe</line>
+      <line n="24" id="bsTR-slv.1.024">milosti prosim,<milestone unit="phrase" corresp="bsWV.1.8.1"/>
+                                in sveto Marijo,<milestone unit="phrase" corresp="bsWV.1.8.2"/> in vse svete.<milestone unit="phrase" corresp="bsWV.1.8.3"/><milestone unit="sentence" corresp="bsWV.1.8"/></line>
+    </page>
+    <page n="78v" id="bsTR-slv.1.2" corresp="bsFC.1.2">
+      <line n="25" id="bsTR-slv.1.025">In da bi na tem svetu za tak greh kazen nase vzel,<milestone unit="phrase" corresp="bsWV.1.9.1"/></line>
+      <line n="26" id="bsTR-slv.1.026">kakor mi Ti zadeneš in kakor je Tvoja milost in Tebi
+                                        ljubó.<milestone unit="phrase" corresp="bsWV.1.9.2"/><milestone unit="sentence" corresp="bsWV.1.9"/></line>
+      <line n="27" id="bsTR-slv.1.027">Bog,<milestone unit="phrase" corresp="bsWV.1.10.1"/> Ti si
+                                prišel z nebes,<milestone unit="phrase" corresp="bsWV.1.10.2"/> in že si se dal mučiti
+                                za ves</line>
+      <line n="28" id="bsTR-slv.1.028">rod,<milestone unit="phrase" corresp="bsWV.1.10.3"/><note place="end" n="14" id="bsTR-slv.1.note.014">28 rod – Izvirna oblika
+                                        naròd se tu uporablja v pomenu človeštvo, človeški rod in ne v pomenu narod. Gl.
+                                        še II 11.</note>da bi nas zlodeju otel.<milestone unit="phrase" corresp="bsWV.1.10.4"/><milestone unit="sentence" corresp="bsWV.1.10"/> Otmi me
+                                vsem zlo-</line>
+      <line n="29" id="bsTR-slv.1.029">dejem.<milestone unit="phrase"/><milestone unit="sentence" corresp="bsWV.1.11"/> Milostljivi Bog,<milestone unit="phrase" corresp="bsWV.1.12.1"/> Tebi izročam moje telo,<milestone unit="phrase" corresp="bsWV.1.12.2"/> in</line>
+      <line n="30" id="bsTR-slv.1.030">mojo dušo,<milestone unit="phrase" corresp="bsWV.1.12.3"/> in
+                                moje besede,<milestone unit="phrase" corresp="bsWV.1.12.4"/> in moje delo,<milestone unit="phrase" corresp="bsWV.1.12.5"/> in mojo voljo,<milestone unit="phrase" corresp="bsWV.1.12.6"/></line>
+      <line n="31" id="bsTR-slv.1.031">in mojo vero,<milestone unit="phrase" corresp="bsWV.1.12.7"/>
+                                in moje življenje.<milestone unit="phrase" corresp="bsWV.1.12.8"/><milestone unit="sentence" corresp="bsWV.1.12"/> In da bi zaslišal na sodni</line>
+      <line n="32" id="bsTR-slv.1.032">dan Tvojo milost veliko s tistimi,<milestone unit="phrase" corresp="bsWV.1.13.1"/> ki jih pozoveš<note place="end" n="15" id="bsTR-slv.1.note.015">32 pozoveš – Za izvirni glagol vzoveš je izbran
+                                        istokorenski glagol pozoveš (prim. SSKJ III, 946). Doslej so ga prevajali kot
+                                        pokličeš (<name id="bsTR-slv.name.051" corresp="bs.name.350">Ramovš</name>,
+                                                <name id="bsTR-slv.name.050" corresp="bs.name.119">Grivec</name>) ali
+                                        jih boš povabil (<name id="bsTR-slv.name.052" corresp="bs.name.334">Pogačnik</name>).</note>s Tvoji-</line>
+      <line n="33" id="bsTR-slv.1.033">mi usti:<milestone unit="phrase" corresp="bsWV.1.13.2"/><milestone unit="sentence" corresp="bsWV.1.13"/> Pridite, Očeta mojega
+                                        izvoljeni,<milestone unit="phrase" corresp="bsWV.1.14.1"/> prej-</line>
+      <line n="34" id="bsTR-slv.1.034">mite večno veselje in večno življenje,<milestone unit="phrase" corresp="bsWV.1.14.2"/> ki vam</line>
+      <line n="35" id="bsTR-slv.1.035">je pripravljeno iz veka v vek.<milestone unit="phrase" corresp="bsWV.1.14.3"/><milestone unit="sentence" corresp="bsWV.1.14"/>
+                                        Amen.<milestone unit="phrase"/><milestone unit="sentence" corresp="bsWV.1.15"/></line>
+      <line n="36" id="bsTR-slv.1.036"/>
+      <line n="37" id="bsTR-slv.1.037">
+        <hi rend="it">Gospod, Tvojim služabnikom<note place="end" n="16" id="bsTR-slv.1.note.016">36 Gospod, Tvojim služabnikom – Formula odveze
+                                                je zapisana le latinsko, ker jo je tako molil duhovnik v vseh stoletjih,
+                                                tudi še v prvi polovici 20. st., ko je bil od 1932/33 uradni Rimski
+                                                obrednik že preveden v slovenščino.</note> in služabnicam, ki se Ti
+                                        izpovedujejo,</hi>
+      </line>
+      <line n="38" id="bsTR-slv.1.038">
+        <hi rend="it">odpusti grehe, da bodo oni, ki jih v notranjosti biča vest,</hi>
+      </line>
+      <line n="39" id="bsTR-slv.1.039">
+        <hi rend="it">potolaženi z milostjo Tvoje sprave. Po [Gospodu našem ...].</hi>
+      </line>
+    </page>
+  </div>
+  <div type="mon" n="2" id="bsTR-slv.2">
+    <head>II<milestone unit="mon" corresp="bsWV.2"/></head>
+    <page n="158v" id="bsTR-slv.2.1" corresp="bsFC.2.1">
+      <line n="1" id="bsTR-slv.2.001">Če bi ded naš ne</line>
+      <line n="2" id="bsTR-slv.2.002">grešil,<milestone unit="phrase" corresp="bsWV.2.1.1"/><note place="end" n="17" id="bsTR-slv.2.note.017">2 grešil – Slovenski
+                                        glagol grešiti je dovršen in nedovršen, zato je grešil razumeti kot storil greh
+                                        (izvirni, prvi greh).</note>bi mu na veke bilo</line>
+      <line n="3" id="bsTR-slv.2.003">živeti,<milestone unit="phrase" corresp="bsWV.2.1.2"/> starosti
+                                ne pre-</line>
+    </page>
+  </div>
+  <div type="mon" n="3" id="bsTR-slv.3">
+    <head>III<milestone unit="mon" corresp="bsWV.3"/></head>
+    <page n="160v" id="bsTR-slv.3.1" corresp="bsFC.3.1">
+      <line n="1" id="bsTR-slv.3.001">Jaz se odpovem</line>
+      <line n="2" id="bsTR-slv.3.002">zlodeju,<milestone unit="phrase" corresp="bsWV.3.1.1"/> in vsem
+                                njegovim</line>
+      <line n="3" id="bsTR-slv.3.003">delom,<milestone unit="phrase" corresp="bsWV.3.1.2"/> in vsem
+                                njegovim</line>
+    </page>
+  </div>
+</div>

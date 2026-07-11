@@ -1,0 +1,118 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory README.md.
+#
+# LOCAL-TRIM PROVENANCE. The eZISS edition serves raw per-file TEI at
+# nl.ijs.si/e-zrc/bs/tei/ (and the whole bundle as bs-text.zip — the
+# adapter fetch target), but every fixture here is a structural trim
+# (README.md: monument I whole, II/III first-page/3-lines; master header
+# essentials + 25-glyph charDesc), so every entry is refetchable: false —
+# `fixtures:check` SKIPS them and `fixtures:refresh` refuses. License:
+# CC BY-ND 2.5 SI (verbatim <availability> kept whole in bs.xml).
+source: freising
+adapter_test:
+retrieved: '2026-07-11'
+files:
+- path: tei/bs.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bs.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'master trimmed: respStmt credit roll cut to 2, editionStmt credits + revisionDesc
+    cut to essentials, sourceDesc first bibl only, charDesc cut to the 25 glyphs the
+    trimmed layer files reference, <front> dropped; full <availability> (the license
+    test target), DOCTYPE + entity decls, langUsage kept whole'
+- path: tei/bsCT.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsCT.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'critical transcription: monument I whole (39 lines incl. the Latin tail),
+    monuments II/III cut to first page / first 3 lines'
+- path: tei/bsDT.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsDT.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'diplomatic transcription: same trim as bsCT'
+- path: tei/bsPT.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsPT.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'phonetic transcription: same trim as bsCT'
+- path: tei/bsTR-slv.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-slv.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'modern Slovene translation: same trim as bsCT (intro subsection kept)'
+- path: tei/bsTR-eng.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-eng.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'English translation: same trim as bsCT (intro subsection kept)'
+- path: tei/bsTR-ger.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-ger.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'German translation: same trim as bsCT'
+- path: tei/bsTR-ita.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-ita.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'Italian translation: same trim as bsCT'
+- path: tei/bsTR-lat.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-lat.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'Latin translation: same trim as bsCT'
+- path: tei/bsTR-pol.xml
+  url: https://nl.ijs.si/e-zrc/bs/tei/bsTR-pol.xml
+  refetchable: false
+  provenance: local-trim
+  reason: Nokogiri-trimmed from the raw tei/ URL (retrieved 2026-07-11) — a fresh
+    whole-file GET would not byte-match; re-acquiring means re-running the trim per
+    README.md
+  copied: '2026-07-11'
+  whole: false
+  trim: 'Polish translation: same trim as bsCT'

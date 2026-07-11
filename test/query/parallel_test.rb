@@ -303,6 +303,46 @@ module Query
       assert_nil run_parallel("urn:cts:greekLit:tg1.w1.nope")
     end
 
+    # -- Freising monuments (P13-11): bs<n> ↔ bs<n>-dt/-pt/-tr-* -----------------
+
+    BS_URN = "urn:nabu:freising:bs1"
+
+    def load_monument_layers
+      load_edition(BS_URN, "sl",
+                   [%w[1 GLAGOLITE], %w[2 Bose]], title: "BS I — critical")
+      load_edition("#{BS_URN}-dt", "sl",
+                   [%w[1 GLAGOLITE·], %w[2 Boſe]], title: "BS I — diplomatic")
+      load_edition("#{BS_URN}-tr-slv", "sl",
+                   [%w[1 GOVORITE], %w[2 Bog]], title: "BS I — modern Slovene")
+      load_edition("#{BS_URN}-tr-eng", "eng",
+                   [%w[1 SAY], %w[2 God]], title: "BS I — English")
+    end
+
+    def test_freising_monument_finds_its_translation_sibling_as_verse_pairs
+      load_monument_layers
+
+      result = run_parallel(BS_URN)
+      assert_equal "#{BS_URN}-tr-eng", result.right.urn
+      assert_equal %i[pair pair], kinds(result), "line-for-line layers pair 1:1"
+      assert_equal(%w[SAY God], result.groups.map { |g| g.translation.text })
+    end
+
+    def test_freising_translation_resolves_back_to_the_critical_primary
+      load_monument_layers
+
+      result = run_parallel("#{BS_URN}-tr-eng", lang: "sl")
+      assert_equal BS_URN, result.right.urn,
+                   "the work's own document outranks its -dt/-tr-slv variants"
+    end
+
+    def test_freising_sibling_lookup_never_crosses_monuments
+      load_edition(BS_URN, "sl", [%w[1 GLAGOLITE]])
+      load_edition("urn:nabu:freising:bs2-tr-eng", "eng", [%w[1 If]])
+
+      result = run_parallel(BS_URN)
+      assert_nil result.right, "an English layer of a DIFFERENT monument is not a sibling"
+    end
+
     # -- visibility (show-family semantics) --------------------------------------
 
     def test_withdrawn_passages_are_included_and_flagged

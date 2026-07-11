@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div type="section" id="bsTR-lat" lang="lat">
+  <head>Prevod: latinščina</head>
+  <docAuthor>Kajetan <name id="bsTR-lat.name.001" corresp="bs.name.098">Gantar</name></docAuthor>
+  <div type="subsection" id="bsTR-in2">
+    <p id="bsTR-in2.p.001">Latinski prevod BS I je leta 1822 objavil J. <name id="bsTR-in2.name.005" corresp="bs.name.198">Kopitar</name>
+        v oceni <name id="bsTR-in2.name.003" corresp="bs.name.065">Dobrovskega</name>
+        Institutiones linguae slavicae. Ponatisnili so ga <name id="bsTR-in2.name.008" corresp="bs.name.267">Metelko</name> v Lehrgebäude... 1825 in <name id="bsTR-in2.name.006" corresp="bs.name.199">Köppen</name>–<name id="bsTR-in2.name.011" corresp="bs.name.429">Vostokov</name> 1827. V izdaji Glagolita <name id="bsTR-in2.name.002" corresp="bs.name.044">Clozianus</name> je leta 1836 Kopitar
+        objavil še prevod BS II in III; ponatisnil ga je Metelko v Anhang... 1848. V. <name id="bsTR-in2.name.010" corresp="bs.name.428">Vondrák</name> je leta 1896 Kopitarjev
+        prevod le malenkostno spremenil. S. <name id="bsTR-in2.name.009" corresp="bs.name.327">Pirchegger</name> je 1931 v glavnem sprejel <name id="bsTR-in2.name.050" corresp="bs.name.428">Vondrákovo</name> verzijo prevoda, vendar je ponekod segel nazaj h
+        Kopitarju, marsikje pa je naredil svojo različico.</p>
+    <p id="bsTR-in2.p.002">Prevod v Kopitarjevi in poznejših izdajah je natančna podoba izvirnika,
+        "ad verbum interpretatio", seveda skladno z razumevanjem (branjem) izvirnega rokopisa.
+        Stilistične zahteve knjižne latinščine jim niso bile v ospredju. </p>
+    <p id="bsTR-in2.p.003">Za <name id="bsTR-in2.name.013" corresp="bs.name.334">Pogačnikovo</name>
+        izdajo 1968 je nov prevod oskrbel K. Gantar. Prevod v naši izdaji je slogovno enak onemu v
+        prejšnji, odstopa le glede besed, ki so zdaj drugače prebrane. Kar zadeva besedni red, ima latinska sintaksa svoje
+        zakonitosti, od katerih so mogoča odstopanja samo v izjemnih primerih, ko gre za namensko
+        stilno podčrtavanje. Latinščina ima svoj pravopis, ki določa rabo interpunkcij in velikih
+        začetnic. Ista slovenska beseda ne more biti vedno prevedena z istim latinskim izrazom, ker
+        imajo besede v različnih jezikih različne pomenske obsege in različne stilne odtenke. Ker
+        latinščina teži h gradnji stavčnih period, kjer prevladuje hipotaksa, in ker latinsko
+        besedilo z relativnimi zaimki pokrije veliko tega, kar moderni jeziki izražajo s podrednimi
+        vezniki, latinski prevod ni dobesedna odslikava izvirnika oziroma prevoda v sedanjo
+        slovenščino. </p>
+    <p id="bsTR-in2.p.004">Zadnji odstavek BS I seveda ni prevod, ampak je prepis izvirno latinskega
+        besedila v Clm 6426.</p>
+  </div>
+  <div type="mon" n="1" id="bsTR-lat.1">
+    <head>I</head>
+    <page n="78r" id="bsTR-lat.1.1" corresp="bsFC.1.1">
+      <line n="1" id="bsTR-lat.1.001">DICITE POST NOS HAEC PAUCA VERBA:</line>
+      <line n="2" id="bsTR-lat.1.002">Deus, Domine misericors, Pater Deus, tibi confiteor</line>
+      <line n="3" id="bsTR-lat.1.003">omne peccatum meum, et sanctae Cruci, et sanctae Mariae, et sanc-</line>
+      <line n="4" id="bsTR-lat.1.004">to Michaeli, et omnibus angelis Dei, et Sancto Pe-</line>
+      <line n="5" id="bsTR-lat.1.005">tro, et omnibus apostolis Dei, et omnibus martyribus Dei,</line>
+      <line n="6" id="bsTR-lat.1.006">et omnibus confessoribus Dei, et omnibus virginibus iustis, et omnibus</line>
+      <line n="7" id="bsTR-lat.1.007">iustis. Et tibi, famule Dei, confessurus sum omnia mea</line>
+      <line n="8" id="bsTR-lat.1.008">peccata, et credo, cum in hoc mundo moratus sum, mihi in illum</line>
+      <line n="9" id="bsTR-lat.1.009">mundum eundum et novissima die resurgendum esse. Mihi vita</line>
+      <line n="10" id="bsTR-lat.1.010">post hanc vitam habenda, mihi remissio peccatorum meorum accipienda est. Deus</line>
+      <line n="11" id="bsTR-lat.1.011">misericors, suscipe confessionem meorum peccatorum: quaecumque</line>
+      <line n="12" id="bsTR-lat.1.012">mala commisi usque ad hunc diem, postquam in hunc mundum</line>
+      <line n="13" id="bsTR-lat.1.013">missus et baptizatus sum, quorum recordor aut non recordor, aut</line>
+      <line n="14" id="bsTR-lat.1.014">mea sponte aut invitus, aut sciens aut nesciens, sive iniuste</line>
+      <line n="15" id="bsTR-lat.1.015">iureiurando sive mendacio, sive furto sive invidia, sive blasphemia</line>
+      <line n="16" id="bsTR-lat.1.016">sive fornicatione, seu si non cupienda concupivi</line>
+      <line n="17" id="bsTR-lat.1.017">sive maledicendo, aut dormiendo aut non dormiendo, sive quod</line>
+      <line n="18" id="bsTR-lat.1.018">neque diem dominicam nec vigiliam sanctam nec ieiunium meum observavi,</line>
+      <line n="19" id="bsTR-lat.1.019">et aliud multum, quod Deo et</line>
+      <line n="20" id="bsTR-lat.1.020">baptismati meo adversarium est. Tibi soli, Deus, notum est, quantopere mihi hoc</line>
+      <line n="21" id="bsTR-lat.1.021">necessarium sit. Deus, Domine misericors, a te misericordiam peto</line>
+      <line n="22" id="bsTR-lat.1.022">pro omnibus enumeratis peccatis et pro multis aliis,</line>
+      <line n="23" id="bsTR-lat.1.023">et maioribus et minoribus, quae commisi. Pro istis a te</line>
+      <line n="24" id="bsTR-lat.1.024">misericordiam peto et a sancta Maria et ab omnibus sanctis.</line>
+    </page>
+    <page n="78v" id="bsTR-lat.1.2" corresp="bsFC.1.2">
+      <line n="25" id="bsTR-lat.1.025">Et utinam in hoc mundo talis peccati punitionem accipiam,</line>
+      <line n="26" id="bsTR-lat.1.026">qualem tu mihi impones et qualis tuae misericordiae et tibi gratum est.</line>
+      <line n="27" id="bsTR-lat.1.027">Deus, qui de caelo descendisti, quin etiam passus es pro toto</line>
+      <line n="28" id="bsTR-lat.1.028">genere humano, ut nos a diabolo eriperes: eripe me ab omnibus diabolis!</line>
+      <line n="29" id="bsTR-lat.1.029">Tibi, misericors Deus, commendo corpus meum et</line>
+      <line n="30" id="bsTR-lat.1.030">animam meam et verba mea et operam meam et voluntatem meam</line>
+      <line n="31" id="bsTR-lat.1.031">et fidem meam et vitam meam. Et utinam novissima die</line>
+      <line n="32" id="bsTR-lat.1.032">magnam tuam misericordiam exaudiam cum illis, quos vocabis</line>
+      <line n="33" id="bsTR-lat.1.033">Tuo ore: Venite, Patris mei electi,</line>
+      <line n="34" id="bsTR-lat.1.034">accipite gaudium aeternum et vitam aeternam,</line>
+      <line n="35" id="bsTR-lat.1.035">quae vobis e saeculo in saeculum parata sunt! Amen.</line>
+      <line n="36" id="bsTR-lat.1.036"/>
+      <line n="37" id="bsTR-lat.1.037">
+        <hi rend="it">Confitentibus tibi, Domine, famulis ac famulabus tuis remit-</hi>
+      </line>
+      <line n="38" id="bsTR-lat.1.038">
+        <hi rend="it">te peccata, ut qui intersecus conscientia flagellantur</hi>
+      </line>
+      <line n="39" id="bsTR-lat.1.039">
+        <hi rend="it">reconciliationis tuae gratia consolentur. Per [...].</hi>
+      </line>
+    </page>
+  </div>
+  <div type="mon" n="2" id="bsTR-lat.2">
+    <head>II</head>
+    <page n="158v" id="bsTR-lat.2.1" corresp="bsFC.2.1">
+      <line n="1" id="bsTR-lat.2.001">Si avus noster non</line>
+      <line n="2" id="bsTR-lat.2.002">peccavisset, tum in aeternum ei</line>
+      <line n="3" id="bsTR-lat.2.003">vivendum fuisset nec senectutem capienti</line>
+    </page>
+  </div>
+  <div type="mon" n="3" id="bsTR-lat.3">
+    <head>III</head>
+    <page n="160v" id="bsTR-lat.3.1" corresp="bsFC.3.1">
+      <line n="1" id="bsTR-lat.3.001">Ego abrenuntio</line>
+      <line n="2" id="bsTR-lat.3.002">diabolo et omnibus eius</line>
+      <line n="3" id="bsTR-lat.3.003">operibus et omnibus eius</line>
+    </page>
+  </div>
+</div>
