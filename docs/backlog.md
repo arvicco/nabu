@@ -3382,13 +3382,37 @@ notes, single + range renders), docs/architecture.md §10. TESTS: registry
 21,735 assertions green; lint clean (190 files). ONE commit, not pushed;
 worklog sha —.
 
-## P13-6 · Morph facets  [tier: opus] [status: pending] [deps: —]
+## P13-6 · Morph facets  [tier: opus] [status: done] [deps: —]
 improvements §1.6: search by morphology over the gold shelves (treebanks +
 ORACC pos): `search --lemma X --morph case=dat,number=pl` or a designed
 equivalent. Design note first (annotations schema reality check across
 conllu/proiel/oracc token shapes; index needed or LIKE-over-annotations
 acceptable at current scale? — measure before building), then implement
 smallest honest version. MCP: extend nabu_search args. Docs + conventions.
+
+Findings (design note: conventions §6.1):
+- **Tagset verdict — unified UD façade, not per-family passthrough.** Query
+  vocabulary is UD feature names (case/number/gender/person/tense/mood/voice/
+  degree). CoNLL-U `feats` parsed as-is (already UD, zero translation); PROIEL/
+  TOROT positional `morphology` DECODED into the same names via a fixed 10×~8
+  code map (`Query::MorphFacets::PROIEL_FIELDS`; positions 9–10 undecoded — no
+  clean UD facet). ORACC has no inflectional morphology (`pos` is NER-flavoured),
+  so inflectional facets never match it — honest absence, tested; a unified
+  `pos` facet deliberately deferred (three incompatible pos schemes).
+- **Index verdict — NO new index/migration.** Morphology is post-filtered in
+  Ruby over the lemma-anchored candidate passages' `annotations_json`. Measured
+  on the live 1.94M-row lemma index: `λόγος` dat-pl 37 ms / 46 hits; `sum`
+  subjunctive 720 ms / 4129 hits; worst case (article ὁ) 757 ms / 2255 hits.
+  A facet index would multiply rows + need a rebuild for no interactive gain.
+- **Out of scope (honest):** bare morph search without `--lemma` (would scan
+  every annotated passage); ORACC pos-only facets; UD/PROIEL tense-vs-aspect
+  divergence follows each treebank's own encoding (documented).
+- Scope: `search`/`nabu_search` only (not `concord` — future). `--morph`
+  requires `--lemma`; malformed facets → usage/InvalidArguments error. Each hit
+  shows the matching surface form(s) + decoded morph evidence, restricted to the
+  matching tokens. New `lib/nabu/query/morph_facets.rb`; tests across conllu +
+  proiel + oracc-absence (query/morph_facets_test, query/lemma_search_test,
+  mcp/tools_test). Suite 1445/21787 green, lint clean.
 
 ## P13-7 · Vocab profiling  [tier: opus] [status: pending] [deps: P13-6]
 improvements §1.7 (stretch — take only if the phase runs to schedule):

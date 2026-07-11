@@ -46,11 +46,10 @@ module MCP
       )
     end
 
-    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: nil)
-      annotations = if lemmas
-                      JSON.generate(
-                        { "tokens" => lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } }
-                      )
+    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: nil, tokens: nil)
+      annotations = if lemmas || tokens
+                      pairs = (lemmas || []).map { |lemma, form| { "lemma" => lemma, "form" => form } }
+                      JSON.generate({ "tokens" => pairs + (tokens || []) })
                     else
                       "{}"
                     end
@@ -168,6 +167,41 @@ module MCP
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_search", {}) }
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "query" => "a", "lemma" => "b" })
+      end
+    end
+
+    # -- nabu_search: morph facets (P13-6) -------------------------------------
+
+    def test_search_morph_filters_lemma_hits_and_shows_evidence
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "τοῖς λόγοις", sequence: 0, tokens: [
+                     { "lemma" => "λόγος", "form" => "λόγοις", "feats" => "Case=Dat|Number=Plur" }
+                   ])
+      make_passage(doc, urn: "urn:d:tb:2", text: "ὁ λόγος", sequence: 1, tokens: [
+                     { "lemma" => "λόγος", "form" => "λόγος", "feats" => "Case=Nom|Number=Sing" }
+                   ])
+      rebuild!
+
+      hits = payload(call("nabu_search", { "lemma" => "λόγος", "morph" => "case=dat,number=pl" }))
+             .fetch("matches")
+      assert_equal(%w[urn:d:tb:1], hits.map { |hit| hit.fetch("urn") })
+      assert_equal "λόγοις", hits.first.fetch("surface_forms")
+      assert_equal "number=plur|case=dat", hits.first.fetch("morph")
+    end
+
+    def test_search_morph_requires_lemma
+      seed_corpus
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "μηνιν", "morph" => "case=dat" })
+      end
+    end
+
+    def test_search_malformed_morph_is_invalid_arguments
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "x", sequence: 0, lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "morph" => "case" })
       end
     end
 

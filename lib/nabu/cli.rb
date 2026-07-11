@@ -141,6 +141,17 @@ module Nabu
       and --license. Passages outside the treebanks carry no lemma
       annotations and are honestly absent here.
 
+      MORPH FACETS (--morph case=dat,number=pl): with --lemma, narrow to
+      attestations whose morphology matches the given facets (comma-joined
+      key=value, all required). The vocabulary is Universal Dependencies
+      feature names — case, number, gender, person, tense, mood, voice,
+      degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
+      their `feats`, PROIEL/TOROT are decoded from their positional tag into
+      the same names. Each hit shows the matching surface form(s) and the
+      decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
+      is out of scope); ORACC carries no inflectional morphology, so
+      inflectional facets never match it (honest absence). See conventions §6.1.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -157,6 +168,8 @@ module Nabu
         nabu search --lemma λέγω --lang grc        # every attestation in the Greek
                                                    #   treebank: λέγουσι, εἶπας, εἰπεῖν…
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
+        nabu search --lemma λόγος --morph case=dat,number=pl
+                                                   # only the dative-plural λόγοις
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -168,9 +181,12 @@ module Nabu
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
     option :lemma, type: :string, banner: "FORM",
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
+    option :morph, type: :string, banner: "FACETS",
+                   desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
     def search(query = nil)
       query = query.to_s.strip
       return lemma_search(query) if options[:lemma]
+      raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
@@ -1171,8 +1187,10 @@ module Nabu
 
         results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                           .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i)
+                                                      limit: options[:limit].to_i, morph: options[:morph])
         print_lemma_results(results)
+      rescue Nabu::Query::MorphFacets::Error => e
+        raise Thor::Error, "search: #{e.message}"
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -1188,7 +1206,8 @@ module Nabu
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
           gloss = result.gloss ? "  (#{result.gloss})" : ""
-          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}"
+          morph = result.morph ? "  {#{result.morph}}" : ""
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}#{morph}"
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"

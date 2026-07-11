@@ -47,14 +47,21 @@ Full-text or exact-lemma search over the whole corpus. Give **exactly one** of:
   adjacency; `prefix*`. Diacritics optional: `μηνιν` finds `μῆνιν`.
 - `lemma` — exact dictionary form over the gold treebanks. `λέγω` finds every
   inflection (`εἶπας`, `εἰπεῖν`, …), including suppletive stems no text query
-  reaches.
+  reaches. With `lemma`, an optional `morph` — comma-joined `key=value` facets
+  in Universal Dependencies vocabulary (`case=dat,number=pl`; keys case, number,
+  gender, person, tense, mood, voice, degree; values `dat`, `pl`/`sg`, `masc`,
+  `aor`, `opt`, `sub`…) — keeps only attestations with that morphology, each hit
+  returning the decoded `morph` evidence. UD treebanks match on their `feats`;
+  PROIEL/TOROT are decoded from their positional tag into the same names; ORACC
+  has no inflectional morphology, so those facets never match it (honest
+  absence). `morph` requires `lemma` (bare morphology search is out of scope).
 
 Optional `lang` (ISO-639-3), `license` (exact class), `limit` (default 10, max
 50). Hits are relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
 is interpretable. Each hit returns urn, language, license_class, source, the
 document title, and a bounded text/snippet (lemma hits also return the matched
-surface forms).
+surface forms, and a morph-filtered hit its decoded `morph` evidence).
 
 ### `nabu_show`
 
