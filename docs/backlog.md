@@ -2677,3 +2677,1104 @@ box (each command actually run); suite+lint untouched-green; worklog
 Full-diff review, library.md refresh (OE sections when synced; §10 duty),
 PR, owner-fired syncs queue (iswoc, aspr, bosworth-toller), flips on
 owner word, sticky alarm LAST.
+
+## Phase 13 — Slavic deepening + cuneiform readability + workbench riders (branch: phase-13; elaborated 2026-07-11)
+
+Owner shape (2026-07-11): "go with B+C but I'm not happy with OCS/Slavic
+coverage — can we do more? are there dictionary sources? Is there something
+for South Slavic/Slovenian?" So: a second, deeper Slavic survey FIRST (its
+findings may append adapter packets to this very phase), then CCMH (survey-I
+pick #2), ORACC breadth + ATF translations, and the workbench riders never
+taken. Sequential dispatch, fixture gates standing, real syncs owner-fired.
+
+## P13-1 · Slavic survey II: dictionaries + South Slavic/Slovenian  [tier: opus] [status: done] [deps: —]
+Scouting only, docs/slavic-survey.md quality bar (that doc covered treebanks
+and OCS canon; this one covers what it didn't). Three axes:
+(a) SLAVIC DICTIONARY SOURCES for the P11-4 reference shelf: the GORAZD
+    project / Old Church Slavonic Digital Hub (gorazd.org, Czech Academy —
+    digitized SJS Slovník jazyka staroslověnského, Cejtlin, Miklosich?
+    formats, APIs, LICENSE verbatim); Sreznevsky (survey I said scans-only —
+    re-verify, any new machine-readable edition?); anything else genuinely
+    machine-readable (derksen etymological? out of copyright dictionaries
+    with digital editions?). For each: format, license VERBATIM, entry
+    count, DictionaryLoader fit (the shelf now has TEI + CSV precedents).
+(b) SOUTH SLAVIC / SLOVENIAN: Freising Manuscripts (Brižinski spomeniki,
+    ~1000 CE, oldest Slovene/Slavic-Latin-script text — eZISS/NUK TEI
+    critical edition, license?); eZISS generally (Slovenian electronic
+    critical editions — what's in scope, what license); IMP historical
+    Slovenian corpus (license? period coverage); Croatian Church Slavonic
+    (Hrvatski crkvenoslavenski corpus, Staroslavenski institut — anything
+    downloadable?); Serbian/Bulgarian/Macedonian Church Slavonic digital
+    editions beyond the already-surveyed Suprasliensis/CCMH. UD treebanks
+    for OLD South Slavic variants (modern hr/sl/sr/bg/mk are OUT of scope —
+    ancient-texts library).
+(c) REVISIT survey-I blocked items ONLY if their status plausibly changed
+    (obdurodon bulk availability; Manuscript.ru grant path — do NOT write
+    emails, just verify current state).
+Deliverable: docs/slavic-survey-2.md (ranked ingestable picks with effort
+sizing, blocked list with unblock paths, explicit "what this adds that
+torot/proiel/ccmh don't already hold" dedup column); 02-sources rows;
+recommendation whether findings warrant packets IN THIS PHASE (orchestrator
++ owner decide at review); backlog done + findings; worklog (sha —).
+Page-level reads + gh metadata only, no bulk fetches, no emails.
+
+### Findings (P13-1, 2026-07-11 — survey delivered, docs/slavic-survey-2.md)
+
+OWNER'S THREE QUESTIONS ANSWERED. (1) More OCS/Slavic: modestly — CCMH
+(P13-2) closes the canon; ONE new clean win found: **UD_Old_East_Slavic-
+Ruthenian** ("prosta mova" 1380–1650, Polotsk letters/Lithuanian Metrica/
+Lokhvitsa book; README metadata verbatim `License: CC BY-SA 4.0`; zero
+overlap — third East Slavic branch) → config-only `TREEBANKS` add, the P10-2
+recipe, **recommended THIS PHASE** as pick #1. No other open machine-readable
+ChSl edition exists in ANY South Slavic recension (Zagreb RCJHR = PDF scans,
+no license; SANU Serbian corpus = internal, no release; Sofia histdict =
+web-UI + bare ©; DIACU JSON = no LICENSE + mostly re-packaged TOROT).
+(2) Dictionaries: **the scholarly OCS lexica are not openly available today.**
+GORAZD hub (Prague SJS ~33k entries + Cejtlin + Greek-OCS index; NB Miklosich/
+Sreznevsky NOT in it — packet lead corrected) is query-only with NO content
+license (the GPL covers its software, not data); **Miklosich BCDH/ELEXIS TEI
+(41,338 entries) exists but CLARIN.si 11356/1666 is metadata-only, 0 files**
+— the nearest prize, one email to BCDH unblocks a drop-in for the existing
+TEI dictionary family; Sreznevsky re-verified unchanged (oldrusdict.ru
+query-only); Derksen Brill-blocked. Only clean ingest today: **Wiktionary OCS
+via kaikki.org** (verbatim "made available under the same licenses as
+Wiktionary - both CC-BY-SA and GFDL", ~4,548 senses, JSONL → small new
+dictionary family) — modest, LATER, best bundled with Miklosich if unblocked.
+(3) South Slavic/Slovenian: YES — **Freising Manuscripts (eZISS) fully
+downloadable TEI P4** (diplomatic+critical+phonetic + 6 translations +
+glossary) but the survey's key catch: the TEI source's `<availability>` says
+verbatim "Priznanje avtorstva-Brez predelav 2.5 Slovenija" = **CC BY-ND**
+(the English HTML page mislabels it BY-SA; verified directly in bs.xml) →
+LATER, gated on owner posture decision (permission email to Ogrin/Erjavec vs
+restricted local ingest); CLARIN.SI holds **goo300k** (gold, 294k words
+1584–1899, verbatim "CC BY 4.0") + **IMP** (17.7M tokens 1584–1919, CC BY-SA
+4.0) → LATER, owner scope call (Early Modern vs ancient charter); no Old
+Slovene/South Slavic UD treebank exists. (c) Blocked re-checks: obdurodon,
+Manuscript.ru (now cert/DNS-degraded), TITUS — all **UNCHANGED**.
+PHASE-13 SHAPE: only UD Ruthenian warrants an in-phase packet (config-only
+rider beside CCMH); everything else is owner-decision-gated (Freising ND
+posture, Miklosich email, Slovene scope), not engineering-gated. Register
+rows: #18 updated (Freising), #45–49 added, #4/#13/#30/#32/#33 annotated.
+
+## P13-2 · CCMH adapter — the OCS canon completion  [tier: opus] [status: done] [deps: P13-1]
+Survey-I pick #2: Corpus Cyrillo-Methodianum Helsingiense (Kielipankki) — 7
+canonical OCS texts as transliteration + simple structured XML; real gain =
+Codex Assemanianus + Savvina kniga (absent from all current holdings) +
+alt-editions of Marianus/Zographensis/Suprasliensis (NEVER dedupe — distinct
+editions per the standing alt-edition rule). Two-phase with fixture gate:
+Phase A verifies the Kielipankki download path + exact license ("Open" in
+the catalogue — get the verbatim grant), maps the "very simple, not all
+texts properly checked" XML honestly, designs citations (text·chapter·verse
+where the transliteration carries them?), sizes the new small family. STOP
+— owner gate. Phase B: adapter, registry enabled:false, conformance, docs.
+
+### Phase A findings + FIXTURE PLAN — OWNER-APPROVED 2026-07-11 ("CCMH fixture approved": 4-gospel XML v1; Suprasliensis + Vitae deferred; dup ids → collision-tolerant `:b2` suffixing per the GRETIL precedent)
+
+**LICENSE (verbatim).** The PUB `-src` bundle carries its own grant. From
+`https://www.kielipankki.fi/download/ccmh-src/README.txt` verbatim:
+> Corpus Cyrillo-Methodianum Helsingiense: Corpus of Old Church Slavonic
+> texts, source
+> Metadata: http://urn.fi/urn:nbn:fi:lb-20140730106
+> Licence: CC-BY (https://creativecommons.org/licenses/by/4.0)
+> Resource shortname: ccmh-src
+
+The download index (`/download/ccmh-src/`) labels `ccmh-src.zip` (2.1M) **"CC
+BY"**; the Helsinki data catalogue record (`342b3dd2-…`) shows the access
+label **"Open"**. So the catalogue's bare "Open" resolves to **CC BY 4.0**.
+→ `license_class: attribution` (byte-for-byte the sblgnt precedent: "CC BY
+4.0" → `attribution`). The manifest will still read the string from the
+bundle at ingestion, not hardcode a class beyond this verified mapping.
+Attribution required: cite CCMH + `urn:nbn:fi:lb-20140730106`.
+
+**DOWNLOAD-PATH VERDICT — CLEAR (no auth).** PUB, publicly browsable, no
+login. Two equivalent surfaces, both verified reachable:
+- bundle zip: `https://www.kielipankki.fi/download/ccmh-src/ccmh-src.zip` (2.1M)
+- per-file www tree: `https://www.kielipankki.fi/download/ccmh-src/www/<text>.{html,txt,xml}`
+Not a git repo → `fetch_path` is HTTP file/zip (ASPR-`FileFetch` / ORACC-
+`ZipFetch` family), `sync_policy: manual`, `enabled: false`. **Recommend
+per-file FileFetch of the 4 gospel `.xml` files** (stable URLs, no unzip step)
+over the zip. No email/signup anywhere on the path — nothing BLOCKED.
+
+**STRUCTURE MAP (honest).** Each `<text>.html` is a LibreOffice-exported
+*description* page (3–22 KB) that links a `.txt` (7-bit-ASCII data) and, for
+the gospels only, a `.xml`. XML availability is the decisive fact:
+
+| text | .txt | .xml | genre / ref scheme |
+|---|---|---|---|
+| Codex Assemanianus | 317 KB | **563 KB** | gospel lectionary — XML re-sorted to canonical MAT→JOH order |
+| Codex Marianus | 413 KB | **618 KB** | tetraevangelium |
+| Codex Zographensis | 389 KB | **560 KB** | tetraevangelium |
+| Savvina kniga | 198 KB | **359 KB** | gospel lectionary |
+| Codex Suprasliensis | 861 KB | *(none)* | menaion/homilies — prose, folio scheme |
+| Vita Constantini | 71 KB | *(none)* | prose (later copy) |
+| Vita Methodii | 25 KB | *(none)* | prose (later copy) |
+
+The `.xml` is **CES `cesDoc` version 4** — genuinely structured:
+`<div type="book" id="b.MAT">` → `<div type="chapter" id="b.MAT.01">` →
+`<seg type="verse" id="b.MAT.01.01">`. Books are the four gospels, upstream
+codes **MAT / MAR / LUK / JOH** (note MAR not MRK, JOH not JHN — kept verbatim,
+not "corrected"). Two sub-shapes under one schema, both handled by a single
+streaming pass (accumulate all text between `<seg>`…`</seg>`):
+- **Assemanianus, Savvina:** verse text wrapped in `<ver id="1.01.01.0.0">`
+  children (id = the 7-digit gospel·ch·verse·line·parallel code); a seg may
+  hold several `<ver>` (line splits / lectionary parallels) → concatenated.
+- **Marianus, Zographensis:** verse text sits directly in `<seg>` mixed
+  content, no `<ver>`; chapter/seg ids NOT zero-padded (`b.MAT.5.23`).
+
+Quirks confirmed against the real files (to be pinned by fixtures): a
+non-canonical chapter `0` exists (`b.JOH.0.14` — colophon material); duplicate
+`(book,chapter,verse)` seg ids occur and carry **distinct** text (marianus 8,
+assemanianus 1, zographensis 3, savvina 0) → must disambiguate, never merge.
+Text is the corpus's **7-bit ASCII transliteration** (case-significant:
+`&`=big jer, `$`=small jer, `@`=jat, `O`=big jus, `E`=small jus, `w`=omega,
+`x`=xer, `T`=fita, plus editorial marks `*`=capital, `!`=titlo, `'`=poerok,
+`[…]`=interpolation, `%`=editor-flagged uncertainty). Stored **verbatim** (no
+Cyrillic back-transliteration — that is an enrichment, not canonical). ASCII ⇒
+NFC is trivially satisfied; `chu` gets the generic search fold. The catalogue's
+"not properly checked" warning is materially the `%` marks and the dup segs;
+both are handled, not cleaned.
+
+**CITATION / URN DESIGN.** One XML file = one manuscript = up to 4 gospel
+books; mirror the ASPR one-file-many-divs pattern — `discover` yields one
+`DocumentRef` per (manuscript, gospel-book), `parse` extracts that book div.
+- Document URN: `urn:nabu:ccmh:<manuscript>:<book>` e.g.
+  `urn:nabu:ccmh:assemanianus:mat` (book lowercased, sblgnt-style).
+- Passage URN: `…:<chapter>.<verse>` e.g. `urn:nabu:ccmh:assemanianus:mat:1.1`
+  (leading zeros stripped → integers, so shape-A `01` and shape-B `5` unify).
+- Passage grain = verse (`<seg type="verse">`); text = its concatenated
+  `<ver>`/mixed content, NFC.
+- **Uniqueness rule** (conformance): where a `(book,ch,verse)` repeats within a
+  document, append an occurrence suffix (`…:21.25` then `…:21.25#2`) so
+  passage URNs stay unique and stable across two parses. Exact suffix form
+  pinned in Phase B against the fixture dup.
+- `parser_family: ccmh-ces`; language `chu` for all.
+
+**DEDUPE DISCIPLINE (standing rule §3 — NEVER dedupe).** Confirmed against
+holdings: PROIEL already carries `urn:nabu:proiel:marianus`; TOROT carries a
+Zographensis and a Suprasliensis. CCMH's Marianus/Zographensis/Suprasliensis
+are **distinct editions** (Vajs–Kurc / Helsinki transliteration vs the
+treebank editions) → ingested as separate versions, no cross-source dedup.
+The genuine gaps CCMH closes — **Codex Assemanianus + Savvina kniga** — are
+absent from every current holding and both live in the XML core below.
+
+**SCOPE RECOMMENDATION (owner call).** Recommend **v1 = the 4 gospel
+manuscripts via the CES-XML parser** (Assemanianus, Marianus, Zographensis,
+Savvina). This delivers BOTH new prizes (Assemanianus, Savvina) AND 2 clean
+alt-editions (Marianus, Zographensis) with uniform book·ch·verse citations,
+low fixture risk, one small parser family, one small diff. **Defer** the 3
+TXT-only texts (Suprasliensis + the two Vitae): no XML, prose/folio 7-digit
+schemes whose semantics differ per text (fixture archaeology), and the
+Suprasliensis alt-edition value is already queued far richer in the obdurodon
+packet (#30) while TOROT holds one. They can be a later `ccmh-txt` extension
+if wanted. **If the owner prefers full-canon coverage now**, say so at the
+gate and I will add the `.txt` line parser + Suprasliensis/vitae fixtures in
+Phase B (larger diff, more quirk-pinning).
+
+**FIXTURE PLAN** (Phase B; the ONLY network step — trimmed real slices,
+retrieved 2026-07-11, from `…/download/ccmh-src/www/<t>.xml`, byte-identical
+heads/tails, structurally intact). Under `test/fixtures/ccmh/`:
+- `assemanianus.xml` — **shape A + lectionary prize + the dup-seg quirk.**
+  Trim to MAT 1 (genealogy, the `<ver>`-wrapped opening already sampled) +
+  the JOH 21 tail that carries the one duplicate `b.JOH.21.25` seg → exercises
+  `<ver>` concatenation, multi-`<ver>` segs, and the uniqueness-suffix path.
+- `savvina.xml` — **shape A + second prize.** Trim to MAT 1 + one LUK
+  pericope; confirms lectionary-with-`<ver>`, zero dups (control).
+- `marianus.xml` — **shape B + alt-edition + dup-seg + chapter-0.** Trim to
+  MAT 5 (Sermon slice, direct mixed content, no `<ver>`) + the `b.JOH.0.14`
+  colophon dup → exercises shape-B path, non-padded ids, chapter `0`, dup.
+- `zographensis.xml` — **shape B alt-edition control.** One short MAT chapter.
+- `README.md` — retrieval date/URL, license chain verbatim (CC BY 4.0 →
+  `attribution`, README.txt + zip label + catalogue "Open"), per-file table,
+  the transliteration/edito­rial-mark key, and the two sub-shape notes.
+Demo-parse evidence to report at Phase-B close: an Assemanianus verse, e.g.
+`urn:nabu:ccmh:assemanianus:mat:1.1` → `*k$nIg&I !rodstva !!iUxva . !sna
+!ddva . !sna *avra/am/l@ .` (Matthew 1:1, "The book of the generation of
+Jesus Christ, the son of David, the son of Abraham").
+
+Files touched Phase B (planned): `lib/nabu/adapters/ccmh.rb` +
+`lib/nabu/adapters/ccmh_ces_parser.rb`, `test/adapters/ccmh_test.rb`,
+`test/fixtures/ccmh/…`, `config/sources.yml` (ccmh: enabled:false,
+sync_policy:manual), `docs/02-sources.md` (row 19 → READY + alt-edition
+notes), worklog (sha —). One commit, not pushed.
+
+**Gate cleared: OWNER-APPROVED 2026-07-11, scope option 1 (4-gospel XML
+v1). Phase B executed — findings below.**
+
+### Findings (P13-2 Phase B, 2026-07-11 — shipped)
+
+SHIPPED AS APPROVED, no scope drift. New small family `ccmh-ces`
+(`CcmhCesParser`, the AsprParser one-file-many-documents shape, streaming
+Reader only) + `Ccmh` adapter: one document per (manuscript, gospel book),
+7 docs from the fixture set, urn `urn:nabu:ccmh:<ms>:<book>` + passage
+`:<ch>.<verse>` (zero-padding stripped so the two upstream sub-shapes cite
+uniformly). Both sub-shapes handled by ONE accumulation rule — a passage's
+text is all character data inside its `<seg>`, collapsed — so `<ver>`-
+wrapped (assemanianus/savvina) and direct-seg (marianus/zographensis) never
+fork the code path. Duplicate verse ids: `:b2` positional suffix in
+document order (GRETIL precedent), pinned by both real dups (assemanianus
+b.JOH.21.25, marianus b.JOH.0.14 — distinct texts kept, never merged).
+Marianus chapter 0 (heading list) kept — canonical means canonical; the
+editors' `%` uncertainty marks stored verbatim.
+
+FETCH DESIGN (the packet's one structural finding): FileFetch keeps ONE
+state file per dir and dooms unrecognized siblings, so the four files MUST
+NOT share a directory → per-manuscript subdirs (`canonical/ccmh/<ms>/`),
+ORACC's two-phase aggregation (prepare all four → one mass-deletion breaker
+over the union → complete all), FetchReport.repos = per-file url→sha pins.
+Probe: `:http_zip`, 4 targets, `state_subdir: <ms>`, `metadata_url: nil`
+(the license lives in the bundle README, no endpoint).
+
+Fixtures: 4 trimmed real slices (13.1/6.3/9.1/1.5 KB) + README (license
+chain verbatim, transliteration key, sub-shape map) + manifest.yml (all
+`whole: false`, `adapter_test: null` — trimmed counts would false-fail
+against full upstream). Registry: `ccmh` enabled:false, sync_policy manual
+(upstream frozen since 2021). 02-sources row 19 → READY with alt-edition +
+deferral notes. Suite 1394 runs/21263 assertions green, lint clean, 24
+adapter tests incl. conformance. Demo: `urn:nabu:ccmh:assemanianus:mat:1.1`
+→ `*k$nIg&I !rodstva !!iUxva . !sna !ddva . !sna *avra/am/l@ .` (Mt 1:1).
+Deferred honestly: Suprasliensis + the two Vitae (txt-only upstream; a
+future `ccmh-txt` family if wanted). Owner next step: real
+`bin/nabu sync ccmh`, eyeball, flip enabled.
+
+## P13-3 · ORACC expansion II  [tier: opus] [status: done] [deps: —]
+Config-only breadth per the P11-6 pattern: candidate projects saao/saa02…
+saa19 (the rest of the State Archives of Assyria), riao, ribo, blms, dcclt
+subprojects — Phase A verifies per-project license (CC0 expected but READ
+per project — the adapter maps at sync anyway) + zip availability + sizes,
+proposes the batch; owner approves the list (sizes matter — this could be
+100+ MB of zips); Phase B: PROJECTS list + scope comment + 02-sources.
+NEW-NODE-TYPE GUARD stands: if the parse-only smoke on owner-synced data
+hits unknown cdl shapes, census + report, do not hack.
+
+### Phase A proposal (2026-07-11) — OWNER-APPROVED 2026-07-11 (all + full-SAA extension)
+
+Scouted via `projects.json` + HEAD on each `json/<slug>.zip` (no zip
+downloads). All 25 packet candidates exist (HTTP 200, `application/zip`,
+`Last-Modified` present). **License is NOT readable in Phase A**: the
+standalone `<project>/metadata.json` serves an empty body over HTTP (200,
+0 bytes) for every candidate — the known upstream quirk already recorded in
+the ORACC row. License expectation is **CC0** for the whole batch, backed by
+(a) the P9-5a family scout (2026-07-08) that sampled every family here —
+saao, riao, ribo, blms, dcclt — and found CC0, and (b) the adapter's
+per-project license gate that STOPS the sync loudly on any non-`open`
+license at ingest (the real guarantee).
+
+| project | slug | zip? | size (MB) | Last-Modified | license evidence |
+|---|---|---|---|---|---|
+| saao/saa02 | saao-saa02 | 200 | 2.5 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa03 | saao-saa03 | 200 | 4.1 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa04 | saao-saa04 | 200 | 7.8 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa05 | saao-saa05 | 200 | 4.7 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa06 | saao-saa06 | 200 | 6.7 | 2024-06-07 | P9-5a saao=CC0; gate at sync |
+| saao/saa07 | saao-saa07 | 200 | 3.6 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa08 | saao-saa08 | 200 | 6.9 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa09 | saao-saa09 | 200 | 0.7 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa10 | saao-saa10 | 200 | 8.3 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa11 | saao-saa11 | 200 | 2.2 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa12 | saao-saa12 | 200 | 3.4 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa13 | saao-saa13 | 200 | 3.7 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa14 | saao-saa14 | 200 | 6.1 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa15 | saao-saa15 | 200 | 5.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa16 | saao-saa16 | 200 | 3.9 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa17 | saao-saa17 | 200 | 4.3 | 2023-07-11 | P9-5a saao=CC0; gate at sync |
+| saao/saa18 | saao-saa18 | 200 | 4.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa19 | saao-saa19 | 200 | 5.2 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| riao | riao | 200 | 17.3 | 2024-06-07 | P9-5a riao=CC0; gate at sync |
+| ribo | ribo | 200 | 6.6 | 2023-10-22 | P9-5a ribo=CC0; gate at sync |
+| blms | blms | 200 | 10.5 | 2024-06-28 | P9-5a blms=CC0; gate at sync |
+| dcclt/ebla | dcclt-ebla | 200 | 1.0 | 2024-08-19 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/jena | dcclt-jena | 200 | 0.9 | 2024-08-19 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/nineveh | dcclt-nineveh | 200 | 16.9 | 2024-10-16 | P9-5a dcclt=CC0; gate at sync |
+| dcclt/signlists | dcclt-signlists | 200 | 11.6 | 2025-01-22 | P9-5a dcclt=CC0; gate at sync |
+| saao/saa20 | saao-saa20 | 200 | 4.4 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saa21 | saao-saa21 | 200 | 3.6 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+| saao/saas2 | saao-saas2 | 200 | 1.5 | 2024-06-10 | P9-5a saao=CC0; gate at sync |
+
+**APPROVAL (2026-07-11): all 25 approved — "Approve all 25, full SAA is
+the point" — and, full SAA being the point, the batch EXTENDS past the
+packet's saa02…saa19 cap** with saao/saa20 and saao/saa21 (HEAD-verified
+above: 200, `application/zip`, Last-Modified) and saao/saas2, evaluated
+and INCLUDED: its project page shows a lemmatised text corpus in the saao
+family (the Assyrian Eponym List / Assyrian King List editions from State
+Archives of Assyria Studies 2, Millard 1994, lemmatised by N. Morello
+2019) with a normal 1.5 MB zip — the same functional shape as the SAA
+volumes, not a different series shape. **Final batch: 28 projects,
+158.7 MB of zips** (original 25 = 149.2 MB). ribo subprojects
+(babylon2…10/sources/bab7scores) remain out — the packet says "ribo", the
+top-level project, which has its own 6.6 MB corpus. Parser unchanged; the
+NEW-NODE-TYPE GUARD is the owner-fired sync review gate as in P11-6.
+
+## P13-4 · ATF translations — cuneiform readable  [tier: fable] [status: done] [deps: P13-3]
+The SAA letters famously have running English; the JSON carries none of it
+(P9-5a: 0 translation nodes; English lives in the ATF #tr.en lines / HTML).
+Phase A (design-heavy scout): find the bulk ATF acquisition path (oracc
+zips with ATF? per-project ATF exports? the oracc github ATF repos?);
+verify license (same CC0 project umbrella?); design how #tr.en lines
+attach: aligned-translation documents in the P7-4 shape (eng docs whose
+citations mirror the tablet lines → --parallel works) vs annotations vs
+hub witnesses — argue, pick, size. STOP — owner gate (this is the
+"cuneiform readable like Homer" payoff and the phase's fable packet).
+Phase B: implement per approved design.
+
+### Findings (P13-4 Phase B, 2026-07-11 — shipped)
+
+Implemented exactly per the approved design (one deviation noted below).
+Suite 1415 runs / 21,684 assertions green; lint clean; one commit, not
+pushed.
+
+- **`OraccTranslationParser`** (new family member, nokogiri): fragment +
+  sibling corpusjson → `-en` Document. All extraction rules are
+  MARKUP-based: prose = `span.cell` text (state-notice cells have none →
+  skipped by rule); the print marker is its own `span.xtr-label` element
+  (excluded by element, no prose regexes); restorations survive verbatim
+  ("[tran]sferred"). Prose at a non-line anchor reattaches to the next
+  line-start row (never silently dropped; unresolvable → loud ParseError);
+  two units on one label JOIN (urn uniqueness). Identity: corpusjson
+  project/textid must mint the caller's urn.
+- **Oracc adapter**: `translations:` kwarg via the established
+  `SourceRegistry::Entry#build_adapter` seam (default provably inert —
+  pre-P13-4 behavior byte-for-byte). Crawl runs after the zip phases,
+  PROJECT-SCOPED (`TRANSLATION_PROJECTS = saao/*`, stage 1); tr-en lists
+  machine-read from metadata formats; fragments land at
+  `<workdir>/html-en/<slug>/` OUTSIDE the zip-managed trees (a build swap
+  can never attic them); sequential + 0.25 s delay, tmp+rename writes,
+  resumable (zip 304 ⇒ missing-only; changed build ⇒ project re-crawl);
+  soft-404 ("404\n" bodies) counted missing, never written; per-project
+  crawl record in fetch notes ("saao-saa01 html-en: 1 fetched, 0 cached,
+  1 missing"). Discover is file-driven (-en ref per fragment with a live
+  tablet corpusjson; orphans counted skipped-by-rule).
+- **`Query::Parallel`**: second work family — `ORACC_DOCUMENT` pattern
+  (tablet urn IS the work; siblings = `<work>-<variant>`), both directions
+  resolve. Span-grouping unchanged: SAA's paragraph units render as :block
+  over the tablet's own o.1/r.5 lines. CLI `show --parallel` + MCP
+  `nabu_show parallel: true` light up with zero renderer changes.
+- **License**: `-en` docs carry `license_override: "attribution"`
+  (CC BY-SA 3.0 SAAo content statement; evidence quoted in the fixtures
+  README) — verified through the Loader into documents.license_override;
+  tablets stay NULL (inherit open/CC0).
+- **Fixtures** (per approved plan): saao-saa01 P224395 pair (corpusjson
+  whole from `saao-saa01.zip` + real 54 KB fragment with the two
+  break-anchored notice cells), fragments for the fixtured rimanum tablets
+  (P405432 13 KB, P405134 7 KB — primed/seal labels), trimmed saa01
+  metadata (tr-en gate: X010028 = the real untranslated text) + catalogue.
+  The saa01 slice ships the REAL NESTED zip root (saao-saa01/saa01/…).
+  DEVIATION from the Phase A table: fixture corpusjson path is
+  `saao-saa01/saa01/corpusjson/…` (nested reality), not the flat path the
+  plan sketched; rimanum fragments came in under estimate.
+- **Demo (scratch store, fixture-loaded)**: `show
+  urn:nabu:oracc:saao-saa01:P224395 --parallel` renders
+  `block [:o.1 — covers :o.1..:o.3]` — akk `a-na LUGAL EN-ia` /
+  `ARAD-ka {1}10-ha-ti` / `lu DI-mu a-na LUGAL EN-ia` then eng "To the
+  king, my lord: Your servant Adda-hati. Good health to the king, my
+  lord!" — cuneiform readable like Homer.
+- **Owner-fired next**: `bin/nabu sync oracc` after merge = stage-1 crawl
+  (saao, ~4.7k texts ≈ 250 MB, ~20 min at the polite delay). Stage 2 =
+  extend `TRANSLATION_PROJECTS`. Hungarian (etcsri tr-hun) remains a
+  config-shaped follow-up.
+
+### Findings & design (P13-4 Phase A, 2026-07-11 — DESIGN + FIXTURE PLAN — AWAITING OWNER APPROVAL)
+
+**Verdict up front.** There is NO public bulk ATF carrying the translations —
+that acquisition path is dead end-to-end (evidence below). The aligned running
+English IS bulk-obtainable, from the official per-text rendered-HTML endpoint
+(`/<project>/<textid>/html`), machine-aligned to the corpusjson we already hold
+via shared node refs. Attachment model: **(a) aligned-translation documents in
+the P7-4 sibling shape** — the SAA unit-grain reality is exactly what the
+P8-1b span-grouped `--parallel` renderer was built for; `show URN --parallel`
+gives the Homer reading experience with near-zero new render machinery.
+License: translations are **CC BY-SA 3.0 → `attribution`** (per-document
+`license_override`, the P10-4 mechanism), NOT the JSON build's CC0.
+
+#### 1. Acquisition — where the English actually lives (all probed 2026-07-11)
+
+Dead ends, each verified:
+- **Project json zips carry no prose translations** (re-confirmed on the
+  sanctioned sample `saao-saa09.zip`, 755 KB/27 files: corpusjson has 0
+  translation nodes, matching P9-5a's saa01 scan). The zip's `index-tra.json`
+  is a STEMMED English search index (instances like
+  `saao/saa09:P333952_project-en.22.9`) — proof translation documents exist in
+  the build, but the index carries word stems, not prose. The 194 KB
+  `saao-saa09-portal.json` is project essays (65 chunks, all `index.html`),
+  not per-text translations.
+- **github.com/oracc/catf** ("Canonical ATF version of Oracc data which is
+  permitted to be released under CC0") covers our exact translation-bearing
+  scope — saao saa01–saa21 + saas2 + saao, rinap, riao, ribo — but is
+  **C-ATF transliteration only: 0 `#tr` lines** (checked saao-saa09.catf
+  whole-file: 11 `&P` texts, no translation protocol lines), and stale
+  (last pushed 2019-09 vs the 2024-06 JSON builds). No etcsri/rimanum/dcclt.
+- **Per-text `.atf`, `.xtf`, `<id>_project-en.json`, and `xml.zip` endpoints
+  are all soft-404s** (HTTP 200 with a literal 4-byte `404\n` body, or 0-byte
+  JSON) on every mirror probed: upenn, build-oracc, LMU Munich. The
+  `oracc/publicdata` repo is empty (2016). P9-5a's ".atf endpoints 404" stands.
+
+The live path:
+- **`https://oracc.museum.upenn.edu/<project>/<textid>/html`** — the official
+  P4 per-text fragment (served with `access-control-allow-origin: *`, i.e.
+  intended for programmatic reads). It interleaves the transliteration rows
+  with translation cells: each transliteration `<tr>` carries
+  `id="P224395.5"` (**the SAME node ref as the corpusjson `line-start`
+  d-node's `ref` field**), and each translation unit anchors at its first row
+  via `data-tlat-ref="P224395_project-en.N"`, its prose in a
+  `<td class="t1 xtr" data-tlit-id="P224395.5">` cell. Alignment is therefore
+  mechanical: HTML ref → corpusjson `line-start` ref → `label` ("o 4") → our
+  frozen passage suffix (`o.4`). Verified on saao/saa01 P224395 against the
+  synced canonical corpusjson: anchors .2/.5/.12/.34 → `o 1`/`o 4`/`o 11`/
+  `r 30`, exact.
+- **Which texts to fetch is machine-readable**: each project's `metadata.json`
+  (in the zips we already sync) carries `formats["tr-en"]` — the exact list of
+  translated text ids. Local evidence: saao-saa01 **264/265**, rimanum
+  **378/378**, etcsri **1448/1456** (+1441 Hungarian `tr-hun` — future
+  option), rinap-rinap1 **88/96**, dcclt 1229/4980 (lexical lists, expectedly
+  partial); saa09 11/11. SAA coverage is effectively total — the famous
+  running English is all there.
+- Sizes: a typical SAA letter fragment ≈ 55 KB (the giant saa09 prophecy
+  compilation P333952: 290 KB). Full 33-project tr-en scope ≈ est. 8–10k
+  texts ≈ **400–500 MB, one-time crawl** (~1.5 h at a polite 2 req/s);
+  SAA-only ≈ ~4.7k texts ≈ 250 MB. No per-file `Last-Modified` on `/html` →
+  freshness gates on the project ZIP's Last-Modified (zip unchanged ⇒ build
+  unchanged ⇒ skip project's crawl entirely). Recommend full in-scope crawl;
+  SAA-first is the fallback if the owner wants a smaller first sync.
+
+#### 2. License — the honest layered reality
+
+- The **CC0 statements attach to the JSON build files** ("This data is
+  released under the CC0 license", in every zip file incl. `index-tra.json`) —
+  and the prose translations are deliberately NOT in those files.
+- **`oracc/catf`'s README wording** — ATF data "which is *permitted* to be
+  released under CC0" — plus the fact that catf strips translations, implies
+  the translation layer is exactly what is NOT under the CC0 umbrella.
+- The **SAAo project footer** states verbatim: "**Content released under a CC
+  BY-SA 3.0 license, 2007-20**" (the site-wide licensing page scopes its CC
+  BY-SA to "this online documentation"; the SAAo statement covers project
+  content). The translations originate in the printed SAA volumes (Helsinki,
+  Parpola et al., 1987–), republished on SAAo.
+- → Translation documents are labeled **`attribution` (CC BY-SA 3.0)** via
+  `documents.license_override` (P10-4 mechanism, as UD birchbark/rnc/
+  ruthenian) while the oracc source stays `open`. Attribution is MCP-safe.
+  Attribution string: "CC BY-SA 3.0 (SAAo/ORACC project content; SAA volume
+  authors per catalogue)".
+
+#### 3. Format — the #tr.en / unit-grain reality
+
+ORACC ATF has three translation forms (doc/help/editinginatf/translations):
+interlinear `#tr.en:` per line, `@translation parallel` (mirrored structure),
+and `@translation labeled` (blocks introduced by `@(o 1)` / `@label o 17 -
+r 2` label or label-RANGE). **SAAo uses labeled translations** — the rendered
+unit structure is the measured reality:
+- saao/saa01 P224395 (typical letter): **39 transliteration lines, 6
+  translation units** — e.g. unit 1 anchors at `o 1` and covers o 1–o 3 ("To
+  the king, my lord: Your servant Adda-hati. Good health to the king, my
+  lord!"), unit 2 at `o 4` covers o 4–o 10, etc. **Paragraph-grained, NOT
+  1:1.**
+- saao/saa09 P333952 (poetry/prophecy): 214 lines, 55 units (~4 lines/unit) —
+  finer, still block-grained. Per-line 1:1 is just the degenerate case.
+- Two P224395 units anchor at NON-line rows ("(Break)", "(Rest destroyed)" —
+  rendered `$`-state notices): prose-free, skipped by rule (counted); a
+  prose-bearing unit anchored at a break row (none seen yet) reattaches to
+  the next line-start row within the unit.
+- Unit prose begins with the print edition's line marker "(1) ", "(4) " —
+  alignment metadata now carried by the citation; stripped at parse, noted in
+  the parser docs (exact rule TDD'd against real fixtures).
+
+#### 4. Design — the attachment argument and pick
+
+**(a) Aligned-translation documents (P7-4 sibling shape) — CHOSEN.**
+One new document per translated text: `urn:nabu:oracc:<slug>:<textid>-en`
+(P/Q ids never contain hyphens; no collision with tablet urns or passage
+suffixes), language `eng`, `license_override: attribution`, title
+"<designation> (English translation)". One passage per translation unit,
+suffix = the ANCHOR line's frozen label suffix (`o.1`, `r.30`) — a suffix
+that exists in the tablet by construction. Then P8-1b span-grouping does the
+rest: the anchor OWNS tablet lines up to the next anchor, a multi-line unit
+renders as a :block (tablet lines then the English once, coverage-labeled), a
+1:1 unit as a :pair — **the ORACC labeled-translation model and the span-group
+ownership rule are the same model**; this is precisely the card-cited-Homer
+case the renderer was rebuilt for. Honest caveat (same as Homer cards): a
+labeled RANGE ending before the next anchor still owns the gap lines — the
+block shows slightly more tablet context than the label claimed, never less.
+One code change needed in `Query::Parallel#sibling_edition`: it is
+CTS-only today; add the ORACC document pattern
+(`\Aurn:nabu:oracc:[^:]+:[PQ][^:.-]+\z` as work; sibling = urn `<work>-…`,
+language = LANG) — ~15 lines + tests. The CLI/MCP surfaces then light up
+unchanged: `nabu show <tablet-urn> --parallel` and MCP `nabu_show`
+`parallel: true, parallel_lang: eng`. Translations are also first-class
+documents: English fulltext `search`, `show`, honest per-document license.
+
+**(b) Annotations on original passages — REJECTED.** Unit prose stuffed into
+the anchor passage's `annotations_json` has no render surface (`show
+--parallel` can't see it; annotations are token/analysis metadata by house
+convention), misrepresents a multi-line unit as a property of one line, makes
+English unsearchable without new plumbing, and cannot carry its own
+(different!) license label. Every honest fix rebuilds model (a) piecemeal.
+
+**(c) Alignment-hub witnesses — REJECTED.** Architecture §10 draws the line
+itself: the hub is CROSS-source, N-way, per-WORK with a shared citation
+vocabulary; Parallel is "within-source translation pairing". Tablets are
+~8–10k independent "works" — a registry entry per tablet is config sprawl the
+registry was never meant for, and the hub renders sentence lists, not the
+interleaved reading page. This is definitionally Parallel's job.
+
+#### 5. Implementation sketch (Phase B)
+
+1. **Fetch** (same oracc source — no cross-source canonical reads): after the
+   zip phase, per project read `metadata.json` `formats["tr-en"]`, crawl
+   `/<project>/<id>/html` → `<workdir>/<slug>/html-en/<id>.html` via
+   `ZipFetch.default_http` (vendored certs), polite rate limit, resumable
+   (skip existing; full re-crawl of a project only when its zip changed);
+   attic contract for upstream-dropped ids; counts in fetch notes. WebMock'd
+   tests. (~100–120 lines)
+2. **Parser** `OraccTranslationParser` (nokogiri, already a dep): input =
+   html fragment + sibling corpusjson path (for ref→label); walk xtr cells in
+   order → units; skip prose-free non-line anchors (counted); strip print
+   markers; NFC; mint `<doc>-en:<label→dots>` passages;
+   `license_override: attribution`. (~180 lines + tests incl. conformance)
+3. **Discover**: emit an `-en` DocumentRef per `html-en/<id>.html` whose
+   sibling corpusjson exists, metadata carrying both paths + title. (~40
+   lines)
+4. **Parallel**: ORACC sibling pattern as above. (~15 lines + tests)
+5. **Docs/registry**: sources.yml oracc `translations: true` note; 02-sources
+   ORACC row (translation acquisition + license layering); architecture §3
+   note (sibling model gains the ORACC pattern — one paragraph); mcp.md line;
+   backlog + worklog.
+   Sizing: **≈ half a P10-1** — a solid fable day, no new gems, schema
+   untouched (license_override exists).
+
+#### 6. Fixture plan (all real upstream, fetched at Phase B fixture time)
+
+Reuse the five existing corpusjson fixtures; add the html fragments + one SAA
+letter pair:
+
+| File (under test/fixtures/oracc/) | Size | whole? | Why |
+|---|---|---|---|
+| `rimanum/html-en/P405432.html` | ~30 KB est | whole | translation for an ALREADY-fixtured corpusjson (rimanum is 378/378 tr-en); Akkadian admin, P-number |
+| `rimanum/html-en/P405134.html` | ~20 KB est | whole | second rimanum pair (short) |
+| `saao-saa01/corpusjson/P224395.json` | 25 KB | whole | the fable case: SAA letter, byte-identical to the synced canonical copy (zip URL noted) |
+| `saao-saa01/html-en/P224395.html` | 55 KB | whole | 6 paragraph units over 39 lines INCLUDING the two break-anchored prose-free cells (the skip rule's regression case) |
+| `saao-saa01/metadata.json` | few KB | trimmed formats | `formats.tr-en` gating test: saa01 has one text with atf but no tr-en (265 vs 264) — keep that id in the trim so the no-translation skip is tested |
+
+HTML fragments are kept WHOLE (trimming rendered HTML risks structural lies);
+if P405432's fragment surprises at >100 KB, substitute the smallest
+translated rimanum text. README notes: retrieval date, endpoint URLs, the
+CC BY-SA 3.0 evidence quotes (SAAo footer verbatim + catf README verbatim),
+the "no public bulk ATF with translations" finding, and the soft-404 record.
+
+#### 7. Acceptance (Phase B)
+
+Conformance + idempotency green for `-en` docs; `bin/nabu show
+urn:nabu:oracc:saao-saa01:P224395 --parallel` renders o.1–o.3 + "To the king,
+my lord…" as a :block (fixture-loaded, demo evidence in the final report);
+`search` hits English prose; license_override attribution visible in show
+output; suite+lint green; one commit, not pushed.
+
+**DESIGN + FIXTURE PLAN — OWNER-APPROVED 2026-07-11** ("Approved design,
+Two-stage SAA-first crawl"): model (a) sibling `-en` documents + per-text
+HTML crawl + `attribution` labeling, as proposed. Crawl staging: TWO-STAGE,
+SAA-FIRST — stage 1 (owner-fired) crawls the saao projects (~250 MB);
+stage 2 (the remaining translated projects: rimanum, etcsri, rinap1, riao,
+ribo, blms, dcclt*) is a later owner-fired run. The crawl path is
+PROJECT-SCOPED from the start: the fetch serves a translation-project list,
+so stage 2 is a list extension (the established `PROJECTS`-scope pattern),
+no machinery change between stages.
+
+Decision points as approved:
+1. **Model (a)** — sibling translation documents, `--parallel` renders tablets
+   like Homer. (b)/(c) rejected with reasons above.
+2. **Acquisition = per-text HTML crawl** (the only public machine path;
+   official endpoint, CORS-open, ref-aligned), SAA-first two-stage as above.
+3. **License: translations labeled `attribution` (CC BY-SA 3.0)** per the
+   SAAo content statement — NOT CC0; per-document override, source stays open.
+4. Hungarian (etcsri, 1441 texts) supported by the same design later — v1 is
+   English only.
+
+## P13-5 · Psalms alignment work  [tier: opus] [status: done] [deps: —]
+Cross-shelf gem: new `psalms` work in config/alignments.yml — LXX-Swete
+(tlg0527 Psalmi, Greek numbering) ↔ Vulgate (Gallican, same Greek-tradition
+numbering — verified compatible in P11-5) ↔ WEB (HEBREW numbering — the
+versification divergence P11-8 dodged; this packet FACES it: a per-witness
+offset map or verse-map extractor extension, designed not hacked; if the
+honest answer is "Psalms need a mapping layer the registry lacks", report
+the design and stop for review) ↔ ASPR Paris Psalter (OE metrical psalms,
+psalm-numbered divs A5.x — verify their citation grain supports verse
+alignment; they may be psalm-level only → document honestly what grain the
+OE witness supports). Acceptance: `align "PSA 22.1" --work psalms` (or the
+designed equivalent) renders ≥3 witnesses correctly INCLUDING the numbering
+divergence handled visibly; registry loader validation green; docs.
+
+### Findings (P13-5, 2026-07-11 — shipped)
+
+NEW MECHANISM: a per-witness `numbering:` key on the alignment registry
+(architecture §10) — a `system:` provenance label plus a `ranges:` list of
+`{from, to, shift}` piecewise-linear rules that remap the LEADING citation
+segment (the psalm number) of a witness's refs into the work vocabulary. It
+lives in `Witness#normalize_ref`, applied AFTER the `books:` alias and, like
+`books:`, INDEX-SIDE only (the query already speaks the work vocabulary — the
+extractor set stays closed at two, `numbering:` is orthogonal to extraction).
+The one new power: an unmapped psalm returns nil → the ref is DROPPED (the
+indexer's compact/filter_map skip it), so the join/split psalms never
+false-align. Existing works stay byte-stable (numbering defaults nil; the two
+`Witness.new` call sites pass it, nothing else moved).
+
+THE MAPPING TABLE (encoded on the WEB witness in config/alignments.yml;
+provenance = the standard LXX↔Masoretic psalm concordance — Rahlfs'
+Septuaginta front-matter, NETS, and the Douay/Vulgate-vs-Hebrew tables, all
+agreeing, cross-checked live against the corpus, e.g. WEB 22 = "My God, my
+God, why have you forsaken me" = Greek 21):
+
+    Hebrew 1–8     = Greek 1–8      identity        (shift 0)
+    Hebrew 9,10    → Greek 9        LXX JOINS        DROPPED
+    Hebrew 11–113  = Greek 10–112   long stretch    (shift −1)
+    Hebrew 114,115 → Greek 113      LXX JOINS        DROPPED
+    Hebrew 116     → Greek 114,115  LXX SPLITS       DROPPED
+    Hebrew 117–146 = Greek 116–145                  (shift −1)
+    Hebrew 147     → Greek 146,147  LXX SPLITS       DROPPED
+    Hebrew 148–150 = Greek 148–150  identity        (shift 0)
+
+The six unmapped psalms (Hebrew 9, 10, 114, 115, 116, 147) attest per-witness
+only: e.g. `align "PSA 113.1"` renders LXX + Vulgate ("In exitu Israel") and
+an honest WEB miss, never a fabricated pairing. HONEST RESIDUAL: the remap
+fixes the PSALM number only; verse numbering WITHIN a psalm can also differ
+(LXX/Vulgate fold a Hebrew superscription into verse 1, the English does not)
+— disclosed, uncorrected, never fuzzed. For the acceptance verse the systems
+agree verse-for-verse.
+
+DISPLAY: the remapped witness's own (Hebrew) ref is recovered at QUERY time
+from the passage urn (never stored in the index) and surfaced — the column
+header gains "· Hebrew (Masoretic) numbering" and each sentence a
+"[Hebrew (Masoretic): PSA 23.1]" note. So the divergence is VISIBLE, not
+silently corrected.
+
+PARIS PSALTER GRAIN VERDICT: DEFERRED with evidence (not registered). ASPR
+mints one document per psalm (`urn:nabu:aspr:A5.51` … `A5.150`, psalms 51–150
+only — 1–50 are prose, absent from ASPR vol. 5) and numbers passages by the
+printed POETIC LINE ordinal, NOT the Latin verse (the adapter's frozen
+minting: "Passage urns append the 1-based line ordinal … equals the printed
+ASPR line number"). One Latin verse becomes several Old English metrical
+lines, so aligning line N onto verse N would fabricate pairings; the psalm
+number lives in the document id, not the passage tail, so cts-verse cannot
+build "PSA 51.3" from it either. Verse alignment would need a hand-built
+line→verse concordance the corpus does not have; a psalm-level registration
+would add a column that never co-renders with the verse-grain rows. So it
+stays out, documented in a loud registry comment + here + architecture §10,
+awaiting a real OE-psalter verse concordance.
+
+ACCEPTANCE RENDER (scratch index over a read-only copy of the live catalog —
+the live alignment index picks `psalms` up at the owner's next `nabu sync`/
+`nabu rebuild`, a config-only change; 130,543 rows indexed across all works
+from the snapshot):
+
+    PSA 22.1 — Psalms (LXX / Vulgate / WEB — the versification divergence)
+      3 of 3 witnesses attest this ref
+    LXX (Swete, First1K) — Psalmi [grc]   license: attribution
+      …:22.1   Κύριος ποιμαίνει με, καὶ οὐδέν με ὑστερήσει.
+    vulgate (Clementine) — Psalmi [lat]   license: open
+      …vulgate:psa:22.1   Psalmus David. Dominus regit me, et nihil mihi deerit :
+    WEB (English) — Psalms [eng]   license: open   · Hebrew (Masoretic) numbering
+      …eng-web:psa:23.1  [Hebrew (Masoretic): PSA 23.1]
+        Yahweh is my shepherd: I shall lack nothing.
+
+FILES: config/alignments.yml (+psalms work, loud comment), lib/nabu/
+alignment_registry.rb (Numbering/NumberingRange + numbering! parser +
+normalize_ref split), lib/nabu/query/align.rb (Sentence.native_ref,
+Witness.numbering, native_ref helper), lib/nabu/cli.rb (numbering + native
+notes, single + range renders), docs/architecture.md §10. TESTS: registry
+(remap/drop/validation + shipped psalms pin), indexer (remap + drop), align
+(native-ref render + join/split miss), cli (visible label). Suite 1426 runs /
+21,735 assertions green; lint clean (190 files). ONE commit, not pushed;
+worklog sha —.
+
+## P13-6 · Morph facets  [tier: opus] [status: done] [deps: —]
+improvements §1.6: search by morphology over the gold shelves (treebanks +
+ORACC pos): `search --lemma X --morph case=dat,number=pl` or a designed
+equivalent. Design note first (annotations schema reality check across
+conllu/proiel/oracc token shapes; index needed or LIKE-over-annotations
+acceptable at current scale? — measure before building), then implement
+smallest honest version. MCP: extend nabu_search args. Docs + conventions.
+
+Findings (design note: conventions §6.1):
+- **Tagset verdict — unified UD façade, not per-family passthrough.** Query
+  vocabulary is UD feature names (case/number/gender/person/tense/mood/voice/
+  degree). CoNLL-U `feats` parsed as-is (already UD, zero translation); PROIEL/
+  TOROT positional `morphology` DECODED into the same names via a fixed 10×~8
+  code map (`Query::MorphFacets::PROIEL_FIELDS`; positions 9–10 undecoded — no
+  clean UD facet). ORACC has no inflectional morphology (`pos` is NER-flavoured),
+  so inflectional facets never match it — honest absence, tested; a unified
+  `pos` facet deliberately deferred (three incompatible pos schemes).
+- **Index verdict — NO new index/migration.** Morphology is post-filtered in
+  Ruby over the lemma-anchored candidate passages' `annotations_json`. Measured
+  on the live 1.94M-row lemma index: `λόγος` dat-pl 37 ms / 46 hits; `sum`
+  subjunctive 720 ms / 4129 hits; worst case (article ὁ) 757 ms / 2255 hits.
+  A facet index would multiply rows + need a rebuild for no interactive gain.
+- **Out of scope (honest):** bare morph search without `--lemma` (would scan
+  every annotated passage); ORACC pos-only facets; UD/PROIEL tense-vs-aspect
+  divergence follows each treebank's own encoding (documented).
+- Scope: `search`/`nabu_search` only (not `concord` — future). `--morph`
+  requires `--lemma`; malformed facets → usage/InvalidArguments error. Each hit
+  shows the matching surface form(s) + decoded morph evidence, restricted to the
+  matching tokens. New `lib/nabu/query/morph_facets.rb`; tests across conllu +
+  proiel + oracc-absence (query/morph_facets_test, query/lemma_search_test,
+  mcp/tools_test). Suite 1445/21787 green, lint clean.
+
+## P13-7 · Vocab profiling  [tier: opus] [status: dropped-to-register (gate rule: phase ran full, 11 packets) 2026-07-11] [deps: P13-6]
+improvements §1.7 (stretch — take only if the phase runs to schedule):
+`nabu vocab <urn-or-document>` — lemma frequency profile of a
+document/range vs the corpus (distinctive vocabulary, hapax list), gold
+shelves only, honest about coverage. CLI + optional MCP. Small.
+
+## P13-8 · Open-source finishers  [tier: opus] [status: done] [deps: —]
+CI badge in README (the repo HAS GitHub Actions CI — the P12-4 no-CI claim
+was wrong, verify + fix), CONTRIBUTING.md (house rules distilled from
+CLAUDE.md/dev-loop for outside contributors + the DCO note from the MIT
+decision discussion), and a SECURITY/support one-liner if conventional.
+Tiny; no code.
+
+## P13-gate · Phase 13 gate  [tier: orchestrator] [status: done 2026-07-11] [deps: P13-1..8]
+Full-diff review, library.md refresh (new shelves/sections as synced),
+README truthfulness (numbers), PR, owner sync queue + flips, sticky alarm
+LAST. P13-7 dropped without ceremony if the phase runs long.
+
+## P13-1b · UD Ruthenian treebank  [tier: opus] [status: done] [deps: P13-1]
+Survey-II pick #1, promoted in-phase (config-only, the P10-2 recipe
+exactly): add UD_Old_East_Slavic-Ruthenian to the ud adapter's TREEBANKS
+map — "prosta mova" chancery/legal texts 1380–1650, the third East Slavic
+branch (zero overlap with birchbark/RNC/TOROT). License gate: verify
+CC BY-SA 4.0 in the repo README/LICENSE verbatim at fixture time (survey
+verified; re-verify) → attribution via the P10-4 per-treebank override
+(follow the birchbark/rnc entries). Fixture: one trimmed ~50-sentence
+.conllu slice (the ONLY network). Language code: verify what the treebank
+declares (orv? separate code?) and follow upstream. Conformance +
+idempotency + lemma-row evidence + dedup-guard test untouched. 02-sources
+UD row → 7 treebanks; backlog done; worklog (sha —). One commit, not
+pushed.
+
+### Findings (P13-1b, 2026-07-11 — shipped)
+
+LICENSE GATE PASSED. `UD_Old_East_Slavic-Ruthenian/master/LICENSE.txt` verbatim:
+"The treebank is licensed under the Creative Commons License Attribution-ShareAlike
+4.0 International." + "The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode" — byte-identical to
+Birchbark/RNC. `README.md` machine-readable metadata block: `License: CC BY-SA
+4.0`. (GitHub repo license field reads `NOASSERTION`, as the survey flagged; the
+in-repo grant is authoritative.) The stop-if-different condition never fired.
+
+LANGUAGE CODE: **`orv`** (following upstream: the UD file stem is `orv_ruthenian`,
+the shared East-Slavic code Birchbark/RNC also use). The per-newdoc comment
+`# lang = orv-be` (all 33 newdocs in the test split) is a finer BCP-47 regional
+subtag (Old East Slavic, Belarus), NOT the UD treebank language — the adapter
+tags the document `orv` from the `TREEBANKS` map, exactly as birchbark/rnc.
+
+FIXTURE: `test/fixtures/ud/old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu`
+— the first 50 complete sentence blocks of `orv_ruthenian-ud-test.conllu` (390
+blocks, 940,453 → 309,311 B). The whole test split has NO multiword-token range
+line (`n-m`) and NO empty node (`n.m`) — checked file-wide — so head-50 is
+representative with nothing extra to append (as Birchbark/RNC). Opens with the
+Second Lithuanian Statute (1566). All token lines validated at 10 tab-columns,
+file ends with a blank line, only complete blocks.
+
+ADAPTER: one `TREEBANKS` entry (`old-east-slavic-ruthenian`, repo, language `orv`,
+license "CC BY-SA 4.0", license_class `attribution`) — the P10-2 + P10-4 recipe
+verbatim, no new parser family, no fetch/discover changes. Dedup guard untouched
+(Ruthenian is neither a chu-PROIEL nor an orv-TOROT conversion). URN example:
+`urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50:StatutVKL1566-1`.
+
+LEMMA-ROW EVIDENCE: fixture load → `passage_lemmas` orv rows via the UNCHANGED
+Indexer plumbing; the opening NOUN lemma `артыкулъ` "article" at
+`…:StatutVKL1566-1` is attested by the pristine uppercase surface form `АРТЫКУЛЪ`.
+
+## P13-9 · Slovenian: goo300k + IMP  [tier: opus] [status: done] [deps: P13-2]
+Owner scope ruling (2026-07-11): "there isn't much before Early Modern
+Slovenian at all, so it's in-scope." Survey-II picks #3/#4: goo300k
+(CLARIN.SI, gold-annotated, verbatim CC BY 4.0, 294k words 1584–1899) and
+IMP (CC BY-SA 4.0, 17.7M tokens, historical Slovenian). Two-phase, fixture
+gate: Phase A verifies CLARIN.SI download paths + license grants verbatim,
+maps formats (TEI? vertical? — survey II has the leads), decides one
+adapter family or two, proposes which of the two corpora first (or both)
+with sizes; STOP — owner gate. Phase B per approval. Registry
+enabled:false; language code sl (historical); 02-sources rows; worklog.
+
+**OWNER-APPROVED 2026-07-11: option B + orig-canonical.** Both corpora via
+the one shared imp-tei parser family — goo300k the gold flagship, IMP the
+thin silver adapter with the automatic-annotation quality labeled honestly;
+gold lemma rows feed passage_lemmas from goo300k ONLY (default upheld: IMP
+text searchable without lemma rows, decision documented in the adapter +
+registry + 02-sources row 45). Canonical/annotation split confirmed:
+historical orig spelling IS the passage text, reg/lemma/msd ride as
+annotations.
+
+### Findings (P13-9, 2026-07-11 — shipped)
+
+Phase A verified both CLARIN.SI records page-level: auth-free DSpace zip
+bitstreams (goo300k-tei.zip 7.1 MB; IMP-corpus-tei.zip 150.31 MB), licenses
+verbatim ("Creative Commons - Attribution 4.0 International (CC BY 4.0)" /
+"Creative Commons - Attribution-ShareAlike 4.0 International (CC BY-SA
+4.0)"), and the actual TEI of both corpora (samples downloaded, schemas
+read). KEY FINDING — the overlap: same documents, complementary layers.
+goo300k = SAMPLED pages with GOLD annotation ("fully manualy validated",
+README sic; samplingDecl per file); IMP = FULL texts with AUTOMATIC
+annotation (deposit verbatim: "a fair amount of errors"); goo300k's gold
+labels do NOT exist inside IMP. Same sigil identity both sides
+(ZRC_00001-1584 = Dalmatin's Biblia) → alt-editions across sources,
+conventions §3, never dedupe.
+
+Shipped: ImpTeiParser (imp-tei family; streaming Reader; block = any
+element with direct <s> children; text = the historical orig surface from
+<orig>/bare <w>/<pc>/<c> leaves — reg NEVER enters text; :gold mode emits
+tokens {form=orig surface, reg, lemma, msd (# stripped), gloss/gloss_bibl},
+:none emits nothing; #header peeks sourceDesc bibl for titles). Goo300k
+adapter (xi:include page walk in root order, upstream document-global ab.N
+citations, urn:nabu:goo300k:<sigil>-<year>; ZipFetch single zip). Imp
+adapter (self-contained *-ana.xml, un-id'd <p>/<head> → per-tag counters
+p.N/head.N — stable, deposit frozen 2015; TEXT ONLY per the silver
+decision). NEW conventions §9 fold: sl ſ→s (Bohorič long s survives the
+generic fold — plain downcase is not full case folding — making every
+ſ-bearing word unfindable otherwise; digraph modernization deliberately NOT
+folded). Gold lemma flow proven end-to-end in tests: fixture → Loader →
+Indexer → passage_lemmas rows (joger attested by pristine "Iogre"; svoj by
+"ſvoje, ſvojga"). Fixtures: goo300k 2 docs (1584 Biblia 2 pages incl. the
+cross-page ab part="F" quirk; 1695 Sacrum promptuarium), imp 2 docs (the
+1584 alt-edition trim + WIKI00290-1855 whole). Registry goo300k + imp,
+enabled:false, sync_policy manual. Deferred honestly: IMP's reg
+(modernized) layer could someday power a modernized-search enrichment —
+out of scope here; imp25k lexicon (11356/1032) = normalization data, not
+dictionary-shelf.
+
+## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: pending] [deps: P13-2]
+## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: done] [deps: P13-2]
+Owner (2026-07-11): "Wiktionary is a good start, could be used for other
+things as a basis. Such as PIE/comparativistics/reconstructions that we
+didn't even start touching yet." Two deliverables:
+(a) kaikki.org Wiktionary-OCS extract (~4,548 senses, "made available
+    under the same licenses as Wiktionary - both CC-BY-SA and GFDL" —
+    dual-license → attribution) onto the reference shelf: JSONL dictionary
+    family (third format after TEI + CSV), slug wiktionary-cu, lang chu,
+    folded-headword keying (Cyrillic OCS — existing chu fold), etymology
+    fields KEPT in the body (they carry the Proto-Slavic links).
+(b) SCOUT NOTE (no implementation): what kaikki offers for the
+    reconstruction axis — Proto-Slavic/Proto-Germanic/PIE reconstruction
+    entries exist in Wiktionary's extracts; survey scope, sizes, licensing
+    (same dual), and how a future "etymology/reconstruction shelf" might
+    join dictionaries (entries whose headwords are *reconstructed forms
+    linked to attested lemmas across the library's languages — the
+    comparativist's dream). Write findings into improvements.md as a new
+    register entry; NO adapter for it in this packet.
+Two-phase, fixture gate on (a). Registry enabled:false; 02-sources;
+worklog.
+
+### FIXTURE PLAN — P13-10 Phase A findings (2026-07-11, network-verified)
+
+**OWNER-APPROVED 2026-07-11** (relayed via orchestrator): fixture plan
+approved as written; the "character"-POS single-letter entries are KEPT
+("yes, keep").
+
+**Upstream (a), verified live.** kaikki.org Old Church Slavonic extract.
+Download URL (per-language subdir, relative href resolved):
+`https://kaikki.org/dictionary/Old%20Church%20Slavonic/kaikki.org-dictionary-OldChurchSlavonic.jsonl`
+— HTTP 200, **44.0 MB**, one JSON object per LINE. Page reports **4548
+distinct words** (~5.7k senses across POS breakdown). Source: enwiktionary
+dump 2026-07-06, extracted 2026-07-09 (wiktextract / Ylönen). Ranged GET
+(bytes 0–120000 → HTTP 206) pulled 49 clean records for shape analysis.
+- **Deprecation caveat (surfaced for the owner):** the file is labelled
+  "DEPRECATED, will be removed in the near future" (wiktextract issue
+  #1178). It is the *postprocessed per-language* artifact the site itself
+  builds on and it **serves today**; Ylönen steers bulk re-processors to
+  the 23 GB raw enwiktionary extract instead. Plan: target this live URL
+  (FileFetch sha-pin + conditional GET; a future 404 → clean FetchError),
+  document the deprecation in the adapter note + 02-sources, and record the
+  durable fallback = filter the full enwiktextract by `lang_code == "cu"`.
+  enabled:false + sync_policy:manual means the owner-fired first sync
+  re-confirms availability, exactly the Bosworth-Toller "frozen deposit"
+  posture.
+
+**License — verbatim, located.** On `https://kaikki.org/dictionary/`
+("Copyright and license"): *"This data is made available under the same
+licenses as Wiktionary - both CC-BY-SA and GFDL."* Plus the wiktextract
+academic-citation request. Dual license → `license_class "attribution"`
+(the SA arm governs), MCP-surface-safe. Same grant covers the
+reconstruction extracts below.
+
+**Record shape (confirmed, not assumed).** One record = one WORD × POS ×
+etymology. Top-level keys observed: `word` (Cyrillic headword, e.g. царь,
+о, богъ), `pos` (noun/prep/conj/pron/num/adv/particle/**character**),
+`lang` ("Old Church Slavonic"), `lang_code` **"cu"**, `senses` (array;
+each sense: `glosses` [array of strings], `id`, `links`, optional
+`tags`/`examples`/`categories`/`raw_glosses`), `etymology_text` (plain
+text — **carries the Proto-Slavic/PIE links to KEEP**, e.g. царь →
+"Shortened from Proto-Slavic \*cěsařь … Proto-Germanic \*kaisaraz … Latin
+Caesar"; о → "From Proto-Slavic \*o(b), from Proto-Indo-European
+\*h₃ebʰi"), `etymology_templates`, `etymology_number` (homograph
+disambiguator: 1/2/3), `forms` (canonical + romanization + full paradigm),
+`head_templates`, `related`/`derived`/`synonyms`/`descendants`. NO
+top-level record id; sense `id` is `en-<word>-cu-<pos>-<hash>`.
+- **Mapping to DictionaryEntry:** one record → one entry (senses collapse
+  into the body, the LSJ/B-T precedent). `headword` = `word` NFC;
+  `headword_folded` = `Normalize.search_form(word, language: "chu")` (the
+  EXISTING chu fold = generic downcase+Mn-strip — titlo U+0483 /
+  palatalization U+0484 are `\p{Mn}`, so цар҄ь folds toward царь; NO new §9
+  rule, matching CCMH/P13-2's chu layer). `gloss` = first sense's first
+  gloss, best-effort nil. `body` = `etymology_text` + numbered sense
+  glosses (etymology KEPT — the reconstruction seed), NFC. `citations` = []
+  (Wiktionary quotes unanchored — B-T precedent).
+- **entry_id (unique-per-file, stable):** `word` alone is NOT unique
+  (homographs: и ×3, о/а/е ×2 in the 49-record sample, split by
+  pos/etymology_number). Plan: `"<word>:<pos>"` + `":<etymology_number>"`
+  when present; a residual same-word+pos+no-ety collision (to be measured
+  on the full file at fixture build) gets a positional `":<n>"` suffix.
+  urn `urn:nabu:dict:wiktionary-cu:<entry_id>`, back-link
+  en.wiktionary.org/wiki/<word>#Old_Church_Slavonic.
+- **"character" POS caveat:** single-letter alphabet entries (б, з, к…)
+  are ~half the *alphabetic-head* sample but a small fraction of the 4548
+  overall. They are legitimate glossed Wiktionary entries; plan = **KEEP**
+  (canonical; harmless to `define`), fixture stratified so they do not
+  dominate. Flag for owner if exclusion preferred.
+
+**Fixture plan (Phase B, ~250–350 records, stratified, trimmed real
+JSONL).** Selected deterministically from a full-file download (network
+step, README notes retrieval date + URL + selection method):
+1. multi-sense (о/prep 7 senses; царь 2) — body sense-linearization;
+2. etymology-bearing with Proto-Slavic AND PIE links — the KEEP assertion;
+3. Cyrillic edge cases: titlo/palatalization marks (цар҄ь), yus/jer
+   letters, romanization forms, a `character` entry or two;
+4. homographs (о, и, а, е) — entry_id disambiguation;
+5. POS spread (noun/prep/conj/pron/num/adv/particle/character);
+6. no-etymology and no-gloss records — best-effort nil paths;
+7. **≥1 gospel-frequent lemma for the Phase B `--lang chu` demo** (candidate
+   царь "emperor/tsar", or богъ/человѣкъ/слово) — a TOROT/PROIEL/CCMH gold
+   `chu` lemma whose folded form must equal the Wiktionary folded headword
+   (corpus lemma spelling to be confirmed against the fixture at build).
+
+**Deliverable (b) — reconstruction scout (network-verified, for
+improvements.md).** kaikki ships the same-licensed reconstruction extracts:
+- **Proto-Slavic** `.../Proto-Slavic/kaikki.org-dictionary-ProtoSlavic.jsonl`
+  — 45.4 MB, ~5195 words, `lang_code "sla-pro"`. Record shape ≈ the OCS
+  shape PLUS a **`descendants`** tree: `*kara` → {East Slavic: be/ru/uk
+  ка́ра; South Slavic: **cu** OCS …} with romanizations. **This is the
+  crosswalk edge** — a reconstructed headword linked to attested reflexes
+  across the library's languages.
+- **Proto-Indo-European**
+  `.../Proto-Indo-European/kaikki.org-dictionary-ProtoIndoEuropean.jsonl`
+  — 11.5 MB, ~1781 words, `lang_code "ine-pro"`. (Proto-Germanic
+  `gem-pro` also exists — the царь chain crosses it.)
+- Both same dual CC-BY-SA + GFDL, both same "deprecated" postprocessed
+  label. NO adapter this packet; the improvements.md register entry
+  describes a future "reconstruction/etymology shelf" joining reconstructed
+  headwords to attested lemmas via two signals already in reach: (i) the
+  `etymology_text` links we KEEP in every OCS body (forward, text), and
+  (ii) the structured `descendants` arrays of the Proto-* extracts
+  (reverse, graph) — the comparativist join across chu/orv/ru/got.
+
+### P13-10 findings (Phase B, 2026-07-11)
+
+- **Full-file reality (46,091,411 B, 4,615 lines / 4,548 distinct words,
+  sha256 5bd61e74…, all `lang_code "cu"`):** POS census noun 2439 / verb
+  1284 / adj 385 / pron 107 / adv 101 / name 63 / **character 60** (kept,
+  owner ruling) / num 40 / suffix 39 / prep 36 / prefix 26 / conj 24 /
+  particle+intj 8 / contraction+det+punct 3; 2,617 etymology-bearing
+  (1,797 Proto-Slavic, 279 PIE); 4 records glossless in every sense; max
+  18 senses (слово). **Residual entry-id collisions measured: 10 pairs**
+  (each ×2) under `word:pos[:ety]` — блажимъ:verb, блѧдь:noun, боль:noun,
+  видимъ:verb:2 (collides WITH an ety number), гобина:noun, гобино:noun,
+  начѧтъ:verb, ненавидимъ:verb, привести:verb, ⰿⰾⱑⰽⱁ:noun (Glagolitic) —
+  resolved by the positional `:n` suffix in file order (2nd = `:2`).
+- **Shipped:** `WiktionaryJsonlParser` (9th parser family; streamed
+  line-by-line JSON, entry_id `word:pos[:ety][:n]`, gloss = first gloss
+  string of the first glossed sense with trailing colon trimmed, body =
+  etymology_text KEPT verbatim first + one line per sense (raw_glosses
+  preferred — keeps "(anatomy)"-style labels; nesting path joined " — ";
+  numbered only when >1 sense; glossless senses render their upstream
+  `tags` so bodies are never empty), NFC; malformed line/record →
+  ParseError with line number) + `WiktionaryCu` adapter (`content_kind
+  :dictionary`, FileFetch single-file, :http_zip probe with metadata_url
+  nil, slug wiktionary-cu, lang chu, `urn:nabu:dict:wiktionary-cu:<id>`)
+  + registry enabled:false sync_policy:manual + CLI/MCP define `lang`
+  gates widened to chu (Query::Define again needed ZERO changes) +
+  architecture §11 fourth-occupant paragraph + 02-sources #46
+  SURVEYED→READY + improvements **§1.11** (the reconstruction-shelf
+  register entry from the Phase A scout).
+- **Fold verdict confirmed in data:** the existing generic chu fold
+  suffices — the fixture's ан҃г (titlo U+0483) folds to анг, цар҄ь's
+  U+0484 strips, jers/yuses stay; no conventions §9 entry (the P13-1
+  survey's open question, settled).
+- **Fixture:** 278 stratified byte-verbatim lines (2,252,722 B), all 10
+  collision pairs + TOROT-gold demo lemmas + all 4 glossless + 18-sense
+  слово + 4-per-POS + 25 PIE + 40 Proto-Slavic + every-32nd sweep + 12
+  extra homograph groups; recipe + full-file census in
+  test/fixtures/wiktionary-cu/README.md.
+- **Demo (scratch catalog built from the fixture; live db untouched):**
+  `define богъ --lang chu` → богъ [attribution] gloss "god", body
+  "Inherited from Proto-Slavic *bogъ.\ngod" — богъ is a TOROT
+  Zographensis gold lemma, the define-glosses join proven in-suite too
+  (`Query::Define#glosses` carries "god"/"say, speak" for богъ/глаголати);
+  `define о --lang chu` → both homographs (о:character:1 the letter,
+  о:prep:2 with 7 numbered senses and the PIE chain *h₃ebʰi verbatim);
+  `status` → wiktionary-cu entries=278.
+- Remaining owner action (P13-gate): fire `bin/nabu sync wiktionary-cu`
+  (~44 MB single GET), eyeball `define` output, flip enabled. NOTE the
+  upstream deprecation flag — if the URL is ever pulled, the 02-sources
+  fallback (filter the full enwiktextract by lang_code) becomes a small
+  follow-up packet.
+
+## Slavic decisions record (owner, 2026-07-11)
+Freising (CC BY-ND): GO — superseding ruling later same day: "BY-ND is
+in-scope going forward… MCP could serve my local models which arguably have
+same tool standing as dumb terminal. If we ever build some form of external
+access in future it would be either excluded by design or secure
+permission… (tracking permission points for future dev as we include
+them)." → P13-11. Miklosich BCDH email: WAIT. Early Modern Slovenian: IN
+SCOPE (→ P13-9). Wiktionary OCS: GO (→ P13-10).
+
+## P13-11 · Freising Manuscripts (Brizinski spomeniki)  [tier: opus] [status: done] [deps: P13-9]
+Owner ruling 2026-07-11: BY-ND in-scope (zero-distribution library; private
+transformations permitted; ND mapped to the research_private posture —
+default-excluded from MCP, per-call opt-in; any future external-access
+feature adds its exclusion checkpoint). The oldest Slovene — and oldest
+Latin-script Slavic — text, ~1000 CE, eZISS TEI P4 critical edition
+(diplomatic + critical + phonetic transcriptions, translations, glossary;
+license VERBATIM in bs.xml: "Priznanje avtorstva-Brez predelav 2.5
+Slovenija" = CC BY-ND 2.5 SI — the English page's BY-SA label is wrong,
+survey II verified in-file).
+OWNER-APPROVED 2026-07-11 (Phase A gate): design + all-six + sl —
+critical transcription = Passage#text; diplomatic/phonetic + all six
+translations (slv/eng/ger/ita/lat/pol) as line-aligned sibling documents;
+passage = manuscript line, display citation "BS I, fol. 78r, l. 1" in
+annotations; language `sl` for transcription layers + slv translation,
+per-language codes for the rest.
+Two-phase, fixture gate: Phase A verifies the eZISS download path, maps
+the P4 TEI (three parallel transcription layers — decide which is the
+Passage text and whether the others ride as annotations or sibling docs;
+P9-2 P4 experience applies), designs citations (folio/line per the
+diplomatic layer?), confirms the license mapping (license string CC BY-ND
+2.5 SI, license_class research_private + a permission-point note in
+improvements §4.3). STOP — owner gate. Phase B: adapter (small; family
+per Phase A verdict), registry enabled:false, conformance, 02-sources row
+(SURVEYED-BLOCKED → READY with the ND posture documented), backlog done,
+worklog (sha —). One commit, not pushed.
+DONE 2026-07-11. Findings:
+- **License re-verified in-file**: bs.xml `<availability status="free">`
+  verbatim "Avtorske pravice za besedilo te izdaje ureja licenca Creative
+  Commons Priznanje avtorstva-Brez predelav 2.5 Slovenija"
+  (creativecommons.org/licenses/by-nd/2.5/si/) = CC BY-ND 2.5 SI. Audio
+  © ZRC SAZU/RTVS, facsimiles © BSB München — both excluded (fetch takes
+  bs-text.zip only, 7.5 MB).
+- **Download-path correction over the survey**: the zips live at
+  `nl.ijs.si/e-zrc/bs-text.zip` (parent dir), NOT `/e-zrc/bs/bs-text.zip`
+  (404). Zip layout: single top dir `bs/`, TEI under `bs/tei/` (41 XML).
+- **The structural gift**: all 9 layers share one skeleton
+  div[mon]→page[folio]→line[n] with IDENTICAL line keys (228 lines/layer)
+  — a perfectly aligned parallel corpus; suffix-equality alignment needs
+  no stored links. Master bs.xml composes layers via external entities
+  (never resolved — each layer file parses standalone) and carries the
+  ZRCola charDesc glyph map (no raw PUA in text, only <g corresp> refs).
+- Shipped: FreisingTeiParser (new family freising-tei; corr-over-sic,
+  expan-over-abbr, scribal del-dropped/add-kept, glyph resolution, NFC),
+  Freising adapter (research_private, ZipFetch), Query::Parallel freising
+  work pattern + work-outranks-variants sibling refinement, MCP-exclusion
+  evidence tests (real manifest wired through source→indexer→tools),
+  improvements §4.3 permission point (first occupant), registry
+  enabled:false/manual, 02-sources row 18 → READY, fixtures (trimmed real,
+  famous opening included; demo parse bs1:1 "GLAGOLITE PO NAZ REDKA
+  ZLOUEZA:" / citation "BS I, fol. 78r, l. 1").
+- Deviations: language codes eng/lat per repo precedent instead of the
+  Phase-A en/la proposal (users type --parallel eng; lat v/j fold);
+  ger/ita/pol per upstream TEI ids. Deferred: witness variants (bsCT-mik,
+  bsDT-*, bsPT-grf/rak), glossary bsLX (dictionary-shelf candidate).
+- Owner action queued: fire `bin/nabu sync freising`, eyeball, flip
+  enabled (CLAUDE.md checklist step 6).

@@ -237,9 +237,20 @@ studies over the full entry set.
 | **Size** | `aspr`: 349 poems / 30,550 lines — the complete six-volume Anglo-Saxon Poetic Records (Beowulf, Exeter Book, Junius, Vercelli, Paris Psalter, Minor Poems), CC BY-SA → `attribution`. `iswoc`: 5 prose+gospel texts / 2,536 gold-annotated sentences (Ælfric's Lives, Apollonius, Chronicles, Orosius, West-Saxon Gospels), CC BY-NC-SA → `nc` |
 | **Metadata** | ASPR: canonical printed line numbers as citations (`urn:nabu:aspr:A4.1:1` = Beowulf line 1), Cameron/DOE record slugs; ISWOC: PROIEL-family gold lemma+morphology (24,827 `ang` lemma rows), verse-cited Gospel of Mark = **alignment-hub witness #9** (`align MARK 2.3` now renders the West-Saxon) |
 
-Both synced 2026-07-11; enabled flips pending owner sign-off.
-Bosworth-Toller (the OE dictionary, CC BY 4.0, 84 MB CSV) is shipped and
-queued for its first sync — `define --lang ang` with æ→ae/þ,ð→th folding.
+All three OE sources live (synced + flipped 2026-07-11); Bosworth-Toller
+holds 62,815 entries — `define --lang ang` with æ→ae/þ,ð→th folding works.
+
+### Incoming shelf (Phase 13, shipped awaiting owner syncs)
+
+Seven sources registered `enabled: false`: **ccmh** (4 OCS gospel
+manuscripts incl. Assemanianus + Savvina kniga, CC BY), **UD Ruthenian**
+(rides the next `sync ud`), **28 new ORACC projects** (full SAA + riao/
+ribo/blms/dcclt subprojects, ~159 MB) plus the **SAA English translation
+crawl** (~250 MB stage 1 — `--parallel` for tablets), **goo300k** (gold
+Early Modern Slovenian, 1584–1899) + **imp** (17.7M tokens, silver),
+**wiktionary-cu** (4.6k OCS Wiktionary entries with Proto-Slavic/PIE
+etymologies kept), and **freising** (the Brižinski spomeniki, ~1000 CE,
+BY-ND → research_private — the first MCP-default-excluded source).
 
 **Research uses:** OE philology with canonical citability; comparative
 Germanic (Gothic ↔ OE ↔ ON gap visible); the nine-witness Mark as a

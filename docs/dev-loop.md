@@ -146,3 +146,15 @@ Real full syncs (`bin/nabu sync <source>` against complete upstream corpora) rem
 2. **Push policy:** the loop pushes `phase-N` branches and opens PRs on `arvicco/nabu`; `main` stays owner-merged.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
 4. In effect: `docs/backlog.md` carries the elaborated packets, `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches.
+
+### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
+
+When a packet stops at an owner approval gate (fixture plan, design pick),
+the orchestrator immediately dispatches the next dependency-free backlog
+packet rather than idling. Discipline: the gated agent may hold uncommitted
+edits in the shared working tree (the Phase A convention), so the parallel
+packet runs in an isolated worktree (or with strict file-disjointness,
+including backlog/worklog) and merges at review. Reviews remain sequential;
+the parallelism is in the agents' work, not in the orchestrator's
+acceptance. Owner verdicts are relayed to the paused agent the moment they
+arrive, regardless of what else is running.

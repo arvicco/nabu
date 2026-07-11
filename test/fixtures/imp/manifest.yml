@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. CLARIN.SI serves the annotated corpus as ONE zip
+# bitstream (IMP-corpus-tei.zip, 150.31 MB); no raw per-file URLs exist.
+# Both fixtures were extracted 2026-07-11 from that zip (one trimmed per
+# the README, one whole), so both entries are refetchable: false —
+# `fixtures:check` SKIPS them and `fixtures:refresh` refuses. Re-acquiring
+# means re-downloading the zip and re-applying the README trim.
+source: imp
+adapter_test:
+retrieved: 2026-07-11
+files:
+  - path: ZRC_00001-1584-ana.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the IMP-corpus-tei.zip bitstream (hdl 11356/1031) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1031/IMP-corpus-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: body cut after the first div's second <p> + re-added close tags; 1,423,939 B -> 37,368 B, well-formed
+  - path: WIKI00290-1855-ana.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the IMP-corpus-tei.zip bitstream (hdl 11356/1031) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1031/IMP-corpus-tei.zip
+    copied: 2026-07-11
+    whole: true
+    trim: none (the corpus's smallest document, kept whole)

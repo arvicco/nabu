@@ -97,7 +97,7 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
-- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided).
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS`, SAA-first staging) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open.
 
 ## 4. Ad-hoc pipeline
 
@@ -331,11 +331,50 @@ witness renders as ONE column: the hit book's document heads it
 "not synced" appears only when none of its documents are live. GRETIL
 commentary layers are a *new work* with its own ref scheme (works are
 independent namespaces; nothing NT-shaped is hardcoded). Versification
-swamps (LXX-vs-Masoretic) stay out of scope by the same scoping: a work's
-witnesses must share a citation scheme, and whoever registers a witness
-owns that claim — the `ot` registrar's claim rests on both witnesses
-following the Greek tradition (Vulgate Psalms are numbered after the LXX,
-so "PSA 22.1" is the shepherd psalm in both).
+swamps (LXX-vs-Masoretic) stayed out of scope through P11-8 by the same
+scoping: a work's witnesses must share a citation scheme, and whoever
+registers a witness owns that claim — the `ot` registrar's claim rests on
+both witnesses following the Greek tradition (Vulgate Psalms are numbered
+after the LXX, so "PSA 22.1" is the shepherd psalm in both).
+
+**Facing versification: the `numbering:` remap (P13-5).** The `psalms` work
+finally faces the divergence the `ot` work sidestepped by omitting the WEB
+psalter. Its vocabulary is the Greek/LXX numbering the Septuagint and
+Vulgate share (so "PSA 22.1" is the shepherd psalm); the World English Bible
+is Hebrew/Masoretic-numbered (its "23.1" is that same verse). A new
+OPTIONAL per-witness key, `numbering:`, carries a `system:` provenance label
+plus a `ranges:` list of piecewise-linear rules — each `{from, to, shift}`
+maps a span of the witness's leading citation segment (the psalm number)
+into the work vocabulary. It is a second witness-local transform in
+`Witness#normalize_ref`, applied AFTER the `books:` alias, and — like
+`books:` — INDEX-SIDE only (the query already speaks the work vocabulary).
+The one genuinely new power: a psalm NO rule covers returns nil, which
+DROPS the ref (the indexer's compact/filter_map skip it). This is the
+honesty the divergence demands — the psalms the LXX joins or splits (Hebrew
+9, 10, 114, 115, 116, 147) map onto no single Greek number, so rather than
+false-align onto a Greek psalm they do not equal, the witness simply renders
+"not attested" there (verified: querying Greek 113, the Hebrew 114+115 join,
+shows the two Greek-tradition witnesses and an honest WEB miss). The
+extractor set stays closed at two — `numbering:` is orthogonal to how a ref
+is EXTRACTED. The remapped witness's OWN ref is recovered at query time from
+the passage urn (never stored) and surfaced on the aligned row ("WEB … ·
+Hebrew (Masoretic) numbering" / "[Hebrew (Masoretic): PSA 23.1]"), so the
+divergence is visible, not silently corrected. The mapping table's
+provenance is the standard LXX↔Masoretic psalm concordance (Rahlfs'
+Septuaginta front-matter, NETS, the Douay/Vulgate-vs-Hebrew tables — all in
+agreement, cross-checked live against the corpus). SCOPE HONESTY: the remap
+corrects the PSALM number only; verse numbering WITHIN a psalm can also
+differ (LXX/Vulgate fold a Hebrew superscription into verse 1, the English
+does not), a disclosed residual left uncorrected rather than fabricated
+away. The OE Paris Psalter (ASPR A5.51–A5.150) was a candidate fourth
+witness but is DEFERRED with evidence: the ASPR adapter numbers passages by
+the printed POETIC LINE (the psalm number lives in the per-psalm document
+id, not the passage tail), and one Latin verse becomes several Old English
+metrical lines, so its citations do not support verse alignment without a
+hand-built line→verse concordance the corpus does not have — registering it
+would either fabricate pairings or add a column that never co-renders. The
+shipped-registry pin test (`test/alignment_registry_test.rb`) grew a `psalms`
+case openly as the schema gained `numbering:`.
 
 ## 11. The dictionary shelf — lexica as data (P11-4)
 
@@ -443,3 +482,20 @@ ISWOC/ASPR urns exists; the resolution layer needed nothing new. Fetch is
 the ASPR FileFetch path (one ~84 MB CSV, DSpace bitstream `/content` URL).
 A second dictionary from the SAME repo (Middle Liddell lives beside LSJ
 upstream) is one entry in the lexica adapter's DICTIONARIES map.
+
+**The fourth occupant brought the third format (P13-10, Wiktionary-OCS).**
+kaikki.org's wiktextract JSONL (one JSON object per line, one record per
+word × POS × etymology; dual "CC-BY-SA and GFDL" → attribution) plugs in
+as `WiktionaryCu` + the `wiktionary-jsonl` parser family: slug
+`wiktionary-cu`, language `chu`, FileFetch single-file path (~44 MB), same
+Entry model, `define`/glosses again unchanged (only the CLI/MCP `lang`
+gates widened to `chu`; the fold is the generic rule — no §9 entry needed,
+Cyrillic combining marks are `\p{Mn}`). Two format-specific decisions:
+kaikki records carry NO stable upstream id, so entry ids are minted
+`<word>:<pos>[:<etymology_number>]` with a positional `:n` suffix for the
+handful of residual collisions (stable while upstream file order is; a
+reorder is an ordinary revision); and `etymology_text` is deliberately
+KEPT at the head of every entry body — those Proto-Slavic/PIE chains are
+the seed data for a future reconstruction/etymology shelf (see the
+improvements register). Citations start empty (Wiktionary quotations are
+unanchored — the B-T precedent).

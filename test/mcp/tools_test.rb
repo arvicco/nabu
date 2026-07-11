@@ -46,11 +46,10 @@ module MCP
       )
     end
 
-    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: nil)
-      annotations = if lemmas
-                      JSON.generate(
-                        { "tokens" => lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } }
-                      )
+    def make_passage(document, urn:, text:, sequence:, language: "grc", lemmas: nil, tokens: nil)
+      annotations = if lemmas || tokens
+                      pairs = (lemmas || []).map { |lemma, form| { "lemma" => lemma, "form" => form } }
+                      JSON.generate({ "tokens" => pairs + (tokens || []) })
                     else
                       "{}"
                     end
@@ -168,6 +167,41 @@ module MCP
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_search", {}) }
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "query" => "a", "lemma" => "b" })
+      end
+    end
+
+    # -- nabu_search: morph facets (P13-6) -------------------------------------
+
+    def test_search_morph_filters_lemma_hits_and_shows_evidence
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "τοῖς λόγοις", sequence: 0, tokens: [
+                     { "lemma" => "λόγος", "form" => "λόγοις", "feats" => "Case=Dat|Number=Plur" }
+                   ])
+      make_passage(doc, urn: "urn:d:tb:2", text: "ὁ λόγος", sequence: 1, tokens: [
+                     { "lemma" => "λόγος", "form" => "λόγος", "feats" => "Case=Nom|Number=Sing" }
+                   ])
+      rebuild!
+
+      hits = payload(call("nabu_search", { "lemma" => "λόγος", "morph" => "case=dat,number=pl" }))
+             .fetch("matches")
+      assert_equal(%w[urn:d:tb:1], hits.map { |hit| hit.fetch("urn") })
+      assert_equal "λόγοις", hits.first.fetch("surface_forms")
+      assert_equal "number=plur|case=dat", hits.first.fetch("morph")
+    end
+
+    def test_search_morph_requires_lemma
+      seed_corpus
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "μηνιν", "morph" => "case=dat" })
+      end
+    end
+
+    def test_search_malformed_morph_is_invalid_arguments
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "x", sequence: 0, lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "morph" => "case" })
       end
     end
 
@@ -545,6 +579,33 @@ module MCP
       assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "ang"
     end
 
+    # P13-10: the OCS shelf — nabu_define reaches Wiktionary-OCS through the
+    # same tool, lang=chu is a legal shelf filter, the Cyrillic headword
+    # resolves via the generic chu fold, and the etymology (the reconstruction
+    # seed) rides in the body.
+    def test_define_covers_the_ocs_shelf
+      wk = Nabu::Store::Source.create(
+        slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryCu",
+        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: wk)
+                                   .load_from(Nabu::Adapters::WiktionaryCu.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+
+      entries = payload(call("nabu_define", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "богъ", entry.fetch("headword")
+      assert_equal "wiktionary-cu", entry.fetch("dictionary")
+      assert_equal "god", entry.fetch("gloss")
+      assert_equal "attribution", entry.fetch("license_class")
+      assert_includes entry.fetch("body"), "Inherited from Proto-Slavic *bogъ.",
+                      "the etymology chain must survive into the MCP body"
+      assert_empty entry.fetch("citations"), "Wiktionary quotes are unanchored — citations start empty"
+      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "chu"
+    end
+
     def test_define_withholds_restricted_dictionaries_by_default
       seed_shelf(source: @private)
       result = call("nabu_define", { "lemma" => "μῆνις" })
@@ -687,6 +748,48 @@ module MCP
         end
       end
       assert_match(/2 of 2/, body.fetch("note"))
+    end
+
+    PSALMS_REGISTRY_YAML = <<~YAML
+      psalms:
+        title: "Psalms"
+        witnesses:
+          - label: LXX
+            extractor: cts-verse
+            documents:
+              PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1
+          - label: WEB (English)
+            extractor: cts-verse
+            numbering:
+              system: "Hebrew (Masoretic)"
+              ranges:
+                - { from: 11, to: 113, shift: -1 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+
+    def test_align_surfaces_the_numbering_divergence_and_native_ref
+      registry = align_registry(PSALMS_REGISTRY_YAML)
+      source = Nabu::Store::Source.create(
+        slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "attribution", enabled: true
+      )
+      [["urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1", "grc", "22.1", "Κύριος ποιμαίνει με"],
+       ["urn:nabu:eng-web:psa", "eng", "23.1", "Yahweh is my shepherd"]].each do |doc_urn, lang, tail, text|
+        doc = make_document(source: source, urn: doc_urn, title: "Psalms", language: lang)
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: "#{doc_urn}:#{tail}", sequence: 0, language: lang,
+          text: text, text_normalized: text, content_sha256: "x", revision: 1, annotations_json: "{}"
+        )
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+
+      body = payload(align_tools(registry).call("nabu_align", { "ref" => "PSA 22.1" }))
+      lxx, web = body.fetch("witnesses")
+      refute lxx.key?("numbering"), "the Greek witness is the work vocabulary — no numbering flag"
+      assert_equal "Hebrew (Masoretic)", web.fetch("numbering"), "the WEB column is flagged as remapped"
+      sentence = web.fetch("sentences").first
+      assert_equal "urn:nabu:eng-web:psa:23.1", sentence.fetch("urn")
+      assert_equal "PSA 23.1", sentence.fetch("native_ref"), "and reports its native Hebrew ref"
     end
 
     def test_align_missing_ref_is_invalid_arguments

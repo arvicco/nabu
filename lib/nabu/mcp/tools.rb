@@ -7,6 +7,7 @@ require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
 require_relative "../query/lemma_search"
+require_relative "../query/morph_facets"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
@@ -26,10 +27,10 @@ module Nabu
     #   (+ source slug — attribution is one cheap join away). The descriptions
     #   tell the model to preserve those fields when quoting.
     # - license classes research_private/restricted are DEFAULT-EXCLUDED from
-    #   every tool. The classes exist in the enum today even though no synced
-    #   source carries them yet — the exclusion is forward-looking: a
-    #   conversational surface must never leak future ad-hoc material
-    #   casually. include_restricted: true opts in, per call, explicitly.
+    #   every tool. First real occupant: freising (CC BY-ND 2.5 SI, P13-11) —
+    #   a conversational surface must never leak restricted or ad-hoc
+    #   material casually. include_restricted: true opts in, per call,
+    #   explicitly.
     # - Bounded outputs with honest truncation notes ("N total, showing k").
     #   No-match search responses carry a one-line coverage hint.
     # - Degradation is a normal tool response, never a crash and never
@@ -117,7 +118,9 @@ module Nabu
         "parallel English translations). Give EXACTLY ONE of: `query` — full-text FTS5 " \
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
         "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
-        "εἰπεῖν, every inflection). Hits are relevance-ranked and bounded (default " \
+        "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
+        "attestations with that morphology, each hit showing the decoded evidence). Hits are " \
+        "relevance-ranked and bounded (default " \
         "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
         "when quoting. Use nabu_show with a hit's urn for the full passage, nabu_status for " \
@@ -171,7 +174,9 @@ module Nabu
         "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
         "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
         "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
-        "aethele finds æðele). Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang) " \
+        "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
+        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu) " \
         "picks a shelf when the spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
@@ -196,6 +201,13 @@ module Nabu
           lemma: { type: "string",
                    description: "Dictionary form for exact-lemma treebank search. " \
                                 "Mutually exclusive with query." },
+          morph: { type: "string",
+                   description: "Morphology facets, only WITH lemma: comma-joined key=value in " \
+                                "Universal Dependencies vocabulary (case, number, gender, person, " \
+                                "tense, mood, voice, degree; values dat, pl/sg, masc, aor, opt, " \
+                                "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
+                                "match on feats, PROIEL/TOROT are decoded to the same names; ORACC " \
+                                "has no inflectional morphology so these facets never match it." },
           lang: { type: "string",
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
@@ -251,9 +263,10 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: %w[grc lat ang],
+          lang: { type: "string", enum: %w[grc lat ang chu],
                   description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                               "ang → Bosworth-Toller (Old English)." },
+                               "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
+                               "(Old Church Slavonic)." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -332,6 +345,7 @@ module Nabu
 
       def search(args)
         term, mode = search_term(args)
+        morph = search_morph(args, mode)
         license = license_arg(args)
         include_restricted = args["include_restricted"] == true
         if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
@@ -345,9 +359,11 @@ module Nabu
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         results = run_search(mode, term, catalog: catalog, fulltext: fulltext,
-                                         lang: args["lang"], license: license, limit: limit + 1)
+                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
+      rescue Query::MorphFacets::Error => e
+        raise InvalidArguments, e.message
       end
 
       def show(args)
@@ -423,8 +439,8 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !%w[grc lat ang].include?(lang)
-          raise InvalidArguments, "lang must be grc, lat or ang (the shelves this corpus holds)"
+        if lang && !%w[grc lat ang chu].include?(lang)
+          raise InvalidArguments, "lang must be grc, lat, ang or chu (the shelves this corpus holds)"
         end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
@@ -468,6 +484,17 @@ module Nabu
         lemma ? [lemma, :lemma] : [query, :text]
       end
 
+      # The morph facet string, only valid WITH a lemma (bare morphology search
+      # is out of scope — it would scan every annotated passage). nil when
+      # absent. Malformed facets raise via the query layer (rescued in #search).
+      def search_morph(args, mode)
+        morph = string_arg(args, "morph")
+        return nil if morph.nil?
+        raise InvalidArguments, "morph requires lemma (morphology search is anchored on a lemma)" unless mode == :lemma
+
+        morph
+      end
+
       # The fulltext handle when the index this mode needs is present; nil
       # during the mid-reindex window (Indexer.rebuild! drops the tables first).
       def search_index(mode)
@@ -478,10 +505,14 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:)
-        klass = mode == :lemma ? Query::LemmaSearch : Query::Search
-        klass.new(catalog: catalog, fulltext: fulltext)
-             .run(term, lang: lang, license: license, limit: limit)
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, morph: nil)
+        if mode == :lemma
+          return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+                                   .run(term, lang: lang, license: license, limit: limit, morph: morph)
+        end
+
+        Query::Search.new(catalog: catalog, fulltext: fulltext)
+                     .run(term, lang: lang, license: license, limit: limit)
       end
 
       def render_search(results, limit:, catalog:)
@@ -508,7 +539,12 @@ module Nabu
         }
         if result.respond_to?(:lemma)
           # gloss (P11-4): the dictionary-shelf short gloss, nil-honest.
-          base.merge(lemma: result.lemma, surface_forms: result.surface_forms, gloss: result.gloss)
+          # morph (P13-6): decoded morphology evidence, present only on a
+          # --morph-filtered hit (nil otherwise, so ordinary lemma hits are
+          # unchanged).
+          lemma_hit = base.merge(lemma: result.lemma, surface_forms: result.surface_forms,
+                                 gloss: result.gloss)
+          result.morph ? lemma_hit.merge(morph: result.morph) : lemma_hit
         else
           base.merge(snippet: result.snippet)
         end
@@ -774,6 +810,10 @@ module Nabu
         base = { label: witness.label, document_urn: witness.document_urn,
                  title: witness.title, language: witness.language,
                  license_class: witness.license_class, source: witness.source_slug }
+        # P13-5: a witness whose psalter is numbered in another system (the WEB
+        # Hebrew/Masoretic numbering) flags it so the model knows its refs were
+        # remapped into the work vocabulary.
+        base[:numbering] = witness.numbering if witness.numbering
         return base.merge(status: "withheld", sentences: []) if withhold?(witness.license_class, include_restricted)
 
         base.merge(status: witness.status.to_s,
@@ -782,11 +822,14 @@ module Nabu
 
       # Every sentence row carries the full contract fields (urn + language +
       # license_class + source) plus the refs it covers — sentence≠verse,
-      # stated per row.
+      # stated per row. A remapped witness (P13-5) also reports its WITNESS-
+      # NATIVE ref (Hebrew "PSA 23.1" under work "PSA 22.1") when it diverges.
       def align_sentence_payload(witness, sentence)
-        { urn: sentence.urn, language: witness.language,
-          license_class: witness.license_class, source: witness.source_slug,
-          text: sentence.text, refs: sentence.refs }
+        row = { urn: sentence.urn, language: witness.language,
+                license_class: witness.license_class, source: witness.source_slug,
+                text: sentence.text, refs: sentence.refs }
+        row[:native_ref] = sentence.native_ref if sentence.native_ref
+        row
       end
 
       # -- the exclusion gate ------------------------------------------------------

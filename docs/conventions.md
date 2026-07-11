@@ -220,6 +220,64 @@ comparative-grammar questions. In Nabu, source-provided analyses ride in
 compute later (CLTK/Stanza lemmatization) are enrichments with tool+version
 provenance, kept strictly apart from upstream's.
 
+### 6.1 Morphology facets — one façade over three tagsets (P13-6)
+
+`search --lemma λόγος --morph case=dat,number=pl` narrows a lemma search to
+attestations whose morphology matches the facets — "every dative plural of
+λόγος", "every subjunctive of *sum*". The design note behind it:
+
+**Tagset reality (measured against the live catalog).** The gold shelves store
+three different morphology dialects per token in `annotations_json`:
+
+| family | field | shape | example |
+| --- | --- | --- | --- |
+| CoNLL-U / UD (grc-perseus, got, …) | `feats` | UD `Key=Value` string, `\|`-joined | `Case=Dat\|Gender=Masc\|Number=Plur` |
+| PROIEL / TOROT (chu, orv, PROIEL grc/lat) | `morphology` | 10-position positional tag | `-p---mgpwi` (plur masc gen pos) |
+| ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
+
+**Vocabulary verdict — unified, not per-family passthrough.** The query
+vocabulary is the **Universal Dependencies feature names** (`case`, `number`,
+`gender`, `person`, `tense`, `mood`, `voice`, `degree`; values `dat`, `pl`/`sg`,
+`masc`, `aor`, `opt`, `sub`…), chosen because UD is (a) a documented public
+standard and (b) already the stored form for the CoNLL-U family, which needs
+zero translation. The two families with inflectional morphology fold into it:
+UD `feats` is parsed as-is (lowercased); the PROIEL positional tag is **decoded
+position-by-position into the same UD names** (a fixed 10×~8 code map in
+`Query::MorphFacets::PROIEL_FIELDS` — the bounded-but-fiddly bit; positions 9–10,
+Germanic strong/weak and the inflecting flag, have no clean UD facet and are
+left undecoded rather than mapped wrongly). ORACC carries no inflectional
+morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
+inflectional facets **never match ORACC** — honest absence, not error. A unified
+`pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and
+welding a third incompatible scheme into the façade for one field would be
+dishonest; it is a clean follow-up. Where a treebank itself encodes a category
+UD's way (grc-perseus writes an aorist as `Aspect=Perf\|Tense=Past`, not
+`Tense=Aor`), the query follows that treebank's convention — a documented
+cross-family divergence, not a bug.
+
+**Where filtering happens — SQL anchor, Ruby post-filter (no new index).**
+Morphology is **not** indexed. Measured verdict against the 1.94M-row live lemma
+index: a dedicated morph-facet table would multiply those rows by the features
+per token *and* need a rebuild, while the lemma anchor already narrows the
+search to just the passages attesting the lemma, so post-filtering their stored
+`annotations_json` in Ruby is cheap. Timings (live db, cold):
+
+| query | candidate passages | filter time (total) |
+| --- | --- | --- |
+| `λόγος` dat pl (a real content-word query) | 996 | **37 ms** (46 hits) |
+| `sum` subjunctive (every subjunctive of *esse*) | 22 344 | 720 ms (4 129 hits) |
+| PROIEL `и` (orv) dat pl | 18 019 | 471 ms (537 hits) |
+| `ὁ` (the article — pathological worst case) dat pl | 25 558 | 757 ms (2 255 hits) |
+
+The realistic case is tens of ms; even morph-filtering the single most common
+lemma in the corpus stays sub-second. The morph test (a cheap string parse)
+runs *before* the per-language fold, so a selective facet folds only the tokens
+that already matched. **Bare morph search (no `--lemma`) is out of scope** — it
+would scan every annotated passage, not a lemma-narrowed handful, and morphology
+without a lemma anchor is rarely the question. Each hit's `surface_forms` and
+its decoded `morph` evidence are restricted to the *matching* tokens, so a
+passage attesting λόγος in two cases surfaces only its dative-plural form.
+
 ## 7. Licensing — old texts, new rights
 
 The ancient *text* is public domain. What carries rights is modern labor: the
@@ -282,6 +340,7 @@ macrons all fall to the same strip.
 | `lat` | v→u, j→i | The classical Latin search convention: PHI's search "is not case-sensitive, nor does it distinguish i from j or u from v," and Perseus-lineage tooling treats the pairs as orthographic variants (editors disagree per edition: *virumque*/*uirumque*). Folding to the u/i base makes every edition findable by every spelling. |
 | `akk`, `sux` (one shared rule) | sign-join `.` and `-` and determinative braces `{` `}` → space; subscript index digits `₀`–`₉`, `ₓ` → ASCII | The cuneiform-transliteration fold (P10-1). ORACC transliteration carries structural punctuation that is notation, not text: `-`/`.` join the signs of a word (`du-un-nu-um`), `{…}` marks unpronounced determinatives (`{d}EN.ZU`), subscript digits index homophonous sign values (`ZI₃`). Opening them to spaces makes every **bare sign reading its own searchable token** (`zi3`, `en`, `zu`, `gesbun` — š/ṣ/ṭ and macrons fall to the generic strip), and a query spelled with the notation (`a-na`, `ZI₃`) folds to the same shape via the query union. Strictly per-codepoint (no space collapsing) so the KWIC fold-map equality holds; FTS treats separator runs as one. Trade-off accepted: a determinative sits as its own token *between* the signs it classifies, so a phrase query spanning a mid-word determinative must spell it (`amar suen` does not match `{d}amar-{d}suen`; `amar` and `suen` individually do), and the normalized dictionary forms (`qēmu`, `Dunnum`) are lemma search's job — the ORACC adapter feeds every `cf` into the lemma index. |
 | `ang` | æ→`ae`, þ→`th`, ð→`th` | The Old English fold (P12-3), argued from Bosworth-Toller's own practice, not assumed: B-T alphabetizes æ as "ae" (the dump files æppel between a-h- and a-l- words) and **interfiles þ and ð as ONE letter** after T — its dump's own `<sort>` field folds æðele → `aetþele` and þing → `tþing`, i.e. the dictionary itself folds æ→ae and buckets ð/þ identically. These are also the ASCII transliterations a user types (`define aethele`, `search thing`). ð→`d` was considered and REJECTED: it would split the þ/ð pair B-T unifies (OE scribes used them interchangeably for the same dental fricative; the dump has no ð-initial headwords at all — ð lives medially: ǽg-hwæðer). Wynn (ƿ) gets no rule deliberately: edited OE prints w. Vowel length (á, ǣ) falls to the generic mark strip, matching B-T's alphabetization of accented vowels as base letters. Implemented as `gsub`, not `tr` (1→2 expansions; `fold_with_map` handles non-length-preserving folds, and downcase runs first so Æ/Þ/Ð reach the rule lowercased). Query-union note: `þing` gains an ang variant `thing` that also matches English text — the same bounded cross-language tradeoff as lat v→u, harmless since æ/þ/ð barely occur outside the OE corpora. The rule landed BEFORE any ang corpus was synced (aspr/iswoc/bosworth-toller all `enabled: false` at the time), so the rebuild-storm caveat below was satisfied vacuously. |
+| `sl` | Bohorič long s ſ→s | The historical-Slovene fold (P13-9). goo300k/IMP passage text is the pristine Early Modern print surface, where non-final s is set as ſ (U+017F): "ſvoje", "dvanajſt", "oblaſt". The generic fold does NOT touch it — ſ is already lowercase, carries no combining mark, and plain `downcase` leaves it alone (only Unicode FULL case folding maps ſ→s) — so without this rule every ſ-bearing word is unfindable by any modern query. Exactly the grc ς→σ situation: one letter, two positional glyphs; Unicode's own case-folding table agrees. `tr`, length-preserving. Bohorič digraphs (zh=č, ſh=š) are deliberately NOT rewritten — that is orthographic modernization (the corpora's own `<reg>` layer, an annotation), never a fold; haček letters (č/š/ž) fall to the generic mark strip on both sides. The rule landed BEFORE any sl corpus was synced (goo300k/imp both `enabled: false`), so the rebuild-storm caveat below was satisfied vacuously. |
 | everything else (`chu`, `orv`, `got`, `san`, unknown) | none — generic fold only | See below. |
 
 **Why the query can't just pick a rule:** queries carry no language, so

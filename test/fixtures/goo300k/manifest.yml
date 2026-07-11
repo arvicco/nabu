@@ -1,0 +1,53 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. CLARIN.SI serves the corpus as ONE zip bitstream
+# (goo300k-tei.zip, 7.1 MB); no raw per-file URLs exist. Every fixture here
+# was extracted 2026-07-11 from that zip and trimmed per the README, so
+# every entry is refetchable: false — `fixtures:check` SKIPS them and
+# `fixtures:refresh` refuses. Re-acquiring means re-downloading the zip and
+# re-applying the README trims.
+source: goo300k
+adapter_test:
+retrieved: 2026-07-11
+files:
+  - path: goo300k-1584-ZRC_00001.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the goo300k-tei.zip bitstream (hdl 11356/1025) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1025/goo300k-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: facsimile cut to surfaces 001-002, body cut to the first two xi:includes; 9,603 B -> 4,884 B, well-formed
+  - path: pages/goo168-ZRC_00001-1584.pb.001_Biblia.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the goo300k-tei.zip bitstream (hdl 11356/1025) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1025/goo300k-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: cut after ab.2 + re-added </div>; 77,984 B -> 7,110 B, well-formed
+  - path: pages/goo168-ZRC_00001-1584.pb.002_Biblia.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the goo300k-tei.zip bitstream (hdl 11356/1025) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1025/goo300k-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: cut after ab.10 (the part="F" block) + re-added </div>; 124,432 B -> 13,193 B, well-formed
+  - path: goo300k-1695-ZRC_00002.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the goo300k-tei.zip bitstream (hdl 11356/1025) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1025/goo300k-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: facsimile cut to surface 001, body cut to the first xi:include; 25,208 B -> 4,232 B, well-formed
+  - path: pages/goo168-ZRC_00002-1695.pb.001_Sacrum_promptuarium.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the goo300k-tei.zip bitstream (hdl 11356/1025) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1025/goo300k-tei.zip
+    copied: 2026-07-11
+    whole: false
+    trim: cut after ab.2 + re-added </div>; 36,653 B -> 3,573 B, well-formed

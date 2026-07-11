@@ -37,14 +37,39 @@ module Nabu
     EXTRACTORS = %w[proiel-citation cts-verse].freeze
     DEFAULT_EXTRACTOR = "proiel-citation"
 
+    # A per-witness VERSIFICATION remap (P13-5, architecture §10): the witness
+    # numbers its psalms/chapters in a DIFFERENT system than the work
+    # vocabulary. The psalms work speaks the Greek/LXX numbering the
+    # Septuagint and Vulgate share; the WEB English psalter is Hebrew/
+    # Masoretic-numbered (Greek Psalm 22 = Hebrew 23, and so on). +system+ is
+    # the provenance label surfaced on the aligned row; +ranges+ is the
+    # piecewise-linear map on the LEADING citation segment (the psalm number):
+    # each rule shifts a [from, to] span of witness numbers by +shift+ into
+    # the work vocabulary. A number NO rule covers is DROPPED — the ref is not
+    # indexed at all, so the psalms the LXX joins/splits (Hebrew 9, 10, 114,
+    # 115, 116, 147) attest per-witness only rather than false-align onto a
+    # Greek psalm they do not equal (the fold-both-sides honesty of §10).
+    Numbering = Data.define(:system, :ranges) do
+      # The work-vocabulary number for witness number +num+, or nil to drop.
+      def remap(num)
+        rule = ranges.find { |range| num.between?(range.from, range.to) }
+        rule && (num + rule.shift)
+      end
+    end
+
+    # One rule of a Numbering map: witness numbers [from, to] shift into the
+    # work vocabulary by +shift+ (0 = the systems already agree in this span).
+    NumberingRange = Data.define(:from, :to, :shift)
+
     # One witness. +documents+ is an ordered frozen map of document urn =>
     # book token — the token is nil for the single-`document:` form (whose
     # refs carry their own book) and a work-vocabulary token for the
     # `documents:` form. +label+ is the display label (defaults to the urn
     # tail for the single form; required for the documents form). +books+
     # maps witness book tokens into the work vocabulary, applied AFTER the
-    # generic ref fold.
-    Witness = Data.define(:documents, :extractor, :label, :books) do
+    # generic ref fold. +numbering+ (P13-5) is an optional versification remap
+    # applied AFTER the book alias, on the leading psalm/chapter number.
+    Witness = Data.define(:documents, :extractor, :label, :books, :numbering) do
       def document_urns
         documents.keys
       end
@@ -61,15 +86,40 @@ module Nabu
       end
 
       # The witness-local normal form of +ref+: the generic fold, then the
-      # witness's book aliases. Index side and query side both come through
-      # here — the fold-both-sides contract (conventions §9, architecture §10).
+      # witness's book aliases, then its versification remap. Index side and
+      # query side both come through here — the fold-both-sides contract
+      # (conventions §9, architecture §10). Returns nil when the numbering map
+      # DROPS the ref (a psalm the witness's system cannot map one-to-one onto
+      # the work vocabulary), so the indexer's compact/filter_map skip it.
       def normalize_ref(ref)
         folded = AlignmentRegistry.normalize_ref(ref)
-        return folded if folded.nil? || books.empty?
+        return folded if folded.nil?
+
+        aliased = apply_book_alias(folded)
+        numbering ? apply_numbering(aliased) : aliased
+      end
+
+      def apply_book_alias(folded)
+        return folded if books.empty?
 
         book, rest = folded.split(" ", 2)
         replacement = books[book]
         replacement && rest ? "#{replacement} #{rest}" : folded
+      end
+
+      # Remap the leading psalm/chapter number of a folded "BOOK cite" ref
+      # through the witness's Numbering. A non-numeric or verse-less leading
+      # segment passes through untouched; a number no rule covers drops the
+      # whole ref (nil).
+      def apply_numbering(folded)
+        book, cite = folded.split(" ", 2)
+        return folded if cite.nil?
+
+        chapter, dot, rest = cite.partition(".")
+        return folded unless chapter.match?(/\A\d+\z/)
+
+        mapped = numbering.remap(chapter.to_i)
+        mapped.nil? ? nil : "#{book} #{mapped}#{dot}#{rest}"
       end
     end
 
@@ -156,7 +206,8 @@ module Nabu
         documents: { document => nil }.freeze,
         extractor: extractor,
         label: string_or(config["label"], default: document.split(":").last),
-        books: books!(work_id, document, config)
+        books: books!(work_id, document, config),
+        numbering: numbering!(work_id, document, config)
       )
     end
     private_class_method :build_single_witness
@@ -181,7 +232,8 @@ module Nabu
         documents: documents!(work_id, label, config["documents"]),
         extractor: extractor,
         label: label,
-        books: books!(work_id, label, config)
+        books: books!(work_id, label, config),
+        numbering: numbering!(work_id, label, config)
       )
     end
     private_class_method :build_multi_witness
@@ -238,6 +290,39 @@ module Nabu
       books.to_h { |from, to| [normalize_ref(from), normalize_ref(to)] }.freeze
     end
     private_class_method :books!
+
+    # The optional per-witness versification remap (P13-5): a system: label and
+    # a non-empty ranges: list of {from, to, shift} integer rules. nil when the
+    # witness declares no numbering: (the common case — its numbering already
+    # is the work vocabulary).
+    def self.numbering!(work_id, witness_name, config)
+      return nil unless config.key?("numbering")
+
+      spec = config["numbering"]
+      unless spec.is_a?(Hash) && string_or(spec["system"], default: nil) && spec["ranges"].is_a?(Array) &&
+             !spec["ranges"].empty?
+        raise ValidationError,
+              "alignment work #{work_id.inspect}, witness #{witness_name}: numbering must be a mapping " \
+              "with a non-empty system: label and a non-empty ranges: list"
+      end
+
+      ranges = spec["ranges"].map { |rule| numbering_range!(work_id, witness_name, rule) }
+      Numbering.new(system: spec["system"], ranges: ranges.freeze)
+    end
+    private_class_method :numbering!
+
+    def self.numbering_range!(work_id, witness_name, rule)
+      valid = rule.is_a?(Hash) && [rule["from"], rule["to"], rule["shift"]].all?(Integer) &&
+              rule["from"] <= rule["to"]
+      unless valid
+        raise ValidationError,
+              "alignment work #{work_id.inspect}, witness #{witness_name}: each numbering range needs " \
+              "integer from:/to:/shift: with from <= to, got #{rule.inspect}"
+      end
+
+      NumberingRange.new(from: rule["from"], to: rule["to"], shift: rule["shift"])
+    end
+    private_class_method :numbering_range!
 
     def self.string_or(value, default:)
       value.is_a?(String) && !value.strip.empty? ? value : default

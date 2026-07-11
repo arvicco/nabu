@@ -19,14 +19,14 @@ module Nabu
     end
 
     def render_entry(entry, db, ledger, width)
-      head = "#{entry.slug.ljust(width)}  #{state(entry.enabled).ljust(8)}  #{entry.sync_policy.ljust(6)}"
+      head = "#{entry.slug.ljust(width)}  #{state(entry.enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}"
       return "#{head}  no database (run nabu sync)" if db.nil?
 
       # A synced source carries its live enabled state in the row; an
       # unsynced one falls back to the registry's declared enabled.
       source = Store::Source.first(slug: entry.slug)
       enabled = source ? source.enabled : entry.enabled
-      "#{entry.slug.ljust(width)}  #{state(enabled).ljust(8)}  #{entry.sync_policy.ljust(6)}  " \
+      "#{entry.slug.ljust(width)}  #{state(enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}  " \
         "#{counts_fragment(entry, source)}  #{last_run(entry.slug, ledger)}"
     end
 
@@ -37,13 +37,15 @@ module Nabu
     # docs/passages/retired triple.
     def counts_fragment(entry, source)
       return "entries=#{dictionary_entry_count(source)}" if dictionary?(entry)
-      return "docs=0 passages=0" if source.nil?
+      return "docs=0 pass=0" if source.nil?
 
       live = Store::Document.where(source_id: source.id, withdrawn: false)
       # retired (upstream-scrapped, attic-kept — P5-2) documents are live and
-      # inside docs=; the extra count keeps upstream attrition visible.
-      "docs=#{live.count} passages=#{passage_count(source.id)} " \
-        "retired=#{live.where(retired_upstream: true).count}"
+      # inside docs=; the count appears only when non-zero (owner UX ruling
+      # 2026-07-11: compact rows, zero-noise suppressed).
+      fragment = "docs=#{live.count} pass=#{passage_count(source.id)}"
+      retired = live.where(retired_upstream: true).count
+      retired.positive? ? "#{fragment} retired=#{retired}" : fragment
     end
 
     def dictionary?(entry)
@@ -77,12 +79,19 @@ module Nabu
       run = Store::Run.where(source_slug: slug).order(Sequel.desc(:id)).first
       return "never synced" if run.nil?
 
-      "last run #{run.finished_at || run.started_at} #{run.status} " \
+      at = (run.finished_at || run.started_at).strftime("%Y-%m-%d %H:%M")
+      "last #{at} #{status_word(run.status)} " \
         "(+#{run.added} ~#{run.updated} -#{run.withdrawn_count} !#{run.errored})"
     end
 
+    # Compact status vocabulary (owner UX ruling 2026-07-11): the common case
+    # reads "ok"; anything else keeps its loud full word.
+    def status_word(status)
+      status == "succeeded" ? "ok" : status
+    end
+
     def state(enabled)
-      enabled ? "enabled" : "disabled"
+      enabled ? "on" : "off"
     end
   end
 end

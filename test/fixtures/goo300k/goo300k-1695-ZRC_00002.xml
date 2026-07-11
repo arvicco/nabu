@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+     xml:id="goo168-ZRC_00002-1695"
+     xml:lang="sl-bohoric">
+   <teiHeader xml:lang="sl">
+      <fileDesc>
+         <titleStmt>
+            <title>goo300k: "Sacrum promptuarium" (1695)</title>
+         </titleStmt>
+         <extent xmlns:xi="http://www.w3.org/2001/XInclude">8721 <term xml:lang="en">words</term>
+            <term xml:lang="sl">besed</term>
+         </extent>
+         <publicationStmt>
+            <distributor>
+               <ref xml:lang="en" target="http://nl.ijs.si/">Natural Language Server, Jožef Stefan Institute</ref>
+            </distributor>
+            <idno>goo168-ZRC_00002-1695</idno>
+            <date>2014-07-28</date>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title type="orig" xml:lang="sl-bohoric">Sacrum promptuarium</title>
+               <title type="reg" xml:lang="sl">Sveti priročnik (vzorec)</title>
+               <author>Janez Svetokriški</author>
+               <date>1695</date>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p xml:lang="sl">Google nagrada za izdelavo jezikoslovnih modelov za starejšo slovenščino.</p>
+            <p xml:lang="en">Google research award "Language models of historical Slovene"</p>
+         </projectDesc>
+         <editorialDecl>
+            <normalization>
+               <p xml:lang="sl">Napake v OCR besedila popravljene.</p>
+               <p xml:lang="en">OCR mistakes in the text were manually corrected.</p>
+            </normalization>
+         </editorialDecl>
+         <samplingDecl>
+            <p xml:lang="sl">To elektronsko besedilo vsebuje samo strani III, 7b-III, 11a.</p>
+            <p xml:lang="en">This digital text contains only pages III, 7b-III, 11a.</p>
+         </samplingDecl>
+         <tagsDecl xmlns:xi="http://www.w3.org/2001/XInclude">
+            <namespace name="http://www.tei-c.org/ns/1.0">
+               <tagUsage gi="ab" occurs="44"/>
+               <tagUsage gi="bibl" occurs="319"/>
+               <tagUsage gi="body" occurs="1"/>
+               <tagUsage gi="c" occurs="8921"/>
+               <tagUsage gi="choice" occurs="5712"/>
+               <tagUsage gi="desc" occurs="346"/>
+               <tagUsage gi="div" occurs="27"/>
+               <tagUsage gi="facsimile" occurs="1"/>
+               <tagUsage gi="gloss" occurs="319"/>
+               <tagUsage gi="graphic" occurs="108"/>
+               <tagUsage gi="lb" occurs="1"/>
+               <tagUsage gi="orig" occurs="5712"/>
+               <tagUsage gi="pc" occurs="1809"/>
+               <tagUsage gi="reg" occurs="5712"/>
+               <tagUsage gi="s" occurs="281"/>
+               <tagUsage gi="surface" occurs="27"/>
+               <tagUsage gi="text" occurs="1"/>
+               <tagUsage gi="w" occurs="14530"/>
+            </namespace>
+         </tagsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <textClass>
+            <catRef target="#Text.book"/>
+            <catRef target="#Text.religious"/>
+            <catRef target="#Text.original"/>
+         </textClass>
+      </profileDesc>
+   </teiHeader>
+   <facsimile xmlns:xi="http://www.w3.org/2001/XInclude">
+      <surface xml:id="ZRC_00002-001"
+               n="ZRC_00002-1695.pb.001_Sacrum_promptuarium"
+               corresp="http://nl.ijs.si/imp/zrc/dl/ZRC_00002-1695.html#pb.001">
+         <desc xml:lang="sl">Faksimile ZRC_00002, stran 1</desc>
+         <graphic n="orig"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00002/ZRC_00002-001.jpg"/>
+         <graphic n="medium"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00002/ZRC_00002-001_m.jpg"/>
+         <graphic n="small"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00002/ZRC_00002-001_s.jpg"/>
+         <graphic n="thumb"
+                  url="http://nl.ijs.si/imp/zrc/facs/ZRC_00002/ZRC_00002-001_t.jpg"/>
+      </surface>
+   </facsimile>
+   <text xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="goo168-ZRC_00002-1695.text"
+         xml:lang="sl-bohoric">
+      <body>
+         <xi:include href="pages/goo168-ZRC_00002-1695.pb.001_Sacrum_promptuarium.xml"/>
+      </body>
+   </text>
+</TEI>

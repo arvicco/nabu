@@ -155,6 +155,20 @@ class NormalizeTest < Minitest::Test
     assert_equal "ae", form("ǣ", "ang")
   end
 
+  def test_slovene_folds_bohoric_long_s_to_s
+    # P13-9 (conventions.md §9): ſ→s. The long s survives the generic fold
+    # (plain downcase does not apply Unicode full case folding, which maps
+    # U+017F ſ → s), so Bohorič-print words would be unfindable by any
+    # modern query. All words are real goo300k fixture surface forms
+    # (Dalmatin 1584); haček letters fall to the generic mark strip.
+    assert_equal "svoje", form("ſvoje", "sl")
+    assert_equal "dvanajst", form("dvanajſt", "sl")
+    assert_equal "oblast", form("oblaſt", "sl")
+    # generic strip handles the modern diacritics; ſ-free words untouched
+    assert_equal "cez", form("čez", "sl")
+    assert_equal "studente", form("študente", "sl")
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end

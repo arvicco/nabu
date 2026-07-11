@@ -93,15 +93,23 @@ oracc:
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
                    # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
                    # search verified live. Scope: rimanum + etcsri; P11-6
-                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt)
-                   # — owner-fired re-sync after merge pulls the new projects.
+                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt);
+                   # P13-3 (owner-approved 2026-07-11) extended to 33 — the
+                   # FULL SAA (saa01–saa21 + saas2), riao, ribo, blms, the
+                   # four dcclt subprojects (~159 MB of new zips) — the
+                   # owner-fired re-sync after merge pulls the new projects.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
-  # The ORACC JSON carries word glosses but NO prose translations (P9-5a:
-  # they live only in the ATF #tr.en source layer) — nothing to opt into;
-  # aligned English is a future separate acquisition.
-  translations: false
+  # P13-4 (owner-approved 2026-07-11, "Two-stage SAA-first crawl"): the
+  # running English is crawled from the official per-text HTML fragments
+  # (no public bulk ATF carries it) and ingested as -en sibling documents —
+  # `show <tablet> --parallel` renders SAA like the Homers. Stage 1 crawls
+  # the saao projects (Oracc::TRANSLATION_PROJECTS, ~250 MB, owner-fired);
+  # stage 2 extends that list. Translation prose is CC BY-SA 3.0 project
+  # content → per-document license_override "attribution" (source stays
+  # open/CC0).
+  translations: true
 
 lexica:
   adapter: Nabu::Adapters::Lexica
@@ -176,6 +184,75 @@ bosworth-toller:
   # (Nabu::FileFetch, DSpace bitstream /content URL). The deposit is a frozen
   # v0.1 (Last-Modified 2021-04-26): manual — a re-sync only matters if the
   # team publishes a new dump version.
+  sync_policy: manual
+
+ccmh:
+  adapter: Nabu::Adapters::Ccmh
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # CCMH (Corpus Cyrillo-Methodianum Helsingiense, Kielipankki; P13-2): the
+  # four gospel OCS manuscripts as the corpus's own CES XML over four plain
+  # HTTPS file URLs (per-manuscript Nabu::FileFetch subdirs). CC BY 4.0
+  # (bundle README.txt verbatim) -> attribution. Assemanianus + Savvina are
+  # the canon gaps closed; Marianus/Zographensis are ALT-EDITIONS of the
+  # PROIEL/TOROT witnesses — never dedupe (conventions §3). The three
+  # txt-only texts (Suprasliensis, the two Vitae) ship no XML: deferred by
+  # owner decision 2026-07-11. Upstream frozen since 2021: manual.
+  sync_policy: manual
+
+goo300k:
+  adapter: Nabu::Adapters::Goo300k
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # goo300k (P13-9, OWNER-APPROVED option B 2026-07-11): the gold reference
+  # corpus of historical Slovene (CLARIN.SI hdl 11356/1025) — 89 texts /
+  # 294k words, 1584-1899, manually validated lemma/MSD/modernization. One
+  # 7.1 MB zip bitstream (Nabu::ZipFetch). CC BY 4.0 (deposit page verbatim)
+  # -> attribution. Passage text = the historical orig spelling; the gold
+  # token layer rides in annotations and feeds passage_lemmas (the sl lemma
+  # axis). Shares documents with imp as ALT-EDITIONS (conventions §3).
+  # Deposit frozen at v1.2 (2015): manual.
+  sync_policy: manual
+
+imp:
+  adapter: Nabu::Adapters::Imp
+  enabled: false  # flip after the owner-fired first real sync (150 MB GET is an owner decision)
+  # IMP (P13-9, same owner approval): goo300k's full-text SILVER sibling
+  # (CLARIN.SI hdl 11356/1031) — 658 texts / 17.7M tokens, 1584-1919, same
+  # imp-tei family. CC BY-SA 4.0 (deposit page verbatim) -> attribution.
+  # SILVER: upstream's own caveat "the annotations are automatic, so they
+  # contain a fair amount of errors" -> TEXT ONLY (owner default
+  # 2026-07-11): no tokens ingested, no lemma-index rows; the lemma index
+  # stays gold-only. Deposit frozen at 1.1 (2015): manual.
+wiktionary-cu:
+  adapter: Nabu::Adapters::WiktionaryCu
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Wiktionary OCS via kaikki.org (P13-10): English Wiktionary's Old Church
+  # Slavonic entries, wiktextract JSONL ("This data is made available under
+  # the same licenses as Wiktionary - both CC-BY-SA and GFDL" -> attribution)
+  # — the fourth dictionary-shelf occupant and the first JSONL dictionary
+  # (parser family wiktionary-jsonl). ONE ~44 MB JSONL over HTTP
+  # (Nabu::FileFetch). CAVEAT: upstream labels the per-language file
+  # DEPRECATED (wiktextract #1178) though it serves today; fallback = filter
+  # the full enwiktionary extract by lang_code == "cu" (docs/02-sources.md).
+  # kaikki re-extracts weekly, but each re-sync re-mints shelf revisions:
+  # manual — refreshes are an owner call.
+  sync_policy: manual
+
+freising:
+  adapter: Nabu::Adapters::Freising
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Freising Manuscripts / Brizinski spomeniki (P13-11, owner-approved
+  # design 2026-07-11): the oldest Slovene — and oldest Latin-script
+  # Slavic — text (~972-1039 CE), eZISS TEI P4 critical edition (ZRC
+  # SAZU/IJS 2007). ONE 7.5 MB zip (Nabu::ZipFetch, bs-text.zip; the
+  # 341 MB bs.zip with audio + the facsimile zip are EXCLUDED — separately
+  # copyrighted). License VERBATIM in bs.xml <availability>: "Creative
+  # Commons Priznanje avtorstva-Brez predelav 2.5 Slovenija" = CC BY-ND
+  # 2.5 SI -> research_private (ND posture: default-excluded from MCP,
+  # per-call opt-in; permission point logged in improvements 4.3).
+  # Critical transcription = passage text (3 docs bs1-bs3, passage =
+  # manuscript line, citation "BS I, fol. 78r, l. 1"); diplomatic,
+  # phonetic + six translations ride as line-aligned sibling documents.
+  # Edition frozen at 1.0 (2007): manual.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

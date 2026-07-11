@@ -50,7 +50,7 @@ class StatusReportTest < Minitest::Test
 
     out = Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
     assert_match(/fake-src/, out)
-    assert_match(/enabled/, out)
+    assert_match(/\bon\b/, out)
     assert_match(/live/, out)
     assert_match(/no database \(run nabu sync\)/, out)
   end
@@ -78,13 +78,13 @@ class StatusReportTest < Minitest::Test
     lines = out.lines.map(&:chomp)
 
     fake = lines.grep(/fake-src/).first
-    assert_match(/enabled/, fake)
+    assert_match(/\bon\b/, fake)
     assert_match(/live/, fake)
-    assert_match(/docs=1 passages=2/, fake)
-    assert_match(/last run .*succeeded \(\+1 ~0 -0 !0\)/, fake)
+    assert_match(/docs=1 pass=2/, fake)
+    assert_match(/last \d{4}-\d{2}-\d{2} \d{2}:\d{2} ok \(\+1 ~0 -0 !0\)/, fake)
 
     never = lines.grep(/never-src/).first
-    assert_match(/disabled/, never)
+    assert_match(/\boff\b/, never)
     assert_match(/manual/, never)
     assert_match(/never synced/, never)
   end
@@ -102,7 +102,7 @@ class StatusReportTest < Minitest::Test
     loader.load([])
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/docs=0 passages=0/, out)
+    assert_match(/docs=0 pass=0/, out)
   end
 
   # P5-2: retired (upstream-scrapped, attic-kept) documents stay in the live
@@ -118,7 +118,7 @@ class StatusReportTest < Minitest::Test
     Nabu::Store::Document.first(urn: "urn:nabu:fake:doc1").update(retired_upstream: true)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/docs=1 passages=2 retired=1/, out)
+    assert_match(/docs=1 pass=2 retired=1/, out)
   end
 
   # P11-10: a dictionary source renders its entry count, not docs=0 passages=0
@@ -149,7 +149,7 @@ class StatusReportTest < Minitest::Test
     )
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/fake-dict\s+enabled\s+live\s+entries=3/, out)
+    assert_match(/fake-dict\s+on\s+live\s+entries=3/, out)
     refute_match(/fake-dict.*docs=/, out)
   end
 
@@ -178,7 +178,7 @@ class StatusReportTest < Minitest::Test
     end
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/bosworth-toller\s+disabled\s+manual\s+entries=2/, out)
+    assert_match(/bosworth-toller\s+off\s+manual\s+entries=2/, out)
     refute_match(/bosworth-toller.*docs=/, out)
   end
 

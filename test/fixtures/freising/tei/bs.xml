@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TEI.2 SYSTEM "tei2.dtd" [
+<!ENTITY bsIN SYSTEM "bsIN.xml">
+<!ENTITY bsFC SYSTEM "bsFC.xml">
+<!ENTITY bsPT-in1 SYSTEM "bsPT-in1.xml">
+<!ENTITY bsPT-in2 SYSTEM "bsPT-in2.xml">
+<!ENTITY bsPT SYSTEM "bsPT.xml">
+<!ENTITY bsPT-grf SYSTEM "bsPT-grf.xml">
+<!ENTITY bsPT-rak SYSTEM "bsPT-rak.xml">
+<!ENTITY bsWV-int SYSTEM "bsWV-int.xml">
+<!ENTITY bsWV SYSTEM "bsWV.xml">
+<!ENTITY bsCT-int SYSTEM "bsCT-int.xml">
+<!ENTITY bsCT SYSTEM "bsCT.xml">
+<!ENTITY bsCT-mik SYSTEM "bsCT-mik.xml">
+<!ENTITY bsDT-in1 SYSTEM "bsDT-in1.xml">
+<!ENTITY bsDT-in2 SYSTEM "bsDT-in2.xml">
+<!ENTITY bsDT SYSTEM "bsDT.xml">
+<!ENTITY bsDT-isa SYSTEM "bsDT-isa.xml">
+<!ENTITY bsDT-koe SYSTEM "bsDT-koe.xml">
+<!ENTITY bsDT-kop SYSTEM "bsDT-kop.xml">
+<!ENTITY bsDT-pir SYSTEM "bsDT-pir.xml">
+<!ENTITY bsDT-rak SYSTEM "bsDT-rak.xml">
+<!ENTITY bsDT-von SYSTEM "bsDT-von.xml">
+<!ENTITY bsTR-slv SYSTEM "bsTR-slv.xml">
+<!ENTITY bsTR-eng SYSTEM "bsTR-eng.xml">
+<!ENTITY bsTR-ger SYSTEM "bsTR-ger.xml">
+<!ENTITY bsTR-ita SYSTEM "bsTR-ita.xml">
+<!ENTITY bsTR-lat SYSTEM "bsTR-lat.xml">
+<!ENTITY bsTR-pol SYSTEM "bsTR-pol.xml">
+<!ENTITY bsPA SYSTEM "bsPA.xml">
+<!ENTITY bsLX-int SYSTEM "bsLX-int.xml">
+<!ENTITY bsLX SYSTEM "bsLX.xml">
+<!ENTITY bsBI SYSTEM "bsBI.xml">
+<!ENTITY bsBK-ovr SYSTEM "bsBK-ovr.xml">
+<!ENTITY bsBK-ger SYSTEM "bsBK-ger.xml">
+<!ENTITY bsBK-eng SYSTEM "bsBK-eng.xml">
+<!ENTITY bsBK-abr SYSTEM "bsBK-abr.xml">
+<!ENTITY bsBK-nam SYSTEM "bsBK-nam.xml">
+<!ENTITY bsBK-edi SYSTEM "bsBK-edi.xml">
+<!ENTITY bsBK-tei SYSTEM "bsBK-tei.xml">
+<!ENTITY bsBK-sch SYSTEM "bsBK-sch.xml">
+<!ENTITY bsBK-geo SYSTEM "bsBK-geo.xml">
+]>
+<TEI.2 id="bs">
+  <teiHeader type="text" id="bs-teiHeader" date.created="2005-05-23" date.updated="2007-04-06">
+    <fileDesc>
+      <titleStmt>
+        <title lang="slv">BRIŽINSKI SPOMENIKI</title>
+        <title lang="lat">MONUMENTA FRISINGENSIA</title>
+        <title lang="slv">Elektronska znanstvenokritična izdaja</title>
+        <respStmt>
+          <resp>Uredil</resp>
+          <name id="MOG">Matija Ogrin, Inštitut za slovensko literaturo in literarne vede ZRC SAZU</name>
+        </respStmt>
+        <respStmt>
+          <resp>Pretvorba in integracija gradiva v zapisu XML–TEI</resp>
+          <name id="TER">Tomaž Erjavec, Odsek za tehnologije znanja IJS</name>
+        </respStmt>
+        <principal>matija.ogrin@zrc-sazu.si</principal>
+      </titleStmt>
+      <editionStmt>
+        <edition>Izdaja 1.0</edition>
+      </editionStmt>
+      <extent>Obseg datotek: 2.5M XML + 17M GIF + 363M WAV (+ 19M HTML)</extent>
+      <publicationStmt>
+        <publisher>
+          <address>
+            <addrLine>
+              <name type="organisation">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</name>
+            </addrLine>
+            <addrLine>Novi trg 2</addrLine>
+            <addrLine>
+              <name type="place">Ljubljana</name>
+            </addrLine>
+            <addrLine>1000</addrLine>
+            <addrLine>matija.ogrin@zrc-sazu.si</addrLine>
+          </address>
+        </publisher>
+        <idno>ISBN 961-6568-33-7</idno>
+        <availability status="free">
+          <p>Avtorske pravice za besedilo te izdaje ureja licenca <xref url="http://creativecommons.org/licenses/by-nd/2.5/si/">Creative Commons Priznanje avtorstva-Brez predelav
+              2.5 Slovenija</xref>
+          </p>
+          <p>© Avtorske pravice za posnetek govorne rekonstrukcije: ZRC SAZU in Radio Slovenija, RTVS</p>
+          <p>© Avtorske pravice za digitalni faksimile izvirnika Clm 6426: Bayerische StaatsBibliothek, München</p>
+        </availability>
+        <date>2007-04-06</date>
+        <pubPlace>
+          <xref url="http://nl.ijs.si/e-zrc/bs/">http://nl.ijs.si/e-zrc/bs/</xref>
+        </pubPlace>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl id="COBISS.212861696">
+          <monogr>
+            <title lang="slv">Brižinski spomeniki</title>
+            <title lang="lat">Monumenta Frisingensia</title>
+            <title lang="slv">Znanstvenokritična izdaja</title>
+            <edition>Tretja, dopolnjena izdaja</edition>
+            <imprint>
+              <publisher>Založba ZRC, ZRC SAZU</publisher>
+              <pubPlace>Ljubljana</pubPlace>
+              <date value="2004">2004</date>
+            </imprint>
+          </monogr>
+          <note id="COBISS-212861696" place="inline" type="listek COBISS">BRIŽINSKI spomeniki = Monumenta Frisingensia :
+            znanstvenokritična izdaja / [avtorji France Bernik ... et al.] ; [izdajatelj] Znanstvenoraziskovalni center
+            SAZU, Inštitut za slovensko literaturo in literarne vede. - 3., dopolnjena izd. / [uredila Darko Dolinar in
+            Jože Faganel]. - Ljubljana : #Založba #ZRC, ZRC SAZU, 2004 ([Ljubljana] : Littera picta). - 210 str., [9]
+            str. faks. pril. ; 27 cm<lb/> Besedilo spomenikov v slov. ter lat., nem. in angl. prevod. - Bibliografija
+            pri posameznih prispevkih. - Bibliografija / Marko Kranjec: str. 163-191. - Zusammenfassung ; Summary. -
+            Kazalo ISBN 961-6500-29-5 (SAZU) <lb/> COBISS.SI-ID 212861696 </note>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>
+          <xref url="http://nl.ijs.si/e-zrc/">Elektronske znanstvenokritične izdaje slovenskega slovstva</xref>
+        </p>
+        <p>Delo za to elektronsko izdajo je financirala <xref url="http://www.arrs.gov.si/sl/index.asp">Agencija za
+            raziskovalno dejavnost</xref> Republike Slovenije v okviru raziskovalnih programov MVZT P6-0024 (A) in MŠZŠ
+          PO-0542-0106.</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p>Vsak spomenik v prepisih in prevodih je razdeljen na strani (element page) in vrstice (line); ti elementi so
+            definirani kot uporabniška sprememba privzetih modulov TEI P4.</p>
+          <p>Razdelki  bsPT, bsCT, bsTR-slv vsebujejujo tudi meje med frazami in stavki (oz. stavki in povedmi). Meje so označene kot
+            prazen element (milestone) z attributom type = "phrase" ali "sentence".</p>
+        </segmentation>
+        <correction>
+          <p>Besedilo je bilo popravljeno tam, kjer so uredniki elektronske izdaje opazili tiskarske napake. Mesta
+            popravkov niso bila posebej zabeležena.</p>
+        </correction>
+        <hyphenation>
+          <p>Deljaji na koncu vrstic v prepisih so ohranjeni in niso posebej označeni.</p>
+        </hyphenation>
+        <stdVals>
+          <p>Pomembni elementi (npr. div, p, note, page, line) so označeni z atributom @id, ki služi kot standardna
+            referenca na element. V zapisu HTML so razni elementi (kot npr. odstavki, opombe, zaporedne številke
+            bibliografskih enot) označeni z zaporedno številko.</p>
+        </stdVals>
+      </editorialDecl>
+      <tagsDecl>
+        <tagUsage gi="text" occurs="1"/>
+        <tagUsage gi="front" occurs="1"/>
+        <tagUsage gi="titlePage" occurs="1"/>
+        <tagUsage gi="docTitle" occurs="1"/>
+        <tagUsage gi="titlePart" occurs="3"/>
+        <tagUsage gi="docImprint" occurs="5"/>
+        <tagUsage gi="signed" occurs="1"/>
+        <tagUsage gi="dateline" occurs="1"/>
+        <tagUsage gi="body" occurs="1"/>
+        <tagUsage gi="del" occurs="31"/>
+        <tagUsage gi="add" occurs="34"/>
+        <tagUsage gi="expan" occurs="13"/>
+        <tagUsage gi="sic" occurs="55"/>
+        <tagUsage gi="xptr" occurs="278"/>
+        <tagUsage gi="gap" occurs="43"/>
+        <tagUsage gi="milestone" occurs="986"/>
+        <tagUsage gi="line" occurs="5700">USER MODIFICATION</tagUsage>
+        <tagUsage gi="re" occurs="6"/>
+        <tagUsage gi="trans" occurs="352"/>
+        <tagUsage gi="tr" occurs="1756"/>
+        <tagUsage gi="eg" occurs="526"/>
+        <tagUsage gi="q" occurs="963"/>
+        <tagUsage gi="entry" occurs="579"/>
+        <tagUsage gi="orth" occurs="579"/>
+        <tagUsage gi="corr" occurs="187"/>
+        <tagUsage gi="gramGrp" occurs="858"/>
+        <tagUsage gi="gram" occurs="858"/>
+        <tagUsage gi="form" occurs="1164"/>
+        <tagUsage gi="pron" occurs="585"/>
+        <tagUsage gi="xr" occurs="235"/>
+        <tagUsage gi="publisher" occurs="8"/>
+        <tagUsage gi="edition" occurs="2"/>
+        <tagUsage gi="editor" occurs="10"/>
+        <tagUsage gi="series" occurs="54"/>
+        <tagUsage gi="respStmt" occurs="8"/>
+        <tagUsage gi="resp" occurs="9"/>
+        <tagUsage gi="listBibl" occurs="147"/>
+        <tagUsage gi="biblStruct" occurs="625"/>
+        <tagUsage gi="analytic" occurs="469"/>
+        <tagUsage gi="author" occurs="614"/>
+        <tagUsage gi="monogr" occurs="625"/>
+        <tagUsage gi="title" occurs="1153"/>
+        <tagUsage gi="imprint" occurs="626"/>
+        <tagUsage gi="pubPlace" occurs="562"/>
+        <tagUsage gi="date" occurs="582"/>
+        <tagUsage gi="biblScope" occurs="969"/>
+        <tagUsage gi="g" occurs="1316"/>
+        <tagUsage gi="table" occurs="2"/>
+        <tagUsage gi="row" occurs="153"/>
+        <tagUsage gi="abbr" occurs="119"/>
+        <tagUsage gi="cell" occurs="353"/>
+        <tagUsage gi="page" occurs="235">USER MODIFICATION</tagUsage>
+        <tagUsage gi="figure" occurs="30"/>
+        <tagUsage gi="figDesc" occurs="30"/>
+        <tagUsage gi="docAuthor" occurs="26"/>
+        <tagUsage gi="lb" occurs="14"/>
+        <tagUsage gi="hi" occurs="62"/>
+        <tagUsage gi="label" occurs="15"/>
+        <tagUsage gi="div" occurs="337"/>
+        <tagUsage gi="head" occurs="340"/>
+        <tagUsage gi="p" occurs="425"/>
+        <tagUsage gi="list" occurs="36"/>
+        <tagUsage gi="note" occurs="550"/>
+        <tagUsage gi="emph" occurs="222"/>
+        <tagUsage gi="name" occurs="1303"/>
+        <tagUsage gi="ref" occurs="2895"/>
+        <tagUsage gi="xref" occurs="88"/>
+        <tagUsage gi="item" occurs="979"/>
+      </tagsDecl>
+      <charDesc>
+        <desc>Opis znakov vsebuje uporabljene znake s področja zasebne rabe unikod (Unicode Private Use Area, PUA), kot so uporabljeni v
+          fontu <xref url="http://zrcola.zrc-sazu.si/">ZRCola</xref>. Opisi znakov so vzeti oz. prirejeni po <xref url="http://www.unicode.org/Public/UNIDATA/NamesList.txt">The Unicode Standard 4.1 // U41M050317.lst</xref>
+          (glej tudi <xref url="http://www.unicode.org/Public/UNIDATA/NamesList.html">Opis sintakse</xref> te datoteke)
+          in po priporočilih zduženja <xref url="http://www.mufi.info/">Medieval Unicode Font Initiative</xref> (MUFI
+          character recommendation). Vsakemu znaku ZRCola PUA je v spodaj pripisana preslikava v standardni Unikod, skupaj s
+          podatkom, ali je preslikava verna (@mapping='exact') ali samo približna (@mapping='lossy').</desc>
+        <char id="zrcolaE148">
+          <!-- MUFI http://www.mufi.info/standard/MUFI-CodeChart-2-0-g.pdf -->
+          <charName>LATIN SMALL LETTER D ROTUNDA</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>lossy</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">d<!--LATIN SMALL LETTER D--></mapping>
+        </char>
+        <char id="zrcolaE31B">
+          <charName>LATIN SMALL LETTER A WITH OGONEK AND DOT ABOVE</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ą<!--LATIN SMALL LETTER A WITH OGONEK-->̇<!--COMBINING DOT ABOVE--></mapping>
+        </char>
+        <char id="zrcolaE346">
+          <charName>LATIN SMALL LETTER AE WITH GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">æ<!--LATIN SMALL LETTER AE (ash) *-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE35E">
+          <charName>LATIN SMALL LETTER AE WITH TILDE AND GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">æ<!--LATIN SMALL LETTER AE (ash) *-->̃<!--COMBINING TILDE-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE35F">
+          <charName>LATIN SMALL LETTER AE WITH ACUTE AND TILDE</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ǽ<!--LATIN SMALL LETTER AE WITH ACUTE (ash) *-->̃<!--COMBINING TILDE--></mapping>
+        </char>
+        <char id="zrcolaE360">
+          <charName>LATIN SMALL LETTER AE WITH TILDE</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">æ<!--LATIN SMALL LETTER AE (ash) *-->̃<!--COMBINING TILDE--></mapping>
+        </char>
+        <char id="zrcolaE466">
+          <charName>LATIN SMALL LETTER SCHWA WITH GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ə<!--LATIN SMALL LETTER SCHWA-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE467">
+          <charName>LATIN SMALL LETTER SCHWA WITH ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ə<!--LATIN SMALL LETTER SCHWA-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaE480">
+          <charName>LATIN SMALL LETTER OPEN E WITH GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɛ<!--LATIN SMALL LETTER OPEN E-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE481">
+          <charName>LATIN SMALL LETTER OPEN E WITH ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɛ<!--LATIN SMALL LETTER OPEN E-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaE656">
+          <charName>LATIN SMALL LETTER OPEN O WITH GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɔ<!--LATIN SMALL LETTER OPEN O-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE657">
+          <charName>LATIN SMALL LETTER OPEN O WITH ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɔ<!--LATIN SMALL LETTER OPEN O-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaE659">
+          <charName>LATIN SMALL LETTER OPEN O WITH TILDE</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɔ<!--LATIN SMALL LETTER OPEN O-->̃<!--COMBINING TILDE--></mapping>
+        </char>
+        <char id="zrcolaE65A">
+          <charName>LATIN SMALL LETTER OPEN O WITH TILDE AND GRAVE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɔ<!--LATIN SMALL LETTER OPEN O-->̃<!--COMBINING TILDE-->̀<!--COMBINING GRAVE ACCENT (Varia)--></mapping>
+        </char>
+        <char id="zrcolaE65B">
+          <charName>LATIN SMALL LETTER OPEN O WITH TILDE AND ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ɔ<!--LATIN SMALL LETTER OPEN O-->̃<!--COMBINING TILDE-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaE72F">
+          <charName>LATIN SMALL LETTER U WITH INVERTED BREVE BELOW</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">u<!--LATIN SMALL LETTER U-->̯<!--COMBINING INVERTED BREVE BELOW--></mapping>
+        </char>
+        <char id="zrcolaEA97">
+          <charName>LATIN SMALL LETTER N WITH MACRON</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">n<!--LATIN SMALL LETTER N-->̄<!--COMBINING MACRON--></mapping>
+        </char>
+        <!-- EAD9 dodan: sedaj pojavi se v 
+<line n="40" id="bsDT-koe.3.040">ponese x<g corresp="zrcolaEAD9"/>en bih . dase</line>
+-->
+        <char id="zrcolaEAE0">
+          <!-- MUFI http://www.mufi.info/standard/MUFI-CodeChart-2-0-g.pdf -->
+          <charName>LATIN CAPITAL LETTER P WITH STROKE THROUGH DESCENDER</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>lossy</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">P<!--LATIN CAPITAL LETTER P-->̵<!--COMBINING SHORT STROKE OVERLAY--></mapping>
+        </char>
+        <char id="zrcolaEB07">
+          <charName>LATIN SMALL LETTER R WITH MACRON</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">r<!--LATIN SMALL LETTER R-->̄<!--COMBINING MACRON--></mapping>
+        </char>
+        <char id="zrcolaEB1F">
+          <charName>LATIN SMALL LETTER R WITH VERTICAL LINE BELOW</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">r<!--LATIN SMALL LETTER R-->̩<!--COMBINING VERTICAL LINE BELOW--></mapping>
+        </char>
+        <char id="zrcolaEB70">
+          <charName>LATIN SMALL LETTER T WITH ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">t<!--LATIN SMALL LETTER T-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaEB81">
+          <charName>LATIN SMALL LETTER V WITH ACUTE ACCENT</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">v<!--LATIN SMALL LETTER V-->́<!--COMBINING ACUTE ACCENT (Oxia, Tonos)--></mapping>
+        </char>
+        <char id="zrcolaEEC8">
+          <charName>LATIN SMALL LETTER TJ DIGRAPH WITH BREVE BELOW</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>lossy</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">t<!--LATIN SMALL LETTER T-->j<!--LATIN SMALL LETTER J-->̮<!--COMBINING BREVE BELOW--></mapping>
+        </char>
+        <char id="zrcolaEECA">
+          <charName>LATIN SMALL LETTER TS DIGRAPH WITH BREVE BELOW</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ʦ<!--LATIN SMALL LETTER TS DIGRAPH-->̮<!--COMBINING BREVE BELOW--></mapping>
+        </char>
+        <char id="zrcolaEECC">
+          <charName>LATIN SMALL LETTER TESH DIGRAPH WITH BREVE BELOW</charName>
+          <charProp>
+            <localName>font</localName>
+            <value>ZRCola</value>
+          </charProp>
+          <charProp>
+            <localName>mapping</localName>
+            <value>exact</value>
+          </charProp>
+          <mapping type="PUA"></mapping>
+          <mapping type="standard">ʧ<!--LATIN SMALL LETTER TESH DIGRAPH-->̮<!--COMBINING BREVE BELOW--></mapping>
+        </char>
+      </charDesc>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language id="slv"><term lang="slv">slovenščina</term> / <term lang="eng">Slovenian</term></language>
+        <language id="lat"><term lang="slv">latinščina</term> / <term lang="eng">Latin</term></language>
+        <language id="ger"><term lang="slv">nemščina</term> / <term lang="eng">German</term></language>
+        <language id="eng"><term lang="slv">angleščina</term> / <term lang="eng">English</term></language>
+        <language id="ita"><term lang="slv">italijanščina</term> / <term lang="eng">Italian</term></language>
+        <language id="pol"><term lang="slv">poljščina</term> / <term lang="eng">Polish</term></language>
+        <language id="ocs"><term lang="slv">stara cerkvena slovanščina</term> / <term lang="eng">Old
+            Church Slavonic</term></language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change>
+        <date>2007-04-06</date>
+        <respStmt>
+          <name>Tomaž Erjavec</name>
+          <name>Matija Ogrin</name>
+        </respStmt>
+        <item>Popravki kolofona, korekture. Verzija 1.0</item>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body> &bsFC; &bsIN; <div type="part" id="bsDT"><head>Diplomatični prepisi</head> &bsDT-in1; &bsDT-in2; &bsDT; &bsDT-isa; &bsDT-rak;
+        &bsDT-pir; &bsDT-von; &bsDT-kop; &bsDT-koe; </div>
+      <div type="part" id="bsCT"><head>Kritični prepisi</head> &bsCT-int; &bsCT; &bsCT-mik; </div>
+      <div type="part" id="bsPT"><head>Fonetični prepisi</head> &bsPT-in1; &bsPT-in2; &bsPT; &bsPT-grf; &bsPT-rak; </div>
+      <div type="part" id="bsWV"><head>Zvočni zapis</head> &bsWV-int; &bsWV; </div>
+      <div type="part" id="bsTR"><head>Prevodi</head> &bsTR-slv; &bsTR-lat; &bsTR-ger; &bsTR-eng; &bsTR-ita; &bsTR-pol;
+      </div> &bsPA; <div type="part" id="bsLX"><head>Slovar</head> &bsLX-int; &bsLX; </div> &bsBI; <div type="part" id="bsBK"><head>Dodatki</head> &bsBK-ovr; &bsBK-ger; &bsBK-eng; &bsBK-abr; &bsBK-nam; &bsBK-sch;
+        &bsBK-geo; &bsBK-edi; &bsBK-tei;</div>
+    </body>
+  </text>
+</TEI.2>

@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="sl" xml:id="WIKI00290-1855">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Jenko, Simon: Kaznovana tercialka. (1855) [Wikivir]</title>
+            <principal>
+               <name>
+                  <ref target="http://nl.ijs.si/et/">Tomaž Erjavec (IJS)</ref>
+               </name>
+            </principal>
+            <respStmt>
+               <name>Domen Kermc</name>
+               <resp>Pretvorba zapisa Wiki/DjVu v TEI.</resp>
+            </respStmt>
+         </titleStmt>
+         <editionStmt>
+            <edition>1.1</edition>
+         </editionStmt>
+         <publicationStmt>
+            <distributor>
+               <ref xml:lang="en" target="http://nl.ijs.si/">Natural Language Server, Jožef Stefan Institute</ref>
+            </distributor>
+            <idno>WIKI00290-1855</idno>
+            <pubPlace>
+               <ref target="http://nl.ijs.si/imp/wikivir/">http://nl.ijs.si/imp/wikivir/</ref>
+            </pubPlace>
+            <availability>
+               <p xml:lang="en">This work is licensed under the
+     <ref target="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons
+    Attribution-ShareAlike 4.0 International License</ref>.</p>
+               <p xml:lang="sl">Besedilo je na razpolago pod dovoljenjem 
+      <ref target="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Priznanje
+    avtorstva-Deljenje pod enakimi pogoji 4.0 mednarodna licenca</ref>.</p>
+            </availability>
+            <date>2015-04-03</date>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title type="orig" xml:lang="sl">Kaznovana tercjalka</title>
+               <title type="reg" xml:lang="sl">Kaznovana tercialka</title>
+               
+               <author>Jenko, Simon</author>
+               <date>1855</date>
+               <pubPlace>
+            Wikivir: <ref target="http://sl.wikisource.org/wiki/Kaznovana_tercjalka">http://sl.wikisource.org/wiki/Kaznovana_tercjalka</ref>
+                  <ref target="http://www.ff.uni-lj.si/slovjez/vaje2.pdf">http://www.ff.uni-lj.si/slovjez/vaje2.pdf</ref>
+               </pubPlace>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Projekt <ref target="http://nl.ijs.si/imp/">IMP</ref>: <q>Jezikovni viri starejše slovenščine</q>.</p>
+            <p>Projekt <ref target="http://sl.wikisource.org/wiki/Wikivir:Slovenska_leposlovna_klasika">Wikivir</ref>: <q>Slovenska leposlovna klasika</q>.</p>
+         </projectDesc>
+         <tagsDecl>
+            <namespace name="http://www.tei-c.org/ns/1.0">
+               <tagUsage gi="facsimile" occurs="1"/>
+               <tagUsage gi="surface" occurs="2"/>
+               <tagUsage gi="desc" occurs="2"/>
+               <tagUsage gi="text" occurs="1"/>
+               <tagUsage gi="front" occurs="1"/>
+               <tagUsage gi="titlePage" occurs="1"/>
+               <tagUsage gi="titlePart" occurs="1"/>
+               <tagUsage gi="docAuthor" occurs="1"/>
+               <tagUsage gi="docDate" occurs="1"/>
+               <tagUsage gi="graphic" occurs="1"/>
+               <tagUsage gi="docImprint" occurs="1"/>
+               <tagUsage gi="pubPlace" occurs="1"/>
+               <tagUsage gi="ref" occurs="1"/>
+               <tagUsage gi="idno" occurs="1"/>
+               <tagUsage gi="divGen" occurs="4"/>
+               <tagUsage gi="body" occurs="1"/>
+               <tagUsage gi="p" occurs="1"/>
+               <tagUsage gi="pb" occurs="2"/>
+               <tagUsage gi="s" occurs="10"/>
+               <tagUsage gi="choice" occurs="30"/>
+               <tagUsage gi="orig" occurs="30"/>
+               <tagUsage gi="reg" occurs="30"/>
+               <tagUsage gi="c" occurs="184"/>
+               <tagUsage gi="w" occurs="215"/>
+               <tagUsage gi="pc" occurs="38"/>
+            </namespace>
+         </tagsDecl>
+         <classDecl>
+            <taxonomy xml:id="Text.taxonomy">
+               <category xml:id="Text.medium">
+                  <catDesc>
+                     <term xml:lang="sl">prenosnik</term> / <term xml:lang="en">medium</term>
+                  </catDesc>
+                  <category xml:id="Text.manuscript">
+                     <catDesc>
+                        <term xml:lang="sl">rokopis</term> / <term xml:lang="en">manuscript</term>
+                     </catDesc>
+                  </category>
+                  <category xml:id="Text.book">
+                     <catDesc>
+                        <term xml:lang="sl">knjiga</term> / <term xml:lang="en">book</term>
+                     </catDesc>
+                  </category>
+                  <category xml:id="Text.magazine">
+                     <catDesc>
+                        <term xml:lang="sl">revija</term> / <term xml:lang="en">magazine</term>
+                     </catDesc>
+                  </category>
+                  <category xml:id="Text.newspaper">
+                     <catDesc>
+                        <term xml:lang="sl">časopis</term> / <term xml:lang="en">newspaper</term>
+                     </catDesc>
+                  </category>
+               </category>
+               <category xml:id="Text.type">
+                  <catDesc>
+                     <term xml:lang="sl">zvrst besedila</term> / <term xml:lang="en">text type</term>
+                  </catDesc>
+                  <category xml:id="Text.fiction">
+                     <catDesc>
+                        <term xml:lang="sl">umetnostno</term> / <term xml:lang="en">fiction</term>
+                     </catDesc>
+                     <category xml:id="Text.prose">
+                        <catDesc>
+                           <term xml:lang="sl">proza</term> / <term xml:lang="en">prose</term>
+                        </catDesc>
+                     </category>
+                     <category xml:id="Text.drama">
+                        <catDesc>
+                           <term xml:lang="sl">gledališka igra</term> / <term xml:lang="en">drama</term>
+                        </catDesc>
+                     </category>
+                     <category xml:id="Text.poetry">
+                        <catDesc>
+                           <term xml:lang="sl">poezija</term> / <term xml:lang="en">poetry</term>
+                        </catDesc>
+                     </category>
+                  </category>
+                  <category xml:id="Text.nonfiction">
+                     <catDesc>
+                        <term xml:lang="sl">stvarno</term> / <term xml:lang="en">non-fiction</term>
+                     </catDesc>
+                     <category xml:id="Text.bees">
+                        <catDesc>
+                           <term xml:lang="sl">čebelarstvo</term> / <term xml:lang="en">beekeeping</term>
+                        </catDesc>
+                     </category>
+                     <category xml:id="Text.cooking">
+                        <catDesc>
+                           <term xml:lang="sl">kuharice</term> / <term xml:lang="en">cookbooks</term>
+                        </catDesc>
+                     </category>
+                  </category>
+                  <category xml:id="Text.religious">
+                     <catDesc>
+                        <term xml:lang="sl">nabožno</term> / <term xml:lang="en">religious</term>
+                     </catDesc>
+                  </category>
+               </category>
+               <category xml:id="Text.status">
+                  <catDesc>
+                     <term xml:lang="sl">status</term> / <term xml:lang="en">status</term>
+                  </catDesc>
+                  <category xml:id="Text.original">
+                     <catDesc>
+                        <term xml:lang="sl">izvirnik</term> / <term xml:lang="en">original</term>
+                     </catDesc>
+                  </category>
+                  <category xml:id="Text.translation">
+                     <catDesc>
+                        <term xml:lang="sl">prevod</term> / <term xml:lang="en">translation</term>
+                     </catDesc>
+                  </category>
+               </category>
+            </taxonomy>
+         </classDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="sl">
+               <term xml:lang="sl">slovenščina</term>
+               <term xml:lang="en">Slovene</term>
+            </language>
+            <language ident="sl-bohoric">
+               <term xml:lang="sl">slovenščina v bohoričici</term>
+               <term xml:lang="en">Slovene in Bohorič alphabet</term>
+            </language>
+            <language ident="sl-dajnko">
+               <term xml:lang="sl">slovenščina v dajnčici</term>
+               <term xml:lang="en">Slovene in Dajnko alphabet</term>
+            </language>
+            <language ident="sl-metelko">
+               <term xml:lang="sl">slovenščina v metelščici</term>
+               <term xml:lang="en">Slovene in Metelko alphabet</term>
+            </language>
+            <language ident="de">
+               <term xml:lang="sl">nemščina</term>
+               <term xml:lang="en">German</term>
+            </language>
+            <language ident="fr">
+               <term xml:lang="sl">francoščina</term>
+               <term xml:lang="en">French</term>
+            </language>
+            <language ident="la">
+               <term xml:lang="sl">latinščina</term>
+               <term xml:lang="en">Latin</term>
+            </language>
+            <language ident="en">
+               <term xml:lang="sl">angleščina</term>
+               <term xml:lang="en">English</term>
+            </language>
+         </langUsage>
+         <textClass>
+            <catRef target="#Text.manuscript"/>
+            <catRef target="#Text.prose"/>
+            <catRef target="#Text.original"/>
+         </textClass>
+      </profileDesc>
+      <revisionDesc>
+         <change>
+            <date>2015-04-03</date>
+            <name>Tomaž Erjavec</name>: meta-data, normalisation.</change>
+         <change>
+            <date>2013-11-29</date>
+            <name>Domen Kermc</name>: pretvorba v TEI P5.
+      </change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:id="WIKI00290-facs" n="2">
+      <graphic n="orig" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290.pdf"/>
+      <surface xml:id="WIKI00290-001">
+         <desc xml:lang="sl">Faksimile kaznovana_tercjalka, stran 1</desc>
+         <graphic n="orig" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-001.png"/>
+         <graphic n="medium"
+                  url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-001_m.jpg"/>
+         <graphic n="small" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-001_s.jpg"/>
+         <graphic n="thumb" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-001_t.jpg"/>
+      </surface>
+      <surface xml:id="WIKI00290-002">
+         <desc xml:lang="sl">Faksimile kaznovana_tercjalka, stran 2</desc>
+         <graphic n="orig" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-002.png"/>
+         <graphic n="medium"
+                  url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-002_m.jpg"/>
+         <graphic n="small" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-002_s.jpg"/>
+         <graphic n="thumb" url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-002_t.jpg"/>
+      </surface>
+   </facsimile>
+   <text xml:lang="sl">
+      <front xml:lang="sl">
+         <titlePage>
+            <titlePart type="reg" xml:lang="sl">Kaznovana tercialka</titlePart>
+            <docAuthor>Jenko, Simon</docAuthor>
+            <docDate>1855</docDate>
+            <graphic rend="center"
+                     url="http://nl.ijs.si/imp/wikivir/facs/WIKI00290/WIKI00290-001_t.jpg"/>
+         </titlePage>
+         <docImprint>
+            <pubPlace>Digitalna knjižnica <ref target="http://nl.ijs.si/imp/">IMP</ref>
+            </pubPlace>
+            <idno>Signatura WIKI00290-1855</idno>
+         </docImprint>
+         <divGen type="teiHeader"/>
+         <divGen type="facsimile"/>
+         <divGen type="xml" corresp="http://nl.ijs.si/imp/dl/xml/WIKI00290-1855.xml"/>
+         <divGen type="toc-pages"/>
+      </front>
+      <body xml:lang="sl">
+         <pb facs="#WIKI00290-001" n="1" xml:id="pb.001"/>
+         <p>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Neka</w>
+                  </orig>
+                  <reg>
+                     <w lemma="nek" ana="Pi-fsn">neka</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w type="unknown" lemma="tercjalka" ana="Ncfsn">tercjalka</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <c> </c>
+               <w lemma="študent" ana="Ncmpa">študente</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="ki" ana="Cs">ki</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3p-n">so</w>
+               <c> </c>
+               <w lemma="pri" ana="Sl">pri</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>nji</w>
+                  </orig>
+                  <reg>
+                     <w lemma="on" ana="Pp3fsl">njej</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="stanovati" ana="Vmpp-pm">stanovali</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="vselej" ana="Rgp">vselej</w>
+               <c> </c>
+               <w lemma="prav" ana="Q">prav</w>
+               <c> </c>
+               <w lemma="zgodaj" ana="Rgp">zgodaj</w>
+               <c> </c>
+               <w lemma="na" ana="Sa">na</w>
+               <c> </c>
+               <w lemma="noga" ana="Ncfpa">noge</w>
+               <c> </c>
+               <w lemma="spraviti" ana="Vmep-sf">spravila</w>
+               <pc>,</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="potlej" ana="Rgp">potlej</w>
+               <c> </c>
+               <w lemma="v" ana="Sa">v</w>
+               <c> </c>
+               <w lemma="cerkev" ana="Ncfsa">cerkev</w>
+               <c> </c>
+               <w lemma="iti" ana="Vmbp-sf">šla</w>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Galiču</w>
+                  </orig>
+                  <reg>
+                     <w lemma="galič" ana="Npmsd">galiču</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <c> </c>
+               <w lemma="ta" ana="Pd-nsn">to</w>
+               <c> </c>
+               <w lemma="prav" ana="Q">prav</w>
+               <c> </c>
+               <w lemma="sitno" ana="Rgp">sitno</w>
+               <c> </c>
+               <w lemma="zdeti" ana="Vmpp-sn">zdelo</w>
+               <pc>;</pc>
+               <c> </c>
+               <w lemma="skleniti" ana="Vmep-sm">sklenil</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="nad" ana="Si">nad</w>
+               <c> </c>
+               <w lemma="on" ana="Pp3fsi">njo</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>maševati</w>
+                  </orig>
+                  <reg>
+                     <w lemma="maščevati" ana="Vmbn">maščevati</w>
+                  </reg>
+               </choice>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Nekega</w>
+                  </orig>
+                  <reg>
+                     <w lemma="nek" ana="Pi-msg">nekega</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="dan" ana="Ncmsg">dne</w>
+               <c> </c>
+               <w lemma="pred" ana="Si">pred</w>
+               <c> </c>
+               <w type="unknown" lemma="petemi" ana="Ncnpi">petemi</w>
+               <c> </c>
+               <w lemma="vstati" ana="Vmer3s">vstane</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="obleči" ana="Vmer3s">obleče</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="da" ana="Cs">da</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-p-sm">bil</w>
+               <c> </c>
+               <w lemma="ves" ana="Pg-msa">ves</w>
+               <c> </c>
+               <w lemma="že" ana="Q">že</w>
+               <c> </c>
+               <w lemma="napravljen" ana="Appmsnn">napravljen</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="ko" ana="Cs">ko</w>
+               <c> </c>
+               <w lemma="gospodinja" ana="Ncfsn">gospodinja</w>
+               <c> </c>
+               <w lemma="buditi" ana="Vmpu">budit</w>
+               <c> </c>
+               <w lemma="priti" ana="Vmer3s">pride</w>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Gospodinja</w>
+                  </orig>
+                  <reg>
+                     <w lemma="gospodinja" ana="Ncfsn">gospodinja</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="pri" ana="Sl">pri</w>
+               <c> </c>
+               <w lemma="en" ana="Mlpfpl">enih</w>
+               <c> </c>
+               <w lemma="vrata" ana="Ncnpl">vratih</w>
+               <c> </c>
+               <w lemma="proti" ana="Sd">proti</w>
+               <c> </c>
+               <w lemma="cerkev" ana="Ncfsd">cerkvi</w>
+               <c> </c>
+               <w lemma="iti" ana="Vmbr3s">gre</w>
+               <pc>,</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>Galič</w>
+                  </orig>
+                  <reg>
+                     <w lemma="galič" ana="Npmsn">galič</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="pa" ana="Cc">pa</w>
+               <c> </c>
+               <w lemma="pri" ana="Sl">pri</w>
+               <c> </c>
+               <w lemma="drug" ana="Mlpmpl">drugih</w>
+               <c> </c>
+               <w lemma="ravno" ana="Q">ravno</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>tje</w>
+                  </orig>
+                  <reg>
+                     <w lemma="tja" ana="Rgp">tja</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="v" ana="Sa">v</w>
+               <c> </c>
+               <w lemma="spovednica" ana="Ncfsa">spovednico</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="ki" ana="Cs">ki</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <c> </c>
+               <w lemma="tek" ana="Ncmsn">tek</w>
+               <c> </c>
+               <w lemma="vrata" ana="Ncnpg">vrat</w>
+               <c> </c>
+               <w lemma="stati" ana="Vmpp-sf">stala</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="spraviti" ana="Vmer3s">spravi</w>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Kmalo</w>
+                  </orig>
+                  <reg>
+                     <w lemma="kmalu" ana="Rgp">kmalu</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w type="unknown" lemma="tercjaliki" ana="Agpfsn">tercjalika</w>
+               <c> </c>
+               <w lemma="do" ana="Sg">do</w>
+               <c> </c>
+               <w lemma="cerkven" ana="Agpfpg">cerkvenih</w>
+               <c> </c>
+               <w lemma="vrata" ana="Ncnpg">vrat</w>
+               <c> </c>
+               <w lemma="priti" ana="Vmer3s">pride</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="do" ana="Sg">do</w>
+               <c> </c>
+               <w lemma="tla" ana="Ncnpa">tla</w>
+               <c> </c>
+               <w lemma="pripogniti" ana="Vmer3s">pripogne</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="milo" ana="Rgp">milo</w>
+               <c> </c>
+               <w lemma="zdihniti" ana="Vmer3s">zdihne</w>
+               <pc>:</pc>
+               <c> </c>
+               <pc>„</pc>
+               <choice>
+                  <orig>
+                     <w>O</w>
+                  </orig>
+                  <reg>
+                     <w lemma="o" ana="Sl">o</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="moj" ana="Ps1msns">moj</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>Bog</w>
+                  </orig>
+                  <reg>
+                     <w lemma="bog" ana="Ncmsn">bog</w>
+                  </reg>
+               </choice>
+               <pc>!</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Ali</w>
+                  </orig>
+                  <reg>
+                     <w lemma="ali" ana="Cc">ali</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="smeti" ana="Vmpr1s">smem</w>
+               <c> </c>
+               <w lemma="nevreden" ana="Agpnpa">nevredna</w>
+               <c> </c>
+               <w lemma="grešnica" ana="Ncfsn">grešnica</w>
+               <c> </c>
+               <w lemma="v" ana="Sl">v</w>
+               <c> </c>
+               <w lemma="ta" ana="Pd-msn">ta</w>
+               <c> </c>
+               <w lemma="tvoj" ana="Ps2msns">tvoj</w>
+               <c> </c>
+               <w lemma="svet" ana="Agpmsny">sveti</w>
+               <c> </c>
+               <w lemma="tempelj" ana="Ncmsn">tempelj</w>
+               <c> </c>
+               <w lemma="stopiti" ana="Vmen">stopiti</w>
+               <pc>?</pc>
+            </s>
+            <c> </c>
+            <s>
+               <pc>“</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>Baba</w>
+                  </orig>
+                  <reg>
+                     <w lemma="baba" ana="Npmsn">baba</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="nak" ana="Npmsn">nak</w>
+               <c> </c>
+               <w lemma="on" ana="Pp3fsd--y">ji</w>
+               <c> </c>
+               <w lemma="strašen" ana="Agpmsnn">strašen</w>
+               <c> </c>
+               <w lemma="glas" ana="Ncmsn">glas</w>
+               <c> </c>
+               <w lemma="na" ana="Sa">na</w>
+               <c> </c>
+               <w lemma="uho" ana="Ncnpi">ušesi</w>
+               <c> </c>
+               <w lemma="zadoneti" ana="Vmer3s">zadoni</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="da" ana="Cs">da</w>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="od" ana="Sg">od</w>
+               <c> </c>
+               <w lemma="strah" ana="Ncmsg">strahu</w>
+               <c> </c>
+               <w lemma="zgrniti" ana="Vmer3s">zgrne</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="di" ana="Npfsi">di</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="napol" ana="Rgp">napol</w>
+               <c> </c>
+               <w lemma="glasno" ana="Rgp">glasno</w>
+               <c> </c>
+               <w lemma="izdihovati" ana="Vmpr3s">izdihuje</w>
+               <pc>:</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>Oh</w>
+                  </orig>
+                  <reg>
+                     <w lemma="oh" ana="I">oh</w>
+                  </reg>
+               </choice>
+               <pc>,</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>Bog</w>
+                  </orig>
+                  <reg>
+                     <w lemma="bog" ana="Ncmsn">bog</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="jaz" ana="Pp1-sa--y">me</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>vsmili</w>
+                  </orig>
+                  <reg>
+                     <w lemma="usmiliti" ana="Vmem2s">usmili</w>
+                  </reg>
+               </choice>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="velik" ana="Agpfsg">velike</w>
+               <c> </c>
+               <w lemma="grešnica" ana="Ncfsg">grešnice</w>
+               <pc>!</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Vem</w>
+                  </orig>
+                  <reg>
+                     <w lemma="vedeti" ana="Vmpr1s">vem</w>
+                  </reg>
+               </choice>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="da" ana="Cs">da</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>nisim</w>
+                  </orig>
+                  <reg>
+                     <w lemma="biti" ana="Va-r1s-y">nisem</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="vreden" ana="Agpfsn">vredna</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="ker" ana="Cs">ker</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>snoči</w>
+                  </orig>
+                  <reg>
+                     <w lemma="sinoči" ana="Rgp">sinoči</w>
+                  </reg>
+               </choice>
+               <pb facs="#WIKI00290-002" n="2" xml:id="pb.002"/>
+               <w lemma="še" ana="Q">še</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>nisim</w>
+                  </orig>
+                  <reg>
+                     <w lemma="biti" ana="Va-r1s-y">nisem</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="ubiti" ana="Vmep-sf">ubila</w>
+               <c> </c>
+               <w lemma="trije" ana="Mlcfpn">tri</w>
+               <c> </c>
+               <w lemma="bolha" ana="Ncfpn">bolhe</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="ko" ana="Cs">ko</w>
+               <c> </c>
+               <w lemma="vedeti" ana="Vmpr1s">vem</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="da" ana="Cs">da</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-c">bi</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-p-pf">bile</w>
+               <c> </c>
+               <w lemma="rad" ana="Rgp">rade</w>
+               <c> </c>
+               <w lemma="živeti" ana="Vmpp-pf">živele</w>
+               <pc>,</pc>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="biti" ana="Va-c">bi</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-p-pf">bile</w>
+               <c> </c>
+               <w lemma="meniti" ana="Vmbr3s">meni</w>
+               <c> </c>
+               <w lemma="lahko" ana="Rgp">lahko</w>
+               <c> </c>
+               <w lemma="za" ana="Sa">za</w>
+               <c> </c>
+               <w lemma="pokora" ana="Ncfsa">pokoro</w>
+               <c> </c>
+               <w lemma="služiti" ana="Vmpp-pf">služile</w>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Komej</w>
+                  </orig>
+                  <reg>
+                     <w lemma="komaj" ana="Rgp">komaj</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="se" ana="Px------y">se</w>
+               <c> </c>
+               <w lemma="pobrati" ana="Vmer3s">pobere</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>i</w>
+                  </orig>
+                  <reg>
+                     <w lemma="in" ana="Cc">in</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>domu</w>
+                  </orig>
+                  <reg>
+                     <w lemma="domov" ana="Rgp">domov</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w type="unknown" lemma="prekrevs" ana="Npmsg">prekrevsa</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="kjer" ana="Cs">kjer</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-n">je</w>
+               <c> </c>
+               <w lemma="veliko" ana="Rgc">več</w>
+               <c> </c>
+               <w lemma="teden" ana="Ncmpg">tednov</w>
+               <c> </c>
+               <w lemma="bolan" ana="Agpfsn">bolna</w>
+               <c> </c>
+               <w lemma="ležati" ana="Vmpp-sf">ležala</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="dokler" ana="Cs">dokler</w>
+               <c> </c>
+               <w lemma="on" ana="Pp3fsd--y">ji</w>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3s-y">ni</w>
+               <c> </c>
+               <w lemma="ves" ana="Pg-msn">ves</w>
+               <c> </c>
+               <w lemma="strah" ana="Ncmsn">strah</w>
+               <c> </c>
+               <w lemma="z" ana="Si">s</w>
+               <c> </c>
+               <w lemma="pot" ana="Ncmsi">potom</w>
+               <c> </c>
+               <w lemma="vred" ana="Rgp">vred</w>
+               <c> </c>
+               <w lemma="iz" ana="Sg">iz</w>
+               <c> </c>
+               <w lemma="koža" ana="Ncfsg">kože</w>
+               <c> </c>
+               <w lemma="iti" ana="Vmbp-sm">šel</w>
+               <pc>.</pc>
+            </s>
+            <c> </c>
+            <s>
+               <choice>
+                  <orig>
+                     <w>Da</w>
+                  </orig>
+                  <reg>
+                     <w lemma="da" ana="Cs">da</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="biti" ana="Va-r3p-n">so</w>
+               <c> </c>
+               <w lemma="študent" ana="Ncmpn">študentje</w>
+               <c> </c>
+               <w lemma="nad" ana="Si">nad</w>
+               <c> </c>
+               <w lemma="ta" ana="Pd-nsi">tem</w>
+               <c> </c>
+               <choice>
+                  <orig>
+                     <w>zjutrej</w>
+                  </orig>
+                  <reg>
+                     <w lemma="zjutraj" ana="Rgp">zjutraj</w>
+                  </reg>
+               </choice>
+               <c> </c>
+               <w lemma="mir" ana="Ncmsan">mir</w>
+               <c> </c>
+               <w lemma="imeti" ana="Vmpp-pm">imeli</w>
+               <pc>,</pc>
+               <c> </c>
+               <w lemma="se" ana="Px---d--y">si</w>
+               <c> </c>
+               <w lemma="vsak" ana="Pg-msn">vsak</w>
+               <c> </c>
+               <w lemma="lahko" ana="Rgp">lahko</w>
+               <c> </c>
+               <w lemma="misliti" ana="Vmpr3s">misli</w>
+               <pc>.</pc>
+            </s>
+         </p>
+      </body>
+   </text>
+</TEI>
