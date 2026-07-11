@@ -182,8 +182,12 @@ class VerifyTest < Minitest::Test
       lexica:
         adapter: Nabu::Adapters::Lexica
         enabled: true
+      bosworth-toller:
+        adapter: Nabu::Adapters::BosworthToller
+        enabled: true
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("bosworth-toller"), File.join(@canonical, "bosworth-toller"))
     Nabu::Rebuild.new(config: config, registry: registry).run # seed both kinds
 
     result = verify
@@ -195,6 +199,12 @@ class VerifyTest < Minitest::Test
     lexica = result.outcomes.find { |outcome| outcome.slug == "lexica" }
     assert_operator lexica.verified, :>, 0, "dictionary entries must be verified, not skipped"
     assert_predicate lexica, :ok?
+    # P12-3: the CSV dictionary (bosworth-toller) inherits the same
+    # entry-level verification purely through content_kind — the 270 fixture
+    # entries re-hash clean, no verify code changed for the third occupant.
+    bosworth = result.outcomes.find { |outcome| outcome.slug == "bosworth-toller" }
+    assert_equal 270, bosworth.verified
+    assert_predicate bosworth, :ok?
   end
 
   def test_verify_flags_a_tampered_dictionary_entry

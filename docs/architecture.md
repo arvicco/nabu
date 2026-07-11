@@ -424,15 +424,22 @@ bounded citations (resolved first), research_private/restricted shelves
 withheld unless `include_restricted`, and graceful states (no catalog / no
 shelf yet → "run nabu sync lexica").
 
-**How a third dictionary plugs in.** The schema is deliberately
-language-agnostic (dictionaries.language is a column, entries fold by it).
+**How a third dictionary plugs in — done (P12-3, Bosworth-Toller).** The
+schema is deliberately language-agnostic (dictionaries.language is a
+column, entries fold by it), and the plug-in went exactly as designed:
 Bosworth-Toller (Old English; docs/oe-survey.md: official CC BY 4.0 LINDAT
-dump, CSV `id;headword;body` with project-XML bodies) becomes its own
-registry source with a small CSV adapter — same `content_kind :dictionary`,
-same DictionaryDocument/Entry model, dictionary slug `bosworth-toller`,
-language `ang`, betacode off — and `define`/glosses work unchanged. Its
-bodies cite OE works by short title without urns, so its
-`dictionary_citations` start empty until a crosswalk to ISWOC/ASPR urns
-exists; the resolution layer needs nothing new. A second dictionary from
-the SAME repo (Middle Liddell lives beside LSJ upstream) is one entry in
-the adapter's DICTIONARIES map.
+dump, CSV `id;headword;body` with project-XML bodies) is its own registry
+source with a small CSV adapter (`BosworthToller` + the `bosworth-csv`
+parser family — the first non-TEI dictionary) — same `content_kind
+:dictionary`, same DictionaryDocument/Entry model, dictionary slug
+`bosworth-toller`, language `ang`, betacode off — and `define`/glosses
+worked unchanged (the only edits outside the adapter were widening the
+CLI/MCP `lang` gates to `ang` and the conventions §9 ang fold: æ→ae,
+þ/ð→th, so `define aethele` reaches æðele from an ASCII keyboard). Entry
+ids are the dump's CSV ids (`urn:nabu:dict:bosworth-toller:940` ↔
+`bosworthtoller.com/940`). Its bodies cite OE works by short title without
+urns, so its `dictionary_citations` start empty until a crosswalk to
+ISWOC/ASPR urns exists; the resolution layer needed nothing new. Fetch is
+the ASPR FileFetch path (one ~84 MB CSV, DSpace bitstream `/content` URL).
+A second dictionary from the SAME repo (Middle Liddell lives beside LSJ
+upstream) is one entry in the lexica adapter's DICTIONARIES map.

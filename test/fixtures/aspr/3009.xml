@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Anglo-Saxon poetic records</title>
+            <editor role="editor">Hidley, Gregory Ray, 1950-</editor>
+            <respStmt>
+               <resp>creation of machine-readable version</resp>
+               <name>Hidley, Gregory Ray, 1950-</name>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <authority xml:id="macdu1">Deposited by <name>Macrae-Gibson, O.Duncan</name>
+               <address>
+                  <addrLine>D of English</addrLine>
+                  <addrLine>U of Aberdeen</addrLine>
+                  <addrLine>King"s College</addrLine>
+                  <addrLine>AB9 2UB  Old Aberdeen</addrLine>
+                  <addrLine>UK</addrLine>
+               </address>
+               <address>
+                  <addrLine>DMG@CS.ABDN.AC.UK</addrLine>
+               </address>
+               <date>1993-10-13</date>
+            </authority>
+            <distributor>
+               <name>University of Oxford Text Archive</name>
+               <address>
+                  <addrLine>Oxford University Computing Services</addrLine>
+                  <addrLine>13 Banbury Road</addrLine>
+                  <addrLine>Oxford</addrLine>
+                  <addrLine>OX2 6NN</addrLine>
+               </address>
+               <email>ota@oucs.ox.ac.uk</email>
+            </distributor>
+            <idno type="ota">http://ota.ox.ac.uk/id/3009</idno>
+            <idno type="isbn10">1106000080</idno>
+            <idno type="isbn13">9781106000088</idno>
+            <availability status="free">
+               <licence target="http://creativecommons.org/licenses/by-sa/3.0/">
+	Distributed by the University of Oxford under a Creative Commons
+	Attribution-ShareAlike 3.0 Unported License
+      </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>Revised version of  <relatedItem type="older" target="http://ota.ox.ac.uk/id/1936"/>
+            </bibl>
+            <biblFull>
+               <titleStmt>
+                  <title>The Anglo-Saxon poetic records: a collective edition</title>
+                  <editor role="editor">Krapp, George Philip, 1872-1934</editor>
+                  <editor role="editor">Dobbie, Elliott Van Kirk</editor>
+               </titleStmt>
+               <extent>6 v. : ill. ; 23 cm.</extent>
+               <publicationStmt>
+                  <publisher>Columbia University Press</publisher>
+                  <pubPlace>New York</pubPlace>
+                  <date>1931-1953</date>
+               </publicationStmt>
+               <notesStmt>
+                  <note anchored="true">Each [vol.] has also a distinctive title page</note>
+                  <note anchored="true">Title from half-title</note>
+                  <note anchored="true">Vols. 1-2, 5, edited by G.P. Krapp; v. 3 by G.P. Krapp and E.V.K. Dobbie; v. 4, 6 by E.V.K. Dobbie</note>
+               </notesStmt>
+            </biblFull>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <classDecl>
+            <taxonomy xml:id="OTASH">
+               <bibl>University of Oxford Text Archive Subject Headings</bibl>
+            </taxonomy>
+            <taxonomy xml:id="LCSH">
+               <bibl>Library of Congress Subject Headings</bibl>
+            </taxonomy>
+         </classDecl>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date notAfter="1100"/>
+         </creation>
+         <langUsage>
+            <language ident="ang">English, Old (ca. 450-1100)</language>
+         </langUsage>
+         <textClass>
+            <keywords scheme="#LCSH">
+               <term type="genre">Poems</term>
+            </keywords>
+         </textClass>
+      </profileDesc>
+      <revisionDesc>
+         <change when="2010-08-31">Header normalised</change>
+      </revisionDesc>
+  </teiHeader>
+  <text>
+      <body>
+         <div rend="linenumber" xml:id="A3.34.15">
+            <head>Riddles 75</head>
+            <bibl>Krapp and Dobbie, 1936 234; Krapp, G.P. and Dobbie, E.V.K., The Exeter Book, ASPR 3 (New York).</bibl>
+            <l>Ic swiftne geseah <caesura/> on swaþe feran </l>
+            <l>
+               <foreign xml:lang="rune">D</foreign>
+               <foreign xml:lang="rune">N</foreign>
+               <foreign xml:lang="rune">L</foreign>
+               <foreign xml:lang="rune">H</foreign>. <caesura/>
+            </l>
+         </div>
+         <div rend="linenumber" xml:id="A3.34.22">
+            <head>Riddles 82</head>
+            <bibl>Krapp and Dobbie, 1936 236; Krapp, G.P. and Dobbie, E.V.K., The Exeter Book, ASPR 3 (New York).</bibl>
+            <l>Wiht is <caesura/> 
+            </l>
+            <l>gongende, <caesura/> greate swilgeð, </l>
+            <gap/>
+            <l>fell ne flæsc, <caesura/> fotum gong/ </l>
+            <l>
+               <caesura/> /eð, </l>
+            <l>sceal mæla gehwam <caesura/> 
+            </l>
+         </div>
+         <div rend="linenumber" xml:id="A4.1">
+            <head>Beowulf</head>
+            <bibl>Dobbie, 1953 3-98; Dobbie, E.V.K., Beowulf and Judith, ASPR 4 (New York).</bibl>
+            <l>Hwæt! We Gardena <caesura/> in geardagum, </l>
+            <l>þeodcyninga, <caesura/> þrym gefrunon, </l>
+            <l>hu ða æþelingas <caesura/> ellen fremedon. </l>
+            <l>Oft Scyld Scefing <caesura/> 
+               <unclear>sceaþena</unclear> þreatum, </l>
+            <l>monegum mægþum, <caesura/> meodosetla ofteah, </l>
+            <l>egsode <unclear>eorlas</unclear>. <caesura/> Syððan ærest wearð </l>
+            <l>feasceaft funden, <caesura/> he þæs frofre gebad, </l>
+            <l>weox under wolcnum, <caesura/> weorðmyndum þah, </l>
+            <l>oðþæt him æghwylc <caesura/> þara ymbsittendra </l>
+            <l>ofer hronrade <caesura/> hyran scolde, </l>
+            <l>gomban gyldan. <caesura/> þæt wæs god cyning! </l>
+            <l>ðæm eafera wæs <caesura/> æfter cenned, </l>
+            <l>geong in geardum, <caesura/> þone god sende </l>
+            <l>folce to frofre; <caesura/> fyrenðearfe ongeat </l>
+            <l>þe hie ær drugon <caesura/> 
+               <unclear>aldorlease</unclear> 
+            </l>
+            <l>lange hwile. <caesura/> Him þæs liffrea, </l>
+            <l>wuldres wealdend, <caesura/> woroldare forgeaf; </l>
+            <l>Beowulf wæs breme <caesura/> (blæd wide sprang), </l>
+            <l>Scyldes eafera <caesura/> Scedelandum in. </l>
+            <l>Swa sceal <unclear>geong</unclear> 
+               <unclear>guma</unclear> 
+               <caesura/> gode gewyrcean, </l>
+            <l>fromum feohgiftum <caesura/> on fæder <unclear>bearme</unclear>, </l>
+            <l>þæt hine on ylde <caesura/> eft gewunigen </l>
+            <l>wilgesiþas, <caesura/> þonne wig cume, </l>
+            <l>leode gelæsten; <caesura/> lofdædum sceal </l>
+         </div>
+         <div rend="linenumber" xml:id="A16">
+            <head>A Proverb from Winfrid's Time</head>
+            <bibl>Dobbie, 1942 57; Dobbie, E.V.K., The Anglo-Saxon Minor Poems, ASPR 6 (New York).</bibl>
+            <l>Oft daedlata <caesura/> dom<g ref="ecaudata">ę</g> for<g ref="ecaudata">ę</g>ldit, </l>
+            <l>sigisitha gahuem, <caesura/> suuyltit thi ana. </l>
+         </div>
+         <div rend="linenumber" xml:id="A32.1">
+            <head>Cædmon's Hymn, Northumbrian Version</head>
+            <bibl>Dobbie, 1942 105; Dobbie, E.V.K., The Anglo-Saxon Minor Poems, ASPR 6 (New York).</bibl>
+            <l>Nu scylun hergan <caesura/> hefaenricaes uard, </l>
+            <l>metudæs maecti <caesura/> end his modgidanc, </l>
+            <l>uerc uuldurfadur, <caesura/> sue he uundra gihuaes, </l>
+            <l>eci dryctin, <caesura/> or astelidæ. </l>
+            <l>He aerist scop <caesura/> aelda barnum </l>
+            <l>heben til hrofe, <caesura/> haleg scepen; </l>
+            <l>tha middungeard <caesura/> moncynnæs uard, </l>
+            <l>eci dryctin, <caesura/> æfter tiadæ </l>
+            <l>firum foldu, <caesura/> frea allmectig. </l>
+         </div>
+         <div rend="linenumber" xml:id="A32.2">
+            <head>Cædmon's Hymn, West-Saxon Version</head>
+            <bibl>Dobbie, 1942 106; Dobbie, E.V.K., The Anglo-Saxon Minor Poems, ASPR 6 (New York).</bibl>
+            <l>Nu sculon herigean <caesura/> heofonrices weard, </l>
+            <l>meotodes meahte <caesura/> and his modgeþanc, </l>
+            <l>weorc wuldorfæder, <caesura/> swa he wundra gehwæs, </l>
+            <l>ece drihten, <caesura/> or onstealde. </l>
+            <l>He ærest sceop <caesura/> eorðan bearnum </l>
+            <l>heofon to hrofe, <caesura/> halig scyppend; </l>
+            <l>þa middangeard <caesura/> moncynnes weard, </l>
+            <l>ece drihten, <caesura/> æfter teode </l>
+            <l>firum foldan, <caesura/> frea ælmihtig. </l>
+         </div>
+         <div rend="linenumber" xml:id="A43.5">
+            <head>For Loss of Cattle</head>
+            <bibl>Dobbie, 1942 123; Dobbie, E.V.K., The Anglo-Saxon Minor Poems, ASPR 6 (New York); Grattan and Singer, 1952 182; Grattan, J.H.G. and Singer, C., Anglo-Saxon Magic and Medicine, Publications of the Wellcome Historical Medical Museum n.s. 3 (London).</bibl>
+            <l>þonne þe mon ærest secge þæt þin ceap sy losod, þonne </l>
+            <l>cweð þu ærest, ær þu elles hwæt cweþe: </l>
+            <l>Bæðleem hatte seo buruh <caesura/> þe Crist on acænned wæs, </l>
+            <l>seo is gemærsod <caesura/> geond ealne middangeard; </l>
+            <l>swa þyos dæd for monnum <caesura/> mære gewurþe </l>
+            <l>þurh þa haligan Cristes rode! Amen. Gebide þe þonne </l>
+            <l>þriwa east and cweþ þonne þriwa: [Crux Christi ab oriente </l>
+            <l>reducað]. Gebide þe þonne þriwa west and cweð þonne </l>
+            <l>þriwa: [Crux Christi ab occidente reducat]. Gebide þe </l>
+            <l>þonne þriwa suð and cweþ þriwa: [Crux Christi ab austro </l>
+            <l>reducat]. Gebide þonne þriwa norð and cweð þriwa: [Crux </l>
+            <l>Christi ab aquilone reducað, crux Christi abscondita est et </l>
+            <l>inuenta est.] Iudeas Crist ahengon, dydon dæda þa </l>
+            <l>wyrrestan, hælon þæt hy forhelan ne mihtan. Swa þeos </l>
+            <l>dæd nænige þinga <unclear>forholen</unclear> ne wurþe þurh þa haligan </l>
+            <l>Cristes rode. Amen. </l>
+         </div>
+         <div rend="linenumber" xml:id="A43.10">
+            <head>For Loss of Cattle</head>
+            <bibl>Dobbie, 1942 126; Dobbie, E.V.K., The Anglo-Saxon Minor Poems, ASPR 6 (New York).</bibl>
+            <l>ðis man sceal cweðan ðonne his ceapa hwilcne man for- </l>
+            <l>stolenne. <unclear>Cwyð</unclear> ær he ænyg oþer word cweðe: </l>
+            <l>Bethlem hattæ seo burh <caesura/> ðe Crist on geboren wes, </l>
+            <l>seo is gemærsod <caesura/> ofer ealne middangeard; </l>
+            <l>swa ðeos dæd wyrþe <caesura/> for monnum mære, </l>
+            <l>[per crucem Christi]! And gebide þe ðonne þriwa east and </l>
+            <l>cweð þriwa: [Crux Christi ab oriente reducat]. And <unclear>[III]</unclear> 
+            </l>
+            <l>west and cweð: [Crux Christi ab occidente reducat]. And </l>
+            <l>
+               <unclear>[III]</unclear> suð and cweð: [Crux Christi a meridie reducant]. And </l>
+            <l>
+               <unclear>[III]</unclear> norð and cweð: [Crux Christi abscondita sunt et inuenta </l>
+            <l>est]. Iudeas Crist ahengon, gedidon him dæda þa wyrstan; </l>
+            <l>hælon þæt hi forhelan ne mihton. Swa næfre ðeos dæd </l>
+            <l>forholen ne wyrðe [per crucem Christi]. </l>
+         </div>
+      </body>
+  </text>
+</TEI>

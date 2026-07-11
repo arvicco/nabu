@@ -56,6 +56,26 @@ class ProbeHttpZipAdapter < Nabu::Adapter
   end
 end
 
+# The single-file HTTP shape (P12-2, ASPR): one FileFetch-backed unit whose
+# state pin is .file-fetch.json at the workdir root (state_subdir "") and
+# whose license lives INSIDE the fetched file — no metadata endpoint at all
+# (metadata_url nil).
+class ProbeHttpFileAdapter < Nabu::Adapter
+  MANIFEST = Nabu::SourceManifest.new(
+    id: "probe-file", name: "Probe HTTP-file", license: "CC BY-SA 3.0", license_class: "attribution",
+    upstream_url: "https://ota.example/bitstream/3009.xml", parser_family: "aspr"
+  )
+  def self.manifest = MANIFEST
+  def self.remote_probe_strategy = :http_zip
+
+  def self.http_probe_targets
+    [Nabu::Adapter::HttpProbeTarget.new(
+      label: "3009.xml", zip_url: MANIFEST.upstream_url, metadata_url: nil,
+      state_subdir: "", state_file: Nabu::FileFetch::STATE_FILE
+    )]
+  end
+end
+
 class RemoteProbeTest < Minitest::Test
   include StoreTestDB
 
@@ -537,6 +557,40 @@ class RemoteProbeTest < Minitest::Test
     stub_request(:get, BETA_META).to_return(status: 200, body: "")
     row = probe(http_registry, NO_SHELL).rows.first
 
+    assert_equal :unchecked, row.license.status
+  end
+
+  # -- HTTP single-file probe (P12-2; ASPR shape) --------------------------
+
+  FILE_URL = "https://ota.example/bitstream/3009.xml"
+
+  def file_registry = registry_of(["asx", "ProbeHttpFileAdapter", false])
+
+  # The FileFetch pin (.file-fetch.json at the workdir ROOT — state_subdir
+  # "") drives drift exactly as a zip unit's does.
+  def test_http_file_current_when_file_fetch_pin_matches
+    Dir.mktmpdir do |root|
+      dir = File.join(root, "asx")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, Nabu::FileFetch::STATE_FILE),
+                 JSON.generate("last_modified" => LM_OLD, "sha256" => "f", "url" => FILE_URL))
+      stub_zip_head(FILE_URL, last_modified: LM_OLD)
+      row = probe(file_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :current, row.drift
+    end
+  end
+
+  # metadata_url nil (the license lives in the fetched file) → the license
+  # row is honestly unchecked and NO metadata GET is issued (WebMock would
+  # fail the test on any unstubbed request).
+  def test_http_file_license_unchecked_without_a_metadata_get
+    seed_pin(slug: "asx", repo_url: FILE_URL, last_sync_sha: "s1")
+    stub_zip_head(FILE_URL, last_modified: LM_OLD)
+    row = probe(file_registry, NO_SHELL).rows.first
+
+    assert_equal :alive, row.liveness.status
     assert_equal :unchecked, row.license.status
   end
 

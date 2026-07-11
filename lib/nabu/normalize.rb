@@ -69,14 +69,27 @@ module Nabu
     #        the generic mark strip. Trade-off documented in conventions.md
     #        §9: a determinative sits as its own token between the signs it
     #        classifies.
+    #   ang  æ→"ae", þ→"th", ð→"th" (P12-3): the ASCII transliterations a
+    #        user actually types, and Bosworth-Toller's own alphabetization —
+    #        B-T interfiles þ/ð as ONE letter and its dump's <sort> field
+    #        folds æ to "ae" and buckets ð/þ identically (æðele → "aetþele",
+    #        þing → "tþing"). ð→"d" was rejected: it would split the pair
+    #        B-T unifies. Vowel length (á, ǣ) falls to the generic mark
+    #        strip. gsub, not tr — these are 1→2 expansions (fold_with_map
+    #        handles non-length-preserving folds; downcase runs first, so
+    #        Æ/Þ/Ð reach the rule lowercased).
     CUNEIFORM_FOLD = ->(str) { str.tr("₀₁₂₃₄₅₆₇₈₉ₓ", "0123456789x").tr("{}.-", "    ") }
     private_constant :CUNEIFORM_FOLD
+
+    OLD_ENGLISH_FOLD = ->(str) { str.gsub(/[æþð]/, "æ" => "ae", "þ" => "th", "ð" => "th") }
+    private_constant :OLD_ENGLISH_FOLD
 
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
-      "sux" => CUNEIFORM_FOLD
+      "sux" => CUNEIFORM_FOLD,
+      "ang" => OLD_ENGLISH_FOLD
     }.freeze
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at

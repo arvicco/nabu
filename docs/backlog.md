@@ -2101,3 +2101,579 @@ Acceptance: live read-only render of status shows lexica entries count
 as skipped-by-rule, quarantines 2 → 0, previously-loaded 84 docs
 =skipped (frozen); suite+lint green; backlog done; worklog (sha —); one
 commit, not pushed.
+
+## Phase 12 — The Old English axis + the public face (branch: phase-12; elaborated 2026-07-10)
+
+Owner shape: "Let's get on the OE axis planning next" + "updating/improving
+user-facing docs and making README better structured and presentable. It's a
+Github face of an open source project… attract followers, explain the use
+cases." Headliners from docs/oe-survey.md (all pre-scouted with verbatim
+license quotes); the presentation packet runs LAST so it reflects the phase's
+own additions. Branch cut from enable-reference-shelf (PR #13) so the flips
+ride along. Sequential dispatch, live-smoke review between packets, real
+syncs owner-fired, fixture plans owner-approved before network (standing).
+
+## P12-1 · ISWOC adapter — Old English treebank  [tier: opus] [status: done] [deps: —]
+The survey's pick #1: five OE texts (~29,406 gold tokens) in PROIEL XML 2.1
+— the exact schema ProielParser already parses. Ælfric's Lives of Saints,
+Apollonius of Tyre, Anglo-Saxon Chronicles, Orosius, West-Saxon Gospel of
+Mark (verse-cited MARK 1.1 style — the hub's witness #8). License CC
+BY-NC-SA 3.0 (verified in README + per-source headers) → nc.
+Phase A (scout + fixture plan, page-level reads only): confirm the current
+canonical repo (survey: successor syntacticus/syntacticus-treebank-data
+carries iswoc/ + proiel/ + torot/ — MUST scope to iswoc/; also verify
+whether the original iswoc repo is the better pin), the five files, the ang
+language code, the Romance texts to filter out; write the fixture plan
+(2 trimmed real slices: one prose text + the wscp Mark for the citation
+path) into this packet block. STOP — owner approval gate.
+Phase B (post-approval): TOROT-pattern adapter subclass (ang filter,
+iswoc/ scoping), registry entry enabled:false, conformance + two-parse,
+uncomment the prepared OE Mark line in config/alignments.yml (it renders
+"not synced" honestly until the owner syncs — P11-9 header-summary
+handles it), 02-sources row → READY, worklog (sha —). Suite+lint green.
+One commit, not pushed.
+
+### FIXTURE PLAN — Phase A findings (scouted 2026-07-10, page-level only)
+### OWNER-APPROVED 2026-07-10 — "Approved as is, including the third fixture"
+
+**Repo verdict: pin the ORIGINAL `iswoc/iswoc-treebank` (the project's own
+repo), NOT the syntacticus successor.** Evidence:
+- Original `iswoc/iswoc-treebank`: default branch `master`, **HEAD sha
+  `574c81cd9dbf8124290e869bc65078c303a36911`** (2023-05-02T11:55:56Z),
+  **`archived: true`** (GitHub read-only → genuinely frozen). Flat repo
+  root: one `<text>.xml` + `<text>.conll` per work.
+- Successor `syntacticus/syntacticus-treebank-data`: default branch `main`,
+  HEAD `525cee4fb40590d7d514376c11acaed1bdd91c15`, last commit
+  **2023-04-26** — i.e. it PREDATES the original's final commit. Not
+  archived, but carries no newer ISWOC data: the `iswoc/` subtree files are
+  byte-*similar* (±a few hundred bytes of export-time/whitespace drift), not
+  newer content. It also bundles `proiel/`, `torot/`, `menotec/` subtrees —
+  the SAME data the Proiel + Torot adapters already sync from their own
+  repos (double-load / urn-collision hazard).
+- Decision rationale: this exactly mirrors the established nabu Proiel
+  precedent (adapters/proiel.rb header): point `upstream_url` at the frozen
+  own-project repo, `sync_policy: frozen`, and note the syntacticus successor
+  for a future migration. Pinning the original means the inherited flat-root
+  `Proiel#discover` works verbatim — **NO `iswoc/`-subdir scoping code
+  needed** (that scoping is only required IF the successor is ever adopted;
+  documented in the adapter header as the future-migration note). The `ang`
+  language filter alone excludes the Romance texts.
+
+**File enumeration (original repo @ pinned sha, verified via `gh api` tree
++ raw `<source>` header peeks):** 15 texts total, 5 OE + 10 Romance.
+- KEEP (5 OE, all `<source language="ang">`): `wscp.xml` (2,735,960 B,
+  West-Saxon Gospels) · `æls.xml` (646,405 B, Ælfric's Lives of Saints;
+  **non-ASCII id `æls`**) · `apt.xml` (1,138,070 B, Apollonius of Tyre) ·
+  `chrona.xml` (1,070,236 B, Anglo-Saxon Chronicles) · `or.xml` (336,862 B,
+  Orosius; **two-letter id `or`**).
+- EXCLUDE (10 Romance, non-`ang`): `eustace` (fro, Old French) · `cge1`,
+  `cge2`, `coutdec-v-8` (por, Portuguese) · `alfonso-xi`, `ce`, `cdeluc`,
+  `ee1`, `ge4`, `varones` (spa, Spanish). All carry the same CC BY-NC-SA
+  header; excluded purely by the `ang` filter, never by name.
+
+**License (re-verified verbatim):**
+- README (github.com/iswoc/iswoc-treebank @ pinned sha): "…is freely
+  available under a [Creative Commons Attribution-NonCommercial-ShareAlike
+  3.0 License](http://creativecommons.org/licenses/by-nc-sa/3.0/us/)." Cite
+  as: "Bech, Kristin and Kristine Eide. 2014. The ISWOC corpus. Department of
+  Literature, Area Studies and European Languages, University of Oslo."
+- Per-source header (`wscp.xml <source>`): `<license>CC BY-NC-SA 3.0</license>`
+  + `<license-url>http://creativecommons.org/licenses/by-nc-sa/3.0/us/</license-url>`
+  (æls/or/apt/chrona headers agree). → `license_class: nc` (proiel/torot
+  sibling). No LICENSE file in the repo.
+
+**OE Mark citation evidence (`wscp.xml`, verified from raw header peek):**
+`<source id="wscp" language="ang"><title>West-Saxon Gospels</title>`; first
+`<div><title>Matthew 7</title>` (boundary fragment, tokens `citation-part="MATT 7.27"`),
+second `<div><title>Mark 1</title>` with tokens `citation-part="MARK 1.1"` —
+the space-separated `BOOK C.V` shape the P11-3 hub's `cts-verse` extractor
+already folds (MK→MARK), lifted by ProielParser into `passage.citation` with
+zero new plumbing. Confirms the prepared `urn:nabu:proiel:wscp` alignments
+line (hub witness #8).
+
+**Fixtures to fetch (STOP — awaiting owner approval; base
+`https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/`):**
+
+| Fixture file | Upstream (full B) | Trim scope | Est. trimmed B |
+|---|---|---|---|
+| `wscp-mark.xml` | `wscp.xml` (2,735,960) | PROIEL surgery: XML decl + `<proiel>` root + whole `<annotation>` + `<source>` metadata, then leading whole `<div>`s — the `Matthew 7` fragment div + `Mark 1` + `Mark 2` divs kept intact (no div/sentence split) | ~90–130 KB |
+| `æls-headN.xml` | `æls.xml` (646,405) | same PROIEL surgery: header + `<annotation>` + `<source>` + leading whole `<div>`s to ≥ ~15 sentences | ~35–55 KB |
+| `eustace-head.xml` | `eustace.xml` (469,127) | **exclusion probe** (see note): header + `<annotation>` + `<source language="fro">` + 1 leading whole `<div>` | ~10–15 KB |
+
+Exact trimmed byte counts recorded at fetch time (torot-manifest precedent).
+
+**Deviation flagged for approval — 3 fixtures, not the packet's 2.** The
+packet named "2 slices (one prose + wscp Mark)". I recommend adding a THIRD
+minimal slice — a trimmed Romance file (`eustace`, `fro`) — because the ONE
+thing this adapter adds over the TOROT pattern is the `ang` language filter,
+and honestly testing that filter's *exclusion* branch requires a non-`ang`
+file physically present in the fixture dir (discover must drop it). Without
+it the exclusion path is untested. It stays out of the conformance count
+(discover filters it before parse). If the owner prefers to hold to 2
+fixtures, the filter's exclusion branch can instead be unit-tested against a
+stubbed peek, but a real Romance header is the CLAUDE.md-preferred evidence.
+
+**Phase B design notes (what differs from TOROT):**
+- Manifest override only, PLUS a private `document_refs` override:
+  `super.select { |ref| ref.metadata["language"] == "ang" }` (few lines;
+  survey's "ang filter"). Everything else — peek_source, parse, git fetch —
+  inherited from Proiel wholesale (TOROT pattern).
+- URN namespace: inherit `urn:nabu:proiel:<source-id>` (TOROT precedent; the
+  ids wscp/æls/apt/chrona/or are disjoint from proiel/torot by upstream
+  convention). This is REQUIRED — the prepared alignments line hard-codes
+  `urn:nabu:proiel:wscp`. Manifest `id: "iswoc"` (source_id on refs), but urn
+  stays literal `proiel`, exactly as Torot does.
+- Non-ASCII-id check: `æls` mints `urn:nabu:proiel:æls` (æ preserved, NFC) —
+  add an explicit URN-mint test.
+- `sync_policy: frozen`, `enabled: false` in config/sources.yml.
+
+### Findings (Phase B, shipped 2026-07-10)
+- Built exactly per the approved plan: `Iswoc < Proiel`
+  (lib/nabu/adapters/iswoc.rb) — manifest override + one private
+  `document_refs` override (`ang` select on peeked header metadata). No
+  subdir scoping needed (original repo pinned). 19-test battery
+  (test/adapters/iswoc_test.rb): full conformance (incl. two-parse URN
+  stability), ang-filter exclusion tested against the real `fro` probe
+  (guarded non-vacuous: the probe file's presence + header are asserted),
+  non-ASCII `urn:nabu:proiel:æls` NFC mint, MARK 1.1 / MATT 7.27
+  citation-part lifting, real OE snippets, repo_url identity, registry
+  round-trip (frozen + disabled).
+- Fixtures in test/fixtures/iswoc/ (upstream sha256s in its README):
+  wscp-mark.xml 305,320 B (3 whole divs: Matthew 7 + Mark 1–2, 150
+  sentences), æls-head20.xml 86,069 B (20 sentences), eustace-head.xml
+  20,899 B (fro exclusion probe, 3 sentences).
+- Honest deviations from the plan text: (1) æls/eustace TRUNCATE their
+  single kept div after N whole sentences — upstream reality (æls div 1 =
+  197/198 sentences ≈ 630 KB; eustace div 1 ≈ 95 KB) made "whole divs" and
+  the approved size envelopes mutually impossible; sentences never split,
+  strict-parse verified, recorded in the fixture README. (2) wscp actual
+  305 KB vs the ~90–130 KB estimate — content scope exactly as approved
+  (the named 3 divs); the Phase A byte estimate was simply low.
+- Hub witness #8 live: urn:nabu:proiel:wscp uncommented in
+  config/alignments.yml; `bin/nabu align "MARK 1.1"` (read-only) renders
+  "wscp — not synced (urn:nabu:proiel:wscp is registered but not in the
+  catalog)" with the P11-9 header honestly counting "7 of 9 witnesses".
+  The shipped-registry pin in test/alignment_registry_test.rb was updated
+  to the new 9-witness truth (wscp at index 5) — a planned expectation
+  change, not a weakening.
+- Registered iswoc `enabled: false` / `sync_policy: frozen`; 02-sources
+  row 34 → READY. First real sync remains owner-fired.
+
+## P12-2 · ASPR adapter — the OE poetry corpus  [tier: opus] [status: done] [deps: P12-1]
+The survey's pick #2 and the only fully-open OE: the complete six-volume
+Krapp & Dobbie Anglo-Saxon Poetic Records as ONE 2.2 MB TEI-P5 file on the
+Oxford Text Archive (OTA 3009) — Beowulf, Junius, Vercelli, Exeter Book,
+Paris Psalter, Minor Poems; 374 texts / ~30.5k lines. License quoted from
+the TEI header itself: CC BY-SA 3.0 → attribution (MCP-shareable).
+Phase A: verify the OTA download URL + the in-file license quote still
+stand (survey inspected it 2026-07-09; one small fetch to scratch was the
+survey's sanctioned sample — re-verify page-level), map the internal
+structure (NOT EpiDoc; no l/@n → ordinal line citations per the survey),
+decide the fetch path (single HTTP file — extend ZipFetch's plumbing or a
+sibling FileFetch with the same Last-Modified + attic contract; argue it),
+write the fixture plan (2-3 poem slices incl. a Beowulf passage). STOP —
+owner approval gate.
+Phase B: small new TEI family (own class + tests first), one document per
+poem, urn:nabu:aspr:<poem-slug>:<line-ordinal>, registry enabled:false,
+02-sources row, worklog. Suite+lint green. One commit, not pushed.
+
+### Phase A findings (2026-07-10) — fixture plan OWNER-APPROVED 2026-07-10 ("Fine as-is, proceed")
+
+**URL + auth + license re-verified (page-level, no re-download beyond the
+survey's one sanctioned sample, which is still in scratch):**
+- Download URL (DSpace bitstream, no handle-page scrape needed):
+  `https://ota.bodleian.ox.ac.uk/repository/xmlui/bitstream/handle/20.500.12024/3009/3009.xml`
+- HEAD → `HTTP/1.1 200 OK`, **no auth** (a JSESSIONID cookie is set but access
+  is granted anonymously), `Content-Type: text/xml;charset=utf-8`,
+  `Content-Length: 2214065` (matches survey exactly), `Last-Modified: Fri,
+  19 Jul 2019 12:07:26 GMT`, `Accept`-less server (Range NOT honoured — the
+  server returns the full body, so the "small ranged read" degraded to the
+  survey's one full-file sample; retained read-only in scratch, sha256
+  `4cf370226d9329e846eceb78fdaa987735113a02ef998980d6070664775ceed5`).
+- License, read verbatim from the in-file teiHeader `<availability
+  status="free">`: `<licence target="http://creativecommons.org/licenses/by-sa/3.0/">
+  Distributed by the University of Oxford under a Creative Commons
+  Attribution-ShareAlike 3.0 Unported License</licence>` → **`license_class:
+  attribution`** (MCP-surface-safe). Still stands.
+
+**Structure map (precise, from the full file):**
+- `<TEI>/<teiHeader>` (3,999 bytes, compact) then `<text><body>` holding
+  **349 flat `<div rend="linenumber" xml:id="…">`, NO nesting** (349 `</div>`,
+  0 nested). Each div = one poem: `<head>` (title) + optional `<bibl>` (Krapp/
+  Dobbie ASPR ref) + a flat run of `<l>` verse lines. 30,550 `<l>` total;
+  **0 `<l>` outside a div**.
+- Line markup: `<caesura/>` mid-line (30,299), `<unclear>` spans (2,613),
+  `<foreign xml:lang="rune">` runic glosses (124), `<gap/>` lacunae (38),
+  `<g>` glyphs (73). **No `<l>/@n` anywhere** (survey confirmed) — but the div
+  carries `rend="linenumber"` and the per-div `<l>` ordinal **equals the
+  canonical printed ASPR line number**: verified Beowulf div = 3,182 `<l>`
+  (ASPR Beowulf is 3182 ll.) and Judith = 349 `<l>` (ASPR Judith is 349 ll.).
+  So the ordinal citation here is *canonical*, not honest-but-noncanonical the
+  way GRETIL prose ordinals are.
+- The survey's "374 texts" = `<head>` count; the extra 25 over 349 divs are
+  **duplicate `<head>` elements** in single poems (Meters of Boethius A6.10–31,
+  Psalm fragments A24.x each repeat their title twice) — NOT multiple poems per
+  div. **div == poem, cleanly.** Parser takes the *first* `<head>` as title.
+
+**Citation design — `<poem-slug>` = the div `xml:id` (Cameron number), verbatim:**
+- The `xml:id` values are the canonical **Cameron/DOE-Corpus record numbers**
+  (A = poetry section): A1 Junius, A2 Vercelli, A3 Exeter, A4 Beowulf+Judith,
+  A5/A6 Paris Psalter + Meters, A12 Rune Poem, A32 Cædmon's Hymn, A33 Bede's
+  Death Song, A43 Metrical Charms, … up to A-values in the 40s. **All 349 are
+  unique** (verified) → urn uniqueness for free.
+- **Title-slugs would collide and are rejected:** A43.5 and A43.10 are *both*
+  `<head>For Loss of Cattle`; Cædmon's Hymn ships as A32.1 (Northumbrian) +
+  A32.2 (West-Saxon) and Bede's Death Song as A33.1/.2/.3 (three dialect
+  witnesses) — the survey's "separate texts" point. The stable, collision-free,
+  scholar-cited id is the Cameron number, so the frozen mint is
+  `urn:nabu:aspr:<xml:id>` (kept verbatim incl. case + dots, the GRETIL
+  "literal upstream slug, no re-slugification" rule), title carried in
+  metadata. Passage urn = `<doc-urn>:<line-ordinal>` (1-based `<l>` count),
+  e.g. **`urn:nabu:aspr:A4.1:1`** = Beowulf line 1 "Hwæt! We Gardena…".
+
+**Fetch path — DECISION: a sibling `Nabu::FileFetch`, NOT extending ZipFetch.**
+- Shared contract to honour either way: conditional GET (`If-Modified-Since`
+  replayed from a `.file-fetch.json` state file storing Last-Modified + sha256
+  + url), sha256 body pin, attic retention with a GitFetch-format manifest, and
+  the `doomed_paths` guard hook — so the adapter base's attic rediscovery and
+  the mass-deletion breaker work unchanged.
+- Why a sibling, not a branch in ZipFetch: ZipFetch is irreducibly zip-shaped —
+  `unpack!` shells to `unzip`, `tree_root` picks the single top dir, the staged
+  tree is a *directory of many files*, and `doomed = live_relpaths -
+  staged_relpaths` is a multi-file set-difference. A single 2.2 MB XML file has
+  none of that: the "tree" is one file, the doomed set is essentially always
+  empty (a single-file source's only "deletion" is the whole file 404-ing,
+  which aborts the fetch — a revised file is an *update*, not an attic-worthy
+  deletion, exactly as git adapters don't attic every changed file). Threading
+  an `is_zip?` mode through unpack!/tree_root/copy_tree would muddy a clean,
+  heavily-documented class and violate "one thing per class / no clever
+  dual-purpose code." FileFetch is smaller and single-purpose: GET → sha →
+  write file → write state; attic path present for contract symmetry but inert
+  in the single-file case. It **reuses `ZipFetch.default_http`** (the
+  vendored-cert Faraday) as-is — the cert-hardened connection is genuine shared
+  infra, one method reference, not dual-mode logic. (OTA's nginx served fine on
+  system certs; reusing the hardened store is belt-and-braces.)
+- Health probe: OTA has no git repo and no per-project metadata.json, so
+  neither `:git` nor `:http_zip` fits. Phase B adds a minimal HEAD-only
+  `remote_probe_strategy` (or reuses the `:http_zip` HEAD target minus the
+  metadata GET) pointed at the bitstream URL for Last-Modified drift; license
+  drift is a re-fetch concern (license lives in-file). Small, flagged.
+- `sync_policy: manual`, `enabled: false` (per packet). Effectively frozen
+  upstream (Last-Modified 2019, header normalised 2010) — manual is honest.
+
+**Parser family shape (the Vulgate single-file-many-docs precedent):**
+- New `Nabu::Adapters::AsprParser` (own class + tests first). Mirrors
+  UsfxParser: `#texts(path)` streams once → inventory `[{id: xml:id, title:
+  first <head>}]` for `discover`; `#parse(path, div_id:, urn:, language:
+  "ang", title:)` re-streams and extracts the one matching div. Sole Nokogiri
+  entry point = `XML::Reader` (house streaming rule; 2.2 MB). One passage per
+  `<l>`, ordinal 1-based, `<caesura/>` kept as a space boundary, `<unclear>`/
+  `<foreign>` text kept inline (canonical), `<gap/>` → nothing, `<g>` glyph
+  kept; NFC at the boundary. Adapter mints `urn:nabu:aspr:<xml:id>`, discover
+  re-reads the one file (Vulgate pattern), 349 documents.
+
+**FIXTURE PLAN — `test/fixtures/aspr/3009.xml` (one trimmed valid TEI file,
+≈13–14 KB, extracted from the scratch sample; owner may trim the tail):**
+- **Extraction method (NOT raw byte ranges — those would split multibyte
+  æ/ð/þ and tag boundaries → invalid XML):** a Phase-B selection script reads
+  the retained scratch `3009.xml`, emits the teiHeader verbatim + `<text>\n
+  <body>`, then for each selected `xml:id` writes the div verbatim (complete
+  divs) or head+bibl+first-N-`<l>`+`</div>` (the Beowulf trim), then
+  `</body></text></TEI>`. Deterministic; `fixtures/aspr/README.md` records
+  retrieval date, URL, source sha256, and the exact div-id + trim list. No new
+  network fetch needed — the scratch sample is the real upstream bytes.
+- **Core slices (the packet's "2–3 poem slices incl. Beowulf"):**
+  1. **A4.1 Beowulf** — head + bibl + `<l>` lines **1–24 contiguous** (ordinals
+     genuine), then `</div>`. Demo line `urn:nabu:aspr:A4.1:1` = "Hwæt! We
+     Gardena // in geardagum,". Covers `<caesura>` (every line) + `<unclear>`
+     (lines 4,6,15,20,21). ≈2 KB.
+  2. **A32.1 + A32.2 Cædmon's Hymn** (Northumbrian + West-Saxon, 9 `<l>` each,
+     complete) — the dialect-witness-as-separate-document design; distinct
+     Cameron ids, near-identical text. ≈1.5 KB.
+  3. **A43.5 + A43.10 "For Loss of Cattle"** (16 + 13 `<l>`, complete) — the
+     **collision proof**: identical `<head>` text, distinct xml:id → asserts
+     `urn:nabu:aspr:A43.5:1` ≠ `urn:nabu:aspr:A43.10:1` where a title-slug
+     would clash. ≈2.8 KB.
+- **Feature-coverage micro-divs (real complete divs, element regression tests;
+  each <1 KB — owner may drop if "2–3 docs" is strict):**
+  4. **A3.34.15** (Exeter Riddle, 2 `<l>`) — `<foreign xml:lang="rune">`.
+  5. **A3.34.22** (Exeter Riddle, 5 `<l>`) — `<gap/>` lacuna.
+  6. **A16** (2 `<l>`) — `<g>` glyph.
+- Total ≈11 documents / ≈90 lines / ≈13–14 KB, structurally intact, covering
+  every element the parser must handle (`head bibl l caesura unclear foreign
+  gap g`), plus the Beowulf demo line and the two collision families.
+
+**STOP — owner approval gate. No fixture written; no Phase B code.**
+
+### Phase B findings (2026-07-10, shipped — one commit, not pushed)
+
+Executed exactly per the approved plan; deviations listed last.
+
+- **Fixture** `test/fixtures/aspr/3009.xml` (12,015 B, well-formed, NFC):
+  teiHeader verbatim + 8 of 349 divs in upstream file order — A3.34.15
+  (Riddles 75, runes), A3.34.22 (Riddles 82, `<gap/>`), **A4.1 Beowulf
+  head+bibl+lines 1–24**, A16 (`<g>` glyphs), A32.1/A32.2 (Cædmon's Hymn
+  dialect pair), A43.5/A43.10 (the "For Loss of Cattle" title-collision
+  pair) — extracted mechanically by div-id from the retained Phase A scratch
+  sample (sha256 recorded in the fixture README + manifest.yml). Fixture
+  archaeology finds: A3.34.22 carries a **div-level `<gap/>` BETWEEN
+  lines** (must not shift ordinals — regression-tested), and Nokogiri's
+  Reader reports whitespace-only text nodes as TYPE_SIGNIFICANT_WHITESPACE
+  (dropping them fused sibling runes: "DNLH." — captured now, so
+  "D N L H."; the collapse keeps `dom<g>ę</g>…` joins tight).
+- **AsprParser** (7th family, the smallest; UsfxParser shape): `#texts`
+  inventory / `#parse(path, div_id:, …)` one-poem extraction, sole entry
+  point XML::Reader, one passage per `<l>` cited by 1-based ordinal (==
+  printed ASPR line number), `<unclear>`/`<foreign>`/`<g>` text kept inline,
+  head/bibl never leak, ParseError on absent div / no lines / malformed XML.
+- **Nabu::FileFetch** (the argued ZipFetch sibling): conditional GET
+  replaying the stored Last-Modified (304 → untouched; wiped tree →
+  unconditional), sha256 body pin in `.file-fetch.json`, guard-before-
+  mutation, attic with GitFetch-format manifest — the one genuine doomed
+  case (a stale differently-named previous download) tested; a changed body
+  is an update, never atticked. Reuses `ZipFetch.default_http` by reference.
+- **Aspr adapter**: one document per poem div, `urn:nabu:aspr:<Cameron>`
+  frozen; fetch via FileFetch wrapped in FetchReport/FetchError; probe rides
+  `:http_zip` with `HttpProbeTarget` gaining an optional `state_file`
+  member (default `.zip-fetch.json` — ORACC unchanged) and a nil
+  `metadata_url` now short-circuiting the license row to honest `unchecked`
+  with NO GET issued (the license lives in-file). Registry `aspr`
+  `enabled: false`, `sync_policy: manual`.
+- **Tests**: 13 parser + 12 FileFetch + 18 adapter (incl. the shared
+  conformance suite: two-parse urn stability, NFC, uniqueness) + 2 probe.
+  Suite 1338 runs / 18,106 assertions green; rubocop 181 files clean.
+- **Deviations from the approved plan, openly:** (1) fixture is ~12.0 KB vs
+  the estimated 13–14 KB (estimate was high; content scope exactly as
+  approved). (2) FileFetch's attic is NOT inert-for-symmetry as the Phase A
+  text sketched — it covers the real FILENAME-migration case (doomed =
+  live files other than the target/state/attic), which is stronger and
+  contract-true. (3) The probe reuses `:http_zip` (per the plan's "or"
+  branch) rather than adding a new strategy symbol — two surgical changes
+  in remote_probe.rb, both tested.
+
+## P12-3 · Bosworth-Toller onto the reference shelf  [tier: opus] [status: done] [deps: P12-2]
+The OE dictionary (survey: official LINDAT dump, hdl 11234/1-3532,
+CC BY 4.0 verbatim, SQL + lemma-keyed CSV id;headword;body). Third
+occupant of the P11-4 shelf — architecture §11 already sketches the
+plug-in: own CSV adapter, content_kind :dictionary, slug bosworth-toller,
+lang ang, betacode off, citations table starts empty (no OE crosswalk
+yet — resolution layer needs nothing new).
+Phase A: verify the LINDAT record + license + dump format (page-level),
+write the fixture plan (a few hundred entry rows trimmed). STOP — owner
+approval gate.
+Phase B: CSV dictionary adapter (new small family — first non-TEI
+dictionary; keep the DictionaryLoader contract), define --lang ang path,
+folded-headword keying for OE (ash/thorn/eth folding rule — conventions
+§9 addition, argued not assumed), registry enabled:false, 02-sources,
+worklog. Suite+lint green. One commit, not pushed.
+
+### Phase A findings (verified 2026-07-10, page-level reads only)
+
+**Record.** LINDAT/CLARIAH-CZ handle `11234/1-3532`, title (dc.title,
+verbatim) "Bosworth-Toller's Anglo-Saxon Dictionary online", handle URI
+`http://hdl.handle.net/11234/1-3532`, source `https://bosworthtoller.com/`.
+The repo migrated to CLARIN-DSpace 7.6.5; the old xmlui handle/bitstream
+URLs now 302-redirect to the Angular UI (an HTML shell), so the survey's
+`.../xmlui/handle/...` link resolves but no longer serves files directly.
+Item uuid `da2f3c19-f5a9-48d2-bb8f-eb84a415f954`.
+
+**License (verbatim, from DSpace REST item metadata).** `dc.rights =
+"Creative Commons - Attribution 4.0 International (CC BY 4.0)"`;
+`dc.rights.uri = http://creativecommons.org/licenses/by/4.0/`;
+`dc.rights.label = PUB`. → `license_class "attribution"`, MCP-surface-safe.
+Confirms the survey; the deposit by the site's own maintainer is the
+authoritative grant (bosworthtoller.com itself carries no readable license).
+
+**Dump contents/format (verbatim from the deposit's own readme.txt, 769 B).**
+Three files in the ORIGINAL bundle:
+- `bosworth_entries_export.csv` — 88,387,561 B (~84 MB), MD5
+  `7c50c0a47ad2365fa0fddea18a54f11d`. THE lemma-keyed CSV. readme: "Encoding:
+  UTF-8 / Data separator: ; / Data enclosed by: \"\" / Contains three
+  columns: \"id\";\"headword\";\"body\" … id = the entry id that can be used
+  to refer to the entry online via http://bosworthtoller.com/id … body = body
+  of the entry tagged in xml".
+- `bosworth_backup_sql.sql` — 634,251,167 B (~605 MB) full DB backup. Out of
+  scope (the CSV carries the id/headword/body we need).
+- `readme.txt` — 769 B, the format spec above.
+readme caveat (verbatim): "Data dump version 0.1. The data is still being
+processed for accuracy and manually tagged with XML structural tags. … Not
+all entries have been checked and/or tagged." → the parser must tolerate
+untagged/degenerate bodies.
+
+**CSV reality (verified on the first 8 KB via HTTP Range — page-level, NOT a
+bulk fetch).** Header row `"id";"headword";"body"`. RFC-style CSV: every
+field quoted (incl. the numeric id and headword), embedded `"` escaped by
+DOUBLING (`""000001""`), and the `body` field is **multi-line XML with
+literal embedded newlines** — so a real CSV reader is mandatory (Ruby stdlib
+`CSV`, `col_sep: ";"`, `quote_char: '"'` handles doubling + multiline
+fields; line-splitting would shred entries). Bodies use a **project-specific
+(non-TEI) schema**: `<entry id=… vid=… …>`, `<form><orth>/<search>/<sort>`,
+`<gramGrp/>`, `<column name="body">`, `<grammar>`, `<page header=… num=…/>`,
+milestone empty-element pairs `<b-s/>…<b-e/>` (bold) and `<i-s/>…<i-e/>`
+(italic), `<def>`, nested `<sense num="N"><snum>N.</snum>…`, `<references>`,
+`<examples><ex><oe>…</oe><trans>…</trans><references>…</references></ex>`,
+`<rune>ᚪ</rune>`, `<br/>`. Entity double-encoding is present
+(`&amp;#39;`→`'`, `&amp;mdash;`); senses nest raggedly and repeat @num — v0.1
+reality the linearizer must tolerate, not assume well-formedness of.
+Note: the CSV `id` column ("1" for headword "A") is the readme's stated
+back-link id; the XML also carries an internal `id="000001"`/`vid=` — Phase B
+spot-checks one CSV id against the live `bosworthtoller.com/<id>` and keys the
+URN on the CSV id (`urn:nabu:dict:bosworth-toller:<csv id>`).
+
+**Fetch-path verdict: FileFetch-ready via the DSpace REST content URL.** The
+stable, auth-free download is the bitstream `/content` endpoint:
+`https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/3010b742-b2c4-4152-870a-716ce1652e7c/content`
+(uuid is per-deposit-stable). HEAD confirms `200`,
+`Content-Type: application/octet-stream;charset=UTF-8`,
+`Content-Length: 88387561`, **`Last-Modified: Mon, 26 Apr 2021 14:04:23 GMT`**,
+`ETag: "7c50c0a47ad2365fa0fddea18a54f11d"`, `Accept-Ranges: bytes` — i.e. the
+conditional-GET + sha-pin contract `Nabu::FileFetch` (P12-2) needs, exactly
+the ASPR wiring: `remote_probe_strategy :http_zip`, one `HttpProbeTarget`
+(zip_url = the content URL, metadata_url nil — license lives in the deposit,
+not an endpoint, so the license row reads unchecked), `state_file
+FileFetch::STATE_FILE`. Dump is frozen (Last-Modified 2021-04-26, v0.1) →
+`sync_policy: manual`. The handle-based xmlui bitstream URL is NOT usable
+(serves the Angular shell); the REST `/content` uuid URL is the one to pin.
+
+**OE headword folding rule (argued — conventions §9 addition
+`LANGUAGE_FOLDS["ang"]`).** On top of the generic fold (downcase → strip
+`\p{Mn}`), apply: **æ→"ae", þ→"th", ð→"th"** (and Æ/Þ/Ð reach these via the
+downcase step that runs first). Argument:
+1. *Vowel-length marks need no rule.* B-T alphabetizes á/é/í/ó/ú/ý and
+   macroned ǣ/ō as their base vowels (length is editorial, not lexical); the
+   generic fold already delivers this — precomposed á → NFD → strip U+0301 →
+   a; ǣ (U+01E3) → NFD → æ + U+0304 → strip → æ, then the ang rule folds the
+   surviving æ. So accents compose correctly with no ang-specific handling.
+2. *æ→"ae".* æ is a real OE letter (its own B-T section after A) but not
+   ASCII-typeable; "ae" is its standard scholarly transliteration and the
+   digraph it historically writes. A user types `nabu define caeg`/`waeter`
+   and must reach cæg/wæter.
+3. *þ→"th", ð→"th".* B-T interfiles þ and ð as ONE letter (after T), and OE
+   scribes used them interchangeably for the same dental fricative; both map
+   to the ASCII "th" a user types. Folding both to "th" mirrors B-T's own
+   interfiling (one search bucket) — ð→"d" was considered and rejected because
+   it would SPLIT the pair B-T unifies. (Wynn ƿ is effectively never in the
+   edited headwords/text — editions already print "w" — so no rule; noted so
+   the absence is deliberate.)
+Both-sides contract: the SAME `LANGUAGE_FOLDS["ang"]` folds ISWOC/ASPR ang
+lemmas, so `search --lemma wæter` (or the ASCII `waeter`) carries the B-T
+gloss — the LSJ/L&S lemma-gloss bridge, verbatim, for OE. Query-union
+pollution (a non-OE query's ang variant, e.g. "þing"→"thing") is the same
+bounded tradeoff §9 already accepts for lat v→u and the cuneiform fold, and
+is harmless here because æ/þ/ð essentially never occur in the other corpora's
+text. No rebuild storm: the rule is added BEFORE any ang corpus is synced
+(aspr + iswoc are both `enabled:false`, zero ang rows in the catalog), so the
+§9 "changing a rule ⇒ plan a rebuild" caveat is satisfied vacuously. Implement
+as a `gsub` lambda (not `tr` — æ→"ae"/þ→"th" are 1→2 expansions;
+`Normalize.fold_with_map` already tolerates non-length-preserving folds).
+
+### FIXTURE PLAN
+
+- **Target:** `test/fixtures/bosworth-toller/bosworth_entries_export.csv`
+  (mirrors the upstream filename so the adapter's `Dir.glob` finds it the same
+  way ASPR finds `3009.xml`) + `test/fixtures/bosworth-toller/README.md`
+  (retrieval date, the CC BY 4.0 verbatim quote above, the content-URL + MD5 +
+  Last-Modified pin, and the selection table below).
+- **Source (Phase B, owner-fired):** the CSV `/content` URL above; verify MD5
+  `7c50c0a47ad2365fa0fddea18a54f11d` on the full download before slicing.
+- **Selection — a stratified ~300-entry sample (values byte-verbatim; only the
+  record SET is trimmed), guaranteeing every folding + parser case:**
+  1. The header row + the first ~180 contiguous records (the "A"/"a-" section):
+     the flagship multi-sense "A" entry (runes, ragged nested `<sense>`,
+     `<examples>`/`<oe>`/`<trans>`, entity double-encoding), accented headwords
+     (ác, á-, etc.) exercising length-mark folding, and prefixed a- verbs.
+  2. ~40 records whose headword begins **æ/Æ** (æ, æcer, æsc, æfter, ælf,
+     æðele — the last also carries ð) — the æ→"ae" fold.
+  3. ~40 records whose headword begins **þ/Þ or ð/Ð** (þ, þæt, þing, þeod, ðes,
+     ðegn) — the þ/ð→"th" fold and the þ/ð interfiling.
+  4. ~20 records covering: any homograph groups seen in the pass (same headword,
+     multiple ids — the DictionaryLoader upsert-by-(dict,entry_id) case), the
+     shortest/most-degenerate bodies found (v0.1 untagged tolerance), and a
+     body with a bare `<references>`/cross-ref stub (nil-gloss honesty).
+- **Extraction method (deterministic, exact):** a Ruby stdlib-`CSV` streaming
+  script — `CSV.foreach(src, col_sep: ";", quote_char: '"', headers: true)`,
+  collect the four strata above (dedupe by id, cap ~300, cap any single body at
+  a sane trim only if it blows the size budget — prefer keeping the "A" entry
+  whole as the stress case), then re-emit with
+  `CSV.generate(col_sep: ";", force_quotes: true)` + the header. Round-tripping
+  through the same CSV semantics the adapter uses keeps every field value
+  identical while trimming only the record selection; `force_quotes` reproduces
+  upstream's quote-all shape. Script lives under the fixture README as the
+  documented recipe (not committed as code — one-shot, like the lexica trims).
+- **Size budget:** aim < ~600 KB (calibrated to the lexica fixtures' ~380 KB;
+  the "A" entry is the one large keep). If over, drop the largest non-essential
+  bodies from stratum 1, never the folding-case headwords.
+
+**FIXTURE PLAN — OWNER-APPROVED 2026-07-10** ("Bosworth-Toller fixture
+plan approved as is", incl. the ang folding rule æ→ae, þ→th, ð→th).
+
+### Phase B findings (2026-07-10, done)
+
+- **Fixture acquired via Range reads only** (~3.4 MB of the 84 MB CSV:
+  bytes 0–1449999, 45600000–46999999, plus small ordering probes — never the
+  full file): 270 stratified entries, 497,144 B, every emitted row asserted
+  **byte-verbatim** against the raw upstream slices. Two plan adjustments,
+  both upstream reality not trim choices: (1) the dump has **no ð-initial
+  headwords** (B-T normalizes headwords to þ-; ð appears medially —
+  ǽg-hwæðer, þeáh-hwæðere — which is where the ð→th fold is exercised);
+  (2) 249/270 bodies have no `<sense>` tag — flat untagged bodies are the
+  NORM, so the linearizer treats tagging as optional. Bonus corroboration
+  found in the data: the dump's own `<sort>` field folds æðele→`aetþele`,
+  þing→`tþing` — B-T itself folds æ→ae and buckets ð/þ identically, the
+  strongest possible evidence for the approved rule.
+- **Shipped:** `BosworthCsvParser` (8th parser family; stdlib CSV streaming,
+  gloss = first `<equiv lang="eng">` else first `<def>` else nil, body
+  linearizer skips `<search>/<sort>/<checked>`, breaks lines on
+  `<sense>`/`<br>`, second-pass decode of the dump's double-encoded entities,
+  NFC; row errors → ParseError) + `BosworthToller` adapter (`content_kind
+  :dictionary`, FileFetch fetch of the DSpace `/content` URL, ASPR-style
+  :http_zip probe with metadata_url nil, `urn:nabu:dict:bosworth-toller:<csv
+  id>` ↔ bosworthtoller.com/<id>) + registry `bosworth-toller`
+  enabled:false sync_policy:manual + conventions §9 `ang` fold + CLI/MCP
+  `lang` gates widened to ang (Query::Define needed zero changes — it was
+  genuinely language-agnostic; the loader/status/verify/rebuild routing
+  inherited purely via content_kind, each pinned by a test against the REAL
+  adapter class).
+- **Gem note:** `csv` added to the Gemfile — the stdlib extraction
+  (ruby-core, zero transitive deps) stopped being a default gem in Ruby 3.4
+  and this box runs 4.0; the approved plan's "stdlib CSV" is exactly this
+  gem.
+- **Demo (scratch catalog built from the fixture; live db untouched):**
+  `define aethele --lang ang` → æðele [attribution] gloss "noble", sense
+  breaks intact; `define thing` → þing "a thing"; `define ae` → the three
+  ǽ homographs (life / river / alas!); `status` → entries=270.
+- Suite 1370 runs / 19,907 assertions green; rubocop 185 files clean.
+  Remaining owner action (P12-gate): fire `bin/nabu sync bosworth-toller`
+  (~84 MB single GET), eyeball `define` output, flip enabled.
+
+## P12-4 · The public face: README + user-facing docs  [tier: fable] [status: done] [deps: P12-1..3]
+Owner: the README is the GitHub face of an open source project — it needs
+to attract followers and explain use cases, not just report status. Runs
+LAST so it reflects the OE additions. Scope:
+- README restructure: a short hero section (what nabu is, in three
+  sentences a stranger understands); a "show me" block early (real
+  commands with real output: trilingual align, define, lemma search,
+  random tablet); use cases by persona (classicist, indologist,
+  assyriologist, digital humanist, AI-tooling builder — MCP angle);
+  clear install/quickstart; corpus table (the library.md summary table,
+  linked); feature tour; protection story (attic/ledger/backup — the
+  "your collection cannot rot" pitch); docs index with one-line
+  descriptions; contributing/status/license sections. Badges only if
+  honest (CI). NO fabricated numbers — pull live counts at write time
+  and date them.
+- docs/quickstart.md: zero-to-first-search walkthrough (install, sync a
+  small source e.g. sblgnt, search/show/align/define), copy-pasteable.
+- Consistency pass over user-facing docs (01-concept, mcp.md intro,
+  library.md → linked coherently from README; no stale claims — verify
+  numbers against the live catalog read-only).
+- The dev-loop/backlog/worklog stay internal (link once under
+  "how this is built", nothing more).
+Acceptance: README renders well on GitHub (check raw markdown structure,
+heading hierarchy, table widths); quickstart executes truthfully on this
+box (each command actually run); suite+lint untouched-green; worklog
+(sha —). One commit, not pushed.
+
+## P12-gate · Phase 12 gate  [tier: orchestrator] [status: pending] [deps: P12-1..4]
+Full-diff review, library.md refresh (OE sections when synced; §10 duty),
+PR, owner-fired syncs queue (iswoc, aspr, bosworth-toller), flips on
+owner word, sticky alarm LAST.

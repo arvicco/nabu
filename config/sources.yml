@@ -60,6 +60,15 @@ torot:
   # re-syncable, just not on a live schedule.
   sync_policy: manual
 
+iswoc:
+  adapter: Nabu::Adapters::Iswoc
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # ISWOC (Old English treebank, PROIEL 2.1 XML; ang-filtered — the repo's ten
+  # medieval Romance texts are out of corpus scope). Upstream iswoc-treebank is
+  # GitHub-archived at its final commit (2023-05-02): genuinely frozen, the
+  # proiel-treebank precedent. Successor repo note in the adapter header.
+  sync_policy: frozen
+
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
   enabled: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
@@ -96,7 +105,9 @@ oracc:
 
 lexica:
   adapter: Nabu::Adapters::Lexica
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10 ("flip all sources enabled" after
+                   # P11 merge): synced, 168,133 entries (LSJ + L&S incl. the
+                   # recovered alpha/theta files), define/nabu_define eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync lexica, then
                    # nabu define μῆνις / officium spot-checks)
   # PerseusDL/lexica (~160 MB git repo, CC BY-SA 4.0): LSJ + Lewis & Short —
@@ -107,7 +118,9 @@ lexica:
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
+                   # (complete Clementine canon), align OT witness eyeballed
+                   # (GEN 1.1, JON 1 trilingual).
                    # (CLAUDE.md checklist §6: bin/nabu sync vulgate — ~76 MB
                    # open-bibles clone — then spot-check nabu show
                    # urn:nabu:vulgate:mrk:2.3 and 5 random verses)
@@ -119,7 +132,8 @@ vulgate:
 
 eng-web:
   adapter: Nabu::Adapters::EngWeb
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
+                   # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
                    # open-bibles clone, shared with vulgate — then spot-check
                    # nabu show urn:nabu:eng-web:jon:1.1 and 5 random verses)
@@ -132,13 +146,36 @@ eng-web:
 
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
-  enabled: false   # flip after the first real owner-fired sync is eyeballed
+  enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
+                   # NT witness live in align; show --random eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
                    # clone — then spot-check nabu show urn:nabu:sblgnt:mark:2.3)
   # P11-5: the SBL Greek New Testament (Faithlife/SBLGNT, CC BY 4.0), 27
   # per-book verse-per-line text files. The nt alignment work's second Greek
   # witness (beside PROIEL greek-nt). Upstream edits are rare (v1.2 2023):
   # re-syncable, not on a live schedule.
+  sync_policy: manual
+
+aspr:
+  adapter: Nabu::Adapters::Aspr
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # ASPR (Anglo-Saxon Poetic Records, OTA 3009): the complete OE poetry corpus
+  # as ONE 2.2 MB TEI file over plain HTTP — the first single-file fetch path
+  # (Nabu::FileFetch). CC BY-SA 3.0 (in-file teiHeader) -> attribution.
+  # Upstream is effectively frozen (Last-Modified 2019, deposit 1993), but the
+  # OTA record is not archive-locked the way a read-only git repo is: manual.
+  sync_policy: manual
+
+bosworth-toller:
+  adapter: Nabu::Adapters::BosworthToller
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # Bosworth-Toller (P12-3): An Anglo-Saxon Dictionary from the official
+  # LINDAT dump (hdl 11234/1-3532, CC BY 4.0 -> attribution) — the third
+  # dictionary-shelf occupant (content_kind :dictionary) and the first CSV
+  # dictionary (parser family bosworth-csv). ONE ~84 MB CSV over HTTP
+  # (Nabu::FileFetch, DSpace bitstream /content URL). The deposit is a frozen
+  # v0.1 (Last-Modified 2021-04-26): manual — a re-sync only matters if the
+  # team publishes a new dump version.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
