@@ -4,12 +4,14 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 (CLAUDE.md fixture rules), one directory per treebank.
 
 - **Retrieved:** 2026-07-03 for the first four treebanks; **2026-07-09** for the
-  two Old East Slavic treebanks (`old-east-slavic-birchbark`,
-  `old-east-slavic-rnc`, packet P10-2) — all from `master` of each treebank's UD
-  repo via `raw.githubusercontent.com`.
+  first two Old East Slavic treebanks (`old-east-slavic-birchbark`,
+  `old-east-slavic-rnc`, packet P10-2); **2026-07-11** for the third,
+  `old-east-slavic-ruthenian` (packet P13-1b) — all from `master` of each
+  treebank's UD repo via `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
-  the two OES treebanks added under packet P10-2 (survey pick #1,
-  `docs/slavic-survey.md` §1).
+  the first two OES treebanks added under packet P10-2 (survey pick #1,
+  `docs/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
+  (survey-II pick #1, `docs/slavic-survey-2.md` §1).
 - **Trim procedure:** each source `*-ud-test.conllu` was trimmed to its **first 50
   complete sentence blocks**. A block = comment lines + token lines up to and
   including the terminating blank line. Files end with a blank line and contain
@@ -26,6 +28,7 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `latin-ittb/la_ittb-ud-test-head50+mwt.conllu` | `UD_Latin-ITTB/master/la_ittb-ud-test.conllu` | 3,184,535 | 61,008 | 50 |
 | `old-east-slavic-birchbark/orv_birchbark-ud-test-head50.conllu` | `UD_Old_East_Slavic-Birchbark/master/orv_birchbark-ud-test.conllu` | 1,446,600 | 63,865 | 50 |
 | `old-east-slavic-rnc/orv_rnc-ud-test-head50.conllu` | `UD_Old_East_Slavic-RNC/master/orv_rnc-ud-test.conllu` | 2,483,580 | 365,977 | 50 |
+| `old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu` | `UD_Old_East_Slavic-Ruthenian/master/orv_ruthenian-ud-test.conllu` | 940,453 | 309,311 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -43,6 +46,23 @@ sentences for parity with the other treebanks. Both files carry the CoNLL-U
 `# newdoc id`, `# transl_ru`/`# transl_en_*`, `# text` and per-sentence
 `# sent_id` comments; the LEMMA (col 3) column is populated (the `orv` lemma-row
 acceptance in `universal_dependencies_test.rb`).
+
+### Old East Slavic Ruthenian trim note (P13-1b)
+
+`old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu` is likewise the
+plain **first 50 complete sentence blocks** of `orv_ruthenian-ud-test.conllu`
+(390 blocks total). The whole test split contains **no** multiword-token range
+line (`n-m`) and **no** empty node (`n.m`) — checked file-wide — so, as with
+Birchbark/RNC, the head-50 slice is representative with nothing extra to append.
+The slice is 309,311 B because these are long legal/chancery sentences: the head
+opens with the Second Lithuanian Statute (1566) and one sentence
+(`StatutVKL1566-10`) runs 73 tokens. Comment lines are `# newdoc = …`,
+`# lang = orv-be` (a finer BCP-47 regional subtag — Old East Slavic, Belarus —
+NOT the UD treebank language, which is `orv`, the file-stem prefix shared with
+Birchbark/RNC), `# title`, `# note`, `# newpar`, and per-sentence `# sent_id` /
+`# text`. The LEMMA (col 3) column is manually annotated and populated (the
+`orv` lemma-row acceptance asserts the opening NOUN lemma `артыкулъ` "article"
+at `…:StatutVKL1566-1`, surface form `АРТЫКУЛЪ`).
 
 ### Latin-ITTB multiword-token (MWT) rule
 
@@ -84,11 +104,23 @@ adapter test even though no extra append was needed.
   "Attribution-ShareAlike 4.0 International" / by-sa/4.0 link) and `README.md`
   metadata likewise records `License: CC BY-SA 4.0`. → license class
   `attribution`.
+- **UD_Old_East_Slavic-Ruthenian** — **CC BY-SA 4.0** (verified 2026-07-11, the
+  P13-1b license gate). `LICENSE.txt`, quoted verbatim:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-Both OES licenses were confirmed BEFORE the fixtures were committed (packet
-gate: had either said anything other than CC BY-SA 4.0 the treebank would have
-been dropped). The `ud` manifest still declares the most-restrictive class
-present — `nc` (PROIEL/ITTB) — so the BY-SA-only treebanks are never over-shared.
+  and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. → license
+  class `attribution` (MCP-surface-safe). Consistent, no 3.0-vs-4.0 discrepancy.
+  (Note: the GitHub repo license field reads `NOASSERTION`; the authoritative
+  grant is the in-repo LICENSE.txt + README metadata, exactly as at P10-2 for
+  Birchbark/RNC.)
+
+All three OES licenses were confirmed BEFORE the fixtures were committed (packet
+gate: had any said anything other than CC BY-SA 4.0 the treebank would have been
+dropped). The `ud` manifest still declares the most-restrictive class present —
+`nc` (PROIEL/ITTB) — so the BY-SA-only treebanks are never over-shared.
 
 ## Structure notes (for the CoNLL-U parser + UD adapter, P3-3)
 

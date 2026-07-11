@@ -28,9 +28,9 @@ module Nabu
     #
     # Varies per treebank (the fixture README records the verbatim, sometimes
     # self-contradictory, LICENSE files): PROIEL is CC BY-NC-SA, Sanskrit-Vedic
-    # CC BY-SA, Latin-ITTB CC BY-NC-SA, both Old East Slavic treebanks
-    # (Birchbark, RNC) CC BY-SA 4.0. The manifest declares the most restrictive
-    # class present (nc) so query/export filters never over-share.
+    # CC BY-SA, Latin-ITTB CC BY-NC-SA, all three Old East Slavic treebanks
+    # (Birchbark, RNC, Ruthenian) CC BY-SA 4.0. The manifest declares the most
+    # restrictive class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
       # and in the urn; value = its upstream repo and ISO 639-3 language tag.
@@ -75,6 +75,19 @@ module Nabu
         },
         "old-east-slavic-rnc" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-RNC",
+          language: "orv", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P13-1b (Survey-II pick #1): the THIRD East Slavic branch — Ruthenian
+        # "prosta mova" (Old Belarusian/Old Ukrainian) chancery/legal prose,
+        # ca. 1380–1650 (Polotsk letters, Lithuanian Metrica, Lokhvitsa town-hall
+        # book). Genuinely new: zero text overlap with Birchbark (Novgorod
+        # letters), RNC (Muscovite Middle Russian) or TOROT/PROIEL (OCS canon).
+        # UD language code orv (treebank id orv_ruthenian; the per-doc `# lang =
+        # orv-be` is a finer BCP-47 regional subtag, not the treebank tag). Same
+        # CC BY-SA 4.0 → attribution override as birchbark/rnc (LICENSE.txt +
+        # README metadata verbatim, verified 2026-07-11 at fixture time).
+        "old-east-slavic-ruthenian" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-Ruthenian",
           language: "orv", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze

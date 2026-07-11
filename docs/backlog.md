@@ -2830,7 +2830,7 @@ Full-diff review, library.md refresh (new shelves/sections as synced),
 README truthfulness (numbers), PR, owner sync queue + flips, sticky alarm
 LAST. P13-7 dropped without ceremony if the phase runs long.
 
-## P13-1b · UD Ruthenian treebank  [tier: opus] [status: in-progress] [deps: P13-1]
+## P13-1b · UD Ruthenian treebank  [tier: opus] [status: done] [deps: P13-1]
 Survey-II pick #1, promoted in-phase (config-only, the P10-2 recipe
 exactly): add UD_Old_East_Slavic-Ruthenian to the ud adapter's TREEBANKS
 map — "prosta mova" chancery/legal texts 1380–1650, the third East Slavic
@@ -2843,3 +2843,37 @@ declares (orv? separate code?) and follow upstream. Conformance +
 idempotency + lemma-row evidence + dedup-guard test untouched. 02-sources
 UD row → 7 treebanks; backlog done; worklog (sha —). One commit, not
 pushed.
+
+### Findings (P13-1b, 2026-07-11 — shipped)
+
+LICENSE GATE PASSED. `UD_Old_East_Slavic-Ruthenian/master/LICENSE.txt` verbatim:
+"The treebank is licensed under the Creative Commons License Attribution-ShareAlike
+4.0 International." + "The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode" — byte-identical to
+Birchbark/RNC. `README.md` machine-readable metadata block: `License: CC BY-SA
+4.0`. (GitHub repo license field reads `NOASSERTION`, as the survey flagged; the
+in-repo grant is authoritative.) The stop-if-different condition never fired.
+
+LANGUAGE CODE: **`orv`** (following upstream: the UD file stem is `orv_ruthenian`,
+the shared East-Slavic code Birchbark/RNC also use). The per-newdoc comment
+`# lang = orv-be` (all 33 newdocs in the test split) is a finer BCP-47 regional
+subtag (Old East Slavic, Belarus), NOT the UD treebank language — the adapter
+tags the document `orv` from the `TREEBANKS` map, exactly as birchbark/rnc.
+
+FIXTURE: `test/fixtures/ud/old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu`
+— the first 50 complete sentence blocks of `orv_ruthenian-ud-test.conllu` (390
+blocks, 940,453 → 309,311 B). The whole test split has NO multiword-token range
+line (`n-m`) and NO empty node (`n.m`) — checked file-wide — so head-50 is
+representative with nothing extra to append (as Birchbark/RNC). Opens with the
+Second Lithuanian Statute (1566). All token lines validated at 10 tab-columns,
+file ends with a blank line, only complete blocks.
+
+ADAPTER: one `TREEBANKS` entry (`old-east-slavic-ruthenian`, repo, language `orv`,
+license "CC BY-SA 4.0", license_class `attribution`) — the P10-2 + P10-4 recipe
+verbatim, no new parser family, no fetch/discover changes. Dedup guard untouched
+(Ruthenian is neither a chu-PROIEL nor an orv-TOROT conversion). URN example:
+`urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50:StatutVKL1566-1`.
+
+LEMMA-ROW EVIDENCE: fixture load → `passage_lemmas` orv rows via the UNCHANGED
+Indexer plumbing; the opening NOUN lemma `артыкулъ` "article" at
+`…:StatutVKL1566-1` is attested by the pristine uppercase surface form `АРТЫКУЛЪ`.
