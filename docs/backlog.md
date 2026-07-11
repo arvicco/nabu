@@ -2829,3 +2829,17 @@ Tiny; no code.
 Full-diff review, library.md refresh (new shelves/sections as synced),
 README truthfulness (numbers), PR, owner sync queue + flips, sticky alarm
 LAST. P13-7 dropped without ceremony if the phase runs long.
+
+## P13-1b · UD Ruthenian treebank  [tier: opus] [status: in-progress] [deps: P13-1]
+Survey-II pick #1, promoted in-phase (config-only, the P10-2 recipe
+exactly): add UD_Old_East_Slavic-Ruthenian to the ud adapter's TREEBANKS
+map — "prosta mova" chancery/legal texts 1380–1650, the third East Slavic
+branch (zero overlap with birchbark/RNC/TOROT). License gate: verify
+CC BY-SA 4.0 in the repo README/LICENSE verbatim at fixture time (survey
+verified; re-verify) → attribution via the P10-4 per-treebank override
+(follow the birchbark/rnc entries). Fixture: one trimmed ~50-sentence
+.conllu slice (the ONLY network). Language code: verify what the treebank
+declares (orv? separate code?) and follow upstream. Conformance +
+idempotency + lemma-row evidence + dedup-guard test untouched. 02-sources
+UD row → 7 treebanks; backlog done; worklog (sha —). One commit, not
+pushed.
