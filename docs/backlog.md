@@ -3414,7 +3414,7 @@ Findings (design note: conventions §6.1):
   proiel + oracc-absence (query/morph_facets_test, query/lemma_search_test,
   mcp/tools_test). Suite 1445/21787 green, lint clean.
 
-## P13-7 · Vocab profiling  [tier: opus] [status: pending] [deps: P13-6]
+## P13-7 · Vocab profiling  [tier: opus] [status: dropped-to-register (gate rule: phase ran full, 11 packets) 2026-07-11] [deps: P13-6]
 improvements §1.7 (stretch — take only if the phase runs to schedule):
 `nabu vocab <urn-or-document>` — lemma frequency profile of a
 document/range vs the corpus (distinctive vocabulary, hapax list), gold
@@ -3427,7 +3427,7 @@ CLAUDE.md/dev-loop for outside contributors + the DCO note from the MIT
 decision discussion), and a SECURITY/support one-liner if conventional.
 Tiny; no code.
 
-## P13-gate · Phase 13 gate  [tier: orchestrator] [status: pending] [deps: P13-1..8]
+## P13-gate · Phase 13 gate  [tier: orchestrator] [status: done 2026-07-11] [deps: P13-1..8]
 Full-diff review, library.md refresh (new shelves/sections as synced),
 README truthfulness (numbers), PR, owner sync queue + flips, sticky alarm
 LAST. P13-7 dropped without ceremony if the phase runs long.
