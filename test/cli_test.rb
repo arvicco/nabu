@@ -861,6 +861,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_align_shows_the_hebrew_witness_at_its_native_ref_with_a_numbering_label
+    registry = <<~YAML
+      psalms:
+        title: "Psalms"
+        witnesses:
+          - label: LXX
+            extractor: cts-verse
+            documents:
+              PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1
+          - label: WEB (English)
+            extractor: cts-verse
+            numbering:
+              system: "Hebrew (Masoretic)"
+              ranges:
+                - { from: 11, to: 113, shift: -1 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+    with_psalms_corpus(registry) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "PSA", "22.1"]) }
+      assert_nil status, "an attested ref exits 0"
+      assert_match(/PSA 22\.1 — Psalms/, out)
+      assert_match(/ποιμαίνει/, out, "the Greek witness at the work ref")
+      assert_match(/Hebrew \(Masoretic\) numbering/, out, "the WEB column is flagged as remapped")
+      assert_match(/\[Hebrew \(Masoretic\): PSA 23\.1\]/, out, "and shows its native Hebrew ref")
+      assert_match(/shepherd/, out)
+    end
+  end
+
   def test_align_normalizes_the_query_ref
     with_aligned_corpus do |config|
       out, _err, status = with_config(config) { run_cli(["align", "mark", "2:3"]) }
@@ -1095,6 +1124,50 @@ class CLITest < Minitest::Test
       index_aligned_corpus(config, catalog) if indexed
       catalog.disconnect
       yield config
+    end
+  end
+
+  # A two-witness Psalms corpus (P13-5): the LXX shepherd verse at Greek 22.1
+  # and the WEB shepherd verse at Hebrew 23.1, so the numbering remap is
+  # exercised end to end through the CLI render.
+  def with_psalms_corpus(registry)
+    Dir.mktmpdir("nabu-cli-psalms") do |root|
+      alignments = File.join(root, "alignments.yml")
+      File.write(alignments, registry)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_psalms_witnesses(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_psalms_witnesses(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "attribution",
+      enabled: true
+    )
+    [["urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1", "Psalmi", "grc", "22.1", "Κύριος ποιμαίνει με"],
+     ["urn:nabu:eng-web:psa", "Psalms", "eng", "23.1",
+      "Yahweh is my shepherd: I shall lack nothing."]].each do |doc_urn, title, lang, tail, text|
+      doc_id = catalog[:documents].insert(
+        source_id: source_id, urn: doc_urn, title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: 0, language: lang,
+        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        annotations_json: "{}"
+      )
     end
   end
 

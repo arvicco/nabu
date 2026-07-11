@@ -316,3 +316,74 @@ ot:
         HAG: urn:nabu:eng-web:hag
         ZEC: urn:nabu:eng-web:zec
         MAL: urn:nabu:eng-web:mal
+
+# P13-5: the Psalms work — the one book where the versification divergence
+# BITES, faced head-on (the P11-8 OT WEB witness dodged it by omitting Psalms).
+# Three verse-grain witnesses under the GREEK/LXX numbering as the work
+# vocabulary (the numbering the Septuagint and Vulgate both carry): so
+# "PSA 22.1" is the Greek Psalm 22 ("The Lord is my shepherd"). The LXX and
+# the Gallican Vulgate align DIRECTLY; the WEB English psalter is
+# HEBREW/Masoretic-numbered (its "23.1" is the shepherd verse) and rides a
+# per-witness `numbering:` remap (architecture §10) into the work vocabulary.
+#
+# THE MAPPING TABLE (provenance: the standard LXX↔Masoretic psalm concordance
+# — Rahlfs' Septuaginta front-matter, NETS, and the Douay-Rheims/Vulgate vs
+# Hebrew tables all agree; verified live against the corpus, Greek 22 = Hebrew
+# 23, WEB 22 = "My God, my God, why have you forsaken me" = Greek 21):
+#     Hebrew 1–8     = Greek 1–8      (identity)
+#     Hebrew 9,10    → Greek 9        (LXX JOINS — dropped, see below)
+#     Hebrew 11–113  = Greek 10–112   (shift −1; the long uniform stretch)
+#     Hebrew 114,115 → Greek 113      (LXX JOINS — dropped)
+#     Hebrew 116     → Greek 114,115  (LXX SPLITS — dropped)
+#     Hebrew 117–146 = Greek 116–145  (shift −1)
+#     Hebrew 147     → Greek 146,147  (LXX SPLITS — dropped)
+#     Hebrew 148–150 = Greek 148–150  (identity)
+# The join/split psalms (Hebrew 9, 10, 114, 115, 116, 147) are DELIBERATELY
+# left unmapped: a psalm the LXX merges or divides has no one-to-one Greek
+# number, so the `numbering:` map DROPS those refs (they are not indexed) and
+# the WEB witness simply renders "not attested" for them rather than
+# false-aligning onto a Greek psalm it does not equal. HONEST RESIDUAL: the
+# remap corrects the PSALM number only; verse numbering WITHIN a psalm can
+# also differ (LXX/Vulgate fold the Hebrew superscription into verse 1, the
+# English does not), so an occasional verse-level off-by-one inside a
+# titulus-bearing psalm is possible and disclosed, never fabricated away.
+#
+# THE OE PARIS PSALTER (ASPR A5.51–A5.150) IS DEFERRED, with evidence. Its
+# grain does not support verse alignment: the ASPR adapter mints one document
+# PER PSALM (the psalm number lives in the div id, e.g. A5.51) and numbers
+# passages by the printed POETIC LINE ordinal — not the Latin verse. A single
+# Latin verse becomes several Old English metrical lines, so aligning line N
+# onto verse N would fabricate pairings; and the metrical psalter covers only
+# psalms 51–150 (1–50 are prose, absent from ASPR vol. 5). Registering it at
+# verse grain would need a hand-built line→verse concordance this packet will
+# not invent; registering it psalm-level would make a witness that never
+# co-renders with the verse-grain rows. So it stays out, documented here and
+# in the findings, awaiting a real OE-psalter verse concordance.
+psalms:
+  title: "Psalms (LXX / Vulgate / WEB — the versification divergence)"
+  witnesses:
+    # LXX Swete Psalmi (tlg0527.tlg027, First1K) — Greek numbering IS the work
+    # vocabulary, so no remap. Synced (attribution class).
+    - label: LXX (Swete, First1K)
+      extractor: cts-verse
+      documents:
+        PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1  # Greek numbering
+    # The Clementine (Gallican) Vulgate psalter — numbered after the LXX, so it
+    # aligns DIRECTLY with the work vocabulary (the P11-5 verified compatibility).
+    - label: vulgate (Clementine)
+      extractor: cts-verse
+      documents:
+        PSA: urn:nabu:vulgate:psa  # Gallican psalter, Greek-tradition numbering
+    # The World English Bible psalter — HEBREW/Masoretic numbering, remapped
+    # into the Greek work vocabulary by the `numbering:` table above.
+    - label: WEB (English)
+      extractor: cts-verse
+      numbering:
+        system: "Hebrew (Masoretic)"
+        ranges:
+          - { from: 1, to: 8, shift: 0 }       # Hebrew 1–8 = Greek 1–8
+          - { from: 11, to: 113, shift: -1 }   # Hebrew 11–113 = Greek 10–112
+          - { from: 117, to: 146, shift: -1 }  # Hebrew 117–146 = Greek 116–145
+          - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
+      documents:
+        PSA: urn:nabu:eng-web:psa  # Hebrew numbering (remapped)

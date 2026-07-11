@@ -275,6 +275,63 @@ module Query
       assert_nil sblgnt.document_urn
     end
 
+    # -- the Psalms numbering divergence (P13-5) ------------------------------------
+
+    PSALMS_YAML = <<~YAML
+      psalms:
+        witnesses:
+          - label: LXX
+            extractor: cts-verse
+            documents:
+              PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1
+          - label: WEB (English)
+            extractor: cts-verse
+            numbering:
+              system: "Hebrew (Masoretic)"
+              ranges:
+                - { from: 11, to: 113, shift: -1 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+
+    def test_the_hebrew_witness_aligns_at_its_remapped_ref_showing_its_native_number
+      registry = load_registry(PSALMS_YAML)
+      seed_verse_document("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1", language: "grc", title: "Psalmi",
+                                                                        verses: [["22.1", "Κύριος ποιμαίνει με"]])
+      seed_verse_document("urn:nabu:eng-web:psa", language: "eng", title: "Psalms",
+                                                  verses: [["23.1", "Yahweh is my shepherd: I shall lack nothing."]])
+      reindex!(registry)
+
+      result = align("PSA 22.1", registry: registry)
+      lxx, web = result.witnesses
+      # The Greek witness attests the work ref directly (no native-ref note).
+      assert_equal :ok, lxx.status
+      assert_includes lxx.sentences.first.text, "ποιμαίνει"
+      assert_nil lxx.sentences.first.native_ref
+      assert_nil lxx.numbering
+      # The Hebrew witness attests the SAME work ref via the remap, and reports
+      # its own native number (Hebrew 23.1) so the render can show the divergence.
+      assert_equal :ok, web.status
+      assert_equal "Hebrew (Masoretic)", web.numbering
+      assert_equal "urn:nabu:eng-web:psa:23.1", web.sentences.first.urn
+      assert_equal "PSA 23.1", web.sentences.first.native_ref
+      assert_includes web.sentences.first.text, "shepherd"
+    end
+
+    def test_the_hebrew_witness_is_not_attested_where_the_lxx_joins_or_splits
+      # Hebrew 116 (an LXX split-psalm) is dropped by the remap: querying its
+      # Greek counterparts finds only the Greek witness, never a false WEB row.
+      registry = load_registry(PSALMS_YAML)
+      seed_verse_document("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1", language: "grc",
+                                                                        title: "Psalmi", verses: [["114.1", "Ἠγάπησα"]])
+      seed_verse_document("urn:nabu:eng-web:psa", language: "eng", title: "Psalms",
+                                                  verses: [["116.1", "I love Yahweh"]])
+      reindex!(registry)
+
+      web = align("PSA 114.1", registry: registry).witnesses.last
+      assert_equal :no_match, web.status, "a dropped join/split psalm never false-aligns"
+    end
+
     def test_two_works_index_and_query_independently
       yaml = TRIO_YAML + <<~YAML
         ot:
