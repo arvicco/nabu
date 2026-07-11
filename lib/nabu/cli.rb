@@ -141,6 +141,17 @@ module Nabu
       and --license. Passages outside the treebanks carry no lemma
       annotations and are honestly absent here.
 
+      MORPH FACETS (--morph case=dat,number=pl): with --lemma, narrow to
+      attestations whose morphology matches the given facets (comma-joined
+      key=value, all required). The vocabulary is Universal Dependencies
+      feature names — case, number, gender, person, tense, mood, voice,
+      degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
+      their `feats`, PROIEL/TOROT are decoded from their positional tag into
+      the same names. Each hit shows the matching surface form(s) and the
+      decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
+      is out of scope); ORACC carries no inflectional morphology, so
+      inflectional facets never match it (honest absence). See conventions §6.1.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -157,6 +168,8 @@ module Nabu
         nabu search --lemma λέγω --lang grc        # every attestation in the Greek
                                                    #   treebank: λέγουσι, εἶπας, εἰπεῖν…
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
+        nabu search --lemma λόγος --morph case=dat,number=pl
+                                                   # only the dative-plural λόγοις
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -168,9 +181,12 @@ module Nabu
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
     option :lemma, type: :string, banner: "FORM",
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
+    option :morph, type: :string, banner: "FACETS",
+                   desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
     def search(query = nil)
       query = query.to_s.strip
       return lemma_search(query) if options[:lemma]
+      raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
@@ -308,15 +324,18 @@ module Nabu
       applies to the sliced rows only).
 
       PARALLEL TRANSLATIONS (--parallel [LANG], default eng): for a CTS
-      document or passage urn, find the sibling edition of the SAME work in
-      LANG (sources ingest translations only when their registry entry sets
-      `translations: true`) and render the two SPAN-GROUPED by citation suffix.
-      A verse-for-verse translation pairs line by line — :1.1 Greek next to
-      :1.1 English. A card-cited prose translation (both English Homers) anchors
-      one block of text at a card's first line: the original lines are listed,
-      then the translation ONCE, labeled with its coverage in the original's
-      numbering (`eng [:1.1 — covers :1.1–:1.43]`) plus a clip note when a range
-      shows only part of a card. A suffix present in only one edition renders
+      document or passage urn — or an ORACC tablet, whose translation is the
+      -en sibling document (P13-4) — find the sibling edition of the SAME
+      work in LANG (sources ingest translations only when their registry
+      entry sets `translations: true`) and render the two SPAN-GROUPED by
+      citation suffix. A verse-for-verse translation pairs line by line —
+      :1.1 Greek next to :1.1 English. A card-cited prose translation (both
+      English Homers) anchors one block of text at a card's first line: the
+      original lines are listed, then the translation ONCE, labeled with its
+      coverage in the original's numbering (`eng [:1.1 — covers :1.1–:1.43]`)
+      plus a clip note when a range shows only part of a card. ORACC's
+      paragraph-grained SAA units render as exactly such blocks over the
+      tablet's o.1/r.5 lines. A suffix present in only one edition renders
       honestly one-sided, never fuzzed. Works with --full-urn.
 
       Examples:
@@ -438,13 +457,15 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller)"
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller, Wiktionary-OCS)"
     long_desc <<~HELP, wrap: false
       The dictionary shelf (architecture §11): look a dictionary form up in
       the lexica the corpus holds locally — LSJ (A Greek-English Lexicon,
       grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA from
-      the Perseus Digital Library, and Bosworth-Toller (An Anglo-Saxon
-      Dictionary, ang; CC BY 4.0, LINDAT dump). Entries print whole:
+      the Perseus Digital Library, Bosworth-Toller (An Anglo-Saxon
+      Dictionary, ang; CC BY 4.0, LINDAT dump), and Wiktionary Old Church
+      Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL — etymologies with
+      their Proto-Slavic/PIE chains kept in the body). Entries print whole:
       headword, short gloss, then the full entry body as structured plain
       text with sense labels on their own lines (the MCP nabu_define surface
       is the bounded sibling).
@@ -466,23 +487,25 @@ module Nabu
       ingested, inscriptions, fragment collections) are honest misses, not
       links.
 
-      --lang grc|lat|ang restricts to one shelf; --limit caps the entries.
+      --lang grc|lat|ang|chu restricts to one shelf; --limit caps the entries.
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
         nabu define λόγος              # the long one, whole
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
+        nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
     HELP
-    option :lang, type: :string, banner: "grc|lat|ang",
-                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, ang → Bosworth-Toller"
+    option :lang, type: :string, banner: "grc|lat|ang|chu",
+                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
+                        "ang → Bosworth-Toller, chu → Wiktionary-OCS"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      if options[:lang] && !%w[grc lat ang].include?(options[:lang])
-        raise Thor::Error, "define: --lang must be grc, lat or ang"
+      if options[:lang] && !%w[grc lat ang chu].include?(options[:lang])
+        raise Thor::Error, "define: --lang must be grc, lat, ang or chu"
       end
 
       config = Nabu::Config.load
@@ -986,7 +1009,11 @@ module Nabu
         result.groups.first.witnesses.map(&:label).map do |label|
           views = result.groups.map { |group| group.witnesses.find { |witness| witness.label == label } }
           synced = views.find { |witness| witness.status != :not_synced }
-          synced ? "#{label} [#{synced.language}] license: #{synced.license_class}" : "#{label} not synced"
+          if synced
+            "#{label} [#{synced.language}] license: #{synced.license_class}#{align_numbering_note(synced)}"
+          else
+            "#{label} not synced"
+          end
         end
       end
 
@@ -1002,7 +1029,8 @@ module Nabu
         when :no_match   then say "    #{witness.label} — not attested"
         else
           witness.sentences.each do |sentence|
-            say "    #{witness.label}  #{sentence.text}#{align_span_note(sentence, ref)}"
+            say "    #{witness.label}  #{sentence.text}" \
+                "#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
           end
         end
       end
@@ -1023,13 +1051,28 @@ module Nabu
 
         # A multi-document witness misses without a book to name — no title.
         say "#{witness.label}#{" — #{witness.title}" if witness.title} [#{witness.language}]   " \
-            "license: #{witness.license_class}"
+            "license: #{witness.license_class}#{align_numbering_note(witness)}"
         return say "  not attested (this witness lacks #{ref})" if witness.status == :no_match
 
         witness.sentences.each do |sentence|
-          say "  #{sentence.urn}#{align_span_note(sentence, ref)}"
+          say "  #{sentence.urn}#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
           say "    #{sentence.text}"
         end
+      end
+
+      # "  · Hebrew (Masoretic) numbering" — flags a witness whose psalter is
+      # numbered in a different system than the work vocabulary (P13-5), so the
+      # reader knows its refs were remapped to align.
+      def align_numbering_note(witness)
+        witness.numbering ? "   · #{witness.numbering} numbering" : ""
+      end
+
+      # "  [Hebrew (Masoretic): PSA 23.1]" — the witness's OWN ref for this
+      # sentence, shown only when its numbering diverges from the queried ref.
+      def align_native_note(witness, sentence)
+        return "" unless sentence.native_ref
+
+        "  [#{witness.numbering}: #{sentence.native_ref}]"
       end
 
       # "  [covers MARK 2.3, MARK 2.4]" — only when the sentence spans beyond
@@ -1148,8 +1191,10 @@ module Nabu
 
         results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                           .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i)
+                                                      limit: options[:limit].to_i, morph: options[:morph])
         print_lemma_results(results)
+      rescue Nabu::Query::MorphFacets::Error => e
+        raise Thor::Error, "search: #{e.message}"
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -1165,7 +1210,8 @@ module Nabu
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
           gloss = result.gloss ? "  (#{result.gloss})" : ""
-          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}"
+          morph = result.morph ? "  {#{result.morph}}" : ""
+          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}#{morph}"
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"

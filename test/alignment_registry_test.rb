@@ -277,6 +277,23 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "JON", web.book_for("urn:nabu:eng-web:jon"), "P11-8 adds the WEB English OT witness"
   end
 
+  def test_shipped_registry_loads_the_psalms_work_with_the_web_numbering_remap
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("psalms")
+    refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
+    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)"],
+                 work.witnesses.map(&:label),
+                 "three verse-grain witnesses; the OE Paris Psalter is deferred (line grain)"
+    lxx, vulgate, web = work.witnesses
+    assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
+    assert_nil lxx.numbering, "the LXX Greek numbering IS the work vocabulary"
+    assert_equal "PSA", vulgate.book_for("urn:nabu:vulgate:psa")
+    assert_nil vulgate.numbering, "the Gallican Vulgate is Greek-numbered too"
+    assert_equal "Hebrew (Masoretic)", web.numbering.system, "the WEB psalter is remapped from Hebrew"
+    assert_equal "PSA 22.1", web.normalize_ref("PSA 23.1"), "Hebrew 23 = Greek 22 (the shepherd psalm)"
+    assert_nil web.normalize_ref("PSA 116.1"), "an LXX split-psalm is dropped, never false-aligned"
+  end
+
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
 
   def test_normalize_ref_folds_case_whitespace_and_colon
@@ -302,5 +319,80 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "MARK 2.3", witness.normalize_ref("Mk 2:3")
     # Unaliased books pass through the plain fold.
     assert_equal "MATT 1.1", witness.normalize_ref("MATT 1.1")
+  end
+
+  # -- numbering remap (P13-5): the Psalms versification divergence ------------
+
+  NUMBERING = <<~YAML
+    psalms:
+      witnesses:
+        - label: WEB (English)
+          extractor: cts-verse
+          numbering:
+            system: "Hebrew (Masoretic)"
+            ranges:
+              - { from: 1, to: 8, shift: 0 }
+              - { from: 11, to: 113, shift: -1 }
+              - { from: 117, to: 146, shift: -1 }
+              - { from: 148, to: 150, shift: 0 }
+          documents:
+            PSA: urn:nabu:eng-web:psa
+  YAML
+
+  def test_numbering_remaps_the_leading_psalm_number_into_the_work_vocabulary
+    witness = load_registry(NUMBERING).work("psalms").witnesses.first
+    assert_equal "Hebrew (Masoretic)", witness.numbering.system
+    # Hebrew 23.1 = Greek 22.1 (the shepherd verse); the verse tail rides along.
+    assert_equal "PSA 22.1", witness.normalize_ref("PSA 23.1")
+    assert_equal "PSA 116.5", witness.normalize_ref("PSA 117.5")
+    # Identity spans pass through.
+    assert_equal "PSA 1.1", witness.normalize_ref("PSA 1.1")
+    assert_equal "PSA 150.6", witness.normalize_ref("PSA 150.6")
+  end
+
+  def test_numbering_drops_a_psalm_no_range_covers
+    witness = load_registry(NUMBERING).work("psalms").witnesses.first
+    # The LXX join/split psalms (Hebrew 9, 10, 114, 115, 116, 147) map onto no
+    # single Greek number — dropped (nil), so the indexer never indexes them.
+    assert_nil witness.normalize_ref("PSA 9.2")
+    assert_nil witness.normalize_ref("PSA 116.1")
+    assert_nil witness.normalize_ref("PSA 147.3")
+  end
+
+  def test_witness_without_numbering_has_a_nil_numbering
+    assert_nil load_registry(VALID).work("nt").witnesses.first.numbering
+  end
+
+  def test_numbering_needs_a_system_label_and_ranges
+    yaml = <<~YAML
+      psalms:
+        witnesses:
+          - label: web
+            extractor: cts-verse
+            numbering:
+              ranges:
+                - { from: 1, to: 8, shift: 0 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/numbering must be a mapping/, error.message)
+  end
+
+  def test_numbering_range_needs_integer_bounds
+    yaml = <<~YAML
+      psalms:
+        witnesses:
+          - label: web
+            extractor: cts-verse
+            numbering:
+              system: Hebrew
+              ranges:
+                - { from: 1, to: eight, shift: 0 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+    error = assert_raises(Nabu::ValidationError) { load_registry(yaml) }
+    assert_match(/numbering range/, error.message)
   end
 end

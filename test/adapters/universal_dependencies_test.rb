@@ -22,6 +22,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
+    "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50"
   ].freeze
 
@@ -96,14 +97,14 @@ class UniversalDependenciesTest < Minitest::Test
   # --- per-treebank license override (P10-4) ------------------------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
-  # derived treebanks). The two Old East Slavic treebanks (Birchbark, RNC) are
-  # CC BY-SA 4.0 → attribution: they carry a per-document license_override so
-  # the shareable shelf labels them honestly, while the four legacy treebanks
-  # stay bare (source class nc applies, override NULL).
-  SLAVIC_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc].freeze
+  # derived treebanks). The three Old East Slavic treebanks (Birchbark, RNC,
+  # Ruthenian) are CC BY-SA 4.0 → attribution: they carry a per-document
+  # license_override so the shareable shelf labels them honestly, while the four
+  # legacy treebanks stay bare (source class nc applies, override NULL).
+  SLAVIC_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc old-east-slavic-ruthenian].freeze
   LEGACY_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic].freeze
 
-  def test_treebanks_map_sets_attribution_only_on_the_two_slavic_entries
+  def test_treebanks_map_sets_attribution_only_on_the_slavic_entries
     treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
     SLAVIC_SLUGS.each do |slug|
       assert_equal "attribution", treebanks.fetch(slug)[:license_class], "#{slug} must be attribution"
@@ -144,7 +145,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_six_files_sorted_by_urn
+  def test_discover_finds_exactly_seven_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -159,6 +160,7 @@ class UniversalDependenciesTest < Minitest::Test
       "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt" => "lat",
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50" => "orv",
+      "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50" => "orv",
       "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50" => "san"
     }
     expected_languages.each do |urn, language|
@@ -204,8 +206,8 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- lemma plumbing for the orv treebanks (P10-2) -----------------------
   #
-  # The acceptance gate: the CoNLL-U LEMMA column of the two new Old East
-  # Slavic treebanks must flow through the UNCHANGED annotation→index plumbing
+  # The acceptance gate: the CoNLL-U LEMMA column of the Old East Slavic
+  # treebanks must flow through the UNCHANGED annotation→index plumbing
   # (ConlluParser "tokens"/"lemma"/"form" → Store::Indexer → passage_lemmas),
   # exactly as the existing treebanks do — no orv-specific code path.
   def test_fixture_load_produces_orv_lemma_rows_via_existing_plumbing
@@ -223,9 +225,11 @@ class UniversalDependenciesTest < Minitest::Test
     assert_operator lemmas.where(language: "orv").count, :>, 0,
                     "the orv treebanks must contribute passage_lemmas rows"
 
-    # Both new treebanks contribute (Birchbark AND the Middle-Russian RNC).
+    # All three orv treebanks contribute (Birchbark, Middle-Russian RNC AND the
+    # Ruthenian "prosta mova" added in P13-1b).
     assert_operator lemmas.where(Sequel.like(:urn, "%old-east-slavic-birchbark%")).count, :>, 0
     assert_operator lemmas.where(Sequel.like(:urn, "%old-east-slavic-rnc%")).count, :>, 0
+    assert_operator lemmas.where(Sequel.like(:urn, "%old-east-slavic-ruthenian%")).count, :>, 0
 
     # A specific readable row: the birchbark NOUN lemma росомуха "wolverine"
     # (002-1), attested by the pristine surface form росомꙋха.
@@ -233,6 +237,14 @@ class UniversalDependenciesTest < Minitest::Test
     refute_nil row, "expected a passage_lemmas row for the orv lemma росомуха"
     assert_equal "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50:002-1", row[:urn]
     assert_includes row[:surface_forms], "росомꙋха"
+
+    # And a Ruthenian readable row (P13-1b): the opening NOUN lemma артыкулъ
+    # "article" of the Second Lithuanian Statute (StatutVKL1566-1), attested by
+    # the pristine uppercase surface form АРТЫКУЛЪ.
+    ruthenian_urn = "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50:StatutVKL1566-1"
+    ruthenian_row = lemmas.where(language: "orv", urn: ruthenian_urn, lemma_raw: "артыкулъ").first
+    refute_nil ruthenian_row, "expected a passage_lemmas row for the orv lemma артыкулъ"
+    assert_includes ruthenian_row[:surface_forms], "АРТЫКУЛЪ"
   ensure
     fulltext&.disconnect
   end
@@ -323,9 +335,9 @@ class UniversalDependenciesTest < Minitest::Test
       adapter.fetch(workdir)
 
       # First repo gains a file; the LAST TWO repos each lose their only
-      # treebank file (2 of #{slugs.size} ingestible files = 33% > 20% → trip;
-      # a single deletion is only 1/#{slugs.size} ≈ 17%, below the breaker, now
-      # that the set has grown to six treebanks).
+      # treebank file (2 of #{slugs.size} ingestible files ≈ 29% > 20% → trip;
+      # a single deletion is only 1/#{slugs.size} ≈ 14%, below the breaker, now
+      # that the set has grown to seven treebanks).
       first = slugs.first
       doomed = slugs.last(2)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")

@@ -1,0 +1,64 @@
+{
+ "type": "metadata",
+ "project": "saao/saa01",
+ "source": "http://oracc.org/saao/saa01",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-06-07T07:23:25",
+ "config": {
+  "pathname": "saao/saa01",
+  "name": "The Correspondence of Sargon II, Part I: Letters from Assyria and the West",
+  "abbrev": "SAAo/SAA01",
+  "project-type": "corpus",
+  "blurb": "The text editions from the book S. Parpola, The Correspondence of Sargon II, Part I: Letters from Assyria and the West (State Archives of Assyria, 1), 1987 (2015 reprint).  <a href=\"https://www.eisenbrauns.org/books/titles/978-1-57506-383-6.html\">Buy the book</a> from Eisenbrauns.",
+  "public": "yes",
+  "options": {
+   "views-cuneify": "true",
+   "catf-ok": "yes",
+   "views-TEI": "true",
+   "l2": "yes",
+   "g2": "yes",
+   "build-approved-policy": "atf",
+   "build-precompute-html": "0",
+   "catalog-build-policy": "custom",
+   "%akk-x-neoass": ". saao saao/saa01 saao/saa02         saao/saa03 saao/saa04 saao/saa05         saao/saa06 saao/saa07 saao/saa08         saao/saa09 saao/saa10 saao/saa11         saao/saa12 saao/saa13 saao/saa14         saao/saa15 saao/saa16 saao/saa17         saao/saa18 saao/saa19 saao/saa20         saao/saa21 saao/saa22 saao/saas2",
+   "%akk-x-neobab": ". saao saao/saa01 saao/saa02         saao/saa03 saao/saa04 saao/saa05         saao/saa06 saao/saa07 saao/saa08         saao/saa09 saao/saa10 saao/saa11         saao/saa12 saao/saa13 saao/saa14         saao/saa15 saao/saa16 saao/saa17         saao/saa18 saao/saa19 saao/saa20         saao/saa21 saao/saa22 saao/saas2",
+   "%akk-x-stdbab": ". saao saao/saa01 saao/saa02         saao/saa03 saao/saa04 saao/saa05         saao/saa06 saao/saa07 saao/saa08         saao/saa09 saao/saa10 saao/saa11         saao/saa12 saao/saa13 saao/saa14         saao/saa15 saao/saa16 saao/saa17         saao/saa18 saao/saa19 saao/saa20         saao/saa21 saao/saa22 saao/saas2",
+   "catalog-pleiades": "yes",
+   "cbd-mode": "dynamic",
+   "cbd-periods": "no",
+   "outline-default-select": "false",
+   "outline-default-sort-fields": "volume,ch_num_name",
+   "outline-default-heading-template": "1, 2",
+   "outline-default-catalog-fields": "designation,title,ancient_author,ancient_recipient,date",
+   "outline-default-catalog-widths": "10,35,20,20,15",
+   "outline-special-select": "false",
+   "render-rulings": "char",
+   "render-accents": "yes",
+   "render-heth": "yes",
+   "render-allographs": "drop",
+   "render-labels": "saa-style"
+  }
+ },
+ "formats": {
+  "atf": [
+   "P224395",
+   "P224485",
+   "X010028"
+  ],
+  "lem": [
+   "P224395",
+   "P224485"
+  ],
+  "tr-en": [
+   "P224395",
+   "P224485"
+  ],
+  "xtf": [
+   "P224395",
+   "P224485",
+   "X010028"
+  ]
+ }
+}

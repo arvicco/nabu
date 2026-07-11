@@ -1,12 +1,22 @@
-# ORACC fixtures — rimanum (Akkadian, P-numbers) + etcsri (Sumerian, Q-numbers)
+# ORACC fixtures — rimanum (Akkadian, P-numbers) + etcsri (Sumerian, Q-numbers) + saao/saa01 + translations
 
 Real ORACC JSON extracts for the OraccJsonParser family and the Oracc
 adapter (P10-1, executing the owner-approved P9-5a fixture plan). Retrieved
 **2026-07-09** from the two per-project open-data zips (the fetch unit —
-ORACC serves no raw per-file URLs; delivery is **zip over HTTP, not git**):
+ORACC serves no raw per-file JSON URLs; delivery is **zip over HTTP, not
+git**):
 
 - `https://oracc.museum.upenn.edu/json/rimanum.zip` (2.9 MB)
 - `https://oracc.museum.upenn.edu/json/etcsri.zip` (12.9 MB)
+
+P13-4 (retrieved **2026-07-11**, owner-approved fixture plan) adds the
+**translation fixtures**: real per-text rendered-HTML fragments from the
+official endpoint `https://oracc.museum.upenn.edu/<project>/<textid>/html`
+(the ONE public machine-readable carrier of ORACC's running English — the
+JSON has none, `oracc/catf` on GitHub is transliteration-only C-ATF with 0
+`#tr` lines, and per-text `.atf`/`.xtf` endpoints are soft-404s: a 200 whose
+body is a literal `404\n`), plus a saao/saa01 slice with its REAL NESTED zip
+root (`saao-saa01/saa01/…`, the P11-7 shape).
 
 ## License (recorded verbatim, machine-read)
 
@@ -52,12 +62,51 @@ well-formed (`json.dump(..., ensure_ascii=False, indent=1)`).
 | `corpusjson/Q004151.json` | whole | Sumerian royal inscription (Amar-Suena seal), 6 lines, plain numeric labels (no surface d-nodes), lemmatized (`cf`/`gw`/`norm`) |
 | `corpusjson/Q001299.json` | whole | second Sumerian text — **the smallest non-empty Q at extraction time** (2,980 B, "Anonymous Nippur 45", Early Dynastic): single line, single lemma, the minimal-document case |
 
+### saao-saa01/ (Neo-Assyrian letters — the P13-4 translation pair)
+
+Layout is the REAL nested zip root: `saao-saa01/saa01/…` (subproject zips
+unpack one level deep — the P11-7 discovery defect this now regression-tests
+at fixture level).
+
+| File | Whole? | Why this one |
+|---|---|---|
+| `saa01/corpusjson/P224395.json` | whole | SAA 01 175 (letter, Adda-hati to Sargon II): 39 lines over obverse/reverse — the tablet side of the translation pair; byte-identical to the copy in `saao-saa01.zip` |
+| `saa01/metadata.json` | trimmed | envelope + config verbatim; `formats` lists reduced to P224395 + P224485 (both `tr-en`) and X010028 (`atf` but **no** `tr-en` — the real untranslated saa01 text, exercising the crawl's tr-en gate) |
+| `saa01/catalogue.json` | trimmed | members/summaries reduced to P224395, P224485 |
+
+### html-en/ (P13-4 translation fragments, raw-GET-able)
+
+| File | Whole? | Why this one |
+|---|---|---|
+| `html-en/saao-saa01/P224395.html` | whole | the paragraph-grain fable case: 39 transliteration lines, 6 translation units (anchored at o 1, o 4, o 11, r 30 + two prose-free state-notice cells "(Break)"/"(Rest destroyed)" — the skip rule's regression case) |
+| `html-en/rimanum/P405432.html` | whole | translation of an already-fixtured tablet; full-label anchors ("(o 1)"), 4 units |
+| `html-en/rimanum/P405134.html` | whole | primed/seal label anchors (`r 1’`, `seal 1 1’`), 3 units |
+
+Fixture layout mirrors the workdir layout: crawled fragments live under
+`<workdir>/html-en/<slug>/`, OUTSIDE the zip-managed project trees (a zip
+swap must never attic them).
+
+## Translation license (P13-4, the layered reality — recorded verbatim)
+
+The CC0 statement above attaches to the **JSON build files**, which carry NO
+prose translations. The prose is ORACC/SAAo project **content**:
+
+> Content released under a CC BY-SA 3.0 license, 2007-20.
+> — https://oracc.museum.upenn.edu/saao/ footer
+
+and `oracc/catf`'s README says the quiet part: "Canonical ATF version of
+Oracc data **which is permitted to be released under CC0**" — and catf
+excludes exactly the translations. → translation documents carry
+`license_override: "attribution"` (CC BY-SA 3.0) while the source stays
+`open` (CC0).
+
 ## Honest findings recorded here
 
 - **Prose translations are NOT in the JSON** — 0 translation nodes; running
-  English lives only in the ATF source (`#tr.en:`) and rendered HTML.
-  Aligned translations are a future separate acquisition, out of the v1
-  JSON adapter (`translations: false` in the registry).
+  English lives only in the ATF source (`#tr.en:`/`@translation labeled`)
+  and rendered HTML. P13-4 ingests it from the per-text HTML fragments as
+  `-en` sibling documents (`translations: true` in the registry; stage-1
+  crawl scope = the saao projects).
 - **The fetch is an HTTP zip, not a git clone** — the first non-git fetch
   path (`Nabu::ZipFetch`); `Last-Modified`/`If-Modified-Since` is the
   change-detection mechanism (no shas upstream).

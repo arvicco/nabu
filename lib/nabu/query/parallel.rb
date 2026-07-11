@@ -58,9 +58,19 @@ module Nabu
     #
     # Sibling = same work prefix (urn:cts:<ns>:<tg>.<work>.), document
     # language = LANG, different urn. When several qualify the highest version
-    # wins (numeric then letter: eng10 > eng2). Non-CTS urns (papyri, treebanks)
-    # have no work prefix and therefore no siblings — Result#right is nil and
-    # the CLI says so.
+    # wins (numeric then letter: eng10 > eng2).
+    #
+    # ORACC tablets (P13-4) are the second sibling family: the tablet urn
+    # (urn:nabu:oracc:<project>:<textid>) IS the work, and its aligned
+    # translations are `<work>-<variant>` documents (…:P224395-en) whose
+    # passage suffixes are the tablet's own line labels (:o.1) — so the same
+    # suffix span-grouping applies unchanged, and the paragraph-grained SAA
+    # units render exactly like the card-cited English Homers. Both
+    # directions resolve (tablet → -en; -en → tablet via lang "akk"/"sux").
+    # P/Q textids never contain a hyphen, so the -variant split is exact.
+    #
+    # Other non-CTS urns (papyri, treebanks) have no work prefix and
+    # therefore no siblings — Result#right is nil and the CLI says so.
     #
     # Show-family semantics: withdrawn passages are included, flagged — this is
     # an inspection surface (see Show's header for the rationale).
@@ -98,6 +108,18 @@ module Nabu
 
       CTS_DOCUMENT = /\A(?<work>urn:cts:[^:]+:[^:]+\.[^:]+)\.[^:.]+\z/
       private_constant :CTS_DOCUMENT
+
+      # An ORACC document urn: the tablet itself (the work) or one of its
+      # translation variants (work-en, …). See "Sibling selection".
+      ORACC_DOCUMENT = /\A(?<work>urn:nabu:oracc:[^:]+:[^:-]+)(?:-[a-z]+)?\z/
+      private_constant :ORACC_DOCUMENT
+
+      # A Freising monument urn (P13-11): the critical transcription IS the
+      # work (urn:nabu:freising:bs1), its layers are "-" variants (bs1-dt,
+      # bs1-pt, bs1-tr-eng, …). Same suffix span-grouping as ORACC; the
+      # layers are line-for-line, so every anchor is a verse pair.
+      FREISING_DOCUMENT = /\A(?<work>urn:nabu:freising:bs\d+)(?:-[a-z-]+)?\z/
+      private_constant :FREISING_DOCUMENT
 
       def initialize(catalog:)
         @catalog = catalog
@@ -156,18 +178,35 @@ module Nabu
         @catalog[:documents].where(criteria).select(:id, :urn, :title, :language).first
       end
 
-      # The highest-version LANG edition of the same work, or nil.
+      # The LANG edition of the same work, or nil. Three work families: CTS
+      # editions (work prefix + "." + edition slug), ORACC tablets and
+      # Freising monuments (the work urn itself + "-" variants). The work's
+      # OWN document outranks its variants when it qualifies (bs1-tr-eng →
+      # sl resolves to the critical bs1, not the highest-sorting -tr-slv);
+      # otherwise the highest version wins.
       def sibling_edition(document, lang)
-        match = document.fetch(:urn).match(CTS_DOCUMENT)
-        return nil if match.nil?
+        work, candidates = work_candidates(document.fetch(:urn))
+        return nil if candidates.nil?
 
-        rows = @catalog[:documents]
-               .where(Sequel.like(:urn, "#{match[:work]}.%"))
+        rows = candidates
                .where(language: lang)
                .exclude(urn: document.fetch(:urn))
                .select(:id, :urn, :title, :language)
                .all
-        rows.max_by { |row| version_key(row.fetch(:urn)) }
+        rows.find { |row| row.fetch(:urn) == work } ||
+          rows.max_by { |row| version_key(row.fetch(:urn)) }
+      end
+
+      # [work urn, dataset of documents sharing it], or nil for a urn with
+      # no work notion (papyri, treebanks).
+      def work_candidates(urn)
+        if (match = urn.match(CTS_DOCUMENT))
+          [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
+        elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT))
+          [match[:work], @catalog[:documents].where(
+            Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
+          )]
+        end
       end
 
       # Order siblings by trailing version token, numeric before letter.

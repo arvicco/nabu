@@ -37,3 +37,7 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_East_Slavic-RNC/master/orv_rnc-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of orv_rnc-ud-test.conllu (long Middle-Russian sentences, no MWT/empty-node lines; P10-2) (2,483,580 B -> 365,977 B)
+  - path: old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_East_Slavic-Ruthenian/master/orv_ruthenian-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of orv_ruthenian-ud-test.conllu (long Ruthenian legal/chancery sentences, no MWT/empty-node lines; P13-1b) (940,453 B -> 309,311 B)
