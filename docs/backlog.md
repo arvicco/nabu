@@ -3137,6 +3137,31 @@ Two-phase, fixture gate on (a). Registry enabled:false; 02-sources;
 worklog.
 
 ## Slavic decisions record (owner, 2026-07-11)
-Freising (CC BY-ND): WAIT. Miklosich BCDH email: WAIT. Early Modern
-Slovenian: IN SCOPE (→ P13-9). Wiktionary OCS: GO (→ P13-10, with the
-reconstruction-axis scout note).
+Freising (CC BY-ND): GO — superseding ruling later same day: "BY-ND is
+in-scope going forward… MCP could serve my local models which arguably have
+same tool standing as dumb terminal. If we ever build some form of external
+access in future it would be either excluded by design or secure
+permission… (tracking permission points for future dev as we include
+them)." → P13-11. Miklosich BCDH email: WAIT. Early Modern Slovenian: IN
+SCOPE (→ P13-9). Wiktionary OCS: GO (→ P13-10).
+
+## P13-11 · Freising Manuscripts (Brizinski spomeniki)  [tier: opus] [status: pending] [deps: P13-9]
+Owner ruling 2026-07-11: BY-ND in-scope (zero-distribution library; private
+transformations permitted; ND mapped to the research_private posture —
+default-excluded from MCP, per-call opt-in; any future external-access
+feature adds its exclusion checkpoint). The oldest Slovene — and oldest
+Latin-script Slavic — text, ~1000 CE, eZISS TEI P4 critical edition
+(diplomatic + critical + phonetic transcriptions, translations, glossary;
+license VERBATIM in bs.xml: "Priznanje avtorstva-Brez predelav 2.5
+Slovenija" = CC BY-ND 2.5 SI — the English page's BY-SA label is wrong,
+survey II verified in-file).
+Two-phase, fixture gate: Phase A verifies the eZISS download path, maps
+the P4 TEI (three parallel transcription layers — decide which is the
+Passage text and whether the others ride as annotations or sibling docs;
+P9-2 P4 experience applies), designs citations (folio/line per the
+diplomatic layer?), confirms the license mapping (license string CC BY-ND
+2.5 SI, license_class research_private + a permission-point note in
+improvements §4.3). STOP — owner gate. Phase B: adapter (small; family
+per Phase A verdict), registry enabled:false, conformance, 02-sources row
+(SURVEYED-BLOCKED → READY with the ND posture documented), backlog done,
+worklog (sha —). One commit, not pushed.
