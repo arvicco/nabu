@@ -147,7 +147,7 @@ class BosworthTollerTest < Minitest::Test
     entry = registry["bosworth-toller"]
     refute_nil entry, "config/sources.yml must register bosworth-toller"
     assert_equal Nabu::Adapters::BosworthToller, entry.adapter_class
-    refute entry.enabled, "enabled stays false until the owner-fired first real sync"
+    assert entry.enabled, "bosworth-toller is live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::BosworthToller.manifest, entry.manifest
   end

@@ -62,11 +62,8 @@ torot:
 
 iswoc:
   adapter: Nabu::Adapters::Iswoc
-  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
-  # ISWOC (Old English treebank, PROIEL 2.1 XML; ang-filtered — the repo's ten
-  # medieval Romance texts are out of corpus scope). Upstream iswoc-treebank is
-  # GitHub-archived at its final commit (2023-05-02): genuinely frozen, the
-  # proiel-treebank precedent. Successor repo note in the adapter header.
+  enabled: true    # OWNER SIGN-OFF 2026-07-11 ("merged, flip"): synced, 5 OE texts /
+                   # 2,536 sentences, OE Mark live as hub witness #9 (9-of-9 eyeballed).
   sync_policy: frozen
 
 papyri-ddbdp:
@@ -158,24 +155,14 @@ sblgnt:
 
 aspr:
   adapter: Nabu::Adapters::Aspr
-  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
-  # ASPR (Anglo-Saxon Poetic Records, OTA 3009): the complete OE poetry corpus
-  # as ONE 2.2 MB TEI file over plain HTTP — the first single-file fetch path
-  # (Nabu::FileFetch). CC BY-SA 3.0 (in-file teiHeader) -> attribution.
-  # Upstream is effectively frozen (Last-Modified 2019, deposit 1993), but the
-  # OTA record is not archive-locked the way a read-only git repo is: manual.
+  enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 349 poems / 30,550 lines,
+                   # Beowulf canonical ordinals eyeballed (A4.1:1-5).
   sync_policy: manual
 
 bosworth-toller:
   adapter: Nabu::Adapters::BosworthToller
-  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
-  # Bosworth-Toller (P12-3): An Anglo-Saxon Dictionary from the official
-  # LINDAT dump (hdl 11234/1-3532, CC BY 4.0 -> attribution) — the third
-  # dictionary-shelf occupant (content_kind :dictionary) and the first CSV
-  # dictionary (parser family bosworth-csv). ONE ~84 MB CSV over HTTP
-  # (Nabu::FileFetch, DSpace bitstream /content URL). The deposit is a frozen
-  # v0.1 (Last-Modified 2021-04-26): manual — a re-sync only matters if the
-  # team publishes a new dump version.
+  enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 62,815 entries; define
+                   # aethele/thaet folding + lemma-gloss bridge eyeballed.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
