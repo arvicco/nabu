@@ -2687,7 +2687,7 @@ findings may append adapter packets to this very phase), then CCMH (survey-I
 pick #2), ORACC breadth + ATF translations, and the workbench riders never
 taken. Sequential dispatch, fixture gates standing, real syncs owner-fired.
 
-## P13-1 · Slavic survey II: dictionaries + South Slavic/Slovenian  [tier: opus] [status: in-progress] [deps: —]
+## P13-1 · Slavic survey II: dictionaries + South Slavic/Slovenian  [tier: opus] [status: done] [deps: —]
 Scouting only, docs/slavic-survey.md quality bar (that doc covered treebanks
 and OCS canon; this one covers what it didn't). Three axes:
 (a) SLAVIC DICTIONARY SOURCES for the P11-4 reference shelf: the GORAZD
@@ -2717,6 +2717,44 @@ torot/proiel/ccmh don't already hold" dedup column); 02-sources rows;
 recommendation whether findings warrant packets IN THIS PHASE (orchestrator
 + owner decide at review); backlog done + findings; worklog (sha —).
 Page-level reads + gh metadata only, no bulk fetches, no emails.
+
+### Findings (P13-1, 2026-07-11 — survey delivered, docs/slavic-survey-2.md)
+
+OWNER'S THREE QUESTIONS ANSWERED. (1) More OCS/Slavic: modestly — CCMH
+(P13-2) closes the canon; ONE new clean win found: **UD_Old_East_Slavic-
+Ruthenian** ("prosta mova" 1380–1650, Polotsk letters/Lithuanian Metrica/
+Lokhvitsa book; README metadata verbatim `License: CC BY-SA 4.0`; zero
+overlap — third East Slavic branch) → config-only `TREEBANKS` add, the P10-2
+recipe, **recommended THIS PHASE** as pick #1. No other open machine-readable
+ChSl edition exists in ANY South Slavic recension (Zagreb RCJHR = PDF scans,
+no license; SANU Serbian corpus = internal, no release; Sofia histdict =
+web-UI + bare ©; DIACU JSON = no LICENSE + mostly re-packaged TOROT).
+(2) Dictionaries: **the scholarly OCS lexica are not openly available today.**
+GORAZD hub (Prague SJS ~33k entries + Cejtlin + Greek-OCS index; NB Miklosich/
+Sreznevsky NOT in it — packet lead corrected) is query-only with NO content
+license (the GPL covers its software, not data); **Miklosich BCDH/ELEXIS TEI
+(41,338 entries) exists but CLARIN.si 11356/1666 is metadata-only, 0 files**
+— the nearest prize, one email to BCDH unblocks a drop-in for the existing
+TEI dictionary family; Sreznevsky re-verified unchanged (oldrusdict.ru
+query-only); Derksen Brill-blocked. Only clean ingest today: **Wiktionary OCS
+via kaikki.org** (verbatim "made available under the same licenses as
+Wiktionary - both CC-BY-SA and GFDL", ~4,548 senses, JSONL → small new
+dictionary family) — modest, LATER, best bundled with Miklosich if unblocked.
+(3) South Slavic/Slovenian: YES — **Freising Manuscripts (eZISS) fully
+downloadable TEI P4** (diplomatic+critical+phonetic + 6 translations +
+glossary) but the survey's key catch: the TEI source's `<availability>` says
+verbatim "Priznanje avtorstva-Brez predelav 2.5 Slovenija" = **CC BY-ND**
+(the English HTML page mislabels it BY-SA; verified directly in bs.xml) →
+LATER, gated on owner posture decision (permission email to Ogrin/Erjavec vs
+restricted local ingest); CLARIN.SI holds **goo300k** (gold, 294k words
+1584–1899, verbatim "CC BY 4.0") + **IMP** (17.7M tokens 1584–1919, CC BY-SA
+4.0) → LATER, owner scope call (Early Modern vs ancient charter); no Old
+Slovene/South Slavic UD treebank exists. (c) Blocked re-checks: obdurodon,
+Manuscript.ru (now cert/DNS-degraded), TITUS — all **UNCHANGED**.
+PHASE-13 SHAPE: only UD Ruthenian warrants an in-phase packet (config-only
+rider beside CCMH); everything else is owner-decision-gated (Freising ND
+posture, Miklosich email, Slovene scope), not engineering-gated. Register
+rows: #18 updated (Freising), #45–49 added, #4/#13/#30/#32/#33 annotated.
 
 ## P13-2 · CCMH adapter — the OCS canon completion  [tier: opus] [status: pending] [deps: P13-1]
 Survey-I pick #2: Corpus Cyrillo-Methodianum Helsingiense (Kielipankki) — 7
