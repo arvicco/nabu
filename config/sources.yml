@@ -178,6 +178,19 @@ bosworth-toller:
   # team publishes a new dump version.
   sync_policy: manual
 
+ccmh:
+  adapter: Nabu::Adapters::Ccmh
+  enabled: false  # flip after the owner-fired first real sync (CLAUDE.md checklist)
+  # CCMH (Corpus Cyrillo-Methodianum Helsingiense, Kielipankki; P13-2): the
+  # four gospel OCS manuscripts as the corpus's own CES XML over four plain
+  # HTTPS file URLs (per-manuscript Nabu::FileFetch subdirs). CC BY 4.0
+  # (bundle README.txt verbatim) -> attribution. Assemanianus + Savvina are
+  # the canon gaps closed; Marianus/Zographensis are ALT-EDITIONS of the
+  # PROIEL/TOROT witnesses — never dedupe (conventions §3). The three
+  # txt-only texts (Suprasliensis, the two Vitae) ship no XML: deferred by
+  # owner decision 2026-07-11. Upstream frozen since 2021: manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

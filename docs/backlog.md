@@ -2756,7 +2756,7 @@ rider beside CCMH); everything else is owner-decision-gated (Freising ND
 posture, Miklosich email, Slovene scope), not engineering-gated. Register
 rows: #18 updated (Freising), #45–49 added, #4/#13/#30/#32/#33 annotated.
 
-## P13-2 · CCMH adapter — the OCS canon completion  [tier: opus] [status: pending] [deps: P13-1]
+## P13-2 · CCMH adapter — the OCS canon completion  [tier: opus] [status: done] [deps: P13-1]
 Survey-I pick #2: Corpus Cyrillo-Methodianum Helsingiense (Kielipankki) — 7
 canonical OCS texts as transliteration + simple structured XML; real gain =
 Codex Assemanianus + Savvina kniga (absent from all current holdings) +
@@ -2768,7 +2768,7 @@ texts properly checked" XML honestly, designs citations (text·chapter·verse
 where the transliteration carries them?), sizes the new small family. STOP
 — owner gate. Phase B: adapter, registry enabled:false, conformance, docs.
 
-### Phase A findings + FIXTURE PLAN — AWAITING OWNER APPROVAL (2026-07-11)
+### Phase A findings + FIXTURE PLAN — OWNER-APPROVED 2026-07-11 ("CCMH fixture approved": 4-gospel XML v1; Suprasliensis + Vitae deferred; dup ids → collision-tolerant `:b2` suffixing per the GRETIL precedent)
 
 **LICENSE (verbatim).** The PUB `-src` bundle carries its own grant. From
 `https://www.kielipankki.fi/download/ccmh-src/README.txt` verbatim:
@@ -2897,7 +2897,44 @@ Files touched Phase B (planned): `lib/nabu/adapters/ccmh.rb` +
 sync_policy:manual), `docs/02-sources.md` (row 19 → READY + alt-edition
 notes), worklog (sha —). One commit, not pushed.
 
-**STOP — FIXTURE PLAN — AWAITING OWNER APPROVAL. No fixtures fetched.**
+**Gate cleared: OWNER-APPROVED 2026-07-11, scope option 1 (4-gospel XML
+v1). Phase B executed — findings below.**
+
+### Findings (P13-2 Phase B, 2026-07-11 — shipped)
+
+SHIPPED AS APPROVED, no scope drift. New small family `ccmh-ces`
+(`CcmhCesParser`, the AsprParser one-file-many-documents shape, streaming
+Reader only) + `Ccmh` adapter: one document per (manuscript, gospel book),
+7 docs from the fixture set, urn `urn:nabu:ccmh:<ms>:<book>` + passage
+`:<ch>.<verse>` (zero-padding stripped so the two upstream sub-shapes cite
+uniformly). Both sub-shapes handled by ONE accumulation rule — a passage's
+text is all character data inside its `<seg>`, collapsed — so `<ver>`-
+wrapped (assemanianus/savvina) and direct-seg (marianus/zographensis) never
+fork the code path. Duplicate verse ids: `:b2` positional suffix in
+document order (GRETIL precedent), pinned by both real dups (assemanianus
+b.JOH.21.25, marianus b.JOH.0.14 — distinct texts kept, never merged).
+Marianus chapter 0 (heading list) kept — canonical means canonical; the
+editors' `%` uncertainty marks stored verbatim.
+
+FETCH DESIGN (the packet's one structural finding): FileFetch keeps ONE
+state file per dir and dooms unrecognized siblings, so the four files MUST
+NOT share a directory → per-manuscript subdirs (`canonical/ccmh/<ms>/`),
+ORACC's two-phase aggregation (prepare all four → one mass-deletion breaker
+over the union → complete all), FetchReport.repos = per-file url→sha pins.
+Probe: `:http_zip`, 4 targets, `state_subdir: <ms>`, `metadata_url: nil`
+(the license lives in the bundle README, no endpoint).
+
+Fixtures: 4 trimmed real slices (13.1/6.3/9.1/1.5 KB) + README (license
+chain verbatim, transliteration key, sub-shape map) + manifest.yml (all
+`whole: false`, `adapter_test: null` — trimmed counts would false-fail
+against full upstream). Registry: `ccmh` enabled:false, sync_policy manual
+(upstream frozen since 2021). 02-sources row 19 → READY with alt-edition +
+deferral notes. Suite 1394 runs/21263 assertions green, lint clean, 24
+adapter tests incl. conformance. Demo: `urn:nabu:ccmh:assemanianus:mat:1.1`
+→ `*k$nIg&I !rodstva !!iUxva . !sna !ddva . !sna *avra/am/l@ .` (Mt 1:1).
+Deferred honestly: Suprasliensis + the two Vitae (txt-only upstream; a
+future `ccmh-txt` family if wanted). Owner next step: real
+`bin/nabu sync ccmh`, eyeball, flip enabled.
 
 ## P13-3 · ORACC expansion II  [tier: opus] [status: pending] [deps: —]
 Config-only breadth per the P11-6 pattern: candidate projects saao/saa02…
