@@ -318,9 +318,7 @@ describe the adapter checklist end to end.
 
 ## License
 
-- **Code:** not yet chosen (the repo currently declares no license — treat
-  it as all-rights-reserved until one lands; an OSI license is the
-  intent).
+- **Code:** [MIT](LICENSE).
 - **Content:** every ingested text keeps its upstream license, recorded
   per document as data (`open` / `attribution` / `nc`), and every surface —
   search hits, exports, MCP responses — carries the label. Roughly 99% of
