@@ -2677,3 +2677,117 @@ box (each command actually run); suite+lint untouched-green; worklog
 Full-diff review, library.md refresh (OE sections when synced; §10 duty),
 PR, owner-fired syncs queue (iswoc, aspr, bosworth-toller), flips on
 owner word, sticky alarm LAST.
+
+## Phase 13 — Slavic deepening + cuneiform readability + workbench riders (branch: phase-13; elaborated 2026-07-11)
+
+Owner shape (2026-07-11): "go with B+C but I'm not happy with OCS/Slavic
+coverage — can we do more? are there dictionary sources? Is there something
+for South Slavic/Slovenian?" So: a second, deeper Slavic survey FIRST (its
+findings may append adapter packets to this very phase), then CCMH (survey-I
+pick #2), ORACC breadth + ATF translations, and the workbench riders never
+taken. Sequential dispatch, fixture gates standing, real syncs owner-fired.
+
+## P13-1 · Slavic survey II: dictionaries + South Slavic/Slovenian  [tier: opus] [status: in-progress] [deps: —]
+Scouting only, docs/slavic-survey.md quality bar (that doc covered treebanks
+and OCS canon; this one covers what it didn't). Three axes:
+(a) SLAVIC DICTIONARY SOURCES for the P11-4 reference shelf: the GORAZD
+    project / Old Church Slavonic Digital Hub (gorazd.org, Czech Academy —
+    digitized SJS Slovník jazyka staroslověnského, Cejtlin, Miklosich?
+    formats, APIs, LICENSE verbatim); Sreznevsky (survey I said scans-only —
+    re-verify, any new machine-readable edition?); anything else genuinely
+    machine-readable (derksen etymological? out of copyright dictionaries
+    with digital editions?). For each: format, license VERBATIM, entry
+    count, DictionaryLoader fit (the shelf now has TEI + CSV precedents).
+(b) SOUTH SLAVIC / SLOVENIAN: Freising Manuscripts (Brižinski spomeniki,
+    ~1000 CE, oldest Slovene/Slavic-Latin-script text — eZISS/NUK TEI
+    critical edition, license?); eZISS generally (Slovenian electronic
+    critical editions — what's in scope, what license); IMP historical
+    Slovenian corpus (license? period coverage); Croatian Church Slavonic
+    (Hrvatski crkvenoslavenski corpus, Staroslavenski institut — anything
+    downloadable?); Serbian/Bulgarian/Macedonian Church Slavonic digital
+    editions beyond the already-surveyed Suprasliensis/CCMH. UD treebanks
+    for OLD South Slavic variants (modern hr/sl/sr/bg/mk are OUT of scope —
+    ancient-texts library).
+(c) REVISIT survey-I blocked items ONLY if their status plausibly changed
+    (obdurodon bulk availability; Manuscript.ru grant path — do NOT write
+    emails, just verify current state).
+Deliverable: docs/slavic-survey-2.md (ranked ingestable picks with effort
+sizing, blocked list with unblock paths, explicit "what this adds that
+torot/proiel/ccmh don't already hold" dedup column); 02-sources rows;
+recommendation whether findings warrant packets IN THIS PHASE (orchestrator
++ owner decide at review); backlog done + findings; worklog (sha —).
+Page-level reads + gh metadata only, no bulk fetches, no emails.
+
+## P13-2 · CCMH adapter — the OCS canon completion  [tier: opus] [status: pending] [deps: P13-1]
+Survey-I pick #2: Corpus Cyrillo-Methodianum Helsingiense (Kielipankki) — 7
+canonical OCS texts as transliteration + simple structured XML; real gain =
+Codex Assemanianus + Savvina kniga (absent from all current holdings) +
+alt-editions of Marianus/Zographensis/Suprasliensis (NEVER dedupe — distinct
+editions per the standing alt-edition rule). Two-phase with fixture gate:
+Phase A verifies the Kielipankki download path + exact license ("Open" in
+the catalogue — get the verbatim grant), maps the "very simple, not all
+texts properly checked" XML honestly, designs citations (text·chapter·verse
+where the transliteration carries them?), sizes the new small family. STOP
+— owner gate. Phase B: adapter, registry enabled:false, conformance, docs.
+
+## P13-3 · ORACC expansion II  [tier: opus] [status: pending] [deps: —]
+Config-only breadth per the P11-6 pattern: candidate projects saao/saa02…
+saa19 (the rest of the State Archives of Assyria), riao, ribo, blms, dcclt
+subprojects — Phase A verifies per-project license (CC0 expected but READ
+per project — the adapter maps at sync anyway) + zip availability + sizes,
+proposes the batch; owner approves the list (sizes matter — this could be
+100+ MB of zips); Phase B: PROJECTS list + scope comment + 02-sources.
+NEW-NODE-TYPE GUARD stands: if the parse-only smoke on owner-synced data
+hits unknown cdl shapes, census + report, do not hack.
+
+## P13-4 · ATF translations — cuneiform readable  [tier: fable] [status: pending] [deps: P13-3]
+The SAA letters famously have running English; the JSON carries none of it
+(P9-5a: 0 translation nodes; English lives in the ATF #tr.en lines / HTML).
+Phase A (design-heavy scout): find the bulk ATF acquisition path (oracc
+zips with ATF? per-project ATF exports? the oracc github ATF repos?);
+verify license (same CC0 project umbrella?); design how #tr.en lines
+attach: aligned-translation documents in the P7-4 shape (eng docs whose
+citations mirror the tablet lines → --parallel works) vs annotations vs
+hub witnesses — argue, pick, size. STOP — owner gate (this is the
+"cuneiform readable like Homer" payoff and the phase's fable packet).
+Phase B: implement per approved design.
+
+## P13-5 · Psalms alignment work  [tier: opus] [status: pending] [deps: —]
+Cross-shelf gem: new `psalms` work in config/alignments.yml — LXX-Swete
+(tlg0527 Psalmi, Greek numbering) ↔ Vulgate (Gallican, same Greek-tradition
+numbering — verified compatible in P11-5) ↔ WEB (HEBREW numbering — the
+versification divergence P11-8 dodged; this packet FACES it: a per-witness
+offset map or verse-map extractor extension, designed not hacked; if the
+honest answer is "Psalms need a mapping layer the registry lacks", report
+the design and stop for review) ↔ ASPR Paris Psalter (OE metrical psalms,
+psalm-numbered divs A5.x — verify their citation grain supports verse
+alignment; they may be psalm-level only → document honestly what grain the
+OE witness supports). Acceptance: `align "PSA 22.1" --work psalms` (or the
+designed equivalent) renders ≥3 witnesses correctly INCLUDING the numbering
+divergence handled visibly; registry loader validation green; docs.
+
+## P13-6 · Morph facets  [tier: opus] [status: pending] [deps: —]
+improvements §1.6: search by morphology over the gold shelves (treebanks +
+ORACC pos): `search --lemma X --morph case=dat,number=pl` or a designed
+equivalent. Design note first (annotations schema reality check across
+conllu/proiel/oracc token shapes; index needed or LIKE-over-annotations
+acceptable at current scale? — measure before building), then implement
+smallest honest version. MCP: extend nabu_search args. Docs + conventions.
+
+## P13-7 · Vocab profiling  [tier: opus] [status: pending] [deps: P13-6]
+improvements §1.7 (stretch — take only if the phase runs to schedule):
+`nabu vocab <urn-or-document>` — lemma frequency profile of a
+document/range vs the corpus (distinctive vocabulary, hapax list), gold
+shelves only, honest about coverage. CLI + optional MCP. Small.
+
+## P13-8 · Open-source finishers  [tier: opus] [status: pending] [deps: —]
+CI badge in README (the repo HAS GitHub Actions CI — the P12-4 no-CI claim
+was wrong, verify + fix), CONTRIBUTING.md (house rules distilled from
+CLAUDE.md/dev-loop for outside contributors + the DCO note from the MIT
+decision discussion), and a SECURITY/support one-liner if conventional.
+Tiny; no code.
+
+## P13-gate · Phase 13 gate  [tier: orchestrator] [status: pending] [deps: P13-1..8]
+Full-diff review, library.md refresh (new shelves/sections as synced),
+README truthfulness (numbers), PR, owner sync queue + flips, sticky alarm
+LAST. P13-7 dropped without ceremony if the phase runs long.
