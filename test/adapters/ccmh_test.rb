@@ -188,7 +188,7 @@ class CcmhTest < Minitest::Test
     entry = registry["ccmh"]
     refute_nil entry, "ccmh must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Ccmh, entry.adapter_class
-    refute entry.enabled, "ccmh stays disabled until the owner-fired first real sync (CLAUDE.md checklist)"
+    assert entry.enabled, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Ccmh.manifest, entry.manifest
   end
 

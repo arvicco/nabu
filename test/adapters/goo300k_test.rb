@@ -179,7 +179,7 @@ class Goo300kTest < Minitest::Test
     entry = registry["goo300k"]
     refute_nil entry, "goo300k must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Goo300k, entry.adapter_class
-    refute entry.enabled, "goo300k stays disabled until the owner-fired first real sync"
+    assert entry.enabled, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Goo300k.manifest, entry.manifest
   end
 
