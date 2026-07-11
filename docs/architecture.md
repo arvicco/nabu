@@ -482,3 +482,20 @@ ISWOC/ASPR urns exists; the resolution layer needed nothing new. Fetch is
 the ASPR FileFetch path (one ~84 MB CSV, DSpace bitstream `/content` URL).
 A second dictionary from the SAME repo (Middle Liddell lives beside LSJ
 upstream) is one entry in the lexica adapter's DICTIONARIES map.
+
+**The fourth occupant brought the third format (P13-10, Wiktionary-OCS).**
+kaikki.org's wiktextract JSONL (one JSON object per line, one record per
+word × POS × etymology; dual "CC-BY-SA and GFDL" → attribution) plugs in
+as `WiktionaryCu` + the `wiktionary-jsonl` parser family: slug
+`wiktionary-cu`, language `chu`, FileFetch single-file path (~44 MB), same
+Entry model, `define`/glosses again unchanged (only the CLI/MCP `lang`
+gates widened to `chu`; the fold is the generic rule — no §9 entry needed,
+Cyrillic combining marks are `\p{Mn}`). Two format-specific decisions:
+kaikki records carry NO stable upstream id, so entry ids are minted
+`<word>:<pos>[:<etymology_number>]` with a positional `:n` suffix for the
+handful of residual collisions (stable while upstream file order is; a
+reorder is an ordinary revision); and `etymology_text` is deliberately
+KEPT at the head of every entry body — those Proto-Slavic/PIE chains are
+the seed data for a future reconstruction/etymology shelf (see the
+improvements register). Citations start empty (Wiktionary quotations are
+unanchored — the B-T precedent).

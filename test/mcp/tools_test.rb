@@ -579,6 +579,33 @@ module MCP
       assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "ang"
     end
 
+    # P13-10: the OCS shelf — nabu_define reaches Wiktionary-OCS through the
+    # same tool, lang=chu is a legal shelf filter, the Cyrillic headword
+    # resolves via the generic chu fold, and the etymology (the reconstruction
+    # seed) rides in the body.
+    def test_define_covers_the_ocs_shelf
+      wk = Nabu::Store::Source.create(
+        slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryCu",
+        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: wk)
+                                   .load_from(Nabu::Adapters::WiktionaryCu.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+
+      entries = payload(call("nabu_define", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "богъ", entry.fetch("headword")
+      assert_equal "wiktionary-cu", entry.fetch("dictionary")
+      assert_equal "god", entry.fetch("gloss")
+      assert_equal "attribution", entry.fetch("license_class")
+      assert_includes entry.fetch("body"), "Inherited from Proto-Slavic *bogъ.",
+                      "the etymology chain must survive into the MCP body"
+      assert_empty entry.fetch("citations"), "Wiktionary quotes are unanchored — citations start empty"
+      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "chu"
+    end
+
     def test_define_withholds_restricted_dictionaries_by_default
       seed_shelf(source: @private)
       result = call("nabu_define", { "lemma" => "μῆνις" })
