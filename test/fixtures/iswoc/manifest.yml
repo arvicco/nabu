@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# base https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/
+# (the pinned final commit of the archived upstream repo — sync_policy frozen,
+# so these URLs are permanently stable).
+#
+# All three fixtures are trims (PROIEL surgery; æls/eustace additionally
+# truncate their single kept <div> — see README.md). adapter_test is null
+# because iswoc's conformance asserts sentence counts that the untrimmed
+# upstream files would false-fail; the drift signal is the frozen upstream
+# (archived repo) itself. Re-apply the README trims after any refresh
+# (refresh overwrites the trims with the full upstream files).
+source: iswoc
+adapter_test:
+retrieved: 2026-07-10
+files:
+  - path: wscp-mark.xml
+    url: https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/wscp.xml
+    whole: false
+    trim: PROIEL surgery — declaration + root + whole <annotation> + <source> metadata + leading 3 whole <div>s (Matthew 7, Mark 1, Mark 2; 150 sentences); 2,735,960 B -> 305,320 B
+  - path: æls-head20.xml
+    url: https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/æls.xml
+    whole: false
+    trim: PROIEL surgery + div truncation — first 20 whole <sentence>s of div 1, div closed cleanly; 646,405 B -> 86,069 B
+  - path: eustace-head.xml
+    url: https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/eustace.xml
+    whole: false
+    trim: PROIEL surgery + div truncation — first 3 whole <sentence>s of div 1 (fro exclusion probe); 469,127 B -> 20,899 B

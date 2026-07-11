@@ -7,6 +7,9 @@ source "https://rubygems.org"
 ruby ">= 3.3"
 
 # Approved dependency budget (see CLAUDE.md). Ask before adding anything.
+# stdlib extraction (ruby-core, zero deps) — no longer a default gem on
+# Ruby 3.4+; the bosworth-csv parser family needs it (P12-3).
+gem "csv"
 gem "faraday"
 gem "nokogiri"
 gem "sequel"

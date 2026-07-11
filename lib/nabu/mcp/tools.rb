@@ -168,10 +168,11 @@ module Nabu
         "readable.".freeze
 
       DEFINE_DESCRIPTION =
-        "Look up a lemma (dictionary form) in the classical lexica nabu holds locally — LSJ " \
-        "for ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat) picks a shelf when the " \
-        "spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
+        "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
+        "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
+        "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
+        "aethele finds æðele). Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang) " \
+        "picks a shelf when the spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
@@ -250,8 +251,9 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: %w[grc lat],
-                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short." },
+          lang: { type: "string", enum: %w[grc lat ang],
+                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
+                               "ang → Bosworth-Toller (Old English)." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -421,8 +423,8 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !%w[grc lat].include?(lang)
-          raise InvalidArguments, "lang must be grc or lat (the shelves this corpus holds)"
+        if lang && !%w[grc lat ang].include?(lang)
+          raise InvalidArguments, "lang must be grc, lat or ang (the shelves this corpus holds)"
         end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)

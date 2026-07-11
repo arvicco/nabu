@@ -38,10 +38,19 @@ module Nabu
     # One HTTP-zip remote-probe target (P11-2), for a :http_zip source. Each
     # fetched unit yields one: +zip_url+ is HEAD'd for reachability +
     # Last-Modified and is ALSO the ledger-pin key (the sync path pins each
-    # unit by its zip URL); +metadata_url+ is GET'd for the license field;
-    # +state_subdir+ is the unit's dir under the source workdir, holding the
-    # .zip-fetch.json Last-Modified pin the probe diffs against.
-    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir)
+    # unit by its zip URL); +metadata_url+ is GET'd for the license field —
+    # nil means the source has NO license endpoint (the license lives inside
+    # the fetched artifact itself; ASPR), and the probe's license row then
+    # honestly reads unchecked instead of GETting anything; +state_subdir+ is
+    # the unit's dir under the source workdir, holding the Last-Modified pin
+    # the probe diffs against — +state_file+ names it (ZipFetch's
+    # .zip-fetch.json by default; a FileFetch-backed source points it at
+    # FileFetch::STATE_FILE).
+    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir, :state_file) do
+      def initialize(label:, zip_url:, metadata_url:, state_subdir:, state_file: ZipFetch::STATE_FILE)
+        super
+      end
+    end
 
     # Trip the mass-deletion breaker when an upstream pull would delete
     # strictly more than this fraction of the source's ingestible files.

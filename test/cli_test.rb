@@ -94,15 +94,19 @@ class CLITest < Minitest::Test
     assert_match(/replaces the text query/i, out, "must be honest that --lemma and a query don't combine")
   end
 
-  # P11-4: `nabu define` help must teach the shelf, the folding promise, the
-  # citation-resolution behavior, and worked examples in both languages.
+  # P11-4 (+P12-3): `nabu define` help must teach the shelf, the folding
+  # promise, the citation-resolution behavior, and worked examples in all
+  # three languages — including the OE ASCII-folding promise (aethele finds
+  # æðele).
   def test_help_define_documents_the_dictionary_shelf
     out, _err, _status = run_cli(%w[help define])
     assert_match(/LSJ/, out)
     assert_match(/Lewis & Short/, out)
+    assert_match(/Bosworth-Toller/, out)
     assert_match(/μηνις finds μῆνις/, out, "must show the diacritic-folding promise")
+    assert_match(/aethele finds æðele/, out, "must show the OE ASCII-folding promise")
     assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
-    assert_match(/--lang grc\|lat/, out)
+    assert_match(/--lang grc\|lat\|ang/, out)
     assert_match(/nabu define virtus/, out, "must show a Latin example")
   end
 

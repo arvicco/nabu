@@ -145,5 +145,51 @@ module Query
       bad = define("virtus").first.citations.find { |c| c.urn_raw.include?("Orat::") }
       assert_nil bad.resolved_urn
     end
+
+    # -- the Old English shelf (P12-3) ----------------------------------------
+
+    def seed_oe_shelf
+      bt = Nabu::Store::Source.create(
+        slug: "bosworth-toller", name: "Bosworth-Toller",
+        adapter_class: "Nabu::Adapters::BosworthToller",
+        license: "CC BY 4.0", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: bt)
+                                   .load_from(Nabu::Adapters::BosworthToller.new,
+                                              workdir: Nabu::TestSupport.fixtures("bosworth-toller"))
+    end
+
+    # THE folding payoff: a user with an ASCII keyboard reaches æðele — and
+    # the native spelling reaches it too, via the query_forms union.
+    def test_defines_an_old_english_headword_typed_in_ascii
+      seed_oe_shelf
+      results = define("aethele", lang: "ang")
+      assert_equal 1, results.size
+      aethele = results.first
+      assert_equal "æðele", aethele.headword
+      assert_equal "noble", aethele.gloss
+      assert_equal "urn:nabu:dict:bosworth-toller:940", aethele.urn
+      assert_equal "bosworth-toller", aethele.dictionary_slug
+      assert_equal "attribution", aethele.license_class
+      assert_empty aethele.citations, "no OE crosswalk yet — citations start empty"
+
+      assert_equal ["æðele"], define("æðele").map(&:headword), "native spelling folds the same"
+    end
+
+    def test_old_english_homographs_are_separate_entries
+      seed_oe_shelf
+      urns = define("ae", lang: "ang").map(&:urn)
+      assert_equal %w[308 309 310], urns.map { |urn| urn.split(":").last },
+                   "the three ǽ homographs all print, in entry order"
+    end
+
+    # The lemma-gloss bridge, verbatim for OE: a treebank lemma in ang carries
+    # its Bosworth-Toller gloss through the same batched lookup LSJ/L&S use.
+    def test_glosses_covers_old_english_lemmas
+      seed_oe_shelf
+      out = Nabu::Query::Define.new(catalog: @catalog).glosses([%w[æðele ang], %w[þing ang]])
+      assert_equal "noble", out[%w[æðele ang]]
+      assert_equal "a thing", out[%w[þing ang]]
+    end
   end
 end

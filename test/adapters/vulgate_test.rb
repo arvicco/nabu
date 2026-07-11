@@ -99,7 +99,7 @@ class VulgateTest < Minitest::Test
     entry = registry["vulgate"]
     refute_nil entry, "vulgate must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Vulgate, entry.adapter_class
-    refute entry.enabled, "vulgate stays enabled: false until the owner-fired first sync is verified"
+    assert entry.enabled, "vulgate is live (owner sign-off 2026-07-10 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Vulgate.manifest, entry.manifest
   end
 

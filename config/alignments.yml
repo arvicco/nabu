@@ -39,10 +39,11 @@ nt:
     - document: urn:nabu:proiel:gothic-nt  # got — Wulfila
     - document: urn:nabu:proiel:armenian-nt # xcl — classical Armenian NT (sampled)
     - document: urn:nabu:proiel:marianus   # chu — Codex Marianus (OCS)
-    # Sixth witness, ready the day the ISWOC adapter lands (docs/oe-survey.md):
-    # the West-Saxon Gospel of Mark mints native "MARK 1.1" citation-parts —
-    # uncomment when the source syncs.
-    # - document: urn:nabu:proiel:wscp     # ang — OE Gospel of Mark (ISWOC)
+    # P12-1: the ISWOC adapter landed — the West-Saxon Gospel of Mark mints
+    # native "MARK 1.1" citation-parts (docs/oe-survey.md). Renders "not
+    # synced" honestly (P11-9 header summary) until the owner-fired first
+    # `nabu sync iswoc`.
+    - document: urn:nabu:proiel:wscp       # ang — OE Gospel of Mark (ISWOC)
     #
     # P11-5: the SBL Greek New Testament (CC BY 4.0, attribution) — a second
     # Greek witness beside the PROIEL treebank (distinct edition, never a

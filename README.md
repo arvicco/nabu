@@ -1,166 +1,328 @@
 # Nabu
 
-Personal research infrastructure for ingesting the world's digitized ancient
-texts — Greek, Latin, Old Church Slavonic, Sanskrit, Gothic, cuneiform, and
-beyond — into a single, locally-owned, queryable store. Named for the
-Mesopotamian god of scribes, patron of the tablet house.
+**A personal, local, license-honest library of the ancient world — that your
+AI tools can read.**
 
-A pipeline plus a database, operated from the command line: upstream corpora
-live as files in a git-tracked **canonical layer**; SQLite (catalog, FTS,
-vectors) is entirely **derived** and can be rebuilt from canonical data at any
-time. See `docs/01-concept.md` for the full vision,
-`docs/architecture.md` for the design, and `docs/conventions.md` for the
-field notes (Unicode/NFC, citation systems, editions, licensing) that explain
-*why* the code enforces what it enforces — start there if you're new to
-ancient-text corpora.
+Nabu pulls the world's openly licensed digital corpora of antiquity — Homer
+and the Greek canon, the Latin classics, documentary papyri from Egypt, the
+Sanskrit epics, cuneiform tablets, the Bible in nine parallel witnesses,
+Beowulf — into one library on your own disk. Everything is plain files plus
+SQLite: searchable by word or by dictionary lemma, citable to the exact verse
+or tablet line, honest about every text's license, and rebuildable from
+scratch at any time. And because it ships a read-only [MCP
+server](docs/mcp.md), the AI assistants you already use can search, quote,
+and cite the whole library — while structurally unable to change a letter
+of it.
 
-**Status: early development.** The core domain is built (adapter contract,
-catalog store, idempotent loader, rebuild) and **twelve source adapters**
-exist across **nine parser families** (EpiDoc/CTS, CoNLL-U, PROIEL XML,
-DDbDP Leiden, GRETIL TEI, ORACC JSON, lexicon TEI, USFX, SBLGNT):
-**all twelve sources live** — Perseus Greek and **Perseus Latin** (Iliad, Aeneid,
-and Livy included, **with 872 aligned English translations**:
-`show <urn> --parallel` — Vergil pairs line-by-line), First1KGreek
-(including Swete's Septuagint at verse grain), Universal Dependencies
-ancient treebanks (six, including Old East Slavic birchbark letters and
-Middle Russian), PROIEL, TOROT, Papyri.info DDbDP (61k documents,
-restart-aware line URNs, cancelled texts kept in ⟦⟧), **GRETIL**
-(Sanskrit: Rāmāyaṇa, Bhāgavata, Brahmasūtra, Mitākṣarā, Ṛgveda with Vedic
-accents preserved; 780 of 784 upstream files parse via five addressability
-rungs), **ORACC at five projects** (6,876 cuneiform texts, proto-cuneiform
-through the Sargon II state correspondence, gold lemmatization riding
-straight into lemma search, CC0, zips over HTTP with full attic parity),
-the **biblical editions** (`vulgate`: the complete
-73-book Clementine canon, public domain; `sblgnt`: SBL Greek NT, CC BY 4.0),
-and the **reference shelf** (`lexica`: LSJ + Lewis & Short, 168k dictionary
-entries) — totalling **~3.07 million searchable passages**. Every sync
-prints a discovery-accounting line (`selected · skipped-by-rule ·
-unrecognized`), so silent ingestion gaps are structurally visible (the
-P11-7 audit recovered 410 silently-dropped documents, including the
-Mitākṣarā and the entire Sargon letters project). Axis surveys rank further
-expansion candidates: Slavic (`docs/slavic-survey.md`) and Old English
-(`docs/oe-survey.md` — ISWOC treebank and the complete ASPR poetry corpus
-are the ranked picks).
-**The collection is protected end to end**: upstream deletions land in a
-local attic and stay searchable ("retired upstream"); run history, license
-baselines, and revision records live in a ledger no rebuild can wipe; and
-`nabu backup` snapshots everything to a mounted external volume — with a
-restore drill (`rake ops:drill`) that has actually passed against the full
-corpus: backup → fresh-root restore → rebuild → verify → RESTORABLE.
-**The research surface is real**: search is diacritic-insensitive with
-per-language search forms (Greek final-sigma, Latin v/u–j/i — conventions
-§9) and **lemma-aware** — `search --lemma λέγω` finds every inflected
-attestation (εἶπον, ῥηθέντος, …) across **1.92M gold lemma rows in twelve
-languages** (Greek, Latin, Sanskrit, Gothic, Armenian, OCS, Old East
-Slavic, Akkadian, Sumerian, and lexical-list scatter in Hittite, Hurrian
-and Ugaritic); `show` renders passages, documents,
-**citation ranges** (`urn:…:1.1-1.10`), and parallel translations
-(span-grouped: prose blocks cite exactly which lines they cover);
-`concord` prints classic KWIC lines in pristine text; `align` renders one
-citation across every witness of a registered work — the parallel New
-Testament (grc/lat/got/xcl/chu live, SBLGNT + Vulgate registered) and the
-Old Testament (Septuagint ↔ Vulgate) ship as flagships
-(`config/alignments.yml`, architecture §10); `define` looks up LSJ and
-Lewis & Short with entry citations resolved to in-catalog passages
-(architecture §11). **And the corpus talks**: a
-read-only MCP server (`bin/nabu mcp`, hand-rolled stdio; `.mcp.json` ships
-in-repo) gives any Claude session six tools — search, show, concord,
-align, define, status — every passage carrying its license class; see
-`docs/mcp.md`. Health (local trends + upstream probes for both git and
-HTTP-zip sources), fixture drift checks, and launchd ops templates round
-out the custodial surface.
+Named for the Mesopotamian god of scribes, patron of the tablet house and
+divine custodian of Ashurbanipal's library. It is not a website and not a
+reader app: it is a pipeline plus a database, operated from the command
+line, designed to outlive the services it draws from.
 
-## Requirements
+As of **2026-07-11** the shelves hold **72,734 documents / 3,143,750
+passages** in some two dozen ancient languages — from proto-cuneiform
+tablets of the late 4th millennium BCE to 17th-century Russian — plus
+**168,133 dictionary entries** and **1.94 million gold lemma annotations in
+13 languages**. (All numbers in this README are read from the live catalog,
+never estimated.)
 
-- Ruby 3.3+ (macOS/Apple Silicon is the development platform)
-- `bundle install` pulls the deliberately small dependency set (thor, sequel,
-  sqlite3, nokogiri, faraday + test tooling)
+## Show me
 
-## What works today
+Real commands, real output, pasted from live runs on 2026-07-11 (trims
+marked with …).
 
-| Command | Does |
-|---|---|
-| `bin/nabu version` | Print the version |
-| `bin/nabu status` | Per-source overview: enabled/policy, live document & passage counts, last run and its counts. Degrades gracefully with no registered sources or no database. |
-| `bin/nabu rebuild` | Drop the derived catalog db and regenerate it from `canonical/` by replaying every registered source through its adapter — parse-only, never touches the network. Prints per-source counts and warnings. |
-| `bin/nabu rebuild --dry-run` | Show exactly what a rebuild would do (db file affected, which sources replay vs. skip) without changing anything |
-| `bin/nabu sync <slug>` | Fetch a source's upstream snapshot (git, into `canonical/<slug>/`) and load it into the catalog under a recorded run. Explicit-by-slug syncs even disabled sources (with a note). |
-| `bin/nabu sync --all` | Sync every *enabled* source with `sync_policy: live` — the unattended path; one source's failure doesn't stop the others |
-| `… --parse-only` | Re-parse the existing local snapshot without touching the network (after parser fixes) |
-| `… --force` | Override the safety breaker that aborts any sync which would withdraw >20% of a source's documents (upstream restructures look like mass deletions) |
-| `bin/nabu search QUERY [--lang X] [--license CLASS] [--limit N]` | Full-text search over the corpus (FTS5, bm25-ranked). Diacritic-insensitive: `μηνιν` finds `μῆνιν`. Prints urn, language, highlighted snippet per hit. |
-| `bin/nabu search --lemma FORM [--lang X]` | Dictionary-form search over the gold lemma layer (treebanks + ORACC; 1.9M rows, 12 languages): `--lemma λέγω` finds εἶπον, ῥηθέντος and the rest of the paradigm, showing the matched surface forms per hit. |
-| `bin/nabu show URN` | Inspect a passage (text, document, license, revision, full provenance trail), a whole document (passages as `:suffixes`; `--full-urn` for absolutes), or a citation range (`urn:…:1.1-1.10`, inclusive, cross-block). Withdrawn and retired items shown, honestly labeled. |
-| `bin/nabu show URN --parallel [LANG]` | Render a passage/document/range aligned with its translation edition of the same work (default eng), paired by citation; unmatched lines shown honestly one-sided. |
-| `bin/nabu show --random [--source SLUG] [--count N]` | The eyeball ritual at a source flip: N random visible passages (default 1, cap 20) in the standard show layout, optionally scoped to one source. Honest randomness over the live corpus (withdrawn excluded); an unknown source errors. |
-| `bin/nabu export --format plain\|jsonl [--lang X] [--license CLASS]` | Stream the live corpus to stdout — the longevity-hedge exit formats (CoNLL-U arrives with the enrichment phase) |
-| `bin/nabu verify` | Re-parse every canonical file (attic included) and compare content hashes against the catalog — the cronnable bitrot/tamper check. Exit 0 clean, 1 on any mismatch. |
-| `bin/nabu health` | Local anomaly report, no network: per-source run-history trends (quarantine spikes, added-collapse, withdrawal/retirement creep, staleness) plus a replay of the golden queries against the live corpus. Exit 1 on any loud finding. |
-| `bin/nabu health --remote` | No-clone upstream probe: `ls-remote` liveness, remote-HEAD-vs-last-sync drift, and best-effort license-file change detection per source. Exit 1 only if an upstream is gone. |
-| `rake fixtures:check[source]` | Re-fetch pinned fixture URLs into tmp, byte-diff against the checked-in fixtures, and run the adapter tests against the fresh copies — the upstream-format drift report. Never overwrites; `fixtures:refresh[source]` is the explicit adoption path. |
-| `bin/nabu backup [--dry-run] [--skip-derived]` | File-level rsync of everything not re-derivable (canonical + attic, the history ledger, config; derived dbs by default) to the configured external volume. Refuses to run when the volume is not mounted. |
-| `bin/nabu concord QUERY\|--lemma FORM [--width N]` | Classic KWIC concordance: keyword column-aligned in pristine text, context trimmed per side, corpus order — for scanning usage, not relevance. |
-| `bin/nabu align REF [--work ID]` | Cross-source alignment: one citation across every witness of a registered work (`config/alignments.yml`) — `align MARK 2.3` renders the verse in Greek, Latin, Gothic, Armenian, and OCS at once, each with its license label; absent verses and unsynced witnesses read honestly. REF may be a passage urn (pivot from a hit). |
-| `bin/nabu mcp` | The read-only MCP server (stdio): search/show/concord/align/status as conversational tools for Claude Code/Desktop — registration recipes in `docs/mcp.md`. |
-| `rake ops:drill` | The fresh-machine restore drill: backup → restore into a tmp root → rebuild → verify → golden replay → counts cross-check. Exit 0 = RESTORABLE. |
-
-Every query command carries worked examples and syntax notes inline:
-`bin/nabu help search` (FTS5 syntax, filters), `help show` (urn shapes
-across the corpora, ranges, --parallel), `help export` (formats, jq recipes).
-
-Configuration lives in `config/nabu.yml` (paths; commented example shipped)
-and `config/sources.yml` (the source registry: adapter class, enabled
-flag, sync policy — with per-source sign-off notes). `docs/ops.md` documents
-the maintenance cadence (nightly verify, weekly sync + health) with
-ready-to-install launchd templates under `ops/launchd/` — nothing runs
-unless you install it.
-
-## What exists under the hood
-
-- **Domain model** — validating value objects (`Passage`, `DocumentRef`,
-  `SourceManifest`, `Document`): construction rejects non-NFC text, malformed
-  language tags, unknown license classes. Licensing is data, per passage.
-- **Adapter contract** — one small base class (`fetch` / `discover` / `parse` /
-  `manifest`); every future adapter must pass a shared conformance suite
-  (URN uniqueness across the corpus, URN stability across parses, NFC output).
-- **Five parser families, nine adapters** — all streaming, all tested against
-  real upstream fixtures: EpiDoc/CTS (Perseus Greek + Latin, First1KGreek), CoNLL-U
-  (Universal Dependencies treebanks: Gothic, Ancient Greek, Vedic Sanskrit,
-  Latin — lemmas and morphology preserved in annotations), PROIEL XML
-  (PROIEL, TOROT — Old Church Slavonic and Old Russian), GRETIL TEI
-  (Sanskrit: three addressability rungs, in-text verse-marker mining), and DDbDP
-  (Papyri.info documentary papyri: print-practice Leiden text extraction —
-  see `docs/conventions.md` §5 — and restart-aware line-URN minting).
-- **Catalog store** — SQLite via Sequel: sources, documents, passages,
-  provenance, enrichments, runs; forward-only migrations.
-- **Loader** — content-hash idempotency: re-loading unchanged data writes
-  nothing; changed content bumps a revision and journals the old hash;
-  upstream deletions withdraw rows (nothing is ever hard-deleted); parse
-  failures quarantine a document without aborting the batch.
-- **The retention contract** — fetch is non-destructive (`Nabu::GitFetch`):
-  files upstream deletes are copied to `canonical/<slug>/.attic/` *before*
-  the merge, and the documents load as `retired_upstream` — still live,
-  searchable, and exportable, keeping the license they were fetched under.
-  The mass-deletion breaker runs before any tree mutation, so an aborted
-  sync leaves canonical byte-unchanged. See `docs/architecture.md` §8.
-- **Rebuild invariant** — the derived db is a pure function of `canonical/`
-  (the attic included, so retired documents survive every rebuild),
-  proven by test: two rebuilds produce identical passage rows.
-
-## Development
+One verse of Mark, across nine witnesses — Greek, Latin, Gothic, Old Church
+Slavonic, Old English, and more — each with its license label:
 
 ```
-rake test        # full suite (network-blocked by WebMock; fast)
-rake lint        # rubocop
+$ bin/nabu align "MARK 2.3"
+MARK 2.3 — New Testament (parallel witnesses)
+  9 of 9 witnesses attest this ref
+
+greek-nt — The Greek New Testament [grc]   license: nc
+  urn:nabu:proiel:greek-nt:6563
+    καὶ ἔρχονται φέροντες πρὸς αὐτὸν παραλυτικὸν αἰρόμενον ὑπὸ τεσσάρων.
+
+latin-nt — Jerome's Vulgate [lat]   license: nc
+  urn:nabu:proiel:latin-nt:10368
+    et venerunt ferentes ad eum paralyticum qui a quattuor portabatur
+
+gothic-nt — The Gothic Bible [got]   license: nc
+  urn:nabu:proiel:gothic-nt:37435
+    jah qemun at imma usliþan bairandans, hafanana fram fidworim.
+
+marianus — Codex Marianus [chu]   license: nc
+  urn:nabu:proiel:marianus:36421
+    Ꙇ придѫ къ немоу носѧште ослабленъ жилами. носимъ четꙑрьми.
+
+wscp — West-Saxon Gospels [ang]   license: nc
+  urn:nabu:proiel:wscp:102359
+    & hi comon anne laman to him berende, þone feower men bæron.
+
+WEB (English) — Mark [eng]   license: open
+  urn:nabu:eng-web:mrk:2.3
+    Four people came, carrying a paralytic to him.
+
+… (Armenian, SBLGNT, and Clementine Vulgate witnesses trimmed)
+```
+
+Look up the first word of Western literature — with the dictionary's
+citations resolved to live passages in your own catalog:
+
+```
+$ bin/nabu define μῆνις
+μῆνις — A Greek-English Lexicon (Liddell-Scott-Jones) [attribution]  urn:nabu:dict:lsj:n67485
+  gloss: wrath
+
+μῆνις, Dor. and Aeol. μᾶν-, ἡ, gen.
+A. μήνιος Pl. R. 390e , later μήνιδος Ael. Fr. 80 , … —wrath; from Hom.
+downwds. freq. of the wrath of the gods, Il. 5.34 , al., A. Ag. 701 (lyr.),
+… but also, generally, of the wrath of Achilles, Il. 1.1 , al. …
+
+resolved citations (in this corpus — nabu show <urn>):
+  Il. 1.1 → urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1
+  Il. 5.34 → urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:5.34
+  A. Ag. 701 → urn:cts:greekLit:tlg0085.tlg005.1st1K-grc1:701
+  …
+```
+
+Search by dictionary form, not surface string — suppletion and all:
+
+```
+$ bin/nabu search --lemma λέγω --limit 3
+urn:nabu:proiel:chron:108755 [grc]  λέγω → ῥηθέντος  (lay)
+  ὅ περ ἦν καὶ αἴτιον τοῦ μὴ ἐλθεῖν τὸν γενήσαντά με εἰς τὸν Μορέαν μετὰ τοῦ αὐθεντοπούλου κὺρ Θωμᾶ εἰ…
+urn:nabu:proiel:chron:121080 [grc]  λέγω → εἶπον, εἰπὲ  (lay)
+  Πολλῶν οὖν λόγων δαπανηθέντων, τέλος ἐστάλησαν πρὸς τὸν ἄνθρωπον δύο τῶν κελλιωτῶν καὶ συντρόφων μου…
+urn:nabu:proiel:chron:121083 [grc]  λέγω → εἴπω  (lay)
+  Ἐγὼ δὲ νὰ ἀκούω παρὰ μὲν τῶν, ὅτι καλή ἐστι, παρὰ δὲ τῶν, ὅτι οὐ καλή, διὰ τὶ νὰ μηδὲν εἴπω·
+3 hits (exact lemma match; text is pristine)
+```
+
+Pull a random tablet off the cuneiform shelf:
+
+```
+$ bin/nabu show --random --source oracc
+urn:nabu:oracc:rinap-rinap1:Q003443:1 [akk]
+  a-di {KUR}sa-u₂-e KUR-e ša ina {KUR}lab-na-na-ma it-tak-ki-pu-u₂-ni
+  document: urn:nabu:oracc:rinap-rinap1:Q003443 — Tiglath-pileser III 30
+  source: oracc   license: open   sequence: 0   revision: 1
+  provenance:
+    2026-07-10 18:36:28 +0200  loaded  nabu-loader
+```
+
+— a royal inscription of Tiglath-pileser III, "as far as Mount Saue, which
+abuts Lebanon."
+
+## Who this is for
+
+- **Classicists.** The Perseus Greek and Latin canons plus First1KGreek —
+  2,209 Greek and Latin editions with 872 aligned English translations
+  (`show <urn> --parallel` pairs Vergil line by line). Citation ranges
+  resolve natively: `show urn:…:1.1-1.32`. Diacritic-insensitive,
+  final-sigma-aware, v/u–j/i-aware search; KWIC concordance in pristine
+  text.
+- **Biblical scholars.** `align "MARK 2.3"` above: the New Testament in up
+  to nine witnesses (Greek ×2, Latin ×2, Gothic, Armenian, OCS, Old
+  English, English), the Old Testament on the Septuagint ↔ Vulgate axis —
+  every verse a citable URN.
+- **Indologists.** 780 GRETIL editions, 703k passages: Rāmāyaṇa, purāṇas,
+  kāvya, dharmaśāstra, the Ṛgveda with Vedic accents preserved; commentary
+  layers separately citable (kārikā vs. vṛtti).
+- **Assyriologists.** 6,876 ORACC texts (CC0) across five projects, from
+  proto-cuneiform to the Sargon II state correspondence, with upstream gold
+  lemmatization riding straight into `search --lemma` for Akkadian and
+  Sumerian.
+- **Medievalists.** Old English just landed: the complete Anglo-Saxon
+  Poetic Records (Beowulf, the Exeter Book — `show urn:nabu:aspr:A4.1:1` →
+  *Hwæt! We Gardena in geardagum*), the ISWOC treebank with West-Saxon Mark
+  wired into the alignment hub, and Bosworth-Toller queued for the
+  dictionary shelf. On the Slavic side: OCS and Old East Slavic from
+  Marianus through birchbark letters to Avvakum.
+- **Digital humanists & linguists.** 1.94M gold lemma rows in 13 languages,
+  morphology preserved in per-token annotations, `export --format jsonl`
+  (and plain text) streams the corpus to your own tooling with license
+  filters.
+- **AI-tooling builders.** A hand-rolled, dependency-free MCP server over
+  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes six read-only
+  tools — search, show, concord, align, define, status — every passage
+  carrying its license class, so a model can quote *and* cite responsibly.
+  See [docs/mcp.md](docs/mcp.md).
+
+## Quickstart
+
+```
+git clone <this repo> && cd nabu
+bundle install          # Ruby 3.3+; deliberately small dependency set
+bin/nabu sync sblgnt    # a small first shelf: the SBL Greek NT, ~11 MB, seconds
+bin/nabu search "ἀγάπη" --limit 3
+```
+
+A fresh checkout works with zero configuration — every key in
+`config/nabu.yml` has a working default. The full zero-to-first-search
+walkthrough, with real outputs and honest sizes/timings for the bigger
+shelves, is in **[docs/quickstart.md](docs/quickstart.md)**.
+
+## What's on the shelves
+
+Live counts as of 2026-07-11; the full shelf map with research uses per
+shelf is **[docs/library.md](docs/library.md)**.
+
+| Shelf | What's on it | Size | License |
+|---|---|---|---|
+| Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen… + 650 aligned English translations | 1,418 docs / 394,706 passages | CC BY-SA |
+| Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 1,129 / 256,480 | CC BY-SA |
+| Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus… + 181 English translations | 534 / 391,799 | CC BY-SA |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,389 / 921,248 | CC BY |
+| Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, Ṛgveda with Vedic accents | 780 / 703,068 | CC BY-NC-SA |
+| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma/morphology/syntax — parallel NT ×5, OCS→Middle Russian, Old English | 75 / 172,815 | mostly CC BY-NC-SA |
+| Cuneiform | ORACC ×5 projects: Sumerian royal inscriptions, Sargon II letters, lexical lists, proto-cuneiform | 6,876 / 191,712 | CC0 |
+| Biblical editions | Clementine Vulgate (73 books), SBL Greek NT, WEB English | 184 / 81,372 | PD / CC BY |
+| Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
+| Reference shelf | LSJ + Lewis & Short (entries, not passages; `nabu define`) | 168,133 entries | CC BY-SA |
+
+The newest arrivals (ISWOC, ASPR) are synced and searchable but still
+marked `enabled: false` pending the routine owner sign-off; Bosworth-Toller
+(Old English dictionary, CC BY 4.0) is registered and queued for its first
+sync. Ranked expansion candidates live in the axis surveys:
+[Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
+
+## Feature tour
+
+| | |
+|---|---|
+| `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. |
+| `nabu search --lemma FORM` | Dictionary-form search over 1.94M gold lemma rows in 13 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. |
+| `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
+| `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. |
+| `nabu define LEMMA` | LSJ and Lewis & Short lookup, entry citations resolved to in-catalog passages. |
+| `nabu concord QUERY` | Classic KWIC concordance: keyword column-aligned in pristine text, corpus order — for scanning usage, not relevance. |
+| `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license` filters — the longevity-hedge exit formats. |
+| `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP); idempotent, non-destructive, every run recorded. |
+| `nabu status` / `health` / `verify` | Per-source counts and run history; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
+| `nabu mcp` | The read-only MCP server — six tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
+
+Two more tastes. Facing translation, span-grouped, honest when the English
+is coarser than the Greek:
+
+```
+$ bin/nabu show urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.5 --parallel
+urn:cts:greekLit:tlg0012.tlg001.perseus-grc2 — Iliad [grc]
+  parallel: urn:cts:greekLit:tlg0012.tlg001.perseus-eng4 — Iliad [eng]
+  aligned by citation: 0 paired, 1 block covering 5 lines, 0 grc only, 0 eng only
+  :1.1
+    grc  μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος
+  :1.2
+    grc  οὐλομένην, ἣ μυρίʼ Ἀχαιοῖς ἄλγεʼ ἔθηκε,
+  …
+  eng [:1.1 — covers :1.1–:1.39; range shows :1.1–:1.5]
+    Sing, O goddess, the anger [mênis] of Achilles son of Peleus, that brought
+    countless ills upon the Achaeans. …
+```
+
+And the concordance, here on Caesar's *virtus*:
+
+```
+$ bin/nabu concord --lemma virtus --width 30
+…vetii quoque reliquos Gallos virtute praecedunt, quod fere cotidi…  urn:nabu:proiel:caes-gal:52552 [lat]
+…i populi Romani et pristinae virtutis Helvetiorum.                   urn:nabu:proiel:caes-gal:52635 [lat]
+…b eam rem aut suae magnopere virtuti tribueret aut ipsos despicer…  urn:nabu:proiel:caes-gal:52636 [lat]
+…que suis didicisse, ut magis virtute contenderent quam dolo aut i…  urn:nabu:proiel:caes-gal:52637 [lat]
+…
+```
+
+## Your collection cannot rot
+
+Upstream projects restructure, lose funding, and disappear. Nabu is built
+on the assumption that the library must outlive its sources:
+
+- **Canonical vs. derived.** Upstream text lives as plain files in a
+  git-tracked canonical layer — the permanent asset. All SQLite is derived
+  and rebuildable: `nabu rebuild` regenerates the entire catalog from
+  canonical data, proven byte-identical by test.
+- **The attic.** Fetch is non-destructive: files an upstream deletes are
+  copied to `canonical/<source>/.attic/` *before* the merge and stay live,
+  searchable, and exportable — honestly labeled "retired upstream", keeping
+  the license they were fetched under. A mass-deletion breaker aborts any
+  sync that would withdraw more than 20% of a source.
+- **The ledger.** Run history, license baselines, and revision records live
+  in `db/history.sqlite3` — the one database no rebuild can wipe.
+- **Backup with a drill.** `nabu backup` rsyncs everything non-derivable to
+  a mounted external volume, and `rake ops:drill` proves it: backup →
+  fresh-root restore → rebuild → verify → RESTORABLE, actually run against
+  the full corpus.
+- **Standing verification.** `nabu verify` re-parses every canonical file
+  (attic included) and compares content hashes against the catalog;
+  `nabu health` watches run-history trends and probes upstreams for drift.
+  Every sync prints a discovery-accounting line (`selected ·
+  skipped-by-rule · unrecognized`), so silent ingestion gaps are
+  structurally visible.
+- **Boring storage.** Files, git, SQLite. Restorable from an rsync with
+  zero services.
+
+Nothing is ever hard-deleted: withdraw, revise, journal.
+
+## Status — honest
+
+This is a **young, personal, early-development project** — built for one
+scholar's research needs first and shared because the approach may be
+useful to others.
+
+- Developed and tested on macOS (Apple Silicon), Ruby 3.3+. Nothing is
+  known to be Mac-specific except the ops templates (launchd), but no other
+  platform is exercised.
+- No packaged release, no gem, no versioned API; CLI flags may still
+  change. No CI badge because there is no public CI — the suite
+  (`rake test`, network-blocked, fast) is the contract.
+- Corpus numbers above are a snapshot of one live install, dated where they
+  appear.
+- The enrichment layer of the original vision (embeddings/semantic search,
+  machine glossing, ad-hoc scan ingestion) is designed but not built — see
+  [docs/01-concept.md](docs/01-concept.md) for where this is headed.
+- Expect rough edges; expect the docs to be more honest than polished.
+
+## Documentation
+
+| Doc | One line |
+|---|---|
+| [docs/quickstart.md](docs/quickstart.md) | Zero to first search, copy-pasteable, honest about sizes and timings. |
+| [docs/library.md](docs/library.md) | The shelf map: every corpus with contents, counts, licenses, and research uses. |
+| [docs/01-concept.md](docs/01-concept.md) | The vision: what Nabu is, workflows, principles, what success looks like. |
+| [docs/mcp.md](docs/mcp.md) | The MCP server: six read-only tools, registration recipes, quoting etiquette. |
+| [docs/conventions.md](docs/conventions.md) | Field notes for working with ancient-text corpora (Unicode/NFC, citations, editions, licensing) — start here if you're new to the domain. |
+| [docs/architecture.md](docs/architecture.md) | The design: layer model, adapter contract, store schema, retention machinery. |
+| [docs/02-sources.md](docs/02-sources.md) | The source inventory: every corpus scouted, scored, and license-checked. |
+| [docs/03-unlockable-sources.md](docs/03-unlockable-sources.md) | Sources not ingestible today, with concrete unlock paths. |
+| [docs/oe-survey.md](docs/oe-survey.md) / [docs/slavic-survey.md](docs/slavic-survey.md) | Evidence-cited axis surveys ranking expansion candidates (and license-honest about what's blocked). |
+| [docs/ops.md](docs/ops.md) | The runbook: maintenance cadence, launchd templates, what to do when a check goes red. |
+| [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md) | How this stays alive across years of intermittent attention. |
+
+## How this is built
+
+Nabu is developed by a model-tiered autonomous agent loop — work packets
+executed by Claude models under TDD ground rules, with owner-approved phase
+gates — documented in [docs/dev-loop.md](docs/dev-loop.md). This README is
+refreshed at every gate to reflect what actually works.
+
+```
+bundle exec rake test    # full suite (network-blocked by WebMock; fast)
+bundle exec rake lint    # rubocop
 bin/nabu --help
 ```
 
-TDD is the workflow; see `CLAUDE.md` for the ground rules and
-`docs/dev-loop.md` for how this project is built (a model-tiered autonomous
-dev loop with owner-approved phase gates — this README is updated at every
-gate to reflect what actually works).
+Contributions: the project is early and personal; issues and conversation
+are welcome, but expect the backlog to be driven by the owner's research
+needs. If you want to add a source, `CLAUDE.md` and
+[docs/maintenance-and-extension.md](docs/maintenance-and-extension.md)
+describe the adapter checklist end to end.
 
 ## License
 
-Code: TBD. Ingested corpora keep their upstream licenses, recorded per
-document — see `docs/02-sources.md`.
+- **Code:** [MIT](LICENSE).
+- **Content:** every ingested text keeps its upstream license, recorded
+  per document as data (`open` / `attribution` / `nc`), and every surface —
+  search hits, exports, MCP responses — carries the label. Roughly 99% of
+  documents are public-domain or attribution-class; the `nc` shelves
+  (GRETIL, most treebanks) are for non-commercial research use and are
+  never redistributed by the tooling. Per-source terms:
+  [docs/02-sources.md](docs/02-sources.md).

@@ -438,21 +438,24 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ for Greek, Lewis & Short for Latin)"
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller)"
     long_desc <<~HELP, wrap: false
       The dictionary shelf (architecture §11): look a dictionary form up in
-      the classical lexica the corpus holds locally — LSJ (A Greek-English
-      Lexicon, grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA
-      from the Perseus Digital Library. Entries print whole: headword, short
-      gloss, then the full entry body as structured plain text with sense
-      labels on their own lines (the MCP nabu_define surface is the bounded
-      sibling).
+      the lexica the corpus holds locally — LSJ (A Greek-English Lexicon,
+      grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA from
+      the Perseus Digital Library, and Bosworth-Toller (An Anglo-Saxon
+      Dictionary, ang; CC BY 4.0, LINDAT dump). Entries print whole:
+      headword, short gloss, then the full entry body as structured plain
+      text with sense labels on their own lines (the MCP nabu_define surface
+      is the bounded sibling).
 
       Matching folds like lemma search (conventions §9): diacritics optional
       (μηνις finds μῆνις), final sigma both ways (λόγος/λογοσ), Latin v/u j/i
-      merged. Homographs are separate entries and all print (volo the verb,
-      volo the flyer). LEMMA must be a dictionary form — `nabu search --lemma`
-      finds the attestations, and its hits carry these glosses.
+      merged, Old English æ/þ/ð typeable in ASCII (aethele finds æðele,
+      thing finds þing). Homographs are separate entries and all print (volo
+      the verb, volo the flyer). LEMMA must be a dictionary form —
+      `nabu search --lemma` finds the attestations, and its hits carry these
+      glosses.
 
       Citations inside an entry stay as text; those that point at a work THIS
       corpus holds are additionally resolved to passage urns and listed at
@@ -463,21 +466,24 @@ module Nabu
       ingested, inscriptions, fragment collections) are honest misses, not
       links.
 
-      --lang grc|lat restricts to one shelf; --limit caps the entries.
+      --lang grc|lat|ang restricts to one shelf; --limit caps the entries.
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
         nabu define λόγος              # the long one, whole
         nabu define virtus --lang lat  # Lewis & Short only
+        nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
     HELP
-    option :lang, type: :string, banner: "grc|lat",
-                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short"
+    option :lang, type: :string, banner: "grc|lat|ang",
+                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, ang → Bosworth-Toller"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      raise Thor::Error, "define: --lang must be grc or lat" if options[:lang] && !%w[grc lat].include?(options[:lang])
+      if options[:lang] && !%w[grc lat ang].include?(options[:lang])
+        raise Thor::Error, "define: --lang must be grc, lat or ang"
+      end
 
       config = Nabu::Config.load
       catalog = open_catalog(config)
