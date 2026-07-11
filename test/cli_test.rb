@@ -326,7 +326,7 @@ class CLITest < Minitest::Test
       assert File.exist?(config.history_path), "the first sync creates the ledger"
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      assert_match(/corpus.*last run .*succeeded \(\+2 ~0 -0 !0\)/, out)
+      assert_match(/corpus.*last \d{4}-\d{2}-\d{2} \d{2}:\d{2} ok \(\+2 ~0 -0 !0\)/, out)
     end
   end
 
