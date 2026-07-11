@@ -774,6 +774,10 @@ module Nabu
         base = { label: witness.label, document_urn: witness.document_urn,
                  title: witness.title, language: witness.language,
                  license_class: witness.license_class, source: witness.source_slug }
+        # P13-5: a witness whose psalter is numbered in another system (the WEB
+        # Hebrew/Masoretic numbering) flags it so the model knows its refs were
+        # remapped into the work vocabulary.
+        base[:numbering] = witness.numbering if witness.numbering
         return base.merge(status: "withheld", sentences: []) if withhold?(witness.license_class, include_restricted)
 
         base.merge(status: witness.status.to_s,
@@ -782,11 +786,14 @@ module Nabu
 
       # Every sentence row carries the full contract fields (urn + language +
       # license_class + source) plus the refs it covers — sentence≠verse,
-      # stated per row.
+      # stated per row. A remapped witness (P13-5) also reports its WITNESS-
+      # NATIVE ref (Hebrew "PSA 23.1" under work "PSA 22.1") when it diverges.
       def align_sentence_payload(witness, sentence)
-        { urn: sentence.urn, language: witness.language,
-          license_class: witness.license_class, source: witness.source_slug,
-          text: sentence.text, refs: sentence.refs }
+        row = { urn: sentence.urn, language: witness.language,
+                license_class: witness.license_class, source: witness.source_slug,
+                text: sentence.text, refs: sentence.refs }
+        row[:native_ref] = sentence.native_ref if sentence.native_ref
+        row
       end
 
       # -- the exclusion gate ------------------------------------------------------

@@ -44,9 +44,12 @@ module Nabu
       # built): the CLI/MCP layers turn the message into exit 1 / isError.
       class Error < Nabu::Error; end
 
-      # One witness's sentence attesting the ref: urn, pristine text, and
-      # every ref the sentence covers (its verse span).
-      Sentence = Data.define(:urn, :text, :refs)
+      # One witness's sentence attesting the ref: urn, pristine text, every ref
+      # the sentence covers (its verse span), and — for a witness whose
+      # numbering differs from the work vocabulary (P13-5) — its WITNESS-NATIVE
+      # ref (the psalter's own number, e.g. Hebrew "PSA 23.1" for work
+      # "PSA 22.1"); nil when the witness numbers as the work does.
+      Sentence = Data.define(:urn, :text, :refs, :native_ref)
 
       # One witness column: registry label, document identity (+ source slug
       # for attribution surfaces), effective license, :ok/:no_match/
@@ -56,7 +59,7 @@ module Nabu
       # title stays nil (naming an arbitrary other book would mislead) while
       # language/license still come from the witness's live documents.
       Witness = Data.define(:label, :document_urn, :title, :language, :license_class,
-                            :source_slug, :status, :sentences)
+                            :source_slug, :status, :sentences, :numbering)
 
       # work/title identify the registry work; ref is the NORMALIZED citation.
       Result = Data.define(:work, :title, :ref, :witnesses)
@@ -389,7 +392,8 @@ module Nabu
         if live.empty?
           return Witness.new(label: witness.label, document_urn: not_synced_urn(witness, ref),
                              title: nil, language: nil, license_class: nil,
-                             source_slug: nil, status: :not_synced, sentences: [])
+                             source_slug: nil, status: :not_synced, sentences: [],
+                             numbering: witness.numbering&.system)
         end
 
         sentences = hits.filter_map do |hit|
@@ -397,7 +401,8 @@ module Nabu
           next nil if row.nil? # visibility changed since the index was built
 
           Sentence.new(urn: row.fetch(:urn), text: row.fetch(:text),
-                       refs: spans.fetch(hit.fetch(:passage_id)))
+                       refs: spans.fetch(hit.fetch(:passage_id)),
+                       native_ref: native_ref(witness, hit.fetch(:document_urn), row.fetch(:urn), ref))
         end
         attested_witness(witness, documents, hits, live, sentences)
       end
@@ -430,8 +435,24 @@ module Nabu
           language: (header || live.first).fetch(:language),
           license_class: (header || live.first).fetch(:license_class),
           source_slug: (header || live.first).fetch(:source_slug),
-          status: sentences.empty? ? :no_match : :ok, sentences: sentences
+          status: sentences.empty? ? :no_match : :ok, sentences: sentences,
+          numbering: witness.numbering&.system
         )
+      end
+
+      # The witness-native ref for a sentence when the witness renumbers (the
+      # psalter's own psalm.verse from the passage urn, e.g. Hebrew "PSA 23.1"
+      # under work-vocabulary "PSA 22.1") — nil for a witness that numbers as
+      # the work does, or when the native ref happens to equal the work ref (an
+      # identity-mapped psalm: nothing diverges, nothing to flag).
+      def native_ref(witness, document_urn, passage_urn, work_ref)
+        return nil unless witness.numbering
+
+        tail = passage_urn.delete_prefix("#{document_urn}:")
+        return nil if tail == passage_urn || tail.empty?
+
+        native = AlignmentRegistry.normalize_ref("#{witness.book_for(document_urn)} #{tail}")
+        native == work_ref ? nil : native
       end
 
       # passage_id => every ref that passage covers under this work, in ref

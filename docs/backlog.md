@@ -3286,7 +3286,7 @@ Decision points as approved:
 4. Hungarian (etcsri, 1441 texts) supported by the same design later — v1 is
    English only.
 
-## P13-5 · Psalms alignment work  [tier: opus] [status: pending] [deps: —]
+## P13-5 · Psalms alignment work  [tier: opus] [status: done] [deps: —]
 Cross-shelf gem: new `psalms` work in config/alignments.yml — LXX-Swete
 (tlg0527 Psalmi, Greek numbering) ↔ Vulgate (Gallican, same Greek-tradition
 numbering — verified compatible in P11-5) ↔ WEB (HEBREW numbering — the
@@ -3299,6 +3299,88 @@ alignment; they may be psalm-level only → document honestly what grain the
 OE witness supports). Acceptance: `align "PSA 22.1" --work psalms` (or the
 designed equivalent) renders ≥3 witnesses correctly INCLUDING the numbering
 divergence handled visibly; registry loader validation green; docs.
+
+### Findings (P13-5, 2026-07-11 — shipped)
+
+NEW MECHANISM: a per-witness `numbering:` key on the alignment registry
+(architecture §10) — a `system:` provenance label plus a `ranges:` list of
+`{from, to, shift}` piecewise-linear rules that remap the LEADING citation
+segment (the psalm number) of a witness's refs into the work vocabulary. It
+lives in `Witness#normalize_ref`, applied AFTER the `books:` alias and, like
+`books:`, INDEX-SIDE only (the query already speaks the work vocabulary — the
+extractor set stays closed at two, `numbering:` is orthogonal to extraction).
+The one new power: an unmapped psalm returns nil → the ref is DROPPED (the
+indexer's compact/filter_map skip it), so the join/split psalms never
+false-align. Existing works stay byte-stable (numbering defaults nil; the two
+`Witness.new` call sites pass it, nothing else moved).
+
+THE MAPPING TABLE (encoded on the WEB witness in config/alignments.yml;
+provenance = the standard LXX↔Masoretic psalm concordance — Rahlfs'
+Septuaginta front-matter, NETS, and the Douay/Vulgate-vs-Hebrew tables, all
+agreeing, cross-checked live against the corpus, e.g. WEB 22 = "My God, my
+God, why have you forsaken me" = Greek 21):
+
+    Hebrew 1–8     = Greek 1–8      identity        (shift 0)
+    Hebrew 9,10    → Greek 9        LXX JOINS        DROPPED
+    Hebrew 11–113  = Greek 10–112   long stretch    (shift −1)
+    Hebrew 114,115 → Greek 113      LXX JOINS        DROPPED
+    Hebrew 116     → Greek 114,115  LXX SPLITS       DROPPED
+    Hebrew 117–146 = Greek 116–145                  (shift −1)
+    Hebrew 147     → Greek 146,147  LXX SPLITS       DROPPED
+    Hebrew 148–150 = Greek 148–150  identity        (shift 0)
+
+The six unmapped psalms (Hebrew 9, 10, 114, 115, 116, 147) attest per-witness
+only: e.g. `align "PSA 113.1"` renders LXX + Vulgate ("In exitu Israel") and
+an honest WEB miss, never a fabricated pairing. HONEST RESIDUAL: the remap
+fixes the PSALM number only; verse numbering WITHIN a psalm can also differ
+(LXX/Vulgate fold a Hebrew superscription into verse 1, the English does not)
+— disclosed, uncorrected, never fuzzed. For the acceptance verse the systems
+agree verse-for-verse.
+
+DISPLAY: the remapped witness's own (Hebrew) ref is recovered at QUERY time
+from the passage urn (never stored in the index) and surfaced — the column
+header gains "· Hebrew (Masoretic) numbering" and each sentence a
+"[Hebrew (Masoretic): PSA 23.1]" note. So the divergence is VISIBLE, not
+silently corrected.
+
+PARIS PSALTER GRAIN VERDICT: DEFERRED with evidence (not registered). ASPR
+mints one document per psalm (`urn:nabu:aspr:A5.51` … `A5.150`, psalms 51–150
+only — 1–50 are prose, absent from ASPR vol. 5) and numbers passages by the
+printed POETIC LINE ordinal, NOT the Latin verse (the adapter's frozen
+minting: "Passage urns append the 1-based line ordinal … equals the printed
+ASPR line number"). One Latin verse becomes several Old English metrical
+lines, so aligning line N onto verse N would fabricate pairings; the psalm
+number lives in the document id, not the passage tail, so cts-verse cannot
+build "PSA 51.3" from it either. Verse alignment would need a hand-built
+line→verse concordance the corpus does not have; a psalm-level registration
+would add a column that never co-renders with the verse-grain rows. So it
+stays out, documented in a loud registry comment + here + architecture §10,
+awaiting a real OE-psalter verse concordance.
+
+ACCEPTANCE RENDER (scratch index over a read-only copy of the live catalog —
+the live alignment index picks `psalms` up at the owner's next `nabu sync`/
+`nabu rebuild`, a config-only change; 130,543 rows indexed across all works
+from the snapshot):
+
+    PSA 22.1 — Psalms (LXX / Vulgate / WEB — the versification divergence)
+      3 of 3 witnesses attest this ref
+    LXX (Swete, First1K) — Psalmi [grc]   license: attribution
+      …:22.1   Κύριος ποιμαίνει με, καὶ οὐδέν με ὑστερήσει.
+    vulgate (Clementine) — Psalmi [lat]   license: open
+      …vulgate:psa:22.1   Psalmus David. Dominus regit me, et nihil mihi deerit :
+    WEB (English) — Psalms [eng]   license: open   · Hebrew (Masoretic) numbering
+      …eng-web:psa:23.1  [Hebrew (Masoretic): PSA 23.1]
+        Yahweh is my shepherd: I shall lack nothing.
+
+FILES: config/alignments.yml (+psalms work, loud comment), lib/nabu/
+alignment_registry.rb (Numbering/NumberingRange + numbering! parser +
+normalize_ref split), lib/nabu/query/align.rb (Sentence.native_ref,
+Witness.numbering, native_ref helper), lib/nabu/cli.rb (numbering + native
+notes, single + range renders), docs/architecture.md §10. TESTS: registry
+(remap/drop/validation + shipped psalms pin), indexer (remap + drop), align
+(native-ref render + join/split miss), cli (visible label). Suite 1426 runs /
+21,735 assertions green; lint clean (190 files). ONE commit, not pushed;
+worklog sha —.
 
 ## P13-6 · Morph facets  [tier: opus] [status: pending] [deps: —]
 improvements §1.6: search by morphology over the gold shelves (treebanks +

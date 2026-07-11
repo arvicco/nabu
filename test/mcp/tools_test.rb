@@ -689,6 +689,48 @@ module MCP
       assert_match(/2 of 2/, body.fetch("note"))
     end
 
+    PSALMS_REGISTRY_YAML = <<~YAML
+      psalms:
+        title: "Psalms"
+        witnesses:
+          - label: LXX
+            extractor: cts-verse
+            documents:
+              PSA: urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1
+          - label: WEB (English)
+            extractor: cts-verse
+            numbering:
+              system: "Hebrew (Masoretic)"
+              ranges:
+                - { from: 11, to: 113, shift: -1 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+
+    def test_align_surfaces_the_numbering_divergence_and_native_ref
+      registry = align_registry(PSALMS_REGISTRY_YAML)
+      source = Nabu::Store::Source.create(
+        slug: "bible", name: "Bible", adapter_class: "TestAdapter", license_class: "attribution", enabled: true
+      )
+      [["urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1", "grc", "22.1", "Κύριος ποιμαίνει με"],
+       ["urn:nabu:eng-web:psa", "eng", "23.1", "Yahweh is my shepherd"]].each do |doc_urn, lang, tail, text|
+        doc = make_document(source: source, urn: doc_urn, title: "Psalms", language: lang)
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: "#{doc_urn}:#{tail}", sequence: 0, language: lang,
+          text: text, text_normalized: text, content_sha256: "x", revision: 1, annotations_json: "{}"
+        )
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+
+      body = payload(align_tools(registry).call("nabu_align", { "ref" => "PSA 22.1" }))
+      lxx, web = body.fetch("witnesses")
+      refute lxx.key?("numbering"), "the Greek witness is the work vocabulary — no numbering flag"
+      assert_equal "Hebrew (Masoretic)", web.fetch("numbering"), "the WEB column is flagged as remapped"
+      sentence = web.fetch("sentences").first
+      assert_equal "urn:nabu:eng-web:psa:23.1", sentence.fetch("urn")
+      assert_equal "PSA 23.1", sentence.fetch("native_ref"), "and reports its native Hebrew ref"
+    end
+
     def test_align_missing_ref_is_invalid_arguments
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { align_tools.call("nabu_align", {}) }
     end

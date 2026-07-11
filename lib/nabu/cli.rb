@@ -989,7 +989,11 @@ module Nabu
         result.groups.first.witnesses.map(&:label).map do |label|
           views = result.groups.map { |group| group.witnesses.find { |witness| witness.label == label } }
           synced = views.find { |witness| witness.status != :not_synced }
-          synced ? "#{label} [#{synced.language}] license: #{synced.license_class}" : "#{label} not synced"
+          if synced
+            "#{label} [#{synced.language}] license: #{synced.license_class}#{align_numbering_note(synced)}"
+          else
+            "#{label} not synced"
+          end
         end
       end
 
@@ -1005,7 +1009,8 @@ module Nabu
         when :no_match   then say "    #{witness.label} — not attested"
         else
           witness.sentences.each do |sentence|
-            say "    #{witness.label}  #{sentence.text}#{align_span_note(sentence, ref)}"
+            say "    #{witness.label}  #{sentence.text}" \
+                "#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
           end
         end
       end
@@ -1026,13 +1031,28 @@ module Nabu
 
         # A multi-document witness misses without a book to name — no title.
         say "#{witness.label}#{" — #{witness.title}" if witness.title} [#{witness.language}]   " \
-            "license: #{witness.license_class}"
+            "license: #{witness.license_class}#{align_numbering_note(witness)}"
         return say "  not attested (this witness lacks #{ref})" if witness.status == :no_match
 
         witness.sentences.each do |sentence|
-          say "  #{sentence.urn}#{align_span_note(sentence, ref)}"
+          say "  #{sentence.urn}#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
           say "    #{sentence.text}"
         end
+      end
+
+      # "  · Hebrew (Masoretic) numbering" — flags a witness whose psalter is
+      # numbered in a different system than the work vocabulary (P13-5), so the
+      # reader knows its refs were remapped to align.
+      def align_numbering_note(witness)
+        witness.numbering ? "   · #{witness.numbering} numbering" : ""
+      end
+
+      # "  [Hebrew (Masoretic): PSA 23.1]" — the witness's OWN ref for this
+      # sentence, shown only when its numbering diverges from the queried ref.
+      def align_native_note(witness, sentence)
+        return "" unless sentence.native_ref
+
+        "  [#{witness.numbering}: #{sentence.native_ref}]"
       end
 
       # "  [covers MARK 2.3, MARK 2.4]" — only when the sentence spans beyond

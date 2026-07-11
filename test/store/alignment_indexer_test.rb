@@ -208,6 +208,51 @@ module Store
       assert_equal ["LJE 5"], refs.select_map(:ref)
     end
 
+    # -- numbering remap (P13-5): the Psalms versification divergence -----------
+
+    NUMBERING_REGISTRY = <<~YAML
+      psalms:
+        witnesses:
+          - label: WEB (English)
+            extractor: cts-verse
+            numbering:
+              system: "Hebrew (Masoretic)"
+              ranges:
+                - { from: 1, to: 8, shift: 0 }
+                - { from: 11, to: 113, shift: -1 }
+                - { from: 148, to: 150, shift: 0 }
+            documents:
+              PSA: urn:nabu:eng-web:psa
+    YAML
+
+    def test_numbering_remaps_hebrew_psalm_refs_into_the_greek_work_vocabulary
+      # Hebrew 23.1 (the shepherd verse) indexes under Greek 22.1; the identity
+      # spans (1–8, 148–150) pass through unchanged.
+      doc = make_document(urn: "urn:nabu:eng-web:psa")
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:23.1", sequence: 0)
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:1.1", sequence: 1)
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:150.1", sequence: 2)
+
+      assert_equal 3, rebuild!(registry(NUMBERING_REGISTRY))
+      assert_equal [["PSA 1.1", "urn:nabu:eng-web:psa:1.1"],
+                    ["PSA 150.1", "urn:nabu:eng-web:psa:150.1"],
+                    ["PSA 22.1", "urn:nabu:eng-web:psa:23.1"]],
+                   refs.order(:ref).select_map(%i[ref passage_urn])
+    end
+
+    def test_numbering_drops_the_join_split_psalms_it_cannot_map_one_to_one
+      # Hebrew 9, 116, 147 fall in no range (the LXX joins/splits them): the
+      # remap returns nil, so those refs are NOT indexed — never false-aligned.
+      doc = make_document(urn: "urn:nabu:eng-web:psa")
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:9.1", sequence: 0)
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:116.1", sequence: 1)
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:147.1", sequence: 2)
+      make_verse(doc, urn: "urn:nabu:eng-web:psa:23.1", sequence: 3)
+
+      assert_equal 1, rebuild!(registry(NUMBERING_REGISTRY))
+      assert_equal ["PSA 22.1"], refs.select_map(:ref)
+    end
+
     def test_cts_verse_skips_a_passage_urn_that_does_not_extend_its_document_urn
       doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
       make_verse(doc, urn: "urn:nabu:oddball:1.1", sequence: 0)
