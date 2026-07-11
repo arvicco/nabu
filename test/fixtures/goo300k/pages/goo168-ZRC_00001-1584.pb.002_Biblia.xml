@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div xmlns="http://www.tei-c.org/ns/1.0"
+     type="pb"
+     xml:lang="sl-bohoric"
+     xml:id="goo168-ZRC_00001-1584.pb.002"
+     n="ZRC_00001-1584.pb.002_Biblia"
+     facs="#ZRC_00001-002">
+   <ab part="F" type="p" xml:id="goo168-ZRC_00001-1584.ab.10">
+      <s>
+         <choice>
+            <orig>
+               <w>Kadar</w>
+            </orig>
+            <reg>
+               <w lemma="kadar" ana="#C">kadar</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="ti" ana="#P">vas</w>
+         <c> </c>
+         <w lemma="biti" ana="#Va">bodo</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>pak</w>
+            </orig>
+            <reg>
+               <w lemma="pa" ana="#Q">pa</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>v'</w>
+            </orig>
+            <reg>
+               <w lemma="v" ana="#S">v</w>
+            </reg>
+         </choice>
+         <choice>
+            <orig>
+               <w>enim</w>
+            </orig>
+            <reg>
+               <w lemma="en" ana="#Ml">enem</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Méſti</w>
+            </orig>
+            <reg>
+               <w lemma="mesto" ana="#Ncn">mestu</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="preganjati" ana="#Vmp">preganjali</w>
+         <choice>
+            <orig>
+               <w>taku</w>
+            </orig>
+            <reg>
+               <w lemma="tako" ana="#C">tako</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>beshite</w>
+            </orig>
+            <reg>
+               <w lemma="bežati" ana="#Vmp">bežite</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>v'</w>
+            </orig>
+            <reg>
+               <w lemma="v" ana="#S">v</w>
+            </reg>
+         </choice>
+         <choice>
+            <orig>
+               <w>enu</w>
+            </orig>
+            <reg>
+               <w lemma="en" ana="#Ml">eno</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>drugu</w>
+            </orig>
+            <reg>
+               <w lemma="drug" ana="#Ml">drugo</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+      <c> </c>
+      <s>
+         <choice>
+            <orig>
+               <w>Riſnizhnu</w>
+            </orig>
+            <reg>
+               <w lemma="resnično" ana="#Rgp">resnično</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>jeſt</w>
+            </orig>
+            <reg>
+               <w lemma="jaz" ana="#P">jaz</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="ti" ana="#P">vam</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>povém</w>
+            </orig>
+            <reg>
+               <w lemma="povedati" ana="#Vme">povem</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>vy</w>
+            </orig>
+            <reg>
+               <w lemma="ti" ana="#P">vi</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nebote</w>
+            </orig>
+            <reg>
+               <w lemma="ne" ana="#Q">ne</w>
+               <c> </c>
+               <w lemma="biti" ana="#Va">boste</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Israelſka</w>
+            </orig>
+            <reg>
+               <w lemma="izraelski" ana="#Agp">izraelska</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Méſta</w>
+            </orig>
+            <reg>
+               <w lemma="mesto" ana="#Ncn">mesta</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="opraviti" ana="#Vme">opravili</w>
+         <pc>,</pc>
+         <c> </c>
+         <w lemma="dokler" ana="#C">dokler</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Syn</w>
+            </orig>
+            <reg>
+               <w lemma="sin" ana="#Ncm">sin</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>tiga</w>
+            </orig>
+            <reg>
+               <w lemma="ta" ana="#P">tega</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Zhloveka</w>
+            </orig>
+            <reg>
+               <w lemma="človek" ana="#Ncm">človeka</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="priti" ana="#Vme">pride</w>
+         <pc>.</pc>
+      </s>
+      <c> </c>
+      <s>
+         <choice>
+            <orig>
+               <w>Mlajſhi</w>
+            </orig>
+            <reg>
+               <w lemma="mlad" ana="#Agc">mlajši</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nej</w>
+            </orig>
+            <reg>
+               <w lemma="biti" ana="#Va">ni</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>zhes</w>
+            </orig>
+            <reg>
+               <w lemma="čez" ana="#S">čez</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ſvojga</w>
+            </orig>
+            <reg>
+               <w lemma="svoj" ana="#P">svojega</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Mojſtra</w>
+            </orig>
+            <reg>
+               <w lemma="mojster" ana="#Ncm">mojstra</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ni</w>
+            </orig>
+            <reg>
+               <w lemma="ni" ana="#C">ni</w>
+               <desc>
+                  <gloss>niti</gloss>
+                  <bibl>SSKJ</bibl>
+               </desc>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Hlapaz</w>
+            </orig>
+            <reg>
+               <w lemma="hlapec" ana="#Ncm">hlapec</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>zhes</w>
+            </orig>
+            <reg>
+               <w lemma="čez" ana="#S">čez</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Goſpuda</w>
+            </orig>
+            <reg>
+               <w lemma="gospod" ana="#Ncm">gospoda</w>
+            </reg>
+         </choice>
+         <pc>:</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Mlajſhimu</w>
+            </orig>
+            <reg>
+               <w lemma="mlad" ana="#Agc">mlajšemu</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="biti" ana="#Va">je</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>sadoſti</w>
+            </orig>
+            <reg>
+               <w lemma="zadosti" ana="#Rgp">zadosti</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>de</w>
+            </orig>
+            <reg>
+               <w lemma="da" ana="#C">da</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="biti" ana="#Va">je</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>kakòr</w>
+            </orig>
+            <reg>
+               <w lemma="kakor" ana="#C">kakor</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>njegou</w>
+            </orig>
+            <reg>
+               <w lemma="njegov" ana="#P">njegov</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Mojſter</w>
+            </orig>
+            <reg>
+               <w lemma="mojster" ana="#Ncm">mojster</w>
+            </reg>
+         </choice>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>inu</w>
+            </orig>
+            <reg>
+               <w lemma="in" ana="#C">in</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Hlapez</w>
+            </orig>
+            <reg>
+               <w lemma="hlapec" ana="#Ncm">hlapec</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>kakòr</w>
+            </orig>
+            <reg>
+               <w lemma="kakor" ana="#C">kakor</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>njegou</w>
+            </orig>
+            <reg>
+               <w lemma="njegov" ana="#P">njegov</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Goſpud</w>
+            </orig>
+            <reg>
+               <w lemma="gospod" ana="#Ncm">gospod</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+      <c> </c>
+      <s>
+         <choice>
+            <orig>
+               <w>So</w>
+            </orig>
+            <reg>
+               <w lemma="biti" ana="#Va">so</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="li" ana="#Q">li</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ony</w>
+            </orig>
+            <reg>
+               <w lemma="on" ana="#P">oni</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Hiſhniga</w>
+            </orig>
+            <reg>
+               <w lemma="hišen" ana="#Agp">hišnega</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Ozheta</w>
+            </orig>
+            <reg>
+               <w lemma="oče" ana="#Ncm">očeta</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Beelzebuba</w>
+            </orig>
+            <reg>
+               <w lemma="belcebub" ana="#Npm">belcebuba</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="imenovati" ana="#Vmb">imenovali</w>
+         <pc>,</pc>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>kuliku</w>
+            </orig>
+            <reg>
+               <w lemma="koliko" ana="#Rgp">koliko</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>vezh</w>
+            </orig>
+            <reg>
+               <w lemma="veliko" ana="#Rgc">več</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="biti" ana="#Va">bodo</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ony</w>
+            </orig>
+            <reg>
+               <w lemma="on" ana="#P">oni</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="njegov" ana="#P">njegovo</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>drushino</w>
+            </orig>
+            <reg>
+               <w lemma="družina" ana="#Ncf">družino</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>taku</w>
+            </orig>
+            <reg>
+               <w lemma="tako" ana="#Rgp">tako</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="imenovati" ana="#Vmb">imenovali</w>
+         <pc>?</pc>
+      </s>
+      <c> </c>
+      <s>
+         <choice>
+            <orig>
+               <w>Satu</w>
+            </orig>
+            <reg>
+               <w lemma="zato" ana="#Rgp">zato</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>ſe</w>
+            </orig>
+            <reg>
+               <w lemma="se" ana="#P">se</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nebujte</w>
+            </orig>
+            <reg>
+               <w lemma="ne" ana="#Q">ne</w>
+               <c> </c>
+               <w lemma="bati" ana="#Vmp">bojte</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="pred" ana="#S">pred</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>nymi</w>
+            </orig>
+            <reg>
+               <w lemma="on" ana="#P">njimi</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+   </ab>
+</div>

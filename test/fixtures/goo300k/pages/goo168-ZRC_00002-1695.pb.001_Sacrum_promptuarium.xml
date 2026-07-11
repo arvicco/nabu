@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div xmlns="http://www.tei-c.org/ns/1.0"
+     type="pb"
+     xml:lang="sl-bohoric"
+     xml:id="goo168-ZRC_00002-1695.pb.001"
+     n="ZRC_00002-1695.pb.001_Sacrum_promptuarium"
+     facs="#ZRC_00002-001">
+   <ab type="head" xml:id="goo168-ZRC_00002-1695.ab.1">
+      <s>
+         <choice>
+            <orig>
+               <w>NA</w>
+            </orig>
+            <reg>
+               <w lemma="na" ana="#S">na</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>NOVIGA</w>
+            </orig>
+            <reg>
+               <w lemma="nov" ana="#Agp">novega</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>LEJTA</w>
+            </orig>
+            <reg>
+               <w lemma="leto" ana="#Ncn">leta</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>DAN</w>
+            </orig>
+            <reg>
+               <w lemma="dan" ana="#Ncm">dan</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+      <c> </c>
+      <s>
+         <c> </c>
+         <lb/>
+         <choice>
+            <orig>
+               <w>Vocatum</w>
+            </orig>
+            <reg>
+               <w lemma="vocatum" ana="#Xf">vocatum</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>eſt</w>
+            </orig>
+            <reg>
+               <w lemma="est" ana="#Xf">est</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Nomen</w>
+            </orig>
+            <reg>
+               <w lemma="nomen" ana="#Xf">nomen</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="ejus" ana="#Xf">ejus</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>JESUS</w>
+            </orig>
+            <reg>
+               <w lemma="jesus" ana="#Xf">jesus</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+      <c> </c>
+      <s>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Je</w>
+            </orig>
+            <reg>
+               <w lemma="biti" ana="#Va">je</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <w lemma="on" ana="#P">njega</w>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>Ime</w>
+            </orig>
+            <reg>
+               <w lemma="ime" ana="#Ncn">ime</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>bilu</w>
+            </orig>
+            <reg>
+               <w lemma="biti" ana="#Va">bilo</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>imenouanu</w>
+            </orig>
+            <reg>
+               <w lemma="imenovan" ana="#App">imenovano</w>
+            </reg>
+         </choice>
+         <c> </c>
+         <choice>
+            <orig>
+               <w>JESUS</w>
+            </orig>
+            <reg>
+               <w lemma="jezus" ana="#Npm">jezus</w>
+            </reg>
+         </choice>
+         <pc>.</pc>
+      </s>
+   </ab>
+   <ab type="head" xml:id="goo168-ZRC_00002-1695.ab.2">
+      <s part="F">
+         <w lemma="luc." ana="#Y">luc.</w>
+      </s>
+      <c> </c>
+      <s part="F">
+         <w lemma="c." ana="#Y">c.</w>
+         <c> </c>
+         <w lemma="2." ana="#Md">2.</w>
+      </s>
+   </ab>
+</div>

@@ -69,6 +69,13 @@ module Nabu
     #        the generic mark strip. Trade-off documented in conventions.md
     #        §9: a determinative sits as its own token between the signs it
     #        classifies.
+    #   sl   Bohorič long s ſ→s (P13-9): plain downcase leaves U+017F alone
+    #        (only Unicode FULL case folding maps it to s), so without this
+    #        rule every pre-19th-c. Slovene word containing ſ is unfindable
+    #        by a modern query. Exactly the grc ς→σ situation: one letter,
+    #        two positional glyphs. Bohorič digraphs (zh=č, ſh=š) are NOT
+    #        rewritten — that is orthographic modernization, an enrichment,
+    #        not a fold; haček letters fall to the generic mark strip.
     #   ang  æ→"ae", þ→"th", ð→"th" (P12-3): the ASCII transliterations a
     #        user actually types, and Bosworth-Toller's own alphabetization —
     #        B-T interfiles þ/ð as ONE letter and its dump's <sort> field
@@ -89,7 +96,8 @@ module Nabu
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
       "sux" => CUNEIFORM_FOLD,
-      "ang" => OLD_ENGLISH_FOLD
+      "ang" => OLD_ENGLISH_FOLD,
+      "sl" => ->(str) { str.tr("ſ", "s") }
     }.freeze
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at

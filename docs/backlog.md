@@ -3480,7 +3480,7 @@ LEMMA-ROW EVIDENCE: fixture load → `passage_lemmas` orv rows via the UNCHANGED
 Indexer plumbing; the opening NOUN lemma `артыкулъ` "article" at
 `…:StatutVKL1566-1` is attested by the pristine uppercase surface form `АРТЫКУЛЪ`.
 
-## P13-9 · Slovenian: goo300k + IMP  [tier: opus] [status: pending] [deps: P13-2]
+## P13-9 · Slovenian: goo300k + IMP  [tier: opus] [status: done] [deps: P13-2]
 Owner scope ruling (2026-07-11): "there isn't much before Early Modern
 Slovenian at all, so it's in-scope." Survey-II picks #3/#4: goo300k
 (CLARIN.SI, gold-annotated, verbatim CC BY 4.0, 294k words 1584–1899) and
@@ -3490,6 +3490,52 @@ maps formats (TEI? vertical? — survey II has the leads), decides one
 adapter family or two, proposes which of the two corpora first (or both)
 with sizes; STOP — owner gate. Phase B per approval. Registry
 enabled:false; language code sl (historical); 02-sources rows; worklog.
+
+**OWNER-APPROVED 2026-07-11: option B + orig-canonical.** Both corpora via
+the one shared imp-tei parser family — goo300k the gold flagship, IMP the
+thin silver adapter with the automatic-annotation quality labeled honestly;
+gold lemma rows feed passage_lemmas from goo300k ONLY (default upheld: IMP
+text searchable without lemma rows, decision documented in the adapter +
+registry + 02-sources row 45). Canonical/annotation split confirmed:
+historical orig spelling IS the passage text, reg/lemma/msd ride as
+annotations.
+
+### Findings (P13-9, 2026-07-11 — shipped)
+
+Phase A verified both CLARIN.SI records page-level: auth-free DSpace zip
+bitstreams (goo300k-tei.zip 7.1 MB; IMP-corpus-tei.zip 150.31 MB), licenses
+verbatim ("Creative Commons - Attribution 4.0 International (CC BY 4.0)" /
+"Creative Commons - Attribution-ShareAlike 4.0 International (CC BY-SA
+4.0)"), and the actual TEI of both corpora (samples downloaded, schemas
+read). KEY FINDING — the overlap: same documents, complementary layers.
+goo300k = SAMPLED pages with GOLD annotation ("fully manualy validated",
+README sic; samplingDecl per file); IMP = FULL texts with AUTOMATIC
+annotation (deposit verbatim: "a fair amount of errors"); goo300k's gold
+labels do NOT exist inside IMP. Same sigil identity both sides
+(ZRC_00001-1584 = Dalmatin's Biblia) → alt-editions across sources,
+conventions §3, never dedupe.
+
+Shipped: ImpTeiParser (imp-tei family; streaming Reader; block = any
+element with direct <s> children; text = the historical orig surface from
+<orig>/bare <w>/<pc>/<c> leaves — reg NEVER enters text; :gold mode emits
+tokens {form=orig surface, reg, lemma, msd (# stripped), gloss/gloss_bibl},
+:none emits nothing; #header peeks sourceDesc bibl for titles). Goo300k
+adapter (xi:include page walk in root order, upstream document-global ab.N
+citations, urn:nabu:goo300k:<sigil>-<year>; ZipFetch single zip). Imp
+adapter (self-contained *-ana.xml, un-id'd <p>/<head> → per-tag counters
+p.N/head.N — stable, deposit frozen 2015; TEXT ONLY per the silver
+decision). NEW conventions §9 fold: sl ſ→s (Bohorič long s survives the
+generic fold — plain downcase is not full case folding — making every
+ſ-bearing word unfindable otherwise; digraph modernization deliberately NOT
+folded). Gold lemma flow proven end-to-end in tests: fixture → Loader →
+Indexer → passage_lemmas rows (joger attested by pristine "Iogre"; svoj by
+"ſvoje, ſvojga"). Fixtures: goo300k 2 docs (1584 Biblia 2 pages incl. the
+cross-page ab part="F" quirk; 1695 Sacrum promptuarium), imp 2 docs (the
+1584 alt-edition trim + WIKI00290-1855 whole). Registry goo300k + imp,
+enabled:false, sync_policy manual. Deferred honestly: IMP's reg
+(modernized) layer could someday power a modernized-search enrichment —
+out of scope here; imp25k lexicon (11356/1032) = normalization data, not
+dictionary-shelf.
 
 ## P13-10 · Wiktionary-OCS dictionary (kaikki) — and the reconstruction seed  [tier: opus] [status: pending] [deps: P13-2]
 Owner (2026-07-11): "Wiktionary is a good start, could be used for other
