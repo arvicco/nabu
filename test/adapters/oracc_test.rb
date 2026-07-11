@@ -18,8 +18,12 @@ module Adapters
 
     FIXTURES = Nabu::TestSupport.fixtures("oracc")
 
+    # The conformance instance is translations-enabled (the registry shape
+    # once sources.yml carries `translations: true`), so the -en sibling
+    # documents run the whole conformance gauntlet too. crawl_delay 0 keeps
+    # the WebMock'd fetch tests instant.
     def conformance_adapter
-      Nabu::Adapters::Oracc.new
+      Nabu::Adapters::Oracc.new(translations: true, crawl_delay: 0)
     end
 
     def conformance_workdir
@@ -32,14 +36,57 @@ module Adapters
 
     # -- discover -------------------------------------------------------------
 
-    def test_discover_yields_the_four_non_empty_texts_sorted_by_urn
+    def test_discover_yields_tablets_and_their_translations_sorted_by_urn
       refs = conformance_adapter.discover(FIXTURES).to_a
       assert_equal %w[
         urn:nabu:oracc:etcsri:Q001299
         urn:nabu:oracc:etcsri:Q004151
         urn:nabu:oracc:rimanum:P405134
+        urn:nabu:oracc:rimanum:P405134-en
         urn:nabu:oracc:rimanum:P405432
+        urn:nabu:oracc:rimanum:P405432-en
+        urn:nabu:oracc:saao-saa01:P224395
+        urn:nabu:oracc:saao-saa01:P224395-en
       ], refs.map(&:id)
+    end
+
+    def test_discover_without_the_translations_flag_is_inert
+      # The registry default (no `translations: true`) must behave exactly as
+      # before P13-4: tablets only, even with html-en fixtures on disk.
+      ids = Nabu::Adapters::Oracc.new.discover(FIXTURES).map(&:id)
+      assert_equal %w[
+        urn:nabu:oracc:etcsri:Q001299
+        urn:nabu:oracc:etcsri:Q004151
+        urn:nabu:oracc:rimanum:P405134
+        urn:nabu:oracc:rimanum:P405432
+        urn:nabu:oracc:saao-saa01:P224395
+      ], ids
+    end
+
+    def test_discover_translation_refs_carry_kind_corpusjson_and_title
+      ref = conformance_adapter.discover(FIXTURES)
+                               .find { |r| r.id == "urn:nabu:oracc:saao-saa01:P224395-en" }
+      assert_equal "translation", ref.metadata["kind"]
+      assert_equal "saao-saa01", ref.metadata["project"]
+      assert ref.metadata["corpusjson"].end_with?("saao-saa01/saa01/corpusjson/P224395.json"),
+             "the ref must carry the sibling corpusjson path for ref→label alignment"
+      assert_equal "SAA 01 175 (English translation)", ref.metadata["title"]
+    end
+
+    def test_discover_skips_orphan_html_without_a_live_corpusjson
+      Dir.mktmpdir do |root|
+        FileUtils.cp_r(File.join(FIXTURES, "rimanum"), File.join(root, "rimanum"))
+        orphans = File.join(root, "html-en", "rimanum")
+        FileUtils.mkdir_p(orphans)
+        FileUtils.cp(File.join(FIXTURES, "html-en", "rimanum", "P405432.html"),
+                     File.join(orphans, "P999999.html"))
+        adapter = conformance_adapter
+        ids = adapter.discover(root).map(&:id)
+        refute_includes ids, "urn:nabu:oracc:rimanum:P999999-en",
+                        "a translation without its tablet is unrenderable — skipped by rule"
+        assert_operator adapter.discovery_skips(root).skipped_by_rule, :>, 0,
+                        "the orphan must be counted, never silent"
+      end
     end
 
     def test_discover_skips_catalog_only_empty_corpusjson_files
@@ -124,6 +171,31 @@ module Adapters
       assert_equal "2(BARIG) ZI₃ US₂ a-na GEŠBUN", document.first.text
     end
 
+    def test_parse_routes_translation_refs_to_the_translation_parser
+      adapter = conformance_adapter
+      ref = adapter.discover(FIXTURES).find { |r| r.id.end_with?("P224395-en") }
+      document = adapter.parse(ref)
+      assert_equal "eng", document.language
+      assert_equal "attribution", document.license_override,
+                   "the prose is CC BY-SA project content, not the JSON build's CC0"
+      assert_equal "SAA 01 175 (English translation)", document.title
+      assert_equal "urn:nabu:oracc:saao-saa01:P224395-en:o.1", document.first.urn
+      assert_includes document.first.text, "To the king, my lord"
+    end
+
+    def test_loaded_translation_documents_carry_the_attribution_override
+      catalog = store_test_db
+      source = Nabu::Store::Source.create(
+        slug: "oracc", name: "ORACC", adapter_class: "Nabu::Adapters::Oracc", license_class: "open"
+      )
+      Nabu::Store::Loader.new(db: catalog, source: source)
+                         .load_from(conformance_adapter, workdir: FIXTURES, full: true)
+      translation = catalog[:documents].where(urn: "urn:nabu:oracc:saao-saa01:P224395-en").first
+      assert_equal "attribution", translation.fetch(:license_override)
+      tablet = catalog[:documents].where(urn: "urn:nabu:oracc:saao-saa01:P224395").first
+      assert_nil tablet.fetch(:license_override), "tablets inherit the source's open class"
+    end
+
     # -- lemma plumbing (cf → passage_lemmas via the shared Indexer) ----------
 
     def test_fixture_load_produces_lemma_rows_for_citation_forms
@@ -160,11 +232,20 @@ module Adapters
     RIMANUM_URL = "https://oracc.museum.upenn.edu/json/rimanum.zip"
     ETCSRI_URL = "https://oracc.museum.upenn.edu/json/etcsri.zip"
 
-    # The two projects with checked-in corpus fixtures; the remaining in-scope
-    # projects (P11-6 expansion — saao/saa01, rinap/rinap1, dcclt) are stubbed
-    # with a metadata-only envelope (no cdl fixtures invented, 0 ingestible
-    # texts) so fetch's per-project plumbing is exercised across the full list.
-    FIXTURED_PROJECTS = %w[rimanum etcsri].freeze
+    # The three projects with checked-in corpus fixtures (saao/saa01 with its
+    # REAL nested zip root — saao-saa01/saa01/corpusjson, the P11-7 shape);
+    # the remaining in-scope projects are stubbed with a metadata-only
+    # envelope (no cdl fixtures invented, 0 ingestible texts, formats REMOVED
+    # so the translation crawl has nothing to request there) so fetch's
+    # per-project plumbing is exercised across the full list.
+    FIXTURED_PROJECTS = %w[rimanum etcsri saao/saa01].freeze
+
+    # The stage-1 crawl endpoints for the saao/saa01 fixture (its trimmed
+    # metadata formats.tr-en lists exactly these two): P224395 serves the real
+    # fragment, P224485 the recorded soft-404 shape (a 200 whose body is a
+    # literal "404\n" — how ORACC answers for a missing per-text page).
+    SAA_HTML_URL = "https://oracc.museum.upenn.edu/saao/saa01/P224395/html"
+    SAA_MISSING_URL = "https://oracc.museum.upenn.edu/saao/saa01/P224485/html"
 
     def test_fetch_downloads_and_unpacks_both_project_zips
       Dir.mktmpdir do |root|
@@ -176,11 +257,19 @@ module Adapters
         assert File.file?(File.join(workdir, "rimanum", "metadata.json"))
         assert File.file?(File.join(workdir, "rimanum", "corpusjson", "P405432.json"))
         assert File.file?(File.join(workdir, "etcsri", "corpusjson", "Q004151.json"))
+        assert File.file?(File.join(workdir, "saao-saa01", "saa01", "corpusjson", "P224395.json")),
+               "the subproject zip unpacks with its real nested root"
         assert_match(/\A\h{64}\z/, report.sha, "sha pins the (last) zip's sha256")
         assert_match(/rimanum=\h{12}/, report.notes)
         assert_match(/etcsri=\h{12}/, report.notes)
         assert_match(/1 catalog-only \(empty\)/, report.notes,
                      "the empty-corpusjson count is the honest sync note")
+        # Stage-1 translation crawl (saao scope): the translated fragment
+        # lands OUTSIDE the zip-managed tree; the soft-404 text is counted
+        # missing, its non-page never written.
+        assert File.file?(File.join(workdir, "html-en", "saao-saa01", "P224395.html"))
+        refute File.exist?(File.join(workdir, "html-en", "saao-saa01", "P224485.html"))
+        assert_match(/saao-saa01 html-en: 1 fetched, 0 cached, 1 missing/, report.notes)
         # repos pins every in-scope project by its zip URL, subproject
         # slash-paths hyphen-flattened (saao/saa01 → saao-saa01.zip).
         assert_equal Nabu::Adapters::Oracc::PROJECTS.map { |project|
@@ -201,10 +290,40 @@ module Adapters
         stub_request(:get, ETCSRI_URL)
           .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
           .to_return(status: 304)
+        stub_request(:get, "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/saao-saa01.zip")
+          .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+          .to_return(status: 304)
 
         second = conformance_adapter.fetch(workdir)
         assert_equal first.sha, second.sha, "an unchanged upstream keeps the pinned sha"
         assert File.file?(File.join(workdir, "rimanum", "corpusjson", "P405432.json"))
+        # Crawl resumability: an unchanged build re-fetches only what is
+        # MISSING locally — the already-crawled fragment is cached (one GET
+        # across both fetches), the soft-404 text is honestly retried.
+        assert_requested :get, SAA_HTML_URL, times: 1
+        assert_requested :get, SAA_MISSING_URL, times: 2
+        assert_match(/saao-saa01 html-en: 0 fetched, 1 cached, 1 missing/, second.notes)
+      end
+    end
+
+    def test_fetch_recrawls_translations_when_the_project_zip_changed
+      Dir.mktmpdir do |root|
+        stub_project_zips(root)
+        workdir = File.join(root, "work")
+        conformance_adapter.fetch(workdir)
+        # Same stubs (200 + same Last-Modified replayed): ZipFetch re-downloads
+        # (no 304), so the build counts as changed and the crawl refreshes the
+        # fragment even though it exists locally.
+        conformance_adapter.fetch(workdir)
+        assert_requested :get, SAA_HTML_URL, times: 2
+      end
+    end
+
+    def test_fetch_wraps_a_crawl_http_failure_in_fetch_error
+      Dir.mktmpdir do |root|
+        stub_project_zips(root)
+        stub_request(:get, SAA_HTML_URL).to_return(status: 500)
+        assert_raises(Nabu::FetchError) { conformance_adapter.fetch(File.join(root, "work")) }
       end
     end
 
@@ -236,8 +355,10 @@ module Adapters
         adapter = conformance_adapter
         adapter.fetch(workdir)
 
-        # Dropping 1 of 4 ingestible texts = 25% > the 20% threshold.
-        stub_project_zips(root, drop: "rimanum/corpusjson/P405432.json")
+        # Post-crawl the tree holds 6 ingestible documents (5 tablets + the
+        # crawled saa01 -en); dropping 2 = 33% > the 20% threshold.
+        stub_project_zips(root, drop: ["rimanum/corpusjson/P405432.json",
+                                       "rimanum/corpusjson/P405134.json"])
         assert_raises(Nabu::SyncAborted) { adapter.fetch(workdir) }
         assert File.file?(File.join(workdir, "rimanum", "corpusjson", "P405432.json")),
                "a tripped breaker must leave the tree byte-unchanged"
@@ -264,33 +385,48 @@ module Adapters
     LAST_MODIFIED = "Fri, 28 Jun 2024 12:46:36 GMT"
 
     # Zip the checked-in fixture projects (real upstream payloads) into
-    # <root>/zips and stub both project URLs with the recorded response shape
-    # (200, application/zip, Last-Modified). +drop+ omits one entry, simulating
-    # an upstream deletion in the next build.
-    def stub_project_zips(root, drop: nil)
-      zips = File.join(root, "zips-#{drop ? 'dropped' : 'full'}")
+    # <root>/zips and stub every project URL with the recorded response shape
+    # (200, application/zip, Last-Modified), plus the two stage-1 crawl
+    # endpoints. +drop+ omits entries (path(s) relative to the zips root),
+    # simulating upstream deletions in the next build.
+    def stub_project_zips(root, drop: [])
+      drops = Array(drop)
+      zips = File.join(root, "zips-#{drops.empty? ? 'full' : 'dropped'}")
       Nabu::Adapters::Oracc::PROJECTS.each do |project|
         slug = project.tr("/", "-")
-        url = "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/#{slug}.zip"
         staging = File.join(zips, slug)
         FileUtils.mkdir_p(File.dirname(staging))
         if FIXTURED_PROJECTS.include?(project)
-          FileUtils.cp_r(File.join(FIXTURES, project), staging)
+          FileUtils.cp_r(File.join(FIXTURES, slug), staging)
         else
-          # No corpus fixture: ship only a real CC0 metadata.json (the license
-          # gate the adapter reads) — a valid, empty project envelope, not
-          # invented cdl data.
-          FileUtils.mkdir_p(staging)
-          FileUtils.cp(File.join(FIXTURES, "rimanum", "metadata.json"), staging)
+          stub_envelope_project(staging)
         end
-        FileUtils.rm_f(File.join(zips, drop)) if drop&.start_with?("#{slug}/")
+        drops.each { |dropped| FileUtils.rm_f(File.join(zips, dropped)) if dropped.start_with?("#{slug}/") }
         zip_path = File.join(zips, "#{slug}.zip")
         Nabu::Shell.run("zip", "-q", "-r", zip_path, slug, chdir: zips)
-        stub_request(:get, url).to_return(
+        stub_request(:get, "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/#{slug}.zip").to_return(
           status: 200, body: File.binread(zip_path),
           headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
         )
       end
+      stub_request(:get, SAA_HTML_URL).to_return(
+        status: 200, body: File.binread(File.join(FIXTURES, "html-en", "saao-saa01", "P224395.html")),
+        headers: { "Content-Type" => "text/html; charset=utf-8" }
+      )
+      stub_request(:get, SAA_MISSING_URL).to_return(
+        status: 200, body: "404\n", headers: { "Content-Type" => "text/html; charset=utf-8" }
+      )
+    end
+
+    # No corpus fixture: ship only a real CC0 metadata.json (the license gate
+    # the adapter reads) with its formats lists REMOVED — a valid, empty
+    # project envelope with nothing for the translation crawl to request; no
+    # cdl data invented.
+    def stub_envelope_project(staging)
+      FileUtils.mkdir_p(staging)
+      metadata = JSON.parse(File.read(File.join(FIXTURES, "rimanum", "metadata.json")))
+      metadata.delete("formats")
+      File.write(File.join(staging, "metadata.json"), JSON.generate(metadata))
     end
 
     # A workdir whose rimanum metadata.json declares +license+ instead of CC0.

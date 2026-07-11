@@ -65,7 +65,8 @@ Read the corpus by urn — the pristine edition text behind a search hit:
   bounded by `max_passages` (default 50, cap 200) with a truncation note;
 - an inclusive **range** (`<document-urn>:1.1-1.10`) → a sequence-ordered slice;
 - `parallel: true` (with `parallel_lang`, default `eng`) → the same work's
-  translation, aligned line by line / block by block.
+  translation, aligned line by line / block by block (CTS editions and, since
+  P13-4, ORACC tablets ↔ their `-en` sibling documents).
 
 Withdrawn and retired-upstream items appear, flagged.
 

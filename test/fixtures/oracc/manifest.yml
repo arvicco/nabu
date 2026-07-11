@@ -85,3 +85,43 @@ files:
     copied: 2026-07-09
     whole: true
     trim: none (smallest non-empty Q at extraction time — the minimal-document case, kept whole)
+  # -- P13-4 translation fixtures (2026-07-11) --------------------------------
+  - path: saao-saa01/saa01/corpusjson/P224395.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/saao-saa01.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/saao-saa01.zip
+    copied: 2026-07-11
+    whole: true
+    trim: none (the tablet side of the P13-4 translation pair; NESTED root path is the real zip layout)
+  - path: saao-saa01/saa01/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/saao-saa01.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/saao-saa01.zip
+    copied: 2026-07-11
+    whole: false
+    trim: formats lists reduced to P224395/P224485 (tr-en) + X010028 (atf-only); envelope + config verbatim (20,799 B -> ~3 KB)
+  - path: saao-saa01/saa01/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/saao-saa01.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/saao-saa01.zip
+    copied: 2026-07-11
+    whole: false
+    trim: members/summaries reduced to P224395, P224485; envelope keys verbatim
+  - path: html-en/saao-saa01/P224395.html
+    url: https://oracc.museum.upenn.edu/saao/saa01/P224395/html
+    retrieved: 2026-07-11
+    whole: true
+    trim: none (official per-text fragment — the P13-4 translation carrier; whole, trimming rendered HTML risks structural lies)
+  - path: html-en/rimanum/P405432.html
+    url: https://oracc.museum.upenn.edu/rimanum/P405432/html
+    retrieved: 2026-07-11
+    whole: true
+    trim: none (translation fragment of an already-fixtured tablet)
+  - path: html-en/rimanum/P405134.html
+    url: https://oracc.museum.upenn.edu/rimanum/P405134/html
+    retrieved: 2026-07-11
+    whole: true
+    trim: none (primed/seal label anchors)
