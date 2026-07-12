@@ -3857,6 +3857,114 @@ tracking? FTS5 delete+insert granularity?). Report with numbers. STOP —
 owner decides implement-now vs re-check-later (the honest answer may be
 "doesn't hurt yet"). Phase B only if commissioned.
 
+### Phase A — MEASUREMENT REPORT (2026-07-12, opus)
+
+Method: copied the live catalog.sqlite3 (3.9 GB) to scratch (APFS clone),
+ran the PRODUCTION `Store::Indexer` / `AlignmentIndexer` code with per-phase
+monotonic timers around each seam (reused `index_row`, `lemma_rows`,
+`live_passages`, `AlignmentIndexer.rebuild!` verbatim — only timing added).
+Apple Silicon, warm page cache, 2 full runs + a 5-point FTS scaling probe.
+The instrumented rebuild reproduced the live index EXACTLY (3,757,019 FTS
+rows / 2,513,786 lemma rows / 130,543 alignment refs), confirming the copy
+and the timed path are faithful. Live db untouched (read-only throughout).
+
+**Current live corpus (read-only counts):** 3,757,019 live passages · 84,423
+live documents · 21 sources · 383,014 passages carry lemma annotations
+(10.2%) · 79,890 carry citation_part.
+
+**Current per-sync reindex cost — MEASURED (~70 s wall, +~4 s ruby startup):**
+
+| phase | time | share |
+|---|---|---|
+| DDL (drop+create FTS/lemma/align tables) | 0.002 s | — |
+| catalog stream / iterate (`live_passages`) | 6–10 s | ~11% |
+| **FTS5 insert** | **~36–37 s** | **~53%** |
+| lemma build (JSON parse + Normalize.fold) | ~11.7 s | ~17% |
+| lemma insert | ~11.6 s | ~16% |
+| alignment refs (P11-3, whole phase) | ~1.3 s | ~2% |
+| **TOTAL** | **~68–71 s** | |
+
+FTS5 insert dominates (~half). Lemma build+insert together ~23 s (~33%).
+Alignment is noise (~1.3 s — it walks only registry witnesses, not the
+corpus). NOTE: there is NO ANALYZE / FTS5 `optimize` / merge step in the
+path — every rebuild produces a fresh, clean (if un-optimized) index. That
+matters for the incremental trade-off below.
+
+**Growth curve — EMPIRICAL (FTS build over first N passages by id):**
+
+| N | FTS insert | marginal |
+|---|---|---|
+| 1.0M | 15.8 s | — |
+| 2.0M | 22.9 s | ~7.1 µs/row |
+| 3.0M | 31.8 s | ~8.9 µs/row |
+| 3.76M | 37.3 s | ~7.2 µs/row |
+
+FTS marginal cost is ~7–9 µs/row and creeps upward with N (the FTS5
+segment-merge log factor): **near-linear, mildly super-linear**. Lemma cost
+tracks the ANNOTATED-passage count (currently 383k → 2.5M rows), NOT total N.
+Alignment tracks registry witnesses, NOT N. So the extrapolation basis,
+stated honestly: overall ≈ **linear in total passages, FTS-dominated, with a
+gentle super-linear FTS creep**; lemma/alignment are decoupled from N.
+
+**Projection to 5M / 10M passages** (two scenarios, because lemma growth
+depends on whether the gold treebanks grow — they are a finite scholarly
+resource, so scenario B is the likelier one):
+
+| | 3.76M (now) | 5M | 10M |
+|---|---|---|---|
+| A · annotated fraction held at 10% | ~70 s | ~90 s (1.5 min) | ~180 s (3 min) |
+| B · treebanks bounded (lemma flat ~23 s) | ~70 s | ~84 s (1.4 min) | ~140 s (2.4 min) |
+
+**Where the pain sits.** Two distinct axes:
+1. *Absolute time* — ~70 s now is annoying-but-tolerable for an interactive
+   operator; it crosses ~2 min around 6–7M passages, ~2.5–3 min at 10M.
+2. *Amplification (the real waste)* — the reindex is corpus-wide but is paid
+   on EVERY per-source sync. Per-source live passage counts: papyri-ddbdp
+   921k (24.5%), gretil 703k, imp 405k … down to ccmh 11k (0.3%), freising
+   2,037 (0.05%). A one-source ccmh sync pays the full ~70 s to rebuild
+   3.76M rows — a **~340× over-index**. Even syncing the LARGEST source
+   re-does 75% of unrelated work.
+
+**Incremental design options (IF commissioned — sketch + risk):**
+1. **Per-source reindex** (improvements §4.2's own sketch): delete the
+   source's rows (by its document-urn→passage set), reinsert just that
+   source. Win: ~4× (papyri worst case) to ~300× (small sources). Coarse,
+   correct boundary — a whole source is recomputed, so NO per-document
+   dirty-tracking bug surface. Consistency risk: passage_ids are re-minted
+   per load, so the delete must key on the source's document urns (the
+   FTS/lemma/align tables carry urn UNINDEXED — usable), and it must run
+   inside the same reindex step, after the load. Modest.
+2. **Dirty-document tracking**: the Loader already knows added/revised/
+   withdrawn docs per run — reindex only those. Finest granularity, biggest
+   win for a 1-doc fix. Risk: the dirty set must be EXACT; a missed doc = a
+   silently stale index (wrong search results, not a crash) — this forfeits
+   the rebuild-everything correctness guarantee, and reindex currently sits
+   OUTSIDE the RunRecorder transaction on purpose, so coupling the dirty set
+   to the catalog write is new plumbing.
+3. **FTS5 granular delete+insert** (tombstone deletes on the shadow table):
+   accumulates tombstones/segments and REQUIRES a periodic `('optimize')`
+   maintenance step the codebase does not currently have. Trades the most
+   simplicity (the clean-per-rebuild property) for the least additional gain
+   over option 1. Not recommended as a first move.
+
+The current rebuild-everything is PROVABLY correct: index = f(catalog),
+recomputed from scratch, drift impossible. Every incremental option adds a
+dirty-set obligation whose failure mode is SILENT. Given the corpus is the
+permanent asset and search correctness is load-bearing, the bar is high.
+
+**RECOMMENDATION: re-check-at-N, do NOT implement now.** At ~70 s the full
+rebuild is annoying-but-tolerable and provably correct; §4.2's own verdict
+("do it when the wait annoys, not before") holds and the near-linear curve
+gives clear runway. Concrete re-check trigger: when the interactive reindex
+crosses **~2 min (≈6–7M passages)**, OR sooner if per-source sync cadence
+rises enough that the ~340× amplification becomes the daily annoyance rather
+than the absolute time. WHEN commissioned, do **option 1 (per-source
+reindex) first** — it captures most of the win, keeps a coarse correctness
+boundary, and needs no FTS5 tombstone management; reserve option 2 for later,
+skip option 3.
+
+**MEASUREMENT REPORT — AWAITING OWNER DECISION**
+
 ## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: pending] [deps: P14-1..6]
 The owner wants A reviewed thoroughly before committing. NOT an
 implementation packet: a design document (docs/intertext-design.md) for
