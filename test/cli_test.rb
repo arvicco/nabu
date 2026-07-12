@@ -481,6 +481,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P15-7: `health --backfill-pins` records a ledger pin from the local git
+  # clone (no network, read-only on canonical/) and is idempotent — a second
+  # run finds nothing to do.
+  def test_health_backfill_pins_from_local_clone_and_idempotent
+    Dir.mktmpdir("nabu-cli-backfill") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "one.txt"), "Iliad\n")
+      Nabu::Shell.run("git", "-C", corpus, "init", "-q")
+      Nabu::Shell.run("git", "-C", corpus, "add", ".")
+      Nabu::Shell.run("git", "-C", corpus, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+
+      out, _err, status = with_config(config) { run_cli(%w[health --backfill-pins]) }
+      assert_nil status
+      assert_match(/corpus\s+pinned/, out)
+      assert_match(/backfilled-from-local-clone/, out)
+      assert_match(/recorded 1 pin/, out)
+
+      again, = with_config(config) { run_cli(%w[health --backfill-pins]) }
+      assert_match(/nothing to backfill/, again)
+    end
+  end
+
   # P14-12: `status --remote` runs the upstream probe inline (the SAME stubbed
   # ls-remote path as `health --remote`), persists the verdict, then renders the
   # up= column from that fresh cache — the one-command informed-update flow.
