@@ -133,6 +133,51 @@ module Query
       assert(results.all? { |r| r.headword.start_with?("*") })
     end
 
+    # -- bare-form fallback: the proto form typed directly (P14-10) --------------------
+
+    def test_bare_proto_form_falls_back_to_headword_lookup_when_the_reflex_path_misses
+      rebuild!
+      # *gʷʰew- names no attested reflex in the catalog, so the reflex path
+      # misses; unstarred input then falls back to the reconstruction shelves'
+      # own headwords (the asterisk is optional — zsh globs a bare *).
+      results = etym("gʷʰew-")
+      assert_equal 1, results.size
+      root = results.first
+      assert_equal "urn:nabu:dict:wiktionary-ine-pro:gʷʰew-:root", root.urn
+      assert_equal "*gʷʰew-", root.headword
+      assert_nil root.matched_reflex, "a direct headword hit, not a reflex walk"
+    end
+
+    def test_bare_fallback_is_trailing_hyphen_tolerant
+      rebuild!
+      # Root entries store a trailing hyphen (*gʷʰew-); a bare form typed
+      # without it must still reach the entry.
+      assert_equal "*gʷʰew-", etym("gʷʰew").first.headword
+    end
+
+    def test_bare_fallback_resolves_a_pure_ascii_proto_form_via_the_modifier_letter_fold
+      rebuild!
+      # P14-10 fold: ʷ→w, ʰ→h — an ASCII typist reaches *gʷʰew- by "gwhew".
+      root = etym("gwhew").first
+      assert_equal "*gʷʰew-", root.headword
+      assert_equal "ine-pro", root.language
+    end
+
+    def test_the_reflex_path_is_preferred_over_the_bare_fallback
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      # богъ is an attested reflex, so the walk enters via the reflex and the
+      # matched_via is preserved — the fallback fires only when reflexes miss.
+      assert_equal "богъ", etym("богъ", lang: "chu").first.matched_reflex.word
+    end
+
+    def test_a_starred_query_is_still_hyphen_and_fold_tolerant
+      rebuild!
+      # define/etym `*` parity: the direct path folds ASCII and tolerates the
+      # missing root hyphen just like the bare fallback.
+      assert_equal "*gʷʰew-", etym("*gwhew").first.headword
+    end
+
     # -- filters, bounds, graceful states ---------------------------------------------
 
     def test_lang_filter_scopes_the_reflex_match

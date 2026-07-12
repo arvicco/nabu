@@ -713,9 +713,11 @@ module Nabu
       def render_etym(results, lemma:, limit:)
         if results.empty?
           return json(entries: [],
-                      note: "no reconstruction names #{lemma.inspect} as a descendant — the " \
-                            "crosswalk covers Proto-Slavic/PIE/Proto-Germanic (Wiktionary); " \
-                            "try the lemma's dictionary form, or *form for a direct lookup")
+                      note: "no reconstruction names #{lemma.inspect} as a descendant, and no " \
+                            "reconstruction headword matches it — the crosswalk covers " \
+                            "Proto-Slavic/PIE/Proto-Germanic (Wiktionary). Try the lemma's " \
+                            "dictionary form, or a quoted '*form' for a direct lookup (quote the " \
+                            "star — a bare * is a shell glob)")
         end
 
         shown = results.first(limit)

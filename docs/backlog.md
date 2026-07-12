@@ -4343,7 +4343,7 @@ Findings (census FIRST, per item):
   skeleton) + html pair, riao proxy corpus.json (3 proxies). TDD: three failing
   tests written first, then the three fixes.
 
-## P14-10 · etym usability: bare proto forms + ASCII typability  [tier: opus] [status: in-progress] [deps: P14-1]
+## P14-10 · etym usability: bare proto forms + ASCII typability  [tier: opus] [status: done] [deps: P14-1]
 Owner defect report (2026-07-12): (1) `etym bʰewgʰ` fails ("no
 reconstruction names…") even though `etym bog` DISPLAYS that very form —
 unstarred input must FALL BACK to reconstruction-headword lookup when the

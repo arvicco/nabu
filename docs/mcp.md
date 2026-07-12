@@ -142,8 +142,10 @@ whole), and the entry's citations with `resolved_urn` set where the cited
 work is in-catalog (`Il. 1.1` → the actual Iliad line, one `nabu_show`
 away); unresolved citations keep their display text and a null urn. Lemma
 hits from `nabu_search` carry these glosses too. A leading asterisk
-(`*bogъ`) scopes to the reconstruction shelves (P14-1), whose entries also
-carry their descendant `reflexes` (bounded, attested-first, honest totals).
+(`*bogъ`; quote it in a shell — zsh globs a bare `*`) scopes to the
+reconstruction shelves (P14-1), whose entries also carry their descendant
+`reflexes` (bounded, attested-first, honest totals); proto headwords fold
+to ASCII (§9: ʰ→h, ʷ→w), so `*gwhew-` reaches `*gʷʰew-`.
 
 ### `nabu_etym`
 
@@ -156,9 +158,13 @@ gold-lemma passages in this catalog; null is an honest absence, not a
 zero), and one hop of proto-to-proto ancestors with *their* cognates
 (богъ → \*bogъ → \*bʰeh₂g- → ἔφᾰγον in one call). Romanization bridges
 scripts: guþ reaches \*gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the attested
-match; a leading asterisk looks a reconstruction up directly. Cognate
-lists are bounded (attested first, 20 shown) with honest totals — the CLI
-`nabu etym` prints everything.
+match. An unstarred lemma that names no descendant **falls back** to a
+reconstruction-headword lookup, so the proto form itself resolves —
+superscripted (`bʰewgʰ`) or pure ASCII (`bhewgh`, the §9 fold ʰ→h/ʷ→w),
+root hyphen optional; a leading asterisk (quote it in a shell — zsh globs a
+bare `*`) forces the direct lookup. Cognate lists are bounded (attested
+first, 20 shown) with honest totals — the CLI `nabu etym` prints
+everything.
 
 ### `nabu_status`
 

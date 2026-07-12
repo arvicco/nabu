@@ -50,16 +50,24 @@ module Nabu
         direct = term.delete_prefix("*")
         return [] if direct.strip.empty?
 
-        if term.start_with?("*")
-          proto_rows_by_headword(direct, limit: limit)
-            .map { |row| build_result(row, matched: nil, ascend: true) }
-        else
-          proto_rows_by_reflex(term, lang: lang, limit: limit)
-            .map { |row, matched| build_result(row, matched: matched, ascend: true) }
-        end
+        return headword_results(direct, limit: limit) if term.start_with?("*")
+
+        reflex = proto_rows_by_reflex(term, lang: lang, limit: limit)
+                 .map { |row, matched| build_result(row, matched: matched, ascend: true) }
+        # Bare-form fallback (P14-10): the reflex path missed, so the user most
+        # likely typed the RECONSTRUCTION form itself (bʰewgʰ, or ASCII bhewgh)
+        # rather than an attested descendant. Try the -pro shelves' own
+        # headwords — asterisk optional (zsh globs a bare *), trailing-hyphen
+        # tolerant (root entries store *bʰewgʰ-), folded through §9.
+        reflex.empty? ? headword_results(direct, limit: limit) : reflex
       end
 
       private
+
+      def headword_results(headword, limit:)
+        proto_rows_by_headword(headword, limit: limit)
+          .map { |row| build_result(row, matched: nil, ascend: true) }
+      end
 
       def shelf?
         @catalog.table_exists?(:dictionary_entries) && @views.available?
@@ -96,14 +104,24 @@ module Nabu
       # ones whose entries carry reflexes; the -pro language scope matches
       # Define's asterisk convention).
       def proto_rows_by_headword(headword, limit:)
-        variants = Nabu::Normalize.query_forms(headword)
         entry_dataset
-          .where(Sequel[:dictionary_entries][:headword_folded] => variants)
+          .where(Sequel[:dictionary_entries][:headword_folded] => headword_variants(headword))
           .where(Sequel.like(Sequel[:dictionaries][:language], "%-pro"))
           .order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
           .limit(limit)
           .select(*entry_columns)
           .all
+      end
+
+      # Folded lookup variants, trailing-hyphen tolerant (P14-10): a
+      # reconstruction ROOT stores its headword with a trailing hyphen
+      # (*bʰewgʰ-), so a query typed without it (bʰewgʰ, bhewgh) must still
+      # reach the entry — and vice versa. Try each §9 fold variant as-is, with
+      # a trailing hyphen appended, and with one stripped.
+      def headword_variants(headword)
+        Nabu::Normalize.query_forms(headword)
+                       .flat_map { |form| [form, "#{form}-", form.chomp("-")] }
+                       .uniq
       end
 
       # Proto → proto, one hop: reflex rows of OTHER reconstruction shelves

@@ -235,5 +235,16 @@ module Query
       assert_equal 3, define("bogъ", lang: "sla-pro").size
       assert_empty define("bogъ", lang: "grc")
     end
+
+    def test_ascii_reconstruction_query_folds_modifier_letters
+      # P14-10: the -pro shelves fold ʰ→h, ʷ→w, so an ASCII typist reaches
+      # *gʷʰew- by "*gwhew-" — parity with `nabu etym gwhew` (quote the star
+      # in the shell; zsh globs a bare *).
+      seed_recon_shelf
+      root = define("*gwhew-").first
+      refute_nil root, "the ASCII fold must reach the ʷ/ʰ-bearing root"
+      assert_equal "*gʷʰew-", root.headword
+      assert_equal "ine-pro", root.language
+    end
   end
 end

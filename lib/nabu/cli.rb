@@ -512,11 +512,13 @@ module Nabu
       links.
 
       The reconstruction shelves (P14-1, architecture §12) join in with the
-      comparativist's asterisk: `define *bogъ` scopes to the Wiktionary
-      Proto-Slavic/PIE/Proto-Germanic extracts (sla-pro/ine-pro/gem-pro),
-      and a reconstruction entry also lists its descendant reflexes — with
-      corpus attestation counts where the reflex is a gold lemma here.
-      `nabu etym` walks the same crosswalk from the attested side.
+      comparativist's asterisk: `define '*bogъ'` (quote the star — zsh globs
+      a bare `*`) scopes to the Wiktionary Proto-Slavic/PIE/Proto-Germanic
+      extracts (sla-pro/ine-pro/gem-pro), and a reconstruction entry also
+      lists its descendant reflexes — with corpus attestation counts where
+      the reflex is a gold lemma here. Proto headwords fold to ASCII (§9:
+      ʰ→h, ʷ→w), so `define '*gʷʰew-'` and `define '*gwhew-'` reach the same
+      root. `nabu etym` walks the same crosswalk from the attested side.
 
       --lang grc|lat|ang|chu|sla-pro|ine-pro|gem-pro restricts to one
       shelf; --limit caps the entries.
@@ -527,7 +529,7 @@ module Nabu
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
-        nabu define *bogъ              # the reconstruction, with its reflexes
+        nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
     HELP
     DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
     option :lang, type: :string, banner: "grc|lat|ang|chu|sla-pro|ine-pro|gem-pro",
@@ -575,15 +577,21 @@ module Nabu
       scripts — guþ reaches *gudą through Gothic 𐌲𐌿𐌸 — and the folding is
       the conventions §9 contract (diacritics optional).
 
-      A leading asterisk looks a reconstruction up directly (`etym *bogъ`),
-      exactly like `define *bogъ` but with the walk attached. --lang scopes
-      the attested match to one language; --limit caps the entries. The MCP
-      sibling is nabu_etym (bounded); this CLI prints everything.
+      An unstarred lemma that names no descendant FALLS BACK to a
+      reconstruction-headword lookup, so the proto form itself resolves —
+      typed with its phonetic superscripts (`etym bʰewgʰ`) or in pure ASCII
+      (`etym bhewgh`, the §9 fold ʰ→h/ʷ→w), root hyphen optional. A quoted
+      leading asterisk looks a reconstruction up directly (`etym '*bogъ'`,
+      like `define '*bogъ'`) — quote the star, zsh globs a bare `*`; the
+      bare-form fallback makes it mostly unnecessary. --lang scopes the
+      attested match; --limit caps the entries. The MCP sibling is nabu_etym
+      (bounded); this CLI prints everything.
 
       Examples:
         nabu etym богъ --lang chu     # Zographensis god → *bogъ → *bʰeh₂g-
         nabu etym guþ --lang got      # Gothic → *gudą → *ǵʰutós
-        nabu etym *kaisaraz           # the Caesar loan chain, top down
+        nabu etym bhewgh              # bare ASCII proto form → *bʰewgʰ-
+        nabu etym '*kaisaraz'         # direct lookup (quoted — zsh globs *)
     HELP
     option :lang, type: :string, banner: "chu|orv|got|grc|lat|…",
                   desc: "Scope the attested-lemma match to one language"
@@ -1526,9 +1534,10 @@ module Nabu
       # then each one-hop ancestor with its cognates.
       def print_etym_results(lemma, results)
         if results.empty?
-          return say("no reconstruction names #{lemma} as a descendant — the crosswalk covers " \
-                     "Proto-Slavic/PIE/Proto-Germanic (Wiktionary); try the dictionary form, " \
-                     "or *form for a direct lookup")
+          return say("no reconstruction names #{lemma} as a descendant, and no reconstruction " \
+                     "headword matches it — the crosswalk covers Proto-Slavic/PIE/Proto-Germanic " \
+                     "(Wiktionary). Try the lemma's dictionary form, or a quoted '*form' for a " \
+                     "direct lookup (quote the star — zsh expands a bare *)")
         end
 
         results.each_with_index do |result, index|
