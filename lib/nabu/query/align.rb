@@ -114,11 +114,11 @@ module Nabu
       # Align +ref+ (a citation like "MARK 2.3", or a passage urn to pivot
       # from) across the witnesses of +work+ (default: the sole registered
       # work). Raises Align::Error on every caller-fixable state.
-      def run(ref, work: nil)
+      def run(ref, work: nil, long: false)
         ensure_registry!
         ensure_index!
         spec = range_spec(ref)
-        return run_range(spec, work: work) if spec
+        return run_range(spec, work: work, long: long) if spec
 
         target = resolve_work(ref, work)
         normalized = resolve_ref(ref, target)
@@ -155,7 +155,7 @@ module Nabu
         end
       end
 
-      def run_range(spec, work:)
+      def run_range(spec, work:, long: false)
         validate_range!(spec)
         target = resolve_range_work(spec, work)
         cites = ordered_cites(target, spec)
@@ -165,7 +165,10 @@ module Nabu
         end
 
         total = cites.size
-        truncated = total > MAX_REFS
+        # The MAX_REFS ceiling is a GUARD against an accidental whole-book render
+        # (each ref is a full multi-witness block). --long is the deliberate
+        # override (house rule, P15-8): it lifts the cap and renders every ref.
+        truncated = !long && total > MAX_REFS
         documents = documents_by_urn(target)
         groups = (truncated ? cites.first(MAX_REFS) : cites).map do |cite|
           ref = "#{spec.book} #{cite}"
