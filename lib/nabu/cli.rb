@@ -103,11 +103,15 @@ module Nabu
     desc "health", "Source health checks (run-history trends + live golden replay; --remote for the upstream probe)"
     option :remote, type: :boolean, default: false,
                     desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
+    option :backfill_pins, type: :boolean, default: false,
+                           desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
-      # live golden replay). --remote is the P5-3 upstream probe. The two share
-      # nothing at runtime, so keep them in separate helpers with their own db
-      # lifetimes and exit-code raises.
+      # live golden replay). --remote is the P5-3 upstream probe.
+      # --backfill-pins (P15-7) is the one-shot pin recovery. Each keeps its own
+      # helper, db lifetime, and exit-code raise.
+      return run_backfill_pins if options[:backfill_pins]
+
       options[:remote] ? run_remote_health : run_local_health
     end
 
@@ -1905,6 +1909,40 @@ module Nabu
         ledger&.disconnect
       end
 
+      # --backfill-pins (P15-7): record ledger pins for sources synced before
+      # the pins ledger existed (P7) — the ones that read "unpinned". No
+      # network, read-only on canonical/ (a local git rev-parse / state-file
+      # read); writes ONLY the ledger pins, idempotently. A write path, so the
+      # ledger is opened + migrated + lifted like the remote probe's.
+      def run_backfill_pins
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        ledger = open_or_create_ledger(config)
+        recorded = Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).backfill_pins
+        print_backfill(recorded)
+      ensure
+        ledger&.disconnect
+      end
+
+      def print_backfill(recorded)
+        if recorded.empty?
+          return say("backfill-pins: nothing to backfill — every synced source already carries its ledger pin.")
+        end
+
+        width = recorded.map { |row| row.slug.length }.max
+        recorded.each do |row|
+          say "#{row.slug.ljust(width)}  pinned #{row.sha[0, 12]}  (#{backfill_origin(row.origin)})"
+        end
+        say "backfill-pins: recorded #{pluralize(recorded.size, 'pin')} " \
+            "(ledger only; canonical/ untouched, no network)."
+      end
+
+      def backfill_origin(origin)
+        origin == :git_clone ? "backfilled-from-local-clone" : "backfilled-from-state-file"
+      end
+
       # `status --remote` (P14-12): run the live upstream probe through the SAME
       # RemoteProbe as `health --remote`, whose run persists each verdict into
       # the ledger's source_probes cache, then hand the (write-opened, migrated)
@@ -2020,8 +2058,9 @@ module Nabu
       end
 
       def drift_cell(drift)
-        { current: "current", behind: "behind", never_synced: "never-synced",
-          unknown: "—", multi: "multi-repo" }.fetch(drift)
+        { current: "current", behind: "behind", unpinned: "unpinned",
+          never_synced: "never-synced", unknown: "—", multi: "multi-repo",
+          frozen: "frozen" }.fetch(drift)
       end
 
       def license_cell(license)
@@ -2034,7 +2073,7 @@ module Nabu
       def health_detail(row)
         bits = []
         bits << row.liveness.detail if row.liveness.detail && row.liveness.status != :alive
-        bits << row.drift_detail if row.drift_detail && row.drift == :behind
+        bits << row.drift_detail if row.drift_detail && %i[behind unpinned].include?(row.drift)
         bits << row.license.detail if row.license.status == :changed
         bits.empty? ? "" : "   #{bits.join(' · ')}"
       end

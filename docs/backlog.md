@@ -4679,3 +4679,26 @@ updates (§1.1/§1.4/§1.5/§1.8 → shipped/partial per reality), PR, owner
 queue (no new syncs expected — this phase is all derived capability;
 health --remote cache seeding if still unseeded), backup-disk re-flag
 (standing), sticky alarm LAST.
+
+## P15-7 · Honest drift labels + pin backfill  [tier: opus] [status: done] [deps: —]
+Owner defect (2026-07-12): health --remote reports proiel/torot/
+papyri-ddbdp as "never-synced" — "Literally not true." Root cause: the
+drift verdict compares upstream vs the LEDGER PIN, and those sources
+last fetched before the pins ledger existed (P7); no pin ≠ never
+synced. Three fixes: (1) LABEL HONESTY — the no-pin verdict renders as
+"unpinned" (with a hint: "synced pre-ledger — next sync records the
+pin, or run health --backfill-pins"), never "never-synced" unless the
+source truly has no runs in the ledger AND no canonical tree; the
+status up= column keeps `?` but its detail follows suit. (2) PIN
+BACKFILL — `health --backfill-pins`: for each git-fetched source with a
+canonical clone but no pin, record `git -C canonical/<slug> rev-parse
+HEAD` as last_sync_sha (through the existing Pin model; timestamp =
+now, detail notes backfilled-from-local-clone; NON-git sources with
+FileFetch/ZipFetch state files backfill from their sha pins where the
+state file exists). Idempotent; read-only on canonical; writes ONLY the
+ledger pins. (3) frozen-policy sources: drift verdict "frozen" in
+health --remote too (status already does this via up=frozen — P14-12;
+make the two surfaces agree). Tests: no-pin labeling, backfill from a
+fixture clone + a state-file source, frozen agreement, idempotency.
+Docs: ops.md informed-update flow gains the backfill note. Suite+lint
+green; backlog done; worklog (sha —). One commit, not pushed.
