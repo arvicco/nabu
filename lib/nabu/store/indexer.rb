@@ -126,6 +126,10 @@ module Nabu
           end
         end
         AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        # The cognate root closure (P15-3) rebuilds AFTER passage_lemmas: its
+        # gold-language scope and suppression stats are snapshots of the lemma
+        # table built moments ago in this same pass, so the two can never drift.
+        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
         count
       end
 
