@@ -7,7 +7,7 @@ AI tools can read.**
 
 Nabu pulls the world's openly licensed digital corpora of antiquity — Homer
 and the Greek canon, the Latin classics, documentary papyri from Egypt, the
-Sanskrit epics, cuneiform tablets, the Bible in nine parallel witnesses,
+Sanskrit epics, cuneiform tablets, the Bible in thirteen parallel witnesses,
 Beowulf — into one library on your own disk. Everything is plain files plus
 SQLite: searchable by word or by dictionary lemma, citable to the exact verse
 or tablet line, honest about every text's license, and rebuildable from
@@ -21,25 +21,25 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-11** the shelves hold **72,734 documents / 3,143,750
+As of **2026-07-12** the shelves hold **88,346 documents / 3,786,763
 passages** in some two dozen ancient languages — from proto-cuneiform
-tablets of the late 4th millennium BCE to 17th-century Russian — plus
-**168,133 dictionary entries** and **1.94 million gold lemma annotations in
-13 languages**. (All numbers in this README are read from the live catalog,
+tablets of the late 4th millennium BCE to 19th-century Slovenian — plus
+**248,616 dictionary entries** and **2.62 million gold lemma annotations in
+14 languages**. (All numbers in this README are read from the live catalog,
 never estimated.)
 
 ## Show me
 
-Real commands, real output, pasted from live runs on 2026-07-11 (trims
+Real commands, real output, pasted from live runs on 2026-07-11/12 (trims
 marked with …).
 
-One verse of Mark, across nine witnesses — Greek, Latin, Gothic, Old Church
-Slavonic, Old English, and more — each with its license label:
+One verse of Mark, across thirteen witnesses — Greek, Latin, Gothic, Old
+Church Slavonic, Old English, and more — each with its license label:
 
 ```
 $ bin/nabu align "MARK 2.3"
 MARK 2.3 — New Testament (parallel witnesses)
-  9 of 9 witnesses attest this ref
+  13 of 13 witnesses attest this ref
 
 greek-nt — The Greek New Testament [grc]   license: nc
   urn:nabu:proiel:greek-nt:6563
@@ -65,7 +65,7 @@ WEB (English) — Mark [eng]   license: open
   urn:nabu:eng-web:mrk:2.3
     Four people came, carrying a paralytic to him.
 
-… (Armenian, SBLGNT, and Clementine Vulgate witnesses trimmed)
+… (Armenian, SBLGNT, Clementine Vulgate, and the four CCMH OCS witnesses trimmed)
 ```
 
 Look up the first word of Western literature — with the dictionary's
@@ -172,8 +172,10 @@ abuts Lebanon."
 - **Indologists.** 780 GRETIL editions, 703k passages: Rāmāyaṇa, purāṇas,
   kāvya, dharmaśāstra, the Ṛgveda with Vedic accents preserved; commentary
   layers separately citable (kārikā vs. vṛtti).
-- **Assyriologists.** 17,795 ORACC texts (CC0) across 33 projects — the
-  complete State Archives of Assyria — with gold lemmatization in
+- **Assyriologists.** 21,692 ORACC documents (CC0) across 33 projects —
+  12,781 tablets and inscriptions, the complete State Archives of Assyria
+  among them, plus 8,911 aligned English translations — with gold
+  lemmatization in
   `search --lemma` and the running English translations aligned per line:
 
   ```
@@ -215,7 +217,7 @@ shelves, is in **[docs/quickstart.md](docs/quickstart.md)**.
 
 ## What's on the shelves
 
-Live counts as of 2026-07-11; the full shelf map with research uses per
+Live counts as of 2026-07-12; the full shelf map with research uses per
 shelf is **[docs/library.md](docs/library.md)**.
 
 | Shelf | What's on it | Size | License |
@@ -225,16 +227,15 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus… + 181 English translations | 534 / 391,799 | CC BY-SA |
 | Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,389 / 921,248 | CC BY |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, Ṛgveda with Vedic accents | 780 / 703,068 | CC BY-NC-SA |
-| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma/morphology/syntax — parallel NT ×5, OCS→Middle Russian, Old English | 75 / 172,815 | mostly CC BY-NC-SA |
-| Cuneiform | ORACC ×5 projects: Sumerian royal inscriptions, Sargon II letters, lexical lists, proto-cuneiform | 6,876 / 191,712 | CC0 |
+| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma/morphology/syntax — parallel NT ×5, OCS→Middle Russian, Old English | 78 / 178,180 | mostly CC BY-NC-SA |
+| Cuneiform | ORACC ×33 projects: the complete State Archives of Assyria, royal inscriptions, lexical lists, proto-cuneiform — with 8,911 aligned English translations | 21,692 / 385,243 | CC0 |
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek NT, WEB English | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
-| Reference shelf | LSJ + Lewis & Short (entries, not passages; `nabu define`) | 168,133 entries | CC BY-SA |
+| Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899) | 793 / 444,117 | CC BY (Freising BY-ND) |
+| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Wiktionary OCS + three reconstruction shelves (`nabu define` / `etym`) | 248,616 entries | CC BY-SA / CC BY |
 
-The newest arrivals (ISWOC, ASPR) are synced and searchable but still
-marked `enabled: false` pending the routine owner sign-off; Bosworth-Toller
-(Old English dictionary, CC BY 4.0) is registered and queued for its first
-sync. Ranked expansion candidates live in the axis surveys:
+All 22 registered sources are synced and enabled. Ranked expansion
+candidates live in the axis surveys:
 [Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
 
 ## Feature tour
@@ -242,10 +243,9 @@ sync. Ranked expansion candidates live in the axis surveys:
 | | |
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. Date/place axis (61,670 dated documents — HGV papyri + Slovene goo300k/IMP): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. |
-| `nabu search --lemma FORM` | Dictionary-form search over 1.94M gold lemma rows in 13 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
+| `nabu search --lemma FORM` | Dictionary-form search over 2.62M gold lemma rows in 14 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
-| `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. |
 | `nabu parallels URN` | Passage-anchored intertext: point at one passage and find where the corpus quotes or echoes it — reception discovery, not translation alignment. Query-time over the FTS index (no new schema): the anchor's 4-word grams are phrase-probed, candidates ranked by shared-gram count weighted by rarity, elision folded across editions (so Matthew 4:4 finds LXX Deuteronomy 8:3). One hit per document (duplicate witnesses grouped, loci counted), the shared phrase shown as evidence; a gold-lemmatized anchor also gets rare-lemma "echoes" (re-inflected allusion). `--long` expands the truncated evidence; `--lang`/`--license`/`--limit` scope. |
 | `nabu formulas SCOPE` | The oral-formulaic reader's mirror of `parallels`, pointed inward: mine the repeated formulas WITHIN a corpus slice (a source slug or a work/urn prefix) — the same gram machinery, counting instead of probing. Homer's `ὣς ἔφαθ' οἵ δ'` (72×), `τὸν δ' ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς` (50×); the Old English `saga hwæt ic hatte` riddle refrain, `Beowulf maþelode bearn Ecgþeowes`, `awa to feore`. Ranked by count × length — no stoplist, the ranking is self-filtering (a genuine formula out-recurs any function-word run; measured). `--lang` mines one tradition where a source mixes translations; `--gram-size`, `--min-count`, `--limit`, `--long` (every locus). Zero schema, ~0.2 s per slice. |
 | `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. A whole-chapter or verse-range query clips at 200 refs by default; `--long` lifts that ceiling and renders every ref. `--collate` diffs the witnesses into a compact apparatus (base reading + per-witness divergences) per (language, script) group, with cross-script witnesses rendered undiffed and labelled honestly; `--base LABEL` picks the base. |
@@ -346,7 +346,7 @@ useful to others.
 | [docs/quickstart.md](docs/quickstart.md) | Zero to first search, copy-pasteable, honest about sizes and timings. |
 | [docs/library.md](docs/library.md) | The shelf map: every corpus with contents, counts, licenses, and research uses. |
 | [docs/01-concept.md](docs/01-concept.md) | The vision: what Nabu is, workflows, principles, what success looks like. |
-| [docs/mcp.md](docs/mcp.md) | The MCP server: six read-only tools, registration recipes, quoting etiquette. |
+| [docs/mcp.md](docs/mcp.md) | The MCP server: nine read-only tools, registration recipes, quoting etiquette. |
 | [docs/conventions.md](docs/conventions.md) | Field notes for working with ancient-text corpora (Unicode/NFC, citations, editions, licensing) — start here if you're new to the domain. |
 | [docs/architecture.md](docs/architecture.md) | The design: layer model, adapter contract, store schema, retention machinery. |
 | [docs/02-sources.md](docs/02-sources.md) | The source inventory: every corpus scouted, scored, and license-checked. |

@@ -5113,13 +5113,14 @@ gram-size, slice totals), cli_test +6 (refrain+loci render, --long,
 gram-size×min-count, unknown scope, bad gram-size, help). Suite + lint
 green. One commit, not pushed.
 
-## P15-6 · search --fuzzy  [tier: opus] [status: stretch — take only if the phase runs light] [deps: —]
+## P15-6 · search --fuzzy  [tier: opus] [status: parked — owner decision at P15 gate 2026-07-12] [deps: —]
 Design doc §4: trigram fragment search, DOCUMENTARY SCOPE (250–270 MB
 index vs 3.6-4.1 GB whole-corpus — the measured line); sub-ms substring
 queries; damaged-text persona. The menu itself said it loses nothing by
-waiting — stretch accordingly.
+waiting — owner parked it for a later phase (register §1.5 tracks it;
+re-propose with the Phase 16 menu alongside links/batch and date part-2).
 
-## P15-gate · Phase 15 gate  [tier: orchestrator] [status: pending] [deps: P15-1..5(+6)]
+## P15-gate · Phase 15 gate  [tier: orchestrator] [status: done 2026-07-12] [deps: P15-1..5(+6)]
 Full-diff, library/languages/README refresh, improvements register
 updates (§1.1/§1.4/§1.5/§1.8 → shipped/partial per reality), PR, owner
 queue (no new syncs expected — this phase is all derived capability;
