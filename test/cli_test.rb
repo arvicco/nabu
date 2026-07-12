@@ -1732,7 +1732,6 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
         sources_path: sources, alignments_path: alignments, config_path: "(test)"
       )
       FileUtils.mkdir_p(config.db_dir)
