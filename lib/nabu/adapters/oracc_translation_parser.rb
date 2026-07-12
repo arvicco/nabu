@@ -43,11 +43,16 @@ module Nabu
     #   carries it now) — excluded by element, never by pattern.
     # - A cell with NO `span.cell` prose is a state notice ("(Break)",
     #   rulings — the rendered `$`-lines) and is skipped by rule.
-    # - A PROSE cell anchored at a row that is not a line-start (seen only
-    #   doctored so far; upstream anchors state notices there) reattaches to
-    #   the next line-start row in row order — prose is never dropped
-    #   silently; a unit with no line-start anywhere after it is counted out
-    #   loud in the ParseError below.
+    # - A PROSE cell anchored at a row that is not a line-start (upstream
+    #   anchors state notices, and TRAILING prose over an unlemmatized final
+    #   line — saa08 P336145's "traces of a name" row) reattaches to the next
+    #   line-start row in row order, or BACKWARD to the last line-start before
+    #   it when none follows — prose is never dropped silently. When the
+    #   corpusjson supplies NO line-start label at all (a catalog-only skeleton
+    #   tablet whose line-starts carry empty ref+label — the blms bilinguals of
+    #   P14-13, published in translation but never lemmatized), the unit falls
+    #   back to its OWN printed span.xtr-label ("o 1"). Only a prose cell that
+    #   resolves to no line-start AND prints no label raises the ParseError.
     # - Two units resolving to one label JOIN in cell order (passage urns
     #   must stay unique; consecutive prose under one anchor is what a reader
     #   wants anyway).
@@ -143,23 +148,54 @@ module Nabu
         return nil if text.empty?
 
         label = anchor_label(cell["data-tlit-id"].to_s, labels: labels, row_ids: row_ids)
+        label ||= marker_label(cell)
         if label.nil?
           raise ParseError, "#{path}: prose unit anchored at #{cell['data-tlit-id'].inspect} " \
-                            "resolves to no line-start row — prose would be dropped"
+                            "resolves to no line-start row and prints no label — prose would be dropped"
         end
 
         Unit.new(label: label, text: text)
       end
 
+      # Last-resort anchor: the cell's OWN rendered print marker ("(o 1)"),
+      # used only when the corpusjson offers no line-start in either direction.
+      # A CATALOG-ONLY SKELETON tablet (blms bilingual literary published with an
+      # English translation but never lemmatized — P14-13) carries line-start
+      # d-nodes with empty ref AND empty label, so the labels map is empty and
+      # both the forward and backward reattach scan nothing; the render ids the
+      # HTML anchors at ("X000003.2l", the untranscribed-line suffix) exist in
+      # NO corpusjson ref. But the fragment still PRINTS the human line label in
+      # its span.xtr-label — the same "o 1"/"r 3" the tablet edition cites — so
+      # we honour it as the suffix rather than drop real translation prose. The
+      # sibling tablet was skipped (no transcribed lines), so this -en document
+      # simply stands alone: Query::Parallel has nothing to pair it with, which
+      # is correct, not a loss. nil when the cell prints no marker at all (then
+      # unit_for still raises loudly — genuinely anchorless prose is refused).
+      def marker_label(cell)
+        marker = cell.css("span.xtr-label").map(&:text).join(" ").gsub(/\s+/, " ").strip
+        return nil if marker.empty?
+
+        stripped = marker.match(/\A\((?<inner>.+)\)\z/) { |m| m[:inner].strip }
+        label = (stripped || marker).strip
+        label.empty? ? nil : label
+      end
+
       # The anchor row's label; a non-line-start anchor reattaches to the
-      # next line-start row in row order (see class note). nil when none.
+      # next line-start row in row order (see class note). When NO line-start
+      # follows — a trailing prose unit over an unlemmatized final line (saa08
+      # P336145's "traces of a name" row, print label "(r 3)", which the
+      # corpusjson never mints: no readable signs) — it reattaches BACKWARD to
+      # the last line-start before it, so prose is never dropped and the suffix
+      # still exists in the tablet (Query::Parallel's contract). nil only when
+      # the document has no line-start anywhere.
       def anchor_label(ref, labels:, row_ids:)
         return labels[ref] if labels.key?(ref)
 
         position = row_ids.index(ref)
         return nil if position.nil?
 
-        row_ids[position..].filter_map { |row_id| labels[row_id] }.first
+        forward = row_ids[position..].filter_map { |row_id| labels[row_id] }.first
+        forward || row_ids[0...position].reverse_each.filter_map { |row_id| labels[row_id] }.first
       end
 
       def build_document(units, urn:, title:, path:)

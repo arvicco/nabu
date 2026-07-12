@@ -216,7 +216,7 @@ class FreisingTest < Minitest::Test
     entry = registry["freising"]
     refute_nil entry, "freising must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Freising, entry.adapter_class
-    refute entry.enabled, "freising stays disabled until the owner-fired first real sync"
+    assert entry.enabled, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Freising.manifest, entry.manifest
   end
 

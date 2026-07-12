@@ -91,13 +91,31 @@ module Nabu
     OLD_ENGLISH_FOLD = ->(str) { str.gsub(/[æþð]/, "æ" => "ae", "þ" => "th", "ð" => "th") }
     private_constant :OLD_ENGLISH_FOLD
 
+    #   gem/ine/sla  the reconstruction/proto fold (P14-10): modifier-letter
+    #        superscripts ʰ (U+02B0) → h and ʷ (U+02B7) → w — the phonetic
+    #        marks of aspirates and labiovelars (*bʰewgʰ-, *gʷʰew-). A census
+    #        of all 13,053 sla-pro/ine-pro/gem-pro headwords found these two
+    #        as the ONLY Unicode Lm modifier letters present (ʰ ×516, ʷ ×193;
+    #        every other non-ASCII char is a base letter that stays or a
+    #        combining mark the generic \p{Mn} strip already drops). The
+    #        generic fold does NOT touch Lm, so an ASCII typist's "bhewgh"
+    #        could never reach *bʰewgʰ- without this rule. tr,
+    #        length-preserving. Scoped to the reconstruction pseudo-languages
+    #        only — no attested corpus carries those collective codes, so the
+    #        three -pro shelves are the sole shelves this refolds.
+    PROTO_FOLD = ->(str) { str.tr("ʰʷ", "hw") }
+    private_constant :PROTO_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
       "sux" => CUNEIFORM_FOLD,
       "ang" => OLD_ENGLISH_FOLD,
-      "sl" => ->(str) { str.tr("ſ", "s") }
+      "sl" => ->(str) { str.tr("ſ", "s") },
+      "gem" => PROTO_FOLD,
+      "ine" => PROTO_FOLD,
+      "sla" => PROTO_FOLD
     }.freeze
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at

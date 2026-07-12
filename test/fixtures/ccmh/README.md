@@ -31,6 +31,28 @@ of Helsinki / Kielipankki (The Language Bank of Finland).
 | `marianus.xml` | MAT 5 + JOH 0 | shape B (text directly in `<seg>`, no `<ver>`), non-zero-padded ids (`b.MAT.5.23`), **non-canonical chapter `0`** (chapter-heading list), **duplicate seg id `b.JOH.0.14`**, no BOM (the other three have a UTF-8 BOM), a tab-indented `</div>` upstream quirk |
 | `zographensis.xml` | MAT 3 (ms begins there — lacunose) | shape B control |
 
+## The txt texts (P14-5, retrieved 2026-07-12)
+
+Byte-identical **line ranges** of the three txt-only texts (same PUB tree,
+`…/www/<stem>.txt`; same CC BY 4.0 grant). `suprasliensis.txt` is LF,
+the Vitae are CRLF — preserved verbatim. Ranges are cut at non-hyphen /
+verse boundaries so the trim mints no fixture-only hyphen join or half
+verse.
+
+| fixture | line ranges | exercises |
+|---|---|---|
+| `suprasliensis.txt` | 1–33, 2382–2415, 8784–8788 | folio-line grain (`part.folium.side.line`), the hyphen-split mechanics (51% of upstream lines wrap mid-word: `mOdrova-`/`ti`), **duplicate codes `1042114`–`1042119`** (two runs, distinct text → `:b2`) with a hyphen join straight across the collision seam, the **side-digit-3 slip `3014301`** (kept raw) |
+| `vita_constantini.txt` | 1–16, 219–224, 778–796 | chapter-verse grain, incipit chapter `00` → `0.0`, multi-line verse aggregation, **adjacent `0600200` code slip** (one verse, absorbed), **non-adjacent `1101010` recurrence** (a slip for 1101910 → separate run → `11.10:b2`) |
+| `vita_methodii.txt` | 1–13, 394–397 | chapter-verse control; **duplicate `1700100` inside one consecutive verse run** (absorbed into `17.1`, no `:b2`); zero EOL hyphens (0% in both Vitae) |
+
+Line-code schemes (each text's own `<stem>.html` description page,
+verbatim): Suprasliensis `part(1) folium(3) side(1: 1=recto, 2=verso)
+line(2)` — Severjanov-edition addressing; the Vitae `chapter(2)
+verse-in-the-edition(3) line-in-this-file-ONLY(1) always-zero(1)`, so only
+chapter.verse is citable. The diplomatic line-break rejoining derivation
+(`hyphen_join` annotation → search form) is documented in
+`docs/conventions.md` §9.
+
 ## Format notes (upstream reality, do not "fix")
 
 - CES `cesDoc` version 4; `<cesHeader>` literally contains the placeholder

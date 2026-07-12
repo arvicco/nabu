@@ -169,7 +169,7 @@ class WiktionaryCuTest < Minitest::Test
     entry = registry["wiktionary-cu"]
     refute_nil entry, "config/sources.yml must register wiktionary-cu"
     assert_equal Nabu::Adapters::WiktionaryCu, entry.adapter_class
-    refute entry.enabled, "enabled stays false until the owner-fired first real sync"
+    assert entry.enabled, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::WiktionaryCu.manifest, entry.manifest
   end

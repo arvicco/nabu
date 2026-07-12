@@ -1,0 +1,14 @@
+{
+ "type": "corpus",
+ "project": "riao",
+ "source": "http://oracc.org/riao",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-06-07T06:57:56",
+ "proxies": {
+  "Q001801": "riao/ria1",
+  "Q005202": "riao/ria1",
+  "Q005278": "riao/ria1"
+ }
+}

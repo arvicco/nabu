@@ -134,6 +134,16 @@ Consequences for Nabu:
   ship *transliterations*: sign-by-sign Latin-alphabet renderings
   (`lugal-e`, with superscript determinatives), which are still Sumerian or
   Akkadian, just re-scripted. The ATF format encodes these conventions.
+- **Reconstruction pseudo-languages (P14-1):** `sla-pro` (Proto-Slavic),
+  `ine-pro` (Proto-Indo-European), `gem-pro` (Proto-Germanic) are NOT ISO
+  639-3 — they are English Wiktionary's etymology-language codes, adopted
+  verbatim because the reconstruction shelf's crosswalk (the kaikki
+  `descendants` trees, architecture §12) speaks them; minting our own would
+  break every join. They pass the shape-only tag validation unchanged
+  (3-letter primary + `pro` subtag). Reconstructed forms are hypotheses,
+  starred by scholarly convention: the store keeps headwords bare (upstream
+  reality), display prefixes `*`, and `define *bogъ`/`etym *bogъ` strip a
+  leading asterisk on the way in.
 - **Word boundaries are editorial.** Ancient Greek was written in *scriptio
   continua* — no spaces, no lowercase, no punctuation. Every space in our
   passages is a modern editor's decision. For scripts where segmentation
@@ -340,6 +350,7 @@ macrons all fall to the same strip.
 | `lat` | v→u, j→i | The classical Latin search convention: PHI's search "is not case-sensitive, nor does it distinguish i from j or u from v," and Perseus-lineage tooling treats the pairs as orthographic variants (editors disagree per edition: *virumque*/*uirumque*). Folding to the u/i base makes every edition findable by every spelling. |
 | `akk`, `sux` (one shared rule) | sign-join `.` and `-` and determinative braces `{` `}` → space; subscript index digits `₀`–`₉`, `ₓ` → ASCII | The cuneiform-transliteration fold (P10-1). ORACC transliteration carries structural punctuation that is notation, not text: `-`/`.` join the signs of a word (`du-un-nu-um`), `{…}` marks unpronounced determinatives (`{d}EN.ZU`), subscript digits index homophonous sign values (`ZI₃`). Opening them to spaces makes every **bare sign reading its own searchable token** (`zi3`, `en`, `zu`, `gesbun` — š/ṣ/ṭ and macrons fall to the generic strip), and a query spelled with the notation (`a-na`, `ZI₃`) folds to the same shape via the query union. Strictly per-codepoint (no space collapsing) so the KWIC fold-map equality holds; FTS treats separator runs as one. Trade-off accepted: a determinative sits as its own token *between* the signs it classifies, so a phrase query spanning a mid-word determinative must spell it (`amar suen` does not match `{d}amar-{d}suen`; `amar` and `suen` individually do), and the normalized dictionary forms (`qēmu`, `Dunnum`) are lemma search's job — the ORACC adapter feeds every `cf` into the lemma index. |
 | `ang` | æ→`ae`, þ→`th`, ð→`th` | The Old English fold (P12-3), argued from Bosworth-Toller's own practice, not assumed: B-T alphabetizes æ as "ae" (the dump files æppel between a-h- and a-l- words) and **interfiles þ and ð as ONE letter** after T — its dump's own `<sort>` field folds æðele → `aetþele` and þing → `tþing`, i.e. the dictionary itself folds æ→ae and buckets ð/þ identically. These are also the ASCII transliterations a user types (`define aethele`, `search thing`). ð→`d` was considered and REJECTED: it would split the þ/ð pair B-T unifies (OE scribes used them interchangeably for the same dental fricative; the dump has no ð-initial headwords at all — ð lives medially: ǽg-hwæðer). Wynn (ƿ) gets no rule deliberately: edited OE prints w. Vowel length (á, ǣ) falls to the generic mark strip, matching B-T's alphabetization of accented vowels as base letters. Implemented as `gsub`, not `tr` (1→2 expansions; `fold_with_map` handles non-length-preserving folds, and downcase runs first so Æ/Þ/Ð reach the rule lowercased). Query-union note: `þing` gains an ang variant `thing` that also matches English text — the same bounded cross-language tradeoff as lat v→u, harmless since æ/þ/ð barely occur outside the OE corpora. The rule landed BEFORE any ang corpus was synced (aspr/iswoc/bosworth-toller all `enabled: false` at the time), so the rebuild-storm caveat below was satisfied vacuously. |
+| `gem`, `ine`, `sla` (one shared rule) | modifier letters ʰ→`h`, ʷ→`w` | The reconstruction/proto fold (P14-10), scoped to the three Wiktionary reconstruction shelves (gem-pro/ine-pro/sla-pro). PIE and its daughters write aspirates and labiovelars with the phonetic **superscript modifier letters** ʰ (U+02B0) and ʷ (U+02B7): `*bʰewgʰ-`, `*gʷʰew-`. These are Unicode category **Lm (modifier letter)**, NOT combining marks — the generic fold's `\p{Mn}` strip does not touch them and plain downcase leaves them alone — so an ASCII typist's `bhewgh` could never reach `*bʰewgʰ-` without this rule (exactly the ſ→s / ς→σ "one sound, an untypable glyph" situation). A census of all 13,053 reconstruction headwords found ʰ and ʷ as the **only** modifier letters present (ʰ ×516, ʷ ×193); every other non-ASCII character is either a base letter that stays (jers ъ/ь, yuses ǫ/ę, þ) or a combining mark the generic strip already drops (the syllabic-consonant ring U+0325, macrons, the acute over é). `tr`, length-preserving. Scoped by primary subtag (gem/ine/sla) — no attested corpus is tagged with a bare collective code, so ONLY the three -pro shelves refold; and because the query union ORs the variants, a bare `*` root query is trailing-hyphen tolerant at the query layer (`Etym`/`Define` also fold the star form). The star is quoted in shell examples (`etym '*form'`) because zsh globs a bare `*`; the bare proto form now resolves without it. |
 | `sl` | Bohorič long s ſ→s | The historical-Slovene fold (P13-9). goo300k/IMP passage text is the pristine Early Modern print surface, where non-final s is set as ſ (U+017F): "ſvoje", "dvanajſt", "oblaſt". The generic fold does NOT touch it — ſ is already lowercase, carries no combining mark, and plain `downcase` leaves it alone (only Unicode FULL case folding maps ſ→s) — so without this rule every ſ-bearing word is unfindable by any modern query. Exactly the grc ς→σ situation: one letter, two positional glyphs; Unicode's own case-folding table agrees. `tr`, length-preserving. Bohorič digraphs (zh=č, ſh=š) are deliberately NOT rewritten — that is orthographic modernization (the corpora's own `<reg>` layer, an annotation), never a fold; haček letters (č/š/ž) fall to the generic mark strip on both sides. The rule landed BEFORE any sl corpus was synced (goo300k/imp both `enabled: false`), so the rebuild-storm caveat below was satisfied vacuously. |
 | everything else (`chu`, `orv`, `got`, `san`, unknown) | none — generic fold only | See below. |
 
@@ -386,6 +397,46 @@ precisely because BOTH sides fold.
 - **Elision apostrophes** (U+02BC vs U+2019 vs U+0027, §1) are *not*
   unified — upstream reality, and unicode61 treats them all as token
   separators anyway.
+- **Reconstruction shelves (`sla-pro`/`ine-pro`/`gem-pro`, P14-1).**
+  Generic fold only. Proto-Slavic works well (hačeks strip: *cěsařь →
+  cesarь; jers are letters and stay). PIE headwords keep their laryngeal
+  subscripts (h₂) and modifier letters (ʰ ʷ) — `define *h₃ebʰi` is not
+  ASCII-typeable, an accepted gap: the primary entry path is `nabu etym`
+  from an attested (typeable) lemma, and starred forms are copy-pasteable
+  from its output. An ine-pro ASCII fold (₂→2, ʰ→h) is a possible future
+  rule here if usage demands it.
+
+**Diplomatic line-break rejoining (P14-5 — PARSER-SCOPED, not a language
+rule).** CCMH's Suprasliensis txt is a diplomatic folio-line edition where
+51% of lines wrap MID-WORD with a hyphen (`… ne dobr@ mOdrova-` / `ti na
+…`). Line grain is the owner-chosen citation unit, but un-rejoined the
+index would carry only fragments: `modrovati` unfindable, the orphan `ti`
+a junk token. The rule: the pristine passage text keeps the line VERBATIM
+(hyphen included — canonical means canonical); `text_normalized` is minted,
+through the same one boundary (`Normalize.search_form`), over a REJOINED
+derivation source — the hyphen line has its split word completed (hyphen
+dropped, the next line's first token appended), the continuation line
+drops its orphan leading fragment. The derivation is recorded per passage
+in the `hyphen_join` annotation (`{"tail" => …}` / `{"orphan" => …}`, a
+line can carry both) so it is **recomputable from the stored row alone** —
+`CcmhTxtParser.search_source(text, annotations)` is the pure function, and
+the adapter conformance suite pins `text_normalized` to the minted fold of
+it (the `conformance_search_source` hook; every other adapter stays pinned
+to the pristine text). Tools that read the annotation: `Query::Concord`
+(KWIC) retries a missed keyword against the rejoined haystack with every
+appended tail character mapped to the hyphen/EOL display position, so the
+highlight is exactly the visible `mOdrova-` — honest, never fabricated
+display text; `nabu show` displays the annotation as any other. Scope
+argument: this is a property of ONE corpus's diplomatic layout, not of
+`chu` — ASPR/Freising/GRETIL lines don't hyphenate, and the gospels' CES
+XML doesn't either — so the rule lives in the parser, not in
+`LANGUAGE_FOLDS`; a future diplomatic source may reuse the annotation
+contract. Known limits, accepted: an UNMARKED wrap (upstream sometimes
+splits without a hyphen: `(ot&ved` / `^jO`) is undetectable and left
+alone; an EOL "missing" mark (`-` also means a lost letter in the
+transliteration) would be mis-joined — the pristine text is untouched
+either way. Content hashes cover `text_normalized` + annotations, and the
+derivation is deterministic, so two parses and rebuilds agree.
 
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not

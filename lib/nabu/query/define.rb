@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "reflex_views"
 
 module Nabu
   module Query
@@ -25,14 +26,26 @@ module Nabu
     # citations keep their display text and a nil resolved_urn: an honest
     # miss, never an invented link.
     #
+    # == The reconstruction shelf (P14-1, architecture §12)
+    #
+    # A LEADING ASTERISK is the comparativist's convention: `define *bogъ`
+    # strips it (upstream stores reconstruction headwords bare) and scopes
+    # the lookup to the reconstruction shelves (dictionary language ends
+    # "-pro"), and reconstruction headwords display WITH the asterisk put
+    # back. Reconstruction entries also carry +reflexes+ — their descendant
+    # edges as ReflexViews::View values, attestation counts resolved when a
+    # +fulltext+ handle was given (nil counts are honest absences).
+    #
     # Degradation: a catalog predating migration 006 (or none at all) simply
     # has no shelf — run returns [], the MCP layer words the state.
     class Define
       # One dictionary entry hit. +citations+ are CitationView values in
-      # entry order; +license_class+/+license+ come from the owning source.
+      # entry order; +license_class+/+license+ come from the owning source;
+      # +reflexes+ (P14-1) are ReflexViews::View values, [] off the
+      # reconstruction shelves.
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :key_raw, :gloss, :body,
-                           :license, :license_class, :source_slug, :citations)
+                           :license, :license_class, :source_slug, :citations, :reflexes)
 
       # One citation of an entry: display label always; resolved_urn is the
       # in-catalog passage urn or nil.
@@ -40,19 +53,23 @@ module Nabu
 
       DEFAULT_LIMIT = 5
 
-      def initialize(catalog:)
+      def initialize(catalog:, fulltext: nil)
         @catalog = catalog
+        @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
       end
 
-      # Look up +lemma+; +lang+ filters by dictionary language (grc/lat).
-      # Returns up to +limit+ Results ordered (dictionary, entry_id).
+      # Look up +lemma+; +lang+ filters by dictionary language (grc/lat/…);
+      # a leading "*" scopes to the reconstruction shelves. Returns up to
+      # +limit+ Results ordered (dictionary, entry_id).
       def run(lemma, lang: nil, limit: DEFAULT_LIMIT)
         return [] unless shelf?
 
-        variants = Nabu::Normalize.query_forms(lemma.to_s)
+        term = lemma.to_s.strip
+        recon_only = term.start_with?("*")
+        variants = Nabu::Normalize.query_forms(term.delete_prefix("*"))
         return [] if variants.first.strip.empty?
 
-        rows = entry_rows(variants, lang: lang, limit: limit)
+        rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
         rows.map { |row| build_result(row) }
       end
 
@@ -78,12 +95,13 @@ module Nabu
         @catalog.table_exists?(:dictionary_entries)
       end
 
-      def entry_rows(variants, lang:, limit:)
+      def entry_rows(variants, lang:, limit:, recon_only: false)
         dataset = @catalog[:dictionary_entries]
                   .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
                   .join(:sources, id: Sequel[:dictionaries][:source_id])
                   .where(Sequel[:dictionary_entries][:headword_folded] => variants,
                          Sequel[:dictionary_entries][:withdrawn] => false)
+        dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) if recon_only
         dataset = dataset.where(Sequel[:dictionaries][:language] => lang) if lang
         dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
                .limit(limit)
@@ -113,14 +131,17 @@ module Nabu
       end
 
       def build_result(row)
+        recon = row.fetch(:language).end_with?("-pro")
         Result.new(
           urn: row.fetch(:urn), dictionary_slug: row.fetch(:dictionary_slug),
           dictionary_title: row.fetch(:dictionary_title), language: row.fetch(:language),
-          headword: row.fetch(:headword), key_raw: row.fetch(:key_raw),
+          headword: recon ? "*#{row.fetch(:headword)}" : row.fetch(:headword),
+          key_raw: row.fetch(:key_raw),
           gloss: row.fetch(:gloss), body: row.fetch(:body),
           license: row.fetch(:license), license_class: row.fetch(:license_class),
           source_slug: row.fetch(:source_slug),
-          citations: resolve_citations(row.fetch(:entry_row_id))
+          citations: resolve_citations(row.fetch(:entry_row_id)),
+          reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : []
         )
       end
 

@@ -138,7 +138,7 @@ class ImpTest < Minitest::Test
     entry = registry["imp"]
     refute_nil entry, "imp must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Imp, entry.adapter_class
-    refute entry.enabled, "imp stays disabled until the owner-fired first real sync (150 MB GET)"
+    assert entry.enabled, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Imp.manifest, entry.manifest
   end
 

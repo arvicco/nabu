@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM P14-9 defect fixtures (real ORACC JSON/HTML slices from on-disk
+# canonical). Non-refetchable: re-acquiring = a full per-project zip sync / HTML
+# crawl, not a raw GET. See README.md.
+source: oracc_p14_9
+adapter_test:
+files:
+  - path: blms/corpusjson/P345480.json
+    refetchable: false
+    provenance: local-trim
+    reason: "bilingual interlinear collision (item 1) - sentence cdl trimmed to 16 children; label-less Akkadian line falls back to 'o 1' colliding with the Sumerian line"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-9 defect fixture (see README.md)"
+  - path: saao-saa08/saa08/corpusjson/P336559.json
+    refetchable: false
+    provenance: local-trim
+    reason: "range-sentence collision (item 1) - sentence cdl trimmed to 36 children; label-less line-starts fall back to 'o 1 - r 6'; nested-root layout"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-9 defect fixture (see README.md)"
+  - path: saao-saa08/saa08/corpusjson/P336145.json
+    refetchable: false
+    provenance: local-trim
+    reason: "sibling tablet for the anchor edge (item 2) - trimmed to its line-start skeleton (o 1..r 2; no r 3), l-nodes dropped"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-9 defect fixture (see README.md)"
+  - path: html-en/saao-saa08/P336145.html
+    refetchable: false
+    provenance: local-trim
+    reason: "translation fragment for the anchor edge (item 2) - trimmed rows; final prose anchors at the trailing nonl-final row P336145.13, backward-reattaching to r 2"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-9 defect fixture (see README.md)"
+  - path: riao/corpus.json
+    refetchable: false
+    provenance: local-trim
+    reason: "proxy corpus (item 3) - type:corpus with a proxies map (trimmed to 3 entries) and no corpusjson; a benign discovery skip, not an unpack error"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-9 defect fixture (see README.md)"

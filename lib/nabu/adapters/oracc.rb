@@ -74,9 +74,10 @@ module Nabu
     # `show <tablet> --parallel` render like the Homers.
     #
     # - CRAWL (fetch, after the zip phases): PROJECT-SCOPED — the served list
-    #   is TRANSLATION_PROJECTS (owner staging 2026-07-11: stage 1 = the saao
-    #   projects; stage 2 extends the list, no machinery change). Which texts
-    #   have English is machine-read from each project metadata.json's
+    #   is TRANSLATION_PROJECTS (stage 1 = saao, owner 2026-07-11; stage 2 =
+    #   the full project list, owner-approved 2026-07-12, P14-4 — the
+    #   promised list change, no machinery change). Which texts have English
+    #   is machine-read from each project metadata.json's
     #   `formats["tr-en"]`. Fragments land OUTSIDE the zip-managed project
     #   trees (<workdir>/html-en/<slug>/<id>.html) so a zip swap never attics
     #   them; the crawl itself never deletes (retention by construction).
@@ -116,11 +117,16 @@ module Nabu
         dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
       ].freeze
 
-      # Stage-1 translation-crawl scope (owner: "Two-stage SAA-first crawl",
-      # 2026-07-11): the saao projects. Stage 2 = the remaining translated
-      # projects (rimanum, etcsri, rinap1, riao, ribo, blms, dcclt*), added
-      # here when the owner fires it — a list change, no machinery change.
-      TRANSLATION_PROJECTS = PROJECTS.grep(%r{\Asaao/}).freeze
+      # Translation-crawl scope. Stage 1 (P13-4, owner 2026-07-11 "Two-stage
+      # SAA-first crawl") was the saao projects; stage 2 (P14-4,
+      # owner-approved 2026-07-12 "Full crawl") is the FULL project list —
+      # the data change the staging design promised, no machinery change.
+      # The metadata tr-en gate makes the full list exact: the zero-English
+      # catalog hubs (riao, ribo, dcclt/jena — no corpusjson, empty formats)
+      # are provably inert, and new upstream tr-en is picked up for free.
+      # English only: etcsri's 1441 tr-hun (Hungarian) stays the flagged
+      # config-shaped follow-up.
+      TRANSLATION_PROJECTS = PROJECTS
 
       # Crawled fragments live OUTSIDE the zip-managed <slug>/ trees: a zip
       # swap diffs only its own tree, so fragments are never atticked/deleted
@@ -211,7 +217,8 @@ module Nabu
       # (unrecognized — the nested-root/unpack signature fix 1 resolves, kept as
       # a loud guard against its recurrence). The no-content skeletons that DO
       # parse-skip are counted by the loader, not here. Cheap: Dir globs + 0-byte
-      # stats, no JSON read.
+      # stats; the one JSON read (proxy_corpus?) fires only on the rare
+      # no-corpusjson branch.
       def discovery_skips(workdir)
         skipped = 0
         notes = []
@@ -220,13 +227,39 @@ module Nabu
 
           files = Dir.glob(File.join(project_dir(workdir, project), "corpusjson", "*.json"))
           if files.empty?
-            notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            # P14-9 fix 3: riao/ribo/dcclt-jena are PROXY corpora — corpus.json
+            # is `type:corpus` with a `proxies` map, their texts hosted in
+            # out-of-scope sibling subprojects (PROJECTS note). Owning no
+            # corpusjson is BY DESIGN, a benign skip, not the unpack/layout
+            # error the loud guard is for.
+            if proxy_corpus?(workdir, project)
+              skipped += 1
+            else
+              notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            end
             next
           end
           skipped += files.count { |path| File.empty?(path) }
           skipped += orphan_fragment_count(workdir, project) if @translations
         end
         Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
+      end
+
+      # A proxy/portal corpus owns no corpusjson: its corpus.json is
+      # `type:corpus` carrying a non-empty `proxies` map (the texts live in
+      # out-of-scope sibling subprojects). Checked at EITHER unpack depth
+      # (dcclt/jena nests under <slug>/jena/), so it mirrors project_dir.
+      def proxy_corpus?(workdir, project)
+        base = File.join(workdir, slug(project))
+        [base, File.join(base, project.split("/").last)].any? do |dir|
+          path = File.join(dir, "corpus.json")
+          next false unless File.exist?(path)
+
+          proxies = JSON.parse(File.read(path))["proxies"]
+          proxies.is_a?(Hash) && !proxies.empty?
+        rescue JSON::ParserError
+          false
+        end
       end
 
       # Tablets go to the OraccJsonParser (title from the catalogue, language
