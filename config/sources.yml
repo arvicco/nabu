@@ -177,6 +177,8 @@ ccmh:
   adapter: Nabu::Adapters::Ccmh
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
                    # verses, Assemanianus Mt 1:1 eyeballed.
+                   # P14-5 (2026-07-12): +3 txt docs (Suprasliensis + the
+                   # Vitae, ccmh-txt family) land at the next owner-fired sync.
   sync_policy: manual
 
 goo300k:
