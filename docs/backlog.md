@@ -4176,3 +4176,25 @@ post-ORACC-sync numbers), README truthfulness, PR, owner queue (syncs:
 reconstruction extracts, stage-2 crawl, ccmh re-sync for txt texts; the
 ud re-sync for Ruthenian if still pending), flips, RE-FLAG the real
 backup disk (D item — owner hardware decision), sticky alarm LAST.
+
+## P14-9 · ORACC sync defects: blms collisions + anchor edge  [tier: opus] [status: in-progress] [deps: —]
+Defect packet (orchestrator census of the owner's 2026-07-12 big sync:
++10,899 docs / 30 projects landed, !20): (1) 19 × "duplicate passage urn"
+all in blms (bilingual literary) — census the real shape first (parallel
+Sumerian/Akkadian versions repeating line labels? column duplication?),
+then collision-tolerance per the house precedent (:b2 positional
+suffixing, never quarantine, never merge — GRETIL/ccmh pattern) IF the
+census supports it; if the duplicates are a different animal, report.
+(2) 1 × saao-saa08:P336145-en "prose unit anchored at X resolves to no
+line-start row" — inspect the actual HTML + corpusjson pair; fix the
+anchor fallback honestly (reattach-forward exists — why did it miss?) or
+skip that unit loudly. (3) Verify the 3 projects that yielded no docs
+(33 registered, 30 with docs — expect saas2-class catalog-only or empty
+corpusjson; confirm via discovery-accounting/canonical inspection and
+document; if a project's zip landed but discover found nothing
+UNEXPECTEDLY, that's the P11-7 loud-zero class — investigate).
+FROZEN-URN GUARD standing: parse-only oracc sync must show all
+previously-loaded docs =skipped; quarantines 20 → ~0. Fixtures: trimmed
+real slices from canonical/oracc/blms + the saa08 pair (no network).
+Suite+lint green; docs (02-sources note); backlog done; worklog (sha —).
+One commit, not pushed.
