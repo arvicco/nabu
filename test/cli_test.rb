@@ -30,7 +30,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export define].each do |command|
+    %w[version sync status rebuild verify search show export define etym].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -109,6 +109,26 @@ class CLITest < Minitest::Test
     assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
     assert_match(/--lang grc\|lat\|ang\|chu/, out)
     assert_match(/nabu define virtus/, out, "must show a Latin example")
+  end
+
+  # P14-1: `nabu etym` help must teach the walk (attested → proto →
+  # cognates), the asterisk convention, the romanization bridge, and worked
+  # examples on the demo chains.
+  def test_help_etym_documents_the_reconstruction_walk
+    out, _err, _status = run_cli(%w[help etym])
+    assert_match(/Proto-Slavic/, out)
+    assert_match(/Proto-Indo-European/, out)
+    assert_match(/Proto-Germanic/, out)
+    assert_match(/attestation count/i, out, "must promise corpus counts")
+    assert_match(/\*bogъ/, out, "must show the asterisk convention")
+    assert_match(/guþ/, out, "must show the romanization bridge example")
+    assert_match(/nabu etym богъ/, out, "must show the OCS worked example")
+  end
+
+  def test_help_define_documents_the_reconstruction_shelves
+    out, _err, _status = run_cli(%w[help define])
+    assert_match(/sla-pro\|ine-pro\|gem-pro/, out, "the widened --lang gate")
+    assert_match(/define \*bogъ/, out, "must show the asterisk example")
   end
 
   def test_help_export_documents_formats_and_filters

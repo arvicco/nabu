@@ -142,6 +142,7 @@ module Nabu
           content_sha256: sha, revision: 1, withdrawn: false
         )
         insert_citations(row, entry)
+        insert_reflexes(row, entry)
         journal(event: "loaded", dictionary_entry_id: row.id)
         :added
       end
@@ -156,6 +157,8 @@ module Nabu
         )
         DictionaryCitation.where(dictionary_entry_id: row.id).delete
         insert_citations(row, entry)
+        DictionaryReflex.where(dictionary_entry_id: row.id).delete
+        insert_reflexes(row, entry)
         journal(event: "revised", dictionary_entry_id: row.id,
                 params: { "old_sha" => old_sha, "new_sha" => sha })
         durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: sha)
@@ -171,6 +174,19 @@ module Nabu
             dictionary_entry_id: row.id, seq: seq,
             urn_raw: citation.urn_raw, cts_work: citation.cts_work,
             citation: citation.citation, label: citation.label
+          )
+        end
+      end
+
+      # P14-1: reflexes persist like citations — content of the entry,
+      # replaced wholesale on revision, resolved only at query time.
+      def insert_reflexes(row, entry)
+        entry.reflexes.each_with_index do |reflex, seq|
+          DictionaryReflex.create(
+            dictionary_entry_id: row.id, seq: seq,
+            lang_code: reflex.lang_code, language: reflex.language,
+            word: reflex.word, roman: reflex.roman,
+            word_folded: reflex.word_folded, roman_folded: reflex.roman_folded
           )
         end
       end

@@ -195,6 +195,13 @@ wiktionary-cu:
                    # богъ → god with Proto-Slavic chain eyeballed.
   sync_policy: manual
 
+wiktionary-recon:
+  adapter: Nabu::Adapters::WiktionaryRecon
+  enabled: false   # P14-1: the reconstruction shelf (three dictionaries —
+                   # sla-pro/ine-pro/gem-pro, ~125 MB across three GETs).
+                   # Flip after the owner-fired first sync + etym eyeball.
+  sync_policy: manual
+
 freising:
   adapter: Nabu::Adapters::Freising
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 27 docs / 2,037 lines,

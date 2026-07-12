@@ -38,7 +38,11 @@ module Nabu
 
       # sha256 over a dictionary entry's content columns (P11-4) — everything
       # except revision/withdrawn bookkeeping. Citations are content: a
-      # citation change is a real upstream revision.
+      # citation change is a real upstream revision. Reflexes (P14-1) are
+      # content too, but are appended ONLY when present: this module is a
+      # persistent format, and the guard keeps every reflex-less entry on
+      # every pre-P14-1 shelf at its stored sha (pinned in the ContentHash
+      # test) — no revision storm on the next full load.
       def dictionary_entry(entry)
         citations = entry.citations.map do |citation|
           { "urn_raw" => citation.urn_raw, "cts_work" => citation.cts_work,
@@ -46,8 +50,22 @@ module Nabu
         end
         digest(
           entry.entry_id, entry.key_raw, entry.language, entry.headword,
-          entry.headword_folded, entry.gloss, entry.body, canonical_json(citations)
+          entry.headword_folded, entry.gloss, entry.body, canonical_json(citations),
+          *reflex_fields(entry)
         )
+      end
+
+      # The only-when-non-empty guard: an empty reflex list contributes NO
+      # fields (the pre-P14-1 encoding, byte for byte).
+      def reflex_fields(entry)
+        return [] if entry.reflexes.empty?
+
+        reflexes = entry.reflexes.map do |reflex|
+          { "lang_code" => reflex.lang_code, "language" => reflex.language,
+            "word" => reflex.word, "roman" => reflex.roman,
+            "word_folded" => reflex.word_folded, "roman_folded" => reflex.roman_folded }
+        end
+        [canonical_json(reflexes)]
       end
 
       # JSON with hash keys sorted recursively (by string form), so

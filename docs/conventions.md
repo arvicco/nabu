@@ -134,6 +134,16 @@ Consequences for Nabu:
   ship *transliterations*: sign-by-sign Latin-alphabet renderings
   (`lugal-e`, with superscript determinatives), which are still Sumerian or
   Akkadian, just re-scripted. The ATF format encodes these conventions.
+- **Reconstruction pseudo-languages (P14-1):** `sla-pro` (Proto-Slavic),
+  `ine-pro` (Proto-Indo-European), `gem-pro` (Proto-Germanic) are NOT ISO
+  639-3 — they are English Wiktionary's etymology-language codes, adopted
+  verbatim because the reconstruction shelf's crosswalk (the kaikki
+  `descendants` trees, architecture §12) speaks them; minting our own would
+  break every join. They pass the shape-only tag validation unchanged
+  (3-letter primary + `pro` subtag). Reconstructed forms are hypotheses,
+  starred by scholarly convention: the store keeps headwords bare (upstream
+  reality), display prefixes `*`, and `define *bogъ`/`etym *bogъ` strip a
+  leading asterisk on the way in.
 - **Word boundaries are editorial.** Ancient Greek was written in *scriptio
   continua* — no spaces, no lowercase, no punctuation. Every space in our
   passages is a modern editor's decision. For scripts where segmentation
@@ -386,6 +396,14 @@ precisely because BOTH sides fold.
 - **Elision apostrophes** (U+02BC vs U+2019 vs U+0027, §1) are *not*
   unified — upstream reality, and unicode61 treats them all as token
   separators anyway.
+- **Reconstruction shelves (`sla-pro`/`ine-pro`/`gem-pro`, P14-1).**
+  Generic fold only. Proto-Slavic works well (hačeks strip: *cěsařь →
+  cesarь; jers are letters and stay). PIE headwords keep their laryngeal
+  subscripts (h₂) and modifier letters (ʰ ʷ) — `define *h₃ebʰi` is not
+  ASCII-typeable, an accepted gap: the primary entry path is `nabu etym`
+  from an attested (typeable) lemma, and starred forms are copy-pasteable
+  from its output. An ine-pro ASCII fold (₂→2, ʰ→h) is a possible future
+  rule here if usage demands it.
 
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not

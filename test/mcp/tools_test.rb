@@ -97,9 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_six_tools_with_json_schemas
+    def test_definitions_lists_the_seven_tools_with_json_schemas
       defs = tools.definitions
-      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_status],
+      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
+                      nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -621,6 +622,87 @@ module MCP
       assert_match(/shelf|dictionar/i, text_of(result))
     ensure
       bare&.disconnect
+    end
+
+    # -- nabu_etym (P14-1) --------------------------------------------------------
+
+    def seed_recon_shelf(source: nil)
+      recon = source || Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon",
+        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+    end
+
+    def test_etym_walks_an_attested_lemma_with_counts_and_ancestors
+      seed_recon_shelf
+      doc = make_document(urn: "urn:nabu:test:chu", title: "Zographensis", language: "chu")
+      make_passage(doc, urn: "urn:nabu:test:chu:1", text: "ба", sequence: 0, language: "chu",
+                        lemmas: [%w[богъ ба]])
+      rebuild!
+
+      entries = payload(call("nabu_etym", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "*bogъ", entry.fetch("headword")
+      assert_equal "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2", entry.fetch("urn")
+      assert_equal "attribution", entry.fetch("license_class")
+      assert_equal({ "language" => "chu", "word" => "богъ", "roman" => "bogŭ" },
+                   entry.fetch("matched_via"))
+      cognate = entry.fetch("cognates").first
+      assert_equal 1, cognate.fetch("attested_count"), "attested cognates sort first"
+      assert_operator entry.fetch("cognates_total"), :>, entry.fetch("cognates").size,
+                      "the cognate list is bounded with an honest total"
+      assert_includes entry.fetch("ancestors").map { |a| a.fetch("headword") }, "*bʰeh₂g-",
+                      "one proto-to-proto hop rides along"
+    end
+
+    def test_etym_needs_a_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_etym", {}) }
+    end
+
+    def test_etym_no_match_words_the_absence
+      seed_recon_shelf
+      rebuild!
+      result = call("nabu_etym", { "lemma" => "βλαβλα" })
+      refute result[:isError]
+      assert_empty payload(result).fetch("entries")
+      assert_match(/no reconstruction/i, payload(result).fetch("note"))
+    end
+
+    def test_etym_withholds_restricted_shelves_by_default
+      restricted = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon",
+        license: "CC-BY-SA + GFDL", license_class: "research_private", enabled: true
+      )
+      seed_recon_shelf(source: restricted)
+      rebuild!
+      assert_empty payload(call("nabu_etym", { "lemma" => "*bogъ" })).fetch("entries")
+      revealed = payload(call("nabu_etym", { "lemma" => "*bogъ", "include_restricted" => true }))
+      refute_empty revealed.fetch("entries")
+    end
+
+    def test_etym_without_the_crosswalk_migration_degrades_gracefully
+      bare = Nabu::Store.connect("sqlite::memory:")
+      result = tools(catalog: bare, fulltext: @fulltext).call("nabu_etym", { "lemma" => "богъ" })
+      refute result[:isError]
+      assert_match(/reconstruction shelf/i, text_of(result))
+    ensure
+      bare&.disconnect
+    end
+
+    def test_define_carries_reflexes_on_reconstruction_entries
+      seed_recon_shelf
+      entries = payload(call("nabu_define", { "lemma" => "*bogъ", "lang" => "sla-pro" })).fetch("entries")
+      refute_empty entries
+      entry = entries.find { |e| e.fetch("urn").end_with?("bogъ:noun:2") }
+      assert_equal "*bogъ", entry.fetch("headword")
+      refute_empty entry.fetch("reflexes")
+      assert_kind_of Integer, entry.fetch("reflexes_total")
     end
 
     def test_concord_with_a_missing_fts_table_degrades_gracefully

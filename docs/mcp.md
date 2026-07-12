@@ -2,10 +2,11 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes six tools — search, read
-by urn, concordance, cross-source alignment, dictionary lookup, and coverage —
-so a model can look things up in your texts, quote them, and cite them, without
-any ability to change the collection.
+(Claude Code, Claude Desktop) over stdio. It exposes seven tools — search, read
+by urn, concordance, cross-source alignment, dictionary lookup, the
+reconstruction walk, and coverage — so a model can look things up in your
+texts, quote them, and cite them, without any ability to change the
+collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -33,7 +34,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The six tools
+## 2. The seven tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, and align rows also carry the **source**
@@ -129,7 +130,24 @@ fields, a short gloss, the entry body as structured plain text (bounded at
 whole), and the entry's citations with `resolved_urn` set where the cited
 work is in-catalog (`Il. 1.1` → the actual Iliad line, one `nabu_show`
 away); unresolved citations keep their display text and a null urn. Lemma
-hits from `nabu_search` carry these glosses too.
+hits from `nabu_search` carry these glosses too. A leading asterisk
+(`*bogъ`) scopes to the reconstruction shelves (P14-1), whose entries also
+carry their descendant `reflexes` (bounded, attested-first, honest totals).
+
+### `nabu_etym`
+
+The reconstruction walk (P14-1, architecture §12): give an attested lemma
+(богъ, guþ) and get every reconstruction whose Wiktionary descendants name
+it — Proto-Slavic / PIE / Proto-Germanic (kaikki.org extracts, CC-BY-SA +
+GFDL) — each with the reflex that matched (`matched_via`), its cognates
+across languages with **corpus attestation counts** (`attested_count` =
+gold-lemma passages in this catalog; null is an honest absence, not a
+zero), and one hop of proto-to-proto ancestors with *their* cognates
+(богъ → \*bogъ → \*bʰeh₂g- → ἔφᾰγον in one call). Romanization bridges
+scripts: guþ reaches \*gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the attested
+match; a leading asterisk looks a reconstruction up directly. Cognate
+lists are bounded (attested first, 20 shown) with honest totals — the CLI
+`nabu etym` prints everything.
 
 ### `nabu_status`
 

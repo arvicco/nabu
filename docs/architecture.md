@@ -499,3 +499,81 @@ KEPT at the head of every entry body — those Proto-Slavic/PIE chains are
 the seed data for a future reconstruction/etymology shelf (see the
 improvements register). Citations start empty (Wiktionary quotations are
 unanchored — the B-T precedent).
+
+## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
+
+`nabu etym богъ --lang chu` walks from an attested lemma to its
+reconstructed ancestors and out to the cognates: богъ (725 gold passages)
+→ Proto-Slavic \*bogъ (gloss, senses, the Iranian-loan discussion) → PIE
+\*bʰeh₂g- with ITS reflexes (grc ἔφᾰγον…), each cognate carrying the
+count of gold-lemma passages attesting it in THIS catalog. The data is
+English Wiktionary's reconstruction pseudo-languages via kaikki.org's
+wiktextract extracts (same dual "CC-BY-SA and GFDL" grant as
+wiktionary-cu → attribution): Proto-Slavic (`sla-pro`, ~5,195 words),
+Proto-Indo-European (`ine-pro`, ~1,781), Proto-Germanic (`gem-pro`,
+~5,552). This section records the design decisions.
+
+**Reconstructions ARE dictionary entries — one source, three
+dictionaries.** The records are byte-for-byte the OCS record shape (the
+`wiktionary-jsonl` family parses them unchanged), so the shelf reuses
+everything §11 built: `WiktionaryRecon` is ONE registry source
+(`wiktionary-recon`, `content_kind :dictionary`) shipping three
+dictionaries (`wiktionary-sla-pro` / `wiktionary-ine-pro` /
+`wiktionary-gem-pro`), urns `urn:nabu:dict:wiktionary-sla-pro:<entry_id>`,
+same entry-id recipe, same revision/withdraw semantics. Fetch is three
+FileFetch single-file syncs — each extract in ITS OWN subdir (FileFetch is
+one-file-per-dir by design), attics under the shared top-level
+`<workdir>/.attic/<subdir>/`, the UD two-phase choreography (all prepare,
+the breaker sees the whole set, all complete), three probe targets. The
+upstream `word` field carries NO asterisk; display puts it back (a
+headword whose dictionary language ends `-pro` prints starred), and
+`define *bogъ` strips a leading asterisk and scopes to the reconstruction
+shelves — the comparativist's notation IS the query convention.
+
+**Language codes: Wiktionary's, verbatim.** `sla-pro`/`ine-pro`/`gem-pro`
+are not ISO 639-3 — they are Wiktionary's etymology-language codes, and
+the registry adopts them unchanged because the whole crosswalk speaks
+them (inventing our own would break the join with every descendants
+node). They pass the existing shape-only tag validation (conventions §4)
+with zero code changes; folding is the generic rule (ě/ř lose their
+hačeks under the Mn strip, jers stay — `*cěsařь` folds `cesarь`; the PIE
+laryngeal subscripts survive, an accepted typability gap since `etym`
+enters from an attested, typeable lemma).
+
+**The crosswalk: `dictionary_reflexes` (migration 007), stored edges,
+query-time resolution.** ~89% of reconstruction records carry a
+`descendants` tree; its WORDED nodes flatten depth-first into
+`DictionaryReflex` values (the citation pattern exactly: parser mints,
+loader persists, revision replaces wholesale, reflexes are part of the
+content sha). Each row keeps the upstream `lang_code` VERBATIM plus a
+catalog-side `language` (the parser's map where codes differ — cu→chu,
+la→lat, sa→san — identity for shape-valid codes, NULL for the lone
+malformed "ML." in the wild: display-only, never a join candidate), the
+reflex `word` and its `roman`, and their conventions-§9 folds (leading
+asterisk stripped — proto-to-proto edges arrive as "*bogъ"). Resolution
+happens at QUERY time only, against whatever `passage_lemmas` currently
+holds — the §10/§11 no-stale-links stance; a rebuild or reindex changes
+nothing here. The `roman` fold is load-bearing: the catalog's got/san/xcl
+gold lemmas are romanized, so Gothic 𐌲𐌿𐌸 counts via "guþ" (measured in
+the P14-1 scout: roman rescues got from 0% to 59% reflex-level).
+ContentHash appends reflexes ONLY when non-empty, so every reflex-less
+entry on every pre-P14-1 shelf keeps its stored sha (pinned by test) —
+no revision storm. The wiktionary-cu records also carry descendants;
+their backfill is a deliberately deferred decision (improvements
+register), so the parser's `reflexes:` option defaults off.
+
+**Query surface: two directions of one table.** `define *bogъ` (and
+`--lang sla-pro|ine-pro|gem-pro`) reads the shelf as entries — body plus
+the reflex list, attested-in-catalog cognates first with counts.
+`Query::Etym` (`nabu etym`, MCP `nabu_etym`) walks the reverse edge:
+folded query → reflex match → proto entries (each with MatchedVia, the
+reflex that let it in), then ONE proto-to-proto hop up (reflex rows of
+OTHER `-pro` dictionaries naming this entry's language + folded headword)
+with the ancestors' own cognates — bounded by design, a report not a
+graph crawl. Counts come from `passage_lemmas` grouped per language
+(ReflexViews, shared by both surfaces); nil is an honest absence, never a
+zero claim. The MCP tool is the seventh, same contract as the rest:
+license fields on every entry, cognate lists bounded attested-first with
+honest totals, research_private/restricted withheld unless
+`include_restricted`, graceful pre-007 degradation ("run nabu sync
+wiktionary-recon").
