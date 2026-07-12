@@ -4106,6 +4106,70 @@ later add (embeddings-based paraphrase detection vs the symbolic core).
 Ends with a recommendation menu for the owner. Live corpus read-only
 experiments allowed (timing probes, n-gram density samples).
 
+## P14-8 · Proximity search  [tier: opus] [status: done] [deps: —]
+Owner-promoted 2026-07-12 from the end-user analysis: proximity search is
+the TLG-style daily-use feature every persona touches (λόγος within N
+words of θεός, lemma-aware) — more basic than the intertext engine and
+its building block. Design-first, measure-first (P13-6/P14-3 precedent).
+Design questions: CLI shape honoring the compact-CLI preference (e.g.
+`search A --near B [--window N]`, composing with the existing --lemma and
+--morph flags where honest — a lemma-aware side means expanding lemma →
+attested surface forms via passage_lemmas before the FTS NEAR, argue the
+mechanics and the window semantics FTS5 NEAR actually gives on folded
+search forms); cross-passage adjacency is OUT (passage = the unit, said
+honestly); result rendering shows both terms highlighted. Collocation
+statistics are NOT this packet (they ride the Phase 15 menu) — but don't
+paint them out. MCP: extend nabu_search args. Measured timings on the
+live index before any schema addition (expect none needed). Tests incl.
+at least two languages + a lemma-expanded case. README command row,
+mcp.md, backlog done + findings, worklog (sha —).
+
+Findings:
+- **CLI shape:** `search A --near B [--window N]` exactly as sketched —
+  `--near` rides the existing `search` command, composing with `--lemma`
+  (the lemma becomes the anchor) and `--lang`/`--license`/`--limit`.
+  `--window` defaults to 10 (FTS5's own NEAR default), 0 = adjacent. New
+  `Query::Proximity` (lib/nabu/query/proximity.rb) shares Search's
+  Result/snippet/bm25 machinery and CatalogJoin, so rendering is plain
+  search rendering — both terms bracketed because both are NEAR phrases.
+- **NEAR semantics (probed on SQLite 3.53, not assumed):** `NEAR(a b, N)`
+  matches when ≤ N tokens sit BETWEEN the phrases, order-independent
+  (N=0 = adjacent; a gap-k pair needs N≥k). The window counts FOLDED
+  tokens (conventions §9): honest per-word for grc/lat/…; documented
+  caveat for akk/sux, where sign-joins/determinatives fold to spaces so
+  one transliterated word spans several tokens (window reads tighter).
+- **Fold-both-sides carried into NEAR:** each side folds to the
+  Normalize.query_forms union; the MATCH is the OR of NEAR clauses over
+  the cartesian product of the two sides' variants (the P6-4 argument
+  applied per side — cannot miss; the generic variant keeps no-rule
+  languages findable).
+- **Lemma-aware anchor:** `--lemma X --near B` expands X via
+  passage_lemmas to its distinct attested surface forms, each folded by
+  its passage language, then each is a NEAR phrase. Live expansion counts
+  are naturally bounded (folding collapses accent variants: ὁ→25,
+  εἰμί→99, λέγω→140 forms); MAX_LEMMA_FORMS=400 guards FTS expression
+  limits only. Homograph honesty documented: an attested surface form
+  may, in some passage, spell a DIFFERENT lemma's token — surface
+  expansion cannot tell (no token offsets in the FTS index).
+- **Measured live (3.6M-passage index, read-only, no schema addition —
+  as expected):** κύριος NEAR θεός w5 grc → top-20 in 43–113 ms; λόγος
+  NEAR θεός w5 → 24–37 ms, surfacing John 1:1 AND the P.Oxy. 8.1151
+  amulet quoting it (the intertext promise already visible); --lemma
+  λέγω --near κύριος w3 → 280 NEAR clauses, 95–284 ms, surfacing the
+  prophetic formula τάδε λέγει κύριος; pathological ὁ NEAR θεός w3 →
+  79 ms. Lemma expansion itself ~170 ms for λέγω.
+- **Out of scope (said honestly):** cross-passage adjacency (passage =
+  the unit; tested); --morph with --near (clear usage error both
+  surfaces; clean follow-up); collocation statistics (Phase 15 menu —
+  proximity returns the raw hit material such counts would aggregate);
+  FTS operators inside proximity terms (each side is phrase-quoted, so
+  `*`/AND/OR are literal — operator queries stay with plain search).
+- MCP: nabu_search gains `near` + `window` (clamped 0–50, default 10);
+  near+morph → InvalidArguments. Tests: query/proximity_test (10: grc +
+  lat folds, lemma-expanded suppletive εἶπε, window boundaries, order
+  independence, filters, cross-passage honesty), cli_test (5, real UD
+  fixture), mcp/tools_test (3). Suite 1598/26,593 green, lint clean.
+
 ## P14-gate · Phase 14 gate  [tier: orchestrator] [status: pending] [deps: P14-1..7]
 Full-diff, library.md refresh (reconstruction shelf section + the
 post-ORACC-sync numbers), README truthfulness, PR, owner queue (syncs:
