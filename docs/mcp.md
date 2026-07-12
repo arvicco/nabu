@@ -57,6 +57,17 @@ Full-text or exact-lemma search over the whole corpus. Give **exactly one** of:
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
 
+An optional `near` turns either mode into **proximity search**: keep only hits
+where `near`'s term occurs within `window` words (default 10, `0` = adjacent) of
+the `query`/`lemma` in the **same passage**. It is FTS5 NEAR over the folded
+search forms — order-independent (`A … B` and `B … A` both count), the window
+counting folded tokens (so a cuneiform sign-joined word, folded to several
+tokens, reads tighter). With a `lemma` anchor the lemma first expands to its
+attested surface forms, so `lemma: "λέγω", near: "κύριος"` finds `τάδε λέγει
+κύριος`. Both matched terms are bracketed in the returned snippet.
+Cross-passage adjacency is out (the passage is the unit); `near` does not
+compose with `morph`.
+
 Optional `lang` (ISO-639-3), `license` (exact class), `limit` (default 10, max
 50). Hits are relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result

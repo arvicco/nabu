@@ -206,6 +206,42 @@ module MCP
       end
     end
 
+    # -- nabu_search: proximity (near/window) -----------------------------------
+
+    def test_search_near_keeps_only_the_close_pair_both_terms_highlighted
+      doc = make_document(urn: "urn:d:jn", title: "John")
+      make_passage(doc, urn: "urn:d:jn:1", text: "θεὸς ἦν ὁ λόγος", sequence: 0)
+      make_passage(doc, urn: "urn:d:jn:2",
+                        text: "λόγος μὲν οὖν ἐστιν ἀρχὴ πάντων καὶ τέλος ὁ θεός", sequence: 1)
+      rebuild!
+
+      hits = payload(call("nabu_search", { "query" => "λόγος", "near" => "θεός", "window" => 3 })).fetch("matches")
+      assert_equal(%w[urn:d:jn:1], hits.map { |hit| hit.fetch("urn") })
+      snippet = hits.first.fetch("snippet")
+      assert_includes snippet, "[θεοσ]"
+      assert_includes snippet, "[λογοσ]", "both proximity terms are bracketed in the snippet"
+    end
+
+    def test_search_near_expands_a_lemma_anchor_to_surface_forms
+      doc = make_document(urn: "urn:d:lxx", title: "LXX")
+      make_passage(doc, urn: "urn:d:lxx:1", text: "καὶ εἶπε κύριος", sequence: 0,
+                        lemmas: [%w[λέγω εἶπε], %w[κύριος κύριος]])
+      rebuild!
+
+      hits = payload(call("nabu_search", { "lemma" => "λέγω", "near" => "κύριος", "window" => 2 })).fetch("matches")
+      assert_equal(%w[urn:d:lxx:1], hits.map { |hit| hit.fetch("urn") },
+                   "the suppletive aorist εἶπε counts as λέγω near κύριος")
+    end
+
+    def test_search_near_does_not_compose_with_morph
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "x", sequence: 0, lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "near" => "κύριος", "morph" => "case=nom" })
+      end
+    end
+
     def test_search_rejects_an_unknown_license_class
       seed_corpus
       error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
