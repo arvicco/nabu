@@ -4278,7 +4278,7 @@ skip option 3.
 
 **MEASUREMENT REPORT — OWNER DECISION 2026-07-12: "No urgency with reindexing, mark to-do for later stages" → RE-CHECK-AT-N accepted (revisit at ~2-min reindex / ~6-7M passages; per-source reindex first when commissioned)**
 
-## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: pending] [deps: P14-1..6]
+## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: done] [deps: P14-1..6]
 The owner wants A reviewed thoroughly before committing. NOT an
 implementation packet: a design document (docs/intertext-design.md) for
 the Phase 15 decision — intertext engine (§1.1), time/place axes (§1.4),
@@ -4290,6 +4290,31 @@ LXX→NT→Fathers), storage/index cost projections AT THIS CORPUS SIZE
 later add (embeddings-based paraphrase detection vs the symbolic core).
 Ends with a recommendation menu for the owner. Live corpus read-only
 experiments allowed (timing probes, n-gram density samples).
+
+Findings: docs/intertext-design.md delivered under the owner-endorsed
+2026-07-12 persona frame (interactive-first), all numbers measured live.
+The headline finding inverts §1.1's architecture: NO materialized n-gram
+table is needed — per-gram FTS phrase probes over the EXISTING index
+answer `parallels <urn>` in 1–111 ms at 3.76M passages (Odyssey 1.1 →
+Polybius; Matt 4:4 → LXX Deut 8:3 once elision marks are stripped — a
+measured U+02BC/U+2019 fold gap; Thucydides 1.9.2 → Dionysius of
+Halicarnassus at 57/117 shared grams). Cognate-in-parallel measured: 349
+NT verses where got and chu attest reflexes of the same proto-root via
+one proto-to-proto hop (31 roots, 1.4 s staged — needs two indexes +
+a tiny closure table; contextually matched: salt/соль, malan/млѣти).
+Collatable hub surface: grc 7,643 / lat 6,974 / chu 3,764 verses with
+≥2 same-language witnesses — but the fold does not bridge Cyrillic vs
+Helsinki ASCII, so collation diffs raw tokens within script family only.
+Date axis generalizes beyond HGV (63,925/66,261 = 96.5% machine-dated)
+to ORACC (96.6% regnal/period), goo300k/IMP (years in urns), TOROT
+chronicle annal divs; ≤100k rows, <20 MB. Fuzzy trigram index measured
+at 5.8–6.6 B/char → documentary scope 250–270 MB, whole corpus 3.6–4.1 GB
+(scope flag vindicated). Formula miner needs zero schema (Homer/ASPR
+slices mined in 0.6 s: ὣς ἔφαθ' 72×, "hwaet ic hatte" 16×). Links table
+= batch-mode output format only, deferred to the first batch producer.
+Menu: P15-1 parallels (headline) → date/place → cognates → collation;
+fuzzy can wait; embeddings-tier paraphrase/cross-language allusion waits
+for the cluster, gated on golden sets the symbolic packets generate.
 
 ## P14-8 · Proximity search  [tier: opus] [status: done] [deps: —]
 Owner-promoted 2026-07-12 from the end-user analysis: proximity search is
