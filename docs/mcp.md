@@ -144,7 +144,9 @@ away); unresolved citations keep their display text and a null urn. Lemma
 hits from `nabu_search` carry these glosses too. A leading asterisk
 (`*bogъ`; quote it in a shell — zsh globs a bare `*`) scopes to the
 reconstruction shelves (P14-1), whose entries also carry their descendant
-`reflexes` (bounded, attested-first, honest totals); proto headwords fold
+`reflexes` (bounded, attested-first, honest totals — this conversational
+surface stays capped by design; the CLI `nabu define --long` is the
+unbounded, grouped-by-language expansion, P14-11); proto headwords fold
 to ASCII (§9: ʰ→h, ʷ→w), so `*gwhew-` reaches `*gʷʰew-`.
 
 ### `nabu_etym`
@@ -163,8 +165,9 @@ reconstruction-headword lookup, so the proto form itself resolves —
 superscripted (`bʰewgʰ`) or pure ASCII (`bhewgh`, the §9 fold ʰ→h/ʷ→w),
 root hyphen optional; a leading asterisk (quote it in a shell — zsh globs a
 bare `*`) forces the direct lookup. Cognate lists are bounded (attested
-first, 20 shown) with honest totals — the CLI `nabu etym` prints
-everything.
+first, 20 shown) with honest totals — this conversational surface stays
+capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
+grouped by language.
 
 ### `nabu_status`
 

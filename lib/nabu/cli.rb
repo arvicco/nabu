@@ -538,6 +538,9 @@ module Nabu
                         "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated reflex list in full, grouped by language " \
+                        "(compact is the default; MCP nabu_define stays bounded)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
@@ -597,6 +600,9 @@ module Nabu
                   desc: "Scope the attested-lemma match to one language"
     option :limit, type: :numeric, default: Nabu::Query::Etym::DEFAULT_LIMIT,
                    desc: "Maximum reconstruction entries printed"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated cognate list in full, grouped by language " \
+                        "(compact is the default; MCP nabu_etym stays bounded)"
     def etym(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "etym: give a lemma (e.g. богъ, guþ) or *reconstruction" if lemma.empty?
@@ -1520,9 +1526,26 @@ module Nabu
         return if rest.empty?
 
         say ""
+        options[:long] ? print_reflexes_expanded(rest) : print_reflexes_capped(rest)
+      end
+
+      # Compact default (house compact-CLI rule): the first ten non-attested
+      # reflexes inline, the tail honestly summarised as "… and N more".
+      def print_reflexes_capped(rest)
         say "other reflexes (not attested here): " \
             "#{rest.first(10).map { |r| "[#{r.lang_code}] #{reflex_form(r)}" }.join(', ')}" \
             "#{" … and #{rest.size - 10} more" if rest.size > 10}"
+      end
+
+      # --long (P14-11): the WHOLE non-attested list, grouped by language so a
+      # long tail (a Proto-Slavic root can name 25+ descendants) stays readable
+      # — languages in first-seen (stored depth-first) order, forms within a
+      # language in stored order. Nothing is elided under the flag.
+      def print_reflexes_expanded(rest)
+        say "other reflexes (not attested here) — all #{rest.size}, grouped by language:"
+        rest.group_by(&:lang_code).each do |lang_code, group|
+          say "  [#{lang_code}] #{group.map { |r| reflex_form(r) }.join(', ')}"
+        end
       end
 
       def reflex_form(reflex)
