@@ -253,6 +253,35 @@ module Store
       assert_equal ["PSA 22.1"], refs.select_map(:ref)
     end
 
+    # -- CCMH (P14-2): chapter-0 apparatus + :b2 duplicate-verse suffixes ------
+
+    CCMH_REGISTRY = <<~YAML
+      nt:
+        witnesses:
+          - label: CCMH Marianus
+            extractor: cts-verse
+            documents:
+              MARK: urn:nabu:ccmh:marianus:mar
+    YAML
+
+    def test_cts_verse_excludes_chapter_zero_apparatus_and_isolates_verse_dup_suffixes
+      # The four CCMH gospel codices mint chapter-0 refs for the kephalaia
+      # (chapter-title lists) and incipits (…:0.N, and their :b2 duplicates) —
+      # NOT running gospel text, and they cross-align spuriously between
+      # manuscripts, so the cts-verse extractor DROPS a leading chapter 0. A
+      # :b2 duplicate on a REAL verse folds to a distinct "…​.B2" ref (the
+      # generic ":" → "." fold), so it never false-aligns onto the primary
+      # verse — it self-isolates, no special handling needed.
+      doc = make_document(urn: "urn:nabu:ccmh:marianus:mar")
+      make_verse(doc, urn: "urn:nabu:ccmh:marianus:mar:2.3", sequence: 0)          # real verse
+      make_verse(doc, urn: "urn:nabu:ccmh:marianus:mar:0.1", sequence: 1)          # kephalaion heading
+      make_verse(doc, urn: "urn:nabu:ccmh:marianus:mar:0.23:b2", sequence: 2)      # duplicate heading
+      make_verse(doc, urn: "urn:nabu:ccmh:marianus:mar:13.11:b2", sequence: 3)     # lectionary verse dup
+
+      assert_equal 2, rebuild!(registry(CCMH_REGISTRY))
+      assert_equal ["MARK 13.11.B2", "MARK 2.3"], refs.order(:ref).select_map(:ref)
+    end
+
     def test_cts_verse_skips_a_passage_urn_that_does_not_extend_its_document_urn
       doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
       make_verse(doc, urn: "urn:nabu:oddball:1.1", sequence: 0)

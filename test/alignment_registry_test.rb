@@ -248,10 +248,12 @@ class AlignmentRegistryTest < Minitest::Test
                     urn:nabu:proiel:armenian-nt urn:nabu:proiel:marianus],
                  work.witnesses.take(5).map(&:document_urn),
                  "the five-way NT flagship (P11-3) is the shipped proof"
-    assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)"],
+    assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)",
+                  "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis"],
                  work.witnesses.drop(5).map(&:label),
                  "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
-                 "Vulgate NT witnesses; P11-8 the WEB English witness"
+                 "Vulgate NT witnesses; P11-8 the WEB English witness; P14-2 the four " \
+                 "CCMH Old Church Slavonic gospel manuscripts"
     assert_equal "urn:nabu:proiel:wscp", work.witnesses[5].document_urn,
                  "the P12-1 OE Gospel of Mark rides the shared urn:nabu:proiel: namespace"
     assert_includes work.witnesses[6].document_urns, "urn:nabu:sblgnt:mark"
@@ -260,6 +262,16 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "MARK", work.witnesses[7].book_for("urn:nabu:vulgate:mrk")
     assert_includes work.witnesses[8].document_urns, "urn:nabu:eng-web:mrk"
     assert_equal "MARK", work.witnesses[8].book_for("urn:nabu:eng-web:mrk")
+    # P14-2: CCMH Marianus (the alt-edition showcase — labelled apart from the
+    # PROIEL "marianus" witness at index 4) maps the PROIEL book vocabulary
+    # (MARK) onto the CCMH per-gospel urn (…:mar), one document per gospel.
+    ccmh_marianus = work.witnesses[10]
+    assert_equal "CCMH Marianus", ccmh_marianus.label
+    assert_equal "cts-verse", ccmh_marianus.extractor
+    assert_equal "MARK", ccmh_marianus.book_for("urn:nabu:ccmh:marianus:mar")
+    assert_equal %w[urn:nabu:ccmh:marianus:mat urn:nabu:ccmh:marianus:mar
+                    urn:nabu:ccmh:marianus:luk urn:nabu:ccmh:marianus:joh],
+                 ccmh_marianus.document_urns, "all four gospels present in the manuscript"
   end
 
   def test_shipped_registry_loads_the_ot_work
