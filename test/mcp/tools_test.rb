@@ -97,10 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_seven_tools_with_json_schemas
+    def test_definitions_lists_the_eight_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_status],
+                      nabu_parallels nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -692,6 +692,67 @@ module MCP
       assert_match(/shelf|dictionar/i, text_of(result))
     ensure
       bare&.disconnect
+    end
+
+    # -- nabu_parallels (P15-1 intertext) -----------------------------------------
+
+    PROEM = "ἄνδρα μοι ἔννεπε μοῦσα πολύτροπον ὃς μάλα πολλὰ"
+
+    # An anchor, an OPEN quoter, and a RESEARCH_PRIVATE quoter of the same line —
+    # so the default-exclusion and include_restricted contract can be probed.
+    def seed_parallels
+      anchor = make_document(urn: "urn:d:od", title: "Odyssey")
+      make_passage(anchor, urn: "urn:d:od:1.1", text: PROEM, sequence: 0)
+      openq = make_document(urn: "urn:d:pol", title: "Histories")
+      make_passage(openq, urn: "urn:d:pol:1", text: "φησιν #{PROEM}", sequence: 0)
+      secret = make_document(source: @private, urn: "urn:d:secret", title: "Private")
+      make_passage(secret, urn: "urn:d:secret:1", text: "λέγει #{PROEM}", sequence: 0)
+      rebuild!
+    end
+
+    def test_parallels_returns_hits_with_the_license_contract
+      seed_parallels
+      body = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))
+      assert_equal "parallels", body["type"]
+      assert_equal "urn:d:od:1.1", body.dig("anchor", "urn")
+      hit = body["hits"].find { |h| h["urn"] == "urn:d:pol:1" }
+      refute_nil hit, "the open quoter is a hit"
+      %w[urn language license_class source score shared_grams evidence].each do |field|
+        assert hit.key?(field), "every hit carries #{field}"
+      end
+      assert_equal "open", hit["license_class"]
+      assert(hit["evidence"].any? { |span| span.include?("ανδρα μοι εννεπε μουσα") }, "shared phrase evidence")
+    end
+
+    def test_parallels_excludes_restricted_candidates_by_default
+      seed_parallels
+      urns = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))["hits"].map { |h| h["urn"] }
+      refute_includes urns, "urn:d:secret:1", "the research_private quoter is excluded by default"
+
+      opened = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1", "include_restricted" => true }))
+      assert_includes opened["hits"].map { |h| h["urn"] }, "urn:d:secret:1",
+                      "include_restricted: true opts the private quoter back in"
+    end
+
+    def test_parallels_missing_urn_is_an_invalid_argument
+      seed_parallels
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_parallels", {}) }
+    end
+
+    def test_parallels_unknown_urn_is_a_graceful_note
+      seed_parallels
+      result = call("nabu_parallels", { "urn" => "urn:d:nope:1" })
+      refute result[:isError]
+      assert_match(/not found/i, text_of(result))
+    end
+
+    def test_parallels_without_index_reports_rebuilding
+      empty = Nabu::Store.connect_fulltext("sqlite::memory:")
+      result = tools(fulltext: empty).call("nabu_parallels", { "urn" => "urn:d:od:1.1" })
+      refute result[:isError]
+      assert_match(/rebuilding/i, text_of(result))
+    ensure
+      empty&.disconnect
     end
 
     # -- nabu_etym (P14-1) --------------------------------------------------------

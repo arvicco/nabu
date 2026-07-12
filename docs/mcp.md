@@ -2,9 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes seven tools — search, read
+(Claude Code, Claude Desktop) over stdio. It exposes eight tools — search, read
 by urn, concordance, cross-source alignment, dictionary lookup, the
-reconstruction walk, and coverage — so a model can look things up in your
+reconstruction walk, intertext (quotation/echo finding), and coverage — so a
+model can look things up in your
 texts, quote them, and cite them, without any ability to change the
 collection.
 
@@ -34,11 +35,11 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The seven tools
+## 2. The eight tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search, concord, and align rows also carry the **source**
-slug). Preserve those fields when you quote — see §6.
+**license_class** (search, concord, align, and parallels rows also carry the
+**source** slug). Preserve those fields when you quote — see §6.
 
 ### `nabu_search`
 
@@ -168,6 +169,31 @@ bare `*`) forces the direct lookup. Cognate lists are bounded (attested
 first, 20 shown) with honest totals — this conversational surface stays
 capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
 grouped by language.
+
+### `nabu_parallels`
+
+Passage-anchored intertext (P15-1, architecture §13): give one passage `urn`
+and get the passages that **quote or echo** it — reception discovery, the
+inverse of `nabu_align` (which renders one verse across its registered
+translation witnesses; this one *discovers* quotation across the whole corpus
+from surface text alone). Query-time over the same FTS index as `nabu_search`,
+no precomputation: the anchor is folded, cut into overlapping 4-word grams,
+each probed as an exact phrase; passages sharing grams are ranked by
+shared-gram count **weighted by rarity** (a rare shared phrase — a real
+quotation — outweighs a pile of common function-word grams). The elision
+apostrophe is folded across editions (SBLGNT `ἐπʼ` ≡ Swete `ἐπ’`), which is what
+lets Matthew 4:4 find LXX Deuteronomy 8:3. Each `hits` entry is **one document**
+(duplicate witnesses and multi-edition works otherwise flood the ranks; `loci`
+counts how many of its passages matched) with its best passage urn, `score`,
+`shared_grams`, and the shared **phrase** spans (the grams merged back to
+contiguous text; diacritic-folded — *what* matched, `nabu_show` gives pristine
+text). Only the anchor's own document is excluded — translations self-exclude
+(no shared folded tokens). When the anchor carries gold treebank lemmas,
+`lemma_echoes` adds passages sharing ≥2 of its **rare** lemmas
+(re-inflected/reordered allusion verbatim grams miss). Bounded (default 10, max
+50) with an honest note; every hit carries urn, language, license_class, and
+source. `lang`/`license` scope the candidates; the default restricted-exclusion
+stance applies (§below).
 
 ### `nabu_status`
 

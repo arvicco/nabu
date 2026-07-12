@@ -139,6 +139,13 @@ module Nabu
           String :language, null: false
           String :surface_forms, null: false
           index :lemma_folded
+          # urn index (P15-1): the lemma-aware second signals — parallels'
+          # rare-lemma co-occurrence and cognate-in-parallel (design §6) — look
+          # a passage's lemmas up BY urn (the anchor probe). Without this the
+          # anchor lookup scans 2.6M rows (~1.7 s measured); with it, one B-tree
+          # hit. ~30–45 MB, rebuilt with the table (never migrated — the fulltext
+          # db is derived-of-derived; class note).
+          index :urn
         end
       end
 

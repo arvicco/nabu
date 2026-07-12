@@ -4566,7 +4566,7 @@ re-design (deviations from the design doc get argued openly, not
 silently). Gate-waits don't block; worktree isolation for parallels...
 parallelism as needed; reviews sequential.
 
-## P15-1 · parallels <urn> — the interactive intertext engine  [tier: opus] [status: in-progress] [deps: —]
+## P15-1 · parallels <urn> — the interactive intertext engine  [tier: opus] [status: done] [deps: —]
 The headline (design doc §1): passage-anchored quotation/allusion
 finding, query-time over the existing FTS index — NO new schema (the
 design's measured verdict: per-gram probes 1–111 ms/passage). Surface-
@@ -4582,6 +4582,58 @@ seeded from the design doc's live probes: Odyssey 1.1→Polybius, Matt
 green; docs (README persona rows gain the command, mcp.md, architecture
 §13 short design record pointing at intertext-design.md); backlog done;
 worklog (sha —). One commit, not pushed.
+
+Findings:
+- **Zero new schema, as the design measured.** `Query::Parallels`
+  (lib/nabu/query/parallels.rb) probes the anchor's folded 4-word grams as
+  FTS5 phrase MATCHes against the existing `passages_fts`; candidates scored
+  by shared-gram count × rarity (1/df, df from each probe's hit count). All
+  three live goldens reproduced through the production code: Odyssey 1.1 →
+  Polybius 12.27.10 (top, score 1.48, the whole proem as one evidence span);
+  John 1:1 → Clement (3 loci), the perseus John edition, other Fathers;
+  Matthew 4:4 → Origen, the PROIEL≡UD NT duplicates, corroborating perseus
+  Matthew (9 grams), **LXX Deut 8:3 (9 grams), and Philo**.
+- **Elision fold is load-bearing (design rider i).** Strip U+02BC (SBLGNT,
+  a letter to unicode61) and U+2019/ASCII (First1K/Swete, punctuation) at
+  gram-build. Measured: LXX Deut 8:3 shares 3 grams with Matt 4:4 unstripped,
+  **9 stripped** — tying canonical Matthew, exactly the design's number. A
+  unit test pins that the two encodings' gram tokens are equal after strip.
+- **Document dedupe + exclusion argued (rider ii).** One hit per document
+  (best passage representative, `loci` counts siblings); only the anchor's
+  own document excluded. Translations self-exclude — surface grams are
+  language-locked folded tokens, so no cross-language rule is needed; a
+  same-language other edition of the anchor's work is a *wanted*
+  corroborating hit (the design's Matt probe wants "canonical Matthew" to
+  appear). Cross-source identical texts (PROIEL greek-nt ≡ UD greek-proiel)
+  stay two hits — we hold no cross-source work identity — stated honestly.
+- **Second signal shipped (option c).** `lemma_echoes`: passages sharing ≥2
+  of the anchor's RARE lemmas, rarity-weighted — fires only when the anchor
+  is gold-lemmatized (else one cheap query, then skip). Measured live 36 ms
+  on PROIEL Matt 4:4 (design's 18 ms + the anchor lookup) once the index was
+  built; it surfaced στόμα/ἐκπορεύομαι echoes ("proceeds from the mouth").
+- **passage_lemmas(urn) index rider landed** in `Store::Indexer`
+  (derived-of-derived, rebuilt with the table, NOT a numbered migration —
+  migrations own the catalog only). Built on the live db directly (sanctioned
+  index build, no reparse): **633 ms, +~44 MB** (design estimated 30–45 MB),
+  index name matches a fresh rebuild's. Unblocks P15-3 cognates too.
+- **MCP `nabu_parallels`** is the eighth tool: bounded (default 10/max 50),
+  license-labeled + source on every hit, `include_restricted` contract,
+  graceful "rebuilding" degradation, unknown-urn note.
+- **`--long` from birth** (mid-flight owner rule 2026-07-12): compact elides
+  evidence spans / shared lemmas with a "… and N more (--long)" tail; `--long`
+  expands them untrimmed. Tested both modes.
+- **Golden split, argued:** the design's live goldens are a PAIR relation,
+  and the trimmed golden fixture corpus holds no quotation pair (proiel =
+  Cicero, ud = Greek NT; no same-language duplicate work) — so they live as
+  fixture-store unit tests seeded with the REAL probe texts (deterministic,
+  offline, a sharper golden than corpus membership), not in
+  golden_queries.yml (single-passage membership). Stated in the test header.
+- **Formula miner (§5) did NOT ride** — the core + second signal + index +
+  MCP + goldens + docs is a full opus packet; the gram builder is shared, so
+  it stays the smallest standalone packet, **P15-5**.
+- **Timings (live, machine under load):** John 1:1 surface parallels tens of
+  ms warm; the elision-strip Matt run ~40 ms; the design's per-gram FTS
+  budget (1–111 ms/passage) holds through the production catalog-join path.
 
 ## P15-2 · Date/place axis, part 1  [tier: opus impl, fable review of the date model] [status: pending] [deps: —]
 Design doc §3: document_axes migration (document-level date ranges +

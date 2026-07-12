@@ -723,6 +723,58 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  # -- parallels (P15-1 intertext) -----------------------------------------
+
+  def test_parallels_finds_the_quotation_with_evidence
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1]) }
+      assert_nil status, "a successful parallels exits 0"
+      assert_match(/parallels of urn:h:od:1\.1/, out)
+      assert_match(/urn:q:full:1 \[grc\]/, out, "the verbatim quoter is a hit")
+      assert_match(/score \d/, out)
+      assert_match(/ανδρα μοι εννεπε μουσα/, out, "the shared phrase is the folded evidence")
+      assert_match(/parallels? from \d+ grams/, out)
+    end
+  end
+
+  # The owner house rule (2026-07-12): --long expands any truncated list. The
+  # full quoter shares FOUR separated phrase spans; compact shows three with a
+  # "… and N more (--long)" tail, --long shows all four and no tail.
+  def test_parallels_long_expands_the_truncated_evidence_spans
+    with_parallels_corpus do |config|
+      compact, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1]) }
+      long, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --long]) }
+
+      assert_match(/… and 1 more \(--long\)/, compact, "compact elides beyond three spans")
+      refute_match(/π4a π4b π4c π4d/, compact, "the fourth span is hidden in compact")
+      refute_match(/and 1 more/, long, "--long drops the elision tail")
+      assert_match(/π4a π4b π4c π4d/, long, "--long shows the fourth span in full")
+    end
+  end
+
+  def test_parallels_unknown_urn_exits_one_with_a_hint
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:no:such:thing]) }
+      assert_equal 1, status
+      assert_match(/no live passage/i, err)
+    end
+  end
+
+  def test_parallels_bad_license_exits_one
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --license bogus]) }
+      assert_equal 1, status
+      assert_match(/unknown license/i, err)
+    end
+  end
+
+  def test_help_parallels_documents_the_engine_and_long
+    out, _err, _status = run_cli(%w[help parallels])
+    assert_match(/quote|echo|intertext/i, out)
+    assert_match(/--long/, out, "the truncation-expand flag is documented")
+    assert_match(/Examples:/, out)
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance
@@ -1253,6 +1305,49 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # A parallels (P15-1) corpus: an anchor line and a verbatim quoter that shares
+  # FOUR non-contiguous phrase spans (the fillers ξξ*/ζζ break continuity), so
+  # the quoter's evidence has four spans — compact elides the fourth, --long
+  # expands it. Built and indexed through the real Indexer (no alignments).
+  def with_parallels_corpus
+    anchor = "ἄνδρα μοι ἔννεπε μοῦσα ξξ1 ξξ2 ξξ3 π2a π2b π2c π2d ξξ4 ξξ5 ξξ6 " \
+             "π3a π3b π3c π3d ξξ7 ξξ8 ξξ9 π4a π4b π4c π4d"
+    quoter = "λεγει ἄνδρα μοι ἔννεπε μοῦσα ζζ π2a π2b π2c π2d ζζ π3a π3b π3c π3d ζζ π4a π4b π4c π4d"
+    Dir.mktmpdir("nabu-cli-parallels") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "h", name: "Homer", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_parallels_passage(catalog, src, "urn:h:od", "urn:h:od:1.1", anchor)
+      seed_parallels_passage(catalog, src, "urn:q:full", "urn:q:full:1", quoter)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_parallels_passage(catalog, source_id, doc_urn, passage_urn, text)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   # An on-disk two-witness alignment corpus (P11-3): a registry file, a
