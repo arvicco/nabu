@@ -405,6 +405,38 @@ precisely because BOTH sides fold.
   from its output. An ine-pro ASCII fold (₂→2, ʰ→h) is a possible future
   rule here if usage demands it.
 
+**Diplomatic line-break rejoining (P14-5 — PARSER-SCOPED, not a language
+rule).** CCMH's Suprasliensis txt is a diplomatic folio-line edition where
+51% of lines wrap MID-WORD with a hyphen (`… ne dobr@ mOdrova-` / `ti na
+…`). Line grain is the owner-chosen citation unit, but un-rejoined the
+index would carry only fragments: `modrovati` unfindable, the orphan `ti`
+a junk token. The rule: the pristine passage text keeps the line VERBATIM
+(hyphen included — canonical means canonical); `text_normalized` is minted,
+through the same one boundary (`Normalize.search_form`), over a REJOINED
+derivation source — the hyphen line has its split word completed (hyphen
+dropped, the next line's first token appended), the continuation line
+drops its orphan leading fragment. The derivation is recorded per passage
+in the `hyphen_join` annotation (`{"tail" => …}` / `{"orphan" => …}`, a
+line can carry both) so it is **recomputable from the stored row alone** —
+`CcmhTxtParser.search_source(text, annotations)` is the pure function, and
+the adapter conformance suite pins `text_normalized` to the minted fold of
+it (the `conformance_search_source` hook; every other adapter stays pinned
+to the pristine text). Tools that read the annotation: `Query::Concord`
+(KWIC) retries a missed keyword against the rejoined haystack with every
+appended tail character mapped to the hyphen/EOL display position, so the
+highlight is exactly the visible `mOdrova-` — honest, never fabricated
+display text; `nabu show` displays the annotation as any other. Scope
+argument: this is a property of ONE corpus's diplomatic layout, not of
+`chu` — ASPR/Freising/GRETIL lines don't hyphenate, and the gospels' CES
+XML doesn't either — so the rule lives in the parser, not in
+`LANGUAGE_FOLDS`; a future diplomatic source may reuse the annotation
+contract. Known limits, accepted: an UNMARKED wrap (upstream sometimes
+splits without a hyphen: `(ot&ved` / `^jO`) is undetectable and left
+alone; an EOL "missing" mark (`-` also means a lost letter in the
+transliteration) would be mis-joined — the pristine text is untouched
+either way. Content hashes cover `text_normalized` + annotations, and the
+derivation is deterministic, so two parses and rebuilds agree.
+
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not
 a parse-only sync, or the loader will read the change as a corpus-wide

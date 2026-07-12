@@ -1,0 +1,41 @@
+0000000 *pamet$ i ZitJe blaZenago uCitelja naSego *kostan'tina
+0000010 filosofa, pr&vago nastav'nika sloven'skU jezykU.
+0000020 blagoslovi:
+0100100 *bog& milostiv$ i qedr$, wZidaje pokaanJe Clov@C$sko, da
+0100110 bySe v&si s&paseny byli i v& razUm$ istin'nyi priSli, ne
+0100120 xoqet' bo s&mr'ti gr@SnikU, n& pokajanJju i ZivotU, aqe i
+0100130 naipaCe priloZit$ na zlobU, n& ne wstavljajet$ Clov@Ca
+0100140 roda wtpasti wslabljenJem$ i v$ s$blazn$ neprijazninU
+0100150 prJiti i pogybnUti, n& na kajaZda l@ta i vr@mena ne
+0100160 pr@stajet$ blagodat$ tvore nam$ mnwgo, jako ispr$va
+0100170 daZe i do nynja, patriar$xi Ze pr&v@e i wt$ci i po t@x$
+0100180 proroky, a po six$ apostoli i muCeniky, pravednymi muZi
+0100190 i uCiteli izbirajei wt$ mnogoml$vnago ZitJa sego.
+0100200 znaet$ bo gospod$ svoje, iZe jego sut$, jakoZe reCe: wv'ce
+0100210 moje glasa mojego slySet$ i az$ znaju je i imenem$ v&zyvaju
+0100220 je i po mn@ xodet$ i daju im$ Zivot$ v@C'nyi.
+0600100 *po six' Ze *agarini, naricajemJi *sracini, v&zdvigoSe
+0600110 xulu na jedinoboZ$stvo svetyje troice glagoljuqe:
+0600200 kako vyi xristJani jedin$ bog& m@neqe, razm@Sajete i paky
+0600200 na trJi, glagoljuqe, jako wt$c$ i syn$ i dux$ jest$?
+0600300 aqe moZete skazati jav@, to posljete muZe, iZe
+0600310 mogut$ glagolati w sem i pr@pr@ti ny.
+1101000 reCe Ze filosof$: wgn$ iskuSajet$ zlat$ i srebro, a Clov@k$
+1101010 umom$ wts@kajet$ l$ZU wt$ istiny.
+1101100 r$c@te Ze mi: wt$ Cesogo byst$ pr&voje wtpadenJe? ne wt$
+1101110 vid@nJa li i ploda slad'kago i poxot@nJa na boZ$stvo?
+1101200 oni Ze reSe: tako jest$.
+1101300 filosof' Ze reCe: to aqe budet$ komU pakost$ med$ jadu u
+1101310 ili studenu vodU piv'SU, priS$d$ vraC$ glagoljet$ jemU:
+1101320 jeqe mnwg$ med$ jad$ isc@l@i.
+1101400 a iZe budet$ vodU pil$, studeni se vody napiv$ nag$ na
+1101410 mraZ@ stav$ isc@l@jeSi.
+1101500 drugy Ze vraC$ ne tako glagoljet$, n& protivno vraCev'stvo
+1101510 zapov@dajet$, v& meda m@sto gor'koje pijuqe postise, a v&
+1101520 studenago m@sto toploje i goreqe.
+1101600 kotoryi ubo wt$ oboju xytr@je vraCjujet$?
+1101700 wtveqaSe v'si: iZe protivnaa vraC$stvU zapov@dajet$.
+1101800 gorestJu bo ZitJa sego poxotnoje slasti dostoit$ umr$tviti
+1101810 i sm@renJem$ gr$dost$, protiv'nymi protivnaa vraCjuqe.
+1101900 a my bo glagoljem$, jako dr@vo, iZe pr$v@je tr$n$
+1101010 s&tvorit$, to posl@di slad'k$ plod' priplodit$.
