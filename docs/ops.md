@@ -48,7 +48,28 @@ What each command does and its exit contract:
   *moved*/*behind*/*license changed* are reported but stay exit 0. (ORACC's
   standalone `metadata.json` currently serves an empty body over HTTP, so its
   license row reads *unchecked* until upstream serves it — the drift check via
-  the zip `Last-Modified` is unaffected.)
+  the zip `Last-Modified` is unaffected.) Every `--remote` run also **persists**
+  each source's verdict into the history ledger (the `source_probes` cache, one
+  row per source, survives `nabu rebuild`), which is what feeds the `up=` column
+  in `nabu status` (below) — so between probe runs you can still see, offline,
+  whether an upstream had moved.
+- **`nabu status`** — per-source row: on/off, sync policy, an **`up=` upstream
+  column** (P14-12), live doc/passage (or dictionary-entry) counts, and the last
+  run. The `up=` column is read from the probe cache, never a live network call:
+  - `up=ok(2d)` — current as of a probe 2 days ago (quiet; the age is always shown);
+  - `up=BEHIND(2d)` — upstream moved past our sync pin (**loud** — a sync is due);
+  - `up=stale(30d)` — the last probe is older than two weeks, so even its "ok" is
+    too old to trust; re-probe before deciding;
+  - `up=?(never)` — never probed here (run `nabu status --remote`);
+  - `up=?(3d)` — probed, but drift is indeterminate (never synced / upstream
+    unreachable / multi-repo with no pins yet);
+  - `up=frozen` — a frozen-policy dead-project snapshot; no probe is expected.
+- **`nabu status --remote`** — the **one-command informed-update flow**: run the
+  live upstream probe inline (the same code path as `health --remote`, so it also
+  persists the cache), then render the freshly refreshed `up=` column. Use this
+  when you want an on-demand "has anything upstream actually changed?" before
+  deciding to sync. MCP `nabu_status` surfaces the same cached verdict per source
+  (an `upstream` object) but **never probes live** — it is a bounded status read.
 - **`rake fixtures:check`** — re-fetches the small fixture samples, diffs them,
   re-runs the affected adapter tests. Never overwrites. Nonzero on drift.
 - **`nabu backup`** — file-level rsync of canonical/ (attic included), the
@@ -290,6 +311,14 @@ Read the report — it names the source and the signal.
 - **golden query lost** — a known query stopped returning its expected passage.
   This is a loader/normalizer/indexer regression the unit tests missed. Bisect
   recent changes; `nabu rebuild` to rule out a stale index.
+
+### `nabu status` shows `up=BEHIND` (or you want to check before syncing)
+`up=BEHIND(Nd)` means the last probe found upstream had moved past our sync pin —
+a sync is due, and now it's an *informed* one. If the column reads `up=?(never)`
+or `up=stale(Nd)`, the cache can't answer "did it change?"; run `nabu status
+--remote` to probe inline and refresh the column in one command, then decide.
+This is the whole point of the column: an update is a choice you can see the
+reason for, not a blind weekly ritual.
 
 ### `health --remote` shows a gone / moved / license-changed upstream
 - **GONE (exit 1)** — the upstream probe failed: `git ls-remote` for a git

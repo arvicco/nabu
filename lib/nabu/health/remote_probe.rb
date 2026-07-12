@@ -121,10 +121,43 @@ module Nabu
       end
 
       def run
-        Report.new(rows: @registry.each_source.map { |entry| probe_source(entry) })
+        checked_at = Time.now
+        rows = @registry.each_source.map do |entry|
+          health = probe_source(entry)
+          persist(health, checked_at)
+          health
+        end
+        Report.new(rows: rows)
       end
 
       private
+
+      # P14-12: persist this run's verdict into the ledger's probe cache (one
+      # upserted row per source), so `nabu status` can render the upstream
+      # `up=…` column with no live network call — the informed-update signal.
+      # No ledger (fresh machine, unit tests without one) → nothing to write.
+      def persist(health, checked_at)
+        return unless @ledger
+
+        attrs = {
+          checked_at: checked_at, drift: health.drift.to_s,
+          license: health.license.status.to_s, detail: probe_detail(health)
+        }
+        row = Nabu::Store::Probe.first(source_slug: health.slug)
+        row ? row.update(attrs) : Nabu::Store::Probe.create(attrs.merge(source_slug: health.slug))
+      end
+
+      # The one compact detail line the cache carries, mirroring what the CLI's
+      # health_detail shows: a not-alive reason, the behind-repo offenders, or a
+      # changed-license note — whichever is most salient; nil when the row is
+      # clean. Kept short (it rides the terse status column's trailing context).
+      def probe_detail(health)
+        return health.liveness.detail if health.liveness.status != :alive && health.liveness.detail
+        return health.drift_detail if health.drift == :behind && health.drift_detail
+        return health.license.detail if health.license.status == :changed && health.license.detail
+
+        nil
+      end
 
       # HTTP client for the HTTP-zip probe: the SAME verified path ZipFetch
       # fetches through (system trust store PLUS the vendored InCommon
