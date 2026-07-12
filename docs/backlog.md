@@ -4469,3 +4469,17 @@ sync, frozen elsewhere. Tests: bare-form fallback (hit + updated
 miss-message), hyphen tolerance, ASCII lookup for a ʰ/ʷ-bearing root,
 define '*' parity. Suite+lint green; docs (README/mcp.md examples use
 quoted forms); backlog done; worklog (sha —). One commit, not pushed.
+
+## P14-11 · etym/define --long  [tier: opus] [status: in-progress] [deps: P14-10]
+Owner UX (2026-07-12): "I commend the terseness BUT there needs to be
+--long form that expands on these '…46 more'." Add `--long` to `etym`
+and `define` (compact stays the default per the house compact-CLI rule):
+expands every truncated list in the renderers — the "other reflexes
+(not attested here)" cap, attested-reflex caps, any "and N more"
+elsewhere in these two commands (census the renderers; expand ALL of
+them under the one flag, grouped by language where lists are long).
+MCP: leave the bounded contract as-is (honest totals already present;
+a conversational surface should stay capped) — note that choice in
+mcp.md if it names caps. Tests: capped default + expanded --long for
+both commands. README rows updated. Suite+lint green; backlog done;
+worklog (sha —). One commit, not pushed.
