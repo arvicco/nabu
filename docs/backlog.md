@@ -3823,7 +3823,7 @@ comparison in one command — Marianus PROIEL edition vs Marianus CCMH
 edition is the alt-edition showcase); registry validation green; suite+
 lint green; docs; worklog (sha —).
 
-## P14-3 · Vocab profiling  [tier: opus] [status: pending] [deps: —]
+## P14-3 · Vocab profiling  [tier: opus] [status: done] [deps: —]
 The dropped P13-7, unchanged scope: `nabu vocab <urn-or-document>` —
 lemma frequency profile of a document/range vs the corpus (distinctive
 vocabulary by simple ratio, hapax list), gold shelves only, honest about
