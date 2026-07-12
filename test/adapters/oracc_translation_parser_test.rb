@@ -163,6 +163,55 @@ module Adapters
       assert_includes trailing.text, "From", "the '[From NN]' prose is not dropped"
     end
 
+    # -- P14-13: catalog-only skeleton blms tablet — fall back to print marker --
+
+    P14_13 = Nabu::TestSupport.fixtures("oracc_p14_13")
+    SKEL_HTML = File.join(P14_13, "html-en", "blms", "X000003.html")
+    SKEL_CORPUS = File.join(P14_13, "blms", "corpusjson", "X000003.json")
+    SKEL_URN = "urn:nabu:oracc:blms:X000003-en"
+
+    def parse_skeleton(html: SKEL_HTML)
+      Nabu::Adapters::OraccTranslationParser.new.parse(
+        html, urn: SKEL_URN, corpusjson_path: SKEL_CORPUS,
+              title: "GAAL 2, pl. 14 (English translation)"
+      )
+    end
+
+    def test_skeleton_tablet_prose_anchors_on_its_printed_label
+      # blms X000003 is a catalog-only skeleton: its corpusjson line-starts carry
+      # empty ref AND label, so the labels map is empty and neither the forward
+      # nor the backward reattach can resolve the HTML render-id anchors
+      # ("X000003.2l"). But each prose cell PRINTS its label in span.xtr-label
+      # ("(o 1)"), so the unit anchors on that rather than being dropped.
+      document = parse_skeleton
+      assert_equal ["#{SKEL_URN}:o.1", "#{SKEL_URN}:o.2"], document.map(&:urn)
+      assert_equal (0..1).to_a, document.map(&:sequence)
+    end
+
+    def test_skeleton_prose_kept_verbatim_with_restorations_and_english_override
+      document = parse_skeleton
+      first = document.first
+      assert_includes first.text, "[detain him]"   # restoration kept
+      assert_includes first.text, "(in a house)"   # gloss kept
+      refute_match(/\A\(o/, first.text, "the print marker is not part of the prose")
+      assert_equal "eng", document.language
+      assert_equal "attribution", document.license_override
+      document.each { |p| assert p.text.unicode_normalized?(:nfc) }
+    end
+
+    def test_skeleton_unit_with_no_corpusjson_label_and_no_print_marker_raises
+      # The loud-refusal guard survives the fallback: strip the span.xtr-label
+      # markers and the same skeleton now resolves to NOTHING in either the
+      # corpusjson or the fragment — prose would be dropped, so it must raise.
+      doctored = doctor(SKEL_HTML) { |html| html.gsub(%r{<span class="xtr-label">.*?</span>}, "") }
+      error = assert_raises(Nabu::ParseError) do
+        Nabu::Adapters::OraccTranslationParser.new.parse(
+          doctored, urn: SKEL_URN, corpusjson_path: SKEL_CORPUS
+        )
+      end
+      assert_match(/resolves to no line-start row and prints no label/, error.message)
+    end
+
     private
 
     def doctor(path)
