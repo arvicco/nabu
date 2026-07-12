@@ -3951,6 +3951,7 @@ it; a per-witness opt-out is a one-line change if a future witness ever needs
 chapter 0.
 
 ## P14-3 · Vocab profiling  [tier: opus] [status: pending] [deps: —]
+## P14-3 · Vocab profiling  [tier: opus] [status: done] [deps: —]
 The dropped P13-7, unchanged scope: `nabu vocab <urn-or-document>` —
 lemma frequency profile of a document/range vs the corpus (distinctive
 vocabulary by simple ratio, hapax list), gold shelves only, honest about
