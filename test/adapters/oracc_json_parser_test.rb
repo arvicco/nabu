@@ -14,6 +14,11 @@ module Adapters
     # tree so the discover-walked main fixtures stay a clean, all-parsing corpus.
     DEFECTS = Nabu::TestSupport.fixtures("oracc_p11_7")
 
+    # P14-9 collision fixtures: trimmed real blms (bilingual literary) and
+    # saao-saa08 (omen) slices whose label-less line-starts share one sentence
+    # label (the P11-7 fallback), so distinct physical lines mint one suffix.
+    P14 = Nabu::TestSupport.fixtures("oracc_p14_9")
+
     def parse(project, id, urn: nil, title: nil, root: FIXTURES)
       Nabu::Adapters::OraccJsonParser.new.parse(
         File.join(root, project, "corpusjson", "#{id}.json"),
@@ -45,6 +50,38 @@ module Adapters
       assert_includes suffixes, "r.xi'.10'"
       assert_includes suffixes, "o.i'.1" # an ordinary labeled line rides alongside
       refute_empty document
+    end
+
+    # -- P14-9 fix 1: repeated fallback labels get a positional :b suffix -----
+
+    def test_bilingual_labelless_line_collision_gets_positional_b_suffix
+      # blms P345480 is interlinear Sumerian/Akkadian: the Akkadian line is a
+      # label-less line-start that P11-7 falls back to the sentence label "o 1'",
+      # colliding with the Sumerian line's own "o 1'". Two distinct physical
+      # lines → the second takes a ":b2" positional suffix (GRETIL/ccmh
+      # precedent), never quarantined, never merged.
+      document = parse("blms", "P345480", root: P14)
+      suffixes = document.map { |p| p.urn.delete_prefix("#{document.urn}:") }
+      assert_includes suffixes, "o.1'"
+      assert_includes suffixes, "o.1':b2"
+      assert_equal suffixes.size, suffixes.uniq.size, "every passage urn is unique"
+      # the two "o 1'" lines are the Sumerian and its Akkadian version — kept
+      # apart, not merged into one text.
+      original = document.find { |p| p.urn.end_with?(":o.1'") }
+      restart  = document.find { |p| p.urn.end_with?(":o.1':b2") }
+      refute_equal original.text, restart.text
+    end
+
+    def test_range_sentence_fallback_collision_gets_positional_b_suffix
+      # saao-saa08 P336559: several label-less line-starts all fall back to the
+      # one whole-text sentence label "o 1 - r 6" → repeated suffix, disambiguated
+      # in document order rather than quarantining the tablet.
+      document = parse("saao-saa08/saa08", "P336559",
+                       root: P14, urn: "urn:nabu:oracc:saao-saa08:P336559")
+      suffixes = document.map { |p| p.urn.delete_prefix("#{document.urn}:") }
+      assert_includes suffixes, "o.1.-.r.6"
+      assert_includes suffixes, "o.1.-.r.6:b2"
+      assert_equal suffixes.size, suffixes.uniq.size
     end
 
     # -- the rich Akkadian exemplar (P405432) --------------------------------

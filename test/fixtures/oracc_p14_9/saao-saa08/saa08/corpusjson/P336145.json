@@ -1,0 +1,99 @@
+{
+ "type": "cdl",
+ "project": "saao/saa08",
+ "source": "http://oracc.org/saao/saa08",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-06-10T06:10:00",
+ "textid": "P336145",
+ "cdl": [
+  {
+   "node": "c",
+   "type": "text",
+   "id": "P336145.U0",
+   "cdl": [
+    {
+     "node": "c",
+     "type": "discourse",
+     "subtype": "body",
+     "id": "P336145.U1",
+     "cdl": [
+      {
+       "node": "c",
+       "type": "sentence",
+       "implicit": "yes",
+       "id": "P336145.U2",
+       "label": "o 1 - r 2",
+       "cdl": [
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.2",
+         "n": "1",
+         "label": "o 1"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.3",
+         "n": "2",
+         "label": "o 2"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.4",
+         "n": "3",
+         "label": "o 3"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.5",
+         "n": "4",
+         "label": "o 4"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.6",
+         "n": "5",
+         "label": "o 5"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.7",
+         "n": "6",
+         "label": "o 6"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.8",
+         "n": "7",
+         "label": "o 7"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.10",
+         "n": "1",
+         "label": "r 1"
+        },
+        {
+         "node": "d",
+         "type": "line-start",
+         "ref": "P336145.11",
+         "n": "2",
+         "label": "r 2"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

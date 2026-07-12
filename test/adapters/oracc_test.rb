@@ -138,6 +138,18 @@ module Adapters
       end
     end
 
+    # -- P14-9 fix 3: a proxy/portal corpus is a benign skip, not a loud zero --
+
+    def test_discovery_recognizes_a_proxy_corpus_as_a_benign_skip
+      # riao/ribo/dcclt-jena are PROXY corpora: corpus.json is `type:corpus`
+      # with a `proxies` map, their texts hosted in out-of-scope sibling
+      # subprojects (PROJECTS note). Owning no corpusjson is BY DESIGN, so the
+      # discovery accounting must NOT flag them as an unpack/layout error.
+      skips = Nabu::Adapters::Oracc.new.discovery_skips(Nabu::TestSupport.fixtures("oracc_p14_9"))
+      assert_equal 0, skips.unrecognized, "a proxy corpus is not an unpack error"
+      assert_predicate skips, :clean?
+    end
+
     # -- license (read per project, never hardcoded) --------------------------
 
     def test_discover_accepts_the_machine_read_cc0_license
