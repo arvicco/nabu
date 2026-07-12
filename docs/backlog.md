@@ -4483,3 +4483,59 @@ a conversational surface should stay capped) — note that choice in
 mcp.md if it names caps. Tests: capped default + expanded --long for
 both commands. README rows updated. Suite+lint green; backlog done;
 worklog (sha —). One commit, not pushed.
+
+## P14-12 · Upstream drift visible in status  [tier: opus] [status: done] [deps: —]
+Owner (2026-07-12): "Right now I have no idea IF the upstream even
+changed, for most sources. A reasonable update would be to indicate the
+upstream changes in status, so that update remains an informed decision."
+Design: health --remote already computes per-source drift (git ls-remote
+HEAD vs pin; HTTP Last-Modified vs zip/file pin) but discards it after
+rendering. (1) PERSIST the probe verdicts: a per-source probe record in
+the history ledger (db/history.sqlite3 — survives rebuilds; new small
+table via the ledger migration track: slug, checked_at, drift verdict,
+license verdict, detail) written by every health --remote run. (2) STATUS
+renders a compact upstream column from the cache per the compact-CLI
+rule: nothing extra when current and recently checked is WRONG — the
+owner wants signal — so: `up=ok(2d)` / `up=BEHIND(2d)` /
+`up=?(never)` / `up=stale(30d)` — pick exact vocabulary honoring
+terseness (BEHIND loud, ok quiet, age always shown; argue the shape in
+one paragraph and match the existing status row style). frozen-policy
+sources render up=frozen (no probe expected). (3) `status --remote` runs
+the probe inline first (same code path as health --remote), then renders
+— the one-command informed-decision flow. (4) health --remote output
+unchanged apart from now also persisting. MCP nabu_status: add the
+cached drift fields (it's a status surface; bounded, no live probing
+from MCP ever — note that). Tests: probe persistence, cache rendering
+incl. never-probed and stale-cache, frozen handling, status --remote
+wiring (WebMock/stub probes). Docs: ops.md (the informed-update flow),
+README status row. Suite+lint green; backlog done; worklog (sha —).
+ONE commit in your worktree, do NOT push.
+
+COLUMN SHAPE (chosen): the up= cell sits immediately after the policy
+column, ljust-aligned to a computed width, before the free-form counts
+and last_run descriptors. It pairs with policy because both describe the
+source's sync disposition — policy is HOW we pull, up= is WHETHER
+upstream moved since we last did; read together they answer "should I
+sync this now?", which is the informed-decision point. counts/last_run
+stay the trailing free-form descriptors they already are. Vocabulary:
+drift current+fresh → up=ok(Nd); drift behind → up=BEHIND(Nd) always
+(loud; staleness never softens an alarm); drift current but older than
+14d → up=stale(Nd) (an "ok" too old to trust — the dangerous
+reassuring-but-stale case); drift indeterminate (unknown/never_synced/
+multi, incl. a gone/unreachable upstream whose drift can't be computed)
+→ up=?(Nd); no cache row → up=?(never); frozen-policy source → up=frozen
+(cache ignored). Age is floor-days, always shown. Sample row set:
+  perseus     on   live    up=ok(2d)      docs=1320 pass=98211 last 2026-07-10 12:03 ok (+3 ~1 -0 !0)
+  ud          on   live    up=BEHIND(2d)  docs=210 pass=44120 last 2026-06-28 09:11 ok (+0 ~0 -0 !0)
+  oracc       off  manual  up=stale(31d)  docs=88 pass=9004 last 2026-06-01 07:40 ok (+0 ~0 -0 !0)
+  bosworth-t  off  manual  up=frozen      entries=42000 last 2026-05-02 03:00 ok (+0 ~0 -0 !0)
+  ccmh        off  manual  up=?(never)    docs=0 pass=0 never synced
+Ledger schema (db/ledger_migrate/002_create_source_probes.rb, table
+source_probes): id pk; source_slug (unique index); checked_at DateTime;
+drift String (current|behind|never_synced|unknown|multi); license String
+(baseline_recorded|unchanged|changed|unchecked); detail String nullable.
+One row per source (upsert per run) — a cache, not history (runs already
+hold history). MCP nabu_status: each source row gains an `upstream`
+object {checked_at, drift, license, detail} (or {drift: "never_probed"}
+when uncached) plus a note that these are the CACHED verdicts of the
+last health --remote / status --remote run — MCP never probes live.

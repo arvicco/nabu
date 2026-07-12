@@ -609,4 +609,59 @@ class RemoteProbeTest < Minitest::Test
       refute report.any_gone?
     end
   end
+
+  # -- P14-12: probe-verdict persistence (the status upstream cache) --------
+
+  # Every run writes one source_probes row per source with the drift/license
+  # verdicts and a checked_at, so `nabu status` can render up=… with no probe.
+  def test_persists_a_probe_row_per_source
+    seed_pin(slug: "src", repo_url: NONGITHUB_URL, last_sync_sha: "sha111")
+    before = Time.now - 1
+    probe(registry_of(["src", "ProbeNonGithubAdapter", true]),
+          FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n"))
+
+    row = Nabu::Store::Probe.first(source_slug: "src")
+    refute_nil row, "a probe row must be persisted"
+    assert_equal "current", row.drift
+    assert_equal "unchecked", row.license # non-github → best-effort unchecked
+    assert_operator row.checked_at, :>=, before, "checked_at is recorded"
+  end
+
+  # The cache is one row per source, upserted — a second run overwrites the
+  # verdict and checked_at, never duplicates the row.
+  def test_persist_upserts_one_row_per_source
+    seed_pin(slug: "src", repo_url: NONGITHUB_URL, last_sync_sha: "sha111")
+    reg = registry_of(["src", "ProbeNonGithubAdapter", true])
+    probe(reg, FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n")) # current
+
+    # Move our pin behind upstream, re-probe: same row, new verdict.
+    Nabu::Store::Pin.first(source_slug: "src").update(last_sync_sha: "old000")
+    probe(reg, FakeShell.new(NONGITHUB_URL => "new999\tHEAD\n")) # behind
+
+    rows = Nabu::Store::Probe.where(source_slug: "src").all
+    assert_equal 1, rows.size, "upsert keeps exactly one row per source"
+    assert_equal "behind", rows.first.drift
+  end
+
+  # A not-alive source persists the liveness reason in detail (the status
+  # column's trailing context) with an indeterminate (unknown) drift.
+  def test_persists_detail_from_a_gone_upstream
+    seed_pin(slug: "src", repo_url: NONGITHUB_URL, last_sync_sha: "x")
+    probe(registry_of(["src", "ProbeNonGithubAdapter", true]),
+          FakeShell.new(NONGITHUB_URL => shell_error("remote: Repository not found.")))
+
+    row = Nabu::Store::Probe.first(source_slug: "src")
+    assert_equal "unknown", row.drift
+    assert_match(/Repository not found/, row.detail)
+  end
+
+  # No ledger (fresh machine / unit run without one) → persistence is silently
+  # skipped, the probe still returns its report.
+  def test_persistence_skipped_without_a_ledger
+    shell = FakeShell.new(NONGITHUB_URL => "sha\tHEAD\n")
+    report = Nabu::Health::RemoteProbe.new(
+      registry: registry_of(["src", "ProbeNonGithubAdapter", true]), ledger: nil, shell: shell
+    ).run
+    assert_equal :alive, report.rows.first.liveness.status
+  end
 end

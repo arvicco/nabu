@@ -33,8 +33,8 @@ module MCP
 
     # -- rig -------------------------------------------------------------------
 
-    def tools(catalog: @catalog, fulltext: @fulltext)
-      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext)
+    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil)
+      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -468,6 +468,40 @@ module MCP
       # A passage source carries entries=0, never a nil/absent field.
       perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
       assert_equal 0, perseus.fetch("entries")
+    end
+
+    # P14-12: nabu_status surfaces the CACHED upstream-drift verdict per source
+    # from the ledger — a bounded status read, never a live probe.
+    def test_status_surfaces_cached_upstream_verdict
+      seed_corpus
+      ledger = ledger_test_db
+      Nabu::Store::Probe.create(source_slug: "perseus", checked_at: Time.utc(2026, 7, 10, 12),
+                                drift: "behind", license: "unchanged",
+                                detail: "behind: https://github.com/acme/one")
+      body = payload(tools(ledger: ledger).call("nabu_status", {}))
+
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      upstream = perseus.fetch("upstream")
+      assert_equal "behind", upstream.fetch("drift")
+      assert_equal "unchanged", upstream.fetch("license")
+      assert_match(/2026-07-10/, upstream.fetch("checked_at"))
+      assert_match(/behind: /, upstream.fetch("detail"))
+      assert_match(/never probes upstreams live/, body.fetch("note"))
+    end
+
+    # A source with no cache row (or no ledger at all) reports never_probed,
+    # never a nil/absent upstream field.
+    def test_status_upstream_never_probed_without_a_cache_row
+      seed_corpus
+      # ledger present but empty (adhoc/perseus have no probe rows)
+      body = payload(tools(ledger: ledger_test_db).call("nabu_status", {}))
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "never_probed", perseus.fetch("upstream").fetch("drift")
+
+      # and with no ledger configured at all, still never_probed, no crash
+      body2 = payload(call("nabu_status"))
+      p2 = body2.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "never_probed", p2.fetch("upstream").fetch("drift")
     end
 
     # -- nabu_concord (P8-3) -------------------------------------------------------
