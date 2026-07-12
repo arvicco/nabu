@@ -97,10 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_eight_tools_with_json_schemas
+    def test_definitions_lists_the_nine_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_status],
+                      nabu_parallels nabu_cognates nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -1158,6 +1158,141 @@ module MCP
         labels = group.fetch("witnesses").map { |witness| witness.fetch("label") }
         assert_equal %w[full partial], labels, "the not_synced witness is gone from every ref"
       end
+    end
+
+    # -- nabu_cognates (P15-3) ----------------------------------------------------
+
+    COGNATES_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (test witnesses)"
+        witnesses:
+          - document: urn:nabu:test:grc-nt
+          - document: urn:nabu:test:marianus
+          - document: urn:nabu:test:oe-mark
+    YAML
+
+    # The real recon shelf + three witnesses with gold lemmas in citation-
+    # bearing tokens: MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-,
+    # MARK 2.1 meets ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (a loan).
+    def seed_cognates_corpus(marianus_override: nil)
+      recon = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      nc = Nabu::Store::Source.create(
+        slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
+        license_class: "nc", enabled: true
+      )
+      [["grc-nt", "grc", nil, [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
+       ["marianus", "chu", marianus_override,
+        [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
+       ["oe-mark", "ang", nil, [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, lang, override, rows|
+        doc = make_document(source: nc, urn: "urn:nabu:test:#{tail}", title: tail,
+                            language: lang, license_override: override)
+        rows.each_with_index do |(ref, lemma, form), seq|
+          Nabu::Store::Passage.create(
+            document_id: doc.id, urn: "#{doc.urn}:#{seq + 1}", sequence: seq, language: lang,
+            text: form, text_normalized: form, content_sha256: "x", revision: 1,
+            annotations_json: JSON.generate(
+              "citation" => ref,
+              "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]
+            )
+          )
+        end
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: cognates_registry)
+    end
+
+    def cognates_registry
+      align_registry(COGNATES_REGISTRY_YAML)
+    end
+
+    def cognates_tools
+      Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext, alignments: cognates_registry)
+    end
+
+    def test_cognates_groups_carry_the_root_shelf_and_witness_licenses
+      seed_cognates_corpus
+      result = cognates_tools.call("nabu_cognates", { "target" => "MARK 1.1" })
+
+      refute result[:isError]
+      body = payload(result)
+      assert_equal "nt", body.fetch("work")
+      assert_equal 1, body.fetch("total")
+      group = body.fetch("groups").first
+      assert_equal "MARK 1.1", group.fetch("ref")
+      root = group.fetch("root")
+      assert_equal "*bʰeh₂g-", root.fetch("headword")
+      assert_equal "ine-pro", root.fetch("shelf")
+      assert_equal "attribution", root.fetch("license_class")
+      assert_equal "CC-BY-SA + GFDL", root.fetch("license")
+      witnesses = group.fetch("witnesses")
+      assert_equal(%w[chu grc], witnesses.map { |witness| witness.fetch("language") })
+      witnesses.each do |witness|
+        witness.fetch("documents").each do |doc|
+          assert_equal "nc", doc.fetch("license_class")
+          assert_equal "proiel", doc.fetch("source")
+        end
+      end
+    end
+
+    def test_cognates_notes_the_borrowing_caveat_and_is_bounded
+      seed_cognates_corpus
+      body = payload(cognates_tools.call("nabu_cognates", { "target" => "nt", "limit" => 1 }))
+
+      assert_equal 2, body.fetch("total")
+      assert_equal 1, body.fetch("groups").size
+      assert_match(/showing 1/, body.fetch("note"))
+      assert_match(/borrowing/, body.fetch("note"))
+    end
+
+    def test_cognates_langs_restricts_the_pair
+      seed_cognates_corpus
+      body = payload(cognates_tools.call("nabu_cognates",
+                                         { "target" => "nt", "langs" => %w[ang chu] }))
+      assert_equal(["*kaisaraz"], body.fetch("groups").map { |g| g.fetch("root").fetch("headword") })
+    end
+
+    def test_cognates_withholds_restricted_witnesses_by_default
+      seed_cognates_corpus(marianus_override: "research_private")
+      body = payload(cognates_tools.call("nabu_cognates", { "target" => "nt" }))
+      assert_equal 0, body.fetch("total"),
+                   "every meet involves the now-private chu witness — nothing may leak"
+
+      shown = payload(cognates_tools.call("nabu_cognates",
+                                          { "target" => "nt", "include_restricted" => true }))
+      assert_equal 2, shown.fetch("total")
+    end
+
+    def test_cognates_needs_a_target
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        cognates_tools.call("nabu_cognates", {})
+      end
+    end
+
+    def test_cognates_unattested_ref_is_a_tool_error
+      seed_cognates_corpus
+      result = cognates_tools.call("nabu_cognates", { "target" => "JOHN 99.1" })
+      assert result[:isError]
+      assert_match(/not attested/, text_of(result))
+    end
+
+    def test_cognates_without_a_registry_notes_how_to_register
+      result = tools.call("nabu_cognates", { "target" => "nt" })
+      refute result[:isError]
+      assert_match(/alignments\.yml/, text_of(result))
+    end
+
+    def test_cognates_with_a_missing_roots_table_degrades_gracefully
+      seed_cognates_corpus
+      @fulltext.drop_table(Nabu::Store::ReflexRootsIndexer::TABLE)
+      result = cognates_tools.call("nabu_cognates", { "target" => "MARK 1.1" })
+      refute result[:isError], "a missing derived table is a state, not a fault"
+      assert_match(/rebuild/, text_of(result))
     end
 
     # -- read-only enforcement ------------------------------------------------------

@@ -2,10 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes eight tools — search, read
+(Claude Code, Claude Desktop) over stdio. It exposes nine tools — search, read
 by urn, concordance, cross-source alignment, dictionary lookup, the
-reconstruction walk, intertext (quotation/echo finding), and coverage — so a
-model can look things up in your
+reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
+and coverage — so a model can look things up in your
 texts, quote them, and cite them, without any ability to change the
 collection.
 
@@ -35,7 +35,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The eight tools
+## 2. The nine tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, and parallels rows also carry the
@@ -194,6 +194,28 @@ text). Only the anchor's own document is excluded — translations self-exclude
 50) with an honest note; every hit carries urn, language, license_class, and
 source. `lang`/`license` scope the candidates; the default restricted-exclusion
 stance applies (§below).
+
+### `nabu_cognates`
+
+Cognates in parallel (P15-3, design §6): verses of a registered alignment work
+where witnesses in **two or more languages** use reflexes of the **same
+reconstruction root** — the alignment hub crossed with the Wiktionary
+reconstruction crosswalk, a join no other tool holds both halves of. Gothic
+*salt* ~ OCS *соль* meet at PIE `*sḗh₂l` in the salt saying (Luke 14:34);
+*hlaifs* ~ *хлѣбъ* at `*hlaibaz` in "he who eats my bread". `target` is a work
+id (`nt` — batches the whole work; the Gothic × OCS NT runs in under a second)
+or a citation/chapter/book ref; `langs` restricts to ≥2 named languages
+(`["got","chu"]`). Each group carries the verse ref, the **root** (headword,
+**shelf**, gloss, license), and per-language witness words (lemma, attested
+surface forms, attesting documents with licenses). **Read the shelf**: a meet
+at `gem-pro` involving a Slavic witness is very possibly a **borrowing**
+(Wiktionary descendant trees include loans), not common descent — `ine-pro`
+meets are the inheritance signal. Corpus-common words (df ≥ max(50, 10% of the
+language's gold passages)) are suppressed with an honest count; `all: true`
+lifts. Recall is bounded by Wiktionary descendants coverage and by gold
+lemmatization (~10% of the corpus): **no hit is absence of evidence**. Bounded
+(default 10 groups, max 50); the restricted-exclusion stance applies to
+witness documents (a private witness's words never join).
 
 ### `nabu_status`
 

@@ -614,6 +614,36 @@ honest totals, research_private/restricted withheld unless
 `include_restricted`, graceful pre-007 degradation ("run nabu sync
 wiktionary-recon").
 
+**Addendum (P15-3): cognates-in-parallel — the crosswalk × the hub.**
+`nabu cognates <work-or-ref> [--langs got,chu]` (MCP `nabu_cognates`, the
+ninth tool) answers the question the crosswalk and the alignment hub (§10)
+can only answer together: verses where witnesses in ≥2 languages use
+reflexes of the SAME reconstruction root — got salt ~ chu соль under PIE
+*sḗh₂l at LUKE 14.34, found blind; the Gothic × OCS NT yields ~300 verses /
+30 roots in under a second (design doc `intertext-design.md` §6). The join
+is staged through `reflex_roots(language, lemma_folded, root_urn)` — a
+derived closure table built by `Store::ReflexRootsIndexer` from
+`Indexer.rebuild!` (the single choke point: sync's reindex and rebuild),
+living in fulltext.sqlite3 beside `passage_lemmas` (~50k rows / ~4 MB /
+~4 s live). The closure is the etym walk, precomputed and bounded the same
+way: direct reflex edges (word AND roman folds — the script bridge) plus
+ONE proto-to-proto ascent hop with the same-language exclusion (intra-PIE
+derivational edges are sub-tree structure, not ancestry); rows are scoped
+to gold languages, since only they can ever join `passage_lemmas`. Design
+decisions from the fable closure review (2026-07-12, backlog P15-3): roots
+are stored as URNs, never row ids (ids re-mint on shelf reload; the query
+resolves urns against the live catalog with the withdrawn filter, so stale
+roots vanish rather than serve); the meet SHELF is displayed on every hit
+(descendant trees include unflagged borrowings — hlaifs ~ хлѣбъ meets at
+gem-pro, and saying "gem-pro" is the minimum honesty until a `borrowed`
+flag lands on the crosswalk); common-word suppression is per-language
+relative (df ≥ max(50, 10% of the language's gold passages) — an absolute
+threshold is percentile-incoherent across gold corpora spanning 125 to
+113k passages, and frequency cannot separate богъ from нъ at all, said
+plainly in the help). Recall is bounded by Wiktionary coverage (~34% got /
+~21% chu gold lemma types reach any proto entry): absence of a hit is
+absence of evidence.
+
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 
 `parallels <urn>` answers the classicist's "who quotes THIS line? where
