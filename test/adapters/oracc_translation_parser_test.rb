@@ -141,6 +141,28 @@ module Adapters
       assert_equal ["#{RIM_URN}:o.1", "#{RIM_URN}:r.2", "#{RIM_URN}:r.3"], document.map(&:urn)
     end
 
+    # -- P14-9 fix 2: trailing prose past all line-starts reattaches backward --
+
+    P14 = Nabu::TestSupport.fixtures("oracc_p14_9")
+
+    def test_trailing_prose_past_all_line_starts_reattaches_backward
+      # saao-saa08 P336145: the final prose unit anchors at row P336145.13, an
+      # unlemmatized "traces of a name" line (print label "(r 3)") the corpusjson
+      # never mints — no readable signs. Reattach-FORWARD finds no line-start
+      # after it; the honest fallback reattaches BACKWARD to the last line-start
+      # (r 2), so the prose is kept and the suffix still exists in the tablet
+      # (Query::Parallel's contract).
+      document = Nabu::Adapters::OraccTranslationParser.new.parse(
+        File.join(P14, "html-en", "saao-saa08", "P336145.html"),
+        urn: "urn:nabu:oracc:saao-saa08:P336145-en",
+        corpusjson_path: File.join(P14, "saao-saa08", "saa08", "corpusjson", "P336145.json")
+      )
+      suffixes = document.map { |p| p.urn.split(":").last }
+      assert_includes suffixes, "r.2", "the trailing prose reattaches to r 2"
+      trailing = document.find { |p| p.urn.end_with?(":r.2") }
+      assert_includes trailing.text, "From", "the '[From NN]' prose is not dropped"
+    end
+
     private
 
     def doctor(path)

@@ -43,11 +43,12 @@ module Nabu
     #   carries it now) — excluded by element, never by pattern.
     # - A cell with NO `span.cell` prose is a state notice ("(Break)",
     #   rulings — the rendered `$`-lines) and is skipped by rule.
-    # - A PROSE cell anchored at a row that is not a line-start (seen only
-    #   doctored so far; upstream anchors state notices there) reattaches to
-    #   the next line-start row in row order — prose is never dropped
-    #   silently; a unit with no line-start anywhere after it is counted out
-    #   loud in the ParseError below.
+    # - A PROSE cell anchored at a row that is not a line-start (upstream
+    #   anchors state notices, and TRAILING prose over an unlemmatized final
+    #   line — saa08 P336145's "traces of a name" row) reattaches to the next
+    #   line-start row in row order, or BACKWARD to the last line-start before
+    #   it when none follows — prose is never dropped silently. Only a document
+    #   with no line-start anywhere raises the ParseError below.
     # - Two units resolving to one label JOIN in cell order (passage urns
     #   must stay unique; consecutive prose under one anchor is what a reader
     #   wants anyway).
@@ -152,14 +153,21 @@ module Nabu
       end
 
       # The anchor row's label; a non-line-start anchor reattaches to the
-      # next line-start row in row order (see class note). nil when none.
+      # next line-start row in row order (see class note). When NO line-start
+      # follows — a trailing prose unit over an unlemmatized final line (saa08
+      # P336145's "traces of a name" row, print label "(r 3)", which the
+      # corpusjson never mints: no readable signs) — it reattaches BACKWARD to
+      # the last line-start before it, so prose is never dropped and the suffix
+      # still exists in the tablet (Query::Parallel's contract). nil only when
+      # the document has no line-start anywhere.
       def anchor_label(ref, labels:, row_ids:)
         return labels[ref] if labels.key?(ref)
 
         position = row_ids.index(ref)
         return nil if position.nil?
 
-        row_ids[position..].filter_map { |row_id| labels[row_id] }.first
+        forward = row_ids[position..].filter_map { |row_id| labels[row_id] }.first
+        forward || row_ids[0...position].reverse_each.filter_map { |row_id| labels[row_id] }.first
       end
 
       def build_document(units, urn:, title:, path:)

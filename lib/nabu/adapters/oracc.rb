@@ -211,7 +211,8 @@ module Nabu
       # (unrecognized — the nested-root/unpack signature fix 1 resolves, kept as
       # a loud guard against its recurrence). The no-content skeletons that DO
       # parse-skip are counted by the loader, not here. Cheap: Dir globs + 0-byte
-      # stats, no JSON read.
+      # stats; the one JSON read (proxy_corpus?) fires only on the rare
+      # no-corpusjson branch.
       def discovery_skips(workdir)
         skipped = 0
         notes = []
@@ -220,13 +221,39 @@ module Nabu
 
           files = Dir.glob(File.join(project_dir(workdir, project), "corpusjson", "*.json"))
           if files.empty?
-            notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            # P14-9 fix 3: riao/ribo/dcclt-jena are PROXY corpora — corpus.json
+            # is `type:corpus` with a `proxies` map, their texts hosted in
+            # out-of-scope sibling subprojects (PROJECTS note). Owning no
+            # corpusjson is BY DESIGN, a benign skip, not the unpack/layout
+            # error the loud guard is for.
+            if proxy_corpus?(workdir, project)
+              skipped += 1
+            else
+              notes << "#{slug(project)}: project tree present but no corpusjson found (unpack/layout error)"
+            end
             next
           end
           skipped += files.count { |path| File.empty?(path) }
           skipped += orphan_fragment_count(workdir, project) if @translations
         end
         Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
+      end
+
+      # A proxy/portal corpus owns no corpusjson: its corpus.json is
+      # `type:corpus` carrying a non-empty `proxies` map (the texts live in
+      # out-of-scope sibling subprojects). Checked at EITHER unpack depth
+      # (dcclt/jena nests under <slug>/jena/), so it mirrors project_dir.
+      def proxy_corpus?(workdir, project)
+        base = File.join(workdir, slug(project))
+        [base, File.join(base, project.split("/").last)].any? do |dir|
+          path = File.join(dir, "corpus.json")
+          next false unless File.exist?(path)
+
+          proxies = JSON.parse(File.read(path))["proxies"]
+          proxies.is_a?(Hash) && !proxies.empty?
+        rescue JSON::ParserError
+          false
+        end
       end
 
       # Tablets go to the OraccJsonParser (title from the catalogue, language

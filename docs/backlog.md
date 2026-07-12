@@ -4177,7 +4177,7 @@ reconstruction extracts, stage-2 crawl, ccmh re-sync for txt texts; the
 ud re-sync for Ruthenian if still pending), flips, RE-FLAG the real
 backup disk (D item — owner hardware decision), sticky alarm LAST.
 
-## P14-9 · ORACC sync defects: blms collisions + anchor edge  [tier: opus] [status: in-progress] [deps: —]
+## P14-9 · ORACC sync defects: blms collisions + anchor edge  [tier: opus] [status: done] [deps: —]
 Defect packet (orchestrator census of the owner's 2026-07-12 big sync:
 +10,899 docs / 30 projects landed, !20): (1) 19 × "duplicate passage urn"
 all in blms (bilingual literary) — census the real shape first (parallel
@@ -4198,3 +4198,45 @@ previously-loaded docs =skipped; quarantines 20 → ~0. Fixtures: trimmed
 real slices from canonical/oracc/blms + the saa08 pair (no network).
 Suite+lint green; docs (02-sources note); backlog done; worklog (sha —).
 One commit, not pushed.
+
+Findings (census FIRST, per item):
+- **Census corrected the orchestrator's framing.** The 20 quarantines (event
+  `quarantined`, at ≥ 2026-07-12) are 19 "duplicate passage urn" + 1 anchor —
+  and the 19 dups are NOT all blms: **7 blms + 12 saao-saa08**. Both dup groups
+  are ONE defect class, so one fix covers both.
+- **(1) The duplicate shape is the P11-7 sentence-label fallback, not column
+  duplication.** blms (bilingual literary) interleaves a Sumerian line (own
+  label "o 1'") with its Akkadian interlinear translation, which upstream ships
+  as a LABEL-LESS `line-start`; P11-7 falls it back to the enclosing sentence
+  label "o 1'" → collision with the Sumerian line. saao-saa08 omens are the same
+  animal with a whole-text range sentence ("o 1 - r 6"): several label-less
+  line-starts all fall back to it. These are DISTINCT physical lines (different
+  words/languages), so the house `:b2`/`:b3` positional suffix in document order
+  is exactly right (GRETIL/ccmh P9-4c precedent) — never quarantine, never merge.
+  Fix: `OraccJsonParser#disambiguate_suffixes`. Clean tablets keep byte-identical
+  urns (only repeated suffixes are touched) → frozen guard holds.
+- **(2) saao-saa08:P336145-en: the anchor is a TRAILING unlemmatized line.** The
+  final prose unit anchors at row P336145.13 — a `nonl-final` "traces of a name"
+  row (print label "(r 3)") the corpusjson never mints (no readable signs; its
+  line-starts stop at r 2). Reattach-forward MISSED because it only looks forward
+  and this row is the LAST content. Fix: `anchor_label` reattaches BACKWARD to
+  the last line-start (r 2) when none follows — prose kept, and the suffix still
+  exists in the tablet for `Query::Parallel`. Not "skip loudly" — backward
+  reattach is the honest keep.
+- **(3) The 3 zero-doc projects (riao, ribo, dcclt-jena) are PROXY corpora, an
+  EXPECTED zero — but the accounting was crying wolf.** Each ships `corpus.json`
+  `type:corpus` with a `proxies` map (riao 1941, ribo 391) and NO `corpusjson`:
+  their texts are proxies hosted in out-of-scope sibling subprojects (the
+  PROJECTS note already says riao/ribo are "top level only"). NOT the P11-7
+  loud-zero class. But `discovery_skips` was flagging all three as
+  "unpack/layout error (unrecognized)". Fix: `proxy_corpus?` recognizes them as a
+  benign skipped-by-rule, so `unrecognized` drops 3 → 0.
+- **Acceptance (parse-only re-sync, loader-idempotent):**
+  `oracc  parse-only  +20 added  ~0 updated  =17775 skipped  -0 withdrawn
+  !0 errored  indexed 3757413 passages` · `discovery: 17795 selected ·
+  415 skipped-by-rule · 0 unrecognized`. Quarantines 20 → 0; all 17,775
+  previously-loaded docs =skipped (frozen guard); 0 unrecognized (was 3).
+- Fixtures: trimmed real slices in `test/fixtures/oracc_p14_9/` — blms P345480
+  (16 sentence children), saa08 P336559 (36), the P336145 corpusjson (line-start
+  skeleton) + html pair, riao proxy corpus.json (3 proxies). TDD: three failing
+  tests written first, then the three fixes.
