@@ -48,11 +48,25 @@ What each command does and its exit contract:
   *moved*/*behind*/*license changed* are reported but stay exit 0. (ORACC's
   standalone `metadata.json` currently serves an empty body over HTTP, so its
   license row reads *unchecked* until upstream serves it — the drift check via
-  the zip `Last-Modified` is unaffected.) Every `--remote` run also **persists**
-  each source's verdict into the history ledger (the `source_probes` cache, one
-  row per source, survives `nabu rebuild`), which is what feeds the `up=` column
-  in `nabu status` (below) — so between probe runs you can still see, offline,
+  the zip `Last-Modified` is unaffected.) Drift vocabulary (P15-7): *current* /
+  *behind* / *unpinned* (synced before the pins ledger existed — see backfill
+  below) / *never-synced* (genuinely untouched: no pin, no run, no canonical
+  tree) / *frozen* (a frozen-policy source — no drift is expected, matching
+  `status`'s `up=frozen`). Every `--remote` run also **persists** each source's
+  verdict into the history ledger (the `source_probes` cache, one row per
+  source, survives `nabu rebuild`), which is what feeds the `up=` column in
+  `nabu status` (below) — so between probe runs you can still see, offline,
   whether an upstream had moved.
+- **`nabu health --backfill-pins`** — one-shot pin recovery, **no network**.
+  Sources fetched before the pins ledger existed (P7) have a canonical clone
+  but no ledger pin, so drift reads *unpinned*. This records the pin from what
+  is already on disk: for a git source, `git -C canonical/<slug> rev-parse
+  HEAD`; for a non-git ZipFetch/FileFetch source, the `sha256` in its
+  `.zip-fetch.json` / `.file-fetch.json` state file. **Read-only** on
+  `canonical/`; writes **only** the ledger pins; **idempotent** (a source that
+  already carries a pin is skipped). After a backfill, those sources read
+  *current* / *behind* against a real pin instead of *unpinned* — or you can
+  just let the next `nabu sync` record the pin.
 - **`nabu status`** — per-source row: on/off, sync policy, an **`up=` upstream
   column** (P14-12), live doc/passage (or dictionary-entry) counts, and the last
   run. The `up=` column is read from the probe cache, never a live network call:
@@ -61,8 +75,9 @@ What each command does and its exit contract:
   - `up=stale(30d)` — the last probe is older than two weeks, so even its "ok" is
     too old to trust; re-probe before deciding;
   - `up=?(never)` — never probed here (run `nabu status --remote`);
-  - `up=?(3d)` — probed, but drift is indeterminate (never synced / upstream
-    unreachable / multi-repo with no pins yet);
+  - `up=?(3d)` — probed, but drift is indeterminate (unpinned / never synced /
+    upstream unreachable / multi-repo with no pins yet); an *unpinned* source
+    clears once `nabu health --backfill-pins` or the next sync records its pin;
   - `up=frozen` — a frozen-policy dead-project snapshot; no probe is expected.
 - **`nabu status --remote`** — the **one-command informed-update flow**: run the
   live upstream probe inline (the same code path as `health --remote`, so it also
