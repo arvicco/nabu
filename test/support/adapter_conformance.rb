@@ -51,6 +51,18 @@ module AdapterConformance
     nil
   end
 
+  # Optional hook (P14-5): the string a passage's text_normalized is derived
+  # from. Default: the pristine text (the P6-4 rule — Passage.new mints the
+  # form). An adapter with a DOCUMENTED, deterministic search-form derivation
+  # (conventions §9 — e.g. ccmh-txt's diplomatic line-break rejoining)
+  # overrides this with that derivation, which must be recomputable from the
+  # STORED passage alone (text + annotations) — so the minted-form pin keeps
+  # its guarantee: text_normalized is always the per-language fold of a
+  # source anyone can recompute, never an ad-hoc adapter-side fold.
+  def conformance_search_source(passage)
+    passage.text
+  end
+
   def test_conformance_manifest_is_a_valid_source_manifest
     manifest = conformance_adapter.manifest
     assert_kind_of Nabu::SourceManifest, manifest
@@ -102,14 +114,16 @@ module AdapterConformance
     end
   end
 
-  # P6-4: text_normalized is minted at the ONE folding boundary (Passage.new →
-  # Normalize.search_form with the passage's own language). An adapter that
-  # passed its own text_normalized would bypass the per-language rule table;
-  # this pins every adapter's output to the minted form.
+  # P6-4: text_normalized is minted at the ONE folding boundary
+  # (Normalize.search_form with the passage's own language). An adapter that
+  # folded text its own way would bypass the per-language rule table; this
+  # pins every adapter's output to the minted form of the (default: pristine,
+  # else documented — see conformance_search_source) derivation source.
   def test_conformance_text_normalized_is_the_minted_search_form
     each_parsed_document(conformance_adapter) do |_ref, document|
       document.each do |passage|
-        expected = Nabu::Normalize.search_form(passage.text, language: passage.language)
+        expected = Nabu::Normalize.search_form(conformance_search_source(passage),
+                                               language: passage.language)
         assert_equal expected, passage.text_normalized,
                      "passage #{passage.urn.inspect} text_normalized must be the per-language search form"
       end

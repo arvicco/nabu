@@ -3967,13 +3967,95 @@ metadata at scout). Phase A: propose the stage-2 list with crawl sizes.
 STOP — owner gate (sizes again). Phase B: the list + docs. NO parser
 changes (new HTML shapes → census + report, the standing guard).
 
-## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: pending] [deps: —]
+## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: done] [deps: —]
 The deferred half of P13-2: Suprasliensis + Vita Constantini + Vita
 Methodii are .txt-only upstream (prose/folio schemes). Phase A: map the
 txt structure honestly (folio markers? paragraph numbers? the catalogue's
 "not properly checked" caveat applies doubly), design citations, size the
 small ccmh-txt family, fixture plan; note the TOROT-Suprasliensis
 alt-edition discipline. STOP — owner gate. Phase B per approval.
+
+### Phase A — OWNER-APPROVED 2026-07-12 (fixture plan approved; Suprasliensis grain = LINE; added requirement, owner verbatim: "we need some mechanics to make the line-split words useful for all our tools, not just a dead weight decoration. Find best approach.")
+
+Phase A facts (re-verified 2026-07-12, same Kielipankki www/ tree, same CC
+BY 4.0 bundle grant covering the .txt files): every line in all three
+files is `<7-digit code> <text>` — zero non-conforming lines; no folio
+markers, no XML. The codes are documented by each text's own .html
+description page, verbatim: Suprasliensis `part(1) folium(3) side(1:
+1=recto 2=verso) line(2)` (Severjanov-edition addressing; 3 parts, folios
+1-118/1-16/1-151, ≤31 lines/side); the Vitae `chapter(2)
+verse-in-the-edition(3) line-in-this-file-ONLY(1) always-zero(1)` — only
+chapter.verse is citable. "Not properly checked" made concrete: Supr
+wraps MID-WORD (51% of 17,013 lines end in a hyphen; the Vitae 0%),
+duplicate full codes 44/2/1 per file, 4 side-digit-3 slips, occasional
+unmarked wraps (`(ot&ved`/`^jO` — undetectable, left alone).
+Adapter-shape verdict: EXTEND Ccmh, no sibling source (same corpus,
+license, base URL and manual sync policy; parser_family is a descriptive
+label, not a dispatch key — goo300k reuses imp-tei, vulgate/eng-web share
+usfx; the fetch was already the ORACC two-phase FileFetch aggregation,
+4→7 per-text subdirs).
+
+### Findings (Phase B, 2026-07-12 — shipped)
+
+SHIPPED AS APPROVED + the split-word requirement. New family `ccmh-txt`
+(`CcmhTxtParser`): folio-line scheme (Suprasliensis, one passage per
+physical line, urn `:<part>.<folium>.<side>.<line>`, zero-padding
+stripped, side digit RAW — the 3014301 slip carried verbatim) and
+chapter-verse scheme (the Vitae, urn `:<ch>.<verse>`, consecutive
+same-verse lines aggregated with a space; upstream is CRLF where Supr is
+LF, both handled). Duplicate codes: `:b2` in document order; the
+verse-grain nuance pinned by all three real cases (VC 0600200 adjacent →
+absorbed into one verse; VC 1101010 non-adjacent → `11.10:b2`; VM
+1700100 inside one consecutive run → absorbed, no suffix). 3 documents:
+urn:nabu:ccmh:suprasliensis / :vita-constantini / :vita-methodii
+(upstream stems vita_constantini → hyphenated urn slugs, the UD
+slugification precedent; fetch keys/subdirs keep the literal stems).
+
+SPLIT-WORD DESIGN (the owner requirement): **search-form rejoining plus a
+`hyphen_join` annotation that two tools genuinely read** — option (a)
+with the option-(b) channel earning its keep. Pristine text = the
+diplomatic line VERBATIM (hyphen included). text_normalized =
+Normalize.search_form over the REJOINED derivation — hyphen line: split
+word completed with the next line's first token; continuation line:
+orphan leading fragment dropped — recorded per passage as `hyphen_join`
+({"tail" => …}/{"orphan" => …}, a line can carry both) so the derivation
+is RECOMPUTABLE from the stored row alone (`CcmhTxtParser.search_source`,
+a pure function). FTS, --near, snippets and golden queries see whole
+words with ZERO query-side machinery — proven end to end: `search
+"mOdrovati"` hits supr:1.1.1.3 (`…mOdrova-`/`ti`), the orphan line
+1.1.1.4 produces NO junk hit for "ti" while the real pronoun ti
+(1.1.1.24) stays findable. KWIC honesty: Concord retries a missed
+keyword against the rejoined haystack with every appended-tail character
+mapped to the hyphen/EOL display index → the highlight is exactly the
+visible `mOdrova-`, never fabricated display text (concord tests pin
+keyword, contexts, and the no-tail fallback). The conformance pin was
+GENERALIZED, not weakened: new optional `conformance_search_source` hook
+(default: pristine text) keeps the guarantee that text_normalized is
+always the minted per-language fold of a recomputable source;
+passage.rb's contract comment updated to match. Joins cross folio/side/
+collision seams (file order = textual flow); a document-final hyphen
+line keeps its fragment; an all-orphan line falls back to the raw fold
+(text_normalized must not be empty). Documented as a PARSER-SCOPED rule
+in conventions §9 (argued: ASPR/Freising/GRETIL lines don't hyphenate,
+the gospels' XML doesn't either — corpus layout, not a chu property; the
+annotation contract is reusable by a future diplomatic source).
+
+Fixtures: 3 byte-identical line-range trims (supr 72 lines — folio 1
+recto+verso head, BOTH 1042114-19 collision runs incl. the hyphen join
+straight across that seam, the side-3 slip; VC 41 lines — incipit,
+ch1, all three duplicate-code behaviors; VM 17 lines — control), ranges
+cut at non-hyphen/verse boundaries so the trims mint no fixture-only
+joins. README + manifest extended (schemes verbatim, quirk table,
+retrieval 2026-07-12). Alt-edition discipline in 02-sources rows 19+30:
+TOROT / CCMH / obdurodon(queued) Suprasliensis = THREE distinct
+editions, never dedupe any pair (conventions §3). Registry untouched —
+ccmh is already enabled; the owner's next `nabu sync ccmh` fetches the
+three txt files and adds 3 docs (~17.5k passages, mostly Supr lines).
+Suite 1693 runs / 27,635 assertions green, lint clean; 21 parser + 28
+adapter tests incl. conformance over all 10 fixture docs + 3 concord
+tests. Demo: urn:nabu:ccmh:suprasliensis:1.1.1.3 = `)i do s&mr)$ti . ne
+dobr@ mOdrova-` → normalized `)i do s&mr)$ti . ne dobr@ modrovati`;
+concord "mOdrovati" keyword = `mOdrova-`.
 
 ## P14-6 · Incremental indexing — measure, then decide  [tier: opus] [status: pending] [deps: —]
 improvements §4.2 "when it hurts" checkpoint. Phase A (measurement, no
