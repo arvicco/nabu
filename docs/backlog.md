@@ -4342,3 +4342,22 @@ Findings (census FIRST, per item):
   (16 sentence children), saa08 P336559 (36), the P336145 corpusjson (line-start
   skeleton) + html pair, riao proxy corpus.json (3 proxies). TDD: three failing
   tests written first, then the three fixes.
+
+## P14-10 · etym usability: bare proto forms + ASCII typability  [tier: opus] [status: in-progress] [deps: P14-1]
+Owner defect report (2026-07-12): (1) `etym bʰewgʰ` fails ("no
+reconstruction names…") even though `etym bog` DISPLAYS that very form —
+unstarred input must FALL BACK to reconstruction-headword lookup when the
+reflex path misses (asterisk optional; trailing-hyphen tolerant — root
+entries are stored `bʰewgʰ-`; try the -pro shelves after the attested
+path). (2) `etym *bʰewgʰ` dies in zsh globbing before nabu runs — error
+messages and docs must show the quoted form (`etym '*form'`), and the
+bare-form fallback makes the star mostly unnecessary. (3) Ship the
+deferred PIE ASCII fold: modifier letters (ʰ→h, ʷ→w, any others present
+in the three extracts — census the actual headword character inventory
+first) folded in the -pro shelves' §9 rule so `etym bhewgh` works;
+combining marks already strip. Fold change touches only the three
+reconstruction dictionaries (synced 2026-07-12) — re-fold via parse-only
+sync, frozen elsewhere. Tests: bare-form fallback (hit + updated
+miss-message), hyphen tolerance, ASCII lookup for a ʰ/ʷ-bearing root,
+define '*' parity. Suite+lint green; docs (README/mcp.md examples use
+quoted forms); backlog done; worklog (sha —). One commit, not pushed.
