@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="hgv56">
+   <teiHeader>
+      <fileDesc>
+         <publicationStmt>
+            <idno type="filename">56</idno>
+            <idno type="TM">56</idno>
+            <idno type="ddb-hybrid">bgu;3;994</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <history>
+                  <origin>
+                     <origPlace>Pathyris</origPlace>
+                     <origDate when="-0113-08-26">26. Aug. 113 v.Chr.</origDate>
+                  </origin>
+                  <provenance type="located">
+                     <p>
+                        <placeName type="ancient" n="1"
+                                   ref="https://pleiades.stoa.org/places/786084 https://www.trismegistos.org/place/1628">Pathyris</placeName>
+                     </p>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+</TEI>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="hgv758">
+   <teiHeader>
+      <fileDesc>
+         <publicationStmt>
+            <idno type="filename">758</idno>
+            <idno type="TM">758</idno>
+            <idno type="ddb-hybrid">p.cair.zen;1;59108</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <history>
+                  <origin>
+                     <origPlace>Alexandria (?)</origPlace>
+                     <origDate notAfter="-0257-11-26">vor 26. Nov. 257 v.Chr.</origDate>
+                  </origin>
+                  <provenance type="located">
+                     <p>
+                        <placeName type="ancient" n="1"
+                                   ref="https://www.trismegistos.org/place/100">Alexandria</placeName>
+                     </p>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+</TEI>

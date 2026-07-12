@@ -250,6 +250,40 @@ module MCP
       assert_match(/open/, error.message, "the message teaches the valid classes")
     end
 
+    # -- nabu_search date/place axis (P15-2) -----------------------------------
+
+    def test_search_from_to_filters_by_date
+      a = make_document(urn: "urn:nabu:ddbdp:a")
+      make_passage(a, urn: "urn:nabu:ddbdp:a:1", text: "στρατηγος", sequence: 0)
+      b = make_document(urn: "urn:nabu:ddbdp:b")
+      make_passage(b, urn: "urn:nabu:ddbdp:b:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: a.id, not_before: -113, not_after: -113,
+                                      place_name: "Oxyrhynchus", axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: b.id, not_before: 591, not_after: 602,
+                                      place_name: "Arsinoites", axis_source: "hgv")
+      rebuild!
+
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "from" => -300, "to" => -30 }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:nabu:ddbdp:a:1], urns
+      places = payload(call("nabu_search", { "query" => "στρατηγος", "place" => "oxyrhynch%" }))
+               .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:nabu:ddbdp:a:1], places
+    end
+
+    def test_search_date_does_not_compose_with_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "from" => -300 })
+      end
+    end
+
+    def test_search_year_zero_is_invalid
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "x", "from" => 0 })
+      end
+      assert_match(/no year 0/i, error.message)
+    end
+
     def test_unknown_tool_raises
       assert_raises(Nabu::MCP::Tools::UnknownTool) { call("nabu_frobnicate", {}) }
     end

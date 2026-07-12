@@ -11,9 +11,18 @@ module Store
     end
 
     def test_migrations_create_all_tables
-      %i[sources documents passages provenance enrichments].each do |table|
+      %i[sources documents passages provenance enrichments document_axes].each do |table|
         assert @db.table_exists?(table), "expected table #{table} to exist"
       end
+    end
+
+    # P15-2: the date/place axis is document-keyed, signed-integer-year columns.
+    def test_document_axes_columns
+      columns = @db.schema(:document_axes).to_h
+      assert_equal :integer, columns[:not_before][:type]
+      assert_equal :integer, columns[:not_after][:type]
+      refute columns[:not_before][:allow_null] == false, "either bound may be NULL (open-ended)"
+      assert_equal false, columns[:axis_source][:allow_null], "axis_source is required"
     end
 
     # P7-1: runs and source_repos moved to the history ledger (as slug-keyed

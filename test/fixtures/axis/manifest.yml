@@ -1,0 +1,58 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM PROVENANCE. These five HGV EpiDoc metadata records (P15-2 date/place
+# axis extractor exemplars) were TRIMMED from the locally synced canonical
+# snapshot canonical/papyri-ddbdp/HGV_meta_EpiDoc/ on 2026-07-12 — kept to the
+# teiHeader idno + history/origin the AxisBuilder reads, structurally intact
+# EpiDoc. There is no raw URL to re-GET (re-acquiring means a full idp.data
+# corpus sync), so every entry is refetchable: false — `fixtures:check` SKIPS
+# them and `fixtures:refresh` refuses to touch them.
+source: axis
+adapter_test:
+files:
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/56.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/56.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-12
+    whole: false
+    trim: teiHeader idno + history/origin only — BCE point (when="-0113"), Pathyris
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/758.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/758.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-12
+    whole: false
+    trim: teiHeader idno + history/origin only — open-ended notAfter-only date
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/610.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/610.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-12
+    whole: false
+    trim: teiHeader idno + history/origin only — undated ("unbekannt"), placed
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/997.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/997.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-12
+    whole: false
+    trim: teiHeader idno + history/origin only — two alternative when-dates (envelope)
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/9150.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/9150.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-07-12
+    whole: false
+    trim: teiHeader idno + history/origin only — notBefore/notAfter CE range, precision low

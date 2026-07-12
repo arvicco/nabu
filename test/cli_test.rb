@@ -605,6 +605,81 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search date/place axis (P15-2) --------------------------------------
+
+  def test_search_from_to_filters_by_date
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --from -300 --to -30]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)  # 113 BCE
+      assert_match("urn:nabu:ddbdp:c:1", out)  # 30 BCE
+      refute_match("urn:nabu:ddbdp:b:1", out)  # 591 CE, out of window
+    end
+  end
+
+  def test_search_century_shorthand_scopes_one_century
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out)
+    end
+  end
+
+  def test_search_place_filters_by_provenance
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --place oxyrhynch%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # Arsinoites
+    end
+  end
+
+  def test_search_year_zero_is_rejected
+    _out, err, status = run_cli(%w[search foo --from 0])
+    assert_equal 1, status
+    assert_match(/no year 0/i, err)
+  end
+
+  def test_search_from_after_to_is_rejected
+    _out, err, status = run_cli(%w[search foo --from -30 --to -300])
+    assert_equal 1, status
+    assert_match(/--from -30 is after --to -300/, err)
+  end
+
+  def test_search_date_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --lemma λέγω --from -300])
+    assert_equal 1, status
+    assert_match(/text search only/i, err)
+  end
+
+  def test_show_prints_the_date_place_axis_line
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_nil status
+      assert_match(/date: 113 BCE \(low\) · Oxyrhynchus/, out)
+    end
+  end
+
+  def test_vocab_by_century_buckets_the_dated_corpus
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab --by-century]) }
+      assert_nil status
+      assert_match(/2nd c\. BCE\s+1 document/, out)
+      assert_match(/6th c\. CE\s+1 document/, out)
+      assert_match(/3 dated documents \(bucketed by earliest year; 2 span multiple centuries\)/, out)
+    end
+  end
+
+  def test_vocab_by_century_plots_a_word
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab --by-century κακος]) }
+      assert_nil status
+      assert_match(/diachrony of "κακος"/, out)
+      assert_match(/6th c\. CE\s+1 document/, out) # only urn:b carries κακος
+    end
+  end
+
   # -- search --lemma (P7-5) -------------------------------------------------
 
   # Real UD Ancient Greek PROIEL fixture synced through the real pipeline:
@@ -1420,6 +1495,49 @@ class CLITest < Minitest::Test
       document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
       content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+  end
+
+  # A dated corpus (P15-2): three papyri with document_axes rows spanning BCE→CE,
+  # indexed through the real Indexer, for the CLI date/place surfaces.
+  def with_dated_corpus
+    Dir.mktmpdir("nabu-cli-dated") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "p", name: "Papyri", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:a", "στρατηγος αγαθος", -113, -113, "Oxyrhynchus")
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:b", "στρατηγος κακος", 591, 602, "Arsinoites")
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:c", "στρατηγος μεγας", -30, 14, "Oxyrhynchus")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+    catalog[:document_axes].insert(
+      document_id: doc_id, not_before: not_before, not_after: not_after,
+      precision: "low", place_name: place, axis_source: "hgv"
     )
   end
 

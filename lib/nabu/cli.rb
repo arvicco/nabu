@@ -217,14 +217,28 @@ module Nabu
     option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
                     desc: "Max words between the two --near terms (default " \
                           "#{Nabu::Query::Proximity::DEFAULT_WINDOW}; 0 = adjacent)"
+    option :from, type: :numeric, banner: "YEAR",
+                  desc: "Earliest date: signed historical year, negative = BCE (-300 = 300 BCE, no year 0)"
+    option :to, type: :numeric, banner: "YEAR",
+                desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
+    option :century, type: :numeric, banner: "N",
+                     desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
+    option :place, type: :string, banner: "PATTERN",
+                   desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
     def search(query = nil)
       query = query.to_s.strip
+      if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
+        raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
+                           "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
+      end
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
+      from, to = date_window
+      place = options[:place]
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -232,9 +246,11 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
+      require_axis!(catalog) if from || to || place
+
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i)
+                                               limit: options[:limit].to_i, from: from, to: to, place: place)
       print_search_results(results)
     ensure
       catalog&.disconnect
@@ -737,18 +753,41 @@ module Nabu
       so you can profile something that works. --limit caps both the distinctive
       list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
 
+      DIACHRONY (--by-century): instead of one document's lemmas, plot the DATED
+      corpus across centuries (P15-2, the date/place axis). Bare, it is the shape
+      of your dated holdings — one row per century (BCE/CE), the document count.
+      With a text QUERY it becomes "plot this word across centuries": how many
+      dated documents attest the term in each century. Composes with --lang,
+      --license, --from/--to/--century, and --place; counts are per DOCUMENT and
+      bucketed by EARLIEST year (a ranged papyrus lands in its first century), so
+      the footer names how many span more than one century. Most of the corpus is
+      undated (papyri via HGV, Slovene goo300k/IMP carry dates); undated
+      documents are simply absent here, never an error.
+
       Examples:
         nabu vocab urn:nabu:proiel:caes-gal          # Caesar's Gallic War
         nabu vocab urn:nabu:proiel:cic-off --limit 30
         nabu vocab urn:nabu:proiel:hdt:1.1-1.100     # a citation range
+        nabu vocab --by-century                      # the dated corpus over time
+        nabu vocab --by-century στρατηγ --lang grc   # a word plotted across centuries
+        nabu vocab --by-century --place oxyrhynch%   # Oxyrhynchus, century by century
     HELP
     option :limit, type: :numeric, default: Nabu::Query::Vocab::DEFAULT_LIMIT,
                    desc: "Cap the distinctive list and hapax spellings printed"
     option :long, type: :boolean, default: false,
                   desc: "List every hapax legomenon (and every gold-bearing language) in full, " \
                         "escaping the --limit display cap (the distinctive ranking stays top-N)"
+    option :by_century, type: :boolean, default: false,
+                        desc: "Diachronic mode: bucket the DATED corpus (or a text query) by century"
+    option :lang, type: :string, desc: "With --by-century: restrict to a language (grc, lat, …)"
+    option :license, type: :string, desc: "With --by-century: restrict to an exact license class"
+    option :from, type: :numeric, banner: "YEAR", desc: "With --by-century: earliest year (negative = BCE)"
+    option :to, type: :numeric, banner: "YEAR", desc: "With --by-century: latest year"
+    option :century, type: :numeric, banner: "N", desc: "With --by-century: one century's window (6, -2)"
+    option :place, type: :string, banner: "PATTERN", desc: "With --by-century: provenance place LIKE filter"
     def vocab(urn = nil)
       urn = urn.to_s.strip
+      return vocab_by_century(urn) if options[:by_century]
       raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
 
       config = Nabu::Config.load
@@ -948,6 +987,49 @@ module Nabu
               "(choose from #{Nabu::SourceManifest::LICENSE_CLASSES.join(', ')})"
       end
 
+      # Resolve --century (a whole century's bounds) OR --from/--to into a
+      # [from, to] signed-historical-year window (P15-2). The reviewed guards:
+      # no year 0 (1 BCE = -1, 1 CE = +1), a clear F>T message (not a silent
+      # empty result), and --century is mutually exclusive with --from/--to.
+      def date_window
+        if options[:century]
+          if options[:from] || options[:to]
+            raise Thor::Error, "date filter: --century is shorthand for --from/--to — use one or the other"
+          end
+
+          idx = options[:century].to_i
+          raise Thor::Error, "date filter: there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if idx.zero?
+
+          return Nabu::DateAxis.century_bounds(idx)
+        end
+
+        from = coerce_year(options[:from], "--from")
+        to = coerce_year(options[:to], "--to")
+        if from && to && from > to
+          raise Thor::Error, "date filter: --from #{from} is after --to #{to} " \
+                             "(BCE years are negative — 300 BCE is -300, so -300 comes before -30)"
+        end
+        [from, to]
+      end
+
+      def coerce_year(value, flag)
+        return nil if value.nil?
+
+        year = value.to_i
+        raise Thor::Error, "date filter: there is no year 0 (#{flag}); 1 BCE is -1, 1 CE is 1" if year.zero?
+
+        year
+      end
+
+      # A date/place filter needs document_axes; a catalog that predates
+      # migration 008 (never rebuilt) hasn't got it. Fail with a clear pointer
+      # rather than a Sequel "no such table".
+      def require_axis!(catalog)
+        return if catalog.table_exists?(:document_axes)
+
+        raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
+      end
+
       # Export format gate. CoNLL-U is a first-class exit format (maintenance
       # §7) but needs the token model, so it is deferred to the enrichment
       # phase with an explicit message rather than a generic "unknown format".
@@ -1074,6 +1156,7 @@ module Nabu
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
+        print_axis(passage.axis)
         return if passage.provenance.empty?
 
         say "  provenance:"
@@ -1087,6 +1170,7 @@ module Nabu
         lang = document.language ? " [#{document.language}]" : ""
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
+        print_axis(document.axis)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
@@ -1101,10 +1185,29 @@ module Nabu
         lang = range.language ? " [#{range.language}]" : ""
         say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
         say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
+        print_axis(range.axis)
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
           say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
+      # The date/place axis line (P15-2), when the document has one. A date span
+      # ("113 BCE", "501–700 CE", "≤ 257 BCE") with the informative precision
+      # ("low"/"high", not the derived exact/range/year) and the provenance
+      # place; place-only rows print as "place:". Undated documents print
+      # nothing (an absence, never an error).
+      def print_axis(axis)
+        return if axis.nil?
+
+        span = Nabu::DateAxis.format_span(axis.not_before, axis.not_after)
+        place = axis.place_name ? " · #{axis.place_name}" : ""
+        if span
+          note = %w[exact range year].include?(axis.precision) ? "" : " (#{axis.precision})"
+          say "  date: #{span}#{note}#{place}"
+        elsif axis.place_name
+          say "  place: #{axis.place_name}"
         end
       end
 
@@ -1619,6 +1722,47 @@ module Nabu
         say "  hapax legomena (#{commafy(hapax_count)}, once each): #{shown.join(', ')}#{tail}"
       end
 
+      # `vocab --by-century` (P15-2): the diachronic histogram of the dated
+      # corpus, optionally filtered by a text query (plot a word across
+      # centuries) and by --lang/--license/date/--place.
+      def vocab_by_century(query)
+        validate_license!(options[:license])
+        from, to = date_window
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        require_axis!(catalog)
+        fulltext = open_fulltext(config) unless query.empty?
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" if !query.empty? && fulltext.nil?
+
+        result = Nabu::Query::Century.new(catalog: catalog, fulltext: fulltext).run(
+          query: query.empty? ? nil : query, lang: options[:lang], license: options[:license],
+          from: from, to: to, place: options[:place]
+        )
+        print_century(result)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_century(result)
+        say(if result.query
+              "diachrony of #{result.query.inspect} (dated documents by century)"
+            else
+              "dated corpus by century"
+            end)
+        return say("  no dated documents match") if result.buckets.empty?
+
+        width = result.buckets.map { |bucket| bucket.label.length }.max
+        result.buckets.each do |bucket|
+          say "  #{bucket.label.ljust(width)}  #{commafy(bucket.documents)} " \
+              "#{bucket.documents == 1 ? 'document' : 'documents'}"
+        end
+        multi = result.multi_century.positive? ? "; #{commafy(result.multi_century)} span multiple centuries" : ""
+        say "  #{commafy(result.total_documents)} dated documents (bucketed by earliest year#{multi})"
+      end
+
       # A document with no gold lemmas: say so plainly and name the gold-bearing
       # languages (from the lemma index) so the user can profile something real.
       def print_vocab_no_gold(profile)
@@ -1887,6 +2031,10 @@ module Nabu
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
+        return unless result.axes
+
+        say "  dated/placed #{result.axes.total} documents " \
+            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp})"
       end
 
       def format_report(label, report)

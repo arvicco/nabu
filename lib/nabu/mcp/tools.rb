@@ -284,6 +284,18 @@ module Nabu
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
                      description: "Exact effective license class filter." },
+          from: { type: "integer",
+                  description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document date/place axis " \
+                               "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
+                               "undated and absent under a date filter. Text search only (not lemma)." },
+          to: { type: "integer",
+                description: "Latest date: signed historical year; composes with from." },
+          century: { type: "integer",
+                     description: "Shorthand for one century's from/to (6 = 6th c. CE, -2 = 2nd c. " \
+                                  "BCE); mutually exclusive with from/to." },
+          place: { type: "string",
+                   description: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -475,13 +487,15 @@ module Nabu
                       "search it deliberately")
         end
 
+        from, to, place = search_date(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
         results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
-                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph)
+                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph,
+                                         from: from, to: to, place: place)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
       rescue Query::MorphFacets::Error => e
@@ -689,7 +703,36 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil)
+      # Resolve the date/place axis args (P15-2), honestly scoped to plain text
+      # search — the dated corpus (papyri) is not lemmatized, and proximity is a
+      # different index path — so date/place with lemma or near is a usage error.
+      # `century` is shorthand for a from/to window; year 0 and from>to are
+      # rejected with a clear message (the reviewed guards).
+      def search_date(args, mode, near)
+        from = int_arg(args, "from")
+        to = int_arg(args, "to")
+        century = int_arg(args, "century")
+        place = string_arg(args, "place")
+        return [nil, nil, nil] unless from || to || century || place
+
+        if mode == :lemma || near
+          raise InvalidArguments, "from/to/century/place compose with text search only, not lemma/near"
+        end
+
+        if century
+          raise InvalidArguments, "century is shorthand for from/to — use one or the other" if from || to
+          raise InvalidArguments, "there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if century.zero?
+
+          from, to = Nabu::DateAxis.century_bounds(century)
+        end
+        raise InvalidArguments, "there is no year 0 (1 BCE is -1, 1 CE is 1)" if from&.zero? || to&.zero?
+        raise InvalidArguments, "from #{from} is after to #{to} (BCE years are negative)" if from && to && from > to
+
+        [from, to, place]
+      end
+
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
+                     from: nil, to: nil, place: nil)
         if near
           return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
             query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
@@ -702,7 +745,7 @@ module Nabu
         end
 
         Query::Search.new(catalog: catalog, fulltext: fulltext)
-                     .run(term, lang: lang, license: license, limit: limit)
+                     .run(term, lang: lang, license: license, limit: limit, from: from, to: to, place: place)
       end
 
       def render_search(results, limit:, catalog:)
@@ -1279,6 +1322,16 @@ module Nabu
 
         stripped = value.strip
         stripped.empty? ? nil : stripped
+      end
+
+      # A signed-integer arg (the date/place axis years, P15-2), or nil. A
+      # JSON number that isn't an integer is a usage error, not a silent coerce.
+      def int_arg(args, key)
+        value = args[key]
+        return nil if value.nil?
+        raise InvalidArguments, "#{key} must be an integer" unless value.is_a?(Integer)
+
+        value
       end
 
       def license_arg(args)
