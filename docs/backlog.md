@@ -3958,7 +3958,7 @@ vocabulary by simple ratio, hapax list), gold shelves only, honest about
 coverage (documents without gold lemmas say so). CLI + optional MCP
 (argue). Small; measure before adding any index (P13-6 precedent).
 
-## P14-4 · Stage-2 SAA-English crawl scope  [tier: opus] [status: pending] [deps: —]
+## P14-4 · Stage-2 SAA-English crawl scope  [tier: opus] [status: done] [deps: —]
 Config extension per the P13-4 staging design: TRANSLATION_PROJECTS
 grows beyond saao/ to the other translated projects (P13-4 scout data:
 rimanum 378/378, etcsri 1448/1456 + Hungarian, rinap1 88/96, dcclt
@@ -3966,6 +3966,108 @@ rimanum 378/378, etcsri 1448/1456 + Hungarian, rinap1 88/96, dcclt
 metadata at scout). Phase A: propose the stage-2 list with crawl sizes.
 STOP — owner gate (sizes again). Phase B: the list + docs. NO parser
 changes (new HTML shapes → census + report, the standing guard).
+
+### Findings (P14-4 Phase B, 2026-07-12 — shipped)
+
+OWNER-APPROVED 2026-07-12 ("Full crawl"): the complete stage-2 list as
+proposed below — ~214 MB / 3,982 tr-en fragments, all eight translated
+projects including dcclt's lexical lists; riao/ribo/dcclt-jena honestly
+zero; English only (etcsri's tr-hun stays the flagged follow-up).
+
+Implemented as the promised DATA CHANGE — `TRANSLATION_PROJECTS =
+PROJECTS` (one line; the P13-4 crawl/census/report machinery untouched,
+no parser changes — the standing new-HTML-shape guard applies at the
+owner-fired sync):
+
+- **Pin test** `test_translation_crawl_scope_is_the_full_project_list`
+  asserts TRANSLATION_PROJECTS == PROJECTS (the stage-2 scope pin).
+- **Fetch tests now exercise a NON-saao crawl** against real payloads:
+  the P13-4 rimanum fragment fixtures (P405432/P405134) are served for
+  the staged rimanum crawl; crawl-note, resumability (304 ⇒ cached), and
+  breaker arithmetic assertions updated (8 ingestible post-crawl docs).
+  Test plumbing, same discipline as the formats-less envelopes: the
+  STAGED copies of the pristine rimanum/etcsri fixtures get their tr-en
+  trimmed (rimanum → its two fragment-fixtured texts, etcsri → none; no
+  fixtures invented, checked-in fixtures untouched).
+- **Docs**: 02-sources ORACC row (stage-2 scope + per-project counts +
+  the zero-English hubs), architecture §parallel-translations staging
+  note.
+- Suite 1666 runs / 26,889 assertions green; lint clean; one commit in
+  the worktree, not pushed. **Owner-fired next**: `bin/nabu sync oracc`
+  crawls the ~3,982 stage-2 fragments (≈ 214 MB, ~28 min polite);
+  saao fragments already on disk stay cached (resumable by design).
+
+### Phase A — STAGE-2 LIST + CRAWL SIZES (2026-07-12, opus) — OWNER-APPROVED 2026-07-12 ("Full crawl", full list as proposed)
+
+Method: read `formats["tr-en"]` from every non-saao project's
+`metadata.json` LOCALLY (all 33 canonical trees are already synced — no
+network read was needed). Size = tr-en count × 55 KB (P13-4 calibration:
+the typical SAA-letter fragment; see caveat). "Ingested" = tr-en ids
+whose live corpusjson is present (discover yields an `-en` ref only for
+those); "orphans" = tr-en ids with no live corpusjson (crawled — the
+crawl fetches the whole tr-en list — but skipped-by-rule at discover and
+counted in the census). The crawl DOWNLOADS the tr-en count; MB below is
+therefore bytes fetched, the number the politeness/size budget cares
+about.
+
+| project          | tr-en | ingested | orphans | size (55 KB/text) |
+|------------------|------:|---------:|--------:|------------------:|
+| rimanum          |   378 |      338 |      40 |            20.3 MB |
+| etcsri †         |  1448 |     1448 |       0 |            77.8 MB |
+| rinap/rinap1     |    88 |       85 |       3 |             4.7 MB |
+| dcclt            |  1229 |     1228 |       1 |            66.0 MB |
+| blms             |   206 |      190 |      16 |            11.1 MB |
+| dcclt/ebla       |   105 |       81 |      24 |             5.6 MB |
+| dcclt/nineveh    |   440 |      440 |       0 |            23.6 MB |
+| dcclt/signlists ‡|    88 |       88 |       0 |             4.7 MB |
+| riao             |     0 |        0 |       0 |               0 MB |
+| ribo             |     0 |        0 |       0 |               0 MB |
+| dcclt/jena       |     0 |        0 |       0 |               0 MB |
+| **STAGE-2 TOTAL**| **3982** | **3898** | **84** |        **~214 MB** |
+
+† **etcsri is trilingual (Sumerian-English-Hungarian).** It carries BOTH
+`tr-en` (1448) AND `tr-hun` (1441). Stage 2 crawls ENGLISH ONLY — the
+`/html` fragment endpoint the crawler hits serves the English rendering,
+and the machinery reads `formats["tr-en"]` exclusively. Hungarian
+(`tr-hun`) stays the config-shaped follow-up P13-4 already flagged (a
+second crawl target + a `-hun` document kind — out of scope here). So
+etcsri is NOT English-dominant, but its English coverage is total and it
+belongs in the English stage.
+
+‡ **dcclt/signlists** also carries a single Arabic gloss (`tr-ar=1`);
+negligible, English-dominant, ignored (English only, as above).
+
+**Zero-English projects (riao, ribo, dcclt/jena) are catalog HUBS.** They
+ship a `catalogue.json` but NO `corpusjson/` locally (their editions live
+in out-of-scope subprojects — e.g. `ribo/babylon*`), and their metadata
+`formats` block is empty (no `tr-en`). They contribute nothing to crawl
+either way; `translated_ids` returns `[]` and the crawl skips them
+silently.
+
+**Size caveat.** 55 KB/text is the P13-4 SAA-letter calibration. The
+dcclt* projects are lexical lists (often shorter fragments) and rimanum
+is admin tablets, so ~214 MB is a conservative (slightly high) estimate
+for the non-SAA mix; the outlier direction is the big compilations, not
+the norm. Combined with stage 1 (saao ≈ 4.7k texts ≈ 250 MB) the full
+translation scope is ≈ 464 MB — squarely inside P13-4 Phase A's 400–500 MB
+projection for the whole 33-project run.
+
+**Proposed stage-2 list (the data change, no machinery change):** extend
+`TRANSLATION_PROJECTS` to the FULL `PROJECTS` list, i.e.
+
+```ruby
+TRANSLATION_PROJECTS = PROJECTS
+```
+
+The metadata `tr-en` gate makes this exact: the three zero-English hubs
+are provably inert (empty `translated_ids` ⇒ skipped), so "all projects"
+and "the eight projects with English" crawl byte-for-byte the same set —
+and this is the natural end state (every in-scope project is now
+translation-eligible; new tr-en that appears upstream is picked up for
+free). One-line data change; the P13-4 crawl/census/report machinery is
+untouched. Est. added crawl: **3982 fragments ≈ 214 MB**, one-time,
+~28 min at the polite 0.25 s delay; ingests **3898** new `-en` documents,
+**84** orphan fragments counted skipped-by-rule.
 
 ## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: pending] [deps: —]
 The deferred half of P13-2: Suprasliensis + Vita Constantini + Vita
