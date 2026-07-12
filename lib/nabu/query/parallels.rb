@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "catalog_join"
+require_relative "grams"
 require_relative "search"
 
 module Nabu
@@ -73,6 +74,7 @@ module Nabu
     # section so the two signals never masquerade as one.
     class Parallels
       include CatalogJoin
+      include Grams
 
       # The gram size the design measured (4-grams: Odyssey 8 tokens → 5 grams,
       # John 17 → 14, Thucydides 120 → 117 — all n−4+1).
@@ -88,12 +90,6 @@ module Nabu
       # (enough that document-grain grouping still yields `limit` documents).
       CANDIDATE_FACTOR = 30
       MIN_CANDIDATES = 300
-
-      # Elision apostrophes stripped at gram-build (rider i): U+02BC modifier
-      # letter (SBLGNT), U+2019/U+2018 quotes and ASCII ' (First1K/Swete/others),
-      # U+02B9 prime, plus the Greek oxia/psili spacing accents (U+0384 U+1FBD
-      # U+1FBF) that ride the same apostrophe slot in some editions.
-      ELISION = /[ʼʹ‘’'΄᾽᾿]/
 
       # A rarity cap on the lemma-co-occurrence signal: a lemma attested in more
       # than this many passages is too common to diagnose an echo (and bounds the
@@ -135,7 +131,7 @@ module Nabu
         return nil if anchor.nil?
 
         tokens = gram_tokens(anchor.fetch(:text_normalized))
-        grams = shingle(tokens)
+        grams = shingle(tokens, GRAM_SIZE)
         scores, matched = probe_grams(grams, anchor_passage_id: anchor.fetch(:passage_id))
         hits = assemble(scores, matched,
                         tokens: tokens, anchor_document_id: anchor.fetch(:document_id),
@@ -160,20 +156,6 @@ module Nabu
             Sequel[:passages][:text_normalized].as(:text_normalized),
             Sequel[:documents][:title].as(:title)
           ).first
-      end
-
-      # Anchor tokens for gramming: strip elision apostrophes (rider i), then
-      # take maximal letter/number runs — reproducing unicode61's tokenization
-      # (punctuation is a separator) so a phrase built here re-tokenizes, and
-      # matches the index, identically.
-      def gram_tokens(text_normalized)
-        text_normalized.gsub(ELISION, "").scan(/[\p{L}\p{N}]+/)
-      end
-
-      def shingle(tokens)
-        return [] if tokens.size < GRAM_SIZE
-
-        (0..(tokens.size - GRAM_SIZE)).map { |i| tokens[i, GRAM_SIZE] }
       end
 
       # Probe each distinct gram once; accumulate rarity-weighted score and the

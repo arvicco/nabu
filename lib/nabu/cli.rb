@@ -411,6 +411,73 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "formulas SCOPE", "Mine the repeated n-gram formulas within a corpus slice (oral-formulaic)"
+    long_desc <<~HELP, wrap: false
+      Intra-corpus formula mining: point at a corpus SLICE and find its recurring
+      formulas — the oral-formulaic scholar's "what are the fixed phrases of this
+      tradition, and where does each occur?" (docs/intertext-design.md §5). The
+      same gram machinery as `parallels` pointed INWARD: instead of probing one
+      passage against the whole corpus, every passage of the slice is folded, cut
+      into overlapping n-word grams, and the grams counted in memory — the ones
+      that recur are the formulas. Zero precomputation (~0.2 s per ~200k-token
+      slice); reads the folded text straight from the catalog.
+
+      SCOPE is a source slug (`aspr`) when one exists, else a urn prefix — a whole
+      work (urn:cts:greekLit:tlg0012.tlg001.perseus-grc2) or a super-prefix over
+      several (urn:cts:greekLit:tlg0012 = Iliad + Odyssey, the Homeric corpus).
+
+      LANGUAGE: a translation-bearing source rides the same urn prefix as its base
+      text (perseus-greek holds Greek AND aligned English), so an unfiltered run
+      mixes traditions — pass --lang to mine one (a single-language source like
+      ASPR needs none).
+
+      RANKING: by count × gram length. No stoplist — the ranking is self-filtering
+      (a genuine formula out-recurs any pure function-word sequence; measured, not
+      one all-function-word gram reaches Homer's top). --min-count raises the
+      recurrence floor against a noisy tail.
+
+      Each formula prints its count and the folded gram (accents stripped, like
+      `search` highlights — `nabu show <urn>` gives the pristine line), with a few
+      example loci beneath. --long lists every locus of every reported formula.
+
+      Examples:
+        nabu formulas urn:cts:greekLit:tlg0012 --lang grc   # the Homeric formulas
+        nabu formulas aspr                                  # Old English verse formulas
+        nabu formulas aspr --gram-size 3 --min-count 5      # the riddle refrain "hwæt ic hatte"
+        nabu formulas urn:cts:greekLit:tlg0012 --lang grc --long   # every locus
+
+      Use cases: characterize a tradition's formulaic diction; find every
+      occurrence of a formula; seed an oral-formulaic study.
+    HELP
+    option :lang, type: :string,
+                  desc: "Restrict the slice to a language (grc, ang) — wanted when a source mixes translations"
+    option :min_count, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_MIN_COUNT,
+                       desc: "Minimum recurrence to count as a formula (default 3)"
+    option :gram_size, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_GRAM_SIZE,
+                       desc: "Words per gram (2–8; default 4)"
+    option :limit, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_LIMIT,
+                   desc: "Maximum formulas shown (default 25)"
+    option :long, type: :boolean, default: false,
+                  desc: "List every locus of every reported formula (compact shows a few examples)"
+    def formulas(scope = nil)
+      scope = scope.to_s.strip
+      raise Thor::Error, "formulas: give a source slug or urn prefix" if scope.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Formulas.new(catalog: catalog).run(
+        scope, gram_size: options[:gram_size].to_i, min_count: options[:min_count].to_i,
+               lang: options[:lang], limit: options[:limit].to_i, long: options[:long]
+      )
+      print_formulas(result, long: options[:long])
+    rescue ArgumentError => e
+      raise Thor::Error, "formulas: #{e.message}"
+    ensure
+      catalog&.disconnect
+    end
+
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
     long_desc <<~HELP, wrap: false
       Inspect one passage or one whole document by urn. Unlike search and
@@ -1658,6 +1725,31 @@ module Nabu
           say "#{echo.urn}#{" [#{echo.language}]" if echo.language}  score #{format('%.2f', echo.score)}"
           say "  #{compact_list(echo.shared_lemmas, long: long).join(', ')}"
         end
+      end
+
+      # Render `formulas` (P15-5): the slice header (passages/tokens), then one
+      # line per formula — count × the folded gram — with example loci beneath
+      # (compact) or every locus (--long). The footer states the ranking and the
+      # recurring total so the "top N of M" elision is explicit.
+      def print_formulas(result, long:)
+        lang = result.lang ? " [#{result.lang}]" : ""
+        say "formulas in #{result.scope}#{lang} — " \
+            "#{plural(result.passage_count, 'passage')} / #{plural(result.token_count, 'token')}"
+        return say("  no passages in scope (unknown source slug or urn prefix?)") if result.passage_count.zero?
+        return say("  no #{result.gram_size}-grams recur ≥#{result.min_count}× in this slice") if result.formulas.empty?
+
+        result.formulas.each { |formula| print_formula(formula, long: long) }
+        say "showing #{result.formulas.size} of #{plural(result.recurring_count, 'formula')} " \
+            "recurring ≥#{result.min_count}× (rank = count × #{result.gram_size}-gram length; " \
+            "grams are diacritic-folded)"
+      end
+
+      def print_formula(formula, long:)
+        say "#{formula.count}×  #{formula.gram}"
+        return if formula.loci.empty?
+
+        prefix = !long && formula.count > formula.loci.size ? "e.g. " : ""
+        say "     #{prefix}#{formula.loci.join(', ')}"
       end
 
       # Cap a list to PARALLELS_COMPACT_ITEMS with a "… and N more" tail unless
