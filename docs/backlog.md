@@ -4555,3 +4555,75 @@ if the rest anchors — argue the grain). FROZEN GUARD: parse-only oracc
 sync =all-previous skipped, quarantines 13 → ~0. Fixture: one trimmed
 real blms pair. Suite+lint green; backlog done; worklog (sha —). One
 commit, not pushed.
+
+## Phase 15 — The corpus reads itself (branch: phase-15; elaborated 2026-07-12)
+
+Owner: "Merged #18, plan Phase 15 with parallels headline" — adopting
+docs/intertext-design.md's recommendation menu as commissioned. Every
+packet's algorithms, costs, and demo targets are ALREADY DESIGNED with
+measured numbers in that document — packets implement, they don't
+re-design (deviations from the design doc get argued openly, not
+silently). Gate-waits don't block; worktree isolation for parallels...
+parallelism as needed; reviews sequential.
+
+## P15-1 · parallels <urn> — the interactive intertext engine  [tier: opus] [status: in-progress] [deps: —]
+The headline (design doc §1): passage-anchored quotation/allusion
+finding, query-time over the existing FTS index — NO new schema (the
+design's measured verdict: per-gram probes 1–111 ms/passage). Surface-
+gram engine + rarity scoring + document dedupe + the elision-strip gram
+builder (the measured U+02BC-vs-U+2019 fold gap across editions); CLI
+`nabu parallels <urn> [--limit]` honoring compact-CLI (per-hit: urn,
+shared-gram evidence, score); MCP nabu_parallels (eighth tool, bounded).
+Riders per the design: the passage_lemmas(urn) index it identified, and
+the rare-lemma co-occurrence second signal; the formula miner rides ONLY
+if the packet stays light (else it's P15-5). GOLDEN QUOTATION TESTS
+seeded from the design doc's live probes: Odyssey 1.1→Polybius, Matt
+4:4→LXX Deut 8:3, John 1:1→the Fathers (+ the P.Oxy amulet). Suite+lint
+green; docs (README persona rows gain the command, mcp.md, architecture
+§13 short design record pointing at intertext-design.md); backlog done;
+worklog (sha —). One commit, not pushed.
+
+## P15-2 · Date/place axis, part 1  [tier: opus impl, fable review of the date model] [status: pending] [deps: —]
+Design doc §3: document_axes migration (document-level date ranges +
+place names; the fable reviewer checks the DATE MODEL specifically —
+BCE handling, ranges vs points, uncertainty); extractors for HGV
+(63,925/66,261 machine-dated, ddb-hybrid↔urn join verified) +
+goo300k/IMP (years in urns); `search --from/--to [--place]`;
+`vocab --by-century` as the linguist payoff. Part 2 (ORACC regnal
+mapping + chronicle annals) is a named follow-on, NOT this packet.
+Two-phase: the migration+model design gets the fable review BEFORE the
+extractors land (an internal review, not an owner gate — owner gates
+only if the model raises a scope question).
+
+## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: pending] [deps: —]
+Design doc §6: `nabu cognates` — alignment hub × reflex crosswalk join
+("verses where Gothic and OCS witnesses use reflexes of the same
+proto-root"; measured: 349 NT verses / 31 roots / 1.4 s staged). Needs
+the two missing indexes + the ~20k-row reflex_roots closure table
+(rebuild-safe, derived); got×chu headline demo (salt~соль), grc×got
+free rider. MCP exposure argued (probably yes, bounded).
+
+## P15-4 · Collation view  [tier: opus] [status: pending] [deps: —]
+Design doc §2: `align REF --collate` — raw-token LCS diff within script
+family over the hub's aligned rows (grc 7,643 / lat 6,974 / chu 3,764
+multi-witness verses); cross-script witnesses rendered undiffed
+honestly (the fold can't bridge Cyrillic↔Helsinki-ASCII — measured).
+Compact rendering per house rule; the PROIEL-vs-CCMH Marianus demo.
+
+## P15-5 · Formula miner  [tier: opus] [status: pending] [deps: P15-1]
+Design doc §5 (unless it rode P15-1): intra-corpus repeated n-gram
+mining (`nabu formulas <source-or-doc>` — measured: Homer 0.6 s, ASPR
+0.6 s; ὣς ἔφαθ' 72×, "hwaet ic hatte" 16×); zero schema.
+
+## P15-6 · search --fuzzy  [tier: opus] [status: stretch — take only if the phase runs light] [deps: —]
+Design doc §4: trigram fragment search, DOCUMENTARY SCOPE (250–270 MB
+index vs 3.6-4.1 GB whole-corpus — the measured line); sub-ms substring
+queries; damaged-text persona. The menu itself said it loses nothing by
+waiting — stretch accordingly.
+
+## P15-gate · Phase 15 gate  [tier: orchestrator] [status: pending] [deps: P15-1..5(+6)]
+Full-diff, library/languages/README refresh, improvements register
+updates (§1.1/§1.4/§1.5/§1.8 → shipped/partial per reality), PR, owner
+queue (no new syncs expected — this phase is all derived capability;
+health --remote cache seeding if still unseeded), backup-disk re-flag
+(standing), sticky alarm LAST.
