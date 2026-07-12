@@ -501,6 +501,55 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search --near (P14-8 proximity) -------------------------------------
+
+  # Real UD grc sentence 64498: … ὁ κῆρυξ(7) καὶ(8) εἶπας(9) … — κῆρυξ and
+  # εἶπας sit a word apart. --window 1 admits them, both folded terms
+  # bracketed; --window 0 (adjacency) does not.
+  def test_search_near_within_window_hits_with_both_terms_highlighted
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 1]) }
+      assert_nil status, "a successful proximity search exits 0"
+      assert_match(/:64498 \[grc\]/, out)
+      assert_match(/\[κηρυξ\]/, out, "the anchor term is highlighted")
+      assert_match(/\[ειπασ\]/, out, "the near term is highlighted too")
+    end
+  end
+
+  def test_search_near_window_zero_requires_adjacency
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 0]) }
+      assert_nil status, "zero hits is not a failure"
+      assert_match(/no matches/i, out, "window 0 needs adjacency — κῆρυξ and εἶπας are a word apart")
+    end
+  end
+
+  # The lemma anchor expands to attested surface forms before the NEAR: the
+  # suppletive aorist εἶπας is a form of λέγω, so it sits near the rare κῆρυξ.
+  def test_search_near_expands_a_lemma_anchor
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κῆρυξ --window 1]) }
+      assert_nil status
+      assert_match(/:64498 \[grc\]/, out, "εἶπας (a form of λέγω) is one word from κῆρυξ")
+    end
+  end
+
+  def test_search_near_with_morph_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κύριος --morph case=nom]) }
+      assert_equal 1, status
+      assert_match(/--morph does not compose with --near/, err)
+    end
+  end
+
+  def test_search_near_without_an_anchor_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --near θεα]) }
+      assert_equal 1, status
+      assert_match(/--near needs an anchor/, err)
+    end
+  end
+
   # -- concord (P8-3) ------------------------------------------------------
 
   def test_concord_prints_kwic_lines_with_the_keyword_located

@@ -7,6 +7,7 @@ require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
 require_relative "../query/lemma_search"
+require_relative "../query/proximity"
 require_relative "../query/morph_facets"
 require_relative "../query/concord"
 require_relative "../query/show"
@@ -74,6 +75,10 @@ module Nabu
 
       SEARCH_DEFAULT_LIMIT = 10
       SEARCH_MAX_LIMIT = 50
+      SEARCH_DEFAULT_WINDOW = Query::Proximity::DEFAULT_WINDOW
+      # A generous proximity ceiling: beyond this the NEAR window spans most
+      # passages and stops meaning "near". Clamps the arg, honest note.
+      SEARCH_MAX_WINDOW = 50
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
       CONCORD_DEFAULT_LIMIT = 10
@@ -119,7 +124,11 @@ module Nabu
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
         "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
         "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
-        "attestations with that morphology, each hit showing the decoded evidence). Hits are " \
+        "attestations with that morphology, each hit showing the decoded evidence). Add `near` " \
+        "for PROXIMITY — keep only hits where that term sits within `window` words (default " \
+        "#{SEARCH_DEFAULT_WINDOW}, 0=adjacent) of query (or lemma, expanded to its surface " \
+        "forms) in the SAME passage, order-independent; both matched terms are bracketed in the " \
+        "snippet (near does not compose with morph). Hits are " \
         "relevance-ranked and bounded (default " \
         "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
@@ -208,6 +217,15 @@ module Nabu
                                 "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
                                 "match on feats, PROIEL/TOROT are decoded to the same names; ORACC " \
                                 "has no inflectional morphology so these facets never match it." },
+          near: { type: "string",
+                  description: "Proximity: keep only hits where this term occurs within `window` " \
+                               "words of query (or lemma) in the SAME passage. FTS5 NEAR over the " \
+                               "folded search forms, order-independent; expands a lemma anchor to " \
+                               "its attested surface forms first. Does NOT compose with morph." },
+          window: { type: "integer", minimum: 0, maximum: SEARCH_MAX_WINDOW,
+                    default: SEARCH_DEFAULT_WINDOW,
+                    description: "With near: max words between the two terms (default " \
+                                 "#{SEARCH_DEFAULT_WINDOW}; 0 = adjacent)." },
           lang: { type: "string",
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
@@ -346,6 +364,7 @@ module Nabu
       def search(args)
         term, mode = search_term(args)
         morph = search_morph(args, mode)
+        near = search_near(args, morph)
         license = license_arg(args)
         include_restricted = args["include_restricted"] == true
         if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
@@ -358,7 +377,8 @@ module Nabu
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
-        results = run_search(mode, term, catalog: catalog, fulltext: fulltext,
+        window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
+        results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
                                          lang: args["lang"], license: license, limit: limit + 1, morph: morph)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
@@ -495,6 +515,20 @@ module Nabu
         morph
       end
 
+      # The proximity term (P14-8), or nil. Composes with query OR lemma anchor
+      # but NOT with morph (morphology-narrowed proximity is out of scope), so a
+      # near+morph combination is a clear usage error like the CLI's.
+      def search_near(args, morph)
+        near = string_arg(args, "near")
+        return nil if near.nil?
+        if morph
+          raise InvalidArguments,
+                "near does not compose with morph (morphology-narrowed proximity is out of scope)"
+        end
+
+        near
+      end
+
       # The fulltext handle when the index this mode needs is present; nil
       # during the mid-reindex window (Indexer.rebuild! drops the tables first).
       def search_index(mode)
@@ -505,7 +539,13 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, morph: nil)
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil)
+        if near
+          return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+            query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
+            near: near, window: window, lang: lang, license: license, limit: limit
+          )
+        end
         if mode == :lemma
           return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                    .run(term, lang: lang, license: license, limit: limit, morph: morph)
@@ -969,10 +1009,10 @@ module Nabu
         text.length > max ? "#{text[0, max]}…" : text
       end
 
-      def clamp(value, default:, max:)
+      def clamp(value, default:, max:, min: 1)
         return default unless value.is_a?(Integer)
 
-        value.clamp(1, max)
+        value.clamp(min, max)
       end
 
       # -- response shapes + degradation ----------------------------------------------------

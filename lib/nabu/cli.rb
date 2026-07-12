@@ -152,6 +152,20 @@ module Nabu
       is out of scope); ORACC carries no inflectional morphology, so
       inflectional facets never match it (honest absence). See conventions §6.1.
 
+      PROXIMITY (A --near B [--window N]): keep only hits where B occurs
+      within N words of A in the SAME passage — λόγος near θεός is John 1:1.
+      Built on FTS5 NEAR over the folded search forms: --window N is the max
+      words BETWEEN the two terms (default 10; 0 = immediately adjacent), and
+      NEAR is order-independent (A…B and B…A both count). The window counts
+      folded tokens, so for cuneiform (akk/sux), where sign-joins and
+      determinatives fold to spaces, one transliterated word spans several
+      tokens and the window reads tighter. --near composes with --lemma (the
+      anchor then expands to the lemma's attested surface forms before the
+      NEAR: --lemma λέγω --near κύριος finds εἶπε near κύριος too), and with
+      --lang/--license/--limit. Cross-passage adjacency is OUT — the passage
+      is the unit. --morph does not compose with --near (out of scope). Both
+      matched terms are bracketed in the snippet.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -170,6 +184,10 @@ module Nabu
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
+        nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
+                                                   #   (John 1:1 and its kin)
+        nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
+                                                   #   near κύριος: τάδε λέγει κύριος
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -183,8 +201,14 @@ module Nabu
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     option :morph, type: :string, banner: "FACETS",
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
+    option :near, type: :string, banner: "TERM",
+                  desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
+    option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
+                    desc: "Max words between the two --near terms (default " \
+                          "#{Nabu::Query::Proximity::DEFAULT_WINDOW}; 0 = adjacent)"
     def search(query = nil)
       query = query.to_s.strip
+      return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
@@ -1195,6 +1219,53 @@ module Nabu
         print_lemma_results(results)
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # search A --near B [--window N] (P14-8): proximity search over the FTS
+      # index via FTS5 NEAR. The anchor is the positional query OR --lemma
+      # (expanded to attested surface forms); --near B is the second term;
+      # --window N is the max folded tokens between them (default 10, 0 =
+      # adjacent). Hits render exactly like plain search — the snippet brackets
+      # BOTH terms. --morph does not compose (out of scope, said honestly).
+      def proximity_search(positional_query)
+        near = options[:near].strip
+        raise Thor::Error, "search: --near needs a term" if near.empty?
+        if options[:morph]
+          raise Thor::Error, "search: --morph does not compose with --near " \
+                             "(morphology-narrowed proximity is out of scope)"
+        end
+        window = options[:window].to_i
+        raise Thor::Error, "search: --window must be 0 or more" if window.negative?
+
+        lemma = options[:lemma]&.strip
+        if options[:lemma]
+          unless positional_query.empty?
+            raise Thor::Error,
+                  "search: --lemma replaces the text query — give one or the other"
+          end
+          raise Thor::Error, "search: --lemma needs a lemma" if lemma.empty?
+        elsif positional_query.empty?
+          raise Thor::Error, "search: --near needs an anchor term (a query, or --lemma)"
+        end
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        if lemma && !fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+          raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+          query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
+          lang: options[:lang], license: options[:license], limit: options[:limit].to_i
+        )
+        print_search_results(results)
       ensure
         catalog&.disconnect
         fulltext&.disconnect
