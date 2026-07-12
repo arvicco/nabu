@@ -1,11 +1,11 @@
 # The Library — content review
 
-**As of 2026-07-11** (post Phase 12 OE syncs, branch phase-12). Live totals:
-**72,734 documents / 3,143,750 passages** across 15 sources (13 loaded;
-bosworth-toller awaits its first sync), plus **168,133 dictionary entries**
-on the reference shelf, 873 aligned English translation editions, and
-**1,942,521 lemma rows in 13 languages** — Old English joined with 24,827
-rows from the ISWOC treebank.
+**As of 2026-07-12** (post Phase 14, branch phase-14). Live totals:
+**84,449 documents / 3,780,482 passages** across all 24 sources, plus
+**248,616 dictionary entries** on the reference shelf (now including the
+three reconstruction dictionaries), and **2,619,049 gold lemma rows in 14
+languages**. The code-per-language map lives in
+[languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §10 for the
