@@ -183,6 +183,38 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P15-8: --long expands vocab's truncated hapax list (house rule) --------
+  # vocab's ONE marked elision is print_vocab_hapax's "(+N more)" tail: the
+  # Greek-PROIEL head-50 fixture holds 211 hapax, so --limit 3 fires the cap by
+  # default and --long must list every hapax with no tail. The distinctive
+  # table is a "top N" RANKING governed by --limit (no "(+N more)" marker), so
+  # --long deliberately leaves it alone — the census verdict argued openly.
+  VOCAB_URN = "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50"
+
+  def test_vocab_hapax_is_capped_by_default
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["vocab", VOCAB_URN, "--limit", "3"]) }
+      assert_nil status
+      assert_match(/hapax legomena \(211, once each\): .+ \(\+208 more\)/, out,
+                   "the 208-past-3 tail is summarised, not listed")
+      assert_match(/distinctive vocabulary \(log-odds vs corpus, top 3\)/, out)
+    end
+  end
+
+  def test_vocab_long_lists_every_hapax_and_leaves_the_ranking_capped
+    with_treebank_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(["vocab", VOCAB_URN, "--limit", "3", "--long"]) }
+      assert_nil status
+      assert_match(/hapax legomena \(211, once each\): /, out)
+      refute_match(/\+\d+ more/, out, "nothing is elided under --long")
+      # The distinctive ranking is a --limit knob, not a marked elision: --long
+      # leaves "top 3" exactly as the compact default renders it.
+      assert_match(/distinctive vocabulary \(log-odds vs corpus, top 3\)/, out,
+                   "--long escapes elisions, not the distinctive ranking cap")
+    end
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -1242,6 +1274,18 @@ class CLITest < Minitest::Test
       assert(out.index("JON 1.2") < out.index("JON 1.10"), "numeric, not lexical, order")
       assert_match(/full  greek verse 1/, out)
       assert_match(/partial — not attested/, out, "per-ref attestation honesty")
+    end
+  end
+
+  # P15-8: --long is wired on align (the flag never errors, the owner's
+  # complaint). Under the cap it renders identically to compact; the cap-lift
+  # itself is proven at the query level (a 205-verse fixture there).
+  def test_align_accepts_long_and_renders_every_ref_under_the_cap
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1 --long]) }
+      assert_nil status
+      assert_match(/JON 1 — /, out)
+      assert_match(/full  greek verse 1/, out, "every attested ref still renders")
     end
   end
 

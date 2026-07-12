@@ -446,3 +446,23 @@ revision storm.
 References: PHI Latin search help (latin.packhum.org/help/search); TLG Beta
 Code manual (S for all sigmas); Unicode TR#15 (NFC/NFD); verified fixture
 behavior in test/normalize_test.rb.
+
+## 10. CLI output: compact by default, `--long` escapes truncation (P15-8)
+
+The house rule (owner, 2026-07-12): the CLI is compact by default, but
+wherever a renderer *elides* a list with a visible marker — a "(+N more)"
+tail, a "… and N more", a trailing "…", a "showing first N of M" note — the
+same command MUST also accept `--long` to render that list in full. `--long`
+is declared per command (the P14-11 `etym`/`define` precedent), never global,
+and the compact form stays byte-identical when the flag is absent. The
+distinction that decides whether a cap earns `--long` is *elision vs guard vs
+ranking knob*: `etym`/`define`'s reflex tails, `vocab`'s hapax "(+N more)" and
+its no-gold "…" language list are elisions and `--long` expands them fully;
+`align`'s 200-ref range ceiling is a *guard* against an accidental whole-book
+render, so `--long` is the deliberate, sanctioned override that lifts it rather
+than a default that could dump thousands of lines; a `--limit`-governed
+"top-N" ranking (`vocab`'s distinctive table, `search`/`concord` result counts)
+is a knob, not an elision, and `--long` deliberately leaves it alone — `--limit`
+is its control. Snippet-level single-line truncation (`search`/`concord`
+context, the lemma-hit text line) is display trimming, not list elision, and
+carries no `--long`.

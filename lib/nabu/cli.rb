@@ -550,6 +550,9 @@ module Nabu
     HELP
     option :work, type: :string, banner: "ID",
                   desc: "Alignment work id from config/alignments.yml (optional when only one is registered)"
+    option :long, type: :boolean, default: false,
+                  desc: "Lift the #{Nabu::Query::Align::MAX_REFS}-ref range ceiling and render every ref " \
+                        "(compact clips a huge range by default)"
     def align(*ref_parts)
       ref = ref_parts.join(" ").strip
       raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
@@ -561,7 +564,7 @@ module Nabu
 
       registry = Nabu::AlignmentRegistry.load(config.alignments_path)
       result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
-                                 .run(ref, work: options[:work])
+                                 .run(ref, work: options[:work], long: options[:long])
       print_align(result)
     rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
       raise Thor::Error, e.message
@@ -741,6 +744,9 @@ module Nabu
     HELP
     option :limit, type: :numeric, default: Nabu::Query::Vocab::DEFAULT_LIMIT,
                    desc: "Cap the distinctive list and hapax spellings printed"
+    option :long, type: :boolean, default: false,
+                  desc: "List every hapax legomenon (and every gold-bearing language) in full, " \
+                        "escaping the --limit display cap (the distinctive ranking stays top-N)"
     def vocab(urn = nil)
       urn = urn.to_s.strip
       raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
@@ -1235,7 +1241,7 @@ module Nabu
         say "  #{absent_range_summary(result.absent)}" unless result.absent.empty?
         if result.truncated
           say "  showing first #{result.groups.size} of #{result.total} refs " \
-              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range"
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range, or pass --long to render all"
         end
         result.groups.each { |group| print_align_range_group(group) }
       end
@@ -1599,12 +1605,15 @@ module Nabu
       end
 
       # The hapax legomena line: attested exactly once in this document. The full
-      # count, then up to --limit spellings (they can number in the hundreds).
+      # count, then up to --limit spellings (they can number in the hundreds) —
+      # or, under --long (house rule P15-8), every spelling with no "(+N more)"
+      # tail. The full list already rides in the profile; --limit only caps the
+      # print, so --long is a pure render concern here.
       def print_vocab_hapax(hapax, hapax_count)
         return if hapax_count.zero?
 
         say ""
-        shown = hapax.first(options[:limit].to_i)
+        shown = options[:long] ? hapax : hapax.first(options[:limit].to_i)
         more = hapax_count - shown.size
         tail = more.positive? ? " (+#{commafy(more)} more)" : ""
         say "  hapax legomena (#{commafy(hapax_count)}, once each): #{shown.join(', ')}#{tail}"
@@ -1617,8 +1626,11 @@ module Nabu
             "(0 of #{pluralize(profile.passages, 'passage')} carry one)."
         say "  Gold lemmas come from the treebank shelves (PROIEL, TOROT, ISWOC, " \
             "Universal Dependencies) and the ORACC cuneiform layer."
-        langs = profile.gold_languages.first(8).map { |lang, count| "#{lang} (#{commafy(count)})" }
-        ellipsis = profile.gold_languages.size > langs.size ? ", …" : ""
+        # --long (house rule P15-8) lists every gold-bearing language; the compact
+        # default shows the first eight with a "…" elision marker.
+        shown = options[:long] ? profile.gold_languages : profile.gold_languages.first(8)
+        langs = shown.map { |lang, count| "#{lang} (#{commafy(count)})" }
+        ellipsis = profile.gold_languages.size > shown.size ? ", …" : ""
         say "  gold-bearing languages: #{langs.join(', ')}#{ellipsis}"
         say "  Try e.g. nabu vocab urn:nabu:proiel:caes-gal"
       end
