@@ -198,5 +198,67 @@ module Query
 
       assert_empty concord("nonexistentword")
     end
+
+    # -- diplomatic line-break rejoining (P14-5, conventions §9) --------------
+    #
+    # A ccmh-txt hyphen line indexes the COMPLETED word (text_normalized is
+    # the fold of the rejoined derivation) while the pristine display keeps
+    # the fragment + hyphen. Concord must highlight HONESTLY: the keyword is
+    # the visible "mOdrova-" up to the line end — the appended tail maps to
+    # the hyphen/EOL position — never fabricated display text.
+
+    def make_hyphen_line(doc, urn:, text:, join:, sequence:)
+      source = Nabu::Adapters::CcmhTxtParser.search_source(text, { "hyphen_join" => join })
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: urn, sequence: sequence, language: "chu",
+        text: text,
+        text_normalized: Nabu::Normalize.search_form(source, language: "chu"),
+        annotations_json: JSON.generate({ "hyphen_join" => join }),
+        content_sha256: "x", revision: 1
+      )
+    end
+
+    def test_hyphen_split_keyword_highlights_the_visible_fragment_to_eol
+      doc = make_document(title: "Suprasliensis", language: "chu")
+      make_hyphen_line(doc, urn: "urn:d:1:1", text: ")i do s&mr)$ti . ne dobr@ mOdrova-",
+                            join: { "tail" => "ti" }, sequence: 0)
+      rebuild!
+
+      rows = concord("mOdrovati", width: 10)
+      assert_equal 1, rows.size, "the split word must be findable"
+      row = rows.first
+      assert_equal "mOdrova-", row.keyword,
+                   "the keyword is what the line actually shows — fragment + hyphen, tail mapped to EOL"
+      assert_equal "…ne dobr@ ", row.left
+      assert_equal " " * 10, row.right, "nothing follows the hyphen on the pristine line"
+    end
+
+    def test_hyphen_continuation_line_locates_its_real_words_normally
+      doc = make_document(title: "Suprasliensis", language: "chu")
+      make_hyphen_line(doc, urn: "urn:d:1:2", text: "ti na c@lomOdrovanije k& bogu .",
+                            join: { "orphan" => "ti" }, sequence: 0)
+      rebuild!
+
+      row = concord("bogu", width: 8).first
+      refute_nil row
+      assert_equal "bogu", row.keyword, "words on the continuation line locate via the normal path"
+    end
+
+    def test_hyphen_line_without_a_tail_annotation_falls_back_to_the_whole_line
+      # A display ending in "-" whose passage carries NO hyphen_join tail
+      # (e.g. a document-final fragment) keeps the defensive empty-keyword
+      # fallback: the line renders, nothing is invented.
+      doc = make_document(title: "Suprasliensis", language: "chu")
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "urn:d:1:3", sequence: 0, language: "chu",
+        text: "kon)$C$no slo- mOdrovati", # a real word makes it findable; the "-" is mid-line
+        text_normalized: Nabu::Normalize.search_form("kon)$C$no slo- mOdrovati", language: "chu"),
+        annotations_json: "{}", content_sha256: "x", revision: 1
+      )
+      rebuild!
+
+      row = concord("mOdrovati").first
+      assert_equal "mOdrovati", row.keyword
+    end
   end
 end

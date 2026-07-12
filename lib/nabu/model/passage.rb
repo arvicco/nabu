@@ -20,9 +20,13 @@ module Nabu
   # HERE by default, via Normalize.search_form with the passage's own
   # language: construction is the one folding boundary (P6-4), so the
   # per-language rule table lives in exactly one place instead of being
-  # duplicated across adapters. Adapters must NOT pass it (the conformance
-  # suite pins every adapter's output to the minted form); tests and store
-  # plumbing may supply an explicit value, which is validated as usual.
+  # duplicated across adapters. An adapter may pass an explicit value ONLY
+  # as Normalize.search_form over a documented, deterministic derivation of
+  # the pristine text that is recomputable from the stored passage alone
+  # (conventions §9 — ccmh-txt's diplomatic line-break rejoining is the one
+  # case); the conformance suite pins every adapter's output to the minted
+  # form of its declared derivation (default: the pristine text). Tests and
+  # store plumbing may supply an explicit value, validated as usual.
   Passage = Data.define(:urn, :language, :text, :text_normalized, :annotations, :sequence) do
     def initialize(urn:, language:, text:, sequence:, text_normalized: nil, annotations: {})
       language = Model::Validation.language!(language)
