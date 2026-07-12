@@ -313,6 +313,84 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "parallels URN", "Find passages that quote or echo this one (intertext over the FTS index)"
+    long_desc <<~HELP, wrap: false
+      Passage-anchored intertext: point at ONE passage and find where the corpus
+      quotes or echoes it — the classicist's "who cites this line? where does it
+      resurface?" (docs/intertext-design.md §1). Query-time over the same FTS
+      index as `search`, no precomputation: the anchor is folded to its search
+      form, cut into overlapping 4-word grams, and each gram is probed as an
+      exact phrase; passages that share grams are candidates, ranked by shared-
+      gram count WEIGHTED BY RARITY (a rare shared phrase — a real quotation —
+      outweighs a pile of common function-word grams).
+
+      Not to be confused with `align` (the translation-column hub, verse X across
+      its witnesses): parallels DISCOVERS reception across the whole corpus, from
+      surface text alone.
+
+      Each hit is one DOCUMENT (duplicate witnesses and multi-edition works
+      otherwise flood the ranks): its best-matching passage urn, the score, the
+      number of shared grams, and — when the document matches in several places —
+      a "loci" count. Under each hit the shared PHRASE spans are shown (the grams
+      merged back into contiguous text). Evidence is the folded search form, so
+      accents/breathings are stripped — it marks WHAT matched; `nabu show <urn>`
+      gives the pristine line.
+
+      Elision is folded at gram-build: the apostrophe that some editions write as
+      a letter (SBLGNT ἐπʼ) and others as punctuation (Swete/First1K ἐπ’) is
+      stripped so a gram matches across editions — the fix that lets Matthew 4:4
+      find LXX Deuteronomy 8:3.
+
+      Only the anchor's OWN document is excluded. Translations and other-language
+      witnesses self-exclude (they share no folded tokens with the anchor's
+      language); a second same-language edition of the anchor's own work is kept
+      — it is exactly the corroborating parallel you want.
+
+      LEMMA ECHOES: when the anchor carries gold treebank lemmas (UD/PROIEL/
+      TOROT), a second section lists passages sharing ≥2 of its RARE lemmas —
+      re-inflected or reordered allusion that verbatim grams miss. Absent (and
+      free) for non-lemmatized anchors.
+
+      Filters: --lang / --license (exact class) scope candidates; --limit caps
+      each list (default 15). --long expands every truncated list — all shared
+      phrase spans and all shared lemmas, untrimmed (compact shows the first few
+      with a "… and N more" tail).
+
+      Examples:
+        nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
+        nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+                                                         # the Odyssey proem — who quotes it
+        nabu parallels urn:nabu:sblgnt:matt:4.4 --long   # Matt 4:4 → Luke, Origen, LXX Deut 8:3
+        nabu parallels <urn> --lang grc --limit 30       # Greek parallels only, wider page
+
+      Use cases: trace a verse's reception; find the source a Father is quoting;
+      seed a citation graph one passage at a time.
+    HELP
+    option :lang, type: :string, desc: "Restrict candidates to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict candidates to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 15, desc: "Maximum hits per signal (default 15)"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated list: all shared phrase spans and shared lemmas, untrimmed"
+    def parallels(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "parallels: give a passage urn" if urn.empty?
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      result = Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
+                                     .run(urn, limit: options[:limit].to_i,
+                                               lang: options[:lang], license: options[:license])
+      print_parallels(result, urn: urn, long: options[:long])
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
     long_desc <<~HELP, wrap: false
       Inspect one passage or one whole document by urn. Unlike search and
@@ -841,6 +919,12 @@ module Nabu
       raise Thor::Error, e.message
     end
 
+    # How many evidence spans / shared lemmas a compact `parallels` hit shows
+    # before it elides with a "… and N more" tail; --long lifts the cap.
+    PARALLELS_COMPACT_ITEMS = 3
+    # Compact evidence-span width; --long prints the span untrimmed.
+    PARALLELS_SPAN_CHARS = 72
+
     no_commands do
       # Reject an unknown --license up front (before opening any db) with the
       # closed enum of valid classes, so the user sees the choices. Shared by
@@ -1330,6 +1414,55 @@ module Nabu
           say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}"
         end
         say "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
+      end
+
+      # Render `parallels` (P15-1): the anchor line, then one hit per document —
+      # urn [lang], score, shared-gram count and loci, and the shared PHRASE
+      # spans indented beneath. A lemma-echoes section follows when the anchor is
+      # gold-lemmatized. `--long` expands every truncated list.
+      def print_parallels(result, urn:, long:)
+        raise Thor::Error, "parallels: no live passage at #{urn} (check `nabu show #{urn}`)" if result.nil?
+
+        title = result.anchor_title ? " — #{result.anchor_title}" : ""
+        say "parallels of #{result.anchor_urn}#{title}"
+        if result.gram_count.zero?
+          say "  passage too short for #{Nabu::Query::Parallels::GRAM_SIZE}-word grams"
+          return
+        end
+
+        say "  no surface-gram parallels" if result.hits.empty?
+        result.hits.each { |hit| print_parallel_hit(hit, long: long) }
+        say "#{result.hits.size} #{result.hits.size == 1 ? 'parallel' : 'parallels'} " \
+            "from #{result.gram_count} grams (evidence is diacritic-folded)"
+        print_lemma_echoes(result.lemma_echoes, long: long) unless result.lemma_echoes.empty?
+      end
+
+      def print_parallel_hit(hit, long:)
+        loci = hit.loci > 1 ? " · #{hit.loci} loci" : ""
+        grams = "#{hit.shared_gram_count} #{hit.shared_gram_count == 1 ? 'gram' : 'grams'}"
+        say "#{hit.urn}#{" [#{hit.language}]" if hit.language}  " \
+            "score #{format('%.2f', hit.score)} · #{grams}#{loci}"
+        compact_list(hit.evidence, long: long) { |span| long ? span : truncate_line(span, PARALLELS_SPAN_CHARS) }
+          .each { |line| say "  #{line}" }
+      end
+
+      def print_lemma_echoes(echoes, long:)
+        say "lemma echoes (rare shared lemmas — re-inflected/reordered allusion):"
+        echoes.each do |echo|
+          say "#{echo.urn}#{" [#{echo.language}]" if echo.language}  score #{format('%.2f', echo.score)}"
+          say "  #{compact_list(echo.shared_lemmas, long: long).join(', ')}"
+        end
+      end
+
+      # Cap a list to PARALLELS_COMPACT_ITEMS with a "… and N more" tail unless
+      # +long+; each kept item passes through the block (span trimming). The tail
+      # itself names --long so the elision is discoverable.
+      def compact_list(items, long:)
+        kept = long ? items : items.first(PARALLELS_COMPACT_ITEMS)
+        rendered = kept.map { |item| block_given? ? yield(item) : item }
+        extra = items.size - kept.size
+        rendered << "… and #{extra} more (--long)" if extra.positive?
+        rendered
       end
 
       # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma
