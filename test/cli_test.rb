@@ -1456,6 +1456,74 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  # -- cognates (P15-3) ------------------------------------------------------
+
+  def test_cognates_renders_a_shared_root_verse_compactly
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1"]) }
+      assert_nil status
+      assert_match(/MARK 1\.1 — work nt/, out)
+      assert_match(/1 hit · 1 verse · 1 root/, out)
+      assert_match(/\*bʰeh₂g- \[ine-pro · attribution\]/, out)
+      assert_match(/grc {2}ἔφᾰγον — attested as ἔφαγεν/, out)
+      assert_match(/chu {2}богъ/, out)
+      refute_match(/gloss:/, out, "gloss is --long detail")
+      refute_match(/urn:nabu:test/, out, "document urns are --long detail")
+    end
+  end
+
+  def test_cognates_long_expands_gloss_and_witness_documents
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1", "--long"]) }
+      assert_nil status
+      assert_match(/Wiktionary — Proto-Indo-European .* gloss: to divide/, out)
+      assert_match(/urn:nabu:test:marianus — Codex Marianus \[nc\]/, out)
+    end
+  end
+
+  def test_cognates_batches_a_work_and_labels_the_loan_shelf
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates nt]) }
+      assert_nil status
+      assert_match(/nt — work nt/, out)
+      assert_match(/\*kaisaraz \[gem-pro · attribution\]/, out,
+                   "цѣсар҄ь ~ cāsere meet at the GERMANIC shelf — the borrowing label")
+      assert(out.index("MARK 1.1") < out.index("MARK 2.1"), "hits in citation order")
+    end
+  end
+
+  def test_cognates_langs_restricts_and_reports_no_hits_honestly
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates nt --langs got,chu]) }
+      assert_nil status
+      assert_match(/no hits/, out)
+    end
+  end
+
+  def test_cognates_langs_needs_two_languages
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[cognates nt --langs chu]) }
+      assert_equal 1, status
+      assert_match(/at least two/, err)
+    end
+  end
+
+  def test_cognates_unattested_ref_exits_one_with_guidance
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["cognates", "JOHN", "99.1"]) }
+      assert_equal 1, status
+      assert_match(/not attested/, err)
+    end
+  end
+
+  def test_help_cognates_documents_the_join_and_the_borrowing_caveat
+    out, _err, _status = run_cli(%w[help cognates])
+    assert_match(/LUKE 14\.34/, out, "the salt-saying example")
+    assert_match(/--langs/, out)
+    assert_match(/BORROWING/, out, "must teach the meet-shelf reading")
+    assert_match(/Examples:/, out)
+  end
+
   # -- align --collate (P15-4) -------------------------------------------------
 
   # A chu corpus for collation: the Cyrillic PROIEL Marianus + two Helsinki-
@@ -1553,72 +1621,6 @@ class CLITest < Minitest::Test
     out, _err, _status = run_cli(%w[help align])
     assert_match(/--collate/, out)
     assert_match(/--base/, out)
-  # -- cognates (P15-3) ------------------------------------------------------
-
-  def test_cognates_renders_a_shared_root_verse_compactly
-    with_cognates_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1"]) }
-      assert_nil status
-      assert_match(/MARK 1\.1 — work nt/, out)
-      assert_match(/1 hit · 1 verse · 1 root/, out)
-      assert_match(/\*bʰeh₂g- \[ine-pro · attribution\]/, out)
-      assert_match(/grc {2}ἔφᾰγον — attested as ἔφαγεν/, out)
-      assert_match(/chu {2}богъ/, out)
-      refute_match(/gloss:/, out, "gloss is --long detail")
-      refute_match(/urn:nabu:test/, out, "document urns are --long detail")
-    end
-  end
-
-  def test_cognates_long_expands_gloss_and_witness_documents
-    with_cognates_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1", "--long"]) }
-      assert_nil status
-      assert_match(/Wiktionary — Proto-Indo-European .* gloss: to divide/, out)
-      assert_match(/urn:nabu:test:marianus — Codex Marianus \[nc\]/, out)
-    end
-  end
-
-  def test_cognates_batches_a_work_and_labels_the_loan_shelf
-    with_cognates_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[cognates nt]) }
-      assert_nil status
-      assert_match(/nt — work nt/, out)
-      assert_match(/\*kaisaraz \[gem-pro · attribution\]/, out,
-                   "цѣсар҄ь ~ cāsere meet at the GERMANIC shelf — the borrowing label")
-      assert(out.index("MARK 1.1") < out.index("MARK 2.1"), "hits in citation order")
-    end
-  end
-
-  def test_cognates_langs_restricts_and_reports_no_hits_honestly
-    with_cognates_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[cognates nt --langs got,chu]) }
-      assert_nil status
-      assert_match(/no hits/, out)
-    end
-  end
-
-  def test_cognates_langs_needs_two_languages
-    with_cognates_corpus do |config|
-      _out, err, status = with_config(config) { run_cli(%w[cognates nt --langs chu]) }
-      assert_equal 1, status
-      assert_match(/at least two/, err)
-    end
-  end
-
-  def test_cognates_unattested_ref_exits_one_with_guidance
-    with_cognates_corpus do |config|
-      _out, err, status = with_config(config) { run_cli(["cognates", "JOHN", "99.1"]) }
-      assert_equal 1, status
-      assert_match(/not attested/, err)
-    end
-  end
-
-  def test_help_cognates_documents_the_join_and_the_borrowing_caveat
-    out, _err, _status = run_cli(%w[help cognates])
-    assert_match(/LUKE 14\.34/, out, "the salt-saying example")
-    assert_match(/--langs/, out)
-    assert_match(/BORROWING/, out, "must teach the meet-shelf reading")
-    assert_match(/Examples:/, out)
   end
 
   # -- export (P4-3) -------------------------------------------------------
@@ -1710,29 +1712,11 @@ class CLITest < Minitest::Test
   # the catalog is needed (the miner reads text_normalized directly, no index).
   def with_formulas_corpus
     Dir.mktmpdir("nabu-cli-formulas") do |root|
-  # An on-disk cognates corpus (P15-3): the real wiktionary-recon shelf, an
-  # nt registry over grc/chu/ang witnesses whose sentences carry gold lemmas
-  # in citation-bearing tokens, and the full index build (FTS + lemmas +
-  # alignment refs + reflex_roots) — the production pipeline end to end.
-  # MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-; MARK 2.1 meets
-  # ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (the loan shelf).
-  def with_cognates_corpus
-    Dir.mktmpdir("nabu-cli-cognates") do |root|
-      registry_yaml = <<~YAML
-        nt:
-          title: "New Testament (test witnesses)"
-          witnesses:
-            - document: urn:nabu:test:grc-nt
-            - document: urn:nabu:test:marianus
-            - document: urn:nabu:test:oe-mark
-      YAML
-      alignments = File.join(root, "alignments.yml")
-      File.write(alignments, registry_yaml)
       sources = File.join(root, "sources.yml")
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+        sources_path: sources, config_path: "(test)"
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -1752,41 +1736,8 @@ class CLITest < Minitest::Test
           content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
-      seed_cognates_corpus(catalog)
-      index_aligned_corpus(config, catalog)
       catalog.disconnect
       yield config
-    end
-  end
-
-  def seed_cognates_corpus(catalog)
-    recon = Nabu::Store::Source.create(
-      slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
-      adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
-    )
-    Nabu::Store::DictionaryLoader.new(db: catalog, source: recon)
-                                 .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                            workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
-    texts = catalog[:sources].insert(slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
-                                     license_class: "nc", enabled: true)
-    [["grc-nt", "Greek NT", "grc", [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
-     ["marianus", "Codex Marianus", "chu", [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
-     ["oe-mark", "OE Mark", "ang", [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, title, lang, rows|
-      doc_id = catalog[:documents].insert(
-        source_id: texts, urn: "urn:nabu:test:#{tail}", title: title, language: lang,
-        content_sha256: "x", revision: 1, withdrawn: false
-      )
-      rows.each_with_index do |(ref, lemma, form), seq|
-        catalog[:passages].insert(
-          document_id: doc_id, urn: "urn:nabu:test:#{tail}:#{seq + 1}", sequence: seq,
-          language: lang, text: form, text_normalized: form, content_sha256: "x", revision: 1,
-          withdrawn: false,
-          annotations_json: JSON.generate(
-            "citation" => ref,
-            "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]
-          )
-        )
-      end
     end
   end
 
@@ -2262,6 +2213,72 @@ class CLITest < Minitest::Test
 
   # Build a throwaway config with an empty (comments-only) registry and no
   # catalog db, and yield it.
+  # An on-disk cognates corpus (P15-3): the real wiktionary-recon shelf, an
+  # nt registry over grc/chu/ang witnesses whose sentences carry gold lemmas
+  # in citation-bearing tokens, and the full index build (FTS + lemmas +
+  # alignment refs + reflex_roots) — the production pipeline end to end.
+  # MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-; MARK 2.1 meets
+  # ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (the loan shelf).
+  def with_cognates_corpus
+    Dir.mktmpdir("nabu-cli-cognates") do |root|
+      registry_yaml = <<~YAML
+        nt:
+          title: "New Testament (test witnesses)"
+          witnesses:
+            - document: urn:nabu:test:grc-nt
+            - document: urn:nabu:test:marianus
+            - document: urn:nabu:test:oe-mark
+      YAML
+      alignments = File.join(root, "alignments.yml")
+      File.write(alignments, registry_yaml)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_cognates_corpus(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_cognates_corpus(catalog)
+    recon = Nabu::Store::Source.create(
+      slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+      adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+    )
+    Nabu::Store::DictionaryLoader.new(db: catalog, source: recon)
+                                 .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                            workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+    texts = catalog[:sources].insert(slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
+                                     license_class: "nc", enabled: true)
+    [["grc-nt", "Greek NT", "grc", [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
+     ["marianus", "Codex Marianus", "chu", [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
+     ["oe-mark", "OE Mark", "ang", [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, title, lang, rows|
+      doc_id = catalog[:documents].insert(
+        source_id: texts, urn: "urn:nabu:test:#{tail}", title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      rows.each_with_index do |(ref, lemma, form), seq|
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "urn:nabu:test:#{tail}:#{seq + 1}", sequence: seq,
+          language: lang, text: form, text_normalized: form, content_sha256: "x", revision: 1,
+          withdrawn: false,
+          annotations_json: JSON.generate(
+            "citation" => ref,
+            "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]
+          )
+        )
+      end
+    end
+  end
+
   def with_empty_registry_env
     Dir.mktmpdir("nabu-cli-empty") do |root|
       sources = File.join(root, "sources.yml")
