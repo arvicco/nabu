@@ -431,6 +431,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P14-12: `status --remote` runs the upstream probe inline (the SAME stubbed
+  # ls-remote path as `health --remote`), persists the verdict, then renders the
+  # up= column from that fresh cache — the one-command informed-update flow.
+  def test_status_remote_probes_inline_persists_and_renders_up_column
+    with_sync_env(enabled: true) do |config|
+      with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+
+      # Bare status before any probe: the upstream is genuinely unknown.
+      before, = with_config(config) { run_cli(%w[status]) }
+      assert_match(/corpus.*up=\?\(never\)/, before)
+
+      # --remote probes inline and writes the cache.
+      out, _err, status = with_config(config) do
+        with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[status --remote]) }
+      end
+      assert_nil status
+      assert_match(/corpus.*up=\S+\(0d\)/, out, "a freshly probed verdict (age 0d)")
+
+      # The verdict persists: a subsequent bare status reads it from the cache.
+      after, = with_config(config) { run_cli(%w[status]) }
+      assert_match(/corpus.*up=\S+\(0d\)/, after)
+    end
+  end
+
   # -- search (P4-2) -------------------------------------------------------
 
   # Build the store (catalog + fulltext index) via a real parse-only sync, then

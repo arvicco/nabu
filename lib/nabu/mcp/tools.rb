@@ -387,10 +387,15 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The history ledger, read-only (P14-12): nabu_status surfaces the
+        # CACHED upstream-drift verdicts from it. nil when unconfigured or
+        # absent — every source then reports upstream "never_probed". MCP NEVER
+        # probes upstreams live: this is a bounded status read, nothing more.
+        @ledger = ledger
       end
 
       # tools/list shape: [{name:, description:, inputSchema:}].
@@ -557,7 +562,10 @@ module Nabu
           index: index_state,
           note: "counts are live passages/documents (withdrawn excluded); " \
                 "research_private/restricted material is excluded from these counts and " \
-                "from every tool by default (see excluded_by_default)"
+                "from every tool by default (see excluded_by_default). each source's " \
+                "upstream.* fields are the CACHED verdict of the last `nabu health --remote` " \
+                "/ `nabu status --remote` run (drift = has upstream moved past our pin; " \
+                "checked_at = when) — MCP never probes upstreams live"
         )
       end
 
@@ -1023,6 +1031,7 @@ module Nabu
 
       def source_rows(catalog)
         entries = dictionary_entry_counts(catalog)
+        probes = probe_cache
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
           { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
@@ -1034,8 +1043,28 @@ module Nabu
             # surfacing the entry count here stops the reference shelf (lexica,
             # 168k entries) from reading as an empty docs=0 passages=0 source.
             entries: entries[source[:id]] || 0,
-            last_sync_at: source[:last_sync_at]&.to_s }
+            last_sync_at: source[:last_sync_at]&.to_s,
+            upstream: upstream_field(probes[source[:slug]]) }
         end
+      end
+
+      # { slug => source_probes row } from the read-only ledger (P14-12), or {}
+      # when the ledger is unconfigured/absent or predates the source_probes
+      # table (guarded). This is a cache read — never a live probe.
+      def probe_cache
+        ledger = resolve(@ledger)
+        return {} unless ledger&.table_exists?(:source_probes)
+
+        ledger[:source_probes].to_hash(:source_slug)
+      end
+
+      # The cached upstream-drift verdict for one source, or the honest
+      # never_probed placeholder when this source has no cache row yet.
+      def upstream_field(row)
+        return { drift: "never_probed", checked_at: nil } unless row
+
+        { drift: row[:drift], license: row[:license],
+          checked_at: row[:checked_at]&.to_s, detail: row[:detail] }
       end
 
       # Live dictionary-entry counts keyed by owning source id — empty when this
