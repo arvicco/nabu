@@ -1,0 +1,186 @@
+{
+  "type": "cdl",
+  "project": "blms",
+  "source": "http://oracc.org/blms",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2024-06-28T18:50:47",
+  "textid": "X000003",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "X000003.U0",
+      "cdl": [
+        {
+          "node": "d",
+          "type": "object",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "subtype": "obverse",
+          "type": "surface",
+          "ref": "X000003.o.1",
+          "label": "o"
+        },
+        {
+          "node": "c",
+          "type": "discourse",
+          "subtype": "body",
+          "id": "X000003.U1",
+          "cdl": [
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "id": "X000003.U2"
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "X000003.U4",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start"
+                },
+                {
+                  "node": "l",
+                  "frag": "{ŋeš}ig",
+                  "id": "X000003.l0aeaf",
+                  "ref": "X000003.2.1",
+                  "inst": "ig[door]N",
+                  "exosig": "@blms%sux:{ŋeš}ig=ig[door//door]N'N$ig/{ŋeš}ig#~",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "{ŋeš}ig",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "det": "semantic",
+                        "pos": "pre",
+                        "seq": [
+                          {
+                            "v": "ŋeš",
+                            "oid": "o0000217",
+                            "gdl_sign": "GIŠ",
+                            "id": "X000003.2.1.0"
+                          }
+                        ]
+                      },
+                      {
+                        "v": "ig",
+                        "oid": "o0000246",
+                        "gdl_sign": "IG",
+                        "id": "X000003.2.1.1"
+                      }
+                    ],
+                    "cf": "ig",
+                    "gw": "door",
+                    "sense": "door",
+                    "norm0": "ig",
+                    "pos": "N",
+                    "epos": "N",
+                    "base": "{ŋeš}ig",
+                    "morph": "~"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "X000003.2.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "X000003.2.1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "X000003.U6",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": ""
+                },
+                {
+                  "node": "l",
+                  "frag": "dal-tu₄",
+                  "id": "X000003.l0aeb4",
+                  "ref": "X000003.2.1001",
+                  "inst": "daltu[door]N$",
+                  "sig": "@blms%akk-x-stdbab:dal-tu₄=daltu[door//door]N'N$daltu",
+                  "f": {
+                    "lang": "akk-x-stdbab",
+                    "form": "dal-tu₄",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "v": "dal",
+                        "oid": "o0000514",
+                        "gdl_sign": "RI",
+                        "id": "X000003.2.1001.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "tu₄",
+                        "oid": "o0000559",
+                        "gdl_sign": "TUM",
+                        "id": "X000003.2.1001.1"
+                      }
+                    ],
+                    "cf": "daltu",
+                    "gw": "door",
+                    "sense": "door",
+                    "norm": "daltu",
+                    "pos": "N",
+                    "epos": "N"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "X000003.2.1001"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "X000003.2.1001"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "X000003.U8"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

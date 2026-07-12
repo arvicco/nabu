@@ -4539,3 +4539,19 @@ hold history). MCP nabu_status: each source row gains an `upstream`
 object {checked_at, drift, license, detail} (or {drift: "never_probed"}
 when uncached) plus a note that these are the CACHED verdicts of the
 last health --remote / status --remote run — MCP never probes live.
+
+## P14-13 · blms translation anchors  [tier: opus] [status: done] [deps: P14-9]
+Defect (orchestrator census of the owner's 2026-07-12 stage-2 crawl:
++3,884 -en docs, !13 — ALL 13 in blms, all "prose unit anchored at X
+resolves to no line-start row"). The P14-9 backward-reattach fixed the
+trailing-anchor case; blms (bilingual interleaved, the P14-9 collision
+oddball) evidently has anchors resolving in NEITHER direction. Census
+the 13 actual HTML+corpusjson pairs first (canonical/oracc/blms/) —
+what do the anchors point at? (Interlinear structure? refs into the
+OTHER language's lines? :b2-suffixed labels the -en anchor map misses
+post-P14-9?) Fix per evidence: extend the anchor fallback honestly OR
+skip the unit loudly (never quarantine the whole -en doc for one unit
+if the rest anchors — argue the grain). FROZEN GUARD: parse-only oracc
+sync =all-previous skipped, quarantines 13 → ~0. Fixture: one trimmed
+real blms pair. Suite+lint green; backlog done; worklog (sha —). One
+commit, not pushed.
