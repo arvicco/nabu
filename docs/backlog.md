@@ -4815,6 +4815,7 @@ noted for a future `--by-decade`).
   values are historical and the CLI user's `--from -300` means 300 BCE.
 
 ## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: pending] [deps: —]
+## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: done] [deps: —]
 Design doc §6: `nabu cognates` — alignment hub × reflex crosswalk join
 ("verses where Gothic and OCS witnesses use reflexes of the same
 proto-root"; measured: 349 NT verses / 31 roots / 1.4 s staged). Needs
@@ -4823,6 +4824,201 @@ the two missing indexes + the ~20k-row reflex_roots closure table
 free rider. MCP exposure argued (probably yes, bounded).
 
 ## P15-4 · Collation view  [tier: opus] [status: done] [deps: —]
+### DESIGN — reflex_roots closure (for fable review)
+
+**What closes over what.** A derived table
+`reflex_roots(language, lemma_folded, root_entry_id)`. Each row asserts:
+an attested gold lemma `(language, lemma_folded)` descends — within a
+BOUNDED two-level walk — from reconstruction entry `root_entry_id`
+(a catalog `dictionary_entries.id`). Build has two edge classes:
+- **DIRECT (attested → proto).** Every `dictionary_reflexes` row `r` with
+  non-null `language` maps both `(r.language, r.word_folded)` and
+  `(r.language, r.roman_folded)` to its OWNING proto entry
+  `r.dictionary_entry_id`. The roman fold is the script bridge (§12): got
+  `𐍃𐌰𐌻𐍄` reaches via roman `salt`, matching the romanized gold lemma.
+- **ASCENT (proto → proto, ONE hop).** For each direct target `P` that is
+  itself a `-pro` entry (headword_folded `H`, dict-language `PL`), add
+  every entry `Q` whose reflexes name `(PL, H)` — exactly the proto-to-proto
+  edge `Etym#ancestors_of` already walks. So got `salt` → {gem-pro *saltą
+  (direct), ine-pro *sḗh₂l (ascent)}; chu `соль` → {sla-pro *solь, ine-pro
+  *sḗh₂l}. They MEET at the ine-pro id — that shared `root_entry_id` is the
+  cognate-in-parallel. Two witnesses are cognate at a verse iff their gold
+  lemmas share a `root_entry_id`. (Direct-only meets — the *plęsati case —
+  are subsumed: both witnesses land on the SAME entry at depth 1.)
+
+**Cycle handling: safe by construction, no guard.** The walk is exactly two
+levels — direct is depth 1, ascent is one non-recursive step; ascent never
+re-expands its own output. A proto-to-proto cycle (P names Q, Q names P)
+therefore terminates after one hop; a self-naming entry emits a duplicate
+row the Set dedups. (Test: a constructed 2-cycle fixture asserts no blow-up
+and the expected finite root set.)
+
+**Rebuild story: derived-of-derived, built in the Indexer.** reflex_roots is
+a pure function of the CATALOG crosswalk (`dictionary_reflexes` +
+`dictionary_entries`), not of passages — but it JOINS `passage_lemmas`, and
+cross-file SQLite joins are costly, so it lives in `fulltext.sqlite3` beside
+`passage_lemmas`/`alignment_refs` (architecture §5 derived-of-derived),
+built by a new `Store::ReflexRootsIndexer` called from
+`Store::Indexer.rebuild!` AFTER `passage_lemmas`. Same drop-and-recreate
+lifecycle: rebuilt on every `nabu sync` reindex and `nabu rebuild`.
+`root_entry_id` is a catalog id re-minted on rebuild, stored cross-db
+exactly as `alignment_refs` stores `passage_id` — safe because both are
+rebuilt in the SAME pass and the query resolves the id against the current
+catalog. A catalog with no reflex shelf → empty table (graceful, like
+AlignmentIndexer's nil registry).
+
+**Gold-scoping.** Final rows are scoped to the languages present in
+`passage_lemmas` (the attested gold languages). The table exists ONLY to
+join attested lemmas, so emitting rows for the ~250k modern-language
+descendant keys (en/sco/de…) that can never join is pure waste. Proto
+intermediates are still consulted DURING ascent (keys in the in-memory
+reflex index, not final rows). Measured gold-scoped: **50,896 rows /
+39,872 keys, ~1.4 s build** (design estimated ~10–20k rows — the real
+number is ~2.5× higher but still < 5 MB). Trade-off: this couples
+reflex_roots to which treebank languages exist; both are f(canonical)
+rebuilt together, so determinism holds.
+
+**Homograph / double-counting.** Two hazards: (a) two distinct `-pro`
+entries sharing `(language, headword_folded)` — the ascent join matches on
+folded STRING, so both attach, over-generating a lemma's root set; (b) two
+reflex WORDS folding identically collapse in the in-memory index. Neither
+MERGES roots: `root_entry_id` stays a concrete entry id, so a homograph
+inflates one lemma's REACH but a false cognate still needs BOTH witnesses to
+independently land on the SAME inflated id — a double collision, rare.
+The ≥2-distinct-language requirement and the df-suppression (below) filter
+the residue; dedup is a Set over the triple; output is sorted before insert
+(deterministic). (Test: a homograph fixture asserts distinct ids are KEPT,
+not merged.)
+
+**Function-word suppression (df threshold).** Measured noise is both-common
+function words (*éti: got `iþ` ~ chu `отъ` df 1316; *nu: 420/692) vs content
+roots (salt 13–14, malan/grind 2–4). Default: drop any participating lemma
+whose in-language `passage_lemmas` df ≥ `STOPLIST_DF` (200) before grouping;
+a root left with <2 languages vanishes. `--all` disables it; output states
+"N common-word matches suppressed (--all shows them)". This removes both
+whole-hit noise (nu~нъ) and a function word riding a real hit's column
+(отъ appearing under *átta beside отьць — measured).
+
+**The two "missing" indexes ALREADY EXIST (deviation).** design §6 says the
+packet must land `passage_lemmas(urn)` and `dictionary_reflexes(lang_code,
+word_folded)`. Verified read-only on the live db: `passage_lemmas(urn)`
+landed with P15-1; `dictionary_reflexes(language, word_folded)` landed with
+migration 007 (P14-1) — and `(language, word_folded)` is what the ascent
+probe actually uses (etym joins the catalog-side `language`, not
+`lang_code`). So NO index is added to an existing table; the only new index
+is `reflex_roots(language, lemma_folded)`, created with the table. The
+design's >8-min naive figure predates both.
+
+**Surface.** `nabu cognates <work-or-ref> [--langs got,chu] [--all]
+[--long]`. Single ref → one verse; a registered work id → batch over its
+refs. Group by root; require ≥2 DISTINCT languages reach it (same-language
+codices sharing a word are not cross-linguistic cognate signal). Per verse:
+root (starred headword + dictionary + license), each language's witness
+lemma(s) + surface forms. `--langs` restricts and requires ≥2 of the named
+langs. MCP `nabu_cognates`: bounded, license-labeled, argued yes.
+
+### FABLE REVIEW (2026-07-12) — verdict: ship-with-changes
+
+Adversarial review of the design above (cycle handling, closure
+correctness, homographs, rebuild determinism, the df threshold). Findings
+and their disposition, all incorporated before implementation:
+
+1. **Claim (c) — rebuild safety — was FALSE for the sync path** (required).
+   A recon re-sync (DictionaryLoader) revises/withdraws catalog entries
+   without dropping the closure; stored row ids would point at withdrawn
+   rows SILENTLY. → Fixed: `reflex_roots` stores the entry **URN** (the
+   project's cross-parse stability contract), the build filters
+   `withdrawn`, and the query re-resolves urns against the live catalog
+   with the withdrawn filter — a stale root vanishes honestly. (Also:
+   every sync triggers `Indexer.rebuild!` — verified both call sites — so
+   the placement in the single choke point covers the drift window.)
+2. **Ascent needed the same-language exclusion** (required): the live PIE
+   extract holds 6,068 ine-pro→ine-pro reflex rows (derivational
+   sub-trees); without Etym#ancestors_of's exclusion every direct PIE
+   landing sprouts phantom sibling roots. → Mirrored in the builder;
+   pinned by test (intra-shelf edges do not ascend).
+3. **df=200 was empirically wrong** (required): fixed absolute df is
+   percentile-incoherent across gold corpora spanning 125 (uga) to 113k
+   (akk) passages — it would suppress guþ (914), богъ (725), sunus (310),
+   the most famous demonstrations. → Per-language relative threshold:
+   df ≥ max(50, 10% × language gold passages), calibrated live (function
+   words 36–72%: ὁ 72.5, и 55.2, jah 45.2, sa 36.4; wanted cognates
+   ≤ 8.4%: guþ 8.4, богъ 4.9, atta 3.7). The floor keeps tiny corpora
+   from judging everything common. Honest limit stated everywhere:
+   frequency cannot separate богъ (4.9%) from нъ (4.7%) — residual
+   common-word survivors are called that, never "function words".
+4. **Borrowing contamination** (required, minimum fix): descendant trees
+   include unflagged loans (hlaifs ~ хлѣбъ IS a Germanic loan in Slavic;
+   лихва, цѣсарь likewise) — a gem-pro meet presented as common descent
+   would be wrong. → Every hit displays its meet SHELF (CLI, MCP, help
+   text teaches the reading); a `borrowed` flag on dictionary_reflexes
+   (parser change + migration) is named future work, improvements-register
+   material.
+5. **Claim (b) restated** (required): ONE fold collision into a root the
+   other language independently reaches suffices for a false pair — not a
+   "double collision". 126 folded-headword homograph groups exist among
+   1,905 PIE entries (~13%); homographs inflate reach, never merge roots
+   (pinned by test: distinct homograph ids are kept apart).
+6. **Cycle/depth arithmetic confirmed** (no change): the two-level walk
+   terminates trivially (ascent never re-expands); with exactly three
+   shelves and every reflex row owned by one of them, one hop provably
+   reaches everything an unbounded walk would — a depth-3 chain needs an
+   intermediate shelf (ine-bsl-pro: named 1,112× as a reflex language,
+   owns no dictionary) that does not exist. Recorded as contingent, not
+   structural: revisit the bound if a Balto-Slavic shelf lands (~44% of
+   Balto-Slavic-linked PIE entries are today unreachable from the Slavic
+   side — a DATA gap, not a walk gap).
+7. **Ground-truth fixtures over plumbing metrics** (required): the
+   349/31 figure validates nothing about correctness. → Fixture goldens
+   from the REAL recon extracts: chu богъ × grc ἔφᾰγον meet at ine-pro
+   *bʰeh₂g- (inheritance), chu цѣсар҄ь × ang cāsere meet at gem-pro
+   *kaisaraz (loan — the shelf-label test), got guþ via the 𐌲𐌿𐌸 roman
+   bridge; plus constructed-row cycle and homograph guards.
+
+### DONE (2026-07-12) — findings
+
+- **The design's two "missing" indexes already existed** (deviation, said
+  plainly): `passage_lemmas(urn)` landed with P15-1;
+  `dictionary_reflexes(language, word_folded)` has been in migration 007
+  since P14-1 — and `language` (not the design's `lang_code`) is what the
+  ascent actually joins. Verified read-only on the live db. The packet
+  landed NO index on any existing table; the only new index is
+  `reflex_roots(language, lemma_folded)`, created with the table. The
+  design's ">8 min naive" figure predates both.
+- **Shipped:** `Store::ReflexRootsIndexer` (reflex_roots + reflex_root_stats
+  in fulltext.sqlite3, drop-and-rebuild from Indexer.rebuild! AFTER
+  passage_lemmas — scope and stats snapshot the same pass);
+  `Query::Cognates` (work/ref/chapter/book grain, ≥2-distinct-languages
+  rule, per-language relative suppression, meet-shelf on every root,
+  witness license labels, `exclude_license:` for the MCP restricted
+  contract); CLI `nabu cognates` (compact per house rule, `--all`,
+  `--long` lifts the 200-hit cap + expands gloss/documents); MCP
+  `nabu_cognates` (ninth tool, default 10 / max 50 groups, borrowing
+  caveat in every note).
+- **Live build (the one sanctioned write):** 50,151 closure rows +
+  14 stats rows, **3.72 s, 4.4 MB** — design estimated ~10–20k rows/~1 s;
+  the 2.5× rows are the 14-gold-language scope (design counted got+chu
+  only), still tiny.
+- **Live demo, through the production code:** got×chu whole-NT
+  `--all` reproduces the design EXACTLY — **349 verses / 31 roots
+  (0.52 s)**; default suppression trims to 299 verses / 30 roots
+  (57 common-word hits: *nu, *éti — precisely the design's named noise).
+  All six design verses reproduce, now shelf-labeled: LUKE 14.34 *sḗh₂l
+  [ine-pro] соль~salt · LUKE 17.35 *melh₂- [ine-pro] млѣти~malan ·
+  LUKE 1.24 *mḗh₁n̥s [ine-pro] мѣсѧць~menoþs (inheritance) vs LUKE 18.25
+  *ulbanduz [gem-pro] · LUKE 20.10 *wīnagardaz [gem-pro] · JOHN 13.18
+  *hlaibaz [gem-pro] (loans, labeled as such). Single verse: 25 ms.
+  grc×got rider: 922 hits / 769 verses / 31 roots / 0.95 s with 2,169
+  common-word hits suppressed — survivors are real cognates (hairto~καρδία,
+  fotus~πούς, filu~πολύς), residual *só/*-we noise stated.
+- Tests: store/reflex_roots_indexer_test (16 — fixture chains, cycle,
+  homograph, intra-shelf, withdrawn, gold scoping, stats, determinism),
+  query/cognates_test (14 — the join, loan shelf, grains, langs,
+  suppression + floor, licenses, degradations), cli_test +7, mcp +8;
+  tool-count pins bumped 8→9. Suite 1812/28,130 green, lint 230 clean.
+  Live db read-only except the sanctioned closure build.
+
+## P15-4 · Collation view  [tier: opus] [status: pending] [deps: —]
 Design doc §2: `align REF --collate` — raw-token LCS diff within script
 family over the hub's aligned rows (grc 7,643 / lat 6,974 / chu 3,764
 multi-witness verses); cross-script witnesses rendered undiffed

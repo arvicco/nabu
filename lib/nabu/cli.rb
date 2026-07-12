@@ -815,6 +815,75 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
+    long_desc <<~HELP, wrap: false
+      The comparativist's join (P15-3): verses of a registered alignment work
+      where witnesses in TWO OR MORE languages use reflexes of the SAME
+      reconstruction root — the alignment hub (nabu align) crossed with the
+      Wiktionary reconstruction crosswalk (nabu etym). Gothic salt ~ OCS соль
+      meet at PIE *sḗh₂l in the salt saying (LUKE 14.34); hlaifs ~ хлѣбъ at
+      *hlaibaz in "he who eats my bread" (JOHN 13.18).
+
+      TARGET is a registered work id (nt, ot, psalms — batches the whole
+      work), a verse ref (LUKE 14.34), a chapter (LUKE 14), or a book (LUKE).
+      Each hit names the root with its SHELF — and the shelf is part of the
+      answer: a Slavic witness meeting a Germanic witness at a gem-pro entry
+      (*hlaibaz, *kaisaraz) is very possibly a BORROWING, not common descent;
+      ine-pro meets are the inheritance signal. Wiktionary descendant trees
+      include loans and do not flag them.
+
+      Corpus-common words are suppressed by default (a lemma in ≥ 10% of its
+      language's gold passages, absolute floor 50 — ὁ, jah, и would otherwise
+      flood every verse); --all shows them, and the header counts what fell.
+      Frequency is a coarse proxy: богъ (4.9% of OCS) and нъ "but" (4.7%) are
+      inseparable by df, so some common words survive — read the hits.
+
+      Recall is bounded by Wiktionary descendants coverage (roughly a third
+      of Gothic and a fifth of OCS gold lemma types reach any proto entry)
+      and by gold lemmatization (~10% of the corpus): absence of a hit is
+      absence of evidence, not evidence of unrelatedness.
+
+      --langs got,chu restricts the comparison to the named languages (at
+      least two); --work picks the alignment work when the ref is ambiguous;
+      --long lifts the #{Nabu::Query::Cognates::MAX_GROUPS}-hit compact cap
+      and expands gloss/dictionary/document detail per hit.
+
+      Examples:
+        nabu cognates "LUKE 14.34"            # the salt saying, all languages
+        nabu cognates nt --langs got,chu      # the whole NT, Gothic × OCS
+        nabu cognates "JOHN 13" --langs got,chu,grc
+        nabu cognates nt --langs got,chu --all  # keep the common-word matches
+    HELP
+    option :work, type: :string,
+                  desc: "Alignment work id (optional when the target decides it)"
+    option :langs, type: :string, banner: "got,chu",
+                   desc: "Restrict the comparison to these languages (comma-joined, at least two)"
+    option :all, type: :boolean, default: false,
+                 desc: "Show the common-word matches the default suppresses"
+    option :long, type: :boolean, default: false,
+                  desc: "Render every hit (compact caps at #{Nabu::Query::Cognates::MAX_GROUPS}) " \
+                        "and expand gloss/dictionary/document detail"
+    def cognates(*target_parts)
+      target = target_parts.join(" ").strip
+      raise Thor::Error, "cognates: give a work id (nt) or a citation ref (e.g. LUKE 14.34)" if target.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+      result = Nabu::Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                    .run(target, work: options[:work], langs: parse_langs(options[:langs]),
+                                                 all: options[:all], long: options[:long])
+      print_cognates(result)
+    rescue Nabu::Query::Cognates::Error, Nabu::ValidationError => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "vocab URN", "Lemma-frequency profile of a document/range vs the corpus (gold shelves only)"
     long_desc <<~HELP, wrap: false
       Profile the gold-lemma vocabulary of one document, a citation range, or a
@@ -2073,6 +2142,65 @@ module Nabu
         prefix = via ? "#{via.word} [#{via.language}] → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
+      end
+
+      # --langs as an array: comma-joined on the CLI, validated by the query.
+      def parse_langs(value)
+        return nil if value.nil?
+
+        value.split(",").map(&:strip).reject(&:empty?)
+      end
+
+      # cognates (P15-3): header with honest totals + the suppression count,
+      # then one compact block per (verse, root) hit — the root line carries
+      # the SHELF (a gem-pro meet with a Slavic witness reads as a borrowing;
+      # see the command help), each witness its lemma and attested forms.
+      def print_cognates(result)
+        say "#{result.query} — work #{result.work} · shared-root verses across witnesses"
+        say "  #{cognates_counts(result)}"
+        if result.truncated
+          say "  showing first #{result.groups.size} of #{result.total} hits — narrow the " \
+              "target, or pass --long to render all"
+        end
+        result.groups.each { |group| print_cognates_group(group, result.documents) }
+      end
+
+      def cognates_counts(result)
+        verses = result.groups.map(&:ref).uniq.size
+        roots = result.groups.map { |group| group.root.urn }.uniq.size
+        counts = if result.total.zero?
+                   "no hits — no verse here has two witnesses on one root"
+                 else
+                   "#{plural(result.total, 'hit')} · #{plural(verses, 'verse')} · " \
+                     "#{plural(roots, 'root')}"
+                 end
+        return counts if result.suppressed.zero?
+
+        "#{counts}; #{result.suppressed} common-word #{result.suppressed == 1 ? 'hit' : 'hits'} " \
+          "suppressed (--all shows them)"
+      end
+
+      def print_cognates_group(group, documents)
+        say ""
+        say "#{group.ref}  #{group.root.headword} [#{group.root.shelf} · #{group.root.license_class}]"
+        if options[:long]
+          say "    #{group.root.dictionary_title}#{" · gloss: #{group.root.gloss}" if group.root.gloss}"
+        end
+        group.witnesses.each do |witness|
+          say "    #{witness.language.ljust(4)} #{witness.lemma}#{cognates_surfaces(witness)}"
+          next unless options[:long]
+
+          witness.document_urns.each do |urn|
+            doc = documents[urn]
+            say "         #{urn}#{" — #{doc[:title]} [#{doc[:license_class]}]" if doc}"
+          end
+        end
+      end
+
+      # The attested forms, shown when they add anything over the lemma.
+      def cognates_surfaces(witness)
+        forms = witness.surfaces - [witness.lemma]
+        forms.empty? ? "" : " — attested as #{forms.join(', ')}"
       end
 
       def print_resolved_citations(result)

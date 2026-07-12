@@ -116,12 +116,12 @@ module MCP
 
     # -- tools/list ---------------------------------------------------------------
 
-    def test_tools_list_exposes_the_eight_tools_with_schemas
+    def test_tools_list_exposes_the_nine_tools_with_schemas
       initialize!
       response = roundtrip(request("tools/list", {}, id: 2))
       tools = response.dig("result", "tools")
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_status],
+                      nabu_parallels nabu_cognates nabu_status],
                    tools.map { |t| t.fetch("name") })
       tools.each do |tool|
         refute_empty tool.fetch("description")
@@ -134,7 +134,7 @@ module MCP
     def test_tools_list_tolerates_absent_params
       initialize!
       response = roundtrip(request("tools/list", nil, id: 3))
-      assert_equal 8, response.dig("result", "tools").size
+      assert_equal 9, response.dig("result", "tools").size
     end
 
     # -- tools/call ----------------------------------------------------------------
