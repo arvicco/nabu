@@ -523,6 +523,57 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "vocab URN", "Lemma-frequency profile of a document/range vs the corpus (gold shelves only)"
+    long_desc <<~HELP, wrap: false
+      Profile the gold-lemma vocabulary of one document, a citation range, or a
+      single passage (P14-3, improvements §1.7): total tokens carrying a gold
+      lemma, how many distinct lemmas, the most DISTINCTIVE vocabulary, and the
+      in-document hapax legomena (lemmas attested exactly once).
+
+      "Distinctive" means over-represented HERE versus the whole corpus, ranked
+      by a log-odds-ratio with an informative Dirichlet prior (Monroe et al.
+      2008) — the z-score damps rare-lemma noise a plain frequency ratio would
+      let blow up, so the list is the text's real subject vocabulary, not its
+      accidental singletons (those get their own hapax line). Each row shows the
+      lemma's document token count and its corpus passage-frequency.
+
+      Gold lemmas exist only for the treebank shelves (PROIEL, TOROT, ISWOC, the
+      UD treebanks) and the ORACC cuneiform layer — about 8% of the corpus. A
+      document without gold lemmas (Perseus, First1K, the papyri, ASPR poetry)
+      is not an error: it says so plainly and lists the gold-bearing languages
+      so you can profile something that works. --limit caps both the distinctive
+      list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
+
+      Examples:
+        nabu vocab urn:nabu:proiel:caes-gal          # Caesar's Gallic War
+        nabu vocab urn:nabu:proiel:cic-off --limit 30
+        nabu vocab urn:nabu:proiel:hdt:1.1-1.100     # a citation range
+    HELP
+    option :limit, type: :numeric, default: Nabu::Query::Vocab::DEFAULT_LIMIT,
+                   desc: "Cap the distinctive list and hapax spellings printed"
+    def vocab(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+      unless fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+        raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                           "run nabu sync or nabu rebuild"
+      end
+
+      profile = Nabu::Query::Vocab.new(catalog: catalog, fulltext: fulltext)
+                                  .run(urn, limit: options[:limit].to_i)
+      print_vocab(profile)
+    rescue Nabu::Query::Vocab::NotFound, Nabu::Query::Range::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
@@ -1215,6 +1266,69 @@ module Nabu
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+      end
+
+      # Render a vocab profile (P14-3): the header (urn, title, language, scope),
+      # then either the gold-lemma summary + distinctive table + hapax line, or
+      # the honest no-gold-lemmas notice naming the gold-bearing languages.
+      def print_vocab(profile)
+        header = "#{profile.urn}#{" — #{profile.title}" if profile.title}"
+        header += " [#{profile.language}]" if profile.language
+        say header
+        say "  #{profile.kind}, #{pluralize(profile.passages, 'passage')}"
+        return print_vocab_no_gold(profile) if profile.total_tokens.zero?
+
+        say "  gold lemmas: #{commafy(profile.total_tokens)} tokens · " \
+            "#{commafy(profile.distinct_lemmas)} distinct lemmas · " \
+            "#{commafy(profile.hapax_count)} hapax legomena " \
+            "(#{profile.annotated_passages} of #{profile.passages} passages annotated)"
+        print_vocab_distinctive(profile.distinctive)
+        print_vocab_hapax(profile.hapax, profile.hapax_count)
+      end
+
+      # The distinctive-vocabulary table: lemma, its token count here, its corpus
+      # passage-frequency, and the log-odds z-score, most distinctive first.
+      def print_vocab_distinctive(distinctive)
+        return if distinctive.empty?
+
+        say ""
+        say "  distinctive vocabulary (log-odds vs corpus, top #{distinctive.size}):"
+        width = distinctive.map { |e| e.lemma.length }.max
+        distinctive.each do |entry|
+          say "    #{entry.lemma.ljust(width)}  #{entry.doc_count}× here · " \
+              "#{commafy(entry.corpus_freq)}× corpus  (z=#{format('%.1f', entry.score)})"
+        end
+      end
+
+      # The hapax legomena line: attested exactly once in this document. The full
+      # count, then up to --limit spellings (they can number in the hundreds).
+      def print_vocab_hapax(hapax, hapax_count)
+        return if hapax_count.zero?
+
+        say ""
+        shown = hapax.first(options[:limit].to_i)
+        more = hapax_count - shown.size
+        tail = more.positive? ? " (+#{commafy(more)} more)" : ""
+        say "  hapax legomena (#{commafy(hapax_count)}, once each): #{shown.join(', ')}#{tail}"
+      end
+
+      # A document with no gold lemmas: say so plainly and name the gold-bearing
+      # languages (from the lemma index) so the user can profile something real.
+      def print_vocab_no_gold(profile)
+        say "  no gold lemmas — this document is not linguistically annotated " \
+            "(0 of #{pluralize(profile.passages, 'passage')} carry one)."
+        say "  Gold lemmas come from the treebank shelves (PROIEL, TOROT, ISWOC, " \
+            "Universal Dependencies) and the ORACC cuneiform layer."
+        langs = profile.gold_languages.first(8).map { |lang, count| "#{lang} (#{commafy(count)})" }
+        ellipsis = profile.gold_languages.size > langs.size ? ", …" : ""
+        say "  gold-bearing languages: #{langs.join(', ')}#{ellipsis}"
+        say "  Try e.g. nabu vocab urn:nabu:proiel:caes-gal"
+      end
+
+      # Group an integer's digits into thousands (12345 → "12,345"). Plain string
+      # work — no locale gem for one display nicety.
+      def commafy(number)
+        number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
       end
 
       # One display line of pristine text: newlines flattened, capped at 100
