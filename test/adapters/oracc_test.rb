@@ -227,6 +227,17 @@ module Adapters
       fulltext&.disconnect
     end
 
+    # -- translation-crawl scope (stage 2) -------------------------------------
+
+    def test_translation_crawl_scope_is_the_full_project_list
+      # P14-4 stage 2 (owner-approved 2026-07-12, "Full crawl"): the crawl
+      # serves EVERY in-scope project — the metadata tr-en gate keeps the
+      # zero-English catalog hubs (riao, ribo, dcclt/jena) provably inert,
+      # so the full list is exact, and new upstream tr-en is picked up free.
+      assert_equal Nabu::Adapters::Oracc::PROJECTS,
+                   Nabu::Adapters::Oracc::TRANSLATION_PROJECTS
+    end
+
     # -- fetch (HTTP zip, no network: WebMock-stubbed) ------------------------
 
     RIMANUM_URL = "https://oracc.museum.upenn.edu/json/rimanum.zip"
@@ -240,12 +251,21 @@ module Adapters
     # per-project plumbing is exercised across the full list.
     FIXTURED_PROJECTS = %w[rimanum etcsri saao/saa01].freeze
 
-    # The stage-1 crawl endpoints for the saao/saa01 fixture (its trimmed
-    # metadata formats.tr-en lists exactly these two): P224395 serves the real
+    # The crawl endpoints for the saao/saa01 fixture (its trimmed metadata
+    # formats.tr-en lists exactly these two): P224395 serves the real
     # fragment, P224485 the recorded soft-404 shape (a 200 whose body is a
     # literal "404\n" — how ORACC answers for a missing per-text page).
     SAA_HTML_URL = "https://oracc.museum.upenn.edu/saao/saa01/P224395/html"
     SAA_MISSING_URL = "https://oracc.museum.upenn.edu/saao/saa01/P224485/html"
+
+    # The stage-2 crawl endpoints (P14-4): the two rimanum texts with real
+    # checked-in fragments. The staged rimanum metadata is trimmed to exactly
+    # these (see stub_project_zips), so the non-saao crawl path is exercised
+    # against real fragment payloads.
+    RIM_HTML_URLS = %w[
+      https://oracc.museum.upenn.edu/rimanum/P405134/html
+      https://oracc.museum.upenn.edu/rimanum/P405432/html
+    ].freeze
 
     def test_fetch_downloads_and_unpacks_both_project_zips
       Dir.mktmpdir do |root|
@@ -264,12 +284,17 @@ module Adapters
         assert_match(/etcsri=\h{12}/, report.notes)
         assert_match(/1 catalog-only \(empty\)/, report.notes,
                      "the empty-corpusjson count is the honest sync note")
-        # Stage-1 translation crawl (saao scope): the translated fragment
-        # lands OUTSIDE the zip-managed tree; the soft-404 text is counted
-        # missing, its non-page never written.
+        # Translation crawl (stage 2: full project list): the translated
+        # fragments land OUTSIDE the zip-managed trees; the soft-404 text is
+        # counted missing, its non-page never written. rimanum (non-saao)
+        # proves the stage-2 scope; the formats-less envelope projects and
+        # the tr-en-emptied etcsri stay silent (nothing to crawl).
         assert File.file?(File.join(workdir, "html-en", "saao-saa01", "P224395.html"))
         refute File.exist?(File.join(workdir, "html-en", "saao-saa01", "P224485.html"))
         assert_match(/saao-saa01 html-en: 1 fetched, 0 cached, 1 missing/, report.notes)
+        assert File.file?(File.join(workdir, "html-en", "rimanum", "P405432.html"))
+        assert_match(/rimanum html-en: 2 fetched, 0 cached, 0 missing/, report.notes)
+        refute_match(/etcsri html-en/, report.notes, "an empty tr-en list crawls nothing")
         # repos pins every in-scope project by its zip URL, subproject
         # slash-paths hyphen-flattened (saao/saa01 → saao-saa01.zip).
         assert_equal Nabu::Adapters::Oracc::PROJECTS.map { |project|
@@ -303,6 +328,8 @@ module Adapters
         assert_requested :get, SAA_HTML_URL, times: 1
         assert_requested :get, SAA_MISSING_URL, times: 2
         assert_match(/saao-saa01 html-en: 0 fetched, 1 cached, 1 missing/, second.notes)
+        RIM_HTML_URLS.each { |url| assert_requested :get, url, times: 1 }
+        assert_match(/rimanum html-en: 0 fetched, 2 cached, 0 missing/, second.notes)
       end
     end
 
@@ -355,8 +382,8 @@ module Adapters
         adapter = conformance_adapter
         adapter.fetch(workdir)
 
-        # Post-crawl the tree holds 6 ingestible documents (5 tablets + the
-        # crawled saa01 -en); dropping 2 = 33% > the 20% threshold.
+        # Post-crawl the tree holds 8 ingestible documents (5 tablets + the
+        # 3 crawled -en siblings); dropping 2 = 25% > the 20% threshold.
         stub_project_zips(root, drop: ["rimanum/corpusjson/P405432.json",
                                        "rimanum/corpusjson/P405134.json"])
         assert_raises(Nabu::SyncAborted) { adapter.fetch(workdir) }
@@ -398,6 +425,7 @@ module Adapters
         FileUtils.mkdir_p(File.dirname(staging))
         if FIXTURED_PROJECTS.include?(project)
           FileUtils.cp_r(File.join(FIXTURES, slug), staging)
+          trim_tr_en!(staging, slug)
         else
           stub_envelope_project(staging)
         end
@@ -416,6 +444,30 @@ module Adapters
       stub_request(:get, SAA_MISSING_URL).to_return(
         status: 200, body: "404\n", headers: { "Content-Type" => "text/html; charset=utf-8" }
       )
+      RIM_HTML_URLS.each do |url|
+        stub_request(:get, url).to_return(
+          status: 200, body: File.binread(File.join(FIXTURES, "html-en", "rimanum", "#{url.split('/')[-2]}.html")),
+          headers: { "Content-Type" => "text/html; charset=utf-8" }
+        )
+      end
+    end
+
+    # Stage-2 crawl scope (the full project list) meets the checked-in
+    # fixtures: the PRISTINE rimanum/etcsri metadata carry their real
+    # 378/1448-id tr-en lists, which the crawl would request wholesale. Test
+    # plumbing (the same discipline as stub_envelope_project): the STAGED
+    # copy's tr-en is trimmed to the texts with checked-in fragments —
+    # rimanum to its two, etcsri to none (no etcsri fragments; nothing
+    # invented). The checked-in fixtures stay real upstream samples; saa01's
+    # was already trimmed at snapshot (P13-4).
+    def trim_tr_en!(staging, slug)
+      trims = { "rimanum" => %w[P405134 P405432], "etcsri" => [] }
+      return unless trims.key?(slug)
+
+      path = File.join(staging, "metadata.json")
+      metadata = JSON.parse(File.read(path))
+      metadata["formats"]["tr-en"] = trims.fetch(slug)
+      File.write(path, JSON.generate(metadata))
     end
 
     # No corpus fixture: ship only a real CC0 metadata.json (the license gate

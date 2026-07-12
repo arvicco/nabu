@@ -74,9 +74,10 @@ module Nabu
     # `show <tablet> --parallel` render like the Homers.
     #
     # - CRAWL (fetch, after the zip phases): PROJECT-SCOPED — the served list
-    #   is TRANSLATION_PROJECTS (owner staging 2026-07-11: stage 1 = the saao
-    #   projects; stage 2 extends the list, no machinery change). Which texts
-    #   have English is machine-read from each project metadata.json's
+    #   is TRANSLATION_PROJECTS (stage 1 = saao, owner 2026-07-11; stage 2 =
+    #   the full project list, owner-approved 2026-07-12, P14-4 — the
+    #   promised list change, no machinery change). Which texts have English
+    #   is machine-read from each project metadata.json's
     #   `formats["tr-en"]`. Fragments land OUTSIDE the zip-managed project
     #   trees (<workdir>/html-en/<slug>/<id>.html) so a zip swap never attics
     #   them; the crawl itself never deletes (retention by construction).
@@ -116,11 +117,16 @@ module Nabu
         dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
       ].freeze
 
-      # Stage-1 translation-crawl scope (owner: "Two-stage SAA-first crawl",
-      # 2026-07-11): the saao projects. Stage 2 = the remaining translated
-      # projects (rimanum, etcsri, rinap1, riao, ribo, blms, dcclt*), added
-      # here when the owner fires it — a list change, no machinery change.
-      TRANSLATION_PROJECTS = PROJECTS.grep(%r{\Asaao/}).freeze
+      # Translation-crawl scope. Stage 1 (P13-4, owner 2026-07-11 "Two-stage
+      # SAA-first crawl") was the saao projects; stage 2 (P14-4,
+      # owner-approved 2026-07-12 "Full crawl") is the FULL project list —
+      # the data change the staging design promised, no machinery change.
+      # The metadata tr-en gate makes the full list exact: the zero-English
+      # catalog hubs (riao, ribo, dcclt/jena — no corpusjson, empty formats)
+      # are provably inert, and new upstream tr-en is picked up for free.
+      # English only: etcsri's 1441 tr-hun (Hungarian) stays the flagged
+      # config-shaped follow-up.
+      TRANSLATION_PROJECTS = PROJECTS
 
       # Crawled fragments live OUTSIDE the zip-managed <slug>/ trees: a zip
       # swap diffs only its own tree, so fragments are never atticked/deleted
