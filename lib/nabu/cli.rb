@@ -45,11 +45,18 @@ module Nabu
     end
 
     desc "status", "Show per-source sync status and passage counts"
+    option :remote, type: :boolean, default: false,
+                    desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
     def status
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
+      # --remote (P14-12): the one-command informed-update flow — run the live
+      # upstream probe inline (the SAME code path as `health --remote`, which
+      # persists each verdict into the ledger cache), then render the up= column
+      # from that fresh cache. Bare `status` is read-only and shows the cached
+      # verdicts as-is (with their age).
+      ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      ledger = open_ledger(config)
       say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     ensure
       db&.disconnect
@@ -709,6 +716,12 @@ module Nabu
         catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
         fulltext: readonly_opener(config.fulltext_path) do
           Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+        end,
+        # The history ledger, read-only (P14-12): nabu_status surfaces the
+        # cached upstream-drift verdicts from source_probes. MCP reads the raw
+        # dataset (no model binding) and NEVER probes upstreams live.
+        ledger: readonly_opener(config.history_path) do
+          Nabu::Store.connect(config.history_path, readonly: true)
         end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
@@ -1734,6 +1747,20 @@ module Nabu
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
         ledger&.disconnect
+      end
+
+      # `status --remote` (P14-12): run the live upstream probe through the SAME
+      # RemoteProbe as `health --remote`, whose run persists each verdict into
+      # the ledger's source_probes cache, then hand the (write-opened, migrated)
+      # ledger back so status renders the just-refreshed up= column. Returns the
+      # ledger handle; the caller owns disconnecting it. The probe's exit-code
+      # gate is health's concern, not status's — status just reports.
+      def probe_upstreams(config, registry)
+        ledger = open_or_create_ledger(config)
+        Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).run
+        ledger
       end
 
       # Bare health (P5-5): run-history trends + live golden replay, no network.

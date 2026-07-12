@@ -203,7 +203,7 @@ sync. Ranked expansion candidates live in the axis surveys:
 | `nabu vocab URN` | Lemma-frequency profile of a document, range, or passage against the gold-lemma corpus: total tokens, distinct lemmas, the most distinctive vocabulary (log-odds vs corpus — Caesar surfaces *legio*/*proelium*, Cicero's *De officiis* surfaces *officium*/*honestas*), and the in-document hapax legomena. Gold shelves only; a document without gold lemmas says so and names the annotated languages. |
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license` filters — the longevity-hedge exit formats. |
 | `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP); idempotent, non-destructive, every run recorded. |
-| `nabu status` / `health` / `verify` | Per-source counts and run history; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
+| `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
 | `nabu mcp` | The read-only MCP server — six tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
 
 Two more tastes. Facing translation, span-grouped, honest when the English

@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "tmpdir"
+require "fileutils"
 
 class StatusReportTest < Minitest::Test
   include StoreTestDB
@@ -149,7 +150,7 @@ class StatusReportTest < Minitest::Test
     )
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/fake-dict\s+on\s+live\s+entries=3/, out)
+    assert_match(/fake-dict\s+on\s+live\s+up=\S+\s+entries=3/, out)
     refute_match(/fake-dict.*docs=/, out)
   end
 
@@ -178,7 +179,7 @@ class StatusReportTest < Minitest::Test
     end
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/bosworth-toller\s+off\s+manual\s+entries=2/, out)
+    assert_match(/bosworth-toller\s+off\s+manual\s+up=\S+\s+entries=2/, out)
     refute_match(/bosworth-toller.*docs=/, out)
   end
 
@@ -210,7 +211,121 @@ class StatusReportTest < Minitest::Test
     assert_match(/no run history/, out)
   end
 
+  # -- P14-12: the upstream drift column (up=…) --------------------------------
+
+  # No cached probe row for a source → up=?(never): the owner has not yet run
+  # `nabu health --remote` / `status --remote`, so drift is genuinely unknown.
+  def test_upstream_never_probed_renders_question_never
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    registry["fake-src"].sync_source!(db)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/fake-src\s+off\s+manual\s+up=\?\(never\)/, out)
+  end
+
+  # A fresh CURRENT probe reads quiet: up=ok(Nd), age always shown.
+  def test_upstream_current_recent_renders_ok_with_age
+    out = render_with_probe(drift: "current", checked_at: Time.now - (2 * 86_400))
+    assert_match(/fake-src\s+off\s+manual\s+up=ok\(2d\)/, out)
+  end
+
+  # BEHIND is the loud signal — the whole point of the feature.
+  def test_upstream_behind_renders_loud_behind
+    out = render_with_probe(drift: "behind", checked_at: Time.now - (2 * 86_400))
+    assert_match(/up=BEHIND\(2d\)/, out)
+  end
+
+  # A CURRENT verdict older than the staleness horizon is no longer trustworthy:
+  # up=stale(Nd) — an "ok" too old to base a sync decision on.
+  def test_upstream_current_but_old_renders_stale
+    out = render_with_probe(drift: "current", checked_at: Time.now - (30 * 86_400))
+    assert_match(/up=stale\(30d\)/, out)
+  end
+
+  # A stale cache never softens a BEHIND — an alarm does not go stale.
+  def test_upstream_behind_stays_loud_even_when_cache_is_old
+    out = render_with_probe(drift: "behind", checked_at: Time.now - (30 * 86_400))
+    assert_match(/up=BEHIND\(30d\)/, out)
+    refute_match(/stale/, out)
+  end
+
+  # An indeterminate verdict (never synced / unreachable / multi) shows ? with
+  # its age: probed, but drift could not be computed.
+  def test_upstream_indeterminate_renders_question_with_age
+    out = render_with_probe(drift: "unknown", checked_at: Time.now - (3 * 86_400))
+    assert_match(/up=\?\(3d\)/, out)
+  end
+
+  # A frozen-policy source is a dead-project snapshot: no probe is expected, so
+  # it renders up=frozen regardless of any cache row.
+  def test_upstream_frozen_policy_renders_frozen
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      frozen-src:
+        adapter: StatusReportTest::FakeAdapter
+        enabled: false
+        sync_policy: frozen
+    YAML
+    registry["frozen-src"].sync_source!(db)
+    # Even with a BEHIND cache row present, policy wins.
+    Nabu::Store::Probe.create(source_slug: "frozen-src", checked_at: Time.now,
+                              drift: "behind", license: "unchanged", detail: nil)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/frozen-src\s+off\s+frozen\s+up=frozen/, out)
+    refute_match(/BEHIND/, out)
+  end
+
+  # A ledger that predates the source_probes table (a read-only status before
+  # any health --remote migrated it) degrades to never-probed, no crash.
+  def test_upstream_ledger_without_probe_table_degrades_to_never
+    db = store_test_db
+    ledger = ledger_missing_probe_table
+    registry = single_source_registry
+    registry["fake-src"].sync_source!(db)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/up=\?\(never\)/, out)
+  end
+
   private
+
+  def single_source_registry
+    load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+    YAML
+  end
+
+  def render_with_probe(drift:, checked_at:, license: "unchanged", detail: nil)
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    registry["fake-src"].sync_source!(db)
+    Nabu::Store::Probe.create(source_slug: "fake-src", checked_at: checked_at,
+                              drift: drift, license: license, detail: detail)
+    Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+  end
+
+  # A ledger migrated to 001 only (runs/pins/revisions, no source_probes).
+  def ledger_missing_probe_table
+    db = Nabu::Store::Ledger.connect("sqlite::memory:")
+    Dir.mktmpdir do |dir|
+      track = File.join(dir, "m")
+      FileUtils.mkdir_p(track)
+      FileUtils.cp(
+        File.expand_path("../db/ledger_migrate/001_initial_ledger.rb", __dir__),
+        File.join(track, "001_initial_ledger.rb")
+      )
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, track)
+    end
+    Nabu::Store::Ledger.setup!(db)
+    db
+  end
 
   def seed_document
     document = Nabu::Document.new(
