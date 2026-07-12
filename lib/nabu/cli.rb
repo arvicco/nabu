@@ -550,9 +550,17 @@ module Nabu
     HELP
     option :work, type: :string, banner: "ID",
                   desc: "Alignment work id from config/alignments.yml (optional when only one is registered)"
+    option :collate, type: :boolean, default: false,
+                     desc: "Diff the witnesses instead of listing them: a raw-token apparatus per " \
+                           "(language, script) group — base reading, then per-witness divergences only " \
+                           "(cross-script witnesses rendered undiffed, honestly)"
+    option :base, type: :string, banner: "LABEL",
+                  desc: "With --collate: the base witness (label or document urn) each group diffs " \
+                        "against (default: the first witness in registry order)"
     option :long, type: :boolean, default: false,
                   desc: "Lift the #{Nabu::Query::Align::MAX_REFS}-ref range ceiling and render every ref " \
-                        "(compact clips a huge range by default)"
+                        "(compact clips a huge range by default); with --collate, also print each " \
+                        "witness's full tokens instead of only its divergences"
     def align(*ref_parts)
       ref = ref_parts.join(" ").strip
       raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
@@ -563,9 +571,17 @@ module Nabu
       raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
 
       registry = Nabu::AlignmentRegistry.load(config.alignments_path)
-      result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
-                                 .run(ref, work: options[:work], long: options[:long])
-      print_align(result)
+      if options[:collate]
+        result = Nabu::Query::Collation.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                       .run(ref, work: options[:work], base: options[:base], long: options[:long])
+        print_collation(result, long: options[:long])
+      else
+        raise Thor::Error, "align: --base only applies with --collate" if options[:base]
+
+        result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                   .run(ref, work: options[:work], long: options[:long])
+        print_align(result)
+      end
     rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
       raise Thor::Error, e.message
     ensure
@@ -1340,6 +1356,83 @@ module Nabu
         return "" if sentence.refs == [ref]
 
         "  [covers #{sentence.refs.join(', ')}]"
+      end
+
+      # -- align --collate (P15-4) ------------------------------------------------
+
+      # The collation apparatus (intertext-design §2): the query/work header,
+      # then one block per ref — each (language, script) cell as a base reading
+      # plus the per-witness divergences, uncollated cross-script/sole witnesses
+      # rendered undiffed and honestly, and any missing witnesses named once.
+      def print_collation(result, long:)
+        say "#{result.query} — #{result.title} · collation"
+        if result.truncated
+          say "  showing first #{result.refs.size} of #{result.total} refs " \
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range, or pass --long to render all"
+        end
+        result.refs.each do |ref_collation|
+          say ""
+          say ref_collation.ref if result.refs.size > 1
+          print_collation_ref(ref_collation, long: long)
+        end
+      end
+
+      def print_collation_ref(ref_collation, long:)
+        say "  no witness attests this ref" if ref_collation.cells.empty? && ref_collation.asides.empty?
+        ref_collation.cells.each { |cell| print_collation_cell(cell, long: long) }
+        ref_collation.asides.each { |aside| print_collation_aside(aside) }
+        print_collation_missing(ref_collation.missing)
+      end
+
+      # One collated cell: the base line in full, then each other witness — its
+      # full tokens under --long, "(agrees with base)" when identical, else its
+      # apparatus of divergences (agreements elided).
+      def print_collation_cell(cell, long:)
+        base = cell.readings.find(&:is_base)
+        say "  [#{cell.language}/#{cell.script}] #{cell.readings.size} witnesses, base #{cell.base_label}"
+        say "    = #{base.label}  #{base.tokens.join(' ')}"
+        cell.readings.reject(&:is_base).each do |reading|
+          say "      #{reading.label}  #{collation_reading_body(reading, long: long)}"
+        end
+      end
+
+      def collation_reading_body(reading, long:)
+        return reading.tokens.join(" ") if long
+        return "(agrees with base)" if reading.edits.empty?
+
+        reading.edits.map { |edit| format_collation_edit(edit) }.join("; ")
+      end
+
+      # Apparatus marks: a substitution as "base → variant", an omission as
+      # "om. base" (the witness lacks it), an insertion as "add. variant".
+      def format_collation_edit(edit)
+        case edit.op
+        when :sub then "#{edit.base.join(' ')} → #{edit.witness.join(' ')}"
+        when :del then "om. #{edit.base.join(' ')}"
+        when :ins then "add. #{edit.witness.join(' ')}"
+        end
+      end
+
+      # An uncollated witness: rendered undiffed, its reason stated plainly —
+      # cross-script (the fold cannot bridge the transcription systems) or the
+      # sole witness of its language here.
+      def print_collation_aside(aside)
+        reason = if aside.reason == :cross_script
+                   "not collated — different transcription system, the fold cannot bridge it"
+                 else
+                   "not collated — sole witness of its language here"
+                 end
+        say "  [#{aside.language}/#{aside.script}] #{aside.label}  license: #{aside.license_class}  (#{reason})"
+        say "    #{aside.text}"
+      end
+
+      def print_collation_missing(missing)
+        no_match = missing.select { |witness| witness.status == :no_match }.map(&:label)
+        not_synced = missing.select { |witness| witness.status == :not_synced }.map(&:label)
+        withheld = missing.select { |witness| witness.status == :withheld }.map(&:label)
+        say "  not attested here: #{no_match.join(', ')}" unless no_match.empty?
+        say "  not synced: #{not_synced.join(', ')}" unless not_synced.empty?
+        say "  license-withheld: #{withheld.join(', ')}" unless withheld.empty?
       end
 
       def format_parallel_side(side)

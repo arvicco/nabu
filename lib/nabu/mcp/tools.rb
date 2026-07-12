@@ -14,6 +14,7 @@ require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/parallels"
 require_relative "../query/align"
+require_relative "../query/collation"
 require_relative "../query/define"
 require_relative "../query/etym"
 
@@ -194,7 +195,10 @@ module Nabu
         "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note. Witnesses " \
         "absent from EVERY ref of a range are summarized once in `absent_witnesses` " \
         "(reason not_attested|not_synced) and omitted from the per-ref columns, so a chapter stays " \
-        "readable.".freeze
+        "readable. `collate: true` returns a witness DIFF instead: a raw-token apparatus per " \
+        "(language, script) cell (base reading + each witness's divergences), with cross-script " \
+        "witnesses rendered undiffed and labelled honestly — the fold cannot bridge e.g. the " \
+        "Cyrillic Marianus and the Helsinki-ASCII CCMH codices.".freeze
 
       DEFINE_DESCRIPTION =
         "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
@@ -324,6 +328,15 @@ module Nabu
           work: { type: "string",
                   description: "Alignment work id from the registry (optional when exactly " \
                                "one work is registered)." },
+          collate: { type: "boolean",
+                     description: "Diff the witnesses instead of listing them: a raw-token " \
+                                  "apparatus per (language, script) cell — base reading plus each " \
+                                  "witness's divergences only; cross-script witnesses rendered " \
+                                  "undiffed and labelled honestly (the fold cannot bridge e.g. the " \
+                                  "Cyrillic Marianus and the Helsinki-ASCII CCMH codices)." },
+          base: { type: "string",
+                  description: "With collate: the base witness (label or document urn) each cell " \
+                               "diffs against (default: the first witness in registry order)." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["ref"],
@@ -571,9 +584,11 @@ module Nabu
         fulltext = resolve(@fulltext)
         return note(ALIGN_REBUILDING_NOTE) unless fulltext&.table_exists?(Store::AlignmentIndexer::TABLE)
 
+        include_restricted = args["include_restricted"] == true
+        return collate(args, catalog, fulltext, registry, include_restricted) if args["collate"] == true
+
         result = Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
                              .run(ref, work: string_arg(args, "work"))
-        include_restricted = args["include_restricted"] == true
         json(if result.is_a?(Query::Align::RangeResult)
                align_range_payload(result, include_restricted: include_restricted)
              else
@@ -583,6 +598,18 @@ module Nabu
         # Caller-fixable (unknown work, unaligned urn): isError so the model
         # self-corrects (SEP-1303), same stance as bad arguments.
         tool_error(e.message)
+      end
+
+      # `collate: true` on nabu_align (P15-4): the witness DIFF apparatus. Same
+      # index/registry contract as align; the license gate WITHHOLDS excluded
+      # witnesses from the diff bodily (they cannot leak through a divergence
+      # line) unless include_restricted.
+      def collate(args, catalog, fulltext, registry, include_restricted)
+        exclude = include_restricted ? [] : EXCLUDED_LICENSE_CLASSES
+        collation = Query::Collation.new(catalog: catalog, fulltext: fulltext, registry: registry)
+        result = collation.run(string_arg(args, "ref"), work: string_arg(args, "work"),
+                                                        base: string_arg(args, "base"), exclude_licenses: exclude)
+        json(collation_payload(result))
       end
 
       def define(args)
@@ -1135,6 +1162,47 @@ module Nabu
                 text: sentence.text, refs: sentence.refs }
         row[:native_ref] = sentence.native_ref if sentence.native_ref
         row
+      end
+
+      # -- align --collate internals (P15-4) ---------------------------------------
+
+      def collation_payload(result)
+        {
+          type: "collation", work: result.work, title: result.title, query: result.query,
+          total_refs: result.total, shown_refs: result.refs.size, truncated: result.truncated,
+          refs: result.refs.map { |ref_collation| collation_ref_payload(ref_collation) },
+          note: "raw-token apparatus per (language, script) cell: each cell diffs its witnesses " \
+                "against a base (agreements elided; substitutions/omissions/insertions marked). " \
+                "asides are witnesses rendered UNDIFFED — reason cross_script (a same-language " \
+                "witness exists in another script the fold cannot bridge) or sole (the only witness " \
+                "of its language here). missing lists no_match/not_synced/withheld witnesses."
+        }
+      end
+
+      def collation_ref_payload(ref_collation)
+        {
+          ref: ref_collation.ref,
+          cells: ref_collation.cells.map { |cell| collation_cell_payload(cell) },
+          asides: ref_collation.asides.map do |aside|
+            { label: aside.label, language: aside.language, script: aside.script,
+              license_class: aside.license_class, source: aside.source_slug,
+              reason: aside.reason.to_s, text: aside.text }
+          end,
+          missing: ref_collation.missing.map { |witness| { label: witness.label, status: witness.status.to_s } }
+        }
+      end
+
+      def collation_cell_payload(cell)
+        base = cell.readings.find(&:is_base)
+        {
+          language: cell.language, script: cell.script, base: cell.base_label,
+          base_tokens: base.tokens,
+          witnesses: cell.readings.reject(&:is_base).map do |reading|
+            { label: reading.label, license_class: reading.license_class, source: reading.source_slug,
+              agrees: reading.edits.empty?, tokens: reading.tokens,
+              edits: reading.edits.map { |edit| { op: edit.op.to_s, base: edit.base, witness: edit.witness } } }
+          end
+        }
       end
 
       # -- the exclusion gate ------------------------------------------------------
