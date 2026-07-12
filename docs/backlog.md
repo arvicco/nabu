@@ -4627,3 +4627,24 @@ updates (§1.1/§1.4/§1.5/§1.8 → shipped/partial per reality), PR, owner
 queue (no new syncs expected — this phase is all derived capability;
 health --remote cache seeding if still unseeded), backup-disk re-flag
 (standing), sticky alarm LAST.
+
+## P15-8 · --long everywhere (house rule)  [tier: opus] [status: done] [deps: —]
+Owner house rule (2026-07-12, after hitting `vocab --long` → ERROR):
+"--long form should be available anywhere the outputs are truncated
+((+792 more) etc)." CENSUS every CLI command's renderer for elisions —
+known: vocab's hapax "(+N more)" cap; check show (document passage
+lists?), concord, align (the range 200-ref cap — argue whether --long
+raises it, bounded, or the cap stays a guard with a clearer message),
+search snippets (no — snippets aren't list elision), anything else.
+For every genuine list-elision found: add --long expanding it fully
+(compact default byte-identical); for caps that are GUARDS not
+elisions (align's 200), argue the verdict openly rather than blindly
+expanding. Thor flag consistency: --long declared per-command (etym/
+define P14-11 precedent). Tests per command (capped default +
+expanded). Update the conventions doc with the house rule (a §
+'CLI output: compact by default, --long escapes truncation' — one
+paragraph). README rows touched only where a command gains the flag.
+backlog done; worklog (sha —). Suite+lint green. One commit, not
+pushed. NB: etym/define already have --long (P14-11); parallels ships
+with it (P15-1, in flight — do NOT touch its files); your census
+covers the REST.
