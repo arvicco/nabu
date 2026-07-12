@@ -139,6 +139,111 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert(entries.all? { |e| e.citations.empty? })
   end
 
+  # --- reflexes (P14-1, the reconstruction crosswalk edges) ----------------------
+
+  RECON = Nabu::TestSupport.fixtures("wiktionary-recon")
+
+  def recon_entries(file, language)
+    Nabu::Adapters::WiktionaryJsonlParser
+      .new(language: language, reflexes: true)
+      .entries(File.join(RECON, file))
+  end
+
+  def sla_entries
+    @sla_entries ||= recon_entries("kaikki.org-dictionary-ProtoSlavic.jsonl", "sla-pro")
+  end
+
+  def sla_entry(id)
+    sla_entries.find { |e| e.entry_id == id } || flunk("fixture entry #{id} not parsed")
+  end
+
+  def test_reflexes_default_off_the_cu_shelf_is_untouched
+    assert(entries.all? { |e| e.reflexes.empty? })
+  end
+
+  def test_reflexes_flatten_worded_nodes_depth_first
+    bog = sla_entry("bogъ:noun:2")
+    # parent before child, siblings in upstream order: orv богъ leads its
+    # Old Ruthenian child
+    assert_equal %w[orv zle-ort], bog.reflexes.first(2).map(&:lang_code)
+    assert_equal %w[богъ богъ], bog.reflexes.first(2).map(&:word)
+    # branch-grouping nodes (East Slavic…) mint no rows: every reflex has a word
+    assert(sla_entries.flat_map(&:reflexes).none? { |r| r.word.strip.empty? })
+  end
+
+  def test_ocs_reflexes_surface_from_the_script_children
+    cu = sla_entry("bogъ:noun:2").reflexes.select { |r| r.lang_code == "cu" }
+    assert_equal %w[chu], cu.map(&:language).uniq, "cu maps to the catalog's chu"
+    cyrillic = cu.find { |r| r.word == "богъ" } || flunk("Old Cyrillic богъ reflex missing")
+    assert_equal "богъ", cyrillic.word_folded
+    assert_equal "bogŭ", cyrillic.roman
+    glagolitic = cu.find { |r| r.word == "ⰱⱁⰳⱏ" } || flunk("Glagolitic богъ reflex missing")
+    assert_equal "ⰱⱁⰳⱏ", glagolitic.word_folded, "script twins fold as themselves, honestly"
+  end
+
+  def test_reconstructed_reflexes_keep_the_asterisk_but_fold_without_it
+    novgorod = sla_entry("bogъ:noun:2").reflexes.find { |r| r.lang_code == "zle-ono" } ||
+               flunk("Old Novgorodian *боге reflex missing")
+    assert_equal "*боге", novgorod.word
+    assert_equal "боге", novgorod.word_folded
+    assert_equal "*boge", novgorod.roman
+    assert_equal "boge", novgorod.roman_folded
+  end
+
+  def test_proto_to_proto_edges_carry_the_other_extracts_language
+    pie = recon_entries("kaikki.org-dictionary-ProtoIndoEuropean.jsonl", "ine-pro")
+    bhag = pie.find { |e| e.entry_id == "bʰeh₂g-:root" } || flunk("bʰeh₂g- not parsed")
+    slavic = bhag.reflexes.find { |r| r.lang_code == "sla-pro" && r.word == "*bogъ" } ||
+             flunk("the PIE→Proto-Slavic *bogъ edge is the demo chain — missing")
+    assert_equal "sla-pro", slavic.language
+    assert_equal "bogъ", slavic.word_folded, "joins the sla-pro shelf's asterisk-less headword_folded"
+    # attested Greek reflexes fold with the mapped catalog language
+    greek = bhag.reflexes.find { |r| r.lang_code == "grc" } || flunk("grc reflex missing")
+    assert_equal "grc", greek.language
+    assert_equal "ἔφᾰγον", greek.word
+    assert_equal "εφαγον", greek.word_folded
+  end
+
+  def test_la_maps_to_lat_and_folds_by_the_catalog_language
+    pie = recon_entries("kaikki.org-dictionary-ProtoIndoEuropean.jsonl", "ine-pro")
+    nu = pie.find { |e| e.entry_id == "nu:adv" } || flunk("nu:adv not parsed")
+    nuper = nu.reflexes.find { |r| r.word == "nūper" } || flunk("la nūper reflex missing")
+    assert_equal "la", nuper.lang_code, "upstream code verbatim"
+    assert_equal "lat", nuper.language, "catalog code for the join"
+    assert_equal "nuper", nuper.word_folded
+  end
+
+  def test_gothic_script_reflexes_carry_their_roman_fold_the_gold_join_key
+    gem = recon_entries("kaikki.org-dictionary-ProtoGermanic.jsonl", "gem-pro")
+    gud = gem.find { |e| e.entry_id == "gudą:noun" } || flunk("gudą not parsed")
+    got = gud.reflexes.find { |r| r.lang_code == "got" } || flunk("got reflex missing")
+    assert_equal "𐌲𐌿𐌸", got.word
+    assert_equal "guþ", got.roman
+    assert_equal "guþ", got.roman_folded
+  end
+
+  def test_the_malformed_ml_code_stores_verbatim_with_nil_language
+    gem = recon_entries("kaikki.org-dictionary-ProtoGermanic.jsonl", "gem-pro")
+    hrunk = gem.find { |e| e.entry_id == "hrunkwǭ:noun" } || flunk("hrunkwǭ not parsed")
+    ml = hrunk.reflexes.find { |r| r.lang_code == "ML." } ||
+         flunk("the lone malformed lang_code record is the fixture's point")
+    assert_nil ml.language, "no valid tag — display-only, never a join candidate"
+    assert_equal "fruncāre", ml.word
+    assert_equal "fruncare", ml.word_folded, "generic fold still applies"
+  end
+
+  def test_grouping_only_descendants_yield_zero_reflexes
+    assert_empty sla_entry("kosatъ:noun:2").reflexes
+    assert_empty sla_entry("aby:particle").reflexes, "no descendants at all"
+  end
+
+  def test_recon_headwords_fold_generically_for_the_pro_languages
+    assert_equal "bogъ", sla_entry("bogъ:noun:2").headword_folded, "jer kept — a letter, not a mark"
+    cesar = sla_entry("cěsařь:noun")
+    assert_equal "cesarь", cesar.headword_folded, "hačeks strip under NFD (ě→e, ř→r); the jer stays"
+    assert cesar.headword.unicode_normalized?(:nfc), "upstream ships decomposed — parser NFCs"
+  end
+
   # --- malformed input ------------------------------------------------------------
 
   def test_malformed_json_line_raises_parse_error_with_line_number

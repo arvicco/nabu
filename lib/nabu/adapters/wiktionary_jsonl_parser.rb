@@ -42,12 +42,29 @@ module Nabu
     #   in parens ("(morpheme, no-gloss)") so the body is never empty. NFC.
     # - citations: always empty — Wiktionary's quotations are unanchored
     #   (no urns), the Bosworth-Toller precedent exactly.
+    # - reflexes (P14-1, opt-in via reflexes: true): the worded nodes of the
+    #   `descendants` tree, flattened depth-first into DictionaryReflex
+    #   values — the reconstruction crosswalk's edges (architecture §12).
+    #   Off by default so the wiktionary-cu shelf (whose records also carry
+    #   descendants) keeps its stored shas untouched; its backfill is a
+    #   deliberate future decision (improvements register).
     class WiktionaryJsonlParser
+      # Upstream Wiktionary lang_codes → the catalog's language tags, for
+      # the codes that differ among languages the catalog holds gold lemmas
+      # for (Wiktionary uses ISO 639-1 where one exists). Everything else
+      # passes through as itself when it is a shape-valid tag, else nil
+      # (the lone "ML." Medieval-Latin code in the wild): display-only,
+      # never a crosswalk join candidate.
+      LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san" }.freeze
+
       # Parse +path+ and return DictionaryEntry values in file order.
       # +language+ is the ISO 639-3 code the entries carry and fold by;
       # kaikki's own lang_code is 639-1 ("cu") and stays in the raw record.
-      def initialize(language: "chu")
+      # +reflexes+ turns on descendants-tree extraction (reconstruction
+      # shelves only).
+      def initialize(language: "chu", reflexes: false)
         @language = language
+        @reflexes = reflexes
       end
 
       def entries(path)
@@ -86,7 +103,8 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(word.to_s, language: @language),
           gloss: gloss(record),
           body: body_text(record),
-          citations: []
+          citations: [],
+          reflexes: @reflexes ? reflexes(record) : []
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
         raise Nabu::ParseError, "wiktionary-jsonl: record at line #{line_number} " \
@@ -128,6 +146,53 @@ module Nabu
         else
           path.map { |gloss| gloss.to_s.gsub(/\s+/, " ").strip }.join(" — ")
         end
+      end
+
+      # -- reflexes (P14-1) ---------------------------------------------------------
+
+      # Depth-first over the descendants tree; only worded nodes mint
+      # reflexes (branch-grouping nodes — "East Slavic" — carry none).
+      def reflexes(record)
+        collect_reflexes(Array(record["descendants"]), [])
+      end
+
+      def collect_reflexes(nodes, out)
+        nodes.each do |node|
+          next unless node.is_a?(Hash)
+
+          out << build_reflex(node) unless node["word"].to_s.strip.empty?
+          collect_reflexes(Array(node["descendants"]), out)
+        end
+        out
+      end
+
+      def build_reflex(node)
+        language = reflex_language(node["lang_code"].to_s)
+        word = Nabu::Normalize.nfc(node["word"].to_s)
+        roman = node["roman"].to_s.strip.empty? ? nil : Nabu::Normalize.nfc(node["roman"])
+        Nabu::DictionaryReflex.new(
+          lang_code: node["lang_code"].to_s, language: language,
+          word: word, roman: roman,
+          word_folded: reflex_fold(word, language),
+          roman_folded: roman && reflex_fold(roman, language)
+        )
+      end
+
+      # The map first; unmapped codes pass through as themselves when they
+      # are shape-valid tags, else nil (display-only).
+      def reflex_language(lang_code)
+        mapped = LANG_CODE_MAP.fetch(lang_code, lang_code)
+        mapped.match?(Nabu::Model::Validation::LANGUAGE_SHAPE) ? mapped : nil
+      end
+
+      # The conventions-§9 search form, with the leading asterisk of
+      # reconstructed reflexes stripped FIRST (upstream writes "*bogъ" under
+      # a PIE entry; the sla-pro shelf keys headword_folded without it —
+      # the same convention `define *bogъ` strips at query time). nil when
+      # the fold comes out empty.
+      def reflex_fold(text, language)
+        folded = Nabu::Normalize.search_form(text.sub(/\A\*/, ""), language: language)
+        folded.strip.empty? ? nil : folded
       end
     end
   end

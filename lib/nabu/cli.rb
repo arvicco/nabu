@@ -487,7 +487,15 @@ module Nabu
       ingested, inscriptions, fragment collections) are honest misses, not
       links.
 
-      --lang grc|lat|ang|chu restricts to one shelf; --limit caps the entries.
+      The reconstruction shelves (P14-1, architecture §12) join in with the
+      comparativist's asterisk: `define *bogъ` scopes to the Wiktionary
+      Proto-Slavic/PIE/Proto-Germanic extracts (sla-pro/ine-pro/gem-pro),
+      and a reconstruction entry also lists its descendant reflexes — with
+      corpus attestation counts where the reflex is a gold lemma here.
+      `nabu etym` walks the same crosswalk from the attested side.
+
+      --lang grc|lat|ang|chu|sla-pro|ine-pro|gem-pro restricts to one
+      shelf; --limit caps the entries.
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
@@ -495,17 +503,20 @@ module Nabu
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
+        nabu define *bogъ              # the reconstruction, with its reflexes
     HELP
-    option :lang, type: :string, banner: "grc|lat|ang|chu",
+    DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
+    option :lang, type: :string, banner: "grc|lat|ang|chu|sla-pro|ine-pro|gem-pro",
                   desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                        "ang → Bosworth-Toller, chu → Wiktionary-OCS"
+                        "ang → Bosworth-Toller, chu → Wiktionary-OCS, " \
+                        "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      if options[:lang] && !%w[grc lat ang chu].include?(options[:lang])
-        raise Thor::Error, "define: --lang must be grc, lat, ang or chu"
+      if options[:lang] && !DEFINE_LANGS.include?(options[:lang])
+        raise Thor::Error, "define: --lang must be one of #{DEFINE_LANGS.join(', ')}"
       end
 
       config = Nabu::Config.load
@@ -516,22 +527,74 @@ module Nabu
                            "(or nabu rebuild after one)"
       end
 
-      results = Nabu::Query::Define.new(catalog: catalog)
+      fulltext = open_fulltext(config)
+      results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
                                    .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_define_results(lemma, results)
     ensure
       catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
+    long_desc <<~HELP, wrap: false
+      The comparativist's walk: from an ATTESTED lemma (богъ, guþ, deus) to
+      every reconstruction whose Wiktionary descendants name it —
+      Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org
+      extracts, CC-BY-SA + GFDL) — then one hop UP the proto-to-proto
+      chain: a Proto-Slavic entry's PIE root prints with ITS cognates, so
+      богъ reaches *bogъ, *bʰeh₂g- and ἔφᾰγον in one command.
+
+      Every cognate reflex that is a gold lemma in this catalog carries its
+      attestation count (searchable via `nabu search --lemma`); the rest
+      are listed honestly as "not attested here". Romanization bridges
+      scripts — guþ reaches *gudą through Gothic 𐌲𐌿𐌸 — and the folding is
+      the conventions §9 contract (diacritics optional).
+
+      A leading asterisk looks a reconstruction up directly (`etym *bogъ`),
+      exactly like `define *bogъ` but with the walk attached. --lang scopes
+      the attested match to one language; --limit caps the entries. The MCP
+      sibling is nabu_etym (bounded); this CLI prints everything.
+
+      Examples:
+        nabu etym богъ --lang chu     # Zographensis god → *bogъ → *bʰeh₂g-
+        nabu etym guþ --lang got      # Gothic → *gudą → *ǵʰutós
+        nabu etym *kaisaraz           # the Caesar loan chain, top down
+    HELP
+    option :lang, type: :string, banner: "chu|orv|got|grc|lat|…",
+                  desc: "Scope the attested-lemma match to one language"
+    option :limit, type: :numeric, default: Nabu::Query::Etym::DEFAULT_LIMIT,
+                   desc: "Maximum reconstruction entries printed"
+    def etym(*lemma_parts)
+      lemma = lemma_parts.join(" ").strip
+      raise Thor::Error, "etym: give a lemma (e.g. богъ, guþ) or *reconstruction" if lemma.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_reflexes)
+        raise Thor::Error, "no reconstruction shelf in this catalog yet — run " \
+                           "nabu sync wiktionary-recon (or nabu rebuild after one)"
+      end
+
+      fulltext = open_fulltext(config)
+      results = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
+                                 .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+      print_etym_results(lemma, results)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
     end
 
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing six tools —
+      conversational surface over the local nabu corpus, exposing seven tools —
       nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
       parallel translations), nabu_concord (KWIC), nabu_align (cross-source
       citation alignment), nabu_define (the dictionary shelf: LSJ + Lewis &
-      Short), and nabu_status (coverage) — to any MCP client
-      (Claude Code, Claude Desktop). The catalog and index are opened
+      Short), nabu_etym (the reconstruction crosswalk), and nabu_status
+      (coverage) — to any MCP client (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
       This is a plumbing command, not an interactive one. STDOUT IS THE PROTOCOL
@@ -1240,8 +1303,68 @@ module Nabu
           say "  gloss: #{result.gloss}" if result.gloss
           say ""
           say result.body
+          print_reflexes(result.reflexes)
           print_resolved_citations(result)
         end
+      end
+
+      # A reconstruction entry's descendant reflexes (P14-1): attested-here
+      # cognates first with their gold-lemma passage counts, then an honest
+      # one-line summary of the rest (the full tree is in the data; the
+      # attested ones are the actionable ones).
+      def print_reflexes(reflexes)
+        return if reflexes.empty?
+
+        attested, rest = reflexes.partition(&:attested_count)
+        unless attested.empty?
+          say ""
+          say "attested in this corpus (nabu search --lemma):"
+          attested.sort_by { |r| -r.attested_count }.each do |r|
+            say "  [#{r.language}] #{reflex_form(r)} — #{r.attested_count} " \
+                "#{r.attested_count == 1 ? 'passage' : 'passages'}"
+          end
+        end
+        return if rest.empty?
+
+        say ""
+        say "other reflexes (not attested here): " \
+            "#{rest.first(10).map { |r| "[#{r.lang_code}] #{reflex_form(r)}" }.join(', ')}" \
+            "#{" … and #{rest.size - 10} more" if rest.size > 10}"
+      end
+
+      def reflex_form(reflex)
+        reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+      end
+
+      # etym (P14-1): one block per reconstruction entry — where the walk
+      # entered (matched reflex → *headword), the entry's own reflex list,
+      # then each one-hop ancestor with its cognates.
+      def print_etym_results(lemma, results)
+        if results.empty?
+          return say("no reconstruction names #{lemma} as a descendant — the crosswalk covers " \
+                     "Proto-Slavic/PIE/Proto-Germanic (Wiktionary); try the dictionary form, " \
+                     "or *form for a direct lookup")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          say "#{etym_entry_line(result)}  #{result.urn}"
+          say "  gloss: #{result.gloss}" if result.gloss
+          print_reflexes(result.cognates)
+          result.ancestors.each do |ancestor|
+            say ""
+            say "← #{etym_entry_line(ancestor)}  #{ancestor.urn}"
+            say "  gloss: #{ancestor.gloss}" if ancestor.gloss
+            print_reflexes(ancestor.cognates)
+          end
+        end
+      end
+
+      def etym_entry_line(result)
+        via = result.matched_reflex
+        prefix = via ? "#{via.word} [#{via.language}] → " : ""
+        "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
+          "[#{result.license_class}]"
       end
 
       def print_resolved_citations(result)

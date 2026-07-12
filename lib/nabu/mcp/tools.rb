@@ -13,6 +13,7 @@ require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/align"
 require_relative "../query/define"
+require_relative "../query/etym"
 
 module Nabu
   module MCP
@@ -85,6 +86,14 @@ module Nabu
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
+      # The reconstruction walk (P14-1): proto entries per query, and the
+      # cognate cap per entry (attested first — gem-pro trees run to ~150
+      # reflexes; the CLI is the unbounded surface).
+      ETYM_DEFAULT_LIMIT = 3
+      ETYM_MAX_LIMIT = 10
+      ETYM_MAX_COGNATES = 20
+      DEFINE_MAX_REFLEXES = ETYM_MAX_COGNATES
+      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
 
@@ -97,6 +106,8 @@ module Nabu
                            "to config/alignments.yml (architecture §10)"
       NO_SHELF_NOTE = "no dictionary shelf in this catalog yet — run `nabu sync lexica` (or " \
                       "`nabu rebuild` after one) to build it, then retry"
+      NO_RECON_NOTE = "no reconstruction shelf in this catalog yet — run `nabu sync " \
+                      "wiktionary-recon` (or `nabu rebuild` after one) to build it, then retry"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
@@ -175,9 +186,14 @@ module Nabu
         "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
         "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
         "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
-        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu) " \
-        "picks a shelf when the spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
+        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body), and " \
+        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic, same " \
+        "extract family): a LEADING ASTERISK scopes to reconstructions (*bogъ), whose " \
+        "entries also list their descendant reflexes with corpus attestation counts " \
+        "(nabu_etym walks the same crosswalk from an attested lemma). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|sla-pro|ine-pro|" \
+        "gem-pro) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
+        "dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
@@ -185,6 +201,21 @@ module Nabu
         "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
         "separate entries).".freeze
+
+      ETYM_DESCRIPTION =
+        "Walk the reconstruction crosswalk (the comparativist's join): give an ATTESTED " \
+        "lemma (богъ, guþ, deus) and get every reconstructed ancestor whose Wiktionary " \
+        "descendants name it — Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org " \
+        "extracts, CC-BY-SA + GFDL; PRESERVE license fields when quoting). Each entry " \
+        "carries the *headword, gloss, the reflex that matched (matched_via), its COGNATES " \
+        "across languages with corpus attestation counts (attested_count = gold-lemma " \
+        "passages in this catalog; null = not attested here, an absence not a zero), and " \
+        "one hop of proto-to-proto ancestors (a Proto-Slavic entry's PIE root, with ITS " \
+        "cognates — the cross-family view: богъ→*bogъ→*bʰeh₂g-→ἔφᾰγον). Romanization " \
+        "bridges scripts: guþ reaches *gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the match " \
+        "to one attested language; a leading asterisk (*bogъ) looks a reconstruction up " \
+        "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
+        "with honest totals; `nabu etym` (CLI) is unbounded.".freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -263,12 +294,31 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: %w[grc lat ang chu],
+          lang: { type: "string", enum: DEFINE_LANGS,
                   description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
                                "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
-                               "(Old Church Slavonic)." },
+                               "(Old Church Slavonic), sla-pro/ine-pro/gem-pro → the " \
+                               "Wiktionary reconstruction shelves." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["lemma"],
+        additionalProperties: false
+      }.freeze
+
+      ETYM_SCHEMA = {
+        type: "object",
+        properties: {
+          lemma: { type: "string",
+                   description: "An attested lemma (богъ, guþ, deus) — or a reconstruction " \
+                                "with a leading asterisk (*bogъ) for a direct lookup." },
+          lang: { type: "string",
+                  description: "Scope the reflex match to one attested language " \
+                               "(ISO-639-3: chu, orv, got, grc, lat, ang, san, …)." },
+          limit: { type: "integer", minimum: 1, maximum: ETYM_MAX_LIMIT,
+                   default: ETYM_DEFAULT_LIMIT,
+                   description: "Maximum reconstruction entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["lemma"],
@@ -310,6 +360,8 @@ module Nabu
                           handler: :align },
         "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
                            handler: :define },
+        "nabu_etym" => { description: ETYM_DESCRIPTION, input_schema: ETYM_SCHEMA,
+                         handler: :etym },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -439,8 +491,9 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !%w[grc lat ang chu].include?(lang)
-          raise InvalidArguments, "lang must be grc, lat, ang or chu (the shelves this corpus holds)"
+        if lang && !DEFINE_LANGS.include?(lang)
+          raise InvalidArguments, "lang must be one of #{DEFINE_LANGS.join(', ')} " \
+                                  "(the shelves this corpus holds)"
         end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
@@ -448,9 +501,26 @@ module Nabu
 
         limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
-        results = Query::Define.new(catalog: catalog).run(lemma, lang: lang, limit: limit + 1)
+        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(lemma, lang: lang, limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit)
+      end
+
+      # The reconstruction walk (P14-1): attested lemma → proto entries with
+      # cognates + one ascent hop. Same shelf guards and license stance as
+      # nabu_define; the crosswalk table additionally needs migration 007.
+      def etym(args)
+        lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_etym needs a lemma"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        return note(NO_RECON_NOTE) unless catalog.table_exists?(:dictionary_reflexes)
+
+        limit = clamp(args["limit"], default: ETYM_DEFAULT_LIMIT, max: ETYM_MAX_LIMIT)
+        include_restricted = args["include_restricted"] == true
+        results = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
+                             .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_etym(results, lemma: lemma, limit: limit)
       end
 
       def status(_args)
@@ -583,6 +653,7 @@ module Nabu
           body_truncated: truncated,
           citations: define_citations(result)
         }
+        base = base.merge(reflex_fields(result.reflexes, cap: DEFINE_MAX_REFLEXES)) unless result.reflexes.empty?
         return base unless truncated
 
         base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
@@ -595,6 +666,59 @@ module Nabu
         ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
           { label: citation.label, resolved_urn: citation.resolved_urn }
         end
+      end
+
+      # -- etym internals -----------------------------------------------------------
+
+      def render_etym(results, lemma:, limit:)
+        if results.empty?
+          return json(entries: [],
+                      note: "no reconstruction names #{lemma.inspect} as a descendant — the " \
+                            "crosswalk covers Proto-Slavic/PIE/Proto-Germanic (Wiktionary); " \
+                            "try the lemma's dictionary form, or *form for a direct lookup")
+        end
+
+        shown = results.first(limit)
+        json(
+          entries: shown.map { |result| etym_payload(result) },
+          note: if results.size > limit
+                  "more than #{limit} entries, showing #{limit} — raise limit (max #{ETYM_MAX_LIMIT})"
+                else
+                  "#{shown.size} #{shown.size == 1 ? 'entry' : 'entries'}"
+                end
+        )
+      end
+
+      def etym_payload(result, ancestors: true)
+        base = {
+          urn: result.urn, dictionary: result.dictionary_slug,
+          dictionary_title: result.dictionary_title, headword: result.headword,
+          language: result.language, gloss: result.gloss,
+          license_class: result.license_class, license: result.license,
+          source: result.source_slug
+        }
+        if result.matched_reflex
+          base[:matched_via] = { language: result.matched_reflex.language,
+                                 word: result.matched_reflex.word,
+                                 roman: result.matched_reflex.roman }
+        end
+        base.merge!(reflex_fields(result.cognates, cap: ETYM_MAX_COGNATES, key: :cognates))
+        base[:ancestors] = result.ancestors.map { |a| etym_payload(a, ancestors: false) } if ancestors
+        base
+      end
+
+      # Shared reflex/cognate list rendering (define + etym): attested first
+      # (by count, descending), capped with an honest total.
+      def reflex_fields(views, cap:, key: :reflexes)
+        attested, rest = views.partition(&:attested_count)
+        ordered = attested.sort_by { |view| -view.attested_count } + rest
+        shown = ordered.first(cap).map do |view|
+          { lang_code: view.lang_code, language: view.language, word: view.word,
+            roman: view.roman, attested_count: view.attested_count }
+        end
+        fields = { key => shown, :"#{key}_total" => views.size }
+        fields[:"#{key}_attested"] = attested.size
+        fields
       end
 
       # -- concord internals -------------------------------------------------------

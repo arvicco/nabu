@@ -3792,7 +3792,7 @@ planning input — a design-review packet at this phase's END prepares it.
 Cut from enable-phase-13-sources so the flips ride. Gate-waits don't
 block (dev-loop §4 addendum); worktree isolation for parallel packets.
 
-## P14-1 · The reconstruction shelf  [tier: fable] [status: in-progress] [deps: —]
+## P14-1 · The reconstruction shelf  [tier: fable] [status: done] [deps: —]
 improvements §1.11 comes due (owner axis: PIE/comparativistics —
 "we didn't even start touching yet"). Two-phase, design-heavy:
 Phase A (scout + design): the three kaikki reconstruction extracts
@@ -3810,6 +3810,67 @@ cognate reflexes across languages?); (3) language codes sla-pro/ine-pro/
 gem-pro posture (non-ISO — registry + conventions treatment); (4) which
 extracts v1 ships (all three? Proto-Slavic first?). Fixture plan. STOP —
 owner gate. Phase B per approval.
+
+**OWNER-APPROVED 2026-07-12 (relayed via orchestrator): "P14-1 approved
+as-is"** — all five Phase A picks stand: dictionary-shelf reuse +
+dictionary_reflexes crosswalk (migration 007); ONE wiktionary-recon source
+shipping all three extracts; new `nabu etym` + seventh MCP tool nabu_etym;
+Wiktionary codes verbatim (sla-pro/ine-pro/gem-pro); deferred: PIE ASCII
+fold (§9 followup), wiktionary-cu descendants backfill.
+
+### P14-1 findings (Phase A 2026-07-12 network-verified; Phase B 2026-07-12)
+
+- **Extracts verified live (extraction 2026-07-09, dump 2026-07-06):**
+  Proto-Slavic 47,623,549 B / 5,431 records / 5,195 words (`sla-pro`);
+  PIE 12,026,624 B / 1,905 / 1,781 (`ine-pro`); Proto-Germanic
+  65,338,100 B / 5,717 / 5,552 (`gem-pro`). License verbatim identical to
+  wiktionary-cu ("…both CC-BY-SA and GFDL"), same DEPRECATED label
+  (wiktextract #1178), same fallback. Record shape = the OCS shape PLUS
+  `original_title` ("Reconstruction:…", 100%) and `descendants` (89/95/88%
+  of records) — a recursive tree {lang, lang_code, word?, roman?, tags?,
+  descendants?}; branch nodes carry no word; OCS reflexes nest under
+  SCRIPT children (Old Cyrillic + Glagolitic, both lang_code cu);
+  proto-to-proto reflexes carry a leading asterisk ("*bogъ"); raw lines
+  are NOT NFC (bʰeh₂ǵos ships decomposed). ONE malformed lang_code in
+  609,691 worded nodes ("ML." — pinned in the fixture).
+- **Measured crosswalk (Phase A, 564-record ranged sample vs live gold
+  passage_lemmas):** record-level 64.5% sla-pro / 64.2% ine-pro / 54.7%
+  gem-pro of proto headwords naming a held language link to ≥1 attested
+  folded gold lemma; reflex-level ine-pro→lat 59%, →grc 40%, →san 41%,
+  →xcl 40%; sla-pro→orv 46%, →sl 45%, →chu 32% (misses = Glagolitic
+  script twins + non-gospel vocab); gem-pro→got 59%, →ang 26%. The
+  `roman` field is LOAD-BEARING: word-only matching gives got/san/xcl 0%.
+- **Shipped:** `DictionaryReflex` model value + `DictionaryEntry#reflexes`
+  (ContentHash appends only-when-non-empty; pre-P14-1 shas pinned by
+  test — no revision storm); `WiktionaryJsonlParser reflexes:` option
+  (depth-first flatten, LANG_CODE_MAP cu→chu/la→lat/sa→san + identity,
+  shape-invalid → nil language, asterisk-stripped §9 folds; cu default
+  off); migration 007 `dictionary_reflexes` + Store model + loader
+  persistence (citation semantics: content of the sha, replaced on
+  revision); `WiktionaryRecon` adapter (ONE source, THREE dictionaries,
+  three FileFetch subdirs + shared attic + UD two-phase choreography,
+  three :http_zip probe targets, registry enabled:false manual);
+  `Query::ReflexViews` (query-time attestation counts, shared);
+  `Query::Etym` + CLI `nabu etym` + MCP `nabu_etym` (seventh tool;
+  bounded attested-first cognates, one ascent hop, include_restricted
+  contract, graceful pre-007 states); `define *bogъ` asterisk convention
+  (strip + -pro scope + starred display + reflex views; CLI/MCP lang
+  gates widened); docs architecture §12 / conventions §4+§9 /
+  02-sources #50 / mcp.md seventh tool / improvements §1.11 SHIPPED.
+- **Fixture:** 210 byte-verbatim records (75 sla / 61 ine / 74 gem,
+  1.9 MB) — demo chains (bogъ, cěsařь / bʰeh₂g-, ǵʰutós, gʷʰew-,
+  bʰeh₂ǵos, swé / gudą, kaisaraz), held-language quotas, homographs,
+  no-descendants/no-etymology/glossless/grouping-only edges, Glagolitic
+  script children, tagged reflexes, sweeps, + the ML. quirk line;
+  deterministic recipe in test/fixtures/wiktionary-recon/README.md.
+- **Demo chains proven in-suite:** богъ (chu) → *bogъ → *bʰeh₂g- (with
+  grc ἔφᾰγον); guþ (got) → *gudą via the 𐌲𐌿𐌸 roman → *ǵʰutós; live-db
+  counts at scout: богъ 725, цѣсарь 244, guþ 914 gold passages.
+- Remaining owner action (P14-gate): fire `bin/nabu sync wiktionary-recon`
+  (~125 MB, three GETs), eyeball `nabu etym богъ --lang chu` against the
+  full shelves, flip enabled. Deferred riders logged: wiktionary-cu
+  descendants backfill (re-revises the cu shelf — a deliberate decision),
+  ine-pro ASCII fold (conventions §9 note).
 
 ## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: pending] [deps: —]
 Registry wiring: the four CCMH manuscripts are verse-cited

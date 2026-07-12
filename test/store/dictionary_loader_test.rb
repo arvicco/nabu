@@ -114,6 +114,64 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal 8, report.added, "the healthy files must still load"
   end
 
+  # --- reflexes (P14-1, the reconstruction crosswalk) -----------------------------
+
+  def recon_document
+    @recon_document ||= begin
+      parser = Nabu::Adapters::WiktionaryJsonlParser.new(language: "sla-pro", reflexes: true)
+      path = File.join(Nabu::TestSupport.fixtures("wiktionary-recon"),
+                       "kaikki.org-dictionary-ProtoSlavic.jsonl")
+      document = Nabu::DictionaryDocument.new(
+        slug: "wiktionary-sla-pro", language: "sla-pro",
+        title: "Wiktionary — Proto-Slavic", canonical_path: path
+      )
+      parser.entries(path).each { |entry| document << entry }
+      document
+    end
+  end
+
+  def bog_row
+    @db[:dictionary_entries].where(entry_id: "bogъ:noun:2").first ||
+      flunk("bogъ:noun:2 not loaded")
+  end
+
+  def test_reflexes_persist_in_depth_first_order_and_load_idempotently
+    loader.load([recon_document], full: false)
+    rows = @db[:dictionary_reflexes].where(dictionary_entry_id: bog_row[:id]).order(:seq).all
+    assert_equal 39, rows.size
+    assert_equal((0...39).to_a, rows.map { |r| r[:seq] })
+    first = rows.first
+    assert_equal %w[orv orv богъ bogŭ богъ bogu],
+                 first.values_at(:lang_code, :language, :word, :roman, :word_folded, :roman_folded)
+    cu = rows.find { |r| r[:lang_code] == "cu" && r[:word] == "богъ" }
+    assert_equal "chu", cu[:language]
+
+    before = @db[:dictionary_reflexes].count
+    report = loader.load([recon_document], full: false)
+    assert_equal 0, report.updated
+    assert_equal before, @db[:dictionary_reflexes].count, "skip writes nothing"
+  end
+
+  def test_revision_replaces_reflexes_wholesale
+    loader.load([recon_document], full: false)
+    entry = recon_document.entries.find { |e| e.entry_id == "bogъ:noun:2" }
+    document = Nabu::DictionaryDocument.new(
+      slug: "wiktionary-sla-pro", language: "sla-pro",
+      title: "Wiktionary — Proto-Slavic", canonical_path: recon_document.canonical_path
+    )
+    document << Nabu::DictionaryEntry.new(
+      entry_id: entry.entry_id, key_raw: entry.key_raw, language: entry.language,
+      headword: entry.headword, headword_folded: entry.headword_folded,
+      gloss: entry.gloss, body: entry.body,
+      reflexes: [entry.reflexes.first]
+    )
+    report = loader.load([document], full: false)
+    assert_equal 1, report.updated, "a reflex change is a content revision"
+    rows = @db[:dictionary_reflexes].where(dictionary_entry_id: bog_row[:id]).all
+    assert_equal 1, rows.size
+    assert_equal 2, bog_row[:revision]
+  end
+
   private
 
   # The fixture μῆνις entry with its body replaced — a real model object, the

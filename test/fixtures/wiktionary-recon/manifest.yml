@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files are documented TRIMs (whole: false) of the upstream
+# reconstruction extracts (210 of 13,053 lines total, selected strata;
+# every kept line byte-verbatim), so a fresh GET returns the full extract
+# and is fetched for URL-liveness only, never byte-compared. Re-apply the
+# README extraction recipe after any refresh. NOTE the upstream files are
+# labelled DEPRECATED (wiktextract #1178) though they serve today; if a
+# URL 404s, the fallback is filtering the full enwiktionary extract by
+# lang_code (README).
+source: wiktionary-recon
+adapter_test: test/adapters/wiktionary_recon_test.rb
+retrieved: 2026-07-12
+files:
+  - path: kaikki.org-dictionary-ProtoSlavic.jsonl
+    url: https://kaikki.org/dictionary/Proto-Slavic/kaikki.org-dictionary-ProtoSlavic.jsonl
+    whole: false
+    trim: 75 stratified lines (demo chain bogъ+cěsařь; first-4 cu/orv/sl reflex records; 3 homographs; 2 no-descendants + 2 no-etymology + 2 glossless + 1 grouping-only; 3 Glagolitic + 2 tagged reflexes; every 100th line) — 47,623,549 B -> 578,110 B; recipe in README.md
+  - path: kaikki.org-dictionary-ProtoIndoEuropean.jsonl
+    url: https://kaikki.org/dictionary/Proto-Indo-European/kaikki.org-dictionary-ProtoIndoEuropean.jsonl
+    whole: false
+    trim: 61 stratified lines (demo chain bʰeh₂g-/ǵʰutós/gʷʰew-/bʰeh₂ǵos/swé; first-3 grc/la/sa/xcl/hit + sla-pro/gem-pro proto-edge records; 3 homographs; structural edges; every 50th line) — 12,026,624 B -> 360,147 B; recipe in README.md
+  - path: kaikki.org-dictionary-ProtoGermanic.jsonl
+    url: https://kaikki.org/dictionary/Proto-Germanic/kaikki.org-dictionary-ProtoGermanic.jsonl
+    whole: false
+    trim: 74 stratified lines (demo chain gudą+kaisaraz; first-4 got/ang/non reflex records; 3 homographs; structural edges; 2 tagged reflexes; every 100th line; + upstream line 4539, the lone malformed "ML." lang_code) — 65,338,100 B -> 970,350 B; recipe in README.md

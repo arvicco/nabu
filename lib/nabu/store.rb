@@ -29,7 +29,8 @@ module Nabu
       Enrichment: :enrichments,
       Dictionary: :dictionaries,
       DictionaryEntry: :dictionary_entries,
-      DictionaryCitation: :dictionary_citations
+      DictionaryCitation: :dictionary_citations,
+      DictionaryReflex: :dictionary_reflexes
     }.freeze
 
     module_function
@@ -101,6 +102,7 @@ module Nabu
         require_relative "store/dictionary"
         require_relative "store/dictionary_entry"
         require_relative "store/dictionary_citation"
+        require_relative "store/dictionary_reflex"
         @models_loaded = true
       end
       db

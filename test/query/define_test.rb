@@ -191,5 +191,49 @@ module Query
       assert_equal "noble", out[%w[æðele ang]]
       assert_equal "a thing", out[%w[þing ang]]
     end
+
+    # -- the reconstruction shelf (P14-1): the `*` convention ---------------------
+
+    def seed_recon_shelf
+      recon = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon",
+        license: "CC-BY-SA + GFDL", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+    end
+
+    def test_an_asterisk_strips_and_scopes_to_the_reconstruction_shelves
+      seed_recon_shelf
+      results = define("*bogъ")
+      assert_equal 3, results.size, "the three bogъ homographs, all sla-pro"
+      assert_equal ["wiktionary-sla-pro"], results.map(&:dictionary_slug).uniq
+      assert_equal "*bogъ", results.map(&:headword).uniq.first,
+                   "display prefixes the asterisk back onto reconstruction headwords"
+    end
+
+    def test_an_asterisk_query_never_reaches_attested_shelves
+      seed_recon_shelf
+      assert_empty define("*μῆνις"), "LSJ is not a reconstruction shelf"
+      assert_equal 1, define("μῆνις").size, "the plain query still is LSJ's"
+    end
+
+    def test_recon_entries_carry_reflex_views
+      seed_recon_shelf
+      bog = define("*bogъ").find { |r| r.urn.end_with?("bogъ:noun:2") }
+      refute_empty bog.reflexes
+      chu = bog.reflexes.find { |r| r.language == "chu" && r.word == "богъ" }
+      refute_nil chu
+      assert_nil chu.attested_count, "no fulltext handle given — honest nil"
+      assert_empty define("μῆνις").first.reflexes, "attested shelves have none"
+    end
+
+    def test_reconstruction_lang_filter_works_unstarred
+      seed_recon_shelf
+      assert_equal 3, define("bogъ", lang: "sla-pro").size
+      assert_empty define("bogъ", lang: "grc")
+    end
   end
 end
