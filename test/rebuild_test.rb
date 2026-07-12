@@ -80,6 +80,30 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # -- date/place axis is rebuilt from canonical (P15-2) -------------------
+
+  def test_rebuild_regenerates_the_document_axes
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    result = rebuilder.run
+
+    # The TestAdapter corpus carries no HGV/goo300k/IMP urns, so zero rows — but
+    # the pass RAN (a Summary, so `nabu rebuild` regenerates the axis) and the
+    # table exists in the fresh catalog.
+    refute_nil result.axes
+    assert_equal 0, result.axes.total
+    db = Nabu::Store.connect(catalog_path)
+    assert db.table_exists?(:document_axes)
+    assert_equal 0, db[:document_axes].count
+  ensure
+    db&.disconnect
+  end
+
   # -- dry-run touches nothing ---------------------------------------------
 
   def test_plan_lists_actions_and_changes_nothing

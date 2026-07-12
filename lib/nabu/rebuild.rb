@@ -33,7 +33,14 @@ module Nabu
 
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
-    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed) do
+    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes) do
+      # +axes+ (P15-2) is the AxisBuilder::Summary of the date/place axis
+      # regenerated from canonical after replay — nil for callers/tests that
+      # predate it, so every existing construction stays valid.
+      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil)
+        super
+      end
+
       # Outcomes that quarantined at least one document (parser regressions).
       def warnings = outcomes.select(&:warning?)
     end
@@ -84,12 +91,17 @@ module Nabu
         end
       end
       replay_enrichments(db)
+      # The date/place axis (P15-2) is f(canonical): rebuild it from canonical
+      # into the fresh catalog AFTER every source is back (it joins by urn), so
+      # `nabu rebuild` regenerates document_axes and the invariant holds.
+      axes = Store::AxisBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       # Reindex ONCE after all sources are back — the index is corpus-wide.
       # The alignment registry (config, not derived) rides in so alignment_refs
       # regenerates with the re-minted passage ids (architecture §10).
       indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
                                         alignments: AlignmentRegistry.load(@config.alignments_path))
-      Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes, skips: skips, indexed: indexed)
+      Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
+                 skips: skips, indexed: indexed, axes: axes)
     ensure
       db&.disconnect
       fulltext&.disconnect

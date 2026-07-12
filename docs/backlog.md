@@ -4635,7 +4635,7 @@ Findings:
   ms warm; the elision-strip Matt run ~40 ms; the design's per-gram FTS
   budget (1–111 ms/passage) holds through the production catalog-join path.
 
-## P15-2 · Date/place axis, part 1  [tier: opus impl, fable review of the date model] [status: pending] [deps: —]
+## P15-2 · Date/place axis, part 1  [tier: opus impl, fable review of the date model] [status: done] [deps: —]
 Design doc §3: document_axes migration (document-level date ranges +
 place names; the fable reviewer checks the DATE MODEL specifically —
 BCE handling, ranges vs points, uncertainty); extractors for HGV
@@ -4646,6 +4646,173 @@ mapping + chronicle annals) is a named follow-on, NOT this packet.
 Two-phase: the migration+model design gets the fable review BEFORE the
 extractors land (an internal review, not an owner gate — owner gates
 only if the model raises a scope question).
+
+### DATE MODEL DESIGN (pre-implementation, for fable review)
+
+**Measured disk reality (2026-07-12, read-only probes).**
+- HGV metadata lives at `canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV{n}/{m}.xml`
+  (66,261 files). Each carries `<idno type="ddb-hybrid">bgu;3;994</idno>` →
+  `urn:nabu:ddbdp:bgu:3:994` (semicolons→colons, the SAME transform
+  `adapters/papyri.rb` uses to mint the DDbDP urn — the join is exact).
+- `origDate` takes two shapes: a POINT `<origDate when="-0113-08-26">26. Aug.
+  113 v.Chr.</origDate>` (ISO-ish, ~1/3), or a RANGE `<origDate
+  notBefore="0501" notAfter="0700" precision="low">VI - VII</origDate>` (~2/3).
+  Years are zero-padded 4 digits; BCE is the MINUS sign.
+- **The decisive off-by-one datum:** HGV `when="-0113"` is labelled "113
+  v.Chr." = 113 BCE. So HGV negates the BCE year with NO astronomical
+  year-0 shift (astronomical numbering would make -0113 mean 114 BCE). HGV
+  is proleptic/historical, not ISO-8601-astronomical, in its own labels.
+- Place: `<origPlace>Pathyris</origPlace>` + a provenance `<placeName
+  type="ancient" ref="https://pleiades.stoa.org/places/786084 https://www.
+  trismegistos.org/place/1628">Pathyris</placeName>` (ref present in 200/200
+  sampled). goo300k/IMP carry only a YEAR (in the urn `…:sigil-1584` and the
+  TEI `<date>1584</date>`); no place.
+
+**Year representation — signed integers, HISTORICAL numbering, NO year 0
+(a reasoned deviation from the design doc's loose "astronomical years").**
+The stored integer is the plain historical year: negative = BCE, positive =
+CE, and there is NO year 0 (1 BCE = -1, 1 CE = +1). HGV `when="-0113"` →
+`-113` verbatim (strip zero-pad, keep sign). Rationale, argued openly against
+the design doc's word "astronomical":
+1. HGV's OWN values are historical (-0113 = 113 BCE, verified). Ingesting
+   verbatim keeps ingest = source; an astronomical model would require a +1
+   transform on every BCE year, drifting from the source's labels and adding
+   an off-by-one surface to get wrong.
+2. The CLI must match intuition: `--from -300` = 300 BCE. Under astronomical
+   numbering `-300` would mean 301 BCE — a footgun. Historical keeps
+   ingest = source = query = display, killing the whole off-by-one class.
+3. SQLite integer sort is correct across the boundary regardless
+   (`-300 < -30 < 14 < 501`); the absent year 0 is a harmless gap (no
+   document occupies it, interval queries don't care). Guard: a literal
+   `--from 0`/`--to 0` is degenerate (no year 0) — documented, not special-
+   cased in storage.
+
+**Ranges vs points.** Every axis row stores `(not_before, not_after)` as
+honest bounds. A POINT (`when`) stores not_before = not_after = the year
+(month/day dropped from the integer axis; the full string survives in
+`date_raw`). A RANGE stores the two bounds unchanged — "VI–VII, precision
+low" → (501, 700, "low"), never a fake midpoint. Interval-overlap is the
+filter semantics: a doc [nb, na] matches a query window [from, to] iff
+`nb <= to AND na >= from` (each bound optional). Era-boundary reign example
+(Augustus 30 BCE–14 CE) stores (-30, 14); `--from -30 --to 14` matches,
+`--from -50 --to -40` does not (nb -30 > to -40).
+
+**Uncertainty / precision.** `precision` column = HGV's `precision` attribute
+verbatim when present ("low"/"high"/…), else "exact" for `when`-points and
+"range" for notBefore/notAfter pairs. Honesty over normalization: uncertain
+dates are stored as their full honest interval, never collapsed.
+
+**Place — string, no gazetteer (the §1.4 stance holds).** `place_name` =
+`origPlace` text (verbatim); `place_ref` = the provenance placeName `ref`
+URL(s) (verbatim string, may be space-joined TM+Pleiades). `--place` filters
+`place_name` by case-insensitive LIKE (SQLite default ASCII-case-insensitive;
+most papyrus places are Latinised ASCII): a value with `%`/`_` is a LIKE
+pattern verbatim, else wrapped `%value%` (substring). `date_raw` keeps the
+upstream origDate string (e.g. "26. Aug. 113 v.Chr.").
+
+**Century bucketing math (`vocab --by-century`).** A signed century INDEX is
+both the bucket key and the chronological sort key (no year 0, so the index
+skips 0 too):
+- year ≥ 1 (CE): `idx = (year - 1) / 100 + 1`  (1..100 → 1c CE; 501 → 6c CE)
+- year ≤ -1 (BCE): `a = -year; idx = -((a - 1) / 100 + 1)`  (-1..-100 → -1
+  = 1c BCE; -113 → -2 = 2c BCE)
+Division is always on a positive magnitude (via abs), so no negative-floor
+surprise. Ascending idx = chronological order: `-2 < -1 < 1 < 2` = 2c BCE,
+1c BCE, 1c CE, 2c CE. Label = `#{ordinal(idx.abs)} c. #{idx<0 ? 'BCE':'CE'}`.
+A RANGED document is bucketed by its `not_before` century (earliest attested)
+— deterministic, no fake midpoint; the CLI states "bucketed by earliest
+century" plainly.
+
+**Schema — catalog-side `document_axes` (migration 008), NOT columns on
+documents.** `(id, document_id FK, not_before INT null, not_after INT null,
+precision, date_raw, place_name, place_ref, axis_source NOT NULL,
+passage_seq_from INT null, passage_seq_to INT null)`. The nullable
+`passage_seq_*` pair rides for Part 2's chronicle passage-grain (document-
+grain rows leave them NULL); shipping the columns now avoids a second
+migration. Indexes: `document_id`, `(not_before, not_after)`, `place_name`.
+
+**Rebuild-safety.** `document_axes` = f(canonical), populated by
+`Store::AxisBuilder` (a post-load pass, like the Indexer but writing the
+catalog): HGV extractor reads the HGV_meta_EpiDoc XML and joins ddb-hybrid→urn
+→ catalog document_id; goo300k/IMP extractors read the year off the urn
+suffix of catalog documents (urn = f(canonical)). Wired into `Rebuild#run`
+after replay, so `nabu rebuild` regenerates it (invariant holds; the Indexer
+never re-parses canonical, unchanged). The live catalog gets a one-time
+SANCTIONED build (migration 008 applied + AxisBuilder run — measured,
+reported), exactly like P15-1's live index build.
+
+### FABLE REVIEW VERDICT (fable model, 2026-07-12)
+**Sound in structure — the core arithmetic survives every boundary case.** The
+reviewer verified on disk (not assumed): year 113 BCE → -113 → century idx -2
+(2nd c. BCE) ✓; the boundary table 101 BCE/100 BCE/1 BCE/1 CE/100 CE/101 CE all
+agree with a historian; the overlap filter `nb<=T ∧ na>=F` is correct where
+naive containment `nb>=F ∧ na<=T` FAILS (a "610s" query would lose every
+`precision="low"` century-range papyrus); the signed century index is a
+collision-free total chronological order; and the historical-vs-astronomical
+choice is right (HGV `-0244` is labelled "244 v.Chr." — historical). FIVE
+MANDATORY input-modelling fixes were raised and are ALL incorporated:
+1. **Reject year 0 at ingest.** Ruby floor-division makes the BCE branch emit a
+   phantom idx 0 for year 0 (a=0 → (0-1)/100 = -1 → idx 0), silently. `DateAxis`
+   raises on year 0; the extractor treats a 0 year as unparseable (skipped, not
+   stored). Also the astronomical-source tripwire. (No year-0 exists in HGV
+   today — the guard costs nothing but future-proofs.)
+2. **Open-ended intervals.** 335+ single-sided origDates on disk (notBefore-only
+   / notAfter-only). Missing not_before = −∞, missing not_after = +∞, stored as
+   NULL; the overlap filter is NULL-aware (`(na IS NULL OR na>=F) AND (nb IS
+   NULL OR nb<=T)`) so an open-ended row never silently vanishes from a --from
+   query. Undated docs (no axis row) are simply absent under a date filter.
+3. **Multiple alternative origDates** (`dateAlternativeX/Y`, verified HGV1/997
+   with when -0244 AND -0243). Policy: ENVELOPE — min of all lower bounds, max
+   of all upper bounds across every date-bearing origDate under origin; composes
+   correctly with the overlap filter.
+4. **Zero-padded year parse via `.to_i`, never `Integer()`** — `Integer("0700")`
+   is OCTAL 448 in Ruby, `Integer("0090")` raises; `.to_i` is base-10. Sign
+   handled by regex (`-0113-08-26` split not on a naive `-`).
+5. **Label the by-not_before bucketing bias.** Ranged low-precision docs bucket
+   in their earliest century only (a systematic earlier-shift for a statistics
+   command); `vocab --by-century` prints "bucketed by earliest year; N span
+   multiple centuries" so the bias is stated, never hidden.
+Recommendations adopted: **`--century N`** convenience flag on `search` (N<0 =
+BCE, N>0 = CE) so users never hand-compute BCE century bounds (the reviewer's UX
+footgun); an **F>T guard** (clear error, not silent empty). Deferred openly: a
+German-label cross-check at ingest (labels are multilingual/fuzzy — "Mitte VII",
+"VI - VII" — a robust check risks false warnings; the year-0 guard is the safe
+tripwire) and a boundary-aware span helper (no duration math ships this packet;
+noted for a future `--by-decade`).
+
+### FINDINGS (implementation)
+- **document_axes (migration 008)** landed as designed: `(document_id, not_before,
+  not_after, precision, date_raw, place_name, place_ref, axis_source,
+  passage_seq_from, passage_seq_to)`. The nullable passage_seq_* ride for Part
+  2's chronicle grain (document-grain rows leave them NULL). Indexes on
+  document_id, (not_before, not_after), place_name.
+- **Nabu::DateAxis** (lib/nabu/date_axis.rb) is the whole date model in one small
+  module: `parse_year` (base-10, sign-aware, rejects 0), `century_index`,
+  `century_label` (ordinal + BCE/CE), `century_bounds` (for --century). Unit-
+  tested across every boundary the reviewer named + the year-0 raise.
+- **Store::AxisBuilder** reads canonical, joins by urn, upserts document_axes;
+  wired into Rebuild#run after replay (so `nabu rebuild` regenerates it) and run
+  once as a sanctioned build on the live catalog (migration 008 applied +
+  builder) — measured/reported in the worklog. HGV envelope + open-ended + multi-
+  origDate all handled; goo300k/IMP take the CE year off the urn suffix.
+- **search --from/--to/--place/--century** compose through CatalogJoin (one
+  correlated EXISTS on document_axes, document-grained); **vocab --by-century**
+  (Query::Century) buckets the dated corpus, optional text query = "plot this
+  word across centuries"; **show** prints the axis line; **nabu_search** gains
+  from/to/place/century args (honest, same bounded contract).
+- **Live sanctioned build (2026-07-12):** migration 008 applied + AxisBuilder on
+  the live catalog: 66,261 HGV files scanned, 0 invalid, **60,923 papyri joined
+  (99.2% of the 61,389-doc DDbDP shelf)** + 89 goo300k + 658 IMP = **61,670
+  dated/placed documents**, in 46.6 s; document_axes = **10.7 MB** (design
+  budgeted < 20 MB). Live demos, sub-300 ms: `search 'στρατηγ*' --from 101 --to
+  300 --place oxyrhynch%` → the Oxyrhynchite strategoi (P.Oxy 10.1255, 19.2228);
+  `search 'στρατηγ*' --century -3` → the early-Ptolemaic strategoi (P.Oxy
+  60.4060); `vocab --by-century` → the corpus peaks 2nd c. CE (16,265 docs),
+  4th c. BCE → 20th c. CE (the Slovene tail), 12,215 span multiple centuries;
+  `vocab --by-century 'στρατηγ*' --lang grc` → the strategos office peaks 2nd c.
+  CE (1,098 docs). Deviation argued openly: the design doc §3's loose
+  "astronomical years" → HISTORICAL numbering (no year 0), because HGV's own
+  values are historical and the CLI user's `--from -300` means 300 BCE.
 
 ## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: pending] [deps: —]
 Design doc §6: `nabu cognates` — alignment hub × reflex crosswalk join

@@ -680,3 +680,42 @@ embeddings/cluster line (design §"what waits"), gated on the golden set the
 symbolic packets like this one produce as a side effect. Batch/corpus-wide
 mining and its persisted `links` edges (design §7) are a later rider on this
 same gram machinery, not this packet.
+
+## 14. The date/place axis — when and where a document is from (P15-2)
+
+The historical linguist and documentary historian ask "only 2nd-century
+texts", "only Oxyrhynchus", "plot this word across centuries". The full
+design — five dating sources measured, the schema priced (≤ ~100k rows,
+< 20 MB) — is `docs/intertext-design.md` §3; this is the short standing
+record of Part 1 (HGV papyri + Slovene goo300k/IMP; ORACC regnal mapping and
+the chronicle passage-grain annals are the named Part 2).
+
+**A catalog-side `document_axes` table (migration 008), NOT columns on
+documents.** A document may carry zero, one, or (Part 2's chronicle annals)
+several axis rows, and most of the corpus is *undated* — an absence, never a
+row. Columns: `(document_id, not_before, not_after, precision, date_raw,
+place_name, place_ref, axis_source, passage_seq_from, passage_seq_to)`. The
+date model is signed historical years with no year 0 (conventions §11); the
+nullable `passage_seq_*` pair rides for Part 2's passage-grain, document-grain
+rows leaving them NULL.
+
+**axes = f(canonical), regenerated on rebuild.** `Store::AxisBuilder` is a
+post-load pass — like the Indexer, but writing the CATALOG rather than the
+fulltext index — wired into `Rebuild#run` after every source is replayed. The
+HGV extractor reads the `HGV_meta_EpiDoc` XML and joins its `ddb-hybrid` idno
+to the DDbDP urn (`bgu;3;994` → `urn:nabu:ddbdp:bgu:3:994`, the same transform
+the papyri adapter mints with — verified); goo300k/IMP take the CE year off
+the urn suffix (`…:sigil-1584`, urn = f(canonical)). The Indexer is unchanged
+and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
+66,261 HGV files → 60,923 papyri joined (99.2% of the DDbDP shelf) + 89
+goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
+is 10.7 MB.
+
+**Query surface.** `search --from/--to/--century/--place` compose through the
+shared `CatalogJoin` as one correlated NULL-aware EXISTS on `document_axes`
+(document-grained, so a multi-row document never multiplies passages). `show`
+prints the axis line ("date: 292 CE · Oxyrhynchos") when present. `vocab
+--by-century` (`Query::Century`) is the diachronic payoff: the dated corpus
+bucketed by century, or — with a text query — a word plotted across the
+centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
+(honestly scoped to text search — the dated corpus is not lemmatized).

@@ -27,13 +27,22 @@ module Nabu
       # One provenance journal entry (architecture §5), chronological.
       ProvenanceEvent = Data.define(:event, :tool, :at)
 
+      # The document's date/place axis (P15-2), when it has one — shown by
+      # `show` under the document/passage header. Signed historical years
+      # (negative = BCE); either bound may be nil (open-ended). nil when the
+      # document is undated (an absence, honestly blank).
+      Axis = Data.define(:not_before, :not_after, :precision, :date_raw,
+                         :place_name, :place_ref, :axis_source)
+
       # A passage in the context of its document + source, with the effective
-      # license class (override coalesced over source class) and its full
-      # provenance trail.
+      # license class (override coalesced over source class), its full
+      # provenance trail, and the document's date/place axis (nil when undated).
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
-        :document_urn, :document_title, :source_slug, :license_class, :provenance
-      )
+        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis
+      ) do
+        def initialize(axis: nil, **) = super
+      end
 
       # One line of a document listing: a passage's urn and text, in sequence.
       PassageLine = Data.define(:urn, :text, :withdrawn)
@@ -43,8 +52,10 @@ module Nabu
       # attic kept it — the document is live, labeled honestly.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages
-      )
+        :revision, :withdrawn, :retired_upstream, :passages, :axis
+      ) do
+        def initialize(axis: nil, **) = super
+      end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
       # the two endpoint urns, and total (M) so the CLI can print the honest
@@ -52,8 +63,10 @@ module Nabu
       # passage_label reuse (it reads +urn+ + +passages+) works unchanged.
       RangeResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class, :revision,
-        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn
-      )
+        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn, :axis
+      ) do
+        def initialize(axis: nil, **) = super
+      end
 
       def initialize(catalog:)
         @catalog = catalog
@@ -90,7 +103,8 @@ module Nabu
           revision: header.fetch(:revision), withdrawn: truthy?(header.fetch(:withdrawn)),
           retired_upstream: truthy?(header.fetch(:retired_upstream)),
           passages: slice_passages(slice), total: slice.total,
-          start_urn: slice.start_urn, end_urn: slice.end_urn
+          start_urn: slice.start_urn, end_urn: slice.end_urn,
+          axis: axis_for(slice.document_id)
         )
       end
 
@@ -137,7 +151,8 @@ module Nabu
           withdrawn: truthy?(row.fetch(:withdrawn)), text: row.fetch(:text),
           document_urn: row.fetch(:document_urn), document_title: row.fetch(:document_title),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
-          provenance: provenance_events(row.fetch(:passage_id))
+          provenance: provenance_events(row.fetch(:passage_id)),
+          axis: axis_for(row.fetch(:document_id))
         )
       end
 
@@ -147,7 +162,27 @@ module Nabu
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           revision: row.fetch(:revision), withdrawn: truthy?(row.fetch(:withdrawn)),
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
-          passages: document_passages(row.fetch(:document_id))
+          passages: document_passages(row.fetch(:document_id)),
+          axis: axis_for(row.fetch(:document_id))
+        )
+      end
+
+      # The document's date/place axis (P15-2), or nil when undated. A document
+      # may carry several axis rows (Part 2's chronicle annals); `show` renders
+      # the primary (earliest not_before) one — document-grain rows are a single
+      # row today. `document_axes` may be absent from a catalog that predates
+      # migration 008 (never rebuilt): degrade to nil, never crash.
+      def axis_for(document_id)
+        return nil unless @catalog.table_exists?(:document_axes)
+
+        row = @catalog[:document_axes].where(document_id: document_id)
+                                      .order(Sequel.function(:coalesce, :not_before, :not_after)).first
+        return nil if row.nil?
+
+        Axis.new(
+          not_before: row[:not_before], not_after: row[:not_after], precision: row[:precision],
+          date_raw: row[:date_raw], place_name: row[:place_name], place_ref: row[:place_ref],
+          axis_source: row[:axis_source]
         )
       end
 
@@ -182,6 +217,7 @@ module Nabu
       def passage_columns
         [
           Sequel[:passages][:id].as(:passage_id),
+          Sequel[:documents][:id].as(:document_id),
           Sequel[:passages][:urn],
           Sequel[:passages][:language],
           Sequel[:passages][:sequence],
