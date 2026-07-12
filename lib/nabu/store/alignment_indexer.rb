@@ -136,8 +136,26 @@ module Nabu
       def cts_verse_refs(passage_urn, witness, document_urn, book)
         tail = passage_urn.delete_prefix("#{document_urn}:")
         return [] if tail == passage_urn || tail.empty?
+        return [] if chapter_zero_apparatus?(tail)
 
         [witness.normalize_ref("#{book} #{tail}")].compact
+      end
+
+      # A leading chapter segment of 0 is manuscript APPARATUS, never a verse:
+      # the CCMH gospel codices (P14-2) mint chapter-0 refs for the kephalaia
+      # (chapter-title lists) and incipits (…:0.1, and their :b2 duplicates),
+      # which are not the running gospel text and would cross-align spuriously
+      # between manuscripts. Bible chapters are 1-indexed, so no verse-grain
+      # cts-verse witness legitimately cites a chapter 0 (verified read-only
+      # against the live catalog: LXX/Vulgate carry none) — while a verse-0
+      # SUPERSCRIPTION ("…:3.0") keeps its non-zero chapter and stays. Dropping
+      # here (not in the parser) preserves canonical: the kephalaia remain
+      # addressable passages via nabu show/search, only the verse-alignment
+      # index excludes them. A :b2 duplicate on a REAL verse needs no handling
+      # — the generic ":" → "." fold turns "13.11:b2" into a distinct
+      # "13.11.B2" ref, so it never false-aligns onto the primary verse.
+      def chapter_zero_apparatus?(tail)
+        tail.split(".", 2).first == "0"
       end
 
       # The distinct normalized citation_part values of the stored tokens.
