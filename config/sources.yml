@@ -197,9 +197,9 @@ wiktionary-cu:
 
 wiktionary-recon:
   adapter: Nabu::Adapters::WiktionaryRecon
-  enabled: false   # P14-1: the reconstruction shelf (three dictionaries —
-                   # sla-pro/ine-pro/gem-pro, ~125 MB across three GETs).
-                   # Flip after the owner-fired first sync + etym eyeball.
+  enabled: true    # OWNER SIGN-OFF 2026-07-12 ("w-recon scanned, etym works,
+                   # flip it on"): synced, 13,053 entries across the three
+                   # proto-extracts; etym walk eyeballed by owner.
   sync_policy: manual
 
 freising:
