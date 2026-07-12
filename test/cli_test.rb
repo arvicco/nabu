@@ -123,12 +123,14 @@ class CLITest < Minitest::Test
     assert_match(/\*bogъ/, out, "must show the asterisk convention")
     assert_match(/guþ/, out, "must show the romanization bridge example")
     assert_match(/nabu etym богъ/, out, "must show the OCS worked example")
+    assert_match(/bhewgh/, out, "P14-10: must teach the ASCII bare-form fallback")
+    assert_match(/'\*kaisaraz'/, out, "P14-10: shell star examples must be quoted")
   end
 
   def test_help_define_documents_the_reconstruction_shelves
     out, _err, _status = run_cli(%w[help define])
     assert_match(/sla-pro\|ine-pro\|gem-pro/, out, "the widened --lang gate")
-    assert_match(/define \*bogъ/, out, "must show the asterisk example")
+    assert_match(/define '\*bogъ'/, out, "must show the quoted asterisk example (zsh globs bare *)")
   end
 
   def test_help_export_documents_formats_and_filters

@@ -169,6 +169,25 @@ class NormalizeTest < Minitest::Test
     assert_equal "studente", form("študente", "sl")
   end
 
+  def test_reconstruction_shelves_fold_modifier_letters_to_ascii
+    # P14-10 (conventions.md §9): the phonetic superscripts ʰ (U+02B0) → h and
+    # ʷ (U+02B7) → w — the ONLY Unicode modifier letters (Lm) in the three
+    # reconstruction extracts' 13,053 headwords (census: ʰ ×516, ʷ ×193, no
+    # other). They survive the generic fold (Lm, not the stripped Mn), so an
+    # ASCII typist's "bhewgh"/"gwhew" could never reach *bʰewgʰ-/*gʷʰew-
+    # without this rule. Combining marks over the base letters (the é acute
+    # here) still fall to the generic strip.
+    assert_equal "bhewgh-", form("bʰewgʰ-", "ine-pro")
+    assert_equal "gwhew-", form("gʷʰew-", "ine-pro")
+    assert_equal "medhyos", form("médʰyos", "ine-pro")
+    assert_equal "bogъ", form("bogъ", "sla-pro"), "no modifier letters — the jer stays"
+    assert_equal "þunraz", form("þunraz", "gem-pro"), "þ is a base letter, kept"
+    assert_equal "guda", form("gudą", "gem-pro"), "the ogonek is combining — generic strip"
+    # Scoped to the reconstruction pseudo-languages: an attested code (no
+    # corpus carries a collective code) keeps the superscripts.
+    assert_equal "bʰewgʰ", form("bʰewgʰ", "chu")
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end
@@ -193,6 +212,10 @@ class NormalizeTest < Minitest::Test
     # the akk/sux rule shares one lambda, so its variant appears once
     assert_equal ["a-na", "a na"], Nabu::Normalize.query_forms("a-na")
     assert_equal ["zi₃", "zi3"], Nabu::Normalize.query_forms("ZI₃")
+    # P14-10: the proto rule (gem/ine/sla share one lambda) adds an ASCII
+    # variant when a superscript is present; a typed-ASCII form needs none.
+    assert_equal %w[bʰewgʰ bhewgh], Nabu::Normalize.query_forms("bʰewgʰ")
+    assert_equal ["bhewgh"], Nabu::Normalize.query_forms("bhewgh")
   end
 
   # THE union invariant that makes every per-language document form findable:

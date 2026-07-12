@@ -706,7 +706,21 @@ module MCP
       result = call("nabu_etym", { "lemma" => "βλαβλα" })
       refute result[:isError]
       assert_empty payload(result).fetch("entries")
-      assert_match(/no reconstruction/i, payload(result).fetch("note"))
+      note = payload(result).fetch("note")
+      assert_match(/no reconstruction/i, note)
+      assert_match(/'\*form'/, note, "the miss note must show the quoted-star syntax")
+    end
+
+    def test_etym_falls_back_to_a_bare_proto_headword_when_reflexes_miss
+      seed_recon_shelf
+      rebuild!
+      # P14-10: nabu_etym shares Query::Etym's bare-form fallback — a proto
+      # form typed directly (asterisk optional), ASCII-folded and
+      # hyphen-tolerant, resolves to its reconstruction entry.
+      entries = payload(call("nabu_etym", { "lemma" => "gwhew" })).fetch("entries")
+      assert_equal 1, entries.size
+      assert_equal "*gʷʰew-", entries.first.fetch("headword")
+      refute entries.first.key?("matched_via"), "a direct headword hit, no reflex walk"
     end
 
     def test_etym_withholds_restricted_shelves_by_default
