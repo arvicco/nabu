@@ -3873,6 +3873,7 @@ fold (§9 followup), wiktionary-cu descendants backfill.
   ine-pro ASCII fold (conventions §9 note).
 
 ## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: pending] [deps: —]
+## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: done] [deps: —]
 Registry wiring: the four CCMH manuscripts are verse-cited
 (urn:nabu:ccmh:<ms>:<book>:<ch>.<verse>) — add them as nt work witnesses
 via the documents: multi-book form (P11-5 precedent). Verify citation
@@ -3883,6 +3884,71 @@ exclusions argued not assumed). Acceptance: align MARK 2.3 renders up to
 comparison in one command — Marianus PROIEL edition vs Marianus CCMH
 edition is the alt-edition showcase); registry validation green; suite+
 lint green; docs; worklog (sha —).
+
+### Findings (P14-2, 2026-07-12 — shipped)
+
+WIRING: the four CCMH gospel manuscripts join the `nt` work in
+config/alignments.yml as `documents:` cts-verse witnesses (P11-5 shape, no new
+extractor), appended after the WEB witness. Labels `CCMH Assemanianus / CCMH
+Marianus / CCMH Savvina / CCMH Zographensis` — the "CCMH" prefix renders them
+distinguishably beside the fifth witness PROIEL `marianus`, so `align "MARK
+2.3"` puts the two Marianus editions (PROIEL Cyrillic vs CCMH Helsinki
+transliteration) side by side (the alt-edition showcase). The work-vocabulary
+token (MATT/MARK/LUKE/JOHN) keys the CCMH per-gospel urn (…:mat/mar/luk/joh);
+the passage-urn tail IS the verse, so cts-verse reads book-token + tail.
+
+BOOK MAP (verified read-only against the live catalog, 2026-07-12 — all 16
+documents non-empty): every one of the four manuscripts holds ALL FOUR gospels,
+so all four books map for each. No whole-book lacunae; coverage is fragmentary
+at the VERSE level (the two lectionaries are sparse — Savvina Mark 131 verses,
+Assemanianus Mark 181, vs Marianus 723 / Zographensis 649), rendered honestly
+"not attested" per verse (P11-9). Passage counts: Assemanianus mat 772 / mar
+181 / luk 628 / joh 806; Marianus 954 / 723 / 1238 / 854; Savvina 663 / 131 /
+422 / 353; Zographensis 715 / 649 / 1178 / 815.
+
+CHAPTER-0 VERDICT — EXCLUDE, argued from the content. Only the continuous-text
+codices carry chapter-0 refs (Marianus joh 19 / luk 85 / mar 47; Zographensis
+joh 2 / luk 90; never the lectionaries, never Matthew). Inspection of the text
+proves they are APPARATUS, not verses: Marianus `mar:0.1` = "*g*l*a!v *e*v*n*&
+…" (glavy eun[gelija] — the chapter-title list), `0.2`–`0.N` the numbered
+kephalaia ("o besnujuštiim" = "concerning the demoniac"); Zographensis
+`joh:0.1`–`0.2` = "evaggeli-/-e ot Joana" (the incipit/title, split across two
+segs). These CROSS-ALIGN spuriously — Marianus and Zographensis both number
+their Luke kephalaia `0.5`, so left in they would pair chapter-titles as if
+verses. So `Store::AlignmentIndexer#cts_verse_refs` now DROPS a leading
+chapter-0 segment (`chapter_zero_apparatus?`). General and safe: Bible chapters
+are 1-indexed, and NO existing verse-grain witness cites a chapter 0 (verified
+— LXX tlg0527 and the Clementine Vulgate carry none); a verse-0 superscription
+(`…:3.0`) keeps its non-zero chapter and is untouched. INDEX-side only — the
+kephalaia stay canonical, addressable passages via `nabu show`/`search`.
+Confirmed on the scratch index: 0 chapter-0 refs indexed for CCMH; Marianus
+row counts drop by EXACTLY the chapter-0 census (854−19=835 joh, 1238−85=1153
+luk, 723−47=676 mar); `MARK 0.5` looks up 0 rows.
+
+:b2 VERDICT — NO handling needed, self-isolating. The parser's `:b2`/`:b3`
+duplicate suffixes (lectionary parallels + repeated headings) occur on both
+chapter-0 headings (dropped with their chapter) AND real verses (e.g.
+`marianus:luk:13.11:b2`, `assemanianus:joh:21.25:b2`). For a real-verse dup the
+generic `:` → `.` fold turns tail "13.11:b2" into a DISTINCT ref "LUKE 13.11.B2"
+— it never false-aligns onto the primary "LUKE 13.11" (which renders the first
+occurrence alone). Verified: the scratch index carries `LUKE 13.11.B2` etc. as
+separate rows, and `align "MARK 2.3"` shows each CCMH witness once.
+
+ACCEPTANCE (scratch alignment index over the READ-ONLY live catalog — no sync,
+no db/ mutation; the live index picks the CCMH witnesses up at the owner's next
+`nabu sync ccmh`/`rebuild`, config-only): `align "MARK 2.3"` renders all 13
+`nt` witnesses, every one `:ok` on the live corpus — greek-nt, latin-nt,
+gothic-nt, armenian-nt, marianus (PROIEL, Cyrillic), wscp, sblgnt, vulgate,
+WEB, then CCMH Assemanianus/Marianus/Savvina/Zographensis (chu, Helsinki
+transliteration). Registry validation green (loads 13 nt witnesses); the
+shipped-registry pin test updated openly with the four CCMH labels + the CCMH
+Marianus book map.
+
+DEVIATIONS: one — I made the chapter-0 drop GENERAL to the cts-verse extractor
+rather than CCMH-gated, because chapter 0 is universally apparatus (not a
+verse) for any verse-grain edition and I verified no existing witness relies on
+it; a per-witness opt-out is a one-line change if a future witness ever needs
+chapter 0.
 
 ## P14-3 · Vocab profiling  [tier: opus] [status: pending] [deps: —]
 The dropped P13-7, unchanged scope: `nabu vocab <urn-or-document>` —

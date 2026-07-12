@@ -376,6 +376,42 @@ would either fabricate pairings or add a column that never co-renders. The
 shipped-registry pin test (`test/alignment_registry_test.rb`) grew a `psalms`
 case openly as the schema gained `numbering:`.
 
+**The CCMH gospels — the Old Church Slavonic manuscript comparison (P14-2).**
+The `nt` work grows from nine witnesses to thirteen: the four CCMH gospel
+manuscripts (Corpus Cyrillo-Methodianum Helsingiense — Codex Assemanianus,
+Codex Marianus, Savvina kniga, Codex Zographensis) join as `documents:`
+cts-verse witnesses, one document per gospel, the work-vocabulary book token
+(MATT/MARK/LUKE/JOHN) keying the CCMH per-book urn
+(`urn:nabu:ccmh:marianus:mar`), their verse identity the passage-urn tail —
+pure registry entries, no new extractor, the P11-5 shape exactly. All four
+manuscripts hold all four gospels (verified read-only against the live
+catalog), so `align "MARK 2.3"` renders up to thirteen witnesses and the
+flagship five-way parallel becomes a thirteen-way one; verse coverage stays
+honestly fragmentary per witness (the lectionaries Assemanianus and Savvina are
+sparse — "not attested" per the P11-9 machinery). Two of the four are
+ALTERNATIVE EDITIONS of witnesses the corpus already holds — CCMH Marianus
+beside PROIEL `marianus` (the fifth witness), CCMH Zographensis beside TOROT's
+— so each CCMH label carries the "CCMH" prefix to render distinguishably: one
+`align` command puts the two Marianus editions (the PROIEL treebank's Cyrillic
+beside CCMH's Helsinki transliteration) side by side, the alt-edition showcase
+(two editions are two versions, never a dedupe, conventions §3). One empirical
+wrinkle drove the ONE code change to the otherwise-closed cts-verse extractor:
+the continuous-text codices (Marianus, Zographensis) mint CHAPTER-0 refs
+(`…:0.N`) for the kephalaia — the chapter-title lists and gospel incipits —
+which are manuscript APPARATUS, not running gospel text, and which cross-align
+spuriously between manuscripts (Marianus and Zographensis both number their
+Luke kephalaia `0.N`). So `cts_verse_refs` now DROPS a leading chapter-0
+segment: Bible chapters are 1-indexed, no verse-grain witness legitimately
+cites a chapter 0 (verified — LXX/Vulgate carry none), and a verse-0
+superscription (`…:3.0`) keeps its non-zero chapter and stays. The drop is
+INDEX-side only — the kephalaia remain canonical, addressable passages via
+`nabu show`/`search`; only the verse-alignment index excludes them. The
+`:b2`/`:b3` duplicate-verse suffixes CCMH mints for lectionary parallels need
+NO handling: the generic `:` → `.` fold turns `13.11:b2` into a distinct
+`13.11.B2` ref, so a duplicate never false-aligns onto the primary verse (it
+renders only under its own explicit ref). The pin test grew the four CCMH cases
+openly.
+
 ## 11. The dictionary shelf — lexica as data (P11-4)
 
 `nabu define μῆνις` prints the LSJ entry — gloss, sense tree as structured
