@@ -1402,6 +1402,105 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  # -- align --collate (P15-4) -------------------------------------------------
+
+  # A chu corpus for collation: the Cyrillic PROIEL Marianus + two Helsinki-
+  # ASCII CCMH codices (registry order), so a chu/Latin cell forms and the
+  # Cyrillic witness is the cross-script aside.
+  COLLATE_REGISTRY = <<~YAML
+    nt:
+      title: "New Testament (parallel witnesses)"
+      witnesses:
+        - document: urn:nabu:proiel:marianus
+          label: marianus
+        - document: urn:nabu:ccmh:assemanianus
+          label: ccmh-assemanianus
+        - document: urn:nabu:ccmh:marianus
+          label: ccmh-marianus
+  YAML
+
+  def with_collation_corpus
+    Dir.mktmpdir("nabu-cli-collate") do |root|
+      config = aligned_corpus_config(root, COLLATE_REGISTRY, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      source_id = catalog[:sources].insert(slug: "proiel", name: "PROIEL",
+                                           adapter_class: "TestAdapter", license_class: "nc", enabled: true)
+      [["urn:nabu:proiel:marianus", "chu", "Ꙇ придѫ къ немоу носѧште ослабленъ жилами."],
+       ["urn:nabu:ccmh:assemanianus", "chu", "*/i pridO k$ nemu nosEqe /oslablena ZIlamI ."],
+       ["urn:nabu:ccmh:marianus", "chu", "*J pridO k& nemu nosESte oslablen& Zilami ."]].each do |urn, lang, text|
+        doc_id = catalog[:documents].insert(source_id: source_id, urn: urn, title: urn.split(":").last,
+                                            language: lang, content_sha256: "x", revision: 1, withdrawn: false)
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "#{urn}:s", sequence: 0, language: lang, text: text,
+          text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+          annotations_json: JSON.generate("citation" => "MARK 2.3",
+                                          "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }])
+        )
+      end
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def test_align_collate_renders_an_apparatus_with_cross_script_honesty
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate"]) }
+      assert_nil status
+      assert_match(/MARK 2\.3 — New Testament.*· collation/, out)
+      assert_match(%r{\[chu/Latin\] 2 witnesses, base ccmh-assemanianus}, out)
+      assert_match(/= ccmh-assemanianus/, out, "the base reading is printed in full")
+      # The real substitution surfaces, markers kept raw.
+      assert_match(/nosEqe.*→.*nosESte/, out)
+      # The Cyrillic witness is set aside, honestly.
+      assert_match(%r{\[chu/Cyrillic\] marianus.*different transcription system}, out)
+      assert_match(/придѫ/, out, "the aside still shows its text")
+    end
+  end
+
+  def test_align_collate_base_flag_selects_the_base
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--base", "ccmh-marianus"]) }
+      assert_nil status
+      assert_match(/base ccmh-marianus/, out)
+    end
+  end
+
+  def test_align_collate_long_prints_full_tokens_per_witness
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--long"]) }
+      assert_nil status
+      # Under --long the divergent witness prints its whole token line, not marks.
+      assert_match(/ccmh-marianus  \*J pridO k& nemu nosESte/, out)
+      refute_match(/→/, out, "--long shows tokens, not apparatus arrows")
+    end
+  end
+
+  def test_align_base_without_collate_exits_one
+    with_collation_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--base", "ccmh-marianus"]) }
+      assert_equal 1, status
+      assert_match(/--base only applies with --collate/, err)
+    end
+  end
+
+  def test_align_collate_base_miss_exits_one
+    with_collation_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--base", "nope"]) }
+      assert_equal 1, status
+      assert_match(/no witness matches --base/, err)
+    end
+  end
+
+  def test_help_align_documents_collate
+    out, _err, _status = run_cli(%w[help align])
+    assert_match(/--collate/, out)
+    assert_match(/--base/, out)
+  end
+
   # -- export (P4-3) -------------------------------------------------------
 
   def test_export_plain_streams_one_line_per_passage

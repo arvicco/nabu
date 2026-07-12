@@ -4822,12 +4822,45 @@ the two missing indexes + the ~20k-row reflex_roots closure table
 (rebuild-safe, derived); got×chu headline demo (salt~соль), grc×got
 free rider. MCP exposure argued (probably yes, bounded).
 
-## P15-4 · Collation view  [tier: opus] [status: pending] [deps: —]
+## P15-4 · Collation view  [tier: opus] [status: done] [deps: —]
 Design doc §2: `align REF --collate` — raw-token LCS diff within script
 family over the hub's aligned rows (grc 7,643 / lat 6,974 / chu 3,764
 multi-witness verses); cross-script witnesses rendered undiffed
 honestly (the fold can't bridge Cyrillic↔Helsinki-ASCII — measured).
 Compact rendering per house rule; the PROIEL-vs-CCMH Marianus demo.
+
+FINDINGS. Query::Collation (lib/nabu/query/collation.rb) is a pure
+RENDERER over Align's aligned rows — it wraps Query::Align, runs it, and
+transforms the witnesses; zero schema, and the P11-8 range grammar +
+P15-8 --long compose for free. GROUPING VERDICT — the collatable cell is
+the PAIR (language, script), argued from the live corpus, NOT script
+alone and NOT language alone: language alone lumps the Cyrillic Marianus
+with the Helsinki-ASCII CCMH codices (same `chu`, two transcriptions the
+fold cannot bridge); script alone lumps got/lat/eng/chu-CCMH (four
+languages, one Latin script — measured at MARK 2.3, all present). Script
+is detected from the TEXT (majority Unicode script via \p{Greek} etc.),
+because the language code does not record which transcription a witness
+uses — and this correctly caught that PROIEL "armenian-nt" is romanized
+(xcl/Latin, an aside). BASE VERDICT — first witness of a cell in REGISTRY
+ORDER (the registry IS the display order), `--base LABEL|urn` overrides;
+at MARK 2.3 the chu/Latin base is CCMH Assemanianus (first CCMH), the
+other three codices diff against it, Marianus stands aside cross-script.
+DIFF — word-level LCS over raw tokens (only punctuation-ONLY tokens
+dropped; markers &/$/^/⸂ kept verbatim — stripping them destroys info
+exactly as folding does), a run of deletes+inserts coalesces to one :sub
+(no transpose op — a word-order variant is honestly del+ins, e.g. the
+Vulgate "ad eum ferentes"). APPARATUS marks: `a → b` (sub), `om. a`
+(omission), `add. b` (insertion); agreements elided; `--collate --long`
+prints each witness's full tokens instead. Cross-script/sole witnesses
+render undiffed with the reason stated; no_match/not_synced/withheld
+named once. MCP: `nabu_align` gains `collate: true` + `base:` (the
+witness diff as `type: "collation"`; license gate withholds excluded
+witnesses from the diff bodily). Golden reproduced live at MARK 2.3
+(the four CCMH codices collated, придѫ/pridO vs pridoSE and
+ослабленъ/nosESte surfacing; Cyrillic Marianus set aside). Tests:
+query/collation_test +15 (LCS insert/subst/omit/agreement, (lang,script)
+grouping, cross-script vs sole honesty, --base + miss, --long, range,
+license withhold), cli_test +6, mcp/tools_test +2. Suite+lint green.
 
 ## P15-5 · Formula miner  [tier: opus] [status: pending] [deps: P15-1]
 Design doc §5 (unless it rode P15-1): intra-corpus repeated n-gram

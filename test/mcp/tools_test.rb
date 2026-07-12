@@ -1103,6 +1103,73 @@ module MCP
       assert_match(/no corpus/i, text_of(result))
     end
 
+    # -- nabu_align collate (P15-4) ---------------------------------------------
+
+    COLLATE_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - { document: urn:nabu:proiel:marianus, label: marianus }
+          - { document: urn:nabu:ccmh:assemanianus, label: ccmh-assemanianus }
+          - { document: urn:nabu:ccmh:marianus, label: ccmh-marianus }
+    YAML
+
+    # A chu corpus with the Cyrillic PROIEL Marianus + two Helsinki-ASCII CCMH
+    # codices, so a chu/Latin cell collates and the Cyrillic witness is aside.
+    def seed_collation_corpus(source: nil)
+      source ||= Nabu::Store::Source.create(
+        slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter", license_class: "nc", enabled: true
+      )
+      [["urn:nabu:proiel:marianus", "Ꙇ придѫ къ немоу носѧште ослабленъ жилами", source],
+       ["urn:nabu:ccmh:assemanianus", "*/i pridO k$ nemu nosEqe /oslablena ZIlamI", @open],
+       ["urn:nabu:ccmh:marianus", "*J pridO k& nemu nosESte oslablen& Zilami", @open]].each do |urn, text, src|
+        doc = make_document(source: src, urn: urn, title: urn.split(":").last, language: "chu")
+        make_passage(doc, urn: "#{doc.urn}:1", text: text, sequence: 0, language: "chu",
+                          tokens: [{ "citation_part" => "MARK 2.3", "form" => "x" }])
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: align_registry(COLLATE_REGISTRY_YAML))
+    end
+
+    def test_collate_returns_an_apparatus_with_a_cross_script_aside
+      seed_collation_corpus
+      body = payload(align_tools(align_registry(COLLATE_REGISTRY_YAML))
+                     .call("nabu_align", { "ref" => "MARK 2.3", "collate" => true }))
+
+      assert_equal "collation", body.fetch("type")
+      ref = body.fetch("refs").first
+      cell = ref.fetch("cells").find { |candidate| candidate.fetch("script") == "Latin" }
+      assert_equal "ccmh-assemanianus", cell.fetch("base"), "base is first in registry order"
+      variant = cell.fetch("witnesses").find { |witness| witness.fetch("label") == "ccmh-marianus" }
+      assert_equal false, variant.fetch("agrees")
+      ops = variant.fetch("edits").map { |edit| edit.fetch("op") }
+      assert_includes ops, "sub", "the real CCMH divergence is a substitution"
+
+      aside = ref.fetch("asides").find { |candidate| candidate.fetch("label") == "marianus" }
+      assert_equal "Cyrillic", aside.fetch("script")
+      assert_equal "cross_script", aside.fetch("reason")
+      assert_match(/придѫ/, aside.fetch("text"))
+    end
+
+    def test_collate_withholds_restricted_witnesses_from_the_diff
+      restricted = Nabu::Store::Source.create(
+        slug: "closed", name: "Closed", adapter_class: "TestAdapter", license_class: "restricted", enabled: true
+      )
+      seed_collation_corpus(source: restricted) # the Cyrillic marianus is now restricted
+      tools = align_tools(align_registry(COLLATE_REGISTRY_YAML))
+
+      body = payload(tools.call("nabu_align", { "ref" => "MARK 2.3", "collate" => true }))
+      refute_match(/придѫ/, text_of(tools.call("nabu_align", { "ref" => "MARK 2.3", "collate" => true })),
+                   "restricted witness text must not leak into the apparatus")
+      withheld = body.fetch("refs").first.fetch("missing").find { |missing| missing.fetch("label") == "marianus" }
+      assert_equal "withheld", withheld.fetch("status")
+
+      opted = payload(tools.call("nabu_align",
+                                 { "ref" => "MARK 2.3", "collate" => true, "include_restricted" => true }))
+      labels = opted.fetch("refs").first.fetch("asides").map { |aside| aside.fetch("label") }
+      assert_includes labels, "marianus", "include_restricted brings the withheld witness back"
+    end
+
     # -- nabu_align ranges / chapters (P11-8) -----------------------------------
 
     RANGE_REGISTRY_YAML = <<~YAML
