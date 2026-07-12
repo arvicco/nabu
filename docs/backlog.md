@@ -4091,7 +4091,7 @@ reindex) first** — it captures most of the win, keeps a coarse correctness
 boundary, and needs no FTS5 tombstone management; reserve option 2 for later,
 skip option 3.
 
-**MEASUREMENT REPORT — AWAITING OWNER DECISION**
+**MEASUREMENT REPORT — OWNER DECISION 2026-07-12: "No urgency with reindexing, mark to-do for later stages" → RE-CHECK-AT-N accepted (revisit at ~2-min reindex / ~6-7M passages; per-source reindex first when commissioned)**
 
 ## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: pending] [deps: P14-1..6]
 The owner wants A reviewed thoroughly before committing. NOT an
