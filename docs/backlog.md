@@ -3778,3 +3778,101 @@ DONE 2026-07-11. Findings:
   bsDT-*, bsPT-grf/rak), glossary bsLX (dictionary-shelf candidate).
 - Owner action queued: fire `bin/nabu sync freising`, eyeball, flip
   enabled (CLAUDE.md checklist step 6).
+
+## Phase 14 — The reconstruction shelf + consolidation riders (branch: phase-14; elaborated 2026-07-12)
+
+Owner shape (2026-07-12): "Let's plan B+C+D then we'll review A more
+thoroughly" — B = the reconstruction/etymology shelf (improvements §1.11,
+the PIE/comparativistics axis); C = the small riders (CCMH hub witnesses,
+vocab profiling, stage-2 SAA-English, CCMH txt texts); D = platform
+watch-items (incremental-indexing measurement; the real-backup-disk item
+remains an owner hardware decision, re-flagged at gate). A ("the corpus
+reads itself") gets a dedicated thorough review as the NEXT phase's
+planning input — a design-review packet at this phase's END prepares it.
+Cut from enable-phase-13-sources so the flips ride. Gate-waits don't
+block (dev-loop §4 addendum); worktree isolation for parallel packets.
+
+## P14-1 · The reconstruction shelf  [tier: fable] [status: in-progress] [deps: —]
+improvements §1.11 comes due (owner axis: PIE/comparativistics —
+"we didn't even start touching yet"). Two-phase, design-heavy:
+Phase A (scout + design): the three kaikki reconstruction extracts
+(Proto-Slavic 45.4 MB ~5,195 words sla-pro; PIE 11.5 MB ~1,781 ine-pro;
+Proto-Germanic gem-pro — verify size/count), same dual CC-BY-SA+GFDL
+(re-verify verbatim). Design questions to answer in an architecture
+section BEFORE code: (1) are reconstructions DICTIONARY entries (the
+shelf precedent: headword *bogъ, body = senses + descendants) or a new
+surface? (2) the CROSSWALK: descendants arrays name attested reflexes
+(cu богъ, orv богъ, got guþ…) — how do reconstruction entries LINK to
+in-catalog lemmas (a derived crosswalk table f(entries, passage_lemmas)?
+rebuild-safe? query surface: `define *bogъ` shows attested reflexes with
+corpus counts? an `etym <lemma>` command walking attested→reconstruction→
+cognate reflexes across languages?); (3) language codes sla-pro/ine-pro/
+gem-pro posture (non-ISO — registry + conventions treatment); (4) which
+extracts v1 ships (all three? Proto-Slavic first?). Fixture plan. STOP —
+owner gate. Phase B per approval.
+
+## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: pending] [deps: —]
+Registry wiring: the four CCMH manuscripts are verse-cited
+(urn:nabu:ccmh:<ms>:<book>:<ch>.<verse>) — add them as nt work witnesses
+via the documents: multi-book form (P11-5 precedent). Verify citation
+compatibility empirically (chapter-0 headings and :b2 dup suffixes must
+not pollute alignment — check how the cts-verse extractor handles them;
+exclusions argued not assumed). Acceptance: align MARK 2.3 renders up to
+13 witnesses incl. the four OCS manuscripts side by side (manuscript
+comparison in one command — Marianus PROIEL edition vs Marianus CCMH
+edition is the alt-edition showcase); registry validation green; suite+
+lint green; docs; worklog (sha —).
+
+## P14-3 · Vocab profiling  [tier: opus] [status: pending] [deps: —]
+The dropped P13-7, unchanged scope: `nabu vocab <urn-or-document>` —
+lemma frequency profile of a document/range vs the corpus (distinctive
+vocabulary by simple ratio, hapax list), gold shelves only, honest about
+coverage (documents without gold lemmas say so). CLI + optional MCP
+(argue). Small; measure before adding any index (P13-6 precedent).
+
+## P14-4 · Stage-2 SAA-English crawl scope  [tier: opus] [status: pending] [deps: —]
+Config extension per the P13-4 staging design: TRANSLATION_PROJECTS
+grows beyond saao/ to the other translated projects (P13-4 scout data:
+rimanum 378/378, etcsri 1448/1456 + Hungarian, rinap1 88/96, dcclt
+1229/4980 — verify tr-en counts for the 28 NEW projects via their
+metadata at scout). Phase A: propose the stage-2 list with crawl sizes.
+STOP — owner gate (sizes again). Phase B: the list + docs. NO parser
+changes (new HTML shapes → census + report, the standing guard).
+
+## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: pending] [deps: —]
+The deferred half of P13-2: Suprasliensis + Vita Constantini + Vita
+Methodii are .txt-only upstream (prose/folio schemes). Phase A: map the
+txt structure honestly (folio markers? paragraph numbers? the catalogue's
+"not properly checked" caveat applies doubly), design citations, size the
+small ccmh-txt family, fixture plan; note the TOROT-Suprasliensis
+alt-edition discipline. STOP — owner gate. Phase B per approval.
+
+## P14-6 · Incremental indexing — measure, then decide  [tier: opus] [status: pending] [deps: —]
+improvements §4.2 "when it hurts" checkpoint. Phase A (measurement, no
+code): instrument the real cost — time a parse-only sync's index rebuild
+at the current ~3.6M passages (per-phase breakdown: FTS insert, lemma
+table, alignment refs), project the curve to 5M/10M, and identify the
+incremental design IF warranted (per-source reindex? dirty-document
+tracking? FTS5 delete+insert granularity?). Report with numbers. STOP —
+owner decides implement-now vs re-check-later (the honest answer may be
+"doesn't hurt yet"). Phase B only if commissioned.
+
+## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: pending] [deps: P14-1..6]
+The owner wants A reviewed thoroughly before committing. NOT an
+implementation packet: a design document (docs/intertext-design.md) for
+the Phase 15 decision — intertext engine (§1.1), time/place axes (§1.4),
+fragment search (§1.5), links table (§1.8) — each with: precise algorithm
+options (n-gram shingling parameters for HIGHLY inflected languages —
+lemma-grams vs surface-grams, the cross-language quotation problem
+LXX→NT→Fathers), storage/index cost projections AT THIS CORPUS SIZE
+(measured, not guessed), staged shipping plan, what the cluster could
+later add (embeddings-based paraphrase detection vs the symbolic core).
+Ends with a recommendation menu for the owner. Live corpus read-only
+experiments allowed (timing probes, n-gram density samples).
+
+## P14-gate · Phase 14 gate  [tier: orchestrator] [status: pending] [deps: P14-1..7]
+Full-diff, library.md refresh (reconstruction shelf section + the
+post-ORACC-sync numbers), README truthfulness, PR, owner queue (syncs:
+reconstruction extracts, stage-2 crawl, ccmh re-sync for txt texts; the
+ud re-sync for Ruthenian if still pending), flips, RE-FLAG the real
+backup disk (D item — owner hardware decision), sticky alarm LAST.
