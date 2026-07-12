@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM P14-13 defect fixture (real ORACC HTML/JSON slice from on-disk
+# canonical blms). Non-refetchable: re-acquiring = a full per-project zip sync /
+# HTML crawl, not a raw GET. See README.md.
+source: oracc_p14_13
+adapter_test:
+files:
+  - path: html-en/blms/X000003.html
+    refetchable: false
+    provenance: local-trim
+    reason: "catalog-only skeleton translation fragment - trimmed to the surface row + first two bilingual line-groups (o 1, o 2) + trailing nonl rows; each prose cell anchors at an HTML-only render id (X000003.2l/3l) and prints its label (o 1)/(o 2)"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-13 defect fixture (see README.md)"
+  - path: blms/corpusjson/X000003.json
+    refetchable: false
+    provenance: local-trim
+    reason: "sibling skeleton tablet - trimmed to the text c-node with object/surface d-nodes and the first two implicit sentences, each kept to its line-start d-node (empty ref+label) + one l-node; reproduces the empty labels map that defeats corpusjson anchoring"
+    copied: 2026-07-12
+    whole: false
+    trim: "P14-13 defect fixture (see README.md)"

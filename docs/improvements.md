@@ -200,7 +200,7 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
-### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [candidate — P13-10 (b) scout, owner axis: "PIE/comparativistics/reconstructions that we didn't even start touching yet"]
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill, PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%.]
 
 **What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
 \*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already

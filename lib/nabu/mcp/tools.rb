@@ -7,12 +7,14 @@ require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
 require_relative "../query/lemma_search"
+require_relative "../query/proximity"
 require_relative "../query/morph_facets"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/align"
 require_relative "../query/define"
+require_relative "../query/etym"
 
 module Nabu
   module MCP
@@ -74,6 +76,10 @@ module Nabu
 
       SEARCH_DEFAULT_LIMIT = 10
       SEARCH_MAX_LIMIT = 50
+      SEARCH_DEFAULT_WINDOW = Query::Proximity::DEFAULT_WINDOW
+      # A generous proximity ceiling: beyond this the NEAR window spans most
+      # passages and stops meaning "near". Clamps the arg, honest note.
+      SEARCH_MAX_WINDOW = 50
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
       CONCORD_DEFAULT_LIMIT = 10
@@ -85,6 +91,14 @@ module Nabu
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
+      # The reconstruction walk (P14-1): proto entries per query, and the
+      # cognate cap per entry (attested first — gem-pro trees run to ~150
+      # reflexes; the CLI is the unbounded surface).
+      ETYM_DEFAULT_LIMIT = 3
+      ETYM_MAX_LIMIT = 10
+      ETYM_MAX_COGNATES = 20
+      DEFINE_MAX_REFLEXES = ETYM_MAX_COGNATES
+      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
 
@@ -97,6 +111,8 @@ module Nabu
                            "to config/alignments.yml (architecture §10)"
       NO_SHELF_NOTE = "no dictionary shelf in this catalog yet — run `nabu sync lexica` (or " \
                       "`nabu rebuild` after one) to build it, then retry"
+      NO_RECON_NOTE = "no reconstruction shelf in this catalog yet — run `nabu sync " \
+                      "wiktionary-recon` (or `nabu rebuild` after one) to build it, then retry"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
@@ -119,7 +135,11 @@ module Nabu
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
         "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
         "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
-        "attestations with that morphology, each hit showing the decoded evidence). Hits are " \
+        "attestations with that morphology, each hit showing the decoded evidence). Add `near` " \
+        "for PROXIMITY — keep only hits where that term sits within `window` words (default " \
+        "#{SEARCH_DEFAULT_WINDOW}, 0=adjacent) of query (or lemma, expanded to its surface " \
+        "forms) in the SAME passage, order-independent; both matched terms are bracketed in the " \
+        "snippet (near does not compose with morph). Hits are " \
         "relevance-ranked and bounded (default " \
         "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
@@ -175,9 +195,14 @@ module Nabu
         "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
         "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
         "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
-        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu) " \
-        "picks a shelf when the spelling is ambiguous. Each entry carries headword, dictionary, license fields " \
+        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body), and " \
+        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic, same " \
+        "extract family): a LEADING ASTERISK scopes to reconstructions (*bogъ), whose " \
+        "entries also list their descendant reflexes with corpus attestation counts " \
+        "(nabu_etym walks the same crosswalk from an attested lemma). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|sla-pro|ine-pro|" \
+        "gem-pro) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
+        "dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
@@ -185,6 +210,21 @@ module Nabu
         "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
         "separate entries).".freeze
+
+      ETYM_DESCRIPTION =
+        "Walk the reconstruction crosswalk (the comparativist's join): give an ATTESTED " \
+        "lemma (богъ, guþ, deus) and get every reconstructed ancestor whose Wiktionary " \
+        "descendants name it — Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org " \
+        "extracts, CC-BY-SA + GFDL; PRESERVE license fields when quoting). Each entry " \
+        "carries the *headword, gloss, the reflex that matched (matched_via), its COGNATES " \
+        "across languages with corpus attestation counts (attested_count = gold-lemma " \
+        "passages in this catalog; null = not attested here, an absence not a zero), and " \
+        "one hop of proto-to-proto ancestors (a Proto-Slavic entry's PIE root, with ITS " \
+        "cognates — the cross-family view: богъ→*bogъ→*bʰeh₂g-→ἔφᾰγον). Romanization " \
+        "bridges scripts: guþ reaches *gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the match " \
+        "to one attested language; a leading asterisk (*bogъ) looks a reconstruction up " \
+        "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
+        "with honest totals; `nabu etym` (CLI) is unbounded.".freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -208,6 +248,15 @@ module Nabu
                                 "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
                                 "match on feats, PROIEL/TOROT are decoded to the same names; ORACC " \
                                 "has no inflectional morphology so these facets never match it." },
+          near: { type: "string",
+                  description: "Proximity: keep only hits where this term occurs within `window` " \
+                               "words of query (or lemma) in the SAME passage. FTS5 NEAR over the " \
+                               "folded search forms, order-independent; expands a lemma anchor to " \
+                               "its attested surface forms first. Does NOT compose with morph." },
+          window: { type: "integer", minimum: 0, maximum: SEARCH_MAX_WINDOW,
+                    default: SEARCH_DEFAULT_WINDOW,
+                    description: "With near: max words between the two terms (default " \
+                                 "#{SEARCH_DEFAULT_WINDOW}; 0 = adjacent)." },
           lang: { type: "string",
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
@@ -263,12 +312,31 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: %w[grc lat ang chu],
+          lang: { type: "string", enum: DEFINE_LANGS,
                   description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
                                "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
-                               "(Old Church Slavonic)." },
+                               "(Old Church Slavonic), sla-pro/ine-pro/gem-pro → the " \
+                               "Wiktionary reconstruction shelves." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["lemma"],
+        additionalProperties: false
+      }.freeze
+
+      ETYM_SCHEMA = {
+        type: "object",
+        properties: {
+          lemma: { type: "string",
+                   description: "An attested lemma (богъ, guþ, deus) — or a reconstruction " \
+                                "with a leading asterisk (*bogъ) for a direct lookup." },
+          lang: { type: "string",
+                  description: "Scope the reflex match to one attested language " \
+                               "(ISO-639-3: chu, orv, got, grc, lat, ang, san, …)." },
+          limit: { type: "integer", minimum: 1, maximum: ETYM_MAX_LIMIT,
+                   default: ETYM_DEFAULT_LIMIT,
+                   description: "Maximum reconstruction entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["lemma"],
@@ -310,6 +378,8 @@ module Nabu
                           handler: :align },
         "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
                            handler: :define },
+        "nabu_etym" => { description: ETYM_DESCRIPTION, input_schema: ETYM_SCHEMA,
+                         handler: :etym },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -317,10 +387,15 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The history ledger, read-only (P14-12): nabu_status surfaces the
+        # CACHED upstream-drift verdicts from it. nil when unconfigured or
+        # absent — every source then reports upstream "never_probed". MCP NEVER
+        # probes upstreams live: this is a bounded status read, nothing more.
+        @ledger = ledger
       end
 
       # tools/list shape: [{name:, description:, inputSchema:}].
@@ -346,6 +421,7 @@ module Nabu
       def search(args)
         term, mode = search_term(args)
         morph = search_morph(args, mode)
+        near = search_near(args, morph)
         license = license_arg(args)
         include_restricted = args["include_restricted"] == true
         if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
@@ -358,7 +434,8 @@ module Nabu
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
-        results = run_search(mode, term, catalog: catalog, fulltext: fulltext,
+        window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
+        results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
                                          lang: args["lang"], license: license, limit: limit + 1, morph: morph)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
@@ -439,8 +516,9 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !%w[grc lat ang chu].include?(lang)
-          raise InvalidArguments, "lang must be grc, lat, ang or chu (the shelves this corpus holds)"
+        if lang && !DEFINE_LANGS.include?(lang)
+          raise InvalidArguments, "lang must be one of #{DEFINE_LANGS.join(', ')} " \
+                                  "(the shelves this corpus holds)"
         end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
@@ -448,9 +526,26 @@ module Nabu
 
         limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
-        results = Query::Define.new(catalog: catalog).run(lemma, lang: lang, limit: limit + 1)
+        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(lemma, lang: lang, limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit)
+      end
+
+      # The reconstruction walk (P14-1): attested lemma → proto entries with
+      # cognates + one ascent hop. Same shelf guards and license stance as
+      # nabu_define; the crosswalk table additionally needs migration 007.
+      def etym(args)
+        lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_etym needs a lemma"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        return note(NO_RECON_NOTE) unless catalog.table_exists?(:dictionary_reflexes)
+
+        limit = clamp(args["limit"], default: ETYM_DEFAULT_LIMIT, max: ETYM_MAX_LIMIT)
+        include_restricted = args["include_restricted"] == true
+        results = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
+                             .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_etym(results, lemma: lemma, limit: limit)
       end
 
       def status(_args)
@@ -467,7 +562,10 @@ module Nabu
           index: index_state,
           note: "counts are live passages/documents (withdrawn excluded); " \
                 "research_private/restricted material is excluded from these counts and " \
-                "from every tool by default (see excluded_by_default)"
+                "from every tool by default (see excluded_by_default). each source's " \
+                "upstream.* fields are the CACHED verdict of the last `nabu health --remote` " \
+                "/ `nabu status --remote` run (drift = has upstream moved past our pin; " \
+                "checked_at = when) — MCP never probes upstreams live"
         )
       end
 
@@ -495,6 +593,20 @@ module Nabu
         morph
       end
 
+      # The proximity term (P14-8), or nil. Composes with query OR lemma anchor
+      # but NOT with morph (morphology-narrowed proximity is out of scope), so a
+      # near+morph combination is a clear usage error like the CLI's.
+      def search_near(args, morph)
+        near = string_arg(args, "near")
+        return nil if near.nil?
+        if morph
+          raise InvalidArguments,
+                "near does not compose with morph (morphology-narrowed proximity is out of scope)"
+        end
+
+        near
+      end
+
       # The fulltext handle when the index this mode needs is present; nil
       # during the mid-reindex window (Indexer.rebuild! drops the tables first).
       def search_index(mode)
@@ -505,7 +617,13 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, morph: nil)
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil)
+        if near
+          return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+            query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
+            near: near, window: window, lang: lang, license: license, limit: limit
+          )
+        end
         if mode == :lemma
           return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                    .run(term, lang: lang, license: license, limit: limit, morph: morph)
@@ -583,6 +701,7 @@ module Nabu
           body_truncated: truncated,
           citations: define_citations(result)
         }
+        base = base.merge(reflex_fields(result.reflexes, cap: DEFINE_MAX_REFLEXES)) unless result.reflexes.empty?
         return base unless truncated
 
         base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
@@ -595,6 +714,61 @@ module Nabu
         ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
           { label: citation.label, resolved_urn: citation.resolved_urn }
         end
+      end
+
+      # -- etym internals -----------------------------------------------------------
+
+      def render_etym(results, lemma:, limit:)
+        if results.empty?
+          return json(entries: [],
+                      note: "no reconstruction names #{lemma.inspect} as a descendant, and no " \
+                            "reconstruction headword matches it — the crosswalk covers " \
+                            "Proto-Slavic/PIE/Proto-Germanic (Wiktionary). Try the lemma's " \
+                            "dictionary form, or a quoted '*form' for a direct lookup (quote the " \
+                            "star — a bare * is a shell glob)")
+        end
+
+        shown = results.first(limit)
+        json(
+          entries: shown.map { |result| etym_payload(result) },
+          note: if results.size > limit
+                  "more than #{limit} entries, showing #{limit} — raise limit (max #{ETYM_MAX_LIMIT})"
+                else
+                  "#{shown.size} #{shown.size == 1 ? 'entry' : 'entries'}"
+                end
+        )
+      end
+
+      def etym_payload(result, ancestors: true)
+        base = {
+          urn: result.urn, dictionary: result.dictionary_slug,
+          dictionary_title: result.dictionary_title, headword: result.headword,
+          language: result.language, gloss: result.gloss,
+          license_class: result.license_class, license: result.license,
+          source: result.source_slug
+        }
+        if result.matched_reflex
+          base[:matched_via] = { language: result.matched_reflex.language,
+                                 word: result.matched_reflex.word,
+                                 roman: result.matched_reflex.roman }
+        end
+        base.merge!(reflex_fields(result.cognates, cap: ETYM_MAX_COGNATES, key: :cognates))
+        base[:ancestors] = result.ancestors.map { |a| etym_payload(a, ancestors: false) } if ancestors
+        base
+      end
+
+      # Shared reflex/cognate list rendering (define + etym): attested first
+      # (by count, descending), capped with an honest total.
+      def reflex_fields(views, cap:, key: :reflexes)
+        attested, rest = views.partition(&:attested_count)
+        ordered = attested.sort_by { |view| -view.attested_count } + rest
+        shown = ordered.first(cap).map do |view|
+          { lang_code: view.lang_code, language: view.language, word: view.word,
+            roman: view.roman, attested_count: view.attested_count }
+        end
+        fields = { key => shown, :"#{key}_total" => views.size }
+        fields[:"#{key}_attested"] = attested.size
+        fields
       end
 
       # -- concord internals -------------------------------------------------------
@@ -857,6 +1031,7 @@ module Nabu
 
       def source_rows(catalog)
         entries = dictionary_entry_counts(catalog)
+        probes = probe_cache
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
           { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
@@ -868,8 +1043,28 @@ module Nabu
             # surfacing the entry count here stops the reference shelf (lexica,
             # 168k entries) from reading as an empty docs=0 passages=0 source.
             entries: entries[source[:id]] || 0,
-            last_sync_at: source[:last_sync_at]&.to_s }
+            last_sync_at: source[:last_sync_at]&.to_s,
+            upstream: upstream_field(probes[source[:slug]]) }
         end
+      end
+
+      # { slug => source_probes row } from the read-only ledger (P14-12), or {}
+      # when the ledger is unconfigured/absent or predates the source_probes
+      # table (guarded). This is a cache read — never a live probe.
+      def probe_cache
+        ledger = resolve(@ledger)
+        return {} unless ledger&.table_exists?(:source_probes)
+
+        ledger[:source_probes].to_hash(:source_slug)
+      end
+
+      # The cached upstream-drift verdict for one source, or the honest
+      # never_probed placeholder when this source has no cache row yet.
+      def upstream_field(row)
+        return { drift: "never_probed", checked_at: nil } unless row
+
+        { drift: row[:drift], license: row[:license],
+          checked_at: row[:checked_at]&.to_s, detail: row[:detail] }
       end
 
       # Live dictionary-entry counts keyed by owning source id — empty when this
@@ -969,10 +1164,10 @@ module Nabu
         text.length > max ? "#{text[0, max]}…" : text
       end
 
-      def clamp(value, default:, max:)
+      def clamp(value, default:, max:, min: 1)
         return default unless value.is_a?(Integer)
 
-        value.clamp(1, max)
+        value.clamp(min, max)
       end
 
       # -- response shapes + degradation ----------------------------------------------------

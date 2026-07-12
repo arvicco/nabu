@@ -3778,3 +3778,780 @@ DONE 2026-07-11. Findings:
   bsDT-*, bsPT-grf/rak), glossary bsLX (dictionary-shelf candidate).
 - Owner action queued: fire `bin/nabu sync freising`, eyeball, flip
   enabled (CLAUDE.md checklist step 6).
+
+## Phase 14 — The reconstruction shelf + consolidation riders (branch: phase-14; elaborated 2026-07-12)
+
+Owner shape (2026-07-12): "Let's plan B+C+D then we'll review A more
+thoroughly" — B = the reconstruction/etymology shelf (improvements §1.11,
+the PIE/comparativistics axis); C = the small riders (CCMH hub witnesses,
+vocab profiling, stage-2 SAA-English, CCMH txt texts); D = platform
+watch-items (incremental-indexing measurement; the real-backup-disk item
+remains an owner hardware decision, re-flagged at gate). A ("the corpus
+reads itself") gets a dedicated thorough review as the NEXT phase's
+planning input — a design-review packet at this phase's END prepares it.
+Cut from enable-phase-13-sources so the flips ride. Gate-waits don't
+block (dev-loop §4 addendum); worktree isolation for parallel packets.
+
+## P14-1 · The reconstruction shelf  [tier: fable] [status: done] [deps: —]
+improvements §1.11 comes due (owner axis: PIE/comparativistics —
+"we didn't even start touching yet"). Two-phase, design-heavy:
+Phase A (scout + design): the three kaikki reconstruction extracts
+(Proto-Slavic 45.4 MB ~5,195 words sla-pro; PIE 11.5 MB ~1,781 ine-pro;
+Proto-Germanic gem-pro — verify size/count), same dual CC-BY-SA+GFDL
+(re-verify verbatim). Design questions to answer in an architecture
+section BEFORE code: (1) are reconstructions DICTIONARY entries (the
+shelf precedent: headword *bogъ, body = senses + descendants) or a new
+surface? (2) the CROSSWALK: descendants arrays name attested reflexes
+(cu богъ, orv богъ, got guþ…) — how do reconstruction entries LINK to
+in-catalog lemmas (a derived crosswalk table f(entries, passage_lemmas)?
+rebuild-safe? query surface: `define *bogъ` shows attested reflexes with
+corpus counts? an `etym <lemma>` command walking attested→reconstruction→
+cognate reflexes across languages?); (3) language codes sla-pro/ine-pro/
+gem-pro posture (non-ISO — registry + conventions treatment); (4) which
+extracts v1 ships (all three? Proto-Slavic first?). Fixture plan. STOP —
+owner gate. Phase B per approval.
+
+**OWNER-APPROVED 2026-07-12 (relayed via orchestrator): "P14-1 approved
+as-is"** — all five Phase A picks stand: dictionary-shelf reuse +
+dictionary_reflexes crosswalk (migration 007); ONE wiktionary-recon source
+shipping all three extracts; new `nabu etym` + seventh MCP tool nabu_etym;
+Wiktionary codes verbatim (sla-pro/ine-pro/gem-pro); deferred: PIE ASCII
+fold (§9 followup), wiktionary-cu descendants backfill.
+
+### P14-1 findings (Phase A 2026-07-12 network-verified; Phase B 2026-07-12)
+
+- **Extracts verified live (extraction 2026-07-09, dump 2026-07-06):**
+  Proto-Slavic 47,623,549 B / 5,431 records / 5,195 words (`sla-pro`);
+  PIE 12,026,624 B / 1,905 / 1,781 (`ine-pro`); Proto-Germanic
+  65,338,100 B / 5,717 / 5,552 (`gem-pro`). License verbatim identical to
+  wiktionary-cu ("…both CC-BY-SA and GFDL"), same DEPRECATED label
+  (wiktextract #1178), same fallback. Record shape = the OCS shape PLUS
+  `original_title` ("Reconstruction:…", 100%) and `descendants` (89/95/88%
+  of records) — a recursive tree {lang, lang_code, word?, roman?, tags?,
+  descendants?}; branch nodes carry no word; OCS reflexes nest under
+  SCRIPT children (Old Cyrillic + Glagolitic, both lang_code cu);
+  proto-to-proto reflexes carry a leading asterisk ("*bogъ"); raw lines
+  are NOT NFC (bʰeh₂ǵos ships decomposed). ONE malformed lang_code in
+  609,691 worded nodes ("ML." — pinned in the fixture).
+- **Measured crosswalk (Phase A, 564-record ranged sample vs live gold
+  passage_lemmas):** record-level 64.5% sla-pro / 64.2% ine-pro / 54.7%
+  gem-pro of proto headwords naming a held language link to ≥1 attested
+  folded gold lemma; reflex-level ine-pro→lat 59%, →grc 40%, →san 41%,
+  →xcl 40%; sla-pro→orv 46%, →sl 45%, →chu 32% (misses = Glagolitic
+  script twins + non-gospel vocab); gem-pro→got 59%, →ang 26%. The
+  `roman` field is LOAD-BEARING: word-only matching gives got/san/xcl 0%.
+- **Shipped:** `DictionaryReflex` model value + `DictionaryEntry#reflexes`
+  (ContentHash appends only-when-non-empty; pre-P14-1 shas pinned by
+  test — no revision storm); `WiktionaryJsonlParser reflexes:` option
+  (depth-first flatten, LANG_CODE_MAP cu→chu/la→lat/sa→san + identity,
+  shape-invalid → nil language, asterisk-stripped §9 folds; cu default
+  off); migration 007 `dictionary_reflexes` + Store model + loader
+  persistence (citation semantics: content of the sha, replaced on
+  revision); `WiktionaryRecon` adapter (ONE source, THREE dictionaries,
+  three FileFetch subdirs + shared attic + UD two-phase choreography,
+  three :http_zip probe targets, registry enabled:false manual);
+  `Query::ReflexViews` (query-time attestation counts, shared);
+  `Query::Etym` + CLI `nabu etym` + MCP `nabu_etym` (seventh tool;
+  bounded attested-first cognates, one ascent hop, include_restricted
+  contract, graceful pre-007 states); `define *bogъ` asterisk convention
+  (strip + -pro scope + starred display + reflex views; CLI/MCP lang
+  gates widened); docs architecture §12 / conventions §4+§9 /
+  02-sources #50 / mcp.md seventh tool / improvements §1.11 SHIPPED.
+- **Fixture:** 210 byte-verbatim records (75 sla / 61 ine / 74 gem,
+  1.9 MB) — demo chains (bogъ, cěsařь / bʰeh₂g-, ǵʰutós, gʷʰew-,
+  bʰeh₂ǵos, swé / gudą, kaisaraz), held-language quotas, homographs,
+  no-descendants/no-etymology/glossless/grouping-only edges, Glagolitic
+  script children, tagged reflexes, sweeps, + the ML. quirk line;
+  deterministic recipe in test/fixtures/wiktionary-recon/README.md.
+- **Demo chains proven in-suite:** богъ (chu) → *bogъ → *bʰeh₂g- (with
+  grc ἔφᾰγον); guþ (got) → *gudą via the 𐌲𐌿𐌸 roman → *ǵʰutós; live-db
+  counts at scout: богъ 725, цѣсарь 244, guþ 914 gold passages.
+- Remaining owner action (P14-gate): fire `bin/nabu sync wiktionary-recon`
+  (~125 MB, three GETs), eyeball `nabu etym богъ --lang chu` against the
+  full shelves, flip enabled. Deferred riders logged: wiktionary-cu
+  descendants backfill (re-revises the cu shelf — a deliberate decision),
+  ine-pro ASCII fold (conventions §9 note).
+
+## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: pending] [deps: —]
+## P14-2 · CCMH gospels into the alignment hub  [tier: opus] [status: done] [deps: —]
+Registry wiring: the four CCMH manuscripts are verse-cited
+(urn:nabu:ccmh:<ms>:<book>:<ch>.<verse>) — add them as nt work witnesses
+via the documents: multi-book form (P11-5 precedent). Verify citation
+compatibility empirically (chapter-0 headings and :b2 dup suffixes must
+not pollute alignment — check how the cts-verse extractor handles them;
+exclusions argued not assumed). Acceptance: align MARK 2.3 renders up to
+13 witnesses incl. the four OCS manuscripts side by side (manuscript
+comparison in one command — Marianus PROIEL edition vs Marianus CCMH
+edition is the alt-edition showcase); registry validation green; suite+
+lint green; docs; worklog (sha —).
+
+### Findings (P14-2, 2026-07-12 — shipped)
+
+WIRING: the four CCMH gospel manuscripts join the `nt` work in
+config/alignments.yml as `documents:` cts-verse witnesses (P11-5 shape, no new
+extractor), appended after the WEB witness. Labels `CCMH Assemanianus / CCMH
+Marianus / CCMH Savvina / CCMH Zographensis` — the "CCMH" prefix renders them
+distinguishably beside the fifth witness PROIEL `marianus`, so `align "MARK
+2.3"` puts the two Marianus editions (PROIEL Cyrillic vs CCMH Helsinki
+transliteration) side by side (the alt-edition showcase). The work-vocabulary
+token (MATT/MARK/LUKE/JOHN) keys the CCMH per-gospel urn (…:mat/mar/luk/joh);
+the passage-urn tail IS the verse, so cts-verse reads book-token + tail.
+
+BOOK MAP (verified read-only against the live catalog, 2026-07-12 — all 16
+documents non-empty): every one of the four manuscripts holds ALL FOUR gospels,
+so all four books map for each. No whole-book lacunae; coverage is fragmentary
+at the VERSE level (the two lectionaries are sparse — Savvina Mark 131 verses,
+Assemanianus Mark 181, vs Marianus 723 / Zographensis 649), rendered honestly
+"not attested" per verse (P11-9). Passage counts: Assemanianus mat 772 / mar
+181 / luk 628 / joh 806; Marianus 954 / 723 / 1238 / 854; Savvina 663 / 131 /
+422 / 353; Zographensis 715 / 649 / 1178 / 815.
+
+CHAPTER-0 VERDICT — EXCLUDE, argued from the content. Only the continuous-text
+codices carry chapter-0 refs (Marianus joh 19 / luk 85 / mar 47; Zographensis
+joh 2 / luk 90; never the lectionaries, never Matthew). Inspection of the text
+proves they are APPARATUS, not verses: Marianus `mar:0.1` = "*g*l*a!v *e*v*n*&
+…" (glavy eun[gelija] — the chapter-title list), `0.2`–`0.N` the numbered
+kephalaia ("o besnujuštiim" = "concerning the demoniac"); Zographensis
+`joh:0.1`–`0.2` = "evaggeli-/-e ot Joana" (the incipit/title, split across two
+segs). These CROSS-ALIGN spuriously — Marianus and Zographensis both number
+their Luke kephalaia `0.5`, so left in they would pair chapter-titles as if
+verses. So `Store::AlignmentIndexer#cts_verse_refs` now DROPS a leading
+chapter-0 segment (`chapter_zero_apparatus?`). General and safe: Bible chapters
+are 1-indexed, and NO existing verse-grain witness cites a chapter 0 (verified
+— LXX tlg0527 and the Clementine Vulgate carry none); a verse-0 superscription
+(`…:3.0`) keeps its non-zero chapter and is untouched. INDEX-side only — the
+kephalaia stay canonical, addressable passages via `nabu show`/`search`.
+Confirmed on the scratch index: 0 chapter-0 refs indexed for CCMH; Marianus
+row counts drop by EXACTLY the chapter-0 census (854−19=835 joh, 1238−85=1153
+luk, 723−47=676 mar); `MARK 0.5` looks up 0 rows.
+
+:b2 VERDICT — NO handling needed, self-isolating. The parser's `:b2`/`:b3`
+duplicate suffixes (lectionary parallels + repeated headings) occur on both
+chapter-0 headings (dropped with their chapter) AND real verses (e.g.
+`marianus:luk:13.11:b2`, `assemanianus:joh:21.25:b2`). For a real-verse dup the
+generic `:` → `.` fold turns tail "13.11:b2" into a DISTINCT ref "LUKE 13.11.B2"
+— it never false-aligns onto the primary "LUKE 13.11" (which renders the first
+occurrence alone). Verified: the scratch index carries `LUKE 13.11.B2` etc. as
+separate rows, and `align "MARK 2.3"` shows each CCMH witness once.
+
+ACCEPTANCE (scratch alignment index over the READ-ONLY live catalog — no sync,
+no db/ mutation; the live index picks the CCMH witnesses up at the owner's next
+`nabu sync ccmh`/`rebuild`, config-only): `align "MARK 2.3"` renders all 13
+`nt` witnesses, every one `:ok` on the live corpus — greek-nt, latin-nt,
+gothic-nt, armenian-nt, marianus (PROIEL, Cyrillic), wscp, sblgnt, vulgate,
+WEB, then CCMH Assemanianus/Marianus/Savvina/Zographensis (chu, Helsinki
+transliteration). Registry validation green (loads 13 nt witnesses); the
+shipped-registry pin test updated openly with the four CCMH labels + the CCMH
+Marianus book map.
+
+DEVIATIONS: one — I made the chapter-0 drop GENERAL to the cts-verse extractor
+rather than CCMH-gated, because chapter 0 is universally apparatus (not a
+verse) for any verse-grain edition and I verified no existing witness relies on
+it; a per-witness opt-out is a one-line change if a future witness ever needs
+chapter 0.
+
+## P14-3 · Vocab profiling  [tier: opus] [status: pending] [deps: —]
+## P14-3 · Vocab profiling  [tier: opus] [status: done] [deps: —]
+The dropped P13-7, unchanged scope: `nabu vocab <urn-or-document>` —
+lemma frequency profile of a document/range vs the corpus (distinctive
+vocabulary by simple ratio, hapax list), gold shelves only, honest about
+coverage (documents without gold lemmas say so). CLI + optional MCP
+(argue). Small; measure before adding any index (P13-6 precedent).
+
+## P14-4 · Stage-2 SAA-English crawl scope  [tier: opus] [status: done] [deps: —]
+Config extension per the P13-4 staging design: TRANSLATION_PROJECTS
+grows beyond saao/ to the other translated projects (P13-4 scout data:
+rimanum 378/378, etcsri 1448/1456 + Hungarian, rinap1 88/96, dcclt
+1229/4980 — verify tr-en counts for the 28 NEW projects via their
+metadata at scout). Phase A: propose the stage-2 list with crawl sizes.
+STOP — owner gate (sizes again). Phase B: the list + docs. NO parser
+changes (new HTML shapes → census + report, the standing guard).
+
+### Findings (P14-4 Phase B, 2026-07-12 — shipped)
+
+OWNER-APPROVED 2026-07-12 ("Full crawl"): the complete stage-2 list as
+proposed below — ~214 MB / 3,982 tr-en fragments, all eight translated
+projects including dcclt's lexical lists; riao/ribo/dcclt-jena honestly
+zero; English only (etcsri's tr-hun stays the flagged follow-up).
+
+Implemented as the promised DATA CHANGE — `TRANSLATION_PROJECTS =
+PROJECTS` (one line; the P13-4 crawl/census/report machinery untouched,
+no parser changes — the standing new-HTML-shape guard applies at the
+owner-fired sync):
+
+- **Pin test** `test_translation_crawl_scope_is_the_full_project_list`
+  asserts TRANSLATION_PROJECTS == PROJECTS (the stage-2 scope pin).
+- **Fetch tests now exercise a NON-saao crawl** against real payloads:
+  the P13-4 rimanum fragment fixtures (P405432/P405134) are served for
+  the staged rimanum crawl; crawl-note, resumability (304 ⇒ cached), and
+  breaker arithmetic assertions updated (8 ingestible post-crawl docs).
+  Test plumbing, same discipline as the formats-less envelopes: the
+  STAGED copies of the pristine rimanum/etcsri fixtures get their tr-en
+  trimmed (rimanum → its two fragment-fixtured texts, etcsri → none; no
+  fixtures invented, checked-in fixtures untouched).
+- **Docs**: 02-sources ORACC row (stage-2 scope + per-project counts +
+  the zero-English hubs), architecture §parallel-translations staging
+  note.
+- Suite 1666 runs / 26,889 assertions green; lint clean; one commit in
+  the worktree, not pushed. **Owner-fired next**: `bin/nabu sync oracc`
+  crawls the ~3,982 stage-2 fragments (≈ 214 MB, ~28 min polite);
+  saao fragments already on disk stay cached (resumable by design).
+
+### Phase A — STAGE-2 LIST + CRAWL SIZES (2026-07-12, opus) — OWNER-APPROVED 2026-07-12 ("Full crawl", full list as proposed)
+
+Method: read `formats["tr-en"]` from every non-saao project's
+`metadata.json` LOCALLY (all 33 canonical trees are already synced — no
+network read was needed). Size = tr-en count × 55 KB (P13-4 calibration:
+the typical SAA-letter fragment; see caveat). "Ingested" = tr-en ids
+whose live corpusjson is present (discover yields an `-en` ref only for
+those); "orphans" = tr-en ids with no live corpusjson (crawled — the
+crawl fetches the whole tr-en list — but skipped-by-rule at discover and
+counted in the census). The crawl DOWNLOADS the tr-en count; MB below is
+therefore bytes fetched, the number the politeness/size budget cares
+about.
+
+| project          | tr-en | ingested | orphans | size (55 KB/text) |
+|------------------|------:|---------:|--------:|------------------:|
+| rimanum          |   378 |      338 |      40 |            20.3 MB |
+| etcsri †         |  1448 |     1448 |       0 |            77.8 MB |
+| rinap/rinap1     |    88 |       85 |       3 |             4.7 MB |
+| dcclt            |  1229 |     1228 |       1 |            66.0 MB |
+| blms             |   206 |      190 |      16 |            11.1 MB |
+| dcclt/ebla       |   105 |       81 |      24 |             5.6 MB |
+| dcclt/nineveh    |   440 |      440 |       0 |            23.6 MB |
+| dcclt/signlists ‡|    88 |       88 |       0 |             4.7 MB |
+| riao             |     0 |        0 |       0 |               0 MB |
+| ribo             |     0 |        0 |       0 |               0 MB |
+| dcclt/jena       |     0 |        0 |       0 |               0 MB |
+| **STAGE-2 TOTAL**| **3982** | **3898** | **84** |        **~214 MB** |
+
+† **etcsri is trilingual (Sumerian-English-Hungarian).** It carries BOTH
+`tr-en` (1448) AND `tr-hun` (1441). Stage 2 crawls ENGLISH ONLY — the
+`/html` fragment endpoint the crawler hits serves the English rendering,
+and the machinery reads `formats["tr-en"]` exclusively. Hungarian
+(`tr-hun`) stays the config-shaped follow-up P13-4 already flagged (a
+second crawl target + a `-hun` document kind — out of scope here). So
+etcsri is NOT English-dominant, but its English coverage is total and it
+belongs in the English stage.
+
+‡ **dcclt/signlists** also carries a single Arabic gloss (`tr-ar=1`);
+negligible, English-dominant, ignored (English only, as above).
+
+**Zero-English projects (riao, ribo, dcclt/jena) are catalog HUBS.** They
+ship a `catalogue.json` but NO `corpusjson/` locally (their editions live
+in out-of-scope subprojects — e.g. `ribo/babylon*`), and their metadata
+`formats` block is empty (no `tr-en`). They contribute nothing to crawl
+either way; `translated_ids` returns `[]` and the crawl skips them
+silently.
+
+**Size caveat.** 55 KB/text is the P13-4 SAA-letter calibration. The
+dcclt* projects are lexical lists (often shorter fragments) and rimanum
+is admin tablets, so ~214 MB is a conservative (slightly high) estimate
+for the non-SAA mix; the outlier direction is the big compilations, not
+the norm. Combined with stage 1 (saao ≈ 4.7k texts ≈ 250 MB) the full
+translation scope is ≈ 464 MB — squarely inside P13-4 Phase A's 400–500 MB
+projection for the whole 33-project run.
+
+**Proposed stage-2 list (the data change, no machinery change):** extend
+`TRANSLATION_PROJECTS` to the FULL `PROJECTS` list, i.e.
+
+```ruby
+TRANSLATION_PROJECTS = PROJECTS
+```
+
+The metadata `tr-en` gate makes this exact: the three zero-English hubs
+are provably inert (empty `translated_ids` ⇒ skipped), so "all projects"
+and "the eight projects with English" crawl byte-for-byte the same set —
+and this is the natural end state (every in-scope project is now
+translation-eligible; new tr-en that appears upstream is picked up for
+free). One-line data change; the P13-4 crawl/census/report machinery is
+untouched. Est. added crawl: **3982 fragments ≈ 214 MB**, one-time,
+~28 min at the polite 0.25 s delay; ingests **3898** new `-en` documents,
+**84** orphan fragments counted skipped-by-rule.
+
+## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: pending] [deps: —]
+## P14-5 · CCMH txt texts — Suprasliensis + the Vitae  [tier: opus] [status: done] [deps: —]
+The deferred half of P13-2: Suprasliensis + Vita Constantini + Vita
+Methodii are .txt-only upstream (prose/folio schemes). Phase A: map the
+txt structure honestly (folio markers? paragraph numbers? the catalogue's
+"not properly checked" caveat applies doubly), design citations, size the
+small ccmh-txt family, fixture plan; note the TOROT-Suprasliensis
+alt-edition discipline. STOP — owner gate. Phase B per approval.
+
+### Phase A — OWNER-APPROVED 2026-07-12 (fixture plan approved; Suprasliensis grain = LINE; added requirement, owner verbatim: "we need some mechanics to make the line-split words useful for all our tools, not just a dead weight decoration. Find best approach.")
+
+Phase A facts (re-verified 2026-07-12, same Kielipankki www/ tree, same CC
+BY 4.0 bundle grant covering the .txt files): every line in all three
+files is `<7-digit code> <text>` — zero non-conforming lines; no folio
+markers, no XML. The codes are documented by each text's own .html
+description page, verbatim: Suprasliensis `part(1) folium(3) side(1:
+1=recto 2=verso) line(2)` (Severjanov-edition addressing; 3 parts, folios
+1-118/1-16/1-151, ≤31 lines/side); the Vitae `chapter(2)
+verse-in-the-edition(3) line-in-this-file-ONLY(1) always-zero(1)` — only
+chapter.verse is citable. "Not properly checked" made concrete: Supr
+wraps MID-WORD (51% of 17,013 lines end in a hyphen; the Vitae 0%),
+duplicate full codes 44/2/1 per file, 4 side-digit-3 slips, occasional
+unmarked wraps (`(ot&ved`/`^jO` — undetectable, left alone).
+Adapter-shape verdict: EXTEND Ccmh, no sibling source (same corpus,
+license, base URL and manual sync policy; parser_family is a descriptive
+label, not a dispatch key — goo300k reuses imp-tei, vulgate/eng-web share
+usfx; the fetch was already the ORACC two-phase FileFetch aggregation,
+4→7 per-text subdirs).
+
+### Findings (Phase B, 2026-07-12 — shipped)
+
+SHIPPED AS APPROVED + the split-word requirement. New family `ccmh-txt`
+(`CcmhTxtParser`): folio-line scheme (Suprasliensis, one passage per
+physical line, urn `:<part>.<folium>.<side>.<line>`, zero-padding
+stripped, side digit RAW — the 3014301 slip carried verbatim) and
+chapter-verse scheme (the Vitae, urn `:<ch>.<verse>`, consecutive
+same-verse lines aggregated with a space; upstream is CRLF where Supr is
+LF, both handled). Duplicate codes: `:b2` in document order; the
+verse-grain nuance pinned by all three real cases (VC 0600200 adjacent →
+absorbed into one verse; VC 1101010 non-adjacent → `11.10:b2`; VM
+1700100 inside one consecutive run → absorbed, no suffix). 3 documents:
+urn:nabu:ccmh:suprasliensis / :vita-constantini / :vita-methodii
+(upstream stems vita_constantini → hyphenated urn slugs, the UD
+slugification precedent; fetch keys/subdirs keep the literal stems).
+
+SPLIT-WORD DESIGN (the owner requirement): **search-form rejoining plus a
+`hyphen_join` annotation that two tools genuinely read** — option (a)
+with the option-(b) channel earning its keep. Pristine text = the
+diplomatic line VERBATIM (hyphen included). text_normalized =
+Normalize.search_form over the REJOINED derivation — hyphen line: split
+word completed with the next line's first token; continuation line:
+orphan leading fragment dropped — recorded per passage as `hyphen_join`
+({"tail" => …}/{"orphan" => …}, a line can carry both) so the derivation
+is RECOMPUTABLE from the stored row alone (`CcmhTxtParser.search_source`,
+a pure function). FTS, --near, snippets and golden queries see whole
+words with ZERO query-side machinery — proven end to end: `search
+"mOdrovati"` hits supr:1.1.1.3 (`…mOdrova-`/`ti`), the orphan line
+1.1.1.4 produces NO junk hit for "ti" while the real pronoun ti
+(1.1.1.24) stays findable. KWIC honesty: Concord retries a missed
+keyword against the rejoined haystack with every appended-tail character
+mapped to the hyphen/EOL display index → the highlight is exactly the
+visible `mOdrova-`, never fabricated display text (concord tests pin
+keyword, contexts, and the no-tail fallback). The conformance pin was
+GENERALIZED, not weakened: new optional `conformance_search_source` hook
+(default: pristine text) keeps the guarantee that text_normalized is
+always the minted per-language fold of a recomputable source;
+passage.rb's contract comment updated to match. Joins cross folio/side/
+collision seams (file order = textual flow); a document-final hyphen
+line keeps its fragment; an all-orphan line falls back to the raw fold
+(text_normalized must not be empty). Documented as a PARSER-SCOPED rule
+in conventions §9 (argued: ASPR/Freising/GRETIL lines don't hyphenate,
+the gospels' XML doesn't either — corpus layout, not a chu property; the
+annotation contract is reusable by a future diplomatic source).
+
+Fixtures: 3 byte-identical line-range trims (supr 72 lines — folio 1
+recto+verso head, BOTH 1042114-19 collision runs incl. the hyphen join
+straight across that seam, the side-3 slip; VC 41 lines — incipit,
+ch1, all three duplicate-code behaviors; VM 17 lines — control), ranges
+cut at non-hyphen/verse boundaries so the trims mint no fixture-only
+joins. README + manifest extended (schemes verbatim, quirk table,
+retrieval 2026-07-12). Alt-edition discipline in 02-sources rows 19+30:
+TOROT / CCMH / obdurodon(queued) Suprasliensis = THREE distinct
+editions, never dedupe any pair (conventions §3). Registry untouched —
+ccmh is already enabled; the owner's next `nabu sync ccmh` fetches the
+three txt files and adds 3 docs (~17.5k passages, mostly Supr lines).
+Suite 1693 runs / 27,635 assertions green, lint clean; 21 parser + 28
+adapter tests incl. conformance over all 10 fixture docs + 3 concord
+tests. Demo: urn:nabu:ccmh:suprasliensis:1.1.1.3 = `)i do s&mr)$ti . ne
+dobr@ mOdrova-` → normalized `)i do s&mr)$ti . ne dobr@ modrovati`;
+concord "mOdrovati" keyword = `mOdrova-`.
+
+## P14-6 · Incremental indexing — measure, then decide  [tier: opus] [status: pending] [deps: —]
+improvements §4.2 "when it hurts" checkpoint. Phase A (measurement, no
+code): instrument the real cost — time a parse-only sync's index rebuild
+at the current ~3.6M passages (per-phase breakdown: FTS insert, lemma
+table, alignment refs), project the curve to 5M/10M, and identify the
+incremental design IF warranted (per-source reindex? dirty-document
+tracking? FTS5 delete+insert granularity?). Report with numbers. STOP —
+owner decides implement-now vs re-check-later (the honest answer may be
+"doesn't hurt yet"). Phase B only if commissioned.
+
+### Phase A — MEASUREMENT REPORT (2026-07-12, opus)
+
+Method: copied the live catalog.sqlite3 (3.9 GB) to scratch (APFS clone),
+ran the PRODUCTION `Store::Indexer` / `AlignmentIndexer` code with per-phase
+monotonic timers around each seam (reused `index_row`, `lemma_rows`,
+`live_passages`, `AlignmentIndexer.rebuild!` verbatim — only timing added).
+Apple Silicon, warm page cache, 2 full runs + a 5-point FTS scaling probe.
+The instrumented rebuild reproduced the live index EXACTLY (3,757,019 FTS
+rows / 2,513,786 lemma rows / 130,543 alignment refs), confirming the copy
+and the timed path are faithful. Live db untouched (read-only throughout).
+
+**Current live corpus (read-only counts):** 3,757,019 live passages · 84,423
+live documents · 21 sources · 383,014 passages carry lemma annotations
+(10.2%) · 79,890 carry citation_part.
+
+**Current per-sync reindex cost — MEASURED (~70 s wall, +~4 s ruby startup):**
+
+| phase | time | share |
+|---|---|---|
+| DDL (drop+create FTS/lemma/align tables) | 0.002 s | — |
+| catalog stream / iterate (`live_passages`) | 6–10 s | ~11% |
+| **FTS5 insert** | **~36–37 s** | **~53%** |
+| lemma build (JSON parse + Normalize.fold) | ~11.7 s | ~17% |
+| lemma insert | ~11.6 s | ~16% |
+| alignment refs (P11-3, whole phase) | ~1.3 s | ~2% |
+| **TOTAL** | **~68–71 s** | |
+
+FTS5 insert dominates (~half). Lemma build+insert together ~23 s (~33%).
+Alignment is noise (~1.3 s — it walks only registry witnesses, not the
+corpus). NOTE: there is NO ANALYZE / FTS5 `optimize` / merge step in the
+path — every rebuild produces a fresh, clean (if un-optimized) index. That
+matters for the incremental trade-off below.
+
+**Growth curve — EMPIRICAL (FTS build over first N passages by id):**
+
+| N | FTS insert | marginal |
+|---|---|---|
+| 1.0M | 15.8 s | — |
+| 2.0M | 22.9 s | ~7.1 µs/row |
+| 3.0M | 31.8 s | ~8.9 µs/row |
+| 3.76M | 37.3 s | ~7.2 µs/row |
+
+FTS marginal cost is ~7–9 µs/row and creeps upward with N (the FTS5
+segment-merge log factor): **near-linear, mildly super-linear**. Lemma cost
+tracks the ANNOTATED-passage count (currently 383k → 2.5M rows), NOT total N.
+Alignment tracks registry witnesses, NOT N. So the extrapolation basis,
+stated honestly: overall ≈ **linear in total passages, FTS-dominated, with a
+gentle super-linear FTS creep**; lemma/alignment are decoupled from N.
+
+**Projection to 5M / 10M passages** (two scenarios, because lemma growth
+depends on whether the gold treebanks grow — they are a finite scholarly
+resource, so scenario B is the likelier one):
+
+| | 3.76M (now) | 5M | 10M |
+|---|---|---|---|
+| A · annotated fraction held at 10% | ~70 s | ~90 s (1.5 min) | ~180 s (3 min) |
+| B · treebanks bounded (lemma flat ~23 s) | ~70 s | ~84 s (1.4 min) | ~140 s (2.4 min) |
+
+**Where the pain sits.** Two distinct axes:
+1. *Absolute time* — ~70 s now is annoying-but-tolerable for an interactive
+   operator; it crosses ~2 min around 6–7M passages, ~2.5–3 min at 10M.
+2. *Amplification (the real waste)* — the reindex is corpus-wide but is paid
+   on EVERY per-source sync. Per-source live passage counts: papyri-ddbdp
+   921k (24.5%), gretil 703k, imp 405k … down to ccmh 11k (0.3%), freising
+   2,037 (0.05%). A one-source ccmh sync pays the full ~70 s to rebuild
+   3.76M rows — a **~340× over-index**. Even syncing the LARGEST source
+   re-does 75% of unrelated work.
+
+**Incremental design options (IF commissioned — sketch + risk):**
+1. **Per-source reindex** (improvements §4.2's own sketch): delete the
+   source's rows (by its document-urn→passage set), reinsert just that
+   source. Win: ~4× (papyri worst case) to ~300× (small sources). Coarse,
+   correct boundary — a whole source is recomputed, so NO per-document
+   dirty-tracking bug surface. Consistency risk: passage_ids are re-minted
+   per load, so the delete must key on the source's document urns (the
+   FTS/lemma/align tables carry urn UNINDEXED — usable), and it must run
+   inside the same reindex step, after the load. Modest.
+2. **Dirty-document tracking**: the Loader already knows added/revised/
+   withdrawn docs per run — reindex only those. Finest granularity, biggest
+   win for a 1-doc fix. Risk: the dirty set must be EXACT; a missed doc = a
+   silently stale index (wrong search results, not a crash) — this forfeits
+   the rebuild-everything correctness guarantee, and reindex currently sits
+   OUTSIDE the RunRecorder transaction on purpose, so coupling the dirty set
+   to the catalog write is new plumbing.
+3. **FTS5 granular delete+insert** (tombstone deletes on the shadow table):
+   accumulates tombstones/segments and REQUIRES a periodic `('optimize')`
+   maintenance step the codebase does not currently have. Trades the most
+   simplicity (the clean-per-rebuild property) for the least additional gain
+   over option 1. Not recommended as a first move.
+
+The current rebuild-everything is PROVABLY correct: index = f(catalog),
+recomputed from scratch, drift impossible. Every incremental option adds a
+dirty-set obligation whose failure mode is SILENT. Given the corpus is the
+permanent asset and search correctness is load-bearing, the bar is high.
+
+**RECOMMENDATION: re-check-at-N, do NOT implement now.** At ~70 s the full
+rebuild is annoying-but-tolerable and provably correct; §4.2's own verdict
+("do it when the wait annoys, not before") holds and the near-linear curve
+gives clear runway. Concrete re-check trigger: when the interactive reindex
+crosses **~2 min (≈6–7M passages)**, OR sooner if per-source sync cadence
+rises enough that the ~340× amplification becomes the daily annoyance rather
+than the absolute time. WHEN commissioned, do **option 1 (per-source
+reindex) first** — it captures most of the win, keeps a coarse correctness
+boundary, and needs no FTS5 tombstone management; reserve option 2 for later,
+skip option 3.
+
+**MEASUREMENT REPORT — OWNER DECISION 2026-07-12: "No urgency with reindexing, mark to-do for later stages" → RE-CHECK-AT-N accepted (revisit at ~2-min reindex / ~6-7M passages; per-source reindex first when commissioned)**
+
+## P14-7 · "Corpus reads itself" design review  [tier: fable] [status: done] [deps: P14-1..6]
+The owner wants A reviewed thoroughly before committing. NOT an
+implementation packet: a design document (docs/intertext-design.md) for
+the Phase 15 decision — intertext engine (§1.1), time/place axes (§1.4),
+fragment search (§1.5), links table (§1.8) — each with: precise algorithm
+options (n-gram shingling parameters for HIGHLY inflected languages —
+lemma-grams vs surface-grams, the cross-language quotation problem
+LXX→NT→Fathers), storage/index cost projections AT THIS CORPUS SIZE
+(measured, not guessed), staged shipping plan, what the cluster could
+later add (embeddings-based paraphrase detection vs the symbolic core).
+Ends with a recommendation menu for the owner. Live corpus read-only
+experiments allowed (timing probes, n-gram density samples).
+
+Findings: docs/intertext-design.md delivered under the owner-endorsed
+2026-07-12 persona frame (interactive-first), all numbers measured live.
+The headline finding inverts §1.1's architecture: NO materialized n-gram
+table is needed — per-gram FTS phrase probes over the EXISTING index
+answer `parallels <urn>` in 1–111 ms at 3.76M passages (Odyssey 1.1 →
+Polybius; Matt 4:4 → LXX Deut 8:3 once elision marks are stripped — a
+measured U+02BC/U+2019 fold gap; Thucydides 1.9.2 → Dionysius of
+Halicarnassus at 57/117 shared grams). Cognate-in-parallel measured: 349
+NT verses where got and chu attest reflexes of the same proto-root via
+one proto-to-proto hop (31 roots, 1.4 s staged — needs two indexes +
+a tiny closure table; contextually matched: salt/соль, malan/млѣти).
+Collatable hub surface: grc 7,643 / lat 6,974 / chu 3,764 verses with
+≥2 same-language witnesses — but the fold does not bridge Cyrillic vs
+Helsinki ASCII, so collation diffs raw tokens within script family only.
+Date axis generalizes beyond HGV (63,925/66,261 = 96.5% machine-dated)
+to ORACC (96.6% regnal/period), goo300k/IMP (years in urns), TOROT
+chronicle annal divs; ≤100k rows, <20 MB. Fuzzy trigram index measured
+at 5.8–6.6 B/char → documentary scope 250–270 MB, whole corpus 3.6–4.1 GB
+(scope flag vindicated). Formula miner needs zero schema (Homer/ASPR
+slices mined in 0.6 s: ὣς ἔφαθ' 72×, "hwaet ic hatte" 16×). Links table
+= batch-mode output format only, deferred to the first batch producer.
+Menu: P15-1 parallels (headline) → date/place → cognates → collation;
+fuzzy can wait; embeddings-tier paraphrase/cross-language allusion waits
+for the cluster, gated on golden sets the symbolic packets generate.
+
+## P14-8 · Proximity search  [tier: opus] [status: done] [deps: —]
+Owner-promoted 2026-07-12 from the end-user analysis: proximity search is
+the TLG-style daily-use feature every persona touches (λόγος within N
+words of θεός, lemma-aware) — more basic than the intertext engine and
+its building block. Design-first, measure-first (P13-6/P14-3 precedent).
+Design questions: CLI shape honoring the compact-CLI preference (e.g.
+`search A --near B [--window N]`, composing with the existing --lemma and
+--morph flags where honest — a lemma-aware side means expanding lemma →
+attested surface forms via passage_lemmas before the FTS NEAR, argue the
+mechanics and the window semantics FTS5 NEAR actually gives on folded
+search forms); cross-passage adjacency is OUT (passage = the unit, said
+honestly); result rendering shows both terms highlighted. Collocation
+statistics are NOT this packet (they ride the Phase 15 menu) — but don't
+paint them out. MCP: extend nabu_search args. Measured timings on the
+live index before any schema addition (expect none needed). Tests incl.
+at least two languages + a lemma-expanded case. README command row,
+mcp.md, backlog done + findings, worklog (sha —).
+
+Findings:
+- **CLI shape:** `search A --near B [--window N]` exactly as sketched —
+  `--near` rides the existing `search` command, composing with `--lemma`
+  (the lemma becomes the anchor) and `--lang`/`--license`/`--limit`.
+  `--window` defaults to 10 (FTS5's own NEAR default), 0 = adjacent. New
+  `Query::Proximity` (lib/nabu/query/proximity.rb) shares Search's
+  Result/snippet/bm25 machinery and CatalogJoin, so rendering is plain
+  search rendering — both terms bracketed because both are NEAR phrases.
+- **NEAR semantics (probed on SQLite 3.53, not assumed):** `NEAR(a b, N)`
+  matches when ≤ N tokens sit BETWEEN the phrases, order-independent
+  (N=0 = adjacent; a gap-k pair needs N≥k). The window counts FOLDED
+  tokens (conventions §9): honest per-word for grc/lat/…; documented
+  caveat for akk/sux, where sign-joins/determinatives fold to spaces so
+  one transliterated word spans several tokens (window reads tighter).
+- **Fold-both-sides carried into NEAR:** each side folds to the
+  Normalize.query_forms union; the MATCH is the OR of NEAR clauses over
+  the cartesian product of the two sides' variants (the P6-4 argument
+  applied per side — cannot miss; the generic variant keeps no-rule
+  languages findable).
+- **Lemma-aware anchor:** `--lemma X --near B` expands X via
+  passage_lemmas to its distinct attested surface forms, each folded by
+  its passage language, then each is a NEAR phrase. Live expansion counts
+  are naturally bounded (folding collapses accent variants: ὁ→25,
+  εἰμί→99, λέγω→140 forms); MAX_LEMMA_FORMS=400 guards FTS expression
+  limits only. Homograph honesty documented: an attested surface form
+  may, in some passage, spell a DIFFERENT lemma's token — surface
+  expansion cannot tell (no token offsets in the FTS index).
+- **Measured live (3.6M-passage index, read-only, no schema addition —
+  as expected):** κύριος NEAR θεός w5 grc → top-20 in 43–113 ms; λόγος
+  NEAR θεός w5 → 24–37 ms, surfacing John 1:1 AND the P.Oxy. 8.1151
+  amulet quoting it (the intertext promise already visible); --lemma
+  λέγω --near κύριος w3 → 280 NEAR clauses, 95–284 ms, surfacing the
+  prophetic formula τάδε λέγει κύριος; pathological ὁ NEAR θεός w3 →
+  79 ms. Lemma expansion itself ~170 ms for λέγω.
+- **Out of scope (said honestly):** cross-passage adjacency (passage =
+  the unit; tested); --morph with --near (clear usage error both
+  surfaces; clean follow-up); collocation statistics (Phase 15 menu —
+  proximity returns the raw hit material such counts would aggregate);
+  FTS operators inside proximity terms (each side is phrase-quoted, so
+  `*`/AND/OR are literal — operator queries stay with plain search).
+- MCP: nabu_search gains `near` + `window` (clamped 0–50, default 10);
+  near+morph → InvalidArguments. Tests: query/proximity_test (10: grc +
+  lat folds, lemma-expanded suppletive εἶπε, window boundaries, order
+  independence, filters, cross-passage honesty), cli_test (5, real UD
+  fixture), mcp/tools_test (3). Suite 1598/26,593 green, lint clean.
+
+## P14-gate · Phase 14 gate  [tier: orchestrator] [status: pending] [deps: P14-1..7]
+Full-diff, library.md refresh (reconstruction shelf section + the
+post-ORACC-sync numbers), README truthfulness, PR, owner queue (syncs:
+reconstruction extracts, stage-2 crawl, ccmh re-sync for txt texts; the
+ud re-sync for Ruthenian if still pending), flips, RE-FLAG the real
+backup disk (D item — owner hardware decision), sticky alarm LAST.
+
+## P14-9 · ORACC sync defects: blms collisions + anchor edge  [tier: opus] [status: done] [deps: —]
+Defect packet (orchestrator census of the owner's 2026-07-12 big sync:
++10,899 docs / 30 projects landed, !20): (1) 19 × "duplicate passage urn"
+all in blms (bilingual literary) — census the real shape first (parallel
+Sumerian/Akkadian versions repeating line labels? column duplication?),
+then collision-tolerance per the house precedent (:b2 positional
+suffixing, never quarantine, never merge — GRETIL/ccmh pattern) IF the
+census supports it; if the duplicates are a different animal, report.
+(2) 1 × saao-saa08:P336145-en "prose unit anchored at X resolves to no
+line-start row" — inspect the actual HTML + corpusjson pair; fix the
+anchor fallback honestly (reattach-forward exists — why did it miss?) or
+skip that unit loudly. (3) Verify the 3 projects that yielded no docs
+(33 registered, 30 with docs — expect saas2-class catalog-only or empty
+corpusjson; confirm via discovery-accounting/canonical inspection and
+document; if a project's zip landed but discover found nothing
+UNEXPECTEDLY, that's the P11-7 loud-zero class — investigate).
+FROZEN-URN GUARD standing: parse-only oracc sync must show all
+previously-loaded docs =skipped; quarantines 20 → ~0. Fixtures: trimmed
+real slices from canonical/oracc/blms + the saa08 pair (no network).
+Suite+lint green; docs (02-sources note); backlog done; worklog (sha —).
+One commit, not pushed.
+
+Findings (census FIRST, per item):
+- **Census corrected the orchestrator's framing.** The 20 quarantines (event
+  `quarantined`, at ≥ 2026-07-12) are 19 "duplicate passage urn" + 1 anchor —
+  and the 19 dups are NOT all blms: **7 blms + 12 saao-saa08**. Both dup groups
+  are ONE defect class, so one fix covers both.
+- **(1) The duplicate shape is the P11-7 sentence-label fallback, not column
+  duplication.** blms (bilingual literary) interleaves a Sumerian line (own
+  label "o 1'") with its Akkadian interlinear translation, which upstream ships
+  as a LABEL-LESS `line-start`; P11-7 falls it back to the enclosing sentence
+  label "o 1'" → collision with the Sumerian line. saao-saa08 omens are the same
+  animal with a whole-text range sentence ("o 1 - r 6"): several label-less
+  line-starts all fall back to it. These are DISTINCT physical lines (different
+  words/languages), so the house `:b2`/`:b3` positional suffix in document order
+  is exactly right (GRETIL/ccmh P9-4c precedent) — never quarantine, never merge.
+  Fix: `OraccJsonParser#disambiguate_suffixes`. Clean tablets keep byte-identical
+  urns (only repeated suffixes are touched) → frozen guard holds.
+- **(2) saao-saa08:P336145-en: the anchor is a TRAILING unlemmatized line.** The
+  final prose unit anchors at row P336145.13 — a `nonl-final` "traces of a name"
+  row (print label "(r 3)") the corpusjson never mints (no readable signs; its
+  line-starts stop at r 2). Reattach-forward MISSED because it only looks forward
+  and this row is the LAST content. Fix: `anchor_label` reattaches BACKWARD to
+  the last line-start (r 2) when none follows — prose kept, and the suffix still
+  exists in the tablet for `Query::Parallel`. Not "skip loudly" — backward
+  reattach is the honest keep.
+- **(3) The 3 zero-doc projects (riao, ribo, dcclt-jena) are PROXY corpora, an
+  EXPECTED zero — but the accounting was crying wolf.** Each ships `corpus.json`
+  `type:corpus` with a `proxies` map (riao 1941, ribo 391) and NO `corpusjson`:
+  their texts are proxies hosted in out-of-scope sibling subprojects (the
+  PROJECTS note already says riao/ribo are "top level only"). NOT the P11-7
+  loud-zero class. But `discovery_skips` was flagging all three as
+  "unpack/layout error (unrecognized)". Fix: `proxy_corpus?` recognizes them as a
+  benign skipped-by-rule, so `unrecognized` drops 3 → 0.
+- **Acceptance (parse-only re-sync, loader-idempotent):**
+  `oracc  parse-only  +20 added  ~0 updated  =17775 skipped  -0 withdrawn
+  !0 errored  indexed 3757413 passages` · `discovery: 17795 selected ·
+  415 skipped-by-rule · 0 unrecognized`. Quarantines 20 → 0; all 17,775
+  previously-loaded docs =skipped (frozen guard); 0 unrecognized (was 3).
+- Fixtures: trimmed real slices in `test/fixtures/oracc_p14_9/` — blms P345480
+  (16 sentence children), saa08 P336559 (36), the P336145 corpusjson (line-start
+  skeleton) + html pair, riao proxy corpus.json (3 proxies). TDD: three failing
+  tests written first, then the three fixes.
+
+## P14-10 · etym usability: bare proto forms + ASCII typability  [tier: opus] [status: done] [deps: P14-1]
+Owner defect report (2026-07-12): (1) `etym bʰewgʰ` fails ("no
+reconstruction names…") even though `etym bog` DISPLAYS that very form —
+unstarred input must FALL BACK to reconstruction-headword lookup when the
+reflex path misses (asterisk optional; trailing-hyphen tolerant — root
+entries are stored `bʰewgʰ-`; try the -pro shelves after the attested
+path). (2) `etym *bʰewgʰ` dies in zsh globbing before nabu runs — error
+messages and docs must show the quoted form (`etym '*form'`), and the
+bare-form fallback makes the star mostly unnecessary. (3) Ship the
+deferred PIE ASCII fold: modifier letters (ʰ→h, ʷ→w, any others present
+in the three extracts — census the actual headword character inventory
+first) folded in the -pro shelves' §9 rule so `etym bhewgh` works;
+combining marks already strip. Fold change touches only the three
+reconstruction dictionaries (synced 2026-07-12) — re-fold via parse-only
+sync, frozen elsewhere. Tests: bare-form fallback (hit + updated
+miss-message), hyphen tolerance, ASCII lookup for a ʰ/ʷ-bearing root,
+define '*' parity. Suite+lint green; docs (README/mcp.md examples use
+quoted forms); backlog done; worklog (sha —). One commit, not pushed.
+
+## P14-11 · etym/define --long  [tier: opus] [status: done] [deps: P14-10]
+Owner UX (2026-07-12): "I commend the terseness BUT there needs to be
+--long form that expands on these '…46 more'." Add `--long` to `etym`
+and `define` (compact stays the default per the house compact-CLI rule):
+expands every truncated list in the renderers — the "other reflexes
+(not attested here)" cap, attested-reflex caps, any "and N more"
+elsewhere in these two commands (census the renderers; expand ALL of
+them under the one flag, grouped by language where lists are long).
+MCP: leave the bounded contract as-is (honest totals already present;
+a conversational surface should stay capped) — note that choice in
+mcp.md if it names caps. Tests: capped default + expanded --long for
+both commands. README rows updated. Suite+lint green; backlog done;
+worklog (sha —). One commit, not pushed.
+
+## P14-12 · Upstream drift visible in status  [tier: opus] [status: done] [deps: —]
+Owner (2026-07-12): "Right now I have no idea IF the upstream even
+changed, for most sources. A reasonable update would be to indicate the
+upstream changes in status, so that update remains an informed decision."
+Design: health --remote already computes per-source drift (git ls-remote
+HEAD vs pin; HTTP Last-Modified vs zip/file pin) but discards it after
+rendering. (1) PERSIST the probe verdicts: a per-source probe record in
+the history ledger (db/history.sqlite3 — survives rebuilds; new small
+table via the ledger migration track: slug, checked_at, drift verdict,
+license verdict, detail) written by every health --remote run. (2) STATUS
+renders a compact upstream column from the cache per the compact-CLI
+rule: nothing extra when current and recently checked is WRONG — the
+owner wants signal — so: `up=ok(2d)` / `up=BEHIND(2d)` /
+`up=?(never)` / `up=stale(30d)` — pick exact vocabulary honoring
+terseness (BEHIND loud, ok quiet, age always shown; argue the shape in
+one paragraph and match the existing status row style). frozen-policy
+sources render up=frozen (no probe expected). (3) `status --remote` runs
+the probe inline first (same code path as health --remote), then renders
+— the one-command informed-decision flow. (4) health --remote output
+unchanged apart from now also persisting. MCP nabu_status: add the
+cached drift fields (it's a status surface; bounded, no live probing
+from MCP ever — note that). Tests: probe persistence, cache rendering
+incl. never-probed and stale-cache, frozen handling, status --remote
+wiring (WebMock/stub probes). Docs: ops.md (the informed-update flow),
+README status row. Suite+lint green; backlog done; worklog (sha —).
+ONE commit in your worktree, do NOT push.
+
+COLUMN SHAPE (chosen): the up= cell sits immediately after the policy
+column, ljust-aligned to a computed width, before the free-form counts
+and last_run descriptors. It pairs with policy because both describe the
+source's sync disposition — policy is HOW we pull, up= is WHETHER
+upstream moved since we last did; read together they answer "should I
+sync this now?", which is the informed-decision point. counts/last_run
+stay the trailing free-form descriptors they already are. Vocabulary:
+drift current+fresh → up=ok(Nd); drift behind → up=BEHIND(Nd) always
+(loud; staleness never softens an alarm); drift current but older than
+14d → up=stale(Nd) (an "ok" too old to trust — the dangerous
+reassuring-but-stale case); drift indeterminate (unknown/never_synced/
+multi, incl. a gone/unreachable upstream whose drift can't be computed)
+→ up=?(Nd); no cache row → up=?(never); frozen-policy source → up=frozen
+(cache ignored). Age is floor-days, always shown. Sample row set:
+  perseus     on   live    up=ok(2d)      docs=1320 pass=98211 last 2026-07-10 12:03 ok (+3 ~1 -0 !0)
+  ud          on   live    up=BEHIND(2d)  docs=210 pass=44120 last 2026-06-28 09:11 ok (+0 ~0 -0 !0)
+  oracc       off  manual  up=stale(31d)  docs=88 pass=9004 last 2026-06-01 07:40 ok (+0 ~0 -0 !0)
+  bosworth-t  off  manual  up=frozen      entries=42000 last 2026-05-02 03:00 ok (+0 ~0 -0 !0)
+  ccmh        off  manual  up=?(never)    docs=0 pass=0 never synced
+Ledger schema (db/ledger_migrate/002_create_source_probes.rb, table
+source_probes): id pk; source_slug (unique index); checked_at DateTime;
+drift String (current|behind|never_synced|unknown|multi); license String
+(baseline_recorded|unchanged|changed|unchecked); detail String nullable.
+One row per source (upsert per run) — a cache, not history (runs already
+hold history). MCP nabu_status: each source row gains an `upstream`
+object {checked_at, drift, license, detail} (or {drift: "never_probed"}
+when uncached) plus a note that these are the CACHED verdicts of the
+last health --remote / status --remote run — MCP never probes live.
+
+## P14-13 · blms translation anchors  [tier: opus] [status: done] [deps: P14-9]
+Defect (orchestrator census of the owner's 2026-07-12 stage-2 crawl:
++3,884 -en docs, !13 — ALL 13 in blms, all "prose unit anchored at X
+resolves to no line-start row"). The P14-9 backward-reattach fixed the
+trailing-anchor case; blms (bilingual interleaved, the P14-9 collision
+oddball) evidently has anchors resolving in NEITHER direction. Census
+the 13 actual HTML+corpusjson pairs first (canonical/oracc/blms/) —
+what do the anchors point at? (Interlinear structure? refs into the
+OTHER language's lines? :b2-suffixed labels the -en anchor map misses
+post-P14-9?) Fix per evidence: extend the anchor fallback honestly OR
+skip the unit loudly (never quarantine the whole -en doc for one unit
+if the rest anchors — argue the grain). FROZEN GUARD: parse-only oracc
+sync =all-previous skipped, quarantines 13 → ~0. Fixture: one trimmed
+real blms pair. Suite+lint green; backlog done; worklog (sha —). One
+commit, not pushed.

@@ -120,36 +120,66 @@ abuts Lebanon."
 
 - **Classicists.** The Perseus Greek and Latin canons plus First1KGreek —
   2,209 Greek and Latin editions with 872 aligned English translations
-  (`show <urn> --parallel` pairs Vergil line by line). Citation ranges
-  resolve natively: `show urn:…:1.1-1.32`. Diacritic-insensitive,
-  final-sigma-aware, v/u–j/i-aware search; KWIC concordance in pristine
-  text.
-- **Biblical scholars.** `align "MARK 2.3"` above: the New Testament in up
-  to nine witnesses (Greek ×2, Latin ×2, Gothic, Armenian, OCS, Old
-  English, English), the Old Testament on the Septuagint ↔ Vulgate axis —
-  every verse a citable URN.
+  (`show <urn> --parallel` pairs Vergil line by line). TLG-style proximity
+  search, lemma-aware:
+
+  ```
+  $ bin/nabu search λόγος --near θεός --window 5 --lang grc
+  urn:nabu:ddbdp:p.oxy:8:1151:18   [θεοσ] ην ο [λογοσ].          ← a papyrus amulet…
+  urn:cts:…:tlg0031.tlg004…:1.1    …και [θεοσ] ην ο [λογοσ].     ← …quoting John 1:1
+  ```
+
+- **Biblical scholars.** The New Testament in up to **thirteen witnesses**
+  (`align "MARK 2.3"` → Greek ×2, Latin ×2, Gothic, Armenian, five OCS
+  manuscript editions incl. Assemanianus and both Marianus editions side by
+  side, Old English, English), the Old Testament on the Septuagint ↔
+  Vulgate ↔ English axis with the Greek/Hebrew Psalm numbering mapped
+  honestly (`align "PSA 22.1"` shows WEB's 23.1 labeled).
+- **Slavists & textual critics.** The OCS canon complete — Marianus,
+  Zographensis, Assemanianus, Savvina kniga, Suprasliensis (folio-line
+  cited, hyphen-split words searchable whole) — plus Old East Slavic from
+  birchbark to Ruthenian chancery texts, and the ~1000 CE Freising
+  Manuscripts in three aligned transcription layers.
+- **Comparativists.** The reconstruction shelf walks attested words to
+  their proto-forms and cognates, with corpus attestation counts:
+
+  ```
+  $ bin/nabu etym богъ --lang chu
+  богъ [chu] → *bogъ [sla-pro] — gloss: god
+  ← *bʰeh₂g- [ine-pro] — gloss: to divide, distribute, allot
+    reflexes: [grc] ἔφᾰγον, [sa] भक्ष (bhakṣá), …
+  ```
+
+  Pure-ASCII input works (`etym bhewgh`); `--long` expands every reflex.
 - **Indologists.** 780 GRETIL editions, 703k passages: Rāmāyaṇa, purāṇas,
   kāvya, dharmaśāstra, the Ṛgveda with Vedic accents preserved; commentary
   layers separately citable (kārikā vs. vṛtti).
-- **Assyriologists.** 6,876 ORACC texts (CC0) across five projects, from
-  proto-cuneiform to the Sargon II state correspondence, with upstream gold
-  lemmatization riding straight into `search --lemma` for Akkadian and
-  Sumerian.
-- **Medievalists.** Old English just landed: the complete Anglo-Saxon
-  Poetic Records (Beowulf, the Exeter Book — `show urn:nabu:aspr:A4.1:1` →
-  *Hwæt! We Gardena in geardagum*), the ISWOC treebank with West-Saxon Mark
-  wired into the alignment hub, and Bosworth-Toller queued for the
-  dictionary shelf. On the Slavic side: OCS and Old East Slavic from
-  Marianus through birchbark letters to Avvakum.
-- **Digital humanists & linguists.** 1.94M gold lemma rows in 13 languages,
-  morphology preserved in per-token annotations, `export --format jsonl`
-  (and plain text) streams the corpus to your own tooling with license
-  filters.
+- **Assyriologists.** 17,795 ORACC texts (CC0) across 33 projects — the
+  complete State Archives of Assyria — with gold lemmatization in
+  `search --lemma` and the running English translations aligned per line:
+
+  ```
+  $ bin/nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel
+  :o.1  akk  a-na LUGAL EN-ia
+  :o.2  akk  ARAD-ka {1}10-ha-ti
+  …     eng  To the king, my lord: Your servant Adda-hati. …
+  ```
+
+- **Medievalists.** The complete Anglo-Saxon Poetic Records (Beowulf cited
+  by its real line numbers: `show urn:nabu:aspr:A4.1:1` → *Hwæt! We
+  Gardena in geardagum*), the ISWOC treebank with West-Saxon Mark as an
+  alignment-hub witness, and Bosworth-Toller on the dictionary shelf —
+  `define aethele --lang ang` finds **æþele** through the æ/þ/ð folding.
+- **Linguists & digital humanists.** 2.6M gold lemma rows in 14 languages
+  with morphology facets (`search --lemma cyning --morph case=gen --lang
+  ang`), distinctive-vocabulary profiles (`vocab urn:nabu:proiel:cic-off` →
+  officium, honestas, decorum), and `export --format jsonl` streaming the
+  corpus to your own tooling with license filters.
 - **AI-tooling builders.** A hand-rolled, dependency-free MCP server over
-  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes six read-only
-  tools — search, show, concord, align, define, status — every passage
-  carrying its license class, so a model can quote *and* cite responsibly.
-  See [docs/mcp.md](docs/mcp.md).
+  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes seven read-only
+  tools — search, show, concord, align, define, etym, status — every
+  passage carrying its license class, so a model can quote *and* cite
+  responsibly. See [docs/mcp.md](docs/mcp.md).
 
 ## Quickstart
 
@@ -195,13 +225,16 @@ sync. Ranked expansion candidates live in the axis surveys:
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. |
 | `nabu search --lemma FORM` | Dictionary-form search over 1.94M gold lemma rows in 13 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
+| `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
 | `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. |
-| `nabu define LEMMA` | LSJ and Lewis & Short lookup, entry citations resolved to in-catalog passages. |
+| `nabu define LEMMA` | LSJ and Lewis & Short lookup, entry citations resolved to in-catalog passages. A leading `*` scopes to the Proto-Slavic/PIE/Proto-Germanic reconstruction shelves, whose entries list their descendant reflexes; `--long` expands the truncated "not attested here" list in full, grouped by language. |
+| `nabu etym LEMMA` | The comparativist's walk: an attested lemma (богъ, guþ) → every reconstruction whose Wiktionary descendants name it → one hop up the proto-to-proto chain, each with cognates and corpus attestation counts. `--long` expands every truncated cognate list, grouped by language (compact is the default). |
 | `nabu concord QUERY` | Classic KWIC concordance: keyword column-aligned in pristine text, corpus order — for scanning usage, not relevance. |
+| `nabu vocab URN` | Lemma-frequency profile of a document, range, or passage against the gold-lemma corpus: total tokens, distinct lemmas, the most distinctive vocabulary (log-odds vs corpus — Caesar surfaces *legio*/*proelium*, Cicero's *De officiis* surfaces *officium*/*honestas*), and the in-document hapax legomena. Gold shelves only; a document without gold lemmas says so and names the annotated languages. |
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license` filters — the longevity-hedge exit formats. |
 | `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP); idempotent, non-destructive, every run recorded. |
-| `nabu status` / `health` / `verify` | Per-source counts and run history; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
+| `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
 | `nabu mcp` | The read-only MCP server — six tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
 
 Two more tastes. Facing translation, span-grouped, honest when the English

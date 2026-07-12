@@ -45,11 +45,18 @@ module Nabu
     end
 
     desc "status", "Show per-source sync status and passage counts"
+    option :remote, type: :boolean, default: false,
+                    desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
     def status
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
+      # --remote (P14-12): the one-command informed-update flow — run the live
+      # upstream probe inline (the SAME code path as `health --remote`, which
+      # persists each verdict into the ledger cache), then render the up= column
+      # from that fresh cache. Bare `status` is read-only and shows the cached
+      # verdicts as-is (with their age).
+      ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      ledger = open_ledger(config)
       say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     ensure
       db&.disconnect
@@ -152,6 +159,20 @@ module Nabu
       is out of scope); ORACC carries no inflectional morphology, so
       inflectional facets never match it (honest absence). See conventions §6.1.
 
+      PROXIMITY (A --near B [--window N]): keep only hits where B occurs
+      within N words of A in the SAME passage — λόγος near θεός is John 1:1.
+      Built on FTS5 NEAR over the folded search forms: --window N is the max
+      words BETWEEN the two terms (default 10; 0 = immediately adjacent), and
+      NEAR is order-independent (A…B and B…A both count). The window counts
+      folded tokens, so for cuneiform (akk/sux), where sign-joins and
+      determinatives fold to spaces, one transliterated word spans several
+      tokens and the window reads tighter. --near composes with --lemma (the
+      anchor then expands to the lemma's attested surface forms before the
+      NEAR: --lemma λέγω --near κύριος finds εἶπε near κύριος too), and with
+      --lang/--license/--limit. Cross-passage adjacency is OUT — the passage
+      is the unit. --morph does not compose with --near (out of scope). Both
+      matched terms are bracketed in the snippet.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -170,6 +191,10 @@ module Nabu
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
+        nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
+                                                   #   (John 1:1 and its kin)
+        nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
+                                                   #   near κύριος: τάδε λέγει κύριος
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -183,8 +208,14 @@ module Nabu
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     option :morph, type: :string, banner: "FACETS",
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
+    option :near, type: :string, banner: "TERM",
+                  desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
+    option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
+                    desc: "Max words between the two --near terms (default " \
+                          "#{Nabu::Query::Proximity::DEFAULT_WINDOW}; 0 = adjacent)"
     def search(query = nil)
       query = query.to_s.strip
+      return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
@@ -487,7 +518,17 @@ module Nabu
       ingested, inscriptions, fragment collections) are honest misses, not
       links.
 
-      --lang grc|lat|ang|chu restricts to one shelf; --limit caps the entries.
+      The reconstruction shelves (P14-1, architecture §12) join in with the
+      comparativist's asterisk: `define '*bogъ'` (quote the star — zsh globs
+      a bare `*`) scopes to the Wiktionary Proto-Slavic/PIE/Proto-Germanic
+      extracts (sla-pro/ine-pro/gem-pro), and a reconstruction entry also
+      lists its descendant reflexes — with corpus attestation counts where
+      the reflex is a gold lemma here. Proto headwords fold to ASCII (§9:
+      ʰ→h, ʷ→w), so `define '*gʷʰew-'` and `define '*gwhew-'` reach the same
+      root. `nabu etym` walks the same crosswalk from the attested side.
+
+      --lang grc|lat|ang|chu|sla-pro|ine-pro|gem-pro restricts to one
+      shelf; --limit caps the entries.
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
@@ -495,17 +536,23 @@ module Nabu
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
+        nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
     HELP
-    option :lang, type: :string, banner: "grc|lat|ang|chu",
+    DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
+    option :lang, type: :string, banner: "grc|lat|ang|chu|sla-pro|ine-pro|gem-pro",
                   desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                        "ang → Bosworth-Toller, chu → Wiktionary-OCS"
+                        "ang → Bosworth-Toller, chu → Wiktionary-OCS, " \
+                        "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated reflex list in full, grouped by language " \
+                        "(compact is the default; MCP nabu_define stays bounded)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      if options[:lang] && !%w[grc lat ang chu].include?(options[:lang])
-        raise Thor::Error, "define: --lang must be grc, lat, ang or chu"
+      if options[:lang] && !DEFINE_LANGS.include?(options[:lang])
+        raise Thor::Error, "define: --lang must be one of #{DEFINE_LANGS.join(', ')}"
       end
 
       config = Nabu::Config.load
@@ -516,22 +563,134 @@ module Nabu
                            "(or nabu rebuild after one)"
       end
 
-      results = Nabu::Query::Define.new(catalog: catalog)
+      fulltext = open_fulltext(config)
+      results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
                                    .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_define_results(lemma, results)
     ensure
       catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
+    long_desc <<~HELP, wrap: false
+      The comparativist's walk: from an ATTESTED lemma (богъ, guþ, deus) to
+      every reconstruction whose Wiktionary descendants name it —
+      Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org
+      extracts, CC-BY-SA + GFDL) — then one hop UP the proto-to-proto
+      chain: a Proto-Slavic entry's PIE root prints with ITS cognates, so
+      богъ reaches *bogъ, *bʰeh₂g- and ἔφᾰγον in one command.
+
+      Every cognate reflex that is a gold lemma in this catalog carries its
+      attestation count (searchable via `nabu search --lemma`); the rest
+      are listed honestly as "not attested here". Romanization bridges
+      scripts — guþ reaches *gudą through Gothic 𐌲𐌿𐌸 — and the folding is
+      the conventions §9 contract (diacritics optional).
+
+      An unstarred lemma that names no descendant FALLS BACK to a
+      reconstruction-headword lookup, so the proto form itself resolves —
+      typed with its phonetic superscripts (`etym bʰewgʰ`) or in pure ASCII
+      (`etym bhewgh`, the §9 fold ʰ→h/ʷ→w), root hyphen optional. A quoted
+      leading asterisk looks a reconstruction up directly (`etym '*bogъ'`,
+      like `define '*bogъ'`) — quote the star, zsh globs a bare `*`; the
+      bare-form fallback makes it mostly unnecessary. --lang scopes the
+      attested match; --limit caps the entries. The MCP sibling is nabu_etym
+      (bounded); this CLI prints everything.
+
+      Examples:
+        nabu etym богъ --lang chu     # Zographensis god → *bogъ → *bʰeh₂g-
+        nabu etym guþ --lang got      # Gothic → *gudą → *ǵʰutós
+        nabu etym bhewgh              # bare ASCII proto form → *bʰewgʰ-
+        nabu etym '*kaisaraz'         # direct lookup (quoted — zsh globs *)
+    HELP
+    option :lang, type: :string, banner: "chu|orv|got|grc|lat|…",
+                  desc: "Scope the attested-lemma match to one language"
+    option :limit, type: :numeric, default: Nabu::Query::Etym::DEFAULT_LIMIT,
+                   desc: "Maximum reconstruction entries printed"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated cognate list in full, grouped by language " \
+                        "(compact is the default; MCP nabu_etym stays bounded)"
+    def etym(*lemma_parts)
+      lemma = lemma_parts.join(" ").strip
+      raise Thor::Error, "etym: give a lemma (e.g. богъ, guþ) or *reconstruction" if lemma.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_reflexes)
+        raise Thor::Error, "no reconstruction shelf in this catalog yet — run " \
+                           "nabu sync wiktionary-recon (or nabu rebuild after one)"
+      end
+
+      fulltext = open_fulltext(config)
+      results = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
+                                 .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+      print_etym_results(lemma, results)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "vocab URN", "Lemma-frequency profile of a document/range vs the corpus (gold shelves only)"
+    long_desc <<~HELP, wrap: false
+      Profile the gold-lemma vocabulary of one document, a citation range, or a
+      single passage (P14-3, improvements §1.7): total tokens carrying a gold
+      lemma, how many distinct lemmas, the most DISTINCTIVE vocabulary, and the
+      in-document hapax legomena (lemmas attested exactly once).
+
+      "Distinctive" means over-represented HERE versus the whole corpus, ranked
+      by a log-odds-ratio with an informative Dirichlet prior (Monroe et al.
+      2008) — the z-score damps rare-lemma noise a plain frequency ratio would
+      let blow up, so the list is the text's real subject vocabulary, not its
+      accidental singletons (those get their own hapax line). Each row shows the
+      lemma's document token count and its corpus passage-frequency.
+
+      Gold lemmas exist only for the treebank shelves (PROIEL, TOROT, ISWOC, the
+      UD treebanks) and the ORACC cuneiform layer — about 8% of the corpus. A
+      document without gold lemmas (Perseus, First1K, the papyri, ASPR poetry)
+      is not an error: it says so plainly and lists the gold-bearing languages
+      so you can profile something that works. --limit caps both the distinctive
+      list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
+
+      Examples:
+        nabu vocab urn:nabu:proiel:caes-gal          # Caesar's Gallic War
+        nabu vocab urn:nabu:proiel:cic-off --limit 30
+        nabu vocab urn:nabu:proiel:hdt:1.1-1.100     # a citation range
+    HELP
+    option :limit, type: :numeric, default: Nabu::Query::Vocab::DEFAULT_LIMIT,
+                   desc: "Cap the distinctive list and hapax spellings printed"
+    def vocab(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+      unless fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+        raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                           "run nabu sync or nabu rebuild"
+      end
+
+      profile = Nabu::Query::Vocab.new(catalog: catalog, fulltext: fulltext)
+                                  .run(urn, limit: options[:limit].to_i)
+      print_vocab(profile)
+    rescue Nabu::Query::Vocab::NotFound, Nabu::Query::Range::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
     end
 
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing six tools —
+      conversational surface over the local nabu corpus, exposing seven tools —
       nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
       parallel translations), nabu_concord (KWIC), nabu_align (cross-source
       citation alignment), nabu_define (the dictionary shelf: LSJ + Lewis &
-      Short), and nabu_status (coverage) — to any MCP client
-      (Claude Code, Claude Desktop). The catalog and index are opened
+      Short), nabu_etym (the reconstruction crosswalk), and nabu_status
+      (coverage) — to any MCP client (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
       This is a plumbing command, not an interactive one. STDOUT IS THE PROTOCOL
@@ -563,6 +722,12 @@ module Nabu
         catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
         fulltext: readonly_opener(config.fulltext_path) do
           Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+        end,
+        # The history ledger, read-only (P14-12): nabu_status surfaces the
+        # cached upstream-drift verdicts from source_probes. MCP reads the raw
+        # dataset (no model binding) and NEVER probes upstreams live.
+        ledger: readonly_opener(config.history_path) do
+          Nabu::Store.connect(config.history_path, readonly: true)
         end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
@@ -1200,6 +1365,53 @@ module Nabu
         fulltext&.disconnect
       end
 
+      # search A --near B [--window N] (P14-8): proximity search over the FTS
+      # index via FTS5 NEAR. The anchor is the positional query OR --lemma
+      # (expanded to attested surface forms); --near B is the second term;
+      # --window N is the max folded tokens between them (default 10, 0 =
+      # adjacent). Hits render exactly like plain search — the snippet brackets
+      # BOTH terms. --morph does not compose (out of scope, said honestly).
+      def proximity_search(positional_query)
+        near = options[:near].strip
+        raise Thor::Error, "search: --near needs a term" if near.empty?
+        if options[:morph]
+          raise Thor::Error, "search: --morph does not compose with --near " \
+                             "(morphology-narrowed proximity is out of scope)"
+        end
+        window = options[:window].to_i
+        raise Thor::Error, "search: --window must be 0 or more" if window.negative?
+
+        lemma = options[:lemma]&.strip
+        if options[:lemma]
+          unless positional_query.empty?
+            raise Thor::Error,
+                  "search: --lemma replaces the text query — give one or the other"
+          end
+          raise Thor::Error, "search: --lemma needs a lemma" if lemma.empty?
+        elsif positional_query.empty?
+          raise Thor::Error, "search: --near needs an anchor term (a query, or --lemma)"
+        end
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        if lemma && !fulltext.table_exists?(Nabu::Store::Indexer::LEMMA_TABLE)
+          raise Thor::Error, "no lemma index (the fulltext index predates lemma search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+          query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
+          lang: options[:lang], license: options[:license], limit: options[:limit].to_i
+        )
+        print_search_results(results)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
       # Render lemma hits: urn + language, the dictionary form with the surface
       # form(s) that attest it, then the PRISTINE passage line (truncated) —
       # the surface form already marks the match, so readability wins over a
@@ -1215,6 +1427,69 @@ module Nabu
           say "  #{truncate_line(result.text)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+      end
+
+      # Render a vocab profile (P14-3): the header (urn, title, language, scope),
+      # then either the gold-lemma summary + distinctive table + hapax line, or
+      # the honest no-gold-lemmas notice naming the gold-bearing languages.
+      def print_vocab(profile)
+        header = "#{profile.urn}#{" — #{profile.title}" if profile.title}"
+        header += " [#{profile.language}]" if profile.language
+        say header
+        say "  #{profile.kind}, #{pluralize(profile.passages, 'passage')}"
+        return print_vocab_no_gold(profile) if profile.total_tokens.zero?
+
+        say "  gold lemmas: #{commafy(profile.total_tokens)} tokens · " \
+            "#{commafy(profile.distinct_lemmas)} distinct lemmas · " \
+            "#{commafy(profile.hapax_count)} hapax legomena " \
+            "(#{profile.annotated_passages} of #{profile.passages} passages annotated)"
+        print_vocab_distinctive(profile.distinctive)
+        print_vocab_hapax(profile.hapax, profile.hapax_count)
+      end
+
+      # The distinctive-vocabulary table: lemma, its token count here, its corpus
+      # passage-frequency, and the log-odds z-score, most distinctive first.
+      def print_vocab_distinctive(distinctive)
+        return if distinctive.empty?
+
+        say ""
+        say "  distinctive vocabulary (log-odds vs corpus, top #{distinctive.size}):"
+        width = distinctive.map { |e| e.lemma.length }.max
+        distinctive.each do |entry|
+          say "    #{entry.lemma.ljust(width)}  #{entry.doc_count}× here · " \
+              "#{commafy(entry.corpus_freq)}× corpus  (z=#{format('%.1f', entry.score)})"
+        end
+      end
+
+      # The hapax legomena line: attested exactly once in this document. The full
+      # count, then up to --limit spellings (they can number in the hundreds).
+      def print_vocab_hapax(hapax, hapax_count)
+        return if hapax_count.zero?
+
+        say ""
+        shown = hapax.first(options[:limit].to_i)
+        more = hapax_count - shown.size
+        tail = more.positive? ? " (+#{commafy(more)} more)" : ""
+        say "  hapax legomena (#{commafy(hapax_count)}, once each): #{shown.join(', ')}#{tail}"
+      end
+
+      # A document with no gold lemmas: say so plainly and name the gold-bearing
+      # languages (from the lemma index) so the user can profile something real.
+      def print_vocab_no_gold(profile)
+        say "  no gold lemmas — this document is not linguistically annotated " \
+            "(0 of #{pluralize(profile.passages, 'passage')} carry one)."
+        say "  Gold lemmas come from the treebank shelves (PROIEL, TOROT, ISWOC, " \
+            "Universal Dependencies) and the ORACC cuneiform layer."
+        langs = profile.gold_languages.first(8).map { |lang, count| "#{lang} (#{commafy(count)})" }
+        ellipsis = profile.gold_languages.size > langs.size ? ", …" : ""
+        say "  gold-bearing languages: #{langs.join(', ')}#{ellipsis}"
+        say "  Try e.g. nabu vocab urn:nabu:proiel:caes-gal"
+      end
+
+      # Group an integer's digits into thousands (12345 → "12,345"). Plain string
+      # work — no locale gem for one display nicety.
+      def commafy(number)
+        number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
       end
 
       # One display line of pristine text: newlines flattened, capped at 100
@@ -1240,8 +1515,86 @@ module Nabu
           say "  gloss: #{result.gloss}" if result.gloss
           say ""
           say result.body
+          print_reflexes(result.reflexes)
           print_resolved_citations(result)
         end
+      end
+
+      # A reconstruction entry's descendant reflexes (P14-1): attested-here
+      # cognates first with their gold-lemma passage counts, then an honest
+      # one-line summary of the rest (the full tree is in the data; the
+      # attested ones are the actionable ones).
+      def print_reflexes(reflexes)
+        return if reflexes.empty?
+
+        attested, rest = reflexes.partition(&:attested_count)
+        unless attested.empty?
+          say ""
+          say "attested in this corpus (nabu search --lemma):"
+          attested.sort_by { |r| -r.attested_count }.each do |r|
+            say "  [#{r.language}] #{reflex_form(r)} — #{r.attested_count} " \
+                "#{r.attested_count == 1 ? 'passage' : 'passages'}"
+          end
+        end
+        return if rest.empty?
+
+        say ""
+        options[:long] ? print_reflexes_expanded(rest) : print_reflexes_capped(rest)
+      end
+
+      # Compact default (house compact-CLI rule): the first ten non-attested
+      # reflexes inline, the tail honestly summarised as "… and N more".
+      def print_reflexes_capped(rest)
+        say "other reflexes (not attested here): " \
+            "#{rest.first(10).map { |r| "[#{r.lang_code}] #{reflex_form(r)}" }.join(', ')}" \
+            "#{" … and #{rest.size - 10} more" if rest.size > 10}"
+      end
+
+      # --long (P14-11): the WHOLE non-attested list, grouped by language so a
+      # long tail (a Proto-Slavic root can name 25+ descendants) stays readable
+      # — languages in first-seen (stored depth-first) order, forms within a
+      # language in stored order. Nothing is elided under the flag.
+      def print_reflexes_expanded(rest)
+        say "other reflexes (not attested here) — all #{rest.size}, grouped by language:"
+        rest.group_by(&:lang_code).each do |lang_code, group|
+          say "  [#{lang_code}] #{group.map { |r| reflex_form(r) }.join(', ')}"
+        end
+      end
+
+      def reflex_form(reflex)
+        reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+      end
+
+      # etym (P14-1): one block per reconstruction entry — where the walk
+      # entered (matched reflex → *headword), the entry's own reflex list,
+      # then each one-hop ancestor with its cognates.
+      def print_etym_results(lemma, results)
+        if results.empty?
+          return say("no reconstruction names #{lemma} as a descendant, and no reconstruction " \
+                     "headword matches it — the crosswalk covers Proto-Slavic/PIE/Proto-Germanic " \
+                     "(Wiktionary). Try the lemma's dictionary form, or a quoted '*form' for a " \
+                     "direct lookup (quote the star — zsh expands a bare *)")
+        end
+
+        results.each_with_index do |result, index|
+          say "" if index.positive?
+          say "#{etym_entry_line(result)}  #{result.urn}"
+          say "  gloss: #{result.gloss}" if result.gloss
+          print_reflexes(result.cognates)
+          result.ancestors.each do |ancestor|
+            say ""
+            say "← #{etym_entry_line(ancestor)}  #{ancestor.urn}"
+            say "  gloss: #{ancestor.gloss}" if ancestor.gloss
+            print_reflexes(ancestor.cognates)
+          end
+        end
+      end
+
+      def etym_entry_line(result)
+        via = result.matched_reflex
+        prefix = via ? "#{via.word} [#{via.language}] → " : ""
+        "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
+          "[#{result.license_class}]"
       end
 
       def print_resolved_citations(result)
@@ -1417,6 +1770,20 @@ module Nabu
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
         ledger&.disconnect
+      end
+
+      # `status --remote` (P14-12): run the live upstream probe through the SAME
+      # RemoteProbe as `health --remote`, whose run persists each verdict into
+      # the ledger's source_probes cache, then hand the (write-opened, migrated)
+      # ledger back so status renders the just-refreshed up= column. Returns the
+      # ledger handle; the caller owns disconnecting it. The probe's exit-code
+      # gate is health's concern, not status's — status just reports.
+      def probe_upstreams(config, registry)
+        ledger = open_or_create_ledger(config)
+        Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).run
+        ledger
       end
 
       # Bare health (P5-5): run-history trends + live golden replay, no network.

@@ -154,6 +154,54 @@ nt:
         3JOHN: urn:nabu:eng-web:3jn
         JUDE: urn:nabu:eng-web:jud
         REV: urn:nabu:eng-web:rev
+    # P14-2: the four CCMH gospel manuscripts (Corpus Cyrillo-Methodianum
+    # Helsingiense, Kielipankki; CC BY 4.0 → attribution) — the Old Church
+    # Slavonic canon as verse-cited witnesses (urn:nabu:ccmh:<ms>:<book>:
+    # <ch>.<verse>), added via the documents: multi-book form (cts-verse).
+    # Codex Assemanianus and Savvina kniga are held NOWHERE ELSE in the corpus;
+    # CCMH Marianus and Zographensis are ALTERNATIVE EDITIONS of the PROIEL
+    # marianus / TOROT zographensis treebanks (Helsinki transliterations of the
+    # print editions — distinct versions, never a dedupe, conventions §3), so
+    # each label carries "CCMH" to render distinguishably beside PROIEL
+    # "marianus" (the fifth witness above): `align "MARK 2.3"` shows the two
+    # Marianus editions side by side, the alt-edition showcase. All four
+    # manuscripts hold all four gospels (verified read-only against the live
+    # catalog, 2026-07-12); verse coverage is fragmentary per witness (the
+    # lectionaries Assemanianus/Savvina are honestly sparse) and renders "not
+    # attested" per verse (P11-9). The codices' CHAPTER-0 apparatus (kephalaia
+    # title-lists + incipits minted as …:0.N) is EXCLUDED at the cts-verse
+    # extractor — it is not verse text and would cross-align spuriously; a
+    # lectionary :b2 duplicate verse folds to a distinct "…​.B2" ref and so
+    # never false-aligns onto the primary verse. "Not synced" until the
+    # owner-fired first `nabu sync ccmh`.
+    - label: CCMH Assemanianus
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:ccmh:assemanianus:mat
+        MARK: urn:nabu:ccmh:assemanianus:mar
+        LUKE: urn:nabu:ccmh:assemanianus:luk
+        JOHN: urn:nabu:ccmh:assemanianus:joh
+    - label: CCMH Marianus
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:ccmh:marianus:mat
+        MARK: urn:nabu:ccmh:marianus:mar
+        LUKE: urn:nabu:ccmh:marianus:luk
+        JOHN: urn:nabu:ccmh:marianus:joh
+    - label: CCMH Savvina
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:ccmh:savvina:mat
+        MARK: urn:nabu:ccmh:savvina:mar
+        LUKE: urn:nabu:ccmh:savvina:luk
+        JOHN: urn:nabu:ccmh:savvina:joh
+    - label: CCMH Zographensis
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:ccmh:zographensis:mat
+        MARK: urn:nabu:ccmh:zographensis:mar
+        LUKE: urn:nabu:ccmh:zographensis:luk
+        JOHN: urn:nabu:ccmh:zographensis:joh
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.

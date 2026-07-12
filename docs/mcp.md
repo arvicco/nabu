@@ -2,10 +2,11 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes six tools — search, read
-by urn, concordance, cross-source alignment, dictionary lookup, and coverage —
-so a model can look things up in your texts, quote them, and cite them, without
-any ability to change the collection.
+(Claude Code, Claude Desktop) over stdio. It exposes seven tools — search, read
+by urn, concordance, cross-source alignment, dictionary lookup, the
+reconstruction walk, and coverage — so a model can look things up in your
+texts, quote them, and cite them, without any ability to change the
+collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -33,7 +34,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The six tools
+## 2. The seven tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, and align rows also carry the **source**
@@ -55,6 +56,17 @@ Full-text or exact-lemma search over the whole corpus. Give **exactly one** of:
   PROIEL/TOROT are decoded from their positional tag into the same names; ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
+
+An optional `near` turns either mode into **proximity search**: keep only hits
+where `near`'s term occurs within `window` words (default 10, `0` = adjacent) of
+the `query`/`lemma` in the **same passage**. It is FTS5 NEAR over the folded
+search forms — order-independent (`A … B` and `B … A` both count), the window
+counting folded tokens (so a cuneiform sign-joined word, folded to several
+tokens, reads tighter). With a `lemma` anchor the lemma first expands to its
+attested surface forms, so `lemma: "λέγω", near: "κύριος"` finds `τάδε λέγει
+κύριος`. Both matched terms are bracketed in the returned snippet.
+Cross-passage adjacency is out (the passage is the unit); `near` does not
+compose with `morph`.
 
 Optional `lang` (ISO-639-3), `license` (exact class), `limit` (default 10, max
 50). Hits are relevance-ranked and bounded, with an honest "showing k of N"
@@ -129,7 +141,33 @@ fields, a short gloss, the entry body as structured plain text (bounded at
 whole), and the entry's citations with `resolved_urn` set where the cited
 work is in-catalog (`Il. 1.1` → the actual Iliad line, one `nabu_show`
 away); unresolved citations keep their display text and a null urn. Lemma
-hits from `nabu_search` carry these glosses too.
+hits from `nabu_search` carry these glosses too. A leading asterisk
+(`*bogъ`; quote it in a shell — zsh globs a bare `*`) scopes to the
+reconstruction shelves (P14-1), whose entries also carry their descendant
+`reflexes` (bounded, attested-first, honest totals — this conversational
+surface stays capped by design; the CLI `nabu define --long` is the
+unbounded, grouped-by-language expansion, P14-11); proto headwords fold
+to ASCII (§9: ʰ→h, ʷ→w), so `*gwhew-` reaches `*gʷʰew-`.
+
+### `nabu_etym`
+
+The reconstruction walk (P14-1, architecture §12): give an attested lemma
+(богъ, guþ) and get every reconstruction whose Wiktionary descendants name
+it — Proto-Slavic / PIE / Proto-Germanic (kaikki.org extracts, CC-BY-SA +
+GFDL) — each with the reflex that matched (`matched_via`), its cognates
+across languages with **corpus attestation counts** (`attested_count` =
+gold-lemma passages in this catalog; null is an honest absence, not a
+zero), and one hop of proto-to-proto ancestors with *their* cognates
+(богъ → \*bogъ → \*bʰeh₂g- → ἔφᾰγον in one call). Romanization bridges
+scripts: guþ reaches \*gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the attested
+match. An unstarred lemma that names no descendant **falls back** to a
+reconstruction-headword lookup, so the proto form itself resolves —
+superscripted (`bʰewgʰ`) or pure ASCII (`bhewgh`, the §9 fold ʰ→h/ʷ→w),
+root hyphen optional; a leading asterisk (quote it in a shell — zsh globs a
+bare `*`) forces the direct lookup. Cognate lists are bounded (attested
+first, 20 shown) with honest totals — this conversational surface stays
+capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
+grouped by language.
 
 ### `nabu_status`
 

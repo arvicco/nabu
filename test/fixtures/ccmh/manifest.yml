@@ -1,13 +1,14 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All four files are documented TRIMS (whole: false) of the CCMH gospel CES
-# XML files: whole chapters/books removed, every retained line byte-identical
-# to upstream, closing tags re-added where a book was cut mid-file. A fresh
-# GET returns the full files, so they are fetched for URL-liveness only,
-# never byte-compared. adapter_test is null: the ccmh adapter test asserts
-# trimmed book/verse counts an untrimmed upstream file would false-fail.
-# Re-apply the README trims after any refresh.
+# All seven files are documented TRIMS (whole: false): the four gospel CES
+# XML files (whole chapters/books removed, every retained line byte-identical
+# to upstream, closing tags re-added where a book was cut mid-file) and the
+# three P14-5 txt texts (byte-identical line ranges, no re-added anything). A
+# fresh GET returns the full files, so they are fetched for URL-liveness
+# only, never byte-compared. adapter_test is null: the ccmh adapter test
+# asserts trimmed book/verse/line counts an untrimmed upstream file would
+# false-fail. Re-apply the README trims after any refresh.
 source: ccmh
 adapter_test: null
 retrieved: 2026-07-11
@@ -28,3 +29,19 @@ files:
     url: https://www.kielipankki.fi/download/ccmh-src/www/zographensis.xml
     whole: false
     trim: header + MAT book cut to chapter b.MAT.3 (the lacunose ms's first chapter) + re-added closing tags; 559,818 B -> 1,474 B, well-formed
+  # P14-5 (retrieved 2026-07-12): the three txt-only texts. Trims are
+  # byte-identical LINE RANGES of the upstream files (LF for suprasliensis,
+  # CRLF preserved for the Vitae); ranges cut at non-hyphen / verse
+  # boundaries so no fixture-only hyphen join or half verse is minted.
+  - path: suprasliensis.txt
+    url: https://www.kielipankki.fi/download/ccmh-src/www/suprasliensis.txt
+    whole: false
+    trim: lines 1-33 (folio 1 recto+verso head, hyphen-split runs) + 2382-2415 (both 1042114-1042119 collision runs incl. the hyphen join across the seam) + 8784-8788 (the side-digit-3 slip 3014301); 860,523 B -> 3,415 B
+  - path: vita_constantini.txt
+    url: https://www.kielipankki.fi/download/ccmh-src/www/vita_constantini.txt
+    whole: false
+    trim: lines 1-16 (incipit + ch1 vv1-2) + 219-224 (ch6 vv1-3 incl. the ADJACENT 0600200 code slip, one aggregated verse) + 778-796 (ch11 vv10-19 + the NON-adjacent 1101010 recurrence -> 11.10:b2); 71,139 B -> 2,408 B
+  - path: vita_methodii.txt
+    url: https://www.kielipankki.fi/download/ccmh-src/www/vita_methodii.txt
+    whole: false
+    trim: lines 1-13 (incipit + ch1 vv1-2) + 394-397 (ch17 vv1-2 incl. the duplicate 1700100 INSIDE one verse run, absorbed without :b2); 25,403 B -> 1,011 B

@@ -58,10 +58,12 @@ module Nabu
     # flattened to a hyphen (saao/saa01 → saao-saa01); <textid> is the stable
     # CDLI/ORACC P-number (artifact) or Q-number (composite). The line label
     # keeps everything else verbatim, primes included ("seal 1 1’" →
-    # seal.1.1’) — labels are verified unique per text across both whole
-    # fixture projects, and a duplicate raises ParseError rather than
-    # minting ambiguity. The caller-supplied urn must equal the minting
-    # (mismatch → ParseError, the DdbdpParser cross-check spirit).
+    # seal.1.1’). Most texts carry unique labels; where the P11-7 sentence-label
+    # fallback makes two physical lines share a suffix (bilingual interlinear
+    # blms, range-labeled saa08 omens), the second takes a ":b2" positional
+    # suffix in document order (P14-9 disambiguate_suffixes — never quarantine,
+    # never merge). The caller-supplied urn must equal the minting (mismatch →
+    # ParseError, the DdbdpParser cross-check spirit).
     #
     # == Language: per-text primary, per-word honest
     #
@@ -150,9 +152,10 @@ module Nabu
 
         language = primary_language(lines)
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
+        suffixes = disambiguate_suffixes(lines)
         lines.each_with_index do |line, sequence|
           document << Passage.new(
-            urn: "#{urn}:#{line_suffix(line.label)}",
+            urn: "#{urn}:#{suffixes[sequence]}",
             language: language,
             text: Normalize.nfc(line.forms.join(" ")),
             annotations: annotations(line),
@@ -162,6 +165,26 @@ module Nabu
         document
       rescue ValidationError => e
         raise ParseError, "#{path}: #{e.message}"
+      end
+
+      # P14-9 collision tolerance (the GRETIL/ccmh :b<k> precedent, P9-4c/P13-2).
+      # Bilingual literary (blms) and range-labeled omen (saa08) texts carry
+      # MULTIPLE label-less line-starts under ONE sentence; the P11-7 fallback
+      # resolves them all to that sentence's label, so distinct physical lines
+      # (a Sumerian line and its Akkadian interlinear translation; an apodosis
+      # gloss and its base line) would mint one suffix. Rather than quarantine
+      # the whole tablet, the second line at a repeated suffix takes a ":b2"
+      # positional suffix, the third ":b3", …, in document order — never merged
+      # (different words/languages), never dropped. A document with no repeated
+      # suffix is returned untouched: clean tablets keep byte-identical passage
+      # urns (the frozen-URN guarantee).
+      def disambiguate_suffixes(lines)
+        seen = Hash.new(0)
+        lines.map do |line|
+          suffix = line_suffix(line.label)
+          seen[suffix] += 1
+          seen[suffix] == 1 ? suffix : "#{suffix}:b#{seen[suffix]}"
+        end
       end
 
       # "o 1" → "o.1"; "seal 1 1’" → "seal.1.1’". FROZEN once minted.

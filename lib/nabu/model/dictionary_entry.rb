@@ -29,6 +29,41 @@ module Nabu
     end
   end
 
+  # One descendant reflex a reconstruction entry names (P14-1): a worded
+  # node of the kaikki `descendants` tree, flattened depth-first — the
+  # machine-readable edge of the reconstruction crosswalk. The citation
+  # pattern exactly: the parser mints it, the loader persists it, and
+  # resolution against in-catalog lemmas happens at QUERY time only
+  # (architecture §12) — nothing resolved is ever stored.
+  #
+  # - +lang_code+: the upstream Wiktionary code verbatim ("cu", "la",
+  #   "zlw-ocs", even the lone malformed "ML." — canonical means canonical).
+  # - +language+: the catalog-side language tag the fold and the crosswalk
+  #   join speak — the parser's map for codes that differ (cu→chu, la→lat,
+  #   sa→san), identity for shape-valid codes, nil for unmappable ones
+  #   (nil = display-only, never a join candidate).
+  # - +word+: the reflex verbatim, NFC (proto-to-proto reflexes keep their
+  #   leading asterisk — upstream writes "*bogъ" under a PIE entry).
+  # - +roman+: the upstream romanization when present — load-bearing for
+  #   scripts the catalog's gold lemmas romanize (Gothic 𐌲𐌿𐌸 is unfindable;
+  #   its roman "guþ" is a gold lemma).
+  # - +word_folded+/+roman_folded+: conventions §9 search forms (leading
+  #   asterisk stripped first — the define/etym query convention), folded
+  #   with +language+; nil when unfoldable or when the fold comes out empty.
+  DictionaryReflex = Data.define(:lang_code, :language, :word, :roman,
+                                 :word_folded, :roman_folded) do
+    def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil, roman_folded: nil)
+      super(
+        lang_code: Model::Validation.present_string!(lang_code, field: "lang_code"),
+        language: language.nil? ? nil : Model::Validation.language!(language),
+        word: Model::Validation.nfc_text!(word, field: "word"),
+        roman: roman.nil? ? nil : Model::Validation.nfc_text!(roman, field: "roman"),
+        word_folded: word_folded.nil? ? nil : Model::Validation.nfc_text!(word_folded, field: "word_folded"),
+        roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded")
+      )
+    end
+  end
+
   # One dictionary entry (P11-4): what the lexicon-tei parser yields and the
   # DictionaryLoader persists. NOT a passage — dictionaries are a separate
   # surface (improvements §1.3) with their own storage shape.
@@ -45,12 +80,17 @@ module Nabu
   # - +body+: the whole entry as structured plain text (sense labels on their
   #   own lines), Greek decoded, NFC.
   # - +citations+: DictionaryCitation values in entry order.
+  # - +reflexes+: DictionaryReflex values in descendants-tree depth-first
+  #   order (P14-1) — empty for every non-reconstruction shelf.
   DictionaryEntry = Data.define(:entry_id, :key_raw, :language, :headword,
-                                :headword_folded, :gloss, :body, :citations) do
+                                :headword_folded, :gloss, :body, :citations, :reflexes) do
     def initialize(entry_id:, key_raw:, language:, headword:, headword_folded:, body:,
-                   gloss: nil, citations: [])
+                   gloss: nil, citations: [], reflexes: [])
       unless citations.is_a?(Array) && citations.all?(Nabu::DictionaryCitation)
         raise ValidationError, "citations must be an Array of Nabu::DictionaryCitation"
+      end
+      unless reflexes.is_a?(Array) && reflexes.all?(Nabu::DictionaryReflex)
+        raise ValidationError, "reflexes must be an Array of Nabu::DictionaryReflex"
       end
 
       super(
@@ -61,7 +101,8 @@ module Nabu
         headword_folded: Model::Validation.nfc_text!(headword_folded, field: "headword_folded"),
         gloss: gloss.nil? ? nil : Model::Validation.nfc_text!(gloss, field: "gloss"),
         body: Model::Validation.nfc_text!(body, field: "body"),
-        citations: citations.freeze
+        citations: citations.freeze,
+        reflexes: reflexes.freeze
       )
     end
   end

@@ -33,8 +33,8 @@ module MCP
 
     # -- rig -------------------------------------------------------------------
 
-    def tools(catalog: @catalog, fulltext: @fulltext)
-      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext)
+    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil)
+      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -97,9 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_six_tools_with_json_schemas
+    def test_definitions_lists_the_seven_tools_with_json_schemas
       defs = tools.definitions
-      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_status],
+      assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
+                      nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -202,6 +203,42 @@ module MCP
       rebuild!
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "lemma" => "λέγω", "morph" => "case" })
+      end
+    end
+
+    # -- nabu_search: proximity (near/window) -----------------------------------
+
+    def test_search_near_keeps_only_the_close_pair_both_terms_highlighted
+      doc = make_document(urn: "urn:d:jn", title: "John")
+      make_passage(doc, urn: "urn:d:jn:1", text: "θεὸς ἦν ὁ λόγος", sequence: 0)
+      make_passage(doc, urn: "urn:d:jn:2",
+                        text: "λόγος μὲν οὖν ἐστιν ἀρχὴ πάντων καὶ τέλος ὁ θεός", sequence: 1)
+      rebuild!
+
+      hits = payload(call("nabu_search", { "query" => "λόγος", "near" => "θεός", "window" => 3 })).fetch("matches")
+      assert_equal(%w[urn:d:jn:1], hits.map { |hit| hit.fetch("urn") })
+      snippet = hits.first.fetch("snippet")
+      assert_includes snippet, "[θεοσ]"
+      assert_includes snippet, "[λογοσ]", "both proximity terms are bracketed in the snippet"
+    end
+
+    def test_search_near_expands_a_lemma_anchor_to_surface_forms
+      doc = make_document(urn: "urn:d:lxx", title: "LXX")
+      make_passage(doc, urn: "urn:d:lxx:1", text: "καὶ εἶπε κύριος", sequence: 0,
+                        lemmas: [%w[λέγω εἶπε], %w[κύριος κύριος]])
+      rebuild!
+
+      hits = payload(call("nabu_search", { "lemma" => "λέγω", "near" => "κύριος", "window" => 2 })).fetch("matches")
+      assert_equal(%w[urn:d:lxx:1], hits.map { |hit| hit.fetch("urn") },
+                   "the suppletive aorist εἶπε counts as λέγω near κύριος")
+    end
+
+    def test_search_near_does_not_compose_with_morph
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "x", sequence: 0, lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "near" => "κύριος", "morph" => "case=nom" })
       end
     end
 
@@ -433,6 +470,40 @@ module MCP
       assert_equal 0, perseus.fetch("entries")
     end
 
+    # P14-12: nabu_status surfaces the CACHED upstream-drift verdict per source
+    # from the ledger — a bounded status read, never a live probe.
+    def test_status_surfaces_cached_upstream_verdict
+      seed_corpus
+      ledger = ledger_test_db
+      Nabu::Store::Probe.create(source_slug: "perseus", checked_at: Time.utc(2026, 7, 10, 12),
+                                drift: "behind", license: "unchanged",
+                                detail: "behind: https://github.com/acme/one")
+      body = payload(tools(ledger: ledger).call("nabu_status", {}))
+
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      upstream = perseus.fetch("upstream")
+      assert_equal "behind", upstream.fetch("drift")
+      assert_equal "unchanged", upstream.fetch("license")
+      assert_match(/2026-07-10/, upstream.fetch("checked_at"))
+      assert_match(/behind: /, upstream.fetch("detail"))
+      assert_match(/never probes upstreams live/, body.fetch("note"))
+    end
+
+    # A source with no cache row (or no ledger at all) reports never_probed,
+    # never a nil/absent upstream field.
+    def test_status_upstream_never_probed_without_a_cache_row
+      seed_corpus
+      # ledger present but empty (adhoc/perseus have no probe rows)
+      body = payload(tools(ledger: ledger_test_db).call("nabu_status", {}))
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "never_probed", perseus.fetch("upstream").fetch("drift")
+
+      # and with no ledger configured at all, still never_probed, no crash
+      body2 = payload(call("nabu_status"))
+      p2 = body2.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "never_probed", p2.fetch("upstream").fetch("drift")
+    end
+
     # -- nabu_concord (P8-3) -------------------------------------------------------
 
     def test_concord_returns_kwic_rows_with_urn_language_and_license
@@ -621,6 +692,101 @@ module MCP
       assert_match(/shelf|dictionar/i, text_of(result))
     ensure
       bare&.disconnect
+    end
+
+    # -- nabu_etym (P14-1) --------------------------------------------------------
+
+    def seed_recon_shelf(source: nil)
+      recon = source || Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon",
+        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+    end
+
+    def test_etym_walks_an_attested_lemma_with_counts_and_ancestors
+      seed_recon_shelf
+      doc = make_document(urn: "urn:nabu:test:chu", title: "Zographensis", language: "chu")
+      make_passage(doc, urn: "urn:nabu:test:chu:1", text: "ба", sequence: 0, language: "chu",
+                        lemmas: [%w[богъ ба]])
+      rebuild!
+
+      entries = payload(call("nabu_etym", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      assert_equal 1, entries.size
+      entry = entries.first
+      assert_equal "*bogъ", entry.fetch("headword")
+      assert_equal "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2", entry.fetch("urn")
+      assert_equal "attribution", entry.fetch("license_class")
+      assert_equal({ "language" => "chu", "word" => "богъ", "roman" => "bogŭ" },
+                   entry.fetch("matched_via"))
+      cognate = entry.fetch("cognates").first
+      assert_equal 1, cognate.fetch("attested_count"), "attested cognates sort first"
+      assert_operator entry.fetch("cognates_total"), :>, entry.fetch("cognates").size,
+                      "the cognate list is bounded with an honest total"
+      assert_includes entry.fetch("ancestors").map { |a| a.fetch("headword") }, "*bʰeh₂g-",
+                      "one proto-to-proto hop rides along"
+    end
+
+    def test_etym_needs_a_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_etym", {}) }
+    end
+
+    def test_etym_no_match_words_the_absence
+      seed_recon_shelf
+      rebuild!
+      result = call("nabu_etym", { "lemma" => "βλαβλα" })
+      refute result[:isError]
+      assert_empty payload(result).fetch("entries")
+      note = payload(result).fetch("note")
+      assert_match(/no reconstruction/i, note)
+      assert_match(/'\*form'/, note, "the miss note must show the quoted-star syntax")
+    end
+
+    def test_etym_falls_back_to_a_bare_proto_headword_when_reflexes_miss
+      seed_recon_shelf
+      rebuild!
+      # P14-10: nabu_etym shares Query::Etym's bare-form fallback — a proto
+      # form typed directly (asterisk optional), ASCII-folded and
+      # hyphen-tolerant, resolves to its reconstruction entry.
+      entries = payload(call("nabu_etym", { "lemma" => "gwhew" })).fetch("entries")
+      assert_equal 1, entries.size
+      assert_equal "*gʷʰew-", entries.first.fetch("headword")
+      refute entries.first.key?("matched_via"), "a direct headword hit, no reflex walk"
+    end
+
+    def test_etym_withholds_restricted_shelves_by_default
+      restricted = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon",
+        license: "CC-BY-SA + GFDL", license_class: "research_private", enabled: true
+      )
+      seed_recon_shelf(source: restricted)
+      rebuild!
+      assert_empty payload(call("nabu_etym", { "lemma" => "*bogъ" })).fetch("entries")
+      revealed = payload(call("nabu_etym", { "lemma" => "*bogъ", "include_restricted" => true }))
+      refute_empty revealed.fetch("entries")
+    end
+
+    def test_etym_without_the_crosswalk_migration_degrades_gracefully
+      bare = Nabu::Store.connect("sqlite::memory:")
+      result = tools(catalog: bare, fulltext: @fulltext).call("nabu_etym", { "lemma" => "богъ" })
+      refute result[:isError]
+      assert_match(/reconstruction shelf/i, text_of(result))
+    ensure
+      bare&.disconnect
+    end
+
+    def test_define_carries_reflexes_on_reconstruction_entries
+      seed_recon_shelf
+      entries = payload(call("nabu_define", { "lemma" => "*bogъ", "lang" => "sla-pro" })).fetch("entries")
+      refute_empty entries
+      entry = entries.find { |e| e.fetch("urn").end_with?("bogъ:noun:2") }
+      assert_equal "*bogъ", entry.fetch("headword")
+      refute_empty entry.fetch("reflexes")
+      assert_kind_of Integer, entry.fetch("reflexes_total")
     end
 
     def test_concord_with_a_missing_fts_table_degrades_gracefully

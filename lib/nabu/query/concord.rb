@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require_relative "../normalize"
 require_relative "search"
 require_relative "lemma_search"
@@ -62,6 +63,7 @@ module Nabu
       WORD_CHAR = /[[:alpha:]\p{M}[:digit:]]/
 
       def initialize(catalog:, fulltext:)
+        @catalog = catalog
         @search = Search.new(catalog: catalog, fulltext: fulltext)
         @lemma_search = LemmaSearch.new(catalog: catalog, fulltext: fulltext)
       end
@@ -107,6 +109,7 @@ module Nabu
       def build_row(result, terms, width)
         display = flatten(result.text)
         span = locate(display, terms, result.language)
+        span = locate_hyphen_joined(display, terms, result) if span == [0, 0]
         left, keyword, right = split_on_span(display, span)
         Row.new(
           urn: result.urn, language: result.language, license_class: result.license_class,
@@ -127,6 +130,50 @@ module Nabu
       # line, left-anchored).
       def locate(display, terms, language)
         folded, map = Nabu::Normalize.fold_with_map(display, language: language)
+        span_from(folded, map, terms, language, display)
+      end
+
+      # The diplomatic line-break retry (P14-5, conventions §9): a ccmh-txt
+      # hyphen line indexes the COMPLETED split word, so a term matched there
+      # is absent from the folded pristine display. Rebuild the haystack the
+      # way the index saw it — trailing hyphen dropped, the annotation's tail
+      # appended with every tail character mapped to the hyphen/EOL display
+      # position — and scan again. The keyword the span yields is exactly the
+      # visible fragment + hyphen ("mOdrova-"): honest highlighting, no
+      # fabricated display text. Passages without a hyphen_join tail (or a
+      # display not ending in "-") keep the [0, 0] fallback.
+      def locate_hyphen_joined(display, terms, result)
+        return [0, 0] unless display.end_with?("-")
+
+        tail = hyphen_tail(result.urn)
+        return [0, 0] unless tail
+
+        folded, map = Nabu::Normalize.fold_with_map(display, language: result.language)
+        return [0, 0] unless folded.end_with?("-")
+
+        folded = folded.delete_suffix("-")
+        map = map[0, folded.length]
+        eol = display.chars.length - 1
+        Nabu::Normalize.search_form(tail, language: result.language).each_char do |char|
+          folded += char
+          map << eol
+        end
+        span_from(folded, map, terms, result.language, display)
+      end
+
+      # The hit's "hyphen_join" tail from the catalog row (the annotation the
+      # ccmh-txt parser records; nil for everything else). One lookup per
+      # retried row only — a formatter-grade cost.
+      def hyphen_tail(urn)
+        json = @catalog[:passages].where(urn: urn).get(:annotations_json)
+        return nil unless json
+
+        JSON.parse(json).dig("hyphen_join", "tail")
+      rescue JSON::ParserError
+        nil
+      end
+
+      def span_from(folded, map, terms, language, display)
         best = nil
         terms.each do |term|
           needle = Nabu::Normalize.search_form(term, language: language)

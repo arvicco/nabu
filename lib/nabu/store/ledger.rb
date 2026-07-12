@@ -23,7 +23,8 @@ module Nabu
       MODELS = {
         Run: :runs,
         Pin: :pins,
-        Revision: :revisions
+        Revision: :revisions,
+        Probe: :source_probes
       }.freeze
 
       module_function
@@ -43,15 +44,32 @@ module Nabu
       # first call loads the model files, later calls rebind their datasets.
       def setup!(db)
         Sequel::Model.db = db
-        if @models_loaded
-          MODELS.each_key { |const| Store.const_get(const).set_dataset(db[MODELS.fetch(const)]) }
-        else
-          require_relative "run"
-          require_relative "pin"
-          require_relative "revision"
-          @models_loaded = true
+        # Tolerate a ledger whose schema predates a just-shipped table: the
+        # read-only `nabu status` path binds the models without migrating (write
+        # paths migrate first), so a pre-P14-12 ledger has no source_probes yet.
+        # require_valid_table false makes that binding lazy — a missing table
+        # errors only if actually queried, and every reader guards with
+        # table_exists? (StatusReport's probe cache degrades to "never probed").
+        with_lenient_table_binding do
+          if @models_loaded
+            MODELS.each_key { |const| Store.const_get(const).set_dataset(db[MODELS.fetch(const)]) }
+          else
+            require_relative "run"
+            require_relative "pin"
+            require_relative "revision"
+            require_relative "probe"
+            @models_loaded = true
+          end
         end
         db
+      end
+
+      def with_lenient_table_binding
+        previous = Sequel::Model.require_valid_table
+        Sequel::Model.require_valid_table = false
+        yield
+      ensure
+        Sequel::Model.require_valid_table = previous
       end
 
       # The write-path opener: create the file if absent, migrate, bind models.

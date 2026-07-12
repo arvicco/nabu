@@ -30,7 +30,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export define].each do |command|
+    %w[version sync status rebuild verify search show export define etym].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -109,6 +109,78 @@ class CLITest < Minitest::Test
     assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
     assert_match(/--lang grc\|lat\|ang\|chu/, out)
     assert_match(/nabu define virtus/, out, "must show a Latin example")
+  end
+
+  # P14-1: `nabu etym` help must teach the walk (attested → proto →
+  # cognates), the asterisk convention, the romanization bridge, and worked
+  # examples on the demo chains.
+  def test_help_etym_documents_the_reconstruction_walk
+    out, _err, _status = run_cli(%w[help etym])
+    assert_match(/Proto-Slavic/, out)
+    assert_match(/Proto-Indo-European/, out)
+    assert_match(/Proto-Germanic/, out)
+    assert_match(/attestation count/i, out, "must promise corpus counts")
+    assert_match(/\*bogъ/, out, "must show the asterisk convention")
+    assert_match(/guþ/, out, "must show the romanization bridge example")
+    assert_match(/nabu etym богъ/, out, "must show the OCS worked example")
+    assert_match(/bhewgh/, out, "P14-10: must teach the ASCII bare-form fallback")
+    assert_match(/'\*kaisaraz'/, out, "P14-10: shell star examples must be quoted")
+  end
+
+  def test_help_define_documents_the_reconstruction_shelves
+    out, _err, _status = run_cli(%w[help define])
+    assert_match(/sla-pro\|ine-pro\|gem-pro/, out, "the widened --lang gate")
+    assert_match(/define '\*bogъ'/, out, "must show the quoted asterisk example (zsh globs bare *)")
+  end
+
+  # -- P14-11: --long expands the truncated reflex/cognate lists ------------
+  # The ONE truncation in the define/etym renderers is print_reflexes' "other
+  # reflexes (not attested here)" cap (first 10 inline + "… and N more"). The
+  # *zima fixture entry names 26 non-attested reflexes, so the cap fires by
+  # default and --long must expand every one, grouped by language. The
+  # attested list is already unbounded, so it needs no flag.
+
+  def test_define_reflexes_are_capped_by_default
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\): /, out)
+      assert_match(/… and 16 more/, out, "the 16-past-10 tail is summarised, not listed")
+      refute_match(/grouped by language/, out, "compact is the default (house rule)")
+      refute_match(/\[dsb\]/, out, "a tail language must not appear in the capped form")
+    end
+  end
+
+  def test_define_long_expands_every_reflex_grouped_by_language
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima --long]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
+      refute_match(/ more$/, out, "nothing is elided under --long")
+      # A language from the truncated tail is now present, on its own group line.
+      assert_match(/^ {2}\[dsb\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows")
+      # Multiple forms of one language collapse onto that language's line.
+      assert_match(/^ {2}\[cu\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
+    end
+  end
+
+  def test_etym_cognates_are_capped_by_default
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima]) }
+      assert_nil status
+      assert_match(/… and 16 more/, out, "the direct-lookup cognate list caps like define")
+      refute_match(/grouped by language/, out)
+    end
+  end
+
+  def test_etym_long_expands_every_cognate_grouped_by_language
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima --long]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
+      assert_match(/^ {2}\[dsb\] zyma$/, out)
+      refute_match(/ more$/, out)
+    end
   end
 
   def test_help_export_documents_formats_and_filters
@@ -409,6 +481,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P14-12: `status --remote` runs the upstream probe inline (the SAME stubbed
+  # ls-remote path as `health --remote`), persists the verdict, then renders the
+  # up= column from that fresh cache — the one-command informed-update flow.
+  def test_status_remote_probes_inline_persists_and_renders_up_column
+    with_sync_env(enabled: true) do |config|
+      with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+
+      # Bare status before any probe: the upstream is genuinely unknown.
+      before, = with_config(config) { run_cli(%w[status]) }
+      assert_match(/corpus.*up=\?\(never\)/, before)
+
+      # --remote probes inline and writes the cache.
+      out, _err, status = with_config(config) do
+        with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[status --remote]) }
+      end
+      assert_nil status
+      assert_match(/corpus.*up=\S+\(0d\)/, out, "a freshly probed verdict (age 0d)")
+
+      # The verdict persists: a subsequent bare status reads it from the cache.
+      after, = with_config(config) { run_cli(%w[status]) }
+      assert_match(/corpus.*up=\S+\(0d\)/, after)
+    end
+  end
+
   # -- search (P4-2) -------------------------------------------------------
 
   # Build the store (catalog + fulltext index) via a real parse-only sync, then
@@ -498,6 +594,55 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω]) }
       assert_equal 1, status
       assert_match(/no lemma index.*sync.*rebuild/i, err)
+    end
+  end
+
+  # -- search --near (P14-8 proximity) -------------------------------------
+
+  # Real UD grc sentence 64498: … ὁ κῆρυξ(7) καὶ(8) εἶπας(9) … — κῆρυξ and
+  # εἶπας sit a word apart. --window 1 admits them, both folded terms
+  # bracketed; --window 0 (adjacency) does not.
+  def test_search_near_within_window_hits_with_both_terms_highlighted
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 1]) }
+      assert_nil status, "a successful proximity search exits 0"
+      assert_match(/:64498 \[grc\]/, out)
+      assert_match(/\[κηρυξ\]/, out, "the anchor term is highlighted")
+      assert_match(/\[ειπασ\]/, out, "the near term is highlighted too")
+    end
+  end
+
+  def test_search_near_window_zero_requires_adjacency
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 0]) }
+      assert_nil status, "zero hits is not a failure"
+      assert_match(/no matches/i, out, "window 0 needs adjacency — κῆρυξ and εἶπας are a word apart")
+    end
+  end
+
+  # The lemma anchor expands to attested surface forms before the NEAR: the
+  # suppletive aorist εἶπας is a form of λέγω, so it sits near the rare κῆρυξ.
+  def test_search_near_expands_a_lemma_anchor
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κῆρυξ --window 1]) }
+      assert_nil status
+      assert_match(/:64498 \[grc\]/, out, "εἶπας (a form of λέγω) is one word from κῆρυξ")
+    end
+  end
+
+  def test_search_near_with_morph_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κύριος --morph case=nom]) }
+      assert_equal 1, status
+      assert_match(/--morph does not compose with --near/, err)
+    end
+  end
+
+  def test_search_near_without_an_anchor_errors
+    with_treebank_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --near θεα]) }
+      assert_equal 1, status
+      assert_match(/--near needs an anchor/, err)
     end
   end
 
@@ -1456,6 +1601,32 @@ class CLITest < Minitest::Test
         slug: "src", name: "Source", adapter_class: "TestAdapter", license_class: "attribution"
       )
       Nabu::Store::Loader.new(db: db, source: source).load(documents, full: false)
+      db.disconnect
+      yield config
+    end
+  end
+
+  # A built catalog holding the real wiktionary-recon reconstruction shelves
+  # (the query-layer fixtures) for the define/etym --long surface. No fulltext
+  # db is built, so every reflex counts as "not attested here" — exactly the
+  # list the P14-11 flag expands. The caller stubs Config.load with the config.
+  def with_recon_shelf
+    Dir.mktmpdir("nabu-cli-recon") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
       db.disconnect
       yield config
     end

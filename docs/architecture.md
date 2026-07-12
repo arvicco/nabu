@@ -97,7 +97,7 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
-- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS`, SAA-first staging) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open.
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS` — SAA-first staging; stage 2 = the full project list since P14-4, the tr-en metadata gate keeping translation-less projects inert) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open.
 
 ## 4. Ad-hoc pipeline
 
@@ -376,6 +376,42 @@ would either fabricate pairings or add a column that never co-renders. The
 shipped-registry pin test (`test/alignment_registry_test.rb`) grew a `psalms`
 case openly as the schema gained `numbering:`.
 
+**The CCMH gospels — the Old Church Slavonic manuscript comparison (P14-2).**
+The `nt` work grows from nine witnesses to thirteen: the four CCMH gospel
+manuscripts (Corpus Cyrillo-Methodianum Helsingiense — Codex Assemanianus,
+Codex Marianus, Savvina kniga, Codex Zographensis) join as `documents:`
+cts-verse witnesses, one document per gospel, the work-vocabulary book token
+(MATT/MARK/LUKE/JOHN) keying the CCMH per-book urn
+(`urn:nabu:ccmh:marianus:mar`), their verse identity the passage-urn tail —
+pure registry entries, no new extractor, the P11-5 shape exactly. All four
+manuscripts hold all four gospels (verified read-only against the live
+catalog), so `align "MARK 2.3"` renders up to thirteen witnesses and the
+flagship five-way parallel becomes a thirteen-way one; verse coverage stays
+honestly fragmentary per witness (the lectionaries Assemanianus and Savvina are
+sparse — "not attested" per the P11-9 machinery). Two of the four are
+ALTERNATIVE EDITIONS of witnesses the corpus already holds — CCMH Marianus
+beside PROIEL `marianus` (the fifth witness), CCMH Zographensis beside TOROT's
+— so each CCMH label carries the "CCMH" prefix to render distinguishably: one
+`align` command puts the two Marianus editions (the PROIEL treebank's Cyrillic
+beside CCMH's Helsinki transliteration) side by side, the alt-edition showcase
+(two editions are two versions, never a dedupe, conventions §3). One empirical
+wrinkle drove the ONE code change to the otherwise-closed cts-verse extractor:
+the continuous-text codices (Marianus, Zographensis) mint CHAPTER-0 refs
+(`…:0.N`) for the kephalaia — the chapter-title lists and gospel incipits —
+which are manuscript APPARATUS, not running gospel text, and which cross-align
+spuriously between manuscripts (Marianus and Zographensis both number their
+Luke kephalaia `0.N`). So `cts_verse_refs` now DROPS a leading chapter-0
+segment: Bible chapters are 1-indexed, no verse-grain witness legitimately
+cites a chapter 0 (verified — LXX/Vulgate carry none), and a verse-0
+superscription (`…:3.0`) keeps its non-zero chapter and stays. The drop is
+INDEX-side only — the kephalaia remain canonical, addressable passages via
+`nabu show`/`search`; only the verse-alignment index excludes them. The
+`:b2`/`:b3` duplicate-verse suffixes CCMH mints for lectionary parallels need
+NO handling: the generic `:` → `.` fold turns `13.11:b2` into a distinct
+`13.11.B2` ref, so a duplicate never false-aligns onto the primary verse (it
+renders only under its own explicit ref). The pin test grew the four CCMH cases
+openly.
+
 ## 11. The dictionary shelf — lexica as data (P11-4)
 
 `nabu define μῆνις` prints the LSJ entry — gloss, sense tree as structured
@@ -499,3 +535,81 @@ KEPT at the head of every entry body — those Proto-Slavic/PIE chains are
 the seed data for a future reconstruction/etymology shelf (see the
 improvements register). Citations start empty (Wiktionary quotations are
 unanchored — the B-T precedent).
+
+## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
+
+`nabu etym богъ --lang chu` walks from an attested lemma to its
+reconstructed ancestors and out to the cognates: богъ (725 gold passages)
+→ Proto-Slavic \*bogъ (gloss, senses, the Iranian-loan discussion) → PIE
+\*bʰeh₂g- with ITS reflexes (grc ἔφᾰγον…), each cognate carrying the
+count of gold-lemma passages attesting it in THIS catalog. The data is
+English Wiktionary's reconstruction pseudo-languages via kaikki.org's
+wiktextract extracts (same dual "CC-BY-SA and GFDL" grant as
+wiktionary-cu → attribution): Proto-Slavic (`sla-pro`, ~5,195 words),
+Proto-Indo-European (`ine-pro`, ~1,781), Proto-Germanic (`gem-pro`,
+~5,552). This section records the design decisions.
+
+**Reconstructions ARE dictionary entries — one source, three
+dictionaries.** The records are byte-for-byte the OCS record shape (the
+`wiktionary-jsonl` family parses them unchanged), so the shelf reuses
+everything §11 built: `WiktionaryRecon` is ONE registry source
+(`wiktionary-recon`, `content_kind :dictionary`) shipping three
+dictionaries (`wiktionary-sla-pro` / `wiktionary-ine-pro` /
+`wiktionary-gem-pro`), urns `urn:nabu:dict:wiktionary-sla-pro:<entry_id>`,
+same entry-id recipe, same revision/withdraw semantics. Fetch is three
+FileFetch single-file syncs — each extract in ITS OWN subdir (FileFetch is
+one-file-per-dir by design), attics under the shared top-level
+`<workdir>/.attic/<subdir>/`, the UD two-phase choreography (all prepare,
+the breaker sees the whole set, all complete), three probe targets. The
+upstream `word` field carries NO asterisk; display puts it back (a
+headword whose dictionary language ends `-pro` prints starred), and
+`define *bogъ` strips a leading asterisk and scopes to the reconstruction
+shelves — the comparativist's notation IS the query convention.
+
+**Language codes: Wiktionary's, verbatim.** `sla-pro`/`ine-pro`/`gem-pro`
+are not ISO 639-3 — they are Wiktionary's etymology-language codes, and
+the registry adopts them unchanged because the whole crosswalk speaks
+them (inventing our own would break the join with every descendants
+node). They pass the existing shape-only tag validation (conventions §4)
+with zero code changes; folding is the generic rule (ě/ř lose their
+hačeks under the Mn strip, jers stay — `*cěsařь` folds `cesarь`; the PIE
+laryngeal subscripts survive, an accepted typability gap since `etym`
+enters from an attested, typeable lemma).
+
+**The crosswalk: `dictionary_reflexes` (migration 007), stored edges,
+query-time resolution.** ~89% of reconstruction records carry a
+`descendants` tree; its WORDED nodes flatten depth-first into
+`DictionaryReflex` values (the citation pattern exactly: parser mints,
+loader persists, revision replaces wholesale, reflexes are part of the
+content sha). Each row keeps the upstream `lang_code` VERBATIM plus a
+catalog-side `language` (the parser's map where codes differ — cu→chu,
+la→lat, sa→san — identity for shape-valid codes, NULL for the lone
+malformed "ML." in the wild: display-only, never a join candidate), the
+reflex `word` and its `roman`, and their conventions-§9 folds (leading
+asterisk stripped — proto-to-proto edges arrive as "*bogъ"). Resolution
+happens at QUERY time only, against whatever `passage_lemmas` currently
+holds — the §10/§11 no-stale-links stance; a rebuild or reindex changes
+nothing here. The `roman` fold is load-bearing: the catalog's got/san/xcl
+gold lemmas are romanized, so Gothic 𐌲𐌿𐌸 counts via "guþ" (measured in
+the P14-1 scout: roman rescues got from 0% to 59% reflex-level).
+ContentHash appends reflexes ONLY when non-empty, so every reflex-less
+entry on every pre-P14-1 shelf keeps its stored sha (pinned by test) —
+no revision storm. The wiktionary-cu records also carry descendants;
+their backfill is a deliberately deferred decision (improvements
+register), so the parser's `reflexes:` option defaults off.
+
+**Query surface: two directions of one table.** `define *bogъ` (and
+`--lang sla-pro|ine-pro|gem-pro`) reads the shelf as entries — body plus
+the reflex list, attested-in-catalog cognates first with counts.
+`Query::Etym` (`nabu etym`, MCP `nabu_etym`) walks the reverse edge:
+folded query → reflex match → proto entries (each with MatchedVia, the
+reflex that let it in), then ONE proto-to-proto hop up (reflex rows of
+OTHER `-pro` dictionaries naming this entry's language + folded headword)
+with the ancestors' own cognates — bounded by design, a report not a
+graph crawl. Counts come from `passage_lemmas` grouped per language
+(ReflexViews, shared by both surfaces); nil is an honest absence, never a
+zero claim. The MCP tool is the seventh, same contract as the rest:
+license fields on every entry, cognate lists bounded attested-first with
+honest totals, research_private/restricted withheld unless
+`include_restricted`, graceful pre-007 degradation ("run nabu sync
+wiktionary-recon").
