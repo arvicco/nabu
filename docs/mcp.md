@@ -131,6 +131,24 @@ narrow the range), mirroring `nabu_define`'s body cap. The CLI `nabu align
 a legend, the all-absent witnesses summarized once, then one line per present
 witness per ref).
 
+`collate: true` (P15-4, design §2) returns a witness **diff** instead of a
+listing (`type: "collation"`). Witnesses are grouped into `cells` by
+`(language, script)` — the collatable unit, because language alone lumps the
+Cyrillic Marianus with the Helsinki-ASCII CCMH codices (same `chu`, two
+transcription systems the conventions-§9 fold cannot bridge) while script alone
+lumps Latin, Gothic and English. A cell of ≥2 witnesses diffs RAW tokens
+(punctuation-only tokens dropped, every diacritic marker kept — folding would
+destroy the very distinctions a critic wants) against a base (the first witness
+in registry order, or `base: "LABEL"`), emitting per witness only its `edits`
+(`op` ∈ `sub`/`del`/`ins`, with the `base` and `witness` token runs;
+agreements elided, `agrees: true` when identical) plus its full `tokens`. A
+witness alone in its cell becomes an `aside`, rendered undiffed with a `reason`:
+`cross_script` (a same-language witness exists in another script — the honest
+"not collated" case) or `sole` (the only witness of its language here). The
+license gate applies as everywhere: an excluded witness is `withheld` from the
+diff bodily (listed in `missing`, never leaking through an `edits` line) unless
+`include_restricted`. Ranges collate per ref (`refs` array, same 200-ref cap).
+
 ### `nabu_define`
 
 The dictionary shelf (P11-4, architecture §11): look a lemma up in the
