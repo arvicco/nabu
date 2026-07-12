@@ -155,6 +155,20 @@ abuts Lebanon."
   ```
 
   Pure-ASCII input works (`etym bhewgh`); `--long` expands every reflex.
+  And `cognates` crosses that crosswalk with the alignment hub — verses
+  where the witnesses use reflexes of the same root, found blind:
+
+  ```
+  $ bin/nabu cognates "LUKE 14.34" --langs got,chu
+  LUKE 14.34  *sḗh₂l [ine-pro · attribution]
+      chu  соль — attested as солъ
+      got  salt
+  ```
+
+  The whole Gothic × OCS NT yields ~300 such verses across 30 roots in
+  under a second (hlaifs ~ хлѣбъ, malan ~ млѣти, menoþs ~ мѣсѧць), each
+  hit labeled with its meet shelf — a gem-pro meet for a Slavic word is
+  flagged reading matter: likely a borrowing, not common descent.
 - **Indologists.** 780 GRETIL editions, 703k passages: Rāmāyaṇa, purāṇas,
   kāvya, dharmaśāstra, the Ṛgveda with Vedic accents preserved; commentary
   layers separately citable (kārikā vs. vṛtti).
@@ -180,10 +194,10 @@ abuts Lebanon."
   officium, honestas, decorum), and `export --format jsonl` streaming the
   corpus to your own tooling with license filters.
 - **AI-tooling builders.** A hand-rolled, dependency-free MCP server over
-  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes seven read-only
-  tools — search, show, concord, align, define, etym, status — every
-  passage carrying its license class, so a model can quote *and* cite
-  responsibly. See [docs/mcp.md](docs/mcp.md).
+  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes nine read-only
+  tools — search, show, concord, align, define, etym, parallels, cognates,
+  status — every passage carrying its license class, so a model can quote
+  *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
 
 ## Quickstart
 
@@ -237,12 +251,13 @@ sync. Ranked expansion candidates live in the axis surveys:
 | `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. A whole-chapter or verse-range query clips at 200 refs by default; `--long` lifts that ceiling and renders every ref. `--collate` diffs the witnesses into a compact apparatus (base reading + per-witness divergences) per (language, script) group, with cross-script witnesses rendered undiffed and labelled honestly; `--base LABEL` picks the base. |
 | `nabu define LEMMA` | LSJ and Lewis & Short lookup, entry citations resolved to in-catalog passages. A leading `*` scopes to the Proto-Slavic/PIE/Proto-Germanic reconstruction shelves, whose entries list their descendant reflexes; `--long` expands the truncated "not attested here" list in full, grouped by language. |
 | `nabu etym LEMMA` | The comparativist's walk: an attested lemma (богъ, guþ) → every reconstruction whose Wiktionary descendants name it → one hop up the proto-to-proto chain, each with cognates and corpus attestation counts. `--long` expands every truncated cognate list, grouped by language (compact is the default). |
+| `nabu cognates TARGET` | Cognates in parallel: verses of an alignment work where witnesses in ≥2 languages use reflexes of the same reconstruction root — the hub × crosswalk join (`cognates nt --langs got,chu` → salt~соль at \*sḗh₂l, hlaifs~хлѣбъ at \*hlaibaz, ~300 verses / 30 roots in under a second). TARGET is a work id, verse, chapter, or book; every hit names its meet SHELF (a gem-pro meet for a Slavic word reads as a borrowing); corpus-common words suppressed with an honest count (`--all` lifts); `--long` lifts the 200-hit cap and expands detail. |
 | `nabu concord QUERY` | Classic KWIC concordance: keyword column-aligned in pristine text, corpus order — for scanning usage, not relevance. |
 | `nabu vocab URN` | Lemma-frequency profile of a document, range, or passage against the gold-lemma corpus: total tokens, distinct lemmas, the most distinctive vocabulary (log-odds vs corpus — Caesar surfaces *legio*/*proelium*, Cicero's *De officiis* surfaces *officium*/*honestas*), and the in-document hapax legomena. Gold shelves only; a document without gold lemmas says so and names the annotated languages. `--long` lists every hapax (and every gold-bearing language) in full, escaping the `--limit` display cap. `--by-century` switches to diachronic mode: the shape of the dated corpus over time, or — with a text query — a word plotted across the centuries (`vocab --by-century 'στρατηγ*' --lang grc` peaks in the 2nd c. CE), bucketed by earliest year and honest about ranges that span more than one. |
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license` filters — the longevity-hedge exit formats. |
 | `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP); idempotent, non-destructive, every run recorded. |
 | `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. |
-| `nabu mcp` | The read-only MCP server — six tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
+| `nabu mcp` | The read-only MCP server — nine tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
 
 Two more tastes. Facing translation, span-grouped, honest when the English
 is coarser than the Greek:
