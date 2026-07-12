@@ -13,13 +13,17 @@ awaiting a phase), **gated** (needs an owner decision or hardware),
 
 ## 1. Research capabilities
 
-### 1.1 Intertext engine — the corpus reads itself  [candidate — Phase 12 proposal]
+### 1.1 Intertext engine — the corpus reads itself  [SHIPPED — Phase 15 P15-1 `nabu parallels URN` + P15-5 `nabu formulas SCOPE` (+ MCP `nabu_parallels`): query-time gram probes over the existing FTS index, rare-lemma echoes on gold anchors — ZERO new schema (measured-first design in docs/intertext-design.md). Leftovers to Phase 16: the links table / batch precompute (design §7); fuzzy matching (design §4) parked — see 1.5]
 
 **What.** Quotation/allusion detection across the whole corpus: index folded
 n-grams and rare-lemma co-occurrences per passage; score candidate parallels
 by shared rare material (the Tesserae method, well documented in the DH
 literature). `nabu intertext <urn>` → ranked echoes across all sources; an
 `intertexts` table in the derived layer, rebuilt by the Indexer.
+*(As shipped: the command is `nabu parallels`, and the engine is
+query-time over the existing FTS index — no `intertexts` table proved
+necessary; docs/intertext-design.md records the measurements behind that
+deviation.)*
 
 **Why.** The corpus has already produced two accidental finds (a papyrus
 school exercise quoting Odyssey 1.1; scholia embedding quoted lines). Nobody
@@ -92,7 +96,7 @@ terms vary by dictionary).
 **Effort.** scout (licenses/formats) + fable (entry model + citation
 resolution policy) + opus (parsers per lexicon); 3 packets.
 
-### 1.4 Time and place as axes — HGV metadata  [candidate — Phase 12 proposal]
+### 1.4 Time and place as axes — HGV metadata  [SHIPPED (part 1) — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; 61,670 documents dated/placed (99.2% of the DDbDP shelf). Part 2 — ORACC regnal years, chronicle annals — remains a Phase 16 candidate]
 
 **What.** Ingest metadata corpora that date and locate texts we already
 hold: HGV (Heidelberger Gesamtverzeichnis — dates/provenances for the
@@ -100,7 +104,8 @@ papyri, sibling dataset of DDbDP in the same idp.data repo we already
 clone), ORACC catalogue dates/places (already in the fixture-planned JSON).
 Schema: nullable `date_not_before/not_after`, `provenance` on documents;
 `search --before -200 --after -300 --place Oxyrhynchus`; time-sliced
-concordances.
+concordances. *(As shipped: a `document_axes` table with signed historical
+years — negative = BCE, no year 0 — and `--from/--to/--century` flags.)*
 
 **Why.** The corpus is currently timeless; for documentary texts date and
 place are half the scholarly value. Language change across centuries,
@@ -117,7 +122,7 @@ dates (the axes stay sparse — display honestly). Provenance names need no
 gazetteer in v1 (strings, not geo-coordinates; resist scope creep).
 **Effort.** opus with fable review of the date model; 1–2 packets.
 
-### 1.5 Fragment-aware search — trigram infix matching  [candidate]
+### 1.5 Fragment-aware search — trigram infix matching  [PARKED — owner decision at the Phase 15 gate, 2026-07-12: the P15 design measured the documentary-scope index at 250–270 MB with sub-ms queries and concluded it "loses nothing by waiting" (docs/intertext-design.md §4); a Phase 16 menu candidate]
 
 **What.** A character-trigram index over the folded search form enabling
 infix/wildcard queries: `search --fragment "]μηνιν αει["` — mid-word
@@ -134,7 +139,7 @@ useful mostly for documentary corpora, so consider scoping the index to
 those sources (a per-source index flag — honest and cheaper).
 **Effort.** opus; 1 packet.
 
-### 1.6 Morphology facets  [candidate — small]
+### 1.6 Morphology facets  [SHIPPED — Phase 13 P13-6: `search --lemma X --morph case=dat,number=pl`, one UD-vocabulary façade over UD feats + PROIEL/TOROT positional tags; MCP `nabu_search` carries the same `morph` arg]
 
 **What.** `search --morph "case=Dat|tense=Aor,mood=Opt" [--lemma X]` over
 the treebank annotations (features already stored per token in
@@ -151,7 +156,7 @@ same dedup thinking as P7-5); only 8% corpus coverage until lemmatize-all
 (§3.1) lands.
 **Effort.** opus with fable review of the tagset mapping; 1–2 packets.
 
-### 1.7 Vocabulary profiling  [candidate — small]
+### 1.7 Vocabulary profiling  [SHIPPED — Phase 14 P14-3: `nabu vocab URN` (log-odds distinctive vocabulary + hapax legomena over the gold shelves); Phase 15 P15-2 added the diachronic `--by-century` mode]
 
 **What.** Corpus-wide lemma frequency tables (per language, per source);
 `nabu vocab <urn-or-range>` → the passage's lemmas ranked by corpus
@@ -166,7 +171,7 @@ log" direction drifts toward reader-app territory the concept explicitly
 excludes — keep it to frequency data and a plain file, no app.
 **Effort.** opus; small packet, could ride along with 1.6.
 
-### 1.8 The citation graph  [frame, not a packet — informs 1.1/1.3]
+### 1.8 The citation graph  [PARTIAL — the edges now exist (alignment refs, dictionary citation resolutions, the `dictionary_reflexes` crosswalk, query-time `parallels`/`cognates` hits) but each in its own shape: the unifying `links` table + `nabu links URN` remain unbuilt — intertext-design §7 is the Phase 16 candidate]
 
 **What.** The unifying long-game frame: every cross-reference in the system
 (intertext hits, dictionary citations, scholia references, alignment
@@ -179,7 +184,7 @@ exists so each feature lands its edges in ONE shared shape instead of three
 private ones. Design the table when the first edge-producer (probably 1.3
 or 1.1) is elaborated.
 
-### 1.9 Edition collation — textual criticism support  [candidate — low priority]
+### 1.9 Edition collation — textual criticism support  [PARTIAL — Phase 15 P15-4 shipped `align REF --collate [--base LABEL]`: a witness apparatus per (language, script) group over the alignment hub (the four CCMH codices collated, cross-script witnesses honestly undiffed). Edition-vs-edition `collate <urn1> <urn2>` within one source remains unbuilt]
 
 **What.** We deliberately ingest the highest edition per work; the other
 editions sit on disk. `nabu collate <urn1> <urn2>` — word-level diff of two
