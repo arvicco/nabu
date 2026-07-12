@@ -133,6 +133,56 @@ class CLITest < Minitest::Test
     assert_match(/define '\*bogъ'/, out, "must show the quoted asterisk example (zsh globs bare *)")
   end
 
+  # -- P14-11: --long expands the truncated reflex/cognate lists ------------
+  # The ONE truncation in the define/etym renderers is print_reflexes' "other
+  # reflexes (not attested here)" cap (first 10 inline + "… and N more"). The
+  # *zima fixture entry names 26 non-attested reflexes, so the cap fires by
+  # default and --long must expand every one, grouped by language. The
+  # attested list is already unbounded, so it needs no flag.
+
+  def test_define_reflexes_are_capped_by_default
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\): /, out)
+      assert_match(/… and 16 more/, out, "the 16-past-10 tail is summarised, not listed")
+      refute_match(/grouped by language/, out, "compact is the default (house rule)")
+      refute_match(/\[dsb\]/, out, "a tail language must not appear in the capped form")
+    end
+  end
+
+  def test_define_long_expands_every_reflex_grouped_by_language
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima --long]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
+      refute_match(/ more$/, out, "nothing is elided under --long")
+      # A language from the truncated tail is now present, on its own group line.
+      assert_match(/^ {2}\[dsb\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows")
+      # Multiple forms of one language collapse onto that language's line.
+      assert_match(/^ {2}\[cu\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
+    end
+  end
+
+  def test_etym_cognates_are_capped_by_default
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima]) }
+      assert_nil status
+      assert_match(/… and 16 more/, out, "the direct-lookup cognate list caps like define")
+      refute_match(/grouped by language/, out)
+    end
+  end
+
+  def test_etym_long_expands_every_cognate_grouped_by_language
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima --long]) }
+      assert_nil status
+      assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
+      assert_match(/^ {2}\[dsb\] zyma$/, out)
+      refute_match(/ more$/, out)
+    end
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -1527,6 +1577,32 @@ class CLITest < Minitest::Test
         slug: "src", name: "Source", adapter_class: "TestAdapter", license_class: "attribution"
       )
       Nabu::Store::Loader.new(db: db, source: source).load(documents, full: false)
+      db.disconnect
+      yield config
+    end
+  end
+
+  # A built catalog holding the real wiktionary-recon reconstruction shelves
+  # (the query-layer fixtures) for the define/etym --long surface. No fulltext
+  # db is built, so every reflex counts as "not attested here" — exactly the
+  # list the P14-11 flag expands. The caller stubs Config.load with the config.
+  def with_recon_shelf
+    Dir.mktmpdir("nabu-cli-recon") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
       db.disconnect
       yield config
     end

@@ -4470,7 +4470,7 @@ miss-message), hyphen tolerance, ASCII lookup for a ʰ/ʷ-bearing root,
 define '*' parity. Suite+lint green; docs (README/mcp.md examples use
 quoted forms); backlog done; worklog (sha —). One commit, not pushed.
 
-## P14-11 · etym/define --long  [tier: opus] [status: in-progress] [deps: P14-10]
+## P14-11 · etym/define --long  [tier: opus] [status: done] [deps: P14-10]
 Owner UX (2026-07-12): "I commend the terseness BUT there needs to be
 --long form that expands on these '…46 more'." Add `--long` to `etym`
 and `define` (compact stays the default per the house compact-CLI rule):
