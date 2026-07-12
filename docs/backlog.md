@@ -4862,10 +4862,60 @@ query/collation_test +15 (LCS insert/subst/omit/agreement, (lang,script)
 grouping, cross-script vs sole honesty, --base + miss, --long, range,
 license withhold), cli_test +6, mcp/tools_test +2. Suite+lint green.
 
-## P15-5 · Formula miner  [tier: opus] [status: pending] [deps: P15-1]
-Design doc §5 (unless it rode P15-1): intra-corpus repeated n-gram
-mining (`nabu formulas <source-or-doc>` — measured: Homer 0.6 s, ASPR
-0.6 s; ὣς ἔφαθ' 72×, "hwaet ic hatte" 16×); zero schema.
+## P15-5 · Formula miner  [tier: opus] [status: done] [deps: P15-1]
+Design doc §5: intra-corpus repeated n-gram mining (`nabu formulas
+<source-slug|urn-prefix>`); zero schema. SHIPPED as Query::Formulas
+(lib/nabu/query/formulas.rb) — the same gram machinery as P15-1's
+Parallels pointed INWARD (probe→count). The shared "fold, elision strip,
+tokenize, shingle" the design named was EXTRACTED to a mixin
+(lib/nabu/query/grams.rb, `include Grams`) so Parallels and Formulas
+tokenize/shingle identically — a formula mined here re-probes as a
+parallel there; Parallels lost its private ELISION/gram_tokens/shingle to
+the module (behaviour byte-identical, its 12 tests green).
+FINDINGS. (1) Reads text_normalized STRAIGHT from the catalog — no
+fulltext index, no Indexer touch (Formulas takes only `catalog:`); the
+slice streams once (`dataset.each`), grams counted in a Hash. (2) SCOPE
+resolves as a source slug (exact) else a DOCUMENT-urn byte-range prefix
+(urn >= p AND urn < p+maxcp, no LIKE to escape) — a document urn is a
+prefix of its passages' urns, so a whole work or the `urn:cts:greekLit:
+tlg0012` super-prefix (Iliad+Odyssey) scopes through the join on the
+documents.urn unique index; an earlier passages.urn-OR variant defeated
+the index (2 s → 0.23 s once dropped). Document-grain by design; a
+sub-document prefix is not a v1 slice. (3) LANGUAGE mandatory in practice
+(design §5): perseus-greek rides grc + eng on one slug, so `--lang` is
+offered and wanted where a source mixes translations (ASPR, single-lang,
+needs none); slice AND lang both apply, exactly as Search. (4) STOPWORD
+VERDICT — no stoplist, no df filter; rank by count × length and the
+ranking is SELF-FILTERING. Measured: under a generous data-derived
+stopword definition (token in ≥10% of the slice's passages: δ 22%, καί
+18%, δέ 15%) NOT ONE all-stopword 4-gram reaches Homer's top 40 —
+function words combine too freely to out-recur a real formula. A
+per-language stoplist is a new unbounded per-language artifact (the "no
+clever registries" rule) that buys nothing; a token-df filter MISFIRES on
+small slices (a formula's own content tokens have elevated df by
+construction — it would eat the formulas). `--min-count` is the noise
+lever; the eye is the final filter, with almost nothing to reject. (At a
+fixed gram size count×length reduces to count — the ×length is the general
+form, the discriminator once mixed sizes are mined, the natural v2.) (5)
+LOCI: lean pass keeps ≤3 example urns/gram (bounded); `--long` re-walks
+the slice a second time for EVERY locus of the few reported grams (pays
+its own ~0.2 s; compact prints "e.g. …"). (6) MCP: NOT a v1 tool
+(argued in the class doc) — the MCP surface is passage-lookup-flavored;
+the miner is batch-flavored (streams a slice, returns a ranked table).
+Natural home is the §7 batch/links surface.
+LIVE (read-only, through the production CLI): `formulas
+urn:cts:greekLit:tlg0012 --lang grc` → 27,903 passages / 199,816 tokens,
+2,751 4-grams recur ≥3×, 0.23 s core — ὣς ἔφαθ' οἵ δ' 72×, τὸν δ' αὖτε
+προσέειπε 68×, the …ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς chain 50×
+(the design's exact numbers). `formulas aspr` → 30,550 / 175,736, 0.15 s
+— ic wæs ond mid 13×, Beowulf maþelode bearn Ecgþeowes 6×; `--gram-size
+3`: hwæt ic hatte 16×, awa to feore 20×, to widan feore 19× (all three
+design figures). Tests: query/formulas_test.rb +14 (mining/ranking,
+min-count, gram-size, no-stoplist, slug/prefix/unknown scope, lang
+filter, compact-vs-long loci, locus=passage dedupe, withdrawn, bad
+gram-size, slice totals), cli_test +6 (refrain+loci render, --long,
+gram-size×min-count, unknown scope, bad gram-size, help). Suite + lint
+green. One commit, not pushed.
 
 ## P15-6 · search --fuzzy  [tier: opus] [status: stretch — take only if the phase runs light] [deps: —]
 Design doc §4: trigram fragment search, DOCUMENTARY SCOPE (250–270 MB

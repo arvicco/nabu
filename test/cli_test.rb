@@ -911,6 +911,60 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  # -- formulas (P15-5 formula miner) --------------------------------------
+
+  def test_formulas_mines_the_refrain_with_loci
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas aspr]) }
+      assert_nil status, "a successful formulas exits 0"
+      assert_match(%r{formulas in aspr — 4 passages / 24 tokens}, out)
+      assert_match(/4×  saga hwaet ic hatte/, out, "the refrain is the top formula, count first")
+      assert_match(/e\.g\. urn:nabu:aspr:riddle:0/, out, "compact shows a few example loci")
+      assert_match(/rank = count × 4-gram length/, out, "the footer states the ranking")
+    end
+  end
+
+  def test_formulas_long_lists_every_locus
+    with_formulas_corpus do |config|
+      compact, = with_config(config) { run_cli(%w[formulas aspr]) }
+      long, = with_config(config) { run_cli(%w[formulas aspr --long]) }
+      refute_match(/urn:nabu:aspr:riddle:3/, compact, "compact keeps only a few examples")
+      assert_match(/urn:nabu:aspr:riddle:3/, long, "--long lists every locus")
+      refute_match(/e\.g\./, long, "--long is the full list, not examples")
+    end
+  end
+
+  def test_formulas_gram_size_and_min_count_compose
+    with_formulas_corpus do |config|
+      out, = with_config(config) { run_cli(%w[formulas aspr --gram-size 3 --min-count 4]) }
+      assert_match(/4×  hwaet ic hatte/, out, "the 3-gram refrain at the raised floor")
+    end
+  end
+
+  def test_formulas_unknown_scope_reports_empty
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas urn:nabu:nope:x]) }
+      assert_nil status
+      assert_match(/no passages in scope/, out)
+    end
+  end
+
+  def test_formulas_bad_gram_size_exits_one
+    with_formulas_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[formulas aspr --gram-size 1]) }
+      assert_equal 1, status
+      assert_match(/gram size must be/i, err)
+    end
+  end
+
+  def test_help_formulas_documents_scope_lang_and_ranking
+    out, _err, _status = run_cli(%w[help formulas])
+    assert_match(/formula/i, out)
+    assert_match(/--lang/, out, "the language filter is documented")
+    assert_match(/--long/, out)
+    assert_match(/Examples:/, out)
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance
@@ -1580,6 +1634,40 @@ class CLITest < Minitest::Test
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
       fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A formula-miner (P15-5) corpus: one ASPR document whose refrain "saga hwaet
+  # ic hatte" recurs across four riddle lines, each with unique tail words. Only
+  # the catalog is needed (the miner reads text_normalized directly, no index).
+  def with_formulas_corpus
+    Dir.mktmpdir("nabu-cli-formulas") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "aspr", name: "ASPR", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      doc_id = catalog[:documents].insert(
+        source_id: src, urn: "urn:nabu:aspr:riddle", title: "Riddles", language: "ang",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      ["foo bar", "baz qux", "alpha beta", "gamma delta"].each_with_index do |tail, i|
+        text = "saga hwaet ic hatte #{tail}"
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "urn:nabu:aspr:riddle:#{i}", sequence: i, language: "ang",
+          text: text, text_normalized: Nabu::Normalize.search_form(text, language: "ang"),
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
       catalog.disconnect
       yield config
     end
