@@ -13,7 +13,7 @@ awaiting a phase), **gated** (needs an owner decision or hardware),
 
 ## 1. Research capabilities
 
-### 1.1 Intertext engine — the corpus reads itself  [SHIPPED — Phase 15 P15-1 `nabu parallels URN` + P15-5 `nabu formulas SCOPE` (+ MCP `nabu_parallels`): query-time gram probes over the existing FTS index, rare-lemma echoes on gold anchors — ZERO new schema (measured-first design in docs/intertext-design.md). Leftovers to Phase 16: the links table / batch precompute (design §7); fuzzy matching (design §4) parked — see 1.5]
+### 1.1 Intertext engine — the corpus reads itself  [SHIPPED — Phase 15 P15-1 `nabu parallels URN` + P15-5 `nabu formulas SCOPE` (+ MCP `nabu_parallels`): query-time gram probes over the existing FTS index, rare-lemma echoes on gold anchors — ZERO new schema (measured-first design in docs/intertext-design.md). Leftovers closed in Phase 16: the links table / batch precompute shipped (P16-1/P16-2 — see 1.8); fuzzy matching shipped (P16-4 — see 1.5)]
 
 **What.** Quotation/allusion detection across the whole corpus: index folded
 n-grams and rare-lemma co-occurrences per passage; score candidate parallels
@@ -96,7 +96,7 @@ terms vary by dictionary).
 **Effort.** scout (licenses/formats) + fable (entry model + citation
 resolution policy) + opus (parsers per lexicon); 3 packets.
 
-### 1.4 Time and place as axes — HGV metadata  [SHIPPED (part 1) — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; 61,670 documents dated/placed (99.2% of the DDbDP shelf). Part 2 — ORACC regnal years, chronicle annals — remains a Phase 16 candidate]
+### 1.4 Time and place as axes — HGV metadata  [SHIPPED — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; 61,670 documents dated/placed live (99.2% of the DDbDP shelf). Part 2 SHIPPED — Phase 16 P16-3: ORACC period/regnal extractors + TOROT chronicle AM annals; coverage grows 61,670 → 83,233 at the next owner-fired axis rebuild (until then the live table holds the part-1 rows only)]
 
 **What.** Ingest metadata corpora that date and locate texts we already
 hold: HGV (Heidelberger Gesamtverzeichnis — dates/provenances for the
@@ -122,7 +122,7 @@ dates (the axes stay sparse — display honestly). Provenance names need no
 gazetteer in v1 (strings, not geo-coordinates; resist scope creep).
 **Effort.** opus with fable review of the date model; 1–2 packets.
 
-### 1.5 Fragment-aware search — trigram infix matching  [PARKED — owner decision at the Phase 15 gate, 2026-07-12: the P15 design measured the documentary-scope index at 250–270 MB with sub-ms queries and concluded it "loses nothing by waiting" (docs/intertext-design.md §4); a Phase 16 menu candidate]
+### 1.5 Fragment-aware search — trigram infix matching  [SHIPPED — Phase 16 P16-4: `search --fuzzy`, a character-trigram index scoped by per-source `fuzzy_index:` flags (papyri-ddbdp + oracc), measured 257.1 MB / 8.6 s scratch build; the production index lands at the next owner-fired reindex — until then the CLI honestly reports the index missing]
 
 **What.** A character-trigram index over the folded search form enabling
 infix/wildcard queries: `search --fragment "]μηνιν αει["` — mid-word
@@ -171,7 +171,7 @@ log" direction drifts toward reader-app territory the concept explicitly
 excludes — keep it to frequency data and a plain file, no app.
 **Effort.** opus; small packet, could ride along with 1.6.
 
-### 1.8 The citation graph  [PARTIAL — the edges now exist (alignment refs, dictionary citation resolutions, the `dictionary_reflexes` crosswalk, query-time `parallels`/`cognates` hits) but each in its own shape: the unifying `links` table + `nabu links URN` remain unbuilt — intertext-design §7 is the Phase 16 candidate]
+### 1.8 The citation graph  [SHIPPED — Phase 16 P16-1/P16-2: the `links` journal (db/links.sqlite3, its own rebuild-surviving database — architecture §15) + `nabu links URN` + MCP `nabu_links`; the `parallels/formulas/cognates --batch` producers populate it with run provenance (seeded live: 5,089 parallel + 360 cognate edges). Still conceptual: scholia and dictionary-citation edges have no batch producers yet — those cross-references remain in their own tables]
 
 **What.** The unifying long-game frame: every cross-reference in the system
 (intertext hits, dictionary citations, scholia references, alignment
