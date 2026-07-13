@@ -5876,7 +5876,7 @@ sketches for the gate; honest "print-only, no unblock" list.
 # question — one email to repo-help@clarin.si settles 141 dictionary
 # records incl. Miklosich; CC on the pending Miklosich draft send.
 
-## P17-9 · Static site — the project's academic face  [tier: opus] [status: dispatched] [deps: —]
+## P17-9 · Static site — the project's academic face  [tier: opus] [status: done 2026-07-13] [deps: —]
 Owner (2026-07-13): "a separate static site for Nabu (github project
 page). Humanists are allergic to github READMEs it seems. The site needs
 to restate README, sources and supporting materials in a more academic
@@ -5892,6 +5892,24 @@ refreshed alongside library.md/README at every future gate. Site serves
 PROJECT DOCS ONLY — no corpus content (the external-access licensing
 rulings are not triggered). Enabling Pages in repo Settings = owner
 action, queued.
+FINDINGS (2026-07-13): shipped as a hand-rolled Jekyll site (no theme,
+own layout + CSS: serif stack Charter/Iowan/Georgia, muted oxblood
+accent, 𒀭𒀝 masthead glyph with font-stack fallback) — 7 tab pages
+(Home, The Library, Tools, Examples, Languages, Sources & Licensing,
+About) + site/MAINTENANCE.md (the gate-duty contract) + site/Gemfile
+(self-contained, app Gemfile untouched). Deploy:
+.github/workflows/pages.yml — jekyll-build-pages from site/ +
+deploy-pages, push-to-main paths [site/**] + dispatch, pages:write +
+id-token:write. All numbers restated from library.md/README with as-of
+dates, never re-derived; snippets are README's own live-run outputs; the
+three enabled:false sources (coptic-scriptorium, mw, edh) listed
+honestly as "awaiting first synchronization". Verified: jekyll build
+exit 0 (jekyll 4.4.1 vendored under site/vendor, gitignored), href
+sweep — every internal link resolves to a built page; rake test exit 0
+(2256 runs / 30,434 assertions). DEFERRED TO ORCHESTRATOR: (1) the §10
+review-cadence line in docs/library.md naming the site (another agent
+held library.md during this packet); (2) a README link to the site;
+(3) owner action to go live: Settings → Pages → Source: GitHub Actions.
 
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/

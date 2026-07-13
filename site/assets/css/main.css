@@ -1,0 +1,224 @@
+/* Nabu site — restrained academic design, hand-rolled, no external fonts. */
+
+:root {
+  --paper: #faf8f3;
+  --ink: #2b2620;
+  --muted: #6f6656;
+  --rule: #d9d2c2;
+  --accent: #7c3626;      /* muted oxblood for links */
+  --accent-dark: #5c2419;
+  --code-bg: #f1ede3;
+  --aside-bg: #f4f1e8;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  max-width: 47rem;
+  font-family: Charter, "Bitstream Charter", "Iowan Old Style",
+    "Palatino Linotype", Palatino, Georgia, Cambria, serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+/* ---- Header ---- */
+
+.site-header {
+  margin: 2.5rem 0 2rem;
+}
+
+.masthead {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.site-title {
+  font-size: 2.1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: var(--accent-dark);
+}
+
+.cuneiform {
+  /* Renders where a cuneiform-capable font exists (Segoe UI Historic,
+     Noto Sans Cuneiform); degrades to the serif stack elsewhere. */
+  font-family: "Segoe UI Historic", "Noto Sans Cuneiform", inherit;
+  font-size: 0.85em;
+  color: var(--muted);
+  margin-right: 0.15em;
+}
+
+.site-tagline {
+  margin: 0.35rem 0 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ---- Navigation tabs ---- */
+
+.site-nav {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.45rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.4rem;
+}
+
+.site-nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.site-nav a:hover {
+  color: var(--accent);
+}
+
+.site-nav a.active {
+  color: var(--accent-dark);
+  border-bottom: 2px solid var(--accent-dark);
+  padding-bottom: 0.1rem;
+}
+
+/* ---- Content ---- */
+
+.content {
+  margin-bottom: 3rem;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 2rem 0 0.75rem;
+}
+
+h1 { font-size: 1.65rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.25rem; }
+h3 { font-size: 1.1rem; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2rem auto;
+  width: 60%;
+}
+
+blockquote {
+  margin: 1.25rem 0;
+  padding: 0.1rem 1.25rem;
+  border-left: 3px solid var(--rule);
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Footnote-style asides */
+.aside, .content em.note {
+  display: block;
+  background: var(--aside-bg);
+  border-left: 3px solid var(--rule);
+  padding: 0.6rem 1rem;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---- Code ---- */
+
+pre, code {
+  font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+}
+
+code {
+  background: var(--code-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ---- Tables ---- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.4rem 0.7rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+th {
+  border-bottom: 2px solid var(--muted);
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(217, 210, 194, 0.15);
+}
+
+/* ---- Footer ---- */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin: 3rem 0 2rem;
+  padding-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---- Small screens ---- */
+
+@media (max-width: 40rem) {
+  body { font-size: 1rem; padding: 0 1rem; }
+  .site-nav ul { gap: 0.2rem 0.9rem; }
+  table { font-size: 0.8rem; }
+  th, td { padding: 0.3rem 0.4rem; }
+}
