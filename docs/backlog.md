@@ -5169,3 +5169,19 @@ backlog done; worklog (sha —). Suite+lint green. One commit, not
 pushed. NB: etym/define already have --long (P14-11); parallels ships
 with it (P15-1, in flight — do NOT touch its files); your census
 covers the REST.
+
+# ── Phase 16 ──────────────────────────────────────────────────────────
+
+## P16-0 · health --remote license-column optics  [tier: orchestrator] [status: done 2026-07-13] [deps: —]
+Owner defect (2026-07-13, immediately post-#19): "license: unchecked"
+creates wrong optics — reads like a problem when it only means "no
+machine-checkable license artifact upstream" (non-github source, or a
+github repo without a top-level license file — verified live: proiel/
+torot/iswoc/gretil/open-bibles/idp.data all lack one). Owner rule:
+"Better not to report anything than report 'unchecked'". Fix is
+display-only: the :unchecked verdict still lands in the ledger; the row
+renders nothing (rstrip'd — no trailing whitespace), conventions §10
+suppress-zero-signal-fields. ok/CHANGED/baseline-recorded unchanged.
+Optional follow-up NOT taken (owner may queue later): a per-source
+`license_watch:` URL key to make non-github/README-licensed sources
+watchable.

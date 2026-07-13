@@ -497,6 +497,11 @@ class CLITest < Minitest::Test
       assert_nil status, "all-alive is exit 0"
       assert_match(/corpus\s+alive/, out)
       assert_match(/1 source, 1 alive/, out)
+      # An unchecked license verdict carries no signal — the row says nothing
+      # rather than "license: unchecked" (owner rule: suppress zero fields),
+      # and suppression leaves no trailing whitespace behind.
+      refute_match(/unchecked/, out)
+      out.each_line { |line| assert_equal line.chomp, line.chomp.rstrip }
     end
   end
 
