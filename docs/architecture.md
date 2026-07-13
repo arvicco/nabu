@@ -733,9 +733,9 @@ same gram machinery, not this packet.
 The historical linguist and documentary historian ask "only 2nd-century
 texts", "only Oxyrhynchus", "plot this word across centuries". The full
 design — five dating sources measured, the schema priced (≤ ~100k rows,
-< 20 MB) — is `docs/intertext-design.md` §3; this is the short standing
-record of Part 1 (HGV papyri + Slovene goo300k/IMP; ORACC regnal mapping and
-the chronicle passage-grain annals are the named Part 2).
+< 20 MB) — is `docs/intertext-design.md` §3; this is the standing record of
+Part 1 (HGV papyri + Slovene goo300k/IMP, P15-2) and Part 2 (ORACC catalogue
+dates + TOROT chronicle annals, P16-3).
 
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
@@ -757,6 +757,56 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 66,261 HGV files → 60,923 papyri joined (99.2% of the DDbDP shelf) + 89
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
+
+**Part 2a — ORACC catalogue dates (`AxisBuilder::OraccDates`, P16-3).** Every
+ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,
+25,502 members) found `period` on 25,330 members and `date_of_origin` on
+7,343 (SAA regnal formulas `Sargon2.000.00.00` / eponym `Esarhaddon.limu
+Dananu.07.21`; RIAO/RIBO/RINAP absolute BCE ranges `704-681`, `ca. 1233-1197`;
+century phrases `9th-8th century`). Extraction is census-backed, never
+guessed: `date_of_origin` first — a regnal formula resolves through a
+12-king Neo-Assyrian reign table (standard eponym-canon chronology, absolute
+via the 763 BCE Bur-Saggilê eclipse; regnal dates after Grayson — the census
+found NO nonzero regnal years, so reign-range grain is the honest maximum);
+an absolute value must DESCEND (BCE) or it is unparseable. Unresolved values
+fall back to `period` through a documented period table (ORACC/CDLI period
+names → middle-chronology year ranges after CDLI's conventional dates,
+Brinkman's chronology; Neo-Assyrian → −911..−612, Old Babylonian →
+−1900..−1600, "First Millennium" honestly −1000..−1). "Uncertain"/"Unknown"
+are deliberately unmapped: skipped and counted (`oracc_undated`). Place =
+`provenience` verbatim (minus unclear/uncertain/unknown) + a Pleiades URL
+from `pleiades_id`. A translation document (`…-en`, P13-4) carries its
+tablet's axis row — the artifact's date, so the English witness inherits the
+time filter. Scratch-measured coverage: 21,558 of 21,692 oracc documents
+(99.4%) carry a row — 21,517 dated (99.2%), 41 place-only, 172 undated
+members counted, 3 documents absent from any catalogue (upstream drift).
+
+**Part 2b — TOROT chronicle annals (`AxisBuilder::ChronicleAnnals`, P16-3):
+the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns
+as designed. Census: the annal year is structural — chronicle `<div>` titles
+carry the anno-mundi year (`6360: Mikhail …`, bare `6361`, ranges
+`6369–6370`); exactly five TOROT sources are annalistic (lav 89 AM divs of
+91, pvl-hyp 24/24, kiev-hyp 4/4, nov-sin 163/163, suz-lav 76/76 — 356 divs;
+no other source has one, so a shape + AM-plausibility gate (5500..7300)
+replaces any allowlist). AM → CE via `DateAxis.am_to_ce`: the Byzantine
+epoch is 1 Sep 5509 BCE, so AM Y is stored as the honest span
+[Y−5509, Y−5508] — the full September-style year; the Rus chronicles' mixed
+March/ultra-March styles make a ±1 residue (Jan–Feb of a March-style year)
+that is documented, not guessed per annal; precision "am" marks every row.
+The conversion crosses the era boundary without a year 0 (AM 5509 → [-1, 1]).
+Each annal div becomes one row anchored by `passage_seq_from/to` (min/max
+catalog sequence of its sentences, joined by the ProielParser's
+`<doc-urn>:<sentence-id>` passage urns); one document-grain ENVELOPE row
+(min..max, passage_seq NULL) is inserted first so document-grain consumers
+see the chronicle once. Scratch-measured: 5 chronicles, 345 annal rows —
+11 nov-sin annal divs are EMPTY upstream (year heading, no text) and anchor
+nothing. Grand total after Part 2: 83,233 dated/placed documents, 83,578
+axis rows, `document_axes` = 13.9 MB (design budget < 20 MB holds).
+`vocab --by-century` counts document-grain rows only (`passage_seq_from IS
+NULL`) — a histogram labelled "documents" must not tally a 163-annal
+chronicle 163 times; `search --from/--to/--century/--place` EXISTS over all
+rows, so annal grain sharpens nothing there yet (the envelope spans it) but
+stands ready for passage-grain queries.
 
 **Query surface.** `search --from/--to/--century/--place` compose through the
 shared `CatalogJoin` as one correlated NULL-aware EXISTS on `document_axes`

@@ -5260,20 +5260,65 @@ Producer #2/#3 riding the P16-1 substrate: `formulas --batch`
 replay, same `links` reader — no new mechanics, just producers.
 Dispatch after P16-1 review.
 
-## P16-3 · Date/place axis, part 2 — ORACC + chronicles  [tier: opus] [status: dispatched] [deps: —]
-Register §1.4 part 2. Two extractors extending AxisBuilder (P15-2
-pattern): (a) ORACC catalogue dates — period/date_of_origin fields in
-the per-project catalogue.json already on disk; map period names →
-honest year RANGES (a "Neo-Assyrian" tablet is -911..-612, never a fake
-point; regnal years resolve where the catalogue names a king with known
-dates); (b) chronicle annals for orv — TOROT chronicle texts carry
-annal-year structure; extract where the citation/text carries the year
-(AM anno mundi → CE conversion, -5508 rule, documented). Signed
-historical years, no year 0, NULL-open ranges — migration 008 semantics
-unchanged, no schema change expected. search --from/--to/--century/
---place and vocab --by-century inherit for free; census-first: report
-coverage gained (docs dated before/after per source), never fake
-precision. Fixtures from real catalogue/chronicle samples.
+## P16-3 · Date/place axis, part 2 — ORACC catalogue dates + chronicle annals  [tier: opus] [status: done] [deps: P15-2]
+Two new AxisBuilder extractors, census-first, feeding the existing
+document_axes (migration 008 untouched): ORACC catalogue.json dates
+(period table + regnal resolution) and TOROT chronicle anno-mundi
+annals (the first passage-grain rows). search --from/--to/--century/
+--place and vocab --by-century inherit the coverage.
+
+### FINDINGS (census 2026-07-13, read-only over live canonical + db)
+- **ORACC census.** 33 catalogue.json files (html-en has none), 25,502
+  members. `period` on 25,330 members (30 distinct values — Neo-Assyrian
+  10,248, Old Babylonian 6,259, …, 'Uncertain'/'uncertain'/'Unknown' 106);
+  `date_of_origin` on 7,343 (683 distinct): SAA regnal formulas
+  `King.000.00.00` (2,814; NO nonzero regnal years anywhere, so reign-range
+  grain is the honest maximum) + eponym `King.limu Eponym.mm.dd` variants,
+  `00.000.00.00` = unknown (1,506), RIAO/RIBO/RINAP absolute BCE ranges
+  (1,899) / years (14) / century phrases (128), 33 stragglers ('?-748',
+  'SE 136.06.21', '673, 672' — unparseable, skipped, counted). 12 king
+  spellings total, all standard NA kings with textbook reign dates.
+- **AxisBuilder::OraccDates.** date_of_origin first (regnal → 12-king reign
+  table, eponym-canon chronology after Grayson; absolute values must DESCEND
+  = BCE or are unparseable; century phrases via DateAxis.century_bounds),
+  else period via a documented ORACC/CDLI → middle-chronology table (after
+  CDLI's conventional dates / Brinkman; 'First Millennium' honestly
+  -1000..-1; compound "X or Y" envelopes); 'Uncertain' unmapped — skipped +
+  counted. provenience (minus unclear/uncertain/unknown) + pleiades_id →
+  place_name/place_ref. Translation docs (…-en) carry the tablet's axis row.
+  **Coverage (scratch build): 21,558 of 21,692 oracc docs (99.4%) get a row;
+  21,517 dated (99.2%), 41 place-only, 172 undated counted, 3 db docs in no
+  catalogue (drift: blms P413985, saa03 Q009249, saa08 X000005).** Per
+  project: all 30 in-db projects ≥ 97% dated (dcclt 5,797/5,961 lowest).
+- **TOROT census: the annal year IS structural.** Chronicle <div> titles
+  carry the AM year ('6360: Mikhail …', bare '6361', range '6369–6370',
+  '6694 part 1'); exactly 5 of 40 sources are annalistic — lav 89/91 divs,
+  pvl-hyp 24/24, kiev-hyp 4/4, nov-sin 163/163, suz-lav 76/76 = 356 AM divs;
+  no other source has any (birchbark '43', rusprav '2' etc. all < 4 digits),
+  so shape + AM-plausibility gate (5500..7300) needs no allowlist.
+- **AxisBuilder::ChronicleAnnals.** Streaming Reader (lav.xml = 12 MB);
+  AM → CE via DateAxis.am_to_ce: [Y−5509, Y−5508] (Byzantine epoch 1 Sep
+  5509 BCE — the full September-style year; the March/ultra-March mix leaves
+  a documented ±1 residue, never a per-annal guess; precision "am"); no-
+  year-0 invariant holds across the epoch (AM 5509 → [-1, 1], tested). One
+  passage-grain row per annal (passage_seq_from/to = min/max sequence via
+  the <doc-urn>:<sentence-id> passage-urn join) + one document-grain
+  ENVELOPE row per chronicle. **Coverage: 5 chronicles, 345 annal rows; 11
+  nov-sin annal divs (6725-6780 group) are EMPTY upstream — skipped.**
+  Envelopes: lav 851–986, pvl-hyp 897–921, kiev-hyp 1131–1135, nov-sin
+  1015–1269, suz-lav 1110–1186 CE.
+- **Query surface.** vocab --by-century now counts document-grain rows only
+  (passage_seq_from IS NULL) — else a 163-annal chronicle tallies 163× in a
+  histogram labelled "documents"; search EXISTS unchanged (all rows). Demos
+  (scratch catalog + read-only live fulltext): `search LUGAL --lang akk
+  --century -7` → SAA 18 101 + Nineveh lexical texts in 22 ms; `vocab
+  --by-century LUGAL --lang akk` plots 19c BCE → 4c BCE peaking 8th c.
+  (1,212 docs); akk corpus histogram peaks 10th c. BCE (2,210 — the
+  by-earliest-year bucketing of the NA period range, stated bias).
+- **Grand total after part 2: 83,233 dated/placed documents (was 61,670),
+  83,578 axis rows, document_axes 13.9 MB** (< 20 MB budget holds). Scratch
+  build 63.1 s on a copy of the live catalog; the LIVE rebuild is owner-
+  fired (or next `nabu rebuild`) — untouched here.
 
 ## P16-4 · search --fuzzy — documentary trigram index  [tier: opus] [status: done 2026-07-13] [deps: —]
 The parked P15-6, re-proposed and approved with the Phase 16 menu: design
