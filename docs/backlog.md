@@ -5858,12 +5858,17 @@ sketches for the gate; honest "print-only, no unblock" list.
 #    + the nabu MCP server; local models have equal standing per the MCP
 #    ruling) — judgment calls only: sample-passage reading, quarantine-
 #    reason triage. No cloud dependency enters the core.
-# 5a. Coptic sync robustness (defect, found 2026-07-13): the owner's
-#    first sync crashed unzip exit 9 mid-checkout (transient race; clone
-#    completed, all 13 zips verified valid post-hoc, 152 AP docs loaded
-#    consistently). Fix: an unreadable TT zip should QUARANTINE its
-#    corpus (ParseError doctrine), not abort the sync (FetchError);
-#    re-census the discover-during-materialization window.
+# 5a. Coptic sync robustness (defect, found 2026-07-13) — SHIPPED in
+#    P17-10 (2026-07-13). The "transient race" hypothesis was WRONG: the
+#    census proved the crash deterministic — the dual-origin work urn
+#    ot.hab.bohairic_ed (standalone bohairic-habakkuk corpus AND
+#    bohairic.ot_TT.zip members share one CTS urn) merged into one
+#    document group whose ref path was the loose .tt, so chunk_content
+#    ran `unzip -p` against a non-zip → exit 9 on EVERY sync, at ref
+#    #280 of 465. Shipped: per-chunk origin reads (structural fix),
+#    standalone-over-zip precedence (shadowed members skipped by rule),
+#    unreadable zip MEMBER at parse → ParseError (quarantine), unreadable
+#    zip at discover → FetchError. Census + verdict: see ## P17-10.
 # 5. PIE deepening (P17-8 picks, fixture sketches in pie-survey.md §7):
 #    IE-CoR cognacy matrix (CC BY — 273 sets/2,261 held-form pair edges,
 #    1,596 laryngeal PIE roots as kaikki cross-check, 1,036 curated loan
@@ -5910,6 +5915,58 @@ sweep — every internal link resolves to a built page; rake test exit 0
 review-cadence line in docs/library.md naming the site (another agent
 held library.md during this packet); (2) a README link to the site;
 (3) owner action to go live: Settings → Pages → Source: GitHub Actions.
+
+## P17-10 · Coptic sync crash: dual-source works  [tier: fable] [status: done 2026-07-13] [deps: P17-1]
+Owner-hit defect, twice: both `bin/nabu sync coptic-scriptorium` attempts
+died `command failed (exit 9): unzip` after "279 docs / 127 quarantined".
+CENSUS (read-only over canonical @ v6.2.0, 465 refs total): exactly ONE
+work urn collects chunks from two origins — `ot.hab.bohairic_ed`, minted
+by BOTH the standalone `bohairic-habakkuk` corpus (3 loose chapter .tt)
+AND `bohairic.ot/bohairic.ot_TT.zip` (members 35_Habacuc_01..03.tt).
+Everywhere else upstream keeps the origins apart with distinct `_ed` CTS
+urns (nt.mark.sahidica_ed loose vs nt.mark.sahidica zip; ot.jonah/ruth
+.coptot_ed vs .coptot) — Habakkuk is an upstream collision, unique in the
+release. The merged group's ref path was the first (loose) chapter file,
+so `chunk_content` ran `unzip -p` against a .tt → exit 9, deterministic,
+at ref #280/465 in urn order: 152 loaded + 127 quarantined + crash =
+exactly the owner's numbers (re-derived ref-by-ref; the live catalog's
+152 urns all re-mint identically — frozen-URN guarantee holds, and
+ot.hab.bohairic_ed itself never loaded). The 127 quarantines are a
+SEPARATE finding, NOT this defect: CopticTtParser's fixture-verified span
+inventory rejects unknown TT span types loudly, and the full corpus
+carries 32 span types the 5-doc fixture census never saw (ed_page_n 58×,
+supplied_reason 42×, entity_identity 30×, abbr 21×, petermann/marcion_
+chapter_n 28×, gap* 28×, …) plus 9 structural rejects (unsegmented
+stretches in 8 NT zip books + 1 magical papyrus, whose copticMag urn the
+CTS_NAMESPACE regex also doesn't strip) — corpus-wide 188 of 465 parse
+clean post-fix (277 quarantine); widening the inventory is P18 material,
+quarantine is exactly the designed behavior. BYTE-IDENTITY: the two Habakkuk origins DIFFER — the
+loose corpus is the v6.2.0 re-release (2025-11-25; segmentation/tagging/
+parsing/entities/identities all GOLD, people/places rosters, lb_n
+manuscript topology, revised lemmas + re-tokenization, public domain +
+CC-BY 4.0) vs the zip's frozen v6.0.0 automatic snapshot (2024-10-31,
+minimal header, CC-BY-SA). PRECEDENCE VERDICT: same edition urn at two
+releases → ONE document, the STANDALONE corpus wins (newer + gold + richer
++ clearer license); the shadowed zip members are skipped_by_rule ("zip
+member shadowed by the standalone edition"), never doubled chapters —
+post-fix live census: 465 refs, 0 mixed groups, skipped_by_rule 111→114,
+ot.hab.bohairic_ed = 56 passages gold v6.2.0. Distinct-urns alternative
+REJECTED: upstream says same work, and the frozen-URN check showed no
+loaded urn moves either way. MECHANICAL FIX regardless of verdict:
+chunk_content now derives the zip path from the CHUNK's own `zip` key
+(expand_path'd), never document_ref.path — a mixed group is structurally
+incapable of the crash even if precedence regresses (pinned by a
+hand-built mixed-group test; ref_path/chunk_label audited, group-order
+safe). Robustness rider (5a, landed here): unreadable zip MEMBER at
+parse → ParseError quarantine; unreadable zip at discover → FetchError
+(that IS a fetch problem). Fixtures: dual-origin pair trimmed from the
+local canonical tree (loose Habakkuk_01 vv1-2 + rebuilt bohairic.ot zip
+with the trimmed real 35_Habacuc_01 member, provenance in README +
+manifest); 6 new tests (precedence at discover, gold edition surfaced at
+parse, mixed-group no-crash, corrupt-member quarantine, corrupt-archive
+FetchError, skip accounting) — suite 2261 runs exit 0, lint exit 0.
+Owner re-run: `bin/nabu sync coptic-scriptorium` (expect 188 docs
+loaded, 277 quarantined — the span-inventory finding, honest and loud).
 
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
