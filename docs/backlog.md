@@ -6054,3 +6054,22 @@ manifest.yml); fixture discover now mints 18 docs. Suite 2,283 runs /
 31,217 assertions exit 0, lint exit 0. Owner re-run:
 `bin/nabu sync coptic-scriptorium --parse-only` (expect 482 loaded /
 1 quarantined / 0 unrecognized).
+
+## P18-2 · Starter pack + site Quickstart  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-13): queue the starter pack; "the site needs some kind of
+'Quickstart' section - right now it lacks even clearly visible link to
+the repo, as well as steps needed to initialize your own Nabu Library."
+Adoption bottleneck: time-to-first-marvel is currently clone + Ruby +
+multi-GB syncs. (a) STARTER PACK: a curated small-shelf set reaching a
+real marvel in minutes — candidates sblgnt + vulgate + eng-web + proiel
++ lexica (align MARK multi-witness, lemma search, define λόγος) —
+MEASURE real canonical sizes (live tree read-only) and pick under a
+~300 MB / <10 min budget; mechanism argued: a `nabu quickstart` command
+(sync the starter list, then print the three demo commands) vs a
+documented sync line — bias to the command, it's the humanist's path.
+(b) SITE: a Quickstart page (prereqs, clone, bundle install, starter
+sync, first search + align + define, MCP registration pointer, "grow
+the library" next step) + a VISIBLE repo link in the site header/nav
+(currently buried in About). README quickstart section aligned with the
+site page (single source of truth stated). Tests for the command
+(fixture-backed, no network in suite); site builds exit 0.
