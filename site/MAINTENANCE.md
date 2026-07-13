@@ -15,7 +15,10 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    documents/passages totals, dictionary entries, gold-lemma rows and
    language count, dated-document coverage — copied from the freshly
    refreshed docs/library.md header, **never re-derived**. Update every
-   "as of" date to the gate date.
+   "as of" date to the gate date. quickstart.md carries measured on-disk
+   sizes (the starter shelf and the growth table) — re-measure (`du -sh`
+   of the live canonical dirs) when a listed shelf changes materially,
+   and keep it consistent with what `bin/nabu quickstart` prints.
 2. **New shelves/sources**: a new synced source gets its row/paragraph on
    library.md + sources.md (upstream link, license, class). A source
    flipped from pending to live moves out of the "awaiting first

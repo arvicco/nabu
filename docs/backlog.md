@@ -6055,7 +6055,7 @@ manifest.yml); fixture discover now mints 18 docs. Suite 2,283 runs /
 `bin/nabu sync coptic-scriptorium --parse-only` (expect 482 loaded /
 1 quarantined / 0 unrecognized).
 
-## P18-2 · Starter pack + site Quickstart  [tier: opus] [status: dispatched] [deps: —]
+## P18-2 · Starter pack + site Quickstart  [tier: opus] [status: done 2026-07-13] [deps: —]
 Owner (2026-07-13): queue the starter pack; "the site needs some kind of
 'Quickstart' section - right now it lacks even clearly visible link to
 the repo, as well as steps needed to initialize your own Nabu Library."
@@ -6073,3 +6073,31 @@ the library" next step) + a VISIBLE repo link in the site header/nav
 (currently buried in About). README quickstart section aligned with the
 site page (single source of truth stated). Tests for the command
 (fixture-backed, no network in suite); site builds exit 0.
+FINDINGS (done 2026-07-13): MEASURED canonical sizes (du -sh, live
+tree, git history included): sblgnt 11 MB · proiel 173 MB · iswoc 30 MB
+· lexica 479 MB · vulgate 357 MB · eng-web 357 MB · torot 270 MB. The
+~300 MB budget is NOT attainable with the define marvel: lexica alone
+is 479 MB on disk (the registry's "~160 MB" note is stale). CHOSEN SET
+(693 MB): sblgnt + proiel + iswoc + lexica — align "MARK 2.3" renders
+SEVEN witnesses (grc ×2, lat, got, xcl, chu, ang — iswoc's 30 MB buys
+the OE witness), search --lemma rides the PROIEL gold rows, define
+λόγος/virtus has LSJ + L&S. vulgate/eng-web EXCLUDED: each is a full
+open-bibles clone measuring 357 MB (stale "~76 MB" note) for one USFX
+file — they are the first "grow the library" step instead. TIME: ledger
+first-sync wall clocks sblgnt 3 s / proiel 14 s / iswoc 4 s / lexica
+133 s ≈ 3 min fetch+load, projected well under the 10 min line with
+per-source reindexes. SHIPPED: `nabu quickstart` (normal per-source
+sync path in starter order, one failure never stops the rest + end
+report + exit 1, idempotent re-sync, --list previews; epilogue = the
+three marvels + grow pointer), site/quickstart.md + nav entry +
+GitHub ↗ repo link in the nav bar of EVERY page (layout-level, accent-
+styled), README Quickstart short form moved near the top pointing at
+the site page, docs/quickstart.md §2 re-anchored on the command,
+MAINTENANCE.md gate duty covers the measured sizes. Lint rider:
+site/vendor + site/_site excluded in .rubocop.yml (vendored gems ship
+.rubocop.yml requiring rubocop-minitest — the CI vendor trap, found at
+the first local site build). Tests +7 (starter wiring vs the shipped
+registry, --list touches nothing, order + epilogue, idempotent re-run,
+partial failure aggregation + exit 1, help teaches the shelf, command
+listed). Suite 2,267 runs exit 0, lint 287 files exit 0, jekyll build
+exit 0.

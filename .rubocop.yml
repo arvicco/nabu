@@ -15,6 +15,14 @@ AllCops:
     # syncs pull sources (e.g. torot) that ship their own .rb tooling, which
     # must never fail our lint.
     - canonical/**/*
+    # The Jekyll site's self-contained bundle (site/Gemfile; vendor/ and
+    # _site/ are gitignored per site/.gitignore): the default vendor/
+    # exclude is top-level only, and gems vendored under site/ ship
+    # .rubocop.yml files requiring plugins we don't carry (rubocop-minitest
+    # — the CI vendor/bundle trap again, found live at the first local site
+    # build, P18-2).
+    - site/vendor/**/*
+    - site/_site/**/*
 
 # Enforce frozen string literal magic comment in every Ruby file.
 Style/FrozenStringLiteralComment:
