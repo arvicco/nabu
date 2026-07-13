@@ -1,0 +1,122 @@
+# frozen_string_literal: true
+
+require_relative "catalog_join"
+
+module Nabu
+  module Query
+    # Reader for the links journal (P16-1, docs/intertext-design.md §7):
+    # `nabu links <urn>` — every mined edge touching this urn, BOTH directions,
+    # grouped by kind, each counterpart resolved through the catalog to its
+    # document title/language/license. The urn is the join key on purpose:
+    # edges are urn-keyed so they survive rebuilds, and this reader re-resolves
+    # them against whatever catalog currently exists. A counterpart the catalog
+    # no longer holds (withdrawn since the batch run, or a rebuild off a
+    # slimmer canonical) resolves to nils and renders honestly as unresolved —
+    # the edge itself is journal truth, not catalog truth.
+    class Links
+      include CatalogJoin
+
+      # One edge as seen FROM the queried urn. +direction+ is :out (the batch
+      # probe discovered the counterpart from this urn) or :in (some other
+      # anchor's probe found this urn). +urn+ is the COUNTERPART; title/
+      # language/license_class come from catalog resolution (nil when the
+      # counterpart is no longer in the catalog).
+      Edge = Data.define(:direction, :urn, :title, :language, :license_class,
+                         :score, :run_id) do
+        def resolved? = !title.nil? || !language.nil?
+      end
+
+      # A producer run cited by at least one shown edge — the provenance line.
+      RunInfo = Data.define(:id, :producer, :scope, :params, :code_version, :created_at)
+
+      # +groups+ is { kind => [Edge] } (edges score-desc within a kind);
+      # +runs+ the RunInfos the edges cite, id-ordered. +title+ is the queried
+      # urn's own resolution (nil when it is not in the catalog — possible,
+      # since edges outlive catalog rows).
+      Result = Data.define(:urn, :title, :groups, :total, :runs)
+
+      def initialize(catalog:, journal:)
+        @catalog = catalog
+        @journal = journal
+      end
+
+      # Edges touching +urn+. Returns nil when the urn is unknown BOTH ways —
+      # no catalog passage/document and no edge (the caller errors); a known
+      # urn with no edges returns an empty Result (a state, not an error).
+      def run(urn)
+        edges = outgoing(urn) + incoming(urn)
+        title = resolve_own_title(urn)
+        return nil if edges.empty? && title == :unknown
+
+        resolved = resolve_counterparts(edges)
+        groups = resolved.group_by { |edge| edge.fetch(:kind) }
+                         .transform_values { |group| group.map { |edge| build_edge(edge) } }
+        Result.new(urn: urn, title: (title unless title == :unknown),
+                   groups: groups, total: resolved.size, runs: run_infos(resolved))
+      end
+
+      private
+
+      def outgoing(urn)
+        @journal[:links].where(from_urn: urn).all.each { |edge| edge[:direction] = :out }
+      end
+
+      def incoming(urn)
+        @journal[:links].where(to_urn: urn).all.each { |edge| edge[:direction] = :in }
+      end
+
+      # The queried urn's own display title: its document's title whether the
+      # urn names a passage or a document. :unknown when the catalog holds
+      # neither (distinct from a nil title on a known row).
+      def resolve_own_title(urn)
+        passage = @catalog[:passages]
+                  .join(:documents, id: Sequel[:passages][:document_id])
+                  .where(Sequel[:passages][:urn] => urn)
+                  .select(Sequel[:documents][:title].as(:title)).first
+        return passage[:title] if passage
+
+        document = @catalog[:documents].where(urn: urn).select(:title).first
+        document ? document[:title] : :unknown
+      end
+
+      # One catalog query resolves every counterpart urn to title/language/
+      # license (no withdrawn filter: a withdrawn counterpart still resolves —
+      # the edge exists; `show` tells the withdrawal story).
+      def resolve_counterparts(edges)
+        urns = edges.map { |edge| counterpart(edge) }.uniq
+        rows = @catalog[:passages]
+               .join(:documents, id: Sequel[:passages][:document_id])
+               .join(:sources, id: Sequel[:documents][:source_id])
+               .where(Sequel[:passages][:urn] => urns)
+               .select(Sequel[:passages][:urn].as(:urn),
+                       Sequel[:passages][:language].as(:language),
+                       Sequel[:documents][:title].as(:title),
+                       license_expr.as(:license_class))
+               .to_hash(:urn)
+        edges.map { |edge| edge.merge(resolution: rows[counterpart(edge)]) }
+             .sort_by { |edge| [-(edge[:score] || 0.0), counterpart(edge)] }
+      end
+
+      def counterpart(edge)
+        edge[:direction] == :out ? edge[:to_urn] : edge[:from_urn]
+      end
+
+      def build_edge(edge)
+        resolution = edge[:resolution] || {}
+        Edge.new(direction: edge[:direction], urn: counterpart(edge),
+                 title: resolution[:title], language: resolution[:language],
+                 license_class: resolution[:license_class],
+                 score: edge[:score], run_id: edge[:run_id])
+      end
+
+      def run_infos(edges)
+        ids = edges.map { |edge| edge[:run_id] }.uniq
+        @journal[:link_runs].where(id: ids).order(:id).all.map do |row|
+          RunInfo.new(id: row[:id], producer: row[:producer], scope: row[:scope],
+                      params: JSON.parse(row[:params_json]), code_version: row[:code_version],
+                      created_at: row[:created_at])
+        end
+      end
+    end
+  end
+end
