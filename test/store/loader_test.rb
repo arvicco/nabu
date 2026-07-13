@@ -55,10 +55,12 @@ module Store
     # -- helpers -------------------------------------------------------------
 
     # passages: array of [urn_suffix, text] pairs; sequence is the array index.
-    def build_document(slug, passages, title: "Document #{slug}", annotations: {}, license_override: nil)
+    def build_document(slug, passages, title: "Document #{slug}", annotations: {}, license_override: nil,
+                       metadata: {})
       document = Nabu::Document.new(
         urn: doc_urn(slug), language: "grc", title: title,
-        canonical_path: "/canonical/test_adapter/#{slug}.txt", license_override: license_override
+        canonical_path: "/canonical/test_adapter/#{slug}.txt", license_override: license_override,
+        metadata: metadata
       )
       passages.each_with_index do |(suffix, text), index|
         document << Nabu::Passage.new(
@@ -230,6 +232,64 @@ module Store
       row = doc_row("alpha")
       assert_equal 2, row.revision
       assert_equal "attribution", row.license_override
+    end
+
+    # -- document metadata (P17-2) --------------------------------------------
+    #
+    # Adapter-emitted Document#metadata (persons prosopography, crosswalk ids,
+    # facets — edh-survey §4.5/§4.6) persists into documents.metadata_json.
+    # Same discipline as license_override: METADATA, never content — it stays
+    # out of content_sha256, and a metadata-only change reconciles in place
+    # without a revision bump.
+
+    def test_load_persists_document_metadata_on_create
+      metadata = { "tm_nr" => "251193", "persons" => [{ "nomen" => "Nonia" }] }
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν]], metadata: metadata)])
+
+      assert_report report, added: 1
+      row = doc_row("alpha")
+      assert_equal metadata, JSON.parse(row.metadata_json)
+      assert_equal 1, row.revision
+    end
+
+    def test_empty_metadata_stores_the_empty_object
+      @loader.load([alpha])
+      assert_equal "{}", doc_row("alpha").metadata_json
+    end
+
+    def test_metadata_change_is_metadata_only_no_revision_bump_no_content_change
+      @loader.load([alpha])
+      sha_before = doc_row("alpha").content_sha256
+
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε]], metadata: { "tm_nr" => "9" })])
+
+      assert_report report, updated: 1
+      row = doc_row("alpha")
+      assert_equal({ "tm_nr" => "9" }, JSON.parse(row.metadata_json))
+      assert_equal 1, row.revision, "a metadata change must not bump the revision"
+      assert_equal sha_before, row.content_sha256, "metadata must never fake a content change"
+    end
+
+    def test_reload_with_same_metadata_is_idempotent
+      with_metadata = -> { build_document("alpha", [%w[1 μῆνιν]], metadata: { "tm_nr" => "9" }) }
+      @loader.load([with_metadata.call])
+      documents_before = snapshot(Nabu::Store::Document)
+
+      report = @loader.load([with_metadata.call])
+
+      assert_report report, skipped: 1
+      assert_equal documents_before, snapshot(Nabu::Store::Document)
+    end
+
+    def test_content_revision_carries_the_current_metadata
+      @loader.load([build_document("alpha", [%w[1 μῆνιν]], metadata: { "tm_nr" => "9" })])
+
+      report = @loader.load([build_document("alpha", [%w[1 θεά]], metadata: { "tm_nr" => "10" })])
+
+      assert_report report, updated: 1
+      row = doc_row("alpha")
+      assert_equal 2, row.revision
+      assert_equal({ "tm_nr" => "10" }, JSON.parse(row.metadata_json))
     end
 
     def test_invalid_license_override_is_rejected_before_any_write

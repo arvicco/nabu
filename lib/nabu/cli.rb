@@ -196,6 +196,19 @@ module Nabu
       (no AND/phrase/prefix operators) and does not combine with
       --lemma/--near/--morph.
 
+      FACETS (--type / --province / --material): document-grained categorical
+      filters over the facet table (P17-2 — EDH inscriptions seed it: 22
+      EAGLE inscription types, 103 Roman provinces, materials). Patterns are
+      case-insensitive and match the normalized term OR the upstream raw code
+      (--type epitaph and --type titsep both work; % wildcards as in
+      --place). They compose with the text query, --fuzzy, and every
+      date/place filter — the epigraphist's slice is
+      `--type epitaph --province "Pannonia inferior" --century 2`. A document
+      with no facet row falls out under an active filter (honest absence:
+      only faceted sources — inscriptions — can match). Like the date
+      filters they do not combine with --lemma/--near. Facet rows land at
+      `nabu rebuild` (like the date/place axis).
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -221,6 +234,11 @@ module Nabu
         nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
                                                    #   all — infix match, papyri+oracc
         nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
+        nabu search "dis manibus" --type epitaph --province "Germania superior"
+                                                   # the D M formula on epitaphs of
+                                                   #   one province (EDH facets)
+        nabu search --fuzzy "votum solvit" --type "votive%" --material Sandstein
+                                                   # V S L M on sandstone votives
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -247,15 +265,23 @@ module Nabu
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
     option :place, type: :string, banner: "PATTERN",
                    desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :type, type: :string, banner: "PATTERN",
+                  desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
+    option :province, type: :string, banner: "PATTERN",
+                      desc: "Roman-province facet filter (Germania inferior, pannonia%)"
+    option :material, type: :string, banner: "PATTERN",
+                      desc: "Material facet filter (Marmor, sandstein%)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     def search(query = nil)
       query = query.to_s.strip
-      if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
-                           "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
+      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
+         (options[:near] || options[:lemma])
+        raise Thor::Error, "search: --from/--to/--century/--place/--type/--province/--material compose " \
+                           "with text search only, not --lemma/--near (the dated/faceted corpus — " \
+                           "papyri, inscriptions — is not lemmatized)"
       end
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
@@ -270,6 +296,7 @@ module Nabu
       validate_license!(options[:license])
       from, to = date_window
       place = options[:place]
+      facets = facet_filters
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -278,11 +305,13 @@ module Nabu
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
       require_axis!(catalog) if from || to || place
+      require_facets!(catalog) if facets
 
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i, from: from, to: to, place: place)
-      print_search_results(results)
+                                               limit: options[:limit].to_i, from: from, to: to, place: place,
+                                               facets: facets)
+      print_search_results(results, facets: facets)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -1377,6 +1406,24 @@ module Nabu
         raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
       end
 
+      # A facet filter needs document_facets (migration 009) — same honest
+      # pointer as the axis guard.
+      def require_facets!(catalog)
+        return if catalog.table_exists?(:document_facets)
+
+        raise Thor::Error, "no facet table (this catalog predates it) — run nabu rebuild"
+      end
+
+      # The active facet filters as {facet name => pattern}, or nil when none
+      # (P17-2): --type → genre, --province → province, --material → material.
+      def facet_filters
+        filters = {}
+        filters["genre"] = options[:type] if options[:type]
+        filters["province"] = options[:province] if options[:province]
+        filters["material"] = options[:material] if options[:material]
+        filters.empty? ? nil : filters
+      end
+
       # Export format gate. CoNLL-U is a first-class exit format (maintenance
       # §7) but needs the token model, so it is deferred to the enrichment
       # phase with an explicit message rather than a generic "unknown format".
@@ -1518,6 +1565,7 @@ module Nabu
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         print_axis(document.axis)
+        print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
@@ -1556,6 +1604,20 @@ module Nabu
         elsif axis.place_name
           say "  place: #{axis.place_name}"
         end
+      end
+
+      # The facets line (P17-2), one compact line and only when faceted:
+      # "facets: genre=epitaph (titsep) · province=Latium et Campania …". The
+      # raw code rides in parentheses when it differs from the value (the `?`
+      # certainty stays visible).
+      def print_facets(facets)
+        return if facets.nil? || facets.empty?
+
+        rendered = facets.map do |facet|
+          raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
+          "#{facet.facet}=#{facet.value}#{raw}"
+        end
+        say "  facets: #{rendered.join(' · ')}"
       end
 
       # Print practice: the document urn appears once in the header, each
@@ -1929,8 +1991,9 @@ module Nabu
 
       # Render hits: urn + optional [language] header, then the FTS snippet
       # (diacritic-folded highlight). The footer labels that so nobody reads the
-      # stripped accents in the highlight as corpus truth.
-      def print_search_results(results)
+      # stripped accents in the highlight as corpus truth; active facet filters
+      # (P17-2) are named in one compact footer line — and only then.
+      def print_search_results(results, facets: nil)
         return say("no matches") if results.empty?
 
         results.each do |result|
@@ -1938,7 +2001,15 @@ module Nabu
           say "  #{result.snippet}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)"
+            "(highlights are diacritic-folded)#{facet_footer(facets)}"
+      end
+
+      # " · facets: genre=epitaph province=pannonia%" — empty when no facet
+      # filter is active (zero-signal silence, the compact rule).
+      def facet_footer(facets)
+        return "" if facets.nil? || facets.empty?
+
+        " · facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}"
       end
 
       # Render fuzzy hits (P16-4): the search-hit shape (urn + [language],
@@ -1946,7 +2017,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil)
         if results.empty?
           say "no matches"
         else
@@ -1955,7 +2026,7 @@ module Nabu
             say "  #{long ? result.folded_marked : result.snippet}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-              "(fuzzy substring; highlights are diacritic-folded)"
+              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets)}"
         end
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
@@ -2274,6 +2345,7 @@ module Nabu
 
         validate_license!(options[:license])
         from, to = date_window
+        facets = facet_filters
         config = Nabu::Config.load
         catalog = open_catalog(config)
         fulltext = open_fulltext(config)
@@ -2284,10 +2356,12 @@ module Nabu
         end
 
         require_axis!(catalog) if from || to || options[:place]
+        require_facets!(catalog) if facets
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
-                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place])
-        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long])
+                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place],
+                                   facets: facets)
+        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets)
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
                            "(#{query.inspect} folds to #{e.folded.inspect}) — the trigram floor"
@@ -2816,11 +2890,18 @@ module Nabu
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
-        return unless result.axes
+        if result.axes
+          say "  dated/placed #{result.axes.total} documents " \
+              "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
+              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, edh #{result.axes.edh})"
+        end
+        return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  dated/placed #{result.axes.total} documents " \
             "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic})"
+            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
+            "edh #{result.axes.edh})"
+        say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
       end
 
       def format_report(label, report)
