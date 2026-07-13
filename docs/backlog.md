@@ -6101,3 +6101,23 @@ registry, --list touches nothing, order + epilogue, idempotent re-run,
 partial failure aggregation + exit 1, help teaches the shelf, command
 listed). Suite 2,267 runs exit 0, lint 287 files exit 0, jekyll build
 exit 0.
+
+## P18-3 · Reflex dedupe audit — every grouping surface  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-13, after the prīmus ×3 fix): "Make sure to dedup not
+just specific command but more generally any path where such grouping
+COULD create dup entries." The orchestrator fixed the display choke
+point (ReflexViews.for_entry — serves etym/define/MCP); this packet
+AUDITS every other surface that groups crosswalk/closure/alignment data
+and proves-or-fixes each: Query::Cognates interactive join (same
+(language, word) via word-fold AND roman-fold double-match?; multiple
+reflex rows per root), BatchCognates edges, Query::Etym ancestors_of
+(claims merge — verify by test), the reflex_roots closure build
+(claims sorted/deduped — verify multi-shelf + multi-subtree), MW
+comparanda rows landing beside kaikki rows for the same (entry, word),
+nabu_etym/nabu_cognates/nabu_define MCP payloads, links journal
+readers (kind-grouped edge lists), parallels loci grouping, formulas
+star edges, vocab hapax lists, collation cells. For each: a test that
+FORCES the duplicate condition and pins the grouped render, or a short
+proof in the class doc why duplication is structurally impossible
+there. Deliverable includes a one-table findings summary (surface /
+dup-possible? / fixed-or-proven).
