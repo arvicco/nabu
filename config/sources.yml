@@ -271,7 +271,9 @@ freising:
 
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
-  enabled: false   # first real sync is owner-fired (~2.8 GB clone; CLAUDE.md
+  enabled: true    # owner sign-off 2026-07-13: synced 482 docs / 74,169 passages
+                   # (P18-1 coverage pass, 1 honest quarantine), eyeballed, flipped.
+                   # Original gate note (~2.8 GB clone; CLAUDE.md
                    # checklist §6: bin/nabu sync coptic-scriptorium, eyeball
                    # nabu show urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1
                    # + 5 random passages, then flip)
@@ -287,7 +289,8 @@ coptic-scriptorium:
 
 mw:
   adapter: Nabu::Adapters::Mw
-  enabled: false   # P17-4 (2026-07-13): first real sync is owner-fired — 11 MB
+  enabled: true    # owner sign-off 2026-07-13: synced 193,890 entries, flipped.
+                   # Original gate note (P17-4): first real sync owner-fired — 11 MB
                    # zip fetch, 286,525 records / 193,890 grouped entries,
                    # ~100-130 MB catalog growth (CLAUDE.md checklist §6:
                    # bin/nabu sync mw, eyeball the per-siglum citation coverage
@@ -299,7 +302,9 @@ mw:
 
 edh:
   adapter: Nabu::Adapters::Edh
-  enabled: false   # P17-2: awaiting the owner-fired first (and only) sync —
+  enabled: true    # owner sign-off 2026-07-13: synced 81,856 docs / 406,281 passages
+                   # (27 quarantines pending triage), flipped. Original gate note
+                   # (P17-2): awaiting the owner-fired first (and only) sync —
                    # ~220 MB canonical: 9 EpiDoc zips (153.8 MB) + 2 CSVs.
   # Upstream archived: funding closed 2021, staff gone, dumps Last-Modified
   # 2021-12-16 (all HEAD-verified 2026-07-13) — the preservation argument
