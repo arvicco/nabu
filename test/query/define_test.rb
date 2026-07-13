@@ -298,6 +298,26 @@ module Query
       assert_empty define("μῆνις").first.reflexes, "attested shelves have none"
     end
 
+    # P18-3: duplicate crosswalk rows on one entry (multi-subtree descent —
+    # the prīmus ×3 defect) render ONE reflex view on the define surface
+    # too — it rides the same ReflexViews grouped render as etym.
+    def test_duplicate_reflex_rows_render_one_view_on_the_define_surface
+      seed_recon_shelf
+      entry_id = @catalog[:dictionary_entries]
+                 .where(urn: "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2").get(:id)
+      chu_row = @catalog[:dictionary_reflexes]
+                .where(dictionary_entry_id: entry_id, language: "chu", word: "богъ").first
+      refute_nil chu_row
+      dupe = chu_row.dup
+      dupe.delete(:id)
+      dupe[:seq] = 9_999
+      @catalog[:dictionary_reflexes].insert(dupe)
+
+      bog = define("*bogъ").find { |r| r.urn.end_with?("bogъ:noun:2") }
+      views = bog.reflexes.select { |r| r.language == "chu" && r.word == "богъ" }
+      assert_equal 1, views.size, "duplicate crosswalk rows must render as one reflex view"
+    end
+
     def test_reconstruction_lang_filter_works_unstarred
       seed_recon_shelf
       assert_equal 3, define("bogъ", lang: "sla-pro").size

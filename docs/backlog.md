@@ -6102,7 +6102,7 @@ partial failure aggregation + exit 1, help teaches the shelf, command
 listed). Suite 2,267 runs exit 0, lint 287 files exit 0, jekyll build
 exit 0.
 
-## P18-3 · Reflex dedupe audit — every grouping surface  [tier: opus] [status: dispatched] [deps: —]
+## P18-3 · Reflex dedupe audit — every grouping surface  [tier: opus] [status: done 2026-07-13 — every surface tested-or-proven, findings table below; 8 forcing tests added, zero code defects found beyond the already-fixed choke point] [deps: —]
 Owner (2026-07-13, after the prīmus ×3 fix): "Make sure to dedup not
 just specific command but more generally any path where such grouping
 COULD create dup entries." The orchestrator fixed the display choke
@@ -6121,3 +6121,27 @@ FORCES the duplicate condition and pins the grouped render, or a short
 proof in the class doc why duplication is structurally impossible
 there. Deliverable includes a one-table findings summary (surface /
 dup-possible? / fixed-or-proven).
+
+FINDINGS (2026-07-13). Verdict: the display choke point the
+orchestrator fixed (ReflexViews#for_entry) was the only defect; every
+other surface either already collapses duplicates structurally
+(hash-keyed grouping / Sets / unique index) or rides the fixed view.
+Where a duplicate condition is reachable in the DATA it was forced by
+test; where unreachable, the impossibility is argued in the class doc.
+
+| surface | dup possible? | fixed-or-proven | where |
+|---|---|---|---|
+| ReflexViews#for_entry (etym/define display) | YES — multi-subtree crosswalk rows (prīmus ×3) | FIXED (orchestrator): dedupe by (language, word, roman), flags merge true>false>nil | lib/nabu/query/reflex_views.rb; etym_test test_duplicate_reflex_rows_render_one_view_with_merged_loan_flag |
+| Query::Cognates join | no — accumulator hash-keyed (ref,root)→language→lemma, surfaces/docs/passages are Sets; word/roman folds are distinct closure keys and a gold lemma has one folded form | proof in class doc + forced-dup test (raw duplicate closure rows) | cognates.rb doc; cognates_test test_duplicate_closure_rows_render_one_group_with_one_witness_word_each |
+| BatchCognates edges | no — refs/meets are Sets, one edge per unordered pair; multi-SUBTREE same-root dups collapse like P16-2's multi-root | test: forced dup closure row → same edge count, meet listed once, score unchanged | batch_cognates_test test_duplicate_closure_rows_collapse_to_one_edge_with_one_meet |
+| Query::Etym#ancestors_of | YES — one ancestor naming the same child via several subtree edges | VERIFIED by test: one ancestor Result, edge_borrowed merges true>false>nil (the class-doc claim now pinned) | etym_test test_duplicate_ancestor_naming_edges_collapse_with_merged_edge_borrowed |
+| Etym entry-level match (word+roman double-join) | reachable rows, collapsed by uniq(entry_row_id) | pinned via the MW doubled-comparandum test (one entry) | etym_test test_duplicated_mw_comparanda_render_one_entry_with_one_cognate_view |
+| ReflexRootsIndexer closure | YES in input (multi-subtree edges) | verified: one (language, lemma_folded, root) row; OR-aggregated borrowed = max_flag, identical to the display merge rule | reflex_roots_indexer_test test_multi_subtree_duplicate_edges_emit_one_row_with_the_display_merge_flag |
+| MW comparanda (P17-4) | under ONE entry: yes (senses repeat a comparandum) — covered by the display dedupe; MW vs kaikki naming the same (language, word) under DIFFERENT entries stays two honest witnesses, never merged | test forces the in-entry dup | etym_test (as above); define surface: define_test test_duplicate_reflex_rows_render_one_view_on_the_define_surface |
+| MCP nabu_etym / nabu_define | ride Query::Etym/Define → the deduped ReflexViews, never raw rows | pinned by payload test | mcp/tools_test test_etym_and_define_payloads_ride_the_deduped_reflex_views |
+| MCP nabu_cognates | rides Query::Cognates | pinned by payload test | mcp/tools_test test_cognates_payload_rides_the_deduped_join |
+| links reader (kind groups) | no — unique (from_urn,to_urn,kind) index + write_edge! reverse-direction refresh ⇒ ≤1 row per unordered pair; out/in double-listing needs a self-edge no producer mints | proof in class doc | lib/nabu/query/links.rb |
+| parallels loci grouping | no — candidates hash-grouped by document id, one Hit per document; loci = sibling row count | already argued (rider ii, class doc) | lib/nabu/query/parallels.rb |
+| formulas star spokes | no — gram counts hash-keyed (one Formula per gram); full loci distinct-passage via per-passage seen-Set; spokes deduped by (hub,locus).minmax seen-set, overlaps counted as coalesced, never silent | already argued (class docs) | lib/nabu/query/formulas.rb; lib/nabu/batch_formulas.rb |
+| vocab hapax list | no — tally hash-keyed by folded lemma: a repeated spelling MERGES (un-hapaxes), never doubles; a repeated display string needs one spelling folding two ways in one scope (mixed-language document — no adapter mints one) | proof in class doc | lib/nabu/query/vocab.rb |
+| collation cells | no — cells hash-grouped by (language, script); Align yields each registered witness at most once per ref, so each reading lands in one cell once | proof in class doc | lib/nabu/query/collation.rb |
