@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Honorific inscription from Roma &amp;ndash; Roma (Roma)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>Epigraphische Datenbank Heidelberg</authority>
+                <availability>
+                    <p>Heidelberger Akademie der Wissenschaften</p>
+                    <licence target="http://creativecommons.org/licenses/by-sa/4.0/">This file is licensed under the Creative Commons Attribution-ShareAlike 4.0 license.
+                    </licence>
+                </availability>
+            <idno type="localID">HD000082</idno><idno type="URI">https://edh-www.adw.uni-heidelberg.de/test/edh/inschrift/HD000082</idno></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Mentana, Lap. Zeri</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/132">herm</objectType><material ref="http://www.eagle-network.eu/voc/material/lod/48">Marmor</material><dimensions unit="cm"><height>(136)</height><width>23</width><depth>26</depth></dimensions><rs type="deccoration" ref="http://www.eagle-network.eu/voc/decor/lod/1000">no</rs></support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>description of text field/campus</layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc><handNote><dimensions><height unit="cm">1.3-1.7</height></dimensions></handNote></handDesc>
+                    </physDesc>
+                    <history>
+                        <origin><origPlace><placeName type="province">Roma</placeName><placeName type="ancient" ref="https://pleiades.stoa.org/places/423025">Roma</placeName></origPlace><origDate><origDate notBefore-custom="0171" notAfter-custom="0230" datingMethod="http://en.wikipedia.org/wiki/Julian_calendar">171 AD - 230 AD</origDate></origDate></origin>
+                        <provenance type="found"><placeName type="country" ref="https://www.geonames.org/3175395">Italy</placeName><placeName type="modern">Roma</placeName><placeName type="findspot">via Portuense, vigna Bonelli?</placeName><placeName type="region">Roma</placeName></provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+             <p>Encoded following EpiDoc guidelines 9.2</p>
+        </encodingDesc>             
+        <profileDesc>
+            <langUsage>
+                <language ident="en">English</language>
+                <language ident="de">Deutsch</language>
+                <language ident="lat">Latin</language>
+            </langUsage>
+            <textClass>
+                <keywords><term ref="http://www.eagle-network.eu/voc/typeins/lod/69">honorific inscription</term></keywords>
+            </textClass>
+            <particDesc><p><listPerson><person xml:id="HD000082_1" sex="M"><persName><name type="praenomen">L.</name><name type="nomen">Licinius</name><name type="cognomen">Crassus++</name></persName></person></listPerson></p></particDesc>
+        </profileDesc>
+        <revisionDesc><change when="2012-02-28" who="Cowey">checked with photo</change></revisionDesc>
+    </teiHeader>
+    <facsimile><graphic xml:id="F010801" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/e58a075a-681f-4db9-9e48-c7653e98cb68/file/id/770321/file_version/name/small"/><graphic xml:id="F042573" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/64d2cc9c-a2df-42c0-87a5-0a641bf1b81f/file/id/803681/file_version/name/small"/><graphic xml:id="F042574" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/360ebdd5-1a21-4ea6-b07e-9408d55792ca/file/id/803682/file_version/name/small"/><graphic xml:id="F042575" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/8c61d14d-0e1a-496f-881a-68d8ac7c807a/file/id/803683/file_version/name/small"/><graphic xml:id="F042576" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/ca0b7429-61bd-4fdc-a4bc-ec1d575160cc/file/id/803684/file_version/name/small"/><graphic xml:id="F042577" url="https://heidicon.ub.uni-heidelberg.de/api/v1/objects/uuid/d30fc8f8-7bd1-4ed7-b567-8a838902b4d0/file/id/803685/file_version/name/small"/></facsimile>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve"><head>Text</head><div n="1" type="textpart"><ab><lb n="1"/>
+                <expan><abbr>L</abbr><ex>ucius</ex></expan> Licinius <expan><abbr>L</abbr><ex>uci</ex></expan> <del rend="erasure"><expan><abbr>f</abbr><ex>ilius</ex></expan> Crassu</del>s <lb n="2"/>consularis <del rend="erasure">orator</del> </ab></div><div n="2" type="textpart"><ab><lb n="1"/> Ὅμηρος <lb n="2"/>φιλόσοφος καὶ <lb n="3"/>θεῖος ποιητής
+            </ab></div></div>
+            <div type="commentary">
+                <p>Inschriftträger für mehrere, aufeinanderfolgende Inschriften verwendet. Vorderseite: teilweise eradierte, lateinische Inschrift (s. Text); Rückseite: griechische Inschrift anstelle einer früheren, eradierten lateinischen Inschrift. (B): AE 1983 bietet nur die lateinische Inschrift. In Z. 2 der griechischen Inschrift wurden die Buchstaben σο nachträglich über die Buchstaben οφ eingesetzt. Material: bläulicher Marmor.</p>
+            </div>
+            <div type="bibliography">
+                <listBibl><bibl>AE 1983, 0046. (B)</bibl><bibl>G. Barbieri, in: G. Barbieri (Hrsg.), Il lapidario Zeri di Mentana (Roma 1982) 67-69, Nr. 28; tav. 26, 1 u. 26, 2. - AE 1983.</bibl><bibl>L. Moretti, ArchClass 25/26, 1973/74, 465-466; tav. 83, 2 u. 83, 3 u. 84, 1.</bibl><bibl>CIL 06, 41026; Foto.</bibl><bibl>IGUR 1533; Foto. (B)</bibl><bibl/></listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

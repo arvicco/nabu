@@ -38,11 +38,19 @@ module Nabu
 
       # Per-source dated/placed DOCUMENT counts (+total+ sums them), plus the
       # honest residues: hgv_files/hgv_invalid (P15-2), oracc_undated (members
-      # whose date didn't resolve — skipped, counted, never guessed) and
-      # torot_annals (the passage-grain annal rows behind the torot documents).
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot,
-                            :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals) do
-        def total = hgv + goo300k + imp + oracc + torot
+      # whose date didn't resolve — skipped, counted, never guessed),
+      # torot_annals (the passage-grain annal rows behind the torot documents)
+      # and edh_undated/edh_invalid (P17-2: undated-but-joined records and the
+      # year-0 tripwire). The P17-2 fields default so every pre-P17-2
+      # construction stays valid.
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :edh,
+                            :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
+                            :edh_undated, :edh_invalid) do
+        def initialize(edh: 0, edh_undated: 0, edh_invalid: 0, **)
+          super
+        end
+
+        def total = hgv + goo300k + imp + oracc + torot + edh
       end
 
       module_function
@@ -57,10 +65,12 @@ module Nabu
         imp = build_year_from_urn(catalog, "urn:nabu:imp:", "imp")
         oracc = OraccDates.build(catalog: catalog, canonical_dir: canonical_dir)
         torot = ChronicleAnnals.build(catalog: catalog, canonical_dir: canonical_dir)
+        edh = EdhDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    oracc: oracc[:documents], torot: torot[:documents],
+                    oracc: oracc[:documents], torot: torot[:documents], edh: edh[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
-                    oracc_undated: oracc[:undated], torot_annals: torot[:annals])
+                    oracc_undated: oracc[:undated], torot_annals: torot[:annals],
+                    edh_undated: edh[:undated], edh_invalid: edh[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -208,3 +218,4 @@ end
 
 require_relative "axis_builder/oracc_dates"
 require_relative "axis_builder/chronicle_annals"
+require_relative "axis_builder/edh_dates"

@@ -177,11 +177,12 @@ module Nabu
 
         if row.content_sha256 == doc_sha
           # Unchanged content: no revision bump, no passage work — only the
-          # visibility flags and the license override (metadata, P10-4) may
-          # need reconciling.
+          # visibility flags, the license override (metadata, P10-4) and the
+          # document metadata (P17-2) may need reconciling.
           restored = row.withdrawn && restore(row)
           relabeled = reconcile_license_override?(row, document)
-          return :skipped unless reconcile_retirement?(row, retained) || restored || relabeled
+          remetadata = reconcile_metadata?(row, document)
+          return :skipped unless reconcile_retirement?(row, retained) || restored || relabeled || remetadata
         else
           revise_document(row, document, passage_shas, doc_sha, retained)
         end
@@ -200,11 +201,25 @@ module Nabu
         true
       end
 
+      # Same-content path, P17-2: bring documents.metadata_json into line with
+      # the adapter-emitted Document#metadata. Like the license override it is
+      # METADATA, never content — no revision bump, content_sha256 untouched —
+      # so a persons/crosswalk refresh (a corrected pers CSV) never fakes a
+      # content revision. Returns whether it changed anything.
+      def reconcile_metadata?(row, document)
+        json = ContentHash.canonical_json(document.metadata)
+        return false if row.metadata_json == json
+
+        row.update(metadata_json: json)
+        true
+      end
+
       def insert_document(document, passage_shas, doc_sha, retained)
         row = Document.create(
           source_id: @source.id, urn: document.urn, title: document.title,
           language: document.language, canonical_path: document.canonical_path,
           license_override: document.license_override,
+          metadata_json: ContentHash.canonical_json(document.metadata),
           content_sha256: doc_sha, revision: 1, withdrawn: false, retired_upstream: !retained.nil?
         )
         journal(event: "loaded", document_id: row.id)
@@ -221,6 +236,7 @@ module Nabu
         row.update(
           title: document.title, language: document.language, canonical_path: document.canonical_path,
           license_override: document.license_override,
+          metadata_json: ContentHash.canonical_json(document.metadata),
           content_sha256: doc_sha, revision: row.revision + 1, withdrawn: false,
           retired_upstream: !retained.nil?
         )

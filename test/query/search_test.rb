@@ -276,5 +276,62 @@ module Query
                    "no axis row → absent under an active date filter"
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
     end
+
+    # -- the facet filter (P17-2, document_facets) -----------------------------
+
+    def faceted(urn, text, facets, not_before: nil, not_after: nil)
+      doc = make_document(source: @open, urn: urn, language: "lat")
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "lat")
+      facets.each do |facet, (value, raw)|
+        @catalog[:document_facets].insert(document_id: doc.id, facet: facet, value: value, raw: raw)
+      end
+      if not_before || not_after
+        @catalog[:document_axes].insert(document_id: doc.id, not_before: not_before,
+                                        not_after: not_after, axis_source: "edh")
+      end
+      doc
+    end
+
+    def test_facet_filter_matches_value_case_insensitively
+      faceted("urn:e:1", "dis manibus", { "genre" => %w[epitaph titsep] })
+      faceted("urn:e:2", "dis manibus", { "genre" => ["votive inscription", "titsac"] })
+      rebuild!
+      assert_equal %w[urn:e:1:1], search("manibus", facets: { "genre" => "Epitaph" }).map(&:urn)
+      assert_equal %w[urn:e:2:1], search("manibus", facets: { "genre" => "votive%" }).map(&:urn)
+    end
+
+    def test_facet_filter_matches_the_raw_code_too
+      faceted("urn:e:1", "dis manibus", { "genre" => ["epitaph", "titsep?"] })
+      rebuild!
+      assert_equal %w[urn:e:1:1], search("manibus", facets: { "genre" => "titsep?" }).map(&:urn),
+                   "the raw code (certainty rider included) is queryable"
+    end
+
+    def test_facet_filters_compose_with_each_other_and_the_date_axis
+      faceted("urn:e:1", "dis manibus",
+              { "genre" => %w[epitaph titsep], "province" => ["Pannonia inferior", "PaI"] },
+              not_before: 101, not_after: 200)
+      faceted("urn:e:2", "dis manibus",
+              { "genre" => %w[epitaph titsep], "province" => %w[Britannia Bri] },
+              not_before: 101, not_after: 200)
+      faceted("urn:e:3", "dis manibus",
+              { "genre" => %w[epitaph titsep], "province" => ["Pannonia inferior", "PaI"] },
+              not_before: 301, not_after: 400)
+      rebuild!
+      hits = search("manibus", facets: { "genre" => "epitaph", "province" => "pannonia%" },
+                               from: 101, to: 200)
+      assert_equal %w[urn:e:1:1], hits.map(&:urn),
+                   "genre AND province AND the date window must all hold"
+    end
+
+    def test_unfaceted_documents_fall_out_under_a_facet_filter
+      make_passage(make_document(source: @open, urn: "urn:plain", language: "lat"),
+                   urn: "urn:plain:1", text: "dis manibus", sequence: 1, language: "lat")
+      faceted("urn:e:1", "dis manibus", { "genre" => %w[epitaph titsep] })
+      rebuild!
+      assert_equal %w[urn:e:1:1], search("manibus", facets: { "genre" => "epitaph" }).map(&:urn),
+                   "no facet row → absent under an active facet filter"
+      assert_equal 2, search("manibus").size, "both visible without a facet filter"
+    end
   end
 end
