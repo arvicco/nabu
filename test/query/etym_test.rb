@@ -233,5 +233,33 @@ module Query
       assert_equal "chu", stopa.language
       assert_equal "sl", stopa.matched_reflex.language
     end
+
+    # -- P17-4: MW's own cognate notes enter the walk as a SECOND witness ----------
+
+    # The dictionary-native comparanda (mw-survey §4): a Greek lemma cited
+    # by MW s.v. aṃsa reaches the MW entry through the same reflex fold the
+    # kaikki crosswalk uses — a 19th-century comparativist witness with MW
+    # provenance (the owning entry's dictionary is mw), no asterisk (san is
+    # attested), zero schema change.
+    def test_walks_a_greek_lemma_to_the_mw_entry_that_names_it_as_comparandum
+      mw = Nabu::Store::Source.create(
+        slug: "mw", name: "Monier-Williams", adapter_class: "Nabu::Adapters::Mw",
+        license: "CC BY-NC-SA 3.0", license_class: "nc"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: mw)
+                                   .load_from(Nabu::Adapters::Mw.new,
+                                              workdir: Nabu::TestSupport.fixtures("mw"))
+      results = etym("ὦμος", lang: "grc")
+      assert_equal 1, results.size
+      amsa = results.first
+      assert_equal "urn:nabu:dict:mw:88", amsa.urn
+      assert_equal "mw", amsa.dictionary_slug, "MW provenance — distinct from the kaikki shelves"
+      assert_equal "aṃsa", amsa.headword, "attested Sanskrit — no reconstruction asterisk"
+      assert_equal "nc", amsa.license_class
+      assert_equal "ὦμος", amsa.matched_reflex.word
+      cognates = amsa.cognates.map { |view| [view.lang_code, view.word] }
+      assert_includes cognates, %w[Goth. amsa]
+      assert_includes cognates, %w[Lat. humerus]
+    end
   end
 end

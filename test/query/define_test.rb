@@ -33,9 +33,9 @@ module Query
       )
     end
 
-    def make_passage(document, urn:)
+    def make_passage(document, urn:, sequence: 0)
       Nabu::Store::Passage.create(
-        document_id: document.id, urn: urn, sequence: 0, language: document.language,
+        document_id: document.id, urn: urn, sequence: sequence, language: document.language,
         text: "τ", text_normalized: "τ", content_sha256: "x", revision: 1
       )
     end
@@ -190,6 +190,74 @@ module Query
       out = Nabu::Query::Define.new(catalog: @catalog).glosses([%w[æðele ang], %w[þing ang]])
       assert_equal "noble", out[%w[æðele ang]]
       assert_equal "a thing", out[%w[þing ang]]
+    end
+
+    # -- the Sanskrit shelf (P17-4): MW → GRETIL resolution ----------------------
+
+    def seed_mw_shelf
+      mw = Nabu::Store::Source.create(
+        slug: "mw", name: "Monier-Williams", adapter_class: "Nabu::Adapters::Mw",
+        license: "CC BY-NC-SA 3.0", license_class: "nc"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: mw)
+                                   .load_from(Nabu::Adapters::Mw.new,
+                                              workdir: Nabu::TestSupport.fixtures("mw"))
+    end
+
+    # THE transcode payoff: ASCII "amsa" reaches both aṃśa and aṃsa — the
+    # same folded shape GRETIL's IAST produces (survey §2, no fold-rule
+    # change).
+    def test_defines_a_sanskrit_headword_typed_in_ascii
+      seed_mw_shelf
+      results = define("amsa", lang: "san")
+      assert_equal %w[aṃśa aṃsa], results.map(&:headword), "homographs at the fold, both print"
+      assert_equal "urn:nabu:dict:mw:10", results.first.urn
+      assert_equal "nc", results.first.license_class
+      assert_equal "a share, portion, part, party", results.first.gloss
+      assert_equal %w[aṃśa aṃsa], define("aṃśa").map(&:headword),
+                   "the native IAST spelling folds the same — diacritic-insensitive BOTH sides (§9)"
+    end
+
+    # The survey's end-to-end verified citation: "RV. v, 86, 5" → the GRETIL
+    # document urn + normalized citation, pada suffix probed at query time.
+    def test_resolves_an_rv_citation_into_the_gretil_shelf_via_pada_probing
+      seed_mw_shelf
+      rgveda = make_document(urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht", language: "san-Latn")
+      make_passage(rgveda, urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05a")
+
+      citation = define("aṃśa").first.citations.find { |c| c.label == "RV. v, 86, 5" }
+      assert_equal "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05a", citation.resolved_urn,
+                   "5.086.05 has no exact passage; the pada probe finds 05a"
+    end
+
+    def test_an_exact_verse_passage_wins_over_the_pada_probe
+      seed_mw_shelf
+      rgveda = make_document(urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht", language: "san-Latn")
+      make_passage(rgveda, urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05")
+      make_passage(rgveda, urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05a", sequence: 1)
+
+      citation = define("aṃśa").first.citations.find { |c| c.label == "RV. v, 86, 5" }
+      assert_equal "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05", citation.resolved_urn
+    end
+
+    # Document-grain honesty: a held single-blob work resolves to the
+    # DOCUMENT urn; a bare CTS work reference keeps the old nil.
+    def test_document_grain_citations_resolve_to_the_document_urn
+      seed_mw_shelf
+      make_document(urn: "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", language: "san-Latn")
+
+      citations = define("bhāṣ").first.citations
+      pan = citations.find { |c| c.label == "Pāṇ. vii, 4, 3" }
+      assert_equal "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", pan.resolved_urn
+      mn = citations.find { |c| c.label == "Mn." }
+      assert_nil mn.resolved_urn, "Manusmṛti is not in this catalog — an honest miss"
+    end
+
+    def test_mw_citations_of_unheld_works_and_authority_labels_stay_unresolved
+      seed_mw_shelf
+      citations = define("bhāṣ").first.citations
+      assert_nil citations.find { |c| c.label == "MBh." }.resolved_urn
+      assert_nil citations.find { |c| c.label == "ib." }.resolved_urn
     end
 
     # -- the reconstruction shelf (P14-1): the `*` convention ---------------------
