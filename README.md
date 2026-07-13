@@ -5,6 +5,10 @@
 **A personal, local, license-honest library of the ancient world — that your
 AI tools can read.**
 
+Project site: **[arvicco.github.io/nabu](https://arvicco.github.io/nabu)** —
+the library, tools, and sources presented in full, without the README
+compression.
+
 Nabu pulls the world's openly licensed digital corpora of antiquity — Homer
 and the Greek canon, the Latin classics, documentary papyri from Egypt, the
 Sanskrit epics, cuneiform tablets, the Bible in thirteen parallel witnesses,
