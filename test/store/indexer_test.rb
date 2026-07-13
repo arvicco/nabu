@@ -24,9 +24,9 @@ module Store
 
     # -- helpers -------------------------------------------------------------
 
-    def make_document(urn:, withdrawn: false)
+    def make_document(urn:, withdrawn: false, source: @source)
       Nabu::Store::Document.create(
-        source_id: @source.id, urn: urn, title: "t", language: "grc",
+        source_id: source.id, urn: urn, title: "t", language: "grc",
         content_sha256: "x", revision: 1, withdrawn: withdrawn
       )
     end
@@ -220,6 +220,88 @@ module Store
       rebuild!
 
       assert_equal 1, lemmas.count, "drop+recreate leaves no duplicate lemma rows"
+    end
+
+    # -- the trigram fragment index (P16-4) ----------------------------------
+
+    def trigrams = @fulltext[Nabu::Store::Indexer::TRIGRAM_TABLE]
+
+    def trigram_scope = @fulltext[Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE]
+
+    # A second source standing in for a literary (non-documentary) shelf.
+    def literary_source
+      @literary_source ||= Nabu::Store::Source.create(
+        slug: "lit", name: "Lit", adapter_class: "TestAdapter", license_class: "open"
+      )
+    end
+
+    def test_trigram_index_scoped_to_the_fuzzy_slugs_only
+      doc = make_document(urn: "urn:d:pap")
+      make_passage(doc, urn: "urn:d:pap:1", text_normalized: "στρατηγοσ", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ και", sequence: 0)
+
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+
+      assert_equal %w[urn:d:pap:1], trigrams.select_map(:urn),
+                   "the literary source's passages must NOT be trigram-indexed"
+      assert_equal %w[s], trigram_scope.select_map(:slug), "the scope table records what was indexed"
+      assert_equal 2, fts.count, "the word index stays corpus-wide"
+    end
+
+    def test_trigram_tables_exist_empty_without_fuzzy_slugs
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "στρατηγοσ", sequence: 0)
+      rebuild!
+
+      assert_equal 0, trigrams.count, "no scope, no rows — the table still exists (queries degrade)"
+      assert_equal 0, trigram_scope.count
+    end
+
+    def test_trigram_index_supports_infix_match
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "τωι στρατηγωι χαιρειν", sequence: 0)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+
+      hits = trigrams.where(Sequel.lit("passages_trigram MATCH ?", '"ρατηγ"')).all
+      assert_equal %w[urn:d:1:1], hits.map { |row| row.fetch(:urn) },
+                   "a mid-word fragment must match — the point of the trigram tokenizer"
+    end
+
+    def test_trigram_excludes_withdrawn_passages
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "gone away", sequence: 0, withdrawn: true)
+      make_passage(doc, urn: "urn:d:1:2", text_normalized: "here now", sequence: 1)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+
+      assert_equal %w[urn:d:1:2], trigrams.select_map(:urn)
+    end
+
+    def test_trigram_reindex_is_idempotent
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "στρατηγοσ", sequence: 0)
+
+      2.times { Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"]) }
+
+      assert_equal 1, trigrams.count, "drop+recreate leaves no duplicate trigram rows"
+      assert_equal 1, trigram_scope.count, "…nor duplicate scope rows"
+    end
+
+    # Rebuild-safety: the trigram index is derived-of-derived — a FRESH
+    # fulltext db regenerates it from the catalog's passages alone.
+    def test_trigram_index_regenerates_into_a_fresh_fulltext_db
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "στρατηγοσ", sequence: 0)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, fuzzy_slugs: ["s"])
+        assert_equal %w[urn:d:1:1], fresh[Nabu::Store::Indexer::TRIGRAM_TABLE].select_map(:urn)
+        assert_equal %w[s], fresh[Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE].select_map(:slug)
+      ensure
+        fresh.disconnect
+      end
     end
   end
 end
