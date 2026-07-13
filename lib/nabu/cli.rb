@@ -3065,14 +3065,11 @@ module Nabu
         if result.axes
           say "  dated/placed #{result.axes.total} documents " \
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, edh #{result.axes.edh})"
+              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
+              "edh #{result.axes.edh})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
-        say "  dated/placed #{result.axes.total} documents " \
-            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
-            "edh #{result.axes.edh})"
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
       end
 
