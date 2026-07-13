@@ -54,7 +54,7 @@ class WiktionaryCuTest < Minitest::Test
     assert_kind_of Nabu::DictionaryDocument, document
     assert_equal "wiktionary-cu", document.slug
     assert_equal "chu", document.language
-    assert_equal 278, document.size
+    assert_equal 279, document.size
   end
 
   def test_entry_ids_are_unique_and_stable_across_independent_passes
@@ -130,13 +130,13 @@ class WiktionaryCuTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_with_stable_urns
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 278, first.added
+    assert_equal 279, first.added
     assert_equal 0, first.errored
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 278, second.skipped
-    assert_equal 278, db[:dictionary_entries].count
+    assert_equal 279, second.skipped
+    assert_equal 279, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
 
     bog = db[:dictionary_entries].where(entry_id: "богъ:noun").first
@@ -152,14 +152,14 @@ class WiktionaryCuTest < Minitest::Test
   # shelves do; since P16-5 the adapter parses them (reflexes: true), so OCS
   # entries mint dictionary_reflexes edges (census over the live extract,
   # 2026-07-13: 589/4,615 entries, 2,210 edges; the trimmed fixture carries
-  # 38 entries / 127 edges).
+  # 39 entries / 129 edges — P17-3 added the flagged-orv страна record).
   def test_parse_extracts_descendants_as_reflexes
     document = adapter.parse(adapter.discover(FIXTURES).first)
     entries = document.map { |entry| entry }
     bearing = entries.count { |entry| !entry.reflexes.empty? }
     minted = entries.sum { |entry| entry.reflexes.size }
-    assert_equal 38, bearing
-    assert_equal 127, minted
+    assert_equal 39, bearing
+    assert_equal 129, minted
 
     stopa = entries.find { |entry| entry.entry_id == "стопа:noun" }
     assert_equal 6, stopa.reflexes.size
@@ -171,14 +171,28 @@ class WiktionaryCuTest < Minitest::Test
     assert_equal "stopa", ru.roman_folded
   end
 
+  # P17-3: the Church-Slavonicism golden — the OCS shelf's страна names its
+  # orv descendant with raw_tags ["borrowed"] (83 of the live shelf's 87
+  # orv edges are flagged: OCS loans INTO Old East Slavic beside the
+  # inherited pleophonic doublets, сторона vs страна). The flag must parse
+  # true on that edge and false on the unflagged ru child.
+  def test_strana_orv_edge_parses_borrowed_the_slavonicism_marker
+    entries = adapter.parse(adapter.discover(FIXTURES).first).map { |entry| entry }
+    strana = entries.find { |entry| entry.entry_id == "страна:noun" } || flunk("страна:noun missing")
+    orv = strana.reflexes.find { |reflex| reflex.language == "orv" } || flunk("orv edge missing")
+    assert orv.borrowed, "orv страна is upstream-flagged borrowed (the Slavonicism)"
+    ru = strana.reflexes.find { |reflex| reflex.language == "ru" } || flunk("ru edge missing")
+    refute ru.borrowed
+  end
+
   def test_loader_mints_reflex_rows_and_reindexing_is_idempotent
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 127, db[:dictionary_reflexes].count
+    assert_equal 129, db[:dictionary_reflexes].count
 
     second = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 278, second.skipped
-    assert_equal 127, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
+    assert_equal 279, second.skipped
+    assert_equal 129, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
   end
 
@@ -198,7 +212,7 @@ class WiktionaryCuTest < Minitest::Test
     loader.load_from(adapter, workdir: FIXTURES)
     recon_loader.load_from(Nabu::Adapters::WiktionaryRecon.new, workdir: recon_workdir)
     total = db[:dictionary_reflexes].count
-    assert_operator total, :>, 127, "both shelves mint edges"
+    assert_operator total, :>, 129, "both shelves mint edges"
 
     loader.load_from(adapter, workdir: FIXTURES)
     recon_loader.load_from(Nabu::Adapters::WiktionaryRecon.new, workdir: recon_workdir)

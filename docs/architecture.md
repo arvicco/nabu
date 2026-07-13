@@ -661,6 +661,61 @@ backfill lands in the live db at the next owner-fired
 `bin/nabu sync wiktionary-cu --parse-only` (re-mints the shelf's
 revisions — expected, journaled).
 
+**Addendum (P17-3): four more shelves, the multi-hop closure, and the
+`borrowed` flag.** The survey (`docs/recon2-survey.md`) landed all four
+served on-axis kaikki extracts as EXTRACTS rows on the SAME
+`wiktionary-recon` source (registry untouched): Proto-Balto-Slavic
+(`ine-bsl-pro`, 491 records — near-zero direct gold value, stated
+plainly; it earns its place as the STRUCTURAL chain link, 88.4% of its
+sla-pro descendant nodes fold-join the sla-pro shelf), Proto-West
+Germanic (`gmw-pro`, 5,551 — the OE axis's proto desk and the second
+intermediate shelf), Proto-Italic (`itc-pro`, 745 — best record-level
+join, 76.9%), Proto-Indo-Iranian (`iir-pro`, 799 — largest new-key
+contributor, san via roman). ~60 MB across the four owner-fired GETs,
++7,586 entries (13,053 → 20,639). Folding gains ˢ→s, ᶻ→z, ˀ→(dropped)
+on the shared proto rule, keys `itc`/`iir` added (`gmw` measured clean —
+no key; conventions §9). Two structural consequences:
+
+- **The closure's one-hop bound died with PBS** — it was argued from "no
+  intermediate shelf exists", and `ine-bsl-pro`/`gmw-pro` ARE that shelf.
+  `Store::ReflexRootsIndexer` now runs a shelf-visited worklist walk:
+  from each direct target, breadth-first rounds over "entries of an
+  UNVISITED shelf whose reflexes name (shelf, headword_folded)", each
+  dictionary language enterable once per walk (the same-language
+  exclusion generalized). Termination is structural (every non-final
+  round visits a new shelf ⇒ ≤ shelves−1 rounds; a malformed
+  proto-to-proto cycle's return edge re-enters a visited shelf and dies),
+  determinism is round-grain (shelves are marked visited per round, so
+  membership never depends on iteration order), and with no intermediate
+  shelf the walk degenerates to EXACTLY the old one-hop set (pinned by
+  test). Attested reflex-owning shelves (wiktionary-cu) now ascend like
+  the -pro shelves — descent through an attested intermediary is the same
+  descent relation (supersedes P16-5's direct-only closure stance;
+  display asterisks stay -pro-only). The verified live chain: PIE *per- →
+  ine-bsl-pro *pírštan → sla-pro *pь̃rstъ → chu прьстъ / orv пьрстъ.
+  `Query::Etym` walks the same bound and renders the chain indented, one
+  step per hop; MCP `nabu_etym` nests `ancestors` recursively.
+- **The `borrowed` flag (P15-3 review finding 4)**: migration 010 adds a
+  NULLABLE boolean to `dictionary_reflexes`; the parser mints true/false
+  from the upstream loan markers in `raw_tags`/`tags` (`/borrow/i`:
+  "borrowed" ×92,120 across the eight extracts, "learned borrowing"
+  ×405, a hedged free-text tail; "reshaped by analogy…" never matches),
+  and NULL remains the honest "row predates the reparse" — the flag rides
+  ContentHash's reflex fields, so the next owner-fired
+  `sync <shelf> --parse-only` re-mints reflex-carrying revisions and
+  backfills (the P16-5 recovery pattern). The flag **ORs along the
+  closure path** (the *hlaibaz golden: the marker sits on the gem→sla-pro
+  proto edge, not the chu leaf — a direct-only flag would never fire for
+  hlaifs ~ хлѣбъ), three-valued (true > false > NULL) across duplicate
+  edges and paths, and lands in `reflex_roots.borrowed`. Consumers state
+  the loan PER EDGE: cognates witness words read "(loan)"
+  (`chu хлѣбъ (loan) ~ got hlaifs` at JOHN 13.18 — previously the reader
+  had to apply the meet-shelf heuristic, which stays the caption for
+  unflagged/NULL edges), etym ancestor arrows read "←(loan)", batch
+  cognate details append "(loan: chu)", MCP payloads carry the boolean
+  with the NULL-honesty note. Projected closure growth ~50,395 → 56–60k
+  rows (survey §2), realized at the owner-fired sync + reindex.
+
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 
 `parallels <urn>` answers the classicist's "who quotes THIS line? where

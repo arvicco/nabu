@@ -56,14 +56,19 @@ module Nabu
       end
 
       # The only-when-non-empty guard: an empty reflex list contributes NO
-      # fields (the pre-P14-1 encoding, byte for byte).
+      # fields (the pre-P14-1 encoding, byte for byte). `borrowed` (P17-3)
+      # is deliberately part of the encoding: flag-bearing reparses change
+      # the sha of every reflex-carrying entry, so the next owner-fired
+      # `sync <shelf> --parse-only` re-mints those revisions and backfills
+      # migration 010's column — the P16-5 recovery pattern, on purpose.
       def reflex_fields(entry)
         return [] if entry.reflexes.empty?
 
         reflexes = entry.reflexes.map do |reflex|
           { "lang_code" => reflex.lang_code, "language" => reflex.language,
             "word" => reflex.word, "roman" => reflex.roman,
-            "word_folded" => reflex.word_folded, "roman_folded" => reflex.roman_folded }
+            "word_folded" => reflex.word_folded, "roman_folded" => reflex.roman_folded,
+            "borrowed" => reflex.borrowed }
         end
         [canonical_json(reflexes)]
       end

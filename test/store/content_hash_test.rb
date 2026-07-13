@@ -53,4 +53,14 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(word: "боже", word_folded: "боже")]))
   end
+
+  # P17-3: the borrowed flag is DELIBERATELY part of the reflex encoding —
+  # the flag-aware reparse changes the sha of every reflex-carrying entry,
+  # which is exactly what re-mints their revisions (and thus backfills
+  # migration 010's column) at the next owner-fired parse-only resync.
+  # Reflex-less entries stay pinned above, byte for byte.
+  def test_borrowed_is_content_on_reflex_carrying_entries_only
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(borrowed: false)])),
+                 Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(borrowed: true)]))
+  end
 end

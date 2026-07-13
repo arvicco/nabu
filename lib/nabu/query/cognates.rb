@@ -19,7 +19,11 @@ module Nabu
     # - The meet SHELF is part of the answer: two words meeting at a gem-pro
     #   entry while one witness is Slavic is very likely a BORROWING
     #   (Wiktionary descendants trees include loans — hlaifs ~ хлѣбъ), and
-    #   renderers must be able to say so. Root.shelf carries it.
+    #   renderers must be able to say so. Root.shelf carries it. Since
+    #   P17-3 the closure also carries the per-edge `borrowed` flag
+    #   (WitnessWord.borrowed → "(loan)" labels); the shelf heuristic stays
+    #   the caption for unflagged/NULL edges — upstream flags are
+    #   high-precision, low-recall.
     # - Common-word suppression: a participating lemma attested in ≥
     #   max(50, 10% of its language's gold passages) is dropped by default
     #   (grc ὁ at 72% and got sa at 36% would otherwise flood every verse);
@@ -38,8 +42,14 @@ module Nabu
       # distinct attested surface forms, and the attesting witness documents
       # and passages (+passage_urns+ — the edge-grain anchor BatchCognates
       # persists; hits are pre-filtered to surviving documents, so these urns
-      # never leak an excluded witness).
-      WitnessWord = Data.define(:language, :lemma, :surfaces, :document_urns, :passage_urns)
+      # never leak an excluded witness). +borrowed+ (P17-3) is the closure's
+      # path-ORed loan flag for THIS witness's lemma→root edge: true = the
+      # crosswalk marks the descent a borrowing (renderers label "(loan)" —
+      # chu хлѣбъ (loan) ~ got hlaifs at *hlaibaz), false = parsed unflagged
+      # (the meet-shelf heuristic still applies), nil = the closure predates
+      # the flag (honest unknown).
+      WitnessWord = Data.define(:language, :lemma, :surfaces, :document_urns,
+                                :passage_urns, :borrowed)
 
       # The reconstruction entry the witnesses meet at. +shelf+ is the
       # dictionary language (ine-pro/gem-pro/sla-pro) — the borrowing signal.
@@ -230,14 +240,21 @@ module Nabu
         rows
       end
 
-      # (language, lemma_folded) => root urns, one query per language.
+      # (language, lemma_folded) => [[root urn, borrowed], …], one query per
+      # language. On a closure built before the P17-3 flag the column is
+      # absent and every flag reads nil (honest unknown, no crash — the
+      # read-surface migration stance).
       def roots_for(lemma_rows)
+        columns = %i[lemma_folded root_urn]
+        columns << :borrowed if @fulltext[Store::ReflexRootsIndexer::TABLE].columns.include?(:borrowed)
         pairs = lemma_rows.values.flatten.group_by { |row| row.fetch(:language) }
         pairs.each_with_object({}) do |(language, rows), map|
           @fulltext[Store::ReflexRootsIndexer::TABLE]
             .where(language: language, lemma_folded: rows.map { |row| row.fetch(:lemma_folded) }.uniq)
-            .select(:lemma_folded, :root_urn)
-            .each { |row| (map[[language, row.fetch(:lemma_folded)]] ||= []) << row.fetch(:root_urn) }
+            .select(*columns)
+            .each do |row|
+              (map[[language, row.fetch(:lemma_folded)]] ||= []) << [row.fetch(:root_urn), row[:borrowed]]
+            end
         end
       end
 
@@ -267,10 +284,11 @@ module Nabu
         hits.each do |hit|
           lemma_rows.fetch(hit.fetch(:passage_urn), []).each do |row|
             key = [row.fetch(:language), row.fetch(:lemma_folded)]
-            roots.fetch(key, []).each do |root_urn|
+            roots.fetch(key, []).each do |root_urn, borrowed|
               slot = ((raw[[hit.fetch(:ref), root_urn]] ||= {})[row.fetch(:language)] ||= {})
               entry = slot[row.fetch(:lemma_folded)] ||=
-                { lemma: row.fetch(:lemma_raw), surfaces: Set.new, documents: Set.new, passages: Set.new }
+                { lemma: row.fetch(:lemma_raw), borrowed: borrowed,
+                  surfaces: Set.new, documents: Set.new, passages: Set.new }
               entry[:surfaces].merge(row.fetch(:surface_forms).split(", ").reject(&:empty?))
               entry[:documents].add(doc_of.fetch(row.fetch(:urn)))
               entry[:passages].add(row.fetch(:urn))
@@ -314,7 +332,8 @@ module Nabu
                             surfaces: entry.fetch(:surfaces).sort,
                             document_urns: entry.fetch(:documents).to_a.sort
                                                 .select { |urn| documents.key?(urn) },
-                            passage_urns: entry.fetch(:passages).to_a.sort)
+                            passage_urns: entry.fetch(:passages).to_a.sort,
+                            borrowed: entry.fetch(:borrowed))
           end
         end.sort_by(&:language)
       end

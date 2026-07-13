@@ -251,6 +251,10 @@ wiktionary-recon:
   enabled: true    # OWNER SIGN-OFF 2026-07-12 ("w-recon scanned, etym works,
                    # flip it on"): synced, 13,053 entries across the three
                    # proto-extracts; etym walk eyeballed by owner.
+                   # P17-3 (2026-07-13): the adapter now ships SEVEN extracts
+                   # (added ine-bsl-pro/gmw-pro/itc-pro/iir-pro); the four new
+                   # ~60 MB GETs + closure rebuild are OWNER-FIRED (+7,586
+                   # entries → ~20,639). Same source row, no registry change.
   sync_policy: manual
 
 freising:

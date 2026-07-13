@@ -83,7 +83,8 @@ module Store
           lang_code: reflex.fetch(:language, "xx"), language: reflex[:language],
           word: reflex.fetch(:word), roman: reflex[:roman],
           word_folded: reflex.fetch(:word_folded, reflex.fetch(:word)),
-          roman_folded: reflex[:roman_folded]
+          roman_folded: reflex[:roman_folded],
+          borrowed: reflex[:borrowed] # nil = a row predating the flag reparse
         )
       end
       entry
@@ -159,18 +160,34 @@ module Store
       assert_includes meet, "urn:nabu:dict:wiktionary-gem-pro:kaisaraz:noun"
     end
 
-    # -- P16-5 (a): the attested-OCS shelf joins the closure -------------------
+    # -- P16-5 (a) / P17-3: the attested-OCS shelf joins the closure -----------
 
-    # A cu-owned edge is direct-only: sl stopa maps to the OCS entry's urn (a
-    # NON-pro root — the OCS → proto step stays Etym's live ascent), and the
-    # closure stays deduplicated and deterministic with both shelves loaded.
-    def test_attested_cu_edges_mint_direct_roots_without_ascent
+    # P17-3 superseded P16-5's direct-only stance: an attested shelf ASCENDS
+    # like the -pro shelves (descent through an attested intermediary is the
+    # same descent relation). With no shelf naming (chu, стопа) in the
+    # fixtures the walk still yields exactly the direct root…
+    def test_attested_cu_edges_mint_direct_roots_when_nothing_names_them
       load_recon_fixtures!
       load_cu_fixtures!
       make_gold_passage(language: "sl", lemma: "stopa")
       rebuild!
       assert_equal ["urn:nabu:dict:wiktionary-cu:стопа:noun"], roots_for("sl", "stopa"),
-                   "the cu entry is the one root — chu is not -pro, so no ascent hop is taken"
+                   "no fixture shelf names (chu, стопа) — the walk finds only the direct root"
+    end
+
+    # …and when a proto shelf DOES name the OCS headword, the sl lemma
+    # ascends THROUGH the attested entry: sl → cu стопа → sla-pro *stopa
+    # (the packet's "(chu)" chain link).
+    def test_attested_cu_entries_ascend_to_a_proto_shelf_naming_them
+      load_cu_fixtures!
+      sla = make_dictionary(slug: "t-sla-pro", language: "sla-pro")
+      proto = make_proto_entry(dictionary: sla, headword: "stopa",
+                               reflexes: [{ language: "chu", word: "стопа" }])
+      make_gold_passage(language: "sl", lemma: "stopa")
+      rebuild!
+      assert_equal ["urn:nabu:dict:wiktionary-cu:стопа:noun", proto.urn].sort,
+                   roots_for("sl", "stopa"),
+                   "the attested OCS shelf ascends like a -pro shelf (P17-3 supersedes P16-5)"
     end
 
     def test_cu_and_recon_shelves_together_rebuild_idempotently_without_duplicates
@@ -258,7 +275,8 @@ module Store
       gem = make_dictionary(slug: "t-gem-pro", language: "gem-pro")
       # A 2-cycle: the sla-pro entry names the gem-pro headword as a
       # descendant and vice versa (bad upstream data, but the build must not
-      # blow up — the walk is depth-bounded, not visited-set-pruned).
+      # blow up — P17-3: the cycle's return edge re-enters a VISITED shelf
+      # and dies; the walk needs no depth constant).
       make_proto_entry(dictionary: sla, headword: "cyka",
                        reflexes: [{ language: "chu", word: "цыка" },
                                   { language: "gem-pro", word: "kukan" }])
@@ -317,6 +335,106 @@ module Store
       rebuild!
       assert_equal 1, roots.where(language: "got", lemma_folded: "salt").count,
                    "word_folded and roman_folded map through one Set — no double rows"
+    end
+
+    # -- P17-3: the multi-hop shelf-visited walk -------------------------------
+
+    def borrowed_of(language, lemma_folded, root_urn)
+      roots.where(language: language, lemma_folded: lemma_folded, root_urn: root_urn)
+           .get(:borrowed)
+    end
+
+    # THE multi-hop golden (survey §2, verified end-to-end in the raw
+    # extracts): chu прьстъ → sla-pro *pьrstъ → ine-bsl-pro *pírštan →
+    # ine-pro *per- — a four-shelf chain the one-hop walk could not close.
+    def test_multi_hop_closes_the_pirstan_chain_from_chu_gold
+      load_recon_fixtures!
+      make_gold_passage(language: "chu", lemma: "прьстъ")
+      rebuild!
+      expected = %w[
+        urn:nabu:dict:wiktionary-ine-bsl-pro:pírštan:noun
+        urn:nabu:dict:wiktionary-ine-pro:per-:root
+        urn:nabu:dict:wiktionary-sla-pro:pьrstъ:noun
+      ]
+      assert_equal expected, roots_for("chu", "прьстъ"),
+                   "the PBS intermediate shelf must carry the walk to the PIE root"
+    end
+
+    # The orv leaf of the same tree rides the identical chain (пьрстъ is a
+    # child node of the sla-pro record).
+    def test_multi_hop_reaches_the_pie_root_from_orv_gold_too
+      load_recon_fixtures!
+      make_gold_passage(language: "orv", lemma: "пьрстъ")
+      rebuild!
+      assert_includes roots_for("orv", "пьрстъ"), "urn:nabu:dict:wiktionary-ine-pro:per-:root"
+    end
+
+    # The degeneration pin (the class doc's claim): where no intermediate
+    # shelf exists the shelf-visited walk emits EXACTLY the old one-hop row
+    # set — direct root + single ascent, nothing else.
+    def test_walk_degenerates_to_the_one_hop_set_without_an_intermediate_shelf
+      load_recon_fixtures!
+      make_gold_passage(language: "chu", lemma: "богъ")
+      rebuild!
+      assert_equal %w[
+        urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root
+        urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2
+      ], roots_for("chu", "богъ"), "the P15-3 one-hop result, preserved as the special case"
+    end
+
+    # The Italic chain: lat quis → itc-pro *kʷis → ine-pro *kʷís, both
+    # edges clean (borrowed false end to end).
+    def test_italic_gold_ascends_to_its_pie_parent
+      load_recon_fixtures!
+      make_gold_passage(language: "lat", lemma: "quis")
+      rebuild!
+      hits = roots_for("lat", "quis")
+      assert_includes hits, "urn:nabu:dict:wiktionary-itc-pro:kʷis:pron"
+      assert_includes hits, "urn:nabu:dict:wiktionary-ine-pro:kʷís:det"
+      assert_equal false, borrowed_of("lat", "quis", "urn:nabu:dict:wiktionary-itc-pro:kʷis:pron")
+    end
+
+    # -- P17-3: the borrowed flag ORs along the path ---------------------------
+
+    # The hlaibaz golden (design-load-bearing, survey §3): the loan marker
+    # rides the PROTO-TO-PROTO edge (gem-pro *hlaibaz → sla-pro *xlěbъ,
+    # raw_tags ["borrowed"]); the chu leaf edge is unflagged. A direct-only
+    # flag would never fire — the path OR must.
+    def test_borrowed_ors_along_the_path_the_hlaibaz_golden
+      load_recon_fixtures!
+      make_gold_passage(language: "chu", lemma: "хлѣбъ")
+      make_gold_passage(language: "got", lemma: "hlaifs")
+      rebuild!
+      xleb = "urn:nabu:dict:wiktionary-sla-pro:xlěbъ:noun"
+      hlaibaz = "urn:nabu:dict:wiktionary-gem-pro:hlaibaz:noun"
+      assert_equal false, borrowed_of("chu", "хлѣбъ", xleb),
+                   "the direct chu → *xlěbъ edge parsed unflagged — an honest false"
+      assert_equal true, borrowed_of("chu", "хлѣбъ", hlaibaz),
+                   "the flagged gem→sla edge makes the whole path a loan"
+      assert_equal false, borrowed_of("got", "hlaifs", hlaibaz),
+                   "Gothic reaches *hlaibaz directly and unflagged — inheritance stays clean"
+    end
+
+    # NULL honesty: an edge predating the flag reparse (borrowed NULL)
+    # keeps the path unknown — never a fake false — and a POSITIVELY
+    # unflagged parallel path wins the dedup (true > false > NULL).
+    def test_null_edges_stay_unknown_and_lose_the_dedup_to_parsed_paths
+      sla = make_dictionary(slug: "t-sla-pro", language: "sla-pro")
+      make_proto_entry(dictionary: sla, headword: "null-only",
+                       reflexes: [{ language: "chu", word: "нуль" }]) # borrowed omitted -> NULL
+      make_gold_passage(language: "chu", lemma: "нуль")
+      rebuild!
+      assert_nil borrowed_of("chu", "нуль", "urn:nabu:dict:t-sla-pro:null-only:test"),
+                 "a pre-reparse edge is unknown, not false"
+
+      gem = make_dictionary(slug: "t-gem-pro", language: "gem-pro")
+      make_proto_entry(dictionary: gem, headword: "twopath",
+                       reflexes: [{ language: "got", word: "tp1", borrowed: false },
+                                  { language: "got", word: "tp1" }])
+      make_gold_passage(language: "got", lemma: "tp1")
+      rebuild!
+      assert_equal false, borrowed_of("got", "tp1", "urn:nabu:dict:t-gem-pro:twopath:test"),
+                   "false (parsed) beats NULL (unknown) per max_flag"
     end
   end
 end

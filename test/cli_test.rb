@@ -183,6 +183,28 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P17-3: the etym ancestor CHAIN renders indented, loans labeled ---------
+
+  def test_etym_renders_the_multi_hop_chain_indented
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym прьстъ]) }
+      assert_nil status
+      assert_match(/\*pьrstъ \[sla-pro\]/, out)
+      assert_match(/^ {2}← \*pírštan \[ine-bsl-pro\]/, out, "hop 1 indents once")
+      assert_match(/^ {4}← \*per- \[ine-pro\]/, out, "hop 2 indents twice — the chain reads as a chain")
+    end
+  end
+
+  def test_etym_labels_a_loan_edge_on_its_arrow
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym хлѣбъ]) }
+      assert_nil status
+      assert_match(/^ {2}←\(loan\) \*hlaibaz \[gem-pro\]/, out,
+                   "the flagged gem→sla edge labels its own arrow")
+      refute_match(/←\(loan\) \*pírštan/, out)
+    end
+  end
+
   # -- P15-8: --long expands vocab's truncated hapax list (house rule) --------
   # vocab's ONE marked elision is print_vocab_hapax's "(+N more)" tail: the
   # Greek-PROIEL head-50 fixture holds 211 hapax, so --limit 3 fires the cap by
@@ -1247,8 +1269,8 @@ class CLITest < Minitest::Test
     with_cognates_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[cognates --batch nt]) }
       assert_nil status, "a successful batch exits 0"
-      assert_match(/batch cognates over nt: 2 edges written · run 1/, out)
-      assert_match(/2 verse-root groups/, out)
+      assert_match(/batch cognates over nt: 3 edges written · run 1/, out)
+      assert_match(/3 verse-root groups/, out)
 
       links, _err2, links_status = with_config(config) { run_cli(%w[links urn:nabu:test:grc-nt:1]) }
       assert_nil links_status
@@ -1257,6 +1279,12 @@ class CLITest < Minitest::Test
                    links, "a cognate edge shows its meet: ref · root [shelf]")
       refute_match(/score/, links, "a cognate's score merely counts the roots its detail lists")
       assert_match(/run 1: cognates over nt/, links, "the provenance footer cites the producer")
+
+      # P17-3: the loan verdict rides the persisted meet — the got×chu pair
+      # at *hlaibaz names the flagged witness language per edge.
+      loan_links, _err3, = with_config(config) { run_cli(%w[links urn:nabu:test:gothic:1]) }
+      assert_match(/JOHN 13\.18 · \*hlaibaz \[gem-pro\] \(loan: chu\)/, loan_links,
+                   "the batch detail states the loan, not just the shelf")
     end
   end
 
@@ -1863,9 +1891,24 @@ class CLITest < Minitest::Test
 
   def test_cognates_langs_restricts_and_reports_no_hits_honestly
     with_cognates_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[cognates nt --langs got,chu]) }
+      out, _err, status = with_config(config) { run_cli(%w[cognates nt --langs grc,ang]) }
       assert_nil status
       assert_match(/no hits/, out)
+    end
+  end
+
+  # P17-3 acceptance render (the survey's JOHN 13.18 before/after): before,
+  # the reader had to apply the taught meet-shelf reading to
+  # "*hlaibaz [gem-pro]: chu хлѣбъ ~ got hlaifs"; after, the loan is STATED
+  # per edge — the flagged OCS witness reads "(loan)", the Gothic side stays
+  # an inheritance claim.
+  def test_cognates_labels_the_flagged_loan_witness_per_edge
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["cognates", "JOHN", "13.18"]) }
+      assert_nil status
+      assert_match(/\*hlaibaz \[gem-pro · attribution\]/, out)
+      assert_match(/chu {2}хлѣбъ \(loan\)/, out, "the flagged witness edge says so itself")
+      assert_match(/got {2}hlaifs(?! \(loan\))/, out, "the Gothic side carries no loan label")
     end
   end
 
@@ -2640,6 +2683,7 @@ class CLITest < Minitest::Test
             - document: urn:nabu:test:grc-nt
             - document: urn:nabu:test:marianus
             - document: urn:nabu:test:oe-mark
+            - document: urn:nabu:test:gothic
       YAML
       alignments = File.join(root, "alignments.yml")
       File.write(alignments, registry_yaml)
@@ -2671,8 +2715,11 @@ class CLITest < Minitest::Test
     texts = catalog[:sources].insert(slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
                                      license_class: "nc", enabled: true)
     [["grc-nt", "Greek NT", "grc", [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
-     ["marianus", "Codex Marianus", "chu", [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
-     ["oe-mark", "OE Mark", "ang", [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, title, lang, rows|
+     ["marianus", "Codex Marianus", "chu",
+      [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"],
+       ["JOHN 13.18", "хлѣбъ", "хлѣбъ"]]], # the P17-3 loan-flag acceptance verse
+     ["oe-mark", "OE Mark", "ang", [["MARK 2.1", "cāsere", "cāsere"]]],
+     ["gothic", "Gothic NT", "got", [["JOHN 13.18", "hlaifs", "hlaifs"]]]].each do |tail, title, lang, rows|
       doc_id = catalog[:documents].insert(
         source_id: texts, urn: "urn:nabu:test:#{tail}", title: title, language: lang,
         content_sha256: "x", revision: 1, withdrawn: false
