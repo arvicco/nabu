@@ -53,12 +53,17 @@ module Nabu
       # Every dated, visible document as { document_id, not_before, not_after },
       # with the optional language/license/date/place filters applied directly
       # on the axis join (one table, so no correlated EXISTS needed here).
+      # DOCUMENT-grain rows only (passage_seq_from NULL): a chronicle's
+      # passage-grain annal rows (P16-3) would count one document dozens of
+      # times in a histogram labelled "documents" — its document-grain
+      # envelope row represents it here instead.
       def dated_documents(lang:, license:, from:, to:, place:)
         axes = Sequel[:document_axes]
         ds = @catalog[:document_axes]
              .join(:documents, id: axes[:document_id])
              .join(:sources, id: Sequel[:documents][:source_id])
              .where(Sequel[:documents][:withdrawn] => false)
+             .where(axes[:passage_seq_from] => nil)
         ds = ds.where(Sequel[:documents][:language] => lang) if lang
         ds = ds.where(license_expr => license) if license
         ds = ds.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from

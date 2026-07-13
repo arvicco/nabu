@@ -12,8 +12,11 @@ module Nabu
     # rather than the fulltext index — so `nabu rebuild` regenerates the axis
     # after replaying the sources (wired into Rebuild#run). axes = f(canonical):
     # HGV reads the HGV_meta_EpiDoc XML and joins ddb-hybrid→urn→document_id;
-    # goo300k/IMP read the CE year off the urn suffix (urn = f(canonical)). The
-    # Indexer is unchanged and never re-parses canonical.
+    # goo300k/IMP read the CE year off the urn suffix (urn = f(canonical)); the
+    # P16-3 part-2 extractors live in axis_builder/: OraccDates (catalogue.json
+    # period/regnal/absolute dates + provenience) and ChronicleAnnals (TOROT
+    # anno-mundi annal divs, the first passage-grain rows). The Indexer is
+    # unchanged and never re-parses canonical.
     #
     # == The date model lives in Nabu::DateAxis (fable-reviewed)
     #
@@ -33,8 +36,13 @@ module Nabu
       # urn "…:sigil-1584" → 1584 CE.
       URN_YEAR = /-(\d{3,4})\z/
 
-      Summary = Data.define(:hgv, :goo300k, :imp, :hgv_files, :hgv_invalid) do
-        def total = hgv + goo300k + imp
+      # Per-source dated/placed DOCUMENT counts (+total+ sums them), plus the
+      # honest residues: hgv_files/hgv_invalid (P15-2), oracc_undated (members
+      # whose date didn't resolve — skipped, counted, never guessed) and
+      # torot_annals (the passage-grain annal rows behind the torot documents).
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot,
+                            :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals) do
+        def total = hgv + goo300k + imp + oracc + torot
       end
 
       module_function
@@ -47,8 +55,12 @@ module Nabu
         hgv = build_hgv(catalog, canonical_dir)
         goo = build_year_from_urn(catalog, "urn:nabu:goo300k:", "goo300k")
         imp = build_year_from_urn(catalog, "urn:nabu:imp:", "imp")
+        oracc = OraccDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        torot = ChronicleAnnals.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    hgv_files: hgv[:files], hgv_invalid: hgv[:invalid])
+                    oracc: oracc[:documents], torot: torot[:documents],
+                    hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
+                    oracc_undated: oracc[:undated], torot_annals: torot[:annals])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -193,3 +205,6 @@ module Nabu
     end
   end
 end
+
+require_relative "axis_builder/oracc_dates"
+require_relative "axis_builder/chronicle_annals"

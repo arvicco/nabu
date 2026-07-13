@@ -83,6 +83,23 @@ module Query
       assert_equal ["3rd c. BCE"], result.buckets.map(&:label)
     end
 
+    def test_passage_grain_annal_rows_do_not_multiply_the_document
+      # A chronicle (P16-3) carries one document-grain envelope row plus one
+      # passage-grain row per annal; the histogram counts the DOCUMENT once,
+      # via the envelope, or it would tally a 163-annal chronicle 163 times.
+      seed("urn:chronicle", "лѣто", 851, 1110)
+      doc_id = @catalog[:documents].where(urn: "urn:chronicle").get(:id)
+      [[851, 852], [1109, 1110]].each_with_index do |(nb, na), i|
+        @catalog[:document_axes].insert(
+          document_id: doc_id, not_before: nb, not_after: na, precision: "am",
+          axis_source: "torot", passage_seq_from: i, passage_seq_to: i
+        )
+      end
+      result = run_century
+      assert_equal 1, result.total_documents
+      assert_equal ["9th c. CE"], result.buckets.map(&:label) # envelope's earliest year
+    end
+
     def test_undated_documents_are_absent
       Nabu::Store::Document.create(
         source_id: @source.id, urn: "urn:undated", title: "u", language: "grc",

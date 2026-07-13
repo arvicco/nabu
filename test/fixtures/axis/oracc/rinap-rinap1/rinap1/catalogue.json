@@ -1,0 +1,43 @@
+{
+ "type": "catalogue",
+ "project": "rinap/rinap1",
+ "source": "http://oracc.org/rinap/rinap1",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2026-04-28T08:14:12",
+ "members": {
+  "Q003414": {
+   "langs": "0x08000000",
+   "project": "rinap/rinap1",
+   "cdli_id": "P463047",
+   "collection": "Archäologisches Institut der Universität Zürich, Zurich, Switzerland",
+   "credits": "Created by Hayim Tadmor, Shigeo Yamada, Jamie Novotny, and the Royal Inscriptions of the Neo-Assyrian Period (RINAP) Project, 2011. Lemmatized by Jamie Novotny, 2010, for the NEH-funded RINAP Project at the University of Pennsylvania. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/rinap/Q003414/.",
+   "date_of_origin": "744-727",
+   "designation": "Tiglath-pileser III 01",
+   "display_name": "RINAP 1 Tigl. III 01",
+   "dynastic_seat": "Assyria",
+   "exemplars": "ZhArchSlg 1917 (+) ZhArchSlg 1918 (+) NA 12/76",
+   "genre": "Royal Inscription",
+   "id_composite": "Q003414",
+   "language": "Akkadian",
+   "material": "stone",
+   "object_type": "wall slab (with reliefs)",
+   "period": "Neo-Assyrian",
+   "pleiades_id": "894019",
+   "popular_name": "Unit 1 (A,1) / Ann. 1a+b",
+   "primary_publication": "Tiglath-pileser III 01",
+   "provenience": "Nimrud (Kalhu)",
+   "pleiades_coord": "[43.3275,36.099167]",
+   "ruler": "Tiglath-pileser III",
+   "script": "Neo-Assyrian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Tiglath-pileser III",
+   "supergenre": "LIT",
+   "trans": [
+    "en"
+   ]
+  }
+ }
+}
