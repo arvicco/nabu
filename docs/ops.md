@@ -462,6 +462,19 @@ The derived dbs are cheap insurance. Restoring them means the corpus is queryabl
 the instant the rsync finishes; omit them with `--skip-derived` and a single
 `nabu rebuild` reconstitutes them from canonical/ byte-for-byte.
 
+**WAL sidecars (P17-7).** The dbs run `journal_mode=WAL` (architecture §5), so
+while any connection is open a `<db>-wal` file next to each db holds recently
+committed transactions the main file does not yet contain (plus a `<db>-shm`
+index). Each db section copies its live sidecars along with the db — the main
+file alone would be a stale or torn snapshot — and **prunes** a sidecar at the
+target whose source counterpart has been checkpointed away (restoring an
+outdated `-wal` next to a newer main file would replay old frames over newer
+data). Normally the nightly backup finds no sidecars at all: the last closing
+connection checkpoints the WAL and removes them. A backup that overlaps a
+running sync/rebuild can still capture a mid-write snapshot — same as before
+WAL — which is exactly what `rake ops:drill` exists to catch; prefer the
+nightly timing or re-run after the write finishes.
+
 ### The target: a mounted external volume
 
 The destination is a path **under a mounted external volume**, wired in
@@ -632,3 +645,32 @@ Because the guard exits 1 when the volume is detached, a nightly fire while the
 backup disk is unplugged lands as a clear failure in
 `log/backup-nightly.err.log` — exactly the signal you want. Wire an ntfy hook
 (§7) on that job if you want to be pushed the news.
+
+---
+
+## 10. Reads during a sync/rebuild (WAL, P17-7)
+
+Reading the corpus while a sync, rebuild, or batch producer writes is
+**supported and safe**. Every nabu SQLite file runs `journal_mode=WAL`
+(persisted in the file; set idempotently on every read-write connect, so
+pre-WAL dbs flip on their first open by current code), which gives N readers +
+1 writer concurrently: readers see a stable snapshot, the writer never waits
+for them. This closed the 2026-07-13 defect where a lingering `sqlite3
+-readonly` session crashed a running `nabu rebuild` with
+`SQLite3::BusyException` — in the old rollback-journal mode one reader's
+shared lock could kill the writer's commit.
+
+Ground rules:
+
+- `nabu search/show/status`, MCP tools, and ad-hoc `sqlite3 -readonly`
+  sessions during an owner sync/rebuild: fine. You read the last committed
+  snapshot; the writer proceeds.
+- Every connection (readonly included) carries a **10 s busy timeout**
+  (`Store::BUSY_TIMEOUT_MS`), which covers what WAL does not: two *writers*
+  overlapping (a batch producer committing while a sync runs) wait each other
+  out instead of crashing — but don't *schedule* concurrent writers; the
+  timeout is a shock absorber, not a queue.
+- Expect `<db>-wal`/`<db>-shm` sidecar files next to each db while any
+  connection is open; the last connection to close checkpoints and removes
+  them. Never delete or separate a `-wal` from its db by hand — backup handles
+  the pair (§9).
