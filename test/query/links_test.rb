@@ -77,6 +77,21 @@ module Query
       assert_equal({ "min_score" => 0.05 }, result.runs.first.params)
     end
 
+    def test_detail_rides_the_edge_through_the_result
+      make_passage(doc_urn: "urn:a", urn: "urn:a:1", title: "Alpha")
+      make_passage(doc_urn: "urn:b", urn: "urn:b:1", title: "Beta")
+      run_id = seed_run
+      Nabu::Store::LinksJournal.write_edge!(
+        @journal, from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "cognate",
+                  score: 1.0, detail: "MARK 1.1 · *bʰeh₂g- [ine-pro]", run_id: run_id
+      )
+      seed_edge(from: "urn:a:1", to: "urn:b:1", run_id: run_id, kind: "parallel")
+
+      groups = reader.run("urn:a:1").groups
+      assert_equal "MARK 1.1 · *bʰeh₂g- [ine-pro]", groups.fetch("cognate").first.detail
+      assert_nil groups.fetch("parallel").first.detail, "parallel edges carry no detail"
+    end
+
     def test_counterpart_missing_from_catalog_is_honestly_unresolved
       make_passage(doc_urn: "urn:a", urn: "urn:a:1", title: "Alpha")
       run_id = seed_run

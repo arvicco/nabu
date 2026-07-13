@@ -5253,12 +5253,77 @@ unknown urn, no-journal state, help, show footer present/absent),
 mcp/tools_test +4 + tool-count pins, config_test +1. Suite + lint green.
 One commit, not pushed.
 
-## P16-2 · Batch producers: formulas + cognates  [tier: opus] [status: blocked] [deps: P16-1]
-Producer #2/#3 riding the P16-1 substrate: `formulas --batch`
-(whole-tradition sweep → kind=formula edges) and `cognates --batch`
-(whole-work cognate map → kind=cognate edges). Same journal, same
-replay, same `links` reader — no new mechanics, just producers.
-Dispatch after P16-1 review.
+## P16-2 · Batch producers: formulas + cognates  [tier: opus] [status: done 2026-07-13] [deps: P16-1]
+Producer #2/#3 riding the P16-1 substrate: `formulas --batch SCOPE` →
+kind=formula edges (Nabu::BatchFormulas), `cognates --batch WORK` →
+kind=cognate edges (Nabu::BatchCognates). Same journal, same supersede
+replay, same `links` reader — no new mechanics beyond one argued column.
+FINDINGS: (1) FORMULA EDGE-SHAPE VERDICT — a formula is an N-locus REFRAIN,
+not a pair; judged by what `links <urn>` should usefully show a reader at
+one locus: all-pairs is O(N²) (the 72-locus ὣς ἔφαθ' οἵ δ' alone = 2,556
+edges saying nothing one couldn't), consecutive-loci chains answer "where
+else?" with "next door", document-grain loses the loci. VERDICT: a STAR per
+formula — hub = its first locus in urn sort order (deterministic,
+rebuild-stable), one edge hub → every other locus, score = slice count,
+detail = the folded gram. A reader at any locus sees `← hub “gram” ×N`
+(which refrain, how strong); `links <hub>` fans out every locus; edges =
+loci−1, linear. Live: Widsith's ic wæs ond mid catalog refrain reads back
+exactly so (hub :59, 12 spokes, ×13). Pruning named: top --max-formulas by
+rank (200) of the recurring grams, gram_size/min_count/lang all in
+params_json; overlapping formulas sharing a (hub, locus) pair coalesce
+onto the best-ranked gram with the fold COUNTED in the summary. A formula
+recurring only within one passage mints no edge. (2) MEET-PROVENANCE
+VERDICT — a cognate edge's meaning is WHICH root, on WHICH shelf, at WHICH
+verse, and that differs per edge: params_json is run-grain (would lose
+per-edge meets) and score is a float, so the schema gained a nullable
+`detail` String via the journal's own forward-only track (migration 002,
+db/links_migrate): applies IN PLACE on the next write-path open
+(LinksJournal.open! migrates), zero data loss (tested against a v1 journal
+file with live edges), read-only opens of pre-002 journals read nil.
+detail carries display-grade evidence: cognate "MARK 2.1 · *kaisaraz
+[gem-pro]" — the shelf on EVERY edge (design §6's borrowing signal);
+formula edges reuse it for the gram. Cognate edges: one per unordered
+cross-language witness-passage pair (never within a language — the
+engine's ≥2-distinct-languages rule; witnesses/verse are few, so pairwise
+is bounded), direction normalized lexicographically (the join has no probe
+direction), a pair meeting at several roots/refs collapses into one edge
+(detail lists all meets, score = distinct roots). Scope = work id;
+suppression stays ON (an edge is an assertion), --all lifts and is
+recorded; suppressed-group count in the summary. Engine touch: WitnessWord
+gains passage_urns (hits pre-filtered to surviving documents, so no
+license leak). (3) READERS — `links` renders each kind's evidence natively
+(parallel score; formula “gram” ×count — a count rendered as "score 13.00"
+would misread; cognate meet with score suppressed, it merely counts the
+roots detail lists); array run-params render comma-joined (langs got,chu).
+`show` footer was already multi-kind with zero-suppression (kind_counts
+returns only present kinds) — verified `linked: 1 formula, 1 parallel` +
+single-kind, no reader fix needed beyond the evidence tail. MCP nabu_links
+payload gains `detail` (docs/mcp.md updated); tool count unchanged.
+Batch-only flags without --batch error exactly like parallels
+(--max-formulas/--db; cognates --db), naming the no-persistence stance;
+--db override honored (tested: default path untouched).
+LIVE DEMO (prod catalog read-only, journal at a scratch --db):
+`formulas --batch aspr` → 170 formulas as stars, 395 edges, 70 pairs
+coalesced, 0.3 s; rerun → 395 again, superseded 1 prior run (395) —
+idempotent. `cognates --batch nt --langs got,chu` → 321 verse-root groups,
+360 edges, 57 common-word groups suppressed, 3.4 s. Journal 264 KB / 755
+edges; db/links.sqlite3 (matt parallels) untouched. `links` readbacks:
+JOHN 6.5 hlaifs ~ хлѣбъ at *hlaibaz [gem-pro] (the design's own loaf), and
+the Widsith star above.
+Tests +26: batch_formulas_test 9 (star shape + hub determinism,
+detail/score, single-locus no-edge, max-formulas cap honesty, coalescing
+counted, params_json, rerun supersede, lang scoping, empty scope),
+batch_cognates_test 6 (cross-language edges + normalized direction + meet
+detail + loan shelf, no same-language edge, langs in params, suppression
+default/--all recorded, rerun supersede, work-id-only contract),
+links_journal_test +3 (detail write/refresh, nil default, 002 forward
+migration on an existing file without data loss), query/links_test +1
+(detail through Result), cognates_test +1 (passage_urns), cli_test +9
+(batch summaries name knobs, supersede lines, --db overrides,
+flags-require-batch both commands, links formula/cognate renders, mixed
+kinds + show footer multi-kind/zero-suppression, work-id error, help),
+mcp/tools_test +1 (detail payload). Suite + lint green. One commit, not
+pushed.
 
 ## P16-3 · Date/place axis, part 2 — ORACC + chronicles  [tier: opus] [status: dispatched] [deps: —]
 Register §1.4 part 2. Two extractors extending AxisBuilder (P15-2
