@@ -19,6 +19,7 @@ class CopticScriptoriumTest < Minitest::Test
     urn:nabu:coptic-scriptorium:besa.food.monbbb
     urn:nabu:coptic-scriptorium:nt.mark.sahidica
     urn:nabu:coptic-scriptorium:nt.phlm.sahidica
+    urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed
     urn:nabu:coptic-scriptorium:papyri_info.tm82127.cpr_2_237
   ].freeze
 
@@ -64,6 +65,8 @@ class CopticScriptoriumTest < Minitest::Test
     assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:besa.food.monbbb")
     assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:ap.4.monbeg")
     assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:papyri_info.tm82127.cpr_2_237")
+    # the dual-origin winner (P17-10): public domain text + CC-BY 4.0 annotations
+    assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed")
     # the Wells NT stays at the source's own nc class — no override
     assert_nil overrides.fetch("urn:nabu:coptic-scriptorium:nt.mark.sahidica")
     assert_nil overrides.fetch("urn:nabu:coptic-scriptorium:nt.phlm.sahidica")
@@ -94,8 +97,82 @@ class CopticScriptoriumTest < Minitest::Test
 
   def test_discovery_skips_are_clean_over_the_fixture_set
     skips = conformance_adapter.discovery_skips(FIXTURES)
-    assert_equal 0, skips.skipped_by_rule
+    # the one rule-skip is Habakkuk's shadowed bohairic.ot zip member (P17-10)
+    assert_equal 1, skips.skipped_by_rule
     assert_predicate skips, :clean?
+  end
+
+  # --- P17-10: the dual-origin defect (owner crash: unzip exit 9) ------------
+  #
+  # ot.hab.bohairic_ed is the ONE work urn upstream mints from two origins:
+  # the standalone bohairic-habakkuk corpus (v6.2.0, gold) AND the
+  # bohairic.ot_TT.zip members (v6.0.0, automatic). Everywhere else the
+  # standalone editions carry distinct `_ed` urns (nt.mark.sahidica_ed vs
+  # nt.mark.sahidica). The census (docs/backlog.md P17-10) found the two
+  # origins byte-DIFFERENT — different releases of the same edition — so the
+  # standalone corpus wins by precedence and the zip members are skipped by
+  # rule, never doubled into one document.
+
+  def test_discover_applies_standalone_over_zip_precedence_for_a_dual_origin_urn
+    ref = conformance_adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed" }
+    refute_nil ref
+    chunks = ref.metadata.fetch("chunks")
+    assert(chunks.all? { |c| c["path"] }, "the standalone (loose) edition must win over the bible-zip member")
+    assert(chunks.none? { |c| c["zip"] }, "shadowed zip members must never enter the document group")
+  end
+
+  def test_parse_of_the_dual_origin_document_uses_the_standalone_gold_edition
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed" }
+    document = adapter.parse(ref)
+    # the census pin: the two origins are NOT byte-identical — the loose
+    # corpus is the v6.2.0 gold re-release, the zip member the v6.0.0
+    # automatic snapshot. Precedence must surface the gold edition.
+    assert_equal "6.2.0", document.metadata["version_n"]
+    assert_equal "gold", document.metadata["tagging"]
+    assert_equal 2, document.size # trimmed fixture: Habakkuk 1:1-2, once each
+    assert_equal "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed:01.1", document.first.urn
+  end
+
+  def test_parse_reads_each_chunk_from_its_own_origin_even_in_a_mixed_group
+    # The mechanical guarantee behind the crash fix: even if precedence ever
+    # regressed and a group mixed origins, every chunk must be read from its
+    # OWN origin (chunk["zip"]/chunk["path"]) — never from document_ref.path,
+    # which points at the first chunk's file (unzip exit 9 on a loose .tt).
+    loose = File.join(FIXTURES, "bohairic-habakkuk", "bohairic.habakkuk_TT", "bohairic.Habakkuk_01.tt")
+    zip = File.join(FIXTURES, "bohairic.ot", "bohairic.ot_TT.zip")
+    ref = Nabu::DocumentRef.new(
+      source_id: "coptic-scriptorium", id: "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed",
+      path: loose,
+      metadata: { "language" => "cop", "title" => "Bohairic Habakkuk",
+                  "chunks" => [{ "path" => loose }, { "zip" => zip, "member" => "35_Habacuc_01.tt" }] }
+    )
+    document = conformance_adapter.parse(ref)
+    # both origins parsed (2 verses each), duplicate citations b2-suffixed —
+    # and structurally NO unzip against the loose .tt file
+    assert_equal 4, document.size
+    assert_equal "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed:01.1:b2", document.passages[2].urn
+  end
+
+  def test_parse_quarantines_an_unreadable_zip_member_instead_of_aborting_the_sync
+    loose = File.join(FIXTURES, "bohairic-habakkuk", "bohairic.habakkuk_TT", "bohairic.Habakkuk_01.tt")
+    ref = Nabu::DocumentRef.new(
+      source_id: "coptic-scriptorium", id: "urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed",
+      path: loose,
+      metadata: { "language" => "cop", "title" => "Bohairic Habakkuk",
+                  "chunks" => [{ "zip" => loose, "member" => "35_Habacuc_01.tt" }] } # a .tt is not a zipfile
+    )
+    error = assert_raises(Nabu::ParseError) { conformance_adapter.parse(ref) }
+    assert_match(/unreadable zip member/, error.message)
+  end
+
+  def test_discover_raises_fetch_error_for_an_unreadable_zip_archive
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "bohairic.ot"))
+      File.write(File.join(dir, "bohairic.ot", "bohairic.ot_TT.zip"), "not a zipfile\n")
+      error = assert_raises(Nabu::FetchError) { conformance_adapter.discover(dir).to_a }
+      assert_match(/unreadable zip archive/, error.message)
+    end
   end
 
   # --- the license rule table (survey §3) --------------------------------------

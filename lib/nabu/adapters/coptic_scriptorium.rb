@@ -142,7 +142,7 @@ module Nabu
       def parse(document_ref)
         chunks = document_ref.metadata.fetch("chunks")
         parser = CopticTtParser.new(lemmas: @lemmas)
-        results = chunks.map { |chunk| parser.parse(chunk_content(document_ref, chunk), label: chunk_label(chunk)) }
+        results = chunks.map { |chunk| parser.parse(chunk_content(chunk), label: chunk_label(chunk)) }
         document = build_document(document_ref, results)
         citations = Hash.new(0)
         results.each do |result|
@@ -198,7 +198,8 @@ module Nabu
             unrecognized << label if outcome == :unrecognized
           end
         end
-        Scan.new(refs: build_refs(chunks), skipped_by_rule: skipped, unrecognized: unrecognized)
+        refs, shadowed = build_refs(chunks)
+        Scan.new(refs: refs, skipped_by_rule: skipped + shadowed, unrecognized: unrecognized)
       end
 
       # :chunk (usable), :skipped (license-less — the book.bartholomew
@@ -225,16 +226,26 @@ module Nabu
         EXCLUDED_DIRS.any? { |dir| path.split(File::SEPARATOR).include?(dir) }
       end
 
+      # Discover-time zip walking. A zip that cannot be listed or read HERE
+      # is a snapshot problem, not a document problem — FetchError (aborts
+      # the sync; refetch is the remedy), the counterpart of chunk_content's
+      # parse-time quarantine.
       def each_zip_member(zip)
         members = Shell.run("unzip", "-Z1", zip).split("\n").grep(/\.tt\z/).sort
         members.each { |member| yield member, Shell.run("unzip", "-p", zip, member) }
+      rescue Shell::Error => e
+        raise FetchError, "#{zip}: unreadable zip archive at discover (unzip exit #{e.status}) — refetch the snapshot"
       end
 
-      # Group chunks by base work urn (the chapter→book merge), order
-      # chapters numerically, and mint one ref per document. The override is
-      # attribution only when EVERY chunk of the document is open-class.
+      # Group chunks by base work urn (the chapter→book merge), apply the
+      # dual-origin precedence rule, order chapters numerically, and mint one
+      # ref per document. The override is attribution only when EVERY chunk
+      # of the document is open-class. Returns [refs, shadowed-chunk count].
       def build_refs(chunks)
-        chunks.group_by { |chunk| document_urn(chunk["meta"]) }.map do |urn, group|
+        shadowed = 0
+        refs = chunks.group_by { |chunk| document_urn(chunk["meta"]) }.map do |urn, group|
+          group, dropped = prefer_standalone(group)
+          shadowed += dropped
           group = group.sort_by { |chunk| chunk["meta"]["chapter"].to_i }
           Nabu::DocumentRef.new(
             source_id: manifest.id, id: urn, path: ref_path(group.first),
@@ -246,6 +257,26 @@ module Nabu
             }.compact
           )
         end.sort_by(&:id)
+        [refs, shadowed]
+      end
+
+      # The dual-origin precedence rule (P17-10, "zip member shadowed by the
+      # standalone edition"). Upstream mints distinct `_ed` CTS urns for its
+      # standalone digital editions (nt.mark.sahidica_ed loose vs
+      # nt.mark.sahidica zip) — EXCEPT Habakkuk, where the bohairic.ot zip
+      # members reuse ot.hab.bohairic_ed. The census over v6.2.0 found the
+      # two origins byte-different: the standalone corpus is the NEWER
+      # release of the same edition (v6.2.0, segmentation/tagging/parsing/
+      # entities all gold, people/places rosters, lb_n manuscript topology)
+      # while the zip member is the frozen v6.0.0 automatic snapshot. So the
+      # standalone (loose) chunks win deterministically; the shadowed zip
+      # members are counted skipped_by_rule — never doubled chapters in one
+      # document, never an unzip against a loose .tt file.
+      def prefer_standalone(group)
+        loose, zipped = group.partition { |chunk| chunk["path"] }
+        return [group, 0] if loose.empty? || zipped.empty?
+
+        [loose, zipped.size]
       end
 
       # urn:nabu:coptic-scriptorium:<cts-tail>, the chapter suffix stripped
@@ -269,11 +300,22 @@ module Nabu
         title&.sub(/_\d+\z/, "")
       end
 
-      def chunk_content(document_ref, chunk)
-        if chunk["zip"]
-          Shell.run("unzip", "-p", document_ref.path, chunk.fetch("member"))
-        else
-          File.read(chunk.fetch("path"))
+      # Every chunk is read from its OWN origin (P17-10): the zip path comes
+      # from the chunk itself, NEVER from document_ref.path — ref path is the
+      # first chunk's file, and a mixed-origin group must be structurally
+      # incapable of unzipping a loose .tt (the owner's exit-9 crash). An
+      # unreadable/corrupt zip MEMBER at parse time quarantines the document
+      # (ParseError — backlog 5a), it never aborts the sync; a zip that fails
+      # at discover is a FetchError (see each_zip_member).
+      def chunk_content(chunk)
+        return File.read(chunk.fetch("path")) unless chunk["zip"]
+
+        zip = File.expand_path(chunk.fetch("zip"))
+        member = chunk.fetch("member")
+        begin
+          Shell.run("unzip", "-p", zip, member)
+        rescue Shell::Error => e
+          raise ParseError, "#{zip}!#{member}: unreadable zip member (unzip exit #{e.status})"
         end
       end
 
