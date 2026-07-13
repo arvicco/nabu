@@ -5236,7 +5236,7 @@ the indexed shelves. Index lives in fulltext.sqlite3 via the Indexer
 choke point (rebuild-safe); measure and REPORT the real index size +
 build time at review. --long rule applies to any truncated list.
 
-## P16-5 · Riders: wiktionary-cu descendants backfill + license_watch  [tier: opus] [status: dispatched] [deps: —]
+## P16-5 · Riders: wiktionary-cu descendants backfill + license_watch  [tier: opus] [status: done 2026-07-13] [deps: —]
 (a) The P14-1 deferred rider: wiktionary-cu entries carry descendants
 data never crosswalked into dictionary_reflexes — backfill at the
 parser/indexer path (same choke point as wiktionary-recon), so OCS
@@ -5249,6 +5249,48 @@ path; makes README-licensed upstreams (kielipankki README.txt,
 clarin.si record pages) watchable. Non-configured sources: behavior
 unchanged (silent per P16-0). Tests stub HTTP (WebMock); no live
 fetches in suite.
+
+FINDINGS (2026-07-13). (a) CENSUS first, read-only over live
+canonical + db: 589 of 4,615 cu entries carry ≥1 worded descendant →
+2,210 dictionary_reflexes rows would mint (ALL new — cu owns 0 today;
+all 2,210 joinable: language + fold present, 0 display-only). Distinct
+(language, fold) keys 3,212 — 1,496 already reachable via recon-minted
+edges, 1,716 new. Gold-language keys 243 (189 new); projected
+reflex_roots closure gain ~244 rows (orv=171 sl=66 lat=5 chu=2; today
+50,151). Top reflex languages sh/ru/bg/uk/mk (modern, non-joining, by
+design). Verdict: data real and worth wiring — DONE: WiktionaryCu#parse
+now passes `reflexes: true` (one-line flip; parser/DictionaryLoader/
+ReflexRootsIndexer already generic). A cu-owned edge is direct-only in
+the closure (chu ≠ -pro → no ascent hop; OCS→proto stays Etym's live
+ascent); Etym display asterisk now -pro-only (attested OCS entries
+enter the walk and must not read as reconstructions — Result#headword
+"стопа", not "*стопа"). Reflexes ride the entry content sha → the
+OWNER-FIRED `bin/nabu sync wiktionary-cu --parse-only` re-mints the
+shelf's 4,615 revisions and lands the 2,210 edges (recovery path; NOT
+run here — proven on fixtures: 38 entries / 127 edges in the trimmed
+cu fixture, loader idempotent, closure dedup + determinism pinned with
+both shelves loaded). (b) license_watch SHIPPED: registry Entry gains
+`license_watch` (nil default; ValidationError unless absolute http(s)
+url), RemoteProbe#source_license overrides BOTH strategies' license
+path when configured — GET via the shared vendored-cert client (no
+redirect following), body sha256 through the shared compare_license,
+baseline on a ledger pin keyed by the WATCHED url (baseline-only row,
+minted on first sight — the one sanctioned exception to "probe never
+mints pins"; drift never reads it). First sight :baseline_recorded /
+match :unchanged ("license: ok") / mismatch :changed ("license:
+CHANGED" + detail naming the url); non-200/transport error → :unchecked
+(silent per P16-0), never raises; failed fetch never touches the stored
+baseline. Non-configured sources byte-identical. Candidate urls
+COMMENTED in sources.yml (owner flips after verifying each serves the
+terms directly): ccmh kielipankki README.txt, goo300k/imp clarin.si
+records (11356/1025, 11356/1031), bosworth-toller LINDAT record
+(11234/1-3532), freising e-ZRC landing page, proiel/torot/iswoc repo
+README raws, oracc licensing doc page. Tests: wiktionary_cu +3,
+reflex_roots_indexer +2, etym +1, source_registry +3, remote_probe +7.
+Docs: architecture §12 addendum, ops.md license_watch paragraph,
+02-sources #46 note, improvements §1.11 rider → shipped. Suite
+1917/28,540 green (exit 0), lint 254 files clean (exit 0). Live db/
+canonical read-only throughout (census only).
 
 ## P16-gate · Phase 16 gate  [tier: orchestrator] [status: pending] [deps: P16-1..5]
 Full-diff review, library/languages/README refresh (links/fuzzy/axis
