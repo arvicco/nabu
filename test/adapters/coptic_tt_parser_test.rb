@@ -21,8 +21,26 @@ class CopticTtParserTest < Minitest::Test
   AP = File.join(FIXTURES, "AP", "apophthegmata.patrum_TT", "AP.004.poemen.65.tt")
   CPR = File.join(FIXTURES, "doc-papyri", "doc.papyri_TT", "cpr.2.237.tt")
 
+  # P18-1 offender fixtures (trimmed real files, see the fixtures README)
+  HELIAS = File.join(FIXTURES, "helias", "helias_TT", "helias_martyrdom_part1.tt")
+  THEODOSIUS = File.join(FIXTURES, "theodosius-alexandria", "theodosius.alexandria_TT",
+                         "Encomium_Michael_BL_OR_6781_part1.tt")
+  PISTIS = File.join(FIXTURES, "pistis-sophia", "pistis.sophia_TT", "pistis.sophia_book_1_part1.tt")
+  ABRAHAM = File.join(FIXTURES, "abraham", "shenoute.abraham_TT", "YA535-540.tt")
+  APHOU = File.join(FIXTURES, "life-aphou", "life.aphou_TT", "life.aphou.01.tt")
+  COR14 = File.join(FIXTURES, "sahidica.1corinthians", "sahidica.1corinthians_TT", "1Cor_14.tt")
+  AP100 = File.join(FIXTURES, "AP", "apophthegmata.patrum_TT", "AP.100.n294.crocodiles.tt")
+  JONAH = File.join(FIXTURES, "sahidic.jonah", "sahidic.jonah_TT", "Jonah_01.tt")
+  VIGILANCE = File.join(FIXTURES, "besa-letters", "besa.letters_TT", "on_vigilance.tt")
+  OCRUM = File.join(FIXTURES, "magical-papyri", "magical.papyri_TT", "OCrum_ST_18.tt")
+
   def parse(path, lemmas: :gold)
     Nabu::Adapters::CopticTtParser.new(lemmas: lemmas).parse(File.read(path), label: path)
+  end
+
+  def parse_member(zip_dir, zip_name, member)
+    content = Nabu::Shell.run("unzip", "-p", File.join(FIXTURES, zip_dir, zip_name), member)
+    Nabu::Adapters::CopticTtParser.new.parse(content, label: member)
   end
 
   # --- meta header --------------------------------------------------------
@@ -157,6 +175,14 @@ class CopticTtParserTest < Minitest::Test
     assert result.units.first.annotations["translation_ar"].start_with?("فال الأنبا بيمن")
   end
 
+  def test_note_spans_ride_as_unit_notes_the_p18_upgrade
+    # P17-1 dropped <note> as render-only; the P18-1 census (327 note_note +
+    # the element form) argued editorial notes into annotations["notes"].
+    notes = parse(AP).units.flat_map { |u| u.annotations["notes"] || [] }
+    refute_empty notes
+    assert(notes.any? { |n| n.include?("damage") })
+  end
+
   # --- documentary fallback (no verse_n) -------------------------------------
 
   def test_cpr_falls_back_to_ordinal_translation_units_flagged_non_canonical
@@ -179,6 +205,207 @@ class CopticTtParserTest < Minitest::Test
            "search source must be the upstream norm layer at word grain: #{source[0, 40].inspect}"
     # falls back to the pristine text when a row carries no tokens
     assert_equal "ⲁⲃⲅ", Nabu::Adapters::CopticTtParser.search_source("ⲁⲃⲅ", {})
+  end
+
+  # --- P18-1: the meta-line whitespace variant ------------------------------
+  #
+  # 18 files in the release (helias/theodosius parts, acts-pilate,
+  # lament-mary) write one attribute as `msItem_title ="…"` — a space before
+  # the `=`. The strict attribute regex saw no meta header at all and the
+  # files were "unrecognized". The widened regex tolerates whitespace around
+  # `=`; everything else about the line is the ordinary meta dialect.
+
+  def test_meta_header_with_whitespace_before_equals_decodes
+    meta = parse(HELIAS).meta
+    assert_equal "urn:cts:copticLit:helias.martyrdom.sobhy_ed:0-15", meta["document_cts_urn"]
+    assert_equal "Martyrdom of Helias", meta["msItem_title"]
+    assert_equal "Martyrdom of Helias (Sobhy ed.) Part 1", meta["title"]
+  end
+
+  # --- P18-1: edition topology (ed_page_n/ed_pg_n/ed_page, ed_line_n/ed_lb_n) --
+
+  def test_helias_carries_edition_page_and_line_topology
+    result = parse(HELIAS)
+    assert_equal 8, result.units.size
+    unit = result.units.first
+    assert_equal "0001", unit.annotations["ed_page"]
+    lines = unit.annotations["tokens"].filter_map { |t| t["ed_line"] }
+    assert_includes lines, "1"
+    assert_includes lines, "2"
+  end
+
+  def test_helias_token_straddling_a_chapter_boundary_belongs_where_it_opened
+    # Token u200 (ϩⲁⲙⲏⲛⲁⲥϣⲱⲡⲉⲇⲉ) opens in chapter 3's verse and is still
+    # open when the verse AND chapter close — the lb_n split quirk at verse
+    # grain (same shape closes Luke 13:20 mid-word). Span-stack semantics:
+    # the token belongs to the unit it opened in, never the next one.
+    units = parse(HELIAS).units
+    owner = units.find { |u| u.annotations["tokens"].any? { |t| t["id"] == "u200" } }
+    refute_nil owner, "the straddling token must not vanish"
+    refute_equal units.last, owner, "u200 opens before the chapter boundary, not in the final unit"
+    following = units[units.index(owner) + 1]
+    assert following.citation.start_with?("4."), "the next unit is chapter 4's first verse"
+    assert(following.annotations["tokens"].none? { |t| t["id"] == "u200" },
+           "a straddling token must not be doubled into the next unit")
+  end
+
+  def test_theodosius_ordinal_units_carry_the_ed_pg_n_spelling
+    result = parse(THEODOSIUS)
+    assert_equal 5, result.units.size # 5 translation units in the trim
+    assert(result.units.all? { |u| u.annotations["addressing"] == "translation-ordinal" })
+    assert_equal "330", result.units.first.annotations["ed_page"]
+  end
+
+  # --- P18-1: alternate citation schemes + extra aligned layers (pistis) ------
+
+  def test_pistis_carries_marcion_and_petermann_citations_and_horner_translation
+    result = parse(PISTIS)
+    assert_equal 3, result.units.size
+    unit = result.units.first
+    assert_equal ["1.1"], unit.annotations["cit_petermann"]
+    assert_includes unit.annotations["cit_marcion"], "1.1"
+    assert unit.annotations["translation_horner"].start_with?("But it happened after that Jesus rose")
+    assert_equal "ⲁ̅.ⲁ.", unit.annotations["page_coptic"]
+  end
+
+  def test_besa_german_translation_layer_folds_into_an_aligned_span
+    unit = parse(VIGILANCE).units.first
+    assert unit.annotations["translation_de"].start_with?("[Warum] unterwerft")
+  end
+
+  # --- P18-1: token-level Wikification + vid variants --------------------------
+
+  def test_abraham_entity_identity_spans_mint_token_level_identities
+    result = parse(ABRAHAM)
+    assert_equal 6, result.units.size
+    assert_equal "urn:cts:copticLit:shenoute.abraham.monbya:21.8", result.units.first.annotations["vid"]
+    identities = result.units.flat_map { |u| u.annotations["entities"] || [] }.select { |e| e["identity"] }
+    jesus = identities.find { |e| e["identity"] == "Jesus" }
+    refute_nil jesus
+    assert_match(/\A#u\d+\z/, jesus["head"])
+    refute_nil jesus["text"]
+  end
+
+  def test_jonah_folds_fused_vid_and_carries_the_readable_verse_name
+    result = parse(JONAH)
+    assert_equal 2, result.units.size
+    assert_equal "urn:cts:copticLit:ot.jonah.coptot_ed:1.1", result.units[0].annotations["vid"]
+    assert_equal "Jonah 1:1", result.units[0].annotations["verse_name"]
+    assert_equal "Jonah 1:2", result.units[1].annotations["verse_name"]
+    assert_includes result.units[1].annotations["notes"], "haplography"
+    marks = result.units[1].annotations["editorial"]
+    assert(marks.any? { |m| m["mark"] == "supplied" && m["reason"] == "omitted" })
+  end
+
+  # --- P18-1: PATHS entity subtypes and quotation references -------------------
+
+  def test_aphou_paths_subtype_spans_enrich_their_enclosing_entities
+    entities = parse(APHOU).units.flat_map { |u| u.annotations["entities"] || [] }
+    assert(entities.any? { |e| e["type"] == "person" && e["subtype"] == "monk" })
+    assert(entities.any? { |e| e["type"] == "place" && e["ref"] == "paths:places:32" })
+    quote = entities.find { |e| e["type"] == "quote" }
+    refute_nil quote
+    assert_equal "Sal.72 , 22.23", quote["ref"]
+    assert_equal "biblical", quote["subtype"]
+  end
+
+  # --- P18-1: verse spans as the unit opener (no verse_n in the file) ----------
+
+  def test_1cor_verse_spans_open_units_and_citations_normalize_the_fused_label
+    result = parse(COR14)
+    assert_equal 3, result.units.size
+    assert_equal %w[14.1 14.2 14.3], result.units.map(&:citation)
+    # the verbatim upstream label rides in annotations, unnormalized
+    assert_equal "1 Corinthians 14:1", result.units.first.annotations["verse"]
+  end
+
+  # --- P18-1: editorial marks (gap*/supplied*/abbr) -----------------------------
+
+  def test_ap100_gap_and_supplied_marks_ride_as_editorial_records
+    marks = parse(AP100).units.flat_map { |u| u.annotations["editorial"] || [] }
+    assert(marks.any? { |m| m["mark"] == "supplied" && m["reason"] == "illegible" })
+    assert_includes marks, { "mark" => "gap", "quantity" => "2", "unit" => "character", "reason" => "illegible" }
+  end
+
+  def test_genesis_zip_member_carries_abbr_gap_and_supplied_marks
+    result = parse_member("sahidic.ot", "sahidic.ot_TT.zip", "01_Genesis_01.tt")
+    marks = result.units.flat_map { |u| u.annotations["editorial"] || [] }
+    assert_includes marks, { "mark" => "abbr", "type" => "nomSac" }
+    assert_includes marks, { "mark" => "gap", "reason" => "lacuna" }
+    assert_includes marks, { "mark" => "supplied", "source" => "transcriber", "reason" => "lacuna" }
+  end
+
+  # --- P18-1: the omitted-verse lacuna shape ------------------------------------
+  #
+  # Eight NT zip books and the OCrum magical papyrus open a bound group
+  # BEFORE the verse_n it contains — the classic omitted verses (Mark 7:16,
+  # John 5:4, Acts 8:37, Rom 16:24…) carried as `[..]`/`[--]`/`[...]`
+  # placeholders whose verse span nests INSIDE the group/token. The group
+  # and token attach FORWARD to the verse that opens inside them; a group
+  # or token that closes with no unit having opened stays a loud error.
+
+  def test_mark7_omitted_verse_16_attaches_its_lacuna_group_forward
+    result = parse_member("sahidica.nt", "sahidica.nt_TT.zip", "41_Mark_07.tt")
+    assert_equal 16, result.units.size
+    unit = result.units.last
+    assert_equal "16", unit.annotations["verse"]
+    assert_equal "[..]", unit.text
+    assert_equal "If anyone has ears to hear, let him hear!'", unit.annotations["translation"]
+    assert_equal(["u433"], unit.annotations["tokens"].map { |t| t["id"] })
+  end
+
+  def test_acts24_lacuna_group_crossing_a_verse_boundary_attaches_to_the_first_verse
+    result = parse_member("bohairic.nt", "bohairic.nt_TT.zip", "05_Acts_24.tt")
+    assert_equal 8, result.units.size
+    seven, eight = result.units.last(2)
+    assert_equal "[...]ⲫⲁⲓ", seven.text
+    assert_equal(["u181"], seven.annotations["tokens"].map { |t| t["id"] })
+    # the boundary-crossing group attaches whole to the verse it opened
+    # into; verse 8 keeps its own tokens (u182's verse attribution is exact)
+    assert_equal "u182", eight.annotations["tokens"].first["id"]
+    assert eight.text.start_with?("ⲉⲧⲉⲟⲩⲟⲛ")
+  end
+
+  def test_ocrum_final_amen_verse_nests_inside_its_bound_group
+    result = parse(OCRUM)
+    assert_equal 7, result.units.size
+    unit = result.units.last
+    assert_equal "1.7", unit.citation
+    assert_equal "ϥⲑ", unit.text
+    assert_equal "Amen!", unit.annotations["translation"]
+    assert_equal({ "hbo" => 1 }, unit.annotations["loans"])
+  end
+
+  def test_a_stray_group_that_closes_without_a_unit_still_fails_loudly
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::CopticTtParser.new.parse(
+        "<meta corpus=\"x\" license=\"CC-BY 4.0\" document_cts_urn=\"urn:cts:copticLit:x\">\n" \
+        "<norm_group norm_group=\"ⲁ\">\n</norm_group>\n" \
+        "<verse_n verse_n=\"1\">\n</verse_n>\n</meta>\n", label: "synthetic"
+      )
+    end
+    assert_match(/unsegmented stretch/, error.message)
+  end
+
+  def test_a_stray_token_that_closes_without_a_unit_still_fails_loudly
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::CopticTtParser.new.parse(
+        "<meta corpus=\"x\" license=\"CC-BY 4.0\" document_cts_urn=\"urn:cts:copticLit:x\">\n" \
+        "<norm_group norm_group=\"ⲁ\">\n" \
+        "<norm xml:id=\"u1\" norm=\"ⲁ\">\nⲁ\n</norm>\n</norm_group>\n</meta>\n", label: "synthetic"
+      )
+    end
+    assert_match(/unsegmented stretch/, error.message)
+  end
+
+  def test_a_stray_group_left_open_at_eof_still_fails_loudly
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::CopticTtParser.new.parse(
+        "<meta corpus=\"x\" license=\"CC-BY 4.0\" document_cts_urn=\"urn:cts:copticLit:x\">\n" \
+        "<norm_group norm_group=\"ⲁ\">\n", label: "synthetic"
+      )
+    end
+    assert_match(/unsegmented stretch/, error.message)
   end
 
   # --- guards -----------------------------------------------------------------

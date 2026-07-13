@@ -69,6 +69,16 @@ module Nabu
       RELEASE_TAG = "v6.2.0"
 
       URN_PREFIX = "urn:nabu:coptic-scriptorium:"
+      # copticLit/copticDoc namespaces strip; copticMag (the magical-papyri
+      # corpus) deliberately does NOT: the first live sync froze
+      # urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.tm99995.
+      # kyp_t_53 into the catalog, and urns are FROZEN once used (P18-1
+      # verdict: the whole corpus keeps the full CTS urn as its tail rather
+      # than moving one loaded document's identity; pinned by test). The
+      # magical papyri carry alt-edition cross-refs to the Würzburg
+      # Kyprianos database in their `source` header field — kept in
+      # metadata, never deduped (conventions §3, the papyri.info
+      # cross-reference precedent).
       CTS_NAMESPACE = /\Aurn:cts:coptic(?:Lit|Doc):/
       CHAPTER_SUFFIX = /:\d+\z/
 
