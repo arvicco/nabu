@@ -126,7 +126,11 @@ module Nabu
       # resolves to no live passage (the caller distinguishes "unknown urn" from
       # "no parallels found"). +lang+/+license+ filter candidates catalog-side
       # exactly as Search does. +limit+ caps each signal's hit list.
-      def run(urn, limit: 15, lang: nil, license: nil)
+      # +echoes: false+ skips the lemma-echo second signal — the batch producer
+      # (P16-1) persists only kind=parallel surface-gram edges, and the
+      # per-lemma df probes are the engine's one per-anchor cost worth shedding
+      # over a gold-lemmatized slice.
+      def run(urn, limit: 15, lang: nil, license: nil, echoes: true)
         anchor = load_anchor(urn)
         return nil if anchor.nil?
 
@@ -136,9 +140,9 @@ module Nabu
         hits = assemble(scores, matched,
                         tokens: tokens, anchor_document_id: anchor.fetch(:document_id),
                         lang: lang, license: license, limit: limit)
-        echoes = lemma_echoes(anchor, lang: lang, license: license, limit: limit)
+        echo_hits = echoes ? lemma_echoes(anchor, lang: lang, license: license, limit: limit) : []
         Result.new(anchor_urn: anchor.fetch(:urn), anchor_title: anchor.fetch(:title),
-                   gram_count: grams.size, hits: hits, lemma_echoes: echoes)
+                   gram_count: grams.size, hits: hits, lemma_echoes: echo_hits)
       end
 
       private
