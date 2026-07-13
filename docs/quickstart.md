@@ -4,9 +4,10 @@ This walkthrough goes from a fresh checkout to searching, reading, and
 aligning ancient texts. Every command below was actually executed on
 2026-07-11 and the output pasted (trims marked with …). The reference box
 carries the full library, so search results here show more shelves than a
-fresh install will — noted where it matters. The two sync commands touch
+fresh install will — noted where it matters. The sync commands touch
 the network and are *described* (with real sizes and timings) rather than
-re-run.
+re-run. The same walkthrough is published on the project site:
+[arvicco.github.io/nabu/quickstart](https://arvicco.github.io/nabu/quickstart/).
 
 ## 0. Prerequisites
 
@@ -30,10 +31,27 @@ Configuration is optional: every key in `config/nabu.yml` has a working
 default, so a fresh checkout runs as-is. Edit it later if you want the
 corpus on a bigger disk.
 
-## 2. Sync your first source
+## 2. Sync the starter shelf
 
-The SBL Greek New Testament is the ideal first shelf — small, fast, openly
-licensed (CC BY 4.0):
+One command syncs the curated starter set and prints the first three
+commands to try:
+
+```
+bin/nabu quickstart
+```
+
+The set (sizes measured from the live canonical tree, 2026-07-13): the SBL
+Greek New Testament (`sblgnt`, 11 MB, CC BY), the PROIEL treebank
+(`proiel`, 173 MB — the NT in Greek, Latin, Gothic, Armenian, and Old
+Church Slavonic, with gold lemmas; nc), the ISWOC Old English treebank
+(`iswoc`, 30 MB; nc), and the LSJ + Lewis & Short dictionaries (`lexica`,
+479 MB, CC BY-SA) — about **690 MB** all told. On the reference box the
+four first syncs took roughly three minutes of fetch-and-load combined
+(lexica dominates); allow up to ten minutes on an ordinary connection.
+`bin/nabu quickstart --list` previews the set without syncing; a re-run is
+an ordinary re-sync, and one source's failure never stops the rest.
+
+Prefer the smallest possible start? A single source works too:
 
 ```
 bin/nabu sync sblgnt
@@ -100,11 +118,14 @@ box, so you know what you're signing up for:
 
 | Sync | Unlocks | Canonical size |
 |---|---|---|
-| `bin/nabu sync lexica` | `nabu define` — LSJ + Lewis & Short, 168k entries | 480 MB |
-| `bin/nabu sync vulgate` + `sync eng-web` | Latin + English witnesses for `align` | 368 MB each |
-| `bin/nabu sync proiel` | lemma search, the 5-way parallel NT | 173 MB |
-| `bin/nabu sync perseus-greek` | the Greek canon + English translations | 921 MB |
+| `bin/nabu sync vulgate` + `sync eng-web` | Latin + English witnesses for `align`, OT included | 357 MB each |
+| `bin/nabu sync perseus-greek` | the Greek canon + English translations | 910 MB |
+| `bin/nabu sync perseus-latin` | the Latin classics | 220 MB |
+| `bin/nabu sync gretil` | 780 Sanskrit editions | 303 MB |
 | `bin/nabu sync papyri-ddbdp` | 61k documentary papyri (the big one — a multi-minute load) | 2.3 GB |
+
+(`lexica` and `proiel` — the dictionary shelf and the 5-way parallel NT
+with lemma search — are already on board from the starter shelf.)
 
 The full menu is `config/sources.yml`; the full shelf map with research
 uses is [library.md](library.md). `bin/nabu sync --all` syncs every

@@ -5974,3 +5974,50 @@ facets from live db), improvements register (§2.2/§2.3 → shipped,
 §1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
 new source are owner-fired; fixture-plan approvals happen mid-phase at
 the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.
+
+## P18-2 · Starter pack + site Quickstart  [tier: opus] [status: done 2026-07-13] [deps: —]
+Owner (2026-07-13): queue the starter pack; "the site needs some kind of
+'Quickstart' section - right now it lacks even clearly visible link to
+the repo, as well as steps needed to initialize your own Nabu Library."
+Adoption bottleneck: time-to-first-marvel is currently clone + Ruby +
+multi-GB syncs. (a) STARTER PACK: a curated small-shelf set reaching a
+real marvel in minutes — candidates sblgnt + vulgate + eng-web + proiel
++ lexica (align MARK multi-witness, lemma search, define λόγος) —
+MEASURE real canonical sizes (live tree read-only) and pick under a
+~300 MB / <10 min budget; mechanism argued: a `nabu quickstart` command
+(sync the starter list, then print the three demo commands) vs a
+documented sync line — bias to the command, it's the humanist's path.
+(b) SITE: a Quickstart page (prereqs, clone, bundle install, starter
+sync, first search + align + define, MCP registration pointer, "grow
+the library" next step) + a VISIBLE repo link in the site header/nav
+(currently buried in About). README quickstart section aligned with the
+site page (single source of truth stated). Tests for the command
+(fixture-backed, no network in suite); site builds exit 0.
+FINDINGS (done 2026-07-13): MEASURED canonical sizes (du -sh, live
+tree, git history included): sblgnt 11 MB · proiel 173 MB · iswoc 30 MB
+· lexica 479 MB · vulgate 357 MB · eng-web 357 MB · torot 270 MB. The
+~300 MB budget is NOT attainable with the define marvel: lexica alone
+is 479 MB on disk (the registry's "~160 MB" note is stale). CHOSEN SET
+(693 MB): sblgnt + proiel + iswoc + lexica — align "MARK 2.3" renders
+SEVEN witnesses (grc ×2, lat, got, xcl, chu, ang — iswoc's 30 MB buys
+the OE witness), search --lemma rides the PROIEL gold rows, define
+λόγος/virtus has LSJ + L&S. vulgate/eng-web EXCLUDED: each is a full
+open-bibles clone measuring 357 MB (stale "~76 MB" note) for one USFX
+file — they are the first "grow the library" step instead. TIME: ledger
+first-sync wall clocks sblgnt 3 s / proiel 14 s / iswoc 4 s / lexica
+133 s ≈ 3 min fetch+load, projected well under the 10 min line with
+per-source reindexes. SHIPPED: `nabu quickstart` (normal per-source
+sync path in starter order, one failure never stops the rest + end
+report + exit 1, idempotent re-sync, --list previews; epilogue = the
+three marvels + grow pointer), site/quickstart.md + nav entry +
+GitHub ↗ repo link in the nav bar of EVERY page (layout-level, accent-
+styled), README Quickstart short form moved near the top pointing at
+the site page, docs/quickstart.md §2 re-anchored on the command,
+MAINTENANCE.md gate duty covers the measured sizes. Lint rider:
+site/vendor + site/_site excluded in .rubocop.yml (vendored gems ship
+.rubocop.yml requiring rubocop-minitest — the CI vendor trap, found at
+the first local site build). Tests +7 (starter wiring vs the shipped
+registry, --list touches nothing, order + epilogue, idempotent re-run,
+partial failure aggregation + exit 1, help teaches the shelf, command
+listed). Suite 2,267 runs exit 0, lint 287 files exit 0, jekyll build
+exit 0.
