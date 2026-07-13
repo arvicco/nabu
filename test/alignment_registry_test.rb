@@ -249,11 +249,13 @@ class AlignmentRegistryTest < Minitest::Test
                  work.witnesses.take(5).map(&:document_urn),
                  "the five-way NT flagship (P11-3) is the shipped proof"
     assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)",
-                  "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis"],
+                  "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis",
+                  "sahidica NT (Sahidic Coptic)", "bohairic NT (Bohairic Coptic)"],
                  work.witnesses.drop(5).map(&:label),
                  "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
                  "Vulgate NT witnesses; P11-8 the WEB English witness; P14-2 the four " \
-                 "CCMH Old Church Slavonic gospel manuscripts"
+                 "CCMH Old Church Slavonic gospel manuscripts; P17-1 the two Coptic " \
+                 "NT witnesses (#14 sahidica nc, #15 bohairic attribution)"
     assert_equal "urn:nabu:proiel:wscp", work.witnesses[5].document_urn,
                  "the P12-1 OE Gospel of Mark rides the shared urn:nabu:proiel: namespace"
     assert_includes work.witnesses[6].document_urns, "urn:nabu:sblgnt:mark"
@@ -272,6 +274,15 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal %w[urn:nabu:ccmh:marianus:mat urn:nabu:ccmh:marianus:mar
                     urn:nabu:ccmh:marianus:luk urn:nabu:ccmh:marianus:joh],
                  ccmh_marianus.document_urns, "all four gospels present in the manuscript"
+    # P17-1: the two Coptic NT witnesses — work vocabulary onto the adapter's
+    # per-book urns (chapter files merged to books), 27 books each.
+    sahidica = work.witnesses[13]
+    assert_equal "sahidica NT (Sahidic Coptic)", sahidica.label
+    assert_equal "MARK", sahidica.book_for("urn:nabu:coptic-scriptorium:nt.mark.sahidica")
+    assert_equal 27, sahidica.document_urns.size
+    bohairic = work.witnesses[14]
+    assert_equal "MARK", bohairic.book_for("urn:nabu:coptic-scriptorium:nt.mark.bohairic")
+    assert_equal 27, bohairic.document_urns.size
   end
 
   def test_shipped_registry_loads_the_ot_work
