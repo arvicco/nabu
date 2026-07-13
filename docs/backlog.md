@@ -5974,3 +5974,83 @@ facets from live db), improvements register (§2.2/§2.3 → shipped,
 §1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
 new source are owner-fired; fixture-plan approvals happen mid-phase at
 the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.
+
+## P18-1 · Coptic coverage: span inventory + headerless files  [tier: fable] [status: done 2026-07-13] [deps: P17-1, P17-10]
+The owner's third sync completed (run 112): 188 of 465 docs loaded, 277
+quarantined, 18 files "no usable TT meta header" (the reported "295
+unrecognized" = 277 + 18 conflated; run 112's notes list exactly 18).
+Census-first widening of the P17-1 inventory — the strict-inventory
+tripwire stays: an unknown span type still quarantines.
+
+CENSUS 1 (spans; full sweep of all 2,497 non-excluded TT chunks @ v6.2.0
+— the P17-10 first-error census undercounted at 32): **66 unknown span
+types**, EACH given a verdict, occurrence×file counts pinned in the
+parser constants. (a) INGEST-AS-ANNOTATION, 49 tags: edition topology
+ed_page_n/ed_pg_n/ed_page (869×/80f + 274×/14f + 14×/2f → "ed_page"),
+ed_line_n/ed_lb_n (38,285×/113f → per-token "ed_line"), ed_chapter_n;
+editorial transcription marks → "editorial" records {mark, verbatim
+sub-attrs incl. upstream typos gap_exent/gap_reasaon/gap_reasonn}: gap*
+(1,154×/165f + reason/unit/extent/quantity), supplied* (1,865×/138f +
+reason/evidence/source/unit/quantity), surplus*, unclear*, abbr
+type=nomSac (1,620×/337f — the sahidic-OT nomina-sacra layer), sic,
+del_rend, add_place; entity_identity (686×/62f — v6.0 attribute-form
+Wikification wrapping the TOKEN → token-anchored entities records);
+PATHS entity markup (persName/placeName/roleName/date/org/rs _type +
+placeName_ref gazetteer ids merging into their enclosing entities;
+standalone quote_ref/quote_type biblical-quotation records); Pistis
+Sophia alternate versification marcion_*/petermann_* (10,117×+2,320×/28f
+→ "cit_marcion"/"cit_petermann" lists) + trans_horner (→
+"translation_horner") + pb_coptic_id (→ "page_coptic"); german (→
+"translation_de", Besa on_vigilance), arabic_translation, section_title;
+verse_n_vname (→ "verse_name"); note/note_note upgraded from ignore to
+"notes" (only annotation change touching already-loaded docs — revision
+bumps at resync, urns frozen). (b) FOLD-INTO-EXISTING, 8 tags:
+verse_n_vid_n/v_id/vid__n → vid; verse → the unit opener (verse-as-unit
+files: 1Cor/shenoute-house carry NO verse_n; fused labels "1 Corinthians
+14:1" normalize to citation 14.1, verbatim label kept in annotations);
+pb_n/pb_id → page; ch_n → chapter; pb_coptic_xml → page_coptic. (c)
+IGNORE-COUNTED, 9 tags, named in IGNORED_TAGS with reasons: hi, sup,
+sub, cb, ignore_note (upstream's own name says ignore), p_source
+(constant PATHS credit), chapter/chapter_name/chapter_2 (duplicate
+chapter naming; citation comes from meta). STRUCTURAL verdicts: (1) the
+"unsegmented stretches" are the OMITTED-VERSE lacuna shape — Mark 7:16,
+John 5:4, Acts 8:37, Matt 12:47, Rom 16:24, Rev 1:1-2, bohairic Acts
+24:7, OCrum's final Amen carry `[..]`/`[--]`/`[...]` placeholder groups
+that open BEFORE the verse_n nested inside them → stray groups/tokens
+attach FORWARD to the unit that opens inside them; a stray that CLOSES
+with no unit is still the loud error (tripwire pinned by 3 synthetic
+guard tests). Acts 24:7's group crosses into v8 → attaches whole to the
+verse it opened into, token-level attribution stays exact. (2) A token
+still open at unit close belongs to the unit it OPENED in (span-stack
+semantics — Luke 13:20|21 splits mid-word ⲟⲩ|ⲉⲥ, helias splits at
+chapter boundaries; freed helias ×4 + nt.luke.sahidica). (3) copticMag
+urn regex deliberately NOT widened: the live catalog froze urn:nabu:
+coptic-scriptorium:urn:cts:copticMag:kyprianos.tm99995.kyp_t_53 at the
+first sync; the corpus keeps the full CTS urn as its tail (pinned by
+test; Würzburg Kyprianos cross-refs ride in metadata `source`).
+
+CENSUS 2 (headers): ALL 18 unrecognized files share ONE lexical variant
+— `msItem_title ="…"`, a space before the equals (helias 5, theodosius
+9, acts-pilate 2, lament-mary 2; v6.0.0 OCR-era headers). NOT a 4th
+structural dialect, NOT meta-on-part1-only: every part carries its own
+full meta with a range-suffixed cts urn (helias.martyrdom.sobhy_ed:0-15)
+→ regex widened to \s*=\s*, one document per part (the shenoute range
+precedent, no group merge). theodosius/acts-pilate/lament-mary parts are
+verse-less → the existing translation-ordinal mode.
+
+POST-FIX COVERAGE (re-derived read-only over the live tree): **482 of
+483 discovered docs parse clean** (465+18 refs; was 188/465), 74,169
+passages projected (was 29,946), 0 unrecognized, skipped_by_rule 114
+unchanged. Remaining quarantine, itemized: 1 — lives.longinus_lucius.
+paths_ed:10-16 (life.longinus.lucius.02.tt carries a verse-less bare
+<translation> stretch inside a verse-mode file, upstream mixed
+segmentation; honest named quarantine, not worth a heuristic). FROZEN
+URNS verified: all 188 live doc urns re-mint with identical passage
+counts; passage-urn lists spot-checked identical on 7 live docs incl.
+the copticMag one and dual-origin Habakkuk. Fixtures: 12 offender items
+(10 trimmed loose files, Mark_07 added to the sahidica.nt zip, NEW
+bohairic.nt + sahidic.ot one-member zips; provenance in README +
+manifest.yml); fixture discover now mints 18 docs. Suite 2,283 runs /
+31,217 assertions exit 0, lint exit 0. Owner re-run:
+`bin/nabu sync coptic-scriptorium --parse-only` (expect 482 loaded /
+1 quarantined / 0 unrecognized).

@@ -26,7 +26,7 @@ files:
   - path: sahidica.nt/sahidica.nt_TT.zip
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidica.nt/sahidica.nt_TT.zip
     whole: false
-    trim: "rebuilt zip (zip -X) with 2 of 259 members: 41_Mark_01.tt cut to meta line + verses 1-12 (upstream lines 1-2495 byte-identical, </meta> re-added; 263,156 B -> 72,878 B) + 57_Philemon_01.tt whole; 5.5 MB -> 40 KB"
+    trim: "rebuilt zip (zip -X) with 3 of 259 members: 41_Mark_01.tt cut to meta line + verses 1-12 (upstream lines 1-2495 byte-identical, </meta> re-added; 263,156 B -> 72,878 B) + 57_Philemon_01.tt whole + 41_Mark_07.tt cut to meta line + verses 1-16 incl. the omitted-verse [..] lacuna group of Mark 7:16 (upstream member lines 1-3253 byte-identical, </meta> re-added; 229,742 B -> 95,680 B, added P18-1)"
   - path: bohairic-habakkuk/bohairic.habakkuk_TT/bohairic.Habakkuk_01.tt
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic-habakkuk/bohairic.habakkuk_TT/bohairic.Habakkuk_01.tt
     whole: false
@@ -35,3 +35,53 @@ files:
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.ot/bohairic.ot_TT.zip
     whole: false
     trim: "rebuilt zip (zip -X) with 1 of 637 members: 35_Habacuc_01.tt cut to meta line + verses 1-2 (upstream member lines 1-316 byte-identical, </meta> re-added; 116,894 B -> 9,430 B); member extracted from the local canonical tree's zip at the same v6.2.0 tag (P17-10 dual-origin pair, bible-zip side)"
+  # ---- P18-1 offender fixtures (one trimmed real file per census family;
+  # ---- all trimmed 2026-07-13 from the local canonical tree @ v6.2.0,
+  # ---- byte-identical to the raw-URL tag paths) ----
+  - path: helias/helias_TT/helias_martyrdom_part1.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/helias/helias_TT/helias_martyrdom_part1.tt
+    whole: false
+    trim: "cut to meta line + 7 verse units through the chapter 4/5 boundary (upstream lines 1-2446 byte-identical, </meta> re-added; 512,255 B -> 68,001 B); the space-before-equals meta variant (msItem_title =\"...\") + ed_page_n/ed_line_n edition topology + TWO tokens straddling chapter boundaries (u200 at ch3->4)"
+  - path: theodosius-alexandria/theodosius.alexandria_TT/Encomium_Michael_BL_OR_6781_part1.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/theodosius-alexandria/theodosius.alexandria_TT/Encomium_Michael_BL_OR_6781_part1.tt
+    whole: false
+    trim: "cut to meta line + 5 translation units (upstream lines 1-521 byte-identical, </meta> re-added; 1,033,062 B -> 15,978 B); space-before-equals meta + ed_pg_n spelling, ordinal (verse-less) mode"
+  - path: pistis-sophia/pistis.sophia_TT/pistis.sophia_book_1_part1.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/pistis-sophia/pistis.sophia_TT/pistis.sophia_book_1_part1.tt
+    whole: false
+    trim: "cut to meta line + verses 1-3 (upstream lines 1-357 byte-identical, </meta> re-added; 1,150,088 B -> 12,206 B); marcion/petermann alternate versification + trans_horner + pb_coptic_id"
+  - path: abraham/shenoute.abraham_TT/YA535-540.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/abraham/shenoute.abraham_TT/YA535-540.tt
+    whole: false
+    trim: "cut to meta line + verses 21.8-21.13 (upstream lines 1-946 byte-identical, </meta> re-added; 332,259 B -> 27,533 B); v_id vid-variant + entity_identity token Wikification"
+  - path: life-aphou/life.aphou_TT/life.aphou.01.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/life-aphou/life.aphou_TT/life.aphou.01.tt
+    whole: false
+    trim: "cut to meta line + the verses through the first quote_ref (upstream lines 1-5081 byte-identical, </meta> re-added; 525,537 B -> 149,544 B); PATHS persName/placeName/roleName/date subtype + gazetteer-ref spans, quote_ref/quote_type, p_source"
+  - path: sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt
+    whole: false
+    trim: "cut to meta line + verses 1-3 (upstream lines 1-573 byte-identical, </meta> re-added; 247,372 B -> 17,033 B); verse-as-unit spans (<verse verse=\"1 Corinthians 14:1\">, no verse_n in the file)"
+  - path: AP/apophthegmata.patrum_TT/AP.100.n294.crocodiles.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/AP/apophthegmata.patrum_TT/AP.100.n294.crocodiles.tt
+    whole: false
+    trim: "cut to meta line + the verses through the supplied_unit/quantity cluster (upstream lines 1-1129 byte-identical, </meta> re-added; 70,852 B -> 31,034 B); gap_reason/unit/quantity + supplied_reason/unit/quantity editorial marks"
+  - path: sahidic.jonah/sahidic.jonah_TT/Jonah_01.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.jonah/sahidic.jonah_TT/Jonah_01.tt
+    whole: false
+    trim: "cut to meta line + verses 1-2 (upstream lines 1-425 byte-identical, </meta> re-added; 148,505 B -> 13,463 B); fused verse_n_vid_n/verse_n_vname spans + note_note + supplied_reason"
+  - path: besa-letters/besa.letters_TT/on_vigilance.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_vigilance.tt
+    whole: false
+    trim: "cut to meta line + verse 1.1 (upstream lines 1-534 byte-identical, </meta> re-added; 366,900 B -> 15,196 B); the German translation layer (<german> spans)"
+  - path: magical-papyri/magical.papyri_TT/OCrum_ST_18.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/magical-papyri/magical.papyri_TT/OCrum_ST_18.tt
+    whole: true
+  - path: bohairic.nt/bohairic.nt_TT.zip
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.nt/bohairic.nt_TT.zip
+    whole: false
+    trim: "rebuilt zip (zip -X) with 1 of 260 members: 05_Acts_24.tt cut to meta line + verses 1-8 incl. the [...]PHAI lacuna group of Acts 24:7 that crosses into verse 8 (upstream member lines 1-1539 byte-identical, </meta> re-added; 169,910 B -> 44,058 B)"
+  - path: sahidic.ot/sahidic.ot_TT.zip
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_TT.zip
+    whole: false
+    trim: "rebuilt zip (zip -X) with 1 of 911 members: 01_Genesis_01.tt cut to meta line + verses 1-11 (upstream member lines 1-381 byte-identical, </meta> re-added; 124,126 B -> 17,389 B); abbr nomSac + <gap reason=\"lacuna\"> + <supplied source= reason=> editorial marks in the collapsed dialect"
