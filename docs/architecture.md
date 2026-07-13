@@ -53,7 +53,7 @@ nabu/
 │   └── ...
 ├── db/
 │   ├── catalog.sqlite3          # DERIVED: sources, documents, passages, provenance, licenses
-│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas (both keyed by passage id)
+│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas + trigram index (all keyed by passage id)
 │   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
 │   ├── migrate/                 # catalog migration track (forward-only)
@@ -151,6 +151,7 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 - Migration tracks are per-db and forward-only: `db/migrate/` for the catalog, `db/ledger_migrate/` for the ledger — each SQLite file keeps its own `schema_info`, so the counters cannot collide. One-shot lift-and-shift: every write path opens the ledger via `Ledger.open_with_lift!`, which copies a pre-P7-1 catalog's runs/pins/baselines into the ledger (re-keyed by slug/url) and only then migrates the catalog forward (005 drops the moved tables). A fresh machine with no ledger bootstraps clean: read paths treat the absent file as empty history ("no run history", never an error); the first sync creates it.
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
 - `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the gold-treebank lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output).
+- `passages_trigram` + `passages_trigram_scope` (P16-4, intertext design §4, same file and lifecycle): the fragment-search index behind `search --fuzzy` — a second FTS5 table over the SAME folded `text_normalized`, tokenized into character trigrams for infix/mid-word matching (`]μηνιν αει[` on a damaged papyrus). DOCUMENTARY SCOPE ONLY: sources flagged `fuzzy_index: true` in config/sources.yml (papyri-ddbdp + oracc; an owner posture like `enabled`/`translations` — the whole corpus would cost 3.6–4.1 GB, the documentary shelves 257 MB measured at 6.43 B/char, 8.6 s build). The scope table records the slugs each build actually indexed, so the query surface reports real coverage instead of trusting config. Query semantics are two-phase: trigram candidates (implicit-AND MATCH of the fragment's trigrams — co-occurrence, not contiguity), then substring verification against the stored folded text (Query::Fuzzy). Sub-ms to ~10 ms measured live.
 - `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
 - `license_class` enum (`open`, `attribution`, `nc`, `research_private`, `restricted`) drives query/export filters.
 

@@ -205,6 +205,36 @@ class SourceRegistryTest < Minitest::Test
     end
   end
 
+  # -- fuzzy_index flag (P16-4) ----------------------------------------------
+
+  def test_fuzzy_index_defaults_false_and_fuzzy_slugs_lists_only_flagged
+    registry = load_registry(<<~YAML)
+      literary-src:
+        adapter: A
+      papyri-src:
+        adapter: B
+        fuzzy_index: true
+      tablets-src:
+        adapter: C
+        fuzzy_index: true
+    YAML
+    refute registry["literary-src"].fuzzy_index
+    assert registry["papyri-src"].fuzzy_index
+    assert_equal %w[papyri-src tablets-src], registry.fuzzy_slugs
+  end
+
+  def test_non_boolean_fuzzy_index_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        my-src:
+          adapter: A
+          fuzzy_index: documentary
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/fuzzy_index/, error.message)
+  end
+
   # -- build_adapter ---------------------------------------------------------
 
   def test_build_adapter_with_flag_off_is_plain_no_arg_construction

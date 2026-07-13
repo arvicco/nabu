@@ -5223,18 +5223,55 @@ unchanged, no schema change expected. search --from/--to/--century/
 coverage gained (docs dated before/after per source), never fake
 precision. Fixtures from real catalogue/chronicle samples.
 
-## P16-4 · search --fuzzy — documentary trigram index  [tier: opus] [status: dispatched] [deps: —]
-Register §1.5 un-parked (owner, 2026-07-13). Design §4 is the spec:
-character-trigram index over the folded search form, DOCUMENTARY SCOPE
-(papyri-ddbdp + oracc — the measured 250–270 MB line, vs 3.6–4.1 GB
-whole-corpus; owner approved this scope by taking the packet),
-trigram-candidates-then-verify semantics, sub-ms substring queries.
-CLI: search --fuzzy for infix/mid-word matching of damaged text
-(`]μηνιν αει[` bracket-tolerant); honest miss when the query is under
-3 chars post-fold; non-documentary sources answer with a hint naming
-the indexed shelves. Index lives in fulltext.sqlite3 via the Indexer
-choke point (rebuild-safe); measure and REPORT the real index size +
-build time at review. --long rule applies to any truncated list.
+## P16-4 · search --fuzzy — documentary trigram index  [tier: opus] [status: done 2026-07-13] [deps: —]
+The parked P15-6, re-proposed and approved with the Phase 16 menu: design
+doc §4 verbatim (trigram fragment search, DOCUMENTARY SCOPE — the
+owner-approved 250–270 MB line vs 3.6–4.1 GB corpus-wide; damaged-text
+persona `]μηνιν αει[`; candidates-then-verify; honest failure modes).
+FINDINGS: (1) SCOPE FLAG VERDICT — per-source `fuzzy_index: true` in
+config/sources.yml (papyri-ddbdp + oracc), parsed/validated by
+SourceRegistry::Entry beside enabled/translations: documentary-vs-literary
+is INDEX ECONOMICS, an owner posture, not intrinsic adapter metadata (a
+manifest field means code edits — the spelunking to avoid; a constant is
+the hardcode the design rejected). Registry#fuzzy_slugs threads into
+Indexer.rebuild! from both callers (sync reindex + rebuild — the one choke
+point, so the invariant holds). (2) INDEX — passages_trigram (FTS5
+tokenize='trigram') over text_normalized AS STORED (same fold, only
+tokenization differs) + passages_trigram_scope recording the slugs each
+build ACTUALLY indexed (the query surface reports real coverage, never
+possibly-drifted config); drop-and-rebuild like everything in
+fulltext.sqlite3 (the existing indexer is not incremental; neither is
+this), empty-not-missing when unscoped. (3) QUERY — Query::Fuzzy, standard
+two-phase: implicit-AND MATCH of the fragment's trigrams (co-occurrence ≠
+contiguity — "abc xyz bcd" candidates for "abcd") then substring verify
+against the stored folded text; query strips editorial [ ] BEFORE the
+query_forms fold union (braces kept — {d} is the akk/sux determinative
+fold's job; conventions §9 note added); <3 chars post-fold raises
+QueryTooShort → CLI names the trigram floor instead of returning nothing.
+Composes with --lang/--license/--limit/--from/--to/--century/--place
+(CatalogJoin, all free); --long lifts the snippet window (house rule);
+--lemma/--near/--morph honestly refused. Every render ends with one scope
+line ("fuzzy index covers: oracc, papyri-ddbdp") — the honest answer when
+a literary fragment misses. (4) MEASURED (scratch build, live catalog
+READONLY, production code path): 1,306,491 documentary passages / 41.9M
+chars → 257.1 MB at 6.43 B/char in 8.6 s — INSIDE the design's 250–270 MB
+projection (design assumed ~6 B/char on 41.3M chars; delta +0.43 B/char,
++1.5% chars). Queries live: στρατηγ/οφειλ/εν-lil 0.7–6.5 ms; the README
+demo is real — `--fuzzy ']ανδρα μοι εν['` → BGU 6.1470, a papyrus writing
+exercise breaking off mid-word through the Odyssey's opening (…Μοῦσα
+πολύτρο[). (5) The LIVE fulltext.sqlite3 does NOT yet carry the table —
+the production build is OWNER-FIRED at the next sync/reindex/rebuild
+(+257 MB, +~9 s, both within budget). Tests +33: registry flag parsing +
+fuzzy_slugs + non-boolean raise (3), indexer scope gating/empty-not-
+missing/infix/withdrawn/idempotent/fresh-db regeneration (6), query
+folding (bracketed Greek, determinative-crossing Akkadian, final sigma),
+false-candidate-rejected-by-verify, scope reader, floor raises, filters,
+snippet-vs-long (14), CLI render/--long/scope hint/literary miss/floor
+message/date compose/pre-P16-4 reindex hint/flag conflicts/help (10).
+Docs: architecture §5 index bullet + tree line, README papyrologist
+persona (live demo pasted) + feature row, conventions §9 bracket-strip
+note. Suite 1933/28,563 green (exit 0), lint 245 files clean (exit 0).
+One commit, not pushed.
 
 ## P16-5 · Riders: wiktionary-cu descendants backfill + license_watch  [tier: opus] [status: done 2026-07-13] [deps: —]
 (a) The P14-1 deferred rider: wiktionary-cu entries carry descendants
