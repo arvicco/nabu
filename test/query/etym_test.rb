@@ -170,6 +170,31 @@ module Query
       assert_nil xleb.edge_borrowed, "a top-level result has no connecting edge"
     end
 
+    # P18-3: the class doc claims duplicate naming edges from ONE ancestor
+    # collapse with flags merged — verify. Two reflex rows of the same
+    # ancestor naming the same (language, word_folded) child (a repeated
+    # node across descendant subtrees) must render ONE ancestor whose
+    # edge_borrowed merges true > false > nil.
+    def test_duplicate_ancestor_naming_edges_collapse_with_merged_edge_borrowed
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      pie_id = @catalog[:dictionary_entries]
+               .where(urn: "urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root").get(:id)
+      edge = @catalog[:dictionary_reflexes]
+             .where(dictionary_entry_id: pie_id, language: "sla-pro", word_folded: "bogъ").first
+      refute_nil edge, "the PIE fixture entry must name sla-pro *bogъ as a descendant"
+      dupe = edge.dup
+      dupe.delete(:id)
+      dupe[:seq] = 9_999
+      dupe[:borrowed] = true if @catalog[:dictionary_reflexes].columns.include?(:borrowed)
+      @catalog[:dictionary_reflexes].insert(dupe)
+
+      ancestors = etym("богъ", lang: "chu").first.ancestors
+      pies = ancestors.select { |a| a.headword == "*bʰeh₂g-" }
+      assert_equal 1, pies.size, "duplicate naming edges from one ancestor collapse"
+      assert_equal true, pies.first.edge_borrowed, "edge flags merge true > false > nil"
+    end
+
     def test_gothic_ascends_to_the_pie_ancestors_of_guda
       make_gold_passages(language: "got", lemma: "guþ", form: "guþ")
       rebuild!
@@ -316,6 +341,35 @@ module Query
       cognates = amsa.cognates.map { |view| [view.lang_code, view.word] }
       assert_includes cognates, %w[Goth. amsa]
       assert_includes cognates, %w[Lat. humerus]
+    end
+
+    # P18-3: MW comparanda duplicated WITHIN one entry (a 19th-century
+    # entry can cite the same comparandum in several senses) ride the same
+    # ReflexViews grouped render as the kaikki subtree duplicates — one
+    # entry (the matched-reflex uniq), one cognate view. (MW and kaikki
+    # naming the same (language, word) under DIFFERENT entries stays two
+    # honest witnesses — two entries, never merged.)
+    def test_duplicated_mw_comparanda_render_one_entry_with_one_cognate_view
+      mw = Nabu::Store::Source.create(
+        slug: "mw", name: "Monier-Williams", adapter_class: "Nabu::Adapters::Mw",
+        license: "CC BY-NC-SA 3.0", license_class: "nc"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: mw)
+                                   .load_from(Nabu::Adapters::Mw.new,
+                                              workdir: Nabu::TestSupport.fixtures("mw"))
+      amsa_id = @catalog[:dictionary_entries].where(urn: "urn:nabu:dict:mw:88").get(:id)
+      omos = @catalog[:dictionary_reflexes]
+             .where(dictionary_entry_id: amsa_id, word: "ὦμος").first
+      refute_nil omos, "the MW fixture entry must carry the ὦμος comparandum"
+      dupe = omos.dup
+      dupe.delete(:id)
+      dupe[:seq] = 9_999
+      @catalog[:dictionary_reflexes].insert(dupe)
+
+      results = etym("ὦμος", lang: "grc")
+      assert_equal 1, results.size, "the doubled matched comparandum resolves to ONE entry"
+      views = results.first.cognates.select { |view| view.word == "ὦμος" }
+      assert_equal 1, views.size, "duplicated comparanda render as one view"
     end
   end
 end

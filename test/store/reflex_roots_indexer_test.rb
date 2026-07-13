@@ -436,5 +436,24 @@ module Store
       assert_equal false, borrowed_of("got", "tp1", "urn:nabu:dict:t-gem-pro:twopath:test"),
                    "false (parsed) beats NULL (unknown) per max_flag"
     end
+
+    # P18-3 (the prīmus ×3 generalization): one word descending from a root
+    # through SEVERAL subtrees of the descendants tree mints several
+    # crosswalk rows — the closure emits exactly ONE (language,
+    # lemma_folded, root_urn) row, its borrowed flag OR-aggregated by the
+    # SAME rule ReflexViews merges with at display time (true > false >
+    # NULL), so build and display can never disagree.
+    def test_multi_subtree_duplicate_edges_emit_one_row_with_the_display_merge_flag
+      gem = make_dictionary(slug: "t-gem-pro", language: "gem-pro")
+      make_proto_entry(dictionary: gem, headword: "twosub",
+                       reflexes: [{ language: "got", word: "ts1", borrowed: false },
+                                  { language: "got", word: "ts1", borrowed: true }])
+      make_gold_passage(language: "got", lemma: "ts1")
+      rebuild!
+      assert_equal 1, roots.where(language: "got", lemma_folded: "ts1").count,
+                   "multi-subtree duplicate edges collapse to one closure row"
+      assert_equal true, borrowed_of("got", "ts1", "urn:nabu:dict:t-gem-pro:twosub:test"),
+                   "the OR-aggregate matches the display merge rule (true > false > nil)"
+    end
   end
 end
