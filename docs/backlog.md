@@ -5169,3 +5169,70 @@ backlog done; worklog (sha —). Suite+lint green. One commit, not
 pushed. NB: etym/define already have --long (P14-11); parallels ships
 with it (P15-1, in flight — do NOT touch its files); your census
 covers the REST.
+
+## P16-1 · Links substrate + batch parallels  [tier: opus] [status: done] [deps: P15-1, P15-5]
+Design doc §7 (the links table as invisible substrate) + §1's batch mode:
+the journal lands WITH its first producer, as §1.8 always said it would.
+SHIPPED: (1) THE LINKS JOURNAL — db/links.sqlite3, links(from_urn, to_urn,
+kind, score, run_id, created_at) + link_runs(producer, scope, params_json,
+code_version, created_at); own forward-only migration track
+db/links_migrate (the ledger_migrate precedent — per-file schema_info, no
+counter collision), urn-keyed both ends. HOST ARGUMENT (from architecture
+§5, now recorded as §15): batch links are a function of (canonical, params,
+code version) — neither a pure function of canonical (so NOT in the
+drop-and-rebuild catalog/fulltext) nor runtime history (a rerun of a scope
+legitimately REPLACES its edges; the append-only ledger must never delete,
+so NOT a ledger table despite the Phase-8 enrichment journal being the
+mechanical precedent). A third file with the ledger's mechanics and its own
+lifecycle: rebuild never touches it (tested byte-identical), losing it
+costs only a re-mine. (2) PRODUCER #1 — `nabu parallels --batch SCOPE`
+(Nabu::BatchParallels): the P15-1 engine looped over every anchor of a
+scope (slug or urn prefix — the formulas grammar, EXTRACTED to a shared
+Query::Scope mixin so the two surfaces cannot drift), hits persisted as
+kind=parallel edges. Engine gains echoes: false (batch sheds the per-anchor
+lemma-df probes; lemma echoes are not kind=parallel edges). Pruning NAMED,
+never silent: top --per-anchor (5) at --min-score (0.05, ≈ one shared gram
+in ≤20 passages) — both in the summary line and in params_json. Dedup: one
+edge per unordered pair per kind (unique index), direction = the probe that
+found it; within-run seen-set + cross-run refresh-in-place. Rerun of the
+same (producer, scope) supersedes atomically (one transaction) —
+idempotent, tested. --db writes the journal elsewhere (scratch runs).
+(3) READERS — `nabu links <urn>`: both directions grouped by kind,
+counterparts re-resolved by urn against the CURRENT catalog
+(title/lang/license; "(not in catalog)" honesty for dropped rows),
+provenance footer citing the run(s); compact 10/kind, --long lifts (house
+rule); --min-score/--per-anchor/--db without --batch are ERRORS naming the
+no-persistence stance (design §7's caching-with-staleness trap — no flag
+blurs interactive vs batch). `show <urn>` gains "linked: N parallel" ONLY
+when edges exist (zero-signal silence). (4) MCP nabu_links, the TENTH
+read-only tool (argued: cheap, fits the bounded/license-labeled pattern;
+reads persisted edges only, NEVER mines — description says so, and points
+empty results at nabu_parallels); tool-count pins bumped 9→10.
+LIVE DEMO (read-only: scratch dir with symlinked catalog/fulltext, journal
+at a scratch path; live db/ untouched): `parallels --batch
+urn:nabu:sblgnt:matt --lang grc` → 1,068 anchors, 5,089 edges, 13.3 s
+(12.5 ms/anchor); rerun → 5,089 again, superseded 1 prior run (5,089
+edges), 1 run row — idempotent. `links urn:nabu:sblgnt:matt:4.4` reads
+back the design's own chain from the journal: Origen's Homiliae in Lucam
+1.81, PROIEL/UD NT duplicates 1.54, canonical Matthew 1.24, LXX
+DEUTERONOMY 8.3 at 1.22 — and `show` footers "linked: 5 parallel".
+Journal: 1.7 MB / 5,089 edges. FULL-CORPUS PROJECTION, honest: the design's
+"~1–2 min" figure was the §5 STREAMING extrapolation; the loop-over-anchors
+batch (this packet, the design's other named option) measures 12.5 ms/anchor
+on short NT verses → grc slice (1.44M anchors) ≈ 5 h lower bound (long
+anchors cost up to ~111 ms), full corpus (3.79M) ≈ 13+ h. OWNER-FIRED only;
+if whole-corpus mining is wanted at minutes-scale, a streaming-count
+producer (P15-5's machinery emitting edges) is the follow-up packet.
+Tests: store/links_journal_test 11 (schema, urn keying, pair invariant both
+directions, supersede scoping, kind_counts, file lifecycle incl. readonly
+refusal), batch_parallels_test 9 (direction, super-scope reverse dedup,
+threshold honesty, lang scoping, provenance, rerun idempotency, overlap
+refresh, empty scope, progress), query/links_test 6 (both directions +
+grouping + resolution, unresolved counterpart, journal-outlives-catalog,
+empty-vs-nil, document urn, unknown), rebuild_test +1 (journal
+byte-identical across rebuild, edge re-resolves against re-minted ids),
+cli_test +10 (batch summary + thresholds, supersede line, --db override,
+flags-require-batch, links render both directions + provenance, --long,
+unknown urn, no-journal state, help, show footer present/absent),
+mcp/tools_test +4 + tool-count pins, config_test +1. Suite + lint green.
+One commit, not pushed.

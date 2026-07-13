@@ -279,6 +279,45 @@ class RebuildTest < Minitest::Test
     with_db { assert_equal 1, Nabu::Store::Document.where(withdrawn: false).count }
   end
 
+  # -- the links journal survives rebuild (P16-1) ----------------------------
+
+  def test_rebuild_never_touches_the_links_journal_and_edges_still_resolve
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+    rebuilder.run # first build: the catalog exists, urns minted
+
+    journal = Nabu::Store::LinksJournal.open!(config.links_path)
+    run_id = Nabu::Store::LinksJournal.record_run!(
+      journal, producer: "parallels", scope: "urn:nabu:test_adapter",
+               params: { min_score: 0.05 }, code_version: "t/1"
+    )
+    Nabu::Store::LinksJournal.write_edge!(
+      journal, from_urn: "urn:nabu:test_adapter:one:1", to_urn: "urn:nabu:test_adapter:one:2",
+               kind: "parallel", score: 1.5, run_id: run_id
+    )
+    journal.disconnect
+    bytes_before = File.binread(config.links_path)
+
+    rebuilder.run # the catalog is dropped and re-minted; the journal must not move
+
+    assert_equal bytes_before, File.binread(config.links_path),
+                 "rebuild leaves the links journal byte-identical"
+    # And the urn-keyed edge still resolves against the REBUILT catalog (fresh
+    # row ids, same urns) — the reason links are urn-keyed, not id-keyed.
+    journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+    with_db do |db|
+      result = Nabu::Query::Links.new(catalog: db, journal: journal).run("urn:nabu:test_adapter:one:1")
+      edge = result.groups.fetch("parallel").first
+      assert_equal "urn:nabu:test_adapter:one:2", edge.urn
+      assert_predicate edge, :resolved?, "the counterpart resolves through the re-minted catalog"
+    end
+    journal.disconnect
+  end
+
   # Trend continuity across the rebuild boundary: source ids are re-minted by
   # the rebuild, but runs are slug-keyed, so history reads continuously.
   def test_run_history_is_continuous_across_id_reminting

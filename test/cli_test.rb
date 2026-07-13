@@ -965,6 +965,134 @@ class CLITest < Minitest::Test
     assert_match(/Examples:/, out)
   end
 
+  # -- parallels --batch + links (P16-1 links journal) -----------------------
+
+  def test_parallels_batch_persists_edges_and_names_its_thresholds
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch parallels over urn:h:od: 1 edge written · run 1/, out)
+      assert_match(%r{1 anchor · kept top 5/anchor at score ≥ 0.05}, out,
+                   "the summary names every pruning threshold — no silent caps")
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      edge = journal[:links].first
+      assert_equal %w[urn:h:od:1.1 urn:q:full:1 parallel],
+                   [edge[:from_urn], edge[:to_urn], edge[:kind]]
+      journal.disconnect
+    end
+  end
+
+  def test_parallels_batch_rerun_reports_the_superseded_run
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      out, _err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      assert_nil status
+      assert_match(/superseded 1 prior run \(1 edge\)/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal [1, 1], [journal[:links].count, journal[:link_runs].count], "rerun is idempotent"
+      journal.disconnect
+    end
+  end
+
+  def test_parallels_batch_db_override_writes_the_journal_elsewhere
+    with_parallels_corpus do |config|
+      scratch = File.join(config.db_dir, "scratch-links.sqlite3")
+      _out, _err, status = with_config(config) { run_cli(["parallels", "--batch", "urn:h:od", "--db", scratch]) }
+      assert_nil status
+      assert_path_exists scratch
+      refute_path_exists config.links_path, "the default journal path is untouched"
+    end
+  end
+
+  def test_parallels_batch_flags_require_batch
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --min-score 0.1]) }
+      assert_equal 1, status
+      assert_match(/--min-score only applies with --batch/, err)
+      assert_match(/never persisted/, err, "the no-caching stance is stated, not just enforced")
+    end
+  end
+
+  def test_links_reads_both_directions_with_resolution_and_provenance
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      out, _err, status = with_config(config) { run_cli(%w[links urn:q:full:1]) }
+      assert_nil status
+      assert_match(/links of urn:q:full:1 — urn:q:full/, out)
+      assert_match(/parallel \(1\):/, out, "edges group by kind")
+      assert_match(/← urn:h:od:1\.1 — urn:h:od \[grc\]  score \d/, out,
+                   "the incoming edge resolves its counterpart to title\\/language")
+      assert_match(/1 edge · run 1: parallels over urn:h:od \(min_score 0.05, per_anchor 5\)/, out,
+                   "the provenance footer cites the producer run and its params")
+
+      anchor_side, = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_match(/→ urn:q:full:1/, anchor_side, "the same edge reads outgoing from its anchor")
+    end
+  end
+
+  def test_links_long_lifts_the_per_kind_truncation
+    with_parallels_corpus do |config|
+      journal = Nabu::Store::LinksJournal.open!(config.links_path)
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "parallels", scope: "urn:h", params: {}, code_version: "t/1"
+      )
+      12.times do |i|
+        Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:h:od:1.1", to_urn: "urn:z:#{i}",
+                                                       kind: "parallel", score: 1.0, run_id: run_id)
+      end
+      journal.disconnect
+      compact, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/… and 2 more \(--long lists all\)/, compact)
+      assert_match(/\(not in catalog\)/, compact, "unresolvable counterparts are flagged, not hidden")
+      long, = with_config(config) { run_cli(%w[links urn:h:od:1.1 --long]) }
+      refute_match(/… and \d+ more/, long)
+      assert_match(/urn:z:11/, long, "--long lists every edge")
+    end
+  end
+
+  def test_links_unknown_urn_exits_one
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      _out, err, status = with_config(config) { run_cli(%w[links urn:no:such]) }
+      assert_equal 1, status
+      assert_match(/links: unknown urn urn:no:such/, err)
+    end
+  end
+
+  def test_links_without_a_journal_is_a_state_not_an_error
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/no links journal yet/, out)
+      assert_match(/parallels --batch/, out, "the empty state teaches the producer")
+    end
+  end
+
+  def test_help_links_documents_directions_provenance_and_long
+    out, _err, _status = run_cli(%w[help links])
+    assert_match(/BOTH directions/, out)
+    assert_match(/provenance/, out)
+    assert_match(/--long/, out)
+    assert_match(/rebuild/, out, "the rebuild-survival promise is documented")
+    assert_match(/Examples:/, out)
+  end
+
+  def test_show_footer_lists_linked_counts_only_when_edges_exist
+    with_parallels_corpus do |config|
+      before, = with_config(config) { run_cli(%w[show urn:h:od:1.1]) }
+      refute_match(/linked:/, before, "no journal → zero-signal silence")
+
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      after, _err, status = with_config(config) { run_cli(%w[show urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/^  linked: 1 parallel$/, after)
+
+      unlinked, = with_config(config) { run_cli(%w[show urn:h:od]) }
+      refute_match(/linked:/, unlinked, "a urn without edges stays silent even with a journal present")
+    end
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance

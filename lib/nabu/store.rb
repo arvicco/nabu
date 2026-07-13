@@ -113,6 +113,7 @@ module Nabu
 end
 
 require_relative "store/ledger"
+require_relative "store/links_journal"
 require_relative "store/loader"
 require_relative "store/dictionary_loader"
 require_relative "store/run_recorder"
