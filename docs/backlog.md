@@ -5845,6 +5845,19 @@ sketches for the gate; honest "print-only, no unblock" list.
 #    + Svetokriški (loanword etymologies → borrowed synergy) + besedje16
 #    (Dalmatin sigla crosswalk); one dictionary parser family.
 # 4. PriLit rider (pick #3, CC BY): 1643–1866 TEI, 7-edition collation.
+# 5b. Postcondition checker + optional AI review (owner, 2026-07-13):
+#    MECHANICAL layer first — health/verify gains consistency invariants:
+#    per-source last-run status surfaced LOUDLY (failed run + partial
+#    docs = today's Coptic case), flag-vs-artifact pairs (fuzzy_index vs
+#    trigram table, axis extractors vs row counts, reflex code vs
+#    crosswalk rows), enabled-vs-populated, pending migrations,
+#    quarantine DELTA vs baseline (not the standing count), projection
+#    diffs vs survey-stated expectations. AI layer as OPTIONAL rider:
+#    post-sync hook (config key / --review), off by default, tool-
+#    agnostic (structured brief on stdin; bundled example wires claude -p
+#    + the nabu MCP server; local models have equal standing per the MCP
+#    ruling) — judgment calls only: sample-passage reading, quarantine-
+#    reason triage. No cloud dependency enters the core.
 # 5a. Coptic sync robustness (defect, found 2026-07-13): the owner's
 #    first sync crashed unzip exit 9 mid-checkout (transient race; clone
 #    completed, all 13 zips verified valid post-hoc, 152 AP docs loaded
