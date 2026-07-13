@@ -14,6 +14,49 @@ module Nabu
   # the model files once, and on every (idempotent) call rebinds each model's
   # dataset to the given handle — so any db handle works and tests can swap in
   # a fresh in-memory database between runs.
+  #
+  # == Lock tolerance (P17-7): journal_mode=WAL + explicit busy_timeout
+  #
+  # Owner defect 2026-07-13: `nabu rebuild` died mid-papyri with
+  # SQLite3::BusyException — a concurrent READER (an agent's `sqlite3
+  # -readonly` session) held a SHARED lock while the loader committed. In
+  # rollback-journal mode (SQLite's default) a COMMIT needs the EXCLUSIVE
+  # lock, so ONE leisurely reader kills the writer once the busy wait runs
+  # out — and no timeout fixes an unbounded reader.
+  #
+  # THE WAL VERDICT: WAL wins, timeout alone loses. journal_mode=WAL lets N
+  # readers and 1 writer run concurrently — readers get a stable snapshot,
+  # the writer appends to the -wal and never waits for them. That is exactly
+  # this corpus's usage pattern: MCP/agent/CLI reads during owner syncs,
+  # rebuilds, and batch producers. Costs, weighed honestly:
+  # - `-wal`/`-shm` sidecar files appear next to each db while connections
+  #   are open (the last connection checkpoints and removes the -wal on
+  #   close). `nabu backup` copies live sidecars with each db and prunes
+  #   stale ones at the target (Nabu::Backup, ops.md §9) — a main file
+  #   restored next to an outdated -wal would replay old frames over it.
+  # - Readonly opens of a WAL db work (sqlite ≥ 3.22 read-only WAL; db/ is
+  #   local and writable, so the -shm poses no problem), and `sqlite3
+  #   -readonly` sessions no longer endanger a writer — that is the point.
+  # - WAL does not work across network filesystems; db/ is local APFS.
+  # - PRAGMA journal_mode=WAL PERSISTS in the file. It is set here on every
+  #   read-write connect — idempotent and self-healing, so existing dbs flip
+  #   on their first open by this code and no migration is needed. Readonly
+  #   connects never set it (the pragma would attempt a write); they inherit
+  #   whatever the file already says.
+  #
+  # BUSY_TIMEOUT_MS still matters under WAL: it covers writer-vs-writer
+  # overlap (a batch producer committing while a sync runs) and readers of a
+  # db still in rollback mode (first readonly open before any writer flipped
+  # it). Value: the longest LEGITIMATE lock holder is seconds-scale — MCP
+  # reads are ms, batch links readbacks and loader/indexer commits are
+  # single-digit seconds — so 10 s is that worst case with a comfortable
+  # margin, while a genuinely wedged lock still fails inside a human's
+  # patience. (Sequel's sqlite default is 5 s — the crash showed "implicit
+  # and shorter than the longest reader" is not a policy; this is.) One
+  # caveat, deliberately accepted: sqlite3's C-level busy handler blocks the
+  # GVL, so two writer THREADS in one process would burn the timeout instead
+  # of handing over — nabu's concurrent writers are separate processes
+  # (owner CLI, agents, MCP server), where the wait works (tested).
   module Store
     MIGRATIONS_DIR = File.expand_path("../../db/migrate", __dir__)
 
@@ -34,6 +77,11 @@ module Nabu
       DocumentAxis: :document_axes
     }.freeze
 
+    # How long any connection waits on a locked database before raising
+    # (SQLite busy_timeout; Sequel's sqlite adapter takes :timeout in ms).
+    # See the class doc: longest legitimate lock holder (seconds) + margin.
+    BUSY_TIMEOUT_MS = 10_000
+
     module_function
 
     # Open a Sequel database for +url+ (e.g. "sqlite::memory:" or a file path).
@@ -41,10 +89,15 @@ module Nabu
     # turns the pragma on by default, and we assert it explicitly here.
     # +readonly+ opens the file with SQLITE_OPEN_READONLY (P8-1: the MCP
     # surface must be POSITIVELY unable to write — the engine refuses, not
-    # just our code declining to).
+    # just our code declining to). Readonly connects carry the busy timeout
+    # too: a reader waiting on a rollback-mode writer's commit is just as
+    # real as the reverse.
     def connect(url, readonly: false)
-      db = Sequel.connect(sqlite_url(url), readonly: readonly)
-      db.run("PRAGMA foreign_keys = ON") if db.database_type == :sqlite
+      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
+      if db.database_type == :sqlite
+        db.run("PRAGMA foreign_keys = ON")
+        write_ahead_log!(db) unless readonly
+      end
       db
     end
 
@@ -54,7 +107,19 @@ module Nabu
     # is a standalone FTS5 table with no relational integrity to enforce (its
     # only link to the catalog is the UNINDEXED passage_id column).
     def connect_fulltext(url, readonly: false)
-      Sequel.connect(sqlite_url(url), readonly: readonly)
+      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
+      write_ahead_log!(db) if !readonly && db.database_type == :sqlite
+      db
+    end
+
+    # Flip +db+ to journal_mode=WAL (P17-7, class doc above): persistent in
+    # the file, idempotent on every read-write connect, self-healing for dbs
+    # created before WAL landed. The pragma RETURNS the resulting mode (a
+    # row, so it goes through a dataset, not #run); ":memory:" databases
+    # answer "memory" and are unaffected — they are per-connection and can
+    # never contend anyway.
+    def write_ahead_log!(db)
+      db.fetch("PRAGMA journal_mode = wal").single_value
     end
 
     # A bare filesystem path (no "scheme:" prefix) is taken as a SQLite file so

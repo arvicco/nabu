@@ -50,6 +50,51 @@ class BackupTest < Minitest::Test
     refute_includes result.sections.map(&:name), "catalog"
   end
 
+  # -- WAL sidecars (P17-7) ---------------------------------------------------
+
+  def test_live_wal_sidecars_ride_along_with_their_db
+    write_db_file("catalog.sqlite3-wal", "wal frames")
+    write_db_file("catalog.sqlite3-shm", "shm index")
+
+    result = backup(allow_unmounted: true).run
+
+    assert_predicate result, :ok?
+    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal")
+    assert_path_exists File.join(@target, "db", "catalog.sqlite3-shm")
+    catalog = result.sections.find { |s| s.name == "catalog" }
+    assert_equal 3, catalog.files, "the db + both sidecars are the section's snapshot"
+    # a db without sidecars stays a single-file copy
+    assert_equal 1, result.sections.find { |s| s.name == "ledger" }.files
+  end
+
+  def test_stale_sidecars_at_the_target_are_pruned
+    # First backup copies a live -wal; the source then checkpoints (sidecars
+    # vanish); the second backup must remove the target's stale copy — a
+    # restore would otherwise replay OLD wal frames over a NEWER main file.
+    write_db_file("catalog.sqlite3-wal", "old frames")
+    backup(allow_unmounted: true).run
+    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal")
+
+    FileUtils.rm(File.join(@root, "db", "catalog.sqlite3-wal"))
+    result = backup(allow_unmounted: true).run
+
+    assert_predicate result, :ok?
+    refute_path_exists File.join(@target, "db", "catalog.sqlite3-wal"),
+                       "a stale -wal at the target corrupts the restore"
+    assert_path_exists File.join(@target, "db", "catalog.sqlite3")
+  end
+
+  def test_dry_run_neither_copies_nor_prunes_sidecars
+    write_db_file("catalog.sqlite3-wal", "old frames")
+    backup(allow_unmounted: true).run
+    FileUtils.rm(File.join(@root, "db", "catalog.sqlite3-wal"))
+
+    backup(allow_unmounted: true, dry_run: true).run
+
+    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal"),
+                       "dry-run must not prune the target"
+  end
+
   # -- --delete scoping -----------------------------------------------------
 
   def test_delete_propagates_within_the_subdir_and_touches_nothing_outside
@@ -179,6 +224,10 @@ class BackupTest < Minitest::Test
       dev = resolved.fetch(File.realpath(path)) { File.stat(path).dev }
       Struct.new(:dev).new(dev)
     end
+  end
+
+  def write_db_file(name, content)
+    File.write(File.join(@root, "db", name), content)
   end
 
   def build_source_tree
