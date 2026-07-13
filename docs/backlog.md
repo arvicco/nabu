@@ -5588,7 +5588,7 @@ items carry explicit CC labels; BY-ND is IN-SCOPE per the standing
 ruling → research_private), machine-readability, size, ranked verdict +
 fixture-plan sketches for the top picks.
 
-## P17-7 · Lock-tolerant SQLite: busy_timeout + WAL verdict  [tier: opus] [status: dispatched] [deps: —]
+## P17-7 · Lock-tolerant SQLite: busy_timeout + WAL verdict  [tier: opus] [status: done 2026-07-13] [deps: —]
 Owner defect (2026-07-13): `nabu rebuild` crashed mid-papyri with
 SQLite3::BusyException "database is locked" — a concurrent READER
 (agent demos/verification, even `sqlite3 -readonly`) held a shared lock
@@ -5609,6 +5609,30 @@ persistent) with a rebuild-safe path; if not, document why busy_timeout
 alone suffices. Tests: concurrent reader-during-write no longer raises
 (thread-based, in-memory-excluded — file-backed tmp db), timeout
 present on every connect, backup drill still green.
+
+FINDINGS (done 2026-07-13): VERDICT = WAL + explicit busy_timeout —
+timeout-only loses because no timeout survives an unbounded reader
+(rollback COMMIT needs EXCLUSIVE vs the reader's SHARED; the crash's
+`sqlite3 -readonly` session could sit for minutes). Correction to the
+crash analysis: there WAS a busy wait — Sequel's sqlite adapter
+defaults :timeout to 5000 ms — the reader simply outlived it, which is
+the proof implicit-and-shorter-than-the-longest-reader is not a policy.
+Landed: Store.connect + connect_fulltext (ledger + links delegate)
+carry timeout: BUSY_TIMEOUT_MS = 10_000 (longest legitimate holder is
+seconds-scale — batch links readbacks, loader/indexer commits — ×
+margin), readonly included; journal_mode=WAL set on every RW connect
+(persists in the file → existing dbs self-heal on first open, no
+migration; readonly connects never set it — the pragma writes). WAL
+costs handled: `nabu backup` db sections copy live -wal/-shm sidecars
+and PRUNE stale ones at the target (a restored stale -wal replays old
+frames over a newer main file); drill unchanged and green. Caveat
+pinned in the class doc: sqlite3's C-level busy handler blocks the GVL,
+so writer-writer waits only work CROSS-PROCESS (nabu's actual writers);
+tested via subprocess holder — 0.3 s held lock waited out, not raised.
+Tests +8 (reader-snapshot-during-commit regression, subprocess busy
+wait, busy_timeout + journal_mode pinned on all 7 connect paths,
+rollback→WAL self-heal; backup sidecar ride-along/prune/dry-run).
+Suite 2055/29,104 exit 0, lint 263 files exit 0.
 
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
