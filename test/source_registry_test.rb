@@ -172,6 +172,39 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/translations/, error.message)
   end
 
+  # -- license_watch (P16-5) -------------------------------------------------
+
+  def test_license_watch_defaults_nil
+    entry = load_registry(<<~YAML)["minimal-src"]
+      minimal-src:
+        adapter: Some::Adapter
+    YAML
+    assert_nil entry.license_watch
+  end
+
+  def test_license_watch_parses_an_https_url
+    entry = load_registry(<<~YAML)["ccmh"]
+      ccmh:
+        adapter: Nabu::Adapters::Ccmh
+        license_watch: https://www.kielipankki.fi/download/ccmh-src/README.txt
+    YAML
+    assert_equal "https://www.kielipankki.fi/download/ccmh-src/README.txt", entry.license_watch
+  end
+
+  def test_non_url_license_watch_raises_naming_the_slug
+    ["yes", true, 42, "ftp://x.example/f", ""].each do |bad|
+      error = assert_raises(Nabu::ValidationError, "#{bad.inspect} must be rejected") do
+        load_registry(<<~YAML)
+          my-src:
+            adapter: A
+            license_watch: #{bad.inspect}
+        YAML
+      end
+      assert_match(/my-src/, error.message)
+      assert_match(/license_watch/, error.message)
+    end
+  end
+
   # -- build_adapter ---------------------------------------------------------
 
   def test_build_adapter_with_flag_off_is_plain_no_arg_construction
