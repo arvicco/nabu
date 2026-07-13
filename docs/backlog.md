@@ -5845,6 +5845,12 @@ sketches for the gate; honest "print-only, no unblock" list.
 #    + Svetokriški (loanword etymologies → borrowed synergy) + besedje16
 #    (Dalmatin sigla crosswalk); one dictionary parser family.
 # 4. PriLit rider (pick #3, CC BY): 1643–1866 TEI, 7-edition collation.
+# 5a. Coptic sync robustness (defect, found 2026-07-13): the owner's
+#    first sync crashed unzip exit 9 mid-checkout (transient race; clone
+#    completed, all 13 zips verified valid post-hoc, 152 AP docs loaded
+#    consistently). Fix: an unreadable TT zip should QUARANTINE its
+#    corpus (ParseError doctrine), not abort the sync (FetchError);
+#    re-census the discover-during-materialization window.
 # 5. PIE deepening (P17-8 picks, fixture sketches in pie-survey.md §7):
 #    IE-CoR cognacy matrix (CC BY — 273 sets/2,261 held-form pair edges,
 #    1,596 laryngeal PIE roots as kaikki cross-check, 1,036 curated loan
