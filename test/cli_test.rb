@@ -1193,6 +1193,147 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- formulas --batch + cognates --batch (P16-2 producers) ------------------
+
+  def test_formulas_batch_persists_the_star_and_names_its_knobs
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch formulas over aspr: 3 edges written · run 1/, out)
+      assert_match(/1 formula persisted as stars \(top 200 by rank of 1 recurring ≥3× 4-grams\)/, out,
+                   "the summary names every pruning knob — no silent caps")
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      edges = journal[:links].order(:to_urn).all
+      assert_equal %w[urn:nabu:aspr:riddle:0] * 3, edges.map { |e| e[:from_urn] },
+                   "the star hub is the first locus in urn order"
+      assert_equal ["saga hwaet ic hatte"], edges.map { |e| e[:detail] }.uniq
+      assert_equal %w[formula], edges.map { |e| e[:kind] }.uniq
+      journal.disconnect
+    end
+  end
+
+  def test_formulas_batch_rerun_reports_the_superseded_run
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      out, _err, status = with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      assert_nil status
+      assert_match(/superseded 1 prior run \(3 edges\)/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal [3, 1], [journal[:links].count, journal[:link_runs].count], "rerun is idempotent"
+      journal.disconnect
+    end
+  end
+
+  def test_formulas_batch_db_override_writes_the_journal_elsewhere
+    with_formulas_corpus do |config|
+      scratch = File.join(config.db_dir, "scratch-links.sqlite3")
+      _out, _err, status = with_config(config) { run_cli(["formulas", "--batch", "aspr", "--db", scratch]) }
+      assert_nil status
+      assert_path_exists scratch
+      refute_path_exists config.links_path, "the default journal path is untouched"
+    end
+  end
+
+  def test_formulas_batch_flags_require_batch
+    with_formulas_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[formulas aspr --max-formulas 10]) }
+      assert_equal 1, status
+      assert_match(/--max-formulas only applies with --batch/, err)
+      assert_match(/never persisted/, err, "the no-caching stance is stated — consistent with parallels")
+    end
+  end
+
+  def test_cognates_batch_persists_the_meets_and_links_reads_them_back
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates --batch nt]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch cognates over nt: 2 edges written · run 1/, out)
+      assert_match(/2 verse-root groups/, out)
+
+      links, _err2, links_status = with_config(config) { run_cli(%w[links urn:nabu:test:grc-nt:1]) }
+      assert_nil links_status
+      assert_match(/cognate \(1\):/, links, "edges group under their kind")
+      assert_match(/urn:nabu:test:marianus:1 — Codex Marianus \[chu\]  MARK 1\.1 · \*bʰeh₂g- \[ine-pro\]/,
+                   links, "a cognate edge shows its meet: ref · root [shelf]")
+      refute_match(/score/, links, "a cognate's score merely counts the roots its detail lists")
+      assert_match(/run 1: cognates over nt/, links, "the provenance footer cites the producer")
+    end
+  end
+
+  def test_cognates_batch_langs_ride_the_run_params
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates --batch nt --langs grc,chu]) }
+      assert_nil status
+      assert_match(/batch cognates over nt \[grc×chu\]: 1 edge written/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal({ "kind" => "cognate", "langs" => %w[grc chu] },
+                   JSON.parse(journal[:link_runs].first[:params_json]))
+      journal.disconnect
+
+      links, = with_config(config) { run_cli(%w[links urn:nabu:test:grc-nt:1]) }
+      assert_match(/cognates over nt \(langs grc,chu\)/, links,
+                   "array params render comma-joined in the provenance footer")
+    end
+  end
+
+  def test_cognates_batch_takes_a_work_id_and_db_requires_batch
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["cognates", "--batch", "MARK 1.1"]) }
+      assert_equal 1, status
+      assert_match(/registered work id/, err)
+
+      _out2, err2, status2 = with_config(config) { run_cli(["cognates", "nt", "--db", "/tmp/x.sqlite3"]) }
+      assert_equal 1, status2
+      assert_match(/--db only applies with --batch/, err2)
+    end
+  end
+
+  def test_links_renders_a_formula_edge_with_its_gram_and_count
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      out, _err, status = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:2]) }
+      assert_nil status
+      assert_match(/formula \(1\):/, out)
+      assert_match(/← urn:nabu:aspr:riddle:0 — Riddles \[ang\]  “saga hwaet ic hatte”  ×4/, out,
+                   "a locus shows WHICH refrain ties it to the hub and how strongly — not a bare score")
+      hub, = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:0]) }
+      assert_match(/formula \(3\):/, hub, "the hub fans out every other locus")
+    end
+  end
+
+  def test_links_groups_mixed_kinds_and_show_footer_counts_them_with_zero_suppression
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      journal = Nabu::Store::LinksJournal.open!(config.links_path)
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "parallels", scope: "aspr", params: {}, code_version: "t/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:nabu:aspr:riddle:1",
+                                                     to_urn: "urn:z:1", kind: "parallel",
+                                                     score: 0.4, run_id: run_id)
+      journal.disconnect
+
+      links, = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:1]) }
+      assert_match(/formula \(1\):.*parallel \(1\):/m, links, "kinds render as separate groups")
+      assert_match(/score 0\.40/, links, "the parallel edge keeps its rarity score")
+
+      mixed, = with_config(config) { run_cli(%w[show urn:nabu:aspr:riddle:1]) }
+      assert_match(/^  linked: 1 formula, 1 parallel$/, mixed,
+                   "the footer counts each kind present and suppresses absent kinds")
+      single, = with_config(config) { run_cli(%w[show urn:nabu:aspr:riddle:2]) }
+      assert_match(/^  linked: 1 formula$/, single)
+    end
+  end
+
+  def test_help_formulas_and_cognates_document_batch
+    formulas_help, = run_cli(%w[help formulas])
+    assert_match(/--batch/, formulas_help)
+    assert_match(/STAR/, formulas_help, "the edge-shape verdict is documented where the flag lives")
+    cognates_help, = run_cli(%w[help cognates])
+    assert_match(/--batch/, cognates_help)
+    assert_match(/shelf rides every edge/, cognates_help, "the meet-provenance stance is documented")
+  end
+
   # -- show (P4-3) ---------------------------------------------------------
 
   def test_show_passage_prints_text_document_and_provenance

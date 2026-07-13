@@ -820,8 +820,10 @@ centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
 ## 15. The links journal — batch-mined edges that outlive rebuilds (P16-1)
 
 `db/links.sqlite3` holds the corpus's mined cross-reference graph:
-`links(from_urn, to_urn, kind, score, run_id, created_at)` with `kind` ∈
-{parallel, formula, cognate, …}, plus a `link_runs` companion
+`links(from_urn, to_urn, kind, score, detail, run_id, created_at)` with
+`kind` ∈ {parallel, formula, cognate, …} and `detail` the per-edge evidence
+(nil for parallels; the gram for formulas, the meet for cognates — added by
+journal migration 002), plus a `link_runs` companion
 `(producer, scope, params_json, code_version, created_at)` so every edge is
 honest about the run that minted it. The full design is
 `docs/intertext-design.md` §7; this is the standing record of what shipped
@@ -852,15 +854,39 @@ persist, and the summary line states both. One edge per unordered pair per
 kind (unique-indexed; the direction is the direction the probe found);
 a rerun of the same (producer, scope) supersedes the prior run atomically —
 edges and run row replaced in one transaction, so reruns are idempotent.
-Interactive `parallels` output is NEVER persisted (design §7: recomputing
+Interactive output is NEVER persisted (design §7: recomputing
 costs milliseconds; a stored copy is caching with staleness obligations),
-and no flag blurs that line.
+and no flag blurs that line. The same discipline holds for every producer.
+
+**Producers #2/#3 (P16-2).** `nabu formulas --batch SCOPE`
+(`Nabu::BatchFormulas`): the whole-tradition formula sweep (§13's miner, one
+full-loci pass) persisting kind=formula edges. A formula is a REFRAIN across
+N loci, not a pair, so it maps onto the pair-shaped table as a STAR: hub =
+the formula's first locus in urn order (deterministic, rebuild-stable),
+one edge hub → every other locus, score = the slice count, `detail` = the
+folded gram — a reader at any locus sees which refrain ties the line to the
+tradition, and `links <hub>` fans out every locus (all-pairs would be O(N²):
+2,556 edges for the 72-locus ὣς ἔφαθ' οἵ δ' alone; chains would only show
+neighbors). Top `--max-formulas` by rank persist (200); overlapping formulas
+sharing a pair coalesce onto the best-ranked gram, counted in the summary.
+`nabu cognates --batch WORK` (`Nabu::BatchCognates`): the whole-work cognate
+map (§12's join) persisting kind=cognate edges between cross-language witness
+passages meeting at a reconstruction root — never within one language;
+direction normalized (smaller urn first — the join has no probe direction).
+The meet is per-edge meaning, so it rides `detail` (migration 002, the
+journal's own forward-only track: nullable, in-place, zero data loss):
+"MARK 2.1 · *kaisaraz [gem-pro]" — ref, root, and SHELF, because a gem-pro
+meet under a Slavic witness reads as a borrowing (§12). Scope = the work id;
+common-word suppression stays on (`--all` lifts it, recorded in params_json).
 
 **Read surface.** `nabu links <urn>` — edges BOTH directions grouped by
 kind, each counterpart re-resolved against the *current* catalog by urn
 (title/language/license; a counterpart a rebuild dropped reads "(not in
-catalog)", honestly), with the producer run(s) cited in the footer. `show
-<urn>` gains a one-line `linked: N parallel` footer ONLY when edges exist
-(zero-signal silence). MCP adds `nabu_links`, the tenth read-only tool —
-same bounded/license-labeled contract as the rest; it reads persisted edges
-only and never mines (batch runs are owner-fired).
+catalog)", honestly), with the producer run(s) cited in the footer and each
+kind's evidence rendered natively (a parallel's score, a formula's
+“gram” ×count, a cognate's meet). `show <urn>` gains a one-line
+`linked: N formula, M parallel` footer counting each kind present, ONLY when
+edges exist (zero-signal silence, absent kinds suppressed). MCP adds
+`nabu_links`, the tenth read-only tool — same bounded/license-labeled
+contract as the rest; it reads persisted edges only (the `detail` field rides
+the payload) and never mines (batch runs are owner-fired).

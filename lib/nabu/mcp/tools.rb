@@ -292,7 +292,10 @@ module Nabu
 
       LINKS_DESCRIPTION =
         "Batch-mined cross-reference edges touching a passage/document urn — the links journal " \
-        "(kind=parallel edges from `nabu parallels --batch`; formula/cognate producers later). " \
+        "(kind=parallel from `nabu parallels --batch`; kind=formula from `formulas --batch`, a " \
+        "star per refrain whose detail carries the gram and score its count; kind=cognate from " \
+        "`cognates --batch`, cross-language witness pairs whose detail carries the meet: " \
+        "ref · root [shelf] — a gem-pro shelf under a Slavic witness suggests a borrowing). " \
         "READS ONLY what a batch run already persisted: for on-the-fly discovery use " \
         "nabu_parallels; an empty result means no batch has covered this urn, NOT that no " \
         "parallel exists. Edges come back grouped by kind, both directions (direction=out: this " \
@@ -1174,9 +1177,12 @@ module Nabu
         )
       end
 
+      # detail (P16-2): per-edge evidence — the formula gram, the cognate
+      # meet (ref · root [shelf]); nil on parallel edges.
       def link_edge_payload(edge)
         { direction: edge.direction, urn: edge.urn, document: edge.title,
-          language: edge.language, license_class: edge.license_class, score: edge.score }
+          language: edge.language, license_class: edge.license_class,
+          score: edge.score, detail: edge.detail }
       end
 
       def links_note(result, kinds:, limit:)

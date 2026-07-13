@@ -820,6 +820,26 @@ module MCP
       journal&.disconnect
     end
 
+    def test_links_edge_detail_rides_the_payload
+      seed_parallels
+      journal = seed_links_journal
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "cognates", scope: "nt", params: { kind: "cognate" }, code_version: "t/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(
+        journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "cognate",
+                 score: 1.0, detail: "MARK 1.1 · *bʰeh₂g- [ine-pro]", run_id: run_id
+      )
+      body = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+      cognate = body.dig("kinds", "cognate").first
+      assert_equal "MARK 1.1 · *bʰeh₂g- [ine-pro]", cognate["detail"],
+                   "the per-edge meet (P16-2) reaches MCP consumers"
+      parallel = body.dig("kinds", "parallel").first
+      assert_nil parallel["detail"]
+    ensure
+      journal&.disconnect
+    end
+
     def test_links_excludes_restricted_counterparts_by_default
       seed_parallels
       journal = seed_links_journal

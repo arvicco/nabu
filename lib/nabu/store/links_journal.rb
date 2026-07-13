@@ -7,9 +7,10 @@ module Nabu
   module Store
     # The links journal: db/links.sqlite3 (P16-1, architecture §15,
     # docs/intertext-design.md §7). Batch-mined cross-reference edges between
-    # passages — `links(from_urn, to_urn, kind, score, run_id, created_at)`
-    # plus a `link_runs` companion recording each run's provenance (producer,
-    # scope, params, code version).
+    # passages — `links(from_urn, to_urn, kind, score, detail, run_id,
+    # created_at)` — minted by the batch producers (BatchParallels,
+    # BatchFormulas, BatchCognates) — plus a `link_runs` companion recording
+    # each run's provenance (producer, scope, params, code version).
     #
     # == Why its own file (the host argument, architecture §5)
     #
@@ -81,16 +82,18 @@ module Nabu
 
       # Write one edge, keeping AT MOST ONE edge per unordered pair per kind:
       # if the pair already exists in either direction (a prior run over an
-      # overlapping scope), that edge is REFRESHED in place (score/run_id/
-      # created_at updated, its original discovery direction preserved) rather
-      # than duplicated. Returns :inserted or :refreshed.
-      def write_edge!(db, from_urn:, to_urn:, kind:, score:, run_id:, at: Time.now)
-        fresh = { score: score, run_id: run_id, created_at: at }
+      # overlapping scope), that edge is REFRESHED in place (score/detail/
+      # run_id/created_at updated, its original discovery direction preserved)
+      # rather than duplicated. +detail+ is the optional per-edge evidence
+      # string (migration 002: the formula gram, the cognate meet). Returns
+      # :inserted or :refreshed.
+      def write_edge!(db, from_urn:, to_urn:, kind:, score:, run_id:, detail: nil, at: Time.now)
+        fresh = { score: score, detail: detail, run_id: run_id, created_at: at }
         return :refreshed if db[:links].where(from_urn: from_urn, to_urn: to_urn, kind: kind).update(fresh) == 1
         return :refreshed if db[:links].where(from_urn: to_urn, to_urn: from_urn, kind: kind).update(fresh) == 1
 
         db[:links].insert(from_urn: from_urn, to_urn: to_urn, kind: kind,
-                          score: score, run_id: run_id, created_at: at)
+                          score: score, detail: detail, run_id: run_id, created_at: at)
         :inserted
       end
 
