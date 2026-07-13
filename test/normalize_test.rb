@@ -200,6 +200,25 @@ class NormalizeTest < Minitest::Test
     assert_equal "bʰewgʰ", form("bʰewgʰ", "chu")
   end
 
+  def test_p17_3_proto_fold_extensions_for_the_new_shelves
+    # P17-3 (conventions.md §9): the four new extracts add ˢ (U+02E2) → s,
+    # ᶻ (U+1DBB) → z (Proto-Indo-Iranian sibilant clusters; ˢ×12 ᶻ×9
+    # measured) and ˀ (U+02C0) → dropped (Proto-Balto-Slavic laryngeal
+    # notation, ×310 in headwords — a 1→0 gsub, fold_with_map-safe). The
+    # itc/iir primary subtags join the shared proto lambda; ine-bsl-pro
+    # already folds under "ine"; gmw-pro carries NO modifier letters
+    # (measured) and deliberately has no key.
+    assert_equal "adzdhah", form("adᶻdʰáH", "iir-pro")
+    assert_equal "witstas", form("witˢtás", "iir-pro")
+    assert_equal "kwis", form("kʷis", "itc-pro")
+    assert_equal "warna", form("wárˀnāˀ", "ine-bsl-pro"), "ˀ drops entirely under the ine key"
+    assert_equal "hlaib", form("hlaib", "gmw-pro"), "gmw: generic fold only, nothing to do"
+    # fold_with_map stays byte-identical to search_form under the 1→0 drop.
+    folded, map = Nabu::Normalize.fold_with_map("wárˀnāˀ", language: "ine-bsl-pro")
+    assert_equal "warna", folded
+    assert_equal folded.length, map.length
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end

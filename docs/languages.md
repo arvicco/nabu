@@ -71,6 +71,10 @@ code system once, then lists every code with one sentence each.
 | `sla-pro` | Proto-Slavic (reconstructed) | ~5.4k reconstructed headwords with descendant trees naming attested reflexes. |
 | `ine-pro` | Proto-Indo-European (reconstructed) | ~1.9k roots — the trunk the `etym` command ascends to. |
 | `gem-pro` | Proto-Germanic (reconstructed) | ~5.7k reconstructions bridging PIE to Gothic and Old English. |
+| `ine-bsl-pro` | Proto-Balto-Slavic (reconstructed) | ~490 headwords — the STRUCTURAL intermediate shelf (PIE → PBS → Proto-Slavic) that the multi-hop closure needs (P17-3). |
+| `gmw-pro` | Proto-West Germanic (reconstructed) | ~5.4k headwords — the Old English proto desk, and the second intermediate shelf (Proto-Germanic → PWG → ang). |
+| `itc-pro` | Proto-Italic (reconstructed) | ~740 headwords bridging PIE to Latin (best record-level crosswalk join, P17-3). |
+| `iir-pro` | Proto-Indo-Iranian (reconstructed) | ~760 headwords — Sanskrit via romanization + the flagged Iranian-loan layer in Armenian. |
 
 ## Gold-lemma languages (searchable via `--lemma`, 14 as of today)
 

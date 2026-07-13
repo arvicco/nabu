@@ -130,9 +130,15 @@ module Nabu
     end
 
     # Apply all pending migrations from db/migrate to +db+. Returns +db+.
+    #
+    # allow_missing_migration_files: phase-17 runs parallel packets on
+    # reserved migration numbers (009 is another packet's; 010 landed
+    # first, P17-3), so the sequence legitimately has a gap until the
+    # phase merge closes it. The option only relaxes the contiguity
+    # check — application order stays strictly numeric.
     def migrate!(db)
       require "sequel/extensions/migration"
-      Sequel::Migrator.run(db, MIGRATIONS_DIR)
+      Sequel::Migrator.run(db, MIGRATIONS_DIR, allow_missing_migration_files: true)
       db
     end
 

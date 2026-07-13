@@ -100,9 +100,9 @@ module Query
       assert_equal 1, got.attested_count, "counted via the roman fold"
     end
 
-    # -- the ascent: proto → proto ---------------------------------------------------
+    # -- the ascent: the shelf-visited chain (P17-3) -----------------------------------
 
-    def test_ascends_one_hop_to_the_pie_ancestor_with_its_own_cognates
+    def test_ascends_to_the_pie_ancestor_with_its_own_cognates
       make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
       rebuild!
       bog = etym("богъ", lang: "chu").first
@@ -111,7 +111,41 @@ module Query
       assert_equal "ine-pro", pie.language
       assert(pie.cognates.any? { |c| c.language == "grc" && c.word == "ἔφᾰγον" },
              "the PIE ancestor brings the cross-family cognates")
-      assert_empty pie.ancestors, "the ascent is bounded to one hop"
+      assert_empty pie.ancestors,
+                   "no shelf names a PIE headword — the chain ends exactly where one-hop did"
+    end
+
+    # THE multi-hop golden (P17-3): прьстъ → *pьrstъ ← *pírštan ← *per- —
+    # the Proto-Balto-Slavic intermediate shelf carries the chain the old
+    # one-hop cut could not render.
+    def test_ascends_the_multi_hop_chain_through_proto_balto_slavic
+      make_gold_passages(language: "chu", lemma: "прьстъ", form: "прьстъ")
+      rebuild!
+      results = etym("прьстъ", lang: "chu")
+      pers = results.find { |r| r.headword == "*pьrstъ" } || flunk("*pьrstъ missing")
+      pbs = pers.ancestors.find { |a| a.headword == "*pírštan" } ||
+            flunk("ine-bsl-pro *pírštan names sla-pro *pь̃rstъ — the accented fold must join")
+      assert_equal "ine-bsl-pro", pbs.language
+      assert_equal false, pbs.edge_borrowed, "an inherited edge parsed unflagged"
+      pie = pbs.ancestors.find { |a| a.headword == "*per-" } ||
+            flunk("PIE *per- names ine-bsl-pro *pírštan — the chain's top")
+      assert_equal "ine-pro", pie.language
+      assert_empty pie.ancestors
+    end
+
+    # The loan edge (P17-3): the *hlaibaz ancestor is reached over the
+    # borrowed-flagged gem→sla proto edge — edge_borrowed labels it; the
+    # direct chu → *xlěbъ edge is honestly false on the matched reflex.
+    def test_ancestor_reached_over_a_flagged_edge_carries_edge_borrowed
+      make_gold_passages(language: "chu", lemma: "хлѣбъ", form: "хлѣбъ")
+      rebuild!
+      xleb = etym("хлѣбъ", lang: "chu").find { |r| r.headword == "*xlěbъ" } ||
+             flunk("*xlěbъ missing")
+      assert_equal false, xleb.matched_reflex.borrowed
+      hlaibaz = xleb.ancestors.find { |a| a.headword == "*hlaibaz" } ||
+                flunk("gem-pro *hlaibaz names sla-pro *xlěbъ (flagged) — the ascent must find it")
+      assert_equal true, hlaibaz.edge_borrowed, "the loan flag rides the connecting edge"
+      assert_nil xleb.edge_borrowed, "a top-level result has no connecting edge"
     end
 
     def test_gothic_ascends_to_the_pie_ancestors_of_guda

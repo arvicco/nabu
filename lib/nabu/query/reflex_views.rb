@@ -16,8 +16,13 @@ module Nabu
     # nil means "not in this catalog / not countable" — an honest absence,
     # never a zero claim (no fulltext handle, display-only language, or the
     # lemma simply is not attested here).
+    #
+    # +borrowed+ (P17-3) is the stored per-edge loan flag: true (the
+    # upstream node carried the marker — renderers label "(loan)"), false
+    # (parsed unflagged), or nil (the row predates the migration-010
+    # flag-aware reparse — unknown, never a claimed false).
     class ReflexViews
-      View = Data.define(:lang_code, :language, :word, :roman, :attested_count)
+      View = Data.define(:lang_code, :language, :word, :roman, :attested_count, :borrowed)
 
       def initialize(catalog:, fulltext: nil)
         @catalog = catalog
@@ -29,13 +34,18 @@ module Nabu
       end
 
       # The entry's reflexes in stored (depth-first) order, counts resolved.
+      # On a catalog predating migration 010 the borrowed column is absent
+      # and every flag reads nil — the same honest unknown as an unreparsed
+      # row (a READ surface can never migrate; the pre-006 precedent).
       def for_entry(entry_row_id)
         return [] unless available?
 
+        columns = %i[lang_code language word roman word_folded roman_folded]
+        columns << :borrowed if borrowed_column?
         rows = @catalog[:dictionary_reflexes]
                .where(dictionary_entry_id: entry_row_id)
                .order(:seq)
-               .select(:lang_code, :language, :word, :roman, :word_folded, :roman_folded)
+               .select(*columns)
                .all
         counts = attestation_counts(rows)
         rows.map do |row|
@@ -43,9 +53,16 @@ module Nabu
             lang_code: row.fetch(:lang_code), language: row.fetch(:language),
             word: row.fetch(:word), roman: row.fetch(:roman),
             attested_count: counts[[row.fetch(:language), row.fetch(:word_folded)]] ||
-                            counts[[row.fetch(:language), row.fetch(:roman_folded)]]
+                            counts[[row.fetch(:language), row.fetch(:roman_folded)]],
+            borrowed: row[:borrowed]
           )
         end
+      end
+
+      def borrowed_column?
+        return @borrowed_column unless @borrowed_column.nil?
+
+        @borrowed_column = available? && @catalog[:dictionary_reflexes].columns.include?(:borrowed)
       end
 
       private
