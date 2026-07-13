@@ -32,6 +32,23 @@ tablets of the late 4th millennium BCE to 19th-century Slovenian — plus
 14 languages**. (All numbers in this README are read from the live catalog,
 never estimated.)
 
+## Quickstart
+
+```
+git clone https://github.com/arvicco/nabu && cd nabu
+bundle install                 # Ruby 3.3+; deliberately small dependency set
+bin/nabu quickstart            # the starter shelf: 4 sources, ~690 MB, minutes — then:
+bin/nabu align "MARK 2.3"      # one verse, seven witnesses
+bin/nabu search --lemma λέγω   # dictionary-form search: λέγουσι, εἶπας, εἰπεῖν…
+bin/nabu define λόγος          # the whole LSJ entry, citations resolved
+```
+
+A fresh checkout works with zero configuration. The long form —
+prerequisites, honest sizes and timings, growing the library, MCP
+registration — is the site's
+**[Quickstart](https://arvicco.github.io/nabu/quickstart/)** page
+(kept in-repo as [docs/quickstart.md](docs/quickstart.md)).
+
 ## Show me
 
 Real commands, real output, pasted from live runs on 2026-07-11/12 (trims
@@ -219,20 +236,6 @@ abuts Lebanon."
   tools — search, show, concord, align, define, etym, parallels, cognates,
   links, status — every passage carrying its license class, so a model can quote
   *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
-
-## Quickstart
-
-```
-git clone <this repo> && cd nabu
-bundle install          # Ruby 3.3+; deliberately small dependency set
-bin/nabu sync sblgnt    # a small first shelf: the SBL Greek NT, ~11 MB, seconds
-bin/nabu search "ἀγάπη" --limit 3
-```
-
-A fresh checkout works with zero configuration — every key in
-`config/nabu.yml` has a working default. The full zero-to-first-search
-walkthrough, with real outputs and honest sizes/timings for the bigger
-shelves, is in **[docs/quickstart.md](docs/quickstart.md)**.
 
 ## What's on the shelves
 

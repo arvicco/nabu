@@ -4,6 +4,24 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
+# A TestAdapter whose #fetch succeeds WITHOUT any network: the quickstart rig
+# (P18-2). The canonical dir already holds the fixture files, so fetch is a
+# no-op that returns a pinned sha, and the rest of the sync path (load, index,
+# ledger pin) runs for real.
+class QuickstartFetchAdapter < TestAdapter
+  def fetch(_workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+    Nabu::FetchReport.new(sha: "deadbeefcafe", fetched_at: Time.now)
+  end
+end
+
+# The partial-failure rig: fetch always raises, as an unreachable upstream
+# would (Nabu::FetchError aborts THIS source's sync, never the batch).
+class QuickstartFailingAdapter < TestAdapter
+  def fetch(_workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+    raise Nabu::FetchError, "upstream unreachable (rigged)"
+  end
+end
+
 class CLITest < Minitest::Test
   # Run the Thor CLI in-process (never shell out to bin/nabu). Returns the
   # captured [stdout, stderr, exit_status]. exit_status is nil when the CLI
@@ -30,7 +48,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export define etym].each do |command|
+    %w[version quickstart sync status rebuild verify search show export define etym].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -440,6 +458,101 @@ class CLITest < Minitest::Test
       end
       assert_empty err, "non-tty small corpus must not emit progress"
     end
+  end
+
+  # -- quickstart (P18-2): the starter shelf --------------------------------
+
+  # The starter list must stay wired to real registry entries: every slug in
+  # STARTER_SOURCES is registered AND enabled in the shipped config/sources.yml
+  # (a renamed/retired source would otherwise fail only at a live quickstart).
+  def test_quickstart_starter_sources_are_registered_in_the_shipped_registry
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    Nabu::CLI.starter_sources.each do |starter|
+      entry = registry[starter.slug]
+      refute_nil entry, "starter source #{starter.slug} must be registered in config/sources.yml"
+      assert entry.enabled, "starter source #{starter.slug} must be enabled"
+    end
+  end
+
+  # --list previews the set (slugs, sizes, blurbs) and touches nothing: no
+  # network (WebMock would trip), no catalog, no ledger.
+  def test_quickstart_list_prints_the_starter_set_without_syncing
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[quickstart --list]) }
+      assert_nil status
+      assert_match(/starter shelf/, out)
+      %w[sblgnt proiel iswoc lexica].each do |slug|
+        assert_match(/^  #{slug}\b/, out, "--list must name #{slug}")
+      end
+      assert_match(/MB/, out, "--list must carry the measured sizes")
+      refute File.exist?(config.catalog_path), "--list must not create the catalog"
+      refute File.exist?(config.history_path), "--list must not create the ledger"
+    end
+  end
+
+  # The command syncs the starter list IN ORDER through the normal per-source
+  # path (fetch → load → index) and ends with the "try these" epilogue naming
+  # the three marvels and the growth pointer.
+  def test_quickstart_syncs_the_starter_list_in_order_and_prints_the_epilogue
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter", "beta" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha beta]) do
+        out, _err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_nil status
+        assert_match(/alpha\s+deadbeefcafe\s+\+2 added/, out)
+        assert_match(/beta\s+deadbeefcafe\s+\+2 added/, out)
+        assert_operator out.index("alpha "), :<, out.index("beta "), "starter order must be respected"
+        assert_match(/try these:/, out)
+        assert_match(/align "MARK 2\.3"/, out)
+        assert_match(/search --lemma/, out)
+        assert_match(/define λόγος/, out)
+        assert_match(%r{grow the library: bin/nabu sync --all}, out)
+      end
+    end
+  end
+
+  # Idempotent by construction: a re-run is an ordinary re-sync (same content
+  # on disk → =N skipped, nothing re-added), and the epilogue still prints.
+  def test_quickstart_rerun_is_an_ordinary_resync
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha]) do
+        with_config(config) { run_cli(%w[quickstart]) }
+        out, _err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_nil status
+        assert_match(/alpha\s+deadbeefcafe\s+\+0 added\s+~0 updated\s+=2 skipped/, out)
+        assert_match(/try these:/, out)
+      end
+    end
+  end
+
+  # One source's failure never stops the rest: the failure is reported at the
+  # end (stdout, before the epilogue), the batch exit status is 1, and the
+  # later sources still sync. An unregistered starter slug fails the same way.
+  def test_quickstart_one_failure_does_not_stop_the_rest_and_exits_one
+    with_quickstart_env("alpha" => "QuickstartFailingAdapter", "beta" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha beta ghost]) do
+        out, err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_equal 1, status
+        assert_match(/beta\s+deadbeefcafe\s+\+2 added/, out, "a failure must not stop later sources")
+        assert_match(/alpha\s+FAILED — upstream unreachable/, out)
+        assert_match(/ghost\s+FAILED — unknown source/, out)
+        assert_match(/try these:/, out, "the epilogue still prints after failures")
+        assert_match(/2 of 3 starter sources failed/, err)
+      end
+    end
+  end
+
+  # `nabu help quickstart` must teach the starter shelf: what it holds (with
+  # sizes), the three marvels, --list, and the idempotency promise.
+  def test_help_quickstart_documents_the_starter_shelf
+    out, _err, _status = run_cli(%w[help quickstart])
+    %w[sblgnt proiel iswoc lexica].each { |slug| assert_match(/#{slug}/, out) }
+    assert_match(/MB/, out, "must state the measured sizes")
+    assert_match(/align "MARK 2\.3"/, out)
+    assert_match(/--lemma/, out)
+    assert_match(/define λόγος/, out)
+    assert_match(/--list/, out)
+    assert_match(/idempotent/i, out)
+    assert_match(/never stops the rest/i, out, "must state the partial-failure posture")
   end
 
   # -- the history ledger at the CLI seam (P7-1) ----------------------------
@@ -2733,6 +2846,40 @@ class CLITest < Minitest::Test
         sources_path: sources, config_path: "(test)"
       )
     end
+  end
+
+  # A quickstart env (P18-2): one source per (slug => adapter class name),
+  # each with its own canonical fixture files already on disk (distinct
+  # filenames per slug — TestAdapter mints urns from filenames, and two
+  # sources must never collide on a urn). The caller stubs Config.load.
+  def with_quickstart_env(adapters)
+    Dir.mktmpdir("nabu-cli-quickstart") do |root|
+      sources = +""
+      adapters.each do |slug, klass|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+        File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        sources << "#{slug}:\n  adapter: #{klass}\n  enabled: true\n  sync_policy: manual\n"
+      end
+      path = File.join(root, "sources.yml")
+      File.write(path, sources)
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: path, config_path: "(test)"
+      )
+    end
+  end
+
+  # Pin the starter list to test slugs by swapping the class method (the
+  # with_config / with_stubbed_shell house pattern), restoring after.
+  def with_starter_sources(slugs)
+    original = Nabu::CLI.method(:starter_sources)
+    list = slugs.map { |slug| Nabu::CLI::StarterSource.new(slug: slug, size: "~1 MB", blurb: "test source") }
+    Nabu::CLI.define_singleton_method(:starter_sources) { list }
+    yield
+  ensure
+    Nabu::CLI.define_singleton_method(:starter_sources, original)
   end
 
   # Swap Nabu::Shell.run for +impl+ (a proc) so the health probe sees canned
