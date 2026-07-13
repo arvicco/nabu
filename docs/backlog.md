@@ -5639,7 +5639,37 @@ enabled. Live-db demo SKIPPED (owner rebuild was running — deferred to
 review). v2 recorded in the survey: persons table + attestation query,
 geo layer, btext, PIR/TM links edges, GODOT.
 
-## P17-3 · Reconstruction shelf, part 2  [tier: opus, two-phase] [status: scouting] [deps: —]
+## P17-3 · Reconstruction shelf, part 2  [tier: opus, two-phase] [status: done] [deps: —]
+DONE 2026-07-13 (Phase B). Survey (docs/recon2-survey.md) verdicts all
+shipped. FIXTURES (network-approved): the ~12 byte-verbatim kaikki goldens
+into the existing layout — four NEW extracts (ine-bsl-pro *pírštan multi-
+hop golden + *wárˀnāˀ ˀ-fold + *duktḗ; gmw-pro *hlaib/*faru; itc-pro *gʷōs
+bōs-loan + *kʷis clean; iir-pro *bʰráHtā roman + *kšatrám xcl-loan +
+*adᶻdʰáH ˢ/ᶻ-fold) + 5 appends to the existing files (sla *xlěbъ/*pьrstъ,
+ine *per-#1/*kʷís, gem *hlaibaz) + 1 cu append (страна Slavonicism); all
+re-downloads hash-identical to the P14-1/P13-10 snapshots. MIGRATION 010
+(009 reserved): nullable boolean `borrowed` on dictionary_reflexes; parser
+mints true/false from raw_tags/tags `/borrow/i` (census: "borrowed"
+×92,120, "learned borrowing" ×405, "reshaped by analogy…" correctly NOT
+matched), NULL = pre-reparse; rides ContentHash reflex_fields (P16-5
+parse-only recovery). FOUR EXTRACTS rows on wiktionary-recon (registry
+untouched — same source), PROTO_FOLD += ˢ→s ᶻ→z ˀ→"" under ine + itc/iir
+keys (gmw measured clean, no key). MULTI-HOP CLOSURE: ReflexRootsIndexer
+rewritten to the shelf-visited worklist walk (each dict-language enterable
+once/walk; breadth-first rounds ⇒ deterministic + terminating in
+≤shelves−1 rounds; cycle-safe by the visited set; degenerates to the old
+one-hop set, pinned); attested shelves ascend like -pro (supersedes P16-5
+direct-only); reflex_roots gains OR-aggregated `borrowed` (true>false>NULL).
+Etym walks the same bound, renders the chain indented + `←(loan)`; MCP
+nabu_etym nests ancestors. Consumers: Cognates WitnessWord.borrowed →
+"(loan)", BatchCognates detail "(loan: chu)", MCP payloads carry the
+boolean w/ NULL-honesty. JOHN 13.18 acceptance render reproduced on
+fixtures: `*hlaibaz [gem-pro] / chu хлѣбъ (loan) / got hlaifs`. Suite +43
+tests (2068 runs / 29,172 assertions), lint clean, both exit 0. The real
+~60 MB sync + closure rebuild are OWNER-FIRED (not run — worktree never
+touched live db; one live-state check DEFERRED-TO-REVIEW per coordinator
+db-lock). One commit, not pushed.
+
 Register §1.11 extension; owner PIE/comparativistics axis. Census which
 kaikki proto extracts exist beyond our three — Proto-Balto-Slavic,
 Proto-Italic, Proto-Hellenic, Proto-Indo-Iranian, Proto-Semitic (the

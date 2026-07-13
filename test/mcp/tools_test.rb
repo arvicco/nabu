@@ -898,7 +898,8 @@ module MCP
       assert_equal "*bogъ", entry.fetch("headword")
       assert_equal "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2", entry.fetch("urn")
       assert_equal "attribution", entry.fetch("license_class")
-      assert_equal({ "language" => "chu", "word" => "богъ", "roman" => "bogŭ" },
+      assert_equal({ "language" => "chu", "word" => "богъ", "roman" => "bogŭ",
+                     "borrowed" => false },
                    entry.fetch("matched_via"))
       cognate = entry.fetch("cognates").first
       assert_equal 1, cognate.fetch("attested_count"), "attested cognates sort first"
@@ -906,6 +907,26 @@ module MCP
                       "the cognate list is bounded with an honest total"
       assert_includes entry.fetch("ancestors").map { |a| a.fetch("headword") }, "*bʰeh₂g-",
                       "one proto-to-proto hop rides along"
+    end
+
+    # P17-3: the payload nests the full shelf-visited chain and labels loan
+    # edges — прьстъ → *pьrstъ → (nested) *pírštan → (nested) *per-, and
+    # хлѣбъ's *hlaibaz ancestor carries edge_borrowed: true.
+    def test_etym_payload_nests_the_multi_hop_chain_with_loan_edges
+      seed_recon_shelf
+      rebuild!
+      entries = payload(call("nabu_etym", { "lemma" => "прьстъ" })).fetch("entries")
+      pers = entries.find { |e| e.fetch("headword") == "*pьrstъ" } || flunk("*pьrstъ missing")
+      pbs = pers.fetch("ancestors").find { |a| a.fetch("headword") == "*pírštan" } ||
+            flunk("the PBS intermediate must nest")
+      assert_includes pbs.fetch("ancestors").map { |a| a.fetch("headword") }, "*per-",
+                      "the chain nests to the PIE root"
+
+      bread = payload(call("nabu_etym", { "lemma" => "хлѣбъ" })).fetch("entries")
+      xleb = bread.find { |e| e.fetch("headword") == "*xlěbъ" } || flunk("*xlěbъ missing")
+      hlaibaz = xleb.fetch("ancestors").find { |a| a.fetch("headword") == "*hlaibaz" } ||
+                flunk("*hlaibaz missing")
+      assert_equal true, hlaibaz.fetch("edge_borrowed"), "the loan edge says so in the payload"
     end
 
     def test_etym_needs_a_lemma
@@ -1417,6 +1438,10 @@ module MCP
       witnesses = group.fetch("witnesses")
       assert_equal(%w[chu grc], witnesses.map { |witness| witness.fetch("language") })
       witnesses.each do |witness|
+        # P17-3: the per-edge loan flag rides every witness word — both
+        # *bʰeh₂g- descents parsed unflagged, an honest false (null would
+        # mean "predates the flag reparse").
+        assert_equal false, witness.fetch("borrowed")
         witness.fetch("documents").each do |doc|
           assert_equal "nc", doc.fetch("license_class")
           assert_equal "proiel", doc.fetch("source")

@@ -478,7 +478,8 @@ class RebuildTest < Minitest::Test
     FileUtils.mkdir_p(File.dirname(catalog_path))
     db = Nabu::Store.connect(catalog_path)
     require "sequel/extensions/migration"
-    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 4)
+    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 4,
+                                                          allow_missing_migration_files: true)
     sid = db[:sources].insert(slug: "corpus", name: "corpus", adapter_class: "TestAdapter",
                               license_class: "open", upstream_url: "https://example/corpus",
                               last_sync_sha: "legacy-sha")

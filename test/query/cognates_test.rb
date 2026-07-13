@@ -240,6 +240,29 @@ module Query
       assert_match(/alignments.yml/, error.message)
     end
 
+    # -- P17-3: the per-edge borrowed flag (the JOHN 13.18 acceptance case) ----
+
+    # hlaifs ~ хлѣбъ at *hlaibaz: before P17-3 the reader had to apply the
+    # taught meet-shelf reading ("gem-pro + Slavic witness = probably a
+    # loan"); now the OCS witness's edge is FLAGGED (the loan marker rides
+    # the gem→sla proto edge and ORs along the closure path) while the
+    # Gothic side stays an unflagged inheritance claim.
+    def test_witness_borrowed_flag_states_the_loan_per_edge
+      chu = witness_doc("marianus", language: "chu", title: "Codex Marianus")
+      got = witness_doc("gothic", language: "got", title: "Gothic NT")
+      make_sentence(chu, ref: "JOHN 13.18", lemmas: ["хлѣбъ"])
+      make_sentence(got, ref: "JOHN 13.18", lemmas: ["hlaifs"])
+      rebuild!
+      result = run_cognates("JOHN 13.18")
+      group = result.groups.find { |g| g.root.headword == "*hlaibaz" } ||
+              flunk("hlaifs and хлѣбъ must meet at gem-pro *hlaibaz")
+      assert_equal "gem-pro", group.root.shelf
+      chu_word = group.witnesses.find { |w| w.language == "chu" }
+      assert_equal true, chu_word.borrowed, "the OCS descent from *hlaibaz is a flagged loan"
+      got_word = group.witnesses.find { |w| w.language == "got" }
+      assert_equal false, got_word.borrowed, "the Gothic side stays an inheritance claim"
+    end
+
     def test_excluded_licenses_drop_their_witnesses
       seed_gospel_verses
       # The chu witness becomes research_private: its words must vanish and

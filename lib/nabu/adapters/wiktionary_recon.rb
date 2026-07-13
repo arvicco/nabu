@@ -4,25 +4,35 @@ require_relative "wiktionary_jsonl_parser"
 
 module Nabu
   module Adapters
-    # The reconstruction shelf source (P14-1, architecture §12): English
-    # Wiktionary's reconstruction pseudo-languages via the kaikki.org
-    # wiktextract extraction — ONE source shipping THREE dictionaries
-    # (Proto-Slavic sla-pro, Proto-Indo-European ine-pro, Proto-Germanic
-    # gem-pro), each its own JSONL through the SAME wiktionary-jsonl family
+    # The reconstruction shelf source (P14-1, architecture §12; extended
+    # P17-3): English Wiktionary's reconstruction pseudo-languages via the
+    # kaikki.org wiktextract extraction — ONE source shipping SEVEN
+    # dictionaries (Proto-Slavic sla-pro, Proto-Indo-European ine-pro,
+    # Proto-Germanic gem-pro; P17-3 adds Proto-Balto-Slavic ine-bsl-pro,
+    # Proto-West Germanic gmw-pro, Proto-Italic itc-pro, Proto-Indo-Iranian
+    # iir-pro), each its own JSONL through the SAME wiktionary-jsonl family
     # as wiktionary-cu, with `reflexes: true`: the records' `descendants`
     # trees flatten into DictionaryReflex edges — the crosswalk that links
     # reconstructed headwords to attested in-catalog lemmas (`nabu etym`).
+    # ine-bsl-pro and gmw-pro are INTERMEDIATE shelves (PIE → PBS →
+    # Proto-Slavic; Proto-Germanic → PWG → Old English) — the shelves whose
+    # arrival replaced the closure's one-hop ascent with the shelf-visited
+    # multi-hop walk (Store::ReflexRootsIndexer).
     #
     # == Upstream (verified page-level + ranged reads, docs/backlog.md P14-1
-    # Phase A, 2026-07-12; full downloads at fixture build)
+    # Phase A, 2026-07-12; P17-3 survey docs/recon2-survey.md, 2026-07-13;
+    # full downloads at fixture builds)
     #
     # kaikki.org per-language extracts, built from the enwiktionary dump
     # dated 2026-07-06 (wiktextract, Tatu Ylönen): Proto-Slavic 47.6 MB /
-    # 5,431 records, PIE 12.0 MB / 1,905, Proto-Germanic 65.3 MB / 5,717.
-    # The `word` field carries NO asterisk (display prefixes it back);
-    # `lang_code` is the Wiktionary etymology-language code the registry
-    # adopts verbatim (conventions §4: sla-pro/ine-pro/gem-pro are not ISO
-    # 639-3, but pass the shape-only tag validation unchanged).
+    # 5,431 records, PIE 12.0 MB / 1,905, Proto-Germanic 65.3 MB / 5,717;
+    # P17-3 (2026-07-13): Proto-Balto-Slavic 1.7 MB / 491, Proto-West
+    # Germanic 49.4 MB / 5,551, Proto-Italic 5.2 MB / 745,
+    # Proto-Indo-Iranian 3.3 MB / 799. The `word` field carries NO asterisk
+    # (display prefixes it back); `lang_code` is the Wiktionary
+    # etymology-language code the registry adopts verbatim (conventions §4:
+    # the -pro codes are not ISO 639-3, but pass the shape-only tag
+    # validation unchanged).
     #
     # DEPRECATION CAVEAT: like the OCS extract, the per-language JSONL is
     # labelled "DEPRECATED, will be removed in the near future" (wiktextract
@@ -40,19 +50,21 @@ module Nabu
     #
     # == fetch / sync policy
     #
-    # Three FileFetch single-file syncs, one per extract, each in ITS OWN
+    # Seven FileFetch single-file syncs, one per extract, each in ITS OWN
     # subdir (FileFetch is one-file-per-dir by design: any other file in
     # the dir is doomed, and there is one state file per dir), attics under
     # the shared top-level <workdir>/.attic/<subdir>/ so discover_with_attic
     # finds retained files — the UD multi-repo choreography: ALL extracts
     # prepare (tree untouched), the mass-deletion breaker sees the whole
-    # SET, then all complete. sync_policy: manual, enabled: false until the
-    # owner-fired first real sync (~125 MB across three GETs).
+    # SET, then all complete. sync_policy: manual; the P17-3 extracts land
+    # in the live catalog at the next owner-fired sync (~60 MB across the
+    # four new GETs, +7,586 entries).
     class WiktionaryRecon < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "wiktionary-recon",
         name: "Wiktionary reconstructions — kaikki.org machine-readable extracts " \
-              "(Proto-Slavic, PIE, Proto-Germanic)",
+              "(Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, " \
+              "Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian)",
         license: "CC-BY-SA + GFDL (verbatim kaikki.org/dictionary/: \"This data is made available " \
                  "under the same licenses as Wiktionary - both CC-BY-SA and GFDL.\")",
         license_class: "attribution",
@@ -86,6 +98,38 @@ module Nabu
           url: "https://kaikki.org/dictionary/Proto-Germanic/kaikki.org-dictionary-ProtoGermanic.jsonl",
           language: "gem-pro",
           title: "Wiktionary — Proto-Germanic (kaikki.org extract)"
+        }.freeze,
+        # -- P17-3 (recon shelf part 2; survey docs/recon2-survey.md §5) --
+        "wiktionary-ine-bsl-pro" => {
+          subdir: "proto-balto-slavic",
+          filename: "kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
+          url: "https://kaikki.org/dictionary/Proto-Balto-Slavic/" \
+               "kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
+          language: "ine-bsl-pro",
+          title: "Wiktionary — Proto-Balto-Slavic (kaikki.org extract)"
+        }.freeze,
+        "wiktionary-gmw-pro" => {
+          subdir: "proto-west-germanic",
+          filename: "kaikki.org-dictionary-ProtoWestGermanic.jsonl",
+          url: "https://kaikki.org/dictionary/Proto-West%20Germanic/" \
+               "kaikki.org-dictionary-ProtoWestGermanic.jsonl",
+          language: "gmw-pro",
+          title: "Wiktionary — Proto-West Germanic (kaikki.org extract)"
+        }.freeze,
+        "wiktionary-itc-pro" => {
+          subdir: "proto-italic",
+          filename: "kaikki.org-dictionary-ProtoItalic.jsonl",
+          url: "https://kaikki.org/dictionary/Proto-Italic/kaikki.org-dictionary-ProtoItalic.jsonl",
+          language: "itc-pro",
+          title: "Wiktionary — Proto-Italic (kaikki.org extract)"
+        }.freeze,
+        "wiktionary-iir-pro" => {
+          subdir: "proto-indo-iranian",
+          filename: "kaikki.org-dictionary-ProtoIndoIranian.jsonl",
+          url: "https://kaikki.org/dictionary/Proto-Indo-Iranian/" \
+               "kaikki.org-dictionary-ProtoIndoIranian.jsonl",
+          language: "iir-pro",
+          title: "Wiktionary — Proto-Indo-Iranian (kaikki.org extract)"
         }.freeze
       }.freeze
 
