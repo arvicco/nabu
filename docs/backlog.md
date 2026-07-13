@@ -5497,3 +5497,75 @@ coverage numbers from live db), improvements register (§1.4 → shipped,
 §1.5 → shipped, §1.8 → shipped), PR, owner queue (parse-only resync
 wiktionary-cu; batch runs are owner-fired if long), backup-disk
 re-flag (standing), sticky alarm LAST.
+# ── Phase 17 ──────────────────────────────────────────────────────────
+# Owner directive (2026-07-13): "focus on additional sources this phase:
+# 4-7, maximal scope with deep info extraction that synergizes with our
+# tools/paradigm. Don't limit yourself to what we ALREADY extract. Think
+# about additional meta/info that strengthens our cross-tools and every
+# aspect of nabu capabilities." Every packet is TWO-PHASE: scout/design
+# (Phase A, docs/<slug>-survey.md, fixture plan) → OWNER GATE → adapter
+# (Phase B). Deep-extraction mandate: enumerate EVERY annotation/metadata
+# layer upstream carries and map each to a nabu surface — axis, links,
+# reflex crosswalk (incl. the P15-3 `borrowed` flag future-work), the
+# alignment hub, morph facets, vocab, collation layers, fuzzy, license
+# labels, MCP — proposing NEW columns/facets where the data earns them.
+
+## P17-1 · Coptic Scriptorium  [tier: opus, two-phase] [status: scouting] [deps: —]
+Register §2.2 (candidate — strong). Gold-lemmatized Coptic (would be
+lemma language #15); the Sahidic NT as alignment witness #14. Deep
+layers to census: bound-group tokenization vs word grain; gold
+lemma/POS/morph; LANGUAGE-OF-ORIGIN tags on tokens (Greek loanwords
+marked — a language-contact layer feeding cognates/etym's borrowing
+signal); normalized vs diplomatic layers (ccmh-txt collation precedent);
+verse citations (hub wiring); English translations (--parallel); MS
+metadata — dates (axis), repository/provenance; multi-corpus structure
+(NT, Shenoute, Apophthegmata, Besa...). License CC BY (verify per
+corpus).
+
+## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: scouting] [deps: —]
+Register §2.3. Epigraphy as the third documentary shelf — fuzzy_index's
+designed second customer (one config line) + the axis's natural feed
+(EDH dating not_before/not_after; findspot/province). Deep layers to
+census: inscription TYPE (epitaph/dedication/milestone/diploma — a
+GENRE facet nabu doesn't have yet; argue schema), material/object type,
+personal names (prosopography seed, §3.5), EpiDoc abbreviation
+expansions + lacunae (folding/fuzzy nuances), bilinguals (grc/lat),
+province geo (strings + province v1; coordinates noted not ingested).
+EDH is archived/read-only upstream — census the dump format (Open Data
+repo, CC BY-SA) and the frozen sync_policy fit.
+
+## P17-3 · Reconstruction shelf, part 2  [tier: opus, two-phase] [status: scouting] [deps: —]
+Register §1.11 extension; owner PIE/comparativistics axis. Census which
+kaikki proto extracts exist beyond our three — Proto-Balto-Slavic,
+Proto-Italic, Proto-Hellenic, Proto-Indo-Iranian, Proto-Semitic (the
+cuneiform synergy: sem-pro descendants naming akk would crosswalk to
+ORACC gold lemmas — verify akk actually appears), others on our axes.
+TWO structural upgrades the data forces: (1) the closure indexer's
+one-hop ascent bound was argued from "no intermediate shelf exists" —
+Proto-Balto-Slavic IS that shelf; design the bounded multi-hop closure
+(PIE → PBS → sla-pro → chu → orv chains) the indexer doc said to
+revisit. (2) kaikki descendants carry BORROWING flags — land the
+P15-3-named `borrowed` column on dictionary_reflexes so cognates/etym
+distinguish inheritance from loan PER EDGE, not just by meet-shelf
+heuristic. Size/count census per extract; fixture plan.
+
+## P17-4 · Monier-Williams (Cologne CDSL)  [tier: opus, two-phase] [status: scouting] [deps: —]
+Register §1.3's named next occupant for Sanskrit. LICENSE SCOUT FIRST
+(CDSL terms vary per dictionary — the register's own warning; record
+the verdict + posture mapping before any fixture plan). Deep layers:
+headwords Devanagari + IAST (folding against GRETIL's san-Latn);
+grammatical apparatus; CITATIONS to Sanskrit literature (RV., MBh. —
+the §1.3 resolution pattern: parse abbreviations, resolve against the
+GRETIL shelf's urns, honest miss-rate reporting); MW's OWN COGNATE
+NOTES (entries cite Greek/Latin/Gothic/Slavic comparanda — a
+dictionary-native comparativistics layer: census whether these parse
+reliably enough to mint crosswalk edges, distinct from kaikki's);
+etymology cross-references between entries. Would complete the
+per-language desk loop: LSJ:grc :: L&S:lat :: B-T:ang :: MW:san.
+
+## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
+Full-diff, library/languages/README refresh (new languages/shelves/
+facets from live db), improvements register (§2.2/§2.3 → shipped,
+§1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
+new source are owner-fired; fixture-plan approvals happen mid-phase at
+the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.
