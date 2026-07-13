@@ -5563,6 +5563,19 @@ reliably enough to mint crosswalk edges, distinct from kaikki's);
 etymology cross-references between entries. Would complete the
 per-language desk loop: LSJ:grc :: L&S:lat :: B-T:ang :: MW:san.
 
+## P17-5 · Etruscan axis scout  [tier: opus, two-phase] [status: scouting] [deps: —]
+Owner axis voiced 2026-07-13 ("One more axis I'd like to explore while
+we're close to Proto-Italic etc - Etruscan"). Phase A survey: what
+machine-readable Etruscan exists — inscription corpora (ETP/UMass, CIE
+digitizations, Rix ET editio minor derivatives, EDR/Trismegistos
+coverage), lexica/glossaries, the kaikki/Wiktionary ett extract
+(descendants/contact data — Latin loanwords FROM Etruscan feed the
+borrowed-flag layer), anything with dates/findspots (axis + the
+P17-2-proposed genre facet fits inscriptions natively). Non-IE: no
+proto-shelf ascent, but the language-contact surfaces (Latin↔Etruscan
+loans, bilinguals like the Pyrgi tablets) are the synergy to census.
+License per source; ranked verdict + fixture plan for the gate.
+
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
 facets from live db), improvements register (§2.2/§2.3 → shipped,
