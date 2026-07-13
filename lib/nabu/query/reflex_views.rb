@@ -48,7 +48,7 @@ module Nabu
                .select(*columns)
                .all
         counts = attestation_counts(rows)
-        rows.map do |row|
+        dedupe(rows).map do |row|
           View.new(
             lang_code: row.fetch(:lang_code), language: row.fetch(:language),
             word: row.fetch(:word), roman: row.fetch(:roman),
@@ -57,6 +57,21 @@ module Nabu
             borrowed: row[:borrowed]
           )
         end
+      end
+
+      # One word can descend from a root through several subtrees of the
+      # upstream descendants data — each mints its own crosswalk row (honest
+      # provenance), but the DISPLAY groups them (owner defect 2026-07-13:
+      # prīmus ×3 under *per-). First occurrence keeps stored order; the
+      # loan flag merges by the closure's rule (true > false > nil).
+      def dedupe(rows)
+        rows.group_by { |row| [row.fetch(:language), row.fetch(:word), row.fetch(:roman)] }
+            .values
+            .map do |group|
+              merged = group.first.dup
+              merged[:borrowed] = group.map { |r| r[:borrowed] }.compact.max_by { |f| f ? 1 : 0 } unless group.size == 1
+              merged
+            end
       end
 
       def borrowed_column?

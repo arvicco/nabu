@@ -87,6 +87,28 @@ module Query
       assert_nil ru.attested_count, "not in the catalog — an honest nil, not a zero claim"
     end
 
+    def test_duplicate_reflex_rows_render_one_view_with_merged_loan_flag
+      # One word can descend from a root through several subtrees of the
+      # upstream descendants data — each mints its own crosswalk row
+      # (honest provenance), but the DISPLAY groups them (owner defect
+      # 2026-07-13: prīmus ×3 under *per-). The loan flag merges by the
+      # closure's own rule: true > false > nil.
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба", count: 2)
+      rebuild!
+      chu_row = @catalog[:dictionary_reflexes].where(language: "chu", word: "богъ").first
+      refute_nil chu_row, "fixture must hold a chu богъ reflex row"
+      dupe = chu_row.dup
+      dupe.delete(:id)
+      dupe[:seq] = 9_999
+      dupe[:borrowed] = true if @catalog[:dictionary_reflexes].columns.include?(:borrowed)
+      @catalog[:dictionary_reflexes].insert(dupe)
+
+      bog = etym("богъ", lang: "chu").first
+      chu_views = bog.cognates.select { |c| c.language == "chu" && c.word == chu_row[:word] }
+      assert_equal 1, chu_views.size, "duplicate crosswalk rows must render as one view"
+      assert_equal true, chu_views.first.borrowed, "loan flag merges true > false > nil"
+    end
+
     def test_gothic_walks_via_the_roman_fold_the_script_bridge
       make_gold_passages(language: "got", lemma: "guþ", form: "guþ")
       rebuild!
