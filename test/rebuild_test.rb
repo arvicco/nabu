@@ -104,6 +104,56 @@ class RebuildTest < Minitest::Test
     db&.disconnect
   end
 
+  # -- facets are rebuilt from the replayed documents (P17-2) ----------------
+
+  def test_rebuild_regenerates_document_facets_and_edh_axis_end_to_end
+    write_sources(<<~YAML)
+      edh:
+        adapter: Nabu::Adapters::Edh
+        enabled: false
+        sync_policy: frozen
+    YAML
+    # The checked-in edh fixture IS the canonical layout — replaying it
+    # exercises the whole chain: parse (EAGLE terms + CSV join) → loader
+    # (metadata_json) → FacetBuilder (facet rows) + EdhDates (axis rows).
+    FileUtils.mkdir_p(@canonical)
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("edh"), File.join(@canonical, "edh"))
+    FileUtils.rm_f(Dir[File.join(@canonical, "edh", "{README.md,manifest.yml}")])
+
+    result = rebuilder.run
+
+    assert_equal 3, result.outcomes.first.report.added
+    refute_nil result.facets
+    assert_equal 3, result.facets.documents
+    assert_equal 12, result.facets.rows, "genre+province+material+object_type × 3 records"
+    assert_equal 3, result.axes.edh
+    db = Nabu::Store.connect(catalog_path)
+    epitaphs = db[:document_facets].where(facet: "genre", value: "epitaph").count
+    assert_equal 1, epitaphs
+    assert_equal 12, db[:document_facets].count
+  ensure
+    db&.disconnect
+  end
+
+  def test_rebuild_facets_pass_runs_even_when_nothing_is_faceted
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    result = rebuilder.run
+
+    refute_nil result.facets
+    assert_equal 0, result.facets.rows
+    db = Nabu::Store.connect(catalog_path)
+    assert db.table_exists?(:document_facets)
+    assert_equal 0, db[:document_facets].count
+  ensure
+    db&.disconnect
+  end
+
   # -- dry-run touches nothing ---------------------------------------------
 
   def test_plan_lists_actions_and_changes_nothing
@@ -428,7 +478,8 @@ class RebuildTest < Minitest::Test
     FileUtils.mkdir_p(File.dirname(catalog_path))
     db = Nabu::Store.connect(catalog_path)
     require "sequel/extensions/migration"
-    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 4)
+    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 4,
+                                                          allow_missing_migration_files: true)
     sid = db[:sources].insert(slug: "corpus", name: "corpus", adapter_class: "TestAdapter",
                               license_class: "open", upstream_url: "https://example/corpus",
                               last_sync_sha: "legacy-sha")

@@ -186,7 +186,8 @@ module Nabu
             dictionary_entry_id: row.id, seq: seq,
             lang_code: reflex.lang_code, language: reflex.language,
             word: reflex.word, roman: reflex.roman,
-            word_folded: reflex.word_folded, roman_folded: reflex.roman_folded
+            word_folded: reflex.word_folded, roman_folded: reflex.roman_folded,
+            borrowed: reflex.borrowed
           )
         end
       end

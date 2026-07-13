@@ -69,19 +69,27 @@ module Nabu
     # One-shot clone-or-pull for a single repo. +guard+, when given, is
     # called with the absolute working-tree paths upstream deleted — BEFORE
     # any tree mutation — and may raise (Nabu::SyncAborted) to abort.
-    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil)
-      pull = new(repo_url: repo_url, dir: dir, attic_dir: attic_dir, progress: progress)
+    #
+    # +ref+ (P17-1) PINS the sync to a tag (or branch) instead of the
+    # clone's default branch: fresh clones use `--branch <ref>`, pulls fetch
+    # exactly that ref into FETCH_HEAD — so a "versioned" upstream (Coptic
+    # Scriptorium's semiannual releases) never tracks its moving master, and
+    # an owner re-pin to a later release tag fast-forwards through the same
+    # attic/breaker contract as any pull.
+    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil, ref: nil)
+      pull = new(repo_url: repo_url, dir: dir, attic_dir: attic_dir, progress: progress, ref: ref)
       pull.prepare!
       guard&.call(pull.doomed_paths)
       pull.complete!
       Result.new(sha: pull.head_sha, atticked: pull.atticked)
     end
 
-    def initialize(repo_url:, dir:, attic_dir:, progress: nil)
+    def initialize(repo_url:, dir:, attic_dir:, progress: nil, ref: nil)
       @repo_url = repo_url
       @dir = dir
       @attic_dir = attic_dir
       @progress = progress
+      @ref = ref
       @doomed_relpaths = []
       @atticked = []
       @cloned = false
@@ -127,24 +135,26 @@ module Nabu
     private
 
     def git_clone
+      pin = @ref ? ["--branch", @ref] : []
       unless @progress
-        Shell.run("git", "clone", "--depth", "1", @repo_url, @dir)
+        Shell.run("git", "clone", "--depth", "1", *pin, @repo_url, @dir)
         return
       end
       @progress.call("Cloning #{@repo_url}…")
-      Shell.stream("git", "clone", "--progress", "--depth", "1", @repo_url, @dir) { |line| @progress.call(line) }
+      Shell.stream("git", "clone", "--progress", "--depth", "1", *pin, @repo_url, @dir) { |line| @progress.call(line) }
     end
 
-    # Fetch exactly the branch the clone tracks, so FETCH_HEAD is a single
-    # unambiguous ref for both the diff and the merge.
+    # Fetch exactly the pinned ref — or, unpinned, the branch the clone
+    # tracks — so FETCH_HEAD is a single unambiguous ref for both the diff
+    # and the merge.
     def git_fetch
-      branch = Shell.run("git", "-C", @dir, "rev-parse", "--abbrev-ref", "HEAD").strip
+      target = @ref || Shell.run("git", "-C", @dir, "rev-parse", "--abbrev-ref", "HEAD").strip
       unless @progress
-        Shell.run("git", "-C", @dir, "fetch", "--quiet", "origin", branch)
+        Shell.run("git", "-C", @dir, "fetch", "--quiet", "origin", target)
         return
       end
       @progress.call("Pulling #{@repo_url}…")
-      Shell.stream("git", "-C", @dir, "fetch", "--progress", "origin", branch) { |line| @progress.call(line) }
+      Shell.stream("git", "-C", @dir, "fetch", "--progress", "origin", target) { |line| @progress.call(line) }
     end
 
     # Files the merge would delete: status D between HEAD and FETCH_HEAD.

@@ -1,7 +1,9 @@
 # Languages of the library
 
-**As of 2026-07-12** (live inventory — every code below appears in the
-catalog, the lemma index, or the reference shelf). This page explains the
+**As of 2026-07-13** (post Phase 17 — live inventory: every code below
+appears in the catalog, the lemma index, or the reference shelf, EXCEPT
+the four Phase-17 proto codes marked *registered, sync pending*, which
+are shipped in code but hold no live entries yet). This page explains the
 code system once, then lists every code with one sentence each.
 
 ## The system, in five rules
@@ -37,7 +39,7 @@ code system once, then lists every code with one sentence each.
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions). |
 | `eng` | English | The translation layer — Perseus/First1K editions, WEB bible, SAA tablet translations, Freising rendering; never an original. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists. |
-| `cop` | Coptic | The last stage of Egyptian, in the documentary papyri of Christian Egypt. |
+| `cop` | Coptic | The last stage of Egyptian, in the documentary papyri of Christian Egypt (the literary coptic-scriptorium shelf is registered but awaits its first clean sync — library.md §8f). |
 | `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, and papyrus fragments. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL shelf — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved. |
 | `sl` | Slovenian (historical) | Early Modern print (Dalmatin 1584 → 1899) and, by lineage, the ~1000 CE Freising Manuscripts. |
@@ -71,13 +73,24 @@ code system once, then lists every code with one sentence each.
 | `sla-pro` | Proto-Slavic (reconstructed) | ~5.4k reconstructed headwords with descendant trees naming attested reflexes. |
 | `ine-pro` | Proto-Indo-European (reconstructed) | ~1.9k roots — the trunk the `etym` command ascends to. |
 | `gem-pro` | Proto-Germanic (reconstructed) | ~5.7k reconstructions bridging PIE to Gothic and Old English. |
+| `ine-bsl-pro` | Proto-Balto-Slavic (reconstructed) | *Registered P17-3, sync pending* — ~490 headwords projected: the STRUCTURAL intermediate shelf (PIE → PBS → Proto-Slavic) that the multi-hop closure needs. |
+| `gmw-pro` | Proto-West Germanic (reconstructed) | *Registered P17-3, sync pending* — ~5.4k headwords projected: the Old English proto desk, and the second intermediate shelf (Proto-Germanic → PWG → ang). |
+| `itc-pro` | Proto-Italic (reconstructed) | *Registered P17-3, sync pending* — ~740 headwords projected, bridging PIE to Latin (best record-level crosswalk join). |
+| `iir-pro` | Proto-Indo-Iranian (reconstructed) | *Registered P17-3, sync pending* — ~760 headwords projected: Sanskrit via romanization + the flagged Iranian-loan layer in Armenian. |
+
+*(The four rows above land at the owner-fired `wiktionary-recon` resync +
+rebuild; until then `define`/`etym` still walk the three live proto
+shelves only.)*
 
 ## Gold-lemma languages (searchable via `--lemma`, 14 as of today)
 
 `lat, grc, orv, san, sux, chu, akk, got, ang, xcl, sl, xhu, uga, hit` —
 the treebanks, ORACC, and goo300k feed these; everything else is
 full-text-searchable but not lemma-searchable (yet — see improvements
-§3.1 for the cluster plan to project lemmas onto the rest).
+§3.1 for the cluster plan to project lemmas onto the rest). **`cop` is
+registered as #15 pending sync**: the coptic-scriptorium adapter (P17-1)
+is shipped with its gold-lemma layer, but the live index holds zero `cop`
+lemma rows until that shelf's first clean owner-fired sync lands.
 
 ---
 

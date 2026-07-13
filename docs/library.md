@@ -1,17 +1,20 @@
 # The Library — content review
 
-**As of 2026-07-13** (post Phase 16, branch phase-16). Live totals:
-**88,346 documents / 3,786,763 passages** across the 22 registered sources
+**As of 2026-07-13** (post Phase 17, branch phase-17). Live totals:
+**88,346 documents / 3,786,763 passages** across the 22 **synced** sources
 (18 corpus sources carrying documents + 4 reference sources — lexica,
 bosworth-toller, wiktionary-cu, wiktionary-recon — carrying dictionary
 entries only), plus **248,616 dictionary entries** on the reference shelf
 (including the three reconstruction dictionaries), and **2,619,049 gold
-lemma rows in 14 languages**. The code-per-language map lives in
-[languages.md](languages.md).
+lemma rows in 14 languages**. Three further sources are **registered but
+unsynced** (`coptic-scriptorium`, `edh`, `mw` — Phase 17 adapters, all
+`enabled: false` awaiting owner-fired first syncs; §8f). The
+code-per-language map lives in [languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
-(`sqlite3 -readonly db/catalog.sqlite3`), not estimated. See §10 for the
-review cadence that keeps it truthful.
+(`sqlite3 db/catalog.sqlite3 "PRAGMA query_only=ON; …"` — the WAL-safe
+read-only convention, ops §10), not estimated. See §10 for the review
+cadence that keeps it truthful.
 
 ---
 
@@ -239,7 +242,10 @@ with the alignment hub (§9) — the comparativist loop closed on live data.
 P16-5 extends the crosswalk to wiktionary-cu's own descendants sections
 (**2,210 edges**, census-verified) — those rows land at the next
 owner-fired parse-only resync; the live crosswalk still carries the three
-reconstruction shelves only.
+reconstruction shelves only. Phase 17 shipped two further extensions in
+code, neither live yet: **Monier-Williams** (`mw`, ~194k Sanskrit entries
+projected) and **four more proto shelves + multi-hop closure + the
+`borrowed` flag** on wiktionary-recon — see §8f.
 
 **Research uses:** the philologist's desk loop (passage → lemma →
 definition → cited parallel passage) closed inside one tool; lexicographic
@@ -287,6 +293,36 @@ diachrony continued past the treebanks (§6) into Early Modern print;
 diachronic Slovene lexis over three centuries (`vocab --by-century`); the
 Freising Manuscripts beside their OCS near-contemporaries.
 
+## 8f. Incoming shelves — Phase 17 adapters, registered, awaiting first syncs
+
+Four Phase-17 deliverables are **shipped in code and registered
+`enabled: false`**; none is a live shelf, and every number they promise
+below is a projection, not a count:
+
+- **`coptic-scriptorium`** — literary Coptic (Sahidic + Bohairic) with
+  gold lemmas: `cop` becomes gold-lemma language #15 once synced; NT
+  witnesses #14 (Sahidic, `nc`) and #15 (Bohairic, `attribution`) already
+  registered in `config/alignments.yml`; language-of-origin loan tags,
+  Wikification entities, a manuscript-date axis extractor; ~2.8 GB clone.
+  *Honest wrinkle: the first owner sync attempt (2026-07-13) failed
+  partway (unzip), leaving a partial load of 152 AP documents / 18,261
+  passages in the catalog — those ARE inside the header totals; the full
+  shelf lands at the clean re-sync.*
+- **`edh`** — Epigraphic Database Heidelberg, ~82k Latin inscriptions
+  projected (the third documentary genre); brings the first **genre
+  facets** (§9) and ~+60k dated documents to the axis; persons
+  prosopography rides `metadata_json`; frozen preservation posture,
+  `fuzzy_index: true`.
+- **`mw`** — Monier-Williams Sanskrit (`nc`), ~194k entries projected;
+  SLP1↔IAST transcoded lookup, citation tiers resolving to GRETIL urns at
+  verse grain, MW's own comparanda as a second etym witness beside kaikki.
+- **wiktionary-recon part 2** — four more proto shelves (`ine-bsl-pro`,
+  `itc-pro`, `iir-pro`, `gmw-pro`; ~7,900 entries projected), multi-hop
+  reflex closure (PIE \*per- → PBS → \*pьrstъ → chu/orv in one walk), and
+  the migration-010 **`borrowed`** flag with per-edge "(loan)" rendering
+  in `etym`/`cognates` — all materialize at the owner-fired resync +
+  rebuild.
+
 ## 9. Library-wide capabilities
 
 - **Full-text search** with per-language folding (Greek final-sigma and
@@ -306,19 +342,27 @@ Freising Manuscripts beside their OCS near-contemporaries.
   matching anywhere in a passage, mid-word included — `']μηνιν αει['`
   typed straight off a damaged edition (brackets stripped, then the usual
   per-language folding). Character-trigram index scoped to the documentary
-  shelves (`fuzzy_index: true` on papyri-ddbdp + oracc; measured 257.1 MB /
-  8.6 s to build — corpus-wide would cost ~15×). **The production index is
-  not yet built**: it lands at the next owner-fired reindex/rebuild; until
-  then `--fuzzy` says so honestly instead of degrading.
+  shelves (`fuzzy_index: true` on papyri-ddbdp + oracc — corpus-wide would
+  cost ~15×). **Live in production** since the 2026-07-13 owner rebuild:
+  1.31M passages indexed (fulltext.sqlite3 at 2.1 GB with the index
+  aboard), and the BGU 6.1470 mid-word Odyssey demo runs against the real
+  index.
+  EDH joins the indexed scope at its first sync (§8f).
 - **Date/place axis** (P15-2, extended P16-3): `document_axes` (migration
-  008) dates and places **61,670 documents live** (HGV for the papyri —
-  99.2% of the DDbDP shelf — plus the Slovene goo300k/IMP year-suffixed
-  urns). `search --from/--to/--century/--place` scope by signed historical
-  year (negative = BCE, no year 0) and provenance; `show` prints the axis
-  line ("date: 292 CE · Oxyrhynchos"). Part 2 (P16-3) shipped the ORACC
-  period/regnal extractors and TOROT chronicle AM-annal dating in code —
-  coverage grows to **83,233** documents when the owner-fired axis rebuild
-  runs; until then the live table holds the part-1 rows only.
+  008) dates and places **83,233 documents live** — HGV for the papyri
+  (99.2% of the DDbDP shelf), the Slovene goo300k/IMP year-suffixed urns,
+  and, since the part-2 rows materialized at the 2026-07-13 owner rebuild,
+  ORACC catalogue/period/regnal dates plus TOROT chronicle AM annals.
+  `search --from/--to/--century/--place` scope by signed historical year
+  (negative = BCE, no year 0) and provenance; `show` prints the axis line
+  ("date: 292 CE · Oxyrhynchos"); `--century -7` reaches the Assyrian
+  letters. The EDH extractor (P17-2) is shipped: ~+60k dated documents
+  land at that shelf's first sync (§8f).
+- **Document facets** (P17-2, migration 009): `document_facets`
+  (genre/province/material/object_type, `?`-certainty preserved in `raw`)
+  with `search --type/--province/--material` composing with the date/place
+  filters. Shipped and live as a surface, but the table holds **0 rows**
+  until the EDH first sync + rebuild projects them (§8f).
 - **Alignment hub** (`align REF`, MCP `nabu_align`): one citation rendered
   across every witness of a registered work (`config/alignments.yml`) —
   the parallel NT (up to **thirteen witnesses**) and OT (Septuagint ↔
@@ -351,7 +395,9 @@ Freising Manuscripts beside their OCS near-contemporaries.
   including `define *proto-form` on the reconstruction shelves.
 - **Etymology walk** (`nabu etym LEMMA`, MCP `nabu_etym`, P14): attested
   lemma → reconstruction(s) → one hop up the proto chain, with cognates
-  and corpus attestation counts.
+  and corpus attestation counts. P17-3 ships multi-hop closure (chains
+  through the intermediate proto shelves) and the `borrowed` flag with
+  "(loan)" rendering — both land at the wiktionary-recon resync (§8f).
 - **Cognates in parallel** (`nabu cognates TARGET`, MCP `nabu_cognates`,
   P15-3): the hub × reflex-crosswalk join — verses where witnesses in ≥2
   languages use reflexes of the same root (got salt ~ chu соль at \*sḗh₂l;
@@ -407,7 +453,10 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
 
 1. **Every phase gate** (before the PR): refresh the header totals and any
    table a packet touched; new source = new section. This is part of the
-   gate's README-truthfulness pass — the orchestrator owns it.
+   gate's README-truthfulness pass — the orchestrator owns it. The public
+   site (`site/`, P17-9) is refreshed in the same pass — its numbers are
+   COPIED from this file and README with their as-of dates, never
+   re-derived (contract: site/MAINTENANCE.md).
 2. **After every owner-fired real sync**: re-read `bin/nabu status` and the
    per-source counts; update sizes if drift >1%. Cheap — one query per table.
 3. **Quarterly full review** (next due **2026-10-08**): re-verify every

@@ -175,8 +175,23 @@ module Nabu
           lang_code: node["lang_code"].to_s, language: language,
           word: word, roman: roman,
           word_folded: reflex_fold(word, language),
-          roman_folded: roman && reflex_fold(roman, language)
+          roman_folded: roman && reflex_fold(roman, language),
+          borrowed: borrowed?(node)
         )
+      end
+
+      # The loan marker (P17-3): descendant nodes flag borrowings in
+      # raw_tags/tags — "borrowed" (92,120 across the eight live extracts,
+      # census 2026-07-13), "learned borrowing" (405), plus a long free-text
+      # hedge tail ("possibly borrowed from …"), all matched /borrow/i per
+      # the P17-3 survey. The frequent non-loan raw_tag "reshaped by analogy
+      # or addition of morphemes" carries no "borrow" substring and stays
+      # false. The parser mints true/false only; NULL in the stored column
+      # means "predates this parser" (migration 010).
+      def borrowed?(node)
+        (Array(node["tags"]) + Array(node["raw_tags"])).any? do |tag|
+          tag.to_s.match?(/borrow/i)
+        end
       end
 
       # The map first; unmapped codes pass through as themselves when they

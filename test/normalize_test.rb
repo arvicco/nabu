@@ -155,6 +155,18 @@ class NormalizeTest < Minitest::Test
     assert_equal "ae", form("ǣ", "ang")
   end
 
+  def test_coptic_strips_editorial_marks_but_keeps_letters
+    # P17-1 (conventions.md §9): the ⳿ morphological divider (U+2CFF, Po —
+    # the one non-Mn editorial mark in the diplomatic layer) deletes; the
+    # supralinear strokes and overlines (U+FE24–26 half marks, combining
+    # dot/diaeresis) are Mn and fall to the generic strip. All words are
+    # real Coptic Scriptorium fixture surface forms (besa.letters).
+    assert_equal "ⲙⲏⲣ", form("ⲙⲏⲣ⳿", "cop")
+    assert_equal "ⲧⲉⲧⲛ", form("ⲧⲉⲧ︤ⲛ︥", "cop")
+    assert_equal "ⲉⲡⲟⲩⲟⲧⲟⲩⲉⲧ", form("ⲉⲡⲟⲩⲟⲧⲟⲩⲉⲧ⳿", "cop")
+    assert_equal "ⲁⲩⲱ", form("Ⲁⲩⲱ̇", "cop") # downcase + dot-above strip
+  end
+
   def test_slovene_folds_bohoric_long_s_to_s
     # P13-9 (conventions.md §9): ſ→s. The long s survives the generic fold
     # (plain downcase does not apply Unicode full case folding, which maps
@@ -186,6 +198,25 @@ class NormalizeTest < Minitest::Test
     # Scoped to the reconstruction pseudo-languages: an attested code (no
     # corpus carries a collective code) keeps the superscripts.
     assert_equal "bʰewgʰ", form("bʰewgʰ", "chu")
+  end
+
+  def test_p17_3_proto_fold_extensions_for_the_new_shelves
+    # P17-3 (conventions.md §9): the four new extracts add ˢ (U+02E2) → s,
+    # ᶻ (U+1DBB) → z (Proto-Indo-Iranian sibilant clusters; ˢ×12 ᶻ×9
+    # measured) and ˀ (U+02C0) → dropped (Proto-Balto-Slavic laryngeal
+    # notation, ×310 in headwords — a 1→0 gsub, fold_with_map-safe). The
+    # itc/iir primary subtags join the shared proto lambda; ine-bsl-pro
+    # already folds under "ine"; gmw-pro carries NO modifier letters
+    # (measured) and deliberately has no key.
+    assert_equal "adzdhah", form("adᶻdʰáH", "iir-pro")
+    assert_equal "witstas", form("witˢtás", "iir-pro")
+    assert_equal "kwis", form("kʷis", "itc-pro")
+    assert_equal "warna", form("wárˀnāˀ", "ine-bsl-pro"), "ˀ drops entirely under the ine key"
+    assert_equal "hlaib", form("hlaib", "gmw-pro"), "gmw: generic fold only, nothing to do"
+    # fold_with_map stays byte-identical to search_form under the 1→0 drop.
+    folded, map = Nabu::Normalize.fold_with_map("wárˀnāˀ", language: "ine-bsl-pro")
+    assert_equal "warna", folded
+    assert_equal folded.length, map.length
   end
 
   def test_unknown_language_gets_the_generic_fold
@@ -241,8 +272,9 @@ class NormalizeTest < Minitest::Test
   # search_form is found in the fold_with_map output.
   def test_fold_with_map_folded_string_equals_search_form
     ["μῆνιν ἄειδε θεά", "ἄρχε δ’ ἀοιδῆς", "Arma Virumque Iustitiam",
-     "дх҃омь ст҃ъꙇмь", "jah qiþands", "þeáh-hwæðere and ǽg-ðer"].each do |text|
-      %w[grc grc lat chu got ang].each do |language|
+     "дх҃омь ст҃ъꙇмь", "jah qiþands", "þeáh-hwæðere and ǽg-ðer",
+     "ⲙ︤ⲛ︥ⲛⲉⲧⲙⲏⲣ⳿ ⲉⲧⲉⲛⲉⲧⲙⲟⲕ︤ϩ︥"].each do |text|
+      %w[grc grc lat chu got ang cop].each do |language|
         folded, = Nabu::Normalize.fold_with_map(text, language: language)
         assert_equal Nabu::Normalize.search_form(text, language: language), folded
       end

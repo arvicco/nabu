@@ -91,23 +91,40 @@ module Nabu
     OLD_ENGLISH_FOLD = ->(str) { str.gsub(/[æþð]/, "æ" => "ae", "þ" => "th", "ð" => "th") }
     private_constant :OLD_ENGLISH_FOLD
 
-    #   gem/ine/sla  the reconstruction/proto fold (P14-10): modifier-letter
-    #        superscripts ʰ (U+02B0) → h and ʷ (U+02B7) → w — the phonetic
-    #        marks of aspirates and labiovelars (*bʰewgʰ-, *gʷʰew-). A census
-    #        of all 13,053 sla-pro/ine-pro/gem-pro headwords found these two
-    #        as the ONLY Unicode Lm modifier letters present (ʰ ×516, ʷ ×193;
-    #        every other non-ASCII char is a base letter that stays or a
-    #        combining mark the generic \p{Mn} strip already drops). The
-    #        generic fold does NOT touch Lm, so an ASCII typist's "bhewgh"
-    #        could never reach *bʰewgʰ- without this rule. tr,
-    #        length-preserving. Scoped to the reconstruction pseudo-languages
-    #        only — no attested corpus carries those collective codes, so the
-    #        three -pro shelves are the sole shelves this refolds.
-    PROTO_FOLD = ->(str) { str.tr("ʰʷ", "hw") }
+    #   gem/ine/sla/itc/iir  the reconstruction/proto fold (P14-10, extended
+    #        P17-3): modifier-letter superscripts ʰ (U+02B0) → h, ʷ (U+02B7)
+    #        → w — the phonetic marks of aspirates and labiovelars
+    #        (*bʰewgʰ-, *gʷʰew-) — plus, from the P17-3 shelf census, ˢ
+    #        (U+02E2) → s and ᶻ (U+1DBB) → z (Proto-Indo-Iranian sibilant
+    #        clusters: *adᶻdʰáH, *witˢtás; ˢ ×12, ᶻ ×9 measured) and the
+    #        glottal-stop letter ˀ (U+02C0) → "" (Proto-Balto-Slavic
+    #        laryngeal notation, *wárˀnāˀ, ×310 in headwords — dropped
+    #        entirely: no ASCII typist spells it; gsub 1→0,
+    #        fold_with_map-safe because the character contributes nothing).
+    #        The original census of all 13,053 sla-pro/ine-pro/gem-pro
+    #        headwords found ʰ/ʷ as the ONLY Lm letters there; the four
+    #        P17-3 extracts add ˢ/ᶻ/ˀ, and Proto-West Germanic (gmw-pro)
+    #        carries none — measured — so "gmw" deliberately has no key
+    #        (generic fold suffices; ine-bsl-pro folds under "ine" via
+    #        primary subtag). The generic fold does NOT touch Lm, so an
+    #        ASCII typist's "bhewgh" could never reach *bʰewgʰ- without
+    #        this rule. Scoped to the reconstruction pseudo-languages only —
+    #        no attested corpus carries those collective codes.
+    PROTO_FOLD = ->(str) { str.tr("ʰʷˢᶻ", "hwsz").gsub("ˀ", "") }
     private_constant :PROTO_FOLD
 
+    #   cop  Coptic (P17-1): delete the morphological divider ⳿ (U+2CFF,
+    #        category Po — an editorial mark attached to its letter, e.g.
+    #        ⲙⲏⲣ⳿, not text). It is the ONLY non-Mn editorial mark the
+    #        fixture census found in the diplomatic layer: the supralinear
+    #        strokes and overlines (U+0304/0305/0307/0308, U+FE24–FE26
+    #        combining half marks) are all Mn and fall to the generic strip
+    #        (the improvements §2.2 "supralinear strokes" question,
+    #        answered; conventions §9). 1→0 deletion — fold_with_map
+    #        handles chars that fold away entirely.
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
+      "cop" => ->(str) { str.delete("⳿") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
       "sux" => CUNEIFORM_FOLD,
@@ -115,7 +132,9 @@ module Nabu
       "sl" => ->(str) { str.tr("ſ", "s") },
       "gem" => PROTO_FOLD,
       "ine" => PROTO_FOLD,
-      "sla" => PROTO_FOLD
+      "sla" => PROTO_FOLD,
+      "itc" => PROTO_FOLD,
+      "iir" => PROTO_FOLD
     }.freeze
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at

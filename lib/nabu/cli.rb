@@ -34,7 +34,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug)
+      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -196,6 +196,19 @@ module Nabu
       (no AND/phrase/prefix operators) and does not combine with
       --lemma/--near/--morph.
 
+      FACETS (--type / --province / --material): document-grained categorical
+      filters over the facet table (P17-2 — EDH inscriptions seed it: 22
+      EAGLE inscription types, 103 Roman provinces, materials). Patterns are
+      case-insensitive and match the normalized term OR the upstream raw code
+      (--type epitaph and --type titsep both work; % wildcards as in
+      --place). They compose with the text query, --fuzzy, and every
+      date/place filter — the epigraphist's slice is
+      `--type epitaph --province "Pannonia inferior" --century 2`. A document
+      with no facet row falls out under an active filter (honest absence:
+      only faceted sources — inscriptions — can match). Like the date
+      filters they do not combine with --lemma/--near. Facet rows land at
+      `nabu rebuild` (like the date/place axis).
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -221,6 +234,11 @@ module Nabu
         nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
                                                    #   all — infix match, papyri+oracc
         nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
+        nabu search "dis manibus" --type epitaph --province "Germania superior"
+                                                   # the D M formula on epitaphs of
+                                                   #   one province (EDH facets)
+        nabu search --fuzzy "votum solvit" --type "votive%" --material Sandstein
+                                                   # V S L M on sandstone votives
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -247,15 +265,23 @@ module Nabu
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
     option :place, type: :string, banner: "PATTERN",
                    desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :type, type: :string, banner: "PATTERN",
+                  desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
+    option :province, type: :string, banner: "PATTERN",
+                      desc: "Roman-province facet filter (Germania inferior, pannonia%)"
+    option :material, type: :string, banner: "PATTERN",
+                      desc: "Material facet filter (Marmor, sandstein%)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     def search(query = nil)
       query = query.to_s.strip
-      if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
-                           "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
+      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
+         (options[:near] || options[:lemma])
+        raise Thor::Error, "search: --from/--to/--century/--place/--type/--province/--material compose " \
+                           "with text search only, not --lemma/--near (the dated/faceted corpus — " \
+                           "papyri, inscriptions — is not lemmatized)"
       end
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
@@ -270,6 +296,7 @@ module Nabu
       validate_license!(options[:license])
       from, to = date_window
       place = options[:place]
+      facets = facet_filters
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -278,11 +305,13 @@ module Nabu
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
       require_axis!(catalog) if from || to || place
+      require_facets!(catalog) if facets
 
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i, from: from, to: to, place: place)
-      print_search_results(results)
+                                               limit: options[:limit].to_i, from: from, to: to, place: place,
+                                               facets: facets)
+      print_search_results(results, facets: facets)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -828,15 +857,19 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller, Wiktionary-OCS)"
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, L&S, Bosworth-Toller, MW, Wiktionary-OCS)"
     long_desc <<~HELP, wrap: false
       The dictionary shelf (architecture §11): look a dictionary form up in
       the lexica the corpus holds locally — LSJ (A Greek-English Lexicon,
       grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA from
       the Perseus Digital Library, Bosworth-Toller (An Anglo-Saxon
-      Dictionary, ang; CC BY 4.0, LINDAT dump), and Wiktionary Old Church
-      Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL — etymologies with
-      their Proto-Slavic/PIE chains kept in the body). Entries print whole:
+      Dictionary, ang; CC BY 4.0, LINDAT dump), Monier-Williams (A
+      Sanskrit-English Dictionary, san; CC BY-NC-SA 3.0, Cologne CDSL —
+      SLP1 transcoded to IAST, so aṃśa and amsa both reach the entry, and
+      RV./BhP. citations resolve into the GRETIL shelf), and Wiktionary Old
+      Church Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL —
+      etymologies with their Proto-Slavic/PIE chains kept in the body).
+      Entries print whole:
       headword, short gloss, then the full entry body as structured plain
       text with sense labels on their own lines (the MCP nabu_define surface
       is the bounded sibling).
@@ -867,7 +900,7 @@ module Nabu
       ʰ→h, ʷ→w), so `define '*gʷʰew-'` and `define '*gwhew-'` reach the same
       root. `nabu etym` walks the same crosswalk from the attested side.
 
-      --lang grc|lat|ang|chu|sla-pro|ine-pro|gem-pro restricts to one
+      --lang grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro restricts to one
       shelf; --limit caps the entries.
 
       Examples:
@@ -875,13 +908,14 @@ module Nabu
         nabu define λόγος              # the long one, whole
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
+        nabu define amsa --lang san    # Monier-Williams: aṃśa/aṃsa, RV. resolved into GRETIL
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
         nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
     HELP
-    DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
-    option :lang, type: :string, banner: "grc|lat|ang|chu|sla-pro|ine-pro|gem-pro",
+    DEFINE_LANGS = %w[grc lat ang san chu sla-pro ine-pro gem-pro].freeze
+    option :lang, type: :string, banner: "grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro",
                   desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                        "ang → Bosworth-Toller, chu → Wiktionary-OCS, " \
+                        "ang → Bosworth-Toller, san → Monier-Williams, chu → Wiktionary-OCS, " \
                         "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
@@ -916,10 +950,15 @@ module Nabu
     long_desc <<~HELP, wrap: false
       The comparativist's walk: from an ATTESTED lemma (богъ, guþ, deus) to
       every reconstruction whose Wiktionary descendants name it —
-      Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org
-      extracts, CC-BY-SA + GFDL) — then one hop UP the proto-to-proto
-      chain: a Proto-Slavic entry's PIE root prints with ITS cognates, so
-      богъ reaches *bogъ, *bʰeh₂g- and ἔφᾰγον in one command.
+      Proto-Slavic, Proto-Indo-European, Proto-Germanic, and (P17-3)
+      Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic,
+      Proto-Indo-Iranian (kaikki.org
+      extracts, CC-BY-SA + GFDL) — then UP the ancestor chain, one indent
+      per shelf hop (each shelf enters a walk once, so the chain is bounded
+      and cycle-safe): прьстъ reaches *pьrstъ ← *pírštan ← *per- end to
+      end. A loan-flagged edge labels its arrow "←(loan)", and a
+      loan-flagged cognate reads "(loan)" (the P17-3 borrowed flag; rows
+      not yet reparsed carry no label — honest unknown, not a claim).
 
       Every cognate reflex that is a gold lemma in this catalog carries its
       attestation count (searchable via `nabu search --lemma`); the rest
@@ -985,8 +1024,13 @@ module Nabu
       Each hit names the root with its SHELF — and the shelf is part of the
       answer: a Slavic witness meeting a Germanic witness at a gem-pro entry
       (*hlaibaz, *kaisaraz) is very possibly a BORROWING, not common descent;
-      ine-pro meets are the inheritance signal. Wiktionary descendant trees
-      include loans and do not flag them.
+      ine-pro meets are the inheritance signal. Since P17-3 a witness whose
+      descent from the root the crosswalk FLAGS as a loan reads "(loan)"
+      (chu хлѣбъ (loan) ~ got hlaifs at *hlaibaz — the flag ORs along the
+      closure path, so a loan on a proto-to-proto edge still fires); the
+      shelf heuristic remains the caption for unflagged edges — upstream
+      flags are high-precision, low-recall — and rows predating the flag
+      reparse carry no label (honest unknown).
 
       Corpus-common words are suppressed by default (a lemma in ≥ 10% of its
       language's gold passages, absolute floor 50 — ὁ, jah, и would otherwise
@@ -1372,6 +1416,24 @@ module Nabu
         raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
       end
 
+      # A facet filter needs document_facets (migration 009) — same honest
+      # pointer as the axis guard.
+      def require_facets!(catalog)
+        return if catalog.table_exists?(:document_facets)
+
+        raise Thor::Error, "no facet table (this catalog predates it) — run nabu rebuild"
+      end
+
+      # The active facet filters as {facet name => pattern}, or nil when none
+      # (P17-2): --type → genre, --province → province, --material → material.
+      def facet_filters
+        filters = {}
+        filters["genre"] = options[:type] if options[:type]
+        filters["province"] = options[:province] if options[:province]
+        filters["material"] = options[:material] if options[:material]
+        filters.empty? ? nil : filters
+      end
+
       # Export format gate. CoNLL-U is a first-class exit format (maintenance
       # §7) but needs the token model, so it is deferred to the enrichment
       # phase with an explicit message rather than a generic "unknown format".
@@ -1513,6 +1575,7 @@ module Nabu
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         print_axis(document.axis)
+        print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
@@ -1551,6 +1614,20 @@ module Nabu
         elsif axis.place_name
           say "  place: #{axis.place_name}"
         end
+      end
+
+      # The facets line (P17-2), one compact line and only when faceted:
+      # "facets: genre=epitaph (titsep) · province=Latium et Campania …". The
+      # raw code rides in parentheses when it differs from the value (the `?`
+      # certainty stays visible).
+      def print_facets(facets)
+        return if facets.nil? || facets.empty?
+
+        rendered = facets.map do |facet|
+          raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
+          "#{facet.facet}=#{facet.value}#{raw}"
+        end
+        say "  facets: #{rendered.join(' · ')}"
       end
 
       # Print practice: the document urn appears once in the header, each
@@ -1924,8 +2001,9 @@ module Nabu
 
       # Render hits: urn + optional [language] header, then the FTS snippet
       # (diacritic-folded highlight). The footer labels that so nobody reads the
-      # stripped accents in the highlight as corpus truth.
-      def print_search_results(results)
+      # stripped accents in the highlight as corpus truth; active facet filters
+      # (P17-2) are named in one compact footer line — and only then.
+      def print_search_results(results, facets: nil)
         return say("no matches") if results.empty?
 
         results.each do |result|
@@ -1933,7 +2011,15 @@ module Nabu
           say "  #{result.snippet}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)"
+            "(highlights are diacritic-folded)#{facet_footer(facets)}"
+      end
+
+      # " · facets: genre=epitaph province=pannonia%" — empty when no facet
+      # filter is active (zero-signal silence, the compact rule).
+      def facet_footer(facets)
+        return "" if facets.nil? || facets.empty?
+
+        " · facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}"
       end
 
       # Render fuzzy hits (P16-4): the search-hit shape (urn + [language],
@@ -1941,7 +2027,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil)
         if results.empty?
           say "no matches"
         else
@@ -1950,7 +2036,7 @@ module Nabu
             say "  #{long ? result.folded_marked : result.snippet}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-              "(fuzzy substring; highlights are diacritic-folded)"
+              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets)}"
         end
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
@@ -2269,6 +2355,7 @@ module Nabu
 
         validate_license!(options[:license])
         from, to = date_window
+        facets = facet_filters
         config = Nabu::Config.load
         catalog = open_catalog(config)
         fulltext = open_fulltext(config)
@@ -2279,10 +2366,12 @@ module Nabu
         end
 
         require_axis!(catalog) if from || to || options[:place]
+        require_facets!(catalog) if facets
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
-                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place])
-        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long])
+                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place],
+                                   facets: facets)
+        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets)
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
                            "(#{query.inspect} folds to #{e.folded.inspect}) — the trigram floor"
@@ -2563,38 +2652,53 @@ module Nabu
         end
       end
 
+      # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
+      # "(loan)"; unflagged and not-yet-reparsed (NULL) edges stay bare.
       def reflex_form(reflex)
-        reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+        base = reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+        reflex.borrowed ? "#{base} (loan)" : base
       end
 
-      # etym (P14-1): one block per reconstruction entry — where the walk
+      # etym (P14-1; multi-hop P17-3): one block per entry — where the walk
       # entered (matched reflex → *headword), the entry's own reflex list,
-      # then each one-hop ancestor with its cognates.
+      # then the ancestor CHAIN, indented one step per shelf hop (the
+      # shelf-visited walk: богъ → *bogъ ← *bogù ← *bʰag-). A loan edge
+      # labels its arrow: "←(loan)". --long expands the cognate lists; the
+      # chain itself is already bounded (each shelf enters once per walk).
       def print_etym_results(lemma, results)
         if results.empty?
           return say("no reconstruction names #{lemma} as a descendant, and no reconstruction " \
-                     "headword matches it — the crosswalk covers Proto-Slavic/PIE/Proto-Germanic " \
-                     "(Wiktionary). Try the lemma's dictionary form, or a quoted '*form' for a " \
-                     "direct lookup (quote the star — zsh expands a bare *)")
+                     "headword matches it — the crosswalk covers the Wiktionary proto shelves " \
+                     "(Proto-Slavic/PIE/Proto-Germanic/Proto-Balto-Slavic/Proto-West Germanic/" \
+                     "Proto-Italic/Proto-Indo-Iranian). Try the lemma's dictionary form, or a " \
+                     "quoted '*form' for a direct lookup (quote the star — zsh expands a bare *)")
         end
 
         results.each_with_index do |result, index|
           say "" if index.positive?
-          say "#{etym_entry_line(result)}  #{result.urn}"
-          say "  gloss: #{result.gloss}" if result.gloss
-          print_reflexes(result.cognates)
-          result.ancestors.each do |ancestor|
-            say ""
-            say "← #{etym_entry_line(ancestor)}  #{ancestor.urn}"
-            say "  gloss: #{ancestor.gloss}" if ancestor.gloss
-            print_reflexes(ancestor.cognates)
-          end
+          print_etym_entry(result, 0)
+        end
+      end
+
+      def print_etym_entry(result, depth)
+        indent = "  " * depth
+        arrow = if depth.positive?
+                  result.edge_borrowed ? "←(loan) " : "← "
+                else
+                  ""
+                end
+        say "#{indent}#{arrow}#{etym_entry_line(result)}  #{result.urn}"
+        say "#{indent}  gloss: #{result.gloss}" if result.gloss
+        print_reflexes(result.cognates)
+        result.ancestors.each do |ancestor|
+          say ""
+          print_etym_entry(ancestor, depth + 1)
         end
       end
 
       def etym_entry_line(result)
         via = result.matched_reflex
-        prefix = via ? "#{via.word} [#{via.language}] → " : ""
+        prefix = via ? "#{via.word} [#{via.language}]#{' (loan)' if via.borrowed} → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
       end
@@ -2642,7 +2746,8 @@ module Nabu
           say "    #{group.root.dictionary_title}#{" · gloss: #{group.root.gloss}" if group.root.gloss}"
         end
         group.witnesses.each do |witness|
-          say "    #{witness.language.ljust(4)} #{witness.lemma}#{cognates_surfaces(witness)}"
+          loan = witness.borrowed ? " (loan)" : ""
+          say "    #{witness.language.ljust(4)} #{witness.lemma}#{loan}#{cognates_surfaces(witness)}"
           next unless options[:long]
 
           witness.document_urns.each do |urn|
@@ -2705,7 +2810,7 @@ module Nabu
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
       # note). A tripped breaker prints its counts + the --force hint and exits 1.
-      def sync_one(runner, registry, slug)
+      def sync_one(runner, registry, slug, db)
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
@@ -2718,6 +2823,18 @@ module Nabu
         say format_sync_outcome(outcome)
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
+        print_citation_coverage(entry, db)
+      end
+
+      # P17-4 per-siglum citation coverage: an adapter that declares
+      # .citation_coverage (MW → GRETIL) gets its live-resolution accounting
+      # printed after every sync — the survey's projections as verifiable
+      # output, recomputed against THIS catalog, never faked.
+      def print_citation_coverage(entry, db)
+        adapter_class = entry&.adapter_class
+        return unless adapter_class.respond_to?(:citation_coverage)
+
+        adapter_class.citation_coverage(catalog: db).each { |line| say("  #{line}") }
       end
 
       # sync --all: enabled + live sources only; report each, never abort the
@@ -2799,11 +2916,18 @@ module Nabu
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
-        return unless result.axes
+        if result.axes
+          say "  dated/placed #{result.axes.total} documents " \
+              "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
+              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, edh #{result.axes.edh})"
+        end
+        return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  dated/placed #{result.axes.total} documents " \
             "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-            "oracc #{result.axes.oracc}, torot #{result.axes.torot})"
+            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
+            "edh #{result.axes.edh})"
+        say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
       end
 
       def format_report(label, report)
