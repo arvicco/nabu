@@ -15,10 +15,14 @@ kramdown:
   syntax_highlighter_opts:
     disable: true
 
-# Horizontal navigation, in tab order.
+# Horizontal navigation, in tab order. (The GitHub repository link is
+# appended to the nav bar by the layout itself — it is an external URL, so
+# it must not pass through relative_url with the internal entries here.)
 nav:
   - title: Home
     url: /
+  - title: Quickstart
+    url: /quickstart/
   - title: The Library
     url: /library/
   - title: Tools

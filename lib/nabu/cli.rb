@@ -44,6 +44,97 @@ module Nabu
       ledger&.disconnect
     end
 
+    # -- quickstart (P18-2): the starter shelf --------------------------------
+
+    # One starter source: its registry slug, its measured canonical footprint
+    # (du -sh of the live tree, git history included), and what it unlocks.
+    StarterSource = Data.define(:slug, :size, :blurb)
+
+    # The curated starter shelf: the smallest set of real sources that delivers
+    # the library's three signature surfaces in minutes — align "MARK 2.3"
+    # (seven witnesses: sblgnt + the five PROIEL NT texts + the ISWOC
+    # West-Saxon Mark), search --lemma (PROIEL gold annotations), and
+    # define λόγος / virtus (LSJ + Lewis & Short). Sizes measured 2026-07-13.
+    # vulgate/eng-web were weighed and excluded: each is a full open-bibles
+    # clone (357 MB) for one USFX file — the first "grow the library" step
+    # instead. Order: quick wins first, the big dictionary clone last.
+    STARTER_SOURCES = [
+      StarterSource.new(slug: "sblgnt", size: "~11 MB",
+                        blurb: "SBL Greek New Testament — the align hub's second Greek witness (CC BY)"),
+      StarterSource.new(slug: "proiel", size: "~175 MB",
+                        blurb: "PROIEL treebank — NT in Greek, Latin, Gothic, Armenian, OCS; gold lemmas (nc)"),
+      StarterSource.new(slug: "iswoc", size: "~30 MB",
+                        blurb: "ISWOC treebank — the West-Saxon gospels, Old English (nc)"),
+      StarterSource.new(slug: "lexica", size: "~480 MB",
+                        blurb: "LSJ + Lewis & Short — the dictionary shelf (CC BY-SA)")
+    ].freeze
+    # The whole shelf on disk (sum of the measured sizes above).
+    STARTER_TOTAL = "~690 MB"
+
+    # Class-method accessor so tests can pin a fixture-backed starter list
+    # (the Config.load swap pattern) without touching the shipped constant.
+    def self.starter_sources = STARTER_SOURCES
+
+    desc "quickstart", "Sync the starter shelf (#{STARTER_SOURCES.map(&:slug).join(' → ')}) " \
+                       "and print what to try first"
+    long_desc <<~HELP, wrap: false
+      The zero-to-first-marvel path for a fresh clone: sync the curated STARTER
+      SHELF — four small sources, #{STARTER_TOTAL} canonical on disk (measured
+      2026-07-13), minutes on an ordinary connection — then print the first
+      three commands to try:
+
+        sblgnt   ~11 MB    SBL Greek New Testament (CC BY)
+        proiel   ~175 MB   PROIEL treebank: the NT in Greek, Latin, Gothic,
+                           Armenian, and Old Church Slavonic, with gold
+                           lemma/morphology annotations (nc)
+        iswoc    ~30 MB    ISWOC treebank: the West-Saxon gospels — Old
+                           English as an alignment witness (nc)
+        lexica   ~480 MB   LSJ + Lewis & Short, the dictionary shelf (CC BY-SA)
+
+      Together they light the three signature surfaces: `align "MARK 2.3"`
+      (one verse across seven witnesses), `search --lemma λέγω`
+      (dictionary-form search over the gold treebanks — λέγουσι, εἶπας,
+      εἰπεῖν all found), and `define λόγος` / `define virtus` (the full
+      dictionary entries, citations resolved into your own catalog).
+
+      Each source syncs through its NORMAL path (fetch → load → index), so
+      the command is idempotent — a re-run is an ordinary re-sync — and one
+      source's failure never stops the rest: failures are reported at the
+      end, and the exit status is 1 if any source failed. --list prints the
+      set (with sizes) and exits without touching the network.
+
+      Examples:
+        nabu quickstart          # sync the starter shelf, then try the printed commands
+        nabu quickstart --list   # what would be synced, and why
+
+      Use cases: a new install's first minutes; the README/site Quickstart's
+      one command; rebuilding a demo box.
+    HELP
+    option :list, type: :boolean, default: false,
+                  desc: "Print the starter set (slugs, sizes, what each unlocks) and exit without syncing"
+    def quickstart
+      return print_starter_list if options[:list]
+
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      # Ledger FIRST, as in sync: open_or_create_ledger lifts a pre-P7-1
+      # catalog's history before open_or_create_catalog migrates it away.
+      ledger = open_or_create_ledger(config)
+      db = open_or_create_catalog(config)
+      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
+      failures = run_starter_syncs(runner)
+      print_quickstart_epilogue(failures)
+      unless failures.empty?
+        raise Thor::Error, "quickstart: #{failures.size} of #{self.class.starter_sources.size} starter " \
+                           "sources failed — re-run bin/nabu quickstart, or sync each by name (bin/nabu sync <slug>)"
+      end
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    ensure
+      db&.disconnect
+      ledger&.disconnect
+    end
+
     desc "status", "Show per-source sync status and passage counts"
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
@@ -2865,6 +2956,61 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # -- quickstart (P18-2) -------------------------------------------------
+
+      # `quickstart --list`: the starter set, sizes, and what each source
+      # unlocks — no network, no db, nothing created.
+      def print_starter_list
+        say "starter shelf (#{STARTER_TOTAL} canonical, minutes to sync):"
+        self.class.starter_sources.each do |starter|
+          say "  #{starter.slug.ljust(8)} #{starter.size.rjust(8)}  #{starter.blurb}"
+        end
+        say "sync it: bin/nabu quickstart"
+      end
+
+      # Sync the starter list IN ORDER through the normal per-source path
+      # (fetch → load → index — SyncRunner#sync, the same code `nabu sync
+      # <slug>` runs, so the command is idempotent by construction). One
+      # source's failure never stops the rest (sync --all's posture): failures
+      # collect as [slug, message] pairs and report after the batch. An
+      # unregistered starter slug fails the same way (ValidationError is a
+      # Nabu::Error), never aborting the run.
+      def run_starter_syncs(runner)
+        failures = []
+        self.class.starter_sources.each do |starter|
+          outcome = runner.sync(starter.slug, progress: progress_reporter)
+          finish_progress
+          if outcome.aborted?
+            failures << [starter.slug, outcome.breaker.message]
+          else
+            say format_sync_outcome(outcome)
+            print_discovery_accounting(outcome)
+            print_sync_warnings(outcome)
+          end
+        rescue Nabu::Error => e
+          finish_progress
+          failures << [starter.slug, e.message]
+        end
+        failures
+      end
+
+      # The "try these" epilogue: any failures first (so what follows is read
+      # against an honest shelf), then the three marvels with their
+      # expected-shape hints, then the growth pointer. Compact house style.
+      def print_quickstart_epilogue(failures)
+        unless failures.empty?
+          say ""
+          failures.each { |slug, message| say("  #{slug.ljust(8)} FAILED — #{message}", :red) }
+        end
+        say ""
+        say "try these:"
+        say %(  bin/nabu align "MARK 2.3"      # one verse, seven witnesses: Greek ×2, Latin, Gothic, OCS, Old English)
+        say "  bin/nabu search --lemma λέγω    # every inflection over the gold treebanks: λέγουσι, εἶπας, εἰπεῖν…"
+        say "  bin/nabu define λόγος           # the whole LSJ entry, citations resolved (Latin: define virtus)"
+        say "grow the library: bin/nabu sync --all (live sources) or bin/nabu sync <slug> — " \
+            "the menu is config/sources.yml, the shelf map docs/library.md"
       end
 
       # P11-7 discovery accounting: classify every content-pattern file
