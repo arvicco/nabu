@@ -128,6 +128,25 @@ module Query
                    "the same fragment in a literary passage stays invisible to --fuzzy"
     end
 
+    # -- the facet filter composes (P17-2) --------------------------------------
+
+    def test_facet_filter_composes_with_fuzzy
+      epitaph = make_document(urn: "urn:d:epitaph", language: "lat")
+      make_passage(epitaph, urn: "urn:d:epitaph:1", text: "dis manibus sacrum", sequence: 0, language: "lat")
+      votive = make_document(urn: "urn:d:votive", language: "lat")
+      make_passage(votive, urn: "urn:d:votive:1", text: "dis manibus votum", sequence: 0, language: "lat")
+      @catalog[:document_facets].insert(document_id: epitaph.id, facet: "genre",
+                                        value: "epitaph", raw: "titsep")
+      @catalog[:document_facets].insert(document_id: votive.id, facet: "genre",
+                                        value: "votive inscription", raw: "titsac")
+      rebuild!
+
+      assert_equal %w[urn:d:epitaph:1 urn:d:votive:1], fuzzy_run("s manibus").map(&:urn).sort
+      assert_equal %w[urn:d:epitaph:1],
+                   fuzzy_run("s manibus", facets: { "genre" => "epitaph" }).map(&:urn),
+                   "the mid-word fragment scoped to one genre facet"
+    end
+
     def test_scope_reports_the_built_slugs
       rebuild!
       assert_equal %w[pap], fuzzy.scope

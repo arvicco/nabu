@@ -40,11 +40,18 @@ module Nabu
       # honest residues: hgv_files/hgv_invalid (P15-2), oracc_undated (members
       # whose date didn't resolve — skipped, counted, never guessed),
       # torot_annals (the passage-grain annal rows behind the torot documents)
-      # and coptic_invalid (P17-1 — year-0/unparseable TT headers, skipped).
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic,
+      # and coptic_invalid (P17-1 — year-0/unparseable TT headers, skipped)
+      # and edh_undated/edh_invalid (P17-2: undated-but-joined records and the
+      # year-0 tripwire). The P17-1/P17-2 fields default so every prior
+      # construction stays valid.
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
-                            :coptic_invalid) do
-        def total = hgv + goo300k + imp + oracc + torot + coptic
+                            :coptic_invalid, :edh_undated, :edh_invalid) do
+        def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0, **)
+          super
+        end
+
+        def total = hgv + goo300k + imp + oracc + torot + coptic + edh
       end
 
       module_function
@@ -60,12 +67,14 @@ module Nabu
         oracc = OraccDates.build(catalog: catalog, canonical_dir: canonical_dir)
         torot = ChronicleAnnals.build(catalog: catalog, canonical_dir: canonical_dir)
         coptic = CopticScriptoriumDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        edh = EdhDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
-                    coptic: coptic[:documents],
+                    coptic: coptic[:documents], edh: edh[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
-                    coptic_invalid: coptic[:invalid])
+                    coptic_invalid: coptic[:invalid],
+                    edh_undated: edh[:undated], edh_invalid: edh[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -214,3 +223,4 @@ end
 require_relative "axis_builder/oracc_dates"
 require_relative "axis_builder/chronicle_annals"
 require_relative "axis_builder/coptic_scriptorium_dates"
+require_relative "axis_builder/edh_dates"

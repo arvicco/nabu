@@ -1,0 +1,60 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# ZIP-EXTRACT PROVENANCE. The three EpiDoc records were copied byte-identical
+# out of the downloaded EDH dump zips (retrieved 2026-07-13); there is no raw
+# per-file URL to re-GET — re-acquiring means downloading the ~18 MB range zip
+# and extracting, not a raw file fetch. The two CSVs are documented TRIMS of
+# the corpus-wide downloads (header + the fixtured records' rows, rows
+# byte-identical). So every entry is refetchable: false — `fixtures:check`
+# SKIPS them (printing the reason) and `fixtures:refresh` refuses to touch
+# them. Upstream is archived (survey §1) and all artifacts were HEAD-verified
+# live on 2026-07-13.
+source: edh
+adapter_test:
+files:
+  - path: epidoc/HD000001-HD010000/HD000001.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD000001-HD010000.zip; re-acquiring = zip download + unzip, not a raw GET
+    canonical: canonical/edh/epidoc/HD000001-HD010000/HD000001.xml
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhEpidocDump_HD000001-HD010000.zip
+    copied: 2026-07-13
+    whole: true
+    trim: none (persons/genre exemplar, copied whole from the zip)
+  - path: epidoc/HD000001-HD010000/HD000082.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD000001-HD010000.zip; re-acquiring = zip download + unzip, not a raw GET
+    canonical: canonical/edh/epidoc/HD000001-HD010000/HD000082.xml
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhEpidocDump_HD000001-HD010000.zip
+    copied: 2026-07-13
+    whole: true
+    trim: none (bilingual textpart + damnatio exemplar, copied whole from the zip)
+  - path: epidoc/HD080001-HD082828/HD080825.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD080001-HD082828.zip; re-acquiring = zip download + unzip, not a raw GET
+    canonical: canonical/edh/epidoc/HD080001-HD082828/HD080825.xml
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhEpidocDump_HD080001-HD082828.zip
+    copied: 2026-07-13
+    whole: true
+    trim: none (expan/supplied/gap + lb n="0" exemplar, copied whole from the zip)
+  - path: text/edh_data_text.csv
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from the 57 MB corpus-wide download; a fresh GET returns the full file, not this trim
+    canonical: canonical/edh/text/edh_data_text.csv
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edh_data_text.csv
+    copied: 2026-07-13
+    whole: false
+    trim: header + the HD000001/HD000082/HD080825 rows only (whole physical lines, byte-identical)
+  - path: pers/edh_data_pers.csv
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from the 8.9 MB corpus-wide download; a fresh GET returns the full file, not this trim
+    canonical: canonical/edh/pers/edh_data_pers.csv
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edh_data_pers.csv
+    copied: 2026-07-13
+    whole: false
+    trim: header + the five person rows of the three fixtured records (whole physical lines, byte-identical)

@@ -213,6 +213,14 @@ contains a partial del: a corpus-wide, journaled revision (bumped
 revisions, provenance entries), to be scheduled deliberately — not
 smuggled in through a parser patch.
 
+**Per-source adoption (P17-2, EDH).** The always-`⟦…⟧` reading IS adopted
+for the EDH inscriptions (`EdhEpidocParser`): their
+`<del rend="erasure">` is the damnatio-memoriae case — legible, edited
+text EDH's own edition prints inside `[[…]]` — and the source lands with
+no frozen urns, so the faithful rule costs no revision storm. The DDbDP
+corpus-wide question above remains open and owner-gated; per-source policy
+where history permits, journaled revision where it does not.
+
 ## 6. Lemmas and morphology — why treebanks are precious
 
 Ancient IE languages are heavily inflected: one Greek verb inflects into

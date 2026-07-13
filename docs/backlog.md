@@ -5578,7 +5578,7 @@ packet, per mid-task coordinator directive). [VERIFIED at review,
 post-rebuild: 8 live cop passages DO carry U+2CFF — not a no-op; they
 refold correctly at next rebuild, intended and small.]
 
-## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: scouting] [deps: —]
+## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
 Register §2.3. Epigraphy as the third documentary shelf — fuzzy_index's
 designed second customer (one config line) + the axis's natural feed
 (EDH dating not_before/not_after; findspot/province). Deep layers to
@@ -5589,6 +5589,55 @@ expansions + lacunae (folding/fuzzy nuances), bilinguals (grc/lat),
 province geo (strings + province v1; coordinates noted not ingested).
 EDH is archived/read-only upstream — census the dump format (Open Data
 repo, CC BY-SA) and the frozen sync_policy fit.
+PHASE A (2026-07-13): docs/edh-survey.md — 82,450 inscriptions censused
+from 12,747 records read + both corpus-wide CSVs; all verdicts inside
+(langUsage-lies trap, del→⟦…⟧, line grain, facet schema, frozen policy,
+persons-as-annotations v1). Fixture plan owner-approved same day.
+PHASE B FINDINGS (2026-07-13): (1) ONE SURVEY DEVIATION, argued — the
+survey's "persons ride in the document's annotations, zero schema"
+presumed a document-annotations surface that DID NOT EXIST (documents had
+no metadata/annotations column; the loader dropped Document#metadata on
+the floor). Migration 009 therefore carries a rider beside
+document_facets: documents.metadata_json (NOT NULL default "{}"),
+persisted by the loader as pure METADATA — deliberately outside
+ContentHash (the license_override precedent), reconciled on the
+same-content path with no revision bump, so every stored sha is
+byte-stable and imp/goo300k/freising's already-emitted metadata persists
+for free. (2) document_facets landed as surveyed: skinny
+(document_id, facet, value, raw), facet ∈ genre/province/material/
+object_type for EDH, value = the record's own EAGLE/XML term, raw = the
+CSV code verbatim with `?`-certainty surviving; Store::FacetBuilder
+projects it from metadata_json at rebuild (after AxisBuilder), so NO
+code-side vocabulary tables exist — the titadnun unknown resolved itself
+(each record carries its own term; live-checked HD014570 = "adnuntiatio").
+(3) search --type/--province/--material as correlated EXISTS in
+CatalogJoin (value OR raw, ilike), composing with --from/--to/--century/
+--place AND --fuzzy; compact renders: search footer names active facet
+filters, show prints one facets: line (raw in parens when divergent),
+rebuild prints the facets summary. MCP nabu_search facet args deferred
+(not in the packet deliverable list; config-shaped follow-up).
+(4) EdhEpidocParser: DdbdpParser-adjacent streaming family; del ALWAYS
+⟦…⟧ (per-source adoption of conventions §5's future-work direction —
+recorded there; no frozen urns exist so no revision storm); gap-only
+lines (lb n="0") not citable; per-passage grc by script (GL bilinguals);
+textpart-relative line restarts in urns. (5) Adapter: 9 flat zips
+(ZipFetch, all URLs HEAD-re-verified 2026-07-13) + 2 CSVs (FileFetch,
+each in its OWN subdir — FileFetch is single-file-per-dir, siblings read
+as deletions); language STRICTLY from CSV nl_text (L→lat, G→grc,
+exotic 5-record residue → und); ~475 text-less stubs skip-by-rule with
+discovery accounting (XML-without-CSV-row = loud unrecognized).
+(6) AxisBuilder::EdhDates: CSV signed years verbatim (no year 0 —
+tripwire counted), open-ended honest, place = fo_antik→fo_modern with
+Pleiades-then-GeoNames refs; Summary grew edh/edh_undated/edh_invalid
+with defaults. (7) Registry: enabled: false, sync_policy: frozen,
+fuzzy_index: true — the one-config-line promise kept. Fixtures per the
+approved plan (HD000001/HD000082/HD080825 byte-identical + both CSVs
+trimmed, manifest + README). Tests +83 (suite 2130/29,466, lint clean,
+both exit 0). Owner queue: one frozen ~220 MB `bin/nabu sync edh`, then
+rebuild (facet+axis rows + trigram +~70 MB materialize), eyeball, flip
+enabled. Live-db demo SKIPPED (owner rebuild was running — deferred to
+review). v2 recorded in the survey: persons table + attestation query,
+geo layer, btext, PIR/TM links edges, GODOT.
 
 ## P17-3 · Reconstruction shelf, part 2  [tier: opus, two-phase] [status: scouting] [deps: —]
 Register §1.11 extension; owner PIE/comparativistics axis. Census which
