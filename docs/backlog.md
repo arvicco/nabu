@@ -5574,7 +5574,9 @@ Registry `enabled: false`; owner fires the first sync (checklist §6).
 Note for review: the §9 cop fold refolds the ~28k live papyri-ddbdp cop
 passages at next rebuild — expected a no-op (documentary text carries
 no U+2CFF) but unverified against live canonical (db untouched this
-packet, per mid-task coordinator directive).
+packet, per mid-task coordinator directive). [VERIFIED at review,
+post-rebuild: 8 live cop passages DO carry U+2CFF — not a no-op; they
+refold correctly at next rebuild, intended and small.]
 
 ## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: scouting] [deps: —]
 Register §2.3. Epigraphy as the third documentary shelf — fuzzy_index's
