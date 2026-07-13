@@ -5563,7 +5563,7 @@ reliably enough to mint crosswalk edges, distinct from kaikki's);
 etymology cross-references between entries. Would complete the
 per-language desk loop: LSJ:grc :: L&S:lat :: B-T:ang :: MW:san.
 
-## P17-5 · Etruscan axis scout  [tier: opus, two-phase] [status: scouting] [deps: —]
+## P17-5 · Etruscan axis scout  [tier: opus, two-phase] [status: Phase A done 2026-07-13 — owner gate PASSED: fixture plan approved, OpenEtruscan ingests under `attribution` (Larth-provenance caveat journaled + license_watch on the Zenodo record); Phase B adapter → P18 queue] [deps: —]
 Owner axis voiced 2026-07-13 ("One more axis I'd like to explore while
 we're close to Proto-Italic etc - Etruscan"). Phase A survey: what
 machine-readable Etruscan exists — inscription corpora (ETP/UMass, CIE
@@ -5576,7 +5576,7 @@ proto-shelf ascent, but the language-contact surfaces (Latin↔Etruscan
 loans, bilinguals like the Pyrgi tablets) are the synergy to census.
 License per source; ranked verdict + fixture plan for the gate.
 
-## P17-6 · CLARIN.SI repository survey  [tier: opus, scout] [status: scouting] [deps: —]
+## P17-6 · CLARIN.SI repository survey  [tier: opus, scout] [status: done 2026-07-13 — owner verdict: ALL findings → P18 queue (Damaskini, Slovenian dictionary shelf, PriLit rider); ELEXIS repo-help email = owner reminder, ride the Miklosich send] [deps: —]
 Owner request (2026-07-13): "check what else is available on clarin.si
 in addition to goo300k/imp/freising". Survey the whole repository
 against our axes (Slavic deepening — OCS/Old East Slavic/South Slavic/
@@ -5633,6 +5633,24 @@ Tests +8 (reader-snapshot-during-commit regression, subprocess busy
 wait, busy_timeout + journal_mode pinned on all 7 connect paths,
 rollback→WAL self-heal; backup sidecar ride-along/prune/dry-run).
 Suite 2055/29,104 exit 0, lint 263 files exit 0.
+
+# ── Phase 18 queue (owner-approved 2026-07-13, dispatch next phase) ──
+# 1. Etruscan adapter (P17-5 Phase B): OpenEtruscan CSV (new flat-CSV
+#    parser family, skip ocr_failed, fuzzy_index, BCE sign-flip pin) +
+#    kaikki ett EXTRACTS row + the Latin-loans curated-edge rider;
+#    posture: attribution + journaled Larth caveat + license_watch.
+#    Fixture plan APPROVED (etruscan-survey.md §fixtures).
+# 2. Damaskini (clarin-si-survey pick #1, CC BY-SA): Balkan Slavic
+#    gold corpus, aligned English, St. Petka multi-witness collation.
+# 3. Slovenian historical dictionary shelf (pick #2, CC BY): Pleteršnik
+#    + Svetokriški (loanword etymologies → borrowed synergy) + besedje16
+#    (Dalmatin sigla crosswalk); one dictionary parser family.
+# 4. PriLit rider (pick #3, CC BY): 1643–1866 TEI, 7-edition collation.
+# 5. Carried candidates: scholia + dictionary-citation links producers,
+#    edition-vs-edition collate, streaming batch parallels producer.
+# OWNER REMINDER (raise at P17-gate + P18 planning): ELEXIS bitstream
+# question — one email to repo-help@clarin.si settles 141 dictionary
+# records incl. Miklosich; CC on the pending Miklosich draft send.
 
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
