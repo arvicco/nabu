@@ -5576,6 +5576,18 @@ proto-shelf ascent, but the language-contact surfaces (Latin↔Etruscan
 loans, bilinguals like the Pyrgi tablets) are the synergy to census.
 License per source; ranked verdict + fixture plan for the gate.
 
+## P17-6 · CLARIN.SI repository survey  [tier: opus, scout] [status: scouting] [deps: —]
+Owner request (2026-07-13): "check what else is available on clarin.si
+in addition to goo300k/imp/freising". Survey the whole repository
+against our axes (Slavic deepening — OCS/Old East Slavic/South Slavic/
+Slovenian, historical corpora, dictionaries, treebanks; secondary: any
+cross-axis surprises worth naming). Known context: goo300k/imp/freising
+already held; Miklosich known-blocked on BCDH (do not re-scout it,
+reference the standing thread). Per-item license verdicts (clarin.si
+items carry explicit CC labels; BY-ND is IN-SCOPE per the standing
+ruling → research_private), machine-readability, size, ranked verdict +
+fixture-plan sketches for the top picks.
+
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
 facets from live db), improvements register (§2.2/§2.3 → shipped,
