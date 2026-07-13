@@ -453,7 +453,10 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
 
 1. **Every phase gate** (before the PR): refresh the header totals and any
    table a packet touched; new source = new section. This is part of the
-   gate's README-truthfulness pass — the orchestrator owns it.
+   gate's README-truthfulness pass — the orchestrator owns it. The public
+   site (`site/`, P17-9) is refreshed in the same pass — its numbers are
+   COPIED from this file and README with their as-of dates, never
+   re-derived (contract: site/MAINTENANCE.md).
 2. **After every owner-fired real sync**: re-read `bin/nabu status` and the
    per-source counts; update sizes if drift >1%. Cheap — one query per table.
 3. **Quarterly full review** (next due **2026-10-08**): re-verify every
