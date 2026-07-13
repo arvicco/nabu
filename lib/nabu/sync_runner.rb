@@ -186,7 +186,8 @@ module Nabu
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
       Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext,
-                              alignments: AlignmentRegistry.load(@config.alignments_path))
+                              alignments: AlignmentRegistry.load(@config.alignments_path),
+                              fuzzy_slugs: @registry.fuzzy_slugs)
     ensure
       fulltext&.disconnect
     end

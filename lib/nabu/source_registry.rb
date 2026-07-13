@@ -27,10 +27,20 @@ module Nabu
     # — the license-drift check for upstreams whose terms live in a README
     # or a repository record page rather than a github LICENSE file (nil =
     # not watched; the probe's default per-strategy check applies).
+    # +fuzzy_index+ (P16-4): per-source opt-in to the trigram fragment index
+    # (search --fuzzy). This is an OWNER POSTURE, not adapter metadata: the
+    # documentary scope exists because of index economics (design §4: the
+    # documentary shelves cost ~250–270 MB, the whole corpus 3.6–4.1 GB), so
+    # the flag lives here beside enabled/translations — flipped per-source in
+    # sources.yml with a sign-off comment, no code change when a future
+    # documentary source (inscriptions) joins. A manifest field was rejected
+    # (the manifest is intrinsic upstream identity/license, and editing it IS
+    # code spelunking); a constant was rejected by the design itself ("a
+    # config list, not a hardcode").
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
-                        :license_watch) do
+                        :license_watch, :fuzzy_index) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
-                     license_watch: nil)
+                     license_watch: nil, fuzzy_index: false)
         super
       end
 
@@ -123,7 +133,8 @@ module Nabu
         slug: slug, adapter_class_name: adapter,
         enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config),
         translations: boolean!(slug, config, "translations"),
-        license_watch: license_watch!(slug, config)
+        license_watch: license_watch!(slug, config),
+        fuzzy_index: boolean!(slug, config, "fuzzy_index")
       )
     end
     private_class_method :build_entry
@@ -181,6 +192,12 @@ module Nabu
 
     def slugs
       @entries.keys
+    end
+
+    # Slugs opted into the trigram fragment index (search --fuzzy, P16-4) —
+    # what the Indexer scopes its trigram pass to. Registration order.
+    def fuzzy_slugs
+      @entries.each_value.select(&:fuzzy_index).map(&:slug)
     end
 
     def empty?

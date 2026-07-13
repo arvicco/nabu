@@ -371,6 +371,15 @@ the `query_forms` union — the whole argument above applies verbatim. Note
 Greek dictionary forms routinely *end* in ς (λόγος → λογοσ): consistent
 precisely because BOTH sides fold.
 
+**Fragment queries strip editorial brackets (P16-4 — QUERY-side, not a
+fold):** `search --fuzzy` deletes `[` and `]` from the QUERY before the
+fold union runs, because the papyrological use case types the lacuna edges
+straight off the edition (`]μηνιν αει[`) and brackets there mark damage,
+not searchable characters. This never touches `search_form` or the rule
+table above — stored text keeps its `[…]` gap markers, indexed as-is — and
+braces are deliberately NOT stripped: `{d}` is a cuneiform determinative
+the akk/sux fold already opens to spaces on both sides.
+
 **Deliberately conservative decisions (the open questions):**
 
 - **Greek adscript iota.** The combining subscript (ᾳ = α + U+0345) strips

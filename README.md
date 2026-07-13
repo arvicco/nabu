@@ -172,6 +172,20 @@ abuts Lebanon."
 - **Indologists.** 780 GRETIL editions, 703k passages: Rāmāyaṇa, purāṇas,
   kāvya, dharmaśāstra, the Ṛgveda with Vedic accents preserved; commentary
   layers separately citable (kārikā vs. vṛtti).
+- **Papyrologists.** 61k DDbDP documents, and fragment search that reads
+  like an edition: type the damaged line brackets and all, and `--fuzzy`
+  matches it INSIDE words (trigram index over papyri + ORACC, sub-10 ms):
+
+  ```
+  $ bin/nabu search --fuzzy ']ανδρα μοι εν['
+  urn:nabu:ddbdp:bgu:6:1470:ctr:6 [grc]
+    μαρτυροι. [ανδρα μοι εν]νεπε μουσα πολυτρο
+  1 hit (fuzzy substring; highlights are diacritic-folded)
+  fuzzy index covers: oracc, papyri-ddbdp
+  ```
+
+  — BGU 6.1470, a Hellenistic writing exercise breaking off mid-word
+  through the Odyssey's opening line (…Μοῦσα πολύτρο[πον).
 - **Assyriologists.** 21,692 ORACC documents (CC0) across 33 projects —
   12,781 tablets and inscriptions, the complete State Archives of Assyria
   among them, plus 8,911 aligned English translations — with gold
@@ -245,6 +259,7 @@ candidates live in the axis surveys:
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. Date/place axis (61,670 dated documents — HGV papyri + Slovene goo300k/IMP): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. |
 | `nabu search --lemma FORM` | Dictionary-form search over 2.62M gold lemma rows in 14 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
+| `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc, `fuzzy_index: true` in the registry; 257 MB — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
 | `nabu parallels URN` | Passage-anchored intertext: point at one passage and find where the corpus quotes or echoes it — reception discovery, not translation alignment. Query-time over the FTS index (no new schema): the anchor's 4-word grams are phrase-probed, candidates ranked by shared-gram count weighted by rarity, elision folded across editions (so Matthew 4:4 finds LXX Deuteronomy 8:3). One hit per document (duplicate witnesses grouped, loci counted), the shared phrase shown as evidence; a gold-lemmatized anchor also gets rare-lemma "echoes" (re-inflected allusion). `--long` expands the truncated evidence; `--lang`/`--license`/`--limit` scope. |
 | `nabu formulas SCOPE` | The oral-formulaic reader's mirror of `parallels`, pointed inward: mine the repeated formulas WITHIN a corpus slice (a source slug or a work/urn prefix) — the same gram machinery, counting instead of probing. Homer's `ὣς ἔφαθ' οἵ δ'` (72×), `τὸν δ' ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς` (50×); the Old English `saga hwæt ic hatte` riddle refrain, `Beowulf maþelode bearn Ecgþeowes`, `awa to feore`. Ranked by count × length — no stoplist, the ranking is self-filtering (a genuine formula out-recurs any function-word run; measured). `--lang` mines one tradition where a source mixes translations; `--gram-size`, `--min-count`, `--limit`, `--long` (every locus). Zero schema, ~0.2 s per slice. |
