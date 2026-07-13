@@ -62,6 +62,36 @@ the adapter's discover walks fixtures exactly as it walks canonical.
   `figure`/`figDesc` seal spans that CLOSE out of order (`</figDesc>`
   before `</figure>` — the not-a-tree proof); `origDate` 0700–0799.
 
+## The dual-origin pair (P17-10)
+
+`ot.hab.bohairic_ed` is the ONE work urn upstream mints from two origins
+(everywhere else standalone editions carry distinct `_ed` urns —
+`nt.mark.sahidica_ed` loose vs `nt.mark.sahidica` zip). Both fixtures were
+trimmed 2026-07-13 from the LOCAL canonical tree at the pinned v6.2.0 tag
+(`canonical/coptic-scriptorium/…`, byte-identical to the raw-URL tag paths
+below), verse ranges chosen so the pair exercises the precedence rule and
+the historical unzip-exit-9 crash shape:
+
+- `bohairic-habakkuk/bohairic.habakkuk_TT/bohairic.Habakkuk_01.tt` —
+  TRIMMED to the meta line + `lb_n` 1–2 + verses 1–2 (upstream lines 1–325
+  byte-identical, `</meta>` re-added; 118,874 B → 10,183 B). The standalone
+  digital edition: v6.2.0 (2025-11-25), segmentation/tagging/parsing/
+  entities/identities all GOLD, `people`/`places` rosters, `lb_n`
+  manuscript topology, public-domain text + CC-BY 4.0 annotations →
+  `attribution` override. Source: `bohairic-habakkuk/bohairic.habakkuk_TT/
+  bohairic.Habakkuk_01.tt` in the canonical tree.
+- `bohairic.ot/bohairic.ot_TT.zip` — rebuilt zip (`zip -X`) with 1 of 637
+  members: `35_Habacuc_01.tt` cut to the meta line + verses 1–2 (upstream
+  member lines 1–316 byte-identical, `</meta>` re-added; 116,894 B →
+  9,430 B). The SAME work urn from the bible zip: frozen v6.0.0
+  (2024-10-31) automatic snapshot, minimal header, CC-BY-SA. Source:
+  `bohairic.ot/bohairic.ot_TT.zip!35_Habacuc_01.tt` in the canonical tree.
+
+The two origins are byte-DIFFERENT (the P17-10 census: revised lemmas,
+re-tokenization, the added `lb_n` layer) — the same edition at two
+releases, so the standalone corpus wins by precedence and the zip member
+is skipped by rule (counted in the discovery accounting).
+
 ## Retrieval URLs
 
 - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_lack_of_food.tt
@@ -72,6 +102,11 @@ the adapter's discover walks fixtures exactly as it walks canonical.
   (5.5 MB, 259 members; the checked-in zip is REBUILT from the two members
   above — `zip -X` over the trimmed Mark + whole Philemon — so a fresh GET
   can never byte-match it)
+- https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic-habakkuk/bohairic.habakkuk_TT/bohairic.Habakkuk_01.tt
+  (trimmed, see the dual-origin section)
+- https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.ot/bohairic.ot_TT.zip
+  (10 MB, 637 members; the checked-in zip is REBUILT from the one trimmed
+  Habacuc member, so a fresh GET can never byte-match it)
 
 ## License chain
 
