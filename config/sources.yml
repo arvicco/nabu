@@ -265,6 +265,22 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+edh:
+  adapter: Nabu::Adapters::Edh
+  enabled: false   # P17-2: awaiting the owner-fired first (and only) sync —
+                   # ~220 MB canonical: 9 EpiDoc zips (153.8 MB) + 2 CSVs.
+  # Upstream archived: funding closed 2021, staff gone, dumps Last-Modified
+  # 2021-12-16 (all HEAD-verified 2026-07-13) — the preservation argument
+  # (docs/edh-survey.md §1). Frozen = one-shot snapshot, no re-sync.
+  sync_policy: frozen
+  # P16-4: the trigram fragment index's designed third documentary shelf —
+  # the survey's one-config-line promise (~447k lines at 23.8 chars/line,
+  # projected +~70 MB; edh-survey §3).
+  fuzzy_index: true
+  # license_watch candidate (P16-5, owner decision — the CC BY-SA 4.0 grant
+  # lives on the /data page, which serves the terms directly):
+  # license_watch: https://edh.ub.uni-heidelberg.de/data
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

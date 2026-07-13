@@ -95,8 +95,10 @@ module Nabu
       # Substring-search +fragment+ and return up to +limit+ Results in bm25
       # candidate order. Filters compose exactly as Search: +lang+ on passage
       # language, +license+ on effective class, +from+/+to+/+place+ on the
-      # document date/place axis. Raises QueryTooShort below the trigram floor.
-      def run(fragment, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil)
+      # document date/place axis, +facets+ (P17-2) on the document facet rows
+      # — a fragmentary formula scoped `--type epitaph` is the designed use.
+      # Raises QueryTooShort below the trigram floor.
+      def run(fragment, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil, facets: nil)
         variants = query_variants(fragment)
         hits = candidates(variants, inner_limit: limit * INNER_LIMIT_FACTOR)
         verified = hits.filter_map do |row|
@@ -105,7 +107,8 @@ module Nabu
         end
         return [] if verified.empty?
 
-        rows = catalog_rows(verified.map(&:first), lang: lang, license: license, from: from, to: to, place: place)
+        rows = catalog_rows(verified.map(&:first), lang: lang, license: license,
+                                                   from: from, to: to, place: place, facets: facets)
                .to_h { |row| [row.fetch(:passage_id), row] }
         verified.filter_map { |id, folded, match| build_result(rows[id], folded, match) if rows[id] }
                 .first(limit)

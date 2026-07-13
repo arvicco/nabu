@@ -31,9 +31,10 @@ module Nabu
       # two-level visibility rule (neither passage nor its document withdrawn)
       # plus the optional language and license filters. No ordering: the
       # caller restores its own index order. +from+/+to+/+place+ (P15-2) add the
-      # document-grained date/place axis filter.
-      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil)
-        visible_passages(lang: lang, license: license, from: from, to: to, place: place)
+      # document-grained date/place axis filter; +facets+ (P17-2) the
+      # document-grained facet filter ({facet name => pattern}).
+      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil)
+        visible_passages(lang: lang, license: license, from: from, to: to, place: place, facets: facets)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -50,7 +51,7 @@ module Nabu
       # multiplies passage rows. A document with NO axis row is undated and
       # falls out under any active date/place filter (an absence, never an
       # error).
-      def visible_passages(lang:, license:, from: nil, to: nil, place: nil)
+      def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -59,6 +60,7 @@ module Nabu
         dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
+        (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset
       end
 
@@ -75,6 +77,21 @@ module Nabu
         sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
         sub = sub.where(Sequel.ilike(axes[:place_name], place)) if place
         sub.exists
+      end
+
+      # A correlated EXISTS over document_facets for the current document
+      # (P17-2, the genre facet — one EXISTS per active facet, so a document
+      # carrying several facet rows never multiplies passage rows). The
+      # pattern matches the normalized value OR the upstream raw code
+      # case-insensitively (`--type epitaph` and `--type titsep?` both work;
+      # LIKE patterns pass through, the --place semantics). A document with
+      # no facet row falls out under an active filter — honest absence.
+      def facet_exists(facet, pattern)
+        facets = Sequel[:document_facets]
+        @catalog[:document_facets]
+          .where(facets[:document_id] => Sequel[:documents][:id], facets[:facet] => facet.to_s)
+          .where(Sequel.ilike(facets[:value], pattern) | Sequel.ilike(facets[:raw], pattern))
+          .exists
       end
 
       # Effective license class: document override wins over source class (P1-3).

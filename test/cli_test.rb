@@ -658,6 +658,71 @@ class CLITest < Minitest::Test
     assert_match(/text search only/i, err)
   end
 
+  # -- search facets (P17-2, document_facets) -------------------------------
+
+  def test_search_type_filters_by_genre_facet_and_names_the_filter
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --type epitaph]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # votive
+      refute_match("urn:nabu:ddbdp:c:1", out) # unfaceted — honest absence
+      assert_match(/facets: genre=epitaph/, out, "the active facet filter is named in the footer")
+    end
+  end
+
+  def test_search_type_matches_the_raw_code_certainty_included
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --type titsep?]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+    end
+  end
+
+  def test_search_province_composes_with_century
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["search", "στρατηγος", "--province", "pannonia%", "--century", "-2"])
+      end
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out) # 113 BCE, Pannonia inferior
+      refute_match("urn:nabu:ddbdp:b:1", out)
+
+      out2, _err2, = with_config(config) do
+        run_cli(["search", "στρατηγος", "--province", "pannonia%", "--century", "6"])
+      end
+      assert_match(/no matches/i, out2, "right province, wrong century")
+    end
+  end
+
+  def test_search_fuzzy_composes_with_facet_filters
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ρατηγ --type votive%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out)
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      assert_match(/facets: genre=votive%/, out)
+    end
+  end
+
+  def test_search_facets_do_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --lemma λέγω --type epitaph])
+    assert_equal 1, status
+    assert_match(/text search only/i, err)
+  end
+
+  def test_search_facets_against_a_pre_facet_catalog_hint_to_rebuild
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog.drop_table?(:document_facets)
+      catalog.disconnect
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --type epitaph]) }
+      assert_equal 1, status
+      assert_match(/no facet table.*rebuild/i, err)
+    end
+  end
+
   # -- search --fuzzy (P16-4) ------------------------------------------------
 
   # The papyrologist's fragment, brackets and all: an infix hit on the
@@ -751,6 +816,18 @@ class CLITest < Minitest::Test
     assert_match(/\]μηνιν αει\[/, out, "must show the damaged-scrap example, brackets and all")
     assert_match(/papyri-ddbdp, oracc/, out, "must name the documentary scope")
     assert_match(/parallels/, out, "must give the honest literary answer")
+  end
+
+  def test_show_prints_the_facets_line_compactly
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_nil status
+      assert_match(/facets: genre=epitaph \(titsep\?\) · province=Pannonia inferior \(PaI\)/, out)
+
+      # An unfaceted document prints NO facets line (zero-signal silence).
+      out_c, _err_c, = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:c]) }
+      refute_match(/facets:/, out_c)
+    end
   end
 
   def test_show_prints_the_date_place_axis_line
@@ -2141,6 +2218,12 @@ class CLITest < Minitest::Test
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:a", "στρατηγος αγαθος", -113, -113, "Oxyrhynchus")
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:b", "στρατηγος κακος", 591, 602, "Arsinoites")
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:c", "στρατηγος μεγας", -30, 14, "Oxyrhynchus")
+      # Facet rows (P17-2): a/b faceted, c honestly unfaceted — the dated
+      # corpus doubles as the facet-composition fixture.
+      seed_facet(catalog, "urn:nabu:ddbdp:a", "genre", "epitaph", "titsep?")
+      seed_facet(catalog, "urn:nabu:ddbdp:a", "province", "Pannonia inferior", "PaI")
+      seed_facet(catalog, "urn:nabu:ddbdp:b", "genre", "votive inscription", "titsac")
+      seed_facet(catalog, "urn:nabu:ddbdp:b", "province", "Britannia", "Bri")
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       # fuzzy_slugs (P16-4): the dated corpus doubles as the fuzzy+date
       # composition fixture — the "p" shelf is documentary by construction.
@@ -2190,6 +2273,11 @@ class CLITest < Minitest::Test
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
       content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
+  end
+
+  def seed_facet(catalog, doc_urn, facet, value, raw)
+    doc_id = catalog[:documents].where(urn: doc_urn).get(:id)
+    catalog[:document_facets].insert(document_id: doc_id, facet: facet, value: value, raw: raw)
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)

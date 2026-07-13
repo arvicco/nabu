@@ -47,14 +47,19 @@ module Nabu
       # One line of a document listing: a passage's urn and text, in sequence.
       PassageLine = Data.define(:urn, :text, :withdrawn)
 
+      # One facet fact (P17-2): "genre" => "epitaph", raw "titsep?" — shown
+      # by `show` in one compact line under the document header.
+      Facet = Data.define(:facet, :value, :raw)
+
       # A document header plus its passages in sequence order.
       # retired_upstream (P5-2): upstream scrapped the canonical file, the
-      # attic kept it — the document is live, labeled honestly.
+      # attic kept it — the document is live, labeled honestly. +facets+
+      # (P17-2): the document's facet rows, [] when unfaceted.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :axis
+        :revision, :withdrawn, :retired_upstream, :passages, :axis, :facets
       ) do
-        def initialize(axis: nil, **) = super
+        def initialize(axis: nil, facets: [], **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -163,8 +168,22 @@ module Nabu
           revision: row.fetch(:revision), withdrawn: truthy?(row.fetch(:withdrawn)),
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
-          axis: axis_for(row.fetch(:document_id))
+          axis: axis_for(row.fetch(:document_id)),
+          facets: facets_for(row.fetch(:document_id))
         )
+      end
+
+      # The document's facet rows (P17-2), [] when unfaceted or when the
+      # catalog predates migration 009 — degrade, never crash (axis_for's
+      # stance). Ordered by facet name for a stable render.
+      def facets_for(document_id)
+        return [] unless @catalog.table_exists?(:document_facets)
+
+        @catalog[:document_facets]
+          .where(document_id: document_id)
+          .order(:facet, :id)
+          .select(:facet, :value, :raw)
+          .map { |r| Facet.new(facet: r.fetch(:facet), value: r.fetch(:value), raw: r[:raw]) }
       end
 
       # The document's date/place axis (P15-2), or nil when undated. A document
