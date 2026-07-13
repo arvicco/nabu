@@ -177,6 +177,25 @@ module Nabu
       is the unit. --morph does not compose with --near (out of scope). Both
       matched terms are bracketed in the snippet.
 
+      FUZZY (--fuzzy): substring/fragment search for damaged texts — matches
+      the fragment ANYWHERE in a passage, mid-word included, where normal
+      search sees only whole words and prefixes. Type the fragment straight
+      off the edition: editorial square brackets are stripped from the query
+      before matching, so `']μηνιν αει['` works as typed. Built on a
+      character-trigram index over the folded search form (same
+      diacritic/case folding as plain search), so fragments need at least 3
+      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc —
+      registry `fuzzy_index: true`): papyrus lines and tablets are where
+      fragment search earns its index bytes; every result footer names the
+      live scope. For half-remembered LITERARY quotations use plain search
+      or `nabu parallels` — the literary corpus is deliberately not
+      trigram-indexed (it would grow the index 15×). Composes with --lang,
+      --limit, --license, and --from/--to/--century/--place; --long prints
+      the full folded passage instead of the windowed snippet. --fuzzy
+      replaces the FTS query syntax: the fragment is matched literally
+      (no AND/phrase/prefix operators) and does not combine with
+      --lemma/--near/--morph.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -199,6 +218,9 @@ module Nabu
                                                    #   (John 1:1 and its kin)
         nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
                                                    #   near κύριος: τάδε λέγει κύριος
+        nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
+                                                   #   all — infix match, papyri+oracc
+        nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -225,12 +247,21 @@ module Nabu
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
     option :place, type: :string, banner: "PATTERN",
                    desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :fuzzy, type: :boolean, default: false,
+                   desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :long, type: :boolean, default: false,
+                  desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     def search(query = nil)
       query = query.to_s.strip
       if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
         raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
                            "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
       end
+      if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
+        raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
+                           "with --lemma/--near/--morph"
+      end
+      return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
@@ -1746,6 +1777,26 @@ module Nabu
             "(highlights are diacritic-folded)"
       end
 
+      # Render fuzzy hits (P16-4): the search-hit shape (urn + [language],
+      # then the folded snippet with the fragment in [brackets]; --long lifts
+      # the snippet window, house rule), plus ONE scope line — the fuzzy
+      # index is documentary-only, so every render names what it covers (the
+      # honest answer when --lang grc "finds nothing" in the literary corpus).
+      def print_fuzzy_results(results, scope:, long: false)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}"
+            say "  #{long ? result.folded_marked : result.snippet}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
+              "(fuzzy substring; highlights are diacritic-folded)"
+        end
+        covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
+        say "fuzzy index covers: #{covered}"
+      end
+
       # Render KWIC rows (P8-3): left + keyword + right (each side already
       # trimmed to width by Concord), then the urn + [language] tag. The left
       # context is a fixed width, so keyword columns align down the page.
@@ -1836,6 +1887,38 @@ module Nabu
       # index. Replaces the FTS query (simplest honest v1 — combining both is
       # future work); composes with --lang/--license/--limit. A fulltext file
       # predating P7-5 lacks the lemma table, so that gets its own honest hint.
+      # search --fuzzy FRAGMENT (P16-4): substring/fragment search over the
+      # documentary trigram index (Query::Fuzzy — candidates, then verify).
+      # Same open/close discipline as the sibling search paths; the trigram
+      # table missing means the fulltext index predates P16-4, an honest
+      # reindex hint, exactly the lemma-index precedent.
+      def fuzzy_search(query)
+        raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
+
+        validate_license!(options[:license])
+        from, to = date_window
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless fulltext.table_exists?(Nabu::Store::Indexer::TRIGRAM_TABLE)
+          raise Thor::Error, "no fuzzy index (the fulltext index predates fragment search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        require_axis!(catalog) if from || to || options[:place]
+        fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
+        results = fuzzy.run(query, lang: options[:lang], license: options[:license],
+                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place])
+        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long])
+      rescue Nabu::Query::Fuzzy::QueryTooShort => e
+        raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
+                           "(#{query.inspect} folds to #{e.folded.inspect}) — the trigram floor"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
       def lemma_search(positional_query)
         unless positional_query.empty?
           raise Thor::Error, "search: --lemma replaces the text query — give one or the other"

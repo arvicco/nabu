@@ -653,6 +653,101 @@ class CLITest < Minitest::Test
     assert_match(/text search only/i, err)
   end
 
+  # -- search --fuzzy (P16-4) ------------------------------------------------
+
+  # The papyrologist's fragment, brackets and all: an infix hit on the
+  # documentary shelf, folded snippet with the fragment bracketed, and the
+  # honest scope footer.
+  def test_search_fuzzy_matches_bracketed_fragment_and_names_its_scope
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["search", "--fuzzy", "]μηνιν αει["]) }
+      assert_nil status, "a successful fuzzy search exits 0"
+      assert_match(/urn:nabu:pap:a:1 \[grc\]/, out)
+      assert_match(/\[μηνιν αει\]/, out, "the fragment is bracketed in the folded snippet")
+      assert_match(/1 hit .*fuzzy substring/, out)
+      assert_match(/fuzzy index covers: pap/, out, "every fuzzy render names the indexed scope")
+      refute_match(/urn:nabu:lit/, out, "the literary shelf is not trigram-indexed")
+    end
+  end
+
+  def test_search_fuzzy_mid_word_fragment_hits
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ηληιαδ]) }
+      assert_nil status
+      assert_match(/urn:nabu:pap:a:1/, out, "mid-word matching is the point: ηληιαδ inside Πηληϊάδεω")
+    end
+  end
+
+  # --long lifts the snippet window (house rule): the full folded passage.
+  def test_search_fuzzy_long_prints_the_full_folded_passage
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ηληιαδ --long]) }
+      assert_nil status
+      assert_match(/μηνιν αειδε θεα π\[ηληιαδ\]εω αχιληοσ/, out, "--long shows the whole folded line")
+    end
+  end
+
+  # A fragment living only on a non-indexed (literary) shelf: honest empty
+  # result PLUS the one-line hint naming what is indexed.
+  def test_search_fuzzy_literary_only_fragment_misses_with_scope_hint
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ολομπι]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/fuzzy index covers: pap/, out, "the miss explains itself — the scope line names the shelves")
+    end
+  end
+
+  def test_search_fuzzy_short_fragment_gets_the_trigram_floor_message
+    with_fuzzy_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --fuzzy αε]) }
+      assert_equal 1, status
+      assert_match(/at least 3 characters/, err)
+      assert_match(/trigram floor/, err)
+    end
+  end
+
+  def test_search_fuzzy_composes_with_date_filters
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ρατηγ --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out) # 113 BCE, out of window
+    end
+  end
+
+  def test_search_fuzzy_against_a_pre_trigram_index_hints_to_reindex
+    with_fuzzy_corpus do |config|
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      fulltext.drop_table?(Nabu::Store::Indexer::TRIGRAM_TABLE)
+      fulltext.drop_table?(Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE)
+      fulltext.disconnect
+      _out, err, status = with_config(config) { run_cli(%w[search --fuzzy μηνιν]) }
+      assert_equal 1, status
+      assert_match(/no fuzzy index.*sync.*rebuild/i, err)
+    end
+  end
+
+  def test_search_fuzzy_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --fuzzy --lemma λέγω μηνιν])
+    assert_equal 1, status
+    assert_match(/--fuzzy.*does not combine/i, err)
+  end
+
+  def test_search_fuzzy_needs_a_fragment
+    _out, err, status = run_cli(%w[search --fuzzy])
+    assert_equal 1, status
+    assert_match(/--fuzzy needs a fragment/, err)
+  end
+
+  def test_help_search_documents_fuzzy_with_the_papyrological_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--fuzzy/, out)
+    assert_match(/\]μηνιν αει\[/, out, "must show the damaged-scrap example, brackets and all")
+    assert_match(/papyri-ddbdp, oracc/, out, "must name the documentary scope")
+    assert_match(/parallels/, out, "must give the honest literary answer")
+  end
+
   def test_show_prints_the_date_place_axis_line
     with_dated_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
@@ -1773,11 +1868,54 @@ class CLITest < Minitest::Test
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:b", "στρατηγος κακος", 591, 602, "Arsinoites")
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:c", "στρατηγος μεγας", -30, 14, "Oxyrhynchus")
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
-      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      # fuzzy_slugs (P16-4): the dated corpus doubles as the fuzzy+date
+      # composition fixture — the "p" shelf is documentary by construction.
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["p"])
       fulltext.disconnect
       catalog.disconnect
       yield config
     end
+  end
+
+  # A fuzzy (P16-4) corpus: one documentary source ("pap", trigram-indexed)
+  # and one literary source ("lit", word-index only) sharing a damaged-text
+  # fragment, built through the real Indexer with the documentary scope.
+  def with_fuzzy_corpus
+    Dir.mktmpdir("nabu-cli-fuzzy") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      pap = catalog[:sources].insert(slug: "pap", name: "Papyri", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      lit = catalog[:sources].insert(slug: "lit", name: "Literary", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_fuzzy_passage(catalog, pap, "urn:nabu:pap:a", "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος")
+      seed_fuzzy_passage(catalog, lit, "urn:nabu:lit:a", "μῆνιν ἄειδε θεὰ καὶ ὀλόμπιος ἀοιδός")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["pap"])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_fuzzy_passage(catalog, source_id, doc_urn, text)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
