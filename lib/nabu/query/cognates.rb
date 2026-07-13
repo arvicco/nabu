@@ -35,8 +35,11 @@ module Nabu
       class Error < Nabu::Error; end
 
       # One language's use of the root at this verse: the display lemma, the
-      # distinct attested surface forms, and the attesting witness documents.
-      WitnessWord = Data.define(:language, :lemma, :surfaces, :document_urns)
+      # distinct attested surface forms, and the attesting witness documents
+      # and passages (+passage_urns+ — the edge-grain anchor BatchCognates
+      # persists; hits are pre-filtered to surviving documents, so these urns
+      # never leak an excluded witness).
+      WitnessWord = Data.define(:language, :lemma, :surfaces, :document_urns, :passage_urns)
 
       # The reconstruction entry the witnesses meet at. +shelf+ is the
       # dictionary language (ine-pro/gem-pro/sla-pro) — the borrowing signal.
@@ -267,9 +270,10 @@ module Nabu
             roots.fetch(key, []).each do |root_urn|
               slot = ((raw[[hit.fetch(:ref), root_urn]] ||= {})[row.fetch(:language)] ||= {})
               entry = slot[row.fetch(:lemma_folded)] ||=
-                { lemma: row.fetch(:lemma_raw), surfaces: Set.new, documents: Set.new }
+                { lemma: row.fetch(:lemma_raw), surfaces: Set.new, documents: Set.new, passages: Set.new }
               entry[:surfaces].merge(row.fetch(:surface_forms).split(", ").reject(&:empty?))
               entry[:documents].add(doc_of.fetch(row.fetch(:urn)))
+              entry[:passages].add(row.fetch(:urn))
             end
           end
         end
@@ -309,7 +313,8 @@ module Nabu
             WitnessWord.new(language: language, lemma: entry.fetch(:lemma),
                             surfaces: entry.fetch(:surfaces).sort,
                             document_urns: entry.fetch(:documents).to_a.sort
-                                                .select { |urn| documents.key?(urn) })
+                                                .select { |urn| documents.key?(urn) },
+                            passage_urns: entry.fetch(:passages).to_a.sort)
           end
         end.sort_by(&:language)
       end

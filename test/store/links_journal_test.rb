@@ -96,6 +96,58 @@ module Store
       assert_equal 2, @db[:links].count
     end
 
+    # -- detail: per-edge evidence (P16-2, migration 002) -----------------------
+
+    def test_write_edge_persists_detail_and_a_refresh_updates_it
+      run_a = record_run(scope: "urn:a")
+      run_b = record_run(scope: "urn:a")
+      Nabu::Store::LinksJournal.write_edge!(
+        @db, from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "formula",
+             score: 3.0, detail: "saga hwaet ic hatte", run_id: run_a
+      )
+      assert_equal "saga hwaet ic hatte", @db[:links].first[:detail]
+
+      Nabu::Store::LinksJournal.write_edge!(
+        @db, from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "formula",
+             score: 4.0, detail: "saga hwaet ic hatte nu", run_id: run_b
+      )
+      assert_equal 1, @db[:links].count
+      assert_equal "saga hwaet ic hatte nu", @db[:links].first[:detail],
+                   "a refresh re-asserts the current evidence"
+    end
+
+    def test_detail_defaults_to_nil_for_parallel_edges
+      write_edge(from: "urn:a:1", to: "urn:b:1", run_id: record_run)
+      assert_nil @db[:links].first[:detail]
+    end
+
+    # Migration 002 is forward-only and applies IN PLACE to a live journal:
+    # a file created at schema version 1 with edges in it gains the detail
+    # column on the next write-path open, losing nothing.
+    def test_detail_migration_applies_forward_to_an_existing_journal_without_data_loss
+      require "sequel/extensions/migration"
+      Dir.mktmpdir("nabu-links") do |dir|
+        path = File.join(dir, "links.sqlite3")
+        v1 = Nabu::Store::LinksJournal.connect(path)
+        Sequel::Migrator.run(v1, Nabu::Store::LinksJournal::MIGRATIONS_DIR, target: 1)
+        run_id = v1[:link_runs].insert(producer: "parallels", scope: "urn:h",
+                                       params_json: "{}", code_version: "t/1", created_at: Time.now)
+        v1[:links].insert(from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "parallel",
+                          score: 1.5, run_id: run_id, created_at: Time.now)
+        refute_includes v1[:links].columns, :detail, "version 1 predates the column"
+        v1.disconnect
+
+        db = Nabu::Store::LinksJournal.open!(path)
+        assert_includes db[:links].columns, :detail
+        edge = db[:links].first
+        assert_equal %w[urn:a:1 urn:b:1], [edge[:from_urn], edge[:to_urn]], "the v1 edge survives"
+        assert_in_delta 1.5, edge[:score]
+        assert_nil edge[:detail], "pre-migration edges read nil detail"
+        assert_equal 1, db[:link_runs].count, "run provenance survives"
+        db.disconnect
+      end
+    end
+
     # -- supersede!: a rerun replaces its scope's edges -------------------------
 
     def test_supersede_removes_only_the_matching_producer_scope

@@ -507,14 +507,30 @@ module Nabu
       `search` highlights — `nabu show <urn>` gives the pristine line), with a few
       example loci beneath. --long lists every locus of every reported formula.
 
+      BATCH MODE (P16-2, the links journal): `formulas --batch SCOPE` runs the
+      whole-tradition sweep once and PERSISTS kind=formula edges. A formula is
+      a refrain across many loci, so it maps onto the pair-shaped journal as a
+      STAR: each formula's first locus (urn order — deterministic) is the hub,
+      with one edge to every other locus carrying the gram (detail) and the
+      count (score); `nabu links <locus>` shows which refrain ties the line to
+      the tradition, and `links <hub>` fans out every locus. Pruning is named,
+      never silent: the top --max-formulas by rank persist (default
+      #{Nabu::BatchFormulas::DEFAULT_MAX_FORMULAS}), at --min-count and
+      --gram-size, all recorded in the run's params. A rerun of the same scope
+      supersedes (idempotent); --db writes the journal elsewhere. Interactive
+      output is never persisted.
+
       Examples:
         nabu formulas urn:cts:greekLit:tlg0012 --lang grc   # the Homeric formulas
         nabu formulas aspr                                  # Old English verse formulas
         nabu formulas aspr --gram-size 3 --min-count 5      # the riddle refrain "hwæt ic hatte"
         nabu formulas urn:cts:greekLit:tlg0012 --lang grc --long   # every locus
+        nabu formulas --batch aspr                          # persist the ASPR formula stars
+        nabu formulas --batch urn:cts:greekLit:tlg0012 --lang grc --max-formulas 500
 
       Use cases: characterize a tradition's formulaic diction; find every
-      occurrence of a formula; seed an oral-formulaic study.
+      occurrence of a formula; seed an oral-formulaic study; wire the refrains
+      into the mined citation graph (`nabu links`).
     HELP
     option :lang, type: :string,
                   desc: "Restrict the slice to a language (grc, ang) — wanted when a source mixes translations"
@@ -526,8 +542,23 @@ module Nabu
                    desc: "Maximum formulas shown (default 25)"
     option :long, type: :boolean, default: false,
                   desc: "List every locus of every reported formula (compact shows a few examples)"
+    option :batch, type: :boolean, default: false,
+                   desc: "Sweep the SCOPE once and persist kind=formula edges to the links journal"
+    option :max_formulas, type: :numeric, banner: "N",
+                          desc: "With --batch: top formulas by rank persisted " \
+                                "(default #{Nabu::BatchFormulas::DEFAULT_MAX_FORMULAS})"
+    option :db, type: :string, banner: "PATH",
+                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
     def formulas(scope = nil)
       scope = scope.to_s.strip
+      return batch_formulas(scope) if options[:batch]
+
+      %i[max_formulas db].each do |flag|
+        next unless options[flag]
+
+        raise Thor::Error, "formulas: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
+                           "(interactive results are never persisted)"
+      end
       raise Thor::Error, "formulas: give a source slug or urn prefix" if scope.empty?
 
       config = Nabu::Config.load
@@ -549,19 +580,22 @@ module Nabu
     long_desc <<~HELP, wrap: false
       Read the links journal (docs/intertext-design.md §7, architecture §15):
       every batch-mined edge touching URN, BOTH directions, grouped by kind
-      (parallel today; formula/cognate producers later). Each edge shows its
-      counterpart urn resolved to the document title and language, plus the
-      edge score; → means a batch anchor at URN discovered the counterpart,
-      ← means another anchor's probe found URN. The footer cites the producer
-      run(s) that minted the edges — scope, parameters, and date — so every
-      edge is honest about its provenance.
+      (parallel, formula, cognate). Each edge shows its counterpart urn
+      resolved to the document title and language plus its kind's evidence —
+      a parallel's rarity score, a formula's gram and count (← the hub locus
+      of the refrain's star; `links <hub>` fans out every locus), a cognate's
+      meet (ref · root [shelf] — a gem-pro shelf under a Slavic witness reads
+      as a borrowing); → means a batch anchor at URN discovered the
+      counterpart, ← means the edge was found from the other end. The footer
+      cites the producer run(s) that minted the edges — scope, parameters,
+      and date — so every edge is honest about its provenance.
 
       Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
       survive `nabu rebuild` untouched; counterparts re-resolve against the
       current catalog, and one that no longer resolves is flagged
       "(not in catalog)" rather than hidden. Edges are minted ONLY by batch
-      producers (`nabu parallels --batch SCOPE`); interactive `parallels`
-      output never persists.
+      producers (`parallels --batch SCOPE`, `formulas --batch SCOPE`,
+      `cognates --batch WORK`); interactive output never persists.
 
       Compact shows the first few edges per kind; --long lists all. --db
       reads a journal written elsewhere (a scratch batch run).
@@ -970,11 +1004,24 @@ module Nabu
       --long lifts the #{Nabu::Query::Cognates::MAX_GROUPS}-hit compact cap
       and expands gloss/dictionary/document detail per hit.
 
+      BATCH MODE (P16-2, the links journal): `cognates --batch WORK` maps the
+      whole work once and PERSISTS kind=cognate edges between the aligned
+      witness passages that meet at a reconstruction root — one edge per
+      cross-language passage pair, its detail carrying the meet (ref · root
+      [SHELF] — the shelf rides every edge because a gem-pro meet for a
+      Slavic witness reads as a borrowing), its score the distinct-root
+      count. WORK must be a registered work id (per-ref runs stay
+      interactive). Common-word suppression stays on (--all lifts it, and
+      the run records that); a rerun of the same work supersedes
+      (idempotent); --db writes the journal elsewhere. Interactive output is
+      never persisted.
+
       Examples:
         nabu cognates "LUKE 14.34"            # the salt saying, all languages
         nabu cognates nt --langs got,chu      # the whole NT, Gothic × OCS
         nabu cognates "JOHN 13" --langs got,chu,grc
         nabu cognates nt --langs got,chu --all  # keep the common-word matches
+        nabu cognates --batch nt --langs got,chu  # persist the Gothic × OCS cognate map
     HELP
     option :work, type: :string,
                   desc: "Alignment work id (optional when the target decides it)"
@@ -985,8 +1032,18 @@ module Nabu
     option :long, type: :boolean, default: false,
                   desc: "Render every hit (compact caps at #{Nabu::Query::Cognates::MAX_GROUPS}) " \
                         "and expand gloss/dictionary/document detail"
+    option :batch, type: :boolean, default: false,
+                   desc: "Map the whole WORK once and persist kind=cognate edges to the links journal"
+    option :db, type: :string, banner: "PATH",
+                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
     def cognates(*target_parts)
       target = target_parts.join(" ").strip
+      return batch_cognates(target) if options[:batch]
+
+      if options[:db]
+        raise Thor::Error, "cognates: --db only applies with --batch " \
+                           "(interactive results are never persisted)"
+      end
       raise Thor::Error, "cognates: give a work id (nt) or a citation ref (e.g. LUKE 14.34)" if target.empty?
 
       config = Nabu::Config.load
@@ -2018,18 +2075,98 @@ module Nabu
       end
 
       def print_batch_parallels(result)
-        lang = result.lang ? " [#{result.lang}]" : ""
-        refreshed = result.edges_refreshed.positive? ? " (+#{result.edges_refreshed} refreshed in place)" : ""
-        say "batch parallels over #{result.scope}#{lang}: " \
-            "#{plural(result.edges_written, 'edge')} written#{refreshed} · run #{result.run_id}"
-        superseded = if result.superseded_runs.positive?
-                       " · superseded #{plural(result.superseded_runs, 'prior run')} " \
-                         "(#{plural(result.superseded_edges, 'edge')})"
+        say "batch parallels over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        say "  #{plural(result.anchor_count, 'anchor')} · kept top #{result.per_anchor}/anchor " \
+            "at score ≥ #{result.min_score}#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      # `formulas --batch SCOPE` (P16-2): sweep the whole tradition once and
+      # persist each formula as a STAR of kind=formula edges (hub = its first
+      # locus in urn order; detail = the gram, score = the count — the
+      # edge-shape verdict is argued in Nabu::BatchFormulas). Same summary
+      # discipline as batch parallels: every pruning knob named.
+      def batch_formulas(scope)
+        raise Thor::Error, "formulas --batch: give a source slug or urn prefix" if scope.empty?
+
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog
+
+        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+        result = Nabu::BatchFormulas.new(catalog: catalog, journal: journal)
+                                    .run(scope, gram_size: options[:gram_size].to_i,
+                                                min_count: options[:min_count].to_i,
+                                                lang: options[:lang], **max_formulas_option)
+        print_batch_formulas(result)
+      rescue ArgumentError => e
+        raise Thor::Error, "formulas: #{e.message}"
+      ensure
+        catalog&.disconnect
+        journal&.disconnect
+      end
+
+      def max_formulas_option
+        options[:max_formulas] ? { max_formulas: options[:max_formulas].to_i } : {}
+      end
+
+      def print_batch_formulas(result)
+        say "batch formulas over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        coalesced = result.coalesced.positive? ? " · #{result.coalesced} overlapping pairs coalesced" : ""
+        say "  #{plural(result.formula_count, 'formula')} persisted as stars " \
+            "(top #{result.max_formulas} by rank of #{result.recurring_count} recurring " \
+            "≥#{result.min_count}× #{result.gram_size}-grams)#{coalesced}" \
+            "#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      # `cognates --batch WORK` (P16-2): map the whole alignment work once and
+      # persist kind=cognate edges between cross-language witness passages
+      # meeting at a reconstruction root; the meet (ref · root [shelf]) rides
+      # each edge's detail (the provenance verdict is argued in
+      # Nabu::BatchCognates).
+      def batch_cognates(work_id)
+        raise Thor::Error, "cognates --batch: give a registered work id (nt)" if work_id.empty?
+
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+        result = Nabu::BatchCognates.new(catalog: catalog, fulltext: fulltext,
+                                         registry: registry, journal: journal)
+                                    .run(work_id, langs: parse_langs(options[:langs]), all: options[:all])
+        print_batch_cognates(result)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+        journal&.disconnect
+      end
+
+      def print_batch_cognates(result)
+        langs = result.langs ? " [#{result.langs.join('×')}]" : ""
+        say "batch cognates over #{result.work}#{langs}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        suppressed = if result.suppressed.positive?
+                       " · #{plural(result.suppressed, 'common-word group')} suppressed (--all keeps)"
                      else
                        ""
                      end
-        say "  #{plural(result.anchor_count, 'anchor')} · kept top #{result.per_anchor}/anchor " \
-            "at score ≥ #{result.min_score}#{superseded} · #{format('%.1f', result.elapsed)} s"
+        say "  #{plural(result.group_count, 'verse-root group')}#{suppressed}" \
+            "#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      def batch_refreshed(result)
+        result.edges_refreshed.positive? ? " (+#{result.edges_refreshed} refreshed in place)" : ""
+      end
+
+      def batch_superseded(result)
+        return "" unless result.superseded_runs.positive?
+
+        " · superseded #{plural(result.superseded_runs, 'prior run')} " \
+          "(#{plural(result.superseded_edges, 'edge')})"
       end
 
       # Render `nabu links` (P16-1): the urn header, one section per kind with
@@ -2051,24 +2188,44 @@ module Nabu
       def print_links_group(kind, edges, long:)
         say "#{kind} (#{edges.size}):"
         shown = long ? edges : edges.first(LINKS_COMPACT_ITEMS)
-        shown.each { |edge| say "  #{format_link_edge(edge)}" }
+        shown.each { |edge| say "  #{format_link_edge(edge, kind)}" }
         hidden = edges.size - shown.size
         say "  … and #{hidden} more (--long lists all)" if hidden.positive?
       end
 
-      def format_link_edge(edge)
+      def format_link_edge(edge, kind)
         arrow = edge.direction == :out ? "→" : "←"
         where = if edge.resolved?
                   "#{" — #{edge.title}" if edge.title}#{" [#{edge.language}]" if edge.language}"
                 else
                   " (not in catalog)"
                 end
-        score = edge.score ? "  score #{format('%.2f', edge.score)}" : ""
-        "#{arrow} #{edge.urn}#{where}#{score}"
+        "#{arrow} #{edge.urn}#{where}#{format_link_evidence(edge, kind)}"
       end
 
+      # The per-kind evidence tail (P16-2): a formula edge shows its gram and
+      # slice count (“saga hwaet ic hatte” ×4 — "score 4.00" would misread a
+      # count as a rarity score); a cognate edge shows its meet (the detail
+      # already carries ref · root [shelf], and its score merely counts the
+      # roots listed there — suppressed as zero-signal); a parallel edge keeps
+      # the rarity score; an unknown future kind prints whatever it has.
+      def format_link_evidence(edge, kind)
+        case kind
+        when "formula"
+          "#{"  “#{edge.detail}”" if edge.detail}#{"  ×#{edge.score.to_i}" if edge.score}"
+        when "cognate"
+          edge.detail ? "  #{edge.detail}" : ""
+        else
+          "#{"  score #{format('%.2f', edge.score)}" if edge.score}#{"  #{edge.detail}" if edge.detail}"
+        end
+      end
+
+      # Array params (cognates' langs) render comma-joined, not as inspected
+      # Ruby arrays — compact house style.
       def format_link_params(params)
-        pairs = params.except("kind").map { |key, value| "#{key} #{value}" }
+        pairs = params.except("kind").map do |key, value|
+          "#{key} #{value.is_a?(Array) ? value.join(',') : value}"
+        end
         pairs.empty? ? "" : "(#{pairs.join(', ')}) "
       end
 

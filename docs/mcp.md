@@ -237,18 +237,23 @@ witness documents (a private witness's words never join).
 
 ### `nabu_links`
 
-The links journal reader (P16-1, design §7, architecture §15): batch-mined
-cross-reference edges touching a urn, grouped by kind (`parallel` today),
-**both directions** (`out` = this urn's batch anchor discovered the
-counterpart, `in` = the reverse), each counterpart resolved to document
-title/language/license against the current catalog (`null` when a rebuild
-dropped it — edges are urn-keyed and outlive rebuilds). `runs` carries the
+The links journal reader (P16-1/P16-2, design §7, architecture §15):
+batch-mined cross-reference edges touching a urn, grouped by kind
+(`parallel`, `formula`, `cognate`), **both directions** (`out` = this urn's
+batch anchor discovered the counterpart, `in` = the reverse), each
+counterpart resolved to document title/language/license against the current
+catalog (`null` when a rebuild dropped it — edges are urn-keyed and outlive
+rebuilds). Each edge carries a `detail` field with its kind's evidence
+(`null` for parallels; the folded gram for a formula edge — the counterpart
+of an `in` edge is the refrain's hub locus; `ref · root [shelf]` for a
+cognate edge, the shelf being the borrowing signal). `runs` carries the
 provenance of every edge: producer, scope, params, code_version, date. This
 tool **reads only what a batch run already persisted** — an empty result
 means no batch has covered the urn, *not* that no parallel exists
 (`nabu_parallels` discovers on the fly); it never mines (batch runs are
-owner-fired: `nabu parallels --batch SCOPE`). Bounded per kind (default 20,
-max 100); the restricted-exclusion stance applies to counterparts.
+owner-fired: `nabu parallels|formulas --batch SCOPE`, `nabu cognates --batch
+WORK`). Bounded per kind (default 20, max 100); the restricted-exclusion
+stance applies to counterparts.
 
 ### `nabu_status`
 

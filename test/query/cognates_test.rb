@@ -129,6 +129,8 @@ module Query
       assert_equal "ἔφᾰγον", grc.lemma
       assert_includes grc.surfaces, "ἔφαγεν"
       assert_equal ["urn:nabu:test:grc-nt"], grc.document_urns
+      assert_equal ["urn:nabu:test:grc-nt:1"], grc.passage_urns,
+                   "the attesting passage urns ride the witness word (BatchCognates' edge anchor)"
     end
 
     def test_a_root_reached_by_one_language_only_is_no_cognate_hit
