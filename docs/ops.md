@@ -662,9 +662,15 @@ shared lock could kill the writer's commit.
 
 Ground rules:
 
-- `nabu search/show/status`, MCP tools, and ad-hoc `sqlite3 -readonly`
-  sessions during an owner sync/rebuild: fine. You read the last committed
-  snapshot; the writer proceeds.
+- `nabu search/show/status` and MCP tools during an owner sync/rebuild:
+  fine. You read the last committed snapshot; the writer proceeds.
+- **Ad-hoc inspection: `sqlite3 -readonly` NO LONGER OPENS a WAL db when no
+  writer has it open** (a readonly handle cannot create the `-shm` sidecar —
+  found live 2026-07-13, first WAL flip). The inspection convention is now
+  `sqlite3 db/<file>.sqlite3 "PRAGMA query_only=ON; SELECT …"` — reads
+  succeed, any write attempt errors at the SQL layer ("attempt to write a
+  readonly database", verified). `-readonly` still works while a writer
+  holds the db (the sidecars exist then), but don't rely on the timing.
 - Every connection (readonly included) carries a **10 s busy timeout**
   (`Store::BUSY_TIMEOUT_MS`), which covers what WAL does not: two *writers*
   overlapping (a batch producer committing while a sync runs) wait each other
