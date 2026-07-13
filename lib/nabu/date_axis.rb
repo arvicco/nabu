@@ -80,6 +80,28 @@ module Nabu
       end
     end
 
+    # Byzantine anno mundi (the era the Rus chronicle annals count in) → the
+    # honest CE year span of an AM year or AM range (P16-3, chronicle annals).
+    # The Byzantine world-era epoch is 1 September 5509 BCE, so a September-
+    # style AM year Y runs 1 Sep (Y−5509) – 31 Aug (Y−5508) CE — a bare annal
+    # year is honestly a TWO-year span, and the Rus chronicles compound the
+    # ambiguity by mixing March-style years (Mar (Y−5508) – Feb (Y−5507), the
+    # ultra-March variant a year earlier). We store the conventional
+    # −5509/−5508 envelope: the full September-style year, which also covers
+    # ten months of a March-style year and all but two of an ultra-March one.
+    # The residual Jan–Feb March-style tail (Y−5507) is a documented, accepted
+    # ±1 — never a per-annal style guess. The subtraction is astronomical;
+    # +historical+ restores no-year-0 numbering, so AM 5509 → [-1, 1], never 0.
+    def am_to_ce(am_lo, am_hi = am_lo)
+      [historical(am_lo - 5509), historical(am_hi - 5508)]
+    end
+
+    # Astronomical year (has a year 0 = 1 BCE) → signed historical year (no
+    # year 0): non-positive years shift down by one.
+    def historical(astronomical)
+      astronomical <= 0 ? astronomical - 1 : astronomical
+    end
+
     # A single year for display: -113 → "113 BCE", 501 → "501 CE".
     def format_year(year)
       "#{year.abs} #{year.negative? ? 'BCE' : 'CE'}"
