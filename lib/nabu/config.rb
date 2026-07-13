@@ -22,6 +22,7 @@ module Nabu
     CATALOG_DB_FILENAME = "catalog.sqlite3"
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
     HISTORY_DB_FILENAME = "history.sqlite3"
+    LINKS_DB_FILENAME = "links.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :sources_path, :alignments_path, :config_path,
                 :backup_target
@@ -111,6 +112,14 @@ module Nabu
     # under db/ that `nabu rebuild` never touches and backups must include.
     def history_path
       File.join(db_dir, HISTORY_DB_FILENAME)
+    end
+
+    # The links journal (architecture §15, P16-1): batch-mined cross-reference
+    # edges. A function of (canonical, params, code version) — NOT of canonical
+    # alone — so, like the ledger, `nabu rebuild` never touches it; unlike the
+    # ledger it is cheap to regenerate (a re-mine), so backups may skip it.
+    def links_path
+      File.join(db_dir, LINKS_DB_FILENAME)
     end
   end
 end

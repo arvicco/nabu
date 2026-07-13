@@ -33,8 +33,8 @@ module MCP
 
     # -- rig -------------------------------------------------------------------
 
-    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil)
-      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger)
+    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil)
+      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -97,10 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_nine_tools_with_json_schemas
+    def test_definitions_lists_the_ten_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_cognates nabu_status],
+                      nabu_parallels nabu_cognates nabu_links nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -787,6 +787,89 @@ module MCP
       assert_match(/rebuilding/i, text_of(result))
     ensure
       empty&.disconnect
+    end
+
+    # -- nabu_links (P16-1 links journal) ------------------------------------------
+
+    def seed_links_journal
+      journal = Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite::memory:"))
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "parallels", scope: "urn:d:od", params: { min_score: 0.05 },
+                 code_version: "t/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1",
+                                                     kind: "parallel", score: 2.0, run_id: run_id)
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:secret:1",
+                                                     kind: "parallel", score: 1.0, run_id: run_id)
+      journal
+    end
+
+    def test_links_returns_grouped_edges_with_resolution_and_run_provenance
+      seed_parallels
+      journal = seed_links_journal
+      body = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+      assert_equal "links", body["type"]
+      assert_equal "Odyssey", body["document"]
+      edge = body.dig("kinds", "parallel").find { |e| e["urn"] == "urn:d:pol:1" }
+      assert_equal %w[out Histories grc open],
+                   [edge["direction"], edge["document"], edge["language"], edge["license_class"]]
+      run = body["runs"].first
+      assert_equal ["parallels", "urn:d:od", "t/1"], [run["producer"], run["scope"], run["code_version"]]
+      assert_match(/PRESERVE license/, body["note"])
+    ensure
+      journal&.disconnect
+    end
+
+    def test_links_edge_detail_rides_the_payload
+      seed_parallels
+      journal = seed_links_journal
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "cognates", scope: "nt", params: { kind: "cognate" }, code_version: "t/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(
+        journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "cognate",
+                 score: 1.0, detail: "MARK 1.1 · *bʰeh₂g- [ine-pro]", run_id: run_id
+      )
+      body = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+      cognate = body.dig("kinds", "cognate").first
+      assert_equal "MARK 1.1 · *bʰeh₂g- [ine-pro]", cognate["detail"],
+                   "the per-edge meet (P16-2) reaches MCP consumers"
+      parallel = body.dig("kinds", "parallel").first
+      assert_nil parallel["detail"]
+    ensure
+      journal&.disconnect
+    end
+
+    def test_links_excludes_restricted_counterparts_by_default
+      seed_parallels
+      journal = seed_links_journal
+      urns = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+             .dig("kinds", "parallel").map { |e| e["urn"] }
+      refute_includes urns, "urn:d:secret:1", "the research_private counterpart is excluded by default"
+
+      opened = payload(tools(links: journal)
+               .call("nabu_links", { "urn" => "urn:d:od:1.1", "include_restricted" => true }))
+      assert_includes opened.dig("kinds", "parallel").map { |e| e["urn"] }, "urn:d:secret:1"
+    ensure
+      journal&.disconnect
+    end
+
+    def test_links_without_a_journal_is_a_graceful_note
+      seed_parallels
+      result = call("nabu_links", { "urn" => "urn:d:od:1.1" })
+      refute result[:isError]
+      assert_match(/no links journal.*parallels --batch/im, text_of(result))
+    end
+
+    def test_links_unknown_urn_is_a_graceful_note_and_missing_urn_invalid
+      seed_parallels
+      journal = seed_links_journal
+      result = tools(links: journal).call("nabu_links", { "urn" => "urn:d:nope:9" })
+      refute result[:isError]
+      assert_match(/not found/i, text_of(result))
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { tools(links: journal).call("nabu_links", {}) }
+    ensure
+      journal&.disconnect
     end
 
     # -- nabu_etym (P14-1) --------------------------------------------------------

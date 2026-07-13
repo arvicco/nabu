@@ -5169,3 +5169,331 @@ backlog done; worklog (sha —). Suite+lint green. One commit, not
 pushed. NB: etym/define already have --long (P14-11); parallels ships
 with it (P15-1, in flight — do NOT touch its files); your census
 covers the REST.
+
+# ── Phase 16 ──────────────────────────────────────────────────────────
+
+## P16-0 · health --remote license-column optics  [tier: orchestrator] [status: done 2026-07-13] [deps: —]
+Owner defect (2026-07-13, immediately post-#19): "license: unchecked"
+creates wrong optics — reads like a problem when it only means "no
+machine-checkable license artifact upstream" (non-github source, or a
+github repo without a top-level license file — verified live: proiel/
+torot/iswoc/gretil/open-bibles/idp.data all lack one). Owner rule:
+"Better not to report anything than report 'unchecked'". Fix is
+display-only: the :unchecked verdict still lands in the ledger; the row
+renders nothing (rstrip'd — no trailing whitespace), conventions §10
+suppress-zero-signal-fields. ok/CHANGED/baseline-recorded unchanged.
+Optional follow-up NOT taken (owner may queue later): a per-source
+`license_watch:` URL key to make non-github/README-licensed sources
+watchable.
+
+## P16-1 · Links substrate + batch parallels  [tier: opus] [status: done] [deps: P15-1, P15-5]
+Design doc §7 (the links table as invisible substrate) + §1's batch mode:
+the journal lands WITH its first producer, as §1.8 always said it would.
+SHIPPED: (1) THE LINKS JOURNAL — db/links.sqlite3, links(from_urn, to_urn,
+kind, score, run_id, created_at) + link_runs(producer, scope, params_json,
+code_version, created_at); own forward-only migration track
+db/links_migrate (the ledger_migrate precedent — per-file schema_info, no
+counter collision), urn-keyed both ends. HOST ARGUMENT (from architecture
+§5, now recorded as §15): batch links are a function of (canonical, params,
+code version) — neither a pure function of canonical (so NOT in the
+drop-and-rebuild catalog/fulltext) nor runtime history (a rerun of a scope
+legitimately REPLACES its edges; the append-only ledger must never delete,
+so NOT a ledger table despite the Phase-8 enrichment journal being the
+mechanical precedent). A third file with the ledger's mechanics and its own
+lifecycle: rebuild never touches it (tested byte-identical), losing it
+costs only a re-mine. (2) PRODUCER #1 — `nabu parallels --batch SCOPE`
+(Nabu::BatchParallels): the P15-1 engine looped over every anchor of a
+scope (slug or urn prefix — the formulas grammar, EXTRACTED to a shared
+Query::Scope mixin so the two surfaces cannot drift), hits persisted as
+kind=parallel edges. Engine gains echoes: false (batch sheds the per-anchor
+lemma-df probes; lemma echoes are not kind=parallel edges). Pruning NAMED,
+never silent: top --per-anchor (5) at --min-score (0.05, ≈ one shared gram
+in ≤20 passages) — both in the summary line and in params_json. Dedup: one
+edge per unordered pair per kind (unique index), direction = the probe that
+found it; within-run seen-set + cross-run refresh-in-place. Rerun of the
+same (producer, scope) supersedes atomically (one transaction) —
+idempotent, tested. --db writes the journal elsewhere (scratch runs).
+(3) READERS — `nabu links <urn>`: both directions grouped by kind,
+counterparts re-resolved by urn against the CURRENT catalog
+(title/lang/license; "(not in catalog)" honesty for dropped rows),
+provenance footer citing the run(s); compact 10/kind, --long lifts (house
+rule); --min-score/--per-anchor/--db without --batch are ERRORS naming the
+no-persistence stance (design §7's caching-with-staleness trap — no flag
+blurs interactive vs batch). `show <urn>` gains "linked: N parallel" ONLY
+when edges exist (zero-signal silence). (4) MCP nabu_links, the TENTH
+read-only tool (argued: cheap, fits the bounded/license-labeled pattern;
+reads persisted edges only, NEVER mines — description says so, and points
+empty results at nabu_parallels); tool-count pins bumped 9→10.
+LIVE DEMO (read-only: scratch dir with symlinked catalog/fulltext, journal
+at a scratch path; live db/ untouched): `parallels --batch
+urn:nabu:sblgnt:matt --lang grc` → 1,068 anchors, 5,089 edges, 13.3 s
+(12.5 ms/anchor); rerun → 5,089 again, superseded 1 prior run (5,089
+edges), 1 run row — idempotent. `links urn:nabu:sblgnt:matt:4.4` reads
+back the design's own chain from the journal: Origen's Homiliae in Lucam
+1.81, PROIEL/UD NT duplicates 1.54, canonical Matthew 1.24, LXX
+DEUTERONOMY 8.3 at 1.22 — and `show` footers "linked: 5 parallel".
+Journal: 1.7 MB / 5,089 edges. FULL-CORPUS PROJECTION, honest: the design's
+"~1–2 min" figure was the §5 STREAMING extrapolation; the loop-over-anchors
+batch (this packet, the design's other named option) measures 12.5 ms/anchor
+on short NT verses → grc slice (1.44M anchors) ≈ 5 h lower bound (long
+anchors cost up to ~111 ms), full corpus (3.79M) ≈ 13+ h. OWNER-FIRED only;
+if whole-corpus mining is wanted at minutes-scale, a streaming-count
+producer (P15-5's machinery emitting edges) is the follow-up packet.
+Tests: store/links_journal_test 11 (schema, urn keying, pair invariant both
+directions, supersede scoping, kind_counts, file lifecycle incl. readonly
+refusal), batch_parallels_test 9 (direction, super-scope reverse dedup,
+threshold honesty, lang scoping, provenance, rerun idempotency, overlap
+refresh, empty scope, progress), query/links_test 6 (both directions +
+grouping + resolution, unresolved counterpart, journal-outlives-catalog,
+empty-vs-nil, document urn, unknown), rebuild_test +1 (journal
+byte-identical across rebuild, edge re-resolves against re-minted ids),
+cli_test +10 (batch summary + thresholds, supersede line, --db override,
+flags-require-batch, links render both directions + provenance, --long,
+unknown urn, no-journal state, help, show footer present/absent),
+mcp/tools_test +4 + tool-count pins, config_test +1. Suite + lint green.
+One commit, not pushed.
+
+## P16-2 · Batch producers: formulas + cognates  [tier: opus] [status: done 2026-07-13] [deps: P16-1]
+Producer #2/#3 riding the P16-1 substrate: `formulas --batch SCOPE` →
+kind=formula edges (Nabu::BatchFormulas), `cognates --batch WORK` →
+kind=cognate edges (Nabu::BatchCognates). Same journal, same supersede
+replay, same `links` reader — no new mechanics beyond one argued column.
+FINDINGS: (1) FORMULA EDGE-SHAPE VERDICT — a formula is an N-locus REFRAIN,
+not a pair; judged by what `links <urn>` should usefully show a reader at
+one locus: all-pairs is O(N²) (the 72-locus ὣς ἔφαθ' οἵ δ' alone = 2,556
+edges saying nothing one couldn't), consecutive-loci chains answer "where
+else?" with "next door", document-grain loses the loci. VERDICT: a STAR per
+formula — hub = its first locus in urn sort order (deterministic,
+rebuild-stable), one edge hub → every other locus, score = slice count,
+detail = the folded gram. A reader at any locus sees `← hub “gram” ×N`
+(which refrain, how strong); `links <hub>` fans out every locus; edges =
+loci−1, linear. Live: Widsith's ic wæs ond mid catalog refrain reads back
+exactly so (hub :59, 12 spokes, ×13). Pruning named: top --max-formulas by
+rank (200) of the recurring grams, gram_size/min_count/lang all in
+params_json; overlapping formulas sharing a (hub, locus) pair coalesce
+onto the best-ranked gram with the fold COUNTED in the summary. A formula
+recurring only within one passage mints no edge. (2) MEET-PROVENANCE
+VERDICT — a cognate edge's meaning is WHICH root, on WHICH shelf, at WHICH
+verse, and that differs per edge: params_json is run-grain (would lose
+per-edge meets) and score is a float, so the schema gained a nullable
+`detail` String via the journal's own forward-only track (migration 002,
+db/links_migrate): applies IN PLACE on the next write-path open
+(LinksJournal.open! migrates), zero data loss (tested against a v1 journal
+file with live edges), read-only opens of pre-002 journals read nil.
+detail carries display-grade evidence: cognate "MARK 2.1 · *kaisaraz
+[gem-pro]" — the shelf on EVERY edge (design §6's borrowing signal);
+formula edges reuse it for the gram. Cognate edges: one per unordered
+cross-language witness-passage pair (never within a language — the
+engine's ≥2-distinct-languages rule; witnesses/verse are few, so pairwise
+is bounded), direction normalized lexicographically (the join has no probe
+direction), a pair meeting at several roots/refs collapses into one edge
+(detail lists all meets, score = distinct roots). Scope = work id;
+suppression stays ON (an edge is an assertion), --all lifts and is
+recorded; suppressed-group count in the summary. Engine touch: WitnessWord
+gains passage_urns (hits pre-filtered to surviving documents, so no
+license leak). (3) READERS — `links` renders each kind's evidence natively
+(parallel score; formula “gram” ×count — a count rendered as "score 13.00"
+would misread; cognate meet with score suppressed, it merely counts the
+roots detail lists); array run-params render comma-joined (langs got,chu).
+`show` footer was already multi-kind with zero-suppression (kind_counts
+returns only present kinds) — verified `linked: 1 formula, 1 parallel` +
+single-kind, no reader fix needed beyond the evidence tail. MCP nabu_links
+payload gains `detail` (docs/mcp.md updated); tool count unchanged.
+Batch-only flags without --batch error exactly like parallels
+(--max-formulas/--db; cognates --db), naming the no-persistence stance;
+--db override honored (tested: default path untouched).
+LIVE DEMO (prod catalog read-only, journal at a scratch --db):
+`formulas --batch aspr` → 170 formulas as stars, 395 edges, 70 pairs
+coalesced, 0.3 s; rerun → 395 again, superseded 1 prior run (395) —
+idempotent. `cognates --batch nt --langs got,chu` → 321 verse-root groups,
+360 edges, 57 common-word groups suppressed, 3.4 s. Journal 264 KB / 755
+edges; db/links.sqlite3 (matt parallels) untouched. `links` readbacks:
+JOHN 6.5 hlaifs ~ хлѣбъ at *hlaibaz [gem-pro] (the design's own loaf), and
+the Widsith star above.
+Tests +26: batch_formulas_test 9 (star shape + hub determinism,
+detail/score, single-locus no-edge, max-formulas cap honesty, coalescing
+counted, params_json, rerun supersede, lang scoping, empty scope),
+batch_cognates_test 6 (cross-language edges + normalized direction + meet
+detail + loan shelf, no same-language edge, langs in params, suppression
+default/--all recorded, rerun supersede, work-id-only contract),
+links_journal_test +3 (detail write/refresh, nil default, 002 forward
+migration on an existing file without data loss), query/links_test +1
+(detail through Result), cognates_test +1 (passage_urns), cli_test +9
+(batch summaries name knobs, supersede lines, --db overrides,
+flags-require-batch both commands, links formula/cognate renders, mixed
+kinds + show footer multi-kind/zero-suppression, work-id error, help),
+mcp/tools_test +1 (detail payload). Suite + lint green. One commit, not
+pushed.
+
+## P16-3 · Date/place axis, part 2 — ORACC catalogue dates + chronicle annals  [tier: opus] [status: done] [deps: P15-2]
+Two new AxisBuilder extractors, census-first, feeding the existing
+document_axes (migration 008 untouched): ORACC catalogue.json dates
+(period table + regnal resolution) and TOROT chronicle anno-mundi
+annals (the first passage-grain rows). search --from/--to/--century/
+--place and vocab --by-century inherit the coverage.
+
+### FINDINGS (census 2026-07-13, read-only over live canonical + db)
+- **ORACC census.** 33 catalogue.json files (html-en has none), 25,502
+  members. `period` on 25,330 members (30 distinct values — Neo-Assyrian
+  10,248, Old Babylonian 6,259, …, 'Uncertain'/'uncertain'/'Unknown' 106);
+  `date_of_origin` on 7,343 (683 distinct): SAA regnal formulas
+  `King.000.00.00` (2,814; NO nonzero regnal years anywhere, so reign-range
+  grain is the honest maximum) + eponym `King.limu Eponym.mm.dd` variants,
+  `00.000.00.00` = unknown (1,506), RIAO/RIBO/RINAP absolute BCE ranges
+  (1,899) / years (14) / century phrases (128), 33 stragglers ('?-748',
+  'SE 136.06.21', '673, 672' — unparseable, skipped, counted). 12 king
+  spellings total, all standard NA kings with textbook reign dates.
+- **AxisBuilder::OraccDates.** date_of_origin first (regnal → 12-king reign
+  table, eponym-canon chronology after Grayson; absolute values must DESCEND
+  = BCE or are unparseable; century phrases via DateAxis.century_bounds),
+  else period via a documented ORACC/CDLI → middle-chronology table (after
+  CDLI's conventional dates / Brinkman; 'First Millennium' honestly
+  -1000..-1; compound "X or Y" envelopes); 'Uncertain' unmapped — skipped +
+  counted. provenience (minus unclear/uncertain/unknown) + pleiades_id →
+  place_name/place_ref. Translation docs (…-en) carry the tablet's axis row.
+  **Coverage (scratch build): 21,558 of 21,692 oracc docs (99.4%) get a row;
+  21,517 dated (99.2%), 41 place-only, 172 undated counted, 3 db docs in no
+  catalogue (drift: blms P413985, saa03 Q009249, saa08 X000005).** Per
+  project: all 30 in-db projects ≥ 97% dated (dcclt 5,797/5,961 lowest).
+- **TOROT census: the annal year IS structural.** Chronicle <div> titles
+  carry the AM year ('6360: Mikhail …', bare '6361', range '6369–6370',
+  '6694 part 1'); exactly 5 of 40 sources are annalistic — lav 89/91 divs,
+  pvl-hyp 24/24, kiev-hyp 4/4, nov-sin 163/163, suz-lav 76/76 = 356 AM divs;
+  no other source has any (birchbark '43', rusprav '2' etc. all < 4 digits),
+  so shape + AM-plausibility gate (5500..7300) needs no allowlist.
+- **AxisBuilder::ChronicleAnnals.** Streaming Reader (lav.xml = 12 MB);
+  AM → CE via DateAxis.am_to_ce: [Y−5509, Y−5508] (Byzantine epoch 1 Sep
+  5509 BCE — the full September-style year; the March/ultra-March mix leaves
+  a documented ±1 residue, never a per-annal guess; precision "am"); no-
+  year-0 invariant holds across the epoch (AM 5509 → [-1, 1], tested). One
+  passage-grain row per annal (passage_seq_from/to = min/max sequence via
+  the <doc-urn>:<sentence-id> passage-urn join) + one document-grain
+  ENVELOPE row per chronicle. **Coverage: 5 chronicles, 345 annal rows; 11
+  nov-sin annal divs (6725-6780 group) are EMPTY upstream — skipped.**
+  Envelopes: lav 851–986, pvl-hyp 897–921, kiev-hyp 1131–1135, nov-sin
+  1015–1269, suz-lav 1110–1186 CE.
+- **Query surface.** vocab --by-century now counts document-grain rows only
+  (passage_seq_from IS NULL) — else a 163-annal chronicle tallies 163× in a
+  histogram labelled "documents"; search EXISTS unchanged (all rows). Demos
+  (scratch catalog + read-only live fulltext): `search LUGAL --lang akk
+  --century -7` → SAA 18 101 + Nineveh lexical texts in 22 ms; `vocab
+  --by-century LUGAL --lang akk` plots 19c BCE → 4c BCE peaking 8th c.
+  (1,212 docs); akk corpus histogram peaks 10th c. BCE (2,210 — the
+  by-earliest-year bucketing of the NA period range, stated bias).
+- **Grand total after part 2: 83,233 dated/placed documents (was 61,670),
+  83,578 axis rows, document_axes 13.9 MB** (< 20 MB budget holds). Scratch
+  build 63.1 s on a copy of the live catalog; the LIVE rebuild is owner-
+  fired (or next `nabu rebuild`) — untouched here.
+
+## P16-4 · search --fuzzy — documentary trigram index  [tier: opus] [status: done 2026-07-13] [deps: —]
+The parked P15-6, re-proposed and approved with the Phase 16 menu: design
+doc §4 verbatim (trigram fragment search, DOCUMENTARY SCOPE — the
+owner-approved 250–270 MB line vs 3.6–4.1 GB corpus-wide; damaged-text
+persona `]μηνιν αει[`; candidates-then-verify; honest failure modes).
+FINDINGS: (1) SCOPE FLAG VERDICT — per-source `fuzzy_index: true` in
+config/sources.yml (papyri-ddbdp + oracc), parsed/validated by
+SourceRegistry::Entry beside enabled/translations: documentary-vs-literary
+is INDEX ECONOMICS, an owner posture, not intrinsic adapter metadata (a
+manifest field means code edits — the spelunking to avoid; a constant is
+the hardcode the design rejected). Registry#fuzzy_slugs threads into
+Indexer.rebuild! from both callers (sync reindex + rebuild — the one choke
+point, so the invariant holds). (2) INDEX — passages_trigram (FTS5
+tokenize='trigram') over text_normalized AS STORED (same fold, only
+tokenization differs) + passages_trigram_scope recording the slugs each
+build ACTUALLY indexed (the query surface reports real coverage, never
+possibly-drifted config); drop-and-rebuild like everything in
+fulltext.sqlite3 (the existing indexer is not incremental; neither is
+this), empty-not-missing when unscoped. (3) QUERY — Query::Fuzzy, standard
+two-phase: implicit-AND MATCH of the fragment's trigrams (co-occurrence ≠
+contiguity — "abc xyz bcd" candidates for "abcd") then substring verify
+against the stored folded text; query strips editorial [ ] BEFORE the
+query_forms fold union (braces kept — {d} is the akk/sux determinative
+fold's job; conventions §9 note added); <3 chars post-fold raises
+QueryTooShort → CLI names the trigram floor instead of returning nothing.
+Composes with --lang/--license/--limit/--from/--to/--century/--place
+(CatalogJoin, all free); --long lifts the snippet window (house rule);
+--lemma/--near/--morph honestly refused. Every render ends with one scope
+line ("fuzzy index covers: oracc, papyri-ddbdp") — the honest answer when
+a literary fragment misses. (4) MEASURED (scratch build, live catalog
+READONLY, production code path): 1,306,491 documentary passages / 41.9M
+chars → 257.1 MB at 6.43 B/char in 8.6 s — INSIDE the design's 250–270 MB
+projection (design assumed ~6 B/char on 41.3M chars; delta +0.43 B/char,
++1.5% chars). Queries live: στρατηγ/οφειλ/εν-lil 0.7–6.5 ms; the README
+demo is real — `--fuzzy ']ανδρα μοι εν['` → BGU 6.1470, a papyrus writing
+exercise breaking off mid-word through the Odyssey's opening (…Μοῦσα
+πολύτρο[). (5) The LIVE fulltext.sqlite3 does NOT yet carry the table —
+the production build is OWNER-FIRED at the next sync/reindex/rebuild
+(+257 MB, +~9 s, both within budget). Tests +33: registry flag parsing +
+fuzzy_slugs + non-boolean raise (3), indexer scope gating/empty-not-
+missing/infix/withdrawn/idempotent/fresh-db regeneration (6), query
+folding (bracketed Greek, determinative-crossing Akkadian, final sigma),
+false-candidate-rejected-by-verify, scope reader, floor raises, filters,
+snippet-vs-long (14), CLI render/--long/scope hint/literary miss/floor
+message/date compose/pre-P16-4 reindex hint/flag conflicts/help (10).
+Docs: architecture §5 index bullet + tree line, README papyrologist
+persona (live demo pasted) + feature row, conventions §9 bracket-strip
+note. Suite 1933/28,563 green (exit 0), lint 245 files clean (exit 0).
+One commit, not pushed.
+
+## P16-5 · Riders: wiktionary-cu descendants backfill + license_watch  [tier: opus] [status: done 2026-07-13] [deps: —]
+(a) The P14-1 deferred rider: wiktionary-cu entries carry descendants
+data never crosswalked into dictionary_reflexes — backfill at the
+parser/indexer path (same choke point as wiktionary-recon), so OCS
+entries' descendants feed etym/cognates; parse-only resync recovers it,
+census the crosswalk gain (rows before/after). (b) license_watch:
+optional per-source `license_watch: <url>` key in sources.yml — the
+remote probe fetches THAT url (any host, not just github) and
+hash-compares against the pin baseline, exactly like the license-file
+path; makes README-licensed upstreams (kielipankki README.txt,
+clarin.si record pages) watchable. Non-configured sources: behavior
+unchanged (silent per P16-0). Tests stub HTTP (WebMock); no live
+fetches in suite.
+
+FINDINGS (2026-07-13). (a) CENSUS first, read-only over live
+canonical + db: 589 of 4,615 cu entries carry ≥1 worded descendant →
+2,210 dictionary_reflexes rows would mint (ALL new — cu owns 0 today;
+all 2,210 joinable: language + fold present, 0 display-only). Distinct
+(language, fold) keys 3,212 — 1,496 already reachable via recon-minted
+edges, 1,716 new. Gold-language keys 243 (189 new); projected
+reflex_roots closure gain ~244 rows (orv=171 sl=66 lat=5 chu=2; today
+50,151). Top reflex languages sh/ru/bg/uk/mk (modern, non-joining, by
+design). Verdict: data real and worth wiring — DONE: WiktionaryCu#parse
+now passes `reflexes: true` (one-line flip; parser/DictionaryLoader/
+ReflexRootsIndexer already generic). A cu-owned edge is direct-only in
+the closure (chu ≠ -pro → no ascent hop; OCS→proto stays Etym's live
+ascent); Etym display asterisk now -pro-only (attested OCS entries
+enter the walk and must not read as reconstructions — Result#headword
+"стопа", not "*стопа"). Reflexes ride the entry content sha → the
+OWNER-FIRED `bin/nabu sync wiktionary-cu --parse-only` re-mints the
+shelf's 4,615 revisions and lands the 2,210 edges (recovery path; NOT
+run here — proven on fixtures: 38 entries / 127 edges in the trimmed
+cu fixture, loader idempotent, closure dedup + determinism pinned with
+both shelves loaded). (b) license_watch SHIPPED: registry Entry gains
+`license_watch` (nil default; ValidationError unless absolute http(s)
+url), RemoteProbe#source_license overrides BOTH strategies' license
+path when configured — GET via the shared vendored-cert client (no
+redirect following), body sha256 through the shared compare_license,
+baseline on a ledger pin keyed by the WATCHED url (baseline-only row,
+minted on first sight — the one sanctioned exception to "probe never
+mints pins"; drift never reads it). First sight :baseline_recorded /
+match :unchanged ("license: ok") / mismatch :changed ("license:
+CHANGED" + detail naming the url); non-200/transport error → :unchecked
+(silent per P16-0), never raises; failed fetch never touches the stored
+baseline. Non-configured sources byte-identical. Candidate urls
+COMMENTED in sources.yml (owner flips after verifying each serves the
+terms directly): ccmh kielipankki README.txt, goo300k/imp clarin.si
+records (11356/1025, 11356/1031), bosworth-toller LINDAT record
+(11234/1-3532), freising e-ZRC landing page, proiel/torot/iswoc repo
+README raws, oracc licensing doc page. Tests: wiktionary_cu +3,
+reflex_roots_indexer +2, etym +1, source_registry +3, remote_probe +7.
+Docs: architecture §12 addendum, ops.md license_watch paragraph,
+02-sources #46 note, improvements §1.11 rider → shipped. Suite
+1917/28,540 green (exit 0), lint 254 files clean (exit 0). Live db/
+canonical read-only throughout (census only).
+
+## P16-gate · Phase 16 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P16-1..5]
+Full-diff review, library/languages/README refresh (links/fuzzy/axis
+coverage numbers from live db), improvements register (§1.4 → shipped,
+§1.5 → shipped, §1.8 → shipped), PR, owner queue (parse-only resync
+wiktionary-cu; batch runs are owner-fired if long), backup-disk
+re-flag (standing), sticky alarm LAST.

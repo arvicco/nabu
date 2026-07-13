@@ -177,6 +177,25 @@ module Nabu
       is the unit. --morph does not compose with --near (out of scope). Both
       matched terms are bracketed in the snippet.
 
+      FUZZY (--fuzzy): substring/fragment search for damaged texts — matches
+      the fragment ANYWHERE in a passage, mid-word included, where normal
+      search sees only whole words and prefixes. Type the fragment straight
+      off the edition: editorial square brackets are stripped from the query
+      before matching, so `']μηνιν αει['` works as typed. Built on a
+      character-trigram index over the folded search form (same
+      diacritic/case folding as plain search), so fragments need at least 3
+      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc —
+      registry `fuzzy_index: true`): papyrus lines and tablets are where
+      fragment search earns its index bytes; every result footer names the
+      live scope. For half-remembered LITERARY quotations use plain search
+      or `nabu parallels` — the literary corpus is deliberately not
+      trigram-indexed (it would grow the index 15×). Composes with --lang,
+      --limit, --license, and --from/--to/--century/--place; --long prints
+      the full folded passage instead of the windowed snippet. --fuzzy
+      replaces the FTS query syntax: the fragment is matched literally
+      (no AND/phrase/prefix operators) and does not combine with
+      --lemma/--near/--morph.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -199,6 +218,9 @@ module Nabu
                                                    #   (John 1:1 and its kin)
         nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
                                                    #   near κύριος: τάδε λέγει κύριος
+        nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
+                                                   #   all — infix match, papyri+oracc
+        nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -225,12 +247,21 @@ module Nabu
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
     option :place, type: :string, banner: "PATTERN",
                    desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :fuzzy, type: :boolean, default: false,
+                   desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :long, type: :boolean, default: false,
+                  desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     def search(query = nil)
       query = query.to_s.strip
       if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
         raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
                            "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
       end
+      if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
+        raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
+                           "with --lemma/--near/--morph"
+      end
+      return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
@@ -376,15 +407,33 @@ module Nabu
       phrase spans and all shared lemmas, untrimmed (compact shows the first few
       with a "… and N more" tail).
 
+      BATCH MODE (P16-1, the links journal): `parallels --batch SCOPE` mines a
+      whole corpus slice — SCOPE is a source slug or a document-urn prefix,
+      exactly the `formulas` scope grammar — looping this same engine over
+      every anchor passage and PERSISTING the hits as kind=parallel edges in
+      the links journal (db/links.sqlite3; `nabu links <urn>` reads them, and
+      `show` grows a "linked:" footer). Each unordered pair is stored once, in
+      the direction the probe found it; a rerun of the same scope supersedes
+      the previous run's edges (idempotent). Pruning is explicit, never
+      silent: only the top --per-anchor hits (default
+      #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR}) clearing --min-score
+      (default #{Nabu::BatchParallels::DEFAULT_MIN_SCORE}) persist, and the
+      summary line names both. --db writes the journal somewhere else (a
+      scratch run). Interactive output is NEVER persisted — recomputing costs
+      milliseconds; a stored copy would only go stale.
+
       Examples:
         nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
         nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
                                                          # the Odyssey proem — who quotes it
         nabu parallels urn:nabu:sblgnt:matt:4.4 --long   # Matt 4:4 → Luke, Origen, LXX Deut 8:3
         nabu parallels <urn> --lang grc --limit 30       # Greek parallels only, wider page
+        nabu parallels --batch urn:nabu:sblgnt:matt --lang grc
+                                                         # mine Matthew's parallels into the journal
+        nabu parallels --batch sblgnt --min-score 0.1    # a whole source, stricter floor
 
       Use cases: trace a verse's reception; find the source a Father is quoting;
-      seed a citation graph one passage at a time.
+      seed the citation graph one batch scope at a time.
     HELP
     option :lang, type: :string, desc: "Restrict candidates to a passage language (e.g. grc, lat)"
     option :license, type: :string,
@@ -392,11 +441,29 @@ module Nabu
     option :limit, type: :numeric, default: 15, desc: "Maximum hits per signal (default 15)"
     option :long, type: :boolean, default: false,
                   desc: "Expand every truncated list: all shared phrase spans and shared lemmas, untrimmed"
+    option :batch, type: :boolean, default: false,
+                   desc: "Mine a SCOPE (source slug or urn prefix) and persist edges to the links journal"
+    option :min_score, type: :numeric, banner: "S",
+                       desc: "With --batch: rarity-score floor an edge must clear " \
+                             "(default #{Nabu::BatchParallels::DEFAULT_MIN_SCORE})"
+    option :per_anchor, type: :numeric, banner: "N",
+                        desc: "With --batch: top document-grain hits kept per anchor " \
+                              "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
+    option :db, type: :string, banner: "PATH",
+                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
     def parallels(urn = nil)
       urn = urn.to_s.strip
+      validate_license!(options[:license])
+      return batch_parallels(urn) if options[:batch]
+
+      %i[min_score per_anchor db].each do |flag|
+        next unless options[flag]
+
+        raise Thor::Error, "parallels: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
+                           "(interactive results are never persisted)"
+      end
       raise Thor::Error, "parallels: give a passage urn" if urn.empty?
 
-      validate_license!(options[:license])
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -440,14 +507,30 @@ module Nabu
       `search` highlights — `nabu show <urn>` gives the pristine line), with a few
       example loci beneath. --long lists every locus of every reported formula.
 
+      BATCH MODE (P16-2, the links journal): `formulas --batch SCOPE` runs the
+      whole-tradition sweep once and PERSISTS kind=formula edges. A formula is
+      a refrain across many loci, so it maps onto the pair-shaped journal as a
+      STAR: each formula's first locus (urn order — deterministic) is the hub,
+      with one edge to every other locus carrying the gram (detail) and the
+      count (score); `nabu links <locus>` shows which refrain ties the line to
+      the tradition, and `links <hub>` fans out every locus. Pruning is named,
+      never silent: the top --max-formulas by rank persist (default
+      #{Nabu::BatchFormulas::DEFAULT_MAX_FORMULAS}), at --min-count and
+      --gram-size, all recorded in the run's params. A rerun of the same scope
+      supersedes (idempotent); --db writes the journal elsewhere. Interactive
+      output is never persisted.
+
       Examples:
         nabu formulas urn:cts:greekLit:tlg0012 --lang grc   # the Homeric formulas
         nabu formulas aspr                                  # Old English verse formulas
         nabu formulas aspr --gram-size 3 --min-count 5      # the riddle refrain "hwæt ic hatte"
         nabu formulas urn:cts:greekLit:tlg0012 --lang grc --long   # every locus
+        nabu formulas --batch aspr                          # persist the ASPR formula stars
+        nabu formulas --batch urn:cts:greekLit:tlg0012 --lang grc --max-formulas 500
 
       Use cases: characterize a tradition's formulaic diction; find every
-      occurrence of a formula; seed an oral-formulaic study.
+      occurrence of a formula; seed an oral-formulaic study; wire the refrains
+      into the mined citation graph (`nabu links`).
     HELP
     option :lang, type: :string,
                   desc: "Restrict the slice to a language (grc, ang) — wanted when a source mixes translations"
@@ -459,8 +542,23 @@ module Nabu
                    desc: "Maximum formulas shown (default 25)"
     option :long, type: :boolean, default: false,
                   desc: "List every locus of every reported formula (compact shows a few examples)"
+    option :batch, type: :boolean, default: false,
+                   desc: "Sweep the SCOPE once and persist kind=formula edges to the links journal"
+    option :max_formulas, type: :numeric, banner: "N",
+                          desc: "With --batch: top formulas by rank persisted " \
+                                "(default #{Nabu::BatchFormulas::DEFAULT_MAX_FORMULAS})"
+    option :db, type: :string, banner: "PATH",
+                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
     def formulas(scope = nil)
       scope = scope.to_s.strip
+      return batch_formulas(scope) if options[:batch]
+
+      %i[max_formulas db].each do |flag|
+        next unless options[flag]
+
+        raise Thor::Error, "formulas: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
+                           "(interactive results are never persisted)"
+      end
       raise Thor::Error, "formulas: give a source slug or urn prefix" if scope.empty?
 
       config = Nabu::Config.load
@@ -476,6 +574,63 @@ module Nabu
       raise Thor::Error, "formulas: #{e.message}"
     ensure
       catalog&.disconnect
+    end
+
+    desc "links URN", "Mined cross-reference edges touching this urn (the links journal)"
+    long_desc <<~HELP, wrap: false
+      Read the links journal (docs/intertext-design.md §7, architecture §15):
+      every batch-mined edge touching URN, BOTH directions, grouped by kind
+      (parallel, formula, cognate). Each edge shows its counterpart urn
+      resolved to the document title and language plus its kind's evidence —
+      a parallel's rarity score, a formula's gram and count (← the hub locus
+      of the refrain's star; `links <hub>` fans out every locus), a cognate's
+      meet (ref · root [shelf] — a gem-pro shelf under a Slavic witness reads
+      as a borrowing); → means a batch anchor at URN discovered the
+      counterpart, ← means the edge was found from the other end. The footer
+      cites the producer run(s) that minted the edges — scope, parameters,
+      and date — so every edge is honest about its provenance.
+
+      Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
+      survive `nabu rebuild` untouched; counterparts re-resolve against the
+      current catalog, and one that no longer resolves is flagged
+      "(not in catalog)" rather than hidden. Edges are minted ONLY by batch
+      producers (`parallels --batch SCOPE`, `formulas --batch SCOPE`,
+      `cognates --batch WORK`); interactive output never persists.
+
+      Compact shows the first few edges per kind; --long lists all. --db
+      reads a journal written elsewhere (a scratch batch run).
+
+      Examples:
+        nabu links urn:nabu:sblgnt:matt:4.4     # who is wired to Matt 4:4
+        nabu links urn:nabu:sblgnt:matt:4.4 --long
+        nabu links <urn> --db /tmp/links.sqlite3
+
+      Use cases: walk the mined citation graph passage by passage; audit what
+      a batch run asserted; jump between quotation and source via `nabu show`.
+    HELP
+    option :long, type: :boolean, default: false,
+                  desc: "List every edge of every kind (compact shows the first few per kind)"
+    option :db, type: :string, banner: "PATH",
+                desc: "Read the links journal at PATH instead of db/links.sqlite3"
+    def links(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "links: give a passage or document urn" if urn.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      path = options[:db] || config.links_path
+      journal = Nabu::Store::LinksJournal.open_readonly(path)
+      return say("no links journal yet — mine one with `nabu parallels --batch SCOPE`") if journal.nil?
+
+      result = Nabu::Query::Links.new(catalog: catalog, journal: journal).run(urn)
+      raise Thor::Error, "links: unknown urn #{urn} (no catalog entry, no edges)" if result.nil?
+
+      print_links(result, long: options[:long])
+    ensure
+      catalog&.disconnect
+      journal&.disconnect
     end
 
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
@@ -581,6 +736,7 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+      print_linked_footer(config, result.urn)
     rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
       # A range urn that names two endpoints but can't be honoured (endpoint
       # missing, or reversed), or an unknown --random --source: a clean stderr
@@ -848,11 +1004,24 @@ module Nabu
       --long lifts the #{Nabu::Query::Cognates::MAX_GROUPS}-hit compact cap
       and expands gloss/dictionary/document detail per hit.
 
+      BATCH MODE (P16-2, the links journal): `cognates --batch WORK` maps the
+      whole work once and PERSISTS kind=cognate edges between the aligned
+      witness passages that meet at a reconstruction root — one edge per
+      cross-language passage pair, its detail carrying the meet (ref · root
+      [SHELF] — the shelf rides every edge because a gem-pro meet for a
+      Slavic witness reads as a borrowing), its score the distinct-root
+      count. WORK must be a registered work id (per-ref runs stay
+      interactive). Common-word suppression stays on (--all lifts it, and
+      the run records that); a rerun of the same work supersedes
+      (idempotent); --db writes the journal elsewhere. Interactive output is
+      never persisted.
+
       Examples:
         nabu cognates "LUKE 14.34"            # the salt saying, all languages
         nabu cognates nt --langs got,chu      # the whole NT, Gothic × OCS
         nabu cognates "JOHN 13" --langs got,chu,grc
         nabu cognates nt --langs got,chu --all  # keep the common-word matches
+        nabu cognates --batch nt --langs got,chu  # persist the Gothic × OCS cognate map
     HELP
     option :work, type: :string,
                   desc: "Alignment work id (optional when the target decides it)"
@@ -863,8 +1032,18 @@ module Nabu
     option :long, type: :boolean, default: false,
                   desc: "Render every hit (compact caps at #{Nabu::Query::Cognates::MAX_GROUPS}) " \
                         "and expand gloss/dictionary/document detail"
+    option :batch, type: :boolean, default: false,
+                   desc: "Map the whole WORK once and persist kind=cognate edges to the links journal"
+    option :db, type: :string, banner: "PATH",
+                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
     def cognates(*target_parts)
       target = target_parts.join(" ").strip
+      return batch_cognates(target) if options[:batch]
+
+      if options[:db]
+        raise Thor::Error, "cognates: --db only applies with --batch " \
+                           "(interactive results are never persisted)"
+      end
       raise Thor::Error, "cognates: give a work id (nt) or a citation ref (e.g. LUKE 14.34)" if target.empty?
 
       config = Nabu::Config.load
@@ -1008,6 +1187,11 @@ module Nabu
         ledger: readonly_opener(config.history_path) do
           Nabu::Store.connect(config.history_path, readonly: true)
         end,
+        # The links journal, read-only (P16-1): nabu_links reads batch-mined
+        # edges. Absent file = no batch has run (a graceful state).
+        links: readonly_opener(config.links_path) do
+          Nabu::Store.connect(config.links_path, readonly: true)
+        end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
         alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
@@ -1125,6 +1309,12 @@ module Nabu
     PARALLELS_COMPACT_ITEMS = 3
     # Compact evidence-span width; --long prints the span untrimmed.
     PARALLELS_SPAN_CHARS = 72
+    # Edges shown per kind by `nabu links` before the "… and N more" tail
+    # (--long lists all — the conventions §10 house rule).
+    LINKS_COMPACT_ITEMS = 10
+    # Batch-mining progress tick cadence (anchors per stderr line); a scope
+    # smaller than one tick prints no progress at all — just the summary.
+    BATCH_PROGRESS_EVERY = 200
 
     no_commands do
       # Reject an unknown --license up front (before opening any db) with the
@@ -1746,6 +1936,26 @@ module Nabu
             "(highlights are diacritic-folded)"
       end
 
+      # Render fuzzy hits (P16-4): the search-hit shape (urn + [language],
+      # then the folded snippet with the fragment in [brackets]; --long lifts
+      # the snippet window, house rule), plus ONE scope line — the fuzzy
+      # index is documentary-only, so every render names what it covers (the
+      # honest answer when --lang grc "finds nothing" in the literary corpus).
+      def print_fuzzy_results(results, scope:, long: false)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}"
+            say "  #{long ? result.folded_marked : result.snippet}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
+              "(fuzzy substring; highlights are diacritic-folded)"
+        end
+        covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
+        say "fuzzy index covers: #{covered}"
+      end
+
       # Render KWIC rows (P8-3): left + keyword + right (each side already
       # trimmed to width by Concord), then the urn + [language] tag. The left
       # context is a fixed width, so keyword columns align down the page.
@@ -1821,6 +2031,219 @@ module Nabu
         say "     #{prefix}#{formula.loci.join(', ')}"
       end
 
+      # -- links journal (P16-1) ------------------------------------------------
+
+      # `parallels --batch SCOPE`: mine the scope with Nabu::BatchParallels and
+      # persist edges to the links journal. Progress ticks go to stderr
+      # (stdout keeps the summary); the summary NAMES the pruning thresholds —
+      # no silent caps — and suppresses zero fields (house style).
+      def batch_parallels(scope)
+        raise Thor::Error, "parallels --batch: give a source slug or urn prefix" if scope.empty?
+
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+        result = Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
+                                     .run(scope, lang: options[:lang], license: options[:license],
+                                                 progress: batch_progress,
+                                                 **batch_thresholds)
+        print_batch_parallels(result)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+        journal&.disconnect
+      end
+
+      def batch_thresholds
+        thresholds = {}
+        thresholds[:min_score] = options[:min_score].to_f if options[:min_score]
+        thresholds[:per_anchor] = options[:per_anchor].to_i if options[:per_anchor]
+        thresholds
+      end
+
+      # A stderr tick every BATCH_PROGRESS_EVERY anchors (and at the end), so a
+      # minutes-long mine is visibly alive without flooding the terminal.
+      def batch_progress
+        lambda do |done, total, edges|
+          return unless (done % BATCH_PROGRESS_EVERY).zero? || done == total
+
+          warn "  #{done}/#{total} anchors · #{edges} edges" if total > BATCH_PROGRESS_EVERY
+        end
+      end
+
+      def print_batch_parallels(result)
+        say "batch parallels over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        say "  #{plural(result.anchor_count, 'anchor')} · kept top #{result.per_anchor}/anchor " \
+            "at score ≥ #{result.min_score}#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      # `formulas --batch SCOPE` (P16-2): sweep the whole tradition once and
+      # persist each formula as a STAR of kind=formula edges (hub = its first
+      # locus in urn order; detail = the gram, score = the count — the
+      # edge-shape verdict is argued in Nabu::BatchFormulas). Same summary
+      # discipline as batch parallels: every pruning knob named.
+      def batch_formulas(scope)
+        raise Thor::Error, "formulas --batch: give a source slug or urn prefix" if scope.empty?
+
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog
+
+        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+        result = Nabu::BatchFormulas.new(catalog: catalog, journal: journal)
+                                    .run(scope, gram_size: options[:gram_size].to_i,
+                                                min_count: options[:min_count].to_i,
+                                                lang: options[:lang], **max_formulas_option)
+        print_batch_formulas(result)
+      rescue ArgumentError => e
+        raise Thor::Error, "formulas: #{e.message}"
+      ensure
+        catalog&.disconnect
+        journal&.disconnect
+      end
+
+      def max_formulas_option
+        options[:max_formulas] ? { max_formulas: options[:max_formulas].to_i } : {}
+      end
+
+      def print_batch_formulas(result)
+        say "batch formulas over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        coalesced = result.coalesced.positive? ? " · #{result.coalesced} overlapping pairs coalesced" : ""
+        say "  #{plural(result.formula_count, 'formula')} persisted as stars " \
+            "(top #{result.max_formulas} by rank of #{result.recurring_count} recurring " \
+            "≥#{result.min_count}× #{result.gram_size}-grams)#{coalesced}" \
+            "#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      # `cognates --batch WORK` (P16-2): map the whole alignment work once and
+      # persist kind=cognate edges between cross-language witness passages
+      # meeting at a reconstruction root; the meet (ref · root [shelf]) rides
+      # each edge's detail (the provenance verdict is argued in
+      # Nabu::BatchCognates).
+      def batch_cognates(work_id)
+        raise Thor::Error, "cognates --batch: give a registered work id (nt)" if work_id.empty?
+
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+        result = Nabu::BatchCognates.new(catalog: catalog, fulltext: fulltext,
+                                         registry: registry, journal: journal)
+                                    .run(work_id, langs: parse_langs(options[:langs]), all: options[:all])
+        print_batch_cognates(result)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+        journal&.disconnect
+      end
+
+      def print_batch_cognates(result)
+        langs = result.langs ? " [#{result.langs.join('×')}]" : ""
+        say "batch cognates over #{result.work}#{langs}: " \
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+        suppressed = if result.suppressed.positive?
+                       " · #{plural(result.suppressed, 'common-word group')} suppressed (--all keeps)"
+                     else
+                       ""
+                     end
+        say "  #{plural(result.group_count, 'verse-root group')}#{suppressed}" \
+            "#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+      end
+
+      def batch_refreshed(result)
+        result.edges_refreshed.positive? ? " (+#{result.edges_refreshed} refreshed in place)" : ""
+      end
+
+      def batch_superseded(result)
+        return "" unless result.superseded_runs.positive?
+
+        " · superseded #{plural(result.superseded_runs, 'prior run')} " \
+          "(#{plural(result.superseded_edges, 'edge')})"
+      end
+
+      # Render `nabu links` (P16-1): the urn header, one section per kind with
+      # each edge's direction, resolved counterpart, and score, then the
+      # provenance footer citing the producer run(s). Compact caps each kind at
+      # LINKS_COMPACT_ITEMS; --long lists all (house rule, conventions §10).
+      def print_links(result, long:)
+        title = result.title ? " — #{result.title}" : ""
+        say "links of #{result.urn}#{title}"
+        return say("  no links") if result.total.zero?
+
+        result.groups.keys.sort.each { |kind| print_links_group(kind, result.groups.fetch(kind), long: long) }
+        result.runs.each do |run|
+          say "#{plural(result.total, 'edge')} · run #{run.id}: #{run.producer} over #{run.scope} " \
+              "#{format_link_params(run.params)}· #{run.created_at.strftime('%Y-%m-%d')}"
+        end
+      end
+
+      def print_links_group(kind, edges, long:)
+        say "#{kind} (#{edges.size}):"
+        shown = long ? edges : edges.first(LINKS_COMPACT_ITEMS)
+        shown.each { |edge| say "  #{format_link_edge(edge, kind)}" }
+        hidden = edges.size - shown.size
+        say "  … and #{hidden} more (--long lists all)" if hidden.positive?
+      end
+
+      def format_link_edge(edge, kind)
+        arrow = edge.direction == :out ? "→" : "←"
+        where = if edge.resolved?
+                  "#{" — #{edge.title}" if edge.title}#{" [#{edge.language}]" if edge.language}"
+                else
+                  " (not in catalog)"
+                end
+        "#{arrow} #{edge.urn}#{where}#{format_link_evidence(edge, kind)}"
+      end
+
+      # The per-kind evidence tail (P16-2): a formula edge shows its gram and
+      # slice count (“saga hwaet ic hatte” ×4 — "score 4.00" would misread a
+      # count as a rarity score); a cognate edge shows its meet (the detail
+      # already carries ref · root [shelf], and its score merely counts the
+      # roots listed there — suppressed as zero-signal); a parallel edge keeps
+      # the rarity score; an unknown future kind prints whatever it has.
+      def format_link_evidence(edge, kind)
+        case kind
+        when "formula"
+          "#{"  “#{edge.detail}”" if edge.detail}#{"  ×#{edge.score.to_i}" if edge.score}"
+        when "cognate"
+          edge.detail ? "  #{edge.detail}" : ""
+        else
+          "#{"  score #{format('%.2f', edge.score)}" if edge.score}#{"  #{edge.detail}" if edge.detail}"
+        end
+      end
+
+      # Array params (cognates' langs) render comma-joined, not as inspected
+      # Ruby arrays — compact house style.
+      def format_link_params(params)
+        pairs = params.except("kind").map do |key, value|
+          "#{key} #{value.is_a?(Array) ? value.join(',') : value}"
+        end
+        pairs.empty? ? "" : "(#{pairs.join(', ')}) "
+      end
+
+      # The `show` footer (P16-1): one "linked:" line, ONLY when the links
+      # journal holds edges touching this urn — zero-signal silence otherwise
+      # (no journal, no edges, nothing printed). Read-only, absent-file-safe.
+      def print_linked_footer(config, urn)
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        return if journal.nil?
+
+        counts = Nabu::Store::LinksJournal.kind_counts(journal, urn)
+        return if counts.empty?
+
+        say "  linked: #{counts.sort_by { |kind, _| kind }.map { |kind, count| "#{count} #{kind}" }.join(', ')}"
+      ensure
+        journal&.disconnect
+      end
+
       # Cap a list to PARALLELS_COMPACT_ITEMS with a "… and N more" tail unless
       # +long+; each kept item passes through the block (span trimming). The tail
       # itself names --long so the elision is discoverable.
@@ -1836,6 +2259,38 @@ module Nabu
       # index. Replaces the FTS query (simplest honest v1 — combining both is
       # future work); composes with --lang/--license/--limit. A fulltext file
       # predating P7-5 lacks the lemma table, so that gets its own honest hint.
+      # search --fuzzy FRAGMENT (P16-4): substring/fragment search over the
+      # documentary trigram index (Query::Fuzzy — candidates, then verify).
+      # Same open/close discipline as the sibling search paths; the trigram
+      # table missing means the fulltext index predates P16-4, an honest
+      # reindex hint, exactly the lemma-index precedent.
+      def fuzzy_search(query)
+        raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
+
+        validate_license!(options[:license])
+        from, to = date_window
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless fulltext.table_exists?(Nabu::Store::Indexer::TRIGRAM_TABLE)
+          raise Thor::Error, "no fuzzy index (the fulltext index predates fragment search) — " \
+                             "run nabu sync or nabu rebuild"
+        end
+
+        require_axis!(catalog) if from || to || options[:place]
+        fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
+        results = fuzzy.run(query, lang: options[:lang], license: options[:license],
+                                   limit: options[:limit].to_i, from: from, to: to, place: options[:place])
+        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long])
+      rescue Nabu::Query::Fuzzy::QueryTooShort => e
+        raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
+                           "(#{query.inspect} folds to #{e.folded.inspect}) — the trigram floor"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
       def lemma_search(positional_query)
         unless positional_query.empty?
           raise Thor::Error, "search: --lemma replaces the text query — give one or the other"
@@ -2347,7 +2802,8 @@ module Nabu
         return unless result.axes
 
         say "  dated/placed #{result.axes.total} documents " \
-            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp})"
+            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
+            "oracc #{result.axes.oracc}, torot #{result.axes.torot})"
       end
 
       def format_report(label, report)
@@ -2520,8 +2976,9 @@ module Nabu
         live_w = rows.map { |row| live_cell(row.liveness).length }.max
         drift_w = rows.map { |row| drift_cell(row.drift).length }.max
         rows.each do |row|
-          say "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
-              "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+          line = "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
+                 "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+          say line.rstrip
         end
         say remote_health_summary(report)
       end
@@ -2536,9 +2993,14 @@ module Nabu
           frozen: "frozen" }.fetch(drift)
       end
 
+      # :unchecked renders as NOTHING — "license: unchecked" reads like a
+      # problem when it only means "no machine-checkable license artifact
+      # upstream" (non-github, or a repo without a top-level license file).
+      # The verdict still lands in the ledger; the row just doesn't speak
+      # (owner rule, conventions §10: suppress zero-signal fields).
       def license_cell(license)
         { baseline_recorded: "license: baseline recorded", unchanged: "license: ok",
-          changed: "license: CHANGED", unchecked: "license: unchecked" }.fetch(license.status)
+          changed: "license: CHANGED", unchecked: "" }.fetch(license.status)
       end
 
       # Trailing context: why an upstream is not alive, or why a license row is

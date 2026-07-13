@@ -77,9 +77,26 @@ module Nabu
     #   Tokens without a lemma (CoNLL-U `_`, MWT ranges, PROIEL empty tokens)
     #   and passages without lemma annotations contribute no rows — honest
     #   absence; the non-treebank ~1.45M passages simply are not here.
+    # == The trigram index (P16-4) — fragment search, documentary scope
+    #
+    # passages_trigram is a second FTS5 table over the SAME folded search form
+    # as passages_fts, tokenized into character trigrams so `search --fuzzy`
+    # can match mid-word fragments (the papyrologist's ]μηνιν αει[). It is
+    # deliberately NOT corpus-wide: at ~6 bytes/char the whole corpus costs
+    # 3.6–4.1 GB, the documentary shelves ~250–270 MB (intertext design §4,
+    # the owner-approved line). Which sources are in is an owner posture in
+    # config/sources.yml (`fuzzy_index: true` — see SourceRegistry::Entry for
+    # the where-does-the-flag-live argument); callers thread the resulting
+    # slug list in as +fuzzy_slugs+. The companion passages_trigram_scope
+    # table records the slugs THIS build actually indexed, so the query
+    # surface reports real coverage, never a config that may have drifted
+    # since the last reindex. Same lifecycle as everything else here:
+    # drop-and-rebuild, never migrated, disposable.
     module Indexer
       TABLE = :passages_fts
       LEMMA_TABLE = :passage_lemmas
+      TRIGRAM_TABLE = :passages_trigram
+      TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
 
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
@@ -96,6 +113,18 @@ module Nabu
         )
       SQL
 
+      # Trigram FTS5 DDL (class note; same raw-DDL exception as CREATE_TABLE —
+      # virtual-table DDL has no Sequel API). Same column shape as
+      # passages_fts so index_row feeds both; only the tokenizer differs.
+      CREATE_TRIGRAM_TABLE = <<~SQL
+        CREATE VIRTUAL TABLE passages_trigram USING fts5(
+          text_normalized,
+          urn UNINDEXED,
+          passage_id UNINDEXED,
+          tokenize = 'trigram'
+        )
+      SQL
+
       module_function
 
       # Drop and rebuild the whole index (FTS + lemma table + alignment refs)
@@ -109,9 +138,15 @@ module Nabu
       # nil still creates the empty alignment table, so queries degrade to
       # "no rows", never "index missing".
       #
+      # +fuzzy_slugs+ (P16-4) scopes the trigram fragment index — callers pass
+      # SourceRegistry#fuzzy_slugs (config/sources.yml `fuzzy_index: true`).
+      # Empty/nil still creates the (empty) trigram + scope tables, so
+      # `search --fuzzy` degrades to "no rows + honest scope line", never
+      # "index missing".
+      #
       # Reads the catalog through raw datasets (not the Store models) so it is
       # independent of whichever db the global models are currently bound to.
-      def rebuild!(catalog:, fulltext:, alignments: nil)
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.run(CREATE_TABLE)
@@ -125,11 +160,36 @@ module Nabu
             count += batch.size
           end
         end
+        rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
         AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
         # The cognate root closure (P15-3) rebuilds AFTER passage_lemmas: its
         # gold-language scope and suppression stats are snapshots of the lemma
         # table built moments ago in this same pass, so the two can never drift.
         ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        count
+      end
+
+      # Drop and rebuild the trigram fragment index (class note) over the live
+      # passages of the +fuzzy_slugs+ sources, and record that scope. A second
+      # streaming pass rather than a branch in the main one: the scope is a
+      # small subset of the corpus, and the fts/lemma pass stays untouched.
+      # Returns the number of passages trigram-indexed.
+      def rebuild_trigram!(catalog:, fulltext:, fuzzy_slugs:)
+        fulltext.drop_table?(TRIGRAM_TABLE)
+        fulltext.drop_table?(TRIGRAM_SCOPE_TABLE)
+        fulltext.run(CREATE_TRIGRAM_TABLE)
+        fulltext.create_table(TRIGRAM_SCOPE_TABLE) do
+          String :slug, null: false
+        end
+
+        count = 0
+        fulltext.transaction do
+          fulltext[TRIGRAM_SCOPE_TABLE].multi_insert(fuzzy_slugs.map { |slug| { slug: slug } })
+          trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
+            fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
+            count += batch.size
+          end
+        end
         count
       end
 
@@ -168,6 +228,26 @@ module Nabu
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
             Sequel[:passages][:annotations_json]
+          )
+      end
+
+      # The trigram pass's slice of live_passages: same two-level visibility
+      # rule, additionally scoped to the fuzzy-flagged sources (empty slugs =
+      # empty dataset). The sources join hangs off documents.source_id;
+      # text_normalized is indexed AS STORED, exactly like the fts pass — the
+      # trigram table differs only in tokenization, never in folding.
+      def trigram_passages(catalog, slugs)
+        return [] if slugs.empty?
+
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .where(Sequel[:sources][:slug] => slugs)
+          .select(
+            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:urn],
+            Sequel[:passages][:id].as(:passage_id)
           )
       end
 

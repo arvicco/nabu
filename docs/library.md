@@ -1,6 +1,6 @@
 # The Library — content review
 
-**As of 2026-07-12** (post Phase 15, branch phase-15). Live totals:
+**As of 2026-07-13** (post Phase 16, branch phase-16). Live totals:
 **88,346 documents / 3,786,763 passages** across the 22 registered sources
 (18 corpus sources carrying documents + 4 reference sources — lexica,
 bosworth-toller, wiktionary-cu, wiktionary-recon — carrying dictionary
@@ -236,6 +236,10 @@ MCP `nabu_define` for AI-assisted reading. A leading `*` (`define *bogъ`)
 scopes to the reconstruction shelves; `nabu etym` walks an attested lemma
 up the proto-to-proto chain, and `nabu cognates` crosses that crosswalk
 with the alignment hub (§9) — the comparativist loop closed on live data.
+P16-5 extends the crosswalk to wiktionary-cu's own descendants sections
+(**2,210 edges**, census-verified) — those rows land at the next
+owner-fired parse-only resync; the live crosswalk still carries the three
+reconstruction shelves only.
 
 **Research uses:** the philologist's desk loop (passage → lemma →
 definition → cited parallel passage) closed inside one tool; lexicographic
@@ -298,13 +302,23 @@ Freising Manuscripts beside their OCS near-contemporaries.
 - **Proximity search** (`search A --near B [--window N]`, P14-8): TLG-style
   collocation probing, FTS5 NEAR over the folded forms, lemma-aware (the
   anchor expands to attested surface forms).
-- **Date/place axis** (P15-2): `document_axes` (migration 008) dates and
-  places 61,670 documents (HGV for the papyri — 99.2% of the DDbDP shelf —
-  plus the Slovene goo300k/IMP year-suffixed urns). `search
-  --from/--to/--century/--place` scope by signed historical year (negative
-  = BCE, no year 0) and provenance; `show` prints the axis line
-  ("date: 292 CE · Oxyrhynchos"). Part 2 (ORACC regnal years, chronicle
-  annals) is a Phase 16 candidate.
+- **Fragment search** (`search --fuzzy FRAGMENT`, P16-4): substring
+  matching anywhere in a passage, mid-word included — `']μηνιν αει['`
+  typed straight off a damaged edition (brackets stripped, then the usual
+  per-language folding). Character-trigram index scoped to the documentary
+  shelves (`fuzzy_index: true` on papyri-ddbdp + oracc; measured 257.1 MB /
+  8.6 s to build — corpus-wide would cost ~15×). **The production index is
+  not yet built**: it lands at the next owner-fired reindex/rebuild; until
+  then `--fuzzy` says so honestly instead of degrading.
+- **Date/place axis** (P15-2, extended P16-3): `document_axes` (migration
+  008) dates and places **61,670 documents live** (HGV for the papyri —
+  99.2% of the DDbDP shelf — plus the Slovene goo300k/IMP year-suffixed
+  urns). `search --from/--to/--century/--place` scope by signed historical
+  year (negative = BCE, no year 0) and provenance; `show` prints the axis
+  line ("date: 292 CE · Oxyrhynchos"). Part 2 (P16-3) shipped the ORACC
+  period/regnal extractors and TOROT chronicle AM-annal dating in code —
+  coverage grows to **83,233** documents when the owner-fired axis rebuild
+  runs; until then the live table holds the part-1 rows only.
 - **Alignment hub** (`align REF`, MCP `nabu_align`): one citation rendered
   across every witness of a registered work (`config/alignments.yml`) —
   the parallel NT (up to **thirteen witnesses**) and OT (Septuagint ↔
@@ -316,11 +330,23 @@ Freising Manuscripts beside their OCS near-contemporaries.
   passage-anchored quotation/echo discovery — query-time 4-gram phrase
   probes over the existing FTS index (zero new schema), rarity-weighted,
   elision-folded (Matthew 4:4 finds LXX Deuteronomy 8:3); gold-lemmatized
-  anchors also get rare-lemma "echoes".
+  anchors also get rare-lemma "echoes". `--batch SCOPE` (P16-1) mines a
+  whole source or urn prefix and persists the hits as journal edges.
 - **Formula mining** (`nabu formulas SCOPE`, P15-5): the same gram
   machinery pointed inward — repeated formulas within a corpus slice,
   ranked by count × length (Homer's ὣς ἔφαθ' 72×; `Beowulf maþelode`;
-  `saga hwæt ic hatte`).
+  `saga hwæt ic hatte`). `--batch SCOPE` (P16-2) persists each formula as
+  a star of edges (hub = first locus, the gram riding each edge's detail).
+- **The links graph** (`nabu links URN`, MCP `nabu_links`, P16-1/P16-2):
+  the mined cross-reference graph read back — every batch-produced edge
+  touching a urn, grouped by kind (parallel, formula, cognate), each with
+  native evidence and a provenance footer naming the producer run (scope,
+  params, code version, date). Edges live in their own journal
+  (`db/links.sqlite3`, the third data temperature — architecture §15), so
+  they survive `nabu rebuild` untouched; `show` grows a one-line
+  `linked:` footer when edges exist. Seeded so far: **5,089 parallel**
+  edges (Matthew anchors), **395 formula** edges (ASPR refrains as stars),
+  and **360 cognate** edges (NT got×chu, per-edge meet detail).
 - **Dictionary lookup** (`define LEMMA`, MCP `nabu_define`): §8c —
   including `define *proto-form` on the reconstruction shelves.
 - **Etymology walk** (`nabu etym LEMMA`, MCP `nabu_etym`, P14): attested
@@ -331,6 +357,8 @@ Freising Manuscripts beside their OCS near-contemporaries.
   languages use reflexes of the same root (got salt ~ chu соль at \*sḗh₂l;
   ~300 NT verses / 30 roots for got×chu, sub-second), each hit naming its
   meet shelf (a gem-pro meet for a Slavic word reads as a borrowing).
+  `--batch WORK` (P16-2, journal migration 002) persists the whole-work
+  map as cognate edges, the meet (`ref · root [shelf]`) riding each edge.
 - **Vocabulary profiling** (`nabu vocab URN`, P14-3): lemma-frequency
   profile against the gold corpus — distinctive vocabulary by log-odds,
   hapax legomena; `--by-century` (P15-2) plots the dated corpus, or a
@@ -346,9 +374,9 @@ Freising Manuscripts beside their OCS near-contemporaries.
 - **Concordance** (`concord`): KWIC lines with fold-aware matching that maps
   hits back to pristine (accented) text.
 - **Parallel display** (`show --parallel`): §7.
-- **MCP server** (**9 read-only tools**: `nabu_search`, `nabu_show`,
+- **MCP server** (**10 read-only tools**: `nabu_search`, `nabu_show`,
   `nabu_concord`, `nabu_align`, `nabu_define`, `nabu_etym`,
-  `nabu_parallels`, `nabu_cognates`, `nabu_status` — see
+  `nabu_parallels`, `nabu_cognates`, `nabu_links`, `nabu_status` — see
   `docs/mcp.md`): exposes the library to Claude and other MCP
   clients. Every passage carries `license_class` + `source` so quoting
   decisions are informed. All licensed shelves including `nc` are served;
@@ -362,7 +390,11 @@ Freising Manuscripts beside their OCS near-contemporaries.
 - **Health**: trend rules (spike/collapse/creep/stale), golden-query replay
   (13 goldens), remote drift + license-baseline probes — with honest drift
   vocabulary (P15-7: `up=unpinned` when no baseline pin exists, never a
-  fake "ok"; `health --backfill-pins` seeds pins from the ledger).
+  fake "ok"; `health --backfill-pins` seeds pins from the ledger; P16-0:
+  the license column stays silent on sources it never checked). A
+  `license_watch:` registry key (P16-5) lets `health --remote` watch a
+  source's upstream license page for changes — candidates are recorded
+  commented-out in `config/sources.yml`, none enabled yet (owner decision).
 - **Licensing split**: `attribution` shelf (Perseus ×2, First1K, papyri —
   ~99% of documents) is redistributable with credit; `nc` shelf (GRETIL,
   treebanks) is non-commercial research use — fine for private/AI-assisted

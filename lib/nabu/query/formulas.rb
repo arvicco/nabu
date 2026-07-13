@@ -2,6 +2,7 @@
 
 require_relative "catalog_join"
 require_relative "grams"
+require_relative "scope"
 
 module Nabu
   module Query
@@ -76,6 +77,7 @@ module Nabu
     class Formulas
       include CatalogJoin
       include Grams
+      include Scope
 
       DEFAULT_GRAM_SIZE = 4
       DEFAULT_MIN_COUNT = 3
@@ -127,35 +129,14 @@ module Nabu
       private
 
       # The passages in scope, selecting just what the pass needs (urn +
-      # text_normalized), through the shared visibility+filter join (CatalogJoin):
-      # a source slug (exact) else a document-urn prefix (a whole work or a
-      # super-prefix over several). --lang filters passage-side exactly as Search
-      # does.
+      # text_normalized), through the shared scope grammar (Query::Scope — a
+      # source slug, exact, else a document-urn prefix) over the shared
+      # visibility+filter join (CatalogJoin). --lang filters passage-side
+      # exactly as Search does.
       def slice(scope, lang:)
-        base = visible_passages(lang: lang, license: nil)
-        base = if source_slug?(scope)
-                 base.where(Sequel[:sources][:slug] => scope)
-               else
-                 base.where(prefix_match(scope))
-               end
-        base.select(Sequel[:passages][:urn].as(:urn),
-                    Sequel[:passages][:text_normalized].as(:text_normalized))
-      end
-
-      def source_slug?(scope)
-        @catalog[:sources].where(slug: scope).any?
-      end
-
-      # A byte-range prefix match (BINARY collation) over the DOCUMENT urn: urn >=
-      # prefix AND urn < prefix + max-codepoint — no LIKE, so nothing to escape,
-      # and it rides the documents.urn unique index (then joins to passages by
-      # document_id, the fast path — measured 0.16 s on Homer; the passages.urn
-      # variant defeated the index at 2 s). Document-grain by design: a source
-      # slug, a whole work, or a super-prefix over several works — the design's
-      # "urn-prefix". A prefix finer than a document urn is not a v1 slice.
-      def prefix_match(prefix)
-        doc = Sequel[:documents][:urn]
-        Sequel.expr(doc >= prefix) & (doc < "#{prefix}\u{10FFFF}")
+        scoped_passages(scope, lang: lang)
+          .select(Sequel[:passages][:urn].as(:urn),
+                  Sequel[:passages][:text_normalized].as(:text_normalized))
       end
 
       # ONE streaming pass: tokenize each passage, shingle, count every gram, and

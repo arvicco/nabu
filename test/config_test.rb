@@ -117,6 +117,14 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P16-1: the links journal rides in the same (config-driven) db dir.
+  def test_links_path_is_under_db_dir
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "db", "links.sqlite3"), config.links_path
+    end
+  end
+
   # P7-2: the backup target is optional and has no default (nil until wired).
   def test_backup_target_absent_by_default
     Dir.mktmpdir do |root|

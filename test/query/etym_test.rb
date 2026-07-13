@@ -207,5 +207,31 @@ module Query
       assert_empty etym("   ")
       assert_empty etym("зззз")
     end
+
+    # -- P16-5 (a): attested wiktionary-cu entries enter the walk ------------------
+
+    # The descendants backfill lets an sl lemma reach its ATTESTED OCS
+    # ancestor entry (стопа carries no recon-fixture chain, so the cu entry
+    # is the only hit) — rendered WITHOUT the reconstruction asterisk, which
+    # only the -pro shelves earn.
+    def test_walks_an_sl_lemma_to_its_attested_ocs_entry_without_an_asterisk
+      cu = Nabu::Store::Source.create(
+        slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryCu",
+        license: "CC-BY-SA + GFDL", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: cu)
+                                   .load_from(Nabu::Adapters::WiktionaryCu.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+      make_gold_passages(language: "sl", lemma: "stopa", form: "stopa")
+      rebuild!
+      results = etym("stopa", lang: "sl")
+      assert_equal 1, results.size
+      stopa = results.first
+      assert_equal "urn:nabu:dict:wiktionary-cu:стопа:noun", stopa.urn
+      assert_equal "стопа", stopa.headword, "attested OCS is not a reconstruction — no asterisk"
+      assert_equal "chu", stopa.language
+      assert_equal "sl", stopa.matched_reflex.language
+    end
   end
 end
