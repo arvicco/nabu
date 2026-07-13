@@ -5857,7 +5857,24 @@ sketches for the gate; honest "print-only, no unblock" list.
 # question — one email to repo-help@clarin.si settles 141 dictionary
 # records incl. Miklosich; CC on the pending Miklosich draft send.
 
-## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
+## P17-9 · Static site — the project's academic face  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-13): "a separate static site for Nabu (github project
+page). Humanists are allergic to github READMEs it seems. The site needs
+to restate README, sources and supporting materials in a more academic
+style and org-look (tabs/pages etc). It needs to be further maintained
+and synced with README and current project state at any future gate."
+Jekyll site under site/ (NOT docs/ — the loop docs stay un-rendered),
+deployed by a GitHub Actions Pages workflow; pages: Home, The Library
+(collections from library.md), Tools, Examples (personas), Languages,
+Licensing & Access, About. Academic register: restrained serif design,
+no marketing voice, cite-the-numbers style, every claim traceable to the
+repo docs. STANDING GATE DUTY added to the §10 cadence: the site is
+refreshed alongside library.md/README at every future gate. Site serves
+PROJECT DOCS ONLY — no corpus content (the external-access licensing
+rulings are not triggered). Enabling Pages in repo Settings = owner
+action, queued.
+
+## P17-gate · Phase 17 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
 facets from live db), improvements register (§2.2/§2.3 → shipped,
 §1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
