@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Four files are WHOLE upstream files (byte-identical, refetchable and
+# byte-comparable); the zip is REBUILT from a trimmed member + a whole
+# member (whole: false — a fresh GET returns the full 259-member zip and is
+# fetched for URL-liveness only). All from the v6.2.0 release tag (commit
+# 6c2acf0ebebf62f40c3834259cf6fd734238e371) — raw URLs pin the tag, so a
+# byte-diff drift means the TAG moved, which upstream never does.
+source: coptic-scriptorium
+adapter_test: test/adapters/coptic_scriptorium_test.rb
+retrieved: 2026-07-13
+files:
+  - path: besa-letters/besa.letters_TT/on_lack_of_food.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_lack_of_food.tt
+    whole: true
+  - path: besa-letters/besa.letters_CONLLU/on_lack_of_food.conllu
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_CONLLU/on_lack_of_food.conllu
+    whole: true
+  - path: AP/apophthegmata.patrum_TT/AP.004.poemen.65.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/AP/apophthegmata.patrum_TT/AP.004.poemen.65.tt
+    whole: true
+  - path: doc-papyri/doc.papyri_TT/cpr.2.237.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/doc-papyri/doc.papyri_TT/cpr.2.237.tt
+    whole: true
+  - path: sahidica.nt/sahidica.nt_TT.zip
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidica.nt/sahidica.nt_TT.zip
+    whole: false
+    trim: "rebuilt zip (zip -X) with 2 of 259 members: 41_Mark_01.tt cut to meta line + verses 1-12 (upstream lines 1-2495 byte-identical, </meta> re-added; 263,156 B -> 72,878 B) + 57_Philemon_01.tt whole; 5.5 MB -> 40 KB"

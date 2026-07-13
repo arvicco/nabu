@@ -5510,7 +5510,7 @@ re-flag (standing), sticky alarm LAST.
 # alignment hub, morph facets, vocab, collation layers, fuzzy, license
 # labels, MCP — proposing NEW columns/facets where the data earns them.
 
-## P17-1 · Coptic Scriptorium  [tier: opus, two-phase] [status: scouting] [deps: —]
+## P17-1 · Coptic Scriptorium  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
 Register §2.2 (candidate — strong). Gold-lemmatized Coptic (would be
 lemma language #15); the Sahidic NT as alignment witness #14. Deep
 layers to census: bound-group tokenization vs word grain; gold
@@ -5521,6 +5521,60 @@ verse citations (hub wiring); English translations (--parallel); MS
 metadata — dates (axis), repository/provenance; multi-corpus structure
 (NT, Shenoute, Apophthegmata, Besa...). License CC BY (verify per
 corpus).
+
+FINDINGS (Phase B, 2026-07-13 — survey docs/coptic-survey.md is the spec
+of record; owner approved the fixture plan as suggested, incl. the
+optional 4th documentary sample). Shipped: fixture set (Besa TT+CoNLL-U
+whole, AP.004.poemen.65 whole, cpr.2.237 whole, rebuilt sahidica.nt zip
+with Mark_01 trimmed to verses 1–12 + Philemon whole; README+manifest,
+all at tag v6.2.0 commit 6c2acf0); parser family `CopticTtParser`
+(span-EVENT stack, never a tree — cpr's `</figDesc>`-before-`</figure>`
+proves it); adapter `CopticScriptorium` (chapter→book merge incl. the
+single-chapter edge, in-repo-zip discover via `unzip` through Shell —
+canonical never written outside fetch, treebank-dir + license-less skip
+rules with discovery accounting, P10-4 attribution overrides read from
+each header, most-restrictive-wins across a book's chapters); GitFetch
+grew `ref:` (fetch pinned to the release TAG, owner re-pins by bumping
+RELEASE_TAG); conventions §9 `cop` fold (⳿ U+2CFF deletes; census: every
+stroke/overline is Mn, already generic-stripped); text = diplomatic
+orig_group sequence, text_normalized = norm-layer WORD sequence through
+the one folding boundary (conformance search-source hook pins the
+derivation); tokens/entities/identities/loans/topology annotations
+(loans = per-passage code counts {grc/hbo/arc/lat/egy}, the future
+--loans facet reads them without reparse); gold-lemma gate `lemmas:
+:gold` default (automatic docs mint lemma_auto — nothing lost, index
+unpolluted; :all = the owner flip); `CopticScriptoriumDates` axis
+extractor (dates+places, unknown-class places skipped, urn mint pinned
+against the adapter by test); hub witnesses #14 sahidica NT (nc) + #15
+bohairic NT (attribution), 27 books each, urns verified in the tagged
+meta.json. DEVIATIONS from the survey, all fixture-forced: (1) a THIRD
+structural TT dialect the survey's 8 samples missed — Philemon's
+COLLAPSED shape (orig_group/orig/lang as ATTRIBUTES on norm_group/norm,
+translation as verse_n attribute) — parser handles all three, fixture
+preserves it; (2) upstream's "Arabic only in ANNIS" is false for AP:
+AP.004 carries embedded per-verse `<arabic>` spans — ingested as
+translation_ar where present; (3) survey's `sync_policy: versioned` is
+not a registry enum — implemented as `manual` + tag-pinned fetch (same
+substance); (4) -en translation sibling documents NOT minted v1 (the
+per-verse English rides in annotations["translation"]; the ORACC-shape
+sibling minting is a named follow-up — deliberate scope hold, the
+packet's deliverable list governed). V2 backlog (survey §10): --loans
+facet + Coptic→Greek borrowing crosswalk (converges with P17-3
+`borrowed`), witness/identity links-journal producers, CoNLL-U FEATS
+join, ANNIS Arabic for the other 72 docs, CDO lexicon, sbl_greek
+collation, -en siblings, AND the OT witnesses (sahidic.ot 911 +
+bohairic.ot 507 docs) — NOT wired v1: upstream's own "versification may
+not always align with traditional Septuagint versification" caveat
+demands a Psalms/Jeremiah spot-check against the LXX witness after
+first sync (the P11-5 clean-books-first precedent). Projected first
+sync: ~2.8 GB clone; ~75–80k passages / ~2.4M token records (~300–400
+MB annotations JSON in the catalog, survey estimate stands — fixture
+parse yields ~46 tokens/passage on literary, ~31 words/verse on NT).
+Registry `enabled: false`; owner fires the first sync (checklist §6).
+Note for review: the §9 cop fold refolds the ~28k live papyri-ddbdp cop
+passages at next rebuild — expected a no-op (documentary text carries
+no U+2CFF) but unverified against live canonical (db untouched this
+packet, per mid-task coordinator directive).
 
 ## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: scouting] [deps: —]
 Register §2.3. Epigraphy as the third documentary shelf — fuzzy_index's

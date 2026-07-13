@@ -265,6 +265,22 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+coptic-scriptorium:
+  adapter: Nabu::Adapters::CopticScriptorium
+  enabled: false   # first real sync is owner-fired (~2.8 GB clone; CLAUDE.md
+                   # checklist §6: bin/nabu sync coptic-scriptorium, eyeball
+                   # nabu show urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1
+                   # + 5 random passages, then flip)
+  # P17-1 (docs/coptic-survey.md): the survey's verdict is "versioned" —
+  # semiannual tagged releases, Zenodo-archived. In registry vocabulary that
+  # is `manual` + the adapter's fetch PINNED to CopticScriptorium::RELEASE_TAG
+  # (v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
+  # bumping the constant, then fires the re-sync.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the license section
+  # lives in the repo README):
+  # license_watch: https://raw.githubusercontent.com/CopticScriptorium/corpora/master/README.md
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
