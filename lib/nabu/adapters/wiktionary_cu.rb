@@ -12,8 +12,16 @@ module Nabu
     # DictionaryDocument/Entry model, dictionary slug wiktionary-cu,
     # language chu, no betacode; citations start empty (Wiktionary's
     # quotations are unanchored). Etymology text is KEPT in entry bodies —
-    # it carries the Proto-Slavic/PIE reconstruction chains the future
-    # reconstruction shelf will join on (improvements register, P13-10 (b)).
+    # it carries the Proto-Slavic/PIE reconstruction chains the
+    # reconstruction shelf joins on (improvements register, P13-10 (b)).
+    #
+    # P16-5 (a): the OCS records' `descendants` trees are crosswalked too
+    # (`reflexes: true`, the P14-1 deferred rider) — attested-OCS entries
+    # mint dictionary_reflexes edges exactly like the recon shelves, so
+    # etym/cognates see OCS-mediated descent (orv/sl/lat gold lemmas reach
+    # their OCS ancestor entries). Reflexes ride the entry content sha, so
+    # the flip re-mints revisions at the next owner-fired parse-only resync
+    # (`bin/nabu sync wiktionary-cu --parse-only`) — the recovery path.
     #
     # == Upstream (verified page-level + ranged reads, docs/backlog.md P13-10 Phase A)
     #
@@ -108,7 +116,7 @@ module Nabu
           slug: DICTIONARY_SLUG, language: LANGUAGE,
           title: TITLE, canonical_path: document_ref.path
         )
-        WiktionaryJsonlParser.new(language: LANGUAGE)
+        WiktionaryJsonlParser.new(language: LANGUAGE, reflexes: true)
                              .entries(document_ref.path).each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e

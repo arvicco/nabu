@@ -91,6 +91,8 @@ module Nabu
       CONCORD_MAX_WIDTH = 120
       PARALLELS_DEFAULT_LIMIT = 10
       PARALLELS_MAX_LIMIT = 50
+      LINKS_DEFAULT_LIMIT = 20
+      LINKS_MAX_LIMIT = 100
       # Per-hit evidence spans carried in the payload (this surface is bounded;
       # a hit sharing more spans notes the truncation, the CLI is unbounded).
       PARALLELS_EVIDENCE_CAP = 12
@@ -288,6 +290,22 @@ module Nabu
         "search — is the language, source, or period even ingested here? — before concluding " \
         "a text is unattested. Takes no arguments."
 
+      LINKS_DESCRIPTION =
+        "Batch-mined cross-reference edges touching a passage/document urn — the links journal " \
+        "(kind=parallel from `nabu parallels --batch`; kind=formula from `formulas --batch`, a " \
+        "star per refrain whose detail carries the gram and score its count; kind=cognate from " \
+        "`cognates --batch`, cross-language witness pairs whose detail carries the meet: " \
+        "ref · root [shelf] — a gem-pro shelf under a Slavic witness suggests a borrowing). " \
+        "READS ONLY what a batch run already persisted: for on-the-fly discovery use " \
+        "nabu_parallels; an empty result means no batch has covered this urn, NOT that no " \
+        "parallel exists. Edges come back grouped by kind, both directions (direction=out: this " \
+        "urn's anchor probe discovered the counterpart; in: another anchor found this urn), each " \
+        "counterpart resolved to document title/language/license_class (null when no longer in " \
+        "the catalog — edges are urn-keyed and outlive rebuilds). `runs` cites the producer " \
+        "run(s): producer, scope, params, code_version, date — every edge's provenance. Bounded " \
+        "per kind (default #{LINKS_DEFAULT_LIMIT}, max #{LINKS_MAX_LIMIT}) with an honest note; " \
+        "PRESERVE the license fields when quoting.".freeze
+
       SEARCH_SCHEMA = {
         type: "object",
         properties: {
@@ -460,6 +478,20 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      LINKS_SCHEMA = {
+        type: "object",
+        properties: {
+          urn: { type: "string",
+                 description: "The passage or document urn whose mined edges to read." },
+          limit: { type: "integer", minimum: 1, maximum: LINKS_MAX_LIMIT,
+                   default: LINKS_DEFAULT_LIMIT,
+                   description: "Maximum edges returned per kind." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["urn"],
+        additionalProperties: false
+      }.freeze
+
       COGNATES_SCHEMA = {
         type: "object",
         properties: {
@@ -487,7 +519,8 @@ module Nabu
       # The tool table. P8-3 adds nabu_concord (a KWIC formatter over the same
       # Query classes) as a fourth entry with its own handler; P15-1 adds
       # nabu_parallels (the intertext engine) as the eighth; P15-3 adds
-      # nabu_cognates (the hub × crosswalk join) as the ninth.
+      # nabu_cognates (the hub × crosswalk join) as the ninth; P16-1 adds
+      # nabu_links (the links-journal reader) as the tenth.
       TOOLS = {
         "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
                            handler: :search },
@@ -505,6 +538,8 @@ module Nabu
                               handler: :parallels },
         "nabu_cognates" => { description: COGNATES_DESCRIPTION, input_schema: COGNATES_SCHEMA,
                              handler: :cognates },
+        "nabu_links" => { description: LINKS_DESCRIPTION, input_schema: LINKS_SCHEMA,
+                          handler: :links },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -512,7 +547,7 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
@@ -521,6 +556,11 @@ module Nabu
         # absent — every source then reports upstream "never_probed". MCP NEVER
         # probes upstreams live: this is a bounded status read, nothing more.
         @ledger = ledger
+        # The links journal, read-only (P16-1): nabu_links reads batch-mined
+        # edges. nil when unconfigured or absent (no batch producer has run) —
+        # a graceful state, never an error. MCP NEVER mines: batch runs are
+        # owner-fired through the CLI.
+        @links = links
       end
 
       # tools/list shape: [{name:, description:, inputSchema:}].
@@ -641,6 +681,27 @@ module Nabu
         end
 
         render_parallels(result, limit: limit, catalog: catalog, include_restricted: include_restricted)
+      end
+
+      # nabu_links (P16-1): the links-journal reader, bounded + license-labeled.
+      # Reads ONLY persisted batch output — never mines (batch runs are
+      # owner-fired). Restricted-class counterparts are excluded by default
+      # exactly like every other surface, with an honest per-kind count.
+      def links(args)
+        urn = string_arg(args, "urn") or raise InvalidArguments, "nabu_links needs a urn"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        journal = resolve(@links) or
+          return note("no links journal — edges appear after the owner runs a batch producer " \
+                      "(nabu parallels --batch); nabu_parallels discovers parallels on the fly")
+
+        limit = clamp(args["limit"], default: LINKS_DEFAULT_LIMIT, max: LINKS_MAX_LIMIT)
+        result = Query::Links.new(catalog: catalog, journal: journal).run(urn)
+        if result.nil?
+          return note("urn not found: #{urn} — no catalog entry and no edges; nabu_search finds " \
+                      "passages, nabu_parallels discovers parallels on the fly")
+        end
+
+        render_links(result, limit: limit, include_restricted: args["include_restricted"] == true)
       end
 
       def align(args)
@@ -1098,6 +1159,43 @@ module Nabu
       def lemma_echo_payload(echo, sources)
         { urn: echo.urn, language: echo.language, license_class: echo.license_class,
           source: sources[echo.urn], score: echo.score, shared_lemmas: echo.shared_lemmas }
+      end
+
+      def render_links(result, limit:, include_restricted:)
+        kinds = result.groups.transform_values do |edges|
+          include_restricted ? edges : edges.reject { |e| EXCLUDED_LICENSE_CLASSES.include?(e.license_class) }
+        end
+        json(
+          type: "links",
+          urn: result.urn, document: result.title,
+          kinds: kinds.sort.to_h { |kind, edges| [kind, edges.first(limit).map { |e| link_edge_payload(e) }] },
+          runs: result.runs.map do |run|
+            { id: run.id, producer: run.producer, scope: run.scope, params: run.params,
+              code_version: run.code_version, created_at: run.created_at.to_s }
+          end,
+          note: links_note(result, kinds: kinds, limit: limit)
+        )
+      end
+
+      # detail (P16-2): per-edge evidence — the formula gram, the cognate
+      # meet (ref · root [shelf]); nil on parallel edges.
+      def link_edge_payload(edge)
+        { direction: edge.direction, urn: edge.urn, document: edge.title,
+          language: edge.language, license_class: edge.license_class,
+          score: edge.score, detail: edge.detail }
+      end
+
+      def links_note(result, kinds:, limit:)
+        shown = kinds.values.sum { |edges| edges.first(limit).size }
+        if shown.zero?
+          return "no persisted edges touch this urn — no batch run has covered it " \
+                 "(NOT proof no parallel exists; try nabu_parallels)"
+        end
+
+        parts = ["#{shown} of #{result.total} edges shown (per-kind limit #{limit})"]
+        parts << "direction out = this urn's batch anchor discovered the counterpart; in = the reverse"
+        parts << "edges are persisted batch output (see runs for provenance); PRESERVE license fields"
+        parts.join("; ")
       end
 
       def parallels_note(result, hits:, echoes:, limit:)

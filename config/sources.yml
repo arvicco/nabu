@@ -11,6 +11,22 @@
 #     translations: true                 # ALSO ingest parallel translations
 #                                        #   (perseus-eng*) as aligned documents
 #                                        #   (P7-4; default false — original-only)
+#     license_watch: <url>               # OPTIONAL (P16-5): health --remote GETs
+#                                        #   THIS url (any host) and sha256-compares
+#                                        #   the body against the pin baseline —
+#                                        #   license drift for upstreams whose terms
+#                                        #   live in a README / record page, not a
+#                                        #   github LICENSE file. First sight records
+#                                        #   the baseline; a later mismatch renders
+#                                        #   "license: CHANGED" naming the url.
+#                                        #   Flipping one on is an OWNER decision:
+#                                        #   verify the url serves the terms directly
+#                                        #   (no redirect — the probe does not follow
+#                                        #   them) before enabling.
+#     fuzzy_index: true                  # include in the trigram fragment index
+#                                        #   (search --fuzzy; P16-4, design §4 —
+#                                        #   documentary sources only, index
+#                                        #   economics; default false)
 #
 # Registered sources follow. `enabled: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
@@ -51,6 +67,9 @@ proiel:
   # Upstream proiel-treebank is frozen at release 20180408; its successor is
   # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
   sync_policy: frozen
+  # license_watch candidate (P16-5, owner decision — the repo has no LICENSE
+  # file; the terms live in the README):
+  # license_watch: https://raw.githubusercontent.com/proiel/proiel-treebank/master/README.md
 
 torot:
   adapter: Nabu::Adapters::Torot
@@ -59,12 +78,16 @@ torot:
   # unlike the frozen proiel-treebank it still gets occasional releases:
   # re-syncable, just not on a live schedule.
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — README-licensed repo):
+  # license_watch: https://raw.githubusercontent.com/torottreebank/treebank-releases/master/README.md
 
 iswoc:
   adapter: Nabu::Adapters::Iswoc
   enabled: true    # OWNER SIGN-OFF 2026-07-11 ("merged, flip"): synced, 5 OE texts /
                    # 2,536 sentences, OE Mark live as hub witness #9 (9-of-9 eyeballed).
   sync_policy: frozen
+  # license_watch candidate (P16-5, owner decision — README-licensed repo):
+  # license_watch: https://raw.githubusercontent.com/iswoc/iswoc-treebank/master/README.md
 
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
@@ -72,6 +95,11 @@ papyri-ddbdp:
   # idp.data updates continuously (born-digital editing platform), but a
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
   sync_policy: manual
+  # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
+  # owner-approved 250–270 MB line (intertext design §4). Papyrus lines
+  # average 34 chars; damaged-fragment search earns its bytes here. Future
+  # documentary sources (inscriptions) join by adding this flag, no code.
+  fuzzy_index: true
 
 gretil:
   adapter: Nabu::Adapters::Gretil
@@ -98,6 +126,13 @@ oracc:
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the project-level
+  # metadata.json license field is already probed, but the site-wide terms
+  # live on the licensing doc page):
+  # license_watch: https://oracc.museum.upenn.edu/doc/about/licensing/index.html
+  # P16-4: trigram fragment index (search --fuzzy) — the second documentary
+  # shelf inside the 250–270 MB line (intertext design §4).
+  fuzzy_index: true
   # P13-4 (owner-approved 2026-07-11, "Two-stage SAA-first crawl"): the
   # running English is crawled from the official per-text HTML fragments
   # (no public bulk ATF carries it) and ingested as -en sibling documents —
@@ -172,6 +207,10 @@ bosworth-toller:
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 62,815 entries; define
                    # aethele/thaet folding + lemma-gloss bridge eyeballed.
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — dc.rights lives on the
+  # LINDAT deposit record hdl 11234/1-3532; verify the direct record URL
+  # serves the terms without a redirect before enabling):
+  # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532
 
 ccmh:
   adapter: Nabu::Adapters::Ccmh
@@ -180,17 +219,27 @@ ccmh:
                    # P14-5 (2026-07-12): +3 txt docs (Suprasliensis + the
                    # Vitae, ccmh-txt family) land at the next owner-fired sync.
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the CC-BY grant lives
+  # in the bundle README, the adapter's verbatim license source):
+  # license_watch: https://www.kielipankki.fi/download/ccmh-src/README.txt
 
 goo300k:
   adapter: Nabu::Adapters::Goo300k
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 89 docs / 8,397 passages,
                    # gold Early Modern Slovenian eyeballed.
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the CC BY 4.0 grant
+  # lives on the CLARIN.SI record page, hdl 11356/1025):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1025
 
 imp:
   adapter: Nabu::Adapters::Imp
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 658 docs / 404,897 passages
                    # (silver annotation, text-only), eyeballed.
+  # license_watch candidate (P16-5, owner decision — the CC BY-SA 4.0 grant
+  # lives on the CLARIN.SI record page, hdl 11356/1031):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1031
+
 wiktionary-cu:
   adapter: Nabu::Adapters::WiktionaryCu
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define
@@ -210,6 +259,11 @@ freising:
                    # GLAGOLITE eyeballed; MCP default-exclusion verified live
                    # (research_private, CC BY-ND 2.5 SI).
   sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the governing CC BY-ND
+  # grant lives in bs.xml's <availability> INSIDE the zip; the nearest
+  # watchable page is the e-ZRC edition landing page — verify it carries
+  # the terms before enabling):
+  # license_watch: https://nl.ijs.si/e-zrc/bs/
 
 # Template for the next source (leave commented until its adapter exists):
 #

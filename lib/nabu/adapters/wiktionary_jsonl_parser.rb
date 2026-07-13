@@ -45,9 +45,10 @@ module Nabu
     # - reflexes (P14-1, opt-in via reflexes: true): the worded nodes of the
     #   `descendants` tree, flattened depth-first into DictionaryReflex
     #   values — the reconstruction crosswalk's edges (architecture §12).
-    #   Off by default so the wiktionary-cu shelf (whose records also carry
-    #   descendants) keeps its stored shas untouched; its backfill is a
-    #   deliberate future decision (improvements register).
+    #   Off by default (a caller must opt in); both wiktionary sources now
+    #   pass it — the recon shelves since P14-1, wiktionary-cu since the
+    #   P16-5 descendants backfill (census 2026-07-13: 589 of 4,615 OCS
+    #   entries carry worded descendants, 2,210 crosswalk edges).
     class WiktionaryJsonlParser
       # Upstream Wiktionary lang_codes → the catalog's language tags, for
       # the codes that differ among languages the catalog holds gold lemmas

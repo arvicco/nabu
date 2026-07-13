@@ -57,6 +57,22 @@ What each command does and its exit contract:
   source, survives `nabu rebuild`), which is what feeds the `up=` column in
   `nabu status` (below) — so between probe runs you can still see, offline,
   whether an upstream had moved.
+
+  **`license_watch` (P16-5):** a source with `license_watch: <url>` in
+  `config/sources.yml` has its license checked against THAT url instead of
+  the strategy default — the escape hatch for upstreams whose terms live in
+  a README or a repository record page (kielipankki `README.txt`, clarin.si
+  records, the PROIEL-family repo READMEs) that the github-only LICENSE
+  fetch and the ORACC `metadata.json` GET can't see. The probe GETs the url
+  (any host, same vendored-cert client, no redirect following),
+  sha256-hashes the body, and compares against a baseline on a ledger pin
+  keyed by the watched url: first sight records it (*baseline recorded*), a
+  match reads *license: ok*, a mismatch reads *license: CHANGED* naming the
+  url. A fetch failure reads unchecked (silent per the P16-0 rule), never an
+  error. Candidate urls for the currently-unwatchable sources sit as
+  comments in `sources.yml`; flipping one on is an OWNER decision (verify
+  the url serves the terms directly first). Non-configured sources are
+  untouched.
 - **`nabu health --backfill-pins`** — one-shot pin recovery, **no network**.
   Sources fetched before the pins ledger existed (P7) have a canonical clone
   but no ledger pin, so drift reads *unpinned*. This records the pin from what

@@ -40,6 +40,19 @@ module Store
                                               workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
     end
 
+    # The attested-OCS shelf (P16-5 descendants backfill): wiktionary-cu
+    # entries mint reflex edges too, from the same trimmed real fixture.
+    def load_cu_fixtures!
+      cu = Nabu::Store::Source.create(
+        slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
+        adapter_class: "Nabu::Adapters::WiktionaryCu",
+        license: "CC-BY-SA + GFDL", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: cu)
+                                   .load_from(Nabu::Adapters::WiktionaryCu.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+    end
+
     def make_gold_passage(language:, lemma:, form: lemma, urn_stem: "urn:nabu:test:#{language}")
       document = Nabu::Store::Document[urn: urn_stem] || Nabu::Store::Document.create(
         source_id: @texts.id, urn: urn_stem, title: "T", language: language,
@@ -144,6 +157,34 @@ module Store
       meet = roots_for("chu", Nabu::Normalize.search_form("цѣсар҄ь", language: "chu")) &
              roots_for("ang", Nabu::Normalize.search_form("cāsere", language: "ang"))
       assert_includes meet, "urn:nabu:dict:wiktionary-gem-pro:kaisaraz:noun"
+    end
+
+    # -- P16-5 (a): the attested-OCS shelf joins the closure -------------------
+
+    # A cu-owned edge is direct-only: sl stopa maps to the OCS entry's urn (a
+    # NON-pro root — the OCS → proto step stays Etym's live ascent), and the
+    # closure stays deduplicated and deterministic with both shelves loaded.
+    def test_attested_cu_edges_mint_direct_roots_without_ascent
+      load_recon_fixtures!
+      load_cu_fixtures!
+      make_gold_passage(language: "sl", lemma: "stopa")
+      rebuild!
+      assert_equal ["urn:nabu:dict:wiktionary-cu:стопа:noun"], roots_for("sl", "stopa"),
+                   "the cu entry is the one root — chu is not -pro, so no ascent hop is taken"
+    end
+
+    def test_cu_and_recon_shelves_together_rebuild_idempotently_without_duplicates
+      load_recon_fixtures!
+      load_cu_fixtures!
+      make_gold_passage(language: "sl", lemma: "stopa")
+      make_gold_passage(language: "chu", lemma: "богъ")
+      rebuild!
+      first = roots.order(:language, :lemma_folded, :root_urn).all
+      assert_equal first.uniq, first, "the closure never carries duplicate rows"
+      rebuild!
+      assert_equal first, roots.order(:language, :lemma_folded, :root_urn).all
+      # the recon-minted chain is untouched by the cu shelf's presence
+      assert_includes roots_for("chu", "богъ"), "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2"
     end
 
     # -- scoping, honesty, lifecycle -----------------------------------------

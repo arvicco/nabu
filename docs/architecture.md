@@ -53,7 +53,7 @@ nabu/
 │   └── ...
 ├── db/
 │   ├── catalog.sqlite3          # DERIVED: sources, documents, passages, provenance, licenses
-│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas (both keyed by passage id)
+│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas + trigram index (all keyed by passage id)
 │   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
 │   ├── migrate/                 # catalog migration track (forward-only)
@@ -151,6 +151,7 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 - Migration tracks are per-db and forward-only: `db/migrate/` for the catalog, `db/ledger_migrate/` for the ledger — each SQLite file keeps its own `schema_info`, so the counters cannot collide. One-shot lift-and-shift: every write path opens the ledger via `Ledger.open_with_lift!`, which copies a pre-P7-1 catalog's runs/pins/baselines into the ledger (re-keyed by slug/url) and only then migrates the catalog forward (005 drops the moved tables). A fresh machine with no ledger bootstraps clean: read paths treat the absent file as empty history ("no run history", never an error); the first sync creates it.
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
 - `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the gold-treebank lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output).
+- `passages_trigram` + `passages_trigram_scope` (P16-4, intertext design §4, same file and lifecycle): the fragment-search index behind `search --fuzzy` — a second FTS5 table over the SAME folded `text_normalized`, tokenized into character trigrams for infix/mid-word matching (`]μηνιν αει[` on a damaged papyrus). DOCUMENTARY SCOPE ONLY: sources flagged `fuzzy_index: true` in config/sources.yml (papyri-ddbdp + oracc; an owner posture like `enabled`/`translations` — the whole corpus would cost 3.6–4.1 GB, the documentary shelves 257 MB measured at 6.43 B/char, 8.6 s build). The scope table records the slugs each build actually indexed, so the query surface reports real coverage instead of trusting config. Query semantics are two-phase: trigram candidates (implicit-AND MATCH of the fragment's trigrams — co-occurrence, not contiguity), then substring verification against the stored folded text (Query::Fuzzy). Sub-ms to ~10 ms measured live.
 - `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
 - `license_class` enum (`open`, `attribution`, `nc`, `research_private`, `restricted`) drives query/export filters.
 
@@ -644,6 +645,22 @@ plainly in the help). Recall is bounded by Wiktionary coverage (~34% got /
 ~21% chu gold lemma types reach any proto entry): absence of a hit is
 absence of evidence.
 
+**Addendum (P16-5): the attested-OCS descendants feed the crosswalk too.**
+The wiktionary-cu records carry the same `descendants` trees the recon
+extracts do; the P14-1 deferral is closed — the cu adapter now parses them
+(`reflexes: true`), so attested-OCS entries mint `dictionary_reflexes`
+edges through the identical parser → DictionaryLoader → ReflexRootsIndexer
+choke points (census over the live extract, 2026-07-13: 589 of 4,615
+entries carry worded descendants → 2,210 edges, ~244 of them gold-joinable,
+mostly orv and sl). The walk semantics stay bounded: a cu-owned edge is
+direct-only (chu is not `-pro`, so the closure takes no ascent hop from
+it — the OCS → Proto-Slavic step remains Etym's live one-hop ascent), and
+etym renders attested entries WITHOUT the reconstruction asterisk, which
+only the `-pro` shelves earn. Reflexes ride the entry content sha, so the
+backfill lands in the live db at the next owner-fired
+`bin/nabu sync wiktionary-cu --parse-only` (re-mints the shelf's
+revisions — expected, journaled).
+
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 
 `parallels <urn>` answers the classicist's "who quotes THIS line? where
@@ -716,9 +733,9 @@ same gram machinery, not this packet.
 The historical linguist and documentary historian ask "only 2nd-century
 texts", "only Oxyrhynchus", "plot this word across centuries". The full
 design — five dating sources measured, the schema priced (≤ ~100k rows,
-< 20 MB) — is `docs/intertext-design.md` §3; this is the short standing
-record of Part 1 (HGV papyri + Slovene goo300k/IMP; ORACC regnal mapping and
-the chronicle passage-grain annals are the named Part 2).
+< 20 MB) — is `docs/intertext-design.md` §3; this is the standing record of
+Part 1 (HGV papyri + Slovene goo300k/IMP, P15-2) and Part 2 (ORACC catalogue
+dates + TOROT chronicle annals, P16-3).
 
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
@@ -741,6 +758,56 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
 
+**Part 2a — ORACC catalogue dates (`AxisBuilder::OraccDates`, P16-3).** Every
+ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,
+25,502 members) found `period` on 25,330 members and `date_of_origin` on
+7,343 (SAA regnal formulas `Sargon2.000.00.00` / eponym `Esarhaddon.limu
+Dananu.07.21`; RIAO/RIBO/RINAP absolute BCE ranges `704-681`, `ca. 1233-1197`;
+century phrases `9th-8th century`). Extraction is census-backed, never
+guessed: `date_of_origin` first — a regnal formula resolves through a
+12-king Neo-Assyrian reign table (standard eponym-canon chronology, absolute
+via the 763 BCE Bur-Saggilê eclipse; regnal dates after Grayson — the census
+found NO nonzero regnal years, so reign-range grain is the honest maximum);
+an absolute value must DESCEND (BCE) or it is unparseable. Unresolved values
+fall back to `period` through a documented period table (ORACC/CDLI period
+names → middle-chronology year ranges after CDLI's conventional dates,
+Brinkman's chronology; Neo-Assyrian → −911..−612, Old Babylonian →
+−1900..−1600, "First Millennium" honestly −1000..−1). "Uncertain"/"Unknown"
+are deliberately unmapped: skipped and counted (`oracc_undated`). Place =
+`provenience` verbatim (minus unclear/uncertain/unknown) + a Pleiades URL
+from `pleiades_id`. A translation document (`…-en`, P13-4) carries its
+tablet's axis row — the artifact's date, so the English witness inherits the
+time filter. Scratch-measured coverage: 21,558 of 21,692 oracc documents
+(99.4%) carry a row — 21,517 dated (99.2%), 41 place-only, 172 undated
+members counted, 3 documents absent from any catalogue (upstream drift).
+
+**Part 2b — TOROT chronicle annals (`AxisBuilder::ChronicleAnnals`, P16-3):
+the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns
+as designed. Census: the annal year is structural — chronicle `<div>` titles
+carry the anno-mundi year (`6360: Mikhail …`, bare `6361`, ranges
+`6369–6370`); exactly five TOROT sources are annalistic (lav 89 AM divs of
+91, pvl-hyp 24/24, kiev-hyp 4/4, nov-sin 163/163, suz-lav 76/76 — 356 divs;
+no other source has one, so a shape + AM-plausibility gate (5500..7300)
+replaces any allowlist). AM → CE via `DateAxis.am_to_ce`: the Byzantine
+epoch is 1 Sep 5509 BCE, so AM Y is stored as the honest span
+[Y−5509, Y−5508] — the full September-style year; the Rus chronicles' mixed
+March/ultra-March styles make a ±1 residue (Jan–Feb of a March-style year)
+that is documented, not guessed per annal; precision "am" marks every row.
+The conversion crosses the era boundary without a year 0 (AM 5509 → [-1, 1]).
+Each annal div becomes one row anchored by `passage_seq_from/to` (min/max
+catalog sequence of its sentences, joined by the ProielParser's
+`<doc-urn>:<sentence-id>` passage urns); one document-grain ENVELOPE row
+(min..max, passage_seq NULL) is inserted first so document-grain consumers
+see the chronicle once. Scratch-measured: 5 chronicles, 345 annal rows —
+11 nov-sin annal divs are EMPTY upstream (year heading, no text) and anchor
+nothing. Grand total after Part 2: 83,233 dated/placed documents, 83,578
+axis rows, `document_axes` = 13.9 MB (design budget < 20 MB holds).
+`vocab --by-century` counts document-grain rows only (`passage_seq_from IS
+NULL`) — a histogram labelled "documents" must not tally a 163-annal
+chronicle 163 times; `search --from/--to/--century/--place` EXISTS over all
+rows, so annal grain sharpens nothing there yet (the envelope spans it) but
+stands ready for passage-grain queries.
+
 **Query surface.** `search --from/--to/--century/--place` compose through the
 shared `CatalogJoin` as one correlated NULL-aware EXISTS on `document_axes`
 (document-grained, so a multi-row document never multiplies passages). `show`
@@ -749,3 +816,77 @@ prints the axis line ("date: 292 CE · Oxyrhynchos") when present. `vocab
 bucketed by century, or — with a text query — a word plotted across the
 centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
 (honestly scoped to text search — the dated corpus is not lemmatized).
+
+## 15. The links journal — batch-mined edges that outlive rebuilds (P16-1)
+
+`db/links.sqlite3` holds the corpus's mined cross-reference graph:
+`links(from_urn, to_urn, kind, score, detail, run_id, created_at)` with
+`kind` ∈ {parallel, formula, cognate, …} and `detail` the per-edge evidence
+(nil for parallels; the gram for formulas, the meet for cognates — added by
+journal migration 002), plus a `link_runs` companion
+`(producer, scope, params_json, code_version, created_at)` so every edge is
+honest about the run that minted it. The full design is
+`docs/intertext-design.md` §7; this is the standing record of what shipped
+and where it lives.
+
+**The host argument (the §5 pattern, applied).** The corpus now has three
+data temperatures. The catalog/fulltext are pure functions of `canonical/` —
+dropped and regenerated by `nabu rebuild`. The history ledger (§5, P7-1) is
+runtime HISTORY — append-only, never regenerable, never pruned. Batch links
+are NEITHER: they are a function of *(canonical, params, code version)* —
+minutes to recompute, so they must survive a rebuild journal-style (the
+Phase-8 enrichment stance: derived-but-expensive output lives outside the
+drop-and-rebuild dbs, keyed by urn because rebuilds re-mint every catalog
+id) — but a rerun of the same scope legitimately REPLACES its edges, which
+an append-only ledger must never do. So the journal is a third SQLite file
+with the ledger's *mechanics* (its own forward-only migration track in
+`db/links_migrate/`, its own `schema_info`, absent-file = empty state,
+urn keying) and its own lifecycle: `nabu rebuild` never touches it, and
+losing it costs only a re-mine, so backups may include it but need not.
+
+**Write discipline.** Edges are minted ONLY by batch producers. Producer #1
+is `nabu parallels --batch SCOPE` (`Nabu::BatchParallels`): the interactive
+intertext engine (§13) looped over every anchor passage of a scope (source
+slug or urn prefix — the formulas scope grammar, now shared via
+`Query::Scope`), persisting hits as kind=parallel edges. Pruning is named,
+never silent: top `--per-anchor` (5) hits clearing `--min-score` (0.05)
+persist, and the summary line states both. One edge per unordered pair per
+kind (unique-indexed; the direction is the direction the probe found);
+a rerun of the same (producer, scope) supersedes the prior run atomically —
+edges and run row replaced in one transaction, so reruns are idempotent.
+Interactive output is NEVER persisted (design §7: recomputing
+costs milliseconds; a stored copy is caching with staleness obligations),
+and no flag blurs that line. The same discipline holds for every producer.
+
+**Producers #2/#3 (P16-2).** `nabu formulas --batch SCOPE`
+(`Nabu::BatchFormulas`): the whole-tradition formula sweep (§13's miner, one
+full-loci pass) persisting kind=formula edges. A formula is a REFRAIN across
+N loci, not a pair, so it maps onto the pair-shaped table as a STAR: hub =
+the formula's first locus in urn order (deterministic, rebuild-stable),
+one edge hub → every other locus, score = the slice count, `detail` = the
+folded gram — a reader at any locus sees which refrain ties the line to the
+tradition, and `links <hub>` fans out every locus (all-pairs would be O(N²):
+2,556 edges for the 72-locus ὣς ἔφαθ' οἵ δ' alone; chains would only show
+neighbors). Top `--max-formulas` by rank persist (200); overlapping formulas
+sharing a pair coalesce onto the best-ranked gram, counted in the summary.
+`nabu cognates --batch WORK` (`Nabu::BatchCognates`): the whole-work cognate
+map (§12's join) persisting kind=cognate edges between cross-language witness
+passages meeting at a reconstruction root — never within one language;
+direction normalized (smaller urn first — the join has no probe direction).
+The meet is per-edge meaning, so it rides `detail` (migration 002, the
+journal's own forward-only track: nullable, in-place, zero data loss):
+"MARK 2.1 · *kaisaraz [gem-pro]" — ref, root, and SHELF, because a gem-pro
+meet under a Slavic witness reads as a borrowing (§12). Scope = the work id;
+common-word suppression stays on (`--all` lifts it, recorded in params_json).
+
+**Read surface.** `nabu links <urn>` — edges BOTH directions grouped by
+kind, each counterpart re-resolved against the *current* catalog by urn
+(title/language/license; a counterpart a rebuild dropped reads "(not in
+catalog)", honestly), with the producer run(s) cited in the footer and each
+kind's evidence rendered natively (a parallel's score, a formula's
+“gram” ×count, a cognate's meet). `show <urn>` gains a one-line
+`linked: N formula, M parallel` footer counting each kind present, ONLY when
+edges exist (zero-signal silence, absent kinds suppressed). MCP adds
+`nabu_links`, the tenth read-only tool — same bounded/license-labeled
+contract as the rest; it reads persisted edges only (the `detail` field rides
+the payload) and never mines (batch runs are owner-fired).

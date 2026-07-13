@@ -497,6 +497,11 @@ class CLITest < Minitest::Test
       assert_nil status, "all-alive is exit 0"
       assert_match(/corpus\s+alive/, out)
       assert_match(/1 source, 1 alive/, out)
+      # An unchecked license verdict carries no signal — the row says nothing
+      # rather than "license: unchecked" (owner rule: suppress zero fields),
+      # and suppression leaves no trailing whitespace behind.
+      refute_match(/unchecked/, out)
+      out.each_line { |line| assert_equal line.chomp, line.chomp.rstrip }
     end
   end
 
@@ -651,6 +656,101 @@ class CLITest < Minitest::Test
     _out, err, status = run_cli(%w[search --lemma λέγω --from -300])
     assert_equal 1, status
     assert_match(/text search only/i, err)
+  end
+
+  # -- search --fuzzy (P16-4) ------------------------------------------------
+
+  # The papyrologist's fragment, brackets and all: an infix hit on the
+  # documentary shelf, folded snippet with the fragment bracketed, and the
+  # honest scope footer.
+  def test_search_fuzzy_matches_bracketed_fragment_and_names_its_scope
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["search", "--fuzzy", "]μηνιν αει["]) }
+      assert_nil status, "a successful fuzzy search exits 0"
+      assert_match(/urn:nabu:pap:a:1 \[grc\]/, out)
+      assert_match(/\[μηνιν αει\]/, out, "the fragment is bracketed in the folded snippet")
+      assert_match(/1 hit .*fuzzy substring/, out)
+      assert_match(/fuzzy index covers: pap/, out, "every fuzzy render names the indexed scope")
+      refute_match(/urn:nabu:lit/, out, "the literary shelf is not trigram-indexed")
+    end
+  end
+
+  def test_search_fuzzy_mid_word_fragment_hits
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ηληιαδ]) }
+      assert_nil status
+      assert_match(/urn:nabu:pap:a:1/, out, "mid-word matching is the point: ηληιαδ inside Πηληϊάδεω")
+    end
+  end
+
+  # --long lifts the snippet window (house rule): the full folded passage.
+  def test_search_fuzzy_long_prints_the_full_folded_passage
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ηληιαδ --long]) }
+      assert_nil status
+      assert_match(/μηνιν αειδε θεα π\[ηληιαδ\]εω αχιληοσ/, out, "--long shows the whole folded line")
+    end
+  end
+
+  # A fragment living only on a non-indexed (literary) shelf: honest empty
+  # result PLUS the one-line hint naming what is indexed.
+  def test_search_fuzzy_literary_only_fragment_misses_with_scope_hint
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ολομπι]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/fuzzy index covers: pap/, out, "the miss explains itself — the scope line names the shelves")
+    end
+  end
+
+  def test_search_fuzzy_short_fragment_gets_the_trigram_floor_message
+    with_fuzzy_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --fuzzy αε]) }
+      assert_equal 1, status
+      assert_match(/at least 3 characters/, err)
+      assert_match(/trigram floor/, err)
+    end
+  end
+
+  def test_search_fuzzy_composes_with_date_filters
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ρατηγ --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out) # 113 BCE, out of window
+    end
+  end
+
+  def test_search_fuzzy_against_a_pre_trigram_index_hints_to_reindex
+    with_fuzzy_corpus do |config|
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      fulltext.drop_table?(Nabu::Store::Indexer::TRIGRAM_TABLE)
+      fulltext.drop_table?(Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE)
+      fulltext.disconnect
+      _out, err, status = with_config(config) { run_cli(%w[search --fuzzy μηνιν]) }
+      assert_equal 1, status
+      assert_match(/no fuzzy index.*sync.*rebuild/i, err)
+    end
+  end
+
+  def test_search_fuzzy_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --fuzzy --lemma λέγω μηνιν])
+    assert_equal 1, status
+    assert_match(/--fuzzy.*does not combine/i, err)
+  end
+
+  def test_search_fuzzy_needs_a_fragment
+    _out, err, status = run_cli(%w[search --fuzzy])
+    assert_equal 1, status
+    assert_match(/--fuzzy needs a fragment/, err)
+  end
+
+  def test_help_search_documents_fuzzy_with_the_papyrological_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--fuzzy/, out)
+    assert_match(/\]μηνιν αει\[/, out, "must show the damaged-scrap example, brackets and all")
+    assert_match(/papyri-ddbdp, oracc/, out, "must name the documentary scope")
+    assert_match(/parallels/, out, "must give the honest literary answer")
   end
 
   def test_show_prints_the_date_place_axis_line
@@ -963,6 +1063,275 @@ class CLITest < Minitest::Test
     assert_match(/--lang/, out, "the language filter is documented")
     assert_match(/--long/, out)
     assert_match(/Examples:/, out)
+  end
+
+  # -- parallels --batch + links (P16-1 links journal) -----------------------
+
+  def test_parallels_batch_persists_edges_and_names_its_thresholds
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch parallels over urn:h:od: 1 edge written · run 1/, out)
+      assert_match(%r{1 anchor · kept top 5/anchor at score ≥ 0.05}, out,
+                   "the summary names every pruning threshold — no silent caps")
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      edge = journal[:links].first
+      assert_equal %w[urn:h:od:1.1 urn:q:full:1 parallel],
+                   [edge[:from_urn], edge[:to_urn], edge[:kind]]
+      journal.disconnect
+    end
+  end
+
+  def test_parallels_batch_rerun_reports_the_superseded_run
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      out, _err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      assert_nil status
+      assert_match(/superseded 1 prior run \(1 edge\)/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal [1, 1], [journal[:links].count, journal[:link_runs].count], "rerun is idempotent"
+      journal.disconnect
+    end
+  end
+
+  def test_parallels_batch_db_override_writes_the_journal_elsewhere
+    with_parallels_corpus do |config|
+      scratch = File.join(config.db_dir, "scratch-links.sqlite3")
+      _out, _err, status = with_config(config) { run_cli(["parallels", "--batch", "urn:h:od", "--db", scratch]) }
+      assert_nil status
+      assert_path_exists scratch
+      refute_path_exists config.links_path, "the default journal path is untouched"
+    end
+  end
+
+  def test_parallels_batch_flags_require_batch
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --min-score 0.1]) }
+      assert_equal 1, status
+      assert_match(/--min-score only applies with --batch/, err)
+      assert_match(/never persisted/, err, "the no-caching stance is stated, not just enforced")
+    end
+  end
+
+  def test_links_reads_both_directions_with_resolution_and_provenance
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      out, _err, status = with_config(config) { run_cli(%w[links urn:q:full:1]) }
+      assert_nil status
+      assert_match(/links of urn:q:full:1 — urn:q:full/, out)
+      assert_match(/parallel \(1\):/, out, "edges group by kind")
+      assert_match(/← urn:h:od:1\.1 — urn:h:od \[grc\]  score \d/, out,
+                   "the incoming edge resolves its counterpart to title\\/language")
+      assert_match(/1 edge · run 1: parallels over urn:h:od \(min_score 0.05, per_anchor 5\)/, out,
+                   "the provenance footer cites the producer run and its params")
+
+      anchor_side, = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_match(/→ urn:q:full:1/, anchor_side, "the same edge reads outgoing from its anchor")
+    end
+  end
+
+  def test_links_long_lifts_the_per_kind_truncation
+    with_parallels_corpus do |config|
+      journal = Nabu::Store::LinksJournal.open!(config.links_path)
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "parallels", scope: "urn:h", params: {}, code_version: "t/1"
+      )
+      12.times do |i|
+        Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:h:od:1.1", to_urn: "urn:z:#{i}",
+                                                       kind: "parallel", score: 1.0, run_id: run_id)
+      end
+      journal.disconnect
+      compact, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/… and 2 more \(--long lists all\)/, compact)
+      assert_match(/\(not in catalog\)/, compact, "unresolvable counterparts are flagged, not hidden")
+      long, = with_config(config) { run_cli(%w[links urn:h:od:1.1 --long]) }
+      refute_match(/… and \d+ more/, long)
+      assert_match(/urn:z:11/, long, "--long lists every edge")
+    end
+  end
+
+  def test_links_unknown_urn_exits_one
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      _out, err, status = with_config(config) { run_cli(%w[links urn:no:such]) }
+      assert_equal 1, status
+      assert_match(/links: unknown urn urn:no:such/, err)
+    end
+  end
+
+  def test_links_without_a_journal_is_a_state_not_an_error
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/no links journal yet/, out)
+      assert_match(/parallels --batch/, out, "the empty state teaches the producer")
+    end
+  end
+
+  def test_help_links_documents_directions_provenance_and_long
+    out, _err, _status = run_cli(%w[help links])
+    assert_match(/BOTH directions/, out)
+    assert_match(/provenance/, out)
+    assert_match(/--long/, out)
+    assert_match(/rebuild/, out, "the rebuild-survival promise is documented")
+    assert_match(/Examples:/, out)
+  end
+
+  def test_show_footer_lists_linked_counts_only_when_edges_exist
+    with_parallels_corpus do |config|
+      before, = with_config(config) { run_cli(%w[show urn:h:od:1.1]) }
+      refute_match(/linked:/, before, "no journal → zero-signal silence")
+
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      after, _err, status = with_config(config) { run_cli(%w[show urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/^  linked: 1 parallel$/, after)
+
+      unlinked, = with_config(config) { run_cli(%w[show urn:h:od]) }
+      refute_match(/linked:/, unlinked, "a urn without edges stays silent even with a journal present")
+    end
+  end
+
+  # -- formulas --batch + cognates --batch (P16-2 producers) ------------------
+
+  def test_formulas_batch_persists_the_star_and_names_its_knobs
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch formulas over aspr: 3 edges written · run 1/, out)
+      assert_match(/1 formula persisted as stars \(top 200 by rank of 1 recurring ≥3× 4-grams\)/, out,
+                   "the summary names every pruning knob — no silent caps")
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      edges = journal[:links].order(:to_urn).all
+      assert_equal %w[urn:nabu:aspr:riddle:0] * 3, edges.map { |e| e[:from_urn] },
+                   "the star hub is the first locus in urn order"
+      assert_equal ["saga hwaet ic hatte"], edges.map { |e| e[:detail] }.uniq
+      assert_equal %w[formula], edges.map { |e| e[:kind] }.uniq
+      journal.disconnect
+    end
+  end
+
+  def test_formulas_batch_rerun_reports_the_superseded_run
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      out, _err, status = with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      assert_nil status
+      assert_match(/superseded 1 prior run \(3 edges\)/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal [3, 1], [journal[:links].count, journal[:link_runs].count], "rerun is idempotent"
+      journal.disconnect
+    end
+  end
+
+  def test_formulas_batch_db_override_writes_the_journal_elsewhere
+    with_formulas_corpus do |config|
+      scratch = File.join(config.db_dir, "scratch-links.sqlite3")
+      _out, _err, status = with_config(config) { run_cli(["formulas", "--batch", "aspr", "--db", scratch]) }
+      assert_nil status
+      assert_path_exists scratch
+      refute_path_exists config.links_path, "the default journal path is untouched"
+    end
+  end
+
+  def test_formulas_batch_flags_require_batch
+    with_formulas_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[formulas aspr --max-formulas 10]) }
+      assert_equal 1, status
+      assert_match(/--max-formulas only applies with --batch/, err)
+      assert_match(/never persisted/, err, "the no-caching stance is stated — consistent with parallels")
+    end
+  end
+
+  def test_cognates_batch_persists_the_meets_and_links_reads_them_back
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates --batch nt]) }
+      assert_nil status, "a successful batch exits 0"
+      assert_match(/batch cognates over nt: 2 edges written · run 1/, out)
+      assert_match(/2 verse-root groups/, out)
+
+      links, _err2, links_status = with_config(config) { run_cli(%w[links urn:nabu:test:grc-nt:1]) }
+      assert_nil links_status
+      assert_match(/cognate \(1\):/, links, "edges group under their kind")
+      assert_match(/urn:nabu:test:marianus:1 — Codex Marianus \[chu\]  MARK 1\.1 · \*bʰeh₂g- \[ine-pro\]/,
+                   links, "a cognate edge shows its meet: ref · root [shelf]")
+      refute_match(/score/, links, "a cognate's score merely counts the roots its detail lists")
+      assert_match(/run 1: cognates over nt/, links, "the provenance footer cites the producer")
+    end
+  end
+
+  def test_cognates_batch_langs_ride_the_run_params
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates --batch nt --langs grc,chu]) }
+      assert_nil status
+      assert_match(/batch cognates over nt \[grc×chu\]: 1 edge written/, out)
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      assert_equal({ "kind" => "cognate", "langs" => %w[grc chu] },
+                   JSON.parse(journal[:link_runs].first[:params_json]))
+      journal.disconnect
+
+      links, = with_config(config) { run_cli(%w[links urn:nabu:test:grc-nt:1]) }
+      assert_match(/cognates over nt \(langs grc,chu\)/, links,
+                   "array params render comma-joined in the provenance footer")
+    end
+  end
+
+  def test_cognates_batch_takes_a_work_id_and_db_requires_batch
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["cognates", "--batch", "MARK 1.1"]) }
+      assert_equal 1, status
+      assert_match(/registered work id/, err)
+
+      _out2, err2, status2 = with_config(config) { run_cli(["cognates", "nt", "--db", "/tmp/x.sqlite3"]) }
+      assert_equal 1, status2
+      assert_match(/--db only applies with --batch/, err2)
+    end
+  end
+
+  def test_links_renders_a_formula_edge_with_its_gram_and_count
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      out, _err, status = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:2]) }
+      assert_nil status
+      assert_match(/formula \(1\):/, out)
+      assert_match(/← urn:nabu:aspr:riddle:0 — Riddles \[ang\]  “saga hwaet ic hatte”  ×4/, out,
+                   "a locus shows WHICH refrain ties it to the hub and how strongly — not a bare score")
+      hub, = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:0]) }
+      assert_match(/formula \(3\):/, hub, "the hub fans out every other locus")
+    end
+  end
+
+  def test_links_groups_mixed_kinds_and_show_footer_counts_them_with_zero_suppression
+    with_formulas_corpus do |config|
+      with_config(config) { run_cli(%w[formulas --batch aspr]) }
+      journal = Nabu::Store::LinksJournal.open!(config.links_path)
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "parallels", scope: "aspr", params: {}, code_version: "t/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:nabu:aspr:riddle:1",
+                                                     to_urn: "urn:z:1", kind: "parallel",
+                                                     score: 0.4, run_id: run_id)
+      journal.disconnect
+
+      links, = with_config(config) { run_cli(%w[links urn:nabu:aspr:riddle:1]) }
+      assert_match(/formula \(1\):.*parallel \(1\):/m, links, "kinds render as separate groups")
+      assert_match(/score 0\.40/, links, "the parallel edge keeps its rarity score")
+
+      mixed, = with_config(config) { run_cli(%w[show urn:nabu:aspr:riddle:1]) }
+      assert_match(/^  linked: 1 formula, 1 parallel$/, mixed,
+                   "the footer counts each kind present and suppresses absent kinds")
+      single, = with_config(config) { run_cli(%w[show urn:nabu:aspr:riddle:2]) }
+      assert_match(/^  linked: 1 formula$/, single)
+    end
+  end
+
+  def test_help_formulas_and_cognates_document_batch
+    formulas_help, = run_cli(%w[help formulas])
+    assert_match(/--batch/, formulas_help)
+    assert_match(/STAR/, formulas_help, "the edge-shape verdict is documented where the flag lives")
+    cognates_help, = run_cli(%w[help cognates])
+    assert_match(/--batch/, cognates_help)
+    assert_match(/shelf rides every edge/, cognates_help, "the meet-provenance stance is documented")
   end
 
   # -- show (P4-3) ---------------------------------------------------------
@@ -1773,11 +2142,54 @@ class CLITest < Minitest::Test
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:b", "στρατηγος κακος", 591, 602, "Arsinoites")
       seed_dated_passage(catalog, src, "urn:nabu:ddbdp:c", "στρατηγος μεγας", -30, 14, "Oxyrhynchus")
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
-      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      # fuzzy_slugs (P16-4): the dated corpus doubles as the fuzzy+date
+      # composition fixture — the "p" shelf is documentary by construction.
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["p"])
       fulltext.disconnect
       catalog.disconnect
       yield config
     end
+  end
+
+  # A fuzzy (P16-4) corpus: one documentary source ("pap", trigram-indexed)
+  # and one literary source ("lit", word-index only) sharing a damaged-text
+  # fragment, built through the real Indexer with the documentary scope.
+  def with_fuzzy_corpus
+    Dir.mktmpdir("nabu-cli-fuzzy") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      pap = catalog[:sources].insert(slug: "pap", name: "Papyri", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      lit = catalog[:sources].insert(slug: "lit", name: "Literary", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_fuzzy_passage(catalog, pap, "urn:nabu:pap:a", "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος")
+      seed_fuzzy_passage(catalog, lit, "urn:nabu:lit:a", "μῆνιν ἄειδε θεὰ καὶ ὀλόμπιος ἀοιδός")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["pap"])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_fuzzy_passage(catalog, source_id, doc_urn, text)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)

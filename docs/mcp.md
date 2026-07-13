@@ -2,10 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes nine tools — search, read
+(Claude Code, Claude Desktop) over stdio. It exposes ten tools — search, read
 by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
-and coverage — so a model can look things up in your
+the mined links graph, and coverage — so a model can look things up in your
 texts, quote them, and cite them, without any ability to change the
 collection.
 
@@ -35,7 +35,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The nine tools
+## 2. The ten tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, and parallels rows also carry the
@@ -234,6 +234,26 @@ lifts. Recall is bounded by Wiktionary descendants coverage and by gold
 lemmatization (~10% of the corpus): **no hit is absence of evidence**. Bounded
 (default 10 groups, max 50); the restricted-exclusion stance applies to
 witness documents (a private witness's words never join).
+
+### `nabu_links`
+
+The links journal reader (P16-1/P16-2, design §7, architecture §15):
+batch-mined cross-reference edges touching a urn, grouped by kind
+(`parallel`, `formula`, `cognate`), **both directions** (`out` = this urn's
+batch anchor discovered the counterpart, `in` = the reverse), each
+counterpart resolved to document title/language/license against the current
+catalog (`null` when a rebuild dropped it — edges are urn-keyed and outlive
+rebuilds). Each edge carries a `detail` field with its kind's evidence
+(`null` for parallels; the folded gram for a formula edge — the counterpart
+of an `in` edge is the refrain's hub locus; `ref · root [shelf]` for a
+cognate edge, the shelf being the borrowing signal). `runs` carries the
+provenance of every edge: producer, scope, params, code_version, date. This
+tool **reads only what a batch run already persisted** — an empty result
+means no batch has covered the urn, *not* that no parallel exists
+(`nabu_parallels` discovers on the fly); it never mines (batch runs are
+owner-fired: `nabu parallels|formulas --batch SCOPE`, `nabu cognates --batch
+WORK`). Bounded per kind (default 20, max 100); the restricted-exclusion
+stance applies to counterparts.
 
 ### `nabu_status`
 

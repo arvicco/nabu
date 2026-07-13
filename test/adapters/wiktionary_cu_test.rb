@@ -146,6 +146,66 @@ class WiktionaryCuTest < Minitest::Test
     assert_includes bog[:body], "Inherited from Proto-Slavic *bogъ."
   end
 
+  # --- P16-5 (a): the descendants backfill — OCS entries crosswalk too ------------
+
+  # The attested-OCS records carry the same `descendants` trees the recon
+  # shelves do; since P16-5 the adapter parses them (reflexes: true), so OCS
+  # entries mint dictionary_reflexes edges (census over the live extract,
+  # 2026-07-13: 589/4,615 entries, 2,210 edges; the trimmed fixture carries
+  # 38 entries / 127 edges).
+  def test_parse_extracts_descendants_as_reflexes
+    document = adapter.parse(adapter.discover(FIXTURES).first)
+    entries = document.map { |entry| entry }
+    bearing = entries.count { |entry| !entry.reflexes.empty? }
+    minted = entries.sum { |entry| entry.reflexes.size }
+    assert_equal 38, bearing
+    assert_equal 127, minted
+
+    stopa = entries.find { |entry| entry.entry_id == "стопа:noun" }
+    assert_equal 6, stopa.reflexes.size
+    ru = stopa.reflexes.find { |reflex| reflex.lang_code == "ru" }
+    assert_equal "ru", ru.language
+    assert_equal "стопа́", ru.word
+    assert_equal "stopá", ru.roman
+    assert_equal "стопа", ru.word_folded, "the combining acute folds away"
+    assert_equal "stopa", ru.roman_folded
+  end
+
+  def test_loader_mints_reflex_rows_and_reindexing_is_idempotent
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal 127, db[:dictionary_reflexes].count
+
+    second = loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal 278, second.skipped
+    assert_equal 127, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
+    assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
+  end
+
+  # cu-minted rows are owned by cu entries, recon-minted rows by recon
+  # entries — loading both shelves into one catalog duplicates nothing, and
+  # re-loading either leaves the crosswalk byte-stable.
+  def test_cu_reflexes_coexist_with_recon_minted_rows_without_duplication
+    db, loader = loader_setup
+    recon_source = Nabu::Store::Source.create(
+      slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
+      adapter_class: "Nabu::Adapters::WiktionaryRecon",
+      license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: false
+    )
+    recon_loader = Nabu::Store::DictionaryLoader.new(db: db, source: recon_source)
+    recon_workdir = Nabu::TestSupport.fixtures("wiktionary-recon")
+
+    loader.load_from(adapter, workdir: FIXTURES)
+    recon_loader.load_from(Nabu::Adapters::WiktionaryRecon.new, workdir: recon_workdir)
+    total = db[:dictionary_reflexes].count
+    assert_operator total, :>, 127, "both shelves mint edges"
+
+    loader.load_from(adapter, workdir: FIXTURES)
+    recon_loader.load_from(Nabu::Adapters::WiktionaryRecon.new, workdir: recon_workdir)
+    assert_equal total, db[:dictionary_reflexes].count
+    assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
+  end
+
   # --- the define integration a TOROT gold lemma rides on -------------------------
 
   def test_torot_gold_lemma_finds_its_wiktionary_gloss
