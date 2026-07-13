@@ -25,6 +25,16 @@ module Store
       assert_equal false, columns[:axis_source][:allow_null], "axis_source is required"
     end
 
+    # P17-3 (migration 010): the crosswalk's per-edge loan flag — NULLABLE
+    # boolean, three honest states (true/false from the flag-aware parser,
+    # NULL = the row predates the reparse; the parse-only resync backfills).
+    def test_dictionary_reflexes_borrowed_is_a_nullable_boolean
+      column = @db.schema(:dictionary_reflexes).to_h[:borrowed]
+      refute_nil column, "dictionary_reflexes.borrowed must exist (migration 010)"
+      assert_equal :boolean, column[:type]
+      refute_equal false, column[:allow_null], "NULL is the pre-reparse honest unknown"
+    end
+
     # P7-1: runs and source_repos moved to the history ledger (as slug-keyed
     # runs and pins — see ledger_test.rb); migration 005 drops them from the
     # catalog, along with the license baseline column.

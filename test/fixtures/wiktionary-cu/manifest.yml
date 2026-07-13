@@ -2,7 +2,7 @@
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
 # The one file is a documented TRIM (whole: false) of the 44 MB upstream
-# JSONL (278 of 4,615 lines, selected strata; every kept line byte-verbatim),
+# JSONL (279 of 4,615 lines, selected strata; every kept line byte-verbatim),
 # so a fresh GET returns the full extract and is fetched for URL-liveness
 # only, never byte-compared. Re-apply the README extraction recipe after any
 # refresh. NOTE the upstream file is labelled DEPRECATED (wiktextract #1178)
@@ -15,4 +15,4 @@ files:
   - path: kaikki.org-dictionary-OldChurchSlavonic.jsonl
     url: https://kaikki.org/dictionary/Old%20Church%20Slavonic/kaikki.org-dictionary-OldChurchSlavonic.jsonl
     whole: false
-    trim: 278 stratified lines (all 10 residual entry-id collision pairs; demo lemmas incl. TOROT gold богъ/глаголати; all 4 gloss-less; the 18-sense record; first 4 per POS; first 25 PIE + 40 Proto-Slavic etymologies; every 32nd line; first 12 multi-record homographs) — 46,091,411 B -> 2,252,722 B; recipe in README.md
+    trim: 278 stratified lines (all 10 residual entry-id collision pairs; demo lemmas incl. TOROT gold богъ/глаголати; all 4 gloss-less; the 18-sense record; first 4 per POS; first 25 PIE + 40 Proto-Slavic etymologies; every 32nd line; first 12 multi-record homographs) + 1 P17-3 golden appended 2026-07-13 (страна — the borrowed-flagged orv Slavonicism edge; same upstream sha) — 46,091,411 B -> 2,433,162 B; recipes in README.md

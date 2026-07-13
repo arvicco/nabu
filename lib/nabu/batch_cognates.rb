@@ -101,11 +101,15 @@ module Nabu
     # { [urn_lo, urn_hi] => { refs: Set, meets: Set } }: every cross-language
     # passage pair of every group, meets accumulated so a pair sharing
     # several roots (or spanning refs) collapses into one edge honestly.
+    # P17-3: the meet string appends the crosswalk's per-edge loan verdict —
+    # "*hlaibaz [gem-pro] (loan: chu)" names the witness languages whose
+    # descent from the root is FLAGGED borrowed (the edge-grain fact the
+    # shelf heuristic could only guess); unflagged/NULL stay unmarked.
     def pair_meets(groups)
       pairs = Hash.new { |hash, key| hash[key] = { refs: Set.new, meets: Set.new } }
       groups.each do |group|
         # Root.headword already carries the reconstruction asterisk.
-        meet = "#{group.root.headword} [#{group.root.shelf}]"
+        meet = "#{group.root.headword} [#{group.root.shelf}]#{loan_marker(group)}"
         by_language = group.witnesses.group_by(&:language)
                            .transform_values { |words| words.flat_map(&:passage_urns).uniq }
         by_language.keys.sort.combination(2) do |lang_a, lang_b|
@@ -117,6 +121,11 @@ module Nabu
         end
       end
       pairs
+    end
+
+    def loan_marker(group)
+      flagged = group.witnesses.select(&:borrowed).map(&:language).uniq.sort
+      flagged.empty? ? "" : " (loan: #{flagged.join(',')})"
     end
 
     def write_pairs(pairs, run_id:, counts:)

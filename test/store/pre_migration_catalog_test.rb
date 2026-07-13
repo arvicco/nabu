@@ -23,7 +23,8 @@ class PreMigrationCatalogTest < Minitest::Test
   def pre006_db
     db = Sequel.sqlite
     require "sequel/extensions/migration"
-    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: PRE_DICTIONARY_VERSION)
+    Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: PRE_DICTIONARY_VERSION,
+                                                          allow_missing_migration_files: true)
     db
   end
 
@@ -66,7 +67,8 @@ class PreMigrationCatalogTest < Minitest::Test
         require "sequel"
         require "sequel/extensions/migration"
         db = Sequel.connect("sqlite://#{db_path}")
-        Sequel::Migrator.run(db, #{Nabu::Store::MIGRATIONS_DIR.inspect}, target: #{PRE_DICTIONARY_VERSION})
+        Sequel::Migrator.run(db, #{Nabu::Store::MIGRATIONS_DIR.inspect}, target: #{PRE_DICTIONARY_VERSION},
+                             allow_missing_migration_files: true)
         db.disconnect
         require "nabu"
         catalog = Nabu::Store.connect("#{db_path}", readonly: true) # the MCP condition: can never migrate

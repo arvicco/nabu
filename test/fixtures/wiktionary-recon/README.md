@@ -86,3 +86,78 @@ Totals: 75 + 61 + 74 = 210 records, 1,908,607 bytes.
 
 Re-apply this recipe after any refresh; fresh GETs return the full
 extracts (fetched for URL-liveness only, never byte-compared).
+
+## P17-3 additions (reconstruction shelf part 2; retrieved 2026-07-13)
+
+Four NEW extracts (the survey docs/recon2-survey.md §4 fixture plan, owner-
+approved) plus five golden lines appended to the existing files. All lines
+byte-verbatim (`select_fixtures_p17_3.py` in scratch, same post-check);
+the three existing extracts re-downloaded 2026-07-13 hash IDENTICAL to the
+2026-07-12 snapshot (sha256 above), so the appends are same-file.
+
+New files (full-download sha256, then what each kept line preserves):
+
+- `.../Proto-Balto-Slavic/kaikki.org-dictionary-ProtoBaltoSlavic.jsonl`
+  — 1,692,429 B, 491 lines, sha256
+  `5fcd528f8c316e38bf8ece3a1c87e5407358a8f556ce7c670b546ee18fc6b0f5`
+  → **3 lines** (upstream lines 23/92/175):
+  - `duktḗ` — borrowed-flagged Proto-Finnic/Samic/Mordvinic descendants:
+    the loan flag on off-gold display-only edges.
+  - `pírštan` — THE multi-hop golden: named by PIE `*per-` (root #1),
+    names `sla-pro *pь̃rstъ` whose accented fold joins the sla-pro shelf
+    headword `pьrstъ`; the chain bottoms at chu прьстъ + Glagolitic
+    ⱂⱃⱐⱄⱅⱏ and orv пьрстъ gold.
+  - `wárˀnāˀ` — the ˀ (U+02C0, MODIFIER LETTER GLOTTAL STOP) headword
+    quirk, ×310 in PBS headwords; folds to `warna` under the P17-3 ine
+    fold extension.
+- `.../Proto-West%20Germanic/kaikki.org-dictionary-ProtoWestGermanic.jsonl`
+  — 49,438,078 B, 5,551 lines, sha256
+  `803bc28eebc73bd00d54ae87fff0b027149b6b93e448486c9a33b7bbc11d8bc4`
+  → **3 lines** (252/253/699):
+  - `faru` noun 1 and 2 — `etymology_number` homographs; faru:1's tree
+    carries `sl barva` flagged borrowed (the German-loan-in-Slovene edge,
+    a gold-language loan label).
+  - `hlaib` — ang hlāf gold (the OE proto desk) + the sco/en-heavy modern
+    tail (112 worded nodes) proving gold-scoping stays quiet; also named
+    by gem-pro `*hlaibaz` (the second intermediate-shelf path).
+- `.../Proto-Italic/kaikki.org-dictionary-ProtoItalic.jsonl`
+  — 5,229,349 B, 745 lines, sha256
+  `b16f7cb74b44dff6c1cb27d8af58975728d290a50bc2b6a596c11847e43dca29`
+  → **2 lines** (124/147):
+  - `gʷōs` — `la bōs` raw_tags `["borrowed"]`: a loan INTO the gold
+    language from Osco-Umbrian, the meet-shelf-heuristic counterexample;
+    ʷ fold quirk.
+  - `kʷis` — clean inherited `la quis/quid` (Vulgate-attested) with a PIE
+    parent (`*kʷís`, appended below): the unflagged Italic ascent.
+- `.../Proto-Indo-Iranian/kaikki.org-dictionary-ProtoIndoIranian.jsonl`
+  — 3,338,611 B, 799 lines, sha256
+  `d7076cb20e41d3e80fd8e256c8d44a92d49734fce291e30601c836ac25fd9d47`
+  → **3 lines** (81/156/229):
+  - `bʰráHtā` — the sa reflex's roman `bhrā́tṛ` is the script bridge to
+    GRETIL's romanized san gold.
+  - `kšatrám` — `xcl աշխարհ` flagged borrowed (the Iranian-loan layer in
+    Armenian, 81 of the live extract's 84 xcl edges).
+  - `adᶻdʰáH` — the ᶻ (U+1DBB) / ˢ (U+02E2) modifier-letter fold class
+    (ˢ×12 ᶻ×9 measured) + a "reshaped by analogy or addition of
+    morphemes" raw_tag that must NOT parse as borrowed.
+
+Appends to the existing files (upstream line numbers in the same-sha
+downloads; appended after the strata, the `hrunkwǭ` precedent):
+
+- ProtoSlavic + `xlěbъ` (686: chu хлѣбъ leaf, the UNFLAGGED direct half of
+  the *hlaibaz borrowed-OR golden) + `pьrstъ` (1144: chu прьстъ Cyrillic +
+  Glagolitic, orv пьрстъ — the multi-hop golden's bottom).
+- ProtoIndoEuropean + `per-` root #1 "before, in front" (28: names
+  `ine-bsl-pro *pírštan` — the golden's top; NOTE upstream has THREE per-
+  root records; only #1 is kept, so its entry_id stays `per-:root`) +
+  `kʷís` (111: names `itc-pro *kʷis`).
+- ProtoGermanic + `hlaibaz` (320: the borrowed flag rides the
+  PROTO-TO-PROTO edge — `sla-pro *xlěbъ` raw_tags `["borrowed"]` — while
+  got 𐌷𐌻𐌰𐌹𐍆𐍃/ang-side edges are unflagged: the closure must OR along the
+  path, pinned by the indexer tests).
+
+Borrow-marker census over all eight live extracts (2026-07-13, scratch):
+`"borrowed"` ×92,120, `"learned borrowing"` ×405, plus a free-text hedge
+tail ("possibly borrowed from …") — all matched `/borrow/i`; the frequent
+non-loan raw_tag "reshaped by analogy or addition of morphemes" carries no
+"borrow" substring and stays false.

@@ -5,7 +5,7 @@ Slavonic dictionary** (wiktextract / Tatu Ylönen's extraction of English
 Wiktionary). Every kept line is **byte-verbatim** upstream data — the
 selection script picks whole JSONL lines and a post-check asserts each
 emitted line is a literal line of the raw download; only the record SET was
-trimmed (278 of 4,615 lines).
+trimmed (278 of 4,615 lines; +1 P17-3 golden, §below — 279 total).
 
 - **Page:** https://kaikki.org/dictionary/Old%20Church%20Slavonic/
   ("4548 distinct words"; built from the enwiktionary dump dated
@@ -71,3 +71,14 @@ Python over the full download: compute the eight strata above as line-index
 sets on the raw lines (JSON-parsed only for *selection*), union, sort by
 line index, emit the raw lines unmodified. Post-check: every emitted line
 `in set(upstream_lines)` byte-for-byte.
+
+## P17-3 addition (retrieved 2026-07-13)
+
+One golden line appended after the strata (the re-download hashes
+IDENTICAL to the 2026-07-11 snapshot, sha256 above, so the append is
+same-file): upstream line 98, `страна` — its orv descendant edge carries
+raw_tags `["borrowed"]` (the Church-Slavonicism marker: OCS страна loaned
+INTO Old East Slavic beside the inherited pleophonic сторона; 83 of the
+live shelf's 87 orv edges are so flagged). Pins the borrowed-flag parse on
+an attested-shelf edge. Totals become 279 lines / 39 reflex-bearing
+entries / 129 edges.

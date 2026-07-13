@@ -916,10 +916,15 @@ module Nabu
     long_desc <<~HELP, wrap: false
       The comparativist's walk: from an ATTESTED lemma (богъ, guþ, deus) to
       every reconstruction whose Wiktionary descendants name it —
-      Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org
-      extracts, CC-BY-SA + GFDL) — then one hop UP the proto-to-proto
-      chain: a Proto-Slavic entry's PIE root prints with ITS cognates, so
-      богъ reaches *bogъ, *bʰeh₂g- and ἔφᾰγον in one command.
+      Proto-Slavic, Proto-Indo-European, Proto-Germanic, and (P17-3)
+      Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic,
+      Proto-Indo-Iranian (kaikki.org
+      extracts, CC-BY-SA + GFDL) — then UP the ancestor chain, one indent
+      per shelf hop (each shelf enters a walk once, so the chain is bounded
+      and cycle-safe): прьстъ reaches *pьrstъ ← *pírštan ← *per- end to
+      end. A loan-flagged edge labels its arrow "←(loan)", and a
+      loan-flagged cognate reads "(loan)" (the P17-3 borrowed flag; rows
+      not yet reparsed carry no label — honest unknown, not a claim).
 
       Every cognate reflex that is a gold lemma in this catalog carries its
       attestation count (searchable via `nabu search --lemma`); the rest
@@ -985,8 +990,13 @@ module Nabu
       Each hit names the root with its SHELF — and the shelf is part of the
       answer: a Slavic witness meeting a Germanic witness at a gem-pro entry
       (*hlaibaz, *kaisaraz) is very possibly a BORROWING, not common descent;
-      ine-pro meets are the inheritance signal. Wiktionary descendant trees
-      include loans and do not flag them.
+      ine-pro meets are the inheritance signal. Since P17-3 a witness whose
+      descent from the root the crosswalk FLAGS as a loan reads "(loan)"
+      (chu хлѣбъ (loan) ~ got hlaifs at *hlaibaz — the flag ORs along the
+      closure path, so a loan on a proto-to-proto edge still fires); the
+      shelf heuristic remains the caption for unflagged edges — upstream
+      flags are high-precision, low-recall — and rows predating the flag
+      reparse carry no label (honest unknown).
 
       Corpus-common words are suppressed by default (a lemma in ≥ 10% of its
       language's gold passages, absolute floor 50 — ὁ, jah, и would otherwise
@@ -2563,38 +2573,53 @@ module Nabu
         end
       end
 
+      # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
+      # "(loan)"; unflagged and not-yet-reparsed (NULL) edges stay bare.
       def reflex_form(reflex)
-        reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+        base = reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
+        reflex.borrowed ? "#{base} (loan)" : base
       end
 
-      # etym (P14-1): one block per reconstruction entry — where the walk
+      # etym (P14-1; multi-hop P17-3): one block per entry — where the walk
       # entered (matched reflex → *headword), the entry's own reflex list,
-      # then each one-hop ancestor with its cognates.
+      # then the ancestor CHAIN, indented one step per shelf hop (the
+      # shelf-visited walk: богъ → *bogъ ← *bogù ← *bʰag-). A loan edge
+      # labels its arrow: "←(loan)". --long expands the cognate lists; the
+      # chain itself is already bounded (each shelf enters once per walk).
       def print_etym_results(lemma, results)
         if results.empty?
           return say("no reconstruction names #{lemma} as a descendant, and no reconstruction " \
-                     "headword matches it — the crosswalk covers Proto-Slavic/PIE/Proto-Germanic " \
-                     "(Wiktionary). Try the lemma's dictionary form, or a quoted '*form' for a " \
-                     "direct lookup (quote the star — zsh expands a bare *)")
+                     "headword matches it — the crosswalk covers the Wiktionary proto shelves " \
+                     "(Proto-Slavic/PIE/Proto-Germanic/Proto-Balto-Slavic/Proto-West Germanic/" \
+                     "Proto-Italic/Proto-Indo-Iranian). Try the lemma's dictionary form, or a " \
+                     "quoted '*form' for a direct lookup (quote the star — zsh expands a bare *)")
         end
 
         results.each_with_index do |result, index|
           say "" if index.positive?
-          say "#{etym_entry_line(result)}  #{result.urn}"
-          say "  gloss: #{result.gloss}" if result.gloss
-          print_reflexes(result.cognates)
-          result.ancestors.each do |ancestor|
-            say ""
-            say "← #{etym_entry_line(ancestor)}  #{ancestor.urn}"
-            say "  gloss: #{ancestor.gloss}" if ancestor.gloss
-            print_reflexes(ancestor.cognates)
-          end
+          print_etym_entry(result, 0)
+        end
+      end
+
+      def print_etym_entry(result, depth)
+        indent = "  " * depth
+        arrow = if depth.positive?
+                  result.edge_borrowed ? "←(loan) " : "← "
+                else
+                  ""
+                end
+        say "#{indent}#{arrow}#{etym_entry_line(result)}  #{result.urn}"
+        say "#{indent}  gloss: #{result.gloss}" if result.gloss
+        print_reflexes(result.cognates)
+        result.ancestors.each do |ancestor|
+          say ""
+          print_etym_entry(ancestor, depth + 1)
         end
       end
 
       def etym_entry_line(result)
         via = result.matched_reflex
-        prefix = via ? "#{via.word} [#{via.language}] → " : ""
+        prefix = via ? "#{via.word} [#{via.language}]#{' (loan)' if via.borrowed} → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
       end
@@ -2642,7 +2667,8 @@ module Nabu
           say "    #{group.root.dictionary_title}#{" · gloss: #{group.root.gloss}" if group.root.gloss}"
         end
         group.witnesses.each do |witness|
-          say "    #{witness.language.ljust(4)} #{witness.lemma}#{cognates_surfaces(witness)}"
+          loan = witness.borrowed ? " (loan)" : ""
+          say "    #{witness.language.ljust(4)} #{witness.lemma}#{loan}#{cognates_surfaces(witness)}"
           next unless options[:long]
 
           witness.document_urns.each do |urn|

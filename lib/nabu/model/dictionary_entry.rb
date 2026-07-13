@@ -50,16 +50,27 @@ module Nabu
   # - +word_folded+/+roman_folded+: conventions §9 search forms (leading
   #   asterisk stripped first — the define/etym query convention), folded
   #   with +language+; nil when unfoldable or when the fold comes out empty.
+  # - +borrowed+ (P17-3): true when the upstream node carries a loan marker
+  #   in raw_tags/tags ("borrowed", "learned borrowing" — the parser's
+  #   /borrow/i census), false when parsed without one. The stored column
+  #   is additionally nullable — NULL = "row predates the flag-aware
+  #   reparse", an honest absence the parser itself never mints.
   DictionaryReflex = Data.define(:lang_code, :language, :word, :roman,
-                                 :word_folded, :roman_folded) do
-    def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil, roman_folded: nil)
+                                 :word_folded, :roman_folded, :borrowed) do
+    def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil,
+                   roman_folded: nil, borrowed: false)
+      unless [true, false].include?(borrowed)
+        raise ValidationError, "borrowed must be true or false (parser-minted reflexes are never NULL)"
+      end
+
       super(
         lang_code: Model::Validation.present_string!(lang_code, field: "lang_code"),
         language: language.nil? ? nil : Model::Validation.language!(language),
         word: Model::Validation.nfc_text!(word, field: "word"),
         roman: roman.nil? ? nil : Model::Validation.nfc_text!(roman, field: "roman"),
         word_folded: word_folded.nil? ? nil : Model::Validation.nfc_text!(word_folded, field: "word_folded"),
-        roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded")
+        roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded"),
+        borrowed: borrowed
       )
     end
   end
