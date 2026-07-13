@@ -11,9 +11,31 @@ module Store
     end
 
     def test_migrations_create_all_tables
-      %i[sources documents passages provenance enrichments document_axes].each do |table|
+      %i[sources documents passages provenance enrichments document_axes document_facets].each do |table|
         assert @db.table_exists?(table), "expected table #{table} to exist"
       end
+    end
+
+    # P17-2: the facet table is skinny and open-vocabulary — facet/value
+    # required, raw (the upstream verbatim, `?` certainty included) optional.
+    def test_document_facets_columns_and_index
+      columns = @db.schema(:document_facets).to_h
+      assert_equal false, columns[:facet][:allow_null], "facet is required"
+      assert_equal false, columns[:value][:allow_null], "value is required"
+      refute columns[:raw][:allow_null] == false, "raw is optional"
+      assert(@db.indexes(:document_facets).values.any? { |i| i[:columns] == %i[facet value] })
+    end
+
+    # P17-2 rider: documents carry their adapter-emitted metadata (persons,
+    # crosswalk ids, facets) — NOT NULL, default "{}", never content-hashed.
+    def test_documents_metadata_json_column_defaults_to_empty_object
+      column = @db.schema(:documents).to_h[:metadata_json]
+      refute_nil column, "documents.metadata_json missing (migration 009)"
+      assert_equal false, column[:allow_null]
+
+      source_id = insert_source
+      id = @db[:documents].insert(document_row(source_id))
+      assert_equal "{}", @db[:documents].first(id: id)[:metadata_json]
     end
 
     # P15-2: the date/place axis is document-keyed, signed-integer-year columns.
@@ -23,6 +45,16 @@ module Store
       assert_equal :integer, columns[:not_after][:type]
       refute columns[:not_before][:allow_null] == false, "either bound may be NULL (open-ended)"
       assert_equal false, columns[:axis_source][:allow_null], "axis_source is required"
+    end
+
+    # P17-3 (migration 010): the crosswalk's per-edge loan flag — NULLABLE
+    # boolean, three honest states (true/false from the flag-aware parser,
+    # NULL = the row predates the reparse; the parse-only resync backfills).
+    def test_dictionary_reflexes_borrowed_is_a_nullable_boolean
+      column = @db.schema(:dictionary_reflexes).to_h[:borrowed]
+      refute_nil column, "dictionary_reflexes.borrowed must exist (migration 010)"
+      assert_equal :boolean, column[:type]
+      refute_equal false, column[:allow_null], "NULL is the pre-reparse honest unknown"
     end
 
     # P7-1: runs and source_repos moved to the history ledger (as slug-keyed

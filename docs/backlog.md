@@ -5497,3 +5497,480 @@ coverage numbers from live db), improvements register (§1.4 → shipped,
 §1.5 → shipped, §1.8 → shipped), PR, owner queue (parse-only resync
 wiktionary-cu; batch runs are owner-fired if long), backup-disk
 re-flag (standing), sticky alarm LAST.
+# ── Phase 17 ──────────────────────────────────────────────────────────
+# Owner directive (2026-07-13): "focus on additional sources this phase:
+# 4-7, maximal scope with deep info extraction that synergizes with our
+# tools/paradigm. Don't limit yourself to what we ALREADY extract. Think
+# about additional meta/info that strengthens our cross-tools and every
+# aspect of nabu capabilities." Every packet is TWO-PHASE: scout/design
+# (Phase A, docs/<slug>-survey.md, fixture plan) → OWNER GATE → adapter
+# (Phase B). Deep-extraction mandate: enumerate EVERY annotation/metadata
+# layer upstream carries and map each to a nabu surface — axis, links,
+# reflex crosswalk (incl. the P15-3 `borrowed` flag future-work), the
+# alignment hub, morph facets, vocab, collation layers, fuzzy, license
+# labels, MCP — proposing NEW columns/facets where the data earns them.
+
+## P17-1 · Coptic Scriptorium  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
+Register §2.2 (candidate — strong). Gold-lemmatized Coptic (would be
+lemma language #15); the Sahidic NT as alignment witness #14. Deep
+layers to census: bound-group tokenization vs word grain; gold
+lemma/POS/morph; LANGUAGE-OF-ORIGIN tags on tokens (Greek loanwords
+marked — a language-contact layer feeding cognates/etym's borrowing
+signal); normalized vs diplomatic layers (ccmh-txt collation precedent);
+verse citations (hub wiring); English translations (--parallel); MS
+metadata — dates (axis), repository/provenance; multi-corpus structure
+(NT, Shenoute, Apophthegmata, Besa...). License CC BY (verify per
+corpus).
+
+FINDINGS (Phase B, 2026-07-13 — survey docs/coptic-survey.md is the spec
+of record; owner approved the fixture plan as suggested, incl. the
+optional 4th documentary sample). Shipped: fixture set (Besa TT+CoNLL-U
+whole, AP.004.poemen.65 whole, cpr.2.237 whole, rebuilt sahidica.nt zip
+with Mark_01 trimmed to verses 1–12 + Philemon whole; README+manifest,
+all at tag v6.2.0 commit 6c2acf0); parser family `CopticTtParser`
+(span-EVENT stack, never a tree — cpr's `</figDesc>`-before-`</figure>`
+proves it); adapter `CopticScriptorium` (chapter→book merge incl. the
+single-chapter edge, in-repo-zip discover via `unzip` through Shell —
+canonical never written outside fetch, treebank-dir + license-less skip
+rules with discovery accounting, P10-4 attribution overrides read from
+each header, most-restrictive-wins across a book's chapters); GitFetch
+grew `ref:` (fetch pinned to the release TAG, owner re-pins by bumping
+RELEASE_TAG); conventions §9 `cop` fold (⳿ U+2CFF deletes; census: every
+stroke/overline is Mn, already generic-stripped); text = diplomatic
+orig_group sequence, text_normalized = norm-layer WORD sequence through
+the one folding boundary (conformance search-source hook pins the
+derivation); tokens/entities/identities/loans/topology annotations
+(loans = per-passage code counts {grc/hbo/arc/lat/egy}, the future
+--loans facet reads them without reparse); gold-lemma gate `lemmas:
+:gold` default (automatic docs mint lemma_auto — nothing lost, index
+unpolluted; :all = the owner flip); `CopticScriptoriumDates` axis
+extractor (dates+places, unknown-class places skipped, urn mint pinned
+against the adapter by test); hub witnesses #14 sahidica NT (nc) + #15
+bohairic NT (attribution), 27 books each, urns verified in the tagged
+meta.json. DEVIATIONS from the survey, all fixture-forced: (1) a THIRD
+structural TT dialect the survey's 8 samples missed — Philemon's
+COLLAPSED shape (orig_group/orig/lang as ATTRIBUTES on norm_group/norm,
+translation as verse_n attribute) — parser handles all three, fixture
+preserves it; (2) upstream's "Arabic only in ANNIS" is false for AP:
+AP.004 carries embedded per-verse `<arabic>` spans — ingested as
+translation_ar where present; (3) survey's `sync_policy: versioned` is
+not a registry enum — implemented as `manual` + tag-pinned fetch (same
+substance); (4) -en translation sibling documents NOT minted v1 (the
+per-verse English rides in annotations["translation"]; the ORACC-shape
+sibling minting is a named follow-up — deliberate scope hold, the
+packet's deliverable list governed). V2 backlog (survey §10): --loans
+facet + Coptic→Greek borrowing crosswalk (converges with P17-3
+`borrowed`), witness/identity links-journal producers, CoNLL-U FEATS
+join, ANNIS Arabic for the other 72 docs, CDO lexicon, sbl_greek
+collation, -en siblings, AND the OT witnesses (sahidic.ot 911 +
+bohairic.ot 507 docs) — NOT wired v1: upstream's own "versification may
+not always align with traditional Septuagint versification" caveat
+demands a Psalms/Jeremiah spot-check against the LXX witness after
+first sync (the P11-5 clean-books-first precedent). Projected first
+sync: ~2.8 GB clone; ~75–80k passages / ~2.4M token records (~300–400
+MB annotations JSON in the catalog, survey estimate stands — fixture
+parse yields ~46 tokens/passage on literary, ~31 words/verse on NT).
+Registry `enabled: false`; owner fires the first sync (checklist §6).
+Note for review: the §9 cop fold refolds the ~28k live papyri-ddbdp cop
+passages at next rebuild — expected a no-op (documentary text carries
+no U+2CFF) but unverified against live canonical (db untouched this
+packet, per mid-task coordinator directive). [VERIFIED at review,
+post-rebuild: 8 live cop passages DO carry U+2CFF — not a no-op; they
+refold correctly at next rebuild, intended and small.]
+
+## P17-2 · EDH — Latin inscriptions  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
+Register §2.3. Epigraphy as the third documentary shelf — fuzzy_index's
+designed second customer (one config line) + the axis's natural feed
+(EDH dating not_before/not_after; findspot/province). Deep layers to
+census: inscription TYPE (epitaph/dedication/milestone/diploma — a
+GENRE facet nabu doesn't have yet; argue schema), material/object type,
+personal names (prosopography seed, §3.5), EpiDoc abbreviation
+expansions + lacunae (folding/fuzzy nuances), bilinguals (grc/lat),
+province geo (strings + province v1; coordinates noted not ingested).
+EDH is archived/read-only upstream — census the dump format (Open Data
+repo, CC BY-SA) and the frozen sync_policy fit.
+PHASE A (2026-07-13): docs/edh-survey.md — 82,450 inscriptions censused
+from 12,747 records read + both corpus-wide CSVs; all verdicts inside
+(langUsage-lies trap, del→⟦…⟧, line grain, facet schema, frozen policy,
+persons-as-annotations v1). Fixture plan owner-approved same day.
+PHASE B FINDINGS (2026-07-13): (1) ONE SURVEY DEVIATION, argued — the
+survey's "persons ride in the document's annotations, zero schema"
+presumed a document-annotations surface that DID NOT EXIST (documents had
+no metadata/annotations column; the loader dropped Document#metadata on
+the floor). Migration 009 therefore carries a rider beside
+document_facets: documents.metadata_json (NOT NULL default "{}"),
+persisted by the loader as pure METADATA — deliberately outside
+ContentHash (the license_override precedent), reconciled on the
+same-content path with no revision bump, so every stored sha is
+byte-stable and imp/goo300k/freising's already-emitted metadata persists
+for free. (2) document_facets landed as surveyed: skinny
+(document_id, facet, value, raw), facet ∈ genre/province/material/
+object_type for EDH, value = the record's own EAGLE/XML term, raw = the
+CSV code verbatim with `?`-certainty surviving; Store::FacetBuilder
+projects it from metadata_json at rebuild (after AxisBuilder), so NO
+code-side vocabulary tables exist — the titadnun unknown resolved itself
+(each record carries its own term; live-checked HD014570 = "adnuntiatio").
+(3) search --type/--province/--material as correlated EXISTS in
+CatalogJoin (value OR raw, ilike), composing with --from/--to/--century/
+--place AND --fuzzy; compact renders: search footer names active facet
+filters, show prints one facets: line (raw in parens when divergent),
+rebuild prints the facets summary. MCP nabu_search facet args deferred
+(not in the packet deliverable list; config-shaped follow-up).
+(4) EdhEpidocParser: DdbdpParser-adjacent streaming family; del ALWAYS
+⟦…⟧ (per-source adoption of conventions §5's future-work direction —
+recorded there; no frozen urns exist so no revision storm); gap-only
+lines (lb n="0") not citable; per-passage grc by script (GL bilinguals);
+textpart-relative line restarts in urns. (5) Adapter: 9 flat zips
+(ZipFetch, all URLs HEAD-re-verified 2026-07-13) + 2 CSVs (FileFetch,
+each in its OWN subdir — FileFetch is single-file-per-dir, siblings read
+as deletions); language STRICTLY from CSV nl_text (L→lat, G→grc,
+exotic 5-record residue → und); ~475 text-less stubs skip-by-rule with
+discovery accounting (XML-without-CSV-row = loud unrecognized).
+(6) AxisBuilder::EdhDates: CSV signed years verbatim (no year 0 —
+tripwire counted), open-ended honest, place = fo_antik→fo_modern with
+Pleiades-then-GeoNames refs; Summary grew edh/edh_undated/edh_invalid
+with defaults. (7) Registry: enabled: false, sync_policy: frozen,
+fuzzy_index: true — the one-config-line promise kept. Fixtures per the
+approved plan (HD000001/HD000082/HD080825 byte-identical + both CSVs
+trimmed, manifest + README). Tests +83 (suite 2130/29,466, lint clean,
+both exit 0). Owner queue: one frozen ~220 MB `bin/nabu sync edh`, then
+rebuild (facet+axis rows + trigram +~70 MB materialize), eyeball, flip
+enabled. Live-db demo SKIPPED (owner rebuild was running — deferred to
+review). v2 recorded in the survey: persons table + attestation query,
+geo layer, btext, PIR/TM links edges, GODOT.
+
+## P17-3 · Reconstruction shelf, part 2  [tier: opus, two-phase] [status: done] [deps: —]
+DONE 2026-07-13 (Phase B). Survey (docs/recon2-survey.md) verdicts all
+shipped. FIXTURES (network-approved): the ~12 byte-verbatim kaikki goldens
+into the existing layout — four NEW extracts (ine-bsl-pro *pírštan multi-
+hop golden + *wárˀnāˀ ˀ-fold + *duktḗ; gmw-pro *hlaib/*faru; itc-pro *gʷōs
+bōs-loan + *kʷis clean; iir-pro *bʰráHtā roman + *kšatrám xcl-loan +
+*adᶻdʰáH ˢ/ᶻ-fold) + 5 appends to the existing files (sla *xlěbъ/*pьrstъ,
+ine *per-#1/*kʷís, gem *hlaibaz) + 1 cu append (страна Slavonicism); all
+re-downloads hash-identical to the P14-1/P13-10 snapshots. MIGRATION 010
+(009 reserved): nullable boolean `borrowed` on dictionary_reflexes; parser
+mints true/false from raw_tags/tags `/borrow/i` (census: "borrowed"
+×92,120, "learned borrowing" ×405, "reshaped by analogy…" correctly NOT
+matched), NULL = pre-reparse; rides ContentHash reflex_fields (P16-5
+parse-only recovery). FOUR EXTRACTS rows on wiktionary-recon (registry
+untouched — same source), PROTO_FOLD += ˢ→s ᶻ→z ˀ→"" under ine + itc/iir
+keys (gmw measured clean, no key). MULTI-HOP CLOSURE: ReflexRootsIndexer
+rewritten to the shelf-visited worklist walk (each dict-language enterable
+once/walk; breadth-first rounds ⇒ deterministic + terminating in
+≤shelves−1 rounds; cycle-safe by the visited set; degenerates to the old
+one-hop set, pinned); attested shelves ascend like -pro (supersedes P16-5
+direct-only); reflex_roots gains OR-aggregated `borrowed` (true>false>NULL).
+Etym walks the same bound, renders the chain indented + `←(loan)`; MCP
+nabu_etym nests ancestors. Consumers: Cognates WitnessWord.borrowed →
+"(loan)", BatchCognates detail "(loan: chu)", MCP payloads carry the
+boolean w/ NULL-honesty. JOHN 13.18 acceptance render reproduced on
+fixtures: `*hlaibaz [gem-pro] / chu хлѣбъ (loan) / got hlaifs`. Suite +43
+tests (2068 runs / 29,172 assertions), lint clean, both exit 0. The real
+~60 MB sync + closure rebuild are OWNER-FIRED (not run — worktree never
+touched live db; one live-state check DEFERRED-TO-REVIEW per coordinator
+db-lock). One commit, not pushed.
+
+Register §1.11 extension; owner PIE/comparativistics axis. Census which
+kaikki proto extracts exist beyond our three — Proto-Balto-Slavic,
+Proto-Italic, Proto-Hellenic, Proto-Indo-Iranian, Proto-Semitic (the
+cuneiform synergy: sem-pro descendants naming akk would crosswalk to
+ORACC gold lemmas — verify akk actually appears), others on our axes.
+TWO structural upgrades the data forces: (1) the closure indexer's
+one-hop ascent bound was argued from "no intermediate shelf exists" —
+Proto-Balto-Slavic IS that shelf; design the bounded multi-hop closure
+(PIE → PBS → sla-pro → chu → orv chains) the indexer doc said to
+revisit. (2) kaikki descendants carry BORROWING flags — land the
+P15-3-named `borrowed` column on dictionary_reflexes so cognates/etym
+distinguish inheritance from loan PER EDGE, not just by meet-shelf
+heuristic. Size/count census per extract; fixture plan.
+
+## P17-4 · Monier-Williams (Cologne CDSL)  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
+Register §1.3's named next occupant for Sanskrit. LICENSE SCOUT FIRST
+(CDSL terms vary per dictionary — the register's own warning; record
+the verdict + posture mapping before any fixture plan). Deep layers:
+headwords Devanagari + IAST (folding against GRETIL's san-Latn);
+grammatical apparatus; CITATIONS to Sanskrit literature (RV., MBh. —
+the §1.3 resolution pattern: parse abbreviations, resolve against the
+GRETIL shelf's urns, honest miss-rate reporting); MW's OWN COGNATE
+NOTES (entries cite Greek/Latin/Gothic/Slavic comparanda — a
+dictionary-native comparativistics layer: census whether these parse
+reliably enough to mint crosswalk edges, distinct from kaikki's);
+etymology cross-references between entries. Would complete the
+per-language desk loop: LSJ:grc :: L&S:lat :: B-T:ang :: MW:san.
+PHASE A (2026-07-13): docs/mw-survey.md — CC BY-NC-SA 3.0 → `nc`
+(mwheader.xml is the grant, per-dictionary; upstream NOT frozen,
+Last-Modified 2026-07); whole-corpus census 286,525 records / 193,890
+grouped entries; headwords SLP1 not Devanagari (backlog lead corrected);
+328,060 <ls> citations, RV resolution verified end-to-end; cognate layer
+973 records / 2,537 tags / 98.9% parseable. Fixture plan owner-approved.
+PHASE B FINDINGS (2026-07-13): (1) `Mw` adapter + `mw-xml` family
+shipped — FileFetch of mwxml.zip (sha pin), parse streams the xml/mw.xml
+member via `unzip -p` (canonical stays the 11 MB zip); ONE ref id
+`mw:mw.xml` for both plain-file (fixtures) and zip shapes. H1–H4 mains
+group their A/B/C/E continuations by file adjacency; entry_id = Cologne
+<L>, urn:nabu:dict:mw:<L>. (2) `Nabu::Slp1` transcoder, deterministic
+BOTH directions (x→ḷ vs L→ḻ keeps the reverse map unambiguous; accents
+a/MSa→áṃśa round-trip; digraphs longest-match-first) — the betacode
+precedent, NO conventions-§9 change; fold("aṃśa")=fold(GRETIL IAST)=
+"amsa" verified in tests. (3) Citations: curated MwSigla map — 24
+GRETIL-held works (filenames verified against the mmehner mirror
+listing) + 11 authority labels; roman→arabic + per-work sprintf pad
+templates ("RV. v, 86, 5" → 5.086.05); Define grew document-urn work
+resolution + bounded pada-suffix probing (a–d; exact verse wins) and
+document-grain citations now resolve to the DOCUMENT urn (nabu-urn
+works only — CTS bare-work refs keep nil). Per-siglum coverage via
+`Mw.citation_coverage` printed at every sync through a generic CLI
+respond_to? hook — tier totals + live-resolution fractions, "document
+not in catalog" never faked. (4) Cognate notes → dictionary_reflexes
+with ZERO schema change (survey §4 state machine: coordination "Goth.
+and Germ. un" shared, register markers ep./Ved. filtered; Gk./Lat./
+Goth./Lith./Angl.Sax./Zd.→ae/Eng./Germ./Russ./Armen. mapped, Slav./Hib.
+display-only) — etym walks a Greek lemma (ὦμος) to the MW aṃsa entry as
+a SECOND witness beside kaikki, tested; P17-3's borrowed column will
+read NULL on these rows honestly (migration 010 untouched). (5) Grammar
+apparatus → a `grammar:` body line (lex genders incl. f#-stems
+transcoded, verb class-pada, Westergaard/Whitney refs); See-refs ride
+the body via the transcode. Fixtures test/fixtures/mw/ (26 record lines
+= 11 entries: aṃśa L10-27.1 with the verified RV citation, aṃs/aṃsa
+L44-92.1 cognate cluster, akūpāra L313 <ls n=> restoration, √bhāṣ
+L150479 verb apparatus, bhāṣaṇa) + verbatim mw.dtd + mwheader.xml (the
+license travels in-fixture) + README/manifest. Registry `enabled:
+false`, sync_policy manual — first real sync OWNER-FIRED (11 MB GET →
+~100–130 MB catalog; eyeball coverage output + define aṃśa/bhāṣ).
+DEFERRED-TO-REVIEW: non-RV passage-grain templates (BhP/R/Ragh/Yājñ/
+Kum/Sāh/MārkP/VP/Daś) encode the survey's census shapes but were not
+re-verified against the live catalog (db access embargoed mid-packet —
+coordinator, owner rebuild in flight); wrong templates yield honest
+query-time misses, never fake links. v2 (surveyed, priced): ibid
+propagation (+10.4k), Devanagari display forms, See-ref/phwparent →
+links graph, root families, full 871-sigla key, Mn./Pāṇ. re-grain.
+Suite 2097 runs / 29,355 assertions green, lint clean, exit 0/0.
+
+## P17-5 · Etruscan axis scout  [tier: opus, two-phase] [status: Phase A done 2026-07-13 — owner gate PASSED: fixture plan approved, OpenEtruscan ingests under `attribution` (Larth-provenance caveat journaled + license_watch on the Zenodo record); Phase B adapter → P18 queue] [deps: —]
+Owner axis voiced 2026-07-13 ("One more axis I'd like to explore while
+we're close to Proto-Italic etc - Etruscan"). Phase A survey: what
+machine-readable Etruscan exists — inscription corpora (ETP/UMass, CIE
+digitizations, Rix ET editio minor derivatives, EDR/Trismegistos
+coverage), lexica/glossaries, the kaikki/Wiktionary ett extract
+(descendants/contact data — Latin loanwords FROM Etruscan feed the
+borrowed-flag layer), anything with dates/findspots (axis + the
+P17-2-proposed genre facet fits inscriptions natively). Non-IE: no
+proto-shelf ascent, but the language-contact surfaces (Latin↔Etruscan
+loans, bilinguals like the Pyrgi tablets) are the synergy to census.
+License per source; ranked verdict + fixture plan for the gate.
+
+## P17-6 · CLARIN.SI repository survey  [tier: opus, scout] [status: done 2026-07-13 — owner verdict: ALL findings → P18 queue (Damaskini, Slovenian dictionary shelf, PriLit rider); ELEXIS repo-help email = owner reminder, ride the Miklosich send] [deps: —]
+Owner request (2026-07-13): "check what else is available on clarin.si
+in addition to goo300k/imp/freising". Survey the whole repository
+against our axes (Slavic deepening — OCS/Old East Slavic/South Slavic/
+Slovenian, historical corpora, dictionaries, treebanks; secondary: any
+cross-axis surprises worth naming). Known context: goo300k/imp/freising
+already held; Miklosich known-blocked on BCDH (do not re-scout it,
+reference the standing thread). Per-item license verdicts (clarin.si
+items carry explicit CC labels; BY-ND is IN-SCOPE per the standing
+ruling → research_private), machine-readability, size, ranked verdict +
+fixture-plan sketches for the top picks.
+
+## P17-7 · Lock-tolerant SQLite: busy_timeout + WAL verdict  [tier: opus] [status: done 2026-07-13] [deps: —]
+Owner defect (2026-07-13): `nabu rebuild` crashed mid-papyri with
+SQLite3::BusyException "database is locked" — a concurrent READER
+(agent demos/verification, even `sqlite3 -readonly`) held a shared lock
+during the loader's journal commit. Root cause: journal_mode=delete
+(rollback) + NO busy_timeout anywhere in Store.connect — any
+reader/writer overlap is a hard crash instead of a wait. Two fixes to
+argue and land: (1) busy_timeout (Sequel/sqlite3 timeout) on EVERY
+connect path (catalog, fulltext, ledger, links journal) — a writer
+waits out a transient reader instead of dying; pick the value from the
+longest legitimate reader (MCP tools, links readback) + margin.
+(2) THE WAL VERDICT — journal_mode=WAL lets readers and one writer
+coexist (the actual architecture here: MCP/agents read while
+syncs/rebuilds write). Argue costs honestly: -wal/-shm sidecar files
+(rsync backup + restore-drill parity — ops.md update), sqlite3
+-readonly semantics on WAL, checkpointing on close. If WAL wins, flip
+at connect + migrate existing files (PRAGMA journal_mode=WAL is
+persistent) with a rebuild-safe path; if not, document why busy_timeout
+alone suffices. Tests: concurrent reader-during-write no longer raises
+(thread-based, in-memory-excluded — file-backed tmp db), timeout
+present on every connect, backup drill still green.
+
+FINDINGS (done 2026-07-13): VERDICT = WAL + explicit busy_timeout —
+timeout-only loses because no timeout survives an unbounded reader
+(rollback COMMIT needs EXCLUSIVE vs the reader's SHARED; the crash's
+`sqlite3 -readonly` session could sit for minutes). Correction to the
+crash analysis: there WAS a busy wait — Sequel's sqlite adapter
+defaults :timeout to 5000 ms — the reader simply outlived it, which is
+the proof implicit-and-shorter-than-the-longest-reader is not a policy.
+Landed: Store.connect + connect_fulltext (ledger + links delegate)
+carry timeout: BUSY_TIMEOUT_MS = 10_000 (longest legitimate holder is
+seconds-scale — batch links readbacks, loader/indexer commits — ×
+margin), readonly included; journal_mode=WAL set on every RW connect
+(persists in the file → existing dbs self-heal on first open, no
+migration; readonly connects never set it — the pragma writes). WAL
+costs handled: `nabu backup` db sections copy live -wal/-shm sidecars
+and PRUNE stale ones at the target (a restored stale -wal replays old
+frames over a newer main file); drill unchanged and green. Caveat
+pinned in the class doc: sqlite3's C-level busy handler blocks the GVL,
+so writer-writer waits only work CROSS-PROCESS (nabu's actual writers);
+tested via subprocess holder — 0.3 s held lock waited out, not raised.
+Tests +8 (reader-snapshot-during-commit regression, subprocess busy
+wait, busy_timeout + journal_mode pinned on all 7 connect paths,
+rollback→WAL self-heal; backup sidecar ride-along/prune/dry-run).
+Suite 2055/29,104 exit 0, lint 263 files exit 0.
+
+## P17-8 · PIE/comparativistics sources survey  [tier: opus, scout] [status: done 2026-07-13 — v1 picks IE-CoR (CC BY, 2,261 held-pair edges, loans layer) + LIV-LOD (CC BY-SA); reflexes-rows surface verdict; dev → P18 pending owner gate at P17-gate] [deps: —]
+Owner (2026-07-13): "Dispatch a scout on other PIE sources, I feel we're
+thin on comparativistics." Beyond kaikki (held: 3 proto shelves + 4 more
+landing in P17-3): survey the machine-readable comparativistics field —
+Pokorny IEW digitizations (UT-Austin LRC, dnghu, Starling), LIV/NIL
+digital state, IE-CoR / IELex / CoBL cognacy databases (Jena/MPI-EVA —
+CLDF, licenses), the Lexibank/CLDF ecosystem generally (cognate-coded
+wordlists, CC-labeled), Tower of Babel/Starling (license reality),
+PIE Lexicon (Pyysalo, Helsinki), UT LRC etyma lists, anything serving
+laryngeal-notated reconstructions with DESCENDANTS/cognate-set structure
+that joins our gold shelves. Per-item: format, entry/cognate-set counts,
+license verdict (paywalled Brill dictionaries = blocked, named), and the
+measured-or-projected join story against dictionary_reflexes/etym (the
+kaikki-shelf precedent: record-level rates). Ranked verdict + fixture
+sketches for the gate; honest "print-only, no unblock" list.
+
+# ── Phase 18 queue (owner-approved 2026-07-13, dispatch next phase) ──
+# 1. Etruscan adapter (P17-5 Phase B): OpenEtruscan CSV (new flat-CSV
+#    parser family, skip ocr_failed, fuzzy_index, BCE sign-flip pin) +
+#    kaikki ett EXTRACTS row + the Latin-loans curated-edge rider;
+#    posture: attribution + journaled Larth caveat + license_watch.
+#    Fixture plan APPROVED (etruscan-survey.md §fixtures).
+# 2. Damaskini (clarin-si-survey pick #1, CC BY-SA): Balkan Slavic
+#    gold corpus, aligned English, St. Petka multi-witness collation.
+# 3. Slovenian historical dictionary shelf (pick #2, CC BY): Pleteršnik
+#    + Svetokriški (loanword etymologies → borrowed synergy) + besedje16
+#    (Dalmatin sigla crosswalk); one dictionary parser family.
+# 4. PriLit rider (pick #3, CC BY): 1643–1866 TEI, 7-edition collation.
+# 5b. Postcondition checker + optional AI review (owner, 2026-07-13):
+#    MECHANICAL layer first — health/verify gains consistency invariants:
+#    per-source last-run status surfaced LOUDLY (failed run + partial
+#    docs = today's Coptic case), flag-vs-artifact pairs (fuzzy_index vs
+#    trigram table, axis extractors vs row counts, reflex code vs
+#    crosswalk rows), enabled-vs-populated, pending migrations,
+#    quarantine DELTA vs baseline (not the standing count), projection
+#    diffs vs survey-stated expectations. AI layer as OPTIONAL rider:
+#    post-sync hook (config key / --review), off by default, tool-
+#    agnostic (structured brief on stdin; bundled example wires claude -p
+#    + the nabu MCP server; local models have equal standing per the MCP
+#    ruling) — judgment calls only: sample-passage reading, quarantine-
+#    reason triage. No cloud dependency enters the core.
+# 5a. Coptic sync robustness (defect, found 2026-07-13) — SHIPPED in
+#    P17-10 (2026-07-13). The "transient race" hypothesis was WRONG: the
+#    census proved the crash deterministic — the dual-origin work urn
+#    ot.hab.bohairic_ed (standalone bohairic-habakkuk corpus AND
+#    bohairic.ot_TT.zip members share one CTS urn) merged into one
+#    document group whose ref path was the loose .tt, so chunk_content
+#    ran `unzip -p` against a non-zip → exit 9 on EVERY sync, at ref
+#    #280 of 465. Shipped: per-chunk origin reads (structural fix),
+#    standalone-over-zip precedence (shadowed members skipped by rule),
+#    unreadable zip MEMBER at parse → ParseError (quarantine), unreadable
+#    zip at discover → FetchError. Census + verdict: see ## P17-10.
+# 5. PIE deepening (P17-8 picks, fixture sketches in pie-survey.md §7):
+#    IE-CoR cognacy matrix (CC BY — 273 sets/2,261 held-form pair edges,
+#    1,596 laryngeal PIE roots as kaikki cross-check, 1,036 curated loan
+#    events) + LIV-LOD Latin slice (CC BY-SA, 305 verbal etymons);
+#    v2: de Vaan EDL skeleton (nc). Unblock emails on file: Starostin
+#    (Starling pokorny.dbf), UT LRC.
+# 5. Carried candidates: scholia + dictionary-citation links producers,
+#    edition-vs-edition collate, streaming batch parallels producer.
+# OWNER REMINDER (raise at P17-gate + P18 planning): ELEXIS bitstream
+# question — one email to repo-help@clarin.si settles 141 dictionary
+# records incl. Miklosich; CC on the pending Miklosich draft send.
+
+## P17-9 · Static site — the project's academic face  [tier: opus] [status: done 2026-07-13] [deps: —]
+Owner (2026-07-13): "a separate static site for Nabu (github project
+page). Humanists are allergic to github READMEs it seems. The site needs
+to restate README, sources and supporting materials in a more academic
+style and org-look (tabs/pages etc). It needs to be further maintained
+and synced with README and current project state at any future gate."
+Jekyll site under site/ (NOT docs/ — the loop docs stay un-rendered),
+deployed by a GitHub Actions Pages workflow; pages: Home, The Library
+(collections from library.md), Tools, Examples (personas), Languages,
+Licensing & Access, About. Academic register: restrained serif design,
+no marketing voice, cite-the-numbers style, every claim traceable to the
+repo docs. STANDING GATE DUTY added to the §10 cadence: the site is
+refreshed alongside library.md/README at every future gate. Site serves
+PROJECT DOCS ONLY — no corpus content (the external-access licensing
+rulings are not triggered). Enabling Pages in repo Settings = owner
+action, queued.
+FINDINGS (2026-07-13): shipped as a hand-rolled Jekyll site (no theme,
+own layout + CSS: serif stack Charter/Iowan/Georgia, muted oxblood
+accent, 𒀭𒀝 masthead glyph with font-stack fallback) — 7 tab pages
+(Home, The Library, Tools, Examples, Languages, Sources & Licensing,
+About) + site/MAINTENANCE.md (the gate-duty contract) + site/Gemfile
+(self-contained, app Gemfile untouched). Deploy:
+.github/workflows/pages.yml — jekyll-build-pages from site/ +
+deploy-pages, push-to-main paths [site/**] + dispatch, pages:write +
+id-token:write. All numbers restated from library.md/README with as-of
+dates, never re-derived; snippets are README's own live-run outputs; the
+three enabled:false sources (coptic-scriptorium, mw, edh) listed
+honestly as "awaiting first synchronization". Verified: jekyll build
+exit 0 (jekyll 4.4.1 vendored under site/vendor, gitignored), href
+sweep — every internal link resolves to a built page; rake test exit 0
+(2256 runs / 30,434 assertions). DEFERRED TO ORCHESTRATOR: (1) the §10
+review-cadence line in docs/library.md naming the site (another agent
+held library.md during this packet); (2) a README link to the site;
+(3) owner action to go live: Settings → Pages → Source: GitHub Actions.
+
+## P17-10 · Coptic sync crash: dual-source works  [tier: fable] [status: done 2026-07-13] [deps: P17-1]
+Owner-hit defect, twice: both `bin/nabu sync coptic-scriptorium` attempts
+died `command failed (exit 9): unzip` after "279 docs / 127 quarantined".
+CENSUS (read-only over canonical @ v6.2.0, 465 refs total): exactly ONE
+work urn collects chunks from two origins — `ot.hab.bohairic_ed`, minted
+by BOTH the standalone `bohairic-habakkuk` corpus (3 loose chapter .tt)
+AND `bohairic.ot/bohairic.ot_TT.zip` (members 35_Habacuc_01..03.tt).
+Everywhere else upstream keeps the origins apart with distinct `_ed` CTS
+urns (nt.mark.sahidica_ed loose vs nt.mark.sahidica zip; ot.jonah/ruth
+.coptot_ed vs .coptot) — Habakkuk is an upstream collision, unique in the
+release. The merged group's ref path was the first (loose) chapter file,
+so `chunk_content` ran `unzip -p` against a .tt → exit 9, deterministic,
+at ref #280/465 in urn order: 152 loaded + 127 quarantined + crash =
+exactly the owner's numbers (re-derived ref-by-ref; the live catalog's
+152 urns all re-mint identically — frozen-URN guarantee holds, and
+ot.hab.bohairic_ed itself never loaded). The 127 quarantines are a
+SEPARATE finding, NOT this defect: CopticTtParser's fixture-verified span
+inventory rejects unknown TT span types loudly, and the full corpus
+carries 32 span types the 5-doc fixture census never saw (ed_page_n 58×,
+supplied_reason 42×, entity_identity 30×, abbr 21×, petermann/marcion_
+chapter_n 28×, gap* 28×, …) plus 9 structural rejects (unsegmented
+stretches in 8 NT zip books + 1 magical papyrus, whose copticMag urn the
+CTS_NAMESPACE regex also doesn't strip) — corpus-wide 188 of 465 parse
+clean post-fix (277 quarantine); widening the inventory is P18 material,
+quarantine is exactly the designed behavior. BYTE-IDENTITY: the two Habakkuk origins DIFFER — the
+loose corpus is the v6.2.0 re-release (2025-11-25; segmentation/tagging/
+parsing/entities/identities all GOLD, people/places rosters, lb_n
+manuscript topology, revised lemmas + re-tokenization, public domain +
+CC-BY 4.0) vs the zip's frozen v6.0.0 automatic snapshot (2024-10-31,
+minimal header, CC-BY-SA). PRECEDENCE VERDICT: same edition urn at two
+releases → ONE document, the STANDALONE corpus wins (newer + gold + richer
++ clearer license); the shadowed zip members are skipped_by_rule ("zip
+member shadowed by the standalone edition"), never doubled chapters —
+post-fix live census: 465 refs, 0 mixed groups, skipped_by_rule 111→114,
+ot.hab.bohairic_ed = 56 passages gold v6.2.0. Distinct-urns alternative
+REJECTED: upstream says same work, and the frozen-URN check showed no
+loaded urn moves either way. MECHANICAL FIX regardless of verdict:
+chunk_content now derives the zip path from the CHUNK's own `zip` key
+(expand_path'd), never document_ref.path — a mixed group is structurally
+incapable of the crash even if precedence regresses (pinned by a
+hand-built mixed-group test; ref_path/chunk_label audited, group-order
+safe). Robustness rider (5a, landed here): unreadable zip MEMBER at
+parse → ParseError quarantine; unreadable zip at discover → FetchError
+(that IS a fetch problem). Fixtures: dual-origin pair trimmed from the
+local canonical tree (loose Habakkuk_01 vv1-2 + rebuilt bohairic.ot zip
+with the trimmed real 35_Habacuc_01 member, provenance in README +
+manifest); 6 new tests (precedence at discover, gold edition surfaced at
+parse, mixed-group no-crash, corrupt-member quarantine, corrupt-archive
+FetchError, skip accounting) — suite 2261 runs exit 0, lint exit 0.
+Owner re-run: `bin/nabu sync coptic-scriptorium` (expect 188 docs
+loaded, 277 quarantined — the span-inventory finding, honest and loud).
+
+## P17-gate · Phase 17 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P17-1..4]
+Full-diff, library/languages/README refresh (new languages/shelves/
+facets from live db), improvements register (§2.2/§2.3 → shipped,
+§1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
+new source are owner-fired; fixture-plan approvals happen mid-phase at
+the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.

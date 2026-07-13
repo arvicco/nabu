@@ -1,0 +1,46 @@
+title: Nabu
+description: >-
+  A personal, local, license-honest library of the ancient world —
+  searchable, citable, and rebuildable from canonical sources.
+url: "https://arvicco.github.io"
+baseurl: "/nabu"
+repository_url: "https://github.com/arvicco/nabu"
+
+# Restrained defaults: no theme, hand-rolled layout and CSS only.
+theme: null
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter_opts:
+    disable: true
+
+# Horizontal navigation, in tab order.
+nav:
+  - title: Home
+    url: /
+  - title: The Library
+    url: /library/
+  - title: Tools
+    url: /tools/
+  - title: Examples
+    url: /examples/
+  - title: Languages
+    url: /languages/
+  - title: Sources & Licensing
+    url: /sources/
+  - title: About
+    url: /about/
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - MAINTENANCE.md
+  - vendor
+  - .bundle

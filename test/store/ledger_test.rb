@@ -175,7 +175,8 @@ module Store
     def legacy_catalog(path = "sqlite::memory:")
       db = Nabu::Store.connect(path)
       require "sequel/extensions/migration"
-      Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: LEGACY_TARGET)
+      Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: LEGACY_TARGET,
+                                                            allow_missing_migration_files: true)
       db
     end
 

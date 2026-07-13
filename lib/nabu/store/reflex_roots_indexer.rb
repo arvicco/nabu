@@ -3,36 +3,67 @@
 module Nabu
   module Store
     # The cognate root-closure table (P15-3, intertext design §6, fable
-    # closure review 2026-07-12): one row per (gold language, folded lemma,
-    # reconstruction-entry urn) asserting the lemma descends — within the
-    # bounded two-level walk below — from that reconstruction entry. The
-    # P7-5 pattern again: derived from the catalog's stored crosswalk, living
-    # in fulltext.sqlite3 beside passage_lemmas/alignment_refs with the same
-    # drop-and-rebuild lifecycle, created here imperatively, never migrated.
-    # Indexer.rebuild! is the single choke point (sync's reindex + rebuild),
-    # so a recon re-sync and a treebank sync both regenerate it — the
-    # review's staleness rider.
+    # closure review 2026-07-12; multi-hop rewrite P17-3): one row per
+    # (gold language, folded lemma, reconstruction-entry urn) asserting the
+    # lemma descends — within the bounded shelf-visited walk below — from
+    # that entry, plus the OR-aggregated `borrowed` flag of the best-known
+    # path. The P7-5 pattern again: derived from the catalog's stored
+    # crosswalk, living in fulltext.sqlite3 beside passage_lemmas/
+    # alignment_refs with the same drop-and-rebuild lifecycle, created here
+    # imperatively, never migrated. Indexer.rebuild! is the single choke
+    # point (sync's reindex + rebuild), so a recon re-sync and a treebank
+    # sync both regenerate it — the review's staleness rider.
     #
-    # == The walk (and why it is exactly two levels)
+    # == The walk (P17-3: the shelf-visited worklist closure)
     #
-    # DIRECT (depth 1): every dictionary_reflexes row of a live entry maps
+    # The original build took DIRECT edges plus ONE ascent hop, arguing "a
+    # depth-3 chain needs an intermediate shelf … that does not exist in
+    # the catalog; revisit the bound if one lands" (P15-3 review finding
+    # 6). Proto-Balto-Slavic IS that shelf (PIE *per- → ine-bsl-pro
+    # *pírštan → sla-pro *pь̃rstъ → chu прьстъ / orv пьрстъ), and
+    # Proto-West Germanic is a second (gem-pro → gmw-pro → ang), so the
+    # bound is now the generalization the old argument was a special case
+    # of:
+    #
+    # DIRECT: every dictionary_reflexes row of a live entry maps
     # (language, word_folded) and (language, roman_folded) to its OWNING
     # entry — the roman fold is the script bridge (got 𐍃𐌰𐌻𐍄 joins the gold
-    # lemma "salt"). ASCENT (depth 2): a direct target that is itself a
-    # reconstruction ("-pro" dictionary) adds every OTHER-shelf entry whose
-    # reflexes name its (language, headword_folded) — the same proto-to-proto
-    # edge Query::Etym#ancestors_of walks, same same-language exclusion (the
-    # live PIE extract holds ~6k intra-shelf derivational edges that are
-    # sub-tree structure, not ancestry). The ascent step is not re-expanded,
-    # so a malformed proto-to-proto cycle terminates trivially. With the
-    # three reconstruction shelves owning nearly every reflex row, one hop
-    # up reaches everything an unbounded walk would (a depth-3 chain needs
-    # an intermediate shelf, e.g. Proto-Balto-Slavic, that does not exist
-    # in the catalog; revisit the bound if one lands). Since P16-5 the
-    # attested wiktionary-cu shelf mints reflex rows too (the descendants
-    # backfill): its direct edges target a NON-pro entry (chu), so they
-    # never ascend — an orv lemma maps to its OCS root here, and the OCS →
-    # proto step stays Query::Etym's live ascent, not a closure row.
+    # lemma "salt"). ASCENT: from each direct target, a worklist walk — for
+    # an entry owned by dictionary-language S, every entry of an UNVISITED
+    # shelf whose reflexes name (S, headword_folded) joins the root set and
+    # re-enters the worklist. Attested reflex-owning shelves (wiktionary-cu
+    # today) ascend exactly like the -pro shelves — descent through an
+    # attested intermediary is the same descent relation (this supersedes
+    # P16-5's direct-only stance for the closure; renderers still star only
+    # -pro headwords).
+    #
+    # BOUND & TERMINATION: each dictionary LANGUAGE (shelf) is enterable
+    # once per walk — a visited set seeded with the direct target's own
+    # shelf, which is the old same-language exclusion generalized (intra-
+    # shelf derivational edges never ascend; a malformed proto-to-proto
+    # cycle's return edge re-enters a visited shelf and dies). Expansion is
+    # breadth-first in ROUNDS: a round expands the whole frontier, then
+    # marks every newly reached shelf visited — so which entries a shelf
+    # contributes depends only on the graph and the start entry, never on
+    # iteration order. Every non-final round visits ≥1 new shelf, so the
+    # walk terminates in ≤ (reflex-owning shelves − 1) rounds — no magic
+    # depth constant — and when no intermediate shelf exists it degenerates
+    # to EXACTLY the old one-hop walk (pinned by test). Longest real chain
+    # measured in the P17-3 survey: 3 hops.
+    #
+    # == The borrowed flag (P17-3; P15-3 review finding 4)
+    #
+    # Each crosswalk edge carries migration 010's nullable `borrowed`
+    # (true/false from the flag-aware parser, NULL for rows predating the
+    # reparse). The flag ORs ALONG THE PATH — the design-load-bearing case
+    # is *hlaibaz: the loan marker rides the proto-to-proto edge (gem-pro →
+    # sla-pro *xlěbъ, flagged), not the chu leaf, so a direct-edge-only
+    # flag would never fire for hlaifs ~ хлѣбъ. Three-valued, honest:
+    # true if any edge on the path is flagged; else NULL if any edge is
+    # not-yet-reparsed (the path cannot claim "inherited"); else false.
+    # Several paths to one root deduplicate by max (true > false > NULL) —
+    # commutative, so determinism survives. Unflagged stays the meet-shelf
+    # heuristic's territory (upstream flags are high-precision/low-recall).
     #
     # == Roots are URNs, not row ids (the review's determinism finding)
     #
@@ -48,8 +79,9 @@ module Nabu
     # Final rows are emitted only for languages present in passage_lemmas:
     # the table exists solely to join gold lemmas, and the ~250k modern-
     # language descendant keys (en, de, ru …) can never join. Proto shelves
-    # still participate as build-time intermediates. Measured live:
-    # ~51k rows, < 5 MB, ~1.4 s.
+    # still participate as build-time intermediates. Measured live at P15-3:
+    # ~50k rows, < 5 MB, ~1.4 s; the P17-3 survey projects ~56–60k rows,
+    # < 8 MB after the four new shelves land.
     #
     # The companion STATS_TABLE holds per-language gold passage counts —
     # what Query::Cognates' common-word suppression divides by (a fixed
@@ -94,6 +126,7 @@ module Nabu
           String :language, null: false
           String :lemma_folded, null: false
           String :root_urn, null: false
+          TrueClass :borrowed # NULL = a path edge predates the flag reparse
           index %i[language lemma_folded]
         end
         fulltext.create_table(STATS_TABLE) do
@@ -139,55 +172,124 @@ module Nabu
           end
       end
 
-      # (reflex language, folded form) => Set of owning entry ids, over both
-      # the word and roman folds. Rows with a nil catalog-side language are
-      # display-only, never join candidates (§12); rows of withdrawn entries
-      # are filtered by the caller's entry_meta lookup.
+      # (reflex language, folded form) => { owning entry id => borrowed },
+      # over both the word and roman folds, several rows into one entry
+      # merged by max_flag (a word/roman pair or duplicate tree nodes are
+      # ONE edge). Rows with a nil catalog-side language are display-only,
+      # never join candidates (§12); rows of withdrawn entries are filtered
+      # by the caller's entry_meta lookup.
       def reflex_edges(catalog)
-        edges = Hash.new { |hash, key| hash[key] = Set.new }
+        edges = Hash.new { |hash, key| hash[key] = {} }
+        columns = %i[language word_folded roman_folded dictionary_entry_id]
+        # Pre-010 catalog: no flag column — every edge reads nil (unknown).
+        columns << :borrowed if catalog[:dictionary_reflexes].columns.include?(:borrowed)
         catalog[:dictionary_reflexes]
           .exclude(language: nil)
-          .select(:language, :word_folded, :roman_folded, :dictionary_entry_id)
+          .select(*columns)
           .each do |row|
             [row.fetch(:word_folded), row.fetch(:roman_folded)].compact.uniq.each do |folded|
               next if folded.empty?
 
-              edges[[row.fetch(:language), folded]].add(row.fetch(:dictionary_entry_id))
+              slot = edges[[row.fetch(:language), folded]]
+              entry_id = row.fetch(:dictionary_entry_id)
+              slot[entry_id] = max_flag(slot.key?(entry_id) ? slot[entry_id] : row[:borrowed],
+                                        row[:borrowed])
             end
           end
         edges
       end
 
-      # The closure over the two-level walk, gold-scoped, deduplicated, and
-      # sorted (deterministic across identical inputs — rebuild determinism
-      # is a review requirement, not a nicety).
+      # The closure over the shelf-visited walk, gold-scoped, deduplicated
+      # (borrowed by max_flag), and sorted (deterministic across identical
+      # inputs — rebuild determinism is a review requirement, not a nicety).
       def closure_rows(meta, edges, gold)
         gold_set = gold.to_set
-        rows = Set.new
-        edges.each do |(language, folded), entry_ids|
+        rows = {}
+        edges.each do |(language, folded), entries|
           next unless gold_set.include?(language)
 
-          root_urns(entry_ids, meta, edges).each do |urn|
-            rows.add([language, folded, urn])
+          root_flags(entries, meta, edges).each do |urn, flag|
+            key = [language, folded, urn]
+            rows[key] = max_flag(rows.key?(key) ? rows[key] : flag, flag)
           end
         end
-        rows.sort.map { |language, folded, urn| { language: language, lemma_folded: folded, root_urn: urn } }
+        rows.sort_by { |(language, folded, urn), _| [language, folded, urn] }
+            .map do |(language, folded, urn), flag|
+          { language: language, lemma_folded: folded, root_urn: urn, borrowed: flag }
+        end
       end
 
-      # Direct targets plus one ascent hop each — never re-expanded (the
-      # depth bound), never into the same shelf (the derivational-edge
-      # exclusion). Withdrawn or unknown entry ids resolve to nothing.
-      def root_urns(entry_ids, meta, edges)
-        entry_ids.each_with_object(Set.new) do |entry_id, urns|
+      # root urn => path-ORed borrowed flag, over the shelf-visited walk
+      # from every direct target entry. Withdrawn or unknown entry ids
+      # resolve to nothing.
+      def root_flags(entries, meta, edges)
+        roots = {}
+        entries.each do |entry_id, flag|
           entry = meta[entry_id] or next
-          urns.add(entry.fetch(:urn))
-          next unless entry.fetch(:language).to_s.end_with?("-pro") && entry[:headword_folded]
+          merge_root(roots, entry.fetch(:urn), flag)
+          ascend(entry_id, entry, flag, meta: meta, edges: edges, roots: roots)
+        end
+        roots
+      end
 
-          edges.fetch([entry.fetch(:language), entry.fetch(:headword_folded)], []).each do |ancestor_id|
+      # The worklist walk from one direct target: breadth-first ROUNDS, a
+      # visited-shelf set seeded with the target's own dictionary language.
+      # Newly reached shelves are marked visited only after the whole round,
+      # so membership never depends on expansion order within a round.
+      def ascend(entry_id, entry, flag, meta:, edges:, roots:)
+        visited = Set[entry.fetch(:language)]
+        frontier = [[entry_id, flag]]
+        until frontier.empty?
+          reached = expand_round(frontier, visited, meta: meta, edges: edges, roots: roots)
+          visited.merge(reached.map { |id, _| meta.fetch(id).fetch(:language) })
+          frontier = reached
+        end
+      end
+
+      # One round: every (S, headword_folded) naming edge out of the
+      # frontier into a not-yet-visited shelf. Returns the next frontier;
+      # merges each reached root with its path-ORed flag.
+      def expand_round(frontier, visited, meta:, edges:, roots:)
+        reached = []
+        frontier.each do |entry_id, path_flag|
+          entry = meta.fetch(entry_id)
+          headword = entry[:headword_folded]
+          next if headword.nil? || headword.empty?
+
+          edges.fetch([entry.fetch(:language), headword], {}).each do |ancestor_id, edge_flag|
             ancestor = meta[ancestor_id] or next
-            urns.add(ancestor.fetch(:urn)) unless ancestor.fetch(:language) == entry.fetch(:language)
+            next if visited.include?(ancestor.fetch(:language))
+
+            combined = or_flag(path_flag, edge_flag)
+            merge_root(roots, ancestor.fetch(:urn), combined)
+            reached << [ancestor_id, combined]
           end
         end
+        reached
+      end
+
+      def merge_root(roots, urn, flag)
+        roots[urn] = max_flag(roots.key?(urn) ? roots[urn] : flag, flag)
+      end
+
+      # Path OR, three-valued: a flagged edge makes the path a loan; an
+      # unreparsed (nil) edge keeps the path honestly unknown; only an
+      # all-false path claims false.
+      def or_flag(one, other)
+        return true if one == true || other == true
+        return nil if one.nil? || other.nil?
+
+        false
+      end
+
+      # Cross-path dedup, three-valued max: true > false > nil (a path that
+      # POSITIVELY parsed unflagged beats one that was never reparsed).
+      # Commutative and associative — merge order cannot matter.
+      def max_flag(one, other)
+        return true if one == true || other == true
+        return false if one == false || other == false
+
+        nil
       end
     end
   end

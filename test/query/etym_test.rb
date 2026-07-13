@@ -100,9 +100,9 @@ module Query
       assert_equal 1, got.attested_count, "counted via the roman fold"
     end
 
-    # -- the ascent: proto → proto ---------------------------------------------------
+    # -- the ascent: the shelf-visited chain (P17-3) -----------------------------------
 
-    def test_ascends_one_hop_to_the_pie_ancestor_with_its_own_cognates
+    def test_ascends_to_the_pie_ancestor_with_its_own_cognates
       make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
       rebuild!
       bog = etym("богъ", lang: "chu").first
@@ -111,7 +111,41 @@ module Query
       assert_equal "ine-pro", pie.language
       assert(pie.cognates.any? { |c| c.language == "grc" && c.word == "ἔφᾰγον" },
              "the PIE ancestor brings the cross-family cognates")
-      assert_empty pie.ancestors, "the ascent is bounded to one hop"
+      assert_empty pie.ancestors,
+                   "no shelf names a PIE headword — the chain ends exactly where one-hop did"
+    end
+
+    # THE multi-hop golden (P17-3): прьстъ → *pьrstъ ← *pírštan ← *per- —
+    # the Proto-Balto-Slavic intermediate shelf carries the chain the old
+    # one-hop cut could not render.
+    def test_ascends_the_multi_hop_chain_through_proto_balto_slavic
+      make_gold_passages(language: "chu", lemma: "прьстъ", form: "прьстъ")
+      rebuild!
+      results = etym("прьстъ", lang: "chu")
+      pers = results.find { |r| r.headword == "*pьrstъ" } || flunk("*pьrstъ missing")
+      pbs = pers.ancestors.find { |a| a.headword == "*pírštan" } ||
+            flunk("ine-bsl-pro *pírštan names sla-pro *pь̃rstъ — the accented fold must join")
+      assert_equal "ine-bsl-pro", pbs.language
+      assert_equal false, pbs.edge_borrowed, "an inherited edge parsed unflagged"
+      pie = pbs.ancestors.find { |a| a.headword == "*per-" } ||
+            flunk("PIE *per- names ine-bsl-pro *pírštan — the chain's top")
+      assert_equal "ine-pro", pie.language
+      assert_empty pie.ancestors
+    end
+
+    # The loan edge (P17-3): the *hlaibaz ancestor is reached over the
+    # borrowed-flagged gem→sla proto edge — edge_borrowed labels it; the
+    # direct chu → *xlěbъ edge is honestly false on the matched reflex.
+    def test_ancestor_reached_over_a_flagged_edge_carries_edge_borrowed
+      make_gold_passages(language: "chu", lemma: "хлѣбъ", form: "хлѣбъ")
+      rebuild!
+      xleb = etym("хлѣбъ", lang: "chu").find { |r| r.headword == "*xlěbъ" } ||
+             flunk("*xlěbъ missing")
+      assert_equal false, xleb.matched_reflex.borrowed
+      hlaibaz = xleb.ancestors.find { |a| a.headword == "*hlaibaz" } ||
+                flunk("gem-pro *hlaibaz names sla-pro *xlěbъ (flagged) — the ascent must find it")
+      assert_equal true, hlaibaz.edge_borrowed, "the loan flag rides the connecting edge"
+      assert_nil xleb.edge_borrowed, "a top-level result has no connecting edge"
     end
 
     def test_gothic_ascends_to_the_pie_ancestors_of_guda
@@ -232,6 +266,34 @@ module Query
       assert_equal "стопа", stopa.headword, "attested OCS is not a reconstruction — no asterisk"
       assert_equal "chu", stopa.language
       assert_equal "sl", stopa.matched_reflex.language
+    end
+
+    # -- P17-4: MW's own cognate notes enter the walk as a SECOND witness ----------
+
+    # The dictionary-native comparanda (mw-survey §4): a Greek lemma cited
+    # by MW s.v. aṃsa reaches the MW entry through the same reflex fold the
+    # kaikki crosswalk uses — a 19th-century comparativist witness with MW
+    # provenance (the owning entry's dictionary is mw), no asterisk (san is
+    # attested), zero schema change.
+    def test_walks_a_greek_lemma_to_the_mw_entry_that_names_it_as_comparandum
+      mw = Nabu::Store::Source.create(
+        slug: "mw", name: "Monier-Williams", adapter_class: "Nabu::Adapters::Mw",
+        license: "CC BY-NC-SA 3.0", license_class: "nc"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: mw)
+                                   .load_from(Nabu::Adapters::Mw.new,
+                                              workdir: Nabu::TestSupport.fixtures("mw"))
+      results = etym("ὦμος", lang: "grc")
+      assert_equal 1, results.size
+      amsa = results.first
+      assert_equal "urn:nabu:dict:mw:88", amsa.urn
+      assert_equal "mw", amsa.dictionary_slug, "MW provenance — distinct from the kaikki shelves"
+      assert_equal "aṃsa", amsa.headword, "attested Sanskrit — no reconstruction asterisk"
+      assert_equal "nc", amsa.license_class
+      assert_equal "ὦμος", amsa.matched_reflex.word
+      cognates = amsa.cognates.map { |view| [view.lang_code, view.word] }
+      assert_includes cognates, %w[Goth. amsa]
+      assert_includes cognates, %w[Lat. humerus]
     end
   end
 end

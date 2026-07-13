@@ -231,5 +231,26 @@ module Query
       assert_nil show("urn:d:2").axis
       assert_nil show("urn:d:2:1").axis
     end
+
+    # -- facets (P17-2) --------------------------------------------------------
+
+    def test_document_carries_its_facets_when_present
+      load_document("1", [%w[1 μῆνιν]])
+      doc = @catalog[:documents].where(urn: "urn:d:1").first
+      @catalog[:document_facets].insert(document_id: doc.fetch(:id), facet: "genre",
+                                        value: "epitaph", raw: "titsep?")
+      @catalog[:document_facets].insert(document_id: doc.fetch(:id), facet: "province",
+                                        value: "Germania inferior", raw: "GeI")
+
+      facets = show("urn:d:1").facets
+      assert_equal %w[genre province], facets.map(&:facet)
+      assert_equal "epitaph", facets.first.value
+      assert_equal "titsep?", facets.first.raw, "the certainty rider stays visible"
+    end
+
+    def test_unfaceted_document_has_empty_facets
+      load_document("2", [%w[1 ἄειδε]])
+      assert_empty show("urn:d:2").facets
+    end
   end
 end

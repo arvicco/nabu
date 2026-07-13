@@ -20,7 +20,7 @@ class WiktionaryJsonlParserTest < Minitest::Test
   end
 
   def test_parses_every_fixture_line_into_a_dictionary_entry
-    assert_equal 278, entries.size
+    assert_equal 279, entries.size
     assert(entries.all?(Nabu::DictionaryEntry))
   end
 
@@ -202,6 +202,23 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert_equal "grc", greek.language
     assert_equal "ἔφᾰγον", greek.word
     assert_equal "εφαγον", greek.word_folded
+  end
+
+  # P17-3: the borrowed predicate — /borrow/i over raw_tags ∪ tags. The
+  # iir-pro adᶻdʰáH record carries all three shapes in one tree: a flagged
+  # xcl loan (raw_tags ["borrowed"]), plain inherited nodes (false), and a
+  # "reshaped by analogy or addition of morphemes" raw_tag that must NOT
+  # read as a loan.
+  def test_borrowed_parses_from_raw_tags_and_ignores_the_analogy_tag
+    iir = recon_entries("kaikki.org-dictionary-ProtoIndoIranian.jsonl", "iir-pro")
+    azd = iir.find { |e| e.entry_id == "adᶻdʰáH:adj" } || flunk("adᶻdʰáH not parsed")
+    xcl = azd.reflexes.find { |r| r.lang_code == "xcl" } || flunk("xcl ազդ reflex missing")
+    assert xcl.borrowed, "xcl ազդ carries raw_tags [\"borrowed\"]"
+    sa = azd.reflexes.find { |r| r.lang_code == "sa" } || flunk("sa अद्धा reflex missing")
+    refute sa.borrowed, "inherited nodes parse false, never NULL"
+    reshaped = azd.reflexes.find { |r| r.word == "ʾzdʾqryʾ" } ||
+               flunk("the reshaped-by-analogy sog node missing")
+    refute reshaped.borrowed, "'reshaped by analogy…' is not a loan marker"
   end
 
   def test_la_maps_to_lat_and_folds_by_the_catalog_language

@@ -202,6 +202,83 @@ nt:
         MARK: urn:nabu:ccmh:zographensis:mar
         LUKE: urn:nabu:ccmh:zographensis:luk
         JOHN: urn:nabu:ccmh:zographensis:joh
+    # P17-1: the two Coptic NT witnesses (Coptic Scriptorium corpora,
+    # docs/coptic-survey.md §6) — witness #14, the complete Sahidic NT
+    # (sahidica.nt, 259 chapter files merged to 27 book documents, ~7,906
+    # verse units; J. Warren Wells "academic use only" terms → the source's
+    # nc class labels every aligned row, the PROIEL-five posture) and
+    # witness #15, the Bohairic NT (bohairic.nt, CC BY-SA per document →
+    # attribution override) — a second Coptic DIALECT column beside the
+    # Sahidic. Work-vocabulary tokens key the adapter's per-book urns
+    # (upstream cts work ids, all 27 verified per corpus in the v6.2.0
+    # meta.json at survey/fixture time — no guessed code dangles). The gold
+    # sahidica.mark alt-edition (nt.mark.sahidica_ed) stays OUTSIDE the
+    # registry: one NT witness per edition, two Sahidica Marks would
+    # false-double the verse. The OT witnesses (sahidic.ot/bohairic.ot) are
+    # NOT wired in v1 — upstream itself flags Septuagint versification
+    # drift; spot-check Psalms/Jeremiah first (the P11-5 clean-books-first
+    # precedent), recorded as v2 in the P17-1 findings. "Not synced" until
+    # the owner-fired first `nabu sync coptic-scriptorium`.
+    - label: sahidica NT (Sahidic Coptic)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:coptic-scriptorium:nt.matt.sahidica
+        MARK: urn:nabu:coptic-scriptorium:nt.mark.sahidica
+        LUKE: urn:nabu:coptic-scriptorium:nt.luke.sahidica
+        JOHN: urn:nabu:coptic-scriptorium:nt.john.sahidica
+        ACTS: urn:nabu:coptic-scriptorium:nt.acts.sahidica
+        ROM: urn:nabu:coptic-scriptorium:nt.rom.sahidica
+        1COR: urn:nabu:coptic-scriptorium:nt.1cor.sahidica
+        2COR: urn:nabu:coptic-scriptorium:nt.2cor.sahidica
+        GAL: urn:nabu:coptic-scriptorium:nt.gal.sahidica
+        EPH: urn:nabu:coptic-scriptorium:nt.eph.sahidica
+        PHIL: urn:nabu:coptic-scriptorium:nt.phil.sahidica
+        COL: urn:nabu:coptic-scriptorium:nt.col.sahidica
+        1THESS: urn:nabu:coptic-scriptorium:nt.1thess.sahidica
+        2THESS: urn:nabu:coptic-scriptorium:nt.2thess.sahidica
+        1TIM: urn:nabu:coptic-scriptorium:nt.1tim.sahidica
+        2TIM: urn:nabu:coptic-scriptorium:nt.2tim.sahidica
+        TIT: urn:nabu:coptic-scriptorium:nt.titus.sahidica
+        PHILEM: urn:nabu:coptic-scriptorium:nt.phlm.sahidica
+        HEB: urn:nabu:coptic-scriptorium:nt.heb.sahidica
+        JAS: urn:nabu:coptic-scriptorium:nt.jas.sahidica
+        1PET: urn:nabu:coptic-scriptorium:nt.1pet.sahidica
+        2PET: urn:nabu:coptic-scriptorium:nt.2pet.sahidica
+        1JOHN: urn:nabu:coptic-scriptorium:nt.1john.sahidica
+        2JOHN: urn:nabu:coptic-scriptorium:nt.2john.sahidica
+        3JOHN: urn:nabu:coptic-scriptorium:nt.3john.sahidica
+        JUDE: urn:nabu:coptic-scriptorium:nt.jude.sahidica
+        REV: urn:nabu:coptic-scriptorium:nt.rev.sahidica
+    - label: bohairic NT (Bohairic Coptic)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:coptic-scriptorium:nt.matt.bohairic
+        MARK: urn:nabu:coptic-scriptorium:nt.mark.bohairic
+        LUKE: urn:nabu:coptic-scriptorium:nt.luke.bohairic
+        JOHN: urn:nabu:coptic-scriptorium:nt.john.bohairic
+        ACTS: urn:nabu:coptic-scriptorium:nt.acts.bohairic
+        ROM: urn:nabu:coptic-scriptorium:nt.rom.bohairic
+        1COR: urn:nabu:coptic-scriptorium:nt.1cor.bohairic
+        2COR: urn:nabu:coptic-scriptorium:nt.2cor.bohairic
+        GAL: urn:nabu:coptic-scriptorium:nt.gal.bohairic
+        EPH: urn:nabu:coptic-scriptorium:nt.eph.bohairic
+        PHIL: urn:nabu:coptic-scriptorium:nt.phil.bohairic
+        COL: urn:nabu:coptic-scriptorium:nt.col.bohairic
+        1THESS: urn:nabu:coptic-scriptorium:nt.1thess.bohairic
+        2THESS: urn:nabu:coptic-scriptorium:nt.2thess.bohairic
+        1TIM: urn:nabu:coptic-scriptorium:nt.1tim.bohairic
+        2TIM: urn:nabu:coptic-scriptorium:nt.2tim.bohairic
+        TIT: urn:nabu:coptic-scriptorium:nt.titus.bohairic
+        PHILEM: urn:nabu:coptic-scriptorium:nt.phlm.bohairic
+        HEB: urn:nabu:coptic-scriptorium:nt.heb.bohairic
+        JAS: urn:nabu:coptic-scriptorium:nt.jas.bohairic
+        1PET: urn:nabu:coptic-scriptorium:nt.1pet.bohairic
+        2PET: urn:nabu:coptic-scriptorium:nt.2pet.bohairic
+        1JOHN: urn:nabu:coptic-scriptorium:nt.1john.bohairic
+        2JOHN: urn:nabu:coptic-scriptorium:nt.2john.bohairic
+        3JOHN: urn:nabu:coptic-scriptorium:nt.3john.bohairic
+        JUDE: urn:nabu:coptic-scriptorium:nt.jude.bohairic
+        REV: urn:nabu:coptic-scriptorium:nt.rev.bohairic
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.

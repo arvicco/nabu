@@ -33,11 +33,13 @@ module Nabu
 
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
-    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes) do
+    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets) do
       # +axes+ (P15-2) is the AxisBuilder::Summary of the date/place axis
-      # regenerated from canonical after replay — nil for callers/tests that
-      # predate it, so every existing construction stays valid.
-      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil)
+      # regenerated from canonical after replay; +facets+ (P17-2) the
+      # FacetBuilder::Summary of the genre-facet table projected from the
+      # replayed documents' metadata. Both default nil for callers/tests that
+      # predate them, so every existing construction stays valid.
+      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil)
         super
       end
 
@@ -95,6 +97,9 @@ module Nabu
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
       axes = Store::AxisBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      # The facet table (P17-2) projects from the documents just replayed
+      # (their metadata_json is f(canonical)), so it regenerates here too.
+      facets = Store::FacetBuilder.rebuild!(catalog: db)
       # Reindex ONCE after all sources are back — the index is corpus-wide.
       # The alignment registry (config, not derived) rides in so alignment_refs
       # regenerates with the re-minted passage ids (architecture §10).
@@ -102,7 +107,7 @@ module Nabu
                                         alignments: AlignmentRegistry.load(@config.alignments_path),
                                         fuzzy_slugs: @registry.fuzzy_slugs)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
-                 skips: skips, indexed: indexed, axes: axes)
+                 skips: skips, indexed: indexed, axes: axes, facets: facets)
     ensure
       db&.disconnect
       fulltext&.disconnect

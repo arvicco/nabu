@@ -43,6 +43,20 @@ module Nabu
   # sections use `--delete` (an upstream deletion propagates); the db files copy
   # without `--delete` (a single-file rsync must not sweep its sibling dbs).
   # `--dry-run` prints the plan and changes nothing.
+  #
+  # == WAL sidecars (P17-7)
+  #
+  # The dbs run journal_mode=WAL (Store, architecture §5), so while any
+  # connection is open a `<db>-wal` holds recently committed transactions the
+  # main file does not yet contain (plus a `<db>-shm` index). A db file
+  # section therefore copies its LIVE sidecars along with the db — the main
+  # file alone would be a stale (or, mid-write, torn) snapshot — and prunes
+  # sidecars at the target whose source counterpart is gone (checkpointed
+  # away): restoring an OUTDATED -wal next to a NEWER main file would make
+  # SQLite replay old frames over newer data. Usually (idle corpus, nightly
+  # timing) the -wal is checkpointed away and this is a no-op; a backup taken
+  # while a writer is mid-transaction can still tear ACROSS files, exactly as
+  # it could pre-WAL — the drill (`rake ops:drill`) is the proof either way.
   class Backup
     # Raised when the backup cannot safely proceed (no target configured, or the
     # mount-point guard tripped). Loud on purpose — a refused backup is a
@@ -53,6 +67,10 @@ module Nabu
     # subdir; +directory+ distinguishes a contents-copy (canonical/, config/)
     # from a single-file copy (a db).
     Section = Data.define(:name, :source, :dest, :delete, :directory)
+
+    # A WAL db's sidecar suffixes (class doc above): copied while live,
+    # pruned at the target once the source checkpoints them away.
+    SIDECAR_SUFFIXES = ["-wal", "-shm"].freeze
 
     # What one section's rsync did (or would do, under --dry-run).
     # status: :ok | :skipped (source absent) | :failed (rsync nonzero).
@@ -140,6 +158,7 @@ module Nabu
 
       mkdir_dest(section) unless @dry_run
       @shell.run(*rsync_argv(section))
+      prune_stale_sidecars(section) unless @dry_run
       done(section, :ok, started)
     rescue Nabu::Shell::Error => e
       SectionResult.new(name: section.name, source: section.source, dest: section.dest,
@@ -151,14 +170,36 @@ module Nabu
       argv = ["rsync", "-a"]
       argv << "--delete" if section.delete
       argv << "--dry-run" if @dry_run
-      argv << rsync_source(section) << section.dest
+      argv.concat(rsync_sources(section)) << section.dest
       argv
     end
 
     # A directory section copies its CONTENTS (trailing slash); a file section
-    # copies the file itself into the db dir.
-    def rsync_source(section)
-      section.directory ? File.join(section.source, "") : section.source
+    # copies the file itself into the db dir, plus any live WAL sidecars
+    # (class doc: the -wal holds commits the main file lacks).
+    def rsync_sources(section)
+      return [File.join(section.source, "")] if section.directory
+
+      [section.source, *sidecars(section.source)]
+    end
+
+    # The WAL sidecars of +path+ that exist right now.
+    def sidecars(path)
+      SIDECAR_SUFFIXES.map { |suffix| "#{path}#{suffix}" }.select { |sidecar| File.exist?(sidecar) }
+    end
+
+    # File sections copy without --delete (must not sweep sibling dbs), so a
+    # sidecar an EARLIER backup copied lingers at the target after the source
+    # checkpoints it away — and a stale -wal would be replayed over the newer
+    # main file on restore. Prune exactly those two names, nothing else.
+    def prune_stale_sidecars(section)
+      return if section.directory
+
+      SIDECAR_SUFFIXES.each do |suffix|
+        next if File.exist?("#{section.source}#{suffix}")
+
+        FileUtils.rm_f(File.join(section.dest, "#{File.basename(section.source)}#{suffix}"))
+      end
     end
 
     def mkdir_dest(section)
@@ -181,11 +222,10 @@ module Nabu
     end
 
     def measure(section)
-      if section.directory
-        measure_tree(section.source)
-      else
-        [1, safe_size(section.source)]
-      end
+      return measure_tree(section.source) if section.directory
+
+      files = [section.source, *sidecars(section.source)]
+      [files.size, files.sum { |path| safe_size(path) }]
     end
 
     def measure_tree(root)

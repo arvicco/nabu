@@ -163,18 +163,43 @@ module Nabu
       def resolve(row, editions)
         work = row.fetch(:cts_work)
         citation = row.fetch(:citation)
-        return nil if work.nil? || citation.nil?
+        return nil if work.nil?
 
         edition_urns = (editions[work] ||= editions_of(work))
         return nil if edition_urns.empty?
+        # Document-grain honesty (P17-4): a held work cited WITHOUT a
+        # passage citation resolves to the document itself when the work is
+        # keyed by its own nabu document urn (MW → GRETIL; Mn./Pāṇ. cite at
+        # document grain by design). CTS works keep the old nil — a bare
+        # work reference there names an abstract work, not a show-able doc.
+        return document_urn?(work) ? edition_urns.first : nil if citation.nil?
 
-        candidates = citation_forms(citation).flat_map do |form|
+        candidates = candidate_forms(work, citation).flat_map do |form|
           edition_urns.map { |urn| "#{urn}:#{form}" }
         end
         existing = @catalog[:passages]
                    .where(urn: candidates, withdrawn: false)
                    .select_map(:urn).to_set
         candidates.find { |urn| existing.include?(urn) }
+      end
+
+      # A cts_work that IS an in-catalog document urn (urn:nabu:… — the MW
+      # → GRETIL shape) versus a CTS work prefix that documents extend with
+      # an edition token.
+      def document_urn?(work)
+        work.start_with?("urn:nabu:")
+      end
+
+      # Candidate citation forms: document-urn works probe the exact
+      # citation then the pada suffixes (P17-4 — GRETIL verse editions cite
+      # quarter/half-verses: RV 5.086.05 lives as 5.086.05a/05c; a bounded
+      # variant of the citation_forms fallback, tried in order so an exact
+      # verse always wins). CTS works keep the classical chapter/section
+      # fallback.
+      def candidate_forms(work, citation)
+        return citation_forms(citation) unless document_urn?(work)
+
+        [citation, *%w[a b c d].map { |pada| "#{citation}#{pada}" }]
       end
 
       # The citation as cited, then — for 3+-part citations — the classical
@@ -192,8 +217,11 @@ module Nabu
 
       # Live editions of +work+, original language first (translations are a
       # last resort — a lexicon cites the source text), then urn order for
-      # determinism.
+      # determinism. A document-urn work (P17-4) has exactly itself as its
+      # edition when the document is live.
       def editions_of(work)
+        return @catalog[:documents].where(urn: work, withdrawn: false).select_map(:urn) if document_urn?(work)
+
         @catalog[:documents]
           .where(Sequel.like(:urn, "#{work.gsub(/[%_]/) { |ch| "\\#{ch}" }}.%"))
           .where(withdrawn: false)

@@ -3,9 +3,11 @@
 require "test_helper"
 require "tmpdir"
 
-# The reconstruction shelf source (P14-1, architecture §12): ONE source,
-# THREE dictionaries — kaikki.org's Proto-Slavic / Proto-Indo-European /
-# Proto-Germanic wiktextract extracts through the existing wiktionary-jsonl
+# The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2):
+# ONE source, SEVEN dictionaries — kaikki.org's Proto-Slavic /
+# Proto-Indo-European / Proto-Germanic plus the P17-3 Proto-Balto-Slavic /
+# Proto-West Germanic / Proto-Italic / Proto-Indo-Iranian wiktextract
+# extracts through the existing wiktionary-jsonl
 # family with reflexes: on. Dictionary-shaped (no passage conformance
 # suite); mirrors the WiktionaryCuTest checks for the dictionary shape and
 # adds the multi-file FileFetch choreography (per-extract subdirs, shared
@@ -21,7 +23,15 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-ine-pro" => "https://kaikki.org/dictionary/Proto-Indo-European/" \
                             "kaikki.org-dictionary-ProtoIndoEuropean.jsonl",
     "wiktionary-gem-pro" => "https://kaikki.org/dictionary/Proto-Germanic/" \
-                            "kaikki.org-dictionary-ProtoGermanic.jsonl"
+                            "kaikki.org-dictionary-ProtoGermanic.jsonl",
+    "wiktionary-ine-bsl-pro" => "https://kaikki.org/dictionary/Proto-Balto-Slavic/" \
+                                "kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
+    "wiktionary-gmw-pro" => "https://kaikki.org/dictionary/Proto-West%20Germanic/" \
+                            "kaikki.org-dictionary-ProtoWestGermanic.jsonl",
+    "wiktionary-itc-pro" => "https://kaikki.org/dictionary/Proto-Italic/" \
+                            "kaikki.org-dictionary-ProtoItalic.jsonl",
+    "wiktionary-iir-pro" => "https://kaikki.org/dictionary/Proto-Indo-Iranian/" \
+                            "kaikki.org-dictionary-ProtoIndoIranian.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -47,7 +57,11 @@ class WiktionaryReconTest < Minitest::Test
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ["wiktionary-sla-pro:kaikki.org-dictionary-ProtoSlavic.jsonl",
                   "wiktionary-ine-pro:kaikki.org-dictionary-ProtoIndoEuropean.jsonl",
-                  "wiktionary-gem-pro:kaikki.org-dictionary-ProtoGermanic.jsonl"],
+                  "wiktionary-gem-pro:kaikki.org-dictionary-ProtoGermanic.jsonl",
+                  "wiktionary-ine-bsl-pro:kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
+                  "wiktionary-gmw-pro:kaikki.org-dictionary-ProtoWestGermanic.jsonl",
+                  "wiktionary-itc-pro:kaikki.org-dictionary-ProtoItalic.jsonl",
+                  "wiktionary-iir-pro:kaikki.org-dictionary-ProtoIndoIranian.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -56,12 +70,15 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_three_reconstruction_dictionaries
+  def test_parse_yields_the_seven_reconstruction_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
-    assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro],
+    assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
+                    wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
+                    wiktionary-iir-pro],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro], documents.map(&:language)
-    assert_equal [75, 61, 74], documents.map(&:size)
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro],
+                 documents.map(&:language)
+    assert_equal [77, 63, 75, 3, 3, 2, 3], documents.map(&:size)
   end
 
   def test_entries_carry_reflexes_the_crosswalk_edges
@@ -69,6 +86,34 @@ class WiktionaryReconTest < Minitest::Test
     bog = slavic.entries.find { |e| e.entry_id == "bogъ:noun:2" } || flunk("bogъ:noun:2 missing")
     refute_empty bog.reflexes
     assert(bog.reflexes.any? { |r| r.language == "chu" && r.word_folded == "богъ" })
+  end
+
+  # P17-3: the borrowed flag rides the crosswalk edge. In *hlaibaz's real
+  # tree the marker sits on the PROTO-TO-PROTO edge (raw_tags ["borrowed"]
+  # on the sla-pro *xlěbъ node) while the got/ang nodes parse false — the
+  # design-load-bearing shape the closure ORs along the path.
+  def test_reflexes_carry_the_borrowed_flag_per_edge
+    gem = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+                                    .find { |doc| doc.slug == "wiktionary-gem-pro" }
+    hlaibaz = gem.entries.find { |e| e.entry_id == "hlaibaz:noun" } || flunk("hlaibaz:noun missing")
+    xleb = hlaibaz.reflexes.find { |r| r.language == "sla-pro" } || flunk("sla-pro *xlěbъ edge missing")
+    assert xleb.borrowed, "the gem-pro → sla-pro *xlěbъ edge is upstream-flagged borrowed"
+    got = hlaibaz.reflexes.find { |r| r.language == "got" } || flunk("got hlaifs edge missing")
+    refute got.borrowed, "the Gothic reflex is inherited — parsed false, not NULL"
+  end
+
+  # P17-3: the new fold keys. The iir-pro headword *adᶻdʰáH carries the ᶻ
+  # modifier letter (→ z) and ʰ (→ h); the ine-bsl-pro headword *wárˀnāˀ
+  # carries the glottal-stop letter ˀ (→ dropped, ×310 upstream). Both must
+  # be reachable by an ASCII typist (conventions §9).
+  def test_new_shelf_headwords_fold_for_ascii_queries
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    iir = documents.find { |doc| doc.slug == "wiktionary-iir-pro" }
+    assert(iir.entries.any? { |e| e.headword_folded == "adzdhah" },
+           "*adᶻdʰáH must fold ᶻ→z ʰ→h (got #{iir.entries.map(&:headword_folded).inspect})")
+    pbs = documents.find { |doc| doc.slug == "wiktionary-ine-bsl-pro" }
+    assert(pbs.entries.any? { |e| e.headword_folded == "warna" },
+           "*wárˀnāˀ must drop ˀ entirely (got #{pbs.entries.map(&:headword_folded).inspect})")
   end
 
   def test_entry_ids_are_unique_per_dictionary_and_stable_across_independent_passes
@@ -104,8 +149,10 @@ class WiktionaryReconTest < Minitest::Test
       assert_instance_of Nabu::FetchReport, report
       assert_match(/\A\h{64}\z/, report.sha)
       assert_match(/sla-pro/, report.notes)
-      assert_equal 3, adapter.discover(workdir).count, "all three extracts discoverable in place"
-      %w[proto-slavic proto-indo-european proto-germanic].each do |subdir|
+      assert_match(/iir-pro/, report.notes)
+      assert_equal 7, adapter.discover(workdir).count, "all seven extracts discoverable in place"
+      %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
+         proto-west-germanic proto-italic proto-indo-iranian].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -125,9 +172,10 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 3, targets.size
+    assert_equal 7, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[proto-germanic proto-indo-european proto-slavic],
+    assert_equal %w[proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
+                    proto-italic proto-slavic proto-west-germanic],
                  targets.map(&:state_subdir).sort
     targets.each do |target|
       assert_nil target.metadata_url
@@ -151,7 +199,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 210, first.added
+    assert_equal 226, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -159,7 +207,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 210, second.skipped
+    assert_equal 226, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

@@ -108,7 +108,8 @@ module Nabu
       ETYM_MAX_LIMIT = 10
       ETYM_MAX_COGNATES = 20
       DEFINE_MAX_REFLEXES = ETYM_MAX_COGNATES
-      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
+      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro
+                        ine-bsl-pro gmw-pro itc-pro iir-pro].freeze
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
       # Cognates-in-parallel (P15-3): (verse, root) groups per response — a
@@ -216,12 +217,13 @@ module Nabu
         "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
         "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
         "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body), and " \
-        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic, same " \
+        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic/" \
+        "Proto-Balto-Slavic/Proto-West Germanic/Proto-Italic/Proto-Indo-Iranian, same " \
         "extract family): a LEADING ASTERISK scopes to reconstructions (*bogъ), whose " \
         "entries also list their descendant reflexes with corpus attestation counts " \
         "(nabu_etym walks the same crosswalk from an attested lemma). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|sla-pro|ine-pro|" \
-        "gem-pro) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|or a -pro shelf " \
+        "code) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
         "dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
@@ -234,13 +236,16 @@ module Nabu
       ETYM_DESCRIPTION =
         "Walk the reconstruction crosswalk (the comparativist's join): give an ATTESTED " \
         "lemma (богъ, guþ, deus) and get every reconstructed ancestor whose Wiktionary " \
-        "descendants name it — Proto-Slavic, Proto-Indo-European, Proto-Germanic (kaikki.org " \
+        "descendants name it — Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, " \
+        "Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian (kaikki.org " \
         "extracts, CC-BY-SA + GFDL; PRESERVE license fields when quoting). Each entry " \
-        "carries the *headword, gloss, the reflex that matched (matched_via), its COGNATES " \
+        "carries the *headword, gloss, the reflex that matched (matched_via, incl. its " \
+        "borrowed loan flag), its COGNATES " \
         "across languages with corpus attestation counts (attested_count = gold-lemma " \
-        "passages in this catalog; null = not attested here, an absence not a zero), and " \
-        "one hop of proto-to-proto ancestors (a Proto-Slavic entry's PIE root, with ITS " \
-        "cognates — the cross-family view: богъ→*bogъ→*bʰeh₂g-→ἔφᾰγον). Romanization " \
+        "passages in this catalog; null = not attested here, an absence not a zero) and " \
+        "per-edge borrowed flags, and nested `ancestors` — the full chain up the proto " \
+        "shelves (прьстъ→*pьrstъ→*pírštan→*per-), bounded because each shelf enters a " \
+        "walk once; a loan edge carries edge_borrowed: true. Romanization " \
         "bridges scripts: guþ reaches *gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the match " \
         "to one attested language; a leading asterisk (*bogъ) looks a reconstruction up " \
         "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
@@ -251,14 +256,16 @@ module Nabu
         "where witnesses in TWO OR MORE languages use reflexes of the SAME reconstruction root — " \
         "Gothic salt ~ OCS соль under PIE *sḗh₂l in the salt saying (Luke 14:34). The alignment " \
         "hub (nabu_align) supplies the verse columns; the Wiktionary reconstruction crosswalk " \
-        "(nabu_etym) supplies the lemma→root closure, one proto-to-proto hop deep " \
+        "(nabu_etym) supplies the lemma→root closure over the shelf-visited multi-hop walk " \
         "(got→*saltą→*sḗh₂l←*solь←chu). `target` is a work id (batch the work) or a " \
         "citation/chapter/book ref; `langs` restricts to ≥2 named languages (e.g. " \
         "[\"got\",\"chu\"]). Each group carries the verse ref, the root (headword, SHELF " \
         "language, gloss, license — PRESERVE license fields when quoting), and per-language " \
-        "witness words (lemma, attested surface forms, attesting documents with licenses). READ " \
-        "THE SHELF: a meet at gem-pro involving a Slavic witness is very possibly a BORROWING " \
-        "(Wiktionary descendant trees include loans — hlaifs ~ хлѣбъ), not common descent; " \
+        "witness words (lemma, attested surface forms, attesting documents with licenses, and " \
+        "a `borrowed` flag: true = the crosswalk marks this witness's descent a loan — " \
+        "hlaifs ~ хлѣбъ(borrowed:true) at *hlaibaz; null = not yet flagged either way). READ " \
+        "THE SHELF for unflagged edges: a meet at gem-pro involving a Slavic witness is very " \
+        "possibly a BORROWING, not common descent; " \
         "ine-pro meets are the inheritance signal. Corpus-common words are suppressed with an " \
         "honest count (`all` lifts; frequency is a coarse proxy and some common words survive). " \
         "Recall is bounded by Wiktionary coverage (~1/3 of Gothic, ~1/5 of OCS gold lemma types " \
@@ -1021,7 +1028,13 @@ module Nabu
         )
       end
 
-      def etym_payload(result, ancestors: true)
+      # P17-3: ancestors nest recursively — the shelf-visited walk bounds
+      # the depth (each dictionary language enters a walk once), so the
+      # payload stays finite without a depth constant. edge_borrowed is the
+      # loan flag of the edge that reached an ancestor (null = unflagged
+      # top-level entry OR a row predating the flag reparse — an unknown,
+      # never a claimed false).
+      def etym_payload(result)
         base = {
           urn: result.urn, dictionary: result.dictionary_slug,
           dictionary_title: result.dictionary_title, headword: result.headword,
@@ -1032,10 +1045,12 @@ module Nabu
         if result.matched_reflex
           base[:matched_via] = { language: result.matched_reflex.language,
                                  word: result.matched_reflex.word,
-                                 roman: result.matched_reflex.roman }
+                                 roman: result.matched_reflex.roman,
+                                 borrowed: result.matched_reflex.borrowed }
         end
+        base[:edge_borrowed] = result.edge_borrowed unless result.edge_borrowed.nil?
         base.merge!(reflex_fields(result.cognates, cap: ETYM_MAX_COGNATES, key: :cognates))
-        base[:ancestors] = result.ancestors.map { |a| etym_payload(a, ancestors: false) } if ancestors
+        base[:ancestors] = result.ancestors.map { |a| etym_payload(a) }
         base
       end
 
@@ -1059,7 +1074,11 @@ module Nabu
                   gloss: group.root.gloss, license: group.root.license,
                   license_class: group.root.license_class, source: group.root.source_slug },
           witnesses: group.witnesses.map do |witness|
-            { language: witness.language, lemma: witness.lemma, surfaces: witness.surfaces,
+            # borrowed (P17-3): true = the crosswalk flags this witness's
+            # descent a loan; false = parsed unflagged; null = closure
+            # predates the flag (unknown, not a claimed false).
+            { language: witness.language, lemma: witness.lemma, borrowed: witness.borrowed,
+              surfaces: witness.surfaces,
               documents: witness.document_urns.map do |urn|
                 doc = documents.fetch(urn, {})
                 { urn: urn, license_class: doc[:license_class], source: doc[:source_slug] }

@@ -1,14 +1,14 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All three files are documented TRIMs (whole: false) of the upstream
-# reconstruction extracts (210 of 13,053 lines total, selected strata;
-# every kept line byte-verbatim), so a fresh GET returns the full extract
-# and is fetched for URL-liveness only, never byte-compared. Re-apply the
-# README extraction recipe after any refresh. NOTE the upstream files are
-# labelled DEPRECATED (wiktextract #1178) though they serve today; if a
-# URL 404s, the fallback is filtering the full enwiktionary extract by
-# lang_code (README).
+# All seven files are documented TRIMs (whole: false) of the upstream
+# reconstruction extracts (226 of 20,639 lines total, selected strata +
+# the P17-3 goldens; every kept line byte-verbatim), so a fresh GET
+# returns the full extract and is fetched for URL-liveness only, never
+# byte-compared. Re-apply the README extraction recipes after any
+# refresh. NOTE the upstream files are labelled DEPRECATED (wiktextract
+# #1178) though they serve today; if a URL 404s, the fallback is
+# filtering the full enwiktionary extract by lang_code (README).
 source: wiktionary-recon
 adapter_test: test/adapters/wiktionary_recon_test.rb
 retrieved: 2026-07-12
@@ -16,12 +16,28 @@ files:
   - path: kaikki.org-dictionary-ProtoSlavic.jsonl
     url: https://kaikki.org/dictionary/Proto-Slavic/kaikki.org-dictionary-ProtoSlavic.jsonl
     whole: false
-    trim: 75 stratified lines (demo chain bogъ+cěsařь; first-4 cu/orv/sl reflex records; 3 homographs; 2 no-descendants + 2 no-etymology + 2 glossless + 1 grouping-only; 3 Glagolitic + 2 tagged reflexes; every 100th line) — 47,623,549 B -> 578,110 B; recipe in README.md
+    trim: 75 stratified lines (demo chain bogъ+cěsařь; first-4 cu/orv/sl reflex records; 3 homographs; 2 no-descendants + 2 no-etymology + 2 glossless + 1 grouping-only; 3 Glagolitic + 2 tagged reflexes; every 100th line) + 2 P17-3 goldens appended 2026-07-13 (xlěbъ, pьrstъ; same upstream sha) — 47,623,549 B -> 595,898 B; recipes in README.md
   - path: kaikki.org-dictionary-ProtoIndoEuropean.jsonl
     url: https://kaikki.org/dictionary/Proto-Indo-European/kaikki.org-dictionary-ProtoIndoEuropean.jsonl
     whole: false
-    trim: 61 stratified lines (demo chain bʰeh₂g-/ǵʰutós/gʷʰew-/bʰeh₂ǵos/swé; first-3 grc/la/sa/xcl/hit + sla-pro/gem-pro proto-edge records; 3 homographs; structural edges; every 50th line) — 12,026,624 B -> 360,147 B; recipe in README.md
+    trim: 61 stratified lines (demo chain bʰeh₂g-/ǵʰutós/gʷʰew-/bʰeh₂ǵos/swé; first-3 grc/la/sa/xcl/hit + sla-pro/gem-pro proto-edge records; 3 homographs; structural edges; every 50th line) + 2 P17-3 goldens appended 2026-07-13 (per- root #1, kʷís; same upstream sha) — 12,026,624 B -> 412,180 B; recipes in README.md
   - path: kaikki.org-dictionary-ProtoGermanic.jsonl
     url: https://kaikki.org/dictionary/Proto-Germanic/kaikki.org-dictionary-ProtoGermanic.jsonl
     whole: false
-    trim: 74 stratified lines (demo chain gudą+kaisaraz; first-4 got/ang/non reflex records; 3 homographs; structural edges; 2 tagged reflexes; every 100th line; + upstream line 4539, the lone malformed "ML." lang_code) — 65,338,100 B -> 970,350 B; recipe in README.md
+    trim: 74 stratified lines (demo chain gudą+kaisaraz; first-4 got/ang/non reflex records; 3 homographs; structural edges; 2 tagged reflexes; every 100th line; + upstream line 4539, the lone malformed "ML." lang_code) + 1 P17-3 golden appended 2026-07-13 (hlaibaz — the borrowed-flagged gem→sla-pro edge; same upstream sha) — 65,338,100 B -> 985,448 B; recipes in README.md
+  - path: kaikki.org-dictionary-ProtoBaltoSlavic.jsonl
+    url: https://kaikki.org/dictionary/Proto-Balto-Slavic/kaikki.org-dictionary-ProtoBaltoSlavic.jsonl
+    whole: false
+    trim: 3 P17-3 lines (duktḗ — borrowed-flagged Finnic/Samic/Mordvinic edges; pírštan — the multi-hop golden; wárˀnāˀ — the ˀ fold quirk) — 1,692,429 B -> 16,661 B; recipe in README.md
+  - path: kaikki.org-dictionary-ProtoWestGermanic.jsonl
+    url: https://kaikki.org/dictionary/Proto-West%20Germanic/kaikki.org-dictionary-ProtoWestGermanic.jsonl
+    whole: false
+    trim: 3 P17-3 lines (faru:1/faru:2 — etymology_number homographs, sl barva borrowed; hlaib — ang hlāf gold + the sco/en modern tail) — 49,438,078 B -> 42,506 B; recipe in README.md
+  - path: kaikki.org-dictionary-ProtoItalic.jsonl
+    url: https://kaikki.org/dictionary/Proto-Italic/kaikki.org-dictionary-ProtoItalic.jsonl
+    whole: false
+    trim: 2 P17-3 lines (gʷōs — la bōs flagged borrowed, the loan INTO Latin; kʷis — clean inherited quis/quid with a PIE parent) — 5,229,349 B -> 10,256 B; recipe in README.md
+  - path: kaikki.org-dictionary-ProtoIndoIranian.jsonl
+    url: https://kaikki.org/dictionary/Proto-Indo-Iranian/kaikki.org-dictionary-ProtoIndoIranian.jsonl
+    whole: false
+    trim: 3 P17-3 lines (bʰráHtā — the sa roman script bridge; kšatrám — flagged xcl loan layer; adᶻdʰáH — ᶻ/ˢ fold class) — 3,338,611 B -> 16,731 B; recipe in README.md
