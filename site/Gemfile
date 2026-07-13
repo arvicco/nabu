@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+# Self-contained Gemfile for the static site ONLY — deliberately separate
+# from the application's Gemfile (the dependency budget rule applies to the
+# app; the site is built by GitHub Actions, this file serves local preview).
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.3"
