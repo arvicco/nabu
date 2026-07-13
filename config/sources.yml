@@ -265,6 +265,18 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+mw:
+  adapter: Nabu::Adapters::Mw
+  enabled: false   # P17-4 (2026-07-13): first real sync is owner-fired — 11 MB
+                   # zip fetch, 286,525 records / 193,890 grouped entries,
+                   # ~100-130 MB catalog growth (CLAUDE.md checklist §6:
+                   # bin/nabu sync mw, eyeball the per-siglum citation coverage
+                   # + `nabu define aṃśa` / `define bhāṣ`, then flip).
+  # Cologne CDSL Monier-Williams 1899 (CC BY-NC-SA 3.0, class nc — the GRETIL
+  # class; license inside the zip, mwheader.xml). Upstream is ACTIVELY
+  # corrected (Last-Modified 2026-07) but a refetch is an owner decision.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

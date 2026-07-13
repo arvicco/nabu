@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files live INSIDE upstream's mwxml.zip (there is no per-file
+# raw URL), so none is whole-file byte-comparable by a plain GET: mw.xml is
+# a documented TRIM (whole: false) and even the verbatim dtd/header would
+# need the zip unpacked first — the sentinel fetches the zip URL for
+# liveness only. Re-apply the README extraction recipe after any refresh.
+source: mw
+adapter_test: test/adapters/mw_test.rb
+retrieved: 2026-07-13
+files:
+  - path: mw.xml
+    url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
+    whole: false
+    trim: 26 record lines of 286,530 (aṃśa L10-27.1 group, aṃs/aṃsa L44-92.1 cognate cluster, akūpāra L313, √bhāṣ L150479 + bhāṣaṇa L150481-2) + header/footer — 64 MB -> 6.5 KB; recipe in README.md
+  - path: mw.dtd
+    url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
+    whole: false
+    trim: verbatim member xml/mw.dtd of the zip (whole FILE, but inside the zip — not byte-comparable by raw GET)
+  - path: mwheader.xml
+    url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
+    whole: false
+    trim: verbatim member xml/mwheader.xml of the zip (the operative CC BY-NC-SA 3.0 grant; whole FILE inside the zip)
