@@ -5634,6 +5634,22 @@ wait, busy_timeout + journal_mode pinned on all 7 connect paths,
 rollback→WAL self-heal; backup sidecar ride-along/prune/dry-run).
 Suite 2055/29,104 exit 0, lint 263 files exit 0.
 
+## P17-8 · PIE/comparativistics sources survey  [tier: opus, scout] [status: scouting] [deps: —]
+Owner (2026-07-13): "Dispatch a scout on other PIE sources, I feel we're
+thin on comparativistics." Beyond kaikki (held: 3 proto shelves + 4 more
+landing in P17-3): survey the machine-readable comparativistics field —
+Pokorny IEW digitizations (UT-Austin LRC, dnghu, Starling), LIV/NIL
+digital state, IE-CoR / IELex / CoBL cognacy databases (Jena/MPI-EVA —
+CLDF, licenses), the Lexibank/CLDF ecosystem generally (cognate-coded
+wordlists, CC-labeled), Tower of Babel/Starling (license reality),
+PIE Lexicon (Pyysalo, Helsinki), UT LRC etyma lists, anything serving
+laryngeal-notated reconstructions with DESCENDANTS/cognate-set structure
+that joins our gold shelves. Per-item: format, entry/cognate-set counts,
+license verdict (paywalled Brill dictionaries = blocked, named), and the
+measured-or-projected join story against dictionary_reflexes/etym (the
+kaikki-shelf precedent: record-level rates). Ranked verdict + fixture
+sketches for the gate; honest "print-only, no unblock" list.
+
 # ── Phase 18 queue (owner-approved 2026-07-13, dispatch next phase) ──
 # 1. Etruscan adapter (P17-5 Phase B): OpenEtruscan CSV (new flat-CSV
 #    parser family, skip ocr_failed, fuzzy_index, BCE sign-flip pin) +
