@@ -5605,7 +5605,7 @@ P15-3-named `borrowed` column on dictionary_reflexes so cognates/etym
 distinguish inheritance from loan PER EDGE, not just by meet-shelf
 heuristic. Size/count census per extract; fixture plan.
 
-## P17-4 · Monier-Williams (Cologne CDSL)  [tier: opus, two-phase] [status: scouting] [deps: —]
+## P17-4 · Monier-Williams (Cologne CDSL)  [tier: opus, two-phase] [status: done 2026-07-13] [deps: —]
 Register §1.3's named next occupant for Sanskrit. LICENSE SCOUT FIRST
 (CDSL terms vary per dictionary — the register's own warning; record
 the verdict + posture mapping before any fixture plan). Deep layers:
@@ -5618,6 +5618,54 @@ dictionary-native comparativistics layer: census whether these parse
 reliably enough to mint crosswalk edges, distinct from kaikki's);
 etymology cross-references between entries. Would complete the
 per-language desk loop: LSJ:grc :: L&S:lat :: B-T:ang :: MW:san.
+PHASE A (2026-07-13): docs/mw-survey.md — CC BY-NC-SA 3.0 → `nc`
+(mwheader.xml is the grant, per-dictionary; upstream NOT frozen,
+Last-Modified 2026-07); whole-corpus census 286,525 records / 193,890
+grouped entries; headwords SLP1 not Devanagari (backlog lead corrected);
+328,060 <ls> citations, RV resolution verified end-to-end; cognate layer
+973 records / 2,537 tags / 98.9% parseable. Fixture plan owner-approved.
+PHASE B FINDINGS (2026-07-13): (1) `Mw` adapter + `mw-xml` family
+shipped — FileFetch of mwxml.zip (sha pin), parse streams the xml/mw.xml
+member via `unzip -p` (canonical stays the 11 MB zip); ONE ref id
+`mw:mw.xml` for both plain-file (fixtures) and zip shapes. H1–H4 mains
+group their A/B/C/E continuations by file adjacency; entry_id = Cologne
+<L>, urn:nabu:dict:mw:<L>. (2) `Nabu::Slp1` transcoder, deterministic
+BOTH directions (x→ḷ vs L→ḻ keeps the reverse map unambiguous; accents
+a/MSa→áṃśa round-trip; digraphs longest-match-first) — the betacode
+precedent, NO conventions-§9 change; fold("aṃśa")=fold(GRETIL IAST)=
+"amsa" verified in tests. (3) Citations: curated MwSigla map — 24
+GRETIL-held works (filenames verified against the mmehner mirror
+listing) + 11 authority labels; roman→arabic + per-work sprintf pad
+templates ("RV. v, 86, 5" → 5.086.05); Define grew document-urn work
+resolution + bounded pada-suffix probing (a–d; exact verse wins) and
+document-grain citations now resolve to the DOCUMENT urn (nabu-urn
+works only — CTS bare-work refs keep nil). Per-siglum coverage via
+`Mw.citation_coverage` printed at every sync through a generic CLI
+respond_to? hook — tier totals + live-resolution fractions, "document
+not in catalog" never faked. (4) Cognate notes → dictionary_reflexes
+with ZERO schema change (survey §4 state machine: coordination "Goth.
+and Germ. un" shared, register markers ep./Ved. filtered; Gk./Lat./
+Goth./Lith./Angl.Sax./Zd.→ae/Eng./Germ./Russ./Armen. mapped, Slav./Hib.
+display-only) — etym walks a Greek lemma (ὦμος) to the MW aṃsa entry as
+a SECOND witness beside kaikki, tested; P17-3's borrowed column will
+read NULL on these rows honestly (migration 010 untouched). (5) Grammar
+apparatus → a `grammar:` body line (lex genders incl. f#-stems
+transcoded, verb class-pada, Westergaard/Whitney refs); See-refs ride
+the body via the transcode. Fixtures test/fixtures/mw/ (26 record lines
+= 11 entries: aṃśa L10-27.1 with the verified RV citation, aṃs/aṃsa
+L44-92.1 cognate cluster, akūpāra L313 <ls n=> restoration, √bhāṣ
+L150479 verb apparatus, bhāṣaṇa) + verbatim mw.dtd + mwheader.xml (the
+license travels in-fixture) + README/manifest. Registry `enabled:
+false`, sync_policy manual — first real sync OWNER-FIRED (11 MB GET →
+~100–130 MB catalog; eyeball coverage output + define aṃśa/bhāṣ).
+DEFERRED-TO-REVIEW: non-RV passage-grain templates (BhP/R/Ragh/Yājñ/
+Kum/Sāh/MārkP/VP/Daś) encode the survey's census shapes but were not
+re-verified against the live catalog (db access embargoed mid-packet —
+coordinator, owner rebuild in flight); wrong templates yield honest
+query-time misses, never fake links. v2 (surveyed, priced): ibid
+propagation (+10.4k), Devanagari display forms, See-ref/phwparent →
+links graph, root families, full 871-sigla key, Mn./Pāṇ. re-grain.
+Suite 2097 runs / 29,355 assertions green, lint clean, exit 0/0.
 
 ## P17-5 · Etruscan axis scout  [tier: opus, two-phase] [status: Phase A done 2026-07-13 — owner gate PASSED: fixture plan approved, OpenEtruscan ingests under `attribution` (Larth-provenance caveat journaled + license_watch on the Zenodo record); Phase B adapter → P18 queue] [deps: —]
 Owner axis voiced 2026-07-13 ("One more axis I'd like to explore while
