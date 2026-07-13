@@ -5974,3 +5974,29 @@ facets from live db), improvements register (§2.2/§2.3 → shipped,
 §1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
 new source are owner-fired; fixture-plan approvals happen mid-phase at
 the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.
+
+# ── Phase 18 ──────────────────────────────────────────────────────────
+
+## P18-1 · Coptic coverage: span inventory + headerless files  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-13, post third sync): "Quite a bit of errors still" —
+the run COMPLETED (P17-10 held: +36/=152/!277, no abort) but coverage
+is 188 of 465 discovered docs + 295 unrecognized files. Two censused
+populations, both fix-here: (1) THE 277 QUARANTINES — CopticTtParser's
+strict span inventory rejects 32 span types the fixtures never saw
+(P17-10 census: ed_page_n 58×, supplied_reason 42×, entity_identity
+30×, abbr 21×, petermann/marcion_chapter_n, gap*, …) plus 9 structural
+rejects (8 NT zip books with unsegmented stretches, 1 copticMag
+namespace). Widen the inventory FROM THE CENSUS: each span type gets a
+deliberate verdict (ingest-as-annotation / fold-into-existing /
+ignore-counted), never a silent pass-through; the unsegmented-stretch
+and copticMag cases get their own argued handling. (2) THE 295
+UNRECOGNIZED — "no usable TT meta header" (helias, acts-pilate parts,
+theodosius encomia, lament-mary…): census the actual header shapes in
+those files (likely a 4th/5th TT dialect or header-in-part1-only
+multi-part works needing group-level meta); extend the parser or
+skip-by-rule with a NAMED rule, never "unrecognized" for files a human
+can read. Target: state the honest post-fix coverage number (docs of
+465 + files of ~760). Recovery = parse-only resync (owner-fired).
+Fixtures: trim real offenders per quirk (canonical tree on disk —
+copy+trim, no network). Frozen-URN guarantee: 188 loaded docs re-mint
+identically.
