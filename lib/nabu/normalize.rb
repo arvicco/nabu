@@ -106,8 +106,18 @@ module Nabu
     PROTO_FOLD = ->(str) { str.tr("ʰʷ", "hw") }
     private_constant :PROTO_FOLD
 
+    #   cop  Coptic (P17-1): delete the morphological divider ⳿ (U+2CFF,
+    #        category Po — an editorial mark attached to its letter, e.g.
+    #        ⲙⲏⲣ⳿, not text). It is the ONLY non-Mn editorial mark the
+    #        fixture census found in the diplomatic layer: the supralinear
+    #        strokes and overlines (U+0304/0305/0307/0308, U+FE24–FE26
+    #        combining half marks) are all Mn and fall to the generic strip
+    #        (the improvements §2.2 "supralinear strokes" question,
+    #        answered; conventions §9). 1→0 deletion — fold_with_map
+    #        handles chars that fold away entirely.
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
+      "cop" => ->(str) { str.delete("⳿") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
       "sux" => CUNEIFORM_FOLD,

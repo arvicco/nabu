@@ -38,11 +38,13 @@ module Nabu
 
       # Per-source dated/placed DOCUMENT counts (+total+ sums them), plus the
       # honest residues: hgv_files/hgv_invalid (P15-2), oracc_undated (members
-      # whose date didn't resolve — skipped, counted, never guessed) and
-      # torot_annals (the passage-grain annal rows behind the torot documents).
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot,
-                            :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals) do
-        def total = hgv + goo300k + imp + oracc + torot
+      # whose date didn't resolve — skipped, counted, never guessed),
+      # torot_annals (the passage-grain annal rows behind the torot documents)
+      # and coptic_invalid (P17-1 — year-0/unparseable TT headers, skipped).
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic,
+                            :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
+                            :coptic_invalid) do
+        def total = hgv + goo300k + imp + oracc + torot + coptic
       end
 
       module_function
@@ -57,10 +59,13 @@ module Nabu
         imp = build_year_from_urn(catalog, "urn:nabu:imp:", "imp")
         oracc = OraccDates.build(catalog: catalog, canonical_dir: canonical_dir)
         torot = ChronicleAnnals.build(catalog: catalog, canonical_dir: canonical_dir)
+        coptic = CopticScriptoriumDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
+                    coptic: coptic[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
-                    oracc_undated: oracc[:undated], torot_annals: torot[:annals])
+                    oracc_undated: oracc[:undated], torot_annals: torot[:annals],
+                    coptic_invalid: coptic[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -208,3 +213,4 @@ end
 
 require_relative "axis_builder/oracc_dates"
 require_relative "axis_builder/chronicle_annals"
+require_relative "axis_builder/coptic_scriptorium_dates"
