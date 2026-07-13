@@ -5588,6 +5588,28 @@ items carry explicit CC labels; BY-ND is IN-SCOPE per the standing
 ruling → research_private), machine-readability, size, ranked verdict +
 fixture-plan sketches for the top picks.
 
+## P17-7 · Lock-tolerant SQLite: busy_timeout + WAL verdict  [tier: opus] [status: dispatched] [deps: —]
+Owner defect (2026-07-13): `nabu rebuild` crashed mid-papyri with
+SQLite3::BusyException "database is locked" — a concurrent READER
+(agent demos/verification, even `sqlite3 -readonly`) held a shared lock
+during the loader's journal commit. Root cause: journal_mode=delete
+(rollback) + NO busy_timeout anywhere in Store.connect — any
+reader/writer overlap is a hard crash instead of a wait. Two fixes to
+argue and land: (1) busy_timeout (Sequel/sqlite3 timeout) on EVERY
+connect path (catalog, fulltext, ledger, links journal) — a writer
+waits out a transient reader instead of dying; pick the value from the
+longest legitimate reader (MCP tools, links readback) + margin.
+(2) THE WAL VERDICT — journal_mode=WAL lets readers and one writer
+coexist (the actual architecture here: MCP/agents read while
+syncs/rebuilds write). Argue costs honestly: -wal/-shm sidecar files
+(rsync backup + restore-drill parity — ops.md update), sqlite3
+-readonly semantics on WAL, checkpointing on close. If WAL wins, flip
+at connect + migrate existing files (PRAGMA journal_mode=WAL is
+persistent) with a rebuild-safe path; if not, document why busy_timeout
+alone suffices. Tests: concurrent reader-during-write no longer raises
+(thread-based, in-memory-excluded — file-backed tmp db), timeout
+present on every connect, backup drill still green.
+
 ## P17-gate · Phase 17 gate  [tier: orchestrator] [status: pending] [deps: P17-1..4]
 Full-diff, library/languages/README refresh (new languages/shelves/
 facets from live db), improvements register (§2.2/§2.3 → shipped,
