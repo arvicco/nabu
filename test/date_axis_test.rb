@@ -84,6 +84,29 @@ class DateAxisTest < Minitest::Test
     end
   end
 
+  # -- am_to_ce: Byzantine anno mundi → CE span (P16-3, chronicle annals) ----
+
+  def test_am_to_ce_spans_the_year_style_ambiguity
+    # AM 6360 = 851/852 CE: a September-style AM year runs 1 Sep (AM−5509) –
+    # 31 Aug (AM−5508), so a bare annal year is honestly a two-year span,
+    # never a picked point.
+    assert_equal [851, 852], Nabu::DateAxis.am_to_ce(6360)
+    assert_equal [1015, 1016], Nabu::DateAxis.am_to_ce(6524)
+  end
+
+  def test_am_to_ce_envelopes_a_range_of_annal_years
+    # A chronicle div titled "6369–6370" covers both AM years.
+    assert_equal [860, 862], Nabu::DateAxis.am_to_ce(6369, 6370)
+  end
+
+  def test_am_to_ce_never_emits_year_zero
+    # The epoch years cross the 1 BCE / 1 CE boundary: AM 5509 spans them
+    # (historical numbering, no year 0 — the P15-2 invariant holds here too).
+    assert_equal [-1, 1], Nabu::DateAxis.am_to_ce(5509)
+    assert_equal [-2, -1], Nabu::DateAxis.am_to_ce(5508)
+    assert_equal [1, 2], Nabu::DateAxis.am_to_ce(5510)
+  end
+
   def test_format_span
     assert_equal "113 BCE", Nabu::DateAxis.format_span(-113, -113)
     assert_equal "501–700 CE", Nabu::DateAxis.format_span(501, 700)
