@@ -2803,7 +2803,7 @@ module Nabu
 
         say "  dated/placed #{result.axes.total} documents " \
             "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-            "oracc #{result.axes.oracc}, torot #{result.axes.torot})"
+            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic})"
       end
 
       def format_report(label, report)

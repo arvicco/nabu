@@ -176,10 +176,33 @@ class GitFetchTest < Minitest::Test
     end
   end
 
+  # --- ref pinning (P17-1) ------------------------------------------------------
+
+  def test_ref_pins_clone_and_pull_to_the_tag_never_the_moving_branch
+    make_repo("alpha.txt" => "release one\n")
+    git(@upstream, "tag", "v1.0.0")
+    pinned = head(@upstream)
+    commit_upstream("alpha.txt" => "master moved on\n")
+
+    result = sync!(ref: "v1.0.0")
+    assert_equal pinned, result.sha, "a fresh pinned clone must land on the tag"
+    assert_equal "release one\n", File.read(File.join(@dir, "alpha.txt"))
+
+    # a re-sync at the same pin is a no-op, still on the tag
+    assert_equal pinned, sync!(ref: "v1.0.0").sha
+
+    # the owner re-pin: a later tag fast-forwards through the normal pull path
+    git(@upstream, "tag", "v2.0.0")
+    result = sync!(ref: "v2.0.0")
+    assert_equal head(@upstream), result.sha
+    assert_equal "master moved on\n", File.read(File.join(@dir, "alpha.txt"))
+  end
+
   private
 
-  def sync!(guard: nil, progress: nil)
-    Nabu::GitFetch.sync!(repo_url: @upstream, dir: @dir, attic_dir: @attic, progress: progress, guard: guard)
+  def sync!(guard: nil, progress: nil, ref: nil)
+    Nabu::GitFetch.sync!(repo_url: @upstream, dir: @dir, attic_dir: @attic,
+                         progress: progress, guard: guard, ref: ref)
   end
 
   def make_repo(files)

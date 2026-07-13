@@ -155,6 +155,18 @@ class NormalizeTest < Minitest::Test
     assert_equal "ae", form("ǣ", "ang")
   end
 
+  def test_coptic_strips_editorial_marks_but_keeps_letters
+    # P17-1 (conventions.md §9): the ⳿ morphological divider (U+2CFF, Po —
+    # the one non-Mn editorial mark in the diplomatic layer) deletes; the
+    # supralinear strokes and overlines (U+FE24–26 half marks, combining
+    # dot/diaeresis) are Mn and fall to the generic strip. All words are
+    # real Coptic Scriptorium fixture surface forms (besa.letters).
+    assert_equal "ⲙⲏⲣ", form("ⲙⲏⲣ⳿", "cop")
+    assert_equal "ⲧⲉⲧⲛ", form("ⲧⲉⲧ︤ⲛ︥", "cop")
+    assert_equal "ⲉⲡⲟⲩⲟⲧⲟⲩⲉⲧ", form("ⲉⲡⲟⲩⲟⲧⲟⲩⲉⲧ⳿", "cop")
+    assert_equal "ⲁⲩⲱ", form("Ⲁⲩⲱ̇", "cop") # downcase + dot-above strip
+  end
+
   def test_slovene_folds_bohoric_long_s_to_s
     # P13-9 (conventions.md §9): ſ→s. The long s survives the generic fold
     # (plain downcase does not apply Unicode full case folding, which maps
@@ -241,8 +253,9 @@ class NormalizeTest < Minitest::Test
   # search_form is found in the fold_with_map output.
   def test_fold_with_map_folded_string_equals_search_form
     ["μῆνιν ἄειδε θεά", "ἄρχε δ’ ἀοιδῆς", "Arma Virumque Iustitiam",
-     "дх҃омь ст҃ъꙇмь", "jah qiþands", "þeáh-hwæðere and ǽg-ðer"].each do |text|
-      %w[grc grc lat chu got ang].each do |language|
+     "дх҃омь ст҃ъꙇмь", "jah qiþands", "þeáh-hwæðere and ǽg-ðer",
+     "ⲙ︤ⲛ︥ⲛⲉⲧⲙⲏⲣ⳿ ⲉⲧⲉⲛⲉⲧⲙⲟⲕ︤ϩ︥"].each do |text|
+      %w[grc grc lat chu got ang cop].each do |language|
         folded, = Nabu::Normalize.fold_with_map(text, language: language)
         assert_equal Nabu::Normalize.search_form(text, language: language), folded
       end
