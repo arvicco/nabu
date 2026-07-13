@@ -5185,3 +5185,74 @@ suppress-zero-signal-fields. ok/CHANGED/baseline-recorded unchanged.
 Optional follow-up NOT taken (owner may queue later): a per-source
 `license_watch:` URL key to make non-github/README-licensed sources
 watchable.
+
+## P16-1 · Links substrate + batch parallels  [tier: opus] [status: dispatched] [deps: —]
+Phase 16 headline, part 1 (intertext-design §7 — the design IS this
+spec; owner approved 2026-07-13 "do it all 1-4"). The links table as the
+OUTPUT FORMAT of batch mode: `links(from_urn, to_urn, kind, score,
+run_id, created_at)`, urn-keyed (catalog ids re-mint on rebuild),
+journal-style OUTSIDE the drop-and-rebuild dbs (architecture §5 Phase-8
+enrichment stance — replayable, exportable, run_id → parameters).
+Producer #1: `parallels --batch <scope>` (corpus-wide mining; design
+measured full-corpus grc ~1–2 min, zero new index). Readers: `nabu
+links <urn>` (edges both directions, --long per house rule), `show`
+gains a "linked:" footer when edges exist. Design questions already
+answered in §7 — do not re-litigate; implementation choices (which db
+file hosts the journal, replay mechanics) argued from architecture §5.
+Interactive results DON'T persist (caching-with-staleness trap — §7).
+
+## P16-2 · Batch producers: formulas + cognates  [tier: opus] [status: blocked] [deps: P16-1]
+Producer #2/#3 riding the P16-1 substrate: `formulas --batch`
+(whole-tradition sweep → kind=formula edges) and `cognates --batch`
+(whole-work cognate map → kind=cognate edges). Same journal, same
+replay, same `links` reader — no new mechanics, just producers.
+Dispatch after P16-1 review.
+
+## P16-3 · Date/place axis, part 2 — ORACC + chronicles  [tier: opus] [status: dispatched] [deps: —]
+Register §1.4 part 2. Two extractors extending AxisBuilder (P15-2
+pattern): (a) ORACC catalogue dates — period/date_of_origin fields in
+the per-project catalogue.json already on disk; map period names →
+honest year RANGES (a "Neo-Assyrian" tablet is -911..-612, never a fake
+point; regnal years resolve where the catalogue names a king with known
+dates); (b) chronicle annals for orv — TOROT chronicle texts carry
+annal-year structure; extract where the citation/text carries the year
+(AM anno mundi → CE conversion, -5508 rule, documented). Signed
+historical years, no year 0, NULL-open ranges — migration 008 semantics
+unchanged, no schema change expected. search --from/--to/--century/
+--place and vocab --by-century inherit for free; census-first: report
+coverage gained (docs dated before/after per source), never fake
+precision. Fixtures from real catalogue/chronicle samples.
+
+## P16-4 · search --fuzzy — documentary trigram index  [tier: opus] [status: dispatched] [deps: —]
+Register §1.5 un-parked (owner, 2026-07-13). Design §4 is the spec:
+character-trigram index over the folded search form, DOCUMENTARY SCOPE
+(papyri-ddbdp + oracc — the measured 250–270 MB line, vs 3.6–4.1 GB
+whole-corpus; owner approved this scope by taking the packet),
+trigram-candidates-then-verify semantics, sub-ms substring queries.
+CLI: search --fuzzy for infix/mid-word matching of damaged text
+(`]μηνιν αει[` bracket-tolerant); honest miss when the query is under
+3 chars post-fold; non-documentary sources answer with a hint naming
+the indexed shelves. Index lives in fulltext.sqlite3 via the Indexer
+choke point (rebuild-safe); measure and REPORT the real index size +
+build time at review. --long rule applies to any truncated list.
+
+## P16-5 · Riders: wiktionary-cu descendants backfill + license_watch  [tier: opus] [status: dispatched] [deps: —]
+(a) The P14-1 deferred rider: wiktionary-cu entries carry descendants
+data never crosswalked into dictionary_reflexes — backfill at the
+parser/indexer path (same choke point as wiktionary-recon), so OCS
+entries' descendants feed etym/cognates; parse-only resync recovers it,
+census the crosswalk gain (rows before/after). (b) license_watch:
+optional per-source `license_watch: <url>` key in sources.yml — the
+remote probe fetches THAT url (any host, not just github) and
+hash-compares against the pin baseline, exactly like the license-file
+path; makes README-licensed upstreams (kielipankki README.txt,
+clarin.si record pages) watchable. Non-configured sources: behavior
+unchanged (silent per P16-0). Tests stub HTTP (WebMock); no live
+fetches in suite.
+
+## P16-gate · Phase 16 gate  [tier: orchestrator] [status: pending] [deps: P16-1..5]
+Full-diff review, library/languages/README refresh (links/fuzzy/axis
+coverage numbers from live db), improvements register (§1.4 → shipped,
+§1.5 → shipped, §1.8 → shipped), PR, owner queue (parse-only resync
+wiktionary-cu; batch runs are owner-fired if long), backup-disk
+re-flag (standing), sticky alarm LAST.
