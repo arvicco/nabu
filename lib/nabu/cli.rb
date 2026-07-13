@@ -2520,8 +2520,9 @@ module Nabu
         live_w = rows.map { |row| live_cell(row.liveness).length }.max
         drift_w = rows.map { |row| drift_cell(row.drift).length }.max
         rows.each do |row|
-          say "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
-              "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+          line = "#{row.slug.ljust(slug_w)}  #{live_cell(row.liveness).ljust(live_w)}  " \
+                 "#{drift_cell(row.drift).ljust(drift_w)}  #{license_cell(row.license)}#{health_detail(row)}"
+          say line.rstrip
         end
         say remote_health_summary(report)
       end
@@ -2536,9 +2537,14 @@ module Nabu
           frozen: "frozen" }.fetch(drift)
       end
 
+      # :unchecked renders as NOTHING — "license: unchecked" reads like a
+      # problem when it only means "no machine-checkable license artifact
+      # upstream" (non-github, or a repo without a top-level license file).
+      # The verdict still lands in the ledger; the row just doesn't speak
+      # (owner rule, conventions §10: suppress zero-signal fields).
       def license_cell(license)
         { baseline_recorded: "license: baseline recorded", unchanged: "license: ok",
-          changed: "license: CHANGED", unchecked: "license: unchecked" }.fetch(license.status)
+          changed: "license: CHANGED", unchecked: "" }.fetch(license.status)
       end
 
       # Trailing context: why an upstream is not alive, or why a license row is
