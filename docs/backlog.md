@@ -4555,3 +4555,617 @@ if the rest anchors — argue the grain). FROZEN GUARD: parse-only oracc
 sync =all-previous skipped, quarantines 13 → ~0. Fixture: one trimmed
 real blms pair. Suite+lint green; backlog done; worklog (sha —). One
 commit, not pushed.
+
+## Phase 15 — The corpus reads itself (branch: phase-15; elaborated 2026-07-12)
+
+Owner: "Merged #18, plan Phase 15 with parallels headline" — adopting
+docs/intertext-design.md's recommendation menu as commissioned. Every
+packet's algorithms, costs, and demo targets are ALREADY DESIGNED with
+measured numbers in that document — packets implement, they don't
+re-design (deviations from the design doc get argued openly, not
+silently). Gate-waits don't block; worktree isolation for parallels...
+parallelism as needed; reviews sequential.
+
+## P15-1 · parallels <urn> — the interactive intertext engine  [tier: opus] [status: done] [deps: —]
+The headline (design doc §1): passage-anchored quotation/allusion
+finding, query-time over the existing FTS index — NO new schema (the
+design's measured verdict: per-gram probes 1–111 ms/passage). Surface-
+gram engine + rarity scoring + document dedupe + the elision-strip gram
+builder (the measured U+02BC-vs-U+2019 fold gap across editions); CLI
+`nabu parallels <urn> [--limit]` honoring compact-CLI (per-hit: urn,
+shared-gram evidence, score); MCP nabu_parallels (eighth tool, bounded).
+Riders per the design: the passage_lemmas(urn) index it identified, and
+the rare-lemma co-occurrence second signal; the formula miner rides ONLY
+if the packet stays light (else it's P15-5). GOLDEN QUOTATION TESTS
+seeded from the design doc's live probes: Odyssey 1.1→Polybius, Matt
+4:4→LXX Deut 8:3, John 1:1→the Fathers (+ the P.Oxy amulet). Suite+lint
+green; docs (README persona rows gain the command, mcp.md, architecture
+§13 short design record pointing at intertext-design.md); backlog done;
+worklog (sha —). One commit, not pushed.
+
+Findings:
+- **Zero new schema, as the design measured.** `Query::Parallels`
+  (lib/nabu/query/parallels.rb) probes the anchor's folded 4-word grams as
+  FTS5 phrase MATCHes against the existing `passages_fts`; candidates scored
+  by shared-gram count × rarity (1/df, df from each probe's hit count). All
+  three live goldens reproduced through the production code: Odyssey 1.1 →
+  Polybius 12.27.10 (top, score 1.48, the whole proem as one evidence span);
+  John 1:1 → Clement (3 loci), the perseus John edition, other Fathers;
+  Matthew 4:4 → Origen, the PROIEL≡UD NT duplicates, corroborating perseus
+  Matthew (9 grams), **LXX Deut 8:3 (9 grams), and Philo**.
+- **Elision fold is load-bearing (design rider i).** Strip U+02BC (SBLGNT,
+  a letter to unicode61) and U+2019/ASCII (First1K/Swete, punctuation) at
+  gram-build. Measured: LXX Deut 8:3 shares 3 grams with Matt 4:4 unstripped,
+  **9 stripped** — tying canonical Matthew, exactly the design's number. A
+  unit test pins that the two encodings' gram tokens are equal after strip.
+- **Document dedupe + exclusion argued (rider ii).** One hit per document
+  (best passage representative, `loci` counts siblings); only the anchor's
+  own document excluded. Translations self-exclude — surface grams are
+  language-locked folded tokens, so no cross-language rule is needed; a
+  same-language other edition of the anchor's work is a *wanted*
+  corroborating hit (the design's Matt probe wants "canonical Matthew" to
+  appear). Cross-source identical texts (PROIEL greek-nt ≡ UD greek-proiel)
+  stay two hits — we hold no cross-source work identity — stated honestly.
+- **Second signal shipped (option c).** `lemma_echoes`: passages sharing ≥2
+  of the anchor's RARE lemmas, rarity-weighted — fires only when the anchor
+  is gold-lemmatized (else one cheap query, then skip). Measured live 36 ms
+  on PROIEL Matt 4:4 (design's 18 ms + the anchor lookup) once the index was
+  built; it surfaced στόμα/ἐκπορεύομαι echoes ("proceeds from the mouth").
+- **passage_lemmas(urn) index rider landed** in `Store::Indexer`
+  (derived-of-derived, rebuilt with the table, NOT a numbered migration —
+  migrations own the catalog only). Built on the live db directly (sanctioned
+  index build, no reparse): **633 ms, +~44 MB** (design estimated 30–45 MB),
+  index name matches a fresh rebuild's. Unblocks P15-3 cognates too.
+- **MCP `nabu_parallels`** is the eighth tool: bounded (default 10/max 50),
+  license-labeled + source on every hit, `include_restricted` contract,
+  graceful "rebuilding" degradation, unknown-urn note.
+- **`--long` from birth** (mid-flight owner rule 2026-07-12): compact elides
+  evidence spans / shared lemmas with a "… and N more (--long)" tail; `--long`
+  expands them untrimmed. Tested both modes.
+- **Golden split, argued:** the design's live goldens are a PAIR relation,
+  and the trimmed golden fixture corpus holds no quotation pair (proiel =
+  Cicero, ud = Greek NT; no same-language duplicate work) — so they live as
+  fixture-store unit tests seeded with the REAL probe texts (deterministic,
+  offline, a sharper golden than corpus membership), not in
+  golden_queries.yml (single-passage membership). Stated in the test header.
+- **Formula miner (§5) did NOT ride** — the core + second signal + index +
+  MCP + goldens + docs is a full opus packet; the gram builder is shared, so
+  it stays the smallest standalone packet, **P15-5**.
+- **Timings (live, machine under load):** John 1:1 surface parallels tens of
+  ms warm; the elision-strip Matt run ~40 ms; the design's per-gram FTS
+  budget (1–111 ms/passage) holds through the production catalog-join path.
+
+## P15-2 · Date/place axis, part 1  [tier: opus impl, fable review of the date model] [status: done] [deps: —]
+Design doc §3: document_axes migration (document-level date ranges +
+place names; the fable reviewer checks the DATE MODEL specifically —
+BCE handling, ranges vs points, uncertainty); extractors for HGV
+(63,925/66,261 machine-dated, ddb-hybrid↔urn join verified) +
+goo300k/IMP (years in urns); `search --from/--to [--place]`;
+`vocab --by-century` as the linguist payoff. Part 2 (ORACC regnal
+mapping + chronicle annals) is a named follow-on, NOT this packet.
+Two-phase: the migration+model design gets the fable review BEFORE the
+extractors land (an internal review, not an owner gate — owner gates
+only if the model raises a scope question).
+
+### DATE MODEL DESIGN (pre-implementation, for fable review)
+
+**Measured disk reality (2026-07-12, read-only probes).**
+- HGV metadata lives at `canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV{n}/{m}.xml`
+  (66,261 files). Each carries `<idno type="ddb-hybrid">bgu;3;994</idno>` →
+  `urn:nabu:ddbdp:bgu:3:994` (semicolons→colons, the SAME transform
+  `adapters/papyri.rb` uses to mint the DDbDP urn — the join is exact).
+- `origDate` takes two shapes: a POINT `<origDate when="-0113-08-26">26. Aug.
+  113 v.Chr.</origDate>` (ISO-ish, ~1/3), or a RANGE `<origDate
+  notBefore="0501" notAfter="0700" precision="low">VI - VII</origDate>` (~2/3).
+  Years are zero-padded 4 digits; BCE is the MINUS sign.
+- **The decisive off-by-one datum:** HGV `when="-0113"` is labelled "113
+  v.Chr." = 113 BCE. So HGV negates the BCE year with NO astronomical
+  year-0 shift (astronomical numbering would make -0113 mean 114 BCE). HGV
+  is proleptic/historical, not ISO-8601-astronomical, in its own labels.
+- Place: `<origPlace>Pathyris</origPlace>` + a provenance `<placeName
+  type="ancient" ref="https://pleiades.stoa.org/places/786084 https://www.
+  trismegistos.org/place/1628">Pathyris</placeName>` (ref present in 200/200
+  sampled). goo300k/IMP carry only a YEAR (in the urn `…:sigil-1584` and the
+  TEI `<date>1584</date>`); no place.
+
+**Year representation — signed integers, HISTORICAL numbering, NO year 0
+(a reasoned deviation from the design doc's loose "astronomical years").**
+The stored integer is the plain historical year: negative = BCE, positive =
+CE, and there is NO year 0 (1 BCE = -1, 1 CE = +1). HGV `when="-0113"` →
+`-113` verbatim (strip zero-pad, keep sign). Rationale, argued openly against
+the design doc's word "astronomical":
+1. HGV's OWN values are historical (-0113 = 113 BCE, verified). Ingesting
+   verbatim keeps ingest = source; an astronomical model would require a +1
+   transform on every BCE year, drifting from the source's labels and adding
+   an off-by-one surface to get wrong.
+2. The CLI must match intuition: `--from -300` = 300 BCE. Under astronomical
+   numbering `-300` would mean 301 BCE — a footgun. Historical keeps
+   ingest = source = query = display, killing the whole off-by-one class.
+3. SQLite integer sort is correct across the boundary regardless
+   (`-300 < -30 < 14 < 501`); the absent year 0 is a harmless gap (no
+   document occupies it, interval queries don't care). Guard: a literal
+   `--from 0`/`--to 0` is degenerate (no year 0) — documented, not special-
+   cased in storage.
+
+**Ranges vs points.** Every axis row stores `(not_before, not_after)` as
+honest bounds. A POINT (`when`) stores not_before = not_after = the year
+(month/day dropped from the integer axis; the full string survives in
+`date_raw`). A RANGE stores the two bounds unchanged — "VI–VII, precision
+low" → (501, 700, "low"), never a fake midpoint. Interval-overlap is the
+filter semantics: a doc [nb, na] matches a query window [from, to] iff
+`nb <= to AND na >= from` (each bound optional). Era-boundary reign example
+(Augustus 30 BCE–14 CE) stores (-30, 14); `--from -30 --to 14` matches,
+`--from -50 --to -40` does not (nb -30 > to -40).
+
+**Uncertainty / precision.** `precision` column = HGV's `precision` attribute
+verbatim when present ("low"/"high"/…), else "exact" for `when`-points and
+"range" for notBefore/notAfter pairs. Honesty over normalization: uncertain
+dates are stored as their full honest interval, never collapsed.
+
+**Place — string, no gazetteer (the §1.4 stance holds).** `place_name` =
+`origPlace` text (verbatim); `place_ref` = the provenance placeName `ref`
+URL(s) (verbatim string, may be space-joined TM+Pleiades). `--place` filters
+`place_name` by case-insensitive LIKE (SQLite default ASCII-case-insensitive;
+most papyrus places are Latinised ASCII): a value with `%`/`_` is a LIKE
+pattern verbatim, else wrapped `%value%` (substring). `date_raw` keeps the
+upstream origDate string (e.g. "26. Aug. 113 v.Chr.").
+
+**Century bucketing math (`vocab --by-century`).** A signed century INDEX is
+both the bucket key and the chronological sort key (no year 0, so the index
+skips 0 too):
+- year ≥ 1 (CE): `idx = (year - 1) / 100 + 1`  (1..100 → 1c CE; 501 → 6c CE)
+- year ≤ -1 (BCE): `a = -year; idx = -((a - 1) / 100 + 1)`  (-1..-100 → -1
+  = 1c BCE; -113 → -2 = 2c BCE)
+Division is always on a positive magnitude (via abs), so no negative-floor
+surprise. Ascending idx = chronological order: `-2 < -1 < 1 < 2` = 2c BCE,
+1c BCE, 1c CE, 2c CE. Label = `#{ordinal(idx.abs)} c. #{idx<0 ? 'BCE':'CE'}`.
+A RANGED document is bucketed by its `not_before` century (earliest attested)
+— deterministic, no fake midpoint; the CLI states "bucketed by earliest
+century" plainly.
+
+**Schema — catalog-side `document_axes` (migration 008), NOT columns on
+documents.** `(id, document_id FK, not_before INT null, not_after INT null,
+precision, date_raw, place_name, place_ref, axis_source NOT NULL,
+passage_seq_from INT null, passage_seq_to INT null)`. The nullable
+`passage_seq_*` pair rides for Part 2's chronicle passage-grain (document-
+grain rows leave them NULL); shipping the columns now avoids a second
+migration. Indexes: `document_id`, `(not_before, not_after)`, `place_name`.
+
+**Rebuild-safety.** `document_axes` = f(canonical), populated by
+`Store::AxisBuilder` (a post-load pass, like the Indexer but writing the
+catalog): HGV extractor reads the HGV_meta_EpiDoc XML and joins ddb-hybrid→urn
+→ catalog document_id; goo300k/IMP extractors read the year off the urn
+suffix of catalog documents (urn = f(canonical)). Wired into `Rebuild#run`
+after replay, so `nabu rebuild` regenerates it (invariant holds; the Indexer
+never re-parses canonical, unchanged). The live catalog gets a one-time
+SANCTIONED build (migration 008 applied + AxisBuilder run — measured,
+reported), exactly like P15-1's live index build.
+
+### FABLE REVIEW VERDICT (fable model, 2026-07-12)
+**Sound in structure — the core arithmetic survives every boundary case.** The
+reviewer verified on disk (not assumed): year 113 BCE → -113 → century idx -2
+(2nd c. BCE) ✓; the boundary table 101 BCE/100 BCE/1 BCE/1 CE/100 CE/101 CE all
+agree with a historian; the overlap filter `nb<=T ∧ na>=F` is correct where
+naive containment `nb>=F ∧ na<=T` FAILS (a "610s" query would lose every
+`precision="low"` century-range papyrus); the signed century index is a
+collision-free total chronological order; and the historical-vs-astronomical
+choice is right (HGV `-0244` is labelled "244 v.Chr." — historical). FIVE
+MANDATORY input-modelling fixes were raised and are ALL incorporated:
+1. **Reject year 0 at ingest.** Ruby floor-division makes the BCE branch emit a
+   phantom idx 0 for year 0 (a=0 → (0-1)/100 = -1 → idx 0), silently. `DateAxis`
+   raises on year 0; the extractor treats a 0 year as unparseable (skipped, not
+   stored). Also the astronomical-source tripwire. (No year-0 exists in HGV
+   today — the guard costs nothing but future-proofs.)
+2. **Open-ended intervals.** 335+ single-sided origDates on disk (notBefore-only
+   / notAfter-only). Missing not_before = −∞, missing not_after = +∞, stored as
+   NULL; the overlap filter is NULL-aware (`(na IS NULL OR na>=F) AND (nb IS
+   NULL OR nb<=T)`) so an open-ended row never silently vanishes from a --from
+   query. Undated docs (no axis row) are simply absent under a date filter.
+3. **Multiple alternative origDates** (`dateAlternativeX/Y`, verified HGV1/997
+   with when -0244 AND -0243). Policy: ENVELOPE — min of all lower bounds, max
+   of all upper bounds across every date-bearing origDate under origin; composes
+   correctly with the overlap filter.
+4. **Zero-padded year parse via `.to_i`, never `Integer()`** — `Integer("0700")`
+   is OCTAL 448 in Ruby, `Integer("0090")` raises; `.to_i` is base-10. Sign
+   handled by regex (`-0113-08-26` split not on a naive `-`).
+5. **Label the by-not_before bucketing bias.** Ranged low-precision docs bucket
+   in their earliest century only (a systematic earlier-shift for a statistics
+   command); `vocab --by-century` prints "bucketed by earliest year; N span
+   multiple centuries" so the bias is stated, never hidden.
+Recommendations adopted: **`--century N`** convenience flag on `search` (N<0 =
+BCE, N>0 = CE) so users never hand-compute BCE century bounds (the reviewer's UX
+footgun); an **F>T guard** (clear error, not silent empty). Deferred openly: a
+German-label cross-check at ingest (labels are multilingual/fuzzy — "Mitte VII",
+"VI - VII" — a robust check risks false warnings; the year-0 guard is the safe
+tripwire) and a boundary-aware span helper (no duration math ships this packet;
+noted for a future `--by-decade`).
+
+### FINDINGS (implementation)
+- **document_axes (migration 008)** landed as designed: `(document_id, not_before,
+  not_after, precision, date_raw, place_name, place_ref, axis_source,
+  passage_seq_from, passage_seq_to)`. The nullable passage_seq_* ride for Part
+  2's chronicle grain (document-grain rows leave them NULL). Indexes on
+  document_id, (not_before, not_after), place_name.
+- **Nabu::DateAxis** (lib/nabu/date_axis.rb) is the whole date model in one small
+  module: `parse_year` (base-10, sign-aware, rejects 0), `century_index`,
+  `century_label` (ordinal + BCE/CE), `century_bounds` (for --century). Unit-
+  tested across every boundary the reviewer named + the year-0 raise.
+- **Store::AxisBuilder** reads canonical, joins by urn, upserts document_axes;
+  wired into Rebuild#run after replay (so `nabu rebuild` regenerates it) and run
+  once as a sanctioned build on the live catalog (migration 008 applied +
+  builder) — measured/reported in the worklog. HGV envelope + open-ended + multi-
+  origDate all handled; goo300k/IMP take the CE year off the urn suffix.
+- **search --from/--to/--place/--century** compose through CatalogJoin (one
+  correlated EXISTS on document_axes, document-grained); **vocab --by-century**
+  (Query::Century) buckets the dated corpus, optional text query = "plot this
+  word across centuries"; **show** prints the axis line; **nabu_search** gains
+  from/to/place/century args (honest, same bounded contract).
+- **Live sanctioned build (2026-07-12):** migration 008 applied + AxisBuilder on
+  the live catalog: 66,261 HGV files scanned, 0 invalid, **60,923 papyri joined
+  (99.2% of the 61,389-doc DDbDP shelf)** + 89 goo300k + 658 IMP = **61,670
+  dated/placed documents**, in 46.6 s; document_axes = **10.7 MB** (design
+  budgeted < 20 MB). Live demos, sub-300 ms: `search 'στρατηγ*' --from 101 --to
+  300 --place oxyrhynch%` → the Oxyrhynchite strategoi (P.Oxy 10.1255, 19.2228);
+  `search 'στρατηγ*' --century -3` → the early-Ptolemaic strategoi (P.Oxy
+  60.4060); `vocab --by-century` → the corpus peaks 2nd c. CE (16,265 docs),
+  4th c. BCE → 20th c. CE (the Slovene tail), 12,215 span multiple centuries;
+  `vocab --by-century 'στρατηγ*' --lang grc` → the strategos office peaks 2nd c.
+  CE (1,098 docs). Deviation argued openly: the design doc §3's loose
+  "astronomical years" → HISTORICAL numbering (no year 0), because HGV's own
+  values are historical and the CLI user's `--from -300` means 300 BCE.
+
+## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: pending] [deps: —]
+## P15-3 · Cognate-in-parallel  [tier: opus impl, fable review of the closure] [status: done] [deps: —]
+Design doc §6: `nabu cognates` — alignment hub × reflex crosswalk join
+("verses where Gothic and OCS witnesses use reflexes of the same
+proto-root"; measured: 349 NT verses / 31 roots / 1.4 s staged). Needs
+the two missing indexes + the ~20k-row reflex_roots closure table
+(rebuild-safe, derived); got×chu headline demo (salt~соль), grc×got
+free rider. MCP exposure argued (probably yes, bounded).
+
+## P15-4 · Collation view  [tier: opus] [status: done] [deps: —]
+### DESIGN — reflex_roots closure (for fable review)
+
+**What closes over what.** A derived table
+`reflex_roots(language, lemma_folded, root_entry_id)`. Each row asserts:
+an attested gold lemma `(language, lemma_folded)` descends — within a
+BOUNDED two-level walk — from reconstruction entry `root_entry_id`
+(a catalog `dictionary_entries.id`). Build has two edge classes:
+- **DIRECT (attested → proto).** Every `dictionary_reflexes` row `r` with
+  non-null `language` maps both `(r.language, r.word_folded)` and
+  `(r.language, r.roman_folded)` to its OWNING proto entry
+  `r.dictionary_entry_id`. The roman fold is the script bridge (§12): got
+  `𐍃𐌰𐌻𐍄` reaches via roman `salt`, matching the romanized gold lemma.
+- **ASCENT (proto → proto, ONE hop).** For each direct target `P` that is
+  itself a `-pro` entry (headword_folded `H`, dict-language `PL`), add
+  every entry `Q` whose reflexes name `(PL, H)` — exactly the proto-to-proto
+  edge `Etym#ancestors_of` already walks. So got `salt` → {gem-pro *saltą
+  (direct), ine-pro *sḗh₂l (ascent)}; chu `соль` → {sla-pro *solь, ine-pro
+  *sḗh₂l}. They MEET at the ine-pro id — that shared `root_entry_id` is the
+  cognate-in-parallel. Two witnesses are cognate at a verse iff their gold
+  lemmas share a `root_entry_id`. (Direct-only meets — the *plęsati case —
+  are subsumed: both witnesses land on the SAME entry at depth 1.)
+
+**Cycle handling: safe by construction, no guard.** The walk is exactly two
+levels — direct is depth 1, ascent is one non-recursive step; ascent never
+re-expands its own output. A proto-to-proto cycle (P names Q, Q names P)
+therefore terminates after one hop; a self-naming entry emits a duplicate
+row the Set dedups. (Test: a constructed 2-cycle fixture asserts no blow-up
+and the expected finite root set.)
+
+**Rebuild story: derived-of-derived, built in the Indexer.** reflex_roots is
+a pure function of the CATALOG crosswalk (`dictionary_reflexes` +
+`dictionary_entries`), not of passages — but it JOINS `passage_lemmas`, and
+cross-file SQLite joins are costly, so it lives in `fulltext.sqlite3` beside
+`passage_lemmas`/`alignment_refs` (architecture §5 derived-of-derived),
+built by a new `Store::ReflexRootsIndexer` called from
+`Store::Indexer.rebuild!` AFTER `passage_lemmas`. Same drop-and-recreate
+lifecycle: rebuilt on every `nabu sync` reindex and `nabu rebuild`.
+`root_entry_id` is a catalog id re-minted on rebuild, stored cross-db
+exactly as `alignment_refs` stores `passage_id` — safe because both are
+rebuilt in the SAME pass and the query resolves the id against the current
+catalog. A catalog with no reflex shelf → empty table (graceful, like
+AlignmentIndexer's nil registry).
+
+**Gold-scoping.** Final rows are scoped to the languages present in
+`passage_lemmas` (the attested gold languages). The table exists ONLY to
+join attested lemmas, so emitting rows for the ~250k modern-language
+descendant keys (en/sco/de…) that can never join is pure waste. Proto
+intermediates are still consulted DURING ascent (keys in the in-memory
+reflex index, not final rows). Measured gold-scoped: **50,896 rows /
+39,872 keys, ~1.4 s build** (design estimated ~10–20k rows — the real
+number is ~2.5× higher but still < 5 MB). Trade-off: this couples
+reflex_roots to which treebank languages exist; both are f(canonical)
+rebuilt together, so determinism holds.
+
+**Homograph / double-counting.** Two hazards: (a) two distinct `-pro`
+entries sharing `(language, headword_folded)` — the ascent join matches on
+folded STRING, so both attach, over-generating a lemma's root set; (b) two
+reflex WORDS folding identically collapse in the in-memory index. Neither
+MERGES roots: `root_entry_id` stays a concrete entry id, so a homograph
+inflates one lemma's REACH but a false cognate still needs BOTH witnesses to
+independently land on the SAME inflated id — a double collision, rare.
+The ≥2-distinct-language requirement and the df-suppression (below) filter
+the residue; dedup is a Set over the triple; output is sorted before insert
+(deterministic). (Test: a homograph fixture asserts distinct ids are KEPT,
+not merged.)
+
+**Function-word suppression (df threshold).** Measured noise is both-common
+function words (*éti: got `iþ` ~ chu `отъ` df 1316; *nu: 420/692) vs content
+roots (salt 13–14, malan/grind 2–4). Default: drop any participating lemma
+whose in-language `passage_lemmas` df ≥ `STOPLIST_DF` (200) before grouping;
+a root left with <2 languages vanishes. `--all` disables it; output states
+"N common-word matches suppressed (--all shows them)". This removes both
+whole-hit noise (nu~нъ) and a function word riding a real hit's column
+(отъ appearing under *átta beside отьць — measured).
+
+**The two "missing" indexes ALREADY EXIST (deviation).** design §6 says the
+packet must land `passage_lemmas(urn)` and `dictionary_reflexes(lang_code,
+word_folded)`. Verified read-only on the live db: `passage_lemmas(urn)`
+landed with P15-1; `dictionary_reflexes(language, word_folded)` landed with
+migration 007 (P14-1) — and `(language, word_folded)` is what the ascent
+probe actually uses (etym joins the catalog-side `language`, not
+`lang_code`). So NO index is added to an existing table; the only new index
+is `reflex_roots(language, lemma_folded)`, created with the table. The
+design's >8-min naive figure predates both.
+
+**Surface.** `nabu cognates <work-or-ref> [--langs got,chu] [--all]
+[--long]`. Single ref → one verse; a registered work id → batch over its
+refs. Group by root; require ≥2 DISTINCT languages reach it (same-language
+codices sharing a word are not cross-linguistic cognate signal). Per verse:
+root (starred headword + dictionary + license), each language's witness
+lemma(s) + surface forms. `--langs` restricts and requires ≥2 of the named
+langs. MCP `nabu_cognates`: bounded, license-labeled, argued yes.
+
+### FABLE REVIEW (2026-07-12) — verdict: ship-with-changes
+
+Adversarial review of the design above (cycle handling, closure
+correctness, homographs, rebuild determinism, the df threshold). Findings
+and their disposition, all incorporated before implementation:
+
+1. **Claim (c) — rebuild safety — was FALSE for the sync path** (required).
+   A recon re-sync (DictionaryLoader) revises/withdraws catalog entries
+   without dropping the closure; stored row ids would point at withdrawn
+   rows SILENTLY. → Fixed: `reflex_roots` stores the entry **URN** (the
+   project's cross-parse stability contract), the build filters
+   `withdrawn`, and the query re-resolves urns against the live catalog
+   with the withdrawn filter — a stale root vanishes honestly. (Also:
+   every sync triggers `Indexer.rebuild!` — verified both call sites — so
+   the placement in the single choke point covers the drift window.)
+2. **Ascent needed the same-language exclusion** (required): the live PIE
+   extract holds 6,068 ine-pro→ine-pro reflex rows (derivational
+   sub-trees); without Etym#ancestors_of's exclusion every direct PIE
+   landing sprouts phantom sibling roots. → Mirrored in the builder;
+   pinned by test (intra-shelf edges do not ascend).
+3. **df=200 was empirically wrong** (required): fixed absolute df is
+   percentile-incoherent across gold corpora spanning 125 (uga) to 113k
+   (akk) passages — it would suppress guþ (914), богъ (725), sunus (310),
+   the most famous demonstrations. → Per-language relative threshold:
+   df ≥ max(50, 10% × language gold passages), calibrated live (function
+   words 36–72%: ὁ 72.5, и 55.2, jah 45.2, sa 36.4; wanted cognates
+   ≤ 8.4%: guþ 8.4, богъ 4.9, atta 3.7). The floor keeps tiny corpora
+   from judging everything common. Honest limit stated everywhere:
+   frequency cannot separate богъ (4.9%) from нъ (4.7%) — residual
+   common-word survivors are called that, never "function words".
+4. **Borrowing contamination** (required, minimum fix): descendant trees
+   include unflagged loans (hlaifs ~ хлѣбъ IS a Germanic loan in Slavic;
+   лихва, цѣсарь likewise) — a gem-pro meet presented as common descent
+   would be wrong. → Every hit displays its meet SHELF (CLI, MCP, help
+   text teaches the reading); a `borrowed` flag on dictionary_reflexes
+   (parser change + migration) is named future work, improvements-register
+   material.
+5. **Claim (b) restated** (required): ONE fold collision into a root the
+   other language independently reaches suffices for a false pair — not a
+   "double collision". 126 folded-headword homograph groups exist among
+   1,905 PIE entries (~13%); homographs inflate reach, never merge roots
+   (pinned by test: distinct homograph ids are kept apart).
+6. **Cycle/depth arithmetic confirmed** (no change): the two-level walk
+   terminates trivially (ascent never re-expands); with exactly three
+   shelves and every reflex row owned by one of them, one hop provably
+   reaches everything an unbounded walk would — a depth-3 chain needs an
+   intermediate shelf (ine-bsl-pro: named 1,112× as a reflex language,
+   owns no dictionary) that does not exist. Recorded as contingent, not
+   structural: revisit the bound if a Balto-Slavic shelf lands (~44% of
+   Balto-Slavic-linked PIE entries are today unreachable from the Slavic
+   side — a DATA gap, not a walk gap).
+7. **Ground-truth fixtures over plumbing metrics** (required): the
+   349/31 figure validates nothing about correctness. → Fixture goldens
+   from the REAL recon extracts: chu богъ × grc ἔφᾰγον meet at ine-pro
+   *bʰeh₂g- (inheritance), chu цѣсар҄ь × ang cāsere meet at gem-pro
+   *kaisaraz (loan — the shelf-label test), got guþ via the 𐌲𐌿𐌸 roman
+   bridge; plus constructed-row cycle and homograph guards.
+
+### DONE (2026-07-12) — findings
+
+- **The design's two "missing" indexes already existed** (deviation, said
+  plainly): `passage_lemmas(urn)` landed with P15-1;
+  `dictionary_reflexes(language, word_folded)` has been in migration 007
+  since P14-1 — and `language` (not the design's `lang_code`) is what the
+  ascent actually joins. Verified read-only on the live db. The packet
+  landed NO index on any existing table; the only new index is
+  `reflex_roots(language, lemma_folded)`, created with the table. The
+  design's ">8 min naive" figure predates both.
+- **Shipped:** `Store::ReflexRootsIndexer` (reflex_roots + reflex_root_stats
+  in fulltext.sqlite3, drop-and-rebuild from Indexer.rebuild! AFTER
+  passage_lemmas — scope and stats snapshot the same pass);
+  `Query::Cognates` (work/ref/chapter/book grain, ≥2-distinct-languages
+  rule, per-language relative suppression, meet-shelf on every root,
+  witness license labels, `exclude_license:` for the MCP restricted
+  contract); CLI `nabu cognates` (compact per house rule, `--all`,
+  `--long` lifts the 200-hit cap + expands gloss/documents); MCP
+  `nabu_cognates` (ninth tool, default 10 / max 50 groups, borrowing
+  caveat in every note).
+- **Live build (the one sanctioned write):** 50,151 closure rows +
+  14 stats rows, **3.72 s, 4.4 MB** — design estimated ~10–20k rows/~1 s;
+  the 2.5× rows are the 14-gold-language scope (design counted got+chu
+  only), still tiny.
+- **Live demo, through the production code:** got×chu whole-NT
+  `--all` reproduces the design EXACTLY — **349 verses / 31 roots
+  (0.52 s)**; default suppression trims to 299 verses / 30 roots
+  (57 common-word hits: *nu, *éti — precisely the design's named noise).
+  All six design verses reproduce, now shelf-labeled: LUKE 14.34 *sḗh₂l
+  [ine-pro] соль~salt · LUKE 17.35 *melh₂- [ine-pro] млѣти~malan ·
+  LUKE 1.24 *mḗh₁n̥s [ine-pro] мѣсѧць~menoþs (inheritance) vs LUKE 18.25
+  *ulbanduz [gem-pro] · LUKE 20.10 *wīnagardaz [gem-pro] · JOHN 13.18
+  *hlaibaz [gem-pro] (loans, labeled as such). Single verse: 25 ms.
+  grc×got rider: 922 hits / 769 verses / 31 roots / 0.95 s with 2,169
+  common-word hits suppressed — survivors are real cognates (hairto~καρδία,
+  fotus~πούς, filu~πολύς), residual *só/*-we noise stated.
+- Tests: store/reflex_roots_indexer_test (16 — fixture chains, cycle,
+  homograph, intra-shelf, withdrawn, gold scoping, stats, determinism),
+  query/cognates_test (14 — the join, loan shelf, grains, langs,
+  suppression + floor, licenses, degradations), cli_test +7, mcp +8;
+  tool-count pins bumped 8→9. Suite 1812/28,130 green, lint 230 clean.
+  Live db read-only except the sanctioned closure build.
+
+## P15-4 · Collation view  [tier: opus] [status: pending] [deps: —]
+Design doc §2: `align REF --collate` — raw-token LCS diff within script
+family over the hub's aligned rows (grc 7,643 / lat 6,974 / chu 3,764
+multi-witness verses); cross-script witnesses rendered undiffed
+honestly (the fold can't bridge Cyrillic↔Helsinki-ASCII — measured).
+Compact rendering per house rule; the PROIEL-vs-CCMH Marianus demo.
+
+FINDINGS. Query::Collation (lib/nabu/query/collation.rb) is a pure
+RENDERER over Align's aligned rows — it wraps Query::Align, runs it, and
+transforms the witnesses; zero schema, and the P11-8 range grammar +
+P15-8 --long compose for free. GROUPING VERDICT — the collatable cell is
+the PAIR (language, script), argued from the live corpus, NOT script
+alone and NOT language alone: language alone lumps the Cyrillic Marianus
+with the Helsinki-ASCII CCMH codices (same `chu`, two transcriptions the
+fold cannot bridge); script alone lumps got/lat/eng/chu-CCMH (four
+languages, one Latin script — measured at MARK 2.3, all present). Script
+is detected from the TEXT (majority Unicode script via \p{Greek} etc.),
+because the language code does not record which transcription a witness
+uses — and this correctly caught that PROIEL "armenian-nt" is romanized
+(xcl/Latin, an aside). BASE VERDICT — first witness of a cell in REGISTRY
+ORDER (the registry IS the display order), `--base LABEL|urn` overrides;
+at MARK 2.3 the chu/Latin base is CCMH Assemanianus (first CCMH), the
+other three codices diff against it, Marianus stands aside cross-script.
+DIFF — word-level LCS over raw tokens (only punctuation-ONLY tokens
+dropped; markers &/$/^/⸂ kept verbatim — stripping them destroys info
+exactly as folding does), a run of deletes+inserts coalesces to one :sub
+(no transpose op — a word-order variant is honestly del+ins, e.g. the
+Vulgate "ad eum ferentes"). APPARATUS marks: `a → b` (sub), `om. a`
+(omission), `add. b` (insertion); agreements elided; `--collate --long`
+prints each witness's full tokens instead. Cross-script/sole witnesses
+render undiffed with the reason stated; no_match/not_synced/withheld
+named once. MCP: `nabu_align` gains `collate: true` + `base:` (the
+witness diff as `type: "collation"`; license gate withholds excluded
+witnesses from the diff bodily). Golden reproduced live at MARK 2.3
+(the four CCMH codices collated, придѫ/pridO vs pridoSE and
+ослабленъ/nosESte surfacing; Cyrillic Marianus set aside). Tests:
+query/collation_test +15 (LCS insert/subst/omit/agreement, (lang,script)
+grouping, cross-script vs sole honesty, --base + miss, --long, range,
+license withhold), cli_test +6, mcp/tools_test +2. Suite+lint green.
+
+## P15-5 · Formula miner  [tier: opus] [status: done] [deps: P15-1]
+Design doc §5: intra-corpus repeated n-gram mining (`nabu formulas
+<source-slug|urn-prefix>`); zero schema. SHIPPED as Query::Formulas
+(lib/nabu/query/formulas.rb) — the same gram machinery as P15-1's
+Parallels pointed INWARD (probe→count). The shared "fold, elision strip,
+tokenize, shingle" the design named was EXTRACTED to a mixin
+(lib/nabu/query/grams.rb, `include Grams`) so Parallels and Formulas
+tokenize/shingle identically — a formula mined here re-probes as a
+parallel there; Parallels lost its private ELISION/gram_tokens/shingle to
+the module (behaviour byte-identical, its 12 tests green).
+FINDINGS. (1) Reads text_normalized STRAIGHT from the catalog — no
+fulltext index, no Indexer touch (Formulas takes only `catalog:`); the
+slice streams once (`dataset.each`), grams counted in a Hash. (2) SCOPE
+resolves as a source slug (exact) else a DOCUMENT-urn byte-range prefix
+(urn >= p AND urn < p+maxcp, no LIKE to escape) — a document urn is a
+prefix of its passages' urns, so a whole work or the `urn:cts:greekLit:
+tlg0012` super-prefix (Iliad+Odyssey) scopes through the join on the
+documents.urn unique index; an earlier passages.urn-OR variant defeated
+the index (2 s → 0.23 s once dropped). Document-grain by design; a
+sub-document prefix is not a v1 slice. (3) LANGUAGE mandatory in practice
+(design §5): perseus-greek rides grc + eng on one slug, so `--lang` is
+offered and wanted where a source mixes translations (ASPR, single-lang,
+needs none); slice AND lang both apply, exactly as Search. (4) STOPWORD
+VERDICT — no stoplist, no df filter; rank by count × length and the
+ranking is SELF-FILTERING. Measured: under a generous data-derived
+stopword definition (token in ≥10% of the slice's passages: δ 22%, καί
+18%, δέ 15%) NOT ONE all-stopword 4-gram reaches Homer's top 40 —
+function words combine too freely to out-recur a real formula. A
+per-language stoplist is a new unbounded per-language artifact (the "no
+clever registries" rule) that buys nothing; a token-df filter MISFIRES on
+small slices (a formula's own content tokens have elevated df by
+construction — it would eat the formulas). `--min-count` is the noise
+lever; the eye is the final filter, with almost nothing to reject. (At a
+fixed gram size count×length reduces to count — the ×length is the general
+form, the discriminator once mixed sizes are mined, the natural v2.) (5)
+LOCI: lean pass keeps ≤3 example urns/gram (bounded); `--long` re-walks
+the slice a second time for EVERY locus of the few reported grams (pays
+its own ~0.2 s; compact prints "e.g. …"). (6) MCP: NOT a v1 tool
+(argued in the class doc) — the MCP surface is passage-lookup-flavored;
+the miner is batch-flavored (streams a slice, returns a ranked table).
+Natural home is the §7 batch/links surface.
+LIVE (read-only, through the production CLI): `formulas
+urn:cts:greekLit:tlg0012 --lang grc` → 27,903 passages / 199,816 tokens,
+2,751 4-grams recur ≥3×, 0.23 s core — ὣς ἔφαθ' οἵ δ' 72×, τὸν δ' αὖτε
+προσέειπε 68×, the …ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς chain 50×
+(the design's exact numbers). `formulas aspr` → 30,550 / 175,736, 0.15 s
+— ic wæs ond mid 13×, Beowulf maþelode bearn Ecgþeowes 6×; `--gram-size
+3`: hwæt ic hatte 16×, awa to feore 20×, to widan feore 19× (all three
+design figures). Tests: query/formulas_test.rb +14 (mining/ranking,
+min-count, gram-size, no-stoplist, slug/prefix/unknown scope, lang
+filter, compact-vs-long loci, locus=passage dedupe, withdrawn, bad
+gram-size, slice totals), cli_test +6 (refrain+loci render, --long,
+gram-size×min-count, unknown scope, bad gram-size, help). Suite + lint
+green. One commit, not pushed.
+
+## P15-6 · search --fuzzy  [tier: opus] [status: parked — owner decision at P15 gate 2026-07-12] [deps: —]
+Design doc §4: trigram fragment search, DOCUMENTARY SCOPE (250–270 MB
+index vs 3.6-4.1 GB whole-corpus — the measured line); sub-ms substring
+queries; damaged-text persona. The menu itself said it loses nothing by
+waiting — owner parked it for a later phase (register §1.5 tracks it;
+re-propose with the Phase 16 menu alongside links/batch and date part-2).
+
+## P15-gate · Phase 15 gate  [tier: orchestrator] [status: done 2026-07-12] [deps: P15-1..5(+6)]
+Full-diff, library/languages/README refresh, improvements register
+updates (§1.1/§1.4/§1.5/§1.8 → shipped/partial per reality), PR, owner
+queue (no new syncs expected — this phase is all derived capability;
+health --remote cache seeding if still unseeded), backup-disk re-flag
+(standing), sticky alarm LAST.
+
+## P15-7 · Honest drift labels + pin backfill  [tier: opus] [status: done] [deps: —]
+Owner defect (2026-07-12): health --remote reports proiel/torot/
+papyri-ddbdp as "never-synced" — "Literally not true." Root cause: the
+drift verdict compares upstream vs the LEDGER PIN, and those sources
+last fetched before the pins ledger existed (P7); no pin ≠ never
+synced. Three fixes: (1) LABEL HONESTY — the no-pin verdict renders as
+"unpinned" (with a hint: "synced pre-ledger — next sync records the
+pin, or run health --backfill-pins"), never "never-synced" unless the
+source truly has no runs in the ledger AND no canonical tree; the
+status up= column keeps `?` but its detail follows suit. (2) PIN
+BACKFILL — `health --backfill-pins`: for each git-fetched source with a
+canonical clone but no pin, record `git -C canonical/<slug> rev-parse
+HEAD` as last_sync_sha (through the existing Pin model; timestamp =
+now, detail notes backfilled-from-local-clone; NON-git sources with
+FileFetch/ZipFetch state files backfill from their sha pins where the
+state file exists). Idempotent; read-only on canonical; writes ONLY the
+ledger pins. (3) frozen-policy sources: drift verdict "frozen" in
+health --remote too (status already does this via up=frozen — P14-12;
+make the two surfaces agree). Tests: no-pin labeling, backfill from a
+fixture clone + a state-file source, frozen agreement, idempotency.
+Docs: ops.md informed-update flow gains the backfill note. Suite+lint
+green; backlog done; worklog (sha —). One commit, not pushed.
+## P15-8 · --long everywhere (house rule)  [tier: opus] [status: done] [deps: —]
+Owner house rule (2026-07-12, after hitting `vocab --long` → ERROR):
+"--long form should be available anywhere the outputs are truncated
+((+792 more) etc)." CENSUS every CLI command's renderer for elisions —
+known: vocab's hapax "(+N more)" cap; check show (document passage
+lists?), concord, align (the range 200-ref cap — argue whether --long
+raises it, bounded, or the cap stays a guard with a clearer message),
+search snippets (no — snippets aren't list elision), anything else.
+For every genuine list-elision found: add --long expanding it fully
+(compact default byte-identical); for caps that are GUARDS not
+elisions (align's 200), argue the verdict openly rather than blindly
+expanding. Thor flag consistency: --long declared per-command (etym/
+define P14-11 precedent). Tests per command (capped default +
+expanded). Update the conventions doc with the house rule (a §
+'CLI output: compact by default, --long escapes truncation' — one
+paragraph). README rows touched only where a command gains the flag.
+backlog done; worklog (sha —). Suite+lint green. One commit, not
+pushed. NB: etym/define already have --long (P14-11); parallels ships
+with it (P15-1, in flight — do NOT touch its files); your census
+covers the REST.

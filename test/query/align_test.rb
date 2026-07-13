@@ -86,9 +86,9 @@ module Query
       Nabu::Store::AlignmentIndexer.rebuild!(catalog: catalog, fulltext: @fulltext, registry: registry)
     end
 
-    def align(ref, work: nil, registry: @registry, catalog: @catalog)
+    def align(ref, work: nil, long: false, registry: @registry, catalog: @catalog)
       Nabu::Query::Align.new(catalog: catalog, fulltext: @fulltext, registry: registry)
-                        .run(ref, work: work)
+                        .run(ref, work: work, long: long)
     end
 
     # -- the five-way flagship -----------------------------------------------------
@@ -566,6 +566,29 @@ module Query
       assert_equal 205, result.total
       assert_equal Nabu::Query::Align::MAX_REFS, result.groups.size
       assert result.truncated, "beyond the cap the range is truncated"
+    end
+
+    # P15-8 (house rule): the 200-ref ceiling is a GUARD against an accidental
+    # whole-book render, but --long is the deliberate, sanctioned override so
+    # the flag never errors where a user reaches for it — it lifts the cap and
+    # renders every ref, marking the result un-truncated.
+    def test_long_lifts_the_range_ceiling_and_renders_every_ref
+      registry = load_registry(<<~YAML)
+        ot:
+          witnesses:
+            - label: full
+              extractor: cts-verse
+              documents:
+                PSA: urn:nabu:src-a:psa
+      YAML
+      seed_verse_document("urn:nabu:src-a:psa", language: "grc", title: "ΨΑΛΜΟΙ",
+                                                verses: (1..205).map { |v| ["1.#{v}", "verse #{v}"] })
+      reindex!(registry)
+
+      result = align("PSA 1", long: true, registry: registry)
+      assert_equal 205, result.total
+      assert_equal 205, result.groups.size, "--long renders every ref, past the 200 guard"
+      refute result.truncated, "nothing is truncated under --long"
     end
 
     def test_a_chapter_with_no_attested_refs_raises_honestly

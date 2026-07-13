@@ -97,10 +97,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_seven_tools_with_json_schemas
+    def test_definitions_lists_the_nine_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_status],
+                      nabu_parallels nabu_cognates nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -248,6 +248,40 @@ module MCP
         call("nabu_search", { "query" => "μηνιν", "license" => "copyleft" })
       end
       assert_match(/open/, error.message, "the message teaches the valid classes")
+    end
+
+    # -- nabu_search date/place axis (P15-2) -----------------------------------
+
+    def test_search_from_to_filters_by_date
+      a = make_document(urn: "urn:nabu:ddbdp:a")
+      make_passage(a, urn: "urn:nabu:ddbdp:a:1", text: "στρατηγος", sequence: 0)
+      b = make_document(urn: "urn:nabu:ddbdp:b")
+      make_passage(b, urn: "urn:nabu:ddbdp:b:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: a.id, not_before: -113, not_after: -113,
+                                      place_name: "Oxyrhynchus", axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: b.id, not_before: 591, not_after: 602,
+                                      place_name: "Arsinoites", axis_source: "hgv")
+      rebuild!
+
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "from" => -300, "to" => -30 }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:nabu:ddbdp:a:1], urns
+      places = payload(call("nabu_search", { "query" => "στρατηγος", "place" => "oxyrhynch%" }))
+               .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:nabu:ddbdp:a:1], places
+    end
+
+    def test_search_date_does_not_compose_with_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "from" => -300 })
+      end
+    end
+
+    def test_search_year_zero_is_invalid
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "x", "from" => 0 })
+      end
+      assert_match(/no year 0/i, error.message)
     end
 
     def test_unknown_tool_raises
@@ -694,6 +728,67 @@ module MCP
       bare&.disconnect
     end
 
+    # -- nabu_parallels (P15-1 intertext) -----------------------------------------
+
+    PROEM = "ἄνδρα μοι ἔννεπε μοῦσα πολύτροπον ὃς μάλα πολλὰ"
+
+    # An anchor, an OPEN quoter, and a RESEARCH_PRIVATE quoter of the same line —
+    # so the default-exclusion and include_restricted contract can be probed.
+    def seed_parallels
+      anchor = make_document(urn: "urn:d:od", title: "Odyssey")
+      make_passage(anchor, urn: "urn:d:od:1.1", text: PROEM, sequence: 0)
+      openq = make_document(urn: "urn:d:pol", title: "Histories")
+      make_passage(openq, urn: "urn:d:pol:1", text: "φησιν #{PROEM}", sequence: 0)
+      secret = make_document(source: @private, urn: "urn:d:secret", title: "Private")
+      make_passage(secret, urn: "urn:d:secret:1", text: "λέγει #{PROEM}", sequence: 0)
+      rebuild!
+    end
+
+    def test_parallels_returns_hits_with_the_license_contract
+      seed_parallels
+      body = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))
+      assert_equal "parallels", body["type"]
+      assert_equal "urn:d:od:1.1", body.dig("anchor", "urn")
+      hit = body["hits"].find { |h| h["urn"] == "urn:d:pol:1" }
+      refute_nil hit, "the open quoter is a hit"
+      %w[urn language license_class source score shared_grams evidence].each do |field|
+        assert hit.key?(field), "every hit carries #{field}"
+      end
+      assert_equal "open", hit["license_class"]
+      assert(hit["evidence"].any? { |span| span.include?("ανδρα μοι εννεπε μουσα") }, "shared phrase evidence")
+    end
+
+    def test_parallels_excludes_restricted_candidates_by_default
+      seed_parallels
+      urns = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))["hits"].map { |h| h["urn"] }
+      refute_includes urns, "urn:d:secret:1", "the research_private quoter is excluded by default"
+
+      opened = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1", "include_restricted" => true }))
+      assert_includes opened["hits"].map { |h| h["urn"] }, "urn:d:secret:1",
+                      "include_restricted: true opts the private quoter back in"
+    end
+
+    def test_parallels_missing_urn_is_an_invalid_argument
+      seed_parallels
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_parallels", {}) }
+    end
+
+    def test_parallels_unknown_urn_is_a_graceful_note
+      seed_parallels
+      result = call("nabu_parallels", { "urn" => "urn:d:nope:1" })
+      refute result[:isError]
+      assert_match(/not found/i, text_of(result))
+    end
+
+    def test_parallels_without_index_reports_rebuilding
+      empty = Nabu::Store.connect_fulltext("sqlite::memory:")
+      result = tools(fulltext: empty).call("nabu_parallels", { "urn" => "urn:d:od:1.1" })
+      refute result[:isError]
+      assert_match(/rebuilding/i, text_of(result))
+    ensure
+      empty&.disconnect
+    end
+
     # -- nabu_etym (P14-1) --------------------------------------------------------
 
     def seed_recon_shelf(source: nil)
@@ -1008,6 +1103,73 @@ module MCP
       assert_match(/no corpus/i, text_of(result))
     end
 
+    # -- nabu_align collate (P15-4) ---------------------------------------------
+
+    COLLATE_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - { document: urn:nabu:proiel:marianus, label: marianus }
+          - { document: urn:nabu:ccmh:assemanianus, label: ccmh-assemanianus }
+          - { document: urn:nabu:ccmh:marianus, label: ccmh-marianus }
+    YAML
+
+    # A chu corpus with the Cyrillic PROIEL Marianus + two Helsinki-ASCII CCMH
+    # codices, so a chu/Latin cell collates and the Cyrillic witness is aside.
+    def seed_collation_corpus(source: nil)
+      source ||= Nabu::Store::Source.create(
+        slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter", license_class: "nc", enabled: true
+      )
+      [["urn:nabu:proiel:marianus", "Ꙇ придѫ къ немоу носѧште ослабленъ жилами", source],
+       ["urn:nabu:ccmh:assemanianus", "*/i pridO k$ nemu nosEqe /oslablena ZIlamI", @open],
+       ["urn:nabu:ccmh:marianus", "*J pridO k& nemu nosESte oslablen& Zilami", @open]].each do |urn, text, src|
+        doc = make_document(source: src, urn: urn, title: urn.split(":").last, language: "chu")
+        make_passage(doc, urn: "#{doc.urn}:1", text: text, sequence: 0, language: "chu",
+                          tokens: [{ "citation_part" => "MARK 2.3", "form" => "x" }])
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: align_registry(COLLATE_REGISTRY_YAML))
+    end
+
+    def test_collate_returns_an_apparatus_with_a_cross_script_aside
+      seed_collation_corpus
+      body = payload(align_tools(align_registry(COLLATE_REGISTRY_YAML))
+                     .call("nabu_align", { "ref" => "MARK 2.3", "collate" => true }))
+
+      assert_equal "collation", body.fetch("type")
+      ref = body.fetch("refs").first
+      cell = ref.fetch("cells").find { |candidate| candidate.fetch("script") == "Latin" }
+      assert_equal "ccmh-assemanianus", cell.fetch("base"), "base is first in registry order"
+      variant = cell.fetch("witnesses").find { |witness| witness.fetch("label") == "ccmh-marianus" }
+      assert_equal false, variant.fetch("agrees")
+      ops = variant.fetch("edits").map { |edit| edit.fetch("op") }
+      assert_includes ops, "sub", "the real CCMH divergence is a substitution"
+
+      aside = ref.fetch("asides").find { |candidate| candidate.fetch("label") == "marianus" }
+      assert_equal "Cyrillic", aside.fetch("script")
+      assert_equal "cross_script", aside.fetch("reason")
+      assert_match(/придѫ/, aside.fetch("text"))
+    end
+
+    def test_collate_withholds_restricted_witnesses_from_the_diff
+      restricted = Nabu::Store::Source.create(
+        slug: "closed", name: "Closed", adapter_class: "TestAdapter", license_class: "restricted", enabled: true
+      )
+      seed_collation_corpus(source: restricted) # the Cyrillic marianus is now restricted
+      tools = align_tools(align_registry(COLLATE_REGISTRY_YAML))
+
+      body = payload(tools.call("nabu_align", { "ref" => "MARK 2.3", "collate" => true }))
+      refute_match(/придѫ/, text_of(tools.call("nabu_align", { "ref" => "MARK 2.3", "collate" => true })),
+                   "restricted witness text must not leak into the apparatus")
+      withheld = body.fetch("refs").first.fetch("missing").find { |missing| missing.fetch("label") == "marianus" }
+      assert_equal "withheld", withheld.fetch("status")
+
+      opted = payload(tools.call("nabu_align",
+                                 { "ref" => "MARK 2.3", "collate" => true, "include_restricted" => true }))
+      labels = opted.fetch("refs").first.fetch("asides").map { |aside| aside.fetch("label") }
+      assert_includes labels, "marianus", "include_restricted brings the withheld witness back"
+    end
+
     # -- nabu_align ranges / chapters (P11-8) -----------------------------------
 
     RANGE_REGISTRY_YAML = <<~YAML
@@ -1097,6 +1259,141 @@ module MCP
         labels = group.fetch("witnesses").map { |witness| witness.fetch("label") }
         assert_equal %w[full partial], labels, "the not_synced witness is gone from every ref"
       end
+    end
+
+    # -- nabu_cognates (P15-3) ----------------------------------------------------
+
+    COGNATES_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (test witnesses)"
+        witnesses:
+          - document: urn:nabu:test:grc-nt
+          - document: urn:nabu:test:marianus
+          - document: urn:nabu:test:oe-mark
+    YAML
+
+    # The real recon shelf + three witnesses with gold lemmas in citation-
+    # bearing tokens: MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-,
+    # MARK 2.1 meets ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (a loan).
+    def seed_cognates_corpus(marianus_override: nil)
+      recon = Nabu::Store::Source.create(
+        slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      nc = Nabu::Store::Source.create(
+        slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
+        license_class: "nc", enabled: true
+      )
+      [["grc-nt", "grc", nil, [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
+       ["marianus", "chu", marianus_override,
+        [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
+       ["oe-mark", "ang", nil, [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, lang, override, rows|
+        doc = make_document(source: nc, urn: "urn:nabu:test:#{tail}", title: tail,
+                            language: lang, license_override: override)
+        rows.each_with_index do |(ref, lemma, form), seq|
+          Nabu::Store::Passage.create(
+            document_id: doc.id, urn: "#{doc.urn}:#{seq + 1}", sequence: seq, language: lang,
+            text: form, text_normalized: form, content_sha256: "x", revision: 1,
+            annotations_json: JSON.generate(
+              "citation" => ref,
+              "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]
+            )
+          )
+        end
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    alignments: cognates_registry)
+    end
+
+    def cognates_registry
+      align_registry(COGNATES_REGISTRY_YAML)
+    end
+
+    def cognates_tools
+      Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext, alignments: cognates_registry)
+    end
+
+    def test_cognates_groups_carry_the_root_shelf_and_witness_licenses
+      seed_cognates_corpus
+      result = cognates_tools.call("nabu_cognates", { "target" => "MARK 1.1" })
+
+      refute result[:isError]
+      body = payload(result)
+      assert_equal "nt", body.fetch("work")
+      assert_equal 1, body.fetch("total")
+      group = body.fetch("groups").first
+      assert_equal "MARK 1.1", group.fetch("ref")
+      root = group.fetch("root")
+      assert_equal "*bʰeh₂g-", root.fetch("headword")
+      assert_equal "ine-pro", root.fetch("shelf")
+      assert_equal "attribution", root.fetch("license_class")
+      assert_equal "CC-BY-SA + GFDL", root.fetch("license")
+      witnesses = group.fetch("witnesses")
+      assert_equal(%w[chu grc], witnesses.map { |witness| witness.fetch("language") })
+      witnesses.each do |witness|
+        witness.fetch("documents").each do |doc|
+          assert_equal "nc", doc.fetch("license_class")
+          assert_equal "proiel", doc.fetch("source")
+        end
+      end
+    end
+
+    def test_cognates_notes_the_borrowing_caveat_and_is_bounded
+      seed_cognates_corpus
+      body = payload(cognates_tools.call("nabu_cognates", { "target" => "nt", "limit" => 1 }))
+
+      assert_equal 2, body.fetch("total")
+      assert_equal 1, body.fetch("groups").size
+      assert_match(/showing 1/, body.fetch("note"))
+      assert_match(/borrowing/, body.fetch("note"))
+    end
+
+    def test_cognates_langs_restricts_the_pair
+      seed_cognates_corpus
+      body = payload(cognates_tools.call("nabu_cognates",
+                                         { "target" => "nt", "langs" => %w[ang chu] }))
+      assert_equal(["*kaisaraz"], body.fetch("groups").map { |g| g.fetch("root").fetch("headword") })
+    end
+
+    def test_cognates_withholds_restricted_witnesses_by_default
+      seed_cognates_corpus(marianus_override: "research_private")
+      body = payload(cognates_tools.call("nabu_cognates", { "target" => "nt" }))
+      assert_equal 0, body.fetch("total"),
+                   "every meet involves the now-private chu witness — nothing may leak"
+
+      shown = payload(cognates_tools.call("nabu_cognates",
+                                          { "target" => "nt", "include_restricted" => true }))
+      assert_equal 2, shown.fetch("total")
+    end
+
+    def test_cognates_needs_a_target
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        cognates_tools.call("nabu_cognates", {})
+      end
+    end
+
+    def test_cognates_unattested_ref_is_a_tool_error
+      seed_cognates_corpus
+      result = cognates_tools.call("nabu_cognates", { "target" => "JOHN 99.1" })
+      assert result[:isError]
+      assert_match(/not attested/, text_of(result))
+    end
+
+    def test_cognates_without_a_registry_notes_how_to_register
+      result = tools.call("nabu_cognates", { "target" => "nt" })
+      refute result[:isError]
+      assert_match(/alignments\.yml/, text_of(result))
+    end
+
+    def test_cognates_with_a_missing_roots_table_degrades_gracefully
+      seed_cognates_corpus
+      @fulltext.drop_table(Nabu::Store::ReflexRootsIndexer::TABLE)
+      result = cognates_tools.call("nabu_cognates", { "target" => "MARK 1.1" })
+      refute result[:isError], "a missing derived table is a state, not a fault"
+      assert_match(/rebuild/, text_of(result))
     end
 
     # -- read-only enforcement ------------------------------------------------------

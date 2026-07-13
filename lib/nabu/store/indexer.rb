@@ -126,6 +126,10 @@ module Nabu
           end
         end
         AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        # The cognate root closure (P15-3) rebuilds AFTER passage_lemmas: its
+        # gold-language scope and suppression stats are snapshots of the lemma
+        # table built moments ago in this same pass, so the two can never drift.
+        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
         count
       end
 
@@ -139,6 +143,13 @@ module Nabu
           String :language, null: false
           String :surface_forms, null: false
           index :lemma_folded
+          # urn index (P15-1): the lemma-aware second signals — parallels'
+          # rare-lemma co-occurrence and cognate-in-parallel (design §6) — look
+          # a passage's lemmas up BY urn (the anchor probe). Without this the
+          # anchor lookup scans 2.6M rows (~1.7 s measured); with it, one B-tree
+          # hit. ~30–45 MB, rebuilt with the table (never migrated — the fulltext
+          # db is derived-of-derived; class note).
+          index :urn
         end
       end
 

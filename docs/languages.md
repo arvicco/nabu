@@ -50,7 +50,7 @@ code system once, then lists every code with one sentence each.
 | `xhu` | Hurrian | Isolated lexical-list column entries from the cuneiform shelf. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
 | `san` | Sanskrit (Vedic, CoNLL-U) | The UD Vedic treebank's gold-annotated sentences. |
-| `pol` / `ita` / `ger` | Polish / Italian / German | Modern scholarly translations of the Freising Manuscripts (one document each). |
+| `pol` / `ita` / `ger` | Polish / Italian / German | Modern scholarly translations of the Freising Manuscripts (three documents each — one per manuscript). |
 | `grc-Latn` | Greek (romanized) | Two papyri whose Greek survives only in Latin transliteration. |
 | `egy-Egyd` | Egyptian (Demotic) | Two Demotic documentary papyri. |
 | `xct` / `xct-Latn` | Classical Tibetan | A stray GRETIL text (native + transliterated). |
@@ -68,9 +68,9 @@ code system once, then lists every code with one sentence each.
 | `lat` | Lewis & Short | The Latin dictionary, 52k entries, same resolution. |
 | `ang` | Bosworth-Toller | The Anglo-Saxon dictionary, 63k entries, æ/þ/ð-folded lookup. |
 | `chu` | Wiktionary-OCS | 4.6k crowd-sourced OCS entries whose etymologies seed the reconstruction crosswalk. |
-| `sla-pro` | Proto-Slavic (reconstructed) | ~5.2k reconstructed headwords with descendant trees naming attested reflexes. |
-| `ine-pro` | Proto-Indo-European (reconstructed) | ~1.8k roots — the trunk the `etym` command ascends to. |
-| `gem-pro` | Proto-Germanic (reconstructed) | ~5.6k reconstructions bridging PIE to Gothic and Old English. |
+| `sla-pro` | Proto-Slavic (reconstructed) | ~5.4k reconstructed headwords with descendant trees naming attested reflexes. |
+| `ine-pro` | Proto-Indo-European (reconstructed) | ~1.9k roots — the trunk the `etym` command ascends to. |
+| `gem-pro` | Proto-Germanic (reconstructed) | ~5.7k reconstructions bridging PIE to Gothic and Old English. |
 
 ## Gold-lemma languages (searchable via `--lemma`, 14 as of today)
 

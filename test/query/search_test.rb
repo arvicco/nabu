@@ -226,5 +226,55 @@ module Query
       assert_empty search("nonexistentword", urn: "urn:d:1:target"),
                    "the urn filter still requires the query to match"
     end
+
+    # -- the date/place axis filter (P15-2) ----------------------------------
+
+    def dated(urn, text, not_before, not_after, place: nil)
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      @catalog[:document_axes].insert(
+        document_id: doc.id, not_before: not_before, not_after: not_after,
+        precision: "x", place_name: place, axis_source: "hgv"
+      )
+    end
+
+    def test_from_to_filter_uses_interval_overlap
+      dated("urn:a", "στρατηγος", -113, -113)  # 113 BCE point
+      dated("urn:b", "στρατηγος", 591, 602)    # 6th–7th c. CE
+      dated("urn:c", "στρατηγος", -30, 14)     # 30 BCE – 14 CE
+      rebuild!
+      # -300..-30 overlaps a (-113) and c (starts -30); NOT b.
+      assert_equal %w[urn:a:1 urn:c:1], search("στρατηγος", from: -300, to: -30).map(&:urn).sort
+      # A window ending at 40 BCE misses c (starts 30 BCE) — the boundary case.
+      assert_equal %w[urn:a:1], search("στρατηγος", from: -300, to: -40).map(&:urn).sort
+      assert_equal %w[urn:b:1], search("στρατηγος", from: 500).map(&:urn).sort
+    end
+
+    def test_open_ended_axis_row_survives_a_from_filter
+      dated("urn:a", "στρατηγος", nil, -257) # notAfter-only → not_before is −∞
+      rebuild!
+      # A NULL not_after would silently drop this row from a --to query; a NULL
+      # not_before must NOT drop it from a --from query below its known bound.
+      assert_equal %w[urn:a:1], search("στρατηγος", from: -400).map(&:urn)
+      assert_empty search("στρατηγος", from: -100), "row is entirely before 100 BCE"
+    end
+
+    def test_place_filter_is_a_case_insensitive_like
+      dated("urn:a", "στρατηγος", -113, -113, place: "Oxyrhynchus")
+      dated("urn:b", "στρατηγος", -30, 14, place: "Arsinoites")
+      rebuild!
+      assert_equal %w[urn:a:1], search("στρατηγος", place: "oxyrhynch%").map(&:urn)
+      assert_equal %w[urn:a:1], search("στρατηγος", place: "Oxyrhynchus").map(&:urn)
+    end
+
+    def test_undated_documents_fall_out_under_a_date_filter
+      make_passage(make_document(source: @open, urn: "urn:undated"),
+                   urn: "urn:undated:1", text: "στρατηγος", sequence: 1, language: "grc")
+      dated("urn:a", "στρατηγος", -113, -113)
+      rebuild!
+      assert_equal %w[urn:a:1], search("στρατηγος", from: -400, to: 100).map(&:urn),
+                   "no axis row → absent under an active date filter"
+      assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
+    end
   end
 end

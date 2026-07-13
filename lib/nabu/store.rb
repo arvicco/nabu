@@ -30,7 +30,8 @@ module Nabu
       Dictionary: :dictionaries,
       DictionaryEntry: :dictionary_entries,
       DictionaryCitation: :dictionary_citations,
-      DictionaryReflex: :dictionary_reflexes
+      DictionaryReflex: :dictionary_reflexes,
+      DocumentAxis: :document_axes
     }.freeze
 
     module_function
@@ -103,6 +104,7 @@ module Nabu
         require_relative "store/dictionary_entry"
         require_relative "store/dictionary_citation"
         require_relative "store/dictionary_reflex"
+        require_relative "store/document_axis"
         @models_loaded = true
       end
       db
@@ -116,3 +118,5 @@ require_relative "store/dictionary_loader"
 require_relative "store/run_recorder"
 require_relative "store/indexer"
 require_relative "store/alignment_indexer"
+require_relative "store/axis_builder"
+require_relative "store/reflex_roots_indexer"

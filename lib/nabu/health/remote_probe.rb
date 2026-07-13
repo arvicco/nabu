@@ -36,8 +36,15 @@ module Nabu
     #      flag; :moved is a soft "your stored URL is stale" signal.
     #
     #   2. Drift — remote HEAD vs the repo's ledger pin (Store::Pin, P7-1):
-    #      :current, :behind (upstream has new commits), or :never_synced (no
-    #      pin / no sha). Not alive → :unknown (nothing to compare).
+    #      :current, :behind (upstream has new commits), :unpinned (no pin yet
+    #      but the source HAS been synced — a run in the ledger or a canonical
+    #      tree on disk — so it last fetched before the pins ledger existed,
+    #      P7; NOT "never synced"), or :never_synced (no pin AND no run AND no
+    #      canonical tree — genuinely untouched). Not alive → :unknown (nothing
+    #      to compare). A frozen-policy source short-circuits to :frozen (no
+    #      drift expected), agreeing with status's up=frozen column (P14-12).
+    #      The honest split (P15-7) closes the owner defect where sources
+    #      synced pre-P7 read a false "never-synced".
     #
     #   3. License drift (best-effort, no clone) — for github.com upstreams,
     #      fetch the license file via raw.githubusercontent.com at the remote
@@ -92,10 +99,15 @@ module Nabu
       Liveness = Data.define(:status, :detail)
       # status: :baseline_recorded | :unchanged | :changed | :unchecked
       License = Data.define(:status, :detail)
-      # status: :current | :behind | :never_synced | :unknown | :multi.
-      # +detail+ names the offending repos for a multi-repo :behind (nil
-      # otherwise); the single-repo path always leaves it nil.
+      # status: :current | :behind | :unpinned | :never_synced | :unknown |
+      # :multi | :frozen. +detail+ names the offending repos for a multi-repo
+      # :behind, or carries UNPINNED_HINT for a single-unit :unpinned (nil
+      # otherwise).
       Drift = Data.define(:status, :detail)
+
+      # The single-unit :unpinned hint — an honest "you synced this before the
+      # pins ledger existed" note, pointing at the two ways to record the pin.
+      UNPINNED_HINT = "synced pre-ledger — next sync records the pin, or run health --backfill-pins"
       # drift is the Drift#status symbol (single-repo behavior unchanged);
       # drift_detail is Drift#detail — the multi-repo offender line, else nil.
       SourceHealth = Data.define(:slug, :enabled, :upstream, :liveness, :drift, :drift_detail, :license)
@@ -130,7 +142,114 @@ module Nabu
         Report.new(rows: rows)
       end
 
+      # One backfilled pin: the source, the repo/zip URL it keys, the recorded
+      # sha, and where it came from (:git_clone | :state_file).
+      Backfilled = Data.define(:slug, :repo_url, :sha, :origin)
+
+      # `nabu health --backfill-pins` (P15-7): record ledger pins for sources
+      # that were synced before the pins ledger existed (P7) and so read as
+      # "unpinned". READ-ONLY on canonical/ (a local `git rev-parse HEAD` or a
+      # state-file read) and on the network (none); writes ONLY the ledger
+      # pins. Idempotent — a source that already carries a non-blank pin is
+      # skipped, so re-running records nothing. Returns the Backfilled rows
+      # actually written (empty without a ledger, or when nothing needs it).
+      def backfill_pins
+        return [] unless @ledger
+
+        @registry.each_source.flat_map { |entry| backfill_source(entry) }
+      end
+
       private
+
+      def backfill_source(entry)
+        case entry.adapter_class.remote_probe_strategy
+        when :http_zip then backfill_http_source(entry)
+        else backfill_git_source(entry)
+        end
+      end
+
+      # Single-repo git sources only: canonical/<slug> is the one clone, so its
+      # `git rev-parse HEAD` maps onto the source's one declared repo URL. A
+      # multi-repo source (UD) keeps its per-repo clones under adapter-private
+      # subdirs — one canonical/<slug> HEAD can't stand in for several pins, so
+      # those are left for the next real sync to record.
+      def backfill_git_source(entry)
+        urls = entry.adapter_class.upstream_repo_urls
+        return [] unless urls.size == 1
+
+        url = urls.first
+        return [] if pinned?(entry.slug, url)
+
+        sha = local_head(entry.slug)
+        return [] unless sha
+
+        record_pin(entry.slug, url, sha)
+        [Backfilled.new(slug: entry.slug, repo_url: url, sha: sha, origin: :git_clone)]
+      end
+
+      # Non-git sources (ZipFetch/FileFetch): each fetched unit's state file
+      # carries the body sha256 pin. Backfill from it (per unit, keyed by the
+      # unit's URL) where the state file exists and the unit is not already
+      # pinned.
+      def backfill_http_source(entry)
+        entry.adapter_class.http_probe_targets.filter_map do |target|
+          next if pinned?(entry.slug, target.zip_url)
+
+          sha = state_file_sha(entry.slug, target)
+          next unless sha
+
+          record_pin(entry.slug, target.zip_url, sha)
+          Backfilled.new(slug: entry.slug, repo_url: target.zip_url, sha: sha, origin: :state_file)
+        end
+      end
+
+      # A source unit counts as pinned only when its row carries a non-blank
+      # last_sync_sha — a baseline-only row (license baseline, no sha) is still
+      # backfillable, and record_pin then updates that row in place.
+      def pinned?(slug, repo_url)
+        pin = Nabu::Store::Pin.first(source_slug: slug, repo_url: repo_url)
+        pin && !blank?(pin.last_sync_sha)
+      end
+
+      def record_pin(slug, repo_url, sha)
+        pin = Nabu::Store::Pin.first(source_slug: slug, repo_url: repo_url)
+        if pin
+          pin.update(last_sync_sha: sha)
+        else
+          Nabu::Store::Pin.create(source_slug: slug, repo_url: repo_url, last_sync_sha: sha)
+        end
+      end
+
+      # `git -C canonical/<slug> rev-parse HEAD`, read-only. nil when there is
+      # no canonical dir, no clone, or the dir is not a git repo (rev-parse
+      # fails → Shell::Error).
+      def local_head(slug)
+        return nil unless @canonical_dir
+
+        dir = File.join(@canonical_dir, slug)
+        return nil unless Dir.exist?(dir)
+
+        sha = @shell.run("git", "-C", dir, "rev-parse", "HEAD").to_s.strip
+        sha.empty? ? nil : sha
+      rescue Nabu::Shell::Error
+        nil
+      end
+
+      # The body-sha pin a ZipFetch/FileFetch state file recorded, at the same
+      # <canonical_dir>/<slug>/<state_subdir>/<state_file> the drift probe reads
+      # its Last-Modified from. nil when the state file is absent or its sha is
+      # blank/unparseable.
+      def state_file_sha(slug, target)
+        return nil unless @canonical_dir
+
+        path = File.join(@canonical_dir, slug, target.state_subdir, target.state_file)
+        return nil unless File.file?(path)
+
+        sha = JSON.parse(File.read(path))["sha256"]
+        blank?(sha) ? nil : sha
+      rescue JSON::ParserError
+        nil
+      end
 
       # P14-12: persist this run's verdict into the ledger's probe cache (one
       # upserted row per source), so `nabu status` can render the upstream
@@ -153,7 +272,7 @@ module Nabu
       # clean. Kept short (it rides the terse status column's trailing context).
       def probe_detail(health)
         return health.liveness.detail if health.liveness.status != :alive && health.liveness.detail
-        return health.drift_detail if health.drift == :behind && health.drift_detail
+        return health.drift_detail if %i[behind unpinned].include?(health.drift) && health.drift_detail
         return health.license.detail if health.license.status == :changed && health.license.detail
 
         nil
@@ -182,7 +301,7 @@ module Nabu
         pins = pins_for(entry.slug)
         probes = urls.map { |url| probe_repo(url) }
         multi = probes.size > 1
-        drift = drift_status(probes, pins, multi: multi)
+        drift = source_drift(entry) { drift_status(probes, pins, multi: multi, no_pin: no_pin_verdict(entry)) }
         SourceHealth.new(
           slug: entry.slug, enabled: entry.enabled,
           upstream: multi ? "#{urls.size} repos" : urls.first,
@@ -227,37 +346,80 @@ module Nabu
         end
       end
 
-      # Worst-wins ordering for a multi-repo source's per-repo drift.
-      DRIFT_SEVERITY = { behind: 3, never_synced: 2, unknown: 1, current: 0 }.freeze
+      # Worst-wins ordering for a multi-repo source's per-repo drift. :unpinned
+      # and :never_synced share a rank (both mean "no pin to compare"): the
+      # verdict chosen for the no-pin case is decided by +no_pin_verdict+, not
+      # by severity.
+      DRIFT_SEVERITY = { behind: 3, unpinned: 2, never_synced: 2, unknown: 1, current: 0 }.freeze
       private_constant :DRIFT_SEVERITY
 
-      def drift_status(probes, pins, multi:)
-        return single_repo_drift(probes.first, pins) unless multi
+      # A frozen-policy source has no meaningful drift (we deliberately don't
+      # re-sync it): short-circuit to :frozen so `health --remote` agrees with
+      # `status`'s up=frozen column (P14-12/P15-7). Otherwise yield the computed
+      # drift. Liveness and license are still probed as normal.
+      def source_drift(entry)
+        return Drift.new(status: :frozen, detail: nil) if frozen?(entry)
 
-        multi_repo_drift(probes, pins)
+        yield
       end
 
-      # repo_drift already yields :unknown (not alive) / :never_synced (no pin)
-      # / :current / :behind — the single-repo status verbatim.
-      def single_repo_drift(probe, pins)
-        Drift.new(status: repo_drift(probe, pins[probe.url]), detail: nil)
+      def frozen?(entry) = entry.sync_policy == "frozen"
+
+      # The verdict a git/zip unit gets when it has no pin. Honest split
+      # (P15-7): a source that HAS been synced (a run in the ledger, or a
+      # canonical tree on disk) but carries no pin was fetched before the pins
+      # ledger existed → :unpinned. One with no run AND no canonical tree is
+      # genuinely :never_synced.
+      def no_pin_verdict(entry)
+        synced_before?(entry.slug) ? :unpinned : :never_synced
+      end
+
+      def synced_before?(slug)
+        any_runs?(slug) || canonical_tree?(slug)
+      end
+
+      def any_runs?(slug)
+        return false unless @ledger&.table_exists?(:runs)
+
+        !Nabu::Store::Run.where(source_slug: slug).empty?
+      end
+
+      def canonical_tree?(slug)
+        return false unless @canonical_dir
+
+        dir = File.join(@canonical_dir, slug)
+        Dir.exist?(dir) && !Dir.empty?(dir)
+      end
+
+      def drift_status(probes, pins, multi:, no_pin:)
+        return single_repo_drift(probes.first, pins, no_pin) unless multi
+
+        multi_repo_drift(probes, pins, no_pin)
+      end
+
+      # repo_drift already yields :unknown (not alive) / the no_pin verdict (no
+      # pin) / :current / :behind — the single-repo status verbatim. An
+      # :unpinned unit carries the honest pre-ledger hint.
+      def single_repo_drift(probe, pins, no_pin)
+        status = repo_drift(probe, pins[probe.url], no_pin)
+        Drift.new(status: status, detail: status == :unpinned ? UNPINNED_HINT : nil)
       end
 
       # No per-repo pins yet → :multi (nothing to compare against until the next
       # sync records rows). Otherwise the worst per-repo drift wins, with the
       # :behind repos named in the detail.
-      def multi_repo_drift(probes, pins)
+      def multi_repo_drift(probes, pins, no_pin)
         return Drift.new(status: :multi, detail: "no per-repo pins yet — sync to record") if pins.empty?
 
-        per_repo = probes.map { |probe| [probe, repo_drift(probe, pins[probe.url])] }
+        per_repo = probes.map { |probe| [probe, repo_drift(probe, pins[probe.url], no_pin)] }
         worst = per_repo.map { |_probe, status| status }.max_by { |status| DRIFT_SEVERITY.fetch(status) }
         behind = per_repo.select { |_probe, status| status == :behind }.map { |probe, _status| probe.url }
         Drift.new(status: worst, detail: behind.empty? ? nil : "behind: #{behind.join(', ')}")
       end
 
-      def repo_drift(probe, pin)
+      def repo_drift(probe, pin, no_pin)
         return :unknown unless probe.liveness.status == :alive && probe.head
-        return :never_synced if pin.nil? || pin.last_sync_sha.nil? || pin.last_sync_sha.empty?
+        return no_pin if pin.nil? || pin.last_sync_sha.nil? || pin.last_sync_sha.empty?
 
         pin.last_sync_sha == probe.head ? :current : :behind
       end
@@ -357,7 +519,7 @@ module Nabu
         pins = pins_for(entry.slug)
         probes = targets.map { |target| probe_zip(entry.slug, target) }
         multi = probes.size > 1
-        drift = zip_drift(probes, multi: multi)
+        drift = source_drift(entry) { zip_drift(probes, multi: multi, no_pin: no_pin_verdict(entry)) }
         SourceHealth.new(
           slug: entry.slug, enabled: entry.enabled,
           upstream: multi ? "#{targets.size} projects" : targets.first&.zip_url,
@@ -401,19 +563,27 @@ module Nabu
       # not as drift. Not alive, or a HEAD that carried no Last-Modified →
       # :unknown (nothing to compare). Aggregated worst-wins like the git
       # multi-repo path; single-project sources leave the detail nil.
-      def zip_drift(probes, multi:)
+      def zip_drift(probes, multi:, no_pin:)
         return Drift.new(status: :unknown, detail: nil) if probes.empty?
 
-        per_repo = probes.map { |probe| [probe, zip_repo_drift(probe)] }
+        per_repo = probes.map { |probe| [probe, zip_repo_drift(probe, no_pin)] }
         worst = per_repo.map { |_probe, status| status }.max_by { |status| DRIFT_SEVERITY.fetch(status) }
         behind = per_repo.select { |_probe, status| status == :behind }.map { |probe, _status| probe.label }
-        detail = multi && !behind.empty? ? "behind: #{behind.join(', ')}" : nil
-        Drift.new(status: worst, detail: detail)
+        Drift.new(status: worst, detail: zip_drift_detail(worst, behind, multi: multi))
       end
 
-      def zip_repo_drift(probe)
+      # Multi-unit: name the behind projects. Single-unit :unpinned: the honest
+      # pre-ledger hint, exactly as the git single-repo path.
+      def zip_drift_detail(worst, behind, multi:)
+        return "behind: #{behind.join(', ')}" if multi && !behind.empty?
+        return UNPINNED_HINT if !multi && worst == :unpinned
+
+        nil
+      end
+
+      def zip_repo_drift(probe, no_pin)
         return :unknown unless probe.liveness.status == :alive
-        return :never_synced if blank?(probe.stored_last_modified)
+        return no_pin if blank?(probe.stored_last_modified)
         return :unknown if blank?(probe.remote_last_modified)
 
         probe.stored_last_modified == probe.remote_last_modified ? :current : :behind

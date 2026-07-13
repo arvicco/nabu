@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="hgv610">
+   <teiHeader>
+      <fileDesc>
+         <publicationStmt>
+            <idno type="filename">610</idno>
+            <idno type="TM">610</idno>
+            <idno type="ddb-hybrid">sb;1;4471</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <history>
+                  <origin>
+                     <origPlace>Pathyris</origPlace>
+                     <origDate>unbekannt</origDate>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+</TEI>

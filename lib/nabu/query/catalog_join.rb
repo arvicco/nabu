@@ -30,9 +30,10 @@ module Nabu
       # Look the index hits' passage_ids up in the catalog, applying the
       # two-level visibility rule (neither passage nor its document withdrawn)
       # plus the optional language and license filters. No ordering: the
-      # caller restores its own index order.
-      def catalog_rows(passage_ids, lang:, license:)
-        visible_passages(lang: lang, license: license)
+      # caller restores its own index order. +from+/+to+/+place+ (P15-2) add the
+      # document-grained date/place axis filter.
+      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil)
+        visible_passages(lang: lang, license: license, from: from, to: to, place: place)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -42,7 +43,14 @@ module Nabu
       # language/license filters — unordered, unselected, so callers add their
       # own scoping (Random's source filter + ORDER BY RANDOM(), a caller's
       # id join). One place for the visibility rule so it can never drift.
-      def visible_passages(lang:, license:)
+      #
+      # +from+/+to+/+place+ (P15-2, the date/place axis) filter on the
+      # document's document_axes rows — a single correlated EXISTS, so a
+      # document with several axis rows (a chronicle's annals, Part 2) never
+      # multiplies passage rows. A document with NO axis row is undated and
+      # falls out under any active date/place filter (an absence, never an
+      # error).
+      def visible_passages(lang:, license:, from: nil, to: nil, place: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -50,7 +58,23 @@ module Nabu
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
         dataset = dataset.where(license_expr => license) if license
+        dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
         dataset
+      end
+
+      # A correlated EXISTS over document_axes for the current document. The
+      # overlap is NULL-aware (fable-reviewed): an open-ended interval (a NULL
+      # bound = −∞ / +∞) must NOT silently vanish — `not_after >= from` becomes
+      # `(not_after IS NULL OR not_after >= from)`, and likewise the lower bound.
+      # A closed-interval overlap `nb <= to AND na >= from` (NOT naive
+      # containment, which would drop every precision="low" century-range doc).
+      def axis_exists(from:, to:, place:)
+        axes = Sequel[:document_axes]
+        sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
+        sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
+        sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
+        sub = sub.where(Sequel.ilike(axes[:place_name], place)) if place
+        sub.exists
       end
 
       # Effective license class: document override wins over source class (P1-3).

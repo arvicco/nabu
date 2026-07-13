@@ -206,5 +206,30 @@ module Query
       assert_kind_of Nabu::Query::Show::PassageResult, result
       assert result.withdrawn, "withdrawn passage is shown, flagged withdrawn"
     end
+
+    # -- the date/place axis (P15-2) -----------------------------------------
+
+    def test_document_carries_its_axis_when_present
+      load_document("1", [%w[1 μῆνιν]])
+      doc = @catalog[:documents].where(urn: "urn:d:1").first
+      @catalog[:document_axes].insert(
+        document_id: doc.fetch(:id), not_before: -113, not_after: -113,
+        precision: "exact", date_raw: "26. Aug. 113 v.Chr.",
+        place_name: "Pathyris", place_ref: "https://pleiades.stoa.org/places/786084", axis_source: "hgv"
+      )
+
+      axis = show("urn:d:1").axis
+      refute_nil axis
+      assert_equal(-113, axis.not_before)
+      assert_equal "Pathyris", axis.place_name
+      # A passage of the same document reports the document's axis too.
+      assert_equal(-113, show("urn:d:1:1").axis.not_before)
+    end
+
+    def test_undated_document_has_nil_axis
+      load_document("2", [%w[1 ἄειδε]])
+      assert_nil show("urn:d:2").axis
+      assert_nil show("urn:d:2:1").axis
+    end
   end
 end
