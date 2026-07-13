@@ -83,6 +83,23 @@ module Nabu
     # (never synced under P6-3) still reads drift → :multi and license →
     # :unchecked("multi-repo") — there is nothing per-repo to compare against
     # until the next sync records pins.
+    #
+    # == license_watch (P16-5)
+    #
+    # A source with `license_watch: <url>` in sources.yml checks THAT url
+    # instead of its strategy's default license path — the escape hatch for
+    # upstreams whose terms live in a README or a repository record page
+    # (kielipankki README.txt, clarin.si records) that the github-only
+    # LICENSE-file fetch and the ORACC metadata.json GET can't see. The GET
+    # goes through the same verified client, the body sha256 is compared via
+    # the same compare_license mechanism, and the baseline lives on a ledger
+    # pin keyed by the WATCHED url (a baseline-only row this probe mints on
+    # first sight — the one exception to "the probe never mints pins", since
+    # no sync path will ever pin a documentation url). First sight →
+    # :baseline_recorded; match → :unchanged; mismatch → :changed with the
+    # watched url named. Best-effort like everything here: a fetch error or
+    # non-200 → :unchecked, never a raise. Non-configured sources are
+    # untouched.
     class RemoteProbe
       # Tried in order at the remote HEAD sha; first 200 wins. Lowercase
       # variants are real: PerseusDL and First1KGreek ship "license.md".
@@ -307,7 +324,7 @@ module Nabu
           upstream: multi ? "#{urls.size} repos" : urls.first,
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,
-          license: license_status(probes, pins, multi: multi)
+          license: source_license(entry) { license_status(probes, pins, multi: multi) }
         )
       end
 
@@ -424,6 +441,44 @@ module Nabu
         pin.last_sync_sha == probe.head ? :current : :behind
       end
 
+      # The license_watch override (P16-5): a configured watch url replaces
+      # the strategy's default license path; otherwise yield it unchanged.
+      def source_license(entry)
+        return yield unless entry.license_watch
+
+        watch_license(entry.slug, entry.license_watch)
+      end
+
+      # GET the watched url, sha256 the body, compare via the shared
+      # compare_license against a ledger pin keyed by the url itself —
+      # minted baseline-only on first sight (no sync path ever pins a
+      # documentation url). No ledger, or any fetch failure → :unchecked.
+      def watch_license(slug, url)
+        return unchecked("license_watch: no ledger") unless @ledger
+
+        body = fetch_watched(url)
+        return unchecked("license_watch fetch failed") unless body
+
+        result = compare_license(watch_pin(slug, url), Digest::SHA256.hexdigest(body))
+        return result unless result.status == :changed
+
+        License.new(status: :changed, detail: "watched license page changed — review #{url}")
+      end
+
+      def watch_pin(slug, url)
+        Nabu::Store::Pin.first(source_slug: slug, repo_url: url) ||
+          Nabu::Store::Pin.create(source_slug: slug, repo_url: url)
+      end
+
+      # Best-effort GET through the verified client (clarin.si and friends
+      # sit behind the same institutional TLS quirks ZipFetch handles).
+      def fetch_watched(url)
+        response = http_client.get(url)
+        response.status == 200 ? response.body.to_s : nil
+      rescue Faraday::Error
+        nil
+      end
+
       def license_status(probes, pins, multi:)
         return repo_license(probes.first, pins[probes.first.url]) unless multi
 
@@ -525,7 +580,7 @@ module Nabu
           upstream: multi ? "#{targets.size} projects" : targets.first&.zip_url,
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,
-          license: zip_license(probes, pins, multi: multi)
+          license: source_license(entry) { zip_license(probes, pins, multi: multi) }
         )
       end
 

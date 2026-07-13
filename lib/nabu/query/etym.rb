@@ -21,6 +21,12 @@ module Nabu
     # reconstruction headword up directly (same strip-the-asterisk
     # convention as `define *bogъ`; upstream stores headwords bare).
     #
+    # Since P16-5 the attested wiktionary-cu entries carry reflexes too
+    # (the descendants backfill), so the reflex walk can land on an OCS
+    # entry: orv/sl lemmas reach their OCS ancestor, whose own ancestors
+    # (the -pro shelves naming chu + the folded headword) ride the same
+    # one-hop ascent. Attested entries render WITHOUT the display asterisk.
+    #
     # Degradation is graceful everywhere: a catalog predating migration 007
     # (or with no shelves) returns []; without a fulltext handle the walk
     # works and every attestation count is an honest nil.
@@ -164,13 +170,22 @@ module Nabu
         Result.new(
           urn: row.fetch(:urn), dictionary_slug: row.fetch(:dictionary_slug),
           dictionary_title: row.fetch(:dictionary_title), language: row.fetch(:language),
-          headword: "*#{row.fetch(:headword)}", gloss: row.fetch(:gloss),
+          headword: display_headword(row), gloss: row.fetch(:gloss),
           license: row.fetch(:license), license_class: row.fetch(:license_class),
           source_slug: row.fetch(:source_slug),
           matched_reflex: matched,
           cognates: @views.for_entry(row.fetch(:entry_row_id)),
           ancestors: ascend ? ancestors_of(row) : []
         )
+      end
+
+      # The display asterisk is the reconstruction convention — earned only by
+      # the -pro shelves. Since P16-5 the attested wiktionary-cu entries carry
+      # reflexes too and enter the walk; an OCS headword is attested, not
+      # reconstructed, and must not read as one.
+      def display_headword(row)
+        headword = row.fetch(:headword)
+        row.fetch(:language).to_s.end_with?("-pro") ? "*#{headword}" : headword
       end
     end
   end

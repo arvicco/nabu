@@ -22,9 +22,15 @@ module Nabu
     # One registry line. adapter_class_name is a String resolved on demand.
     # +translations+ (P7-4): per-source opt-in to ingesting parallel
     # translations (default false — corpora stay original-only unless the
-    # owner flips it in sources.yml).
-    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations) do
-      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false)
+    # owner flips it in sources.yml). +license_watch+ (P16-5): an optional
+    # URL whose body the remote probe hash-compares against the pin baseline
+    # — the license-drift check for upstreams whose terms live in a README
+    # or a repository record page rather than a github LICENSE file (nil =
+    # not watched; the probe's default per-strategy check applies).
+    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
+                        :license_watch) do
+      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
+                     license_watch: nil)
         super
       end
 
@@ -116,10 +122,23 @@ module Nabu
       Entry.new(
         slug: slug, adapter_class_name: adapter,
         enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config),
-        translations: boolean!(slug, config, "translations")
+        translations: boolean!(slug, config, "translations"),
+        license_watch: license_watch!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    # nil (not watched) or an absolute http(s) URL String — anything else is
+    # a configuration error naming the slug, caught at load, not probe time.
+    def self.license_watch!(slug, config)
+      url = config.fetch("license_watch", nil)
+      return nil if url.nil?
+      return url if url.is_a?(String) && url.match?(%r{\Ahttps?://\S+\z})
+
+      raise ValidationError,
+            "source #{slug.inspect}: license_watch must be an http(s) URL, got #{url.inspect}"
+    end
+    private_class_method :license_watch!
 
     def self.enabled!(slug, config)
       boolean!(slug, config, "enabled")

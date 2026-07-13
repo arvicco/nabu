@@ -302,6 +302,96 @@ class RemoteProbeTest < Minitest::Test
     assert_equal :baseline_recorded, row.license.status
   end
 
+  # -- license_watch (P16-5; WebMock, never real network) -------------------
+
+  WATCH_URL = "https://repo.example/record/11356/1025"
+  WATCH_BODY = "Licence: CC-BY 4.0\nAttribution: CCMH\n"
+
+  # A non-github source (whose default license path is a silent :unchecked)
+  # with a configured watch url — the escape hatch the key exists for.
+  def watch_registry(adapter: "ProbeNonGithubAdapter")
+    entry = Nabu::SourceRegistry::Entry.new(
+      slug: "wsrc", adapter_class_name: adapter, enabled: true,
+      sync_policy: "manual", license_watch: WATCH_URL
+    )
+    Nabu::SourceRegistry.new([entry])
+  end
+
+  def alive_nongithub_shell = FakeShell.new(NONGITHUB_URL => "sha\tHEAD\n")
+
+  def test_license_watch_records_baseline_on_first_sight
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    row = probe(watch_registry, alive_nongithub_shell).rows.first
+
+    assert_equal :baseline_recorded, row.license.status
+    pin = Nabu::Store::Pin.first(source_slug: "wsrc", repo_url: WATCH_URL)
+    assert_equal Digest::SHA256.hexdigest(WATCH_BODY), pin.license_baseline_sha256
+    assert_nil pin.last_sync_sha, "a watch pin is baseline-only — the drift check never reads it"
+  end
+
+  def test_license_watch_unchanged_when_hash_matches_baseline
+    seed_pin(slug: "wsrc", repo_url: WATCH_URL,
+             license_baseline_sha256: Digest::SHA256.hexdigest(WATCH_BODY))
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    row = probe(watch_registry, alive_nongithub_shell).rows.first
+
+    assert_equal :unchanged, row.license.status # renders "license: ok"
+  end
+
+  def test_license_watch_changed_names_the_watched_url
+    seed_pin(slug: "wsrc", repo_url: WATCH_URL, license_baseline_sha256: "00stale00")
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    row = probe(watch_registry, alive_nongithub_shell).rows.first
+
+    assert_equal :changed, row.license.status # renders "license: CHANGED"
+    assert_includes row.license.detail, WATCH_URL
+  end
+
+  # Best-effort contract: a non-200, or a transport error, reads :unchecked
+  # (silent per P16-0) and never raises out of the probe.
+  def test_license_watch_fetch_failure_reads_unchecked_never_raises
+    seed_pin(slug: "wsrc", repo_url: WATCH_URL, license_baseline_sha256: "00baseline00")
+    stub_request(:get, WATCH_URL).to_return(status: 500)
+    assert_equal :unchecked, probe(watch_registry, alive_nongithub_shell).rows.first.license.status
+
+    stub_request(:get, WATCH_URL).to_timeout
+    row = probe(watch_registry, alive_nongithub_shell).rows.first
+    assert_equal :unchecked, row.license.status
+    assert_equal "00baseline00",
+                 Nabu::Store::Pin.first(source_slug: "wsrc", repo_url: WATCH_URL).license_baseline_sha256,
+                 "a failed fetch must not touch the stored baseline"
+  end
+
+  # The watch REPLACES the github license-file path: no raw.githubusercontent
+  # GET is stubbed, so any attempt would fail the test under WebMock.
+  def test_license_watch_overrides_the_github_license_file_path
+    seed_pin(slug: "wsrc", repo_url: GITHUB_URL, last_sync_sha: "deadbeef")
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    shell = FakeShell.new(GITHUB_URL => "deadbeef\tHEAD\n")
+    row = probe(watch_registry(adapter: "ProbeGithubAdapter"), shell).rows.first
+
+    assert_equal :baseline_recorded, row.license.status
+  end
+
+  # Same override on the http-zip strategy: the metadata.json GETs are not
+  # stubbed, so reaching them would fail under WebMock.
+  def test_license_watch_overrides_the_http_zip_metadata_path
+    stub_zip_head(ALPHA_ZIP, last_modified: LM_OLD)
+    stub_zip_head(BETA_ZIP, last_modified: LM_OLD)
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    row = probe(watch_registry(adapter: "ProbeHttpZipAdapter"), NO_SHELL).rows.first
+
+    assert_equal :baseline_recorded, row.license.status
+  end
+
+  def test_license_watch_without_a_ledger_reads_unchecked
+    stub_request(:get, WATCH_URL).to_return(status: 200, body: WATCH_BODY)
+    report = Nabu::Health::RemoteProbe.new(
+      registry: watch_registry, ledger: nil, shell: alive_nongithub_shell
+    ).run
+    assert_equal :unchecked, report.rows.first.license.status
+  end
+
   # -- multi-repo (UD shape) ----------------------------------------------
 
   # A multi-repo source with NO per-repo pins yet (never synced under P6-3)

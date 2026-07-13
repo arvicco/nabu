@@ -24,11 +24,15 @@ module Nabu
     # edge Query::Etym#ancestors_of walks, same same-language exclusion (the
     # live PIE extract holds ~6k intra-shelf derivational edges that are
     # sub-tree structure, not ancestry). The ascent step is not re-expanded,
-    # so a malformed proto-to-proto cycle terminates trivially, and — with
-    # exactly three reconstruction shelves, every reflex row owned by one of
-    # them — one hop up provably reaches everything an unbounded walk would
-    # (a depth-3 chain needs an intermediate shelf, e.g. Proto-Balto-Slavic,
-    # that does not exist in the catalog; revisit the bound if one lands).
+    # so a malformed proto-to-proto cycle terminates trivially. With the
+    # three reconstruction shelves owning nearly every reflex row, one hop
+    # up reaches everything an unbounded walk would (a depth-3 chain needs
+    # an intermediate shelf, e.g. Proto-Balto-Slavic, that does not exist
+    # in the catalog; revisit the bound if one lands). Since P16-5 the
+    # attested wiktionary-cu shelf mints reflex rows too (the descendants
+    # backfill): its direct edges target a NON-pro entry (chu), so they
+    # never ascend — an orv lemma maps to its OCS root here, and the OCS →
+    # proto step stays Query::Etym's live ascent, not a closure row.
     #
     # == Roots are URNs, not row ids (the review's determinism finding)
     #
