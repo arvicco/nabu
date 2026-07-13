@@ -107,8 +107,10 @@ class CLITest < Minitest::Test
     assert_match(/μηνις finds μῆνις/, out, "must show the diacritic-folding promise")
     assert_match(/aethele finds æðele/, out, "must show the OE ASCII-folding promise")
     assert_match(/nabu show <urn>/, out, "must teach the resolved-citation handoff")
-    assert_match(/--lang grc\|lat\|ang\|chu/, out)
+    assert_match(/Monier-Williams/, out, "must document the Sanskrit shelf (P17-4)")
+    assert_match(/--lang grc\|lat\|ang\|san\|chu/, out)
     assert_match(/nabu define virtus/, out, "must show a Latin example")
+    assert_match(/nabu define amsa/, out, "must show the SLP1-transcode Sanskrit example")
   end
 
   # P14-1: `nabu etym` help must teach the walk (attested → proto →

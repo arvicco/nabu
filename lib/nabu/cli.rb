@@ -34,7 +34,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug)
+      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -828,15 +828,19 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, Lewis & Short, Bosworth-Toller, Wiktionary-OCS)"
+    desc "define LEMMA", "Look up a lemma in the dictionary shelf (LSJ, L&S, Bosworth-Toller, MW, Wiktionary-OCS)"
     long_desc <<~HELP, wrap: false
       The dictionary shelf (architecture §11): look a dictionary form up in
       the lexica the corpus holds locally — LSJ (A Greek-English Lexicon,
       grc) and Lewis & Short (A Latin Dictionary, lat), both CC BY-SA from
       the Perseus Digital Library, Bosworth-Toller (An Anglo-Saxon
-      Dictionary, ang; CC BY 4.0, LINDAT dump), and Wiktionary Old Church
-      Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL — etymologies with
-      their Proto-Slavic/PIE chains kept in the body). Entries print whole:
+      Dictionary, ang; CC BY 4.0, LINDAT dump), Monier-Williams (A
+      Sanskrit-English Dictionary, san; CC BY-NC-SA 3.0, Cologne CDSL —
+      SLP1 transcoded to IAST, so aṃśa and amsa both reach the entry, and
+      RV./BhP. citations resolve into the GRETIL shelf), and Wiktionary Old
+      Church Slavonic (chu; kaikki.org extract, CC-BY-SA + GFDL —
+      etymologies with their Proto-Slavic/PIE chains kept in the body).
+      Entries print whole:
       headword, short gloss, then the full entry body as structured plain
       text with sense labels on their own lines (the MCP nabu_define surface
       is the bounded sibling).
@@ -867,7 +871,7 @@ module Nabu
       ʰ→h, ʷ→w), so `define '*gʷʰew-'` and `define '*gwhew-'` reach the same
       root. `nabu etym` walks the same crosswalk from the attested side.
 
-      --lang grc|lat|ang|chu|sla-pro|ine-pro|gem-pro restricts to one
+      --lang grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro restricts to one
       shelf; --limit caps the entries.
 
       Examples:
@@ -875,13 +879,14 @@ module Nabu
         nabu define λόγος              # the long one, whole
         nabu define virtus --lang lat  # Lewis & Short only
         nabu define aethele --lang ang # Bosworth-Toller: æðele, noble
+        nabu define amsa --lang san    # Monier-Williams: aṃśa/aṃsa, RV. resolved into GRETIL
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
         nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
     HELP
-    DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
-    option :lang, type: :string, banner: "grc|lat|ang|chu|sla-pro|ine-pro|gem-pro",
+    DEFINE_LANGS = %w[grc lat ang san chu sla-pro ine-pro gem-pro].freeze
+    option :lang, type: :string, banner: "grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro",
                   desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                        "ang → Bosworth-Toller, chu → Wiktionary-OCS, " \
+                        "ang → Bosworth-Toller, san → Monier-Williams, chu → Wiktionary-OCS, " \
                         "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
@@ -2705,7 +2710,7 @@ module Nabu
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
       # note). A tripped breaker prints its counts + the --force hint and exits 1.
-      def sync_one(runner, registry, slug)
+      def sync_one(runner, registry, slug, db)
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
@@ -2718,6 +2723,18 @@ module Nabu
         say format_sync_outcome(outcome)
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
+        print_citation_coverage(entry, db)
+      end
+
+      # P17-4 per-siglum citation coverage: an adapter that declares
+      # .citation_coverage (MW → GRETIL) gets its live-resolution accounting
+      # printed after every sync — the survey's projections as verifiable
+      # output, recomputed against THIS catalog, never faked.
+      def print_citation_coverage(entry, db)
+        adapter_class = entry&.adapter_class
+        return unless adapter_class.respond_to?(:citation_coverage)
+
+        adapter_class.citation_coverage(catalog: db).each { |line| say("  #{line}") }
       end
 
       # sync --all: enabled + live sources only; report each, never abort the
