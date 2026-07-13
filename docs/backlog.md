@@ -5491,7 +5491,7 @@ Docs: architecture §12 addendum, ops.md license_watch paragraph,
 1917/28,540 green (exit 0), lint 254 files clean (exit 0). Live db/
 canonical read-only throughout (census only).
 
-## P16-gate · Phase 16 gate  [tier: orchestrator] [status: pending] [deps: P16-1..5]
+## P16-gate · Phase 16 gate  [tier: orchestrator] [status: done 2026-07-13] [deps: P16-1..5]
 Full-diff review, library/languages/README refresh (links/fuzzy/axis
 coverage numbers from live db), improvements register (§1.4 → shipped,
 §1.5 → shipped, §1.8 → shipped), PR, owner queue (parse-only resync
