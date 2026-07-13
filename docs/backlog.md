@@ -5817,7 +5817,7 @@ wait, busy_timeout + journal_mode pinned on all 7 connect paths,
 rollback→WAL self-heal; backup sidecar ride-along/prune/dry-run).
 Suite 2055/29,104 exit 0, lint 263 files exit 0.
 
-## P17-8 · PIE/comparativistics sources survey  [tier: opus, scout] [status: scouting] [deps: —]
+## P17-8 · PIE/comparativistics sources survey  [tier: opus, scout] [status: done 2026-07-13 — v1 picks IE-CoR (CC BY, 2,261 held-pair edges, loans layer) + LIV-LOD (CC BY-SA); reflexes-rows surface verdict; dev → P18 pending owner gate at P17-gate] [deps: —]
 Owner (2026-07-13): "Dispatch a scout on other PIE sources, I feel we're
 thin on comparativistics." Beyond kaikki (held: 3 proto shelves + 4 more
 landing in P17-3): survey the machine-readable comparativistics field —
@@ -5845,6 +5845,12 @@ sketches for the gate; honest "print-only, no unblock" list.
 #    + Svetokriški (loanword etymologies → borrowed synergy) + besedje16
 #    (Dalmatin sigla crosswalk); one dictionary parser family.
 # 4. PriLit rider (pick #3, CC BY): 1643–1866 TEI, 7-edition collation.
+# 5. PIE deepening (P17-8 picks, fixture sketches in pie-survey.md §7):
+#    IE-CoR cognacy matrix (CC BY — 273 sets/2,261 held-form pair edges,
+#    1,596 laryngeal PIE roots as kaikki cross-check, 1,036 curated loan
+#    events) + LIV-LOD Latin slice (CC BY-SA, 305 verbal etymons);
+#    v2: de Vaan EDL skeleton (nc). Unblock emails on file: Starostin
+#    (Starling pokorny.dbf), UT LRC.
 # 5. Carried candidates: scholia + dictionary-citation links producers,
 #    edition-vs-edition collate, streaming batch parallels producer.
 # OWNER REMINDER (raise at P17-gate + P18 planning): ELEXIS bitstream
