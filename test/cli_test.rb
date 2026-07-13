@@ -580,7 +580,7 @@ class CLITest < Minitest::Test
 
       # Bare status before any probe: the upstream is genuinely unknown.
       before, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\?\(never\)/, before)
+      assert_match(/corpus.*up=\?\(unprobed\)/, before)
 
       # --remote probes inline and writes the cache.
       out, _err, status = with_config(config) do

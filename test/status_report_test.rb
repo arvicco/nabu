@@ -213,7 +213,7 @@ class StatusReportTest < Minitest::Test
 
   # -- P14-12: the upstream drift column (up=…) --------------------------------
 
-  # No cached probe row for a source → up=?(never): the owner has not yet run
+  # No cached probe row for a source → up=?(unprobed): the owner has not yet run
   # `nabu health --remote` / `status --remote`, so drift is genuinely unknown.
   def test_upstream_never_probed_renders_question_never
     db = store_test_db
@@ -222,7 +222,7 @@ class StatusReportTest < Minitest::Test
     registry["fake-src"].sync_source!(db)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/fake-src\s+off\s+manual\s+up=\?\(never\)/, out)
+    assert_match(/fake-src\s+off\s+manual\s+up=\?\(unprobed\)/, out)
   end
 
   # A fresh CURRENT probe reads quiet: up=ok(Nd), age always shown.
@@ -288,7 +288,7 @@ class StatusReportTest < Minitest::Test
     registry["fake-src"].sync_source!(db)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/up=\?\(never\)/, out)
+    assert_match(/up=\?\(unprobed\)/, out)
   end
 
   private

@@ -51,14 +51,15 @@ module Nabu
     # (P14-12) — never a live probe. Vocabulary honours terseness: BEHIND is
     # loud, ok is quiet, the age is always shown so a decision is informed.
     #   up=frozen      frozen-policy source (no probe expected; cache ignored)
-    #   up=?(never)    no cached probe yet — run `nabu status --remote`
+    #   up=?(unprobed) no cached probe yet — run `nabu status --remote`
+    #                  ("never" read as never-SYNCED — owner defect 2026-07-13)
     #   up=BEHIND(Nd)  upstream moved past our pin (loud; staleness irrelevant)
     #   up=ok(Nd)      current as of a recent probe
     #   up=stale(Nd)   was "ok" but the probe is older than STALE_AFTER_DAYS
     #   up=?(Nd)       drift indeterminate (never synced / unreachable / multi)
     def upstream_cell(entry, probe)
       return "up=frozen" if entry.sync_policy == "frozen"
-      return "up=?(never)" if probe.nil?
+      return "up=?(unprobed)" if probe.nil?
 
       age = age_days(probe.checked_at)
       case probe.drift
@@ -76,7 +77,7 @@ module Nabu
     # { slug => Store::Probe } from the ledger. Empty when there is no ledger
     # (fresh machine) or the ledger predates the source_probes table (a
     # read-only status before any health --remote migrated it) — every source
-    # then renders up=?(never), honestly.
+    # then renders up=?(unprobed), honestly.
     def probe_cache(ledger)
       return {} unless ledger&.table_exists?(:source_probes)
 
