@@ -20,9 +20,12 @@ module Nabu
       # probe discovered the counterpart from this urn) or :in (some other
       # anchor's probe found this urn). +urn+ is the COUNTERPART; title/
       # language/license_class come from catalog resolution (nil when the
-      # counterpart is no longer in the catalog).
+      # counterpart is no longer in the catalog). +detail+ is the per-edge
+      # evidence (P16-2, migration 002): the formula gram, the cognate meet
+      # (ref · root [shelf]); nil for parallel edges and journals predating
+      # the column (a read-only open never migrates — missing key reads nil).
       Edge = Data.define(:direction, :urn, :title, :language, :license_class,
-                         :score, :run_id) do
+                         :score, :detail, :run_id) do
         def resolved? = !title.nil? || !language.nil?
       end
 
@@ -106,7 +109,7 @@ module Nabu
         Edge.new(direction: edge[:direction], urn: counterpart(edge),
                  title: resolution[:title], language: resolution[:language],
                  license_class: resolution[:license_class],
-                 score: edge[:score], run_id: edge[:run_id])
+                 score: edge[:score], detail: edge[:detail], run_id: edge[:run_id])
       end
 
       def run_infos(edges)
