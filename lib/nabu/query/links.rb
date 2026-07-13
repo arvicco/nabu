@@ -13,6 +13,16 @@ module Nabu
     # no longer holds (withdrawn since the batch run, or a rebuild off a
     # slimmer canonical) resolves to nils and renders honestly as unresolved —
     # the edge itself is journal truth, not catalog truth.
+    #
+    # == Why an edge never renders twice (P18-3, the dedupe audit)
+    #
+    # The journal's unique (from_urn, to_urn, kind) index plus write_edge!'s
+    # reverse-direction refresh keep AT MOST ONE row per unordered pair per
+    # kind, and the out/in halves of this query could both return one row
+    # only for a self-edge (from_urn = to_urn) — which no producer mints
+    # (parallels excludes the anchor's own document, formula spokes fan out
+    # of a hub distinct from every spoke, cognate pairs span two languages'
+    # passages). So the kind groups are duplicate-free by construction.
     class Links
       include CatalogJoin
 

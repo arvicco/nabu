@@ -66,6 +66,15 @@ module Nabu
     # difference; the alternative (passage-frequency on the document side too)
     # would turn "8 occurrences" into "in 6 passages", less intuitive for no gain.
     #
+    # == Why the distinctive/hapax lists never repeat a row (P18-3)
+    #
+    # The tally is hash-keyed by folded lemma across the whole scope, so
+    # each list carries one row per folded key — repeated spellings MERGE
+    # into one count (a second occurrence un-hapaxes the word, never
+    # doubles it), and a repeated display string would need one raw
+    # spelling folding two ways inside one scope, i.e. a mixed-language
+    # document, which no adapter mints.
+    #
     # == MCP: CLI-only for v1 (argued, deferred with a re-open condition)
     #
     # The eyeball-ritual `--random` was kept off MCP because it is an operator

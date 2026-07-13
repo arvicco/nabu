@@ -33,6 +33,14 @@ module Nabu
     # - Roots are stored as URNs and resolved against the CURRENT catalog
     #   with the withdrawn filter: a root withdrawn since the index was
     #   built silently vanishes rather than serving stale content.
+    # - Grouping is duplicate-proof by construction (P18-3, the prīmus ×3
+    #   audit): the accumulator is hash-keyed at every level — (ref, root
+    #   urn) → language → folded lemma — and surfaces/documents/passages
+    #   are Sets, so duplicate closure rows or repeated lemma rows can only
+    #   MERGE into a witness word, never render it twice (pinned by test).
+    #   A word/roman double-fold cannot double-match either: the closure
+    #   keys word and roman folds as distinct lemma_folded strings and a
+    #   gold lemma carries exactly one folded form.
     class Cognates
       # A caller-fixable problem (unknown work, unattested ref, index not
       # built): CLI/MCP turn the message into exit 1 / isError.

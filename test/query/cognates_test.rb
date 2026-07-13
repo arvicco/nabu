@@ -133,6 +133,27 @@ module Query
                    "the attesting passage urns ride the witness word (BatchCognates' edge anchor)"
     end
 
+    # P18-3: the join is hash-keyed at every level — (ref, root) → language
+    # → lemma_folded — so even raw duplicate closure rows (impossible from
+    # the indexer's build, forced here directly) render ONE group with ONE
+    # witness word per language, never a doubled row.
+    def test_duplicate_closure_rows_render_one_group_with_one_witness_word_each
+      seed_gospel_verses
+      rebuild!
+      table = @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE]
+      row = table.where(language: "chu", lemma_folded: "богъ",
+                        root_urn: "urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root").first
+      refute_nil row, "the closure must hold the chu богъ → *bʰeh₂g- row"
+      table.insert(row)
+
+      result = run_cognates("MARK 1.1")
+      assert_equal 1, result.groups.size, "one (verse, root) group, not one per closure row"
+      group = result.groups.first
+      assert_equal %w[chu grc], group.witnesses.map(&:language).sort
+      assert_equal 1, group.witnesses.count { |w| w.language == "chu" },
+                   "the doubled closure row renders one witness word"
+    end
+
     def test_a_root_reached_by_one_language_only_is_no_cognate_hit
       seed_gospel_verses
       rebuild!
