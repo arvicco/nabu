@@ -644,6 +644,22 @@ plainly in the help). Recall is bounded by Wiktionary coverage (~34% got /
 ~21% chu gold lemma types reach any proto entry): absence of a hit is
 absence of evidence.
 
+**Addendum (P16-5): the attested-OCS descendants feed the crosswalk too.**
+The wiktionary-cu records carry the same `descendants` trees the recon
+extracts do; the P14-1 deferral is closed — the cu adapter now parses them
+(`reflexes: true`), so attested-OCS entries mint `dictionary_reflexes`
+edges through the identical parser → DictionaryLoader → ReflexRootsIndexer
+choke points (census over the live extract, 2026-07-13: 589 of 4,615
+entries carry worded descendants → 2,210 edges, ~244 of them gold-joinable,
+mostly orv and sl). The walk semantics stay bounded: a cu-owned edge is
+direct-only (chu is not `-pro`, so the closure takes no ascent hop from
+it — the OCS → Proto-Slavic step remains Etym's live one-hop ascent), and
+etym renders attested entries WITHOUT the reconstruction asterisk, which
+only the `-pro` shelves earn. Reflexes ride the entry content sha, so the
+backfill lands in the live db at the next owner-fired
+`bin/nabu sync wiktionary-cu --parse-only` (re-mints the shelf's
+revisions — expected, journaled).
+
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 
 `parallels <urn>` answers the classicist's "who quotes THIS line? where
