@@ -183,6 +183,38 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P15-8: --long expands vocab's truncated hapax list (house rule) --------
+  # vocab's ONE marked elision is print_vocab_hapax's "(+N more)" tail: the
+  # Greek-PROIEL head-50 fixture holds 211 hapax, so --limit 3 fires the cap by
+  # default and --long must list every hapax with no tail. The distinctive
+  # table is a "top N" RANKING governed by --limit (no "(+N more)" marker), so
+  # --long deliberately leaves it alone — the census verdict argued openly.
+  VOCAB_URN = "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50"
+
+  def test_vocab_hapax_is_capped_by_default
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["vocab", VOCAB_URN, "--limit", "3"]) }
+      assert_nil status
+      assert_match(/hapax legomena \(211, once each\): .+ \(\+208 more\)/, out,
+                   "the 208-past-3 tail is summarised, not listed")
+      assert_match(/distinctive vocabulary \(log-odds vs corpus, top 3\)/, out)
+    end
+  end
+
+  def test_vocab_long_lists_every_hapax_and_leaves_the_ranking_capped
+    with_treebank_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(["vocab", VOCAB_URN, "--limit", "3", "--long"]) }
+      assert_nil status
+      assert_match(/hapax legomena \(211, once each\): /, out)
+      refute_match(/\+\d+ more/, out, "nothing is elided under --long")
+      # The distinctive ranking is a --limit knob, not a marked elision: --long
+      # leaves "top 3" exactly as the compact default renders it.
+      assert_match(/distinctive vocabulary \(log-odds vs corpus, top 3\)/, out,
+                   "--long escapes elisions, not the distinctive ranking cap")
+    end
+  end
+
   def test_help_export_documents_formats_and_filters
     out, _err, _status = run_cli(%w[help export])
     assert_match(/jsonl/, out)
@@ -481,6 +513,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P15-7: `health --backfill-pins` records a ledger pin from the local git
+  # clone (no network, read-only on canonical/) and is idempotent — a second
+  # run finds nothing to do.
+  def test_health_backfill_pins_from_local_clone_and_idempotent
+    Dir.mktmpdir("nabu-cli-backfill") do |root|
+      corpus = File.join(root, "canonical", "corpus")
+      FileUtils.mkdir_p(corpus)
+      File.write(File.join(corpus, "one.txt"), "Iliad\n")
+      Nabu::Shell.run("git", "-C", corpus, "init", "-q")
+      Nabu::Shell.run("git", "-C", corpus, "add", ".")
+      Nabu::Shell.run("git", "-C", corpus, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+
+      out, _err, status = with_config(config) { run_cli(%w[health --backfill-pins]) }
+      assert_nil status
+      assert_match(/corpus\s+pinned/, out)
+      assert_match(/backfilled-from-local-clone/, out)
+      assert_match(/recorded 1 pin/, out)
+
+      again, = with_config(config) { run_cli(%w[health --backfill-pins]) }
+      assert_match(/nothing to backfill/, again)
+    end
+  end
+
   # P14-12: `status --remote` runs the upstream probe inline (the SAME stubbed
   # ls-remote path as `health --remote`), persists the verdict, then renders the
   # up= column from that fresh cache — the one-command informed-update flow.
@@ -541,6 +602,81 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[search anything]) }
       assert_equal 1, status
       assert_match(/no index.*sync.*rebuild/i, err)
+    end
+  end
+
+  # -- search date/place axis (P15-2) --------------------------------------
+
+  def test_search_from_to_filters_by_date
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --from -300 --to -30]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)  # 113 BCE
+      assert_match("urn:nabu:ddbdp:c:1", out)  # 30 BCE
+      refute_match("urn:nabu:ddbdp:b:1", out)  # 591 CE, out of window
+    end
+  end
+
+  def test_search_century_shorthand_scopes_one_century
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out)
+    end
+  end
+
+  def test_search_place_filters_by_provenance
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --place oxyrhynch%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # Arsinoites
+    end
+  end
+
+  def test_search_year_zero_is_rejected
+    _out, err, status = run_cli(%w[search foo --from 0])
+    assert_equal 1, status
+    assert_match(/no year 0/i, err)
+  end
+
+  def test_search_from_after_to_is_rejected
+    _out, err, status = run_cli(%w[search foo --from -30 --to -300])
+    assert_equal 1, status
+    assert_match(/--from -30 is after --to -300/, err)
+  end
+
+  def test_search_date_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --lemma λέγω --from -300])
+    assert_equal 1, status
+    assert_match(/text search only/i, err)
+  end
+
+  def test_show_prints_the_date_place_axis_line
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_nil status
+      assert_match(/date: 113 BCE \(low\) · Oxyrhynchus/, out)
+    end
+  end
+
+  def test_vocab_by_century_buckets_the_dated_corpus
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab --by-century]) }
+      assert_nil status
+      assert_match(/2nd c\. BCE\s+1 document/, out)
+      assert_match(/6th c\. CE\s+1 document/, out)
+      assert_match(/3 dated documents \(bucketed by earliest year; 2 span multiple centuries\)/, out)
+    end
+  end
+
+  def test_vocab_by_century_plots_a_word
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab --by-century κακος]) }
+      assert_nil status
+      assert_match(/diachrony of "κακος"/, out)
+      assert_match(/6th c\. CE\s+1 document/, out) # only urn:b carries κακος
     end
   end
 
@@ -720,6 +856,112 @@ class CLITest < Minitest::Test
     assert_match(/corpus order/i, out, "must say rows are corpus-ordered, not ranked")
     assert_match(/nabu concord μῆνιν/, out, "a worked grc example")
     assert_match(/--lemma λέγω/, out, "a worked lemma example")
+    assert_match(/Examples:/, out)
+  end
+
+  # -- parallels (P15-1 intertext) -----------------------------------------
+
+  def test_parallels_finds_the_quotation_with_evidence
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1]) }
+      assert_nil status, "a successful parallels exits 0"
+      assert_match(/parallels of urn:h:od:1\.1/, out)
+      assert_match(/urn:q:full:1 \[grc\]/, out, "the verbatim quoter is a hit")
+      assert_match(/score \d/, out)
+      assert_match(/ανδρα μοι εννεπε μουσα/, out, "the shared phrase is the folded evidence")
+      assert_match(/parallels? from \d+ grams/, out)
+    end
+  end
+
+  # The owner house rule (2026-07-12): --long expands any truncated list. The
+  # full quoter shares FOUR separated phrase spans; compact shows three with a
+  # "… and N more (--long)" tail, --long shows all four and no tail.
+  def test_parallels_long_expands_the_truncated_evidence_spans
+    with_parallels_corpus do |config|
+      compact, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1]) }
+      long, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --long]) }
+
+      assert_match(/… and 1 more \(--long\)/, compact, "compact elides beyond three spans")
+      refute_match(/π4a π4b π4c π4d/, compact, "the fourth span is hidden in compact")
+      refute_match(/and 1 more/, long, "--long drops the elision tail")
+      assert_match(/π4a π4b π4c π4d/, long, "--long shows the fourth span in full")
+    end
+  end
+
+  def test_parallels_unknown_urn_exits_one_with_a_hint
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:no:such:thing]) }
+      assert_equal 1, status
+      assert_match(/no live passage/i, err)
+    end
+  end
+
+  def test_parallels_bad_license_exits_one
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --license bogus]) }
+      assert_equal 1, status
+      assert_match(/unknown license/i, err)
+    end
+  end
+
+  def test_help_parallels_documents_the_engine_and_long
+    out, _err, _status = run_cli(%w[help parallels])
+    assert_match(/quote|echo|intertext/i, out)
+    assert_match(/--long/, out, "the truncation-expand flag is documented")
+    assert_match(/Examples:/, out)
+  end
+
+  # -- formulas (P15-5 formula miner) --------------------------------------
+
+  def test_formulas_mines_the_refrain_with_loci
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas aspr]) }
+      assert_nil status, "a successful formulas exits 0"
+      assert_match(%r{formulas in aspr — 4 passages / 24 tokens}, out)
+      assert_match(/4×  saga hwaet ic hatte/, out, "the refrain is the top formula, count first")
+      assert_match(/e\.g\. urn:nabu:aspr:riddle:0/, out, "compact shows a few example loci")
+      assert_match(/rank = count × 4-gram length/, out, "the footer states the ranking")
+    end
+  end
+
+  def test_formulas_long_lists_every_locus
+    with_formulas_corpus do |config|
+      compact, = with_config(config) { run_cli(%w[formulas aspr]) }
+      long, = with_config(config) { run_cli(%w[formulas aspr --long]) }
+      refute_match(/urn:nabu:aspr:riddle:3/, compact, "compact keeps only a few examples")
+      assert_match(/urn:nabu:aspr:riddle:3/, long, "--long lists every locus")
+      refute_match(/e\.g\./, long, "--long is the full list, not examples")
+    end
+  end
+
+  def test_formulas_gram_size_and_min_count_compose
+    with_formulas_corpus do |config|
+      out, = with_config(config) { run_cli(%w[formulas aspr --gram-size 3 --min-count 4]) }
+      assert_match(/4×  hwaet ic hatte/, out, "the 3-gram refrain at the raised floor")
+    end
+  end
+
+  def test_formulas_unknown_scope_reports_empty
+    with_formulas_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[formulas urn:nabu:nope:x]) }
+      assert_nil status
+      assert_match(/no passages in scope/, out)
+    end
+  end
+
+  def test_formulas_bad_gram_size_exits_one
+    with_formulas_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[formulas aspr --gram-size 1]) }
+      assert_equal 1, status
+      assert_match(/gram size must be/i, err)
+    end
+  end
+
+  def test_help_formulas_documents_scope_lang_and_ranking
+    out, _err, _status = run_cli(%w[help formulas])
+    assert_match(/formula/i, out)
+    assert_match(/--lang/, out, "the language filter is documented")
+    assert_match(/--long/, out)
     assert_match(/Examples:/, out)
   end
 
@@ -1164,6 +1406,18 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P15-8: --long is wired on align (the flag never errors, the owner's
+  # complaint). Under the cap it renders identically to compact; the cap-lift
+  # itself is proven at the query level (a 205-verse fixture there).
+  def test_align_accepts_long_and_renders_every_ref_under_the_cap
+    with_range_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[align JON 1 --long]) }
+      assert_nil status
+      assert_match(/JON 1 — /, out)
+      assert_match(/full  greek verse 1/, out, "every attested ref still renders")
+    end
+  end
+
   def test_align_chapter_summarizes_all_absent_witnesses_once_in_the_header
     with_absent_range_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[align JON 1]) }
@@ -1200,6 +1454,173 @@ class CLITest < Minitest::Test
     assert_match(/--work/, out)
     assert_match(%r{config/alignments\.yml}, out, "must point at the registry")
     assert_match(/Examples:/, out)
+  end
+
+  # -- cognates (P15-3) ------------------------------------------------------
+
+  def test_cognates_renders_a_shared_root_verse_compactly
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1"]) }
+      assert_nil status
+      assert_match(/MARK 1\.1 — work nt/, out)
+      assert_match(/1 hit · 1 verse · 1 root/, out)
+      assert_match(/\*bʰeh₂g- \[ine-pro · attribution\]/, out)
+      assert_match(/grc {2}ἔφᾰγον — attested as ἔφαγεν/, out)
+      assert_match(/chu {2}богъ/, out)
+      refute_match(/gloss:/, out, "gloss is --long detail")
+      refute_match(/urn:nabu:test/, out, "document urns are --long detail")
+    end
+  end
+
+  def test_cognates_long_expands_gloss_and_witness_documents
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["cognates", "MARK", "1.1", "--long"]) }
+      assert_nil status
+      assert_match(/Wiktionary — Proto-Indo-European .* gloss: to divide/, out)
+      assert_match(/urn:nabu:test:marianus — Codex Marianus \[nc\]/, out)
+    end
+  end
+
+  def test_cognates_batches_a_work_and_labels_the_loan_shelf
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates nt]) }
+      assert_nil status
+      assert_match(/nt — work nt/, out)
+      assert_match(/\*kaisaraz \[gem-pro · attribution\]/, out,
+                   "цѣсар҄ь ~ cāsere meet at the GERMANIC shelf — the borrowing label")
+      assert(out.index("MARK 1.1") < out.index("MARK 2.1"), "hits in citation order")
+    end
+  end
+
+  def test_cognates_langs_restricts_and_reports_no_hits_honestly
+    with_cognates_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[cognates nt --langs got,chu]) }
+      assert_nil status
+      assert_match(/no hits/, out)
+    end
+  end
+
+  def test_cognates_langs_needs_two_languages
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[cognates nt --langs chu]) }
+      assert_equal 1, status
+      assert_match(/at least two/, err)
+    end
+  end
+
+  def test_cognates_unattested_ref_exits_one_with_guidance
+    with_cognates_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["cognates", "JOHN", "99.1"]) }
+      assert_equal 1, status
+      assert_match(/not attested/, err)
+    end
+  end
+
+  def test_help_cognates_documents_the_join_and_the_borrowing_caveat
+    out, _err, _status = run_cli(%w[help cognates])
+    assert_match(/LUKE 14\.34/, out, "the salt-saying example")
+    assert_match(/--langs/, out)
+    assert_match(/BORROWING/, out, "must teach the meet-shelf reading")
+    assert_match(/Examples:/, out)
+  end
+
+  # -- align --collate (P15-4) -------------------------------------------------
+
+  # A chu corpus for collation: the Cyrillic PROIEL Marianus + two Helsinki-
+  # ASCII CCMH codices (registry order), so a chu/Latin cell forms and the
+  # Cyrillic witness is the cross-script aside.
+  COLLATE_REGISTRY = <<~YAML
+    nt:
+      title: "New Testament (parallel witnesses)"
+      witnesses:
+        - document: urn:nabu:proiel:marianus
+          label: marianus
+        - document: urn:nabu:ccmh:assemanianus
+          label: ccmh-assemanianus
+        - document: urn:nabu:ccmh:marianus
+          label: ccmh-marianus
+  YAML
+
+  def with_collation_corpus
+    Dir.mktmpdir("nabu-cli-collate") do |root|
+      config = aligned_corpus_config(root, COLLATE_REGISTRY, nil)
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      source_id = catalog[:sources].insert(slug: "proiel", name: "PROIEL",
+                                           adapter_class: "TestAdapter", license_class: "nc", enabled: true)
+      [["urn:nabu:proiel:marianus", "chu", "Ꙇ придѫ къ немоу носѧште ослабленъ жилами."],
+       ["urn:nabu:ccmh:assemanianus", "chu", "*/i pridO k$ nemu nosEqe /oslablena ZIlamI ."],
+       ["urn:nabu:ccmh:marianus", "chu", "*J pridO k& nemu nosESte oslablen& Zilami ."]].each do |urn, lang, text|
+        doc_id = catalog[:documents].insert(source_id: source_id, urn: urn, title: urn.split(":").last,
+                                            language: lang, content_sha256: "x", revision: 1, withdrawn: false)
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "#{urn}:s", sequence: 0, language: lang, text: text,
+          text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+          annotations_json: JSON.generate("citation" => "MARK 2.3",
+                                          "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }])
+        )
+      end
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def test_align_collate_renders_an_apparatus_with_cross_script_honesty
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate"]) }
+      assert_nil status
+      assert_match(/MARK 2\.3 — New Testament.*· collation/, out)
+      assert_match(%r{\[chu/Latin\] 2 witnesses, base ccmh-assemanianus}, out)
+      assert_match(/= ccmh-assemanianus/, out, "the base reading is printed in full")
+      # The real substitution surfaces, markers kept raw.
+      assert_match(/nosEqe.*→.*nosESte/, out)
+      # The Cyrillic witness is set aside, honestly.
+      assert_match(%r{\[chu/Cyrillic\] marianus.*different transcription system}, out)
+      assert_match(/придѫ/, out, "the aside still shows its text")
+    end
+  end
+
+  def test_align_collate_base_flag_selects_the_base
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--base", "ccmh-marianus"]) }
+      assert_nil status
+      assert_match(/base ccmh-marianus/, out)
+    end
+  end
+
+  def test_align_collate_long_prints_full_tokens_per_witness
+    with_collation_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--long"]) }
+      assert_nil status
+      # Under --long the divergent witness prints its whole token line, not marks.
+      assert_match(/ccmh-marianus  \*J pridO k& nemu nosESte/, out)
+      refute_match(/→/, out, "--long shows tokens, not apparatus arrows")
+    end
+  end
+
+  def test_align_base_without_collate_exits_one
+    with_collation_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--base", "ccmh-marianus"]) }
+      assert_equal 1, status
+      assert_match(/--base only applies with --collate/, err)
+    end
+  end
+
+  def test_align_collate_base_miss_exits_one
+    with_collation_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(["align", "MARK 2.3", "--collate", "--base", "nope"]) }
+      assert_equal 1, status
+      assert_match(/no witness matches --base/, err)
+    end
+  end
+
+  def test_help_align_documents_collate
+    out, _err, _status = run_cli(%w[help align])
+    assert_match(/--collate/, out)
+    assert_match(/--base/, out)
   end
 
   # -- export (P4-3) -------------------------------------------------------
@@ -1253,6 +1674,126 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # A parallels (P15-1) corpus: an anchor line and a verbatim quoter that shares
+  # FOUR non-contiguous phrase spans (the fillers ξξ*/ζζ break continuity), so
+  # the quoter's evidence has four spans — compact elides the fourth, --long
+  # expands it. Built and indexed through the real Indexer (no alignments).
+  def with_parallels_corpus
+    anchor = "ἄνδρα μοι ἔννεπε μοῦσα ξξ1 ξξ2 ξξ3 π2a π2b π2c π2d ξξ4 ξξ5 ξξ6 " \
+             "π3a π3b π3c π3d ξξ7 ξξ8 ξξ9 π4a π4b π4c π4d"
+    quoter = "λεγει ἄνδρα μοι ἔννεπε μοῦσα ζζ π2a π2b π2c π2d ζζ π3a π3b π3c π3d ζζ π4a π4b π4c π4d"
+    Dir.mktmpdir("nabu-cli-parallels") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "h", name: "Homer", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_parallels_passage(catalog, src, "urn:h:od", "urn:h:od:1.1", anchor)
+      seed_parallels_passage(catalog, src, "urn:q:full", "urn:q:full:1", quoter)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A formula-miner (P15-5) corpus: one ASPR document whose refrain "saga hwaet
+  # ic hatte" recurs across four riddle lines, each with unique tail words. Only
+  # the catalog is needed (the miner reads text_normalized directly, no index).
+  def with_formulas_corpus
+    Dir.mktmpdir("nabu-cli-formulas") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "aspr", name: "ASPR", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      doc_id = catalog[:documents].insert(
+        source_id: src, urn: "urn:nabu:aspr:riddle", title: "Riddles", language: "ang",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      ["foo bar", "baz qux", "alpha beta", "gamma delta"].each_with_index do |tail, i|
+        text = "saga hwaet ic hatte #{tail}"
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "urn:nabu:aspr:riddle:#{i}", sequence: i, language: "ang",
+          text: text, text_normalized: Nabu::Normalize.search_form(text, language: "ang"),
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_parallels_passage(catalog, source_id, doc_urn, passage_urn, text)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+  end
+
+  # A dated corpus (P15-2): three papyri with document_axes rows spanning BCE→CE,
+  # indexed through the real Indexer, for the CLI date/place surfaces.
+  def with_dated_corpus
+    Dir.mktmpdir("nabu-cli-dated") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "p", name: "Papyri", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:a", "στρατηγος αγαθος", -113, -113, "Oxyrhynchus")
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:b", "στρατηγος κακος", 591, 602, "Arsinoites")
+      seed_dated_passage(catalog, src, "urn:nabu:ddbdp:c", "στρατηγος μεγας", -30, 14, "Oxyrhynchus")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "grc",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
+      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+    catalog[:document_axes].insert(
+      document_id: doc_id, not_before: not_before, not_after: not_after,
+      precision: "low", place_name: place, axis_source: "hgv"
+    )
   end
 
   # An on-disk two-witness alignment corpus (P11-3): a registry file, a
@@ -1672,6 +2213,72 @@ class CLITest < Minitest::Test
 
   # Build a throwaway config with an empty (comments-only) registry and no
   # catalog db, and yield it.
+  # An on-disk cognates corpus (P15-3): the real wiktionary-recon shelf, an
+  # nt registry over grc/chu/ang witnesses whose sentences carry gold lemmas
+  # in citation-bearing tokens, and the full index build (FTS + lemmas +
+  # alignment refs + reflex_roots) — the production pipeline end to end.
+  # MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-; MARK 2.1 meets
+  # ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (the loan shelf).
+  def with_cognates_corpus
+    Dir.mktmpdir("nabu-cli-cognates") do |root|
+      registry_yaml = <<~YAML
+        nt:
+          title: "New Testament (test witnesses)"
+          witnesses:
+            - document: urn:nabu:test:grc-nt
+            - document: urn:nabu:test:marianus
+            - document: urn:nabu:test:oe-mark
+      YAML
+      alignments = File.join(root, "alignments.yml")
+      File.write(alignments, registry_yaml)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_cognates_corpus(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_cognates_corpus(catalog)
+    recon = Nabu::Store::Source.create(
+      slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+      adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+    )
+    Nabu::Store::DictionaryLoader.new(db: catalog, source: recon)
+                                 .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                            workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+    texts = catalog[:sources].insert(slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
+                                     license_class: "nc", enabled: true)
+    [["grc-nt", "Greek NT", "grc", [["MARK 1.1", "ἔφᾰγον", "ἔφαγεν"]]],
+     ["marianus", "Codex Marianus", "chu", [["MARK 1.1", "богъ", "ба"], ["MARK 2.1", "цѣсар҄ь", "цѣсар҄ь"]]],
+     ["oe-mark", "OE Mark", "ang", [["MARK 2.1", "cāsere", "cāsere"]]]].each do |tail, title, lang, rows|
+      doc_id = catalog[:documents].insert(
+        source_id: texts, urn: "urn:nabu:test:#{tail}", title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      rows.each_with_index do |(ref, lemma, form), seq|
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "urn:nabu:test:#{tail}:#{seq + 1}", sequence: seq,
+          language: lang, text: form, text_normalized: form, content_sha256: "x", revision: 1,
+          withdrawn: false,
+          annotations_json: JSON.generate(
+            "citation" => ref,
+            "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]
+          )
+        )
+      end
+    end
+  end
+
   def with_empty_registry_env
     Dir.mktmpdir("nabu-cli-empty") do |root|
       sources = File.join(root, "sources.yml")

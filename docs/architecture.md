@@ -613,3 +613,139 @@ license fields on every entry, cognate lists bounded attested-first with
 honest totals, research_private/restricted withheld unless
 `include_restricted`, graceful pre-007 degradation ("run nabu sync
 wiktionary-recon").
+
+**Addendum (P15-3): cognates-in-parallel — the crosswalk × the hub.**
+`nabu cognates <work-or-ref> [--langs got,chu]` (MCP `nabu_cognates`, the
+ninth tool) answers the question the crosswalk and the alignment hub (§10)
+can only answer together: verses where witnesses in ≥2 languages use
+reflexes of the SAME reconstruction root — got salt ~ chu соль under PIE
+*sḗh₂l at LUKE 14.34, found blind; the Gothic × OCS NT yields ~300 verses /
+30 roots in under a second (design doc `intertext-design.md` §6). The join
+is staged through `reflex_roots(language, lemma_folded, root_urn)` — a
+derived closure table built by `Store::ReflexRootsIndexer` from
+`Indexer.rebuild!` (the single choke point: sync's reindex and rebuild),
+living in fulltext.sqlite3 beside `passage_lemmas` (~50k rows / ~4 MB /
+~4 s live). The closure is the etym walk, precomputed and bounded the same
+way: direct reflex edges (word AND roman folds — the script bridge) plus
+ONE proto-to-proto ascent hop with the same-language exclusion (intra-PIE
+derivational edges are sub-tree structure, not ancestry); rows are scoped
+to gold languages, since only they can ever join `passage_lemmas`. Design
+decisions from the fable closure review (2026-07-12, backlog P15-3): roots
+are stored as URNs, never row ids (ids re-mint on shelf reload; the query
+resolves urns against the live catalog with the withdrawn filter, so stale
+roots vanish rather than serve); the meet SHELF is displayed on every hit
+(descendant trees include unflagged borrowings — hlaifs ~ хлѣбъ meets at
+gem-pro, and saying "gem-pro" is the minimum honesty until a `borrowed`
+flag lands on the crosswalk); common-word suppression is per-language
+relative (df ≥ max(50, 10% of the language's gold passages) — an absolute
+threshold is percentile-incoherent across gold corpora spanning 125 to
+113k passages, and frequency cannot separate богъ from нъ at all, said
+plainly in the help). Recall is bounded by Wiktionary coverage (~34% got /
+~21% chu gold lemma types reach any proto entry): absence of a hit is
+absence of evidence.
+
+## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
+
+`parallels <urn>` answers the classicist's "who quotes THIS line? where
+does it echo?" — reception discovery, the inverse of the alignment hub
+(§10, which renders one verse across its *registered* translation
+witnesses; this DISCOVERS quotation across the whole corpus from surface
+text alone). The full design, priced against measured live probes (per-gram
+FTS 1–111 ms/passage; the elision-strip finding; rarity scoring; document
+dedupe), is `docs/intertext-design.md` §1 — this is the short standing
+record of what shipped.
+
+**Zero new schema — a query surface, not an index.** The design's measured
+verdict: the materialized corpus-wide n-gram table the register imagined is
+not needed. `Query::Parallels` folds the anchor to its stored search form
+(`text_normalized`, already minted at the adapter boundary), cuts it into
+overlapping 4-word grams, and probes each as a quoted FTS5 phrase MATCH
+against the SAME `passages_fts` index Search and Proximity use. Candidates
+are scored by shared-gram count **weighted by rarity** (1/document-frequency,
+the df free from each probe's own hit count), so a rare shared phrase — a
+real quotation — outweighs a pile of common function-word grams. Grams in
+≥ `COMMON_GRAM_DF` passages are dropped (no evidence, and a cost bound).
+
+**Two measured correctness riders (design §1).** (i) *Elision fold at
+gram-build.* The elision apostrophe splits editions — SBLGNT writes it
+U+02BC (a LETTER to unicode61: `ἐπʼ` is one token) while First1K/Swete
+writes U+2019 (punctuation: bare `ἐπ`) — so a surface gram misses its twin
+until the apostrophe is stripped. `Parallels` strips every elision
+apostrophe in its gram builder (the cheapest fix, local to the query;
+folding U+02BC in `text_normalized` is the deeper fix but re-mints shas, a
+fable decision). Measured payoff: Matthew 4:4 finds LXX Deuteronomy 8:3.
+(ii) *Duplicate witnesses.* The corpus deliberately holds texts more than
+once, so candidates group to **document grain** — one hit per document, its
+best passage the representative, sibling loci counted; cross-source
+identical texts stay two hits (two documents; no cross-source work
+identity). The only explicit exclusion is the anchor's own document —
+translations self-exclude (no shared folded tokens across languages), and a
+same-language other edition of the anchor's work is a wanted corroborating
+hit, not excluded.
+
+**Second signal — rare-lemma co-occurrence (design §1 option c).** For the
+gold-lemmatized slice, `lemma_echoes` lists passages sharing ≥2 of the
+anchor's RARE lemmas (global df ≤ `RARE_LEMMA_DF`), rarity-weighted — the
+re-inflected/reordered allusion verbatim grams miss. It fires only when the
+anchor carries gold lemmas (else one cheap query returns empty and it
+skips), and depends on the **`passage_lemmas(urn)` index** this packet adds
+to `Store::Indexer#create_lemma_table` (the anchor-lemma lookup by urn; also
+needed by cognate-in-parallel, design §6). Like the rest of the fulltext db
+the index is derived-of-derived — created imperatively in the Indexer,
+rebuilt with the table, never a numbered migration (§5; migrations own the
+catalog only).
+
+**Surfaces.** CLI `nabu parallels <urn> [--lang/--license/--limit]
+[--long]` (compact by default; `--long` expands any truncated evidence-span
+or shared-lemma list, per the owner rule that `--long` be available wherever
+output is elided). MCP `nabu_parallels` is the eighth tool, same contract as
+the rest: license fields + source on every hit, bounded with an honest note,
+research_private/restricted withheld unless `include_restricted`, graceful
+degradation when the index is rebuilding.
+
+**What it is not.** Cross-language allusion without alignment (a Father
+paraphrasing LXX in another language, an OCS homily echoing a Greek
+original) shares no surface or lemma vocabulary to shingle — that is the
+embeddings/cluster line (design §"what waits"), gated on the golden set the
+symbolic packets like this one produce as a side effect. Batch/corpus-wide
+mining and its persisted `links` edges (design §7) are a later rider on this
+same gram machinery, not this packet.
+
+## 14. The date/place axis — when and where a document is from (P15-2)
+
+The historical linguist and documentary historian ask "only 2nd-century
+texts", "only Oxyrhynchus", "plot this word across centuries". The full
+design — five dating sources measured, the schema priced (≤ ~100k rows,
+< 20 MB) — is `docs/intertext-design.md` §3; this is the short standing
+record of Part 1 (HGV papyri + Slovene goo300k/IMP; ORACC regnal mapping and
+the chronicle passage-grain annals are the named Part 2).
+
+**A catalog-side `document_axes` table (migration 008), NOT columns on
+documents.** A document may carry zero, one, or (Part 2's chronicle annals)
+several axis rows, and most of the corpus is *undated* — an absence, never a
+row. Columns: `(document_id, not_before, not_after, precision, date_raw,
+place_name, place_ref, axis_source, passage_seq_from, passage_seq_to)`. The
+date model is signed historical years with no year 0 (conventions §11); the
+nullable `passage_seq_*` pair rides for Part 2's passage-grain, document-grain
+rows leaving them NULL.
+
+**axes = f(canonical), regenerated on rebuild.** `Store::AxisBuilder` is a
+post-load pass — like the Indexer, but writing the CATALOG rather than the
+fulltext index — wired into `Rebuild#run` after every source is replayed. The
+HGV extractor reads the `HGV_meta_EpiDoc` XML and joins its `ddb-hybrid` idno
+to the DDbDP urn (`bgu;3;994` → `urn:nabu:ddbdp:bgu:3:994`, the same transform
+the papyri adapter mints with — verified); goo300k/IMP take the CE year off
+the urn suffix (`…:sigil-1584`, urn = f(canonical)). The Indexer is unchanged
+and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
+66,261 HGV files → 60,923 papyri joined (99.2% of the DDbDP shelf) + 89
+goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
+is 10.7 MB.
+
+**Query surface.** `search --from/--to/--century/--place` compose through the
+shared `CatalogJoin` as one correlated NULL-aware EXISTS on `document_axes`
+(document-grained, so a multi-row document never multiplies passages). `show`
+prints the axis line ("date: 292 CE · Oxyrhynchos") when present. `vocab
+--by-century` (`Query::Century`) is the diachronic payoff: the dated corpus
+bucketed by century, or — with a text query — a word plotted across the
+centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
+(honestly scoped to text search — the dated corpus is not lemmatized).

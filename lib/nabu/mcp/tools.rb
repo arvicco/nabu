@@ -12,9 +12,12 @@ require_relative "../query/morph_facets"
 require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
+require_relative "../query/parallels"
 require_relative "../query/align"
+require_relative "../query/collation"
 require_relative "../query/define"
 require_relative "../query/etym"
+require_relative "../query/cognates"
 
 module Nabu
   module MCP
@@ -86,6 +89,11 @@ module Nabu
       CONCORD_MAX_LIMIT = 50
       CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
       CONCORD_MAX_WIDTH = 120
+      PARALLELS_DEFAULT_LIMIT = 10
+      PARALLELS_MAX_LIMIT = 50
+      # Per-hit evidence spans carried in the payload (this surface is bounded;
+      # a hit sharing more spans notes the truncation, the CLI is unbounded).
+      PARALLELS_EVIDENCE_CAP = 12
       DEFINE_DEFAULT_LIMIT = 3
       DEFINE_MAX_LIMIT = 10
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
@@ -101,6 +109,10 @@ module Nabu
       DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro].freeze
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
+      # Cognates-in-parallel (P15-3): (verse, root) groups per response — a
+      # whole-work batch can hold thousands; this surface stays bounded.
+      COGNATES_DEFAULT_LIMIT = 10
+      COGNATES_MAX_LIMIT = 50
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       BUSY_ATTEMPTS = 3
@@ -115,6 +127,9 @@ module Nabu
                       "wiktionary-recon` (or `nabu rebuild` after one) to build it, then retry"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
+      COGNATES_REBUILDING_NOTE = "cognate root index rebuilding (or the fulltext index predates " \
+                                 "it) — retry shortly, or run `nabu rebuild` (and `nabu sync " \
+                                 "wiktionary-recon` if the reconstruction shelf is missing)"
       REBUILDING_NOTE = "search index rebuilding — retry shortly"
       LEMMA_REBUILDING_NOTE = "lemma index rebuilding (or the fulltext index predates lemma " \
                               "search) — retry shortly, or run `nabu rebuild`"
@@ -188,7 +203,10 @@ module Nabu
         "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note. Witnesses " \
         "absent from EVERY ref of a range are summarized once in `absent_witnesses` " \
         "(reason not_attested|not_synced) and omitted from the per-ref columns, so a chapter stays " \
-        "readable.".freeze
+        "readable. `collate: true` returns a witness DIFF instead: a raw-token apparatus per " \
+        "(language, script) cell (base reading + each witness's divergences), with cross-script " \
+        "witnesses rendered undiffed and labelled honestly — the fold cannot bridge e.g. the " \
+        "Cyrillic Marianus and the Helsinki-ASCII CCMH codices.".freeze
 
       DEFINE_DESCRIPTION =
         "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
@@ -226,6 +244,43 @@ module Nabu
         "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
         "with honest totals; `nabu etym` (CLI) is unbounded.".freeze
 
+      COGNATES_DESCRIPTION =
+        "Cognates-in-parallel over the local nabu corpus: verses of a registered alignment work " \
+        "where witnesses in TWO OR MORE languages use reflexes of the SAME reconstruction root — " \
+        "Gothic salt ~ OCS соль under PIE *sḗh₂l in the salt saying (Luke 14:34). The alignment " \
+        "hub (nabu_align) supplies the verse columns; the Wiktionary reconstruction crosswalk " \
+        "(nabu_etym) supplies the lemma→root closure, one proto-to-proto hop deep " \
+        "(got→*saltą→*sḗh₂l←*solь←chu). `target` is a work id (batch the work) or a " \
+        "citation/chapter/book ref; `langs` restricts to ≥2 named languages (e.g. " \
+        "[\"got\",\"chu\"]). Each group carries the verse ref, the root (headword, SHELF " \
+        "language, gloss, license — PRESERVE license fields when quoting), and per-language " \
+        "witness words (lemma, attested surface forms, attesting documents with licenses). READ " \
+        "THE SHELF: a meet at gem-pro involving a Slavic witness is very possibly a BORROWING " \
+        "(Wiktionary descendant trees include loans — hlaifs ~ хлѣбъ), not common descent; " \
+        "ine-pro meets are the inheritance signal. Corpus-common words are suppressed with an " \
+        "honest count (`all` lifts; frequency is a coarse proxy and some common words survive). " \
+        "Recall is bounded by Wiktionary coverage (~1/3 of Gothic, ~1/5 of OCS gold lemma types " \
+        "reach any proto entry) and by gold lemmatization (~10% of the corpus): no hit is " \
+        "absence of evidence, not evidence of unrelatedness. Bounded (default " \
+        "#{COGNATES_DEFAULT_LIMIT} groups, max #{COGNATES_MAX_LIMIT}) with honest totals.".freeze
+
+      PARALLELS_DESCRIPTION =
+        "Passage-anchored intertext over the local nabu corpus: give ONE passage urn and get the " \
+        "passages that QUOTE or ECHO it — reception discovery, not translation alignment (that is " \
+        "nabu_align). Query-time over the same FTS index as nabu_search: the anchor is folded, cut " \
+        "into overlapping 4-word grams, each probed as an exact phrase; passages sharing grams are " \
+        "ranked by shared-gram count WEIGHTED BY RARITY (a rare shared phrase outweighs common " \
+        "function-word grams). Elision is folded across editions (SBLGNT ἐπʼ ≡ Swete ἐπ’), which is " \
+        "what lets Matthew 4:4 find LXX Deuteronomy 8:3. Each `hits` entry is one DOCUMENT " \
+        "(duplicate witnesses grouped; loci = how many of its passages matched) with its best " \
+        "passage urn, score, shared_grams, and the shared PHRASE spans (diacritic-folded — WHAT " \
+        "matched; nabu_show gives pristine text). Only the anchor's OWN document is excluded; " \
+        "translations self-exclude (no shared folded tokens). When the anchor carries gold treebank " \
+        "lemmas, `lemma_echoes` adds passages sharing ≥2 of its RARE lemmas (re-inflected/reordered " \
+        "allusion verbatim grams miss). Bounded (default #{PARALLELS_DEFAULT_LIMIT}, max " \
+        "#{PARALLELS_MAX_LIMIT}) with an honest note; every hit carries urn, language, license_class, " \
+        "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates.".freeze
+
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
         "recency, passage counts by language and by license class, index state, and what is " \
@@ -261,6 +316,18 @@ module Nabu
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
                      description: "Exact effective license class filter." },
+          from: { type: "integer",
+                  description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document date/place axis " \
+                               "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
+                               "undated and absent under a date filter. Text search only (not lemma)." },
+          to: { type: "integer",
+                description: "Latest date: signed historical year; composes with from." },
+          century: { type: "integer",
+                     description: "Shorthand for one century's from/to (6 = 6th c. CE, -2 = 2nd c. " \
+                                  "BCE); mutually exclusive with from/to." },
+          place: { type: "string",
+                   description: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -301,6 +368,15 @@ module Nabu
           work: { type: "string",
                   description: "Alignment work id from the registry (optional when exactly " \
                                "one work is registered)." },
+          collate: { type: "boolean",
+                     description: "Diff the witnesses instead of listing them: a raw-token " \
+                                  "apparatus per (language, script) cell — base reading plus each " \
+                                  "witness's divergences only; cross-script witnesses rendered " \
+                                  "undiffed and labelled honestly (the fold cannot bridge e.g. the " \
+                                  "Cyrillic Marianus and the Helsinki-ASCII CCMH codices)." },
+          base: { type: "string",
+                  description: "With collate: the base witness (label or document urn) each cell " \
+                               "diffs against (default: the first witness in registry order)." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["ref"],
@@ -365,8 +441,53 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      PARALLELS_SCHEMA = {
+        type: "object",
+        properties: {
+          urn: { type: "string",
+                 description: "The anchor passage urn (from a nabu_search/nabu_show hit) whose " \
+                              "quotations and echoes to find." },
+          lang: { type: "string",
+                  description: "ISO-639-3 passage language filter on the CANDIDATES: grc, lat, chu, …" },
+          license: { type: "string", enum: LICENSE_CLASSES,
+                     description: "Exact effective license class filter on the candidates." },
+          limit: { type: "integer", minimum: 1, maximum: PARALLELS_MAX_LIMIT,
+                   default: PARALLELS_DEFAULT_LIMIT,
+                   description: "Maximum hits per signal (surface parallels and lemma echoes)." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["urn"],
+        additionalProperties: false
+      }.freeze
+
+      COGNATES_SCHEMA = {
+        type: "object",
+        properties: {
+          target: { type: "string",
+                    description: "A registered alignment work id (nt|ot|psalms — batches the " \
+                                 "whole work) or a citation ref: verse (\"LUKE 14.34\"), " \
+                                 "chapter (\"LUKE 14\"), or book (\"LUKE\")." },
+          work: { type: "string",
+                  description: "Alignment work id, when a bare ref is ambiguous across works." },
+          langs: { type: "array", items: { type: "string" }, minItems: 2,
+                   description: "Restrict the comparison to these languages (ISO-639-3, at " \
+                                "least two: [\"got\",\"chu\"]). Default: every gold language." },
+          all: { type: "boolean", default: false,
+                 description: "Also return the corpus-common-word matches the default " \
+                              "suppresses." },
+          limit: { type: "integer", minimum: 1, maximum: COGNATES_MAX_LIMIT,
+                   default: COGNATES_DEFAULT_LIMIT,
+                   description: "Maximum (verse, root) groups returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["target"],
+        additionalProperties: false
+      }.freeze
+
       # The tool table. P8-3 adds nabu_concord (a KWIC formatter over the same
-      # Query classes) as a fourth entry with its own handler.
+      # Query classes) as a fourth entry with its own handler; P15-1 adds
+      # nabu_parallels (the intertext engine) as the eighth; P15-3 adds
+      # nabu_cognates (the hub × crosswalk join) as the ninth.
       TOOLS = {
         "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
                            handler: :search },
@@ -380,6 +501,10 @@ module Nabu
                            handler: :define },
         "nabu_etym" => { description: ETYM_DESCRIPTION, input_schema: ETYM_SCHEMA,
                          handler: :etym },
+        "nabu_parallels" => { description: PARALLELS_DESCRIPTION, input_schema: PARALLELS_SCHEMA,
+                              handler: :parallels },
+        "nabu_cognates" => { description: COGNATES_DESCRIPTION, input_schema: COGNATES_SCHEMA,
+                             handler: :cognates },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -430,13 +555,15 @@ module Nabu
                       "search it deliberately")
         end
 
+        from, to, place = search_date(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
         results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
-                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph)
+                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph,
+                                         from: from, to: to, place: place)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog)
       rescue Query::MorphFacets::Error => e
@@ -489,6 +616,33 @@ module Nabu
         render_concord(rows, limit: limit, width: width, catalog: catalog)
       end
 
+      # nabu_parallels (P15-1): the intertext engine, bounded + license-labeled.
+      # The anchor urn is echoed back (like nabu_align's ref); candidates are
+      # license-filtered exactly like search, so nothing restricted leaks.
+      def parallels(args)
+        urn = string_arg(args, "urn") or raise InvalidArguments, "nabu_parallels needs a urn (the anchor passage)"
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
+          return note("license class #{license} is excluded by default from this surface " \
+                      "(it must never leak casually); pass include_restricted: true to " \
+                      "search it deliberately")
+        end
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = search_index(:text) or return note(REBUILDING_NOTE)
+
+        limit = clamp(args["limit"], default: PARALLELS_DEFAULT_LIMIT, max: PARALLELS_MAX_LIMIT)
+        result = Query::Parallels.new(catalog: catalog, fulltext: fulltext)
+                                 .run(urn, limit: limit + 1, lang: args["lang"], license: license)
+        if result.nil?
+          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
+                      "what this corpus holds")
+        end
+
+        render_parallels(result, limit: limit, catalog: catalog, include_restricted: include_restricted)
+      end
+
       def align(args)
         ref = string_arg(args, "ref") or
           raise InvalidArguments, "nabu_align needs a ref (a citation like MARK 2.3, or a passage urn)"
@@ -499,9 +653,11 @@ module Nabu
         fulltext = resolve(@fulltext)
         return note(ALIGN_REBUILDING_NOTE) unless fulltext&.table_exists?(Store::AlignmentIndexer::TABLE)
 
+        include_restricted = args["include_restricted"] == true
+        return collate(args, catalog, fulltext, registry, include_restricted) if args["collate"] == true
+
         result = Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
                              .run(ref, work: string_arg(args, "work"))
-        include_restricted = args["include_restricted"] == true
         json(if result.is_a?(Query::Align::RangeResult)
                align_range_payload(result, include_restricted: include_restricted)
              else
@@ -511,6 +667,18 @@ module Nabu
         # Caller-fixable (unknown work, unaligned urn): isError so the model
         # self-corrects (SEP-1303), same stance as bad arguments.
         tool_error(e.message)
+      end
+
+      # `collate: true` on nabu_align (P15-4): the witness DIFF apparatus. Same
+      # index/registry contract as align; the license gate WITHHOLDS excluded
+      # witnesses from the diff bodily (they cannot leak through a divergence
+      # line) unless include_restricted.
+      def collate(args, catalog, fulltext, registry, include_restricted)
+        exclude = include_restricted ? [] : EXCLUDED_LICENSE_CLASSES
+        collation = Query::Collation.new(catalog: catalog, fulltext: fulltext, registry: registry)
+        result = collation.run(string_arg(args, "ref"), work: string_arg(args, "work"),
+                                                        base: string_arg(args, "base"), exclude_licenses: exclude)
+        json(collation_payload(result))
       end
 
       def define(args)
@@ -546,6 +714,30 @@ module Nabu
                              .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_etym(results, lemma: lemma, limit: limit)
+      end
+
+      # Cognates-in-parallel (P15-3): the hub × crosswalk join, bounded and
+      # license-labeled per witness document. Restricted witnesses are
+      # excluded INSIDE the query (their words never join, and a root left
+      # with one language falls out) unless include_restricted.
+      def cognates(args)
+        target = string_arg(args, "target") or
+          raise InvalidArguments, "nabu_cognates needs a target (a work id like nt, or a ref like LUKE 14.34)"
+        registry = resolve(@alignments)
+        return note(NO_ALIGNMENTS_NOTE) if registry.nil? || registry.empty?
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = resolve(@fulltext)
+        return note(COGNATES_REBUILDING_NOTE) unless fulltext&.table_exists?(Store::ReflexRootsIndexer::TABLE)
+
+        limit = clamp(args["limit"], default: COGNATES_DEFAULT_LIMIT, max: COGNATES_MAX_LIMIT)
+        exclude = args["include_restricted"] == true ? [] : EXCLUDED_LICENSE_CLASSES
+        result = Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                .run(target, work: string_arg(args, "work"), langs: args["langs"],
+                                             all: args["all"] == true, long: true, exclude_license: exclude)
+        render_cognates(result, limit: limit)
+      rescue Query::Cognates::Error => e
+        tool_error(e.message)
       end
 
       def status(_args)
@@ -617,7 +809,36 @@ module Nabu
         fulltext
       end
 
-      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil)
+      # Resolve the date/place axis args (P15-2), honestly scoped to plain text
+      # search — the dated corpus (papyri) is not lemmatized, and proximity is a
+      # different index path — so date/place with lemma or near is a usage error.
+      # `century` is shorthand for a from/to window; year 0 and from>to are
+      # rejected with a clear message (the reviewed guards).
+      def search_date(args, mode, near)
+        from = int_arg(args, "from")
+        to = int_arg(args, "to")
+        century = int_arg(args, "century")
+        place = string_arg(args, "place")
+        return [nil, nil, nil] unless from || to || century || place
+
+        if mode == :lemma || near
+          raise InvalidArguments, "from/to/century/place compose with text search only, not lemma/near"
+        end
+
+        if century
+          raise InvalidArguments, "century is shorthand for from/to — use one or the other" if from || to
+          raise InvalidArguments, "there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if century.zero?
+
+          from, to = Nabu::DateAxis.century_bounds(century)
+        end
+        raise InvalidArguments, "there is no year 0 (1 BCE is -1, 1 CE is 1)" if from&.zero? || to&.zero?
+        raise InvalidArguments, "from #{from} is after to #{to} (BCE years are negative)" if from && to && from > to
+
+        [from, to, place]
+      end
+
+      def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
+                     from: nil, to: nil, place: nil)
         if near
           return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
             query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
@@ -630,7 +851,7 @@ module Nabu
         end
 
         Query::Search.new(catalog: catalog, fulltext: fulltext)
-                     .run(term, lang: lang, license: license, limit: limit)
+                     .run(term, lang: lang, license: license, limit: limit, from: from, to: to, place: place)
       end
 
       def render_search(results, limit:, catalog:)
@@ -757,6 +978,49 @@ module Nabu
         base
       end
 
+      # nabu_cognates (P15-3): bounded groups, the meet SHELF on every root,
+      # license labels on the root and on every attesting witness document.
+      def render_cognates(result, limit:)
+        shown = result.groups.first(limit)
+        json(
+          work: result.work, query: result.query, total: result.total,
+          suppressed_common_word_hits: result.suppressed,
+          groups: shown.map { |group| cognates_group_payload(group, result.documents) },
+          note: cognates_note(result, shown: shown)
+        )
+      end
+
+      def cognates_group_payload(group, documents)
+        {
+          ref: group.ref,
+          root: { urn: group.root.urn, headword: group.root.headword,
+                  shelf: group.root.shelf, dictionary: group.root.dictionary_title,
+                  gloss: group.root.gloss, license: group.root.license,
+                  license_class: group.root.license_class, source: group.root.source_slug },
+          witnesses: group.witnesses.map do |witness|
+            { language: witness.language, lemma: witness.lemma, surfaces: witness.surfaces,
+              documents: witness.document_urns.map do |urn|
+                doc = documents.fetch(urn, {})
+                { urn: urn, license_class: doc[:license_class], source: doc[:source_slug] }
+              end }
+          end
+        }
+      end
+
+      def cognates_note(result, shown:)
+        parts = [if result.total > shown.size
+                   "#{result.total} (verse, root) hits, showing #{shown.size} — raise limit " \
+                     "(max #{COGNATES_MAX_LIMIT}) or narrow the target"
+                 else
+                   "#{shown.size} (verse, root) #{shown.size == 1 ? 'hit' : 'hits'}"
+                 end]
+        if result.suppressed.positive?
+          parts << "#{result.suppressed} common-word hits suppressed (all: true shows them)"
+        end
+        parts << "a gem-pro meet with a Slavic witness is likely a borrowing, not common descent"
+        parts.join("; ")
+      end
+
       # Shared reflex/cognate list rendering (define + etym): attested first
       # (by count, descending), capped with an honest total.
       def reflex_fields(views, cap:, key: :reflexes)
@@ -796,6 +1060,65 @@ module Nabu
       def concord_row_payload(row, sources)
         { urn: row.urn, language: row.language, license_class: row.license_class,
           source: sources[row.urn], left: row.left, keyword: row.keyword, right: row.right }
+      end
+
+      # -- parallels internals -----------------------------------------------------
+
+      def render_parallels(result, limit:, catalog:, include_restricted:)
+        hits = result.hits
+        echoes = result.lemma_echoes
+        unless include_restricted
+          hits = hits.reject { |hit| EXCLUDED_LICENSE_CLASSES.include?(hit.license_class) }
+          echoes = echoes.reject { |echo| EXCLUDED_LICENSE_CLASSES.include?(echo.license_class) }
+        end
+        shown_hits = hits.first(limit)
+        shown_echoes = echoes.first(limit)
+        sources = sources_by_urn(catalog, (shown_hits + shown_echoes).map(&:urn))
+        json(
+          type: "parallels",
+          anchor: { urn: result.anchor_urn, document: result.anchor_title },
+          gram_count: result.gram_count,
+          hits: shown_hits.map { |hit| parallels_hit_payload(hit, sources) },
+          lemma_echoes: shown_echoes.map { |echo| lemma_echo_payload(echo, sources) },
+          note: parallels_note(result, hits: hits, echoes: echoes, limit: limit)
+        )
+      end
+
+      def parallels_hit_payload(hit, sources)
+        payload = {
+          urn: hit.urn, language: hit.language, license_class: hit.license_class,
+          source: sources[hit.urn], document: hit.document_title,
+          score: hit.score, shared_grams: hit.shared_gram_count, loci: hit.loci,
+          evidence: hit.evidence.first(PARALLELS_EVIDENCE_CAP)
+        }
+        payload[:evidence_truncated] = true if hit.evidence.size > PARALLELS_EVIDENCE_CAP
+        payload
+      end
+
+      def lemma_echo_payload(echo, sources)
+        { urn: echo.urn, language: echo.language, license_class: echo.license_class,
+          source: sources[echo.urn], score: echo.score, shared_lemmas: echo.shared_lemmas }
+      end
+
+      def parallels_note(result, hits:, echoes:, limit:)
+        return "anchor too short for #{Query::Parallels::GRAM_SIZE}-word grams — no parallels" \
+          if result.gram_count.zero?
+
+        parts = [
+          if hits.size > limit
+            "more than #{limit} parallels, showing #{limit} — raise limit (max #{PARALLELS_MAX_LIMIT})"
+          else
+            "#{hits.size} #{hits.size == 1 ? 'parallel' : 'parallels'} from #{result.gram_count} grams"
+          end,
+          "evidence spans are the diacritic-folded shared phrases (WHAT matched); nabu_show gives pristine text",
+          "each hit is one document (duplicate witnesses grouped; loci = matching passages); " \
+          "PRESERVE the license fields when quoting"
+        ]
+        unless echoes.empty?
+          parts << "lemma_echoes: rare-lemma co-occurrence for re-inflected/reordered allusion " \
+                   "(present only when the anchor is gold-lemmatized)"
+        end
+        parts.join("; ")
       end
 
       # One line that makes "no matches" interpretable without a second call.
@@ -1006,6 +1329,47 @@ module Nabu
         row
       end
 
+      # -- align --collate internals (P15-4) ---------------------------------------
+
+      def collation_payload(result)
+        {
+          type: "collation", work: result.work, title: result.title, query: result.query,
+          total_refs: result.total, shown_refs: result.refs.size, truncated: result.truncated,
+          refs: result.refs.map { |ref_collation| collation_ref_payload(ref_collation) },
+          note: "raw-token apparatus per (language, script) cell: each cell diffs its witnesses " \
+                "against a base (agreements elided; substitutions/omissions/insertions marked). " \
+                "asides are witnesses rendered UNDIFFED — reason cross_script (a same-language " \
+                "witness exists in another script the fold cannot bridge) or sole (the only witness " \
+                "of its language here). missing lists no_match/not_synced/withheld witnesses."
+        }
+      end
+
+      def collation_ref_payload(ref_collation)
+        {
+          ref: ref_collation.ref,
+          cells: ref_collation.cells.map { |cell| collation_cell_payload(cell) },
+          asides: ref_collation.asides.map do |aside|
+            { label: aside.label, language: aside.language, script: aside.script,
+              license_class: aside.license_class, source: aside.source_slug,
+              reason: aside.reason.to_s, text: aside.text }
+          end,
+          missing: ref_collation.missing.map { |witness| { label: witness.label, status: witness.status.to_s } }
+        }
+      end
+
+      def collation_cell_payload(cell)
+        base = cell.readings.find(&:is_base)
+        {
+          language: cell.language, script: cell.script, base: cell.base_label,
+          base_tokens: base.tokens,
+          witnesses: cell.readings.reject(&:is_base).map do |reading|
+            { label: reading.label, license_class: reading.license_class, source: reading.source_slug,
+              agrees: reading.edits.empty?, tokens: reading.tokens,
+              edits: reading.edits.map { |edit| { op: edit.op.to_s, base: edit.base, witness: edit.witness } } }
+          end
+        }
+      end
+
       # -- the exclusion gate ------------------------------------------------------
 
       def withhold?(license_class, include_restricted)
@@ -1148,6 +1512,16 @@ module Nabu
 
         stripped = value.strip
         stripped.empty? ? nil : stripped
+      end
+
+      # A signed-integer arg (the date/place axis years, P15-2), or nil. A
+      # JSON number that isn't an integer is a usage error, not a silent coerce.
+      def int_arg(args, key)
+        value = args[key]
+        return nil if value.nil?
+        raise InvalidArguments, "#{key} must be an integer" unless value.is_a?(Integer)
+
+        value
       end
 
       def license_arg(args)

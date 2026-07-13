@@ -103,14 +103,37 @@ class RemoteProbeTest < Minitest::Test
     Nabu::Shell::Error.new("command failed (exit #{status}): git", status: status, stderr: stderr)
   end
 
-  def registry_of(*specs)
+  def registry_of(*specs, policy: "manual")
     entries = specs.map do |slug, klass, enabled|
       Nabu::SourceRegistry::Entry.new(
-        slug: slug, adapter_class_name: klass, enabled: enabled || enabled.nil?, sync_policy: "manual"
+        slug: slug, adapter_class_name: klass, enabled: enabled || enabled.nil?, sync_policy: policy
       )
     end
     Nabu::SourceRegistry.new(entries)
   end
+
+  # A synced run in the ledger — one of the two "has been synced before" signals
+  # (the other is a canonical tree on disk) the honest no-pin split reads.
+  def seed_run(slug:, status: "succeeded")
+    Nabu::Store::Run.create(source_slug: slug, kind: "sync", started_at: Time.now, status: status)
+  end
+
+  # A non-empty canonical tree for +slug+ under +root+ (the second "synced
+  # before" signal), and — with git: true — a real local git clone so the
+  # backfill's `git -C … rev-parse HEAD` reads a genuine sha (no network).
+  def seed_canonical(root, slug, git: false)
+    dir = File.join(root, slug)
+    FileUtils.mkdir_p(dir)
+    File.write(File.join(dir, "doc.txt"), "hello")
+    return dir unless git
+
+    Nabu::Shell.run("git", "-C", dir, "init", "-q")
+    Nabu::Shell.run("git", "-C", dir, "add", ".")
+    Nabu::Shell.run("git", "-C", dir, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
+    dir
+  end
+
+  def head_sha(dir) = Nabu::Shell.run("git", "-C", dir, "rev-parse", "HEAD").strip
 
   # One ledger pin (P7-1): the unified per-repo pin/baseline row, single- and
   # multi-repo sources alike.
@@ -663,5 +686,172 @@ class RemoteProbeTest < Minitest::Test
       registry: registry_of(["src", "ProbeNonGithubAdapter", true]), ledger: nil, shell: shell
     ).run
     assert_equal :alive, report.rows.first.liveness.status
+  end
+
+  # -- P15-7: honest no-pin labels (unpinned vs never-synced) --------------
+
+  # No pin, but a canonical tree exists → the source WAS synced before the pins
+  # ledger existed (P7): :unpinned, with the honest pre-ledger hint — NOT the
+  # false "never-synced" of the owner defect (proiel/torot/papyri-ddbdp).
+  def test_no_pin_reads_unpinned_when_a_canonical_tree_exists
+    Dir.mktmpdir do |root|
+      seed_canonical(root, "src")
+      shell = FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n")
+      row = probe(registry_of(["src", "ProbeNonGithubAdapter", true]), shell, canonical_dir: root).rows.first
+
+      assert_equal :unpinned, row.drift
+      assert_match(/synced pre-ledger/, row.drift_detail)
+      assert_match(/health --backfill-pins/, row.drift_detail)
+    end
+  end
+
+  # The other "synced before" signal: a run in the ledger, no canonical dir.
+  def test_no_pin_reads_unpinned_when_a_run_is_in_the_ledger
+    seed_run(slug: "src")
+    shell = FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n")
+    row = probe(registry_of(["src", "ProbeNonGithubAdapter", true]), shell).rows.first
+
+    assert_equal :unpinned, row.drift
+  end
+
+  # Truly untouched: no pin, no run, no canonical tree → :never_synced stays.
+  def test_no_pin_reads_never_synced_without_a_run_or_tree
+    Dir.mktmpdir do |root|
+      shell = FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n")
+      row = probe(registry_of(["src", "ProbeNonGithubAdapter", true]), shell, canonical_dir: root).rows.first
+
+      assert_equal :never_synced, row.drift
+      assert_nil row.drift_detail
+    end
+  end
+
+  # The unpinned verdict + hint are cached (the status up= detail "follows
+  # suit" — MCP/status read the cached row).
+  def test_persists_unpinned_verdict_and_hint
+    seed_run(slug: "src")
+    probe(registry_of(["src", "ProbeNonGithubAdapter", true]),
+          FakeShell.new(NONGITHUB_URL => "sha111\tHEAD\n"))
+
+    row = Nabu::Store::Probe.first(source_slug: "src")
+    assert_equal "unpinned", row.drift
+    assert_match(/synced pre-ledger/, row.detail)
+  end
+
+  # -- P15-7: frozen-policy agreement --------------------------------------
+
+  # A frozen-policy source reads drift :frozen in health --remote, agreeing
+  # with status's up=frozen (P14-12) — even when a pin sits behind upstream,
+  # the frozen verdict overrides (we deliberately don't re-sync it).
+  def test_frozen_policy_source_reads_frozen_drift
+    seed_pin(slug: "src", repo_url: NONGITHUB_URL, last_sync_sha: "old000")
+    shell = FakeShell.new(NONGITHUB_URL => "new999\tHEAD\n") # would be :behind if not frozen
+    row = probe(registry_of(["src", "ProbeNonGithubAdapter", true], policy: "frozen"), shell).rows.first
+
+    assert_equal :alive, row.liveness.status, "liveness is still probed"
+    assert_equal :frozen, row.drift
+  end
+
+  def test_frozen_verdict_is_persisted_to_the_probe_cache
+    shell = FakeShell.new(NONGITHUB_URL => "new999\tHEAD\n")
+    probe(registry_of(["src", "ProbeNonGithubAdapter", true], policy: "frozen"), shell)
+
+    assert_equal "frozen", Nabu::Store::Probe.first(source_slug: "src").drift
+  end
+
+  # -- P15-7: pin backfill --------------------------------------------------
+
+  def backfiller(registry, shell: Nabu::Shell, canonical_dir: nil)
+    Nabu::Health::RemoteProbe.new(
+      registry: registry, ledger: @ledger, shell: shell, canonical_dir: canonical_dir
+    )
+  end
+
+  # A git source with a canonical clone but no pin → the clone's HEAD is
+  # recorded as last_sync_sha, keyed by the source's one declared repo URL.
+  def test_backfill_records_pin_from_a_git_clone
+    Dir.mktmpdir do |root|
+      dir = seed_canonical(root, "gh", git: true)
+      recorded = backfiller(registry_of(["gh", "ProbeGithubAdapter", true]), canonical_dir: root).backfill_pins
+
+      assert_equal 1, recorded.size
+      assert_equal :git_clone, recorded.first.origin
+      pin = Nabu::Store::Pin.first(source_slug: "gh", repo_url: GITHUB_URL)
+      assert_equal head_sha(dir), pin.last_sync_sha
+    end
+  end
+
+  # A non-git ZipFetch source: each project's .zip-fetch.json sha256 pin is
+  # recorded, keyed by the project zip URL.
+  def test_backfill_records_pins_from_zip_state_files
+    Dir.mktmpdir do |root|
+      write_zip_sha_state(root, "orx", "alpha", "shaA")
+      write_zip_sha_state(root, "orx", "beta", "shaB")
+      recorded = backfiller(http_registry, shell: NO_SHELL, canonical_dir: root).backfill_pins
+
+      assert_equal %i[state_file state_file], recorded.map(&:origin)
+      assert_equal "shaA", Nabu::Store::Pin.first(source_slug: "orx", repo_url: ALPHA_ZIP).last_sync_sha
+      assert_equal "shaB", Nabu::Store::Pin.first(source_slug: "orx", repo_url: BETA_ZIP).last_sync_sha
+    end
+  end
+
+  # A single-file FileFetch source (.file-fetch.json at the workdir root).
+  def test_backfill_records_pin_from_a_file_state_file
+    Dir.mktmpdir do |root|
+      dir = File.join(root, "asx")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, Nabu::FileFetch::STATE_FILE),
+                 JSON.generate("last_modified" => LM_OLD, "sha256" => "shaF", "url" => FILE_URL))
+      recorded = backfiller(file_registry, shell: NO_SHELL, canonical_dir: root).backfill_pins
+
+      assert_equal 1, recorded.size
+      assert_equal "shaF", Nabu::Store::Pin.first(source_slug: "asx", repo_url: FILE_URL).last_sync_sha
+    end
+  end
+
+  # Idempotent: a second backfill records nothing and does not change the pin.
+  def test_backfill_is_idempotent
+    Dir.mktmpdir do |root|
+      seed_canonical(root, "gh", git: true)
+      reg = registry_of(["gh", "ProbeGithubAdapter", true])
+      first = backfiller(reg, canonical_dir: root).backfill_pins
+      sha = Nabu::Store::Pin.first(source_slug: "gh").last_sync_sha
+
+      second = backfiller(reg, canonical_dir: root).backfill_pins
+      assert_equal 1, first.size
+      assert_empty second, "already-pinned source is skipped"
+      assert_equal 1, Nabu::Store::Pin.where(source_slug: "gh").count, "no duplicate pin row"
+      assert_equal sha, Nabu::Store::Pin.first(source_slug: "gh").last_sync_sha
+    end
+  end
+
+  # An existing pin (non-blank sha) is never overwritten by backfill.
+  def test_backfill_skips_an_already_pinned_source
+    Dir.mktmpdir do |root|
+      seed_pin(slug: "gh", repo_url: GITHUB_URL, last_sync_sha: "kept0000")
+      seed_canonical(root, "gh", git: true)
+      recorded = backfiller(registry_of(["gh", "ProbeGithubAdapter", true]), canonical_dir: root).backfill_pins
+
+      assert_empty recorded
+      assert_equal "kept0000", Nabu::Store::Pin.first(source_slug: "gh").last_sync_sha
+    end
+  end
+
+  # No canonical clone / no state file → nothing to backfill.
+  def test_backfill_records_nothing_without_a_local_clone
+    Dir.mktmpdir do |root|
+      recorded = backfiller(registry_of(["gh", "ProbeGithubAdapter", true]), canonical_dir: root).backfill_pins
+      assert_empty recorded
+      assert_nil Nabu::Store::Pin.first(source_slug: "gh")
+    end
+  end
+
+  # A .zip-fetch.json carrying the sha256 body pin, the way ZipFetch writes it.
+  def write_zip_sha_state(canonical_dir, slug, subdir, sha256)
+    dir = File.join(canonical_dir, slug, subdir)
+    FileUtils.mkdir_p(dir)
+    File.write(
+      File.join(dir, Nabu::ZipFetch::STATE_FILE),
+      JSON.generate("last_modified" => LM_OLD, "sha256" => sha256, "url" => "u")
+    )
   end
 end

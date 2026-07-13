@@ -2,9 +2,10 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes seven tools — search, read
+(Claude Code, Claude Desktop) over stdio. It exposes nine tools — search, read
 by urn, concordance, cross-source alignment, dictionary lookup, the
-reconstruction walk, and coverage — so a model can look things up in your
+reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
+and coverage — so a model can look things up in your
 texts, quote them, and cite them, without any ability to change the
 collection.
 
@@ -34,11 +35,11 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The seven tools
+## 2. The nine tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search, concord, and align rows also carry the **source**
-slug). Preserve those fields when you quote — see §6.
+**license_class** (search, concord, align, and parallels rows also carry the
+**source** slug). Preserve those fields when you quote — see §6.
 
 ### `nabu_search`
 
@@ -130,6 +131,24 @@ narrow the range), mirroring `nabu_define`'s body cap. The CLI `nabu align
 a legend, the all-absent witnesses summarized once, then one line per present
 witness per ref).
 
+`collate: true` (P15-4, design §2) returns a witness **diff** instead of a
+listing (`type: "collation"`). Witnesses are grouped into `cells` by
+`(language, script)` — the collatable unit, because language alone lumps the
+Cyrillic Marianus with the Helsinki-ASCII CCMH codices (same `chu`, two
+transcription systems the conventions-§9 fold cannot bridge) while script alone
+lumps Latin, Gothic and English. A cell of ≥2 witnesses diffs RAW tokens
+(punctuation-only tokens dropped, every diacritic marker kept — folding would
+destroy the very distinctions a critic wants) against a base (the first witness
+in registry order, or `base: "LABEL"`), emitting per witness only its `edits`
+(`op` ∈ `sub`/`del`/`ins`, with the `base` and `witness` token runs;
+agreements elided, `agrees: true` when identical) plus its full `tokens`. A
+witness alone in its cell becomes an `aside`, rendered undiffed with a `reason`:
+`cross_script` (a same-language witness exists in another script — the honest
+"not collated" case) or `sole` (the only witness of its language here). The
+license gate applies as everywhere: an excluded witness is `withheld` from the
+diff bodily (listed in `missing`, never leaking through an `edits` line) unless
+`include_restricted`. Ranges collate per ref (`refs` array, same 200-ref cap).
+
 ### `nabu_define`
 
 The dictionary shelf (P11-4, architecture §11): look a lemma up in the
@@ -168,6 +187,53 @@ bare `*`) forces the direct lookup. Cognate lists are bounded (attested
 first, 20 shown) with honest totals — this conversational surface stays
 capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
 grouped by language.
+
+### `nabu_parallels`
+
+Passage-anchored intertext (P15-1, architecture §13): give one passage `urn`
+and get the passages that **quote or echo** it — reception discovery, the
+inverse of `nabu_align` (which renders one verse across its registered
+translation witnesses; this one *discovers* quotation across the whole corpus
+from surface text alone). Query-time over the same FTS index as `nabu_search`,
+no precomputation: the anchor is folded, cut into overlapping 4-word grams,
+each probed as an exact phrase; passages sharing grams are ranked by
+shared-gram count **weighted by rarity** (a rare shared phrase — a real
+quotation — outweighs a pile of common function-word grams). The elision
+apostrophe is folded across editions (SBLGNT `ἐπʼ` ≡ Swete `ἐπ’`), which is what
+lets Matthew 4:4 find LXX Deuteronomy 8:3. Each `hits` entry is **one document**
+(duplicate witnesses and multi-edition works otherwise flood the ranks; `loci`
+counts how many of its passages matched) with its best passage urn, `score`,
+`shared_grams`, and the shared **phrase** spans (the grams merged back to
+contiguous text; diacritic-folded — *what* matched, `nabu_show` gives pristine
+text). Only the anchor's own document is excluded — translations self-exclude
+(no shared folded tokens). When the anchor carries gold treebank lemmas,
+`lemma_echoes` adds passages sharing ≥2 of its **rare** lemmas
+(re-inflected/reordered allusion verbatim grams miss). Bounded (default 10, max
+50) with an honest note; every hit carries urn, language, license_class, and
+source. `lang`/`license` scope the candidates; the default restricted-exclusion
+stance applies (§below).
+
+### `nabu_cognates`
+
+Cognates in parallel (P15-3, design §6): verses of a registered alignment work
+where witnesses in **two or more languages** use reflexes of the **same
+reconstruction root** — the alignment hub crossed with the Wiktionary
+reconstruction crosswalk, a join no other tool holds both halves of. Gothic
+*salt* ~ OCS *соль* meet at PIE `*sḗh₂l` in the salt saying (Luke 14:34);
+*hlaifs* ~ *хлѣбъ* at `*hlaibaz` in "he who eats my bread". `target` is a work
+id (`nt` — batches the whole work; the Gothic × OCS NT runs in under a second)
+or a citation/chapter/book ref; `langs` restricts to ≥2 named languages
+(`["got","chu"]`). Each group carries the verse ref, the **root** (headword,
+**shelf**, gloss, license), and per-language witness words (lemma, attested
+surface forms, attesting documents with licenses). **Read the shelf**: a meet
+at `gem-pro` involving a Slavic witness is very possibly a **borrowing**
+(Wiktionary descendant trees include loans), not common descent — `ine-pro`
+meets are the inheritance signal. Corpus-common words (df ≥ max(50, 10% of the
+language's gold passages)) are suppressed with an honest count; `all: true`
+lifts. Recall is bounded by Wiktionary descendants coverage and by gold
+lemmatization (~10% of the corpus): **no hit is absence of evidence**. Bounded
+(default 10 groups, max 50); the restricted-exclusion stance applies to
+witness documents (a private witness's words never join).
 
 ### `nabu_status`
 

@@ -103,11 +103,15 @@ module Nabu
     desc "health", "Source health checks (run-history trends + live golden replay; --remote for the upstream probe)"
     option :remote, type: :boolean, default: false,
                     desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
+    option :backfill_pins, type: :boolean, default: false,
+                           desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
-      # live golden replay). --remote is the P5-3 upstream probe. The two share
-      # nothing at runtime, so keep them in separate helpers with their own db
-      # lifetimes and exit-code raises.
+      # live golden replay). --remote is the P5-3 upstream probe.
+      # --backfill-pins (P15-7) is the one-shot pin recovery. Each keeps its own
+      # helper, db lifetime, and exit-code raise.
+      return run_backfill_pins if options[:backfill_pins]
+
       options[:remote] ? run_remote_health : run_local_health
     end
 
@@ -213,14 +217,28 @@ module Nabu
     option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
                     desc: "Max words between the two --near terms (default " \
                           "#{Nabu::Query::Proximity::DEFAULT_WINDOW}; 0 = adjacent)"
+    option :from, type: :numeric, banner: "YEAR",
+                  desc: "Earliest date: signed historical year, negative = BCE (-300 = 300 BCE, no year 0)"
+    option :to, type: :numeric, banner: "YEAR",
+                desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
+    option :century, type: :numeric, banner: "N",
+                     desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
+    option :place, type: :string, banner: "PATTERN",
+                   desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
     def search(query = nil)
       query = query.to_s.strip
+      if (options[:from] || options[:to] || options[:century] || options[:place]) && (options[:near] || options[:lemma])
+        raise Thor::Error, "search: --from/--to/--century/--place compose with text search only, " \
+                           "not --lemma/--near (the dated corpus — papyri — is not lemmatized)"
+      end
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
       raise Thor::Error, "search: give a query" if query.empty?
 
       validate_license!(options[:license])
+      from, to = date_window
+      place = options[:place]
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -228,9 +246,11 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
+      require_axis!(catalog) if from || to || place
+
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i)
+                                               limit: options[:limit].to_i, from: from, to: to, place: place)
       print_search_results(results)
     ensure
       catalog&.disconnect
@@ -311,6 +331,151 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+    end
+
+    desc "parallels URN", "Find passages that quote or echo this one (intertext over the FTS index)"
+    long_desc <<~HELP, wrap: false
+      Passage-anchored intertext: point at ONE passage and find where the corpus
+      quotes or echoes it — the classicist's "who cites this line? where does it
+      resurface?" (docs/intertext-design.md §1). Query-time over the same FTS
+      index as `search`, no precomputation: the anchor is folded to its search
+      form, cut into overlapping 4-word grams, and each gram is probed as an
+      exact phrase; passages that share grams are candidates, ranked by shared-
+      gram count WEIGHTED BY RARITY (a rare shared phrase — a real quotation —
+      outweighs a pile of common function-word grams).
+
+      Not to be confused with `align` (the translation-column hub, verse X across
+      its witnesses): parallels DISCOVERS reception across the whole corpus, from
+      surface text alone.
+
+      Each hit is one DOCUMENT (duplicate witnesses and multi-edition works
+      otherwise flood the ranks): its best-matching passage urn, the score, the
+      number of shared grams, and — when the document matches in several places —
+      a "loci" count. Under each hit the shared PHRASE spans are shown (the grams
+      merged back into contiguous text). Evidence is the folded search form, so
+      accents/breathings are stripped — it marks WHAT matched; `nabu show <urn>`
+      gives the pristine line.
+
+      Elision is folded at gram-build: the apostrophe that some editions write as
+      a letter (SBLGNT ἐπʼ) and others as punctuation (Swete/First1K ἐπ’) is
+      stripped so a gram matches across editions — the fix that lets Matthew 4:4
+      find LXX Deuteronomy 8:3.
+
+      Only the anchor's OWN document is excluded. Translations and other-language
+      witnesses self-exclude (they share no folded tokens with the anchor's
+      language); a second same-language edition of the anchor's own work is kept
+      — it is exactly the corroborating parallel you want.
+
+      LEMMA ECHOES: when the anchor carries gold treebank lemmas (UD/PROIEL/
+      TOROT), a second section lists passages sharing ≥2 of its RARE lemmas —
+      re-inflected or reordered allusion that verbatim grams miss. Absent (and
+      free) for non-lemmatized anchors.
+
+      Filters: --lang / --license (exact class) scope candidates; --limit caps
+      each list (default 15). --long expands every truncated list — all shared
+      phrase spans and all shared lemmas, untrimmed (compact shows the first few
+      with a "… and N more" tail).
+
+      Examples:
+        nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
+        nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
+                                                         # the Odyssey proem — who quotes it
+        nabu parallels urn:nabu:sblgnt:matt:4.4 --long   # Matt 4:4 → Luke, Origen, LXX Deut 8:3
+        nabu parallels <urn> --lang grc --limit 30       # Greek parallels only, wider page
+
+      Use cases: trace a verse's reception; find the source a Father is quoting;
+      seed a citation graph one passage at a time.
+    HELP
+    option :lang, type: :string, desc: "Restrict candidates to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict candidates to an exact license class (open, attribution, nc, …)"
+    option :limit, type: :numeric, default: 15, desc: "Maximum hits per signal (default 15)"
+    option :long, type: :boolean, default: false,
+                  desc: "Expand every truncated list: all shared phrase spans and shared lemmas, untrimmed"
+    def parallels(urn = nil)
+      urn = urn.to_s.strip
+      raise Thor::Error, "parallels: give a passage urn" if urn.empty?
+
+      validate_license!(options[:license])
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      result = Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
+                                     .run(urn, limit: options[:limit].to_i,
+                                               lang: options[:lang], license: options[:license])
+      print_parallels(result, urn: urn, long: options[:long])
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    desc "formulas SCOPE", "Mine the repeated n-gram formulas within a corpus slice (oral-formulaic)"
+    long_desc <<~HELP, wrap: false
+      Intra-corpus formula mining: point at a corpus SLICE and find its recurring
+      formulas — the oral-formulaic scholar's "what are the fixed phrases of this
+      tradition, and where does each occur?" (docs/intertext-design.md §5). The
+      same gram machinery as `parallels` pointed INWARD: instead of probing one
+      passage against the whole corpus, every passage of the slice is folded, cut
+      into overlapping n-word grams, and the grams counted in memory — the ones
+      that recur are the formulas. Zero precomputation (~0.2 s per ~200k-token
+      slice); reads the folded text straight from the catalog.
+
+      SCOPE is a source slug (`aspr`) when one exists, else a urn prefix — a whole
+      work (urn:cts:greekLit:tlg0012.tlg001.perseus-grc2) or a super-prefix over
+      several (urn:cts:greekLit:tlg0012 = Iliad + Odyssey, the Homeric corpus).
+
+      LANGUAGE: a translation-bearing source rides the same urn prefix as its base
+      text (perseus-greek holds Greek AND aligned English), so an unfiltered run
+      mixes traditions — pass --lang to mine one (a single-language source like
+      ASPR needs none).
+
+      RANKING: by count × gram length. No stoplist — the ranking is self-filtering
+      (a genuine formula out-recurs any pure function-word sequence; measured, not
+      one all-function-word gram reaches Homer's top). --min-count raises the
+      recurrence floor against a noisy tail.
+
+      Each formula prints its count and the folded gram (accents stripped, like
+      `search` highlights — `nabu show <urn>` gives the pristine line), with a few
+      example loci beneath. --long lists every locus of every reported formula.
+
+      Examples:
+        nabu formulas urn:cts:greekLit:tlg0012 --lang grc   # the Homeric formulas
+        nabu formulas aspr                                  # Old English verse formulas
+        nabu formulas aspr --gram-size 3 --min-count 5      # the riddle refrain "hwæt ic hatte"
+        nabu formulas urn:cts:greekLit:tlg0012 --lang grc --long   # every locus
+
+      Use cases: characterize a tradition's formulaic diction; find every
+      occurrence of a formula; seed an oral-formulaic study.
+    HELP
+    option :lang, type: :string,
+                  desc: "Restrict the slice to a language (grc, ang) — wanted when a source mixes translations"
+    option :min_count, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_MIN_COUNT,
+                       desc: "Minimum recurrence to count as a formula (default 3)"
+    option :gram_size, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_GRAM_SIZE,
+                       desc: "Words per gram (2–8; default 4)"
+    option :limit, type: :numeric, default: Nabu::Query::Formulas::DEFAULT_LIMIT,
+                   desc: "Maximum formulas shown (default 25)"
+    option :long, type: :boolean, default: false,
+                  desc: "List every locus of every reported formula (compact shows a few examples)"
+    def formulas(scope = nil)
+      scope = scope.to_s.strip
+      raise Thor::Error, "formulas: give a source slug or urn prefix" if scope.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Formulas.new(catalog: catalog).run(
+        scope, gram_size: options[:gram_size].to_i, min_count: options[:min_count].to_i,
+               lang: options[:lang], limit: options[:limit].to_i, long: options[:long]
+      )
+      print_formulas(result, long: options[:long])
+    rescue ArgumentError => e
+      raise Thor::Error, "formulas: #{e.message}"
+    ensure
+      catalog&.disconnect
     end
 
     desc "show URN", "Show a passage or document by urn (withdrawn items shown, flagged)"
@@ -468,6 +633,17 @@ module Nabu
     HELP
     option :work, type: :string, banner: "ID",
                   desc: "Alignment work id from config/alignments.yml (optional when only one is registered)"
+    option :collate, type: :boolean, default: false,
+                     desc: "Diff the witnesses instead of listing them: a raw-token apparatus per " \
+                           "(language, script) group — base reading, then per-witness divergences only " \
+                           "(cross-script witnesses rendered undiffed, honestly)"
+    option :base, type: :string, banner: "LABEL",
+                  desc: "With --collate: the base witness (label or document urn) each group diffs " \
+                        "against (default: the first witness in registry order)"
+    option :long, type: :boolean, default: false,
+                  desc: "Lift the #{Nabu::Query::Align::MAX_REFS}-ref range ceiling and render every ref " \
+                        "(compact clips a huge range by default); with --collate, also print each " \
+                        "witness's full tokens instead of only its divergences"
     def align(*ref_parts)
       ref = ref_parts.join(" ").strip
       raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
@@ -478,9 +654,17 @@ module Nabu
       raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
 
       registry = Nabu::AlignmentRegistry.load(config.alignments_path)
-      result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
-                                 .run(ref, work: options[:work])
-      print_align(result)
+      if options[:collate]
+        result = Nabu::Query::Collation.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                       .run(ref, work: options[:work], base: options[:base], long: options[:long])
+        print_collation(result, long: options[:long])
+      else
+        raise Thor::Error, "align: --base only applies with --collate" if options[:base]
+
+        result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                   .run(ref, work: options[:work], long: options[:long])
+        print_align(result)
+      end
     rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
       raise Thor::Error, e.message
     ensure
@@ -631,6 +815,75 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
+    long_desc <<~HELP, wrap: false
+      The comparativist's join (P15-3): verses of a registered alignment work
+      where witnesses in TWO OR MORE languages use reflexes of the SAME
+      reconstruction root — the alignment hub (nabu align) crossed with the
+      Wiktionary reconstruction crosswalk (nabu etym). Gothic salt ~ OCS соль
+      meet at PIE *sḗh₂l in the salt saying (LUKE 14.34); hlaifs ~ хлѣбъ at
+      *hlaibaz in "he who eats my bread" (JOHN 13.18).
+
+      TARGET is a registered work id (nt, ot, psalms — batches the whole
+      work), a verse ref (LUKE 14.34), a chapter (LUKE 14), or a book (LUKE).
+      Each hit names the root with its SHELF — and the shelf is part of the
+      answer: a Slavic witness meeting a Germanic witness at a gem-pro entry
+      (*hlaibaz, *kaisaraz) is very possibly a BORROWING, not common descent;
+      ine-pro meets are the inheritance signal. Wiktionary descendant trees
+      include loans and do not flag them.
+
+      Corpus-common words are suppressed by default (a lemma in ≥ 10% of its
+      language's gold passages, absolute floor 50 — ὁ, jah, и would otherwise
+      flood every verse); --all shows them, and the header counts what fell.
+      Frequency is a coarse proxy: богъ (4.9% of OCS) and нъ "but" (4.7%) are
+      inseparable by df, so some common words survive — read the hits.
+
+      Recall is bounded by Wiktionary descendants coverage (roughly a third
+      of Gothic and a fifth of OCS gold lemma types reach any proto entry)
+      and by gold lemmatization (~10% of the corpus): absence of a hit is
+      absence of evidence, not evidence of unrelatedness.
+
+      --langs got,chu restricts the comparison to the named languages (at
+      least two); --work picks the alignment work when the ref is ambiguous;
+      --long lifts the #{Nabu::Query::Cognates::MAX_GROUPS}-hit compact cap
+      and expands gloss/dictionary/document detail per hit.
+
+      Examples:
+        nabu cognates "LUKE 14.34"            # the salt saying, all languages
+        nabu cognates nt --langs got,chu      # the whole NT, Gothic × OCS
+        nabu cognates "JOHN 13" --langs got,chu,grc
+        nabu cognates nt --langs got,chu --all  # keep the common-word matches
+    HELP
+    option :work, type: :string,
+                  desc: "Alignment work id (optional when the target decides it)"
+    option :langs, type: :string, banner: "got,chu",
+                   desc: "Restrict the comparison to these languages (comma-joined, at least two)"
+    option :all, type: :boolean, default: false,
+                 desc: "Show the common-word matches the default suppresses"
+    option :long, type: :boolean, default: false,
+                  desc: "Render every hit (compact caps at #{Nabu::Query::Cognates::MAX_GROUPS}) " \
+                        "and expand gloss/dictionary/document detail"
+    def cognates(*target_parts)
+      target = target_parts.join(" ").strip
+      raise Thor::Error, "cognates: give a work id (nt) or a citation ref (e.g. LUKE 14.34)" if target.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      registry = Nabu::AlignmentRegistry.load(config.alignments_path)
+      result = Nabu::Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
+                                    .run(target, work: options[:work], langs: parse_langs(options[:langs]),
+                                                 all: options[:all], long: options[:long])
+      print_cognates(result)
+    rescue Nabu::Query::Cognates::Error, Nabu::ValidationError => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "vocab URN", "Lemma-frequency profile of a document/range vs the corpus (gold shelves only)"
     long_desc <<~HELP, wrap: false
       Profile the gold-lemma vocabulary of one document, a citation range, or a
@@ -652,15 +905,41 @@ module Nabu
       so you can profile something that works. --limit caps both the distinctive
       list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
 
+      DIACHRONY (--by-century): instead of one document's lemmas, plot the DATED
+      corpus across centuries (P15-2, the date/place axis). Bare, it is the shape
+      of your dated holdings — one row per century (BCE/CE), the document count.
+      With a text QUERY it becomes "plot this word across centuries": how many
+      dated documents attest the term in each century. Composes with --lang,
+      --license, --from/--to/--century, and --place; counts are per DOCUMENT and
+      bucketed by EARLIEST year (a ranged papyrus lands in its first century), so
+      the footer names how many span more than one century. Most of the corpus is
+      undated (papyri via HGV, Slovene goo300k/IMP carry dates); undated
+      documents are simply absent here, never an error.
+
       Examples:
         nabu vocab urn:nabu:proiel:caes-gal          # Caesar's Gallic War
         nabu vocab urn:nabu:proiel:cic-off --limit 30
         nabu vocab urn:nabu:proiel:hdt:1.1-1.100     # a citation range
+        nabu vocab --by-century                      # the dated corpus over time
+        nabu vocab --by-century στρατηγ --lang grc   # a word plotted across centuries
+        nabu vocab --by-century --place oxyrhynch%   # Oxyrhynchus, century by century
     HELP
     option :limit, type: :numeric, default: Nabu::Query::Vocab::DEFAULT_LIMIT,
                    desc: "Cap the distinctive list and hapax spellings printed"
+    option :long, type: :boolean, default: false,
+                  desc: "List every hapax legomenon (and every gold-bearing language) in full, " \
+                        "escaping the --limit display cap (the distinctive ranking stays top-N)"
+    option :by_century, type: :boolean, default: false,
+                        desc: "Diachronic mode: bucket the DATED corpus (or a text query) by century"
+    option :lang, type: :string, desc: "With --by-century: restrict to a language (grc, lat, …)"
+    option :license, type: :string, desc: "With --by-century: restrict to an exact license class"
+    option :from, type: :numeric, banner: "YEAR", desc: "With --by-century: earliest year (negative = BCE)"
+    option :to, type: :numeric, banner: "YEAR", desc: "With --by-century: latest year"
+    option :century, type: :numeric, banner: "N", desc: "With --by-century: one century's window (6, -2)"
+    option :place, type: :string, banner: "PATTERN", desc: "With --by-century: provenance place LIKE filter"
     def vocab(urn = nil)
       urn = urn.to_s.strip
+      return vocab_by_century(urn) if options[:by_century]
       raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
 
       config = Nabu::Config.load
@@ -841,6 +1120,12 @@ module Nabu
       raise Thor::Error, e.message
     end
 
+    # How many evidence spans / shared lemmas a compact `parallels` hit shows
+    # before it elides with a "… and N more" tail; --long lifts the cap.
+    PARALLELS_COMPACT_ITEMS = 3
+    # Compact evidence-span width; --long prints the span untrimmed.
+    PARALLELS_SPAN_CHARS = 72
+
     no_commands do
       # Reject an unknown --license up front (before opening any db) with the
       # closed enum of valid classes, so the user sees the choices. Shared by
@@ -852,6 +1137,49 @@ module Nabu
         raise Thor::Error,
               "unknown license #{license.inspect} " \
               "(choose from #{Nabu::SourceManifest::LICENSE_CLASSES.join(', ')})"
+      end
+
+      # Resolve --century (a whole century's bounds) OR --from/--to into a
+      # [from, to] signed-historical-year window (P15-2). The reviewed guards:
+      # no year 0 (1 BCE = -1, 1 CE = +1), a clear F>T message (not a silent
+      # empty result), and --century is mutually exclusive with --from/--to.
+      def date_window
+        if options[:century]
+          if options[:from] || options[:to]
+            raise Thor::Error, "date filter: --century is shorthand for --from/--to — use one or the other"
+          end
+
+          idx = options[:century].to_i
+          raise Thor::Error, "date filter: there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if idx.zero?
+
+          return Nabu::DateAxis.century_bounds(idx)
+        end
+
+        from = coerce_year(options[:from], "--from")
+        to = coerce_year(options[:to], "--to")
+        if from && to && from > to
+          raise Thor::Error, "date filter: --from #{from} is after --to #{to} " \
+                             "(BCE years are negative — 300 BCE is -300, so -300 comes before -30)"
+        end
+        [from, to]
+      end
+
+      def coerce_year(value, flag)
+        return nil if value.nil?
+
+        year = value.to_i
+        raise Thor::Error, "date filter: there is no year 0 (#{flag}); 1 BCE is -1, 1 CE is 1" if year.zero?
+
+        year
+      end
+
+      # A date/place filter needs document_axes; a catalog that predates
+      # migration 008 (never rebuilt) hasn't got it. Fail with a clear pointer
+      # rather than a Sequel "no such table".
+      def require_axis!(catalog)
+        return if catalog.table_exists?(:document_axes)
+
+        raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
       end
 
       # Export format gate. CoNLL-U is a first-class exit format (maintenance
@@ -980,6 +1308,7 @@ module Nabu
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
+        print_axis(passage.axis)
         return if passage.provenance.empty?
 
         say "  provenance:"
@@ -993,6 +1322,7 @@ module Nabu
         lang = document.language ? " [#{document.language}]" : ""
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
+        print_axis(document.axis)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
@@ -1007,10 +1337,29 @@ module Nabu
         lang = range.language ? " [#{range.language}]" : ""
         say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
         say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
+        print_axis(range.axis)
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
           say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+        end
+      end
+
+      # The date/place axis line (P15-2), when the document has one. A date span
+      # ("113 BCE", "501–700 CE", "≤ 257 BCE") with the informative precision
+      # ("low"/"high", not the derived exact/range/year) and the provenance
+      # place; place-only rows print as "place:". Undated documents print
+      # nothing (an absence, never an error).
+      def print_axis(axis)
+        return if axis.nil?
+
+        span = Nabu::DateAxis.format_span(axis.not_before, axis.not_after)
+        place = axis.place_name ? " · #{axis.place_name}" : ""
+        if span
+          note = %w[exact range year].include?(axis.precision) ? "" : " (#{axis.precision})"
+          say "  date: #{span}#{note}#{place}"
+        elsif axis.place_name
+          say "  place: #{axis.place_name}"
         end
       end
 
@@ -1147,7 +1496,7 @@ module Nabu
         say "  #{absent_range_summary(result.absent)}" unless result.absent.empty?
         if result.truncated
           say "  showing first #{result.groups.size} of #{result.total} refs " \
-              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range"
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range, or pass --long to render all"
         end
         result.groups.each { |group| print_align_range_group(group) }
       end
@@ -1248,6 +1597,83 @@ module Nabu
         "  [covers #{sentence.refs.join(', ')}]"
       end
 
+      # -- align --collate (P15-4) ------------------------------------------------
+
+      # The collation apparatus (intertext-design §2): the query/work header,
+      # then one block per ref — each (language, script) cell as a base reading
+      # plus the per-witness divergences, uncollated cross-script/sole witnesses
+      # rendered undiffed and honestly, and any missing witnesses named once.
+      def print_collation(result, long:)
+        say "#{result.query} — #{result.title} · collation"
+        if result.truncated
+          say "  showing first #{result.refs.size} of #{result.total} refs " \
+              "(cap #{Nabu::Query::Align::MAX_REFS}) — narrow the range, or pass --long to render all"
+        end
+        result.refs.each do |ref_collation|
+          say ""
+          say ref_collation.ref if result.refs.size > 1
+          print_collation_ref(ref_collation, long: long)
+        end
+      end
+
+      def print_collation_ref(ref_collation, long:)
+        say "  no witness attests this ref" if ref_collation.cells.empty? && ref_collation.asides.empty?
+        ref_collation.cells.each { |cell| print_collation_cell(cell, long: long) }
+        ref_collation.asides.each { |aside| print_collation_aside(aside) }
+        print_collation_missing(ref_collation.missing)
+      end
+
+      # One collated cell: the base line in full, then each other witness — its
+      # full tokens under --long, "(agrees with base)" when identical, else its
+      # apparatus of divergences (agreements elided).
+      def print_collation_cell(cell, long:)
+        base = cell.readings.find(&:is_base)
+        say "  [#{cell.language}/#{cell.script}] #{cell.readings.size} witnesses, base #{cell.base_label}"
+        say "    = #{base.label}  #{base.tokens.join(' ')}"
+        cell.readings.reject(&:is_base).each do |reading|
+          say "      #{reading.label}  #{collation_reading_body(reading, long: long)}"
+        end
+      end
+
+      def collation_reading_body(reading, long:)
+        return reading.tokens.join(" ") if long
+        return "(agrees with base)" if reading.edits.empty?
+
+        reading.edits.map { |edit| format_collation_edit(edit) }.join("; ")
+      end
+
+      # Apparatus marks: a substitution as "base → variant", an omission as
+      # "om. base" (the witness lacks it), an insertion as "add. variant".
+      def format_collation_edit(edit)
+        case edit.op
+        when :sub then "#{edit.base.join(' ')} → #{edit.witness.join(' ')}"
+        when :del then "om. #{edit.base.join(' ')}"
+        when :ins then "add. #{edit.witness.join(' ')}"
+        end
+      end
+
+      # An uncollated witness: rendered undiffed, its reason stated plainly —
+      # cross-script (the fold cannot bridge the transcription systems) or the
+      # sole witness of its language here.
+      def print_collation_aside(aside)
+        reason = if aside.reason == :cross_script
+                   "not collated — different transcription system, the fold cannot bridge it"
+                 else
+                   "not collated — sole witness of its language here"
+                 end
+        say "  [#{aside.language}/#{aside.script}] #{aside.label}  license: #{aside.license_class}  (#{reason})"
+        say "    #{aside.text}"
+      end
+
+      def print_collation_missing(missing)
+        no_match = missing.select { |witness| witness.status == :no_match }.map(&:label)
+        not_synced = missing.select { |witness| witness.status == :not_synced }.map(&:label)
+        withheld = missing.select { |witness| witness.status == :withheld }.map(&:label)
+        say "  not attested here: #{no_match.join(', ')}" unless no_match.empty?
+        say "  not synced: #{not_synced.join(', ')}" unless not_synced.empty?
+        say "  license-withheld: #{withheld.join(', ')}" unless withheld.empty?
+      end
+
       def format_parallel_side(side)
         "#{side.urn}#{" — #{side.title}" if side.title}#{" [#{side.language}]" if side.language}"
       end
@@ -1330,6 +1756,80 @@ module Nabu
           say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}"
         end
         say "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
+      end
+
+      # Render `parallels` (P15-1): the anchor line, then one hit per document —
+      # urn [lang], score, shared-gram count and loci, and the shared PHRASE
+      # spans indented beneath. A lemma-echoes section follows when the anchor is
+      # gold-lemmatized. `--long` expands every truncated list.
+      def print_parallels(result, urn:, long:)
+        raise Thor::Error, "parallels: no live passage at #{urn} (check `nabu show #{urn}`)" if result.nil?
+
+        title = result.anchor_title ? " — #{result.anchor_title}" : ""
+        say "parallels of #{result.anchor_urn}#{title}"
+        if result.gram_count.zero?
+          say "  passage too short for #{Nabu::Query::Parallels::GRAM_SIZE}-word grams"
+          return
+        end
+
+        say "  no surface-gram parallels" if result.hits.empty?
+        result.hits.each { |hit| print_parallel_hit(hit, long: long) }
+        say "#{result.hits.size} #{result.hits.size == 1 ? 'parallel' : 'parallels'} " \
+            "from #{result.gram_count} grams (evidence is diacritic-folded)"
+        print_lemma_echoes(result.lemma_echoes, long: long) unless result.lemma_echoes.empty?
+      end
+
+      def print_parallel_hit(hit, long:)
+        loci = hit.loci > 1 ? " · #{hit.loci} loci" : ""
+        grams = "#{hit.shared_gram_count} #{hit.shared_gram_count == 1 ? 'gram' : 'grams'}"
+        say "#{hit.urn}#{" [#{hit.language}]" if hit.language}  " \
+            "score #{format('%.2f', hit.score)} · #{grams}#{loci}"
+        compact_list(hit.evidence, long: long) { |span| long ? span : truncate_line(span, PARALLELS_SPAN_CHARS) }
+          .each { |line| say "  #{line}" }
+      end
+
+      def print_lemma_echoes(echoes, long:)
+        say "lemma echoes (rare shared lemmas — re-inflected/reordered allusion):"
+        echoes.each do |echo|
+          say "#{echo.urn}#{" [#{echo.language}]" if echo.language}  score #{format('%.2f', echo.score)}"
+          say "  #{compact_list(echo.shared_lemmas, long: long).join(', ')}"
+        end
+      end
+
+      # Render `formulas` (P15-5): the slice header (passages/tokens), then one
+      # line per formula — count × the folded gram — with example loci beneath
+      # (compact) or every locus (--long). The footer states the ranking and the
+      # recurring total so the "top N of M" elision is explicit.
+      def print_formulas(result, long:)
+        lang = result.lang ? " [#{result.lang}]" : ""
+        say "formulas in #{result.scope}#{lang} — " \
+            "#{plural(result.passage_count, 'passage')} / #{plural(result.token_count, 'token')}"
+        return say("  no passages in scope (unknown source slug or urn prefix?)") if result.passage_count.zero?
+        return say("  no #{result.gram_size}-grams recur ≥#{result.min_count}× in this slice") if result.formulas.empty?
+
+        result.formulas.each { |formula| print_formula(formula, long: long) }
+        say "showing #{result.formulas.size} of #{plural(result.recurring_count, 'formula')} " \
+            "recurring ≥#{result.min_count}× (rank = count × #{result.gram_size}-gram length; " \
+            "grams are diacritic-folded)"
+      end
+
+      def print_formula(formula, long:)
+        say "#{formula.count}×  #{formula.gram}"
+        return if formula.loci.empty?
+
+        prefix = !long && formula.count > formula.loci.size ? "e.g. " : ""
+        say "     #{prefix}#{formula.loci.join(', ')}"
+      end
+
+      # Cap a list to PARALLELS_COMPACT_ITEMS with a "… and N more" tail unless
+      # +long+; each kept item passes through the block (span trimming). The tail
+      # itself names --long so the elision is discoverable.
+      def compact_list(items, long:)
+        kept = long ? items : items.first(PARALLELS_COMPACT_ITEMS)
+        rendered = kept.map { |item| block_given? ? yield(item) : item }
+        extra = items.size - kept.size
+        rendered << "… and #{extra} more (--long)" if extra.positive?
+        rendered
       end
 
       # search --lemma FORM (P7-5): exact-lemma lookup over the treebank lemma
@@ -1462,15 +1962,59 @@ module Nabu
       end
 
       # The hapax legomena line: attested exactly once in this document. The full
-      # count, then up to --limit spellings (they can number in the hundreds).
+      # count, then up to --limit spellings (they can number in the hundreds) —
+      # or, under --long (house rule P15-8), every spelling with no "(+N more)"
+      # tail. The full list already rides in the profile; --limit only caps the
+      # print, so --long is a pure render concern here.
       def print_vocab_hapax(hapax, hapax_count)
         return if hapax_count.zero?
 
         say ""
-        shown = hapax.first(options[:limit].to_i)
+        shown = options[:long] ? hapax : hapax.first(options[:limit].to_i)
         more = hapax_count - shown.size
         tail = more.positive? ? " (+#{commafy(more)} more)" : ""
         say "  hapax legomena (#{commafy(hapax_count)}, once each): #{shown.join(', ')}#{tail}"
+      end
+
+      # `vocab --by-century` (P15-2): the diachronic histogram of the dated
+      # corpus, optionally filtered by a text query (plot a word across
+      # centuries) and by --lang/--license/date/--place.
+      def vocab_by_century(query)
+        validate_license!(options[:license])
+        from, to = date_window
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        require_axis!(catalog)
+        fulltext = open_fulltext(config) unless query.empty?
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" if !query.empty? && fulltext.nil?
+
+        result = Nabu::Query::Century.new(catalog: catalog, fulltext: fulltext).run(
+          query: query.empty? ? nil : query, lang: options[:lang], license: options[:license],
+          from: from, to: to, place: options[:place]
+        )
+        print_century(result)
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_century(result)
+        say(if result.query
+              "diachrony of #{result.query.inspect} (dated documents by century)"
+            else
+              "dated corpus by century"
+            end)
+        return say("  no dated documents match") if result.buckets.empty?
+
+        width = result.buckets.map { |bucket| bucket.label.length }.max
+        result.buckets.each do |bucket|
+          say "  #{bucket.label.ljust(width)}  #{commafy(bucket.documents)} " \
+              "#{bucket.documents == 1 ? 'document' : 'documents'}"
+        end
+        multi = result.multi_century.positive? ? "; #{commafy(result.multi_century)} span multiple centuries" : ""
+        say "  #{commafy(result.total_documents)} dated documents (bucketed by earliest year#{multi})"
       end
 
       # A document with no gold lemmas: say so plainly and name the gold-bearing
@@ -1480,8 +2024,11 @@ module Nabu
             "(0 of #{pluralize(profile.passages, 'passage')} carry one)."
         say "  Gold lemmas come from the treebank shelves (PROIEL, TOROT, ISWOC, " \
             "Universal Dependencies) and the ORACC cuneiform layer."
-        langs = profile.gold_languages.first(8).map { |lang, count| "#{lang} (#{commafy(count)})" }
-        ellipsis = profile.gold_languages.size > langs.size ? ", …" : ""
+        # --long (house rule P15-8) lists every gold-bearing language; the compact
+        # default shows the first eight with a "…" elision marker.
+        shown = options[:long] ? profile.gold_languages : profile.gold_languages.first(8)
+        langs = shown.map { |lang, count| "#{lang} (#{commafy(count)})" }
+        ellipsis = profile.gold_languages.size > shown.size ? ", …" : ""
         say "  gold-bearing languages: #{langs.join(', ')}#{ellipsis}"
         say "  Try e.g. nabu vocab urn:nabu:proiel:caes-gal"
       end
@@ -1595,6 +2142,65 @@ module Nabu
         prefix = via ? "#{via.word} [#{via.language}] → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
+      end
+
+      # --langs as an array: comma-joined on the CLI, validated by the query.
+      def parse_langs(value)
+        return nil if value.nil?
+
+        value.split(",").map(&:strip).reject(&:empty?)
+      end
+
+      # cognates (P15-3): header with honest totals + the suppression count,
+      # then one compact block per (verse, root) hit — the root line carries
+      # the SHELF (a gem-pro meet with a Slavic witness reads as a borrowing;
+      # see the command help), each witness its lemma and attested forms.
+      def print_cognates(result)
+        say "#{result.query} — work #{result.work} · shared-root verses across witnesses"
+        say "  #{cognates_counts(result)}"
+        if result.truncated
+          say "  showing first #{result.groups.size} of #{result.total} hits — narrow the " \
+              "target, or pass --long to render all"
+        end
+        result.groups.each { |group| print_cognates_group(group, result.documents) }
+      end
+
+      def cognates_counts(result)
+        verses = result.groups.map(&:ref).uniq.size
+        roots = result.groups.map { |group| group.root.urn }.uniq.size
+        counts = if result.total.zero?
+                   "no hits — no verse here has two witnesses on one root"
+                 else
+                   "#{plural(result.total, 'hit')} · #{plural(verses, 'verse')} · " \
+                     "#{plural(roots, 'root')}"
+                 end
+        return counts if result.suppressed.zero?
+
+        "#{counts}; #{result.suppressed} common-word #{result.suppressed == 1 ? 'hit' : 'hits'} " \
+          "suppressed (--all shows them)"
+      end
+
+      def print_cognates_group(group, documents)
+        say ""
+        say "#{group.ref}  #{group.root.headword} [#{group.root.shelf} · #{group.root.license_class}]"
+        if options[:long]
+          say "    #{group.root.dictionary_title}#{" · gloss: #{group.root.gloss}" if group.root.gloss}"
+        end
+        group.witnesses.each do |witness|
+          say "    #{witness.language.ljust(4)} #{witness.lemma}#{cognates_surfaces(witness)}"
+          next unless options[:long]
+
+          witness.document_urns.each do |urn|
+            doc = documents[urn]
+            say "         #{urn}#{" — #{doc[:title]} [#{doc[:license_class]}]" if doc}"
+          end
+        end
+      end
+
+      # The attested forms, shown when they add anything over the lemma.
+      def cognates_surfaces(witness)
+        forms = witness.surfaces - [witness.lemma]
+        forms.empty? ? "" : " — attested as #{forms.join(', ')}"
       end
 
       def print_resolved_citations(result)
@@ -1738,6 +2344,10 @@ module Nabu
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
+        return unless result.axes
+
+        say "  dated/placed #{result.axes.total} documents " \
+            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp})"
       end
 
       def format_report(label, report)
@@ -1770,6 +2380,40 @@ module Nabu
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
         ledger&.disconnect
+      end
+
+      # --backfill-pins (P15-7): record ledger pins for sources synced before
+      # the pins ledger existed (P7) — the ones that read "unpinned". No
+      # network, read-only on canonical/ (a local git rev-parse / state-file
+      # read); writes ONLY the ledger pins, idempotently. A write path, so the
+      # ledger is opened + migrated + lifted like the remote probe's.
+      def run_backfill_pins
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        ledger = open_or_create_ledger(config)
+        recorded = Nabu::Health::RemoteProbe.new(
+          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+        ).backfill_pins
+        print_backfill(recorded)
+      ensure
+        ledger&.disconnect
+      end
+
+      def print_backfill(recorded)
+        if recorded.empty?
+          return say("backfill-pins: nothing to backfill — every synced source already carries its ledger pin.")
+        end
+
+        width = recorded.map { |row| row.slug.length }.max
+        recorded.each do |row|
+          say "#{row.slug.ljust(width)}  pinned #{row.sha[0, 12]}  (#{backfill_origin(row.origin)})"
+        end
+        say "backfill-pins: recorded #{pluralize(recorded.size, 'pin')} " \
+            "(ledger only; canonical/ untouched, no network)."
+      end
+
+      def backfill_origin(origin)
+        origin == :git_clone ? "backfilled-from-local-clone" : "backfilled-from-state-file"
       end
 
       # `status --remote` (P14-12): run the live upstream probe through the SAME
@@ -1887,8 +2531,9 @@ module Nabu
       end
 
       def drift_cell(drift)
-        { current: "current", behind: "behind", never_synced: "never-synced",
-          unknown: "—", multi: "multi-repo" }.fetch(drift)
+        { current: "current", behind: "behind", unpinned: "unpinned",
+          never_synced: "never-synced", unknown: "—", multi: "multi-repo",
+          frozen: "frozen" }.fetch(drift)
       end
 
       def license_cell(license)
@@ -1901,7 +2546,7 @@ module Nabu
       def health_detail(row)
         bits = []
         bits << row.liveness.detail if row.liveness.detail && row.liveness.status != :alive
-        bits << row.drift_detail if row.drift_detail && row.drift == :behind
+        bits << row.drift_detail if row.drift_detail && %i[behind unpinned].include?(row.drift)
         bits << row.license.detail if row.license.status == :changed
         bits.empty? ? "" : "   #{bits.join(' · ')}"
       end

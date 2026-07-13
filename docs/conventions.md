@@ -446,3 +446,52 @@ revision storm.
 References: PHI Latin search help (latin.packhum.org/help/search); TLG Beta
 Code manual (S for all sigmas); Unicode TR#15 (NFC/NFD); verified fixture
 behavior in test/normalize_test.rb.
+
+## 10. CLI output: compact by default, `--long` escapes truncation (P15-8)
+
+The house rule (owner, 2026-07-12): the CLI is compact by default, but
+wherever a renderer *elides* a list with a visible marker — a "(+N more)"
+tail, a "… and N more", a trailing "…", a "showing first N of M" note — the
+same command MUST also accept `--long` to render that list in full. `--long`
+is declared per command (the P14-11 `etym`/`define` precedent), never global,
+and the compact form stays byte-identical when the flag is absent. The
+distinction that decides whether a cap earns `--long` is *elision vs guard vs
+ranking knob*: `etym`/`define`'s reflex tails, `vocab`'s hapax "(+N more)" and
+its no-gold "…" language list are elisions and `--long` expands them fully;
+`align`'s 200-ref range ceiling is a *guard* against an accidental whole-book
+render, so `--long` is the deliberate, sanctioned override that lifts it rather
+than a default that could dump thousands of lines; a `--limit`-governed
+"top-N" ranking (`vocab`'s distinctive table, `search`/`concord` result counts)
+is a knob, not an elision, and `--long` deliberately leaves it alone — `--limit`
+is its control. Snippet-level single-line truncation (`search`/`concord`
+context, the lemma-hit text line) is display trimming, not list elision, and
+carries no `--long`.
+
+## 11. Dates — signed historical years, no year 0 (P15-2)
+
+The date/place axis (`document_axes`, architecture §14) stores a document's
+date as **signed integer historical years**: negative = BCE, positive = CE,
+and **there is no year 0** — 1 BCE is `-1`, 1 CE is `+1`. This is *not*
+astronomical/ISO-8601 numbering (where year 0 = 1 BCE and `-0113` would mean
+114 BCE). It is the numbering HGV itself uses — `origDate when="-0113"` is
+labelled "113 v.Chr." = 113 BCE — and the number the CLI user types:
+`search --from -300` means 300 BCE, full stop. Ingest = source = query =
+display, which is deliberately how the entire BCE off-by-one class is avoided
+(fable-reviewed 2026-07-12).
+
+Consequences that hold everywhere dates are handled:
+
+- **Interval overlap, not containment.** A document dated `[not_before,
+  not_after]` matches a query window `[from, to]` iff `not_before <= to AND
+  not_after >= from`. Either bound may be NULL — an **open-ended interval**
+  (HGV `notBefore`-only / `notAfter`-only): NULL reads as −∞ / +∞ and the
+  filter is NULL-aware, so an open-ended row never silently vanishes.
+- **Honest ranges, never a midpoint.** "VI–VII, precision low" stores
+  `(501, 700, "low")`. A point (`when`) stores `not_before == not_after`.
+- **Centuries** use a signed index that also skips 0 (1st c. CE = 1, 1st c.
+  BCE = -1), so ascending index *is* chronological order (`-2 < -1 < 1 < 2` =
+  2nd c. BCE, 1st c. BCE, 1st c. CE, 2nd c. CE). `Nabu::DateAxis` owns the whole
+  model (parse, century index/label/bounds, span formatting) in one place;
+  it raises on a literal year 0 (the malformed-source / astronomical-source
+  tripwire). A ranged document buckets in its *earliest* century, and the CLI
+  says so ("bucketed by earliest year; N span multiple centuries").
