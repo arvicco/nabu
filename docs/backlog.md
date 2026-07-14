@@ -5837,8 +5837,11 @@ sketches for the gate; honest "print-only, no unblock" list.
 # 1. Etruscan adapter (P17-5 Phase B): OpenEtruscan CSV (new flat-CSV
 #    parser family, skip ocr_failed, fuzzy_index, BCE sign-flip pin) +
 #    kaikki ett EXTRACTS row + the Latin-loans curated-edge rider;
-#    posture: attribution + journaled Larth caveat + license_watch.
-#    Fixture plan APPROVED (etruscan-survey.md §fixtures).
+#    posture: attribution — the Larth provenance caveat DISSOLVED
+#    2026-07-14 (upstream added LICENSE CC-BY 4.0 on owner request);
+#    carry instead the author's own data-quality caveat ("many
+#    inscriptions are really noisy and not really reliable") in
+#    02-sources. Fixture plan APPROVED (etruscan-survey.md §fixtures).
 # 2. Damaskini (clarin-si-survey pick #1, CC BY-SA): Balkan Slavic
 #    gold corpus, aligned English, St. Petka multi-witness collation.
 # 3. Slovenian historical dictionary shelf (pick #2, CC BY): Pleteršnik
