@@ -276,6 +276,10 @@ cognate sets / 26,325 reflex rows projected, 2,308 loan-flagged),
 Etymological Dictionary of Latin** (2,860 etymons) — a third-witness tier
 for the etymology desk. Ranked expansion candidates live in the axis
 surveys: [Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
+There is also a shelf for your own PDFs, scans and articles
+(`canonical/local-library/` — manifest-catalogued, `research_private` by
+default, page-cited where a text layer exists; an `ingest` front door is
+in the works).
 
 ## Feature tour
 

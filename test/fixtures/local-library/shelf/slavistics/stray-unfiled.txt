@@ -1,0 +1,2 @@
+A file dropped into the collection without a manifest entry — the
+discovery census must count it unrecognized (awaiting `nabu ingest`).

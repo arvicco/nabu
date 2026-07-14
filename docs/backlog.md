@@ -6656,3 +6656,57 @@ OWNER RUNBOOK: nabu language --export-dossiers --dry-run → without
 --dry-run → bin/nabu sync local-language → eyeball `nabu language chu`
 / `zle-ort` / `--list`. LATER PACKET: drop ledger_migrate language_notes
 after parity (supersession history lives only there until then).
+
+## P19-4 · The local-library shelf  [tier: opus] [status: done 2026-07-14 — shipped; population is owner-by-hand until ingest] [deps: P19-1]
+Shelf two of the canonical-memory design (.docs/canonical-memory.md §2;
+the queue's "P19-2: local-library" renumbered — site FAQ/News took the
+P19-2/3 slots): canonical/local-library/<collection>/ with one
+manifest.yml per collection as the SOURCE OF RECORD (file/title/creator/
+year/languages/provenance/license_class/tags/related; a YAML list so
+`nabu ingest` — the NEXT packet — appends mechanically). Adapter
+sync_policy: local on the P19-1 framework (LocalFetch pins, vanished/
+attic honesty, §16 write doctrine), documents + passages (FULL
+conformance, unlike the dossier shelf): PDF text layer → page-grain
+passages via mutool (Nabu::Shell), scans/images → metadata-only
+(text_layer: none, HTR-era queue, never quarantined), corrupt files →
+quarantine; research_private DEFAULT enforced at the manifest parser
+with per-entry upgrades as license_override; manifest related: urns →
+kind=reference links-journal edges refreshed at every sync.
+DONE (2026-07-14): shipped as specced. VERDICTS — (a) content_kind
+stays :passages: the enum routes LOADERS (closed set, "new kind = new
+loader"); articles parse to Document+Passage, exactly Store::Loader's
+shape, so :article would be a routing word without a loader (and would
+skip the document-grain withdrawal trend rule); article-ness =
+Document#metadata "kind"=>"article". (b) Page grain argued: the page is
+the only citation unit a PDF keeps stable across extractions and the
+one scholarship cites — urns …:p<N>, sequence = physical page, blank
+pages skipped but numbering preserved; born-digital txt/md get
+paragraph ordinals (…:<n> — blank-line paragraphs are authorial there).
+(c) related: language codes stay metadata, NOT edges — P19-1 minted no
+dossier urns, and an edge to an invented urn would sit permanently
+"(not in catalog)"; codes upgrade if dossier documents ever exist.
+Counted honestly (Result#skipped_codes). (d) Query::Links counterparts
+now resolve passage-grain first then DOCUMENT-grain, so the article
+shows beside the passages it discusses from either end. (e) New Adapter
+capability flag reference_edges? (beside reflex_bearing?); SyncRunner
+refreshes Nabu::LibraryReferences (producer "library", scope=slug,
+superseding, score nil, detail=the asserting manifest) after load,
+outside the run row (the reindex stance); rebuild never touches the
+journal — a lost journal costs one no-network re-sync. (f) Conformance
+extended with a marker-driven hook (conformance_metadata_only?, default
+false; meta-test pins that an UNDECLARED empty document still fails).
+(g) minitest 6 ships no mock/stub → PdfText got an explicit runner:
+seam; the adapter takes pdf_text: injection. (h) LocalFetch missing-tree
+hint made a pass-through (each shelf names its own front door).
+FIXTURES: constructed (cupsfilter, noted in README/manifest) — a REAL
+2-page text-layer PDF carrying PD Leskien 1871 text (text layer
+verified via PDFKit at construction; mutool NOT installed on this box,
+so adapter tests inject the extractor and a guarded live test pins real
+mutool substrings when present), a textless scan PDF, an OCS-Cyrillic
+.txt (explicit open entry), a PNG plate, a manifested-but-MISSING
+entry, an UNMANIFESTED stray. MCP end-to-end pin: shelf hidden by
+default, explicit open entry served, include_restricted labels both.
+Registered enabled: true (the P19-1 argument verbatim). Docs: arch §16
+extension, 02-sources row 55, README one-liner (modest — the story
+lands with ingest). Suite 2,568/32,662 exit 0 (1 skip = guarded mutool
+live test) · lint 337 files exit 0.
