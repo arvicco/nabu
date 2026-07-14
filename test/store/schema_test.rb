@@ -72,6 +72,14 @@ module Store
 
     def test_documents_urn_unique_index_present
       assert(@db.indexes(:documents).values.any? { |i| i[:columns] == [:urn] && i[:unique] })
+      # P18-4 follow-up (migration 012): the `nabu language` card's live
+      # relevance counts query by language column — indexed, never scanned.
+      assert(@db.indexes(:dictionary_reflexes).values.any? { |i| i[:columns] == [:lang_code] },
+             "dictionary_reflexes.lang_code index missing (migration 012)")
+      assert(@db.indexes(:documents).values.any? { |i| i[:columns] == [:language] },
+             "documents.language index missing (migration 012)")
+      assert(@db.indexes(:passages).values.any? { |i| i[:columns] == [:language] },
+             "passages.language index missing (migration 013)")
     end
 
     def test_passages_composite_unique_index_present
