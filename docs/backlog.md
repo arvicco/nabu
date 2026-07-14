@@ -6546,3 +6546,17 @@ records become derived; the ledger table and seed file retire; the
 P18-5/6 accretion writers redirect to dossier sections). nabu language
 reads the merged view unchanged. Integrity via ledger pins; attic on
 deletion; P18-7 invariants extend (dossier files vs language records).
+
+## P19-2 · Site FAQ  [tier: opus] [status: dispatched] [deps: P19-0]
+Owner (2026-07-14): "FAQ site section (Q&A Bank from licensing-emails +
+think of most common questions - answers should be clear and contain
+links to site tabs or md docs with context)." A new site tab: the
+licensing Q&A bank generalized (commercial? AI involvement? what is
+stored? redistribution?) + the predictable newcomer questions (what is
+this / who for; install & first marvel → Quickstart; why no TLG/Brill;
+license classes explained; offline/privacy; MCP & AI assistants; how to
+request a source / report a wrong reading → the P19-0 funnels; disk
+size; platforms; vs Perseus/Scaife; how to cite). Every answer links to
+the tab or md doc holding the full context. Academic register, honest
+answers (incl. the AI-assisted development one, verbatim from the
+framework bank).
