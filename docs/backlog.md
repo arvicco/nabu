@@ -6710,3 +6710,71 @@ Registered enabled: true (the P19-1 argument verbatim). Docs: arch §16
 extension, 02-sources row 55, README one-liner (modest — the story
 lands with ingest). Suite 2,568/32,662 exit 0 (1 skip = guarded mutool
 live test) · lint 337 files exit 0.
+
+## P19-5 · `nabu ingest` — the intake front door  [tier: opus] [status: done 2026-07-14] [deps: P19-1, P19-4]
+The design's §4b (canonical-memory, owner addition 2026-07-14): the
+sanctioned intake for local acquisitions. `nabu ingest FILE...
+[--collection NAME]` — sha-account (identical MANIFESTED bytes = honest
+no-op), COPY (never move) into canonical/local-library/<collection>/,
+derive candidates mechanically (PDF Info metadata + first-page sample
+via the PdfText seam where mutool exists, filename heuristics + sha256
+always), categorize in one of THREE modes (interactive TTY prompts with
+candidates prefilled and the research_private default STATED at the
+prompt; --assist CMD piping a JSON brief to a subprocess whose suggested
+entry PREFILLS the same prompts — the P18-7 hook pattern, bundled
+`claude -p` example; --yes + field flags for scripted drops), append the
+manifest entry mechanically, then the shelf's ordinary sync + minted
+urns + a compact try: epilogue. Same front door for the dossier shelf:
+--shelf language CODE scaffolds a skeleton through LanguageShelf.
+DONE (2026-07-14): shipped as specced. VERDICTS — (a) default collection
+"inbox" over date-based, argued: the collection is a FROZEN urn segment,
+so a date default bakes an acquisition accident into identity AND
+scatters review across a manifest-per-day; one visible triage collection
+with one accumulating manifest keeps the census honest ("prefer
+--collection <topic>" stated in help/ops). (b) Second sanctioned write
+gateway: Nabu::LibraryShelf (LanguageShelf's sibling — copy_in! never
+moves, sha_index for dup detection, append_entry! is APPEND-ONLY: owner
+comments/entries never rewritten, result re-validated through
+LibraryManifest so a bad append cannot land; refuses manifest.yml/
+dotfile names, path-shaped collections, malformed manifests). CLAUDE.md
+ground rule + arch §16 updated. (c) Assist brief nabu.ingest-assist/1
+(schema-tagged like the ReviewHook): derived candidates + ≤2000-char
+sample + field/license vocabulary; capture3 not 2e (a chatty tool must
+not corrupt its own JSON); lenient parse (whole stdout, else outermost
+{...}); nonzero exit/garbage = advisory note, mechanical candidates
+stand; suggestion only ever PREFILLS — flags beat assist beats derived;
+script/ingest-assist-claude wires claude -p + nabu MCP (search/show —
+related: urns looked up, not invented). (d) Resolver seam: the three
+modes are ONE injectable interface (PromptResolver with a plain ask
+callable — CLI wires Thor ask; AcceptResolver for --yes); non-TTY
+without --yes refuses honestly BEFORE any copy. (e) Idempotency ladder:
+manifested dup sha = no-op naming the existing home; UNMANIFESTED
+identical copy (aborted earlier ingest) does NOT block — the re-run
+finishes the cataloguing; same name + new bytes = copy replaced, entry
+kept, the loader's revision story at sync; bad file named, rest proceed,
+exit 1 at end. (f) Manifest writes OMIT license_class at the
+research_private default (fixture-file doctrine: silence means the
+conservative class; an explicit class marks an owner override) and OMIT
+empty lanes; keys in manifest order. (g) Year precedence fixed by live
+transcript: PDF Title/Author beat filename guesses, but CreationDate
+year only fills ABSENCE (a scan's CreationDate is the scan date; the
+author-year-title filename year is the publication year). (h) --shelf
+language kept THIN: name/family/context prompts (family prefilled from
+the code's hyphen prefix), LanguageDossier skeleton via LanguageShelf,
+dossier sync, `try: nabu language CODE`; existing dossier = no-op
+pointing at the file. (i) DRIVE-BY FIX exposed by this box's newly
+installed mutool 1.26: PdfText.pages kept the trailing "\f\n" fragment
+as a phantom third page — whitespace-only tail after the final \f now
+drops (regression test; the P19-4 guarded live test runs green, 0 skips
+now). Epilogue: show always; search hint only when text was extracted
+(word from the sample, --license = the entry's effective class);
+links hint when related urns were given. Docs: README paragraph (the
+"add your own material" story) + example, site/tools.md Stewardship
+(argued over quickstart: ingest is command surface, not the
+zero-to-first-marvel path — one place only), ops.md §13, CONTRIBUTING
+pointer ("your own PDFs need no adapter"), arch §16 truth pass,
+sources.yml comment. Tests +45 (engine 24 incl. real-subprocess Assist,
+gateway 11, PdfText.info 3 + phantom-page regression, CLI 8 e2e on
+scratch roots incl. --shelf language). Interactive flow verified live
+via PTY on a scratch root (real mutool derivation end to end). Suite
+2,616/32,881 exit 0 (0 skips) · lint 341 files exit 0.

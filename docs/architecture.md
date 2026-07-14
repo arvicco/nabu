@@ -1015,8 +1015,10 @@ mass-deletion breaker before the scan state advances (`--force` overrides).
 through `Adapter#fetch` and the ad-hoc pipeline — and, for local shelves,
 through the shelf's ONE sanctioned write gateway, the `Adapter#fetch`
 analogue for data that is authored rather than downloaded. For the
-local-language shelf that gateway is `Nabu::LanguageShelf`; everything else
-stays read-only on the shelf.
+local-language shelf that gateway is `Nabu::LanguageShelf`; for the
+local-library shelf it is `Nabu::LibraryShelf` (P19-5: copy-in — never
+move — plus the mechanical, append-only manifest append), driven by `nabu
+ingest`. Everything else stays read-only on the shelves.
 
 **Shelf one: `canonical/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -1051,8 +1053,8 @@ ledger already accumulated everything it seeded, and one home beats three.
 scholarly articles the owner acquires: one `<collection>/` dir per drop,
 each with a `manifest.yml` that is the SOURCE OF RECORD — a YAML list of
 entries (`file`, `title`, `creator`, `year`, `languages`, `provenance`,
-`license_class`, `tags`, `related`) shaped so `nabu ingest` (the intake
-front door, next) can append one mechanically. A file present but
+`license_class`, `tags`, `related`) shaped so `nabu ingest` can append one
+mechanically. A file present but
 unmanifested is UNRECOGNIZED in the discovery census (awaiting ingest);
 manifested but missing is the vanished/attic story above. Unlike the
 dossier shelf this one mints DOCUMENTS + PASSAGES (the full conformance
@@ -1068,8 +1070,27 @@ unreadable file quarantines. Licensing is the shelf's point: class
 `research_private` (MCP default-excluded, never redistributed), applied as
 the manifest DEFAULT in one place (`Nabu::LibraryManifest`); an entry's
 explicit more-open class is honored as a per-document `license_override`.
-This shelf has no programmatic write gateway yet — the owner places files
-by hand until `nabu ingest` becomes the sanctioned path.
+The shelf's write path is `nabu ingest FILE... [--collection NAME]`
+(P19-5), through the `Nabu::LibraryShelf` gateway — in order: sha-account
+(bytes already MANIFESTED anywhere in the shelf = honest no-op; same name
+with new bytes = the loader's ordinary revision), copy in (never move),
+derive candidates mechanically (PDF Info metadata + a first-page sample
+via the `PdfText` seam where mutool exists, filename heuristics and the
+sha always), categorize — interactive field-by-field prompts with the
+candidates prefilled; `--assist CMD` piping a `nabu.ingest-assist/1` JSON
+brief to a suggester subprocess (the P18-7 hook pattern; bundled
+`script/ingest-assist-claude`) whose answer PREFILLS the same prompts
+(never lands unreviewed without `--yes`); or `--yes` + flags for scripted
+drops — append one manifest entry, then run the shelf's ordinary sync and
+print the minted urns. The default collection is `inbox`, argued over a
+date-based name: the collection is a FROZEN urn segment, and one visible
+triage collection with one accumulating review-surface manifest beats a
+manifest-per-day scatter that bakes an acquisition accident into
+identity. `--shelf language CODE` is the same front door for the dossier
+shelf: a THIN scaffold (front matter + context, same three modes) through
+`Nabu::LanguageShelf`, then the dossier sync. Owner hand-placement plus a
+manual sync stays legitimate — the census flags whatever ingest has not
+catalogued.
 
 **The `related:` edges.** Manifest `related:` URNs become kind=`reference`
 edges in the links journal (producer `library`, scope = the source slug),
@@ -1087,6 +1108,6 @@ documents ever exist.
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is
-unchanged. Future local shelves (`nabu ingest` as the intake front door
-lands next) follow the same pattern: files + manifest + adapter + one
-sanctioned write gateway.
+unchanged. Future local shelves follow the same pattern: files + manifest +
+adapter + one sanctioned write gateway, with `nabu ingest` as the shared
+intake front door.

@@ -814,3 +814,45 @@ automatically; no per-release action.
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
 the subset the owner promotes to a version number.
+
+## 13. Ingesting your own material (P19-5)
+
+`nabu ingest FILE... [--collection NAME]` is the front door for local
+acquisitions — scanned grammars, offprints, notes — onto the
+`local-library` shelf (architecture §16), and the shelf's ONE sanctioned
+write path. What it does, in order: sha-accounts the file (identical bytes
+already catalogued anywhere in the shelf = honest no-op), COPIES it into
+`canonical/local-library/<collection>/` (never moves — your original stays
+put), derives metadata candidates mechanically (PDF Info metadata and a
+first-page text sample via mutool where installed, filename heuristics
+otherwise), has you confirm them, appends one entry to the collection's
+`manifest.yml`, then runs the shelf's ordinary sync and prints the minted
+urns plus a `try:` epilogue.
+
+Operational notes:
+
+- **Collections are urn segments.** The default collection is `inbox`;
+  prefer `--collection <topic>` for anything you'd shelve deliberately —
+  the collection name is frozen into the urn, so a later re-file is
+  honestly a new document (the old one retires through the attic).
+- **Three categorization modes.** Interactive prompts (TTY default; Enter
+  keeps the prefilled candidate, `-` clears); `--assist CMD` pipes a JSON
+  brief (`nabu.ingest-assist/1`) to any suggester command and prefills the
+  prompts with its answer — the bundled `script/ingest-assist-claude`
+  wires `claude -p` with the nabu MCP tools so `related:` urns are looked
+  up, not invented; `--yes` plus field flags for scripted bulk drops.
+  Assist output never lands unreviewed unless you also passed `--yes`.
+- **License discipline.** Every prompt states the shelf default:
+  `research_private` (MCP-excluded, never served, never redistributed).
+  Silence in the manifest MEANS that class; pass `--license-class open`
+  (or answer the prompt) only for genuinely open items.
+- **Same name, new bytes** is an ordinary revision — the copy is replaced
+  and the sync records it; metadata corrections are manifest edits, not
+  re-ingests. A bad file is named and the rest proceed (exit 1 at the
+  end). An ingest aborted mid-prompt leaves the copied file visible in the
+  discovery census as `unmanifested`; re-running the same ingest finishes
+  the cataloguing.
+- **`--shelf language CODE`** scaffolds a language dossier skeleton
+  (name/family/context, same three modes) through `Nabu::LanguageShelf`
+  and syncs the dossier shelf — a scaffold, not an editor; edit
+  `canonical/local-language/<code>.md` directly afterwards and re-sync.

@@ -378,10 +378,11 @@ local-library:
                    # from the owner's own manifests, defaulting
                    # research_private; rebuild replays it regardless of this
                    # flag, and `sync --all` skips non-live policies anyway).
-                   # The shelf populates when the owner creates
+                   # The shelf populates through `bin/nabu ingest FILE...`
+                   # (P19-5, the sanctioned front door: copy + categorize +
+                   # manifest append + sync), or by hand-creating
                    # canonical/local-library/<collection>/ + manifest.yml
-                   # (nabu ingest, the next packet, becomes the front door)
-                   # and fires `bin/nabu sync local-library`.
+                   # and firing `bin/nabu sync local-library`.
   # The second canonical-memory shelf (architecture §16): PDFs, scans and
   # scholarly articles. Documents + page-grain passages (mutool text layer);
   # scans/images stay metadata-only until the HTR era. license_class

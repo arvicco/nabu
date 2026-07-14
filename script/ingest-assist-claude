@@ -1,0 +1,46 @@
+#!/bin/bash
+# ingest-assist-claude — the bundled example ingest-assist hook (P19-5).
+#
+#   bin/nabu ingest FILE --assist script/ingest-assist-claude
+#
+# Reads the nabu.ingest-assist/1 JSON brief on stdin (derived metadata
+# candidates + a first-page text sample) and asks Claude Code (`claude -p`,
+# one non-interactive turn) to suggest a filled manifest entry, wiring the
+# nabu MCP server so the model can search the local catalog for genuinely
+# related passages (nabu_search / nabu_show) instead of inventing urns.
+#
+# This is a SUBPROCESS on the far side of nabu's hook boundary (the P18-7
+# ReviewHook pattern): nabu pipes the brief, parses ONLY the JSON object
+# this prints to stdout, and PREFILLS the interactive prompts with it — the
+# owner still confirms every field unless --yes was passed deliberately.
+# Swap this script for any other suggester (a local model, exiftool + jq)
+# without touching nabu. Diagnostics go to stderr; stdout is the suggestion.
+#
+# Requirements: the `claude` CLI on PATH, run from the repo root (bin/nabu).
+set -u
+
+BRIEF="$(cat)"
+
+if ! command -v claude >/dev/null 2>&1; then
+  echo "ingest-assist-claude: 'claude' CLI not found on PATH" >&2
+  exit 69 # EX_UNAVAILABLE
+fi
+
+MCP_CONFIG='{"mcpServers":{"nabu":{"command":"bin/nabu","args":["mcp"]}}}'
+
+PROMPT="You are categorizing one locally acquired document for nabu's \
+local-library shelf (ancient-language research library). Below is the \
+machine brief: mechanically derived metadata candidates, a first-page text \
+sample, and the field vocabulary. Suggest a manifest entry: correct/complete \
+title, creator, year; ISO-639-3 languages; a few tags; provenance only if \
+evident. For related:, you may use the nabu MCP tools (nabu_search, \
+nabu_show) to find passages/documents this item genuinely discusses — \
+include only urns you verified exist, plus bare language codes. \
+license_class: keep the research_private default unless the sample proves \
+the item is genuinely open. Reply with ONLY one JSON object whose keys are \
+drawn from the brief's \"fields\" list (strings; lists as JSON arrays) — no \
+prose, no code fences. Brief:
+${BRIEF}"
+
+exec claude -p "${PROMPT}" --mcp-config "${MCP_CONFIG}" --allowedTools \
+  "mcp__nabu__nabu_search" "mcp__nabu__nabu_show" "mcp__nabu__nabu_status"
