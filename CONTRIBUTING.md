@@ -33,8 +33,9 @@ this file is the distilled house rules for outside contributors.
   change. Please don't refactor opportunistically across the codebase while
   implementing a feature; a focused diff is a reviewable diff.
 - **Ask before adding a gem.** The dependency budget is deliberately small
-  (thor, sequel, sqlite3, nokogiri, faraday, rubocop, minitest, webmock).
-  Open an issue and make the case before reaching for a new one.
+  (thor, sequel, sqlite3, nokogiri, faraday, csv; minitest, webmock,
+  rubocop, and rake in development). Open an issue and make the case
+  before reaching for a new one.
 - **Canonical is read-only.** Upstream text under `canonical/` is the
   permanent asset; application code never writes it except through an
   adapter's `fetch`. All SQLite is derived and must survive
@@ -45,8 +46,10 @@ this file is the distilled house rules for outside contributors.
   adapter tests run against the checked-in fixtures.
 
 Run `bundle exec rake test` and `bundle exec rake lint` before you open a
-pull request; both must be green. CI runs the same two commands on every
-push and pull request, so there are no surprises.
+pull request; both must be green. The suite is network-blocked and fast —
+2,471 tests / 32,142 assertions, about two minutes, as of 2026-07-14. CI
+runs the same two commands on every push and pull request, so there are no
+surprises.
 
 ## Developer Certificate of Origin (DCO)
 
@@ -65,16 +68,36 @@ Content licensing is separate and unchanged: every ingested text keeps its
 own upstream license, recorded per document and labeled on every surface —
 the DCO covers your contribution to the code, not the corpora it ingests.
 
-## Proposing a new source
+## Requesting corpora and features
 
-The best way to suggest a corpus is an issue that brings **license
-evidence** — a link to the upstream grant, quoted verbatim, and the class it
-falls into (`open` / `attribution` / `nc`). That's the pattern the axis
-surveys already follow: see [`docs/oe-survey.md`](docs/oe-survey.md) and
-[`docs/slavic-survey.md`](docs/slavic-survey.md) for evidence-cited,
-license-honest rankings of candidates (including what's blocked and why).
-A source with no verifiable open license can't be ingested, however
-desirable — so lead with the license.
+Requests go through GitHub issue templates, so a direct link lands on a
+useful form:
+
+- [Request a source](https://github.com/arvicco/nabu/issues/new?template=request-a-source.md)
+  — upstream name and URL, the license as far as you know it (quoted
+  verbatim), why it fits (which reader or axis it serves), size if known.
+- [Request a feature](https://github.com/arvicco/nabu/issues/new?template=feature-request.md)
+  — the scholarly task first (what question can't you ask today), the
+  command surface second.
+- [Report a wrong reading](https://github.com/arvicco/nabu/issues/new?template=wrong-reading.md)
+  — the URN, what nabu shows, what the source shows, and the edition
+  context.
+
+Anything else fits a
+[blank issue](https://github.com/arvicco/nabu/issues/new/choose).
+
+On source requests, the best thing you can bring is **license evidence** —
+a link to the upstream grant, quoted verbatim, and the class it falls into
+(`open` / `attribution` / `nc`). That's the pattern the axis surveys
+already follow: see [`docs/oe-survey.md`](docs/oe-survey.md),
+[`docs/slavic-survey.md`](docs/slavic-survey.md), and
+[`docs/pie-survey.md`](docs/pie-survey.md) for evidence-cited,
+license-honest rankings of candidates (including what's blocked and why);
+accepted proposals get the same survey-first treatment before any adapter
+work. A source with no verifiable open license can't be ingested, however
+desirable — so lead with the license. The library currently holds 25
+synced sources plus three registered and awaiting first sync (as of
+2026-07-14; [`docs/library.md`](docs/library.md) is the living inventory).
 
 If a proposal is accepted, [`CLAUDE.md`](CLAUDE.md) and
 [`docs/maintenance-and-extension.md`](docs/maintenance-and-extension.md)
@@ -93,3 +116,5 @@ MCP server is local, stdio-only, and structurally read-only), so there's no
 formal security policy — please just open an issue for bugs, questions, or
 anything that looks like a vulnerability, and flag security-sensitive
 reports as such so they can be looked at first.
+
+Maintainer: Ar Vicco <arvicco@nabu.ac>.
