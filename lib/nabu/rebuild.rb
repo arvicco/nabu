@@ -77,7 +77,11 @@ module Nabu
 
     # Delete the catalog db file, re-migrate a fresh one, and replay every
     # source that has local canonical data. Returns a Result. Never touches
-    # canonical/ — and NEVER touches the history ledger (P7-1): the ledger is
+    # canonical/ (one sanctioned exception, P19-1: a replayed dictionary
+    # source's language-notes accretion writes the local-language dossier
+    # shelf through Nabu::LanguageShelf — deterministic and idempotent, a
+    # byte-level no-op when the sections already exist) — and NEVER touches
+    # the history ledger (P7-1): the ledger is
     # opened (created on a fresh machine; a pre-P7-1 catalog's history is
     # lifted into it first, BEFORE the file is deleted) but only appended to,
     # via the per-source "rebuild"-kind run rows. Runs/pins/revisions recorded
@@ -134,12 +138,9 @@ module Nabu
     def replay(db, ledger, entry, progress)
       source = entry.sync_source!(db)
       adapter = entry.build_adapter
-      # Same content-kind routing as SyncRunner (P11-4, architecture §11):
-      # dictionary sources replay through the DictionaryLoader.
-      loader_class = adapter.class.content_kind == :dictionary ? Store::DictionaryLoader : Store::Loader
       report = nil
       Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
-        report = loader_class.new(db: db, source: source, ledger: ledger).load_from(
+        report = build_loader(adapter, db, ledger, source).load_from(
           adapter,
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
@@ -151,6 +152,23 @@ module Nabu
       finding = Health::QuarantineBaseline.delta_finding(ledger, entry.slug, errored: report.errored)
       Health::QuarantineBaseline.record!(ledger, entry.slug, errored: report.errored)
       Outcome.new(slug: entry.slug, report: report, quarantine: finding)
+    end
+
+    # Same content-kind routing as SyncRunner (P11-4/P19-1, architecture
+    # §11/§16): dictionary sources replay through the DictionaryLoader (with
+    # the corpus root — its language-notes accretion is idempotent, so a
+    # replay re-derives the same dossier sections and touches nothing),
+    # language dossier shelves through the LanguageDossierLoader.
+    def build_loader(adapter, db, ledger, source)
+      case adapter.class.content_kind
+      when :dictionary
+        Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                    canonical_dir: @config.canonical_dir)
+      when :language
+        Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
+      else
+        Store::Loader.new(db: db, source: source, ledger: ledger)
+      end
     end
 
     # Enrichment replay is OUT OF SCOPE for rebuild-of-text (architecture §6):

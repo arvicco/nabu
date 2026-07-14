@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The local-language shelf has NO upstream by definition (P19-1,
+# sync_policy: local) — nothing here can ever be refetched. The dossier
+# bodies are the real curation verbatim from the retiring
+# config/languages.yml (this repo's git history) plus the LIV witness rider
+# body (Nabu::Adapters::Liv::LANGUAGE_NOTES), i.e. exactly what the
+# owner-fired dossier export writes.
+source: local-language
+adapter_test: test/adapters/local_language_test.rb
+retrieved: 2026-07-14
+files:
+  - path: chu.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body verbatim from config/languages.yml (git history, pre-P19-1)
+  - path: sla-pro.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body verbatim from config/languages.yml (git history, pre-P19-1)
+  - path: zle.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body verbatim from config/languages.yml (git history, pre-P19-1)
+  - path: zlw.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body verbatim from config/languages.yml (git history, pre-P19-1)
+  - path: ine-pro.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; seed body + the real LIV witness section (Liv::LANGUAGE_NOTES, P18-6)
+  - path: broken.md.quarantine
+    whole: true
+    refetchable: false
+    reason: synthetic malformed dossier (renamed to .md by the loader test to exercise quarantine)

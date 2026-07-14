@@ -196,7 +196,7 @@ module Store
 
       Nabu::Store::Ledger.migrate!(db)
 
-      assert_equal 5, db[:schema_info].get(:version)
+      assert_equal 6, db[:schema_info].get(:version) # 005 baselines + 006 drift widen (P19-1)
       assert db.table_exists?(:quarantine_baselines)
       assert_equal 0, db[:quarantine_baselines].count
       assert_equal 3, db[:runs].get(:added)

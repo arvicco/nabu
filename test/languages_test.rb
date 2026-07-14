@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "tmpdir"
 
-# Nabu::Languages (P18-4): the merged read over the derived name census
-# (catalog, migration 011) and the accumulated curated notes (ledger,
-# ledger migration 004), plus the idempotent seed path from
-# config/languages.yml. Every handle is optional and every table guarded —
-# the degradation cases are tested, not assumed.
+# Nabu::Languages (P18-4, rehomed by P19-1): the merged read over the derived
+# dossier records (catalog, migration 014), the derived name census (catalog,
+# migration 011), and the TRANSITIONAL ledger notes (ledger migration 004 —
+# the per-(code, kind) fallback until the owner-fired dossier export lands).
+# Every handle is optional and every table guarded — the degradation cases
+# are tested, not assumed.
 class LanguagesTest < Minitest::Test
   include StoreTestDB
 
@@ -36,6 +36,10 @@ class LanguagesTest < Minitest::Test
   def note!(code, kind, body, source: "test")
     @ledger[:language_notes].insert(lang_code: code, kind: kind, body: body,
                                     source: source, created_at: Time.now)
+  end
+
+  def record!(code, kind, body, source: "dossier")
+    @catalog[:language_records].insert(lang_code: code, kind: kind, body: body, source: source)
   end
 
   # -- the census read: filter, then mode over summed counts ------------------------
@@ -73,29 +77,38 @@ class LanguagesTest < Minitest::Test
     assert Nabu::Languages.plausible_name?("Föhr-Amrum North Frisian")
   end
 
-  # -- notes: latest per (code, kind) wins; curated name beats the census -----------
+  # -- records (P19-1): the dossier index is the first read layer --------------------
 
-  def test_curated_name_beats_the_census_and_latest_note_wins
+  def test_dossier_record_beats_census_and_transitional_note
     d = dictionary
     census!(d.id, [["rue", "Carpathian Rusyn", 100]])
-    note!("rue", "name", "Rusyn (first)")
-    note!("rue", "name", "Rusyn")
-    assert_equal "Rusyn", languages.name("rue"), "the appended supersession wins"
-    assert_equal "Carpathian Rusyn", Nabu::Languages.new(catalog: @catalog).name("rue"),
-                 "no ledger — the census still answers"
+    note!("rue", "name", "Rusyn (ledger, pre-migration)")
+    record!("rue", "name", "Rusyn")
+    assert_equal "Rusyn", languages.name("rue"), "the dossier record wins"
+    assert_equal "Rusyn (ledger, pre-migration)",
+                 Nabu::Languages.new(catalog: old_catalog, ledger: @ledger).name("rue"),
+                 "a catalog predating migration 014 still reads the transitional note"
   end
 
-  def test_context_and_family_read_their_kinds
-    note!("gkm", "context", "Byzantine Greek, ca. 600–1453.")
+  def test_context_and_family_read_records_with_note_fallback_per_kind
+    record!("gkm", "context", "Byzantine Greek, ca. 600–1453.")
     note!("gkm", "family", "Hellenic < Indo-European")
     assert_equal "Byzantine Greek, ca. 600–1453.", languages.context("gkm")
-    assert_equal "Hellenic < Indo-European", languages.family("gkm")
+    assert_equal "Hellenic < Indo-European", languages.family("gkm"),
+                 "a kind with no record falls back to the ledger note — per (code, kind), not per code"
     assert languages.curated?("gkm")
     refute languages.curated?("zzz")
   end
 
-  def test_family_fallback_reads_the_prefix_code_notes
-    note!("zle", "name", "East Slavic")
+  def test_transitional_notes_answer_alone_and_latest_wins
+    note!("rue", "name", "Rusyn (first)")
+    note!("rue", "name", "Rusyn")
+    assert_equal "Rusyn", languages.name("rue"), "the appended supersession wins in the fallback"
+    assert languages.curated?("rue")
+  end
+
+  def test_family_fallback_reads_the_prefix_code_lanes
+    record!("zle", "name", "East Slavic")
     note!("zle", "context", "The Rus' branch and its historical stages.")
     fallback = languages.family_fallback("zle-xyz")
     assert_equal "zle", fallback.code
@@ -105,17 +118,30 @@ class LanguagesTest < Minitest::Test
     assert_nil languages.family_fallback("qq-x"), "an unknown prefix yields no hint — no guessing"
   end
 
-  # P18-5: kinds beyond name/family/context (the programmatic accretions —
-  # "iecor" today) surface as extra notes, latest per kind, shipped kinds
-  # excluded (they have their own readers).
-  def test_extra_notes_surface_latest_per_kind_beyond_the_shipped_kinds
-    note!("chu", "iecor", "IE-CoR variety: Old Church Slavonic (superseded)", source: "iecor")
-    note!("chu", "iecor", "IE-CoR variety: Old Church Slavonic (latest)", source: "iecor")
+  # P18-5: kinds beyond name/family/context (programmatic accretions and
+  # dossier front-matter extras) surface as extra notes, records winning per
+  # kind, shipped kinds excluded (they have their own readers).
+  def test_extra_notes_merge_records_over_notes_per_kind
+    note!("chu", "iecor", "IE-CoR variety: OCS (ledger, pre-migration)", source: "iecor")
+    record!("chu", "iecor", "IE-CoR variety: OCS (dossier)", source: "iecor")
+    record!("chu", "period", "9th–11th c.")
     note!("chu", "context", "Curated context stays out of the extras.")
-    assert_equal({ "iecor" => "IE-CoR variety: Old Church Slavonic (latest)" },
+    assert_equal({ "iecor" => "IE-CoR variety: OCS (dossier)", "period" => "9th–11th c." },
                  languages.extra_notes("chu"))
     assert_equal({}, languages.extra_notes("zzz"))
-    assert_equal({}, Nabu::Languages.new.extra_notes("chu"), "degrades without a ledger")
+    assert_equal({}, Nabu::Languages.new.extra_notes("chu"), "degrades without handles")
+  end
+
+  def test_witnesses_merge_per_source_lane_and_never_shadow_context
+    record!("itc-pro", "context", "Curated Proto-Italic prose.")
+    record!("itc-pro", "witness:edl", "Leiden-school PIt stage (dossier).", source: "edl")
+    note!("itc-pro", "witness:iecor", "Another source's lane (ledger).", source: "iecor")
+    view = languages
+    assert_equal "Curated Proto-Italic prose.", view.context("itc-pro")
+    assert_equal({ "edl" => "Leiden-school PIt stage (dossier).",
+                   "iecor" => "Another source's lane (ledger)." },
+                 view.witnesses("itc-pro"))
+    assert_empty view.witnesses("lat")
   end
 
   # -- degradation: missing handles/tables read as no data --------------------------
@@ -129,122 +155,14 @@ class LanguagesTest < Minitest::Test
     # a ledger predating ledger migration 004 (language_notes absent)
     old_ledger = Sequel.sqlite
     assert_nil Nabu::Languages.new(ledger: old_ledger).context("chu")
+    # a catalog predating migration 014 (language_records absent)
+    assert_nil Nabu::Languages.new(catalog: old_catalog).context("chu")
   end
 
-  # -- the seed path -----------------------------------------------------------------
+  private
 
-  def seed_yaml(dir, body)
-    path = File.join(dir, "languages.yml")
-    File.write(path, body)
-    path
-  end
-
-  def test_seed_is_idempotent_and_supersedes_by_append
-    Dir.mktmpdir do |dir|
-      path = seed_yaml(dir, <<~YAML)
-        languages:
-          gkm:
-            name: Medieval Greek
-            context: Byzantine Greek.
-        families:
-          zle:
-            name: East Slavic
-      YAML
-      report = Nabu::Languages.seed!(ledger: @ledger, path: path)
-      assert_equal 3, report.appended
-      assert_equal 0, report.unchanged
-
-      report = Nabu::Languages.seed!(ledger: @ledger, path: path)
-      assert_equal 0, report.appended, "re-seeding an unchanged file writes nothing"
-      assert_equal 3, report.unchanged
-      assert_equal 3, @ledger[:language_notes].count
-
-      path = seed_yaml(dir, <<~YAML)
-        languages:
-          gkm:
-            name: Medieval Greek
-            context: Byzantine Greek, ca. 600–1453.
-        families:
-          zle:
-            name: East Slavic
-      YAML
-      report = Nabu::Languages.seed!(ledger: @ledger, path: path)
-      assert_equal 1, report.appended, "only the changed body appends"
-      assert_equal 2, report.unchanged
-      assert_equal 4, @ledger[:language_notes].count, "supersession appends — nothing is updated or deleted"
-      assert_equal "Byzantine Greek, ca. 600–1453.", languages.context("gkm")
-      assert_equal Nabu::Languages::SEED_SOURCE,
-                   @ledger[:language_notes].order(Sequel.desc(:id)).get(:source)
-    end
-  end
-
-  def test_seed_refuses_a_code_in_both_sections
-    Dir.mktmpdir do |dir|
-      path = seed_yaml(dir, <<~YAML)
-        languages:
-          grc:
-            name: Ancient Greek
-        families:
-          grc:
-            name: Ancient Greek (dialects)
-      YAML
-      error = assert_raises(Nabu::Error) { Nabu::Languages.seed!(ledger: @ledger, path: path) }
-      assert_match(%r{grc/name}, error.message)
-      assert_equal 0, @ledger[:language_notes].count, "a refused seed writes nothing"
-    end
-  end
-
-  # The SHIPPED seed file: parses, and covers the held languages and the
-  # owner's pain codes (anchors only — prose may move).
-  def test_shipped_seed_file_covers_held_languages_and_the_etymology_tail
-    Nabu::Languages.seed!(ledger: @ledger)
-    view = languages
-    assert_equal "Old Church Slavonic", view.name("chu")
-    assert_match(/OCS canon/, view.context("chu"))
-    assert_match(/Grand Duchy of Lithuania/, view.context("zle-ort"), "the owner's pain code is curated")
-    assert_match(/Novgorod/, view.context("zle-ono"))
-    assert_equal "Medieval Greek", view.name("gkm")
-    %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro].each do |shelf|
-      assert view.context(shelf), "every reconstruction shelf carries a note (#{shelf})"
-    end
-    %w[zle zlw zls gmw gmq ine iir itc grk roa].each do |family|
-      assert view.context(family), "family-level note missing for #{family}"
-    end
-    assert_equal "West Slavic", view.family_fallback("zlw-osk").name
-  end
-
-  # -- accretion + witnesses (P18-6: the loader/agent write path made real) ---------
-
-  def test_accrete_appends_with_provenance_and_the_latest_body_rule
-    notes = [["ine-pro", "witness:liv", "305 PIE verbal roots."]]
-    assert_equal 1, Nabu::Languages.accrete!(ledger: @ledger, notes: notes, source: "liv")
-    assert_equal 0, Nabu::Languages.accrete!(ledger: @ledger, notes: notes, source: "liv"),
-                 "re-accreting an unchanged body writes nothing — the seed! rule"
-    assert_equal 1, Nabu::Languages.accrete!(ledger: @ledger, source: "liv",
-                                             notes: [["ine-pro", "witness:liv", "revised wording."]]),
-                 "a changed body appends a superseding note"
-    assert_equal 2, @ledger[:language_notes].count, "append-only — nothing updated or deleted"
-    assert_equal %w[liv], @ledger[:language_notes].select_map(:source).uniq
-  end
-
-  def test_witness_lanes_never_shadow_the_seed_context_and_read_per_source
-    note!("itc-pro", "context", "Curated Proto-Italic prose.", source: Nabu::Languages::SEED_SOURCE)
-    Nabu::Languages.accrete!(ledger: @ledger, source: "edl",
-                             notes: [["itc-pro", "witness:edl", "Leiden-school PIt stage."]])
-    Nabu::Languages.accrete!(ledger: @ledger, source: "iecor",
-                             notes: [["itc-pro", "witness:iecor", "Another source's lane."]])
-    view = languages
-    assert_equal "Curated Proto-Italic prose.", view.context("itc-pro"),
-                 "source-laned kinds never supersede the curated context"
-    assert_equal({ "edl" => "Leiden-school PIt stage.", "iecor" => "Another source's lane." },
-                 view.witnesses("itc-pro"))
-    assert_empty view.witnesses("lat")
-  end
-
-  def test_accrete_and_witnesses_degrade_on_a_ledger_predating_the_notes_table
-    old_ledger = Sequel.sqlite
-    assert_equal 0, Nabu::Languages.accrete!(ledger: old_ledger, source: "liv",
-                                             notes: [["ine-pro", "witness:liv", "x"]])
-    assert_empty Nabu::Languages.new(ledger: old_ledger).witnesses("ine-pro")
+  # A catalog with neither the census nor the records table.
+  def old_catalog
+    Sequel.sqlite
   end
 end
