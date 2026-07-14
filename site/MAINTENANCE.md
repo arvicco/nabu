@@ -34,6 +34,12 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
 4. **License changes** (a license_watch alarm, a class change): sources.md
    updated immediately, not just at gates — same trigger rule as
    library.md §10 duty 4.
+5. **News entry** (P19-3): every gate adds one dated post to
+   `site/news/_posts/` (`YYYY-MM-DD-slug.md`) — what shipped, honest
+   numbers with as-of dates, distilled from the gate's worklog line. The
+   Atom feed (`/feed.xml`, jekyll-feed) carries it on deploy; nothing else
+   to do. Gates that cut a tagged release follow the fuller checklist in
+   docs/ops.md §12 (CITATION.cff version/date bump, GitHub release, DOI).
 
 ## Hard rules
 

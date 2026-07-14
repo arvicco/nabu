@@ -6561,7 +6561,7 @@ the tab or md doc holding the full context. Academic register, honest
 answers (incl. the AI-assisted development one, verbatim from the
 framework bank).
 
-## P19-3 · Site News + the release rail  [tier: opus] [status: dispatched] [deps: P19-0]
+## P19-3 · Site News + the release rail  [tier: opus] [status: done] [deps: P19-0]
 Owner (2026-07-14): "Site news page (media plan suggestion) - releases
 with info about new sources/capabilities. Need to think of the best
 gate point to cut the first 'official' release." Deliverables: (a)
@@ -6602,3 +6602,27 @@ lint 314 files exit 0. Finding: docs/mcp.md §restricted-exclusion
 still says "nothing synced today carries those classes" — stale since
 Freising went live as research_private; FAQ follows the newer
 sources.md truth, the mcp.md sentence is a one-line gate-duty fix.
+DONE (2026-07-14): native Jekyll posts, not a collection —
+site/news/_posts/ gives filename dates, newest-first ordering, and
+zero-config jekyll-feed coverage; a collection buys nothing here.
+Inaugural entry "The library as of today" (2026-07-14) + THREE
+retrospectives kept (PR #20 fuzzy+links and #21 sources 2026-07-13,
+#22 machinery 2026-07-14, distilled from gates 16–18; verdict: a
+one-entry News section gives aggregators nothing to judge cadence by —
+three compact entries establish format and history without clutter;
+same-day ordering pinned by front-matter times). Feed: jekyll-feed
+~> 0.17 (site/Gemfile only, github-pages-whitelisted so
+jekyll-build-pages carries it in production) → /feed.xml,
+xmllint-valid, 4 entries, absolute URLs correct under baseurl;
+feed_meta in the layout head. Nav tail pinned: Sources & Licensing,
+[FAQ slot], News, About — FAQ (P19-2) slots directly before News,
+About stays last (noted in _config.yml for the merge). CITATION.cff
+shipped (cff 1.2.0, structurally validated; version 0.0.0-unreleased +
+date-released placeholders, bumped per tag). Release rail = ops.md §12
+(chosen over CONTRIBUTING — release-cutting is operator duty;
+CONTRIBUTING got a 6-line "Releases & citation" pointer): one-time
+Zenodo link, then per-tag checklist (green gate → CITATION bump → tag
+→ gh release from the worklog gate line → news post → DOI badge first
+time). Gate duty wired: MAINTENANCE.md duty 5 + library §10 duty 1.
+News pages link-swept (15 internal links OK), jekyll build exit 0,
+suite + lint exit 0.

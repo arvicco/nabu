@@ -109,6 +109,15 @@ Nabu is developed by a model-tiered autonomous agent loop — work packets
 executed under the TDD ground rules above, with owner-approved phase gates —
 documented in [`docs/dev-loop.md`](docs/dev-loop.md).
 
+## Releases & citation
+
+Releases are cut by the maintainer following the release rail in
+[`docs/ops.md`](docs/ops.md) §12 (tag → GitHub release → site News entry →
+Zenodo DOI); contributors never tag. To cite the tool, use
+[`CITATION.cff`](CITATION.cff) (GitHub's "Cite this repository" button reads
+it) — and cite the underlying corpora and dictionaries as their projects
+require.
+
 ## Security & support
 
 There's no packaged release and no server exposed to untrusted input (the
