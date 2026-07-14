@@ -827,7 +827,11 @@ put), derives metadata candidates mechanically (PDF Info metadata and a
 first-page text sample via mutool where installed, filename heuristics
 otherwise), has you confirm them, appends one entry to the collection's
 `manifest.yml`, then runs the shelf's ordinary sync and prints the minted
-urns plus a `try:` epilogue.
+urns plus a `try:` epilogue. Arguments may also be http(s) urls (P20-0):
+the file is downloaded first (redirects followed — archive.org's mirror
+hop included) and then treated exactly like a local file, with the url
+you gave recorded in the entry's `source_url:` lane; a failed download
+is one named `FAILED` line and the rest of the batch proceeds.
 
 Operational notes:
 

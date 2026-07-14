@@ -148,6 +148,22 @@ class LocalLibraryTest < Minitest::Test
     assert_match(/public domain/, metadata["provenance"])
   end
 
+  def test_source_url_lane_rides_into_document_metadata_when_present
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "inbox"))
+      File.write(File.join(dir, "inbox", "notes.txt"), "Ein Absatz.\n")
+      File.write(File.join(dir, "inbox", "manifest.yml"), <<~YAML)
+        - file: notes.txt
+          source_url: https://archive.org/download/x/notes.txt
+      YAML
+      document = adapter.parse(adapter.discover(dir).first)
+      assert_equal "https://archive.org/download/x/notes.txt", document.metadata["source_url"],
+                   "a url ingest's provenance lane is queryable downstream"
+      assert_nil parse_urn("#{URN_PREFIX}:jagic-notes").metadata["source_url"],
+                 "local ingests carry no such lane"
+    end
+  end
+
   def test_text_file_mints_paragraph_passages_nfc_clean
     document = parse_urn("#{URN_PREFIX}:jagic-notes")
     assert_equal ["#{document.urn}:1", "#{document.urn}:2"], document.map(&:urn)
