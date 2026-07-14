@@ -278,8 +278,22 @@ for the etymology desk. Ranked expansion candidates live in the axis
 surveys: [Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
 There is also a shelf for your own PDFs, scans and articles
 (`canonical/local-library/` — manifest-catalogued, `research_private` by
-default, page-cited where a text layer exists; an `ingest` front door is
-in the works).
+default so nothing you scanned is ever served or redistributed,
+page-cited where a text layer exists). `nabu ingest FILE...` is its front
+door: it copies the file in (never moves your original), derives metadata
+candidates mechanically (PDF metadata, filename, sha256), walks you
+through confirming them — interactively, AI-assisted (`--assist
+script/ingest-assist-claude` prefills the prompts with a model's
+suggestion), or scripted (`--yes` plus flags) — then syncs the shelf and
+prints the minted urn:
+
+```
+bin/nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
+```
+
+After that the manual is `show`-able by page, searchable where it carries
+text, and `links`-wired to the passages its manifest entry names as
+`related:`.
 
 ## Feature tour
 

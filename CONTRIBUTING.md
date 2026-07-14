@@ -103,6 +103,11 @@ If a proposal is accepted, [`CLAUDE.md`](CLAUDE.md) and
 [`docs/maintenance-and-extension.md`](docs/maintenance-and-extension.md)
 walk the adapter checklist end to end.
 
+Your **own** PDFs, scans and notes need no adapter and no proposal:
+`bin/nabu ingest FILE` files them onto the local-library shelf
+(`research_private` by default — catalogued locally, never served or
+redistributed); see [`docs/ops.md`](docs/ops.md) §13.
+
 ## How Nabu is built
 
 Nabu is developed by a model-tiered autonomous agent loop — work packets

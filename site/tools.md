@@ -256,6 +256,17 @@ peaks in the second century CE.
 
 ## Stewardship
 
+**Ingest** (`nabu ingest FILE...`) files your own material — scanned
+grammars, offprints, reading notes — into the local library shelf: the
+file is copied in (never moved), metadata candidates are derived
+mechanically (PDF metadata, filename heuristics, sha256) and confirmed
+interactively, with AI assistance (`--assist` pipes a brief to any
+suggester command and prefills the prompts), or scripted (`--yes` plus
+flags); the shelf then syncs and the new urn is printed. Everything on
+this shelf defaults to the `research_private` license class — catalogued
+and searchable locally, never served or redistributed. The same command
+scaffolds a language dossier (`ingest --shelf language CODE`).
+
 The remaining commands keep the collection alive: `nabu quickstart` syncs
 a curated starter shelf (four sources, about 690 MB) and prints the first
 commands to try; `nabu sync` fetches and
