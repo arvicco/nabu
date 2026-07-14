@@ -320,7 +320,8 @@ edh:
 
 iecor:
   adapter: Nabu::Adapters::Iecor
-  enabled: false   # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
+  enabled: true    # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
+                   # owner sign-off 2026-07-14: synced 4,981 entries / 26k reflex rows, eyeballed, flipped.
                    # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync iecor,
                    # eyeball `nabu etym срьдьцє` / `nabu language chu` for the
                    # iecor note, then flip). Projected: 4,981 entries /
@@ -335,7 +336,8 @@ iecor:
 
 liv:
   adapter: Nabu::Adapters::Liv
-  enabled: false   # P18-6: awaiting the owner-fired first sync (657 KB GET →
+  enabled: true    # P18-6: awaiting the owner-fired first sync (657 KB GET →
+                   # owner sign-off 2026-07-14: synced 305 etymons / 385 lat edges (post blank-node fix), eyeballed, flipped.
                    # 305 PIE verbal etymons / ~385 lat reflex edges; CLAUDE.md
                    # checklist §6 — eyeball `nabu define '*dʰu̯eh₂-'` stem
                    # types + `nabu etym vireo`, then flip).
@@ -346,7 +348,8 @@ liv:
 
 edl:
   adapter: Nabu::Adapters::Edl
-  enabled: false   # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
+  enabled: true    # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
+                   # owner sign-off 2026-07-14: synced 2,860 entries / 2,653 edges, eyeballed, flipped.
                    # ~2,653 reflex edges across two shelves; eyeball
                    # `nabu etym rodo` — the lat → PIt → PIE Leiden chain).
   # CIRCSE/EtymologicalDictionaryLatin LiLa LOD skeleton (CC BY-NC-SA 4.0 →

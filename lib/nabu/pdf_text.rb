@@ -45,7 +45,11 @@ module Nabu
     def pages(path, runner: Shell)
       output = runner.run("mutool", "draw", "-F", "text", "-o", "-", path)
       pages = output.split("\f", -1)
-      pages.pop if pages.last == ""
+      # Real mutool ends the stream "\f\n" — the fragment after the final
+      # form-feed is a whitespace artifact, never a page (a genuine blank
+      # page produces its fragment BEFORE a \f). Found by the guarded live
+      # test the moment mupdf landed on the owner's box (2026-07-14).
+      pages.pop if pages.any? && pages.last.strip.empty?
       pages
     rescue Shell::Error => e
       detail = e.stderr.to_s.strip.empty? ? e.message : "#{e.message}: #{e.stderr.strip.lines.first&.strip}"
