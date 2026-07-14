@@ -332,6 +332,25 @@ iecor:
   # feeding the borrowed flag. The Zenodo versioned record is immutable; a
   # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
   # the Coptic RELEASE_TAG pattern) before firing a re-sync.
+
+liv:
+  adapter: Nabu::Adapters::Liv
+  enabled: false   # P18-6: awaiting the owner-fired first sync (657 KB GET →
+                   # 305 PIE verbal etymons / ~385 lat reflex edges; CLAUDE.md
+                   # checklist §6 — eyeball `nabu define '*dʰu̯eh₂-'` stem
+                   # types + `nabu etym vireo`, then flip).
+  # CIRCSE/LIV LiLa LOD (CC BY-SA 4.0 with publisher permission). Completed
+  # publication, no release cadence; raw.githubusercontent serves no
+  # Last-Modified, so a re-sync refetches unconditionally (657 KB).
+  sync_policy: manual
+
+edl:
+  adapter: Nabu::Adapters::Edl
+  enabled: false   # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
+                   # ~2,653 reflex edges across two shelves; eyeball
+                   # `nabu etym rodo` — the lat → PIt → PIE Leiden chain).
+  # CIRCSE/EtymologicalDictionaryLatin LiLa LOD skeleton (CC BY-NC-SA 4.0 →
+  # nc: MCP default-excluded, never redistributed — the GRETIL/MW posture).
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

@@ -2909,7 +2909,18 @@ module Nabu
         print_language_family(code, languages, fallback)
         print_language_context(context, fallback)
         extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
+        print_language_witnesses(code, languages)
         print_language_relevance(code, relevance) if relevance
+      end
+
+      # P18-6: the per-source witness notes (kind "witness:<slug>" — what
+      # each held source says about this language stage; LIV/EDL accrete
+      # them at sync with per-record provenance). One wrapped line per
+      # source, quiet when none.
+      def print_language_witnesses(code, languages)
+        languages.witnesses(code).each do |source, body|
+          say_wrapped("witness (#{source}): #{body}", indent: 2)
+        end
       end
 
       def print_language_miss(code, fallback)

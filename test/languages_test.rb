@@ -212,4 +212,39 @@ class LanguagesTest < Minitest::Test
     end
     assert_equal "West Slavic", view.family_fallback("zlw-osk").name
   end
+
+  # -- accretion + witnesses (P18-6: the loader/agent write path made real) ---------
+
+  def test_accrete_appends_with_provenance_and_the_latest_body_rule
+    notes = [["ine-pro", "witness:liv", "305 PIE verbal roots."]]
+    assert_equal 1, Nabu::Languages.accrete!(ledger: @ledger, notes: notes, source: "liv")
+    assert_equal 0, Nabu::Languages.accrete!(ledger: @ledger, notes: notes, source: "liv"),
+                 "re-accreting an unchanged body writes nothing — the seed! rule"
+    assert_equal 1, Nabu::Languages.accrete!(ledger: @ledger, source: "liv",
+                                             notes: [["ine-pro", "witness:liv", "revised wording."]]),
+                 "a changed body appends a superseding note"
+    assert_equal 2, @ledger[:language_notes].count, "append-only — nothing updated or deleted"
+    assert_equal %w[liv], @ledger[:language_notes].select_map(:source).uniq
+  end
+
+  def test_witness_lanes_never_shadow_the_seed_context_and_read_per_source
+    note!("itc-pro", "context", "Curated Proto-Italic prose.", source: Nabu::Languages::SEED_SOURCE)
+    Nabu::Languages.accrete!(ledger: @ledger, source: "edl",
+                             notes: [["itc-pro", "witness:edl", "Leiden-school PIt stage."]])
+    Nabu::Languages.accrete!(ledger: @ledger, source: "iecor",
+                             notes: [["itc-pro", "witness:iecor", "Another source's lane."]])
+    view = languages
+    assert_equal "Curated Proto-Italic prose.", view.context("itc-pro"),
+                 "source-laned kinds never supersede the curated context"
+    assert_equal({ "edl" => "Leiden-school PIt stage.", "iecor" => "Another source's lane." },
+                 view.witnesses("itc-pro"))
+    assert_empty view.witnesses("lat")
+  end
+
+  def test_accrete_and_witnesses_degrade_on_a_ledger_predating_the_notes_table
+    old_ledger = Sequel.sqlite
+    assert_equal 0, Nabu::Languages.accrete!(ledger: old_ledger, source: "liv",
+                                             notes: [["ine-pro", "witness:liv", "x"]])
+    assert_empty Nabu::Languages.new(ledger: old_ledger).witnesses("ine-pro")
+  end
 end

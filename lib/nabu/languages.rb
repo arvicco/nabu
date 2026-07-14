@@ -42,6 +42,21 @@ module Nabu
     def context(code) = note(code, "context")
     def family(code) = note(code, "family")
 
+    # P18-6: the per-source witness notes for a code — what each SOURCE
+    # says about the language stage it carries (kind "witness:<slug>", one
+    # lane per source so witnesses never supersede each other or the
+    # curated "context" under the latest-per-(code, kind) read). Returns
+    # { source-slug => latest body }, insertion order.
+    def witnesses(code)
+      return {} unless notes?
+
+      @ledger[:language_notes]
+        .where(lang_code: code.to_s)
+        .where(Sequel.like(:kind, "witness:%"))
+        .order(:id)
+        .to_h { |row| [row[:kind].delete_prefix("witness:"), row[:body]] }
+    end
+
     # P18-5: the accretion kinds beyond the shipped three — programmatic
     # writers ("iecor" today) file under their own kind, so they can never
     # supersede curated name/family/context. Latest body per kind, kinds
@@ -52,6 +67,7 @@ module Nabu
       @ledger[:language_notes]
         .where(lang_code: code.to_s)
         .exclude(kind: NOTE_KINDS)
+        .exclude(Sequel.like(:kind, "witness:%")) # witness lanes render separately (P18-6)
         .order(:kind, :id)
         .to_h { |row| [row[:kind], row[:body]] } # duplicate kinds: the latest id wins
     end
@@ -156,6 +172,30 @@ module Nabu
     def self.latest_body(ledger, code, kind)
       ledger[:language_notes].where(lang_code: code, kind: kind)
                              .order(Sequel.desc(:id)).get(:body)
+    end
+
+    # The loader/agent accretion write path (P18-6, the P18-4 design's
+    # named future work made real): append +notes+ ([lang_code, kind, body]
+    # rows) with per-record provenance +source+, idempotently — a note is
+    # appended ONLY when the latest stored body for its (code, kind)
+    # differs (the seed! rule exactly; re-running a sync is a no-op, an
+    # upstream wording change appends a superseding note). Guarded like
+    # every read: a ledger predating ledger migration 004 accretes nothing.
+    # Returns the number appended.
+    def self.accrete!(ledger:, notes:, source:, now: Time.now)
+      return 0 unless ledger.table_exists?(:language_notes)
+
+      appended = 0
+      ledger.transaction do
+        notes.each do |code, kind, body|
+          next if latest_body(ledger, code, kind) == body
+
+          ledger[:language_notes].insert(lang_code: code, kind: kind, body: body,
+                                         source: source, created_at: now)
+          appended += 1
+        end
+      end
+      appended
     end
 
     private
