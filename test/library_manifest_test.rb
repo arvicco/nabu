@@ -68,6 +68,25 @@ class LibraryManifestTest < Minitest::Test
     end
   end
 
+  # P20-1 (the 2026-07-14 "chu (body ger)" incident): language tags are
+  # validated at PARSE with the model's own rule — a hand-edited bad tag
+  # fails early and named, never deep in the loader scan.
+  def test_a_bad_language_tag_fails_at_parse_naming_file_and_entry
+    with_manifest("- file: a.pdf\n- file: b.pdf\n  languages: [\"chu (body ger)\"]\n") do |path|
+      error = assert_raises(Nabu::LibraryManifest::FormatError) { Nabu::LibraryManifest.load(path) }
+      assert_match(/entry 2 \(b\.pdf\)/, error.message, "per-entry defects name the entry")
+      assert_includes error.message, path, "…and the file"
+      assert_match(%r{BCP-47/ISO-639}, error.message, "the model's rule, reused verbatim")
+      assert_match(/chu \(body ger\)/, error.message)
+    end
+  end
+
+  def test_good_language_tags_including_the_subtag_form_pass
+    with_manifest("- file: a.pdf\n  languages: [chu, grc-Grek, deu]\n") do |path|
+      assert_equal %w[chu grc-Grek deu], Nabu::LibraryManifest.load(path).entries.first.languages
+    end
+  end
+
   def test_unknown_license_class_fails_loudly_never_defaults_down
     with_manifest("- file: a.pdf\n  license_class: public\n") do |path|
       error = assert_raises(Nabu::LibraryManifest::FormatError) { Nabu::LibraryManifest.load(path) }
