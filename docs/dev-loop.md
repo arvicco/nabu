@@ -62,6 +62,13 @@ Each iteration, regardless of execution vehicle (§5):
      catalog before commit; quarantined documents are unconstrained.
      Search-form changes instead ride a full rebuild (content hashes cover
      text_normalized — a parse-only sync would read as a revision storm).
+   - **No orphaned tails**: opening phase-N+1 ALWAYS starts with
+     `git cherry main origin/phase-N` — commits pushed to a phase branch
+     after its PR merged are silently absent from main and every later
+     branch (bitten twice: the P17 backlog block, and the liv/define fixes
+     whose absence let a pre-fix resync withdraw a whole shelf,
+     2026-07-14). Any tail commits are cherry-picked before the first
+     packet dispatches.
    - **Owner-consideration output goes to `.docs/`, never `docs/`** (owner
      policy, 2026-07-14): every survey, scouting report, strategy brief, or
      design-for-consideration an agent produces targets the gitignored
