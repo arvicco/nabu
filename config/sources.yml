@@ -318,6 +318,22 @@ edh:
   # lives on the /data page, which serves the terms directly):
   # license_watch: https://edh.ub.uni-heidelberg.de/data
 
+iecor:
+  adapter: Nabu::Adapters::Iecor
+  enabled: false   # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
+                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync iecor,
+                   # eyeball `nabu etym срьдьцє` / `nabu language chu` for the
+                   # iecor note, then flip). Projected: 4,981 entries /
+                   # ~26.3k reflex rows (~2.3k loan-flagged) + ~144
+                   # language notes accreted into the ledger.
+  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; docs/pie-survey.md §1): the
+  # cognacy-matrix dictionary shelf — one entry per expert-curated cognate
+  # set under the collective `ine` tag, members as reflex edges, loans.csv
+  # feeding the borrowed flag. The Zenodo versioned record is immutable; a
+  # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
+  # the Coptic RELEASE_TAG pattern) before firing a re-sync.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

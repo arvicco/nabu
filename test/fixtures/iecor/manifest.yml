@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All six tables live INSIDE the immutable Zenodo release zip (no per-file
+# raw URL), so none is whole-file byte-comparable by a plain GET: every
+# file is a documented TRIM (whole: false) — kept records byte-verbatim,
+# record set reduced per the README recipe. The sentinel fetches the zip
+# URL for liveness only. Zenodo records are immutable: a drift at this URL
+# is an incident, never an update (a new IE-CoR release mints a NEW DOI).
+source: iecor
+adapter_test: test/adapters/iecor_test.rb
+retrieved: 2026-07-14
+files:
+  - path: cldf/languages.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 13 of 160 varieties — IDs 46 (Lithuanian), 80, 100, 105, 110, 112, 129, 173, 177, 245, 259, 298, 303 (the 12 held-mapped varieties of docs/pie-survey.md §1); recipe in README.md
+  - path: cldf/parameters.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 5 of 170 concepts — IDs 4 (ash), 6 (back), 62 (full), 73 (heart), 144 (skin)
+  - path: cldf/forms.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 17 of 25,731 forms — the fixture sets' members in the 13 fixture varieties (incl. the comma-multiform OCS record 100-4-1)
+  - path: cldf/cognates.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 17 of 25,741 judgments — those pairing the kept forms with the kept sets
+  - path: cldf/cognatesets.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 5 of 5,039 sets — 1105 (ash, ?*pel(h₁)-), 1171 (skin, the Turkic loan event), 1846 (back, Root_Form_calc-only), 2280 (full, singleton), 6458 (heart, the 11-witness golden)
+  - path: cldf/loans.csv
+    url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
+    whole: false
+    trim: 1 of 1,036 loan events — set 1171 ← Turkic

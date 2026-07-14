@@ -105,6 +105,19 @@ class LanguagesTest < Minitest::Test
     assert_nil languages.family_fallback("qq-x"), "an unknown prefix yields no hint — no guessing"
   end
 
+  # P18-5: kinds beyond name/family/context (the programmatic accretions —
+  # "iecor" today) surface as extra notes, latest per kind, shipped kinds
+  # excluded (they have their own readers).
+  def test_extra_notes_surface_latest_per_kind_beyond_the_shipped_kinds
+    note!("chu", "iecor", "IE-CoR variety: Old Church Slavonic (superseded)", source: "iecor")
+    note!("chu", "iecor", "IE-CoR variety: Old Church Slavonic (latest)", source: "iecor")
+    note!("chu", "context", "Curated context stays out of the extras.")
+    assert_equal({ "iecor" => "IE-CoR variety: Old Church Slavonic (latest)" },
+                 languages.extra_notes("chu"))
+    assert_equal({}, languages.extra_notes("zzz"))
+    assert_equal({}, Nabu::Languages.new.extra_notes("chu"), "degrades without a ledger")
+  end
+
   # -- degradation: missing handles/tables read as no data --------------------------
 
   def test_degrades_honestly_without_handles_or_tables
