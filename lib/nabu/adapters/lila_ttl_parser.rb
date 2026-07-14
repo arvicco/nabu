@@ -96,7 +96,7 @@ module Nabu
 
       def parse_statement(out)
         subject, kind = parse_term
-        fail!("expected an IRI subject") unless kind == :iri
+        fail!("expected an IRI or blank-node subject") unless %i[iri blank].include?(kind)
         parse_predicate_object_list(out, subject)
         skip_ws
         fail!("expected '.'") unless @scanner.scan(".")
@@ -167,7 +167,12 @@ module Nabu
 
       def parse_term
         skip_ws
-        if @scanner.scan(/<([^>]*)>/)
+        if @scanner.scan(/_:([A-Za-z0-9._-]+)/)
+          # Named blank node (the real LIV.ttl carries 70 — census gap found
+          # live 2026-07-14): a stable label usable in subject AND object
+          # position; the Graph indexes it like any subject key.
+          ["_:#{@scanner[1]}", :blank]
+        elsif @scanner.scan(/<([^>]*)>/)
           [@scanner[1], :iri]
         elsif @scanner.scan(PNAME)
           prefix = @scanner[1].to_s

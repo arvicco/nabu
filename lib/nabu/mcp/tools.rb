@@ -959,12 +959,18 @@ module Nabu
 
       # -- define internals ---------------------------------------------------------
 
+      def define_miss_note(lemma)
+        langs = @catalog[:dictionaries].distinct.order(:language).select_map(:language)
+        "no dictionary entry for #{lemma.inspect} — the shelf holds " \
+          "#{@catalog[:dictionaries].count} dictionaries (#{langs.join(', ')}); " \
+          "diacritics are optional; the lemma must be a dictionary form " \
+          "(nabu_search with lemma: finds attestations)"
+      end
+
       def render_define(results, lemma:, limit:)
         if results.empty?
           return json(entries: [],
-                      note: "no dictionary entry for #{lemma.inspect} — the shelf holds LSJ (grc) " \
-                            "and Lewis & Short (lat); diacritics are optional, but the lemma must " \
-                            "be a dictionary form (nabu_search with lemma: finds attestations)")
+                      note: define_miss_note(lemma))
         end
 
         shown = results.first(limit)

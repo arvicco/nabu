@@ -12,6 +12,26 @@ class LilaTtlParserTest < Minitest::Test
     Nabu::Adapters::LilaTtlParser.new.statements(text)
   end
 
+  def test_named_blank_nodes_parse_as_terms_in_both_positions
+    # The real LIV.ttl carries 70 NAMED blank nodes (_:node1hh00i44bx1) —
+    # object position AND subject position — which the fixture-slice
+    # census missed; the whole-file document quarantined and the liv
+    # sync "succeeded" with an empty shelf (owner-hit, 2026-07-14).
+    ttl = <<~TTL
+      @prefix vartrans: <http://www.w3.org/ns/lemon/vartrans#> .
+      @prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+      @prefix liv_forms: <http://example.org/liv/forms/> .
+      <http://example.org/liv/lex_1> vartrans:lexicalRel _:node1hh00i44bx1 .
+      _:node1hh00i44bx1 ontolex:lexicalForm liv_forms:form_78 .
+    TTL
+    stmts = statements(ttl)
+    rel = stmts.select { |s| s.predicate == "http://www.w3.org/ns/lemon/vartrans#lexicalRel" }
+    assert_equal ["_:node1hh00i44bx1"], rel.map(&:object)
+    assert_equal [:blank], rel.map(&:kind)
+    form = stmts.select { |s| s.subject == "_:node1hh00i44bx1" }
+    assert_equal ["http://example.org/liv/forms/form_78"], form.map(&:object)
+  end
+
   def test_prefixed_names_expand_through_the_prefix_map
     triples = statements(<<~TTL)
       @prefix ex: <http://example.org/> .

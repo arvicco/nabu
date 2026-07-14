@@ -1007,11 +1007,9 @@ module Nabu
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
         nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
     HELP
-    DEFINE_LANGS = %w[grc lat ang san chu sla-pro ine-pro gem-pro].freeze
-    option :lang, type: :string, banner: "grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro",
-                  desc: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                        "ang → Bosworth-Toller, san → Monier-Williams, chu → Wiktionary-OCS, " \
-                        "sla-pro/ine-pro/gem-pro → the reconstruction shelves"
+    option :lang, type: :string,
+                  desc: "Restrict to one dictionary language (any language on the live " \
+                        "shelf — the miss message lists what is held)"
     option :limit, type: :numeric, default: Nabu::Query::Define::DEFAULT_LIMIT,
                    desc: "Maximum entries printed (homographs are separate entries)"
     option :long, type: :boolean, default: false,
@@ -1020,9 +1018,6 @@ module Nabu
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
-      if options[:lang] && !DEFINE_LANGS.include?(options[:lang])
-        raise Thor::Error, "define: --lang must be one of #{DEFINE_LANGS.join(', ')}"
-      end
 
       config = Nabu::Config.load
       catalog = open_catalog(config)
@@ -1030,6 +1025,13 @@ module Nabu
       unless catalog.table_exists?(:dictionary_entries)
         raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync lexica " \
                            "(or nabu rebuild after one)"
+      end
+      shelf_langs = catalog[:dictionaries].distinct.order(:language).select_map(:language)
+      @shelf_summary = "the shelf holds #{catalog[:dictionaries].count} dictionaries " \
+                       "(#{shelf_langs.join(', ')})"
+      if options[:lang] && !shelf_langs.include?(options[:lang])
+        raise Thor::Error, "define: --lang must be a language on the live shelf " \
+                           "(#{shelf_langs.join(', ')})"
       end
 
       fulltext = open_fulltext(config)
@@ -2759,8 +2761,8 @@ module Nabu
       # read inline in the body text.
       def print_define_results(lemma, results)
         if results.empty?
-          return say("no dictionary entry for #{lemma} — the shelf holds LSJ (grc) and " \
-                     "Lewis & Short (lat); give a dictionary form (search --lemma finds attestations)")
+          return say("no dictionary entry for #{lemma} — #{@shelf_summary}; " \
+                     "give a dictionary form (search --lemma finds attestations)")
         end
 
         results.each_with_index do |result, index|
