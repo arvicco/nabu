@@ -44,6 +44,13 @@ class PdfTextTest < Minitest::Test
     assert_equal [""], Nabu::PdfText.pages("scan.pdf", runner: FakeRunner.new(output: "\f"))
   end
 
+  def test_a_trailing_newline_after_the_final_form_feed_is_not_a_phantom_page
+    # mutool 1.26 (this box) terminates the stream "…\f\n"; older versions
+    # end bare "…\f". Neither tail is a page.
+    runner = FakeRunner.new(output: "Erste Seite.\n\fZweite Seite.\n\f\n")
+    assert_equal ["Erste Seite.\n", "Zweite Seite.\n"], Nabu::PdfText.pages("x.pdf", runner: runner)
+  end
+
   def test_runs_mutool_draw_text_to_stdout_via_the_shell_contract
     runner = FakeRunner.new(output: "p1\f")
     Nabu::PdfText.pages("/canonical/local-library/a/b.pdf", runner: runner)
@@ -65,5 +72,38 @@ class PdfTextTest < Minitest::Test
       Nabu::PdfText.pages("x.pdf", runner: FakeRunner.new(error: error))
     end
     assert_match(/command not found: mutool/, raised.message)
+  end
+
+  # -- .info (P19-5): best-effort ingest metadata candidates -----------------
+
+  INFO_OUTPUT = <<~OUT
+    x.pdf:
+
+    PDF-1.7
+    Info object (60 0 R):
+    <</Author(A. Vaillant)/Title(Manuel du vieux slave \\(2e éd.\\))/CreationDate(D:19500612120000Z)/Producer(x)>>
+    Pages: 2
+  OUT
+
+  def test_info_reads_title_creator_and_year_from_mutool_info
+    runner = FakeRunner.new(output: INFO_OUTPUT)
+    info = Nabu::PdfText.info("x.pdf", runner: runner)
+    assert_equal ["mutool", "info", "x.pdf"], runner.argv
+    assert_equal "Manuel du vieux slave (2e éd.)", info["title"], "PDF literal-string escapes are undone"
+    assert_equal "A. Vaillant", info["creator"]
+    assert_equal 1950, info["year"]
+  end
+
+  def test_info_omits_absent_lanes_and_skips_hex_strings
+    output = "Info object (2 0 R):\n<</Title<FEFF04120430>/CreationDate(D:2026)>>\n"
+    info = Nabu::PdfText.info("x.pdf", runner: FakeRunner.new(output: output))
+    assert_equal({ "year" => 2026 }, info,
+                 "hex-encoded strings are honestly skipped, never half-decoded")
+  end
+
+  def test_info_degrades_to_empty_on_any_shell_failure
+    error = Nabu::Shell::Error.new("command not found: mutool", status: nil, stderr: "")
+    assert_empty Nabu::PdfText.info("x.pdf", runner: FakeRunner.new(error: error)),
+                 "metadata candidates are a convenience — filename heuristics carry instead"
   end
 end
