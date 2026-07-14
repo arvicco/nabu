@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# BrillEDL.ttl is a documented TRIM (whole: false) of the upstream Turtle
+# (106 of 64,593 lines; every kept statement block byte-verbatim), so a
+# fresh GET returns the full 3.9 MB file and is fetched for URL-liveness
+# only, never byte-compared. Re-apply the README block recipe after any
+# refresh.
+source: edl
+adapter_test: test/adapters/edl_test.rb
+retrieved: 2026-07-14
+files:
+  - path: BrillEDL.ttl
+    url: https://raw.githubusercontent.com/CIRCSE/EtymologicalDictionaryLatin/master/data/BrillEDL.ttl
+    whole: false
+    trim: prefixes + the full rōdō chain (etymology/718, etymons pie1043+pit1043, etylinks 1322+1321, entry la1405) + pie0787 (*‑ne — blank-node canonicalForm, U+2011 pin) + the direct pie→lat edge (pie1418, etylink/1033, la0332 cōlum) — 4,064,145 B -> 106 lines; subject-block extraction recipe in README.md
