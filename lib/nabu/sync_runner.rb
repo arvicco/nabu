@@ -128,6 +128,10 @@ module Nabu
       discovery = adapter.discovery_skips(workdir)
       record_discovery_notes(run, discovery)
       update_source_state(source, entry, fetch_report)
+      # Warnings compare against the PREVIOUS ok run's baseline, so compute
+      # them before the baseline advances (P18-7: recorded at every ok run).
+      warnings = deviation_warnings(source, load_report, adapter)
+      Health::QuarantineBaseline.record!(@ledger, entry.slug, errored: load_report.errored)
       # Reindex the fulltext AFTER the RunRecorder block: the index is
       # corpus-wide, not per-source, so it must not live inside a source's run
       # row (an indexing failure surfaces as its own error, never a falsified
@@ -136,7 +140,7 @@ module Nabu
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
-                  warnings: deviation_warnings(source, load_report, adapter), discovery: discovery)
+                  warnings: warnings, discovery: discovery)
     end
 
     # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with
@@ -149,32 +153,28 @@ module Nabu
       run.update(notes: discovery.notes.join("; "))
     end
 
-    # P5-5: after a successful sync, run the SAME trend rules the `nabu health`
-    # LocalCheck uses against this fresh LoadReport — a quarantine spike versus
-    # the source's recent run history, and a single-sync mass-withdrawal sweep.
-    # Advisory only: these are returned in the Outcome for the CLI to print, they
-    # never fail the sync (the >20% breaker is the only thing that stops a sync).
-    # Cheap: two small aggregate queries reusing Health::TrendRules — no new
-    # thresholds. The just-finished run is already recorded "succeeded", so it is
-    # runs.first here; prior runs form the spike norm.
+    # P5-5/P18-7: after a successful sync, advisory deviation warnings against
+    # this fresh LoadReport — returned in the Outcome for the CLI to print,
+    # never failing the sync (the >20% breaker is the only thing that stops
+    # one). The quarantine check is DELTA-aware (P18-7): this run's errored
+    # count against the ledger's recorded baseline — silent when the standing
+    # count is unchanged (papyri's audited 9,312 stops shouting), one loud
+    # line carrying the delta when it moved (this replaced the P5-5
+    # recent-max spike rule here: the baseline comparison is strictly more
+    # sensitive, and the spike rule still guards run HISTORY in `nabu
+    # health`'s trend layer).
     def deviation_warnings(source, load_report, adapter)
       return [] unless load_report
+
+      delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: load_report.errored)]
       # Dictionary sources (P11-4): entry-grained counts against a
       # document-count baseline would be apples-to-oranges — the quarantine
-      # spike still applies (errored counts files either way), the
+      # delta still applies (errored counts files either way), the
       # document-withdrawal sweep rule does not.
-      return quarantine_warnings(source, load_report) if adapter.class.content_kind == :dictionary
+      return delta.compact if adapter.class.content_kind == :dictionary
 
       total = Store::Document.where(source_id: source.id).count
-      quarantine_warnings(source, load_report) +
-        [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)].compact
-    end
-
-    def quarantine_warnings(source, load_report)
-      errored = Store::Run.where(source_slug: source.slug, kind: "sync", status: "succeeded")
-                          .order(Sequel.desc(:id)).select_map(:errored)
-      prior = errored.drop(1).first(Health::TrendRules::SPIKE_WINDOW)
-      [Health::TrendRules.quarantine_spike(latest_errored: load_report.errored, prior_errored: prior)].compact
+      (delta + [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)]).compact
     end
 
     # Rebuild the whole FTS5 index (plus lemma + alignment tables) from the

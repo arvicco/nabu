@@ -23,9 +23,17 @@ module Nabu
   #   parser regression (P1-4), so it is surfaced as a warning (collected, never
   #   aborting the rebuild).
   class Rebuild
-    # A source that was replayed, carrying its LoadReport.
-    Outcome = Data.define(:slug, :report) do
-      def warning? = report.errored.positive?
+    # A source that was replayed, carrying its LoadReport. +quarantine+
+    # (P18-7) is the DELTA-aware quarantine finding for this replay — nil when
+    # the errored count matches the recorded ledger baseline, so a standing
+    # (audited) quarantine population no longer shouts "parser regression?" at
+    # every rebuild while a CHANGE still does, loudly, with the delta.
+    Outcome = Data.define(:slug, :report, :quarantine) do
+      def initialize(slug:, report:, quarantine: nil)
+        super
+      end
+
+      def warning? = !quarantine.nil?
     end
 
     # A source left untouched because it has no local canonical data yet.
@@ -137,7 +145,12 @@ module Nabu
           on_document: progress&.method(:load_tick)
         )
       end
-      Outcome.new(slug: entry.slug, report: report)
+      # Quarantine delta vs the ledger baseline, then advance it (P18-7: the
+      # baseline is recorded at every ok sync/rebuild; the finding compares
+      # against the PREVIOUS level, so each change announces exactly once).
+      finding = Health::QuarantineBaseline.delta_finding(ledger, entry.slug, errored: report.errored)
+      Health::QuarantineBaseline.record!(ledger, entry.slug, errored: report.errored)
+      Outcome.new(slug: entry.slug, report: report, quarantine: finding)
     end
 
     # Enrichment replay is OUT OF SCOPE for rebuild-of-text (architecture §6):

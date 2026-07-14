@@ -385,23 +385,66 @@ class SyncRunnerTest < Minitest::Test
     assert_nil aborted.indexed
   end
 
-  # --- inline deviation warnings (P5-5) -----------------------------------
+  # --- inline deviation warnings (P5-5, delta-aware since P18-7) ------------
 
-  # A sync whose fresh LoadReport quarantines far above the source's recent norm
-  # emits an inline quarantine-spike warning — advisory: the sync still succeeds.
-  def test_sync_emits_inline_quarantine_spike_warning
-    [0, 1, 2].each do |errored|
-      Nabu::Store::Run.create(source_slug: "spiky", kind: "sync", started_at: Time.now, finished_at: Time.now,
-                              added: 5, updated: 0, errored: errored, status: "succeeded")
-    end
+  # A sync whose errored count moved off the recorded ledger baseline emits one
+  # LOUD delta warning — advisory: the sync still succeeds.
+  def test_sync_emits_quarantine_delta_warning_when_off_baseline
+    seed_baseline("spiky", baseline: 2, anchor: 2)
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
     runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
 
     outcome = runner.sync("spiky", parse_only: true)
     refute outcome.aborted?, "an advisory warning must never fail the sync"
     assert_equal 90, outcome.load_report.errored
-    assert_includes outcome.warnings.map(&:kind), :quarantine_spike
+    finding = outcome.warnings.find { |w| w.kind == :quarantine_delta }
+    assert finding, "expected a quarantine delta warning"
+    assert_predicate finding, :loud?
+    assert_match(/90 errored vs baseline 2 \(\+88\)/, finding.message)
     assert_equal "succeeded", last_run_status
+  end
+
+  # The standing-quarantine case (papyri's audited 9,312): errored equals the
+  # recorded baseline → SILENT, no warning at all.
+  def test_sync_is_silent_when_errored_matches_the_baseline
+    seed_baseline("spiky", baseline: 90, anchor: 90)
+    FileUtils.mkdir_p(File.join(@canonical, "spiky"))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+
+    outcome = runner.sync("spiky", parse_only: true)
+    assert_equal 90, outcome.load_report.errored
+    assert_empty outcome.warnings
+  end
+
+  # First ok run with quarantines and no baseline yet (pre-005 history): the
+  # switchover is announced once (soft), never a phantom "regression".
+  def test_first_sync_with_quarantines_announces_the_baseline_recording
+    FileUtils.mkdir_p(File.join(@canonical, "spiky"))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+
+    outcome = runner.sync("spiky", parse_only: true)
+    finding = outcome.warnings.fetch(0)
+    assert_equal :quarantine_baseline_recorded, finding.kind
+    refute_predicate finding, :loud?
+  end
+
+  # Every ok run records/advances the baseline in the LEDGER (it must survive
+  # rebuilds); the anchor is the low-water mark and never advances upward.
+  def test_ok_sync_records_and_advances_the_quarantine_baseline
+    FileUtils.mkdir_p(File.join(@canonical, "spiky"))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+
+    runner.sync("spiky", parse_only: true) # errored 90
+    row = @ledger[:quarantine_baselines].where(source_slug: "spiky").first
+    assert_equal 90, row[:baseline]
+    assert_equal 90, row[:anchor]
+
+    seed_baseline("other", baseline: 5, anchor: 3) # untouched control
+    runner.sync("spiky", parse_only: true) # errored 90 again — steady state
+    row = @ledger[:quarantine_baselines].where(source_slug: "spiky").first
+    assert_equal 90, row[:baseline]
+    assert_equal 90, row[:anchor]
+    assert_equal 1, @ledger[:quarantine_baselines].where(source_slug: "spiky").count, "upsert, not append"
   end
 
   # A clean sync against no history carries no warnings.
@@ -492,4 +535,10 @@ class SyncRunnerTest < Minitest::Test
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
 
   def last_run_status = Nabu::Store::Run.order(:id).last&.status
+
+  def seed_baseline(slug, baseline:, anchor:)
+    @ledger[:quarantine_baselines].insert(
+      source_slug: slug, baseline: baseline, anchor: anchor, recorded_at: Time.now
+    )
+  end
 end
