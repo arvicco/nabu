@@ -6500,3 +6500,34 @@ Starostin email in .docs awaiting owner send), backup-disk re-flag
 # siblings, scholia/dict-citation links producers, streaming batch
 # parallels, tr-hun. Waiting: Starostin reply (starling packet on YES),
 # Miklosich/ELEXIS reply, cluster-gated §3.
+
+# ── Phase 19 ──────────────────────────────────────────────────────────
+
+## P19-0 · Site: Contributing + request funnels + maintainer contact  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-14, post-#22): "next site revision should include
+(probably in About tab) Contributing (worth a separate md document in
+docs as well) and Feature/Source requests with the links that lead
+directly to opening GH Issue (issues/new), as well as maintainer
+contact e-mail Ar Vicco (arvicco@nabu.ac)." Deliverables: (a) GitHub
+issue templates (.github/ISSUE_TEMPLATE/: request-a-source,
+feature-request, wrong-reading/defect — the pre-wave 0.4 design,
+finally built) so the direct links land on useful forms; (b)
+CONTRIBUTING.md refreshed (root, 95 lines exist — verify truthfulness
+post-P18 and extend: how to request sources/features, the dev-loop
+reality, fixture rules for adapter PRs); (c) site About tab: a
+Contributing section + "Request a corpus" / "Request a feature" /
+"Report a wrong reading" links straight to issues/new?template=…, +
+maintainer line "Ar Vicco <arvicco@nabu.ac>"; (d) README contributing
+pointer verified consistent.
+
+## P19-1 · Canonical memory: framework + local-language shelf  [tier: opus] [status: dispatched] [deps: —]
+The approved headliner (design: /Users/vb/Dev/nabu/.docs/
+canonical-memory.md §§0-1,3-4 — read it; owner approved in principle
+2026-07-14). LocalFetch + sync_policy: local + canonical/local-language/
+dossiers (Markdown, YAML front-matter, provenance-headed accretion
+sections) + the P18-4 layer MIGRATION (ledger language_notes +
+config/languages.yml seed → dossier files via one-shot exporter; db
+records become derived; the ledger table and seed file retire; the
+P18-5/6 accretion writers redirect to dossier sections). nabu language
+reads the merged view unchanged. Integrity via ledger pins; attic on
+deletion; P18-7 invariants extend (dossier files vs language records).
