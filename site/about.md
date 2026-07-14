@@ -111,6 +111,8 @@ Anything else fits a
 [new issue](https://github.com/arvicco/nabu/issues/new/choose) of any
 shape.
 
+**Cite it:** DOI [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957) (v1.0.0); see the FAQ for the full citation form.
+
 ## Contact
 
 Questions, corrections, and conversation are welcome through
