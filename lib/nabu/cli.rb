@@ -155,7 +155,7 @@ module Nabu
       entry additionally records the URL you gave in a source_url: lane
       (mirror-node URLs rotate; yours is the stable identity — it also
       prefills the provenance candidate). A failed download is one honest
-      FAILED line naming the HTTP status; the rest of the batch proceeds.
+      FAILED line naming the HTTP status — and aborts the batch (below).
 
       Candidate metadata is derived mechanically first — PDF Info metadata
       and a first-page text sample via mutool (degrading gracefully to
@@ -190,11 +190,14 @@ module Nabu
       collection is part of the minted urn (frozen forever), so file
       deliberately: a later re-file is honestly a new document.
 
-      Idempotency and honesty: a file whose bytes are already catalogued
-      anywhere in the shelf is a no-op with a message; the same NAME with
-      new bytes replaces the copy and the sync records an ordinary
-      revision; a bad file (missing, unreadable) is named and the rest
-      proceed (exit 1 at the end).
+      Atomicity and honesty: the batch lands WHOLE or not at all —
+      everything fallible (downloads, existence and no-executables checks,
+      categorization, validation against the manifest's own rules) runs
+      BEFORE any write, so a defect anywhere is one named FAILED line per
+      problem, the other files say "aborted", canonical/ stays untouched,
+      exit 1. A file whose bytes are already catalogued anywhere in the
+      shelf is a no-op with a message; the same NAME with new bytes
+      replaces the copy and the sync records an ordinary revision.
 
       --shelf language CODE scaffolds a language DOSSIER instead — the same
       front door for all canonical memory: prompts (same three modes; flags
@@ -3467,13 +3470,17 @@ module Nabu
         # able to fail BEFORE any interactive furniture appears (the
         # 2026-07-14 archive.org incident, P20-0).
         header_printed = false
-        Nabu::Ingest::PromptResolver.new(ask: lambda do |label, default|
-          unless header_printed
-            say "categorize (Enter keeps the [default]; '-' clears a field):"
-            header_printed = true
-          end
-          default ? ask("  #{label}", default: default) : ask("  #{label}:")
-        end)
+        Nabu::Ingest::PromptResolver.new(
+          ask: lambda do |label, default|
+            unless header_printed
+              say "categorize (Enter keeps the [default]; '-' clears a field):"
+              header_printed = true
+            end
+            default ? ask("  #{label}", default: default) : ask("  #{label}:")
+          end,
+          # An invalid answer's one-line reason (P20-1) — the prompt repeats.
+          warn: ->(line) { say "  ! #{line}", :yellow }
+        )
       end
 
       def ingest_overrides(keys)
@@ -3494,6 +3501,7 @@ module Nabu
         when :added then say "  added    #{outcome.file} #{outcome.message}"
         when :revised then say "  revised  #{outcome.file} — #{outcome.message}"
         when :skipped then say "  skipped  #{outcome.file} — #{outcome.message}"
+        when :aborted then say "  aborted  #{outcome.file} — #{outcome.message}", :yellow
         else say "  FAILED   #{outcome.file} — #{outcome.message}", :red
         end
       end

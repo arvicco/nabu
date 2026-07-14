@@ -6838,3 +6838,62 @@ Docs: cli desc/long_desc + url example, ops.md §13, README paragraph;
 site/tools.md untouched (its wording stays true — additive
 capability). Suite 2,642/32,974 exit 0 (0 skips) · lint 343 files
 exit 0.
+
+## P20-1 · ingest validates before append  [tier: opus] [status: done 2026-07-14] [deps: P20-0]
+Owner incident (2026-07-14, live library): the categorize languages
+prompt accepted `chu (body ger)` (pasted from a scout doc), the entry
+appended, and only the SHELF SYNC exploded (model validation.rb:44) —
+the manifest stayed poisoned, every later local-library sync failed
+until hand-repair; a second live find catalogued the EXECUTABLE
+bin/nabu itself. Mid-packet owner doctrine upgrade: "the changes
+should be atomic as well — either everything succeeds or fails, and
+if it fails it doesn't pollute canonical."
+DONE (2026-07-14): `nabu ingest` is ATOMIC TWO-PHASE (the GitFetch/
+ZipFetch prepare/complete mirror) — a batch lands WHOLE or leaves
+canonical/ byte-identical. PREPARE (all fallible work, staging only,
+zero canonical writes): downloads + existence checks (P20-0's staging
+pass) + NEW executables-refused guardrail (mode +x, one honest line —
+no shelf material runs), sha-account, derive, categorize, entry
+construction, then a REHEARSAL: the collection's future manifest
+(existing bytes + every new entry, rendered by the same render_entry
+the append uses) round-trips through the REAL LibraryManifest parser
+against a staging file — an entry the loader would reject cannot
+exist, whatever rules the loader grows; intra-batch duplicate names
+surface here too. COMMIT (only after the whole batch validated): per
+file copy_in! + append_entry!, a freak append failure compensating-
+deletes that file's copy (new LibraryShelf#remove_copy!, refuses
+manifested files); append_entry! itself also now ROLLS BACK a
+rejected append (truncate/delete) as the last-gate belt. VERDICT
+CHANGE, owner-ordered: any prepare defect aborts the WHOLE batch —
+one named FAILED line per defect, other files print `aborted`
+(new Outcome status, yellow), canonical untouched, exit 1; replaces
+P19-5's bad-file-named-rest-proceed ladder (it let a typo'd batch
+half-land; the owner lived the cleanup) — and a doomed batch asks NO
+categorize questions (defects known at staging skip prompts).
+VALIDATION per mode, one shared rule (Ingest.field_error: languages
+via the model's LANGUAGE_SHAPE — reused, never a second regex;
+license_class vocab): interactive RE-PROMPTS with a one-line reason
+(`! "chu (body ger)" is not a language tag — give comma-separated
+codes like: chu, deu`; PromptResolver warn: lane, CLI says it yellow)
+until valid or '-'-cleared — an assist suggestion only ever prefills
+this guarded prompt; --yes/scripted raise the same message from
+build_entry, failing the batch in prepare. FOUNDATION: LibraryManifest
+now validates language tags at PARSE (Model::Validation.language!
+reused, FormatError naming file + entry index like every per-entry
+defect) — a hand-edited bad manifest fails at load, early and named,
+never deep in the loader scan. Residual crash window stated honestly:
+kill -9 between copy and append leaves one unmanifested file; the
+next sync's discovery census names it LOUDLY (unrecognized ≥ 1 path).
+RIDER: the try: epilogue's search hint picks the first ALPHABETIC
+word ≥ 4 (Unicode letters — Greek/Cyrillic count; edge punctuation
+stripped, digit/symbol-riddled tokens skipped): the live Leskien
+smoke's `search 01assJ£` junk is gone, an all-garbage sample omits
+the hint. Tests +20 (manifest parse 2; gateway rollback 2; engine 13
+net incl. re-prompt bad-then-good, '-' escape, yes-mode pre-append
+refusal, incident regression across all modes, atomic aborts for
+ENOENT/404-in-mixed-batch/executable, freak-append rollback,
+intra-batch dup at rehearsal, staging-defect-asks-nothing, rider 3;
+CLI e2e 3 incl. whole-batch abort + executable refusal) — WebMock,
+no network. Docs: cli long_desc atomicity paragraph, ops §13 rewritten
+(atomic + executables + crash window), arch §16 truth pass. Suite
+2,662/33,056 exit 0 (0 skips) · lint 343 files exit 0.
