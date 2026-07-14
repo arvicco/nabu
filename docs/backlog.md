@@ -6472,7 +6472,7 @@ FINDINGS (2026-07-14):
   hook brief shape + stdin pipe + non-fatality incl. unstartable
   command, CLI --review relay + off-by-default + failed-run health).
 
-## P18-gate · Phase 18 gate  [tier: orchestrator] [status: pending] [deps: P18-1..7]
+## P18-gate · Phase 18 gate  [tier: orchestrator] [status: done 2026-07-14] [deps: P18-1..7]
 Full-diff, library/languages/README/site refresh (per §10 + the site
 duty), improvements register updates, EDH 27-quarantine triage folded
 in if not done sooner, PR, owner queue (IE-CoR/LIV syncs owner-fired;
@@ -6492,7 +6492,10 @@ Starostin email in .docs awaiting owner send), backup-disk re-flag
 #    copy → derive metadata → categorize (interactive TTY / --assist via
 #    the P18-7 hook pattern, AI suggests + owner confirms / scripted
 #    --yes) → manifest append → local sync. Deps: P19-2.
-# Carried: EDH 27-quarantine triage (if not folded into P18 gate),
+# Carried: EDH lb-less fallback (P18-gate triage verdict: 26 of the 27
+#   quarantines are real inscriptions with NO <lb> markup — fall back to
+#   whole-inscription passage grain; 1 is malformed upstream XML
+#   (hd059778), honest permanent quarantine; baseline keeps all quiet),
 # Damaskini, Slovenian dictionary shelf, OpenEtruscan, Coptic -en
 # siblings, scholia/dict-citation links producers, streaming batch
 # parallels, tr-hun. Waiting: Starostin reply (starling packet on YES),

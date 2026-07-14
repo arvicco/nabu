@@ -8,8 +8,9 @@ description: >-
 
 Nabu is a piece of personal research infrastructure that gathers the world's
 openly licensed digital corpora of antiquity — Homer and the Greek canon, the
-Latin classics, the documentary papyri of Egypt, the Sanskrit tradition,
-cuneiform tablets, the New Testament in thirteen parallel witnesses, the
+Latin classics, the documentary papyri of Egypt, the Latin inscriptions of
+the Roman empire, the Sanskrit tradition, cuneiform tablets, the New
+Testament in up to fifteen parallel witnesses, the
 complete corpus of Old English poetry — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is
 searchable by word or by dictionary lemma, citable to the exact verse or
@@ -27,24 +28,26 @@ draws from.
 
 ## The holdings, in brief
 
-As of **13 July 2026**, the catalog records **88,346 documents** comprising
-**3,786,763 passages** in some two dozen ancient languages — from
+As of **14 July 2026**, the catalog records **170,684 documents** comprising
+**4,267,213 passages** in some two dozen ancient languages — from
 proto-cuneiform tablets of the late fourth millennium BCE to
-nineteenth-century Slovenian — together with **248,616 dictionary entries**
-on the reference shelf and **2,619,049 gold-standard lemma annotations in
-fourteen languages**. All figures on this site are read from the live
+nineteenth-century Slovenian — together with **450,092 dictionary entries**
+on the reference shelf and **2,852,069 gold-standard lemma annotations in
+fifteen languages**. All figures on this site are read from the live
 catalog, never estimated, and carry the date on which they were read.
 
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on
 [Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
 
-## A single verse, thirteen witnesses
+## A single verse, many witnesses
 
 One illustration, pasted from a live run (12 July 2026; trimmed lines are
 marked). A single Gospel citation rendered across the aligned witnesses —
 Greek, Latin, Gothic, Old Church Slavonic, Old English, and more — each
-carrying its license label:
+carrying its license label. Since this run, the Sahidic and Bohairic
+Coptic New Testaments have joined the hub (13 July 2026), bringing the
+registered witnesses to fifteen:
 
 ```
 $ bin/nabu align "MARK 2.3"
