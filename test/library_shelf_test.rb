@@ -135,6 +135,31 @@ class LibraryShelfTest < Minitest::Test
     end
   end
 
+  # P20-1: the append is re-validated AND rolled back when rejected — the
+  # gateway can never leave a manifest entry the loader would refuse (the
+  # "chu (body ger)" poisoning incident, closed at the last write gate).
+  def test_append_entry_rolls_back_an_entry_the_loader_would_reject
+    with_shelf do |shelf, _root|
+      error = assert_raises(Nabu::LibraryShelf::Error) do
+        shelf.append_entry!(collection: "notes", entry: { "file" => "a.txt", "languages" => ["chu (body ger)"] })
+      end
+      assert_match(/chu \(body ger\)/, error.message)
+      refute_path_exists shelf.manifest_path("notes"), "a first append that fails validation leaves no manifest"
+    end
+  end
+
+  def test_append_entry_rollback_preserves_the_existing_bytes_exactly
+    with_shelf do |shelf, _root|
+      shelf.append_entry!(collection: "notes", entry: { "file" => "good.txt" })
+      before = File.read(shelf.manifest_path("notes"))
+      assert_raises(Nabu::LibraryShelf::Error) do
+        shelf.append_entry!(collection: "notes", entry: { "file" => "bad.txt", "languages" => ["chu (body ger)"] })
+      end
+      assert_equal before, File.read(shelf.manifest_path("notes")), "the poisoned append is truncated away"
+      assert Nabu::LibraryManifest.load(shelf.manifest_path("notes")), "the manifest still parses"
+    end
+  end
+
   def test_manifested_reads_the_collection_manifest
     with_shelf do |shelf, _root|
       refute shelf.manifested?("notes", "a.txt"), "no manifest yet"

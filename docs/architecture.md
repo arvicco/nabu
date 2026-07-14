@@ -1071,18 +1071,30 @@ unreadable file quarantines. Licensing is the shelf's point: class
 the manifest DEFAULT in one place (`Nabu::LibraryManifest`); an entry's
 explicit more-open class is honored as a per-document `license_override`.
 The shelf's write path is `nabu ingest FILE... [--collection NAME]`
-(P19-5), through the `Nabu::LibraryShelf` gateway — in order: sha-account
-(bytes already MANIFESTED anywhere in the shelf = honest no-op; same name
-with new bytes = the loader's ordinary revision), copy in (never move),
+(P19-5), through the `Nabu::LibraryShelf` gateway — ATOMIC and two-phase
+since P20-1 (the GitFetch/ZipFetch prepare/complete mirror): a batch
+lands whole or leaves canonical/ byte-identical. PREPARE does everything
+fallible against staging only — download urls / existence-check locals
+and refuse executables (mode `+x`; shelf material never runs),
+sha-account (bytes already MANIFESTED anywhere in the shelf = honest
+no-op; same name with new bytes = the loader's ordinary revision),
 derive candidates mechanically (PDF Info metadata + a first-page sample
 via the `PdfText` seam where mutool exists, filename heuristics and the
 sha always), categorize — interactive field-by-field prompts with the
-candidates prefilled; `--assist CMD` piping a `nabu.ingest-assist/1` JSON
-brief to a suggester subprocess (the P18-7 hook pattern; bundled
+candidates prefilled, an invalid answer re-prompted with a one-line
+reason; `--assist CMD` piping a `nabu.ingest-assist/1` JSON brief to a
+suggester subprocess (the P18-7 hook pattern; bundled
 `script/ingest-assist-claude`) whose answer PREFILLS the same prompts
-(never lands unreviewed without `--yes`); or `--yes` + flags for scripted
-drops — append one manifest entry, then run the shelf's ordinary sync and
-print the minted urns. The default collection is `inbox`, argued over a
+(never lands unreviewed without `--yes`); or `--yes` + flags for
+scripted drops (an invalid value fails the batch) — then REHEARSE the
+collection's future manifest through the real `LibraryManifest` parser
+(language tags validated with the model's own rule), so an entry the
+loader would reject cannot exist. Only a fully validated batch COMMITS:
+per file, copy in (never move) + append one manifest entry (a freak
+append failure rolls that file's copy back); then the shelf's ordinary
+sync runs and the minted urns print. Any prepare defect aborts the whole
+batch — one named FAILED line per defect, the rest `aborted`, canonical
+untouched, exit 1. The default collection is `inbox`, argued over a
 date-based name: the collection is a FROZEN urn segment, and one visible
 triage collection with one accumulating review-surface manifest beats a
 manifest-per-day scatter that bakes an acquisition accident into
