@@ -1,5 +1,5 @@
 # Citation metadata (Citation File Format 1.2.0, https://citation-file-format.github.io/).
-# `version` and `date-released` are placeholders until the first tagged
+# `version` and `date-released` are bumped at each tagged release (ops §12).
 # release; the release checklist (docs/ops.md §12) updates both at each tag.
 cff-version: 1.2.0
 message: >-
@@ -28,5 +28,5 @@ keywords:
   - philology
   - epigraphy
   - lexicography
-version: 0.0.0-unreleased
+version: 1.0.0
 date-released: "2026-07-14"
