@@ -36,6 +36,25 @@ class StatusReportTest < Minitest::Test
     def self.content_kind = :dictionary
   end
 
+  def test_behind_verdict_older_than_a_succeeded_sync_renders_reprobe
+    # Owner defect 2026-07-14: a re-synced source still read BEHIND from a
+    # pre-sync probe cache — answered noise. A BEHIND older than the last
+    # ok sync renders up=?(re-probe); a fresh probe restores real verdicts.
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    registry["fake-src"].sync_source!(db)
+    Nabu::Store::Probe.create(source_slug: "fake-src", checked_at: Time.now - 3600,
+                              drift: "behind", license: "unchanged", detail: nil)
+    ledger[:runs].insert(source_slug: "fake-src", kind: "sync",
+                         started_at: Time.now - 60, finished_at: Time.now,
+                         added: 0, updated: 0, withdrawn_count: 0, errored: 0,
+                         status: "succeeded")
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/up=\?\(re-probe\)/, out)
+    refute_match(/BEHIND/, out)
+  end
+
   def test_empty_registry_says_so
     registry = load_registry("# nothing\n")
     assert_equal "No sources registered.", Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
