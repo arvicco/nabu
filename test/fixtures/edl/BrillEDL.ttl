@@ -1,0 +1,106 @@
+@prefix lila:  <http://lila-erc.eu/ontologies/lila/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix fn:    <http://www.w3.org/2005/xpath-functions#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix lemma: <http://lila-erc.eu/data/id/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix lexinfo: <https://lexinfo.net/ontology/2.0/lexinfo.owl#> .
+@prefix ns1:   <http://example.net/> .
+@prefix xsp:   <http://www.owl-ontologies.com/2005/08/07/xsp.owl#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix lemonEty: <http://lari-datasets.ilc.cnr.it/lemonEty#> .
+@prefix xml:   <http://www.w3.org/XML/1998/namespace> .
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix igvll: <http://lila-erc.eu/data/lexicalResources/IGVLL/> .
+@prefix lime:  <http://www.w3.org/ns/lemon/lime#> .
+@prefix ov:    <http://open.vocab.org/terms/> .
+@prefix swrl:  <http://www.w3.org/2003/11/swrl#> .
+@prefix protege: <http://protege.stanford.edu/plugins/owl/protege#> .
+@prefix crminf: <http://new.cidoc-crm.org/crminf/> .
+@prefix frbr:  <http://purl.org/vocab/frbr/core#> .
+@prefix viaf:  <https://viaf.org/viaf/118278497/> .
+@prefix provdc: <http://www.w3.org/ns/prov-dc#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix marl:  <http://www.gsi.dit.upm.es/ontologies/marl/ns#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie0787>
+        a                      lemonEty:Etymon ;
+        rdfs:comment           "Etymology for: ‑ne (la1079)" , "*‑ne" ;
+        rdfs:label             "*‑ne" ;
+        ns1:lila_link          "NaN"^^xsd:double ;
+        lime:language          "PIE" ;
+        ontolex:canonicalForm  [ ontolex:writtenRep
+                          "*‑ne" ] .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymology/718>
+        a                      crm:E89 , lemonEty:Etymology ;
+        rdfs:label             "Etymology of: rōdō" ;
+        lemonEty:etymon        <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie1043> , <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pit1043> ;
+        lemonEty:hasEtyLink    <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1322> , <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1321> ;
+        lemonEty:startingLink  <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1322> .
+
+<https://dictionaries.brillonline.com/search#dictionary=latin&id=la1405>
+        a                      ontolex:LexicalEntry ;
+        rdfs:label             "rōdō" ;
+        lemonEty:etymology     <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymology/718> ;
+        ontolex:canonicalForm  <http://lila-erc.eu/data/id/lemma/122851> .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie1043>
+        a                      lemonEty:Etymon ;
+        rdfs:comment           "*Hreh₃d‑e/o‑;*ureh₃d‑e/o‑" , "Etymology for: rōdō (la1405)" ;
+        rdfs:label             "*Hreh₃d‑e/o‑" ;
+        ns1:lila_link          "122851" ;
+        lime:language          "PIE" ;
+        ontolex:canonicalForm  [ ontolex:writtenRep
+                          "*ureh₃d‑e/o‑" , "*Hreh₃d‑e/o‑" ] .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pit1043>
+        a                      lemonEty:Etymon ;
+        rdfs:comment           "Etymology for: rōdō (la1405)" , "*(w)rōde/o‑" ;
+        rdfs:label             "*(w)rōde/o‑" ;
+        ns1:lila_link          "122851" ;
+        lime:language          "PIt" ;
+        ontolex:canonicalForm  [ ontolex:writtenRep
+                          "*(w)rōde/o‑" ] .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1322>
+        a                     lemonEty:EtyLink ;
+        rdfs:label            "Etymology Link" ;
+        lemonEty:etyLinkType  "inheritance" ;
+        lemonEty:etySource    <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie1043> ;
+        lemonEty:etyTarget    <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pit1043> .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1321>
+        a                     lemonEty:EtyLink ;
+        rdfs:label            "Etymology Link" ;
+        lemonEty:etyLinkType  "inheritance" ;
+        lemonEty:etySource    <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pit1043> ;
+        lemonEty:etyTarget    <https://dictionaries.brillonline.com/search#dictionary=latin&id=la1405> .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie1418>
+        a                      lemonEty:Etymon ;
+        rdfs:comment           "Etymology for: cōlum (la0332)" , "*kʷot‑slo‑?" ;
+        rdfs:label             "*kʷot‑slo‑?" ;
+        ns1:lila_link          "94963" ;
+        lime:language          "PIE" ;
+        ontolex:canonicalForm  [ ontolex:writtenRep
+                          "*kʷot‑slo‑?" ] .
+
+<http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etylink/1033>
+        a                     lemonEty:EtyLink ;
+        rdfs:label            "Etymology Link" ;
+        lemonEty:etyLinkType  "inheritance" ;
+        lemonEty:etySource    <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymon/pie1418> ;
+        lemonEty:etyTarget    <https://dictionaries.brillonline.com/search#dictionary=latin&id=la0332> .
+
+<https://dictionaries.brillonline.com/search#dictionary=latin&id=la0332>
+        a                      ontolex:LexicalEntry ;
+        rdfs:label             "cōlum" ;
+        lemonEty:etymology     <http://lila-erc.eu/data/lexicalResources/BrillEDL/id/etymology/561> ;
+        ontolex:canonicalForm  <http://lila-erc.eu/data/id/lemma/94963> .
