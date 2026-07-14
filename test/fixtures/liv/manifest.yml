@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# LIV.ttl is a documented TRIM (whole: false) of the upstream Turtle
+# (170 of 14,148 lines; every kept statement block byte-verbatim), so a
+# fresh GET returns the full file and is fetched for URL-liveness only,
+# never byte-compared. Re-apply the README block recipe after any refresh.
+source: liv
+adapter_test: test/adapters/liv_test.rb
+retrieved: 2026-07-14
+files:
+  - path: LIV.ttl
+    url: https://raw.githubusercontent.com/CIRCSE/LIV/master/ttl/LIV.ttl
+    whole: false
+    trim: prefixes + Lexicon header + 3 stem-type declarations + 3 complete etymon clusters (suffio/*dʰu̯eh₂-{1}, uireo/1.*u̯ei̯s-{1} — the u/v pin, ludo/*lei̯d- — the shared "–" placeholder theme), upstream lines 1-42/55-58/75-78/82-115/199-236/283-330 — 672,757 B -> 170 lines; recipe in README.md

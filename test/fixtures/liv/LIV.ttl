@@ -1,0 +1,170 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix frac: <http://www.w3.org/nl/lemon/frac#> .
+@prefix lemonEty: <http://lari-datasets.ilc.cnr.it/lemonEty#> .
+@prefix lila: <http://lila-erc.eu/ontologies/lila/> .
+@prefix lilaIpoLemma: <http://lila-erc.eu/data/id/hypolemma/> .
+@prefix lila_authors: <http://lila-erc.eu/data/corpora/id/authors/> .
+@prefix lila_corpus: <http://lila-erc.eu/ontologies/lila_corpora/> .
+@prefix lila_lemma: <http://lila-erc.eu/data/id/lemma/> .
+@prefix lime: <http://www.w3.org/ns/lemon/lime#> .
+@prefix liv_base: <http://lila-erc.eu/data/lexicalResources/LIV/> .
+@prefix liv_etylink: <http://lila-erc.eu/data/lexicalResources/LIV/id/EtyLink/> .
+@prefix liv_etymologies: <http://lila-erc.eu/data/lexicalResources/LIV/id/Etymologies/> .
+@prefix liv_etymons: <http://lila-erc.eu/data/lexicalResources/LIV/id/Etymons/> .
+@prefix liv_forms: <http://lila-erc.eu/data/lexicalResources/LIV/id/Forms/> .
+@prefix liv_themes: <http://lila-erc.eu/data/lexicalResources/LIV/id/Themes/> .
+@prefix morph: <https://ontolex.github.io/morph/> .
+@prefix oa: <http://www.w3.org/ns/oa#> .
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix powla: <http://purl.org/powla/powla.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos#> .
+@prefix vartrans: <http://www.w3.org/ns/lemon/vartrans#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+liv_base:Lexicon a crm:E31, lime:Lexicon;
+  dct:contributor "Valeria Boano, Marco Passarotti, Francesco Mambrini, Riccardo Ginevra, Giovanni Moretti";
+  dct:creator "Helmut Rix, Martin Kümmel, Thomas Zehnder, Reiner Lipp, Brigitte Schirmer";
+  dct:description "The Lexicon Der Indogermanischen Verben is an etymological dictionary of proto-indo-european verbal roots and stems, which aims to collect them together systematically and to make possible to follow their development in single indo-european languages. The version published in LiLa is the second edition published in 2001.";
+  dct:license <http://www.wikidata.org/entity/Q18199165>;
+  dct:publisher <http://www.wikidata.org/entity/Q89883181>;
+  dct:title "Lexicon Der Indogermanischen Verben";
+  rdfs:label "LIV";
+  lime:entry <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/1>, <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/2>,
+    <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/3> .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/present_stem>
+  a <http://lila-erc.eu/ontologies/prinparlat/StemType>;
+  rdfs:label "present stem" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/essive_stem>
+  a <http://lila-erc.eu/ontologies/prinparlat/StemType>;
+  rdfs:label "essive stem" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/aorist_stem>
+  a <http://lila-erc.eu/ontologies/prinparlat/StemType>;
+  rdfs:label "aorist stem" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/1> a ontolex:LexicalEntry;
+  lemonEty:etymology liv_etymologies:1;
+  rdfs:label "suffio";
+  ontolex:canonicalForm lila_lemma:126606;
+  vartrans:lexicalRel <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_suff_s3356_present_stem> .
+
+liv_themes:1039490935661763527509341827371069474528331284855222600237 a morph:Morph;
+  <http://lila-erc.eu/ontologies/prinparlat/stemType> <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/present_stem>;
+  rdfs:label "*dʰu̯éh₂-/dʰuh₂-";
+  lime:language "PIE" .
+
+liv_etymons:56350916536173684873874157618509590909 a lemonEty:Etymon;
+  rdfs:label "*dʰu̯eh₂-{1}";
+  lime:language "PIE";
+  vartrans:lexicalRel liv_themes:1039490935661763527509341827371069474528331284855222600237 .
+
+liv_etymologies:1 a lemonEty:Etymology;
+  lemonEty:etymon liv_etymons:56350916536173684873874157618509590909;
+  lemonEty:hasEtyLink liv_etylink:link_1_pres;
+  rdfs:label "Etymology of suffio" .
+
+liv_etylink:link_1_pres a lemonEty:EtyLink;
+  lemonEty:etySource liv_themes:1039490935661763527509341827371069474528331284855222600237;
+  lemonEty:etyTarget <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_suff_s3356_present_stem>;
+  rdfs:label "Etymology link: pres suffio" .
+
+<http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_suff_s3356_present_stem>
+  a <http://lila-erc.eu/data/lexicalResources/LIV/ontology/Remodeling>;
+  ontolex:lexicalForm liv_forms:form_1 .
+
+liv_forms:form_1 a ontolex:Form;
+  rdfs:label "suffio";
+  ontolex:writtenRep "suffio" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/4> a ontolex:LexicalEntry;
+  lemonEty:etymology liv_etymologies:4;
+  rdfs:label "uireo";
+  ontolex:canonicalForm lila_lemma:130307;
+  vartrans:lexicalRel <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_uir_u0757_present_stem> .
+
+liv_base:Lexicon lime:entry <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/4>,
+    <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/5>, <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/6>,
+    <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/7> .
+
+liv_themes:14448441872521675103563598431671757809965 a morph:Morph;
+  <http://lila-erc.eu/ontologies/prinparlat/stemType> <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/essive_stem>;
+  rdfs:label "*u̯is-h₁i̯é-";
+  lime:language "PIE" .
+
+liv_etymons:255358900949995430917747026003964285 a lemonEty:Etymon;
+  rdfs:label "1.*u̯ei̯s-{1}";
+  lime:language "PIE";
+  vartrans:lexicalRel liv_themes:14448441872521675103563598431671757809965 .
+
+liv_etymologies:4 a lemonEty:Etymology;
+  lemonEty:etymon liv_etymons:255358900949995430917747026003964285;
+  lemonEty:hasEtyLink liv_etylink:link_4_pres;
+  rdfs:label "Etymology of uireo" .
+
+liv_etylink:link_4_pres a lemonEty:EtyLink;
+  lemonEty:etySource liv_themes:14448441872521675103563598431671757809965;
+  lemonEty:etyTarget <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_uir_u0757_present_stem>;
+  rdfs:label "Etymology link: pres uireo" .
+
+<http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_uir_u0757_present_stem>
+  a <http://lila-erc.eu/data/lexicalResources/LIV/ontology/Remodeling>;
+  ontolex:lexicalForm liv_forms:form_4 .
+
+liv_forms:form_4 a ontolex:Form;
+  rdfs:label "uireo";
+  ontolex:writtenRep "uireo" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/6> a ontolex:LexicalEntry;
+  lemonEty:etymology liv_etymologies:6;
+  rdfs:label "ludo";
+  ontolex:canonicalForm lila_lemma:110939;
+  vartrans:lexicalRel <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lud_l1157_present_stem>,
+    <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lus_l1157_perfect_stem> .
+
+liv_themes:21494181428376301518789662933132767749165 a morph:Morph;
+  <http://lila-erc.eu/ontologies/prinparlat/stemType> <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/present_stem>;
+  rdfs:label "?*lé-loi̯d/lid-";
+  lime:language "PIE" .
+
+liv_etymons:3056929752157742125 a lemonEty:Etymon;
+  rdfs:label "*lei̯d-";
+  lime:language "PIE";
+  vartrans:lexicalRel <http://lila-erc.eu/data/lexicalResources/LIV/id/Themes/->, liv_themes:21494181428376301518789662933132767749165 .
+
+liv_etymologies:6 a lemonEty:Etymology;
+  lemonEty:etymon liv_etymons:3056929752157742125;
+  lemonEty:hasEtyLink liv_etylink:link_6_perf, liv_etylink:link_6_pres;
+  rdfs:label "Etymology of ludo" .
+
+liv_etylink:link_6_pres a lemonEty:EtyLink;
+  lemonEty:etySource liv_themes:21494181428376301518789662933132767749165;
+  lemonEty:etyTarget <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lud_l1157_present_stem>;
+  rdfs:label "Etymology link: pres ludo" .
+
+<http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lud_l1157_present_stem>
+  a <http://lila-erc.eu/data/lexicalResources/LIV/ontology/Remodeling>;
+  ontolex:lexicalForm liv_forms:form_6 .
+
+liv_forms:form_6 a ontolex:Form;
+  rdfs:label "ludo";
+  ontolex:writtenRep "ludo" .
+
+<http://lila-erc.eu/data/lexicalResources/LIV/id/Themes/-> a morph:Morph;
+  <http://lila-erc.eu/ontologies/prinparlat/stemType> <http://lila-erc.eu/data/lexicalResources/LIV/id/LexicalEntry/id/Stems/aorist_stem>;
+  rdfs:comment "aorist stem";
+  rdfs:label "–" .
+
+liv_etylink:link_6_perf a lemonEty:EtyLink;
+  lemonEty:etySource <http://lila-erc.eu/data/lexicalResources/LIV/id/Themes/->;
+  lemonEty:etyTarget <http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lus_l1157_perfect_stem>;
+  rdfs:label "Etymology link: perf lusi" .
+
+<http://lila-erc.eu/data/lexicalResources/prinparlat/id/stem_lus_l1157_perfect_stem>
+  a <http://lila-erc.eu/data/lexicalResources/LIV/ontology/Innovation> .
+

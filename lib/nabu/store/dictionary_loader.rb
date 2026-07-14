@@ -2,6 +2,7 @@
 
 require "json"
 require_relative "content_hash"
+require_relative "../languages"
 
 module Nabu
   module Store
@@ -50,7 +51,7 @@ module Nabu
       # discover → parse → load straight off a dictionary adapter, attic
       # included (retained letter files rediscover; live wins on duplicates).
       def load_from(adapter, workdir:, full: true, on_document: nil)
-        run(full: full, on_document: on_document) do |process, quarantine|
+        report = run(full: full, on_document: on_document) do |process, quarantine|
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
               begin
@@ -62,6 +63,8 @@ module Nabu
             process.call(document)
           end
         end
+        accrete_language_notes(adapter)
+        report
       end
 
       private
@@ -108,6 +111,20 @@ module Nabu
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1
         journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
+      end
+
+      # P18-6: the language-notes rider — an adapter that declares
+      # .language_notes ([lang_code, kind, body] rows; LIV/EDL stage
+      # witnesses) accretes them into the ledger with its own id as the
+      # per-record provenance, idempotently (Languages.accrete!'s
+      # latest-body rule — a re-sync appends nothing). Ledger-optional and
+      # table-guarded like every accumulated-layer touch; catalog loads
+      # without a ledger simply skip the rider.
+      def accrete_language_notes(adapter)
+        return unless @ledger && adapter.class.respond_to?(:language_notes)
+
+        Nabu::Languages.accrete!(ledger: @ledger, notes: adapter.class.language_notes,
+                                 source: adapter.manifest.id)
       end
 
       # P18-4: the derived language-name census (migration 011) — what the

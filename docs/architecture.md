@@ -155,6 +155,11 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
    -- (lang_code, kind) wins, so supersession history is free. Seeded
    -- idempotently from config/languages.yml (`nabu language --seed`);
    -- family-level notes ride the family prefix as their lang_code.
+   -- P18-6: sources accrete too — an adapter declaring .language_notes
+   -- (LIV/EDL stage witnesses) appends through Languages.accrete! at
+   -- dictionary load, kind "witness:<slug>" (one lane per source, so
+   -- witnesses never supersede each other or the curated kinds), source
+   -- column = the adapter id (per-record provenance).
 ```
 
 - Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.

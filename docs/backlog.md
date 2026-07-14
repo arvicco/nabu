@@ -6273,7 +6273,7 @@ per-record provenance, seed-file untouched). Honest gaps from the
 survey handled as stated (san stem lemmas, hit hyphenated stems, orv
 dialect). Migration number IF needed: 014 (P18-6 has 015).
 
-## P18-6 · LIV-LOD + de Vaan EDL skeleton  [tier: opus] [status: dispatched] [deps: —]
+## P18-6 · LIV-LOD + de Vaan EDL skeleton  [tier: opus] [status: done 2026-07-14 — both CIRCSE shelves READY (enabled: false), findings below] [deps: —]
 pie-survey v1-2 + its named v2 sibling, one packet (both CIRCSE, both
 Latin/Italic): LIV as Linked Open Data (CC BY-SA w/ publisher
 permission, 657 KB Turtle) — 305 laryngeal PIE verbal etymons → 385
@@ -6284,6 +6284,57 @@ de Vaan EDL skeleton (CC BY-NC-SA → nc): 1,429 Latin headwords staged
 through 1,466 Proto-Italic + 1,394 PIE etymons — the Leiden-school
 cross-witness beside kaikki's itc-pro (provenance-distinct entries, the
 MW precedent). LANGUAGE-INFO RIDER as P18-5. Migration IF needed: 015.
+
+FINDINGS (2026-07-14):
+- **Turtle verdict: in-house censused-subset reader, no gem.** New parser
+  family `lila-ttl` (~200 lines with docs): both files censused
+  first-hand — no triple-quoted/multiline literals, no collections, no
+  bare numerics, blank nodes only as `[…]` objects (BrillEDL
+  canonicalForm, incl. multi-valued writtenRep), one `@en` tag, `^^`
+  only on quoted literals, repeated subjects (LIV's Lexicon accretes
+  lime:entry), `a`, `;`/`,` lists. Anything outside the census fails
+  LOUDLY (ParseError + line). rdf-turtle would drag the rdf gem family
+  through the CLAUDE.md bar for two small regular files — declined.
+- **Adapter count: TWO adapters, one family.** Forced by the license
+  split (BY-SA `attribution` vs BY-NC-SA `nc` — license_class is
+  per-source) and by graph shape (LIV: stem-typed themes + prinparlat
+  links; EDL: staged etymon→etymon). Both single-file FileFetch of the
+  raw URLs (git clone drags history for one data file; raw host serves
+  no Last-Modified → manual re-syncs refetch unconditionally, 0.7/3.9 MB).
+- **Stem-type surface verdict: entry BODY, nothing else.** One line per
+  theme, "present stem *dʰu̯éh₂-/dʰuh₂- → pres suffio" (link-label tails
+  carry the Latin PERFECT forms — peperci, lusi — that no writtenRep
+  holds); define renders body already, zero schema/query change. Not
+  gloss (formations ≠ meanings; the LOD ships no meanings — nil gloss
+  honest); no new table for a one-source 426-row layer. The shared
+  placeholder theme (label "–") is scoped per-etymon so it never leaks
+  other verbs' continuations. **Migration 015 NOT needed** — number
+  still free.
+- **Shelf layout:** liv = ONE dictionary (ine-pro; 305 etymons, lat
+  reflexes, u/v pin uireo↔vireo fixture-tested; ~40-digit upstream
+  etymon ids verbatim as entry ids). edl = TWO dictionaries from one
+  file (edl-ine-pro 1,394 + edl-itc-pro 1,466; reflexes pie→pit 1,216
+  proto-to-proto + pie→lat 27 direct + pit→lat 1,410) — the existing
+  shelf-visited etym walk runs rōdō ← *(w)rōde/o‑ ← *Hreh₃d‑e/o‑ with
+  zero query change, and two itc-pro witnesses list side by side
+  (pinned). U+2011 kept in display, opened to "-" in folds. All 2,653
+  links "inheritance" (censused); /borrow/i guard for future loan links.
+- **Rider:** language_notes kinds `witness:liv`/`witness:edl`
+  (source-laned — never supersede each other or the seed's context
+  under latest-per-(code,kind)), provenance column "liv"/"edl";
+  accreted idempotently by DictionaryLoader#load_from via new
+  Languages.accrete! (the P18-4 "future write path" made real — same
+  latest-body rule as seed!); `nabu language CODE` renders witness
+  lines. Notes: ine-pro (liv), itc-pro + lat (edl).
+- **Projected live counts:** liv 305 entries / 385 lat reflex edges;
+  edl 2,860 entries / 2,653 edges across two shelves. Acceptance
+  rendered on a scratch root: define *dʰu̯eh₂- (stem line + reflex),
+  etym vireo (u/v → LIV), etym rodo (full Leiden chain), language
+  itc-pro (EDL witness note + EDL shelf beside kaikki's).
+- Suite 2,374 runs / 31,714 assertions exit 0 · lint 303 files exit 0.
+  Tests +46 (parser 11, liv 16, edl 16, languages 3). Fixtures:
+  test/fixtures/liv (170 lines) + test/fixtures/edl (106 lines),
+  byte-verbatim blocks + READMEs + manifests.
 
 ## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: dispatched] [deps: —]
 The owner-designed P18-queue item 5b, now taken (owner 2026-07-14).
