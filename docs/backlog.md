@@ -6547,7 +6547,7 @@ P18-5/6 accretion writers redirect to dossier sections). nabu language
 reads the merged view unchanged. Integrity via ledger pins; attic on
 deletion; P18-7 invariants extend (dossier files vs language records).
 
-## P19-2 · Site FAQ  [tier: opus] [status: dispatched] [deps: P19-0]
+## P19-2 · Site FAQ  [tier: opus] [status: done] [deps: P19-0]
 Owner (2026-07-14): "FAQ site section (Q&A Bank from licensing-emails +
 think of most common questions - answers should be clear and contain
 links to site tabs or md docs with context)." A new site tab: the
@@ -6560,3 +6560,29 @@ size; platforms; vs Perseus/Scaife; how to cite). Every answer links to
 the tab or md doc holding the full context. Academic register, honest
 answers (incl. the AI-assisted development one, verbatim from the
 framework bank).
+DONE (2026-07-14): site/faq.md shipped — 17 questions in 5 clusters
+(Getting started: what/who-for, try-in-minutes → Quickstart, needs
+(Ruby 3.3/git, 690 MB starter / 16+7 GB full, dated 2026-07-13),
+platforms (macOS honest), offline, vs Perseus/Scaife; The library:
+what's included (dated counts), why-no-TLG/Brill (license-honest, →
+02-sources blocked entries + request-a-source funnel), own PDFs
+(local-shelf in active development stated honestly, no backlog leak),
+source currency (live/manual/frozen postures + health probes);
+Licenses and use: the four classes plain-language, redistribution
+per-class, not-commercial (MIT tool, data licenses upstream's), what's
+stored (files+SQLite local, nothing leaves); AI: MCP read-only w/
+license labels → docs/mcp.md, research_private/restricted default
+exclusion (Freising named), AI-assisted development honest answer
+(agent loop, Claude models, code open for inspection → dev-loop);
+Contributing and contact: the three P19-0 template links + new/choose,
+how-to-cite (honest: site+repo+access date, DOI planned), maintainer).
+Nav entry FAQ before About (_config.yml); MAINTENANCE gate-duty list
+extended with faq.md dated-figure re-check. Every answer 2–5 sentences
+with ≥1 contextual link (relative_url internal, absolute GitHub for
+repo docs). Gates: jekyll build exit 0; href sweep over built
+/faq/index.html — 24 hrefs, all 10 internal resolve in _site, all
+linked repo docs/templates exist on disk; suite 2,471/32,142 exit 0;
+lint 314 files exit 0. Finding: docs/mcp.md §restricted-exclusion
+still says "nothing synced today carries those classes" — stale since
+Freising went live as research_private; FAQ follows the newer
+sources.md truth, the mcp.md sentence is a one-line gate-duty fix.
