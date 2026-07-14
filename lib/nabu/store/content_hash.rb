@@ -56,8 +56,11 @@ module Nabu
       end
 
       # The only-when-non-empty guard: an empty reflex list contributes NO
-      # fields (the pre-P14-1 encoding, byte for byte). `borrowed` (P17-3)
-      # is deliberately part of the encoding: flag-bearing reparses change
+      # fields (the pre-P14-1 encoding, byte for byte). `lang_name` (P18-4)
+      # is deliberately NOT part of the encoding: display metadata bound for
+      # the language_names census, not content identity — keeping it out
+      # pins every stored sha (no revision storm on the next full load).
+      # `borrowed` (P17-3) is deliberately part of the encoding: flag-bearing reparses change
       # the sha of every reflex-carrying entry, so the next owner-fired
       # `sync <shelf> --parse-only` re-mints those revisions and backfills
       # migration 010's column — the P16-5 recovery pattern, on purpose.
