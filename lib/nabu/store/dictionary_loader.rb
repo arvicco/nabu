@@ -105,9 +105,38 @@ module Nabu
           end
           replace_name_census(dictionary, census)
         end
+        accrete_language_notes(document)
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1
         journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
+      end
+
+      # P18-5: the ACCUMULATED language layer's programmatic write path —
+      # notes a batch carries (IE-CoR's languages.csv metadata) append into
+      # the LEDGER's language_notes under the P18-4 append-only contract:
+      # a note lands ONLY when the latest stored body for its
+      # (lang_code, kind) differs, so re-syncs and rebuild replays are
+      # no-ops and supersession history is free. Runs AFTER the catalog
+      # transaction (the ledger is a different database file — it could
+      # never join it), with per-record provenance in `source` ("iecor");
+      # the config/languages.yml seed keeps its own provenance and is never
+      # touched from here. Guarded: no ledger handle or a pre-004 ledger
+      # accretes nothing, silently and honestly.
+      def accrete_language_notes(document)
+        notes = document.language_notes
+        return if notes.empty? || @ledger.nil? || !@ledger.table_exists?(:language_notes)
+
+        now = Time.now
+        @ledger.transaction do
+          notes.each do |note|
+            latest = @ledger[:language_notes].where(lang_code: note.lang_code, kind: note.kind)
+                                             .order(Sequel.desc(:id)).get(:body)
+            next if latest == note.body
+
+            @ledger[:language_notes].insert(lang_code: note.lang_code, kind: note.kind,
+                                            body: note.body, source: note.source, created_at: now)
+          end
+        end
       end
 
       # P18-4: the derived language-name census (migration 011) — what the

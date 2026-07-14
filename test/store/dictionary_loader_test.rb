@@ -203,6 +203,45 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal 2, bog_row[:revision]
   end
 
+  # -- P18-5: the language-notes accretion (the P18-4 accumulated layer's
+  # first programmatic writer) --------------------------------------------------
+
+  def noted_document(body: "IE-CoR variety: Test (modern)")
+    document = Nabu::DictionaryDocument.new(
+      slug: "noted", language: "ine", title: "Noted", canonical_path: "/x/noted.csv"
+    )
+    document << Nabu::DictionaryEntry.new(
+      entry_id: "1", key_raw: "*x-", language: "ine", headword: "*x-",
+      headword_folded: "x-", body: "root"
+    )
+    document.add_language_note(
+      Nabu::DictionaryLanguageNote.new(lang_code: "xx", kind: "iecor", body: body, source: "iecor")
+    )
+    document
+  end
+
+  def test_language_notes_accrete_append_only_and_idempotently
+    loader.load([noted_document], full: false)
+    rows = @ledger[:language_notes].where(lang_code: "xx", kind: "iecor").all
+    assert_equal 1, rows.size
+    assert_equal "iecor", rows.first[:source]
+
+    loader.load([noted_document], full: false)
+    assert_equal 1, @ledger[:language_notes].where(lang_code: "xx").count,
+                 "an unchanged body appends nothing"
+
+    loader.load([noted_document(body: "IE-CoR variety: Test (revised)")], full: false)
+    bodies = @ledger[:language_notes].where(lang_code: "xx").order(:id).select_map(:body)
+    assert_equal 2, bodies.size, "a changed body appends a superseding note; history is kept"
+    assert_equal "IE-CoR variety: Test (revised)", bodies.last
+  end
+
+  def test_language_notes_accretion_degrades_without_a_ledger
+    loader = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: nil)
+    report = loader.load([noted_document], full: false)
+    assert_equal 1, report.added, "no ledger handle: entries load, notes silently accrete nowhere"
+  end
+
   private
 
   # The fixture μῆνις entry with its body replaced — a real model object, the

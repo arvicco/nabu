@@ -42,6 +42,20 @@ module Nabu
     def context(code) = note(code, "context")
     def family(code) = note(code, "family")
 
+    # P18-5: the accretion kinds beyond the shipped three — programmatic
+    # writers ("iecor" today) file under their own kind, so they can never
+    # supersede curated name/family/context. Latest body per kind, kinds
+    # sorted (deterministic card order); {} without a ledger or table.
+    def extra_notes(code)
+      return {} unless notes?
+
+      @ledger[:language_notes]
+        .where(lang_code: code.to_s)
+        .exclude(kind: NOTE_KINDS)
+        .order(:kind, :id)
+        .to_h { |row| [row[:kind], row[:body]] } # duplicate kinds: the latest id wins
+    end
+
     def curated?(code)
       return false unless notes?
 
