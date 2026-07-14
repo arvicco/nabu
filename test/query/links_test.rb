@@ -102,6 +102,41 @@ module Query
       refute_predicate edge, :resolved?
     end
 
+    # P19-4: reference edges point at whole DOCUMENTS (a local-library
+    # article beside the passages it discusses) — a counterpart no passage
+    # answers for resolves at document grain, with the document's effective
+    # license (source class or override), before falling to "(not in
+    # catalog)".
+    def test_document_urn_counterparts_resolve_at_document_grain
+      make_passage(doc_urn: "urn:b", urn: "urn:b:1", title: "Discussed edition")
+      shelf = Nabu::Store::Source.create(
+        slug: "local-library", name: "Local library", adapter_class: "X",
+        license_class: "research_private"
+      )
+      Nabu::Store::Document.create(
+        source_id: shelf.id, urn: "urn:nabu:local-library:c:article", title: "The article",
+        language: "deu", content_sha256: "x", revision: 1, withdrawn: false
+      )
+      run_id = seed_run
+      Nabu::Store::LinksJournal.write_edge!(
+        @journal, from_urn: "urn:nabu:local-library:c:article", to_urn: "urn:b:1",
+                  kind: "reference", score: nil, detail: "manifest local-library/c/manifest.yml", run_id: run_id
+      )
+
+      edge = reader.run("urn:b:1").groups.fetch("reference").first
+      assert_equal "urn:nabu:local-library:c:article", edge.urn
+      assert_predicate edge, :resolved?
+      assert_equal ["The article", "deu", "research_private"],
+                   [edge.title, edge.language, edge.license_class],
+                   "document-grain resolution carries the shelf's license label"
+      assert_equal "manifest local-library/c/manifest.yml", edge.detail
+
+      # And from the article's side the passage resolves as before.
+      back = reader.run("urn:nabu:local-library:c:article")
+      assert_equal "The article", back.title
+      assert_equal "Discussed edition", back.groups.fetch("reference").first.title
+    end
+
     def test_edges_survive_catalog_absence_of_the_queried_urn
       # The journal outlives catalog rows: urn:a:1 is gone from the catalog
       # (a rebuild off slimmer canonical) but its edges still read by urn.

@@ -59,7 +59,16 @@ module Nabu
     # of content-pattern files that never became refs (0-byte skeletons,
     # non-editions, and loud nested-root/unpack gaps); combined with load_report
     # it drives the printed discovery accounting. nil on an aborted run.
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings, :discovery) do
+    # +references+ (P19-4) is the Nabu::LibraryReferences::Result for a
+    # reference_edges? source (the manifests' related: urns refreshed into
+    # the links journal after the load); nil for every other source.
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
+                          :discovery, :references) do
+      def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
+                     discovery:, references: nil)
+        super
+      end
+
       def aborted? = !breaker.nil?
     end
 
@@ -140,7 +149,25 @@ module Nabu
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
-                  warnings: warnings, discovery: discovery)
+                  warnings: warnings, discovery: discovery,
+                  references: refresh_references(entry))
+    end
+
+    # P19-4: after a reference_edges? source loads, re-derive its manifests'
+    # related: urns as kind=reference edges (Nabu::LibraryReferences — pure
+    # function of the loaded documents' metadata, superseding the prior
+    # run). Outside the RunRecorder block like reindexing: the journal is a
+    # third store with its own lifecycle, and a journal failure must surface
+    # as its own error, never falsify the source's run row.
+    def refresh_references(entry)
+      return nil unless entry.adapter_class.reference_edges?
+
+      journal = Store::LinksJournal.open!(@config.links_path)
+      begin
+        LibraryReferences.new(catalog: @db, journal: journal).run(entry.slug)
+      ensure
+        journal.disconnect
+      end
     end
 
     # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with

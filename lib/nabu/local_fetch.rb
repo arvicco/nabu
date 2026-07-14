@@ -48,20 +48,23 @@ module Nabu
     # → last-known sha), and how many retired properly into the attic.
     Result = Data.define(:sha, :files, :vanished, :retired)
 
-    def self.sync!(dir:, attic_dir:, force: false)
-      new(dir: dir, attic_dir: attic_dir).sync!(force: force)
+    def self.sync!(dir:, attic_dir:, force: false, hint: nil)
+      new(dir: dir, attic_dir: attic_dir, hint: hint).sync!(force: force)
     end
 
-    def initialize(dir:, attic_dir:)
+    # +hint+ (P19-4): an optional shelf-specific "how to populate me" tail
+    # for the missing-tree error — each shelf knows its own front door.
+    def initialize(dir:, attic_dir:, hint: nil)
       @dir = dir
       @attic_dir = attic_dir
+      @hint = hint
     end
 
     def sync!(force: false)
       files = scan
       if files.empty?
-        raise Error, "no local tree at #{@dir} — place files there first " \
-                     "(for local-language: nabu language --export-dossiers)"
+        raise Error, "no local tree at #{@dir} — place files there first" \
+                     "#{" (#{@hint})" if @hint}"
       end
       previous = state
       vanished, retired = classify_missing(previous, files)
