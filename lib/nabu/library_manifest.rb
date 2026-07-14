@@ -32,9 +32,12 @@ module Nabu
     # One catalogued item. +file+ is the path relative to the collection
     # dir; +license_class+ is always a valid class (the default applied);
     # +languages+/+tags+/+related+ are Arrays of Strings (possibly empty);
-    # +year+ is an Integer or nil; +title+ defaults to the file stem.
+    # +year+ is an Integer or nil; +title+ defaults to the file stem;
+    # +source_url+ is the ORIGINAL url a `nabu ingest URL` was given (the
+    # stable identity — mirror-node final urls rotate), nil for local
+    # ingests.
     Entry = Data.define(:file, :title, :creator, :year, :languages,
-                        :provenance, :license_class, :tags, :related)
+                        :provenance, :source_url, :license_class, :tags, :related)
 
     # Parse the manifest at +path+. Raises FormatError on any structural or
     # per-entry defect, naming the file and the offending entry.
@@ -60,8 +63,9 @@ module Nabu
         title: string_or_nil!(path, item, index, "title") || File.basename(item["file"], ".*"),
         creator: string_or_nil!(path, item, index, "creator"),
         year: year!(path, item, index),
-        languages: string_list!(path, item, index, "languages"),
+        languages: languages!(path, item, index),
         provenance: string_or_nil!(path, item, index, "provenance"),
+        source_url: string_or_nil!(path, item, index, "source_url"),
         license_class: license_class!(path, item, index),
         tags: string_list!(path, item, index, "tags"),
         related: string_list!(path, item, index, "related")
@@ -101,6 +105,19 @@ module Nabu
       raise FormatError, "#{path}: entry #{index + 1} (#{item['file']}): year must be an Integer, got #{year.inspect}"
     end
     private_class_method :year!
+
+    # Language tags must satisfy THE MODEL'S shape rule (Model::Validation
+    # .language!, reused — never a second regex) so a bad tag fails HERE, at
+    # parse, named like every other per-entry defect — not deep in the
+    # loader scan (P20-1, the 2026-07-14 "chu (body ger)" incident).
+    def self.languages!(path, item, index)
+      string_list!(path, item, index, "languages").each do |tag|
+        Model::Validation.language!(tag)
+      rescue Nabu::ValidationError => e
+        raise FormatError, "#{path}: entry #{index + 1} (#{item['file']}): #{e.message}"
+      end
+    end
+    private_class_method :languages!
 
     def self.string_or_nil!(path, item, index, key)
       value = item.fetch(key, nil)

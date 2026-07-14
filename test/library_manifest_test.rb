@@ -57,6 +57,36 @@ class LibraryManifestTest < Minitest::Test
     end
   end
 
+  def test_source_url_lane_parses_and_is_nil_when_absent
+    with_manifest("- file: a.pdf\n  source_url: https://archive.org/download/x/a.pdf\n") do |path|
+      entry = Nabu::LibraryManifest.load(path).entries.first
+      assert_equal "https://archive.org/download/x/a.pdf", entry.source_url
+    end
+    with_manifest("- file: a.pdf\n") do |path|
+      assert_nil Nabu::LibraryManifest.load(path).entries.first.source_url,
+                 "local ingests carry no source_url lane"
+    end
+  end
+
+  # P20-1 (the 2026-07-14 "chu (body ger)" incident): language tags are
+  # validated at PARSE with the model's own rule — a hand-edited bad tag
+  # fails early and named, never deep in the loader scan.
+  def test_a_bad_language_tag_fails_at_parse_naming_file_and_entry
+    with_manifest("- file: a.pdf\n- file: b.pdf\n  languages: [\"chu (body ger)\"]\n") do |path|
+      error = assert_raises(Nabu::LibraryManifest::FormatError) { Nabu::LibraryManifest.load(path) }
+      assert_match(/entry 2 \(b\.pdf\)/, error.message, "per-entry defects name the entry")
+      assert_includes error.message, path, "…and the file"
+      assert_match(%r{BCP-47/ISO-639}, error.message, "the model's rule, reused verbatim")
+      assert_match(/chu \(body ger\)/, error.message)
+    end
+  end
+
+  def test_good_language_tags_including_the_subtag_form_pass
+    with_manifest("- file: a.pdf\n  languages: [chu, grc-Grek, deu]\n") do |path|
+      assert_equal %w[chu grc-Grek deu], Nabu::LibraryManifest.load(path).entries.first.languages
+    end
+  end
+
   def test_unknown_license_class_fails_loudly_never_defaults_down
     with_manifest("- file: a.pdf\n  license_class: public\n") do |path|
       error = assert_raises(Nabu::LibraryManifest::FormatError) { Nabu::LibraryManifest.load(path) }
@@ -68,7 +98,8 @@ class LibraryManifestTest < Minitest::Test
   def test_structural_defects_raise_format_error
     ["file: not-a-list\n", "[]\n", "- just a string\n", "- title: no file key\n",
      "- file: ../escape.pdf\n", "- file: a.pdf\n  year: \"1871\"\n",
-     "- file: a.pdf\n  related: chu\n", "- {file: a.pdf}\n- {file: a.pdf}\n"].each do |yaml|
+     "- file: a.pdf\n  related: chu\n", "- {file: a.pdf}\n- {file: a.pdf}\n",
+     "- file: a.pdf\n  source_url: 42\n"].each do |yaml|
       with_manifest(yaml) do |path|
         assert_raises(Nabu::LibraryManifest::FormatError, "expected FormatError for #{yaml.inspect}") do
           Nabu::LibraryManifest.load(path)

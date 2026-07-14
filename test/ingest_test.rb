@@ -13,6 +13,9 @@ class IngestTest < Minitest::Test
     case File.basename(path)
     when "vaillant-1950-manuel.pdf" then ["Manuel du vieux slave\nGrammaire et textes.\n", "Deuxieme page.\n"]
     when "scan-plate.pdf", "leskien-1871-scan.pdf" then [""]
+    when "ocr-smoke.pdf" then ["01assJ£ Die altbulgarische Sprache.\n"] # the live Leskien OCR garbage
+    when "ocr-garbage.pdf" then ["01assJ£ 3,14 §§ 42\n"]
+    when "greek-smoke.pdf" then ["※ 123 λόγος ἦν\n"]
     else raise Nabu::PdfText::Error, "mutool text extraction failed for #{path} (rigged)"
     end
   end
@@ -47,15 +50,35 @@ class IngestTest < Minitest::Test
     end
   end
 
+  # An ask double that replays a QUEUE of answers per field-label prefix —
+  # the bad-then-good re-prompt rig (P20-1); exhausted queues answer ""
+  # (accept the default), like ScriptedAsk.
+  class QueuedAsk
+    attr_reader :asked
+
+    def initialize(queues)
+      @queues = queues.transform_values(&:dup)
+      @asked = []
+    end
+
+    def to_proc
+      lambda do |label, default|
+        @asked << [label, default]
+        key = @queues.keys.find { |k| label.start_with?(k) }
+        key && !@queues[key].empty? ? @queues[key].shift : ""
+      end
+    end
+  end
+
   def with_rig(resolver: Nabu::Ingest::AcceptResolver.new, overrides: {}, assist_command: nil,
-               assist_runner: nil, notify: nil)
+               assist_runner: nil, notify: nil, download: nil)
     Dir.mktmpdir("nabu-ingest") do |root|
       shelf = Nabu::LibraryShelf.new(dir: File.join(root, "canonical", "local-library"))
       notes = []
       engine = Nabu::Ingest.new(
         shelf: shelf, resolver: resolver, overrides: overrides,
         assist_command: assist_command, assist_runner: assist_runner || Nabu::Ingest::Assist.method(:run),
-        pdf_pages: FAKE_PDF_PAGES, pdf_info: FAKE_PDF_INFO,
+        pdf_pages: FAKE_PDF_PAGES, pdf_info: FAKE_PDF_INFO, download: download,
         notify: notify || ->(line) { notes << line }, now: Time.utc(2026, 7, 14)
       )
       yield engine, shelf, root, notes
@@ -146,7 +169,8 @@ class IngestTest < Minitest::Test
 
   def test_an_unmanifested_identical_copy_does_not_block_the_resume
     with_rig do |engine, shelf, root|
-      # An aborted earlier ingest left the copy but no manifest entry.
+      # A stray unmanifested copy (hand-copied, or the kill-between-copy-
+      # and-append crash window) must not block re-running the ingest.
       source = write_pdf(root, "vaillant-1950-manuel.pdf")
       FileUtils.mkdir_p(File.join(shelf.dir, "inbox"))
       FileUtils.cp(source, File.join(shelf.dir, "inbox", "vaillant-1950-manuel.pdf"))
@@ -170,14 +194,206 @@ class IngestTest < Minitest::Test
     end
   end
 
-  def test_a_bad_file_is_named_and_the_rest_proceed
+  # -- atomicity (P20-1, owner doctrine): the batch lands whole or not at all ----
+
+  def test_a_bad_file_aborts_the_whole_batch_and_canonical_is_untouched
     with_rig do |engine, shelf, root|
       good = write_pdf(root, "vaillant-1950-manuel.pdf")
       outcomes = engine.add_files([File.join(root, "ghost.pdf"), good])
-      assert_equal %i[failed added], outcomes.map(&:status)
+      assert_equal %i[failed aborted], outcomes.map(&:status),
+                   "the defect is named; the valid file does NOT half-land"
       assert_match(/ghost\.pdf/, outcomes.first.message)
       refute_predicate outcomes.first, :ok?
-      assert shelf.manifested?("inbox", "vaillant-1950-manuel.pdf")
+      assert_match(/batch aborted, canonical untouched/, outcomes.last.message)
+      refute Dir.exist?(shelf.dir), "no copy, no manifest — canonical is byte-identical"
+    end
+  end
+
+  def test_a_failed_download_in_a_mixed_batch_aborts_the_local_file_too
+    stub_request(:get, ARCHIVE_URL).to_return(status: 404)
+    with_rig do |engine, shelf, root|
+      good = write_pdf(root, "vaillant-1950-manuel.pdf")
+      outcomes = engine.add_files([ARCHIVE_URL, good])
+      assert_equal %i[failed aborted], outcomes.map(&:status)
+      assert_match(/HTTP 404/, outcomes.first.message)
+      refute Dir.exist?(shelf.dir), "canonical untouched — nothing to clean up, nothing half-landed"
+    end
+  end
+
+  def test_an_executable_file_is_refused_and_aborts_the_batch
+    with_rig do |engine, shelf, root|
+      rogue = write_pdf(root, "bin-nabu", "#!/usr/bin/env ruby\n")
+      File.chmod(0o755, rogue)
+      good = write_pdf(root, "vaillant-1950-manuel.pdf")
+      outcomes = engine.add_files([rogue, good])
+      assert_equal %i[failed aborted], outcomes.map(&:status)
+      assert_match(/bin-nabu is executable \(mode \+x\) — refusing; shelf material never runs/,
+                   outcomes.first.message)
+      refute Dir.exist?(shelf.dir), "the live incident catalogued bin/nabu itself — never again"
+    end
+  end
+
+  def test_a_freak_append_failure_rolls_the_copy_back
+    with_rig do |engine, shelf, root|
+      def shelf.append_entry!(**)
+        raise Nabu::LibraryShelf::Error, "disk full (rigged)"
+      end
+      outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
+      assert_equal :failed, outcome.status
+      assert_match(/disk full \(rigged\) — copy rolled back/, outcome.message)
+      refute_path_exists File.join(shelf.dir, "inbox", "vaillant-1950-manuel.pdf"),
+                         "the compensating delete — canonical never keeps a stray"
+      refute_path_exists shelf.manifest_path("inbox")
+    end
+  end
+
+  def test_a_successful_batch_lands_every_file_and_entry
+    with_rig do |engine, shelf, root|
+      outcomes = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf"),
+                                   write_pdf(root, "scan-plate.pdf")])
+      assert_equal %i[added added], outcomes.map(&:status)
+      entries = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries
+      assert_equal %w[vaillant-1950-manuel.pdf scan-plate.pdf], entries.map(&:file)
+      outcomes.each { |outcome| assert_path_exists File.join(shelf.dir, "inbox", outcome.file) }
+    end
+  end
+
+  def test_intra_batch_duplicate_names_are_caught_at_the_rehearsal
+    with_rig do |engine, shelf, root|
+      nested = File.join(root, "again")
+      FileUtils.mkdir_p(nested)
+      first = write_pdf(root, "vaillant-1950-manuel.pdf", "first bytes")
+      second_path = File.join(nested, "vaillant-1950-manuel.pdf")
+      File.write(second_path, "different bytes, same basename")
+      outcomes = engine.add_files([first, second_path])
+      assert_equal %i[aborted failed], outcomes.map(&:status),
+                   "two new files with one target name can never both be entries"
+      assert_match(/manifest rehearsal: duplicate entry/, outcomes.last.message)
+      refute Dir.exist?(shelf.dir)
+    end
+  end
+
+  # -- url intake (P20-0): download first, then the exact same pipeline ----------
+
+  ARCHIVE_URL = "https://archive.org/download/handbuch/leskien-1871-notes.txt"
+
+  def test_a_url_downloads_then_flows_through_the_same_intake_with_the_source_url_lane
+    stub_request(:get, ARCHIVE_URL).to_return(status: 200, body: "Die altbulgarische Sprache.\n")
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :added, outcome.status
+      assert_equal "urn:nabu:local-library:inbox:leskien-1871-notes", outcome.urn
+      copied = File.join(shelf.dir, "inbox", "leskien-1871-notes.txt")
+      assert_equal "Die altbulgarische Sprache.\n", File.read(copied)
+      entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
+      assert_equal ARCHIVE_URL, entry.source_url, "the manifest records the url the owner gave"
+      assert_equal "ingested 2026-07-14 from #{ARCHIVE_URL}", entry.provenance,
+                   "provenance names the url, never the ephemeral staging path"
+      assert_equal 1871, entry.year, "filename heuristics run on the derived name"
+    end
+  end
+
+  def test_a_redirected_url_ingests_the_final_body_but_records_the_original_url
+    mirror = "https://ia601500.us.archive.org/5/items/handbuch/leskien-1871-notes.txt"
+    stub_request(:get, ARCHIVE_URL).to_return(status: 302, headers: { "Location" => mirror })
+    stub_request(:get, mirror).to_return(status: 200, body: "mirror body\n")
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :added, outcome.status
+      assert_equal "mirror body\n", File.read(File.join(shelf.dir, "inbox", "leskien-1871-notes.txt"))
+      entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
+      assert_equal ARCHIVE_URL, entry.source_url,
+                   "mirror-node urls rotate — the original url is the stable identity"
+    end
+  end
+
+  def test_a_failed_download_is_a_named_failure_with_no_shelf_mutation
+    stub_request(:get, ARCHIVE_URL).to_return(status: 404)
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :failed, outcome.status
+      assert_match(/HTTP 404/, outcome.message)
+      refute Dir.exist?(shelf.dir), "no copy, no manifest — the shelf is untouched"
+    end
+  end
+
+  def test_mixed_batch_url_and_local_file_both_land
+    stub_request(:get, ARCHIVE_URL).to_return(status: 200, body: "url body\n")
+    with_rig do |engine, shelf, root|
+      local = write_pdf(root, "vaillant-1950-manuel.pdf")
+      outcomes = engine.add_files([ARCHIVE_URL, local])
+      assert_equal %i[added added], outcomes.map(&:status)
+      entries = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries
+      assert_equal [ARCHIVE_URL, nil], entries.map(&:source_url),
+                   "the source_url lane exists only for url ingests"
+    end
+  end
+
+  def test_local_ingests_write_no_source_url_lane
+    with_rig do |engine, shelf, root|
+      engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")])
+      refute_match(/source_url/, File.read(shelf.manifest_path("inbox")),
+                   "omit-when-empty — the manifest style")
+    end
+  end
+
+  def recording_download(events)
+    download = Object.new
+    download.define_singleton_method(:fetch) do |url, dir:|
+      events << [:download, url]
+      path = File.join(dir, File.basename(url))
+      File.write(path, "downloaded body\n")
+      path
+    end
+    download
+  end
+
+  def recording_resolver(events)
+    Nabu::Ingest::PromptResolver.new(ask: lambda do |label, _default|
+      events << [:ask, label]
+      ""
+    end)
+  end
+
+  def test_staging_completes_downloads_and_existence_checks_before_any_prompt
+    events = []
+    with_rig(resolver: recording_resolver(events), download: recording_download(events)) do |engine, _shelf, root|
+      local = write_pdf(root, "vaillant-1950-manuel.pdf")
+      outcomes = engine.add_files(["https://example.org/a.txt", local])
+      assert_equal %i[added added], outcomes.map(&:status)
+      asks = events.each_index.select { |i| events[i].first == :ask }
+      downloads = events.each_index.select { |i| events[i].first == :download }
+      refute_empty asks
+      refute_empty downloads
+      assert_operator downloads.max, :<, asks.min,
+                      "ALL staging (downloads, existence checks) precedes ANY categorization prompt"
+    end
+  end
+
+  def test_a_staging_defect_asks_no_questions_at_all
+    events = []
+    with_rig(resolver: recording_resolver(events), download: recording_download(events)) do |engine, shelf, root|
+      outcomes = engine.add_files([File.join(root, "ghost.pdf"), "https://example.org/a.txt"])
+      assert_equal %i[failed aborted], outcomes.map(&:status)
+      assert(events.none? { |kind, _| kind == :ask },
+             "a batch that cannot land never wastes a prompt (atomic prepare, P20-1)")
+      refute Dir.exist?(shelf.dir)
+    end
+  end
+
+  def test_the_staging_dir_dissolves_after_the_batch
+    dirs = []
+    download = Object.new
+    download.define_singleton_method(:fetch) do |_url, dir:|
+      dirs << dir
+      path = File.join(dir, "a.txt")
+      File.write(path, "body\n")
+      path
+    end
+    with_rig(download: download) do |engine, shelf, _root|
+      engine.add_files(["https://example.org/a.txt"])
+      refute Dir.exist?(dirs.first), "the temp download is cleaned up — the shelf copy is the record"
+      assert shelf.manifested?("inbox", "a.txt")
     end
   end
 
@@ -210,13 +426,114 @@ class IngestTest < Minitest::Test
     end
   end
 
-  def test_an_invalid_license_class_fails_loudly_naming_the_vocabulary
-    ask = ScriptedAsk.new("license_class" => "public-domainish")
-    with_rig(resolver: Nabu::Ingest::PromptResolver.new(ask: ask.to_proc)) do |engine, _shelf, root|
+  # -- validation at the resolver seam (P20-1, the "chu (body ger)" incident) ----
+
+  INCIDENT = "chu (body ger)"
+
+  def test_interactive_reprompts_an_invalid_languages_answer_with_a_one_line_reason
+    ask = QueuedAsk.new("languages" => [INCIDENT, "chu, deu"])
+    warnings = []
+    resolver = Nabu::Ingest::PromptResolver.new(ask: ask.to_proc, warn: ->(line) { warnings << line })
+    with_rig(resolver: resolver) do |engine, shelf, root|
+      outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
+      assert_equal :added, outcome.status
+      assert_equal 2, ask.asked.count { |label, _| label.start_with?("languages") }, "the prompt repeated"
+      assert_equal ['"chu (body ger)" is not a language tag — give comma-separated codes like: chu, deu'],
+                   warnings
+      entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
+      assert_equal %w[chu deu], entry.languages
+    end
+  end
+
+  def test_interactive_reprompts_an_invalid_license_class_naming_the_vocabulary
+    ask = QueuedAsk.new("license_class" => %w[public-domainish open])
+    warnings = []
+    resolver = Nabu::Ingest::PromptResolver.new(ask: ask.to_proc, warn: ->(line) { warnings << line })
+    with_rig(resolver: resolver) do |engine, shelf, root|
+      outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
+      assert_equal :added, outcome.status
+      assert_match(/license_class must be one of open, attribution, nc, research_private, restricted/,
+                   warnings.first)
+      assert_equal "open", Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first.license_class
+    end
+  end
+
+  def test_interactive_dash_escapes_the_reprompt_loop_by_clearing_the_field
+    ask = QueuedAsk.new("languages" => [INCIDENT, "-"])
+    resolver = Nabu::Ingest::PromptResolver.new(ask: ask.to_proc, warn: ->(_line) {})
+    with_rig(resolver: resolver) do |engine, shelf, root|
+      outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
+      assert_equal :added, outcome.status
+      assert_empty Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first.languages
+    end
+  end
+
+  def test_yes_mode_fails_a_bad_languages_flag_in_prepare_and_nothing_is_written
+    with_rig(overrides: { "languages" => INCIDENT }) do |engine, shelf, root|
+      outcomes = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf"),
+                                   write_pdf(root, "scan-plate.pdf")])
+      assert_equal %i[failed failed], outcomes.map(&:status), "every defect is named (the flag hits both)"
+      assert_match(/"chu \(body ger\)" is not a language tag — give comma-separated codes like: chu, deu/,
+                   outcomes.first.message)
+      refute Dir.exist?(shelf.dir), "validation fires in PREPARE — no copy, no manifest, canonical untouched"
+    end
+  end
+
+  def test_an_invalid_license_class_flag_fails_the_file_naming_the_vocabulary
+    with_rig(overrides: { "license_class" => "public-domainish" }) do |engine, shelf, root|
       outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
       assert_equal :failed, outcome.status
       assert_match(/license_class must be one of open, attribution, nc, research_private, restricted/,
                    outcome.message)
+      refute Dir.exist?(shelf.dir)
+    end
+  end
+
+  # The incident, pinned end to end: no resolver mode can land the exact
+  # poison string in a manifest (interactive loops, --yes fails in prepare,
+  # and an assist suggestion only prefills the same guarded seam) — and a
+  # batch containing it lands NOTHING.
+  def test_the_incident_string_can_never_reach_a_manifest_via_any_resolver_mode
+    with_rig(overrides: { "languages" => INCIDENT }) do |engine, shelf, root|
+      outcomes = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")])
+      assert_equal [:failed], outcomes.map(&:status), "--yes: refused in prepare"
+      refute Dir.exist?(shelf.dir)
+    end
+    suggestion = Nabu::Ingest::Assist::Result.new(status: 0, suggestion: { "languages" => [INCIDENT] },
+                                                  output: "")
+    ask = QueuedAsk.new("languages" => ["", "-"]) # Enter keeps the poisoned prefill → re-prompt → clear
+    resolver = Nabu::Ingest::PromptResolver.new(ask: ask.to_proc, warn: ->(_line) {})
+    with_rig(resolver: resolver, assist_command: "my-assist",
+             assist_runner: canned_assist(suggestion)) do |engine, shelf, root|
+      outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
+      assert_equal :added, outcome.status
+      refute_match(/body ger/, File.read(shelf.manifest_path("inbox")),
+                   "an assist suggestion prefills the guarded prompt — it can never land unvalidated")
+    end
+  end
+
+  # -- the search-hint rider (P20-1): a real word or no hint at all --------------
+
+  def test_search_hint_skips_ocr_garbage_for_the_first_alphabetic_word
+    with_rig do |engine, _shelf, root|
+      outcome = engine.add_files([write_pdf(root, "ocr-smoke.pdf")]).first
+      assert_equal "altbulgarische", outcome.search_term,
+                   "digit/symbol-riddled OCR tokens are not words; length < 4 skipped too"
+    end
+  end
+
+  def test_search_hint_counts_unicode_letters_as_alphabetic
+    with_rig do |engine, _shelf, root|
+      outcome = engine.add_files([write_pdf(root, "greek-smoke.pdf")]).first
+      assert_equal "λόγος", outcome.search_term
+    end
+  end
+
+  def test_search_hint_is_omitted_when_the_sample_is_all_garbage
+    with_rig do |engine, _shelf, root|
+      outcome = engine.add_files([write_pdf(root, "ocr-garbage.pdf")]).first
+      assert_equal :added, outcome.status
+      assert_nil outcome.search_term, "junk is worse than no hint (the live `search 01assJ£` epilogue)"
     end
   end
 
