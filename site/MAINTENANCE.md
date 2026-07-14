@@ -19,6 +19,11 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    sizes (the starter shelf and the growth table) — re-measure (`du -sh`
    of the live canonical dirs) when a listed shelf changes materially,
    and keep it consistent with what `bin/nabu quickstart` prints.
+   faq.md restates a few of these figures (starter-shelf and full-build
+   sizes, source/document counts, the class percentages) — re-check its
+   dated numbers against quickstart.md/library.md/index.md at the same
+   pass, and keep its answers truthful when postures, funnels, or the
+   citation story (a DOI is planned) change.
 2. **New shelves/sources**: a new synced source gets its row/paragraph on
    library.md + sources.md (upstream link, license, class). A source
    flipped from pending to live moves out of the "awaiting first
