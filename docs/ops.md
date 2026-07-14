@@ -831,7 +831,7 @@ urns plus a `try:` epilogue. Arguments may also be http(s) urls (P20-0):
 the file is downloaded first (redirects followed — archive.org's mirror
 hop included) and then treated exactly like a local file, with the url
 you gave recorded in the entry's `source_url:` lane; a failed download
-is one named `FAILED` line and the rest of the batch proceeds.
+is one named `FAILED` line — and aborts the batch (atomicity, below).
 
 Operational notes:
 
@@ -850,12 +850,20 @@ Operational notes:
   `research_private` (MCP-excluded, never served, never redistributed).
   Silence in the manifest MEANS that class; pass `--license-class open`
   (or answer the prompt) only for genuinely open items.
+- **Atomic, all-or-nothing (P20-1).** Everything fallible — downloads,
+  existence and no-executables checks (mode `+x` is refused; shelf
+  material never runs), categorization, and validation of every field
+  against the manifest's own rules (language tags included) — happens
+  BEFORE any write to canonical/. A defect anywhere is one named `FAILED`
+  line per problem, every other file prints `aborted`, canonical/ stays
+  byte-identical, exit 1. Fix the input and re-run the batch. Interactive
+  prompts re-ask with a one-line reason on an invalid answer (`-` clears
+  the field), so a typo can't fail the batch. The one residual crash
+  window (a hard kill between the copy and the manifest append) leaves an
+  unmanifested file that the next sync's discovery census names loudly.
 - **Same name, new bytes** is an ordinary revision — the copy is replaced
   and the sync records it; metadata corrections are manifest edits, not
-  re-ingests. A bad file is named and the rest proceed (exit 1 at the
-  end). An ingest aborted mid-prompt leaves the copied file visible in the
-  discovery census as `unmanifested`; re-running the same ingest finishes
-  the cataloguing.
+  re-ingests.
 - **`--shelf language CODE`** scaffolds a language dossier skeleton
   (name/family/context, same three modes) through `Nabu::LanguageShelf`
   and syncs the dossier shelf — a scaffold, not an editor; edit

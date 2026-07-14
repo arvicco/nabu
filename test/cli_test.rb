@@ -894,7 +894,11 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_ingest_names_the_bad_file_the_rest_proceed_and_the_exit_is_one
+  # P20-1 owner doctrine: a batch lands WHOLE or not at all — a defect
+  # anywhere names itself, the valid files say aborted, canonical is
+  # byte-identical, exit 1. (Replaces the old bad-file-named-rest-proceed
+  # ladder, which let a typo'd batch half-land.)
+  def test_ingest_names_the_bad_file_and_aborts_the_whole_batch
     with_ingest_env do |config, root|
       source = write_note(root)
       out, err, status = with_config(config) do
@@ -902,10 +906,41 @@ class CLITest < Minitest::Test
       end
       assert_equal 1, status
       assert_match(/FAILED\s+ghost\.pdf/, out)
-      assert_match(%r{added\s+reading-notes\.txt → inbox/reading-notes\.txt}, out,
-                   "the default collection is #{Nabu::Ingest::DEFAULT_COLLECTION}")
-      assert_match(/minted:/, out, "the good file still lands and syncs")
+      assert_match(/aborted\s+reading-notes\.txt — not ingested — batch aborted, canonical untouched/, out)
+      refute_match(/minted:/, out, "nothing lands, nothing syncs")
+      refute Dir.exist?(File.join(config.canonical_dir, "local-library")), "canonical untouched"
       assert_match(/1 of 2 file\(s\) failed/, err)
+    end
+  end
+
+  # P20-1 (the "chu (body ger)" incident): a bad --languages flag is one
+  # named FAILED line from the PREPARE phase — no copy, no manifest entry,
+  # canonical byte-identical; the manifest can never be poisoned.
+  def test_ingest_yes_with_a_bad_languages_flag_fails_in_prepare_touching_nothing
+    with_ingest_env do |config, root|
+      source = write_note(root)
+      out, err, status = with_config(config) do
+        run_cli(["ingest", source, "--yes", "--languages", "chu (body ger)"])
+      end
+      assert_equal 1, status
+      assert_match(/FAILED\s+reading-notes\.txt — .*"chu \(body ger\)" is not a language tag/, out)
+      refute_match(/minted:/, out)
+      assert_match(/1 of 1 file\(s\) failed/, err)
+      refute Dir.exist?(File.join(config.canonical_dir, "local-library")),
+             "atomic: a failed ingest leaves canonical byte-identical — no stray copy, no manifest"
+    end
+  end
+
+  def test_ingest_refuses_an_executable_file_with_an_honest_line
+    with_ingest_env do |config, root|
+      rogue = File.join(root, "nabu")
+      File.write(rogue, "#!/usr/bin/env ruby\n")
+      File.chmod(0o755, rogue)
+      out, _err, status = with_config(config) { run_cli(["ingest", rogue, "--yes"]) }
+      assert_equal 1, status
+      assert_match(/FAILED\s+nabu — nabu is executable \(mode \+x\) — refusing; shelf material never runs/,
+                   out)
+      refute Dir.exist?(File.join(config.canonical_dir, "local-library"))
     end
   end
 

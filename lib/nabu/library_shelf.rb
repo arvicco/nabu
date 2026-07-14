@@ -79,8 +79,10 @@ module Nabu
     # Append one entry (a String-keyed Hash, "file" required) to the
     # collection's manifest, creating collection dir + manifest if new.
     # Append-only: existing bytes (entries, owner comments) are never
-    # rewritten. The result is re-validated through LibraryManifest so a bad
-    # append can never land silently.
+    # rewritten. The result is re-validated through LibraryManifest and a
+    # rejected append is ROLLED BACK (truncated to the prior bytes) — a bad
+    # entry can never land at all, the loader-facing invariant `nabu
+    # ingest` promises (P20-1).
     def append_entry!(collection:, entry:)
       validate_collection!(collection)
       file = entry.fetch("file")
@@ -89,15 +91,36 @@ module Nabu
 
       path = manifest_path(collection)
       FileUtils.mkdir_p(File.dirname(path))
-      File.write(path, render_entry(entry, exists: File.file?(path)), mode: "a")
-      LibraryManifest.load(path)
+      prior_size = File.file?(path) ? File.size(path) : nil
+      File.write(path, render_entry(entry, exists: !prior_size.nil?), mode: "a")
+      revalidate!(path, prior_size)
       path
-    rescue LibraryManifest::FormatError => e
-      raise Error, "manifest append failed validation: #{e.message}"
     end
 
     def manifest_path(collection)
       File.join(@dir, collection, LibraryManifest::FILENAME)
+    end
+
+    # The collection's FUTURE manifest bytes with +entries+ appended — the
+    # prepare-phase rehearsal material (P20-1): the ingest engine parses
+    # these through LibraryManifest against a STAGING file to prove the
+    # eventual append cannot be rejected. Reads only, renders identically
+    # to append_entry! (same render_entry, byte for byte).
+    def future_manifest(collection, entries)
+      base = File.file?(manifest_path(collection)) ? File.read(manifest_path(collection)) : ""
+      entries.reduce(base) { |content, entry| content + render_entry(entry, exists: !content.empty?) }
+    end
+
+    # Compensating delete for a failed commit (P20-1): remove the file just
+    # copied in when its manifest append failed — canonical never keeps a
+    # stray. Only the ingest engine's rollback path calls this; it refuses
+    # anything already manifested (that would be a hard delete of record).
+    def remove_copy!(collection:, file:)
+      raise Error, "#{collection}/#{file} is manifested — not a stray, refusing to remove" \
+        if manifested?(collection, file)
+
+      target = File.join(@dir, collection, file)
+      File.delete(target) if File.file?(target)
     end
 
     private
@@ -107,6 +130,15 @@ module Nabu
     def render_entry(entry, exists:)
       item = YAML.dump([entry]).delete_prefix("---\n")
       exists ? "\n#{item}" : item
+    end
+
+    # +prior_size+ nil means the append created the file (delete it whole);
+    # otherwise truncate back to the owner's untouched prior bytes.
+    def revalidate!(path, prior_size)
+      LibraryManifest.load(path)
+    rescue LibraryManifest::FormatError => e
+      prior_size.nil? ? File.delete(path) : File.truncate(path, prior_size)
+      raise Error, "manifest append failed validation: #{e.message}"
     end
 
     def validate_collection!(collection)
