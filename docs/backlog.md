@@ -6170,4 +6170,11 @@ where it appears), unknown code → honest miss + nearest-family hint.
 Consider (argue, don't assume): a one-line name hint in etym's grouped
 reflex lists where the terminal is wide enough vs keeping the render
 compact and pointing at the command. languages.md gains a pointer;
-MCP tool deferred unless trivially clean.
+MCP tool deferred unless trivially clean. OWNER DESIGN CHANGE mid-packet
+(2026-07-14): "we probably need a per-language info persistence layer
+with accumulatable data, not just hardcoded stubs/hit counts" — languages
+become a persisted entity: DERIVED layer (names/counts, rebuildable,
+catalog) + ACCUMULATED layer (curated context/notes/references,
+survives rebuild — journal-style per the links precedent, provenance
+per record) + an idempotent git-reviewable seed loader; the command
+reads the merged view. Agent re-briefed in flight.
