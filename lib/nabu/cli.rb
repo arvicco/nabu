@@ -26,6 +26,10 @@ module Nabu
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
+    option :review, type: :string, banner: "CMD",
+                    desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
+                          "the hook's exit status is reported, never fails the sync). " \
+                          "Example: --review script/review-sync-claude. Single-source sync only."
     def sync(slug = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -34,10 +38,101 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db)
+      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db, ledger)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
+      raise Thor::Error, e.message
+    ensure
+      db&.disconnect
+      ledger&.disconnect
+    end
+
+    # -- quickstart (P18-2): the starter shelf --------------------------------
+
+    # One starter source: its registry slug, its measured canonical footprint
+    # (du -sh of the live tree, git history included), and what it unlocks.
+    StarterSource = Data.define(:slug, :size, :blurb)
+
+    # The curated starter shelf: the smallest set of real sources that delivers
+    # the library's three signature surfaces in minutes — align "MARK 2.3"
+    # (seven witnesses: sblgnt + the five PROIEL NT texts + the ISWOC
+    # West-Saxon Mark), search --lemma (PROIEL gold annotations), and
+    # define λόγος / virtus (LSJ + Lewis & Short). Sizes measured 2026-07-13.
+    # vulgate/eng-web were weighed and excluded: each is a full open-bibles
+    # clone (357 MB) for one USFX file — the first "grow the library" step
+    # instead. Order: quick wins first, the big dictionary clone last.
+    STARTER_SOURCES = [
+      StarterSource.new(slug: "sblgnt", size: "~11 MB",
+                        blurb: "SBL Greek New Testament — the align hub's second Greek witness (CC BY)"),
+      StarterSource.new(slug: "proiel", size: "~175 MB",
+                        blurb: "PROIEL treebank — NT in Greek, Latin, Gothic, Armenian, OCS; gold lemmas (nc)"),
+      StarterSource.new(slug: "iswoc", size: "~30 MB",
+                        blurb: "ISWOC treebank — the West-Saxon gospels, Old English (nc)"),
+      StarterSource.new(slug: "lexica", size: "~480 MB",
+                        blurb: "LSJ + Lewis & Short — the dictionary shelf (CC BY-SA)")
+    ].freeze
+    # The whole shelf on disk (sum of the measured sizes above).
+    STARTER_TOTAL = "~690 MB"
+
+    # Class-method accessor so tests can pin a fixture-backed starter list
+    # (the Config.load swap pattern) without touching the shipped constant.
+    def self.starter_sources = STARTER_SOURCES
+
+    desc "quickstart", "Sync the starter shelf (#{STARTER_SOURCES.map(&:slug).join(' → ')}) " \
+                       "and print what to try first"
+    long_desc <<~HELP, wrap: false
+      The zero-to-first-marvel path for a fresh clone: sync the curated STARTER
+      SHELF — four small sources, #{STARTER_TOTAL} canonical on disk (measured
+      2026-07-13), minutes on an ordinary connection — then print the first
+      three commands to try:
+
+        sblgnt   ~11 MB    SBL Greek New Testament (CC BY)
+        proiel   ~175 MB   PROIEL treebank: the NT in Greek, Latin, Gothic,
+                           Armenian, and Old Church Slavonic, with gold
+                           lemma/morphology annotations (nc)
+        iswoc    ~30 MB    ISWOC treebank: the West-Saxon gospels — Old
+                           English as an alignment witness (nc)
+        lexica   ~480 MB   LSJ + Lewis & Short, the dictionary shelf (CC BY-SA)
+
+      Together they light the three signature surfaces: `align "MARK 2.3"`
+      (one verse across seven witnesses), `search --lemma λέγω`
+      (dictionary-form search over the gold treebanks — λέγουσι, εἶπας,
+      εἰπεῖν all found), and `define λόγος` / `define virtus` (the full
+      dictionary entries, citations resolved into your own catalog).
+
+      Each source syncs through its NORMAL path (fetch → load → index), so
+      the command is idempotent — a re-run is an ordinary re-sync — and one
+      source's failure never stops the rest: failures are reported at the
+      end, and the exit status is 1 if any source failed. --list prints the
+      set (with sizes) and exits without touching the network.
+
+      Examples:
+        nabu quickstart          # sync the starter shelf, then try the printed commands
+        nabu quickstart --list   # what would be synced, and why
+
+      Use cases: a new install's first minutes; the README/site Quickstart's
+      one command; rebuilding a demo box.
+    HELP
+    option :list, type: :boolean, default: false,
+                  desc: "Print the starter set (slugs, sizes, what each unlocks) and exit without syncing"
+    def quickstart
+      return print_starter_list if options[:list]
+
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      # Ledger FIRST, as in sync: open_or_create_ledger lifts a pre-P7-1
+      # catalog's history before open_or_create_catalog migrates it away.
+      ledger = open_or_create_ledger(config)
+      db = open_or_create_catalog(config)
+      runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
+      failures = run_starter_syncs(runner)
+      print_quickstart_epilogue(failures)
+      unless failures.empty?
+        raise Thor::Error, "quickstart: #{failures.size} of #{self.class.starter_sources.size} starter " \
+                           "sources failed — re-run bin/nabu quickstart, or sync each by name (bin/nabu sync <slug>)"
+      end
+    rescue Nabu::Error => e
       raise Thor::Error, e.message
     ensure
       db&.disconnect
@@ -938,12 +1033,15 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
                                    .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_define_results(lemma, results)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+      ledger&.disconnect
     end
 
     desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
@@ -1002,12 +1100,77 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
       results = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
                                  .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_etym_results(lemma, results)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+      ledger&.disconnect
+    end
+
+    desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
+    long_desc <<~HELP, wrap: false
+      Explains any language code the library surfaces — the corpus tags
+      (chu, orv, san-Latn) and the Wiktionary etymology codes the etym
+      cognate lists are full of (gkm, zle-ort, zlw-opl…). The card merges
+      three layers:
+
+      - NAME, derived from the held kaikki extracts: every descendants node
+        carries the human name next to its code, censused into the catalog
+        with the dictionary shelves (a catalog predating that census shows
+        names only for curated codes until the next rebuild or parse-only
+        shelf resync).
+      - CONTEXT, curated and accumulated in the history ledger: period,
+        family, what the library holds — every held language, plus
+        family-level entries for the etymology tail (zle-* East Slavic
+        stages, gkm Medieval Greek…). A code without its own note falls
+        back to its family; without either it says so honestly.
+      - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
+        dictionary shelves, reconstruction-crosswalk edges. Zero fields
+        are suppressed.
+
+      --long adds where-it-appears detail: per-source document counts and
+      the upstream-code split of the etymology edges (chu's edges arrive
+      as Wiktionary's "cu"). --list shows the held languages only — the
+      ~800-code etymology tail is what `language CODE` is for. --seed
+      loads config/languages.yml into the ledger's language notes
+      (idempotent; run after editing the curation).
+
+      Examples:
+        nabu language zle-ort      # the code from an etym cognate list
+        nabu language chu --long   # a held language, full holdings
+        nabu language --list       # every held language
+    HELP
+    option :list, type: :boolean, default: false,
+                  desc: "List the held languages (corpus documents, gold lemmas, or a shelf)"
+    option :seed, type: :boolean, default: false,
+                  desc: "Load config/languages.yml into the ledger's language notes (idempotent)"
+    option :long, type: :boolean, default: false,
+                  desc: "Add per-source document counts and the upstream-code edge split"
+    def language(code = nil)
+      config = Nabu::Config.load
+      return seed_language_notes(config) if options[:seed]
+
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      info = catalog && Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext)
+      if options[:list]
+        print_language_list(languages, info)
+      else
+        term = code.to_s.strip
+        raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
+
+        print_language_card(term, languages, info)
+      end
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+      ledger&.disconnect
     end
 
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
@@ -2645,11 +2808,21 @@ module Nabu
       # long tail (a Proto-Slavic root can name 25+ descendants) stays readable
       # — languages in first-seen (stored depth-first) order, forms within a
       # language in stored order. Nothing is elided under the flag.
+      # P18-4 render verdict: each group header carries the code's NAME
+      # inline when the library knows one ("[gkm · Medieval Greek]") — one
+      # name per LINE, so the compact rule holds exactly where the owner's
+      # pain was; the capped default stays code-only (ten names inline would
+      # blow the line) and etym's footer points at `nabu language` instead.
       def print_reflexes_expanded(rest)
         say "other reflexes (not attested here) — all #{rest.size}, grouped by language:"
         rest.group_by(&:lang_code).each do |lang_code, group|
-          say "  [#{lang_code}] #{group.map { |r| reflex_form(r) }.join(', ')}"
+          say "  #{reflex_group_label(lang_code)} #{group.map { |r| reflex_form(r) }.join(', ')}"
         end
+      end
+
+      def reflex_group_label(lang_code)
+        name = @languages&.name(lang_code)
+        name ? "[#{lang_code} · #{name}]" : "[#{lang_code}]"
       end
 
       # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
@@ -2678,6 +2851,10 @@ module Nabu
           say "" if index.positive?
           print_etym_entry(result, 0)
         end
+        # P18-4: one footer line, the desk-reference pointer — the compact
+        # render keeps raw codes, this names the way out.
+        say ""
+        say "codes: nabu language CODE — name, context, and what this library holds"
       end
 
       def print_etym_entry(result, depth)
@@ -2701,6 +2878,149 @@ module Nabu
         prefix = via ? "#{via.word} [#{via.language}]#{' (loan)' if via.borrowed} → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
+      end
+
+      # -- language (P18-4): the code desk reference ------------------------------
+
+      def seed_language_notes(config)
+        ledger = open_or_create_ledger(config)
+        report = Nabu::Languages.seed!(ledger: ledger)
+        say "language notes: #{report.appended} seeded, #{report.unchanged} unchanged " \
+            "(config/languages.yml → ledger)"
+      ensure
+        ledger&.disconnect
+      end
+
+      # The card: headline (code — name), family line, curated context (or
+      # the family's, labeled; or an honest absence), accreted extra-kind
+      # notes (P18-5 — "iecor: IE-CoR variety: …", one line per kind), then
+      # live relevance with zero fields suppressed. An unknown code misses
+      # honestly, with a family hint when the prefix is a known family.
+      def print_language_card(code, languages, info)
+        name = languages.name(code)
+        context = languages.context(code)
+        extras = languages.extra_notes(code)
+        fallback = languages.family_fallback(code)
+        relevance = info&.relevance(code)
+        held = relevance && !relevance.empty?
+        return print_language_miss(code, fallback) unless name || context || held || extras.any?
+
+        say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
+        print_language_family(code, languages, fallback)
+        print_language_context(context, fallback)
+        extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
+        print_language_witnesses(code, languages)
+        print_language_relevance(code, relevance) if relevance
+      end
+
+      # P18-6: the per-source witness notes (kind "witness:<slug>" — what
+      # each held source says about this language stage; LIV/EDL accrete
+      # them at sync with per-record provenance). One wrapped line per
+      # source, quiet when none.
+      def print_language_witnesses(code, languages)
+        languages.witnesses(code).each do |source, body|
+          say_wrapped("witness (#{source}): #{body}", indent: 2)
+        end
+      end
+
+      def print_language_miss(code, fallback)
+        say "#{code} — unknown here: no held text, no shelf, no etymology edge, " \
+            "and no name in the held kaikki extracts"
+        if fallback
+          hint = [fallback.name, fallback.context].compact.join(": ")
+          say_wrapped("family hint: #{fallback.code}-* — #{hint}", indent: 2)
+        end
+        say "  held languages: nabu language --list"
+      end
+
+      def print_language_family(code, languages, fallback)
+        family = languages.family(code)
+        if family
+          say_wrapped("family: #{family}", indent: 2)
+        elsif fallback&.name
+          say_wrapped("family: #{fallback.code}-* — #{fallback.name}", indent: 2)
+        end
+      end
+
+      def print_language_context(context, fallback)
+        if context
+          say_wrapped(context, indent: 2)
+        elsif fallback&.context
+          say_wrapped("(no curated note for this code — its #{fallback.code}-* family:) " \
+                      "#{fallback.context}", indent: 2)
+        else
+          say "  (no curated note)"
+        end
+      end
+
+      def print_language_relevance(code, rel)
+        corpus = []
+        corpus << plural(rel.documents, "document") if rel.documents.positive?
+        corpus << "#{commas(rel.passages)} passages" if rel.passages.positive?
+        say "  corpus: #{corpus.join(' · ')}" unless corpus.empty?
+        say "  gold lemmas: #{commas(rel.lemma_rows)} rows (nabu search --lemma)" if rel.lemma_rows.positive?
+        unless rel.shelves.empty?
+          shelf_list = rel.shelves.map { |shelf| "#{shelf.title} (#{commas(shelf.entries)} entries)" }
+          say "  dictionary: #{shelf_list.join(' · ')}"
+        end
+        say "  etymology: #{commas(rel.reflex_edges)} reflex #{rel.reflex_edges == 1 ? 'edge' : 'edges'}" \
+          if rel.reflex_edges.positive?
+        print_language_long(code, rel) if options[:long]
+      end
+
+      # --long: per-source document counts and the upstream-code split of
+      # the etymology edges (chu's edges arrive as Wiktionary's "cu").
+      def print_language_long(code, rel)
+        unless rel.sources.empty?
+          say "  by source: #{rel.sources.map { |slug, docs| "#{slug} #{commas(docs)}" }.join(' · ')}"
+        end
+        return unless rel.edge_codes.any? && rel.edge_codes.keys != [code]
+
+        say "  edge codes: #{rel.edge_codes.map { |edge_code, n| "#{edge_code} #{commas(n)}" }.join(' · ')}"
+      end
+
+      # --list: the held languages only (a full dump of the ~800-code
+      # etymology tail would be unusable and unpageable; the tail is what
+      # `language CODE` is for — stated in the footer, never implied away).
+      def print_language_list(languages, info)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless info
+
+        held = info.held
+        say "held languages (#{held.size} with corpus documents, gold lemmas, or a shelf):"
+        width = held.map { |entry| entry.code.length }.max || 0
+        held.each do |entry|
+          say "  #{entry.code.ljust(width)}  #{languages.name(entry.code) || '(unnamed)'} — " \
+              "#{held_line(entry)}"
+        end
+        say "etymology tail: ~800 more codes appear in reflex edges — nabu language CODE explains any"
+      end
+
+      def held_line(entry)
+        bits = []
+        bits << "#{commas(entry.documents)} docs" if entry.documents.positive?
+        bits << "#{commas(entry.lemma_rows)} lemma rows" if entry.lemma_rows.positive?
+        (bits + entry.shelves).join(" · ")
+      end
+
+      def commas(count)
+        count.to_s.gsub(/\B(?=(\d{3})+\z)/, ",")
+      end
+
+      # Wrap prose to the card's width, every line indented.
+      def say_wrapped(text, indent:, width: 78)
+        pad = " " * indent
+        line = +""
+        text.split(/\s+/).each do |word|
+          if line.empty?
+            line << word
+          elsif pad.length + line.length + 1 + word.length > width
+            say "#{pad}#{line}"
+            line = +word
+          else
+            line << " " << word
+          end
+        end
+        say "#{pad}#{line}" unless line.empty?
       end
 
       # --langs as an array: comma-joined on the CLI, validated by the query.
@@ -2810,7 +3130,7 @@ module Nabu
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
       # note). A tripped breaker prints its counts + the --force hint and exits 1.
-      def sync_one(runner, registry, slug, db)
+      def sync_one(runner, registry, slug, db, ledger)
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
@@ -2824,6 +3144,25 @@ module Nabu
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
         print_citation_coverage(entry, db)
+        run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # P18-7, the optional AI-review rider: assemble the JSON brief and pipe
+      # it to the --review command. The hook's output is relayed and its exit
+      # status REPORTED — never raised: the sync already happened, and a
+      # review's failure is advisory information, not a sync failure.
+      def run_review_hook(outcome, db, ledger)
+        result = Nabu::ReviewHook.run(
+          command: options[:review],
+          brief: Nabu::ReviewHook.brief(outcome: outcome, db: db, ledger: ledger)
+        )
+        result.output.each_line { |line| say "  review| #{line.chomp}" }
+        if result.ok?
+          say "  review hook: exit 0"
+        else
+          status = result.status ? "exit #{result.status}" : "could not start"
+          say "  review hook: #{status} (advisory — sync unaffected)", :yellow
+        end
       end
 
       # P17-4 per-siglum citation coverage: an adapter that declares
@@ -2865,6 +3204,61 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # -- quickstart (P18-2) -------------------------------------------------
+
+      # `quickstart --list`: the starter set, sizes, and what each source
+      # unlocks — no network, no db, nothing created.
+      def print_starter_list
+        say "starter shelf (#{STARTER_TOTAL} canonical, minutes to sync):"
+        self.class.starter_sources.each do |starter|
+          say "  #{starter.slug.ljust(8)} #{starter.size.rjust(8)}  #{starter.blurb}"
+        end
+        say "sync it: bin/nabu quickstart"
+      end
+
+      # Sync the starter list IN ORDER through the normal per-source path
+      # (fetch → load → index — SyncRunner#sync, the same code `nabu sync
+      # <slug>` runs, so the command is idempotent by construction). One
+      # source's failure never stops the rest (sync --all's posture): failures
+      # collect as [slug, message] pairs and report after the batch. An
+      # unregistered starter slug fails the same way (ValidationError is a
+      # Nabu::Error), never aborting the run.
+      def run_starter_syncs(runner)
+        failures = []
+        self.class.starter_sources.each do |starter|
+          outcome = runner.sync(starter.slug, progress: progress_reporter)
+          finish_progress
+          if outcome.aborted?
+            failures << [starter.slug, outcome.breaker.message]
+          else
+            say format_sync_outcome(outcome)
+            print_discovery_accounting(outcome)
+            print_sync_warnings(outcome)
+          end
+        rescue Nabu::Error => e
+          finish_progress
+          failures << [starter.slug, e.message]
+        end
+        failures
+      end
+
+      # The "try these" epilogue: any failures first (so what follows is read
+      # against an honest shelf), then the three marvels with their
+      # expected-shape hints, then the growth pointer. Compact house style.
+      def print_quickstart_epilogue(failures)
+        unless failures.empty?
+          say ""
+          failures.each { |slug, message| say("  #{slug.ljust(8)} FAILED — #{message}", :red) }
+        end
+        say ""
+        say "try these:"
+        say %(  bin/nabu align "MARK 2.3"      # one verse, seven witnesses: Greek ×2, Latin, Gothic, OCS, Old English)
+        say "  bin/nabu search --lemma λέγω    # every inflection over the gold treebanks: λέγουσι, εἶπας, εἰπεῖν…"
+        say "  bin/nabu define λόγος           # the whole LSJ entry, citations resolved (Latin: define virtus)"
+        say "grow the library: bin/nabu sync --all (live sources) or bin/nabu sync <slug> — " \
+            "the menu is config/sources.yml, the shelf map docs/library.md"
       end
 
       # P11-7 discovery accounting: classify every content-pattern file
@@ -2911,22 +3305,21 @@ module Nabu
         say "Dropped catalog db: #{result.db_path}#{existed}"
         result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        # DELTA-aware (P18-7): silence when a source's errored count matches its
+        # recorded ledger baseline; a change (or first recording) speaks.
         result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} quarantined #{outcome.report.errored} document(s) — parser regression?"
+          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
         if result.axes
           say "  dated/placed #{result.axes.total} documents " \
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, edh #{result.axes.edh})"
+              "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
+              "edh #{result.axes.edh})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
-        say "  dated/placed #{result.axes.total} documents " \
-            "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
-            "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
-            "edh #{result.axes.edh})"
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
       end
 
@@ -3037,6 +3430,9 @@ module Nabu
       # and a hint toward the upstream probe.
       def print_local_health(report)
         print_source_health(report.sources)
+        # Library-wide invariant findings (P18-7: pending migrations) — printed
+        # only when present, so a green library shows nothing new here.
+        report.global.each { |finding| say "#{finding_tag(finding)} #{finding.message}" }
         print_golden_health(report)
         say local_health_verdict(report)
         say "Hint: run `nabu health --remote` for the no-clone upstream probe."

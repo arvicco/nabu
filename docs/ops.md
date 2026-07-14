@@ -34,9 +34,13 @@ What each command does and its exit contract:
   circuit-breaker aborts (exit 1) any source whose sync would gut it. One
   source's failure does not stop the others.
 - **`nabu health`** — local, no network. Run-history trends (quarantine spikes,
-  added-count collapse, withdrawal/retirement creep, stale sources) plus a live
-  golden-query replay. **Exit 1** on a loud finding (spike, >15% creep, a lost
-  golden query); soft warnings (collapse, 5–15% creep, stale) stay **exit 0**.
+  added-count collapse, withdrawal/retirement creep, stale sources), the
+  mechanical postcondition invariants (§11: failed/partial last runs,
+  enabled-vs-populated, flag-vs-artifact, quarantine creep, pending
+  migrations), plus a live golden-query replay. **Exit 1** on a loud finding
+  (spike, >15% creep, a lost golden query, a failed last run, a broken
+  flag-vs-artifact promise); soft warnings (collapse, 5–15% creep, stale,
+  pending migrations) stay **exit 0**.
 - **`nabu health --remote`** — no-clone upstream probe. The strategy is keyed
   per source off the adapter: **git** sources use `git ls-remote` (liveness,
   HEAD-vs-`last_sync_sha` drift, best-effort license-drift via
@@ -330,11 +334,26 @@ alarm.
 
 ### `health` shows a loud ANOMALY (exit 1)
 Read the report — it names the source and the signal.
+- **last … run FAILED** — the source's most recent sync/rebuild run failed; the
+  line carries the recorded error. A companion **partial load** line means the
+  failed run wrote rows before dying — the catalog holds a half-loaded source.
+  Same cure either way: re-run the sync (idempotent) or rebuild (§11).
+- **enabled … zero documents/entries** — the ledger records a successful run
+  but the catalog holds nothing for the source: the half-loaded-catalog
+  signature a crashed rebuild leaves for the sources it never reached. Rebuild.
 - **quarantine spike** — a sync suddenly quarantined far more documents than its
   history. Usually an **upstream format change** broke a parser. Reproduce with
   `nabu sync <slug> --parse-only` (no network), inspect a quarantined file, fix
   the adapter/parser, re-run. Do **not** accept the run until the count returns
   to baseline.
+- **quarantine delta / creep** — the errored count moved off its recorded
+  baseline (announced at the sync/rebuild that moved it), or drifted
+  cumulatively above its low-water mark across ok runs (§11). Triage as a
+  spike; an accepted new level goes quiet on its own (the baseline advances).
+- **fuzzy_index flagged but … / axis extractor … 0 rows / reflexes … 0 rows /
+  language_names census …** — flag-vs-artifact (§11): config or code promises
+  a derived surface the database does not hold. The message names the fix
+  (a reindex, a rebuild, or a `--parse-only` resync).
 - **withdrawal/retirement creep >15%** — slow upstream bleed the per-sync 20%
   breaker never trips on. Check `nabu health --remote` and the source's upstream:
   is it shrinking legitimately, or restructuring? Consider `sync_policy: frozen`
@@ -680,3 +699,81 @@ Ground rules:
   connection is open; the last connection to close checkpoints and removes
   them. Never delete or separate a `-wal` from its db by hand — backup handles
   the pair (§9).
+
+## 11. The postcondition checker & the post-sync review hook (P18-7)
+
+Every silent failure this section exists for actually happened: a rebuild
+crash left a half-loaded catalog nobody surfaced; a failed Coptic sync left
+152 partial documents discovered days later; `fuzzy_index` sat flagged ON for
+a day with no trigram table behind it; reflex extraction shipped with 0 rows
+pending resync; and the standing 9,312 papyri quarantines shouted "parser
+regression?" at every rebuild — exactly the noise a real regression would
+drown in.
+
+### The mechanical invariants (always on, in `nabu health`)
+
+Bare `nabu health` now holds STATE against PROMISES beside its run-history
+trends. Findings-only — a healthy library prints exactly what it printed
+before, nothing new:
+
+| Invariant | Fires when | Severity |
+|---|---|---|
+| last-run honesty | the source's most recent ledger run is `failed` (error detail printed) | loud |
+| partial load | that failed run journaled provenance rows — it half-loaded | loud |
+| enabled-vs-populated | enabled + a `succeeded` run on record + zero docs AND entries | loud |
+| fuzzy-vs-trigram | `fuzzy_index: true` but the trigram index is absent/empty or the source is outside its built scope | loud |
+| axis-vs-rows | an axis extractor family ships for the source, `document_axes` has 0 rows | loud |
+| reflex-vs-rows | `Adapter.reflex_bearing?` true, entries loaded, `dictionary_reflexes` empty | loud |
+| language census | reflex rows present, `language_names` census empty | loud |
+| quarantine creep | the baseline has drifted above its low-water anchor (below) | soft/loud |
+| pending migrations | catalog or ledger `schema_info` behind its migration dir | soft |
+
+Projection diffs (declared expected counts) were considered and **skipped**:
+no machine-readable expectation source exists (sources.yml counts live in
+sign-off comments, which rot by design), and an `expected_docs:` key would go
+stale at every ordinary sync. The zero-rows check plus the delta rules cover
+what a projection diff would catch.
+
+### The quarantine baseline (ledger migration 005)
+
+The rebuild/sync quarantine WARNING is **delta-aware**. The ledger's
+`quarantine_baselines` table keeps, per source:
+
+- **baseline** — the errored count of the most recent ok sync/rebuild run.
+  Auto-advances at every ok run, so each CHANGE is announced exactly once, at
+  the run that changed it, and steady state is silent (the standing 9,312
+  prints nothing).
+- **anchor** — the low-water mark; set at first recording, advances DOWNWARD
+  only. This is why auto-advance can't hide a slow creep: +5 a sync is one
+  absorbed line each time, but `nabu health` watches baseline−anchor and
+  flags the cumulative drift (the withdrawal-creep precedent: soft >5%, loud
+  >15% of the anchor, small-number floor; from a zero anchor any drift past
+  the floor is loud).
+
+First run after the migration announces "baseline recorded" once, then goes
+quiet. An IMPROVEMENT (owner triages quarantines away) pulls both values
+down — the new lower level becomes the standard automatically.
+
+### The post-sync review hook (optional, off by default)
+
+```
+bin/nabu sync <slug> --review CMD          # e.g. --review script/review-sync-claude
+```
+
+At sync end nabu assembles a JSON brief — schema `nabu.sync-review/1`:
+source, fetched sha, load counts, quarantine state vs baseline, discovery
+accounting, the mechanical warnings, and up to 5 freshly written passage (or
+dictionary-entry) urns — and pipes it to CMD's stdin. CMD is ANY executable;
+its combined output is relayed (`review|` lines) and its exit status is
+reported honestly. **A failing hook never fails the sync** — the sync already
+happened; the review is judgment, not a gate. No cloud dependency enters
+nabu: the hook is a subprocess boundary.
+
+The bundled example, `script/review-sync-claude`, wires `claude -p` with the
+nabu MCP server (read-only) so the model can spot-read the sampled urns
+(`nabu_show`) instead of judging counts blind, and answers in ≤6 lines
+(verdict first). Swap it for a local model, a shell sanity check, or `tee` to
+a log without touching nabu. A flag per invocation (not a config key) was the
+deliberate choice: syncs in this library are owner-fired, and the visible
+`--review CMD` keeps the subprocess boundary explicit with no standing config
+to rot.

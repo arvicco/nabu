@@ -55,10 +55,15 @@ module Nabu
   #   /borrow/i census), false when parsed without one. The stored column
   #   is additionally nullable — NULL = "row predates the flag-aware
   #   reparse", an honest absence the parser itself never mints.
+  # - +lang_name+ (P18-4): the upstream node's human `lang` name verbatim
+  #   (NFC) — "Old Ruthenian" next to lang_code "zle-ort". NOT persisted per
+  #   row and NOT part of the entry ContentHash (display metadata, not
+  #   content identity): the loader aggregates it into the language_names
+  #   census, which is what `nabu language` reads.
   DictionaryReflex = Data.define(:lang_code, :language, :word, :roman,
-                                 :word_folded, :roman_folded, :borrowed) do
+                                 :word_folded, :roman_folded, :borrowed, :lang_name) do
     def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil,
-                   roman_folded: nil, borrowed: false)
+                   roman_folded: nil, borrowed: false, lang_name: nil)
       unless [true, false].include?(borrowed)
         raise ValidationError, "borrowed must be true or false (parser-minted reflexes are never NULL)"
       end
@@ -70,7 +75,8 @@ module Nabu
         roman: roman.nil? ? nil : Model::Validation.nfc_text!(roman, field: "roman"),
         word_folded: word_folded.nil? ? nil : Model::Validation.nfc_text!(word_folded, field: "word_folded"),
         roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded"),
-        borrowed: borrowed
+        borrowed: borrowed,
+        lang_name: lang_name.nil? ? nil : Model::Validation.nfc_text!(lang_name, field: "lang_name")
       )
     end
   end

@@ -74,7 +74,8 @@ module Nabu
       DictionaryEntry: :dictionary_entries,
       DictionaryCitation: :dictionary_citations,
       DictionaryReflex: :dictionary_reflexes,
-      DocumentAxis: :document_axes
+      DocumentAxis: :document_axes,
+      LanguageName: :language_names
     }.freeze
 
     # How long any connection waits on a locked database before raising
@@ -176,6 +177,7 @@ module Nabu
         require_relative "store/dictionary_citation"
         require_relative "store/dictionary_reflex"
         require_relative "store/document_axis"
+        require_relative "store/language_name"
         @models_loaded = true
       end
       db

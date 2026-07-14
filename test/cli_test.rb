@@ -4,6 +4,24 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
+# A TestAdapter whose #fetch succeeds WITHOUT any network: the quickstart rig
+# (P18-2). The canonical dir already holds the fixture files, so fetch is a
+# no-op that returns a pinned sha, and the rest of the sync path (load, index,
+# ledger pin) runs for real.
+class QuickstartFetchAdapter < TestAdapter
+  def fetch(_workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+    Nabu::FetchReport.new(sha: "deadbeefcafe", fetched_at: Time.now)
+  end
+end
+
+# The partial-failure rig: fetch always raises, as an unreachable upstream
+# would (Nabu::FetchError aborts THIS source's sync, never the batch).
+class QuickstartFailingAdapter < TestAdapter
+  def fetch(_workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+    raise Nabu::FetchError, "upstream unreachable (rigged)"
+  end
+end
+
 class CLITest < Minitest::Test
   # Run the Thor CLI in-process (never shell out to bin/nabu). Returns the
   # captured [stdout, stderr, exit_status]. exit_status is nil when the CLI
@@ -30,7 +48,7 @@ class CLITest < Minitest::Test
 
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
-    %w[version sync status rebuild verify search show export define etym].each do |command|
+    %w[version quickstart sync status rebuild verify search show export define etym].each do |command|
       assert_match(/\b#{command}\b/, out, "help output should list #{command}")
     end
   end
@@ -159,10 +177,11 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
       refute_match(/ more$/, out, "nothing is elided under --long")
-      # A language from the truncated tail is now present, on its own group line.
-      assert_match(/^ {2}\[dsb\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows")
+      # A language from the truncated tail is now present, on its own group
+      # line — named inline from the derived census (P18-4).
+      assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows, named")
       # Multiple forms of one language collapse onto that language's line.
-      assert_match(/^ {2}\[cu\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
+      assert_match(/^ {2}\[cu · Old Church Slavonic\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
     end
   end
 
@@ -180,8 +199,179 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[etym *zima --long]) }
       assert_nil status
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
-      assert_match(/^ {2}\[dsb\] zyma$/, out)
-      refute_match(/ more$/, out)
+      assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "grouped headers name the code inline (P18-4)")
+      refute_match(/ and \d+ more$/, out)
+    end
+  end
+
+  # -- P18-4: nabu language — the code desk reference --------------------------
+
+  def test_help_language_documents_the_desk_reference
+    out, _err, _status = run_cli(%w[help language])
+    assert_match(/zle-ort/, out, "must show the etymology-tail worked example")
+    assert_match(/--list/, out)
+    assert_match(/--seed/, out)
+    assert_match(/family-level/, out, "must explain the family fallback for the tail")
+  end
+
+  def test_language_card_for_a_held_shelf_language_merges_all_three_layers
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language sla-pro])
+        assert_nil status
+        assert_match(/^sla-pro — Proto-Slavic$/, out, "curated name headline")
+        assert_match(/family: Slavic < Balto-Slavic < Indo-European \(reconstructed\)/, out)
+        assert_match(/reconstructed headwords/, out, "curated context renders")
+        assert_match(/dictionary: Wiktionary — Proto-Slavic.*\(\d+ entries\)/, out)
+        assert_match(/etymology: \d+ reflex edges/, out, "PIE/PBS descendants name sla-pro forms")
+        refute_match(/corpus:/, out, "zero corpus holdings are suppressed (house rule)")
+        refute_match(/no curated note/, out)
+      end
+    end
+  end
+
+  def test_language_card_for_a_tail_code_census_name_with_family_fallback
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language zlw-osk])
+        assert_nil status
+        assert_match(/^zlw-osk — Old Slovak$/, out, "the name comes from the derived kaikki census")
+        assert_match(/family: zlw-\* — West Slavic/, out)
+        assert_match(/no curated note for this code — its zlw-\* family/, out)
+        assert_match(/etymology: \d+ reflex edge/, out)
+      end
+    end
+  end
+
+  def test_language_card_long_shows_the_upstream_code_split
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language chu --long])
+        assert_nil status
+        assert_match(/^chu — Old Church Slavonic$/, out)
+        assert_match(/edge codes: cu \d+/, out, "chu's edges arrive under Wiktionary's cu — said honestly")
+      end
+    end
+  end
+
+  def test_language_unknown_code_misses_honestly_with_a_family_hint
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language zle-qqq])
+        assert_nil status
+        assert_match(/^zle-qqq — unknown here/, out)
+        assert_match(/family hint: zle-\* — East Slavic/, out)
+        assert_match(/nabu language --list/, out)
+
+        out, _err, _status = run_cli(%w[language qqqq])
+        assert_match(/^qqqq — unknown here/, out)
+        refute_match(/family hint/, out, "no known prefix — no guessed hint")
+      end
+    end
+  end
+
+  def test_language_list_scopes_to_held_languages_and_names_the_tail
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language --list])
+        assert_nil status
+        assert_match(/^held languages \(\d+ with corpus documents, gold lemmas, or a shelf\):/, out)
+        assert_match(/^ {2}sla-pro\s+Proto-Slavic — .*Wiktionary — Proto-Slavic/, out)
+        refute_match(/^ {2}zle-ort/, out, "the etymology tail never floods the list")
+        assert_match(/etymology tail: ~800 more codes.*nabu language CODE/, out)
+      end
+    end
+  end
+
+  def test_language_seed_is_idempotent_across_runs
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language --seed])
+        assert_nil status
+        assert_match(/language notes: \d+ seeded, 0 unchanged/, out)
+        out, _err, _status = run_cli(%w[language --seed])
+        assert_match(/language notes: 0 seeded, \d+ unchanged/, out, "re-seeding writes nothing")
+      end
+    end
+  end
+
+  def test_language_without_code_or_flag_errors
+    with_recon_shelf do |config|
+      _out, err, status = with_config(config) { run_cli(%w[language]) }
+      assert_equal 1, status
+      assert_match(/give a code/, err)
+    end
+  end
+
+  # -- P18-5: the IE-CoR shelf — cognacy sets as etym/define surfaces, the
+  # loan label, and the language card's accreted iecor note ---------------------
+
+  def test_language_card_renders_the_iecor_accreted_note
+    with_iecor_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language chu])
+        assert_nil status
+        assert_match(/^chu — /, out)
+        assert_match(/iecor: IE-CoR variety: Old Church Slavonic/, out, "the accreted note renders")
+        assert_match(/Balto-Slavic/, out, "the clade travels")
+        assert_match(/etymology: \d+ reflex edge/, out, "iecor reflexes count as edges")
+      end
+    end
+  end
+
+  def test_language_card_for_a_code_known_only_through_iecor
+    with_iecor_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language lit])
+        assert_nil status
+        assert_match(/^lit — Lithuanian$/, out, "the census name comes from IE-CoR's languages table")
+        assert_match(/iecor: IE-CoR variety: Lithuanian/, out)
+      end
+    end
+  end
+
+  def test_etym_reaches_the_iecor_heart_set_from_the_attested_side
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym срьдьцє --long]) }
+      assert_nil status
+      assert_match(/срьдьцє \[chu\] → \*k̑erd- \[ine\]/, out, "the upstream asterisk displays verbatim")
+      assert_match(/IE-CoR/, out)
+      assert_match(/\[got · Gothic\] 𐌷𐌰𐌹𐍂𐍄𐍉 \(hairto\)/, out,
+                   "the Gothic witness rides word (roman), named by the iecor census")
+      assert_match(/καρδία/, out)
+      assert_match(/\[lat( · Latin)?\] cor/, out)
+    end
+  end
+
+  def test_etym_labels_the_iecor_loan_event_edges
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym кожа]) }
+      assert_nil status
+      assert_match(/кожа \[chu\] \(loan\) → \*kož- \[ine\]/, out,
+                   "the loans.csv event ORs into the member edge and labels it")
+    end
+  end
+
+  def test_define_finds_the_iecor_root_by_folded_headword
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define kerd-]) }
+      assert_nil status
+      assert_match(/^\*k̑erd- — IE-CoR/, out)
+      assert_match(/cognate set 6458/, out)
+      assert_match(/Proto-Indo-European/, out)
+    end
+  end
+
+  def test_etym_footer_points_at_the_language_desk_reference
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima]) }
+      assert_nil status
+      assert_match(/^codes: nabu language CODE/, out, "the compact render's way out of raw codes")
     end
   end
 
@@ -415,6 +605,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- sync --review (P18-7): the optional post-sync hook --------------------
+
+  # The hook gets the JSON brief on stdin (tool-agnostic stub: a shell
+  # command), its output is relayed, exit 0 reported.
+  def test_sync_review_pipes_the_brief_and_relays_the_hook_output
+    with_sync_env(enabled: true) do |config|
+      sink = File.join(config.canonical_dir, "..", "brief.json")
+      out, _err, status = with_config(config) do
+        run_cli(["sync", "corpus", "--parse-only", "--review", "tee #{sink} >/dev/null && echo LGTM"])
+      end
+      assert_nil status, "the sync itself succeeded"
+      assert_match(/review\| LGTM/, out)
+      assert_match(/review hook: exit 0/, out)
+      brief = JSON.parse(File.read(sink))
+      assert_equal "nabu.sync-review/1", brief["schema"]
+      assert_equal "corpus", brief["source"]
+      assert_equal 2, brief.dig("counts", "added")
+      assert_equal 2, brief["sample_urns"].size
+    end
+  end
+
+  # NON-FATALITY: the hook's failure is reported and the sync still exits 0.
+  def test_sync_review_hook_failure_never_fails_the_sync
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["sync", "corpus", "--parse-only", "--review", "cat >/dev/null; echo no thanks >&2; exit 7"])
+      end
+      assert_nil status, "a failing review hook must never fail the sync"
+      assert_match(/\+2 added/, out, "the sync report still prints")
+      assert_match(/review\| no thanks/, out)
+      assert_match(/review hook: exit 7 \(advisory — sync unaffected\)/, out)
+    end
+  end
+
+  # Off by default: no --review, no hook, no review lines.
+  def test_sync_without_review_runs_no_hook
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil status
+      refute_match(/review/, out)
+    end
+  end
+
   # -- progress reporting (P2-6) -------------------------------------------
 
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
@@ -440,6 +673,101 @@ class CLITest < Minitest::Test
       end
       assert_empty err, "non-tty small corpus must not emit progress"
     end
+  end
+
+  # -- quickstart (P18-2): the starter shelf --------------------------------
+
+  # The starter list must stay wired to real registry entries: every slug in
+  # STARTER_SOURCES is registered AND enabled in the shipped config/sources.yml
+  # (a renamed/retired source would otherwise fail only at a live quickstart).
+  def test_quickstart_starter_sources_are_registered_in_the_shipped_registry
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    Nabu::CLI.starter_sources.each do |starter|
+      entry = registry[starter.slug]
+      refute_nil entry, "starter source #{starter.slug} must be registered in config/sources.yml"
+      assert entry.enabled, "starter source #{starter.slug} must be enabled"
+    end
+  end
+
+  # --list previews the set (slugs, sizes, blurbs) and touches nothing: no
+  # network (WebMock would trip), no catalog, no ledger.
+  def test_quickstart_list_prints_the_starter_set_without_syncing
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[quickstart --list]) }
+      assert_nil status
+      assert_match(/starter shelf/, out)
+      %w[sblgnt proiel iswoc lexica].each do |slug|
+        assert_match(/^  #{slug}\b/, out, "--list must name #{slug}")
+      end
+      assert_match(/MB/, out, "--list must carry the measured sizes")
+      refute File.exist?(config.catalog_path), "--list must not create the catalog"
+      refute File.exist?(config.history_path), "--list must not create the ledger"
+    end
+  end
+
+  # The command syncs the starter list IN ORDER through the normal per-source
+  # path (fetch → load → index) and ends with the "try these" epilogue naming
+  # the three marvels and the growth pointer.
+  def test_quickstart_syncs_the_starter_list_in_order_and_prints_the_epilogue
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter", "beta" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha beta]) do
+        out, _err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_nil status
+        assert_match(/alpha\s+deadbeefcafe\s+\+2 added/, out)
+        assert_match(/beta\s+deadbeefcafe\s+\+2 added/, out)
+        assert_operator out.index("alpha "), :<, out.index("beta "), "starter order must be respected"
+        assert_match(/try these:/, out)
+        assert_match(/align "MARK 2\.3"/, out)
+        assert_match(/search --lemma/, out)
+        assert_match(/define λόγος/, out)
+        assert_match(%r{grow the library: bin/nabu sync --all}, out)
+      end
+    end
+  end
+
+  # Idempotent by construction: a re-run is an ordinary re-sync (same content
+  # on disk → =N skipped, nothing re-added), and the epilogue still prints.
+  def test_quickstart_rerun_is_an_ordinary_resync
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha]) do
+        with_config(config) { run_cli(%w[quickstart]) }
+        out, _err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_nil status
+        assert_match(/alpha\s+deadbeefcafe\s+\+0 added\s+~0 updated\s+=2 skipped/, out)
+        assert_match(/try these:/, out)
+      end
+    end
+  end
+
+  # One source's failure never stops the rest: the failure is reported at the
+  # end (stdout, before the epilogue), the batch exit status is 1, and the
+  # later sources still sync. An unregistered starter slug fails the same way.
+  def test_quickstart_one_failure_does_not_stop_the_rest_and_exits_one
+    with_quickstart_env("alpha" => "QuickstartFailingAdapter", "beta" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha beta ghost]) do
+        out, err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_equal 1, status
+        assert_match(/beta\s+deadbeefcafe\s+\+2 added/, out, "a failure must not stop later sources")
+        assert_match(/alpha\s+FAILED — upstream unreachable/, out)
+        assert_match(/ghost\s+FAILED — unknown source/, out)
+        assert_match(/try these:/, out, "the epilogue still prints after failures")
+        assert_match(/2 of 3 starter sources failed/, err)
+      end
+    end
+  end
+
+  # `nabu help quickstart` must teach the starter shelf: what it holds (with
+  # sizes), the three marvels, --list, and the idempotency promise.
+  def test_help_quickstart_documents_the_starter_shelf
+    out, _err, _status = run_cli(%w[help quickstart])
+    %w[sblgnt proiel iswoc lexica].each { |slug| assert_match(/#{slug}/, out) }
+    assert_match(/MB/, out, "must state the measured sizes")
+    assert_match(/align "MARK 2\.3"/, out)
+    assert_match(/--lemma/, out)
+    assert_match(/define λόγος/, out)
+    assert_match(/--list/, out)
+    assert_match(/idempotent/i, out)
+    assert_match(/never stops the rest/i, out, "must state the partial-failure posture")
   end
 
   # -- the history ledger at the CLI seam (P7-1) ----------------------------
@@ -497,6 +825,19 @@ class CLITest < Minitest::Test
       assert_match(/ANOMALY/, out)
       assert_match(/quarantine spike/i, out)
       assert_match(/loud finding/i, err)
+    end
+  end
+
+  # P18-7 last-run honesty end-to-end: a FAILED most-recent run is a loud
+  # ANOMALY naming the error, exit 1 — the failed-Coptic-sync gap closed.
+  def test_health_local_failed_last_run_exits_one_with_the_error
+    with_indexed_corpus do |config|
+      seed_failed_run(config, notes: "fetch exploded: connection reset")
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status
+      assert_match(/ANOMALY last sync run FAILED/, out)
+      assert_match(/fetch exploded/, out)
+      assert_match(/re-run/, out)
     end
   end
 
@@ -580,7 +921,7 @@ class CLITest < Minitest::Test
 
       # Bare status before any probe: the upstream is genuinely unknown.
       before, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\?\(never\)/, before)
+      assert_match(/corpus.*up=\?\(unprobed\)/, before)
 
       # --remote probes inline and writes the cache.
       out, _err, status = with_config(config) do
@@ -2592,6 +2933,15 @@ class CLITest < Minitest::Test
   # latest errored count (90) towers over the recent norm — a quarantine spike.
   # Runs live in the history ledger (P7-1), slug-keyed; writes through its own
   # connection, then hands back so the CLI opens it fresh.
+  def seed_failed_run(config, notes:)
+    db = Nabu::Store::Ledger.open!(config.history_path)
+    now = Time.now
+    Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: now, finished_at: now,
+                            status: "failed", notes: notes)
+  ensure
+    db&.disconnect
+  end
+
   def seed_spike_runs(config)
     db = Nabu::Store::Ledger.open!(config.history_path)
     now = Time.now
@@ -2718,6 +3068,33 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P18-5: the IE-CoR cognacy shelf loaded from the fixture CLDF bundle,
+  # WITH a real ledger so the language-notes rider accretes (the loader's
+  # programmatic write path, end to end).
+  def with_iecor_shelf
+    Dir.mktmpdir("nabu-cli-iecor") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      source = Nabu::Store::Source.create(
+        slug: "iecor", name: "IE-CoR", adapter_class: "Nabu::Adapters::Iecor",
+        license: "CC BY 4.0", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)
+                                   .load_from(Nabu::Adapters::Iecor.new,
+                                              workdir: Nabu::TestSupport.fixtures("iecor"))
+      db.disconnect
+      ledger.disconnect
+      yield config
+    end
+  end
+
   # One TestAdapter source "corpus" (two documents) with canonical data; the
   # caller stubs Config.load with the yielded config. +enabled+ seeds the row.
   def with_sync_env(enabled:)
@@ -2733,6 +3110,40 @@ class CLITest < Minitest::Test
         sources_path: sources, config_path: "(test)"
       )
     end
+  end
+
+  # A quickstart env (P18-2): one source per (slug => adapter class name),
+  # each with its own canonical fixture files already on disk (distinct
+  # filenames per slug — TestAdapter mints urns from filenames, and two
+  # sources must never collide on a urn). The caller stubs Config.load.
+  def with_quickstart_env(adapters)
+    Dir.mktmpdir("nabu-cli-quickstart") do |root|
+      sources = +""
+      adapters.each do |slug, klass|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+        File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        sources << "#{slug}:\n  adapter: #{klass}\n  enabled: true\n  sync_policy: manual\n"
+      end
+      path = File.join(root, "sources.yml")
+      File.write(path, sources)
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: path, config_path: "(test)"
+      )
+    end
+  end
+
+  # Pin the starter list to test slugs by swapping the class method (the
+  # with_config / with_stubbed_shell house pattern), restoring after.
+  def with_starter_sources(slugs)
+    original = Nabu::CLI.method(:starter_sources)
+    list = slugs.map { |slug| Nabu::CLI::StarterSource.new(slug: slug, size: "~1 MB", blurb: "test source") }
+    Nabu::CLI.define_singleton_method(:starter_sources) { list }
+    yield
+  ensure
+    Nabu::CLI.define_singleton_method(:starter_sources, original)
   end
 
   # Swap Nabu::Shell.run for +impl+ (a proc) so the health probe sees canned

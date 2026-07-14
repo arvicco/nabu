@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
 module Nabu
+  # One per-language note a dictionary batch accretes into the history
+  # ledger's language_notes (P18-5 — the P18-4 accumulated layer's first
+  # programmatic writer). The parser mints it from upstream language
+  # metadata (IE-CoR's languages.csv); Store::DictionaryLoader appends it
+  # under the layer's append-only latest-per-(lang_code, kind) contract —
+  # only when the latest stored body differs — with +source+ as the
+  # per-record provenance ("iecor"; the seed keeps its own
+  # "seed:config/languages.yml" provenance, never touched by this path).
+  DictionaryLanguageNote = Data.define(:lang_code, :kind, :body, :source) do
+    def initialize(lang_code:, kind:, body:, source:)
+      super(
+        lang_code: Model::Validation.present_string!(lang_code, field: "lang_code"),
+        kind: Model::Validation.present_string!(kind, field: "kind"),
+        body: Model::Validation.nfc_text!(body, field: "body"),
+        source: Model::Validation.present_string!(source, field: "source")
+      )
+    end
+  end
+
   # What a dictionary adapter's #parse returns (P11-4): one dictionary FILE's
   # worth of entries, tagged with the dictionary it belongs to. The
   # DictionaryDocument is to Store::DictionaryLoader what Nabu::Document is
@@ -22,6 +41,21 @@ module Nabu
       @title = Model::Validation.present_string!(title, field: "title")
       @canonical_path = Model::Validation.present_string!(canonical_path, field: "canonical_path")
       @entries_by_id = {}
+      @language_notes = []
+    end
+
+    # Language notes riding this batch (P18-5): NOT entry content — they
+    # never touch ContentHash or the catalog — the loader accretes them
+    # into the ledger's language_notes idempotently after the file loads.
+    attr_reader :language_notes
+
+    def add_language_note(note)
+      unless note.is_a?(DictionaryLanguageNote)
+        raise ValidationError, "expected a Nabu::DictionaryLanguageNote, got #{note.inspect} (#{note.class})"
+      end
+
+      @language_notes << note
+      self
     end
 
     # Append an entry; duplicate entry ids within one file are a parse bug.

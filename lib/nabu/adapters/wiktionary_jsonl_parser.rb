@@ -171,12 +171,17 @@ module Nabu
         language = reflex_language(node["lang_code"].to_s)
         word = Nabu::Normalize.nfc(node["word"].to_s)
         roman = node["roman"].to_s.strip.empty? ? nil : Nabu::Normalize.nfc(node["roman"])
+        name = node["lang"].to_s.strip
         Nabu::DictionaryReflex.new(
           lang_code: node["lang_code"].to_s, language: language,
           word: word, roman: roman,
           word_folded: reflex_fold(word, language),
           roman_folded: roman && reflex_fold(roman, language),
-          borrowed: borrowed?(node)
+          borrowed: borrowed?(node),
+          # P18-4: the node's human language name, verbatim (the census raw
+          # material — "Cyrillic script" wrapper noise included; the read
+          # side filters). Feeds the language_names census, never the hash.
+          lang_name: name.empty? ? nil : Nabu::Normalize.nfc(name)
         )
       end
 

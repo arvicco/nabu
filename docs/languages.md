@@ -1,10 +1,22 @@
 # Languages of the library
 
-**As of 2026-07-13** (post Phase 17 — live inventory: every code below
-appears in the catalog, the lemma index, or the reference shelf, EXCEPT
-the four Phase-17 proto codes marked *registered, sync pending*, which
-are shipped in code but hold no live entries yet). This page explains the
-code system once, then lists every code with one sentence each.
+**As of 2026-07-14** (post Phase 18 — live inventory: every code below
+appears in the catalog, the lemma index, or the reference shelf; the
+Phase-17 proto shelves and Coptic are now live, and the only shipped-but-
+unsynced tier is the Phase-18 trio noted at the end of the dictionary
+table). This page explains the code system once, then lists every code
+with one sentence each.
+
+**The desk reference is a command (P18-4):** `nabu language CODE` explains
+any code this page covers AND the **803-code** Wiktionary etymology
+universe the `etym` cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) —
+name, family, curated context, and live holdings, in ~0.2 s. Honesty note:
+the derived names census (`language_names`, from the held kaikki extracts)
+is **currently empty** — it fills at the owner's wiktionary parse-only
+resyncs, and `nabu health` surfaces the gap until then; the **183-entry
+curated seed** is loaded live into the ledger's accumulated notes layer
+(`nabu language --seed`, from `config/languages.yml` and the curation
+below). `nabu language --list` prints the held languages.
 
 ## The system, in five rules
 
@@ -35,12 +47,12 @@ code system once, then lists every code with one sentence each.
 
 | Code | Language | One sentence |
 |---|---|---|
-| `grc` | Ancient Greek | The library's largest language — Homer through the papyri to Swete's Septuagint and both Greek NTs, polytonic. |
+| `grc` | Ancient Greek | The library's largest language by passages — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions). |
 | `eng` | English | The translation layer — Perseus/First1K editions, WEB bible, SAA tablet translations, Freising rendering; never an original. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists. |
-| `cop` | Coptic | The last stage of Egyptian, in the documentary papyri of Christian Egypt (the literary coptic-scriptorium shelf is registered but awaits its first clean sync — library.md §8f). |
-| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, and papyrus fragments. |
+| `cop` | Coptic | The last stage of Egyptian: 2,047 documentary papyri plus the literary Coptic Scriptorium shelf, live since 2026-07-13 — 482 docs / 74,169 passages in Sahidic and Bohairic, gold-lemma language #15 (233,020 rows; library.md §8f). |
+| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments — and, since the EDH sync, 80,561 inscriptions (library.md §8g), making it the largest language by documents. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL shelf — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved. |
 | `sl` | Slovenian (historical) | Early Modern print (Dalmatin 1584 → 1899) and, by lineage, the ~1000 CE Freising Manuscripts. |
 | `qpc` | Proto-cuneiform | The pre-linguistic administrative tablets of the late 4th millennium BCE (dcclt archaic lists) — signs before language. |
@@ -61,36 +73,42 @@ code system once, then lists every code with one sentence each.
 | `ta-Latn` | Tamil (romanized) | One GRETIL stray. |
 | `arc` | Aramaic | A single cuneiform-shelf document. |
 | `en` | English (legacy tag) | One GRETIL stray using the 2-letter tag; everything else standardizes on `eng`. |
+| `und` | Undetermined | Five EDH inscriptions whose language the upstream record could not determine — coded honestly rather than guessed. |
 
 ## Reference-shelf languages (dictionaries)
 
 | Code | Dictionary | One sentence |
 |---|---|---|
-| `grc` | LSJ | The Greek-English lexicon, 116k entries, citations resolved into the corpus. |
-| `lat` | Lewis & Short | The Latin dictionary, 52k entries, same resolution. |
-| `ang` | Bosworth-Toller | The Anglo-Saxon dictionary, 63k entries, æ/þ/ð-folded lookup. |
-| `chu` | Wiktionary-OCS | 4.6k crowd-sourced OCS entries whose etymologies seed the reconstruction crosswalk. |
-| `sla-pro` | Proto-Slavic (reconstructed) | ~5.4k reconstructed headwords with descendant trees naming attested reflexes. |
-| `ine-pro` | Proto-Indo-European (reconstructed) | ~1.9k roots — the trunk the `etym` command ascends to. |
-| `gem-pro` | Proto-Germanic (reconstructed) | ~5.7k reconstructions bridging PIE to Gothic and Old English. |
-| `ine-bsl-pro` | Proto-Balto-Slavic (reconstructed) | *Registered P17-3, sync pending* — ~490 headwords projected: the STRUCTURAL intermediate shelf (PIE → PBS → Proto-Slavic) that the multi-hop closure needs. |
-| `gmw-pro` | Proto-West Germanic (reconstructed) | *Registered P17-3, sync pending* — ~5.4k headwords projected: the Old English proto desk, and the second intermediate shelf (Proto-Germanic → PWG → ang). |
-| `itc-pro` | Proto-Italic (reconstructed) | *Registered P17-3, sync pending* — ~740 headwords projected, bridging PIE to Latin (best record-level crosswalk join). |
-| `iir-pro` | Proto-Indo-Iranian (reconstructed) | *Registered P17-3, sync pending* — ~760 headwords projected: Sanskrit via romanization + the flagged Iranian-loan layer in Armenian. |
+| `grc` | LSJ | The Greek-English lexicon, 116,497 entries, citations resolved into the corpus. |
+| `lat` | Lewis & Short | The Latin dictionary, 51,636 entries, same resolution. |
+| `san` | Monier-Williams | The Sanskrit-English dictionary (1899), 193,890 entries live since 2026-07-13 — SLP1↔IAST transcoded lookup, RV./BhP. citations resolving to GRETIL urns. |
+| `ang` | Bosworth-Toller | The Anglo-Saxon dictionary, 62,815 entries, æ/þ/ð-folded lookup. |
+| `chu` | Wiktionary-OCS | 4,615 crowd-sourced OCS entries whose etymologies seed the reconstruction crosswalk (2,210 descendant edges live). |
+| `sla-pro` | Proto-Slavic (reconstructed) | 5,431 reconstructed headwords with descendant trees naming attested reflexes. |
+| `ine-pro` | Proto-Indo-European (reconstructed) | 1,905 roots — the trunk the `etym` command ascends to. |
+| `gem-pro` | Proto-Germanic (reconstructed) | 5,717 reconstructions bridging PIE to Gothic and Old English. |
+| `ine-bsl-pro` | Proto-Balto-Slavic (reconstructed) | 491 headwords, live since the P17-3 resync — the STRUCTURAL intermediate shelf (PIE → PBS → Proto-Slavic) the multi-hop closure walks. |
+| `gmw-pro` | Proto-West Germanic (reconstructed) | 5,551 headwords — the Old English proto desk, and the second intermediate shelf (Proto-Germanic → PWG → ang). |
+| `itc-pro` | Proto-Italic (reconstructed) | 745 headwords bridging PIE to Latin (best record-level crosswalk join). |
+| `iir-pro` | Proto-Indo-Iranian (reconstructed) | 799 headwords: Sanskrit via romanization + the flagged Iranian-loan layer in Armenian. |
 
-*(The four rows above land at the owner-fired `wiktionary-recon` resync +
-rebuild; until then `define`/`etym` still walk the three live proto
-shelves only.)*
+*(All seven proto shelves are live — `define`/`etym` walk them with
+multi-hop closure and per-edge "(loan)" flags. The Phase-18 trio is
+shipped in code but **unsynced with no live entries**: `iecor` — the
+IE-CoR cognacy matrix under the collective `ine` tag, 4,981 sets
+projected — plus the LiLa Turtle shelves `liv` (305 PIE verbal etymons)
+and `edl` (de Vaan's Latin etymological dictionary, 2,860 etymons);
+library.md §8h.)*
 
-## Gold-lemma languages (searchable via `--lemma`, 14 as of today)
+## Gold-lemma languages (searchable via `--lemma`, 15 as of today)
 
-`lat, grc, orv, san, sux, chu, akk, got, ang, xcl, sl, xhu, uga, hit` —
-the treebanks, ORACC, and goo300k feed these; everything else is
+`lat, grc, orv, akk, cop, sl, san, sux, chu, got, ang, xcl, xhu, uga,
+hit` — the treebanks, ORACC, goo300k, and (since 2026-07-13) Coptic
+Scriptorium feed these 2,852,069 rows; everything else is
 full-text-searchable but not lemma-searchable (yet — see improvements
 §3.1 for the cluster plan to project lemmas onto the rest). **`cop` is
-registered as #15 pending sync**: the coptic-scriptorium adapter (P17-1)
-is shipped with its gold-lemma layer, but the live index holds zero `cop`
-lemma rows until that shelf's first clean owner-fired sync lands.
+live as #15**: 233,020 gold lemma rows from the coptic-scriptorium shelf,
+the fifth-largest lemma pool in the library.
 
 ---
 

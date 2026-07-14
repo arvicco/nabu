@@ -15,12 +15,24 @@ class CopticScriptoriumTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("coptic-scriptorium")
 
   DOCUMENT_URNS = %w[
+    urn:nabu:coptic-scriptorium:ap.100.monbeg
     urn:nabu:coptic-scriptorium:ap.4.monbeg
     urn:nabu:coptic-scriptorium:besa.food.monbbb
+    urn:nabu:coptic-scriptorium:besa.vigilance.monbba
+    urn:nabu:coptic-scriptorium:helias.martyrdom.sobhy_ed:0-15
+    urn:nabu:coptic-scriptorium:lives.aphou.paths_ed:0-61
+    urn:nabu:coptic-scriptorium:nt.1cor.sahidica_ed
+    urn:nabu:coptic-scriptorium:nt.acts.bohairic
     urn:nabu:coptic-scriptorium:nt.mark.sahidica
     urn:nabu:coptic-scriptorium:nt.phlm.sahidica
+    urn:nabu:coptic-scriptorium:ot.gen.coptot
     urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed
+    urn:nabu:coptic-scriptorium:ot.jonah.coptot_ed
     urn:nabu:coptic-scriptorium:papyri_info.tm82127.cpr_2_237
+    urn:nabu:coptic-scriptorium:pistissophia.1.petermann:1-13
+    urn:nabu:coptic-scriptorium:shenoute.abraham.monbya:21-27
+    urn:nabu:coptic-scriptorium:theodosiusalex.michael.budge_al_ed:9-30
+    urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.ocrum_st_18.kypt344
   ].freeze
 
   def conformance_adapter
@@ -70,6 +82,10 @@ class CopticScriptoriumTest < Minitest::Test
     # the Wells NT stays at the source's own nc class — no override
     assert_nil overrides.fetch("urn:nabu:coptic-scriptorium:nt.mark.sahidica")
     assert_nil overrides.fetch("urn:nabu:coptic-scriptorium:nt.phlm.sahidica")
+    assert_nil overrides.fetch("urn:nabu:coptic-scriptorium:nt.1cor.sahidica_ed")
+    # P18-1 additions: CC-BY-SA (sahidic OT) and CC-BY (helias OCR corpus)
+    assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:ot.gen.coptot")
+    assert_equal "attribution", overrides.fetch("urn:nabu:coptic-scriptorium:helias.martyrdom.sobhy_ed:0-15")
   end
 
   def test_discover_of_an_unfetched_workdir_yields_nothing
@@ -196,10 +212,51 @@ class CopticScriptoriumTest < Minitest::Test
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:nt.mark.sahidica" }
     document = adapter.parse(ref)
     assert_equal "cop", document.language
-    assert_equal 12, document.size
+    # two chapter members since P18-1: Mark_01 vv1-12 + Mark_07 vv1-16
+    assert_equal 28, document.size
     assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1", document.first.urn
-    assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.12", document.passages.last.urn
+    assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica:7.16", document.passages.last.urn
     assert document.first.text.start_with?("ⲧⲁⲣⲭⲏ ⲙⲡⲉⲩⲁⲅⲅⲉⲗⲓⲟⲛ")
+  end
+
+  # --- P18-1: the meta-line whitespace variant + the copticMag urn --------------
+
+  def test_parse_a_space_equals_header_document_end_to_end
+    # helias_martyrdom_part1: `msItem_title ="…"` made the file unrecognized
+    # ("no usable TT meta header") until the P18-1 regex widening. Part files
+    # carry their own range-suffixed cts urns (the shenoute precedent) — one
+    # document per part, no merge.
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:helias.martyrdom.sobhy_ed:0-15" }
+    refute_nil ref, "the space-equals header file must be recognized at discover"
+    document = adapter.parse(ref)
+    assert_equal 8, document.size
+    assert_equal "Martyrdom of Helias", document.metadata["msItem_title"]
+  end
+
+  def test_parse_an_ordinal_mode_space_equals_document
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find do |r|
+      r.id == "urn:nabu:coptic-scriptorium:theodosiusalex.michael.budge_al_ed:9-30"
+    end
+    document = adapter.parse(ref)
+    assert_equal 5, document.size
+    assert_equal "translation-ordinal", document.first.annotations["addressing"]
+  end
+
+  def test_coptic_mag_documents_keep_the_full_cts_urn_as_their_tail
+    # The copticMag namespace is deliberately NOT stripped: the live catalog
+    # already minted urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.
+    # tm99995.kyp_t_53 at the first sync — urns are FROZEN once used, so the
+    # whole magical-papyri corpus keeps the full CTS urn as its tail rather
+    # than moving one loaded document's identity.
+    adapter = conformance_adapter
+    urn = "urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.ocrum_st_18.kypt344"
+    ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
+    refute_nil ref
+    document = adapter.parse(ref)
+    assert_equal 7, document.size
+    assert_equal "#{urn}:1.7", document.passages.last.urn
   end
 
   def test_parse_handles_the_single_chapter_book_edge_case

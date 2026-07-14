@@ -71,7 +71,7 @@ stable). Needs a mapping table design (which source-pairs align, keyed how)
 **Effort.** fable (mapping design + PROIEL citation surfacing) + opus
 (renderer/CLI); 2 packets + optional source adapters.
 
-### 1.3 The reference shelf — dictionaries as data  [SHIPPED — Phase 11 P11-4: LSJ + Lewis & Short, define + nabu_define, citation resolution, architecture §11; Bosworth-Toller shipped Phase 12 per oe-survey. Monier-Williams SHIPPED — Phase 17 P17-4: `mw` adapter (`nc`), SLP1↔IAST bijective transcode, citation tiers resolving RV./BhP. to GRETIL urns, MW comparanda as a second etym witness beside kaikki; registered `enabled: false` — ~194k entries land at the owner-fired first sync (~11 MB)]
+### 1.3 The reference shelf — dictionaries as data  [SHIPPED — Phase 11 P11-4: LSJ + Lewis & Short, define + nabu_define, citation resolution, architecture §11; Bosworth-Toller shipped Phase 12 per oe-survey. Monier-Williams SHIPPED — Phase 17 P17-4: `mw` adapter (`nc`), SLP1↔IAST bijective transcode, citation tiers resolving RV./BhP. to GRETIL urns, MW comparanda as a second etym witness beside kaikki; SYNCED LIVE 2026-07-13 (owner sign-off): 193,890 entries, 3,250 comparanda edges in the crosswalk]
 
 **What.** Ingest the openly licensed classical lexica as a queryable layer:
 LSJ, Lewis & Short, Middle Liddell (Perseus lexica repos, CC BY-SA XML),
@@ -96,7 +96,7 @@ terms vary by dictionary).
 **Effort.** scout (licenses/formats) + fable (entry model + citation
 resolution policy) + opus (parsers per lexicon); 3 packets.
 
-### 1.4 Time and place as axes — HGV metadata  [SHIPPED — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; part 1 dated/placed 61,670 documents (99.2% of the DDbDP shelf). Part 2 SHIPPED — Phase 16 P16-3: ORACC period/regnal extractors + TOROT chronicle AM annals; LIVE since the 2026-07-13 owner rebuild at **83,233 dated/placed documents**. Part 3 shipped-not-synced — Phase 17 P17-2: the EDH date extractor projects ~+60k more at that shelf's first sync (see 2.3)]
+### 1.4 Time and place as axes — HGV metadata  [SHIPPED — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; part 1 dated/placed 61,670 documents (99.2% of the DDbDP shelf). Part 2 SHIPPED — Phase 16 P16-3: ORACC period/regnal extractors + TOROT chronicle AM annals; LIVE since the 2026-07-13 owner rebuild at 83,233 dated/placed documents. Part 3 (Phase 17 P17-2, the EDH date extractor) DELIVERED at the 2026-07-13 EDH sync: **164,989 dated/placed documents live** as of 2026-07-14, EDH contributing 81,416 (see 2.3)]
 
 **What.** Ingest metadata corpora that date and locate texts we already
 hold: HGV (Heidelberger Gesamtverzeichnis — dates/provenances for the
@@ -122,7 +122,7 @@ dates (the axes stay sparse — display honestly). Provenance names need no
 gazetteer in v1 (strings, not geo-coordinates; resist scope creep).
 **Effort.** opus with fable review of the date model; 1–2 packets.
 
-### 1.5 Fragment-aware search — trigram infix matching  [SHIPPED — Phase 16 P16-4: `search --fuzzy`, a character-trigram index scoped by per-source `fuzzy_index:` flags (papyri-ddbdp + oracc); LIVE in production since the 2026-07-13 owner rebuild (1.31M passages indexed, the BGU 6.1470 demo runs against the real index). EDH ships `fuzzy_index: true` and joins the scope at its first sync (see 2.3)]
+### 1.5 Fragment-aware search — trigram infix matching  [SHIPPED — Phase 16 P16-4: `search --fuzzy`, a character-trigram index scoped by per-source `fuzzy_index:` flags (papyri-ddbdp + oracc); LIVE in production since the 2026-07-13 owner rebuild (the BGU 6.1470 demo runs against the real index); EDH joined the scope at its 2026-07-13 sync — 1,712,772 passages indexed as of 2026-07-14 (see 2.3)]
 
 **What.** A character-trigram index over the folded search form enabling
 infix/wildcard queries: `search --fragment "]μηνιν αει["` — mid-word
@@ -205,7 +205,7 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
-### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro, ~7,900 entries projected), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — all land at the owner-fired resync + rebuild. The P17-8 PIE survey (docs/pie-survey.md) queues IE-CoR (CC BY, 2,261 held-pair edges measured) + LIV-LOD for Phase 18, pending the gate decision; Starling/UT-LRC honestly blocked with mail-unblock paths]
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (docs/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family — all three registered `enabled: false`, NOT SYNCED, no live rows until the owner-fired first syncs. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
 
 **What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
 \*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already
@@ -280,7 +280,7 @@ what each digitization IS — e.g. SBLGNT ≠ NA28 — and don't pretend
 otherwise); LXX digitization licensing needs the honest scout treatment.
 **Effort.** scout + 2–3 small opus adapters.
 
-### 2.2 Coptic Scriptorium  [SHIPPED — Phase 17 P17-1: `coptic-scriptorium` adapter (new TT parser family), cop = gold-lemma language #15 ONCE SYNCED, Sahidic (`nc`) + Bohairic (`attribution`) NT witnesses #14/#15 registered in alignments.yml, language-of-origin loans layer, Wikification entities, MS-date axis extractor. Registered `enabled: false` — the ~2.8 GB first sync is owner-fired; the 2026-07-13 attempt failed partway (a 152-doc partial load sits in the catalog), so the shelf lands at the clean re-sync]
+### 2.2 Coptic Scriptorium  [SHIPPED — Phase 17 P17-1: `coptic-scriptorium` adapter (new TT parser family), cop = gold-lemma language #15 ONCE SYNCED, Sahidic (`nc`) + Bohairic (`attribution`) NT witnesses #14/#15 registered in alignments.yml, language-of-origin loans layer, Wikification entities, MS-date axis extractor. SYNCED LIVE 2026-07-13 (owner sign-off; the first attempt's unzip failure re-run clean) and completed by Phase 18 P18-1's coverage pass (188 → 482 of 483 upstream corpora): 482 docs / 74,169 passages, cop live as gold-lemma language #15 with 233,020 rows, NT witnesses #14/#15 attesting in the hub]
 
 **What.** Coptic corpora (Sahidic), TEI + **treebank-annotated**, CC BY.
 We already hold 28k unannotated Coptic passages via papyri; this adds
@@ -294,7 +294,7 @@ conventions §9.
 **Effort.** scout + opus adapter; possibly ConlluParser reuse (they publish
 UD-format treebanks too — the cheap path, verify).
 
-### 2.3 Epigraphic Database Heidelberg — Latin inscriptions  [SHIPPED — Phase 17 P17-2: `edh` adapter (EpiDoc parser family reuse), migration 009 `document_facets` (genre/province/material/object_type + `search --type/--province/--material`), persons prosopography in `metadata_json`, date extractor projecting ~+60k dated documents. Registered `enabled: false`, `sync_policy: frozen` (upstream archived — preservation posture); ~82k inscriptions land at the owner-fired first sync + rebuild, until which `document_facets` holds 0 rows]
+### 2.3 Epigraphic Database Heidelberg — Latin inscriptions  [SHIPPED — Phase 17 P17-2: `edh` adapter (EpiDoc parser family reuse), migration 009 `document_facets` (genre/province/material/object_type + `search --type/--province/--material`), persons prosopography in `metadata_json`, date extractor projecting ~+60k dated documents. SYNCED LIVE 2026-07-13 (owner sign-off), `sync_policy: frozen` (upstream archived — preservation posture): 81,856 inscriptions / 406,281 passages, `document_facets` at 256,518 rows, 81,416 dated documents on the axis, 27 quarantines triaged at gate 18 and baseline-anchored]
 
 **What.** EDH: ~80k Latin inscriptions, EpiDoc TEI, CC BY-SA, bulk
 downloads. **Our EpiDoc family nearly reuses directly** (Leiden conventions

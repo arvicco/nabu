@@ -40,6 +40,7 @@ class LocalCheckTest < Minitest::Test
     seed_run(source, added: 5, updated: 0, errored: 1)
     seed_run(source, added: 5, updated: 0, errored: 2)
     seed_run(source, added: 5, updated: 0, errored: 80) # latest: huge jump
+    seed_docs(source, live: 15) # populated — the P18-7 zero-rows invariant stays out of the way
 
     report = check(registry_of(["spiky", { enabled: true }]))
     kinds = report.sources.first.findings.map(&:kind)
@@ -53,6 +54,7 @@ class LocalCheckTest < Minitest::Test
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 1)
+    seed_docs(source, live: 9)
 
     report = check(registry_of(["calm", { enabled: true }]))
     refute report.any_loud?
@@ -65,6 +67,7 @@ class LocalCheckTest < Minitest::Test
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_run(source, added: 0, updated: 0, errored: 0)
+    seed_docs(source, live: 11)
 
     report = check(registry_of(["dead", { enabled: true }]))
     findings = report.sources.first.findings
@@ -128,6 +131,7 @@ class LocalCheckTest < Minitest::Test
     source = seed_source(slug: "rebuilt", enabled: true)
     # Only rebuild-kind history: trend-wise this source was never synced.
     seed_run(source, added: 60_000, updated: 0, errored: 90, kind: "rebuild")
+    seed_docs(source, live: 12) # populated — replay landed; only the TREND reading is at stake
     report = check(registry_of(["rebuilt", { enabled: true }]))
     assert_equal :never_synced, report.sources.first.findings.first.kind
 
@@ -137,6 +141,72 @@ class LocalCheckTest < Minitest::Test
     seed_run(source, added: 4, updated: 1, errored: 0, finished_at: @now - 86_400)
     report = check(registry_of(["rebuilt", { enabled: true }]))
     assert_empty report.sources.first.findings
+  end
+
+  # -- the P18-7 invariants fold into the same report -----------------------
+
+  # The motivating gap: a source whose most recent run FAILED previously
+  # surfaced NOTHING here (trends read successes only). Now it is loud.
+  def test_failed_last_run_is_loud_even_with_healthy_prior_trends
+    source = seed_source(slug: "coptic", enabled: true)
+    seed_run(source, added: 400, updated: 0, errored: 1, finished_at: @now - 86_400)
+    seed_docs(source, live: 400)
+    seed_run(source, added: 0, updated: 0, errored: 0, status: "failed", finished_at: @now)
+
+    report = check(registry_of(["coptic", { enabled: true }]))
+    findings = report.sources.first.findings
+    assert_includes findings.map(&:kind), :failed_run
+    assert report.any_loud?, "a failed last run must fail the health check"
+  end
+
+  # A source with ONLY a failed run is "last run FAILED", not "never synced".
+  def test_failed_first_sync_beats_the_never_synced_note
+    source = seed_source(slug: "firstfail", enabled: true)
+    seed_run(source, added: 0, updated: 0, errored: 0, status: "failed")
+
+    kinds = check(registry_of(["firstfail", { enabled: true }])).sources.first.findings.map(&:kind)
+    assert_includes kinds, :failed_run
+    refute_includes kinds, :never_synced
+  end
+
+  # The half-loaded-catalog signature: ledger says succeeded, catalog empty.
+  def test_enabled_source_with_ok_run_and_no_rows_is_loud
+    source = seed_source(slug: "hollow", enabled: true)
+    seed_run(source, added: 500, updated: 0, errored: 0)
+
+    report = check(registry_of(["hollow", { enabled: true }]))
+    assert_includes report.sources.first.findings.map(&:kind), :enabled_unpopulated
+    assert report.any_loud?
+  end
+
+  # Quarantine creep (the auto-advance backstop) joins the per-source findings.
+  def test_quarantine_creep_surfaces_in_health
+    source = seed_source(slug: "creeper", enabled: true)
+    seed_run(source, added: 5, updated: 0, errored: 0)
+    seed_docs(source, live: 5)
+    @ledger[:quarantine_baselines].insert(source_slug: "creeper", baseline: 1_200,
+                                          anchor: 1_000, recorded_at: @now)
+
+    report = check(registry_of(["creeper", { enabled: true }]))
+    assert_includes report.sources.first.findings.map(&:kind), :quarantine_creep
+    assert report.any_loud?
+  end
+
+  # The global slot: fully-migrated fixture dbs report nothing (a healthy
+  # library prints nothing new); a behind ledger surfaces softly.
+  def test_global_findings_empty_on_migrated_dbs_and_soft_when_ledger_behind
+    seed_source(slug: "s", enabled: true)
+    assert_empty check(registry_of(["s", { enabled: true }])).global
+
+    stale = Nabu::Store::Ledger.connect("sqlite::memory:")
+    require "sequel/extensions/migration"
+    Sequel::Migrator.run(stale, Nabu::Store::Ledger::MIGRATIONS_DIR, target: 4)
+    report = check(registry_of(["s", { enabled: true }]), ledger: stale)
+    assert_equal [:pending_migrations], report.global.map(&:kind)
+    refute report.any_loud?, "pending migrations are advisory (soft)"
+    assert_operator report.soft_count, :>=, 1
+  ensure
+    stale&.disconnect
   end
 
   # -- live golden replay --------------------------------------------------

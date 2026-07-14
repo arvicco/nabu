@@ -166,6 +166,48 @@ module Store
       end
     end
 
+    # -- ledger migration 005 (P18-7: quarantine baselines) -------------------
+
+    def test_migration_005_creates_the_quarantine_baselines_table
+      assert @ledger.table_exists?(:quarantine_baselines)
+      @ledger[:quarantine_baselines].insert(source_slug: "papyri-ddbdp", baseline: 9_312,
+                                            anchor: 9_312, recorded_at: Time.now)
+      assert_raises(Sequel::UniqueConstraintViolation, Sequel::ConstraintViolation) do
+        @ledger[:quarantine_baselines].insert(source_slug: "papyri-ddbdp", baseline: 1,
+                                              anchor: 1, recorded_at: Time.now)
+      end
+    end
+
+    # Forward-only against a LIVE-shaped ledger: apply 001–004, fill every
+    # pre-existing table as production would, migrate to 005 — nothing lost,
+    # the new table present and empty.
+    def test_migration_005_applies_to_a_live_shaped_ledger_without_loss
+      db = Nabu::Store::Ledger.connect("sqlite::memory:")
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, Nabu::Store::Ledger::MIGRATIONS_DIR, target: 4)
+      db[:runs].insert(source_slug: "perseus-greek", kind: "sync", started_at: Time.now,
+                       finished_at: Time.now, added: 3, status: "succeeded")
+      db[:pins].insert(source_slug: "perseus-greek", repo_url: "https://x", last_sync_sha: "abc")
+      db[:revisions].insert(urn: "urn:x:1", event: "revised", at: Time.now)
+      db[:source_probes].insert(source_slug: "perseus-greek", checked_at: Time.now,
+                                drift: "current", license: "unchanged")
+      db[:language_notes].insert(lang_code: "grc", kind: "name", body: "Ancient Greek",
+                                 source: "seed", created_at: Time.now)
+
+      Nabu::Store::Ledger.migrate!(db)
+
+      assert_equal 5, db[:schema_info].get(:version)
+      assert db.table_exists?(:quarantine_baselines)
+      assert_equal 0, db[:quarantine_baselines].count
+      assert_equal 3, db[:runs].get(:added)
+      assert_equal "abc", db[:pins].get(:last_sync_sha)
+      assert_equal "urn:x:1", db[:revisions].get(:urn)
+      assert_equal "current", db[:source_probes].get(:drift)
+      assert_equal "Ancient Greek", db[:language_notes].get(:body)
+    ensure
+      db&.disconnect
+    end
+
     # A catalog frozen at the pre-P7-1 shape: migrations 001–004 applied, so
     # runs/source_repos/sources.license_baseline_sha256 still live in it.
     LEGACY_TARGET = 4

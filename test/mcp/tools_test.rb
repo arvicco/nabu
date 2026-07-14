@@ -988,6 +988,39 @@ module MCP
       assert_kind_of Integer, entry.fetch("reflexes_total")
     end
 
+    # P18-3: the MCP payloads ride the DEDUPED ReflexViews (never raw
+    # crosswalk rows) — a duplicate reflex row (multi-subtree descent, the
+    # prīmus ×3 defect) appears once in both nabu_etym cognates and
+    # nabu_define reflexes.
+    def test_etym_and_define_payloads_ride_the_deduped_reflex_views
+      seed_recon_shelf
+      entry_row_id = @catalog[:dictionary_entries]
+                     .where(urn: "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2").get(:id)
+      chu_row = @catalog[:dictionary_reflexes]
+                .where(dictionary_entry_id: entry_row_id, language: "chu", word: "богъ").first
+      dupe = chu_row.dup
+      dupe.delete(:id)
+      dupe[:seq] = 9_999
+      @catalog[:dictionary_reflexes].insert(dupe)
+      # Attest chu богъ so it sorts into the bounded cognate page.
+      doc = make_document(urn: "urn:nabu:test:chu", title: "Zographensis", language: "chu")
+      make_passage(doc, urn: "urn:nabu:test:chu:1", text: "ба", sequence: 0, language: "chu",
+                        lemmas: [%w[богъ ба]])
+      rebuild!
+
+      etym_entries = payload(call("nabu_etym", { "lemma" => "*bogъ" })).fetch("entries")
+      entry = etym_entries.find { |e| e.fetch("urn").end_with?("bogъ:noun:2") }
+      chu = entry.fetch("cognates").select { |c| c["language"] == "chu" && c["word"] == "богъ" }
+      assert_equal 1, chu.size, "nabu_etym serves the grouped view, one row per word"
+
+      define_entries = payload(call("nabu_define", { "lemma" => "*bogъ", "lang" => "sla-pro" }))
+                       .fetch("entries")
+      reflexes = define_entries.find { |e| e.fetch("urn").end_with?("bogъ:noun:2") }
+                               .fetch("reflexes")
+                               .select { |c| c["language"] == "chu" && c["word"] == "богъ" }
+      assert_equal 1, reflexes.size, "nabu_define serves the same grouped view"
+    end
+
     def test_concord_with_a_missing_fts_table_degrades_gracefully
       seed_corpus
       @fulltext.drop_table(Nabu::Store::Indexer::TABLE)
@@ -1457,6 +1490,24 @@ module MCP
       assert_equal 1, body.fetch("groups").size
       assert_match(/showing 1/, body.fetch("note"))
       assert_match(/borrowing/, body.fetch("note"))
+    end
+
+    # P18-3: nabu_cognates rides the hash-keyed Query::Cognates join — a
+    # forced duplicate closure row still yields one group with one witness
+    # word per language in the payload.
+    def test_cognates_payload_rides_the_deduped_join
+      seed_cognates_corpus
+      table = @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE]
+      row = table.where(language: "chu", lemma_folded: "богъ",
+                        root_urn: "urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root").first
+      refute_nil row, "the closure must hold the chu богъ → *bʰeh₂g- row"
+      table.insert(row)
+
+      body = payload(cognates_tools.call("nabu_cognates", { "target" => "MARK 1.1" }))
+      assert_equal 1, body.fetch("total"), "one (verse, root) group, not one per closure row"
+      witnesses = body.fetch("groups").first.fetch("witnesses")
+      assert_equal(%w[chu grc], witnesses.map { |w| w.fetch("language") },
+                   "one witness word per language, the duplicate row invisible")
     end
 
     def test_cognates_langs_restricts_the_pair

@@ -5974,3 +5974,529 @@ facets from live db), improvements register (§2.2/§2.3 → shipped,
 §1.11 part-2 note, §1.3 MW note), PR, owner queue (real syncs for every
 new source are owner-fired; fixture-plan approvals happen mid-phase at
 the Phase A gates), backup-disk re-flag (standing), sticky alarm LAST.
+
+## P18-1 · Coptic coverage: span inventory + headerless files  [tier: fable] [status: done 2026-07-13] [deps: P17-1, P17-10]
+The owner's third sync completed (run 112): 188 of 465 docs loaded, 277
+quarantined, 18 files "no usable TT meta header" (the reported "295
+unrecognized" = 277 + 18 conflated; run 112's notes list exactly 18).
+Census-first widening of the P17-1 inventory — the strict-inventory
+tripwire stays: an unknown span type still quarantines.
+
+CENSUS 1 (spans; full sweep of all 2,497 non-excluded TT chunks @ v6.2.0
+— the P17-10 first-error census undercounted at 32): **66 unknown span
+types**, EACH given a verdict, occurrence×file counts pinned in the
+parser constants. (a) INGEST-AS-ANNOTATION, 49 tags: edition topology
+ed_page_n/ed_pg_n/ed_page (869×/80f + 274×/14f + 14×/2f → "ed_page"),
+ed_line_n/ed_lb_n (38,285×/113f → per-token "ed_line"), ed_chapter_n;
+editorial transcription marks → "editorial" records {mark, verbatim
+sub-attrs incl. upstream typos gap_exent/gap_reasaon/gap_reasonn}: gap*
+(1,154×/165f + reason/unit/extent/quantity), supplied* (1,865×/138f +
+reason/evidence/source/unit/quantity), surplus*, unclear*, abbr
+type=nomSac (1,620×/337f — the sahidic-OT nomina-sacra layer), sic,
+del_rend, add_place; entity_identity (686×/62f — v6.0 attribute-form
+Wikification wrapping the TOKEN → token-anchored entities records);
+PATHS entity markup (persName/placeName/roleName/date/org/rs _type +
+placeName_ref gazetteer ids merging into their enclosing entities;
+standalone quote_ref/quote_type biblical-quotation records); Pistis
+Sophia alternate versification marcion_*/petermann_* (10,117×+2,320×/28f
+→ "cit_marcion"/"cit_petermann" lists) + trans_horner (→
+"translation_horner") + pb_coptic_id (→ "page_coptic"); german (→
+"translation_de", Besa on_vigilance), arabic_translation, section_title;
+verse_n_vname (→ "verse_name"); note/note_note upgraded from ignore to
+"notes" (only annotation change touching already-loaded docs — revision
+bumps at resync, urns frozen). (b) FOLD-INTO-EXISTING, 8 tags:
+verse_n_vid_n/v_id/vid__n → vid; verse → the unit opener (verse-as-unit
+files: 1Cor/shenoute-house carry NO verse_n; fused labels "1 Corinthians
+14:1" normalize to citation 14.1, verbatim label kept in annotations);
+pb_n/pb_id → page; ch_n → chapter; pb_coptic_xml → page_coptic. (c)
+IGNORE-COUNTED, 9 tags, named in IGNORED_TAGS with reasons: hi, sup,
+sub, cb, ignore_note (upstream's own name says ignore), p_source
+(constant PATHS credit), chapter/chapter_name/chapter_2 (duplicate
+chapter naming; citation comes from meta). STRUCTURAL verdicts: (1) the
+"unsegmented stretches" are the OMITTED-VERSE lacuna shape — Mark 7:16,
+John 5:4, Acts 8:37, Matt 12:47, Rom 16:24, Rev 1:1-2, bohairic Acts
+24:7, OCrum's final Amen carry `[..]`/`[--]`/`[...]` placeholder groups
+that open BEFORE the verse_n nested inside them → stray groups/tokens
+attach FORWARD to the unit that opens inside them; a stray that CLOSES
+with no unit is still the loud error (tripwire pinned by 3 synthetic
+guard tests). Acts 24:7's group crosses into v8 → attaches whole to the
+verse it opened into, token-level attribution stays exact. (2) A token
+still open at unit close belongs to the unit it OPENED in (span-stack
+semantics — Luke 13:20|21 splits mid-word ⲟⲩ|ⲉⲥ, helias splits at
+chapter boundaries; freed helias ×4 + nt.luke.sahidica). (3) copticMag
+urn regex deliberately NOT widened: the live catalog froze urn:nabu:
+coptic-scriptorium:urn:cts:copticMag:kyprianos.tm99995.kyp_t_53 at the
+first sync; the corpus keeps the full CTS urn as its tail (pinned by
+test; Würzburg Kyprianos cross-refs ride in metadata `source`).
+
+CENSUS 2 (headers): ALL 18 unrecognized files share ONE lexical variant
+— `msItem_title ="…"`, a space before the equals (helias 5, theodosius
+9, acts-pilate 2, lament-mary 2; v6.0.0 OCR-era headers). NOT a 4th
+structural dialect, NOT meta-on-part1-only: every part carries its own
+full meta with a range-suffixed cts urn (helias.martyrdom.sobhy_ed:0-15)
+→ regex widened to \s*=\s*, one document per part (the shenoute range
+precedent, no group merge). theodosius/acts-pilate/lament-mary parts are
+verse-less → the existing translation-ordinal mode.
+
+POST-FIX COVERAGE (re-derived read-only over the live tree): **482 of
+483 discovered docs parse clean** (465+18 refs; was 188/465), 74,169
+passages projected (was 29,946), 0 unrecognized, skipped_by_rule 114
+unchanged. Remaining quarantine, itemized: 1 — lives.longinus_lucius.
+paths_ed:10-16 (life.longinus.lucius.02.tt carries a verse-less bare
+<translation> stretch inside a verse-mode file, upstream mixed
+segmentation; honest named quarantine, not worth a heuristic). FROZEN
+URNS verified: all 188 live doc urns re-mint with identical passage
+counts; passage-urn lists spot-checked identical on 7 live docs incl.
+the copticMag one and dual-origin Habakkuk. Fixtures: 12 offender items
+(10 trimmed loose files, Mark_07 added to the sahidica.nt zip, NEW
+bohairic.nt + sahidic.ot one-member zips; provenance in README +
+manifest.yml); fixture discover now mints 18 docs. Suite 2,283 runs /
+31,217 assertions exit 0, lint exit 0. Owner re-run:
+`bin/nabu sync coptic-scriptorium --parse-only` (expect 482 loaded /
+1 quarantined / 0 unrecognized).
+
+## P18-2 · Starter pack + site Quickstart  [tier: opus] [status: done 2026-07-13] [deps: —]
+Owner (2026-07-13): queue the starter pack; "the site needs some kind of
+'Quickstart' section - right now it lacks even clearly visible link to
+the repo, as well as steps needed to initialize your own Nabu Library."
+Adoption bottleneck: time-to-first-marvel is currently clone + Ruby +
+multi-GB syncs. (a) STARTER PACK: a curated small-shelf set reaching a
+real marvel in minutes — candidates sblgnt + vulgate + eng-web + proiel
++ lexica (align MARK multi-witness, lemma search, define λόγος) —
+MEASURE real canonical sizes (live tree read-only) and pick under a
+~300 MB / <10 min budget; mechanism argued: a `nabu quickstart` command
+(sync the starter list, then print the three demo commands) vs a
+documented sync line — bias to the command, it's the humanist's path.
+(b) SITE: a Quickstart page (prereqs, clone, bundle install, starter
+sync, first search + align + define, MCP registration pointer, "grow
+the library" next step) + a VISIBLE repo link in the site header/nav
+(currently buried in About). README quickstart section aligned with the
+site page (single source of truth stated). Tests for the command
+(fixture-backed, no network in suite); site builds exit 0.
+FINDINGS (done 2026-07-13): MEASURED canonical sizes (du -sh, live
+tree, git history included): sblgnt 11 MB · proiel 173 MB · iswoc 30 MB
+· lexica 479 MB · vulgate 357 MB · eng-web 357 MB · torot 270 MB. The
+~300 MB budget is NOT attainable with the define marvel: lexica alone
+is 479 MB on disk (the registry's "~160 MB" note is stale). CHOSEN SET
+(693 MB): sblgnt + proiel + iswoc + lexica — align "MARK 2.3" renders
+SEVEN witnesses (grc ×2, lat, got, xcl, chu, ang — iswoc's 30 MB buys
+the OE witness), search --lemma rides the PROIEL gold rows, define
+λόγος/virtus has LSJ + L&S. vulgate/eng-web EXCLUDED: each is a full
+open-bibles clone measuring 357 MB (stale "~76 MB" note) for one USFX
+file — they are the first "grow the library" step instead. TIME: ledger
+first-sync wall clocks sblgnt 3 s / proiel 14 s / iswoc 4 s / lexica
+133 s ≈ 3 min fetch+load, projected well under the 10 min line with
+per-source reindexes. SHIPPED: `nabu quickstart` (normal per-source
+sync path in starter order, one failure never stops the rest + end
+report + exit 1, idempotent re-sync, --list previews; epilogue = the
+three marvels + grow pointer), site/quickstart.md + nav entry +
+GitHub ↗ repo link in the nav bar of EVERY page (layout-level, accent-
+styled), README Quickstart short form moved near the top pointing at
+the site page, docs/quickstart.md §2 re-anchored on the command,
+MAINTENANCE.md gate duty covers the measured sizes. Lint rider:
+site/vendor + site/_site excluded in .rubocop.yml (vendored gems ship
+.rubocop.yml requiring rubocop-minitest — the CI vendor trap, found at
+the first local site build). Tests +7 (starter wiring vs the shipped
+registry, --list touches nothing, order + epilogue, idempotent re-run,
+partial failure aggregation + exit 1, help teaches the shelf, command
+listed). Suite 2,267 runs exit 0, lint 287 files exit 0, jekyll build
+exit 0.
+
+## P18-3 · Reflex dedupe audit — every grouping surface  [tier: opus] [status: done 2026-07-13 — every surface tested-or-proven, findings table below; 8 forcing tests added, zero code defects found beyond the already-fixed choke point] [deps: —]
+Owner (2026-07-13, after the prīmus ×3 fix): "Make sure to dedup not
+just specific command but more generally any path where such grouping
+COULD create dup entries." The orchestrator fixed the display choke
+point (ReflexViews.for_entry — serves etym/define/MCP); this packet
+AUDITS every other surface that groups crosswalk/closure/alignment data
+and proves-or-fixes each: Query::Cognates interactive join (same
+(language, word) via word-fold AND roman-fold double-match?; multiple
+reflex rows per root), BatchCognates edges, Query::Etym ancestors_of
+(claims merge — verify by test), the reflex_roots closure build
+(claims sorted/deduped — verify multi-shelf + multi-subtree), MW
+comparanda rows landing beside kaikki rows for the same (entry, word),
+nabu_etym/nabu_cognates/nabu_define MCP payloads, links journal
+readers (kind-grouped edge lists), parallels loci grouping, formulas
+star edges, vocab hapax lists, collation cells. For each: a test that
+FORCES the duplicate condition and pins the grouped render, or a short
+proof in the class doc why duplication is structurally impossible
+there. Deliverable includes a one-table findings summary (surface /
+dup-possible? / fixed-or-proven).
+
+FINDINGS (2026-07-13). Verdict: the display choke point the
+orchestrator fixed (ReflexViews#for_entry) was the only defect; every
+other surface either already collapses duplicates structurally
+(hash-keyed grouping / Sets / unique index) or rides the fixed view.
+Where a duplicate condition is reachable in the DATA it was forced by
+test; where unreachable, the impossibility is argued in the class doc.
+
+| surface | dup possible? | fixed-or-proven | where |
+|---|---|---|---|
+| ReflexViews#for_entry (etym/define display) | YES — multi-subtree crosswalk rows (prīmus ×3) | FIXED (orchestrator): dedupe by (language, word, roman), flags merge true>false>nil | lib/nabu/query/reflex_views.rb; etym_test test_duplicate_reflex_rows_render_one_view_with_merged_loan_flag |
+| Query::Cognates join | no — accumulator hash-keyed (ref,root)→language→lemma, surfaces/docs/passages are Sets; word/roman folds are distinct closure keys and a gold lemma has one folded form | proof in class doc + forced-dup test (raw duplicate closure rows) | cognates.rb doc; cognates_test test_duplicate_closure_rows_render_one_group_with_one_witness_word_each |
+| BatchCognates edges | no — refs/meets are Sets, one edge per unordered pair; multi-SUBTREE same-root dups collapse like P16-2's multi-root | test: forced dup closure row → same edge count, meet listed once, score unchanged | batch_cognates_test test_duplicate_closure_rows_collapse_to_one_edge_with_one_meet |
+| Query::Etym#ancestors_of | YES — one ancestor naming the same child via several subtree edges | VERIFIED by test: one ancestor Result, edge_borrowed merges true>false>nil (the class-doc claim now pinned) | etym_test test_duplicate_ancestor_naming_edges_collapse_with_merged_edge_borrowed |
+| Etym entry-level match (word+roman double-join) | reachable rows, collapsed by uniq(entry_row_id) | pinned via the MW doubled-comparandum test (one entry) | etym_test test_duplicated_mw_comparanda_render_one_entry_with_one_cognate_view |
+| ReflexRootsIndexer closure | YES in input (multi-subtree edges) | verified: one (language, lemma_folded, root) row; OR-aggregated borrowed = max_flag, identical to the display merge rule | reflex_roots_indexer_test test_multi_subtree_duplicate_edges_emit_one_row_with_the_display_merge_flag |
+| MW comparanda (P17-4) | under ONE entry: yes (senses repeat a comparandum) — covered by the display dedupe; MW vs kaikki naming the same (language, word) under DIFFERENT entries stays two honest witnesses, never merged | test forces the in-entry dup | etym_test (as above); define surface: define_test test_duplicate_reflex_rows_render_one_view_on_the_define_surface |
+| MCP nabu_etym / nabu_define | ride Query::Etym/Define → the deduped ReflexViews, never raw rows | pinned by payload test | mcp/tools_test test_etym_and_define_payloads_ride_the_deduped_reflex_views |
+| MCP nabu_cognates | rides Query::Cognates | pinned by payload test | mcp/tools_test test_cognates_payload_rides_the_deduped_join |
+| links reader (kind groups) | no — unique (from_urn,to_urn,kind) index + write_edge! reverse-direction refresh ⇒ ≤1 row per unordered pair; out/in double-listing needs a self-edge no producer mints | proof in class doc | lib/nabu/query/links.rb |
+| parallels loci grouping | no — candidates hash-grouped by document id, one Hit per document; loci = sibling row count | already argued (rider ii, class doc) | lib/nabu/query/parallels.rb |
+| formulas star spokes | no — gram counts hash-keyed (one Formula per gram); full loci distinct-passage via per-passage seen-Set; spokes deduped by (hub,locus).minmax seen-set, overlaps counted as coalesced, never silent | already argued (class docs) | lib/nabu/query/formulas.rb; lib/nabu/batch_formulas.rb |
+| vocab hapax list | no — tally hash-keyed by folded lemma: a repeated spelling MERGES (un-hapaxes), never doubles; a repeated display string needs one spelling folding two ways in one scope (mixed-language document — no adapter mints one) | proof in class doc | lib/nabu/query/vocab.rb |
+| collation cells | no — cells hash-grouped by (language, script); Align yields each registered witness at most once per ref, so each reading lands in one cell once | proof in class doc | lib/nabu/query/collation.rb |
+
+## P18-4 · nabu language CODE — the code desk reference  [tier: opus] [status: done 2026-07-14 — three-layer persistence per the mid-packet owner redirect; findings below] [deps: —]
+Owner (2026-07-14, reading etym reflexes): "half of these language codes
+means nothing even to (non-specialist) humanists. There needs to be a
+nabu language [code] that not only gives language name but also
+(possibly historical) context and the language relevance to
+corpus/library." Census first: the code universe actually OCCURRING in
+the db (documents.language + passage_lemmas.language + reflex
+lang_codes — the kaikki etymology codes like zle-ort/gkm/zlw-opl are
+the long tail). NAMES: the kaikki descendants data carries the language
+NAME per node — check whether the parser sees it and can store/derive
+it (zero-curation name source beats a hand-table); fall back to a
+generated code→name table from wiktextract's published language data.
+CONTEXT: curated one-to-three-line entries for (a) every held corpus/
+gold/dictionary language (from languages.md — period, family, what the
+library holds), (b) code FAMILIES for the etymology tail (zle-* = East
+Slavic historical stages, zlw-* = West Slavic, gkm = Medieval Greek…)
+— family-level context is honest and tractable where per-code curation
+isn't. RELEVANCE computed live: docs/passages/gold-lemma counts,
+dictionary shelves, reflex-edge counts ("appears in N etymology
+edges"). Command: `nabu language CODE` (compact card; --long lists
+where it appears), unknown code → honest miss + nearest-family hint.
+Consider (argue, don't assume): a one-line name hint in etym's grouped
+reflex lists where the terminal is wide enough vs keeping the render
+compact and pointing at the command. languages.md gains a pointer;
+MCP tool deferred unless trivially clean. OWNER DESIGN CHANGE mid-packet
+(2026-07-14): "we probably need a per-language info persistence layer
+with accumulatable data, not just hardcoded stubs/hit counts" — languages
+become a persisted entity: DERIVED layer (names/counts, rebuildable,
+catalog) + ACCUMULATED layer (curated context/notes/references,
+survives rebuild — journal-style per the links precedent, provenance
+per record) + an idempotent git-reviewable seed loader; the command
+reads the merged view. Agent re-briefed in flight.
+MCP tool deferred unless trivially clean.
+MID-PACKET OWNER REDIRECT (2026-07-14): "we probably need a per-language
+info persistence layer with accumulatable data, not just hardcoded
+stubs/hit counts" — languages became a first-class persisted entity,
+designed against the three-temperatures doctrine (§5/§15).
+FINDINGS (2026-07-14):
+- CENSUS (live db, read-only): documents.language 30 distinct / 170,684
+  docs (lat 82,424 · grc 61,080 · eng 9,870 · akk 6,261 · sux 5,905 ·
+  cop 2,529 · san-Latn 776 · sl 759 · qpc 601 · ang 354 · + 20 more incl.
+  und ×5); passage_lemmas.language 15 distinct / 2.85M rows (lat 583k ·
+  orv 455k · grc 379k · akk 361k · cop 233k · sl 214k · san 190k ·
+  sux 171k · chu 123k · got 99k · ang 25k · xcl 18k · xhu/uga/hit tiny);
+  dictionary_reflexes 803 distinct lang_codes / 1,006,872 rows (sco 144k ·
+  en 87k · enm 65k · yol 33k · de 32k · gmw-msc 29k …; tail: 549 codes
+  ≤100 rows, 317 codes ≤10). kaikki descendant nodes DO carry a human
+  `lang` name — the parser dropped it until now. Mode-of-names per code
+  over the 8 held extracts names 787/803 (98%); the 16 unnamed are 12
+  malformed abbreviation codes ("Angl.Sax.", "Lat."… — the ML. precedent),
+  unk, kdr, xlu-Latn, xmn (script-wrapper-only names). Mode needs a
+  plausibility filter: drop "unknown", /script$/ wrappers ("Old Cyrillic
+  script" outnumbers "Old Church Slavonic" 1532:919 under cu), and
+  non-capital free-text fragments.
+- STORAGE VERDICT (three temperatures): DERIVED = language_names census
+  in the catalog (migration 011: dictionary_id, lang_code, name,
+  occurrences — RAW, filter at read so rule changes need no reparse),
+  written wholesale per reflex-bearing dictionary by DictionaryLoader —
+  pure function of canonical, regenerated by rebuild; the LIVE db shows
+  census names after the next owner-fired rebuild or parse-only shelf
+  resync (until then curated names cover the pain codes). lang_name rides
+  the DictionaryReflex VALUE only — deliberately NOT stored per row (a
+  787-name function duplicated across 1M rows) and NOT in ContentHash
+  (pinned: no revision storm). ACCUMULATED = language_notes in the
+  LEDGER (ledger migration 004: lang_code, kind[name|family|context|…],
+  body, source, created_at) — ledger over own-journal-file because
+  authored curation is the most precious temperature (never-dropped,
+  always-backed-up file), the Phase-8 enrichment stance already assigns
+  authored accretions there, source_probes proves the ledger hosts
+  non-run-history state, and append-only FITS (supersession = append +
+  read-latest per (code,kind) — provenance history free; links needed its
+  own file precisely because reruns must physically replace). SEED =
+  config/languages.yml (curation reviewable in git; 183 notes: 33 held
+  languages incl. all 7 -pro shelves, 8 pain-tail codes incl. zle-ort/
+  ono/mru, zlw-opl/mpl, gkm, rue, cu; 24 family-prefix entries zle/zlw/
+  zls/sla/gem/gmw/gmq/ine/iir/inc/pra/ira/xme/xsc/itc/grk/bat/cel/roa/
+  sem/urj/cau/crp/frr) loaded by `nabu language --seed`, idempotent
+  (append only when latest body differs; duplicate code across sections
+  refused loudly — grc nearly ping-ponged). Update path: seed-file
+  reload is the shipped path; `--note` write command + agent survey-time
+  accretions = future work.
+- MERGED READ: Nabu::Languages (catalog+ledger handles, both optional,
+  both tables guarded — pre-011 catalog / pre-004 ledger read as no
+  data): name = note > filtered census mode > nil; context/family =
+  latest note; hyphenated codes fall back to family-prefix notes.
+  Query::LanguageInfo computes live relevance (docs/passages excl.
+  withdrawn, lemma rows, shelves + entry counts, reflex edges as
+  lang_code OR mapped language — one count, --long splits per upstream
+  code: chu's edges arrive as cu).
+- RENDER VERDICT: inline names in the GROUPED --long reflex render
+  ("[gkm · Medieval Greek]" — one name per line, exactly where the
+  owner's pain was; benefits define --long too) + one footer line on
+  etym ("codes: nabu language CODE — …"); the capped compact list stays
+  code-only (ten inline names would blow the line — the compact rule).
+  --list ships scoped to HELD languages only (a full 803-code dump is
+  unusable; the tail is the card's job — stated in the list footer).
+  MCP tool deferred (not trivially clean: needs ledger handle plumbing
+  in the MCP server).
+- Tests: suite 2,328 runs / 31,500 assertions exit 0, lint exit 0 (30 new
+  tests: parser lang_name, ContentHash exclusion pin, loader census raw +
+  idempotent + lexica-silent, Languages mode/filter/precedence/fallback/
+  degradation/seed-idempotency/duplicate-refusal/shipped-seed-anchors,
+  LanguageInfo counts incl. withdrawn exclusion + held scope, CLI
+  cards/miss/list/seed/footer/help + 2 updated grouped-render assertions).
+  Owner: run `nabu language --seed` once, and the census names land at
+  the next rebuild/resync.
+
+## P18-5 · IE-CoR — the cognacy matrix  [tier: opus] [status: done 2026-07-14 — adapter + cldf-csv family + loan flag + language-notes rider shipped, enabled:false awaiting owner sync; findings below] [deps: —]
+Owner (2026-07-14): "plan all major unblocked sources from PIE survey…
+This batch," with the language-info rider: "extract not only corpus but
+also nabu-language info where relevant." docs/pie-survey.md is the spec
+(v1-1; fixture sketch §7 approved by the batch directive). IE-CoR
+(lexibank/iecor, CC BY 4.0, Zenodo): 160 varieties / 170 concepts /
+25,731 lexemes / 4,981 cognate sets. SURFACE (survey verdict): reflexes
+ROWS — each cognate set = a dictionary entry (headword = Root_Form,
+1,596 laryngeal-notated PIE roots; collective `ine` tag proposal for
+mixed-root sets per §1), members = DictionaryReflex rows → 2,261
+measured held-pair edges light up etym/cognates/closure/MCP with zero
+new query code; 1,036 curated loan events feed the `borrowed` flag.
+LANGUAGE-INFO RIDER: IE-CoR's languages table carries per-variety
+metadata (names, clades, historical status) — accrete into the P18-4
+language layer (language_notes, provenance "iecor"; the named
+future-work write path becomes real here: agent/loader accretion with
+per-record provenance, seed-file untouched). Honest gaps from the
+survey handled as stated (san stem lemmas, hit hyphenated stems, orv
+dialect). Migration number IF needed: 014 (P18-6 has 015).
+
+FINDINGS (2026-07-14):
+- FETCH VERDICT: the Zenodo VERSIONED record (10.5281/zenodo.13304537 =
+  v1.2, one immutable 6.4 MB zip, published md5 matched) via ZipFetch
+  with a HARD sha256 pin (RELEASE_SHA256; mismatch aborts before any
+  tree mutation) — over GitFetch-of-repo (drags git history for a
+  dataset that only moves by minting a new DOI) and GitHub zipballs
+  (generated on the fly, NOT byte-stable). New release = new DOI =
+  owner re-pins URL+sha (the Coptic RELEASE_TAG pattern). NO migration
+  needed — 014 stays free (reflexes/borrowed/language_notes all exist).
+- INE DECISION: dictionary language = ISO 639-2 collective `ine`, per
+  the survey proposal, decided against per-clade shelves on the frozen-
+  URN clincher: Root_Language is a CURATABLE field (v1.2 roots span
+  PIE 1,596 / Latin 123 / Sanskrit 102 / … / 639 blank) — keying entry
+  identity to it would move entries between dictionaries on upstream
+  revision. Costs stated: `ine` is not -pro, so no renderer asterisk
+  (upstream Root_Form carries its own, kept VERBATIM incl. ?-doubt) and
+  `etym *root`/`define *root` direct-asterisk lookups skip iecor —
+  covered from the attested side (etym срьдьцє) and bare define
+  (define kerd-), where the cognacy value lives.
+- SHAPE: one entry per member-bearing set (4,981; the 58 judgment-less
+  rows skip by rule; singletons INCLUDED — a curated root + concept is
+  a define surface and can only surface when queried by its own forms).
+  Multiform split policy pinned: comma + SPACED slash split, native/
+  roman paired by index (mismatch → one unsplit verbatim row). Folds:
+  root keeps trailing hyphen (kaikki convention — *k̑erd- ≡ *ḱerd- →
+  "kerd-", verified cross-witness), members strip parens + trailing
+  hyphen (gold lemmas carry neither). Doubt flags dropped (no home in
+  the entry model) — named, not fudged. loans.csv ORs borrowed=true
+  into every member edge of an event set (path-grain, the survey's
+  explicit hlaibaz rule); non-event members parse false.
+- 12-variety map keyed by upstream variety ID (not ISO): the two real
+  remaps are Slovene EM slv→sl and grc ×2 collapsing; gmy rides
+  honestly off-gold. lang_code = upstream ISO else Glottocode verbatim.
+- RIDER: languages.csv → ledger language_notes, kind/provenance
+  "iecor" (never name/family/context — programmatic accretion can
+  never supersede curation), ONE note per catalog-facing code with
+  co-coded varieties grouped (grc, and 14 more multi-variety codes
+  measured) so append-only idempotency can't ping-pong. Writer =
+  DictionaryLoader#accrete_language_notes (the P18-4 named future
+  write path, now real: DictionaryDocument#add_language_note →
+  append-only latest-per-(code,kind), guarded pre-004/no-ledger).
+  Languages#extra_notes + card render ("iecor: IE-CoR variety: …");
+  card miss-guard extended so an extras-only code still gets a card.
+- FIXTURES: byte-verbatim trimmed 6-CSV set (13 varieties / 5 sets /
+  17 forms+judgments / 1 loan event; csv round-trip verified byte-
+  identical before trimming) — heart 6458, loan 1171, calc-only 1846,
+  singleton 2280, comma-multiform 1105 (?*pel(h₁)- paren-laryngeal
+  fold pin). Fixture render: etym срьдьцє → *k̑erd- [ine] with the 11
+  witnesses (got 𐌷𐌰𐌹𐍂𐍄𐍉 (hairto), sl ſerzè); etym кожа → "(loan)";
+  language chu → iecor note + census-named card; language lit → card
+  from iecor census+note alone.
+- PROJECTED LIVE (measured from the full v1.2 tables under the shipped
+  policy): 4,981 entries / 26,328 reflex rows (2,308 loan-flagged) /
+  1,800 held-language member edges (grc 334 · chu 179 · sl 179 · san
+  173 · lat 172 · xcl 170 · ang 170 · hit 148 · got 123 · orv 105 ·
+  gmy 47) / 144 language notes. Owner: bin/nabu sync iecor, eyeball
+  etym срьдьцє + language chu, flip enabled, rebuild reindex picks the
+  closure up.
+
+## P18-6 · LIV-LOD + de Vaan EDL skeleton  [tier: opus] [status: done 2026-07-14 — both CIRCSE shelves READY (enabled: false), findings below] [deps: —]
+pie-survey v1-2 + its named v2 sibling, one packet (both CIRCSE, both
+Latin/Italic): LIV as Linked Open Data (CC BY-SA w/ publisher
+permission, 657 KB Turtle) — 305 laryngeal PIE verbal etymons → 385
+Latin entries, joins lat gold through the u/v fold; NEW LAYER: the
+verbal-stem-type annotations (survey: a layer nabu has no surface for —
+design the minimal honest home, likely entry payload + etym display).
+de Vaan EDL skeleton (CC BY-NC-SA → nc): 1,429 Latin headwords staged
+through 1,466 Proto-Italic + 1,394 PIE etymons — the Leiden-school
+cross-witness beside kaikki's itc-pro (provenance-distinct entries, the
+MW precedent). LANGUAGE-INFO RIDER as P18-5. Migration IF needed: 015.
+
+## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: done] [deps: —]
+FINDINGS (2026-07-14):
+- **Turtle verdict: in-house censused-subset reader, no gem.** New parser
+  family `lila-ttl` (~200 lines with docs): both files censused
+  first-hand — no triple-quoted/multiline literals, no collections, no
+  bare numerics, blank nodes only as `[…]` objects (BrillEDL
+  canonicalForm, incl. multi-valued writtenRep), one `@en` tag, `^^`
+  only on quoted literals, repeated subjects (LIV's Lexicon accretes
+  lime:entry), `a`, `;`/`,` lists. Anything outside the census fails
+  LOUDLY (ParseError + line). rdf-turtle would drag the rdf gem family
+  through the CLAUDE.md bar for two small regular files — declined.
+- **Adapter count: TWO adapters, one family.** Forced by the license
+  split (BY-SA `attribution` vs BY-NC-SA `nc` — license_class is
+  per-source) and by graph shape (LIV: stem-typed themes + prinparlat
+  links; EDL: staged etymon→etymon). Both single-file FileFetch of the
+  raw URLs (git clone drags history for one data file; raw host serves
+  no Last-Modified → manual re-syncs refetch unconditionally, 0.7/3.9 MB).
+- **Stem-type surface verdict: entry BODY, nothing else.** One line per
+  theme, "present stem *dʰu̯éh₂-/dʰuh₂- → pres suffio" (link-label tails
+  carry the Latin PERFECT forms — peperci, lusi — that no writtenRep
+  holds); define renders body already, zero schema/query change. Not
+  gloss (formations ≠ meanings; the LOD ships no meanings — nil gloss
+  honest); no new table for a one-source 426-row layer. The shared
+  placeholder theme (label "–") is scoped per-etymon so it never leaks
+  other verbs' continuations. **Migration 015 NOT needed** — number
+  still free.
+- **Shelf layout:** liv = ONE dictionary (ine-pro; 305 etymons, lat
+  reflexes, u/v pin uireo↔vireo fixture-tested; ~40-digit upstream
+  etymon ids verbatim as entry ids). edl = TWO dictionaries from one
+  file (edl-ine-pro 1,394 + edl-itc-pro 1,466; reflexes pie→pit 1,216
+  proto-to-proto + pie→lat 27 direct + pit→lat 1,410) — the existing
+  shelf-visited etym walk runs rōdō ← *(w)rōde/o‑ ← *Hreh₃d‑e/o‑ with
+  zero query change, and two itc-pro witnesses list side by side
+  (pinned). U+2011 kept in display, opened to "-" in folds. All 2,653
+  links "inheritance" (censused); /borrow/i guard for future loan links.
+- **Rider:** language_notes kinds `witness:liv`/`witness:edl`
+  (source-laned — never supersede each other or the seed's context
+  under latest-per-(code,kind)), provenance column "liv"/"edl";
+  accreted idempotently by DictionaryLoader#load_from via new
+  Languages.accrete! (the P18-4 "future write path" made real — same
+  latest-body rule as seed!); `nabu language CODE` renders witness
+  lines. Notes: ine-pro (liv), itc-pro + lat (edl).
+- **Projected live counts:** liv 305 entries / 385 lat reflex edges;
+  edl 2,860 entries / 2,653 edges across two shelves. Acceptance
+  rendered on a scratch root: define *dʰu̯eh₂- (stem line + reflex),
+  etym vireo (u/v → LIV), etym rodo (full Leiden chain), language
+  itc-pro (EDL witness note + EDL shelf beside kaikki's).
+- Suite 2,374 runs / 31,714 assertions exit 0 · lint 303 files exit 0.
+  Tests +46 (parser 11, liv 16, edl 16, languages 3). Fixtures:
+  test/fixtures/liv (170 lines) + test/fixtures/edl (106 lines),
+  byte-verbatim blocks + READMEs + manifests.
+
+## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: dispatched] [deps: —]
+The owner-designed P18-queue item 5b, now taken (owner 2026-07-14).
+MECHANICAL layer (always on, in health/verify): per-source last-run
+status surfaced LOUDLY (failed run + partial docs = the Coptic case),
+flag-vs-artifact invariants (fuzzy_index vs trigram table, axis
+extractors vs row presence, reflex parse code vs crosswalk rows,
+language_names table vs filled), enabled-vs-populated, pending
+migrations (schema_info vs migration dir), quarantine DELTA vs a
+recorded baseline (the standing 9,312 stops shouting; a CHANGE shouts),
+projection diffs where the registry/docs state expected counts. AI
+layer: OPTIONAL post-sync hook, off by default, tool-agnostic
+(structured brief on stdout/stdin; bundled example script wires
+`claude -p` + the nabu MCP server) — judgment only. Ledger migration
+IF needed: 005 (quarantine baseline lives in the ledger — it must
+survive rebuilds).
+FINDINGS (2026-07-14):
+- INVARIANTS SHIPPED (Health::Invariants, folded into bare `nabu
+  health`'s per-source findings + a global slot; findings-only, so a
+  green library prints exactly what it printed before): (1) last-run
+  honesty — most recent ledger run `failed` → LOUD with the recorded
+  error + "re-run"; (2) partial load — the failed run journaled
+  provenance rows (the 152-doc Coptic case; provenance is the witness,
+  doc- and dictionary-grained) → LOUD, named; (3) enabled-vs-populated
+  — enabled + a succeeded run on record + zero docs AND entries (the
+  crashed-rebuild signature for never-reached sources) → LOUD; (4)
+  fuzzy_index vs trigram index/scope (absent | source outside the
+  built passages_trigram_scope | empty) → LOUD; (5) axis extractor
+  families (slug→axis_source map off AxisBuilder) vs document_axes
+  rows → LOUD, "run rebuild"; (6) Adapter.reflex_bearing? (new
+  declaration, true on the two wiktionary adapters) vs
+  dictionary_reflexes rows → LOUD, "--parse-only resync"; (7) reflex
+  rows vs language_names census → LOUD; (8) quarantine creep (below)
+  soft/loud; (9) pending catalog/ledger migrations (schema_info vs
+  dir) → SOFT, global. All raw-dataset reads (Verify precedent), every
+  missing table degrades silent (pending-migrations says why).
+  never_synced note now yields to invariant findings (a failed FIRST
+  sync reads "last run FAILED", not "never synced").
+- PROJECTION DIFFS: skipped, argued — no machine-readable expectation
+  exists (sources.yml counts live in sign-off comments, rot by
+  design); an expected_docs: key would stale at every ordinary sync;
+  zero-rows + delta rules cover the class.
+- ADVANCE-RULE VERDICT (ledger migration 005, quarantine_baselines):
+  TWO columns. `baseline` = errored of the last ok sync/rebuild run,
+  auto-advances at EVERY ok run → the delta warning (TrendRules
+  .quarantine_delta, replaces the absolute rebuild WARNING and the
+  sync-time spike check) speaks exactly once per change, silent at
+  steady state, drops loud too (upstream churn is signal). `anchor` =
+  low-water mark, advances DOWNWARD only → health's creep check
+  (TrendRules.quarantine_creep: floor 10, then the shared 5%/15%
+  fractions of the anchor; any over-floor drift from a zero anchor is
+  loud) keeps the cumulative bleed visible that pure auto-advance
+  would absorb step by step — the trend_rules withdrawal-creep
+  precedent applied verbatim. Improvement pulls both down (auto
+  re-anchor); acceptance of a higher standing level needs no command
+  (each step already announced once; the creep line IS the standing
+  reminder until triaged).
+- HOOK MECHANISM VERDICT: `nabu sync SLUG --review CMD` (flag, not a
+  post_sync_review: config key) — syncs here are owner-fired, the
+  visible flag keeps the subprocess boundary explicit per invocation,
+  and no standing config can rot or surprise an unattended --all.
+  ReviewHook emits schema nabu.sync-review/1 (source, sha, counts,
+  quarantine vs baseline/anchor, discovery accounting, warning
+  messages, ≤5 fresh urns via provenance) to CMD's stdin; output
+  relayed as review| lines, exit status reported, NEVER fails the sync
+  (spawn failure included). script/review-sync-claude = the bundled
+  `claude -p` + nabu MCP example (read-only tools, ≤6-line verdict).
+- Healthy-library check: bare `nabu health` output is UNCHANGED on
+  green (asserted end-to-end in cli_test).
+- Tests: suite 2,388 runs / 31,714 assertions exit 0, lint exit 0
+  (60 new: delta/creep rules, baseline record/advance/degrade, each
+  invariant red+green, ledger 005 forward-only on a live-shaped
+  ledger without loss, sync delta silent-on-baseline/loud-on-change/
+  records, rebuild first-records + silent-then-loud-then-silent,
+  hook brief shape + stdin pipe + non-fatality incl. unstartable
+  command, CLI --review relay + off-by-default + failed-run health).
+
+## P18-gate · Phase 18 gate  [tier: orchestrator] [status: done 2026-07-14] [deps: P18-1..7]
+Full-diff, library/languages/README/site refresh (per §10 + the site
+duty), improvements register updates, EDH 27-quarantine triage folded
+in if not done sooner, PR, owner queue (IE-CoR/LIV syncs owner-fired;
+Starostin email in .docs awaiting owner send), backup-disk re-flag
+(standing), sticky alarm LAST.
+
+# ── Phase 19 queue (owner-approved in principle, 2026-07-14) ──────────
+# Canonical memory (design: .docs/canonical-memory.md — file-first local
+# knowledge; owner: "local dev approved for P19 headliner in principle"):
+# 1. P19-1 headline: LocalFetch + sync_policy: local + the
+#    canonical/local-language/ dossier shelf + P18-4 layer migration
+#    (ledger notes + config seed → dossiers; db becomes derived).
+# 2. P19-2: canonical/local-library/ (PDFs/scans/articles; manifest,
+#    mutool text layer, research_private DEFAULT, links reference edges).
+# 3. P19-3: `nabu ingest` — the intake front door (owner: "separate
+#    ingest command… possibly interactive/AI-assisted categorization"):
+#    copy → derive metadata → categorize (interactive TTY / --assist via
+#    the P18-7 hook pattern, AI suggests + owner confirms / scripted
+#    --yes) → manifest append → local sync. Deps: P19-2.
+# Carried: EDH lb-less fallback (P18-gate triage verdict: 26 of the 27
+#   quarantines are real inscriptions with NO <lb> markup — fall back to
+#   whole-inscription passage grain; 1 is malformed upstream XML
+#   (hd059778), honest permanent quarantine; baseline keeps all quiet),
+# Damaskini, Slovenian dictionary shelf, OpenEtruscan, Coptic -en
+# siblings, scholia/dict-citation links producers, streaming batch
+# parallels, tr-hun. Waiting: Starostin reply (starling packet on YES),
+# Miklosich/ELEXIS reply, cluster-gated §3.

@@ -129,6 +129,61 @@ module Nabu
         )
       end
 
+      # == Quarantine delta vs the recorded baseline (P18-7)
+      #
+      # The sync/rebuild-end warning, made DELTA-aware: compare this ok run's
+      # errored count against the ledger's recorded baseline (the previous ok
+      # run's count — Health::QuarantineBaseline). Equal → nil (the standing
+      # 9,312 stops shouting); changed → one loud line carrying the signed
+      # delta, at exactly the run that changed it (the baseline then advances,
+      # so steady state at the new level is silent again). A DROP is loud too:
+      # quarantines vanishing without a parser fix is upstream churn worth one
+      # line. No prior baseline (pre-005 ledger, or a source's first ok run
+      # since 005) → the recording note, so the switchover is announced once.
+      def quarantine_delta(errored:, baseline:)
+        if baseline.nil?
+          return nil if errored.zero?
+
+          return Finding.new(
+            kind: :quarantine_baseline_recorded, severity: :soft,
+            message: "quarantined #{errored} — baseline recorded; future runs warn on change only"
+          )
+        end
+        delta = errored - baseline
+        return nil if delta.zero?
+
+        Finding.new(
+          kind: :quarantine_delta, severity: :loud,
+          message: "quarantine delta: #{errored} errored vs baseline #{baseline} (#{format('%+d', delta)}) — " \
+                   "#{delta.positive? ? 'parser or upstream regression?' : 'quarantines cleared upstream?'} " \
+                   "(baseline advances)"
+        )
+      end
+
+      # == Quarantine creep vs the low-water anchor (P18-7)
+      #
+      # The auto-advancing baseline announces each change once and then goes
+      # quiet — so a slow creep (+5 a sync, ten syncs) is ten absorbed
+      # one-liners, never a standing alarm. Same failure mode the withdrawal
+      # creep rule exists for, same fix: watch the CUMULATIVE drift of the
+      # baseline above the anchor (the low-water mark, which only ever moves
+      # down). Absolute floor SPIKE_FLOOR suppresses small-number noise; from
+      # a zero anchor any drift past the floor is loud, otherwise the creep
+      # fractions apply (soft >5%, loud >15% — shared constants, one policy).
+      def quarantine_creep(baseline:, anchor:)
+        drift = baseline - anchor
+        return nil if drift <= SPIKE_FLOOR
+
+        severity = anchor.zero? ? :loud : creep_severity(shed: drift, total: anchor)
+        return nil unless severity
+
+        Finding.new(
+          kind: :quarantine_creep, severity: severity,
+          message: "quarantine creep: baseline #{baseline} has drifted +#{drift} above the low-water mark " \
+                   "#{anchor} across ok runs — each step was announced once; the total is the signal"
+        )
+      end
+
       # +last_sync_at+ may be nil (never synced — handled as its own signal, not
       # stale). +now+ is injected so tests pin the clock.
       def stale_source(last_sync_at:, now:)
