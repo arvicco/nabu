@@ -116,6 +116,22 @@ class AdapterConformanceMetaTest < Minitest::Test
     end
   end
 
+  # Every document parses to zero passages but DECLARES it (the P19-4
+  # local-library marker: a scan with no text layer is catalogued, not
+  # quarantined).
+  class MetadataOnlyAdapter < TestAdapter
+    def parse(document_ref)
+      original = super
+      Nabu::Document.new(
+        urn: original.urn,
+        language: original.language,
+        title: original.title,
+        canonical_path: original.canonical_path,
+        metadata: { "text_layer" => "none" }
+      )
+    end
+  end
+
   # self.manifest returns the wrong type entirely.
   class WrongManifestAdapter < TestAdapter
     def self.manifest
@@ -158,6 +174,18 @@ class AdapterConformanceMetaTest < Minitest::Test
                              :test_conformance_parse_yields_documents_with_at_least_one_passage,
                              /parsed to zero passages/
     assert_passes_conformance EmptyDocumentAdapter, :test_conformance_manifest_is_a_valid_source_manifest
+  end
+
+  # P19-4: the conformance_metadata_only? hook admits ONLY documents that
+  # carry the honest marker — an undeclared empty document still fails even
+  # under an overriding suite, so the hook cannot be used as a blanket pass.
+  def test_metadata_only_hook_admits_declared_empty_documents_only
+    passed = run_marker_conformance(MetadataOnlyAdapter)
+    assert passed.passed?, "declared metadata-only documents must pass: #{passed.failures.first}"
+
+    failed = run_marker_conformance(EmptyDocumentAdapter)
+    refute failed.passed?, "an UNDECLARED empty document must still fail under the marker-driven hook"
+    assert_match(/parsed to zero passages/, failed.failures.first.message)
   end
 
   def test_wrong_manifest_type_fails_the_manifest_assertion
@@ -209,5 +237,20 @@ class AdapterConformanceMetaTest < Minitest::Test
   def assert_passes_conformance(adapter_class, test_method)
     result = run_conformance(adapter_class, test_method)
     assert result.passed?, "#{adapter_class} should pass #{test_method}, got: #{result.failures.first}"
+  end
+
+  # The at-least-one-passage check under a marker-driven metadata-only hook
+  # (the local-library override, reproduced).
+  def run_marker_conformance(adapter_class)
+    workdir = FIXTURES
+    suite = Class.new(Minitest::Test) do
+      include AdapterConformance
+
+      define_method(:conformance_adapter) { adapter_class.new }
+      define_method(:conformance_workdir) { workdir }
+      define_method(:conformance_metadata_only?) { |document| document.metadata["text_layer"] == "none" }
+    end
+    Minitest::Runnable.runnables.delete(suite)
+    suite.new(:test_conformance_parse_yields_documents_with_at_least_one_passage).run
   end
 end

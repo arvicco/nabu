@@ -55,6 +55,17 @@ class LocalFetchTest < Minitest::Test
     with_tree do |dir, attic|
       error = assert_raises(Nabu::LocalFetch::Error) { sync(File.join(dir, "nope"), attic) }
       assert_match(/no local tree/, error.message)
+    end
+  end
+
+  # P19-4: each shelf names its own front door in the error — the hint is a
+  # pass-through, absent when the caller gives none.
+  def test_missing_tree_error_carries_the_callers_hint
+    with_tree do |dir, attic|
+      error = assert_raises(Nabu::LocalFetch::Error) do
+        Nabu::LocalFetch.sync!(dir: File.join(dir, "nope"), attic_dir: attic,
+                               hint: "for local-language: nabu language --export-dossiers")
+      end
       assert_match(/export-dossiers/, error.message)
     end
   end
