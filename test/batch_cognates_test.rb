@@ -131,6 +131,26 @@ class BatchCognatesTest < Minitest::Test
                  [caesar[:from_urn], caesar[:to_urn]].sort
   end
 
+  # P18-3: P16-2 pinned multi-ROOT pairs collapsing to one edge; the same
+  # holds for duplicate closure rows of ONE root (multi-subtree descent —
+  # forced here, the indexer never emits them): the meets Set keeps one
+  # meet, the edge count and score are unchanged.
+  def test_duplicate_closure_rows_collapse_to_one_edge_with_one_meet
+    seed_gospel_verses
+    reg = rebuild!
+    table = @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE]
+    row = table.where(language: "chu", lemma_folded: "богъ",
+                      root_urn: "urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root").first
+    refute_nil row, "the closure must hold the chu богъ → *bʰeh₂g- row"
+    table.insert(row)
+
+    result = producer(reg).run("nt")
+    assert_equal 2, result.edges_written, "the duplicate closure row mints no extra edge"
+    eat = @journal[:links].all.find { |e| e[:detail].include?("MARK 1.1") }
+    assert_equal "MARK 1.1 · *bʰeh₂g- [ine-pro]", eat[:detail], "the meet is listed once"
+    assert_in_delta 1.0, eat[:score], 0.001, "score counts distinct roots, not closure rows"
+  end
+
   def test_no_edge_within_one_language
     grc = witness_doc("grc-nt", language: "grc", title: "Greek NT")
     chu = witness_doc("marianus", language: "chu", title: "Codex Marianus")

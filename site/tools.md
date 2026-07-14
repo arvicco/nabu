@@ -27,11 +27,21 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 61,670 dated and placed
-documents as of 13 July 2026, growing to 83,233 at the next index rebuild.
+and third centuries. The chronological axis covers 164,989 dated and
+placed documents as of 14 July 2026 — the Heidelberg inscriptions (81,416)
+and the papyri (60,923) foremost among them. On the faceted shelves
+(currently the inscriptions), genre facets compose with the same filters:
+
+```
+$ bin/nabu search --type epitaph --province Britannia --material marble
+```
+
+draws on 256,518 facet rows recording inscription genre, province,
+material, and object type, with uncertain upstream attributions preserved
+as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 2,619,049 gold lemma annotations in fourteen
+than surface string, over 2,852,069 gold lemma annotations in fifteen
 languages — inflection and suppletion included:
 
 ```
@@ -74,9 +84,11 @@ fuzzy index covers: oracc, papyri-ddbdp
 
 — BGU 6.1470, a Hellenistic writing exercise breaking off mid-word through
 the opening line of the *Odyssey*. The character-trigram index behind this
-is scoped to the documentary shelves (papyri and cuneiform), where
-fragment search earns its cost; until the production index is built the
-command reports that plainly rather than degrading.
+is scoped to the documentary shelves, where fragment search earns its
+cost; the run above predates the Heidelberg inscriptions, which joined the
+indexed scope on 13 July 2026 — the production index covers 1,712,772
+passages across the papyri, cuneiform, and inscription shelves as of
+14 July 2026.
 
 **Concordance** (`nabu concord QUERY`) prints classic keyword-in-context
 lines, column-aligned in the pristine (accented) text and in corpus order —
@@ -114,8 +126,9 @@ urn:cts:greekLit:tlg0012.tlg001.perseus-grc2 — Iliad [grc]
 ```
 
 **Alignment** (`nabu align REF`) renders one citation across every witness
-of a registered work — the parallel New Testament (up to thirteen
-witnesses) and the Septuagint ↔ Vulgate ↔ English Old Testament ship as
+of a registered work — the parallel New Testament (up to fifteen
+registered witnesses, the Sahidic and Bohairic Coptic among them since
+13 July 2026) and the Septuagint ↔ Vulgate ↔ English Old Testament ship as
 flagships; a full example opens the [Home]({{ '/' | relative_url }}) page.
 
 **Collation** (`align REF --collate`) turns the aligned witnesses into a
@@ -135,9 +148,9 @@ never captive to its own tooling.
 ## The reference desk
 
 **Dictionary lookup** (`nabu define LEMMA`) queries the reference shelf
-(LSJ, Lewis &amp; Short, Bosworth-Toller, and the reconstruction
-dictionaries), with the entry's citations resolved to live passages in the
-local catalog:
+(LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, and the
+reconstruction dictionaries), with the entry's citations resolved to live
+passages in the local catalog:
 
 ```
 $ bin/nabu define μῆνις
@@ -157,15 +170,29 @@ resolved citations (in this corpus — nabu show <urn>):
 ```
 
 **Etymology** (`nabu etym LEMMA`) walks an attested lemma to the
-reconstructions that name it among their descendants, then one hop up the
-proto-to-proto chain, each stage listing cognates with corpus attestation
-counts. Plain-ASCII input is accepted for reconstructed forms:
+reconstructions that name it among their descendants, then up the
+proto-to-proto chain — through the intermediate shelves where they exist
+(Latin through Proto-Italic to Proto-Indo-European, for instance) — each
+stage listing cognates with corpus attestation counts, and curated loan
+events labelled as such. Plain-ASCII input is accepted for reconstructed
+forms:
 
 ```
 $ bin/nabu etym богъ --lang chu
 богъ [chu] → *bogъ [sla-pro] — gloss: god
 ← *bʰeh₂g- [ine-pro] — gloss: to divide, distribute, allot
   reflexes: [grc] ἔφᾰγον, [sa] भक्ष (bhakṣá), …
+```
+
+**Language cards** (`nabu language CODE`) explain any language code the
+library surfaces — the corpus languages and the 803 Wiktionary etymology
+codes that appear in `etym` cognate lists — on one card: name, family,
+curated historical context, and the code's live holdings in the catalog.
+An unknown code is reported honestly, with a family hint;
+`nabu language --list` prints the held languages.
+
+```
+$ bin/nabu language gkm
 ```
 
 **Cognates in parallel** (`nabu cognates TARGET`) crosses the etymological
@@ -229,10 +256,16 @@ peaks in the second century CE.
 
 ## Stewardship
 
-The remaining commands keep the collection alive: `nabu sync` fetches and
+The remaining commands keep the collection alive: `nabu quickstart` syncs
+a curated starter shelf (four sources, about 690 MB) and prints the first
+commands to try; `nabu sync` fetches and
 loads a source (idempotent and non-destructive, with every run recorded);
 `nabu status` and `nabu health` report per-source counts, run history, and
-upstream drift; `nabu verify` re-parses every canonical file and compares
+upstream drift — `health` also checks a set of mechanical invariants
+(failed or partial loads, configuration-versus-catalog mismatches, pending
+migrations, quarantine counts measured against an audited baseline) so
+that a sync that did not do what it claimed is surfaced rather than
+discovered; `nabu verify` re-parses every canonical file and compares
 content hashes against the catalog; `nabu rebuild` regenerates the entire
 database from canonical data, proven byte-identical by test; and
 `nabu backup` copies everything non-derivable to external storage, with a

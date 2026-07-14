@@ -1,4 +1,4 @@
-# Coptic Scriptorium fixtures (P17-1 Phase B)
+# Coptic Scriptorium fixtures (P17-1 Phase B, extended P17-10 + P18-1)
 
 Real files from `github.com/CopticScriptorium/corpora` at release tag
 **v6.2.0** (commit `6c2acf0ebebf62f40c3834259cf6fd734238e371`, "Late 2025
@@ -92,6 +92,78 @@ re-tokenization, the added `lb_n` layer) — the same edition at two
 releases, so the standalone corpus wins by precedence and the zip member
 is skipped by rule (counted in the discovery accounting).
 
+## The P18-1 offender set (span-inventory + header census)
+
+The first full sync loaded 188 of 465 documents: 277 quarantined on span
+types the fixture set never saw, 18 files "unrecognized: no usable TT meta
+header". The P18-1 census swept all 2,497 TT chunks in the release and
+named 66 unknown span types plus TWO structural findings; one trimmed real
+offender per census family was added (all trimmed 2026-07-13 from the
+LOCAL canonical tree at the pinned v6.2.0 tag, byte-identical prefixes,
+`</meta>` re-added; exact line/byte counts in manifest.yml):
+
+- `helias/helias_TT/helias_martyrdom_part1.tt` — the SPACE-BEFORE-EQUALS
+  meta variant (`msItem_title ="…"`) that made 18 files unrecognized
+  (helias 5, theodosius 9, acts-pilate 2, lament-mary 2); also
+  `ed_page_n`/`ed_line_n` edition topology. Part files carry their own
+  range-suffixed cts urns (`helias.martyrdom.sobhy_ed:0-15`) — one
+  document per part, the shenoute precedent, no merge.
+- `theodosius-alexandria/theodosius.alexandria_TT/
+  Encomium_Michael_BL_OR_6781_part1.tt` — same header variant in ORDINAL
+  (verse-less) mode, plus the `ed_pg_n` spelling.
+- `pistis-sophia/pistis.sophia_TT/pistis.sophia_book_1_part1.tt` —
+  Marcion/Petermann ALTERNATE VERSIFICATION spans riding beside the
+  primary verse_n (`cit_marcion`/`cit_petermann` lists), the Horner
+  translation (`trans_horner` → `translation_horner`), Coptic-numeral
+  page ids (`pb_coptic_id` → `page_coptic`).
+- `abraham/shenoute.abraham_TT/YA535-540.tt` — `v_id` (vid_n variant) and
+  `entity_identity`: the v6.0 attribute-form Wikification wrapping the
+  TOKEN (Sarah on ⲥⲁⲣⲣⲁ) → token-anchored entities records.
+- `life-aphou/life.aphou_TT/life.aphou.01.tt` — the PATHS-project entity
+  markup (`persName_type`/`placeName_ref`+`_type`/`roleName_type`/
+  `date_type` merging into their enclosing entities; standalone
+  `quote_ref`/`quote_type` biblical-quotation records; `p_source` PATHS
+  credit, ignored-counted).
+- `sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt` —
+  VERSE-AS-UNIT: `<verse verse="1 Corinthians 14:1">` IS the unit opener
+  (no verse_n in the file); citations normalize the fused label to 14.1,
+  the verbatim label rides in annotations.
+- `AP/apophthegmata.patrum_TT/AP.100.n294.crocodiles.tt` — the editorial
+  transcription marks (`gap_reason/unit/quantity`, `supplied_reason/
+  unit/quantity`) → `annotations["editorial"]` records.
+- `sahidic.jonah/sahidic.jonah_TT/Jonah_01.tt` — fused `verse_n_vid_n`
+  (→ vid fold) + `verse_n_vname` ("Jonah 1:1" → `verse_name`) +
+  `note_note` (→ `notes`, the attribute-form of `<note>`, both upgraded
+  from ignore to annotation in P18-1).
+- `besa-letters/besa.letters_TT/on_vigilance.tt` — the German translation
+  layer (`<german>` → `translation_de`, 20 spans, one file upstream).
+- `magical-papyri/magical.papyri_TT/OCrum_ST_18.tt` (whole, 23 KB) — the
+  `copticMag` urn namespace: deliberately NOT stripped (the live catalog
+  froze `urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.
+  tm99995.kyp_t_53` at the first sync, so the corpus keeps the full CTS
+  urn as its tail); also the final-Amen omitted-verse shape (below).
+- `sahidica.nt/sahidica.nt_TT.zip` grew a third member, `41_Mark_07.tt`
+  (verses 1–16): the OMITTED-VERSE LACUNA shape — Mark 7:16's `[..]`
+  bound group opens BEFORE the verse_n it contains, the verse span
+  nesting INSIDE the token (same family: John 5:4, Acts 8:37, Matt 12:47,
+  Rom 16:24, Rev 1:1–2 `[--]` — the census's "unsegmented stretches").
+  Stray groups/tokens attach FORWARD to the verse that opens inside them;
+  a stray that closes with no unit still fails loudly.
+- `bohairic.nt/bohairic.nt_TT.zip` (NEW, 1 of 260 members) —
+  `05_Acts_24.tt` verses 1–8: the lacuna group `[...]ⲫⲁⲓ` of Acts 24:7
+  CROSSES into verse 8; the group attaches whole to the verse it opened
+  into, token-level verse attribution stays exact.
+- `sahidic.ot/sahidic.ot_TT.zip` (NEW, 1 of 911 members) —
+  `01_Genesis_01.tt` verses 1–11: `abbr type="nomSac"` (nomina sacra,
+  1,620 spans across the sahidic OT), `<gap reason="lacuna">` and
+  `<supplied source= reason=>` in the collapsed dialect.
+
+Rare fold-variants without a dedicated fixture (`vid__n`,
+`arabic_translation`, `pb_n`/`pb_id`, `ch_n`, `ed_lb_n`, `section_title`,
+gap/supplied typo suffixes, `sup`/`sub`/`hi`/`cb`/`ignore_note`/
+`chapter*`) share a fixture-verified handler path; the tag→path mapping is
+census-verified (occurrence counts in the parser constants).
+
 ## Retrieval URLs
 
 - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_lack_of_food.tt
@@ -107,6 +179,20 @@ is skipped by rule (counted in the discovery accounting).
 - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.ot/bohairic.ot_TT.zip
   (10 MB, 637 members; the checked-in zip is REBUILT from the one trimmed
   Habacuc member, so a fresh GET can never byte-match it)
+- P18-1 additions (all trimmed unless noted; the two new zips are REBUILT
+  with one trimmed member each and can never byte-match a fresh GET):
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/helias/helias_TT/helias_martyrdom_part1.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/theodosius-alexandria/theodosius.alexandria_TT/Encomium_Michael_BL_OR_6781_part1.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/pistis-sophia/pistis.sophia_TT/pistis.sophia_book_1_part1.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/abraham/shenoute.abraham_TT/YA535-540.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/life-aphou/life.aphou_TT/life.aphou.01.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/AP/apophthegmata.patrum_TT/AP.100.n294.crocodiles.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.jonah/sahidic.jonah_TT/Jonah_01.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_vigilance.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/magical-papyri/magical.papyri_TT/OCrum_ST_18.tt (whole)
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.nt/bohairic.nt_TT.zip (16 MB, 260 members)
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_TT.zip (30 MB, 911 members)
 
 ## License chain
 

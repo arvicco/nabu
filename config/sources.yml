@@ -271,7 +271,9 @@ freising:
 
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
-  enabled: false   # first real sync is owner-fired (~2.8 GB clone; CLAUDE.md
+  enabled: true    # owner sign-off 2026-07-13: synced 482 docs / 74,169 passages
+                   # (P18-1 coverage pass, 1 honest quarantine), eyeballed, flipped.
+                   # Original gate note (~2.8 GB clone; CLAUDE.md
                    # checklist §6: bin/nabu sync coptic-scriptorium, eyeball
                    # nabu show urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1
                    # + 5 random passages, then flip)
@@ -287,7 +289,8 @@ coptic-scriptorium:
 
 mw:
   adapter: Nabu::Adapters::Mw
-  enabled: false   # P17-4 (2026-07-13): first real sync is owner-fired — 11 MB
+  enabled: true    # owner sign-off 2026-07-13: synced 193,890 entries, flipped.
+                   # Original gate note (P17-4): first real sync owner-fired — 11 MB
                    # zip fetch, 286,525 records / 193,890 grouped entries,
                    # ~100-130 MB catalog growth (CLAUDE.md checklist §6:
                    # bin/nabu sync mw, eyeball the per-siglum citation coverage
@@ -299,7 +302,9 @@ mw:
 
 edh:
   adapter: Nabu::Adapters::Edh
-  enabled: false   # P17-2: awaiting the owner-fired first (and only) sync —
+  enabled: true    # owner sign-off 2026-07-13: synced 81,856 docs / 406,281 passages
+                   # (27 quarantines pending triage), flipped. Original gate note
+                   # (P17-2): awaiting the owner-fired first (and only) sync —
                    # ~220 MB canonical: 9 EpiDoc zips (153.8 MB) + 2 CSVs.
   # Upstream archived: funding closed 2021, staff gone, dumps Last-Modified
   # 2021-12-16 (all HEAD-verified 2026-07-13) — the preservation argument
@@ -312,6 +317,41 @@ edh:
   # license_watch candidate (P16-5, owner decision — the CC BY-SA 4.0 grant
   # lives on the /data page, which serves the terms directly):
   # license_watch: https://edh.ub.uni-heidelberg.de/data
+
+iecor:
+  adapter: Nabu::Adapters::Iecor
+  enabled: false   # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
+                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync iecor,
+                   # eyeball `nabu etym срьдьцє` / `nabu language chu` for the
+                   # iecor note, then flip). Projected: 4,981 entries /
+                   # ~26.3k reflex rows (~2.3k loan-flagged) + ~144
+                   # language notes accreted into the ledger.
+  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; docs/pie-survey.md §1): the
+  # cognacy-matrix dictionary shelf — one entry per expert-curated cognate
+  # set under the collective `ine` tag, members as reflex edges, loans.csv
+  # feeding the borrowed flag. The Zenodo versioned record is immutable; a
+  # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
+  # the Coptic RELEASE_TAG pattern) before firing a re-sync.
+
+liv:
+  adapter: Nabu::Adapters::Liv
+  enabled: false   # P18-6: awaiting the owner-fired first sync (657 KB GET →
+                   # 305 PIE verbal etymons / ~385 lat reflex edges; CLAUDE.md
+                   # checklist §6 — eyeball `nabu define '*dʰu̯eh₂-'` stem
+                   # types + `nabu etym vireo`, then flip).
+  # CIRCSE/LIV LiLa LOD (CC BY-SA 4.0 with publisher permission). Completed
+  # publication, no release cadence; raw.githubusercontent serves no
+  # Last-Modified, so a re-sync refetches unconditionally (657 KB).
+  sync_policy: manual
+
+edl:
+  adapter: Nabu::Adapters::Edl
+  enabled: false   # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
+                   # ~2,653 reflex edges across two shelves; eyeball
+                   # `nabu etym rodo` — the lat → PIt → PIE Leiden chain).
+  # CIRCSE/EtymologicalDictionaryLatin LiLa LOD skeleton (CC BY-NC-SA 4.0 →
+  # nc: MCP default-excluded, never redistributed — the GRETIL/MW posture).
+  sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
 #

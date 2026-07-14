@@ -2,6 +2,7 @@
 
 require "yaml"
 require_relative "trend_rules"
+require_relative "invariants"
 
 module Nabu
   module Health
@@ -48,14 +49,21 @@ module Nabu
       # against the LIVE corpus is exactly the point of P5-5.
       GOLDEN_QUERIES_PATH = File.expand_path("../../../test/golden/golden_queries.yml", __dir__)
 
-      # corpus: :present | :no_index | :absent
-      Report = Data.define(:sources, :golden, :corpus) do
-        def any_loud?
-          sources.any? { |source| source.findings.any?(&:loud?) } || golden.any?(&:lost?)
+      # corpus: :present | :no_index | :absent. +global+ (P18-7) carries the
+      # library-wide invariant findings (pending migrations); it defaults empty
+      # so every pre-P18-7 construction stays valid.
+      Report = Data.define(:sources, :golden, :corpus, :global) do
+        def initialize(sources:, golden:, corpus:, global: [])
+          super
         end
 
-        def soft_count = sources.sum { |source| source.findings.count(&:soft?) }
-        def loud_count = sources.sum { |s| s.findings.count(&:loud?) } + golden.count(&:lost?)
+        def any_loud?
+          sources.any? { |source| source.findings.any?(&:loud?) } ||
+            golden.any?(&:lost?) || global.any?(&:loud?)
+        end
+
+        def soft_count = sources.sum { |source| source.findings.count(&:soft?) } + global.count(&:soft?)
+        def loud_count = sources.sum { |s| s.findings.count(&:loud?) } + golden.count(&:lost?) + global.count(&:loud?)
       end
 
       # findings empty ⇒ healthy ("ok"); otherwise one or more Findings.
@@ -83,10 +91,15 @@ module Nabu
         @ledger = ledger
         @golden_queries = golden_queries
         @now = now
+        # The P18-7 mechanical invariants ride the same handles; their findings
+        # fold into each SourceCheck (plus the Report's global slot), so a green
+        # library prints exactly what it printed before — nothing new.
+        @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger)
       end
 
       def run
-        Report.new(sources: check_sources, golden: replay_golden, corpus: corpus_state)
+        Report.new(sources: check_sources, golden: replay_golden, corpus: corpus_state,
+                   global: @invariants.global)
       end
 
       private
@@ -102,11 +115,20 @@ module Nabu
         @registry.each_source.map { |entry| check_source(entry) }
       end
 
+      # Invariant findings (P18-7) come first — a FAILED last run outranks any
+      # trend. A source with no successful sync runs keeps the informational
+      # never-synced note, but only when the invariants found nothing (a failed
+      # first sync is "last run FAILED", not "never synced").
       def check_source(entry)
+        invariant_findings = @invariants.for_source(entry)
         runs = successful_sync_runs(entry.slug)
-        return never_synced(entry.slug) if runs.empty?
+        if runs.empty?
+          return SourceCheck.new(slug: entry.slug, findings: invariant_findings) unless invariant_findings.empty?
 
-        SourceCheck.new(slug: entry.slug, findings: findings_for(entry, runs))
+          return never_synced(entry.slug)
+        end
+
+        SourceCheck.new(slug: entry.slug, findings: invariant_findings + findings_for(entry, runs))
       end
 
       def findings_for(entry, runs)

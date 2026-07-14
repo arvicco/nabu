@@ -40,6 +40,11 @@ module Nabu
     # metadata, because the metadata language code (chu) does not record which
     # transcription a witness uses.
     #
+    # Cells cannot repeat a witness (P18-3, the dedupe audit): they are
+    # hash-grouped by (language, script) and Align yields each registered
+    # witness at most once per ref, so every reading lands in exactly one
+    # cell, exactly once.
+    #
     # == Base witness
     #
     # The base of a cell is its FIRST witness in REGISTRY ORDER (the registry is

@@ -62,6 +62,18 @@ Each iteration, regardless of execution vehicle (§5):
      catalog before commit; quarantined documents are unconstrained.
      Search-form changes instead ride a full rebuild (content hashes cover
      text_normalized — a parse-only sync would read as a revision storm).
+   - **Owner-consideration output goes to `.docs/`, never `docs/`** (owner
+     policy, 2026-07-14): every survey, scouting report, strategy brief, or
+     design-for-consideration an agent produces targets the gitignored
+     `.docs/` directory — the repo is public and these are owner-facing
+     working documents, not publications. Publishing anything into `docs/`
+     is the owner's explicit decision, packet by packet. Dispatch mechanics:
+     survey/scout agents run in the MAIN tree (gitignored files never cross
+     a worktree merge); worktree agents deliver code + backlog/worklog only,
+     and route any consideration material through their final report for the
+     orchestrator to file under `.docs/`. Loop docs that ARE the public
+     record (backlog, worklog, architecture, shipped-feature docs) stay in
+     `docs/` as before.
 5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update backlog + worklog.
 6. **Escalate on failure**: two failed attempts at a packet → mark `blocked` with a diagnosis, move to the next packet. Never thrash. `blocked` packets are adjudicated by Fable at the next gate (or sooner if everything else is blocked → stop and notify the owner).
 7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, **updates `README.md`** — the user-facing document describing the capabilities and commands implemented up to this point (honest about what doesn't work yet; a newcomer reading only the README should know exactly what `bin/nabu` can do today) — then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The gate turn ends by arming the owner's attention alarm (sticky mode — see the global convention in `~/.claude/CLAUDE.md`), as does any blocked state needing guidance. The next phase's packets are elaborated in detail only after the merge.

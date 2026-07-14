@@ -152,6 +152,37 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal before, @db[:dictionary_reflexes].count, "skip writes nothing"
   end
 
+  # P18-4: the derived language-name census — raw (dictionary, code, name)
+  # counts over the batch's worded nodes, replaced wholesale per dictionary
+  # like reflexes. Raw means raw: the fixture's real noise (a "Middle
+  # Ukrainian" node misfiled under zle-ort, "Old Cyrillic script" wrappers
+  # under cu) is stored; Nabu::Languages filters at read.
+  def test_language_name_census_is_written_raw_and_reloads_idempotently
+    loader.load([recon_document], full: false)
+    dictionary_id = @db[:dictionaries].where(slug: "wiktionary-sla-pro").get(:id)
+    rows = @db[:language_names].where(dictionary_id: dictionary_id).all
+    refute_empty rows
+    ort = rows.select { |row| row[:lang_code] == "zle-ort" }.to_h { |row| [row[:name], row[:occurrences]] }
+    assert_operator ort.fetch("Old Ruthenian"), :>=, 1
+    assert ort.key?("Middle Ukrainian"), "the raw census keeps upstream noise for the read side to weigh"
+    cu_names = rows.select { |row| row[:lang_code] == "cu" }.map { |row| row[:name] }
+    assert_includes cu_names, "Old Cyrillic script"
+
+    before = census_snapshot(dictionary_id)
+    loader.load([recon_document], full: false)
+    assert_equal before, census_snapshot(dictionary_id), "reload replaces the census with identical rows"
+  end
+
+  def test_reflexless_shelves_write_no_census
+    load!
+    assert_equal 0, @db[:language_names].count, "the TEI lexica carry no descendants data"
+  end
+
+  def census_snapshot(dictionary_id)
+    @db[:language_names].where(dictionary_id: dictionary_id)
+                        .select_map(%i[lang_code name occurrences]).sort
+  end
+
   def test_revision_replaces_reflexes_wholesale
     loader.load([recon_document], full: false)
     entry = recon_document.entries.find { |e| e.entry_id == "bogъ:noun:2" }
@@ -170,6 +201,45 @@ class DictionaryLoaderTest < Minitest::Test
     rows = @db[:dictionary_reflexes].where(dictionary_entry_id: bog_row[:id]).all
     assert_equal 1, rows.size
     assert_equal 2, bog_row[:revision]
+  end
+
+  # -- P18-5: the language-notes accretion (the P18-4 accumulated layer's
+  # first programmatic writer) --------------------------------------------------
+
+  def noted_document(body: "IE-CoR variety: Test (modern)")
+    document = Nabu::DictionaryDocument.new(
+      slug: "noted", language: "ine", title: "Noted", canonical_path: "/x/noted.csv"
+    )
+    document << Nabu::DictionaryEntry.new(
+      entry_id: "1", key_raw: "*x-", language: "ine", headword: "*x-",
+      headword_folded: "x-", body: "root"
+    )
+    document.add_language_note(
+      Nabu::DictionaryLanguageNote.new(lang_code: "xx", kind: "iecor", body: body, source: "iecor")
+    )
+    document
+  end
+
+  def test_language_notes_accrete_append_only_and_idempotently
+    loader.load([noted_document], full: false)
+    rows = @ledger[:language_notes].where(lang_code: "xx", kind: "iecor").all
+    assert_equal 1, rows.size
+    assert_equal "iecor", rows.first[:source]
+
+    loader.load([noted_document], full: false)
+    assert_equal 1, @ledger[:language_notes].where(lang_code: "xx").count,
+                 "an unchanged body appends nothing"
+
+    loader.load([noted_document(body: "IE-CoR variety: Test (revised)")], full: false)
+    bodies = @ledger[:language_notes].where(lang_code: "xx").order(:id).select_map(:body)
+    assert_equal 2, bodies.size, "a changed body appends a superseding note; history is kept"
+    assert_equal "IE-CoR variety: Test (revised)", bodies.last
+  end
+
+  def test_language_notes_accretion_degrades_without_a_ledger
+    loader = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: nil)
+    report = loader.load([noted_document], full: false)
+    assert_equal 1, report.added, "no ledger handle: entries load, notes silently accrete nowhere"
   end
 
   private

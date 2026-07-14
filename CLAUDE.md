@@ -55,6 +55,8 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 
 ## Claude Code working agreements
 
+- **Surveys and consideration documents go to gitignored `.docs/`, never `docs/`.** The repo is public; scouting reports, strategy briefs, and any document produced for the owner's consideration are working material, not publications. Publishing into `docs/` is the owner's explicit decision. (Agents in worktrees: gitignored files don't cross merges — deliver consideration material via your final report instead.)
+
 - **Plan before code on anything multi-file.** State the file list and test plan first; wait for nothing — proceed — but the plan goes in the response so drift is visible.
 - When a test fails, fix the code or the test's incorrect expectation — never weaken an assertion to green. If upstream fixture reality contradicts the spec, say so explicitly.
 - Don't invent upstream formats. If unsure how a source structures its data, inspect the fixture; if there is no fixture, ask for one rather than guessing.

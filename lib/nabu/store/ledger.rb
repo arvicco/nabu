@@ -24,7 +24,8 @@ module Nabu
         Run: :runs,
         Pin: :pins,
         Revision: :revisions,
-        Probe: :source_probes
+        Probe: :source_probes,
+        LanguageNote: :language_notes
       }.freeze
 
       module_function
@@ -58,6 +59,7 @@ module Nabu
             require_relative "pin"
             require_relative "revision"
             require_relative "probe"
+            require_relative "language_note"
             @models_loaded = true
           end
         end

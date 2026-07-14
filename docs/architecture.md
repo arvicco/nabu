@@ -129,6 +129,11 @@ passages(id, document_id, urn, sequence, language, text, text_normalized,
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
 enrichments(id, passage_id, kind, model, model_version, payload_json, at)
    -- lemmas, glosses; embeddings live in vectors.sqlite3 keyed by passage id
+language_names(id, dictionary_id, lang_code, name, occurrences)
+   -- P18-4: the derived language-name census — what kaikki's descendants
+   -- nodes call each lang_code, counted RAW per reflex-bearing dictionary
+   -- (written wholesale by DictionaryLoader; the read side filters wrapper/
+   -- placeholder names and takes the mode). Feeds `nabu language`.
 ```
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
@@ -142,6 +147,19 @@ pins(id, source_slug, repo_url, last_sync_sha, license_baseline_sha256)
 revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
           old_sha, new_sha, at)
    -- the durable revision history: content transitions of existing rows only
+language_notes(id, lang_code, kind[name|family|context|…], body, source,
+               created_at)
+   -- P18-4: the ACCUMULATED per-language knowledge layer — curated context
+   -- that is not a function of canonical/ (the enrichment stance: authored
+   -- accretions live in the ledger). Append-only; the latest note per
+   -- (lang_code, kind) wins, so supersession history is free. Seeded
+   -- idempotently from config/languages.yml (`nabu language --seed`);
+   -- family-level notes ride the family prefix as their lang_code.
+   -- P18-6: sources accrete too — an adapter declaring .language_notes
+   -- (LIV/EDL stage witnesses) appends through Languages.accrete! at
+   -- dictionary load, kind "witness:<slug>" (one lane per source, so
+   -- witnesses never supersede each other or the curated kinds), source
+   -- column = the adapter id (per-record provenance).
 ```
 
 - Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.
@@ -183,6 +201,7 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
 - Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
+- **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); an enabled source with a successful run on record and zero rows is the half-loaded-catalog signature; flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, axis extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
 - Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational).
 
