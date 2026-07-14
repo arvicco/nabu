@@ -6503,7 +6503,7 @@ Starostin email in .docs awaiting owner send), backup-disk re-flag
 
 # ── Phase 19 ──────────────────────────────────────────────────────────
 
-## P19-0 · Site: Contributing + request funnels + maintainer contact  [tier: opus] [status: dispatched] [deps: —]
+## P19-0 · Site: Contributing + request funnels + maintainer contact  [tier: opus] [status: done] [deps: —]
 Owner (2026-07-14, post-#22): "next site revision should include
 (probably in About tab) Contributing (worth a separate md document in
 docs as well) and Feature/Source requests with the links that lead
@@ -6519,6 +6519,21 @@ Contributing section + "Request a corpus" / "Request a feature" /
 "Report a wrong reading" links straight to issues/new?template=…, +
 maintainer line "Ar Vicco <arvicco@nabu.ac>"; (d) README contributing
 pointer verified consistent.
+DONE (2026-07-14): three .md templates + config.yml shipped
+(request-a-source / feature-request / wrong-reading; blank issues stay
+enabled, contact_links → site home + About — GitHub contact_links
+require http(s), so the mailto lives on the About page itself).
+CONTRIBUTING truth pass: suite figure added (2,471 tests / 32,142
+assertions, dated), dependency list corrected (csv was missing; dev
+gems separated), survey list extended (+pie-survey), "Proposing a new
+source" grew into "Requesting corpora and features" with the three
+direct template links + issues/new/choose, source count 25+3 dated,
+maintainer line appended to Security & support. About tab: new
+Contributing section (what's welcome + the three direct links +
+new/choose) before a slimmed Contact carrying the mailto; "two dozen
+sources" → "more than two dozen". README pointer extended by one
+clause (templates live in CONTRIBUTING.md), no duplication. Jekyll
+build exit 0 (links verified in rendered HTML); suite/lint exit 0.
 
 ## P19-1 · Canonical memory: framework + local-language shelf  [tier: opus] [status: dispatched] [deps: —]
 The approved headliner (design: /Users/vb/Dev/nabu/.docs/

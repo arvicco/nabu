@@ -413,8 +413,10 @@ bin/nabu --help
 Contributions: the project is early and personal; issues and conversation
 are welcome, but expect the backlog to be driven by the owner's research
 needs. The house rules for outside contributors — TDD, fixture discipline,
-the DCO sign-off — are in [CONTRIBUTING.md](CONTRIBUTING.md); if you want to
-add a source, `CLAUDE.md` and
+the DCO sign-off — and the issue templates for requesting sources and
+features or reporting a wrong reading are in
+[CONTRIBUTING.md](CONTRIBUTING.md); if you want to add a source,
+`CLAUDE.md` and
 [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md)
 describe the adapter checklist end to end.
 

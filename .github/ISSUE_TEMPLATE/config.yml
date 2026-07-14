@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Project site
+    url: https://arvicco.github.io/nabu/
+    about: The library tour, tools, sources & licensing, and the contribution guide in readable form.
+  - name: Maintainer contact
+    url: https://arvicco.github.io/nabu/about/
+    about: How to reach the maintainer directly (About page, Contact section).
