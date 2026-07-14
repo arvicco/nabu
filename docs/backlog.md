@@ -6252,3 +6252,58 @@ FINDINGS (2026-07-14):
   cards/miss/list/seed/footer/help + 2 updated grouped-render assertions).
   Owner: run `nabu language --seed` once, and the census names land at
   the next rebuild/resync.
+
+## P18-5 · IE-CoR — the cognacy matrix  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-14): "plan all major unblocked sources from PIE survey…
+This batch," with the language-info rider: "extract not only corpus but
+also nabu-language info where relevant." docs/pie-survey.md is the spec
+(v1-1; fixture sketch §7 approved by the batch directive). IE-CoR
+(lexibank/iecor, CC BY 4.0, Zenodo): 160 varieties / 170 concepts /
+25,731 lexemes / 4,981 cognate sets. SURFACE (survey verdict): reflexes
+ROWS — each cognate set = a dictionary entry (headword = Root_Form,
+1,596 laryngeal-notated PIE roots; collective `ine` tag proposal for
+mixed-root sets per §1), members = DictionaryReflex rows → 2,261
+measured held-pair edges light up etym/cognates/closure/MCP with zero
+new query code; 1,036 curated loan events feed the `borrowed` flag.
+LANGUAGE-INFO RIDER: IE-CoR's languages table carries per-variety
+metadata (names, clades, historical status) — accrete into the P18-4
+language layer (language_notes, provenance "iecor"; the named
+future-work write path becomes real here: agent/loader accretion with
+per-record provenance, seed-file untouched). Honest gaps from the
+survey handled as stated (san stem lemmas, hit hyphenated stems, orv
+dialect). Migration number IF needed: 014 (P18-6 has 015).
+
+## P18-6 · LIV-LOD + de Vaan EDL skeleton  [tier: opus] [status: dispatched] [deps: —]
+pie-survey v1-2 + its named v2 sibling, one packet (both CIRCSE, both
+Latin/Italic): LIV as Linked Open Data (CC BY-SA w/ publisher
+permission, 657 KB Turtle) — 305 laryngeal PIE verbal etymons → 385
+Latin entries, joins lat gold through the u/v fold; NEW LAYER: the
+verbal-stem-type annotations (survey: a layer nabu has no surface for —
+design the minimal honest home, likely entry payload + etym display).
+de Vaan EDL skeleton (CC BY-NC-SA → nc): 1,429 Latin headwords staged
+through 1,466 Proto-Italic + 1,394 PIE etymons — the Leiden-school
+cross-witness beside kaikki's itc-pro (provenance-distinct entries, the
+MW precedent). LANGUAGE-INFO RIDER as P18-5. Migration IF needed: 015.
+
+## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: dispatched] [deps: —]
+The owner-designed P18-queue item 5b, now taken (owner 2026-07-14).
+MECHANICAL layer (always on, in health/verify): per-source last-run
+status surfaced LOUDLY (failed run + partial docs = the Coptic case),
+flag-vs-artifact invariants (fuzzy_index vs trigram table, axis
+extractors vs row presence, reflex parse code vs crosswalk rows,
+language_names table vs filled), enabled-vs-populated, pending
+migrations (schema_info vs migration dir), quarantine DELTA vs a
+recorded baseline (the standing 9,312 stops shouting; a CHANGE shouts),
+projection diffs where the registry/docs state expected counts. AI
+layer: OPTIONAL post-sync hook, off by default, tool-agnostic
+(structured brief on stdout/stdin; bundled example script wires
+`claude -p` + the nabu MCP server) — judgment only. Ledger migration
+IF needed: 005 (quarantine baseline lives in the ledger — it must
+survive rebuilds).
+
+## P18-gate · Phase 18 gate  [tier: orchestrator] [status: pending] [deps: P18-1..7]
+Full-diff, library/languages/README/site refresh (per §10 + the site
+duty), improvements register updates, EDH 27-quarantine triage folded
+in if not done sooner, PR, owner queue (IE-CoR/LIV syncs owner-fired;
+Starostin email in .docs awaiting owner send), backup-disk re-flag
+(standing), sticky alarm LAST.
