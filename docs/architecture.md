@@ -129,6 +129,11 @@ passages(id, document_id, urn, sequence, language, text, text_normalized,
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
 enrichments(id, passage_id, kind, model, model_version, payload_json, at)
    -- lemmas, glosses; embeddings live in vectors.sqlite3 keyed by passage id
+language_names(id, dictionary_id, lang_code, name, occurrences)
+   -- P18-4: the derived language-name census — what kaikki's descendants
+   -- nodes call each lang_code, counted RAW per reflex-bearing dictionary
+   -- (written wholesale by DictionaryLoader; the read side filters wrapper/
+   -- placeholder names and takes the mode). Feeds `nabu language`.
 ```
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
@@ -142,6 +147,14 @@ pins(id, source_slug, repo_url, last_sync_sha, license_baseline_sha256)
 revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
           old_sha, new_sha, at)
    -- the durable revision history: content transitions of existing rows only
+language_notes(id, lang_code, kind[name|family|context|…], body, source,
+               created_at)
+   -- P18-4: the ACCUMULATED per-language knowledge layer — curated context
+   -- that is not a function of canonical/ (the enrichment stance: authored
+   -- accretions live in the ledger). Append-only; the latest note per
+   -- (lang_code, kind) wins, so supersession history is free. Seeded
+   -- idempotently from config/languages.yml (`nabu language --seed`);
+   -- family-level notes ride the family prefix as their lang_code.
 ```
 
 - Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.

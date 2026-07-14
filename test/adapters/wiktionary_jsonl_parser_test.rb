@@ -181,6 +181,18 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert_equal "ⰱⱁⰳⱏ", glagolitic.word_folded, "script twins fold as themselves, honestly"
   end
 
+  # P18-4: every worded node's human `lang` name rides the reflex VERBATIM
+  # (NFC) — the raw material of the language_names census. Script wrapper
+  # names ("Old Cyrillic script") and misfiled names ("Middle Ukrainian"
+  # under zle-ort in this fixture) stay: canonical means canonical, the
+  # census read side filters and takes the mode.
+  def test_reflexes_carry_the_upstream_language_name_verbatim
+    bog = sla_entry("bogъ:noun:2")
+    assert_equal ["Old East Slavic", "Old Ruthenian"], bog.reflexes.first(2).map(&:lang_name)
+    cu_names = bog.reflexes.select { |r| r.lang_code == "cu" }.map(&:lang_name)
+    assert_includes cu_names, "Old Cyrillic script", "wrapper-node names parse raw"
+  end
+
   def test_reconstructed_reflexes_keep_the_asterisk_but_fold_without_it
     novgorod = sla_entry("bogъ:noun:2").reflexes.find { |r| r.lang_code == "zle-ono" } ||
                flunk("Old Novgorodian *боге reflex missing")

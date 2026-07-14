@@ -6,6 +6,14 @@ the four Phase-17 proto codes marked *registered, sync pending*, which
 are shipped in code but hold no live entries yet). This page explains the
 code system once, then lists every code with one sentence each.
 
+**The desk reference is a command (P18-4):** `nabu language CODE` explains
+any code this page covers AND the ~800-code Wiktionary etymology tail the
+`etym` cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name (derived
+from the held kaikki extracts), family, curated context, and live holdings.
+`nabu language --list` prints the held languages; the curation below and in
+`config/languages.yml` seeds the ledger's accumulated notes layer via
+`nabu language --seed`.
+
 ## The system, in five rules
 
 1. **Codes are BCP-47-shaped**: a primary language subtag (ISO 639: `grc`,
