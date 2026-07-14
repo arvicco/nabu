@@ -7,7 +7,11 @@ baseurl: "/nabu"
 repository_url: "https://github.com/arvicco/nabu"
 
 # Restrained defaults: no theme, hand-rolled layout and CSS only.
+# jekyll-feed is the single plugin (Atom feed for /news/, P19-3); it is in
+# the github-pages whitelist, so actions/jekyll-build-pages honors it too.
 theme: null
+plugins:
+  - jekyll-feed
 markdown: kramdown
 kramdown:
   input: GFM
@@ -33,14 +37,28 @@ nav:
     url: /languages/
   - title: Sources & Licensing
     url: /sources/
+  # Tail order is fixed as: Sources & Licensing, [FAQ], News, About —
+  # alphabetical among the informational tabs, About always last. The FAQ
+  # tab (P19-2, parallel packet) slots in directly before News.
+  - title: News
+    url: /news/
   - title: About
     url: /about/
+
+# News entries are native Jekyll posts (site/news/_posts/): filename dates,
+# newest-first site.posts ordering, and the Atom feed all come for free.
+permalink: /news/:year/:month/:day/:title/
 
 defaults:
   - scope:
       path: ""
     values:
       layout: default
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
 
 exclude:
   - Gemfile
