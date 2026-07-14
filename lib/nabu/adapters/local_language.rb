@@ -51,7 +51,8 @@ module Nabu
       # and trips the house mass-deletion breaker (--force overrides).
       def fetch(workdir, progress: nil, force: false)
         progress&.call("Scanning #{workdir}…")
-        result = LocalFetch.sync!(dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME), force: force)
+        result = LocalFetch.sync!(dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME), force: force,
+                                  hint: "for local-language: nabu language --export-dossiers")
         FetchReport.new(sha: result.sha, fetched_at: Time.now,
                         notes: fetch_notes(result), repos: pin_map(result))
       rescue LocalFetch::Error => e

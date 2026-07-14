@@ -1,0 +1,45 @@
+# One collection's manifest — THE SOURCE OF RECORD for the local-library
+# shelf (P19-4, architecture §16; design: canonical-memory §2). A YAML list
+# of entries so `nabu ingest` (the next packet) can APPEND one mechanically.
+# Field notes:
+#   file           required — path relative to this collection dir
+#   license_class  optional — DEFAULTS to research_private (the shelf's
+#                  conservative default; override upward only for items that
+#                  are genuinely open)
+#   related        optional — urns and/or language codes; urns become
+#                  kind=reference edges in the links journal, codes stay
+#                  document metadata (no dossier urns exist to point at yet)
+- file: leskien-1871-handbuch.pdf
+  title: "Handbuch der altbulgarischen (altkirchenslavischen) Sprache"
+  creator: "A. Leskien"
+  year: 1871
+  languages: [deu]
+  provenance: "constructed fixture — Leskien 1871 (public domain) abridged, text→PDF via cupsfilter (README.md)"
+  tags: [grammar, ocs]
+  related: ["urn:nabu:local-library:slavistics:jagic-notes", "chu"]
+  # no license_class on purpose: the research_private DEFAULT applies
+
+- file: jagic-notes.txt
+  title: "Notes on Jagić's Codex Marianus edition"
+  creator: "owner"
+  year: 2026
+  languages: [eng]
+  license_class: open # explicit upgrade — owner-authored note
+  provenance: "owner note, written for this fixture"
+  related: ["urn:nabu:ccmh:mar:mt"]
+
+- file: scan-plate.pdf
+  title: "Facsimile plate (textless scan)"
+  languages: [chu]
+  tags: [facsimile]
+  provenance: "constructed fixture — image-only PDF via cupsfilter (README.md)"
+
+- file: codex-plate.png
+  title: "Codex plate photograph"
+  languages: [chu]
+  tags: [facsimile]
+  provenance: "constructed fixture — 1×1 PNG placeholder"
+
+- file: missing-notes.txt
+  title: "Notes that vanished"
+  provenance: "manifested but deliberately ABSENT — the vanished-file story"

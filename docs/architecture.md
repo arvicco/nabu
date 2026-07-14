@@ -1047,9 +1047,46 @@ auto-migrate the ledger on open, which would drop the notes before the
 export ever ran). `config/languages.yml` is retired immediately — the
 ledger already accumulated everything it seeded, and one home beats three.
 
+**Shelf two: `canonical/local-library/` (P19-4)** — PDFs, scans and
+scholarly articles the owner acquires: one `<collection>/` dir per drop,
+each with a `manifest.yml` that is the SOURCE OF RECORD — a YAML list of
+entries (`file`, `title`, `creator`, `year`, `languages`, `provenance`,
+`license_class`, `tags`, `related`) shaped so `nabu ingest` (the intake
+front door, next) can append one mechanically. A file present but
+unmanifested is UNRECOGNIZED in the discovery census (awaiting ingest);
+manifested but missing is the vanished/attic story above. Unlike the
+dossier shelf this one mints DOCUMENTS + PASSAGES (the full conformance
+suite applies): `content_kind` stays `:passages` — "article" is document
+metadata (`kind: article`, plus creator/year/tags/related, the EDH-persons
+pattern), not a fourth loader routing. A PDF with a text layer extracts
+via mutool (`Nabu::PdfText`, through `Nabu::Shell`) into PAGE-GRAIN
+passages (`…:p12` — the page is the only citation unit a PDF keeps stable,
+and the one scholarship cites); a scan that reads clean but blank is a
+metadata-only document marked `text_layer: none` (queued for the HTR era,
+never quarantined for being a scan); images likewise; a genuinely
+unreadable file quarantines. Licensing is the shelf's point: class
+`research_private` (MCP default-excluded, never redistributed), applied as
+the manifest DEFAULT in one place (`Nabu::LibraryManifest`); an entry's
+explicit more-open class is honored as a per-document `license_override`.
+This shelf has no programmatic write gateway yet — the owner places files
+by hand until `nabu ingest` becomes the sanctioned path.
+
+**The `related:` edges.** Manifest `related:` URNs become kind=`reference`
+edges in the links journal (producer `library`, scope = the source slug),
+refreshed by every local-library sync AFTER the load (SyncRunner →
+`Nabu::LibraryReferences`, superseding the prior run — the journal always
+holds the current manifests' assertions; a lost journal costs one
+no-network re-sync). Edges carry no score (a manifest assertion is owner
+curation, not a mined similarity); `detail` names the asserting manifest.
+`Query::Links` resolves counterparts at passage grain first, then DOCUMENT
+grain, so `nabu links <urn>` shows an article beside the passages it
+discusses from either end. Language codes in `related:` stay document
+metadata only: P19-1 minted no dossier urns, and an edge to an invented
+urn would sit permanently unresolved — codes upgrade to edges if dossier
+documents ever exist.
+
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is
-unchanged. Future local shelves (`local-library` for PDFs/scans with a
-`research_private` default, `nabu ingest` as the intake front door) follow
-the same pattern: files + manifest + adapter + the one sanctioned write
-gateway.
+unchanged. Future local shelves (`nabu ingest` as the intake front door
+lands next) follow the same pattern: files + manifest + adapter + one
+sanctioned write gateway.
