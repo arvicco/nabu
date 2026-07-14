@@ -6307,3 +6307,22 @@ duty), improvements register updates, EDH 27-quarantine triage folded
 in if not done sooner, PR, owner queue (IE-CoR/LIV syncs owner-fired;
 Starostin email in .docs awaiting owner send), backup-disk re-flag
 (standing), sticky alarm LAST.
+
+# ── Phase 19 queue (owner-approved in principle, 2026-07-14) ──────────
+# Canonical memory (design: .docs/canonical-memory.md — file-first local
+# knowledge; owner: "local dev approved for P19 headliner in principle"):
+# 1. P19-1 headline: LocalFetch + sync_policy: local + the
+#    canonical/local-language/ dossier shelf + P18-4 layer migration
+#    (ledger notes + config seed → dossiers; db becomes derived).
+# 2. P19-2: canonical/local-library/ (PDFs/scans/articles; manifest,
+#    mutool text layer, research_private DEFAULT, links reference edges).
+# 3. P19-3: `nabu ingest` — the intake front door (owner: "separate
+#    ingest command… possibly interactive/AI-assisted categorization"):
+#    copy → derive metadata → categorize (interactive TTY / --assist via
+#    the P18-7 hook pattern, AI suggests + owner confirms / scripted
+#    --yes) → manifest append → local sync. Deps: P19-2.
+# Carried: EDH 27-quarantine triage (if not folded into P18 gate),
+# Damaskini, Slovenian dictionary shelf, OpenEtruscan, Coptic -en
+# siblings, scholia/dict-citation links producers, streaming batch
+# parallels, tr-hun. Waiting: Starostin reply (starling packet on YES),
+# Miklosich/ELEXIS reply, cluster-gated §3.
