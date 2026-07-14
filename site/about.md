@@ -33,7 +33,7 @@ Three convictions, stated plainly:
 2. **Citations are the unit of scholarship.** A search result that cannot
    be cited to a verse, a folio line, or a tablet surface is a curiosity.
    Everything in Nabu resolves to a stable URN.
-3. **License terms are data.** Aggregating two dozen sources under a dozen
+3. **License terms are data.** Aggregating more than two dozen sources under a dozen
    different licenses is workable only if every text's terms are recorded
    per document and consulted mechanically — especially once AI tools can
    quote from the collection.
@@ -84,11 +84,33 @@ is
   page carries the full inventory. The data licenses belong to the upstream
   projects, not to Nabu.
 
+## Contributing
+
+The project is early and personal — expect the backlog to be driven by the
+maintainer's research needs — but contributions are genuinely welcome:
+a well-argued source proposal that leads with license evidence, a report
+of a passage where the library's text departs from the source, a feature
+request stated as the scholarly question it would answer, or a small clean
+adapter patch with real trimmed upstream fixtures. The house rules — TDD,
+fixture discipline, license honesty, the DCO sign-off — are stated in
+[CONTRIBUTING.md](https://github.com/arvicco/nabu/blob/main/CONTRIBUTING.md).
+
+Requests go straight to a prepared issue form:
+
+- [Request a source](https://github.com/arvicco/nabu/issues/new?template=request-a-source.md)
+  — upstream name and URL, the license as far as known (quoted verbatim),
+  which reader or axis it serves, size if known.
+- [Request a feature](https://github.com/arvicco/nabu/issues/new?template=feature-request.md)
+  — the scholarly task first: what question can you not ask today.
+- [Report a wrong reading](https://github.com/arvicco/nabu/issues/new?template=wrong-reading.md)
+  — the URN, what nabu shows, what the source shows, the edition context.
+
+Anything else fits a
+[new issue](https://github.com/arvicco/nabu/issues/new/choose) of any
+shape.
+
 ## Contact
 
 Questions, corrections, and conversation are welcome through
-[GitHub issues](https://github.com/arvicco/nabu/issues). The project is
-early and personal — expect the backlog to be driven by the maintainer's
-research needs — but the house rules for outside contributions are stated
-in
-[CONTRIBUTING.md](https://github.com/arvicco/nabu/blob/main/CONTRIBUTING.md).
+[GitHub issues](https://github.com/arvicco/nabu/issues). The maintainer is
+Ar Vicco &lt;[arvicco@nabu.ac](mailto:arvicco@nabu.ac)&gt;.
