@@ -48,14 +48,14 @@ class IngestTest < Minitest::Test
   end
 
   def with_rig(resolver: Nabu::Ingest::AcceptResolver.new, overrides: {}, assist_command: nil,
-               assist_runner: nil, notify: nil)
+               assist_runner: nil, notify: nil, download: nil)
     Dir.mktmpdir("nabu-ingest") do |root|
       shelf = Nabu::LibraryShelf.new(dir: File.join(root, "canonical", "local-library"))
       notes = []
       engine = Nabu::Ingest.new(
         shelf: shelf, resolver: resolver, overrides: overrides,
         assist_command: assist_command, assist_runner: assist_runner || Nabu::Ingest::Assist.method(:run),
-        pdf_pages: FAKE_PDF_PAGES, pdf_info: FAKE_PDF_INFO,
+        pdf_pages: FAKE_PDF_PAGES, pdf_info: FAKE_PDF_INFO, download: download,
         notify: notify || ->(line) { notes << line }, now: Time.utc(2026, 7, 14)
       )
       yield engine, shelf, root, notes
@@ -178,6 +178,111 @@ class IngestTest < Minitest::Test
       assert_match(/ghost\.pdf/, outcomes.first.message)
       refute_predicate outcomes.first, :ok?
       assert shelf.manifested?("inbox", "vaillant-1950-manuel.pdf")
+    end
+  end
+
+  # -- url intake (P20-0): download first, then the exact same pipeline ----------
+
+  ARCHIVE_URL = "https://archive.org/download/handbuch/leskien-1871-notes.txt"
+
+  def test_a_url_downloads_then_flows_through_the_same_intake_with_the_source_url_lane
+    stub_request(:get, ARCHIVE_URL).to_return(status: 200, body: "Die altbulgarische Sprache.\n")
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :added, outcome.status
+      assert_equal "urn:nabu:local-library:inbox:leskien-1871-notes", outcome.urn
+      copied = File.join(shelf.dir, "inbox", "leskien-1871-notes.txt")
+      assert_equal "Die altbulgarische Sprache.\n", File.read(copied)
+      entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
+      assert_equal ARCHIVE_URL, entry.source_url, "the manifest records the url the owner gave"
+      assert_equal "ingested 2026-07-14 from #{ARCHIVE_URL}", entry.provenance,
+                   "provenance names the url, never the ephemeral staging path"
+      assert_equal 1871, entry.year, "filename heuristics run on the derived name"
+    end
+  end
+
+  def test_a_redirected_url_ingests_the_final_body_but_records_the_original_url
+    mirror = "https://ia601500.us.archive.org/5/items/handbuch/leskien-1871-notes.txt"
+    stub_request(:get, ARCHIVE_URL).to_return(status: 302, headers: { "Location" => mirror })
+    stub_request(:get, mirror).to_return(status: 200, body: "mirror body\n")
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :added, outcome.status
+      assert_equal "mirror body\n", File.read(File.join(shelf.dir, "inbox", "leskien-1871-notes.txt"))
+      entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
+      assert_equal ARCHIVE_URL, entry.source_url,
+                   "mirror-node urls rotate — the original url is the stable identity"
+    end
+  end
+
+  def test_a_failed_download_is_a_named_failure_with_no_shelf_mutation
+    stub_request(:get, ARCHIVE_URL).to_return(status: 404)
+    with_rig do |engine, shelf, _root|
+      outcome = engine.add_files([ARCHIVE_URL]).first
+      assert_equal :failed, outcome.status
+      assert_match(/HTTP 404/, outcome.message)
+      refute Dir.exist?(shelf.dir), "no copy, no manifest — the shelf is untouched"
+    end
+  end
+
+  def test_mixed_batch_url_and_local_file_both_land
+    stub_request(:get, ARCHIVE_URL).to_return(status: 200, body: "url body\n")
+    with_rig do |engine, shelf, root|
+      local = write_pdf(root, "vaillant-1950-manuel.pdf")
+      outcomes = engine.add_files([ARCHIVE_URL, local])
+      assert_equal %i[added added], outcomes.map(&:status)
+      entries = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries
+      assert_equal [ARCHIVE_URL, nil], entries.map(&:source_url),
+                   "the source_url lane exists only for url ingests"
+    end
+  end
+
+  def test_local_ingests_write_no_source_url_lane
+    with_rig do |engine, shelf, root|
+      engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")])
+      refute_match(/source_url/, File.read(shelf.manifest_path("inbox")),
+                   "omit-when-empty — the manifest style")
+    end
+  end
+
+  def test_staging_completes_downloads_and_existence_checks_before_any_prompt
+    events = []
+    download = Object.new
+    download.define_singleton_method(:fetch) do |url, dir:|
+      events << [:download, url]
+      path = File.join(dir, File.basename(url))
+      File.write(path, "downloaded body\n")
+      path
+    end
+    resolver = Nabu::Ingest::PromptResolver.new(ask: lambda do |label, _default|
+      events << [:ask, label]
+      ""
+    end)
+    with_rig(resolver: resolver, download: download) do |engine, _shelf, root|
+      outcomes = engine.add_files([File.join(root, "ghost.pdf"), "https://example.org/a.txt"])
+      assert_equal %i[failed added], outcomes.map(&:status)
+      asks = events.each_index.select { |i| events[i].first == :ask }
+      downloads = events.each_index.select { |i| events[i].first == :download }
+      refute_empty asks
+      refute_empty downloads
+      assert_operator downloads.max, :<, asks.min,
+                      "ALL staging (downloads, existence checks) precedes ANY categorization prompt"
+    end
+  end
+
+  def test_the_staging_dir_dissolves_after_the_batch
+    dirs = []
+    download = Object.new
+    download.define_singleton_method(:fetch) do |_url, dir:|
+      dirs << dir
+      path = File.join(dir, "a.txt")
+      File.write(path, "body\n")
+      path
+    end
+    with_rig(download: download) do |engine, shelf, _root|
+      engine.add_files(["https://example.org/a.txt"])
+      refute Dir.exist?(dirs.first), "the temp download is cleaned up — the shelf copy is the record"
+      assert shelf.manifested?("inbox", "a.txt")
     end
   end
 

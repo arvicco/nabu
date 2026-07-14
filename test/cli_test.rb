@@ -909,6 +909,63 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_ingest_url_end_to_end_downloads_ingests_and_records_the_original_url
+    url = "https://archive.org/download/handbuch/handbuch-notes.txt"
+    mirror = "https://ia601500.us.archive.org/5/items/handbuch/handbuch-notes.txt"
+    stub_request(:get, url).to_return(status: 302, headers: { "Location" => mirror })
+    stub_request(:get, mirror).to_return(status: 200, body: "Altbulgarische Marginalien.\n\nZweiter Absatz.\n")
+    with_ingest_env do |config, _root|
+      out, _err, status = with_config(config) { run_cli(["ingest", url, "--yes"]) }
+      assert_nil status
+      assert_match(%r{added\s+handbuch-notes\.txt → inbox/handbuch-notes\.txt}, out)
+      assert_match(/minted:\n  urn:nabu:local-library:inbox:handbuch-notes/, out)
+      copied = File.join(config.canonical_dir, "local-library", "inbox", "handbuch-notes.txt")
+      assert_equal "Altbulgarische Marginalien.\n\nZweiter Absatz.\n", File.read(copied),
+                   "the mirror body landed through the ordinary intake"
+      entry = Nabu::LibraryManifest.load(File.join(File.dirname(copied), "manifest.yml")).entries.first
+      assert_equal url, entry.source_url, "the manifest records the url the owner gave, not the mirror"
+    end
+  end
+
+  # The 2026-07-14 incident, exactly: interactive mode, a bad argument —
+  # the categorize header must NOT print before validation/download settles.
+  def test_ingest_url_failure_is_one_honest_line_without_a_categorize_header
+    url = "https://archive.org/download/ghost/ghost.pdf"
+    stub_request(:get, url).to_return(status: 404)
+    with_ingest_env do |config, _root|
+      out, err, status = with_config(config) do
+        with_tty_stdin { run_cli(["ingest", url]) }
+      end
+      assert_equal 1, status
+      refute_match(/categorize/, out, "no interactive header before the download settles")
+      assert_match(/FAILED\s+ghost\.pdf — .*HTTP 404/, out)
+      assert_match(/1 of 1 file\(s\) failed/, err)
+    end
+  end
+
+  def test_ingest_missing_local_file_prints_no_categorize_header_either
+    with_ingest_env do |config, root|
+      out, _err, status = with_config(config) do
+        with_tty_stdin { run_cli(["ingest", File.join(root, "ghost.pdf")]) }
+      end
+      assert_equal 1, status
+      refute_match(/categorize/, out, "existence is validated before any interactive furniture")
+      assert_match(/FAILED\s+ghost\.pdf/, out)
+    end
+  end
+
+  # A stdin double that CLAIMS a TTY (so the interactive resolver is chosen)
+  # without ever being read — for asserting what must NOT prompt.
+  def with_tty_stdin
+    original = $stdin
+    fake = Object.new
+    def fake.tty? = true
+    $stdin = fake
+    yield
+  ensure
+    $stdin = original
+  end
+
   def test_ingest_without_a_tty_and_without_yes_refuses_honestly
     with_ingest_env do |config, root|
       source = write_note(root)
@@ -979,6 +1036,8 @@ class CLITest < Minitest::Test
     assert_match(/--shelf language CODE/, out)
     assert_match(/ingest-assist-claude/, out, "the bundled example hook is named")
     assert_match(/Examples:/, out)
+    assert_match(%r{https?://}, out, "the url form is taught")
+    assert_match(/source_url/, out, "the provenance lane is named")
   end
 
   # -- the history ledger at the CLI seam (P7-1) ----------------------------

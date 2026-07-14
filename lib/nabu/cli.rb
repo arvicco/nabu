@@ -139,7 +139,7 @@ module Nabu
       ledger&.disconnect
     end
 
-    desc "ingest FILE...", "File your own PDFs, scans and articles into the local-library shelf"
+    desc "ingest FILE|URL...", "File your own PDFs, scans and articles into the local-library shelf"
     long_desc <<~HELP, wrap: false
       The intake front door for canonical memory (architecture §16): copy
       files (never move — your originals stay put) into
@@ -148,6 +148,14 @@ module Nabu
       minted urns. This is the ONE sanctioned write path onto the library
       shelf; after it, the files are searchable, showable, linkable corpus
       members like everything else.
+
+      Arguments may be http(s) URLs: the file is DOWNLOADED first (redirect
+      chains followed — archive.org's mirror hop included), then flows
+      through the exact same intake as a local file, and the manifest
+      entry additionally records the URL you gave in a source_url: lane
+      (mirror-node URLs rotate; yours is the stable identity — it also
+      prefills the provenance candidate). A failed download is one honest
+      FAILED line naming the HTTP status; the rest of the batch proceeds.
 
       Candidate metadata is derived mechanically first — PDF Info metadata
       and a first-page text sample via mutool (degrading gracefully to
@@ -197,6 +205,7 @@ module Nabu
 
       Examples:
         nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
+        nabu ingest https://archive.org/download/handbuchderaltbu00lesk/handbuchderaltbu00lesk.pdf
         nabu ingest paper.pdf --assist script/ingest-assist-claude
         nabu ingest notes.txt --yes --title "Reading notes" --languages eng \\
           --related urn:nabu:ccmh:mar:mt --license-class open
@@ -229,7 +238,7 @@ module Nabu
       config = Nabu::Config.load
       return ingest_language(config, paths) if options[:shelf]
 
-      raise Thor::Error, "ingest: give at least one file (or --shelf language CODE)" if paths.empty?
+      raise Thor::Error, "ingest: give at least one file or url (or --shelf language CODE)" if paths.empty?
 
       %w[name family context].each do |flag|
         raise Thor::Error, "ingest: --#{flag} only applies with --shelf language" if options[flag]
@@ -3453,8 +3462,16 @@ module Nabu
           raise Thor::Error, "ingest: interactive categorization needs a TTY — pass --yes " \
                              "(fields from flags), or run in a terminal"
         end
-        say "categorize (Enter keeps the [default]; '-' clears a field):"
+        # The header prints at the FIRST prompt, not at resolver construction:
+        # the engine's staging pass (existence checks, downloads) must be
+        # able to fail BEFORE any interactive furniture appears (the
+        # 2026-07-14 archive.org incident, P20-0).
+        header_printed = false
         Nabu::Ingest::PromptResolver.new(ask: lambda do |label, default|
+          unless header_printed
+            say "categorize (Enter keeps the [default]; '-' clears a field):"
+            header_printed = true
+          end
           default ? ask("  #{label}", default: default) : ask("  #{label}:")
         end)
       end
