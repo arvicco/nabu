@@ -266,10 +266,11 @@ state, and what is excluded by default. Takes no arguments.
 
 License classes `research_private` and `restricted` are **excluded by default**
 from every tool — they never appear in search results, `nabu_show` withholds
-them, and `nabu_status` counts them only under `excluded_by_default`. Nothing
-synced today carries those classes; the exclusion is forward-looking (the ad-hoc
-pipeline will), so a conversational surface never leaks private material
-casually. A caller who understands and will honor the restriction can opt in
+them, and `nabu_status` counts them only under `excluded_by_default`. The
+Freising Manuscripts shelf carries `research_private` today (BY-ND posture),
+and the coming local-library shelf will default to it — so the exclusion is
+live, not theoretical: a conversational surface never leaks restricted
+material casually. A caller who understands and will honor the restriction can opt in
 per call with `include_restricted: true`.
 
 ---

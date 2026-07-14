@@ -359,6 +359,40 @@ module MCP
       assert_equal "research_private", body.fetch("license_class")
     end
 
+    # P19-4 end-to-end pin: the local-library shelf (source class
+    # research_private) is MCP-excluded by default through the EXISTING
+    # machinery — no shelf-specific code — while a manifest entry's explicit
+    # open override serves normally with its label.
+    def test_local_library_shelf_is_mcp_excluded_by_default_with_open_overrides_served
+      shelf = Nabu::Store::Source.create(
+        slug: "local-library", name: "Local library",
+        adapter_class: "Nabu::Adapters::LocalLibrary", license_class: "research_private", enabled: true
+      )
+      article = make_document(source: shelf, urn: "urn:nabu:local-library:c:leskien",
+                              title: "Leskien 1871", language: "deu")
+      make_passage(article, urn: "urn:nabu:local-library:c:leskien:p1",
+                            text: "vertraulich altbulgarischen", sequence: 0, language: "deu")
+      note = make_document(source: shelf, urn: "urn:nabu:local-library:c:note",
+                           title: "Open note", language: "eng", license_override: "open")
+      make_passage(note, urn: "urn:nabu:local-library:c:note:1",
+                         text: "offen altbulgarischen", sequence: 0, language: "eng")
+      rebuild!
+
+      urns = payload(call("nabu_search", { "query" => "altbulgarischen" }))
+             .fetch("matches").map { |hit| hit.fetch("urn") }
+      assert_equal %w[urn:nabu:local-library:c:note:1], urns,
+                   "the shelf default hides; the explicit open entry serves"
+
+      opted = payload(call("nabu_search", { "query" => "altbulgarischen", "include_restricted" => true }))
+      classes = opted.fetch("matches").to_h { |hit| [hit.fetch("urn"), hit.fetch("license_class")] }
+      assert_equal "research_private", classes.fetch("urn:nabu:local-library:c:leskien:p1")
+      assert_equal "open", classes.fetch("urn:nabu:local-library:c:note:1")
+
+      shown = call("nabu_show", { "urn" => "urn:nabu:local-library:c:leskien:p1" })
+      assert_match(/research_private/, text_of(shown))
+      refute_match(/vertraulich/, text_of(shown), "the shelf's text never leaks by default")
+    end
+
     def test_status_excludes_restricted_material_from_coverage_counts
       seed_corpus
       body = payload(call("nabu_status"))

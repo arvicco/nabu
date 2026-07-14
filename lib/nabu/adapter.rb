@@ -128,6 +128,14 @@ module Nabu
     # adapters override to true.
     def self.reflex_bearing? = false
 
+    # Does this adapter's parsed metadata carry `related:` reference targets
+    # the links journal should hold as kind=reference edges (P19-4, the
+    # local-library manifests)? Declared HERE — beside content_kind and
+    # reflex_bearing?, the other capability flags — so SyncRunner can
+    # refresh Nabu::LibraryReferences after every load without special-
+    # casing slugs. Default false; the local-library shelf overrides.
+    def self.reference_edges? = false
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to

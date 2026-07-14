@@ -63,6 +63,17 @@ module AdapterConformance
     passage.text
   end
 
+  # Optional hook (P19-4): may +document+ honestly parse to ZERO passages?
+  # Default false — every existing adapter's at-least-one-passage guarantee
+  # stands untouched. A shelf with DECLARED metadata-only documents (the
+  # local-library: a scan with no text layer is catalogued, never
+  # quarantined) overrides this to check the document's own honest marker
+  # (metadata "text_layer" == "none"); a blanket `true` would gut the
+  # zero-passage defect check, so overrides must stay marker-driven.
+  def conformance_metadata_only?(_document)
+    false
+  end
+
   def test_conformance_manifest_is_a_valid_source_manifest
     manifest = conformance_adapter.manifest
     assert_kind_of Nabu::SourceManifest, manifest
@@ -93,6 +104,8 @@ module AdapterConformance
   def test_conformance_parse_yields_documents_with_at_least_one_passage
     each_parsed_document(conformance_adapter) do |ref, document|
       assert_kind_of Nabu::Document, document
+      next if document.empty? && conformance_metadata_only?(document)
+
       refute_empty document,
                    "document #{document.urn.inspect} (ref #{ref.id.inspect}) parsed to zero passages"
     end

@@ -59,7 +59,16 @@ module Nabu
     # of content-pattern files that never became refs (0-byte skeletons,
     # non-editions, and loud nested-root/unpack gaps); combined with load_report
     # it drives the printed discovery accounting. nil on an aborted run.
-    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings, :discovery) do
+    # +references+ (P19-4) is the Nabu::LibraryReferences::Result for a
+    # reference_edges? source (the manifests' related: urns refreshed into
+    # the links journal after the load); nil for every other source.
+    Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
+                          :discovery, :references) do
+      def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
+                     discovery:, references: nil)
+        super
+      end
+
       def aborted? = !breaker.nil?
     end
 
@@ -140,7 +149,25 @@ module Nabu
       indexed = reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
-                  warnings: warnings, discovery: discovery)
+                  warnings: warnings, discovery: discovery,
+                  references: refresh_references(entry))
+    end
+
+    # P19-4: after a reference_edges? source loads, re-derive its manifests'
+    # related: urns as kind=reference edges (Nabu::LibraryReferences — pure
+    # function of the loaded documents' metadata, superseding the prior
+    # run). Outside the RunRecorder block like reindexing: the journal is a
+    # third store with its own lifecycle, and a journal failure must surface
+    # as its own error, never falsify the source's run row.
+    def refresh_references(entry)
+      return nil unless entry.adapter_class.reference_edges?
+
+      journal = Store::LinksJournal.open!(@config.links_path)
+      begin
+        LibraryReferences.new(catalog: @db, journal: journal).run(entry.slug)
+      ensure
+        journal.disconnect
+      end
     end
 
     # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with
@@ -167,11 +194,11 @@ module Nabu
       return [] unless load_report
 
       delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: load_report.errored)]
-      # Dictionary sources (P11-4): entry-grained counts against a
-      # document-count baseline would be apples-to-oranges — the quarantine
-      # delta still applies (errored counts files either way), the
-      # document-withdrawal sweep rule does not.
-      return delta.compact if adapter.class.content_kind == :dictionary
+      # Dictionary and language sources (P11-4/P19-1): entry-/record-grained
+      # counts against a document-count baseline would be apples-to-oranges —
+      # the quarantine delta still applies (errored counts files either way),
+      # the document-withdrawal sweep rule does not.
+      return delta.compact if adapter.class.content_kind != :passages
 
       total = Store::Document.where(source_id: source.id).count
       (delta + [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)]).compact
@@ -198,11 +225,25 @@ module Nabu
 
     # Route by the adapter's declared content kind (P11-4, architecture §11):
     # passage corpora load through Store::Loader, dictionary sources through
-    # Store::DictionaryLoader — same call shape, same LoadReport.
+    # Store::DictionaryLoader (P19-1: with the corpus root, so its language-
+    # notes accretion can reach the local-language dossier shelf), language
+    # dossier shelves through Store::LanguageDossierLoader — same call shape,
+    # same LoadReport.
     def load(source, adapter, workdir, progress)
-      loader_class = adapter.class.content_kind == :dictionary ? Store::DictionaryLoader : Store::Loader
-      loader_class.new(db: @db, source: source, ledger: @ledger)
-                  .load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
+      loader = build_loader(adapter, source)
+      loader.load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
+    end
+
+    def build_loader(adapter, source)
+      case adapter.class.content_kind
+      when :dictionary
+        Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
+                                    canonical_dir: @config.canonical_dir)
+      when :language
+        Store::LanguageDossierLoader.new(db: @db, source: source, ledger: @ledger)
+      else
+        Store::Loader.new(db: @db, source: source, ledger: @ledger)
+      end
     end
 
     # Predict the withdrawal sweep and refuse if it exceeds the threshold. Runs

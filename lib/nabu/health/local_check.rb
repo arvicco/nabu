@@ -84,7 +84,10 @@ module Nabu
       # yet). Store models are assumed bound to +catalog+ (Store.setup!) and
       # ledger models to +ledger+ (Ledger.setup!) by the caller, matching the
       # RemoteProbe convention. +now+ is injected so the stale rule is testable.
-      def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now)
+      # +canonical_dir+ (P19-1) reaches the invariants' local-shelf checks
+      # (dossier files vs derived records, pinned files vs the tree); nil
+      # skips them honestly.
+      def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now, canonical_dir: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -94,7 +97,8 @@ module Nabu
         # The P18-7 mechanical invariants ride the same handles; their findings
         # fold into each SourceCheck (plus the Report's global slot), so a green
         # library prints exactly what it printed before — nothing new.
-        @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger)
+        @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext,
+                                     ledger: ledger, canonical_dir: canonical_dir)
       end
 
       def run

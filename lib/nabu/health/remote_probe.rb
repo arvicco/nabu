@@ -307,10 +307,33 @@ module Nabu
       private_constant :RepoProbe
 
       def probe_source(entry)
+        return probe_local_source(entry) if entry.sync_policy == "local"
+
         case entry.adapter_class.remote_probe_strategy
         when :http_zip then probe_http_source(entry)
         else probe_git_source(entry)
         end
+      end
+
+      # A local-policy shelf (P19-1) has NO upstream: nothing to ls-remote,
+      # HEAD, or GET — the probe touches no network at all. Liveness is the
+      # canonical tree itself (missing/empty → :gone, the restore-from-backup
+      # signal); drift short-circuits to the frozen-style :local verdict (no
+      # upstream can move); license reads :unchecked naming the shelf — the
+      # license is the shelf's own manifest/data, never a fetched file.
+      # Per-file INTEGRITY against the ledger pins is the bare `nabu health`
+      # invariant's job (Health::Invariants#local_shelf_integrity), not this
+      # network probe's.
+      def probe_local_source(entry)
+        alive = canonical_tree?(entry.slug)
+        detail = alive ? nil : "local tree missing — export/restore canonical/#{entry.slug}"
+        SourceHealth.new(
+          slug: entry.slug, enabled: entry.enabled,
+          upstream: "canonical/#{entry.slug} (local)",
+          liveness: Liveness.new(status: alive ? :alive : :gone, detail: detail),
+          drift: :local, drift_detail: nil,
+          license: unchecked("local shelf — owner-authored")
+        )
       end
 
       def probe_git_source(entry)

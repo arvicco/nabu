@@ -5837,8 +5837,11 @@ sketches for the gate; honest "print-only, no unblock" list.
 # 1. Etruscan adapter (P17-5 Phase B): OpenEtruscan CSV (new flat-CSV
 #    parser family, skip ocr_failed, fuzzy_index, BCE sign-flip pin) +
 #    kaikki ett EXTRACTS row + the Latin-loans curated-edge rider;
-#    posture: attribution + journaled Larth caveat + license_watch.
-#    Fixture plan APPROVED (etruscan-survey.md §fixtures).
+#    posture: attribution — the Larth provenance caveat DISSOLVED
+#    2026-07-14 (upstream added LICENSE CC-BY 4.0 on owner request);
+#    carry instead the author's own data-quality caveat ("many
+#    inscriptions are really noisy and not really reliable") in
+#    02-sources. Fixture plan APPROVED (etruscan-survey.md §fixtures).
 # 2. Damaskini (clarin-si-survey pick #1, CC BY-SA): Balkan Slavic
 #    gold corpus, aligned English, St. Petka multi-witness collation.
 # 3. Slovenian historical dictionary shelf (pick #2, CC BY): Pleteršnik
@@ -6500,3 +6503,287 @@ Starostin email in .docs awaiting owner send), backup-disk re-flag
 # siblings, scholia/dict-citation links producers, streaming batch
 # parallels, tr-hun. Waiting: Starostin reply (starling packet on YES),
 # Miklosich/ELEXIS reply, cluster-gated §3.
+
+# ── Phase 19 ──────────────────────────────────────────────────────────
+
+## P19-0 · Site: Contributing + request funnels + maintainer contact  [tier: opus] [status: done] [deps: —]
+Owner (2026-07-14, post-#22): "next site revision should include
+(probably in About tab) Contributing (worth a separate md document in
+docs as well) and Feature/Source requests with the links that lead
+directly to opening GH Issue (issues/new), as well as maintainer
+contact e-mail Ar Vicco (arvicco@nabu.ac)." Deliverables: (a) GitHub
+issue templates (.github/ISSUE_TEMPLATE/: request-a-source,
+feature-request, wrong-reading/defect — the pre-wave 0.4 design,
+finally built) so the direct links land on useful forms; (b)
+CONTRIBUTING.md refreshed (root, 95 lines exist — verify truthfulness
+post-P18 and extend: how to request sources/features, the dev-loop
+reality, fixture rules for adapter PRs); (c) site About tab: a
+Contributing section + "Request a corpus" / "Request a feature" /
+"Report a wrong reading" links straight to issues/new?template=…, +
+maintainer line "Ar Vicco <arvicco@nabu.ac>"; (d) README contributing
+pointer verified consistent.
+DONE (2026-07-14): three .md templates + config.yml shipped
+(request-a-source / feature-request / wrong-reading; blank issues stay
+enabled, contact_links → site home + About — GitHub contact_links
+require http(s), so the mailto lives on the About page itself).
+CONTRIBUTING truth pass: suite figure added (2,471 tests / 32,142
+assertions, dated), dependency list corrected (csv was missing; dev
+gems separated), survey list extended (+pie-survey), "Proposing a new
+source" grew into "Requesting corpora and features" with the three
+direct template links + issues/new/choose, source count 25+3 dated,
+maintainer line appended to Security & support. About tab: new
+Contributing section (what's welcome + the three direct links +
+new/choose) before a slimmed Contact carrying the mailto; "two dozen
+sources" → "more than two dozen". README pointer extended by one
+clause (templates live in CONTRIBUTING.md), no duplication. Jekyll
+build exit 0 (links verified in rendered HTML); suite/lint exit 0.
+
+## P19-1 · Canonical memory: framework + local-language shelf  [tier: opus] [status: done 2026-07-14 — shipped; the REAL export + first sync are OWNER-FIRED, findings below] [deps: —]
+The approved headliner (design: /Users/vb/Dev/nabu/.docs/
+canonical-memory.md §§0-1,3-4 — read it; owner approved in principle
+2026-07-14). LocalFetch + sync_policy: local + canonical/local-language/
+dossiers (Markdown, YAML front-matter, provenance-headed accretion
+sections) + the P18-4 layer MIGRATION (ledger language_notes +
+config/languages.yml seed → dossier files via one-shot exporter; db
+records become derived; the ledger table and seed file retire; the
+P18-5/6 accretion writers redirect to dossier sections). nabu language
+reads the merged view unchanged. Integrity via ledger pins; attic on
+deletion; P18-7 invariants extend (dossier files vs language records).
+
+## P19-2 · Site FAQ  [tier: opus] [status: done] [deps: P19-0]
+Owner (2026-07-14): "FAQ site section (Q&A Bank from licensing-emails +
+think of most common questions - answers should be clear and contain
+links to site tabs or md docs with context)." A new site tab: the
+licensing Q&A bank generalized (commercial? AI involvement? what is
+stored? redistribution?) + the predictable newcomer questions (what is
+this / who for; install & first marvel → Quickstart; why no TLG/Brill;
+license classes explained; offline/privacy; MCP & AI assistants; how to
+request a source / report a wrong reading → the P19-0 funnels; disk
+size; platforms; vs Perseus/Scaife; how to cite). Every answer links to
+the tab or md doc holding the full context. Academic register, honest
+answers (incl. the AI-assisted development one, verbatim from the
+framework bank).
+
+## P19-3 · Site News + the release rail  [tier: opus] [status: done] [deps: P19-0]
+Owner (2026-07-14): "Site news page (media plan suggestion) - releases
+with info about new sources/capabilities. Need to think of the best
+gate point to cut the first 'official' release." Deliverables: (a)
+site/news — dated entries per release/phase (new sources, new
+capabilities, honest numbers), newest first, plus an ATOM/RSS feed
+(the media plan's DHNow syndication rail needs a feed to submit); an
+inaugural entry summarizing the library as of today, back-referencing
+the phase history compactly. (b) The release rail: CITATION.cff
+(pre-wave 0.2), a documented release flow (tag → GitHub release notes
+distilled from the gate worklog line → news entry → Zenodo DOI mints
+on release once the owner links the repo, one-time). (c) Gate duty
+extended: every future gate adds a news entry (site/MAINTENANCE.md +
+library §10). First-release gate point = OWNER DECISION, orchestrator
+recommendation prepared separately (P19 gate, v1.0.0).
+DONE (2026-07-14): site/faq.md shipped — 17 questions in 5 clusters
+(Getting started: what/who-for, try-in-minutes → Quickstart, needs
+(Ruby 3.3/git, 690 MB starter / 16+7 GB full, dated 2026-07-13),
+platforms (macOS honest), offline, vs Perseus/Scaife; The library:
+what's included (dated counts), why-no-TLG/Brill (license-honest, →
+02-sources blocked entries + request-a-source funnel), own PDFs
+(local-shelf in active development stated honestly, no backlog leak),
+source currency (live/manual/frozen postures + health probes);
+Licenses and use: the four classes plain-language, redistribution
+per-class, not-commercial (MIT tool, data licenses upstream's), what's
+stored (files+SQLite local, nothing leaves); AI: MCP read-only w/
+license labels → docs/mcp.md, research_private/restricted default
+exclusion (Freising named), AI-assisted development honest answer
+(agent loop, Claude models, code open for inspection → dev-loop);
+Contributing and contact: the three P19-0 template links + new/choose,
+how-to-cite (honest: site+repo+access date, DOI planned), maintainer).
+Nav entry FAQ before About (_config.yml); MAINTENANCE gate-duty list
+extended with faq.md dated-figure re-check. Every answer 2–5 sentences
+with ≥1 contextual link (relative_url internal, absolute GitHub for
+repo docs). Gates: jekyll build exit 0; href sweep over built
+/faq/index.html — 24 hrefs, all 10 internal resolve in _site, all
+linked repo docs/templates exist on disk; suite 2,471/32,142 exit 0;
+lint 314 files exit 0. Finding: docs/mcp.md §restricted-exclusion
+still says "nothing synced today carries those classes" — stale since
+Freising went live as research_private; FAQ follows the newer
+sources.md truth, the mcp.md sentence is a one-line gate-duty fix.
+DONE (2026-07-14): native Jekyll posts, not a collection —
+site/news/_posts/ gives filename dates, newest-first ordering, and
+zero-config jekyll-feed coverage; a collection buys nothing here.
+Inaugural entry "The library as of today" (2026-07-14) + THREE
+retrospectives kept (PR #20 fuzzy+links and #21 sources 2026-07-13,
+#22 machinery 2026-07-14, distilled from gates 16–18; verdict: a
+one-entry News section gives aggregators nothing to judge cadence by —
+three compact entries establish format and history without clutter;
+same-day ordering pinned by front-matter times). Feed: jekyll-feed
+~> 0.17 (site/Gemfile only, github-pages-whitelisted so
+jekyll-build-pages carries it in production) → /feed.xml,
+xmllint-valid, 4 entries, absolute URLs correct under baseurl;
+feed_meta in the layout head. Nav tail pinned: Sources & Licensing,
+[FAQ slot], News, About — FAQ (P19-2) slots directly before News,
+About stays last (noted in _config.yml for the merge). CITATION.cff
+shipped (cff 1.2.0, structurally validated; version 0.0.0-unreleased +
+date-released placeholders, bumped per tag). Release rail = ops.md §12
+(chosen over CONTRIBUTING — release-cutting is operator duty;
+CONTRIBUTING got a 6-line "Releases & citation" pointer): one-time
+Zenodo link, then per-tag checklist (green gate → CITATION bump → tag
+→ gh release from the worklog gate line → news post → DOI badge first
+time). Gate duty wired: MAINTENANCE.md duty 5 + library §10 duty 1.
+News pages link-swept (15 internal links OK), jekyll build exit 0,
+suite + lint exit 0.
+FINDINGS (2026-07-14): shipped as designed; the doctrine decisions —
+(a) canonical-write path: ONE sanctioned gateway per local shelf
+(Nabu::LanguageShelf, the Adapter#fetch analogue for authored data;
+CLAUDE.md ground rule amended, architecture §16 states it); accretion
+refreshes the derived rows incrementally so cards see it without a
+re-scan; rebuild replays MAY touch the shelf but only as byte-level
+no-ops (idempotent own-section supersession). (b) Migration ordering:
+code first (reads fall back to ledger notes per (code, kind)), export
+owner-fired (`nabu language --export-dossiers`, idempotent,
+absence-filling, --dry-run), ledger-table DROP deferred to a later
+packet — it cannot ride this one because write paths auto-migrate the
+ledger on open, which would destroy the notes before the export ran.
+config/languages.yml deleted NOW (the live ledger holds all 183 seed
+notes; exporter still reads a seed yml if a checkout has one).
+(c) Conformance subset argued (LexicaTest precedent): manifest/license/
+discover-parse/id-identity/uniqueness/stability/NFC mirrored for the
+dossier shape; passage-only checks (urns, search form) have no analogue.
+(d) LocalFetch attic honesty: it runs AFTER deletion so it cannot attic
+vanished bytes — sanctioned retire = move into .attic/ (rediscovers
+retained); un-atticked disappearance keeps its pin (health LOUD:
+dossiers_vanished) and >20% trips the breaker. Owner-edited dossiers
+read as a SOFT stale-derivation nudge, not corruption. (e) Probe cache
+needed ledger migration 006 (widen drift CHECK for "local").
+OWNER RUNBOOK: nabu language --export-dossiers --dry-run → without
+--dry-run → bin/nabu sync local-language → eyeball `nabu language chu`
+/ `zle-ort` / `--list`. LATER PACKET: drop ledger_migrate language_notes
+after parity (supersession history lives only there until then).
+
+## P19-4 · The local-library shelf  [tier: opus] [status: done 2026-07-14 — shipped; population is owner-by-hand until ingest] [deps: P19-1]
+Shelf two of the canonical-memory design (.docs/canonical-memory.md §2;
+the queue's "P19-2: local-library" renumbered — site FAQ/News took the
+P19-2/3 slots): canonical/local-library/<collection>/ with one
+manifest.yml per collection as the SOURCE OF RECORD (file/title/creator/
+year/languages/provenance/license_class/tags/related; a YAML list so
+`nabu ingest` — the NEXT packet — appends mechanically). Adapter
+sync_policy: local on the P19-1 framework (LocalFetch pins, vanished/
+attic honesty, §16 write doctrine), documents + passages (FULL
+conformance, unlike the dossier shelf): PDF text layer → page-grain
+passages via mutool (Nabu::Shell), scans/images → metadata-only
+(text_layer: none, HTR-era queue, never quarantined), corrupt files →
+quarantine; research_private DEFAULT enforced at the manifest parser
+with per-entry upgrades as license_override; manifest related: urns →
+kind=reference links-journal edges refreshed at every sync.
+DONE (2026-07-14): shipped as specced. VERDICTS — (a) content_kind
+stays :passages: the enum routes LOADERS (closed set, "new kind = new
+loader"); articles parse to Document+Passage, exactly Store::Loader's
+shape, so :article would be a routing word without a loader (and would
+skip the document-grain withdrawal trend rule); article-ness =
+Document#metadata "kind"=>"article". (b) Page grain argued: the page is
+the only citation unit a PDF keeps stable across extractions and the
+one scholarship cites — urns …:p<N>, sequence = physical page, blank
+pages skipped but numbering preserved; born-digital txt/md get
+paragraph ordinals (…:<n> — blank-line paragraphs are authorial there).
+(c) related: language codes stay metadata, NOT edges — P19-1 minted no
+dossier urns, and an edge to an invented urn would sit permanently
+"(not in catalog)"; codes upgrade if dossier documents ever exist.
+Counted honestly (Result#skipped_codes). (d) Query::Links counterparts
+now resolve passage-grain first then DOCUMENT-grain, so the article
+shows beside the passages it discusses from either end. (e) New Adapter
+capability flag reference_edges? (beside reflex_bearing?); SyncRunner
+refreshes Nabu::LibraryReferences (producer "library", scope=slug,
+superseding, score nil, detail=the asserting manifest) after load,
+outside the run row (the reindex stance); rebuild never touches the
+journal — a lost journal costs one no-network re-sync. (f) Conformance
+extended with a marker-driven hook (conformance_metadata_only?, default
+false; meta-test pins that an UNDECLARED empty document still fails).
+(g) minitest 6 ships no mock/stub → PdfText got an explicit runner:
+seam; the adapter takes pdf_text: injection. (h) LocalFetch missing-tree
+hint made a pass-through (each shelf names its own front door).
+FIXTURES: constructed (cupsfilter, noted in README/manifest) — a REAL
+2-page text-layer PDF carrying PD Leskien 1871 text (text layer
+verified via PDFKit at construction; mutool NOT installed on this box,
+so adapter tests inject the extractor and a guarded live test pins real
+mutool substrings when present), a textless scan PDF, an OCS-Cyrillic
+.txt (explicit open entry), a PNG plate, a manifested-but-MISSING
+entry, an UNMANIFESTED stray. MCP end-to-end pin: shelf hidden by
+default, explicit open entry served, include_restricted labels both.
+Registered enabled: true (the P19-1 argument verbatim). Docs: arch §16
+extension, 02-sources row 55, README one-liner (modest — the story
+lands with ingest). Suite 2,568/32,662 exit 0 (1 skip = guarded mutool
+live test) · lint 337 files exit 0.
+
+## P19-5 · `nabu ingest` — the intake front door  [tier: opus] [status: done 2026-07-14] [deps: P19-1, P19-4]
+The design's §4b (canonical-memory, owner addition 2026-07-14): the
+sanctioned intake for local acquisitions. `nabu ingest FILE...
+[--collection NAME]` — sha-account (identical MANIFESTED bytes = honest
+no-op), COPY (never move) into canonical/local-library/<collection>/,
+derive candidates mechanically (PDF Info metadata + first-page sample
+via the PdfText seam where mutool exists, filename heuristics + sha256
+always), categorize in one of THREE modes (interactive TTY prompts with
+candidates prefilled and the research_private default STATED at the
+prompt; --assist CMD piping a JSON brief to a subprocess whose suggested
+entry PREFILLS the same prompts — the P18-7 hook pattern, bundled
+`claude -p` example; --yes + field flags for scripted drops), append the
+manifest entry mechanically, then the shelf's ordinary sync + minted
+urns + a compact try: epilogue. Same front door for the dossier shelf:
+--shelf language CODE scaffolds a skeleton through LanguageShelf.
+DONE (2026-07-14): shipped as specced. VERDICTS — (a) default collection
+"inbox" over date-based, argued: the collection is a FROZEN urn segment,
+so a date default bakes an acquisition accident into identity AND
+scatters review across a manifest-per-day; one visible triage collection
+with one accumulating manifest keeps the census honest ("prefer
+--collection <topic>" stated in help/ops). (b) Second sanctioned write
+gateway: Nabu::LibraryShelf (LanguageShelf's sibling — copy_in! never
+moves, sha_index for dup detection, append_entry! is APPEND-ONLY: owner
+comments/entries never rewritten, result re-validated through
+LibraryManifest so a bad append cannot land; refuses manifest.yml/
+dotfile names, path-shaped collections, malformed manifests). CLAUDE.md
+ground rule + arch §16 updated. (c) Assist brief nabu.ingest-assist/1
+(schema-tagged like the ReviewHook): derived candidates + ≤2000-char
+sample + field/license vocabulary; capture3 not 2e (a chatty tool must
+not corrupt its own JSON); lenient parse (whole stdout, else outermost
+{...}); nonzero exit/garbage = advisory note, mechanical candidates
+stand; suggestion only ever PREFILLS — flags beat assist beats derived;
+script/ingest-assist-claude wires claude -p + nabu MCP (search/show —
+related: urns looked up, not invented). (d) Resolver seam: the three
+modes are ONE injectable interface (PromptResolver with a plain ask
+callable — CLI wires Thor ask; AcceptResolver for --yes); non-TTY
+without --yes refuses honestly BEFORE any copy. (e) Idempotency ladder:
+manifested dup sha = no-op naming the existing home; UNMANIFESTED
+identical copy (aborted earlier ingest) does NOT block — the re-run
+finishes the cataloguing; same name + new bytes = copy replaced, entry
+kept, the loader's revision story at sync; bad file named, rest proceed,
+exit 1 at end. (f) Manifest writes OMIT license_class at the
+research_private default (fixture-file doctrine: silence means the
+conservative class; an explicit class marks an owner override) and OMIT
+empty lanes; keys in manifest order. (g) Year precedence fixed by live
+transcript: PDF Title/Author beat filename guesses, but CreationDate
+year only fills ABSENCE (a scan's CreationDate is the scan date; the
+author-year-title filename year is the publication year). (h) --shelf
+language kept THIN: name/family/context prompts (family prefilled from
+the code's hyphen prefix), LanguageDossier skeleton via LanguageShelf,
+dossier sync, `try: nabu language CODE`; existing dossier = no-op
+pointing at the file. (i) DRIVE-BY FIX exposed by this box's newly
+installed mutool 1.26: PdfText.pages kept the trailing "\f\n" fragment
+as a phantom third page — whitespace-only tail after the final \f now
+drops (regression test; the P19-4 guarded live test runs green, 0 skips
+now). Epilogue: show always; search hint only when text was extracted
+(word from the sample, --license = the entry's effective class);
+links hint when related urns were given. Docs: README paragraph (the
+"add your own material" story) + example, site/tools.md Stewardship
+(argued over quickstart: ingest is command surface, not the
+zero-to-first-marvel path — one place only), ops.md §13, CONTRIBUTING
+pointer ("your own PDFs need no adapter"), arch §16 truth pass,
+sources.yml comment. Tests +45 (engine 24 incl. real-subprocess Assist,
+gateway 11, PdfText.info 3 + phantom-page regression, CLI 8 e2e on
+scratch roots incl. --shelf language). Interactive flow verified live
+via PTY on a scratch root (real mutool derivation end to end). Suite
+2,616/32,881 exit 0 (0 skips) · lint 341 files exit 0.
+
+## P19-gate · Phase 19 gate — the v1.0.0 release gate  [tier: orchestrator] [status: done 2026-07-14] [deps: P19-0..5]
+Full-diff, docs+site truthed (16 dictionaries / 458,238 entries /
+170,711 docs / 4.27M passages verified live), news post = the release
+announcement, FAQ #9 → YES, register §3.4 intake-half + §4.3/§4.6
+updated. PR #23; on owner merge: ops §12 release checklist cuts
+v1.0.0 (owner-blessed version pending final word), DOI mints if the
+Zenodo toggle is on. Owner queue: first real `nabu ingest`; the
+licensing send queue (GORAZD next); backup disk (standing).

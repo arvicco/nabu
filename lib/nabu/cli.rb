@@ -139,6 +139,118 @@ module Nabu
       ledger&.disconnect
     end
 
+    desc "ingest FILE...", "File your own PDFs, scans and articles into the local-library shelf"
+    long_desc <<~HELP, wrap: false
+      The intake front door for canonical memory (architecture §16): copy
+      files (never move — your originals stay put) into
+      canonical/local-library/<collection>/, categorize them, append one
+      manifest entry each, then run the shelf's ordinary sync and print the
+      minted urns. This is the ONE sanctioned write path onto the library
+      shelf; after it, the files are searchable, showable, linkable corpus
+      members like everything else.
+
+      Candidate metadata is derived mechanically first — PDF Info metadata
+      and a first-page text sample via mutool (degrading gracefully to
+      filename heuristics where mutool is absent), the sha256 always — then
+      categorized in one of three modes:
+
+        interactive (TTY default)  one prompt per field, candidates
+                                   prefilled; Enter keeps the [default],
+                                   '-' clears a field. license_class
+                                   DEFAULTS to research_private (never
+                                   served or redistributed) — stated at
+                                   the prompt; raise it per item only for
+                                   genuinely open material.
+        --assist CMD               pipe a JSON brief (nabu.ingest-assist/1:
+                                   derived candidates + text sample) to
+                                   CMD's stdin, parse a suggested entry
+                                   from its stdout, and PREFILL the
+                                   interactive prompts with it — AI
+                                   suggests, you confirm; nothing lands
+                                   unreviewed unless you also pass --yes.
+                                   Bundled example:
+                                   script/ingest-assist-claude (claude -p
+                                   with the nabu MCP tools).
+        --yes                      scripted: accept the candidates plus
+                                   any --title/--creator/--year/--languages/
+                                   --tags/--related/--provenance/
+                                   --license-class flags, no prompts —
+                                   for bulk drops.
+
+      The default collection is "#{Nabu::Ingest::DEFAULT_COLLECTION}" — pass
+      --collection for anything you want shelved by topic. Mind that the
+      collection is part of the minted urn (frozen forever), so file
+      deliberately: a later re-file is honestly a new document.
+
+      Idempotency and honesty: a file whose bytes are already catalogued
+      anywhere in the shelf is a no-op with a message; the same NAME with
+      new bytes replaces the copy and the sync records an ordinary
+      revision; a bad file (missing, unreadable) is named and the rest
+      proceed (exit 1 at the end).
+
+      --shelf language CODE scaffolds a language DOSSIER instead — the same
+      front door for all canonical memory: prompts (same three modes; flags
+      --name/--family/--context) for the front matter and a context line,
+      writes canonical/local-language/CODE.md through the shelf's gateway,
+      and syncs. A scaffold, not an editor: an existing dossier is a no-op
+      pointing at the file.
+
+      Examples:
+        nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
+        nabu ingest paper.pdf --assist script/ingest-assist-claude
+        nabu ingest notes.txt --yes --title "Reading notes" --languages eng \\
+          --related urn:nabu:ccmh:mar:mt --license-class open
+        nabu ingest --shelf language zle-ort
+    HELP
+    option :collection, type: :string, banner: "NAME",
+                        desc: "Target collection under canonical/local-library/ " \
+                              "(default #{Nabu::Ingest::DEFAULT_COLLECTION}; becomes part of the urn)"
+    option :assist, type: :string, banner: "CMD",
+                    desc: "AI-assist hook: JSON brief to CMD's stdin, suggested entry from its stdout " \
+                          "(prefills the prompts; example: script/ingest-assist-claude)"
+    option :yes, type: :boolean, default: false,
+                 desc: "No prompts: accept the derived/assist/flag values (scripted bulk drops)"
+    option :title, type: :string, desc: "Title (one file only)"
+    option :creator, type: :string, desc: "Creator/author"
+    option :year, type: :numeric, desc: "Publication year"
+    option :languages, type: :string, banner: "chu,deu", desc: "Language codes, comma-separated"
+    option :tags, type: :string, banner: "grammar,ocs", desc: "Tags, comma-separated"
+    option :related, type: :string, banner: "URN,CODE",
+                     desc: "Related urns/language codes, comma-separated (urns become links-journal edges)"
+    option :provenance, type: :string, desc: "Where this copy came from"
+    option :license_class, type: :string, banner: "CLASS",
+                           desc: "License class (default research_private — never served or redistributed)"
+    option :shelf, type: :string, banner: "language",
+                   desc: "Ingest into another local shelf: `--shelf language CODE` scaffolds a dossier"
+    option :name, type: :string, desc: "With --shelf language: the language's name"
+    option :family, type: :string, desc: "With --shelf language: the family lane"
+    option :context, type: :string, desc: "With --shelf language: one context line (free prose)"
+    def ingest(*paths)
+      config = Nabu::Config.load
+      return ingest_language(config, paths) if options[:shelf]
+
+      raise Thor::Error, "ingest: give at least one file (or --shelf language CODE)" if paths.empty?
+
+      %w[name family context].each do |flag|
+        raise Thor::Error, "ingest: --#{flag} only applies with --shelf language" if options[flag]
+      end
+      raise Thor::Error, "ingest: --title names one file's title — ingest that file alone" \
+        if options[:title] && paths.size > 1
+
+      outcomes = build_ingest_engine(config).add_files(
+        paths, collection: options[:collection] || Nabu::Ingest::DEFAULT_COLLECTION
+      )
+      outcomes.each { |outcome| print_ingest_outcome(outcome) }
+      if outcomes.any? { |outcome| %i[added revised].include?(outcome.status) }
+        run_shelf_sync(config, Nabu::LibraryShelf::SLUG)
+        print_ingest_epilogue(outcomes)
+      end
+      failed = outcomes.reject(&:ok?)
+      raise Thor::Error, "ingest: #{failed.size} of #{outcomes.size} file(s) failed — see above" unless failed.empty?
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    end
+
     desc "status", "Show per-source sync status and passage counts"
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
@@ -704,22 +816,26 @@ module Nabu
     long_desc <<~HELP, wrap: false
       Read the links journal (docs/intertext-design.md §7, architecture §15):
       every batch-mined edge touching URN, BOTH directions, grouped by kind
-      (parallel, formula, cognate). Each edge shows its counterpart urn
-      resolved to the document title and language plus its kind's evidence —
-      a parallel's rarity score, a formula's gram and count (← the hub locus
-      of the refrain's star; `links <hub>` fans out every locus), a cognate's
-      meet (ref · root [shelf] — a gem-pro shelf under a Slavic witness reads
-      as a borrowing); → means a batch anchor at URN discovered the
-      counterpart, ← means the edge was found from the other end. The footer
-      cites the producer run(s) that minted the edges — scope, parameters,
-      and date — so every edge is honest about its provenance.
+      (parallel, formula, cognate, reference). Each edge shows its
+      counterpart urn resolved to the document title and language plus its
+      kind's evidence — a parallel's rarity score, a formula's gram and
+      count (← the hub locus of the refrain's star; `links <hub>` fans out
+      every locus), a cognate's meet (ref · root [shelf] — a gem-pro shelf
+      under a Slavic witness reads as a borrowing), a reference's asserting
+      manifest (P19-4: a local-library article beside the passages it
+      discusses); → means a batch anchor at URN discovered the counterpart,
+      ← means the edge was found from the other end. The footer cites the
+      producer run(s) that minted the edges — scope, parameters, and date —
+      so every edge is honest about its provenance.
 
       Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
       survive `nabu rebuild` untouched; counterparts re-resolve against the
-      current catalog, and one that no longer resolves is flagged
-      "(not in catalog)" rather than hidden. Edges are minted ONLY by batch
-      producers (`parallels --batch SCOPE`, `formulas --batch SCOPE`,
-      `cognates --batch WORK`); interactive output never persists.
+      current catalog (passage grain first, document grain second), and one
+      that no longer resolves is flagged "(not in catalog)" rather than
+      hidden. Edges are minted ONLY by batch producers (`parallels --batch
+      SCOPE`, `formulas --batch SCOPE`, `cognates --batch WORK`, and the
+      local-library sync's manifest `related:` refresh); interactive output
+      never persists.
 
       Compact shows the first few edges per kind; --long lists all. --db
       reads a journal written elsewhere (a scratch batch run).
@@ -1123,11 +1239,14 @@ module Nabu
         with the dictionary shelves (a catalog predating that census shows
         names only for curated codes until the next rebuild or parse-only
         shelf resync).
-      - CONTEXT, curated and accumulated in the history ledger: period,
-        family, what the library holds — every held language, plus
-        family-level entries for the etymology tail (zle-* East Slavic
-        stages, gkm Medieval Greek…). A code without its own note falls
-        back to its family; without either it says so honestly.
+      - CONTEXT, curated in the canonical/local-language dossier shelf
+        (P19-1: one Markdown file per code — edit it in any editor, then
+        `nabu sync local-language` re-derives): period, family, what the
+        library holds — every held language, plus family-level entries for
+        the etymology tail (zle-* East Slavic stages, gkm Medieval Greek…).
+        A code without its own dossier falls back to its family; without
+        either it says so honestly. (Libraries that predate the dossier
+        migration keep reading the ledger's language notes unchanged.)
       - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
         dictionary shelves, reconstruction-crosswalk edges. Zero fields
         are suppressed.
@@ -1135,24 +1254,29 @@ module Nabu
       --long adds where-it-appears detail: per-source document counts and
       the upstream-code split of the etymology edges (chu's edges arrive
       as Wiktionary's "cu"). --list shows the held languages only — the
-      ~800-code etymology tail is what `language CODE` is for. --seed
-      loads config/languages.yml into the ledger's language notes
-      (idempotent; run after editing the curation).
+      ~800-code etymology tail is what `language CODE` is for.
+      --export-dossiers is THE one-shot canonical-memory migration
+      (owner-fired): it writes the ledger's language notes out as dossier
+      files, absence-filling only, idempotent; --dry-run previews it.
 
       Examples:
         nabu language zle-ort      # the code from an etym cognate list
         nabu language chu --long   # a held language, full holdings
         nabu language --list       # every held language
+        nabu language --export-dossiers --dry-run   # preview the migration
     HELP
     option :list, type: :boolean, default: false,
                   desc: "List the held languages (corpus documents, gold lemmas, or a shelf)"
-    option :seed, type: :boolean, default: false,
-                  desc: "Load config/languages.yml into the ledger's language notes (idempotent)"
+    option :"export-dossiers", type: :boolean, default: false,
+                               desc: "One-shot migration: write ledger language notes out as " \
+                                     "canonical/local-language dossiers (idempotent, absence-filling)"
+    option :"dry-run", type: :boolean, default: false,
+                       desc: "With --export-dossiers: report what would be written, touch nothing"
     option :long, type: :boolean, default: false,
                   desc: "Add per-source document counts and the upstream-code edge split"
     def language(code = nil)
       config = Nabu::Config.load
-      return seed_language_notes(config) if options[:seed]
+      return export_language_dossiers(config) if options[:"export-dossiers"]
 
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -2880,13 +3004,27 @@ module Nabu
           "[#{result.license_class}]"
       end
 
-      # -- language (P18-4): the code desk reference ------------------------------
+      # -- language (P18-4, rehomed P19-1): the code desk reference ---------------
 
-      def seed_language_notes(config)
-        ledger = open_or_create_ledger(config)
-        report = Nabu::Languages.seed!(ledger: ledger)
-        say "language notes: #{report.appended} seeded, #{report.unchanged} unchanged " \
-            "(config/languages.yml → ledger)"
+      # THE canonical-memory migration (P19-1, owner-fired): ledger
+      # language_notes (+ the retired seed yml, when a checkout still has
+      # one) → canonical/local-language/<code>.md dossiers. Absence-filling
+      # and idempotent — safe to re-run; a dossier lane that already exists
+      # (a redirected accretion landed first, or the owner edited) is never
+      # overwritten. After it: bin/nabu sync local-language derives the
+      # catalog records the card reads.
+      def export_language_dossiers(config)
+        ledger = open_ledger(config)
+        dir = Nabu::LanguageShelf.dir(config.canonical_dir)
+        seed = File.join(config.config_dir, "languages.yml")
+        report = Nabu::LanguageDossierExport.new(ledger: ledger, dir: dir,
+                                                 seed_path: File.file?(seed) ? seed : nil)
+                                            .run!(dry_run: options[:"dry-run"])
+        verb = options[:"dry-run"] ? "would write" : "wrote"
+        line = "dossiers: #{verb} #{report.written}, #{report.unchanged} unchanged"
+        line += ", #{report.lanes_kept} lane(s) kept (already in a dossier)" if report.lanes_kept.positive?
+        say "#{line} → #{dir}"
+        say "next: bin/nabu sync local-language (derives the catalog records)" unless options[:"dry-run"]
       ensure
         ledger&.disconnect
       end
@@ -3261,6 +3399,127 @@ module Nabu
             "the menu is config/sources.yml, the shelf map docs/library.md"
       end
 
+      # -- ingest (P19-5): the canonical-memory intake front door ---------------
+
+      # `--shelf language CODE`: scaffold a dossier through LanguageShelf
+      # (the shelf's sanctioned gateway), then sync the dossier shelf. THIN
+      # by design — a skeleton, not an editor.
+      def ingest_language(config, codes)
+        unless options[:shelf] == "language"
+          raise Thor::Error, "ingest: unknown shelf #{options[:shelf].inspect} — `--shelf language CODE` " \
+                             "is the only other front door today"
+        end
+        raise Thor::Error, "ingest --shelf language: give exactly one CODE (e.g. zle-ort)" unless codes.size == 1
+
+        %w[collection title creator year languages tags related provenance license_class].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "ingest: --#{flag.tr('_', '-')} is a library-shelf field — " \
+                             "with --shelf language use --name/--family/--context"
+        end
+        shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config.canonical_dir))
+        engine = Nabu::Ingest.new(resolver: ingest_resolver, assist_command: options[:assist],
+                                  overrides: ingest_overrides(%w[name family context]),
+                                  notify: ingest_notify)
+        outcome = engine.scaffold_language(codes.first, language_shelf: shelf)
+        print_ingest_outcome(outcome)
+        return unless outcome.status == :added
+
+        run_shelf_sync(config, Nabu::LanguageShelf::SLUG)
+        say ""
+        say "try: bin/nabu language #{codes.first}"
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+
+      def build_ingest_engine(config)
+        shelf = Nabu::LibraryShelf.new(dir: Nabu::LibraryShelf.dir(config.canonical_dir))
+        Nabu::Ingest.new(
+          shelf: shelf, resolver: ingest_resolver, assist_command: options[:assist],
+          overrides: ingest_overrides(Nabu::Ingest::LIBRARY_FIELDS), notify: ingest_notify
+        )
+      end
+
+      # The three categorization modes, decided here: --yes accepts, a TTY
+      # prompts (Thor ask, injectable into the engine as a plain callable),
+      # anything else is an honest refusal — assist suggestions never land
+      # unreviewed by accident.
+      def ingest_resolver
+        return Nabu::Ingest::AcceptResolver.new if options[:yes]
+
+        unless $stdin.tty?
+          raise Thor::Error, "ingest: interactive categorization needs a TTY — pass --yes " \
+                             "(fields from flags), or run in a terminal"
+        end
+        say "categorize (Enter keeps the [default]; '-' clears a field):"
+        Nabu::Ingest::PromptResolver.new(ask: lambda do |label, default|
+          default ? ask("  #{label}", default: default) : ask("  #{label}:")
+        end)
+      end
+
+      def ingest_overrides(keys)
+        keys.each_with_object({}) do |key, map|
+          value = options[key]
+          map[key] = value unless value.nil?
+        end
+      end
+
+      # Advisory engine notes (assist diagnostics, degrade notes) — yellow,
+      # never affecting the exit code.
+      def ingest_notify
+        ->(line) { say "  #{line}", :yellow }
+      end
+
+      def print_ingest_outcome(outcome)
+        case outcome.status
+        when :added then say "  added    #{outcome.file} #{outcome.message}"
+        when :revised then say "  revised  #{outcome.file} — #{outcome.message}"
+        when :skipped then say "  skipped  #{outcome.file} — #{outcome.message}"
+        else say "  FAILED   #{outcome.file} — #{outcome.message}", :red
+        end
+      end
+
+      # Minted urns + the compact "try:" epilogue: show always; search only
+      # when the file actually yielded text (metadata-only scans are not
+      # searchable — honesty over symmetry); links when the entry asserted
+      # related urns (they just became reference edges).
+      def print_ingest_epilogue(outcomes)
+        added = outcomes.select { |outcome| outcome.status == :added }
+        return if added.empty?
+
+        say ""
+        say "minted:"
+        added.each { |outcome| say "  #{outcome.urn}" }
+        say "try:"
+        first = added.first
+        say "  bin/nabu show #{first.urn}"
+        if first.search_term
+          say "  bin/nabu search #{first.search_term} --license " \
+              "#{first.entry['license_class'] || Nabu::LibraryManifest::DEFAULT_LICENSE_CLASS}"
+        end
+        linked = added.find { |outcome| (outcome.entry["related"] || []).any? { |r| r.start_with?("urn:") } }
+        say "  bin/nabu links #{linked.urn}" if linked
+      end
+
+      # Run one local shelf's ordinary sync (fetch = the LocalFetch re-scan;
+      # no network) and print the standard sync accounting.
+      def run_shelf_sync(config, slug)
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        ledger = open_or_create_ledger(config)
+        db = open_or_create_catalog(config)
+        runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
+        outcome = runner.sync(slug, progress: progress_reporter)
+        finish_progress
+        raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
+
+        say format_sync_outcome(outcome)
+        print_discovery_accounting(outcome)
+        print_sync_warnings(outcome)
+      ensure
+        db&.disconnect
+        ledger&.disconnect
+      end
+
       # P11-7 discovery accounting: classify every content-pattern file
       # selected / skipped-by-rule / unrecognized, combining the loader's fate
       # of discovered refs (loaded → selected; parse-skipped → skipped-by-rule;
@@ -3287,7 +3546,21 @@ module Nabu
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored  " \
-          "indexed #{outcome.indexed} passages"
+          "indexed #{outcome.indexed} passages#{format_sync_references(outcome.references)}"
+      end
+
+      # P19-4: the reference-edge tail for a local-shelf sync — silent when
+      # the source mints no reference edges (references nil), compact
+      # otherwise (zero counts suppressed, house style).
+      def format_sync_references(refs)
+        return "" if refs.nil?
+
+        parts = []
+        parts << "+#{refs.edges_written}" if refs.edges_written.positive?
+        parts << "~#{refs.edges_refreshed}" if refs.edges_refreshed.positive?
+        parts << "-#{refs.superseded_edges}" if refs.superseded_edges.positive?
+        counts = parts.empty? ? "0" : parts.join(" ")
+        "  refs #{counts}"
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -3416,7 +3689,8 @@ module Nabu
         ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
           registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
-          golden_queries: Nabu::Health::LocalCheck.golden_queries
+          golden_queries: Nabu::Health::LocalCheck.golden_queries,
+          canonical_dir: config.canonical_dir
         ).run
         print_local_health(report)
         raise Thor::Error, local_health_failure(report) if report.any_loud?
@@ -3510,7 +3784,7 @@ module Nabu
       def drift_cell(drift)
         { current: "current", behind: "behind", unpinned: "unpinned",
           never_synced: "never-synced", unknown: "—", multi: "multi-repo",
-          frozen: "frozen" }.fetch(drift)
+          frozen: "frozen", local: "local" }.fetch(drift)
       end
 
       # :unchecked renders as NOTHING — "license: unchecked" reads like a
