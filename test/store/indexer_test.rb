@@ -154,6 +154,8 @@ module Store
       assert_equal passage.id, row.fetch(:passage_id)
       assert_equal "urn:d:1:1", row.fetch(:urn)
       assert_equal "grc", row.fetch(:language)
+      assert(@fulltext.indexes(:passage_lemmas).values.any? { |i| i[:columns] == [:language] },
+             "passage_lemmas.language index missing (P18-4 follow-up — the language card scans without it)")
     end
 
     # Non-treebank passages (annotations "{}", or annotations without token

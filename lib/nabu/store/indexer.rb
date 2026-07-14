@@ -210,6 +210,10 @@ module Nabu
           # hit. ~30–45 MB, rebuilt with the table (never migrated — the fulltext
           # db is derived-of-derived; class note).
           index :urn
+          # language index (P18-4 follow-up): `nabu language CODE` counts a
+          # language's gold rows; without this the card scans 2.85M rows
+          # (owner-measured 11.6 s per card across the three unindexed scans).
+          index :language
         end
       end
 
