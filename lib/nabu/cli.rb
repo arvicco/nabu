@@ -1029,12 +1029,15 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
                                    .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_define_results(lemma, results)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+      ledger&.disconnect
     end
 
     desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
@@ -1093,12 +1096,77 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
       results = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
                                  .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       print_etym_results(lemma, results)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+      ledger&.disconnect
+    end
+
+    desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
+    long_desc <<~HELP, wrap: false
+      Explains any language code the library surfaces — the corpus tags
+      (chu, orv, san-Latn) and the Wiktionary etymology codes the etym
+      cognate lists are full of (gkm, zle-ort, zlw-opl…). The card merges
+      three layers:
+
+      - NAME, derived from the held kaikki extracts: every descendants node
+        carries the human name next to its code, censused into the catalog
+        with the dictionary shelves (a catalog predating that census shows
+        names only for curated codes until the next rebuild or parse-only
+        shelf resync).
+      - CONTEXT, curated and accumulated in the history ledger: period,
+        family, what the library holds — every held language, plus
+        family-level entries for the etymology tail (zle-* East Slavic
+        stages, gkm Medieval Greek…). A code without its own note falls
+        back to its family; without either it says so honestly.
+      - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
+        dictionary shelves, reconstruction-crosswalk edges. Zero fields
+        are suppressed.
+
+      --long adds where-it-appears detail: per-source document counts and
+      the upstream-code split of the etymology edges (chu's edges arrive
+      as Wiktionary's "cu"). --list shows the held languages only — the
+      ~800-code etymology tail is what `language CODE` is for. --seed
+      loads config/languages.yml into the ledger's language notes
+      (idempotent; run after editing the curation).
+
+      Examples:
+        nabu language zle-ort      # the code from an etym cognate list
+        nabu language chu --long   # a held language, full holdings
+        nabu language --list       # every held language
+    HELP
+    option :list, type: :boolean, default: false,
+                  desc: "List the held languages (corpus documents, gold lemmas, or a shelf)"
+    option :seed, type: :boolean, default: false,
+                  desc: "Load config/languages.yml into the ledger's language notes (idempotent)"
+    option :long, type: :boolean, default: false,
+                  desc: "Add per-source document counts and the upstream-code edge split"
+    def language(code = nil)
+      config = Nabu::Config.load
+      return seed_language_notes(config) if options[:seed]
+
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      ledger = open_ledger(config)
+      languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      info = catalog && Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext)
+      if options[:list]
+        print_language_list(languages, info)
+      else
+        term = code.to_s.strip
+        raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
+
+        print_language_card(term, languages, info)
+      end
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+      ledger&.disconnect
     end
 
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
@@ -2736,11 +2804,21 @@ module Nabu
       # long tail (a Proto-Slavic root can name 25+ descendants) stays readable
       # — languages in first-seen (stored depth-first) order, forms within a
       # language in stored order. Nothing is elided under the flag.
+      # P18-4 render verdict: each group header carries the code's NAME
+      # inline when the library knows one ("[gkm · Medieval Greek]") — one
+      # name per LINE, so the compact rule holds exactly where the owner's
+      # pain was; the capped default stays code-only (ten names inline would
+      # blow the line) and etym's footer points at `nabu language` instead.
       def print_reflexes_expanded(rest)
         say "other reflexes (not attested here) — all #{rest.size}, grouped by language:"
         rest.group_by(&:lang_code).each do |lang_code, group|
-          say "  [#{lang_code}] #{group.map { |r| reflex_form(r) }.join(', ')}"
+          say "  #{reflex_group_label(lang_code)} #{group.map { |r| reflex_form(r) }.join(', ')}"
         end
+      end
+
+      def reflex_group_label(lang_code)
+        name = @languages&.name(lang_code)
+        name ? "[#{lang_code} · #{name}]" : "[#{lang_code}]"
       end
 
       # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
@@ -2769,6 +2847,10 @@ module Nabu
           say "" if index.positive?
           print_etym_entry(result, 0)
         end
+        # P18-4: one footer line, the desk-reference pointer — the compact
+        # render keeps raw codes, this names the way out.
+        say ""
+        say "codes: nabu language CODE — name, context, and what this library holds"
       end
 
       def print_etym_entry(result, depth)
@@ -2792,6 +2874,135 @@ module Nabu
         prefix = via ? "#{via.word} [#{via.language}]#{' (loan)' if via.borrowed} → " : ""
         "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
           "[#{result.license_class}]"
+      end
+
+      # -- language (P18-4): the code desk reference ------------------------------
+
+      def seed_language_notes(config)
+        ledger = open_or_create_ledger(config)
+        report = Nabu::Languages.seed!(ledger: ledger)
+        say "language notes: #{report.appended} seeded, #{report.unchanged} unchanged " \
+            "(config/languages.yml → ledger)"
+      ensure
+        ledger&.disconnect
+      end
+
+      # The card: headline (code — name), family line, curated context (or
+      # the family's, labeled; or an honest absence), then live relevance
+      # with zero fields suppressed. An unknown code misses honestly, with a
+      # family hint when the prefix is a known family.
+      def print_language_card(code, languages, info)
+        name = languages.name(code)
+        context = languages.context(code)
+        fallback = languages.family_fallback(code)
+        relevance = info&.relevance(code)
+        held = relevance && !relevance.empty?
+        return print_language_miss(code, fallback) unless name || context || held
+
+        say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
+        print_language_family(code, languages, fallback)
+        print_language_context(context, fallback)
+        print_language_relevance(code, relevance) if relevance
+      end
+
+      def print_language_miss(code, fallback)
+        say "#{code} — unknown here: no held text, no shelf, no etymology edge, " \
+            "and no name in the held kaikki extracts"
+        if fallback
+          hint = [fallback.name, fallback.context].compact.join(": ")
+          say_wrapped("family hint: #{fallback.code}-* — #{hint}", indent: 2)
+        end
+        say "  held languages: nabu language --list"
+      end
+
+      def print_language_family(code, languages, fallback)
+        family = languages.family(code)
+        if family
+          say_wrapped("family: #{family}", indent: 2)
+        elsif fallback&.name
+          say_wrapped("family: #{fallback.code}-* — #{fallback.name}", indent: 2)
+        end
+      end
+
+      def print_language_context(context, fallback)
+        if context
+          say_wrapped(context, indent: 2)
+        elsif fallback&.context
+          say_wrapped("(no curated note for this code — its #{fallback.code}-* family:) " \
+                      "#{fallback.context}", indent: 2)
+        else
+          say "  (no curated note)"
+        end
+      end
+
+      def print_language_relevance(code, rel)
+        corpus = []
+        corpus << plural(rel.documents, "document") if rel.documents.positive?
+        corpus << "#{commas(rel.passages)} passages" if rel.passages.positive?
+        say "  corpus: #{corpus.join(' · ')}" unless corpus.empty?
+        say "  gold lemmas: #{commas(rel.lemma_rows)} rows (nabu search --lemma)" if rel.lemma_rows.positive?
+        unless rel.shelves.empty?
+          shelf_list = rel.shelves.map { |shelf| "#{shelf.title} (#{commas(shelf.entries)} entries)" }
+          say "  dictionary: #{shelf_list.join(' · ')}"
+        end
+        say "  etymology: #{commas(rel.reflex_edges)} reflex #{rel.reflex_edges == 1 ? 'edge' : 'edges'}" \
+          if rel.reflex_edges.positive?
+        print_language_long(code, rel) if options[:long]
+      end
+
+      # --long: per-source document counts and the upstream-code split of
+      # the etymology edges (chu's edges arrive as Wiktionary's "cu").
+      def print_language_long(code, rel)
+        unless rel.sources.empty?
+          say "  by source: #{rel.sources.map { |slug, docs| "#{slug} #{commas(docs)}" }.join(' · ')}"
+        end
+        return unless rel.edge_codes.any? && rel.edge_codes.keys != [code]
+
+        say "  edge codes: #{rel.edge_codes.map { |edge_code, n| "#{edge_code} #{commas(n)}" }.join(' · ')}"
+      end
+
+      # --list: the held languages only (a full dump of the ~800-code
+      # etymology tail would be unusable and unpageable; the tail is what
+      # `language CODE` is for — stated in the footer, never implied away).
+      def print_language_list(languages, info)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless info
+
+        held = info.held
+        say "held languages (#{held.size} with corpus documents, gold lemmas, or a shelf):"
+        width = held.map { |entry| entry.code.length }.max || 0
+        held.each do |entry|
+          say "  #{entry.code.ljust(width)}  #{languages.name(entry.code) || '(unnamed)'} — " \
+              "#{held_line(entry)}"
+        end
+        say "etymology tail: ~800 more codes appear in reflex edges — nabu language CODE explains any"
+      end
+
+      def held_line(entry)
+        bits = []
+        bits << "#{commas(entry.documents)} docs" if entry.documents.positive?
+        bits << "#{commas(entry.lemma_rows)} lemma rows" if entry.lemma_rows.positive?
+        (bits + entry.shelves).join(" · ")
+      end
+
+      def commas(count)
+        count.to_s.gsub(/\B(?=(\d{3})+\z)/, ",")
+      end
+
+      # Wrap prose to the card's width, every line indented.
+      def say_wrapped(text, indent:, width: 78)
+        pad = " " * indent
+        line = +""
+        text.split(/\s+/).each do |word|
+          if line.empty?
+            line << word
+          elsif pad.length + line.length + 1 + word.length > width
+            say "#{pad}#{line}"
+            line = +word
+          else
+            line << " " << word
+          end
+        end
+        say "#{pad}#{line}" unless line.empty?
       end
 
       # --langs as an array: comma-joined on the CLI, validated by the query.

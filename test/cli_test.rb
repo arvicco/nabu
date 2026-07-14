@@ -177,10 +177,11 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
       refute_match(/ more$/, out, "nothing is elided under --long")
-      # A language from the truncated tail is now present, on its own group line.
-      assert_match(/^ {2}\[dsb\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows")
+      # A language from the truncated tail is now present, on its own group
+      # line — named inline from the derived census (P18-4).
+      assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "the capped-away Lower Sorbian reflex now shows, named")
       # Multiple forms of one language collapse onto that language's line.
-      assert_match(/^ {2}\[cu\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
+      assert_match(/^ {2}\[cu · Old Church Slavonic\] .*,.*$/, out, "Old Church Slavonic's two forms share one line")
     end
   end
 
@@ -198,8 +199,120 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[etym *zima --long]) }
       assert_nil status
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
-      assert_match(/^ {2}\[dsb\] zyma$/, out)
-      refute_match(/ more$/, out)
+      assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "grouped headers name the code inline (P18-4)")
+      refute_match(/ and \d+ more$/, out)
+    end
+  end
+
+  # -- P18-4: nabu language — the code desk reference --------------------------
+
+  def test_help_language_documents_the_desk_reference
+    out, _err, _status = run_cli(%w[help language])
+    assert_match(/zle-ort/, out, "must show the etymology-tail worked example")
+    assert_match(/--list/, out)
+    assert_match(/--seed/, out)
+    assert_match(/family-level/, out, "must explain the family fallback for the tail")
+  end
+
+  def test_language_card_for_a_held_shelf_language_merges_all_three_layers
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language sla-pro])
+        assert_nil status
+        assert_match(/^sla-pro — Proto-Slavic$/, out, "curated name headline")
+        assert_match(/family: Slavic < Balto-Slavic < Indo-European \(reconstructed\)/, out)
+        assert_match(/reconstructed headwords/, out, "curated context renders")
+        assert_match(/dictionary: Wiktionary — Proto-Slavic.*\(\d+ entries\)/, out)
+        assert_match(/etymology: \d+ reflex edges/, out, "PIE/PBS descendants name sla-pro forms")
+        refute_match(/corpus:/, out, "zero corpus holdings are suppressed (house rule)")
+        refute_match(/no curated note/, out)
+      end
+    end
+  end
+
+  def test_language_card_for_a_tail_code_census_name_with_family_fallback
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language zlw-osk])
+        assert_nil status
+        assert_match(/^zlw-osk — Old Slovak$/, out, "the name comes from the derived kaikki census")
+        assert_match(/family: zlw-\* — West Slavic/, out)
+        assert_match(/no curated note for this code — its zlw-\* family/, out)
+        assert_match(/etymology: \d+ reflex edge/, out)
+      end
+    end
+  end
+
+  def test_language_card_long_shows_the_upstream_code_split
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language chu --long])
+        assert_nil status
+        assert_match(/^chu — Old Church Slavonic$/, out)
+        assert_match(/edge codes: cu \d+/, out, "chu's edges arrive under Wiktionary's cu — said honestly")
+      end
+    end
+  end
+
+  def test_language_unknown_code_misses_honestly_with_a_family_hint
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language zle-qqq])
+        assert_nil status
+        assert_match(/^zle-qqq — unknown here/, out)
+        assert_match(/family hint: zle-\* — East Slavic/, out)
+        assert_match(/nabu language --list/, out)
+
+        out, _err, _status = run_cli(%w[language qqqq])
+        assert_match(/^qqqq — unknown here/, out)
+        refute_match(/family hint/, out, "no known prefix — no guessed hint")
+      end
+    end
+  end
+
+  def test_language_list_scopes_to_held_languages_and_names_the_tail
+    with_recon_shelf do |config|
+      with_config(config) do
+        run_cli(%w[language --seed])
+        out, _err, status = run_cli(%w[language --list])
+        assert_nil status
+        assert_match(/^held languages \(\d+ with corpus documents, gold lemmas, or a shelf\):/, out)
+        assert_match(/^ {2}sla-pro\s+Proto-Slavic — .*Wiktionary — Proto-Slavic/, out)
+        refute_match(/^ {2}zle-ort/, out, "the etymology tail never floods the list")
+        assert_match(/etymology tail: ~800 more codes.*nabu language CODE/, out)
+      end
+    end
+  end
+
+  def test_language_seed_is_idempotent_across_runs
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language --seed])
+        assert_nil status
+        assert_match(/language notes: \d+ seeded, 0 unchanged/, out)
+        out, _err, _status = run_cli(%w[language --seed])
+        assert_match(/language notes: 0 seeded, \d+ unchanged/, out, "re-seeding writes nothing")
+      end
+    end
+  end
+
+  def test_language_without_code_or_flag_errors
+    with_recon_shelf do |config|
+      _out, err, status = with_config(config) { run_cli(%w[language]) }
+      assert_equal 1, status
+      assert_match(/give a code/, err)
+    end
+  end
+
+  def test_etym_footer_points_at_the_language_desk_reference
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *zima]) }
+      assert_nil status
+      assert_match(/^codes: nabu language CODE/, out, "the compact render's way out of raw codes")
     end
   end
 

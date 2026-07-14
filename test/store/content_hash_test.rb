@@ -63,4 +63,15 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(borrowed: false)])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(borrowed: true)]))
   end
+
+  # P18-4: lang_name is DELIBERATELY NOT content — it feeds the derived
+  # language_names census, not entry identity. The name-aware parse must not
+  # revise a single stored entry (no revision storm; the census recovers at
+  # any rebuild/resync regardless).
+  def test_lang_name_is_display_metadata_never_content
+    assert_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex])),
+                 Nabu::Store::ContentHash.dictionary_entry(
+                   entry(reflexes: [reflex(lang_name: "Old Church Slavonic")])
+                 )
+  end
 end

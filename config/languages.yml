@@ -1,0 +1,409 @@
+# Curated language context (P18-4) — the SEED for the accumulated
+# language_notes layer in the history ledger. `nabu language --seed` loads
+# it idempotently (a note is appended only when its body changed; the ledger
+# keeps every superseded version with provenance). Curation is reviewed
+# HERE, in git; the ledger accumulates beyond it.
+#
+# Shape: languages.<code> and families.<family-prefix>, each with up to
+# three fields — name (beats the derived kaikki census), family (the card's
+# family line), context (one to three lines: period, what it is, what this
+# library holds). Adapted from docs/languages.md (the held-language page);
+# family entries cover the etymology tail at family grain (honest and
+# tractable where per-code curation isn't).
+
+languages:
+  # -- corpus languages (documents / passages) -------------------------------
+  # NOTE: a code may appear in ONE section only (the seed would ping-pong
+  # otherwise — pinned in cli_test's idempotency test). grc doubles as the
+  # family prefix of Wiktionary's dialect tags, so the dialect note lives
+  # here and grc-* falls back to this entry.
+  grc:
+    name: Ancient Greek
+    family: Hellenic < Indo-European
+    context: >-
+      The library's largest language — Homer through the papyri to Swete's
+      Septuagint and both Greek NTs, polytonic, ca. 8th c. BCE onward.
+      LSJ (116k entries) is its reference shelf. grc-* codes are
+      Wiktionary's dialect tags (Attic grc-att, Doric grc-dor, Koine
+      grc-koi…).
+  lat:
+    name: Latin
+    family: Italic < Indo-European
+    context: >-
+      Republican and Imperial classics, Jerome's Vulgate, the Clementine
+      bible, and papyrus fragments. Lewis & Short (52k entries) is its
+      reference shelf.
+  akk:
+    name: Akkadian
+    family: East Semitic
+    context: >-
+      East Semitic language of Babylon and Assyria, ca. 2350 BCE – 100 CE,
+      held in transliteration with ORACC's gold lemmas (SAA letters, omens,
+      royal inscriptions).
+  sux:
+    name: Sumerian
+    family: language isolate
+    context: >-
+      The language isolate of the earliest written literature, from Ur III
+      royal inscriptions to the great lexical lists.
+  qpc:
+    name: Proto-cuneiform
+    family: pre-linguistic notation
+    context: >-
+      The pre-linguistic administrative tablets of the late 4th millennium
+      BCE (dcclt archaic lists) — signs before language.
+  cop:
+    name: Coptic
+    family: Egyptian < Afro-Asiatic
+    context: >-
+      The last stage of Egyptian (Greek alphabet + Demotic letters), 3rd c.
+      CE onward — documentary papyri of Christian Egypt plus the
+      coptic-scriptorium literary shelf (Shenoute, apophthegmata, biblical
+      books) with gold lemmas.
+  eng:
+    name: English
+    family: West Germanic
+    context: >-
+      The translation layer — Perseus/First1K editions, WEB bible, SAA
+      tablet translations, Freising rendering; never an original.
+  san-Latn:
+    name: Sanskrit (IAST romanization)
+    family: Indo-Aryan < Indo-Iranian < Indo-European
+    context: >-
+      The GRETIL shelf — Vedas to early-modern śāstra — stored in the
+      international transliteration scheme with accents preserved.
+  san:
+    name: Sanskrit (Vedic)
+    family: Indo-Aryan < Indo-Iranian < Indo-European
+    context: >-
+      The UD Vedic treebank's gold-annotated sentences; Monier-Williams
+      (SLP1→IAST) is the san reference shelf.
+  sl:
+    name: Slovenian (historical)
+    family: South Slavic
+    context: >-
+      Early Modern print (Dalmatin 1584 → 1899, goo300k + IMP) and, by
+      lineage, the ~1000 CE Freising Manuscripts — an acknowledged
+      anachronism (no better subtag exists).
+  ang:
+    name: Old English
+    family: West Germanic
+    context: >-
+      Beowulf and the complete ASPR poetry plus the ISWOC prose/gospel
+      treebank, ca. 700–1150. Bosworth-Toller (63k entries) is its
+      reference shelf.
+  orv:
+    name: Old East Slavic
+    family: East Slavic
+    context: >-
+      Birchbark letters, chronicles, Avvakum, and the prosta mova chancery
+      texts, 1025–1700. Middle Russian and Ruthenian ride this code too
+      (the UD convention); Wiktionary splits them (zle-mru, zle-ort).
+  chu:
+    name: Old Church Slavonic
+    family: South Slavic
+    context: >-
+      The OCS canon, 9th–11th c.: Codex Marianus, Suprasliensis, and the
+      four CCMH gospel manuscripts. Wiktionary-OCS (4.6k entries) glosses
+      it; its etymology edges arrive under Wiktionary's code "cu".
+  got:
+    name: Gothic
+    family: East Germanic
+    context: >-
+      Wulfila's 4th-c. Bible — the oldest substantial Germanic text,
+      gold-lemmatized in PROIEL; romanization bridges its script in etym.
+  xcl:
+    name: Classical Armenian
+    family: Armenian < Indo-European
+    context: >-
+      The 5th-century Armenian New Testament, gold-lemmatized; carries the
+      flagged Iranian-loan layer the iir-pro shelf reaches.
+  hit:
+    name: Hittite
+    family: Anatolian < Indo-European
+    context: Anatolian entries in the multilingual cuneiform lexical lists.
+  xhu:
+    name: Hurrian
+    family: Hurro-Urartian (isolate family)
+    context: Isolated lexical-list column entries from the cuneiform shelf.
+  uga:
+    name: Ugaritic
+    family: Northwest Semitic
+    context: A lexical-list trace from the cuneiform shelf.
+  arc:
+    name: Aramaic
+    family: Northwest Semitic
+    context: A single cuneiform-shelf document.
+  ar:
+    name: Arabic
+    family: Central Semitic
+    context: A handful of early Islamic-era documentary papyri.
+  egy-Egyd:
+    name: Egyptian (Demotic)
+    family: Egyptian < Afro-Asiatic
+    context: Two Demotic documentary papyri.
+  grc-Latn:
+    name: Greek (romanized)
+    family: Hellenic < Indo-European
+    context: Two papyri whose Greek survives only in Latin transliteration.
+  xct:
+    name: Classical Tibetan
+    family: Tibeto-Burman
+    context: A stray GRETIL text (native script; xct-Latn is its transliterated twin).
+  xct-Latn:
+    name: Classical Tibetan (romanized)
+    family: Tibeto-Burman
+    context: The transliterated twin of the stray GRETIL xct text.
+  ta-Latn:
+    name: Tamil (romanized)
+    family: Dravidian
+    context: One GRETIL stray.
+  pol:
+    name: Polish
+    family: West Slavic
+    context: Modern scholarly translations of the Freising Manuscripts (one per manuscript).
+  ita:
+    name: Italian
+    family: Romance < Italic
+    context: Modern scholarly translations of the Freising Manuscripts (one per manuscript).
+  ger:
+    name: German
+    family: West Germanic
+    context: Modern scholarly translations of the Freising Manuscripts (one per manuscript).
+  en:
+    name: English (legacy tag)
+    family: West Germanic
+    context: >-
+      One GRETIL stray using the 2-letter tag — the corpus standardizes on
+      eng. (In etymology edges "en" is Wiktionary's normal English code.)
+  und:
+    name: undetermined
+    family: (BCP-47 placeholder)
+    context: The BCP-47 "undetermined" tag — a few documents whose language upstream never states.
+
+  # -- reference-shelf reconstruction languages ------------------------------
+  sla-pro:
+    name: Proto-Slavic
+    family: Slavic < Balto-Slavic < Indo-European (reconstructed)
+    context: >-
+      ~5.4k reconstructed headwords with descendant trees naming attested
+      reflexes — the crosswalk hop between OCS/Slavic lemmas and PIE.
+  ine-pro:
+    name: Proto-Indo-European
+    family: Indo-European trunk (reconstructed)
+    context: >-
+      ~1.9k roots — the trunk the etym command ascends to; every -pro shelf
+      chains toward it.
+  gem-pro:
+    name: Proto-Germanic
+    family: Germanic < Indo-European (reconstructed)
+    context: >-
+      ~5.7k reconstructions bridging PIE to Gothic and Old English; a
+      gem-pro meet under a Slavic witness reads as a borrowing.
+  ine-bsl-pro:
+    name: Proto-Balto-Slavic
+    family: Balto-Slavic < Indo-European (reconstructed)
+    context: >-
+      The structural intermediate shelf (PIE → PBS → Proto-Slavic) the
+      multi-hop closure walks through (~490 headwords).
+  gmw-pro:
+    name: Proto-West Germanic
+    family: West Germanic < Germanic (reconstructed)
+    context: >-
+      The Old English proto desk (~5.4k headwords) — the second intermediate
+      shelf (Proto-Germanic → PWG → ang).
+  itc-pro:
+    name: Proto-Italic
+    family: Italic < Indo-European (reconstructed)
+    context: Bridges PIE to Latin (~740 headwords; best record-level crosswalk join).
+  iir-pro:
+    name: Proto-Indo-Iranian
+    family: Indo-Iranian < Indo-European (reconstructed)
+    context: >-
+      ~760 headwords: Sanskrit via romanization plus the flagged
+      Iranian-loan layer in Armenian.
+
+  # -- the etymology tail, per-code curation where the owner's pain was ------
+  cu:
+    name: Old Church Slavonic
+    family: South Slavic
+    context: >-
+      Wiktionary's own OCS code (ISO 639-1) — the catalog stores the
+      language as chu; reflex edges keep the upstream code verbatim.
+  gkm:
+    name: Medieval Greek
+    family: Hellenic < Indo-European
+    context: >-
+      Byzantine Greek, ca. 600–1453 — the stage between the papyri's Koine
+      and Modern Greek; frequent in descendant trees as the donor of Slavic
+      and Romance borrowings.
+  rue:
+    name: Rusyn
+    family: East Slavic
+    context: >-
+      Carpathian Rusyn — the East Slavic language of the Carpathian arc,
+      descended from the same Rus' continuum as Ukrainian; upstream also
+      calls it Carpathian Rusyn.
+  zle-ort:
+    name: Old Ruthenian
+    family: East Slavic
+    context: >-
+      The chancery and literary language of the Grand Duchy of Lithuania and
+      the Polish–Lithuanian east (14th–18th c., "prosta mova") — ancestor of
+      Belarusian, Ukrainian, and Rusyn. The corpus holds its texts under orv
+      (the UD convention).
+  zle-ono:
+    name: Old Novgorodian
+    family: East Slavic
+    context: >-
+      The birchbark-letter dialect of medieval Novgorod and Pskov
+      (11th–15th c.), famously missing the second palatalization; attested
+      in the corpus inside the orv birchbark shelf.
+  zle-mru:
+    name: Middle Russian
+    family: East Slavic
+    context: >-
+      The Muscovite stage between Old East Slavic and the modern standard
+      (ca. 1400–1700) — Avvakum's era; held under orv per the UD convention.
+  zlw-opl:
+    name: Old Polish
+    family: West Slavic
+    context: >-
+      Polish to ca. 1500 — the stage Wiktionary's Proto-Slavic descendants
+      cite most for Lechitic; no corpus texts held.
+  zlw-mpl:
+    name: Middle Polish
+    family: West Slavic
+    context: Polish of ca. 1500–1780 (the print era between Old Polish and the modern standard).
+
+families:
+  # Family-level context for the etymology tail: a code without its own
+  # curated note falls back to its family prefix here — honest and tractable
+  # where per-code curation isn't. Prefixes are Wiktionary's family codes.
+  zle:
+    name: East Slavic
+    context: >-
+      The Rus' branch and its historical stages — Old Novgorodian (zle-ono),
+      Old Ruthenian (zle-ort), Middle Russian (zle-mru), Middle
+      Belarusian/Ukrainian (zle-mbe, zle-muk) — modern be/ru/uk. The
+      corpus's orv shelf sits here.
+  zlw:
+    name: West Slavic
+    context: >-
+      Polish, Czech, Slovak, Sorbian and their historical stages — Old
+      Polish (zlw-opl), Middle Polish (zlw-mpl), Old Czech (zlw-ocs), Old
+      Slovak (zlw-osk), Slovincian (zlw-slv).
+  zls:
+    name: South Slavic
+    context: >-
+      OCS's own branch: Church Slavonic recensions (zls-chs), Slovenian,
+      Serbo-Croatian, Bulgarian, Macedonian. The corpus's chu and sl shelves
+      sit here.
+  sla:
+    name: Slavic
+    context: >-
+      The whole Slavic branch of Indo-European; sla-pro (Proto-Slavic) is a
+      held reconstruction shelf.
+  gem:
+    name: Germanic
+    context: >-
+      The Germanic branch; gem-pro (Proto-Germanic) is a held reconstruction
+      shelf bridging PIE to Gothic and Old English.
+  gmw:
+    name: West Germanic
+    context: >-
+      English, Frisian, Dutch, German and their stages — Middle Scots
+      (gmw-msc), Central Franconian (gmw-cfr), Rhine Franconian (gmw-rfr);
+      gmw-pro (Proto-West Germanic) is a held shelf.
+  gmq:
+    name: North Germanic
+    context: >-
+      The Scandinavian branch — Old Swedish (gmq-osw), Old Danish (gmq-oda),
+      Old/modern Gutnish (gmq-ogt/gut), Proto-Norse (gmq-pro).
+  ine:
+    name: Indo-European
+    context: >-
+      The family trunk: ine-pro (PIE) and ine-bsl-pro (Proto-Balto-Slavic)
+      are held shelves; ine-ana-pro/ine-toc-pro are its Anatolian/Tocharian
+      proto-branches.
+  iir:
+    name: Indo-Iranian
+    context: >-
+      The Indic–Iranian branch; iir-pro (Proto-Indo-Iranian) is a held
+      shelf reaching Sanskrit and the Armenian loan layer.
+  inc:
+    name: Indic (Indo-Aryan)
+    context: >-
+      Sanskrit's descendants — Prakrits' successors, Old/Middle stages of
+      the modern languages (inc-ash Ashokan Prakrit, inc-ogu Old Gujarati…).
+  pra:
+    name: Prakrits
+    context: >-
+      The Middle Indo-Aryan literary languages (pra-mah Maharastri, pra-sau
+      Sauraseni, pra-mag Magadhi, pra-ard Ardhamagadhi).
+  ira:
+    name: Iranian
+    context: >-
+      The Iranian branch — Avestan, Old/Middle Persian, Sogdian…; ira-pro
+      (Proto-Iranian) and sub-branch protos (ira-shr-pro…) appear in
+      descendant trees.
+  xme:
+    name: Median / Old Iranian substrate
+    context: >-
+      Median (xme-old) and the Central-Iranian "Kermanic" dialect cluster
+      Wiktionary files under xme-* (Old Azari, Hamadani…).
+  xsc:
+    name: Scytho-Sarmatian
+    context: >-
+      The steppe-Iranian branch: Proto-Scythian (xsc-pro), Proto-Saka
+      (xsc-sak-pro), Proto-Sarmatian (xsc-sar-pro) — Ossetic's ancestry.
+  itc:
+    name: Italic
+    context: >-
+      Latin's branch — Old Latin (itc-ola), Osco-Umbrian (itc-sbl),
+      Praenestine (itc-pra); itc-pro (Proto-Italic) is a held shelf.
+  grk:
+    name: Hellenic
+    context: >-
+      Greek's own branch — the ancient dialects ride grc-* (Attic grc-att,
+      Doric grc-dor, Koine grc-koi); grk-pro is Proto-Hellenic, grk-ita
+      Italiot Greek.
+  bat:
+    name: Baltic
+    context: >-
+      Lithuanian, Latvian, Old Prussian; bat-pro (Proto-Baltic) and East
+      Baltic (bat-eas) appear in Balto-Slavic descendant trees.
+  cel:
+    name: Celtic
+    context: >-
+      The Celtic branch — Gaulish (cel-gau), Proto-Celtic (cel-pro),
+      Proto-Brythonic (cel-bry-pro).
+  roa:
+    name: Romance
+    context: >-
+      Latin's descendants beyond the standards — Old Catalan/Italian/Leonese
+      (roa-oca/oit/ole), Gallo (roa-gal), Franc-Comtois (roa-fcm)….
+  sem:
+    name: Semitic
+    context: The Semitic family; sem-pro (Proto-Semitic) appears in loan chains.
+  urj:
+    name: Uralic
+    context: >-
+      The Uralic family — Proto-Finnic (urj-fin-pro), Proto-Permic
+      (urj-prm-pro), Proto-Uralic (urj-pro); its languages preserve early
+      Germanic/Baltic/Slavic loans.
+  cau:
+    name: Caucasian (areal)
+    context: >-
+      Wiktionary's Caucasian proto-groups — Proto-Nakh (cau-nkh-pro),
+      Proto-Northeast/Northwest Caucasian (cau-nec-pro/cau-nwc-pro).
+  crp:
+    name: Creoles and pidgins
+    context: >-
+      Contact languages — Russenorsk (crp-rsn), Taimyr Pidgin Russian
+      (crp-tpr), Solombala English (crp-slb)….
+  frr:
+    name: North Frisian (dialects)
+    context: >-
+      frr-* codes are North Frisian dialect tags — Föhr-Amrum (frr-fam),
+      Sylt (frr-syl), Heligoland (frr-hel)….
