@@ -228,8 +228,8 @@ version you used, or the site and repository with your access date:
 *Nabu: a local library of the ancient world*,
 https://arvicco.github.io/nabu (repository:
 [github.com/arvicco/nabu](https://github.com/arvicco/nabu)), adding the
-version tag or commit hash where precision matters. A DOI per release
-(via Zenodo) is planned. Texts you quote *from* the library should be
+version tag or commit hash where precision matters. Each release carries a DOI —
+v1.0.0: [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957). Texts you quote *from* the library should be
 cited to their upstream editions, which every passage's URN and license
 label identify — see
 [Sources &amp; Licensing]({{ '/sources/' | relative_url }}).

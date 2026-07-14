@@ -1,6 +1,6 @@
 # Nabu
 
-[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg)](https://github.com/arvicco/nabu/actions/workflows/ci.yml)
+[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg)](https://github.com/arvicco/nabu/actions/workflows/ci.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21361957.svg)](https://doi.org/10.5281/zenodo.21361957)
 
 **A personal, local, license-honest library of the ancient world — that your
 AI tools can read.**
