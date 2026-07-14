@@ -26,7 +26,9 @@ module Nabu
 
       width = registry.each_source.map { |entry| entry.slug.length }.max
       cache = probe_cache(ledger)
-      cells = registry.each_source.to_h { |entry| [entry.slug, upstream_cell(entry, cache[entry.slug])] }
+      cells = registry.each_source.to_h do |entry|
+        [entry.slug, upstream_cell(entry, cache[entry.slug], ledger: ledger)]
+      end
       up_w = cells.values.map(&:length).max
       registry.each_source.map { |entry| render_entry(entry, db, ledger, width, cells[entry.slug], up_w) }.join("\n")
     end
@@ -58,17 +60,36 @@ module Nabu
     #   up=ok(Nd)      current as of a recent probe
     #   up=stale(Nd)   was "ok" but the probe is older than STALE_AFTER_DAYS
     #   up=?(Nd)       drift indeterminate (never synced / unreachable / multi)
-    def upstream_cell(entry, probe)
+    def upstream_cell(entry, probe, ledger: nil)
       return "up=frozen" if entry.sync_policy == "frozen"
       return "up=local" if entry.sync_policy == "local"
       return "up=?(unprobed)" if probe.nil?
 
       age = age_days(probe.checked_at)
       case probe.drift
-      when "behind" then "up=BEHIND(#{age}d)"
+      when "behind"
+        # A BEHIND verdict older than the source's last ok sync is answered
+        # noise (owner defect 2026-07-14: re-synced perseus-greek still read
+        # BEHIND from a 15-hour-old cache). The verdict cannot be trusted
+        # either way after a sync — say so and point at the re-probe.
+        return "up=?(re-probe)" if synced_since?(entry.slug, probe.checked_at, ledger)
+
+        "up=BEHIND(#{age}d)"
       when "current" then age > STALE_AFTER_DAYS ? "up=stale(#{age}d)" : "up=ok(#{age}d)"
       else "up=?(#{age}d)"
       end
+    end
+
+    # True when the source has a SUCCEEDED run newer than the probe.
+    def synced_since?(slug, checked_at, ledger)
+      return false unless ledger&.table_exists?(:runs)
+
+      probe_time = checked_at.is_a?(Time) ? checked_at : Time.parse(checked_at.to_s)
+      last_ok = ledger[:runs].where(source_slug: slug, status: %w[ok succeeded])
+                             .order(Sequel.desc(:id)).get(:finished_at)
+      return false unless last_ok
+
+      (last_ok.is_a?(Time) ? last_ok : Time.parse(last_ok.to_s)) > probe_time
     end
 
     def age_days(checked_at)
