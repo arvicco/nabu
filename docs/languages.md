@@ -13,10 +13,14 @@ universe the `etym` cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) —
 name, family, curated context, and live holdings, in ~0.2 s. Honesty note:
 the derived names census (`language_names`, from the held kaikki extracts)
 is **currently empty** — it fills at the owner's wiktionary parse-only
-resyncs, and `nabu health` surfaces the gap until then; the **183-entry
-curated seed** is loaded live into the ledger's accumulated notes layer
-(`nabu language --seed`, from `config/languages.yml` and the curation
-below). `nabu language --list` prints the held languages.
+resyncs, and `nabu health` surfaces the gap until then. **The curation's
+home is the `canonical/local-language/` dossier shelf (P19-1, architecture
+§16)** — one Markdown file per code, edit it in any editor, then `nabu sync
+local-language` re-derives the card — superseding the retired
+`config/languages.yml` seed: the 183-entry curation (the prose this page
+distills) migrates there via the owner-fired `nabu language
+--export-dossiers`, with the ledger's accumulated notes serving reads until
+that lands. `nabu language --list` prints the held languages.
 
 ## The system, in five rules
 

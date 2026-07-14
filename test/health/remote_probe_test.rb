@@ -848,6 +848,37 @@ class RemoteProbeTest < Minitest::Test
     assert_equal "frozen", Nabu::Store::Probe.first(source_slug: "src").drift
   end
 
+  # -- P19-1: local-policy shelves ------------------------------------------
+
+  # A local shelf has NO upstream: the probe must touch neither the shell nor
+  # the network (NO_SHELL raises on any ls-remote), read the frozen-style
+  # :local drift, and judge liveness by the canonical tree itself.
+  def test_local_policy_source_probes_no_network_and_reads_local
+    Dir.mktmpdir do |root|
+      seed_canonical(root, "local-language")
+      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], policy: "local"),
+                  NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :local, row.drift
+      assert_equal :unchecked, row.license.status
+      assert_equal "canonical/local-language (local)", row.upstream
+      assert_equal "local", Nabu::Store::Probe.first(source_slug: "local-language").drift,
+                   "the verdict persists to the probe cache"
+    end
+  end
+
+  def test_local_policy_source_with_a_missing_tree_reads_gone
+    Dir.mktmpdir do |root|
+      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], policy: "local"),
+                  NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :gone, row.liveness.status
+      assert_match(/local tree missing/, row.liveness.detail)
+      assert_equal :local, row.drift
+    end
+  end
+
   # -- P15-7: pin backfill --------------------------------------------------
 
   def backfiller(registry, shell: Nabu::Shell, canonical_dir: nil)

@@ -95,6 +95,7 @@ module Nabu
     def verify_source(entry, workdir)
       adapter = entry.build_adapter
       return verify_dictionary_source(entry, adapter, workdir) if adapter.class.content_kind == :dictionary
+      return verify_language_source(entry, adapter, workdir) if adapter.class.content_kind == :language
 
       recomputed, unparseable = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
@@ -114,6 +115,48 @@ module Nabu
       entries = dictionary_entries_for(entry.slug)
       issues = entries.filter_map { |row| classify_entry(row, recomputed) }
       SourceOutcome.new(slug: entry.slug, verified: entries.size, issues: issues)
+    end
+
+    # A language dossier shelf (P19-1) verifies by re-parsing the dossiers
+    # and diffing the derived rows they yield against the catalog's
+    # language_records, per code. Records carry no stored sha (they ARE the
+    # content), so the comparison is the row set itself: a code whose rows
+    # differ is :mismatch, a code with rows but no parseable dossier (file
+    # gone or malformed) is :missing/:unparseable — the same fate vocabulary.
+    def verify_language_source(entry, adapter, workdir)
+      return SourceOutcome.new(slug: entry.slug, verified: 0, issues: []) \
+        unless @db.table_exists?(:language_records)
+
+      reparsed = reparse_dossiers(adapter, workdir)
+      codes = @db[:language_records].distinct.select_map(:lang_code).sort
+      issues = codes.filter_map { |code| classify_code(entry, code, reparsed) }
+      SourceOutcome.new(slug: entry.slug, verified: codes.size, issues: issues)
+    end
+
+    # { code => [[kind, body, source], …] } from a fresh discover→parse
+    # (attic included); a malformed dossier contributes its error instead.
+    def reparse_dossiers(adapter, workdir)
+      reparsed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        dossier = adapter.parse(ref)
+        reparsed[dossier.code] = dossier.records.map { |r| [r.kind, r.body, r.source] }.sort
+      rescue Nabu::ParseError => e
+        reparsed[ref.metadata.fetch("code", ref.id)] = e.message
+      end
+      reparsed
+    end
+
+    def classify_code(entry, code, reparsed)
+      stored = @db[:language_records].where(lang_code: code)
+                                     .map { |row| [row[:kind], row[:body], row[:source]] }.sort
+      urn = "#{entry.slug}:#{code}"
+      fresh = reparsed[code]
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
+      return nil if fresh == stored
+
+      DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                        detail: "derived records differ from the reparsed dossier")
     end
 
     # discover→parse the workdir — attic included (P5-2): retired documents

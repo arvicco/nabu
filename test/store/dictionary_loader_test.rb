@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
 
 # Store::DictionaryLoader (P11-4): persists dictionary adapter output with the
 # same idempotency / revision / withdrawal semantics as the passage Loader —
@@ -203,8 +204,9 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal 2, bog_row[:revision]
   end
 
-  # -- P18-5: the language-notes accretion (the P18-4 accumulated layer's
-  # first programmatic writer) --------------------------------------------------
+  # -- P18-5, redirected by P19-1: the language-notes accretion writes
+  # dossier SECTIONS through the LanguageShelf gateway (own-section
+  # supersession, byte-idempotent) and refreshes the derived records --------------
 
   def noted_document(body: "IE-CoR variety: Test (modern)")
     document = Nabu::DictionaryDocument.new(
@@ -220,26 +222,40 @@ class DictionaryLoaderTest < Minitest::Test
     document
   end
 
-  def test_language_notes_accrete_append_only_and_idempotently
-    loader.load([noted_document], full: false)
-    rows = @ledger[:language_notes].where(lang_code: "xx", kind: "iecor").all
-    assert_equal 1, rows.size
-    assert_equal "iecor", rows.first[:source]
-
-    loader.load([noted_document], full: false)
-    assert_equal 1, @ledger[:language_notes].where(lang_code: "xx").count,
-                 "an unchanged body appends nothing"
-
-    loader.load([noted_document(body: "IE-CoR variety: Test (revised)")], full: false)
-    bodies = @ledger[:language_notes].where(lang_code: "xx").order(:id).select_map(:body)
-    assert_equal 2, bodies.size, "a changed body appends a superseding note; history is kept"
-    assert_equal "IE-CoR variety: Test (revised)", bodies.last
+  def rooted_loader(root)
+    Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger,
+                                      canonical_dir: root)
   end
 
-  def test_language_notes_accretion_degrades_without_a_ledger
-    loader = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: nil)
+  def test_language_notes_accrete_as_dossier_sections_idempotently
+    Dir.mktmpdir do |root|
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      rooted_loader(root).load([noted_document], full: false)
+      section = shelf.load("xx").section("iecor")
+      assert_equal "iecor", section.source
+      assert_equal "IE-CoR variety: Test (modern)", section.body
+      assert_equal section.body,
+                   @db[:language_records].where(lang_code: "xx", kind: "iecor").get(:body),
+                   "the derived record refreshes at accretion time"
+
+      before = File.read(shelf.path_for("xx"))
+      rooted_loader(root).load([noted_document], full: false)
+      assert_equal before, File.read(shelf.path_for("xx")), "an unchanged body writes nothing"
+
+      rooted_loader(root).load([noted_document(body: "IE-CoR variety: Test (revised)")], full: false)
+      assert_equal "IE-CoR variety: Test (revised)", shelf.load("xx").section("iecor").body,
+                   "a changed body supersedes the writer's own section"
+      assert_equal 1, @db[:language_records].where(lang_code: "xx").count
+      assert_equal 0, @ledger[:language_notes].count,
+                   "the retiring ledger table is never written by the redirect"
+    end
+  end
+
+  def test_language_notes_accretion_degrades_without_a_canonical_dir
+    loader = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger)
     report = loader.load([noted_document], full: false)
-    assert_equal 1, report.added, "no ledger handle: entries load, notes silently accrete nowhere"
+    assert_equal 1, report.added, "no corpus root: entries load, notes silently accrete nowhere"
+    assert_equal 0, @db[:language_records].count
   end
 
   private

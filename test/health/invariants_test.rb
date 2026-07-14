@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
+require "fileutils"
+require "digest"
 
 # The P18-7 mechanical invariants: each one forced red (the motivating silent
 # state, seeded on fixture dbs) then green (the healthy shape produces NO
@@ -248,6 +251,86 @@ class InvariantsTest < Minitest::Test
   end
 
   private
+
+  # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
+
+  def local_entry
+    entry("local-language", adapter: "Nabu::Adapters::LocalLanguage").with(sync_policy: "local")
+  end
+
+  def local_invariants(root)
+    Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                 ledger: @ledger, canonical_dir: root)
+  end
+
+  def seed_local_pin(rel, sha)
+    @ledger[:pins].insert(source_slug: "local-language", repo_url: "local:#{rel}", last_sync_sha: sha)
+  end
+
+  def write_dossier(root, rel, body)
+    dir = File.join(root, "local-language")
+    FileUtils.mkdir_p(dir)
+    File.write(File.join(dir, rel), body)
+    Digest::SHA256.hexdigest(body)
+  end
+
+  def test_dossiers_on_disk_with_zero_records_is_loud
+    Dir.mktmpdir do |root|
+      source = seed_source("local-language")
+      seed_run(source, status: "succeeded")
+      write_dossier(root, "chu.md", "---\ncode: chu\n---\nprose\n")
+
+      finding = local_invariants(root).for_source(local_entry).find { |f| f.kind == :dossiers_unindexed }
+      assert_predicate finding, :loud?
+      assert_match(/zero derived language records/, finding.message)
+
+      @db[:language_records].insert(lang_code: "chu", kind: "context", body: "prose", source: "dossier")
+      assert_nil(local_invariants(root).for_source(local_entry).find { |f| f.kind == :dossiers_unindexed })
+    end
+  end
+
+  def test_pinned_dossier_vanished_without_attic_is_loud
+    Dir.mktmpdir do |root|
+      seed_source("local-language")
+      sha = write_dossier(root, "chu.md", "---\ncode: chu\n---\nprose\n")
+      seed_local_pin("chu.md", sha)
+      seed_local_pin("zle.md", "feedbeef")
+
+      finding = local_invariants(root).for_source(local_entry).find { |f| f.kind == :dossiers_vanished }
+      assert_predicate finding, :loud?
+      assert_match(/zle\.md/, finding.message)
+      assert_match(/attic/, finding.message)
+    end
+  end
+
+  def test_pinned_dossier_retired_into_the_attic_is_quiet
+    Dir.mktmpdir do |root|
+      seed_source("local-language")
+      write_dossier(root, File.join(Nabu::Adapter::ATTIC_DIRNAME, "zle.md"), "---\ncode: zle\n---\nold\n")
+      seed_local_pin("zle.md", "feedbeef")
+
+      assert_nil(local_invariants(root).for_source(local_entry).find { |f| f.kind == :dossiers_vanished })
+    end
+  end
+
+  def test_edited_dossier_reads_soft_stale_naming_the_rescan
+    Dir.mktmpdir do |root|
+      seed_source("local-language")
+      write_dossier(root, "chu.md", "---\ncode: chu\n---\nedited since the scan\n")
+      seed_local_pin("chu.md", "0" * 64)
+
+      finding = local_invariants(root).for_source(local_entry).find { |f| f.kind == :dossiers_stale }
+      assert_predicate finding, :soft?
+      assert_match(/sync local-language/, finding.message)
+    end
+  end
+
+  def test_local_checks_skip_without_a_canonical_dir
+    seed_source("local-language")
+    seed_local_pin("chu.md", "0" * 64)
+    findings = invariants.for_source(local_entry)
+    assert_empty(findings.select { |f| %i[dossiers_vanished dossiers_stale dossiers_unindexed].include?(f.kind) })
+  end
 
   def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger)
     Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger)
