@@ -139,7 +139,7 @@ module Nabu
       ledger&.disconnect
     end
 
-    desc "ingest FILE...", "File your own PDFs, scans and articles into the local-library shelf"
+    desc "ingest FILE|URL...", "File your own PDFs, scans and articles into the local-library shelf"
     long_desc <<~HELP, wrap: false
       The intake front door for canonical memory (architecture §16): copy
       files (never move — your originals stay put) into
@@ -148,6 +148,14 @@ module Nabu
       minted urns. This is the ONE sanctioned write path onto the library
       shelf; after it, the files are searchable, showable, linkable corpus
       members like everything else.
+
+      Arguments may be http(s) URLs: the file is DOWNLOADED first (redirect
+      chains followed — archive.org's mirror hop included), then flows
+      through the exact same intake as a local file, and the manifest
+      entry additionally records the URL you gave in a source_url: lane
+      (mirror-node URLs rotate; yours is the stable identity — it also
+      prefills the provenance candidate). A failed download is one honest
+      FAILED line naming the HTTP status — and aborts the batch (below).
 
       Candidate metadata is derived mechanically first — PDF Info metadata
       and a first-page text sample via mutool (degrading gracefully to
@@ -182,11 +190,14 @@ module Nabu
       collection is part of the minted urn (frozen forever), so file
       deliberately: a later re-file is honestly a new document.
 
-      Idempotency and honesty: a file whose bytes are already catalogued
-      anywhere in the shelf is a no-op with a message; the same NAME with
-      new bytes replaces the copy and the sync records an ordinary
-      revision; a bad file (missing, unreadable) is named and the rest
-      proceed (exit 1 at the end).
+      Atomicity and honesty: the batch lands WHOLE or not at all —
+      everything fallible (downloads, existence and no-executables checks,
+      categorization, validation against the manifest's own rules) runs
+      BEFORE any write, so a defect anywhere is one named FAILED line per
+      problem, the other files say "aborted", canonical/ stays untouched,
+      exit 1. A file whose bytes are already catalogued anywhere in the
+      shelf is a no-op with a message; the same NAME with new bytes
+      replaces the copy and the sync records an ordinary revision.
 
       --shelf language CODE scaffolds a language DOSSIER instead — the same
       front door for all canonical memory: prompts (same three modes; flags
@@ -197,6 +208,7 @@ module Nabu
 
       Examples:
         nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
+        nabu ingest https://archive.org/download/handbuchderaltbu00lesk/handbuchderaltbu00lesk.pdf
         nabu ingest paper.pdf --assist script/ingest-assist-claude
         nabu ingest notes.txt --yes --title "Reading notes" --languages eng \\
           --related urn:nabu:ccmh:mar:mt --license-class open
@@ -229,7 +241,7 @@ module Nabu
       config = Nabu::Config.load
       return ingest_language(config, paths) if options[:shelf]
 
-      raise Thor::Error, "ingest: give at least one file (or --shelf language CODE)" if paths.empty?
+      raise Thor::Error, "ingest: give at least one file or url (or --shelf language CODE)" if paths.empty?
 
       %w[name family context].each do |flag|
         raise Thor::Error, "ingest: --#{flag} only applies with --shelf language" if options[flag]
@@ -3453,10 +3465,22 @@ module Nabu
           raise Thor::Error, "ingest: interactive categorization needs a TTY — pass --yes " \
                              "(fields from flags), or run in a terminal"
         end
-        say "categorize (Enter keeps the [default]; '-' clears a field):"
-        Nabu::Ingest::PromptResolver.new(ask: lambda do |label, default|
-          default ? ask("  #{label}", default: default) : ask("  #{label}:")
-        end)
+        # The header prints at the FIRST prompt, not at resolver construction:
+        # the engine's staging pass (existence checks, downloads) must be
+        # able to fail BEFORE any interactive furniture appears (the
+        # 2026-07-14 archive.org incident, P20-0).
+        header_printed = false
+        Nabu::Ingest::PromptResolver.new(
+          ask: lambda do |label, default|
+            unless header_printed
+              say "categorize (Enter keeps the [default]; '-' clears a field):"
+              header_printed = true
+            end
+            default ? ask("  #{label}", default: default) : ask("  #{label}:")
+          end,
+          # An invalid answer's one-line reason (P20-1) — the prompt repeats.
+          warn: ->(line) { say "  ! #{line}", :yellow }
+        )
       end
 
       def ingest_overrides(keys)
@@ -3477,6 +3501,7 @@ module Nabu
         when :added then say "  added    #{outcome.file} #{outcome.message}"
         when :revised then say "  revised  #{outcome.file} — #{outcome.message}"
         when :skipped then say "  skipped  #{outcome.file} — #{outcome.message}"
+        when :aborted then say "  aborted  #{outcome.file} — #{outcome.message}", :yellow
         else say "  FAILED   #{outcome.file} — #{outcome.message}", :red
         end
       end

@@ -230,6 +230,7 @@ module Nabu
         metadata["creator"] = entry.creator if entry.creator
         metadata["year"] = entry.year if entry.year
         metadata["provenance"] = entry.provenance if entry.provenance
+        metadata["source_url"] = entry.source_url if entry.source_url
         %w[languages tags related].each do |key|
           values = entry.public_send(key)
           metadata[key] = values unless values.empty?
@@ -308,7 +309,7 @@ module Nabu
 
       def document_metadata(document_ref, meta)
         metadata = { "kind" => "article", "collection" => meta.fetch("collection"), "file" => meta.fetch("file") }
-        %w[creator year languages provenance tags related].each do |key|
+        %w[creator year languages provenance source_url tags related].each do |key|
           metadata[key] = meta[key] if meta.key?(key)
         end
         layer = text_layer(document_ref, meta)

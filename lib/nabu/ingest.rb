@@ -2,6 +2,8 @@
 
 require "json"
 require "open3"
+require "tmpdir"
+require_relative "url_download"
 require_relative "library_shelf"
 require_relative "language_shelf"
 require_relative "language_dossier"
@@ -12,26 +14,50 @@ module Nabu
   # The intake engine behind `nabu ingest` (P19-5; design: canonical-memory
   # §4b) — the front door for local acquisitions, and the one path that
   # drives the shelves' sanctioned write gateways (LibraryShelf for files,
-  # LanguageShelf for dossier scaffolds). Per file, in the design's order:
+  # LanguageShelf for dossier scaffolds).
   #
+  # == Atomic two-phase intake (P20-1, the GitFetch/ZipFetch phase mirror)
+  #
+  # A batch either lands WHOLE or leaves canonical/ byte-identical — the
+  # owner's doctrine after the 2026-07-14 "chu (body ger)" poisoning
+  # incident (a bad languages answer landed in the manifest and every
+  # later shelf sync failed until hand-repair). Everything fallible runs
+  # in PREPARE, against staging only:
+  #
+  #   0. stage — urls are downloaded (Nabu::UrlDownload, redirects
+  #      followed) into a throwaway staging dir; local paths are
+  #      existence-checked and EXECUTABLES REFUSED (mode +x — shelf
+  #      material never runs; the live incident catalogued bin/nabu).
+  #      All of this BEFORE any categorization: prompts never wait on the
+  #      network, and a doomed batch never asks a single question.
   #   1. account — sha256 the source; an identical file already MANIFESTED
   #      in the shelf is an honest no-op (never a second copy).
-  #   2. copy — LibraryShelf#copy_in! (never move; same name over new
-  #      content is the loader's normal revision story).
-  #   3. derive — mechanical candidates: PDF Info metadata + first-page
+  #   2. derive — mechanical candidates: PDF Info metadata + first-page
   #      sample via the PdfText seam where mutool exists (degrading
   #      gracefully where not), filename heuristics, the sha.
-  #   4. categorize — through the injected RESOLVER (the seam that keeps
+  #   3. categorize — through the injected RESOLVER (the seam that keeps
   #      all three CLI modes testable): interactive prompts prefilled with
-  #      the candidates, an --assist suggestion prefilled the same way, or
-  #      --yes flag-driven acceptance. Nothing lands unresolved.
-  #   5. append — one manifest entry, mechanically, append-only.
+  #      the candidates (invalid answers re-prompt with a one-line reason
+  #      — see PromptResolver), an --assist suggestion prefilled the same
+  #      way, or --yes flag-driven acceptance (invalid flag values raise,
+  #      Ingest.field_error). Nothing lands unresolved or invalid.
+  #   4. rehearse — the collection's FUTURE manifest (existing bytes plus
+  #      every new entry) is round-tripped through the REAL LibraryManifest
+  #      parser against a staging file: an entry the loader would reject
+  #      cannot exist, by construction, whatever rule the loader grows.
   #
-  # The caller (the CLI) then runs the shelf's ordinary sync and prints the
-  # minted urns — the engine itself never touches a database.
+  # Only when the ENTIRE batch validated does COMMIT touch canonical: per
+  # file, LibraryShelf#copy_in! (never move) + append_entry!; a freak
+  # append failure rolls that file's copy back (compensating delete) so
+  # canonical never keeps a stray. Any prepare defect instead aborts the
+  # WHOLE batch: one named :failed outcome per defect, every other file
+  # :aborted, nothing written. The residual crash window is a hard kill
+  # between copy and append — the next sync's discovery census names the
+  # stray LOUDLY as unmanifested.
   #
-  # Partial-failure honesty: each file's defect (missing, unreadable, a bad
-  # field) becomes a named :failed outcome; the remaining files proceed.
+  # The caller (the CLI) then runs the shelf's ordinary sync — which, by
+  # construction, cannot reject what the same validator passed — and
+  # prints the minted urns; the engine itself never touches a database.
   class Ingest
     DEFAULT_COLLECTION = "inbox"
 
@@ -52,12 +78,59 @@ module Nabu
     Field = Data.define(:key, :label, :default)
 
     # What one ingested file (or one scaffolded dossier) came to:
-    # +status+ ∈ :added, :revised, :skipped, :failed; +urn+/+entry+ nil
-    # except on :added (+search_term+ is an extracted-text word for the
-    # epilogue's search hint, nil when the file yielded no text).
+    # +status+ ∈ :added, :revised, :skipped, :failed, :aborted (valid but
+    # not landed — another file's defect aborted the batch); +urn+/+entry+
+    # nil except on :added (+search_term+ is an extracted-text word for the
+    # epilogue's search hint, nil when the file yielded no real word).
     Outcome = Data.define(:file, :status, :message, :urn, :entry, :search_term) do
       def initialize(file:, status:, message:, urn: nil, entry: nil, search_term: nil) = super
       def ok? = status != :failed
+    end
+
+    # One staged intake item: the local path the pipeline reads and, for a
+    # url argument, the ORIGINAL url the owner gave (nil for local files —
+    # mirror-node final urls rotate; the given url is the stable identity).
+    Staged = Data.define(:path, :source_url) do
+      def file = File.basename(path)
+    end
+
+    # One validated intake plan awaiting commit (P20-1): everything the
+    # commit phase needs, prepared with ZERO canonical writes. +action+ ∈
+    # :catalogue (new file: copy + append) or :revise (manifested name,
+    # new bytes: copy replacement only); +entry+/+sample+ nil on :revise.
+    Plan = Data.define(:action, :path, :file, :entry, :sample) do
+      def initialize(action:, path:, file:, entry: nil, sample: nil) = super
+    end
+
+    # -- the shared field-validity rule (P20-1) --------------------------------
+
+    # One place answers "is this resolved value valid for KEY?" for both
+    # halves of the categorization seam: PromptResolver re-prompts on the
+    # returned reason; build_entry raises it, so --yes/--assist fail the
+    # FILE pre-append. nil means valid. Language tags reuse THE MODEL'S
+    # shape rule (Model::Validation::LANGUAGE_SHAPE) — the manifest can
+    # never accept what the loader rejects (the "chu (body ger)" incident).
+    def self.field_error(key, value)
+      case key
+      when "languages"
+        bad = coerce_list(value).find { |tag| !tag.match?(Model::Validation::LANGUAGE_SHAPE) }
+        "#{bad.inspect} is not a language tag — give comma-separated codes like: chu, deu" if bad
+      when "license_class"
+        klass = value.to_s.strip
+        unless klass.empty? || Model::Validation::LICENSE_CLASSES.include?(klass)
+          "license_class must be one of #{Model::Validation::LICENSE_CLASSES.join(', ')}, got #{klass.inspect}"
+        end
+      end
+    end
+
+    # List lanes arrive as Arrays (candidates/assist) or comma strings
+    # (prompt answers, flags) — one splitter for validation and assembly.
+    def self.coerce_list(value)
+      case value
+      when nil then []
+      when Array then value.map(&:to_s).map(&:strip).reject(&:empty?)
+      else value.to_s.split(",").map(&:strip).reject(&:empty?)
+      end
     end
 
     # -- the resolvers (the categorization seam) ------------------------------
@@ -71,24 +144,37 @@ module Nabu
     end
 
     # Interactive: one prompt per field, candidate prefilled; Enter keeps
-    # the default, "-" clears a field. +ask+ is injectable ((label, default)
-    # → String) so the flow tests without a TTY; the CLI wires Thor's ask.
+    # the default, "-" clears a field. An INVALID answer (Ingest.field_error)
+    # re-prompts with a one-line reason via +warn+ until valid or cleared —
+    # categorization can never hand the pipeline a value the manifest would
+    # reject (P20-1). +ask+ is injectable ((label, default) → String) so the
+    # flow tests without a TTY; the CLI wires Thor's ask and a say-based warn.
     class PromptResolver
       CLEAR = "-"
 
-      def initialize(ask:)
+      def initialize(ask:, warn: ->(line) { Kernel.warn("  ! #{line}") })
         @ask = ask
+        @warn = warn
       end
 
       def resolve(fields)
-        fields.to_h do |field|
-          answer = @ask.call(field.label, prompt_default(field.default)).to_s.strip
-          value = answer.empty? ? field.default : answer
-          [field.key, answer == CLEAR ? nil : value]
-        end
+        fields.to_h { |field| [field.key, resolve_field(field)] }
       end
 
       private
+
+      def resolve_field(field)
+        loop do
+          answer = @ask.call(field.label, prompt_default(field.default)).to_s.strip
+          return nil if answer == CLEAR
+
+          value = answer.empty? ? field.default : answer
+          error = Ingest.field_error(field.key, value)
+          return value if error.nil?
+
+          @warn.call(error)
+        end
+      end
 
       def prompt_default(default)
         default.is_a?(Array) ? default.join(", ") : default
@@ -137,29 +223,44 @@ module Nabu
     # +resolver+ decides the final fields (see above); +assist_command+ (with
     # its injectable +assist_runner+) is optional; +pdf_pages+/+pdf_info+ are
     # the PdfText seams (tests inject fakes — the suite never needs mutool);
-    # +overrides+ are the CLI flag values (they beat assist beats derived);
-    # +notify+ receives advisory one-liners (assist failures, degrades).
+    # +download+ is the url seam (defaults to the real cert-hardened
+    # UrlDownload; tests inject fakes or stub with WebMock); +overrides+ are
+    # the CLI flag values (they beat assist beats derived); +notify+
+    # receives advisory one-liners (assist failures, degrades, downloads).
     def initialize(resolver:, shelf: nil, assist_command: nil, assist_runner: Assist.method(:run),
                    pdf_pages: PdfText.method(:pages), pdf_info: PdfText.method(:info),
-                   overrides: {}, notify: ->(_line) {}, now: Time.now)
+                   download: nil, overrides: {}, notify: ->(_line) {}, now: Time.now)
       @shelf = shelf
       @resolver = resolver
       @assist_command = assist_command
       @assist_runner = assist_runner
       @pdf_pages = pdf_pages
       @pdf_info = pdf_info
+      @download = download || UrlDownload.new
       @overrides = overrides
       @notify = notify
       @now = now
     end
 
-    # Ingest +paths+ into +collection+. Returns one Outcome per path; a bad
-    # file is a named :failed outcome and the rest proceed.
+    # Ingest +paths+ (local files or http(s) urls) into +collection+,
+    # ATOMICALLY (class comment): prepare everything against staging, then
+    # commit the whole batch or nothing. Returns one Outcome per argument,
+    # in order; any prepare defect keeps its named :failed outcome and
+    # turns every would-land file :aborted — canonical is byte-identical
+    # to before the run. The staging dir dissolves afterwards — the shelf
+    # copy (commit phase only) is the record.
     def add_files(paths, collection: DEFAULT_COLLECTION)
-      paths.map do |path|
-        add_file(path, collection)
-      rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
-        Outcome.new(file: File.basename(path), status: :failed, message: e.message)
+      Dir.mktmpdir("nabu-ingest") do |staging_dir|
+        staged = stage(paths, staging_dir)
+        # A staging defect is already fatal to the batch: abort before any
+        # categorization — never prompt for a batch that cannot land.
+        return abort_batch(staged) if staged.any? { |item| failed?(item) }
+
+        plans = staged.map { |item| prepare(item, collection) }
+        rehearse!(plans, collection, staging_dir)
+        return abort_batch(plans) if plans.any? { |item| failed?(item) }
+
+        plans.map { |plan| plan.is_a?(Outcome) ? plan : commit(plan, collection) }
       end
     end
 
@@ -187,43 +288,121 @@ module Nabu
 
     private
 
-    # -- the per-file pipeline -------------------------------------------------
+    # -- prepare (steps 0–4): everything fallible, zero canonical writes --------
 
-    def add_file(path, collection)
-      raise Errno::ENOENT, path unless File.file?(path)
+    def stage(paths, staging_dir)
+      paths.map do |path|
+        if UrlDownload.url?(path)
+          @notify.call("downloading #{path}")
+          Staged.new(path: @download.fetch(path, dir: staging_dir), source_url: path)
+        else
+          raise Errno::ENOENT, path unless File.file?(path)
+          if executable?(path)
+            raise ValidationError,
+                  "#{File.basename(path)} is executable (mode +x) — refusing; shelf material never runs"
+          end
 
-      file = File.basename(path)
-      sha = LibraryShelf.sha256(path)
-      duplicate = manifested_duplicate(sha)
+          Staged.new(path: path, source_url: nil)
+        end
+      rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
+        Outcome.new(file: File.basename(path), status: :failed, message: e.message)
+      end
+    end
+
+    # Any x-bit refuses (the live incident catalogued bin/nabu itself):
+    # there is no legitimate executable shelf material.
+    def executable?(path)
+      File.stat(path).mode.anybits?(0o111)
+    end
+
+    # Account + derive + categorize + build ONE file's entry — reads only;
+    # a defect (a bad --yes flag value, an unreadable source) is a named
+    # :failed outcome that will abort the batch. Interactive resolvers
+    # cannot fail here: PromptResolver re-prompts until valid.
+    def prepare(staged, collection)
+      file = staged.file
+      duplicate = manifested_duplicate(LibraryShelf.sha256(staged.path))
       if duplicate
         return Outcome.new(file: file, status: :skipped,
                            message: "identical bytes already catalogued at #{duplicate} — no-op")
       end
-      return revise(path, collection, file) if @shelf.manifested?(collection, file)
+      return Plan.new(action: :revise, path: staged.path, file: file) if @shelf.manifested?(collection, file)
 
-      catalogue(path, collection, file)
-    end
-
-    # Same name, already manifested, new bytes: overwrite the copy and let
-    # the loader's normal revision machinery record it at sync. The manifest
-    # entry stands (metadata edits are manifest edits, not re-ingests).
-    def revise(path, collection, file)
-      @shelf.copy_in!(path, collection: collection)
-      Outcome.new(file: file, status: :revised,
-                  message: "same name, new content — copy replaced; sync records a revision " \
-                           "(metadata edits go in #{@shelf.manifest_path(collection)})")
-    end
-
-    def catalogue(path, collection, file)
-      @shelf.copy_in!(path, collection: collection)
-      candidates, sample = derive(path, file)
+      candidates, sample = derive(staged.path, file, source_url: staged.source_url)
       fields = apply_suggestions(library_fields(candidates),
                                  library_brief(collection, file, candidates, sample))
-      entry = build_entry(file, @resolver.resolve(fields))
-      @shelf.append_entry!(collection: collection, entry: entry)
+      entry = build_entry(file, @resolver.resolve(fields), source_url: staged.source_url)
+      Plan.new(action: :catalogue, path: staged.path, file: file, entry: entry, sample: sample)
+    rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
+      Outcome.new(file: file, status: :failed, message: e.message)
+    end
+
+    # The rehearsal (step 4): round-trip the collection's FUTURE manifest —
+    # existing bytes plus every new entry, cumulatively so a defect names
+    # its plan — through the REAL parser, against a staging file. What the
+    # loader would reject cannot reach commit, whatever rules the loader
+    # grows; intra-batch duplicates surface here too.
+    def rehearse!(plans, collection, staging_dir)
+      entries = []
+      rehearsal = File.join(staging_dir, "manifest-rehearsal.yml")
+      plans.map! do |plan|
+        next plan unless plan.is_a?(Plan) && plan.action == :catalogue
+
+        entries << plan.entry
+        File.write(rehearsal, @shelf.future_manifest(collection, entries))
+        begin
+          LibraryManifest.load(rehearsal)
+          plan
+        rescue LibraryManifest::FormatError => e
+          entries.pop
+          Outcome.new(file: plan.file, status: :failed,
+                      message: e.message.sub("#{rehearsal}: ", "manifest rehearsal: "))
+        end
+      end
+    end
+
+    # The owner's all-or-nothing doctrine: defects stay named :failed,
+    # honest no-ops stay :skipped (they never write anyway), and every
+    # file that WOULD have landed becomes :aborted — canonical untouched.
+    def abort_batch(items)
+      items.map do |item|
+        next item if item.is_a?(Outcome) && %i[failed skipped].include?(item.status)
+
+        Outcome.new(file: item.file, status: :aborted,
+                    message: "not ingested — batch aborted, canonical untouched")
+      end
+    end
+
+    def failed?(item)
+      item.is_a?(Outcome) && item.status == :failed
+    end
+
+    # -- commit: the only canonical writes, all pre-validated --------------------
+
+    # :revise — same name, already manifested, new bytes: replace the copy
+    # and let the loader's normal revision machinery record it at sync (the
+    # manifest entry stands; metadata edits are manifest edits, not
+    # re-ingests). :catalogue — copy + append; a freak append failure
+    # (validated content, so IO-shaped only) rolls the copy back: canonical
+    # never keeps a stray.
+    def commit(plan, collection)
+      file = plan.file
+      @shelf.copy_in!(plan.path, collection: collection)
+      if plan.action == :revise
+        return Outcome.new(file: file, status: :revised,
+                           message: "same name, new content — copy replaced; sync records a revision " \
+                                    "(metadata edits go in #{@shelf.manifest_path(collection)})")
+      end
+
+      begin
+        @shelf.append_entry!(collection: collection, entry: plan.entry)
+      rescue Nabu::Error => e
+        @shelf.remove_copy!(collection: collection, file: file)
+        return Outcome.new(file: file, status: :failed, message: "#{e.message} — copy rolled back")
+      end
       Outcome.new(file: file, status: :added, message: "→ #{collection}/#{file}",
                   urn: Adapters::LocalLibrary.urn_for(collection, file),
-                  entry: entry, search_term: search_term(sample))
+                  entry: plan.entry, search_term: search_term(plan.sample))
     end
 
     # The sha's existing home, when that home is MANIFESTED (an unmanifested
@@ -239,7 +418,12 @@ module Nabu
 
     # -- derivation (mechanical candidates) ------------------------------------
 
-    def derive(path, file)
+    # The provenance candidate names where the copy REALLY came from: the
+    # original url for a download (the staging path is ephemeral), the
+    # expanded local path otherwise — and it also surfaces the url in the
+    # categorize display without a prompt of its own (the source_url lane
+    # is recorded mechanically).
+    def derive(path, file, source_url: nil)
       candidates = filename_candidates(file)
       sample = nil
       case File.extname(file).downcase
@@ -249,7 +433,7 @@ module Nabu
       when *TEXT_EXTENSIONS
         sample = File.read(path, encoding: "UTF-8").scrub("\u{FFFD}")[0, SAMPLE_CHARS]
       end
-      candidates["provenance"] = "ingested #{@now.strftime('%Y-%m-%d')} from #{File.expand_path(path)}"
+      candidates["provenance"] = "ingested #{@now.strftime('%Y-%m-%d')} from #{source_url || File.expand_path(path)}"
       [candidates, sample]
     end
 
@@ -291,10 +475,15 @@ module Nabu
     end
 
     # A word of extracted text for the epilogue's search hint (title words
-    # live in metadata, not passages — only real text is searchable).
+    # live in metadata, not passages — only real text is searchable). The
+    # first ALPHABETIC word of length ≥ 4 — Unicode letters, so Greek and
+    # Cyrillic count, while digit/symbol-riddled OCR junk ("01assJ£", the
+    # live Leskien smoke) never becomes the hint; no real word, no hint
+    # (the epilogue omits it on nil).
     def search_term(sample)
-      sample.to_s.split(/\s+/).map { |word| word.gsub(/[[:punct:]]/, "") }
-                              .find { |word| word.length >= 4 }
+      sample.to_s.split(/\s+/)
+            .map { |token| token.gsub(/\A[[:punct:]]+|[[:punct:]]+\z/, "") }
+            .find { |word| word.length >= 4 && word.match?(/\A[[:alpha:]]+\z/) }
     end
 
     # -- fields, assist, entry assembly ----------------------------------------
@@ -367,10 +556,15 @@ module Nabu
     end
 
     # Resolved values → the manifest entry: keys in manifest order, lists
-    # split, year coerced, license validated, empty lanes omitted — and the
-    # research_private DEFAULT omitted too (manifest silence means the
-    # conservative class; an explicit class marks an owner override).
-    def build_entry(file, values)
+    # split, year coerced, languages + license validated (Ingest.field_error
+    # — the interactive resolver already re-prompted these, so a raise here
+    # means a --yes/--assist value, failing the FILE before any append),
+    # empty lanes omitted — and the research_private DEFAULT omitted too
+    # (manifest silence means the conservative class; an explicit class
+    # marks an owner override). +source_url+ (a url ingest's original url)
+    # is recorded mechanically, never prompted; local ingests get no such
+    # lane.
+    def build_entry(file, values, source_url: nil)
       entry = { "file" => file }
       title = presence(values["title"])
       entry["title"] = title if title
@@ -379,11 +573,15 @@ module Nabu
       year = coerce_year(values["year"])
       entry["year"] = year if year
       LIST_FIELDS.each do |key|
-        list = coerce_list(values[key])
+        list = self.class.coerce_list(values[key])
+        error = self.class.field_error(key, list)
+        raise ValidationError, error if error
+
         entry[key] = list unless list.empty?
       end
       provenance = presence(values["provenance"])
       entry["provenance"] = provenance if provenance
+      entry["source_url"] = source_url if source_url
       entry["license_class"] = validate_license!(values["license_class"])
       entry.compact
     end
@@ -398,20 +596,11 @@ module Nabu
       text.to_i
     end
 
-    def coerce_list(value)
-      case value
-      when nil then []
-      when Array then value.map(&:to_s).map(&:strip).reject(&:empty?)
-      else value.to_s.split(",").map(&:strip).reject(&:empty?)
-      end
-    end
-
     def validate_license!(value)
       klass = presence(value) || LibraryManifest::DEFAULT_LICENSE_CLASS
-      unless Model::Validation::LICENSE_CLASSES.include?(klass)
-        raise ValidationError, "license_class must be one of " \
-                               "#{Model::Validation::LICENSE_CLASSES.join(', ')}, got #{klass.inspect}"
-      end
+      error = self.class.field_error("license_class", klass)
+      raise ValidationError, error if error
+
       klass == LibraryManifest::DEFAULT_LICENSE_CLASS ? nil : klass
     end
 

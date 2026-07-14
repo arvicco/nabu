@@ -285,7 +285,9 @@ There is also a shelf for your own PDFs, scans and articles
 (`canonical/local-library/` — manifest-catalogued, `research_private` by
 default so nothing you scanned is ever served or redistributed,
 page-cited where a text layer exists). `nabu ingest FILE...` is its front
-door: it copies the file in (never moves your original), derives metadata
+door — and it takes http(s) URLs too, downloading first (redirects
+followed) and recording the URL you gave in the manifest's `source_url:`
+lane: it copies the file in (never moves your original), derives metadata
 candidates mechanically (PDF metadata, filename, sha256), walks you
 through confirming them — interactively, AI-assisted (`--assist
 script/ingest-assist-claude` prefills the prompts with a model's

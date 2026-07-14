@@ -6791,3 +6791,109 @@ updated. PR #23; on owner merge: ops §12 release checklist cuts
 v1.0.0 (owner-blessed version pending final word), DOI mints if the
 Zenodo toggle is on. Owner queue: first real `nabu ingest`; the
 licensing send queue (GORAZD next); backup disk (standing).
+
+# ── Phase 20 ──────────────────────────────────────────────────────────
+
+## P20-0 · ingest URL intake  [tier: opus] [status: done 2026-07-14] [deps: —]
+Owner incident (2026-07-14): `bin/nabu ingest https://archive.org/
+download/handbuchderaltbu00lesk/….pdf` printed the categorize header,
+THEN failed with ENOENT on the url. Verdict: "I see no reason why it
+shouldn't ingest both local and url pdfs."
+DONE (2026-07-14): http(s) arguments are DOWNLOADED first into a
+Dir.mktmpdir staging pass, then flow through the unchanged intake
+(copy → derive → categorize in all three modes → append → shelf sync);
+the staging dir dissolves after the batch — the shelf copy is the
+record, and for a url the staging copy IS the original (ingest still
+never moves anything). VERDICTS — (a) New Nabu::UrlDownload (ZipFetch/
+FileFetch's one-shot sibling; NOT a sync path — no retention contract,
+no state file): bounded manual redirect loop over 301/302/303/307/308,
+max 5 hops then an honest error, relative Location via URI.join
+(archive.org's mirror 302 is the motivating case), body binwritten,
+shared cert-hardened ZipFetch.default_http, http:-injectable — no new
+gem, no middleware. (b) Filename: Content-Disposition filename=
+(quotes stripped, path components dropped) beats the percent-decoded
+FINAL-url basename; an extension-less final basename (mirror handler
+garbage à la /fetch?id=) falls back to the ORIGINAL url's; numbered
+suffix on staging collisions. (c) Provenance (deep-extraction): the
+manifest entry records the ORIGINAL url in a new source_url: lane
+(LibraryManifest schema + validation, omit-when-empty, after
+provenance in manifest key order; mirror-final urls rotate — the
+owner's url is the stable identity); recorded mechanically, NEVER
+prompted; the provenance candidate names the url (not the ephemeral
+staging path) so the categorize display surfaces it; local ingests get
+no lane; the adapter rides it into document metadata beside
+provenance. (d) BOTH incident UX defects fixed: the engine's staging
+pass settles EVERY argument (downloads complete, local existence
+checked) before any categorization, and the CLI's categorize header
+now prints at the FIRST prompt, not at resolver construction — a
+failed batch shows one honest FAILED line per defect (HTTP status /
+transport message for urls, ENOENT for files), others proceed, exit 1
+at the end (the existing ladder, ordered correctly). Tests +26
+(UrlDownload 13 incl. loop cap/relative Location/CD filename/
+transport; engine url intake 7 incl. staging-before-prompt ordering +
+staging-dir cleanup + 404-means-untouched-shelf; manifest lane 2;
+adapter pass-through 1; CLI 3 e2e incl. the header-order regression
+under a tty-claiming stdin double) — WebMock throughout, no network.
+Docs: cli desc/long_desc + url example, ops.md §13, README paragraph;
+site/tools.md untouched (its wording stays true — additive
+capability). Suite 2,642/32,974 exit 0 (0 skips) · lint 343 files
+exit 0.
+
+## P20-1 · ingest validates before append  [tier: opus] [status: done 2026-07-14] [deps: P20-0]
+Owner incident (2026-07-14, live library): the categorize languages
+prompt accepted `chu (body ger)` (pasted from a scout doc), the entry
+appended, and only the SHELF SYNC exploded (model validation.rb:44) —
+the manifest stayed poisoned, every later local-library sync failed
+until hand-repair; a second live find catalogued the EXECUTABLE
+bin/nabu itself. Mid-packet owner doctrine upgrade: "the changes
+should be atomic as well — either everything succeeds or fails, and
+if it fails it doesn't pollute canonical."
+DONE (2026-07-14): `nabu ingest` is ATOMIC TWO-PHASE (the GitFetch/
+ZipFetch prepare/complete mirror) — a batch lands WHOLE or leaves
+canonical/ byte-identical. PREPARE (all fallible work, staging only,
+zero canonical writes): downloads + existence checks (P20-0's staging
+pass) + NEW executables-refused guardrail (mode +x, one honest line —
+no shelf material runs), sha-account, derive, categorize, entry
+construction, then a REHEARSAL: the collection's future manifest
+(existing bytes + every new entry, rendered by the same render_entry
+the append uses) round-trips through the REAL LibraryManifest parser
+against a staging file — an entry the loader would reject cannot
+exist, whatever rules the loader grows; intra-batch duplicate names
+surface here too. COMMIT (only after the whole batch validated): per
+file copy_in! + append_entry!, a freak append failure compensating-
+deletes that file's copy (new LibraryShelf#remove_copy!, refuses
+manifested files); append_entry! itself also now ROLLS BACK a
+rejected append (truncate/delete) as the last-gate belt. VERDICT
+CHANGE, owner-ordered: any prepare defect aborts the WHOLE batch —
+one named FAILED line per defect, other files print `aborted`
+(new Outcome status, yellow), canonical untouched, exit 1; replaces
+P19-5's bad-file-named-rest-proceed ladder (it let a typo'd batch
+half-land; the owner lived the cleanup) — and a doomed batch asks NO
+categorize questions (defects known at staging skip prompts).
+VALIDATION per mode, one shared rule (Ingest.field_error: languages
+via the model's LANGUAGE_SHAPE — reused, never a second regex;
+license_class vocab): interactive RE-PROMPTS with a one-line reason
+(`! "chu (body ger)" is not a language tag — give comma-separated
+codes like: chu, deu`; PromptResolver warn: lane, CLI says it yellow)
+until valid or '-'-cleared — an assist suggestion only ever prefills
+this guarded prompt; --yes/scripted raise the same message from
+build_entry, failing the batch in prepare. FOUNDATION: LibraryManifest
+now validates language tags at PARSE (Model::Validation.language!
+reused, FormatError naming file + entry index like every per-entry
+defect) — a hand-edited bad manifest fails at load, early and named,
+never deep in the loader scan. Residual crash window stated honestly:
+kill -9 between copy and append leaves one unmanifested file; the
+next sync's discovery census names it LOUDLY (unrecognized ≥ 1 path).
+RIDER: the try: epilogue's search hint picks the first ALPHABETIC
+word ≥ 4 (Unicode letters — Greek/Cyrillic count; edge punctuation
+stripped, digit/symbol-riddled tokens skipped): the live Leskien
+smoke's `search 01assJ£` junk is gone, an all-garbage sample omits
+the hint. Tests +20 (manifest parse 2; gateway rollback 2; engine 13
+net incl. re-prompt bad-then-good, '-' escape, yes-mode pre-append
+refusal, incident regression across all modes, atomic aborts for
+ENOENT/404-in-mixed-batch/executable, freak-append rollback,
+intra-batch dup at rehearsal, staging-defect-asks-nothing, rider 3;
+CLI e2e 3 incl. whole-batch abort + executable refusal) — WebMock,
+no network. Docs: cli long_desc atomicity paragraph, ops §13 rewritten
+(atomic + executables + crash window), arch §16 truth pass. Suite
+2,662/33,056 exit 0 (0 skips) · lint 343 files exit 0.
