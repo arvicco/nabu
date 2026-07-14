@@ -6560,3 +6560,19 @@ size; platforms; vs Perseus/Scaife; how to cite). Every answer links to
 the tab or md doc holding the full context. Academic register, honest
 answers (incl. the AI-assisted development one, verbatim from the
 framework bank).
+
+## P19-3 · Site News + the release rail  [tier: opus] [status: dispatched] [deps: P19-0]
+Owner (2026-07-14): "Site news page (media plan suggestion) - releases
+with info about new sources/capabilities. Need to think of the best
+gate point to cut the first 'official' release." Deliverables: (a)
+site/news — dated entries per release/phase (new sources, new
+capabilities, honest numbers), newest first, plus an ATOM/RSS feed
+(the media plan's DHNow syndication rail needs a feed to submit); an
+inaugural entry summarizing the library as of today, back-referencing
+the phase history compactly. (b) The release rail: CITATION.cff
+(pre-wave 0.2), a documented release flow (tag → GitHub release notes
+distilled from the gate worklog line → news entry → Zenodo DOI mints
+on release once the owner links the repo, one-time). (c) Gate duty
+extended: every future gate adds a news entry (site/MAINTENANCE.md +
+library §10). First-release gate point = OWNER DECISION, orchestrator
+recommendation prepared separately (P19 gate, v1.0.0).
