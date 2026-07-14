@@ -141,6 +141,10 @@ module Nabu
       # through Store::DictionaryLoader.
       def self.content_kind = :dictionary
 
+      # The parser runs with `reflexes: true` (P14-1): descendants become
+      # dictionary_reflexes rows. Health checks this promise (P18-7).
+      def self.reflex_bearing? = true
+
       # One HEAD per extract, each against its own subdir's FileFetch state
       # (Last-Modified drift + the DEPRECATED-file early warning).
       def self.remote_probe_strategy = :http_zip

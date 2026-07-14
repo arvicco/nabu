@@ -82,6 +82,10 @@ module Nabu
       # SyncRunner/Rebuild load through Store::DictionaryLoader.
       def self.content_kind = :dictionary
 
+      # The parser runs with `reflexes: true` (P14-1): descendants become
+      # dictionary_reflexes rows. Health checks this promise (P18-7).
+      def self.reflex_bearing? = true
+
       # The probe HEADs the JSONL itself: reachability + Last-Modified drift
       # vs the .file-fetch.json pin — and, given the deprecation flag, the
       # early warning that upstream pulled the file. metadata_url nil — see
