@@ -9,11 +9,11 @@ require "fileutils"
 # and reconnect to it to inspect the result. TestAdapter is the source; the
 # registry is built from a sources.yml written into the tmpdir.
 class RebuildTest < Minitest::Test
-  # TestAdapter variant that quarantines one specific ref (a "parser
+  # TestAdapter variant that quarantines every bad* ref (a "parser
   # regression" on rebuild). Top-level-resolvable via its full nested name.
   class PoisonAdapter < TestAdapter
     def parse(document_ref)
-      raise Nabu::ParseError, "poisoned" if document_ref.id == "urn:nabu:test_adapter:bad"
+      raise Nabu::ParseError, "poisoned" if document_ref.id.start_with?("urn:nabu:test_adapter:bad")
 
       super
     end
@@ -204,9 +204,11 @@ class RebuildTest < Minitest::Test
     with_db { assert_equal %w[corpus], Nabu::Store::Source.select_order_map(:slug) }
   end
 
-  # -- errored > 0 surfaces a warning --------------------------------------
+  # -- errored > 0: DELTA-aware vs the ledger baseline (P18-7) ---------------
 
-  def test_quarantined_document_surfaces_a_warning
+  # First rebuild with a quarantine and no baseline: the recording is
+  # announced once (soft), and the baseline lands in the LEDGER.
+  def test_first_quarantined_rebuild_announces_and_records_the_baseline
     write_sources(<<~YAML)
       corpus:
         adapter: RebuildTest::PoisonAdapter
@@ -219,9 +221,43 @@ class RebuildTest < Minitest::Test
     assert_equal 1, outcome.report.added   # good.txt loaded
     assert_equal 1, outcome.report.errored # bad.txt quarantined
     assert_predicate outcome, :warning?
+    assert_equal :quarantine_baseline_recorded, outcome.quarantine.kind
     assert_equal [outcome], result.warnings
-    # The batch still succeeded (quarantine never aborts): a run row exists.
-    with_ledger { assert_equal 1, Nabu::Store::Run.where(status: "succeeded").count }
+    with_ledger do |ledger|
+      # The batch still succeeded (quarantine never aborts): a run row exists —
+      # and the baseline row landed, rebuild-surviving by construction.
+      assert_equal 1, Nabu::Store::Run.where(status: "succeeded").count
+      assert_equal({ baseline: 1, anchor: 1 },
+                   ledger[:quarantine_baselines].where(source_slug: "corpus")
+                                                .select(:baseline, :anchor).first)
+    end
+  end
+
+  # The standing-quarantine case: a SECOND rebuild with the same errored count
+  # matches the baseline and is SILENT (papyri's 9,312 stops shouting); the
+  # count CHANGING shouts the delta.
+  def test_rebuild_quarantine_warning_is_silent_on_baseline_and_loud_on_change
+    write_sources(<<~YAML)
+      corpus:
+        adapter: RebuildTest::PoisonAdapter
+    YAML
+    write_canonical("corpus", "good.txt" => ILIAD, "bad.txt" => "Bad\nx\n")
+
+    rebuilder.run # records baseline 1
+    steady = rebuilder.run
+    refute_predicate steady.outcomes.fetch(0), :warning?
+    assert_empty steady.warnings, "errored == baseline must print nothing"
+
+    # A new poisoned file: errored 1 → 2 — the delta shouts.
+    write_canonical("corpus", "bad2.txt" => "Bad\ny\n")
+    changed = rebuilder.run.outcomes.fetch(0)
+    assert_predicate changed, :warning?
+    assert_equal :quarantine_delta, changed.quarantine.kind
+    assert_predicate changed.quarantine, :loud?
+    assert_match(/\(\+1\)/, changed.quarantine.message)
+
+    # Baseline auto-advanced: the next rebuild at 2 is silent again.
+    assert_empty rebuilder.run.warnings
   end
 
   # -- disabled source with local data is still replayed -------------------

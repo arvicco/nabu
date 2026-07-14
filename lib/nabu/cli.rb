@@ -26,6 +26,10 @@ module Nabu
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
+    option :review, type: :string, banner: "CMD",
+                    desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
+                          "the hook's exit status is reported, never fails the sync). " \
+                          "Example: --review script/review-sync-claude. Single-source sync only."
     def sync(slug = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -34,7 +38,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db)
+      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db, ledger)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -3112,7 +3116,7 @@ module Nabu
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
       # note). A tripped breaker prints its counts + the --force hint and exits 1.
-      def sync_one(runner, registry, slug, db)
+      def sync_one(runner, registry, slug, db, ledger)
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
@@ -3126,6 +3130,25 @@ module Nabu
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
         print_citation_coverage(entry, db)
+        run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # P18-7, the optional AI-review rider: assemble the JSON brief and pipe
+      # it to the --review command. The hook's output is relayed and its exit
+      # status REPORTED — never raised: the sync already happened, and a
+      # review's failure is advisory information, not a sync failure.
+      def run_review_hook(outcome, db, ledger)
+        result = Nabu::ReviewHook.run(
+          command: options[:review],
+          brief: Nabu::ReviewHook.brief(outcome: outcome, db: db, ledger: ledger)
+        )
+        result.output.each_line { |line| say "  review| #{line.chomp}" }
+        if result.ok?
+          say "  review hook: exit 0"
+        else
+          status = result.status ? "exit #{result.status}" : "could not start"
+          say "  review hook: #{status} (advisory — sync unaffected)", :yellow
+        end
       end
 
       # P17-4 per-siglum citation coverage: an adapter that declares
@@ -3268,8 +3291,10 @@ module Nabu
         say "Dropped catalog db: #{result.db_path}#{existed}"
         result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        # DELTA-aware (P18-7): silence when a source's errored count matches its
+        # recorded ledger baseline; a change (or first recording) speaks.
         result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} quarantined #{outcome.report.errored} document(s) — parser regression?"
+          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
         end
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
@@ -3391,6 +3416,9 @@ module Nabu
       # and a hint toward the upstream probe.
       def print_local_health(report)
         print_source_health(report.sources)
+        # Library-wide invariant findings (P18-7: pending migrations) — printed
+        # only when present, so a green library shows nothing new here.
+        report.global.each { |finding| say "#{finding_tag(finding)} #{finding.message}" }
         print_golden_health(report)
         say local_health_verdict(report)
         say "Hint: run `nabu health --remote` for the no-clone upstream probe."

@@ -120,6 +120,14 @@ module Nabu
     # silent fall-through.
     def self.content_kind = :passages
 
+    # Does this adapter's parser extract descendant reflexes into
+    # dictionary_reflexes (P14-1)? Declared HERE — beside content_kind, the
+    # other loader-facing capability — so `nabu health` can hold the promise
+    # against the catalog (P18-7 flag-vs-artifact: reflex code shipping with
+    # 0 rows pending resync was a real silent state). The wiktionary
+    # adapters override to true.
+    def self.reflex_bearing? = false
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to

@@ -1,0 +1,45 @@
+#!/bin/bash
+# review-sync-claude — the bundled example post-sync review hook (P18-7).
+#
+#   bin/nabu sync <slug> --review script/review-sync-claude
+#
+# Reads the nabu.sync-review/1 JSON brief on stdin and asks Claude Code
+# (`claude -p`, one non-interactive turn) for a short judgment call, wiring
+# the nabu MCP server so the model can actually READ the sampled passages
+# (nabu_show / nabu_search / nabu_define) instead of guessing from counts.
+#
+# This is a SUBPROCESS on the far side of nabu's hook boundary: nabu pipes
+# the brief, relays whatever this prints, reports the exit status, and never
+# fails the sync over it. No cloud dependency enters nabu itself — swap this
+# script for any other reviewer (a local model, a shell sanity check, tee to
+# a log) without touching nabu.
+#
+# Requirements: the `claude` CLI on PATH, run from the repo root (bin/nabu).
+set -u
+
+BRIEF="$(cat)"
+
+if ! command -v claude >/dev/null 2>&1; then
+  echo "review-sync-claude: 'claude' CLI not found on PATH — brief follows for the record:"
+  echo "${BRIEF}"
+  exit 69 # EX_UNAVAILABLE
+fi
+
+# Register the nabu MCP server for this one-shot session (read-only stdio;
+# the same server .mcp.json registers for interactive sessions).
+MCP_CONFIG='{"mcpServers":{"nabu":{"command":"bin/nabu","args":["mcp"]}}}'
+
+PROMPT="You are reviewing a just-finished nabu sync (ancient-text corpus \
+ingest into SQLite). Below is the machine brief: counts, quarantine state \
+vs its recorded baseline, discovery accounting, mechanical warnings, and a \
+few freshly written sample urns. Use the nabu MCP tools to spot-read the \
+sample urns (nabu_show) and judge: does the loaded text look sane \
+(language, encoding, no truncation/mojibake), and do the counts and \
+warnings tell a coherent story? Reply in at most 6 lines: verdict line \
+first (OK / LOOK CLOSER: reason), then only what a maintainer must know. \
+Brief:
+${BRIEF}"
+
+exec claude -p "${PROMPT}" --mcp-config "${MCP_CONFIG}" --allowedTools \
+  "mcp__nabu__nabu_show" "mcp__nabu__nabu_search" "mcp__nabu__nabu_define" \
+  "mcp__nabu__nabu_status"
