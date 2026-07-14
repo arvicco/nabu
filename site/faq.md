@@ -72,11 +72,11 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 14 July 2026: 170,684 documents and 4,267,213 passages across 25
-synced sources, plus 450,092 dictionary entries and 2.85 million gold
+As of 14 July 2026: 170,711 documents and 4,267,659 passages across 28
+synced sources, plus 458,238 dictionary entries and 2.85 million gold
 lemma annotations in fifteen languages — classical Greek and Latin,
 papyri, Latin inscriptions, cuneiform, Sanskrit, Coptic, Old English,
-Slavic, biblical editions, and a twelve-dictionary reference shelf. The
+Slavic, biblical editions, and a sixteen-dictionary reference shelf. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md).
@@ -97,14 +97,18 @@ leading with the license evidence.
 
 ### Can I add my own texts and PDFs?
 
-Today the supported path is a per-source adapter — reasonable for a
-structured corpus, described in
-[CONTRIBUTING.md](https://github.com/arvicco/nabu/blob/main/CONTRIBUTING.md) —
-and there is no drag-and-drop intake yet. A local-shelf system for
-personal material (PDFs, scans, articles, held under the strictest
-access class by default) is in active development; until it lands, the
-honest answer is that ad-hoc documents wait. Watch the
-[repository](https://github.com/arvicco/nabu) for progress.
+Yes, since 14 July 2026: `nabu ingest FILE` files your own material —
+scanned grammars, offprints, articles — into a local-library shelf. The
+file is copied in (never moved), metadata is derived mechanically and
+confirmed interactively, with AI assistance, or fully scripted; the
+document is then catalogued, page-cited where it carries a text layer,
+and searchable beside the rest of the library. Everything on this shelf
+defaults to the strictest access class (`research_private`): it is never
+served to AI clients without an explicit opt-in and never redistributed.
+The command is described under Stewardship on
+[Tools]({{ '/tools/' | relative_url }}); for a *structured corpus* the
+better path is still a per-source adapter, per
+[CONTRIBUTING.md](https://github.com/arvicco/nabu/blob/main/CONTRIBUTING.md).
 
 ### How current are the sources kept?
 
@@ -217,15 +221,18 @@ shape; the house rules are in
 
 ### How do I cite Nabu?
 
-There is no DOI or versioned release yet — one is planned — so the
-honest current form is to cite this site and the repository with your
-access date: *Nabu: a local library of the ancient world*,
+The repository carries citation metadata in
+[CITATION.cff](https://github.com/arvicco/nabu/blob/main/CITATION.cff),
+and versioned releases begin with v1.0.0 (July 2026) — cite the tagged
+version you used, or the site and repository with your access date:
+*Nabu: a local library of the ancient world*,
 https://arvicco.github.io/nabu (repository:
-[github.com/arvicco/nabu](https://github.com/arvicco/nabu)), accessed
-on the date you used it, adding the repository commit hash where
-precision matters. Texts you quote *from* the library should be cited
-to their upstream editions, which every passage's URN and license label
-identify — see [Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+[github.com/arvicco/nabu](https://github.com/arvicco/nabu)), adding the
+version tag or commit hash where precision matters. A DOI per release
+(via Zenodo) is planned. Texts you quote *from* the library should be
+cited to their upstream editions, which every passage's URN and license
+label identify — see
+[Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
 
 ### Who maintains it?
 

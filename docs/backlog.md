@@ -6778,3 +6778,12 @@ gateway 11, PdfText.info 3 + phantom-page regression, CLI 8 e2e on
 scratch roots incl. --shelf language). Interactive flow verified live
 via PTY on a scratch root (real mutool derivation end to end). Suite
 2,616/32,881 exit 0 (0 skips) · lint 341 files exit 0.
+
+## P19-gate · Phase 19 gate — the v1.0.0 release gate  [tier: orchestrator] [status: done 2026-07-14] [deps: P19-0..5]
+Full-diff, docs+site truthed (16 dictionaries / 458,238 entries /
+170,711 docs / 4.27M passages verified live), news post = the release
+announcement, FAQ #9 → YES, register §3.4 intake-half + §4.3/§4.6
+updated. PR #23; on owner merge: ops §12 release checklist cuts
+v1.0.0 (owner-blessed version pending final word), DOI mints if the
+Zenodo toggle is on. Owner queue: first real `nabu ingest`; the
+licensing send queue (GORAZD next); backup disk (standing).
