@@ -6495,6 +6495,10 @@ Starostin email in .docs awaiting owner send), backup-disk re-flag
 #    copy → derive metadata → categorize (interactive TTY / --assist via
 #    the P18-7 hook pattern, AI suggests + owner confirms / scripted
 #    --yes) → manifest append → local sync. Deps: P19-2.
+# Carried: P18-7 invariant refinement — enabled-vs-populated misses a
+#   DISABLED source synced-anyway to zero rows (the liv case: succeeded
+#   run + empty shelf, silent because enabled:false; check any source
+#   with a succeeded run + zero rows instead),
 # Carried: EDH lb-less fallback (P18-gate triage verdict: 26 of the 27
 #   quarantines are real inscriptions with NO <lb> markup — fall back to
 #   whole-inscription passage grain; 1 is malformed upstream XML
