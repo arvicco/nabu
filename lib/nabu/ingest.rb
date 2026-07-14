@@ -2,6 +2,8 @@
 
 require "json"
 require "open3"
+require "tmpdir"
+require_relative "url_download"
 require_relative "library_shelf"
 require_relative "language_shelf"
 require_relative "language_dossier"
@@ -14,6 +16,13 @@ module Nabu
   # drives the shelves' sanctioned write gateways (LibraryShelf for files,
   # LanguageShelf for dossier scaffolds). Per file, in the design's order:
   #
+  #   0. stage — a distinct FIRST pass over the whole batch (P20-0): url
+  #      arguments are downloaded (Nabu::UrlDownload, redirects followed)
+  #      into a throwaway staging dir and local paths existence-checked,
+  #      all BEFORE any categorization — an interactive header can never
+  #      precede a failure, and prompts never wait on the network. For a
+  #      url the staging copy is the original (the shelf copies it in;
+  #      the manifest entry records the owner's url in a source_url lane).
   #   1. account — sha256 the source; an identical file already MANIFESTED
   #      in the shelf is an honest no-op (never a second copy).
   #   2. copy — LibraryShelf#copy_in! (never move; same name over new
@@ -59,6 +68,11 @@ module Nabu
       def initialize(file:, status:, message:, urn: nil, entry: nil, search_term: nil) = super
       def ok? = status != :failed
     end
+
+    # One staged intake item: the local path the pipeline reads and, for a
+    # url argument, the ORIGINAL url the owner gave (nil for local files —
+    # mirror-node final urls rotate; the given url is the stable identity).
+    Staged = Data.define(:path, :source_url)
 
     # -- the resolvers (the categorization seam) ------------------------------
 
@@ -137,29 +151,41 @@ module Nabu
     # +resolver+ decides the final fields (see above); +assist_command+ (with
     # its injectable +assist_runner+) is optional; +pdf_pages+/+pdf_info+ are
     # the PdfText seams (tests inject fakes — the suite never needs mutool);
-    # +overrides+ are the CLI flag values (they beat assist beats derived);
-    # +notify+ receives advisory one-liners (assist failures, degrades).
+    # +download+ is the url seam (defaults to the real cert-hardened
+    # UrlDownload; tests inject fakes or stub with WebMock); +overrides+ are
+    # the CLI flag values (they beat assist beats derived); +notify+
+    # receives advisory one-liners (assist failures, degrades, downloads).
     def initialize(resolver:, shelf: nil, assist_command: nil, assist_runner: Assist.method(:run),
                    pdf_pages: PdfText.method(:pages), pdf_info: PdfText.method(:info),
-                   overrides: {}, notify: ->(_line) {}, now: Time.now)
+                   download: nil, overrides: {}, notify: ->(_line) {}, now: Time.now)
       @shelf = shelf
       @resolver = resolver
       @assist_command = assist_command
       @assist_runner = assist_runner
       @pdf_pages = pdf_pages
       @pdf_info = pdf_info
+      @download = download || UrlDownload.new
       @overrides = overrides
       @notify = notify
       @now = now
     end
 
-    # Ingest +paths+ into +collection+. Returns one Outcome per path; a bad
-    # file is a named :failed outcome and the rest proceed.
+    # Ingest +paths+ (local files or http(s) urls) into +collection+.
+    # Returns one Outcome per argument, in order; a bad item is a named
+    # :failed outcome and the rest proceed. The staging pass runs FIRST for
+    # the whole batch (class comment, step 0); the staging dir dissolves
+    # afterwards — the shelf copy is the record.
     def add_files(paths, collection: DEFAULT_COLLECTION)
-      paths.map do |path|
-        add_file(path, collection)
-      rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
-        Outcome.new(file: File.basename(path), status: :failed, message: e.message)
+      Dir.mktmpdir("nabu-ingest") do |staging_dir|
+        stage(paths, staging_dir).map do |item|
+          next item if item.is_a?(Outcome)
+
+          begin
+            add_file(item.path, collection, source_url: item.source_url)
+          rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
+            Outcome.new(file: File.basename(item.path), status: :failed, message: e.message)
+          end
+        end
       end
     end
 
@@ -187,9 +213,26 @@ module Nabu
 
     private
 
+    # -- staging (step 0): every argument settled before any prompt -------------
+
+    def stage(paths, staging_dir)
+      paths.map do |path|
+        if UrlDownload.url?(path)
+          @notify.call("downloading #{path}")
+          Staged.new(path: @download.fetch(path, dir: staging_dir), source_url: path)
+        else
+          raise Errno::ENOENT, path unless File.file?(path)
+
+          Staged.new(path: path, source_url: nil)
+        end
+      rescue Nabu::Error, Errno::ENOENT, Errno::EACCES => e
+        Outcome.new(file: File.basename(path), status: :failed, message: e.message)
+      end
+    end
+
     # -- the per-file pipeline -------------------------------------------------
 
-    def add_file(path, collection)
+    def add_file(path, collection, source_url: nil)
       raise Errno::ENOENT, path unless File.file?(path)
 
       file = File.basename(path)
@@ -201,7 +244,7 @@ module Nabu
       end
       return revise(path, collection, file) if @shelf.manifested?(collection, file)
 
-      catalogue(path, collection, file)
+      catalogue(path, collection, file, source_url: source_url)
     end
 
     # Same name, already manifested, new bytes: overwrite the copy and let
@@ -214,12 +257,12 @@ module Nabu
                            "(metadata edits go in #{@shelf.manifest_path(collection)})")
     end
 
-    def catalogue(path, collection, file)
+    def catalogue(path, collection, file, source_url: nil)
       @shelf.copy_in!(path, collection: collection)
-      candidates, sample = derive(path, file)
+      candidates, sample = derive(path, file, source_url: source_url)
       fields = apply_suggestions(library_fields(candidates),
                                  library_brief(collection, file, candidates, sample))
-      entry = build_entry(file, @resolver.resolve(fields))
+      entry = build_entry(file, @resolver.resolve(fields), source_url: source_url)
       @shelf.append_entry!(collection: collection, entry: entry)
       Outcome.new(file: file, status: :added, message: "→ #{collection}/#{file}",
                   urn: Adapters::LocalLibrary.urn_for(collection, file),
@@ -239,7 +282,12 @@ module Nabu
 
     # -- derivation (mechanical candidates) ------------------------------------
 
-    def derive(path, file)
+    # The provenance candidate names where the copy REALLY came from: the
+    # original url for a download (the staging path is ephemeral), the
+    # expanded local path otherwise — and it also surfaces the url in the
+    # categorize display without a prompt of its own (the source_url lane
+    # is recorded mechanically).
+    def derive(path, file, source_url: nil)
       candidates = filename_candidates(file)
       sample = nil
       case File.extname(file).downcase
@@ -249,7 +297,7 @@ module Nabu
       when *TEXT_EXTENSIONS
         sample = File.read(path, encoding: "UTF-8").scrub("\u{FFFD}")[0, SAMPLE_CHARS]
       end
-      candidates["provenance"] = "ingested #{@now.strftime('%Y-%m-%d')} from #{File.expand_path(path)}"
+      candidates["provenance"] = "ingested #{@now.strftime('%Y-%m-%d')} from #{source_url || File.expand_path(path)}"
       [candidates, sample]
     end
 
@@ -370,7 +418,9 @@ module Nabu
     # split, year coerced, license validated, empty lanes omitted — and the
     # research_private DEFAULT omitted too (manifest silence means the
     # conservative class; an explicit class marks an owner override).
-    def build_entry(file, values)
+    # +source_url+ (a url ingest's original url) is recorded mechanically,
+    # never prompted; local ingests get no such lane.
+    def build_entry(file, values, source_url: nil)
       entry = { "file" => file }
       title = presence(values["title"])
       entry["title"] = title if title
@@ -384,6 +434,7 @@ module Nabu
       end
       provenance = presence(values["provenance"])
       entry["provenance"] = provenance if provenance
+      entry["source_url"] = source_url if source_url
       entry["license_class"] = validate_license!(values["license_class"])
       entry.compact
     end

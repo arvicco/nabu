@@ -32,9 +32,12 @@ module Nabu
     # One catalogued item. +file+ is the path relative to the collection
     # dir; +license_class+ is always a valid class (the default applied);
     # +languages+/+tags+/+related+ are Arrays of Strings (possibly empty);
-    # +year+ is an Integer or nil; +title+ defaults to the file stem.
+    # +year+ is an Integer or nil; +title+ defaults to the file stem;
+    # +source_url+ is the ORIGINAL url a `nabu ingest URL` was given (the
+    # stable identity — mirror-node final urls rotate), nil for local
+    # ingests.
     Entry = Data.define(:file, :title, :creator, :year, :languages,
-                        :provenance, :license_class, :tags, :related)
+                        :provenance, :source_url, :license_class, :tags, :related)
 
     # Parse the manifest at +path+. Raises FormatError on any structural or
     # per-entry defect, naming the file and the offending entry.
@@ -62,6 +65,7 @@ module Nabu
         year: year!(path, item, index),
         languages: string_list!(path, item, index, "languages"),
         provenance: string_or_nil!(path, item, index, "provenance"),
+        source_url: string_or_nil!(path, item, index, "source_url"),
         license_class: license_class!(path, item, index),
         tags: string_list!(path, item, index, "tags"),
         related: string_list!(path, item, index, "related")

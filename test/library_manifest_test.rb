@@ -57,6 +57,17 @@ class LibraryManifestTest < Minitest::Test
     end
   end
 
+  def test_source_url_lane_parses_and_is_nil_when_absent
+    with_manifest("- file: a.pdf\n  source_url: https://archive.org/download/x/a.pdf\n") do |path|
+      entry = Nabu::LibraryManifest.load(path).entries.first
+      assert_equal "https://archive.org/download/x/a.pdf", entry.source_url
+    end
+    with_manifest("- file: a.pdf\n") do |path|
+      assert_nil Nabu::LibraryManifest.load(path).entries.first.source_url,
+                 "local ingests carry no source_url lane"
+    end
+  end
+
   def test_unknown_license_class_fails_loudly_never_defaults_down
     with_manifest("- file: a.pdf\n  license_class: public\n") do |path|
       error = assert_raises(Nabu::LibraryManifest::FormatError) { Nabu::LibraryManifest.load(path) }
@@ -68,7 +79,8 @@ class LibraryManifestTest < Minitest::Test
   def test_structural_defects_raise_format_error
     ["file: not-a-list\n", "[]\n", "- just a string\n", "- title: no file key\n",
      "- file: ../escape.pdf\n", "- file: a.pdf\n  year: \"1871\"\n",
-     "- file: a.pdf\n  related: chu\n", "- {file: a.pdf}\n- {file: a.pdf}\n"].each do |yaml|
+     "- file: a.pdf\n  related: chu\n", "- {file: a.pdf}\n- {file: a.pdf}\n",
+     "- file: a.pdf\n  source_url: 42\n"].each do |yaml|
       with_manifest(yaml) do |path|
         assert_raises(Nabu::LibraryManifest::FormatError, "expected FormatError for #{yaml.inspect}") do
           Nabu::LibraryManifest.load(path)
