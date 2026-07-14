@@ -94,20 +94,41 @@ module Nabu
 
       # One catalog query resolves every counterpart urn to title/language/
       # license (no withdrawn filter: a withdrawn counterpart still resolves —
-      # the edge exists; `show` tells the withdrawal story).
+      # the edge exists; `show` tells the withdrawal story). Urns no passage
+      # answers for are retried at DOCUMENT grain (P19-4: reference edges
+      # point at whole documents — a local-library article, a discussed
+      # edition — not only passages); only then does an edge render
+      # "(not in catalog)".
       def resolve_counterparts(edges)
         urns = edges.map { |edge| counterpart(edge) }.uniq
-        rows = @catalog[:passages]
-               .join(:documents, id: Sequel[:passages][:document_id])
-               .join(:sources, id: Sequel[:documents][:source_id])
-               .where(Sequel[:passages][:urn] => urns)
-               .select(Sequel[:passages][:urn].as(:urn),
-                       Sequel[:passages][:language].as(:language),
-                       Sequel[:documents][:title].as(:title),
-                       license_expr.as(:license_class))
-               .to_hash(:urn)
+        rows = passage_resolutions(urns)
+        unresolved = urns - rows.keys
+        rows = rows.merge(document_resolutions(unresolved)) unless unresolved.empty?
         edges.map { |edge| edge.merge(resolution: rows[counterpart(edge)]) }
              .sort_by { |edge| [-(edge[:score] || 0.0), counterpart(edge)] }
+      end
+
+      def passage_resolutions(urns)
+        @catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:urn] => urns)
+          .select(Sequel[:passages][:urn].as(:urn),
+                  Sequel[:passages][:language].as(:language),
+                  Sequel[:documents][:title].as(:title),
+                  license_expr.as(:license_class))
+          .to_hash(:urn)
+      end
+
+      def document_resolutions(urns)
+        @catalog[:documents]
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:documents][:urn] => urns)
+          .select(Sequel[:documents][:urn].as(:urn),
+                  Sequel[:documents][:language].as(:language),
+                  Sequel[:documents][:title].as(:title),
+                  license_expr.as(:license_class))
+          .to_hash(:urn)
       end
 
       def counterpart(edge)

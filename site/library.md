@@ -6,8 +6,8 @@ description: >-
   Sanskrit, cuneiform, treebanks, biblical editions, Old English, and Slavic.
 ---
 
-Live counts as of **14 July 2026**: **170,684 documents / 4,267,213
-passages** across 25 synced sources, plus **450,092 dictionary
+Live counts as of **14 July 2026**: **170,711 documents / 4,267,659
+passages** across 28 synced sources, plus **458,238 dictionary
 entries** on the reference shelf and **2,852,069 gold lemma annotations in
 fifteen languages**. The authoritative shelf map, refreshed at every
 development gate, is
@@ -20,7 +20,7 @@ the live catalog, not estimated.
 | Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen, with 650 aligned English translations | 8th c. BCE – 3rd c. CE | 1,418 docs / 394,706 passages | CC BY-SA |
 | Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 3rd c. BCE – 6th c. CE | 1,129 / 256,480 | CC BY-SA |
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with 181 English translations | 3rd c. BCE – Late Antiquity | 534 / 391,799 | CC BY-SA |
-| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 61,389 / 921,248 | CC BY |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 61,416 / 921,694 | CC BY |
 | Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | 81,856 / 406,281 | CC BY-SA |
 | Coptic | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | 482 / 74,169 | CC BY per document (source class `nc`) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, the Ṛgveda with Vedic accents | c. 1200 BCE – 18th c. CE | 780 / 703,068 | CC BY-NC-SA |
@@ -29,7 +29,7 @@ the live catalog, not estimated.
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek New Testament, World English Bible | — | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | 349 / 30,550 | CC BY-SA |
 | Slavic &amp; Slovenian | CCMH OCS gospel codices, the Freising Manuscripts, goo300k and IMP Early Modern Slovenian | c. 1000 – 1899 | 793 / 444,117 | CC BY (Freising BY-ND) |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary OCS, seven reconstruction dictionaries | — | 450,092 entries | CC BY-SA / CC BY / CC BY-NC-SA |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary OCS, seven reconstruction dictionaries, and the IE-CoR, LIV, and de Vaan etymological witnesses | — | 458,238 entries | CC BY-SA / CC BY / CC BY-NC-SA |
 
 ## Classical Greek literature
 
@@ -63,7 +63,7 @@ layer, so *iuvenis*, *juvenis*, and *iuuenis* all resolve to the same word.
 
 The everyday written record of a millennium of Egypt, from the Duke Databank
 of Documentary Papyri via papyri.info: contracts, tax receipts, petitions,
-private letters, census returns, leases, and court records — 61,389
+private letters, census returns, leases, and court records — 61,416
 documents from Ptolemaic to early Islamic Egypt, chiefly Greek with Coptic,
 Latin, Arabic, and Demotic minorities. Leiden-convention editorial markup
 (restorations, cancellations) is preserved, and the fragment-search index
@@ -157,7 +157,7 @@ passages), all dated per document and feeding the chronological axis.
 
 ## Reference shelf
 
-Twelve dictionaries as structured data rather than page images:
+Sixteen dictionaries as structured data rather than page images:
 Liddell-Scott-Jones (116,497 entries), Lewis &amp; Short (51,636),
 Bosworth-Toller (62,815), the Monier-Williams Sanskrit-English dictionary
 (193,890, synchronized 13 July 2026, with transliteration-tolerant lookup
@@ -165,15 +165,27 @@ and citations resolving into the Sanskrit shelf), a Wiktionary-derived Old
 Church Slavonic lexicon (4,615), and seven reconstruction dictionaries
 (Proto-Indo-European, Proto-Slavic, Proto-Germanic, Proto-West Germanic,
 Proto-Balto-Slavic, Proto-Italic, Proto-Indo-Iranian) whose entries carry
-machine-readable descendant trees — a crosswalk of 1,006,872 edges joining
-reconstructed forms to attested lemmas, with curated loan events flagged.
-Dictionary citations are resolved to live passages where
-the cited work is held: the LSJ entry for μῆνις points at *Iliad* 1.1 as a
-resolvable URN, not a printed abbreviation.
+machine-readable descendant trees. Three etymological witnesses joined on
+14 July 2026: the IE-CoR Indo-European cognacy database (4,981
+expert-curated cognate sets with loan events flagged), the LIV-LOD
+dictionary of Proto-Indo-European verbs (305 verbal etymons), and de
+Vaan's <em>Etymological Dictionary of Latin</em> (2,860 etymons, LiLa
+linked-data edition) — independent, expert-curated chains beside the
+Wiktionary-derived ones. Together these feed a crosswalk of 1,036,224
+edges joining reconstructed forms to attested lemmas. Dictionary
+citations are resolved to live passages where the cited work is held: the
+LSJ entry for μῆνις points at *Iliad* 1.1 as a resolvable URN, not a
+printed abbreviation.
 
-<p class="aside">Adapters for three further sources — the IE-CoR
-Indo-European cognacy database, the LIV-LOD dictionary of
-Proto-Indo-European verbs, and de Vaan's <em>Etymological Dictionary of
-Latin</em> (LiLa linked-data editions) — are built and tested as of
-14 July 2026, awaiting their first synchronization. They hold no live
-entries yet and will appear in these counts at a future gate.</p>
+## The local shelves
+
+Two shelves hold material that is authored or acquired rather than
+downloaded. A language-dossier shelf carries the library's per-language
+curation — one plain Markdown file per language code, 199 dossiers as of
+14 July 2026, feeding the `nabu language` reference cards. A local-library
+shelf files the owner's own PDFs, scans, and offprints as catalogued,
+page-cited collections through the `nabu ingest` command (see
+[Tools]({{ '/tools/' | relative_url }})); everything on it is held under
+the library's strictest access class by default and is never served or
+redistributed. The local-library shelf is newly opened and holds no
+documents yet.

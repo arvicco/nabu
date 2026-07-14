@@ -134,6 +134,15 @@ language_names(id, dictionary_id, lang_code, name, occurrences)
    -- nodes call each lang_code, counted RAW per reflex-bearing dictionary
    -- (written wholesale by DictionaryLoader; the read side filters wrapper/
    -- placeholder names and takes the mode). Feeds `nabu language`.
+language_records(id, lang_code, kind, body, source)
+   -- P19-1: the derived index of the canonical/local-language dossier shelf
+   -- (§16) — one row per (code, kind) lane as the dossier currently states
+   -- it (curated name/family/context + front-matter extras + accretion
+   -- sections), `source` the per-record provenance ("dossier", "iecor",
+   -- "liv"). Replaced per code by LanguageDossierLoader at every
+   -- local-language sync/rebuild (and incrementally by the LanguageShelf
+   -- accretion path). Feeds `nabu language` ahead of the transitional
+   -- ledger notes below.
 ```
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
@@ -149,17 +158,18 @@ revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
    -- the durable revision history: content transitions of existing rows only
 language_notes(id, lang_code, kind[name|family|context|…], body, source,
                created_at)
-   -- P18-4: the ACCUMULATED per-language knowledge layer — curated context
-   -- that is not a function of canonical/ (the enrichment stance: authored
-   -- accretions live in the ledger). Append-only; the latest note per
-   -- (lang_code, kind) wins, so supersession history is free. Seeded
-   -- idempotently from config/languages.yml (`nabu language --seed`);
-   -- family-level notes ride the family prefix as their lang_code.
-   -- P18-6: sources accrete too — an adapter declaring .language_notes
-   -- (LIV/EDL stage witnesses) appends through Languages.accrete! at
-   -- dictionary load, kind "witness:<slug>" (one lane per source, so
-   -- witnesses never supersede each other or the curated kinds), source
-   -- column = the adapter id (per-record provenance).
+   -- P18-4, TRANSITIONAL since P19-1: the accumulated per-language layer's
+   -- retiring first home. The canonical-memory migration (§16) rehomes
+   -- authored language knowledge into canonical/local-language/ dossier
+   -- FILES; this table is read only as the per-(code, kind) FALLBACK where
+   -- no derived language_record exists (a library whose owner has not yet
+   -- fired `nabu language --export-dossiers` serves exactly what it served
+   -- before), and is written by NOTHING anymore (the P18-5/6 accretion
+   -- writers redirect to dossier sections via Nabu::LanguageShelf; the
+   -- config/languages.yml seed and `--seed` are retired). A later packet
+   -- drops the table once export parity is verified — the drop cannot ride
+   -- P19-1 because every write path auto-migrates the ledger on open, which
+   -- would destroy the notes before the owner ever exported.
 ```
 
 - Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.
@@ -965,3 +975,139 @@ edges exist (zero-signal silence, absent kinds suppressed). MCP adds
 `nabu_links`, the tenth read-only tool — same bounded/license-labeled
 contract as the rest; it reads persisted edges only (the `detail` field rides
 the payload) and never mines (batch runs are owner-fired).
+
+## 16. Canonical memory — local shelves (P19-1)
+
+**The principle.** canonical/ holds the permanent asset; db/ is a derived
+index, rebuildable from scratch. P18-4's language notes broke that rule by
+making the ledger the home of authored knowledge; the canonical-memory
+design (owner-approved 2026-07-14) generalizes the rule instead of patching
+the case: **everything nabu KNOWS — fetched corpora, owner-authored
+dossiers, locally acquired documents — lives as files under canonical/, in
+a `local-<kind>/` shelf when we author or acquire it ourselves. The db only
+ever indexes it. The ledger records what HAPPENED (runs, pins, probes),
+never what is KNOWN.**
+
+**Local shelves are ordinary sources.** Registry entry, adapter, discovery
+accounting, quarantines, rebuild — the whole pipeline applies unchanged,
+under the fourth `sync_policy` vocabulary word, **`local`**: no upstream, no
+network, ever. Sync = re-scan the tree (`Nabu::LocalFetch`): validates it
+exists, sha256-pins every file into the ledger via the existing pin
+machinery (one `pins` row per file, keyed `local:<relative path>`), and
+reports disappearances. The remote probe short-circuits to the frozen-style
+`local` verdict (liveness = the tree itself; license from the shelf's own
+manifest/data, never a fetched file); `status` shows `up=local`. Per-file
+INTEGRITY is bare `nabu health`'s job: a pinned file that is neither live
+nor atticked is a LOUD "vanished" finding (restore from backup, or retire
+deliberately); a live file whose bytes changed since the last scan is a
+soft "stale derivation" nudge toward the re-scan — owner edits are the
+shelf's whole point, not corruption.
+
+**The attic, within honest limits.** LocalFetch runs AFTER any deletion, so
+it cannot copy bytes that are already gone: the sanctioned retire flow is
+MOVING a file into `canonical/<slug>/.attic/<same relative path>` —
+`discover_with_attic` then rediscovers it retained and its derived rows
+never vanish. An un-atticked disappearance keeps its last-known sha pinned
+(so health stays loud) and, above the house 20% threshold, trips the
+mass-deletion breaker before the scan state advances (`--force` overrides).
+
+**The write doctrine.** Application code never writes canonical/ except
+through `Adapter#fetch` and the ad-hoc pipeline — and, for local shelves,
+through the shelf's ONE sanctioned write gateway, the `Adapter#fetch`
+analogue for data that is authored rather than downloaded. For the
+local-language shelf that gateway is `Nabu::LanguageShelf`; for the
+local-library shelf it is `Nabu::LibraryShelf` (P19-5: copy-in — never
+move — plus the mechanical, append-only manifest append), driven by `nabu
+ingest`. Everything else stays read-only on the shelves.
+
+**Shelf one: `canonical/local-language/`** — one Markdown + YAML
+front-matter dossier per language code (`Nabu::LanguageDossier`): curated
+`code/name/family` front matter (any other scalar key — `period`,
+`scripts` — is an extra card lane), free prose as the curated context, and
+one provenance-headed accretion SECTION per kind
+(`## witness:liv (liv, 2026-07-14)`). The P18-4 append-only
+latest-per-(code, kind) contract maps verbatim onto files: the section body
+IS the latest, supersession = a writer replacing its OWN section (kinds are
+writer-owned), never someone else's lane, and idempotency = write only when
+the body differs, so re-syncs and rebuild replays are byte-level no-ops.
+The `local-language` adapter (`content_kind :language`, the third loader
+routing) parses dossiers into the catalog's `language_records` (§5) —
+temperature 1, the cleanest one; `nabu verify` re-parses the dossiers and
+diffs the derived rows; the P18-7 invariants extend with the
+dossier-files-vs-records pair and the pin-integrity check. `nabu language`
+reads the merged view unchanged.
+
+**The migration** is owner-fired and ordered so both states are honest at
+every step: (1) this code ships with reads falling back to the ledger's
+`language_notes` per (code, kind); (2) `nabu language --export-dossiers`
+(idempotent, absence-filling, `--dry-run` previews) writes the ledger notes
+— seed curation and accretions alike, provenance preserved as section
+headers — out as the initial dossier files, then `bin/nabu sync
+local-language` derives the records; (3) a LATER packet drops the ledger
+table after parity is eyeballed (it cannot ride this one: write paths
+auto-migrate the ledger on open, which would drop the notes before the
+export ever ran). `config/languages.yml` is retired immediately — the
+ledger already accumulated everything it seeded, and one home beats three.
+
+**Shelf two: `canonical/local-library/` (P19-4)** — PDFs, scans and
+scholarly articles the owner acquires: one `<collection>/` dir per drop,
+each with a `manifest.yml` that is the SOURCE OF RECORD — a YAML list of
+entries (`file`, `title`, `creator`, `year`, `languages`, `provenance`,
+`license_class`, `tags`, `related`) shaped so `nabu ingest` can append one
+mechanically. A file present but
+unmanifested is UNRECOGNIZED in the discovery census (awaiting ingest);
+manifested but missing is the vanished/attic story above. Unlike the
+dossier shelf this one mints DOCUMENTS + PASSAGES (the full conformance
+suite applies): `content_kind` stays `:passages` — "article" is document
+metadata (`kind: article`, plus creator/year/tags/related, the EDH-persons
+pattern), not a fourth loader routing. A PDF with a text layer extracts
+via mutool (`Nabu::PdfText`, through `Nabu::Shell`) into PAGE-GRAIN
+passages (`…:p12` — the page is the only citation unit a PDF keeps stable,
+and the one scholarship cites); a scan that reads clean but blank is a
+metadata-only document marked `text_layer: none` (queued for the HTR era,
+never quarantined for being a scan); images likewise; a genuinely
+unreadable file quarantines. Licensing is the shelf's point: class
+`research_private` (MCP default-excluded, never redistributed), applied as
+the manifest DEFAULT in one place (`Nabu::LibraryManifest`); an entry's
+explicit more-open class is honored as a per-document `license_override`.
+The shelf's write path is `nabu ingest FILE... [--collection NAME]`
+(P19-5), through the `Nabu::LibraryShelf` gateway — in order: sha-account
+(bytes already MANIFESTED anywhere in the shelf = honest no-op; same name
+with new bytes = the loader's ordinary revision), copy in (never move),
+derive candidates mechanically (PDF Info metadata + a first-page sample
+via the `PdfText` seam where mutool exists, filename heuristics and the
+sha always), categorize — interactive field-by-field prompts with the
+candidates prefilled; `--assist CMD` piping a `nabu.ingest-assist/1` JSON
+brief to a suggester subprocess (the P18-7 hook pattern; bundled
+`script/ingest-assist-claude`) whose answer PREFILLS the same prompts
+(never lands unreviewed without `--yes`); or `--yes` + flags for scripted
+drops — append one manifest entry, then run the shelf's ordinary sync and
+print the minted urns. The default collection is `inbox`, argued over a
+date-based name: the collection is a FROZEN urn segment, and one visible
+triage collection with one accumulating review-surface manifest beats a
+manifest-per-day scatter that bakes an acquisition accident into
+identity. `--shelf language CODE` is the same front door for the dossier
+shelf: a THIN scaffold (front matter + context, same three modes) through
+`Nabu::LanguageShelf`, then the dossier sync. Owner hand-placement plus a
+manual sync stays legitimate — the census flags whatever ingest has not
+catalogued.
+
+**The `related:` edges.** Manifest `related:` URNs become kind=`reference`
+edges in the links journal (producer `library`, scope = the source slug),
+refreshed by every local-library sync AFTER the load (SyncRunner →
+`Nabu::LibraryReferences`, superseding the prior run — the journal always
+holds the current manifests' assertions; a lost journal costs one
+no-network re-sync). Edges carry no score (a manifest assertion is owner
+curation, not a mined similarity); `detail` names the asserting manifest.
+`Query::Links` resolves counterparts at passage grain first, then DOCUMENT
+grain, so `nabu links <urn>` shows an article beside the passages it
+discusses from either end. Language codes in `related:` stay document
+metadata only: P19-1 minted no dossier urns, and an edge to an invented
+urn would sit permanently unresolved — codes upgrade to edges if dossier
+documents ever exist.
+
+**What this does not change.** The ledger keeps runs/pins/probes/revisions;
+the links journal keeps batch edges; `nabu language`'s command surface is
+unchanged. Future local shelves follow the same pattern: files + manifest +
+adapter + one sanctioned write gateway, with `nabu ingest` as the shared
+intake front door.

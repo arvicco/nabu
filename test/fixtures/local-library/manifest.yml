@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The local-library shelf has NO upstream by definition (P19-4,
+# sync_policy: local) — nothing here can ever be refetched. The two PDFs
+# are CONSTRUCTED (cupsfilter, 2026-07-14; see README.md) because the shelf
+# format is nabu's own and no trimmed public-domain scan was at hand; the
+# Leskien text they carry is public-domain (1871).
+source: local-library
+adapter_test: test/adapters/local_library_test.rb
+retrieved: 2026-07-14
+files:
+  - path: shelf/slavistics/manifest.yml
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; the collection manifest under test (nabu's own format)
+  - path: shelf/slavistics/leskien-1871-handbuch.pdf
+    whole: true
+    refetchable: false
+    reason: constructed 2-page text-layer PDF (cupsfilter over PD Leskien 1871 excerpt; README.md)
+  - path: shelf/slavistics/scan-plate.pdf
+    whole: true
+    refetchable: false
+    reason: constructed textless PDF (cupsfilter over a PNG) — the scan/metadata-only story
+  - path: shelf/slavistics/jagic-notes.txt
+    whole: true
+    refetchable: false
+    reason: local shelf — owner-note text file (UTF-8/NFC, OCS Cyrillic), explicit open entry
+  - path: shelf/slavistics/codex-plate.png
+    whole: true
+    refetchable: false
+    reason: 1×1 PNG placeholder image — the HTR-era metadata-only story
+  - path: shelf/slavistics/stray-unfiled.txt
+    whole: true
+    refetchable: false
+    reason: deliberately UNMANIFESTED file — the unrecognized-census story

@@ -19,6 +19,11 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    sizes (the starter shelf and the growth table) — re-measure (`du -sh`
    of the live canonical dirs) when a listed shelf changes materially,
    and keep it consistent with what `bin/nabu quickstart` prints.
+   faq.md restates a few of these figures (starter-shelf and full-build
+   sizes, source/document counts, the class percentages) — re-check its
+   dated numbers against quickstart.md/library.md/index.md at the same
+   pass, and keep its answers truthful when postures, funnels, or the
+   citation story (a DOI is planned) change.
 2. **New shelves/sources**: a new synced source gets its row/paragraph on
    library.md + sources.md (upstream link, license, class). A source
    flipped from pending to live moves out of the "awaiting first
@@ -29,6 +34,12 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
 4. **License changes** (a license_watch alarm, a class change): sources.md
    updated immediately, not just at gates — same trigger rule as
    library.md §10 duty 4.
+5. **News entry** (P19-3): every gate adds one dated post to
+   `site/news/_posts/` (`YYYY-MM-DD-slug.md`) — what shipped, honest
+   numbers with as-of dates, distilled from the gate's worklog line. The
+   Atom feed (`/feed.xml`, jekyll-feed) carries it on deploy; nothing else
+   to do. Gates that cut a tagged release follow the fuller checklist in
+   docs/ops.md §12 (CITATION.cff version/date bump, GitHub release, DOI).
 
 ## Hard rules
 

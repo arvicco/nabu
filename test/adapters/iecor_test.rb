@@ -74,39 +74,47 @@ class IecorTest < Minitest::Test
   # --- loader round-trip: entries + reflexes + the notes rider ---------------------
 
   def test_loads_through_the_dictionary_loader_with_notes_accreted
-    db = store_test_db
-    ledger = ledger_test_db
-    source = Nabu::Store::Source.create(
-      slug: "iecor", name: "IE-CoR", adapter_class: "Nabu::Adapters::Iecor",
-      license: "CC BY 4.0", license_class: "attribution",
-      upstream_url: "https://zenodo.org", enabled: false
-    )
-    loader = Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)
-    report = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 5, report.added
-    assert_equal 0, report.errored
-    heart = db[:dictionary_entries].where(entry_id: "6458").first
-    assert_equal "urn:nabu:dict:iecor:6458", heart[:urn]
-    assert_equal "*k̑erd-", heart[:headword]
-    reflexes = db[:dictionary_reflexes].where(dictionary_entry_id: heart[:id]).all
-    assert_equal 12, reflexes.size, "11 witnesses, the hit stem alternant split into 2"
-    # the loan-event set flags every member edge
-    skin = db[:dictionary_entries].where(entry_id: "1171").first
-    assert_equal [true],
-                 db[:dictionary_reflexes].where(dictionary_entry_id: skin[:id]).select_map(:borrowed).uniq
-    # the rider landed in the ledger with iecor provenance
-    notes = ledger[:language_notes].where(kind: "iecor").all
-    refute_empty notes
-    assert_equal ["iecor"], notes.map { |n| n[:source] }.uniq
-    chu = notes.find { |n| n[:lang_code] == "chu" }
-    assert_includes chu[:body], "Old Church Slavonic"
-    # idempotency: a second full load appends nothing anywhere
-    before = [db[:dictionary_entries].count, db[:dictionary_reflexes].count,
-              ledger[:language_notes].count]
-    second = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 0, second.added + second.updated + second.withdrawn
-    assert_equal before, [db[:dictionary_entries].count, db[:dictionary_reflexes].count,
-                          ledger[:language_notes].count]
+    Dir.mktmpdir do |canonical_root|
+      db = store_test_db
+      ledger = ledger_test_db
+      source = Nabu::Store::Source.create(
+        slug: "iecor", name: "IE-CoR", adapter_class: "Nabu::Adapters::Iecor",
+        license: "CC BY 4.0", license_class: "attribution",
+        upstream_url: "https://zenodo.org", enabled: false
+      )
+      loader = Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                                 canonical_dir: canonical_root)
+      report = loader.load_from(adapter, workdir: FIXTURES)
+      assert_equal 5, report.added
+      assert_equal 0, report.errored
+      heart = db[:dictionary_entries].where(entry_id: "6458").first
+      assert_equal "urn:nabu:dict:iecor:6458", heart[:urn]
+      assert_equal "*k̑erd-", heart[:headword]
+      reflexes = db[:dictionary_reflexes].where(dictionary_entry_id: heart[:id]).all
+      assert_equal 12, reflexes.size, "11 witnesses, the hit stem alternant split into 2"
+      # the loan-event set flags every member edge
+      skin = db[:dictionary_entries].where(entry_id: "1171").first
+      assert_equal [true],
+                   db[:dictionary_reflexes].where(dictionary_entry_id: skin[:id]).select_map(:borrowed).uniq
+      # the rider landed as dossier sections with iecor provenance (P19-1
+      # redirect), and the derived records refreshed at accretion time
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(canonical_root))
+      chu = shelf.load("chu").section("iecor")
+      assert_equal "iecor", chu.source
+      assert_includes chu.body, "Old Church Slavonic"
+      records = db[:language_records].where(kind: "iecor").all
+      refute_empty records
+      assert_equal ["iecor"], records.map { |r| r[:source] }.uniq
+      # idempotency: a second full load appends nothing anywhere
+      dossier_bytes = File.read(shelf.path_for("chu"))
+      before = [db[:dictionary_entries].count, db[:dictionary_reflexes].count,
+                db[:language_records].count]
+      second = loader.load_from(adapter, workdir: FIXTURES)
+      assert_equal 0, second.added + second.updated + second.withdrawn
+      assert_equal before, [db[:dictionary_entries].count, db[:dictionary_reflexes].count,
+                            db[:language_records].count]
+      assert_equal dossier_bytes, File.read(shelf.path_for("chu")), "byte-identical dossier on re-load"
+    end
   end
 
   # --- fetch (WebMock only, no network) --------------------------------------------

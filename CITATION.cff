@@ -1,0 +1,32 @@
+# Citation metadata (Citation File Format 1.2.0, https://citation-file-format.github.io/).
+# `version` and `date-released` are placeholders until the first tagged
+# release; the release checklist (docs/ops.md §12) updates both at each tag.
+cff-version: 1.2.0
+message: >-
+  If you use Nabu in your research, please cite it as below. Every ingested
+  text keeps its upstream license and attribution — cite the underlying
+  corpora and dictionaries as their projects require, alongside the tool.
+type: software
+title: "Nabu: a personal, local, license-honest library of the ancient world"
+abstract: >-
+  Research infrastructure that gathers openly licensed digital corpora of
+  antiquity into a single local library — searchable by word, lemma, or
+  morphology, citable to the verse or tablet line, explicit about every
+  text's license, rebuildable from canonical sources, and exposed to AI
+  assistants through a read-only Model Context Protocol server.
+authors:
+  - given-names: Ar
+    family-names: Vicco
+    email: arvicco@nabu.ac
+repository-code: "https://github.com/arvicco/nabu"
+url: "https://arvicco.github.io/nabu"
+license: MIT
+keywords:
+  - digital humanities
+  - ancient languages
+  - corpora
+  - philology
+  - epigraphy
+  - lexicography
+version: 0.0.0-unreleased
+date-released: "2026-07-14"

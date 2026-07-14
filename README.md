@@ -25,12 +25,12 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-14** the shelves hold **170,684 documents / 4,267,213
+As of **2026-07-14** the shelves hold **170,711 documents / 4,267,659
 passages** in some two dozen ancient languages — from proto-cuneiform
 tablets of the late 4th millennium BCE to 19th-century Slovenian — plus
-**450,092 dictionary entries** and **2.85 million gold lemma annotations in
-15 languages**. (All numbers in this README are read from the live catalog,
-never estimated.)
+**458,238 dictionary entries** across sixteen dictionaries and **2.85
+million gold lemma annotations in 15 languages**. (All numbers in this
+README are read from the live catalog, never estimated.)
 
 ## Quickstart
 
@@ -257,7 +257,7 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen… + 650 aligned English translations | 1,418 docs / 394,706 passages | CC BY-SA |
 | Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 1,129 / 256,480 | CC BY-SA |
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus… + 181 English translations | 534 / 391,799 | CC BY-SA |
-| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,389 / 921,248 | CC BY |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,416 / 921,694 | CC BY |
 | Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire — 81,416 dated, genre/province/material facets | 81,856 / 406,281 | CC BY-SA |
 | Coptic | Coptic Scriptorium: the complete Sahidic + Bohairic NT, monastic and patristic prose — gold-lemmatized (233k rows) | 482 / 74,169 | CC BY per doc (source class nc) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, Ṛgveda with Vedic accents | 780 / 703,068 | CC BY-NC-SA |
@@ -266,39 +266,63 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek NT, WEB English | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
 | Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899) | 793 / 444,117 | CC BY (Freising BY-ND) |
-| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + seven reconstruction shelves (`nabu define` / `etym`) | 450,092 entries | CC BY-SA / CC BY / CC BY-NC-SA |
+| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + seven reconstruction shelves + the IE-CoR / LIV / de Vaan etymological witnesses (`nabu define` / `etym`) | 458,238 entries | CC BY-SA / CC BY / CC BY-NC-SA |
 
-All 25 synced sources are enabled. Three more shelves are registered
-(`enabled: false`, no live rows) and land at their owner-fired first
-syncs: **IE-CoR** (the expert-curated Indo-European cognacy matrix — 4,981
-cognate sets / 26,325 reflex rows projected, 2,308 loan-flagged),
-**LIV-LOD** (305 PIE verbal etymons with stem types), and **de Vaan's
-Etymological Dictionary of Latin** (2,860 etymons) — a third-witness tier
-for the etymology desk. Ranked expansion candidates live in the axis
-surveys: [Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
+All 30 registered sources are enabled — 28 upstream sources synced and
+live, plus the two local shelves (the language dossiers live, the local
+library awaiting your first ingest). The etymology desk's third-witness
+tier went live 2026-07-14: **IE-CoR** (the
+expert-curated Indo-European cognacy matrix — 4,981 cognate sets / 26,325
+reflex rows, 2,308 loan-flagged), **LIV-LOD** (305 PIE verbal etymons
+with stem types), and **de Vaan's Etymological Dictionary of Latin**
+(2,860 etymons) now sit beside the Wiktionary-derived chains in `etym`.
+A local **language-dossier shelf** holds the library's language curation
+as 199 plain-Markdown files (`canonical/local-language/` — edit in any
+editor, `nabu sync local-language` re-derives the `nabu language` cards).
+Ranked expansion candidates live in the axis surveys:
+[Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
+There is also a shelf for your own PDFs, scans and articles
+(`canonical/local-library/` — manifest-catalogued, `research_private` by
+default so nothing you scanned is ever served or redistributed,
+page-cited where a text layer exists). `nabu ingest FILE...` is its front
+door: it copies the file in (never moves your original), derives metadata
+candidates mechanically (PDF metadata, filename, sha256), walks you
+through confirming them — interactively, AI-assisted (`--assist
+script/ingest-assist-claude` prefills the prompts with a model's
+suggestion), or scripted (`--yes` plus flags) — then syncs the shelf and
+prints the minted urn:
+
+```
+bin/nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
+```
+
+After that the manual is `show`-able by page, searchable where it carries
+text, and `links`-wired to the passages its manifest entry names as
+`related:`.
 
 ## Feature tour
 
 | | |
 |---|---|
-| `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. Date/place axis (164,989 dated/placed documents live — EDH inscriptions 81,416, HGV papyri 60,923, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. |
+| `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. |
 | `nabu search --lemma FORM` | Dictionary-form search over 2.85M gold lemma rows in 15 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
-| `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,712,772 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
+| `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,713,135 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
 | `nabu parallels URN` | Passage-anchored intertext: point at one passage and find where the corpus quotes or echoes it — reception discovery, not translation alignment. Query-time over the FTS index (no new schema): the anchor's 4-word grams are phrase-probed, candidates ranked by shared-gram count weighted by rarity, elision folded across editions (so Matthew 4:4 finds LXX Deuteronomy 8:3). One hit per document (duplicate witnesses grouped, loci counted), the shared phrase shown as evidence; a gold-lemmatized anchor also gets rare-lemma "echoes" (re-inflected allusion). `--long` expands the truncated evidence; `--lang`/`--license`/`--limit` scope. `--batch SCOPE` flips the engine to corpus-wide mining: every anchor of a source slug or urn prefix, hits persisted as `kind=parallel` edges in the links journal (top `--per-anchor` per anchor at `--min-score`+, both named in the summary — no silent caps); reruns supersede, interactive output never persists. |
 | `nabu formulas SCOPE` | The oral-formulaic reader's mirror of `parallels`, pointed inward: mine the repeated formulas WITHIN a corpus slice (a source slug or a work/urn prefix) — the same gram machinery, counting instead of probing. Homer's `ὣς ἔφαθ' οἵ δ'` (72×), `τὸν δ' ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς` (50×); the Old English `saga hwæt ic hatte` riddle refrain, `Beowulf maþelode bearn Ecgþeowes`, `awa to feore`. Ranked by count × length — no stoplist, the ranking is self-filtering (a genuine formula out-recurs any function-word run; measured). `--lang` mines one tradition where a source mixes translations; `--gram-size`, `--min-count`, `--limit`, `--long` (every locus). Zero schema, ~0.2 s per slice. `--batch SCOPE` persists the sweep as `kind=formula` edges: a STAR per formula (hub = its first locus in urn order, one edge to every other locus, the gram riding each edge's detail, the count its score — all-pairs would explode quadratically), top `--max-formulas` by rank; reruns supersede, interactive output never persists. |
 | `nabu links URN` | The mined cross-reference graph, read back: every batch-produced edge touching a urn, both directions, grouped by kind (parallel, formula, cognate), counterparts resolved to title/language, each kind's evidence rendered natively (a parallel's score, a formula's `“gram” ×count` pointing at the refrain's hub, a cognate's `ref · root [shelf]` meet), provenance footer citing the producer run (scope, params, code version, date). Edges are urn-keyed in their own journal (`db/links.sqlite3`) so they survive `nabu rebuild` untouched; `show` grows a one-line `linked: N formula, M parallel` footer counting the kinds present when edges exist. `--long` lists every edge per kind. |
 | `nabu align REF` | One citation across every witness of a registered work (`config/alignments.yml`) — the parallel NT and the Septuagint ↔ Vulgate OT ship as flagships. A whole-chapter or verse-range query clips at 200 refs by default; `--long` lifts that ceiling and renders every ref. `--collate` diffs the witnesses into a compact apparatus (base reading + per-witness divergences) per (language, script) group, with cross-script witnesses rendered undiffed and labelled honestly; `--base LABEL` picks the base. |
 | `nabu define LEMMA` | Dictionary-shelf lookup — LSJ, Lewis & Short, Bosworth-Toller, Monier-Williams (193,890 entries live: SLP1 transcoded to IAST, so `define amsa` reaches aṃśa/aṃsa, RV./BhP. citations resolving into the GRETIL shelf at verse grain, MW's own Gk./Lat./Goth. cognate notes feeding `etym`), Wiktionary OCS — entry citations resolved to in-catalog passages/documents. A leading `*` scopes to the seven reconstruction shelves (Proto-Slavic/PIE/Proto-Germanic plus the four intermediates), whose entries list their descendant reflexes; `--long` expands the truncated "not attested here" list in full, grouped by language. |
-| `nabu etym LEMMA` | The comparativist's walk: an attested lemma (богъ, guþ) → every reconstruction whose Wiktionary descendants name it → one hop up the proto-to-proto chain, each with cognates and corpus attestation counts. Multi-hop closure (PIE \*per- → PBS → \*pьrstъ → chu/orv in one walk) and per-edge "(loan)" flags are live. IE-CoR (registered `enabled: false`, no live rows until its owner-fired first sync) will add an independent expert-curated witness: its cognate sets ride the same walk (`etym срьдьцє` → \*k̑erd- with grc καρδία ~ lat cor ~ got hairto beside kaikki's \*ḱérd-), curated loan events labelling their edges `(loan)`. `--long` expands every truncated cognate list, grouped by language with each code named inline (`[gkm · Medieval Greek]`; compact is the default). |
-| `nabu language CODE` | The code desk reference: any language code the library surfaces — corpus tags (`chu`, `san-Latn`) and the 803 Wiktionary etymology codes in `etym`'s cognate lists (`gkm`, `zle-ort`, `zlw-opl`) — explained on one card: name (from the derived names census — currently empty pending the owner's wiktionary parse-only resyncs, a gap `health` surfaces), family, curated historical context (accumulated in the ledger, 183 notes seeded live from `config/languages.yml` via `--seed`), and live holdings (documents/passages, gold-lemma rows, dictionary shelves, etymology edges; zero fields suppressed). An unknown code misses honestly with a family hint. `--list` prints the held languages; `--long` adds per-source counts and the upstream-code edge split. |
+| `nabu etym LEMMA` | The comparativist's walk: an attested lemma (богъ, guþ) → every reconstruction whose Wiktionary descendants name it → one hop up the proto-to-proto chain, each with cognates and corpus attestation counts. Multi-hop closure (PIE \*per- → PBS → \*pьrstъ → chu/orv in one walk) and per-edge "(loan)" flags are live, and so — since their 2026-07-14 first syncs — are the three independent expert-curated witnesses: IE-CoR's cognate sets ride the same walk (`etym срьдьцє` → \*k̑erd- with grc καρδία ~ lat cor ~ got hairto beside kaikki's \*ḱérd-, curated loan events labelling their edges `(loan)`), LIV supplies the PIE verbal roots, and de Vaan's EDL the lat → Proto-Italic → PIE Leiden chains. `--long` expands every truncated cognate list, grouped by language with each code named inline (`[gkm · Medieval Greek]`; compact is the default). |
+| `nabu language CODE` | The code desk reference: any language code the library surfaces — corpus tags (`chu`, `san-Latn`) and the 803 Wiktionary etymology codes in `etym`'s cognate lists (`gkm`, `zle-ort`, `zlw-opl`) — explained on one card: name (from the derived names census, filled at the owner's 2026-07-14 wiktionary resyncs), family, curated historical context (file-backed since P19-1: one Markdown dossier per code under `canonical/local-language/`, 199 live — edit in any editor, `nabu sync local-language` re-derives the card), and live holdings (documents/passages, gold-lemma rows, dictionary shelves, etymology edges; zero fields suppressed). An unknown code misses honestly with a family hint. `--list` prints the held languages; `--long` adds per-source counts and the upstream-code edge split. |
 | `nabu cognates TARGET` | Cognates in parallel: verses of an alignment work where witnesses in ≥2 languages use reflexes of the same reconstruction root — the hub × crosswalk join (`cognates nt --langs got,chu` → salt~соль at \*sḗh₂l, hlaifs~хлѣбъ at \*hlaibaz, ~300 verses / 30 roots in under a second). TARGET is a work id, verse, chapter, or book; every hit names its meet SHELF (a gem-pro meet for a Slavic word reads as a borrowing); corpus-common words suppressed with an honest count (`--all` lifts); `--long` lifts the 200-hit cap and expands detail. `--batch WORK` persists the whole-work map as `kind=cognate` edges between the cross-language witness passages of each meet, the meet itself (`ref · root [shelf]`) riding each edge's detail; reruns supersede, interactive output never persists. |
 | `nabu concord QUERY` | Classic KWIC concordance: keyword column-aligned in pristine text, corpus order — for scanning usage, not relevance. |
 | `nabu vocab URN` | Lemma-frequency profile of a document, range, or passage against the gold-lemma corpus: total tokens, distinct lemmas, the most distinctive vocabulary (log-odds vs corpus — Caesar surfaces *legio*/*proelium*, Cicero's *De officiis* surfaces *officium*/*honestas*), and the in-document hapax legomena. Gold shelves only; a document without gold lemmas says so and names the annotated languages. `--long` lists every hapax (and every gold-bearing language) in full, escaping the `--limit` display cap. `--by-century` switches to diachronic mode: the shape of the dated corpus over time, or — with a text query — a word plotted across the centuries (`vocab --by-century 'στρατηγ*' --lang grc` peaks in the 2nd c. CE), bucketed by earliest year and honest about ranges that span more than one. |
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license` filters — the longevity-hedge exit formats. |
-| `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP); idempotent, non-destructive, every run recorded. |
-| `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. `health` also runs the mechanical postcondition invariants (P18-7): failed-run/partial-load surfacing, flag-vs-artifact and enabled-vs-populated mismatches, pending migrations, and quarantine counts as a DELTA against an audited baseline — plus an optional `sync --review CMD` AI-review hook, off by default. |
+| `nabu ingest FILE...` | The intake front door for your own material: copies a PDF/scan/article into the local-library shelf (`research_private` by default — never served or redistributed), derives metadata candidates mechanically, confirms them interactively / AI-assisted (`--assist CMD`) / scripted (`--yes`), then syncs and prints the minted urn. `--shelf language CODE` scaffolds a language dossier instead. |
+| `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP — or re-scan a local shelf); idempotent, non-destructive, every run recorded. |
+| `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=?(re-probe)` when a cached verdict predates the last sync / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. `health` also runs the mechanical postcondition invariants (P18-7): failed-run/partial-load surfacing, flag-vs-artifact and enabled-vs-populated mismatches, pending migrations, and quarantine counts as a DELTA against an audited baseline — plus an optional `sync --review CMD` AI-review hook, off by default. |
 | `nabu mcp` | The read-only MCP server — ten tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
 
 Two more tastes. Facing translation, span-grouped, honest when the English
@@ -370,15 +394,20 @@ useful to others.
 - Developed and tested on macOS (Apple Silicon), Ruby 3.3+. Nothing is
   known to be Mac-specific except the ops templates (launchd), but no other
   platform is exercised.
-- No packaged release, no gem, no versioned API; CLI flags may still
-  change. GitHub Actions CI runs the full suite plus rubocop
-  (`rake test` + `rake lint`, network-blocked, fast) on every push and pull
-  request — the badge up top is the contract.
+- Versioned releases begin at **v1.0.0** (cut at the Phase-19 gate;
+  citation metadata ships in [CITATION.cff](CITATION.cff)); there is no
+  gem and CLI flags may still change between releases. GitHub Actions CI
+  runs the full suite plus rubocop (`rake test` + `rake lint`,
+  network-blocked, fast) on every push and pull request — the badge up
+  top is the contract.
 - Corpus numbers above are a snapshot of one live install, dated where they
   appear.
 - The enrichment layer of the original vision (embeddings/semantic search,
-  machine glossing, ad-hoc scan ingestion) is designed but not built — see
+  machine glossing) is designed but not built — see
   [docs/01-concept.md](docs/01-concept.md) for where this is headed.
+  Ad-hoc ingestion of your own material shipped as `nabu ingest`
+  (Phase 19); OCR/HTR for image-only scans still waits on local inference
+  hardware.
 - Expect rough edges; expect the docs to be more honest than polished.
 
 ## Documentation
@@ -413,8 +442,10 @@ bin/nabu --help
 Contributions: the project is early and personal; issues and conversation
 are welcome, but expect the backlog to be driven by the owner's research
 needs. The house rules for outside contributors — TDD, fixture discipline,
-the DCO sign-off — are in [CONTRIBUTING.md](CONTRIBUTING.md); if you want to
-add a source, `CLAUDE.md` and
+the DCO sign-off — and the issue templates for requesting sources and
+features or reporting a wrong reading are in
+[CONTRIBUTING.md](CONTRIBUTING.md); if you want to add a source,
+`CLAUDE.md` and
 [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md)
 describe the adapter checklist end to end.
 

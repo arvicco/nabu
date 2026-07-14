@@ -777,3 +777,82 @@ a log without touching nabu. A flag per invocation (not a config key) was the
 deliberate choice: syncs in this library are owner-fired, and the visible
 `--review CMD` keeps the subprocess boundary explicit with no standing config
 to rot.
+
+## 12. The release rail (P19-3)
+
+Releases are cut by the owner (or the orchestrator at an owner-approved
+gate); contributors never tag. The rail exists so a tagged version is
+simultaneously citable (CITATION.cff → Zenodo DOI), announced (site News +
+Atom feed), and documented (GitHub release notes) — one pass, no drift.
+
+**One-time setup (owner):** link the repository to Zenodo
+(zenodo.org → GitHub → flip `arvicco/nabu` on) BEFORE the first tag you
+want a DOI for. From then on every GitHub *release* mints a versioned DOI
+automatically; no per-release action.
+
+**Per release, in order (the gate checklist):**
+
+1. **Green gate first.** `rake test && rake lint` exit 0 on the release
+   commit; the phase's worklog gate line is written (it is the release-notes
+   source of record).
+2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
+   today; commit with the release.
+3. **Tag**: `git tag -a vX.Y.Z -m "vX.Y.Z — <one-line theme>"` on main;
+   `git push origin vX.Y.Z`.
+4. **GitHub release**: `gh release create vX.Y.Z --title "vX.Y.Z — <theme>"
+   --notes-file <notes.md>` — the notes are the gate's worklog line
+   distilled to prose: what shipped, honest numbers with as-of dates, the
+   owner-queue caveats. (This is the step that triggers the Zenodo DOI once
+   the repo is linked.)
+5. **News entry**: add `site/news/_posts/YYYY-MM-DD-vX-Y-Z-<slug>.md` — the
+   same distillation, academic register, numbers dated (contract:
+   site/MAINTENANCE.md). The Atom feed (`/feed.xml`) carries it to
+   aggregators automatically on deploy.
+6. **DOI badge** (first release only, after Zenodo mints): copy the
+   concept-DOI badge into README and the site About page.
+
+Between releases, phase gates that don't tag still add a News entry
+(MAINTENANCE.md gate duty) — the News section tracks phases; releases are
+the subset the owner promotes to a version number.
+
+## 13. Ingesting your own material (P19-5)
+
+`nabu ingest FILE... [--collection NAME]` is the front door for local
+acquisitions — scanned grammars, offprints, notes — onto the
+`local-library` shelf (architecture §16), and the shelf's ONE sanctioned
+write path. What it does, in order: sha-accounts the file (identical bytes
+already catalogued anywhere in the shelf = honest no-op), COPIES it into
+`canonical/local-library/<collection>/` (never moves — your original stays
+put), derives metadata candidates mechanically (PDF Info metadata and a
+first-page text sample via mutool where installed, filename heuristics
+otherwise), has you confirm them, appends one entry to the collection's
+`manifest.yml`, then runs the shelf's ordinary sync and prints the minted
+urns plus a `try:` epilogue.
+
+Operational notes:
+
+- **Collections are urn segments.** The default collection is `inbox`;
+  prefer `--collection <topic>` for anything you'd shelve deliberately —
+  the collection name is frozen into the urn, so a later re-file is
+  honestly a new document (the old one retires through the attic).
+- **Three categorization modes.** Interactive prompts (TTY default; Enter
+  keeps the prefilled candidate, `-` clears); `--assist CMD` pipes a JSON
+  brief (`nabu.ingest-assist/1`) to any suggester command and prefills the
+  prompts with its answer — the bundled `script/ingest-assist-claude`
+  wires `claude -p` with the nabu MCP tools so `related:` urns are looked
+  up, not invented; `--yes` plus field flags for scripted bulk drops.
+  Assist output never lands unreviewed unless you also passed `--yes`.
+- **License discipline.** Every prompt states the shelf default:
+  `research_private` (MCP-excluded, never served, never redistributed).
+  Silence in the manifest MEANS that class; pass `--license-class open`
+  (or answer the prompt) only for genuinely open items.
+- **Same name, new bytes** is an ordinary revision — the copy is replaced
+  and the sync records it; metadata corrections are manifest edits, not
+  re-ingests. A bad file is named and the rest proceed (exit 1 at the
+  end). An ingest aborted mid-prompt leaves the copied file visible in the
+  discovery census as `unmanifested`; re-running the same ingest finishes
+  the cataloguing.
+- **`--shelf language CODE`** scaffolds a language dossier skeleton
+  (name/family/context, same three modes) through `Nabu::LanguageShelf`
+  and syncs the dossier shelf — a scaffold, not an editor; edit
+  `canonical/local-language/<code>.md` directly afterwards and re-sync.

@@ -34,7 +34,7 @@ design.
 
 ## For the papyrologist
 
-The library holds 61,389 documents of the Duke Databank of Documentary
+The library holds 61,416 documents of the Duke Databank of Documentary
 Papyri, with the Leiden editorial conventions preserved. Fragment search is
 built for damaged texts: type the line as the edition prints it, brackets
 and all, and the trigram index matches it inside words:

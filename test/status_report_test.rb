@@ -36,6 +36,25 @@ class StatusReportTest < Minitest::Test
     def self.content_kind = :dictionary
   end
 
+  def test_behind_verdict_older_than_a_succeeded_sync_renders_reprobe
+    # Owner defect 2026-07-14: a re-synced source still read BEHIND from a
+    # pre-sync probe cache — answered noise. A BEHIND older than the last
+    # ok sync renders up=?(re-probe); a fresh probe restores real verdicts.
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    registry["fake-src"].sync_source!(db)
+    Nabu::Store::Probe.create(source_slug: "fake-src", checked_at: Time.now - 3600,
+                              drift: "behind", license: "unchanged", detail: nil)
+    ledger[:runs].insert(source_slug: "fake-src", kind: "sync",
+                         started_at: Time.now - 60, finished_at: Time.now,
+                         added: 0, updated: 0, withdrawn_count: 0, errored: 0,
+                         status: "succeeded")
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/up=\?\(re-probe\)/, out)
+    refute_match(/BEHIND/, out)
+  end
+
   def test_empty_registry_says_so
     registry = load_registry("# nothing\n")
     assert_equal "No sources registered.", Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
@@ -277,6 +296,38 @@ class StatusReportTest < Minitest::Test
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     assert_match(/frozen-src\s+off\s+frozen\s+up=frozen/, out)
     refute_match(/BEHIND/, out)
+  end
+
+  # P19-1: a local shelf has no upstream to probe — policy wins over any
+  # cache row — and its content is per-language records, not docs/passages.
+  class LanguageFakeAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "local-language", name: "Language dossiers (local shelf)",
+      license: "Owner-authored", license_class: "open",
+      upstream_url: "canonical/local-language (local)", parser_family: "language-dossier"
+    )
+    def self.manifest = MANIFEST
+    def self.content_kind = :language
+  end
+
+  def test_local_policy_renders_up_local_and_records_count
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      local-language:
+        adapter: StatusReportTest::LanguageFakeAdapter
+        enabled: true
+        sync_policy: local
+    YAML
+    registry["local-language"].sync_source!(db)
+    db[:language_records].insert(lang_code: "chu", kind: "name", body: "OCS", source: "dossier")
+    Nabu::Store::Probe.create(source_slug: "local-language", checked_at: Time.now,
+                              drift: "behind", license: "unchanged", detail: nil)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/local-language\s+on\s+local\s+up=local\s+records=1/, out)
+    refute_match(/docs=0/, out, "records, never a misleading docs/pass zero")
+    refute_match(/BEHIND/, out, "policy wins over any cache row")
   end
 
   # A ledger that predates the source_probes table (a read-only status before

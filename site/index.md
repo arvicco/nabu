@@ -28,10 +28,10 @@ draws from.
 
 ## The holdings, in brief
 
-As of **14 July 2026**, the catalog records **170,684 documents** comprising
-**4,267,213 passages** in some two dozen ancient languages — from
+As of **14 July 2026**, the catalog records **170,711 documents** comprising
+**4,267,659 passages** in some two dozen ancient languages — from
 proto-cuneiform tablets of the late fourth millennium BCE to
-nineteenth-century Slovenian — together with **450,092 dictionary entries**
+nineteenth-century Slovenian — together with **458,238 dictionary entries**
 on the reference shelf and **2,852,069 gold-standard lemma annotations in
 fifteen languages**. All figures on this site are read from the live
 catalog, never estimated, and carry the date on which they were read.

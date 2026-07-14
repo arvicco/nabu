@@ -152,6 +152,37 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # P19-4: a reference_edges? source — one document whose metadata carries
+  # related: targets (one urn, one language code); a sync must refresh
+  # kind=reference edges into the links journal via LibraryReferences.
+  class ReferenceAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "refsrc", name: "RefSrc", license: "per-item manifest", license_class: "research_private",
+      upstream_url: "canonical/refsrc (local)", parser_family: "plaintext"
+    )
+    def self.manifest = MANIFEST
+    def self.reference_edges? = true
+
+    def fetch(_workdir, **) = Nabu::FetchReport.new(sha: "s", fetched_at: Time.now, notes: nil)
+
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      yield Nabu::DocumentRef.new(source_id: MANIFEST.id, id: "urn:nabu:refsrc:c:article",
+                                  path: File.join(workdir, "x"))
+    end
+
+    def parse(ref)
+      doc = Nabu::Document.new(
+        urn: ref.id, language: "und", title: "Article", canonical_path: ref.path,
+        metadata: { "kind" => "article", "collection" => "c",
+                    "related" => ["urn:nabu:ccmh:mar:mt", "chu"] }
+      )
+      doc << Nabu::Passage.new(urn: "#{ref.id}:1", language: "und", text: "t", sequence: 1)
+      doc
+    end
+  end
+
   class LiveEnabled  < CountingSource; def self.slug = "live-enabled";  end
   class LiveDisabled < CountingSource; def self.slug = "live-disabled"; end
   class ManualSrc    < CountingSource; def self.slug = "manual-src";    end
@@ -501,6 +532,35 @@ class SyncRunnerTest < Minitest::Test
     assert_kind_of Nabu::SyncRunner::Outcome, results["ok-live"]
     refute results["ok-live"].aborted?
     assert_equal 1, OkLive.fetches, "one source's failure must not stop the others"
+  end
+
+  # --- reference edges (P19-4) ---------------------------------------------
+
+  def test_sync_refreshes_reference_edges_for_a_reference_edges_source
+    BreakerAdapter.reset!(urns: ["urn:cts:test:w1"])
+    runner = make_runner(registry(entry("refsrc", ReferenceAdapter, enabled: true, sync_policy: "local"),
+                                  entry("breaker", BreakerAdapter, enabled: true)))
+
+    outcome = runner.sync("refsrc")
+    refute outcome.aborted?
+    refute_nil outcome.references, "a reference_edges? source reports its refresh"
+    assert_equal 1, outcome.references.edges_written
+    assert_equal 1, outcome.references.skipped_codes, "the language code stays metadata"
+
+    journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+    begin
+      edge = journal[:links].first
+      assert_equal %w[urn:nabu:refsrc:c:article urn:nabu:ccmh:mar:mt reference],
+                   [edge[:from_urn], edge[:to_urn], edge[:kind]]
+      assert_equal "manifest refsrc/c/manifest.yml", edge[:detail]
+    ensure
+      journal.disconnect
+    end
+
+    # A rerun supersedes rather than duplicates; an ordinary source stays nil.
+    resync = runner.sync("refsrc")
+    assert_equal 1, resync.references.superseded_runs
+    assert_nil runner.sync("breaker").references
   end
 
   # --- helpers ------------------------------------------------------------

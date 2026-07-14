@@ -26,7 +26,9 @@ module Nabu
 
       width = registry.each_source.map { |entry| entry.slug.length }.max
       cache = probe_cache(ledger)
-      cells = registry.each_source.to_h { |entry| [entry.slug, upstream_cell(entry, cache[entry.slug])] }
+      cells = registry.each_source.to_h do |entry|
+        [entry.slug, upstream_cell(entry, cache[entry.slug], ledger: ledger)]
+      end
       up_w = cells.values.map(&:length).max
       registry.each_source.map { |entry| render_entry(entry, db, ledger, width, cells[entry.slug], up_w) }.join("\n")
     end
@@ -51,22 +53,43 @@ module Nabu
     # (P14-12) — never a live probe. Vocabulary honours terseness: BEHIND is
     # loud, ok is quiet, the age is always shown so a decision is informed.
     #   up=frozen      frozen-policy source (no probe expected; cache ignored)
+    #   up=local       local-policy shelf (no upstream exists; cache ignored)
     #   up=?(unprobed) no cached probe yet — run `nabu status --remote`
     #                  ("never" read as never-SYNCED — owner defect 2026-07-13)
     #   up=BEHIND(Nd)  upstream moved past our pin (loud; staleness irrelevant)
     #   up=ok(Nd)      current as of a recent probe
     #   up=stale(Nd)   was "ok" but the probe is older than STALE_AFTER_DAYS
     #   up=?(Nd)       drift indeterminate (never synced / unreachable / multi)
-    def upstream_cell(entry, probe)
+    def upstream_cell(entry, probe, ledger: nil)
       return "up=frozen" if entry.sync_policy == "frozen"
+      return "up=local" if entry.sync_policy == "local"
       return "up=?(unprobed)" if probe.nil?
 
       age = age_days(probe.checked_at)
       case probe.drift
-      when "behind" then "up=BEHIND(#{age}d)"
+      when "behind"
+        # A BEHIND verdict older than the source's last ok sync is answered
+        # noise (owner defect 2026-07-14: re-synced perseus-greek still read
+        # BEHIND from a 15-hour-old cache). The verdict cannot be trusted
+        # either way after a sync — say so and point at the re-probe.
+        return "up=?(re-probe)" if synced_since?(entry.slug, probe.checked_at, ledger)
+
+        "up=BEHIND(#{age}d)"
       when "current" then age > STALE_AFTER_DAYS ? "up=stale(#{age}d)" : "up=ok(#{age}d)"
       else "up=?(#{age}d)"
       end
+    end
+
+    # True when the source has a SUCCEEDED run newer than the probe.
+    def synced_since?(slug, checked_at, ledger)
+      return false unless ledger&.table_exists?(:runs)
+
+      probe_time = checked_at.is_a?(Time) ? checked_at : Time.parse(checked_at.to_s)
+      last_ok = ledger[:runs].where(source_slug: slug, status: %w[ok succeeded])
+                             .order(Sequel.desc(:id)).get(:finished_at)
+      return false unless last_ok
+
+      (last_ok.is_a?(Time) ? last_ok : Time.parse(last_ok.to_s)) > probe_time
     end
 
     def age_days(checked_at)
@@ -91,6 +114,7 @@ module Nabu
     # docs/passages/retired triple.
     def counts_fragment(entry, source)
       return "entries=#{dictionary_entry_count(source)}" if dictionary?(entry)
+      return "records=#{language_record_count}" if language?(entry)
       return "docs=0 pass=0" if source.nil?
 
       live = Store::Document.where(source_id: source.id, withdrawn: false)
@@ -103,11 +127,30 @@ module Nabu
     end
 
     def dictionary?(entry)
-      entry.adapter_class.content_kind == :dictionary
+      content_kind(entry) == :dictionary
+    end
+
+    # A language dossier shelf's content is per-language records (P19-1) —
+    # docs=0 pass=0 would be the misleading-zero class P11-10 closed.
+    def language?(entry)
+      content_kind(entry) == :language
+    end
+
+    def content_kind(entry)
+      entry.adapter_class.content_kind
     rescue Nabu::Error
       # A broken/unknown adapter class is not this renderer's problem to
       # raise on; treat it as a plain passage source so status still prints.
-      false
+      :passages
+    end
+
+    # Derived rows in language_records (the local-language shelf is their
+    # only writer). A catalog predating migration 014 reads 0, honestly.
+    def language_record_count
+      db = Store::LanguageRecord.db
+      return 0 unless db&.table_exists?(:language_records)
+
+      Store::LanguageRecord.count
     end
 
     # Live dictionary entries owned by this source (across all its

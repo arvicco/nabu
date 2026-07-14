@@ -91,6 +91,17 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/slug/, error.message)
   end
 
+  # P19-1: the fourth vocabulary word — a shelf with no upstream at all.
+  def test_sync_policy_local_is_accepted
+    registry = load_registry(<<~YAML)
+      local-language:
+        adapter: Nabu::Adapters::LocalLanguage
+        enabled: true
+        sync_policy: local
+    YAML
+    assert_equal "local", registry["local-language"].sync_policy
+  end
+
   def test_bad_sync_policy_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
