@@ -1,15 +1,17 @@
 # The Library — content review
 
-**As of 2026-07-13** (post Phase 17, branch phase-17). Live totals:
-**88,346 documents / 3,786,763 passages** across the 22 **synced** sources
-(18 corpus sources carrying documents + 4 reference sources — lexica,
-bosworth-toller, wiktionary-cu, wiktionary-recon — carrying dictionary
-entries only), plus **248,616 dictionary entries** on the reference shelf
-(including the three reconstruction dictionaries), and **2,619,049 gold
-lemma rows in 14 languages**. Three further sources are **registered but
-unsynced** (`coptic-scriptorium`, `edh`, `mw` — Phase 17 adapters, all
-`enabled: false` awaiting owner-fired first syncs; §8f). The
-code-per-language map lives in [languages.md](languages.md).
+**As of 2026-07-14** (post Phase 18, branch phase-18). Live totals:
+**170,684 documents / 4,267,213 passages** across the 25 **synced** sources
+(20 corpus sources carrying documents + 5 reference sources — lexica,
+bosworth-toller, mw, wiktionary-cu, wiktionary-recon — carrying dictionary
+entries only), plus **450,092 dictionary entries** on the reference shelf
+(twelve dictionaries, including Monier-Williams and the seven
+reconstruction shelves), and **2,852,069 gold lemma rows in 15 languages**.
+The three Phase-17 adapters (coptic-scriptorium, edh, mw) are synced and
+live (§8f–§8g, §8c). Three further sources are **registered but unsynced**
+(`iecor`, `liv`, `edl` — Phase 18 adapters, all `enabled: false` awaiting
+owner-fired first syncs; §8h). The code-per-language map lives in
+[languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 db/catalog.sqlite3 "PRAGMA query_only=ON; …"` — the WAL-safe
@@ -88,7 +90,7 @@ locus.
 | **Category** | Documentary texts: contracts, tax receipts, petitions, private letters, census returns, leases, court records |
 | **Language** | Greek (`grc`, 57,901 docs), Coptic (`cop`, 2,047), Latin (`lat`, 1,425), Arabic (`ar`, 12), Demotic (`egy-Egyd`, 2) |
 | **Period** | Ptolemaic to early Islamic Egypt — c. 300 BCE to 8th c. CE |
-| **Size** | 61,389 docs / 921,248 passages (94% of all documents in the library) |
+| **Size** | 61,389 docs / 921,248 passages (the largest shelf by passages; largest by documents until the EDH inscriptions arrived — §8g) |
 | **Source** | `papyri-ddbdp` (Duke Databank of Documentary Papyri via papyri.info), license: `attribution` |
 | **Metadata** | DDbDP identifiers (series.volume.number), Leiden-convention editorial markup preserved (restorations, cancellations — including the cancelled-⟦⟧ fallback class), fragment/side structure as passage paths |
 
@@ -140,7 +142,7 @@ texts that mostly exist as scanned books elsewhere.
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
 | **Size** | 73 docs / 175,644 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (21 / 91,238) — plus `iswoc` (5 / 2,536, §8d) in the same family |
 | **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (seven treebanks incl. Old East Slavic birchbark letters, Middle Russian RNC, and Ruthenian — the first two CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
-| **Metadata** | The gold lemma layer: `passage_lemmas` totals **2,619,049 rows in 14 languages** (lat 583k, orv 455k, grc 379k, san 190k, chu 123k, got 99k, ang 25k, xcl 18k from the treebank family; akk 361k, sux 171k + Hurrian/Ugaritic/Hittite scatter from ORACC gold — §8; sl 214k from goo300k — §8e), searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
+| **Metadata** | The gold lemma layer: `passage_lemmas` totals **2,852,069 rows in 15 languages** (lat 583k, orv 455k, grc 379k, san 190k, chu 123k, got 99k, ang 25k, xcl 18k from the treebank family; akk 361k, sux 171k + Hurrian/Ugaritic/Hittite scatter from ORACC gold — §8; sl 214k from goo300k — §8e; cop 233k from Coptic Scriptorium — §8f), searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
 Vulgate + Gothic Wulfila + Classical Armenian + OCS Codex Marianus — five
@@ -215,10 +217,13 @@ column entries.
 | **Size** | `vulgate`: 73 books / 35,809 verses (the complete Clementine canon, public domain). `sblgnt`: 27 books / 7,939 verses (SBL Greek NT, CC BY 4.0). `eng-web`: 84 books / 37,624 verses (World English Bible, public domain — the readable English witness, P11-8). LXX: no separate source — Swete's Septuagint lives in First1K (§2) and is hub-wired |
 | **Metadata** | Native book.chapter.verse citations (`urn:nabu:vulgate:jon:2.1`); every verse a hub-alignable ref |
 
-With these aboard, `align "MARK 2.3"` renders up to **thirteen witnesses**
-(Greek NT, Vulgate, Gothic, Armenian, PROIEL Marianus, West-Saxon Gospels,
-SBLGNT, Clementine, WEB English, and the four CCMH OCS codices — §8e) and
-`align "GEN 1.1"` opens the OT axis (Septuagint ↔ Vulgate ↔ English).
+With these aboard, the NT hub registers **fifteen witnesses** (Greek NT,
+Vulgate, Gothic, Armenian, PROIEL Marianus, West-Saxon Gospels, SBLGNT,
+Clementine, WEB English, the four CCMH OCS codices — §8e — and, since the
+2026-07-13 Coptic sync, the Sahidic and Bohairic NT — §8f); `align "MARK
+2.3"` attests fourteen of them (per-witness verse coverage stays honestly
+fragmentary), and `align "GEN 1.1"` opens the OT axis (Septuagint ↔
+Vulgate ↔ English).
 Rahlfs' LXX was honestly blocked on CATSS license terms — recorded in
 02-sources.
 
@@ -231,7 +236,7 @@ the densest multi-language alignment laboratory in the library.
 | | |
 |---|---|
 | **Category** | Scholarly lexica and reconstruction dictionaries — entries, not passages (own tables, own `nabu define` / `nabu etym` surfaces) |
-| **Size** | **248,616 entries** across seven dictionaries: LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) + **Bosworth-Toller** (Old English, 62,815, CC BY 4.0) + Wiktionary OCS (`wiktionary-cu`, 4,615) + the three reconstruction shelves (`wiktionary-recon`: Proto-Germanic 5,717, Proto-Slavic 5,431, PIE 1,905) |
+| **Size** | **450,092 entries** across twelve dictionaries: LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) + **Bosworth-Toller** (Old English, 62,815, CC BY 4.0) + **Monier-Williams** (Sanskrit, 193,890, `nc`) + Wiktionary OCS (`wiktionary-cu`, 4,615) + the seven reconstruction shelves (`wiktionary-recon`: Proto-Germanic 5,717, Proto-West Germanic 5,551, Proto-Slavic 5,431, PIE 1,905, Proto-Indo-Iranian 799, Proto-Italic 745, Proto-Balto-Slavic 491) |
 | **Metadata** | Folded-headword keying (diacritic-insensitive lookup, incl. æ/þ/ð→ae/th for Old English); betacode decoded; entry citations parsed and **resolved to in-catalog passages** where the cited work exists (μῆνις → Il. 1.1 as a live urn); glosses surface in `search --lemma` output; the reconstruction entries carry machine-readable **descendant trees** joined to attested gold lemmas (`dictionary_reflexes`) |
 
 `nabu define λόγος` / `define virtus` / `define aethele --lang ang`, and
@@ -239,13 +244,19 @@ MCP `nabu_define` for AI-assisted reading. A leading `*` (`define *bogъ`)
 scopes to the reconstruction shelves; `nabu etym` walks an attested lemma
 up the proto-to-proto chain, and `nabu cognates` crosses that crosswalk
 with the alignment hub (§9) — the comparativist loop closed on live data.
-P16-5 extends the crosswalk to wiktionary-cu's own descendants sections
-(**2,210 edges**, census-verified) — those rows land at the next
-owner-fired parse-only resync; the live crosswalk still carries the three
-reconstruction shelves only. Phase 17 shipped two further extensions in
-code, neither live yet: **Monier-Williams** (`mw`, ~194k Sanskrit entries
-projected) and **four more proto shelves + multi-hop closure + the
-`borrowed` flag** on wiktionary-recon — see §8f.
+All of the Phase 16–17 extensions are **live** since the 2026-07-13 owner
+syncs + rebuild: the reflex crosswalk (`dictionary_reflexes`) holds
+**1,006,872 edges** across nine shelves, including wiktionary-cu's own
+descendants sections (2,210 edges, the P16-5 rider) and Monier-Williams'
+Gk./Lat./Goth. comparanda (3,250 edges — a second etym witness beside
+kaikki). The P17-3 **multi-hop closure** (PIE \*per- → PBS → \*pьrstъ →
+chu/orv in one walk) and the migration-010 **`borrowed`** flag with
+per-edge "(loan)" rendering in `etym`/`cognates` are equally live. MW
+lookup rides the SLP1↔IAST transcode (`define amsa` reaches aṃśa/aṃsa),
+with citation tiers resolving RV./BhP. references to GRETIL urns at verse
+grain. Phase 18 registers a third-witness tier — IE-CoR's expert-curated
+cognate sets and the two LiLa Turtle shelves (LIV, de Vaan EDL) — shipped
+in code, **none synced, no live rows** (§8h).
 
 **Research uses:** the philologist's desk loop (passage → lemma →
 definition → cited parallel passage) closed inside one tool; lexicographic
@@ -267,7 +278,7 @@ holds 62,815 entries on the reference shelf (§8c) — `define --lang ang`
 with æ→ae/þ,ð→th folding works.
 
 **Research uses:** OE philology with canonical citability; comparative
-Germanic (Gothic ↔ OE ↔ ON gap visible); the thirteen-witness Mark as a
+Germanic (Gothic ↔ OE ↔ ON gap visible); the many-witness Mark (§8b) as a
 Germanic-inclusive alignment laboratory; lemma-driven OE vocabulary study
 bridged to Bosworth-Toller definitions.
 
@@ -278,7 +289,7 @@ bridged to Bosworth-Toller definitions.
 | **Category** | The Slavic axis (docs/slavic-survey.md): OCS gospel manuscripts, the oldest Slovene text, Early Modern Slovenian print |
 | **Language** | Old Church Slavonic (`chu`), Slovenian incl. its historical stages (`sl`), plus the Freising translation layers (`lat`, `eng`, `ger`, `ita`, `pol`) |
 | **Period** | ~1000 CE (Freising Manuscripts) through 1899 (IMP print) |
-| **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's third-largest shelf by passages |
+| **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's fourth-largest shelf by passages (the EDH inscriptions, §8g, edge past it by ~1,400) |
 | **Metadata** | CCMH: folio-line citations, hyphen-split words searchable whole; freising: per-layer parallel citation; goo300k/imp: CE year in the urn (`…:sigil-1584`) feeding the date axis (§9) — all 747 Slovene docs dated |
 
 The four CCMH codices join the alignment hub (witnesses 10–13 of the NT)
@@ -293,35 +304,74 @@ diachrony continued past the treebanks (§6) into Early Modern print;
 diachronic Slovene lexis over three centuries (`vocab --by-century`); the
 Freising Manuscripts beside their OCS near-contemporaries.
 
-## 8f. Incoming shelves — Phase 17 adapters, registered, awaiting first syncs
+## 8f. Coptic (Coptic Scriptorium)
 
-Four Phase-17 deliverables are **shipped in code and registered
-`enabled: false`**; none is a live shelf, and every number they promise
-below is a projection, not a count:
+| | |
+|---|---|
+| **Category** | Literary Coptic: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, hagiography, apophthegmata — with gold lemmas |
+| **Language** | Coptic (`cop`), Sahidic and Bohairic dialects |
+| **Period** | Roughly 3rd–10th c. CE, the Christian-Egypt corpus |
+| **Size** | 482 docs / 74,169 passages — 482 of the 483 upstream corpora aboard (P18-1 coverage pass; the one remainder is an honest quarantine) |
+| **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.2.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
+| **Metadata** | Upstream **gold lemmatization** — **233,020 `cop` lemma rows**, gold-lemma language **#15**; language-of-origin loan tags (the Greek layer inside Coptic); Wikification entities; manuscript-date axis rows (340 dated documents) |
 
-- **`coptic-scriptorium`** — literary Coptic (Sahidic + Bohairic) with
-  gold lemmas: `cop` becomes gold-lemma language #15 once synced; NT
-  witnesses #14 (Sahidic, `nc`) and #15 (Bohairic, `attribution`) already
-  registered in `config/alignments.yml`; language-of-origin loan tags,
-  Wikification entities, a manuscript-date axis extractor; ~2.8 GB clone.
-  *Honest wrinkle: the first owner sync attempt (2026-07-13) failed
-  partway (unzip), leaving a partial load of 152 AP documents / 18,261
-  passages in the catalog — those ARE inside the header totals; the full
-  shelf lands at the clean re-sync.*
-- **`edh`** — Epigraphic Database Heidelberg, ~82k Latin inscriptions
-  projected (the third documentary genre); brings the first **genre
-  facets** (§9) and ~+60k dated documents to the axis; persons
-  prosopography rides `metadata_json`; frozen preservation posture,
-  `fuzzy_index: true`.
-- **`mw`** — Monier-Williams Sanskrit (`nc`), ~194k entries projected;
-  SLP1↔IAST transcoded lookup, citation tiers resolving to GRETIL urns at
-  verse grain, MW's own comparanda as a second etym witness beside kaikki.
-- **wiktionary-recon part 2** — four more proto shelves (`ine-bsl-pro`,
-  `itc-pro`, `iir-pro`, `gmw-pro`; ~7,900 entries projected), multi-hop
-  reflex closure (PIE \*per- → PBS → \*pьrstъ → chu/orv in one walk), and
-  the migration-010 **`borrowed`** flag with per-edge "(loan)" rendering
-  in `etym`/`cognates` — all materialize at the owner-fired resync +
-  rebuild.
+Synced and flipped by the owner 2026-07-13 (the first sync attempt's unzip
+failure re-run clean; P18-1 then lifted coverage from the initial 188
+documents to 482). The Sahidic and Bohairic NTs attest in the alignment
+hub as witnesses #14 and #15 (§8b), and `cop` — previously the library's
+largest language with zero tooling — now joins `search --lemma`, `vocab`,
+and the loan-layer questions the etym shelf asks.
+
+**Research uses:** Coptic philology with gold lemma search; Sahidic ↔
+Bohairic dialect comparison over the same verses (the hub renders both);
+the Greek-loan stratum of Coptic as data; continuity with the 2,047
+documentary Coptic papyri (§4) across the literary/documentary line.
+
+## 8g. Latin inscriptions (EDH)
+
+| | |
+|---|---|
+| **Category** | The third documentary genre: epitaphs, dedications, honorific and building inscriptions, milestones, instrumentum — the Roman epigraphic habit |
+| **Language** | Latin (`lat`, 80,561 docs), Greek (`grc`, 1,290 — the bilinguals), plus 5 `und` (exotic-language residue, coded honestly) |
+| **Period** | Roman Republic through Late Antiquity, empire-wide — provinces from Britannia to Arabia |
+| **Size** | 81,856 docs / 406,281 passages — the largest shelf by documents (48% of the library) |
+| **Source** | `edh` (Epigraphic Database Heidelberg), license: `attribution` (CC BY-SA 4.0); **`sync_policy: frozen`** — upstream archived 2021, this is a one-shot preservation snapshot (27 quarantines, triaged at gate 18: 26 lb-less inscriptions carried to P19, 1 malformed upstream XML, all baseline-anchored) |
+| **Metadata** | The library's first **genre facets** (migration 009): `document_facets` live at **256,518 rows** (genre/province/material/object_type, `?`-certainty preserved in `raw`) behind `search --type/--province/--material`; **81,416 dated documents** on the axis (§9); persons prosopography in `metadata_json`; Leiden ⟦…⟧ rendering for every `del`; `fuzzy_index: true` |
+
+Synced and flipped by the owner 2026-07-13. Inscriptions beside papyri
+(§4) and tablets (§8) complete the documentary triangle, and the facet
+axes make the epigraphic habit queryable: `search --type epitaph
+--province Britannia --material marble` composes with the date/place
+filters.
+
+**Research uses:** Latin epigraphy proper (formulae, titulature, careers);
+provincial and social history by facet (genre × province × material);
+onomastics and prosopography at empire scale; the epigraphic habit as a
+quantitative object; fragment search (`--fuzzy`) over damaged stones.
+
+## 8h. Incoming shelves — Phase 18 adapters, registered, awaiting first syncs
+
+Three Phase-18 deliverables are **shipped in code and registered
+`enabled: false`**; none is a live shelf — they hold **no live rows**, and
+every number below is a projection from the staged upstream data, not a
+catalog count:
+
+- **`iecor`** — IE-CoR (lexibank/iecor v1.2, CC BY 4.0, sha-pinned
+  immutable Zenodo DOI): the expert-curated Indo-European cognacy matrix
+  as a dictionary shelf — 4,981 cognate-set entries under the collective
+  `ine` tag / 26,325 reflex rows (2,308 loan-flagged, feeding `borrowed`)
+  projected, 1,799 of those edges landing on held gold lemmas; ~144
+  language notes accrete into the ledger (the `nabu language` card layer's
+  first programmatic writer). An independent third etymological witness
+  beside kaikki and MW.
+- **`liv`** — LIV-LOD (CIRCSE/LiLa, CC BY-SA 4.0 with publisher
+  permission): 305 PIE verbal etymons with verbal stem types in the entry
+  bodies / ~385 Latin reflex edges projected; first user of the new
+  lila-ttl (Turtle) parser family.
+- **`edl`** — de Vaan, *Etymological Dictionary of Latin* (CIRCSE/LiLa LOD
+  skeleton, CC BY-NC-SA → `nc`, MCP-default-served with its label, never
+  redistributed): 2,860 etymons / ~2,653 reflex edges across two shelves
+  projected — the lat → Proto-Italic → PIE Leiden chains beside kaikki's.
 
 ## 9. Library-wide capabilities
 
@@ -330,7 +380,8 @@ below is a projection, not a count:
   determinative stripping, generic diacritic folding for IAST Sanskrit) —
   `bin/nabu search`, FTS5 under the hood.
 - **Lemma search** (`search --lemma`) over the treebank shelf (§6), the
-  ORACC gold layer (§8), and goo300k (§8e) — **14 languages**;
+  ORACC gold layer (§8), goo300k (§8e), and Coptic Scriptorium (§8f) —
+  **15 languages**;
   ranking-independent `urn:` filtering; hits carry dictionary glosses where
   the reference shelf (§8c) knows the lemma. **Morphology facets**
   (`--morph case=dat,number=pl`, P13-6) filter by gold morphology — one UD
@@ -342,30 +393,28 @@ below is a projection, not a count:
   matching anywhere in a passage, mid-word included — `']μηνιν αει['`
   typed straight off a damaged edition (brackets stripped, then the usual
   per-language folding). Character-trigram index scoped to the documentary
-  shelves (`fuzzy_index: true` on papyri-ddbdp + oracc — corpus-wide would
-  cost ~15×). **Live in production** since the 2026-07-13 owner rebuild:
-  1.31M passages indexed (fulltext.sqlite3 at 2.1 GB with the index
-  aboard), and the BGU 6.1470 mid-word Odyssey demo runs against the real
-  index.
-  EDH joins the indexed scope at its first sync (§8f).
-- **Date/place axis** (P15-2, extended P16-3): `document_axes` (migration
-  008) dates and places **83,233 documents live** — HGV for the papyri
-  (99.2% of the DDbDP shelf), the Slovene goo300k/IMP year-suffixed urns,
-  and, since the part-2 rows materialized at the 2026-07-13 owner rebuild,
-  ORACC catalogue/period/regnal dates plus TOROT chronicle AM annals.
+  shelves (`fuzzy_index: true` on papyri-ddbdp + oracc + edh — corpus-wide
+  would cost ~15×). **Live in production**: **1,712,772 passages indexed**
+  (fulltext.sqlite3 at 2.3 GB with the index aboard) — EDH joined the
+  indexed scope at its 2026-07-13 sync (§8g) — and the BGU 6.1470 mid-word
+  Odyssey demo runs against the real index.
+- **Date/place axis** (P15-2, extended P16-3 and P17-2): `document_axes`
+  (migration 008) dates and places **164,989 documents live** — EDH
+  inscription dates (81,416, the largest contributor since that shelf's
+  2026-07-13 sync), HGV for the papyri (60,923), ORACC catalogue/period/
+  regnal dates (21,558), the Slovene goo300k/IMP year-suffixed urns (747),
+  Coptic manuscript dates (340), and TOROT chronicle AM annals.
   `search --from/--to/--century/--place` scope by signed historical year
   (negative = BCE, no year 0) and provenance; `show` prints the axis line
   ("date: 292 CE · Oxyrhynchos"); `--century -7` reaches the Assyrian
-  letters. The EDH extractor (P17-2) is shipped: ~+60k dated documents
-  land at that shelf's first sync (§8f).
+  letters.
 - **Document facets** (P17-2, migration 009): `document_facets`
   (genre/province/material/object_type, `?`-certainty preserved in `raw`)
   with `search --type/--province/--material` composing with the date/place
-  filters. Shipped and live as a surface, but the table holds **0 rows**
-  until the EDH first sync + rebuild projects them (§8f).
+  filters. **Live at 256,518 rows** since the EDH sync + rebuild (§8g).
 - **Alignment hub** (`align REF`, MCP `nabu_align`): one citation rendered
   across every witness of a registered work (`config/alignments.yml`) —
-  the parallel NT (up to **thirteen witnesses**) and OT (Septuagint ↔
+  the parallel NT (**fifteen registered witnesses**, §8b) and OT (Septuagint ↔
   Vulgate ↔ English); registry-driven, rebuild-safe, per-witness license
   labels. **Collation** (`align REF --collate [--base LABEL]`, P15-4) diffs
   the witnesses into a compact apparatus per (language, script) group,
@@ -394,10 +443,11 @@ below is a projection, not a count:
 - **Dictionary lookup** (`define LEMMA`, MCP `nabu_define`): §8c —
   including `define *proto-form` on the reconstruction shelves.
 - **Etymology walk** (`nabu etym LEMMA`, MCP `nabu_etym`, P14): attested
-  lemma → reconstruction(s) → one hop up the proto chain, with cognates
-  and corpus attestation counts. P17-3 ships multi-hop closure (chains
-  through the intermediate proto shelves) and the `borrowed` flag with
-  "(loan)" rendering — both land at the wiktionary-recon resync (§8f).
+  lemma → reconstruction(s) → the proto chain, with cognates and corpus
+  attestation counts. The P17-3 multi-hop closure (chains through the four
+  intermediate proto shelves) and the `borrowed` flag with "(loan)"
+  rendering are **live**; the IE-CoR/LIV/EDL adapters (§8h) will add
+  independent expert-curated witnesses at their first syncs.
 - **Cognates in parallel** (`nabu cognates TARGET`, MCP `nabu_cognates`,
   P15-3): the hub × reflex-crosswalk join — verses where witnesses in ≥2
   languages use reflexes of the same root (got salt ~ chu соль at \*sḗh₂l;
@@ -409,6 +459,23 @@ below is a projection, not a count:
   profile against the gold corpus — distinctive vocabulary by log-odds,
   hapax legomena; `--by-century` (P15-2) plots the dated corpus, or a
   word's diachrony, across centuries.
+- **Language cards** (`nabu language CODE`, P18-4): the desk reference for
+  every code the library surfaces — the 30 corpus languages and the
+  **803-code** Wiktionary etymology universe the `etym` cognate lists
+  expose (`gkm`, `zle-ort`, `zlw-opl`…). One card: name, family, curated
+  context, live holdings (zero fields suppressed); unknown codes miss
+  honestly with a family hint; ~0.2 s after migrations 012/013. Three data
+  temperatures: a derived names census in the catalog (**currently empty —
+  it fills at the owner's wiktionary parse-only resyncs; health surfaces
+  the gap**), accumulated notes in the ledger (append-only, provenanced —
+  the 183-entry curated seed from `config/languages.yml` is loaded live
+  via `--seed`), and the live-count joins.
+- **Starter shelf** (`nabu quickstart`, P18-2): the curated first-run set
+  — sblgnt + proiel + iswoc + lexica, 693 MB measured, minutes to sync
+  through the ordinary fetch → load → index path — ending with the first
+  three commands (seven-witness `align`, lemma search, `define`).
+  Idempotent; one source's failure never stops the rest; `--list` prints
+  the set without syncing.
 - **`--long` everywhere** (P15-8, house rule): every truncated list —
   vocab hapaxes, etym reflexes, align ranges, parallels evidence — has the
   same escape hatch.
@@ -441,11 +508,21 @@ below is a projection, not a count:
   `license_watch:` registry key (P16-5) lets `health --remote` watch a
   source's upstream license page for changes — candidates are recorded
   commented-out in `config/sources.yml`, none enabled yet (owner decision).
-- **Licensing split**: `attribution` shelf (Perseus ×2, First1K, papyri —
-  ~99% of documents) is redistributable with credit; `nc` shelf (GRETIL,
-  treebanks) is non-commercial research use — fine for private/AI-assisted
-  work, not for republishing. Both are served everywhere (CLI and MCP) with
-  per-passage license labels.
+  P18-7 folds the mechanical **postcondition invariants** into every
+  `health` run: failed-run and partial-load surfacing, flag-vs-artifact
+  and enabled-vs-populated mismatches, pending migrations, and a
+  **quarantine baseline** in the ledger so only the delta from the audited
+  anchor alarms (the EDH 27 are anchored; the standing papyri stubs go
+  quiet). Its first contact with the live library correctly surfaced the
+  two real pending items — among them the empty language-names census
+  awaiting the wiktionary resyncs. An optional `sync --review CMD` hook
+  (off by default) pipes each sync summary to an external AI reviewer.
+- **Licensing split**: `attribution` shelf (Perseus ×2, First1K, papyri,
+  EDH — ~99% of documents) is redistributable with credit; `nc` shelf
+  (GRETIL, treebanks, MW, Coptic Scriptorium's stricter class) is
+  non-commercial research use — fine for private/AI-assisted work, not for
+  republishing. Both are served everywhere (CLI and MCP) with per-passage
+  license labels.
 
 ## 10. Review plan
 

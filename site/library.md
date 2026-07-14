@@ -6,10 +6,10 @@ description: >-
   Sanskrit, cuneiform, treebanks, biblical editions, Old English, and Slavic.
 ---
 
-Live counts as of **13 July 2026**: **88,346 documents / 3,786,763
-passages** across 22 registered sources, plus **248,616 dictionary
-entries** on the reference shelf and **2,619,049 gold lemma annotations in
-fourteen languages**. The authoritative shelf map, refreshed at every
+Live counts as of **14 July 2026**: **170,684 documents / 4,267,213
+passages** across 25 synced sources, plus **450,092 dictionary
+entries** on the reference shelf and **2,852,069 gold lemma annotations in
+fifteen languages**. The authoritative shelf map, refreshed at every
 development gate, is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md)
 in the repository; the numbers below are taken from it, and were read from
@@ -21,13 +21,15 @@ the live catalog, not estimated.
 | Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 3rd c. BCE – 6th c. CE | 1,129 / 256,480 | CC BY-SA |
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with 181 English translations | 3rd c. BCE – Late Antiquity | 534 / 391,799 | CC BY-SA |
 | Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 61,389 / 921,248 | CC BY |
+| Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | 81,856 / 406,281 | CC BY-SA |
+| Coptic | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | 482 / 74,169 | CC BY per document (source class `nc`) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, the Ṛgveda with Vedic accents | c. 1200 BCE – 18th c. CE | 780 / 703,068 | CC BY-NC-SA |
 | Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma, morphology, and syntax | 5th c. BCE – 17th c. CE | 78 / 178,180 | mostly CC BY-NC-SA |
 | Cuneiform | ORACC, 33 projects: the complete State Archives of Assyria, royal inscriptions, lexical lists, with 8,911 aligned English translations | late 4th mill. – 7th c. BCE | 21,692 / 385,243 | CC0 |
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek New Testament, World English Bible | — | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | 349 / 30,550 | CC BY-SA |
 | Slavic &amp; Slovenian | CCMH OCS gospel codices, the Freising Manuscripts, goo300k and IMP Early Modern Slovenian | c. 1000 – 1899 | 793 / 444,117 | CC BY (Freising BY-ND) |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Wiktionary OCS, three reconstruction dictionaries | — | 248,616 entries | CC BY-SA / CC BY |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary OCS, seven reconstruction dictionaries | — | 450,092 entries | CC BY-SA / CC BY / CC BY-NC-SA |
 
 ## Classical Greek literature
 
@@ -67,6 +69,29 @@ Latin, Arabic, and Demotic minorities. Leiden-convention editorial markup
 (restorations, cancellations) is preserved, and the fragment-search index
 (see [Tools]({{ '/tools/' | relative_url }})) is built over this shelf.
 
+## Latin inscriptions
+
+The Epigraphic Database Heidelberg, ingested on 13 July 2026 as a
+preservation snapshot (the upstream project was archived in 2021): 81,856
+inscriptions — epitaphs, dedications, honorific and building inscriptions,
+milestones — in Latin (80,561), Greek (1,290, the bilinguals), from
+provinces across the whole empire. 81,416 documents carry dates on the
+chronological axis, and the shelf brings the library's first genre facets:
+searches can be filtered by inscription genre, province, material, and
+object type, composing with the date and place filters. Leiden-convention
+rendering and the fragment-search index apply here as on the papyri.
+
+## Coptic
+
+The Coptic Scriptorium corpora, synchronized on 13 July 2026 with 482 of
+the 483 upstream corpora aboard: the complete Sahidic
+and Bohairic New Testaments, monastic and patristic prose, and
+hagiography — 74,169 passages with upstream gold lemmatization, making
+Coptic the library's fifteenth lemma-searchable language (233,020 lemma
+rows). The two New Testament dialects join the alignment hub as witnesses
+fourteen and fifteen, and the corpus's language-of-origin annotations make
+the Greek loan stratum of Coptic queryable.
+
 ## Sanskrit
 
 The GRETIL corpus (Göttingen Register of Electronic Texts in Indian
@@ -86,8 +111,8 @@ Slavonic, with classical prose), TOROT (Old East Slavic and OCS, from
 birchbark letters to Avvakum), ISWOC (Old English prose and the West-Saxon
 Gospels), and seven ancient-language treebanks from Universal Dependencies
 (including Thomas Aquinas, Vedic Sanskrit, and Ruthenian). Together with
-the ORACC and goo300k gold layers these feed a lemma index of 2,619,049
-rows in fourteen languages.
+the ORACC, goo300k, and Coptic Scriptorium gold layers these feed a lemma
+index of 2,852,069 rows in fifteen languages.
 
 ## Cuneiform
 
@@ -104,7 +129,8 @@ running English, line by line. Released by ORACC under CC0.
 Editions serving the alignment hub: the complete Clementine Vulgate (73
 books, public domain), the SBL Greek New Testament (CC BY), and the World
 English Bible (public domain) as the readable English witness. With these
-aboard, one Gospel citation renders across up to thirteen witnesses, and
+aboard, one Gospel citation renders across up to fifteen registered
+witnesses (the two Coptic dialects joined on 13 July 2026), and
 the Old Testament axis runs Septuagint ↔ Vulgate ↔ English, with the
 Greek/Hebrew Psalm numbering divergence mapped explicitly.
 
@@ -126,22 +152,28 @@ collation. The ~1000 CE Freising Manuscripts, the oldest Slavic text in
 Latin script, appear in three aligned transcription layers with five modern
 translations (CC BY-ND; held under the library's strictest access class).
 Early Modern Slovenian print is covered by goo300k (gold-annotated,
-1584–1899) and the IMP corpus (658 documents, the third-largest shelf by
+1584–1899) and the IMP corpus (658 documents, the fourth-largest shelf by
 passages), all dated per document and feeding the chronological axis.
 
 ## Reference shelf
 
-Seven dictionaries as structured data rather than page images:
+Twelve dictionaries as structured data rather than page images:
 Liddell-Scott-Jones (116,497 entries), Lewis &amp; Short (51,636),
-Bosworth-Toller (62,815), a Wiktionary-derived Old Church Slavonic lexicon
-(4,615), and three reconstruction dictionaries (Proto-Slavic,
-Proto-Germanic, Proto-Indo-European) whose entries carry machine-readable
-descendant trees. Dictionary citations are resolved to live passages where
+Bosworth-Toller (62,815), the Monier-Williams Sanskrit-English dictionary
+(193,890, synchronized 13 July 2026, with transliteration-tolerant lookup
+and citations resolving into the Sanskrit shelf), a Wiktionary-derived Old
+Church Slavonic lexicon (4,615), and seven reconstruction dictionaries
+(Proto-Indo-European, Proto-Slavic, Proto-Germanic, Proto-West Germanic,
+Proto-Balto-Slavic, Proto-Italic, Proto-Indo-Iranian) whose entries carry
+machine-readable descendant trees — a crosswalk of 1,006,872 edges joining
+reconstructed forms to attested lemmas, with curated loan events flagged.
+Dictionary citations are resolved to live passages where
 the cited work is held: the LSJ entry for μῆνις points at *Iliad* 1.1 as a
 resolvable URN, not a printed abbreviation.
 
-<p class="aside">Adapters for three further sources — Coptic Scriptorium,
-the Cologne Monier-Williams Sanskrit dictionary, and the Epigraphic
-Database Heidelberg — are built and tested as of 13 July 2026, awaiting
-their first synchronization. They will appear in these counts at a future
-gate.</p>
+<p class="aside">Adapters for three further sources — the IE-CoR
+Indo-European cognacy database, the LIV-LOD dictionary of
+Proto-Indo-European verbs, and de Vaan's <em>Etymological Dictionary of
+Latin</em> (LiLa linked-data editions) — are built and tested as of
+14 July 2026, awaiting their first synchronization. They hold no live
+entries yet and will appear in these counts at a future gate.</p>

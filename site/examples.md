@@ -137,11 +137,13 @@ abuts Lebanon."
 
 ## For the biblical scholar
 
-The New Testament is held in up to thirteen witnesses — two Greek editions,
-two Latin, Gothic, Classical Armenian, five Old Church Slavonic manuscript
-editions, Old English, and English — and one command renders any verse
-across all of them, each row carrying its license label (the full output
-opens the [Home]({{ '/' | relative_url }}) page):
+The New Testament is held in up to fifteen registered witnesses — two
+Greek editions, two Latin, Gothic, Classical Armenian, five Old Church
+Slavonic manuscript editions, Old English, English, and (since 13 July
+2026) Sahidic and Bohairic Coptic — and one command renders any verse
+across all of them, each row carrying its license label (the run below
+predates the two Coptic witnesses; the full output opens the
+[Home]({{ '/' | relative_url }}) page):
 
 ```
 $ bin/nabu align "MARK 2.3"

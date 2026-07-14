@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 22 registered sources below are synced and live as of 13 July 2026.
+All 25 sources below are synced and live as of 14 July 2026.
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
@@ -72,19 +72,22 @@ All 22 registered sources below are synced and live as of 13 July 2026.
 | `ccmh` | Corpus Cyrillo-Methodianum Helsingiense via [Kielipankki](https://www.kielipankki.fi/) (Language Bank of Finland) | Four OCS gospel codices, Suprasliensis, the Vitae | CC BY 4.0 |
 | `goo300k`, `imp` | [CLARIN.SI](https://www.clarin.si/) (Erjavec, JSI; hdl [11356/1025](http://hdl.handle.net/11356/1025), [11356/1031](http://hdl.handle.net/11356/1031)) | Gold and silver-annotated historical Slovenian, 1584–1899 | CC BY 4.0 / CC BY-SA 4.0 |
 | `freising` | [Brižinski spomeniki e-edition](https://nl.ijs.si/e-zrc/bs/) (ZRC SAZU / IJS) | The Freising Manuscripts, three transcription layers + translations | CC BY-ND 2.5 SI → `research_private` |
-| `wiktionary-cu`, `wiktionary-recon` | [kaikki.org](https://kaikki.org/) (Wiktextract) from [Wiktionary](https://www.wiktionary.org/) | OCS lexicon; Proto-Slavic, Proto-Germanic, and PIE reconstruction dictionaries with descendant trees | CC BY-SA + GFDL |
+| `wiktionary-cu`, `wiktionary-recon` | [kaikki.org](https://kaikki.org/) (Wiktextract) from [Wiktionary](https://www.wiktionary.org/) | OCS lexicon; seven reconstruction dictionaries (PIE, Proto-Slavic, Proto-Germanic, Proto-West Germanic, Proto-Balto-Slavic, Proto-Italic, Proto-Indo-Iranian) with descendant trees | CC BY-SA + GFDL |
+| `coptic-scriptorium` | [Coptic Scriptorium](https://copticscriptorium.org/) | Sahidic and Bohairic Coptic corpora with gold annotation, 482 documents | CC BY per document (source class `nc`, most-restrictive-wins) |
+| `mw` | [Cologne Digital Sanskrit Lexicon](https://www.sanskrit-lexicon.uni-koeln.de/) | Monier-Williams Sanskrit-English Dictionary (1899), 193,890 entries | CC BY-NC-SA 3.0 |
+| `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | 81,856 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
 
 ## Registered, awaiting first synchronization
 
-Adapters for three further sources are built and tested as of 13 July 2026;
-they enter the live counts once their first synchronization is run and
-verified:
+Adapters for three further sources are built and tested as of 14 July 2026;
+they hold no live rows and enter the live counts once their first
+synchronization is run and verified:
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
-| `coptic-scriptorium` | [Coptic Scriptorium](https://copticscriptorium.org/) | Sahidic and Bohairic Coptic corpora with rich annotation | CC BY per document (source class `nc`, most-restrictive-wins) |
-| `mw` | [Cologne Digital Sanskrit Lexicon](https://www.sanskrit-lexicon.uni-koeln.de/) | Monier-Williams Sanskrit-English Dictionary (1899), 193,890 entries | CC BY-NC-SA 3.0 |
-| `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | ~82,000 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
+| `iecor` | [IE-CoR](https://iecor.clld.org/) (lexibank/iecor via Zenodo) | The Indo-European cognacy database: 4,981 expert-curated cognate sets with loan events | CC BY 4.0 |
+| `liv` | [LiLa / CIRCSE LIV-LOD](https://lila-erc.eu/) | *Lexikon der indogermanischen Verben* linked-data edition: 305 PIE verbal etymons | CC BY-SA 4.0 (with publisher permission) |
+| `edl` | [LiLa / CIRCSE](https://lila-erc.eu/) | De Vaan, *Etymological Dictionary of Latin* (linked-data skeleton): 2,860 etymons | CC BY-NC-SA 4.0 |
 
 ## Acknowledgements
 
