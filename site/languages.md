@@ -16,7 +16,11 @@ The library also carries this reference as a command: `nabu language CODE`
 explains any code the tools surface — the corpus languages below and the
 803 Wiktionary etymology codes that appear in `etym` cognate lists — on
 one card: name, family, curated historical context, and live holdings. An
-unknown code is reported honestly, with a family hint.
+unknown code is reported honestly, with a family hint. Since 14 July 2026
+the curated layer behind these cards is file-backed: one plain Markdown
+dossier per language code (199 dossiers) on the library's local
+language-dossier shelf, editable in any editor and re-derived into the
+catalog on sync.
 
 ## The code system
 
@@ -88,12 +92,14 @@ unknown code is reported honestly, with a family hint.
 | `gmw-pro` | Proto-West Germanic | 5,551 headwords — the second intermediate shelf (Proto-Germanic → PWG → Old English). |
 | `itc-pro` | Proto-Italic | 745 headwords bridging PIE to Latin. |
 | `iir-pro` | Proto-Indo-Iranian | 799 headwords — Sanskrit via romanization, plus the flagged Iranian-loan layer in Armenian. |
+| `ine` | IE-CoR | 4,981 expert-curated Indo-European cognate sets (synchronized 14 July 2026), with loan events flagged — an independent witness beside the Wiktionary-derived chains. |
+| `ine-pro` | LIV-LOD | 305 Proto-Indo-European verbal etymons with stem types (synchronized 14 July 2026). |
+| `ine-pro` / `itc-pro` | de Vaan, <em>Etymological Dictionary of Latin</em> | 2,860 etymons across two shelves (synchronized 14 July 2026) — the Latin → Proto-Italic → PIE chains of the Leiden school. |
 
 <p class="aside">All seven reconstruction shelves are live, with multi-hop
-chains through the intermediate shelves and per-edge loan flags. Three
-further dictionary sources — the IE-CoR cognacy database, LIV-LOD, and de
-Vaan's Latin etymological dictionary — are built and registered as of
-14 July 2026 but not yet synchronized: they hold no live entries.</p>
+chains through the intermediate shelves and per-edge loan flags, and the
+three etymological witnesses — IE-CoR, LIV-LOD, and de Vaan — are
+synchronized and live as of 14 July 2026.</p>
 
 ## Gold-lemma languages
 

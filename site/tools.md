@@ -27,9 +27,9 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 164,989 dated and
+and third centuries. The chronological axis covers 163,821 dated and
 placed documents as of 14 July 2026 — the Heidelberg inscriptions (81,416)
-and the papyri (60,923) foremost among them. On the faceted shelves
+and the papyri foremost among them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
 
 ```
@@ -86,7 +86,7 @@ fuzzy index covers: oracc, papyri-ddbdp
 the opening line of the *Odyssey*. The character-trigram index behind this
 is scoped to the documentary shelves, where fragment search earns its
 cost; the run above predates the Heidelberg inscriptions, which joined the
-indexed scope on 13 July 2026 — the production index covers 1,712,772
+indexed scope on 13 July 2026 — the production index covers 1,713,135
 passages across the papyri, cuneiform, and inscription shelves as of
 14 July 2026.
 
@@ -183,6 +183,11 @@ $ bin/nabu etym богъ --lang chu
 ← *bʰeh₂g- [ine-pro] — gloss: to divide, distribute, allot
   reflexes: [grc] ἔφᾰγον, [sa] भक्ष (bhakṣá), …
 ```
+
+Since 14 July 2026 three expert-curated witnesses answer beside the
+Wiktionary-derived chains: the IE-CoR cognacy database (4,981 cognate
+sets), the LIV verbal roots, and de Vaan's Latin etymological dictionary —
+so the same walk can be checked against independently curated scholarship.
 
 **Language cards** (`nabu language CODE`) explain any language code the
 library surfaces — the corpus languages and the 803 Wiktionary etymology

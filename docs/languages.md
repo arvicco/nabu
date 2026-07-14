@@ -1,26 +1,27 @@
 # Languages of the library
 
-**As of 2026-07-14** (post Phase 18 — live inventory: every code below
+**As of 2026-07-14** (post Phase 19 — live inventory: every code below
 appears in the catalog, the lemma index, or the reference shelf; the
-Phase-17 proto shelves and Coptic are now live, and the only shipped-but-
-unsynced tier is the Phase-18 trio noted at the end of the dictionary
-table). This page explains the code system once, then lists every code
-with one sentence each.
+Phase-18 etymological trio synced live 2026-07-14, so nothing in the
+dictionary table is pending). This page explains the code system once,
+then lists every code with one sentence each.
 
-**The desk reference is a command (P18-4):** `nabu language CODE` explains
-any code this page covers AND the **803-code** Wiktionary etymology
-universe the `etym` cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) —
-name, family, curated context, and live holdings, in ~0.2 s. Honesty note:
-the derived names census (`language_names`, from the held kaikki extracts)
-is **currently empty** — it fills at the owner's wiktionary parse-only
-resyncs, and `nabu health` surfaces the gap until then. **The curation's
-home is the `canonical/local-language/` dossier shelf (P19-1, architecture
-§16)** — one Markdown file per code, edit it in any editor, then `nabu sync
-local-language` re-derives the card — superseding the retired
-`config/languages.yml` seed: the 183-entry curation (the prose this page
-distills) migrates there via the owner-fired `nabu language
---export-dossiers`, with the ledger's accumulated notes serving reads until
-that lands. `nabu language --list` prints the held languages.
+**The desk reference is a command (P18-4), and languages are now
+file-backed (P19-1):** `nabu language CODE` explains any code this page
+covers AND the **803-code** Wiktionary etymology universe the `etym`
+cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
+curated context, and live holdings, in ~0.2 s. **The curation's home is
+the `canonical/local-language/` dossier shelf (architecture §16)** — one
+Markdown file per code, edit it in any editor, then `nabu sync
+local-language` re-derives the card. The owner-fired migration is
+complete: **199 dossiers** on disk derive **329 `language_records`**
+(name, family, context, and the IE-CoR witness sections — that shelf's
+first programmatic writer), and the `config/languages.yml` seed is
+retired. The derived names census (`language_names`, from the held kaikki
+extracts) is **filled** — 160 name records, feeding the inline
+`[gkm · Medieval Greek]`-style rendering in `etym --long`.
+`nabu ingest --shelf language CODE` scaffolds a new dossier;
+`nabu language --list` prints the held languages.
 
 ## The system, in five rules
 
@@ -55,7 +56,7 @@ that lands. `nabu language --list` prints the held languages.
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions). |
 | `eng` | English | The translation layer — Perseus/First1K editions, WEB bible, SAA tablet translations, Freising rendering; never an original. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists. |
-| `cop` | Coptic | The last stage of Egyptian: 2,047 documentary papyri plus the literary Coptic Scriptorium shelf, live since 2026-07-13 — 482 docs / 74,169 passages in Sahidic and Bohairic, gold-lemma language #15 (233,020 rows; library.md §8f). |
+| `cop` | Coptic | The last stage of Egyptian: 2,063 documentary papyri plus the literary Coptic Scriptorium shelf, live since 2026-07-13 — 482 docs / 74,169 passages in Sahidic and Bohairic, gold-lemma language #15 (233,020 rows; library.md §8f). |
 | `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments — and, since the EDH sync, 80,561 inscriptions (library.md §8g), making it the largest language by documents. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL shelf — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved. |
 | `sl` | Slovenian (historical) | Early Modern print (Dalmatin 1584 → 1899) and, by lineage, the ~1000 CE Freising Manuscripts. |
@@ -95,14 +96,15 @@ that lands. `nabu language --list` prints the held languages.
 | `gmw-pro` | Proto-West Germanic (reconstructed) | 5,551 headwords — the Old English proto desk, and the second intermediate shelf (Proto-Germanic → PWG → ang). |
 | `itc-pro` | Proto-Italic (reconstructed) | 745 headwords bridging PIE to Latin (best record-level crosswalk join). |
 | `iir-pro` | Proto-Indo-Iranian (reconstructed) | 799 headwords: Sanskrit via romanization + the flagged Iranian-loan layer in Armenian. |
+| `ine` | IE-CoR (cognate sets) | 4,981 expert-curated Indo-European cognate sets under the collective `ine` tag, live since 2026-07-14 — the third etymological witness, 26,325 reflex edges, 2,308 loan-flagged. |
+| `ine-pro` | LIV-LOD | 305 PIE verbal etymons with stem types (LiLa Turtle edition), live since 2026-07-14 — 374 Latin reflex edges. |
+| `ine-pro` / `itc-pro` | de Vaan EDL | De Vaan's *Etymological Dictionary of Latin* (LiLa skeleton, `nc`): 2,860 etymons across two shelves, live since 2026-07-14 — the lat → Proto-Italic → PIE Leiden chains. |
 
 *(All seven proto shelves are live — `define`/`etym` walk them with
-multi-hop closure and per-edge "(loan)" flags. The Phase-18 trio is
-shipped in code but **unsynced with no live entries**: `iecor` — the
-IE-CoR cognacy matrix under the collective `ine` tag, 4,981 sets
-projected — plus the LiLa Turtle shelves `liv` (305 PIE verbal etymons)
-and `edl` (de Vaan's Latin etymological dictionary, 2,860 etymons);
-library.md §8h.)*
+multi-hop closure and per-edge "(loan)" flags — and the Phase-18 trio
+(`iecor`, `liv`, `edl`) is **synced live since 2026-07-14**, adding three
+independent expert-curated witnesses beside the Wiktionary-derived
+chains; library.md §8h.)*
 
 ## Gold-lemma languages (searchable via `--lemma`, 15 as of today)
 
@@ -118,5 +120,6 @@ the fifth-largest lemma pool in the library.
 
 *Maintenance: this page is refreshed at phase gates alongside library.md
 (§10 duty). The authoritative per-source assignments live in each
-adapter's manifest; folding rules in conventions §9; the proto-code
-rationale in conventions §4.*
+adapter's manifest; the curated per-language prose lives in the
+`canonical/local-language/` dossiers (edit there, not here); folding
+rules in conventions §9; the proto-code rationale in conventions §4.*

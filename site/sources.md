@@ -50,13 +50,13 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 25 sources below are synced and live as of 14 July 2026.
+All 28 sources below are synced and live as of 14 July 2026.
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
 | `perseus-greek`, `perseus-latin` | [Perseus Digital Library](https://www.perseus.tufts.edu/) (PerseusDL canonical-greekLit / canonical-latinLit) | The classical Greek and Latin canons with English translations | CC BY-SA |
 | `first1k-greek` | [First1KGreek, Open Greek &amp; Latin](https://opengreekandlatin.github.io/First1KGreek/) | Post-classical Greek prose, incl. Swete's Septuagint | CC BY-SA |
-| `papyri-ddbdp` | [papyri.info](https://papyri.info/) — Duke Databank of Documentary Papyri | 61,389 documentary papyri | CC BY |
+| `papyri-ddbdp` | [papyri.info](https://papyri.info/) — Duke Databank of Documentary Papyri | 61,416 documentary papyri | CC BY |
 | `oracc` | [ORACC](https://oracc.museum.upenn.edu/), 33 projects incl. the State Archives of Assyria | Cuneiform transliterations with gold lemmatization | CC0 (per project); translation prose CC BY-SA |
 | `gretil` | [GRETIL](https://gretil.sub.uni-goettingen.de/), Göttingen | 780 Sanskrit (and related) TEI editions | CC BY-NC-SA 4.0 |
 | `proiel` | [PROIEL treebank](https://proiel.github.io/) | Parallel NT (Greek, Latin, Gothic, Armenian, OCS) + classical prose, gold-annotated | CC BY-NC-SA |
@@ -76,18 +76,23 @@ All 25 sources below are synced and live as of 14 July 2026.
 | `coptic-scriptorium` | [Coptic Scriptorium](https://copticscriptorium.org/) | Sahidic and Bohairic Coptic corpora with gold annotation, 482 documents | CC BY per document (source class `nc`, most-restrictive-wins) |
 | `mw` | [Cologne Digital Sanskrit Lexicon](https://www.sanskrit-lexicon.uni-koeln.de/) | Monier-Williams Sanskrit-English Dictionary (1899), 193,890 entries | CC BY-NC-SA 3.0 |
 | `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | 81,856 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
+| `iecor` | [IE-CoR](https://iecor.clld.org/) (lexibank/iecor via Zenodo) | The Indo-European cognacy database: 4,981 expert-curated cognate sets with loan events (synchronized 14 July 2026) | CC BY 4.0 |
+| `liv` | [LiLa / CIRCSE LIV-LOD](https://lila-erc.eu/) | *Lexikon der indogermanischen Verben* linked-data edition: 305 PIE verbal etymons (synchronized 14 July 2026) | CC BY-SA 4.0 (with publisher permission) |
+| `edl` | [LiLa / CIRCSE](https://lila-erc.eu/) | De Vaan, *Etymological Dictionary of Latin* (linked-data skeleton): 2,860 etymons (synchronized 14 July 2026) | CC BY-NC-SA 4.0 |
 
-## Registered, awaiting first synchronization
+## The local shelves
 
-Adapters for three further sources are built and tested as of 14 July 2026;
-they hold no live rows and enter the live counts once their first
-synchronization is run and verified:
-
-| Source | Upstream project | Contents | License |
-|---|---|---|---|
-| `iecor` | [IE-CoR](https://iecor.clld.org/) (lexibank/iecor via Zenodo) | The Indo-European cognacy database: 4,981 expert-curated cognate sets with loan events | CC BY 4.0 |
-| `liv` | [LiLa / CIRCSE LIV-LOD](https://lila-erc.eu/) | *Lexikon der indogermanischen Verben* linked-data edition: 305 PIE verbal etymons | CC BY-SA 4.0 (with publisher permission) |
-| `edl` | [LiLa / CIRCSE](https://lila-erc.eu/) | De Vaan, *Etymological Dictionary of Latin* (linked-data skeleton): 2,860 etymons | CC BY-NC-SA 4.0 |
+Two further registered sources hold no upstream at all — they are the
+library's shelves for authored and acquired material, synchronized by
+re-scanning local files rather than fetching. The language-dossier shelf
+(`local-language`) carries the library's own per-language curation, 199
+Markdown dossiers as of 14 July 2026. The local-library shelf
+(`local-library`) files the owner's PDFs, scans, and offprints through
+the `nabu ingest` command; everything on it defaults to the
+`research_private` class — catalogued and searchable locally, never
+served or redistributed — and it holds no documents yet. Licenses on
+these shelves belong to whatever the owner files there; the class system
+above is the gate that keeps restricted personal material private.
 
 ## Acknowledgements
 
@@ -101,9 +106,11 @@ LINDAT/CLARIAH-CZ; the Bosworth-Toller digitization at Charles University;
 the eZISS edition of the Freising Manuscripts; the Society of Biblical
 Literature and Logos; eBible.org and the open-bibles collection; the Oxford
 Text Archive; the Wiktionary community and the Wiktextract project; the
-Cologne Digital Sanskrit Lexicon; Coptic Scriptorium; and the Epigraphic
-Database Heidelberg. Users of this software are bound by, and should credit,
-these upstream projects under their respective terms.
+Cologne Digital Sanskrit Lexicon; Coptic Scriptorium; the Epigraphic
+Database Heidelberg; the IE-CoR project; and the LiLa (Linking Latin) /
+CIRCSE group, whose linked-data editions carry LIV and de Vaan. Users of
+this software are bound by, and should credit, these upstream projects
+under their respective terms.
 
 Sources that could not be ingested for license reasons — however valuable —
 are recorded honestly in the repository inventory with the specific

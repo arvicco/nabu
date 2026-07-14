@@ -96,7 +96,7 @@ terms vary by dictionary).
 **Effort.** scout (licenses/formats) + fable (entry model + citation
 resolution policy) + opus (parsers per lexicon); 3 packets.
 
-### 1.4 Time and place as axes — HGV metadata  [SHIPPED — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; part 1 dated/placed 61,670 documents (99.2% of the DDbDP shelf). Part 2 SHIPPED — Phase 16 P16-3: ORACC period/regnal extractors + TOROT chronicle AM annals; LIVE since the 2026-07-13 owner rebuild at 83,233 dated/placed documents. Part 3 (Phase 17 P17-2, the EDH date extractor) DELIVERED at the 2026-07-13 EDH sync: **164,989 dated/placed documents live** as of 2026-07-14, EDH contributing 81,416 (see 2.3)]
+### 1.4 Time and place as axes — HGV metadata  [SHIPPED — Phase 15 P15-2: `document_axes` (migration 008, its own table rather than columns on documents), HGV + goo300k + IMP date extractors, `search --from/--to/--century/--place`, `vocab --by-century`; part 1 dated/placed 61,670 documents (99.2% of the DDbDP shelf). Part 2 SHIPPED — Phase 16 P16-3: ORACC period/regnal extractors + TOROT chronicle AM annals; LIVE since the 2026-07-13 owner rebuild at 83,233 dated/placed documents. Part 3 (Phase 17 P17-2, the EDH date extractor) DELIVERED at the 2026-07-13 EDH sync: **165,334 dated/placed records covering 163,821 documents live** as of 2026-07-14 (post Phase 19), EDH contributing 81,416 (see 2.3)]
 
 **What.** Ingest metadata corpora that date and locate texts we already
 hold: HGV (Heidelberger Gesamtverzeichnis — dates/provenances for the
@@ -122,7 +122,7 @@ dates (the axes stay sparse — display honestly). Provenance names need no
 gazetteer in v1 (strings, not geo-coordinates; resist scope creep).
 **Effort.** opus with fable review of the date model; 1–2 packets.
 
-### 1.5 Fragment-aware search — trigram infix matching  [SHIPPED — Phase 16 P16-4: `search --fuzzy`, a character-trigram index scoped by per-source `fuzzy_index:` flags (papyri-ddbdp + oracc); LIVE in production since the 2026-07-13 owner rebuild (the BGU 6.1470 demo runs against the real index); EDH joined the scope at its 2026-07-13 sync — 1,712,772 passages indexed as of 2026-07-14 (see 2.3)]
+### 1.5 Fragment-aware search — trigram infix matching  [SHIPPED — Phase 16 P16-4: `search --fuzzy`, a character-trigram index scoped by per-source `fuzzy_index:` flags (papyri-ddbdp + oracc); LIVE in production since the 2026-07-13 owner rebuild (the BGU 6.1470 demo runs against the real index); EDH joined the scope at its 2026-07-13 sync — 1,713,135 passages indexed as of 2026-07-14, post Phase 19 (see 2.3)]
 
 **What.** A character-trigram index over the folded search form enabling
 infix/wildcard queries: `search --fragment "]μηνιν αει["` — mid-word
@@ -171,7 +171,7 @@ log" direction drifts toward reader-app territory the concept explicitly
 excludes — keep it to frequency data and a plain file, no app.
 **Effort.** opus; small packet, could ride along with 1.6.
 
-### 1.8 The citation graph  [SHIPPED — Phase 16 P16-1/P16-2: the `links` journal (db/links.sqlite3, its own rebuild-surviving database — architecture §15) + `nabu links URN` + MCP `nabu_links`; the `parallels/formulas/cognates --batch` producers populate it with run provenance (seeded live: 5,089 parallel + 360 cognate edges). Still conceptual: scholia and dictionary-citation edges have no batch producers yet — those cross-references remain in their own tables]
+### 1.8 The citation graph  [SHIPPED — Phase 16 P16-1/P16-2: the `links` journal (db/links.sqlite3, its own rebuild-surviving database — architecture §15) + `nabu links URN` + MCP `nabu_links`; the `parallels/formulas/cognates --batch` producers populate it with run provenance (seeded live: 5,089 parallel + 395 formula + 360 cognate edges), and P19-4 added a fourth producer — local-library `related:` manifest lines as `kind=reference` edges (shipped, zero edges until the owner's first ingest). Still conceptual: scholia and dictionary-citation edges have no batch producers yet — those cross-references remain in their own tables]
 
 **What.** The unifying long-game frame: every cross-reference in the system
 (intertext hits, dictionary citations, scholia references, alignment
@@ -205,7 +205,7 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
-### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (docs/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family — all three registered `enabled: false`, NOT SYNCED, no live rows until the owner-fired first syncs. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (docs/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family. ALL THREE SYNCED LIVE 2026-07-14 (owner-fired): iecor 4,981 entries / 26,325 reflex edges (2,308 loan-flagged) + 143 language notes accreted into the local-language dossiers; liv 305 entries / 374 edges; edl 2,860 entries across two shelves / 2,653 edges — the crosswalk stands at 1,036,224 edges across thirteen shelves. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
 
 **What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
 \*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already
@@ -372,13 +372,17 @@ batch. The dictionary shelf (§1.3) *reduces* its surface further — human
 lexica beat machine glosses for single words; glossing earns its keep at
 the passage level.
 
-### 3.4 HTR / ad-hoc pipeline  [gated: cluster + demand]
+### 3.4 HTR / ad-hoc pipeline  [gated: cluster + demand — intake half SHIPPED Phase 19]
 
 The concept's original dream (camera → searchable passage), explicitly
-demand-driven. The cluster makes local HTR (Kraken, or VLM-based) real.
-First concrete candidates already identified: the Sreznevsky scans
-(§2.5), any manuscript facsimiles the owner works with. Wake this when a
-real stack of images exists.
+demand-driven. The *intake* half shipped in Phase 19: `nabu ingest` +
+the local-library shelf (P19-4/P19-5) file PDFs, scans, and articles
+into canonical memory with page-grain text extraction (mutool) where a
+text layer exists. What remains gated on the cluster is HTR proper
+(Kraken, or VLM-based) for image-only material. First concrete
+candidates already identified: the Sreznevsky scans (§2.5), any
+manuscript facsimiles the owner works with. Wake this when a real stack
+of text-less images exists.
 
 ### 3.5 NER / prosopography over the papyri  [gated: cluster — candidate]
 
@@ -435,6 +439,13 @@ technical blocks a Tailscale-only JSON endpoint tomorrow; the *public*
 version is a policy decision more than an engineering one. Revisit when
 sharing becomes a goal.
 
+*Status note (P19-0, 2026-07-14):* the domain itself is no longer
+hypothetical — **nabu.ac now carries the maintainer's public contact
+address** (arvicco@nabu.ac, in CONTRIBUTING.md, CITATION.cff, and the
+site's About/FAQ pages). The endpoint this section describes remains
+unbuilt and gated exactly as above; the permission points below are
+unchanged.
+
 **Permission points** (owner convention 2026-07-11, P13-11: tracked here
 as they are incurred — any future external-access feature must clear each
 entry before launch):
@@ -472,14 +483,16 @@ packet, not discovered during it.
 - **UD overlap posture** (P9-6): any future UD expansion must explicitly
   exclude the chu-PROIEL/orv-TOROT conversions (re-loads of native syncs).
 
-### 4.6 Open-sourcing the tooling  [candidate — owner call, zero urgency]
+### 4.6 Open-sourcing the tooling  [SHIPPED incrementally — public repo, MIT, site, contribution rails]
 
-The adapter contract, parser families, retention machinery, and MCP
-surface would be genuinely useful to the DH community (no maintained
-local-first corpus builder exists in this shape). Costs: README-for-
-strangers, issue triage, license choice (code license is still TBD in the
-README), and the loss of "personal tool" freedom. Purely an owner
-temperament question; the code quality is already publishable.
+Overtaken by events: the repository is public under MIT, the project
+site (P17-9) presents it to strangers, and Phase 19 (P19-0) added the
+contribution rails — CONTRIBUTING.md house rules with DCO sign-off,
+prepared issue templates (source request / feature request / wrong
+reading), and a public contact address (arvicco@nabu.ac). The backlog
+remains owner-driven by design; what this entry once weighed (issue
+triage load, loss of "personal tool" freedom) is now lived reality
+rather than a decision to make.
 
 ---
 

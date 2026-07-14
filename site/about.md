@@ -11,10 +11,10 @@ description: >-
 Nabu is **personal research infrastructure**: one scholar's local library
 of ancient-text corpora, built to serve that scholar's reading and research
 first, and shared because the approach — local, license-honest, citation
-native, rebuildable — may be useful to others. It is a young,
-early-development project. There is no packaged release, no versioned API,
-and command-line flags may still change; the documentation aims to be more
-honest than polished.
+native, rebuildable — may be useful to others. It is a young project:
+versioned releases begin with v1.0.0 (July 2026), there is no packaged
+gem or versioned API, and command-line flags may still change between
+releases; the documentation aims to be more honest than polished.
 
 The name is that of the Mesopotamian god of scribes and writing, divine
 custodian of the library of Ashurbanipal at Nineveh — a fitting patron for
@@ -67,8 +67,10 @@ refreshed at every gate to reflect what actually works.
 
 The original concept includes an enrichment layer — projecting lemmas onto
 the ninety percent of the corpus without gold annotation, embeddings and
-semantic search, on-demand glossing, ingestion of ad-hoc scans — that is
-designed but not built; it waits on local inference hardware and demand.
+semantic search, on-demand glossing — that is designed but not built; it
+waits on local inference hardware and demand. (Ingestion of one's own
+PDFs and scans, once on this list, shipped in July 2026 as `nabu ingest`;
+what still waits on hardware is text recognition for image-only scans.)
 A public read-only query endpoint is a distant possibility for which the
 MCP server is the rehearsal: the tool contract that would face outward
 runs locally first, against the real corpus, under the same license gates.
