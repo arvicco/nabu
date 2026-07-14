@@ -6520,7 +6520,7 @@ Contributing section + "Request a corpus" / "Request a feature" /
 maintainer line "Ar Vicco <arvicco@nabu.ac>"; (d) README contributing
 pointer verified consistent.
 
-## P19-1 · Canonical memory: framework + local-language shelf  [tier: opus] [status: dispatched] [deps: —]
+## P19-1 · Canonical memory: framework + local-language shelf  [tier: opus] [status: done 2026-07-14 — shipped; the REAL export + first sync are OWNER-FIRED, findings below] [deps: —]
 The approved headliner (design: /Users/vb/Dev/nabu/.docs/
 canonical-memory.md §§0-1,3-4 — read it; owner approved in principle
 2026-07-14). LocalFetch + sync_policy: local + canonical/local-language/
@@ -6531,3 +6531,30 @@ records become derived; the ledger table and seed file retire; the
 P18-5/6 accretion writers redirect to dossier sections). nabu language
 reads the merged view unchanged. Integrity via ledger pins; attic on
 deletion; P18-7 invariants extend (dossier files vs language records).
+FINDINGS (2026-07-14): shipped as designed; the doctrine decisions —
+(a) canonical-write path: ONE sanctioned gateway per local shelf
+(Nabu::LanguageShelf, the Adapter#fetch analogue for authored data;
+CLAUDE.md ground rule amended, architecture §16 states it); accretion
+refreshes the derived rows incrementally so cards see it without a
+re-scan; rebuild replays MAY touch the shelf but only as byte-level
+no-ops (idempotent own-section supersession). (b) Migration ordering:
+code first (reads fall back to ledger notes per (code, kind)), export
+owner-fired (`nabu language --export-dossiers`, idempotent,
+absence-filling, --dry-run), ledger-table DROP deferred to a later
+packet — it cannot ride this one because write paths auto-migrate the
+ledger on open, which would destroy the notes before the export ran.
+config/languages.yml deleted NOW (the live ledger holds all 183 seed
+notes; exporter still reads a seed yml if a checkout has one).
+(c) Conformance subset argued (LexicaTest precedent): manifest/license/
+discover-parse/id-identity/uniqueness/stability/NFC mirrored for the
+dossier shape; passage-only checks (urns, search form) have no analogue.
+(d) LocalFetch attic honesty: it runs AFTER deletion so it cannot attic
+vanished bytes — sanctioned retire = move into .attic/ (rediscovers
+retained); un-atticked disappearance keeps its pin (health LOUD:
+dossiers_vanished) and >20% trips the breaker. Owner-edited dossiers
+read as a SOFT stale-derivation nudge, not corruption. (e) Probe cache
+needed ledger migration 006 (widen drift CHECK for "local").
+OWNER RUNBOOK: nabu language --export-dossiers --dry-run → without
+--dry-run → bin/nabu sync local-language → eyeball `nabu language chu`
+/ `zle-ort` / `--list`. LATER PACKET: drop ledger_migrate language_notes
+after parity (supersession history lives only there until then).

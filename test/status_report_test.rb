@@ -279,6 +279,38 @@ class StatusReportTest < Minitest::Test
     refute_match(/BEHIND/, out)
   end
 
+  # P19-1: a local shelf has no upstream to probe — policy wins over any
+  # cache row — and its content is per-language records, not docs/passages.
+  class LanguageFakeAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "local-language", name: "Language dossiers (local shelf)",
+      license: "Owner-authored", license_class: "open",
+      upstream_url: "canonical/local-language (local)", parser_family: "language-dossier"
+    )
+    def self.manifest = MANIFEST
+    def self.content_kind = :language
+  end
+
+  def test_local_policy_renders_up_local_and_records_count
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      local-language:
+        adapter: StatusReportTest::LanguageFakeAdapter
+        enabled: true
+        sync_policy: local
+    YAML
+    registry["local-language"].sync_source!(db)
+    db[:language_records].insert(lang_code: "chu", kind: "name", body: "OCS", source: "dossier")
+    Nabu::Store::Probe.create(source_slug: "local-language", checked_at: Time.now,
+                              drift: "behind", license: "unchanged", detail: nil)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/local-language\s+on\s+local\s+up=local\s+records=1/, out)
+    refute_match(/docs=0/, out, "records, never a misleading docs/pass zero")
+    refute_match(/BEHIND/, out, "policy wins over any cache row")
+  end
+
   # A ledger that predates the source_probes table (a read-only status before
   # any health --remote migrated it) degrades to never-probed, no crash.
   def test_upstream_ledger_without_probe_table_degrades_to_never

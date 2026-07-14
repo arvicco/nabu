@@ -2,7 +2,8 @@
 
 require "json"
 require_relative "content_hash"
-require_relative "../languages"
+require_relative "language_dossier_loader"
+require_relative "../language_shelf"
 
 module Nabu
   module Store
@@ -35,10 +36,16 @@ module Nabu
     class DictionaryLoader
       TOOL = "nabu-dictionary-loader"
 
-      def initialize(db:, source:, ledger: nil)
+      # +canonical_dir+ (P19-1) roots the language-notes accretion redirect:
+      # notes a batch or adapter carries land as dossier SECTIONS under
+      # canonical/<canonical_dir>/local-language via Nabu::LanguageShelf (the
+      # local shelf's sanctioned write gateway). nil (callers that cannot
+      # name the corpus root — bare loader tests) accretes nothing, honestly.
+      def initialize(db:, source:, ledger: nil, canonical_dir: nil)
         @db = db
         @source = source
         @ledger = ledger
+        @canonical_dir = canonical_dir
       end
 
       # Load an enumerable of Nabu::DictionaryDocument values.
@@ -114,46 +121,42 @@ module Nabu
         journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
       end
 
-      # P18-5: the ACCUMULATED language layer's programmatic write path —
-      # notes a batch carries (IE-CoR's languages.csv metadata) append into
-      # the LEDGER's language_notes under the P18-4 append-only contract:
-      # a note lands ONLY when the latest stored body for its
-      # (lang_code, kind) differs, so re-syncs and rebuild replays are
-      # no-ops and supersession history is free. Runs AFTER the catalog
-      # transaction (the ledger is a different database file — it could
-      # never join it), with per-record provenance in `source` ("iecor");
-      # the config/languages.yml seed keeps its own provenance and is never
-      # touched from here. Guarded: no ledger handle or a pre-004 ledger
-      # accretes nothing, silently and honestly.
+      # P18-5, redirected by P19-1: the language layer's programmatic write
+      # path — notes a batch carries (IE-CoR's languages.csv metadata) land
+      # as SECTIONS in the canonical/local-language dossiers through
+      # Nabu::LanguageShelf, the local shelf's sanctioned write gateway (the
+      # ledger language_notes home retired with the canonical-memory
+      # migration). The P18-4 contract survives verbatim: a section is
+      # written ONLY when its body differs (re-syncs and rebuild replays are
+      # byte-level no-ops), each note supersedes only its OWN kind's section,
+      # and per-record provenance rides the section header ("iecor"). The
+      # changed dossiers refresh their derived catalog rows immediately, so
+      # `nabu language` sees the accretion without waiting for the next
+      # local-language re-scan. Guarded: no canonical_dir accretes nothing,
+      # silently and honestly.
       def accrete_document_language_notes(document)
         notes = document.language_notes
-        return if notes.empty? || @ledger.nil? || !@ledger.table_exists?(:language_notes)
+        return if notes.empty? || @canonical_dir.nil?
 
-        now = Time.now
-        @ledger.transaction do
-          notes.each do |note|
-            latest = @ledger[:language_notes].where(lang_code: note.lang_code, kind: note.kind)
-                                             .order(Sequel.desc(:id)).get(:body)
-            next if latest == note.body
-
-            @ledger[:language_notes].insert(lang_code: note.lang_code, kind: note.kind,
-                                            body: note.body, source: note.source, created_at: now)
-          end
-        end
+        source = notes.first.source
+        accrete_dossier_sections(notes: notes, source: source)
       end
 
-      # P18-6: the language-notes rider — an adapter that declares
-      # .language_notes ([lang_code, kind, body] rows; LIV/EDL stage
-      # witnesses) accretes them into the ledger with its own id as the
-      # per-record provenance, idempotently (Languages.accrete!'s
-      # latest-body rule — a re-sync appends nothing). Ledger-optional and
-      # table-guarded like every accumulated-layer touch; catalog loads
-      # without a ledger simply skip the rider.
+      # P18-6, same redirect: the language-notes rider — an adapter that
+      # declares .language_notes ([lang_code, kind, body] rows; LIV/EDL
+      # stage witnesses) accretes them with its own manifest id as the
+      # per-record provenance.
       def accrete_adapter_language_notes(adapter)
-        return unless @ledger && adapter.class.respond_to?(:language_notes)
+        return if @canonical_dir.nil? || !adapter.class.respond_to?(:language_notes)
 
-        Nabu::Languages.accrete!(ledger: @ledger, notes: adapter.class.language_notes,
-                                 source: adapter.manifest.id)
+        accrete_dossier_sections(notes: adapter.class.language_notes, source: adapter.manifest.id)
+      end
+
+      def accrete_dossier_sections(notes:, source:)
+        shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(@canonical_dir))
+        shelf.accrete!(notes: notes, source: source).each_value do |dossier|
+          LanguageDossierLoader.replace_for_code!(@db, dossier)
+        end
       end
 
       # P18-4: the derived language-name census (migration 011) — what the
