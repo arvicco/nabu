@@ -6145,3 +6145,29 @@ test; where unreachable, the impossibility is argued in the class doc.
 | formulas star spokes | no — gram counts hash-keyed (one Formula per gram); full loci distinct-passage via per-passage seen-Set; spokes deduped by (hub,locus).minmax seen-set, overlaps counted as coalesced, never silent | already argued (class docs) | lib/nabu/query/formulas.rb; lib/nabu/batch_formulas.rb |
 | vocab hapax list | no — tally hash-keyed by folded lemma: a repeated spelling MERGES (un-hapaxes), never doubles; a repeated display string needs one spelling folding two ways in one scope (mixed-language document — no adapter mints one) | proof in class doc | lib/nabu/query/vocab.rb |
 | collation cells | no — cells hash-grouped by (language, script); Align yields each registered witness at most once per ref, so each reading lands in one cell once | proof in class doc | lib/nabu/query/collation.rb |
+
+## P18-4 · nabu language CODE — the code desk reference  [tier: opus] [status: dispatched] [deps: —]
+Owner (2026-07-14, reading etym reflexes): "half of these language codes
+means nothing even to (non-specialist) humanists. There needs to be a
+nabu language [code] that not only gives language name but also
+(possibly historical) context and the language relevance to
+corpus/library." Census first: the code universe actually OCCURRING in
+the db (documents.language + passage_lemmas.language + reflex
+lang_codes — the kaikki etymology codes like zle-ort/gkm/zlw-opl are
+the long tail). NAMES: the kaikki descendants data carries the language
+NAME per node — check whether the parser sees it and can store/derive
+it (zero-curation name source beats a hand-table); fall back to a
+generated code→name table from wiktextract's published language data.
+CONTEXT: curated one-to-three-line entries for (a) every held corpus/
+gold/dictionary language (from languages.md — period, family, what the
+library holds), (b) code FAMILIES for the etymology tail (zle-* = East
+Slavic historical stages, zlw-* = West Slavic, gkm = Medieval Greek…)
+— family-level context is honest and tractable where per-code curation
+isn't. RELEVANCE computed live: docs/passages/gold-lemma counts,
+dictionary shelves, reflex-edge counts ("appears in N etymology
+edges"). Command: `nabu language CODE` (compact card; --long lists
+where it appears), unknown code → honest miss + nearest-family hint.
+Consider (argue, don't assume): a one-line name hint in etym's grouped
+reflex lists where the terminal is wide enough vs keeping the render
+compact and pointing at the command. languages.md gains a pointer;
+MCP tool deferred unless trivially clean.
