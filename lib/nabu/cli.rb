@@ -2892,20 +2892,23 @@ module Nabu
       end
 
       # The card: headline (code — name), family line, curated context (or
-      # the family's, labeled; or an honest absence), then live relevance
-      # with zero fields suppressed. An unknown code misses honestly, with a
-      # family hint when the prefix is a known family.
+      # the family's, labeled; or an honest absence), accreted extra-kind
+      # notes (P18-5 — "iecor: IE-CoR variety: …", one line per kind), then
+      # live relevance with zero fields suppressed. An unknown code misses
+      # honestly, with a family hint when the prefix is a known family.
       def print_language_card(code, languages, info)
         name = languages.name(code)
         context = languages.context(code)
+        extras = languages.extra_notes(code)
         fallback = languages.family_fallback(code)
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
-        return print_language_miss(code, fallback) unless name || context || held
+        return print_language_miss(code, fallback) unless name || context || held || extras.any?
 
         say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
         print_language_family(code, languages, fallback)
         print_language_context(context, fallback)
+        extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
         print_language_relevance(code, relevance) if relevance
       end
 

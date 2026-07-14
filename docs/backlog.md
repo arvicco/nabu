@@ -6253,7 +6253,7 @@ FINDINGS (2026-07-14):
   Owner: run `nabu language --seed` once, and the census names land at
   the next rebuild/resync.
 
-## P18-5 · IE-CoR — the cognacy matrix  [tier: opus] [status: dispatched] [deps: —]
+## P18-5 · IE-CoR — the cognacy matrix  [tier: opus] [status: done 2026-07-14 — adapter + cldf-csv family + loan flag + language-notes rider shipped, enabled:false awaiting owner sync; findings below] [deps: —]
 Owner (2026-07-14): "plan all major unblocked sources from PIE survey…
 This batch," with the language-info rider: "extract not only corpus but
 also nabu-language info where relevant." docs/pie-survey.md is the spec
@@ -6272,6 +6272,65 @@ future-work write path becomes real here: agent/loader accretion with
 per-record provenance, seed-file untouched). Honest gaps from the
 survey handled as stated (san stem lemmas, hit hyphenated stems, orv
 dialect). Migration number IF needed: 014 (P18-6 has 015).
+
+FINDINGS (2026-07-14):
+- FETCH VERDICT: the Zenodo VERSIONED record (10.5281/zenodo.13304537 =
+  v1.2, one immutable 6.4 MB zip, published md5 matched) via ZipFetch
+  with a HARD sha256 pin (RELEASE_SHA256; mismatch aborts before any
+  tree mutation) — over GitFetch-of-repo (drags git history for a
+  dataset that only moves by minting a new DOI) and GitHub zipballs
+  (generated on the fly, NOT byte-stable). New release = new DOI =
+  owner re-pins URL+sha (the Coptic RELEASE_TAG pattern). NO migration
+  needed — 014 stays free (reflexes/borrowed/language_notes all exist).
+- INE DECISION: dictionary language = ISO 639-2 collective `ine`, per
+  the survey proposal, decided against per-clade shelves on the frozen-
+  URN clincher: Root_Language is a CURATABLE field (v1.2 roots span
+  PIE 1,596 / Latin 123 / Sanskrit 102 / … / 639 blank) — keying entry
+  identity to it would move entries between dictionaries on upstream
+  revision. Costs stated: `ine` is not -pro, so no renderer asterisk
+  (upstream Root_Form carries its own, kept VERBATIM incl. ?-doubt) and
+  `etym *root`/`define *root` direct-asterisk lookups skip iecor —
+  covered from the attested side (etym срьдьцє) and bare define
+  (define kerd-), where the cognacy value lives.
+- SHAPE: one entry per member-bearing set (4,981; the 58 judgment-less
+  rows skip by rule; singletons INCLUDED — a curated root + concept is
+  a define surface and can only surface when queried by its own forms).
+  Multiform split policy pinned: comma + SPACED slash split, native/
+  roman paired by index (mismatch → one unsplit verbatim row). Folds:
+  root keeps trailing hyphen (kaikki convention — *k̑erd- ≡ *ḱerd- →
+  "kerd-", verified cross-witness), members strip parens + trailing
+  hyphen (gold lemmas carry neither). Doubt flags dropped (no home in
+  the entry model) — named, not fudged. loans.csv ORs borrowed=true
+  into every member edge of an event set (path-grain, the survey's
+  explicit hlaibaz rule); non-event members parse false.
+- 12-variety map keyed by upstream variety ID (not ISO): the two real
+  remaps are Slovene EM slv→sl and grc ×2 collapsing; gmy rides
+  honestly off-gold. lang_code = upstream ISO else Glottocode verbatim.
+- RIDER: languages.csv → ledger language_notes, kind/provenance
+  "iecor" (never name/family/context — programmatic accretion can
+  never supersede curation), ONE note per catalog-facing code with
+  co-coded varieties grouped (grc, and 14 more multi-variety codes
+  measured) so append-only idempotency can't ping-pong. Writer =
+  DictionaryLoader#accrete_language_notes (the P18-4 named future
+  write path, now real: DictionaryDocument#add_language_note →
+  append-only latest-per-(code,kind), guarded pre-004/no-ledger).
+  Languages#extra_notes + card render ("iecor: IE-CoR variety: …");
+  card miss-guard extended so an extras-only code still gets a card.
+- FIXTURES: byte-verbatim trimmed 6-CSV set (13 varieties / 5 sets /
+  17 forms+judgments / 1 loan event; csv round-trip verified byte-
+  identical before trimming) — heart 6458, loan 1171, calc-only 1846,
+  singleton 2280, comma-multiform 1105 (?*pel(h₁)- paren-laryngeal
+  fold pin). Fixture render: etym срьдьцє → *k̑erd- [ine] with the 11
+  witnesses (got 𐌷𐌰𐌹𐍂𐍄𐍉 (hairto), sl ſerzè); etym кожа → "(loan)";
+  language chu → iecor note + census-named card; language lit → card
+  from iecor census+note alone.
+- PROJECTED LIVE (measured from the full v1.2 tables under the shipped
+  policy): 4,981 entries / 26,328 reflex rows (2,308 loan-flagged) /
+  1,800 held-language member edges (grc 334 · chu 179 · sl 179 · san
+  173 · lat 172 · xcl 170 · ang 170 · hit 148 · got 123 · orv 105 ·
+  gmy 47) / 144 language notes. Owner: bin/nabu sync iecor, eyeball
+  etym срьдьцє + language chu, flip enabled, rebuild reindex picks the
+  closure up.
 
 ## P18-6 · LIV-LOD + de Vaan EDL skeleton  [tier: opus] [status: dispatched] [deps: —]
 pie-survey v1-2 + its named v2 sibling, one packet (both CIRCSE, both

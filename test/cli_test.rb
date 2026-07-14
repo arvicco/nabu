@@ -308,6 +308,65 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P18-5: the IE-CoR shelf — cognacy sets as etym/define surfaces, the
+  # loan label, and the language card's accreted iecor note ---------------------
+
+  def test_language_card_renders_the_iecor_accreted_note
+    with_iecor_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language chu])
+        assert_nil status
+        assert_match(/^chu — /, out)
+        assert_match(/iecor: IE-CoR variety: Old Church Slavonic/, out, "the accreted note renders")
+        assert_match(/Balto-Slavic/, out, "the clade travels")
+        assert_match(/etymology: \d+ reflex edge/, out, "iecor reflexes count as edges")
+      end
+    end
+  end
+
+  def test_language_card_for_a_code_known_only_through_iecor
+    with_iecor_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language lit])
+        assert_nil status
+        assert_match(/^lit — Lithuanian$/, out, "the census name comes from IE-CoR's languages table")
+        assert_match(/iecor: IE-CoR variety: Lithuanian/, out)
+      end
+    end
+  end
+
+  def test_etym_reaches_the_iecor_heart_set_from_the_attested_side
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym срьдьцє --long]) }
+      assert_nil status
+      assert_match(/срьдьцє \[chu\] → \*k̑erd- \[ine\]/, out, "the upstream asterisk displays verbatim")
+      assert_match(/IE-CoR/, out)
+      assert_match(/\[got · Gothic\] 𐌷𐌰𐌹𐍂𐍄𐍉 \(hairto\)/, out,
+                   "the Gothic witness rides word (roman), named by the iecor census")
+      assert_match(/καρδία/, out)
+      assert_match(/\[lat( · Latin)?\] cor/, out)
+    end
+  end
+
+  def test_etym_labels_the_iecor_loan_event_edges
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym кожа]) }
+      assert_nil status
+      assert_match(/кожа \[chu\] \(loan\) → \*kož- \[ine\]/, out,
+                   "the loans.csv event ORs into the member edge and labels it")
+    end
+  end
+
+  def test_define_finds_the_iecor_root_by_folded_headword
+    with_iecor_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define kerd-]) }
+      assert_nil status
+      assert_match(/^\*k̑erd- — IE-CoR/, out)
+      assert_match(/cognate set 6458/, out)
+      assert_match(/Proto-Indo-European/, out)
+    end
+  end
+
   def test_etym_footer_points_at_the_language_desk_reference
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[etym *zima]) }
@@ -3005,6 +3064,33 @@ class CLITest < Minitest::Test
                                    .load_from(Nabu::Adapters::WiktionaryRecon.new,
                                               workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
       db.disconnect
+      yield config
+    end
+  end
+
+  # P18-5: the IE-CoR cognacy shelf loaded from the fixture CLDF bundle,
+  # WITH a real ledger so the language-notes rider accretes (the loader's
+  # programmatic write path, end to end).
+  def with_iecor_shelf
+    Dir.mktmpdir("nabu-cli-iecor") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      source = Nabu::Store::Source.create(
+        slug: "iecor", name: "IE-CoR", adapter_class: "Nabu::Adapters::Iecor",
+        license: "CC BY 4.0", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)
+                                   .load_from(Nabu::Adapters::Iecor.new,
+                                              workdir: Nabu::TestSupport.fixtures("iecor"))
+      db.disconnect
+      ledger.disconnect
       yield config
     end
   end
