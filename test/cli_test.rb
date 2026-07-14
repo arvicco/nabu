@@ -546,6 +546,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- sync --review (P18-7): the optional post-sync hook --------------------
+
+  # The hook gets the JSON brief on stdin (tool-agnostic stub: a shell
+  # command), its output is relayed, exit 0 reported.
+  def test_sync_review_pipes_the_brief_and_relays_the_hook_output
+    with_sync_env(enabled: true) do |config|
+      sink = File.join(config.canonical_dir, "..", "brief.json")
+      out, _err, status = with_config(config) do
+        run_cli(["sync", "corpus", "--parse-only", "--review", "tee #{sink} >/dev/null && echo LGTM"])
+      end
+      assert_nil status, "the sync itself succeeded"
+      assert_match(/review\| LGTM/, out)
+      assert_match(/review hook: exit 0/, out)
+      brief = JSON.parse(File.read(sink))
+      assert_equal "nabu.sync-review/1", brief["schema"]
+      assert_equal "corpus", brief["source"]
+      assert_equal 2, brief.dig("counts", "added")
+      assert_equal 2, brief["sample_urns"].size
+    end
+  end
+
+  # NON-FATALITY: the hook's failure is reported and the sync still exits 0.
+  def test_sync_review_hook_failure_never_fails_the_sync
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["sync", "corpus", "--parse-only", "--review", "cat >/dev/null; echo no thanks >&2; exit 7"])
+      end
+      assert_nil status, "a failing review hook must never fail the sync"
+      assert_match(/\+2 added/, out, "the sync report still prints")
+      assert_match(/review\| no thanks/, out)
+      assert_match(/review hook: exit 7 \(advisory — sync unaffected\)/, out)
+    end
+  end
+
+  # Off by default: no --review, no hook, no review lines.
+  def test_sync_without_review_runs_no_hook
+    with_sync_env(enabled: true) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil status
+      refute_match(/review/, out)
+    end
+  end
+
   # -- progress reporting (P2-6) -------------------------------------------
 
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
@@ -723,6 +766,19 @@ class CLITest < Minitest::Test
       assert_match(/ANOMALY/, out)
       assert_match(/quarantine spike/i, out)
       assert_match(/loud finding/i, err)
+    end
+  end
+
+  # P18-7 last-run honesty end-to-end: a FAILED most-recent run is a loud
+  # ANOMALY naming the error, exit 1 — the failed-Coptic-sync gap closed.
+  def test_health_local_failed_last_run_exits_one_with_the_error
+    with_indexed_corpus do |config|
+      seed_failed_run(config, notes: "fetch exploded: connection reset")
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status
+      assert_match(/ANOMALY last sync run FAILED/, out)
+      assert_match(/fetch exploded/, out)
+      assert_match(/re-run/, out)
     end
   end
 
@@ -2818,6 +2874,15 @@ class CLITest < Minitest::Test
   # latest errored count (90) towers over the recent norm — a quarantine spike.
   # Runs live in the history ledger (P7-1), slug-keyed; writes through its own
   # connection, then hands back so the CLI opens it fresh.
+  def seed_failed_run(config, notes:)
+    db = Nabu::Store::Ledger.open!(config.history_path)
+    now = Time.now
+    Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: now, finished_at: now,
+                            status: "failed", notes: notes)
+  ensure
+    db&.disconnect
+  end
+
   def seed_spike_runs(config)
     db = Nabu::Store::Ledger.open!(config.history_path)
     now = Time.now

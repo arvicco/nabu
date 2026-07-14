@@ -6285,7 +6285,7 @@ through 1,466 Proto-Italic + 1,394 PIE etymons — the Leiden-school
 cross-witness beside kaikki's itc-pro (provenance-distinct entries, the
 MW precedent). LANGUAGE-INFO RIDER as P18-5. Migration IF needed: 015.
 
-## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: dispatched] [deps: —]
+## P18-7 · Postcondition checker + AI-review hook  [tier: opus] [status: done] [deps: —]
 The owner-designed P18-queue item 5b, now taken (owner 2026-07-14).
 MECHANICAL layer (always on, in health/verify): per-source last-run
 status surfaced LOUDLY (failed run + partial docs = the Coptic case),
@@ -6300,6 +6300,66 @@ layer: OPTIONAL post-sync hook, off by default, tool-agnostic
 `claude -p` + the nabu MCP server) — judgment only. Ledger migration
 IF needed: 005 (quarantine baseline lives in the ledger — it must
 survive rebuilds).
+FINDINGS (2026-07-14):
+- INVARIANTS SHIPPED (Health::Invariants, folded into bare `nabu
+  health`'s per-source findings + a global slot; findings-only, so a
+  green library prints exactly what it printed before): (1) last-run
+  honesty — most recent ledger run `failed` → LOUD with the recorded
+  error + "re-run"; (2) partial load — the failed run journaled
+  provenance rows (the 152-doc Coptic case; provenance is the witness,
+  doc- and dictionary-grained) → LOUD, named; (3) enabled-vs-populated
+  — enabled + a succeeded run on record + zero docs AND entries (the
+  crashed-rebuild signature for never-reached sources) → LOUD; (4)
+  fuzzy_index vs trigram index/scope (absent | source outside the
+  built passages_trigram_scope | empty) → LOUD; (5) axis extractor
+  families (slug→axis_source map off AxisBuilder) vs document_axes
+  rows → LOUD, "run rebuild"; (6) Adapter.reflex_bearing? (new
+  declaration, true on the two wiktionary adapters) vs
+  dictionary_reflexes rows → LOUD, "--parse-only resync"; (7) reflex
+  rows vs language_names census → LOUD; (8) quarantine creep (below)
+  soft/loud; (9) pending catalog/ledger migrations (schema_info vs
+  dir) → SOFT, global. All raw-dataset reads (Verify precedent), every
+  missing table degrades silent (pending-migrations says why).
+  never_synced note now yields to invariant findings (a failed FIRST
+  sync reads "last run FAILED", not "never synced").
+- PROJECTION DIFFS: skipped, argued — no machine-readable expectation
+  exists (sources.yml counts live in sign-off comments, rot by
+  design); an expected_docs: key would stale at every ordinary sync;
+  zero-rows + delta rules cover the class.
+- ADVANCE-RULE VERDICT (ledger migration 005, quarantine_baselines):
+  TWO columns. `baseline` = errored of the last ok sync/rebuild run,
+  auto-advances at EVERY ok run → the delta warning (TrendRules
+  .quarantine_delta, replaces the absolute rebuild WARNING and the
+  sync-time spike check) speaks exactly once per change, silent at
+  steady state, drops loud too (upstream churn is signal). `anchor` =
+  low-water mark, advances DOWNWARD only → health's creep check
+  (TrendRules.quarantine_creep: floor 10, then the shared 5%/15%
+  fractions of the anchor; any over-floor drift from a zero anchor is
+  loud) keeps the cumulative bleed visible that pure auto-advance
+  would absorb step by step — the trend_rules withdrawal-creep
+  precedent applied verbatim. Improvement pulls both down (auto
+  re-anchor); acceptance of a higher standing level needs no command
+  (each step already announced once; the creep line IS the standing
+  reminder until triaged).
+- HOOK MECHANISM VERDICT: `nabu sync SLUG --review CMD` (flag, not a
+  post_sync_review: config key) — syncs here are owner-fired, the
+  visible flag keeps the subprocess boundary explicit per invocation,
+  and no standing config can rot or surprise an unattended --all.
+  ReviewHook emits schema nabu.sync-review/1 (source, sha, counts,
+  quarantine vs baseline/anchor, discovery accounting, warning
+  messages, ≤5 fresh urns via provenance) to CMD's stdin; output
+  relayed as review| lines, exit status reported, NEVER fails the sync
+  (spawn failure included). script/review-sync-claude = the bundled
+  `claude -p` + nabu MCP example (read-only tools, ≤6-line verdict).
+- Healthy-library check: bare `nabu health` output is UNCHANGED on
+  green (asserted end-to-end in cli_test).
+- Tests: suite 2,388 runs / 31,714 assertions exit 0, lint exit 0
+  (60 new: delta/creep rules, baseline record/advance/degrade, each
+  invariant red+green, ledger 005 forward-only on a live-shaped
+  ledger without loss, sync delta silent-on-baseline/loud-on-change/
+  records, rebuild first-records + silent-then-loud-then-silent,
+  hook brief shape + stdin pipe + non-fatality incl. unstartable
+  command, CLI --review relay + off-by-default + failed-run health).
 
 ## P18-gate · Phase 18 gate  [tier: orchestrator] [status: pending] [deps: P18-1..7]
 Full-diff, library/languages/README/site refresh (per §10 + the site

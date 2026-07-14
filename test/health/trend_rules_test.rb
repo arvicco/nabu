@@ -106,4 +106,78 @@ class TrendRulesTest < Minitest::Test
     finding = T.stale_source(last_sync_at: (now - (30 * 86_400)).to_s, now: now)
     assert finding.soft?
   end
+
+  # -- quarantine delta vs baseline (P18-7) ----------------------------------
+
+  # The standing count (papyri's 9,312) equals the baseline ⇒ SILENT.
+  def test_delta_silent_when_errored_equals_baseline
+    assert_nil T.quarantine_delta(errored: 9_312, baseline: 9_312)
+  end
+
+  # Any change off the baseline is one LOUD line carrying the signed delta —
+  # no floor: the baseline advances, so each change speaks exactly once.
+  def test_delta_loud_on_increase_with_the_signed_delta
+    finding = T.quarantine_delta(errored: 9_320, baseline: 9_312)
+    assert finding.loud?
+    assert_equal :quarantine_delta, finding.kind
+    assert_match(/\(\+8\)/, finding.message)
+  end
+
+  def test_delta_loud_on_decrease_too
+    finding = T.quarantine_delta(errored: 9_300, baseline: 9_312)
+    assert finding.loud?
+    assert_match(/\(-12\)/, finding.message)
+  end
+
+  # No baseline yet (pre-005 ledger): quarantines present → announce the
+  # recording once (soft); a clean run records silently.
+  def test_no_baseline_with_quarantines_is_the_soft_recording_note
+    finding = T.quarantine_delta(errored: 27, baseline: nil)
+    assert_equal :quarantine_baseline_recorded, finding.kind
+    assert finding.soft?
+  end
+
+  def test_no_baseline_and_zero_errored_is_silent
+    assert_nil T.quarantine_delta(errored: 0, baseline: nil)
+  end
+
+  # -- quarantine creep vs the low-water anchor (P18-7) -----------------------
+  #
+  # The advance rule's backstop: the baseline auto-advances (each step is one
+  # absorbed warning), so health watches the CUMULATIVE drift above the anchor.
+
+  def test_creep_silent_at_steady_state
+    assert_nil T.quarantine_creep(baseline: 9_312, anchor: 9_312)
+  end
+
+  # Small absolute drift is under the floor — noise, not creep.
+  def test_creep_silent_under_the_absolute_floor
+    assert_nil T.quarantine_creep(baseline: 9_320, anchor: 9_312)
+  end
+
+  # Proportionally small drift on a big anchor stays silent even over the
+  # floor (the withdrawal-creep fractions, one policy).
+  def test_creep_silent_when_fraction_is_small_on_a_big_anchor
+    assert_nil T.quarantine_creep(baseline: 9_400, anchor: 9_312) # ~0.9%
+  end
+
+  def test_creep_soft_between_the_fractions
+    finding = T.quarantine_creep(baseline: 1_100, anchor: 1_000) # 10%
+    assert finding.soft?
+    assert_equal :quarantine_creep, finding.kind
+  end
+
+  def test_creep_loud_over_the_loud_fraction
+    finding = T.quarantine_creep(baseline: 1_200, anchor: 1_000) # 20%
+    assert finding.loud?
+  end
+
+  # From a clean source (anchor 0) any drift past the floor is loud — the
+  # slow 0→2→…→12 bleed the auto-advancing baseline would otherwise absorb.
+  def test_creep_from_zero_anchor_is_loud_past_the_floor
+    assert_nil T.quarantine_creep(baseline: 10, anchor: 0) # at the floor: noise
+    finding = T.quarantine_creep(baseline: 11, anchor: 0)
+    assert finding.loud?
+    assert_match(/\+11 above the low-water mark 0/, finding.message)
+  end
 end
