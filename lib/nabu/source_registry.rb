@@ -15,8 +15,12 @@ module Nabu
   # two, writing metadata into the sources row while preserving db-owned state.
   class SourceRegistry
     # Closed set (docs/maintenance-and-extension.md §2): live syncs in `--all`,
-    # manual never does, frozen is a one-shot dead-project snapshot.
-    SYNC_POLICIES = %w[live manual frozen].freeze
+    # manual never does, frozen is a one-shot dead-project snapshot, and
+    # local (P19-1, architecture §16) has NO upstream at all — no network,
+    # ever; sync re-scans the canonical tree (LocalFetch), the drift probe
+    # short-circuits to a frozen-style "local" verdict, and the license comes
+    # from the shelf's own manifest/data, never from a fetched file.
+    SYNC_POLICIES = %w[live manual frozen local].freeze
     DEFAULT_SYNC_POLICY = "manual"
 
     # One registry line. adapter_class_name is a String resolved on demand.

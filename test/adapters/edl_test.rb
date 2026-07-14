@@ -139,14 +139,14 @@ class EdlTest < Minitest::Test
 
   # --- DictionaryLoader contract ---------------------------------------------------
 
-  def loader_setup(ledger: nil)
+  def loader_setup(ledger: nil, canonical_dir: nil)
     db = store_test_db
     source = Nabu::Store::Source.create(
       slug: "edl", name: "de Vaan EDL", adapter_class: "Nabu::Adapters::Edl",
       license: "CC BY-NC-SA 4.0", license_class: "nc",
       upstream_url: RAW_URL, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)]
+    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger, canonical_dir: canonical_dir)]
   end
 
   def test_loading_twice_is_idempotent_across_both_shelves
@@ -162,18 +162,21 @@ class EdlTest < Minitest::Test
     assert_equal 3, db[:dictionary_reflexes].count
   end
 
-  # --- language-notes rider ---------------------------------------------------------
+  # --- language-notes rider (redirected to dossier sections by P19-1) ---------------
 
-  def test_load_accretes_the_stage_witness_notes_idempotently
-    ledger = ledger_test_db
-    _db, loader = loader_setup(ledger: ledger)
-    loader.load_from(adapter, workdir: FIXTURES)
-    rows = ledger[:language_notes].where(kind: "witness:edl").order(:id).all
-    assert_equal %w[itc-pro lat], rows.map { |row| row[:lang_code] }.sort
-    assert_equal ["edl"], rows.map { |row| row[:source] }.uniq
-    assert_match(/Proto-Italic/, rows.find { |row| row[:lang_code] == "itc-pro" }[:body])
-    loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 2, ledger[:language_notes].where(kind: "witness:edl").count
+  def test_load_accretes_the_stage_witness_sections_idempotently
+    Dir.mktmpdir do |root|
+      _db, loader = loader_setup(canonical_dir: root)
+      loader.load_from(adapter, workdir: FIXTURES)
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      itc = shelf.load("itc-pro").section("witness:edl")
+      lat = shelf.load("lat").section("witness:edl")
+      assert_equal %w[edl edl], [itc.source, lat.source]
+      assert_match(/Proto-Italic/, itc.body)
+      before = File.read(shelf.path_for("itc-pro"))
+      loader.load_from(adapter, workdir: FIXTURES)
+      assert_equal before, File.read(shelf.path_for("itc-pro")), "re-loading writes nothing"
+    end
   end
 
   # --- acceptance render: the full lat → PIt → PIE ascent ---------------------------

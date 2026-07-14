@@ -141,14 +141,14 @@ class LivTest < Minitest::Test
 
   # --- DictionaryLoader contract ---------------------------------------------------
 
-  def loader_setup(ledger: nil)
+  def loader_setup(ledger: nil, canonical_dir: nil)
     db = store_test_db
     source = Nabu::Store::Source.create(
       slug: "liv", name: "LIV", adapter_class: "Nabu::Adapters::Liv",
       license: "CC BY-SA 4.0", license_class: "attribution",
       upstream_url: RAW_URL, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)]
+    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger, canonical_dir: canonical_dir)]
   end
 
   def test_loading_twice_is_idempotent_with_stable_urns_and_reflex_rows
@@ -166,21 +166,24 @@ class LivTest < Minitest::Test
     assert_equal ["lat"], db[:dictionary_reflexes].select_map(:language).uniq
   end
 
-  # --- language-notes rider (P18-6, the P18-4 accretion layer) ---------------------
+  # --- language-notes rider (P18-6, redirected to dossier sections by P19-1) --------
 
-  def test_load_accretes_the_ine_pro_witness_note_idempotently
-    ledger = ledger_test_db
-    _db, loader = loader_setup(ledger: ledger)
-    loader.load_from(adapter, workdir: FIXTURES)
-    rows = ledger[:language_notes].where(kind: "witness:liv").all
-    assert_equal 1, rows.size
-    note = rows.first
-    assert_equal "ine-pro", note[:lang_code]
-    assert_equal "liv", note[:source], "per-record provenance, the P18-5 contract"
-    assert_match(/305 .*verbal roots/, note[:body])
-    loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 1, ledger[:language_notes].where(kind: "witness:liv").count,
-                 "re-loading appends nothing — the seed!-style latest-body check"
+  def test_load_accretes_the_ine_pro_witness_section_idempotently
+    Dir.mktmpdir do |root|
+      db, loader = loader_setup(canonical_dir: root)
+      loader.load_from(adapter, workdir: FIXTURES)
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      section = shelf.load("ine-pro").section("witness:liv")
+      assert_equal "liv", section.source, "per-record provenance, the P18-5 contract"
+      assert_match(/305 .*verbal roots/, section.body)
+      assert_equal section.body,
+                   db[:language_records].where(lang_code: "ine-pro", kind: "witness:liv").get(:body),
+                   "the derived record refreshes at accretion time"
+      before = File.read(shelf.path_for("ine-pro"))
+      loader.load_from(adapter, workdir: FIXTURES)
+      assert_equal before, File.read(shelf.path_for("ine-pro")),
+                   "re-loading writes nothing — the latest-body check, rehomed"
+    end
   end
 
   # --- acceptance renders (define / etym on the fixture shelf) ---------------------

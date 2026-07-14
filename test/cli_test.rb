@@ -210,14 +210,14 @@ class CLITest < Minitest::Test
     out, _err, _status = run_cli(%w[help language])
     assert_match(/zle-ort/, out, "must show the etymology-tail worked example")
     assert_match(/--list/, out)
-    assert_match(/--seed/, out)
+    assert_match(/--export-dossiers/, out, "the one-shot canonical-memory migration")
+    assert_match(/local-language/, out, "must name the dossier shelf the curation lives in")
     assert_match(/family-level/, out, "must explain the family fallback for the tail")
   end
 
   def test_language_card_for_a_held_shelf_language_merges_all_three_layers
     with_recon_shelf do |config|
       with_config(config) do
-        run_cli(%w[language --seed])
         out, _err, status = run_cli(%w[language sla-pro])
         assert_nil status
         assert_match(/^sla-pro — Proto-Slavic$/, out, "curated name headline")
@@ -234,7 +234,6 @@ class CLITest < Minitest::Test
   def test_language_card_for_a_tail_code_census_name_with_family_fallback
     with_recon_shelf do |config|
       with_config(config) do
-        run_cli(%w[language --seed])
         out, _err, status = run_cli(%w[language zlw-osk])
         assert_nil status
         assert_match(/^zlw-osk — Old Slovak$/, out, "the name comes from the derived kaikki census")
@@ -248,7 +247,6 @@ class CLITest < Minitest::Test
   def test_language_card_long_shows_the_upstream_code_split
     with_recon_shelf do |config|
       with_config(config) do
-        run_cli(%w[language --seed])
         out, _err, status = run_cli(%w[language chu --long])
         assert_nil status
         assert_match(/^chu — Old Church Slavonic$/, out)
@@ -260,7 +258,6 @@ class CLITest < Minitest::Test
   def test_language_unknown_code_misses_honestly_with_a_family_hint
     with_recon_shelf do |config|
       with_config(config) do
-        run_cli(%w[language --seed])
         out, _err, status = run_cli(%w[language zle-qqq])
         assert_nil status
         assert_match(/^zle-qqq — unknown here/, out)
@@ -277,7 +274,6 @@ class CLITest < Minitest::Test
   def test_language_list_scopes_to_held_languages_and_names_the_tail
     with_recon_shelf do |config|
       with_config(config) do
-        run_cli(%w[language --seed])
         out, _err, status = run_cli(%w[language --list])
         assert_nil status
         assert_match(/^held languages \(\d+ with corpus documents, gold lemmas, or a shelf\):/, out)
@@ -288,14 +284,29 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_language_seed_is_idempotent_across_runs
+  # P19-1: THE canonical-memory migration — ledger notes export as dossier
+  # files, idempotently; --dry-run touches nothing.
+  def test_language_export_dossiers_is_idempotent_and_dry_run_touches_nothing
     with_recon_shelf do |config|
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      ledger[:language_notes].insert(lang_code: "gkm", kind: "name", body: "Medieval Greek",
+                                     source: "seed:config/languages.yml", created_at: Time.now)
+      ledger.disconnect
       with_config(config) do
-        out, _err, status = run_cli(%w[language --seed])
+        shelf_dir = Nabu::LanguageShelf.dir(config.canonical_dir)
+        out, _err, status = run_cli(%w[language --export-dossiers --dry-run])
         assert_nil status
-        assert_match(/language notes: \d+ seeded, 0 unchanged/, out)
-        out, _err, _status = run_cli(%w[language --seed])
-        assert_match(/language notes: 0 seeded, \d+ unchanged/, out, "re-seeding writes nothing")
+        assert_match(/dossiers: would write 1/, out)
+        refute File.exist?(File.join(shelf_dir, "gkm.md")), "dry-run touches nothing"
+
+        out, _err, status = run_cli(%w[language --export-dossiers])
+        assert_nil status
+        assert_match(/dossiers: wrote 1/, out)
+        assert_match(%r{next: bin/nabu sync local-language}, out)
+        assert File.file?(File.join(shelf_dir, "gkm.md"))
+
+        out, _err, _status = run_cli(%w[language --export-dossiers])
+        assert_match(/dossiers: wrote 0, 1 unchanged/, out, "re-exporting writes nothing")
       end
     end
   end
@@ -591,6 +602,51 @@ class CLITest < Minitest::Test
       assert_match(/corpus\s+parse-only/, out)
       assert_match(/\+2 added/, out)
       assert_match(/indexed 3 passages/, out) # μῆνιν, ἄειδε, ἄνδρα
+    end
+  end
+
+  # P19-1: the local shelf end to end — a REAL `nabu sync local-language`
+  # (fetch = LocalFetch re-scan, per-file ledger pins, records derived), then
+  # the card reads the merged view from the derived records. No network:
+  # sync_policy local never touches one.
+  def test_sync_local_language_scans_pins_and_derives_then_the_card_reads_it
+    Dir.mktmpdir("nabu-cli-local") do |root|
+      shelf = File.join(root, "canonical", "local-language")
+      FileUtils.mkdir_p(File.dirname(shelf))
+      FileUtils.cp_r(Nabu::TestSupport.fixtures("local-language"), shelf)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        local-language:
+          adapter: Nabu::Adapters::LocalLanguage
+          enabled: true
+          sync_policy: local
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      with_config(config) do
+        out, _err, status = run_cli(%w[sync local-language])
+        assert_nil status
+        assert_match(/added/, out)
+
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        pins = ledger[:pins].where(source_slug: "local-language").select_map(:repo_url)
+        ledger.disconnect
+        assert_includes pins, "local:chu.md", "one ledger pin per scanned file"
+
+        out, _err, status = run_cli(%w[language sla-pro])
+        assert_nil status
+        assert_match(/^sla-pro — Proto-Slavic$/, out)
+        assert_match(/family: Slavic < Balto-Slavic/, out)
+
+        out, _err, _status = run_cli(%w[language ine-pro])
+        assert_match(/witness \(liv\): LIV — Lexikon/, out, "dossier sections render as witness lanes")
+        assert_match(/period: reconstructed/, out, "front-matter extras render as extra lanes")
+
+        out, _err, _status = run_cli(%w[sync local-language])
+        assert_match(/0 added/, out, "a re-scan of an unchanged shelf loads nothing")
+      end
     end
   end
 
@@ -3063,9 +3119,23 @@ class CLITest < Minitest::Test
       Nabu::Store::DictionaryLoader.new(db: db, source: source)
                                    .load_from(Nabu::Adapters::WiktionaryRecon.new,
                                               workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      load_language_shelf(db)
       db.disconnect
       yield config
     end
+  end
+
+  # P19-1: the curated layer of the language card — the local-language
+  # dossier shelf loaded into the catalog's derived records (the production
+  # read path; what `nabu sync local-language` derives on a live box).
+  def load_language_shelf(db)
+    source = Nabu::Store::Source.create(
+      slug: "local-language", name: "Language dossiers (local shelf)",
+      adapter_class: "Nabu::Adapters::LocalLanguage", license_class: "open"
+    )
+    Nabu::Store::LanguageDossierLoader.new(db: db, source: source)
+                                      .load_from(Nabu::Adapters::LocalLanguage.new,
+                                                 workdir: Nabu::TestSupport.fixtures("local-language"))
   end
 
   # P18-5: the IE-CoR cognacy shelf loaded from the fixture CLDF bundle,
@@ -3086,7 +3156,8 @@ class CLITest < Minitest::Test
         slug: "iecor", name: "IE-CoR", adapter_class: "Nabu::Adapters::Iecor",
         license: "CC BY 4.0", license_class: "attribution"
       )
-      Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger)
+      Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                        canonical_dir: config.canonical_dir)
                                    .load_from(Nabu::Adapters::Iecor.new,
                                               workdir: Nabu::TestSupport.fixtures("iecor"))
       db.disconnect

@@ -1,0 +1,3 @@
+no front matter here — a malformed dossier the loader must quarantine,
+not crash on. The loader test renames this to broken.md inside a copied
+tree (see README.md).

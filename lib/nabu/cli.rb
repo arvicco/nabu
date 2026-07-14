@@ -1123,11 +1123,14 @@ module Nabu
         with the dictionary shelves (a catalog predating that census shows
         names only for curated codes until the next rebuild or parse-only
         shelf resync).
-      - CONTEXT, curated and accumulated in the history ledger: period,
-        family, what the library holds — every held language, plus
-        family-level entries for the etymology tail (zle-* East Slavic
-        stages, gkm Medieval Greek…). A code without its own note falls
-        back to its family; without either it says so honestly.
+      - CONTEXT, curated in the canonical/local-language dossier shelf
+        (P19-1: one Markdown file per code — edit it in any editor, then
+        `nabu sync local-language` re-derives): period, family, what the
+        library holds — every held language, plus family-level entries for
+        the etymology tail (zle-* East Slavic stages, gkm Medieval Greek…).
+        A code without its own dossier falls back to its family; without
+        either it says so honestly. (Libraries that predate the dossier
+        migration keep reading the ledger's language notes unchanged.)
       - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
         dictionary shelves, reconstruction-crosswalk edges. Zero fields
         are suppressed.
@@ -1135,24 +1138,29 @@ module Nabu
       --long adds where-it-appears detail: per-source document counts and
       the upstream-code split of the etymology edges (chu's edges arrive
       as Wiktionary's "cu"). --list shows the held languages only — the
-      ~800-code etymology tail is what `language CODE` is for. --seed
-      loads config/languages.yml into the ledger's language notes
-      (idempotent; run after editing the curation).
+      ~800-code etymology tail is what `language CODE` is for.
+      --export-dossiers is THE one-shot canonical-memory migration
+      (owner-fired): it writes the ledger's language notes out as dossier
+      files, absence-filling only, idempotent; --dry-run previews it.
 
       Examples:
         nabu language zle-ort      # the code from an etym cognate list
         nabu language chu --long   # a held language, full holdings
         nabu language --list       # every held language
+        nabu language --export-dossiers --dry-run   # preview the migration
     HELP
     option :list, type: :boolean, default: false,
                   desc: "List the held languages (corpus documents, gold lemmas, or a shelf)"
-    option :seed, type: :boolean, default: false,
-                  desc: "Load config/languages.yml into the ledger's language notes (idempotent)"
+    option :"export-dossiers", type: :boolean, default: false,
+                               desc: "One-shot migration: write ledger language notes out as " \
+                                     "canonical/local-language dossiers (idempotent, absence-filling)"
+    option :"dry-run", type: :boolean, default: false,
+                       desc: "With --export-dossiers: report what would be written, touch nothing"
     option :long, type: :boolean, default: false,
                   desc: "Add per-source document counts and the upstream-code edge split"
     def language(code = nil)
       config = Nabu::Config.load
-      return seed_language_notes(config) if options[:seed]
+      return export_language_dossiers(config) if options[:"export-dossiers"]
 
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -2880,13 +2888,27 @@ module Nabu
           "[#{result.license_class}]"
       end
 
-      # -- language (P18-4): the code desk reference ------------------------------
+      # -- language (P18-4, rehomed P19-1): the code desk reference ---------------
 
-      def seed_language_notes(config)
-        ledger = open_or_create_ledger(config)
-        report = Nabu::Languages.seed!(ledger: ledger)
-        say "language notes: #{report.appended} seeded, #{report.unchanged} unchanged " \
-            "(config/languages.yml → ledger)"
+      # THE canonical-memory migration (P19-1, owner-fired): ledger
+      # language_notes (+ the retired seed yml, when a checkout still has
+      # one) → canonical/local-language/<code>.md dossiers. Absence-filling
+      # and idempotent — safe to re-run; a dossier lane that already exists
+      # (a redirected accretion landed first, or the owner edited) is never
+      # overwritten. After it: bin/nabu sync local-language derives the
+      # catalog records the card reads.
+      def export_language_dossiers(config)
+        ledger = open_ledger(config)
+        dir = Nabu::LanguageShelf.dir(config.canonical_dir)
+        seed = File.join(config.config_dir, "languages.yml")
+        report = Nabu::LanguageDossierExport.new(ledger: ledger, dir: dir,
+                                                 seed_path: File.file?(seed) ? seed : nil)
+                                            .run!(dry_run: options[:"dry-run"])
+        verb = options[:"dry-run"] ? "would write" : "wrote"
+        line = "dossiers: #{verb} #{report.written}, #{report.unchanged} unchanged"
+        line += ", #{report.lanes_kept} lane(s) kept (already in a dossier)" if report.lanes_kept.positive?
+        say "#{line} → #{dir}"
+        say "next: bin/nabu sync local-language (derives the catalog records)" unless options[:"dry-run"]
       ensure
         ledger&.disconnect
       end
@@ -3416,7 +3438,8 @@ module Nabu
         ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
           registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
-          golden_queries: Nabu::Health::LocalCheck.golden_queries
+          golden_queries: Nabu::Health::LocalCheck.golden_queries,
+          canonical_dir: config.canonical_dir
         ).run
         print_local_health(report)
         raise Thor::Error, local_health_failure(report) if report.any_loud?
@@ -3510,7 +3533,7 @@ module Nabu
       def drift_cell(drift)
         { current: "current", behind: "behind", unpinned: "unpinned",
           never_synced: "never-synced", unknown: "—", multi: "multi-repo",
-          frozen: "frozen" }.fetch(drift)
+          frozen: "frozen", local: "local" }.fetch(drift)
       end
 
       # :unchecked renders as NOTHING — "license: unchecked" reads like a

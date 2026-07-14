@@ -229,6 +229,48 @@ class VerifyTest < Minitest::Test
     assert_equal :mismatch, issue.kind
   end
 
+  # -- P19-1: the language dossier shelf verifies its derived records --------
+
+  def seed_language_shelf
+    write_sources(<<~YAML)
+      local-language:
+        adapter: Nabu::Adapters::LocalLanguage
+        enabled: true
+        sync_policy: local
+    YAML
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("local-language"), File.join(@canonical, "local-language"))
+    Nabu::Rebuild.new(config: config, registry: registry).run
+  end
+
+  def test_verify_holds_language_records_against_the_reparsed_dossiers
+    seed_language_shelf
+    result = verify
+
+    assert result.clean?, "a fresh dossier shelf verifies clean"
+    outcome = result.outcomes.find { |o| o.slug == "local-language" }
+    assert_equal 5, outcome.verified, "one verification unit per code"
+
+    # An edited dossier (bytes changed AFTER the derivation) is a mismatch on
+    # exactly that code — the records no longer reflect canonical.
+    File.write(File.join(@canonical, "local-language", "zlw.md"),
+               "---\ncode: zlw\nname: West Slavic (edited)\n---\n")
+    result = verify
+    refute result.clean?
+    issue = result.issues.fetch(0)
+    assert_equal "local-language:zlw", issue.urn
+    assert_equal :mismatch, issue.kind
+  end
+
+  def test_verify_reports_a_vanished_dossier_as_missing
+    seed_language_shelf
+    FileUtils.rm(File.join(@canonical, "local-language", "zlw.md"))
+
+    result = verify
+    issue = result.issues.find { |i| i.urn == "local-language:zlw" }
+    refute_nil issue
+    assert_equal :missing, issue.kind
+  end
+
   # -- helpers -------------------------------------------------------------
 
   private

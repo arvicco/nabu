@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest"
 require_relative "trend_rules"
 require_relative "quarantine_baseline"
 
@@ -55,11 +56,15 @@ module Nabu
         "edh" => "edh"
       }.freeze
 
-      def initialize(registry:, catalog:, fulltext:, ledger:)
+      # +canonical_dir+ (P19-1) roots the local-shelf checks (dossier files
+      # vs derived records; pinned files vs the tree); nil (callers that
+      # cannot name the corpus root) skips them honestly.
+      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
+        @canonical_dir = canonical_dir
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -72,6 +77,8 @@ module Nabu
           axis_vs_rows(entry),
           reflex_vs_rows(entry),
           language_names_vs_reflexes(entry),
+          dossiers_vs_records(entry),
+          *local_shelf_integrity(entry),
           QuarantineBaseline.creep_finding(@ledger, entry.slug)
         ].compact
       end
@@ -150,13 +157,22 @@ module Nabu
 
       def enabled_unpopulated(entry)
         return nil unless entry.enabled && @catalog && any_ok_run?(entry.slug)
-        return nil if live_documents(entry.slug).positive? || dictionary_entries(entry.slug).positive?
+        return nil if populated?(entry)
 
         Finding.new(
           kind: :enabled_unpopulated, severity: :loud,
-          message: "enabled with a successful run on record but zero documents/entries — " \
+          message: "enabled with a successful run on record but zero documents/entries/records — " \
                    "half-loaded catalog? re-sync or rebuild"
         )
+      end
+
+      # What "populated" means is content-kind-shaped (P19-1): a language
+      # dossier shelf's artifact is language_records rows (it owns them —
+      # the shelf is their only writer), everything else documents/entries.
+      def populated?(entry)
+        return language_records.positive? if content_kind(entry) == :language
+
+        live_documents(entry.slug).positive? || dictionary_entries(entry.slug).positive?
       end
 
       # -- flag-vs-artifact ---------------------------------------------------
@@ -221,6 +237,78 @@ module Nabu
           message: "reflex rows present but the language_names census is empty — " \
                    "parse-only resync (bin/nabu sync #{entry.slug} --parse-only)"
         )
+      end
+
+      # -- local shelves (P19-1) -------------------------------------------------
+
+      # Flag-vs-artifact, the dossier family: dossier FILES on disk with a
+      # successful run on record but ZERO derived language records — the
+      # local-shelf variant of the half-loaded-catalog signature (the files
+      # are the flag, the records the artifact).
+      def dossiers_vs_records(entry)
+        return nil unless content_kind(entry) == :language && @canonical_dir && @catalog
+        return nil unless table?(@catalog, :language_records) && any_ok_run?(entry.slug)
+        return nil if dossier_files(entry.slug).zero? || language_records.positive?
+
+        Finding.new(
+          kind: :dossiers_unindexed, severity: :loud,
+          message: "dossier files on disk but zero derived language records — " \
+                   "re-sync (bin/nabu sync #{entry.slug}) or rebuild"
+        )
+      end
+
+      # The per-file integrity check the LocalFetch pins exist for: every
+      # ledger pin of a local-policy source ("local:<relpath>" → sha256 at
+      # last scan) is held against the canonical tree. A pinned file that is
+      # neither live nor in the attic VANISHED (loud — restore from backup,
+      # or move to .attic/ to retire deliberately); a live file whose bytes
+      # changed since the last scan is STALE derivation, not corruption —
+      # owner edits are the shelf's whole point — so it reads soft, naming
+      # the re-scan that re-derives and re-pins.
+      def local_shelf_integrity(entry)
+        return [] unless entry.sync_policy == "local" && @canonical_dir && table?(@ledger, :pins)
+
+        vanished, changed = partition_local_pins(entry.slug)
+        findings = []
+        unless vanished.empty?
+          findings << Finding.new(
+            kind: :dossiers_vanished, severity: :loud,
+            message: "#{vanished.size} pinned file(s) missing from canonical/#{entry.slug} " \
+                     "(no attic copy): #{vanished.join(', ')} — restore from backup, " \
+                     "or move to .attic/ to retire"
+          )
+        end
+        unless changed.empty?
+          findings << Finding.new(
+            kind: :dossiers_stale, severity: :soft,
+            message: "#{changed.size} file(s) edited since the last scan (#{changed.join(', ')}) — " \
+                     "bin/nabu sync #{entry.slug} re-derives and re-pins"
+          )
+        end
+        findings
+      end
+
+      def partition_local_pins(slug)
+        vanished = []
+        changed = []
+        workdir = File.join(@canonical_dir, slug)
+        local_pins(slug).each do |rel, sha|
+          live = File.join(workdir, rel)
+          if File.file?(live)
+            changed << rel unless Digest::SHA256.file(live).hexdigest == sha
+          elsif !File.file?(File.join(workdir, Nabu::Adapter::ATTIC_DIRNAME, rel))
+            vanished << rel
+          end
+        end
+        [vanished.sort, changed.sort]
+      end
+
+      # { relpath => sha } from the source's "local:" ledger pins.
+      def local_pins(slug)
+        @ledger[:pins]
+          .where(source_slug: slug)
+          .where(Sequel.like(:repo_url, "local:%"))
+          .to_h { |row| [row[:repo_url].delete_prefix("local:"), row[:last_sync_sha]] }
       end
 
       # -- pending migrations (global) -----------------------------------------
@@ -292,6 +380,24 @@ module Nabu
         klass.respond_to?(:reflex_bearing?) && klass.reflex_bearing?
       rescue Nabu::ValidationError
         false
+      end
+
+      # Same tolerance for the content kind: an unloadable adapter class
+      # reads as the plain passage default.
+      def content_kind(entry)
+        entry.adapter_class.content_kind
+      rescue Nabu::ValidationError
+        :passages
+      end
+
+      def language_records
+        return 0 unless table?(@catalog, :language_records)
+
+        @catalog[:language_records].count
+      end
+
+      def dossier_files(slug)
+        Dir.glob(File.join(@canonical_dir, slug, "*.md")).size
       end
 
       def table?(db, name)

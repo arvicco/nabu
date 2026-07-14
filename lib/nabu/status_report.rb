@@ -51,6 +51,7 @@ module Nabu
     # (P14-12) — never a live probe. Vocabulary honours terseness: BEHIND is
     # loud, ok is quiet, the age is always shown so a decision is informed.
     #   up=frozen      frozen-policy source (no probe expected; cache ignored)
+    #   up=local       local-policy shelf (no upstream exists; cache ignored)
     #   up=?(unprobed) no cached probe yet — run `nabu status --remote`
     #                  ("never" read as never-SYNCED — owner defect 2026-07-13)
     #   up=BEHIND(Nd)  upstream moved past our pin (loud; staleness irrelevant)
@@ -59,6 +60,7 @@ module Nabu
     #   up=?(Nd)       drift indeterminate (never synced / unreachable / multi)
     def upstream_cell(entry, probe)
       return "up=frozen" if entry.sync_policy == "frozen"
+      return "up=local" if entry.sync_policy == "local"
       return "up=?(unprobed)" if probe.nil?
 
       age = age_days(probe.checked_at)
@@ -91,6 +93,7 @@ module Nabu
     # docs/passages/retired triple.
     def counts_fragment(entry, source)
       return "entries=#{dictionary_entry_count(source)}" if dictionary?(entry)
+      return "records=#{language_record_count}" if language?(entry)
       return "docs=0 pass=0" if source.nil?
 
       live = Store::Document.where(source_id: source.id, withdrawn: false)
@@ -103,11 +106,30 @@ module Nabu
     end
 
     def dictionary?(entry)
-      entry.adapter_class.content_kind == :dictionary
+      content_kind(entry) == :dictionary
+    end
+
+    # A language dossier shelf's content is per-language records (P19-1) —
+    # docs=0 pass=0 would be the misleading-zero class P11-10 closed.
+    def language?(entry)
+      content_kind(entry) == :language
+    end
+
+    def content_kind(entry)
+      entry.adapter_class.content_kind
     rescue Nabu::Error
       # A broken/unknown adapter class is not this renderer's problem to
       # raise on; treat it as a plain passage source so status still prints.
-      false
+      :passages
+    end
+
+    # Derived rows in language_records (the local-language shelf is their
+    # only writer). A catalog predating migration 014 reads 0, honestly.
+    def language_record_count
+      db = Store::LanguageRecord.db
+      return 0 unless db&.table_exists?(:language_records)
+
+      Store::LanguageRecord.count
     end
 
     # Live dictionary entries owned by this source (across all its
