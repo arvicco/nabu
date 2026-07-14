@@ -6,3 +6,6 @@
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.3"
+# Atom feed for the News section (P19-3) — also in the github-pages gem's
+# plugin whitelist, so actions/jekyll-build-pages carries it in production.
+gem "jekyll-feed", "~> 0.17"

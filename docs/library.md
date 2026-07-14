@@ -533,7 +533,11 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
    gate's README-truthfulness pass — the orchestrator owns it. The public
    site (`site/`, P17-9) is refreshed in the same pass — its numbers are
    COPIED from this file and README with their as-of dates, never
-   re-derived (contract: site/MAINTENANCE.md).
+   re-derived (contract: site/MAINTENANCE.md). Every gate also adds a
+   dated News entry (`site/news/_posts/`, P19-3) distilled from the gate's
+   worklog line; a gate that cuts a tagged release additionally runs the
+   release rail (ops §12: CITATION.cff bump → tag → GitHub release →
+   Zenodo DOI).
 2. **After every owner-fired real sync**: re-read `bin/nabu status` and the
    per-source counts; update sizes if drift >1%. Cheap — one query per table.
 3. **Quarterly full review** (next due **2026-10-08**): re-verify every
