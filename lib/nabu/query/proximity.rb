@@ -97,8 +97,9 @@ module Nabu
       # up to +limit+ Search::Result values in bm25 rank order — the snippet
       # brackets BOTH matched terms because both are NEAR phrases. +window+ is
       # the max folded tokens between the two terms (see class note). +lang+ /
-      # +license+ filter catalog-side exactly as in Search.
-      def run(near:, query: nil, lemma: nil, window: DEFAULT_WINDOW, lang: nil, license: nil, limit: 20)
+      # +license+ / +source+ filter catalog-side exactly as in Search.
+      def run(near:, query: nil, lemma: nil, window: DEFAULT_WINDOW, lang: nil, license: nil, limit: 20,
+              source: nil)
         unless [query, lemma].compact.one?
           raise ArgumentError, "give exactly one of query or lemma as the proximity anchor"
         end
@@ -109,7 +110,7 @@ module Nabu
 
         match = near_match(anchor, near_variants, window.to_i)
         hits = fts_hits(match, inner_limit: limit * Search::INNER_LIMIT_FACTOR)
-        assemble(hits, lang: lang, license: license, limit: limit)
+        assemble(hits, lang: lang, license: license, limit: limit, source: source)
       end
 
       private
@@ -169,12 +170,12 @@ module Nabu
 
       # Reassemble in FTS rank order after the catalog join drops filtered rows,
       # then trim to the page — the Search#run tail verbatim.
-      def assemble(hits, lang:, license:, limit:)
+      def assemble(hits, lang:, license:, limit:, source: nil)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
-        rows = catalog_rows(ordered_ids, lang: lang, license: license)
+        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source)
                .to_h { |row| [row.fetch(:passage_id), row] }
         ordered_ids.filter_map { |id| rows[id] }
                    .first(limit)

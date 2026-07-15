@@ -263,7 +263,18 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "status", "Show per-source sync status and passage counts"
+    desc "status", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
+    long_desc <<~HELP, wrap: false
+      The SYNC-STATE view: one row per registered source — enabled, sync
+      policy, the cached upstream-drift verdict (up=), live counts, and the
+      last run's outcome. Its sibling is `nabu list`, the WHAT-IS-HELD view
+      (content census, per-shelf cards, document/entry enumerations): status
+      answers "should I sync?", list answers "what does the library hold?".
+
+      --remote probes every upstream first (the same code path as
+      `health --remote`, persisting each verdict) and renders the fresh
+      drift column — the one-command informed-update flow.
+    HELP
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
     def status
@@ -280,6 +291,103 @@ module Nabu
     ensure
       db&.disconnect
       ledger&.disconnect
+    end
+
+    desc "list [SOURCE]", "What the library holds: the shelf census, or one source's card " \
+                          "(`nabu status` shows sync state)"
+    long_desc <<~HELP, wrap: false
+      The WHAT-IS-HELD view — the contents sibling of `nabu status` (which
+      answers "should I sync?"; list answers "what does the library hold?").
+
+      Bare `nabu list` is the content census: one line per catalog source —
+      live document/passage counts, dictionary entry counts, the languages
+      held (codes when few, a count when many), the effective license-class
+      mix (document overrides included), and withdrawn/retired counts when
+      nonzero (zero fields are suppressed, the house rule).
+
+      `nabu list SOURCE` is one shelf's card: identity (name, adapter,
+      registry sync policy + enabled), license class(es) with the source's
+      credit line when it carries one, counts, a per-language passage
+      breakdown, its dictionaries (dictionary shelves), date-axis coverage
+      (dated docs + year range) when present, genre-facet and collection
+      summaries when present. A card, not a dump — the enumerations below
+      go deeper.
+
+      Enumerations (one per invocation, each honoring --limit, default 50,
+      0 = all, with an honest "… N more" tail):
+        --documents    every document: urn — title [lang] license, urn order,
+                       withdrawn/retired flagged inline. Filters: --lang,
+                       --license, --withdrawn (ONLY withdrawn/retired — the
+                       stewardship lens), --from/--to/--century (the date
+                       axis, as in search).
+        --entries      a dictionary shelf's entries: headword [dict] — gloss.
+                       Filters: --lang (dictionary language), --prefix STR
+                       (folded headword prefix — bh finds *bʰer-, the define
+                       contract). A passage shelf misses honestly, exit 0.
+        --collections  collection → document count for shelves whose urns
+                       carry a manifest collection segment (local-library);
+                       an honest miss elsewhere, exit 0.
+
+      Examples:
+        nabu list                                # the census, every shelf
+        nabu list ccmh                           # one shelf's card
+        nabu list local-library --documents      # what did I ingest?
+        nabu list local-library --collections    # …and how is it filed?
+        nabu list lexica --entries --prefix log  # λόγος and its neighbors
+        nabu list papyri-ddbdp --documents --century 6 --limit 5
+        nabu list shelf --documents --withdrawn  # the stewardship lens
+
+      Use cases: enumerate a shelf without sqlite3 one-liners; a license
+      audit before an export; eyeballing what an ingest actually filed.
+    HELP
+    option :documents, type: :boolean, default: false,
+                       desc: "Enumerate the source's documents (urn order, withdrawn/retired flagged)"
+    option :entries, type: :boolean, default: false,
+                     desc: "Enumerate a dictionary source's entries (headword + gloss)"
+    option :collections, type: :boolean, default: false,
+                         desc: "Collection → document count for manifest-collection shelves"
+    option :limit, type: :numeric, default: Nabu::Query::List::DEFAULT_LIMIT,
+                   desc: "Maximum rows per enumeration (default #{Nabu::Query::List::DEFAULT_LIMIT}; 0 = all)"
+    option :prefix, type: :string, banner: "STR",
+                    desc: "With --entries: folded headword prefix (bh finds *bʰer-)"
+    option :lang, type: :string, desc: "With --documents/--entries: restrict to one language"
+    option :license, type: :string,
+                     desc: "With --documents: restrict to an exact effective license class"
+    option :withdrawn, type: :boolean, default: false,
+                       desc: "With --documents: ONLY withdrawn/retired documents (the stewardship lens)"
+    option :from, type: :numeric, banner: "YEAR",
+                  desc: "With --documents: earliest date on the axis (negative = BCE)"
+    option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the axis"
+    option :century, type: :numeric, banner: "N",
+                     desc: "With --documents: one century's --from/--to shorthand (6, -2)"
+    def list(slug = nil)
+      slug = slug.to_s.strip
+      validate_list_flags!(slug)
+      validate_license!(options[:license])
+      from, to = date_window
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      require_axis!(catalog) if from || to
+      query = Nabu::Query::List.new(catalog: catalog)
+      if slug.empty? then print_census(query.census)
+      elsif options[:documents]
+        print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
+                                                   withdrawn_only: options[:withdrawn], from: from, to: to,
+                                                   limit: options[:limit].to_i))
+      elsif options[:entries]
+        print_list_entries(slug, query.entries(slug, prefix: options[:prefix], lang: options[:lang],
+                                                     limit: options[:limit].to_i))
+      elsif options[:collections] then print_list_collections(slug, query.collections(slug))
+      else
+        print_list_card(query.card(slug), registry_entry(config, slug))
+      end
+    rescue Nabu::Query::List::Error => e
+      # Unknown source slug: a clean stderr line naming the valid slugs.
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
     end
 
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
@@ -357,6 +465,8 @@ module Nabu
         --lang     ISO-639-3 passage language: grc, lat, got, chu, orv, san, …
         --license  effective license class (document override beats source):
                    open, attribution, nc, research_private, restricted
+        --source   one source slug (nabu list names them); composes with
+                   every other filter, --lemma/--near/--fuzzy included
         --limit    maximum hits, default 20
 
       LEMMA SEARCH (--lemma FORM): exact dictionary-form lookup over the
@@ -466,6 +576,8 @@ module Nabu
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :source, type: :string, banner: "SLUG",
+                    desc: "Restrict to one source (`nabu list` names the slugs)"
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
     option :lemma, type: :string, banner: "FORM",
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
@@ -525,11 +637,12 @@ module Nabu
 
       require_axis!(catalog) if from || to || place
       require_facets!(catalog) if facets
+      validate_source!(catalog, options[:source])
 
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
                                                limit: options[:limit].to_i, from: from, to: to, place: place,
-                                               facets: facets)
+                                               facets: facets, source: options[:source])
       print_search_results(results, facets: facets)
     ensure
       catalog&.disconnect
@@ -1566,10 +1679,11 @@ module Nabu
                 them (the treebanks: UD, PROIEL, TOROT)
         conllu  arrives with the enrichment phase (needs the token model)
 
-      Same --lang / --license filters as search.
+      Same --lang / --license / --source filters as search.
 
       Examples:
         nabu export --format plain --lang got > gothic.txt
+        nabu export --format jsonl --source ccmh > ccmh.jsonl
         nabu export --format jsonl --license open | jq -r .urn
         nabu export --format jsonl --lang chu | jq '.annotations' | head
 
@@ -1581,6 +1695,8 @@ module Nabu
     option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :source, type: :string, banner: "SLUG",
+                    desc: "Restrict to one source (`nabu list` names the slugs)"
     def export
       format = validate_format!(options[:format])
       validate_license!(options[:license])
@@ -1588,8 +1704,10 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
+      validate_source!(catalog, options[:source])
       lines = Nabu::Query::Export.new(catalog: catalog)
-                                 .run(format: format, lang: options[:lang], license: options[:license])
+                                 .run(format: format, lang: options[:lang], license: options[:license],
+                                      source: options[:source])
       # Stream: write each serialized line as it arrives — never join a
       # 238k-passage corpus into one string.
       lines.each { |line| $stdout.puts(line) }
@@ -1733,6 +1851,171 @@ module Nabu
         filters["province"] = options[:province] if options[:province]
         filters["material"] = options[:material] if options[:material]
         filters.empty? ? nil : filters
+      end
+
+      # --source SLUG (P22-1, search/export): reject an unknown slug up front,
+      # naming the valid slugs (the define-miss pattern). Validated against
+      # the CATALOG — what is held is what can be filtered.
+      def validate_source!(catalog, slug)
+        return if slug.nil?
+        return if catalog[:sources].where(slug: slug).any?
+
+        known = catalog[:sources].order(:slug).select_map(:slug)
+        raise Thor::Error, "unknown source #{slug.inspect} — the catalog holds: #{known.join(', ')}"
+      end
+
+      # -- list (P22-1) renderers -------------------------------------------
+
+      # The flag grammar: one enumeration mode per invocation, each filter
+      # only where it means something — a wrong combination is a named
+      # error, never a silently ignored flag.
+      def validate_list_flags!(slug)
+        modes = %i[documents entries collections].select { |flag| options[flag] }
+        raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
+        raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
+        raise Thor::Error, "list: --prefix filters headwords — use it with --entries" \
+          if options[:prefix] && !options[:entries]
+
+        doc_only = %i[license withdrawn from to century].select { |flag| options[flag] }
+        unless doc_only.empty? || options[:documents]
+          raise Thor::Error, "list: --#{doc_only.first} composes with --documents"
+        end
+        return if options[:lang].nil? || options[:documents] || options[:entries]
+
+        raise Thor::Error, "list: --lang composes with --documents or --entries"
+      end
+
+      # The registry entry for one slug, nil when the catalog source is not
+      # (or no longer) registered — the card words that honestly.
+      def registry_entry(config, slug)
+        Nabu::SourceRegistry.load(config.sources_path)[slug]
+      end
+
+      def print_census(rows)
+        return say("nothing held yet — run nabu sync") if rows.empty?
+
+        width = rows.map { |row| row.slug.length }.max
+        rows.each { |row| say "#{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+        say census_summary(rows)
+      end
+
+      # Compact census fragments, zero fields suppressed (conventions §10).
+      def census_fragments(row)
+        parts = []
+        parts << "docs=#{row.docs}#{" pass=#{row.passages}" if row.passages.positive?}" if row.docs.positive?
+        parts << "entries=#{row.entries}" if row.entries.positive?
+        parts << "empty" if parts.empty?
+        parts << "langs=#{census_langs(row.languages)}" unless row.languages.empty?
+        parts << "license=#{row.license_classes.join(',')}"
+        parts << "withdrawn=#{row.withdrawn}" if row.withdrawn.positive?
+        parts << "retired=#{row.retired}" if row.retired.positive?
+        parts
+      end
+
+      # The codes when few, the count when the list would swamp the row.
+      def census_langs(codes)
+        codes.size <= 3 ? codes.join(",") : codes.size.to_s
+      end
+
+      def census_summary(rows)
+        parts = [pluralize(rows.size, "source"), "#{rows.sum(&:docs)} docs", "#{rows.sum(&:passages)} passages"]
+        entries = rows.sum(&:entries)
+        parts << "#{entries} entries" if entries.positive?
+        parts.join(" · ")
+      end
+
+      def print_list_card(card, entry)
+        say "#{card.slug} — #{card.name}"
+        say "  adapter #{card.adapter_class}#{registry_fragment(entry)}"
+        credit = card.license_text.to_s.strip
+        say "  license #{card.license_classes.join(',')}#{" · #{truncate_line(credit)}" unless credit.empty?}"
+        say "  #{card_counts(card)}"
+        say "  langs #{card.languages.map { |code, n| "#{code}=#{n}" }.join(' ')}" unless card.languages.empty?
+        card.dictionaries.each do |dict|
+          say "  dict #{dict.slug} — #{dict.title} [#{dict.language}] entries=#{dict.entries}"
+        end
+        print_card_axes(card)
+      end
+
+      # Registry facts on the header line; a catalog source missing from the
+      # registry is abnormal and reads loudly.
+      def registry_fragment(entry)
+        return " · NOT IN REGISTRY" if entry.nil?
+
+        " · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
+      end
+
+      def card_counts(card)
+        parts = []
+        parts << "docs=#{card.docs}" if card.docs.positive?
+        parts << "pass=#{card.passages}" if card.passages.positive?
+        parts << "entries=#{card.entries}" if card.entries.positive?
+        parts << "withdrawn=#{card.withdrawn}" if card.withdrawn.positive?
+        parts << "retired=#{card.retired}" if card.retired.positive?
+        parts.empty? ? "empty" : parts.join(" ")
+      end
+
+      # The optional card layers: date-axis coverage, facet summary, and the
+      # collections census (inlined when small, deferred to --collections
+      # when it would swamp the card).
+      def print_card_axes(card)
+        if card.dated
+          say "  dated #{pluralize(card.dated.docs, 'doc')} #{card.dated.min || 'open'}..#{card.dated.max || 'open'}"
+        end
+        unless card.facets.empty?
+          say "  facets #{card.facets.map { |f| "#{f.facet}=#{f.values} values/#{f.docs} docs" }.join(' · ')}"
+        end
+        return if card.collections.nil?
+
+        if card.collections.size <= 8
+          say "  collections #{format_collections(card.collections).join(' ')}"
+        else
+          say "  collections #{card.collections.size} (see --collections)"
+        end
+      end
+
+      def format_collections(counts)
+        counts.sort_by { |name, count| [-count, name] }.map { |name, count| "#{name}=#{count}" }
+      end
+
+      def print_list_documents(page)
+        return say("no documents match") if page.rows.empty?
+
+        page.rows.each do |row|
+          flags = "#{' (withdrawn)' if row.withdrawn}#{' (retired upstream)' if row.retired}"
+          say "#{row.urn} — #{row.title}#{" [#{row.language}]" if row.language} #{row.license_class}#{flags}"
+        end
+        print_list_tail(page)
+      end
+
+      def print_list_entries(slug, page)
+        return say("#{slug} holds no dictionary entries (a passage shelf) — try --documents") if page.nil?
+        return say("no entries match") if page.rows.empty?
+
+        page.rows.each do |row|
+          gloss = row.gloss.to_s.gsub(/\s+/, " ").strip
+          say "#{row.headword} [#{row.dictionary_slug}]#{" — #{truncate_line(gloss)}" unless gloss.empty?}"
+        end
+        print_list_tail(page)
+      end
+
+      def print_list_collections(slug, counts)
+        if counts.nil?
+          return say("no collection segments in #{slug} document urns " \
+                     "(manifest-collection shelves — local-library — carry them)")
+        end
+
+        width = counts.keys.map(&:length).max
+        format_collections(counts).each do |pair|
+          name, count = pair.split("=", 2)
+          say "#{name.ljust(width)}  docs=#{count}"
+        end
+      end
+
+      # The honest truncation tail every list enumeration shares.
+      def print_list_tail(page)
+        more = page.total - page.rows.size
+        say "… #{more} more — raise --limit (0 = all)" if more.positive?
       end
 
       # Export format gate. CoNLL-U is a first-class exit format (maintenance
@@ -2668,10 +2951,11 @@ module Nabu
 
         require_axis!(catalog) if from || to || options[:place]
         require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
-                                   facets: facets)
+                                   facets: facets, source: options[:source])
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets)
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -2699,9 +2983,11 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
+        validate_source!(catalog, options[:source])
         results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                           .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i, morph: options[:morph])
+                                                      limit: options[:limit].to_i, morph: options[:morph],
+                                                      source: options[:source])
         print_lemma_results(results)
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -2747,9 +3033,11 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
+        validate_source!(catalog, options[:source])
         results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
-          lang: options[:lang], license: options[:license], limit: options[:limit].to_i
+          lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
+          source: options[:source]
         )
         print_search_results(results)
       ensure

@@ -1,0 +1,283 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+module Query
+  # Nabu::Query::List (P22-1): the what-is-held read surface behind
+  # `nabu list` — the shelf census, one source's card, and the bounded
+  # document/entry/collection enumerations. Catalog is a fresh in-memory
+  # SQLite; rows are created directly (the export-test pattern).
+  class ListTest < Minitest::Test
+    include StoreTestDB
+
+    def setup
+      @catalog = store_test_db
+      @ccmh = make_source(slug: "ccmh", name: "CCMH", license_class: "nc",
+                          license: "CC BY-NC 4.0 (Helsinki corpus)")
+      @library = make_source(slug: "local-library", name: "Local library", license_class: "research_private")
+    end
+
+    # -- helpers -------------------------------------------------------------
+
+    def make_source(slug:, name:, license_class:, license: nil)
+      Nabu::Store::Source.create(
+        slug: slug, name: name, adapter_class: "TestAdapter",
+        license: license, license_class: license_class, enabled: true
+      )
+    end
+
+    def make_document(source:, urn:, language: "chu", title: nil, license_override: nil,
+                      withdrawn: false, retired: false)
+      Nabu::Store::Document.create(
+        source_id: source.id, urn: urn, title: title || urn, language: language,
+        license_override: license_override, content_sha256: "x", revision: 1,
+        withdrawn: withdrawn, retired_upstream: retired
+      )
+    end
+
+    def make_passage(document, urn:, sequence:, language: "chu", withdrawn: false)
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: urn, sequence: sequence, language: language,
+        text: "text #{sequence}", text_normalized: "text #{sequence}",
+        content_sha256: "x", revision: 1, withdrawn: withdrawn
+      )
+    end
+
+    def make_dictionary(source:, slug:, language:, title: nil)
+      @catalog[:dictionaries].insert(source_id: source.id, slug: slug,
+                                     title: title || slug, language: language)
+    end
+
+    def make_entry(dictionary_id, entry_id:, headword:, folded:, gloss: nil, withdrawn: false)
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dictionary_id, urn: "urn:nabu:dict:d#{dictionary_id}:#{entry_id}",
+        entry_id: entry_id, key_raw: headword, headword: headword, headword_folded: folded,
+        gloss: gloss, body: "#{headword} body", content_sha256: "x", revision: 1, withdrawn: withdrawn
+      )
+    end
+
+    def make_axis(doc, not_before:, not_after:)
+      @catalog[:document_axes].insert(document_id: doc.id, not_before: not_before,
+                                      not_after: not_after, axis_source: "hgv")
+    end
+
+    def list
+      Nabu::Query::List.new(catalog: @catalog)
+    end
+
+    def seed_ccmh
+      doc = make_document(source: @ccmh, urn: "urn:nabu:ccmh:mt", title: "Marianus Matthew")
+      make_passage(doc, urn: "urn:nabu:ccmh:mt:1", sequence: 0)
+      make_passage(doc, urn: "urn:nabu:ccmh:mt:2", sequence: 1)
+      doc
+    end
+
+    # -- census ---------------------------------------------------------------
+
+    def test_census_counts_docs_passages_languages_and_license_mix
+      seed_ccmh
+      rows = list.census
+      row = rows.find { |r| r.slug == "ccmh" }
+      assert_equal 1, row.docs
+      assert_equal 2, row.passages
+      assert_equal 0, row.entries
+      assert_equal ["chu"], row.languages
+      assert_equal ["nc"], row.license_classes
+      assert_equal 0, row.withdrawn
+    end
+
+    def test_census_excludes_withdrawn_from_live_counts_but_counts_them
+      seed_ccmh
+      gone = make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:gone", withdrawn: true)
+      make_passage(gone, urn: "urn:nabu:ccmh:mar:gone:1", sequence: 0)
+      row = list.census.find { |r| r.slug == "ccmh" }
+      assert_equal 1, row.docs, "withdrawn documents are not live"
+      assert_equal 2, row.passages
+      assert_equal 1, row.withdrawn
+    end
+
+    def test_census_counts_dictionary_entries_and_dictionary_languages
+      dict = make_dictionary(source: @ccmh, slug: "lsj", language: "grc")
+      make_entry(dict, entry_id: "n1", headword: "μῆνις", folded: "μηνισ", gloss: "wrath")
+      make_entry(dict, entry_id: "n2", headword: "λόγος", folded: "λογοσ", withdrawn: true)
+      row = list.census.find { |r| r.slug == "ccmh" }
+      assert_equal 1, row.entries, "withdrawn entries are not live"
+      assert_includes row.languages, "grc"
+    end
+
+    def test_census_license_mix_includes_document_overrides
+      seed_ccmh
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:open", license_override: "open")
+      row = list.census.find { |r| r.slug == "ccmh" }
+      assert_equal %w[nc open], row.license_classes.sort
+    end
+
+    def test_census_source_without_content_reads_source_license_class
+      row = list.census.find { |r| r.slug == "local-library" }
+      assert_equal 0, row.docs
+      assert_equal ["research_private"], row.license_classes
+    end
+
+    # -- card -----------------------------------------------------------------
+
+    def test_card_carries_identity_counts_languages_and_credit
+      seed_ccmh
+      card = list.card("ccmh")
+      assert_equal "ccmh", card.slug
+      assert_equal "CCMH", card.name
+      assert_equal "TestAdapter", card.adapter_class
+      assert card.enabled
+      assert_equal "CC BY-NC 4.0 (Helsinki corpus)", card.license_text
+      assert_equal ["nc"], card.license_classes
+      assert_equal 1, card.docs
+      assert_equal 2, card.passages
+      assert_equal({ "chu" => 2 }, card.languages)
+      assert_nil card.dated
+      assert_empty card.facets
+      assert_nil card.collections
+    end
+
+    def test_card_dated_coverage_when_axis_rows_exist
+      doc = seed_ccmh
+      make_axis(doc, not_before: -113, not_after: 602)
+      card = list.card("ccmh")
+      assert_equal 1, card.dated.docs
+      assert_equal(-113, card.dated.min)
+      assert_equal 602, card.dated.max
+    end
+
+    def test_card_facets_summary_when_facet_rows_exist
+      doc = seed_ccmh
+      @catalog[:document_facets].insert(document_id: doc.id, facet: "genre", value: "epitaph", raw: "titsep")
+      @catalog[:document_facets].insert(document_id: doc.id, facet: "genre", value: "votive", raw: "titsac")
+      card = list.card("ccmh")
+      genre = card.facets.find { |f| f.facet == "genre" }
+      assert_equal 2, genre.values
+      assert_equal 1, genre.docs
+    end
+
+    def test_card_collections_for_manifest_collection_urns
+      make_document(source: @library, urn: "urn:nabu:local-library:slavistics:leskien", language: "deu")
+      make_document(source: @library, urn: "urn:nabu:local-library:slavistics:jagic", language: "deu")
+      make_document(source: @library, urn: "urn:nabu:local-library:articles:vaillant", language: "fra")
+      card = list.card("local-library")
+      assert_equal({ "slavistics" => 2, "articles" => 1 }, card.collections)
+    end
+
+    def test_card_dictionaries_listed_for_dictionary_sources
+      dict = make_dictionary(source: @ccmh, slug: "lsj", language: "grc", title: "A Greek-English Lexicon")
+      make_entry(dict, entry_id: "n1", headword: "μῆνις", folded: "μηνισ")
+      card = list.card("ccmh")
+      assert_equal 1, card.dictionaries.size
+      assert_equal "lsj", card.dictionaries.first.slug
+      assert_equal 1, card.dictionaries.first.entries
+    end
+
+    def test_card_unknown_source_raises_naming_valid_slugs
+      error = assert_raises(Nabu::Query::List::Error) { list.card("nope") }
+      assert_match(/unknown source "nope"/, error.message)
+      assert_match(/ccmh/, error.message)
+    end
+
+    # -- documents -------------------------------------------------------------
+
+    def seed_document_pile
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:mt", title: "Matthew")
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:mk", title: "Mark", language: "grc")
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:lk", title: "Luke", withdrawn: true)
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:jn", title: "John", retired: true)
+    end
+
+    def test_documents_enumerate_in_urn_order_with_flags
+      seed_document_pile
+      page = list.documents("ccmh")
+      assert_equal 4, page.total
+      assert_equal %w[urn:nabu:ccmh:mar:jn urn:nabu:ccmh:mar:lk urn:nabu:ccmh:mar:mk urn:nabu:ccmh:mar:mt],
+                   page.rows.map(&:urn)
+      assert page.rows.find { |r| r.urn.end_with?(":lk") }.withdrawn
+      assert page.rows.find { |r| r.urn.end_with?(":jn") }.retired
+    end
+
+    def test_documents_limit_pages_and_total_stays_honest
+      seed_document_pile
+      page = list.documents("ccmh", limit: 2)
+      assert_equal 2, page.rows.size
+      assert_equal 4, page.total
+      assert_equal 4, list.documents("ccmh", limit: 0).rows.size, "limit 0 is unlimited"
+    end
+
+    def test_documents_lang_license_and_withdrawn_filters
+      seed_document_pile
+      assert_equal ["urn:nabu:ccmh:mar:mk"], list.documents("ccmh", lang: "grc").rows.map(&:urn)
+      assert_equal 4, list.documents("ccmh", license: "nc").total
+      assert_equal %w[urn:nabu:ccmh:mar:jn urn:nabu:ccmh:mar:lk],
+                   list.documents("ccmh", withdrawn_only: true).rows.map(&:urn)
+    end
+
+    def test_documents_date_window_filters_on_the_axis
+      seed_document_pile
+      dated = @catalog[:documents].where(urn: "urn:nabu:ccmh:mar:mt").first
+      @catalog[:document_axes].insert(document_id: dated[:id], not_before: 850, not_after: 900,
+                                      axis_source: "hgv")
+      page = list.documents("ccmh", from: 800, to: 1000)
+      assert_equal ["urn:nabu:ccmh:mar:mt"], page.rows.map(&:urn)
+    end
+
+    def test_documents_unknown_source_raises
+      assert_raises(Nabu::Query::List::Error) { list.documents("nope") }
+    end
+
+    # -- entries ---------------------------------------------------------------
+
+    def seed_dictionary_shelf
+      dict = make_dictionary(source: @ccmh, slug: "sla-pro", language: "sla-pro")
+      make_entry(dict, entry_id: "n1", headword: "bʰer-", folded: "bher-", gloss: "to carry")
+      make_entry(dict, entry_id: "n2", headword: "bogъ", folded: "bogъ", gloss: "god")
+      make_entry(dict, entry_id: "n3", headword: "gone", folded: "gone", withdrawn: true)
+      dict
+    end
+
+    def test_entries_enumerate_headword_and_gloss_live_only
+      seed_dictionary_shelf
+      page = list.entries("ccmh")
+      assert_equal 2, page.total
+      assert_equal ["bʰer-", "bogъ"], page.rows.map(&:headword)
+      assert_equal "to carry", page.rows.first.gloss
+    end
+
+    def test_entries_prefix_filters_by_folded_prefix
+      seed_dictionary_shelf
+      # ASCII "bh" reaches the folded "bher-" through the proto fold (ʰ→h),
+      # and the comparativist's leading asterisk is stripped.
+      page = list.entries("ccmh", prefix: "*bʰ")
+      assert_equal ["bʰer-"], page.rows.map(&:headword)
+      assert_equal ["bʰer-"], list.entries("ccmh", prefix: "bh").rows.map(&:headword)
+    end
+
+    def test_entries_lang_filter_scopes_to_one_dictionary_language
+      seed_dictionary_shelf
+      other = make_dictionary(source: @ccmh, slug: "lsj", language: "grc")
+      make_entry(other, entry_id: "g1", headword: "μῆνις", folded: "μηνισ")
+      assert_equal ["μῆνις"], list.entries("ccmh", lang: "grc").rows.map(&:headword)
+    end
+
+    def test_entries_on_a_non_dictionary_source_returns_nil
+      seed_ccmh
+      assert_nil list.entries("local-library")
+    end
+
+    # -- collections -------------------------------------------------------------
+
+    def test_collections_census_counts_manifest_segments
+      make_document(source: @library, urn: "urn:nabu:local-library:slavistics:leskien")
+      make_document(source: @library, urn: "urn:nabu:local-library:slavistics:jagic")
+      make_document(source: @library, urn: "urn:nabu:local-library:articles:vaillant")
+      assert_equal({ "slavistics" => 2, "articles" => 1 }, list.collections("local-library"))
+    end
+
+    def test_collections_nil_for_sources_without_collection_segments
+      make_document(source: @ccmh, urn: "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2")
+      assert_nil list.collections("ccmh")
+    end
+  end
+end
