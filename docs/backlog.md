@@ -6919,3 +6919,18 @@ LIVE REPAIRS (owner tree, disclosed): articles manifest !binary lane →
 plain string; shelf resync (9 local-library docs live). Live smoke: the
 exact crashing url end to end on a scratch root, exit 0, plain-string
 manifest lane. Suite 2,665 exit 0 · lint 343 exit 0.
+
+# ── Phase 21 queue (licensing replies landed 2026-07-15) ──────────────
+# 1. STARLING PACKET UNBLOCKED: G. Starostin granted any-use-with-
+#    attribution (per-base compiler credit REQUIRED — roster at
+#    starlingdb.org/descrip.php; his non-consensus caveat rides verbatim,
+#    the Larth-caveat treatment). Owner pre-approved "starling packet on
+#    YES" (2026-07-13) — scope: StarLing-format parser + Pokorny IE base
+#    adapter, class attribution, grant email as license basis
+#    (pie-survey §3.1 census stands). Dispatch at owner's word.
+# 2. ETP CLOSED (Wallace: database no longer exists) — Etruscan axis
+#    rests on OpenEtruscan alone; its adapter packet already queued.
+# 3. CATSS DECLINED (Tov: commercial, Accordance) — LXX position
+#    unchanged (Swete held); CCAT-declaration route now doubtful,
+#    02-sources row 44 updated.
+# Send queue rest: GORAZD (#2) still first among unsent.
