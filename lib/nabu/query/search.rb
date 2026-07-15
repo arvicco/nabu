@@ -57,10 +57,12 @@ module Nabu
       # +from+/+to+/+place+ (P15-2) filter on the document's date/place axis
       # (signed historical years, place LIKE pattern); +facets+ (P17-2) on the
       # document's facet rows ({facet name => pattern} — search --type/
-      # --province/--material). +urn+ restricts the match to one passage — a
-      # ranking-independent "is this passage findable by this query" probe
-      # (the health golden replay), not a pagination knob.
-      def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil, facets: nil)
+      # --province/--material); +source+ (P22-1) scopes to one source slug.
+      # +urn+ restricts the match to one passage — a ranking-independent
+      # "is this passage findable by this query" probe (the health golden
+      # replay), not a pagination knob.
+      def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
+              facets: nil, source: nil)
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
@@ -70,7 +72,7 @@ module Nabu
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
         rows = catalog_rows(ordered_ids, lang: lang, license: license,
-                                         from: from, to: to, place: place, facets: facets)
+                                         from: from, to: to, place: place, facets: facets, source: source)
                .to_h { |row| [row.fetch(:passage_id), row] }
 
         # Reassemble in FTS rank order (the catalog query returns no order),

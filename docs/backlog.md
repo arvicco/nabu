@@ -6934,3 +6934,96 @@ manifest lane. Suite 2,665 exit 0 · lint 343 exit 0.
 #    unchanged (Swete held); CCAT-declaration route now doubtful,
 #    02-sources row 44 updated.
 # Send queue rest: GORAZD (#2) still first among unsent.
+
+# ── Phase 22 ──────────────────────────────────────────────────────────
+
+## P22-1 · `nabu list SOURCE` + `--source` filter on search/export  [tier: agent] [status: done 2026-07-15] [deps: —]
+
+Owner-approved semantics (2026-07-15): "nabu list source semantics
+(general shelf info/stats by default, --documents --entries
+--collections --limit - other useful filters you can think of? Sure,
+plus a --source filter on search/export". Gap: no CLI way to enumerate
+a shelf's contents — the owner had to be handed a sqlite3 one-liner.
+
+SHIPPED — `nabu list [SOURCE]`, the WHAT-IS-HELD view (status = the
+sync-state view; each command's help names the other, the
+discoverability pair):
+
+- Bare census: one line per catalog source — docs=/pass= (live,
+  StatusReport counting semantics), entries= (dictionary shelves),
+  langs= (codes when ≤3, count when more; passage ∪ dictionary
+  languages), license= (distinct EFFECTIVE classes — document overrides
+  included; declared class when empty), withdrawn=/retired= only when
+  nonzero (conventions §10, zero-suppression). Footer totals.
+- `list SOURCE` card: slug — name, adapter + registry sync policy +
+  enabled (NOT IN REGISTRY reads loudly when a catalog source lost its
+  registry row), license class(es) + the source's free-text
+  license/credit line when it carries one (truncated to one line),
+  counts, per-language passage breakdown, per-dictionary entries,
+  date-axis coverage (dated docs + min..max signed years, `open` for a
+  NULL bound), facet summary (facet=N values/M docs), collections
+  (inline ≤8, else a count pointing at --collections). Bounded — a
+  card, not a dump.
+- `--documents`: urn — title [lang] license, urn order, withdrawn/
+  retired flagged inline; filters --lang/--license/--withdrawn (ONLY
+  withdrawn/retired — the stewardship lens)/--from/--to/--century
+  (reuses CatalogJoin#axis_exists — the date join was already
+  document-grain-correlated, so reuse was cheap; require_axis! guard
+  as in search). Default --limit 50, 0 = all, honest "… N more —
+  raise --limit (0 = all)" tail (Page carries the true total).
+- `--entries`: headword [dict] — gloss (one line, collapsed), live
+  entries, (dictionary, entry_id) order; --lang = dictionary language;
+  --prefix STR = FOLDED headword prefix via the full
+  Normalize.query_forms variant union ORed as byte-range prefixes
+  (rides the headword_folded index, nothing to escape — the
+  Scope#prefix_match precedent; ASCII bh finds *bʰer-, leading *
+  stripped). Non-dictionary source: one honest line, exit 0.
+- `--collections`: collection → doc count, censused MECHANICALLY from
+  the urn shape urn:nabu:<slug>:<collection>:<rest> (≥2 segments after
+  the source prefix) — local-library reads exactly as filed, any
+  nested nabu-urn source (ddbdp series) censuses honestly, CTS shelves
+  miss honestly (exit 0). VERDICT: no adapter/registry flag needed;
+  the urn IS the manifest structure.
+- Flag grammar validated up front: one enumeration mode per invocation;
+  SOURCE required for modes; --prefix entries-only; --license/
+  --withdrawn/date filters documents-only; --lang documents/entries.
+  Every misuse is a NAMED error, never a silently ignored flag.
+- `--source SLUG` on search AND export: threaded as `source:` through
+  CatalogJoin#visible_passages/#catalog_rows (one place, the
+  visibility-rule module) so it composes with EVERY search path —
+  plain FTS, --lemma (+--morph), --near, --fuzzy — and all
+  lang/license/date/place/facet filters; Export gets the same clause
+  in its own dataset builder. Validated CLI-side against the catalog
+  with the define-miss pattern (unknown slug → the valid slugs, exit 1)
+  so an unknown source is never a silent empty result.
+
+DESIGN VERDICTS (journaled):
+- --prefix stays ENTRIES-ONLY: a urn-prefix filter on --documents does
+  NOT fall out of the folding helpers (urns are never folded; prefix
+  semantics would differ per shelf) — out, said in help via omission.
+- INDEX verdict: NO migration. The --source filter lands on the
+  already-joined sources row (documents.source_id indexed since 001,
+  sources.slug unique); FTS hit resolution stays an id-list join
+  bounded by INNER_LIMIT_FACTOR — nothing quadratic to index away
+  (012/013 addressed per-passage language lookups; there is no
+  per-passage source column and none is needed). Known tradeoff
+  (same as --lang/--license): a rare --source may under-fill a page
+  since filtering is catalog-side after the inner FTS limit.
+- --source deliberately NOT added to concord/parallels/etc. — the
+  owner named search + export; the CatalogJoin threading makes the
+  future addition one kwarg each.
+- census/card read the CATALOG (held content); registry supplies only
+  the card's policy/enabled line — an unsynced registered source is
+  status's story, not list's.
+
+Tests +40 (query/list_test 22 on sqlite::memory: with migrations;
+search/export query tests +2 source-filter; CLI e2e +16: census, card,
+dictionary card, unknown-source miss, documents flags+tail+filters
+(--lang/--license/--withdrawn/--century), entries+--prefix folding,
+passage-shelf entries miss exit 0, collections census + honest miss,
+flag guards, search/export --source + unknown miss, help anchors both
+directions of the status/list pair). Docs: cli help (list long_desc,
+status long_desc naming list, search/export --source), README feature
+tour (+list row, --source in search/export rows); docs/ops.md and
+site/tools.md untouched (no enumerated command list goes false).
+Suite 2,704 runs / 33,259 assertions exit 0 · lint 345 files exit 0.

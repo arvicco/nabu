@@ -162,6 +162,20 @@ module Query
       assert_equal %w[urn:d:nc:1], search("libertas", license: "nc").map(&:urn)
     end
 
+    # --source SLUG (P22-1): scope hits to one source; composes with the
+    # other catalog-side filters.
+    def test_source_filter_scopes_to_one_source
+      open_doc = make_document(source: @open, urn: "urn:d:open")
+      make_passage(open_doc, urn: "urn:d:open:1", text: "libertas", sequence: 0)
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "libertas", sequence: 0)
+      rebuild!
+
+      assert_equal %w[urn:d:nc:1], search("libertas", source: "nc").map(&:urn)
+      assert_equal %w[urn:d:nc:1], search("libertas", source: "nc", license: "nc").map(&:urn)
+      assert_empty search("libertas", source: "nc", license: "open"), "filters compose"
+    end
+
     # A document on an "open" source with an "nc" override must filter as nc and
     # report license_class "nc" (P1-3 override wins over source class).
     def test_license_override_wins_over_source_class
