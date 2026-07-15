@@ -6897,3 +6897,25 @@ CLI e2e 3 incl. whole-batch abort + executable refusal) — WebMock,
 no network. Docs: cli long_desc atomicity paragraph, ops §13 rewritten
 (atomic + executables + crash window), arch §16 truth pass. Suite
 2,662/33,056 exit 0 (0 skips) · lint 343 files exit 0.
+
+# ── Phase 21 ──────────────────────────────────────────────────────────
+
+## P21-0 · UrlDownload names cross the boundary UTF-8 NFC  [tier: orchestrator, hotfix] [status: done 2026-07-14] [deps: —]
+Live crash, owner's seventh url ingest (Linguistica Brunensia, OJS):
+Content-Disposition filenames arrive as raw UTF-8 bytes in a
+BINARY-encoded header value ("37850-Text článku-….pdf"); the derived
+name reached the engine ASCII-8BIT, the success message's UTF-8
+interpolation raised Encoding::CompatibilityError AFTER copy+append had
+landed (canonical stayed CONSISTENT — the atomic contract held — but
+the manifest serialized the file lane as a YAML !binary blob and the
+run died before the shelf sync). FIX at the one choke point every
+derived name crosses (UrlDownload#sanitize, the adapter boundary, the
+house text rule): force UTF-8, scrub undecodable bytes to U+FFFD,
+Normalize.nfc — Content-Disposition and percent-decoded url basenames
+alike (NFD e+combining-acute composes). Tests +3 with the offending
+bytes as fixture (BINARY CD header w/ UTF-8 bytes → UTF-8 NFC name;
+NFD percent-encoding → composed; invalid byte → honest U+FFFD).
+LIVE REPAIRS (owner tree, disclosed): articles manifest !binary lane →
+plain string; shelf resync (9 local-library docs live). Live smoke: the
+exact crashing url end to end on a scratch root, exit 0, plain-string
+manifest lane. Suite 2,665 exit 0 · lint 343 exit 0.

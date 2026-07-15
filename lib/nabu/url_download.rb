@@ -2,6 +2,7 @@
 
 require "uri"
 require "faraday"
+require_relative "normalize"
 require_relative "zip_fetch"
 
 module Nabu
@@ -109,9 +110,14 @@ module Nabu
     end
 
     # One honest file name: path components dropped, whitespace trimmed;
-    # nil when nothing usable remains.
+    # nil when nothing usable remains. Every derived name crosses the
+    # adapter boundary HERE, so the house text rule applies here: force
+    # UTF-8 (HTTP header values arrive BINARY — the 2026-07-14
+    # Encoding::CompatibilityError crash), scrub undecodable bytes to the
+    # replacement char, NFC-normalize.
     def sanitize(name)
-      clean = File.basename(name.tr("\\", "/").strip)
+      utf8 = Normalize.nfc(name.dup.force_encoding(Encoding::UTF_8).scrub("\u{FFFD}"))
+      clean = File.basename(utf8.tr("\\", "/").strip)
       clean.empty? || %w[/ . ..].include?(clean) ? nil : clean
     end
 
