@@ -375,7 +375,7 @@ module Nabu
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
-                                                   limit: options[:limit].to_i))
+                                                   limit: options[:limit].to_i, prefix: options[:prefix]))
       elsif options[:entries]
         print_list_entries(slug, query.entries(slug, prefix: options[:prefix], lang: options[:lang],
                                                      limit: options[:limit].to_i))
@@ -1873,8 +1873,10 @@ module Nabu
         modes = %i[documents entries collections].select { |flag| options[flag] }
         raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
         raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
-        raise Thor::Error, "list: --prefix filters headwords — use it with --entries" \
-          if options[:prefix] && !options[:entries]
+        if options[:prefix] && !options[:entries] && !options[:documents]
+          raise Thor::Error, "list: --prefix filters headwords/dossier codes — use it with --entries " \
+                             "or --documents"
+        end
 
         doc_only = %i[license withdrawn from to century].select { |flag| options[flag] }
         unless doc_only.empty? || options[:documents]
@@ -1904,6 +1906,7 @@ module Nabu
         parts = []
         parts << "docs=#{row.docs}#{" pass=#{row.passages}" if row.passages.positive?}" if row.docs.positive?
         parts << "entries=#{row.entries}" if row.entries.positive?
+        parts << "dossiers=#{row.dossiers}" if row.dossiers.positive?
         parts << "empty" if parts.empty?
         parts << "langs=#{census_langs(row.languages)}" unless row.languages.empty?
         parts << "license=#{row.license_classes.join(',')}"
@@ -1931,6 +1934,8 @@ module Nabu
         say "  license #{card.license_classes.join(',')}#{" · #{truncate_line(credit)}" unless credit.empty?}"
         say "  #{card_counts(card)}"
         say "  langs #{card.languages.map { |code, n| "#{code}=#{n}" }.join(' ')}" unless card.languages.empty?
+        say "  records #{card.record_kinds.map { |kind, n| "#{kind}=#{n}" }.join(' ')}" \
+          unless card.record_kinds.empty?
         card.dictionaries.each do |dict|
           say "  dict #{dict.slug} — #{dict.title} [#{dict.language}] entries=#{dict.entries}"
         end
@@ -1950,6 +1955,7 @@ module Nabu
         parts << "docs=#{card.docs}" if card.docs.positive?
         parts << "pass=#{card.passages}" if card.passages.positive?
         parts << "entries=#{card.entries}" if card.entries.positive?
+        parts << "dossiers=#{card.dossiers}" if card.dossiers.positive?
         parts << "withdrawn=#{card.withdrawn}" if card.withdrawn.positive?
         parts << "retired=#{card.retired}" if card.retired.positive?
         parts.empty? ? "empty" : parts.join(" ")
@@ -1982,8 +1988,12 @@ module Nabu
         return say("no documents match") if page.rows.empty?
 
         page.rows.each do |row|
-          flags = "#{' (withdrawn)' if row.withdrawn}#{' (retired upstream)' if row.retired}"
-          say "#{row.urn} — #{row.title}#{" [#{row.language}]" if row.language} #{row.license_class}#{flags}"
+          if row.is_a?(Nabu::Query::List::DossierRow)
+            say "#{row.code}#{" — #{row.name}" if row.name}#{" [#{row.family}]" if row.family}"
+          else
+            flags = "#{' (withdrawn)' if row.withdrawn}#{' (retired upstream)' if row.retired}"
+            say "#{row.urn} — #{row.title}#{" [#{row.language}]" if row.language} #{row.license_class}#{flags}"
+          end
         end
         print_list_tail(page)
       end

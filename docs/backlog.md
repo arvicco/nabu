@@ -7123,3 +7123,12 @@ status long_desc naming list, search/export --source), README feature
 tour (+list row, --source in search/export rows); docs/ops.md and
 site/tools.md untouched (no enumerated command list goes false).
 Suite 2,704 runs / 33,259 assertions exit 0 · lint 345 files exit 0.
+LIVE-GAP FIX (owner report, 2026-07-15, in-PR): the dossier shelf
+(language grain, no documents) rendered as `empty` — census/card now
+count dossiers (198) + records-by-kind, `--documents` enumerates
+`code — Name [family]` with --prefix/--limit (other document filters
+= named inapplicability), document-grain --prefix also a NAMED error
+(was a silent no-match). Grain detected from adapter_class in the
+catalog, never the registry; guarded on table_exists (read surfaces
+never migrate). Tests +7.
+
