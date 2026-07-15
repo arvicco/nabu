@@ -104,6 +104,18 @@ module Query
       assert_equal %w[vinculum servitus].sort, export(format: "plain", license: "nc").to_a.sort
     end
 
+    # --source SLUG (P22-1): scope the stream to one source.
+    def test_source_filter_scopes_the_stream
+      open_doc = make_document(source: @open, urn: "urn:d:open")
+      make_passage(open_doc, urn: "urn:d:open:1", text: "libertas", sequence: 0)
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "vinculum", sequence: 0)
+
+      assert_equal ["vinculum"], export(format: "plain", source: "nc").to_a
+      assert_equal ["vinculum"], export(format: "plain", source: "nc", lang: "grc").to_a
+      assert_empty export(format: "plain", source: "nc", lang: "lat").to_a, "filters compose"
+    end
+
     def test_withdrawn_passage_and_document_are_excluded
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "kept", sequence: 0)

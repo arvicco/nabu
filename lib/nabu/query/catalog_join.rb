@@ -32,9 +32,11 @@ module Nabu
       # plus the optional language and license filters. No ordering: the
       # caller restores its own index order. +from+/+to+/+place+ (P15-2) add the
       # document-grained date/place axis filter; +facets+ (P17-2) the
-      # document-grained facet filter ({facet name => pattern}).
-      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil)
-        visible_passages(lang: lang, license: license, from: from, to: to, place: place, facets: facets)
+      # document-grained facet filter ({facet name => pattern}); +source+
+      # (P22-1) scopes to one source slug.
+      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil)
+        visible_passages(lang: lang, license: license, from: from, to: to, place: place,
+                         facets: facets, source: source)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -50,13 +52,16 @@ module Nabu
       # document with several axis rows (a chronicle's annals, Part 2) never
       # multiplies passage rows. A document with NO axis row is undated and
       # falls out under any active date/place filter (an absence, never an
-      # error).
-      def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil)
+      # error). +source+ (P22-1, `--source SLUG`) filters on the already-joined
+      # sources row — validated CLI-side, so an unknown slug never reaches here
+      # as a silent empty result.
+      def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
+        dataset = dataset.where(Sequel[:sources][:slug] => source) if source
         dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
