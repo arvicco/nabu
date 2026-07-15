@@ -517,6 +517,34 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P23-3b: the registry is authoritative for enablement — the card's header
+  # shows the registry value even when the db row is stale (a sources.yml
+  # flip reaches the db only at the source's next sync).
+  def test_list_card_enabled_comes_from_the_registry_not_the_stale_db_row
+    with_list_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:sources].where(slug: "shelf").update(enabled: false) # stale row; registry says true
+      catalog.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      assert_match(/· sync manual · on$/, out, "registry enabled: true must win over the stale db row")
+    end
+  end
+
+  # The P22-1 loud-orphan case must not regress: a catalog source with no
+  # registry line reads NOT IN REGISTRY on its card.
+  def test_list_card_of_an_unregistered_catalog_source_reads_loudly
+    with_list_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:sources].insert(slug: "orphan", name: "Orphan", adapter_class: "TestAdapter",
+                               license_class: "open", enabled: true)
+      catalog.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[list orphan]) }
+      assert_nil status
+      assert_match(/NOT IN REGISTRY/, out)
+    end
+  end
+
   def test_list_unknown_source_misses_honestly_naming_the_slugs
     with_list_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[list nope]) }
