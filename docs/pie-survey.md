@@ -252,6 +252,10 @@ credit rides in source metadata and on every serving surface; his
 non-consensus caveat is carried verbatim at adapter-build time. The
 survey below (data census, decoding) predates the grant and stands.
 
+**Adapter built P22-0 (2026-07-15):** `starling-dbf` parser family +
+`starling` source (pokorny + piet shelves, `enabled: false`) — pending
+the owner-fired first sync + flip; see 02-sources row 56.
+
 
 <https://starlingdb.org> (starling.rinet.ru 301s here). The famous murky
 terms, read: the downloads page (`downl.php?lan=en`) offers the full IE

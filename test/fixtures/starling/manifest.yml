@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All four files live INSIDE the downloadable IE.exe package (a plain zip;
+# no per-file raw URL), and each is a documented TRIM (whole: false): the
+# selected records' bytes and their .var payloads are byte-verbatim
+# upstream, only the record count and the 6-byte var-pointers were
+# rewritten to address the compacted .var (recipe in README.md). The
+# sentinel fetches the package URL for liveness only.
+source: starling
+adapter_test: test/adapters/starling_test.rb
+retrieved: 2026-07-15
+files:
+  - path: pokorny.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 3 of 2,222 records — NUMBER 1 (ā, the ἆ font-shift pin), 721 (gʷer(ə)-4, PIET crosslink), 1089 (kʷel-1, the \x80\xA8 stray-byte pin); header + field descriptors verbatim, var-pointers rewritten
+  - path: pokorny.var
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: piet.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 3 of 3,291 records — NUMBER 1 (*ay-er/n-), 562 (*kol-, the pokorny-#1089 crosslink pair), 1501 (*k'īgh-, proto-column no-row pin); header + field descriptors verbatim, var-pointers rewritten
+  - path: piet.var
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
