@@ -6934,3 +6934,218 @@ manifest lane. Suite 2,665 exit 0 · lint 343 exit 0.
 #    unchanged (Swete held); CCAT-declaration route now doubtful,
 #    02-sources row 44 updated.
 # Send queue rest: GORAZD (#2) still first among unsent.
+
+# ── Phase 22 ──────────────────────────────────────────────────────────
+
+## P22-0 · starling adapter (StarLing parser + Pokorny/PIET)  [tier: fable] [status: done 2026-07-15 — parser family + adapter shipped, enabled:false awaiting owner sync+flip; verdicts below] [deps: —]
+The unlock: G. Starostin's e-mail grant 2026-07-15 ("all etymological
+data are free for anybody to use for any purposes as long as the source
+is properly acknowledged") with the EXPRESS per-base compiler-credit
+condition (roster: starlingdb.org/descrip.php?lan=en#bases) and the
+non-consensus caveat carried verbatim (the Larth treatment). Owner
+pre-approved ("go ahead with starling packet", 2026-07-15). Scope: ONE
+parser family (starling-dbf) + ONE adapter (slug starling), pokorny +
+piet only; germet/baltet/vasmer are follow-up configuration.
+
+FINDINGS (2026-07-15):
+- ENCODING VERDICT (the packet's hard part): the survey's /startrac/
+  source tree 404s live; the authority used instead is the OFFICIAL
+  current package — starling_3.9.0-20251128_amd64.deb, whose own
+  config.str wires convert/unipro.lst ("fully Unicode compatible",
+  1,134 forward mappings + 17 alias rows) as THE Unicode conversion.
+  unipro.lst is vendored VERBATIM (config/starling/, sha256 + provenance
+  README) and drives a longest-match trie decoder (Nabu::StarlingText)
+  — no byte meaning guessed, alias rows resolved through the table
+  itself. Structure from the package's help/encoding.htm: \x01–\x07
+  open doublebyte sets (IE bases use set 1 only — \x01\x83/\x01\x85
+  Greek + combining), any byte <0x80 terminates, \x7F invisible
+  breaker, \B\I\C\U\L\H markup stripped; \x15 = paragraph mark (live
+  site renders <P>) → "\n". Table sequences deliberately span mode
+  transitions (α+\x7F+macron = one ᾱ entry) — the trie walks with the
+  shift byte virtually prefixed. VERIFIED against the live starlingdb
+  CGI rendering of the same records (2026-07-15): pokorny #1 (\xB0→ā;
+  \x01\x83\xC2\x83\xC0→ἆ — the survey's byte run, its ellipsis resolved:
+  ἆ is the FOUR-byte run, \x01\x83\xC2 alone is bare α), #34 (αἰγίλωψ
+  across continuing pairs), #284 (\x1Da→æ), #1089 (kʷel-1; cīrṇá),
+  piet #1/#562/#1501 (утро, ayarə, kaṇṭhá-, collus). FULL-CORPUS decode
+  census: 41,329 non-empty cells over 5,513 records decode with ONE
+  unmapped pair — \x80\xA8 after τέλλω in pokorny #1089 (upstream
+  stray; the official converter silently drops it) → honest U+FFFD,
+  fixture-pinned. dBase III layer: length-6 C cells with descriptor
+  byte 12 = "V" are var-pointers (uint32 offset + uint16 length into
+  .var); pokorny carries a trailing 0x1A EOF, piet does not (both real,
+  both handled); zero deleted records in either base.
+- REFLEX VERDICT (deep-extraction mandate, censused on the full base
+  before promising): piet branch columns are scholarly PROSE (variants,
+  grammar tags, glosses, dialect prefixes), not word lists — whole-cell
+  reflex rows would poison the crosswalk. The honest slice: the six
+  SINGLE-LANGUAGE attested columns (HITT→hit, IND→san, AVEST→ae,
+  ARM→xcl, LAT→lat, ALB→sq) mint ONE row per cell — the LEADING
+  citation form only, gated by a clean-token shape (dialect-prefixed
+  "Khow. yor" and ?-doubt cells mint nothing; the gate self-filters the
+  census's dirty classes). lang_code = upstream column name verbatim,
+  lang_name = the .inf field alias (feeds the language_names census →
+  reflex_bearing health invariants hold). Projected ~4.4k rows (LAT
+  1,386 · IND 1,335 · AVEST 652 · ARM 486 · HITT 323 · ALB 230 of
+  clean-first-token cells). NO rows from: GREEK (Starostin Latin
+  transcription — script-mismatched against grc gold; 80% clean would
+  still join nothing), SLAV/BALT/GERM (Nikolayev-notation branch
+  PROTOFORMS, morpheme-segmented (*xáls-a-), a rival notation whose
+  honest lane is the body + the SLAVNUM/BALTNUM/GERMNUM links into the
+  subordinate bases — live joins when germet/baltet/vasmer land as
+  config), IRAN/ITAL/CELT/TOKH (multi-language cells — rows would
+  invent language codes). Every column rides the entry BODY verbatim
+  regardless (labeled with the upstream .inf aliases).
+- CROSSLINK SEMANTICS (read from the in-package .inf files, which
+  correct the survey's guess): pokorny.PIET → piet NUMBER; piet's
+  REFERNUM = "Pokorny" (NOT a references table), PRNUM = "Nostratic
+  etymology" (nostret, out of package), SLAVNUM = "Vasmer", BALTNUM/
+  GERMNUM = the Baltic/Germanic subordinate bases. Both directions
+  preserved as body lines ("PIE database: #562" / "Pokorny: #1089" —
+  the numbers ARE the shelves' entry ids); fixture pair pokorny #1089 ⇄
+  piet #562 pins it both ways.
+- LEMMATIZATION: both shelves ine-pro (piet is laryngeal-free
+  traditional notation — a second ine-pro witness, provenance-distinct
+  from kaikki/LIV; the define-unification lane is the §9 ine PROTO
+  fold). headword verbatim (homonym digits kept in display: bher-1),
+  key_raw keeps the asterisk; headword_folded = FIRST comma-variant,
+  ?/* prefix + parens off, IEW homonym digit off, trailing hyphen KEPT
+  (the iecor/kaikki root-fold convention): "kʷel-1, kʷelə-" → "kwel-".
+  Starostin palatal apostrophes (*k'īgh-) fold as-typed — cross-
+  notation unification with kaikki ḱ is NOT forced (journal: honest
+  non-join; the closure sees this shelf through its reflex rows).
+- ATTRIBUTION LANE: the grant + BOTH per-base credits travel in
+  MANIFEST.license → sources.license → every define/etym/cognates/MCP
+  result row (fixture-tested on a define render); sources.yml row +
+  02-sources row 56 carry the caveat verbatim.
+- FIXTURES: real-byte rebuilds (header/descriptors/record bytes + var
+  payloads verbatim; only nrec + the 6-byte pointers rewritten to a
+  compacted .var) — pokorny #1/#721/#1089, piet #1/#562/#1501, each
+  decode web-verified; manifest.yml + README with grant, sha256s,
+  selection rationale. Conformance: dictionary-shaped, so the passage
+  suite is MIRRORED (the LivTest/MwTest house form) — manifest/round-
+  trip/uniqueness/stability/NFC + loader idempotency + rider + renders.
+- docs/library.md NOT extended with the shelf (truthfulness: its
+  numbers read from the live catalog; starling is not in it yet) —
+  only the registry sentence updated to 31 sources / 30 enabled.
+- Owner queue: bin/nabu sync starling (6.2 MB; projected 2,222 + 3,291
+  entries, ~4.4k reflex rows, 1 ine-pro note), eyeball define '*bher-'
+  (credit line) + etym collum-class walks + the ONE U+FFFD in pokorny
+  #1089, then flip enabled + rebuild for the closure reindex.
+
+## P22-2 · show resolves dictionary-entry urns  [tier: orchestrator, in-PR] [status: done 2026-07-15] [deps: —]
+Owner repro (first starling browse): `define '*kreu-'` prints
+`urn:nabu:dict:starling-pokorny:1040` on the headline; `show <that urn>`
+→ "urn not found". Corpus-wide gap since the dict shelf existed (lsj
+urns missed identically) — define INVITES the show. FIX: Define#by_urn
+(one entry by minted urn, entry_columns extracted for reuse; withdrawn
+entries resolve FLAGGED — show's hides-nothing contract, not define's
+live-shelf lookup; Result gains withdrawn, default false),
+Query::Show#run routes the urn:nabu:dict: prefix there
+(table_exists-guarded), CLI print_show dispatches to the extracted
+print_define_entry (one renderer, no divergence; "(withdrawn)" tag),
+MCP nabu_show → define_payload with the SAME license-withholding rule
+(research_private entries withheld as ever). Reflex attested-counts
+read nil under show (no fulltext dependency added — honest absence).
+Tests +5 (by_urn ×3 incl. withdrawn, Show routing, MCP payload) + CLI
+e2e of the exact owner repro. Suite exit 0 · lint exit 0.
+
+## P22-1 · `nabu list SOURCE` + `--source` filter on search/export  [tier: agent] [status: done 2026-07-15] [deps: —]
+
+Owner-approved semantics (2026-07-15): "nabu list source semantics
+(general shelf info/stats by default, --documents --entries
+--collections --limit - other useful filters you can think of? Sure,
+plus a --source filter on search/export". Gap: no CLI way to enumerate
+a shelf's contents — the owner had to be handed a sqlite3 one-liner.
+
+SHIPPED — `nabu list [SOURCE]`, the WHAT-IS-HELD view (status = the
+sync-state view; each command's help names the other, the
+discoverability pair):
+
+- Bare census: one line per catalog source — docs=/pass= (live,
+  StatusReport counting semantics), entries= (dictionary shelves),
+  langs= (codes when ≤3, count when more; passage ∪ dictionary
+  languages), license= (distinct EFFECTIVE classes — document overrides
+  included; declared class when empty), withdrawn=/retired= only when
+  nonzero (conventions §10, zero-suppression). Footer totals.
+- `list SOURCE` card: slug — name, adapter + registry sync policy +
+  enabled (NOT IN REGISTRY reads loudly when a catalog source lost its
+  registry row), license class(es) + the source's free-text
+  license/credit line when it carries one (truncated to one line),
+  counts, per-language passage breakdown, per-dictionary entries,
+  date-axis coverage (dated docs + min..max signed years, `open` for a
+  NULL bound), facet summary (facet=N values/M docs), collections
+  (inline ≤8, else a count pointing at --collections). Bounded — a
+  card, not a dump.
+- `--documents`: urn — title [lang] license, urn order, withdrawn/
+  retired flagged inline; filters --lang/--license/--withdrawn (ONLY
+  withdrawn/retired — the stewardship lens)/--from/--to/--century
+  (reuses CatalogJoin#axis_exists — the date join was already
+  document-grain-correlated, so reuse was cheap; require_axis! guard
+  as in search). Default --limit 50, 0 = all, honest "… N more —
+  raise --limit (0 = all)" tail (Page carries the true total).
+- `--entries`: headword [dict] — gloss (one line, collapsed), live
+  entries, (dictionary, entry_id) order; --lang = dictionary language;
+  --prefix STR = FOLDED headword prefix via the full
+  Normalize.query_forms variant union ORed as byte-range prefixes
+  (rides the headword_folded index, nothing to escape — the
+  Scope#prefix_match precedent; ASCII bh finds *bʰer-, leading *
+  stripped). Non-dictionary source: one honest line, exit 0.
+- `--collections`: collection → doc count, censused MECHANICALLY from
+  the urn shape urn:nabu:<slug>:<collection>:<rest> (≥2 segments after
+  the source prefix) — local-library reads exactly as filed, any
+  nested nabu-urn source (ddbdp series) censuses honestly, CTS shelves
+  miss honestly (exit 0). VERDICT: no adapter/registry flag needed;
+  the urn IS the manifest structure.
+- Flag grammar validated up front: one enumeration mode per invocation;
+  SOURCE required for modes; --prefix entries-only; --license/
+  --withdrawn/date filters documents-only; --lang documents/entries.
+  Every misuse is a NAMED error, never a silently ignored flag.
+- `--source SLUG` on search AND export: threaded as `source:` through
+  CatalogJoin#visible_passages/#catalog_rows (one place, the
+  visibility-rule module) so it composes with EVERY search path —
+  plain FTS, --lemma (+--morph), --near, --fuzzy — and all
+  lang/license/date/place/facet filters; Export gets the same clause
+  in its own dataset builder. Validated CLI-side against the catalog
+  with the define-miss pattern (unknown slug → the valid slugs, exit 1)
+  so an unknown source is never a silent empty result.
+
+DESIGN VERDICTS (journaled):
+- --prefix stays ENTRIES-ONLY: a urn-prefix filter on --documents does
+  NOT fall out of the folding helpers (urns are never folded; prefix
+  semantics would differ per shelf) — out, said in help via omission.
+- INDEX verdict: NO migration. The --source filter lands on the
+  already-joined sources row (documents.source_id indexed since 001,
+  sources.slug unique); FTS hit resolution stays an id-list join
+  bounded by INNER_LIMIT_FACTOR — nothing quadratic to index away
+  (012/013 addressed per-passage language lookups; there is no
+  per-passage source column and none is needed). Known tradeoff
+  (same as --lang/--license): a rare --source may under-fill a page
+  since filtering is catalog-side after the inner FTS limit.
+- --source deliberately NOT added to concord/parallels/etc. — the
+  owner named search + export; the CatalogJoin threading makes the
+  future addition one kwarg each.
+- census/card read the CATALOG (held content); registry supplies only
+  the card's policy/enabled line — an unsynced registered source is
+  status's story, not list's.
+
+Tests +40 (query/list_test 22 on sqlite::memory: with migrations;
+search/export query tests +2 source-filter; CLI e2e +16: census, card,
+dictionary card, unknown-source miss, documents flags+tail+filters
+(--lang/--license/--withdrawn/--century), entries+--prefix folding,
+passage-shelf entries miss exit 0, collections census + honest miss,
+flag guards, search/export --source + unknown miss, help anchors both
+directions of the status/list pair). Docs: cli help (list long_desc,
+status long_desc naming list, search/export --source), README feature
+tour (+list row, --source in search/export rows); docs/ops.md and
+site/tools.md untouched (no enumerated command list goes false).
+Suite 2,704 runs / 33,259 assertions exit 0 · lint 345 files exit 0.
+LIVE-GAP FIX (owner report, 2026-07-15, in-PR): the dossier shelf
+(language grain, no documents) rendered as `empty` — census/card now
+count dossiers (198) + records-by-kind, `--documents` enumerates
+`code — Name [family]` with --prefix/--limit (other document filters
+= named inapplicability), document-grain --prefix also a NAMED error
+(was a silent no-match). Grain detected from adapter_class in the
+catalog, never the registry; guarded on table_exists (read surfaces
+never migrate). Tests +7.
+

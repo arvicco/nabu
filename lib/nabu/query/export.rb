@@ -34,10 +34,11 @@ module Nabu
       end
 
       # Return an Enumerator of serialized lines (Strings, no trailing newline).
-      # +format+ is "plain" or "jsonl"; +lang+/+license+ are optional filters.
-      def run(format:, lang: nil, license: nil)
+      # +format+ is "plain" or "jsonl"; +lang+/+license+/+source+ (P22-1,
+      # one source slug) are optional filters.
+      def run(format:, lang: nil, license: nil, source: nil)
         serialize = serializer(format)
-        dataset = export_dataset(lang: lang, license: license)
+        dataset = export_dataset(lang: lang, license: license, source: source)
         Enumerator.new do |yielder|
           dataset.each { |row| yielder << serialize.call(row) }
         end
@@ -83,12 +84,13 @@ module Nabu
       # Live passages (passage and its document both non-withdrawn), optionally
       # filtered by language and effective license class, in stable primary-key
       # order (index-backed, so the stream never buffers a sort).
-      def export_dataset(lang:, license:)
+      def export_dataset(lang:, license:, source: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
+        dataset = dataset.where(Sequel[:sources][:slug] => source) if source
         dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset.select(*columns).order(Sequel[:passages][:id])

@@ -9,7 +9,10 @@ dictionary entries only), plus **458,238 dictionary entries** on the
 reference shelf (sixteen dictionaries, including Monier-Williams, the seven
 reconstruction shelves, and the three new etymological witnesses — §8h),
 and **2,852,069 gold lemma rows in 15 languages**. Two **local shelves**
-(architecture §16) complete the registry at 30 sources, all enabled: the
+(architecture §16) and the registered-but-unsynced `starling` source
+(StarLing/Tower of Babel Pokorny + PIET, P22-0 — `enabled: false` until
+the owner-fired first sync) complete the registry at 31 sources, 30
+enabled: the
 `local-language` dossier shelf is live (199 dossiers → 329 derived language
 records), and the `local-library` shelf for the owner's own PDFs and scans
 is registered with `nabu ingest` as its front door — empty until the first
