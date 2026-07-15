@@ -45,7 +45,10 @@ module Nabu
       # reconstruction shelves.
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :key_raw, :gloss, :body,
-                           :license, :license_class, :source_slug, :citations, :reflexes)
+                           :license, :license_class, :source_slug, :citations, :reflexes,
+                           :withdrawn) do
+        def initialize(withdrawn: false, **) = super
+      end
 
       # One citation of an entry: display label always; resolved_urn is the
       # in-catalog passage urn or nil.
@@ -77,6 +80,20 @@ module Nabu
       # +pairs+ is an array of [lemma, language]; returns
       # { [lemma, language] => gloss } for every pair a dictionary of that
       # language glosses. One query per distinct language.
+      # Resolve ONE entry by the minted urn `define` prints on every headline
+      # (P22-2 — the owner's natural next move was `show <that urn>`, which
+      # missed). Withdrawn entries resolve too, flagged: this is show's
+      # hides-nothing contract, not define's live-shelf lookup.
+      def by_urn(urn)
+        row = @catalog[:dictionary_entries]
+              .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+              .join(:sources, id: Sequel[:dictionaries][:source_id])
+              .where(Sequel[:dictionary_entries][:urn] => urn)
+              .select(*entry_columns, Sequel[:dictionary_entries][:withdrawn])
+              .first
+        row && build_result(row)
+      end
+
       def glosses(pairs)
         return {} unless shelf?
 
@@ -105,17 +122,22 @@ module Nabu
         dataset = dataset.where(Sequel[:dictionaries][:language] => lang) if lang
         dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
                .limit(limit)
-               .select(
-                 Sequel[:dictionary_entries][:id].as(:entry_row_id),
-                 Sequel[:dictionary_entries][:urn], Sequel[:dictionary_entries][:entry_id],
-                 Sequel[:dictionary_entries][:key_raw], Sequel[:dictionary_entries][:headword],
-                 Sequel[:dictionary_entries][:gloss], Sequel[:dictionary_entries][:body],
-                 Sequel[:dictionaries][:slug].as(:dictionary_slug),
-                 Sequel[:dictionaries][:title].as(:dictionary_title),
-                 Sequel[:dictionaries][:language],
-                 Sequel[:sources][:license], Sequel[:sources][:license_class],
-                 Sequel[:sources][:slug].as(:source_slug)
-               ).all
+               .select(*entry_columns)
+               .all
+      end
+
+      def entry_columns
+        [
+          Sequel[:dictionary_entries][:id].as(:entry_row_id),
+          Sequel[:dictionary_entries][:urn], Sequel[:dictionary_entries][:entry_id],
+          Sequel[:dictionary_entries][:key_raw], Sequel[:dictionary_entries][:headword],
+          Sequel[:dictionary_entries][:gloss], Sequel[:dictionary_entries][:body],
+          Sequel[:dictionaries][:slug].as(:dictionary_slug),
+          Sequel[:dictionaries][:title].as(:dictionary_title),
+          Sequel[:dictionaries][:language],
+          Sequel[:sources][:license], Sequel[:sources][:license_class],
+          Sequel[:sources][:slug].as(:source_slug)
+        ]
       end
 
       def gloss_rows(folded_keys, language)
@@ -141,7 +163,8 @@ module Nabu
           license: row.fetch(:license), license_class: row.fetch(:license_class),
           source_slug: row.fetch(:source_slug),
           citations: resolve_citations(row.fetch(:entry_row_id)),
-          reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : []
+          reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : [],
+          withdrawn: row[:withdrawn] ? true : false
         )
       end
 

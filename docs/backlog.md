@@ -7033,6 +7033,23 @@ FINDINGS (2026-07-15):
   (credit line) + etym collum-class walks + the ONE U+FFFD in pokorny
   #1089, then flip enabled + rebuild for the closure reindex.
 
+## P22-2 · show resolves dictionary-entry urns  [tier: orchestrator, in-PR] [status: done 2026-07-15] [deps: —]
+Owner repro (first starling browse): `define '*kreu-'` prints
+`urn:nabu:dict:starling-pokorny:1040` on the headline; `show <that urn>`
+→ "urn not found". Corpus-wide gap since the dict shelf existed (lsj
+urns missed identically) — define INVITES the show. FIX: Define#by_urn
+(one entry by minted urn, entry_columns extracted for reuse; withdrawn
+entries resolve FLAGGED — show's hides-nothing contract, not define's
+live-shelf lookup; Result gains withdrawn, default false),
+Query::Show#run routes the urn:nabu:dict: prefix there
+(table_exists-guarded), CLI print_show dispatches to the extracted
+print_define_entry (one renderer, no divergence; "(withdrawn)" tag),
+MCP nabu_show → define_payload with the SAME license-withholding rule
+(research_private entries withheld as ever). Reflex attested-counts
+read nil under show (no fulltext dependency added — honest absence).
+Tests +5 (by_urn ×3 incl. withdrawn, Show routing, MCP payload) + CLI
+e2e of the exact owner repro. Suite exit 0 · lint exit 0.
+
 ## P22-1 · `nabu list SOURCE` + `--source` filter on search/export  [tier: agent] [status: done 2026-07-15] [deps: —]
 
 Owner-approved semantics (2026-07-15): "nabu list source semantics

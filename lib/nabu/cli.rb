@@ -2145,6 +2145,7 @@ module Nabu
         when Nabu::Query::Show::PassageResult then print_show_passage(result)
         when Nabu::Query::Show::DocumentResult then print_show_document(result)
         when Nabu::Query::Show::RangeResult then print_show_range(result)
+        when Nabu::Query::Define::Result then print_define_entry(result)
         end
       end
 
@@ -3201,13 +3202,20 @@ module Nabu
 
         results.each_with_index do |result, index|
           say "" if index.positive?
-          say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]  #{result.urn}"
-          say "  gloss: #{result.gloss}" if result.gloss
-          say ""
-          say result.body
-          print_reflexes(result.reflexes)
-          print_resolved_citations(result)
+          print_define_entry(result)
         end
+      end
+
+      # One entry, the define house format — shared verbatim by `show` on a
+      # dictionary-entry urn (P22-2), where a withdrawn entry reads honestly.
+      def print_define_entry(result)
+        say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]" \
+            "#{' (withdrawn)' if result.withdrawn}  #{result.urn}"
+        say "  gloss: #{result.gloss}" if result.gloss
+        say ""
+        say result.body
+        print_reflexes(result.reflexes)
+        print_resolved_citations(result)
       end
 
       # A reconstruction entry's descendant reflexes (P14-1): attested-here
