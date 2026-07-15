@@ -16,10 +16,18 @@ module Nabu
     #   (the failed Coptic sync sat invisible — health showed old trends, run
     #   history only surfaced successes); a failed run that also left catalog
     #   rows behind is named a PARTIAL LOAD.
-    # - Enabled-vs-populated: an enabled source with a successful run on record
-    #   and zero documents AND zero dictionary entries — the half-loaded-
-    #   catalog signature a crashed rebuild leaves for the sources it never
-    #   reached (their ledger says ok, the fresh catalog is empty).
+    # - Synced-vs-populated: a source whose LATEST run succeeded but which
+    #   holds zero rows in its grain (documents, dictionary entries, language
+    #   records) — the half-loaded-catalog signature a crashed rebuild leaves
+    #   for the sources it never reached (their ledger says ok, the fresh
+    #   catalog is empty). Enablement is deliberately NOT a gate (P23-3a): the
+    #   liv case (2026-07-14) was a DISABLED source synced anyway to zero
+    #   entries, silent because the original enabled-vs-populated check
+    #   watched enabled sources only. A succeeded run promises rows whatever
+    #   the flag says. No exemption mechanism ships: the 2026-07-15 census of
+    #   the live catalog found every source populated in its own grain
+    #   (local-language holds language_records — the grain routing below), so
+    #   an honestly-empty-by-design source does not exist to exempt.
     # - Flag-vs-artifact: fuzzy_index flagged but the trigram index absent /
     #   empty / scope-less for the source (the flag was ON a full day with no
     #   trigram table); an axis extractor family shipping for the source but
@@ -36,7 +44,7 @@ module Nabu
     # SKIPPED: nothing machine-readable states an expected count today (the
     # sources.yml counts live in sign-off comments, which rot by design), and
     # an `expected_docs:` key would be stale after every ordinary sync. The
-    # enabled-vs-populated zero check plus the quarantine/withdrawal deltas
+    # synced-vs-populated zero check plus the quarantine/withdrawal deltas
     # already cover the regression classes a projection diff would catch.
     #
     # Everything reads through raw datasets on the injected handles (the
@@ -72,7 +80,7 @@ module Nabu
         [
           last_run_honesty(entry),
           partial_load(entry),
-          enabled_unpopulated(entry),
+          synced_unpopulated(entry),
           fuzzy_vs_trigram(entry),
           axis_vs_rows(entry),
           reflex_vs_rows(entry),
@@ -153,16 +161,20 @@ module Nabu
         @catalog[:provenance].where { at >= since }.where(dictionary_entry_id: entry_ids).count
       end
 
-      # -- enabled-vs-populated -----------------------------------------------
+      # -- synced-vs-populated ------------------------------------------------
 
-      def enabled_unpopulated(entry)
-        return nil unless entry.enabled && @catalog && any_ok_run?(entry.slug)
+      # Gates on the LATEST run having succeeded (a failed latest run is
+      # last_run_honesty's one loud line, not two), and NEVER on `enabled` —
+      # class note (the liv case).
+      def synced_unpopulated(entry)
+        return nil unless @catalog && latest_run(entry.slug)&.fetch(:status) == "succeeded"
         return nil if populated?(entry)
 
         Finding.new(
-          kind: :enabled_unpopulated, severity: :loud,
-          message: "enabled with a successful run on record but zero documents/entries/records — " \
-                   "half-loaded catalog? re-sync or rebuild"
+          kind: :synced_unpopulated, severity: :loud,
+          message: "latest run succeeded but zero documents/entries/records held " \
+                   "(enabled or not — a succeeded run promises rows) — " \
+                   "half-loaded catalog or synced-to-nothing? re-sync or rebuild"
         )
       end
 
