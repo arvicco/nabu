@@ -42,7 +42,9 @@ module Nabu
       # passage languages and dictionary languages; +license_classes+ the
       # sorted effective-class mix.
       CensusRow = Data.define(:slug, :docs, :passages, :entries, :languages,
-                              :license_classes, :withdrawn, :retired)
+                              :license_classes, :withdrawn, :retired, :dossiers) do
+        def initialize(dossiers: 0, **rest) = super
+      end
 
       # One source's card (`nabu list SOURCE`). +languages+ maps language →
       # live passage count; +dictionaries+ lists DictionaryRow values;
@@ -50,7 +52,10 @@ module Nabu
       # values ([] when none); +collections+ {collection => doc count} or nil.
       Card = Data.define(:slug, :name, :adapter_class, :enabled, :license_text, :license_classes,
                          :docs, :passages, :entries, :withdrawn, :retired,
-                         :languages, :dictionaries, :dated, :facets, :collections)
+                         :languages, :dictionaries, :dated, :facets, :collections,
+                         :dossiers, :record_kinds) do
+        def initialize(dossiers: 0, record_kinds: {}, **rest) = super
+      end
       Dated = Data.define(:docs, :min, :max)
       FacetRow = Data.define(:facet, :values, :docs)
       DictionaryRow = Data.define(:slug, :title, :language, :entries)
@@ -59,9 +64,16 @@ module Nabu
       # renderer can say "… N more — raise --limit".
       Page = Data.define(:rows, :total)
       DocRow = Data.define(:urn, :title, :language, :license_class, :withdrawn, :retired)
+      # The dossier shelf's enumeration grain (language records, not documents).
+      DossierRow = Data.define(:code, :name, :family)
       EntryRow = Data.define(:headword, :gloss, :dictionary_slug, :language)
 
       DEFAULT_LIMIT = 50
+      # The language-dossier shelf holds language_records, not documents —
+      # detected from the catalog itself (adapter_class), never the registry
+      # (the query-object contract). Live gap 2026-07-15: 199 dossiers
+      # rendered as "empty".
+      LANGUAGE_ADAPTER = "Nabu::Adapters::LocalLanguage"
 
       def initialize(catalog:)
         @catalog = catalog
@@ -74,12 +86,13 @@ module Nabu
         entries = entry_counts
         langs = census_languages
         licenses = license_mix
-        @catalog[:sources].order(:slug).select(:id, :slug, :license_class).all.map do |source|
+        @catalog[:sources].order(:slug).select(:id, :slug, :license_class, :adapter_class).all.map do |source|
           id = source.fetch(:id)
           doc = docs.fetch(id, { docs: 0, withdrawn: 0, retired: 0 })
           CensusRow.new(
             slug: source.fetch(:slug), docs: doc.fetch(:docs), passages: passages.fetch(id, 0),
             entries: entries.fetch(id, 0),
+            dossiers: language_grain?(source) ? dossier_count : 0,
             languages: ((langs[id] || []) + dictionary_languages(id)).uniq.sort,
             license_classes: licenses.fetch(id, [source.fetch(:license_class)]).sort,
             withdrawn: doc.fetch(:withdrawn), retired: doc.fetch(:retired)
@@ -100,7 +113,9 @@ module Nabu
           entries: entry_counts.fetch(id, 0),
           withdrawn: doc.fetch(:withdrawn), retired: doc.fetch(:retired),
           languages: card_languages(id), dictionaries: dictionary_rows(id),
-          dated: dated_coverage(id), facets: facet_summary(id), collections: collections(slug)
+          dated: dated_coverage(id), facets: facet_summary(id), collections: collections(slug),
+          dossiers: language_grain?(source) ? dossier_count : 0,
+          record_kinds: language_grain?(source) ? record_kinds : {}
         )
       end
 
@@ -109,8 +124,16 @@ module Nabu
       # narrows to exactly them). +limit+ 0 = unlimited; Page#total is always
       # the filtered whole.
       def documents(slug, lang: nil, license: nil, withdrawn_only: false,
-                    from: nil, to: nil, limit: DEFAULT_LIMIT)
-        source_row!(slug)
+                    from: nil, to: nil, limit: DEFAULT_LIMIT, prefix: nil)
+        source = source_row!(slug)
+        if language_grain?(source)
+          return dossiers(lang: lang, license: license, withdrawn_only: withdrawn_only,
+                          from: from, to: to, limit: limit, prefix: prefix)
+        end
+        # The P22-1 verdict stands for document grain: urns are never folded,
+        # so a prefix here is a named inapplicability, not a silent no-match.
+        raise Error, "--prefix filters headwords and dossier codes — this shelf enumerates documents" if prefix
+
         dataset = @catalog[:documents]
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:sources][:slug] => slug)
@@ -163,7 +186,45 @@ module Nabu
         counts.empty? ? nil : counts
       end
 
+      # The dossier shelf's --documents: one row per language code (name and
+      # family lanes joined in), code order. Document-shaped filters are
+      # honestly inapplicable here — a named error, never a silent empty.
+      def dossiers(lang:, license:, withdrawn_only:, from:, to:, limit:, prefix:)
+        if lang || license || withdrawn_only || from || to
+          raise Error, "the dossier shelf holds language records — only --prefix and --limit apply"
+        end
+
+        codes = @catalog[:language_records].distinct.order(:lang_code).select_map(:lang_code)
+        codes = codes.select { |code| code.start_with?(prefix) } if prefix
+        names = record_lane("name")
+        families = record_lane("family")
+        rows = (limit.positive? ? codes.first(limit) : codes).map do |code|
+          DossierRow.new(code: code, name: names[code], family: families[code])
+        end
+        Page.new(rows: rows, total: codes.size)
+      end
+
       private
+
+      def language_grain?(source)
+        source.fetch(:adapter_class) == LANGUAGE_ADAPTER && @catalog.table_exists?(:language_records)
+      end
+
+      def dossier_count
+        @dossier_count ||= @catalog[:language_records].select(:lang_code).distinct.count
+      end
+
+      # {kind => record count}, largest lanes first (the card's records line).
+      def record_kinds
+        @record_kinds ||= @catalog[:language_records]
+                          .group_and_count(:kind).all
+                          .sort_by { |row| [-row.fetch(:count), row.fetch(:kind)] }
+                          .to_h { |row| [row.fetch(:kind), row.fetch(:count)] }
+      end
+
+      def record_lane(kind)
+        @catalog[:language_records].where(kind: kind).select_hash(:lang_code, :body)
+      end
 
       def source_row!(slug)
         row = @catalog[:sources]

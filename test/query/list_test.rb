@@ -279,5 +279,64 @@ module Query
       make_document(source: @ccmh, urn: "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2")
       assert_nil list.collections("ccmh")
     end
+
+    # -- the dossier shelf (P22-1 live gap: language grain) --------------------
+
+    def make_language_shelf
+      source = Nabu::Store::Source.create(
+        slug: "local-language", name: "Language dossiers",
+        adapter_class: "Nabu::Adapters::LocalLanguage", license_class: "open", enabled: true
+      )
+      [["chu", "name", "Church Slavonic"], %w[chu family slavic], %w[chu context curated],
+       %w[got name Gothic], ["got", "witness:liv", "wrote"]].each do |code, kind, body|
+        @catalog[:language_records].insert(lang_code: code, kind: kind, body: body, source: "dossier")
+      end
+      source
+    end
+
+    def test_census_counts_dossiers_for_the_language_shelf
+      make_language_shelf
+      row = list.census.find { |r| r.slug == "local-language" }
+      assert_equal 2, row.dossiers, "199 dossiers must never render as empty (live gap 2026-07-15)"
+      assert_equal 0, row.docs
+    end
+
+    def test_card_carries_dossier_count_and_record_kinds
+      make_language_shelf
+      card = list.card("local-language")
+      assert_equal 2, card.dossiers
+      assert_equal({ "name" => 2, "context" => 1, "family" => 1, "witness:liv" => 1 }, card.record_kinds)
+    end
+
+    def test_documents_on_the_language_shelf_enumerates_dossiers
+      make_language_shelf
+      page = list.documents("local-language", limit: 10)
+      assert_equal 2, page.total
+      codes = page.rows.map(&:code)
+      assert_equal %w[chu got], codes
+      chu = page.rows.first
+      assert_equal "Church Slavonic", chu.name
+      assert_equal "slavic", chu.family
+    end
+
+    def test_dossier_enumeration_honors_prefix_and_limit
+      make_language_shelf
+      page = list.documents("local-language", prefix: "ch", limit: 10)
+      assert_equal %w[chu], page.rows.map(&:code)
+      page = list.documents("local-language", limit: 1)
+      assert_equal 2, page.total, "the tail stays honest under --limit"
+    end
+
+    def test_prefix_on_a_document_grain_shelf_is_a_named_inapplicability
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:mt")
+      error = assert_raises(Nabu::Query::List::Error) { list.documents("ccmh", prefix: "urn") }
+      assert_match(/headwords and dossier codes/, error.message)
+    end
+
+    def test_document_filters_are_named_inapplicable_on_the_dossier_shelf
+      make_language_shelf
+      error = assert_raises(Nabu::Query::List::Error) { list.documents("local-language", lang: "chu") }
+      assert_match(/dossier/, error.message)
+    end
   end
 end
