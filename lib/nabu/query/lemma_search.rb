@@ -69,18 +69,21 @@ module Nabu
       # morphology (see #run_with_morph); it REQUIRES the lemma anchor — bare
       # morph search is deliberately out of scope (it would scan every
       # annotated passage, not a lemma-narrowed handful).
-      def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil)
+      def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil)
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         facets = morph.to_s.strip.empty? ? nil : MorphFacets.parse(morph)
-        return run_with_morph(variants, facets, lang: lang, license: license, limit: limit, urn: urn) if facets
+        if facets
+          return run_with_morph(variants, facets, lang: lang, license: license, limit: limit,
+                                                  urn: urn, source: source)
+        end
 
         hits = lemma_hits(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
-        rows = catalog_rows(ordered_ids, lang: lang, license: license)
+        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source)
                .to_h { |row| [row.fetch(:passage_id), row] }
         by_id = hits.to_h { |row| [row.fetch(:passage_id), row] }
 
@@ -109,12 +112,12 @@ module Nabu
       #   3. a passage with ≥1 such token is a hit — its surface_forms and morph
       #      evidence restricted to the MATCHING tokens (not the whole lemma's
       #      attestations), then the ordinary catalog page-fill and glossing.
-      def run_with_morph(variants, facets, lang:, license:, limit:, urn:)
+      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil)
         passage_ids = candidate_passage_ids(variants, urn: urn)
         return [] if passage_ids.empty?
 
         variant_set = variants.to_set
-        rows = annotated_catalog_rows(passage_ids, lang: lang, license: license)
+        rows = annotated_catalog_rows(passage_ids, lang: lang, license: license, source: source)
                .to_h { |row| [row.fetch(:passage_id), row] }
         results = passage_ids.filter_map do |id|
           row = rows[id] and morph_hit(row, variant_set, facets)
@@ -133,8 +136,8 @@ module Nabu
 
       # Catalog rows for the candidate passages, carrying annotations_json for
       # the morph post-filter alongside the usual display/visibility columns.
-      def annotated_catalog_rows(passage_ids, lang:, license:)
-        visible_passages(lang: lang, license: license)
+      def annotated_catalog_rows(passage_ids, lang:, license:, source: nil)
+        visible_passages(lang: lang, license: license, source: source)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns, Sequel[:passages][:annotations_json].as(:annotations_json))
           .all

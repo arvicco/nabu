@@ -1609,5 +1609,21 @@ module MCP
         ro&.disconnect
       end
     end
+
+    def test_show_resolves_a_dictionary_entry_urn_to_the_define_payload
+      dict_id = @catalog[:dictionaries].insert(source_id: @open.id, slug: "lsj",
+                                               title: "LSJ", language: "grc")
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dict_id, urn: "urn:nabu:dict:lsj:n1", entry_id: "n1",
+        key_raw: "μῆνις", headword: "μῆνις", headword_folded: "μηνις",
+        gloss: "wrath", body: "μῆνις body", content_sha256: "x", revision: 1, withdrawn: false
+      )
+      urn = "urn:nabu:dict:lsj:n1"
+      result = call("nabu_show", { "urn" => urn })
+      body = payload(result)
+      entry = body.key?("entries") ? body.fetch("entries").first : body
+      assert_equal urn, entry.fetch("urn")
+      assert entry.fetch("headword")
+    end
   end
 end

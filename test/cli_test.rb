@@ -160,6 +160,18 @@ class CLITest < Minitest::Test
   # default and --long must expand every one, grouped by language. The
   # attested list is already unbounded, so it needs no flag.
 
+  def test_show_resolves_the_urn_define_prints
+    with_recon_shelf do |config|
+      out, = with_config(config) { run_cli(%w[define *zima]) }
+      urn = out[/urn:nabu:dict:\S+/]
+      refute_nil urn, "define prints the entry urn"
+      shown, _err, status = with_config(config) { run_cli(["show", urn]) }
+      assert_nil status
+      assert_match(/zima/, shown, "show renders the entry define invited (owner repro 2026-07-15)")
+      assert_match(/#{Regexp.escape(urn)}/, shown)
+    end
+  end
+
   def test_define_reflexes_are_capped_by_default
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
@@ -445,6 +457,192 @@ class CLITest < Minitest::Test
     assert_match(/jsonl/, out)
     assert_match(/annotations/, out, "must say what rides in jsonl lines")
     assert_match(/Examples:/, out)
+  end
+
+  # -- list (P22-1): the what-is-held view -----------------------------------
+
+  def test_help_list_documents_the_modes_and_points_at_status
+    out, _err, _status = run_cli(%w[help list])
+    assert_match(/--documents/, out)
+    assert_match(/--entries/, out)
+    assert_match(/--collections/, out)
+    assert_match(/--prefix/, out)
+    assert_match(/nabu status/, out, "the sync-state sibling must be named for discoverability")
+    assert_match(/Examples:/, out)
+  end
+
+  def test_help_status_points_at_list
+    out, _err, _status = run_cli(%w[help status])
+    assert_match(/nabu list/, out, "the contents-view sibling must be named for discoverability")
+  end
+
+  def test_list_census_one_line_per_source_with_counts_and_mix
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["list"]) }
+      assert_nil status, "the census exits 0"
+      assert_match(/^shelf\s+docs=2 pass=3\s+langs=grc,lat\s+license=nc,open\s+withdrawn=1\s+retired=1/, out)
+      assert_match(/^lex\s+entries=2\s+langs=sla-pro\s+license=attribution/, out)
+      assert_match(/^library\s+docs=3/, out)
+      assert_match(/3 sources/, out)
+    end
+  end
+
+  def test_list_census_without_catalog_hints_to_sync_or_rebuild
+    with_empty_registry_env do |config|
+      _out, err, status = with_config(config) { run_cli(["list"]) }
+      assert_equal 1, status
+      assert_match(/no catalog.*sync.*rebuild/i, err)
+    end
+  end
+
+  def test_list_source_card_identity_counts_languages_and_credit
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      assert_match(/^shelf — Shelf$/, out)
+      assert_match(/adapter TestAdapter/, out)
+      assert_match(/license nc,open · CC BY-NC 4\.0 \(compiled by Test\)/, out, "credit line rides the card")
+      assert_match(/docs=2 pass=3 withdrawn=1 retired=1/, out)
+      assert_match(/langs grc=2 lat=1/, out)
+      assert_match(/dated 1 doc -113\.\.602/, out)
+    end
+  end
+
+  def test_list_dictionary_source_card_lists_its_dictionaries
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list lex]) }
+      assert_nil status
+      assert_match(/entries=2/, out)
+      assert_match(/dict sla-pro — Proto-Slavic \[sla-pro\] entries=2/, out)
+    end
+  end
+
+  def test_list_unknown_source_misses_honestly_naming_the_slugs
+    with_list_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[list nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source "nope"/, err)
+      assert_match(/shelf/, err, "the miss lists the valid slugs")
+    end
+  end
+
+  def test_list_documents_enumerates_with_flags_and_an_honest_tail
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list shelf --documents]) }
+      assert_nil status
+      assert_match(/urn:nabu:shelf:alpha — Alpha \[grc\] open/, out)
+      assert_match(/urn:nabu:shelf:beta — Beta \[lat\] nc \(retired upstream\)/, out)
+      assert_match(/urn:nabu:shelf:gone — Gone \[grc\] nc \(withdrawn\)/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list shelf --documents --limit 1]) }
+      assert_nil status
+      assert_match(/… 2 more — raise --limit \(0 = all\)/, out)
+    end
+  end
+
+  def test_list_documents_filters_compose
+    with_list_corpus do |config|
+      out, _err, _status = with_config(config) { run_cli(%w[list shelf --documents --lang lat]) }
+      assert_match(/urn:nabu:shelf:beta/, out)
+      refute_match(/urn:nabu:shelf:alpha/, out)
+
+      out, _err, _status = with_config(config) { run_cli(%w[list shelf --documents --license open]) }
+      assert_match(/urn:nabu:shelf:alpha/, out)
+      refute_match(/urn:nabu:shelf:beta/, out)
+
+      out, _err, _status = with_config(config) { run_cli(%w[list shelf --documents --withdrawn]) }
+      assert_match(/urn:nabu:shelf:gone/, out)
+      assert_match(/urn:nabu:shelf:beta/, out, "retired upstream is part of the stewardship lens")
+      refute_match(/urn:nabu:shelf:alpha/, out)
+
+      out, _err, _status = with_config(config) { run_cli(%w[list shelf --documents --century -2]) }
+      assert_match(/urn:nabu:shelf:alpha/, out)
+      refute_match(/urn:nabu:shelf:beta/, out)
+    end
+  end
+
+  def test_list_entries_enumerates_headwords_with_prefix_folding
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list lex --entries]) }
+      assert_nil status
+      assert_match(/bʰer- \[sla-pro\] — to carry/, out)
+      assert_match(/bogъ \[sla-pro\] — god/, out)
+
+      out, _err, _status = with_config(config) { run_cli(%w[list lex --entries --prefix bh]) }
+      assert_match(/bʰer-/, out, "ASCII bh reaches the folded proto headword")
+      refute_match(/bogъ/, out)
+    end
+  end
+
+  def test_list_entries_on_a_passage_shelf_misses_honestly_exit_zero
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list shelf --entries]) }
+      assert_nil status, "an honest miss is not a failure"
+      assert_match(/no dictionary entries/, out)
+      assert_match(/--documents/, out, "the miss points at the lens that works")
+    end
+  end
+
+  def test_list_collections_census_and_honest_miss
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list library --collections]) }
+      assert_nil status
+      assert_match(/slavistics\s+docs=2/, out)
+      assert_match(/articles\s+docs=1/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list shelf --collections]) }
+      assert_nil status, "an honest miss is not a failure"
+      assert_match(/no collection segments/, out)
+    end
+  end
+
+  def test_list_flag_guards_are_honest
+    with_list_corpus do |config|
+      with_config(config) do
+        _out, err, status = run_cli(%w[list --documents])
+        assert_equal 1, status
+        assert_match(/give a SOURCE/, err)
+
+        _out, err, status = run_cli(%w[list shelf --documents --entries])
+        assert_equal 1, status
+        assert_match(/one of/, err)
+
+        _out, err, status = run_cli(%w[list lex --prefix bh])
+        assert_equal 1, status
+        assert_match(/--prefix.*--entries/, err)
+
+        _out, err, status = run_cli(%w[list shelf --entries --license open])
+        assert_equal 1, status
+        assert_match(/--license.*--documents/, err)
+      end
+    end
+  end
+
+  # -- search/export --source (P22-1) ----------------------------------------
+
+  def test_search_source_scopes_and_unknown_source_misses_honestly
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν --source corpus]) }
+      assert_nil status
+      assert_match(/urn:nabu:test_adapter:one:1/, out)
+
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --source nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source "nope"/, err)
+      assert_match(/corpus/, err, "the miss lists the valid slugs")
+    end
+  end
+
+  def test_export_source_scopes_the_stream
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[export --format plain --source corpus]) }
+      assert_nil status
+      assert_match(/μῆνιν/, out)
+
+      _out, err, status = with_config(config) { run_cli(%w[export --format plain --source nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source "nope"/, err)
+    end
   end
 
   # status is implemented (P1-6). Against an empty registry with no catalog db,
@@ -2876,6 +3074,95 @@ class CLITest < Minitest::Test
       catalog.disconnect
       yield config
     end
+  end
+
+  # A list (P22-1) corpus: a passage shelf with live/withdrawn/retired
+  # documents, a mixed license story and one dated document; a dictionary
+  # shelf; and a manifest-collection shelf — everything `nabu list` renders,
+  # seeded directly (no fulltext index needed: list reads only the catalog).
+  def with_list_corpus
+    Dir.mktmpdir("nabu-cli-list") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        shelf:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+        lex:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: frozen
+        library:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: local
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_list_shelf(catalog)
+      seed_list_lex(catalog)
+      seed_list_library(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_list_shelf(catalog)
+    src = catalog[:sources].insert(slug: "shelf", name: "Shelf", adapter_class: "TestAdapter",
+                                   license: "CC BY-NC 4.0 (compiled by Test)",
+                                   license_class: "nc", enabled: true)
+    alpha = seed_list_document(catalog, src, "urn:nabu:shelf:alpha", "Alpha", "grc", override: "open")
+    seed_list_passage(catalog, alpha, "urn:nabu:shelf:alpha:1", 0, "grc")
+    seed_list_passage(catalog, alpha, "urn:nabu:shelf:alpha:2", 1, "grc")
+    catalog[:document_axes].insert(document_id: alpha, not_before: -113, not_after: 602, axis_source: "hgv")
+    beta = seed_list_document(catalog, src, "urn:nabu:shelf:beta", "Beta", "lat", retired: true)
+    seed_list_passage(catalog, beta, "urn:nabu:shelf:beta:1", 0, "lat")
+    gone = seed_list_document(catalog, src, "urn:nabu:shelf:gone", "Gone", "grc", withdrawn: true)
+    seed_list_passage(catalog, gone, "urn:nabu:shelf:gone:1", 0, "grc")
+  end
+
+  def seed_list_lex(catalog)
+    src = catalog[:sources].insert(slug: "lex", name: "Lexica", adapter_class: "TestAdapter",
+                                   license_class: "attribution", enabled: true)
+    dict = catalog[:dictionaries].insert(source_id: src, slug: "sla-pro", title: "Proto-Slavic",
+                                         language: "sla-pro")
+    [["n1", "bʰer-", "bher-", "to carry"], ["n2", "bogъ", "bogъ", "god"]].each do |id, head, folded, gloss|
+      catalog[:dictionary_entries].insert(
+        dictionary_id: dict, urn: "urn:nabu:dict:sla-pro:#{id}", entry_id: id, key_raw: head,
+        headword: head, headword_folded: folded, gloss: gloss, body: "#{head} body",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+    end
+  end
+
+  def seed_list_library(catalog)
+    src = catalog[:sources].insert(slug: "library", name: "Library", adapter_class: "TestAdapter",
+                                   license_class: "research_private", enabled: true)
+    %w[slavistics:leskien slavistics:jagic articles:vaillant].each do |tail|
+      seed_list_document(catalog, src, "urn:nabu:library:#{tail}", tail, "deu")
+    end
+  end
+
+  def seed_list_document(catalog, source_id, urn, title, language, override: nil, withdrawn: false, retired: false)
+    catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: title, language: language,
+      license_override: override, content_sha256: "x", revision: 1,
+      withdrawn: withdrawn, retired_upstream: retired
+    )
+  end
+
+  def seed_list_passage(catalog, doc_id, urn, sequence, language)
+    catalog[:passages].insert(
+      document_id: doc_id, urn: urn, sequence: sequence, language: language,
+      text: "text #{sequence}", text_normalized: "text #{sequence}",
+      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   def seed_parallels_passage(catalog, source_id, doc_urn, passage_urn, text)
