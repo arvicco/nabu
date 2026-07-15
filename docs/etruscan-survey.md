@@ -48,10 +48,13 @@ EpiDoc, never bulk-downloadable, license never stated. **The data is not
 lost:** the Larth repo (§1.6) carries ETP-derived files verbatim
 (`ETPWords.txt`, `ETPNames.txt`, `ETPSuff.txt`, `ETP_POS.csv`,
 `ETP_fix.csv`), and 380 `ETP n` ids survive in Larth's merged CSV (324 in
-OpenEtruscan). → **SURVEYED-BLOCKED** (dead upstream, no grant ever).
-*Unblock:* contact Rex Wallace (UMass Amherst, emeritus — the ETP PI) for the
-database and a grant; the Larth/OpenEtruscan chain is the de-facto archive
-meanwhile.
+OpenEtruscan). → **CLOSED — CONFIRMED GONE (2026-07-15).**
+*Unblock path exercised:* Rex Wallace (the ETP PI, retired 2018) answered
+by email, 2026-07-15: ETP went offline years before his retirement and
+"the database for the project no longer exists." He notes UMass/French
+student projects building on Meiser's ET 2014 (untracked) and knows of
+OpenEtruscan. The Larth/OpenEtruscan chain (§1.6) is therefore not the
+de-facto archive but the ONLY archive — the Etruscan axis rests on it.
 
 ### 1.2 Rix, Etruskische Texte editio minor (1991) / Meiser ET² (2014) · PRINT
 
