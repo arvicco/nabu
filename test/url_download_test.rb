@@ -59,6 +59,42 @@ class UrlDownloadTest < Minitest::Test
     assert_equal "leskien 1871.pdf", name
   end
 
+  def test_content_disposition_utf8_bytes_arrive_utf8_nfc_never_binary
+    # The 2026-07-14 live crash (P21-0): OJS journals send Content-Disposition
+    # filenames as raw UTF-8 bytes and the HTTP stack hands the header value
+    # over BINARY-encoded. Unnormalized, the name reached the engine as
+    # ASCII-8BIT — the success message's UTF-8 interpolation raised
+    # Encoding::CompatibilityError AFTER the copy and append had landed, and
+    # the manifest serialized the file lane as a YAML !binary blob.
+    stub_request(:get, URL).to_return(
+      status: 200, body: "x",
+      headers: { "Content-Disposition" => %(attachment; filename="37850-Text článku-69488.pdf").b }
+    )
+    name, = fetch
+    assert_equal "37850-Text článku-69488.pdf", name
+    assert_equal Encoding::UTF_8, name.encoding
+    assert_predicate name, :valid_encoding?
+  end
+
+  def test_derived_names_are_nfc_normalized
+    # NFD percent-encoding in the wild (e + combining acute) must come out
+    # as the composed form — the house rule: UTF-8 NFC at the boundary.
+    decomposed = "https://example.org/Frisinske%CC%81.pdf"
+    stub_request(:get, decomposed).to_return(status: 200, body: "x")
+    name, = fetch(decomposed)
+    assert_equal "Frisinské.pdf", name
+  end
+
+  def test_undecodable_header_bytes_are_scrubbed_not_crashed
+    stub_request(:get, URL).to_return(
+      status: 200, body: "x",
+      headers: { "Content-Disposition" => %(attachment; filename="bad\xFFname.pdf").b }
+    )
+    name, = fetch
+    assert_predicate name, :valid_encoding?
+    assert_equal "bad\u{FFFD}name.pdf", name, "invalid bytes degrade to the replacement char, honestly"
+  end
+
   def test_bare_content_disposition_filename_is_honored_too
     stub_request(:get, URL).to_return(
       status: 200, body: "x", headers: { "Content-Disposition" => "attachment; filename=offprint.pdf" }
