@@ -239,14 +239,26 @@ The underlying IEW is itself in copyright (Pokorny d. 1970; life+70 →
 2040, Francke/Narr) — every digitization inherits that cloud unless it has
 its own grant.
 
-### 3.1 StarlingDB / Tower of Babel · DATA MEASURED, LICENSE BLOCKED
+### 3.1 StarlingDB / Tower of Babel · UNBLOCKED — PERMISSION GRANTED (2026-07-15)
+
+**License resolved by correspondence:** G. Starostin, 2026-07-15 — "all
+etymological data are free for anybody to use for any purposes as long
+as the source is properly acknowledged," with the express condition
+that attribution name the SPECIFIC compilers of each database (roster:
+starlingdb.org/descrip.php?lan=en#bases), since the databases are
+individual scholarly reconstructions, not consensus snapshots. Class
+recommendation `attribution` (grant email archived); per-base compiler
+credit rides in source metadata and on every serving surface; his
+non-consensus caveat is carried verbatim at adapter-build time. The
+survey below (data census, decoding) predates the grant and stands.
+
 
 <https://starlingdb.org> (starling.rinet.ru 301s here). The famous murky
 terms, read: the downloads page (`downl.php?lan=en`) offers the full IE
 package with **no license text at all**; the project page's only statements
 are "Copyright 1998-2003 by S. Starostin" and software copyrights
-(Bronnikov, Krylov). No grant → all-rights-reserved default →
-**research_private at best**, on top of the IEW cloud. The data reality,
+(Bronnikov, Krylov). No grant on the SITE → all-rights-reserved default was the pre-grant
+reading (**superseded by the 2026-07-15 written permission above**). The data reality,
 censused first-hand (`download/IE.exe` — a plain zip despite the name,
 6.2 MB, extracted to scratch): `pokorny.dbf` **2,222 roots**
 (ROOT/MEANING/GER_MEAN/MATERIAL/PAGES + PIET crosslink — the Starostin-
