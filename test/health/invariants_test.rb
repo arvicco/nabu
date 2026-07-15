@@ -63,31 +63,51 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:partial_load, entry("clean-fail"))
   end
 
-  # -- enabled-vs-populated ---------------------------------------------------
+  # -- synced-vs-populated (P23-3a refinement of enabled-vs-populated) --------
 
   # The half-loaded-catalog signature: the ledger says a run succeeded, the
   # (fresh) catalog holds nothing for the source.
-  def test_enabled_source_with_ok_run_and_zero_rows_is_loud
+  def test_source_with_ok_latest_run_and_zero_rows_is_loud
     source = seed_source("hollow")
     seed_run(source, status: "succeeded")
 
-    finding = find(:enabled_unpopulated, entry("hollow"))
+    finding = find(:synced_unpopulated, entry("hollow"))
     assert_predicate finding, :loud?
     assert_match(/zero documents/, finding.message)
   end
 
-  def test_populated_or_disabled_or_never_ok_sources_are_silent
+  # The liv case (2026-07-14): a DISABLED source synced anyway to zero rows —
+  # succeeded run, empty shelf, silent because the old invariant watched
+  # `enabled` sources only. Enablement is irrelevant: a succeeded run PROMISES
+  # rows, whatever the flag says.
+  def test_disabled_source_with_ok_latest_run_and_zero_rows_is_loud_too
+    source = seed_source("liv")
+    seed_run(source, status: "succeeded")
+
+    finding = find(:synced_unpopulated, entry("liv", enabled: false))
+    assert_predicate finding, :loud?
+  end
+
+  def test_populated_or_never_run_sources_are_silent
     populated = seed_source("populated")
     seed_run(populated, status: "succeeded")
     seed_docs(populated, 1)
-    assert_nil find(:enabled_unpopulated, entry("populated"))
-
-    disabled = seed_source("disabled")
-    seed_run(disabled, status: "succeeded")
-    assert_nil find(:enabled_unpopulated, entry("disabled", enabled: false))
+    assert_nil find(:synced_unpopulated, entry("populated"))
 
     seed_source("never-run")
-    assert_nil find(:enabled_unpopulated, entry("never-run"))
+    assert_nil find(:synced_unpopulated, entry("never-run"))
+  end
+
+  # A FAILED latest run is last_run_honesty's story (one loud finding, not
+  # two): the zero-rows check gates on the LATEST run having succeeded, so an
+  # older ok run behind a fresh failure stays out of this finding.
+  def test_failed_latest_run_is_not_a_synced_unpopulated_finding
+    source = seed_source("fail-after-ok")
+    seed_run(source, status: "succeeded", finished_at: @now - 86_400)
+    seed_run(source, status: "failed", finished_at: @now)
+
+    assert_nil find(:synced_unpopulated, entry("fail-after-ok"))
+    refute_nil find(:failed_run, entry("fail-after-ok"))
   end
 
   def test_dictionary_entries_count_as_populated
@@ -95,7 +115,7 @@ class InvariantsTest < Minitest::Test
     seed_run(source, status: "succeeded")
     seed_dictionary(source, entries: 3)
 
-    assert_nil find(:enabled_unpopulated, entry("lexica"))
+    assert_nil find(:synced_unpopulated, entry("lexica"))
   end
 
   # -- flag-vs-artifact: fuzzy_index vs trigram ------------------------------

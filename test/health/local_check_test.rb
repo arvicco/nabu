@@ -175,7 +175,7 @@ class LocalCheckTest < Minitest::Test
     seed_run(source, added: 500, updated: 0, errored: 0)
 
     report = check(registry_of(["hollow", { enabled: true }]))
-    assert_includes report.sources.first.findings.map(&:kind), :enabled_unpopulated
+    assert_includes report.sources.first.findings.map(&:kind), :synced_unpopulated
     assert report.any_loud?
   end
 
