@@ -252,5 +252,21 @@ module Query
       load_document("2", [%w[1 ἄειδε]])
       assert_empty show("urn:d:2").facets
     end
+
+    # -- dictionary-entry urns (P22-2) ----------------------------------------
+
+    def test_show_routes_dictionary_entry_urns_to_the_define_result
+      dict_id = @catalog[:dictionaries].insert(source_id: @source.id, slug: "lsj",
+                                               title: "LSJ", language: "grc")
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dict_id, urn: "urn:nabu:dict:lsj:n1", entry_id: "n1",
+        key_raw: "μῆνις", headword: "μῆνις", headword_folded: "μηνις",
+        gloss: "wrath", body: "μῆνις body", content_sha256: "x", revision: 1, withdrawn: false
+      )
+      result = Nabu::Query::Show.new(catalog: @catalog).run("urn:nabu:dict:lsj:n1")
+      assert_instance_of Nabu::Query::Define::Result, result
+      assert_equal "μῆνις", result.headword
+      assert_nil Nabu::Query::Show.new(catalog: @catalog).run("urn:nabu:dict:lsj:missing")
+    end
   end
 end

@@ -160,6 +160,18 @@ class CLITest < Minitest::Test
   # default and --long must expand every one, grouped by language. The
   # attested list is already unbounded, so it needs no flag.
 
+  def test_show_resolves_the_urn_define_prints
+    with_recon_shelf do |config|
+      out, = with_config(config) { run_cli(%w[define *zima]) }
+      urn = out[/urn:nabu:dict:\S+/]
+      refute_nil urn, "define prints the entry urn"
+      shown, _err, status = with_config(config) { run_cli(["show", urn]) }
+      assert_nil status
+      assert_match(/zima/, shown, "show renders the entry define invited (owner repro 2026-07-15)")
+      assert_match(/#{Regexp.escape(urn)}/, shown)
+    end
+  end
+
   def test_define_reflexes_are_capped_by_default
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define *zima]) }

@@ -44,6 +44,31 @@ module Query
       Nabu::Query::Define.new(catalog: @catalog).run(lemma, **)
     end
 
+    # -- by_urn (P22-2: `show` resolves the urns `define` prints) -------------
+
+    def test_by_urn_resolves_one_entry_with_the_define_result_shape
+      row = @catalog[:dictionary_entries]
+            .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+            .where(Sequel[:dictionaries][:slug] => "lsj")
+            .select(Sequel[:dictionary_entries][:urn]).first
+      result = Nabu::Query::Define.new(catalog: @catalog).by_urn(row[:urn])
+      assert_equal row[:urn], result.urn
+      assert_equal "lsj", result.dictionary_slug
+      refute result.withdrawn
+    end
+
+    def test_by_urn_resolves_withdrawn_entries_honestly
+      row = @catalog[:dictionary_entries].first
+      @catalog[:dictionary_entries].where(id: row[:id]).update(withdrawn: true)
+      result = Nabu::Query::Define.new(catalog: @catalog).by_urn(row[:urn])
+      assert result, "show hides nothing — a withdrawn entry still resolves"
+      assert result.withdrawn
+    end
+
+    def test_by_urn_returns_nil_on_a_miss
+      assert_nil Nabu::Query::Define.new(catalog: @catalog).by_urn("urn:nabu:dict:lsj:nope")
+    end
+
     # -- lookup ---------------------------------------------------------------
 
     def test_defines_a_greek_lemma_with_license_label_and_gloss

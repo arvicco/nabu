@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "define"
+require_relative "range"
+
 module Nabu
   module Query
     # `nabu show URN`: inspect a single passage or a whole document by urn.
@@ -82,7 +85,21 @@ module Nabu
       # attempted (a passage urn holding a hyphen is never misparsed as one).
       # A range with a bad endpoint raises Range::Error (CLI → exit 1).
       def run(urn)
+        return dictionary_entry(urn) if urn.start_with?(DICT_URN_PREFIX)
+
         passage(urn) || document(urn) || range(urn)
+      end
+
+      # `define` prints minted dictionary-entry urns on every headline; show
+      # resolves them to the same Define::Result the define renderers already
+      # speak (P22-2). +fulltext+ was never Show's dependency, so reflex
+      # attested-counts read nil here — an honest absence, not a zero.
+      DICT_URN_PREFIX = "urn:nabu:dict:"
+
+      def dictionary_entry(urn)
+        return nil unless @catalog.table_exists?(:dictionary_entries)
+
+        Define.new(catalog: @catalog).by_urn(urn)
       end
 
       private

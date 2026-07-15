@@ -635,6 +635,9 @@ module Nabu
         when Query::Show::PassageResult then json(passage_payload(result))
         when Query::Show::DocumentResult then json(document_payload(result, bound))
         when Query::Show::RangeResult then json(range_payload(result, bound))
+        # A dictionary-entry urn (the ones nabu_define prints) resolves to the
+        # define payload shape (P22-2), license-withheld by the same rule.
+        when Query::Define::Result then json(define_payload(result))
         end
       rescue Query::Range::Error => e
         tool_error(e.message)
