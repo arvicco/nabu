@@ -6897,3 +6897,40 @@ CLI e2e 3 incl. whole-batch abort + executable refusal) — WebMock,
 no network. Docs: cli long_desc atomicity paragraph, ops §13 rewritten
 (atomic + executables + crash window), arch §16 truth pass. Suite
 2,662/33,056 exit 0 (0 skips) · lint 343 files exit 0.
+
+# ── Phase 21 ──────────────────────────────────────────────────────────
+
+## P21-0 · UrlDownload names cross the boundary UTF-8 NFC  [tier: orchestrator, hotfix] [status: done 2026-07-14] [deps: —]
+Live crash, owner's seventh url ingest (Linguistica Brunensia, OJS):
+Content-Disposition filenames arrive as raw UTF-8 bytes in a
+BINARY-encoded header value ("37850-Text článku-….pdf"); the derived
+name reached the engine ASCII-8BIT, the success message's UTF-8
+interpolation raised Encoding::CompatibilityError AFTER copy+append had
+landed (canonical stayed CONSISTENT — the atomic contract held — but
+the manifest serialized the file lane as a YAML !binary blob and the
+run died before the shelf sync). FIX at the one choke point every
+derived name crosses (UrlDownload#sanitize, the adapter boundary, the
+house text rule): force UTF-8, scrub undecodable bytes to U+FFFD,
+Normalize.nfc — Content-Disposition and percent-decoded url basenames
+alike (NFD e+combining-acute composes). Tests +3 with the offending
+bytes as fixture (BINARY CD header w/ UTF-8 bytes → UTF-8 NFC name;
+NFD percent-encoding → composed; invalid byte → honest U+FFFD).
+LIVE REPAIRS (owner tree, disclosed): articles manifest !binary lane →
+plain string; shelf resync (9 local-library docs live). Live smoke: the
+exact crashing url end to end on a scratch root, exit 0, plain-string
+manifest lane. Suite 2,665 exit 0 · lint 343 exit 0.
+
+# ── Phase 21 queue (licensing replies landed 2026-07-15) ──────────────
+# 1. STARLING PACKET UNBLOCKED: G. Starostin granted any-use-with-
+#    attribution (per-base compiler credit REQUIRED — roster at
+#    starlingdb.org/descrip.php; his non-consensus caveat rides verbatim,
+#    the Larth-caveat treatment). Owner pre-approved "starling packet on
+#    YES" (2026-07-13) — scope: StarLing-format parser + Pokorny IE base
+#    adapter, class attribution, grant email as license basis
+#    (pie-survey §3.1 census stands). Dispatch at owner's word.
+# 2. ETP CLOSED (Wallace: database no longer exists) — Etruscan axis
+#    rests on OpenEtruscan alone; its adapter packet already queued.
+# 3. CATSS DECLINED (Tov: commercial, Accordance) — LXX position
+#    unchanged (Swete held); CCAT-declaration route now doubtful,
+#    02-sources row 44 updated.
+# Send queue rest: GORAZD (#2) still first among unsent.
