@@ -1,10 +1,12 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# ZIP-EXTRACT PROVENANCE. The three EpiDoc records were copied byte-identical
-# out of the downloaded EDH dump zips (retrieved 2026-07-13); there is no raw
-# per-file URL to re-GET — re-acquiring means downloading the ~18 MB range zip
-# and extracting, not a raw file fetch. The two CSVs are documented TRIMS of
+# ZIP-EXTRACT PROVENANCE. The five EpiDoc records were copied byte-identical
+# out of the downloaded EDH dump zips (three retrieved 2026-07-13; two read
+# byte-identical from the canonical tree 2026-07-15 — the same zips, already
+# unpacked on disk). There is no raw per-file URL to re-GET — re-acquiring
+# means downloading the ~18 MB range zip and extracting, not a raw file
+# fetch. The two CSVs are documented TRIMS of
 # the corpus-wide downloads (header + the fixtured records' rows, rows
 # byte-identical). So every entry is refetchable: false — `fixtures:check`
 # SKIPS them (printing the reason) and `fixtures:refresh` refuses to touch
@@ -40,6 +42,24 @@ files:
     copied: 2026-07-13
     whole: true
     trim: none (expan/supplied/gap + lb n="0" exemplar, copied whole from the zip)
+  - path: epidoc/HD020001-HD030000/HD029093.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD020001-HD030000.zip; re-acquiring = zip download + unzip, not a raw GET
+    canonical: canonical/edh/epidoc/HD020001-HD030000/HD029093.xml
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhEpidocDump_HD020001-HD030000.zip
+    copied: 2026-07-15
+    whole: true
+    trim: none (fully-lost inscription — lb n="0" gap-only lines, the whole-inscription fallback exemplar; copied whole from the zip)
+  - path: epidoc/HD080001-HD082828/HD081183.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD080001-HD082828.zip; re-acquiring = zip download + unzip, not a raw GET
+    canonical: canonical/edh/epidoc/HD080001-HD082828/HD081183.xml
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhEpidocDump_HD080001-HD082828.zip
+    copied: 2026-07-15
+    whole: true
+    trim: none (fully-lost inscription across TWO textparts — the flat :text fallback-suffix exemplar; copied whole from the zip)
   - path: text/edh_data_text.csv
     refetchable: false
     provenance: local-trim
@@ -48,7 +68,7 @@ files:
     upstream: https://edh.ub.uni-heidelberg.de/data/download/edh_data_text.csv
     copied: 2026-07-13
     whole: false
-    trim: header + the HD000001/HD000082/HD080825 rows only (whole physical lines, byte-identical)
+    trim: header + the HD000001/HD000082/HD080825 rows (2026-07-13) + the HD029093/HD081183 rows (2026-07-15, the P23-3c fallback exemplars) — whole physical lines, byte-identical
   - path: pers/edh_data_pers.csv
     refetchable: false
     provenance: local-trim

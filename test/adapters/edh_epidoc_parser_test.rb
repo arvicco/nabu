@@ -15,10 +15,14 @@ class EdhEpidocParserTest < Minitest::Test
   HD1 = File.join(FIXTURES, "HD000001-HD010000", "HD000001.xml")
   HD82 = File.join(FIXTURES, "HD000001-HD010000", "HD000082.xml")
   HD80825 = File.join(FIXTURES, "HD080001-HD082828", "HD080825.xml")
+  HD29093 = File.join(FIXTURES, "HD020001-HD030000", "HD029093.xml")
+  HD81183 = File.join(FIXTURES, "HD080001-HD082828", "HD081183.xml")
 
   HD1_URN = "urn:nabu:edh:hd000001"
   HD82_URN = "urn:nabu:edh:hd000082"
   HD80825_URN = "urn:nabu:edh:hd080825"
+  HD29093_URN = "urn:nabu:edh:hd029093"
+  HD81183_URN = "urn:nabu:edh:hd081183"
 
   def parser
     Nabu::Adapters::EdhEpidocParser.new
@@ -76,6 +80,66 @@ class EdhEpidocParserTest < Minitest::Test
     assert_equal 2, doc.size
     refute_includes doc.passages.map(&:urn), "#{HD80825_URN}:0",
                     "a lost-line-only lb n=\"0\" extracts no citable text"
+  end
+
+  # --- the whole-inscription fallback (P23-3c; the 26 EDH quarantines) --------
+  #
+  # The P18-gate triage called these "lb-less"; the fixture bytes correct the
+  # mechanism: each record HAS <lb> milestones (mostly n="0"), but every line
+  # extracts to gap markers only — the WHOLE edition is lost lines (CSV atext
+  # "[------]" …). The gap-only-line skip stays the line-grain rule; when it
+  # leaves ZERO passages, the parser falls back to ONE whole-inscription
+  # passage carrying the edition's own lacuna notation (stable suffix :text),
+  # so the real, catalogued inscription lands with all its metadata layers
+  # instead of a false "parser failed" quarantine.
+
+  def test_fully_lost_inscription_falls_back_to_one_whole_inscription_passage
+    doc = parser.parse(HD29093, urn: HD29093_URN, language: "lat")
+    assert_equal 1, doc.size
+    passage = doc.passages.first
+    assert_equal "#{HD29093_URN}:text", passage.urn
+    assert_equal "[…] […]", passage.text, "the edition's own lacuna notation, nothing invented"
+    assert_equal "lat", passage.language
+    assert_equal [{ "reason" => "lost", "quantity" => 1, "unit" => "line" }] * 2,
+                 passage.annotations.dig("leiden", "gaps")
+  end
+
+  # The textpart-shaped variant of the same class: the fallback is
+  # whole-INSCRIPTION grain, so no textpart path enters the suffix.
+  def test_fallback_suffix_is_flat_even_across_textparts
+    doc = parser.parse(HD81183, urn: HD81183_URN, language: "lat")
+    assert_equal ["#{HD81183_URN}:text"], doc.passages.map(&:urn)
+    assert_equal "[…] […]", doc.passages.first.text
+  end
+
+  # The edition <head> ("Text") is never reading text — it must not leak into
+  # the fallback passage (it was invisible to line grain only because no line
+  # was open around it).
+  def test_edition_head_label_does_not_leak_into_the_fallback
+    doc = parser.parse(HD29093, urn: HD29093_URN, language: "lat")
+    refute_match(/Text/, doc.passages.first.text)
+  end
+
+  def test_fallback_urns_are_stable_across_two_parses
+    first = parser.parse(HD29093, urn: HD29093_URN, language: "lat")
+    second = parser.parse(HD29093, urn: HD29093_URN, language: "lat")
+    assert_equal first.passages.map(&:urn), second.passages.map(&:urn)
+    assert_equal first.passages.map(&:text), second.passages.map(&:text)
+  end
+
+  # Line-grain documents never fall back: HD080825 still skips its lb n="0"
+  # lost line and keeps exactly its two citable lines (no :text passage).
+  def test_documents_with_citable_lines_never_mint_the_fallback
+    refute_includes parse80825.passages.map(&:urn), "#{HD80825_URN}:text"
+  end
+
+  # Malformed upstream XML (hd059778's class) stays an honest permanent
+  # quarantine — the fallback is for parsed-but-lost editions only.
+  def test_malformed_xml_still_quarantines_not_falls_back
+    assert_raises(Nabu::ParseError) do
+      parser.parse(StringIO.new("<TEI><teiHeader><link></head></TEI>"),
+                   urn: HD29093_URN, language: "lat", canonical_path: "/x/HD059778.xml")
+    end
   end
 
   # --- the <del> divergence: damnatio kept in ⟦…⟧ (HD000082) -----------------

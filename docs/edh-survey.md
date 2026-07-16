@@ -1,5 +1,17 @@
 # EDH survey (P17-2 Phase A, 2026-07-13)
 
+**Status (2026-07-15, P23-3c):** shelf live since 2026-07-13 (81,856 docs /
+406,281 passages, owner sign-off). The 27 first-sync quarantines are triaged
+and CLOSED in code: 26 are **fully-lost inscriptions** — the P18-gate wording
+"no `<lb>` markup" corrected by the bytes: every one HAS `<lb>` milestones
+(mostly `n="0"`) but each line extracts gap markers only (CSV `atext` =
+`[------]`, `[---]`, `//`) — and now land via the parser's
+**whole-inscription fallback** (one passage `<urn>:text` carrying the
+edition's own lacuna notation, document-wide gap annotations; fixtures
+HD029093/HD081183). The 27th, hd059778, is malformed upstream XML and stays
+an honest permanent quarantine. Owner-fired `bin/nabu sync edh --parse-only`
+lands the 26; the baseline delta announces the −26 once, then anchors at 1.
+
 Scouting survey for the Epigraphic Database Heidelberg (register §2.3) — Latin
 inscriptions as the third documentary shelf beside the papyri and the tablets.
 Per the Phase 17 deep-extraction mandate, this censuses **every** layer the
