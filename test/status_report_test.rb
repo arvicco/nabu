@@ -109,6 +109,39 @@ class StatusReportTest < Minitest::Test
     assert_match(/never synced/, never)
   end
 
+  # P23-3b: the registry is AUTHORITATIVE for enablement. A registry flip used
+  # to reach the db row only at that source's next sync, so `nabu status` kept
+  # showing the STALE db value (2026-07-14: mw/iecor/liv/edl read off after
+  # the owner flipped them on). Status renders the registry truth directly —
+  # a flip with NO sync shows immediately, in both directions.
+  def test_registry_enabled_flip_shows_without_a_sync
+    db = store_test_db
+    stale = load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+        enabled: false
+    YAML
+    stale["fake-src"].sync_source!(db) # db row now carries enabled: false
+
+    flipped = load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+        enabled: true
+    YAML
+    out = Nabu::StatusReport.render(registry: flipped, db: db, ledger: ledger_test_db)
+    assert_match(/fake-src\s+on\b/, out, "a registry enabled: true must show on, stale db row or not")
+
+    # And the reverse: flipped OFF in the registry, db row still on.
+    Nabu::Store::Source.first(slug: "fake-src").update(enabled: true)
+    unflipped = load_registry(<<~YAML)
+      fake-src:
+        adapter: StatusReportTest::FakeAdapter
+        enabled: false
+    YAML
+    out = Nabu::StatusReport.render(registry: unflipped, db: db, ledger: ledger_test_db)
+    assert_match(/fake-src\s+off\b/, out)
+  end
+
   def test_withdrawn_rows_excluded_from_counts
     db = store_test_db
     registry = load_registry(<<~YAML)

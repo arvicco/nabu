@@ -36,7 +36,7 @@ What each command does and its exit contract:
 - **`nabu health`** — local, no network. Run-history trends (quarantine spikes,
   added-count collapse, withdrawal/retirement creep, stale sources), the
   mechanical postcondition invariants (§11: failed/partial last runs,
-  enabled-vs-populated, flag-vs-artifact, quarantine creep, pending
+  synced-vs-populated, flag-vs-artifact, quarantine creep, pending
   migrations), plus a live golden-query replay. **Exit 1** on a loud finding
   (spike, >15% creep, a lost golden query, a failed last run, a broken
   flag-vs-artifact promise); soft warnings (collapse, 5–15% creep, stale,
@@ -338,9 +338,11 @@ Read the report — it names the source and the signal.
   line carries the recorded error. A companion **partial load** line means the
   failed run wrote rows before dying — the catalog holds a half-loaded source.
   Same cure either way: re-run the sync (idempotent) or rebuild (§11).
-- **enabled … zero documents/entries** — the ledger records a successful run
-  but the catalog holds nothing for the source: the half-loaded-catalog
-  signature a crashed rebuild leaves for the sources it never reached. Rebuild.
+- **latest run succeeded … zero documents/entries/records** — the ledger
+  records a successful latest run but the catalog holds nothing for the
+  source: the half-loaded-catalog signature a crashed rebuild leaves for the
+  sources it never reached — or a source synced-to-nothing (the disabled-liv
+  case; the check ignores `enabled` on purpose). Rebuild or re-sync.
 - **quarantine spike** — a sync suddenly quarantined far more documents than its
   history. Usually an **upstream format change** broke a parser. Reproduce with
   `nabu sync <slug> --parse-only` (no network), inspect a quarantined file, fix
@@ -720,7 +722,7 @@ before, nothing new:
 |---|---|---|
 | last-run honesty | the source's most recent ledger run is `failed` (error detail printed) | loud |
 | partial load | that failed run journaled provenance rows — it half-loaded | loud |
-| enabled-vs-populated | enabled + a `succeeded` run on record + zero docs AND entries | loud |
+| synced-vs-populated | latest run `succeeded` + zero rows in the source's grain (docs/entries/records) — `enabled` deliberately ignored (the disabled-liv case) | loud |
 | fuzzy-vs-trigram | `fuzzy_index: true` but the trigram index is absent/empty or the source is outside its built scope | loud |
 | axis-vs-rows | an axis extractor family ships for the source, `document_axes` has 0 rows | loud |
 | reflex-vs-rows | `Adapter.reflex_bearing?` true, entries loaded, `dictionary_reflexes` empty | loud |

@@ -17,35 +17,44 @@ module Nabu
   #   sets ("every two bytes are interpreted as a single character"); any
   #   byte < 0x80 terminates the run (\x01–\x07 immediately re-open); \x7F
   #   is the invisible flow breaker. The IE databases use set 1 only (the
-  #   \x01\x83/\x01\x85 Greek + combining ranges);
+  #   \x01\x83/\x01\x85 Greek + combining ranges, plus — vasmer, P23-0 —
+  #   the \x01\x86–\x88 Church Slavonic font range);
   # - in-band `\`-style markup: \B \I \C \U \L \H open bold/italic/
   #   condensed/underline/sub/superscript, the lowercase letters close them
   #   (stripped here — the text is what survives).
   #
-  # == The table — never guess byte meanings
+  # == The tables — never guess byte meanings
   #
   # Byte-run → Unicode mappings come EXCLUSIVELY from the vendored
-  # config/starling/unipro.lst — the "fully Unicode compatible" conversion
-  # table the current StarLing 3.9.0 release wires as its own Unicode
-  # conversion (provenance: config/starling/README.md). Table lines map a
-  # StarLing byte sequence to `U+XXXX` (first line per left side is the
-  # forward mapping; later duplicates serve upstream's reverse conversion)
-  # or to another StarLing sequence (alias rows — resolved through the
-  # table itself). Sequences may span mode transitions (α + \x7F + macron
-  # byte = one precomposed ᾱ entry), so decoding walks a longest-match trie
-  # with the current shift byte virtually prefixed.
+  # config/starling/ tables (provenance: config/starling/README.md):
+  # unipro.lst — the "fully Unicode compatible" conversion table the current
+  # StarLing 3.9.0 release wires as its own Unicode conversion — and, since
+  # P23-0, chslav.lst — the same release's Church Slavonic conversion
+  # (config.str `[Chslav font]`), which owns the \x01-shifted \x86/\x87/\x88
+  # doublebyte range vasmer's Old Cyrillic citations are typed in (absent
+  # from unipro.lst; key spaces disjoint, so merging the tries changes no
+  # existing decode). Table lines map a StarLing byte sequence to `U+XXXX`
+  # (first line per left side is the forward mapping; later duplicates serve
+  # upstream's reverse conversion) or to another StarLing sequence (alias
+  # rows — resolved through the tables themselves). Sequences may span mode
+  # transitions (α + \x7F + macron byte = one precomposed ᾱ entry), so
+  # decoding walks a longest-match trie with the current shift byte
+  # virtually prefixed.
   #
   # Structural bytes handled OUTSIDE the table, each verified against the
   # live starlingdb.org rendering of the same records (2026-07-15): \x15 is
   # the paragraph mark (the site renders <P>) → "\n"; CR dropped/LF kept;
   # \x7F invisible. An unmapped byte or pair decodes to U+FFFD — never
-  # silently dropped (the whole 2005 IE corpus carries exactly ONE such
-  # stray: \x80\xA8 after τέλλω in pokorny #1089, which the official web
-  # converter drops; the fixture pins our honest replacement instead).
+  # silently dropped (pokorny/piet carry exactly ONE such stray — \x80\xA8
+  # after τέλλω in pokorny #1089 — and vasmer 28 more, all stray high bytes
+  # inside per-character shift runs; the official web converter drops or
+  # garbles them; fixtures pin our honest replacements instead).
   #
   # Output is UTF-8 NFC (the house boundary rule).
   module StarlingText
-    TABLE_PATH = File.expand_path("../../config/starling/unipro.lst", __dir__)
+    TABLE_PATHS = %w[unipro.lst chslav.lst].map do |name|
+      File.expand_path("../../config/starling/#{name}", __dir__)
+    end.freeze
 
     STYLE_MARKUP = /\A\\[BbIiCcUuLlHh]/
     private_constant :STYLE_MARKUP
@@ -147,20 +156,22 @@ module Nabu
       shift
     end
 
-    # -- the table -----------------------------------------------------------
+    # -- the tables ----------------------------------------------------------
 
     def trie
-      @trie ||= build_trie(File.binread(TABLE_PATH))
+      @trie ||= build_trie(TABLE_PATHS.map { |path| File.binread(path) })
     end
 
-    def build_trie(table)
+    def build_trie(tables)
       trie = {}
       aliases = []
-      each_mapping(table) do |left, right|
-        if (unicode = right[/\AU\+(\h{4,6})/n, 1])
-          insert(trie, left, [unicode.to_i(16)].pack("U"))
-        else
-          aliases << [left, right.sub(/\s+\*.*\z/n, "").sub(/\s+\z/n, "")]
+      tables.each do |table|
+        each_mapping(table) do |left, right|
+          if (unicode = right[/\AU\+(\h{4,6})/n, 1])
+            insert(trie, left, [unicode.to_i(16)].pack("U"))
+          else
+            aliases << [left, right.sub(/\s+\*.*\z/n, "").sub(/\s+\z/n, "")]
+          end
         end
       end
       resolve_aliases(trie, aliases)

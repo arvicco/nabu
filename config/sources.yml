@@ -240,6 +240,29 @@ imp:
   # lives on the CLARIN.SI record page, hdl 11356/1031):
   # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1031
 
+damaskini:
+  adapter: Nabu::Adapters::Damaskini
+  enabled: false   # P23-1: awaiting the owner-fired first real sync (two zip
+                   # bitstreams, ~1.7 MB total → 23 docs / 6,036 sentences +
+                   # 23 -en siblings; CLAUDE.md checklist §6 — eyeball
+                   # nabu show urn:nabu:damaskini:berlinski--slovo-petki:1
+                   # --parallel, a veles Cyrillic passage and 5 random
+                   # passages, then flip).
+  # Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1
+  # (CLARIN.SI hdl 11356/1441, CC BY-SA 4.0 → attribution): 23 gold
+  # damaskini/Balkan Slavic witnesses, 15th–19th c., chu/bul per the
+  # corpus's own Norm classification. The deposit is a frozen v1.1
+  # (2021-07-02; v1.0 = 11356/1368 was GPL-3, superseded) — a re-fetch is
+  # an owner decision.
+  sync_policy: manual
+  # text_en coverage is 100% (censused at fixture time): -en sibling
+  # documents ride the same parse, `show --parallel` renders them like the
+  # SAA letters. Same CC BY-SA grant (same deposit) — no license override.
+  translations: true
+  # license_watch candidate (P16-5, owner decision — the CC BY-SA grant
+  # lives on the CLARIN.SI record page, hdl 11356/1441):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1441
+
 wiktionary-cu:
   adapter: Nabu::Adapters::WiktionaryCu
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define
@@ -358,21 +381,45 @@ edl:
 
 starling:
   adapter: Nabu::Adapters::Starling
-  enabled: false   # P22-0: awaiting the owner-fired first sync (6.2 MB IE.exe
-                   # zip → 2,222 pokorny roots + 3,291 piet etymologies,
-                   # ~4.4k reflex rows; CLAUDE.md checklist §6 — eyeball
-                   # `nabu define '*bher-'` for the Pokorny shelf credit and
-                   # `nabu etym collum`-class walks, then flip).
+  enabled: false   # P22-0/P23-0: awaiting the owner-fired sync + flip. One
+                   # 6.2 MB IE.exe zip → five shelves: 2,222 pokorny roots +
+                   # 3,291 piet etymologies (P22-0; the live piet quarantine —
+                   # upstream NUMBER 574 collision — is fixed in P23-0, so
+                   # re-run `bin/nabu sync starling --parse-only` to land it)
+                   # + 18,239 vasmer entries + 1,994 germet + 1,651 baltet
+                   # (P23-0; 4,398 piet + 17,718 germet/baltet reflex rows).
+                   # CLAUDE.md checklist §6 — eyeball `nabu define '*bher-'`
+                   # (Pokorny credit), `nabu define 'сигать'` (vasmer credit),
+                   # `nabu etym hals` (germet got/ang gold joins), then flip.
   # StarLing / Tower of Babel IE package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
   # scanned/recognized by George Starostin, corrected by A. Lubotsky; PIET:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
-  # by S. Starostin — carried verbatim in the adapter MANIFEST.license so
-  # every serving surface renders it. Upstream is a hand-curated 2005-era
-  # package: re-fetch is an owner decision.
+  # by S. Starostin; Vasmer: the project's scan/OCR/database conversion of
+  # M. Vasmer's dictionary (roster; vasmer.inf is blank); Germanic + Baltic:
+  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO) —
+  # all carried verbatim in the adapter MANIFEST.license so every serving
+  # surface renders them. Upstream is a hand-curated 2005-era package:
+  # re-fetch is an owner decision.
   sync_policy: manual
+
+sl-lexica:
+  adapter: Nabu::Adapters::SlLexica
+  enabled: false   # P23-2: awaiting the owner-fired first sync (three zip
+                   # GETs, ~7 MB total → 103,185 + 8,461 + 27,759 = 139,405
+                   # entries across pletersnik/jsv/besedje16; CLAUDE.md
+                   # checklist §6 — eyeball `nabu define abeceda` for the
+                   # Pleteršnik toneme headword, `nabu define --lang sl a`
+                   # for the three-dictionary unification, then flip).
+  # The Slovenian historical dictionary shelf (ZRC SAZU / CLARIN.SI, all
+  # CC BY 4.0 verbatim: hdl 11356/1114 + 11356/1092 + 11356/1127). The
+  # deposits are frozen 2015/2017 uploads: re-fetch is an owner decision.
+  sync_policy: manual
+  # license_watch candidates (P16-5, owner decision — the CC BY 4.0 grants
+  # live on the three record pages):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1114
 
 local-language:
   adapter: Nabu::Adapters::LocalLanguage

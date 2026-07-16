@@ -11,8 +11,12 @@ require "test_helper"
 class StarlingTextTest < Minitest::Test
   def decode(bytes) = Nabu::StarlingText.decode(bytes)
 
-  def test_the_vendored_table_is_present
-    assert File.file?(Nabu::StarlingText::TABLE_PATH), "config/starling/unipro.lst must ship with the repo"
+  def test_the_vendored_tables_are_present
+    assert_equal %w[unipro.lst chslav.lst], Nabu::StarlingText::TABLE_PATHS.map { |path| File.basename(path) },
+                 "unipro.lst first (first mapping per byte sequence wins), then the Church Slavonic table"
+    Nabu::StarlingText::TABLE_PATHS.each do |path|
+      assert File.file?(path), "#{File.basename(path)} must ship with the repo (config/starling/README.md)"
+    end
   end
 
   def test_plain_ascii_passes_through
@@ -88,6 +92,32 @@ class StarlingTextTest < Minitest::Test
   def test_the_unmapped_pair_from_the_corpus_becomes_a_replacement_character
     bytes = +"\x01\x83\xD5\x83\xC6\x83\x93\x83\xCD\x83\xCD\x83\xD8\x80\xA8"
     assert_equal "τέλλω�", decode(bytes)
+  end
+
+  # vasmer #1 GENERAL, verbatim (P23-0): the Church Slavonic font range —
+  # \x01-shifted \x87/\x88 doublebyte pairs — is NOT in unipro.lst; its
+  # official mapping is the package's second Unicode conversion table,
+  # chslav.lst (config.str [Chslav font]), vendored beside unipro.lst.
+  # Live web renders the run as азъ (the OCS citation for "я").
+  def test_the_church_slavonic_font_range_decodes_through_the_chslav_table
+    assert_equal "азъ", decode(+"\x01\x87\xBE\x87\xC8\x87\xB8")
+  end
+
+  # vasmer #489 GENERAL, verbatim: a whole OCS word in the chslav range —
+  # багрѣница with the yat (U+0463) mid-word. Web-verified 2026-07-15.
+  def test_a_chslav_word_with_yat_decodes_across_continuing_pairs
+    bytes = +"\x01\x87\x84\x87\xBE\x87\xCD\x87\xC0\x87\xD5\x87\xD1\x87\xBA\x87\xCF\x87\xBE"
+    assert_equal "багрѣница", decode(bytes)
+  end
+
+  # A stray high byte inside a per-character \x01-shifted run (vasmer #3364
+  # GENERAL, verbatim: τέ[stray]νη — τέχνη missing its χ upstream) consumes
+  # its pair — the \x01 it swallows would only have re-opened set 1, so the
+  # following Greek decodes intact and the stray reads as one honest U+FFFD
+  # (the corpus carries 28 such stray occurrences, all in vasmer; the
+  # official web converter garbles them too — censused in P23-0).
+  def test_a_stray_byte_before_a_reshift_marks_one_replacement_and_self_heals
+    assert_equal "τέ�νη", decode(+"\x01\x83\xD5\x01\x83\xC6\x01\x83\x93\xF9\x01\x83\xCF\x01\x83\xC9")
   end
 
   # \x7F is StarLing's invisible doublebyte-flow breaker (encoding.htm) —

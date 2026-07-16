@@ -49,6 +49,28 @@ class QuarantineBaselineTest < Minitest::Test
     assert_nil Q.creep_finding(@ledger, "other"), "no row → no creep"
   end
 
+  # -- the EDH 27→1 story (P23-3c) --------------------------------------------
+
+  # The 26 lost-text records leave quarantine via the whole-inscription
+  # fallback at the owner's `sync edh --parse-only`. The machinery handles the
+  # drop BY DESIGN — no baseline surgery needed: the delta announces the -26
+  # exactly once at that run, record! then advances the baseline AND the
+  # anchor down to 1 (an improvement resets the low-water mark), so the creep
+  # backstop stays silent and the steady state at 1 (hd059778, the honest
+  # malformed-XML permanent quarantine) never alarms again.
+  def test_edh_quarantines_leaving_via_the_fallback_announce_once_and_settle
+    Q.record!(@ledger, "edh", errored: 27) # the anchored P18-gate audit level
+
+    drop = Q.delta_finding(@ledger, "edh", errored: 1)
+    assert_predicate drop, :loud?, "the -26 is announced at the run that lands the fallback"
+    assert_match(/-26/, drop.message)
+
+    Q.record!(@ledger, "edh", errored: 1)
+    assert_equal({ baseline: 1, anchor: 1 }, Q.read(@ledger, "edh"))
+    assert_nil Q.creep_finding(@ledger, "edh"), "the drop must not trip the creep anchor"
+    assert_nil Q.delta_finding(@ledger, "edh", errored: 1), "steady state at 1 is silent"
+  end
+
   # -- honest degradation ----------------------------------------------------
 
   def test_nil_ledger_reads_as_no_baseline_and_declines_writes

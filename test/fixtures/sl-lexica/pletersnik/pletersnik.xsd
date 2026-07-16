@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+   <!-- korenski element -->
+   <xs:element name="P">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="rc"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- slovarski sestavek -->
+   <xs:element name="rc">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="ge"/>
+            <xs:element minOccurs="0" ref="ei"/>
+            <xs:element ref="zi"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+               <xs:element ref="pr"/>
+               <xs:element ref="vi"/>
+            </xs:choice>
+            <xs:element minOccurs="0" ref="or"/>
+            <xs:element minOccurs="0" ref="ra"/>
+            <xs:element minOccurs="0" ref="pi"/>
+         </xs:sequence>
+         <!-- Prvotna objava v razdelku Dodatki in popravki -->
+         <xs:attribute name="dodatek" type="xs:NCName"/>
+         <!-- id -->
+         <xs:attribute name="geslo-id" use="required" type="xs:integer"/>
+      </xs:complexType>
+   </xs:element>
+   <!-- neonaglašena iztočnica -->
+   <xs:element name="ge" type="xs:string"/>
+   <!-- številka homografa -->
+   <xs:element name="ei" type="xs:decimal"/>
+   <!-- območje iztočnice -->
+   <xs:element name="zi">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="em"/>
+            <xs:element ref="it"/>
+            <xs:element ref="kr"/>
+            <xs:element ref="oi"/>
+            <xs:element ref="pd"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- iztočnica -->
+   <xs:element name="oi" type="xs:string"/>
+   <!-- Pleteršnikovi Dodatki in popravki -->
+   <xs:element name="pd" type="xs:string"/>
+   <!-- pregibnost/zaglavje; dodatki in popravki -->
+   <xs:element name="pr">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="em"/>
+            <xs:element ref="it"/>
+            <xs:element ref="kr"/>
+            <xs:element ref="po"/>
+            <xs:element ref="sup"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- variantnost iztočnice -->
+   <xs:element name="vi" type="xs:string"/>
+   <!-- oznaka za razvrščanje -->
+   <xs:element name="or">
+      <xs:complexType mixed="true">
+         <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="it"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- razlaga -->
+   <xs:element name="ra">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="em"/>
+            <xs:element ref="it"/>
+            <xs:element ref="kr"/>
+            <xs:element ref="po"/>
+            <xs:element ref="sup"/>
+            <xs:element ref="rz"/>
+            <xs:element ref="sub"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- razprti tisk -->
+   <xs:element name="rz" type="xs:NCName"/>
+   <!-- podpisano -->
+   <xs:element name="sub" type="xs:string"/>
+   <!-- etimologija -->
+   <xs:element name="pi">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="em"/>
+            <xs:element ref="it"/>
+            <xs:element ref="kr"/>
+            <xs:element ref="po"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- poševni tisk -->
+   <xs:element name="it">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="kr"/>
+            <xs:element ref="gn"/>
+            <xs:element ref="ko"/>
+            <xs:element ref="ov"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- geografska in narečna oznaka -->
+   <xs:element name="gn" type="xs:string"/>
+   <!-- krajevna oznaka -->
+   <xs:element name="ko" type="xs:string"/>
+   <!-- oznaka knjižnega vira -->
+   <xs:element name="ov" type="xs:string"/>
+   <!-- poudarjeni tisk -->
+   <xs:element name="em" type="xs:string"/>
+   <!-- krajšava -->
+   <xs:element name="kr" type="xs:string"/>
+   <!-- pomen (nemško) -->
+   <xs:element name="po">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="em"/>
+            <xs:element ref="kr"/>
+            <xs:element ref="sup"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <!-- nadpisano -->
+   <xs:element name="sup" type="xs:string"/>
+</xs:schema>

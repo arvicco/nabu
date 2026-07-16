@@ -37,15 +37,19 @@ module Nabu
       head = "#{entry.slug.ljust(width)}  #{state(entry.enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}"
       return "#{head}  no database (run nabu sync)" if db.nil?
 
-      # A synced source carries its live enabled state in the row; an
-      # unsynced one falls back to the registry's declared enabled.
+      # Enabled comes from the REGISTRY, always (P23-3b): the registry is
+      # authoritative for enablement (sources.yml owner flips), and the db
+      # row only mirrors it at that source's next sync — rendering the row
+      # value showed stale off/on for flipped-but-unsynced sources
+      # (2026-07-14: mw/iecor/liv/edl). Every line here IS a registry entry,
+      # so there is no orphan case to fall back for (an unregistered catalog
+      # source is `nabu list`'s loud NOT IN REGISTRY story).
       source = Store::Source.first(slug: entry.slug)
-      enabled = source ? source.enabled : entry.enabled
       # up= (the upstream-drift column, P14-12) sits right after policy: policy
       # is HOW we pull, up= is WHETHER upstream moved since we last did — read
       # together they answer "should I sync this now?". counts/last_run stay the
       # trailing free-form descriptors.
-      "#{entry.slug.ljust(width)}  #{state(enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}  " \
+      "#{entry.slug.ljust(width)}  #{state(entry.enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}  " \
         "#{up_cell.ljust(up_w)}  #{counts_fragment(entry, source)}  #{last_run(entry.slug, ledger)}"
     end
 

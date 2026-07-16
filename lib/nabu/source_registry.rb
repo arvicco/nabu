@@ -10,9 +10,12 @@ module Nabu
   # never require every adapter to be loadable.
   #
   # Split of authority: the registry owns identity + metadata (name, adapter
-  # class, license, upstream URL — all from the adapter manifest); the catalog
-  # db owns runtime state (enabled, last_sync_*). #sync_source! reconciles the
-  # two, writing metadata into the sources row while preserving db-owned state.
+  # class, license, upstream URL — all from the adapter manifest) AND
+  # enablement (revised 2026-07-04; re-affirmed P23-3b: status/list/MCP read
+  # `enabled` from the registry directly, since the db row only mirrors a
+  # sources.yml flip at the source's next sync); the catalog db owns sync
+  # history (last_sync_*). #sync_source! reconciles the two, writing metadata
+  # + enabled into the sources row while preserving db-owned state.
   class SourceRegistry
     # Closed set (docs/maintenance-and-extension.md §2): live syncs in `--all`,
     # manual never does, frozen is a one-shot dead-project snapshot, and

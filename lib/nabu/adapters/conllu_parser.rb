@@ -81,14 +81,27 @@ module Nabu
       # Same signature family as EpidocParser#parse. +license_override+ (P10-4)
       # rides through to the Document unchanged (nil default); the parser stays
       # license-agnostic — the caller decides the per-document class.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil, license_override: nil)
+      #
+      # +citation+ (P23-1): an optional callable mapping the upstream sent_id to
+      # the citation minted into the passage urn. Default nil keeps the sent_id
+      # verbatim (every existing caller unchanged). Damaskini uses it to strip
+      # the corpus-continuous "<newdoc-id>." prefix from its sent_ids — the doc
+      # id already lives in the document urn. A hook returning a blank citation
+      # is a caller bug surfaced as ParseError, never a silently bad urn.
+      #
+      # +metadata+ (P23-1): document-level metadata rides through to the
+      # Document unchanged (default {}) — the caller extracted it (TSV headers,
+      # catalogue rows); the parser neither reads nor invents any.
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, license_override: nil,
+                citation: nil, metadata: {})
         document = Nabu::Document.new(
-          urn: urn, language: language, title: title,
+          urn: urn, language: language, title: title, metadata: metadata,
           canonical_path: canonical_path || source.to_s, license_override: license_override
         )
 
         each_block(source) do |block, sequence|
-          document << build_passage(block, document_urn: urn, language: language, sequence: sequence)
+          document << build_passage(block, document_urn: urn, language: language,
+                                           sequence: sequence, citation: citation)
         end
 
         raise Nabu::ParseError, "#{source}: no sentence blocks found" if document.empty?
@@ -155,16 +168,23 @@ module Nabu
         columns
       end
 
-      def build_passage(block, document_urn:, language:, sequence:)
+      def build_passage(block, document_urn:, language:, sequence:, citation: nil)
         sent_id = comment_value(block, "sent_id")
         if sent_id.nil? || sent_id.empty?
           raise Nabu::ParseError,
                 "block starting at line #{block.first_line}: missing mandatory `# sent_id`"
         end
 
+        cite = citation ? citation.call(sent_id) : sent_id
+        if cite.nil? || cite.to_s.empty?
+          raise Nabu::ParseError,
+                "block starting at line #{block.first_line}: citation hook minted a blank " \
+                "citation for sent_id #{sent_id.inspect}"
+        end
+
         text = passage_text(block)
         Nabu::Passage.new(
-          urn: "#{document_urn}:#{sent_id}",
+          urn: "#{document_urn}:#{cite}",
           language: language,
           text: text,
           annotations: annotations(block),

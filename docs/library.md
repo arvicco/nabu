@@ -568,7 +568,7 @@ ops §13):
   commented-out in `config/sources.yml`, none enabled yet (owner decision).
   P18-7 folds the mechanical **postcondition invariants** into every
   `health` run: failed-run and partial-load surfacing, flag-vs-artifact
-  and enabled-vs-populated mismatches, pending migrations, and a
+  and synced-vs-populated mismatches, pending migrations, and a
   **quarantine baseline** in the ledger so only the delta from the audited
   anchor alarms (the EDH 27 are anchored; the standing papyri stubs go
   quiet). Its first contact with the live library correctly surfaced the

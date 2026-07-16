@@ -33,8 +33,9 @@ module MCP
 
     # -- rig -------------------------------------------------------------------
 
-    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil)
-      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links)
+    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil)
+      Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
+                           registry: registry)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -536,6 +537,27 @@ module MCP
       # A passage source carries entries=0, never a nil/absent field.
       perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
       assert_equal 0, perseus.fetch("entries")
+    end
+
+    # P23-3b: the registry is AUTHORITATIVE for enablement — a registry flip
+    # reaches the db row only at the source's next sync, so status surfaces
+    # the registry value for registered slugs. An unregistered catalog source
+    # (no registry line) keeps its db value, honestly.
+    def test_status_enabled_comes_from_the_registry_when_registered
+      seed_corpus
+      @catalog[:sources].where(slug: "perseus").update(enabled: false) # stale db row
+      registry = Nabu::SourceRegistry.new([
+                                            Nabu::SourceRegistry::Entry.new(
+                                              slug: "perseus", adapter_class_name: "TestAdapter",
+                                              enabled: true, sync_policy: "manual"
+                                            )
+                                          ])
+      body = payload(tools(registry: registry).call("nabu_status", {}))
+      sources = body.fetch("sources")
+      assert sources.find { |s| s.fetch("slug") == "perseus" }.fetch("enabled"),
+             "registry enabled: true must win over the stale db row"
+      # adhoc has no registry line: the db value is all there is.
+      assert sources.find { |s| s.fetch("slug") == "adhoc" }.fetch("enabled")
     end
 
     # P14-12: nabu_status surfaces the CACHED upstream-drift verdict per source

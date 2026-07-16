@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Shema za Slovar jezika Janeza Svetokriškega -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!-- korenski element -->
+  <xs:element name="JSV">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ge"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- geslo -->
+  <xs:element name="ge">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="b"/>
+        <xs:element ref="ct"/>
+        <xs:element ref="ho"/>
+        <xs:element ref="p"/>
+        <xs:element ref="pi"/>
+        <xs:element ref="po"/>
+        <xs:element ref="pz"/>
+        <xs:element ref="sk"/>
+        <xs:element ref="zg"/>
+        <xs:element ref="iz"/>
+        <xs:element ref="op"/>
+        <xs:element ref="za"/>
+      </xs:choice>
+      <xs:attribute name="geslo-id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- iztočnica -->
+  <xs:element name="iz">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ho"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- opomba -->
+  <xs:element name="op">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="b"/>
+        <xs:element ref="i"/>
+        <xs:element ref="p"/>
+        <xs:element ref="pz"/>
+        <xs:element ref="sk"/>
+        <xs:element ref="sup"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- zaglavje -->
+  <xs:element name="za">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="sk"/>
+        <xs:element ref="so"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- stranska oblika -->
+  <xs:element name="so" type="xs:string"/>
+
+  <!-- zgled -->
+  <xs:element name="zg">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="b"/>
+        <xs:element ref="ct"/>
+        <xs:element ref="p"/>
+        <xs:element ref="pi"/>
+        <xs:element ref="po"/>
+        <xs:element ref="sk"/>
+        <xs:element ref="sup"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- slovnična kategorija -->
+  <xs:element name="sk">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="i"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- sklic -->
+  <xs:element name="b">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="i"/>
+        <xs:element ref="sup"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- pomenski del -->
+  <xs:element name="pz">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="b"/>
+        <xs:element ref="ct"/>
+        <xs:element ref="p"/>
+        <xs:element ref="pi"/>
+        <xs:element ref="po"/>
+        <xs:element ref="sk"/>
+        <xs:element ref="zg"/>
+        <xs:element ref="l"/>
+        <xs:element ref="sp"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- tip lastnega imena -->
+  <xs:element name="l" type="xs:string"/>
+  <!-- številka pomena -->
+  <xs:element name="sp" type="xs:decimal"/>
+  <!-- pojasnilo -->
+  <xs:element name="p" type="xs:string"/>
+  <!-- nadpisano -->
+  <xs:element name="sup" type="xs:NMTOKEN"/>
+  <!-- ležeče -->
+  <xs:element name="i">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sup"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- številka homonima -->
+  <xs:element name="ho" type="xs:integer"/>
+  <!-- pomen -->
+  <xs:element name="po" type="xs:string"/>
+  <!-- podiztočnica -->
+  <xs:element name="pi" type="xs:string"/>
+  <!-- citat -->
+  <xs:element name="ct" type="xs:string"/>
+</xs:schema>
