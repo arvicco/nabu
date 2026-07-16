@@ -7149,3 +7149,64 @@ count dossiers (198) + records-by-kind, `--documents` enumerates
 catalog, never the registry; guarded on table_exists (read surfaces
 never migrate). Tests +7.
 
+
+# ── Phase 23 ──────────────────────────────────────────────────────────
+
+## P23-1 · damaskini corpus adapter  [tier: fable] [status: done 2026-07-15 — adapter + registry shipped, enabled:false awaiting owner sync+flip; census below] [deps: —]
+
+The clarin-si-survey (P17-6) pick #1, owner-approved 2026-07-15: the
+Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1
+(CLARIN.SI hdl 11356/1441, CC BY-SA 4.0 verbatim → attribution). Shipped:
+`Nabu::Adapters::Damaskini` on the `conllu` family (one document per
+`# newdoc id` of the ONE corpus-wide CoNLL-U file; new optional
+`citation:` + `metadata:` hooks on ConlluParser, UD callers unchanged);
+urn `urn:nabu:damaskini:<newdoc-id downcased>`, citation = the numeric
+tail of upstream's corpus-continuous sent_id; two-zip ZipFetch
+(CoNLL-U + TSV bitstreams); TSV headers → doc metadata (source name,
+place with honest "?", date, scribe, title, locus notes) +
+`AxisBuilder::DamaskiniDates` (all 23 headers date-parseable: point
+years, decades, "1650-1670s", "17th"/"XV c.", "19th (post 1817)",
+xrulev's year in an edition line); language chu×3/bul×20 from the
+philological PDF's own Norm classification (deposit tags `bul, mkd`
+collectively, no per-doc tag; fn.7 quoted in the adapter); Norm+Origin
+→ document_facets; gold lemmas → passage_lemmas; `translations: true`
+mints -en siblings (100% text_en, censused) with the DAMASKINI_DOCUMENT
+work pattern in Query::Parallel (hyphen-rich doc ids: the -en tail is
+the only variant, anchored literally).
+
+### Metadata-layer census — wired vs journaled (deep-extraction mandate)
+
+WIRED: gold lemma (→ lemma index) · msd-bg-dam XPOS + UD head/deprel
+(annotations tokens) · text_en (-en siblings, --parallel) · dating +
+place (axis rows) · scribe/title/locus (doc metadata) · Norm + Origin
+dialect classification (facets) · per-doc language (chu/bul).
+
+JOURNALED — phase 2 of this source (build only on owner say-so):
+
+1. TSV TOKEN layers: accented | Cyrillic | diplomatic orthography
+   (3-layer collation, the ccmh-txt precedent), per-token folio anchors,
+   `eol` line breaks. Census: per-file column layouts vary 15–20 cols,
+   the per-file header row is authoritative; 3 files (nbkm1064,
+   raikovski, nbkm1423 — the last Latin-script original) have NO
+   cyrillic column; TSV sentence numbering restarts per file and 5 files
+   disagree with the CoNLL-U by 1–3 sentences (jankul 293/296, kievski
+   579/580, krcovski 316/317, raikovski 315/316, veles 182/183) — a real
+   alignment job, needs a small bespoke TSV family.
+2. `chunk` column: narrative-division labels ("1. staroe Žitie" — 628
+   marks in kievski) — a structural layer nabu could render as div
+   context; `ref` column: dictionary/Biblical/cross-text references —
+   the machine seed for the St.-Petka collation hub (~10 independent
+   witnesses of one vita across four centuries, the alignment layer's
+   best Slavic case since ccmh; needs work-registration design).
+3. Scribe as a queryable person facet (16 named scribes incl. Josif
+   Bradati and Sofronii Vračanski) — nabu has no prosopography model;
+   currently doc metadata only.
+4. Balkan-sprachbund msd-bg-dam features (definiteness marking, case
+   loss, future tense) as morph facets — the corpus's own philological
+   PDF quantifies them per source; would need a morph-facet subsystem.
+
+Suite 2,806 runs / 34,112 assertions exit 0 · lint 355 files exit 0.
+Owner gate (checklist §6): `bin/nabu sync damaskini` (~1.7 MB, two
+zips) → eyeball `nabu show urn:nabu:damaskini:berlinski--slovo-petki:1
+--parallel`, a veles Cyrillic passage, 5 random passages → flip
+`enabled: true`.

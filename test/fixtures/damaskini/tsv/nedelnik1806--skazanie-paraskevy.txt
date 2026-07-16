@@ -1,0 +1,40 @@
+Kyriakodromion - sireč Nedělnikъ - Poučenie															
+Râmnic, 1806															
+Sofronii ep. Vračanskii															
+l. 184v-187r															
+															
+Skazánıe o žitıe prépodobnyę															
+matere našeę Paraskeѵi Térnovskïę															
+															
+text	cyrillic	diplomatic	lemma	PoS_tag	PoS_ext	sent_id	UD_id	UD_ncy	UD_type	UD_ext	folio	translation	eol	chunk	ref
+															
+Skazánıe 	Сказáнıе 	skazanie	skazanie	Nnsnn		1	1	0	root		[184v]	[Title] Story about the life of our Reverend Mother Parascheva of Tarnovo		1. predislovie Sofronievo	
+o 	о 	o	o	Sl		1	2	3	case						
+žitıe 	житıе 	žitie	žitie	Nnsnn		1	3	1	obl						
+prépodobnyę	пре́подобныѧ	prepodobnyę	prepodoben	Afsgy		1	4	5	amod						
+matere	матере	matere	mati	Nfsgy		1	5	3	nmod	poss					
+našeę	нашеѧ	našeę	naš	Afsgy		1	6	5	amod	poss					
+Paraskeѵi 	Параскеѵи 	Paraskevi	Paraskeva	Nfsgy		1	7	5	appos						
+Térnovskïę	Те́рновскїѧ	Ternovskię	Tъrnovski	Afsgy		1	8	7	amod						
+															
+slovo 	слово 	slovo	slovo	Nnsnn		2	1	0	root			[Title] Chapter 60			
+*ѯ*	·ѯ·	*ѯ*	60	Mc		2	2	1	nummod						
+															
+blgoslovì 	блгословѝ 	blgoslovi	blagoslovja	Vmm-2si		3	1	0	root			bless (us), Father!			
+oče	оче	oče	otec	Nmsvy		3	2	1	vocative						
+															
+pročestì	прочестѝ	pročesti	pročeta	Vmn---e		4	1	0	root			to read (aloud)			
+															
+Vsę´kogi	Всѧ́коги	Vsękogi	vsěkoga	Pi		5	1	2	amod			we are obliged, my hearers, to remember the Lord and praise His saints every time			
+dólžni	до́лжни	dolžni	dъlžen	Ampnn		5	2	0	root						
+esmỳ	есмы̀	esmi	sъm	Vmip1pi		5	3	2	cop						
+slíšateli	сли́шатели	slišateli	slušatel	Nmpny		5	4	2	vocative						
+mói,	мо́и,	moi	moi	Ampny		5	5	4	amod	poss					
+da	да	da	da	C		5	6	7	mark						
+pomęnúvamę	помѧнꙋ́вамѧ	pomęnuvamę	pomenuvam	Vmip1pi		5	7	2	acl						
+Gga,	Гга,	Gga	Gospod	Nmsgy		5	8	7	obj						
+i+	и+	i	i	C		5	9	11	cc						
+da	да	da	da	C		5	10	11	mark						
+po_Xválęme	по_Хвáлѧме	poXvalęme	poxvaljam	Vmip1pi		5	11	7	conj						
+stýxъ	сты́хъ	stixъ	svęt	Ampgn		5	12	11	obj						
+egò,	его̀,	ego	jь	Pp3msg		5	13	12	nmod	poss					
