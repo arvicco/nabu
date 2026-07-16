@@ -289,6 +289,39 @@ module Query
       assert_empty etym("зззз")
     end
 
+    # -- P24-2: the crosswalk shelf census (define/etym coordination) --------------
+
+    # The miss message's shelf enumeration is DB-DRIVEN (the P11/P18
+    # hardcoded-list lesson): distinct dictionary languages actually
+    # holding reflex rows. A shelf added to the catalog appears with zero
+    # code change; a prose-only dictionary (vasmer: no reflex rows) never
+    # claims crosswalk membership.
+    def test_crosswalk_shelves_are_db_derived_and_pick_up_a_new_shelf_without_code_change
+      query = Nabu::Query::Etym.new(catalog: @catalog)
+      shelves = query.crosswalk_shelves
+      assert_includes shelves, "sla-pro"
+      assert_includes shelves, "ine-pro"
+      assert_includes shelves, "ine-bsl-pro"
+      assert_equal shelves.sort, shelves, "deterministic order"
+
+      dict_id = @catalog[:dictionaries].insert(source_id: @recon.id, slug: "new-shelf",
+                                               title: "New shelf", language: "xx-pro")
+      entry_id = @catalog[:dictionary_entries].insert(
+        dictionary_id: dict_id, urn: "urn:nabu:dict:new-shelf:1", entry_id: "1",
+        key_raw: "x", headword: "x", headword_folded: "x", body: "b",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      @catalog[:dictionary_reflexes].insert(dictionary_entry_id: entry_id, seq: 0,
+                                            lang_code: "yy", language: "yy",
+                                            word: "y", word_folded: "y")
+      assert_includes query.crosswalk_shelves, "xx-pro",
+                      "a new shelf with reflex rows enumerates itself — no code change"
+    end
+
+    def test_crosswalk_shelves_are_empty_without_the_reflex_table
+      assert_empty Nabu::Query::Etym.new(catalog: Sequel.sqlite).crosswalk_shelves
+    end
+
     # -- P16-5 (a): attested wiktionary-cu entries enter the walk ------------------
 
     # The descendants backfill lets an sl lemma reach its ATTESTED OCS

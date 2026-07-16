@@ -145,6 +145,8 @@ class CLITest < Minitest::Test
     assert_match(/nabu etym богъ/, out, "must show the OCS worked example")
     assert_match(/bhewgh/, out, "P14-10: must teach the ASCII bare-form fallback")
     assert_match(/'\*kaisaraz'/, out, "P14-10: shell star examples must be quoted")
+    assert_match(/no reconstruction\s+path in the crosswalk/, out,
+                 "P24-2: must teach the dictionary-shelf fallback")
   end
 
   def test_help_define_documents_the_reconstruction_shelves
@@ -213,6 +215,55 @@ class CLITest < Minitest::Test
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
       assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "grouped headers name the code inline (P18-4)")
       refute_match(/ and \d+ more$/, out)
+    end
+  end
+
+  # -- P24-2: define/etym coordination — etym must not miss what define finds --
+
+  # THE incident (owner, 2026-07-16): `define сигать` finds the Vasmer
+  # article (urn:nabu:dict:starling-vasmer:12561 — prose fields, no reflex
+  # rows) while `etym сигать` returned a flat miss. On a crosswalk miss,
+  # etym now falls back to the SAME Query::Define lookup and renders the
+  # entries in the define house format (print_define_entry — zero renderer
+  # divergence) under an honest header. The folded headword carries the
+  # dictionary's verbatim trailing comma (сига́ть,) — the fold must reach it.
+  def test_etym_falls_back_to_the_dictionary_shelf_on_a_crosswalk_miss
+    with_starling_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym сигать]) }
+      assert_nil status
+      assert_match(/no reconstruction path in the crosswalk for сигать — the dictionary shelf holds:/,
+                   out)
+      assert_match(/сига́ть,.*urn:nabu:dict:starling-vasmer:12561/, out,
+                   "the define house format — headword (verbatim comma) + urn on the headline")
+      assert_match(/Near etymology:/, out, "the entry body renders whole")
+      refute_match(/no reconstruction names/, out,
+                   "the fallback fired — the full miss text is unnecessary")
+    end
+  end
+
+  def test_etym_crosswalk_hit_never_mixes_the_dictionary_fallback
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym прьстъ]) }
+      assert_nil status
+      assert_match(/\*pьrstъ/, out, "the walk itself is untouched")
+      refute_match(/dictionary shelf holds/, out,
+                   "etym's primary contract stays the walk — no fallback mixing on a hit")
+    end
+  end
+
+  # The genuine total miss enumerates the crosswalk shelves DB-DRIVEN (the
+  # P11/P18 hardcoded-list lesson): the starling fixture crosswalk holds
+  # bat-pro/gem-pro/ine-pro (vasmer's rus mints no reflex rows and must
+  # not appear); the stale Wiktionary proto-shelf roll call is gone; the
+  # '*form' quoting hint stays.
+  def test_etym_total_miss_enumerates_the_live_crosswalk_shelves
+    with_starling_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym зззз]) }
+      assert_nil status
+      assert_match(/the crosswalk covers bat-pro, gem-pro, ine-pro\b/, out,
+                   "db-derived enumeration — exactly the shelves with reflex rows")
+      refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, out, "the hardcoded enumeration is gone")
+      assert_match(/'\*form'/, out, "the quoting hint stays")
     end
   end
 
@@ -3684,6 +3735,32 @@ class CLITest < Minitest::Test
                                    .load_from(Nabu::Adapters::WiktionaryRecon.new,
                                               workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
       load_language_shelf(db)
+      db.disconnect
+      yield config
+    end
+  end
+
+  # P24-2: the starling shelves — a crosswalk WITH reflex rows (piet/
+  # germet/baltet) alongside a prose-only etymological dictionary (vasmer,
+  # rus — zero reflex rows), the exact define/etym coordination incident.
+  def with_starling_shelf
+    Dir.mktmpdir("nabu-cli-starling") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "starling", name: "StarLing IE",
+        adapter_class: "Nabu::Adapters::Starling",
+        license: Nabu::Adapters::Starling::MANIFEST.license, license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::Starling.new,
+                                              workdir: Nabu::TestSupport.fixtures("starling"))
       db.disconnect
       yield config
     end
