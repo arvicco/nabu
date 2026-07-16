@@ -1019,8 +1019,10 @@ through the shelf's ONE sanctioned write gateway, the `Adapter#fetch`
 analogue for data that is authored rather than downloaded. For the
 local-language shelf that gateway is `Nabu::LanguageShelf`; for the
 local-library shelf it is `Nabu::LibraryShelf` (P19-5: copy-in — never
-move — plus the mechanical, append-only manifest append), driven by `nabu
-ingest`. Everything else stays read-only on the shelves.
+move — plus the mechanical, append-only manifest append); for the
+local-source shelf it is `Nabu::SourceShelf` (P24-0, the third gateway) —
+all driven by `nabu ingest`. Everything else stays read-only on the
+shelves.
 
 **Shelf one: `canonical/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -1105,6 +1107,37 @@ shelf: a THIN scaffold (front matter + context, same three modes) through
 `Nabu::LanguageShelf`, then the dossier sync. Owner hand-placement plus a
 manual sync stays legitimate — the census flags whatever ingest has not
 catalogued.
+
+**Shelf three: `canonical/local-source/` (P24-0)** — the canonical-memory
+doctrine extended to the SOURCE grain: one Markdown + YAML front-matter
+dossier per REGISTERED SOURCE (`Nabu::SourceDossier`,
+`canonical/local-source/<slug>.md`) — what each shelf holds, in the
+owner's words. Curated lanes: `description` (THE load-bearing field, a 1–3
+sentence content description served on `nabu list` cards, the `--long`
+census, and the MCP status payload by default — the owner's own library
+metadata is useful context), `themes` (list), `key_works` (urn list), any
+other scalar as an extra lane, free prose as the curated NOTE lane, and
+provenance-headed accretion sections under the language shelf's
+append-only latest-per-(slug, kind) contract verbatim. The `local-source`
+adapter (`content_kind :source`, the fourth loader routing) parses
+dossiers into the derived `source_records` (migration 015 —
+slug/kind/body/provenance, temperature 1, replaced per slug); `nabu
+verify` re-parses and diffs; the P18-7 invariants' populated/files-vs-
+records checks cover both dossier grains. Populated by the owner-fired
+one-shot `nabu list --export-source-dossiers` (idempotent, existing
+dossiers untouched): descriptions seed from the best EXISTING prose —
+docs/library.md per-shelf sections and bullets, then sources.yml
+standalone shelf comments — and where none exists the dossier is an
+HONEST STUB that says so, never invented content. Per-source scaffolds go
+through `nabu ingest --shelf source SLUG` (the language scaffold's thin
+three-mode pattern, description prefilled from the registered source's
+name). The dossiers are gate-checked, never generated: `rake site:check`
+(the P24-0 gate rider) flags PRESENCE/MENTION drift — a registered source
+without a dossier, a docs/library.md-mentioned shelf whose dossier lacks
+a description, an enabled described shelf the library review never
+mentions — never verbatim equality (the two registers legitimately
+diverge in wording; site/library.md is covered transitively as the
+printed map of docs/library.md). Exit 1 on drift, findings listed.
 
 **The `related:` edges.** Manifest `related:` URNs become kind=`reference`
 edges in the links journal (producer `library`, scope = the source slug),

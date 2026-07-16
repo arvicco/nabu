@@ -166,6 +166,8 @@ module Nabu
                                     canonical_dir: @config.canonical_dir)
       when :language
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
+      when :source
+        Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
         Store::Loader.new(db: db, source: source, ledger: ledger)
       end

@@ -7463,3 +7463,61 @@ FINDINGS (2026-07-16):
   a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
   line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
   the piet 574-b note body, then flip enabled + rebuild.
+
+# ── Phase 24 ──────────────────────────────────────────────────────────
+
+## P24-0 · Shelf dossiers — canonical/local-source/  [tier: fable] [status: done 2026-07-16 — full stack shipped; owner queue: seed export + first sync + eyeball] [deps: P19-1]
+The canonical-memory doctrine (architecture §16) extended to the SOURCE
+grain — the language-dossier stack's twin, owner-approved 2026-07-16.
+- SHIPPED: Nabu::SourceDossier (canonical/local-source/<slug>.md — YAML
+  front matter slug/description/themes/key_works + scalar extras, owner
+  prose = the curated `note` lane, provenance-headed accretion sections
+  under the append-only latest-per-(slug, kind) contract verbatim;
+  parse/render round-trips, NFC at the boundary); Nabu::SourceShelf —
+  the THIRD sanctioned canonical-write gateway (CLAUDE.md ground rule +
+  architecture §16 amended in the same change); Adapters::LocalSource
+  (`content_kind :source`, the FOURTH loader routing in
+  SyncRunner/Rebuild/Verify; sync_policy local, enabled true by default
+  — the P19-1 argument verbatim in sources.yml) →
+  Store::SourceDossierLoader → derived `source_records` (migration 015:
+  slug/kind/body/provenance; replace-per-slug, record-grained counts,
+  absent-slug sweep, attic retention); status reads records=N;
+  invariants' populated + files-vs-records checks generalized to both
+  dossier grains (DOSSIER_TABLES).
+- SCAFFOLD: `nabu ingest --shelf source SLUG` — the thin three-mode
+  language-scaffold pattern; description prompt prefilled from the
+  registered source's manifest name; key_works validated as urns via the
+  shared field_error seam (prompt re-asks; --yes fails pre-write).
+- SEED (owner-fired one-shot): `nabu list --export-source-dossiers
+  [--dry-run]` scaffolds a dossier for EVERY registered source,
+  description seeded from the best EXISTING prose — docs/library.md
+  per-shelf `| **Source** |` sections + slug bullets (slug-specific
+  bullets win), then sources.yml standalone shelf comments (inline flag
+  comments and license_watch lines excluded); sentences capped at 3; NO
+  prose = an HONEST STUB named in the report, never invented content;
+  idempotent at the file grain (existing dossier = untouched no-op).
+- CONSUMERS: `nabu list SLUG` card renders the description wrapped under
+  the header (house measure, whole words); `nabu list --long` census
+  adds one description line per described source (zero fields
+  suppressed); MCP nabu_status serves `description` per source by
+  default (absent dossier = absent key, never a null).
+- GATE-CHECK RIDER (owner: gate-checked only, never generated): `rake
+  site:check` → Nabu::Ops::DossierDrift. PRESENCE/MENTION rule,
+  journaled in the class: drift = registered source with no dossier /
+  docs/library.md-mentioned slug whose dossier lacks a description / an
+  ENABLED described shelf the library review never mentions (pending
+  sources exempt — MAINTENANCE duty 2 maps shelves when they go live) /
+  malformed dossier / unseeded shelf. NEVER verbatim equality (the two
+  registers legitimately diverge in wording); site/library.md covered
+  TRANSITIVELY (the printed map of docs/library.md, no slugs to anchor
+  on). Listed report, exit 1 on drift.
+- Fixtures test/fixtures/local-source/ (3 real dossiers distilled from
+  library.md prose + quarantine rig + README/manifest). Docs:
+  architecture §16 shelf three + third gateway, ops.md §14 workflow,
+  02-sources row 60, site/MAINTENANCE.md duty 5, CLAUDE.md ground rule.
+  Tests +44 across 9 new/extended files. Suite 2,913 runs / 34,805
+  assertions exit 0 (0 skips) · lint 372 files exit 0.
+- Owner queue: `bin/nabu list --export-source-dossiers` (eyeball seeded
+  descriptions + the stub list), `bin/nabu sync local-source`,
+  `bin/nabu list edh` (description under the header), `bundle exec rake
+  site:check`.

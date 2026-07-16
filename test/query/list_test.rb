@@ -338,5 +338,51 @@ module Query
       error = assert_raises(Nabu::Query::List::Error) { list.documents("local-language", lang: "chu") }
       assert_match(/dossier/, error.message)
     end
+
+    # -- the source-dossier shelf (P24-0) ------------------------------------
+
+    def make_source_shelf
+      source = Nabu::Store::Source.create(
+        slug: "local-source", name: "Source dossiers",
+        adapter_class: "Nabu::Adapters::LocalSource", license_class: "open", enabled: true
+      )
+      [["ccmh", "description", "OCS gospel codices with a diplomatic layer."],
+       ["edh", "description", "Latin inscriptions, empire-wide."],
+       %w[edh theme epigraphy],
+       ["edh", "witness:survey", "surveyed"]].each do |slug, kind, body|
+        @catalog[:source_records].insert(slug: slug, kind: kind, body: body, provenance: "dossier")
+      end
+      source
+    end
+
+    def test_card_renders_the_dossier_description
+      make_source_shelf
+      assert_equal "OCS gospel codices with a diplomatic layer.", list.card("ccmh").description
+    end
+
+    def test_card_description_nil_without_a_dossier_record
+      assert_nil list.card("ccmh").description
+    end
+
+    def test_descriptions_map_serves_the_census
+      make_source_shelf
+      assert_equal({ "ccmh" => "OCS gospel codices with a diplomatic layer.",
+                     "edh" => "Latin inscriptions, empire-wide." }, list.descriptions)
+    end
+
+    def test_census_and_card_count_source_dossiers
+      make_source_shelf
+      row = list.census.find { |r| r.slug == "local-source" }
+      assert_equal 2, row.dossiers, "the source shelf must never render as empty (the P22-1 gap class)"
+      card = list.card("local-source")
+      assert_equal 2, card.dossiers
+      assert_equal({ "description" => 2, "theme" => 1, "witness:survey" => 1 }, card.record_kinds)
+    end
+
+    def test_documents_on_the_source_shelf_is_a_named_miss
+      make_source_shelf
+      error = assert_raises(Nabu::Query::List::Error) { list.documents("local-source") }
+      assert_match(/card/, error.message)
+    end
   end
 end

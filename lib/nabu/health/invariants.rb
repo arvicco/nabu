@@ -99,6 +99,10 @@ module Nabu
         ].compact
       end
 
+      # Dossier-shelf content kind => its derived catalog table (P19-1 the
+      # language shelf, P24-0 the source shelf).
+      DOSSIER_TABLES = { language: :language_records, source: :source_records }.freeze
+
       private
 
       # -- last-run honesty ---------------------------------------------------
@@ -178,11 +182,12 @@ module Nabu
         )
       end
 
-      # What "populated" means is content-kind-shaped (P19-1): a language
-      # dossier shelf's artifact is language_records rows (it owns them —
+      # What "populated" means is content-kind-shaped (P19-1/P24-0): a
+      # dossier shelf's artifact is its derived records rows (it owns them —
       # the shelf is their only writer), everything else documents/entries.
       def populated?(entry)
-        return language_records.positive? if content_kind(entry) == :language
+        kind = content_kind(entry)
+        return derived_records(kind).positive? if DOSSIER_TABLES.key?(kind)
 
         live_documents(entry.slug).positive? || dictionary_entries(entry.slug).positive?
       end
@@ -258,13 +263,14 @@ module Nabu
       # local-shelf variant of the half-loaded-catalog signature (the files
       # are the flag, the records the artifact).
       def dossiers_vs_records(entry)
-        return nil unless content_kind(entry) == :language && @canonical_dir && @catalog
-        return nil unless table?(@catalog, :language_records) && any_ok_run?(entry.slug)
-        return nil if dossier_files(entry.slug).zero? || language_records.positive?
+        kind = content_kind(entry)
+        return nil unless DOSSIER_TABLES.key?(kind) && @canonical_dir && @catalog
+        return nil unless table?(@catalog, DOSSIER_TABLES.fetch(kind)) && any_ok_run?(entry.slug)
+        return nil if dossier_files(entry.slug).zero? || derived_records(kind).positive?
 
         Finding.new(
           kind: :dossiers_unindexed, severity: :loud,
-          message: "dossier files on disk but zero derived language records — " \
+          message: "dossier files on disk but zero derived #{kind} records — " \
                    "re-sync (bin/nabu sync #{entry.slug}) or rebuild"
         )
       end
@@ -402,10 +408,11 @@ module Nabu
         :passages
       end
 
-      def language_records
-        return 0 unless table?(@catalog, :language_records)
+      def derived_records(kind)
+        table = DOSSIER_TABLES.fetch(kind)
+        return 0 unless table?(@catalog, table)
 
-        @catalog[:language_records].count
+        @catalog[table].count
       end
 
       def dossier_files(slug)
