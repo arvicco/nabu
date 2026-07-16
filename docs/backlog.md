@@ -7509,3 +7509,33 @@ miss; MCP 3: fallback payload+note, db-driven miss note, restricted
 withholding through the fallback; +1 help-pin assertion). Docs: cli
 etym long_desc (shelf wording de-hardcoded + fallback paragraph),
 ETYM_DESCRIPTION, docs/mcp.md nabu_etym paragraph.
+
+# ── Phase 25 queue: the Celtic axis (owner-approved as-is, 2026-07-16) ─
+# Survey: .docs/celtic-survey.md (scout 2026-07-15/16; licenses verbatim,
+# contacts verified). Five packets + rider, ranked value×readiness:
+# 1. riig — 428 Gaulish EpiDoc inscriptions (CC BY 4.0 IN-FILE, header
+#    governs), ~6 MB polite crawl, EDH-style date/place extraction,
+#    Gaulish xtg incl. Gallo-Greek script.
+# 2. kaikki sga/mga/wlm — three EXTRACTS config rows on the live
+#    wiktionary-jsonl adapter (the ett precedent, zero new code; the
+#    Old Irish extract is 19.8 MB — DIL-derived depth).
+# 3. corph — Maynooth ChronHib, 78 annotated Old Irish texts, MIT
+#    LICENSE (dump in chronhib-MU/Chronhib-Website repo, 39 MB);
+#    FIRST CELTIC GOLD LEMMAS → unmutes piet CELT column, Pokorny
+#    MATERIAL, IE-CoR sga, cel-pro ReflexViews; DIL_Headword ids →
+#    links-journal edges into eDIL's stable id space.
+# 4. UD Old Irish ×2 — DipSGG (3,471 St Gall glosses, BY-NC-SA → nc)
+#    + DipWBG (42 Würzburg glosses, BY-SA → attribution override).
+#    Config-only.
+# 5. ogham — 508 EpiDoc records (git clone; in-file CC BY 4.0 vs site
+#    BY-NC-SA → class nc PENDING the clarification email #14,
+#    relabel-on-reply); Primitive Irish pgl, real Ogham codepoints.
+# Rider: 11 verified PD-scan ingest one-liners (survey §PD; Thurneysen
+#    1909 GERMAN original — the 1946 English translation is IN
+#    COPYRIGHT, trap avoided).
+# Negative (verified): no licensed machine-readable Celtic Gospel
+#    exists — alignment hub gains no Celtic witness this phase.
+# Unlock emails DRAFTED (registry rows 11-16): eDIL, GPC, CELT,
+#    OG(H)AM clarification, Cardiff Welsh Prose (address needs owner
+#    eyeball), Hesperia. v2 on replies: LexLep, Rhyddiaith 13eg,
+#    CELT subset, Celtiberian.
