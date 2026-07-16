@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The XML files are documented TRIMS (whole: false): kept entry lines are
+# byte-verbatim upstream (line terminators included — besedje16 is CRLF),
+# only the entry set was reduced; recipe in README.md. The XSDs ship whole.
+# All six files live INSIDE the three deposit zips (no per-file raw URL);
+# the sentinel fetches the zip URLs for liveness only.
+source: sl-lexica
+adapter_test: test/adapters/sl_lexica_test.rb
+retrieved: 2026-07-15
+files:
+  - path: pletersnik/Pletersnik.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1114/Pletersnik.zip
+    whole: false
+    trim: 7 of 103,185 rc entries — geslo-ids 000001/000002/000003 (a homograph triple), 000005 (abeceda, toneme pin), 000012 (abel, pi etymology), 001934 (blažji, vi variant), 102523 (apnariti, dodatek attr)
+  - path: pletersnik/pletersnik.xsd
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1114/Pletersnik.zip
+    whole: true
+  - path: jsv/JSV.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1092/JSV.zip
+    whole: false
+    trim: 5 of 8,461 ge entries — geslo-ids 000002/000003 (a/à homographs, op etymologies, ct citations), 000007 (Abakuk), 000026 (Abramov, sp senses), 000033 (Abundij, "(II, 194 s.)" citation variant)
+  - path: jsv/JSV.xsd
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1092/JSV.zip
+    whole: true
+  - path: besedje16/besedje16.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1127/besedje16.zip
+    whole: false
+    trim: 6 of 27,759 Ges entries (CRLF preserved) — geslo-ids 000004 (a hom 4, DB 1584 sigla), 000010 (kaz), 000011 (razl), 000021 (itd), 000125 (prav + second sku/skupk group), 000175 (zvezdica attr)
+  - path: besedje16/besedje16.xsd
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1127/besedje16.zip
+    whole: true

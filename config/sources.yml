@@ -374,6 +374,22 @@ starling:
   # package: re-fetch is an owner decision.
   sync_policy: manual
 
+sl-lexica:
+  adapter: Nabu::Adapters::SlLexica
+  enabled: false   # P23-2: awaiting the owner-fired first sync (three zip
+                   # GETs, ~7 MB total → 103,185 + 8,461 + 27,759 = 139,405
+                   # entries across pletersnik/jsv/besedje16; CLAUDE.md
+                   # checklist §6 — eyeball `nabu define abeceda` for the
+                   # Pleteršnik toneme headword, `nabu define --lang sl a`
+                   # for the three-dictionary unification, then flip).
+  # The Slovenian historical dictionary shelf (ZRC SAZU / CLARIN.SI, all
+  # CC BY 4.0 verbatim: hdl 11356/1114 + 11356/1092 + 11356/1127). The
+  # deposits are frozen 2015/2017 uploads: re-fetch is an owner decision.
+  sync_policy: manual
+  # license_watch candidates (P16-5, owner decision — the CC BY 4.0 grants
+  # live on the three record pages):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1114
+
 local-language:
   adapter: Nabu::Adapters::LocalLanguage
   enabled: true    # P19-1: enabled by DEFAULT, deliberately -- the checklist's
