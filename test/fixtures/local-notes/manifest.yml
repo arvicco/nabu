@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The local-notes shelf has NO upstream by definition (P24-1, sync_policy:
+# local) — nothing here can ever be refetched. The note records are the
+# shape the Nabu::NoteShelf gateway writes (nabu note), topics grouping
+# notes however the owner likes.
+source: local-notes
+adapter_test: test/adapters/local_notes_test.rb
+retrieved: 2026-07-16
+files:
+  - path: notes.yml
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; the default topic file, gateway-written shape
+  - path: reading-log.yml
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; a second topic incl. a deliberate --force dangling note
+  - path: broken.yml.quarantine
+    whole: true
+    refetchable: false
+    reason: synthetic malformed notes file (renamed to .yml by the loader test to exercise quarantine)

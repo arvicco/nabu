@@ -271,6 +271,47 @@ class VerifyTest < Minitest::Test
     assert_equal :missing, issue.kind
   end
 
+  # -- P24-1: the owner-notes shelf verifies its derived urn_notes -----------
+
+  def seed_notes_shelf
+    write_sources(<<~YAML)
+      local-notes:
+        adapter: Nabu::Adapters::LocalNotes
+        enabled: true
+        sync_policy: local
+    YAML
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("local-notes"), File.join(@canonical, "local-notes"))
+    FileUtils.rm(File.join(@canonical, "local-notes", "broken.yml.quarantine"))
+    Nabu::Rebuild.new(config: config, registry: registry).run
+  end
+
+  def test_verify_holds_urn_notes_against_the_reparsed_topic_files
+    seed_notes_shelf
+    result = verify
+
+    assert result.clean?, "a fresh notes shelf verifies clean"
+    outcome = result.outcomes.find { |o| o.slug == "local-notes" }
+    assert_equal 2, outcome.verified, "one verification unit per topic"
+
+    File.write(File.join(@canonical, "local-notes", "notes.yml"),
+               "- urn: urn:nabu:ccmh:mar:mt\n  note: edited after derivation\n  added: '2026-07-17'\n")
+    result = verify
+    refute result.clean?
+    issue = result.issues.fetch(0)
+    assert_equal "local-notes:notes", issue.urn
+    assert_equal :mismatch, issue.kind
+  end
+
+  def test_verify_reports_a_vanished_topic_file_as_missing
+    seed_notes_shelf
+    FileUtils.rm(File.join(@canonical, "local-notes", "reading-log.yml"))
+
+    result = verify
+    issue = result.issues.find { |i| i.urn == "local-notes:reading-log" }
+    refute_nil issue
+    assert_equal :missing, issue.kind
+  end
+
   # -- helpers -------------------------------------------------------------
 
   private

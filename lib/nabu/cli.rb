@@ -993,6 +993,7 @@ module Nabu
       raise Thor::Error, "links: unknown urn #{urn} (no catalog entry, no edges)" if result.nil?
 
       print_links(result, long: options[:long])
+      print_links_notes_lane(catalog, urn)
     ensure
       catalog&.disconnect
       journal&.disconnect
@@ -1102,6 +1103,7 @@ module Nabu
 
       print_show(result)
       print_linked_footer(config, result.urn)
+      print_notes_footer(catalog, result)
     rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
       # A range urn that names two endpoints but can't be honoured (endpoint
       # missing, or reversed), or an unknown --random --source: a clean stderr
@@ -1109,6 +1111,69 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
+    end
+
+    desc "note URN [TEXT]", "Annotate any urn the corpus knows (owner notes → canonical/local-notes/)"
+    long_desc <<~HELP, wrap: false
+      The owner's annotation lane (architecture §16) — scholia of one's own,
+      keyed by ANY urn the corpus knows: a document, a passage, a range, a
+      dictionary entry. Notes are canonical memory: they live as YAML files
+      under canonical/local-notes/<topic>.yml (append-only through the
+      Nabu::NoteShelf gateway; hand-edits welcome — the file is the record),
+      and the catalog only indexes them (urn_notes, rebuilt at every
+      sync/rebuild). Once noted, the urn's renders carry the note: `show`
+      prints an "owner note (topic, date): …" footer (a document also counts
+      its passage-note children), `define` prints entry notes after the
+      body, `links` shows an owner-notes lane, and the MCP surface serves
+      notes by default (withheld wherever the target document is withheld).
+
+      Modes:
+        nabu note URN "TEXT"    scripted append (TEXT may be several words)
+        nabu note URN           existing notes? show them; none? prompt for
+                                one (TTY only — a pipe without TEXT refuses
+                                honestly BEFORE any write)
+        nabu note --list        enumerate notes (bounded --limit; --topic
+                                narrows)
+
+      The urn must RESOLVE in the catalog — a note on a typo'd urn would sit
+      unreachable forever, so a miss is an error naming it. --force records
+      a note on a not-yet-held urn deliberately (notes on planned material);
+      such notes read "(dangling)" at render until the urn arrives.
+
+      --topic groups notes however you like (default "#{Nabu::NoteShelf::DEFAULT_TOPIC}";
+      one file per topic); --tags rides a comma-separated tag list.
+
+      Examples:
+        nabu note urn:nabu:ccmh:mar:mt "Collate against Jagić 1883 before citing."
+        nabu note urn:nabu:dict:lsj:logos "Anchor for the John 1.1 witness comparison." --topic lexicon
+        nabu note urn:nabu:planned:vaillant --force "Order the reprint." --tags acquisitions
+        nabu note urn:nabu:ccmh:mar:mt         # read what you said
+        nabu note --list --topic lexicon
+    HELP
+    option :topic, type: :string, banner: "NAME",
+                   desc: "Topic file under canonical/local-notes/ (default #{Nabu::NoteShelf::DEFAULT_TOPIC}; " \
+                         "with --list: narrow to this topic)"
+    option :tags, type: :string, banner: "collation,ocs", desc: "Tags, comma-separated"
+    option :force, type: :boolean, default: false,
+                   desc: "Record a note on a not-yet-held urn (flagged dangling at render)"
+    option :list, type: :boolean, default: false,
+                  desc: "Enumerate notes (bounded; --topic narrows, --limit lifts)"
+    option :limit, type: :numeric, default: Nabu::Query::Notes::DEFAULT_LIMIT,
+                   desc: "With --list: how many notes (default #{Nabu::Query::Notes::DEFAULT_LIMIT})"
+    def note(urn = nil, *text_parts)
+      config = Nabu::Config.load
+      return note_list(config, urn) if options[:list]
+
+      urn = urn.to_s.strip
+      raise Thor::Error, "note: give a urn (or --list)" if urn.empty?
+
+      text = text_parts.join(" ").strip
+      text = show_notes_or_prompt(config, urn) if text.empty?
+      return if text.nil? # existing notes were shown — a read, not a write
+
+      append_note(config, urn, text)
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
     end
 
     desc "align REF", "Render one citation across every witness of a registered work (the alignment hub)"
@@ -1280,7 +1345,7 @@ module Nabu
       @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
                                    .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
-      print_define_results(lemma, results)
+      print_define_results(lemma, results, catalog: catalog)
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -2929,6 +2994,122 @@ module Nabu
         journal&.disconnect
       end
 
+      # -- nabu note (P24-1) -------------------------------------------------
+
+      # The `show`/`define` notes footer: one "owner note (topic, date): …"
+      # line per note on the urn, and — on a document — the passage-note
+      # children count. Zero-signal silence when unnoted (the linked-footer
+      # stance); a catalog predating migration 015 has no lane at all.
+      def print_notes_footer(catalog, result)
+        reader = Nabu::Query::Notes.new(catalog: catalog)
+        return unless reader.available?
+
+        reader.for_urn(result.urn).each do |row|
+          say "  owner note (#{row.topic}, #{row.added}): #{row.note}#{note_tags_fragment(row)}"
+        end
+        return unless result.is_a?(Nabu::Query::Show::DocumentResult)
+
+        children = reader.child_count(result.urn)
+        say "  passage notes: #{children}" if children.positive?
+      end
+
+      # The `links` owner-notes lane: the urn's own notes beside its mined
+      # edges (curation next to discovery), silent when unnoted.
+      def print_links_notes_lane(catalog, urn)
+        rows = Nabu::Query::Notes.new(catalog: catalog).for_urn(urn)
+        return if rows.empty?
+
+        say "owner notes (#{rows.size}):"
+        rows.each { |row| say "  #{note_line(row)}" }
+      end
+
+      def note_line(row)
+        "(#{row.topic}, #{row.added}) #{row.note}#{note_tags_fragment(row)}"
+      end
+
+      def note_tags_fragment(row)
+        row.tags.empty? ? "" : "  [#{row.tags.join(', ')}]"
+      end
+
+      # `nabu note --list`: the bounded enumeration, oldest first, each urn
+      # resolution-checked so a --force note on a not-yet-held urn reads
+      # honestly dangling.
+      def note_list(config, urn_arg)
+        raise Thor::Error, "note: --list takes no urn (--topic narrows, --limit lifts)" \
+          unless urn_arg.to_s.strip.empty?
+
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        page = Nabu::Query::Notes.new(catalog: catalog).list(topic: options[:topic], limit: options[:limit].to_i)
+        return say(%(no notes yet — nabu note URN "TEXT" writes the first)) if page.total.zero?
+
+        resolved = Nabu::NoteShelf.catalog_resolver(catalog)
+        page.rows.each do |row|
+          say "#{row.urn}#{' (dangling)' unless resolved.call(row.urn)} — #{note_line(row)}"
+        end
+        remaining = page.total - page.rows.size
+        say "… and #{remaining} more (--limit lifts, --topic narrows)" if remaining.positive?
+      ensure
+        catalog&.disconnect
+      end
+
+      # `nabu note URN` without TEXT: existing notes are SHOWN (a read —
+      # works piped or not); a bare urn with none prompts on a TTY and
+      # refuses honestly otherwise, BEFORE any write (the ingest precedent).
+      # Returns the text to append, or nil when notes were shown.
+      def show_notes_or_prompt(config, urn)
+        existing = existing_notes(config, urn)
+        unless existing.empty?
+          say "notes on #{urn} (#{existing.size}):"
+          existing.each { |row| say "  #{note_line(row)}" }
+          say %(add another: nabu note #{urn} "TEXT")
+          return nil
+        end
+        unless $stdin.tty?
+          raise Thor::Error, "note: no TEXT and no TTY to prompt — pass the note as an argument " \
+                             "(nabu note URN \"TEXT\"); nothing was written"
+        end
+
+        answer = ask("  note for #{urn}:").to_s.strip
+        raise Thor::Error, "note: refusing an empty note — nothing was written" if answer.empty?
+
+        answer
+      end
+
+      def existing_notes(config, urn)
+        catalog = open_catalog(config)
+        return [] unless catalog
+
+        Nabu::Query::Notes.new(catalog: catalog).for_urn(urn, topic: options[:topic])
+      ensure
+        catalog&.disconnect
+      end
+
+      # The write path: resolution-checked append through the NoteShelf
+      # gateway, then the shelf's ordinary sync (the ingest pattern) so the
+      # note is indexed and sha-pinned immediately.
+      def append_note(config, urn, text)
+        resolved = true
+        catalog = open_catalog(config)
+        begin
+          resolver = catalog && Nabu::NoteShelf.catalog_resolver(catalog)
+          resolved = resolver ? resolver.call(urn) : false if options[:force]
+          shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config.canonical_dir), resolver: resolver)
+          path = shelf.append_note!(urn: urn, note: text,
+                                    topic: options[:topic] || Nabu::NoteShelf::DEFAULT_TOPIC,
+                                    tags: (options[:tags] || "").split(","), force: options[:force])
+          say "  noted    #{urn} → #{path}"
+        ensure
+          catalog&.disconnect
+        end
+        run_shelf_sync(config, Nabu::NoteShelf::SLUG)
+        unless resolved
+          say "  note: #{urn} is not in the catalog yet — it reads (dangling) until the urn arrives", :yellow
+        end
+        say "try: bin/nabu show #{urn}" if resolved
+      end
+
       # Cap a list to PARALLELS_COMPACT_ITEMS with a "… and N more" tail unless
       # +long+; each kept item passes through the block (span trimming). The tail
       # itself names --long so the elision is discoverable.
@@ -3198,7 +3379,9 @@ module Nabu
       # header with license label, gloss, the structured body, then the
       # resolved citations as show-able urns. Unresolved citations already
       # read inline in the body text.
-      def print_define_results(lemma, results)
+      # +catalog+ (P24-1): when given, each entry's owner notes render after
+      # its body — the note lane on the dictionary surface.
+      def print_define_results(lemma, results, catalog: nil)
         if results.empty?
           return say("no dictionary entry for #{lemma} — #{@shelf_summary}; " \
                      "give a dictionary form (search --lemma finds attestations)")
@@ -3207,6 +3390,7 @@ module Nabu
         results.each_with_index do |result, index|
           say "" if index.positive?
           print_define_entry(result)
+          print_notes_footer(catalog, result) if catalog
         end
       end
 

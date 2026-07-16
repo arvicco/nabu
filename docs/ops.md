@@ -870,3 +870,40 @@ Operational notes:
   (name/family/context, same three modes) through `Nabu::LanguageShelf`
   and syncs the dossier shelf — a scaffold, not an editor; edit
   `canonical/local-language/<code>.md` directly afterwards and re-sync.
+
+## 14. Annotating the corpus (P24-1)
+
+`nabu note URN [TEXT]` is the owner's annotation lane — scholia of one's
+own, keyed by ANY urn the corpus knows (a document, a passage, a range, a
+dictionary entry), and the local-notes shelf's ONE sanctioned write path
+(`Nabu::NoteShelf`, architecture §16). Notes are canonical memory: they
+live as YAML files under `canonical/local-notes/<topic>.yml`; the catalog
+only indexes them (`urn_notes`, rebuilt at every sync/rebuild). Once noted,
+the urn's renders carry the note: `show` prints an
+`owner note (topic, date): …` footer (a document also counts its
+passage-note children), `define` prints entry notes after the body, `links`
+shows an owner-notes lane, and the MCP surface serves notes by default —
+withheld wherever the target document is withheld
+(research_private/restricted), so a note never leaks a withheld text's
+content frame.
+
+Operational notes:
+
+- **Three modes.** `nabu note URN "TEXT"` appends scripted; `nabu note URN`
+  shows the urn's existing notes (a read), or — none yet, on a TTY —
+  prompts for one; piped without TEXT it refuses honestly BEFORE any
+  write. `nabu note --list [--topic T] [--limit N]` enumerates, oldest
+  first.
+- **The urn must resolve.** A miss is an error naming the urn (a note on a
+  typo would sit unreachable forever). `--force` records a note on a
+  not-yet-held urn deliberately — notes on planned material — and such
+  notes read `(dangling)` at render until the urn arrives.
+- **Topics are files.** `--topic` groups notes however you like (default
+  `notes`; one file per topic, lowercase names). `--tags` rides a
+  comma-separated tag list on the record.
+- **Hand-edits are welcome.** The topic file is the record — edit it, then
+  `bin/nabu sync local-notes` re-derives the index (per-file sha pins; an
+  edited file reads as a soft "stale derivation" nudge at `nabu health`
+  until the re-scan). A malformed edit quarantines that topic file loudly,
+  naming file + entry; the gateway refuses to append into one until it is
+  fixed.

@@ -1,0 +1,10 @@
+# A second topic file: the owner groups notes however they like.
+- urn: urn:nabu:local-library:slavistics:leskien-1871-handbuch
+  note: Re-read the paradigm tables (pp. 40–60) for the aorist survey.
+  added: '2026-07-15'
+  tags:
+  - reading
+
+- urn: urn:nabu:planned:vaillant-manuel
+  note: Order the Vaillant Manuel reprint — noted ahead of ingest (--force).
+  added: '2026-07-16'
