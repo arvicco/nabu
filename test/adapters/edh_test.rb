@@ -29,9 +29,10 @@ class EdhTest < Minitest::Test
 
   # -- discovery --------------------------------------------------------------
 
-  def test_discover_yields_the_three_fixture_records_in_urn_order
+  def test_discover_yields_the_five_fixture_records_in_urn_order
     refs = conformance_adapter.discover(FIXTURES).to_a
-    assert_equal %w[urn:nabu:edh:hd000001 urn:nabu:edh:hd000082 urn:nabu:edh:hd080825],
+    assert_equal %w[urn:nabu:edh:hd000001 urn:nabu:edh:hd000082 urn:nabu:edh:hd029093
+                    urn:nabu:edh:hd080825 urn:nabu:edh:hd081183],
                  refs.map(&:id)
   end
 
@@ -89,7 +90,8 @@ class EdhTest < Minitest::Test
       refs = adapter.discover(dir).to_a
       refute_includes refs.map(&:id), "urn:nabu:edh:hd000001",
                       "a CSV row with empty atext is a metadata-only stub, never a document"
-      assert_equal %w[urn:nabu:edh:hd000082 urn:nabu:edh:hd080825], refs.map(&:id)
+      assert_equal %w[urn:nabu:edh:hd000082 urn:nabu:edh:hd029093
+                      urn:nabu:edh:hd080825 urn:nabu:edh:hd081183], refs.map(&:id)
 
       skips = adapter.discovery_skips(dir)
       assert_equal 1, skips.skipped_by_rule
@@ -128,7 +130,7 @@ class EdhTest < Minitest::Test
       assert File.file?(File.join(workdir, "pers", "edh_data_pers.csv"))
       assert_match(/\A\h{64}\z/, report.sha)
       assert_match(/HD000001-HD010000=\h{12} \(2 records\)/, report.notes)
-      assert_match(/text=\h{12} \(3 rows\)/, report.notes)
+      assert_match(/text=\h{12} \(5 rows\)/, report.notes)
       assert_match(/pers=\h{12} \(5 rows\)/, report.notes)
       # repos pins every artifact by its URL: 9 zips + 2 CSVs.
       assert_equal 11, report.repos.size
@@ -143,7 +145,7 @@ class EdhTest < Minitest::Test
       adapter = conformance_adapter
       adapter.fetch(workdir)
       refs = adapter.discover(workdir).to_a
-      assert_equal 3, refs.size
+      assert_equal 5, refs.size
       assert_equal "urn:nabu:edh:hd000001", adapter.parse(refs.first).urn
     end
   end
@@ -169,7 +171,7 @@ class EdhTest < Minitest::Test
       adapter = conformance_adapter
       adapter.fetch(workdir)
 
-      # A fresh build missing 2 of the 3 ingestible records (66% > 20%).
+      # A fresh build missing 2 of the 5 ingestible records (40% > 20%).
       stub_edh_artifacts(root, drop: %w[HD000001.xml HD000082.xml])
       assert_raises(Nabu::SyncAborted) { adapter.fetch(workdir) }
       assert File.file?(File.join(workdir, "epidoc", "HD000001-HD010000", "HD000001.xml")),

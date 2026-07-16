@@ -122,15 +122,18 @@ class RebuildTest < Minitest::Test
 
     result = rebuilder.run
 
-    assert_equal 3, result.outcomes.first.report.added
+    # 5 fixture records since P23-3c: the two fully-lost inscriptions land as
+    # whole-inscription fallback passages, facets/axes riding along (HD029093
+    # carries no material — 3 facets; HD081183 all four).
+    assert_equal 5, result.outcomes.first.report.added
     refute_nil result.facets
-    assert_equal 3, result.facets.documents
-    assert_equal 12, result.facets.rows, "genre+province+material+object_type × 3 records"
-    assert_equal 3, result.axes.edh
+    assert_equal 5, result.facets.documents
+    assert_equal 19, result.facets.rows, "4+4+4 facets × 3 line-grain records + 3 + 4 fallback records"
+    assert_equal 5, result.axes.edh
     db = Nabu::Store.connect(catalog_path)
     epitaphs = db[:document_facets].where(facet: "genre", value: "epitaph").count
     assert_equal 1, epitaphs
-    assert_equal 12, db[:document_facets].count
+    assert_equal 19, db[:document_facets].count
   ensure
     db&.disconnect
   end

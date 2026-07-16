@@ -44,6 +44,22 @@ module Nabu
     # A line whose extraction is ONLY gap markers (lb n="0", the lost-line-
     # before-text encoding — HD080825) is not citable text and is skipped.
     #
+    # == The whole-inscription fallback (P23-3c; the 26 quarantines triaged)
+    #
+    # 26 real EDH records mint ZERO lines under the rule above: their whole
+    # edition is lost lines — <lb n="0"> milestones whose every extraction is
+    # gap markers (CSV atext "[------]", "[---]", "//"; the P18-gate triage's
+    # "no <lb> markup" wording was corrected by the fixture bytes — the <lb>s
+    # exist, the text does not). These are catalogued inscriptions, not
+    # parser failures, so instead of quarantining, the parser falls back to
+    # ONE whole-inscription passage: the edition's full extraction (here its
+    # own lacuna notation, "[…] […]") under the stable suffix :text — flat,
+    # no textpart path, collision-free because the fallback only fires when
+    # zero line-grain suffixes were minted (frozen-URN guarantee). Gap/
+    # supplied/cancelled annotations accumulate document-wide onto it. A
+    # per-source policy like the <del> divergence: DDbDP's text-less stubs
+    # (9,351 empty <ab/>) keep quarantining — see the papyri fixture README.
+    #
     # == Language: NEVER from the header (the survey's verified trap)
     #
     # EDH's <langUsage> is boilerplate (en/de/lat on every record, Greek
@@ -92,6 +108,11 @@ module Nabu
 
       URN_PREFIX = "urn:nabu:edh:"
 
+      # The whole-inscription fallback's stable urn suffix (class note):
+      # flat, textpart-free, minted only when zero line suffixes exist —
+      # so it can never collide within a document (frozen-URN guarantee).
+      FALLBACK_SUFFIX = "text"
+
       # One extracted line (same shape as the DdbdpParser sibling's).
       Line = Data.define(:urn_suffix, :text, :leiden)
       private_constant :Line
@@ -135,7 +156,11 @@ module Nabu
           urn: urn, language: language, title: title, canonical_path: path,
           metadata: metadata(extraction.header, csv, persons)
         )
-        extraction.lines.each_with_index do |line, sequence|
+        # Zero line-grain passages → the whole-inscription fallback (class
+        # note): one :text passage, or nil when the edition carried nothing.
+        lines = extraction.lines
+        lines = [extraction.whole_inscription_line].compact if lines.empty?
+        lines.each_with_index do |line, sequence|
           document << Passage.new(
             urn: "#{urn}:#{line.urn_suffix}",
             language: passage_language(line.text, language),
@@ -144,7 +169,7 @@ module Nabu
             sequence: sequence
           )
         end
-        raise ParseError, "#{path}: no citable lines (<lb>) found in div[@type=\"edition\"]" if document.empty?
+        raise ParseError, "#{path}: no citable text found in div[@type=\"edition\"]" if document.empty?
 
         document
       rescue ValidationError => e
@@ -226,8 +251,10 @@ module Nabu
         ].freeze
         # Never reading text (the DDbDP policy minus <del> — the per-source
         # divergence keeps del). <gap> is handled separately: marker first,
-        # then its children drop too.
-        DROPPED_ELEMENTS = %w[rdg orig note figure].freeze
+        # then its children drop too. <head> is the edition's own "Text"
+        # label — invisible to line grain (no line is open around it) but it
+        # must not leak into the whole-inscription fallback buffer (P23-3c).
+        DROPPED_ELEMENTS = %w[rdg orig note figure head].freeze
         # Header elements whose text is captured once (first occurrence wins;
         # placeName is special-cased on @type below).
         HEADER_CAPTURES = { "title" => :title, "objectType" => :object_type, "material" => :material,
@@ -256,6 +283,21 @@ module Nabu
           @lines = []
           @block = 1 # implicit restart-block ordinal (DdbdpParser P5-1)
           @seen_suffixes = {}
+          # The whole-edition accumulator behind the whole-inscription
+          # fallback (P23-3c): every kept text node / gap marker / del
+          # bracket inside the edition also lands here, line or no line.
+          @whole = { buffer: +"", gaps: [], supplied: 0, cancelled: false }
+        end
+
+        # The fallback Line (class note): the edition's FULL extraction under
+        # the stable :text suffix, document-wide leiden annotations attached.
+        # nil when the edition carried nothing at all — that stays the honest
+        # no-citable-text ParseError.
+        def whole_inscription_line
+          text = Normalize.nfc(@whole[:buffer].gsub(/[[:space:]]+/, " ").strip)
+          return nil if text.empty?
+
+          Line.new(urn_suffix: EdhEpidocParser::FALLBACK_SUFFIX, text: text, leiden: leiden(@whole))
         end
 
         def call
@@ -352,17 +394,20 @@ module Nabu
             capture_header(node.value.to_s)
             return
           end
-          return unless in_edition? && @current && !dropping?
+          return unless in_edition? && !dropping?
 
           value = node.value.to_s
-          @current[:buffer] << value
+          @whole[:buffer] << value
+          @current[:buffer] << value if @current
           count_supplied(value)
         end
 
         def count_supplied(value)
           return if @supplied_depths.empty?
 
-          @current[:supplied] += value.gsub(/[[:space:]]/, "").grapheme_clusters.size
+          count = value.gsub(/[[:space:]]/, "").grapheme_clusters.size
+          @whole[:supplied] += count
+          @current[:supplied] += count if @current
         end
 
         def dropping?
@@ -463,6 +508,8 @@ module Nabu
         end
 
         def mark_cancelled(marker)
+          @whole[:buffer] << marker
+          @whole[:cancelled] = true
           return unless @current
 
           @current[:buffer] << marker
@@ -472,9 +519,12 @@ module Nabu
         # -- leiden milestones ------------------------------------------------------
 
         def add_gap(node)
+          annotation = gap_annotation(node)
+          @whole[:buffer] << EdhEpidocParser::GAP_MARKER
+          @whole[:gaps] << annotation
           if @current
             @current[:buffer] << EdhEpidocParser::GAP_MARKER
-            @current[:gaps] << gap_annotation(node)
+            @current[:gaps] << annotation
           end
           @drop_depth = node.depth unless node.empty_element?
         end
