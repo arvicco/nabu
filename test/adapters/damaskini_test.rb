@@ -300,7 +300,7 @@ class DamaskiniTest < Minitest::Test
     entry = registry["damaskini"]
     refute_nil entry, "damaskini must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Damaskini, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first real sync (checklist §5)"
+    assert entry.enabled, "live (owner sign-off 2026-07-16: synced 46 docs, eyeballed, flipped)"
     assert entry.translations, "text_en coverage is 100% — -en siblings ride the same parse"
     assert_equal Nabu::Adapters::Damaskini.manifest, entry.manifest
   end
