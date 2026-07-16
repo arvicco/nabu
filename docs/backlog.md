@@ -7149,3 +7149,72 @@ count dossiers (198) + records-by-kind, `--documents` enumerates
 catalog, never the registry; guarded on table_exists (read surfaces
 never migrate). Tests +7.
 
+
+# ── Phase 23 ──────────────────────────────────────────────────────────
+
+## P23-3 · loop-health trio  [tier: agent] [status: done 2026-07-16] [deps: —]
+Three small owner-approved fixes, each bitten live (packet spec verbatim
+from the P19-queue carried items + the 2026-07-14 status defects).
+
+(a) INVARIANT REFINEMENT — synced-vs-populated. The liv case
+(2026-07-14): a DISABLED source synced anyway to zero entries —
+succeeded run, empty shelf, silent because enabled-vs-populated watched
+enabled sources only. Health::Invariants#synced_unpopulated now gates on
+the LATEST run having succeeded (a failed latest run stays
+last-run-honesty's single loud line) and NEVER on `enabled`; the
+populated test keeps its per-grain routing (live documents / dictionary
+entries / language_records — the P22-1 grain knowledge). VERDICT: no
+exemption mechanism ships — reality checked first (2026-07-15 census of
+the live catalog): every one of the 31 sources is populated in its own
+grain (local-language holds 330 language_records), so an
+honestly-empty-by-design source does not exist to exempt; the mechanism
+gets built if one ever does.
+
+(b) STATUS FLIP-RECONCILE — registry is AUTHORITATIVE for enablement.
+Registry `enabled:` flips reached db sources.enabled only at that
+source's next sync (2026-07-14: mw/iecor/liv/edl read off in status
+after the owner flipped them on; orchestrator hand-reconciled).
+VERDICT: option (1), READ-side registry truth — no write path (`nabu
+status` opens the catalog read-only-ish; a write-back at status time
+was rejected as a read surface mutating state). StatusReport renders
+entry.enabled directly (every status line IS a registry entry — no
+orphan fallback needed there); the list card already rendered registry
+truth via registry_fragment (pinned with a regression test) and the
+P22-1 NOT IN REGISTRY loud-orphan case is pinned too; MCP nabu_status
+gets the same rule (Tools takes registry:, wired like alignments) —
+registry value for registered slugs, db value kept for unregistered
+catalog orphans, the one surface that enumerates them. Regression
+tests: flip in registry with no sync → status/list/MCP show registry
+truth, both directions.
+
+(c) EDH LB-LESS FALLBACK — landed, with the triage's mechanism claim
+CORRECTED BY THE BYTES. The P18-gate verdict said the 26 real
+quarantines have "no <lb> line markup"; canonical inspection of all 26
+shows every one HAS <lb> milestones (mostly n="0") — each line extracts
+gap markers only, i.e. the WHOLE edition is lost lines (CSV atext
+'[------]'/'[---]'/'//', zero readable text anywhere). VERDICT: the
+owner-approved remedy stands and generalizes — when line grain mints
+ZERO passages, EdhEpidocParser falls back to ONE whole-inscription
+passage carrying the edition's full extraction (its own lacuna
+notation, '[…] […]') under the stable flat suffix :text
+(collision-free by construction — minted only when no line suffix
+exists; no textpart path: whole-inscription grain); edition <head>
+joins the dropped elements. hd059778 (malformed upstream XML) raises
+before extraction — the honest permanent quarantine. Per-source policy
+(the del-⟦…⟧ precedent): DDbDP's empty-<ab/> stubs keep quarantining.
+BASELINE VERDICT: the P18-7 machinery handles the 26 leaving BY DESIGN
+— delta announces the -26 exactly once at the landing run, record!
+advances baseline AND anchor down to 1 (an improvement resets the
+low-water mark), creep never trips; regression-pinned, no migration/
+surgery. Fixtures: HD029093 + HD081183 byte-identical from
+canonical/edh + their text-CSV rows (whole physical lines; no pers
+rows); rebuild e2e replays 5 records (19 facet rows, 5 axis rows).
+
+Tests +13 net (invariants 4 reshaped, baseline story 1, status flip 1,
+MCP registry 1, list-card 2, parser fallback 6, adapter/rebuild
+expectations updated to 5 fixture records). Docs: ops.md §anomalies +
+§11 table, architecture sources-mirror note + invariants wording,
+README/library.md invariant name, source_registry authority comment,
+edh-survey status block, 02-sources row 51 (status LIVE + fixture
+list). Owner queue: `bin/nabu sync edh --parse-only` lands the 26
+(+26 docs, errored 27→1, one loud -26 delta line, then quiet).
