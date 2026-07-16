@@ -343,6 +343,33 @@ module Query
       assert_nil result.right, "an English layer of a DIFFERENT monument is not a sibling"
     end
 
+    # -- Damaskini witnesses (P23-1): <doc-id> ↔ <doc-id>-en ---------------------
+
+    DAM_URN = "urn:nabu:damaskini:veles--trojanskata"
+
+    def test_damaskini_witness_finds_its_en_sibling_as_verse_pairs
+      load_edition(DAM_URN, "chu",
+                   [%w[5601 slovo], ["5602", "kako oubi siona"]], title: "Trojanska")
+      load_edition("#{DAM_URN}-en", "eng",
+                   [%w[5601 Chapter], ["5602", "How he slew Sion"]], title: "Trojanska — English")
+
+      result = run_parallel(DAM_URN)
+      assert_equal "#{DAM_URN}-en", result.right.urn
+      assert_equal %i[pair pair], kinds(result), "sentence-for-sentence siblings pair 1:1"
+
+      back = run_parallel("#{DAM_URN}-en", lang: "chu")
+      assert_equal DAM_URN, back.right.urn, "the -en resolves back to its witness"
+    end
+
+    def test_damaskini_sibling_lookup_never_crosses_witnesses
+      load_edition(DAM_URN, "chu", [%w[5601 slovo]])
+      load_edition("urn:nabu:damaskini:berlinski--slovo-petki-en", "eng", [%w[1 sun]])
+
+      result = run_parallel(DAM_URN)
+      assert_nil result.right, "an -en document of a DIFFERENT witness is not a sibling — " \
+                               "hyphen-rich doc ids must not confuse the variant split"
+    end
+
     # -- visibility (show-family semantics) --------------------------------------
 
     def test_withdrawn_passages_are_included_and_flagged

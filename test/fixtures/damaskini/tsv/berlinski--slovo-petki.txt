@@ -1,0 +1,39 @@
+Berlinski damaskin															
+Pleven?, 1791															
+pop Georgi															
+l. 179r-185v (Arabic pagination), *rp*-*rpź* (Cyrillic)															
+															
+Slóvo styę prpdbnïę mtre nášīę Pét'kĭ															
+															
+text	cyrillic	diplomatic	lemma	PoS_tag	PoS_ext	sent_id	UD_id	UD_ncy	UD_type	UD_ext	folio	translation	eol	chunk	ref
+															
+(S)lnce+	(С)лнце+	slnce	slъnce	Nnsnn		1	1	4	obj		[179r/*rp*]	as (the) world has the sun		1. staroe Žitie	
+tò	то̀	to	tъ	Pd-nsn		1	2	1	det	p_nom					
+kól'koto	ко́л͛кото	kolkoto	kolkoto	Pr		1	3	4	advmod						
+ima	има	ima	imam	Vmip3si		1	4	0	root						
+svě´tъ,	свѣ́тъ,	světъ	svět	Nmsnn		1	5	4	nsubj						
+															
+tól'kozy	то́л͛козы	tolkozi	tolkozi	Pr		2	1	2	advmod			such is the rememberance of Reverend Petka to you			
+e+	е+	e	sъm	Vaip3si		2	2	0	root						
+ti	ти	ti	ti	Pp2-sn		2	3	2	obl						
+na	на	na	na	Sa		2	4	6	case						
+prpdbnaę	прпдбнаѧ	prpdbnaę	prepodoben	Afsny		2	5	6	amod						
+pétka	пе́тка	petka	Petka	Nfsny		2	6	7	nmod	poss			1		
+pámeta+	пáмета+	pameta	pamet	Nmsgn	Nmson	2	7	2	nsubj						
+tъ˸	тъ˸	tъ	tъ	Pd-msn		2	8	7	det	p_nom					
+															
+ako	ако	ako	ako	C		3	1	2	cc			if we (would) tell of her life shortly			
+iskážim	искáжим	iskažim	izkaža	Vmip1pe		3	2	0	root						
+po+	по+	po	po	Qc		3	3	4	advmod						
+tén'ko,	те́н͛ко,	tenko	tenko	R		3	4	2	advmod						
+néĭno+	не́йно+	neino	nein	Amson		3	5	7	amod	poss					
+tъ	тъ	tъ	tъ	Pd-msn		3	6	5	det	p_adj					
+živótъ,	живо́тъ,	životъ	život	Nmsnn		3	7	2	obj						
+xódinïe	хо́динїе	xodinie	xodene	Nnsnn		3	8	2	obj			(about) her travelling	1		
+to	то	to	tъ	Pd-nsn		3	9	8	det	p_nom					
+ĭ,	й,	i	tja	Pp3fsd		3	10	9	nmod	poss					
+i+	и+	i	i	C		3	11	14	cc			and her good works			
+dobrí+	добри́+	dobri	dobъr	Afsnn		3	12	15	amod						
+te+	те+	te	tъ	Pd-fpn		3	13	12	det	p_adj					
+ì	ѝ	i	tja	Pp3fsd		3	14	15	nmod	poss					
+rábotĭ,	рáботй,	raboti	rabota	Nfpnn		3	15	2	obj						
