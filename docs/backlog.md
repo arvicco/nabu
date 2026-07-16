@@ -7463,3 +7463,49 @@ FINDINGS (2026-07-16):
   a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
   line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
   the piet 574-b note body, then flip enabled + rebuild.
+
+# ── Phase 24 ──────────────────────────────────────────────────────────
+
+## P24-2 · define/etym coordination — etym must not miss what define finds  [tier: fable] [status: done 2026-07-16] [deps: —]
+
+Owner incident (2026-07-16, verbatim: "disagreement between define and
+etym. should be more coordination between command execution paths with
+similar function"): `define сигать` finds the Vasmer article
+(urn:nabu:dict:starling-vasmer:12561 — prose fields, no reflex rows)
+while `etym сигать` returned a flat miss whose message enumerated a
+HARDCODED, pre-starling/LIV/EDL shelf roll call.
+
+FALLBACK-DESIGN VERDICT (judged as specced): fallback fires ONLY on a
+crosswalk miss — etym's primary contract stays the walk, hits never mix
+with dictionary entries. On a miss the CLI runs the SAME Query::Define
+lookup the define command runs (one execution path — coordination, not
+duplication) and renders any entries via the P22-2-extracted
+print_define_entry (zero renderer divergence) under the honest header
+"no reconstruction path in the crosswalk for X — the dictionary shelf
+holds:". MCP nabu_etym mirrors it exactly: `dictionary_entries`
+(define_payload shape, license-withholding applied) + an explanatory
+note; entries stays honestly [].
+
+ENUMERATION now DB-DERIVED (the P11 DEFINE_LANGS / P18 lesson —
+hardcoded shelf lists rot): new public Query::Etym#crosswalk_shelves =
+distinct dictionary languages holding reflex rows (withdrawn entries
+excluded, sorted; [] pre-migration-007). The genuine-total-miss message
+(CLI + MCP) lists exactly those codes ("the crosswalk covers bat-pro,
+gem-pro, ine-pro" on the starling fixture — vasmer's rus honestly
+absent, zero reflex rows) with the `nabu language CODE` pointer and the
+'*form' quoting hint kept; a fixture shelf added to the catalog appears
+in the message with zero code change (test-pinned). When the fallback
+fired, the full miss text is suppressed (coordinated message).
+
+Boundaries held: crosswalk semantics, reflex minting, and define
+behavior untouched; cli.rb diff localized to the etym command +
+etym renderer region (print_etym_results lost its dead miss branch —
+misses route through print_etym_fallback).
+
+Tests +8 (query 2: db-derived census + new-shelf-no-code-change pin,
+pre-007 grace; CLI 3: the verbatim incident on the starling fixtures
+incl. the сига́ть, trailing-comma fold pin, hit-never-mixes, db-driven
+miss; MCP 3: fallback payload+note, db-driven miss note, restricted
+withholding through the fallback; +1 help-pin assertion). Docs: cli
+etym long_desc (shelf wording de-hardcoded + fallback paragraph),
+ETYM_DESCRIPTION, docs/mcp.md nabu_etym paragraph.

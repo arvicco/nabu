@@ -1000,6 +1000,65 @@ module MCP
       assert_match(/'\*form'/, note, "the miss note must show the quoted-star syntax")
     end
 
+    # -- P24-2: define/etym coordination ----------------------------------------
+
+    # The starling shelves: piet/germet/baltet crosswalk WITH reflex rows,
+    # vasmer prose-only (rus, zero reflex rows) — the incident fixture.
+    def seed_starling_shelf
+      source = Nabu::Store::Source.create(
+        slug: "starling", name: "StarLing IE", adapter_class: "Nabu::Adapters::Starling",
+        license: Nabu::Adapters::Starling::MANIFEST.license, license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: source)
+                                   .load_from(Nabu::Adapters::Starling.new,
+                                              workdir: Nabu::TestSupport.fixtures("starling"))
+    end
+
+    # The owner incident (2026-07-16): a crosswalk miss where the
+    # dictionary shelf holds the etymology (Vasmer сига́ть,) — nabu_etym
+    # mirrors the CLI fallback: define_payload entries under
+    # dictionary_entries + an explanatory note, entries honestly empty.
+    def test_etym_crosswalk_miss_falls_back_to_define_payload_entries_with_a_note
+      seed_starling_shelf
+      result = payload(call("nabu_etym", { "lemma" => "сигать" }))
+      assert_empty result.fetch("entries"), "no crosswalk path — no etym-shaped hits"
+      entries = result.fetch("dictionary_entries")
+      assert_equal(["urn:nabu:dict:starling-vasmer:12561"], entries.map { |e| e.fetch("urn") })
+      assert_equal "сига́ть,", entries.first.fetch("headword"), "the define payload shape, verbatim"
+      assert_match(/Near etymology:/, entries.first.fetch("body"))
+      assert_match(/no reconstruction path in the crosswalk/, result.fetch("note"))
+    end
+
+    # The genuine total miss enumerates the crosswalk shelves DB-DRIVEN
+    # (the P11 DEFINE_LANGS lesson): exactly the languages with reflex
+    # rows, never the stale hardcoded proto roll call.
+    def test_etym_total_miss_note_enumerates_the_live_crosswalk_shelves
+      seed_starling_shelf
+      result = payload(call("nabu_etym", { "lemma" => "зззз" }))
+      assert_empty result.fetch("entries")
+      refute result.key?("dictionary_entries"), "nothing anywhere — no fallback block"
+      note = result.fetch("note")
+      assert_match(/bat-pro, gem-pro, ine-pro\b/, note, "derived from the live catalog")
+      refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, note, "the hardcoded enumeration is gone")
+      assert_match(/'\*form'/, note, "the quoting hint stays")
+    end
+
+    def test_etym_fallback_withholds_restricted_dictionary_entries
+      source = Nabu::Store::Source.create(
+        slug: "starling", name: "StarLing IE", adapter_class: "Nabu::Adapters::Starling",
+        license: "grant", license_class: "research_private"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: source)
+                                   .load_from(Nabu::Adapters::Starling.new,
+                                              workdir: Nabu::TestSupport.fixtures("starling"))
+      result = payload(call("nabu_etym", { "lemma" => "сигать" }))
+      refute result.key?("dictionary_entries"),
+             "a restricted shelf must not leak through the fallback"
+      revealed = payload(call("nabu_etym", { "lemma" => "сигать", "include_restricted" => true }))
+      assert_equal(["urn:nabu:dict:starling-vasmer:12561"],
+                   revealed.fetch("dictionary_entries").map { |e| e.fetch("urn") })
+    end
+
     def test_etym_falls_back_to_a_bare_proto_headword_when_reflexes_miss
       seed_recon_shelf
       rebuild!

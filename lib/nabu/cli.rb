@@ -1290,11 +1290,12 @@ module Nabu
     desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
     long_desc <<~HELP, wrap: false
       The comparativist's walk: from an ATTESTED lemma (богъ, guþ, deus) to
-      every reconstruction whose Wiktionary descendants name it —
-      Proto-Slavic, Proto-Indo-European, Proto-Germanic, and (P17-3)
-      Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic,
-      Proto-Indo-Iranian (kaikki.org
-      extracts, CC-BY-SA + GFDL) — then UP the ancestor chain, one indent
+      every reconstruction whose descendants name it — the Wiktionary proto
+      shelves (Proto-Slavic, Proto-Indo-European, Proto-Germanic, and
+      (P17-3) Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic,
+      Proto-Indo-Iranian; kaikki.org extracts, CC-BY-SA + GFDL) and every
+      other shelf carrying reflex edges (StarLing bases, MW comparanda —
+      the miss message lists what is live) — then UP the ancestor chain, one indent
       per shelf hop (each shelf enters a walk once, so the chain is bounded
       and cycle-safe): прьстъ reaches *pьrstъ ← *pírštan ← *per- end to
       end. A loan-flagged edge labels its arrow "←(loan)", and a
@@ -1316,6 +1317,13 @@ module Nabu
       bare-form fallback makes it mostly unnecessary. --lang scopes the
       attested match; --limit caps the entries. The MCP sibling is nabu_etym
       (bounded); this CLI prints everything.
+
+      A lemma with NO crosswalk path at all falls back once more (P24-2) —
+      to the same lookup `nabu define` runs: a prose etymological article
+      (Vasmer's Russian dictionary carries no reflex edges) still answers,
+      rendered in the define format under an honest "no reconstruction
+      path in the crosswalk" header. A genuine total miss enumerates the
+      crosswalk's live shelves, derived from the catalog.
 
       Examples:
         nabu etym богъ --lang chu     # Zographensis god → *bogъ → *bʰeh₂g-
@@ -1345,9 +1353,21 @@ module Nabu
       fulltext = open_fulltext(config)
       ledger = open_ledger(config)
       @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
-      results = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
-                                 .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
-      print_etym_results(lemma, results)
+      query = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
+      results = query.run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+      if results.empty?
+        # P24-2 coordination (owner incident 2026-07-16: define found the
+        # Vasmer сигать article, etym missed flat): on a crosswalk miss,
+        # fall back to the SAME Query::Define lookup the define command
+        # runs — one execution path, rendered in the define house format.
+        # Fallback fires ONLY on a miss: etym's primary contract stays the
+        # walk, hits are never mixed.
+        entries = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
+                                     .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
+        print_etym_fallback(lemma, entries, shelves: query.crosswalk_shelves)
+      else
+        print_etym_results(results)
+      end
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -3286,15 +3306,7 @@ module Nabu
       # shelf-visited walk: богъ → *bogъ ← *bogù ← *bʰag-). A loan edge
       # labels its arrow: "←(loan)". --long expands the cognate lists; the
       # chain itself is already bounded (each shelf enters once per walk).
-      def print_etym_results(lemma, results)
-        if results.empty?
-          return say("no reconstruction names #{lemma} as a descendant, and no reconstruction " \
-                     "headword matches it — the crosswalk covers the Wiktionary proto shelves " \
-                     "(Proto-Slavic/PIE/Proto-Germanic/Proto-Balto-Slavic/Proto-West Germanic/" \
-                     "Proto-Italic/Proto-Indo-Iranian). Try the lemma's dictionary form, or a " \
-                     "quoted '*form' for a direct lookup (quote the star — zsh expands a bare *)")
-        end
-
+      def print_etym_results(results)
         results.each_with_index do |result, index|
           say "" if index.positive?
           print_etym_entry(result, 0)
@@ -3303,6 +3315,30 @@ module Nabu
         # render keeps raw codes, this names the way out.
         say ""
         say "codes: nabu language CODE — name, context, and what this library holds"
+      end
+
+      # P24-2: the crosswalk-miss path. When the dictionary shelf holds the
+      # lemma (Vasmer's prose etymologies carry no reflex edges), render
+      # those entries in the define house format under an honest header —
+      # print_define_entry, zero renderer divergence. A genuine total miss
+      # enumerates the crosswalk shelves DB-DRIVEN (Query::Etym
+      # #crosswalk_shelves — the P11 DEFINE_LANGS hardcoded-list lesson),
+      # keeping the '*form' quoting hint.
+      def print_etym_fallback(lemma, entries, shelves:)
+        if entries.empty?
+          covered = shelves.empty? ? "no shelves yet (run nabu sync wiktionary-recon)" : shelves.join(", ")
+          return say("no reconstruction names #{lemma} as a descendant, no reconstruction " \
+                     "headword matches it, and no dictionary entry defines it — the crosswalk " \
+                     "covers #{covered} (nabu language CODE explains any). Try the lemma's " \
+                     "dictionary form, or a quoted '*form' for a direct lookup (quote the " \
+                     "star — zsh expands a bare *)")
+        end
+
+        say "no reconstruction path in the crosswalk for #{lemma} — the dictionary shelf holds:"
+        entries.each do |result|
+          say ""
+          print_define_entry(result)
+        end
       end
 
       def print_etym_entry(result, depth)

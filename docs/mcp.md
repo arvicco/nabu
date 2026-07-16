@@ -183,7 +183,13 @@ match. An unstarred lemma that names no descendant **falls back** to a
 reconstruction-headword lookup, so the proto form itself resolves —
 superscripted (`bʰewgʰ`) or pure ASCII (`bhewgh`, the §9 fold ʰ→h/ʷ→w),
 root hyphen optional; a leading asterisk (quote it in a shell — zsh globs a
-bare `*`) forces the direct lookup. Cognate lists are bounded (attested
+bare `*`) forces the direct lookup. A lemma with **no crosswalk path at
+all** falls back once more (P24-2) — to the same lookup `nabu_define` runs:
+a prose etymological article (Vasmer's Russian dictionary carries no reflex
+edges) still answers, returned as `dictionary_entries` (the `nabu_define`
+payload shape) plus an explanatory note; a genuine total miss enumerates
+the crosswalk's live shelves, derived from the catalog, never a hardcoded
+roll call. Cognate lists are bounded (attested
 first, 20 shown) with honest totals — this conversational surface stays
 capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
 grouped by language.

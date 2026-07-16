@@ -248,7 +248,12 @@ module Nabu
         "walk once; a loan edge carries edge_borrowed: true. Romanization " \
         "bridges scripts: guþ reaches *gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the match " \
         "to one attested language; a leading asterisk (*bogъ) looks a reconstruction up " \
-        "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
+        "directly. A lemma with NO crosswalk path falls back to the dictionary shelf " \
+        "(nabu_define's own lookup): the reply then carries `dictionary_entries` (the " \
+        "nabu_define payload shape — a prose etymological article like Vasmer's still " \
+        "answers) plus an explanatory note; a genuine total miss enumerates the " \
+        "crosswalk's live shelves. Cognate lists are bounded (attested first, " \
+        "#{ETYM_MAX_COGNATES} shown) " \
         "with honest totals; `nabu etym` (CLI) is unbounded.".freeze
 
       COGNATES_DESCRIPTION =
@@ -787,10 +792,19 @@ module Nabu
 
         limit = clamp(args["limit"], default: ETYM_DEFAULT_LIMIT, max: ETYM_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
-        results = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
-                             .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        query = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
+        results = query.run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_etym(results, lemma: lemma, limit: limit)
+        return render_etym(results, limit: limit) unless results.empty?
+
+        # P24-2 coordination (the CLI's exact fallback): a crosswalk miss
+        # consults the SAME Query::Define lookup nabu_define runs — a
+        # prose etymological article (Vasmer) answers under an honest
+        # note; hits above never mix with the fallback.
+        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        entries = entries.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_etym_fallback(entries, lemma: lemma, limit: limit, shelves: query.crosswalk_shelves)
       end
 
       # Cognates-in-parallel (P15-3): the hub × crosswalk join, bounded and
@@ -1022,16 +1036,35 @@ module Nabu
 
       # -- etym internals -----------------------------------------------------------
 
-      def render_etym(results, lemma:, limit:)
-        if results.empty?
+      # P24-2: the crosswalk-miss path — the CLI fallback's MCP mirror.
+      # Dictionary entries answering the lemma ride define_payload (zero
+      # payload divergence with nabu_define) under `dictionary_entries`
+      # plus an explanatory note; a genuine total miss enumerates the
+      # crosswalk shelves DB-DRIVEN (Query::Etym#crosswalk_shelves — the
+      # P11 DEFINE_LANGS hardcoded-list lesson).
+      def render_etym_fallback(entries, lemma:, limit:, shelves:)
+        if entries.empty?
+          covered = shelves.empty? ? "no shelves yet" : shelves.join(", ")
           return json(entries: [],
-                      note: "no reconstruction names #{lemma.inspect} as a descendant, and no " \
-                            "reconstruction headword matches it — the crosswalk covers " \
-                            "Proto-Slavic/PIE/Proto-Germanic (Wiktionary). Try the lemma's " \
-                            "dictionary form, or a quoted '*form' for a direct lookup (quote the " \
-                            "star — a bare * is a shell glob)")
+                      note: "no reconstruction names #{lemma.inspect} as a descendant, no " \
+                            "reconstruction headword matches it, and no dictionary entry " \
+                            "defines it — the crosswalk covers #{covered}. Try the lemma's " \
+                            "dictionary form, or a quoted '*form' for a direct lookup (quote " \
+                            "the star — a bare * is a shell glob)")
         end
 
+        shown = entries.first(limit)
+        json(
+          entries: [],
+          dictionary_entries: shown.map { |result| define_payload(result) },
+          note: "no reconstruction path in the crosswalk for #{lemma.inspect} — the dictionary " \
+                "shelf holds #{shown.size == 1 ? 'this entry' : "these #{shown.size} entries"} " \
+                "(the nabu_define payload shape)" \
+                "#{" — more exist; raise limit (max #{ETYM_MAX_LIMIT})" if entries.size > limit}"
+        )
+      end
+
+      def render_etym(results, limit:)
         shown = results.first(limit)
         json(
           entries: shown.map { |result| etym_payload(result) },
