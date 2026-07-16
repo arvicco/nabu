@@ -206,6 +206,13 @@ module Nabu
       and syncs. A scaffold, not an editor: an existing dossier is a no-op
       pointing at the file.
 
+      --shelf source SLUG scaffolds a SOURCE dossier the same way (P24-0):
+      prompts (flags --description/--themes/--key-works) with the
+      description prefilled from the registered source's name, writes
+      canonical/local-source/SLUG.md through Nabu::SourceShelf, and syncs.
+      SLUG must be registered in config/sources.yml — dossiers describe
+      held shelves.
+
       Examples:
         nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics
         nabu ingest https://archive.org/download/handbuchderaltbu00lesk/handbuchderaltbu00lesk.pdf
@@ -213,6 +220,7 @@ module Nabu
         nabu ingest notes.txt --yes --title "Reading notes" --languages eng \\
           --related urn:nabu:ccmh:mar:mt --license-class open
         nabu ingest --shelf language zle-ort
+        nabu ingest --shelf source edh --themes epigraphy,prosopography
     HELP
     option :collection, type: :string, banner: "NAME",
                         desc: "Target collection under canonical/local-library/ " \
@@ -232,19 +240,29 @@ module Nabu
     option :provenance, type: :string, desc: "Where this copy came from"
     option :license_class, type: :string, banner: "CLASS",
                            desc: "License class (default research_private — never served or redistributed)"
-    option :shelf, type: :string, banner: "language",
-                   desc: "Ingest into another local shelf: `--shelf language CODE` scaffolds a dossier"
+    option :shelf, type: :string, banner: "language|source",
+                   desc: "Ingest into another local shelf: `--shelf language CODE` / `--shelf source SLUG` " \
+                         "scaffolds a dossier"
     option :name, type: :string, desc: "With --shelf language: the language's name"
     option :family, type: :string, desc: "With --shelf language: the family lane"
     option :context, type: :string, desc: "With --shelf language: one context line (free prose)"
+    option :description, type: :string,
+                         desc: "With --shelf source: the 1–3 sentence content description (the load-bearing lane)"
+    option :themes, type: :string, banner: "epigraphy,onomastics",
+                    desc: "With --shelf source: themes, comma-separated"
+    option :key_works, type: :string, banner: "URN,URN",
+                       desc: "With --shelf source: key works as catalog urns, comma-separated"
     def ingest(*paths)
       config = Nabu::Config.load
-      return ingest_language(config, paths) if options[:shelf]
+      return ingest_shelf(config, paths) if options[:shelf]
 
-      raise Thor::Error, "ingest: give at least one file or url (or --shelf language CODE)" if paths.empty?
+      if paths.empty?
+        raise Thor::Error, "ingest: give at least one file or url (or --shelf language CODE / " \
+                           "--shelf source SLUG)"
+      end
 
-      %w[name family context].each do |flag|
-        raise Thor::Error, "ingest: --#{flag} only applies with --shelf language" if options[flag]
+      %w[name family context description themes key_works].each do |flag|
+        raise Thor::Error, "ingest: --#{flag.tr('_', '-')} only applies with --shelf language/source" if options[flag]
       end
       raise Thor::Error, "ingest: --title names one file's title — ingest that file alone" \
         if options[:title] && paths.size > 1
@@ -306,12 +324,16 @@ module Nabu
       nonzero (zero fields are suppressed, the house rule).
 
       `nabu list SOURCE` is one shelf's card: identity (name, adapter,
-      registry sync policy + enabled), license class(es) with the source's
+      registry sync policy + enabled), the shelf's dossier description
+      when the local-source shelf carries one (canonical/local-source,
+      architecture §16 — seed the shelf once with
+      --export-source-dossiers), license class(es) with the source's
       credit line when it carries one, counts, a per-language passage
       breakdown, its dictionaries (dictionary shelves), date-axis coverage
       (dated docs + year range) when present, genre-facet and collection
       summaries when present. A card, not a dump — the enumerations below
-      go deeper.
+      go deeper. `nabu list --long` adds each source's description line to
+      the census.
 
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
@@ -360,18 +382,28 @@ module Nabu
     option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the axis"
     option :century, type: :numeric, banner: "N",
                      desc: "With --documents: one century's --from/--to shorthand (6, -2)"
+    option :long, type: :boolean, default: false,
+                  desc: "Census only: add each source's dossier description line (the local-source shelf)"
+    option :"export-source-dossiers", type: :boolean, default: false,
+                                      desc: "Owner one-shot: scaffold a canonical/local-source dossier for " \
+                                            "EVERY registered source, descriptions seeded from existing " \
+                                            "prose (idempotent; existing dossiers untouched)"
+    option :"dry-run", type: :boolean, default: false,
+                       desc: "With --export-source-dossiers: report without writing"
     def list(slug = nil)
       slug = slug.to_s.strip
       validate_list_flags!(slug)
       validate_license!(options[:license])
       from, to = date_window
       config = Nabu::Config.load
+      return export_source_dossiers(config) if options[:"export-source-dossiers"]
+
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       require_axis!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
-      if slug.empty? then print_census(query.census)
+      if slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
@@ -1962,6 +1994,16 @@ module Nabu
         modes = %i[documents entries collections].select { |flag| options[flag] }
         raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
         raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
+        if options[:"export-source-dossiers"] && (!slug.empty? || modes.any?)
+          raise Thor::Error, "list: --export-source-dossiers scaffolds ALL registered sources — " \
+                             "no SOURCE, no enumeration"
+        end
+        if options[:"dry-run"] && !options[:"export-source-dossiers"]
+          raise Thor::Error, "list: --dry-run composes with --export-source-dossiers"
+        end
+        if options[:long] && (!slug.empty? || modes.any?)
+          raise Thor::Error, "list: --long expands the bare census — drop the SOURCE/enumeration flags"
+        end
         if options[:prefix] && !options[:entries] && !options[:documents]
           raise Thor::Error, "list: --prefix filters headwords/dossier codes — use it with --entries " \
                              "or --documents"
@@ -1982,11 +2024,18 @@ module Nabu
         Nabu::SourceRegistry.load(config.sources_path)[slug]
       end
 
-      def print_census(rows)
+      # +descriptions+ (P24-0, --long): { slug => dossier description } — one
+      # line under each source that has one (zero fields suppressed, the
+      # house rule; the dossier shelf is the census's own metadata).
+      def print_census(rows, descriptions = nil)
         return say("nothing held yet — run nabu sync") if rows.empty?
 
         width = rows.map { |row| row.slug.length }.max
-        rows.each { |row| say "#{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+        rows.each do |row|
+          say "#{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}"
+          description = descriptions && descriptions[row.slug]
+          say "#{' ' * (width + 2)}#{truncate_line(description)}" if description
+        end
         say census_summary(rows)
       end
 
@@ -2018,6 +2067,7 @@ module Nabu
 
       def print_list_card(card, entry)
         say "#{card.slug} — #{card.name}"
+        wrap_text(card.description).each { |line| say "  #{line}" } if card.description
         say "  adapter #{card.adapter_class}#{registry_fragment(entry)}"
         credit = card.license_text.to_s.strip
         say "  license #{card.license_classes.join(',')}#{" · #{truncate_line(credit)}" unless credit.empty?}"
@@ -3395,6 +3445,19 @@ module Nabu
         line.length > max ? "#{line[0, max]}…" : line
       end
 
+      # House-width prose wrap for the card's description lane (P24-0) —
+      # whole words, no truncation: the card serves the dossier's 1–3
+      # sentences in full.
+      def wrap_text(text, width: 76)
+        text.split(/\s+/).each_with_object([]) do |word, lines|
+          if lines.empty? || lines.last.length + word.length + 1 > width
+            lines << word.dup
+          else
+            lines.last << " " << word
+          end
+        end
+      end
+
       # Render dictionary entries whole (the CLI is the unbounded surface):
       # header with license label, gloss, the structured body, then the
       # resolved citations as show-able urns. Unresolved citations already
@@ -3945,20 +4008,34 @@ module Nabu
 
       # -- ingest (P19-5): the canonical-memory intake front door ---------------
 
+      # `--shelf X`: the canonical-memory scaffold front doors, one per
+      # local dossier shelf (language P19-5, source P24-0).
+      def ingest_shelf(config, args)
+        case options[:shelf]
+        when "language" then ingest_language(config, args)
+        when "source" then ingest_source(config, args)
+        else
+          raise Thor::Error, "ingest: unknown shelf #{options[:shelf].inspect} — `--shelf language CODE` " \
+                             "and `--shelf source SLUG` are the front doors"
+        end
+      end
+
       # `--shelf language CODE`: scaffold a dossier through LanguageShelf
       # (the shelf's sanctioned gateway), then sync the dossier shelf. THIN
       # by design — a skeleton, not an editor.
       def ingest_language(config, codes)
-        unless options[:shelf] == "language"
-          raise Thor::Error, "ingest: unknown shelf #{options[:shelf].inspect} — `--shelf language CODE` " \
-                             "is the only other front door today"
-        end
         raise Thor::Error, "ingest --shelf language: give exactly one CODE (e.g. zle-ort)" unless codes.size == 1
 
         %w[collection title creator year languages tags related provenance license_class].each do |flag|
           next unless options[flag]
 
           raise Thor::Error, "ingest: --#{flag.tr('_', '-')} is a library-shelf field — " \
+                             "with --shelf language use --name/--family/--context"
+        end
+        %w[description themes key_works].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "ingest: --#{flag.tr('_', '-')} is a source-shelf field — " \
                              "with --shelf language use --name/--family/--context"
         end
         shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config.canonical_dir))
@@ -3974,6 +4051,64 @@ module Nabu
         say "try: bin/nabu language #{codes.first}"
       rescue Nabu::Error => e
         raise Thor::Error, e.message
+      end
+
+      # `--shelf source SLUG` (P24-0): scaffold a source dossier through
+      # SourceShelf (the third sanctioned gateway), then sync. The
+      # description prompt prefills from the registered source's name.
+      def ingest_source(config, slugs)
+        raise Thor::Error, "ingest --shelf source: give exactly one SLUG (e.g. edh)" unless slugs.size == 1
+
+        %w[collection title creator year languages tags related provenance license_class name family
+           context].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "ingest: --#{flag.tr('_', '-')} is another shelf's field — " \
+                             "with --shelf source use --description/--themes/--key-works"
+        end
+        slug = slugs.first
+        entry = registry_entry(config, slug)
+        if entry.nil?
+          raise Thor::Error, "ingest --shelf source: #{slug.inspect} is not a registered source " \
+                             "(config/sources.yml) — dossiers describe held shelves"
+        end
+        shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config.canonical_dir))
+        engine = Nabu::Ingest.new(resolver: ingest_resolver, assist_command: options[:assist],
+                                  overrides: ingest_overrides(Nabu::Ingest::SOURCE_FIELDS),
+                                  notify: ingest_notify)
+        outcome = engine.scaffold_source(slug, source_shelf: shelf, source_name: entry.manifest.name)
+        print_ingest_outcome(outcome)
+        return unless outcome.status == :added
+
+        run_shelf_sync(config, Nabu::SourceShelf::SLUG)
+        say ""
+        say "try: bin/nabu list #{slug}"
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+
+      # THE SEED (P24-0, owner-fired): a canonical/local-source dossier for
+      # every registered source, descriptions from the best existing prose
+      # (docs/library.md sections/bullets, sources.yml standalone comments)
+      # — honest stubs where none exists, never invented. Idempotent at the
+      # file grain: existing dossiers are untouched, so it is safe to
+      # re-run after registering new sources. After it: bin/nabu sync
+      # local-source derives the catalog records the card/census read.
+      def export_source_dossiers(config)
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        dir = Nabu::SourceShelf.dir(config.canonical_dir)
+        report = Nabu::SourceDossierExport.new(
+          registry: registry, dir: dir,
+          library_md: File.expand_path("../../docs/library.md", __dir__),
+          sources_yml: config.sources_path
+        ).run!(dry_run: options[:"dry-run"])
+        verb = options[:"dry-run"] ? "would scaffold" : "scaffolded"
+        say "dossiers: #{verb} #{report.written}, #{report.unchanged} existing untouched → #{dir}"
+        if report.stubs.positive?
+          say "  #{report.stubs} honest stub(s) — no existing prose found, write the description: " \
+              "#{report.stub_slugs.join(', ')}"
+        end
+        say "next: bin/nabu sync local-source (derives the catalog records)" unless options[:"dry-run"]
       end
 
       def build_ingest_engine(config)

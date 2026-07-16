@@ -97,6 +97,7 @@ module Nabu
       return verify_dictionary_source(entry, adapter, workdir) if adapter.class.content_kind == :dictionary
       return verify_language_source(entry, adapter, workdir) if adapter.class.content_kind == :language
       return verify_notes_source(entry, adapter, workdir) if adapter.class.content_kind == :notes
+      return verify_source_shelf(entry, adapter, workdir) if adapter.class.content_kind == :source
 
       recomputed, unparseable = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
@@ -194,6 +195,45 @@ module Nabu
                                      .map { |row| [row[:kind], row[:body], row[:source]] }.sort
       urn = "#{entry.slug}:#{code}"
       fresh = reparsed[code]
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
+      return nil if fresh == stored
+
+      DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                        detail: "derived records differ from the reparsed dossier")
+    end
+
+    # The source-dossier shelf (P24-0) verifies exactly as the language
+    # shelf does, at the slug grain: re-parse the dossiers, diff the derived
+    # rows against source_records — the same fate vocabulary.
+    def verify_source_shelf(entry, adapter, workdir)
+      return SourceOutcome.new(slug: entry.slug, verified: 0, issues: []) \
+        unless @db.table_exists?(:source_records)
+
+      reparsed = reparse_source_dossiers(adapter, workdir)
+      slugs = @db[:source_records].distinct.select_map(:slug).sort
+      issues = slugs.filter_map { |slug| classify_source_slug(entry, slug, reparsed) }
+      SourceOutcome.new(slug: entry.slug, verified: slugs.size, issues: issues)
+    end
+
+    # { slug => [[kind, body, provenance], …] } from a fresh discover→parse
+    # (attic included); a malformed dossier contributes its error instead.
+    def reparse_source_dossiers(adapter, workdir)
+      reparsed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        dossier = adapter.parse(ref)
+        reparsed[dossier.slug] = dossier.records.map { |r| [r.kind, r.body, r.provenance] }.sort
+      rescue Nabu::ParseError => e
+        reparsed[ref.metadata.fetch("slug", ref.id)] = e.message
+      end
+      reparsed
+    end
+
+    def classify_source_slug(entry, slug, reparsed)
+      stored = @db[:source_records].where(slug: slug)
+                                   .map { |row| [row[:kind], row[:body], row[:provenance]] }.sort
+      urn = "#{entry.slug}:#{slug}"
+      fresh = reparsed[slug]
       return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
       return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
       return nil if fresh == stored

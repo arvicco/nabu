@@ -266,7 +266,11 @@ stance applies to counterparts.
 Coverage of the corpus, and the tool to call to interpret an empty search
 *before* concluding a text is unattested: per-source document/passage counts and
 last-sync recency, passage counts by language and by license class, index
-state, and what is excluded by default. Takes no arguments.
+state, and what is excluded by default. Each source also carries its
+`description` when the owner's local-source dossier has one (P24-0,
+architecture §16) — a 1–3 sentence account of what the shelf holds, served
+by default because the library's own metadata is useful context for
+deciding where to search. Takes no arguments.
 
 ### The restricted-exclusion stance
 

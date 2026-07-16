@@ -1595,21 +1595,37 @@ module Nabu
 
       def source_rows(catalog)
         entries = dictionary_entry_counts(catalog)
+        descriptions = source_descriptions(catalog)
         probes = probe_cache
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
-          { slug: source[:slug], enabled: enabled_field(source),
-            license_class: source[:license_class],
-            documents: live_docs.count,
-            passages: catalog[:passages].where(withdrawn: false)
-                                        .where(document_id: live_docs.select(:id)).count,
-            # P11-10: a dictionary source's content is entries, not docs/passages;
-            # surfacing the entry count here stops the reference shelf (lexica,
-            # 168k entries) from reading as an empty docs=0 passages=0 source.
-            entries: entries[source[:id]] || 0,
-            last_sync_at: source[:last_sync_at]&.to_s,
-            upstream: upstream_field(probes[source[:slug]]) }
+          row = { slug: source[:slug], enabled: enabled_field(source),
+                  license_class: source[:license_class],
+                  documents: live_docs.count,
+                  passages: catalog[:passages].where(withdrawn: false)
+                                              .where(document_id: live_docs.select(:id)).count,
+                  # P11-10: a dictionary source's content is entries, not docs/passages;
+                  # surfacing the entry count here stops the reference shelf (lexica,
+                  # 168k entries) from reading as an empty docs=0 passages=0 source.
+                  entries: entries[source[:id]] || 0,
+                  last_sync_at: source[:last_sync_at]&.to_s,
+                  upstream: upstream_field(probes[source[:slug]]) }
+          # P24-0: the source's dossier description rides by default — the
+          # owner's own library metadata is useful context for a model
+          # deciding where to search. Absent dossier/table = absent key.
+          description = descriptions[source[:slug]]
+          row[:description] = description if description
+          row
         end
+      end
+
+      # { slug => description } from the derived source_records
+      # (canonical/local-source dossiers, P24-0); {} on a catalog predating
+      # migration 015 or before the owner seeded the shelf.
+      def source_descriptions(catalog)
+        return {} unless catalog.table_exists?(:source_records)
+
+        catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
       end
 
       # Registry truth for registered slugs (class note at @registry), the db
