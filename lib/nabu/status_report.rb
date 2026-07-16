@@ -119,6 +119,7 @@ module Nabu
     def counts_fragment(entry, source)
       return "entries=#{dictionary_entry_count(source)}" if dictionary?(entry)
       return "records=#{language_record_count}" if language?(entry)
+      return "notes=#{urn_note_count}" if notes?(entry)
       return "docs=0 pass=0" if source.nil?
 
       live = Store::Document.where(source_id: source.id, withdrawn: false)
@@ -140,6 +141,12 @@ module Nabu
       content_kind(entry) == :language
     end
 
+    # The owner-notes shelf's content is per-urn notes (P24-1) — the same
+    # misleading-zero rule.
+    def notes?(entry)
+      content_kind(entry) == :notes
+    end
+
     def content_kind(entry)
       entry.adapter_class.content_kind
     rescue Nabu::Error
@@ -155,6 +162,15 @@ module Nabu
       return 0 unless db&.table_exists?(:language_records)
 
       Store::LanguageRecord.count
+    end
+
+    # Derived rows in urn_notes (the local-notes shelf is their only
+    # writer). A catalog predating migration 015 reads 0, honestly.
+    def urn_note_count
+      db = Store::UrnNote.db
+      return 0 unless db&.table_exists?(:urn_notes)
+
+      Store::UrnNote.count
     end
 
     # Live dictionary entries owned by this source (across all its

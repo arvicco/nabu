@@ -1,0 +1,4 @@
+# Malformed on purpose: a mapping, not a list — the loader test renames
+# this to broken.yml to exercise the quarantine path.
+urn: urn:nabu:ccmh:mar:mt
+note: not a list

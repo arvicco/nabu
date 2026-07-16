@@ -174,7 +174,9 @@ module Nabu
         "`parallel_lang` (default eng) edition line by line. Passage lists are bounded by " \
         "max_passages (default #{SHOW_DEFAULT_MAX_PASSAGES}, cap #{SHOW_MAX_PASSAGES_CAP}) " \
         "with an honest truncation note. Every passage carries urn, language, and " \
-        "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged.".freeze
+        "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged. " \
+        "The owner's own notes on the urn ride along in `notes` (documents also count " \
+        "passage-note children) — useful curatorial context.".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -231,7 +233,8 @@ module Nabu
         "in the local catalog the citation carries a resolved passage urn (open it with " \
         "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
-        "separate entries).".freeze
+        "separate entries). The owner's own notes on an entry ride along in `notes` — " \
+        "useful curatorial context.".freeze
 
       ETYM_DESCRIPTION =
         "Walk the reconstruction crosswalk (the comparativist's join): give an ATTESTED " \
@@ -642,14 +645,18 @@ module Nabu
         end
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
 
-        case result
-        when Query::Show::PassageResult then json(passage_payload(result))
-        when Query::Show::DocumentResult then json(document_payload(result, bound))
-        when Query::Show::RangeResult then json(range_payload(result, bound))
-        # A dictionary-entry urn (the ones nabu_define prints) resolves to the
-        # define payload shape (P22-2), license-withheld by the same rule.
-        when Query::Define::Result then json(define_payload(result))
-        end
+        payload = case result
+                  when Query::Show::PassageResult then passage_payload(result)
+                  when Query::Show::DocumentResult then document_payload(result, bound)
+                  when Query::Show::RangeResult then range_payload(result, bound)
+                  # A dictionary-entry urn (the ones nabu_define prints) resolves to the
+                  # define payload shape (P22-2), license-withheld by the same rule.
+                  when Query::Define::Result then define_payload(result)
+                  end
+        # Owner notes ride BY DEFAULT (P24-1: "your own library metadata is
+        # useful context") — and only here, after the withhold gate, so a
+        # note can never leak a withheld text's content frame.
+        json(attach_notes(catalog, result, payload))
       rescue Query::Range::Error => e
         tool_error(e.message)
       end
@@ -779,7 +786,7 @@ module Nabu
         results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
                                .run(lemma, lang: lang, limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_define(results, lemma: lemma, limit: limit)
+        render_define(results, lemma: lemma, limit: limit, catalog: catalog)
       end
 
       # The reconstruction walk (P14-1): attested lemma → proto entries with
@@ -990,7 +997,9 @@ module Nabu
           "(nabu_search with lemma: finds attestations)"
       end
 
-      def render_define(results, lemma:, limit:)
+      # +catalog+ (P24-1): when given, each served entry carries its owner
+      # notes — the note lane on the dictionary surface, served by default.
+      def render_define(results, lemma:, limit:, catalog: nil)
         if results.empty?
           return json(entries: [],
                       note: define_miss_note(lemma))
@@ -998,7 +1007,10 @@ module Nabu
 
         shown = results.first(limit)
         json(
-          entries: shown.map { |result| define_payload(result) },
+          entries: shown.map do |result|
+            payload = define_payload(result)
+            catalog ? attach_notes(catalog, result, payload) : payload
+          end,
           note: if results.size > limit
                   "more than #{limit} entries, showing #{limit} — raise limit (max #{DEFINE_MAX_LIMIT})"
                 else
@@ -1338,6 +1350,29 @@ module Nabu
           revision: result.revision, withdrawn: result.withdrawn,
           retired_upstream: result.retired_upstream
         }
+      end
+
+      # Owner notes (P24-1), served BY DEFAULT on show/define payloads:
+      # merged AFTER the withhold gate, so a note on a withheld document is
+      # withheld with it — a note must never leak a withheld text's content
+      # frame. Documents additionally carry their passage-note child count.
+      # A catalog predating migration 015 has no lane, silently.
+      def attach_notes(catalog, result, payload)
+        reader = Query::Notes.new(catalog: catalog)
+        return payload unless reader.available?
+
+        notes = reader.for_urn(result.urn)
+        payload = payload.merge(notes: notes.map { |note| note_payload(note) }) unless notes.empty?
+        if result.is_a?(Query::Show::DocumentResult)
+          children = reader.child_count(result.urn)
+          payload = payload.merge(passage_note_count: children) if children.positive?
+        end
+        payload
+      end
+
+      def note_payload(note)
+        base = { topic: note.topic, added: note.added, note: note.note }
+        note.tags.empty? ? base : base.merge(tags: note.tags)
       end
 
       # Every listed passage carries language + license_class: both are

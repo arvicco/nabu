@@ -459,6 +459,26 @@ local-library:
   # kind=reference edges into the links journal at every sync.
   sync_policy: local
 
+local-notes:
+  adapter: Nabu::Adapters::LocalNotes
+  enabled: true    # P24-1: enabled by DEFAULT -- the P19-1 local-shelf argument
+                   # verbatim: the checklist's "enabled: false until first real
+                   # sync" guards network cost and unverified licenses, and a
+                   # LOCAL shelf has neither (no upstream; the notes are the
+                   # owner's own annotations, class open; rebuild replays it
+                   # regardless of this flag, and `sync --all` skips non-live
+                   # policies anyway). The shelf populates through
+                   # `bin/nabu note URN "TEXT"` (the sanctioned front door:
+                   # resolution-checked append through Nabu::NoteShelf + sync),
+                   # or by hand-editing canonical/local-notes/<topic>.yml and
+                   # firing `bin/nabu sync local-notes`.
+  # The third canonical-memory shelf (architecture §16): owner notes on ANY
+  # urn the corpus knows (documents, passages, ranges, dictionary entries) --
+  # scholia of one's own, one YAML list per topic file, indexed into the
+  # derived urn_notes and rendered on show/define/links (MCP serves notes by
+  # default, withheld wherever the target document is withheld).
+  sync_policy: local
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
