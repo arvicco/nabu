@@ -79,6 +79,18 @@ every real candidate is PUB with an explicit CC label.
 
 ### 2. The Slovenian historical dictionary shelf — Pleteršnik + Svetokriški + besedje16 (+ Franček crosswalk)
 
+**STATUS (P23-2, 2026-07-15): INGESTED** — the three dictionaries shipped
+as ONE source `sl-lexica` (parser family `zrc-xml`, dictionary slugs
+`pletersnik`/`jsv`/`besedje16`, `enabled: false` awaiting the owner-fired
+first sync). Licenses re-verified verbatim at fetch time (all three:
+"Creative Commons - Attribution 4.0 International (CC BY 4.0)", PUB);
+counts confirmed 103,185 / **8,461** (the delta below, reported honestly)
+/ 27,759; the toneme-folding question settled WITHOUT a new conventions
+§9 rule (fold from the unaccented `<ge>`; generic mark strip handles the
+tonemes). The **Franček crosswalk rider was NOT ingested** — outside the
+packet's three-artifact scope, still open below. Details:
+docs/backlog.md P23-2, docs/02-sources.md #57–59.
+
 Three ZRC SAZU dictionaries, all real deposits with files, all verbatim
 "Creative Commons - Attribution 4.0 International (CC BY 4.0)", **PUB** →
 `attribution`, MCP-safe. Together they give the sl axis what LSJ:grc /

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+   <!-- korenski element -->
+   <xs:element name="besedje16">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="Ges"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- slovarski sestavek -->
+   <xs:element name="Ges">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="besed"/>
+            <xs:element minOccurs="0" ref="itd"/>
+            <xs:choice maxOccurs="unbounded">
+               <xs:element ref="bv"/>
+               <xs:element ref="bvo"/>
+               <xs:element ref="kaz"/>
+               <xs:element ref="obl"/>
+               <xs:element ref="prav"/>
+               <xs:element ref="razl"/>
+               <xs:element ref="sku"/>
+               <xs:element ref="skupk"/>
+               <xs:element ref="slov"/>
+               <xs:element ref="zst"/>
+            </xs:choice>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- iztočnica -->
+   <xs:element name="besed">
+      <xs:complexType mixed="true">
+         <!-- id -->
+         <xs:attribute name="geslo-id" use="required" type="xs:integer"/>
+         <!-- številka homonima -->
+         <xs:attribute name="hom" type="xs:integer"/>
+         <xs:attribute name="zvezdica" type="xs:NCName"/>
+      </xs:complexType>
+   </xs:element>
+   <!-- in druge oblike -->
+   <xs:element name="itd" type="xs:string"/>
+   <!-- besedna vrsta -->
+   <xs:element name="bv" type="xs:string"/>
+   <!-- besednovrstna podkategorija -->
+   <xs:element name="bvo" type="xs:string"/>
+   <!-- kazalka -->
+   <xs:element name="kaz" type="xs:string"/>
+   <!-- oblika -->
+   <xs:element name="obl" type="xs:string"/>
+   <!-- pravopisna različica -->
+   <xs:element name="prav" type="xs:string"/>
+   <!-- pojasnilo -->
+   <xs:element name="razl" type="xs:string"/>
+   <!-- število virov -->
+   <xs:element name="sku" type="xs:string"/>
+   <!-- viri -->
+   <xs:element name="skupk" type="xs:string"/>
+   <!-- slovnično pojasnilo -->
+   <xs:element name="slov" type="xs:string"/>
+   <!-- število -->
+   <xs:element name="zst" type="xs:string"/>
+</xs:schema>
