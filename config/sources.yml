@@ -242,7 +242,7 @@ imp:
 
 damaskini:
   adapter: Nabu::Adapters::Damaskini
-  enabled: false   # P23-1: awaiting the owner-fired first real sync (two zip
+  enabled: true    # flipped 2026-07-16 (owner sign-off: synced, 46 docs incl. -en siblings, eyeballed)
                    # bitstreams, ~1.7 MB total → 23 docs / 6,036 sentences +
                    # 23 -en siblings; CLAUDE.md checklist §6 — eyeball
                    # nabu show urn:nabu:damaskini:berlinski--slovo-petki:1
@@ -381,7 +381,7 @@ edl:
 
 starling:
   adapter: Nabu::Adapters::Starling
-  enabled: false   # P22-0/P23-0: awaiting the owner-fired sync + flip. One
+  enabled: true    # flipped 2026-07-16 (owner sign-off: synced, piet 3,291 landed incl. 574-b, eyeballed)
                    # 6.2 MB IE.exe zip → five shelves: 2,222 pokorny roots +
                    # 3,291 piet etymologies (P22-0; the live piet quarantine —
                    # upstream NUMBER 574 collision — is fixed in P23-0, so
@@ -407,7 +407,7 @@ starling:
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
-  enabled: false   # P23-2: awaiting the owner-fired first sync (three zip
+  enabled: true    # flipped 2026-07-16 (owner sign-off: synced, 139,405 entries across 3 dictionaries, eyeballed)
                    # GETs, ~7 MB total → 103,185 + 8,461 + 27,759 = 139,405
                    # entries across pletersnik/jsv/besedje16; CLAUDE.md
                    # checklist §6 — eyeball `nabu define abeceda` for the
