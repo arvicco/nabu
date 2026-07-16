@@ -1,0 +1,454 @@
+# newdoc id = berlinski--slovo-petki
+# sent_id = berlinski--slovo-petki.1
+# text = slnce to kolkoto ima světъ
+# text_en = as (the) world has the sun
+1	slnce	slъnce	NOUN	Nnsnn	_	4	obj	_	_
+2	to	tъ	PRON	Pd-nsn	_	1	det	_	_
+3	kolkoto	kolkoto	PRON	Pr	_	4	advmod	_	_
+4	ima	imam	VERB	Vmip3si	_	0	root	_	_
+5	světъ	svět	NOUN	Nmsnn	_	4	nsubj	_	_
+
+# sent_id = berlinski--slovo-petki.2
+# text = tolkozi e ti na prpdbnaę petka pameta tъ
+# text_en = such is the rememberance of Reverend Petka to you
+1	tolkozi	tolkozi	PRON	Pr	_	2	advmod	_	_
+2	e	sъm	VERB	Vaip3si	_	0	root	_	_
+3	ti	ti	PRON	Pp2-sn	_	2	obl	_	_
+4	na	na	ADP	Sa	_	6	case	_	_
+5	prpdbnaę	prepodoben	ADJ	Afsny	_	6	amod	_	_
+6	petka	Petka	NOUN	Nfsny	_	7	nmod	_	_
+7	pameta	pamet	NOUN	Nmsgn	_	2	nsubj	_	_
+8	tъ	tъ	PRON	Pd-msn	_	7	det	_	_
+
+# sent_id = berlinski--slovo-petki.3
+# text = ako iskažim po tenko neino tъ životъ xodinie to i i dobri te i raboti deto zarad xva ljubovъ podze
+# text_en = if we (would) tell of her life shortly [8:](about) her travelling [11:]and her good works [16:]which she decided (to do) for the love of Christ
+1	ako	ako	CCONJ	C	_	2	cc	_	_
+2	iskažim	izkaža	VERB	Vmip1pe	_	0	root	_	_
+3	po	po	PART	Qc	_	4	advmod	_	_
+4	tenko	tenko	ADV	R	_	2	advmod	_	_
+5	neino	nein	ADJ	Amson	_	7	amod	_	_
+6	tъ	tъ	PRON	Pd-msn	_	5	det	_	_
+7	životъ	život	NOUN	Nmsnn	_	2	obj	_	_
+8	xodinie	xodene	NOUN	Nnsnn	_	2	obj	_	_
+9	to	tъ	PRON	Pd-nsn	_	8	det	_	_
+10	i	tja	PRON	Pp3fsd	_	9	nmod	_	_
+11	i	i	CCONJ	C	_	14	cc	_	_
+12	dobri	dobъr	ADJ	Afsnn	_	15	amod	_	_
+13	te	tъ	PRON	Pd-fpn	_	12	det	_	_
+14	i	tja	PRON	Pp3fsd	_	15	nmod	_	_
+15	raboti	rabota	NOUN	Nfpnn	_	2	obj	_	_
+16	deto	deto	PRON	Pr	_	6	mark	_	_
+17	zarad	zaradi	ADP	Sg	_	19	case	_	_
+18	xva	Xristov	ADJ	Afsnn	_	19	amod	_	_
+19	ljubovъ	ljubov	NOUN	Nfsnn	_	20	obl	_	_
+20	podze	podvzema	VERB	Vmia3se	_	15	acl	_	_
+
+# sent_id = berlinski--slovo-petki.4
+# text = ami koi šte da može da iskaže neini te počesti raboti i i čjudesa ta
+# text_en = but who shall be able to describe her virtues, her works and miracles?
+1	ami	ami	CCONJ	C	_	7	cc	_	_
+2	koi	koi	PRON	Pq---n	_	7	nsubj	_	_
+3	šte	šta	VERB	Vaip3si	_	5	aux	_	_
+4	da	da	CCONJ	C	_	3	fixed	_	_
+5	može	moga	VERB	Vaip3si	_	7	aux	_	_
+6	da	da	CCONJ	C	_	5	fixed	_	_
+7	iskaže	iskaža	VERB	Vmip3se	_	0	root	_	_
+8	neini	nein	ADJ	Afpnn	_	10	amod	_	_
+9	te	tъ	PRON	Pd-fpn	_	8	det	_	_
+10	počesti	počest	NOUN	Nfpnn	_	7	obj	_	_
+11	raboti	rabota	NOUN	Nfpnn	_	10	conj	_	_
+12	i	tja	PRON	Pp3fsd	_	11	nmod	_	_
+13	i	i	CCONJ	C	_	14	cc	_	_
+14	čjudesa	čjudo	NOUN	Nnpnn	_	11	conj	_	_
+15	ta	tъ	PRON	Pd-nsn	_	14	det	_	_
+
+# sent_id = berlinski--slovo-petki.5
+# text = i koi šte da kaže neini te dobrini i zakrilinie i pomošti i celbi te
+# text_en = who shall tell of her good deeds, and protection, and helpings, and healings
+1	i	i	CCONJ	C	_	5	cc	_	_
+2	koi	koi	PRON	Pq---n	_	5	nsubj	_	_
+3	šte	šta	VERB	Vaip3si	_	5	aux	_	_
+4	da	da	CCONJ	C	_	3	fixed	_	_
+5	kaže	kaža	VERB	Vmip3se	_	0	root	_	_
+6	neini	nein	ADJ	Afpnn	_	8	amod	_	_
+7	te	tъ	PRON	Pd-fpn	_	6	det	_	_
+8	dobrini	dobrina	NOUN	Nfpnn	_	5	obj	_	_
+9	i	i	CCONJ	C	_	10	cc	_	_
+10	zakrilinie	zakrilenie	NOUN	Nnsnn	_	8	conj	_	_
+11	i	i	CCONJ	C	_	12	cc	_	_
+12	pomošti	pomošt	NOUN	Nfpnn	_	10	conj	_	_
+13	i	i	CCONJ	C	_	14	cc	_	_
+14	celbi	celba	NOUN	Nfpnn	_	12	conj	_	_
+15	te	tъ	PRON	Pd-fpn	_	14	det	_	_
+
+# sent_id = berlinski--slovo-petki.6
+# text = da izreče nei deto gi na epivatъ i na trakia i na tъrnov‚ i na misia i na dalmatię struvaše
+# text_en = (who shall be able) to tell her (deeds?) [4:]which (she) was doing in Epibates, and in Thrace, and in Tъrnovo, and in Moesia, and in Dalmatia
+1	da	da	CCONJ	C	_	2	aux	_	_
+2	izreče	izreka	VERB	Vmip3se	_	0	root	_	_
+3	nei	tja	PRON	Pp3fsd	_	2	obl	_	_
+4	deto	deto	PRON	Pr	_	20	mark	_	_
+5	gi	te	PRON	Pp3-pa	_	20	expl	_	_
+6	na	na	ADP	Sl	_	7	case	_	_
+7	epivatъ	Epivat	NOUN	Nmsnn	_	20	obl	_	_
+8	i	i	CCONJ	C	_	10	cc	_	_
+9	na	na	ADP	Sl	_	10	case	_	_
+10	trakia	Trakija	NOUN	Nfsnn	_	7	conj	_	_
+11	i	i	CCONJ	C	_	13	cc	_	_
+12	na	na	ADP	Sl	_	13	case	_	_
+13	tъrnov‚	Tъrnov	NOUN	Nmsnn	_	10	conj	_	_
+14	i	i	CCONJ	C	_	16	cc	_	_
+15	na	na	ADP	Sl	_	16	case	_	_
+16	misia	Misija	NOUN	Nfsnn	_	13	conj	_	_
+17	i	i	CCONJ	C	_	19	cc	_	_
+18	na	na	ADP	Sl	_	19	case	_	_
+19	dalmatię	Dalmatija	NOUN	Nfsnn	_	16	conj	_	_
+20	struvaše	struvam	VERB	Vmii3si	_	2	advcl	_	_
+
+# sent_id = berlinski--slovo-petki.7
+# text = ami ně toko tam ami i redom po sički světъ štešъ nameri neino to ime če go prekazvatъ
+# text_en = but not only there [5:]but also all over the world you shall find her name [16:]that it is repeated
+1	ami	ami	CCONJ	C	_	4	cc	_	_
+2	ně	ne	PART	Qz	_	3	amod	_	_
+3	toko	toko	ADV	R	_	4	amod	_	_
+4	tam	tam	ADV	R	_	12	nmod	_	_
+5	ami	ami	CCONJ	C	_	7	cc	_	_
+6	i	i	CCONJ	C	_	7	cc	_	_
+7	redom	red	NOUN	Nmsin	_	12	advmod	_	_
+8	po	po	ADP	Sl	_	10	case	_	_
+9	sički	sički	ADJ	Amsny	_	10	amod	_	_
+10	světъ	svět	NOUN	Nmsnn	_	12	obl	_	_
+11	štešъ	šta	VERB	Vaip2si	_	12	aux	_	_
+12	nameri	namerja	VERB	Vmn---e	_	0	root	_	_
+13	neino	nein	ADJ	Ansnn	_	15	amod	_	_
+14	to	tъ	PRON	Pd-nsn	_	13	det	_	_
+15	ime	ime	NOUN	Nnsnn	_	12	obj	_	_
+16	če	če	CCONJ	C	_	18	mark	_	_
+17	go	tova	PRON	Pp3msa	_	18	obj	_	_
+18	prekazvatъ	prikazvam	VERB	Vmip3pi	_	12	advcl	_	_
+
+# sent_id = berlinski--slovo-petki.8
+# text = mnogo šte da bъde i dъlgo prikazvanie na tazi staę prpdbnaę
+# text_en = (the) story of this St Reverend shall become long
+1	mnogo	mnogo	ADV	R	_	4	advmod	_	_
+2	šte	šta	VERB	Vaip3si	_	4	aux	_	_
+3	da	da	CCONJ	C	_	2	fixed	_	_
+4	bъde	bъda	VERB	Vmip3se	_	0	root	_	_
+5	i	i	CCONJ	C	_	6	cc	_	_
+6	dъlgo	dъlgo	ADJ	Ansnn	_	1	conj	_	_
+7	prikazvanie	prikazvanie	NOUN	Nnsnn	_	4	nsubj	_	_
+8	na	na	ADP	Sa	_	11	case	_	_
+9	tazi	tozi	PRON	Pd-fsn	_	11	det	_	_
+10	staę	světi	ADJ	Afsny	_	11	amod	_	_
+11	prpdbnaę	prepodoben	ADJ	Afsny	_	4	nmod	_	_
+
+# sent_id = berlinski--slovo-petki.9
+# text = alla našia tъ umъ i neina ta lěpota ne dostignuva da iskaža
+# text_en = but our mind isn't able to explain her beauty.
+1	alla	ala	CCONJ	C	_	12	cc	_	_
+2	našia	naš	ADJ	Amsoy	_	4	amod	_	_
+3	tъ	tъ	PRON	Pd-msn	_	2	det	_	_
+4	umъ	um	NOUN	Nmsnn	_	12	nsubj	_	_
+5	i	i	CCONJ	C	_	12	cc	_	_
+6	neina	nein	ADJ	Afsnn	_	8	amod	_	_
+7	ta	tъ	PRON	Pd-fsn	_	6	det	_	_
+8	lěpota	lěpota	NOUN	Nfsnn	_	12	obj	_	_
+9	ne	ne	PART	Qz	_	10	advmod	_	_
+10	dostignuva	dostigna	VERB	Vaip3se	_	12	aux	_	_
+11	da	da	CCONJ	C	_	10	fixed	_	_
+12	iskaža	iskaža	VERB	Vmip3se	_	0	root	_	_
+
+# sent_id = berlinski--slovo-petki.10
+# text = slušaite blgveni xrstiani
+# text_en = Hear, o blessed Christians
+1	slušaite	slušam	VERB	Vmm-2pi	_	0	root	_	_
+2	blgveni	blagoslovja	ADJ	Ampnn	_	3	amod	_	_
+3	xrstiani	xristianin	NOUN	Nmpny	_	1	vocative	_	_
+
+# sent_id = berlinski--slovo-petki.11
+# text = tazi staę i prpbdnaę petka baštnino to i selo běši epivatъ
+# text_en = (about) this St and Reverend Petka. [6:]her ancestral village was Epibates,
+1	tazi	tozi	PRON	Pd-fsn	_	5	det	_	_
+2	staę	světi	ADJ	Afsny	_	5	amod	_	_
+3	i	i	CCONJ	C	_	4	cc	_	_
+4	prpbdnaę	prepodoben	ADJ	Afsny	_	2	conj	_	_
+5	petka	Petka	NOUN	Nfsny	_	11	obl	_	_
+6	baštnino	baštinen	ADJ	Ansnn	_	9	amod	_	_
+7	to	tъ	PRON	Pd-nsn	_	6	det	_	_
+8	i	tja	PRON	Pp3fsd	_	11	nmod	_	_
+9	selo	selo	NOUN	Nnsnn	_	11	nsubj	_	_
+10	běši	sъm	VERB	Vmii3si	_	9	cop	_	_
+11	epivatъ	Epivat	NOUN	Nmsnn	_	0	root	_	_
+
+# sent_id = berlinski--slovo-petki.12
+# text = i roditeli te i běxa blgčstivi
+# text_en = and her parents were pious
+1	i	i	CCONJ	C	_	6	cc	_	_
+2	roditeli	roditel	NOUN	Nmpny	_	6	nsubj	_	_
+3	te	tъ	PRON	Pd-mpn	_	2	det	_	_
+4	i	tja	PRON	Pp3fsd	_	2	nmod	_	_
+5	běxa	sъm	VERB	Vmii3pi	_	2	cop	_	_
+6	blgčstivi	blagočestiv	ADJ	Ampnn	_	0	root	_	_
+
+# newdoc id = nedelnik1806--skazanie-paraskevy
+# sent_id = nedelnik1806--skazanie-paraskevy.3487
+# text = skazanie o žitie prepodobnyę matere našeę Paraskevi Ternovskię
+# text_en = [Title] Story about the life of our Reverend Mother Parascheva of Tarnovo
+1	skazanie	skazanie	NOUN	Nnsnn	_	0	root	_	_
+2	o	o	ADP	Sl	_	3	case	_	_
+3	žitie	žitie	NOUN	Nnsnn	_	1	obl	_	_
+4	prepodobnyę	prepodoben	ADJ	Afsgy	_	5	amod	_	_
+5	matere	mati	NOUN	Nfsgy	_	3	nmod	_	_
+6	našeę	naš	ADJ	Afsgy	_	5	amod	_	_
+7	Paraskevi	Paraskeva	NOUN	Nfsgy	_	5	appos	_	_
+8	Ternovskię	Tъrnovski	ADJ	Afsgy	_	7	amod	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3488
+# text = slovo *ѯ*
+# text_en = [Title] Chapter 60
+1	slovo	slovo	NOUN	Nnsnn	_	0	root	_	_
+2	*ѯ*	60	NUM	Mc	_	1	nummod	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3489
+# text = blgoslovi oče
+# text_en = bless (us), Father!
+1	blgoslovi	blagoslovja	VERB	Vmm-2si	_	0	root	_	_
+2	oče	otec	NOUN	Nmsvy	_	1	vocative	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3490
+# text = pročesti
+# text_en = to read (aloud)
+1	pročesti	pročeta	VERB	Vmn---e	_	0	root	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3491
+# text = Vsękogi dolžni esmi slišateli moi da pomęnuvamę Gga i da poXvalęme stixъ ego
+# text_en = we are obliged, my hearers, to remember the Lord and praise His saints every time
+1	Vsękogi	vsěkoga	PRON	Pi	_	2	amod	_	_
+2	dolžni	dъlžen	ADJ	Ampnn	_	0	root	_	_
+3	esmi	sъm	VERB	Vmip1pi	_	2	cop	_	_
+4	slišateli	slušatel	NOUN	Nmpny	_	2	vocative	_	_
+5	moi	moi	ADJ	Ampny	_	4	amod	_	_
+6	da	da	CCONJ	C	_	7	mark	_	_
+7	pomęnuvamę	pomenuvam	VERB	Vmip1pi	_	2	acl	_	_
+8	Gga	Gospod	NOUN	Nmsgy	_	7	obj	_	_
+9	i	i	CCONJ	C	_	11	cc	_	_
+10	da	da	CCONJ	C	_	11	mark	_	_
+11	poXvalęme	poxvaljam	VERB	Vmip1pi	_	7	conj	_	_
+12	stixъ	svęt	ADJ	Ampgn	_	11	obj	_	_
+13	ego	jь	PRON	Pp3msg	_	12	nmod	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3492
+# text = tova namъ zave dobro
+# text_en = this leads us (?) to the good
+1	tova	tova	PRON	Pd-nsn	_	3	nsubj	_	_
+2	namъ	nie	PRON	Pp1-pd	_	3	obl	_	_
+3	zave	zaveždam	VERB	Vmip3se	_	0	root	_	_
+4	dobro	dobъr	ADJ	Ansnn	_	3	obj	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3493
+# text = i polezno est
+# text_en = and it is helpful
+1	i	i	CCONJ	C	_	2	cc	_	_
+2	polezno	polezen	ADJ	Ansnn	_	0	root	_	_
+3	est	sъm	VERB	Vmip3si	_	2	cop	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3494
+# text = Poneže pomęnuvanie Bžie Čudesa i poXvalenie stixъ ego mnogo utěšenie podava namъ
+# text_en = because the remembrance of divine miracles and the praise of His saints gives us much comfort
+1	Poneže	poneže	CCONJ	C	_	11	cc	_	_
+2	pomęnuvanie	poměnuvanie	NOUN	Nnsnn	_	11	nsubj	_	_
+3	Bžie	božii	ADJ	Anpnn	_	4	amod	_	_
+4	Čudesa	čudo	NOUN	Nnpnn	_	2	nmod	_	_
+5	i	i	CCONJ	C	_	6	cc	_	_
+6	poXvalenie	poxvalenie	NOUN	Nnsnn	_	2	conj	_	_
+7	stixъ	svęt	ADJ	Ampgn	_	6	nmod	_	_
+8	ego	jь	PRON	Pp3msa	_	7	nmod	_	_
+9	mnogo	mnogo	ADV	R	_	10	amod	_	_
+10	utěšenie	utěšenie	NOUN	Nnsnn	_	11	obj	_	_
+11	podava	podavam	VERB	Vmip3si	_	0	root	_	_
+12	namъ	nie	PRON	Pp1-pd	_	11	obl	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3495
+# text = kakvotъ Prorokъ Dvdъ duma
+# text_en = as the Prophet David says:
+1	kakvotъ	kakvoto	PRON	Pr	_	4	advmod	_	_
+2	Prorokъ	prorok	NOUN	Nmsny	_	4	nsubj	_	_
+3	Dvdъ	David	NOUN	Nmsny	_	2	appos	_	_
+4	duma	dumam	VERB	Vmip3si	_	0	root	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3496
+# text = Pomęnuxъ sudbi tvoi Gdi
+# text_en = ʺI remember, Lord, your ancient lawsʺ
+1	Pomęnuxъ	poměnuja	VERB	Vmia1se	_	0	root	_	_
+2	sudbi	sudba	NOUN	Nfpnn	_	1	obj	_	_
+3	tvoi	tvoi	ADJ	Afpny	_	2	amod	_	_
+4	Gdi	Gospod	NOUN	Nmsvy	_	1	vocative	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3497
+# text = i utěšix sę
+# text_en = ʺand I find comfort in them.ʺ
+1	i	i	CCONJ	C	_	2	cc	_	_
+2	utěšix	utěšja	VERB	Vmia1se	_	0	root	_	_
+3	sę	se	PRON	Px---a	_	2	expl	_	_
+
+# sent_id = nedelnik1806--skazanie-paraskevy.3498
+# text = Ala koga tokmo so usta pomęnuvanie Bžie Čudesa i poXvalenie stixъ ego ne e toliko poXvalno i Bgopriętno ako ne xodimъ i nii po těxnoe živenie kakvotъ tie stii člvci živeęli
+# text_en = but if (this) remembrance of divine miracles and the praise of His saints is only with mouth [13:]it is not as praiseworthy and pleasing the God [19:]if we, too, do not walk (the path of) their life, which these holy men had lived
+1	Ala	ala	CCONJ	C	_	16	cc	_	_
+2	koga	kogato	PRON	Pq	_	5	mark	_	_
+3	tokmo	tъkmo	ADV	R	_	5	amod	_	_
+4	so	s	ADP	Si	_	5	case	_	_
+5	usta	usta	NOUN	Nnsnn	_	6	acl	_	_
+6	pomęnuvanie	poměnuvanie	NOUN	Nnsnn	_	16	nsubj	_	_
+7	Bžie	božii	ADJ	Anpnn	_	8	amod	_	_
+8	Čudesa	čudo	NOUN	Nnpnn	_	6	nmod	_	_
+9	i	i	CCONJ	C	_	10	cc	_	_
+10	poXvalenie	poxvalenie	NOUN	Nnsnn	_	6	conj	_	_
+11	stixъ	svęt	ADJ	Ampgn	_	10	nmod	_	_
+12	ego	jь	PRON	Pp3msa	_	11	nmod	_	_
+13	ne	ne	PART	Qz	_	14	advmod	_	_
+14	e	sъm	VERB	Vmip3si	_	16	cop	_	_
+15	toliko	toliko	ADV	R	_	16	amod	_	_
+16	poXvalno	poxvalen	ADJ	Ansnn	_	0	root	_	_
+17	i	i	CCONJ	C	_	18	cc	_	_
+18	Bgopriętno	boguprijaten	ADJ	Ansnn	_	16	conj	_	_
+19	ako	ako	CCONJ	C	_	21	mark	_	_
+20	ne	ne	PART	Qz	_	21	advmod	_	_
+21	xodimъ	xodja	VERB	Vmip1pi	_	16	acl	_	_
+22	i	i	CCONJ	C	_	23	amod	_	_
+23	nii	nie	PRON	Pp1-pn	_	21	csubj	_	_
+24	po	po	ADP	Sl	_	26	case	_	_
+25	těxnoe	těxen	ADJ	Ansny	_	26	amod	_	_
+26	živenie	živenie	NOUN	Nnsnn	_	21	obl	_	_
+27	kakvotъ	kakvoto	PRON	Pr	_	31	mark	_	_
+28	tie	toja	PRON	Pd-mpn	_	31	csubj	_	_
+29	stii	svęt	ADJ	Ampnn	_	30	amod	_	_
+30	člvci	člověk	NOUN	Nmpny	_	31	csubj	_	_
+31	živeęli	živeja	VERB	Vmpi-pi	_	26	acl	_	_
+
+# newdoc id = veles--trojanskata
+# sent_id = veles--trojanskata.5601
+# text = slo větъgo aleѯa
+# text_en = [Title] Homily on Alexander the Elder
+1	slo	slovo	NOUN	Nnsnn	_	0	root	_	_
+2	větъgo	vetxi	ADJ	Amsgy	_	3	amod	_	_
+3	aleѯa	Aleksander	NOUN	Nmsgy	_	1	nmod	_	_
+
+# sent_id = veles--trojanskata.5602
+# text = kako oubi siona cra amoreiska i oga cra vъsanъskago i *vi* cri xanaskix
+# text_en = [Title] How he slew Sion, king of Amorites and Og, king of Bashan, and 12 (other) kings of Canaan
+1	kako	kako	ADV	R	_	2	advmod	_	_
+2	oubi	ubija	VERB	Vmia3se	_	0	root	_	_
+3	siona	Sion	NOUN	Nmsgy	_	2	obj	_	_
+4	cra	car	NOUN	Nmsgy	_	3	appos	_	_
+5	amoreiska	amoreiski	ADJ	Amsgn	_	4	amod	_	_
+6	i	i	CCONJ	C	_	7	cc	_	_
+7	oga	Og	NOUN	Nmsgy	_	4	conj	_	_
+8	cra	car	NOUN	Nmsgy	_	7	appos	_	_
+9	vъsanъskago	vasanski	ADJ	Amsgy	_	8	amod	_	_
+10	i	i	CCONJ	C	_	12	cc	_	_
+11	*vi*	12	NUM	Mc	_	12	nummod	_	_
+12	cri	car	NOUN	Nmpnn	_	7	conj	_	_
+13	xanaskix	xanaanski	ADJ	Ampgy	_	12	amod	_	_
+
+# sent_id = veles--trojanskata.5603
+# text = bis grad věkъ źělo vъ anaѳoliskoi zemli na msě skamanъdre
+# text_en = There was a very large city in the land of Anatolia, on the place called Skamander
+1	bis	byti	VERB	Vmia3se	_	0	root	_	_
+2	grad	grad	NOUN	Nmsnn	_	1	nsubj	_	_
+3	věkъ	velik	ADJ	Amsnn	_	2	amod	_	_
+4	źělo	źělo	ADV	R	_	3	amod	_	_
+5	vъ	v	ADP	Sl	_	7	case	_	_
+6	anaѳoliskoi	anaѳoliiski	ADJ	Afsdy	_	7	amod	_	_
+7	zemli	zemlja	NOUN	Nfsdn	_	1	obl	_	_
+8	na	na	ADP	Sl	_	9	case	_	_
+9	msě	město	NOUN	Nnsln	_	1	obl	_	_
+10	skamanъdre	Skamander	NOUN	Nnsmn	_	9	appos	_	_
+
+# sent_id = veles--trojanskata.5604
+# text = imaše *mź* vratъ
+# text_en = it had 46 gates
+1	imaše	imam	VERB	Vmii3si	_	0	root	_	_
+2	*mź*	46	NUM	Mc	_	3	nummod	_	_
+3	vratъ	vrata	NOUN	Nnpgn	_	1	obj	_	_
+
+# sent_id = veles--trojanskata.5605
+# text = isxoždaše izъ nego voiska *o* stěgovъ
+# text_en = it mustered an army of 70 flags/battalions
+1	isxoždaše	isxoždati	VERB	Vmii3si	_	0	root	_	_
+2	izъ	iz	ADP	Sg	_	3	case	_	_
+3	nego	jь	PRON	Pp3msg	_	1	obl	_	_
+4	voiska	voisko	NOUN	Nnpnn	_	1	nsubj	_	_
+5	*o*	70	NUM	Mc	_	6	nummod	_	_
+6	stěgovъ	stěg	NOUN	Nmpgn	_	4	nmod	_	_
+
+# sent_id = veles--trojanskata.5606
+# text = i toi grad nazivaetъ se trad
+# text_en = and the city's name was Troas
+1	i	i	CCONJ	C	_	4	cc	_	_
+2	toi	tъ	PRON	Pd-msn	_	3	det	_	_
+3	grad	grad	NOUN	Nmsnn	_	4	nsubj	_	_
+4	nazivaetъ	nazivam	VERB	Vmip3si	_	0	root	_	_
+5	se	se	PRON	Px---a	_	4	expl	_	_
+6	trad	Trad	NOUN	Nmsnn	_	4	obl	_	_
+
+# sent_id = veles--trojanskata.5607
+# text = běše vъ nei crъ vělikъ i strašenъ źělo
+# text_en = there was a very great and terrible king there
+1	běše	byti	VERB	Vmii3si	_	0	root	_	_
+2	vъ	v	ADP	Sl	_	3	case	_	_
+3	nei	jь	PRON	Pp3fsd	_	1	obl	_	_
+4	crъ	car	NOUN	Nmsny	_	1	nsubj	_	_
+5	vělikъ	velik	ADJ	Amsnn	_	4	amod	_	_
+6	i	i	CCONJ	C	_	7	cc	_	_
+7	strašenъ	strašen	ADJ	Amsnn	_	5	conj	_	_
+8	źělo	źělo	ADV	R	_	5	amod	_	_
+
+# sent_id = veles--trojanskata.5608
+# text = imě emu bě amorъ crъ
+# text_en = his name was king Amor
+1	imě	ime	NOUN	Nnsnn	_	3	obl	_	_
+2	emu	jь	PRON	Pp3msd	_	1	nmod	_	_
+3	bě	byti	VERB	Vmia3si	_	0	root	_	_
+4	amorъ	Amor	NOUN	Nmsny	_	3	nsubj	_	_
+5	crъ	car	NOUN	Nmsny	_	4	appos	_	_
+
+# sent_id = veles--trojanskata.5609
+# text = vъ edinu noštъ vide crъ sъnъ strašъnъ
+# text_en = in one night he saw a terrible dream
+1	vъ	v	ADP	Sl	_	3	case	_	_
+2	edinu	edin	ADJ	Afsan	_	3	amod	_	_
+3	noštъ	nošt	NOUN	Nfsnn	_	4	obl	_	_
+4	vide	vidja	VERB	Vmia3si	_	0	root	_	_
+5	crъ	car	NOUN	Nmsny	_	4	nsubj	_	_
+6	sъnъ	sъn	NOUN	Nmsnn	_	4	obj	_	_
+7	strašъnъ	strašen	ADJ	Amsnn	_	6	amod	_	_
+
+# sent_id = veles--trojanskata.5610
+# text = i ouboja se ot nego
+# text_en = and he was afraid much because of it
+1	i	i	CCONJ	C	_	2	cc	_	_
+2	ouboja	uboja	VERB	Vmia3se	_	0	root	_	_
+3	se	se	PRON	Px---a	_	2	expl	_	_
+4	ot	ot	ADP	Sg	_	5	case	_	_
+5	nego	jь	PRON	Pp3msg	_	2	obl	_	_
+
+# sent_id = veles--trojanskata.5611
+# text = vide gde rodi crca glavъnoju ogъnъnoju
+# text_en = he saw (a dream) where the queen gave birth to a burning furnace
+1	vide	vidja	VERB	Vmia3si	_	0	root	_	_
+2	gde	gde	PRON	Pq	_	3	mark	_	_
+3	rodi	rodja	VERB	Vmia3se	_	1	advcl	_	_
+4	crca	carica	NOUN	Nfsny	_	3	csubj	_	_
+5	glavъnoju	glavnja	NOUN	Nfsin	_	3	obj	_	_
+6	ogъnъnoju	ognen	ADJ	Afsin	_	5	amod	_	_
+
+# sent_id = veles--trojanskata.5612
+# text = i zapali grad tradъ
+# text_en = and it ignited the city of Troas
+1	i	i	CCONJ	C	_	2	cc	_	_
+2	zapali	zapalja	VERB	Vmia3se	_	0	root	_	_
+3	grad	grad	NOUN	Nmsnn	_	2	obj	_	_
+4	tradъ	Trad	NOUN	Nmsnn	_	3	appos	_	_
+

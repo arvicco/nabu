@@ -36,6 +36,18 @@ every real candidate is PUB with an explicit CC label.
 
 ### 1. Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1 ("Damaskini") — the find
 
+**Status: SHIPPED (P23-1, 2026-07-15) — adapter + registry landed,
+`enabled: false` awaiting the owner-fired first real sync.** The fixture
+pass confirmed the survey's read with three corrections: the CoNLL-U's
+surface text is the mixed Latin/Cyrillic *diplomatic* transliteration (the
+fully Cyrillic layer lives only in the TSV); the corpus assigns NO
+per-document language — the philological PDF's Norm classification (read
+at Phase B as planned) maps veles/vukovic/kievski → chu and the rest →
+bul, with Norm+Origin as facets; and the TSV token layers are genuinely
+phase-2 (per-file column layouts vary 15–20 cols, 5 files disagree with
+the CoNLL-U by 1–3 sentences — censused, journaled in backlog P23-1).
+02-sources row 57 is the full record.
+
 - **Handle:** <http://hdl.handle.net/11356/1441> (v1.0 = 11356/1368, GPL-3,
   superseded — ingest 1.1 only).
 - **License (verbatim):** "Creative Commons - Attribution-ShareAlike 4.0

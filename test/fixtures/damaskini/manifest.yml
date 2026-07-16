@@ -1,0 +1,46 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. CLARIN.SI serves the corpus as zip bitstreams
+# (Damaskini.CoNNL-U.zip — upstream filename typo, sic — and
+# Damaskini.TSV.zip); no raw per-file URLs exist. Every fixture here was
+# extracted 2026-07-15 from those zips and trimmed per the README, so
+# every entry is refetchable: false — `fixtures:check` SKIPS them and
+# `fixtures:refresh` refuses. Re-acquiring means re-downloading the zips
+# and re-applying the README trims.
+source: damaskini
+adapter_test:
+retrieved: 2026-07-15
+files:
+  - path: conllu/damaskini.conllu
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the Damaskini.CoNNL-U.zip bitstream (hdl 11356/1441) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1441/Damaskini.CoNNL-U.zip
+    copied: 2026-07-15
+    whole: false
+    trim: 3 of 23 newdoc blocks kept (berlinski, nedelnik1806, veles), first 12 sentence blocks each; 3.5 MB -> 17 KB, lines byte-identical
+  - path: tsv/berlinski--slovo-petki.txt
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the Damaskini.TSV.zip bitstream (hdl 11356/1441) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1441/Damaskini.TSV.zip
+    copied: 2026-07-15
+    whole: false
+    trim: header block + first 31 token rows; lines byte-identical
+  - path: tsv/nedelnik1806--skazanie-paraskevy.txt
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the Damaskini.TSV.zip bitstream (hdl 11356/1441) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1441/Damaskini.TSV.zip
+    copied: 2026-07-15
+    whole: false
+    trim: header block + first 31 token rows; lines byte-identical
+  - path: tsv/veles--trojanskata.txt
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the Damaskini.TSV.zip bitstream (hdl 11356/1441) — no raw per-file URL exists
+    upstream: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1441/Damaskini.TSV.zip
+    copied: 2026-07-15
+    whole: false
+    trim: header block + first 31 token rows; lines byte-identical

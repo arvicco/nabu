@@ -240,6 +240,29 @@ imp:
   # lives on the CLARIN.SI record page, hdl 11356/1031):
   # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1031
 
+damaskini:
+  adapter: Nabu::Adapters::Damaskini
+  enabled: false   # P23-1: awaiting the owner-fired first real sync (two zip
+                   # bitstreams, ~1.7 MB total → 23 docs / 6,036 sentences +
+                   # 23 -en siblings; CLAUDE.md checklist §6 — eyeball
+                   # nabu show urn:nabu:damaskini:berlinski--slovo-petki:1
+                   # --parallel, a veles Cyrillic passage and 5 random
+                   # passages, then flip).
+  # Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1
+  # (CLARIN.SI hdl 11356/1441, CC BY-SA 4.0 → attribution): 23 gold
+  # damaskini/Balkan Slavic witnesses, 15th–19th c., chu/bul per the
+  # corpus's own Norm classification. The deposit is a frozen v1.1
+  # (2021-07-02; v1.0 = 11356/1368 was GPL-3, superseded) — a re-fetch is
+  # an owner decision.
+  sync_policy: manual
+  # text_en coverage is 100% (censused at fixture time): -en sibling
+  # documents ride the same parse, `show --parallel` renders them like the
+  # SAA letters. Same CC BY-SA grant (same deposit) — no license override.
+  translations: true
+  # license_watch candidate (P16-5, owner decision — the CC BY-SA grant
+  # lives on the CLARIN.SI record page, hdl 11356/1441):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1441
+
 wiktionary-cu:
   adapter: Nabu::Adapters::WiktionaryCu
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define

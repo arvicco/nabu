@@ -1,0 +1,39 @@
+Veleško sborniče (NBKM 667)															
+XV c.															
+S2: l. 109r-112v, Conev II 1923:180-181															
+S1: Močuľskij 1899:377-380															
+															
+Razkaz za Trojanskata voina - Slovo větxago Aleѯandra															
+															
+text	cyrillic	diplomatic	lemma	PoS_tag	PoS_ext	sent_id	UD_id	UD_ncy	UD_type	UD_ext	folio	translation	eol	chunk	ref
+															
+Slo	Сло	slo	slovo	Nnsnn		1	1	0	root		S1:377	[Title] Homily on Alexander the Elder			Obdurodon title: Story about the old Alexander
+vět'go	вѣт͛го	větъgo	vetxi	Amsgy		1	2	3	amod						Adžar: NBKM 326
+aleѯa.	алеѯа.	aleѯa	Aleksander	Nmsgy		1	3	1	nmod	poss					Bucharest: BAR Ms slav. 740, Syrku 1884
+															
+kako	како	kako	kako	R		2	1	2	advmod			[Title] How he slew Sion, king of Amorites and Og, king of Bashan, and 12 (other) kings of Canaan			cf. Num 21:33, Ps 135:11
+oubi	оуби	oubi	ubija	Vmia3se		2	2	0	root						
+sïwna	сїѡна	siona	Sion	Nmsgy		2	3	2	obj						
+cra	цра	cra	car	Nmsgy		2	4	3	appos						
+amoreiska.	амореиска.	amoreiska	amoreiski	Amsgn		2	5	4	amod						
+i	и	i	i	C		2	6	7	cc						
+wga	ѡга	oga	Og	Nmsgy		2	7	4	conj						
+cra	цра	cra	car	Nmsgy		2	8	7	appos						
+vъsan'skago.	въсан͛скаго.	vъsanъskago	vasanski	Amsgy		2	9	8	amod						
+i	и	i	i	C		2	10	12	cc						
+*vı*	·вı·	*vi*	12	Mc		2	11	12	nummod						
+cri	цри	cri	car	Nmpnn		2	12	7	conj						
+xanaskix.	ханаских.	xanaskix	xanaanski	Ampgy		2	13	12	amod						
+															
+Bys	Быс	bis	byti	Vmia3se		3	1	0	root			There was a very large city in the land of Anatolia, on the place called Skamander			
+grad	град	grad	grad	Nmsnn		3	2	1	nsubj						
+věkь.	вѣкь.	věkъ	velik	Amsnn		3	3	2	amod						
+źělo.	ѕѣло.	źělo	źělo	R		3	4	3	amod						
+vь	вь	vъ	v	Sl		3	5	7	case						
+anaѳolískoi	анаѳоли́скои	anaѳoliskoi	anaѳoliiski	Afsdy		3	6	7	amod						
+zemli	земли	zemli	zemlja	Nfsdn		3	7	1	obl	loc					
+na	на	na	na	Sl		3	8	9	case						
+msě	мсѣ	msě	město	Nnsln		3	9	1	obl	loc					
+skaman'dre.	скаман͛дре.	skamanъdre	Skamander	Nnsmn		3	10	9	appos						river Skamandros/Xanthos (today Karamenderes)
+															
+imaše	имаше	imaše	imam	Vmii3si		4	1	0	root			it had 46 gates			
