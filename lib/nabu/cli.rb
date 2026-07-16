@@ -1652,7 +1652,11 @@ module Nabu
         end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
-        alignments: Nabu::AlignmentRegistry.load(config.alignments_path)
+        alignments: Nabu::AlignmentRegistry.load(config.alignments_path),
+        # The source registry (P23-3b): authoritative for enablement, so
+        # nabu_status renders a sources.yml flip immediately (the db row only
+        # mirrors it at the source's next sync).
+        registry: Nabu::SourceRegistry.load(config.sources_path)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -3922,7 +3926,7 @@ module Nabu
           say "  dated/placed #{result.axes.total} documents " \
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
-              "edh #{result.axes.edh})"
+              "edh #{result.axes.edh}, damaskini #{result.axes.damaskini})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

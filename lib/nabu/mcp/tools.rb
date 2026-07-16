@@ -554,10 +554,16 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The source registry (P23-3b): AUTHORITATIVE for enablement. The db
+        # sources row mirrors a sources.yml flip only at that source's next
+        # sync, so nabu_status reads enabled from the registry for registered
+        # slugs (the db value stays for unregistered catalog orphans). nil
+        # (unconfigured entrypoint, older callers) degrades to db values.
+        @registry = registry
         # The history ledger, read-only (P14-12): nabu_status surfaces the
         # CACHED upstream-drift verdicts from it. nil when unconfigured or
         # absent — every source then reports upstream "never_probed". MCP NEVER
@@ -1524,7 +1530,7 @@ module Nabu
         probes = probe_cache
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
-          { slug: source[:slug], enabled: [true, 1].include?(source[:enabled]),
+          { slug: source[:slug], enabled: enabled_field(source),
             license_class: source[:license_class],
             documents: live_docs.count,
             passages: catalog[:passages].where(withdrawn: false)
@@ -1536,6 +1542,15 @@ module Nabu
             last_sync_at: source[:last_sync_at]&.to_s,
             upstream: upstream_field(probes[source[:slug]]) }
         end
+      end
+
+      # Registry truth for registered slugs (class note at @registry), the db
+      # value for orphans / an unconfigured registry.
+      def enabled_field(source)
+        entry = @registry && @registry[source[:slug]]
+        return entry.enabled unless entry.nil?
+
+        [true, 1].include?(source[:enabled])
       end
 
       # { slug => source_probes row } from the read-only ledger (P14-12), or {}

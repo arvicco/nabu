@@ -121,6 +121,15 @@ module Nabu
       FREISING_DOCUMENT = /\A(?<work>urn:nabu:freising:bs\d+)(?:-[a-z-]+)?\z/
       private_constant :FREISING_DOCUMENT
 
+      # A Damaskini witness urn (P23-1): the witness IS the work
+      # (urn:nabu:damaskini:veles--trojanskata), its aligned English is the
+      # -en variant, suffix = the sentence number — verse pairs throughout.
+      # Doc ids are hyphen-rich ("berlinski--slovo-petki"), so unlike ORACC
+      # the variant split anchors on the literal -en tail (the only variant
+      # this source mints; no upstream id ends in "-en" — censused, frozen).
+      DAMASKINI_DOCUMENT = /\A(?<work>urn:nabu:damaskini:[^:]+?)(?:-en)?\z/
+      private_constant :DAMASKINI_DOCUMENT
+
       def initialize(catalog:)
         @catalog = catalog
       end
@@ -202,7 +211,8 @@ module Nabu
       def work_candidates(urn)
         if (match = urn.match(CTS_DOCUMENT))
           [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
-        elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT))
+        elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT) ||
+                       urn.match(DAMASKINI_DOCUMENT))
           [match[:work], @catalog[:documents].where(
             Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
           )]

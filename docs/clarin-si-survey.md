@@ -36,6 +36,18 @@ every real candidate is PUB with an explicit CC label.
 
 ### 1. Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1 ("Damaskini") — the find
 
+**Status: SHIPPED (P23-1, 2026-07-15) — adapter + registry landed,
+`enabled: false` awaiting the owner-fired first real sync.** The fixture
+pass confirmed the survey's read with three corrections: the CoNLL-U's
+surface text is the mixed Latin/Cyrillic *diplomatic* transliteration (the
+fully Cyrillic layer lives only in the TSV); the corpus assigns NO
+per-document language — the philological PDF's Norm classification (read
+at Phase B as planned) maps veles/vukovic/kievski → chu and the rest →
+bul, with Norm+Origin as facets; and the TSV token layers are genuinely
+phase-2 (per-file column layouts vary 15–20 cols, 5 files disagree with
+the CoNLL-U by 1–3 sentences — censused, journaled in backlog P23-1).
+02-sources row 57 is the full record.
+
 - **Handle:** <http://hdl.handle.net/11356/1441> (v1.0 = 11356/1368, GPL-3,
   superseded — ingest 1.1 only).
 - **License (verbatim):** "Creative Commons - Attribution-ShareAlike 4.0
@@ -78,6 +90,18 @@ every real candidate is PUB with an explicit CC label.
   axis — smaller than histdict, but gold and PUB.
 
 ### 2. The Slovenian historical dictionary shelf — Pleteršnik + Svetokriški + besedje16 (+ Franček crosswalk)
+
+**STATUS (P23-2, 2026-07-15): INGESTED** — the three dictionaries shipped
+as ONE source `sl-lexica` (parser family `zrc-xml`, dictionary slugs
+`pletersnik`/`jsv`/`besedje16`, `enabled: false` awaiting the owner-fired
+first sync). Licenses re-verified verbatim at fetch time (all three:
+"Creative Commons - Attribution 4.0 International (CC BY 4.0)", PUB);
+counts confirmed 103,185 / **8,461** (the delta below, reported honestly)
+/ 27,759; the toneme-folding question settled WITHOUT a new conventions
+§9 rule (fold from the unaccented `<ge>`; generic mark strip handles the
+tonemes). The **Franček crosswalk rider was NOT ingested** — outside the
+packet's three-artifact scope, still open below. Details:
+docs/backlog.md P23-2, docs/02-sources.md #57–59.
 
 Three ZRC SAZU dictionaries, all real deposits with files, all verbatim
 "Creative Commons - Attribution 4.0 International (CC BY 4.0)", **PUB** →

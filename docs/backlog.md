@@ -7149,3 +7149,317 @@ count dossiers (198) + records-by-kind, `--documents` enumerates
 catalog, never the registry; guarded on table_exists (read surfaces
 never migrate). Tests +7.
 
+
+# ── Phase 23 ──────────────────────────────────────────────────────────
+
+## P23-3 · loop-health trio  [tier: agent] [status: done 2026-07-16] [deps: —]
+Three small owner-approved fixes, each bitten live (packet spec verbatim
+from the P19-queue carried items + the 2026-07-14 status defects).
+
+(a) INVARIANT REFINEMENT — synced-vs-populated. The liv case
+(2026-07-14): a DISABLED source synced anyway to zero entries —
+succeeded run, empty shelf, silent because enabled-vs-populated watched
+enabled sources only. Health::Invariants#synced_unpopulated now gates on
+the LATEST run having succeeded (a failed latest run stays
+last-run-honesty's single loud line) and NEVER on `enabled`; the
+populated test keeps its per-grain routing (live documents / dictionary
+entries / language_records — the P22-1 grain knowledge). VERDICT: no
+exemption mechanism ships — reality checked first (2026-07-15 census of
+the live catalog): every one of the 31 sources is populated in its own
+grain (local-language holds 330 language_records), so an
+honestly-empty-by-design source does not exist to exempt; the mechanism
+gets built if one ever does.
+
+(b) STATUS FLIP-RECONCILE — registry is AUTHORITATIVE for enablement.
+Registry `enabled:` flips reached db sources.enabled only at that
+source's next sync (2026-07-14: mw/iecor/liv/edl read off in status
+after the owner flipped them on; orchestrator hand-reconciled).
+VERDICT: option (1), READ-side registry truth — no write path (`nabu
+status` opens the catalog read-only-ish; a write-back at status time
+was rejected as a read surface mutating state). StatusReport renders
+entry.enabled directly (every status line IS a registry entry — no
+orphan fallback needed there); the list card already rendered registry
+truth via registry_fragment (pinned with a regression test) and the
+P22-1 NOT IN REGISTRY loud-orphan case is pinned too; MCP nabu_status
+gets the same rule (Tools takes registry:, wired like alignments) —
+registry value for registered slugs, db value kept for unregistered
+catalog orphans, the one surface that enumerates them. Regression
+tests: flip in registry with no sync → status/list/MCP show registry
+truth, both directions.
+
+(c) EDH LB-LESS FALLBACK — landed, with the triage's mechanism claim
+CORRECTED BY THE BYTES. The P18-gate verdict said the 26 real
+quarantines have "no <lb> line markup"; canonical inspection of all 26
+shows every one HAS <lb> milestones (mostly n="0") — each line extracts
+gap markers only, i.e. the WHOLE edition is lost lines (CSV atext
+'[------]'/'[---]'/'//', zero readable text anywhere). VERDICT: the
+owner-approved remedy stands and generalizes — when line grain mints
+ZERO passages, EdhEpidocParser falls back to ONE whole-inscription
+passage carrying the edition's full extraction (its own lacuna
+notation, '[…] […]') under the stable flat suffix :text
+(collision-free by construction — minted only when no line suffix
+exists; no textpart path: whole-inscription grain); edition <head>
+joins the dropped elements. hd059778 (malformed upstream XML) raises
+before extraction — the honest permanent quarantine. Per-source policy
+(the del-⟦…⟧ precedent): DDbDP's empty-<ab/> stubs keep quarantining.
+BASELINE VERDICT: the P18-7 machinery handles the 26 leaving BY DESIGN
+— delta announces the -26 exactly once at the landing run, record!
+advances baseline AND anchor down to 1 (an improvement resets the
+low-water mark), creep never trips; regression-pinned, no migration/
+surgery. Fixtures: HD029093 + HD081183 byte-identical from
+canonical/edh + their text-CSV rows (whole physical lines; no pers
+rows); rebuild e2e replays 5 records (19 facet rows, 5 axis rows).
+
+Tests +13 net (invariants 4 reshaped, baseline story 1, status flip 1,
+MCP registry 1, list-card 2, parser fallback 6, adapter/rebuild
+expectations updated to 5 fixture records). Docs: ops.md §anomalies +
+§11 table, architecture sources-mirror note + invariants wording,
+README/library.md invariant name, source_registry authority comment,
+edh-survey status block, 02-sources row 51 (status LIVE + fixture
+list). Owner queue: `bin/nabu sync edh --parse-only` lands the 26
+(+26 docs, errored 27→1, one loud -26 delta line, then quiet).
+
+## P23-2 · Slovenian dictionary shelf (Pleteršnik / JSV / besedje16)  [tier: fable] [status: done 2026-07-15 — zrc-xml family + sl-lexica adapter shipped, enabled:false awaiting owner sync+flip; verdicts below] [deps: —]
+
+Owner-approved 2026-07-15 (queued since the P17-6 CLARIN.SI survey,
+docs/clarin-si-survey.md §2): the three ZRC SAZU dictionary deposits
+that give the sl axis what LSJ/L&S/B-T gave grc/lat/ang, keyed to the
+goo300k/IMP corpora already held. SHIPPED: parser family `zrc-xml`
+(flat ZRC SAZU dictionary XML, NOT TEI — streamed via XML::Reader, the
+>5 MB rule) + `SlLexica` adapter (`sl-lexica` source, three
+dictionaries pletersnik/jsv/besedje16), three-zip ZipFetch (per-dict
+subdir + state + attic, the ORACC recipe on goo300k's CLARIN.SI URL
+pattern), registry row `enabled: false` / `sync_policy: manual`,
+conformance-mirror tests + idempotent double-load + define renders.
+
+CENSUS VERDICTS (fetched to scratch 2026-07-15, one GET per artifact):
+- **One source, not three.** All three records carry the IDENTICAL
+  verbatim grant — dc.rights "Creative Commons - Attribution 4.0
+  International (CC BY 4.0)", label PUB → `attribution` — same
+  publisher conventions (`geslo-id` entry-per-line XML + XSD), same
+  fetch shape; no license/posture split demands per-artifact sources
+  (the lexica LSJ/L&S precedent).
+- **Counts:** pletersnik 103,185 (= description), jsv 8,461 counted vs
+  8,540 described (upstream delta, reported honestly in fixtures README
+  + 02-sources), besedje16 27,759. All geslo-ids unique per file.
+- **Language = `sl` for all three** (besedje16 included): headwords are
+  MODERNIZED orthography by editorial design — exactly what goo300k's
+  gold lemmas speak — so a period subtag/marker would fracture the
+  define/gloss joins for no gain. The period lives in dictionary
+  titles + the `witness:sl-lexica` language note.
+- **Pleteršnik headword split:** display headword = accented `<oi>`
+  (tonemes: abecę̑da), `headword_folded` from unaccented `<ge>` — the
+  generic §9 mark strip folds tonemes, but `<oi>` spellings carry ə/ł
+  (ábəł) that no modern query types; ge "abel" is the real key. No new
+  conventions §9 rule needed (sl ſ→s + generic strip suffice — the
+  survey's toneme-folding question, settled at fixture time).
+- **JSV citations minted UNRESOLVED:** every `<ct>` → DictionaryCitation
+  with urn_raw/label verbatim ("(I/1, 207)"), cts_work nil (nothing
+  invented), citation = parsed "I/1.207" vol/page pair ("s." suffix
+  tolerated; upstream typos like "I1, 112" parse to nil honestly).
+- **besedje16 CRLF** line endings (the other two are LF) — preserved
+  byte-exact in fixtures.
+
+DEEP-EXTRACTION LEDGER — wired: German/modern-sl/razl glosses, toneme
+display forms, folded lookup (define abeceda ≡ define abecę̑da; one
+"a" lookup unifies all three dictionaries), JSV vol/page citation rows,
+loanword etymologies + attestation quotes verbatim in bodies (Bohorič ſ
+kept — canonical means canonical), besedje16 attestation sigla verbatim
+in bodies, sl witness language note (dictionary_loader rider).
+JOURNALED, not wired (each needs its own owner-scoped packet):
+- Pleteršnik `<gn>`/`<ko>` dialect/place tags as a geo facet (26,692
+  gn occurrences) and `<ov>` source-authority sigla (215,568) as an
+  attestation apparatus; `dodatek` (663) + besedje16 `zvezdica` (192) /
+  `hom` attributes as entry metadata.
+- JSV citation RESOLUTION against IMP (needs the Sacrum promptuarium
+  holding check the survey left open).
+- besedje16 sigla→document crosswalk (DB 1584 = zrc_00001-1584) —
+  mechanical once a sigla registry exists; earliest-attestation axis.
+- Franček crosswalk deposit (11356/1472): NOT fetched — outside this
+  packet's three-artifact scope; remains the survey's rider.
+
+Fixtures: test/fixtures/sl-lexica/ — 7+5+6 byte-verbatim entries + the
+three XSDs whole (documented deviation from the plan's "2–3 each":
+homograph sets and per-element variants cannot be pinned with fewer).
+Tests +23 (suite 2,787 / 33,663 · lint 354 files, both exit 0).
+Checklist §6 for the owner: bin/nabu sync sl-lexica (three GETs, ~7 MB
+→ 139,405 entries), eyeball `nabu define abeceda` (toneme headword,
+German gloss) + `nabu define --lang sl a` (three-dictionary
+unification) + `nabu language sl` (witness note), then flip enabled.
+
+## P23-1 · damaskini corpus adapter  [tier: fable] [status: done 2026-07-15 — adapter + registry shipped, enabled:false awaiting owner sync+flip; census below] [deps: —]
+
+The clarin-si-survey (P17-6) pick #1, owner-approved 2026-07-15: the
+Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1
+(CLARIN.SI hdl 11356/1441, CC BY-SA 4.0 verbatim → attribution). Shipped:
+`Nabu::Adapters::Damaskini` on the `conllu` family (one document per
+`# newdoc id` of the ONE corpus-wide CoNLL-U file; new optional
+`citation:` + `metadata:` hooks on ConlluParser, UD callers unchanged);
+urn `urn:nabu:damaskini:<newdoc-id downcased>`, citation = the numeric
+tail of upstream's corpus-continuous sent_id; two-zip ZipFetch
+(CoNLL-U + TSV bitstreams); TSV headers → doc metadata (source name,
+place with honest "?", date, scribe, title, locus notes) +
+`AxisBuilder::DamaskiniDates` (all 23 headers date-parseable: point
+years, decades, "1650-1670s", "17th"/"XV c.", "19th (post 1817)",
+xrulev's year in an edition line); language chu×3/bul×20 from the
+philological PDF's own Norm classification (deposit tags `bul, mkd`
+collectively, no per-doc tag; fn.7 quoted in the adapter); Norm+Origin
+→ document_facets; gold lemmas → passage_lemmas; `translations: true`
+mints -en siblings (100% text_en, censused) with the DAMASKINI_DOCUMENT
+work pattern in Query::Parallel (hyphen-rich doc ids: the -en tail is
+the only variant, anchored literally).
+
+### Metadata-layer census — wired vs journaled (deep-extraction mandate)
+
+WIRED: gold lemma (→ lemma index) · msd-bg-dam XPOS + UD head/deprel
+(annotations tokens) · text_en (-en siblings, --parallel) · dating +
+place (axis rows) · scribe/title/locus (doc metadata) · Norm + Origin
+dialect classification (facets) · per-doc language (chu/bul).
+
+JOURNALED — phase 2 of this source (build only on owner say-so):
+
+1. TSV TOKEN layers: accented | Cyrillic | diplomatic orthography
+   (3-layer collation, the ccmh-txt precedent), per-token folio anchors,
+   `eol` line breaks. Census: per-file column layouts vary 15–20 cols,
+   the per-file header row is authoritative; 3 files (nbkm1064,
+   raikovski, nbkm1423 — the last Latin-script original) have NO
+   cyrillic column; TSV sentence numbering restarts per file and 5 files
+   disagree with the CoNLL-U by 1–3 sentences (jankul 293/296, kievski
+   579/580, krcovski 316/317, raikovski 315/316, veles 182/183) — a real
+   alignment job, needs a small bespoke TSV family.
+2. `chunk` column: narrative-division labels ("1. staroe Žitie" — 628
+   marks in kievski) — a structural layer nabu could render as div
+   context; `ref` column: dictionary/Biblical/cross-text references —
+   the machine seed for the St.-Petka collation hub (~10 independent
+   witnesses of one vita across four centuries, the alignment layer's
+   best Slavic case since ccmh; needs work-registration design).
+3. Scribe as a queryable person facet (16 named scribes incl. Josif
+   Bradati and Sofronii Vračanski) — nabu has no prosopography model;
+   currently doc metadata only.
+4. Balkan-sprachbund msd-bg-dam features (definiteness marking, case
+   loss, future tense) as morph facets — the corpus's own philological
+   PDF quantifies them per source; would need a morph-facet subsystem.
+
+Suite 2,806 runs / 34,112 assertions exit 0 · lint 355 files exit 0.
+Owner gate (checklist §6): `bin/nabu sync damaskini` (~1.7 MB, two
+zips) → eyeball `nabu show urn:nabu:damaskini:berlinski--slovo-petki:1
+--parallel`, a veles Cyrillic passage, 5 random passages → flip
+`enabled: true`.
+
+## P23-0 · starling follow-up bases: vasmer + germet + baltet  [tier: fable] [status: done 2026-07-16 — three config rows + fixtures shipped; enabled stays false, owner re-sync queued; verdicts below] [deps: P22-0]
+The P22-0 promise cashed: the IE.exe package's remaining three bases as
+BASES configuration rows — starling-vasmer (rus, 18,239 entries: M.
+Vasmer's Russian etymological dictionary, Trubachev edition),
+starling-germet (gem-pro, 1,994: Nikolayev's Common Germanic database),
+starling-baltet (bat-pro, 1,651: Nikolayev's Baltic database). Owner-
+authorized fixture pass only: one IE.exe fetch to scratch (sha256
+byte-identical to the P22-0 snapshot), .inf DBINFO + descrip.php roster
+snapshots, live-CGI char-level verification of every fixture record.
+
+FINDINGS (2026-07-16):
+- CONFIG-ONLY VERDICT: held, with FOUR measured exceptions, each the
+  minimum code (journaled in the adapter class comment): (1) chslav.lst
+  — vasmer's OCS citations ride the \x01\x86–\x88 doublebyte range,
+  absent from unipro.lst; the official 3.9.0 package wires a SECOND
+  Unicode table for it (config.str [Chslav font] → convert/chslav.lst,
+  90 mappings), vendored verbatim beside unipro.lst (sha in
+  config/starling/README.md) and merged into the StarlingText trie
+  (key spaces disjoint — zero pokorny/piet drift, measured). Census:
+  19,229 of vasmer's 19,257 otherwise-unmapped pair occurrences
+  resolve (азъ, багрѣница, сѧгати — live-verified); the residual 28
+  are stray high bytes inside per-character shift runs (the official
+  web converter garbles them too) → honest U+FFFD, unit-pinned with
+  verbatim corpus bytes. (2) duplicate-NUMBER entry ids, (3) "#NUMBER"
+  placeholder headwords, (4) the STOP_TOKENS reflex gate — all below.
+- UPSTREAM DATA-DEFECT CENSUS (whole package, both defect classes
+  found the hard way — the owner's 2026-07-16 live sync quarantined
+  piet.dbf whole on "duplicate entry id 574"):
+  · NUMBER collisions: piet ×1 — record #573 (*kōim- 'village') and
+    record #1573 (*kneuk- 'to shout') BOTH stamped 574, the latter
+    sitting exactly where the vacant 1574 belongs in an otherwise
+    consecutive run (a dropped leading "1"); the live CGI itself
+    serves "Total of 2 records" for 574. baltet ×6 (76/95/248/689/
+    1049/1394) — exactly the six piet BALTNUM links that dangle
+    (piet #76 'flea' → BALTNUM 37 dangles while baltet's flea record
+    wrongly wears 76 = its own PRNUM; in baltet the INTERLOPER comes
+    first in file order, so the plain id lands on the typo'd record —
+    upstream's defect, journaled, not repaired). pokorny/vasmer/
+    germet ×0. VERDICT: first occurrence in file order keeps the plain
+    NUMBER as entry id (upstream "#N" crosslinks resolve to it), each
+    repeat mints a stable file-order suffix (-b, -c…) + one honest
+    body note; NEVER renumbered (canonical means canonical). urns
+    frozen — the 2005 package is frozen. Fixture-pinned: BOTH piet
+    574s, BOTH baltet 76s.
+  · Headword-less records (the SECOND whole-file quarantine class,
+    censused before it bit): piet 6 — content-bearing Iranian stubs
+    at the file tail (Sogd./Yag. material) the live CGI cannot even
+    serve ("Total of 0 records") — germet 6 / baltet 7 fully-empty
+    numbered slots; pokorny/vasmer 0. VERDICT: kept under the
+    mechanical "#NUMBER" placeholder headword (the crosslink
+    notation) — nothing hidden, links at those numbers resolve.
+    Fixture-pinned: piet #3278, germet #401.
+- VASMER: language rus (the headwords are Russian dictionary words,
+  accented, verbatim incl. the inflection-follows comma the live site
+  renders — "сига́ть,"; fold takes the first comma-variant). vasmer.inf
+  is BLANK → field labels from the live CGI (Word / Near etymology /
+  Further etymology / Trubachev's comments / Editorial comments /
+  Pages; web-verified on #20) and the ATTRIBUTION from the roster's
+  actual words ("scanned, OCR'd, and database-converted versions of
+  M. Vasmer's etymological dictionary of Russian…") — vasmer's credit
+  differs from pokorny's, carried verbatim per the grant. Field
+  density: GENERAL 18,085 / ORIGIN 3,097 / TRUBACHEV 1,478 /
+  EDITORIAL 191 / PAGES 18,239. REFLEX VERDICT: mints NOTHING —
+  every field is scholarly prose; body-only. No gloss lane (config
+  gloss: nil — the one-line build_entry accommodation).
+- GERMET: gem-pro (unifies with wiktionary-recon's Proto-Germanic
+  shelf code). REFLEX VERDICT: 19 of 21 single-language columns mint
+  leading-citation-form rows — 14,627 rows censused with the real
+  gate. GOT→got and OENGL→ang JOIN THE GOLD (attested counts resolve
+  via ReflexViews at query time — test-pinned against a seeded lemma
+  index); the rest speak the Wiktionary codes the kaikki crosswalk
+  speaks (non/no/gmq-osw/sv/gmq-oda/da/enm/en/ofs/osx/dum/nl/gml/nds/
+  goh/gmh/de). NEW GATE, censused: bare dialect/variety LABELS lead
+  ~75 cells without the period that self-filtered piet's "Khow."
+  (CrimGot ×7, NIsl ×20, OGutn ×13, OWFris ×15, Langob, dial…) —
+  STOP_TOKENS (27 censused tokens, zero collisions with legitimate
+  citation forms anywhere in the package, zero piet/pokorny drift,
+  both measured). EASTFRIS + OLFRANK stay BODY-ONLY: variety-
+  ambiguous columns (EASTFRIS ~47% label-led "Fris./WFris."; OLFRANK
+  mixes ONFrank/OFrank/SalFrank/EFrank) — a language code would be
+  invented, the P22-0 IRAN/ITAL/CELT/TOKH discipline.
+- BALTET: bat-pro — minted by the family-code+-pro convention;
+  Wiktionary reconstructs Balto-Slavic (ine-bsl-pro), not Proto-
+  Baltic, so there is no upstream shelf to unify with (journaled in
+  the language note). Headwords carry no Lm modifier letters
+  (censused) — the generic §9 fold suffices, no Normalize change.
+  REFLEX VERDICT: all four columns mint (OLITH→olt, LITH→lt, LETT→lv,
+  OPRUS→prg; 96%+ clean) — 3,091 rows.
+- CROSSLINKS NOW LIVE: piet's SLAVNUM/BALTNUM/GERMNUM body lines name
+  entry ids that exist (censused: GERMNUM 1,965/1,965 resolve, SLAVNUM
+  1,233/1,233, BALTNUM 1,626/1,632 — the six misses ARE the six baltet
+  duplicates); germet/baltet PRNUM → piet (1,955/1,955 and 1,642/
+  1,643). Fixture set closes every crosslink loop on itself: piet #1 ⇄
+  germet #1, piet #562 ⇄ germet #390 + baltet #1634, piet #1501 →
+  vasmer #12561. BODY-LINE → LIVE-LINK RESOLUTION: no cheap wire
+  exists inside the current rendering — the only resolution lane
+  define renders is DictionaryCitation (cts-work-shaped, resolved at
+  query time); a "Vasmer: #12561" line would need a dictionary-
+  crosslink rows lane (the citations pattern: parser mints, loader
+  persists, query resolves) — JOURNALED AS FOLLOW-UP, not built (the
+  packet's explicit boundary). Interim: `show urn:nabu:dict:
+  starling-vasmer:12561` works today (P22-2).
+- ATTRIBUTION: all five credits verbatim in MANIFEST.license →
+  sources.license → every define/etym/MCP surface (render-tested on a
+  vasmer define). 02-sources row 56 extended; the non-consensus caveat
+  rides as before.
+- FIXTURES: 19 real records across five bases (piet regained its
+  P22-0 three + the two 574s + #3278; every record live-CGI verified
+  char-level; one known divergence journaled — the legacy web
+  converter renders \xF0 as ɵ where the official unipro.lst maps
+  U+03D1 ϑ, germet #513; the table is the authority). manifest.yml +
+  README updated with selection rationale.
+- Owner queue: `bin/nabu sync starling --parse-only` (re-parse of the
+  already-fetched package lands piet's 3,291 + the three new shelves;
+  a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
+  line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
+  the piet 574-b note body, then flip enabled + rebuild.
