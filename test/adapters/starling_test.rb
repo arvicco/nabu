@@ -3,18 +3,23 @@
 require "test_helper"
 require "tmpdir"
 
-# The StarLing adapter (P22-0): Pokorny's IEW (Starostin/Lubotsky
-# digitization) + Nikolayev's Walde-Pokorny-based PIE database from the
-# Tower of Babel IE package, under G. Starostin's 2026-07-15 any-use-with-
-# acknowledgment grant (per-base compiler credit REQUIRED — it must ride the
-# manifest license string onto every serving surface). Dictionary-shaped, so
-# like LivTest/MwTest it MIRRORS the passage-shaped conformance suite
-# (manifest validity, discover→parse round-trip, id uniqueness/stability,
-# NFC, license class) and adds the packet pins: the ἆ font-shift decode
-# proven end to end on a real record, the branch-column reflex verdict
-# (single-language attested columns mint rows, proto/mixed columns stay in
-# the body), the pokorny↔piet crosslink, the DictionaryLoader contract, the
-# language-notes rider, and define/etym acceptance renders.
+# The StarLing adapter (P22-0 + P23-0): the Tower of Babel IE package's
+# five etymological bases — Pokorny's IEW (Starostin/Lubotsky digitization),
+# Nikolayev's Walde-Pokorny-based PIE database, Vasmer's Russian dictionary,
+# and the Common Germanic + Baltic subordinate bases — under G. Starostin's
+# 2026-07-15 any-use-with-acknowledgment grant (per-base compiler credit
+# REQUIRED — it must ride the manifest license string onto every serving
+# surface). Dictionary-shaped, so like LivTest/MwTest it MIRRORS the
+# passage-shaped conformance suite (manifest validity, discover→parse
+# round-trip, id uniqueness/stability, NFC, license class) and adds the
+# packet pins: the ἆ font-shift and chslav азъ decodes proven end to end on
+# real records, the per-base reflex verdicts (single-language attested
+# columns mint rows; proto/mixed/variety-ambiguous columns and label-led
+# cells stay in the body), the upstream NUMBER collisions (piet #574 — the
+# owner's live quarantine — and baltet's six) parsing whole with stable -b
+# suffixes, the cross-base crosslinks both ways, the DictionaryLoader
+# contract, the language-notes rider, gold attestation via ReflexViews, and
+# define/etym acceptance renders.
 class StarlingTest < Minitest::Test
   include StoreTestDB
 
@@ -40,6 +45,20 @@ class StarlingTest < Minitest::Test
     assert_equal "starling-dbf", manifest.parser_family
   end
 
+  # P23-0: the three follow-up bases' credits, each in ITS OWN upstream
+  # words — germet/baltet from their .inf DBINFO texts; vasmer's .inf is
+  # BLANK, so its credit quotes the descrip.php roster paragraph verbatim
+  # (the grant names the roster as the credit source).
+  def test_manifest_carries_the_follow_up_bases_credits_verbatim
+    license = adapter.manifest.license
+    assert_match(/Common Germanic database, compiled by S\. Nikolayev and subordinate to the Common Indo-European/,
+                 license, "germet credit: the germet.inf DBINFO sentence")
+    assert_match(/Baltic database, compiled by S\. Nikolayev and subordinate to the Proto-Indo-European/,
+                 license, "baltet credit: the baltet.inf DBINFO sentence")
+    assert_match(/scanned, OCR'd, and database-converted versions of M\. Vasmer's etymological dictionary/,
+                 license, "vasmer credit: the roster's actual words (vasmer.inf is blank)")
+  end
+
   def test_content_kind_is_dictionary_and_the_source_promises_reflexes
     assert_equal :dictionary, Nabu::Adapters::Starling.content_kind
     assert Nabu::Adapters::Starling.reflex_bearing?
@@ -49,8 +68,10 @@ class StarlingTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
-    assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf"], refs.map(&:id)
-    assert_equal %w[starling starling], refs.map(&:source_id)
+    assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
+                  "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
+                  "starling-baltet:baltet.dbf"], refs.map(&:id)
+    assert_equal %w[starling] * 5, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -105,7 +126,7 @@ class StarlingTest < Minitest::Test
 
   def test_parse_piet_yields_the_second_ine_pro_shelf_with_crosslinks
     entries = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }
-    assert_equal %w[1 562 1501], entries.keys
+    assert_equal %w[1 562 574 1501 574-b 3278], entries.keys
     entry = entries["562"]
     assert_equal "kol-", entry.headword, "leading asterisk stripped (the kaikki convention)"
     assert_equal "*kol-", entry.key_raw
@@ -115,8 +136,137 @@ class StarlingTest < Minitest::Test
     assert_includes entry.body, "Pokorny: #1089", "REFERNUM crosslinks back to the pokorny shelf"
     assert_includes entry.body, "Baltic etymology: #1634"
     assert_includes entry.body, "Germanic etymology: #390"
-    assert_includes entries["1501"].body, "Vasmer: #12561", "SLAVNUM points into the (future) vasmer base"
+    assert_includes entries["1501"].body, "Vasmer: #12561",
+                    "SLAVNUM points into the vasmer base — #12561 is IN this fixture set (P23-0)"
     assert_includes entries["1"].body, "Nostratic etymology: #721"
+  end
+
+  # --- the P23-0 bases: vasmer -------------------------------------------------------
+
+  def test_parse_vasmer_yields_the_russian_shelf_with_the_live_site_field_labels
+    document = parse("starling-vasmer")
+    assert_equal "starling-vasmer", document.slug
+    assert_equal "rus", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 20 12561], entries.keys, "entry id = the stable upstream NUMBER"
+    entry = entries["20"]
+    assert_equal "абракада́бра", entry.headword
+    assert_equal "абракадабра", entry.headword_folded, "generic fold strips the acute"
+    assert_nil entry.gloss, "vasmer has no gloss column — an honest absence"
+    # field labels: vasmer.inf is BLANK; these are the live CGI's own labels
+    # (web-verified on #20, 2026-07-15)
+    assert_includes entry.body, "Near etymology: \"заклинание на амулетах\"."
+    assert_includes entry.body, "Further etymology: Скорее всего, через нем. Abrakadabra"
+    assert_includes entry.body, "Trubachev's comments: [Гипотезу о фракийском первоисточнике"
+    assert_includes entry.body, "Editorial comments: [Совр. знач. \"бессмыслица\". -- Ред.]"
+    assert_includes entry.body, "Pages: 1,56"
+  end
+
+  def test_vasmer_headwords_stay_verbatim_and_mint_no_reflexes
+    entries = parse("starling-vasmer").entries.to_h { |e| [e.entry_id, e] }
+    assert_equal "сига́ть,", entries["12561"].headword,
+                 "the dictionary's inflection-follows comma stays (the live site renders it too)"
+    assert_equal "сигать", entries["12561"].headword_folded, "the fold takes the first comma-variant"
+    assert_includes entries["12561"].body, "др.-инд. c̨īghrás", "ORIGIN rides as Further etymology"
+    assert entries.values.all? { |e| e.reflexes.empty? },
+           "vasmer's fields are scholarly prose — no reflex columns, body-only (the P23-0 verdict)"
+  end
+
+  # THE chslav pin: vasmer #1 GENERAL cites OCS азъ in the Church Slavonic
+  # font range (\x01\x87…), decoded through the second vendored table.
+  def test_vasmer_decodes_the_church_slavonic_font_range_end_to_end
+    body = parse("starling-vasmer").entries.first.body
+    assert_includes body, "Название: аз, ст.-слав. азъ \"я\"."
+    refute_includes body, "\u{FFFD}", "no honest-replacement residue in the fixture records"
+  end
+
+  # --- the P23-0 bases: germet -------------------------------------------------------
+
+  def test_parse_germet_yields_the_gem_pro_shelf_with_the_ie_crosslink
+    document = parse("starling-germet")
+    assert_equal "gem-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 390 401 513], entries.keys
+    entry = entries["390"]
+    assert_equal "xálsa-z", entry.headword
+    assert_equal "*xálsa-z", entry.key_raw
+    assert_equal "xalsa-z", entry.headword_folded
+    assert_equal "neck", entry.gloss
+    assert_includes entry.body, "Gothic: hals m. (a) `neck'", "the .inf aliases label the body lines"
+    assert_includes entry.body, "Old English: heals (hals), -es m. `neck, prow of a ship'"
+    assert_includes entry.body, "IE etymology: #562",
+                    "PRNUM crosslinks into the piet shelf (both ways: piet #562 GERMNUM=390)"
+  end
+
+  def test_germet_single_language_columns_mint_reflex_rows_that_join_the_gold_codes
+    reflexes = parse("starling-germet").entries.to_h { |e| [e.entry_id, e] }["390"].reflexes
+    assert_equal [%w[GOT got], %w[ONORD non], %w[NORW no], %w[SWED sv], %w[DAN da],
+                  %w[OENGL ang], %w[OFRIS ofs], %w[OSAX osx], %w[MDUTCH dum], %w[DUTCH nl],
+                  %w[MLG gml], %w[OHG goh], %w[MHG gmh], %w[HG de]],
+                 reflexes.map { |r| [r.lang_code, r.language] },
+                 "lang_code = upstream column verbatim; language = catalog gold tag (got/ang) " \
+                 "or the Wiktionary code the kaikki crosswalk speaks"
+    words = reflexes.to_h { |r| [r.lang_code, r] }
+    assert_equal "hals", words["GOT"].word
+    assert_equal "heals", words["OENGL"].word, "the leading citation form only"
+    assert_equal Nabu::Normalize.search_form("heals", language: "ang"), words["OENGL"].word_folded
+    assert_equal "Gothic", words["GOT"].lang_name, "the .inf field alias feeds the language census"
+  end
+
+  # The censused stop-token gate (P23-0): germet cells that LEAD with a
+  # dialect/variety label (CrimGot, NIsl, OGutn, OWFris …) mint nothing —
+  # the label is not a citation form. germet #513's GOT cell is Crimean
+  # Gothic; the cell still rides the body verbatim.
+  def test_dialect_label_prefixed_cells_mint_nothing_but_ride_the_body
+    entries = parse("starling-germet").entries.to_h { |e| [e.entry_id, e] }
+    assert_empty entries["513"].reflexes, "GOT `CrimGot marzus` is label-prefixed — no row"
+    assert_includes entries["513"].body, "Gothic: CrimGot marzus `nuptiae'"
+    assert_equal "marϑiō ?", entries["513"].headword, "doubt-marked root verbatim (canonical means canonical)"
+  end
+
+  # EASTFRIS and OLFRANK are variety-ambiguous columns (Fris./ONFrank/
+  # SalFrank label mixes, censused ~47% label-led) — body-only by verdict,
+  # like piet's mixed IRAN/ITAL/CELT/TOKH. germet #1's OLFRANK cell pins it.
+  def test_variety_ambiguous_columns_stay_body_only
+    entry = parse("starling-germet").entries.first
+    assert_includes entry.body, "Old Franconian: ONFrank ēr"
+    refute_includes entry.reflexes.map(&:lang_code), "OLFRANK"
+    got = entry.reflexes.find { |r| r.lang_code == "GOT" }
+    assert_equal "air", got.word, "the clean columns of the same record still mint"
+  end
+
+  # --- the P23-0 bases: baltet -------------------------------------------------------
+
+  def test_parse_baltet_yields_the_bat_pro_shelf_with_the_ie_crosslink
+    document = parse("starling-baltet")
+    assert_equal "bat-pro", document.language
+    entry = document.entries.to_h { |e| [e.entry_id, e] }["1634"]
+    assert_equal "kakla-", entry.headword
+    assert_equal "neck; throat", entry.gloss
+    assert_includes entry.body, "Lithuanian: kãklas `шея; горло'"
+    assert_includes entry.body, "Comments: kraklan 'breast'"
+    assert_includes entry.body, "Indo-European etymology: #562",
+                    "PRNUM crosslinks into the piet shelf (both ways: piet #562 BALTNUM=1634)"
+    assert_equal [%w[LITH lt], %w[LETT lv]], entry.reflexes.map { |r| [r.lang_code, r.language] },
+                 "OLITH/OPRUS are empty here — the minting columns speak Wiktionary codes"
+    assert_equal "kãklas", entry.reflexes.first.word
+  end
+
+  # Upstream data defect, kept honest (P23-0 census): six baltet records
+  # carry a NUMBER another record already used (76/95/248/689/1049/1394) —
+  # exactly the six piet BALTNUM links that dangle. The FIRST record keeps
+  # the NUMBER as its entry id; a repeat gets a stable file-order suffix.
+  def test_baltet_duplicate_numbers_disambiguate_stably
+    entries = parse("starling-baltet").entries.to_a
+    assert_equal %w[76 76-b 1634], entries.map(&:entry_id)
+    assert_equal "blus-ā̂ f.", entries[0].headword, "file order rules: the flea record wears the NUMBER"
+    assert_equal "dal-i-s f., *dal-jā̂ f.", entries[1].headword
+    assert_includes entries[1].body, "Indo-European etymology: #178", "each keeps its own PRNUM"
+    assert_includes entries[1].body, "note: upstream NUMBER collision",
+                    "the suffixed record says so honestly in its body"
+    assert_equal %w[blusà blusa Bluskaym], entries[0].reflexes.map(&:word),
+                 "LITH/LETT/OPRUS rows — Old Prussian's onomastic Bluskaym is a real citation form"
+    assert_equal "dalìs", entries[1].reflexes.first.word, "the second duplicate mints its own rows"
   end
 
   # --- the reflex verdict (journaled in docs/backlog.md P22-0) ---------------------
@@ -146,8 +296,51 @@ class StarlingTest < Minitest::Test
     assert_equal "ayarə", entries["1"].reflexes.first.word
   end
 
+  # THE OWNER'S LIVE QUARANTINE (2026-07-16): piet.dbf carries exactly one
+  # upstream NUMBER collision — record #574 (*kōim- 'village') and, sitting
+  # where the vacant 1574 belongs in an otherwise consecutive run, a second
+  # record also stamped 574 (*kneuk- 'to shout'; evidently a dropped
+  # leading "1"). The live CGI itself serves "Total of 2 records" for
+  # number 574. The whole 3,291-entry file was quarantined by the duplicate
+  # guard. Verdict: file parses whole; the first occurrence keeps the plain
+  # id (so pokorny-side "#574" crosslinks resolve to the village root); the
+  # second mints the stable -b suffix and says so in its body. Never
+  # renumbered to 1574 — canonical means canonical.
+  def test_piet_upstream_number_collision_parses_whole_with_a_stable_suffix_and_note
+    entries = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }
+    assert_equal "kōim-", entries["574"].headword, "the first occurrence wears the plain NUMBER"
+    assert_equal "village", entries["574"].gloss
+    refute_includes entries["574"].body, "note: upstream NUMBER collision",
+                    "the plain-id record carries no note — nothing is wrong with it"
+    collided = entries["574-b"]
+    assert_equal "kneuk-, -g-", collided.headword
+    assert_equal "to shout", collided.gloss
+    assert_includes collided.body, "note: upstream NUMBER collision — this record shares NUMBER 574"
+    assert_includes collided.body, "disambiguated mechanically as 574-b"
+    assert_includes collided.body, "Pokorny: #985", "its own crosslinks are intact"
+  end
+
+  # The second whole-file quarantine class (P23-0 census): headword-less
+  # records — piet carries six content-bearing Iranian stubs at the file
+  # tail (the live CGI serves "Total of 0 records" for them; the content
+  # exists only in the downloadable package), germet six and baltet seven
+  # fully-empty numbered slots. They keep their slot under the mechanical
+  # "#NUMBER" placeholder so nothing upstream is hidden and crosslinks at
+  # those numbers stay resolvable.
+  def test_headword_less_records_keep_their_slot_under_the_number_placeholder
+    piet = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }["3278"]
+    assert_equal "#3278", piet.headword
+    assert_includes piet.body, "Other Iranian: Sogd. nɣz, Yag. naɣz 'good'",
+                    "the content-bearing stub's real material rides the body"
+    assert_empty piet.reflexes, "IRAN is a mixed column — body-only"
+    empty = parse("starling-germet").entries.to_h { |e| [e.entry_id, e] }["401"]
+    assert_equal "#401", empty.headword
+    assert_equal "#401", empty.body, "a fully-empty numbered slot reads as its own placeholder"
+    assert_nil empty.gloss
+  end
+
   def test_entry_ids_are_unique_stable_and_output_is_nfc
-    %w[starling-pokorny starling-piet].each do |slug|
+    %w[starling-pokorny starling-piet starling-vasmer starling-germet starling-baltet].each do |slug|
       first = parse(slug).map(&:entry_id)
       assert_equal first.uniq, first
       assert_equal first, parse(slug).map(&:entry_id)
@@ -160,24 +353,26 @@ class StarlingTest < Minitest::Test
 
   # --- fetch (WebMock only) ---------------------------------------------------------
 
+  BASE_FILES = %w[pokorny piet vasmer germet baltet].flat_map { |base| ["#{base}.dbf", "#{base}.var"] }.freeze
+
   def zip_body
     @zip_body ||= Dir.mktmpdir do |dir|
-      %w[pokorny.dbf pokorny.var piet.dbf piet.var].each do |name|
-        FileUtils.cp(File.join(FIXTURES, name), dir)
-      end
+      BASE_FILES.each { |name| FileUtils.cp(File.join(FIXTURES, name), dir) }
       zip = File.join(dir, "IE.zip")
-      Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, *%w[pokorny.dbf pokorny.var piet.dbf piet.var]) }
+      Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, *BASE_FILES) }
       File.binread(zip)
     end
   end
 
-  def test_fetch_unpacks_the_package_and_discovers_both_bases
+  def test_fetch_unpacks_the_package_and_discovers_all_five_bases
     stub_request(:get, ZIP_URL).to_return(status: 200, body: zip_body)
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
       assert_match(/\A\h{64}\z/, report.sha)
       refs = adapter.discover(workdir).to_a
-      assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf"], refs.map(&:id)
+      assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
+                    "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
+                    "starling-baltet:baltet.dbf"], refs.map(&:id)
       assert_equal 3, adapter.parse(refs.first).size
     end
   end
@@ -210,23 +405,66 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 6, first.added
+    assert_equal 19, first.added,
+                 "3 records per base + both halves of each fixture NUMBER collision + the two headword-less pins"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 6, second.skipped
+    assert_equal 19, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
-    assert_equal 5, db[:dictionary_reflexes].count, "AVEST + (IND, LAT, ALB) + IND"
-    assert_equal ["Albanian", "Avestan", "Latin", "Old Indian"],
-                 db[:language_names].select_map(:name).sort,
+    assert_equal "urn:nabu:dict:starling-vasmer:12561",
+                 db[:dictionary_entries].where(entry_id: "12561").get(:urn),
+                 "piet #1501's `Vasmer: #12561` body line now names a live entry id"
+    assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-piet:574-b"],
+                 db[:dictionary_entries].where(Sequel.like(:entry_id, "%-b")).select_order_map(:urn),
+                 "the duplicate-NUMBER disambiguation is urn-stable"
+    assert_equal 36, db[:dictionary_reflexes].count,
+                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2)"
+    assert_equal ["Albanian", "Avestan", "Danish", "Dutch", "English", "German", "Gothic",
+                  "Latin", "Lettish", "Lithuanian", "Middle Dutch", "Middle High German",
+                  "Middle Low German", "Norwegian", "Old English", "Old Frisian",
+                  "Old High German", "Old Indian", "Old Norse", "Old Prussian",
+                  "Old Saxon", "Swedish"],
+                 db[:language_names].select_map(:name).sort.uniq,
                  "the .inf aliases feed the language census reflex_bearing health checks"
+  end
+
+  # germet's GOT/OENGL columns JOIN THE GOLD (the P23-0 crosswalk question):
+  # attested counts resolve at query time via ReflexViews against the
+  # fulltext lemma index — got and ang are gold-lemma languages of this
+  # catalog (Wulfila/PROIEL; the OE shelves).
+  def test_germet_gothic_and_old_english_reflexes_resolve_attested_counts_against_gold
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    fulltext = Sequel.sqlite
+    fulltext.create_table(:passage_lemmas) do
+      String :lemma_folded, null: false
+      String :lemma_raw, null: false
+      Integer :passage_id, null: false
+      String :urn, null: false
+      String :language, null: false
+      String :surface_forms, null: false
+      index :lemma_folded
+    end
+    row = { lemma_raw: "hals", passage_id: 1, urn: "urn:nabu:test:1", surface_forms: "hals" }
+    got_folded = Nabu::Normalize.search_form("hals", language: "got")
+    ang_folded = Nabu::Normalize.search_form("heals", language: "ang")
+    fulltext[:passage_lemmas].insert(row.merge(language: "got", lemma_folded: got_folded))
+    fulltext[:passage_lemmas].insert(row.merge(language: "got", lemma_folded: got_folded, passage_id: 2))
+    fulltext[:passage_lemmas].insert(row.merge(language: "ang", lemma_folded: ang_folded, lemma_raw: "heals"))
+    entry_row_id = db[:dictionary_entries].where(entry_id: "390").get(:id)
+    views = Nabu::Query::ReflexViews.new(catalog: db, fulltext: fulltext).for_entry(entry_row_id)
+    counts = views.to_h { |v| [v.language, v.attested_count] }
+    assert_equal 2, counts["got"], "Gothic hals joins the got gold lemma index"
+    assert_equal 1, counts["ang"], "Old English heals joins the ang gold"
+    assert_nil counts["nl"], "no Dutch gold here — an honest absence, never a zero claim"
   end
 
   # --- language-notes rider ----------------------------------------------------------
 
-  def test_load_accretes_the_ine_pro_witness_section_idempotently
+  def test_load_accretes_the_witness_sections_idempotently
     Dir.mktmpdir do |root|
       _db, loader = loader_setup(canonical_dir: root)
       loader.load_from(adapter, workdir: FIXTURES)
@@ -235,9 +473,14 @@ class StarlingTest < Minitest::Test
       assert_equal "starling", section.source
       assert_match(/Pokorny/, section.body)
       assert_match(/Nikolayev/, section.body)
-      before = File.read(shelf.path_for("ine-pro"))
+      # P23-0: one honest witness note per follow-up base's language
+      assert_match(/Vasmer/, shelf.load("rus").section("witness:starling").body)
+      assert_match(/Common Germanic/, shelf.load("gem-pro").section("witness:starling").body)
+      assert_match(/Proto-Baltic/, shelf.load("bat-pro").section("witness:starling").body)
+      before = %w[ine-pro rus gem-pro bat-pro].map { |code| File.read(shelf.path_for(code)) }
       loader.load_from(adapter, workdir: FIXTURES)
-      assert_equal before, File.read(shelf.path_for("ine-pro"))
+      assert_equal before, %w[ine-pro rus gem-pro bat-pro].map { |code| File.read(shelf.path_for(code)) },
+                   "a second load accretes nothing new"
     end
   end
 
@@ -262,6 +505,29 @@ class StarlingTest < Minitest::Test
     assert_equal ["*kol-"], results.map(&:headword)
     assert_equal "starling-piet", results.first.dictionary_slug
     assert_equal "collus", results.first.matched_reflex.word
+  end
+
+  # P23-0 acceptance: a vasmer entry serves with the grant + the roster's
+  # vasmer credit on its license lane (the render every surface shares).
+  def test_define_a_vasmer_word_serves_the_credit_line_and_the_decoded_body
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    results = Nabu::Query::Define.new(catalog: db).run("сигать")
+    assert_equal ["starling-vasmer"], results.map(&:dictionary_slug)
+    result = results.first
+    assert_equal "urn:nabu:dict:starling-vasmer:12561", result.urn
+    assert_match(/properly acknowledged/, result.license, "the grant rides the result")
+    assert_match(/M\. Vasmer's etymological dictionary/, result.license,
+                 "the roster's vasmer credit rides the result")
+    assert_includes result.body, "Near etymology:"
+  end
+
+  def test_etym_walks_a_gothic_reflex_to_the_germet_proto_form
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    results = Nabu::Query::Etym.new(catalog: db).run("hals")
+    assert_equal ["starling-germet"], results.map(&:dictionary_slug).uniq
+    assert(results.map(&:headword).any? { |headword| headword.include?("xálsa-z") })
   end
 
   # --- registry -----------------------------------------------------------------------
