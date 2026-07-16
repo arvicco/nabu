@@ -7149,3 +7149,123 @@ count dossiers (198) + records-by-kind, `--documents` enumerates
 catalog, never the registry; guarded on table_exists (read surfaces
 never migrate). Tests +7.
 
+
+# ── Phase 23 ──────────────────────────────────────────────────────────
+
+## P23-0 · starling follow-up bases: vasmer + germet + baltet  [tier: fable] [status: done 2026-07-16 — three config rows + fixtures shipped; enabled stays false, owner re-sync queued; verdicts below] [deps: P22-0]
+The P22-0 promise cashed: the IE.exe package's remaining three bases as
+BASES configuration rows — starling-vasmer (rus, 18,239 entries: M.
+Vasmer's Russian etymological dictionary, Trubachev edition),
+starling-germet (gem-pro, 1,994: Nikolayev's Common Germanic database),
+starling-baltet (bat-pro, 1,651: Nikolayev's Baltic database). Owner-
+authorized fixture pass only: one IE.exe fetch to scratch (sha256
+byte-identical to the P22-0 snapshot), .inf DBINFO + descrip.php roster
+snapshots, live-CGI char-level verification of every fixture record.
+
+FINDINGS (2026-07-16):
+- CONFIG-ONLY VERDICT: held, with FOUR measured exceptions, each the
+  minimum code (journaled in the adapter class comment): (1) chslav.lst
+  — vasmer's OCS citations ride the \x01\x86–\x88 doublebyte range,
+  absent from unipro.lst; the official 3.9.0 package wires a SECOND
+  Unicode table for it (config.str [Chslav font] → convert/chslav.lst,
+  90 mappings), vendored verbatim beside unipro.lst (sha in
+  config/starling/README.md) and merged into the StarlingText trie
+  (key spaces disjoint — zero pokorny/piet drift, measured). Census:
+  19,229 of vasmer's 19,257 otherwise-unmapped pair occurrences
+  resolve (азъ, багрѣница, сѧгати — live-verified); the residual 28
+  are stray high bytes inside per-character shift runs (the official
+  web converter garbles them too) → honest U+FFFD, unit-pinned with
+  verbatim corpus bytes. (2) duplicate-NUMBER entry ids, (3) "#NUMBER"
+  placeholder headwords, (4) the STOP_TOKENS reflex gate — all below.
+- UPSTREAM DATA-DEFECT CENSUS (whole package, both defect classes
+  found the hard way — the owner's 2026-07-16 live sync quarantined
+  piet.dbf whole on "duplicate entry id 574"):
+  · NUMBER collisions: piet ×1 — record #573 (*kōim- 'village') and
+    record #1573 (*kneuk- 'to shout') BOTH stamped 574, the latter
+    sitting exactly where the vacant 1574 belongs in an otherwise
+    consecutive run (a dropped leading "1"); the live CGI itself
+    serves "Total of 2 records" for 574. baltet ×6 (76/95/248/689/
+    1049/1394) — exactly the six piet BALTNUM links that dangle
+    (piet #76 'flea' → BALTNUM 37 dangles while baltet's flea record
+    wrongly wears 76 = its own PRNUM; in baltet the INTERLOPER comes
+    first in file order, so the plain id lands on the typo'd record —
+    upstream's defect, journaled, not repaired). pokorny/vasmer/
+    germet ×0. VERDICT: first occurrence in file order keeps the plain
+    NUMBER as entry id (upstream "#N" crosslinks resolve to it), each
+    repeat mints a stable file-order suffix (-b, -c…) + one honest
+    body note; NEVER renumbered (canonical means canonical). urns
+    frozen — the 2005 package is frozen. Fixture-pinned: BOTH piet
+    574s, BOTH baltet 76s.
+  · Headword-less records (the SECOND whole-file quarantine class,
+    censused before it bit): piet 6 — content-bearing Iranian stubs
+    at the file tail (Sogd./Yag. material) the live CGI cannot even
+    serve ("Total of 0 records") — germet 6 / baltet 7 fully-empty
+    numbered slots; pokorny/vasmer 0. VERDICT: kept under the
+    mechanical "#NUMBER" placeholder headword (the crosslink
+    notation) — nothing hidden, links at those numbers resolve.
+    Fixture-pinned: piet #3278, germet #401.
+- VASMER: language rus (the headwords are Russian dictionary words,
+  accented, verbatim incl. the inflection-follows comma the live site
+  renders — "сига́ть,"; fold takes the first comma-variant). vasmer.inf
+  is BLANK → field labels from the live CGI (Word / Near etymology /
+  Further etymology / Trubachev's comments / Editorial comments /
+  Pages; web-verified on #20) and the ATTRIBUTION from the roster's
+  actual words ("scanned, OCR'd, and database-converted versions of
+  M. Vasmer's etymological dictionary of Russian…") — vasmer's credit
+  differs from pokorny's, carried verbatim per the grant. Field
+  density: GENERAL 18,085 / ORIGIN 3,097 / TRUBACHEV 1,478 /
+  EDITORIAL 191 / PAGES 18,239. REFLEX VERDICT: mints NOTHING —
+  every field is scholarly prose; body-only. No gloss lane (config
+  gloss: nil — the one-line build_entry accommodation).
+- GERMET: gem-pro (unifies with wiktionary-recon's Proto-Germanic
+  shelf code). REFLEX VERDICT: 19 of 21 single-language columns mint
+  leading-citation-form rows — 14,627 rows censused with the real
+  gate. GOT→got and OENGL→ang JOIN THE GOLD (attested counts resolve
+  via ReflexViews at query time — test-pinned against a seeded lemma
+  index); the rest speak the Wiktionary codes the kaikki crosswalk
+  speaks (non/no/gmq-osw/sv/gmq-oda/da/enm/en/ofs/osx/dum/nl/gml/nds/
+  goh/gmh/de). NEW GATE, censused: bare dialect/variety LABELS lead
+  ~75 cells without the period that self-filtered piet's "Khow."
+  (CrimGot ×7, NIsl ×20, OGutn ×13, OWFris ×15, Langob, dial…) —
+  STOP_TOKENS (27 censused tokens, zero collisions with legitimate
+  citation forms anywhere in the package, zero piet/pokorny drift,
+  both measured). EASTFRIS + OLFRANK stay BODY-ONLY: variety-
+  ambiguous columns (EASTFRIS ~47% label-led "Fris./WFris."; OLFRANK
+  mixes ONFrank/OFrank/SalFrank/EFrank) — a language code would be
+  invented, the P22-0 IRAN/ITAL/CELT/TOKH discipline.
+- BALTET: bat-pro — minted by the family-code+-pro convention;
+  Wiktionary reconstructs Balto-Slavic (ine-bsl-pro), not Proto-
+  Baltic, so there is no upstream shelf to unify with (journaled in
+  the language note). Headwords carry no Lm modifier letters
+  (censused) — the generic §9 fold suffices, no Normalize change.
+  REFLEX VERDICT: all four columns mint (OLITH→olt, LITH→lt, LETT→lv,
+  OPRUS→prg; 96%+ clean) — 3,091 rows.
+- CROSSLINKS NOW LIVE: piet's SLAVNUM/BALTNUM/GERMNUM body lines name
+  entry ids that exist (censused: GERMNUM 1,965/1,965 resolve, SLAVNUM
+  1,233/1,233, BALTNUM 1,626/1,632 — the six misses ARE the six baltet
+  duplicates); germet/baltet PRNUM → piet (1,955/1,955 and 1,642/
+  1,643). Fixture set closes every crosslink loop on itself: piet #1 ⇄
+  germet #1, piet #562 ⇄ germet #390 + baltet #1634, piet #1501 →
+  vasmer #12561. BODY-LINE → LIVE-LINK RESOLUTION: no cheap wire
+  exists inside the current rendering — the only resolution lane
+  define renders is DictionaryCitation (cts-work-shaped, resolved at
+  query time); a "Vasmer: #12561" line would need a dictionary-
+  crosslink rows lane (the citations pattern: parser mints, loader
+  persists, query resolves) — JOURNALED AS FOLLOW-UP, not built (the
+  packet's explicit boundary). Interim: `show urn:nabu:dict:
+  starling-vasmer:12561` works today (P22-2).
+- ATTRIBUTION: all five credits verbatim in MANIFEST.license →
+  sources.license → every define/etym/MCP surface (render-tested on a
+  vasmer define). 02-sources row 56 extended; the non-consensus caveat
+  rides as before.
+- FIXTURES: 19 real records across five bases (piet regained its
+  P22-0 three + the two 574s + #3278; every record live-CGI verified
+  char-level; one known divergence journaled — the legacy web
+  converter renders \xF0 as ɵ where the official unipro.lst maps
+  U+03D1 ϑ, germet #513; the table is the authority). manifest.yml +
+  README updated with selection rationale.
+- Owner queue: `bin/nabu sync starling --parse-only` (re-parse of the
+  already-fetched package lands piet's 3,291 + the three new shelves;
+  a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
+  line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
+  the piet 574-b note body, then flip enabled + rebuild.
