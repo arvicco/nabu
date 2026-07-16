@@ -7218,3 +7218,71 @@ README/library.md invariant name, source_registry authority comment,
 edh-survey status block, 02-sources row 51 (status LIVE + fixture
 list). Owner queue: `bin/nabu sync edh --parse-only` lands the 26
 (+26 docs, errored 27→1, one loud -26 delta line, then quiet).
+
+## P23-2 · Slovenian dictionary shelf (Pleteršnik / JSV / besedje16)  [tier: fable] [status: done 2026-07-15 — zrc-xml family + sl-lexica adapter shipped, enabled:false awaiting owner sync+flip; verdicts below] [deps: —]
+
+Owner-approved 2026-07-15 (queued since the P17-6 CLARIN.SI survey,
+docs/clarin-si-survey.md §2): the three ZRC SAZU dictionary deposits
+that give the sl axis what LSJ/L&S/B-T gave grc/lat/ang, keyed to the
+goo300k/IMP corpora already held. SHIPPED: parser family `zrc-xml`
+(flat ZRC SAZU dictionary XML, NOT TEI — streamed via XML::Reader, the
+>5 MB rule) + `SlLexica` adapter (`sl-lexica` source, three
+dictionaries pletersnik/jsv/besedje16), three-zip ZipFetch (per-dict
+subdir + state + attic, the ORACC recipe on goo300k's CLARIN.SI URL
+pattern), registry row `enabled: false` / `sync_policy: manual`,
+conformance-mirror tests + idempotent double-load + define renders.
+
+CENSUS VERDICTS (fetched to scratch 2026-07-15, one GET per artifact):
+- **One source, not three.** All three records carry the IDENTICAL
+  verbatim grant — dc.rights "Creative Commons - Attribution 4.0
+  International (CC BY 4.0)", label PUB → `attribution` — same
+  publisher conventions (`geslo-id` entry-per-line XML + XSD), same
+  fetch shape; no license/posture split demands per-artifact sources
+  (the lexica LSJ/L&S precedent).
+- **Counts:** pletersnik 103,185 (= description), jsv 8,461 counted vs
+  8,540 described (upstream delta, reported honestly in fixtures README
+  + 02-sources), besedje16 27,759. All geslo-ids unique per file.
+- **Language = `sl` for all three** (besedje16 included): headwords are
+  MODERNIZED orthography by editorial design — exactly what goo300k's
+  gold lemmas speak — so a period subtag/marker would fracture the
+  define/gloss joins for no gain. The period lives in dictionary
+  titles + the `witness:sl-lexica` language note.
+- **Pleteršnik headword split:** display headword = accented `<oi>`
+  (tonemes: abecę̑da), `headword_folded` from unaccented `<ge>` — the
+  generic §9 mark strip folds tonemes, but `<oi>` spellings carry ə/ł
+  (ábəł) that no modern query types; ge "abel" is the real key. No new
+  conventions §9 rule needed (sl ſ→s + generic strip suffice — the
+  survey's toneme-folding question, settled at fixture time).
+- **JSV citations minted UNRESOLVED:** every `<ct>` → DictionaryCitation
+  with urn_raw/label verbatim ("(I/1, 207)"), cts_work nil (nothing
+  invented), citation = parsed "I/1.207" vol/page pair ("s." suffix
+  tolerated; upstream typos like "I1, 112" parse to nil honestly).
+- **besedje16 CRLF** line endings (the other two are LF) — preserved
+  byte-exact in fixtures.
+
+DEEP-EXTRACTION LEDGER — wired: German/modern-sl/razl glosses, toneme
+display forms, folded lookup (define abeceda ≡ define abecę̑da; one
+"a" lookup unifies all three dictionaries), JSV vol/page citation rows,
+loanword etymologies + attestation quotes verbatim in bodies (Bohorič ſ
+kept — canonical means canonical), besedje16 attestation sigla verbatim
+in bodies, sl witness language note (dictionary_loader rider).
+JOURNALED, not wired (each needs its own owner-scoped packet):
+- Pleteršnik `<gn>`/`<ko>` dialect/place tags as a geo facet (26,692
+  gn occurrences) and `<ov>` source-authority sigla (215,568) as an
+  attestation apparatus; `dodatek` (663) + besedje16 `zvezdica` (192) /
+  `hom` attributes as entry metadata.
+- JSV citation RESOLUTION against IMP (needs the Sacrum promptuarium
+  holding check the survey left open).
+- besedje16 sigla→document crosswalk (DB 1584 = zrc_00001-1584) —
+  mechanical once a sigla registry exists; earliest-attestation axis.
+- Franček crosswalk deposit (11356/1472): NOT fetched — outside this
+  packet's three-artifact scope; remains the survey's rider.
+
+Fixtures: test/fixtures/sl-lexica/ — 7+5+6 byte-verbatim entries + the
+three XSDs whole (documented deviation from the plan's "2–3 each":
+homograph sets and per-element variants cannot be pinned with fewer).
+Tests +23 (suite 2,787 / 33,663 · lint 354 files, both exit 0).
+Checklist §6 for the owner: bin/nabu sync sl-lexica (three GETs, ~7 MB
+→ 139,405 entries), eyeball `nabu define abeceda` (toneme headword,
+German gloss) + `nabu define --lang sl a` (three-dictionary
+unification) + `nabu language sl` (witness note), then flip enabled.
