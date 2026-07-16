@@ -870,3 +870,32 @@ Operational notes:
   (name/family/context, same three modes) through `Nabu::LanguageShelf`
   and syncs the dossier shelf — a scaffold, not an editor; edit
   `canonical/local-language/<code>.md` directly afterwards and re-sync.
+
+## 14. Source dossiers — the local-source shelf (P24-0)
+
+One Markdown dossier per REGISTERED SOURCE under `canonical/local-source/`
+(architecture §16, shelf three): the shelf's `description` (1–3 sentences,
+the load-bearing lane), `themes`, `key_works` urns, your prose, and
+provenance-headed accretion sections. Served on `nabu list SLUG` cards,
+the `nabu list --long` census, and the MCP `nabu_status` payload.
+
+The workflow:
+
+1. **Seed once** (idempotent, safe to re-run after registering sources):
+   `bin/nabu list --export-source-dossiers` (`--dry-run` previews)
+   scaffolds a dossier for every registered source, descriptions seeded
+   from existing prose (docs/library.md, sources.yml comments); where none
+   exists the dossier is an honest stub and the report names it.
+2. **Derive**: `bin/nabu sync local-source` re-scans the tree and replaces
+   the catalog's `source_records` (rebuild replays it too).
+3. **Edit** any dossier directly (or scaffold one:
+   `bin/nabu ingest --shelf source SLUG`), then re-sync. Writes from code
+   go ONLY through `Nabu::SourceShelf`, the shelf's sanctioned gateway.
+4. **Gate-check**: `bundle exec rake site:check` at every phase gate
+   (site/MAINTENANCE.md standing duty) — flags presence/mention drift
+   between dossier descriptions and docs/library.md (a registered source
+   with no dossier; a library-described shelf with no dossier
+   description; an enabled described shelf the library never mentions).
+   It checks MENTION, never verbatim wording, and never generates — exit
+   1 lists the findings; the fixes are the seed command, a description
+   edit, or a library.md row.

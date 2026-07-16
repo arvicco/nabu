@@ -554,6 +554,76 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P24-0: the source-dossier consumers ----------------------------------
+
+  def test_list_card_renders_the_dossier_description_under_the_header
+    with_list_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:source_records].insert(
+        slug: "shelf", kind: "description", provenance: "dossier",
+        body: "A deliberately long shelf description that carries enough words to force the card " \
+              "renderer to wrap it onto a second indented line at the house measure."
+      )
+      catalog.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      lines = out.lines
+      header = lines.index { |line| line.start_with?("shelf — Shelf") }
+      assert_match(/^  A deliberately long shelf description/, lines[header + 1],
+                   "the description renders directly under the header")
+      assert_match(/^  \S/, lines[header + 2], "long descriptions wrap onto further indented lines")
+      assert_match(/house measure\.$/, lines[header + 2].chomp, "the prose tail survives the wrap whole")
+    end
+  end
+
+  def test_list_census_long_adds_one_description_line_per_described_source
+    with_list_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:source_records].insert(slug: "lex", kind: "description",
+                                      body: "The reference shelf.", provenance: "dossier")
+      catalog.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[list --long]) }
+      assert_nil status
+      assert_match(/^\s+The reference shelf\.$/, out)
+      description_lines = out.lines.count { |line| line.match?(/\A\s+\S/) }
+      assert_equal 1, description_lines,
+                   "only the described source gets a description line (zero fields suppressed)"
+    end
+  end
+
+  def test_list_long_and_dry_run_flag_validations
+    with_list_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[list shelf --long]) }
+      assert_equal 1, status
+      assert_match(/--long expands the bare census/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[list --dry-run]) }
+      assert_equal 1, status
+      assert_match(/--dry-run composes with --export-source-dossiers/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[list shelf --export-source-dossiers]) }
+      assert_equal 1, status
+      assert_match(/scaffolds ALL registered sources/, err)
+    end
+  end
+
+  def test_list_export_source_dossiers_scaffolds_every_registered_source_idempotently
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --export-source-dossiers]) }
+      assert_nil status
+      assert_match(/scaffolded 3, 0 existing untouched/, out)
+      assert_match(/honest stub/, out, "scratch sources carry no library.md prose — stubs, said so")
+      shelf_dir = Nabu::SourceShelf.dir(config.canonical_dir)
+      assert File.file?(File.join(shelf_dir, "shelf.md"))
+      assert File.file?(File.join(shelf_dir, "lex.md"))
+      assert File.file?(File.join(shelf_dir, "library.md"))
+
+      out, _err, status = with_config(config) { run_cli(%w[list --export-source-dossiers]) }
+      assert_nil status
+      assert_match(/scaffolded 0, 3 existing untouched/, out, "the export is idempotent")
+    end
+  end
+
   def test_list_documents_enumerates_with_flags_and_an_honest_tail
     with_list_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[list shelf --documents]) }
