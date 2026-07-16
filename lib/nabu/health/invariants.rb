@@ -178,11 +178,13 @@ module Nabu
         )
       end
 
-      # What "populated" means is content-kind-shaped (P19-1): a language
-      # dossier shelf's artifact is language_records rows (it owns them —
-      # the shelf is their only writer), everything else documents/entries.
+      # What "populated" means is content-kind-shaped (P19-1/P24-1): a
+      # language dossier shelf's artifact is language_records rows, the
+      # owner-notes shelf's urn_notes rows (each shelf is its table's only
+      # writer), everything else documents/entries.
       def populated?(entry)
         return language_records.positive? if content_kind(entry) == :language
+        return urn_notes.positive? if content_kind(entry) == :notes
 
         live_documents(entry.slug).positive? || dictionary_entries(entry.slug).positive?
       end
@@ -406,6 +408,12 @@ module Nabu
         return 0 unless table?(@catalog, :language_records)
 
         @catalog[:language_records].count
+      end
+
+      def urn_notes
+        return 0 unless table?(@catalog, :urn_notes)
+
+        @catalog[:urn_notes].count
       end
 
       def dossier_files(slug)

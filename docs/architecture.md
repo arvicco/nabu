@@ -1020,7 +1020,8 @@ analogue for data that is authored rather than downloaded. For the
 local-language shelf that gateway is `Nabu::LanguageShelf`; for the
 local-library shelf it is `Nabu::LibraryShelf` (P19-5: copy-in — never
 move — plus the mechanical, append-only manifest append), driven by `nabu
-ingest`. Everything else stays read-only on the shelves.
+ingest`; for the local-notes shelf it is `Nabu::NoteShelf` (P24-1), driven
+by `nabu note`. Everything else stays read-only on the shelves.
 
 **Shelf one: `canonical/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -1119,6 +1120,38 @@ discusses from either end. Language codes in `related:` stay document
 metadata only: P19-1 minted no dossier urns, and an edge to an invented
 urn would sit permanently unresolved — codes upgrade to edges if dossier
 documents ever exist.
+
+**Shelf three: `canonical/local-notes/` (P24-1)** — the owner's annotation
+lane, scholia of one's own: curatorial notes keyed by ANY urn the corpus
+knows — a document, a passage, a range, a dictionary entry (P22-2's minted
+urns included). One YAML file per TOPIC (`<topic>.yml`, default `notes` —
+grouping is the owner's whim), each a YAML LIST of records
+(`urn`/`note`/`added`/optional `tags`) so the gateway appends one
+mechanically without rewriting the owner's bytes; hand-edits are welcome
+(the file is the record) and parse validates every record, naming defects
+file+entry (`Nabu::NoteFile`). The gateway (`Nabu::NoteShelf`, driven by
+`nabu note URN [TEXT]` — scripted with TEXT, interactive on a TTY, an
+honest refusal piped; `nabu note URN` alone reads back) resolves the urn
+against the catalog BEFORE any write (Query::Show's resolution, dictionary
+urns included): a typo'd urn is an error naming the miss, while `--force`
+records a note on a not-yet-held urn deliberately (planned material) and
+such notes read "(dangling)" at render until the urn arrives. The append is
+atomic with the LibraryShelf discipline: reparse-validate through the real
+parser, rollback to the prior bytes on rejection. The `local-notes` adapter
+(`content_kind :notes`, the fourth loader routing → `Store::NoteLoader`)
+indexes topics into the derived `urn_notes` (migration 015) — temperature
+1, replaced per topic wholesale, swept on full loads, rebuilt by `nabu
+rebuild`; `nabu verify` re-parses the topic files and diffs the derived
+rows (the dossier pattern). Render is the point: `show` prints an "owner
+note (topic, date): …" footer (a document also counts its passage-note
+children), `define` prints entry notes after the body, `links` shows an
+owner-notes lane, `nabu note --list` enumerates (bounded, dangling urns
+flagged) — and the MCP surface serves notes BY DEFAULT on
+nabu_show/nabu_define (owner ruling: your own library metadata is useful
+context), attached strictly AFTER the withhold gate so a note on a
+research_private/restricted document is withheld with its target: a note
+must never leak a withheld text's content frame. The shelf itself is class
+`open` (owner-authored, the local-language argument).
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is

@@ -7463,3 +7463,70 @@ FINDINGS (2026-07-16):
   a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
   line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
   the piet 574-b note body, then flip enabled + rebuild.
+
+# ── Phase 24 ──────────────────────────────────────────────────────────
+
+## P24-1 · `nabu note` — owner annotations on any urn  [tier: fable] [status: done 2026-07-16 — shelf + gateway + adapter + renders shipped; design verdicts below] [deps: —]
+The curatorial note lane (owner-approved 2026-07-16, metadata-framework
+phase 2): notes keyed by ANY urn the corpus knows — document, passage,
+range, dictionary entry — nabu's scholia-of-one's-own. Canonical-memory
+doctrine (architecture §16): notes live as FILES under
+canonical/local-notes/<topic>.yml (a YAML LIST of urn/note/added/tags
+records, append-only through the gateway, hand-edits validated with
+file+entry defect naming — Nabu::NoteFile); the db only indexes
+(urn_notes, migration 015, temperature 1, replaced per topic wholesale by
+Store::NoteLoader — content_kind :notes, the fourth loader routing).
+
+SHIPPED:
+- Nabu::NoteShelf — the FOURTH sanctioned local-shelf write gateway
+  (CLAUDE.md rule + architecture §16 updated in the same change): atomic
+  append + reparse-validate + rollback (the LibraryShelf P20-1 pattern),
+  urn resolution against the catalog BEFORE any write (Query::Show incl.
+  P22-2 dictionary-entry urns; a range with a bad endpoint is a miss,
+  never a crash); --force records a note on a not-yet-held urn (planned
+  material), flagged (dangling) at render.
+- `nabu note URN [TEXT]`: scripted append / interactive prompt (TTY; the
+  ingest furniture) / bare-urn read-back of existing notes; non-TTY
+  without TEXT refuses honestly BEFORE any write; `--topic` (default
+  notes; "manifest" reserved shelf furniture), `--tags`, `--force`,
+  `nabu note --list [--topic] [--limit]` (bounded, dangling flagged).
+  Append runs the shelf's ordinary sync (the ingest pattern) so the note
+  indexes + sha-pins immediately.
+- Adapter local-notes (sync_policy local, enabled true — the P19-1
+  argument): LocalFetch per-file pins/vanished/attic verbatim; quarantine
+  per topic file; discovery census counts non-topic yml by rule.
+  Registered in config/sources.yml + 02-sources row 61. Verify diffs
+  derived rows per topic (the dossier pattern); status shows notes=N
+  (the P11-10 misleading-zero rule); health populated? gains the :notes
+  grain.
+- Renders: show footer "owner note (topic, date): …" + document
+  passage-note child count; define entry notes after the body (and on
+  show of a minted dict urn); links owner-notes lane; MCP nabu_show/
+  nabu_define serve notes BY DEFAULT (owner: "your own library metadata
+  is useful context"), attached strictly AFTER the withhold gate — a note
+  on a research_private/restricted document is withheld with its target.
+
+DESIGN VERDICTS (2026-07-16):
+- FILE GROUPING: topic files (default "notes"), not per-urn files — one
+  honest review surface per theme, mechanical appends, the manifest
+  precedent; topic names are lowercase file stems, "manifest" reserved
+  (fixture/shelf furniture collision, gateway and discovery agree).
+- DANGLING-URN STORY: resolution is a GATEWAY check, not a parse rule —
+  NoteFile accepts any urn:-shaped key so hand-edits and --force survive
+  rebuilds; renders flag (dangling) by re-resolving at read time, so the
+  note self-heals the day the urn arrives. The reparse-validate backstop
+  keeps even a --force append from landing a non-urn key (rollback,
+  byte-identical prior file).
+- WITHHOLDING RULE: notes attach to their TARGET's payload only, after
+  the withhold gate — the withheld response carries no notes field at
+  all, so the frame cannot leak; include_restricted serves note beside
+  target, deliberately.
+- IDEMPOTENCY GRAIN: notes have no per-record key, so the loader replaces
+  per TOPIC wholesale — byte-identical topics skip whole (double-load
+  test pins rows AND ids unchanged), edits re-add whole, absent topics
+  sweep on full loads only.
+
+Owner queue: `bin/nabu sync local-notes` errors until the first note
+exists (LocalFetch's missing-tree honesty — the hint names `nabu note`);
+try `bin/nabu note <urn> "…"` on a held urn, then `show <urn>`,
+`note --list`, and an MCP nabu_show to see the served lane.
