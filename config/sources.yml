@@ -358,20 +358,28 @@ edl:
 
 starling:
   adapter: Nabu::Adapters::Starling
-  enabled: false   # P22-0: awaiting the owner-fired first sync (6.2 MB IE.exe
-                   # zip → 2,222 pokorny roots + 3,291 piet etymologies,
-                   # ~4.4k reflex rows; CLAUDE.md checklist §6 — eyeball
-                   # `nabu define '*bher-'` for the Pokorny shelf credit and
-                   # `nabu etym collum`-class walks, then flip).
+  enabled: false   # P22-0/P23-0: awaiting the owner-fired sync + flip. One
+                   # 6.2 MB IE.exe zip → five shelves: 2,222 pokorny roots +
+                   # 3,291 piet etymologies (P22-0; the live piet quarantine —
+                   # upstream NUMBER 574 collision — is fixed in P23-0, so
+                   # re-run `bin/nabu sync starling --parse-only` to land it)
+                   # + 18,239 vasmer entries + 1,994 germet + 1,651 baltet
+                   # (P23-0; 4,398 piet + 17,718 germet/baltet reflex rows).
+                   # CLAUDE.md checklist §6 — eyeball `nabu define '*bher-'`
+                   # (Pokorny credit), `nabu define 'сигать'` (vasmer credit),
+                   # `nabu etym hals` (germet got/ang gold joins), then flip.
   # StarLing / Tower of Babel IE package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
   # scanned/recognized by George Starostin, corrected by A. Lubotsky; PIET:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
-  # by S. Starostin — carried verbatim in the adapter MANIFEST.license so
-  # every serving surface renders it. Upstream is a hand-curated 2005-era
-  # package: re-fetch is an owner decision.
+  # by S. Starostin; Vasmer: the project's scan/OCR/database conversion of
+  # M. Vasmer's dictionary (roster; vasmer.inf is blank); Germanic + Baltic:
+  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO) —
+  # all carried verbatim in the adapter MANIFEST.license so every serving
+  # surface renders them. Upstream is a hand-curated 2005-era package:
+  # re-fetch is an owner decision.
   sync_policy: manual
 
 local-language:

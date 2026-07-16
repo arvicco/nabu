@@ -255,6 +255,11 @@ survey below (data census, decoding) predates the grant and stands.
 **Adapter built P22-0 (2026-07-15):** `starling-dbf` parser family +
 `starling` source (pokorny + piet shelves, `enabled: false`) — pending
 the owner-fired first sync + flip; see 02-sources row 56.
+**P23-0 (2026-07-16):** the remaining three bases landed as BASES config
+rows — vasmer (rus, 18,239; chslav.lst decodes its OCS runs) + germet
+(gem-pro, 1,994; GOT/OENGL join the got/ang gold) + baltet (bat-pro,
+1,651) — and the upstream NUMBER-574 collision that quarantined the
+owner's live piet load is handled (574-b); all five bases parse whole.
 
 
 <https://starlingdb.org> (starling.rinet.ru 301s here). The famous murky

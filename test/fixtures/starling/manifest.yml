@@ -1,7 +1,7 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All four files live INSIDE the downloadable IE.exe package (a plain zip;
+# All ten files live INSIDE the downloadable IE.exe package (a plain zip;
 # no per-file raw URL), and each is a documented TRIM (whole: false): the
 # selected records' bytes and their .var payloads are byte-verbatim
 # upstream, only the record count and the 6-byte var-pointers were
@@ -22,8 +22,32 @@ files:
   - path: piet.dbf
     url: https://starlingdb.org/download/IE.exe
     whole: false
-    trim: 3 of 3,291 records — NUMBER 1 (*ay-er/n-), 562 (*kol-, the pokorny-#1089 crosslink pair), 1501 (*k'īgh-, proto-column no-row pin); header + field descriptors verbatim, var-pointers rewritten
+    trim: 6 of 3,291 records — NUMBER 1 (*ay-er/n-), 562 (*kol-, the pokorny-#1089 crosslink pair), 574 BOTH TIMES (*kōim- + *kneuk-, the upstream NUMBER-collision pin → entry ids 574/574-b), 1501 (*k'īgh-, proto-column no-row pin), 3278 (headword-less Iranian stub → the #3278 placeholder pin); header + field descriptors verbatim, var-pointers rewritten
   - path: piet.var
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: vasmer.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 3 of 18,239 records — NUMBER 1 (а, the chslav азъ pin), 20 (абракада́бра, all five text fields = the live-CGI label pin), 12561 (сига́ть, — the piet-#1501 SLAVNUM target); header + field descriptors verbatim, var-pointers rewritten
+  - path: vasmer.var
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: germet.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 4 of 1,994 records — NUMBER 1 (*aira-, OLFRANK body-only pin, piet-#1 pair), 390 (*xálsa-z, the got/ang gold-join pin, piet-#562 pair), 401 (empty numbered slot → the #401 placeholder pin), 513 (*marϑiō ?, the CrimGot STOP_TOKENS pin); header + field descriptors verbatim, var-pointers rewritten
+  - path: germet.var
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: baltet.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 3 of 1,651 records — NUMBER 76 BOTH TIMES (*blus-ā̂ + *dal-i-s, one of baltet's six duplicate-NUMBER pairs → entry ids 76/76-b), 1634 (*kakla-, the piet-#562 BALTNUM pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: baltet.var
     url: https://starlingdb.org/download/IE.exe
     whole: false
     trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
