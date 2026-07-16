@@ -3926,7 +3926,7 @@ module Nabu
           say "  dated/placed #{result.axes.total} documents " \
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
-              "edh #{result.axes.edh})"
+              "edh #{result.axes.edh}, damaskini #{result.axes.damaskini})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

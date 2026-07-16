@@ -114,6 +114,32 @@ class ConlluParserTest < Minitest::Test
     assert_match(/no sentence blocks/, error.message)
   end
 
+  # --- the citation hook (P23-1) ------------------------------------------
+
+  def test_citation_hook_maps_sent_id_to_the_minted_citation
+    doc = Nabu::Adapters::ConlluParser.new.parse(
+      GOTHIC,
+      urn: GOTHIC_URN, language: "got", citation: ->(sent_id) { "s#{sent_id}" }
+    )
+    assert_equal "#{GOTHIC_URN}:s46928", doc.first.urn,
+                 "the passage urn suffix is the hook's output, not the raw sent_id"
+  end
+
+  def test_document_metadata_passes_through
+    doc = Nabu::Adapters::ConlluParser.new.parse(
+      GOTHIC, urn: GOTHIC_URN, language: "got", metadata: { "scribe" => "Wulfila" }
+    )
+    assert_equal({ "scribe" => "Wulfila" }, doc.metadata)
+  end
+
+  def test_citation_hook_returning_blank_raises_parse_error
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::ConlluParser.new.parse(GOTHIC, urn: GOTHIC_URN, language: "got",
+                                                     citation: ->(_) { "" })
+    end
+    assert_match(/citation/, error.message)
+  end
+
   private
 
   def parse(path, urn:, language:)

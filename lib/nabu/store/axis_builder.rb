@@ -44,14 +44,15 @@ module Nabu
       # and edh_undated/edh_invalid (P17-2: undated-but-joined records and the
       # year-0 tripwire). The P17-1/P17-2 fields default so every prior
       # construction stays valid.
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh,
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid) do
-        def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0, **)
+        def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
+                       damaskini: 0, **)
           super
         end
 
-        def total = hgv + goo300k + imp + oracc + torot + coptic + edh
+        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini
       end
 
       module_function
@@ -68,9 +69,11 @@ module Nabu
         torot = ChronicleAnnals.build(catalog: catalog, canonical_dir: canonical_dir)
         coptic = CopticScriptoriumDates.build(catalog: catalog, canonical_dir: canonical_dir)
         edh = EdhDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        damaskini = DamaskiniDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
+                    damaskini: damaskini[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
@@ -224,3 +227,4 @@ require_relative "axis_builder/oracc_dates"
 require_relative "axis_builder/chronicle_annals"
 require_relative "axis_builder/coptic_scriptorium_dates"
 require_relative "axis_builder/edh_dates"
+require_relative "axis_builder/damaskini_dates"
