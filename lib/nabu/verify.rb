@@ -96,6 +96,7 @@ module Nabu
       adapter = entry.build_adapter
       return verify_dictionary_source(entry, adapter, workdir) if adapter.class.content_kind == :dictionary
       return verify_language_source(entry, adapter, workdir) if adapter.class.content_kind == :language
+      return verify_notes_source(entry, adapter, workdir) if adapter.class.content_kind == :notes
 
       recomputed, unparseable = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
@@ -131,6 +132,48 @@ module Nabu
       codes = @db[:language_records].distinct.select_map(:lang_code).sort
       issues = codes.filter_map { |code| classify_code(entry, code, reparsed) }
       SourceOutcome.new(slug: entry.slug, verified: codes.size, issues: issues)
+    end
+
+    # The owner-notes shelf (P24-1) verifies the dossier way: re-parse the
+    # topic files and diff the derived rows they yield against the catalog's
+    # urn_notes, per topic. Rows carry no stored sha (they ARE the content),
+    # so the comparison is the row set itself — the same fate vocabulary
+    # (:mismatch / :missing / :unparseable).
+    def verify_notes_source(entry, adapter, workdir)
+      return SourceOutcome.new(slug: entry.slug, verified: 0, issues: []) \
+        unless @db.table_exists?(:urn_notes)
+
+      reparsed = reparse_notes(adapter, workdir)
+      topics = @db[:urn_notes].distinct.select_map(:topic).sort
+      issues = topics.filter_map { |topic| classify_topic(entry, topic, reparsed) }
+      SourceOutcome.new(slug: entry.slug, verified: topics.size, issues: issues)
+    end
+
+    # { topic => derived row set } from a fresh discover→parse (attic
+    # included; Store::NoteLoader.rows_for, so load and check never drift);
+    # a malformed topic file contributes its error instead.
+    def reparse_notes(adapter, workdir)
+      reparsed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        note_file = adapter.parse(ref)
+        reparsed[note_file.topic] = Store::NoteLoader.rows_for(note_file)
+      rescue Nabu::ParseError => e
+        reparsed[ref.metadata.fetch("topic", ref.id)] = e.message
+      end
+      reparsed
+    end
+
+    def classify_topic(entry, topic, reparsed)
+      stored = @db[:urn_notes].where(topic: topic).order(:id)
+                              .select(:urn, :note, :topic, :tags, :added, :provenance).all
+      urn = "#{entry.slug}:#{topic}"
+      fresh = reparsed[topic]
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
+      return nil if fresh == stored
+
+      DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                        detail: "derived notes differ from the reparsed topic file")
     end
 
     # { code => [[kind, body, source], …] } from a fresh discover→parse

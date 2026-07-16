@@ -1336,6 +1336,200 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- nabu note (P24-1): the owner-annotation lane ---------------------------
+
+  ILIAD_DOC = "urn:nabu:test_adapter:one"
+
+  # A corpus catalog (TestAdapter, rebuilt) + the local-notes shelf
+  # registered: what `nabu note` needs to resolve urns and run the shelf
+  # sync after an append.
+  def with_note_env
+    Dir.mktmpdir("nabu-cli-note") do |root|
+      sources = <<~YAML
+        corpus:
+          adapter: TestAdapter
+          enabled: true
+        local-notes:
+          adapter: Nabu::Adapters::LocalNotes
+          enabled: true
+          sync_policy: local
+      YAML
+      path = File.join(root, "sources.yml")
+      File.write(path, sources)
+      canonical = File.join(root, "canonical")
+      FileUtils.mkdir_p(File.join(canonical, "corpus"))
+      File.write(File.join(canonical, "corpus", "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      config = Nabu::Config.new(canonical_dir: canonical, db_dir: File.join(root, "db"),
+                                sources_path: path, config_path: "(test)")
+      capture_io { Nabu::Rebuild.new(config: config, registry: Nabu::SourceRegistry.load(path)).run }
+      yield config, root
+    end
+  end
+
+  def test_note_scripted_append_writes_canonical_syncs_and_renders_on_show
+    with_note_env do |config, _root|
+      out, _err, status = with_config(config) do
+        run_cli(["note", ILIAD_DOC, "Collate against Jagić 1883.", "--tags", "collation,ocs"])
+      end
+      assert_nil status
+      assert_match(/noted\s+#{Regexp.escape(ILIAD_DOC)}/, out)
+      assert_match(/local-notes\s+\S+\s+\+1 added/, out, "the shelf's ordinary sync runs after the append")
+      assert_match(%r{try: bin/nabu show #{Regexp.escape(ILIAD_DOC)}}, out)
+      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      assert_equal [ILIAD_DOC], notes.records.map(&:urn)
+      assert_equal %w[collation ocs], notes.records.first.tags
+
+      shown, = with_config(config) { run_cli(["show", ILIAD_DOC]) }
+      assert_match(/owner note \(notes, \d{4}-\d{2}-\d{2}\): Collate against Jagić 1883\.  \[collation, ocs\]/,
+                   shown, "the show footer carries the note")
+    end
+  end
+
+  def test_note_on_a_passage_counts_as_a_child_on_the_document_and_renders_on_the_passage
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", "#{ILIAD_DOC}:1", "The invocation line."]) }
+      doc_view, = with_config(config) { run_cli(["show", ILIAD_DOC]) }
+      assert_match(/passage notes: 1/, doc_view, "a document counts its passage-note children")
+      refute_match(/owner note .*invocation/, doc_view, "the child note renders on the child, not the parent")
+      passage_view, = with_config(config) { run_cli(["show", "#{ILIAD_DOC}:1"]) }
+      assert_match(/owner note \(notes, .*\): The invocation line\./, passage_view)
+    end
+  end
+
+  def test_note_typod_urn_is_an_error_naming_the_miss_and_writes_nothing
+    with_note_env do |config, _root|
+      _out, err, status = with_config(config) { run_cli(["note", "urn:nabu:test_adapter:eno", "typo"]) }
+      assert_equal 1, status
+      assert_match(/urn:nabu:test_adapter:eno does not resolve/, err)
+      assert_match(/--force/, err, "the planned-material escape hatch is taught")
+      refute Dir.exist?(File.join(config.canonical_dir, "local-notes")), "a refusal writes nothing"
+    end
+  end
+
+  def test_note_force_records_a_dangling_note_and_list_flags_it
+    with_note_env do |config, _root|
+      out, _err, status = with_config(config) do
+        run_cli(["note", "urn:nabu:planned:vaillant", "Order the reprint.", "--force", "--topic", "acquisitions"])
+      end
+      assert_nil status
+      assert_match(/reads \(dangling\)/, out, "the append says the urn is not held yet")
+      listed, _err, list_status = with_config(config) { run_cli(%w[note --list]) }
+      assert_nil list_status
+      assert_match(/urn:nabu:planned:vaillant \(dangling\) — \(acquisitions, \d{4}-\d{2}-\d{2}\) Order the reprint\./,
+                   listed)
+    end
+  end
+
+  def test_note_without_text_shows_existing_notes_a_read_not_a_write
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "First thought."]) }
+      out, _err, status = with_config(config) { run_cli(["note", ILIAD_DOC]) }
+      assert_nil status
+      assert_match(/notes on #{Regexp.escape(ILIAD_DOC)} \(1\):/, out)
+      assert_match(/\(notes, \d{4}-\d{2}-\d{2}\) First thought\./, out)
+      assert_match(/add another/, out)
+      assert_equal 1, Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+                                    .records.size, "showing is a read — nothing appended"
+    end
+  end
+
+  def test_note_without_text_without_a_tty_refuses_before_any_write
+    with_note_env do |config, _root|
+      _out, err, status = with_config(config) { run_cli(["note", ILIAD_DOC]) }
+      assert_equal 1, status
+      assert_match(/no TTY to prompt/, err)
+      assert_match(/nothing was written/, err)
+      refute Dir.exist?(File.join(config.canonical_dir, "local-notes"))
+    end
+  end
+
+  def test_note_interactive_prompts_on_a_tty_and_appends
+    with_note_env do |config, _root|
+      out, _err, status = with_config(config) do
+        with_stdin_lines("Prompted marginal note.\n") { run_cli(["note", ILIAD_DOC]) }
+      end
+      assert_nil status
+      assert_match(/note for #{Regexp.escape(ILIAD_DOC)}/, out, "the ingest prompt furniture")
+      assert_match(/noted\s+#{Regexp.escape(ILIAD_DOC)}/, out)
+      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      assert_equal ["Prompted marginal note."], notes.records.map(&:note)
+    end
+  end
+
+  def test_note_list_is_bounded_and_topic_narrowed
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "General note."]) }
+      with_config(config) { run_cli(["note", "#{ILIAD_DOC}:1", "Logged.", "--topic", "reading-log"]) }
+      out, = with_config(config) { run_cli(%w[note --list --limit 1]) }
+      assert_match(/— \(notes, .*\) General note\./, out)
+      assert_match(/… and 1 more \(--limit lifts/, out, "the honest total survives the bound")
+      narrowed, = with_config(config) { run_cli(%w[note --list --topic reading-log]) }
+      assert_match(/Logged\./, narrowed)
+      refute_match(/General note/, narrowed)
+    end
+  end
+
+  def test_note_on_a_dictionary_entry_urn_renders_after_the_define_body
+    with_note_env do |config, _root|
+      folded = Nabu::Normalize.search_form("λόγος", language: "grc")
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.first(slug: "corpus")
+      dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: "lsj", title: "LSJ",
+                                                  language: "grc")
+      Nabu::Store::DictionaryEntry.create(dictionary_id: dictionary.id, urn: "urn:nabu:dict:lsj:logos",
+                                          entry_id: "logos", key_raw: "λόγος", headword: "λόγος",
+                                          headword_folded: folded, body: "the word, the account",
+                                          content_sha256: "x")
+      db.disconnect
+      with_config(config) { run_cli(["note", "urn:nabu:dict:lsj:logos", "Anchor for John 1.1."]) }
+
+      defined, _err, status = with_config(config) { run_cli(%w[define λόγος]) }
+      assert_nil status
+      assert_match(/owner note \(notes, .*\): Anchor for John 1\.1\./, defined,
+                   "entry notes render after the define body")
+      shown, = with_config(config) { run_cli(%w[show urn:nabu:dict:lsj:logos]) }
+      assert_match(/owner note \(notes, .*\): Anchor for John 1\.1\./, shown,
+                   "show on the minted dict urn carries the same footer")
+    end
+  end
+
+  def test_links_shows_an_owner_notes_lane
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      db = Nabu::Store.connect(config.catalog_path)
+      db[:urn_notes].insert(urn: "urn:h:od:1.1", note: "The anchor verse of the survey.", topic: "notes",
+                            added: "2026-07-16", provenance: "local-notes/notes.yml")
+      db.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/owner notes \(1\):\n  \(notes, 2026-07-16\) The anchor verse of the survey\./, out,
+                   "notes are a lane beside the mined edges")
+    end
+  end
+
+  # A stdin double that claims a TTY AND yields scripted lines — the
+  # interactive-note rig (Thor's ask reads $stdin.gets).
+  def with_stdin_lines(script)
+    original = $stdin
+    fake = StringIO.new(script)
+    def fake.tty? = true
+    $stdin = fake
+    yield
+  ensure
+    $stdin = original
+  end
+
+  def test_help_note_documents_the_modes_the_resolution_rule_and_force
+    out, _err, _status = run_cli(%w[help note])
+    assert_match(%r{canonical/local-notes}, out, "canonical memory is stated")
+    assert_match(/RESOLVE/, out, "the resolution rule is taught")
+    assert_match(/--force/, out)
+    assert_match(/dangling/, out)
+    assert_match(/--list/, out)
+    assert_match(/Examples:/, out)
+  end
+
   # `nabu help ingest` must teach the front door: the three modes, the
   # license default, the copy-never-move promise, and the language scaffold.
   def test_help_ingest_documents_the_three_modes_and_the_license_default

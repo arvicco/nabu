@@ -227,8 +227,9 @@ module Nabu
     # passage corpora load through Store::Loader, dictionary sources through
     # Store::DictionaryLoader (P19-1: with the corpus root, so its language-
     # notes accretion can reach the local-language dossier shelf), language
-    # dossier shelves through Store::LanguageDossierLoader — same call shape,
-    # same LoadReport.
+    # dossier shelves through Store::LanguageDossierLoader, the owner-notes
+    # shelf through Store::NoteLoader (P24-1) — same call shape, same
+    # LoadReport.
     def load(source, adapter, workdir, progress)
       loader = build_loader(adapter, source)
       loader.load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
@@ -241,6 +242,8 @@ module Nabu
                                     canonical_dir: @config.canonical_dir)
       when :language
         Store::LanguageDossierLoader.new(db: @db, source: source, ledger: @ledger)
+      when :notes
+        Store::NoteLoader.new(db: @db, source: source, ledger: @ledger)
       else
         Store::Loader.new(db: @db, source: source, ledger: @ledger)
       end

@@ -394,6 +394,69 @@ module MCP
       refute_match(/vertraulich/, text_of(shown), "the shelf's text never leaks by default")
     end
 
+    # -- P24-1: owner notes served by default, withheld with their target ---------
+
+    def seed_note(urn:, note:, topic: "notes", tags: nil, added: "2026-07-16")
+      @catalog[:urn_notes].insert(urn: urn, note: note, topic: topic, added: added,
+                                  tags: tags && JSON.generate(tags),
+                                  provenance: "local-notes/#{topic}.yml")
+    end
+
+    def test_show_serves_owner_notes_by_default_with_the_document_child_count
+      seed_corpus
+      seed_note(urn: @grc.urn, note: "Collate against the OCT.", tags: %w[collation])
+      seed_note(urn: "#{@grc.urn}:1.1", note: "The invocation line.")
+
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      notes = body.fetch("notes")
+      assert_equal(["Collate against the OCT."], notes.map { |n| n.fetch("note") })
+      assert_equal %w[collation], notes.first.fetch("tags")
+      assert_equal "notes", notes.first.fetch("topic")
+      assert_equal 1, body.fetch("passage_note_count"), "the document counts its passage-note children"
+
+      passage = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal(["The invocation line."], passage.fetch("notes").map { |n| n.fetch("note") })
+    end
+
+    def test_show_omits_the_notes_lane_when_unnoted
+      seed_corpus
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      refute body.key?("notes"), "zero-signal silence, not an empty list"
+      refute body.key?("passage_note_count")
+    end
+
+    # The withholding rule: a note on a research_private/restricted document
+    # follows the DOCUMENT's withholding — the withheld response carries no
+    # notes, so a note can never leak a withheld text's content frame.
+    def test_notes_on_a_withheld_document_are_withheld_with_it
+      seed_corpus
+      seed_note(urn: "urn:nabu:adhoc:notes:1", note: "The μυστικον passage frames the private survey.")
+
+      withheld = call("nabu_show", { "urn" => "urn:nabu:adhoc:notes:1" })
+      refute_match(/μυστικον/, text_of(withheld))
+      refute_match(/private survey/, text_of(withheld), "the note is withheld with its target")
+
+      opted = payload(call("nabu_show", { "urn" => "urn:nabu:adhoc:notes:1",
+                                          "include_restricted" => true }))
+      assert_match(/private survey/, opted.fetch("notes").first.fetch("note"),
+                   "the deliberate opt-in serves the note beside its target")
+    end
+
+    def test_define_serves_entry_notes_by_default
+      seed_shelf
+      bare = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      refute bare.key?("notes"), "zero-signal silence before any note exists"
+      entry_urn = bare.fetch("urn")
+      seed_note(urn: entry_urn, note: "Anchor for the John 1.1 comparison.")
+
+      entry = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      assert_equal(["Anchor for the John 1.1 comparison."], entry.fetch("notes").map { |n| n.fetch("note") })
+
+      shown = payload(call("nabu_show", { "urn" => entry_urn }))
+      assert_equal ["Anchor for the John 1.1 comparison."], shown.fetch("notes").map { |n| n.fetch("note") },
+                   "show on the minted dict urn carries the same lane"
+    end
+
     def test_status_excludes_restricted_material_from_coverage_counts
       seed_corpus
       body = payload(call("nabu_status"))
