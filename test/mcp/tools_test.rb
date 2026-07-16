@@ -602,6 +602,20 @@ module MCP
       assert_equal 0, perseus.fetch("entries")
     end
 
+    # P24-0: each source's dossier description (canonical/local-source →
+    # source_records) rides the status payload by default — the owner's own
+    # library metadata is useful context. Absent dossier = absent key.
+    def test_status_serves_source_dossier_descriptions_by_default
+      seed_corpus
+      @catalog[:source_records].insert(slug: "perseus", kind: "description",
+                                       body: "The Greek canon.", provenance: "dossier")
+      body = payload(call("nabu_status"))
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "The Greek canon.", perseus.fetch("description")
+      undescribed = body.fetch("sources").find { |s| s.fetch("slug") != "perseus" }
+      refute undescribed.key?("description"), "no dossier description = absent key, never a null"
+    end
+
     # P23-3b: the registry is AUTHORITATIVE for enablement — a registry flip
     # reaches the db row only at the source's next sync, so status surfaces
     # the registry value for registered slugs. An unregistered catalog source

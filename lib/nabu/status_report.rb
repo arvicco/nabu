@@ -120,6 +120,7 @@ module Nabu
       return "entries=#{dictionary_entry_count(source)}" if dictionary?(entry)
       return "records=#{language_record_count}" if language?(entry)
       return "notes=#{urn_note_count}" if notes?(entry)
+      return "records=#{source_record_count}" if source_shelf?(entry)
       return "docs=0 pass=0" if source.nil?
 
       live = Store::Document.where(source_id: source.id, withdrawn: false)
@@ -147,6 +148,11 @@ module Nabu
       content_kind(entry) == :notes
     end
 
+    # The source-dossier shelf's twin (P24-0): per-source records.
+    def source_shelf?(entry)
+      content_kind(entry) == :source
+    end
+
     def content_kind(entry)
       entry.adapter_class.content_kind
     rescue Nabu::Error
@@ -171,6 +177,15 @@ module Nabu
       return 0 unless db&.table_exists?(:urn_notes)
 
       Store::UrnNote.count
+    end
+
+    # Derived rows in source_records (the local-source shelf is their only
+    # writer). A catalog predating migration 016 reads 0, honestly.
+    def source_record_count
+      db = Store::SourceRecord.db
+      return 0 unless db&.table_exists?(:source_records)
+
+      Store::SourceRecord.count
     end
 
     # Live dictionary entries owned by this source (across all its

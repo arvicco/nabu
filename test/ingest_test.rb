@@ -692,4 +692,68 @@ class IngestTest < Minitest::Test
       assert_match(/not a language code/, error.message)
     end
   end
+
+  # -- --shelf source: the source-dossier scaffold (P24-0) --------------------
+
+  def with_source_shelf
+    Dir.mktmpdir("nabu-ingest-source") do |root|
+      yield Nabu::SourceShelf.new(dir: File.join(root, "canonical", "local-source"))
+    end
+  end
+
+  def test_scaffold_source_writes_a_parseable_dossier_skeleton
+    with_source_shelf do |shelf|
+      engine = Nabu::Ingest.new(resolver: Nabu::Ingest::AcceptResolver.new,
+                                overrides: { "description" => "Latin inscriptions, empire-wide.",
+                                             "themes" => "epigraphy, onomastics",
+                                             "key_works" => "urn:nabu:edh:hd029093" })
+      outcome = engine.scaffold_source("edh", source_shelf: shelf, source_name: "Epigraphic Database Heidelberg")
+      assert_equal :added, outcome.status
+      dossier = shelf.load("edh")
+      assert_equal "Latin inscriptions, empire-wide.", dossier.description
+      assert_equal %w[epigraphy onomastics], dossier.themes
+      assert_equal %w[urn:nabu:edh:hd029093], dossier.key_works
+    end
+  end
+
+  def test_scaffold_source_prompts_with_the_source_name_prefilled
+    ask = ScriptedAsk.new
+    with_source_shelf do |shelf|
+      engine = Nabu::Ingest.new(resolver: Nabu::Ingest::PromptResolver.new(ask: ask.to_proc))
+      engine.scaffold_source("edh", source_shelf: shelf, source_name: "Epigraphic Database Heidelberg")
+      assert_equal(%w[description themes key_works], ask.asked.map { |label, _| label.split.first })
+      assert_equal "Epigraphic Database Heidelberg", ask.asked.first.last,
+                   "the description prompt prefills from the registered source name"
+      assert_equal "Epigraphic Database Heidelberg", shelf.load("edh").description
+    end
+  end
+
+  def test_scaffold_source_is_a_no_op_on_an_existing_dossier
+    with_source_shelf do |shelf|
+      shelf.write!(Nabu::SourceDossier.new(slug: "edh", description: "Owner-edited."))
+      engine = Nabu::Ingest.new(resolver: Nabu::Ingest::AcceptResolver.new)
+      outcome = engine.scaffold_source("edh", source_shelf: shelf, source_name: "EDH")
+      assert_equal :skipped, outcome.status
+      assert_match(/dossier exists — edit .*edh\.md/, outcome.message)
+      assert_equal "Owner-edited.", shelf.load("edh").description, "the existing dossier is untouched"
+    end
+  end
+
+  def test_scaffold_source_refuses_a_non_slug_and_a_non_urn_key_work
+    with_source_shelf do |shelf|
+      engine = Nabu::Ingest.new(resolver: Nabu::Ingest::AcceptResolver.new)
+      error = assert_raises(Nabu::ValidationError) do
+        engine.scaffold_source("Not A Slug!", source_shelf: shelf)
+      end
+      assert_match(/not a source slug/, error.message)
+
+      engine = Nabu::Ingest.new(resolver: Nabu::Ingest::AcceptResolver.new,
+                                overrides: { "key_works" => "hd029093" })
+      error = assert_raises(Nabu::ValidationError) do
+        engine.scaffold_source("edh", source_shelf: shelf)
+      end
+      assert_match(/not a urn/, error.message)
+      assert_nil shelf.load("edh"), "an invalid --yes value fails the scaffold before any write"
+    end
+  end
 end

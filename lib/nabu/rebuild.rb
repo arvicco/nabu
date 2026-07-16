@@ -169,6 +169,8 @@ module Nabu
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
       when :notes
         Store::NoteLoader.new(db: db, source: source, ledger: ledger)
+      when :source
+        Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
         Store::Loader.new(db: db, source: source, ledger: ledger)
       end
