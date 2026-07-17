@@ -83,6 +83,16 @@ module Nabu
     # ~50k rows, < 5 MB, ~1.4 s; the P17-3 survey projects ~56–60k rows,
     # < 8 MB after the four new shelves land.
     #
+    # Since P26-4 "gold" is literal tier scope, not just a synonym for
+    # "annotated": the language scope and the stats denominators read only
+    # tier-gold rows of passage_lemmas. The closure is RECONSTRUCTION
+    # EVIDENCE (Cognates joins it to claim attested reflexes), and silver
+    # (automatic-lemmatization) rows carry no such claim — a language whose
+    # lemmas are all silver (Diorisis-only coverage) stays out of the
+    # closure entirely, and a silver flood can never skew the suppression
+    # denominator. Pre-tier fulltext files have no tier column and read
+    # all-gold (the borrowed_column? precedent).
+    #
     # The companion STATS_TABLE holds per-language gold passage counts —
     # what Query::Cognates' common-word suppression divides by (a fixed
     # absolute df threshold is percentile-incoherent across corpora spanning
@@ -138,11 +148,12 @@ module Nabu
 
       # Per-language DISTINCT gold passage counts — the suppression
       # denominator, snapshotted from the passage_lemmas built in the same
-      # rebuild pass (so the two can never drift).
+      # rebuild pass (so the two can never drift). Tier-scoped (class note):
+      # a silver passage is not a gold passage.
       def write_stats(fulltext)
         return unless fulltext.table_exists?(Indexer::LEMMA_TABLE)
 
-        rows = fulltext[Indexer::LEMMA_TABLE]
+        rows = gold_rows(fulltext)
                .group(:language)
                .select { [language, count(:passage_id).distinct.as(:gold_passages)] }
                .map { |row| { language: row.fetch(:language), gold_passages: row.fetch(:gold_passages) } }
@@ -152,7 +163,17 @@ module Nabu
       def gold_languages(fulltext)
         return [] unless fulltext.table_exists?(Indexer::LEMMA_TABLE)
 
-        fulltext[Indexer::LEMMA_TABLE].distinct.select_map(:language).compact
+        gold_rows(fulltext).distinct.select_map(:language).compact
+      end
+
+      # The tier-gold slice of passage_lemmas (class note; P26-4). A
+      # pre-tier table has no tier column — and no silver rows — so the
+      # unfiltered dataset is the same set.
+      def gold_rows(fulltext)
+        dataset = fulltext[Indexer::LEMMA_TABLE]
+        return dataset unless dataset.columns.include?(:tier)
+
+        dataset.where(tier: Indexer::GOLD_TIER)
       end
 
       # Live entries only (the withdrawn filter mirrors Etym#entry_dataset):

@@ -173,6 +173,68 @@ module Query
                       "the fixture corpus's gold lemmas are Latin"
     end
 
+    # -- P26-4: the lemma tier (labeled profile, gold reference corpus) --------
+
+    def silver_source
+      @silver_source ||= Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+    end
+
+    def make_silver_document(urn:, title: "Silver")
+      Nabu::Store::Document.create(
+        source_id: silver_source.id, urn: urn, title: title, language: "grc",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+    end
+
+    def silver_rebuild!
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "diorisis" => "silver" })
+    end
+
+    def test_a_gold_document_carries_the_gold_tier_label
+      seed_corpus
+      assert_equal "gold", vocab("urn:d:lat").lemma_tier
+    end
+
+    def test_a_silver_document_profiles_labeled_never_as_gold
+      seed_corpus # gold background (built again below with tiers threaded)
+      doc = make_silver_document(urn: "urn:d:silver")
+      make_passage(doc, urn: "urn:d:silver:1", sequence: 1, language: "grc",
+                        lemmas: %w[θεός θεός λόγος])
+      silver_rebuild!
+      profile = vocab("urn:d:silver")
+      assert_equal "silver", profile.lemma_tier,
+                   "the profile of an automatic-lemmatization document says so"
+      assert_equal 3, profile.total_tokens, "silver documents DO profile — that is the value"
+      assert_equal 2, profile.distinct_lemmas
+    end
+
+    def test_corpus_reference_frequencies_are_gold_scoped
+      seed_corpus # gold "et" df = 43 (40 background + 3 in the document)
+      doc = make_silver_document(urn: "urn:d:silver")
+      make_passage(doc, urn: "urn:d:silver:1", sequence: 1, language: "grc", lemmas: %w[et])
+      silver_rebuild!
+      profile = vocab("urn:d:lat")
+      et = profile.distinctive.find { |e| e.lemma == "et" } || flunk("et entry missing")
+      assert_equal 43, et.corpus_freq,
+                   "the reference corpus stays gold — the silver row must not lift et to 44"
+    end
+
+    def test_gold_languages_listing_is_gold_scoped
+      seed_corpus
+      doc = make_silver_document(urn: "urn:d:silver")
+      make_passage(doc, urn: "urn:d:silver:1", sequence: 1, language: "grc", lemmas: %w[θεός])
+      empty = make_document(urn: "urn:d:empty", title: "No lemmas")
+      make_passage(empty, urn: "urn:d:empty:1", sequence: 1)
+      silver_rebuild!
+      profile = vocab("urn:d:empty")
+      assert_equal ["lat"], profile.gold_languages.map(&:first),
+                   "the listing's own label says GOLD-bearing — silver-only grc must not appear"
+    end
+
     def test_withdrawn_passages_are_excluded_from_the_profile
       doc = make_document(urn: "urn:d:w")
       make_passage(doc, urn: "urn:d:w:1", sequence: 1, lemmas: %w[hostis])

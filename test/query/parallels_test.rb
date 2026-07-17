@@ -237,6 +237,30 @@ module Query
       assert_equal %w[στόμα ἄρτος], hit.shared_lemmas.sort, "the shared lemmas are reported (dictionary forms)"
     end
 
+    # P26-4 (the P26-0 journaled decision, pinned): lemma echoes are a
+    # HEURISTIC DISCOVERY signal, so they deliberately read BOTH tiers — a
+    # silver (automatic) anchor still finds echoes and a silver passage still
+    # echoes a gold anchor; that is exactly what the Diorisis layer buys for
+    # the un-annotated Perseus canon. No attestation count is rendered here.
+    def test_lemma_echoes_read_both_tiers
+      silver = Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+      anchor = make_document(urn: "urn:le:anchor", title: "Anchor", source: silver)
+      make_passage(anchor, urn: "urn:le:anchor:1", text: "ἄρτος ἐκπορεύεται στόμα θεός", sequence: 0,
+                           lemmas: [%w[ἄρτος ἄρτος], %w[στόμα στόμα]])
+      echo = make_document(urn: "urn:le:echo", title: "Echo")
+      make_passage(echo, urn: "urn:le:echo:1", text: "ἄρτον καὶ στόματι", sequence: 0,
+                         lemmas: [%w[ἄρτος ἄρτον], %w[στόμα στόματι]])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "diorisis" => "silver" })
+
+      echoes = parallels("urn:le:anchor:1").lemma_echoes.map(&:urn)
+      assert_includes echoes, "urn:le:echo:1",
+                      "a silver anchor still finds gold echoes — the discovery surface reads both tiers"
+    end
+
     def test_no_lemma_echoes_for_a_non_lemmatized_anchor
       anchor = make_document(urn: "urn:nl:a", title: "Anchor")
       make_passage(anchor, urn: "urn:nl:a:1", text: ODYSSEY_1_1, sequence: 0) # no lemmas

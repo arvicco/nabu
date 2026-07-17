@@ -273,6 +273,37 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P26-4: the tier on the concord and vocab renders ------------------------
+
+  def test_concord_lemma_mode_tags_silver_rows_and_totals_them
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord --lemma зима --lang chu]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:auto:chu:1 \[chu\] \[silver\]$/, out, "silver rows say so")
+      refute_match(/urn:nabu:test:treebank:chu:1 \[chu\] \[silver\]/, out, "gold rows stay untagged")
+      assert_match(/— 2 silver \(automatic lemmatization\)$/, out, "the footer totals the silver share")
+    end
+  end
+
+  def test_vocab_labels_a_silver_document_never_as_gold
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab urn:nabu:test:auto:chu]) }
+      assert_nil status
+      assert_match(/silver lemmas: 2 tokens/, out, "the count line itself says silver")
+      assert_match(/lemma tier: silver \(automatic lemmatization/, out)
+      refute_match(/gold lemmas:/, out, "a silver profile must never render under the gold name")
+    end
+  end
+
+  def test_vocab_keeps_the_pre_tier_render_for_gold_documents
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[vocab urn:nabu:test:treebank:chu]) }
+      assert_nil status
+      assert_match(/gold lemmas: 1 token/, out)
+      refute_match(/lemma tier:/, out, "gold renders exactly as before — no label noise")
+    end
+  end
+
   # -- P24-2: define/etym coordination — etym must not miss what define finds --
 
   # THE incident (owner, 2026-07-16): `define сигать` finds the Vasmer

@@ -148,6 +148,28 @@ module Query
                    "a lemma with no surface forms in the corpus yields no proximity anchor"
     end
 
+    # P26-4 (the P26-0 journaled decision, pinned): the lemma anchor is a
+    # RETRIEVAL EXPANSION, so it deliberately reads BOTH tiers — a surface
+    # form attested only by the silver (automatic) layer still expands the
+    # anchor, mirroring search --lemma's inclusive stance. The hit itself is
+    # real text the reader judges from its snippet; no per-hit annotation
+    # claim is rendered that a tier label could attach to.
+    def test_lemma_anchor_expands_through_silver_attested_forms
+      silver = Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+      doc = make_document(urn: "urn:d:silver", source: silver)
+      make_passage(doc, urn: "urn:d:silver:1", text: "καὶ εἶπε κύριος πρὸς Μωυσῆν", sequence: 0,
+                        lemmas: [%w[λέγω εἶπε], %w[κύριος κύριος]])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "diorisis" => "silver" })
+
+      hits = prox(lemma: "λέγω", near: "κύριος", window: 3)
+      assert_equal %w[urn:d:silver:1], hits.map(&:urn),
+                   "the silver-attested suppletive εἶπε expands the λέγω anchor"
+    end
+
     # -- filters compose (catalog side, shared with Search) ------------------
 
     def test_language_and_license_filter_compose

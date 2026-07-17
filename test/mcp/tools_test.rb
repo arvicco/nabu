@@ -1095,6 +1095,20 @@ module MCP
       assert_equal "silver", silver_hit.fetch("tier"), "silver hits say so"
     end
 
+    # P26-4: concord is a formatter over LemmaSearch, so its rows mirror the
+    # lemma-hit labels — tier key on non-gold rows only; gold and text-mode
+    # rows carry no tier key at all.
+    def test_concord_lemma_payload_labels_silver_rows
+      seed_tiered_bog_corpus
+      rows = payload(call("nabu_concord", { "lemma" => "богъ", "lang" => "chu" })).fetch("rows")
+      gold_row = rows.find { |r| r.fetch("urn") == "urn:nabu:test:chu:1" }
+      silver_row = rows.find { |r| r.fetch("urn") == "urn:nabu:test:auto:chu:1" }
+      refute_nil gold_row
+      refute_nil silver_row
+      refute gold_row.key?("tier"), "gold rows stay unlabeled (the lemma-hit mirror)"
+      assert_equal "silver", silver_row.fetch("tier"), "silver rows say so"
+    end
+
     # P17-3: the payload nests the full shelf-visited chain and labels loan
     # edges — прьстъ → *pьrstъ → (nested) *pírštan → (nested) *per-, and
     # хлѣбъ's *hlaibaz ancestor carries edge_borrowed: true.
