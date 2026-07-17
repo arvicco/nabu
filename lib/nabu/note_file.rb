@@ -28,6 +28,16 @@ module Nabu
 
     ADDED_SHAPE = /\A\d{4}-\d{2}-\d{2}\z/
 
+    # A note's stable id: 8 hex chars of the digest over its identity
+    # (topic + urn + added + text). COMPUTED, never stored — so hand-added
+    # records have ids automatically, file edits never renumber neighbors,
+    # and every surface (--list, the bare-urn read-back, --rm) derives the
+    # same id from the same content.
+    def self.record_id(topic:, urn:, added:, note:)
+      require "digest"
+      Digest::SHA256.hexdigest("#{topic}\n#{urn}\n#{added}\n#{note}")[0, 8]
+    end
+
     # Parse the notes file at +path+; the topic is the file stem. Raises
     # FormatError on any structural or per-record defect, naming the file
     # and the offending entry.
