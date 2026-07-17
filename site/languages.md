@@ -6,7 +6,7 @@ description: >-
   dictionaries, and the gold-lemma index, with the code conventions.
 ---
 
-As of **14 July 2026** — a live inventory: every code below appears in the
+As of **17 July 2026** — a live inventory: every code below appears in the
 catalog, the lemma index, or the reference shelf. The maintained original of
 this page is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
@@ -60,6 +60,10 @@ catalog on sync.
 | `ang` | Old English | Beowulf and the complete ASPR poetry, plus the ISWOC prose and gospel treebank, ca. 700–1150. |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts. |
+| `sga` | Old / Early Irish | The Celtic axis's keystone (added 17 July 2026): CorPH's gold-lemmatized texts and gloss corpora, 7th–10th c., plus the two Old Irish UD treebanks — a new gold-lemma language. |
+| `xtg` | Gaulish | The 428 RIIG inscriptions in Gallo-Greek and Gallo-Latin scripts (added 17 July 2026). |
+| `pgl` | Primitive Irish | The ogham stones, in real Ogham codepoints with aligned transliteration layers (added 17 July 2026; held `nc` pending a license clarification). |
+| `bul` | Bulgarian (pre-standardized) | The damaskini witnesses of the Church Slavonic–Bulgarian continuum, 15th–19th c., gold-annotated (added 17 July 2026). |
 | `ar` | Arabic | A handful of early Islamic-era documentary papyri. |
 | `hit` | Hittite | Anatolian entries in the multilingual cuneiform lexical lists. |
 | `xhu` | Hurrian | Isolated lexical-list column entries from the cuneiform shelf. |
@@ -95,19 +99,29 @@ catalog on sync.
 | `ine` | IE-CoR | 4,981 expert-curated Indo-European cognate sets (synchronized 14 July 2026), with loan events flagged — an independent witness beside the Wiktionary-derived chains. |
 | `ine-pro` | LIV-LOD | 305 Proto-Indo-European verbal etymons with stem types (synchronized 14 July 2026). |
 | `ine-pro` / `itc-pro` | de Vaan, <em>Etymological Dictionary of Latin</em> | 2,860 etymons across two shelves (synchronized 14 July 2026) — the Latin → Proto-Italic → PIE chains of the Leiden school. |
+| `ine-pro` | StarLing: Pokorny; Nikolayev PIE | Pokorny's complete <em>IEW</em> (2,222 roots) and Nikolayev's Walde-Pokorny-based database (3,291 etymologies with per-branch reflexes), synchronized 17 July 2026 under a written grant. |
+| `rus` | StarLing: Vasmer | Vasmer's etymological dictionary of Russian, Trubachev edition — 18,239 entries (synchronized 17 July 2026). |
+| `gem-pro` / `bat-pro` | StarLing: Common Germanic; Baltic | 1,994 and 1,651 etymologies with per-language reflex columns (synchronized 17 July 2026). |
+| `sl` | Pleteršnik; Svetokriški; besedje16 | The Slovenian historical dictionary shelf, 139,405 entries (synchronized 17 July 2026) — toneme-accented headwords, Baroque attestation quotes, 16th-century print sigla. |
+| `sga` / `mga` / `wlm` | Wiktionary Celtic extracts | Old Irish (6,564 entries), Middle Irish (767), and Middle Welsh (766) extracts joining the reconstruction crosswalk (synchronized 17 July 2026). |
 
 <p class="aside">All seven reconstruction shelves are live, with multi-hop
-chains through the intermediate shelves and per-edge loan flags, and the
+chains through the intermediate shelves and per-edge loan flags; the
 three etymological witnesses — IE-CoR, LIV-LOD, and de Vaan — are
-synchronized and live as of 14 July 2026.</p>
+synchronized and live as of 14 July 2026, and the five StarLing bases,
+the Slovenian historical dictionaries, and the Celtic Wiktionary
+extracts as of 17 July 2026.</p>
 
 ## Gold-lemma languages
 
-Fifteen languages are searchable by dictionary form (`search --lemma`) as
-of 14 July 2026:
+Seventeen languages are searchable by dictionary form (`search --lemma`)
+as of 17 July 2026:
 
-`lat, grc, orv, akk, cop, sl, san, sux, chu, got, ang, xcl, xhu, uga, hit`
+`lat, grc, orv, akk, cop, sl, san, sux, chu, got, ang, xcl, xhu, uga,
+hit, sga, bul`
 
-The treebanks, ORACC, goo300k, and Coptic Scriptorium feed these
-2,852,069 annotations; everything else is full-text-searchable but not yet
-lemma-searchable.
+The treebanks, ORACC, goo300k, Coptic Scriptorium, CorPH, and damaskini
+feed these annotations — over 2.85 million rows (the exact count of
+2,852,069 dates from the 14 July census; the Old Irish and Bulgarian
+layers landed on 17 July). Everything else is full-text-searchable but
+not yet lemma-searchable.

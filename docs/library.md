@@ -1,22 +1,21 @@
 # The Library — content review
 
-**As of 2026-07-14** (post Phase 19, branch phase-19). Live totals:
-**170,711 documents / 4,267,659 passages** across the 28 **synced** sources
-(20 corpus sources carrying documents + 8 reference sources — lexica,
-bosworth-toller, mw, wiktionary-cu, wiktionary-recon, and the etymological
-trio iecor/liv/edl, synced and flipped live 2026-07-14 — carrying
-dictionary entries only), plus **458,238 dictionary entries** on the
-reference shelf (sixteen dictionaries, including Monier-Williams, the seven
-reconstruction shelves, and the three new etymological witnesses — §8h),
-and **2,852,069 gold lemma rows in 15 languages**. Two **local shelves**
-(architecture §16) and the registered-but-unsynced `starling` source
-(StarLing/Tower of Babel Pokorny + PIET, P22-0 — `enabled: false` until
-the owner-fired first sync) complete the registry at 31 sources, 30
-enabled: the
-`local-language` dossier shelf is live (199 dossiers → 329 derived language
-records), and the `local-library` shelf for the owner's own PDFs and scans
-is registered with `nabu ingest` as its front door — empty until the first
-ingest (§8i). The code-per-language map lives in
+**As of 2026-07-17** (post Phases 20–25). Live totals:
+**172,189 documents / 4,308,814 passages** across the **38 registered,
+synced sources** — 25 corpus sources carrying documents (the
+`local-library` shelf now among them, 20 owner-ingested docs — §8i) + 10
+reference sources carrying dictionary entries only (`lexica`,
+`bosworth-toller`, `mw`, `wiktionary-cu`, `wiktionary-recon`, `sl-lexica`,
+`starling`, and the etymological trio `iecor`/`liv`/`edl`) + 3
+canonical-memory shelves (`local-language` 199 dossiers, `local-source`
+37 source dossiers, `local-notes` — empty until the owner's first
+annotations). The reference shelf holds **633,137 dictionary entries**
+across twenty-seven dictionary shelves (§8c, §8h, §8j, §8k). The gold
+lemma layer stood at **2,852,069 rows in 15 languages** at the 2026-07-14
+census; since then the CorPH sync added the first Old Irish (`sga`) gold
+lemmas and damaskini its Balkan Slavic rows (Bulgarian the seventeenth
+gold language) — a fresh `passage_lemmas` row census is owed at the next
+full review. The code-per-language map lives in
 [languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
@@ -96,7 +95,7 @@ locus.
 | **Category** | Documentary texts: contracts, tax receipts, petitions, private letters, census returns, leases, court records |
 | **Language** | Greek (`grc`, 57,912 docs), Coptic (`cop`, 2,063), Latin (`lat`, 1,425), Arabic (`ar`, 12), Demotic (`egy-Egyd`, 2) |
 | **Period** | Ptolemaic to early Islamic Egypt — c. 300 BCE to 8th c. CE |
-| **Size** | 61,416 docs / 921,694 passages (the largest shelf by passages; largest by documents until the EDH inscriptions arrived — §8g; counts as of the owner's 2026-07-14 resync) |
+| **Size** | 61,414 docs / 921,611 passages (the largest shelf by passages; largest by documents until the EDH inscriptions arrived — §8g; counts as of 2026-07-17 — per-language split above from the 2026-07-14 resync) |
 | **Source** | `papyri-ddbdp` (Duke Databank of Documentary Papyri via papyri.info), license: `attribution` |
 | **Metadata** | DDbDP identifiers (series.volume.number), Leiden-convention editorial markup preserved (restorations, cancellations — including the cancelled-⟦⟧ fallback class), fragment/side structure as passage paths |
 
@@ -144,10 +143,10 @@ texts that mostly exist as scanned books elsewhere.
 | | |
 |---|---|
 | **Category** | Gold-standard linguistically annotated corpora: lemma, morphology, dependency syntax per token |
-| **Language** | Latin (`lat`), Greek (`grc`), Gothic (`got`), Classical Armenian (`xcl`), Old Church Slavonic (`chu`), Old East Slavic (`orv`), Vedic Sanskrit (`san`), Old English (`ang` — ISWOC, §8d) |
+| **Language** | Latin (`lat`), Greek (`grc`), Gothic (`got`), Classical Armenian (`xcl`), Old Church Slavonic (`chu`), Old East Slavic (`orv`), Vedic Sanskrit (`san`), Old English (`ang` — ISWOC, §8d), Old Irish (`sga` — the P25-2 glosses pair, §8l) |
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
-| **Size** | 73 docs / 175,644 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (21 / 91,238) — plus `iswoc` (5 / 2,536, §8d) in the same family |
-| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (seven treebanks incl. Old East Slavic birchbark letters, Middle Russian RNC, and Ruthenian — the first two CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
+| **Size** | 75 docs / 175,742 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (23 / 91,336) — plus `iswoc` (5 / 2,536, §8d) in the same family |
+| **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (nine treebanks incl. Old East Slavic birchbark letters, Middle Russian RNC, Ruthenian, and — since the 2026-07-17 sync — the two Old Irish glosses treebanks DipSGG/DipWBG; birchbark/RNC/Ruthenian/DipWBG CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
 | **Metadata** | The gold lemma layer: `passage_lemmas` totals **2,852,069 rows in 15 languages** (lat 583k, orv 455k, grc 379k, san 190k, chu 123k, got 99k, ang 25k, xcl 18k from the treebank family; akk 361k, sux 171k + Hurrian/Ugaritic/Hittite scatter from ORACC gold — §8; sl 214k from goo300k — §8e; cop 233k from Coptic Scriptorium — §8f), searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
@@ -156,8 +155,10 @@ versions of the same text, morphologically annotated) plus classical prose
 (Herodotus, Caesar, Cicero); TOROT's Old East Slavic and OCS shelf (birchbark
 letters, chronicles including the Kiev Chronicle, Domostroj, Avvakum,
 Afanasij Nikitin); UD treebanks adding Thomas Aquinas (ITTB, the largest
-Latin lemma pool), Vedic Sanskrit, and the Ruthenian (prosta mova) treebank
-riding under `orv`.
+Latin lemma pool), Vedic Sanskrit, the Ruthenian (prosta mova) treebank
+riding under `orv`, and — since the 2026-07-17 sync — the two Old Irish
+glosses treebanks (St Gall Priscian DipSGG, Würzburg DipWBG; test-set-only
+conversions, the UD side of the Celtic axis — §8l).
 
 **Research uses:** any lemma-based query (find every inflected occurrence of
 a word regardless of form); historical/comparative linguistics across the
@@ -242,7 +243,7 @@ the densest multi-language alignment laboratory in the library.
 | | |
 |---|---|
 | **Category** | Scholarly lexica and reconstruction dictionaries — entries, not passages (own tables, own `nabu define` / `nabu etym` surfaces) |
-| **Size** | **458,238 entries** across sixteen dictionaries: LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) + **Bosworth-Toller** (Old English, 62,815, CC BY 4.0) + **Monier-Williams** (Sanskrit, 193,890, `nc`) + Wiktionary OCS (`wiktionary-cu`, 4,615) + the seven reconstruction shelves (`wiktionary-recon`: Proto-Germanic 5,717, Proto-West Germanic 5,551, Proto-Slavic 5,431, PIE 1,905, Proto-Indo-Iranian 799, Proto-Italic 745, Proto-Balto-Slavic 491) + the etymological witnesses synced 2026-07-14 (**IE-CoR** 4,981 cognate sets, **LIV** 305 verbal etymons, **de Vaan EDL** 2,860 etymons across two shelves — §8h) |
+| **Size** | **633,137 entries** across twenty-seven dictionary shelves: `lexica` — LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) — plus **`bosworth-toller`** (Old English, 62,815, CC BY 4.0) + **`mw`** Monier-Williams (Sanskrit, 193,890, `nc`) + Wiktionary OCS (`wiktionary-cu`, 4,615) + the `wiktionary-recon` shelves (28,736: the seven reconstruction shelves — Proto-Germanic 5,717, Proto-West Germanic 5,551, Proto-Slavic 5,431, PIE 1,905, Proto-Indo-Iranian 799, Proto-Italic 745, Proto-Balto-Slavic 491 — plus the three attested-Celtic extracts sga/mga/wlm, §8l) + the etymological witnesses synced 2026-07-14 (**IE-CoR** 4,981 cognate sets, **LIV** 305 verbal etymons, **de Vaan EDL** 2,860 etymons across two shelves — §8h) + the five **StarLing** bases (`starling`, 27,397 — §8j) + the three Slovenian historical dictionaries (`sl-lexica`, 139,405 — §8k) |
 | **Metadata** | Folded-headword keying (diacritic-insensitive lookup, incl. æ/þ/ð→ae/th for Old English); betacode decoded; entry citations parsed and **resolved to in-catalog passages** where the cited work exists (μῆνις → Il. 1.1 as a live urn); glosses surface in `search --lemma` output; the reconstruction entries carry machine-readable **descendant trees** joined to attested gold lemmas (`dictionary_reflexes`) |
 
 `nabu define λόγος` / `define virtus` / `define aethele --lang ang`, and
@@ -291,11 +292,11 @@ bridged to Bosworth-Toller definitions.
 
 | | |
 |---|---|
-| **Category** | The Slavic axis (.docs/surveys/slavic-survey.md): OCS gospel manuscripts, the oldest Slovene text, Early Modern Slovenian print |
-| **Language** | Old Church Slavonic (`chu`), Slovenian incl. its historical stages (`sl`), plus the Freising translation layers (`lat`, `eng`, `ger`, `ita`, `pol`) |
+| **Category** | The Slavic axis (.docs/surveys/slavic-survey.md): OCS gospel manuscripts, the oldest Slovene text, Early Modern Slovenian print, pre-standardized Balkan Slavic |
+| **Language** | Old Church Slavonic (`chu`), Bulgarian on the Church-Slavonic→Bulgarian continuum (`bul`), Slovenian incl. its historical stages (`sl`), plus the Freising translation layers (`lat`, `eng`, `ger`, `ita`, `pol`) and the damaskini English siblings |
 | **Period** | ~1000 CE (Freising Manuscripts) through 1899 (IMP print) |
-| **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's fourth-largest shelf by passages (the EDH inscriptions, §8g, edge past it by ~1,400) |
-| **Metadata** | CCMH: folio-line citations, hyphen-split words searchable whole; freising: per-layer parallel citation; goo300k/imp: CE year in the urn (`…:sigil-1584`) feeding the date axis (§9) — all 747 Slovene docs dated |
+| **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's fourth-largest shelf by passages (the EDH inscriptions, §8g, edge past it by ~1,400). `damaskini`: 46 docs / 12,072 passages — 23 gold-annotated Balkan Slavic witnesses, 15th–19th c., plus their 23 English sibling translations (synced live 2026-07-17) |
+| **Metadata** | CCMH: folio-line citations, hyphen-split words searchable whole; freising: per-layer parallel citation; goo300k/imp: CE year in the urn (`…:sigil-1584`) feeding the date axis (§9) — all 747 Slovene docs dated; damaskini: gold lemma + MULTEXT-East MSD, Norm/Origin document facets, TSV-header dates and places on the axis |
 
 The four CCMH codices join the alignment hub (witnesses 10–13 of the NT)
 and are the substrate of `align REF --collate` — a raw-token apparatus per
@@ -304,10 +305,24 @@ other, the Cyrillic Marianus beside them honestly uncollated (the fold
 cannot bridge the two transcription systems). Wiktionary-OCS and the
 reconstruction shelves (§8c) complete the axis: богъ → \*bogъ → PIE.
 
+The `damaskini` shelf (Annotated Corpus of Pre-Standardized Balkan Slavic
+Literature 1.1, CLARIN.SI, CC BY-SA → `attribution`; synced live
+2026-07-17) opens the axis's southern continuation: 23 gold-annotated
+damaskini and related witnesses of the 15th–19th c.
+Church-Slavonic→Bulgarian continuum — among them ~10 independent
+witnesses of Euthymius of Tarnovo's *Life of St. Petka* — each with a
+full English sibling translation (`show --parallel` works), classified
+honestly by the corpus's own Norm scheme (`chu` ×3 / `bul` ×20, the
+deposit's own "Bulgarian" usage quoted in 02-sources row 60), with
+dialectal Origin riding as document facets and the TSV-header dates
+(1536–1860) on the chronological axis.
+
 **Research uses:** OCS textual criticism with a live apparatus; Slavic
-diachrony continued past the treebanks (§6) into Early Modern print;
-diachronic Slovene lexis over three centuries (`vocab --by-century`); the
-Freising Manuscripts beside their OCS near-contemporaries.
+diachrony continued past the treebanks (§6) into Early Modern print *and*
+down the Balkan vernacular line; multi-witness collation of the St. Petka
+tradition; diachronic Slovene lexis over three centuries
+(`vocab --by-century`); the Freising Manuscripts beside their OCS
+near-contemporaries.
 
 ## 8f. Coptic (Coptic Scriptorium)
 
@@ -337,9 +352,9 @@ documentary Coptic papyri (§4) across the literary/documentary line.
 | | |
 |---|---|
 | **Category** | The third documentary genre: epitaphs, dedications, honorific and building inscriptions, milestones, instrumentum — the Roman epigraphic habit |
-| **Language** | Latin (`lat`, 80,561 docs), Greek (`grc`, 1,290 — the bilinguals), plus 5 `und` (exotic-language residue, coded honestly) |
+| **Language** | Latin (`lat`, 80,561 docs), Greek (`grc`, 1,290 — the bilinguals), plus 5 `und` (exotic-language residue, coded honestly; split as of the 2026-07-14 census — the P23-3c quarantine-recovery re-parse added 25 docs since) |
 | **Period** | Roman Republic through Late Antiquity, empire-wide — provinces from Britannia to Arabia |
-| **Size** | 81,856 docs / 406,281 passages — the largest shelf by documents (48% of the library) |
+| **Size** | 81,881 docs / 406,306 passages — the largest shelf by documents (48% of the library; counts as of 2026-07-17) |
 | **Source** | `edh` (Epigraphic Database Heidelberg), license: `attribution` (CC BY-SA 4.0); **`sync_policy: frozen`** — upstream archived 2021, this is a one-shot preservation snapshot (27 quarantines, triaged at gate 18: 26 lb-less inscriptions carried to P19, 1 malformed upstream XML, all baseline-anchored) |
 | **Metadata** | The library's first **genre facets** (migration 009): `document_facets` live at **256,518 rows** (genre/province/material/object_type, `?`-certainty preserved in `raw`) behind `search --type/--province/--material`; **81,416 dated documents** on the axis (§9); persons prosopography in `metadata_json`; Leiden ⟦…⟧ rendering for every `del`; `fuzzy_index: true` |
 
@@ -378,14 +393,72 @@ The three Phase-18 adapters were synced and flipped live by the owner on
   1,394 + `edl-itc-pro` 1,466) / **2,653 reflex edges** — the lat →
   Proto-Italic → PIE Leiden chains beside kaikki's.
 
+## 8j. The StarLing etymological bases (`starling`, synced live 2026-07-17)
+
+| | |
+|---|---|
+| **Category** | The Moscow-school etymological databases (StarLing / Tower of Babel, starlingdb.org) as five dictionary shelves — the Pokorny family complete |
+| **Size** | **27,397 entries**: `starling-pokorny` — Pokorny's *Indogermanisches Etymologisches Wörterbuch*, all 2,222 roots with full Material/References apparatus; `starling-piet` — Nikolayev's Walde-Pokorny-based PIE database, 3,291 etymologies with per-branch reflex columns; `starling-vasmer` (`rus`) — Vasmer's etymological dictionary of Russian, Trubachev edition, 18,239 entries; `starling-germet` (`gem-pro`) — the Common Germanic database, 1,994 etymologies; `starling-baltet` (`bat-pro`) — the Baltic database, 1,651 |
+| **Source** | One 6.2 MB `IE.exe` package, decoded by the table-driven `starling-dbf` parser family (dBase III + StarLing font-shift encoding, byte meanings from the vendored official tables, never guessed) |
+| **License** | `attribution` — a written grant (G. Starostin, 2026-07-15: "free for anybody to use for any purposes as long as the source is properly acknowledged"), with per-base compiler credit carried verbatim in the manifest and rendered on every `define`/`etym`/MCP surface, and the compiler's caveat (individual reconstructions, not always the consensus view) riding with it |
+
+The piet/germet/baltet reflex columns mint reflex rows (germet's Gothic
+and Old English columns join the gold-attestation counts), the
+pokorny⇄piet crosslinks are preserved both ways, and `define сигать`
+reaches the Vasmer article — with `etym` falling back to the same lookup
+when the reconstruction crosswalk has no path (the P24-2 coordination).
+
+**Research uses:** the classical Pokorny apparatus beside the modern
+witnesses (IE-CoR, LIV, de Vaan — §8h) on one desk; Vasmer as the Slavic
+etymological reference the axis lacked; branch-level Germanic and Baltic
+comparanda joined to attested corpus forms.
+
+## 8k. Slovenian historical dictionaries (`sl-lexica`, synced live 2026-07-17)
+
+| | |
+|---|---|
+| **Category** | The Slovenian historical dictionary shelf (ZRC SAZU via CLARIN.SI), three dictionaries on one source |
+| **Size** | **139,405 entries**: `pletersnik` — Pleteršnik's *Slovensko-nemški slovar* (1894–95), 103,185 entries, THE reference dictionary of older Slovenian with toneme-accented headwords and German glosses; `jsv` — the dictionary of Janez Svetokriški's Baroque sermon lexis (1691–1707), 8,461 entries with verbatim Bohorič-orthography attestation quotes; `besedje16` — the complete word inventory of 1550–1603 Slovenian print, 27,759 entries with per-word attestation sigla of the editions |
+| **License** | All three CC BY 4.0 verbatim → `attribution` (frozen CLARIN.SI deposits; parser family `zrc-xml`) |
+
+Headwords are keyed on the unaccented form, so `define abeceda` lands on
+the toneme entry `abecę̑da`, and — the point of the shelf — Pleteršnik's
+headwords match goo300k's modernized gold lemmas (§8e): the
+gold-lemma→dictionary loop that LSJ closed for Greek now closes for `sl`.
+Besedje16's sigla (TA 1550, DB 1584…) name the very editions goo300k/IMP
+hold as documents.
+
+**Research uses:** diachronic Slovene lexicography 1550–1899 on one desk;
+gloss-carrying `sl` lemma search; earliest-attestation questions at word
+grain; Baroque sermon lexis with in-context quotations.
+
+## 8l. The Celtic axis (`corph`, `riig`, `ogham`; synced live 2026-07-17)
+
+| | |
+|---|---|
+| **Category** | The library's newest language axis (.docs/surveys/celtic-survey.md): Early Irish gold annotation, Gaulish and Primitive Irish epigraphy, plus dictionary and treebank riders |
+| **Language** | Old/Early Irish (`sga`), Gaulish (`xtg`, Gallo-Greek and Gallo-Latin scripts), Primitive Irish (`pgl`, real Ogham codepoints), with Latin companions and Pictish/Old Norse rarities coded honestly |
+| **Size** | `corph`: 76 docs / 17,942 passages — CorPH / Corpus PalaeoHibernicum (ERC ChronHib, Maynooth; MIT → `attribution`): 7th–10th-c. texts (Annals of Ulster, Vita Columbae, Blathmac, the Milan/St Gall/Würzburg gloss corpora, law, poetry, computus) with 136,559 gold-lemmatized tokens — **the first `sga` gold lemmas**. `riig`: 477 docs / 1,323 passages — RIIG (ANR, Ausonius/Bordeaux; CC BY 4.0 in-file → `attribution`): 428 Gaulish inscriptions with per-editor readings, morphosyntax, dated findspots, and French sibling translations. `ogham`: 834 docs / 1,053 passages — OG(H)AM / Ogham in 3D v2.0 (DIAS/Maynooth): ~500 ogham stones in real Ogham codepoints with transliteration/roman sibling layers; **license conflict held at the restrictive reading → `nc`** (site says BY-NC-SA, in-file records say CC BY 4.0; clarification email pending, relabel on reply) |
+| **Metadata** | CorPH: per-token language and dil.ie headword keys (→ links-journal reference edges — the eDIL bridge), ChronHib text dates on the axis; RIIG: signed-year `origDate` + WGS84 findspots on the axis, RIG print-corpus concordance as reference edges; ogham: dil.ie word links, logainm.ie place ids, CIIC/CISP concordances |
+
+The axis's riders land elsewhere in the library: the three attested-Celtic
+kaikki extracts (`wiktionary-sga`/`-mga`/`-wlm`, 8,097 entries on the
+`wiktionary-recon` source — §8c) and the two Old Irish UD glosses
+treebanks (§6). Together they light Proto-Celtic reflex attestations, the
+piet CELT column's context, and IE-CoR's `sga` variety.
+
+**Research uses:** Early Irish philology with gold lemma search; the
+Continental Celtic epigraphic record beside the insular one (RIIG's
+Segomaros dedication against the Kerry stones); ogham palaeography with
+layer-aligned transliterations; Celtic comparanda joined to the
+reconstruction shelves.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
-or acquired, not downloaded**: two local shelves with `sync_policy: local`
+or acquired, not downloaded** — local shelves with `sync_policy: local`
 (no upstream, no network — `sync --all` never touches them), written only
-through their sanctioned gateways, with **`nabu ingest`** as the shared
-front door (interactive, `--assist` AI-prefilled, or `--yes` scripted;
-ops §13):
+through their sanctioned gateways. Phases 20–24 grew the family to four:
 
 - **`local-language`** — the language-dossier shelf, **live**: one
   Markdown file per code under `canonical/local-language/` (YAML front
@@ -402,9 +475,30 @@ ops §13):
   extraction (mutool) where a text layer exists, `research_private` by
   default — catalogued and searchable locally, never served over MCP
   without per-call opt-in, never redistributed. `related:` manifest lines
-  are derived into the links journal as `kind=reference` edges.
-  Registered and enabled, gateway tested end to end — **empty until the
-  owner's first `nabu ingest`**: no live documents yet, honestly.
+  are derived into the links journal as `kind=reference` edges. **In use
+  since the first ingests: 20 documents / 8,725 passages** in a dozen
+  languages, mixed `research_private`/`nc`/`open` per item. `nabu ingest`
+  (ops §13) is the front door — and since P20-0 it **takes http(s) URLs**
+  too, downloading first (redirects followed, atomic staging, the given
+  URL recorded in the manifest's `source_url:` lane), with metadata
+  candidates derived mechanically and confirmed interactively,
+  AI-assisted (`--assist`), or scripted (`--yes`).
+- **`local-source`** — the shelf-dossier shelf (P24-0), **live**: one
+  Markdown + YAML dossier per registered source under
+  `canonical/local-source/` — the curated 1–3-sentence content
+  description served on `nabu list` cards and MCP `nabu_status`, plus
+  themes, key-work urns, and accretion sections. **37 dossiers**, seeded
+  by `nabu list --export-source-dossiers` and owner-edited thereafter;
+  `rake site:check` gate-checks dossier-vs-library.md mention drift
+  (never generates). Written only through `Nabu::SourceShelf`.
+- **`local-notes`** — the owner-annotation shelf (P24-1), registered and
+  **empty until the first `nabu note`**: scholia of one's own on ANY urn
+  the corpus knows (documents, passages, ranges, dictionary entries),
+  one YAML topic file per grouping, appended through `nabu note URN
+  "TEXT"` (resolution-checked; `--force` for deliberately dangling notes
+  on planned material). Notes render on `show`/`define`/`links` footers
+  and are MCP-served by default, withheld wherever their target document
+  is withheld.
 
 ## 9. Library-wide capabilities
 
@@ -413,8 +507,9 @@ ops §13):
   determinative stripping, generic diacritic folding for IAST Sanskrit) —
   `bin/nabu search`, FTS5 under the hood.
 - **Lemma search** (`search --lemma`) over the treebank shelf (§6), the
-  ORACC gold layer (§8), goo300k (§8e), and Coptic Scriptorium (§8f) —
-  **15 languages**;
+  ORACC gold layer (§8), goo300k (§8e), damaskini (§8e), Coptic
+  Scriptorium (§8f), and CorPH (§8l) — **17 languages** since the
+  2026-07-17 syncs (Old Irish and Bulgarian the newcomers);
   ranking-independent `urn:` filtering; hits carry dictionary glosses where
   the reference shelf (§8c) knows the lemma. **Morphology facets**
   (`--morph case=dat,number=pl`, P13-6) filter by gold morphology — one UD
@@ -510,15 +605,37 @@ ops §13):
   the owner's wiktionary resyncs — the inline `[code · Name]` rendering
   in `etym --long` is active), and the live-count joins complete the
   card.
-- **Ingest — the intake front door** (`nabu ingest FILE...`, P19-5): the
-  second sanctioned canonical-write gateway (after the dossier shelf's) —
-  copies your PDF/scan/article into the local-library shelf (§8i, never
-  moves the original), derives metadata candidates mechanically (PDF
-  metadata, filename heuristics, sha256), and confirms them
-  interactively, AI-assisted (`--assist script/ingest-assist-claude`
-  prefills the prompts with a model's suggestion), or scripted (`--yes`
-  plus flags); then syncs the shelf and prints the minted urn.
-  `--shelf language CODE` scaffolds a language dossier instead.
+- **Ingest — the intake front door** (`nabu ingest FILE...`, P19-5,
+  URL intake P20-0/P20-1): the second sanctioned canonical-write gateway
+  (after the dossier shelf's) — copies your PDF/scan/article into the
+  local-library shelf (§8i, never moves the original) **or downloads an
+  http(s) URL first** (redirects followed, the given URL recorded as
+  `source_url:`), derives metadata candidates mechanically (PDF
+  metadata, filename heuristics, sha256), validates before any append,
+  and confirms interactively, AI-assisted (`--assist
+  script/ingest-assist-claude` prefills the prompts with a model's
+  suggestion), or scripted (`--yes` plus flags); then syncs the shelf
+  and prints the minted urn. `--shelf language CODE` scaffolds a
+  language dossier; `--shelf source SLUG` a source dossier (§8i).
+- **The content census** (`nabu list [SOURCE]`, P22-1): the what-is-held
+  view beside `status`'s sync-state view — bare, one line per shelf with
+  document/passage/entry counts, languages, and the effective
+  license-class mix; with a SOURCE, one shelf's card (identity, credit
+  line, dossier description, per-language breakdown, date-axis and facet
+  coverage). `--documents`/`--entries`/`--collections` enumerate with
+  filters; `--source SLUG` also joined search/export as a filter in the
+  same packet.
+- **Owner notes** (`nabu note URN [TEXT]`, P24-1): annotations on any urn
+  the corpus knows, resolution-checked before any write, stored as plain
+  YAML on the `local-notes` shelf (§8i) and rendered on
+  `show`/`define`/`links`; `nabu note URN` alone reads back what you
+  said, `--list` enumerates, `--force` records a deliberately dangling
+  note on planned material. Notes are canonical memory — retired by
+  editing the topic file, never deleted by the tooling.
+- **Shelf dossiers + the drift gate** (`rake site:check`, P24-0): every
+  registered source carries a curated dossier (§8i) served on `list` and
+  MCP `nabu_status`; the rake task flags presence/mention drift between
+  the dossiers and this document at every gate.
 - **News & citability** (P19-3): the project site carries a dated News
   section with an Atom feed (`/feed.xml`, jekyll-feed) — one honest entry
   per phase gate — and the repository ships `CITATION.cff`; tagged
