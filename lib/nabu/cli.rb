@@ -3141,7 +3141,13 @@ module Nabu
                              "(nabu note URN \"TEXT\"); nothing was written"
         end
 
-        answer = ask("  note for #{urn}:").to_s.strip
+        # Plain $stdin.gets, NOT Thor's ask: Thor routes ask through
+        # LineEditor::Readline when the readline ext exists (CI's Ruby 3.3
+        # bundles it; homebrew 4.0 dropped it), and Readline reads the real
+        # fd — invisible to the suite's $stdin double and to piped input.
+        # One prompt, one line; the say keeps the ingest prompt furniture.
+        say "  note for #{urn}:"
+        answer = $stdin.gets.to_s.strip
         raise Thor::Error, "note: refusing an empty note — nothing was written" if answer.empty?
 
         answer
