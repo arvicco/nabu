@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files live INSIDE the frozen figshare v1 zip (no per-file raw
+# URL), so none is whole-file byte-comparable by a plain GET: the Hymn is a
+# byte-verbatim WHOLE of its in-zip file, the other two are documented
+# TRIMS (whole: false; recipe in README.md). The sentinel fetches the zip
+# URL for liveness only. The figshare v1 artifact is immutable (md5
+# f3a26efa7e7d2b93d1bcca26900d180a, sha256-pinned in the adapter): a drift
+# at this URL is an incident, never an update — upstream's update channel
+# is a separate token-gated JSON API (journaled in sources.yml).
+# adapter_test is null: the adapter test asserts trimmed-sentence counts,
+# which untrimmed upstream files would false-fail.
+source: diorisis
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: "Hymns (0013) - Hymn 13 To Demeter (013).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (8,323 B) — whole: false only because the URL is the 194 MB zip, not the file"
+  - path: "Thucydides (0003) - History (001).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: teiHeader + sentences 1-3 + appended closers (36,950,222 B -> 30,273 B); recipe in README.md
+  - path: "Septuaginta (0527) - Abdias (040).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: teiHeader + sentences 1-2 + appended closers (114,702 B -> 8,031 B) — the PINNED-AS-EXCLUDED Rahlfs-lineage file (tlgAuthor 0527; 02-sources row 44)
