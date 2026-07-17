@@ -117,7 +117,8 @@ module Nabu
       # regenerates with the re-minted passage ids (architecture §10).
       indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
                                         alignments: AlignmentRegistry.load(@config.alignments_path),
-                                        fuzzy_slugs: @registry.fuzzy_slugs)
+                                        fuzzy_slugs: @registry.fuzzy_slugs,
+                                        lemma_tiers: @registry.lemma_tiers)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets)
     ensure

@@ -224,6 +224,41 @@ module Store
       assert_equal 1, lemmas.count, "drop+recreate leaves no duplicate lemma rows"
     end
 
+    # -- the lemma tier column (P26-0) ---------------------------------------
+    # The tier lives on the FULLTEXT-side passage_lemmas rows (no catalog
+    # migration — drop-and-rebuild), declared per SOURCE via the registry's
+    # lemma_tiers map (absent slug = gold).
+
+    def test_lemma_rows_default_to_gold_tier
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "λεγουσι", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγουσι]))
+      rebuild!
+
+      assert_equal "gold", lemmas.first.fetch(:tier),
+                   "no lemma_tiers map given — every row is gold (zero churn for existing sources)"
+    end
+
+    def test_lemma_tiers_map_labels_a_silver_source_per_row
+      gold_doc = make_document(urn: "urn:d:gold")
+      make_passage(gold_doc, urn: "urn:d:gold:1", text_normalized: "x", sequence: 0,
+                             annotations: token_annotations(%w[λέγω λέγει]))
+      silver_source = Nabu::Store::Source.create(
+        slug: "auto", name: "Auto", adapter_class: "TestAdapter", license_class: "open"
+      )
+      silver_doc = make_document(urn: "urn:d:silver", source: silver_source)
+      make_passage(silver_doc, urn: "urn:d:silver:1", text_normalized: "y", sequence: 0,
+                               annotations: token_annotations(%w[λέγω λέγοντος]))
+
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "auto" => "silver" })
+
+      assert_equal "gold", lemmas.where(urn: "urn:d:gold:1").get(:tier),
+                   "a source ABSENT from the map stays gold"
+      assert_equal "silver", lemmas.where(urn: "urn:d:silver:1").get(:tier),
+                   "the declared silver source's rows carry the tier"
+    end
+
     # -- the trigram fragment index (P16-4) ----------------------------------
 
     def trigrams = @fulltext[Nabu::Store::Indexer::TRIGRAM_TABLE]
