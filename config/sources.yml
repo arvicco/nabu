@@ -619,6 +619,31 @@ sarit:
   # the native script, the search layer folds a Deva→IAST transcode
   # (Nabu::Deva), so IAST queries land on both scripts. Upstream is a
   # dormant scholarly project (last merge 2021) → re-syncs owner-fired.
+
+dcs:
+  adapter: Nabu::Adapters::Dcs
+  enabled: false   # awaiting the owner-fired first real sync (P26-0): a SPARSE
+                   # GitFetch of github.com/OliverHellwig/sanskrit scoped to
+                   # dcs/data/conllu (+ dcs/data/readme.md) — the cone is
+                   # ~844 MB on disk (15,900 gold chapter files / 270 texts /
+                   # ~5.46M words; git compresses the CoNLL-U heavily on the
+                   # wire, expect a fraction of that to transfer). CLAUDE.md
+                   # checklist §6: bin/nabu sync dcs, eyeball
+                   # nabu show urn:nabu:dcs:5:3656 (Suśruta, Kalpasthāna 4)
+                   # + 5 random chapters + `nabu search --lemma kaṇṭha`, then
+                   # flip. Expect the odd stray non-.conllu file upstream to
+                   # be ignored by the glob, and any chapter chapter-info.xml
+                   # does not declare gold to quarantine loudly.
+  # Digital Corpus of Sanskrit (Hellwig; CC BY 4.0 verbatim in both data
+  # readmes → attribution). GOLD is machine-declared per chapter in
+  # lookup/chapter-info.xml (<layer type="gold">lexicon</layer> on all
+  # 15,900 at fixture time) — the adapter gates on the declaration and never
+  # touches the automatic .conllu_parsed siblings. lemma_tier ABSENT = gold:
+  # DCS is the first gold Sanskrit occupant of the lemma index. NO dedup vs
+  # ud/sanskrit-vedic (same Hellwig Vedic material at a different grain —
+  # two honest witnesses, the MW-beside-kaikki precedent; backlog P26-0).
+  # Upstream dump regenerates occasionally from the DCS database → re-syncs
+  # are owner-fired.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
