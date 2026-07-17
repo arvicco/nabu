@@ -7660,3 +7660,47 @@ grain — the language-dossier stack's twin, owner-approved 2026-07-16.
   descriptions + the stub list), `bin/nabu sync local-source`,
   `bin/nabu list edh` (description under the header), `bundle exec rake
   site:check`.
+
+# ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
+# Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no
+# unlock emails). Phasing per survey §6:
+# 1. lemma-tier column + DCS (one packet): `lemma_tier` per source
+#    (absent = gold), carried per passage_lemmas row (drop-and-rebuild,
+#    no migration); attested_count stays GOLD-ONLY, labeled
+#    silver_count beside it ("attested 12 (+340 silver)"; silver-only
+#    renders "silver 340", never a bare number); LemmaSearch tier
+#    labels + --gold-only. DCS: OliverHellwig/sanskrit dcs/data/conllu
+#    (NOT "dcs-data" — 02-sources row 7 stale twice: repo + format),
+#    15,900 CoNLL-U chapters / 270 texts / CC BY 4.0 verbatim; GOLD
+#    gated on machine-readable <layer type="gold"> per chapter;
+#    dedup pin vs UD sanskrit-vedic (same Vedic Treebank). Sanskrit
+#    gold lights MW + piet IND attested counts (fold spot-verified).
+# 2. OSHB — three-legged ot hub (MT ↔ LXX ↔ Vulgate): 39 OSIS books,
+#    cts-verse extractor + P13-5 Psalms numbering table verbatim; WLC
+#    text PD, morphology CC BY 4.0; hbo + arc per-word axes; lemmas =
+#    augmented Strong's. GATE DECISION AT PACKET: upstream anti-NFC
+#    warning is MEASURED TRUE (Ruth 1:1 not NFC-stable) — first
+#    collision with the NFC invariant, owner rules. Hold out JER/DAN-3/
+#    1KI (LXX reorderings). TAHOT (CC BY) = second-witness option.
+# 3. SuttaCentral — bilara-data published branch, whole Tipiṭaka roman
+#    Pali (7,289 flat-JSON files), 138/140 CC0 + 1 PD + 1 BY-SA
+#    (override); shared segment ids → exact -en siblings; new pli axis;
+#    sc-data parallels graph (8,221 relations, non-copyrightable) =
+#    intertext packet material; legacy NC-ND html_text EXCLUDED.
+#    UD_Pali-PaliCanon lands v2.19 (2026-11-15, manual-native lemmas,
+#    BY-SA) = future config-only gold.
+# 4. SARIT — 83 TEI texts / 178 MB, all headers censused BY-SA/MIT,
+#    ZERO NC (the GRETIL upgrade); ~60 works GRETIL lacks incl.
+#    complete MBh (38.6 MB); sibling parser (not GretilParser
+#    regexes); 41/83 Devanagari (transcode policy verdict); MBh
+#    recension check before promising MW citation lights.
+# 5. Diorisis — ONLY behind the silver tier: 820 XML (figshare zip
+#    md5-pinned), automatic annotation by upstream's own words =
+#    SILVER never gold; 806/809 works already held (a lemma layer over
+#    our canon, arriving as second editions); IN-FILE CC BY-SA 3.0 US
+#    governs over figshare's CC BY 4.0 (in-file doctrine proof #3);
+#    the 53 Rahlfs-lineage LXX files EXCLUDED by rule (row 44,
+#    machine-readable per-file provenance); upstream's token-gated
+#    JSON update channel = license_watch item.
+# Riders: 02-sources row 7 correction at DCS promotion; row 44
+#    footnote (Diorisis LXX = another Rahlfs dead end).
