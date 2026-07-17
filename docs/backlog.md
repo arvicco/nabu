@@ -8298,3 +8298,121 @@ exit 0 (0 skips) · lint 406 files exit 0. OWNER QUEUE:
 bin/nabu sync dcs (sparse clone, ~844 MB cone), eyeball
 urn:nabu:dcs:5:3656 + `nabu search --lemma kaṇṭha` + 5 random chapters,
 flip enabled, rebuild/reindex.
+
+## P26-4 · Diorisis — the SILVER Greek lemma layer  [tier: fable] [status: done 2026-07-18 — adapter + `diorisis` streaming family + fixtures + the per-surface tier verdicts shipped, enabled:false awaiting the owner-fired first sync; verdicts below] [deps: P26-0]
+Queue item 5 (biblical–Indic batch, survey §6): the tier's first
+occupant — ~10.2M words of automatically lemmatized Greek arriving as
+silver, never gold, over a canon the catalog already holds bare.
+
+SHIPPED — the corpus:
+- ARTIFACT: figshare v1 (2018) zip, 194,443,428 bytes, md5
+  f3a26efa7e7d2b93d1bcca26900d180a — VERIFIED byte-for-byte against
+  figshare's own published computed_md5 at the census download —
+  sha256 fb32b7ff…19b65 pinned in the adapter (ZipFetch, the IE-CoR
+  prepare→verify-pin→breaker→complete choreography; a mismatch aborts
+  with the tree untouched). 820 XML / ~2.5 GB unpacked. Whole-corpus
+  census run over the real zip: 538,011 sentences / 10,206,421 words /
+  98.5% lemmatized (81.8–100% per file); provenance Perseus 752 /
+  Bibliotheca Augustana 60 / Mikros Apoplous 8; body inventory CLOSED
+  (sentence/word/lemma/analysis/punct); sentence ids unique per file;
+  TreeTagger=true on 1.84M words with 1/n disambiguated fractions
+  (1.0/0.5/0.33/…); 153,593 entry-less (unlemmatized) words; 429
+  non-NFC lemma entries (NFC'd at the boundary).
+- LICENSE (in-file doctrine proof #3): figshare page says CC BY 4.0;
+  ALL 820 files' own publicationStmt declare "Creative Commons
+  Attribution-ShareAlike 3.0 United States License" — the in-file
+  declaration GOVERNS; both quoted in the manifest + 02-sources row
+  69; class attribution.
+- SILVER, NEVER GOLD: upstream's own in-file words are "corpus
+  conversion and automatic annotation" (editionStmt) — sources.yml
+  `lemma_tier: silver`; the whole tier render verified end to end on
+  REAL fixture bytes (silver rows in passage_lemmas, [silver]-labeled
+  LemmaSearch hits, --gold-only exclusion, ReflexViews silver_count
+  beside a nil attested_count — never a bare number).
+- THE RAHLFS EXCLUSION (row 44 xref): 53/820 files are the Septuagint
+  — machine-readable header identity tlgAuthor 0527 (sourceDesc
+  Bibliotheca Augustana = the Rahlfs lineage; scout text-diffed
+  divergent from held Swete tlg0527). discover skips by rule with an
+  honest discovery_skips census (53 upstream / 1 in fixtures); parse
+  refuses belt-and-braces (a rights exclusion deserves both layers);
+  the fetched artifact stays whole in canonical.
+- SECOND EDITIONS, deliberately: 806/809 works already held (742
+  Perseus, 102 First1K) — Diorisis mints its own documents
+  (provenance-distinct second editions, the MW-beside-kaikki
+  precedent); no dedup, no cross-links; the value IS the lemma layer.
+- PARSER VERDICT: new bespoke `diorisis` streaming family (sibling of
+  ProielParser's shape) — TEI.2 P4-era XML, no namespace, no XML
+  declaration, so no TEI/EpiDoc family fits; Reader-only pinned
+  structurally (76 files >5 MB, Polybius 76.1 MB). Word forms are TLG
+  Beta Code decoded through the EXISTING Nabu::Betacode (census: zero
+  out-of-inventory characters; zero new fold rules); punct marks kept
+  VERBATIM glued left (")" is a Beta Code breathing — decoding punct
+  would fabricate combining marks); lemma entry = Unicode, NFC'd.
+  Annotations: lean tokens (id/form/lemma/lemma_id/pos + tree_tagger/
+  disambiguated only where TreeTagger actually fired + analyses); the
+  Perseus-style prose morph strings are a THIRD morphology dialect —
+  deliberately NOT wired into --morph (MorphFacets speaks UD+PROIEL;
+  absence over a wrong mapping).
+- GRAIN VERDICT (frozen minting): document per work file,
+  urn:nabu:diorisis:<tlgAuthor>:<tlgId> (header-peeked, streamed);
+  passage per sentence on upstream's file-stable sentence ids
+  (censused unique; the zip is frozen, so ids are the stability
+  contract). location is NOT identity — it repeats (poetry lines),
+  goes empty (142 files incl. all 53 LXX + Aristides), and free-forms
+  ("APr.Α", "6,7", "fragment") — it rides as the verbatim citation in
+  annotations. Header metadata (author/title/genre/subgenre/creation
+  date/provenance ref+URL/tlg ids) rides document metadata.
+- Registry: enabled:false, sync_policy manual (frozen artifact),
+  lemma_tier: silver; license_watch deliberately UNSET (figshare API
+  body carries volatile stats — hash compare would false-alarm); the
+  token-gated per-file JSON update channel (v1.6) journaled in
+  sources.yml comments as the future-refresh watch item.
+- PROJECTED first sync: ≈767 docs / ≈516,500 passages / ≈9.6M words →
+  ≈6–7M silver lemma rows (the fulltext db roughly triples; the
+  2.85M-row gold index is untouched by every gold-scoped surface).
+
+SHIPPED — the P26-0 journaled per-surface verdicts (each TDD'd):
+- cognates: GOLD-SCOPED (witness lookups + suppression df both) —
+  reconstruction evidence; a silver witness contributes NO cognate
+  evidence (refutation-pinned), and a silver flood cannot re-judge a
+  gold lemma common.
+- ReflexRootsIndexer: GOLD-SCOPED (closure language scope + stats
+  gold_passages denominators) — a silver-only language stays out of
+  the closure; numerator and denominator agree with cognates.
+- vocab: LABELED + gold reference — silver documents DO profile (that
+  is the Diorisis value) under an explicit "silver lemmas / lemma
+  tier: silver (automatic lemmatization…)" render, never the gold
+  name; corpus reference frequencies, corpus total and the
+  gold-bearing-languages listing stay gold-scoped (the documented
+  denominator keeps its meaning).
+- concord: LABELED pass-through — a formatter over LemmaSearch
+  inherits the hit tier; CLI tags [silver] rows + silver footer, MCP
+  rows carry tier key on non-gold only (the lemma-hit mirror); text
+  mode claims no tier (nil).
+- proximity: BOTH TIERS, deliberately — the lemma anchor is retrieval
+  expansion (hits are real text judged from snippets, no annotation
+  claim rendered); silver-attested inflections expand the anchor,
+  mirroring search --lemma's inclusive stance (test-pinned).
+- parallels (censused beyond the journal's four): BOTH TIERS,
+  deliberately — lemma echoes are a heuristic discovery signal, and
+  silver df IMPROVES the rarity estimate (gold-rare-but-corpus-common
+  is genuinely undiagnostic); test-pinned.
+- language_info: already gold-scoped at P26-0 (no change).
+
+Fixtures: Hymn 13 To Demeter WHOLE (8.3 KB — repeating locations,
+entry-less lemma, TreeTagger fractions, Beta Code capitals/elision),
+Thucydides trimmed to header + 3 sentences (dotted citations, the
+36.9 MB file the streaming rule exists for), LXX Abdias trimmed +
+PINNED AS EXCLUDED (empty locations documented), README with both
+license quotes + md5/sha256 + re-trim procedure.
+
+Tests +23 net adapter/parser (10 parser + 23 adapter incl.
+conformance, exclusion census + belt-and-braces refusal, idempotent
+double-load, silver tier end-to-end, sha-pin fetch trio) + 11 tier
+surfaces (cognates 2, reflex_roots 2, vocab 4, concord 2 [+1 MCP],
+proximity 1, parallels 1, cli 3). Suite + lint exit 0 at hand-off
+(exact counts in worklog). OWNER QUEUE: bin/nabu sync diorisis
+(194 MB download, md5/sha-pinned), eyeball urn:nabu:diorisis:0012:001
++ `nabu search --lemma θεός` (expect [silver] labels) + 5 random
+passages, confirm the 53-file skip census line, flip enabled,
+rebuild/reindex.
