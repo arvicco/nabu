@@ -50,11 +50,18 @@ module Nabu
     #
     # Records carry French translation divs (per reading, prose). When the
     # registry opts in, discover yields one -fr sibling ref per record whose
-    # file carries non-empty translation prose (a cheap byte peek), parsed
-    # into <urn>-fr documents cited by reading id — the damaskini/ORACC -en
-    # sibling pattern. Same CC BY 4.0 grant (same files) — no license
-    # override. Coverage is partial upstream (AHP-01-01's translation div is
-    # empty), so the peek, not a blanket flag, decides.
+    # file carries non-empty translation prose, parsed into <urn>-fr
+    # documents cited by reading id — the damaskini/ORACC -en sibling
+    # pattern. Same CC BY 4.0 grant (same files) — no license override.
+    # Coverage is partial upstream (AHP-01-01's translation div is empty),
+    # and the minting decision IS the parser's own prose extraction
+    # (RiigEpidocParser#translations — P25-3: the earlier cheap byte peek
+    # disagreed with it across the corpus's markup variety, minting 233
+    # siblings the parser could never fill and missing 18 real ones behind
+    # attribute-reordered divs; 428 files ≤70 KB, parsing at discovery is
+    # cheap). A sibling ref therefore exists iff translation prose exists —
+    # siblings riding structurally broken BASE records still mint and
+    # quarantine honestly when parse_translation re-parses the original.
     #
     # == Reference edges (P25-1 deep extraction)
     #
@@ -239,13 +246,14 @@ module Nabu
         refs
       end
 
-      # Cheap byte peek: does the file carry a translation div with real
-      # prose? (Empty <div type="translation"/> — AHP-01-01 — must not mint
-      # a sibling.)
+      # The sibling-minting decision is the parser's OWN prose extraction
+      # (class note, P25-3): a -fr ref exists iff #parse_translation would
+      # find paragraphs to mint. An unreadable record extracts nothing —
+      # no sibling; its base ref already carries the honest quarantine.
       def translated?(path)
-        File.read(path).scan(%r{<div type="translation"[^>]*>(.*?)</div>}m).any? do |(body)|
-          body.match?(/<p[ >][^<]*\S|<p>\s*\S/m) && body.gsub(/<[^>]+>/, "").match?(/\S/)
-        end
+        RiigEpidocParser.new.translations(path).any?
+      rescue ParseError
+        false
       end
 
       # The -fr sibling: one French passage per translation paragraph,

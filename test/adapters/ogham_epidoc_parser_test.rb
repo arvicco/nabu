@@ -169,4 +169,62 @@ class OghamEpidocParserTest < Minitest::Test
                                            urn: "urn:nabu:ogham:i-may-010-translit").metadata
     assert_equal({ "layer" => "transliteration" }, metadata)
   end
+
+  # --- layer census (P25-3 hotfix: discovery shares the parser's extraction) --
+
+  def census(region, id, glyph_table: glyphs)
+    Nabu::Adapters::OghamEpidocParser.new.layer_census(
+      File.join(FIXTURES, "XML", region, "#{id}.xml"), glyphs: glyph_table
+    )
+  end
+
+  def test_layer_census_separates_citable_from_declared_but_empty_layers
+    sts = census("E-STS", "E-STS-001")
+    assert_empty sts.citable, "both declared layers carry only <ab><lb n=\"1\"/></ab> — no citable text"
+    assert_equal %w[ogham transliteration], sts.empty
+    assert_empty sts.unknown
+
+    may = census("I-MAY", "I-MAY-010")
+    assert_equal %w[ogham transliteration], may.citable, "first-appearance order"
+    assert_empty may.empty
+  end
+
+  def test_layer_census_does_not_see_commented_out_edition_divs
+    x01 = census("E-CON", "E-CON-X01")
+    assert_empty x01.citable
+    assert_empty x01.empty, "E-CON-X01's edition divs live inside <!-- --> — not declared at all"
+    assert_empty x01.unknown
+  end
+
+  # A structurally broken layer (unresolvable glyph here; the W-PEM lb
+  # defects upstream) stays CITABLE in the census: the ref must mint so the
+  # parse can quarantine it honestly — only clean emptiness skips.
+  def test_layer_census_keeps_structurally_broken_layers_citable
+    she = census("S-SHE", "S-SHE-001", glyph_table: {})
+    assert_equal %w[ogham transliteration], she.citable,
+                 "glyph refs cannot resolve without charDecl — broken, not empty; mint and quarantine"
+  end
+
+  # --- metadata-only stones (P25-3 hotfix) ------------------------------------
+
+  def test_parse_metadata_only_mints_a_zero_passage_stone_document
+    document = Nabu::Adapters::OghamEpidocParser.new.parse_metadata_only(
+      File.join(FIXTURES, "XML", "E-CON", "E-CON-X01.xml"), urn: "urn:nabu:ogham:e-con-x01"
+    )
+    assert_predicate document, :empty?
+    assert_equal "none", document.metadata["text_layer"]
+    assert_equal "und", document.language
+    assert_equal "Lewannick 3", document.title
+    assert_equal "Cornwall", document.metadata.dig("place", "county")
+    assert_nil document.metadata["layer"], "no layer minted — the stone grain, not a layer document"
+  end
+
+  def test_parse_metadata_only_urn_mismatch_is_a_parse_error
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::OghamEpidocParser.new.parse_metadata_only(
+        File.join(FIXTURES, "XML", "E-CON", "E-CON-X01.xml"), urn: "urn:nabu:ogham:wrong"
+      )
+    end
+    assert_match(/urn mismatch/, error.message)
+  end
 end

@@ -3,8 +3,9 @@
 Real EpiDoc records + a trimmed corpus map for the `riig` adapter
 (`Nabu::Adapters::Riig` / `RiigEpidocParser`). Retrieved **2026-07-17** from
 `https://riig.huma-num.fr` (the owner-authorized fixture-sample crawl —
-3–4 records, not the full 428): each record from the verified stable
-pattern `https://riig.huma-num.fr/documents/data/documents/RIIG/<ID>.xml`,
+not the full 428; AIS-01-01 added in P25-3 from the canonical crawl of the
+same date): each record from the verified stable pattern
+`https://riig.huma-num.fr/documents/data/documents/RIIG/<ID>.xml`,
 **byte-identical**; the corpus map extracted from
 `https://riig.huma-num.fr/corpus.html?collection=RIIG`.
 
@@ -35,6 +36,7 @@ pattern `https://riig.huma-num.fr/documents/data/documents/RIIG/<ID>.xml`,
 | `documents/VAU-13-01.xml` | G153 | xtg-Grek | The **Segomaros dedication** (Vaison-la-Romaine): THREE concurring readings (MLE-a / PLT-a / RIIG-a, 7 lines each), per-glyph `<g>` letter forms in `orig` (dropped — reg governs), a **non-empty French translation div** (`corresp="#MLE-a"`) → the -fr sibling, full msd/pos/type word layer. |
 | `documents/ALL-01-01.xml` | L6 | xtg-Latn | **Gallo-Latin** (Néris-les-Bains): `expan/abbr/ex` (NANTONICN → nanton{t}icnos), `<surplus>` (Leiden braces), `<lb break="no"/>` mid-word (epađateχto\|rici), `rs` stem/suffix wrappers inside reg, two readings. |
 | `documents/GAR-10-03.xml` | G205 | xtg-Grek + la | **Bilingual** (Nîmes): two textparts (no `@n` — seg ids disambiguate), Latin readings with `xml:lang="la"` → per-passage `lat`, `supplied reason="lost"` (βρατουδεκ-), explicit `<space/>` word dividers inside `<w>` (votum solvit libens merito), translation div per textpart. |
+| `documents/AIS-01-01.xml` | G617 | xtg-Grek | **P25-3 sibling-noise regression** (byte-verbatim from the canonical 2026-07-17 crawl): `<div type="translation"/>` **self-closed**, followed by prose-bearing commentary divs — the shape that fooled the retired byte peek's non-greedy `(.*?)</div>` into minting 233 corpus `-fr` siblings the parser could never fill. No translation prose → no sibling ref. `documents/` only — NOT added to the map trim (discovery globs `documents/`, never the map; the fetch tests keep their 4-id map). |
 
 ## Known upstream quirks the fixtures document
 

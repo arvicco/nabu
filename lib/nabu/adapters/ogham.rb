@@ -30,13 +30,23 @@ module Nabu
     #
     # == Layers (see OghamEpidocParser)
     #
-    # discover yields one ref per (record × edition layer): the ogham layer
-    # under the bare urn, transliteration/roman/runic/english as -suffix
-    # siblings; the FIRST layer of each record carries the stone-grain
-    # metadata (ref metadata "primary"). A SELF-CLOSED (empty) edition div
-    # is a catalogued-but-unedited layer — skipped by rule and counted
-    # (discovery_skips), never a quarantine; an edition div with an unknown
-    # @subtype is unrecognized (loud).
+    # discover yields one ref per (record × CITABLE edition layer): the
+    # ogham layer under the bare urn, transliteration/roman/runic/english
+    # as -suffix siblings; the FIRST citable layer of each record carries
+    # the stone-grain metadata (ref metadata "primary"). Which layers are
+    # citable is decided by the parser's OWN extraction
+    # (OghamEpidocParser#layer_census — P25-3: the earlier raw-byte peek
+    # only recognized SELF-CLOSED divs as empty and saw straight into XML
+    # comments, minting 209 refs the parser could never fill): a declared
+    # layer with no citable text is an honest absence — skipped by rule and
+    # counted (discovery_skips), never a ref, never a quarantine — while a
+    # structurally BROKEN layer (lb without @n, unresolvable glyph) still
+    # mints and quarantines honestly. An edition div with an unknown
+    # @subtype is unrecognized (loud). A stone with NO citable layer at all
+    # (never-encoded; ~38 upstream) mints ONE metadata-only bare-urn
+    # document (ref metadata "kind" => "metadata_only" — the local-library
+    # text_layer:none precedent): catalogued, zero passages, never
+    # quarantined.
     #
     # == Reference edges
     #
@@ -57,12 +67,6 @@ module Nabu
 
       XML_DIRNAME = "XML"
       CHARDECL_FILENAME = "charDecl.xml"
-
-      # Edition-div open tags in a record's raw bytes — the cheap discovery
-      # peek (parse re-reads properly). A tag ending "/>" is a self-closed,
-      # empty layer.
-      EDITION_TAG = %r{<div\b[^>]*type="edition"[^>]*?(/?)>}
-      SUBTYPE_ATTR = /subtype="([^"]*)"/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "ogham",
@@ -96,25 +100,29 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
-      # The discovery census (P11-7): self-closed (empty) edition layers
-      # skip by rule; an edition div with an unknown @subtype is
-      # unrecognized — loud, a vocabulary drift, never a norm.
+      # The discovery census (P11-7, P25-3): declared-but-empty edition
+      # layers skip by rule (the parser's own extraction decides — class
+      # note); an edition div with an unknown @subtype is unrecognized —
+      # loud, a vocabulary drift, never a norm. An unreadable record counts
+      # nowhere here: its metadata-only ref carries the honest quarantine.
       def discovery_skips(workdir)
         skipped = 0
         notes = []
+        glyphs = census_glyphs(workdir)
         record_paths(workdir).each do |path|
-          scan_layers(path) do |subtype, empty|
-            if !OghamEpidocParser::LAYER_SUFFIXES.key?(subtype)
-              notes << "#{File.basename(path)}: unknown edition subtype #{subtype.inspect}"
-            elsif empty
-              skipped += 1
-            end
+          census = layer_census(path, glyphs) or next
+          skipped += census.empty.size
+          census.unknown.each do |subtype|
+            notes << "#{File.basename(path)}: unknown edition subtype #{subtype.inspect}"
           end
         end
         Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: notes.size, notes: notes)
       end
 
       def parse(document_ref)
+        return OghamEpidocParser.new.parse_metadata_only(document_ref.path, urn: document_ref.id) if
+          document_ref.metadata["kind"] == "metadata_only"
+
         glyphs = OghamEpidocParser.glyph_map(document_ref.metadata["chardecl"])
         OghamEpidocParser.new.parse(
           document_ref.path,
@@ -143,16 +151,25 @@ module Nabu
 
       def document_refs(workdir)
         chardecl = chardecl_path(workdir)
+        glyphs = census_glyphs(workdir)
         record_paths(workdir).flat_map do |path|
-          record_refs(File.expand_path(path), chardecl)
+          record_refs(File.expand_path(path), chardecl, glyphs)
         end.sort_by(&:id)
       end
 
-      # The record's non-empty layers in first-appearance order; the first
-      # carries the stone-grain metadata (parser class note).
-      def record_refs(path, chardecl)
+      # The record's citable layers in first-appearance order (the parser's
+      # own census — class note); the first carries the stone-grain
+      # metadata. No citable layer at all (or an unreadable record) → the
+      # single metadata-only stone ref.
+      def record_refs(path, chardecl, glyphs)
         base = "#{OghamEpidocParser::URN_PREFIX}#{File.basename(path, '.xml').downcase}"
-        layers(path).each_with_index.map do |layer, index|
+        census = layer_census(path, glyphs)
+        if census.nil? || census.citable.empty?
+          return [Nabu::DocumentRef.new(source_id: manifest.id, id: base, path: path,
+                                        metadata: { "kind" => "metadata_only" })]
+        end
+
+        census.citable.each_with_index.map do |layer, index|
           suffix = OghamEpidocParser::LAYER_SUFFIXES.fetch(layer)
           metadata = { "layer" => layer, "chardecl" => chardecl }
           metadata["primary"] = true if index.zero?
@@ -163,23 +180,23 @@ module Nabu
         end
       end
 
-      def layers(path)
-        result = []
-        scan_layers(path) do |subtype, empty|
-          next if empty || !OghamEpidocParser::LAYER_SUFFIXES.key?(subtype)
-
-          result << subtype unless result.include?(subtype)
-        end
-        result
+      # nil = unreadable record (malformed XML): discovery mints the
+      # metadata-only ref, whose parse re-raises the real error as the
+      # honest quarantine.
+      def layer_census(path, glyphs)
+        OghamEpidocParser.new.layer_census(path, glyphs: glyphs)
+      rescue ParseError
+        nil
       end
 
-      # Yields [subtype, empty?] per edition-div open tag in the raw bytes.
-      def scan_layers(path)
-        File.read(path).scan(EDITION_TAG) do |(self_closed)|
-          tag = Regexp.last_match(0)
-          subtype = tag[SUBTYPE_ATTR, 1].to_s
-          yield subtype, self_closed == "/"
-        end
+      # The census resolves glyphs with the same charDecl table parse uses;
+      # a missing/broken charDecl degrades to {} so extraction raises and
+      # the affected layers stay citable — quarantined at parse with the
+      # real message, never silently dropped at discovery.
+      def census_glyphs(workdir)
+        OghamEpidocParser.glyph_map(chardecl_path(workdir))
+      rescue ParseError
+        {}
       end
     end
   end
