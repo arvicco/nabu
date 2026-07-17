@@ -99,7 +99,73 @@ module Nabu
       write_record!(topic, build_record(urn, body, tags, now))
     end
 
+    # What one removal did: the record, its topic, the file path, and
+    # whether the file itself was deleted (last record removed).
+    Removal = Data.define(:record, :topic, :path, :file_deleted)
+
+    # Remove ONE note by its computed id (NoteFile.record_id — shown by
+    # --list and the bare-urn read-back). +topic+ scopes the search; without
+    # it every topic file is searched. Zero matches and ambiguity are named
+    # errors; the rewrite goes through the same reparse-validate the append
+    # uses, and removing the last record deletes the file (an empty notes
+    # file is furniture, not content).
+    def remove_note!(id:, topic: nil)
+      id = id.to_s.strip.downcase
+      raise Error, "note --rm needs an id (nabu note --list shows them)" if id.empty?
+
+      matches = find_by_id(id, topic)
+      raise Error, "no note with id #{id}#{" in topic #{topic}" if topic} — nabu note --list shows ids" \
+        if matches.empty?
+
+      if matches.size > 1
+        listing = matches.map { |t, r, _| "#{id} (#{t}) #{r.urn}" }.join("; ")
+        raise Error, "id #{id} is ambiguous across topics (#{listing}) — scope with --topic"
+      end
+
+      found_topic, record, path = matches.first
+      note_file = NoteFile.load(path)
+      remaining = note_file.records.reject { |r| r == record }
+      if remaining.empty?
+        File.delete(path)
+        return Removal.new(record: record, topic: found_topic, path: path, file_deleted: true)
+      end
+
+      rewrite!(path, remaining)
+      Removal.new(record: record, topic: found_topic, path: path, file_deleted: false)
+    end
+
     private
+
+    # [topic, record, path] triples matching +id+ across the shelf (or one
+    # topic). Ids are computed per record — no index to consult or corrupt.
+    def find_by_id(id, topic)
+      paths = topic ? [path_for(topic)].select { |p| File.file?(p) } : Dir[File.join(@dir, "*.yml")]
+      paths.flat_map do |path|
+        file = NoteFile.load(path)
+        hits = file.records.select do |r|
+          NoteFile.record_id(topic: file.topic, urn: r.urn, added: r.added, note: r.note) == id
+        end
+        hits.map { |r| [file.topic, r, path] }
+      end
+    end
+
+    # Whole-file rewrite for a removal: temp + validate + atomic rename —
+    # the owner's surviving records land byte-equivalent (YAML re-dump; the
+    # append path's record shape), never half-written.
+    def rewrite!(path, records)
+      body = records.map do |r|
+        YAML.dump([r.to_h.transform_keys(&:to_s).reject do |k, v|
+          k == "tags" && v.empty?
+        end]).delete_prefix("---\n")
+      end.join("\n")
+      tmp = "#{path}.tmp"
+      File.write(tmp, body)
+      NoteFile.load(tmp, topic: File.basename(path, ".yml"))
+      File.rename(tmp, path)
+    rescue NoteFile::FormatError => e
+      FileUtils.rm_f(tmp)
+      raise Error, "note removal failed validation: #{e.message}"
+    end
 
     def build_record(urn, body, tags, now)
       record = { "urn" => urn, "note" => body, "added" => now.strftime("%Y-%m-%d") }
