@@ -1436,14 +1436,19 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_note_scripted_append_writes_canonical_syncs_and_renders_on_show
+  def test_note_scripted_append_is_surgical_fast_and_renders_on_show
     with_note_env do |config, _root|
       out, _err, status = with_config(config) do
         run_cli(["note", ILIAD_DOC, "Collate against Jagić 1883.", "--tags", "collation,ocs"])
       end
       assert_nil status
       assert_match(/noted\s+#{Regexp.escape(ILIAD_DOC)}/, out)
-      assert_match(/local-notes\s+\S+\s+\+1 added/, out, "the shelf's ordinary sync runs after the append")
+      # The 2026-07-18 owner defect: the append ran the shelf's FULL sync
+      # (LocalFetch discovery + the corpus indexer — minutes for one line).
+      # The fast path replaces one topic's derived rows surgically: no sync
+      # furniture may ever appear here again.
+      refute_match(/loading…|indexed \d+ passages|discovery:/, out,
+                   "a note append must never run the sync pipeline")
       assert_match(%r{try: bin/nabu show #{Regexp.escape(ILIAD_DOC)}}, out)
       notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
       assert_equal [ILIAD_DOC], notes.records.map(&:urn)
