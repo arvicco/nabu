@@ -416,6 +416,66 @@ ot:
         LAM: urn:nabu:vulgate:lam
         EZK: urn:nabu:vulgate:ezk  # Ezechiel
         DAN: urn:nabu:vulgate:dan  # Daniel (Theodotion token → the Vulgate book)
+    # P26-3: the OSHB Masoretic witness — the Westminster Leningrad Codex
+    # (urn:nabu:oshb:<book>), the ot hub's THIRD leg: `align "GEN 1.1"`
+    # renders MT ↔ LXX ↔ Vulgate. Versification honesty (the §10 "whoever
+    # registers a witness owns the shared-citation claim" contract) — the
+    # map is DELIBERATELY conservative:
+    #   - HELD OUT per the biblical–Indic survey's conservative map (LXX
+    #     reorderings): JER (the LXX Jeremiah is shorter and largely
+    #     re-ordered — the same chapter number names a different oracle),
+    #     DAN (the survey's DAN-3 flag: the Greek additions after 3:23
+    #     shift verse numbers through the rest of the chapter, and the
+    #     registry's numbering: remap is witness-global, not
+    #     chapter-scoped, so the whole book attests per-witness), 1KI
+    #     (3 Kingdoms reorderings).
+    #   - HELD OUT, measured at packet time (chapter-grain census,
+    #     read-only against the live catalog 2026-07-18): PRO (MT 31
+    #     chapters vs Swete's Greek Proverbs 29 — the LXX reorders 24-31),
+    #     JOL (MT 4 chapters vs Greek/Vulgate 3) and MAL (MT 3 chapters vs
+    #     Greek/Vulgate 4) — mapping them would false-align late chapters.
+    #   - NO WORK TOKEN exists for EZR/NEH (the §10 Esdras divergence — the
+    #     Vulgate holds them out too) or ECC (absent from the LXX witness
+    #     upstream), so those books simply attest per-witness.
+    #   - PSA is REGISTERED IN THE psalms WORK below instead: the MT
+    #     psalter is Hebrew-numbered and needs the P13-5 numbering: remap,
+    #     which is witness-global — attaching it here would shift every
+    #     book's chapter numbers. The ot map therefore omits PSA (the
+    #     P11-8 WEB precedent), and the psalms work carries the remapped
+    #     MT witness.
+    # "Not synced" until the owner-fired first `nabu sync oshb`.
+    - label: OSHB (WLC, Masoretic)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:oshb:gen
+        EXO: urn:nabu:oshb:exod
+        LEV: urn:nabu:oshb:lev
+        NUM: urn:nabu:oshb:num
+        DEU: urn:nabu:oshb:deut
+        JOS: urn:nabu:oshb:josh
+        JDG: urn:nabu:oshb:judg
+        RUT: urn:nabu:oshb:ruth
+        1SA: urn:nabu:oshb:1sam
+        2SA: urn:nabu:oshb:2sam
+        2KI: urn:nabu:oshb:2kgs   # 1KI (1Kgs) held out — LXX 3 Kingdoms reorderings
+        1CH: urn:nabu:oshb:1chr
+        2CH: urn:nabu:oshb:2chr
+        EST: urn:nabu:oshb:esth
+        JOB: urn:nabu:oshb:job
+        SNG: urn:nabu:oshb:song
+        ISA: urn:nabu:oshb:isa
+        LAM: urn:nabu:oshb:lam
+        EZK: urn:nabu:oshb:ezek
+        HOS: urn:nabu:oshb:hos
+        AMO: urn:nabu:oshb:amos
+        OBA: urn:nabu:oshb:obad
+        JON: urn:nabu:oshb:jonah
+        MIC: urn:nabu:oshb:mic
+        NAM: urn:nabu:oshb:nah
+        HAB: urn:nabu:oshb:hab
+        ZEP: urn:nabu:oshb:zeph
+        HAG: urn:nabu:oshb:hag
+        ZEC: urn:nabu:oshb:zech
     # P11-8: the World English Bible's OT books — the readable English witness
     # beside the Septuagint and Vulgate. Versification honesty (the §10
     # "whoever registers a witness owns the shared-citation claim" contract):
@@ -512,3 +572,22 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:eng-web:psa  # Hebrew numbering (remapped)
+    # P26-3: the MT psalter itself (OSHB/WLC) — Hebrew/Masoretic numbering
+    # BY DEFINITION, remapped into the Greek work vocabulary by the SAME
+    # P13-5 table as the WEB witness above (reused verbatim: the WEB
+    # psalter's Hebrew numbering IS the Masoretic scheme, so the concordance
+    # is identical — Hebrew 23, מִזְמ֥וֹר לְדָוִ֑ד "the LORD is my
+    # shepherd", lands on Greek PSA 22 beside LXX and Vulgate; the LXX
+    # join/split psalms drop and attest per-witness, never false-aligned).
+    # "Not synced" until the owner-fired first `nabu sync oshb`.
+    - label: OSHB (WLC, Masoretic)
+      extractor: cts-verse
+      numbering:
+        system: "Hebrew (Masoretic)"
+        ranges:
+          - { from: 1, to: 8, shift: 0 }       # Hebrew 1–8 = Greek 1–8
+          - { from: 11, to: 113, shift: -1 }   # Hebrew 11–113 = Greek 10–112
+          - { from: 117, to: 146, shift: -1 }  # Hebrew 117–146 = Greek 116–145
+          - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
+      documents:
+        PSA: urn:nabu:oshb:ps  # Hebrew numbering (remapped)

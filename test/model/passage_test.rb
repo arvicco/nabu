@@ -136,6 +136,48 @@ class PassageTest < Minitest::Test
     assert_raises(Nabu::ValidationError) { build(text_normalized: NFD_ANDRA) }
   end
 
+  # -- the P26-3 per-language NFC exemption (owner ruling 2026-07-18) --------
+  #
+  # WLC Hebrew is stored byte-verbatim: NFC reorders Hebrew combining marks
+  # (dagesh/shin-dot vs vowel points differ in canonical combining class), so
+  # hbo/arc text is accepted UN-normalized — a NAMED exemption scoped by
+  # Normalize::NFC_EXEMPT_LANGUAGES, never a general loosening.
+
+  # Upstream WLC bytes of בִּימֵי֙ (Ruth 1:1): bet + DAGESH U+05BC before
+  # HIRIQ U+05B4 — the Masoretic mark order NFC would swap (ccc 21 vs 14).
+  WLC_BIMEI = "\u05D1\u05BC\u05B4\u05D9\u05DE\u05B5\u05D9\u0599"
+
+  def test_hbo_text_is_accepted_byte_verbatim_without_nfc
+    refute WLC_BIMEI.unicode_normalized?(:nfc), "the pin must be a genuinely NFC-unstable sequence"
+    passage = build(language: "hbo", text: WLC_BIMEI, text_normalized: nil)
+    assert_equal WLC_BIMEI, passage.text, "WLC bytes stored exactly as upstream ships them"
+  end
+
+  def test_arc_text_is_accepted_byte_verbatim_without_nfc
+    passage = build(language: "arc", text: WLC_BIMEI, text_normalized: nil)
+    assert_equal WLC_BIMEI, passage.text
+  end
+
+  def test_exempt_language_text_normalized_is_still_minted_nfc
+    passage = build(language: "hbo", text: WLC_BIMEI, text_normalized: nil)
+    assert passage.text_normalized.unicode_normalized?(:nfc),
+           "the SEARCH side still folds through NFC — find-ability is unaffected"
+    assert_equal "בימי", passage.text_normalized, "points and accents strip to bare letters"
+  end
+
+  def test_exempt_language_still_rejects_invalid_utf8_and_empty_text
+    invalid = "abc\xFF".dup.force_encoding(Encoding::UTF_8)
+    assert_raises(Nabu::ValidationError) { build(language: "hbo", text: invalid, text_normalized: nil) }
+    assert_raises(Nabu::ValidationError) { build(language: "hbo", text: "", text_normalized: nil) }
+  end
+
+  def test_non_exempt_languages_keep_the_nfc_invariant
+    # The exemption is per-language, not a general loosening: Greek (and
+    # every other language) still refuses non-NFC text.
+    assert_raises(Nabu::ValidationError) { build(language: "grc", text: NFD_ANDRA) }
+    assert_raises(Nabu::ValidationError) { build(language: "lat", text: NFD_ANDRA) }
+  end
+
   def test_invalid_utf8_text_rejected
     invalid = "abc\xFF".dup.force_encoding(Encoding::UTF_8)
     error = assert_raises(Nabu::ValidationError) { build(text: invalid) }

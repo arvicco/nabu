@@ -290,7 +290,9 @@ class AlignmentRegistryTest < Minitest::Test
     work = Nabu::AlignmentRegistry.load(path).work("ot")
     refute_nil work, "config/alignments.yml must register the ot work (P11-5)"
     labels = work.witnesses.map(&:label)
-    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)"], labels
+    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
+                  "WEB (English)"], labels,
+                 "P26-3 adds the Masoretic witness — the ot hub goes three-legged (MT/LXX/Vulgate)"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
@@ -300,14 +302,35 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "JON", web.book_for("urn:nabu:eng-web:jon"), "P11-8 adds the WEB English OT witness"
   end
 
+  def test_shipped_ot_oshb_witness_maps_conservatively_with_the_holdouts_absent
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    oshb = work.witnesses.find { |witness| witness.label == "OSHB (WLC, Masoretic)" }
+    refute_nil oshb
+    assert_equal "cts-verse", oshb.extractor
+    assert_equal "GEN", oshb.book_for("urn:nabu:oshb:gen"), "align GEN 1.1 goes three-legged"
+    assert_equal "2KI", oshb.book_for("urn:nabu:oshb:2kgs")
+    assert_equal 29, oshb.document_urns.size, "29 of 39 books map; the rest attest per-witness"
+    tokens = oshb.documents.values
+    # The survey's conservative holdouts (LXX reorderings): JER, DAN (the
+    # DAN-3 additions — numbering: is witness-global, so the whole book
+    # holds out), 1KI. Measured at packet time: PRO/JOL/MAL chapter grids
+    # diverge (MT 31/4/3 vs Swete 29/3/4). No work token: EZR/NEH/ECC.
+    %w[JER DAN 1KI PRO JOL MAL PSA ECC EZR NEH].each do |token|
+      refute_includes tokens, token, "#{token} must not be mapped (holdout / no-token / psalms work)"
+    end
+    assert_nil oshb.numbering, "the ot witness carries NO numbering remap — chapters are native"
+  end
+
   def test_shipped_registry_loads_the_psalms_work_with_the_web_numbering_remap
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
     work = Nabu::AlignmentRegistry.load(path).work("psalms")
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
-    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)"],
+    assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
+                  "OSHB (WLC, Masoretic)"],
                  work.witnesses.map(&:label),
-                 "three verse-grain witnesses; the OE Paris Psalter is deferred (line grain)"
-    lxx, vulgate, web = work.witnesses
+                 "P26-3 adds the MT psalter itself; the OE Paris Psalter stays deferred (line grain)"
+    lxx, vulgate, web, oshb = work.witnesses
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     assert_nil lxx.numbering, "the LXX Greek numbering IS the work vocabulary"
     assert_equal "PSA", vulgate.book_for("urn:nabu:vulgate:psa")
@@ -315,6 +338,13 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "Hebrew (Masoretic)", web.numbering.system, "the WEB psalter is remapped from Hebrew"
     assert_equal "PSA 22.1", web.normalize_ref("PSA 23.1"), "Hebrew 23 = Greek 22 (the shepherd psalm)"
     assert_nil web.normalize_ref("PSA 116.1"), "an LXX split-psalm is dropped, never false-aligned"
+    # P26-3: the MT psalter rides the SAME P13-5 concordance verbatim — the
+    # WEB witness's "Hebrew numbering" IS the Masoretic scheme.
+    assert_equal "PSA", oshb.book_for("urn:nabu:oshb:ps")
+    assert_equal "Hebrew (Masoretic)", oshb.numbering.system
+    assert_equal web.numbering, oshb.numbering, "the P13-5 table is reused VERBATIM"
+    assert_equal "PSA 22.1", oshb.normalize_ref("PSA 23.1"), "the shepherd psalm aligns MT-beside-LXX"
+    assert_nil oshb.normalize_ref("PSA 9.1"), "an LXX join-psalm is dropped, never false-aligned"
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------

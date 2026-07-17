@@ -30,7 +30,16 @@ module Nabu
   Passage = Data.define(:urn, :language, :text, :text_normalized, :annotations, :sequence) do
     def initialize(urn:, language:, text:, sequence:, text_normalized: nil, annotations: {})
       language = Model::Validation.language!(language)
-      text = Model::Validation.nfc_text!(text, field: "text")
+      # The P26-3 per-language NFC exemption (owner ruling 2026-07-18): hbo/arc
+      # text is stored byte-verbatim — NFC would reorder the Masoretic
+      # combining-mark order the WLC ships (Normalize::NFC_EXEMPT_LANGUAGES,
+      # the one named exception). Every other language keeps the NFC invariant;
+      # text_normalized is minted through the NFC fold either way.
+      text = if Normalize.nfc_exempt?(language)
+               Model::Validation.verbatim_text!(text, field: "text")
+             else
+               Model::Validation.nfc_text!(text, field: "text")
+             end
       text_normalized ||= Normalize.search_form(text, language: language)
       super(
         urn: Model::Validation.urn!(urn),

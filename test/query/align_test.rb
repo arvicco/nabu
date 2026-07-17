@@ -275,6 +275,56 @@ module Query
       assert_nil sblgnt.document_urn
     end
 
+    # -- the three-legged ot hub (P26-3: MT ↔ LXX ↔ Vulgate) ------------------------
+
+    OT_TRIO_YAML = <<~YAML
+      ot:
+        title: "Old Testament (LXX / Vulgate / MT)"
+        witnesses:
+          - label: LXX (Swete, First1K)
+            extractor: cts-verse
+            documents:
+              GEN: urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1
+          - label: vulgate (Clementine)
+            extractor: cts-verse
+            documents:
+              GEN: urn:nabu:vulgate:gen
+          - label: OSHB (WLC, Masoretic)
+            extractor: cts-verse
+            documents:
+              GEN: urn:nabu:oshb:gen
+    YAML
+
+    # Upstream WLC bytes of Gen 1:1's opening word (בְּרֵאשִׁ֖ית): bet +
+    # dagesh U+05BC BEFORE sheva U+05B0 — the Masoretic mark order the P26-3
+    # exemption stores verbatim (NFC would reorder ccc 21 before ccc 10).
+    WLC_BERESHIT = "בְּרֵאשִׁ֖ית"
+
+    def test_gen_1_1_renders_three_legged_mt_beside_lxx_and_vulgate
+      registry = load_registry(OT_TRIO_YAML)
+      seed_verse_document("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1", language: "grc", title: "Genesis",
+                                                                        verses: [["1.1", "ΕΝ ΑΡΧΗ ἐποίησεν ὁ θεὸς"]])
+      seed_verse_document("urn:nabu:vulgate:gen", language: "lat", title: "Genesis",
+                                                  verses: [["1.1", "In principio creavit Deus cælum et terram."]])
+      seed_verse_document("urn:nabu:oshb:gen", language: "hbo", title: "Gen",
+                                               verses: [["1.1", "#{WLC_BERESHIT} בָּרָא אֱלֹהִים"]])
+      reindex!(registry)
+
+      result = align("GEN 1.1", registry: registry)
+      assert_equal "ot", result.work
+      assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)"],
+                   result.witnesses.map(&:label), "registry order IS the render order"
+      assert_equal %w[grc lat hbo], result.witnesses.map(&:language)
+      assert(result.witnesses.all? { |witness| witness.status == :ok },
+             "all three legs attest GEN 1.1")
+      mt = result.witnesses.last
+      assert_equal ["urn:nabu:oshb:gen:1.1"], mt.sentences.map(&:urn)
+      assert_includes mt.sentences.first.text, WLC_BERESHIT,
+                      "the aligned render serves the byte-verbatim WLC text"
+      refute mt.sentences.first.text.unicode_normalized?(:nfc),
+             "the Masoretic mark order survives all the way to the aligned row"
+    end
+
     # -- the Psalms numbering divergence (P13-5) ------------------------------------
 
     PSALMS_YAML = <<~YAML
