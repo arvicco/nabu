@@ -7731,7 +7731,7 @@ grain — the language-dossier stack's twin, owner-approved 2026-07-16.
 
 # ── Phase 25 ──────────────────────────────────────────────────────────
 
-## P25-3 · hotfix — Celtic quarantine noise: discovery must not mint refs the parser cannot fill  [tier: fable] [status: done 2026-07-17 — both adapters aligned; expected at next parse-only sync: riig 242→9 quarantines, ogham 214→5] [deps: P25-1]
+## P25-4 · Celtic quarantine-noise hotfix — Celtic quarantine noise: discovery must not mint refs the parser cannot fill  [tier: fable] [status: done 2026-07-17 — both adapters aligned; expected at next parse-only sync: riig 242→9 quarantines, ogham 214→5] [deps: P25-1]
 
 The first live sync of the P25-1 pair surfaced 444 noise quarantines on
 perfectly good records — both adapters' cheap discovery peeks (raw-byte
