@@ -72,6 +72,22 @@ module Query
       refute rel.empty?
     end
 
+    # P26-0: the language card's lemma_rows line SAYS gold — silver
+    # (automatic) rows must not inflate it, in relevance or in --list.
+    def test_lemma_rows_count_gold_tier_only
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1",
+                    passages: 2, lemma: "богъ")
+      make_document(source: @more, language: "chu", urn: "urn:nabu:test:chu:2",
+                    passages: 3, lemma: "богъ")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "more-texts" => "silver" })
+
+      assert_equal 2, info.relevance("chu").lemma_rows,
+                   "the card's gold label stays honest — silver rows excluded"
+      held = info.held.find { |h| h.code == "chu" }
+      assert_equal 2, held.lemma_rows
+    end
+
     def test_relevance_for_a_shelf_language_counts_entries
       rel = info.relevance("sla-pro")
       shelf = rel.shelves.find { |s| s.slug == "wiktionary-sla-pro" } || flunk("sla-pro shelf missing")

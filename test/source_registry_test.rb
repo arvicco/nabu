@@ -246,6 +246,41 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/fuzzy_index/, error.message)
   end
 
+  # -- lemma_tier (P26-0) ----------------------------------------------------
+  # ABSENT = gold: every existing registry entry keeps gold semantics with
+  # zero churn; a source whose lemmatization is AUTOMATIC declares
+  # `lemma_tier: silver` and its rows are labeled all the way to the render.
+
+  def test_lemma_tier_defaults_gold_and_lemma_tiers_maps_only_non_gold
+    registry = load_registry(<<~YAML)
+      treebank-src:
+        adapter: A
+      diorisis-src:
+        adapter: B
+        lemma_tier: silver
+      explicit-gold-src:
+        adapter: C
+        lemma_tier: gold
+    YAML
+    assert_equal "gold", registry["treebank-src"].lemma_tier
+    assert_equal "silver", registry["diorisis-src"].lemma_tier
+    assert_equal "gold", registry["explicit-gold-src"].lemma_tier
+    assert_equal({ "diorisis-src" => "silver" }, registry.lemma_tiers,
+                 "absent-is-gold is the wire format: only non-gold sources are mapped")
+  end
+
+  def test_unknown_lemma_tier_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        my-src:
+          adapter: A
+          lemma_tier: bronze
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/lemma_tier/, error.message)
+  end
+
   # -- build_adapter ---------------------------------------------------------
 
   def test_build_adapter_with_flag_off_is_plain_no_arg_construction

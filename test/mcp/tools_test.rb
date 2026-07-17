@@ -1042,6 +1042,59 @@ module MCP
                       "one proto-to-proto hop rides along"
     end
 
+    # -- P26-0: the lemma tier mirrors the CLI labels ---------------------------
+    # attested_count stays gold-only in every payload; silver rows ride as a
+    # separate, labeled silver_count key — never summed, never a bare number.
+
+    def seed_tiered_bog_corpus
+      seed_recon_shelf
+      gold_doc = make_document(urn: "urn:nabu:test:chu", title: "Zographensis", language: "chu")
+      make_passage(gold_doc, urn: "urn:nabu:test:chu:1", text: "ба", sequence: 0, language: "chu",
+                             lemmas: [%w[богъ ба]])
+      silver_source = Nabu::Store::Source.create(
+        slug: "auto", name: "Auto", adapter_class: "TestAdapter", license_class: "open", enabled: true
+      )
+      silver_doc = make_document(source: silver_source, urn: "urn:nabu:test:auto:chu",
+                                 title: "Auto", language: "chu")
+      2.times do |i|
+        make_passage(silver_doc, urn: "urn:nabu:test:auto:chu:#{i + 1}", text: "богъ",
+                                 sequence: i, language: "chu", lemmas: [%w[богъ богъ]])
+      end
+      silver_orv = make_document(source: silver_source, urn: "urn:nabu:test:auto:orv",
+                                 title: "Auto orv", language: "orv")
+      3.times do |i|
+        make_passage(silver_orv, urn: "urn:nabu:test:auto:orv:#{i + 1}", text: "богъ",
+                                 sequence: i, language: "orv", lemmas: [%w[богъ богъ]])
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "auto" => "silver" })
+    end
+
+    def test_etym_payload_serves_gold_attested_count_with_labeled_silver_beside_it
+      seed_tiered_bog_corpus
+      entries = payload(call("nabu_etym", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      cognates = entries.first.fetch("cognates")
+      chu = cognates.find { |c| c["language"] == "chu" && c["word"] == "богъ" }
+      assert_equal 1, chu.fetch("attested_count"), "gold-only, never gold+silver summed"
+      assert_equal 2, chu.fetch("silver_count"), "the automatic count rides beside it, labeled"
+      orv = cognates.find { |c| c["language"] == "orv" && c["word"] == "богъ" }
+      assert_nil orv.fetch("attested_count"), "silver-only never claims gold attestation"
+      assert_equal 3, orv.fetch("silver_count")
+      bare = cognates.find { |c| c["attested_count"].nil? && !c.key?("silver_count") }
+      refute_nil bare, "unattested cognates carry NO silver_count key — absence stays honest"
+    end
+
+    def test_search_lemma_payload_labels_silver_hits
+      seed_tiered_bog_corpus
+      matches = payload(call("nabu_search", { "lemma" => "богъ", "lang" => "chu" })).fetch("matches")
+      gold_hit = matches.find { |m| m.fetch("urn") == "urn:nabu:test:chu:1" }
+      silver_hit = matches.find { |m| m.fetch("urn") == "urn:nabu:test:auto:chu:1" }
+      refute_nil gold_hit
+      refute_nil silver_hit
+      refute gold_hit.key?("tier"), "gold hits stay unlabeled (the CLI mirror)"
+      assert_equal "silver", silver_hit.fetch("tier"), "silver hits say so"
+    end
+
     # P17-3: the payload nests the full shelf-visited chain and labels loan
     # edges — прьстъ → *pьrstъ → (nested) *pírštan → (nested) *per-, and
     # хлѣбъ's *hlaibaz ancestor carries edge_borrowed: true.

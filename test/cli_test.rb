@@ -218,6 +218,61 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P26-0: the lemma tier on the define/etym render ------------------------
+  # attested_count keeps gold-only semantics; silver (automatic lemmatization)
+  # counts are ALWAYS labeled — "1 passage (+2 silver)" beside a gold count,
+  # "silver 3 passages" for a silver-only reflex. NEVER a bare number that
+  # could read as gold: that is the rule under test, stated as refutations.
+
+  def test_define_renders_silver_counts_labeled_beside_gold
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/^ {2}\[chu\] зима \(zima\) — 1 passage \(\+2 silver\)$/, out,
+                   "the gold count keeps its meaning; silver rides beside it, labeled")
+      refute_match(/\[chu\] зима \(zima\) — 3 passage/, out,
+                   "gold and silver must never sum into one number")
+    end
+  end
+
+  def test_define_renders_silver_only_reflexes_labeled_never_a_bare_number
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/silver-only \(automatic lemmatization/, out)
+      assert_match(/^ {2}\[orv\] зима \(zima\) — silver 3 passages$/, out)
+      refute_match(/\[orv\] зима \(zima\) — 3 passages/, out,
+                   "a silver-only count must never render as a bare (gold-readable) number")
+      refute_match(/attested in this corpus.*\n.*\[orv\]/, out,
+                   "silver-only reflexes must not sit in the gold-attested section")
+    end
+  end
+
+  def test_etym_renders_the_same_tier_labels
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym зима --lang chu]) }
+      assert_nil status
+      assert_match(/^ {2}\[chu\] зима \(zima\) — 1 passage \(\+2 silver\)$/, out,
+                   "etym rides the same print_reflexes — same labels")
+      assert_match(/^ {2}\[orv\] зима \(zima\) — silver 3 passages$/, out)
+    end
+  end
+
+  def test_search_lemma_labels_silver_hits_and_gold_only_excludes_them
+    with_tiered_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma зима --lang chu]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:auto:chu:1 \[chu\] \[silver\]/, out, "the silver hit says so")
+      refute_match(/urn:nabu:test:treebank:chu:1 \[chu\] \[silver\]/, out, "gold hits stay unlabeled")
+      assert_match(/2 silver \(automatic lemmatization/, out, "the footer totals the silver hits")
+
+      gold, _err2, status2 = with_config(config) { run_cli(%w[search --lemma зима --lang chu --gold-only]) }
+      assert_nil status2
+      assert_match(/urn:nabu:test:treebank:chu:1/, gold)
+      refute_match(/urn:nabu:test:auto/, gold, "--gold-only excludes the silver tier")
+    end
+  end
+
   # -- P24-2: define/etym coordination — etym must not miss what define finds --
 
   # THE incident (owner, 2026-07-16): `define сигать` finds the Vasmer
@@ -4060,6 +4115,53 @@ class CLITest < Minitest::Test
       load_language_shelf(db)
       db.disconnect
       yield config
+    end
+  end
+
+  # P26-0: the recon shelf PLUS a tiered lemma index at config.fulltext_path —
+  # chu зима attested 1× by a gold source and 2× by a silver (automatic)
+  # source, orv зима 3× silver-only. The tier map is what the registry's
+  # `lemma_tier: silver` line would thread through sync/rebuild.
+  def with_tiered_recon_shelf
+    with_recon_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      begin
+        gold = Nabu::Store::Source.create(
+          slug: "treebank", name: "Treebank", adapter_class: "TestAdapter", license_class: "open"
+        )
+        silver = Nabu::Store::Source.create(
+          slug: "auto", name: "Auto", adapter_class: "TestAdapter", license_class: "open"
+        )
+        seed_tier_passages(source: gold, language: "chu", count: 1)
+        seed_tier_passages(source: silver, language: "chu", count: 2)
+        seed_tier_passages(source: silver, language: "orv", count: 3)
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+        begin
+          Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
+                                        lemma_tiers: { "auto" => "silver" })
+        ensure
+          fulltext.disconnect
+        end
+      ensure
+        db.disconnect
+      end
+      yield config
+    end
+  end
+
+  def seed_tier_passages(source:, language:, count:)
+    urn_stem = "urn:nabu:test:#{source.slug}:#{language}"
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: urn_stem, title: "T", language: language,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    count.times do |i|
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: "#{urn_stem}:#{i + 1}", sequence: i,
+        language: language, text: "зима", text_normalized: "зима",
+        annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "зима", "form" => "зима" }] }),
+        content_sha256: "x", revision: 1
+      )
     end
   end
 
