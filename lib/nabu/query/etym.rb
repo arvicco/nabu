@@ -80,6 +80,24 @@ module Nabu
         reflex.empty? ? headword_results(direct, limit: limit) : reflex
       end
 
+      # The shelves actually present in the crosswalk (P24-2): distinct
+      # dictionary languages holding reflex rows, db-derived so a miss
+      # message never rots into a hardcoded enumeration (the P11
+      # DEFINE_LANGS lesson — a shelf added to the catalog appears with
+      # zero code change). Sorted for determinism; [] on a catalog
+      # predating migration 007.
+      def crosswalk_shelves
+        return [] unless shelf?
+
+        @catalog[:dictionary_reflexes]
+          .join(:dictionary_entries, id: Sequel[:dictionary_reflexes][:dictionary_entry_id])
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .where(Sequel[:dictionary_entries][:withdrawn] => false)
+          .distinct
+          .select_map(Sequel[:dictionaries][:language])
+          .sort
+      end
+
       private
 
       def headword_results(headword, limit:)

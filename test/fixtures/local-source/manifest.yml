@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The local-source shelf has NO upstream by definition (P24-0,
+# sync_policy: local) — nothing here can ever be refetched. The dossier
+# bodies are the shelf descriptions distilled from docs/library.md's
+# per-shelf sections, i.e. exactly what the owner-fired seed export
+# (`nabu list --export-source-dossiers`) writes.
+source: local-source
+adapter_test: test/adapters/local_source_test.rb
+retrieved: 2026-07-16
+files:
+  - path: edh.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body distilled from docs/library.md §8g + docs/edh-survey.md
+  - path: lexica.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body distilled from docs/library.md §8c
+  - path: local-language.md
+    whole: true
+    refetchable: false
+    reason: local shelf — no upstream; body distilled from docs/library.md §8i
+  - path: broken.md.quarantine
+    whole: true
+    refetchable: false
+    reason: synthetic malformed dossier (renamed to .md by the loader test to exercise quarantine)

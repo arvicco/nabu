@@ -118,6 +118,24 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:synced_unpopulated, entry("lexica"))
   end
 
+  # P24-1: the owner-notes shelf is populated by urn_notes rows — its own
+  # grain, never the documents/entries test (which would read forever-empty).
+  class NotesKindAdapter < Nabu::Adapter
+    def self.content_kind = :notes
+  end
+
+  def test_urn_notes_count_as_populated_for_the_notes_shelf
+    source = seed_source("local-notes")
+    seed_run(source, status: "succeeded")
+
+    finding = find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
+    assert_predicate finding, :loud?, "a succeeded run over an empty notes shelf is the hollow signature"
+
+    @db[:urn_notes].insert(urn: "urn:t:1", note: "n", topic: "notes",
+                           added: "2026-07-16", provenance: "local-notes/notes.yml")
+    assert_nil find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
+  end
+
   # -- flag-vs-artifact: fuzzy_index vs trigram ------------------------------
 
   # The real day-long state: fuzzy_index flipped ON, no trigram table built.

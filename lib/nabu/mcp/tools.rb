@@ -174,7 +174,9 @@ module Nabu
         "`parallel_lang` (default eng) edition line by line. Passage lists are bounded by " \
         "max_passages (default #{SHOW_DEFAULT_MAX_PASSAGES}, cap #{SHOW_MAX_PASSAGES_CAP}) " \
         "with an honest truncation note. Every passage carries urn, language, and " \
-        "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged.".freeze
+        "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged. " \
+        "The owner's own notes on the urn ride along in `notes` (documents also count " \
+        "passage-note children) — useful curatorial context.".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -231,7 +233,8 @@ module Nabu
         "in the local catalog the citation carries a resolved passage urn (open it with " \
         "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
-        "separate entries).".freeze
+        "separate entries). The owner's own notes on an entry ride along in `notes` — " \
+        "useful curatorial context.".freeze
 
       ETYM_DESCRIPTION =
         "Walk the reconstruction crosswalk (the comparativist's join): give an ATTESTED " \
@@ -248,7 +251,12 @@ module Nabu
         "walk once; a loan edge carries edge_borrowed: true. Romanization " \
         "bridges scripts: guþ reaches *gudą through Gothic 𐌲𐌿𐌸. `lang` scopes the match " \
         "to one attested language; a leading asterisk (*bogъ) looks a reconstruction up " \
-        "directly. Cognate lists are bounded (attested first, #{ETYM_MAX_COGNATES} shown) " \
+        "directly. A lemma with NO crosswalk path falls back to the dictionary shelf " \
+        "(nabu_define's own lookup): the reply then carries `dictionary_entries` (the " \
+        "nabu_define payload shape — a prose etymological article like Vasmer's still " \
+        "answers) plus an explanatory note; a genuine total miss enumerates the " \
+        "crosswalk's live shelves. Cognate lists are bounded (attested first, " \
+        "#{ETYM_MAX_COGNATES} shown) " \
         "with honest totals; `nabu etym` (CLI) is unbounded.".freeze
 
       COGNATES_DESCRIPTION =
@@ -637,14 +645,18 @@ module Nabu
         end
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
 
-        case result
-        when Query::Show::PassageResult then json(passage_payload(result))
-        when Query::Show::DocumentResult then json(document_payload(result, bound))
-        when Query::Show::RangeResult then json(range_payload(result, bound))
-        # A dictionary-entry urn (the ones nabu_define prints) resolves to the
-        # define payload shape (P22-2), license-withheld by the same rule.
-        when Query::Define::Result then json(define_payload(result))
-        end
+        payload = case result
+                  when Query::Show::PassageResult then passage_payload(result)
+                  when Query::Show::DocumentResult then document_payload(result, bound)
+                  when Query::Show::RangeResult then range_payload(result, bound)
+                  # A dictionary-entry urn (the ones nabu_define prints) resolves to the
+                  # define payload shape (P22-2), license-withheld by the same rule.
+                  when Query::Define::Result then define_payload(result)
+                  end
+        # Owner notes ride BY DEFAULT (P24-1: "your own library metadata is
+        # useful context") — and only here, after the withhold gate, so a
+        # note can never leak a withheld text's content frame.
+        json(attach_notes(catalog, result, payload))
       rescue Query::Range::Error => e
         tool_error(e.message)
       end
@@ -774,7 +786,7 @@ module Nabu
         results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
                                .run(lemma, lang: lang, limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_define(results, lemma: lemma, limit: limit)
+        render_define(results, lemma: lemma, limit: limit, catalog: catalog)
       end
 
       # The reconstruction walk (P14-1): attested lemma → proto entries with
@@ -787,10 +799,19 @@ module Nabu
 
         limit = clamp(args["limit"], default: ETYM_DEFAULT_LIMIT, max: ETYM_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
-        results = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
-                             .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        query = Query::Etym.new(catalog: catalog, fulltext: resolve(@fulltext))
+        results = query.run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_etym(results, lemma: lemma, limit: limit)
+        return render_etym(results, limit: limit) unless results.empty?
+
+        # P24-2 coordination (the CLI's exact fallback): a crosswalk miss
+        # consults the SAME Query::Define lookup nabu_define runs — a
+        # prose etymological article (Vasmer) answers under an honest
+        # note; hits above never mix with the fallback.
+        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
+        entries = entries.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        render_etym_fallback(entries, lemma: lemma, limit: limit, shelves: query.crosswalk_shelves)
       end
 
       # Cognates-in-parallel (P15-3): the hub × crosswalk join, bounded and
@@ -976,7 +997,9 @@ module Nabu
           "(nabu_search with lemma: finds attestations)"
       end
 
-      def render_define(results, lemma:, limit:)
+      # +catalog+ (P24-1): when given, each served entry carries its owner
+      # notes — the note lane on the dictionary surface, served by default.
+      def render_define(results, lemma:, limit:, catalog: nil)
         if results.empty?
           return json(entries: [],
                       note: define_miss_note(lemma))
@@ -984,7 +1007,10 @@ module Nabu
 
         shown = results.first(limit)
         json(
-          entries: shown.map { |result| define_payload(result) },
+          entries: shown.map do |result|
+            payload = define_payload(result)
+            catalog ? attach_notes(catalog, result, payload) : payload
+          end,
           note: if results.size > limit
                   "more than #{limit} entries, showing #{limit} — raise limit (max #{DEFINE_MAX_LIMIT})"
                 else
@@ -1022,16 +1048,35 @@ module Nabu
 
       # -- etym internals -----------------------------------------------------------
 
-      def render_etym(results, lemma:, limit:)
-        if results.empty?
+      # P24-2: the crosswalk-miss path — the CLI fallback's MCP mirror.
+      # Dictionary entries answering the lemma ride define_payload (zero
+      # payload divergence with nabu_define) under `dictionary_entries`
+      # plus an explanatory note; a genuine total miss enumerates the
+      # crosswalk shelves DB-DRIVEN (Query::Etym#crosswalk_shelves — the
+      # P11 DEFINE_LANGS hardcoded-list lesson).
+      def render_etym_fallback(entries, lemma:, limit:, shelves:)
+        if entries.empty?
+          covered = shelves.empty? ? "no shelves yet" : shelves.join(", ")
           return json(entries: [],
-                      note: "no reconstruction names #{lemma.inspect} as a descendant, and no " \
-                            "reconstruction headword matches it — the crosswalk covers " \
-                            "Proto-Slavic/PIE/Proto-Germanic (Wiktionary). Try the lemma's " \
-                            "dictionary form, or a quoted '*form' for a direct lookup (quote the " \
-                            "star — a bare * is a shell glob)")
+                      note: "no reconstruction names #{lemma.inspect} as a descendant, no " \
+                            "reconstruction headword matches it, and no dictionary entry " \
+                            "defines it — the crosswalk covers #{covered}. Try the lemma's " \
+                            "dictionary form, or a quoted '*form' for a direct lookup (quote " \
+                            "the star — a bare * is a shell glob)")
         end
 
+        shown = entries.first(limit)
+        json(
+          entries: [],
+          dictionary_entries: shown.map { |result| define_payload(result) },
+          note: "no reconstruction path in the crosswalk for #{lemma.inspect} — the dictionary " \
+                "shelf holds #{shown.size == 1 ? 'this entry' : "these #{shown.size} entries"} " \
+                "(the nabu_define payload shape)" \
+                "#{" — more exist; raise limit (max #{ETYM_MAX_LIMIT})" if entries.size > limit}"
+        )
+      end
+
+      def render_etym(results, limit:)
         shown = results.first(limit)
         json(
           entries: shown.map { |result| etym_payload(result) },
@@ -1307,6 +1352,29 @@ module Nabu
         }
       end
 
+      # Owner notes (P24-1), served BY DEFAULT on show/define payloads:
+      # merged AFTER the withhold gate, so a note on a withheld document is
+      # withheld with it — a note must never leak a withheld text's content
+      # frame. Documents additionally carry their passage-note child count.
+      # A catalog predating migration 015 has no lane, silently.
+      def attach_notes(catalog, result, payload)
+        reader = Query::Notes.new(catalog: catalog)
+        return payload unless reader.available?
+
+        notes = reader.for_urn(result.urn)
+        payload = payload.merge(notes: notes.map { |note| note_payload(note) }) unless notes.empty?
+        if result.is_a?(Query::Show::DocumentResult)
+          children = reader.child_count(result.urn)
+          payload = payload.merge(passage_note_count: children) if children.positive?
+        end
+        payload
+      end
+
+      def note_payload(note)
+        base = { topic: note.topic, added: note.added, note: note.note }
+        note.tags.empty? ? base : base.merge(tags: note.tags)
+      end
+
       # Every listed passage carries language + license_class: both are
       # document-effective values (a passage's effective license IS its
       # document's), so the contract holds mechanically.
@@ -1527,21 +1595,37 @@ module Nabu
 
       def source_rows(catalog)
         entries = dictionary_entry_counts(catalog)
+        descriptions = source_descriptions(catalog)
         probes = probe_cache
         catalog[:sources].order(:slug).map do |source|
           live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
-          { slug: source[:slug], enabled: enabled_field(source),
-            license_class: source[:license_class],
-            documents: live_docs.count,
-            passages: catalog[:passages].where(withdrawn: false)
-                                        .where(document_id: live_docs.select(:id)).count,
-            # P11-10: a dictionary source's content is entries, not docs/passages;
-            # surfacing the entry count here stops the reference shelf (lexica,
-            # 168k entries) from reading as an empty docs=0 passages=0 source.
-            entries: entries[source[:id]] || 0,
-            last_sync_at: source[:last_sync_at]&.to_s,
-            upstream: upstream_field(probes[source[:slug]]) }
+          row = { slug: source[:slug], enabled: enabled_field(source),
+                  license_class: source[:license_class],
+                  documents: live_docs.count,
+                  passages: catalog[:passages].where(withdrawn: false)
+                                              .where(document_id: live_docs.select(:id)).count,
+                  # P11-10: a dictionary source's content is entries, not docs/passages;
+                  # surfacing the entry count here stops the reference shelf (lexica,
+                  # 168k entries) from reading as an empty docs=0 passages=0 source.
+                  entries: entries[source[:id]] || 0,
+                  last_sync_at: source[:last_sync_at]&.to_s,
+                  upstream: upstream_field(probes[source[:slug]]) }
+          # P24-0: the source's dossier description rides by default — the
+          # owner's own library metadata is useful context for a model
+          # deciding where to search. Absent dossier/table = absent key.
+          description = descriptions[source[:slug]]
+          row[:description] = description if description
+          row
         end
+      end
+
+      # { slug => description } from the derived source_records
+      # (canonical/local-source dossiers, P24-0); {} on a catalog predating
+      # migration 015 or before the owner seeded the shelf.
+      def source_descriptions(catalog)
+        return {} unless catalog.table_exists?(:source_records)
+
+        catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
       end
 
       # Registry truth for registered slugs (class note at @registry), the db

@@ -394,6 +394,69 @@ module MCP
       refute_match(/vertraulich/, text_of(shown), "the shelf's text never leaks by default")
     end
 
+    # -- P24-1: owner notes served by default, withheld with their target ---------
+
+    def seed_note(urn:, note:, topic: "notes", tags: nil, added: "2026-07-16")
+      @catalog[:urn_notes].insert(urn: urn, note: note, topic: topic, added: added,
+                                  tags: tags && JSON.generate(tags),
+                                  provenance: "local-notes/#{topic}.yml")
+    end
+
+    def test_show_serves_owner_notes_by_default_with_the_document_child_count
+      seed_corpus
+      seed_note(urn: @grc.urn, note: "Collate against the OCT.", tags: %w[collation])
+      seed_note(urn: "#{@grc.urn}:1.1", note: "The invocation line.")
+
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      notes = body.fetch("notes")
+      assert_equal(["Collate against the OCT."], notes.map { |n| n.fetch("note") })
+      assert_equal %w[collation], notes.first.fetch("tags")
+      assert_equal "notes", notes.first.fetch("topic")
+      assert_equal 1, body.fetch("passage_note_count"), "the document counts its passage-note children"
+
+      passage = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal(["The invocation line."], passage.fetch("notes").map { |n| n.fetch("note") })
+    end
+
+    def test_show_omits_the_notes_lane_when_unnoted
+      seed_corpus
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      refute body.key?("notes"), "zero-signal silence, not an empty list"
+      refute body.key?("passage_note_count")
+    end
+
+    # The withholding rule: a note on a research_private/restricted document
+    # follows the DOCUMENT's withholding — the withheld response carries no
+    # notes, so a note can never leak a withheld text's content frame.
+    def test_notes_on_a_withheld_document_are_withheld_with_it
+      seed_corpus
+      seed_note(urn: "urn:nabu:adhoc:notes:1", note: "The μυστικον passage frames the private survey.")
+
+      withheld = call("nabu_show", { "urn" => "urn:nabu:adhoc:notes:1" })
+      refute_match(/μυστικον/, text_of(withheld))
+      refute_match(/private survey/, text_of(withheld), "the note is withheld with its target")
+
+      opted = payload(call("nabu_show", { "urn" => "urn:nabu:adhoc:notes:1",
+                                          "include_restricted" => true }))
+      assert_match(/private survey/, opted.fetch("notes").first.fetch("note"),
+                   "the deliberate opt-in serves the note beside its target")
+    end
+
+    def test_define_serves_entry_notes_by_default
+      seed_shelf
+      bare = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      refute bare.key?("notes"), "zero-signal silence before any note exists"
+      entry_urn = bare.fetch("urn")
+      seed_note(urn: entry_urn, note: "Anchor for the John 1.1 comparison.")
+
+      entry = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      assert_equal(["Anchor for the John 1.1 comparison."], entry.fetch("notes").map { |n| n.fetch("note") })
+
+      shown = payload(call("nabu_show", { "urn" => entry_urn }))
+      assert_equal ["Anchor for the John 1.1 comparison."], shown.fetch("notes").map { |n| n.fetch("note") },
+                   "show on the minted dict urn carries the same lane"
+    end
+
     def test_status_excludes_restricted_material_from_coverage_counts
       seed_corpus
       body = payload(call("nabu_status"))
@@ -537,6 +600,20 @@ module MCP
       # A passage source carries entries=0, never a nil/absent field.
       perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
       assert_equal 0, perseus.fetch("entries")
+    end
+
+    # P24-0: each source's dossier description (canonical/local-source →
+    # source_records) rides the status payload by default — the owner's own
+    # library metadata is useful context. Absent dossier = absent key.
+    def test_status_serves_source_dossier_descriptions_by_default
+      seed_corpus
+      @catalog[:source_records].insert(slug: "perseus", kind: "description",
+                                       body: "The Greek canon.", provenance: "dossier")
+      body = payload(call("nabu_status"))
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal "The Greek canon.", perseus.fetch("description")
+      undescribed = body.fetch("sources").find { |s| s.fetch("slug") != "perseus" }
+      refute undescribed.key?("description"), "no dossier description = absent key, never a null"
     end
 
     # P23-3b: the registry is AUTHORITATIVE for enablement — a registry flip
@@ -998,6 +1075,65 @@ module MCP
       note = payload(result).fetch("note")
       assert_match(/no reconstruction/i, note)
       assert_match(/'\*form'/, note, "the miss note must show the quoted-star syntax")
+    end
+
+    # -- P24-2: define/etym coordination ----------------------------------------
+
+    # The starling shelves: piet/germet/baltet crosswalk WITH reflex rows,
+    # vasmer prose-only (rus, zero reflex rows) — the incident fixture.
+    def seed_starling_shelf
+      source = Nabu::Store::Source.create(
+        slug: "starling", name: "StarLing IE", adapter_class: "Nabu::Adapters::Starling",
+        license: Nabu::Adapters::Starling::MANIFEST.license, license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: source)
+                                   .load_from(Nabu::Adapters::Starling.new,
+                                              workdir: Nabu::TestSupport.fixtures("starling"))
+    end
+
+    # The owner incident (2026-07-16): a crosswalk miss where the
+    # dictionary shelf holds the etymology (Vasmer сига́ть,) — nabu_etym
+    # mirrors the CLI fallback: define_payload entries under
+    # dictionary_entries + an explanatory note, entries honestly empty.
+    def test_etym_crosswalk_miss_falls_back_to_define_payload_entries_with_a_note
+      seed_starling_shelf
+      result = payload(call("nabu_etym", { "lemma" => "сигать" }))
+      assert_empty result.fetch("entries"), "no crosswalk path — no etym-shaped hits"
+      entries = result.fetch("dictionary_entries")
+      assert_equal(["urn:nabu:dict:starling-vasmer:12561"], entries.map { |e| e.fetch("urn") })
+      assert_equal "сига́ть,", entries.first.fetch("headword"), "the define payload shape, verbatim"
+      assert_match(/Near etymology:/, entries.first.fetch("body"))
+      assert_match(/no reconstruction path in the crosswalk/, result.fetch("note"))
+    end
+
+    # The genuine total miss enumerates the crosswalk shelves DB-DRIVEN
+    # (the P11 DEFINE_LANGS lesson): exactly the languages with reflex
+    # rows, never the stale hardcoded proto roll call.
+    def test_etym_total_miss_note_enumerates_the_live_crosswalk_shelves
+      seed_starling_shelf
+      result = payload(call("nabu_etym", { "lemma" => "зззз" }))
+      assert_empty result.fetch("entries")
+      refute result.key?("dictionary_entries"), "nothing anywhere — no fallback block"
+      note = result.fetch("note")
+      assert_match(/bat-pro, gem-pro, ine-pro\b/, note, "derived from the live catalog")
+      refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, note, "the hardcoded enumeration is gone")
+      assert_match(/'\*form'/, note, "the quoting hint stays")
+    end
+
+    def test_etym_fallback_withholds_restricted_dictionary_entries
+      source = Nabu::Store::Source.create(
+        slug: "starling", name: "StarLing IE", adapter_class: "Nabu::Adapters::Starling",
+        license: "grant", license_class: "research_private"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: source)
+                                   .load_from(Nabu::Adapters::Starling.new,
+                                              workdir: Nabu::TestSupport.fixtures("starling"))
+      result = payload(call("nabu_etym", { "lemma" => "сигать" }))
+      refute result.key?("dictionary_entries"),
+             "a restricted shelf must not leak through the fallback"
+      revealed = payload(call("nabu_etym", { "lemma" => "сигать", "include_restricted" => true }))
+      assert_equal(["urn:nabu:dict:starling-vasmer:12561"],
+                   revealed.fetch("dictionary_entries").map { |e| e.fetch("urn") })
     end
 
     def test_etym_falls_back_to_a_bare_proto_headword_when_reflexes_miss

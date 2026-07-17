@@ -154,11 +154,12 @@ module Nabu
       Outcome.new(slug: entry.slug, report: report, quarantine: finding)
     end
 
-    # Same content-kind routing as SyncRunner (P11-4/P19-1, architecture
-    # §11/§16): dictionary sources replay through the DictionaryLoader (with
-    # the corpus root — its language-notes accretion is idempotent, so a
-    # replay re-derives the same dossier sections and touches nothing),
-    # language dossier shelves through the LanguageDossierLoader.
+    # Same content-kind routing as SyncRunner (P11-4/P19-1/P24-1,
+    # architecture §11/§16): dictionary sources replay through the
+    # DictionaryLoader (with the corpus root — its language-notes accretion
+    # is idempotent, so a replay re-derives the same dossier sections and
+    # touches nothing), language dossier shelves through the
+    # LanguageDossierLoader, the owner-notes shelf through the NoteLoader.
     def build_loader(adapter, db, ledger, source)
       case adapter.class.content_kind
       when :dictionary
@@ -166,6 +167,10 @@ module Nabu
                                     canonical_dir: @config.canonical_dir)
       when :language
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
+      when :notes
+        Store::NoteLoader.new(db: db, source: source, ledger: ledger)
+      when :source
+        Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
         Store::Loader.new(db: db, source: source, ledger: ledger)
       end

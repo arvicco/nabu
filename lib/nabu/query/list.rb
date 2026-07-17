@@ -53,8 +53,8 @@ module Nabu
       Card = Data.define(:slug, :name, :adapter_class, :enabled, :license_text, :license_classes,
                          :docs, :passages, :entries, :withdrawn, :retired,
                          :languages, :dictionaries, :dated, :facets, :collections,
-                         :dossiers, :record_kinds) do
-        def initialize(dossiers: 0, record_kinds: {}, **rest) = super
+                         :dossiers, :record_kinds, :description) do
+        def initialize(dossiers: 0, record_kinds: {}, description: nil, **rest) = super
       end
       Dated = Data.define(:docs, :min, :max)
       FacetRow = Data.define(:facet, :values, :docs)
@@ -74,6 +74,8 @@ module Nabu
       # (the query-object contract). Live gap 2026-07-15: 199 dossiers
       # rendered as "empty".
       LANGUAGE_ADAPTER = "Nabu::Adapters::LocalLanguage"
+      # Its P24-0 twin: the source-dossier shelf holds source_records.
+      SOURCE_ADAPTER = "Nabu::Adapters::LocalSource"
 
       def initialize(catalog:)
         @catalog = catalog
@@ -92,7 +94,7 @@ module Nabu
           CensusRow.new(
             slug: source.fetch(:slug), docs: doc.fetch(:docs), passages: passages.fetch(id, 0),
             entries: entries.fetch(id, 0),
-            dossiers: language_grain?(source) ? dossier_count : 0,
+            dossiers: shelf_dossier_count(source),
             languages: ((langs[id] || []) + dictionary_languages(id)).uniq.sort,
             license_classes: licenses.fetch(id, [source.fetch(:license_class)]).sort,
             withdrawn: doc.fetch(:withdrawn), retired: doc.fetch(:retired)
@@ -114,8 +116,9 @@ module Nabu
           withdrawn: doc.fetch(:withdrawn), retired: doc.fetch(:retired),
           languages: card_languages(id), dictionaries: dictionary_rows(id),
           dated: dated_coverage(id), facets: facet_summary(id), collections: collections(slug),
-          dossiers: language_grain?(source) ? dossier_count : 0,
-          record_kinds: language_grain?(source) ? record_kinds : {}
+          dossiers: shelf_dossier_count(source),
+          record_kinds: shelf_record_kinds(source),
+          description: description_for(slug)
         )
       end
 
@@ -129,6 +132,10 @@ module Nabu
         if language_grain?(source)
           return dossiers(lang: lang, license: license, withdrawn_only: withdrawn_only,
                           from: from, to: to, limit: limit, prefix: prefix)
+        end
+        if source_grain?(source)
+          raise Error, "the source-dossier shelf's records render on each source's card — " \
+                       "bare `nabu list` (census) and `nabu list SLUG` serve them"
         end
         # The P22-1 verdict stands for document grain: urns are never folded,
         # so a prefix here is a named inapplicability, not a silent no-match.
@@ -204,10 +211,57 @@ module Nabu
         Page.new(rows: rows, total: codes.size)
       end
 
+      # { slug => dossier description } from the derived source_records —
+      # the P24-0 census/MCP lane. {} on a catalog predating migration 015.
+      def descriptions
+        return {} unless @catalog.table_exists?(:source_records)
+
+        @catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
+      end
+
       private
 
       def language_grain?(source)
         source.fetch(:adapter_class) == LANGUAGE_ADAPTER && @catalog.table_exists?(:language_records)
+      end
+
+      def source_grain?(source)
+        source.fetch(:adapter_class) == SOURCE_ADAPTER && @catalog.table_exists?(:source_records)
+      end
+
+      # The dossier count for a shelf whose content grain is dossiers
+      # (language or source shelf); 0 for ordinary sources.
+      def shelf_dossier_count(source)
+        return dossier_count if language_grain?(source)
+        return source_dossier_count if source_grain?(source)
+
+        0
+      end
+
+      def shelf_record_kinds(source)
+        return record_kinds if language_grain?(source)
+        return source_record_kinds if source_grain?(source)
+
+        {}
+      end
+
+      def source_dossier_count
+        @source_dossier_count ||= @catalog[:source_records].select(:slug).distinct.count
+      end
+
+      def source_record_kinds
+        @source_record_kinds ||= @catalog[:source_records]
+                                 .group_and_count(:kind).all
+                                 .sort_by { |row| [-row.fetch(:count), row.fetch(:kind)] }
+                                 .to_h { |row| [row.fetch(:kind), row.fetch(:count)] }
+      end
+
+      # One source's dossier description (P24-0), nil when the shelf has
+      # nothing on it (or the catalog predates migration 015).
+      def description_for(slug)
+        return nil unless @catalog.table_exists?(:source_records)
+
+        @catalog[:source_records].where(slug: slug, kind: "description").get(:body)
       end
 
       def dossier_count

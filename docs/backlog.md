@@ -7463,3 +7463,244 @@ FINDINGS (2026-07-16):
   a fresh fetch also fine), eyeball `define 'сигать'` (vasmer credit
   line), `define '*kakla-'`, `etym hals` (germet got/ang gold joins),
   the piet 574-b note body, then flip enabled + rebuild.
+
+# ── Phase 24 ──────────────────────────────────────────────────────────
+
+## P24-2 · define/etym coordination — etym must not miss what define finds  [tier: fable] [status: done 2026-07-16] [deps: —]
+
+Owner incident (2026-07-16, verbatim: "disagreement between define and
+etym. should be more coordination between command execution paths with
+similar function"): `define сигать` finds the Vasmer article
+(urn:nabu:dict:starling-vasmer:12561 — prose fields, no reflex rows)
+while `etym сигать` returned a flat miss whose message enumerated a
+HARDCODED, pre-starling/LIV/EDL shelf roll call.
+
+FALLBACK-DESIGN VERDICT (judged as specced): fallback fires ONLY on a
+crosswalk miss — etym's primary contract stays the walk, hits never mix
+with dictionary entries. On a miss the CLI runs the SAME Query::Define
+lookup the define command runs (one execution path — coordination, not
+duplication) and renders any entries via the P22-2-extracted
+print_define_entry (zero renderer divergence) under the honest header
+"no reconstruction path in the crosswalk for X — the dictionary shelf
+holds:". MCP nabu_etym mirrors it exactly: `dictionary_entries`
+(define_payload shape, license-withholding applied) + an explanatory
+note; entries stays honestly [].
+
+ENUMERATION now DB-DERIVED (the P11 DEFINE_LANGS / P18 lesson —
+hardcoded shelf lists rot): new public Query::Etym#crosswalk_shelves =
+distinct dictionary languages holding reflex rows (withdrawn entries
+excluded, sorted; [] pre-migration-007). The genuine-total-miss message
+(CLI + MCP) lists exactly those codes ("the crosswalk covers bat-pro,
+gem-pro, ine-pro" on the starling fixture — vasmer's rus honestly
+absent, zero reflex rows) with the `nabu language CODE` pointer and the
+'*form' quoting hint kept; a fixture shelf added to the catalog appears
+in the message with zero code change (test-pinned). When the fallback
+fired, the full miss text is suppressed (coordinated message).
+
+Boundaries held: crosswalk semantics, reflex minting, and define
+behavior untouched; cli.rb diff localized to the etym command +
+etym renderer region (print_etym_results lost its dead miss branch —
+misses route through print_etym_fallback).
+
+Tests +8 (query 2: db-derived census + new-shelf-no-code-change pin,
+pre-007 grace; CLI 3: the verbatim incident on the starling fixtures
+incl. the сига́ть, trailing-comma fold pin, hit-never-mixes, db-driven
+miss; MCP 3: fallback payload+note, db-driven miss note, restricted
+withholding through the fallback; +1 help-pin assertion). Docs: cli
+etym long_desc (shelf wording de-hardcoded + fallback paragraph),
+ETYM_DESCRIPTION, docs/mcp.md nabu_etym paragraph.
+
+# ── Phase 25 queue: the Celtic axis (owner-approved as-is, 2026-07-16) ─
+# Survey: .docs/celtic-survey.md (scout 2026-07-15/16; licenses verbatim,
+# contacts verified). Five packets + rider, ranked value×readiness:
+# 1. riig — 428 Gaulish EpiDoc inscriptions (CC BY 4.0 IN-FILE, header
+#    governs), ~6 MB polite crawl, EDH-style date/place extraction,
+#    Gaulish xtg incl. Gallo-Greek script.
+# 2. kaikki sga/mga/wlm — three EXTRACTS config rows on the live
+#    wiktionary-jsonl adapter (the ett precedent, zero new code; the
+#    Old Irish extract is 19.8 MB — DIL-derived depth).
+# 3. corph — Maynooth ChronHib, 78 annotated Old Irish texts, MIT
+#    LICENSE (dump in chronhib-MU/Chronhib-Website repo, 39 MB);
+#    FIRST CELTIC GOLD LEMMAS → unmutes piet CELT column, Pokorny
+#    MATERIAL, IE-CoR sga, cel-pro ReflexViews; DIL_Headword ids →
+#    links-journal edges into eDIL's stable id space.
+# 4. UD Old Irish ×2 — DipSGG (3,471 St Gall glosses, BY-NC-SA → nc)
+#    + DipWBG (42 Würzburg glosses, BY-SA → attribution override).
+#    Config-only.
+# 5. ogham — 508 EpiDoc records (git clone; in-file CC BY 4.0 vs site
+#    BY-NC-SA → class nc PENDING the clarification email #14,
+#    relabel-on-reply); Primitive Irish pgl, real Ogham codepoints.
+# Rider: 11 verified PD-scan ingest one-liners (survey §PD; Thurneysen
+#    1909 GERMAN original — the 1946 English translation is IN
+#    COPYRIGHT, trap avoided).
+# Negative (verified): no licensed machine-readable Celtic Gospel
+#    exists — alignment hub gains no Celtic witness this phase.
+# Unlock emails DRAFTED (registry rows 11-16): eDIL, GPC, CELT,
+#    OG(H)AM clarification, Cardiff Welsh Prose (address needs owner
+#    eyeball), Hesperia. v2 on replies: LexLep, Rhyddiaith 13eg,
+#    CELT subset, Celtiberian.
+
+## P24-1 · `nabu note` — owner annotations on any urn  [tier: fable] [status: done 2026-07-16 — shelf + gateway + adapter + renders shipped; design verdicts below] [deps: —]
+The curatorial note lane (owner-approved 2026-07-16, metadata-framework
+phase 2): notes keyed by ANY urn the corpus knows — document, passage,
+range, dictionary entry — nabu's scholia-of-one's-own. Canonical-memory
+doctrine (architecture §16): notes live as FILES under
+canonical/local-notes/<topic>.yml (a YAML LIST of urn/note/added/tags
+records, append-only through the gateway, hand-edits validated with
+file+entry defect naming — Nabu::NoteFile); the db only indexes
+(urn_notes, migration 015, temperature 1, replaced per topic wholesale by
+Store::NoteLoader — content_kind :notes, the fourth loader routing).
+
+SHIPPED:
+- Nabu::NoteShelf — the FOURTH sanctioned local-shelf write gateway
+  (CLAUDE.md rule + architecture §16 updated in the same change): atomic
+  append + reparse-validate + rollback (the LibraryShelf P20-1 pattern),
+  urn resolution against the catalog BEFORE any write (Query::Show incl.
+  P22-2 dictionary-entry urns; a range with a bad endpoint is a miss,
+  never a crash); --force records a note on a not-yet-held urn (planned
+  material), flagged (dangling) at render.
+- `nabu note URN [TEXT]`: scripted append / interactive prompt (TTY; the
+  ingest furniture) / bare-urn read-back of existing notes; non-TTY
+  without TEXT refuses honestly BEFORE any write; `--topic` (default
+  notes; "manifest" reserved shelf furniture), `--tags`, `--force`,
+  `nabu note --list [--topic] [--limit]` (bounded, dangling flagged).
+  Append runs the shelf's ordinary sync (the ingest pattern) so the note
+  indexes + sha-pins immediately.
+- Adapter local-notes (sync_policy local, enabled true — the P19-1
+  argument): LocalFetch per-file pins/vanished/attic verbatim; quarantine
+  per topic file; discovery census counts non-topic yml by rule.
+  Registered in config/sources.yml + 02-sources row 61. Verify diffs
+  derived rows per topic (the dossier pattern); status shows notes=N
+  (the P11-10 misleading-zero rule); health populated? gains the :notes
+  grain.
+- Renders: show footer "owner note (topic, date): …" + document
+  passage-note child count; define entry notes after the body (and on
+  show of a minted dict urn); links owner-notes lane; MCP nabu_show/
+  nabu_define serve notes BY DEFAULT (owner: "your own library metadata
+  is useful context"), attached strictly AFTER the withhold gate — a note
+  on a research_private/restricted document is withheld with its target.
+
+DESIGN VERDICTS (2026-07-16):
+- FILE GROUPING: topic files (default "notes"), not per-urn files — one
+  honest review surface per theme, mechanical appends, the manifest
+  precedent; topic names are lowercase file stems, "manifest" reserved
+  (fixture/shelf furniture collision, gateway and discovery agree).
+- DANGLING-URN STORY: resolution is a GATEWAY check, not a parse rule —
+  NoteFile accepts any urn:-shaped key so hand-edits and --force survive
+  rebuilds; renders flag (dangling) by re-resolving at read time, so the
+  note self-heals the day the urn arrives. The reparse-validate backstop
+  keeps even a --force append from landing a non-urn key (rollback,
+  byte-identical prior file).
+- WITHHOLDING RULE: notes attach to their TARGET's payload only, after
+  the withhold gate — the withheld response carries no notes field at
+  all, so the frame cannot leak; include_restricted serves note beside
+  target, deliberately.
+- IDEMPOTENCY GRAIN: notes have no per-record key, so the loader replaces
+  per TOPIC wholesale — byte-identical topics skip whole (double-load
+  test pins rows AND ids unchanged), edits re-add whole, absent topics
+  sweep on full loads only.
+
+Owner queue: `bin/nabu sync local-notes` errors until the first note
+exists (LocalFetch's missing-tree honesty — the hint names `nabu note`);
+try `bin/nabu note <urn> "…"` on a held urn, then `show <urn>`,
+`note --list`, and an MCP nabu_show to see the served lane.
+
+## P24-0 · Shelf dossiers — canonical/local-source/  [tier: fable] [status: done 2026-07-16 — full stack shipped; owner queue: seed export + first sync + eyeball] [deps: P19-1]
+The canonical-memory doctrine (architecture §16) extended to the SOURCE
+grain — the language-dossier stack's twin, owner-approved 2026-07-16.
+- SHIPPED: Nabu::SourceDossier (canonical/local-source/<slug>.md — YAML
+  front matter slug/description/themes/key_works + scalar extras, owner
+  prose = the curated `note` lane, provenance-headed accretion sections
+  under the append-only latest-per-(slug, kind) contract verbatim;
+  parse/render round-trips, NFC at the boundary); Nabu::SourceShelf —
+  the THIRD sanctioned canonical-write gateway (CLAUDE.md ground rule +
+  architecture §16 amended in the same change); Adapters::LocalSource
+  (`content_kind :source`, the FOURTH loader routing in
+  SyncRunner/Rebuild/Verify; sync_policy local, enabled true by default
+  — the P19-1 argument verbatim in sources.yml) →
+  Store::SourceDossierLoader → derived `source_records` (migration 015:
+  slug/kind/body/provenance; replace-per-slug, record-grained counts,
+  absent-slug sweep, attic retention); status reads records=N;
+  invariants' populated + files-vs-records checks generalized to both
+  dossier grains (DOSSIER_TABLES).
+- SCAFFOLD: `nabu ingest --shelf source SLUG` — the thin three-mode
+  language-scaffold pattern; description prompt prefilled from the
+  registered source's manifest name; key_works validated as urns via the
+  shared field_error seam (prompt re-asks; --yes fails pre-write).
+- SEED (owner-fired one-shot): `nabu list --export-source-dossiers
+  [--dry-run]` scaffolds a dossier for EVERY registered source,
+  description seeded from the best EXISTING prose — docs/library.md
+  per-shelf `| **Source** |` sections + slug bullets (slug-specific
+  bullets win), then sources.yml standalone shelf comments (inline flag
+  comments and license_watch lines excluded); sentences capped at 3; NO
+  prose = an HONEST STUB named in the report, never invented content;
+  idempotent at the file grain (existing dossier = untouched no-op).
+- CONSUMERS: `nabu list SLUG` card renders the description wrapped under
+  the header (house measure, whole words); `nabu list --long` census
+  adds one description line per described source (zero fields
+  suppressed); MCP nabu_status serves `description` per source by
+  default (absent dossier = absent key, never a null).
+- GATE-CHECK RIDER (owner: gate-checked only, never generated): `rake
+  site:check` → Nabu::Ops::DossierDrift. PRESENCE/MENTION rule,
+  journaled in the class: drift = registered source with no dossier /
+  docs/library.md-mentioned slug whose dossier lacks a description / an
+  ENABLED described shelf the library review never mentions (pending
+  sources exempt — MAINTENANCE duty 2 maps shelves when they go live) /
+  malformed dossier / unseeded shelf. NEVER verbatim equality (the two
+  registers legitimately diverge in wording); site/library.md covered
+  TRANSITIVELY (the printed map of docs/library.md, no slugs to anchor
+  on). Listed report, exit 1 on drift.
+- Fixtures test/fixtures/local-source/ (3 real dossiers distilled from
+  library.md prose + quarantine rig + README/manifest). Docs:
+  architecture §16 shelf three + third gateway, ops.md §14 workflow,
+  02-sources row 60, site/MAINTENANCE.md duty 5, CLAUDE.md ground rule.
+  Tests +44 across 9 new/extended files. Suite 2,913 runs / 34,805
+  assertions exit 0 (0 skips) · lint 372 files exit 0.
+- Owner queue: `bin/nabu list --export-source-dossiers` (eyeball seeded
+  descriptions + the stub list), `bin/nabu sync local-source`,
+  `bin/nabu list edh` (description under the header), `bundle exec rake
+  site:check`.
+
+# ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
+# Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no
+# unlock emails). Phasing per survey §6:
+# 1. lemma-tier column + DCS (one packet): `lemma_tier` per source
+#    (absent = gold), carried per passage_lemmas row (drop-and-rebuild,
+#    no migration); attested_count stays GOLD-ONLY, labeled
+#    silver_count beside it ("attested 12 (+340 silver)"; silver-only
+#    renders "silver 340", never a bare number); LemmaSearch tier
+#    labels + --gold-only. DCS: OliverHellwig/sanskrit dcs/data/conllu
+#    (NOT "dcs-data" — 02-sources row 7 stale twice: repo + format),
+#    15,900 CoNLL-U chapters / 270 texts / CC BY 4.0 verbatim; GOLD
+#    gated on machine-readable <layer type="gold"> per chapter;
+#    dedup pin vs UD sanskrit-vedic (same Vedic Treebank). Sanskrit
+#    gold lights MW + piet IND attested counts (fold spot-verified).
+# 2. OSHB — three-legged ot hub (MT ↔ LXX ↔ Vulgate): 39 OSIS books,
+#    cts-verse extractor + P13-5 Psalms numbering table verbatim; WLC
+#    text PD, morphology CC BY 4.0; hbo + arc per-word axes; lemmas =
+#    augmented Strong's. GATE DECISION AT PACKET: upstream anti-NFC
+#    warning is MEASURED TRUE (Ruth 1:1 not NFC-stable) — first
+#    collision with the NFC invariant, owner rules. Hold out JER/DAN-3/
+#    1KI (LXX reorderings). TAHOT (CC BY) = second-witness option.
+# 3. SuttaCentral — bilara-data published branch, whole Tipiṭaka roman
+#    Pali (7,289 flat-JSON files), 138/140 CC0 + 1 PD + 1 BY-SA
+#    (override); shared segment ids → exact -en siblings; new pli axis;
+#    sc-data parallels graph (8,221 relations, non-copyrightable) =
+#    intertext packet material; legacy NC-ND html_text EXCLUDED.
+#    UD_Pali-PaliCanon lands v2.19 (2026-11-15, manual-native lemmas,
+#    BY-SA) = future config-only gold.
+# 4. SARIT — 83 TEI texts / 178 MB, all headers censused BY-SA/MIT,
+#    ZERO NC (the GRETIL upgrade); ~60 works GRETIL lacks incl.
+#    complete MBh (38.6 MB); sibling parser (not GretilParser
+#    regexes); 41/83 Devanagari (transcode policy verdict); MBh
+#    recension check before promising MW citation lights.
+# 5. Diorisis — ONLY behind the silver tier: 820 XML (figshare zip
+#    md5-pinned), automatic annotation by upstream's own words =
+#    SILVER never gold; 806/809 works already held (a lemma layer over
+#    our canon, arriving as second editions); IN-FILE CC BY-SA 3.0 US
+#    governs over figshare's CC BY 4.0 (in-file doctrine proof #3);
+#    the 53 Rahlfs-lineage LXX files EXCLUDED by rule (row 44,
+#    machine-readable per-file provenance); upstream's token-gated
+#    JSON update channel = license_watch item.
+# Riders: 02-sources row 7 correction at DCS promotion; row 44
+#    footnote (Diorisis LXX = another Rahlfs dead end).
