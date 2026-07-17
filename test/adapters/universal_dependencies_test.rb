@@ -23,6 +23,8 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
+    "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50",
+    "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50"
   ].freeze
 
@@ -63,7 +65,7 @@ class UniversalDependenciesTest < Minitest::Test
   # OCS canon the `proiel` source syncs, and UD_Old_East_Slavic-TOROT
   # (orv-torot) re-exports the `torot` source. Adding either to TREEBANKS would
   # DOUBLE-LOAD the same sentences under a second urn scheme — the survey's
-  # named hazard (docs/slavic-survey.md §1). This test freezes their exclusion:
+  # named hazard (.docs/surveys/slavic-survey.md §1). This test freezes their exclusion:
   # the two orv treebanks we DO add (Birchbark, RNC) are RNC-scheme conversions
   # with no PROIEL/TOROT overlap, so they are safe; the two below are not.
   def test_treebanks_excludes_the_chu_proiel_and_orv_torot_conversions
@@ -85,7 +87,7 @@ class UniversalDependenciesTest < Minitest::Test
     ].each do |conversion_repo|
       refute_includes repos, conversion_repo,
                       "TREEBANKS must exclude #{conversion_repo}: it re-loads the native " \
-                      "proiel/torot sync (double-load hazard, docs/slavic-survey.md §1)"
+                      "proiel/torot sync (double-load hazard, .docs/surveys/slavic-survey.md §1)"
     end
 
     chu = treebanks.select { |_slug, tb| tb[:language] == "chu" }.keys
@@ -94,39 +96,42 @@ class UniversalDependenciesTest < Minitest::Test
                  "natively via proiel/torot; a chu UD treebank would double-load it. Found: #{chu.inspect}"
   end
 
-  # --- per-treebank license override (P10-4) ------------------------------
+  # --- per-treebank license override (P10-4; extended P25-2) ---------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
   # derived treebanks). The three Old East Slavic treebanks (Birchbark, RNC,
-  # Ruthenian) are CC BY-SA 4.0 → attribution: they carry a per-document
-  # license_override so the shareable shelf labels them honestly, while the four
-  # legacy treebanks stay bare (source class nc applies, override NULL).
-  SLAVIC_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc old-east-slavic-ruthenian].freeze
-  LEGACY_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic].freeze
+  # Ruthenian) and Old Irish DipWBG (P25-2, verbatim "CC BY-SA 4.0") are
+  # CC BY-SA 4.0 → attribution: they carry a per-document license_override so
+  # the shareable shelf labels them honestly, while the bare treebanks —
+  # the four legacy ones plus Old Irish DipSGG (P25-2, verbatim
+  # "CC BY-NC-SA 4.0") — inherit the source class nc (override NULL).
+  OVERRIDE_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc old-east-slavic-ruthenian
+                      old-irish-dipwbg].freeze
+  BARE_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic old-irish-dipsgg].freeze
 
-  def test_treebanks_map_sets_attribution_only_on_the_slavic_entries
+  def test_treebanks_map_sets_attribution_only_on_the_by_sa_entries
     treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
-    SLAVIC_SLUGS.each do |slug|
+    OVERRIDE_SLUGS.each do |slug|
       assert_equal "attribution", treebanks.fetch(slug)[:license_class], "#{slug} must be attribution"
       assert_equal "CC BY-SA 4.0", treebanks.fetch(slug)[:license]
     end
-    LEGACY_SLUGS.each do |slug|
+    BARE_SLUGS.each do |slug|
       assert_nil treebanks.fetch(slug)[:license_class], "#{slug} must stay bare (source class applies)"
     end
   end
 
-  def test_parse_surfaces_license_override_for_slavic_and_nil_for_legacy
+  def test_parse_surfaces_license_override_for_by_sa_and_nil_for_bare
     adapter = Nabu::Adapters::UniversalDependencies.new
     by_slug = adapter.discover(FIXTURES).to_h { |ref| [ref.metadata["treebank"], adapter.parse(ref)] }
 
-    SLAVIC_SLUGS.each { |slug| assert_equal "attribution", by_slug.fetch(slug).license_override }
-    LEGACY_SLUGS.each { |slug| assert_nil by_slug.fetch(slug).license_override }
+    OVERRIDE_SLUGS.each { |slug| assert_equal "attribution", by_slug.fetch(slug).license_override }
+    BARE_SLUGS.each { |slug| assert_nil by_slug.fetch(slug).license_override }
   end
 
   # End-to-end: after a fixture load, documents.license_override reads
-  # attribution for the two Slavic treebanks and NULL for the four legacy ones,
+  # attribution for the BY-SA treebanks and NULL for the bare ones,
   # while the source class remains nc.
-  def test_fixture_load_writes_attribution_override_only_for_the_slavic_treebanks
+  def test_fixture_load_writes_attribution_override_only_for_the_by_sa_treebanks
     catalog = store_test_db
     source = Nabu::Store::Source.create(
       slug: "ud", name: "Universal Dependencies",
@@ -138,14 +143,14 @@ class UniversalDependenciesTest < Minitest::Test
     override_by_slug = Nabu::Store::Document.where(source_id: source.id).all.to_h do |doc|
       [doc.urn.split(":")[3], doc.license_override]
     end
-    SLAVIC_SLUGS.each { |slug| assert_equal "attribution", override_by_slug.fetch(slug) }
-    LEGACY_SLUGS.each { |slug| assert_nil override_by_slug.fetch(slug) }
+    OVERRIDE_SLUGS.each { |slug| assert_equal "attribution", override_by_slug.fetch(slug) }
+    BARE_SLUGS.each { |slug| assert_nil override_by_slug.fetch(slug) }
     assert_equal "nc", source.license_class, "the source class is unchanged"
   end
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_seven_files_sorted_by_urn
+  def test_discover_finds_exactly_nine_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -161,6 +166,8 @@ class UniversalDependenciesTest < Minitest::Test
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50" => "orv",
+      "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50" => "sga",
+      "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test" => "sga",
       "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50" => "san"
     }
     expected_languages.each do |urn, language|
@@ -245,6 +252,20 @@ class UniversalDependenciesTest < Minitest::Test
     ruthenian_row = lemmas.where(language: "orv", urn: ruthenian_urn, lemma_raw: "артыкулъ").first
     refute_nil ruthenian_row, "expected a passage_lemmas row for the orv lemma артыкулъ"
     assert_includes ruthenian_row[:surface_forms], "АРТЫКУЛЪ"
+
+    # P25-2: both Old Irish glosses treebanks flow through the same
+    # unchanged plumbing — sga becomes a lemma-indexed language. A readable
+    # row each: DipSGG gloss 1 "libardaib" lemmatized lebarda ("bookish"),
+    # DipWBG gloss 1's airbág ("boasting", surface irbáig).
+    assert_operator lemmas.where(language: "sga").count, :>, 0,
+                    "the Old Irish treebanks must contribute passage_lemmas rows"
+    sgg_row = lemmas.where(language: "sga", lemma_raw: "lebarda").first
+    refute_nil sgg_row, "expected a passage_lemmas row for the sga lemma lebarda"
+    assert_equal "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50:1", sgg_row[:urn]
+    assert_includes sgg_row[:surface_forms], "libardaib"
+    wbg_row = lemmas.where(language: "sga", lemma_raw: "airbág").first
+    refute_nil wbg_row, "expected a passage_lemmas row for the sga lemma airbág"
+    assert_equal "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test:1", wbg_row[:urn]
   ensure
     fulltext&.disconnect
   end
@@ -335,9 +356,9 @@ class UniversalDependenciesTest < Minitest::Test
       adapter.fetch(workdir)
 
       # First repo gains a file; the LAST TWO repos each lose their only
-      # treebank file (2 of #{slugs.size} ingestible files ≈ 29% > 20% → trip;
-      # a single deletion is only 1/#{slugs.size} ≈ 14%, below the breaker, now
-      # that the set has grown to seven treebanks).
+      # treebank file (2 of #{slugs.size} ingestible files ≈ 22% > 20% → trip;
+      # a single deletion is only 1/#{slugs.size} ≈ 11%, below the breaker, now
+      # that the set has grown to nine treebanks).
       first = slugs.first
       doomed = slugs.last(2)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")

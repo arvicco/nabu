@@ -10,7 +10,7 @@ module Nabu
     # per-verse English (and sometimes Arabic) translation, diplomatic +
     # normalized + morph token layers, bound groups, lemma/POS/deprel,
     # entity spans with Wikification, language-of-origin tags and
-    # manuscript page/column/line topology (docs/coptic-survey.md §4).
+    # manuscript page/column/line topology (.docs/surveys/coptic-survey.md §4).
     #
     # == The format is a SPAN STACK, not a tree
     #

@@ -7540,6 +7540,74 @@ ETYM_DESCRIPTION, docs/mcp.md nabu_etym paragraph.
 #    eyeball), Hesperia. v2 on replies: LexLep, Rhyddiaith 13eg,
 #    CELT subset, Celtiberian.
 
+## P25-1 · Celtic epigraphy pair: RIIG (Gaulish) + OG(H)AM (Primitive Irish)  [tier: fable] [status: done 2026-07-17 — both adapters + families shipped, enabled:false awaiting owner syncs; verdicts below] [deps: —]
+
+Two EpiDoc corpora, one shared parser investment (queue picks #1 + #5).
+
+SHIPPED:
+- `CelticLeiden` — the shared Leiden reading-text policy module (the "one
+  shared investment" verdict: gap `[…]` / del `⟦⟧` / surplus `{}` markers,
+  corr>reg>lem>expan choice-branch rule, supplied/unclear grapheme counts,
+  language mapping, line folding). The two parsers stay SIBLING families
+  (the EDH/DDbDP siblings-not-a-hierarchy doctrine), each owning its walk;
+  both are DOM-based (428 + 504 files ≤70 KB — the freising small-TEI
+  precedent, not the >5 MB Reader rule; and choice-branch selection needs
+  name-based lookahead a one-pass stream can't do).
+- `riig` (adapter `Riig`, family `riig-epidoc`, `attribution`): passage =
+  line WITHIN an editorial reading (`<urn>:<seg-id>:<lb n>` — RIIG marks
+  no preferred reading, so EVERY seg mints; AHP-01-01's καρε[…]μ vs
+  καρβ[…]μ both live). choice→reg; word-internal pretty-print whitespace
+  stripped (no xml:space upstream; `<space/>` = real division —
+  "nanton{t}icnos", "votum solvit libens merito"); msd/pos/type →
+  per-line `words`; seg resp/cert → `reading` annotation. Fetch =
+  FileFetch corpus map (corpus.html's embedded placesgeo GeoJSON, the
+  crawl seed + probe target) + polite resumable per-record crawl (ORACC
+  html-en shape, CRAWL_DELAY 0.25). `AxisBuilder::RiigDates` (envelope
+  reuse, BCE-signed; findspot-over-settlement, Trismegistos refs; WGS84
+  verbatim in metadata — the EDH no-coordinate-columns decision). RIG
+  concordance → `related` `rig:G593` (hyphen variants deduped) →
+  reference edges. French translation divs → `-fr` siblings, cited by
+  reading id (registry `translations: true`; per-file peek since coverage
+  is partial — the AHP empty-div case). LICENSE both layers verbatim in
+  MANIFEST + 02-sources: in-file CC BY 4.0 governs (Freising ruling);
+  page-level BY-NC-ND covers site documentation only.
+- `ogham` (adapter `Ogham`, family `ogham-epidoc`, `nc` PENDING registry
+  #14 — relabel-on-reply): Document = (stone × layer), the Freising
+  sibling design — ogham layer bare urn, transliteration/roman/runic/
+  english as -translit/-roman/… siblings with IDENTICAL line suffixes
+  (suffix-equality --parallel alignment). SCRIPT-HONESTY verdicts: Ogham
+  codepoints verbatim NFC as the PRIMARY surface (byte-pinned ᚇᚑᚈᚐᚌᚅᚔ);
+  the transliteration is its own parallel document, never a replacement;
+  a false `-Ogam` subtag on a Latin-script layer is SHED, `-Latn` never
+  invented (upstream doesn't claim it). charDecl glyph table resolves
+  `<g>` refs per layer (ogham vs diplomatic mapping, `@type` override;
+  unknown ref = ParseError, the freising rule). choice→corr either order;
+  no-lb layers → the `:text` whole-layer fallback (EDH P23-3c); empty
+  edition divs skip-by-rule (discovery census); `<ab type="list">`
+  summary dropped. dil.ie word links → `related`
+  (`https://dil.ie/<id>`) → reference edges, producer `ogham` — corph
+  coordinates via producer, no code coupling. GitFetch; sync_policy
+  MANUAL verdict (not frozen: v2.0 2025, commits into 2026).
+- Reference-edge generalization (the packet's links promise):
+  `Adapter.reference_producer` (default "library") +
+  `LibraryReferences#run(slug, producer:)` + the edge-worthiness rule
+  generalized from urn:-only to scheme-bearing targets (":"-less strings
+  stay codes/metadata) — SyncRunner passes the producer; supersession
+  stays (producer, scope)-scoped so independent producers over the same
+  id space never clobber.
+- AxisBuilder Summary + rebuild + CLI axes line gain riig (+undated/
+  +invalid residues); config rows riig (translations: true) + ogham,
+  both enabled: false; fixtures = 4 real RIIG records + trimmed corpus
+  map, 6 real ogham records + charDecl (manifests + READMEs with both
+  license layers verbatim).
+
+KNOWN HONEST RESIDUES (first-sync triage): ~5 RIIG "Indéterminé" records
+may quarantine (empty editions — the EDH 27-quarantine precedent); ogham
+W-PEM-006/W-PEM-012 transliteration layers quarantine on lb-without-@n
+(upstream defect, named in the fixture README). FOLLOW-UP (proposed, not
+promised): an ogham place/date axis feed (geo 484/504, origDate attrs
+104/504 censused) once the owner wants Insular findspots on the axis.
+
 ## P24-1 · `nabu note` — owner annotations on any urn  [tier: fable] [status: done 2026-07-16 — shelf + gateway + adapter + renders shipped; design verdicts below] [deps: —]
 The curatorial note lane (owner-approved 2026-07-16, metadata-framework
 phase 2): notes keyed by ANY urn the corpus knows — document, passage,
@@ -7660,6 +7728,157 @@ grain — the language-dossier stack's twin, owner-approved 2026-07-16.
   descriptions + the stub list), `bin/nabu sync local-source`,
   `bin/nabu list edh` (description under the header), `bundle exec rake
   site:check`.
+
+# ── Phase 25 ──────────────────────────────────────────────────────────
+
+## P25-2 · Celtic config batch — kaikki ×3 + UD ×2 + survey-reference truth-pass rider  [tier: fable] [status: done 2026-07-17 — config + fixtures shipped, zero new code; extracts/treebanks flow at the next owner-fired syncs] [deps: —]
+
+The Celtic axis's two config-shaped lanes (queue items 2 + 4; survey
+.docs/surveys/celtic-survey.md) plus the survey-reference rider.
+
+- KAIKKI ×3 (the ett-precedent EXTRACTS pattern: three rows on the live
+  wiktionary-recon source, zero new code; enabled state UNCHANGED —
+  extracts land at the next owner-fired `bin/nabu sync wiktionary-recon`,
+  ~22.4 MB across three GETs, +8,097 entries): `wiktionary-sga` Old Irish
+  (19,776,265 B / 6,564 records / 5,828 distinct words — DIL-derived
+  depth: 2,093 with descendants, 3,116 with etymology text, 1,427 naming
+  Proto-Celtic, 1,263 naming PIE), `wiktionary-mga` Middle Irish
+  (1,267,269 B / 767 / 710), `wiktionary-wlm` Middle Welsh (1,343,469 B /
+  766 / 695). ATTESTED languages on the recon source — the wiktionary-cu
+  precedent: reflexes minted, no display asterisk; upstream lang_codes
+  are already the ISO 639-3 sga/mga/wlm, adopted as themselves. Manifest
+  name extended ("+ attested Celtic"). License statement re-verified
+  verbatim 2026-07-17, unchanged: "This data is made available under the
+  same licenses as Wiktionary - both CC-BY-SA and GFDL." → attribution.
+  CROSSWALK LIGHTS (fixture-pinned, the ReflexViews path): sga rí "king"
+  carries the cel-pro/ine-pro etymology verbatim in its body (*rīxs,
+  *h₃rḗǵs) AND mints the mga rí reflex edge whose target is the mga
+  shelf's own headword — the shelf-visited ascent runs Middle Irish rí →
+  Old Irish rí; mga clann → en clan rides the borrowed flag. NOTE:
+  cel-pro itself is NOT a served kaikki extract (no Proto-Celtic shelf
+  yet); the sga etymology text is the join surface a future cel-pro
+  witness (CorPH/eDIL era) will land on.
+- UD ×2 (config rows on the existing ud source, the P10-2/P13-1b
+  pattern; rows flow at the next owner-fired `bin/nabu sync ud` — no
+  per-treebank enablement exists, the source syncs its whole TREEBANKS
+  map): `old-irish-dipsgg` — diplomatic St Gall Priscian glosses (Bauer's
+  data, conv. Adrian Doyle), 3,471 glosses in the collection, test-set
+  only (64 dependency-annotated sentences served today; fixture = head
+  50); license verbatim, the ENTIRE LICENSE.txt: "CC BY-NC-SA 4.0" →
+  rides the UD source's `nc` class unchanged, no override.
+  `old-irish-dipwbg` — diplomatic Würzburg glosses, 42 glosses (tiny;
+  upstream: growing), 34 test sentences (fixture = whole file); license
+  verbatim "CC BY-SA 4.0" (LICENSE.txt: "The treebank is licensed under
+  the Creative Commons License Attribution-ShareAlike 4.0 International")
+  → `attribution` via the P10-4 per-document license_override (the
+  birchbark/RNC mechanics). Language `sga` both (code-mixed Latin inside
+  the glosses — the one-tag-per-treebank honesty RNC practices under
+  orv). OVERLAP NOTE, journaled per the packet: DipSGG's text = the same
+  St Gall glosses CorPH (P25-0, sibling packet) carries at a DIFFERENT
+  grain — UD dependencies here, CorPH morphology there. Two honest
+  witnesses, the MW-beside-kaikki precedent; NO dedup wanted (the UD
+  dedup guard is for re-exports of already-synced sources, which this is
+  not). sga joins the lemma-indexed languages (lebarda/airbág fixture
+  rows pinned).
+- RIDER (survey-reference truth-pass; owner reorg 2026-07-16: ALL
+  surveys → gitignored .docs/surveys/): every LIVING reference to a
+  `docs/<x>-survey.md` path rephrased to `.docs/surveys/<x>-survey.md`
+  (annotated "gitignored planning material" at first mentions) or
+  dropped where the sentence works without it — docs/02-sources.md (25),
+  docs/architecture.md (2), docs/library.md (2), docs/improvements.md
+  (4), README.md (6: prose mention de-linked, the doc-map table row
+  DROPPED — a public table row cannot link a gitignored file),
+  CONTRIBUTING.md (6: links replaced with prose + a 02-sources pointer),
+  .github/ISSUE_TEMPLATE/request-a-source.md (3), config/sources.yml (3)
+  + config/alignments.yml (2) comments, lib/** code comments (16 files),
+  test/** comments + fixture READMEs/manifest prose (15 files).
+  docs/backlog.md + docs/worklog.md history lines untouched (the record
+  of what was true then), likewise the local-source fixture dossier
+  test/fixtures/local-source/edh.md + its manifest `reason:` line
+  (fixture PAYLOADS — dated provenance records tests may pin, not
+  reader-facing pointers). The owner's own docs/*-survey.md deletions
+  remain the owner's uncommitted act — no survey file deleted here.
+- Fixtures: 9 byte-verbatim JSONL lines into test/fixtures/
+  wiktionary-recon/ (recipe + full-download sha256s in its README;
+  post-check asserts literal-line membership) + 2 real trimmed CoNLL-U
+  under test/fixtures/ud/ (DipSGG head-50, DipWBG whole at 34 blocks;
+  README records both license verbatims). Tests +2 (recon: the Celtic
+  etymology/crosswalk pin + the ReflexViews-after-load proof; UD tests
+  extended in place: 9-file discover, OVERRIDE/BARE license split,
+  sga lemma plumbing, conformance over the new fixtures). Suite 2,981
+  runs / 35,771 assertions exit 0 (0 skips) · lint 384 files exit 0.
+- Owner queue: `bin/nabu sync wiktionary-recon` (~22.4 MB, +8,097
+  entries; then eyeball `nabu define rí` + `nabu etym rí`) and
+  `bin/nabu sync ud` (two small clones; eyeball `nabu show
+  urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test:1` and the license mix
+  in `nabu list ud`).
+
+## P25-0 · CorPH adapter — the first Celtic gold lemmas  [tier: fable] [status: done 2026-07-17] [deps: —]
+The Celtic-axis keystone (queue item 3): CorPH / Corpus PalaeoHibernicum
+(ERC ChronHib, Maynooth) — 78 deep-annotated Early Irish texts, 7th–10th
+c., from the 39 MB MySQL dump `chronhibdev_2020.sql` in
+chronhib-MU/Chronhib-Website, PINNED to commit e7ef75d5f9a6 (dormant repo,
+2021-05-11): fetch is the ordinary GitFetch (attic + breaker) plus a pin
+gate — HEAD ≠ pin aborts loudly (owner review + re-pin; GitFetch ref: is
+branch/tag-only, so the pin is verified post-fetch). License verbatim "MIT
+License / Copyright (c) 2020 [Chronologicon Hibernicum]" (repo LICENSE
+covers the dump) → attribution; the CODECS CC BY-SA 3.0 footer is CODECS's
+own, never cited (the survey's trap note, kept in sources.yml + row 63).
+
+SHIPPED:
+- CorphSqlParser — the corph-sql family: streaming MySQL-dump INSERT
+  walker (File.foreach + StringScanner; only the current tuple buffered;
+  \' \r\n ''-escapes, NULL→nil, Integer natively; multi-statement
+  chunking; truncation → ParseError). No SQL evaluated, ever.
+- Adapter corph: document per TEXT row (urn:nabu:corph:<Text_ID>, FROZEN),
+  passage per SENTENCES text unit (<doc>:<Text_Unit_ID>, Textual_Unit
+  VERBATIM incl. CRLF computus tables, Sort_ID order), MORPHOLOGY tokens
+  in the P7-5 contract → passage_lemmas: THE FIRST sga GOLD (e2e pinned:
+  lemma search "caur" finds S0003-1 caur AND S0003-13 cur/Caincur — the
+  attestation surface search misses). Homonym indices ("macc 1") split
+  into lemma + "homonym" so the headword searches. Mutation/verbal-flag/
+  onomastic/problematic/Var_Status columns verbatim per token; loci,
+  translation, Latin_Text context per passage; BIBLIOGRAPHY resolved into
+  document metadata references.
+- LANGUAGE HONESTY (census 2026-07-17, full dump): 80.5% Early Irish /
+  12.4% Latin / 6.2% lang-less lemmata / rarities. Three grains: token
+  "lang" (mapped: sga/lat/ang/non/grc) or "lang_source" verbatim
+  (Pictish, British… — never a guessed code); PASSAGE = majority over its
+  tokens (the gold-index grain: 16,535 sga / 1,050 lat / 11 ang voted +
+  351 no-vote fallbacks — a pure Old Irish gloss inside a Latin computus
+  stays sga, a Latin annal stays lat); document = majority over all (71
+  sga + 4 lat: 0035/0039/0060/0077 minor glosses on Latin texts).
+- Date axis: AxisBuilder::CorphDates — TEXT.Date via the honest ladder
+  (ChronHib "date range … is/are used" phrase, "(for text)"-tagged range
+  preferred else envelope; "Text: N-M"/"N X M" fallback): 73/78 dated,
+  5 honest residues (AU's 431–1131 annalistic spread + 4 MS-only proses)
+  counted undated, never guessed. Summary +corph/+corph_undated.
+- eDIL bridge: CorphDilReferences (producer corph, kind=reference) — one
+  edge per distinct (document, dil id) pair, from document urn to
+  urn:nabu:dict:edil:<id> (the dictionary-urn convention the future eDIL
+  shelf will mint; ~12,321 pairs / 5,846 distinct ids projected), detail
+  names the carrying lemma; wired via the NEW Adapter.reference_producer
+  seam (default LibraryReferences — SyncRunner no longer hardcodes the
+  P19-4 producer; local-library behavior byte-identical).
+- Registry corph enabled:false sync_policy:manual; fixtures = real
+  trimmed dump (0003 Baile Chuinn / 0008 Paris Priscian / 0077 Einsiedeln
+  Computus + sentence-less 0067 + the stray Text_ID "6" wart; six tables,
+  LEMMATA across 23 real INSERT statements) + README (retrieval date,
+  pinned sha, MIT quote) + manifest (git-extract, refetchable:false).
+  02-sources row 63; conformance suite + double-load idempotency green.
+
+FOLLOW-UPS (journaled, not built):
+- Etymology column (4,562 LEMMATA rows, cited PC/PIE reconstructions,
+  e.g. caur ← *karut-, Schrijver-style citations) — crosswalk-shaped
+  (piet/Pokorny/cel-pro); needs a citation-prose parser, deliberately not
+  this packet.
+- AU passage-grain annal dates: SENTENCES Locus1 carries the annal year
+  (554.01 …) for text 0001 — the TOROT ChronicleAnnals shape, would date
+  ~7k passages of the one undated flagship text.
+- SENTENCES Variant_Readings/Subunit + VARIATIONS registry prose, and
+  MORPHOLOGY Stressed_Unit/Syntactic_* (phrase trees) — annotation layers
+  beyond the v1 token contract.
+- Language dossier: `nabu ingest --shelf language sga` once live (owner).
 
 # ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
 # Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no

@@ -30,15 +30,20 @@ module Nabu
   # rows, not ones that never had any. Codes therefore stay document
   # metadata (searchable, shown by `show`); if a later packet mints dossier
   # documents, codes upgrade here. They are counted (+skipped_codes+) so
-  # the summary stays honest.
+  # the summary stays honest. The edge-worthiness rule (P25-1, generalized
+  # for the concordance sources): a target carrying a scheme — an ":" —
+  # names a stable id space (urn:, https://dil.ie/…, rig:G593) and mints
+  # an edge; a bare ":"-less string is a code and stays metadata.
   #
   # == Edge shape
   #
-  # from_urn = the article document urn; to_urn = the related target
-  # verbatim (document or passage urn — Query::Links resolves either);
-  # score nil (a manifest assertion is owner curation, not a mined
-  # similarity — no fake number); detail carries the provenance: the
-  # collection manifest that asserted the edge.
+  # from_urn = the asserting document urn; to_urn = the related target
+  # verbatim (document/passage urn or external stable id — Query::Links
+  # resolves catalog urns; an external id renders "(not in catalog)"
+  # honestly); score nil (a curated assertion is not a mined similarity —
+  # no fake number); detail carries the provenance: the collection
+  # manifest (or source slug, for the P25-1 concordance producers) that
+  # asserted the edge.
   class LibraryReferences
     PRODUCER = "library"
     KIND = "reference"
@@ -50,20 +55,31 @@ module Nabu
     Result = Data.define(:scope, :run_id, :edges_written, :edges_refreshed,
                          :superseded_runs, :superseded_edges, :skipped_codes)
 
-    def initialize(catalog:, journal:)
+    # +producer+ names the links-journal producer this instance records
+    # under — "library" (the P19-4 manifests) by default; the concordance
+    # sources (riig/ogham) construct with their own name via their
+    # Adapter.reference_producer override (the P25-0 object seam).
+    def initialize(catalog:, journal:, producer: PRODUCER)
       @catalog = catalog
       @journal = journal
+      @producer = producer
     end
 
+    # The name this instance records under (test-inspectable).
+    attr_reader :producer
+
     # Re-derive every reference edge for the source at +slug+ from its
-    # loaded documents' metadata. Supersedes the prior (producer, scope)
-    # run atomically — deleted manifest entries drop their edges.
-    def run(slug)
+    # loaded documents' metadata, recorded under +producer+ (the adapter's
+    # Adapter.reference_producer — "library" for the P19-4 manifests, the
+    # source's own name for the P25-1 concordance sources). Supersedes the
+    # prior (producer, scope) run atomically — deleted assertions drop
+    # their edges.
+    def run(slug, producer: @producer)
       counts = { inserted: 0, refreshed: 0, codes: 0 }
       run_id = superseded = nil
       @journal.transaction do
-        superseded = Store::LinksJournal.supersede!(@journal, producer: PRODUCER, scope: slug)
-        run_id = Store::LinksJournal.record_run!(@journal, producer: PRODUCER, scope: slug,
+        superseded = Store::LinksJournal.supersede!(@journal, producer: producer, scope: slug)
+        run_id = Store::LinksJournal.record_run!(@journal, producer: producer, scope: slug,
                                                            params: { kind: KIND }, code_version: CODE_VERSION)
         write_edges(slug, run_id, counts)
       end
@@ -79,7 +95,7 @@ module Nabu
       related_documents(slug).each do |urn, metadata|
         detail = provenance_detail(slug, metadata)
         Array(metadata["related"]).each do |target|
-          unless target.start_with?("urn:")
+          unless target.include?(":") # scheme-less = a bare code (class note)
             counts[:codes] += 1
             next
           end

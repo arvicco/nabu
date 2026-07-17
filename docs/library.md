@@ -273,7 +273,7 @@ cognates the corpus actually attests.
 
 | | |
 |---|---|
-| **Category** | The OE axis (docs/oe-survey.md): poetry corpus + gold treebank + dictionary (§8c) |
+| **Category** | The OE axis (.docs/surveys/oe-survey.md — gitignored planning material): poetry corpus + gold treebank + dictionary (§8c) |
 | **Language** | Old English (`ang`), ca. 700–1150, West-Saxon and Anglian dialects |
 | **Size** | `aspr`: 349 poems / 30,550 lines — the complete six-volume Anglo-Saxon Poetic Records (Beowulf, Exeter Book, Junius, Vercelli, Paris Psalter, Minor Poems), CC BY-SA → `attribution`. `iswoc`: 5 prose+gospel texts / 2,536 gold-annotated sentences (Ælfric's Lives, Apollonius, Chronicles, Orosius, West-Saxon Gospels), CC BY-NC-SA → `nc` |
 | **Metadata** | ASPR: canonical printed line numbers as citations (`urn:nabu:aspr:A4.1:1` = Beowulf line 1), Cameron/DOE record slugs; ISWOC: PROIEL-family gold lemma+morphology (24,822 `ang` lemma rows), verse-cited Gospel of Mark = an **alignment-hub witness** (`align MARK 2.3` renders the West-Saxon) |
@@ -291,7 +291,7 @@ bridged to Bosworth-Toller definitions.
 
 | | |
 |---|---|
-| **Category** | The Slavic axis (docs/slavic-survey.md): OCS gospel manuscripts, the oldest Slovene text, Early Modern Slovenian print |
+| **Category** | The Slavic axis (.docs/surveys/slavic-survey.md): OCS gospel manuscripts, the oldest Slovene text, Early Modern Slovenian print |
 | **Language** | Old Church Slavonic (`chu`), Slovenian incl. its historical stages (`sl`), plus the Freising translation layers (`lat`, `eng`, `ger`, `ita`, `pol`) |
 | **Period** | ~1000 CE (Freising Manuscripts) through 1899 (IMP print) |
 | **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's fourth-largest shelf by passages (the EDH inscriptions, §8g, edge past it by ~1,400) |

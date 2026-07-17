@@ -4,7 +4,7 @@ require "test_helper"
 require "stringio"
 
 # EdhEpidocParser unit tests against the three real EDH fixtures (P17-2,
-# docs/edh-survey.md §5 fixture plan). Every expected string below is derived
+# .docs/surveys/edh-survey.md §5 fixture plan). Every expected string below is derived
 # from the fixture bytes under the policy in the parser header: expansions
 # read EXPANDED, supplied read through, gap → "[…]" (a gap-only line is not
 # citable), <del> KEPT in ⟦…⟧ (the per-source damnatio divergence), line =

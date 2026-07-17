@@ -88,13 +88,13 @@ Anything else fits a
 
 On source requests, the best thing you can bring is **license evidence** —
 a link to the upstream grant, quoted verbatim, and the class it falls into
-(`open` / `attribution` / `nc`). That's the pattern the axis surveys
-already follow: see [`docs/oe-survey.md`](docs/oe-survey.md),
-[`docs/slavic-survey.md`](docs/slavic-survey.md), and
-[`docs/pie-survey.md`](docs/pie-survey.md) for evidence-cited,
-license-honest rankings of candidates (including what's blocked and why);
-accepted proposals get the same survey-first treatment before any adapter
-work. A source with no verifiable open license can't be ingested, however
+(`open` / `attribution` / `nc`). That's the pattern the per-axis surveys
+already follow — evidence-cited, license-honest rankings of candidates,
+including what's blocked and why (they are private planning material;
+their verdicts land in [`docs/02-sources.md`](docs/02-sources.md), which
+is the public record of every corpus scouted, scored, and
+license-checked); accepted proposals get the same survey-first treatment
+before any adapter work. A source with no verifiable open license can't be ingested, however
 desirable — so lead with the license. The library currently holds 25
 synced sources plus three registered and awaiting first sync (as of
 2026-07-14; [`docs/library.md`](docs/library.md) is the living inventory).

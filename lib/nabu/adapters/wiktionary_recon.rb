@@ -5,22 +5,30 @@ require_relative "wiktionary_jsonl_parser"
 module Nabu
   module Adapters
     # The reconstruction shelf source (P14-1, architecture §12; extended
-    # P17-3): English Wiktionary's reconstruction pseudo-languages via the
-    # kaikki.org wiktextract extraction — ONE source shipping SEVEN
+    # P17-3, P25-2): English Wiktionary's reconstruction pseudo-languages —
+    # plus, since P25-2, three ATTESTED medieval Celtic languages — via the
+    # kaikki.org wiktextract extraction. ONE source shipping TEN
     # dictionaries (Proto-Slavic sla-pro, Proto-Indo-European ine-pro,
     # Proto-Germanic gem-pro; P17-3 adds Proto-Balto-Slavic ine-bsl-pro,
     # Proto-West Germanic gmw-pro, Proto-Italic itc-pro, Proto-Indo-Iranian
-    # iir-pro), each its own JSONL through the SAME wiktionary-jsonl family
+    # iir-pro; P25-2 adds Old Irish sga, Middle Irish mga, Middle Welsh
+    # wlm), each its own JSONL through the SAME wiktionary-jsonl family
     # as wiktionary-cu, with `reflexes: true`: the records' `descendants`
     # trees flatten into DictionaryReflex edges — the crosswalk that links
     # reconstructed headwords to attested in-catalog lemmas (`nabu etym`).
     # ine-bsl-pro and gmw-pro are INTERMEDIATE shelves (PIE → PBS →
     # Proto-Slavic; Proto-Germanic → PWG → Old English) — the shelves whose
     # arrival replaced the closure's one-hop ascent with the shelf-visited
-    # multi-hop walk (Store::ReflexRootsIndexer).
+    # multi-hop walk (Store::ReflexRootsIndexer). The attested Celtic
+    # extracts ride the wiktionary-cu precedent (P16-5: attested entries
+    # mint reflex edges too, no display asterisk): an sga entry's
+    # descendants reach mga/ga/gd/gv, so the shelf-visited walk ascends
+    # Middle Irish → Old Irish, and the DIL-derived sga etymology text
+    # (Proto-Celtic/PIE chains) is KEPT verbatim in entry bodies.
     #
     # == Upstream (verified page-level + ranged reads, docs/backlog.md P14-1
-    # Phase A, 2026-07-12; P17-3 survey docs/recon2-survey.md, 2026-07-13;
+    # Phase A, 2026-07-12; P17-3 survey .docs/surveys/recon2-survey.md, 2026-07-13;
+    # P25-2 Celtic survey .docs/surveys/celtic-survey.md, 2026-07-16;
     # full downloads at fixture builds)
     #
     # kaikki.org per-language extracts, built from the enwiktionary dump
@@ -28,11 +36,16 @@ module Nabu
     # 5,431 records, PIE 12.0 MB / 1,905, Proto-Germanic 65.3 MB / 5,717;
     # P17-3 (2026-07-13): Proto-Balto-Slavic 1.7 MB / 491, Proto-West
     # Germanic 49.4 MB / 5,551, Proto-Italic 5.2 MB / 745,
-    # Proto-Indo-Iranian 3.3 MB / 799. The `word` field carries NO asterisk
+    # Proto-Indo-Iranian 3.3 MB / 799; P25-2 (2026-07-17): Old Irish
+    # 19.8 MB / 6,564 records (5,828 distinct words; 2,093 with
+    # descendants, 1,427 with a Proto-Celtic etymology), Middle Irish
+    # 1.3 MB / 767 (710 distinct), Middle Welsh 1.3 MB / 766 (695
+    # distinct). The `word` field carries NO asterisk on the proto shelves
     # (display prefixes it back); `lang_code` is the Wiktionary
     # etymology-language code the registry adopts verbatim (conventions §4:
     # the -pro codes are not ISO 639-3, but pass the shape-only tag
-    # validation unchanged).
+    # validation unchanged; sga/mga/wlm ARE ISO 639-3 and pass as
+    # themselves).
     #
     # DEPRECATION CAVEAT: like the OCS extract, the per-language JSONL is
     # labelled "DEPRECATED, will be removed in the near future" (wiktextract
@@ -50,7 +63,7 @@ module Nabu
     #
     # == fetch / sync policy
     #
-    # Seven FileFetch single-file syncs, one per extract, each in ITS OWN
+    # Ten FileFetch single-file syncs, one per extract, each in ITS OWN
     # subdir (FileFetch is one-file-per-dir by design: any other file in
     # the dir is doomed, and there is one state file per dir), attics under
     # the shared top-level <workdir>/.attic/<subdir>/ so discover_with_attic
@@ -58,13 +71,15 @@ module Nabu
     # prepare (tree untouched), the mass-deletion breaker sees the whole
     # SET, then all complete. sync_policy: manual; the P17-3 extracts land
     # in the live catalog at the next owner-fired sync (~60 MB across the
-    # four new GETs, +7,586 entries).
+    # four new GETs, +7,586 entries); likewise the P25-2 Celtic extracts
+    # (~22.4 MB across three GETs, +8,097 entries).
     class WiktionaryRecon < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "wiktionary-recon",
-        name: "Wiktionary reconstructions — kaikki.org machine-readable extracts " \
-              "(Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, " \
-              "Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian)",
+        name: "Wiktionary reconstructions + attested Celtic — kaikki.org " \
+              "machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, " \
+              "Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, " \
+              "Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh)",
         license: "CC-BY-SA + GFDL (verbatim kaikki.org/dictionary/: \"This data is made available " \
                  "under the same licenses as Wiktionary - both CC-BY-SA and GFDL.\")",
         license_class: "attribution",
@@ -99,7 +114,7 @@ module Nabu
           language: "gem-pro",
           title: "Wiktionary — Proto-Germanic (kaikki.org extract)"
         }.freeze,
-        # -- P17-3 (recon shelf part 2; survey docs/recon2-survey.md §5) --
+        # -- P17-3 (recon shelf part 2; survey .docs/surveys/recon2-survey.md §5) --
         "wiktionary-ine-bsl-pro" => {
           subdir: "proto-balto-slavic",
           filename: "kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
@@ -130,6 +145,31 @@ module Nabu
                "kaikki.org-dictionary-ProtoIndoIranian.jsonl",
           language: "iir-pro",
           title: "Wiktionary — Proto-Indo-Iranian (kaikki.org extract)"
+        }.freeze,
+        # -- P25-2 (Celtic axis; survey .docs/surveys/celtic-survey.md) --
+        # ATTESTED languages on the recon source (the wiktionary-cu
+        # precedent: attested entries mint reflex edges too, and render
+        # without the display asterisk — codes carry no -pro suffix).
+        "wiktionary-sga" => {
+          subdir: "old-irish",
+          filename: "kaikki.org-dictionary-OldIrish.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Irish/kaikki.org-dictionary-OldIrish.jsonl",
+          language: "sga",
+          title: "Wiktionary — Old Irish (kaikki.org extract)"
+        }.freeze,
+        "wiktionary-mga" => {
+          subdir: "middle-irish",
+          filename: "kaikki.org-dictionary-MiddleIrish.jsonl",
+          url: "https://kaikki.org/dictionary/Middle%20Irish/kaikki.org-dictionary-MiddleIrish.jsonl",
+          language: "mga",
+          title: "Wiktionary — Middle Irish (kaikki.org extract)"
+        }.freeze,
+        "wiktionary-wlm" => {
+          subdir: "middle-welsh",
+          filename: "kaikki.org-dictionary-MiddleWelsh.jsonl",
+          url: "https://kaikki.org/dictionary/Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl",
+          language: "wlm",
+          title: "Wiktionary — Middle Welsh (kaikki.org extract)"
         }.freeze
       }.freeze
 
@@ -190,7 +230,7 @@ module Nabu
         raise Nabu::ParseError, "wiktionary-recon: #{document_ref.id}: #{e.message}"
       end
 
-      # Download the three extracts two-phase (the UD choreography): all
+      # Download the extracts two-phase (the UD choreography): all
       # prepare with the live tree untouched, the breaker sees the combined
       # doomed set, then all complete. Report: last extract's sha (the
       # single-pin convention), per-extract shas in notes.

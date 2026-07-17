@@ -4,7 +4,7 @@ require_relative "lila_ttl_parser"
 
 module Nabu
   module Adapters
-    # The de Vaan EDL skeleton adapter (P18-6; docs/pie-survey.md §2.2):
+    # The de Vaan EDL skeleton adapter (P18-6; .docs/surveys/pie-survey.md §2.2):
     # Michiel de Vaan's *Etymological Dictionary of Latin and the other
     # Italic Languages* (Brill 2008, Leiden IEED series), published by
     # CIRCSE/LiLa as a Linked Open Data ETYMOLOGY SKELETON — entries

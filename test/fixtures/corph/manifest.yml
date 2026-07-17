@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# GIT-EXTRACT PROVENANCE. CorPH's delivery unit is one 39 MB MySQL dump
+# inside the ChronHib website git repo (pinned commit e7ef75d5f9a6…); the
+# fixture is a line-verbatim TRIM of it (see README.md), so no raw GET can
+# ever byte-match it: refetchable: false — `fixtures:check` SKIPS it
+# (printing the reason) and `fixtures:refresh` refuses to touch it.
+# Re-acquiring means cloning the repo at the pinned commit and re-applying
+# the README trim procedure.
+source: corph
+adapter_test:
+retrieved: 2026-07-17
+files:
+  - path: chronhibdev_2020.sql
+    refetchable: false
+    provenance: git-extract
+    reason: trimmed from the 39 MB dump at github.com/chronhib-MU/Chronhib-Website @ e7ef75d5f9a6 — no raw per-row URL exists
+    upstream: https://github.com/chronhib-MU/Chronhib-Website/blob/e7ef75d5f9a6ea97210f028b7389fa9539fbe8c0/chronhibdev_2020.sql
+    copied: 2026-07-17
+    whole: false
+    trim: texts 0003/0008/0067/0077 whole + the stray S0006-6 sentence; LEMMATA/BIBLIOGRAPHY/VARIATIONS filtered to referenced rows; SEARCH/TEAM/USERS dropped (see README.md)

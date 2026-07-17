@@ -7,7 +7,7 @@ module Nabu
   module Adapters
     # The starling-dbf parser family (P22-0): a hand-rolled dBase III table
     # reader for the StarLing / Tower of Babel database downloads
-    # (docs/pie-survey.md §3.1) — header, 32-byte field descriptors,
+    # (.docs/surveys/pie-survey.md §3.1) — header, 32-byte field descriptors,
     # fixed-width records — plus the StarLing var-text convention layered on
     # top: a character field of length 6 whose descriptor byte 12 is "V"
     # does not hold text but a POINTER into the sibling .var file (uint32 LE

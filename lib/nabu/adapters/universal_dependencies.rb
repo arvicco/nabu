@@ -29,7 +29,8 @@ module Nabu
     # Varies per treebank (the fixture README records the verbatim, sometimes
     # self-contradictory, LICENSE files): PROIEL is CC BY-NC-SA, Sanskrit-Vedic
     # CC BY-SA, Latin-ITTB CC BY-NC-SA, all three Old East Slavic treebanks
-    # (Birchbark, RNC, Ruthenian) CC BY-SA 4.0. The manifest declares the most
+    # (Birchbark, RNC, Ruthenian) CC BY-SA 4.0, Old Irish DipSGG CC BY-NC-SA
+    # 4.0 and DipWBG CC BY-SA 4.0 (P25-2). The manifest declares the most
     # restrictive class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
@@ -89,6 +90,31 @@ module Nabu
         "old-east-slavic-ruthenian" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_East_Slavic-Ruthenian",
           language: "orv", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P25-2 (Celtic axis): the two diplomatic Old Irish glosses
+        # treebanks (Adrian Doyle's conversions of Bernhard Bauer's St Gall
+        # data / the wurzburg.ie Würzburg glosses), both test-set only.
+        # Language sga for both — the glosses code-mix Latin inside Irish
+        # (the README's own framing: "only those glosses which contain some
+        # Irish text"), the same one-tag-per-treebank honesty as RNC's
+        # Middle Russian under orv. NOTE the same St Gall glosses arrive at
+        # a different grain via CorPH (P25-0, morphology) — two honest
+        # witnesses, NO dedup wanted (the MW-beside-kaikki precedent; these
+        # are UD dependency conversions, not a re-export of CorPH).
+        #
+        # DipSGG's license is verbatim "CC BY-NC-SA 4.0" (its LICENSE.txt is
+        # exactly that line; README metadata agrees) → it rides the SOURCE's
+        # nc class unchanged, no override key. DipWBG is verbatim
+        # "CC BY-SA 4.0" (README metadata; LICENSE.txt "Attribution-
+        # ShareAlike 4.0 International") → the P10-4 per-document
+        # attribution override, the birchbark/RNC mechanics.
+        "old-irish-dipsgg" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipSGG",
+          language: "sga"
+        },
+        "old-irish-dipwbg" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipWBG",
+          language: "sga", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

@@ -1,7 +1,7 @@
 # sl-lexica fixtures (P23-2 — the Slovenian historical dictionary shelf)
 
 Real upstream samples from the THREE ZRC SAZU dictionary deposits on
-CLARIN.SI (owner-approved 2026-07-15; scouted in docs/clarin-si-survey.md §2).
+CLARIN.SI (owner-approved 2026-07-15; scouted in .docs/surveys/clarin-si-survey.md §2).
 Every kept entry line is **byte-verbatim** upstream data (the extraction
 asserted each emitted line is a substring of the raw file, line terminators
 included); only the entry SET was trimmed. XSDs ship whole — they are the

@@ -5,7 +5,7 @@ require "nokogiri"
 module Nabu
   module Adapters
     # Streaming parser for one EDH (Epigraphic Database Heidelberg) EpiDoc
-    # file — DdbdpParser-adjacent (P17-2; docs/edh-survey.md §3/§5), the
+    # file — DdbdpParser-adjacent (P17-2; .docs/surveys/edh-survey.md §3/§5), the
     # documentary-epigraphy sibling of the papyrological family. A new family,
     # not DdbdpParser reuse: different header extraction (msDesc/origin/
     # textClass/particDesc), a per-source <del> policy divergence (below),
