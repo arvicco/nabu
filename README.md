@@ -25,12 +25,13 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-14** the shelves hold **170,711 documents / 4,267,659
+As of **2026-07-17** the shelves hold **172,189 documents / 4,308,814
 passages** in some two dozen ancient languages — from proto-cuneiform
-tablets of the late 4th millennium BCE to 19th-century Slovenian — plus
-**458,238 dictionary entries** across sixteen dictionaries and **2.85
-million gold lemma annotations in 15 languages**. (All numbers in this
-README are read from the live catalog, never estimated.)
+tablets of the late 4th millennium BCE to 19th-century Slovenian, with
+Gaulish inscriptions and Irish ogham stones the newest arrivals — plus
+**633,137 dictionary entries** across twenty-seven dictionary shelves
+and **over 2.85 million gold lemma annotations in 17 languages**. (All
+numbers in this README are read from the live catalog, never estimated.)
 
 ## Quickstart
 
@@ -213,11 +214,22 @@ abuts Lebanon."
   through the Odyssey's opening line (…Μοῦσα πολύτρο[πον). *(Live output
   of 2026-07-13; the EDH inscriptions joined the index's scope later that
   day — it now covers 1.71M passages.)*
-- **Epigraphists.** 81,856 Latin inscriptions from the Epigraphic Database
+- **Epigraphists.** 81,881 Latin inscriptions from the Epigraphic Database
   Heidelberg (CC BY-SA; a preservation snapshot of the archived upstream) —
-  81,416 of them dated, with the library's first genre facets: `search
+  81,416 of them dated (2026-07-14 census), with the library's first genre
+  facets: `search
   --type epitaph --province Britannia --material marble` composes with the
-  date and place filters, and the stones are in the `--fuzzy` index.
+  date and place filters, and the stones are in the `--fuzzy` index. Since
+  2026-07-17 the epigraphic shelves speak Celtic too: 428 Gaulish
+  inscriptions (RIIG, with per-editor readings and French translations)
+  and ~500 Irish ogham stones in real Ogham codepoints with aligned
+  transliteration layers.
+- **Celticists.** The CorPH corpus (ERC ChronHib) brings 7th–10th-century
+  Early Irish with gold lemmatization — the Annals of Ulster, Vita
+  Columbae, Blathmac, and the Milan/St Gall/Würzburg gloss corpora —
+  joined by two Old Irish UD treebanks, the Gaulish and ogham epigraphy
+  above, and Old/Middle Irish and Middle Welsh dictionary extracts on the
+  reference shelf.
 - **Assyriologists.** 21,692 ORACC documents (CC0) across 33 projects —
   12,781 tablets and inscriptions, the complete State Archives of Assyria
   among them, plus 8,911 aligned English translations — with gold
@@ -236,7 +248,7 @@ abuts Lebanon."
   Gardena in geardagum*), the ISWOC treebank with West-Saxon Mark as an
   alignment-hub witness, and Bosworth-Toller on the dictionary shelf —
   `define aethele --lang ang` finds **æþele** through the æ/þ/ð folding.
-- **Linguists & digital humanists.** 2.85M gold lemma rows in 15 languages
+- **Linguists & digital humanists.** Over 2.85M gold lemma rows in 17 languages
   with morphology facets (`search --lemma cyning --morph case=gen --lang
   ang`), distinctive-vocabulary profiles (`vocab urn:nabu:proiel:cic-off` →
   officium, honestas, decorum), and `export --format jsonl` streaming the
@@ -257,28 +269,43 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen… + 650 aligned English translations | 1,418 docs / 394,706 passages | CC BY-SA |
 | Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 1,129 / 256,480 | CC BY-SA |
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus… + 181 English translations | 534 / 391,799 | CC BY-SA |
-| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,416 / 921,694 | CC BY |
-| Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire — 81,416 dated, genre/province/material facets | 81,856 / 406,281 | CC BY-SA |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts from a millennium of Egypt (Greek, Coptic, Latin, Arabic) | 61,414 / 921,611 | CC BY |
+| Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire — 81,416 dated (2026-07-14 census), genre/province/material facets | 81,881 / 406,306 | CC BY-SA |
 | Coptic | Coptic Scriptorium: the complete Sahidic + Bohairic NT, monastic and patristic prose — gold-lemmatized (233k rows) | 482 / 74,169 | CC BY per doc (source class nc) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, Ṛgveda with Vedic accents | 780 / 703,068 | CC BY-NC-SA |
-| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma/morphology/syntax — parallel NT ×5, OCS→Middle Russian, Old English | 78 / 178,180 | mostly CC BY-NC-SA |
+| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma/morphology/syntax — parallel NT ×5, OCS→Middle Russian, Old English, Old Irish glosses | 80 / 178,278 | mostly CC BY-NC-SA |
 | Cuneiform | ORACC ×33 projects: the complete State Archives of Assyria, royal inscriptions, lexical lists, proto-cuneiform — with 8,911 aligned English translations | 21,692 / 385,243 | CC0 |
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek NT, WEB English | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
-| Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899) | 793 / 444,117 | CC BY (Freising BY-ND) |
-| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + seven reconstruction shelves + the IE-CoR / LIV / de Vaan etymological witnesses (`nabu define` / `etym`) | 458,238 entries | CC BY-SA / CC BY / CC BY-NC-SA |
+| Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899), the damaskini Balkan Slavic witnesses (15th–19th c., with English siblings) | 839 / 456,189 | CC BY (Freising BY-ND) |
+| Celtic | CorPH Early Irish (gold-lemmatized: Annals of Ulster, the great gloss corpora), RIIG Gaulish inscriptions (with French siblings), the Ogham in 3D stones (real Ogham codepoints + transliteration layers) | 1,387 / 20,318 | CC BY / MIT (ogham `nc` pending clarification) |
+| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik (`nabu define` / `etym`) | 633,137 entries | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-All 30 registered sources are enabled — 28 upstream sources synced and
-live, plus the two local shelves (the language dossiers live, the local
-library awaiting your first ingest). The etymology desk's third-witness
-tier went live 2026-07-14: **IE-CoR** (the
-expert-curated Indo-European cognacy matrix — 4,981 cognate sets / 26,325
-reflex rows, 2,308 loan-flagged), **LIV-LOD** (305 PIE verbal etymons
-with stem types), and **de Vaan's Etymological Dictionary of Latin**
-(2,860 etymons) now sit beside the Wiktionary-derived chains in `etym`.
+All 38 registered sources are enabled and synced — 34 upstream sources
+plus four local shelves (the language dossiers and source dossiers live,
+the owner's library shelf holding its first 20 ingested documents, the
+notes shelf awaiting its first annotation). The etymology desk now hears
+from three tiers of witnesses: the Wiktionary-derived chains, the
+expert-curated trio synced 2026-07-14 — **IE-CoR** (4,981 cognate sets /
+26,325 reflex rows, 2,308 loan-flagged), **LIV-LOD** (305 PIE verbal
+etymons), **de Vaan's Etymological Dictionary of Latin** (2,860
+etymons) — and, since 2026-07-17, the five **StarLing / Tower of Babel
+bases** under a written grant: Pokorny's complete IEW (2,222 roots),
+Nikolayev's PIE database (3,291 etymologies), **Vasmer's etymological
+dictionary of Russian** (18,239 entries), and the Common Germanic and
+Baltic databases. The same sync wave landed the **Slovenian historical
+dictionary shelf** (Pleteršnik 1894–95, the Svetokriški Baroque lexicon,
+and the complete 16th-century word inventory — 139,405 entries), the
+**damaskini** Balkan Slavic corpus, and the library's **Celtic axis**:
+CorPH's gold-lemmatized Early Irish, the RIIG Gaulish inscriptions, the
+Ogham in 3D stones, three attested-Celtic Wiktionary extracts, and two
+Old Irish UD treebanks.
 A local **language-dossier shelf** holds the library's language curation
 as 199 plain-Markdown files (`canonical/local-language/` — edit in any
-editor, `nabu sync local-language` re-derives the `nabu language` cards).
+editor, `nabu sync local-language` re-derives the `nabu language` cards),
+and a **source-dossier shelf** carries a curated description of every
+registered source, served on `nabu list` and gate-checked against the
+shelf map by `rake site:check`.
 Ranked expansion candidates live in the per-axis surveys (Old English,
 Slavic, PIE, …) — private planning material under gitignored
 `.docs/surveys/`; their license-checked verdicts land in
@@ -309,7 +336,7 @@ text, and `links`-wired to the passages its manifest entry names as
 | | |
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--source SLUG` (one shelf — it composes with every other filter, `--lemma`/`--near`/`--fuzzy` included), `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. |
-| `nabu search --lemma FORM` | Dictionary-form search over 2.85M gold lemma rows in 15 languages — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
+| `nabu search --lemma FORM` | Dictionary-form search over 2.85M+ gold lemma rows in 17 languages (Old Irish and Bulgarian joined 2026-07-17) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,713,135 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf. |
@@ -324,7 +351,8 @@ text, and `links`-wired to the passages its manifest entry names as
 | `nabu concord QUERY` | Classic KWIC concordance: keyword column-aligned in pristine text, corpus order — for scanning usage, not relevance. |
 | `nabu vocab URN` | Lemma-frequency profile of a document, range, or passage against the gold-lemma corpus: total tokens, distinct lemmas, the most distinctive vocabulary (log-odds vs corpus — Caesar surfaces *legio*/*proelium*, Cicero's *De officiis* surfaces *officium*/*honestas*), and the in-document hapax legomena. Gold shelves only; a document without gold lemmas says so and names the annotated languages. `--long` lists every hapax (and every gold-bearing language) in full, escaping the `--limit` display cap. `--by-century` switches to diachronic mode: the shape of the dated corpus over time, or — with a text query — a word plotted across the centuries (`vocab --by-century 'στρατηγ*' --lang grc` peaks in the 2nd c. CE), bucketed by earliest year and honest about ranges that span more than one. |
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license`/`--source` filters — the longevity-hedge exit formats. |
-| `nabu ingest FILE...` | The intake front door for your own material: copies a PDF/scan/article into the local-library shelf (`research_private` by default — never served or redistributed), derives metadata candidates mechanically, confirms them interactively / AI-assisted (`--assist CMD`) / scripted (`--yes`), then syncs and prints the minted urn. `--shelf language CODE` scaffolds a language dossier instead. |
+| `nabu ingest FILE-or-URL...` | The intake front door for your own material: copies a PDF/scan/article into the local-library shelf (`research_private` by default — never served or redistributed) — or downloads an http(s) URL first, recording it in the manifest — derives metadata candidates mechanically, confirms them interactively / AI-assisted (`--assist CMD`) / scripted (`--yes`), then syncs and prints the minted urn. `--shelf language CODE` scaffolds a language dossier, `--shelf source SLUG` a source dossier. |
+| `nabu note URN [TEXT]` | Owner annotations — scholia of one's own — on any urn the corpus knows (documents, passages, ranges, dictionary entries), resolution-checked before any write, stored as plain YAML on the local-notes shelf. Bare `nabu note URN` reads back what you said; `--list` enumerates; `--force` records a deliberately dangling note on planned material. Notes render on `show`/`define`/`links` and are served over MCP with their target's withholding rules. |
 | `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP — or re-scan a local shelf); idempotent, non-destructive, every run recorded. |
 | `nabu list [SOURCE]` | The what-is-held view (`status` is the sync-state view): bare, a content census — one line per shelf with document/passage/entry counts, languages, the effective license-class mix, withdrawn/retired counts when nonzero. With a SOURCE, one shelf's card (identity, credit line, counts, per-language breakdown, dictionaries, date-axis coverage, facet and collection summaries). `--documents` / `--entries` / `--collections` enumerate (default `--limit 50`, `0` = all, honest "… N more" tail), with `--lang`/`--license`/`--withdrawn`/`--from`/`--to`/`--century` filters on documents and `--prefix` folded headword-prefix filtering on entries (`bh` finds `*bʰer-`). |
 | `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=?(re-probe)` when a cached verdict predates the last sync / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. `health` also runs the mechanical postcondition invariants (P18-7): failed-run/partial-load surfacing, flag-vs-artifact and synced-vs-populated mismatches, pending migrations, and quarantine counts as a DELTA against an audited baseline — plus an optional `sync --review CMD` AI-review hook, off by default. |
