@@ -1,0 +1,1980 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:id="sarit__mahābhārata"  xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title type="main" xml:lang="sa">श्रीमन् महाभारतम्</title>
+				<title xml:lang="en" type="sub">A SARIT edition</title>
+				<author xml:lang="sa">व्यास</author>
+				<principal><persName>Shrinivasa Varakhedi</persName>
+					<note>Creation of the machine-readable text from the printed edition</note>.
+					Shrinivasa Varakhedi began work while at the <affiliation><orgName>Rashtriya
+							Sanskrit Vidyapeetha</orgName>,
+						<placeName>Tirupati</placeName></affiliation> and continued this work with
+					the support of research team members in various places, including
+						<placeName>Hyderabad</placeName> and <placeName>Bangalore</placeName> and
+					Professor <persName>K. V. Ramakrishnamacharyulu</persName>, <persName>Amba
+						Kulakarni</persName>, <persName>Prof. Prahladachar</persName>, and members
+					of <orgName>MSP Bangalore</orgName> and many others.</principal>
+			</titleStmt>
+			<editionStmt>
+				<p>This e-text is based on the `Southern Recension' of the Mahābhārata, edited by
+						<ref target="#mb-krishnacharya">Krishnacharya 1906–1914</ref>.</p>
+			</editionStmt>
+			<publicationStmt>
+				<authority>SARIT: Search and Retrieval of Indic Texts</authority>
+				<availability status="restricted">
+					<p>Copyright Notice</p>
+					<p>Distributed by <ref type="url" target="http://sarit.indology.info"
+							>SARIT</ref> under a <ref type="licence"
+							target="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons
+							Attribution-ShareAlike 3.0 Unported License. </ref></p>
+					<p>Under this licence, you are free <list>
+							<item>to Share — to copy, distribute and transmit the work</item>
+							<item>to Remix — to adapt the work </item>
+						</list></p>
+					<p>Under the following conditions:</p>
+					<p>
+						<list>
+							<item>Attribution — You must attribute the work in the manner specified
+								by the authorparva or licensor (but not in any way that suggests
+								that they endorse you or your use of the work).</item>
+							<item>Share Alike — If you alter, transform, or build upon this work,
+								you may distribute the resulting work only under the same or similar
+								license to this one.</item>
+						</list></p>
+					<p>More information and fuller details of this license are given on the Creative
+						Commons website.</p>
+					<p>SARIT assumes no responsibility for unauthorised use that infringes the
+						rights of any copyright owners, known or unknown.</p>
+				</availability>
+				<date>2012-2016</date>
+				<idno>2013-03-05</idno>
+			</publicationStmt>
+			<notesStmt>
+				<note>In Devanāgarī script.</note>
+			</notesStmt>
+
+			<sourceDesc>
+				<bibl>
+					<title>॥ श्रीः ॥ श्रीमन्महाभारतम् । सटिप्पणम् । ... टी. आर्. कृष्णाचार्येण टी.
+						आर्. ब्यासाचार्येण च अनेकेषां विदुषां साहाय्येन दाक्षिणात्यबहुकोशानुसारेण
+						संशोध्य ... प्रकाशितम् । = Sriman Mahabharatam. A New Edition Mainly Based on
+						the South Indian Texts, with Footnotes and Readings</title>
+					<extent>17 volumes</extent>
+					<publisher>निर्णयसागरमुद्रणयन्त्रे मुद्रयित्वा</publisher>
+					<editor>टी. आर्. कृष्णाचार्य</editor>
+					<editor>टी. आर्. व्यासाचार्य</editor>
+					<affiliation> कुम्भघोणस्थेन श्रीमन्मध्वविलासपुस्तकाल </affiliation>
+					<date>1906-1910</date>
+					<pubPlace> मुंबापुर्यां </pubPlace>
+					<note>PDFs of the publication are downloadable from <ptr
+							target="http://www.mahabharata-resources.org"/></note>
+					<note>BibTeX description: @BOOK{maha-kumb, title = {Śrīḥ Śrīman Mahābhāratam.
+						Saṭippaṇam \ldots\ Ṭī. Ār. Kṛṣṇācāryeṇa Ṭī. Ār. Vyāsācāryeṇa ca anekeṣāṃ
+						viduṣāṃ sāhāyyena dākṣiṇātyabahukośānusāreṇa saṃśodhya = Sriman
+						Mahabharatam. A New Edition Mainly Based on the South Indian Texts, with
+						Footnotes and Readings}, year = {1906--1910}, address = {Bombay}, publisher
+						= {Nirnayasagar Press}, editor = {T. R. Krishnacharya and T. R.
+						Vyasacharya}, url = {http://www.mahabharata-resources.org/}, note = {17v},
+						timestamp = {2012.12.06} }</note>
+					<note>
+						<p>Files supplied by Prof. <persName sameAs="sv">Shrinivasa
+								Varakhedi</persName>.</p>
+						<p>They are based on the edition by T. R. Krishnacharya and T. R.
+							Vyasacharya, Kumbakonam, 1906-1910 (<ptr
+								target="http://www.worldcat.org/oclc/46190386"/>.</p>
+						<p>Droṇaparva 15 is empty.</p>
+					</note>
+				</bibl>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc xml:id="encoding">
+			<p>The source files were sent to <persName key="name person dw">Dominik Wujastyk</persName> by
+					<persName sameAs="sv">Shrinivasa Varakhedi</persName>, <roleName>Dean and
+					Director</roleName>
+				<orgName>Karnataka Sanskrit University</orgName>
+				<address><addrLine>24/10, Vaijayanta, Temple Rd,</addrLine>
+      	<addrLine>ITI layout, BSK III Stage</addrLine>
+      	<addrLine><placeName>Bangalore</placeName> 85</addrLine></address>
+				<email>shrivara@gmail.com</email>) in <date>October 2012</date>. <persName
+					sameAs="#dw">Dominik Wujastyk</persName> converted the files to utf-8 IAST
+				encoding. These files were then combined and converted into a single XML file by
+					<persName sameAs="#pma">Patrick McAllister</persName>. </p>
+
+			<p>Various XML comments are still in the file now, like: ``new file: ./01
+				adiparva/MB-a_Adi_ch001". This should of course be changed (they should be either
+				removed or put into appropriate XML elements), but at the moment this is a useful
+				compromise. So, please <emph>do not</emph> remove them! </p>
+
+			<p> The individual chapters are supposed to be div elements  whose parent is the body element. The individual adhyāyas are supposed to be div
+				elements below the chapters (i.e., body --> div --> div). Below these, there are line group (lg) elements and paragraphs. The
+				paragraphs should vanish, in the end: the introductory parts could not be
+				automatically converted, and the footnotes should be put into the text. The line
+				group elements contain lines (l), of course. It is not predictable how many. These
+				lines contain segment elements, each segment corresponding to a <rs xml:lang="sa"
+					>pāda</rs>, unless it is a `speaker' line (see <ref
+					target="#line-element-description"/>). </p>
+
+			<p>The format of the xml:id-s is as follows: 
+			<list>
+			  <item>
+			    <emph>General</emph>: the xml:id-s are based on the line prefixes found in the source files. These had various troubles, yielding non-unique xml:id-s. This has been fixed now, with the help of the printed edition. It still does not mean, however, that they are all `right'. They're just unique. One should be careful in inferring, e.g., that the xml:id shanti-12-34-12 is indeed the id of the twelfth verse in the thirty-fourth adhyāya of the Śāntiparvan (though we hope it is). 
+					</item>
+
+					<item><emph>line group (lg) elements</emph> (e.g.,
+						xml:id="karna-8-7-57"): format: shorthand of chapter + number of
+						chapter + number of adhyāya + verse number.</item>
+
+					<item xml:id="line-element-description">
+						<emph>line (l) elements</emph> (e.g., xml:id="adi-1-260-0x"): format:
+						shorthand of chapter + number of chapter + number of adhyāya + [abcdefx]. The `x' was in the source file; it
+						usually marks a speaker change, so I put rend="speak" on these lines (if there's more than one speaker per linegroup, so that the xml:id would not be unique anymore, I add an additional x). </item>
+
+					<item><emph>paragraph elements</emph>: mainly for footnotes, and some passages
+						(only introductory I think) not yet put into line groups. </item>
+				</list>
+			</p>
+
+		</encodingDesc>
+		<revisionDesc>
+			<change from="2007" to="2012" who="#sv">
+				<persName key="name person sv">Prof. Shrinivasa Varakhedi </persName>Director of the Sansknet
+				Project. Creation of e-text. February 2007-2012. </change>
+			<change when="2012-10-09">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: Conversion of files to utf-8
+				encoding. <date>2012-10-09</date>
+			</change>
+			<change when="2012-10-28">Converted from source files (provided by <persName
+					sameAs="#dw">Dominik Wujastyk</persName>) to TEI XML by <persName sameAs="#pma"
+					>Patrick McAllister</persName>
+				<date>2012-10-28</date>
+			</change>
+			<change from="2012-10-01" to="2012-11-30" who="#pma">
+				<persName key="name person pma">Patrick McAllister</persName>: Various corrections.
+					<date>October and November 2011</date>
+			</change>
+			<change when="2012-12-06" who="#dw">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: Added a fuller bibliographical
+				description of the printed edition from which this e-text was derived. Other tweaks
+				to the TEI header; no changes to the text. </change>
+			<change when="2012-12-06" who="#dw">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: Added head statements at the
+				start of each adhyāya. </change>
+			<change when="2012-12-13">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: Tidied and corrected the adhyāya
+				names and their sequences, especially in the Śāntiparvan and Aśvamedhikaparvan.
+				Checked for omissions and additions. </change>
+			<change when="2012-12-13">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: commented out the apparent
+				garbage text between adhyāyas 29 and 30 in the śalyaparvan.</change>
+			<change when="2013-07-28" who="#dw">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: corrected ​आध्यायः and अध्यायः
+				to अध्यायः in the headings. Thanks to the notification of Shreeshrii via the Github
+				cwebsite.</change>
+			<change when="2013-07-28" who="#dw">
+				<persName sameAs="#dw">Dominik Wujastyk</persName>: typed in verses 1-8 of the Bhismaparvan
+				from the Kumbakonam editon.</change>
+		</revisionDesc>
+	</teiHeader>
+
+	<text xml:id="mahābhārata" xml:lang="sa-Deva">
+		<front>
+			<titlePage>
+				<docTitle>
+					<titlePart type="main">महाभारतम्</titlePart>
+				</docTitle>
+			</titlePage>
+		</front>
+		<body>
+			<!-- #### new file: ./01 adiparva/MB-a_Adi_ch001 -->
+			<div xml:id="ādiparva" n="01">
+				<head>आदिपर्व</head>
+				<p rend="śrī">श्रीः</p>
+				<pb/>
+				<!-- mahabharatam-Kumbakonam-T.R. Krishnacharya Edition 1906-10 -->
+				<div n="1" xml:id="ādiparva__adhyāya_001">
+					<head>अध्यायः 001</head>
+					<p> (अनुक्रमणिकापर्व ॥ 1 ॥) </p>
+					<p rend="topic"> आदौ मङ्गलाचरणं ॥ 1 ॥ नैमिशारण्ये दीर्घसत्रे शौनकादीन्प्रति
+						सौतेरागमनम् ॥ 2 ॥ तत्र शौनकादिभिः सौतिं प्रति भारतकथनचोदना ॥ 3 ॥ सौतिना
+						श्रीमन्नारायणनमस्कारपूर्वकं व्यासस्य भारतनिर्माणकथनम् ॥ 4 ॥
+						पर्वानुक्रमणिका ॥ 5 ॥ </p>
+
+					<lg xml:id="adi-1-1-0">
+						<l xml:id="adi-1-1-0x">॥ श्रीवेदव्यासाय नमः ॥</l>
+					</lg>
+
+					<lg xml:id="adi-1-1-1" type="anuṣṭubh">
+						<l>नारायणं नमस्कृत्य नरं चैव नरोत्तमम् ।</l>
+						<l>देवीं सरस्वतीं चैव(व्यासं) ततो जयमुदीरयेत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-2">
+						<l><seg n="a">`नारायणं सुरगुरुं जगदेकनाथं'</seg>
+							<seg n="b">भक्तप्रियं सकललोकनमस्कृतं च ।</seg>
+						</l>
+						<l><seg n="c">त्रैगुण्यवर्जितमजं विभुमाद्यमीशं</seg>
+							<seg n="d">वन्दे भवघ्नममरासुरसिद्धवन्द्यम्' ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-3" type="anuṣṭubh">
+						<l>`नमो धर्माय महते नमः कृष्णाय वेधसे ।</l>
+						<l>ब्राह्मणेभ्यो नमस्कृत्य धर्मान्वक्ष्यामि शाश्वतान्' ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-4">
+						<l><seg n="a">ॐ नमो भगवते वासुदेवाय ।</seg>
+							<seg n="b">ॐ नमः पितामहाय । ॐ नमः प्रजापतिभ्यः ।</seg>
+						</l>
+						<l><seg n="c">ॐ नमः कृष्णद्वैपायनाय ।</seg>
+							<seg n="d">ॐ नमः सर्वविघ्नविनायकेभ्यः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-5">
+						<l><seg n="a">रोमहर्षणपुत्र उग्रश्रवाः सौतिः पौराणिको</seg>
+							<seg n="b">नैमिशारण्ये शौनकस्य कुलपतेर्द्वादशवार्षिके सत्रे</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-6" type="anuṣṭubh">
+						<l>सुखासीनानभ्यगच्छद्ब्रह्मर्षीन्संशितव्रतान् ।</l>
+						<l>विनयावनतो भूत्वा कदाचित्सूतनन्दनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-7">
+						<l><seg n="a">तमाश्रममनुप्राप्य नैमिशारण्यवासिनः ।</seg>
+							<seg n="b">`उवाच तानृषीन्सर्वान्धन्यो वोऽस्म्यद्यदर्शनात्</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-8">
+						<l><seg n="a">वेद वैयासिकीः सर्वाः कथा धर्मार्यैसंहिताः ।</seg>
+							<seg n="b">वक्ष्यामि वो द्विजश्रेष्ठाः शृण्वन्त्वद्य तपोधनाः</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-9" type="anuṣṭubh">
+						<l>तस्य तद्वचनं श्रुत्वा नैमिशारण्यवासिनः ।</l>
+						<l>चित्रा श्रोतुं कथास्तत्र परिव्रुस्तपस्विनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-10" type="anuṣṭubh">
+						<l>अभिवाद्य मुनींस्तांस्तु सर्वानेव कुताञ्जलिः ।</l>
+						<l>अपृच्छत्स तपोवृद्धिं सद्भिश्चैवाभिपूजितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-11" type="anuṣṭubh">
+						<l>अथ तेषूपविष्टेषु सर्वेष्वेव तपस्विषु ।</l>
+						<l>निर्दिष्टमासनं भेजे विनयाद्रौमहर्षणिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-12" type="anuṣṭubh">
+						<l>सुखासीनं ततस्तं तु विश्रान्तमुपलक्ष्य च ।</l>
+						<l>अथापृच्छदृषिस्तत्र कश्चित्प्रस्तावयन्कथाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-13" type="anuṣṭubh">
+						<l>कुत आगम्यते सौते क्वचायं विहृतस्त्वया ।</l>
+						<l>कालः कमलपत्राक्ष शंसैतत्पृच्छतो मम ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-14" type="anuṣṭubh">
+						<l>एवं पृष्टोऽब्रवीत्सम्यग्यथावद्रौमहर्षणिः ।</l>
+						<l>वाक्यं वचनसंपन्नस्तेषां च चरिताश्रयम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-15">
+						<l><seg n="a">तस्मिन्सदसि विस्तीर्णे मुनीनां भावितात्मनाम् ।</seg>
+						</l>
+						<l xml:id="adi-1-1-15x" rend="speak">सौतिरुवाच ।</l>
+						<l>
+							<seg n="b">जनमेजयस्य राजर्षेः सर्पसत्रे महात्मनः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-16">
+						<l><seg n="a">समीपे पार्थिवेन्द्रस्य सम्यक्पारिक्षितस्य च ।</seg>
+							<seg n="b">कृष्णद्वैपायनप्रोक्ताः सुपुण्या विविधाः कथाः</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-17" type="anuṣṭubh">
+						<l>कथिताश्चापि विधिवद्या वैशंपायनेन वै ।</l>
+						<l>श्रुत्वाऽहं ता विचित्रार्था महाभारतसंश्रिताः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-18" type="anuṣṭubh">
+						<l>वहूनि संपरिक्रम्य तीर्थान्यायतनानि च ।</l>
+						<l>समन्तपञ्चकं नाम पुण्यं द्विजनिषेवितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-19" type="anuṣṭubh">
+						<l>गतवानस्मि तं देशं युद्धं यत्राभवत्पुरा ।</l>
+						<l>कुरूणां पाण्डवानां च सर्वेषां चहीक्षिताम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-20" type="anuṣṭubh">
+						<l>दिदृक्षुंरागतस्तस्मात्समीपं भावतामिह ।</l>
+						<l>आयुष्मन्तः सर्व एव ब्रह्मभाता हि मे मताः ॥</l>
+						<l><seg n="c">अस्मिन्यज्ञे महाभङ्गाः सूर्यपावकवर्चसः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-21">
+						<l><seg n="a">कृताभिषेकाः शुचयः कृतजप्या हुताग्नयः ।</seg>
+							<seg n="b">भवन्त आसते स्वस्था ब्रवीमि किमहं द्विजाः</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-22" type="anuṣṭubh">
+						<l>पुराणसंहिताः पुण्याः कथा धर्मार्थसंश्रिताः ।</l>
+						<l>इतिवृत्तं नरेन्द्राणामृषीणां च महात्मनाम् ॥</l>
+						<l xml:id="adi-1-1-23x" rend="speak">ऋषय ऊचुः । </l>
+					</lg>
+					<lg xml:id="adi-1-1-23" type="anuṣṭubh">
+						<l>द्वैपायनेन यत्प्रोक्तं पुराणं परमर्षिणा ।</l>
+						<l>सुरैर्ब्रह्मर्षिभिश्चैव श्रुत्वा यदभिपूजितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-24" type="anuṣṭubh">
+						<l>तस्याख्यानवरिष्ठस्य विचित्रपदपर्वणः ।</l>
+						<l>सूक्ष्मार्थन्याययुक्तस्य वेदार्थैर्भूषितस्य च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-25" type="anuṣṭubh">
+						<l>भारतस्येतिहासस्य पुण्यां ग्रन्थार्थसंयुताम् ।</l>
+						<l>संस्कारोपगतां ब्राह्मीं नानाशास्त्रोपबृंहिताम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-26" type="anuṣṭubh">
+						<l>जनमेजयस्य यां राज्ञो वैशंपायन उक्तवान् ।</l>
+						<l>यथावत्स ऋषिः पृष्टः सत्रे द्वैपायनाज्ञया ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-27" type="anuṣṭubh">
+						<l>वेदैश्चतुर्भिः सयुक्तां व्यासस्याद्भुतकर्मणः ।</l>
+						<l>संहितां श्रोतुमिच्छामः पुण्यां पापभयापहाम् ॥</l>
+						<l xml:id="adi-1-1-28x" rend="speak">सौतिरुवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-28" type="anuṣṭubh">
+						<l>आद्यं पुरुषमीशानं पुरुहूतं पुरुष्टुतम् ।</l>
+						<l>ऋतमेकाक्षरं ब्रह्म व्यक्ताव्यक्तं सनातनम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-29">
+						<l><seg n="a">असच्च सच्चैव च यद्विश्वं सदसतः परम्</seg>
+							<seg n="b">परावराणां स्रष्टारं पुराणं परमव्ययम् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-30" type="anuṣṭubh">
+						<l>मङ्गल्यं मङ्गलं विष्णुं वरेण्यमनघं शुचिम् ।</l>
+						<l>नमस्कृत्य हृषीकेशं चराचरगुरुं हरिम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-31" type="anuṣṭubh">
+						<l>महर्षेः पूजितस्येह सर्वलोकैर्महात्मनः ।</l>
+						<l>प्रवक्ष्यामि मतं पुण्यं व्यासस्याद्भुतकर्मणः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-32" type="anuṣṭubh">
+						<l>`नमो भगवते तस्मै व्यासायामिततेजसे ।</l>
+						<l>यस्य प्रसादाद्वक्ष्यामि नारायणकथामिमाम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-33" type="anuṣṭubh">
+						<l>सर्वाश्रमाभिशमनं सर्वतीर्थावगाहनम् ।</l>
+						<l>न तथा फलद सूते नारायणकथा यथा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-34" type="anuṣṭubh">
+						<l>नास्ति नारायणसमं न भूतं न भविष्यति ।</l>
+						<l>एतेन सत्यवाक्येन सर्वार्थान्साधयाम्यहम्' ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-35" type="anuṣṭubh">
+						<l>आचख्युः कवयः केचित्संप्रत्याचक्षते परे ।</l>
+						<l>आख्यास्यन्ति तथैवान्य इतिहासमिमं भुवि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-36" type="anuṣṭubh">
+						<l>इदं तु त्रिषु लोकेषु महज्ज्ञानं प्रतिष्ठितम् ।</l>
+						<l>विस्तरैश्च समासैश्च धार्यते यद्द्विजातिभिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-37" type="anuṣṭubh">
+						<l>अलङ्कृतं शुभैः शब्दैः समयैर्दिव्यधनुषैः ।</l>
+						<l>छन्दोवृत्तैश्च विविधैरन्वितं विदुषांप्रियम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-38" type="anuṣṭubh">
+						<l>तपसा ब्रह्मचर्येण व्यस्य वेदं सनातनम् ।</l>
+						<l>इतिहासमिमं चक्रे पुण्यं सत्यवतीसुतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-39" type="anuṣṭubh">
+						<l>`पुण्ये हिमवतः पादे मेध्ये गिरिगुहालये ।</l>
+						<l>विशोध्य देहं धर्मात्मा दर्भसंस्तरमाश्रितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-40">
+						<l><seg n="a">शुचिः सनियमो व्यासः शान्तात्मातपसि स्थितः</seg>
+							<seg n="b">भारतस्येतिहासस्य धर्मेणान्वीक्ष्य तां गतिम् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-41">
+						<l><seg n="a">प्रविश्य योगं ज्ञानेन सोऽपश्यत्सर्वमन्ततः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-42" type="anuṣṭubh">
+						<l>निष्प्रभेऽस्मिन्निरालोके सर्वतस्तमसा वृते ।</l>
+						<l>बृहदण्डमभूदेकं प्रजानां बीजमव्ययम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-43" type="anuṣṭubh">
+						<l>युगस्यादिनिमित्तं तन्महद्दिव्यं प्रचक्षत ।</l>
+						<l>व्यस्मिंस्तच्छ्रूयते सत्यंज्योतिर्ब्रह्म सनातनम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-44" type="anuṣṭubh">
+						<l>अद्भुतं चाप्यचिन्त्यं च सर्वत्र समतां मतम् ।</l>
+						<l>अव्यक्तं कारणं सूक्ष्मं यत्तत्सदसदात्मकम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-45" type="anuṣṭubh">
+						<l>यस्मिन्पितामहो जज्ञे प्रभुरेकः प्रजापतिः ।</l>
+						<l>ब्रह्मा सुरगुरुः स्थाणुर्मनुः कः परमेष्ठ्यथ ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-46" type="anuṣṭubh">
+						<l>प्राचेतसस्तथा दक्षो दक्षपुत्राश्च सप्तवै ।</l>
+						<l>ततः प्रजानां पतयः प्राभवन्नेकविंशतिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-47" type="anuṣṭubh">
+						<l>पुरुषश्चाप्रमेयात्मा यं सर्वऋषयो विदु ।</l>
+						<l>विश्वेदेवास्तथाऽऽदित्या वसवोऽथाश्विनावपि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-48" type="anuṣṭubh">
+						<l>यक्षाः साध्याः पिशाचाश्च गुह्यकाः पितरस्तथा ।</l>
+						<l>ततः प्रसूता विद्वांसः शिष्टा ब्रह्मर्षिसत्तमाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-49" type="anuṣṭubh">
+						<l>महर्षयश्च बहवः सर्वैः समुदिता गुणैः ।</l>
+						<l>आतो द्यौः पृथिवी वायुरन्तरिक्षं दिशस्तया ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-50" type="anuṣṭubh">
+						<l>संवत्सरर्तवो मासाः पक्षाहोरात्रयः क्रमात् ।</l>
+						<l>यच्चान्यदपि तत्सर्वं संभूतं लोकसाक्षिकम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-51" type="anuṣṭubh">
+						<l>यदिदं दृश्यते किंचिद्बूतं स्थावरजङ्गमम् ।</l>
+						<l>पुनःसंक्षिप्यते सर्वं जगत्प्राप्ते युगक्षये ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-52" type="anuṣṭubh">
+						<l>यथर्तुष्वृतुलिङ्गानि नानारूपाणि पर्यये ।</l>
+						<l>दृश्यन्ते तानि तान्येव तथा भावा युगादिषु ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-53" type="anuṣṭubh">
+						<l>एवमेतदनाद्यन्तं भूतसंघातकारकम् ।</l>
+						<l>अनादिनिधनं लोके चक्रं संपरिवर्तते ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-54" type="anuṣṭubh">
+						<l>त्रयस्त्रिंशत्सहस्राणि त्रयस्त्रिंशच्छतानि च ।</l>
+						<l>त्रयस्त्रिंशच्च देवनां सृष्टिः संक्षेपलक्षणा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-55" type="anuṣṭubh">
+						<l>दिवः पुत्रो बृहद्भानुश्चक्षुरात्मा विभावसुः ।</l>
+						<l>सविता स ऋचीकोऽर्को भानुराशावहो रविः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-56" type="anuṣṭubh">
+						<l>पुत्रा विवस्वतः सर्वे मनुस्तेषां तथाऽवरः ।</l>
+						<l>देवभ्राट् तनयस्तस्य सुभ्राडिति ततः स्मृतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-57" type="anuṣṭubh">
+						<l>सुभ्राजस्तु त्रयः पुत्राः प्रजावन्तो बहुश्रुताः ।</l>
+						<l>दशज्योतिः शतज्योतिः सहस्रज्योतिरेव च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-58" type="anuṣṭubh">
+						<l>दशपुत्रसहस्राणि दशज्योतेर्महात्मनः ।</l>
+						<l>ततो दशगुणाश्चान्ये शतज्योतेरिहात्मजाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-59" type="anuṣṭubh">
+						<l>भूयस्ततो दशगुणाः सहस्रज्योतिषः सुताः ।</l>
+						<l>तेभ्योऽयं कुरुवंशश्च यदूनां भरतस्य च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-60" type="anuṣṭubh">
+						<l>ययातीक्ष्वाकृवंशश्च राजर्षीणां च सर्वशः ।</l>
+						<l>संभूता बहवो वंशा भूतसर्गाः सुविस्तराः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-61" type="anuṣṭubh">
+						<l>भूतस्थानानि सर्वाणि रहस्यं त्रिविधं च यत् ।</l>
+						<l>वेदा योगः सविज्ञानो धर्मोऽर्थः काम एव च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-62" type="anuṣṭubh">
+						<l>धर्मार्थकामयुक्तानि शास्त्राणि विविधानि च ।</l>
+						<l>लोकयात्राविधान च सर्व तद्दृष्टवानृषिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-63">
+						<l><seg n="a">`नीतिर्भरतवंशस्य विस्तारश्चैव सर्वशः ।'</seg>
+							<seg n="b">इतिहासाः सहव्याख्या विविधाश्रुतयोऽपि च ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-64">
+						<l><seg n="a">इह सर्वमनुक्रान्तमुक्तं ग्रन्थस्य लक्षणम् ।</seg>
+							<seg n="b">`संक्षेपेणेतिहासस्य ततो वक्ष्यति विस्तरम् ॥'</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-65" type="anuṣṭubh">
+						<l>विस्तीर्यैतन्महज्ज्ञानमृषिः संक्षिप्य चाब्रवीत् ।</l>
+						<l>इष्टं हि विदुषां लोके समासव्यासधारणम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-66" type="anuṣṭubh">
+						<l>मन्वादि भारतं केचिदास्तीकादि तथाऽपरे ।</l>
+						<l>तथोपरिचराद्यन्ये विप्राः सम्यगधीयिरे ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-67" type="anuṣṭubh">
+						<l>विविधं संहिताज्ञानं दीपयन्ति मनीषिणः ।</l>
+						<l>व्याख्यातुं कुशलाः केचिद्ग्रन्थान्धारयितुं परे ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-68" type="anuṣṭubh">
+						<l>तपसा ब्रह्मचर्येण व्यस्य वेदं सनातनम् ।</l>
+						<l>इतिहासमिमं चक्रे पुण्यं सत्यवतीत्सुतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-69" type="anuṣṭubh">
+						<l>पराशरात्मजो विद्वान्ब्रह्मर्षिः संशितव्रतः ।</l>
+						<l>मातुर्नियोगाद्धर्मात्मा गाङ्गेयस्य च धीमतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-70" type="anuṣṭubh">
+						<l>क्षेत्रे विचित्रवीर्यस्य कृष्णद्वैपायनः पुरा ।</l>
+						<l>त्रीनग्नीनिव कौरव्याञ्जनयामास वीर्यवान् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-71" type="anuṣṭubh">
+						<l>उत्पाद्य धृतराष्ट्रं च पाण्डुं विदुरमेव च ।</l>
+						<l>जगाम तपसे धीमान्पुनरेवाश्रमं प्रति ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-72" type="anuṣṭubh">
+						<l>तेषु जातेषु वृद्धेषु गतेषु परमां गतिम् ।</l>
+						<l>अब्रवीद्भारतं लोके मानुषेऽस्मिन्महानृषिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-73" type="anuṣṭubh">
+						<l>जनमेजयेन पृष्टः सन्ब्राह्मणैश्च सहस्रशः ।</l>
+						<l>शशास शिष्यमासीनं वैशंपायनमन्तिके ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-74" type="anuṣṭubh">
+						<l>स सदस्यैः सहासीनं श्रावयामास भारतम् ।</l>
+						<l>कर्मान्तरेषु यज्ञस्य चोद्यमानः पुनः पुनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-75" type="anuṣṭubh">
+						<l>विस्तारं कुरुवंशस्य गान्धार्या धर्मशीलताम् ।</l>
+						<l>क्षत्तुः प्रज्ञां धृतिं कुन्त्याः सम्यग्द्वैपायनोब्रवीत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-76" type="anuṣṭubh">
+						<l>वासुदेवस्य माहात्म्यं पाण्डवानां च सत्यताम् ।</l>
+						<l>दुर्वृत्तं धार्तराष्ट्राणामुक्तवान्भगवानृषिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-77" type="anuṣṭubh">
+						<l>इदं शतसहस्रं तु श्लोकानां पुण्यकर्मणाम् ।</l>
+						<l>उपाख्यानैः सह ज्ञेयं श्राव्यं भारतमुत्तमम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-78" type="anuṣṭubh">
+						<l>चतुर्विंशतिसाहस्रीं चक्रे भारतसंहिताम् ।</l>
+						<l>उपाख्यानैर्विना तावद्भारतं प्रोच्यते बुधैः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-79" type="anuṣṭubh">
+						<l>ततोऽध्यर्धशतं भूयः संक्षेपं कृतवानृषिः ।</l>
+						<l>अनुक्रमणिकाध्यायं वृत्तान्तं सर्वपर्वणाम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-80" type="anuṣṭubh">
+						<l>तस्याख्यानवरिष्ठस्य कृत्वा द्वैपायनः प्रभुः ।</l>
+						<l>कथमध्यापयानीह शिष्यानित्यन्वचिन्तयत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-81" type="anuṣṭubh">
+						<l>तस्य तच्चिन्तितं ज्ञात्वा ऋषेर्द्वैपायनस्य च ।</l>
+						<l>तत्राजगाम भगवान्ब्रह्मा लोकगुरुः स्वयम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-82" type="anuṣṭubh">
+						<l>प्रीत्यर्थं तस्य चैवर्षेर्लोकानां हितकाम्यया ।</l>
+						<l>तं दृष्ट्वा विस्मितो भूत्वा प्राञ्जलिः प्रणतः स्थितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-83">
+						<l><seg n="a">आसनं कल्पयामास सर्वैर्मुनिगणैर्वृतः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-84" type="anuṣṭubh">
+						<l>हिरण्यमर्भमासीनं तस्मिंस्तु परमासने ।</l>
+						<l>परिवृत्यासनभ्याशे वासवेयः स्थितोऽभवत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-85" type="anuṣṭubh">
+						<l>अनुज्ञातोऽथ कृष्णस्तु ब्रह्मणा परमेष्ठिना ।</l>
+						<l>निषसादासनाभ्याशे प्रीयमाणः शुचिस्मितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-86" type="anuṣṭubh">
+						<l>उवाच स महातेजा ब्रह्माणं परमेष्ठिनम् ।</l>
+						<l>कृतं मयेदं भगवन्काव्यं परमपूजितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-87" type="anuṣṭubh">
+						<l>ब्रह्मन्वेदरहस्य च यच्चान्यत्स्थापितं मया ।</l>
+						<l>साङ्गोपनिषदां चैव वेदानां विस्तरक्रिया ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-88" type="anuṣṭubh">
+						<l>इतिहासपुरापानामुन्मेषं निमिषं च यत् ।</l>
+						<l>भूतं भव्यं भविष्यच्च त्रिविधं कालसंज्ञितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-89" type="anuṣṭubh">
+						<l>जरामृत्युभयव्याधिभावाभावविनिश्चयः ।</l>
+						<l>विविधस्य च धर्मस्य ह्याश्रमाणां च लक्षणम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-90" type="anuṣṭubh">
+						<l>चातुर्वर्ण्यविधानं च पुराणानां च कृत्स्नशः ।</l>
+						<l>तपसो ब्रह्मचर्यस्य पृथिव्याश्चन्द्रसूर्ययोः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-91" type="anuṣṭubh">
+						<l>ग्रहनक्षत्रताराणां प्रमाणं च युगैः सह ।</l>
+						<l>ऋचो यजूषि सामानि वेदाध्यात्मं तथैव च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-92" type="anuṣṭubh">
+						<l>न्यायशिक्षा चिकित्सा च दानं पाशुपतं तथा ।</l>
+						<l>इति नैकाश्रयं जन्म दिव्यमानुषसंज्ञितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-93" type="anuṣṭubh">
+						<l>तीर्थानां चैव पुण्यानां देशानां चैव कीर्तनम् ।</l>
+						<l>नदीनां पर्वतानां च वनानां सागरस्य च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-94" type="anuṣṭubh">
+						<l>पुराणां चैव दिव्यानां कल्पानां युद्धकौशलम् ।</l>
+						<l>वाक्यजातिविशेषाश्च लोकयात्राक्रमश्च यः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-95" type="anuṣṭubh">
+						<l>यच्चापि सर्वगं वस्तु तच्चैव प्रतिपादितम् ।</l>
+						<l>परं न लेखकः कश्चिदेतस्य भुवि विद्यते ॥</l>
+						<l xml:id="adi-1-1-96x" rend="speak">ब्रह्मोवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-96" type="anuṣṭubh">
+						<l>तपोविशिष्टदपि वै वसिष्ठान्मुनिपुंगवात् ।</l>
+						<l>मन्ये श्रेष्ठव्यं त्वां वै रहस्यज्ञानवेदनात् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-97" type="anuṣṭubh">
+						<l>जन्मप्रभृति सत्यां ते वेद्मि गां ब्रह्मवादिनीम् ।</l>
+						<l>त्वयाच काव्यमित्युक्तं तस्मात्काव्यं भविष्यति ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-98" type="anuṣṭubh">
+						<l>अस्य काव्यस्य कवयो न समर्था विशेषणे ।</l>
+						<l>विशेषणे गृहस्थस्य शेषास्त्रय इवाश्रमाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-99" type="anuṣṭubh">
+						<l>`जडान्धबधिरोन्मत्तं तमोभूतं जगद्भवेत् ।</l>
+						<l>यदि ज्ञानहुताशेन त्वया नोज्ज्वलियं भवेत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-100" type="anuṣṭubh">
+						<l>तमसान्धस्य लोकस्य वेष्टितस्य स्वकर्मभिः ।</l>
+						<l>ज्ञानाञ्जनशलाकाभिर्बुद्धिनेत्रोत्सवः कृतः' ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-101" type="anuṣṭubh">
+						<l>धर्मार्थकाममोक्षार्थैः समासव्यासकीर्तनैः ।</l>
+						<l>त्वया भारतसूर्येण नृणां विनिहतं तमः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-102" type="anuṣṭubh">
+						<l>पुराणपूर्णचन्द्रेण श्रुतिज्योत्स्नाप्रकाशिना ।</l>
+						<l>नृणां कुमुदसौम्यानां कृतं बुद्धिप्रसादनम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-103" type="anuṣṭubh">
+						<l>इतिहासप्रदीपेन मोहावरणघातिना ।</l>
+						<l>लोकगर्भगृहं कृत्स्नं यथावत्संप्रकाशितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-104" type="anuṣṭubh">
+						<l>संग्रहाध्यायबीजो वै पौलोमास्तीकमूलवान् ।</l>
+						<l>संभवस्कन्धविस्तारः सभापर्वविटङ्कवान् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-105" type="anuṣṭubh">
+						<l>आरण्यपर्वरूपाढ्यो विराटोद्योगसारवान् ।</l>
+						<l>भीष्मपर्वमहाशाखो द्रोणपर्वपलाशवान् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-106" type="anuṣṭubh">
+						<l>कर्णपर्वसितैः पुष्पैः शल्यपर्वसुगन्धिभिः ।</l>
+						<l>स्त्रीपर्वैषीकविश्रामः शान्तिपर्वमहाफलः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-107" type="anuṣṭubh">
+						<l>अश्वमेधामृतसस्त्वाश्रमस्थानसंश्रयः ।</l>
+						<l>मौसलश्रुतिसंक्षेपः शिष्टद्विजनिषेवितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-108" type="anuṣṭubh">
+						<l>सर्वेषां कविमुख्यानामुपजीव्यो भविष्यति ।</l>
+						<l>पर्जन्यइव भूतानामक्षयो भारद्रुमः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-109">
+						<l><seg n="a">काव्यस्य लेखनार्थाय गणेशः स्मर्यतां मुने ।</seg>
+						</l>
+						<l xml:id="adi-1-1-110x" rend="speak">सौतिरुवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-110" type="anuṣṭubh">
+						<l>एवमाभाष्य तं ब्रह्मा जगाम स्वं निवेशनम् ।</l>
+						<l>भगवान्स जगत्स्रष्टा ऋषिदेवगणैः सह ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-111">
+						<l><seg n="a">ततः सस्मार हेरम्बं व्यासः सत्यवतीसुतः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-112" type="anuṣṭubh">
+						<l>स्मृतमात्रो गणेशानो भक्तचिन्तितपूरकः ।</l>
+						<l>तत्राजगाम विघ्नेशो वेदव्यासो यतः स्थितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-113" type="anuṣṭubh">
+						<l>पूजितश्चोपविष्टश्च व्यासेनोक्तस्तदानघ ।</l>
+						<l>लेखको भारतस्यास्य भव त्वं गणनायक ॥</l>
+						<l><seg n="c">मयैव प्रोच्यमानस्य मनसा कल्पितस्य च ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-114" type="anuṣṭubh">
+						<l>श्रुत्वैतत्प्राह विघ्नेशो यदि मे लेखनी क्षणम् ।</l>
+						<l>लिखतो नावतिष्ठेत तदा स्यां लेखको ह्यहम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-115" type="anuṣṭubh">
+						<l>व्यासोऽप्युवाच तं देवमबुद्ध्वा मा लिख क्वचित् ।</l>
+						<l>ओमित्युक्त्वा गणेशोपि बभूव किल लेखकः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-116" type="anuṣṭubh">
+						<l>ग्रन्थग्रन्थिं तदा चक्रे मुनिर्गूढं कुतूहलात् ।</l>
+						<l>यस्मिन्प्रतिज्ञया प्राह मुनिर्द्वैपायनस्त्विदम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-117" type="anuṣṭubh">
+						<l>अष्टौ श्लोकसहस्राणि अष्टौ श्लोकशतानि च ।</l>
+						<l>अहं वेद्मि शुको वेत्ति संजयो वेत्ति वा न वा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-118" type="anuṣṭubh">
+						<l>तच्छ्लोककूटमद्यापि ग्रथितं सुदृढं मुने ।</l>
+						<l>भेत्तुं न शक्यतेऽर्थस्यं गूढत्वात्प्रश्रितस्य च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-119" type="anuṣṭubh">
+						<l>सर्वज्ञोपि गणेशो यत्क्षणमास्ते विचारयन् ।</l>
+						<l>तावच्चकार व्यासोपि श्लोकानन्यान्बहूनपि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-120" type="anuṣṭubh">
+						<l>तस्य वृक्षस्य वक्ष्यामि शाखापुष्पफलोदयम् ।</l>
+						<l>स्वादुमेध्यरसोपेतमच्छेद्यममरैरपि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-121" type="anuṣṭubh">
+						<l>अनुक्रमणिकाध्यायं वृत्तान्तं सर्वपर्वणाम् ।</l>
+						<l>इदं द्वैपायनः पूर्वं पुत्रमध्यापयच्छुकम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-122">
+						<l><seg n="a">ततोऽन्येभ्योऽनुरूपेभ्यः शिष्येभ्यः प्रददौ प्रभु</seg>
+							<seg n="b">षष्टिं शतसहस्राणि चकारान्यां स संहिताम् ।</seg>
+						</l>
+						<l><seg n="c">त्रिंशच्छतसहस्रं च देवलोके प्रतिष्ठितम् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-123" type="anuṣṭubh">
+						<l>पित्र्ये पञ्चदश प्रोक्तं रक्षोयक्षे चतुर्दश ।</l>
+						<l>एकं शतसहस्रं तु मानुषेषु प्रतिष्ठितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-124" type="anuṣṭubh">
+						<l>नारदोऽश्रावयद्देवानसितो देवलः पितृन् ।</l>
+						<l>गन्धर्वयक्षरक्षांसि श्रावयामास वै शुकः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-125" type="anuṣṭubh">
+						<l>`वैशंपायनविप्रर्षिः श्रावयामास पार्थिवम् ।</l>
+						<l>पारिक्षितं महात्मानं नाम्ना तु जनमेजयम्' ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-126" type="anuṣṭubh">
+						<l>अस्मिंस्तु मानुषे लोके वैशंपायन उक्तवान् ।</l>
+						<l>शिष्यो व्यासस्य धर्मात्मा सर्ववेदविदां वरः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-127">
+						<l><seg n="a">एकं शतसहस्रं तु मयोक्तं वै निबोधत ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-128">
+						<l><seg n="a">दुर्योधनो मन्युमयो महाद्रुमः</seg>
+							<seg n="b">कर्णः स्कन्धः शकुनिस्तस्य शाखाः ।</seg>
+						</l>
+						<l><seg n="c">दुश्शासनः पुष्पफले समृद्धे</seg>
+							<seg n="d">मूलं राजा धृतराष्ट्रोऽमनीषि ।</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-129">
+						<l><seg n="a">युधिष्ठिरे धर्ममयो महाद्रुमः</seg>
+							<seg n="b">स्कन्धोऽर्जुनो भीमसेनोऽस्य शाखाः ।</seg>
+						</l>
+						<l><seg n="c">माद्रीसुतौ पुष्पफले समृद्धे</seg>
+							<seg n="d">मूलं कृष्णो ब्रह्म च ब्राह्मणाश्च ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-130" type="anuṣṭubh">
+						<l>पाण्डुर्जित्वा बहून्देशान्युधा विक्रमणेन च ।</l>
+						<l>अरण्ये मृगयाशीलो न्यवसत्सजनस्तथा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-131" type="anuṣṭubh">
+						<l>मृगव्यवायनिधनात्कृच्छ्रां प्राप स आपदम् ।</l>
+						<l>जन्मप्रभृति पार्थानां तत्राचारविधिक्रमः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-132" type="anuṣṭubh">
+						<l>मात्रोरभ्युपपत्तिश्च धर्मोपनिषदं प्रति ।</l>
+						<l>धर्मानिलेन्द्रांस्ताभिः साऽऽजुहाव सुतवाञ्छया ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-133" type="anuṣṭubh">
+						<l>`ततो धर्मोपनिषदं भूत्वा भर्तुः प्रिया पृथा ।</l>
+						<l>धर्मानिलेन्द्रांस्ताभिः साऽऽजुहाव सुतवाञ्छया ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-134">
+						<l><seg n="a">तद्दत्तोपनिषन्माद्री चाश्विनावाजुहाव च ।</seg>
+							<seg n="b">जाताः पार्थास्ततः सर्वे कुन्त्या माद्र्याश्च मन्त्रतः ।'</seg>
+						</l>
+						<l><seg n="c">तापसैः सह संवृद्धा मातृभ्यां परिरक्षिताः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-135" type="anuṣṭubh">
+						<l>मेध्यारण्येषु पुण्येषु महतामाश्रमेषु च ।</l>
+						<l>`तेषु जातेषु सर्वेषु पाण्डवेषु महात्मसु ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-136">
+						<l><seg n="a">माद्र्या तु सह संगम्य ऋषिशापप्रभावतः ।</seg>
+							<seg n="b">मृतः पाण्डुर्महापुण्ये शतशृङ्गे महागिरौ ॥'</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-137" type="anuṣṭubh">
+						<l>ऋषिभिश्च समानीता धार्तराष्ट्रान्प्रति स्वयम् ।</l>
+						<l>शिशवश्चाभिरूपाश्च जटिला ब्रह्मचारिणः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-138" type="anuṣṭubh">
+						<l>पुत्राश्च भ्रातरश्चेमे शिष्याश्च सुहृदश्च वः ।</l>
+						<l>पाण्डवा एत इत्युक्त्वा मुनयोऽन्तर्हितास्ततः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-139" type="anuṣṭubh">
+						<l>तांस्तैर्निवेदितान्दृष्ट्वा पाण्डवान्कौरवास्तदा ।</l>
+						<l>शिष्टाश्च वर्णाः पौरा ये ते हर्षाच्चुक्रुशुर्भृशम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-140" type="anuṣṭubh">
+						<l>आहुः केचिन्न तस्यैते तस्यैत इति चापरे ।</l>
+						<l>यदा चिरमृतः पाण्डुः कथं तस्येतदि चापरे ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-141" type="anuṣṭubh">
+						<l>स्वागतं सर्वथा दिष्ट्या पाण्डोः पश्याम सन्ततिम् ।</l>
+						<l>उच्यतां स्वागतमिति वाचोऽश्रूयन्त सर्वशः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-142" type="anuṣṭubh">
+						<l>तस्मिन्नुपरते शब्दे दिशः सर्वा निनादयन् ।</l>
+						<l>अन्तर्हितानां भूतानां निःस्वनस्तुमुलीऽभवत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-143" type="anuṣṭubh">
+						<l>पुष्पवृष्टिः शुभा गन्धाः शङ्खदुन्दुभिनिःस्वनाः ।</l>
+						<l>आसन्प्रवेशे पार्थानां तदद्भुतमिवाभवत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-144" type="anuṣṭubh">
+						<l>तत्प्रीत्या चैव सर्वेषां पौराणां हर्षसंभवः ।</l>
+						<l>शब्द आसीन्महांस्तत्र दिवस्पृक्कीर्तिवर्धनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-145" type="anuṣṭubh">
+						<l>तेऽधीत्य निखिलान्वेदाञ्शास्त्राणि विविधानि च ।</l>
+						<l>न्यवसन्पाण्डवास्तत्र पूजिता अकुतोभयाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-146" type="anuṣṭubh">
+						<l>युधिष्ठिरस्य शौचेन प्रीताः प्रकृतयोऽभवन् ।</l>
+						<l>धृत्या च भीमसेनस्य विक्रमेणार्जुनस्य च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-147" type="anuṣṭubh">
+						<l>गुरुशुश्रूषया कुन्त्या यमयोर्विनयेन च ।</l>
+						<l>तुतोष लोकः सकलस्तेषां शौर्यगुणेन च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-148" type="anuṣṭubh">
+						<l>समवाये ततो राज्ञां कन्यां भर्तृस्वयंवराम् ।</l>
+						<l>प्राप्तवानर्जुनः कृष्णां कृत्वा कर्म सुदुष्करम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-149" type="anuṣṭubh">
+						<l>ततः प्रभृति लोकेऽस्मिन्पूज्यः सर्वधनुष्मताम् ।</l>
+						<l>आदित्य इव दुष्प्रेक्ष्यः समरेष्वपि चाभवत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-150" type="anuṣṭubh">
+						<l>स सर्वान्पार्थिवाञ्जित्वा सर्वांश्च महतो गणान् ।</l>
+						<l>आजहारार्जुनो राज्ञो राजसूयं महाक्रतुम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-151" type="anuṣṭubh">
+						<l>अन्नवान्दक्षिणावांश्च सर्वैः समुदितो गुणैः ।</l>
+						<l>युधिष्ठिरेण संप्राप्तो राजसूयो महाक्रतुः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-152" type="anuṣṭubh">
+						<l>सुनयाद्वासुदेवस्य भीमार्जुनबलेन च ।</l>
+						<l>घातयित्वा जरासन्धं चैद्यं च बलगर्वितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-153" type="anuṣṭubh">
+						<l>दुर्योधनं समागच्छन्नर्हणानि ततस्ततः ।</l>
+						<l>मणिकाञ्चनरत्नानि गोहस्त्यश्वधनानि च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-154" type="anuṣṭubh">
+						<l>विचित्राणि च वासांसि प्रावारावरणानि च ।</l>
+						<l>कम्बलाजिनरत्नानि राङ्कवास्तरणानि च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-155" type="anuṣṭubh">
+						<l>समृद्धां तां तथा दृष्ट्वा पाण्डवानां तदा श्रियम् ।</l>
+						<l>ईर्ष्यासमुत्थः सुमहांस्तस्य मन्युरजायत ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-156" type="anuṣṭubh">
+						<l>विमानप्रतिमां तत्र मयेन सुकृतां सभाम् ।</l>
+						<l>पाण्डवानामुपहृतां स दृष्ट्वा पर्यतप्यत ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-157" type="anuṣṭubh">
+						<l>तत्रावहसितश्चासीत्प्रस्कन्दन्निव संभ्रमात् ।</l>
+						<l>प्रत्यक्षं वासुदेवस्य भीमेनानभिजातवत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-158" type="anuṣṭubh">
+						<l>स भोगान्विविधान्भुञ्जन्रत्नानि विविधानि च ।</l>
+						<l>कथितो धृतराष्ट्रस्य विवर्णो हरिणः कृशः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-159" type="anuṣṭubh">
+						<l>अन्वजानात्ततो द्यूतं धृतराष्ट्रः सुतप्रियः ।</l>
+						<l>तच्छ्रुत्वा वासुदेवस्य कोपः समभवन्महान् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-160" type="anuṣṭubh">
+						<l>नातिप्रीतमनाश्चासीद्विवादांश्चान्वमोदत ।</l>
+						<l>द्यूतादीननयान्घोरान्विविधांश्चाप्युपैक्षत ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-161" type="anuṣṭubh">
+						<l>निरस्य विदुरं भीष्मं द्रोणं शारद्वतं कृपम् ।</l>
+						<l>विग्रहे तुमुले तस्मिन्दहन्क्षत्रं परस्परम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-162" type="anuṣṭubh">
+						<l>जयत्सु पाण्डुपुत्रेषु श्रुत्वा सुमहदप्रियम् ।</l>
+						<l>दुर्योधनमतं ज्ञात्वा कर्णस्य शकुनेस्तथा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-163" type="anuṣṭubh">
+						<l>धृतराष्ट्रश्चिरं ध्यात्वा संजयं वाक्यमब्रवीत् ।</l>
+						<l>शृणु संजय सर्वं मे नचासूयितुमर्हसि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-164" type="anuṣṭubh">
+						<l>श्रुतवानसि मेधावी बुद्धिमान्प्राज्ञसंमतः ।</l>
+						<l>न विग्रहे मम मतिर्न च प्रीये कुलक्षये ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-165" type="anuṣṭubh">
+						<l>न मे विशेषः पुत्रेषु स्वेषु पाम्डुसुतेषु वा ।</l>
+						<l>वृद्धं मामभ्यसूयन्ति पुत्रा मन्युपरायणाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-166" type="anuṣṭubh">
+						<l>अहं त्वचक्षुः कार्पण्यात्पुत्रप्रीत्या सहामि तत् ।</l>
+						<l>मुह्यन्तं चानुमुह्यामि दुर्योधनमचेतनम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-167" type="anuṣṭubh">
+						<l>राजसूये श्रियं दृष्ट्वा पाण्डवस्य महौजसः ।</l>
+						<l>तच्चावहसनं प्राप्य सभारोहणदर्शने ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-168" type="anuṣṭubh">
+						<l>अमर्षितः स्वयं जेतुमशक्तः पाण्डवान्रणे ।</l>
+						<l>निरुत्साहश्च संप्राप्तुं सुश्रियं क्षत्रियोऽपि सन् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-169" type="anuṣṭubh">
+						<l>गान्धारराजसहितश्छद्मद्यूतममन्त्रयत् ।</l>
+						<l>तत्र यद्यद्यथा ज्ञातं मयां संजय तच्छृणु ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-170" type="anuṣṭubh">
+						<l>श्रुत्वा तु मम वाक्यानि बुद्धियुक्तानि तत्त्वतः ।</l>
+						<l>ततो ज्ञास्यसि मां सौते प्रज्ञाटचक्षुषमित्युत ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-171">
+						<l><seg n="a">यदाऽश्रौषं धनुरायम्य चित्रं</seg>
+							<seg n="b">विद्धं लक्ष्यं पातितं वै पृथिव्याम् ।</seg>
+						</l>
+						<l><seg n="c">कृष्णां हृतां प्रेक्षतां सर्वराज्ञां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-172">
+						<l><seg n="a">यदाऽश्रौषं द्वारकायां सुभद्रां</seg>
+							<seg n="b">प्रसह्योढां माधवीमर्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">इन्द्रप्रस्थं वृष्णिवीरौ च यातौ</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-173">
+						<l><seg n="a">यदाऽश्रौषं देवराजं प्रवृष्टं</seg>
+							<seg n="b">शरैर्दिव्यैर्वारितं चार्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">अग्निं तथा तर्पितं खाण्डवे च</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-174">
+						<l><seg n="a">यदाऽश्रौषं जातुषाद्वेश्मनस्ता-</seg>
+							<seg n="b">न्मुक्तान्पार्थान्पञ्च कुन्त्या समेतान् ।</seg>
+						</l>
+						<l><seg n="c">युक्तं चैषां विदुरं स्वार्थसिद्ध्यै</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-175">
+						<l><seg n="a">यदाऽश्रौषं द्रौपदीं रङ्गमध्ये</seg>
+							<seg n="b">लक्ष्यं भित्त्वा निर्जितामर्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">शूरान्पञ्चालान्पाण्डवेयांश्च युक्तां-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-176">
+						<l><seg n="a">यदाऽश्रौषं मागधानां वरिष्ठं</seg>
+							<seg n="b">जरासन्धं क्ष्वमध्ये ज्वलन्तम् ।</seg>
+						</l>
+						<l><seg n="c">दोर्भ्यां हतं भीमसेनेन गत्वा</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-177">
+						<l><seg n="a">यदाऽश्रौषं दिग्जये पाण्डुपुत्रै-</seg>
+							<seg n="b">र्वशीकृतान्भूमिपालान्प्रसह्य ।</seg>
+						</l>
+						<l><seg n="c">महाक्रतुं राजसूयं कृतं च</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-178">
+						<l><seg n="a">यदाऽश्रौषं द्रौपदीमश्रुकण्ठीं</seg>
+							<seg n="b">सभां नीतां दुःखितामेकवस्त्राम् ।</seg>
+						</l>
+						<l><seg n="c">रजस्वलां नाथवतीमनाथव-</seg>
+							<seg n="d">त्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-179">
+						<l><seg n="a">यदाऽश्रौषं वाससां तत्र राशिं</seg>
+							<seg n="b">समाक्षिपत्कितवो मन्दबुद्धिः ।</seg>
+						</l>
+						<l><seg n="c">दुःशासनो गतवान्नैवं चान्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-180">
+						<l><seg n="a">यदाऽश्रौषं हृतराज्यं युधिष्ठिरं</seg>
+							<seg n="b">पराजितं सौबलेनाक्षवत्याम् ।</seg>
+						</l>
+						<l><seg n="c">अन्वागतं भ्रातृभिरप्रमेयै-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-181">
+						<l><seg n="a">यदाश्रौषं विविधास्तत्र चेष्टा</seg>
+							<seg n="b">धर्मात्मनां प्रस्थितानां वनाय ।</seg>
+						</l>
+						<l><seg n="c">ज्येष्ठप्रीत्या क्लिश्यतां पाण्डवानां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-182">
+						<l><seg n="a">यदाऽश्रौषं स्नातकानां सहस्रै-</seg>
+							<seg n="b">रन्वागतं धर्मराजं वनस्थम् ।</seg>
+						</l>
+						<l><seg n="c">भिक्षाभुजां ब्राह्मणानां महात्मनां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-184">
+						<l><seg n="a">`यदाऽश्रौषं वनवासेन पार्था-</seg>
+							<seg n="b">न्समागतान्महर्षिभिः पुराणैः ।</seg>
+						</l>
+						<l><seg n="c">उपास्यमानान्सगणैर्जातसख्यां-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजर्य ॥'</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-185">
+						<l><seg n="a">यदाश्रौषं त्रिदिवस्थं धनंजयं</seg>
+							<seg n="b">शक्रात्साक्षाद्दिव्यमस्त्रं यथावत् ।</seg>
+						</l>
+						<l><seg n="c">अधीयानं शंसितं सत्यसन्धं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-186">
+						<l><seg n="a">यदाऽश्रोषं कालकेयास्ततस्ते</seg>
+							<seg n="b">पौलोमानो वरदानाच्च दृप्ताः ।</seg>
+						</l>
+						<l><seg n="c">देवैरजेया निर्जिताश्चार्जुनेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-187">
+						<l><seg n="a">यदाऽश्रौषमसुराणां वधार्थे</seg>
+							<seg n="b">किरीटिनं यान्तममित्रकर्शनम् ।</seg>
+						</l>
+						<l><seg n="c">कृतार्थं चाप्यागतं शक्रलोका-</seg>
+							<seg n="d">त्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-188">
+						<l><seg n="a">`यदाऽश्रौषं तीर्थयात्राप्रवृत्तं</seg>
+							<seg n="b">पाण्डोः सुतं सहितं लोमशेन ।</seg>
+						</l>
+						<l><seg n="c">बृहदश्वादक्षहृदयं च प्राप्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥'</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-189">
+						<l><seg n="a">यदाऽश्रौषं वैश्रवणेन सार्धं</seg>
+							<seg n="b">समागतं भीमन्यांश्च पार्थान् ।</seg>
+						</l>
+						<l><seg n="c">तस्मिन्देशे मानुषाणामगम्ये</seg>
+							<seg n="d">तदा नाशंसि विजयाय संजया ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-190">
+						<l><seg n="a">यदाऽश्रौषं घोषयात्रागतानां</seg>
+							<seg n="b">बन्धं गन्धर्वैर्मोक्षणं चार्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">स्वेषां सुतानां कर्णबुद्धौ रतानां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-191">
+						<l><seg n="a">यदाऽश्रौषं यक्षरूपेण धर्मं</seg>
+							<seg n="b">समागतं धर्मराजेन सूत ।</seg>
+						</l>
+						<l><seg n="c">प्रश्नान्कांश्चिद्विब्रुवाणं च सम्यक्</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-192">
+						<l><seg n="a">यदाऽश्रौषं न विदुर्मामकास्तान्</seg>
+							<seg n="b">प्रच्छन्नरूपान्वसतः पाण्डवेयान् ।</seg>
+						</l>
+						<l><seg n="c">विराटराष्ट्रे सह कृष्णया च</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-193">
+						<l><seg n="a">`यदाऽश्रौषं कीचकानां वरिष्ठं</seg>
+							<seg n="b">निषूदितं भ्रातृशतेन सार्धम् ।</seg>
+						</l>
+						<l><seg n="c">द्रौपद्यर्थे भीमसेनेन सङ्ख्ये</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥'</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-194">
+						<l><seg n="a">यदाऽश्रौषं मामकानां वरिष्ठा-</seg>
+							<seg n="b">न्धनंजयेनैकरथेन भग्नान् ।</seg>
+						</l>
+						<l><seg n="c">विराटराष्ट्रे वसता महात्मना</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-195">
+						<l><seg n="a">यदाऽश्रौषं सत्कृतं मत्स्यराज्ञा</seg>
+							<seg n="b">सुतां दत्तामुत्तरामर्जुनाय ।</seg>
+						</l>
+						<l><seg n="c">तां चार्जुनः प्रत्यगृह्णात्सुतार्थे</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-196">
+						<l><seg n="a">यदाऽश्रौषं निर्जितस्याधनस्य</seg>
+							<seg n="b">प्रव्राजितस्य स्वजनात्प्रच्युतस्य ।</seg>
+						</l>
+						<l><seg n="c">अक्षौहिणीः सप्त युधिष्ठिरस्य</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥ 196 ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-197">
+						<l><seg n="a">यदाऽश्रौषं माधवं वासुदेवं</seg>
+							<seg n="b">सर्वात्मना पाण्डवार्थे निविष्टम् ।</seg>
+						</l>
+						<l><seg n="c">यस्येमां गां विक्रममेकमाहु-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-198">
+						<l><seg n="a">यदाऽश्रौषं नरनारायणौ तौ</seg>
+							<seg n="b">कृष्णार्जुनौ वदतो नारदस्य ।</seg>
+						</l>
+						<l><seg n="c">अहं द्रष्टा ब्रह्मलोके च सम्यक्</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-199">
+						<l><seg n="a">यदाऽश्रौषं लोकहिताय कृष्णं</seg>
+							<seg n="b">शमार्थिनमुपयातं कुरूणाम् ।</seg>
+						</l>
+						<l><seg n="c">शमं कुर्वाणमकृतार्थं च यातं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥ 199 ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-200">
+						<l><seg n="a">यदाऽश्रौषं कर्णदुर्योधनाभ्यां</seg>
+							<seg n="b">बुद्धिं कृतां निग्रहे केशवस्य ।</seg>
+						</l>
+						<l><seg n="c">तं चात्मानं बहुधा दर्शयानं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-201">
+						<l><seg n="a">यदाऽश्रौषं वासुदेवे प्रयाते</seg>
+							<seg n="b">रथस्यैकामग्रतस्तिष्ठमानाम् ।</seg>
+						</l>
+						<l><seg n="c">आर्तां पृथां सान्त्वितां केशवेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-202">
+						<l><seg n="a">यदाऽश्रौषं मन्त्रिणं वासुदेवं</seg>
+							<seg n="b">तथा भीष्मं शान्तनवं च तेषाम् ।</seg>
+						</l>
+						<l><seg n="c">भारद्वाजं चाशिषोऽनुब्रुवाणं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-203">
+						<l><seg n="a">यदा कर्णो भीष्ममुवाच वाक्यं</seg>
+							<seg n="b">नाहं योत्स्ये युध्यमाने त्वयीति ।</seg>
+						</l>
+						<l><seg n="c">हित्वा सेनामपचक्राम चापि</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-204">
+						<l><seg n="a">यदाऽश्रौषं वासुदेवार्जुनौ तौ</seg>
+							<seg n="b">तथा धनुर्गाण्डिवमप्रमेयम् ।</seg>
+						</l>
+						<l><seg n="c">त्रीण्युग्रवीर्याणि समागतानि</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-205">
+						<l><seg n="a">यदाऽश्रौषं कश्ललेनाभिपन्ने</seg>
+							<seg n="b">रथोपस्थे सीदमानेऽर्जुने वै ।</seg>
+						</l>
+						<l><seg n="c">कृष्णं लोकान्दर्शयानं शरीरे</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-206">
+						<l><seg n="a">यदाऽश्रौषं भीष्ममित्रकर्शनं</seg>
+							<seg n="b">निघ्नन्तमाजावयुतं रथानाम् ।</seg>
+						</l>
+						<l><seg n="c">नैषां कश्चिद्वध्यते ख्यातरूप-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-207">
+						<l><seg n="a">यदाऽश्रौषं चापगेयेन सङ्ख्ये</seg>
+							<seg n="b">स्वयं मृत्युं विहितं धार्मिकेण ।</seg>
+						</l>
+						<l><seg n="c">तच्चाकार्षुः पाण्डवेयाः प्रहृष्टा-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-208">
+						<l><seg n="a">यदाऽश्रौषं भीष्ममत्यन्तशूरं</seg>
+							<seg n="b">हतं पार्थेनाहवेष्वप्रधृष्यम् ।</seg>
+						</l>
+						<l><seg n="c">शिखण्डिनं पुरतः स्थापयित्वा</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-209">
+						<l><seg n="a">यदाऽश्रौषं शरतल्पे शयानं</seg>
+							<seg n="b">वृद्धं वीरं सादितं चित्रपुङ्खैः ।</seg>
+						</l>
+						<l><seg n="c">भीष्मं कृत्वा सोमकानल्पशेषां-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-210">
+						<l><seg n="a">यदाऽश्रौषं शान्तनवे शयाने</seg>
+							<seg n="b">पानीयार्थे चोदितेनार्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">भूमिं भित्त्वा तर्पितं तत्र भीष्मं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-211">
+						<l><seg n="a">यदाश्रौषं शुक्रसूर्यौ च युक्तौ</seg>
+							<seg n="b">कौन्तेयानामनुलोमौ जयाय ।</seg>
+						</l>
+						<l><seg n="c">नित्यं चास्माञ्श्वापदा भीषयन्ति</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-212">
+						<l><seg n="a">यदा द्रोणो विविधानस्त्रमार्गा-</seg>
+							<seg n="b">न्निदर्शयन्समरे चित्रयोधी ।</seg>
+						</l>
+						<l><seg n="c">न पाण्डवाञ्श्रेष्ठतरान्निहन्ति</seg>
+							<seg n="d">तदा नाशंसे विजयायं संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-213">
+						<l><seg n="a">यदाऽश्रौषं चास्मदीयान्महारथा-</seg>
+							<seg n="b">न्व्यवस्थितानर्जुनस्यान्तकाय ।</seg>
+						</l>
+						<l><seg n="c">संशप्तकान्निहतानर्जुनेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-214">
+						<l><seg n="a">यदाऽश्रौषं व्यूहमभेद्यमन्यै-</seg>
+							<seg n="b">र्भारद्वाजेनात्तशस्त्रेण गुप्तम् ।</seg>
+						</l>
+						<l><seg n="c">भित्त्वा सौभद्रं वीरमेकं प्रविष्टं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-215">
+						<l><seg n="a">यदाऽभिमन्युं परिवार्य बालं</seg>
+							<seg n="b">सर्वे हत्त्वा हृष्टरूपा बभूवुः ।</seg>
+						</l>
+						<l><seg n="c">महारथाः पार्थमशक्नुवन्त-</seg>
+							<seg n="d">स्तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-216">
+						<l><seg n="a">यदाऽश्रौषमभिमन्युं निहत्य</seg>
+							<seg n="b">हर्षान्मूढान्क्रोशतो धार्तराष्ट्रान् ।</seg>
+						</l>
+						<l><seg n="c">क्रोधादुक्तं सैन्धवे चार्जुनेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-217">
+						<l><seg n="a">यदाऽश्रौषं सैन्धवार्थे प्रतिज्ञां</seg>
+							<seg n="b">प्रतिज्ञातां तद्वधायार्जुनेन ।</seg>
+						</l>
+						<l><seg n="c">सत्यां तीर्णां शत्रुमध्ये च तेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-218">
+						<l><seg n="a">यदाऽश्रौषं श्रान्तहये धनंजये</seg>
+							<seg n="b">मुक्त्वा हयान्पाययित्वोपवृत्तान् ।</seg>
+						</l>
+						<l><seg n="c">पुनर्युक्त्वा वासुदेवं प्रयातं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-219">
+						<l><seg n="a">यदाऽश्रौषं वाहनेष्वक्षमेषु</seg>
+							<seg n="b">रथोपस्थे तिष्ठता पाण्डवेन ।</seg>
+						</l>
+						<l><seg n="c">सर्वान्योधान्वारितानर्जुनेन</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-220">
+						<l><seg n="a">यदाऽश्रौषं नागबलैः सुदुःसहं</seg>
+							<seg n="b">द्रोणानीकं युयुधानं प्रमथ्य ।</seg>
+						</l>
+						<l><seg n="c">यातं वार्ष्णेयं यत्र तौ कृष्णपार्थौ</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-221">
+						<l><seg n="a">यदाऽश्रौषं कर्णमासाद्य मुक्तं</seg>
+							<seg n="b">वधाद्भीमं कुत्सयित्वा वचोभिः ।</seg>
+						</l>
+						<l><seg n="c">धनुष्कोट्याऽऽतुद्य कर्णेन वीरं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-222">
+						<l><seg n="a">यदा द्रोणः कृतवर्मा कृपश्च</seg>
+							<seg n="b">कर्णो द्रौणिर्मद्रराजश्च शूरः ।</seg>
+						</l>
+						<l><seg n="c">अमर्षयन्सैन्धवं वध्यमानं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-223">
+						<l><seg n="a">यदाऽश्रौषं देवराजेन दत्तां</seg>
+							<seg n="b">दिव्यां शक्तिं व्यंसितां माधवेन ।</seg>
+						</l>
+						<l><seg n="c">घटोत्कचे राक्षसे घोररूपे</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-224">
+						<l><seg n="a">यदाऽश्रौषं कर्णघटोत्कचाभ्यां</seg>
+							<seg n="b">युद्धे मुक्तां सूतपुत्रेण शक्तिम् ।</seg>
+						</l>
+						<l><seg n="c">यया वध्यः समरे सव्यसाची</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-225">
+						<l><seg n="a">यदाऽश्रौषं द्रोणमाचार्यमेकं</seg>
+							<seg n="b">धृष्टद्युम्नेनाभ्यतिक्रम्य धर्मम् ।</seg>
+						</l>
+						<l><seg n="c">रथोपस्थे प्रायगतं विशस्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-226">
+						<l><seg n="a">यदाऽश्रौषं द्रौणिना द्वैरथस्थं</seg>
+							<seg n="b">माद्रीसुतं नकुलं लोकमध्ये ।</seg>
+						</l>
+						<l><seg n="c">समं युद्धे मण्डलेभ्यश्चरन्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-227">
+						<l><seg n="a">यदा द्रोणे निहते द्रोणपुत्रो</seg>
+							<seg n="b">नारायणं दिव्यमस्त्रं विकुर्वन् ।</seg>
+						</l>
+						<l><seg n="c">नैषामन्तं गतवान्पाण्डवानां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-228">
+						<l><seg n="a">यदाऽश्रौषं भीमसेनेन पीतं</seg>
+							<seg n="b">रक्तं भ्रातुर्युधि दुःशासनस्य ।</seg>
+						</l>
+						<l><seg n="c">निवारितं नान्यतमेन भीमं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-229">
+						<l><seg n="a">यदाऽश्रौषं कर्णमत्यन्तशूरं</seg>
+							<seg n="b">हतं पार्थेनाहवेष्वप्रधृष्यम् ।</seg>
+						</l>
+						<l><seg n="c">तस्मिन्भ्रातृणां विग्रहे देवगुह्ये</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-230">
+						<l><seg n="a">यदाऽश्रौषं द्रोणपुत्रं च शूरं</seg>
+							<seg n="b">दुःशासनं कृतवर्माणमुग्रम् ।</seg>
+						</l>
+						<l><seg n="c">युधिष्टिरं धर्मराजं जयन्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-231">
+						<l><seg n="a">यदाऽश्रौषं निहतं मद्रराजं</seg>
+							<seg n="b">रणे शूरं धर्मराजेन सूत ।</seg>
+						</l>
+						<l><seg n="c">सदा सङ्ग्रामे स्प्रधते यस्तु कृष्णं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-232">
+						<l><seg n="a">यदाऽश्रौषं कलहद्यूतमूलं</seg>
+							<seg n="b">मायाबलं सौबलं पाण्डवेन ।</seg>
+						</l>
+						<l><seg n="c">हतं सङ्ग्रामे सहदेवेन पापं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-233">
+						<l><seg n="a">यदाऽश्रौषं श्रान्तमेकं शयानं</seg>
+							<seg n="b">ह्रदं गत्वा स्तम्भयित्वा तदम्भः ।</seg>
+						</l>
+						<l><seg n="c">दुर्योधनं विरथं भग्नशक्तिं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-234">
+						<l><seg n="a">यदाऽश्रौषं पाण्डवांस्तिष्ठमानान्</seg>
+							<seg n="b">गत्वा ह्रदे वासुदेवेन सार्धम् ।</seg>
+						</l>
+						<l><seg n="c">अमर्षणं धर्षयतः सुतं मे</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-235">
+						<l><seg n="a">यदाऽश्रौषं विविधांश्चित्रमार्गान्</seg>
+							<seg n="b">गदायुद्धे मण्डलशश्चरन्तम् ।</seg>
+						</l>
+						<l><seg n="c">मिथ्या हतं वासुदेवस्य बुद्ध्या</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-236">
+						<l><seg n="a">यदाऽश्रौषं द्रोणपुत्रादिभिस्तै-</seg>
+							<seg n="b">र्हतान्पञ्चालान्द्रौपदेयांश्च सुप्तान् ।</seg>
+						</l>
+						<l><seg n="c">कृतं बीभत्समयशस्यं च कर्म</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-237">
+						<l><seg n="a">यदाऽश्रौषं भीमसेनानुयाते-</seg>
+							<seg n="b">नाश्वत्थाम्ना परमास्त्रं प्रयुक्तम् ।</seg>
+						</l>
+						<l><seg n="c">क्रुद्धेनैषीकमवधीद्येन गर्भं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-238">
+						<l><seg n="a">यदाऽश्रौषं ब्रह्मशिरोऽर्जुनेन</seg>
+							<seg n="b">स्वस्तीत्युक्त्वाऽस्त्रमस्त्रेण शान्तम् ।</seg>
+						</l>
+						<l><seg n="c">अश्वत्थाम्ना मणिरत्नं च दत्तं</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-239">
+						<l><seg n="a">यदाऽश्रौषं द्रोणपुत्रेण गर्भे</seg>
+							<seg n="b">वैराट्या वै पात्यमाने महास्त्रैः ।</seg>
+						</l>
+						<l><seg n="c">संजीवयामीति हरेः प्रतिज्ञां</seg>
+							<seg n="d">तदा नाशंसे विजयाय संजय ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-240">
+						<l><seg n="a">द्वैपायनः केशवो द्रोणपुत्रं</seg>
+							<seg n="b">परस्पेरणाभिशापैः शशाप ।</seg>
+						</l>
+						<l><seg n="c">बुद्ध्वा चाहं बुद्धिहीनोऽद्य सूत</seg>
+							<seg n="d">संतप्ये वै पुत्रपौत्रैश्च हीनः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-241">
+						<l><seg n="a">शोच्या गान्धारी पुत्रपौत्रैर्विहीना</seg>
+							<seg n="b">तथा वध्वा पितृभिर्भ्रातृभिश्च ।</seg>
+						</l>
+						<l><seg n="c">कृतं कार्यं दुष्करं पाण्डवेयैः</seg>
+							<seg n="d">प्राप्तं राज्यमसपत्नं पुनस्तैः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-242">
+						<l><seg n="a">कष्टं युद्धे दश शेषाः श्रुता मे</seg>
+							<seg n="b">त्रयोऽस्माकं पाण्डवानां च सप्त ।</seg>
+						</l>
+						<l><seg n="c">द्व्यूना विंशतिराहताऽक्षौहिणीनां</seg>
+							<seg n="d">तस्मिन्सङ्ग्रामे भैरवे क्षत्रियाणाम् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-243" type="anuṣṭubh">
+						<l>तमस्त्वतीव विस्तीर्णं मोह आविशतीव माम् ।</l>
+						<l>संज्ञां नोपलभे सूत मनो विह्वलतीव मे ॥</l>
+						<l xml:id="adi-1-1-244x" rend="speak">सौतिरुवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-244" type="anuṣṭubh">
+						<l>इत्युक्त्वा धृतराष्ट्रोऽथ विलप्य बहु दुःखितः ।</l>
+						<l>मूर्च्छितः पुनराश्वस्तः संजयं वाक्यमब्रवीत् ॥</l>
+						<l xml:id="adi-1-1-245x" rend="speak">धृतराष्ट्र उवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-245" type="anuṣṭubh">
+						<l>संजयैवं गते प्राणांस्त्यक्तुमिच्छामि मा चिरम् ।</l>
+						<l>स्तोकं ह्यपि न पश्यामि फलं जीवितधारणे ॥</l>
+						<l xml:id="adi-1-1-246x" rend="speak">सौतिरुवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-246" type="anuṣṭubh">
+						<l>तं तथा वादिनं दीनं विलपन्तं महीपतिम् ।</l>
+						<l>निःश्वसन्तं यथा नागं मुह्यमानं पुनः पुनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-247">
+						<l><seg n="a">गावल्गणिरिदं धीमान्महार्थं वाक्यमब्रवीत् ।</seg>
+						</l>
+						<l xml:id="adi-1-1-247x" rend="speak">संजय उवाच ।</l>
+						<l><seg n="b">श्रुतवानसि वै राजन्महोत्साहान्महाबलान् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-248" type="anuṣṭubh">
+						<l>द्वैपायनस्य वदतो नारदस्य च धीमतः ।</l>
+						<l>महत्सु राजवंशेषु गुणैः समुदितेषु च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-249" type="anuṣṭubh">
+						<l>जातान्दिव्यास्त्रविदुषः शक्रप्रतिमतेजसः ।</l>
+						<l>धर्मेण पृथिवीं जित्वा यज्ञैरिष्ट्वाप्तदक्षिणैः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-250" type="anuṣṭubh">
+						<l>अस्मिँल्लोके यशः प्राप्य ततः कालवशं गतान् ।</l>
+						<l>शैब्यं महारथं वीरं सृंजयं जयतां वरम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-251" type="anuṣṭubh">
+						<l>सुहोत्रं रन्तिदेवं च काक्षीवन्तमतौशिजम् ।</l>
+						<l>बाह्लीकं दमनं चैद्यं शर्यातिमजितं नलम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-252" type="anuṣṭubh">
+						<l>विश्वामित्रममित्रघ्नमम्बरीषं महाबलम् ।</l>
+						<l>मरुत्तं मनुमिक्ष्वाकुं गयं भरतमेव च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-253" type="anuṣṭubh">
+						<l>रामं दाशरथिं चैव शशबिन्दुं भगीरथम् ।</l>
+						<l>कृतवीर्यं महाभागं तथैव जनमेजयम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-254" type="anuṣṭubh">
+						<l>ययातिं शुभकर्माणं देवैर्यो याजितः स्वयम् ।</l>
+						<l>`चैत्ययूपाङ्किता भूमिर्यस्येयं सवनाकरा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-255" type="anuṣṭubh">
+						<l>इति राज्ञां चतुर्विंशन्नारदेन सुरर्षिणा ।</l>
+						<l>पुत्रशोकाभितप्ताय पुरा श्वैत्याय कीर्तितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-256" type="anuṣṭubh">
+						<l>तेभ्यश्चान्ये गताः पूर्वं राजानो बलवत्तराः ।</l>
+						<l>महारथा महात्मानः सर्वैः समुदिता गुणैः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-257" type="anuṣṭubh">
+						<l>पूरुः कुरुर्यदुः शूरो विष्वगश्वो महाद्युतिः ।</l>
+						<l>अणुहो युवनाश्वश्च ककुत्स्थो विक्रमी रघुः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-258" type="anuṣṭubh">
+						<l>विजयो वीतिहोत्रोऽह्गो भवः श्वेतो बृहद्गुरुः ।</l>
+						<l>उशीनरः शतरथः कङ्को दुलिदुहो द्रुमः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-259" type="anuṣṭubh">
+						<l>दम्भोद्भवः परो वेनः सगरः संकृतिर्निमिः ।</l>
+						<l>अजेयः परशुः पुण्ड्रः शंभुर्देवावृधोऽनघः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-260" type="anuṣṭubh">
+						<l>देवाह्वयः सुप्रतिमः सुप्रतीको बृहद्रथः ।</l>
+						<l>महोत्साहो विनीतात्मा सुक्रतुर्नैषधो नलः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-261" type="anuṣṭubh">
+						<l>सत्यव्रतः शान्तभयः सुमित्रः सुबलः प्रभुः ।</l>
+						<l>जानुजङ्घोऽनरण्योऽर्कः प्रियभृत्यः शुचिव्रतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-262" type="anuṣṭubh">
+						<l>बलबन्धुर्निरामर्दः केतुशृङ्गो बृहद्बलः ।</l>
+						<l>धृष्टकेतुर्बृहत्केतुर्दीप्तकेतुर्निरामयः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-263" type="anuṣṭubh">
+						<l>अविक्षिच्चपलो धूर्तः कृतबन्धुर्दृढेषुधिः ।</l>
+						<l>महापुराणसंभाव्यः प्रत्यङ्गः परहा श्रुतिः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-264" type="anuṣṭubh">
+						<l>एते चान्ये च राजानः शतशोऽथ सहस्रशः ।</l>
+						<l>श्रूयन्ते शतशश्चान्ये सङ्ख्याताश्चैव पद्मशः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-265" type="anuṣṭubh">
+						<l>हित्वा सुविपुलान्भोगान्बुद्धिमन्तो महाबलाः ।</l>
+						<l>राजानो निधनं प्राप्तास्तव पुत्रैर्महत्तरः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-266" type="anuṣṭubh">
+						<l>येषां दिव्यानि कर्माणि विक्रमस्त्याग एव च ।</l>
+						<l>माहात्म्यमपि चास्तिक्यं सत्यं शौचं दयाऽर्जवम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-267" type="anuṣṭubh">
+						<l>विद्वद्भिः कथ्यते लोके पुराणैः कविसत्तमैः ।</l>
+						<l>सर्वर्द्धिगुणसंपन्नास्ते चापि निधनं गताः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-268" type="anuṣṭubh">
+						<l>तव पुत्रा दुरात्मानः प्रतप्ताश्चैव मन्युना ।</l>
+						<l>लुब्धा दुर्वृत्तभूयिष्ठा न ताञ्छोचितुमर्हसि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-269" type="anuṣṭubh">
+						<l>श्रुतवानसि मेधावी बुद्धिमान्प्राज्ञसंमतः ।</l>
+						<l>येषां शास्त्रानुगा बुद्धिर्न ते मुह्यन्ति भारत ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-270" type="anuṣṭubh">
+						<l>निग्रहानुग्रहौ चापि विदितौ ते नराधिप ।</l>
+						<l>नात्यन्तमेवानुवृत्तिः कार्या ते पुत्ररक्षणे ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-271" type="anuṣṭubh">
+						<l>भवितव्यं तथा तच्च नानुशोचितुमर्हसि ।</l>
+						<l>दैवं पुरुषकारेण को निवर्तितुमर्हति ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-272" type="anuṣṭubh">
+						<l>विधातृविहितं मार्गं न कश्चिदतिवर्तते ।</l>
+						<l>कालमूलमिदं सर्वं भावाभावौ सुखासुखे ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-273" type="anuṣṭubh">
+						<l>कालः सृजति भूतानि कालः संहरते प्रजाः ।</l>
+						<l>संहरन्तं प्रजाः कालं कालः शमयते पुनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-274" type="anuṣṭubh">
+						<l>कालो विकुरुते भावान्सर्वांल्लोके शुभाशुभान् ।</l>
+						<l>कालः संक्षिपते सर्वाः प्रजा विसृजते पुनः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-275" type="anuṣṭubh">
+						<l>कालः सुप्तेषु जागर्ति कालो हि दुरतिक्रमः ।</l>
+						<l>कालः सर्वेषु भूतेषु चरत्यविधतः समः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-276" type="anuṣṭubh">
+						<l>अतीतानागता भावा ये च वर्तन्ति सांप्रतम् ।</l>
+						<l>तान्कालनिर्मितान्बुद्ध्वा न संज्ञां हातुमर्हसि ॥</l>
+						<l xml:id="adi-1-1-277x" rend="speak">सौतिरुवाच । </l>
+					</lg>
+					<lg xml:id="adi-1-1-277" type="anuṣṭubh">
+						<l>इत्येवं पुत्रशोकार्तं धृतराष्ट्रं जनेश्वरम् ।</l>
+						<l>आश्वास्य स्वस्थमकरोत्सूतो गावल्गणिस्तदा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-278" type="anuṣṭubh">
+						<l>धृतराष्ट्रोऽपि तच्छ्रुत्वा धृतिमेव समाश्रयत् ।</l>
+						<l>दिष्ट्येदमागतमिति मत्त्वा स प्राज्ञसत्तमः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-279" type="anuṣṭubh">
+						<l>लोकानां च हितार्थाय कारुण्यान्मुनिसत्तमः ।</l>
+						<l>अत्रोपनिषदं पुण्यां कृष्णद्वैपायनोऽब्रवीत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-280">
+						<l><seg n="a">विद्वद्भिः कथ्यते लोके पुराणे कविसत्तमैः ।</seg>
+							<seg n="b">भारताध्ययनं पुण्यमपि पादमधीयतः ।</seg>
+						</l>
+						<l><seg n="c">श्रद्दधानस्य पूयन्ते सर्वपापान्यशेषतः ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="adi-1-1-281" type="anuṣṭubh">
+						<l>देवा देवर्षयो ह्यत्र तथा ब्रह्मर्षयोऽमलाः ।</l>
+						<l>कीर्त्यन्ते शुमकर्माणस्तथा यक्षा महोरगाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-282" type="anuṣṭubh">
+						<l>भगवान्वासुदेवश्च कीर्त्यतेऽत्र सनातनः ।</l>
+						<l>स हि सत्यमृतं चैव पवित्रं पुण्यमेव च ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-283" type="anuṣṭubh">
+						<l>शाश्वतं ब्रह्म परमं ध्रुवं ज्योतिः सनातनम् ।</l>
+						<l>यस्य दिव्यानि कर्माणि कथन्ति मनीषिणः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-284" type="anuṣṭubh">
+						<l>असत्सत्सदसच्चैव यस्माद्विश्वं प्रवर्तते ।</l>
+						<l>सन्ततिश्च प्रवृत्तिश्च जन्ममृत्युपुनर्भवाः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-285" type="anuṣṭubh">
+						<l>अध्यात्मं श्रूयतें यत्र पञ्चभूतगुणात्मकम् ।</l>
+						<l>अव्यक्तादि परं यच्च स एव परिगीयते ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-286" type="anuṣṭubh">
+						<l>यं ध्यायन्ति सदा मुक्ता ध्यानयोगबलान्विताः ।</l>
+						<l>प्रतिबिम्बमिवादर्शे पश्यन्त्यात्मन्यवस्थितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-287" type="anuṣṭubh">
+						<l>श्रद्दधानः सदा युक्तः सदा धर्मपरायणः ।</l>
+						<l>आसेवन्निममध्यायं नरः पापात्प्रमुच्यते ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-288" type="anuṣṭubh">
+						<l>अनुक्रमणिकाध्यायं भारतस्येममादितः ।</l>
+						<l>आस्तिकः सततं शृण्वन्न कृच्छ्रेष्ववसीदति ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-289" type="anuṣṭubh">
+						<l>उभे सन्ध्ये जपन्किंचित्सद्यो मुच्येत किल्बिषात् ।</l>
+						<l>अनुक्रमण्या यावत्स्यादह्नारात्र्या च संचितम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-290" type="anuṣṭubh">
+						<l>भारतस्य वपुर्ह्येतत्सत्यं चामृतमेव च ।</l>
+						<l>नवनीतं यथा दध्नो द्विपदां ब्राह्मणो यथा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-291" type="anuṣṭubh">
+						<l>आरण्यकं च वेदेभ्य ओषधिभ्योऽमृतं यथा ।</l>
+						<l>ह्रदानामुदधिः श्रेष्ठो गौर्वरिष्ठा चतुष्पदाम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-292" type="anuṣṭubh">
+						<l>यथैतानीतिहासानां तथा भारतमुच्यते ।</l>
+						<l>यश्चैनं श्रावयेच्छ्राद्धे ब्राह्मणान्पादमन्ततः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-293" type="anuṣṭubh">
+						<l>अक्षय्यमन्नपानं वै पितृंस्तस्योपतिष्ठते ।</l>
+						<l>इतिहासपुराणाभ्यां वेदं समुपबृंहयेत् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-294" type="anuṣṭubh">
+						<l>बिभेत्यल्पश्रुताद्वेदो मामयं प्रतरिष्यति ।</l>
+						<l>कार्ष्णं वेदमिमं विद्वाञ्श्रावयित्वार्थमश्नुते ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-295" type="anuṣṭubh">
+						<l>भ्रूणहत्यादिकं चापि पापं जह्यादसंशयम् ।</l>
+						<l>य इमं शुचिरध्यायं पठेत्पर्वणि पर्वणि ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-296" type="anuṣṭubh">
+						<l>अधीतं भारतं तेन कृत्स्नं स्यादिति मे मतिः ।</l>
+						<l>यश्चैनं शृणुयान्नित्यमार्षं श्रद्धासमन्वितः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-297" type="anuṣṭubh">
+						<l>स दीर्घमायुः कीर्तिं च स्वर्गतिं चाप्नुयान्नरः ।</l>
+						<l>एकतश्चतुरो वेदा भारतं चैतदेकतः ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-298" type="anuṣṭubh">
+						<l>पुरा किल सुरैः सर्वैः समेत्य तुलया धृतम् ।</l>
+						<l>चतुर्भ्यः सरहस्येभ्यो वेदेभ्यो ह्यधिकं यदा ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-299" type="anuṣṭubh">
+						<l>तदाप्रभृति लोकेऽस्मिन्महाभारतमुच्यते ।</l>
+						<l>महत्त्वे च गुरुत्वे च ध्रियमाणं यतोऽधिकम् ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-300" type="anuṣṭubh">
+						<l>महत्त्वाद्भारवत्त्वाच्च महाभारतमुच्यते ।</l>
+						<l>निरुक्तमस्य यो वेद सर्वपापैः प्रमुच्यते ॥</l>
+					</lg>
+					<lg xml:id="adi-1-1-301">
+						<l><seg n="a">तपो नकल्कोऽध्ययनं नकल्कः</seg>
+							<seg n="b">स्वाभाविको वेदविधिर्नकल्कः ।</seg>
+						</l>
+						<l><seg n="c">प्रसह्य वित्ताहरणं नकल्क-</seg>
+							<seg n="d">स्तान्येव भावोपहतानि कल्कः ॥</seg>
+						</l>
+					</lg>
+					<p> इति श्रीमन्माहाभारते आदिपर्वणि अनुक्रमणिकापर्वणि प्रथमोऽध्यायः ॥ 1 ॥ ॥
+						अनुक्रमणिकापर्व समाप्तम् ॥ </p>
+
+					<p rend="footnotes"> 1-1-1 श्रीलक्ष्मीनृसिंहाय नमः ॥ श्रीहयग्रीवाय नमः ॥
+						श्रीवेदव्यासाय नमः ॥ इह खलु भगवान्पाराशर्यः परमकारुणिको म्दमतीननुग्रहीतुं
+						चतुर्दशविद्यास्थानान्येकत्र दिदर्शयिषुर्महाभारताख्यमितिहासं
+						प्रणेष्यन्प्रारिप्सितस्य निष्प्रत्यूहारिपूरणाय प्रचयगमनाय च मङ्गलं रचयन्
+						शिष्यशिक्षायै लोकरूपेम निबघ्नन्नर्यात्तत्र प्रेक्षावत्प्रवृत्त्यङ्गमभिधेयादि
+						दर्शयति ॥ नारायणमिति ॥ नरोत्तमं पुरुषोत्तमं नारायणं नरं देवी सरस्वतीं
+						(व्यासं) चैव नमस्कृत्य जयं भारताख्यमितिहासं उदीरयेत् ॥ 1-1-2
+						लक्षालङ्कारव्याख्यानरीत्यायमाद्यः श्लोकः ॥ 1-1-3 कतिपयकोशरीत्यायस्पद्यः ॥ 3 ॥ 1-1-5 रोमहर्षणपुत्रः रोमाणि हर्षयाञ्चके श्रोतॄणा यः स्वभाषितैः । कर्मणा
+						प्रथितस्तेन रोमहर्षणसंज्ञया । इति कौर्मे निरुक्तार्थनाम्नः पुत्रः । अग्रश्रवाः
+						उग्रस्य नृसिंहस्य श्रवः श्रवणं यस्य सः । पौराणिकः पुराणे कृतश्रमः ।
+						नैमिशारण्ये वायवीये । एतन्मनोमयं चक्रं मया सृष्टं विसृज्यते । यत्रास्य शीर्यते
+						नेमिः स देशस्तपसः शुभः । इत्युक्त्वा सूर्यसंकाशं चक्रं सृष्ट्वा मनोमयम् ।
+						प्रणिपत्य महादेवं विससर्ज पितामहः । तेपि हृष्टतरा विप्राः प्रणम्य जगतां
+						प्रभुम्. प्रययुस्तस्य चक्रस्य यत्र नेमिर्व्यशीर्यत । तद्वनं तेन विख्यातं
+						नैमिशं मुनिपूजितम् । इति उक्तरूपे । नैमिषेति पाठे तु वाराहे । एवं कृत्वा ततो
+						देवो मुनि गौरमुखं तदा । उवाच निमिषेणेदं निहतं दानवं बलं ।
+						अरण्येऽस्मिंस्ततस्त्वेतन्नैमिषारण्यसंज्ञितं । इति निर्वचनं द्रष्टव्यं ।
+						शुनकस्य मुनेरपत्यं शौनकः । कुलपतेः । एको दशसहस्राणि योऽन्नदानादिना भरेत् । स वै
+						कुलपतिः इत्युक्तलक्षणस्य । सत्रे ये यजमानास्तएव ऋत्विजो यस्मिन्बहुकर्तृके
+						क्रतौ स सत्रसंज्ञ तस्मिन् ॥ 5 ॥ 1-1-7 नैमिशारण्यवासिनः
+						तान्सर्वानृषीनुवाचेत्यन्वयः ॥ 7 ॥ 1-1-8 अहं तपोधनाः सिकीः सर्वाः कथा वेद
+						जानामि ॥ 8 ॥ 1-1-11 निर्दिष्टं इहोपविश्यतामिति दर्शितम् ॥ 11 ॥ 1-1-12
+						प्रस्तावयन् उपोद्धातयन् ॥ 12 ॥ 1-1-13 विहृतः नीतः ॥ 13 ॥ 1-1-14 तेषां
+						मुनीनां चादन्येषां राजादीनां च यानि चरितानि तेषामाश्रयभूतम् । भावितात्मनां
+						शोधितचित्तानाम् ॥ 14 ॥ 1-1-18 समन्तपञ्चकं समन्तात् पञ्चकं
+						परशुरामकृतहृदपञ्चकं यस्मिंस्तत् । स्यमन्तपञ्चकमित्यपि पाठो दृश्यते ॥ 18 ॥ 1-1-21 ब्रवीमि किमहं द्विजाः अहं च पुराणादिष्वन्यतमं किं ब्रवीमि
+						तदाज्ञापयतेति शेषः ॥ 21 ॥ 1-1-25 संस्कारोपगतां पदादिव्युत्पत्तिमतीम् ।
+						ब्राह्मो वाचं । ब्राह्मी तु भारती भाषेत्यमरः ॥ 25 ॥ 1-1-28 मङ्गलाचरणपूर्वकं
+						मुनिभिः प्रार्थितमर्थं वक्तुं प्रतिजानीते आद्यमित्यदिचतुर्भिः । हरिं
+						नमस्कृत्य महर्षेर्मतं प्रवक्ष्यामीत्यन्वयः । पुरुहूतं पुरुभिर्बहुभिर्होतृभिः
+						हूतं आहूतं । पुरुभिः सामगैः स्तुतं । ऋतं सत्यं । एकश्चासावक्षरश्च तं । एकं
+						अद्वितीयं समाधिकरहितमिति वा । अक्षरं नाशरहितं । व्यख्यव्यक्तं रामकृष्णादिरूपेण
+						दृश्यं । ज्ञानानन्दादिरूपेण मन्देरदृश्यं ॥ 28 ॥ 1-1-30 मङ्गल्यं मङ्गलप्रदं ॥ 30 ॥ 1-1-36 ज्ञानं ज्ञानसाधनं इदं भारत त्रिषु लोकेषु प्रतिष्ठितम् ॥ 36 ॥ 1-1-37 समयैः संकेतैः । छन्दोवृत्तैः
+						त्रिष्टुबादिछन्दोन्तीतैरिन्द्रवज्रादिभिर्वृत्तैः ॥ 37 ॥ 1-1-45 यस्मिन्
+						ब्रह्माण्डे ॥ 45 ॥ 1-1-52 प्रतिकल्पं सृष्टेः समाननामरूपत्वमाह यथेति ॥ 52 ॥ 1-1-53 कल्पानामानन्त्यमाह एवमिति ॥ 53 ॥ 1-1-54 एवं जडसृष्टिमुक्त्वा
+						चेतनसृष्टिमाह त्रयन्निंशदिति ॥ 54 ॥ 1-1-61 भूतस्थानानि नृणां वासस्थानानि
+						नगरादीनि ॥ 61 ॥ 1-1-64 इह सर्वमनुकान्तं अनुकमेण उक्तं ॥ 64 ॥ 1-1-65 समासः
+						सङ्क्षेपः । व्यासो विस्तारः ॥ 65 ॥ 1-1-66 भारतारम्भे मतभेदमाह मन्वादीति ।
+						मन्वादि मनुर्मन्त्रः नारायणं नमस्कृत्येति । ॐ नमो भगवते वासुदेवायेति वा
+						तदादि । प्रस्तीकं आस्तीकचरितं तदादि । उपरिचरो वसुः तच्चरितादि वा ॥ 66 ॥ 1-1-67 बह्वर्थत्वाद्विविधं संहिताज्ञानं दीपयन्ति प्रकाशयन्ति ॥ 67 ॥ 1-1-69
+						महुः सत्यवत्याः । गाङ्गेयस्य भीष्मस्य ॥ 69 ॥ 1-1-70 क्षत्र भार्यासु
+						अम्बिकादिषु ॥ 70 ॥ 1-1-71 परमां गतिं मृत्युं ॥ 71 ॥ 1-1-73 शशासं त्वममन्
+						भारतं श्रावयेत्याज्ञापितवान् ॥ 73 ॥ 1-1-84 वसोः अपत्यं स्त्री वास्त्री
+						तस्याः अपत्यं वासवेयो व्यासः ॥ 84 ॥ 1-1-85 कृष्णो व्यासः ॥ 85 ॥ 1-1-98
+						विशेषणे अतिशायने ॥ 98 ॥ 1-1-104 विटङ्काः पक्ष्युपवेशनस्थानानि ॥ 104 ॥ 1-1-105 सारो मज्जा ॥ 105 ॥ 1-1-106 विश्रामः छाया ॥ 106 ॥ 1-1-108
+						आश्रमस्थानसंश्रयः आश्रमवासिकस्यण्डिलः । मौसलश्रुतिसंक्षेपः मौसलादिग्रन्थः
+						श्रुतिस्थानीयदीर्घशाखान्तः ॥ 108 ॥ 1-1-112 यतः यत्र देशे ॥ 112 ॥ 1-1-115
+						अबुद्ध्वा अर्थमिति शेषः । ओमित्यङ्गीकारे ॥ 115 ॥ 1-1-116 अन्थग्रन्थिं
+						ग्रन्थे दुर्भेद्यस्थानं ॥ 116 ॥ 1-1-131 कृच्छ्रां आपदं व्यवायकाले
+						मरिष्यसीत्येवं शापरूपां । तत्र आपदि एवं सत्यामपि पार्थानां पाण्डवानां
+						जन्मप्रभृति आचारविधिक्रमः अभूदिति शेषः ॥ 131 ॥ 1-1-132 आचारविधिक्रममेवाह ।
+						मात्रोरिति । मात्रोः कुन्तीमाद्योः । धर्मोपनिषदं प्रति आपदि अपत्यार्थे
+						विशिष्टः पुमान्प्रार्थनीय इत्येवरूपं धर्मरहस्यं प्रति । अभ्युपपत्तिः
+						अङ्गीकारः ॥ 132 ॥ 1-1-137 धार्तराष्ट्रान्धृतराष्ट्रसंबन्धिगृहान् ॥ 137 ॥ 1-1-142 अन्तर्हितानां भूतानां निःस्वनः पाण्डुपुत्रा एवैते इत्येवंरूपा
+						अशरीरवाक् ॥ 142 ॥ 1-1-148 भर्तारं स्वयमेव वृणुत इति भर्तृस्वयंवरां ॥ 148 ॥ 1-1-150 राज्ञो युधिष्ठिरस्य ॥ 150 ॥ 1-1-157 अनभिजातवत् ग्रामीणवत् ॥ 157 ॥ 1-1-160 धृतराष्ट्रो यद्विवादानन्वमोदत यच्चानयानुपैक्षत तस्माद्वासुदेवस्य
+						कोपः समभवत् ॥ 160 ॥ 1-1-161 दहन् अदहत् ॥ 161 ॥ 1-1-173 प्रवृष्टं वर्षणे
+						प्रवृत्तं ॥ 173 ॥ 1-1-181 चेष्टाः बाहुवीक्षणाद्याः ॥ 181 ॥ 1-1-182
+						स्नातकानां समापितविद्याव्रतानां ब्राह्मणानां ॥ 182 ॥ 1-1-185 शंसितं
+						प्रशस्यं ॥ 185 ॥ 1-1-197 इमां गां पृथिवीं यस्य वासुदेवस्य एकं विक्रमं
+						पदमात्रमाहुः ॥ 197 ॥ 1-1-198 यौ नरनारायणौ ब्रह्मलोके अहं द्रष्टा अद्राक्षं
+						तौ कृष्णार्जुनौ अर्जुनकृष्णौ इति वदतो नारदस्य नारदात् ॥ 198 ॥ 1-1-200 बहुधा
+						विश्वरूपत्वेन ॥ 200 ॥ 1-1-202 तेषां पाण्डवानां ॥ 202 ॥ 1-1-209 सोमकानेव
+						अल्पशेषान्कृत्वा ॥ 209 ॥ 1-1-210 चोदितमर्जुनं च । गां भित्त्वाम्बो
+						वारुणेनाददाने इति पाठान्तरं ॥ 210 ॥ 1-1-223 व्यंसितां व्यर्थीकृतां ॥ 223 ॥ 1-1-237 क्रुद्धेनैषीकं चावधीद्यन्न गर्भं इति पाठान्तरम् ॥ 1-1-280 पूयन्ते
+						नश्यन्ति ॥ 280 ॥ 1-1-294 कार्ष्णं कृष्णेन व्यासेन प्रोक्तं ॥ 294 ॥ 1-1-301
+						ननु वेदेभ्यः कथमिदमधिकं अत्र युद्धप्रधानानां कर्मणां बन्धनहेतूनां
+						कथनादुपनिषदि तावन्मोक्षसाधनानां धर्माणां ब्रह्मणश्च प्रतिपादनादिति
+						चेत्तत्राह । तप इति । तपः कृच्छ्रचान्द्रायणादि नकल्कः पापनाशकं । स्वाभाविकः
+						स्वस्ववर्णाश्रमादिपुरस्कारेण विहितः । वेदविधिः वेदोक्तो विधिः
+						सन्ध्योपासनादिः । प्रसह्य प्रकर्षेण सोढ्वा क्षुधादिदुःखमपि सोढ्वा । वित्तस्य
+						आहरणं शिलोञ्छादिना अर्जनं । तान्येव तपआदीन्येव भावेन फलानुसन्धानेन उपहतानि
+						प्रतिषिद्धानि । कल्कः पापहेतुः । तथाचात्रापि मोक्षधर्मादिषु तत्रतत्र
+						निष्कामकर्मणां प्रतिपादनं ब्रह्मनिरूपणं चास्त्येव । अतो वेदादप्युत्तमं
+						भारतं ॥ 301 ॥ इति टिप्पणे प्रथमोऽध्यायः ॥ 1 ॥ <!-- mahabharatam-Kumbakonam-T.R. Krishnacharya Edition 1906-10 -->
+						<!-- #### new file: ./01 adiparva/MB-a_Adi_ch002 -->
+						<!-- Mahabharatam-Kumbakonam_T.R. Krishnacharya Edition 1906-10 -->
+						<!-- adiparva -->
+					</p>
+				</div>
+			</div>
+			<div xml:id="svargārohaṇaparva" n="18">
+				<head>स्वर्गारोहणपर्व</head>
+				<!-- #### new file: ./18 swargarohana_parva/MB-a_Swarga_ch001 -->
+				<p rend="śrī">श्रीः</p>
+				<!-- Mahabharatam -Kumbhakonam-TRKrishnacharya Edition 1906-10 -->
+				<!-- sec change Swargarohana parva -->
+
+				<div xml:id="svargārohaṇaparva__adhyāya_001">
+					<head>अध्यायः 001</head>
+
+					<p rend="topic"> स्वर्गं गतेन युधिष्ठिरेण तत्र महासमुच्छ्रयेण
+						शोभमानदुर्योधनदर्शनम् ॥ 1 ॥ तथा तदुस्कर्षासहिष्णुतया तदीयदोषो द्धाटनेन तेन
+						सह स्वन स्वर्गवासानभिरोचननिवेदनपूर्वकं नारदंप्रति स्वस्य
+						भ्रात्रादिदिदृक्षानिवेदनम् ॥ 2 ॥ </p>
+
+					<lg xml:id="svargArohana-18-1-0">
+					  <l xml:id="svargArohana-18-1-0x">श्रीवेदव्यासाय नमः ।</l>
+					  <l>नारायणं नस्कृत्य नरं चैव नरोत्तमम् ।</l>
+					  <l>देवीं सरस्वतीं व्यासं ततो जयमुदीरयेत् ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-1" type="anuṣṭubh">
+					  <l xml:id="svargArohana-18-1-1x" rend="speak">जनमेजय उवाच । </l>
+					  <l>स्वर्गं त्रिविष्टपं प्राप्य मम पूर्वपितामहाः ।</l>
+					  <l>पाण्डवा धार्तराष्ट्राश्च कानि स्थानानि भेजिरे ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-2" type="anuṣṭubh">
+						<l>एतदिच्छाम्यहं श्रोतुं सर्वविच्चासि मे मतः ।</l>
+						<l>महर्षिणाऽभ्यनुज्ञातो व्यासेनाद्भुतकर्मणा ॥</l>
+						<l xml:id="svargArohana-18-1-3x" rend="speak">वैशम्पायन उवाच । </l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-3" type="anuṣṭubh">
+						<l>स्वर्गं त्रिविष्टपं प्राप्य तव पूर्वपितामहाः ।</l>
+						<l>युधिष्ठिरप्रभृतयो यदकुर्वत तच्छृणु ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-4" type="anuṣṭubh">
+						<l>स्वर्गं त्रिविष्टपं प्राप्य धर्मराजो युधिष्ठिरः ।</l>
+						<l>दुर्योधनं श्रिया जुष्टं ददर्शासीनमासने ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-5" type="anuṣṭubh">
+						<l>भ्राजमानमिवादित्यं वीरलक्ष्म्याऽभिसंवृतम् ।</l>
+						<l>देवैर्भ्राजिष्णुभिः साध्यैः सहितं पुण्यकर्मभिः ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-6" type="anuṣṭubh">
+						<l>ततो युधिष्ठिरो राजा दुर्योधनममर्षितः ।</l>
+						<l>सहसा सन्निवृत्तोऽभूच्छ्रियं दृष्ट्वा सुयोधने ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-7" type="anuṣṭubh">
+						<l>ब्रुवन्नुच्चैर्वचस्तान्वै नाहं दुर्योधनेन वै ।</l>
+						<l>सहितः कामये लोकाँल्लब्धेनादीर्घदर्शिना ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-8" type="anuṣṭubh">
+						<l>यत्कृते पृथिवी सर्वा सुहृदो बान्धवास्तथा ।</l>
+						<l>हतास्माभिः प्रसह्याजौ किल्ष्टैः पूर्वं महावने ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-9" type="anuṣṭubh">
+						<l>द्रौपदी च सभामध्ये पाञ्चाली धर्मचारिणी ।</l>
+						<l>पर्याकृष्टाऽनवद्याङ्गी पत्नी नो गुरुसन्निधौ ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-10" type="anuṣṭubh">
+						<l>अस्ति देवा न मे कामः सुयोधनमुदीक्षितुम् ।</l>
+						<l>तत्राहं गन्तुमिच्छामि यत्र ते भ्रातरो मम ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-11" type="anuṣṭubh">
+						<l>नैवमित्यब्रवीत्तं तु नारदः प्रहसन्निव ।</l>
+						<l>स्वर्गे निवासे राजेन्द्र विरुद्धं चापि नश्यति ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-12" type="anuṣṭubh">
+						<l>युधिष्ठिर महाबाहो मैवं वोचः कथञ्चन ।</l>
+						<l>दुर्योधनं प्रति नृपं शृणु चेदं वचो मम ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-13">
+						<l><seg n="a">एष दुर्योधनो राजा पूज्यते त्रिदशैः सह ।</seg>
+							<seg n="b">सद्भिश्च राजप्रवरैते इमे स्वर्गवासिनः ।</seg>
+						</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-14" type="anuṣṭubh">
+						<l>वीरलोकगतिं प्राप्ता युद्धे हुत्वाऽऽत्मनस्तनुम् ।</l>
+						<l>यूयं सर्वे सुरसमा येन युद्धेन बाधिताः ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-15" type="anuṣṭubh">
+						<l>स एष क्षत्रधर्मेण स्थानमेतदवाप्तवान् ।</l>
+						<l>भये महति योऽभीतो बभूव पृथिवीपतिः ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-16" type="anuṣṭubh">
+						<l>न तन्मनसि कर्तव्यं पुत्र यद्द्यूतकारितम् ।</l>
+						<l>द्रौपद्याश्च परिक्लेशं न चिन्तयितुमर्हसि ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-17" type="anuṣṭubh">
+						<l>ये चान्येऽपि परिक्लेशा युष्माकं ज्ञातिकारिताः ।</l>
+						<l>संग्रामेष्वथवाऽन्यत्र न तान्संस्मर्तुमर्हसि ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-18" type="anuṣṭubh">
+						<l>समागच्छ यथान्यायं राज्ञा दुर्योधनेन वै ।</l>
+						<l>स्वर्गोऽयं नेह वैराणि भन्ति मनुजाधिप ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-19" type="anuṣṭubh">
+						<l>नारदेनैवमुक्तस्तु कुरुराजो युधिष्ठिरः ।</l>
+						<l>भ्रातॄन्पप्रच्छ मेधावी वाक्यमेतदुवाच ह ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-20" type="anuṣṭubh">
+						<l>यदि दुर्योधनस्यैते वीरलोकाः सनातनाः ।</l>
+						<l>अधर्मज्ञस्य पापस्य पृथिवीसुहृदद्रुहः ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-21" type="anuṣṭubh">
+						<l>यत्कृते पृथिवी नष्टा सहसा सनरद्विपा ।</l>
+						<l>वयं च मन्युना दग्धा वैरं प्रतिचिकीर्षवः ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-22">
+						<l><seg n="a">ये ते वीरी महात्मानो भ्रातरो मे महाव्रताः ।</seg>
+							<seg n="b">सत्यप्रतिज्ञा लोकस्य शूरा वै सत्यवादिनः ।</seg>
+						</l>
+						<l><seg n="c">तेषामिदानीं के लोका द्रष्टुमिच्छामि तानहम् ॥</seg>
+						</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-23" type="anuṣṭubh">
+						<l>कर्णं चैव महात्मानं कौन्तेयं सत्यसङ्गरम् ।</l>
+						<l>धृष्टद्युम्नं सात्यकिं च धृष्टद्युम्नस्य चात्मजान् ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-24" type="anuṣṭubh">
+						<l>ये च शस्त्रैर्वधं प्राप्ताः क्षत्रधर्मेण पार्थिवाः ।</l>
+						<l>क्वनु ते पार्थिवान्ब्रह्मन्नैतान्पश्यामि नारद ॥</l>
+					</lg>
+					<lg xml:id="svargArohana-18-1-25">
+						<l><seg n="a">विराटद्रुपदौ चैव धृष्टकेतुमुखांश्च तान् ।</seg>
+							<seg n="b">शिखण्डिनं च पाञ्चाल्यं द्रौपदेयांश्च सर्वशः ।</seg>
+						</l>
+						<l><seg n="c">अभिमन्युं च दुर्धर्षं द्रष्टुमिच्छामि नारद ॥ ॥</seg></l>
+					</lg>
+					<p> इति श्रीमन्महाभारते स्वर्गारोहणपर्वणि प्रथमोऽध्यायः ॥ 1 ॥ </p>
+
+					<p rend="footnotes"> 7-1-1 त्रीणि विष्टपानि भुवनानि
+						फलोत्कर्षवशाद्यत्रान्तर्भवन्ति तादृशं स्वर्गं प्राप्य ॥ 7-1-6 तत इति ।
+						स्वर्गेऽप्यमर्षो दुस्त्यज इति संस्काराणां प्राबल्यमुक्तम् ॥ 7-1-9 हताः
+						अस्माभिः संधिरार्षः ॥ 7-1-11 विरुद्धं वैरादिकं नश्यति अन्तर्धीयते ॥ 7-1-20
+						सुहृद इत्यदन्तः शब्दः ॥ </p>
+
+					<!-- end of adhyāya -->
+					<!-- sec change Swargarohana parva -->
+					<!-- Mahabharatam-Kumbhakonam-TRKrishnacharya Edition 1906-10 -->
+					<!-- #### new file: ./18 swargarohana_parva/MB-a_Swarga_ch002 -->
+					<p rend="śrī">श्रीः</p>
+					<!-- Mahabharatam -Kumbhakonam-TRKrishnacharya Edition 1906-10 -->
+					<!-- sec change Swargarohana parva -->
+				</div>
+			</div>
+		</body>
+	</text>
+</TEI>
