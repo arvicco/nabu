@@ -128,13 +128,21 @@ module Nabu
     # adapters override to true.
     def self.reflex_bearing? = false
 
-    # Does this adapter's parsed metadata carry `related:` reference targets
-    # the links journal should hold as kind=reference edges (P19-4, the
-    # local-library manifests)? Declared HERE — beside content_kind and
-    # reflex_bearing?, the other capability flags — so SyncRunner can
-    # refresh Nabu::LibraryReferences after every load without special-
-    # casing slugs. Default false; the local-library shelf overrides.
+    # Does this adapter's parsed data carry reference targets the links
+    # journal should hold as kind=reference edges (P19-4, the local-library
+    # manifests' related: urns; P25-0, CorPH's DIL headword ids)? Declared
+    # HERE — beside content_kind and reflex_bearing?, the other capability
+    # flags — so SyncRunner can refresh the source's reference producer
+    # after every load without special-casing slugs. Default false.
     def self.reference_edges? = false
+
+    # The producer SyncRunner runs for a reference_edges? source (P25-0):
+    # anything with #run(slug) returning a LibraryReferences::Result-shaped
+    # value. Default: the P19-4 manifest-related: producer; an adapter whose
+    # reference edges come from elsewhere (corph's token DIL ids) overrides.
+    def self.reference_producer(catalog:, journal:)
+      LibraryReferences.new(catalog: catalog, journal: journal)
+    end
 
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
