@@ -130,7 +130,8 @@ module Nabu
 
     # Does this adapter's parsed data carry reference targets the links
     # journal should hold as kind=reference edges (P19-4, the local-library
-    # manifests' related: urns; P25-0, CorPH's DIL headword ids)? Declared
+    # manifests' related: urns; P25-0, CorPH's DIL headword ids; P25-1,
+    # riig's RIG sigla and ogham's dil.ie word links)? Declared
     # HERE — beside content_kind and reflex_bearing?, the other capability
     # flags — so SyncRunner can refresh the source's reference producer
     # after every load without special-casing slugs. Default false.

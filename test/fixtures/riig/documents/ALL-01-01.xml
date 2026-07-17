@@ -1,0 +1,844 @@
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="R287">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Pierre de Néris-les-Bains</title>
+				<title type="corpus">RIIG</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>RIIG</edition>
+				<respStmt>
+					<resp>First editor</resp>
+					<persName key="MLE">Michel Lejeune</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Project coordinator and contributor</resp>
+					<persName key="CRD">Coline Ruiz Darasse</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="HBT">Hugo Blanchet</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="MEN">María José Estarán</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="AMN">Alex Mullen</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Metadata</resp>
+					<resp>TEI encoding</resp>
+					<persName key="NCR">Nolwenn Chevalier</persName>
+				</respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<authority>UMR 5607 - Ausonius</authority>
+				<idno type="filename">ALL-01-01</idno>
+				<idno type="corpus-number">0</idno>
+				<date when="2022">2022</date>
+				<availability>
+					<licence target="http://creativecommons.org/licenses/by/4.0/">Cette œuvre est mise à disposition selon les termes de la <ref target="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</ref>. </licence>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note/>
+			</notesStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						<country>
+                            <placeName ref="https://sws.geonames.org/3017382/" type="modern">France</placeName>
+                        </country>
+						<region>
+                            <placeName ref="https://sws.geonames.org/3012874/" type="modern">Île-de-France</placeName>
+                        </region>
+						<settlement>
+                            <placeName ref="https://sws.geonames.org/2968815/" type="modern">Paris</placeName>
+                        </settlement>
+						<repository ref="https://sws.geonames.org/8504622/">Musée de Cluny</repository>
+						<collection/>
+						<idno type="invNo">Cl. 3172</idno>
+						<idno type="TM">218869</idno>
+						<idno type="localID">L6</idno>
+						<altIdentifier>
+							<idno type="localID">L-6</idno>
+						</altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary resp="#RIIG" corresp="https://ausohnum.huma-num.fr/concept/c26683">Indéterminé</summary>
+						<textLang mainLang="xtg-Latn"/>
+					</msContents>
+					<physDesc>
+						<objectDesc>
+							<supportDesc>
+								<support>
+									<desc resp="#MLE">
+                                        <objectType corresp="https://ark.frantiq.fr/ark:/26678/pcrt7HbtemJhVu">Plaque</objectType> de pierre en <material ref="https://opentheso.huma-num.fr/api/ark:/76609/genepi0t98d6272jf5c4j5p4lk-s">grès</material> brunâtre, de contexture extrêmement grossière (et, par là, bien malencontreusement choisi comme support de gravure). Le bloc constitue un parallélépipède approximatif, à arêtes mousses. Dim. max. : <dimensions unit="cm">
+											<width max="31">31</width>
+										</dimensions> cm de large × <dimensions unit="cm">
+											<height max="28">28</height>
+										</dimensions> cm de haut × <dimensions unit="cm">
+											<depth max="16">16</depth>
+										</dimensions> cm d'épaisseur. Une des deux faces principales, approximativement carrée, porte un texte gaulois en alphabet latin. </desc>
+								</support>
+								<condition>Pierre complète ; inscription <rs corresp="https://www.eagle-network.eu/voc/statepreserv/lod/4" type="statPreserv">endommagée</rs>. </condition>
+							</supportDesc>
+							<layoutDesc>
+								<layout>
+									<desc resp="#MLE">Le champ inscrit, <rs corresp="https://www.eagle-network.eu/voc/writing/lod/3" type="writing">gravé</rs> (<dimensions unit="cm">
+                                            <height>24</height>
+										</dimensions> cm de haut × <dimensions unit="cm">
+											<width>23</width>
+										</dimensions> cm de large), a été évidé en réservant un encadrement large en moyenne de <dimensions unit="cm">
+											<dim type="length">2,5</dim>
+                                        </dimensions> cm et faisant saillie de <dimensions unit="cm">
+											<dim type="length">0,5</dim>
+                                        </dimensions> cm environ. L'inscription est pratiquement tangente au cadre à gauche, en haut et à droite. Elle se répartit sur cinq lignes (faibles interlignes de <dimensions unit="mm">
+											<height min="5">5</height>
+                                        </dimensions> mm à <dimensions unit="mm">
+                                            <height max="10">10</height>
+										</dimensions> mm), plus le début d'une sixième : le graveur, n'ayant pu terminer son texte avec la l.5, a rejeté trois lettres dans la bande qui demeurait libre entre les pieds de lettres de la l.5 et le cadre. </desc>
+								</layout>
+							</layoutDesc>
+						</objectDesc>
+						<handDesc>
+							<handNote scribe="unknown">
+								<desc resp="#MLE">
+                                    <rs key="capital" type="execution">Lettres capitales</rs> d'environ <dimensions unit="mm">
+										<height>30</height>
+									</dimensions> mm de haut aux lignes 1 et 5, d'environ <dimensions unit="mm">
+										<height>35</height>
+									</dimensions> mm aux lignes 2, 3, 4 ; <dimensions unit="mm">
+										<height>20</height>
+									</dimensions> à la ligne 5. </desc>
+							</handNote>
+						</handDesc>
+						<scriptDesc>
+							<scriptNote/>
+						</scriptDesc>
+					</physDesc>
+					<history>
+						<origin>
+							<origDate notBefore="0001" notAfter="0100" corresp="http://n2t.net/ark:/99152/p09hq4ndm7n" cert="high" evidence="lettering" resp="#MLE">I<hi rend="superscript">er</hi> siècle</origDate>
+							<origPlace type="found">
+								<country ref="https://www.trismegistos.org/place/693">France</country>
+								<region>Auvergne-Rhône-Alpes</region>
+								<district>Allier</district>
+								<settlement corresp="www.trismegistos.org/place/23219" ref="https://riig.huma-num.fr/places/168">
+                                    <placeName type="modern" xml:lang="fr">Néris-les-Bains</placeName>
+                                    <placeName type="ancient" xml:lang="xtg">Neriomagus</placeName>
+                                    <placeName type="ancient" xml:lang="la">Aquae Neri</placeName>
+                                </settlement>
+								<placeName ref="https://www.trismegistos.org/place/19858" type="provinceItalicRegion">Lugdunensis</placeName>
+								<placeName type="ethnic">Bituriges Cubi</placeName>
+								<placeName ref="https://riig.huma-num.fr/places/169">Camp Romain</placeName>
+								<location cert="medium" resp="#MLE">
+									<geo decls="#WGS84">46,2856 2,6556</geo>
+								</location>
+							</origPlace>
+						</origin>
+						<provenance resp="#MLE" type="found">
+							<rs type="circumstances">Pierre trouvée fortuitement en (ou peu avant) <date type="found" when="1836">1836</date> à la sortie nord-ouest de <placeName type="ancientFindspot">Néris</placeName> au lieu-dit « Camp Romain ». </rs>
+							<rs type="context">Les recherches faites entre 1970 et 1985 ne concernent pas la zone intéressée par la trouvaille fortuite de notre pierre au siècle dernier. Elle fut faite au lieu-dit (de dénomination impropre) « Camp Romain ». Si notre pierre appartenait bien originellement au Camp, où il a été trouvé ; on peut cependant se demander si ce réduit escarpé est un site plausible de sépulture. </rs>
+							<rs type="micro-context"/>
+							<rs type="datation" resp="#MLE">L'écriture ne disconvient pas au I<hi rend="superscript">er</hi> siècle : c'est le seul indice (imprécis) que nous ayons pour dater le document, en l'absence de tout contexte archéologique.</rs>
+						</provenance>
+						<provenance resp="#MLE" subtype="reported" type="observed">
+							<p>L'histoire de la pierre, jusqu'ici fort confuse, redevient nette à travers les documents suivants : </p>
+							<p>
+                                <label>a)</label>Lettre (inédite) de <persName key="AVE">P. A. Nouail de la Villegille</persName>, secrétaire du <orgName>Comité des Travaux historiques</orgName>, à <persName key="ESD">Edmond du Sommerard</persName>, conservateur du Musée des Thermes et de l'Hôtel de Cluny, en date du <date when="1860-11-25">25 novembre 1860</date>, conservée dans les archives du Musée (avec le brouillon de la lettre d'acceptation du don, en date du <date when="1860-12-14">14 décembre 1860</date>) : « ... Je me trouvais à <placeName>Néris</placeName> en <date when="1836">1836</date>, et j'appris qu'en labourant l'intérieur du camp romain situé à l'entrée de la ville, un paysan avait trouvé une pierre portant une inscription. Je fus voir cette pierre et j'en fis l'acquisition, non sans quelque peine, parce que le maire de <placeName>Néris</placeName> avait défendu au possesseur de la vendre, comme antiquité intéressant la localité. Toutefois, les scrupules du paysan cédèrent devant mes offres et après une remise qui me fut faite avec beaucoup de mystère, en dehors de la ville, j'apportai ce morceau de granit [sic] à <placeName>Paris</placeName>. Bien que l'inscription qu'il porte n'ait pu encore être déchiffrée en totalité, ce monument épigraphique me paraît cependant offrir assez d'intérêt pour être admis dans une collection appartenant à l'État ; et j'en fais don au Musée de Cluny où j'espère que vous voudrez bien lui donner place... ». </p>
+							<p>
+                                <label>b)</label>Registre d'inventaire, année <date when="1860">1860</date>, n° 3.172 : « Inscription antique gravée sur granit [sic] trouvée à <placeName>Néris</placeName> en <date when="1836">1836</date> et donnée au Musée par <persName key="AVE">M. Villegille</persName>... ». </p>
+							<p>
+                                <label>c)</label>Premières mentions (<bibl corresp="http://zotero.org/groups/2657791/items/BUY6Y9XJ"><!--Hugo 1877-->
+                                    <citedRange unit="page">266-267</citedRange>
+                                </bibl>) et publication (<bibl corresp="http://zotero.org/groups/2657791/items/7ILR9NFP"><!--Mowat 1878a-->
+                                    <citedRange unit="page">94-108</citedRange>
+                                </bibl>) par <persName key="RMT">Robert Mowat</persName> : « Monument conservé depuis des années au Musée de Cluny : bloc calcaire [sic] ... ; la provenance de cette pierre et la manière dont elle est entrée au Musée de Cluny sont entourées de quelque obscurité. Tout ce qu'on sait, c'est qu'on la découvrit il y a plusieurs années en déplaçant quelques blocs gisant dans un coin du musée. <persName key="ESD">M. du Sommerard</persName>, directeur de l'établissement, suppose, avec toute apparence de raison, qu'elle y avait été déposée avec d'autres débris provenant des trayaux de réparation de la Sainte-Chapelle, et que l'ouvrier qui l'a apportée s'est retiré sans donner de renseignements au gardien... » (<bibl corresp="http://zotero.org/groups/2657791/items/7ILR9NFP"><!--Mowat 1878a-->
+                                    <citedRange unit="page">108</citedRange>
+                                </bibl>). </p>
+							<p>À la suite de cette étrange assertion du conservateur (qui avait reçu et inventorié l'objet en <date when="1860">1860</date>), attribution erronée à <placeName>Lutèce</placeName> (reprise par <persName key="EDS">E. Desjardins</persName>, <bibl corresp="http://zotero.org/groups/2657791/items/NGRTGYNW"><!--Desjardins 1878-->
+                                    <citedRange unit="page">476</citedRange>
+                                    <citedRange unit="number">2</citedRange>
+                                </bibl>). Mais la rectification ne devait pas tarder : </p>
+								<p>
+                                <label>d)</label>
+                                <persName key="RMT">R. Mowat</persName>, dans le fascicule suivant de la <hi rend="italic">Revue Archéologique</hi> <bibl corresp="http://zotero.org/groups/2657791/items/U6H9G48N"><!--Mowat 1878b-->
+                                    <citedRange unit="page">188-189</citedRange>
+                                </bibl> : « Mon article sur la découverte d'une inscription gauloise avait à peine paru en février dernier dans la <hi rend="italic">Revue</hi> lorsque <persName key="ABY">M. A. de Barthélémy</persName> m'a fort obligeamment communiqué un renseignement important qu'il venait de recevoir de <persName key="AVE">M. de la Villegille</persName>. À la date du <date when="1869-02-10">10 février</date>, celui-ci l'informait que ce monument épigraphique provient d'une enceinte carrée en terre située à droite de la route de <placeName>Montluçon</placeName> à <placeName>Néris</placeName> en arrivant dans cette dernière ville. <persName key="AVE">M. de la Villegille</persName> l'a donné en <date when="1869">1869</date> [sic : coquille pour <date when="1860">1860</date>] au Musée de Cluny... ». </p>
+							<p>L'attribution correcte à <placeName>Néris</placeName> figure dans le catalogue de <date when="1883">1883</date>
+								<note>
+                                    <bibl corresp="http://zotero.org/groups/2657791/items/TJTS3INK"><!--Sommerard 1883-->
+                                        <citedRange unit="page">29</citedRange>
+                                        <citedRange unit="number">306</citedRange>
+                                    </bibl>
+                                </note> : « Inscription gauloise, gravée sur un bloc calcaire [sic], trouvée à <placeName>Néris</placeName> en <date when="1836">1836</date>... et donnée au Musée en <date when="1860">1860</date> par <persName key="AVE">M. de la Villegille</persName>... ». De même dans le catalogue de <date when="1922">1922</date>
+                                <note>
+                                    <bibl corresp="http://zotero.org/groups/2657791/items/MWJ2Z6XZ"><!--Haraucourt et Montrémy 1922-->
+                                        <citedRange unit="page">95</citedRange>
+                                        <citedRange unit="number">n°520</citedRange>
+                                    </bibl>
+                                </note> : « Inscription gauloise (ex-voto ou épitaphe), <date atLeast="0001" atMost="0100">I<hi rend="superscript">er</hi> siècle</date> (?), trouvée à <placeName>Néris</placeName> (<placeName>Allier</placeName>) en <date when="1836">1836</date>, don de <persName key="AVE">La Villegille</persName>, <date when="1860">1860</date>) ». Entre temps, le nouvel inventaire de <date when="1912">1912</date>, où l'objet reçoit le n°19.262, néglige de mentionner le lieu de trouvaille : « Inscription. Époque gauloise. Don de la <persName key="AVE">Villegille</persName>
+								<date when="1860">1860</date>. Bloc calcaire [sic]... ».</p>
+							<p>Attribution correcte à <placeName>Néris</placeName> dans toutes les mentions du document à partir de <date when="1881">1881</date>. </p>
+						</provenance>
+						
+						<provenance resp="#MLE" type="transferred">
+							<p>Acquise en <date when="1836">1836</date> par <placeName>La Villegille</placeName>, et donnée par lui en <date when="1860">1860</date> au Musée de Cluny à <placeName>Paris</placeName>, où elle a reçu successivement les nos d'inventaire 3.172 (en <date when="1860">1860</date>) puis inv. 19.262 (renumérotation de <date when="1912">1912</date>). Nouvelle présentation depuis <date when="1984">1984</date> dans la salle du frigidarium des Thermes, où la pierre, à hauteur de lecture, est affixée au mur par des crochets. </p>
+						</provenance>
+						<provenance resp="#RIIG" type="transferred">
+							<p>À la date de 2022, la pierre est conservée dans les réserves du musée de Cluny, sous le numéro d'inventaire Cl. 3172. </p>
+						</provenance>
+						<provenance type="observed" subtype="autopsied" resp="#RIIG">
+							<p>Photographiée dans le cadre du projet RIIG par <persName key="CRD">Coline Ruiz Darasse</persName> en mai <date when="2023">2023</date> dans les réserves du musée de Cluny. </p>
+						</provenance>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<editorialDecl>
+				<p/>
+			</editorialDecl>
+			<classDecl>
+				<taxonomy>
+					<category/>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="xtg-Latn">gaulois écrit en alphabet latin</language>
+				<language ident="fr">français</language>
+				<language ident="osc">osque</language>
+				<language ident="ine">indo-européen</language>
+				<language ident="la">latin</language>
+				<language ident="cel">celtique</language>
+			</langUsage>
+			<textClass>
+				<keywords>
+					<list>
+						<item>Histoire -- Protohistoire -- Antiquité</item>
+					</list>
+				</keywords>
+			</textClass>
+			<particDesc>
+				<listPerson type="editorial">
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?coline.ruiz-darasse" xml:id="CRD">
+						<persName>
+							<forename>Coline</forename>
+							<surname>Ruiz Darasse</surname> (Chargée de recherches au CNRS) </persName>
+					</person>
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nathalie.prevot" xml:id="NPT">
+						<persName>
+							<forename>Nathalie</forename>
+							<surname>Prévôt</surname> (Ingénieur CNRS en Humanités Numériques et responsable AusoHNum) </persName>
+					</person>
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nolwenn.chevalier" xml:id="NCR">
+						<persName>
+							<forename>Nolwenn</forename>
+							<surname>Chevalier</surname> (AI ANR RIIG) </persName>
+					</person>
+				</listPerson>
+			</particDesc>
+		</profileDesc>
+		<revisionDesc status="high">
+			<listChange>
+				<change when="2020-01-08" who="#NPT">XML File programmatically created from CSV file</change>
+				<change when="2020-04-17" who="#NCR">Addition of the RIG data in the XML file</change>
+				<change when="2020-07-02" who="#NCR">Revision of the indentation</change>
+				<change when="2020-08-15" who="#CRD">First global revision by Coline Ruiz Darasse</change>
+				<change when="2020-09-02" who="#NCR">Addition of new markups to manage paragraphs problems in the document provenance</change>
+				<change when="2020-09-18" who="#NCR">Addition of glyphs</change>
+				<change when="2020-09-22" who="#NCR">Replacement of the old RIG numbering by the new RIIG identifiers</change>
+				<change when="2020-10-01" who="#NCR">Added RIG page numbers for figures</change>
+				<change when="2020-10-08" who="#NCR">Addition of provinces</change>
+				<change when="2022-01-17" who="#CRD">Revision of the reading and addition of comments</change>
+				<change when="2022-06-21" who="#CRD">Global revision</change>
+				<change when="2022-07-17" who="#CRD">Addition of sociolinguistic comments</change>
+				<change who="#CRD" when="2023-01-23">Global revision</change>
+				<change who="#CRD" when="2023-03-17">Global revision</change>
+				<change who="#CRD" when="2023-06-06">Addition of the provenance</change>
+				<change who="#CRD" when="2023-06-23">Addition of a comment</change>
+				<change who="#CRD" when="2024-03-28">Addition of images and beginning of the palaeography</change>
+			</listChange>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+		<graphic url="https://www.nakala.fr/iiif/10.34847/nkl.cbccbk49">
+			<desc type="view">RIG II.1, fig. 43 : L'inscription L-6 de Néris</desc>
+			<desc type="copyright">RIG II.1</desc>
+			<desc type="mention"/>
+			<desc type="author"/>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+		<graphic url="https://www.nakala.fr/iiif/10.34847/nkl.7b8an8he">
+			<desc type="view">RIIG ALL-01-01 (occlusion ambiante)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) </desc>
+			<desc type="mention">avec l'aimable autorisation du musée de Cluny</desc>
+			<desc type="author">Florent Comte</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+		<graphic url="https://www.nakala.fr/iiif/10.34847/nkl.dc933k4m">
+			<desc type="view">RIIG ALL-01-01 (depthmap)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) </desc>
+			<desc type="mention">avec l'aimable autorisation du musée de Cluny</desc>
+			<desc type="author">Florent Comte</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+		<graphic url="https://www.nakala.fr/iiif/10.34847/nkl.3fb9jb0z">
+			<desc type="view">RIIG ALL-01-01 (rasant)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) </desc>
+			<desc type="mention">avec l'aimable autorisation du musée de Cluny</desc>
+			<desc type="author">Coline Ruiz Darasse</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+		<surface>
+			<graphic url="https://www.nakala.fr/iiif/10.34847/nkl.caa646k0">
+			<desc type="view">RIIG ALL-01-01 (shading mix)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) </desc>
+			<desc type="mention">avec l'aimable autorisation du musée de Cluny</desc>
+			<desc type="author">Florent Comte</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+			<zone xml:id="R287-Β_1" ulx="172" uly="266" lrx="257" lry="403"/>
+			<zone xml:id="R287-R_1" ulx="264" uly="270" lrx="350" lry="398"/>
+			<zone xml:id="R287-A_1" ulx="358" uly="266" lrx="464" lry="400"/>
+			<zone xml:id="R287-Τ_1" ulx="442" uly="261" lrx="530" lry="393"/>
+			<zone xml:id="R287-R_2" ulx="528" uly="269" lrx="629" lry="393"/>
+			<zone xml:id="R287-Ο_1" ulx="629" uly="272" lrx="744" lry="391"/>
+			<zone xml:id="R287-N_1" ulx="739" uly="266" lrx="867" lry="402"/>
+			<zone xml:id="R287-Ο_2" ulx="850" uly="263" lrx="936" lry="392"/>
+			<zone xml:id="R287-S_1" ulx="916" uly="255" lrx="992" lry="424"/>
+		
+		</surface>
+	</facsimile>
+	<text>
+		<body>
+			<div type="edition">
+				<div type="textpart">
+					<!-- Résumé : 
+						Lecture 1 : 
+					BRATRONOS = NOM sg 1 idionym
+					NANTONTICNOS = NOM sg patronym
+					EPADATEXTORICI = DAT
+					LEVCVTIO = DAT sg anthroponym
+					SVIOREBE = V prétérit 3e sg
+					TOGITOI = LOG sg
+					
+						Lecture 2 : 
+					BRATRONOS = NOM sg 1 idionym
+					NANTONTICNOS = NOM sg patronym
+					EPADATEXTORICI = DAT
+					LEVCVTIO = DAT sg anthroponym
+					SVIOREBE = NOM pl
+					TOGITOI = LOG sg
+					
+						Lecture 3 : 
+					BRATRONOS = NOM sg 1 idionym
+					NANTONTICNOS = NOM sg patronym
+					EPADATEXTORICI = DAT
+					LEVCVTIO = DAT sg theonym
+					SVIOREBE = V prétérit 3e sg
+					TOGITOI = LOG sg
+					
+						Lecture 4 : 
+					BRATRONOS = NOM sg 1 idionym
+					NANTONTICNOS = NOM sg patronym
+					EPADATEXTORICI = DAT
+					LEVCVTIO = DAT sg theonym
+					SVIOREBE = NOM pl
+					TOGITOI = LOG sg
+					-->
+					<ab>
+						<seg cert="medium" resp="#PLT" xml:id="PLT-a" xml:lang="xtg-Latn">
+							<lb n="1"/>
+							<w msd="sg m 2" pos="NOM" type="idionym">
+								<choice>
+									<orig>BRATRONOS</orig>
+									<reg>
+                                        <rs type="stem">bratro</rs>nos</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<w msd="sg m 2" pos="NOM" type="patronym">
+								<choice>
+									<orig>
+                                        <expan>
+                                            <abbr type="suspension">NA<hi rend="ligature">NT</hi>O<hi rend="ligature">N<surplus>T</surplus>
+                                                </hi>ICN</abbr>
+                                        </expan>
+                                    </orig>
+									<reg>
+                                        <expan>
+                                            <abbr type="suspension">
+                                                <rs type="stem">na<hi rend="ligature">nt</hi>o</rs>
+                                                <hi rend="ligature">n<surplus>t</surplus>
+                                                </hi>
+                                                <rs type="suffix" subtype="patronymic">icn</rs>
+                                            </abbr>
+                                            <ex>os</ex>
+                                        </expan>
+                                    </reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w msd="m sg 3" pos="DAT" type="theonym">
+								<choice>
+									<orig>EPAÐATEXTO<lb break="no" n="4"/>
+                                        <unclear cert="medium" reason="illegible">R</unclear>IC<hi rend="enclavement">I</hi>
+                                    </orig>
+									<reg>
+                                        <rs type="anthroponymic_element">epađ</rs>
+                                        <rs type="anthroponymic_element">ateχto</rs>
+                                        <lb break="no" n="4"/>
+                                        <rs type="anthroponymic_element">ric</rs>i</reg>
+								</choice>
+							</w>
+							<g type="interpunct"/>
+							<w msd="sg m 2" pos="DAT" type="adjective" subtype="epiclesis">
+								<choice>
+									<orig>LEVCV<unclear cert="medium" reason="illegible">TI</unclear>O</orig>
+									<reg>
+                                        <rs type="stem">leuc</rs>u<unclear cert="medium" reason="illegible">ti</unclear>o</reg>
+								</choice>
+							</w>
+							<lb n="5"/>
+							<w msd="duel" pos="INS" type="substantive">
+								<choice>
+									<orig>SVIOREBE</orig>
+									<reg>
+                                        <rs type="stem">suior</rs>ebe</reg>
+								</choice>
+							</w>
+							<g type="interpunct"/>
+							<w msd="sg 2" pos="LOC" type="substantive">
+								<choice>
+									<orig>
+                                        <unclear cert="medium" reason="illegible">L</unclear>O<unclear cert="medium" reason="illegible">G</unclear>I<lb break="no" n="6"/>TOI</orig>
+									<reg>
+                                        <rs type="stem">
+                                            <unclear cert="medium" reason="illegible">l</unclear>o<unclear cert="medium" reason="illegible">g</unclear>
+                                        </rs>i<lb break="no" n="6"/>toi</reg>
+								</choice>
+							</w>
+						</seg>
+						<seg cert="medium" resp="#MLE" xml:id="MLE-a" xml:lang="xtg-Latn">
+							<lb n="1"/>
+							<w msd="sg m 2" pos="NOM" type="idionym">
+								<choice>
+									<orig>BRATRONOS</orig>
+									<reg>bratronos</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<w msd="sg m 2" pos="NOM" type="patronym" subtype="abreviation">
+								<choice>
+									<orig>
+                                        <expan>
+                                            <abbr type="suspension">NA<hi rend="ligature">NT</hi>O<hi rend="ligature">N<surplus>T</surplus>
+                                                </hi>ICN</abbr>
+                                        </expan>
+                                    </orig>
+									<reg>
+                                        <expan>
+                                            <abbr type="suspension">na<hi rend="ligature">nt</hi>o<hi rend="ligature">n<surplus>t</surplus>
+                                                </hi>icn</abbr>
+                                            <ex>os</ex>
+                                        </expan>
+                                    </reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w msd="m sg 3" pos="DAT">
+								<choice>
+									<orig>EPAÐATEXTO<lb break="no" n="4"/>
+                                        <unclear cert="medium" reason="illegible">R</unclear>IC<hi rend="enclavement">I</hi>
+                                    </orig>
+									<reg>epađateχto<lb break="no" n="4"/>
+                                        <unclear cert="medium" reason="illegible">r</unclear>ici</reg>
+								</choice>
+							</w>
+							<g type="interpunct"/>
+							<w msd="sg 2" pos="ACC" type="substantive">
+								<choice>
+									<orig>
+                                        <expan>
+                                            <abbr>LEVCV<unclear cert="medium" reason="illegible">TI</unclear>O</abbr>
+                                        </expan>
+                                    </orig>
+									<reg>leucu<unclear cert="medium" reason="illegible">ti</unclear>o<expan>
+                                            <abbr>
+                                                <ex>n</ex>
+                                            </abbr>
+                                        </expan>
+                                    </reg>
+								</choice>
+							</w>
+							<lb n="5"/>
+							<w msd="pl f 3" pos="INS" type="substantive" subtype="cl_kindship">
+								<choice>
+									<orig>SVIOREBE</orig>
+									<reg>suiorebe</reg>
+								</choice>
+							</w>
+							<g type="interpunct"/>
+							<w msd="sg 3 PRT" pos="verb">
+								<choice>
+									<orig>
+                                        <unclear cert="medium" reason="illegible">T</unclear>O<unclear cert="medium" reason="illegible">G</unclear>I<lb break="no" n="6"/>TOI</orig>
+									<reg>
+                                        <rs type="stem">
+                                            <unclear cert="medium" reason="illegible">t</unclear>o<unclear cert="medium" reason="illegible">g</unclear>
+                                        </rs>i<lb break="no" n="6"/>toi</reg>
+								</choice>
+							</w>
+						</seg>
+						
+						
+						
+					</ab>
+				</div>
+			</div>
+			<!-- Commentaire : -->
+			<div corresp="#MLE-a #MLE-b" resp="#MLE" type="apparatus">
+				<p>Il est plausible que le texte commence par une désignation bimembre au nominatif, suivie d'une désignation bimembre au datif ; après quoi viendraient deux mots de statut incertain et de signification obscure ; encore cette vue ne prétend-elle pas à la certitude. Si les deux premiers termes ont été tout de suite correctement identifiés, le reste a fait l'objet d'une série d'approches tâtonnantes dues d'abord à <persName key="RMT">Mowat</persName> et à <persName key="WSS">Stokes</persName> (qui songent à une dédicace), ensuite à <persName key="JRS">Rhŷs</persName> (qui songe à une épitaphe). La présente discussion, si elle prend en compte une lecture par endroits nouvelle, n'en arrive pas pour autant à l'élucidation souhaitable du document. </p>
+				<p>En début de texte, un nominatif (en l'espèce, de deuxième déclinaison) étant bien plus probable qu'un génitif (en l'espèce, de thème en <mentioned ana="stem" xml:lang="xtg">...n-</mentioned>), s'en tenir à ce qui a été, dès le départ, l'interprétation de <persName key="RMT">Mowat</persName> : énoncé à sujet <mentioned xml:lang="xtg">Bratronos Nantionicn(os)</mentioned>, idionyme + adj. patronymique. </p>
+				<p>Sur <mentioned ana="idionym" xml:lang="xtg">Bratronos</mentioned>, voir <bibl corresp="http://zotero.org/groups/2657791/items/U6JHNX2D"><!--Evans 1967-->
+                        <citedRange unit="page">314</citedRange>
+                    </bibl> : dérivé du nom celtique <mentioned ana="anthroponymic_element" xml:lang="cel">brāter-</mentioned>/<mentioned ana="anthroponymic_element" xml:lang="cel">brātr-</mentioned> du « frère » ; mais, plutôt que d'évoquer lat. <mentioned xml:lang="la">patrōnus</mentioned>, <mentioned xml:lang="la">mātrōna</mentioned> (à suffixe <mentioned ana="suffix" xml:lang="la">-ōno-</mentioned>), se référer à des dérivés celtiques en <mentioned ana="suffix" xml:lang="cel">-ŏno-</mentioned> (type : <mentioned xml:lang="cel">Epŏna</mentioned> : <emph>ŏ</emph> garanti par <persName key="JL">Juvénal</persName>) comme l'hydronyme <mentioned ana="hydronym" xml:lang="la">Mātrŏna</mentioned> (<emph>ŏ</emph> garanti par <persName key="AE">Ausone</persName> et par l'évolution romane) ; à la différence de ce <mentioned xml:lang="la">Brātrŏno-</mentioned>, c'est sur le degré plein en <mentioned xml:lang="ine">-ter-</mentioned> qu'est dérivé, de celt. <mentioned xml:lang="cel">ater-</mentioned>/<mentioned xml:lang="cel">atr-</mentioned> « père », un anthroponyme <mentioned ana="anthroponym" xml:lang="la">Aterŏno-</mentioned> (cf. <mentioned ana="anthroponym" xml:lang="la">Ateronius</mentioned>, <bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">V</biblScope>
+                        <citedRange unit="entry">6518, 6520</citedRange>
+                    </bibl>). </p>
+				<p>Le nom <mentioned ana="patronym" xml:lang="xtg">Nantonios</mentioned>, impliqué par <mentioned ana="patronym" xml:lang="xtg">Nantonicnos</mentioned>, se retrouve en <bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">VII</biblScope>
+                        <citedRange unit="entry">198</citedRange>
+                    </bibl> ; voir <bibl corresp="http://zotero.org/groups/2657791/items/U6JHNX2D"><!--Evans 1967-->
+                        <citedRange unit="page">104, 236</citedRange>
+                    </bibl> ; on discute pour savoir si les anthroponymes celtiques en <mentioned ana="anthroponymic_element" xml:lang="cel">Nant...</mentioned> sont apparentés à un nom <mentioned ana="root" xml:lang="ine">*nantu-</mentioned> de la « vallée » (<bibl corresp="http://zotero.org/groups/2657791/items/X4FFQK8V"><!--IEW-->
+                        <citedRange unit="page">764</citedRange>
+                    </bibl>) ou (plutôt ?) à un nom <mentioned ana="root" xml:lang="ine">*nanti-</mentioned> du « combat » (<bibl corresp="http://zotero.org/groups/2657791/items/X4FFQK8V"><!--IEW-->
+                        <citedRange unit="page">755</citedRange>
+                    </bibl>). </p>
+				<p>Dès le départ aussi, <persName key="RMT">Mowat</persName> a vu en <mentioned xml:lang="xtg">Epadateχtorigi</mentioned> le datif d'un nom propre en <mentioned ana="anthroponymic_element" xml:lang="xtg">-rīx</mentioned> (série proliférante d'anthroponymes ; mais quelques théonymes aussi : voir <bibl corresp="http://zotero.org/groups/2657791/items/3WRHDW9Y"><!--Lejeune 1982, Bolards--></bibl>), encore qu'il ait ensuite changé d'avis (<bibl corresp="http://zotero.org/groups/2657791/items/PEJGIN6H"><!--Mowat 1887--></bibl>). Il existe un composé <mentioned ana="anthroponym" xml:lang="xtg">Ateχtorix</mentioned> (nom d'un prince picton : légendes monétaires <mentioned ana="anthroponym" xml:lang="xtg">Atectorix</mentioned>, <bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder I-->
+                        <biblScope unit="volume">I</biblScope>
+                        <citedRange unit="entry">254</citedRange>
+                    </bibl>), dont le premier terme est lui-même composé : <mentioned xml:lang="xtg">
+                        <mentioned ana="anthroponymic_element" xml:lang="xtg">A(d)</mentioned>-<mentioned ana="anthroponymic_element" xml:lang="xtg">teχto</mentioned>-</mentioned>, à côté de <mentioned xml:lang="xtg">
+                        <mentioned ana="anthroponymic_element" xml:lang="xtg">Con</mentioned>-<mentioned ana="anthroponymic_element" xml:lang="xtg">teχto</mentioned>-</mentioned>, etc. (voir <bibl corresp="http://zotero.org/groups/2657791/items/8K27V2SR"><!--Schmidt 1957-->
+                        <citedRange unit="page">116, 181, 277</citedRange>
+                    </bibl>). À partir de là a été constitué un sur-composé <mentioned ana="anthroponymic_element" xml:lang="xtg">*<mentioned ana="anthroponymic_element" xml:lang="xtg">Epa<hi rend="ligature">ts</hi>
+                        </mentioned>-<mentioned ana="anthroponymic_element" xml:lang="xtg">ateχto</mentioned>-<mentioned ana="anthroponymic_element" xml:lang="xtg">rix</mentioned>
+                    </mentioned> avec un premier terme (ici écrit <mentioned ana="anthroponymic_element" xml:lang="xtg">epad-</mentioned>) qui se retrouve (noté <mentioned ana="anthroponymic_element" xml:lang="xtg">epas-</mentioned> dans nos manuscrits) dans le nom du prince arverne <mentioned ana="anthroponym" xml:lang="xtg">Epasnactus</mentioned> mentionné, pour l'année <date when="-0051">-51</date>, par <persName key="AHS">Hirtius</persName> (<bibl corresp="http://data.perseus.org/citations/urn:cts:latinLit:phi0448.phi001.perseus-lat1:8.44.4">César<citedRange unit="book">VIII</citedRange>
+                        <citedRange unit="chapter">44</citedRange>
+                        <citedRange unit="section">4</citedRange>
+                    </bibl> ; voir <bibl corresp="http://zotero.org/groups/2657791/items/8K27V2SR"><!--Schmidt 1957-->
+                        <citedRange unit="page">209</citedRange>
+                    </bibl>) ; ce premier terme (dont on s'accorde à penser qu'il dérive - mais comment ? - de <mentioned xml:lang="xtg">epo-</mentioned> « cheval ») est lui-même à la base d'hypocoristiques divers (ainsi <mentioned ana="anthroponymic_element" xml:lang="xtg">Epatō</mentioned> nom de femme à <placeName>Vaison</placeName>
+					<bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">XII</biblScope>
+                        <citedRange unit="entry">1398</citedRange>
+                    </bibl>, etc.). </p>
+				<p>Inspirée par une épitaphe latine de Saintes (celle d'un militaire du corps de cavalerie dit Atectorigien : <mentioned xml:lang="la">...duplicario alae Atectorigianae...</mentioned>, <bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">XIII</biblScope>
+                        <citedRange unit="entry">1041</citedRange>
+                    </bibl>), la trop ingénieuse construction de <persName key="RMT">Mowat</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/PEJGIN6H"><!--Mowat 1887--></bibl>) ne convainc pas. Sur le fond : les références militaires romaines ont bien peu de chances d'être jamais passées dans l'épigraphie gauloise ; c'est, en tout cas, sans exemple jusqu'ici. Sur la forme : outre que la finale <mentioned ana="flexional_ending" xml:lang="xtg">...rigi</mentioned> reste alors inexpliquée chez <persName key="RMT">Mowat</persName>, c'est pure illusion que de voir en <mentioned xml:lang="xtg">epad</mentioned> un nomin. sg. du type de <mentioned xml:lang="la">eques</mentioned> : la sifflante impliquée dans l'affriquée n'est pas désinentielle, puisqu'elle se retrouve en premier terme de composé, dans <mentioned xml:lang="xtg">Epasnactus</mentioned>. </p>
+				<p>Donc : « B. fils de N. pour E. », que E. soit anthroponyme (alors, épitaphe avec formule de curatelle) ou théonyme (alors, ex-voto). </p>
+				<p>Dans le quatrième mot (que, plutôt que <mentioned xml:lang="xtg">leucullo</mentioned>, nous lisons <mentioned xml:lang="xtg">leucutio</mentioned>) apparaît, avec diphtongue <emph>eu</emph> conservée (comme dans le document biturige contemporain <bibl corresp="https://riig.huma-num.fr/documents/CHE-01-01">*CHE-01-01</bibl> : <mentioned xml:lang="xtg">aneuno</mentioned>), le radical <mentioned ana="root" xml:lang="ine">*leuk-</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/X4FFQK8V"><!--IEW-->
+                        <citedRange unit="page">687</citedRange>
+                    </bibl>), abondamment représenté dans l'onomastique gauloise (<bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder II-->
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">192, 291, 296</citedRange>
+                    </bibl>). Il n'est pas question, bien entendu, de rechercher dans notre texte une référence à <placeName>Lutèce</placeName> (comme on l'a fait épisodiquement lorsqu'on croyait la pierre issue de l'<placeName>Île de la Cité</placeName> : <bibl corresp="http://zotero.org/groups/2657791/items/PEJGIN6H"><!--Mowat 1878--></bibl>). Mais il se trouve que <persName key="RMT">Mowat</persName> (pensant que le mot en <mentioned ana="anthroponymic_element" xml:lang="xtg">-rīx</mentioned> pouvait être un théonyme, épiclèse de Mars) avait aussi (<bibl corresp="http://zotero.org/groups/2657791/items/PEJGIN6H"><!--Mowat 1878--></bibl>), à propos du mot en <mentioned ana="anthroponymic_element" xml:lang="xtg">leuc-</mentioned> de <placeName>Néris</placeName>, lointainement évoqué les dédicaces <mentioned xml:lang="xtg">Marti Leucetio</mentioned> ou <mentioned xml:lang="xtg">Loucetio</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">VII</biblScope>
+                        <citedRange unit="entry">36</citedRange>
+                    </bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">XIII</biblScope>
+                        <citedRange unit="entry">6221, 7241, 7242, 7249, 7252, 7608, 11605</citedRange>
+                    </bibl>). Il le faisait donc à partir d'un <mentioned xml:lang="xtg">leucullo</mentioned>. Mais, si la nouvelle lecture est admise, le rapprochement prend de la consistance : <mentioned xml:lang="xtg">leucutio</mentioned> pourrait bien être une variante de (voire, un lapsus pour ?) <mentioned xml:lang="xtg">leucetio</mentioned>. </p>
+				<p>En tout cas, on a posé, à propos de la finale de ce quatrième mot, un faux problème. Finale de dat. sg. thématique, estimait <persName key="RMT">Mowat</persName>. Impossible, rétorque <persName key="WSS">Stokes</persName>, car ce cas est en <mentioned ana="thematic_vowel" xml:lang="xtg">-u</mentioned> (et, comme il y a cependant besoin d'un datif, il fait un mot de <mentioned xml:lang="xtg">leucullosu</mentioned>). En réalité, vaine querelle. Le gaulois, outre un /o/ d'aperture moyenne et un /u/, l'un et l'autre hérités, l'un et l'autre dotés d'une notation constante, avait vu se développer un phonème intermédiaire /ů/, issu à date historique de <emph>*-ō</emph> final et aussi de diverses monophtongaisons (par exemple au dat. sg. thématique). Ce phonème était dépourvu de notation propre. Ainsi ce datif s'écrit-il en gallo-grec (<bibl corresp="http://zotero.org/groups/2657791/items/4T8X6DPC"><!--Lejeune 1985-->
+                        <citedRange unit="page">449</citedRange>
+                    </bibl>) tantôt <emph>-o</emph> tantôt <emph>-ου</emph>, en gallo-latin tantôt <emph>-o</emph> (comme ici), tantôt <emph>-u</emph>. </p>
+				<p>Peut-être bien, donc, « B. fils de N. à (Mars ?) E. L. ... ». Mais après ? </p>
+				<p>Les deux derniers mots (le dernier, de lecture discutée) demeurent obscurs ; pour les diverses hypothèses avancées jusqu'ici, voir notre analyse de la bibliographie. Nous nous bornerons à des observations sur les finales. </p>
+				<p>
+                    <label>a) Finale ...be.</label> Si verbale (le contexte faisant alors attendre un prétérit 3<hi rend="superscript">e</hi> sg.), elle serait sans aucune correspondance en celtique ; elle évoquerait peut-être certains prétérits faibles de l'osco-ombrien (ainsi, dans la 1<hi rend="superscript">re</hi> conjugaison osque, 3<hi rend="superscript">e</hi> sg. en <mentioned xml:lang="osc">...AFED</mentioned>, issu de <mentioned xml:lang="ine">*-ā-bh(w)et</mentioned>) ; encore faudrait-il étayer sur d'autres exemples (mais ils font défaut) un amuïssement, en gaulois, de l'ancienne désinence secondaire <mentioned ana="flexional_ending" xml:lang="xtg">*-t</mentioned>. Si désinence nominale (de cas oblique), elle ne coïncide ni avec le <mentioned ana="flexional_ending" xml:lang="xtg">-bo</mentioned> du dat. pl., ni avec le <mentioned ana="flexional_ending" xml:lang="xtg">-bi</mentioned> de l'instr. pl. Quel statut aurait alors ce <mentioned ana="flexional_ending" xml:lang="xtg">-be</mentioned> (plausiblement issu de <mentioned ana="flexional_ending" xml:lang="osc">*-bhei</mentioned> ; sur ce traitement, cf. <bibl corresp="http://zotero.org/groups/2657791/items/4T8X6DPC"><!--Lejeune 1985-->
+                        <citedRange unit="page">451</citedRange>
+                    </bibl>) ? Faute de lui trouver place au pluriel, voudra-t-on l'imputer à un dat. instr. duel ? Du duel en gaulois, nous ne savons rien (sur l'existence alléguée d'un cas direct duel en <mentioned ana="flexional_ending" xml:lang="xtg">...o</mentioned> dans la II<hi rend="superscript">e</hi> déclinaison, voir <bibl corresp="http://zotero.org/groups/2657791/items/4T8X6DPC"><!--Lejeune 1985-->
+                        <citedRange unit="page">275</citedRange>
+                    </bibl>). Dans les deux hypothèses (verbale, nominale) envisagées ci-dessus, le <emph>-e-</emph> qui précède <emph>b</emph> pourrait résulter de l'aperture d'un <emph>-ĭ-</emph> en syllabe intérieure ouverte. </p>
+				<p>
+                    <label>b) Finale ...oi</label>(si telle est bien la lecture). Première difficulté : à notre connaissance (<bibl corresp="http://zotero.org/groups/2657791/items/4T8X6DPC"><!--Lejeune 1985-->
+                        <citedRange unit="page">451</citedRange>
+                    </bibl>), <mentioned ana="flexional_ending" xml:lang="xtg">-oi</mentioned> final (dans nos exemples, au nomin. pl. thématique) est conservé en gaulois avant notre ère, mais se réduit ensuite à <emph>-i</emph> ; l'exemple de <placeName>Saint-Germain-source-Seine</placeName> (<bibl corresp="https://riig.huma-num.fr/documents/CDO-02-01">CDO-02-01</bibl>), <mentioned xml:lang="xtg">aresequani</mentioned>, est datable du milieu ou de la <date atLeast="0051" atMost="0100">seconde moitié du I<hi rend="superscript">er</hi> siècle</date> ; il faudrait donc que l'inscription de <placeName>Néris</placeName> fût antérieure, ou fût, sur ce point, archaïsante. À dire vrai, notre chronologie n'est ni assez précise ni assez largement assise pour que la difficulté signalée soit dirimante. Cela dit, le contexte exclut un nominatif pluriel ; admettrait-on que l'inscription fût constituée de deux énoncés successifs (le premier étant nominal : « X. pour Y. »), il faudrait que, dans le second, un sujet au pluriel (notre mot en <emph>...oi</emph>) fût associé à un prédicat au pluriel (soit nominal, soit verbal), ce que le mot en <emph>...be</emph> ne saurait être. Songera-t-on alors à un locatif sg. thématique (encore que, de l'existence du locatif en gaulois, on ne sache rien) ? Du moins se gardera-t-on alors de lui donner (avec <bibl corresp="http://zotero.org/groups/2657791/items/WIZFV3ZT"><!--Stokes 1881--></bibl>) une signification instrumentale ; si locatif il y avait (pouvant s'employer sans préposition), il ne pourrait marquer que l'environnement concret de la pierre (« dans le... », « sur le... »). </p>
+				<p>
+                    <label>c)</label> C'est seulement pour mémoire qu'on posera enfin la question suivante. À la même époque (en gros), dans notre autre document biturige (<placeName>Genouilly</placeName>, <bibl corresp="https://riig.huma-num.fr/documents/CHE-01-01">*CHE-01-01</bibl>), le lapicide A note tous les <mentioned ana="flexional_ending" xml:lang="xtg">-s</mentioned> en fin de mot (<mentioned ana="patronym" xml:lang="xtg-Latn">VIRILIOS</mentioned>, etc.), le lapicide B n'en note aucun (<mentioned xml:lang="xtg-Latn">ANEVNO</mentioned>, etc.). Le lapicide de <placeName>Néris</placeName> a écrit <mentioned ana="idionym" xml:lang="xtg-Latn">BRATRONOS</mentioned> à la l.1 ; le plus plausible est de le supposer cohérent avec lui-même (et d'accord avec A). Mais, si l'on voulait imaginer que, dans son usage aient pu se refléter, par des flottements, les deux usages de <placeName>Genouilly</placeName>, cela ouvrirait peut-être, pour <mentioned ana="flexional_ending" xml:lang="xtg-Latn">-BE</mentioned> par exemple ou pour <mentioned ana="flexional_ending" xml:lang="xtg-Latn">-OI</mentioned>, d'autres possibilités. </p>
+			</div>
+			<div corresp="#PLT-a" resp="#PLT" type="translation">
+				<p>Bratronos, fils de Nantonos, a établi un <emph>leucution</emph> (bois sacré ?) pour Epadatextorix, en association avec ses sœurs. </p>
+			</div>
+			<div corresp="#MLE-a" resp="#MLE" type="translation">
+				<p>Bratronos fils de Nantonos, à (Mars ?) Epadateχtorix Leucutio(s)... </p>
+			</div>
+			<div corresp="#MLE-a " resp="#MEN" subtype="sociolinguistic" type="commentary">
+				<p>Genre épigraphique : funéraire ? </p>
+			</div>
+			<div subtype="sociolinguistic" type="commentary" resp="#PLT" corresp="#PLT-a">
+				<p>De façon remarquable, Bratronos, signifiant quelque chose comme « le Grand Frère », a fait une offrande en mentionnant ses sœurs. </p>
+			</div>
+			<div corresp="#MLE-a #MLE-b" resp="#AMN" subtype="sociolinguistic" type="commentary" xml:lang="en">
+				<p>Two bi-partite masculine names? Gaulish patronymic adjective in <mentioned ana="suffix">-iknos</mentioned>? Unnamed women may be involved if we understand by SVIOREBE 'with the sisters' or similar. The root of this term in Indo-European is <emph>*swesor-</emph>. If this is the correct interpretation then the loss of the intervocalic -s- may help to date the text. </p>
+			</div>
+			<div subtype="general" type="commentary" resp="#PLT" corresp="#PLT-a">
+				<p>
+                    <label>Bratronos</label> : sujet au nominatif, sur l'analyse duquel, voir plus haut, suivi de son patronyme <mentioned xml:lang="xtg">Nantonicnos</mentioned> abrégé de sa finale. </p>
+				<p>
+                    <label>Nantonicnos</label> est probablement dérivé de nanto- « ruisseau ». </p>
+				<p>
+                    <label>Epađateχtorig-</label> : voir l'analyse de Lejeune reprenant Mowat. </p>
+				<p>
+                    <label>Leucutio</label> : objet à l'accusatif de lecture incertaine. Désignation possible d'un bois sacré (<mentioned xml:lang="la">lucus</mentioned>), sur le thème <mentioned xml:lang="ine">*leuk</mentioned> « lumière, blancheur ». </p>
+				<p>
+                    <label>Suiorebe</label> est probablement une forme à l'instrumental sociatif, du nom de la sœur <mentioned xml:lang="ine">*sṷesor-</mentioned>. Finale en <mentioned>-ebe</mentioned> pour <mentioned>-ebi</mentioned> analogique des autres thèmes en <emph>-r-</emph> cf. ματρεβο (<bibl corresp="https://riig.huma-num.fr/documents/GAR-10-01">GAR-10-01</bibl>). </p>
+				<p>
+                    <label>Logitoi</label> : verbe au prétérit. Thème verbal dénominatif <mentioned xml:lang="ine">*logho-</mentioned> « fait de coucher, d'établir » ou causatif de <mentioned xml:lang="ine">*legh-</mentioned> « coucher, établir » d'après <bibl corresp="http://zotero.org/groups/2657791/items/SYVGWHBR"><!--Schmidt 1986--></bibl>
+                </p>
+			</div>
+			<div subtype="general" type="commentary" resp="#EDZ" corresp="#PLT-a">
+				<p>Sur la forme <mentioned xml:lang="xtg">suiorebe</mentioned>, voir <bibl corresp="http://zotero.org/groups/2657791/items/N52ZS5UK"><!--Dupraz 2021--></bibl>. </p>
+			</div>
+			<!-- Description détaillée du document : -->
+			<div subtype="physDesc" type="commentary">
+				<div resp="#MLE" subtype="support" type="commentary">
+					<p>« Granit », écrit <persName key="AVE">La Villegille</persName> en 1860 (suivi par le registre d'inventaire à cette date). « Calcaire » écrit <persName key="RMT">Mowat</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/PEJGIN6H"><!--Mowat 1878--></bibl>, suivi par le catalogue de <date when="1883">1883</date>, par <persName key="WSS">Stokes</persName>, et par l'inventaire de <date when="1912">1912</date>). « Lapis harenaceus », écrit <persName key="OHD">Hirschfeld</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                            <citedRange unit="volume">XIII</citedRange>
+                            <citedRange unit="entry">1388</citedRange>
+                        </bibl>). Aucune précision sur la nature de la pierre chez <persName key="JRS">Rhŷs</persName> ni <persName key="JWH">Whatmough</persName>, qui l'ont pourtant, comme les trois autres, examinée. </p>
+				</div>
+				<div resp="#MLE" subtype="layout" type="commentary"/>
+				<div resp="#MLE" subtype="handNote" type="commentary">
+					<p>Noter <emph>E</emph> pour <emph>e</emph>, et (l.3) <emph>Ð</emph> pour l'affriquée <emph>
+                            <hi rend="ligature">ts</hi>
+                        </emph> ; (la barrette de D, à même hauteur que celle du <emph>a</emph> qui suit, est aujourd'hui à peine perceptible, mais voir fig. <bibl corresp="http://zotero.org/groups/2657791/items/I7RM4NME"><!--Lejeune 1988-->
+                            <citedRange unit="page">92</citedRange>
+                            <citedRange unit="figure">42, 2</citedRange>
+                        </bibl>). Des omégas n'ont jamais existé que dans l'imagination de <persName key="JRS">Rhŷs</persName> (cf. bibliographie) ; un examen attentif établit que les <emph>o</emph> de <emph>nanto...</emph> l.2 et <emph>suio...</emph> l.5 étaient des circonférences complètes (encore que leurs parties inférieures soient aujourd'hui très effacées ; mais voir fig. <bibl corresp="http://zotero.org/groups/2657791/items/I7RM4NME"><!--Lejeune 1988-->
+                            <citedRange unit="page">92</citedRange>
+                            <citedRange unit="figure">42, 2</citedRange>
+                        </bibl>). </p>
+					<p>Le seul mot divisé entre deux lignes est coupé syllabiquement (<emph>...to|ri...</emph>, ll. 3-4). Les limites de mots dans le cours d'une ligne sont marquées par des interponctions à mi-hauteur (après <emph>...gi</emph>, l.4 ; après <emph>...be</emph>, l.5). Le souci de faire tenir le texte dans un espace à peine suffisant a conduit le graveur à user de divers expédients, qui se manifestent surtout en fin de ligne ; abréviation <emph>...icn</emph> pour <emph>...icnos</emph>, l.2 ; écrasement latéral et cabossage des derniers <emph>o</emph> des lignes 1 et 4, réduction de diamètre pour l'<emph>o</emph> de la l.4 et le second <emph>o</emph> de la l.5 ; ligatures <emph>
+                            <hi rend="ligature">nt</hi>
+                        </emph> l.2, <emph>
+                            <hi rend="ligature">ci</hi>
+                        </emph> l.4. </p>
+					<p>La lecture est difficile. Nous avons procédé à des examens répétés en faisant jouer diversement la lumière ; nous avons exploité aussi un jeu de photographies prises sous éclairages variés (<bibl corresp="http://zotero.org/groups/2657791/items/I7RM4NME"><!--Lejeune 1988-->
+                            <citedRange unit="page">92</citedRange>
+                            <citedRange unit="figure">42</citedRange>
+                        </bibl> ; le cliché 2 est le plus parlant). Nous demeurons, plus d'une fois, dans l'incertitude. Aussi notre transcription et le dessin interprétatif (<bibl corresp="http://zotero.org/groups/2657791/items/I7RM4NME"><!--Lejeune 1988-->
+                            <citedRange unit="page"/>
+                            <citedRange unit="figure"/>
+                        </bibl>fig. 43) qui l'accompagne ne devront-ils être reçus qu'avec cette réserve. </p>
+					<p>Difficulté générale, venant de la nature même de cette pierre à texture grumeleuse ayant rendu impossible une gravure nette. Difficultés ponctuelles (notamment pour la première partie de la l.3) dues à des érosions accidentelles de la surface. Et, de plus, cette circonstance, qui n'a pas été signalée jusqu'ici : à la base des lettres règne, à chaque ligne, une sorte de sillon horizontal plus ou moins continu résultant apparemment d'un lignage préalable du champ, sillon avec lequel tendent à se confondre les éléments horizontaux inférieurs des <emph>e</emph> et des <emph>l</emph> ; en sorte que les éditeurs antérieurs (par exemple en position antépénultième de la l.4) ont trop facilement identifié comme <emph>l</emph> une haste verticale dont le bas plongeait (de part et d'autre, d'ailleurs) dans ce sillon, négligeant une barrette supérieure qui dénonce la lettre comme un <emph>t</emph> : des deux traits, celui qu'on est en droit de négliger est celui du bas, parce qu'il est susceptible d'une autre explication (lignage). </p>
+					<p>En général, lorsque l'hésitation demeure possible entre deux lectures, nous avons choisi, ci-dessous, celle qui s'écarte de la tradition afin de lui donner ses chances. </p>
+					<p>
+                        <label>L. 2 :</label> <emph>...onti...</emph> incontestable, là où tous les éditeurs ont lu ce qu'ils attendaient (<emph>...oni...</emph>) ; lapsus dittographique du graveur, qui venait d'écrire (correctement) <emph>
+                            <hi rend="ligature">nt</hi>
+                        </emph> dans <emph>...anto...</emph> ; entendre donc <mentioned ana="patronym" xml:lang="xtg">nanton{t}icn(os)</mentioned>. </p>
+					<p>
+                        <label>L. 4, portion initiale :</label> d'abord, à première vue, soit <emph>bi...</emph>, soit <emph>ri...</emph>, selon que le segment correspondant du lignage appartient ou non en même temps à la lettre elle-même (mais <emph>r</emph> matériellement un peu plus probable que <emph>b</emph>). Ensuite, <emph>...ci</emph> : sorte de ligature, un <emph>i</emph> de petite taille étant logé dans la boucle du <emph>c</emph>, son sommet à l'aplomb de l'extrémité supérieure du <emph>c</emph>, son pied ne descendant pas aussi bas que les autres lettres ; l'arrondi inférieur du <emph>c</emph> vient se perdre dans le lignage sans qu'on puisse décider jusqu'où il se prolonge vers la droite ; en tout cas nulle part n'apparaît le petit élément diacritique qui serait constitutif d'un <emph>g</emph>. Ne pas mettre en doute, pour autant, qu'il s'agisse du datif d'un composé en <mentioned ana="anthroponymic_element" xml:lang="xtg">-rīx</mentioned> ; mais si le graveur a écrit <emph>-rici</emph>, reconnaître là une de ces notations de /g/ par <emph>c</emph> (<bibl corresp="http://zotero.org/groups/2657791/items/N35QEJQ3"><!--Dottin 1918-->
+                            <citedRange unit="page">63</citedRange>
+                        </bibl>), discutées notamment par <persName key="CWS">C. Watkins</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/W7HVQGHD"><!--Watkins 1955-->
+                            <citedRange unit="page">17 sv.</citedRange>
+                        </bibl>). </p>
+					<p>
+                        <label>L. 4, portion finale :</label> entre le second <emph>u</emph> et le (maladroit) <emph>o</emph> terminal, deux hastes verticales qui, vers le bas, vont rejoindre le sillon de lignage ; traditionnellement depuis <persName key="RMT">Mowat</persName> on y voit des <emph>l</emph>, en demandant au lignage d'en fournir les traits horizontaux inférieurs. Mais c'est négliger le fait que la haste de gauche est, à son sommet, coiffée d'une barrette qui en fait un <emph>t</emph> (barrette oblique, montant vers la droite, comme celle de <emph>...onti...</emph> à la l. 2) ; lecture <emph>...ti...</emph>, dès lors, préférable à <emph>...ll...</emph> (ceci justifiant, d'ailleurs, l'important blanc de part et d'autre de la première haste). </p>
+					<p>
+                        <label>L. 5, portion finale :</label> après l'interponction, et pour les mêmes raisons, préférer <emph>to...</emph> à <emph>lo...</emph> (barrette supérieure cette fois horizontale, comme celle de <emph>...anto...</emph> à la l.2). Ensuite, <emph>...gi</emph> plutôt que <emph>...ci</emph> si l'on interprète comme élément diacritique la remontée de la boucle inférieure vers la droite, différenciant cette lettre des autres <emph>c</emph> du texte. </p>
+					<p>
+                        <label>L. 6 :</label> les petits appendices latéraux, horizontaux ou obliques, dont certains éditeurs ont cru voir pourvue, vers la droite, la haste finale, n'ont pas d'existence (illusions dues aux inégalités de la surface). </p>
+				</div>
+				<div resp="#RIIG" subtype="handNote" type="commentary">
+					<p>La photogrammétrie réalisée sur la pierre a fait apparaître de manière plus claire le soin porté à l'écriture de l'inscription. Les lettres (R, T, E, L…) sont pourvues d'empattements réalisés avec une forme d'élégance. Cela permet de confirmer par ailleurs la lecture du L pour le dernier mot de la dernière ligne (LOGITOI) mais relance l'interrogation sur la présence des ligatures à la ligne 2. </p>
+				</div>
+			</div>
+			<!-- Description détaillée de l'origine document : -->
+			<div subtype="history" type="commentary">
+				<div resp="#MLE" subtype="context" type="commentary"/>
+				<div resp="#MLE" subtype="micro-context" type="commentary"/>
+				<div resp="#PLT" corresp="#PLT-a" subtype="datation" type="commentary">
+					<p>La chute du -n final de l'accusatif de <mentioned xml:lang="xtg">leucutio</mentioned> est un signe de langue tardive. </p>
+					<p>
+                        <mentioned xml:lang="xtg">Suiorebe</mentioned> présente aussi des traits tardifs. Si on part de l'indo-européen <mentioned xml:lang="ine">*sṷesor-</mentioned>, il faut considérer qu'est intervenue en gaulois tardif une chute du -s- intervocalique, comparable à ce qui est attesté en brittonique au I<hi rend="superscript">er</hi> s. (cf. <bibl corresp="http://zotero.org/groups/2657791/items/JIA8NFQ8"><!--Jackson 1954--></bibl>). </p>
+				</div>
+			</div>
+			<!-- Bibliographie : -->
+			<div subtype="principalEdition" type="bibliography">
+				<listBibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/I7RM4NME"/>
+                        <citedRange unit="page">89-98</citedRange>
+                    </bibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/I7RM4NME"/>
+                        <citedRange unit="page">92-93</citedRange>
+                        <citedRange unit="figure">42-43</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div subtype="otherEditions" type="bibliography">
+				<listBibl resp="#MLE">
+					<bibl><!--Hugo 1877-->
+                        <ptr target="http://zotero.org/groups/2657791/items/BUY6Y9XJ"/>
+                        <citedRange unit="page">256</citedRange>
+                    </bibl>
+					<bibl><!--Mowat 1877-->
+                        <ptr target="http://zotero.org/groups/2657791/items/PEJGIN6H"/>
+                        <citedRange unit="page">255,266-267</citedRange>
+                    </bibl>
+					<bibl><!--Desjardins 1878-->
+                        <ptr target="http://zotero.org/groups/2657791/items/NGRTGYNW"/>
+                    </bibl>
+					<bibl><!--Mowat 1878b-->
+                        <ptr target="http://zotero.org/groups/2657791/items/U6H9G48N"/>
+                        <citedRange unit="page">94-108</citedRange>
+                    </bibl>
+					<bibl><!--Mowat 1880a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/BDJDJSCJ"/>
+                        <citedRange unit="page">255</citedRange>
+                    </bibl>
+					<bibl><!--Mowat 1880a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/BDJDJSCJ"/>
+                        <citedRange unit="page">256</citedRange>
+                        <citedRange unit="note">2</citedRange>
+                    </bibl>
+					<bibl><!--BEG 1881-->
+                        <ptr target="http://zotero.org/groups/2657791/items/EXS5LQE3"/>
+                        <citedRange unit="page">245</citedRange>
+                    </bibl>
+					<bibl><!--Stokes 1881-->
+                        <ptr target="http://zotero.org/groups/2657791/items/WIZFV3ZT"/>
+                        <citedRange unit="page">116-119</citedRange>
+                    </bibl>
+					<bibl><!--Sommerard 1883-->
+                        <ptr target="http://zotero.org/groups/2657791/items/TJTS3INK"/>
+                    </bibl>
+					<bibl><!--Stokes 1886-->
+                        <ptr target="http://zotero.org/groups/2657791/items/WSKITS9R"/>
+                        <citedRange unit="page">134-136</citedRange>
+                        <citedRange unit="entry">23</citedRange>
+                    </bibl>
+					<bibl><!--Mowat 1887b-->
+                        <ptr target="http://zotero.org/groups/2657791/items/5PCRWJLV"/>
+                        <citedRange unit="page">256-266</citedRange>
+                    </bibl>
+					<bibl><!--CIL-->
+                        <ptr target="http://zotero.org/groups/2657791/items/34W5PCBI"/>
+                        <biblScope unit="volume">XIII</biblScope>
+                        <citedRange unit="page">1388</citedRange>
+                    </bibl>
+					<bibl><!--Rhŷs 1911-->
+                        <ptr target="http://zotero.org/groups/2657791/items/H95LIC77"/>
+                        <citedRange unit="page">320</citedRange>
+                    </bibl>
+					<bibl><!--Rhŷs 1905-->
+                        <ptr target="http://zotero.org/groups/2657791/items/DSQF3HLP"/>
+                        <citedRange unit="page">108</citedRange>
+                        <citedRange unit="note">2</citedRange>
+                    </bibl>
+					<bibl><!--Rhŷs 1906-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9AEYU4SM"/>
+                        <citedRange unit="page">324-326</citedRange>
+                    </bibl>
+					<bibl><!--Dottin 1918-->
+                        <ptr target="http://zotero.org/groups/2657791/items/N35QEJQ3"/>
+                        <citedRange unit="page">10,100,166</citedRange>
+                    </bibl>
+					<bibl><!--Dottin 1918-->
+                        <ptr target="http://zotero.org/groups/2657791/items/N35QEJQ3"/>
+                        <citedRange unit="page">120</citedRange>
+                        <citedRange unit="note">1</citedRange>
+                    </bibl>
+					<bibl><!--Haraucourt et Montrémy 1922-->
+                        <ptr target="http://zotero.org/groups/2657791/items/MWJ2Z6XZ"/>
+                    </bibl>
+					<bibl><!--Thurneysen 1946-->
+                        <ptr target="http://zotero.org/groups/2657791/items/NKWWGQWU"/>
+                        <citedRange unit="page">182</citedRange>
+                    </bibl>
+					<bibl><!--Watkings 1955-->
+                        <ptr target="http://zotero.org/groups/2657791/items/W7HVQGHD"/>
+                    </bibl>
+					<bibl><!--Schmidt 1957-->
+                        <ptr target="http://zotero.org/groups/2657791/items/8K27V2SR"/>
+                        <citedRange unit="page">208,248</citedRange>
+                    </bibl>
+					<bibl><!--Holder 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9LE83Y7L"/>
+                        <biblScope unit="volume">I</biblScope>
+                        <citedRange unit="entry">514,1442</citedRange>
+                    </bibl>
+					<bibl><!--Holder 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9LE83Y7L"/>
+                        <biblScope unit="volume">I</biblScope>
+                        <citedRange unit="entry">514,1442</citedRange>
+                    </bibl>
+					<bibl><!--Holder 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9LE83Y7L"/>
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">65,196,278</citedRange>
+                    </bibl>
+					<bibl><!--Holder 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9LE83Y7L"/>
+                        <biblScope unit="volume">III</biblScope>
+                        <citedRange unit="entry">926</citedRange>
+                    </bibl>
+					<bibl><!--Evans 1967-->
+                        <ptr target="http://zotero.org/groups/2657791/items/U6JHNX2D"/>
+                        <citedRange unit="page">88,104,314,358</citedRange>
+                    </bibl>
+					<bibl><!--IEW-->
+                        <ptr target="http://zotero.org/groups/2657791/items/X4FFQK8V"/>
+                    </bibl>
+					<bibl><!--Whatmough 1970-->
+                        <ptr target="http://zotero.org/groups/2657791/items/RS6R4TJ8"/>
+                        <citedRange unit="page">350</citedRange>
+                    </bibl>
+					<bibl><!--Lejeune 1984a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/BRVKMMVJ"/>
+                    </bibl>
+					<bibl><!--Lejeune 1985-->
+                        <ptr target="http://zotero.org/groups/2657791/items/4T8X6DPC"/>
+                    </bibl>
+					<bibl><!--Schmidt 1986-->
+                        <ptr target="http://zotero.org/groups/2657791/items/SYVGWHBR"/>
+                        <citedRange unit="page">179</citedRange>
+                    </bibl>
+				</listBibl>
+				<listBibl resp="#RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+			<div type="bibliography">
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/6ZQ4LNCN" type="RIG">
+					<bibl/>
+				</listBibl>
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/AXN2QT54" type="RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+		</body>
+	</text>
+</TEI>

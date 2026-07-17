@@ -1,0 +1,501 @@
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="R4">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Chapiteau perdu de la Fontaine</title>
+				<title type="corpus">RIIG</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>RIIG</edition>
+				<respStmt>
+                    <resp>First editor</resp>
+                    <persName key="MLE">Michel Lejeune</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Project coordinator and contributor</resp>
+                    <persName key="CRD">Coline Ruiz Darasse</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="HBT">Hugo Blanchet</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="CaJN">Carlos Jordán Cólera</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="MEN">María José Estarán Tolosa</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="AMN">Alex Mullen</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Metadata</resp>
+                    <resp>TEI encoding</resp>
+                    <persName key="NCR">Nolwenn Chevalier</persName>
+                </respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<authority>UMR 5607 - Ausonius</authority>
+				<idno type="filename">GAR-10-03</idno>
+				<idno type="corpus-number">0</idno>
+				<date when="2022">2022</date>
+				<availability>
+					<licence target="http://creativecommons.org/licenses/by/4.0/">Cette œuvre est mise à disposition selon les termes de la <ref target="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</ref>. </licence>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note/>
+			</notesStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						<country/>
+						<region/>
+						<settlement/>
+						<repository/>
+						<collection/>
+						<collection/>
+						<idno type="invNo"/>
+						<idno type="TM">218781</idno>
+						<idno type="localID">G205</idno>
+						<altIdentifier>
+                            <idno type="localID">G-205</idno>
+                        </altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary corresp="https://www.eagle-network.eu/voc/typeins/lod/81" resp="#RIIG">Inscription religieuse / cultuelle </summary>
+						<textLang mainLang="xtg-Grek" otherLangs="la"/>
+					</msContents>
+					<physDesc>
+						<objectDesc>
+							<supportDesc>
+								<support>
+									<desc resp="#MLE">Haut de <objectType ref="https://ark.frantiq.fr/ark:/26678/pcrtbhNbSIzWXG">colonne</objectType> cannelée avec <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/63">chapiteau</objectType> en <material ref="https://ark.frantiq.fr/ark:/26678/pcrtSVdwKcS3MI">pierre</material>. </desc>
+								</support>
+								<condition>Inscription <rs type="statPreserv" corresp="https://www.eagle-network.eu/voc/statepreserv/lod/10">perdue mais connue</rs> (il ne reste que deux copies infidèles de <persName key="JSR">Séguier</persName>). Du texte latin, il ne subsistait au <date notBefore="1701" notAfter="1800">XVIII<hi rend="superscript">e</hi> siècle</date> que la fin <note>
+                                        <bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                                            <biblScope unit="volume">XII</biblScope>
+                                            <citedRange unit="page">3044</citedRange>
+                                        </bibl>
+                                    </note>. </condition>
+							</supportDesc>
+							<layoutDesc>
+								<layout xml:id="G205-1">
+									<desc resp="#MLE">Inscription gauloise. L'inscription gauloise est <rs type="writing" corresp="https://www.eagle-network.eu/voc/writing/lod/3">gravée</rs> sur l'abaque : la dédicace portait sur deux lignes et intéressait au mois deux faces, sinon trois. </desc>
+								</layout>
+								<layout xml:id="G205-2">
+									<desc resp="#MLE">Inscription latine. Le chapiteau a ensuite été réutilisé à l'époque romaine pour une dédicace latine, occupant l'avant-dernière face, peut-être l'antépénultième, de la dédicace gallo-grecque, après l'abolition de celle-ci par grattage ou retaille. </desc>
+								</layout>
+							</layoutDesc>
+						</objectDesc>
+						<handDesc>
+							<handNote corresp="#G205-1">
+								<desc resp="#MLE">Inscription gauloise. <rs type="execution" key="capital">Lettres capitales</rs>. </desc>
+							</handNote>
+							<handNote corresp="#G205-2">
+								<desc resp="#MLE">Inscription latine. <rs type="execution" key="capital">Lettres capitales</rs>. </desc>
+							</handNote>
+						</handDesc>
+						<scriptDesc>
+							<scriptNote/>
+						</scriptDesc>
+					</physDesc>
+					<history>
+						<origin>
+							<origDate notBefore="-0200" notAfter="-0001" corresp="http://n2t.net/ark:/99152/p09hq4nqrjc http://n2t.net/ark:/99152/p09hq4n9m89" cert="low" evidence="context" resp="#MLE">-II<hi rend="superscript">e</hi>/-I<hi rend="superscript">er</hi> siècle</origDate>
+							<origPlace type="found">
+								<country ref="http://www.trismegistos.org/place/8881">France</country>
+								<region>Occitanie</region>
+								<district>Gard</district>
+								<settlement ref="https://riig.huma-num.fr/places/3" corresp="https://www.trismegistos.org/place/19905">
+                                    <placeName type="modern" xml:lang="fr">Nîmes</placeName>
+                                    <placeName type="ancient" xml:lang="xtg">*Ναμαυσος</placeName>
+                                    <placeName type="ancient" xml:lang="la">Nemausus</placeName>
+                                </settlement>
+								<placeName type="provinceItalicRegion" ref="https://www.trismegistos.org/place/19860">Narbonensis</placeName>
+								<placeName type="ethnic" ref="https://www.trismegistos.org/place/11402">Volcae Arecomici</placeName>
+								<placeName ref="https://riig.huma-num.fr/places/13">Temple de la Fontaine</placeName>
+								<location cert="medium" resp="#MLE">
+									<geo decls="#WGS84">43,8403306 4,348969444444444</geo>
+								</location>
+							</origPlace>
+						</origin>
+						<provenance type="found" resp="#MLE">
+							<rs type="circumstances">Trouvée au <placeName type="ancientFindspot">Temple de la Fontaine</placeName> lors des travaux de déblaiement commencé en <date type="found" when="1738" precision="low">1738</date>. </rs>
+							<rs type="context">La fontaine de <placeName>Nîmes</placeName> est le site d’un lieu de culte des eaux protohistorique. Dès l’époque républicaine, le site connaît un aménagement monumental : c’est de ce contexte que proviennent les inscriptions gallo-grecques (<date notBefore="-0125" notAfter="-0071">fin -II<hi rend="superscript">e</hi> début -I<hi rend="superscript">er</hi>
+                                </date>) trouvées à la Fontaine lors de travaux d’aménagement au XVIII<hi rend="superscript">e</hi> siècle. Ce sanctuaire indigène cède ultérieurement sa place à un sanctuaire du culte impérial, interprété comme l’<hi rend="italic">Augusteum</hi> de la colonie.
+							</rs>
+							<rs type="micro-context"/>
+							<rs type="datation"/>
+						</provenance>
+						<provenance type="observed" subtype="autopsied" resp="#MLE">
+							<p>Vue par <persName key="JSR">Séguier</persName> en <date when="1742">1742</date> qui en donne une copie et un dessin (<bibl corresp="http://zotero.org/groups/2657791/items/VN58D5NZ"><!--Séguier 1742-->
+                                    <citedRange unit="page">49 verso, la face latine seule</citedRange>
+                                    <citedRange unit="page">46, les deux faces</citedRange>
+                                </bibl>). Dans <bibl corresp="http://zotero.org/groups/2657791/items/ZMQTCBYD"><!--HAI XIV-->
+                                    <citedRange unit="page">107</citedRange>
+                                    <citedRange unit="plate">III</citedRange>
+                                    <citedRange unit="figure">R</citedRange>
+                                </bibl> il ne reproduit que celui des dessins de <persName key="JSR">Séguier</persName> qui concerne la face latine. C'est <persName key="JWH">Whatmough</persName> le premier, en <date when="1949">1949</date> (<bibl corresp="http://zotero.org/groups/2657791/items/RS6R4TJ8"><!--Whatmough 1970-->
+                                    <citedRange unit="page">107</citedRange>
+                                    <citedRange unit="note">XIV bis</citedRange>
+                                </bibl>) qui a appelé l'attention sur l'autre dessin. </p>
+						</provenance>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<editorialDecl>
+				<p/>
+			</editorialDecl>
+			<classDecl>
+				<taxonomy>
+					<category/>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="xtg-Grek">gaulois écrit en alphabet grec</language>
+				<language ident="la">latin</language>
+				<language ident="fr">français</language>
+			</langUsage>
+			<textClass>
+				<keywords>
+					<list>
+						<item>Histoire -- Protohistoire -- Antiquité</item>
+					</list>
+				</keywords>
+			</textClass>
+			<particDesc>
+				<listPerson type="editorial">
+					<person xml:id="CRD" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?coline.ruiz-darasse">
+						<persName>
+							<forename>Coline</forename>
+							<surname>Ruiz Darasse</surname> (Chargée de recherches au CNRS)
+						</persName>
+					</person>
+					<person xml:id="NPT" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nathalie.prevot">
+						<persName>
+							<forename>Nathalie</forename>
+							<surname>Prévôt</surname> (Ingénieur CNRS en Humanités Numériques et responsable AusoHNum)
+						</persName>
+					</person>
+					<person xml:id="NCR" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nolwenn.chevalier">
+						<persName>
+							<forename>Nolwenn</forename>
+							<surname>Chevalier</surname> (AI ANR RIIG)
+						</persName>
+					</person>
+				</listPerson>
+			</particDesc>
+		</profileDesc>
+		<revisionDesc status="high">
+			<listChange>
+				<change who="#NPT" when="2020-01-08">XML File programmatically created from CSV file</change>
+				<change who="#NCR" when="2020-02-04">Addition of the RIG data in the XML file</change> 
+				<change who="#NCR" when="2020-07-02">Revision of the indentation</change>
+				<change who="#CRD" when="2020-08-11">First global revision by Coline Ruiz Darasse</change>
+				<change who="#NCR" when="2020-09-02">Addition of new markups to manage paragraphs problems in the document provenance</change>
+				<change who="#NCR" when="2020-09-18">Addition of glyphs</change>
+				<change who="#NCR" when="2020-09-22">Replacement of the old RIG numbering by the new RIIG identifiers</change>
+				<change who="#NCR" when="2020-10-01">Added RIG page numbers for figures</change>
+				<change who="#NCR" when="2020-10-08">Addition of provinces</change>
+				<change who="#CDR" when="2021-10-04">Revision of the readings</change>
+				<change who="#CDR" when="2021-10-21">Revision of the reading</change>
+				<change who="#CRD" when="2022-02-01">Revision of the reading</change>
+				<change who="#CRD" when="2022-06-09">Global revision</change>
+				<change who="#CRD" when="2022-07-17">Addition of sociolinguistic comments</change>
+			</listChange>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+        <graphic url="https://www.nakala.fr/iiif/11280/ec998496">
+			<desc type="view">RIG 1, fig. 248 : Chapiteau perdu *G-205 de la Fontaine de Nîmes ; double copie par Séguier (ms. 110 : à gauche p. 49, verso, la face latine seule ; à droite, p. 46, les deux faces)</desc>
+			<desc type="copyright">RIG I</desc>
+			<desc type="author"/>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+    </facsimile>
+	<text>
+		<body>
+			<div type="edition">
+				<div type="textpart" corresp="#G205-1">
+					<ab>
+						<seg resp="#MLE" xml:lang="xtg-Grek" xml:id="MLE-1-a" cert="medium">
+							<lb n="1"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w>
+								<choice>
+									<orig>
+                                        <gap unit="character" extent="unknown" reason="lost"/>ς</orig>
+									<reg>
+                                        <supplied reason="lost">ο</supplied>ς</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w type="votive_formula">
+								<choice>
+									<orig>
+                                        <gap unit="character" extent="unknown" reason="lost"/>αντεν</orig>
+									<reg>
+                                        <supplied reason="lost">βρατουδεκ</supplied>αντεν</reg>
+								</choice>
+							</w>
+						</seg>
+					</ab>
+				</div>
+				<div type="textpart" corresp="#G205-2">
+					<ab>
+						<seg resp="#MLE" xml:lang="la" xml:id="MLE-2-a" cert="medium">
+							<lb n="1"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w>
+								<choice>
+									<orig>CN<g type="interpunct"/>F<g type="interpunct"/>LEPO<gap unit="character" extent="1" reason="lost"/>
+                                    </orig>
+									<reg>
+                                        <rs type="idionym" xml:lang="la">
+                                            <expan>
+                                                <abbr>Cn</abbr>
+                                                <ex>...</ex>
+                                            </expan>
+                                        </rs>
+                                        <space/>
+                                        <rs type="substantive" xml:lang="la">
+                                            <expan>
+                                                <abbr>F</abbr>
+                                                <ex>ilius</ex>
+                                            </expan>
+                                        </rs>
+                                        <space/>
+                                        <rs type="idionym" xml:lang="la">Lepo<supplied reason="lost" cert="medium">s</supplied>
+                                        </rs>
+                                    </reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w pos="DAT" type="theonym">
+								<choice>
+									<orig>
+                                        <unclear resp="#JSR">ATI</unclear>
+                                    </orig>
+									<reg>
+                                        <unclear resp="#JSR">ati</unclear>
+                                    </reg>
+								</choice>
+								<space/>
+							</w>
+								<w type="votive_formula" xml:lang="la">
+									<choice>
+										<orig>
+                                        <abbr>
+                                            <g type="interpunct"/>V<g type="interpunct"/>S<g type="interpunct"/>L<g type="interpunct"/>M</abbr>
+                                    </orig>
+										<reg>
+                                        <expan>
+                                            <abbr>
+                                                <g type="interpunct"/>v</abbr>
+                                            <ex>otum</ex>
+                                            <abbr>
+                                                <space/>s</abbr>
+                                            <ex>olvit</ex>
+                                            <abbr>
+                                                <space/>l</abbr>
+                                            <ex>ibens</ex>
+                                            <abbr>
+                                                <space/>m</abbr>
+                                            <ex>erito</ex>
+                                        </expan>
+                                    </reg>
+									</choice>
+								</w>
+					 </seg>
+						<seg resp="#MLE" xml:lang="la" xml:id="MLE-2-b" cert="medium">
+							<lb n="1"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w>
+								<choice>
+									<orig>CN<g type="interpunct"/>F<g type="interpunct"/>LEPO<gap unit="character" extent="1" reason="lost"/>
+                                    </orig>
+									<reg>
+                                        <rs type="idionym" xml:lang="la">
+                                            <expan>
+                                                <abbr>Cn</abbr>
+                                                <ex>...</ex>
+                                            </expan>
+                                        </rs>
+                                        <space/>
+                                        <rs type="substantive" xml:lang="la">
+                                            <expan>
+                                                <abbr>F</abbr>
+                                                <ex>ilius</ex>
+                                            </expan>
+                                        </rs>
+                                        <space/>
+                                        <rs type="idionym" xml:lang="la">Lepo<supplied reason="lost" cert="medium">s</supplied>
+                                        </rs>
+                                    </reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<gap reason="lost" extent="unknown" unit="character"/>
+							<w pos="DAT" type="theonym">
+								<choice>
+									<orig>
+                                        <unclear resp="#JSR">NI</unclear>
+                                    </orig>
+									<reg>
+                                        <unclear resp="#JSR">ni</unclear>
+                                    </reg>
+								</choice>
+							</w>
+								<w type="votive_formula" xml:lang="la">
+									<choice>
+										<orig>
+                                        <abbr>
+                                            <g type="interpunct"/>V<g type="interpunct"/>S<g type="interpunct"/>L<g type="interpunct"/>M</abbr>
+                                    </orig>
+										<reg>
+                                        <expan>
+                                            <abbr>
+                                                <space/>v</abbr>
+                                            <ex>otum</ex>
+                                            <abbr>
+                                                <space/>s</abbr>
+                                            <ex>olvit</ex>
+                                            <abbr>
+                                                <space/>l</abbr>
+                                            <ex>ibens</ex>
+                                            <abbr>
+                                                <space/>m</abbr>
+                                            <ex>erito</ex>
+                                        </expan>
+                                    </reg>
+									</choice>
+								</w>
+							</seg>
+					</ab>
+				</div>
+			</div>
+
+			<!-- Commentaire : -->
+			<div type="apparatus" corresp="#MLE-2-a #MLE-2-b" resp="#MLE">
+				<p>Du dédicant romain ou romanisé, prénom et gentilice se sont perdus, et seuls subsistent patronyme et cognomen. C'est sur le datif théonymique fragmentaire que divergent les deux copies de <persName key="JSR">Séguier</persName> : dédicace <mentioned xml:lang="la">[APOLLI]NI</mentioned> (?) ou dédicace à un dieu ou une déesse <mentioned ana="theonym" xml:lang="la">[NEMAVS]ATI</mentioned> (?). </p>
+			</div>
+			<div type="translation" corresp="#MLE-1-a" resp="#MLE">
+				<p>[...] en gratitude (?).</p>
+			</div>
+			<div type="translation" corresp="#MLE-2-a #MLE-2-b" resp="#MLE">
+				<p>
+                    <hi rend="italic">[...] Lepos fils de Gnaeus pour [...] et il s'est acquitté de son vœu, de bon gré et comme il se doit.</hi>
+                </p>
+			</div>
+			<div type="commentary" subtype="sociolinguistic" resp="#MEN">
+				<p>
+					<list>
+						<item>Genre épigraphique : dédicace religieuse ?</item>
+						<item>La pierre étant perdue, on ne peut affimer si l'inscription latine et l'inscription gauloises formaient partie de la même inscription ou s'il s'agissait de deux textes successifs. Dans le premier cas, il pourrait y avoir une équivalence sémantique et fonctionnelle entre VSLM et βρατουδεκαντεν.</item>
+						<item>Dans tous les cas, cette pierre est un témoignage de la coexistence des deux langues dans l'épigraphie monumentale de Nîmes. </item>
+						<item>Parallèle : chapiteau bilingue de Tarragone <emph>MLH</emph> III C.18.10 (<bibl corresp="http://hesperia.ucm.es/consulta_hesperia/Generalidades.php?id=232&amp;file=file_48.php">Hesperia T.11.09</bibl>) </item>
+					</list>
+				</p>
+			</div>
+			<div type="commentary" subtype="sociolinguistic" resp="#AMN" xml:lang="en">
+				<p>Dedication using <mentioned ana="votive_formula">dede bratou dekantem</mentioned> formula? For the sociolinguistic context of the formula, see <bibl corresp="http://zotero.org/groups/2657791/items/AG8BNN8D"><!--Mullen 2013-->
+                        <citedRange unit="page">189-219</citedRange>
+                    </bibl>. </p>
+				<p>It is unclear if the Latin text is directly related - i.e. forming a bilingual text - or may result from a reuse of the object. The latter seems most likely given the earlier commentary.</p>
+				<p>Texts on same object or surface in different languages but unrelated? Gallo-Greek inscriptions and then Latin inscription?</p>
+			</div>
+			<div type="commentary" subtype="general"/>
+
+			<!-- Description détaillée du document : -->
+			<div type="commentary" subtype="physDesc">
+				<div type="commentary" subtype="support" resp="#MLE">
+					<p>Le chapiteau présente une série de moulures soutenant un abaque plat ; deux faces (au mois) sont inscrites, l'une en lettres latines, l'autre (adjacente à droite) en lettres grecques. </p>
+				</div>
+				<div type="commentary" subtype="layout" resp="#MLE"/>
+				<div type="commentary" subtype="handNote" resp="#MLE"/>
+			</div>
+
+			<!-- Description détaillée de l'origine document : -->
+			<div type="commentary" subtype="history">
+				<div type="commentary" subtype="context" resp="#MLE"/>
+				<div type="commentary" subtype="micro-context" resp="#MLE"/>
+				<div type="commentary" subtype="datation" resp="#MLE"/>
+			</div>
+			
+			<!-- Bibliographie : -->
+			<div type="bibliography" subtype="principalEdition">
+				<listBibl resp="#MLE">
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/4T8X6DPC"/>
+                        <citedRange unit="page">273-274, 282-284</citedRange>
+                    </bibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/4T8X6DPC"/>
+                        <citedRange unit="page">282-283</citedRange>
+                        <citedRange unit="figure">248-249</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography" subtype="otherEditions">
+				<listBibl resp="#MLE">
+					<bibl><!--Séguier 1742-->
+                        <ptr target="http://zotero.org/groups/2657791/items/VN58D5NZ"/>
+                    </bibl>
+					<bibl><!--HAI XIV-->
+                        <ptr target="http://zotero.org/groups/2657791/items/ZMQTCBYD"/>
+                    </bibl>
+					<bibl><!--Hischfeld 1888-->
+                        <ptr target="http://zotero.org/groups/2657791/items/34W5PCBI"/>
+                        <biblScope unit="volume">XII</biblScope>
+                        <citedRange unit="page">383</citedRange>
+                        <citedRange unit="entry">4</citedRange>
+                    </bibl>
+					<bibl><!--Whatmough 1970-->
+                        <ptr target="http://zotero.org/groups/2657791/items/RS6R4TJ8"/>
+                    </bibl>
+				</listBibl>
+				<listBibl resp="#RIIG">
+					<bibl><!--Gros 1984-->
+                        <ptr target="http://zotero.org/groups/2657791/items/BW8V4NBD"/>
+                    </bibl>
+					<bibl><!--Py 1990-->
+                        <ptr target="http://zotero.org/groups/2657791/items/FMJ8RIJS"/>
+                    </bibl>
+					<bibl><!--Sauvage 1992-->
+                        <ptr target="http://zotero.org/groups/2657791/items/DLE7WPZK"/>
+                    </bibl>
+					<bibl><!--Lejeune 1994-->
+                        <ptr target="http://zotero.org/groups/2657791/items/DV5P3WB5"/>
+                    </bibl>
+					<bibl><!--CAG 30-01-->
+                        <ptr target="http://zotero.org/groups/2657791/items/4ZMBUC6D"/>
+                    </bibl>
+					<bibl><!--Dupraz 2018-->
+                        <ptr target="http://zotero.org/groups/2657791/items/UJUIUTV8"/>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography">
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/8VIJADYN" type="RIG">
+					<bibl/>
+				</listBibl>
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/PZRUVYEH" type="RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+		</body>
+	</text>
+</TEI>

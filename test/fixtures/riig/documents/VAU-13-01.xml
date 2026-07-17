@@ -1,0 +1,941 @@
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="R167">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Plaque votive de Vaison-la-Romaine</title>
+				<title type="corpus">RIIG</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>RIIG</edition>
+				<respStmt>
+                    <resp>First editor</resp>
+                    <persName key="MLE">Michel Lejeune</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Project coordinator and contributor</resp>
+                    <persName key="CRD">Coline Ruiz Darasse</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="HBT">Hugo Blanchet</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="CaJN">Carlos Jordán Cólera</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="DSR">David Stifter</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="DWO">Dagmar Wodtko</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="MEN">María José Estarán Tolosa</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="AMN">Alex Mullen</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Metadata</resp>
+                    <resp>TEI encoding</resp>
+                    <persName key="NCR">Nolwenn Chevalier</persName>
+                </respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<authority>UMR 5607 - Ausonius</authority>
+				<idno type="filename">VAU-13-01</idno>
+				<idno type="corpus-number">0</idno>
+				<date when="2022">2022</date>
+				<availability>
+					<licence target="http://creativecommons.org/licenses/by/4.0/">Cette œuvre est mise à disposition selon les termes de la <ref target="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</ref>. </licence>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note/>
+			</notesStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						<country>
+                            <placeName type="modern" ref="https://sws.geonames.org/3017382/">France</placeName>
+                        </country>
+						<region>
+                            <placeName type="modern" ref="https://sws.geonames.org/2985244/">Provence-Alpes-Côte d'Azur</placeName>
+                        </region>
+						<settlement>
+                            <placeName type="modern" ref="https://sws.geonames.org/3035681/">Avignon</placeName>
+                        </settlement>
+						<repository ref="https://www.trismegistos.org/collection/549">Musée Calvet</repository>
+						<collection/>
+						<idno type="invNo">E 25</idno>
+						<idno type="TM">218728</idno>
+						<idno type="localID">G153</idno>
+						<altIdentifier>
+                            <idno type="localID">G-153</idno>
+                        </altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary corresp="https://www.eagle-network.eu/voc/typeins/lod/81" resp="#RIIG">Inscription religieuse / cultuelle </summary>
+						<textLang mainLang="xtg-Grek"/>
+					</msContents>
+					<physDesc>
+						<objectDesc>
+							<supportDesc>
+								<support>
+									<desc resp="#MLE">Petite <objectType ref="https://ark.frantiq.fr/ark:/26678/pcrt7HbtemJhVu">plaque</objectType> en <material ref="https://opentheso.huma-num.fr/api/ark:/76609/genepic18m2m26h2lknpnp88sn-g">calcaire</material> à grain très fin, présentement de <dimensions unit="cm">
+                                            <depth>6,5</depth>
+                                        </dimensions> cm d'épaisseur × <dimensions unit="cm">
+                                            <width>31</width>
+                                        </dimensions> cm de large × <dimensions unit="cm">
+                                            <height>25</height>
+                                        </dimensions> cm de haut, passant à gauche, en haut, à droite, en bas, au ras des lettres, sans mutiler le texte. Ce découpage (on le voit d'après les mesures qu'il mentionne) était déjà chose faite lorsque <persName key="ADE">A. Deloye</persName> vit la pierre ; il visait à rendre le document écrit aussi maniable que possible (en vue, peut-être, d'un ultérieur encastrement ?) : travail d'un collectionneur (soit <persName key="MRT">Rostant</persName>, soit un propriétaire antérieur ?). Nous ne savons rien du monument d'où ce fragment inscrit a été détaché. Mais il est clair que, difficilement lisible à distance à cause du format modeste des lettres, cette dédicace devait avoir été logée (sur un pilier ?) sensiblement à hauteur de vue. </desc>
+								</support>
+								<condition>Inscription <rs type="statPreserv" corresp="https://www.eagle-network.eu/voc/statepreserv/lod/2">complète</rs>. </condition>
+							</supportDesc>
+							<layoutDesc>
+								<layout>
+									<desc resp="#MLE">Texte en graphie continue, <rs type="writing" corresp="https://www.eagle-network.eu/voc/writing/lod/3">gravée</rs> sur sept lignes ; un seul mot (<mentioned xml:lang="xtg-Grek">βηλη|σαμι</mentioned>) a été coupé entre deux lignes. </desc>
+								</layout>
+							</layoutDesc>
+						</objectDesc>
+						<handDesc>
+							<handNote>
+								<desc resp="#MLE">
+                                    <rs type="execution" key="capital">Lettres capitales</rs> de <dimensions unit="mm">
+                                        <height min="20">20</height>
+                                    </dimensions> mm (<emph>
+                                        <g ref="#Ω1">ⲱ</g>
+                                    </emph>) à <dimensions unit="mm">
+                                        <height max="40">40</height>
+                                    </dimensions> mm (<emph>λ</emph>) de haut. Les <emph>ε</emph> et <emph>σ</emph> lunaires, <emph>
+                                        <g ref="#Ω1">ⲱ</g>
+                                    </emph> <rs type="execution" key="cursive">cursif</rs>, <emph>α</emph> à barrette convexe ; l'auteur du texte use de <emph>
+                                        <g ref="#Ω1">ⲱ</g>
+                                    </emph> et <emph>η</emph>. Gravure soignée. </desc>
+							</handNote>
+						</handDesc>
+						<scriptDesc>
+							<scriptNote/>
+						</scriptDesc>
+					</physDesc>
+					<history>
+						<origin>
+							<origDate notBefore="-0200" notAfter="-0001" corresp="http://n2t.net/ark:/99152/p09hq4n6svx http://n2t.net/ark:/99152/p09hq4n9m89" cert="low" evidence="context" resp="#RIIG">-II<hi rend="superscript">e</hi>/-I<hi rend="superscript">er</hi> siècle</origDate>
+							<origPlace type="found">
+								<country ref="https://www.trismegistos.org/place/693">France</country>
+								<region>Provence-Alpes-Côte d'Azur</region>
+								<district>Vaucluse</district>
+								<settlement ref="https://riig.huma-num.fr/places/95" corresp="https://www.trismegistos.org/place/20928">
+                                    <placeName type="modern" xml:lang="fr">Vaison</placeName>
+                                    <placeName type="ancient" xml:lang="la">Vasio</placeName>
+                                </settlement>
+								<placeName type="provinceItalicRegion" ref="https://www.trismegistos.org/place/19860">Narbonensis</placeName>
+								<placeName type="ethnic" ref="https://www.trismegistos.org/place/6141">Vocontii</placeName>
+								<placeName ref="https://riig.huma-num.fr/places/258">Enclos des Cordeliers</placeName>
+								<location cert="low" resp="#MLE">
+									<geo decls="#WGS84">44,241081 5,075984</geo>
+								</location>
+							</origPlace>
+						</origin>
+						<provenance type="found" resp="#RIIG">
+							<rs type="circumstances">Trouvé en <date type="found" notAfter="1835">1835</date> à <placeName>Vaison</placeName>, à l’emplacement du couvent des Cordeliers, à l’intersection de la rue de Maquis et de l’avenue Victor Hugo, au sud de l’<placeName type="ancientFindspot">enclos des Cordeliers</placeName>. </rs>
+							<rs type="context" resp="#RIIG">
+                                <persName key="CGU">Chr. Goudineau</persName> rappelle que l’enclos des Cordeliers, où a été découverte la plaque de calcaire, n’est pas loin du « quartier des boutiques » : l’enclos sacré offert à Belisama mentionné dans l’inscription pourrait selon lui correspondre au sanctuaire découvert par <persName>Y. de Kisch</persName> <note>
+                                    <bibl corresp="http://zotero.org/groups/2657791/items/EJ2EKDMT"><!--Goudineau et al. 1999-->
+                                        <citedRange unit="page">69</citedRange>
+                                    </bibl>
+                                </note>. </rs>
+							<rs type="micro-context"/>
+							<rs type="datation"/>
+						</provenance>
+						<provenance>
+							<p>Étude d'ensemble en <date when="1926">1926</date> par <persName key="JSL">J. Sautel</persName>, <bibl corresp="http://zotero.org/groups/2657791/items/V533QMS8"><!--Sautel 1926--></bibl>. </p>
+						</provenance>
+						<provenance type="observed" subtype="reported" resp="#MLE">
+							<p>
+                                <persName key="LLS">Jean-François de Paule-Louis de la Saussaye</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/EEJ8AHZN"><!--Saussaye 1842-->
+                                    <citedRange unit="page">163</citedRange>
+                                </bibl>) : « Je dois à l'amitié de <persName key="PME">M. Prosper Mérimée</persName> de pouvoir produire ici une inscription encore inédite où se trouve... l'ethnique grec <mentioned> de Nemausus</mentioned>. Cette inscription, gravée sur une pierre de 25 cm de hauteur et de 31 de largeur, a été trouvée en <date type="found" when="1840">1840</date> à <placeName>Vaison</placeName>... d'où elle a été portée au musée d'Avignon en 1841. Elle paraît relative à la consécration d'un sanctuaire. Heureusement pour moi, il n'entre pas dans mon sujet d'expliquer ce curieux spécimen de grec rustique des Gaulois de la Narbonnaise. » [suit en majuscules d'imprimerie un texte parfaitement correct.] <persName key="ADE">A. Deloye</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/5EGCVWW6"><!--Deloye 1848-->
+                                    <citedRange unit="page">312</citedRange>
+                                </bibl>) : « Dans la partie de <placeName>Vaison</placeName> qu'on a lieu de croire antérieure à la conquête romaine, au Sud et à cent ou deux cents pas de l'enclos des Cordeliers, on a découvert il y a environ douze à quinze ans une inscription toute grecque... L'auteur de cette notice... ne put examiner cette inscription que pendant quelques minutes. Elle appartenait alors à <persName key="MRT">M. Rostant</persName>, officier de santé... Elle a été transportée au Musée Calvet à <placeName>Avignon</placeName> en <date when="1841">1841</date> et a été publiée l'année suivante par <persName key="LLS">M. de la Saussaye</persName> ». <persName key="ADE">A. Deloye</persName> a donc vu la pierre  à <placeName>Vaison</placeName>, chez son propriétaire <persName key="PME"> avant <date notAfter="1841">1841</date> et il y a lieu de le croire quant au lieu et à la date  (vers <date type="found" notAfter="1835">1835</date> et non en <date type="found" when="1840">1840</date>) de la trouvaille. M. Prosper Mérimée</persName> n'a probablement vu la pierre qu'au musée, en <date when="1841">1841</date>. </p>
+						</provenance>
+						<provenance type="transferred" resp="#MLE">
+							<p>« [L'inscription] a été portée au Musée d'Avignon en <date when="1841">1841</date> » (<persName key="LLS">Paule-Louis de la Saussaye</persName>, <bibl corresp="http://zotero.org/groups/2657791/items/EEJ8AHZN"><!--Saussaye 1842-->
+                                    <citedRange unit="page">163</citedRange>
+                                </bibl>), inv. E 25. </p>
+						</provenance>
+						<provenance type="observed" subtype="autopsied" resp="#RIIG">
+							<p>Photographiée dans le cadre du projet RIIG par <persName key="CRD">Coline Ruiz Darasse</persName> et <persName key="FCE">Florent Comte</persName> en <date when="2020">2020</date> dans la Chapelle des Jésuites, musée lapidaire Calvet d'Avignon. </p>
+						</provenance>
+						<provenance type="observed" subtype="autopsied" resp="#RIIG">
+							<p>En 2021, l'inscription a été restaurée à l'occasion d'une exposition au musée de Lattes (voir le catalogue : <bibl corresp="http://zotero.org/groups/2657791/items/B3Y68UUI"><!--Roure et Dusseaux 2021--></bibl>). En <date when="2023">2023</date>, <persName key="CRD">Coline Ruiz Darasse</persName> et <persName key="DSR">David Stifter</persName> ont procédé à un nouvel examen de la plaque au musée lapidaire Calvet d'Avignon. Le nettoyage fait apparaître plus nettement la présence possible d'une interponction entre ειωρου et βηληϲαμι. </p>
+						</provenance>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<editorialDecl>
+				<p/>
+			</editorialDecl>
+			<classDecl>
+				<taxonomy>
+					<category/>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="xtg-Grek">gaulois écrit en alphabet grec</language>
+				<language ident="fr">français</language>
+				<language ident="la">latin</language>
+				<language ident="xga">galate</language>
+				<language ident="sga">vieil-irlandais</language>
+				<language ident="xtg">gaulois transalpin</language>
+			</langUsage>
+			<textClass>
+				<keywords>
+					<list>
+						<item>Histoire -- Protohistoire -- Antiquité</item>
+					</list>
+				</keywords>
+			</textClass>
+			<particDesc>
+				<listPerson type="editorial">
+					<person xml:id="CRD" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?coline.ruiz-darasse">
+						<persName>
+							<forename>Coline</forename>
+							<surname>Ruiz Darasse</surname> (Chargée de recherches au CNRS)
+						</persName>
+					</person>
+					<person xml:id="NPT" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nathalie.prevot">
+						<persName>
+							<forename>Nathalie</forename>
+							<surname>Prévôt</surname> (Ingénieur CNRS en Humanités Numériques et responsable AusoHNum)
+						</persName>
+					</person>
+					<person xml:id="NCR" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nolwenn.chevalier">
+						<persName>
+							<forename>Nolwenn</forename>
+							<surname>Chevalier</surname> (AI ANR RIIG)
+						</persName>
+					</person>
+				</listPerson>
+			</particDesc>
+		</profileDesc>
+		<revisionDesc status="high">
+			<listChange>
+				<change who="#NPT" when="2020-01-08">XML File programmatically created from CSV file</change>
+				<change who="#NCR" when="2020-03-11">Addition of the RIG data in the XML file</change>
+				<change who="#NCR" when="2020-07-02">Revision of the indentation</change>
+				<change who="#CRD" when="2020-08-10">First global revision by Coline Ruiz Darasse</change>
+				<change who="#NCR" when="2020-09-02">Addition of new markups to manage paragraphs problems in the document provenance</change>
+				<change who="#NCR" when="2020-09-18">Addition of glyphs</change>
+				<change who="#NCR" when="2020-09-22">Replacement of the old RIG numbering by the new RIIG identifiers</change>
+				<change who="#NCR" when="2020-10-01">Added RIG page numbers for figures</change>
+				<change who="#NCR" when="2020-10-08">Addition of provinces</change>
+				<change who="#CRD" when="2021-04-28">Addition of context</change>
+				<change who="#CRD" when="2022-03-17">Addition of a reading and of commentaries</change>
+				<change who="#CRD" when="2022-06-21">Global revision</change>
+				<change who="#CRD" when="2022-07-17">Addition of sociolinguistic comments</change>
+				<change who="#CRD" when="2023-03-30">Global revision</change>
+				<change who="#CRD" when="2023-06-23">Global revision</change>
+				<change who="#CRD" when="2024-04-17">Addition of the palaeography</change>
+				<change who="#CRD" when="2024-11-15">Revision of the palaeography</change>
+				<change who="#CRD" when="2024-12-03">Revision of the palaeography</change>
+			</listChange>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+        <graphic url="https://www.nakala.fr/iiif/11280/28dc2406">
+			<desc type="view">Dédicace de Vaison (lumière rasante)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) ; propriété de l'Institut Calvet d’Avignon</desc>
+			<desc type="author">Florent Comte - Ausonius UMR 5607</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+        <graphic url="https://www.nakala.fr/iiif/11280/b20f9f05">
+			<desc type="view">Dédicace de Vaison (occlusion)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) ; propriété de l'Institut Calvet d’Avignon</desc>
+			<desc type="author">Florent Comte - Ausonius UMR 5607</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+        <surface>
+            <graphic url="https://www.nakala.fr/iiif/11280/0271501c">
+			<desc type="view">Dédicace de Vaison (détail de l'inscription)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) ; propriété de l'Institut Calvet d’Avignon</desc>
+			<desc type="author">Florent Comte - Ausonius UMR 5607</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+			<zone xml:id="R167-Σ_1" ulx="58" uly="52" lrx="174" lry="197"/>
+			<zone xml:id="R167-Ε_1" ulx="140" uly="58" lrx="246" lry="188"/>
+			<zone xml:id="R167-Γ_1" ulx="238" uly="56" lrx="362" lry="171"/>
+			<zone xml:id="R167-Ο_1" ulx="348" uly="50" lrx="463" lry="151"/>
+			<zone xml:id="R167-Μ_1" ulx="456" uly="44" lrx="607" lry="145"/>
+			<zone xml:id="R167-Α_1" ulx="594" uly="30" lrx="729" lry="174"/>
+			<zone xml:id="R167-Ρ_1" ulx="702" uly="24" lrx="796" lry="170"/>
+			<zone xml:id="R167-Ο_2" ulx="798" uly="32" lrx="913" lry="161"/>
+			<zone xml:id="R167-Σ_2" ulx="928" uly="26" lrx="1038" lry="148"/>
+			
+			<zone xml:id="R167-Ο_3" ulx="52" uly="206" lrx="159" lry="321"/>
+			<zone xml:id="R167-Υ_1" ulx="162" uly="196" lrx="253" lry="325"/>
+			<zone xml:id="R167-Ι_1" ulx="269" uly="195" lrx="318" lry="314"/>
+			<zone xml:id="R167-Λ_1" ulx="310" uly="170" lrx="436" lry="318"/>
+			<zone xml:id="R167-Λ_2" ulx="424" uly="146" lrx="551" lry="298"/>
+			<zone xml:id="R167-Ο_4" ulx="552" uly="178" lrx="661" lry="297"/>
+			<zone xml:id="R167-N_1" ulx="674" uly="158" lrx="783" lry="297"/>
+			<zone xml:id="R167-Ε_2" ulx="782" uly="172" lrx="893" lry="299"/>
+			<zone xml:id="R167-Ο_5" ulx="884" uly="168" lrx="998" lry="301"/>
+			<zone xml:id="R167-Σ_3" ulx="1000" uly="168" lrx="1098" lry="302"/>
+			
+			<zone xml:id="R167-Τ_1" ulx="56" uly="332" lrx="178" lry="455"/>
+			<zone xml:id="R167-Ο_6" ulx="168" uly="334" lrx="275" lry="443"/>
+			<zone xml:id="R167-Ο_7" ulx="276" uly="330" lrx="387" lry="439"/>
+			<zone xml:id="R167-Υ_2" ulx="388" uly="328" lrx="478" lry="450"/>
+			<zone xml:id="R167-Τ_2" ulx="488" uly="316" lrx="611" lry="441"/>
+			<zone xml:id="R167-Ι_2" ulx="622" uly="306" lrx="667" lry="437"/>
+			<zone xml:id="R167-Ο_8" ulx="668" uly="312" lrx="793" lry="439"/>
+			<zone xml:id="R167-Υ_3" ulx="818" uly="306" lrx="901" lry="435"/>
+			<zone xml:id="R167-Σ_4" ulx="914" uly="308" lrx="1042" lry="433"/>
+			
+			<zone xml:id="R167-N_2" ulx="44" uly="456" lrx="131" lry="545"/>
+			<zone xml:id="R167-Α_2" ulx="128" uly="442" lrx="239" lry="555"/>
+			<zone xml:id="R167-Μ_2" ulx="228" uly="448" lrx="355" lry="549"/>
+			<zone xml:id="R167-Α_3" ulx="354" uly="430" lrx="459" lry="549"/>
+			<zone xml:id="R167-Υ_4" ulx="432" uly="436" lrx="508" lry="551"/>
+			<zone xml:id="R167-Σ_5" ulx="502" uly="442" lrx="597" lry="557"/>
+			<zone xml:id="R167-Α_4" ulx="588" uly="426" lrx="721" lry="551"/>
+			<zone xml:id="R167-Τ_3" ulx="712" uly="440" lrx="821" lry="543"/>
+			<zone xml:id="R167-Ι_3" ulx="836" uly="426" lrx="883" lry="529"/>
+			<zone xml:id="R167-Σ_6" ulx="894" uly="428" lrx="997" lry="537"/>
+			
+			<zone xml:id="R167-Ε_3" ulx="50" uly="560" lrx="141" lry="671"/>
+			<zone xml:id="R167-Ι_4" ulx="132" uly="556" lrx="171" lry="665"/>
+			<zone xml:id="R167-Ω_1" ulx="186" uly="554" lrx="337" lry="649"/>
+			<zone xml:id="R167-Ρ_2" ulx="349" uly="561" lrx="410" lry="664"/>
+			<zone xml:id="R167-Ο_9" ulx="429" uly="560" lrx="524" lry="668"/>
+			<zone xml:id="R167-Υ_5" ulx="539" uly="556" lrx="646" lry="686"/>
+			
+			<zone xml:id="R167-Β_1" ulx="644" uly="554" lrx="739" lry="673"/>
+			<zone xml:id="R167-Η_1" ulx="748" uly="550" lrx="833" lry="671"/>
+			<zone xml:id="R167-Λ_3" ulx="826" uly="530" lrx="957" lry="665"/>
+			<zone xml:id="R167-Η_2" ulx="938" uly="544" lrx="1041" lry="657"/>
+			<zone xml:id="R167-Σ_7" ulx="38" uly="678" lrx="131" lry="817"/>
+			<zone xml:id="R167-Α_5" ulx="120" uly="662" lrx="253" lry="796"/>
+			<zone xml:id="R167-Μ_3" ulx="240" uly="664" lrx="385" lry="790"/>
+			<zone xml:id="R167-Ι_5" ulx="380" uly="656" lrx="423" lry="769"/>
+			
+			<zone xml:id="R167-Σ_8" ulx="436" uly="660" lrx="533" lry="779"/>
+			<zone xml:id="R167-Ο_10" ulx="528" uly="674" lrx="632" lry="784"/>
+			<zone xml:id="R167-Σ_9" ulx="648" uly="670" lrx="763" lry="791"/>
+			<zone xml:id="R167-Ι_6" ulx="758" uly="664" lrx="815" lry="787"/>
+			<zone xml:id="R167-N_3" ulx="830" uly="662" lrx="956" lry="780"/>
+			
+			<zone xml:id="R167-N_4" ulx="44" uly="788" lrx="157" lry="893"/>
+			<zone xml:id="R167-Ε_4" ulx="170" uly="776" lrx="267" lry="896"/>
+			<zone xml:id="R167-Μ_4" ulx="258" uly="772" lrx="421" lry="895"/>
+			<zone xml:id="R167-Η_3" ulx="416" uly="762" lrx="521" lry="885"/>
+			<zone xml:id="R167-Τ_4" ulx="530" uly="772" lrx="657" lry="891"/>
+			<zone xml:id="R167-Ο_11" ulx="660" uly="782" lrx="759" lry="893"/>
+			<zone xml:id="R167-N_5" ulx="780" uly="766" lrx="925" lry="891"/>
+				
+		</surface>
+        <graphic url="https://www.nakala.fr/iiif/11280/acb2ad8b">
+			<desc type="view">Dédicace de Vaison (couleur)</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) ; propriété de l'Institut Calvet d’Avignon</desc>
+			<desc type="author">Florent Comte - Ausonius UMR 5607</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+        <graphic url="https://www.nakala.fr/iiif/11280/4c79fe28">
+			<desc type="view">RIG 1, fig. 178 : Graffite G-153 de Vaison</desc>
+			<desc type="copyright">RIG I</desc>
+			<desc type="author"/>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+		<surface>
+			<media url="VAU-13-01.json" mimeType="model/obj">
+				<desc type="view">3D</desc>
+				<desc type="copyright">à compléter</desc>
+				<desc type="author">Florent Comte - Ausonius UMR 5607</desc>
+				<desc type="licence">
+					<ref target="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</ref>
+				</desc>
+			</media>
+		</surface>
+	</facsimile>
+	<text>
+		<body>
+			<div type="edition">
+				<div type="textpart">
+					<ab>
+						<seg resp="#MLE" xml:lang="xtg-Grek" xml:id="MLE-a" cert="medium">
+							<lb n="1"/>
+							<w pos="NOM" msd="sg m 2" type="idionym">
+								<choice>
+									<orig>
+                                        <g ref="#Σ4" facs="#R167-Σ_1">ϲ</g>
+                                        <g ref="#Ε1" facs="#R167-Ε_1">є</g>
+                                        <g ref="#Γ6" facs="#R167-Γ_1">γ</g>
+                                        <g ref="#Ο6" facs="#R167-Ο_1">ο</g>
+                                        <g ref="#Μ2" facs="#R167-Μ_1">μ</g>
+                                        <g ref="#Α1" facs="#R167-Α_1">α</g>
+                                        <g ref="#Ρ7" facs="#R167-Ρ_1">ρ</g>
+                                        <g ref="#Ο6" facs="#R167-Ο_2">ο</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_2">ϲ</g>
+                                    </orig>
+									<reg>σεγομαρος</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<w pos="NOM" msd="sg m 2" type="patronym">
+								<choice>
+									<orig>
+                                        <g ref="#Ο1" facs="#R167-Ο_3">ο</g>
+                                        <g ref="#Υ14" facs="#R167-Υ_1">υ</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_1">ι</g>
+                                        <g ref="#Λ4" facs="#R167-Λ_1">λ</g>
+                                        <g ref="#Λ4" facs="#R167-Λ_2">λ</g>
+                                        <g ref="#Ο1" facs="#R167-Ο_4">ο</g>
+                                        <g ref="#Ν1" facs="#R167-N_1">ν</g>
+                                        <g ref="#Ε1" facs="#R167-Ε_2">є</g>
+                                        <g ref="#Ο6" facs="#R167-Ο_5">ο</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_3">ϲ</g>
+                                    </orig>
+									<reg>ουιλλονεος</reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w pos="NOM" msd="sg m 2" type="substantive" subtype="cl_citizenship">
+								<choice>
+									<orig>
+                                        <g ref="#Τ1" facs="#R167-Τ_1">τ</g>
+                                        <g ref="#Ο1" facs="#R167-Ο_6">ο</g>
+                                        <g ref="#Ο1" facs="#R167-Ο_7">ο</g>
+                                        <g ref="#Υ14" facs="#R167-Υ_2">υ</g>
+                                        <g ref="#Τ1" facs="#R167-Τ_2">τ</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_2">ι</g>
+                                        <g ref="#Ο6" facs="#R167-Ο_8">ο</g>
+                                        <g ref="#Υ14" facs="#R167-Υ_3">υ</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_3">ϲ</g>
+                                    </orig>
+									<reg>τοουτιους</reg>
+								</choice>
+							</w>
+							<lb n="4"/>
+							<w pos="NOM" msd="sg m 5" type="ethnonym">
+								<choice>
+									<orig>
+                                        <g ref="#Ν1" facs="#R167-N_2">ν</g>
+                                        <g ref="#Α13" facs="#R167-Α_2">α</g>
+                                        <g ref="#Μ2" facs="#R167-Μ_2">μ</g>
+                                        <g ref="#Α13" facs="#R167-Α_3">α</g>
+                                        <g ref="#Υ14" facs="#R167-Υ_4">υ</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_4">ϲ</g>
+                                        <g ref="#Α13" facs="#R167-Α_4">α</g>
+                                        <g ref="#Τ1" facs="#R167-Τ_3">τ</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_3">ι</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_5">ϲ</g>
+                                    </orig>
+									<reg>
+                                        <rs type="stem">ναμαυσ</rs>
+                                        <rs type="suffix" subtype="ethnic">ατι</rs>ς</reg>
+								</choice>
+							</w>
+							<lb n="5"/>
+							<w pos="verb" msd="P3 sg PRT">
+								<choice>
+									<orig>
+                                        <g ref="#Ε1" facs="#R167-Ε_3">є</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_4">ι</g>
+                                        <g ref="#Ω1" facs="#R167-Ω_1">ⲱ</g>
+                                        <g ref="#Ρ7" facs="#R167-Ρ_2">ρ</g>
+                                        <g ref="#Ο2" facs="#R167-Ο_9">ο</g>
+                                        <g ref="#Υ14" facs="#R167-Υ_5">υ</g>
+                                    </orig>
+									<reg>ειωρου</reg>
+								</choice>
+							</w>
+							<w pos="DAT" msd="sg f 1" type="theonym">
+								<choice>
+									<orig>
+                                        <g ref="#Β5" facs="#R167-Β_1">β</g>
+                                        <g ref="#Η1" facs="#R167-Η_1">η</g>
+                                        <g ref="#Λ4" facs="#R167-Λ_3">λ</g>
+                                        <g ref="#Η1" facs="#R167-Η_2">η</g>
+                                        <lb n="6" break="no"/>
+                                        <g ref="#Σ4" facs="#R167-Σ_6">ϲ</g>
+                                        <g ref="#Α13" facs="#R167-Α_5">α</g>
+                                        <g ref="#Μ2" facs="#R167-Μ_3">μ</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_5">ι</g>
+                                    </orig>
+									<reg>βηλη<lb n="6" break="no"/>σαμι</reg>
+								</choice>
+							</w>
+							<w pos="ACC" type="demonstrative">
+								<choice>
+									<orig>
+                                        <g ref="#Σ4" facs="#R167-Σ_7">ϲ</g>
+                                        <g ref="#Ο2" facs="#R167-Ο_9">ο</g>
+                                        <g ref="#Σ4" facs="#R167-Σ_8">ϲ</g>
+                                        <g ref="#Ι1" facs="#R167-Ι_6">ι</g>
+                                        <g ref="#Ν1" facs="#R167-N_3">ν</g>
+                                    </orig>
+									<reg>σοσιν</reg>
+								</choice>
+							</w>
+							<lb n="7"/>
+							<w pos="ACC" type="substantive">
+								<choice>
+									<orig>
+                                        <g ref="#Ν1" facs="#R167-N_4">ν</g>
+                                        <g ref="#Ε1" facs="#R167-Ε_4">є</g>
+                                        <g ref="#Μ2" facs="#R167-Μ_4">μ</g>
+                                        <g ref="#Η1" facs="#R167-Η_3">η</g>
+                                        <g ref="#Τ1" facs="#R167-Τ_4">τ</g>
+                                        <g ref="#Ο2" facs="#R167-Ο_10">ο</g>
+                                        <g ref="#Ν1" facs="#R167-N_5">ν</g>
+                                    </orig>
+									<reg>νεμητον</reg>
+								</choice>
+							</w>
+						</seg>
+						<seg resp="#PLT" xml:lang="xtg-Grek" xml:id="PLT-a" cert="medium">
+							<lb n="1"/>
+							<w pos="NOM" msd="sg m 2" type="idionym">
+								<choice>
+									<orig>ϲєγομα<g ref="#Ρ7">ρ</g>οϲ</orig>
+									<reg>σεγομαρος</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<w pos="NOM" msd="sg m 2" type="patronym">
+								<choice>
+									<orig>ουιλλονєοϲ</orig>
+									<reg>
+                                        <rs type="anthroponymic_element">ουιλλον</rs>εος</reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w pos="INS-SOC" msd="pl m 2" type="substantive" subtype="cl_citizenship">
+								<choice>
+									<orig>τοουτιουϲ</orig>
+									<reg>
+                                        <rs type="anthroponymic_element">τοουτιου</rs>ς</reg>
+								</choice>
+							</w>
+							<lb n="4"/>
+							<w pos="NOM" msd="sg m 5" type="ethnonym">
+								<choice>
+									<orig>ναμαυϲατιϲ</orig>
+									<reg>
+                                        <rs type="stem">ναμαυσ</rs>
+                                        <rs type="suffix" subtype="ethnic">ατι</rs>ς</reg>
+								</choice>
+							</w>
+							<lb n="5"/>
+							<w pos="verb" msd="P3 sg PRT">
+								<choice>
+									<orig>єι<g ref="#Ω1">ⲱ</g>
+                                        <g ref="#Ρ7">ρ</g>ου</orig>
+									<reg>ειωρου</reg>
+								</choice>
+							</w>
+							<w pos="DAT" msd="sg f 1" type="theonym">
+								<choice>
+									<orig>βηλη<lb n="6" break="no"/>ϲαμι</orig>
+									<reg>βηλη<lb n="6" break="no"/>σαμι</reg>
+								</choice>
+							</w>
+							<w pos="ACC" type="demonstrative">
+								<choice>
+									<orig>ϲοϲιν</orig>
+									<reg>σοσιν</reg>
+								</choice>
+							</w>
+							<lb n="7"/>
+							<w pos="ACC" type="substantive">
+								<choice>
+									<orig>νєμητον</orig>
+									<reg>νεμητον</reg>
+								</choice>
+							</w>
+						</seg>
+						<seg resp="#RIIG_L" xml:lang="xtg-Grek" xml:id="RIIG-a" cert="medium">
+							<lb n="1"/>
+							<w pos="NOM" msd="sg m 2" type="idionym">
+								<choice>
+									<orig>ϲєγομα<g ref="#Ρ7">ρ</g>οϲ</orig>
+									<reg>σεγομαρος</reg>
+								</choice>
+							</w>
+							<lb n="2"/>
+							<w pos="NOM" msd="sg m 2" type="patronym">
+								<choice>
+									<orig>ουιλλονєοϲ</orig>
+									<reg>
+                                        <rs type="anthroponymic_element">ουιλλον</rs>εος</reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w pos="INS-SOC" msd="pl m 2" type="substantive" subtype="cl_citizenship">
+								<choice>
+									<orig>τοουτιουϲ</orig>
+									<reg>
+                                        <rs type="anthroponymic_element">τοουτιου</rs>ς</reg>
+								</choice>
+							</w>
+							<lb n="4"/>
+							<w pos="NOM" msd="sg m 5" type="ethnonym">
+								<choice>
+									<orig>ναμαυϲατιϲ</orig>
+									<reg>
+                                        <rs type="stem">ναμαυσ</rs>
+                                        <rs type="suffix" subtype="ethnic">ατι</rs>ς</reg>
+								</choice>
+							</w>
+							<lb n="5"/>
+							<w pos="verb" msd="P3 sg PRT">
+								<choice>
+									<orig>єι<g ref="#Ω1">ⲱ</g>
+                                        <g ref="#Ρ7">ρ</g>ου</orig>
+									<reg>ειωρου</reg>
+								</choice>
+							</w>
+							<g type="interpunct"/>
+							<w pos="DAT" msd="sg f 1" type="theonym">
+								<choice>
+									<orig>βηλη<lb n="6" break="no"/>ϲαμι</orig>
+									<reg>βηλη<lb n="6" break="no"/>σαμι</reg>
+								</choice>
+							</w>
+							<w pos="ACC" type="demonstrative">
+								<choice>
+									<orig>ϲοϲιν</orig>
+									<reg>σοσιν</reg>
+								</choice>
+							</w>
+							<lb n="7"/>
+							<w pos="ACC" type="substantive">
+								<choice>
+									<orig>νєμητον</orig>
+									<reg>νεμητον</reg>
+								</choice>
+							</w>
+						</seg>
+					</ab>
+				</div>
+			</div>
+
+			<!-- Commentaire : -->
+			<div type="apparatus" corresp="#MLE-a" resp="#MLE">
+				<p>Sur la signification, accord général, les divergences ne concernant que des détails. </p>
+				<p>Le nom <mentioned ana="idionym" xml:lang="xtg">Segomāros</mentioned> est connu ailleurs, notamment en <placeName>Narbonnaise</placeName> aux <placeName>Baux</placeName> (<bibl corresp="https://riig.huma-num.fr/documents/BDR-05-03">BDR-05-03</bibl>), et à <placeName>Couchey</placeName> en Côte d'Or (<bibl corresp="http://zotero.org/groups/2657791/items/N35QEJQ3"><!--Dottin 37--></bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/RS6R4TJ8"><!--Whatmough 1970-->
+                        <citedRange unit="entry">161</citedRange>
+                    </bibl>). Sur ce composé, voir <bibl corresp="http://zotero.org/groups/2657791/items/8K27V2SR"><!--Schmidt 1957-->
+                        <citedRange unit="page">238, 265</citedRange>
+                    </bibl> et <bibl corresp="http://zotero.org/groups/2657791/items/U6JHNX2D"><!--Evans 1967-->
+                        <citedRange unit="page">111, 223, 254</citedRange>
+                    </bibl>. Le père s'appelait soit <mentioned ana="patronym" xml:lang="xtg">*Villō</mentioned> (thème à nasale <mentioned ana="stem" xml:lang="xtg">*Villon-</mentioned>) soit <mentioned ana="patronym" xml:lang="xtg">*Villonos</mentioned> ; un potier <mentioned ana="idionym" xml:lang="xtg">Villō</mentioned> est connu (<bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder II-->
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">319</citedRange>
+                    </bibl>), mais, à cela près, la souche est isolée (<bibl corresp="http://zotero.org/groups/2657791/items/U6JHNX2D"><!--Evans 1967-->
+                        <citedRange unit="page">477</citedRange>
+                    </bibl>). Dérivé patronymique en <mentioned ana="suffixe patronymic" xml:lang="xtg">-eo-</mentioned>. </p>
+				<p>Du dérivé <mentioned xml:lang="xtg-Grek">τοουτιους</mentioned> de <mentioned ana="stem" xml:lang="xtg">toutā</mentioned>, il convient d'abord de rappeler que la forme est certainement incorrecte, faute de crédibilité pour une suffixation <mentioned ana="suffix" xml:lang="xtg">*-yu-</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/MZ3E4NYL http://zotero.org/groups/2657791/items/JW5JC3KE"><!--Lejeune 1969-->
+                        <citedRange unit="page">45</citedRange>
+                    </bibl> ; le mécanisme de l'erreur est apparent : lapsus dittographique pour <mentioned ana="patronym" xml:lang="xtg-Grek">τοουτιος</mentioned> ; thème, donc, <mentioned ana="stem" xml:lang="xtg">toutio-</mentioned>, identique au premier terme de composé de <mentioned ana="anthroponym" xml:lang="xtg">
+                        <mentioned ana="anthroponymic_element" xml:lang="xtg">Toutio</mentioned>-<mentioned ana="anthroponymic_element" xml:lang="xtg">rīx</mentioned>
+                    </mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/8K27V2SR"><!--Schmidt 1957-->
+                        <citedRange unit="page">280</citedRange>
+                    </bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/U6JHNX2D"><!--Evans 1967-->
+                        <citedRange unit="page">266</citedRange>
+                    </bibl>), alors que les anthroponymes du type <mentioned ana="anthroponym" xml:lang="xtg">Toutios</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder II-->
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">1898</citedRange>
+                    </bibl>) pourraient être aussi bien des hypocoristiques formés sur les composés en <mentioned ana="anthroponymic_element" xml:lang="xtg">Touto-</mentioned>. On a hésité, pour l'appellatif <mentioned ana="cl_citizenship" xml:lang="xtg">toutio-</mentioned>, entre le sens « citoyen » et le sens « homme public, magistrat » ; le premier est plus probable ; l'<mentioned ana="theonym" xml:lang="la">Apollon Toutiorix</mentioned> de <placeName>Wiesbaden</placeName> (<bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">XIII</biblScope>
+                        <citedRange unit="entry">7564</citedRange>
+                    </bibl>) est plutôt « souverain des citoyens » que « souverain des magistrats ». Le dévot de <placeName>Vaison</placeName> indique son origine, du fait même qu'il est étranger : à titre privé, non-officiel, un Volque est venu faire dédicace chez les Voconces. </p>
+				<p>Du nom indigène de <placeName>Nîmes</placeName>, deux ethniques : l'un est en <mentioned ana="suffix" xml:lang="xtg">-āti-</mentioned> (ici), l'autre en <mentioned ana="suffix" xml:lang="xtg">-iko-</mentioned> (à <placeName>Nîmes</placeName>, datif féminin pluriel <mentioned xml:lang="xtg-Grek">ναμαυσικαϐο</mentioned>, <bibl corresp="https://riig.huma-num.fr/documents/GAR-10-01">GAR-10-01</bibl>). Le nom de la ville est en <mentioned ana="stem" xml:lang="xtg">Nam-</mentioned> dans ces deux textes, qui sont nos deux seules sources indigènes, en regard de <mentioned xml:lang="xtg-Grek">Νέμαυσος</mentioned>, <mentioned xml:lang="la">Nemausus</mentioned> dans la tradition classique (épigraphique et littéraire) ; monnayage local : d'abord <mentioned xml:lang="xtg-Grek">Ναμ-</mentioned>, plus tard <mentioned xml:lang="xtg-Grek">Νεμ</mentioned>, <mentioned xml:lang="xtg">NEM-</mentioned>. </p>
+				<p>La venue au jour de notre texte suivit de peu celle (<date when="1839">1839</date>) de la dédicace de Martialis à <placeName>Alise-Sainte-Reine</placeName> (<bibl corresp="http://zotero.org/groups/2657791/items/N35QEJQ3"><!--Dottin 1918-->
+                        <citedRange unit="entry">33</citedRange>
+                    </bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/RS6R4TJ8"><!--Whatmough 1970-->
+                        <citedRange unit="entry">169</citedRange>
+                    </bibl> : <mentioned xml:lang="xtg">... ieuru... sosin celicnon...</mentioned>) et on avait déjà alors d'autres inscriptions <mentioned xml:lang="xtg">ieuru</mentioned> (à <placeName>Nevers</placeName>, à <placeName>Auxey</placeName>, au <placeName>Vieux-Poitiers</placeName>). On a donc sur-le-champ reconnu un verbe (prétérit 3<hi rend="superscript">e</hi> singulier) en <mentioned ana="verb" xml:lang="xtg-Grek">ειωρου</mentioned> bien que la correspondance soit imparfaite entre et <emph>ειω-</emph> et <emph>ieu-</emph>. Sur le sens (qui est « <mentioned ana="verb" xml:lang="la">dēdicāuit</mentioned> », et non « <mentioned ana="verb" xml:lang="la">fēcit</mentioned> »), voir en dernier lieu <bibl corresp="http://zotero.org/groups/2657791/items/MF87LUPM"><!--Lejeune 1980-->
+                        <citedRange unit="page">110</citedRange>
+                    </bibl>. La morphologie est encore mal élucidée ; sur les diverses hypothèses (et avec une hypothèses nouvelle), voir en dernier lieu <bibl corresp="http://zotero.org/groups/2657791/items/SFQQ5KL2"><!--Lambert 1979-->
+                        <citedRange unit="page">110</citedRange>
+                    </bibl> ; mais on souhaiterait un second témoignage gallo-grec (<mentioned ana="verb" xml:lang="xtg-Grek">ειωρου</mentioned>, qui est, un hapax, est livré par un texte qui manifeste, par ailleurs, un lapsus). </p>
+				<p>La dédicataire est une déesse, également connue par l'inscription latine d'un cippe votif à <placeName>Saint-Lizier</placeName> (Ariège), <mentioned xml:lang="la">Mineruae Belisamae sacrum</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/34W5PCBI"><!--CIL-->
+                        <biblScope unit="volume">XIII</biblScope>
+                        <citedRange unit="entry">8</citedRange>
+                    </bibl>) ; le flottement <emph>e</emph>/<emph>i</emph> en syllabe intérieure rappelle celui de <mentioned ana="theonym" xml:lang="xtg">Belenos</mentioned>/<mentioned ana="theonym" xml:lang="xtg">Belinos</mentioned>. Comme l'a reconnu <persName key="WSS">Stokes</persName> dès <date when="1858">1858</date>, datif en <mentioned ana="thematic_vowel" xml:lang="xtg">ī</mentioned> de première déclinaison, comme celui que postule l'irlandais (<bibl corresp="http://zotero.org/groups/2657791/items/NKWWGQWU"><!--Thurneysen 1946-->
+                        <citedRange unit="paragraph">296</citedRange>
+                    </bibl>). Mais ajouter que cet <mentioned ana="thematic_vowel" xml:lang="xtg">ī</mentioned> est lui-même, dès la fin de la période gallo-grecque, l'aboutissement du plus ancien <mentioned ana="thematic_vowel" xml:lang="xtg">-ai</mentioned>. </p>
+				<p>Sur le démonstratif, voir <bibl corresp="http://zotero.org/groups/2657791/items/R737NGN3"><!--Lejeune 32-->
+                        <citedRange unit="page">51</citedRange>
+                    </bibl> : <mentioned xml:lang="xtg-Grek">... ειωρου... σοσιν νεμητον</mentioned> ici, comme <mentioned xml:lang="xtg">... ieuru... sosin celicnon...</mentioned> à <placeName>Alise-Sainte-Reine</placeName> (<bibl corresp="http://zotero.org/groups/2657791/items/N35QEJQ3"><!--Dottin 33--></bibl>). Le mot <mentioned xml:lang="xtg-Grek">νεμητον</mentioned> (avec variante graphique <emph>η</emph> de <emph>ε</emph>) était déjà connu comme galate par <persName key="ST">Strabon</persName> (<bibl corresp="http://data.perseus.org/citations/urn:cts:greekLit:tlg0099.tlg001.perseus-grc1:4.6.3">Strabon<citedRange unit="book">XII</citedRange>
+                        <citedRange unit="chapter">5</citedRange>
+                        <citedRange unit="section">1</citedRange>
+                    </bibl> : <mentioned xml:lang="xga">ἄνδρες... τριακόσιοι συνήγοντο... εἰς τὸ</mentioned> (codd. <mentioned xml:lang="xga">τὸν</mentioned> ; nous corrigeons) <mentioned xml:lang="xga">καλούμενον δρυνέμετον</mentioned> (codd. <mentioned xml:lang="xga">δρυναίμετον</mentioned>) ; il figure en Gaule au second terme de toponymes gallo-romains neutres comme <mentioned ana="toponym" xml:lang="xtg">Augustonemetum</mentioned>, etc ; il se manifeste au premier terme d'un anthroponyme comme <mentioned ana="anthroponym" xml:lang="xtg">Nemetogena</mentioned> (Bordeaux ; <bibl corresp="http://zotero.org/groups/2657791/items/8K27V2SR"><!--Schmidt 1957-->
+                        <citedRange unit="page">248</citedRange>
+                    </bibl>) ; il survit en celtique insulaire : vieil-irlandais neutre (ensuite, et secondairement, masculin) <mentioned ana="anthroponym" xml:lang="sga">nemed</mentioned>, glosant « <mentioned xml:lang="la">sacellum</mentioned> ». Comme l'indique le mot galate (à premier terme <mentioned ana="anthroponymic_element" xml:lang="xga">drū-</mentioned> (« chêne »), ce lieu sacré est proprement, un lucus (voir aussi <bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder II-->
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">712</citedRange>
+                    </bibl>). Autre dédicace gauloise d'un lucus : celle de Verceil, avec traduction latine <mentioned xml:lang="la">finis campo quem dedit Acisius Argantocomatereeus comunem deis et hominibus</mentioned> (borne bilingue ; cf. <bibl corresp="http://zotero.org/groups/2657791/items/7PMLYMTB"><!--Lejeune 1977--></bibl>). L'inscription de Segomaros doit provenir d'un élément de délimitation (par exemple, un pilier) d'un tel lucus. </p>
+				<p>Sur une éventuelle structure métrique du texte, hypothèses inconsistance chez <persName key="JRS">Rhŷs</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/9AEYU4SM"><!--Rhŷs 1906--></bibl>) (dactyles) et chez <persName key="LGY">Gray</persName> (<bibl corresp="http://zotero.org/groups/2657791/items/YMW8N4J7"><!--Gray 1942--></bibl>) (trochées). </p>
+			</div>
+			<div type="translation" corresp="#MLE-a" resp="#MLE">
+				<p>Segomaros fils de Villo(nos), citoyen de Nîmes, a dédié à Belesama ce lieu sacré. </p>
+			</div>
+			<div type="translation" corresp="#PLT-a" resp="#PLT">
+				<p>Segomaros fils de Villū, avec ses concitoyens de Nîmes, a dédié à Belesama ce lieu sacré. </p>
+			</div>
+			
+			<div type="commentary" subtype="sociolinguistic" resp="#MEN">
+				<p>
+					<list>
+						<item>Genre épigraphique : édilitaire et religieux</item>
+						<item>Le dédicant est un citoyen de Nîmes (ou un magistrat). Expression de l'identité civique : impact de la culture romaine. </item>
+					</list>
+				</p>
+			</div>
+			<div type="commentary" subtype="sociolinguistic" resp="#AMN" xml:lang="en">
+				<p>
+					<list>
+						<item>Gaulish patronymic adjective <mentioned ana="suffix">-eos</mentioned>.</item>
+						<item>IEVRV example, see <bibl corresp="http://zotero.org/groups/2657791/items/SFQQ5KL2"><!--Lambert 1979--></bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/MF87LUPM"><!--Lejeune 1980a--></bibl>, <bibl corresp="http://zotero.org/groups/2657791/items/GTICH2L2"><!--Estarán 2021--></bibl>. </item>
+						<item>Rare mention of local civic affiliation, in this case to the community at Nîmes. Note however that there is no certainty that Segomaros is a 'citizen' in the the Roman sense of the term. He does not have the naming formula which would indicate citizenship and even in Latin inscriptions when individuals have the description civis X this does not always mean citizenship but sometimes indicates simply belonging to civitas X.</item>
+					</list>
+				</p>
+			</div>
+			<div type="commentary" subtype="general" corresp="#MLE-a #PLT-a" resp="#CaJN">
+				<p>Pour les différentes analyses morpho-etymologiques, vid. aussi <bibl corresp="http://zotero.org/groups/2657791/items/28JDE5FI"><!--Delamarre 2018--></bibl> <emph>s.uu.</emph> <mentioned ana="stem" xml:lang="xtg">sego-</mentioned>, « victoire, force » ; <mentioned ana="anthroponymic_element" xml:lang="xtg">maros</mentioned>, « grand » ; <mentioned ana="substantive" xml:lang="xtg">toutios</mentioned>, « citoyen » ; <mentioned ana="verb" xml:lang="xtg">ieuru</mentioned>, « a offert, a dédié » ; <mentioned ana="demonstratif" xml:lang="xtg">sosin</mentioned>, « ce, hoc » ; <mentioned ana="substantive" xml:lang="xtg">nemeton</mentioned>, « sanctuaire » (&lt; « bois sacré »).</p>
+			</div>
+			<div type="commentary" subtype="general" corresp="#MLE-a #PLT-a" resp="#DWO" xml:lang="de">
+				<p>
+                    <bibl corresp="http://zotero.org/groups/2657791/items/R7NYA4UF"><!--Lambert 2018-->
+                        <citedRange unit="page">55</citedRange>
+                    </bibl> vermutet, dass es sich bei τοουτιους um einen soziativen Instr. pl. „avec ses concitoyens“ handeln könnte, der auf <emph>*-ōis</emph> zurück ginge.
+					Zu einem möglichen Suffix <emph>-yu-</emph> s. auch <bibl corresp="http://zotero.org/groups/2657791/items/PBAMUSIY"><!--Lambert 2013b-->
+                        <citedRange unit="entry">126-128</citedRange>
+                    </bibl>, der in einer Bildung wie τοουτιους mit Einfluss der griechischen denominalen Nomina agentis auf -ευς rechnet. Die gr. -ευς-Nomina hat <bibl corresp="http://zotero.org/groups/2657791/items/BX36KUTF"><!--Hajnal 2005--></bibl> mit der produktiven Bildeweise von denominalen Nomina agentis auf <emph>-ius</emph> im Litauischen verglichen; s. zu diesen <bibl corresp="http://zotero.org/groups/2657791/items/WSCZMN4C"><!--Skardžius 1943-->
+                        <citedRange unit="entry">78</citedRange>
+                    </bibl>.
+					Zu beachten bleibt auch die Verbindung TOVTIV TREBAQVE (ERClunia 100; s. <bibl corresp="http://zotero.org/groups/2657791/items/I9SK9LAA"><!--Gorrochategui 2011-->
+                        <citedRange unit="page">211-214</citedRange>
+                    </bibl>) aus keltiberischem Gebiet.
+				</p>
+			</div>
+			<div type="commentary" subtype="general" corresp="#MLE-a #PLT-a" resp="#CaJN">
+				<p>Dans <bibl corresp="http://zotero.org/groups/2657791/items/F6THII2W"><!--AE-->
+                        <citedRange unit="issue">1988</citedRange>
+                        <citedRange unit="entry">805</citedRange>
+                    </bibl>, une stèle trouvée à <placeName>Clunia</placeName> (Burgos), on lit <mentioned ana="substantive" xml:lang="xce">toutiu</mentioned>, que <bibl corresp="http://zotero.org/groups/2657791/items/I9SK9LAA"><!--Gorrochategui 2011--></bibl> complète en <mentioned xml:lang="xce">toutius</mentioned> et, en raison de la structure du texte, suggère de considérer comme un mot celtibère, décliné en latin, qui désignerait un « magistrat » et non un « citoyen ». Cependant, il y a une autre interprétation possible : le mot est complet et pourrait être un nominatif singulier d'un thème en nasale. Il serait donc en celtibère. Il pourrait en effet faire référence à une personne qui apparaît sur la stèle, mais il pourrait aussi s'agir d'une référence à un collectif, surtout si l'on tient compte du fait qu'il est suivi de l'expression <mentioned xml:lang="xce">trebaque</mentioned>.
+				</p>
+			</div>
+			<div type="commentary" subtype="general" corresp="#MLE-a #PLT-a" resp="#DSR" xml:lang="en">
+				<p>For <mentioned ana="verb" xml:lang="xtg-Grek">ΕΙΩΡΟΥ</mentioned> see <bibl corresp="http://zotero.org/groups/2657791/items/P8G798JK"><!--Schumacher 2004-->
+                        <citedRange unit="page">738–741</citedRange>
+                    </bibl>. </p>
+			</div>
+			
+			<!-- Description détaillée du document : -->
+			<div type="commentary" subtype="physDesc">
+				<div type="commentary" subtype="support" resp="#MLE"/>
+				<div type="commentary" subtype="layout" resp="#MLE"/>
+				<div type="commentary" subtype="handNote" resp="#MLE">
+					<p>Au début de la l.3, le lapicide avait d'abord gravé <emph>του...</emph> ; il a effacé le <emph>υ</emph> fautif (dont on aperçoit encore la trace) pour écrire <emph>ο</emph> par-dessus, et aboutir à la graphie correcte <emph>τοου...</emph> ; mais, mal parti, il a fait, plus loin dans la même ligne, une autre erreur <emph>ους...</emph> au lieu de <emph>...ος</emph>, erreur qu'il n'a pas vue, ou en tout cas pas corrigée. </p>
+				</div>
+			</div>
+
+			<!-- Description détaillée de l'origine document : -->
+			<div type="commentary" subtype="history">
+				<div type="commentary" subtype="context" resp="#MLE"/>
+				<div type="commentary" subtype="micro-context" resp="#MLE"/>
+				<div type="commentary" subtype="datation" resp="#MLE"/>
+			</div>
+			
+			<!-- Bibliographie : -->
+			<div type="bibliography" subtype="principalEdition">
+				<listBibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/4T8X6DPC"/>
+                        <citedRange unit="page">205-209</citedRange>
+                    </bibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/4T8X6DPC"/>
+                        <citedRange unit="page">206</citedRange>
+                        <citedRange unit="figure">178</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography" subtype="otherEditions">
+				<listBibl resp="#MLE">
+					<bibl><!--Saussaye 1842-->
+                        <ptr target="http://zotero.org/groups/2657791/items/EEJ8AHZN"/>
+                    </bibl>
+					<bibl><!--Deloye 1848-->
+                        <ptr target="http://zotero.org/groups/2657791/items/5EGCVWW6"/>
+                    </bibl>
+					<bibl><!--Becker 1852-->
+                        <ptr target="http://zotero.org/groups/2657791/items/URPVBK44"/>
+                        <citedRange unit="page">120</citedRange>
+                    </bibl>
+					<bibl><!--Mommsen 1853-->
+                        <ptr target="http://zotero.org/groups/2657791/items/ZGKRGYE6"/>
+                        <citedRange unit="page">240</citedRange>
+                    </bibl>
+					<bibl><!--Stark 1853-->
+                        <ptr target="http://zotero.org/groups/2657791/items/4JD5BGYY"/>
+                        <citedRange unit="fascicule">55-57</citedRange>
+                        <citedRange unit="column">370</citedRange>
+                    </bibl>
+					<bibl><!--Stokes 1858-->
+                        <ptr target="http://zotero.org/groups/2657791/items/GJNWDRFX"/>
+                        <citedRange unit="page">451</citedRange>
+                    </bibl>
+					<bibl><!--Pictet 1867c-->
+                        <ptr target="http://zotero.org/groups/2657791/items/ARVJCXM3"/>
+                        <citedRange unit="page">385</citedRange>
+                    </bibl>
+					<bibl><!--Héron de Villefosse 1879a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/I75VYIY9 http://zotero.org/groups/2657791/items/JK2B695K"/>
+                        <citedRange unit="page">42</citedRange>
+                        <citedRange unit="entry">3</citedRange>
+                    </bibl>
+					<bibl><!--Hirschfeld 1883-->
+                        <ptr target="http://zotero.org/groups/2657791/items/I2ADI4DS"/>
+                        <citedRange unit="page">42</citedRange>
+                    </bibl>
+					<bibl><!--Stokes 1886-->
+                        <ptr target="http://zotero.org/groups/2657791/items/WSKITS9R"/>
+                        <citedRange unit="page">122</citedRange>
+                        <citedRange unit="entry">6</citedRange>
+                    </bibl>
+					<bibl><!--Héron de Villefosse 1887-->
+                        <ptr target="http://zotero.org/groups/2657791/items/NTL5LM9I"/>
+                        <citedRange unit="page">204</citedRange>
+                        <citedRange unit="entry">8</citedRange>
+                    </bibl>
+					<bibl><!--CIL-->
+                        <ptr target="http://zotero.org/groups/2657791/items/34W5PCBI"/>
+                        <biblScope unit="volume">XII</biblScope>
+                        <citedRange unit="page">162</citedRange>
+                    </bibl>
+					<bibl><!--Allmer 1875-->
+                        <ptr target="http://zotero.org/groups/2657791/items/8TUC7UWN"/>
+                        <citedRange unit="page">128</citedRange>
+                        <citedRange unit="entry">457</citedRange>
+                    </bibl>
+					<bibl><!--Germer-Durand 1892-->
+                        <ptr target="http://zotero.org/groups/2657791/items/5N9XPVS7"/>
+                        <citedRange unit="page">654</citedRange>
+                    </bibl>
+					<bibl><!--Sacaze 1892-->
+                        <ptr target="http://zotero.org/groups/2657791/items/MUNFB8AD"/>
+                        <citedRange unit="page">119</citedRange>
+                    </bibl>
+					<bibl><!--Allmer 1895-->
+                        <ptr target="http://zotero.org/groups/2657791/items/PXCICH44"/>
+                        <citedRange unit="page">375</citedRange>
+                        <citedRange unit="entry">1134</citedRange>
+                    </bibl>
+					<bibl><!--Esperandieu 1900a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/8DUNV4UZ"/>
+                        <citedRange unit="page">10</citedRange>
+                        <citedRange unit="entry">3</citedRange>
+                    </bibl>
+					<bibl><!--Rhŷs 1906-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9AEYU4SM"/>
+                        <citedRange unit="page">285</citedRange>
+                        <citedRange unit="entry">VI</citedRange>
+                    </bibl>
+					<bibl><!--Dottin 1918-->
+                        <ptr target="http://zotero.org/groups/2657791/items/N35QEJQ3"/>
+                        <citedRange unit="page">149</citedRange>
+                    </bibl>
+					<bibl><!--Sautel 1926-->
+                        <ptr target="http://zotero.org/groups/2657791/items/V533QMS8"/>
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="page">4</citedRange>
+                        <citedRange unit="entry">2</citedRange>
+                    </bibl>
+					<bibl><!--Sautel 1926-->
+                        <ptr target="http://zotero.org/groups/2657791/items/V533QMS8"/>
+                        <biblScope unit="volume">III</biblScope>
+                        <citedRange unit="plate">I</citedRange>
+                    </bibl>
+					<bibl><!--Sautel 1939-->
+                        <ptr target="http://zotero.org/groups/2657791/items/HPGXFXXE"/>
+                        <citedRange unit="page">58</citedRange>
+                        <citedRange unit="entry">39</citedRange>
+                    </bibl>
+					<bibl><!--Gray 1942-->
+                        <ptr target="http://zotero.org/groups/2657791/items/YMW8N4J7"/>
+                        <citedRange unit="page">442</citedRange>
+                    </bibl>
+					<bibl><!--Thurneysen 1946-->
+                        <ptr target="http://zotero.org/groups/2657791/items/NKWWGQWU"/>
+                    </bibl>
+					<bibl><!--Schmidt 1957-->
+                        <ptr target="http://zotero.org/groups/2657791/items/8K27V2SR"/>
+                    </bibl>
+					<bibl><!--Holder 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/9LE83Y7L"/>
+                    </bibl>
+					<bibl><!--Evans 1967-->
+                        <ptr target="http://zotero.org/groups/2657791/items/U6JHNX2D"/>
+                    </bibl>
+					<bibl><!--Lejeune 1968a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/MZ3E4NYL http://zotero.org/groups/2657791/items/JW5JC3KE"/>
+                    </bibl>
+					<bibl><!--Whatmough 1970-->
+                        <ptr target="http://zotero.org/groups/2657791/items/RS6R4TJ8"/>
+                        <citedRange unit="page">109</citedRange>
+                    </bibl>
+					<bibl><!--Lejeune 1977d-->
+                        <ptr target="http://zotero.org/groups/2657791/items/7PMLYMTB"/>
+                    </bibl>
+					<bibl><!--Lambert 1979-->
+                        <ptr target="http://zotero.org/groups/2657791/items/SFQQ5KL2"/>
+                    </bibl>
+					<bibl><!--Lejeune 1980a-->
+                        <ptr target="http://zotero.org/groups/2657791/items/MF87LUPM"/>
+                    </bibl>
+					<bibl><!--Lejeune 1980c-->
+                        <ptr target="http://zotero.org/groups/2657791/items/R737NGN3"/>
+                    </bibl>
+				</listBibl>
+				<listBibl resp="#RIIG">
+					<bibl><!--CAG 84-1-->
+                        <ptr target="http://zotero.org/groups/2657791/items/284BIZS4"/>
+                        <citedRange unit="page">288-289</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography">
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/8SDXC9RT" type="RIG">
+					<bibl/>
+				</listBibl>
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/TA5HV96U" type="RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+		</body>
+	</text>
+</TEI>

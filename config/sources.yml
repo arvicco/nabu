@@ -478,6 +478,46 @@ local-notes:
   # derived urn_notes and rendered on show/define/links (MCP serves notes by
   # default, withheld wherever the target document is withheld).
 
+riig:
+  adapter: Nabu::Adapters::Riig
+  enabled: false   # P25-1: awaiting the owner-fired first crawl (~6 MB: the
+                   # corpus map + 428 EpiDoc records, polite sequential;
+                   # CLAUDE.md checklist §6 — bin/nabu sync riig, eyeball
+                   # nabu show urn:nabu:riig:vau-13-01 --parallel (the
+                   # Segomaros dedication, σεγομαρος … νεμητον + the French
+                   # sibling) and 5 random records, then flip). Expect the
+                   # ~5 "Indéterminé" map records to quarantine honestly if
+                   # their editions are empty — triage at first sync (the
+                   # EDH precedent).
+  # RIIG — Recueil informatisé des inscriptions gauloises (ANR, Ausonius/
+  # Bordeaux): 428 Gaulish inscriptions, Gallo-Greek (xtg-Grek) + Gallo-
+  # Latin (xtg-Latn). CC BY 4.0 per-record in-file grant (governs — the
+  # project page's CC BY-NC-ND covers site documentation only, never
+  # fetched) → attribution. The project is a completed ANR edition with
+  # occasional revisions: re-crawls are an owner decision.
+  sync_policy: manual
+  # P25-1: French translation divs ride as -fr sibling documents where
+  # records carry them (partial coverage upstream — the per-file peek, not
+  # a blanket flag, decides). Same CC BY grant, no license override.
+  translations: true
+
+ogham:
+  adapter: Nabu::Adapters::Ogham
+  enabled: false   # P25-1: awaiting the owner-fired first sync (ordinary
+                   # git clone; CLAUDE.md checklist §6 — bin/nabu sync
+                   # ogham, eyeball nabu show urn:nabu:ogham:i-may-010
+                   # (ᚇᚑᚈᚐᚌᚅᚔ) beside its -translit sibling and 5 random
+                   # stones, then flip).
+  # OG(H)AM — Ogham in 3D v2.0 (DIAS/Maynooth), ~500 EpiDoc records of
+  # ogham stones (Primitive Irish pgl in real Ogham codepoints; layer
+  # siblings -translit/-roman/…). LICENSE CONFLICT held at the restrictive
+  # reading: site about-page says CC-BY-NC-SA, every sampled record's
+  # in-file <licence> says CC BY 4.0, repo has no LICENSE file → class nc
+  # PENDING the clarification email (unlock registry #14); relabel on
+  # reply. The live project still updates (v2.0 2025) → re-syncs are
+  # owner-fired.
+  sync_policy: manual
+
 local-source:
   adapter: Nabu::Adapters::LocalSource
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
