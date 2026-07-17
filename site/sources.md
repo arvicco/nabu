@@ -50,19 +50,19 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 28 sources below are synced and live as of 14 July 2026.
+All 34 sources below are synced and live as of 17 July 2026.
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
 | `perseus-greek`, `perseus-latin` | [Perseus Digital Library](https://www.perseus.tufts.edu/) (PerseusDL canonical-greekLit / canonical-latinLit) | The classical Greek and Latin canons with English translations | CC BY-SA |
 | `first1k-greek` | [First1KGreek, Open Greek &amp; Latin](https://opengreekandlatin.github.io/First1KGreek/) | Post-classical Greek prose, incl. Swete's Septuagint | CC BY-SA |
-| `papyri-ddbdp` | [papyri.info](https://papyri.info/) — Duke Databank of Documentary Papyri | 61,416 documentary papyri | CC BY |
+| `papyri-ddbdp` | [papyri.info](https://papyri.info/) — Duke Databank of Documentary Papyri | 61,414 documentary papyri | CC BY |
 | `oracc` | [ORACC](https://oracc.museum.upenn.edu/), 33 projects incl. the State Archives of Assyria | Cuneiform transliterations with gold lemmatization | CC0 (per project); translation prose CC BY-SA |
 | `gretil` | [GRETIL](https://gretil.sub.uni-goettingen.de/), Göttingen | 780 Sanskrit (and related) TEI editions | CC BY-NC-SA 4.0 |
 | `proiel` | [PROIEL treebank](https://proiel.github.io/) | Parallel NT (Greek, Latin, Gothic, Armenian, OCS) + classical prose, gold-annotated | CC BY-NC-SA |
 | `torot` | [TOROT](https://torottreebank.github.io/) — Tromsø OCS and Old Russian Treebank | OCS and Old East Slavic, gold-annotated | CC BY-NC-SA |
 | `iswoc` | [ISWOC treebank](https://github.com/iswoc/iswoc-treebank), Oslo | Old English prose and the West-Saxon Gospels, gold-annotated | CC BY-NC-SA |
-| `ud` | [Universal Dependencies](https://universaldependencies.org/) (seven ancient treebanks) | Latin (Aquinas), Vedic Sanskrit, Gothic, Greek, Old East Slavic (birchbark, RNC, Ruthenian) | CC BY-SA / CC BY-NC-SA per treebank |
+| `ud` | [Universal Dependencies](https://universaldependencies.org/) (nine ancient treebanks) | Latin (Aquinas), Vedic Sanskrit, Gothic, Greek, Old East Slavic (birchbark, RNC, Ruthenian), Old Irish glosses (St Gall Priscian, Würzburg — since 17 July 2026) | CC BY-SA / CC BY-NC-SA per treebank |
 | `lexica` | [PerseusDL lexica](https://github.com/PerseusDL/lexica) | Liddell-Scott-Jones; Lewis &amp; Short | CC BY-SA 4.0 |
 | `vulgate` | [open-bibles](https://github.com/seven1m/open-bibles) / [eBible.org](https://ebible.org/) (Tweedale text) | The complete Clementine Vulgate, 73 books | Public domain |
 | `sblgnt` | [SBL Greek New Testament](https://sblgnt.com/) (SBL / Logos) | Critical edition of the Greek NT | CC BY 4.0 |
@@ -72,25 +72,37 @@ All 28 sources below are synced and live as of 14 July 2026.
 | `ccmh` | Corpus Cyrillo-Methodianum Helsingiense via [Kielipankki](https://www.kielipankki.fi/) (Language Bank of Finland) | Four OCS gospel codices, Suprasliensis, the Vitae | CC BY 4.0 |
 | `goo300k`, `imp` | [CLARIN.SI](https://www.clarin.si/) (Erjavec, JSI; hdl [11356/1025](http://hdl.handle.net/11356/1025), [11356/1031](http://hdl.handle.net/11356/1031)) | Gold and silver-annotated historical Slovenian, 1584–1899 | CC BY 4.0 / CC BY-SA 4.0 |
 | `freising` | [Brižinski spomeniki e-edition](https://nl.ijs.si/e-zrc/bs/) (ZRC SAZU / IJS) | The Freising Manuscripts, three transcription layers + translations | CC BY-ND 2.5 SI → `research_private` |
-| `wiktionary-cu`, `wiktionary-recon` | [kaikki.org](https://kaikki.org/) (Wiktextract) from [Wiktionary](https://www.wiktionary.org/) | OCS lexicon; seven reconstruction dictionaries (PIE, Proto-Slavic, Proto-Germanic, Proto-West Germanic, Proto-Balto-Slavic, Proto-Italic, Proto-Indo-Iranian) with descendant trees | CC BY-SA + GFDL |
+| `wiktionary-cu`, `wiktionary-recon` | [kaikki.org](https://kaikki.org/) (Wiktextract) from [Wiktionary](https://www.wiktionary.org/) | OCS lexicon; seven reconstruction dictionaries (PIE, Proto-Slavic, Proto-Germanic, Proto-West Germanic, Proto-Balto-Slavic, Proto-Italic, Proto-Indo-Iranian) with descendant trees; Old Irish, Middle Irish, and Middle Welsh extracts (since 17 July 2026) | CC BY-SA + GFDL |
 | `coptic-scriptorium` | [Coptic Scriptorium](https://copticscriptorium.org/) | Sahidic and Bohairic Coptic corpora with gold annotation, 482 documents | CC BY per document (source class `nc`, most-restrictive-wins) |
 | `mw` | [Cologne Digital Sanskrit Lexicon](https://www.sanskrit-lexicon.uni-koeln.de/) | Monier-Williams Sanskrit-English Dictionary (1899), 193,890 entries | CC BY-NC-SA 3.0 |
-| `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | 81,856 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
+| `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | 81,881 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
 | `iecor` | [IE-CoR](https://iecor.clld.org/) (lexibank/iecor via Zenodo) | The Indo-European cognacy database: 4,981 expert-curated cognate sets with loan events (synchronized 14 July 2026) | CC BY 4.0 |
 | `liv` | [LiLa / CIRCSE LIV-LOD](https://lila-erc.eu/) | *Lexikon der indogermanischen Verben* linked-data edition: 305 PIE verbal etymons (synchronized 14 July 2026) | CC BY-SA 4.0 (with publisher permission) |
 | `edl` | [LiLa / CIRCSE](https://lila-erc.eu/) | De Vaan, *Etymological Dictionary of Latin* (linked-data skeleton): 2,860 etymons (synchronized 14 July 2026) | CC BY-NC-SA 4.0 |
+| `starling` | [StarLing / Tower of Babel](https://starlingdb.org/) (G. Starostin et al.) | Five etymological databases, 27,397 entries: Pokorny's IEW, Nikolayev's PIE database, Vasmer's dictionary of Russian (Trubachev ed.), Common Germanic, Baltic (synchronized 17 July 2026) | Written grant ("free for anybody to use … as long as the source is properly acknowledged"), per-base compiler credit carried on every surface |
+| `sl-lexica` | [ZRC SAZU](https://www.zrc-sazu.si/) via [CLARIN.SI](https://www.clarin.si/) | Pleteršnik's *Slovensko-nemški slovar* (1894–95), the Janez Svetokriški lexicon, and the 16th-century Slovenian word inventory — 139,405 entries (synchronized 17 July 2026) | CC BY 4.0 |
+| `damaskini` | [CLARIN.SI](https://www.clarin.si/) (hdl [11356/1441](http://hdl.handle.net/11356/1441)) | Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1: 23 gold-annotated witnesses, 15th–19th c., with English translations (synchronized 17 July 2026) | CC BY-SA 4.0 |
+| `corph` | [CorPH — Corpus PalaeoHibernicum](https://chronhib.maynoothuniversity.ie/) (ERC ChronHib, Maynooth) | 76 Early Irish documents, 7th–10th c., gold-lemmatized — the library's first Old Irish (synchronized 17 July 2026) | MIT |
+| `riig` | [RIIG — Recueil informatisé des inscriptions gauloises](https://riig.huma-num.fr/) (ANR, Ausonius/Bordeaux) | 428 Gaulish inscriptions, Gallo-Greek and Gallo-Latin, with French translations (synchronized 17 July 2026) | CC BY 4.0 (in-file grant) |
+| `ogham` | [Ogham in 3D](https://ogham.celt.dias.ie/) v2.0 (DIAS / Maynooth) | ~500 ogham stones in real Ogham codepoints with transliteration layers (synchronized 17 July 2026) | Conflicting statements (site CC BY-NC-SA vs in-file CC BY 4.0) — held at the restrictive `nc` reading pending clarification |
 
 ## The local shelves
 
-Two further registered sources hold no upstream at all — they are the
+Four further registered sources hold no upstream at all — they are the
 library's shelves for authored and acquired material, synchronized by
 re-scanning local files rather than fetching. The language-dossier shelf
 (`local-language`) carries the library's own per-language curation, 199
-Markdown dossiers as of 14 July 2026. The local-library shelf
+Markdown dossiers as of 17 July 2026. The local-library shelf
 (`local-library`) files the owner's PDFs, scans, and offprints through
-the `nabu ingest` command; everything on it defaults to the
-`research_private` class — catalogued and searchable locally, never
-served or redistributed — and it holds no documents yet. Licenses on
+the `nabu ingest` command (which also accepts http(s) URLs, downloading
+first and recording the address in the manifest); everything on it
+defaults to the `research_private` class — catalogued and searchable
+locally, never served or redistributed — and it holds its first 20
+documents as of 17 July 2026. The source-dossier shelf (`local-source`)
+carries a curated description of every registered source, 37 dossiers
+served on the `nabu list` census. The notes shelf (`local-notes`)
+records the owner's annotations on any citable URN through `nabu note`;
+it awaits its first entry. Licenses on
 these shelves belong to whatever the owner files there; the class system
 above is the gate that keeps restricted personal material private.
 
@@ -107,8 +119,13 @@ the eZISS edition of the Freising Manuscripts; the Society of Biblical
 Literature and Logos; eBible.org and the open-bibles collection; the Oxford
 Text Archive; the Wiktionary community and the Wiktextract project; the
 Cologne Digital Sanskrit Lexicon; Coptic Scriptorium; the Epigraphic
-Database Heidelberg; the IE-CoR project; and the LiLa (Linking Latin) /
-CIRCSE group, whose linked-data editions carry LIV and de Vaan. Users of
+Database Heidelberg; the IE-CoR project; the LiLa (Linking Latin) /
+CIRCSE group, whose linked-data editions carry LIV and de Vaan; George
+Starostin and the StarLing / Tower of Babel project, with the compilers
+of its constituent databases; ZRC SAZU, whose dictionaries carry the
+Slovenian lexicographic tradition; the ChronHib project at Maynooth
+(CorPH); the RIIG project at Ausonius / Bordeaux; and the Ogham in 3D
+project at DIAS. Users of
 this software are bound by, and should credit, these upstream projects
 under their respective terms.
 
