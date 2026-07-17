@@ -2,7 +2,7 @@
 
 module Nabu
   module Adapters
-    # The Coptic Scriptorium adapter (P17-1, docs/coptic-survey.md): ONE git
+    # The Coptic Scriptorium adapter (P17-1, .docs/surveys/coptic-survey.md): ONE git
     # source for github.com/CopticScriptorium/corpora — 77 corpora / ~2,390
     # documents / ~2.38M words of literary Sahidic and Bohairic Coptic with
     # gold-to-automatic lemma/POS/deprel, entities + Wikification,

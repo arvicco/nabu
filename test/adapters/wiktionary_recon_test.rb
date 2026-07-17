@@ -3,11 +3,13 @@
 require "test_helper"
 require "tmpdir"
 
-# The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2):
-# ONE source, SEVEN dictionaries — kaikki.org's Proto-Slavic /
+# The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
+# P25-2 Celtic): ONE source, TEN dictionaries — kaikki.org's Proto-Slavic /
 # Proto-Indo-European / Proto-Germanic plus the P17-3 Proto-Balto-Slavic /
 # Proto-West Germanic / Proto-Italic / Proto-Indo-Iranian wiktextract
-# extracts through the existing wiktionary-jsonl
+# extracts, and the P25-2 ATTESTED Celtic extracts (Old Irish sga, Middle
+# Irish mga, Middle Welsh wlm — the wiktionary-cu attested precedent),
+# through the existing wiktionary-jsonl
 # family with reflexes: on. Dictionary-shaped (no passage conformance
 # suite); mirrors the WiktionaryCuTest checks for the dictionary shape and
 # adds the multi-file FileFetch choreography (per-extract subdirs, shared
@@ -31,7 +33,13 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-itc-pro" => "https://kaikki.org/dictionary/Proto-Italic/" \
                             "kaikki.org-dictionary-ProtoItalic.jsonl",
     "wiktionary-iir-pro" => "https://kaikki.org/dictionary/Proto-Indo-Iranian/" \
-                            "kaikki.org-dictionary-ProtoIndoIranian.jsonl"
+                            "kaikki.org-dictionary-ProtoIndoIranian.jsonl",
+    "wiktionary-sga" => "https://kaikki.org/dictionary/Old%20Irish/" \
+                        "kaikki.org-dictionary-OldIrish.jsonl",
+    "wiktionary-mga" => "https://kaikki.org/dictionary/Middle%20Irish/" \
+                        "kaikki.org-dictionary-MiddleIrish.jsonl",
+    "wiktionary-wlm" => "https://kaikki.org/dictionary/Middle%20Welsh/" \
+                        "kaikki.org-dictionary-MiddleWelsh.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -61,7 +69,10 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-ine-bsl-pro:kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
                   "wiktionary-gmw-pro:kaikki.org-dictionary-ProtoWestGermanic.jsonl",
                   "wiktionary-itc-pro:kaikki.org-dictionary-ProtoItalic.jsonl",
-                  "wiktionary-iir-pro:kaikki.org-dictionary-ProtoIndoIranian.jsonl"],
+                  "wiktionary-iir-pro:kaikki.org-dictionary-ProtoIndoIranian.jsonl",
+                  "wiktionary-sga:kaikki.org-dictionary-OldIrish.jsonl",
+                  "wiktionary-mga:kaikki.org-dictionary-MiddleIrish.jsonl",
+                  "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -70,15 +81,15 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_seven_reconstruction_dictionaries
+  def test_parse_yields_the_ten_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
-                    wiktionary-iir-pro],
+                    wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro],
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3], documents.map(&:size)
   end
 
   def test_entries_carry_reflexes_the_crosswalk_edges
@@ -100,6 +111,55 @@ class WiktionaryReconTest < Minitest::Test
     assert xleb.borrowed, "the gem-pro → sla-pro *xlěbъ edge is upstream-flagged borrowed"
     got = hlaibaz.reflexes.find { |r| r.language == "got" } || flunk("got hlaifs edge missing")
     refute got.borrowed, "the Gothic reflex is inherited — parsed false, not NULL"
+  end
+
+  # P25-2: the ATTESTED Celtic extracts mint crosswalk edges exactly like
+  # the proto shelves (the wiktionary-cu attested precedent). Old Irish rí
+  # "king" carries the DIL-derived Proto-Celtic/PIE etymology verbatim in
+  # its body AND a descendants tree whose Middle Irish node is the mga
+  # shelf's own rí headword — the sga→mga edge the shelf-visited ascent
+  # rides (Middle Irish rí walks up to the Old Irish entry).
+  def test_sga_entries_carry_celtic_etymologies_and_mint_crosswalk_edges
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    sga = documents.find { |doc| doc.slug == "wiktionary-sga" }
+    ri = sga.entries.find { |e| e.entry_id == "rí:noun" } || flunk("rí:noun missing")
+    assert_match(/Proto-Celtic \*rīxs/, ri.body) # the cel-pro chain, kept verbatim
+    assert_match(/Proto-Indo-European \*h₃rḗǵs/, ri.body)
+    refute_empty ri.reflexes
+    assert(ri.reflexes.any? { |r| r.language == "mga" && r.word_folded == "ri" },
+           "rí must mint the Middle Irish descendant edge")
+    assert_equal "ri", ri.headword_folded, "sga rí must be ASCII-typable (í → i)"
+
+    mga = documents.find { |doc| doc.slug == "wiktionary-mga" }
+    assert(mga.entries.any? { |e| e.entry_id == "rí:noun" && e.headword_folded == "ri" },
+           "the mga shelf holds rí — the sga reflex edge's ascent target")
+  end
+
+  # P25-2: the crosswalk LIGHTS end to end — after a load, the sga rí
+  # entry's stored reflex edges come back through ReflexViews (the read
+  # side Define/Etym share), and the loan flag parses on the mga clann →
+  # en clan edge (the Gaelic loan into English).
+  def test_reflex_views_serve_the_sga_entry_edges_after_a_load
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    sga_dict = db[:dictionaries].where(slug: "wiktionary-sga").get(:id)
+    ri = db[:dictionary_entries].where(dictionary_id: sga_dict, entry_id: "rí:noun").first
+    refute_nil ri, "the loaded sga shelf must hold rí:noun"
+    assert_equal "urn:nabu:dict:wiktionary-sga:rí:noun", ri[:urn]
+
+    views = Nabu::Query::ReflexViews.new(catalog: db).for_entry(ri[:id])
+    refute_empty views, "the sga entry's crosswalk edges must serve through ReflexViews"
+    mga_view = views.find { |v| v.language == "mga" } || flunk("mga rí edge missing")
+    assert_equal "rí", mga_view.word
+    assert_nil mga_view.attested_count, "no fulltext handle — honest nil, never a zero claim"
+
+    mga_dict = db[:dictionaries].where(slug: "wiktionary-mga").get(:id)
+    clann = db[:dictionary_entries].where(dictionary_id: mga_dict, entry_id: "clann:noun").first
+    refute_nil clann, "the loaded mga shelf must hold clann:noun"
+    clan = Nabu::Query::ReflexViews.new(catalog: db).for_entry(clann[:id])
+                                   .find { |v| v.lang_code == "en" && v.word == "clan" }
+    refute_nil clan, "clann must mint the English clan edge"
+    assert clan.borrowed, "en clan is upstream-flagged borrowed"
   end
 
   # P17-3: the new fold keys. The iir-pro headword *adᶻdʰáH carries the ᶻ
@@ -150,9 +210,11 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/\A\h{64}\z/, report.sha)
       assert_match(/sla-pro/, report.notes)
       assert_match(/iir-pro/, report.notes)
-      assert_equal 7, adapter.discover(workdir).count, "all seven extracts discoverable in place"
+      assert_match(/wlm/, report.notes)
+      assert_equal 10, adapter.discover(workdir).count, "all ten extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
-         proto-west-germanic proto-italic proto-indo-iranian].each do |subdir|
+         proto-west-germanic proto-italic proto-indo-iranian
+         old-irish middle-irish middle-welsh].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -172,9 +234,10 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 7, targets.size
+    assert_equal 10, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
+    assert_equal %w[middle-irish middle-welsh old-irish
+                    proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
                     proto-italic proto-slavic proto-west-germanic],
                  targets.map(&:state_subdir).sort
     targets.each do |target|
@@ -199,7 +262,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 226, first.added
+    assert_equal 235, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -207,7 +270,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 226, second.skipped
+    assert_equal 235, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

@@ -6,12 +6,14 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 - **Retrieved:** 2026-07-03 for the first four treebanks; **2026-07-09** for the
   first two Old East Slavic treebanks (`old-east-slavic-birchbark`,
   `old-east-slavic-rnc`, packet P10-2); **2026-07-11** for the third,
-  `old-east-slavic-ruthenian` (packet P13-1b) — all from `master` of each
-  treebank's UD repo via `raw.githubusercontent.com`.
+  `old-east-slavic-ruthenian` (packet P13-1b); **2026-07-17** for the two Old
+  Irish glosses treebanks (`old-irish-dipsgg`, `old-irish-dipwbg`, packet
+  P25-2) — all from `master` of each treebank's UD repo via
+  `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
-  `docs/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
-  (survey-II pick #1, `docs/slavic-survey-2.md` §1).
+  `.docs/surveys/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
+  (survey-II pick #1, `.docs/surveys/slavic-survey-2.md` §1).
 - **Trim procedure:** each source `*-ud-test.conllu` was trimmed to its **first 50
   complete sentence blocks**. A block = comment lines + token lines up to and
   including the terminating blank line. Files end with a blank line and contain
@@ -29,6 +31,8 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `old-east-slavic-birchbark/orv_birchbark-ud-test-head50.conllu` | `UD_Old_East_Slavic-Birchbark/master/orv_birchbark-ud-test.conllu` | 1,446,600 | 63,865 | 50 |
 | `old-east-slavic-rnc/orv_rnc-ud-test-head50.conllu` | `UD_Old_East_Slavic-RNC/master/orv_rnc-ud-test.conllu` | 2,483,580 | 365,977 | 50 |
 | `old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu` | `UD_Old_East_Slavic-Ruthenian/master/orv_ruthenian-ud-test.conllu` | 940,453 | 309,311 | 50 |
+| `old-irish-dipsgg/sga_dipsgg-ud-test-head50.conllu` | `UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu` | 37,231 | 24,075 | 50 |
+| `old-irish-dipwbg/sga_dipwbg-ud-test.conllu` | `UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu` | 32,767 | 32,767 (whole) | 34 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -63,6 +67,27 @@ Birchbark/RNC), `# title`, `# note`, `# newpar`, and per-sentence `# sent_id` /
 `# text`. The LEMMA (col 3) column is manually annotated and populated (the
 `orv` lemma-row acceptance asserts the opening NOUN lemma `артыкулъ` "article"
 at `…:StatutVKL1566-1`, surface form `АРТЫКУЛЪ`).
+
+### Old Irish glosses trim note (P25-2)
+
+`old-irish-dipsgg/sga_dipsgg-ud-test-head50.conllu` is the plain **first 50
+complete sentence blocks** of `sga_dipsgg-ud-test.conllu` (64 blocks upstream —
+the dependency-annotated subset of the collection's 3,471 St Gall Priscian
+glosses; the treebank is test-set only). `old-irish-dipwbg/sga_dipwbg-ud-test.conllu`
+is the **whole upstream file** (34 blocks < 50 — the 42-gloss Würzburg treebank
+is tiny and growing; byte-identical to upstream at retrieval,
+sha256 `f04fd8e44c60be16b68f8ced77cbcd34a304f5986671c48f10e92ad6b9ac161a`).
+Neither test split contains any multiword-token range line (`n-m`) or empty
+node (`n.m`) — checked file-wide. Comment lines are per-sentence `# sent_id`
+(plain integers), `# reference` (manuscript locus, e.g. `1a1`/`16d8`),
+`# scribe` (DipSGG), `# text`, `# translation` (DipSGG). The LEMMA column is
+populated on most tokens (upstream file-wide: DipSGG 392/418, DipWBG 428/438;
+this DipSGG head-50 trim: 246/269 — the rest are `_`, honest upstream gaps). The glosses code-mix Latin inside Irish (both READMEs:
+"only those glosses which contain some Irish text are collected here");
+the treebank language tag is `sga`, the same one-tag-per-treebank practice
+as RNC's Middle Russian under `orv`. Note the SAME St Gall glosses arrive
+at a different grain via CorPH (sibling packet P25-0, morphology) — two
+honest witnesses, NO dedup (the MW-beside-kaikki precedent).
 
 ### Latin-ITTB multiword-token (MWT) rule
 
@@ -117,10 +142,29 @@ adapter test even though no extra append was needed.
   grant is the in-repo LICENSE.txt + README metadata, exactly as at P10-2 for
   Birchbark/RNC.)
 
+- **UD_Old_Irish-DipSGG** — **CC BY-NC-SA 4.0** (verified 2026-07-17, the P25-2
+  license gate). Its `LICENSE.txt` is, verbatim and in its entirety:
+  > CC BY-NC-SA 4.0
+
+  and `README.md` machine-readable metadata agrees: `License: CC BY-NC-SA 4.0`.
+  → NonCommercial-ShareAlike: **no override** — the treebank rides the `ud`
+  source's `nc` class unchanged (the PROIEL/ITTB class).
+- **UD_Old_Irish-DipWBG** — **CC BY-SA 4.0** (verified 2026-07-17, the P25-2
+  license gate). `LICENSE.txt`, quoted verbatim:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+  and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. → license
+  class `attribution` via the P10-4 per-document `license_override` (the
+  birchbark/RNC mechanics exactly).
+
 All three OES licenses were confirmed BEFORE the fixtures were committed (packet
 gate: had any said anything other than CC BY-SA 4.0 the treebank would have been
-dropped). The `ud` manifest still declares the most-restrictive class present —
-`nc` (PROIEL/ITTB) — so the BY-SA-only treebanks are never over-shared.
+dropped); likewise both Old Irish licenses at P25-2. The `ud` manifest still
+declares the most-restrictive class present — `nc` (PROIEL/ITTB/DipSGG) — so
+the BY-SA-only treebanks are never over-shared.
 
 ## Structure notes (for the CoNLL-U parser + UD adapter, P3-3)
 

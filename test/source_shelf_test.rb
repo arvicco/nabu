@@ -17,13 +17,13 @@ class SourceShelfTest < Minitest::Test
 
   def test_accrete_creates_a_skeleton_dossier_for_an_unknown_slug
     with_shelf do |shelf, dir|
-      changed = shelf.accrete!(notes: [["gretil", "witness:survey", "Survey: docs/pie-survey.md."]],
+      changed = shelf.accrete!(notes: [["gretil", "witness:survey", "Survey: .docs/surveys/pie-survey.md."]],
                                source: "pie-survey", now: Time.new(2026, 7, 16))
       assert_equal %w[gretil], changed.keys
       dossier = Nabu::SourceDossier.parse(File.read(File.join(dir, "gretil.md")), slug: "gretil")
       assert_nil dossier.description, "a skeleton has no curated lanes"
       section = dossier.section("witness:survey")
-      assert_equal "Survey: docs/pie-survey.md.", section.body
+      assert_equal "Survey: .docs/surveys/pie-survey.md.", section.body
       assert_equal "pie-survey", section.provenance
       assert_equal "2026-07-16", section.date
     end

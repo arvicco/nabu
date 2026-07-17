@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# The IE-CoR adapter (P18-5, docs/pie-survey.md §1): the cognacy-matrix
+# The IE-CoR adapter (P18-5, .docs/surveys/pie-survey.md §1): the cognacy-matrix
 # dictionary shelf — one dictionary (slug iecor, language ine), one entry
 # per cognate set through the cldf-csv parser family. Dictionary-shaped
 # (no passage conformance suite; the wiktionary-recon precedent), plus the

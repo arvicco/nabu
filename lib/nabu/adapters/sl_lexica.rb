@@ -4,7 +4,7 @@ require_relative "zrc_xml_parser"
 
 module Nabu
   module Adapters
-    # The sl-lexica adapter (P23-2; docs/clarin-si-survey.md §2): the
+    # The sl-lexica adapter (P23-2; .docs/surveys/clarin-si-survey.md §2): the
     # Slovenian historical dictionary shelf — three ZRC SAZU dictionary
     # deposits on CLARIN.SI, ingested as ONE source with three dictionaries
     # (the lexica LSJ/L&S precedent; census verdict journaled in

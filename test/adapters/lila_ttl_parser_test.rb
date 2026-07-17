@@ -5,7 +5,7 @@ require "test_helper"
 # The lila-ttl parser family (P18-6): a minimal Turtle-subset triple reader
 # for the two CIRCSE/LiLa lexical-resource files (LIV.ttl, BrillEDL.ttl).
 # NOT a general Turtle parser — the subset was censused first-hand against
-# both upstream files (docs/pie-survey.md §2; fixture READMEs) and anything
+# both upstream files (.docs/surveys/pie-survey.md §2; fixture READMEs) and anything
 # outside it fails LOUDLY as Nabu::ParseError, never a silent skip.
 class LilaTtlParserTest < Minitest::Test
   def statements(text)

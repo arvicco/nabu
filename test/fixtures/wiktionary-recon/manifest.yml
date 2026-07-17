@@ -1,9 +1,9 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All seven files are documented TRIMs (whole: false) of the upstream
-# reconstruction extracts (226 of 20,639 lines total, selected strata +
-# the P17-3 goldens; every kept line byte-verbatim), so a fresh GET
+# All ten files are documented TRIMs (whole: false) of the upstream
+# extracts (235 of 28,736 lines total: 226 recon strata + P17-3 goldens
+# + 9 P25-2 Celtic lines; every kept line byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
 # byte-compared. Re-apply the README extraction recipes after any
 # refresh. NOTE the upstream files are labelled DEPRECATED (wiktextract
@@ -41,3 +41,15 @@ files:
     url: https://kaikki.org/dictionary/Proto-Indo-Iranian/kaikki.org-dictionary-ProtoIndoIranian.jsonl
     whole: false
     trim: 3 P17-3 lines (bʰráHtā — the sa roman script bridge; kšatrám — flagged xcl loan layer; adᶻdʰáH — ᶻ/ˢ fold class) — 3,338,611 B -> 16,731 B; recipe in README.md
+  - path: kaikki.org-dictionary-OldIrish.jsonl
+    url: https://kaikki.org/dictionary/Old%20Irish/kaikki.org-dictionary-OldIrish.jsonl
+    whole: false
+    trim: 3 P25-2 lines retrieved 2026-07-17 (rí — the cel-pro/PIE crosswalk golden, mga rí ascent edge; ingen 1/ingen 2 — etymology_number homographs, Ogham ᚔᚅᚔᚌᚓᚅᚐ in the etymology) — 19,776,265 B -> 19,678 B; recipe in README.md
+  - path: kaikki.org-dictionary-MiddleIrish.jsonl
+    url: https://kaikki.org/dictionary/Middle%20Irish/kaikki.org-dictionary-MiddleIrish.jsonl
+    whole: false
+    trim: 3 P25-2 lines retrieved 2026-07-17 (rí — the sga golden's ascent target; clann — en clan edge flagged borrowed; data — no-etymology/no-descendants structural edge) — 1,267,269 B -> 9,761 B; recipe in README.md
+  - path: kaikki.org-dictionary-MiddleWelsh.jsonl
+    url: https://kaikki.org/dictionary/Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl
+    whole: false
+    trim: 3 P25-2 lines retrieved 2026-07-17 (cant — cel-pro/PIE etymology with cy descendant; cam 1/cam 2 — etymology_number homographs) — 1,343,469 B -> 4,580 B; recipe in README.md

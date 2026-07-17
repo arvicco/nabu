@@ -4,7 +4,7 @@ Real upstream sample from **CIRCSE/LIV** — Rix's *Lexikon der
 indogermanischen Verben* (2nd ed. 2001) as LiLa Linked Open Data
 (lemonEty/Ontolex Turtle). Every kept statement block is **byte-verbatim**
 upstream data (the P14-1 recipe); only the block SET was trimmed, per the
-fixture sketch approved in docs/pie-survey.md §7.
+fixture sketch approved in .docs/surveys/pie-survey.md §7.
 
 - **Upstream:** <https://github.com/CIRCSE/LIV>, `ttl/LIV.ttl`.
 - **Retrieved:** 2026-07-14, from

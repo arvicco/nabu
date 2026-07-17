@@ -27,8 +27,8 @@ otherwise restricted).
 > (verbatim license text or "could not find a stated license")
 
 Note: license verification happens **survey-first** — accepted proposals go
-through an evidence-cited license survey (see `docs/oe-survey.md`,
-`docs/slavic-survey.md`, `docs/pie-survey.md` for the pattern) before any
+through an evidence-cited license survey (see `.docs/surveys/oe-survey.md`,
+`.docs/surveys/slavic-survey.md`, `.docs/surveys/pie-survey.md` for the pattern) before any
 adapter work begins. What you provide here is the head start, not the
 verdict.
 

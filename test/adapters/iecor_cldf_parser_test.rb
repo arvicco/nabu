@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# The cldf-csv parser family (P18-5, docs/pie-survey.md §1/§7): IE-CoR's
+# The cldf-csv parser family (P18-5, .docs/surveys/pie-survey.md §1/§7): IE-CoR's
 # CLDF multi-table CSV join (cognatesets × cognates × forms × languages ×
 # parameters × loans) read into dictionary entries — one entry per cognate
 # set, one DictionaryReflex per member form — plus the language-info rider

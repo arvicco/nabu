@@ -7661,6 +7661,90 @@ grain — the language-dossier stack's twin, owner-approved 2026-07-16.
   `bin/nabu list edh` (description under the header), `bundle exec rake
   site:check`.
 
+# ── Phase 25 ──────────────────────────────────────────────────────────
+
+## P25-2 · Celtic config batch — kaikki ×3 + UD ×2 + survey-reference truth-pass rider  [tier: fable] [status: done 2026-07-17 — config + fixtures shipped, zero new code; extracts/treebanks flow at the next owner-fired syncs] [deps: —]
+
+The Celtic axis's two config-shaped lanes (queue items 2 + 4; survey
+.docs/surveys/celtic-survey.md) plus the survey-reference rider.
+
+- KAIKKI ×3 (the ett-precedent EXTRACTS pattern: three rows on the live
+  wiktionary-recon source, zero new code; enabled state UNCHANGED —
+  extracts land at the next owner-fired `bin/nabu sync wiktionary-recon`,
+  ~22.4 MB across three GETs, +8,097 entries): `wiktionary-sga` Old Irish
+  (19,776,265 B / 6,564 records / 5,828 distinct words — DIL-derived
+  depth: 2,093 with descendants, 3,116 with etymology text, 1,427 naming
+  Proto-Celtic, 1,263 naming PIE), `wiktionary-mga` Middle Irish
+  (1,267,269 B / 767 / 710), `wiktionary-wlm` Middle Welsh (1,343,469 B /
+  766 / 695). ATTESTED languages on the recon source — the wiktionary-cu
+  precedent: reflexes minted, no display asterisk; upstream lang_codes
+  are already the ISO 639-3 sga/mga/wlm, adopted as themselves. Manifest
+  name extended ("+ attested Celtic"). License statement re-verified
+  verbatim 2026-07-17, unchanged: "This data is made available under the
+  same licenses as Wiktionary - both CC-BY-SA and GFDL." → attribution.
+  CROSSWALK LIGHTS (fixture-pinned, the ReflexViews path): sga rí "king"
+  carries the cel-pro/ine-pro etymology verbatim in its body (*rīxs,
+  *h₃rḗǵs) AND mints the mga rí reflex edge whose target is the mga
+  shelf's own headword — the shelf-visited ascent runs Middle Irish rí →
+  Old Irish rí; mga clann → en clan rides the borrowed flag. NOTE:
+  cel-pro itself is NOT a served kaikki extract (no Proto-Celtic shelf
+  yet); the sga etymology text is the join surface a future cel-pro
+  witness (CorPH/eDIL era) will land on.
+- UD ×2 (config rows on the existing ud source, the P10-2/P13-1b
+  pattern; rows flow at the next owner-fired `bin/nabu sync ud` — no
+  per-treebank enablement exists, the source syncs its whole TREEBANKS
+  map): `old-irish-dipsgg` — diplomatic St Gall Priscian glosses (Bauer's
+  data, conv. Adrian Doyle), 3,471 glosses in the collection, test-set
+  only (64 dependency-annotated sentences served today; fixture = head
+  50); license verbatim, the ENTIRE LICENSE.txt: "CC BY-NC-SA 4.0" →
+  rides the UD source's `nc` class unchanged, no override.
+  `old-irish-dipwbg` — diplomatic Würzburg glosses, 42 glosses (tiny;
+  upstream: growing), 34 test sentences (fixture = whole file); license
+  verbatim "CC BY-SA 4.0" (LICENSE.txt: "The treebank is licensed under
+  the Creative Commons License Attribution-ShareAlike 4.0 International")
+  → `attribution` via the P10-4 per-document license_override (the
+  birchbark/RNC mechanics). Language `sga` both (code-mixed Latin inside
+  the glosses — the one-tag-per-treebank honesty RNC practices under
+  orv). OVERLAP NOTE, journaled per the packet: DipSGG's text = the same
+  St Gall glosses CorPH (P25-0, sibling packet) carries at a DIFFERENT
+  grain — UD dependencies here, CorPH morphology there. Two honest
+  witnesses, the MW-beside-kaikki precedent; NO dedup wanted (the UD
+  dedup guard is for re-exports of already-synced sources, which this is
+  not). sga joins the lemma-indexed languages (lebarda/airbág fixture
+  rows pinned).
+- RIDER (survey-reference truth-pass; owner reorg 2026-07-16: ALL
+  surveys → gitignored .docs/surveys/): every LIVING reference to a
+  `docs/<x>-survey.md` path rephrased to `.docs/surveys/<x>-survey.md`
+  (annotated "gitignored planning material" at first mentions) or
+  dropped where the sentence works without it — docs/02-sources.md (25),
+  docs/architecture.md (2), docs/library.md (2), docs/improvements.md
+  (4), README.md (6: prose mention de-linked, the doc-map table row
+  DROPPED — a public table row cannot link a gitignored file),
+  CONTRIBUTING.md (6: links replaced with prose + a 02-sources pointer),
+  .github/ISSUE_TEMPLATE/request-a-source.md (3), config/sources.yml (3)
+  + config/alignments.yml (2) comments, lib/** code comments (16 files),
+  test/** comments + fixture READMEs/manifest prose (15 files).
+  docs/backlog.md + docs/worklog.md history lines untouched (the record
+  of what was true then), likewise the local-source fixture dossier
+  test/fixtures/local-source/edh.md + its manifest `reason:` line
+  (fixture PAYLOADS — dated provenance records tests may pin, not
+  reader-facing pointers). The owner's own docs/*-survey.md deletions
+  remain the owner's uncommitted act — no survey file deleted here.
+- Fixtures: 9 byte-verbatim JSONL lines into test/fixtures/
+  wiktionary-recon/ (recipe + full-download sha256s in its README;
+  post-check asserts literal-line membership) + 2 real trimmed CoNLL-U
+  under test/fixtures/ud/ (DipSGG head-50, DipWBG whole at 34 blocks;
+  README records both license verbatims). Tests +2 (recon: the Celtic
+  etymology/crosswalk pin + the ReflexViews-after-load proof; UD tests
+  extended in place: 9-file discover, OVERRIDE/BARE license split,
+  sga lemma plumbing, conformance over the new fixtures). Suite 2,981
+  runs / 35,771 assertions exit 0 (0 skips) · lint 384 files exit 0.
+- Owner queue: `bin/nabu sync wiktionary-recon` (~22.4 MB, +8,097
+  entries; then eyeball `nabu define rí` + `nabu etym rí`) and
+  `bin/nabu sync ud` (two small clones; eyeball `nabu show
+  urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test:1` and the license mix
+  in `nabu list ud`).
+
 # ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
 # Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no
 # unlock emails). Phasing per survey §6:

@@ -279,8 +279,10 @@ with stem types), and **de Vaan's Etymological Dictionary of Latin**
 A local **language-dossier shelf** holds the library's language curation
 as 199 plain-Markdown files (`canonical/local-language/` — edit in any
 editor, `nabu sync local-language` re-derives the `nabu language` cards).
-Ranked expansion candidates live in the axis surveys:
-[Old English](docs/oe-survey.md), [Slavic](docs/slavic-survey.md).
+Ranked expansion candidates live in the per-axis surveys (Old English,
+Slavic, PIE, …) — private planning material under gitignored
+`.docs/surveys/`; their license-checked verdicts land in
+[docs/02-sources.md](docs/02-sources.md).
 There is also a shelf for your own PDFs, scans and articles
 (`canonical/local-library/` — manifest-catalogued, `research_private` by
 default so nothing you scanned is ever served or redistributed,
@@ -425,7 +427,6 @@ useful to others.
 | [docs/architecture.md](docs/architecture.md) | The design: layer model, adapter contract, store schema, retention machinery. |
 | [docs/02-sources.md](docs/02-sources.md) | The source inventory: every corpus scouted, scored, and license-checked. |
 | [docs/03-unlockable-sources.md](docs/03-unlockable-sources.md) | Sources not ingestible today, with concrete unlock paths. |
-| [docs/oe-survey.md](docs/oe-survey.md) / [docs/slavic-survey.md](docs/slavic-survey.md) | Evidence-cited axis surveys ranking expansion candidates (and license-honest about what's blocked). |
 | [docs/ops.md](docs/ops.md) | The runbook: maintenance cadence, launchd templates, what to do when a check goes red. |
 | [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md) | How this stays alive across years of intermittent attention. |
 

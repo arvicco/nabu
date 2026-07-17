@@ -6,7 +6,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # The cldf-csv parser family (P18-5; docs/pie-survey.md §1 is the design
+    # The cldf-csv parser family (P18-5; .docs/surveys/pie-survey.md §1 is the design
     # source): CLDF — the Cross-Linguistic Data Formats standard — ships a
     # dataset as a bundle of csvw tables. IE-CoR's bundle joins six of them:
     #
@@ -57,7 +57,7 @@ module Nabu
     #   expected depressed, measured at query time, not promised.
     # - hit forms are hyphenated sign-joined stems: the paren/hyphen strip
     #   gives clean fold keys, but hit gold is ~14 lemmas — ≈0 join either
-    #   way (corpus-side gap, per docs/recon2-survey.md).
+    #   way (corpus-side gap, per .docs/surveys/recon2-survey.md).
     # - orv is the Novgorod DIALECT (сердьце with polnoglasie vs TOROT's
     #   OCS-leaning lemmas): partial join by nature; nothing rewritten.
     # - per-judgment Doubt flags and alignment strings have no home in the
@@ -86,7 +86,7 @@ module Nabu
       # shelf, language notes for the ledger accretion.
       Result = Data.define(:entries, :language_notes)
 
-      # The held-variety map (docs/pie-survey.md §1, owner-approved): IE-CoR
+      # The held-variety map (.docs/surveys/pie-survey.md §1, owner-approved): IE-CoR
       # variety id → the catalog's language tag. Keyed by variety ID, not
       # ISO code, so an upstream re-tagging can never silently remap; the
       # two rows the map actually CHANGES are Slovene: Early Modern

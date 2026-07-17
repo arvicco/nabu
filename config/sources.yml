@@ -300,7 +300,7 @@ coptic-scriptorium:
                    # checklist §6: bin/nabu sync coptic-scriptorium, eyeball
                    # nabu show urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1
                    # + 5 random passages, then flip)
-  # P17-1 (docs/coptic-survey.md): the survey's verdict is "versioned" —
+  # P17-1 (.docs/surveys/coptic-survey.md): the survey's verdict is "versioned" —
   # semiannual tagged releases, Zenodo-archived. In registry vocabulary that
   # is `manual` + the adapter's fetch PINNED to CopticScriptorium::RELEASE_TAG
   # (v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
@@ -331,7 +331,7 @@ edh:
                    # ~220 MB canonical: 9 EpiDoc zips (153.8 MB) + 2 CSVs.
   # Upstream archived: funding closed 2021, staff gone, dumps Last-Modified
   # 2021-12-16 (all HEAD-verified 2026-07-13) — the preservation argument
-  # (docs/edh-survey.md §1). Frozen = one-shot snapshot, no re-sync.
+  # (.docs/surveys/edh-survey.md §1). Frozen = one-shot snapshot, no re-sync.
   sync_policy: frozen
   # P16-4: the trigram fragment index's designed third documentary shelf —
   # the survey's one-config-line promise (~447k lines at 23.8 chars/line,
@@ -350,7 +350,7 @@ iecor:
                    # iecor note, then flip). Projected: 4,981 entries /
                    # ~26.3k reflex rows (~2.3k loan-flagged) + ~144
                    # language notes accreted into the ledger.
-  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; docs/pie-survey.md §1): the
+  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; .docs/surveys/pie-survey.md §1): the
   # cognacy-matrix dictionary shelf — one entry per expert-curated cognate
   # set under the collective `ine` tag, members as reflex edges, loans.csv
   # feeding the borrowed flag. The Zenodo versioned record is immutable; a

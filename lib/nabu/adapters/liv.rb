@@ -4,7 +4,7 @@ require_relative "lila_ttl_parser"
 
 module Nabu
   module Adapters
-    # The LIV adapter (P18-6; docs/pie-survey.md §2.1): Helmut Rix's *Lexikon
+    # The LIV adapter (P18-6; .docs/surveys/pie-survey.md §2.1): Helmut Rix's *Lexikon
     # der indogermanischen Verben* (2nd ed. 2001) as Linked Open Data,
     # published by CIRCSE (Università Cattolica Milan, the LiLa: Linking
     # Latin project) — the FIRST non-Wiktionary reconstruction shelf, the
