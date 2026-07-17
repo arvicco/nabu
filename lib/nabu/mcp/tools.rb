@@ -1207,10 +1207,14 @@ module Nabu
 
       # Left/keyword/right are already width-trimmed by Concord; the model can
       # reassemble the KWIC line or read the keyword in isolation. license
-      # fields ride on every row, per contract.
+      # fields ride on every row, per contract. tier (P26-4): present only on
+      # NON-gold lemma-mode rows — the lemma-hit mirror (silver labeled, gold
+      # and text-mode rows unlabeled as ever).
       def concord_row_payload(row, sources)
-        { urn: row.urn, language: row.language, license_class: row.license_class,
-          source: sources[row.urn], left: row.left, keyword: row.keyword, right: row.right }
+        payload = { urn: row.urn, language: row.language, license_class: row.license_class,
+                    source: sources[row.urn], left: row.left, keyword: row.keyword, right: row.right }
+        payload[:tier] = row.tier if row.tier && row.tier != "gold"
+        payload
       end
 
       # -- parallels internals -----------------------------------------------------

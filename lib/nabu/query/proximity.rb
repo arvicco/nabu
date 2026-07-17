@@ -126,6 +126,16 @@ module Nabu
       # passage_lemmas index. surface_forms is the pristine ", "-joined list per
       # passage; each form folds by ITS passage language (search_form), matching
       # how the FTS index folded it. Capped (see MAX_LEMMA_FORMS).
+      #
+      # BOTH TIERS, deliberately (P26-4, the P26-0 journaled decision): the
+      # lemma here is a RETRIEVAL EXPANSION — the hits are real text matched
+      # by the FTS NEAR, judged by the reader from their snippets, and no
+      # per-hit annotation claim is rendered that a tier label could attach
+      # to. Scoping to gold would gut the surface for Greek literature
+      # (Diorisis is the only lemma layer most of it has); mirroring search
+      # --lemma's inclusive stance, silver-attested inflections expand the
+      # anchor too (test-pinned). The precision cost — a silver row can hang
+      # a form on the wrong lemma — is bounded by the visible snippet.
       def lemma_surface_forms(lemma)
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty?

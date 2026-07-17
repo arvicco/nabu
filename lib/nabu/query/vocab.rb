@@ -22,9 +22,11 @@ module Nabu
     # (the FTS-only literary corpora: Perseus, First1K, the papyri, ASPR poetry)
     # is NOT an error — it reports plainly that it carries no annotation and
     # names the gold-bearing languages (queried live from the lemma index, so
-    # the list never drifts from the data). The marquee learner use case
-    # (vocab-prep for Homer) does not work YET precisely because Perseus Homer
-    # is not a treebank; it waits on lemma projection (improvements §3.1).
+    # the list never drifts from the data). Since P26-4 a SILVER document
+    # (Diorisis) also profiles — labeled, against the gold reference corpus;
+    # see "The lemma tier" below. The marquee learner use case (vocab-prep
+    # for Homer) works through the silver Diorisis edition where one exists;
+    # gold projection stays improvements §3.1.
     #
     # == The distinctiveness metric: log-odds, not a simple ratio (measured)
     #
@@ -66,6 +68,25 @@ module Nabu
     # difference; the alternative (passage-frequency on the document side too)
     # would turn "8 occurrences" into "in 6 passages", less intuitive for no gain.
     #
+    # == The lemma tier (P26-4, the P26-0 journaled decision): label + gold reference
+    #
+    # Vocab is a PROFILE surface, so silver (automatic-lemmatization)
+    # documents PROFILE — that is the Diorisis value: a frequency profile of
+    # Herodotus exists at all only because of the automatic layer — but the
+    # profile is LABELED: Profile#lemma_tier carries the tier of the scope's
+    # own indexed lemma rows ("silver" → the CLI prints an explicit
+    # automatic-lemmatization warning line; "gold" renders exactly as
+    # pre-tier; nil = unresolvable, e.g. a stale index, no claim made).
+    # The CORPUS REFERENCE side (corpus_frequencies, the corpus total, the
+    # gold-bearing-languages listing) stays scoped to GOLD rows: the class
+    # has always documented its denominator as "the whole gold-lemma corpus",
+    # and a 6-7M-row silver flood would silently redefine every z-score. A
+    # silver document is thus profiled AGAINST the verified reference — its
+    # own tokens counted exactly, its comparison corpus staying gold — and
+    # the in-document/corpus tier split is visible in the label. Pre-tier
+    # indexes have no tier column and read all-gold (the borrowed_column?
+    # precedent).
+    #
     # == Why the distinctive/hapax lists never repeat a row (P18-3)
     #
     # The tally is hash-keyed by folded lemma across the whole scope, so
@@ -102,17 +123,21 @@ module Nabu
       Entry = Data.define(:lemma, :doc_count, :corpus_freq, :score)
 
       # The profile. +kind+ is :document / :range / :passage. +total_tokens+ is
-      # the count of tokens bearing a gold lemma; +distinct_lemmas+ the distinct
+      # the count of tokens bearing a lemma; +distinct_lemmas+ the distinct
       # folded lemmas. +distinctive+ is the top-N Entry list (empty when no
-      # gold). +hapax+ the raw spellings attested exactly once (full list;
+      # lemmas). +hapax+ the raw spellings attested exactly once (full list;
       # +hapax_count+ its size). +gold_languages+ is populated ONLY on the
-      # no-gold path: [[language, corpus_row_count], …] descending, so the CLI
-      # can point the user at a document that will profile.
+      # no-lemma path: [[language, gold corpus_row_count], …] descending, so
+      # the CLI can point the user at a document that will profile.
+      # +lemma_tier+ (P26-4, class note): the tier of the scope's own indexed
+      # lemma rows — "gold" | "silver" | nil (unresolvable — no tier claim).
       Profile = Data.define(
         :urn, :kind, :title, :language, :passages, :annotated_passages,
         :total_tokens, :distinct_lemmas, :distinctive, :hapax, :hapax_count,
-        :gold_languages
-      )
+        :gold_languages, :lemma_tier
+      ) do
+        def initialize(lemma_tier: nil, **rest) = super
+      end
 
       # A resolved scope: the header (urn/kind/title/language/passage count) and
       # the live passage rows carrying language + annotations_json to tally.
@@ -155,7 +180,8 @@ module Nabu
         row = @catalog[:passages]
               .join(:documents, id: Sequel[:passages][:document_id])
               .where(Sequel[:passages][:urn] => urn, Sequel[:documents][:withdrawn] => false)
-              .select(Sequel[:passages][:language].as(:language),
+              .select(Sequel[:passages][:urn].as(:urn),
+                      Sequel[:passages][:language].as(:language),
                       Sequel[:passages][:annotations_json].as(:annotations_json),
                       Sequel[:passages][:withdrawn].as(:withdrawn),
                       Sequel[:documents][:title].as(:title))
@@ -187,7 +213,8 @@ module Nabu
                          Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:passages][:sequence] => sequence) if sequence
-        dataset.select(Sequel[:passages][:language].as(:language),
+        dataset.select(Sequel[:passages][:urn].as(:urn),
+                       Sequel[:passages][:language].as(:language),
                        Sequel[:passages][:annotations_json].as(:annotations_json)).all
       end
 
@@ -227,10 +254,12 @@ module Nabu
         added
       end
 
-      # The full profile for a document that DOES carry gold lemmas.
+      # The full profile for a document that DOES carry lemmas. The
+      # comparison corpus is GOLD (class note); the scope's own tier rides
+      # the profile as the label.
       def gold_profile(scope, counts, total_tokens, limit:)
         corpus = corpus_frequencies(counts.keys)
-        corpus_total = @fulltext[Store::Indexer::LEMMA_TABLE].count.to_f
+        corpus_total = gold_corpus_rows.count.to_f
         distinctive = rank_distinctive(counts, corpus, total_tokens, corpus_total, limit: limit)
         hapax = counts.select { |_, e| e[:count] == 1 }.map { |_, e| e[:raw] }.sort
 
@@ -238,21 +267,55 @@ module Nabu
           urn: scope.urn, kind: scope.kind, title: scope.title, language: scope.language,
           passages: scope.passage_count, annotated_passages: annotated_count(scope.rows),
           total_tokens: total_tokens, distinct_lemmas: counts.size,
-          distinctive: distinctive, hapax: hapax, hapax_count: hapax.size, gold_languages: nil
+          distinctive: distinctive, hapax: hapax, hapax_count: hapax.size, gold_languages: nil,
+          lemma_tier: scope_tier(scope.rows)
         )
       end
 
-      # Corpus passage-frequency per folded lemma: an indexed lemma_folded IN
-      # GROUP BY, batched so a document with thousands of distinct lemmas never
-      # overruns SQLite's bound-variable limit. { folded => count }.
+      # GOLD corpus passage-frequency per folded lemma (class note): an
+      # indexed lemma_folded IN GROUP BY, batched so a document with
+      # thousands of distinct lemmas never overruns SQLite's bound-variable
+      # limit. { folded => count }.
       def corpus_frequencies(folded_lemmas)
         out = {}
         folded_lemmas.each_slice(500) do |slice|
-          counted = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: slice)
-                                                          .group_and_count(:lemma_folded)
+          counted = gold_corpus_rows.where(lemma_folded: slice)
+                                    .group_and_count(:lemma_folded)
           counted.each { |row| out[row.fetch(:lemma_folded)] = row.fetch(:count) }
         end
         out
+      end
+
+      # The gold-tier reference slice (class note; P26-4). A pre-tier index
+      # has no tier column — and no silver rows — so the unfiltered dataset
+      # is the same gold-only corpus.
+      def gold_corpus_rows
+        dataset = @fulltext[Store::Indexer::LEMMA_TABLE]
+        return dataset unless tier_column?
+
+        dataset.where(tier: Store::Indexer::GOLD_TIER)
+      end
+
+      def tier_column?
+        return @tier_column unless @tier_column.nil?
+
+        @tier_column = @fulltext[Store::Indexer::LEMMA_TABLE].columns.include?(:tier)
+      end
+
+      # The tier of the scope's OWN lemma rows, read from the index by the
+      # first annotated passage's urn (tier is per-source, a scope is within
+      # one document, so one passage answers for all). nil — no tier claim —
+      # when the column predates the tier or the index lacks the passage
+      # (stale index): honest unknown, the CLI then labels nothing.
+      def scope_tier(rows)
+        return nil unless tier_column?
+
+        urn = rows.find do |row|
+          (json = row[:annotations_json]) && json.include?('"lemma"')
+        end&.fetch(:urn, nil)
+        return nil unless urn
+
+        @fulltext[Store::Indexer::LEMMA_TABLE].where(urn: urn).get(:tier)
       end
 
       # Rank the lemmas by log-odds z-score (see class note), most distinctive
@@ -288,9 +351,10 @@ module Nabu
         (Math.log(odds1) - Math.log(odds2)) / Math.sqrt(variance)
       end
 
-      # A document with zero gold tokens: name the gold-bearing languages so the
-      # user can profile something that works. This is the ONLY path that scans
-      # the lemma index by language (~0.6s, measured) — the normal path never does.
+      # A document with zero lemma-bearing tokens: name the gold-bearing
+      # languages so the user can profile something that works. This is the
+      # ONLY path that scans the lemma index by language (~0.6s, measured) —
+      # the normal path never does.
       def no_gold_profile(scope)
         Profile.new(
           urn: scope.urn, kind: scope.kind, title: scope.title, language: scope.language,
@@ -300,10 +364,11 @@ module Nabu
         )
       end
 
-      # [[language, corpus_row_count], …] descending — the gold-bearing
-      # languages, straight from the lemma index so the list never drifts.
+      # [[language, gold corpus_row_count], …] descending — the GOLD-bearing
+      # languages (the listing's own label; tier-scoped since P26-4),
+      # straight from the lemma index so the list never drifts.
       def gold_languages
-        @fulltext[Store::Indexer::LEMMA_TABLE]
+        gold_corpus_rows
           .group_and_count(:language)
           .order(Sequel.desc(:count))
           .map { |row| [row.fetch(:language), row.fetch(:count)] }

@@ -2789,13 +2789,20 @@ module Nabu
       # Render KWIC rows (P8-3): left + keyword + right (each side already
       # trimmed to width by Concord), then the urn + [language] tag. The left
       # context is a fixed width, so keyword columns align down the page.
+      # Silver lemma-mode rows carry the search --lemma tag (P26-4); gold and
+      # text-mode rows render exactly as before. The footer totals the silver
+      # share so a mixed page is never silently mixed.
       def print_concord_rows(rows)
         return say("no matches") if rows.empty?
 
         rows.each do |row|
-          say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}"
+          tier = row.tier == "silver" ? " [silver]" : ""
+          say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}#{tier}"
         end
-        say "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
+        footer = "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
+        silver = rows.count { |row| row.tier == "silver" }
+        footer += " — #{silver} silver (automatic lemmatization)" if silver.positive?
+        say footer
       end
 
       # Render `parallels` (P15-1): the anchor line, then one hit per document —
@@ -3443,10 +3450,19 @@ module Nabu
         say "  #{profile.kind}, #{pluralize(profile.passages, 'passage')}"
         return print_vocab_no_gold(profile) if profile.total_tokens.zero?
 
-        say "  gold lemmas: #{commafy(profile.total_tokens)} tokens · " \
+        # The tier label (P26-4): a silver document profiles, but its counts
+        # never render under the gold name — the line SAYS silver, plus an
+        # explicit automatic-lemmatization warning. Gold (and pre-tier nil)
+        # keeps the exact pre-tier render.
+        silver = profile.lemma_tier == "silver"
+        say "  #{silver ? 'silver' : 'gold'} lemmas: #{commafy(profile.total_tokens)} tokens · " \
             "#{commafy(profile.distinct_lemmas)} distinct lemmas · " \
             "#{commafy(profile.hapax_count)} hapax legomena " \
             "(#{profile.annotated_passages} of #{profile.passages} passages annotated)"
+        if silver
+          say "  lemma tier: silver (automatic lemmatization — token counts are not gold " \
+              "attestation; corpus reference frequencies stay gold-only)"
+        end
         print_vocab_distinctive(profile.distinctive)
         print_vocab_hapax(profile.hapax, profile.hapax_count)
       end
