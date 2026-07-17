@@ -646,6 +646,42 @@ dcs:
   # are owner-fired.
   sync_policy: manual
 
+diorisis:
+  adapter: Nabu::Adapters::Diorisis
+  enabled: false   # P26-4: awaiting the owner-fired first real sync (ZipFetch of
+                   # the frozen figshare v1 zip — 194,443,428 bytes, md5
+                   # f3a26efa7e7d2b93d1bcca26900d180a verified against figshare's
+                   # own metadata, sha256-pinned in the adapter; ~2.5 GB unpacked,
+                   # 820 XML files. CLAUDE.md checklist §6: bin/nabu sync diorisis,
+                   # eyeball urn:nabu:diorisis:0012:001 (the Iliad) + 5 random
+                   # passages + `nabu search --lemma θεός` — expect [silver]
+                   # labels throughout — then flip. Expect discovery to census
+                   # 53 files skipped by rule: the Septuagint exclusion below.)
+  # Diorisis Ancient Greek Corpus (Vatri & McGillivray 2018, figshare v1) —
+  # ~10.2M words of tokenized, lemmatized, morphologically analyzed Greek.
+  # THE FIRST SILVER SOURCE: upstream's own in-file words are "corpus
+  # conversion and automatic annotation" (TreeTagger flags, 1/n confidence
+  # fractions on the tokens themselves), so lemma_tier: silver — every count
+  # renders labeled, never as gold attestation (the P26-0 tier contract).
+  # LICENSE (in-file doctrine proof #3): every one of the 820 files declares
+  # CC BY-SA 3.0 US in its own header, which GOVERNS over the figshare
+  # page's CC BY 4.0 claim → attribution. THE RAHLFS EXCLUSION: 53 files
+  # are the Septuagint (tlgAuthor 0527, Bibliotheca Augustana = Rahlfs
+  # lineage, CATSS-encumbered — 02-sources row 44); discover skips them by
+  # the machine-readable header field, parse refuses belt-and-braces, the
+  # fetched artifact stays whole. 806/809 works are second editions of
+  # texts already held (742 Perseus, 102 First1K) — deliberately unmerged,
+  # provenance-distinct witnesses; the value is the lemma layer at scale.
+  # LICENSE WATCH / FUTURE REFRESH (journaled, not wired): upstream also
+  # runs a token-gated JSON update channel (per-file v1.6 versions vs this
+  # 2018 XML zip); the figshare zip stays the pinned artifact — a refresh
+  # means a new owner-verified pin, never a silent re-download. No
+  # license_watch URL: the figshare API body carries volatile stats and
+  # would false-alarm the hash compare; the in-file licenses re-read at
+  # every real fetch.
+  sync_policy: manual
+  lemma_tier: silver
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
