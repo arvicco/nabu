@@ -34,7 +34,15 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
 4. **License changes** (a license_watch alarm, a class change): sources.md
    updated immediately, not just at gates — same trigger rule as
    library.md §10 duty 4.
-5. **News entry** (P19-3): every gate adds one dated post to
+5. **Dossier drift check** (P24-0): `bundle exec rake site:check` — the
+   mechanical rider for duties 1–2 at the source grain: it flags
+   presence/mention drift between the canonical/local-source dossier
+   descriptions and docs/library.md (this site's library page is covered
+   transitively, as the printed map). Exit 1 lists the findings; fix by
+   re-running the idempotent seed (`bin/nabu list
+   --export-source-dossiers`), writing the missing description, or adding
+   the shelf's library.md row.
+6. **News entry** (P19-3): every gate adds one dated post to
    `site/news/_posts/` (`YYYY-MM-DD-slug.md`) — what shipped, honest
    numbers with as-of dates, distilled from the gate's worklog line. The
    Atom feed (`/feed.xml`, jekyll-feed) carries it on deploy; nothing else

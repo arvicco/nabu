@@ -7,6 +7,8 @@ require_relative "url_download"
 require_relative "library_shelf"
 require_relative "language_shelf"
 require_relative "language_dossier"
+require_relative "source_shelf"
+require_relative "source_dossier"
 require_relative "pdf_text"
 require_relative "adapters/local_library"
 
@@ -65,6 +67,8 @@ module Nabu
     LIBRARY_FIELDS = %w[title creator year languages tags related provenance license_class].freeze
     # The dossier lanes the --shelf language scaffold asks for.
     LANGUAGE_FIELDS = %w[name family context].freeze
+    # The dossier lanes the --shelf source scaffold asks for (P24-0).
+    SOURCE_FIELDS = %w[description themes key_works].freeze
     # List-valued lanes (comma-joined on prompts and flags).
     LIST_FIELDS = %w[languages tags related].freeze
 
@@ -120,6 +124,9 @@ module Nabu
         unless klass.empty? || Model::Validation::LICENSE_CLASSES.include?(klass)
           "license_class must be one of #{Model::Validation::LICENSE_CLASSES.join(', ')}, got #{klass.inspect}"
         end
+      when "key_works"
+        bad = coerce_list(value).find { |urn| !urn.start_with?("urn:") }
+        "#{bad.inspect} is not a urn — key_works are catalog urns like: urn:nabu:edh:hd029093" if bad
       end
     end
 
@@ -284,6 +291,33 @@ module Nabu
                                                 family: presence(values["family"]),
                                                 context: presence(values["context"])))
       Outcome.new(file: code, status: :added, message: "dossier scaffolded at #{path}")
+    end
+
+    # --shelf source SLUG (P24-0): scaffold a source dossier through
+    # SourceShelf, the third sanctioned gateway. THIN like the language
+    # scaffold — a skeleton, not an editor: an existing dossier is an
+    # honest no-op pointing at the file. +source_name+ (the registered
+    # source's manifest name) prefills the description prompt.
+    def scaffold_source(slug, source_shelf:, source_name: nil)
+      raise ValidationError, "#{slug.inspect} is not a source slug (edh, first1k-greek, …)" \
+        unless "#{slug}.md".match?(Adapters::LocalSource::DOSSIER_FILE)
+
+      path = source_shelf.path_for(slug)
+      if source_shelf.load(slug)
+        return Outcome.new(file: slug, status: :skipped,
+                           message: "dossier exists — edit #{path}, then bin/nabu sync local-source")
+      end
+
+      fields = apply_suggestions(source_fields(source_name), source_brief(slug, source_name))
+      values = @resolver.resolve(fields)
+      key_works = self.class.coerce_list(values["key_works"])
+      error = self.class.field_error("key_works", key_works)
+      raise ValidationError, error if error
+
+      source_shelf.write!(SourceDossier.new(slug: slug, description: presence(values["description"]),
+                                            themes: self.class.coerce_list(values["themes"]),
+                                            key_works: key_works))
+      Outcome.new(file: slug, status: :added, message: "dossier scaffolded at #{path}")
     end
 
     private
@@ -553,6 +587,24 @@ module Nabu
 
     def language_brief(code)
       { schema: Assist::SCHEMA, shelf: "language", code: code, fields: LANGUAGE_FIELDS }
+    end
+
+    # The --shelf source field set: the description prompt prefills from
+    # the registered source's name (flags still win — merged after).
+    def source_fields(source_name)
+      defaults = { "description" => presence(source_name) }.compact.merge(compact_overrides)
+      SOURCE_FIELDS.map do |key|
+        label = case key
+                when "description" then "description (dossier front matter — 1–3 sentences, what this shelf holds)"
+                when "themes" then "themes (comma-separated)"
+                else "key_works (comma-separated urns)"
+                end
+        Field.new(key: key, label: label, default: defaults[key])
+      end
+    end
+
+    def source_brief(slug, source_name)
+      { schema: Assist::SCHEMA, shelf: "source", slug: slug, name: source_name, fields: SOURCE_FIELDS }
     end
 
     # Resolved values → the manifest entry: keys in manifest order, lists

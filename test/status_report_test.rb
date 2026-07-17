@@ -363,6 +363,36 @@ class StatusReportTest < Minitest::Test
     refute_match(/BEHIND/, out, "policy wins over any cache row")
   end
 
+  # P24-1: the owner-notes shelf's content is per-urn notes — the same
+  # misleading-zero rule, the same policy-wins local verdict.
+  class NotesFakeAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "local-notes", name: "Owner notes (local shelf)",
+      license: "Owner-authored", license_class: "open",
+      upstream_url: "canonical/local-notes (local)", parser_family: "urn-notes"
+    )
+    def self.manifest = MANIFEST
+    def self.content_kind = :notes
+  end
+
+  def test_notes_shelf_renders_up_local_and_notes_count
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      local-notes:
+        adapter: StatusReportTest::NotesFakeAdapter
+        enabled: true
+        sync_policy: local
+    YAML
+    registry["local-notes"].sync_source!(db)
+    db[:urn_notes].insert(urn: "urn:nabu:ccmh:mar:mt", note: "collate first", topic: "notes",
+                          added: "2026-07-16", provenance: "local-notes/notes.yml")
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/local-notes\s+on\s+local\s+up=local\s+notes=1/, out)
+    refute_match(/docs=0/, out, "notes, never a misleading docs/pass zero")
+  end
+
   # A ledger that predates the source_probes table (a read-only status before
   # any health --remote migrated it) degrades to never-probed, no crash.
   def test_upstream_ledger_without_probe_table_degrades_to_never

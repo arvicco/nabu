@@ -72,6 +72,34 @@ namespace :ops do
   end
 end
 
+# Gate rider (P24-0, site/MAINTENANCE.md standing duty): flag drift between
+# the canonical/local-source dossier descriptions and the public map
+# (docs/library.md; site/library.md is its printed copy, covered
+# transitively). Presence/mention check, never verbatim equality — the rule
+# is journaled in Nabu::Ops::DossierDrift. Never generates; exit 1 on drift.
+namespace :site do
+  desc "Gate check: source-dossier descriptions vs docs/library.md (drift = exit 1)"
+  task :check do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    check = Nabu::Ops::DossierDrift.new(
+      shelf_dir: Nabu::SourceShelf.dir(config.canonical_dir),
+      registry: Nabu::SourceRegistry.load(config.sources_path),
+      library_md: File.expand_path("docs/library.md", __dir__),
+      site_library_md: File.expand_path("site/library.md", __dir__)
+    )
+    findings = check.findings
+    findings.each { |finding| puts "DRIFT #{finding.slug} — #{finding.message}" }
+    if findings.empty?
+      puts "site:check clean — dossier descriptions and docs/library.md cover each other"
+    else
+      abort "site:check found #{findings.size} drift finding(s)"
+    end
+  end
+end
+
 # Print the drill report to stdout.
 def print_drill_report(report)
   puts "Restore drill"

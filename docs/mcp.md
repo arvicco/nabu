@@ -183,7 +183,13 @@ match. An unstarred lemma that names no descendant **falls back** to a
 reconstruction-headword lookup, so the proto form itself resolves —
 superscripted (`bʰewgʰ`) or pure ASCII (`bhewgh`, the §9 fold ʰ→h/ʷ→w),
 root hyphen optional; a leading asterisk (quote it in a shell — zsh globs a
-bare `*`) forces the direct lookup. Cognate lists are bounded (attested
+bare `*`) forces the direct lookup. A lemma with **no crosswalk path at
+all** falls back once more (P24-2) — to the same lookup `nabu_define` runs:
+a prose etymological article (Vasmer's Russian dictionary carries no reflex
+edges) still answers, returned as `dictionary_entries` (the `nabu_define`
+payload shape) plus an explanatory note; a genuine total miss enumerates
+the crosswalk's live shelves, derived from the catalog, never a hardcoded
+roll call. Cognate lists are bounded (attested
 first, 20 shown) with honest totals — this conversational surface stays
 capped by design; the CLI `nabu etym --long` (P14-11) prints everything,
 grouped by language.
@@ -260,7 +266,11 @@ stance applies to counterparts.
 Coverage of the corpus, and the tool to call to interpret an empty search
 *before* concluding a text is unattested: per-source document/passage counts and
 last-sync recency, passage counts by language and by license class, index
-state, and what is excluded by default. Takes no arguments.
+state, and what is excluded by default. Each source also carries its
+`description` when the owner's local-source dossier has one (P24-0,
+architecture §16) — a 1–3 sentence account of what the shelf holds, served
+by default because the library's own metadata is useful context for
+deciding where to search. Takes no arguments.
 
 ### The restricted-exclusion stance
 

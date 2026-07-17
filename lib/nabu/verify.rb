@@ -96,6 +96,8 @@ module Nabu
       adapter = entry.build_adapter
       return verify_dictionary_source(entry, adapter, workdir) if adapter.class.content_kind == :dictionary
       return verify_language_source(entry, adapter, workdir) if adapter.class.content_kind == :language
+      return verify_notes_source(entry, adapter, workdir) if adapter.class.content_kind == :notes
+      return verify_source_shelf(entry, adapter, workdir) if adapter.class.content_kind == :source
 
       recomputed, unparseable = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
@@ -133,6 +135,48 @@ module Nabu
       SourceOutcome.new(slug: entry.slug, verified: codes.size, issues: issues)
     end
 
+    # The owner-notes shelf (P24-1) verifies the dossier way: re-parse the
+    # topic files and diff the derived rows they yield against the catalog's
+    # urn_notes, per topic. Rows carry no stored sha (they ARE the content),
+    # so the comparison is the row set itself — the same fate vocabulary
+    # (:mismatch / :missing / :unparseable).
+    def verify_notes_source(entry, adapter, workdir)
+      return SourceOutcome.new(slug: entry.slug, verified: 0, issues: []) \
+        unless @db.table_exists?(:urn_notes)
+
+      reparsed = reparse_notes(adapter, workdir)
+      topics = @db[:urn_notes].distinct.select_map(:topic).sort
+      issues = topics.filter_map { |topic| classify_topic(entry, topic, reparsed) }
+      SourceOutcome.new(slug: entry.slug, verified: topics.size, issues: issues)
+    end
+
+    # { topic => derived row set } from a fresh discover→parse (attic
+    # included; Store::NoteLoader.rows_for, so load and check never drift);
+    # a malformed topic file contributes its error instead.
+    def reparse_notes(adapter, workdir)
+      reparsed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        note_file = adapter.parse(ref)
+        reparsed[note_file.topic] = Store::NoteLoader.rows_for(note_file)
+      rescue Nabu::ParseError => e
+        reparsed[ref.metadata.fetch("topic", ref.id)] = e.message
+      end
+      reparsed
+    end
+
+    def classify_topic(entry, topic, reparsed)
+      stored = @db[:urn_notes].where(topic: topic).order(:id)
+                              .select(:urn, :note, :topic, :tags, :added, :provenance).all
+      urn = "#{entry.slug}:#{topic}"
+      fresh = reparsed[topic]
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
+      return nil if fresh == stored
+
+      DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                        detail: "derived notes differ from the reparsed topic file")
+    end
+
     # { code => [[kind, body, source], …] } from a fresh discover→parse
     # (attic included); a malformed dossier contributes its error instead.
     def reparse_dossiers(adapter, workdir)
@@ -151,6 +195,45 @@ module Nabu
                                      .map { |row| [row[:kind], row[:body], row[:source]] }.sort
       urn = "#{entry.slug}:#{code}"
       fresh = reparsed[code]
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
+      return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
+      return nil if fresh == stored
+
+      DocumentIssue.new(urn: urn, canonical_path: nil, kind: :mismatch,
+                        detail: "derived records differ from the reparsed dossier")
+    end
+
+    # The source-dossier shelf (P24-0) verifies exactly as the language
+    # shelf does, at the slug grain: re-parse the dossiers, diff the derived
+    # rows against source_records — the same fate vocabulary.
+    def verify_source_shelf(entry, adapter, workdir)
+      return SourceOutcome.new(slug: entry.slug, verified: 0, issues: []) \
+        unless @db.table_exists?(:source_records)
+
+      reparsed = reparse_source_dossiers(adapter, workdir)
+      slugs = @db[:source_records].distinct.select_map(:slug).sort
+      issues = slugs.filter_map { |slug| classify_source_slug(entry, slug, reparsed) }
+      SourceOutcome.new(slug: entry.slug, verified: slugs.size, issues: issues)
+    end
+
+    # { slug => [[kind, body, provenance], …] } from a fresh discover→parse
+    # (attic included); a malformed dossier contributes its error instead.
+    def reparse_source_dossiers(adapter, workdir)
+      reparsed = {}
+      adapter.discover_with_attic(workdir).each do |ref|
+        dossier = adapter.parse(ref)
+        reparsed[dossier.slug] = dossier.records.map { |r| [r.kind, r.body, r.provenance] }.sort
+      rescue Nabu::ParseError => e
+        reparsed[ref.metadata.fetch("slug", ref.id)] = e.message
+      end
+      reparsed
+    end
+
+    def classify_source_slug(entry, slug, reparsed)
+      stored = @db[:source_records].where(slug: slug)
+                                   .map { |row| [row[:kind], row[:body], row[:provenance]] }.sort
+      urn = "#{entry.slug}:#{slug}"
+      fresh = reparsed[slug]
       return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :missing, detail: nil) if fresh.nil?
       return DocumentIssue.new(urn: urn, canonical_path: nil, kind: :unparseable, detail: fresh) if fresh.is_a?(String)
       return nil if fresh == stored

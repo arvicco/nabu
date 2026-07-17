@@ -1,0 +1,18 @@
+# Owner notes — the default topic file (canonical/local-notes/notes.yml).
+# Appended by `nabu note`; hand-edits welcome (the file is the record).
+- urn: urn:nabu:ccmh:mar:mt
+  note: Collate the Marianus Matthew against Jagić 1883 before citing readings.
+  added: '2026-07-14'
+  tags:
+  - collation
+  - ocs
+
+- urn: urn:nabu:ccmh:mar:mt:1
+  note: искони — the Marianus incipit; compare Zographensis word order here.
+  added: '2026-07-15'
+
+- urn: urn:nabu:dict:lsj:logos
+  note: The LSJ λόγος entry is the anchor for the John 1.1 witness comparison.
+  added: '2026-07-16'
+  tags:
+  - lexicon
