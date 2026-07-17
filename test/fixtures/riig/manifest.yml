@@ -1,16 +1,22 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# The four records are byte-identical raw GETs from the verified stable
-# per-record pattern (P25-1, retrieved 2026-07-17). map/corpus.html is a
+# The five records are byte-identical raw GETs from the verified stable
+# per-record pattern (P25-1 ×4, retrieved 2026-07-17; AIS-01-01 added
+# P25-3 from the canonical crawl of the same date). map/corpus.html is a
 # documented TRIM of the 2.6 MB corpus page (its embedded placesgeo
-# GeoJSON reduced to these four records' feature objects, each object
-# byte-identical), so adapter_test stays null (a re-run against the full
+# GeoJSON reduced to the four P25-1 records' feature objects, each object
+# byte-identical; AIS-01-01 lives in documents/ only — discovery never
+# reads the map), so adapter_test stays null (a re-run against the full
 # upstream page would false-fail the fetch tests' id count).
 source: riig
 adapter_test:
 retrieved: 2026-07-17
 files:
+  - path: documents/AIS-01-01.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/AIS-01-01.xml
+    whole: true
+    trim: none (P25-3 — SELF-CLOSED translation div followed by prose-bearing commentary divs, the sibling-noise shape; documents/ only, not in the map trim)
   - path: documents/AHP-01-01.xml
     url: https://riig.huma-num.fr/documents/data/documents/RIIG/AHP-01-01.xml
     whole: true

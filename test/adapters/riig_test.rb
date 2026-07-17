@@ -64,17 +64,46 @@ class RiigTest < Minitest::Test
   def test_discover_mints_original_and_fr_sibling_refs
     refs = Nabu::Adapters::Riig.new(translations: true).discover(FIXTURES).to_a
     assert_equal %w[
-      urn:nabu:riig:ahp-01-01 urn:nabu:riig:all-01-01
+      urn:nabu:riig:ahp-01-01 urn:nabu:riig:ais-01-01
+      urn:nabu:riig:all-01-01 urn:nabu:riig:all-01-01-fr
       urn:nabu:riig:gar-10-03 urn:nabu:riig:gar-10-03-fr
       urn:nabu:riig:vau-13-01 urn:nabu:riig:vau-13-01-fr
-    ], refs.map(&:id), "-fr siblings only where the record carries translation prose " \
-                       "(AHP-01-01's translation div is empty; ALL-01-01 has none)"
+    ], refs.map(&:id), "-fr siblings exactly where the parser's own extraction finds prose " \
+                       "(AHP-01-01's translation div is empty; AIS-01-01's is self-closed; " \
+                       "ALL-01-01 carries prose behind attribute-reordered divs)"
   end
 
   def test_discover_without_translations_is_originals_only
     refs = Nabu::Adapters::Riig.new.discover(FIXTURES).to_a
-    assert_equal 4, refs.size
+    assert_equal 5, refs.size
     refute(refs.any? { |ref| ref.id.end_with?("-fr") })
+  end
+
+  # P25-3 hotfix regression (the 230-noise-quarantine shape): AIS-01-01's
+  # <div type="translation"/> is SELF-CLOSED and followed by prose-bearing
+  # commentary divs — the old byte peek's non-greedy (.*?)</div> swallowed
+  # the commentary and minted a -fr sibling the parser could never fill.
+  # The minting decision now IS the parser's extraction: no prose, no ref.
+  def test_a_self_closed_translation_div_mints_no_fr_sibling
+    refs = Nabu::Adapters::Riig.new(translations: true).discover(FIXTURES).to_a
+    refute_includes refs.map(&:id), "urn:nabu:riig:ais-01-01-fr",
+                    "an empty translation div must not mint a sibling the parser cannot fill"
+    assert_empty Nabu::Adapters::RiigEpidocParser.new.translations(
+      File.join(FIXTURES, "documents", "AIS-01-01.xml")
+    ), "the shared extraction agrees: AIS-01-01 has no translation prose"
+  end
+
+  # P25-3 hotfix regression (the missed-sibling shape): ALL-01-01 writes its
+  # translation divs attributes-first (<div corresp=… resp=… type="translation">),
+  # which the old literal-prefix regex never matched — real prose went unminted.
+  def test_attribute_reordered_translation_divs_mint_a_parsing_fr_sibling
+    adapter = Nabu::Adapters::Riig.new(translations: true)
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:riig:all-01-01-fr" }
+    refute_nil ref, "ALL-01-01 carries real translation prose; the sibling must mint"
+    document = adapter.parse(ref)
+    assert_equal "fra", document.language
+    assert_equal 2, document.size, "one prose paragraph per translation div (PLT-a, MLE-a)"
+    assert_match(/Bratronos/, document.first.text)
   end
 
   def test_discover_of_an_unfetched_workdir_yields_nothing
