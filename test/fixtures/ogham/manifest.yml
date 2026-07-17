@@ -1,0 +1,39 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# All files byte-identical to the og-h-am repo at HEAD bb62ccd146cc3
+# (committed 2026-07-02; cloned 2026-07-17, P25-1). Raw URLs are the
+# GitHub raw mirror of the same paths — a fresh fetch that differs is real
+# upstream drift (the repo is live, v2.0 2025).
+source: ogham
+adapter_test: test/adapters/ogham_test.rb
+retrieved: 2026-07-17
+files:
+  - path: XML/charDecl.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/charDecl.xml
+    whole: true
+    trim: none (the shared glyph table — 61 glyphs, ogham/diplomatic/interpretation mappings)
+  - path: XML/I-MAY/I-MAY-010.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/I-MAY/I-MAY-010.xml
+    whole: true
+    trim: none (base case — Ogham codepoints, dil.ie refs, logainm, translation)
+  - path: XML/S-SHE/S-SHE-001.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/S-SHE/S-SHE-001.xml
+    whole: true
+    trim: none (glyph-heavy Pictish case — forfeda, letter variants, ab type="list" summary)
+  - path: XML/E-DEV/E-DEV-001.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/E-DEV/E-DEV-001.xml
+    whole: true
+    trim: none (corr/sic choice, two roman divs, inline pgl inside the Latin edition)
+  - path: XML/E-CON/E-CON-X03.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/E-CON/E-CON-X03.xml
+    whole: true
+    trim: none (roman-only companion stone — no ogham layer, textpart line restarts)
+  - path: XML/I-WAT/I-WAT-042.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/I-WAT/I-WAT-042.xml
+    whole: true
+    trim: none (ogham edition without <lb> — the whole-layer :text fallback exemplar)
+  - path: XML/I-COR/I-COR-L11.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/I-COR/I-COR-L11.xml
+    whole: true
+    trim: none (both edition divs self-closed — the empty-layer skip-by-rule census exemplar)

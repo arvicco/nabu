@@ -7540,6 +7540,74 @@ ETYM_DESCRIPTION, docs/mcp.md nabu_etym paragraph.
 #    eyeball), Hesperia. v2 on replies: LexLep, Rhyddiaith 13eg,
 #    CELT subset, Celtiberian.
 
+## P25-1 · Celtic epigraphy pair: RIIG (Gaulish) + OG(H)AM (Primitive Irish)  [tier: fable] [status: done 2026-07-17 — both adapters + families shipped, enabled:false awaiting owner syncs; verdicts below] [deps: —]
+
+Two EpiDoc corpora, one shared parser investment (queue picks #1 + #5).
+
+SHIPPED:
+- `CelticLeiden` — the shared Leiden reading-text policy module (the "one
+  shared investment" verdict: gap `[…]` / del `⟦⟧` / surplus `{}` markers,
+  corr>reg>lem>expan choice-branch rule, supplied/unclear grapheme counts,
+  language mapping, line folding). The two parsers stay SIBLING families
+  (the EDH/DDbDP siblings-not-a-hierarchy doctrine), each owning its walk;
+  both are DOM-based (428 + 504 files ≤70 KB — the freising small-TEI
+  precedent, not the >5 MB Reader rule; and choice-branch selection needs
+  name-based lookahead a one-pass stream can't do).
+- `riig` (adapter `Riig`, family `riig-epidoc`, `attribution`): passage =
+  line WITHIN an editorial reading (`<urn>:<seg-id>:<lb n>` — RIIG marks
+  no preferred reading, so EVERY seg mints; AHP-01-01's καρε[…]μ vs
+  καρβ[…]μ both live). choice→reg; word-internal pretty-print whitespace
+  stripped (no xml:space upstream; `<space/>` = real division —
+  "nanton{t}icnos", "votum solvit libens merito"); msd/pos/type →
+  per-line `words`; seg resp/cert → `reading` annotation. Fetch =
+  FileFetch corpus map (corpus.html's embedded placesgeo GeoJSON, the
+  crawl seed + probe target) + polite resumable per-record crawl (ORACC
+  html-en shape, CRAWL_DELAY 0.25). `AxisBuilder::RiigDates` (envelope
+  reuse, BCE-signed; findspot-over-settlement, Trismegistos refs; WGS84
+  verbatim in metadata — the EDH no-coordinate-columns decision). RIG
+  concordance → `related` `rig:G593` (hyphen variants deduped) →
+  reference edges. French translation divs → `-fr` siblings, cited by
+  reading id (registry `translations: true`; per-file peek since coverage
+  is partial — the AHP empty-div case). LICENSE both layers verbatim in
+  MANIFEST + 02-sources: in-file CC BY 4.0 governs (Freising ruling);
+  page-level BY-NC-ND covers site documentation only.
+- `ogham` (adapter `Ogham`, family `ogham-epidoc`, `nc` PENDING registry
+  #14 — relabel-on-reply): Document = (stone × layer), the Freising
+  sibling design — ogham layer bare urn, transliteration/roman/runic/
+  english as -translit/-roman/… siblings with IDENTICAL line suffixes
+  (suffix-equality --parallel alignment). SCRIPT-HONESTY verdicts: Ogham
+  codepoints verbatim NFC as the PRIMARY surface (byte-pinned ᚇᚑᚈᚐᚌᚅᚔ);
+  the transliteration is its own parallel document, never a replacement;
+  a false `-Ogam` subtag on a Latin-script layer is SHED, `-Latn` never
+  invented (upstream doesn't claim it). charDecl glyph table resolves
+  `<g>` refs per layer (ogham vs diplomatic mapping, `@type` override;
+  unknown ref = ParseError, the freising rule). choice→corr either order;
+  no-lb layers → the `:text` whole-layer fallback (EDH P23-3c); empty
+  edition divs skip-by-rule (discovery census); `<ab type="list">`
+  summary dropped. dil.ie word links → `related`
+  (`https://dil.ie/<id>`) → reference edges, producer `ogham` — corph
+  coordinates via producer, no code coupling. GitFetch; sync_policy
+  MANUAL verdict (not frozen: v2.0 2025, commits into 2026).
+- Reference-edge generalization (the packet's links promise):
+  `Adapter.reference_producer` (default "library") +
+  `LibraryReferences#run(slug, producer:)` + the edge-worthiness rule
+  generalized from urn:-only to scheme-bearing targets (":"-less strings
+  stay codes/metadata) — SyncRunner passes the producer; supersession
+  stays (producer, scope)-scoped so independent producers over the same
+  id space never clobber.
+- AxisBuilder Summary + rebuild + CLI axes line gain riig (+undated/
+  +invalid residues); config rows riig (translations: true) + ogham,
+  both enabled: false; fixtures = 4 real RIIG records + trimmed corpus
+  map, 6 real ogham records + charDecl (manifests + READMEs with both
+  license layers verbatim).
+
+KNOWN HONEST RESIDUES (first-sync triage): ~5 RIIG "Indéterminé" records
+may quarantine (empty editions — the EDH 27-quarantine precedent); ogham
+W-PEM-006/W-PEM-012 transliteration layers quarantine on lb-without-@n
+(upstream defect, named in the fixture README). FOLLOW-UP (proposed, not
+promised): an ogham place/date axis feed (geo 484/504, origDate attrs
+104/504 censused) once the owner wants Insular findspots on the axis.
+
 ## P24-1 · `nabu note` — owner annotations on any urn  [tier: fable] [status: done 2026-07-16 — shelf + gateway + adapter + renders shipped; design verdicts below] [deps: —]
 The curatorial note lane (owner-approved 2026-07-16, metadata-framework
 phase 2): notes keyed by ANY urn the corpus knows — document, passage,
