@@ -135,6 +135,56 @@ module Nabu
         raise ParseError, "#{chardecl_path}: malformed XML: #{e.message}"
       end
 
+      # The discovery census of one record (P25-3 hotfix — discovery shares
+      # the parser's own extraction, the riig sibling of the same fix):
+      # recognized layers split into +citable+ (would mint at least one
+      # passage, OR are structurally broken — lb without @n, unresolvable
+      # glyph — and must mint so parse can quarantine them honestly) and
+      # +empty+ (declared but carrying no citable text: an honest absence,
+      # the EDH lost-edition lesson — never a ref, never a quarantine).
+      # +unknown+ collects unrecognized @subtype values (vocabulary drift,
+      # loud in the adapter's discovery_skips). Commented-out edition divs
+      # are invisible to the DOM and count nowhere — unlike the raw-byte
+      # peek this census replaced. Order is first appearance.
+      LayerCensus = Data.define(:citable, :empty, :unknown)
+
+      def layer_census(path, glyphs:)
+        doc = read_xml(path)
+        recognized = []
+        unknown = []
+        doc.xpath("//div[@type='edition']").each do |div|
+          subtype = div["subtype"].to_s
+          list = LAYER_SUFFIXES.key?(subtype) ? recognized : unknown
+          list << subtype unless list.include?(subtype)
+        end
+        citable, empty = recognized.partition { |layer| layer_citable?(doc, layer, glyphs: glyphs, path: path) }
+        LayerCensus.new(citable: citable, empty: empty, unknown: unknown)
+      end
+
+      # The never-encoded stone (P25-3): a record with NO citable layer at
+      # all is catalogued as a zero-passage bare-urn document carrying the
+      # stone-grain header metadata plus the local-library metadata-only
+      # marker ("text_layer" => "none") — catalogued, never quarantined.
+      def parse_metadata_only(path, urn:)
+        doc = read_xml(path)
+        filename = doc.at_xpath("//idno[@type='filename']")&.text.to_s.strip
+        raise ParseError, "#{path}: no <idno type=\"filename\"> found in teiHeader" if filename.empty?
+
+        base = "#{URN_PREFIX}#{filename.downcase}"
+        unless base == urn
+          raise ParseError, "#{path}: urn mismatch: caller says #{urn.inspect}, " \
+                            "<idno type=\"filename\"> #{filename.inspect} mints #{base.inspect}"
+        end
+
+        language = CelticLeiden.normalize_language(presence(doc.at_xpath("//textLang/@mainLang")&.value)) || "und"
+        Nabu::Document.new(
+          urn: urn, language: language, title: presence(doc.at_xpath("//titleStmt/title")&.text),
+          canonical_path: path, metadata: stone_metadata(doc).merge("text_layer" => "none")
+        )
+      rescue ValidationError => e
+        raise ParseError, "#{path}: #{e.message}"
+      end
+
       # Parse one record file's +layer+ into a Nabu::Document. +glyphs+ is
       # the .glyph_map table; +primary+ hangs the stone-grain metadata on
       # this layer's document (class note).
@@ -185,6 +235,20 @@ module Nabu
         doc.xpath("//div[@type='edition']").select { |div| div["subtype"] == layer }
       end
 
+      # Would this layer mint at least one passage? Runs the REAL extraction
+      # (the whole point of P25-3: no cheaper approximation gets to
+      # disagree with parse). A ParseError mid-extraction means broken, not
+      # empty — report citable so the ref mints and quarantines honestly.
+      def layer_citable?(doc, layer, glyphs:, path:)
+        editions = layer_editions(doc, layer)
+        extraction = Extraction.new(path: path, glyphs: glyphs, layer: layer,
+                                    document_language: layer_language(doc, editions, layer))
+        editions.each { |edition| extraction.edition(edition) }
+        extraction.lines.any? || !extraction.whole_layer_line.nil?
+      rescue ParseError
+        true
+      end
+
       # Class note "Languages": div @xml:lang → textLang @mainLang → und;
       # a non-ogham layer sheds a false -Ogam subtag.
       def layer_language(doc, editions, layer)
@@ -207,6 +271,13 @@ module Nabu
         result = { "layer" => layer }
         return result unless primary
 
+        result.merge(stone_metadata(doc))
+      end
+
+      # The stone-grain header block — on the primary layer document, or on
+      # the whole metadata-only document of a never-encoded stone.
+      def stone_metadata(doc)
+        result = {}
         facets = build_facets(doc)
         result["facets"] = facets unless facets.empty?
         place = extract_place(doc)

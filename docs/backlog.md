@@ -7731,6 +7731,62 @@ grain — the language-dossier stack's twin, owner-approved 2026-07-16.
 
 # ── Phase 25 ──────────────────────────────────────────────────────────
 
+## P25-3 · hotfix — Celtic quarantine noise: discovery must not mint refs the parser cannot fill  [tier: fable] [status: done 2026-07-17 — both adapters aligned; expected at next parse-only sync: riig 242→9 quarantines, ogham 214→5] [deps: P25-1]
+
+The first live sync of the P25-1 pair surfaced 444 noise quarantines on
+perfectly good records — both adapters' cheap discovery peeks (raw-byte
+regexes) DISAGREED with the parsers' real extraction. One principle fixes
+both: the minting decision now IS the parser's own extraction (428 + 503
+files ≤70 KB — parsing at discovery is cheap; no approximation gets to
+disagree with parse).
+
+- riig: `translated?` was a byte peek over `<div type="translation">…</div>`
+  whose non-greedy close swallowed FOLLOWING divs (a self-closed
+  translation div + prose-bearing commentary → phantom sibling) and whose
+  literal prefix missed attribute-reordered divs (real prose unminted).
+  Corpus census: 291 minted siblings = 233 phantoms ("no translation
+  prose found" noise) + 56 loading + 2 on broken bases; 18 real siblings
+  MISSED. Now `translated?` = `RiigEpidocParser#translations(path).any?`
+  (rescue ParseError → false: an unreadable record's base ref already
+  carries the honest quarantine) — a -fr ref exists iff parse_translation
+  would find prose. Expected: 504 refs (76 siblings), 495 loaded (+18 new
+  siblings, NOTHING withdrawn — the 56 loading siblings are a subset of
+  the 76), 9 quarantines = the 7 known base defects (bdr-04-05 lb@n,
+  bdr-17-01 bad language tag, 5 × no-citable-text) + their 2 prose-bearing
+  -fr riders (bdr-17-01-fr, gar-02-03-fr — honest, base-broken).
+- ogham: the byte peek only recognized SELF-CLOSED edition divs as empty
+  and read straight through XML comments. Census of the 214 quarantines:
+  195 DECLARED-but-empty layers (open divs carrying only <ab><lb/></ab> —
+  never-encoded stones; the EDH lost-edition lesson in a new costume) +
+  14 commented-out divs (not declared at all — DOM-invisible) + 3 charDecl
+  glyph-drift refs + 2 W-PEM lb defects. New
+  `OghamEpidocParser#layer_census` (shared by discover + discovery_skips):
+  a declared layer with no citable text mints NO ref (skip-by-rule,
+  censused — 197 skips corpus-wide); a structurally BROKEN layer (lb
+  without @n, unresolvable glyph) stays citable so its ref mints and
+  quarantines honestly; commented divs count nowhere. VERDICT on the
+  all-empty stone (censused: 39 upstream, none with any citable layer):
+  the local-library metadata-only precedent FITS — conformance already
+  ships the P19-4 marker-driven hook, Document/store accept zero-passage
+  documents — so each mints ONE bare-urn metadata-only document
+  (`text_layer: "none"`, stone-grain header metadata, new
+  `parse_metadata_only`): catalogued, never quarantined. Expected: 878
+  refs, 873 loaded (834 text docs UNCHANGED + 39 metadata-only stones),
+  5 quarantines = W-PEM-006/012 translit (lb@n, kept per spec) + 3
+  glyph-drift (i-ker-054-roman chi-rho, s-abd-003 ×2 stemline_space —
+  real parse failures on non-empty layers, NOT empty-layer noise; honest,
+  kept).
+- Fixtures (byte-verbatim from the canonical trees, READMEs + manifests
+  updated): riig AIS-01-01 (the self-closed-div phantom shape; red first —
+  reproduced the exact noise quarantine), ogham E-STS-001 (declared-empty
+  layers → metadata-only) + E-CON-X01 (all divs commented out, textLang
+  removed upstream → und metadata-only). ALL-01-01 (already a fixture)
+  turned out to be a MISSED sibling — the old test asserted the bug
+  ("ALL-01-01 has none"); its -fr ref now mints and parses (Bratronos).
+- Deviation from the hotfix brief: projected floors are 9 (not ~7) and 5
+  (not ~2) — the brief's census lumped the 3 glyph-drift and 2 broken-base
+  -fr quarantines into the noise; they are honest errors and stay.
+
 ## P25-2 · Celtic config batch — kaikki ×3 + UD ×2 + survey-reference truth-pass rider  [tier: fable] [status: done 2026-07-17 — config + fixtures shipped, zero new code; extracts/treebanks flow at the next owner-fired syncs] [deps: —]
 
 The Celtic axis's two config-shaped lanes (queue items 2 + 4; survey

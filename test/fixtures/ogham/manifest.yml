@@ -37,3 +37,11 @@ files:
     url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/I-COR/I-COR-L11.xml
     whole: true
     trim: none (both edition divs self-closed — the empty-layer skip-by-rule census exemplar)
+  - path: XML/E-STS/E-STS-001.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/E-STS/E-STS-001.xml
+    whole: true
+    trim: none (P25-3 — DECLARED-but-empty layers, open divs with only <ab><lb n="1"/></ab>; metadata-only stone)
+  - path: XML/E-CON/E-CON-X01.xml
+    url: https://raw.githubusercontent.com/lguariento/og-h-am/master/XML/E-CON/E-CON-X01.xml
+    whole: true
+    trim: none (P25-3 — every edition div commented out; never-encoded stone, metadata-only, no textLang)
