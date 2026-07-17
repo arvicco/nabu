@@ -76,20 +76,32 @@ module Nabu
     # Scriptorium's semiannual releases) never tracks its moving master, and
     # an owner re-pin to a later release tag fast-forwards through the same
     # attic/breaker contract as any pull.
-    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil, ref: nil)
-      pull = new(repo_url: repo_url, dir: dir, attic_dir: attic_dir, progress: progress, ref: ref)
+    #
+    # +sparse+ (P26-0) scopes the checkout to the given path prefixes: the
+    # fresh clone runs --filter=blob:none --no-checkout, declares the
+    # sparse-checkout cone, then materializes it — so only the cone's blobs
+    # transfer (DCS: dcs/data/conllu, 844 MB of a ~1.7 GB research repo).
+    # Pulls scope the deletion diff to the cone too — files outside it were
+    # never this source's retained assets, so they are neither guarded nor
+    # atticked. Local-path clones ignore --filter with a warning (git's
+    # local-transport rule) — harmless: the sparse cone still governs the
+    # working tree, which is the contract under test.
+    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil, ref: nil, sparse: nil)
+      pull = new(repo_url: repo_url, dir: dir, attic_dir: attic_dir, progress: progress, ref: ref,
+                 sparse: sparse)
       pull.prepare!
       guard&.call(pull.doomed_paths)
       pull.complete!
       Result.new(sha: pull.head_sha, atticked: pull.atticked)
     end
 
-    def initialize(repo_url:, dir:, attic_dir:, progress: nil, ref: nil)
+    def initialize(repo_url:, dir:, attic_dir:, progress: nil, ref: nil, sparse: nil)
       @repo_url = repo_url
       @dir = dir
       @attic_dir = attic_dir
       @progress = progress
       @ref = ref
+      @sparse = sparse&.then { |paths| Array(paths) }
       @doomed_relpaths = []
       @atticked = []
       @cloned = false
@@ -136,12 +148,28 @@ module Nabu
 
     def git_clone
       pin = @ref ? ["--branch", @ref] : []
+      return sparse_clone(pin) if @sparse
+
       unless @progress
         Shell.run("git", "clone", "--depth", "1", *pin, @repo_url, @dir)
         return
       end
       @progress.call("Cloning #{@repo_url}…")
       Shell.stream("git", "clone", "--progress", "--depth", "1", *pin, @repo_url, @dir) { |line| @progress.call(line) }
+    end
+
+    # The sparse recipe (class note): blobless no-checkout clone, declare the
+    # cone, materialize it — only the cone's blobs ever transfer.
+    def sparse_clone(pin)
+      args = ["clone", "--depth", "1", "--filter=blob:none", "--no-checkout", *pin, @repo_url, @dir]
+      if @progress
+        @progress.call("Cloning #{@repo_url} (sparse: #{@sparse.join(', ')})…")
+        Shell.stream("git", *args.insert(1, "--progress")) { |line| @progress.call(line) }
+      else
+        Shell.run("git", *args)
+      end
+      Shell.run("git", "-C", @dir, "sparse-checkout", "set", "--no-cone", *@sparse)
+      Shell.run("git", "-C", @dir, "checkout", "--quiet")
     end
 
     # Fetch exactly the pinned ref — or, unpinned, the branch the clone
@@ -161,9 +189,12 @@ module Nabu
     # --find-renames is explicit so a rename always reports as R (not D+A)
     # regardless of the user's diff.renames setting; -z gives raw NUL-split
     # paths (git would otherwise quote non-ASCII names, and corpora have them).
+    # A sparse repo scopes the diff to its cone (class note): deletions
+    # outside it are not this source's assets.
     def deleted_relpaths
+      scope = @sparse ? ["--", *@sparse] : []
       Shell.run("git", "-C", @dir, "diff", "--name-only", "--diff-filter=D",
-                "--find-renames", "-z", "HEAD", "FETCH_HEAD").split("\0")
+                "--find-renames", "-z", "HEAD", "FETCH_HEAD", *scope).split("\0")
     end
 
     # Copy each doomed file into the attic — first copy wins — and record the

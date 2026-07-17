@@ -26,6 +26,14 @@ module Nabu
     SYNC_POLICIES = %w[live manual frozen local].freeze
     DEFAULT_SYNC_POLICY = "manual"
 
+    # The lemma-index tiers (P26-0). ABSENT = gold — every adapter that
+    # existed before the tier did keeps its meaning with zero registry churn;
+    # a source whose lemmatization is AUTOMATIC (Diorisis-style) declares
+    # `lemma_tier: silver` and its passage_lemmas rows carry the label all
+    # the way to the render (attested_count stays gold-only everywhere).
+    LEMMA_TIERS = %w[gold silver].freeze
+    DEFAULT_LEMMA_TIER = "gold"
+
     # One registry line. adapter_class_name is a String resolved on demand.
     # +translations+ (P7-4): per-source opt-in to ingesting parallel
     # translations (default false — corpora stay original-only unless the
@@ -44,10 +52,13 @@ module Nabu
     # (the manifest is intrinsic upstream identity/license, and editing it IS
     # code spelunking); a constant was rejected by the design itself ("a
     # config list, not a hardcode").
+    # +lemma_tier+ (P26-0): the tier this source's lemma annotations enter the
+    # passage_lemmas index under (LEMMA_TIERS; default gold — absent means
+    # gold, so existing entries never change).
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
-                        :license_watch, :fuzzy_index) do
+                        :license_watch, :fuzzy_index, :lemma_tier) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
-                     license_watch: nil, fuzzy_index: false)
+                     license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER)
         super
       end
 
@@ -141,10 +152,20 @@ module Nabu
         enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config),
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
-        fuzzy_index: boolean!(slug, config, "fuzzy_index")
+        fuzzy_index: boolean!(slug, config, "fuzzy_index"),
+        lemma_tier: lemma_tier!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    def self.lemma_tier!(slug, config)
+      tier = config.fetch("lemma_tier", DEFAULT_LEMMA_TIER)
+      return tier if LEMMA_TIERS.include?(tier)
+
+      raise ValidationError,
+            "source #{slug.inspect}: lemma_tier must be one of #{LEMMA_TIERS.join(', ')}, got #{tier.inspect}"
+    end
+    private_class_method :lemma_tier!
 
     # nil (not watched) or an absolute http(s) URL String — anything else is
     # a configuration error naming the slug, caught at load, not probe time.
@@ -205,6 +226,15 @@ module Nabu
     # what the Indexer scopes its trigram pass to. Registration order.
     def fuzzy_slugs
       @entries.each_value.select(&:fuzzy_index).map(&:slug)
+    end
+
+    # { slug => tier } for the NON-gold sources only (P26-0) — absent-is-gold
+    # is the wire format the Indexer consumes, mirroring the yaml's own
+    # absent-is-gold contract.
+    def lemma_tiers
+      @entries.each_value
+              .reject { |entry| entry.lemma_tier == DEFAULT_LEMMA_TIER }
+              .to_h { |entry| [entry.slug, entry.lemma_tier] }
     end
 
     def empty?

@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../normalize"
+require_relative "../store/indexer"
 require_relative "catalog_join"
 require_relative "define"
 require_relative "morph_facets"
@@ -44,10 +45,12 @@ module Nabu
       # dictionary of that language holds it — honest absence; `morph` (P13-6)
       # the decoded morphology evidence of the matching token(s) when a
       # `--morph` filter narrowed the hit, nil otherwise — so every morph hit
-      # SHOWS why it matched.
+      # SHOWS why it matched; `tier` (P26-0) the hit's lemma tier ("gold" |
+      # "silver") — renderers label silver hits so an automatic lemmatization
+      # is never mistakable for a verified one.
       Result = Data.define(:urn, :language, :lemma, :surface_forms, :text,
-                           :document_title, :license_class, :gloss, :morph) do
-        def initialize(gloss: nil, morph: nil, **rest) = super
+                           :document_title, :license_class, :gloss, :morph, :tier) do
+        def initialize(gloss: nil, morph: nil, tier: Store::Indexer::GOLD_TIER, **rest) = super
       end
 
       # Pull more index hits than the caller's limit so that catalog-side
@@ -68,18 +71,23 @@ module Nabu
       # each hit to passages attesting the lemma with a token bearing that
       # morphology (see #run_with_morph); it REQUIRES the lemma anchor — bare
       # morph search is deliberately out of scope (it would scan every
-      # annotated passage, not a lemma-narrowed handful).
-      def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil)
+      # annotated passage, not a lemma-narrowed handful). +gold_only+ (P26-0)
+      # drops the silver (automatic-lemmatization) rows at the index — the
+      # pre-tier gold-treebanks-only scope; on a pre-tier index it is a no-op
+      # (every row IS gold there).
+      def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil,
+              gold_only: false)
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         facets = morph.to_s.strip.empty? ? nil : MorphFacets.parse(morph)
         if facets
           return run_with_morph(variants, facets, lang: lang, license: license, limit: limit,
-                                                  urn: urn, source: source)
+                                                  urn: urn, source: source, gold_only: gold_only)
         end
 
-        hits = lemma_hits(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
+        hits = lemma_hits(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn,
+                                    gold_only: gold_only)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -112,26 +120,44 @@ module Nabu
       #   3. a passage with ≥1 such token is a hit — its surface_forms and morph
       #      evidence restricted to the MATCHING tokens (not the whole lemma's
       #      attestations), then the ordinary catalog page-fill and glossing.
-      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil)
-        passage_ids = candidate_passage_ids(variants, urn: urn)
+      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil,
+                         gold_only: false)
+        passage_ids, tiers = candidate_passages(variants, urn: urn, gold_only: gold_only)
         return [] if passage_ids.empty?
 
         variant_set = variants.to_set
         rows = annotated_catalog_rows(passage_ids, lang: lang, license: license, source: source)
                .to_h { |row| [row.fetch(:passage_id), row] }
         results = passage_ids.filter_map do |id|
-          row = rows[id] and morph_hit(row, variant_set, facets)
+          row = rows[id] and morph_hit(row, variant_set, facets, tier: tiers[id])
         end
         attach_glosses(results.first(limit))
       end
 
-      # Every distinct passage attesting the folded lemma, in urn order. Unlike
-      # #lemma_hits this pulls the WHOLE candidate set (morph filtering happens
-      # after) — the lemma anchor bounds it to that lemma's attestations.
-      def candidate_passage_ids(variants, urn:)
+      # [passage ids, { passage_id => tier }] for every distinct passage
+      # attesting the folded lemma, in urn order. Unlike #lemma_hits this
+      # pulls the WHOLE candidate set (morph filtering happens after) — the
+      # lemma anchor bounds it to that lemma's attestations.
+      def candidate_passages(variants, urn:, gold_only:)
         dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants)
         dataset = dataset.where(urn: urn) if urn
-        dataset.order(:urn).select(:passage_id).all.map { |row| row.fetch(:passage_id) }.uniq
+        dataset = dataset.where(tier: Store::Indexer::GOLD_TIER) if gold_only && tier_column?
+        columns = tier_column? ? %i[passage_id tier] : %i[passage_id]
+        tiers = {}
+        ids = dataset.order(:urn).select(*columns).all.map do |row|
+          id = row.fetch(:passage_id)
+          tiers[id] ||= row[:tier] || Store::Indexer::GOLD_TIER
+          id
+        end
+        [ids.uniq, tiers]
+      end
+
+      # Pre-tier fulltext tolerance (P26-0): an index built before the tier
+      # column serves every row as gold — which is what those rows are.
+      def tier_column?
+        return @tier_column unless @tier_column.nil?
+
+        @tier_column = @fulltext[Store::Indexer::LEMMA_TABLE].columns.include?(:tier)
       end
 
       # Catalog rows for the candidate passages, carrying annotations_json for
@@ -148,7 +174,7 @@ module Nabu
       # set; the surface forms and the morph evidence come from THOSE tokens
       # only. The morph filter (cheap string ops) runs before the fold (the
       # per-language Normalize pass) so a selective facet folds only survivors.
-      def morph_hit(row, variant_set, facets)
+      def morph_hit(row, variant_set, facets, tier: nil)
         tokens = passage_tokens(row.fetch(:annotations_json))
         return nil if tokens.empty?
 
@@ -159,7 +185,7 @@ module Nabu
         return nil if matches.empty?
 
         forms = matches.filter_map { |token| token["form"] }.reject(&:empty?).uniq
-        build_morph_result(row, matches, forms)
+        build_morph_result(row, matches, forms, tier: tier)
       end
 
       def passage_tokens(json)
@@ -176,13 +202,14 @@ module Nabu
         variant_set.include?(Nabu::Normalize.search_form(lemma, language: language))
       end
 
-      def build_morph_result(row, matches, forms)
+      def build_morph_result(row, matches, forms, tier: nil)
         Result.new(
           urn: row.fetch(:urn), language: row.fetch(:language),
           lemma: matches.first.fetch("lemma"), surface_forms: forms.join(", "),
           text: row.fetch(:text), document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class),
-          morph: matches.map { |token| MorphFacets.describe(token) }.uniq.join("; ")
+          morph: matches.map { |token| MorphFacets.describe(token) }.uniq.join("; "),
+          tier: tier || Store::Indexer::GOLD_TIER
         )
       end
 
@@ -190,12 +217,15 @@ module Nabu
       # FTS, no raw SQL. Distinct on passage_id: a passage row per folded
       # lemma means one passage could match twice only if two distinct folded
       # lemmas both sit in the variant set (contrived, but dedup is one line).
-      def lemma_hits(variants, inner_limit:, urn: nil)
+      def lemma_hits(variants, inner_limit:, urn: nil, gold_only: false)
         dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants)
         dataset = dataset.where(urn: urn) if urn
+        dataset = dataset.where(tier: Store::Indexer::GOLD_TIER) if gold_only && tier_column?
+        columns = %i[passage_id lemma_raw surface_forms]
+        columns << :tier if tier_column?
         dataset.order(:urn)
                .limit(inner_limit)
-               .select(:passage_id, :lemma_raw, :surface_forms)
+               .select(*columns)
                .all
                .uniq { |row| row.fetch(:passage_id) }
       end
@@ -221,7 +251,8 @@ module Nabu
           surface_forms: hit.fetch(:surface_forms),
           text: row.fetch(:text),
           document_title: row.fetch(:document_title),
-          license_class: row.fetch(:license_class)
+          license_class: row.fetch(:license_class),
+          tier: hit[:tier] || Store::Indexer::GOLD_TIER
         )
       end
     end

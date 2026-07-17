@@ -1,0 +1,42 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All chapter/lookup files are TRIMS of much larger upstream files (whole:
+# false — a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared); the two readmes are byte-verbatim wholes.
+# adapter_test is null: the DCS adapter test asserts trimmed-block counts,
+# which untrimmed upstream files would false-fail. Re-trim per the README
+# table after any refresh. Pinned upstream commit:
+# 04e0778d3dc971030229179e25eea043d06ff397 (master, retrieved 2026-07-18).
+source: dcs
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: dcs/data/readme.md
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/readme.md
+    whole: true
+    trim:
+  - path: dcs/data/conllu/readme.md
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/readme.md
+    whole: true
+    trim:
+  - path: dcs/data/conllu/lookup/chapter-info.xml
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/chapter-info.xml
+    whole: false
+    trim: the three fixture chapters' <chapter> entries, byte-verbatim, in the upstream <info> wrapper (8,858,624 B -> 1,532 B)
+  - path: "dcs/data/conllu/files/Aitareyopaniṣad/Aitareyopaniṣad-0000-AU, 1, 1-8816.conllu"
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/files/Aitareyopani%E1%B9%A3ad/Aitareyopani%E1%B9%A3ad-0000-AU%2C%201%2C%201-8816.conllu
+    whole: true
+    trim:
+  - path: "dcs/data/conllu/files/Aitareyopaniṣad/Aitareyopaniṣad-0000-AU, 1, 1-8816.conllu_parsed"
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/files/Aitareyopani%E1%B9%A3ad/Aitareyopani%E1%B9%A3ad-0000-AU%2C%201%2C%201-8816.conllu_parsed
+    whole: false
+    trim: first 2 sentence blocks of the automatic-layer sibling (18,204 B -> 1,442 B) — kept only for the never-ingested pin
+  - path: "dcs/data/conllu/files/Suśrutasaṃhitā/Suśrutasaṃhitā-0034-Su, Sū., 35-3363.conllu"
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/files/Su%C5%9Brutasa%E1%B9%83hit%C4%81/Su%C5%9Brutasa%E1%B9%83hit%C4%81-0034-Su%2C%20S%C5%AB.%2C%2035-3363.conllu
+    whole: false
+    trim: header + first 3 blocks + the aṃśa-attesting block (221,846 B -> 38,655 B; 4 of 107 blocks)
+  - path: "dcs/data/conllu/files/Suśrutasaṃhitā/Suśrutasaṃhitā-0115-Su, Ka., 4-3656.conllu"
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/files/Su%C5%9Brutasa%E1%B9%83hit%C4%81/Su%C5%9Brutasa%E1%B9%83hit%C4%81-0115-Su%2C%20Ka.%2C%204-3656.conllu
+    whole: false
+    trim: header + first 3 blocks + the 2 kaṇṭha blocks + the śīghra block (189,133 B -> 22,528 B; 6 of 92 blocks)

@@ -247,10 +247,11 @@ module Nabu
     # FetchError contract. Multi-repo adapters (UD) compose GitFetch phases
     # themselves. +ref+ pins the sync to a release tag (P17-1, Coptic
     # Scriptorium's versioned upstream — see GitFetch.sync!).
-    def git_fetch!(repo_url:, workdir:, progress: nil, force: false, ref: nil)
+    def git_fetch!(repo_url:, workdir:, progress: nil, force: false, ref: nil, sparse: nil)
       result = GitFetch.sync!(
         repo_url: repo_url, dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
-        progress: progress, ref: ref, guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
+        progress: progress, ref: ref, sparse: sparse,
+        guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
       )
       FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: attic_notes(result.atticked))
     rescue Shell::Error => e

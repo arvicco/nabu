@@ -317,5 +317,78 @@ module Query
       seed_lego_corpus
       assert_raises(Nabu::Query::MorphFacets::Error) { search("λέγω", morph: "case") }
     end
+
+    # -- the lemma tier (P26-0) ------------------------------------------------
+    # Silver (automatic) lemmatization joins the index labeled per row; lemma
+    # search INCLUDES silver hits, each carrying its tier, and --gold-only
+    # restores the gold-treebank-only scope.
+
+    def seed_tiered_corpus
+      gold_doc = make_document(urn: "urn:d:gold")
+      make_passage(gold_doc, urn: "urn:d:gold:1", text: "σὺ δὲ εἶπας.", sequence: 0,
+                             lemmas: [%w[λέγω εἶπας]])
+      silver_source = Nabu::Store::Source.create(
+        slug: "auto", name: "Auto", adapter_class: "TestAdapter", license_class: "open"
+      )
+      silver_doc = make_document(urn: "urn:d:silver", source: silver_source)
+      make_passage(silver_doc, urn: "urn:d:silver:1", text: "λέγειν ἢ εἰπεῖν", sequence: 0,
+                               lemmas: [%w[λέγω λέγειν]])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "auto" => "silver" })
+    end
+
+    def test_silver_hits_are_included_with_per_hit_tier
+      seed_tiered_corpus
+
+      results = search("λέγω")
+      assert_equal %w[urn:d:gold:1 urn:d:silver:1], results.map(&:urn)
+      assert_equal %w[gold silver], results.map(&:tier),
+                   "every hit says which tier attests it — silver is never mistakable for gold"
+    end
+
+    def test_gold_only_excludes_silver_hits
+      seed_tiered_corpus
+
+      results = search("λέγω", gold_only: true)
+      assert_equal %w[urn:d:gold:1], results.map(&:urn)
+      assert_equal %w[gold], results.map(&:tier)
+    end
+
+    def test_morph_hits_carry_the_tier_and_respect_gold_only
+      gold_doc = make_document(urn: "urn:d:gold")
+      make_passage(gold_doc, urn: "urn:d:gold:1", text: "τοῖς λόγοις", sequence: 0,
+                             lemmas: [],
+                             tokens: [{ "lemma" => "λόγος", "form" => "λόγοις",
+                                        "feats" => "Case=Dat|Number=Plur" }])
+      silver_source = Nabu::Store::Source.create(
+        slug: "auto", name: "Auto", adapter_class: "TestAdapter", license_class: "open"
+      )
+      silver_doc = make_document(urn: "urn:d:silver", source: silver_source)
+      make_passage(silver_doc, urn: "urn:d:silver:1", text: "λόγοις", sequence: 0,
+                               lemmas: [],
+                               tokens: [{ "lemma" => "λόγος", "form" => "λόγοις",
+                                          "feats" => "Case=Dat|Number=Plur" }])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "auto" => "silver" })
+
+      results = search("λόγος", morph: "case=dat,number=pl")
+      assert_equal %w[gold silver], results.map(&:tier), "morph hits are tier-labeled too"
+      gold = search("λόγος", morph: "case=dat,number=pl", gold_only: true)
+      assert_equal %w[urn:d:gold:1], gold.map(&:urn)
+    end
+
+    # A pre-tier fulltext index (built before the column existed) still
+    # serves: every row reads gold — the current, correct semantics of an
+    # index that predates silver sources (the ReflexViews pre-migration
+    # tolerance precedent).
+    def test_pre_tier_lemma_index_reads_all_gold
+      seed_lego_corpus
+      @fulltext.alter_table(Nabu::Store::Indexer::LEMMA_TABLE) { drop_column :tier }
+
+      results = search("λέγω", gold_only: true)
+      assert_equal %w[urn:d:grc:64498 urn:d:grc:64531], results.map(&:urn),
+                   "gold_only on a pre-tier index is a no-op, never a crash"
+      assert_equal %w[gold gold], results.map(&:tier)
+    end
   end
 end

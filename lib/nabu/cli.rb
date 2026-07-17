@@ -638,6 +638,9 @@ module Nabu
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
+    option :gold_only, type: :boolean, default: false,
+                       desc: "With --lemma: gold (verified) annotations only — exclude silver " \
+                             "(automatic) lemmatization"
     def search(query = nil)
       query = query.to_s.strip
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
@@ -649,6 +652,10 @@ module Nabu
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
                            "with --lemma/--near/--morph"
+      end
+      if options[:gold_only] && (!options[:lemma] || options[:near])
+        raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
+                           "(and does not compose with --near)"
       end
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
@@ -3343,7 +3350,8 @@ module Nabu
         results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
                                           .run(lemma, lang: options[:lang], license: options[:license],
                                                       limit: options[:limit].to_i, morph: options[:morph],
-                                                      source: options[:source])
+                                                      source: options[:source],
+                                                      gold_only: options[:gold_only])
         print_lemma_results(results)
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3404,7 +3412,9 @@ module Nabu
       # Render lemma hits: urn + language, the dictionary form with the surface
       # form(s) that attest it, then the PRISTINE passage line (truncated) —
       # the surface form already marks the match, so readability wins over a
-      # folded snippet here.
+      # folded snippet here. Silver (automatic-lemmatization) hits are labeled
+      # per hit — gold stays unlabeled, the pre-tier render exactly (P26-0);
+      # the footer totals the silver share and names the way out.
       def print_lemma_results(results)
         return say("no matches") if results.empty?
 
@@ -3412,10 +3422,15 @@ module Nabu
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
           gloss = result.gloss ? "  (#{result.gloss})" : ""
           morph = result.morph ? "  {#{result.morph}}" : ""
-          say "#{result.urn}#{" [#{result.language}]" if result.language}  #{result.lemma} → #{forms}#{gloss}#{morph}"
+          tier = result.tier == "gold" ? "" : " [#{result.tier}]"
+          say "#{result.urn}#{" [#{result.language}]" if result.language}#{tier}  " \
+              "#{result.lemma} → #{forms}#{gloss}#{morph}"
           say "  #{truncate_line(result.text)}"
         end
-        say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+        silver = results.count { |result| result.tier == "silver" }
+        footer = "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
+        footer += " — #{silver} silver (automatic lemmatization; --gold-only excludes)" if silver.positive?
+        say footer
       end
 
       # Render a vocab profile (P14-3): the header (urn, title, language, scope),
@@ -3583,22 +3598,41 @@ module Nabu
       # cognates first with their gold-lemma passage counts, then an honest
       # one-line summary of the rest (the full tree is in the data; the
       # attested ones are the actionable ones).
+      #
+      # The tier rule (P26-0): attested_count IS the gold count — a silver
+      # (automatic-lemmatization) count renders beside it as "(+N silver)",
+      # and a silver-ONLY reflex gets its own labeled section, "silver N
+      # passages". NEVER a bare number that could read as gold.
       def print_reflexes(reflexes)
         return if reflexes.empty?
 
-        attested, rest = reflexes.partition(&:attested_count)
+        attested, uncounted = reflexes.partition(&:attested_count)
+        silver_only, rest = uncounted.partition(&:silver_count)
         unless attested.empty?
           say ""
           say "attested in this corpus (nabu search --lemma):"
           attested.sort_by { |r| -r.attested_count }.each do |r|
             say "  [#{r.language}] #{reflex_form(r)} — #{r.attested_count} " \
-                "#{r.attested_count == 1 ? 'passage' : 'passages'}"
+                "#{r.attested_count == 1 ? 'passage' : 'passages'}#{silver_suffix(r)}"
+          end
+        end
+        unless silver_only.empty?
+          say ""
+          say "silver-only (automatic lemmatization — not gold-attested; nabu search --lemma):"
+          silver_only.sort_by { |r| -r.silver_count }.each do |r|
+            say "  [#{r.language}] #{reflex_form(r)} — silver #{r.silver_count} " \
+                "#{r.silver_count == 1 ? 'passage' : 'passages'}"
           end
         end
         return if rest.empty?
 
         say ""
         options[:long] ? print_reflexes_expanded(rest) : print_reflexes_capped(rest)
+      end
+
+      # The labeled silver rider on a gold-attested line (P26-0).
+      def silver_suffix(reflex)
+        reflex.silver_count ? " (+#{reflex.silver_count} silver)" : ""
       end
 
       # Compact default (house compact-CLI rule): the first ten non-attested
