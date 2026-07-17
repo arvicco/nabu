@@ -8141,3 +8141,53 @@ SHIPPED:
 Owner queue: bin/nabu sync oshb, eyeball nabu show urn:nabu:oshb:gen:1.1
 (pointed WLC mark order intact) + 5 random verses + `align "GEN 1.1"`
 three-legged, then flip enabled.
+
+## P26-2 · SARIT adapter — the open scholarly Sanskrit shelf  [tier: fable] [status: done 2026-07-18 — adapter + `sarit` family + `Nabu::Deva` shipped, `enabled: false` awaiting the owner-fired first sync (~204 MB clone)] [deps: —]
+
+The GRETIL-posture upgrade: 83 scholarly TEI editions (~170 MB,
+github.com/sarit/SARIT-corpus @ `1eac9ee`) whose headers were ALL censused
+at parse-scout AND re-verified by this packet's whole-corpus dry run —
+**CC BY-SA 4.0 ×56, CC BY-SA 3.0 ×26, MIT ×1, zero NC** → class
+`attribution` (GRETIL stays nc-locked). ~60 works GRETIL lacks, incl. a
+complete Mahābhārata (38.6 MB) and full Caraka/Suśruta.
+
+Shipped:
+- `Nabu::Deva` — one-way Devanagari→IAST transcoder (Slp1/Betacode
+  precedent; inherent-a logic is context-sensitive, so it can never be a
+  conventions-§9 fold rule and must run before the virāma-stripping generic
+  fold).
+- `SaritParser` — new bespoke streaming family (SIBLING of GretilParser:
+  rung strategy, but citations mined from TEI apparatus, never in-text
+  marker regexes). Unit grain lg/standalone-l/p; ladder @n → stripped
+  @xml:id → block-quote inheritance (base-text sūtras) → div-scoped
+  ordinals (non-canonical flag); `:b<k>` collision suffixes; per-file
+  license gate (BY-SA/MIT else quarantine) carried in
+  `Document#metadata["license"]`; `<lb break="no"/>` word joins; apparatus
+  `<note>`/`<head>` drops. Reader-only (9 files >5 MB; static streaming
+  proof à la EpidocParser).
+- `Sarit` adapter — flat-root discover (teiCorpus wrapper + header template
+  skipped by rule, censused), language ladder text→body→script-sniff
+  (sa→san, braj→bra, avadhi→awa), urn `urn:nabu:sarit:<filename-stem>`,
+  GitFetch. Registry `enabled: false`, `sync_policy: manual`.
+- SCRIPT VERDICT: native script stays the canonical surface (41/83
+  Devanagari); the search layer folds the Deva→IAST transcode
+  (text_normalized = san fold of `Deva.to_iast`, the ccmh-txt
+  documented-derivation mechanism). Proven end-to-end in the adapter test:
+  one IAST FTS query lands on the IAST aṣṭāvakragītā AND the Devanagari
+  MBh. v1 limitation, documented: Devanagari-TYPED queries are not
+  transcoded query-side (query_forms' generic fold strips the virāma
+  first) — future packet if wanted.
+- MBh RECENSION VERDICT: SARIT's MBh is the SOUTHERN RECENSION (Kumbakonam,
+  Krishnacharya & Vyasacharya 1906–1910, per its own editionStmt) — not
+  BORI, not the Calcutta vulgate MW's `MB.` citations reference → NO
+  MW-citation joins promised on it (docs say so; MwSigla untouched).
+- Fixtures (4): astavakragita + samanyadusana whole; nyāyabhāṣya sūtras
+  1.1.1–1.1.2 trim; MBh two-parva trim (147 KB, the trimmed-but-big
+  streaming fixture) — README + manifest, license verbatim.
+- Dry run over the full clone (projected first sync): 78 docs / 345,601
+  passages; 5 honest quarantines, all named (4 `<ab>`-shaped Braj/Awadhi
+  texts + list-shaped ayurvedasutram — small v2 rungs, the P9-4c
+  precedent).
+
+Docs: 02-sources row 68; fixtures README. Suite + lint green at hand-off;
+sha in worklog `—` (orchestrator fills at merge).

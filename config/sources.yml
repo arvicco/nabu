@@ -598,6 +598,27 @@ oshb:
   # own anti-NFC warning is measured-true (architecture §3). Upstream is a
   # completed digitization with occasional corrections: re-syncs are an
   # owner decision.
+
+sarit:
+  adapter: Nabu::Adapters::Sarit
+  enabled: false   # P26-2: awaiting the owner-fired first real sync (~204 MB
+                   # git clone — 170 MB TEI + 33 MB .git at HEAD 1eac9ee;
+                   # CLAUDE.md checklist §6: bin/nabu sync sarit, eyeball
+                   # nabu show urn:nabu:sarit:astavakragita:1.1, a Devanagari
+                   # Mahābhārata passage found via its IAST spelling, and 5
+                   # random passages, then flip).
+  # SARIT — Search and Retrieval of Indic Texts (github.com/sarit/
+  # SARIT-corpus): 83 scholarly TEI editions / ~170 MB, ~60 works GRETIL
+  # lacks incl. a complete Mahābhārata (38.6 MB, SOUTHERN Recension —
+  # Kumbakonam 1906–1910, NOT the Calcutta vulgate MW cites: no MW citation
+  # joins promised on it). License censused per-file 2026-07-18: CC BY-SA
+  # 4.0 x56 + CC BY-SA 3.0 x26 + MIT x1, ZERO NC → class attribution (the
+  # GRETIL-posture upgrade; GRETIL itself stays nc). The parser re-verifies
+  # every file's <availability> at parse and quarantines anything outside
+  # BY-SA/MIT. 41/83 files carry a Devanagari surface: canonical text keeps
+  # the native script, the search layer folds a Deva→IAST transcode
+  # (Nabu::Deva), so IAST queries land on both scripts. Upstream is a
+  # dormant scholarly project (last merge 2021) → re-syncs owner-fired.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
