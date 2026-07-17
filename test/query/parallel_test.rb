@@ -370,6 +370,35 @@ module Query
                                "hyphen-rich doc ids must not confuse the variant split"
     end
 
+    # -- SuttaCentral texts (P26-1): <stem> ↔ <stem>-en --------------------------
+
+    SC_URN = "urn:nabu:suttacentral:sn35.24"
+
+    def test_suttacentral_root_finds_its_en_sibling_as_verse_pairs
+      load_edition(SC_URN, "pli",
+                   [["1.1", "“Sabbappahānāya vo, bhikkhave, dhammaṁ desessāmi."],
+                    ["1.2", "Taṁ suṇātha."]], title: "Pahānasutta")
+      load_edition("#{SC_URN}-en", "eng",
+                   [["1.1", "“Mendicants, I will teach you the principle for giving up the all."],
+                    ["1.2", "Listen …"]], title: "Giving Up")
+
+      result = run_parallel(SC_URN)
+      assert_equal "#{SC_URN}-en", result.right.urn
+      assert_equal %i[pair pair], kinds(result), "shared segment ids pair 1:1"
+
+      back = run_parallel("#{SC_URN}-en", lang: "pli")
+      assert_equal SC_URN, back.right.urn, "the -en resolves back to its root text"
+    end
+
+    def test_suttacentral_sibling_lookup_never_crosses_texts
+      load_edition(SC_URN, "pli", [["1.1", "Sabbappahānāya"]])
+      load_edition("urn:nabu:suttacentral:dhp21-32-en", "eng", [["dhp21:1", "Heedfulness"]])
+
+      result = run_parallel(SC_URN)
+      assert_nil result.right, "an -en document of a DIFFERENT text is not a sibling — " \
+                               "hyphen-rich range stems must not confuse the variant split"
+    end
+
     # -- visibility (show-family semantics) --------------------------------------
 
     def test_withdrawn_passages_are_included_and_flagged
