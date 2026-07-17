@@ -1,0 +1,234 @@
+{
+  "scpub1": {
+    "publication_number": "scpub1",
+    "root_lang_iso": "pli",
+    "root_lang_name": "Pali",
+    "translation_lang_iso": "en",
+    "translation_lang_name": "English",
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/translation/en/sujato/sutta/kn/thag",
+    "author_uid": "sujato-walton",
+    "collaborator": [
+      {
+        "collaborator_uid": "sujato",
+        "author_name": "Bhikkhu Sujato",
+        "author_github_handle": "sujato"
+      },
+      {
+        "collaborator_uid": "walton",
+        "author_name": "Jessica Walton",
+        "author_github_handle": ""
+      }
+    ],
+    "text_uid": "thag",
+    "translation_title": "Verses of the Senior Monks",
+    "translation_subtitle": "An approachable translation of the Theragāthā",
+    "root_title": "Theragāthā",
+    "translation_process": "Translated from the Pali. The primary source was the Mahāsaṅgīti edition, with reference to several English translations, especially those of K.R. Norman.",
+    "translation_description": "This translation aims to make a clear, readable, and accurate rendering of the Theragāthā. The initial edition was by Jessica Walton and Bhikkhu Sujato was published in 2014 through SuttaCentral. A revised edition, bringing the terminology in line with the subsequently-translated four Nikāyas, was published in 2019.",
+    "is_published": true,
+    "publication_status": "Completed, revision is ongoing.",
+    "license": {
+      "license_type": "Creative Commons Zero",
+      "license_abbreviation": "CC0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_statement": "This translation is an expression of an ancient spiritual text that has been passed down by the Buddhist tradition for the benefit of all sentient beings. It is dedicated to the public domain via Creative Commons Zero (CC0). You are encouraged to copy, reproduce, adapt, alter, or otherwise make use of this translation. The translator respectfully requests that any use be in accordance with the values and principles of the Buddhist community."
+    },
+    "edition": [
+      {
+        "edition_number": "2",
+        "publication_date": "2014",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/thag"
+      },
+      {
+        "edition_number": "1",
+        "publication_date": "2014",
+        "publisher": "SuttaCentral",
+        "publication_type": "book",
+        "number_of_volumes": "1",
+        "edition_url": [
+          "http://www.lulu.com/shop/bhikkhu-sujato/verses-of-the-senior-monks/hardcover/product-22152079.html",
+          "http://www.lulu.com/shop/bhikkhu-sujato/verses-of-the-senior-monks/paperback/product-22136852.html"
+        ]
+      }
+    ]
+  },
+  "scpub4": {
+    "publication_number": "scpub4",
+    "root_lang_iso": "pli",
+    "root_lang_name": "Pali",
+    "translation_lang_iso": "en",
+    "translation_lang_name": "English",
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/translation/en/sujato/sutta/sn",
+    "author_uid": "sujato",
+    "author_name": "Bhikkhu Sujato",
+    "author_github_handle": "sujato",
+    "text_uid": "sn",
+    "translation_title": "Linked Discourses",
+    "translation_subtitle": "A plain translation of the Saṁyutta Nikāya",
+    "root_title": "Saṁyuttanikāya",
+    "translation_process": "Primary source was the digital Mahāsaṅgīti edition of the Pali Tipiṭaka. Translated from the Pali, with reference to several English translations, especially those of Bhikkhu Bodhi.",
+    "translation_description": "This translation was part of a project to translate the four Pali Nikāyas with the following aims: plain, approachable English; consistent terminology; accurate rendition of the Pali; free of copyright. It was made during 2016–2018 while Bhikkhu Sujato was staying in Qimei, Taiwan.",
+    "is_published": true,
+    "publication_status": "Completed, revision is ongoing.",
+    "license": {
+      "license_type": "Creative Commons Zero",
+      "license_abbreviation": "CC0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_statement": "This translation is an expression of an ancient spiritual text that has been passed down by the Buddhist tradition for the benefit of all sentient beings. It is dedicated to the public domain via Creative Commons Zero (CC0). You are encouraged to copy, reproduce, adapt, alter, or otherwise make use of this translation. The translator respectfully requests that any use be in accordance with the values and principles of the Buddhist community."
+    },
+    "edition": [
+      {
+        "edition_number": "1",
+        "publication_date": "2018",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/sn"
+      }
+    ]
+  },
+  "scpub7": {
+    "publication_number": "scpub7",
+    "root_lang_iso": "pli",
+    "root_lang_name": "Pali",
+    "translation_lang_iso": "en",
+    "translation_lang_name": "English",
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/translation/en/sujato/sutta/kn/dhp",
+    "author_uid": "sujato",
+    "author_name": "Bhikkhu Sujato",
+    "author_github_handle": "sujato",
+    "text_uid": "dhp",
+    "translation_title": "Sayings of the Dhamma",
+    "translation_subtitle": "A meaningful translation of the Dhammapada",
+    "root_title": "Dhammapada",
+    "translation_process": "Translated from the Pali. The primary source was the Mahāsaṅgīti edition, with reference to several English translations, especially those of K.R. Norman and Venerable Buddharakkhita.",
+    "translation_description": "This translation aims to make a clear, readable, and accurate rendering of the Dhammapada. Unlike most Dhammapadas in English, this is a new translation from the source Pali text. The aim was to make the sense as transparent as possible.",
+    "is_published": true,
+    "publication_status": "Completed, revision is ongoing.",
+    "license": {
+      "license_type": "Creative Commons Zero",
+      "license_abbreviation": "CC0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_statement": "This translation is an expression of an ancient spiritual text that has been passed down by the Buddhist tradition for the benefit of all sentient beings. It is dedicated to the public domain via Creative Commons Zero (CC0). You are encouraged to copy, reproduce, adapt, alter, or otherwise make use of this translation. The translator respectfully requests that any use be in accordance with the values and principles of the Buddhist community."
+    },
+    "edition": [
+      {
+        "edition_number": "1",
+        "publication_date": "2021",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/dhp"
+      }
+    ]
+  },
+  "scpub53": {
+    "publication_number": "scpub53",
+    "root_lang_iso": "pli",
+    "root_lang_name": "Pali",
+    "translation_lang_iso": "en",
+    "translation_lang_name": "English",
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/translation/en/suddhaso/sutta/kn/dhp",
+    "author_uid": "suddhaso",
+    "author_name": "Bhante Suddhāso",
+    "author_github_handle": "suddhaso",
+    "text_uid": "dhp",
+    "translation_title": "Verses of Dhamma",
+    "translation_subtitle": "A translation of the Dhammapada",
+    "root_title": "Dhammapada",
+    "translation_process": "Translated from the Pāli. Primary source was the Burmese Sixth Council edition. In the interest of being as true as possible to the original Pāli text, this translation has been prepared without influence from the so-called “Dhammapada Commentary” (an apocryphal work that deviates significantly from the root text).",
+    "translation_description": "A new translation of the Dhammapada, with a particular focus on accuracy and fidelity to the root text.",
+    "is_published": true,
+    "publication_status": "Completed, revision is ongoing.",
+    "license": {
+      "license_type": "Creative Commons Zero",
+      "license_abbreviation": "CC0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_statement": "This translation is an expression of an ancient spiritual text that has been passed down by the Buddhist tradition for the benefit of all sentient beings. It is dedicated to the public domain via Creative Commons Zero (CC0). You are encouraged to copy, reproduce, adapt, alter, or otherwise make use of this translation. The translator respectfully requests that any use be in accordance with the values and principles of the Buddhist community."
+    },
+    "edition": [
+      {
+        "edition_number": "1",
+        "publication_date": "2021",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/dhp"
+      }
+    ]
+  },
+  "scpub64": {
+    "publication_number": "scpub64",
+    "root_lang_iso": "pli",
+    "root_lang_name": "Pali",
+    "translation_lang_iso": false,
+    "translation_lang_name": false,
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/root/pli/ms",
+    "author_uid": "ms",
+    "author_name": "Mahāsaṅgīti Tipiṭaka Buddhavasse 2500",
+    "author_github_handle": false,
+    "text_uid": "ms",
+    "translation_title": "The Buddhist Era 2500 Great International Council Pāḷi Tipiṭaka",
+    "translation_subtitle": "40 Volume Edition in Roman Script B.E. 2548 (2005)",
+    "root_title": "World Tipiṭaka in Roman Script",
+    "translation_process": "Prepared by the M.L. Maniratana Bunnag Dhamma Society Fund based on the Vipassanā Research Institute Tipiṭaka, 2537–2542, which was originally known as Chaṭṭha Saṅgāyana CD-ROM and is available at tipitaka.org. The entire text was proofread, and in addition, recited four times between B.E. 2543–2545 (2000–2002) and B.E. 2549–2550 (2006–2007) to verify every Pāḷi sound and to correct the printing errors of the original 40-volume edition. The primary reference for proofreading was the first edition of the Chaṭṭha Saṅgāyana Tipiṭaka published in Myanmar in 1958. Additional reference was made to 18 editions of the Pāḷi Tipiṭaka in various national scripts of other countries. ",
+    "translation_description": "40 volumes of the Pali Tipiṭaka in Roman script. Includes the Nettiparaṇa, Peṭakopadesa, and Milindapañha. The Pali text on SuttaCentral was extracted from the source XML files of the Mahāsaṅgīti edition. Minor editorial changes have been made to numbering and punctuation, but no changes to the text itself.",
+    "is_published": true,
+    "publication_status": "Complete.",
+    "license": {
+      "license_type": "Public Domain",
+      "license_abbreviation": false,
+      "license_url": "https://creativecommons.org/publicdomain/mark/1.0",
+      "license_statement": "This work is an ancient sacred text that was created thousands of years ago and is maintained to the present day by its traditional custodians, the Buddhist monastic Sangha. It is free of known restrictions under copyright law, including all related and neighboring rights. We respectfully request that it is used in accordance with the values of the Buddhist tradition."
+    },
+    "edition": [
+      {
+        "edition_number": "1",
+        "publication_date": "2005",
+        "publisher": "Dhamma Society",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/ms"
+      }
+    ]
+  },
+  "scpub69": {
+    "publication_number": "scpub69",
+    "root_lang_iso": "pra",
+    "root_lang_name": "Prakrit",
+    "translation_lang_iso": "en",
+    "translation_lang_name": "English",
+    "source_url": "https://github.com/suttacentral/bilara-data/tree/published/translation/en/anandajoti/sutta/pdhp",
+    "author_uid": "anandajoti",
+    "author_name": "Bhikkhu Ānandajoti",
+    "author_github_handle": "",
+    "text_uid": "pdhp",
+    "translation_title": "Patna Dhammapada",
+    "translation_subtitle": "A translation of the Patna Dhamma Verses",
+    "root_title": "Patna Dharmapada",
+    "translation_process": "",
+    "translation_description": "The Patna Dharmapada was transcribed by Dr Margaret Cone and published in the Journal of the Pali Text Society, Volume XIII (1989), pp. 101-217. Dr Cone's text was reproduced with the consent of the Pali Text Society, Oxford, England. Pāḷi Parallels, Metrical Commentary, Notes and Indexes were compiled and translated by Ānandajoti Bhikkhu (2017).",
+    "is_published": true,
+    "publication_status": "Completed.",
+    "license": {
+      "license_type": "Creative Commons Attribution-ShareAlike 3.0 Unported",
+      "license_abbreviation": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "license_statement": ""
+    },
+    "edition": [
+      {
+        "edition_number": "2",
+        "publication_date": "2022",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://suttacentral.net/pdhp"
+      },
+      {
+        "edition_number": "1",
+        "publication_date": "2017",
+        "publisher": "SuttaCentral",
+        "publication_type": "website",
+        "edition_url": "https://www.ancient-buddhist-texts.net/Texts-and-Translations/Patna-Dhammapada/index.htm"
+      }
+    ]
+  }
+}

@@ -7971,3 +7971,61 @@ worklog `—` (orchestrator fills at merge).
 #    JSON update channel = license_watch item.
 # Riders: 02-sources row 7 correction at DCS promotion; row 44
 #    footnote (Diorisis LXX = another Rahlfs dead end).
+
+# ── Phase 26 ──────────────────────────────────────────────────────────
+
+## P26-1 · SuttaCentral — the Pali axis  [tier: fable] [status: done 2026-07-18 — adapter + bilara-json family + fixtures shipped, enabled:false awaiting the owner-fired first sync; verdicts below] [deps: —]
+
+Queue item 3 (biblical–Indic batch): `suttacentral/bilara-data`, branch
+`published` — the whole Tipiṭaka in roman-script Pali, English as `-en`
+sibling documents keyed by THE SAME segment ids.
+
+SHIPPED:
+- `BilaraJsonParser` (NEW family `bilara-json`): flat ordered JSON segment
+  map → passages. Citation = segment id minus the redundant `<stem>:`
+  prefix; RANGE-STEM files (dhp21-32, sn23.23-33, pli-tv-bu-vb-as1-7 —
+  6,707 segments censused) keep the FULL per-item id, colons intact.
+  Blank segments (14 corpus-wide) skip by rule; edge whitespace stripped,
+  interior verbatim (pdhp's inline `<unclear>` kept); heading block
+  (leading `0.x` run of the first item) → title, stem fallback.
+- `Suttacentral` adapter: scope root/pli/ms (Mahāsaṅgīti, 7,289 files; the
+  xplayground sandbox skips by rule) + root/pra/pts (Patna Dhammapada, 22
+  files, `pra` — in scope because its English translation IS the license
+  outlier). urn urn:nabu:suttacentral:<stem>, frozen. GitFetch PINNED to
+  branch `published` (the P17-1 ref pin). `-en` siblings file-driven with
+  the frozen TRANSLATOR_PRIORITY pick (104 double-covered stems, all
+  sujato+other); 179 orphan en stems (sujato name/ glossaries, patton's
+  Āgama translations of lzh roots) skip by rule. Per-publication license
+  gate machine-read from _publication.json: 138 CC0 + 1 PD (scpub64, the
+  root) + 1 CC BY-SA 3.0 (scpub69, Ānandajoti's en pdhp) → pdhp-en mints
+  license_override "attribution" (P10-4); no-record trees ride LICENSE.md's
+  CC0 blanket; unmappable license = loud FetchError; gate only where the
+  file exists (the ORACC attic stance verbatim).
+- Query::Parallel SUTTACENTRAL_DOCUMENT work family (the Damaskini literal
+  `-en` tail split — stems are hyphen-rich); honest one-sided rows pinned
+  (en expands the root's blank `…pe…` ellipsis at sn35.24:1.5, leaves the
+  `Dutiyaṁ.` colophon untranslated).
+- New `pli`/`pra` language axes on the generic fold (dhammā/dhamma pinned;
+  no LANGUAGE_FOLDS key needed — measured).
+- Registry `enabled: false`, sync_policy manual, translations: true; docs
+  02-sources row 66; fixtures = 8 whole byte-verbatim upstream files + a
+  _publication.json slice (entry blocks byte-identical), commit
+  cebbf6181dafbbde155cce7f0357426cc65e5668 pinned in the README.
+
+JOURNALED (not built, by rule):
+- The sc-data parallels graph (8,221 relations / 49,685 refs, upstream
+  declares it non-copyrightable) = a FUTURE intertext packet — different
+  repo, not fetched here.
+- language-notes rider (witness:suttacentral on pli): NOT honest today —
+  the accretion hook lives in Store::DictionaryLoader
+  (accrete_adapter_language_notes) and suttacentral is a :passages source
+  routed to Store::Loader, which has no such hook. The pli dossier is the
+  owner's scaffold (canonical/ is not written from a worktree); wire a
+  witness lane if/when a passages-loader hook exists.
+- The 32 non-English translation languages, root/san + root/lzh parallels,
+  and the alternate translators of double-covered stems (suddhaso/soma/
+  kovilo variants) = future scope decisions; UD_Pali-PaliCanon v2.19
+  (2026-11-15, BY-SA, manual-native lemmas) = future config-only gold.
+- Owner sync expectation: ~353 MB clone (310 MB tree + 43 MB .git at
+  census); ≈7,310 root docs / ≈445,600 passages + ≈4,712 -en siblings
+  (≈12,022 docs total).
