@@ -480,7 +480,7 @@ local-notes:
 
 riig:
   adapter: Nabu::Adapters::Riig
-  enabled: false   # P25-1: awaiting the owner-fired first crawl (~6 MB: the
+  enabled: true    # flipped 2026-07-18 (owner sign-off: 477 docs live; sibling-peek quarantine noise = open hotfix)
                    # corpus map + 428 EpiDoc records, polite sequential;
                    # CLAUDE.md checklist §6 — bin/nabu sync riig, eyeball
                    # nabu show urn:nabu:riig:vau-13-01 --parallel (the
@@ -503,7 +503,7 @@ riig:
 
 ogham:
   adapter: Nabu::Adapters::Ogham
-  enabled: false   # P25-1: awaiting the owner-fired first sync (ordinary
+  enabled: true    # flipped 2026-07-18 (owner sign-off: 834 docs live; empty-layer quarantine noise = open hotfix; class stays nc pending registry #14)
                    # git clone; CLAUDE.md checklist §6 — bin/nabu sync
                    # ogham, eyeball nabu show urn:nabu:ogham:i-may-010
                    # (ᚇᚑᚈᚐᚌᚅᚔ) beside its -translit sibling and 5 random
@@ -540,7 +540,7 @@ local-source:
 
 corph:
   adapter: Nabu::Adapters::Corph
-  enabled: false   # until the owner-fired first sync (CLAUDE.md checklist)
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced 76 docs / 17,942 gold sga passages, eyeballed)
   # CorPH / Corpus PalaeoHibernicum (ERC ChronHib, Maynooth) — 78 Early Irish
   # texts, 7th–10th c. (Annals of Ulster, Vita Columbae, Blathmac, the
   # Milan/St Gall/Würzburg gloss corpora, Armagh, law/poetry/computus): the

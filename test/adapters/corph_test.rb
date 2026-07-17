@@ -32,7 +32,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["corph"]
       refute_nil entry, "corph must be registered in config/sources.yml"
-      refute entry.enabled, "corph stays enabled: false until the owner-fired first sync"
+      assert entry.enabled, "live (owner sign-off 2026-07-18: 76 docs / 17,942 gold sga passages, flipped)"
       assert_equal "manual", entry.sync_policy
       assert_equal "corph", entry.adapter_class.manifest.id
       assert_equal "attribution", entry.adapter_class.manifest.license_class,
