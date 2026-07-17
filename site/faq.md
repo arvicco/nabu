@@ -72,11 +72,14 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 14 July 2026: 170,711 documents and 4,267,659 passages across 28
-synced sources, plus 458,238 dictionary entries and 2.85 million gold
-lemma annotations in fifteen languages — classical Greek and Latin,
+As of 17 July 2026: 172,189 documents and 4,308,814 passages across 38
+registered, synced sources, plus 633,137 dictionary entries and over
+2.85 million gold
+lemma annotations in seventeen languages — classical Greek and Latin,
 papyri, Latin inscriptions, cuneiform, Sanskrit, Coptic, Old English,
-Slavic, biblical editions, and a sixteen-dictionary reference shelf. The
+Slavic, Celtic (Early Irish, Gaulish, and ogham, added 17 July 2026),
+biblical editions, and a reference shelf of twenty-seven dictionary
+shelves. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md).
@@ -98,7 +101,9 @@ leading with the license evidence.
 ### Can I add my own texts and PDFs?
 
 Yes, since 14 July 2026: `nabu ingest FILE` files your own material —
-scanned grammars, offprints, articles — into a local-library shelf. The
+scanned grammars, offprints, articles — into a local-library shelf; it
+also accepts http(s) URLs, downloading first and recording the address
+in the catalogue entry. The
 file is copied in (never moved), metadata is derived mechanically and
 confirmed interactively, with AI assistance, or fully scripted; the
 document is then catalogued, page-cited where it carries a text layer,
