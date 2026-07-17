@@ -498,6 +498,23 @@ local-source:
   # flags dossier-vs-docs/library.md drift.
   sync_policy: local
 
+corph:
+  adapter: Nabu::Adapters::Corph
+  enabled: false   # until the owner-fired first sync (CLAUDE.md checklist)
+  # CorPH / Corpus PalaeoHibernicum (ERC ChronHib, Maynooth) — 78 Early Irish
+  # texts, 7th–10th c. (Annals of Ulster, Vita Columbae, Blathmac, the
+  # Milan/St Gall/Würzburg gloss corpora, Armagh, law/poetry/computus): the
+  # FIRST Celtic source and the first sga GOLD lemmas (P25-0). One 39 MB
+  # MySQL dump (chronhibdev_2020.sql) in the dormant website repo
+  # github.com/chronhib-MU/Chronhib-Website; the adapter PINS commit
+  # e7ef75d5f9a6 (2021-05-11) and aborts loudly on drift (owner re-pin
+  # decision). LICENSE verbatim: "MIT License / Copyright (c) 2020
+  # [Chronologicon Hibernicum]" — the repo LICENSE covers the dump → class
+  # attribution. NB the CC BY-SA 3.0 footer seen on CODECS is CODECS's own
+  # site license, NOT CorPH's — never cite it for this source. Upstream is
+  # dormant → manual, one-shot in practice.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

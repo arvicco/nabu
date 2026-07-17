@@ -7745,6 +7745,73 @@ The Celtic axis's two config-shaped lanes (queue items 2 + 4; survey
   urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test:1` and the license mix
   in `nabu list ud`).
 
+## P25-0 · CorPH adapter — the first Celtic gold lemmas  [tier: fable] [status: done 2026-07-17] [deps: —]
+The Celtic-axis keystone (queue item 3): CorPH / Corpus PalaeoHibernicum
+(ERC ChronHib, Maynooth) — 78 deep-annotated Early Irish texts, 7th–10th
+c., from the 39 MB MySQL dump `chronhibdev_2020.sql` in
+chronhib-MU/Chronhib-Website, PINNED to commit e7ef75d5f9a6 (dormant repo,
+2021-05-11): fetch is the ordinary GitFetch (attic + breaker) plus a pin
+gate — HEAD ≠ pin aborts loudly (owner review + re-pin; GitFetch ref: is
+branch/tag-only, so the pin is verified post-fetch). License verbatim "MIT
+License / Copyright (c) 2020 [Chronologicon Hibernicum]" (repo LICENSE
+covers the dump) → attribution; the CODECS CC BY-SA 3.0 footer is CODECS's
+own, never cited (the survey's trap note, kept in sources.yml + row 63).
+
+SHIPPED:
+- CorphSqlParser — the corph-sql family: streaming MySQL-dump INSERT
+  walker (File.foreach + StringScanner; only the current tuple buffered;
+  \' \r\n ''-escapes, NULL→nil, Integer natively; multi-statement
+  chunking; truncation → ParseError). No SQL evaluated, ever.
+- Adapter corph: document per TEXT row (urn:nabu:corph:<Text_ID>, FROZEN),
+  passage per SENTENCES text unit (<doc>:<Text_Unit_ID>, Textual_Unit
+  VERBATIM incl. CRLF computus tables, Sort_ID order), MORPHOLOGY tokens
+  in the P7-5 contract → passage_lemmas: THE FIRST sga GOLD (e2e pinned:
+  lemma search "caur" finds S0003-1 caur AND S0003-13 cur/Caincur — the
+  attestation surface search misses). Homonym indices ("macc 1") split
+  into lemma + "homonym" so the headword searches. Mutation/verbal-flag/
+  onomastic/problematic/Var_Status columns verbatim per token; loci,
+  translation, Latin_Text context per passage; BIBLIOGRAPHY resolved into
+  document metadata references.
+- LANGUAGE HONESTY (census 2026-07-17, full dump): 80.5% Early Irish /
+  12.4% Latin / 6.2% lang-less lemmata / rarities. Three grains: token
+  "lang" (mapped: sga/lat/ang/non/grc) or "lang_source" verbatim
+  (Pictish, British… — never a guessed code); PASSAGE = majority over its
+  tokens (the gold-index grain: 16,535 sga / 1,050 lat / 11 ang voted +
+  351 no-vote fallbacks — a pure Old Irish gloss inside a Latin computus
+  stays sga, a Latin annal stays lat); document = majority over all (71
+  sga + 4 lat: 0035/0039/0060/0077 minor glosses on Latin texts).
+- Date axis: AxisBuilder::CorphDates — TEXT.Date via the honest ladder
+  (ChronHib "date range … is/are used" phrase, "(for text)"-tagged range
+  preferred else envelope; "Text: N-M"/"N X M" fallback): 73/78 dated,
+  5 honest residues (AU's 431–1131 annalistic spread + 4 MS-only proses)
+  counted undated, never guessed. Summary +corph/+corph_undated.
+- eDIL bridge: CorphDilReferences (producer corph, kind=reference) — one
+  edge per distinct (document, dil id) pair, from document urn to
+  urn:nabu:dict:edil:<id> (the dictionary-urn convention the future eDIL
+  shelf will mint; ~12,321 pairs / 5,846 distinct ids projected), detail
+  names the carrying lemma; wired via the NEW Adapter.reference_producer
+  seam (default LibraryReferences — SyncRunner no longer hardcodes the
+  P19-4 producer; local-library behavior byte-identical).
+- Registry corph enabled:false sync_policy:manual; fixtures = real
+  trimmed dump (0003 Baile Chuinn / 0008 Paris Priscian / 0077 Einsiedeln
+  Computus + sentence-less 0067 + the stray Text_ID "6" wart; six tables,
+  LEMMATA across 23 real INSERT statements) + README (retrieval date,
+  pinned sha, MIT quote) + manifest (git-extract, refetchable:false).
+  02-sources row 63; conformance suite + double-load idempotency green.
+
+FOLLOW-UPS (journaled, not built):
+- Etymology column (4,562 LEMMATA rows, cited PC/PIE reconstructions,
+  e.g. caur ← *karut-, Schrijver-style citations) — crosswalk-shaped
+  (piet/Pokorny/cel-pro); needs a citation-prose parser, deliberately not
+  this packet.
+- AU passage-grain annal dates: SENTENCES Locus1 carries the annal year
+  (554.01 …) for text 0001 — the TOROT ChronicleAnnals shape, would date
+  ~7k passages of the one undated flagship text.
+- SENTENCES Variant_Readings/Subunit + VARIATIONS registry prose, and
+  MORPHOLOGY Stressed_Unit/Syntactic_* (phrase trees) — annotation layers
+  beyond the v1 token contract.
+- Language dossier: `nabu ingest --shelf language sga` once live (owner).
+
 # ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
 # Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no
 # unlock emails). Phasing per survey §6:
