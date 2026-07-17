@@ -555,6 +555,29 @@ corph:
   # dormant → manual, one-shot in practice.
   sync_policy: manual
 
+suttacentral:
+  adapter: Nabu::Adapters::Suttacentral
+  enabled: false   # flip after the owner-fired first sync (~353 MB clone of
+                   # bilara-data at census time; expected ≈7,310 root docs /
+                   # ≈445,600 pli+pra passages + ≈4,712 -en siblings —
+                   # CLAUDE.md checklist §6: eyeball
+                   # nabu show urn:nabu:suttacentral:mn1:1.1 --parallel,
+                   # a dhp verse and 5 random passages, then flip).
+  # SuttaCentral bilara-data, branch `published` (P26-1) — the whole
+  # Tipiṭaka in roman-script Pali (root/pli/ms, Mahāsaṅgīti; 7,289 files)
+  # plus the Patna Dhammapada (root/pra/pts, `pra`). License read PER
+  # PUBLICATION from the repo's own _publication.json (censused 138 CC0 +
+  # 1 Public Domain root + 1 CC BY-SA 3.0 — Ānandajoti's English pdhp,
+  # whose -en documents carry license_override: attribution, P10-4);
+  # the legacy NC-ND html_text layer (separate sc-data repo) is EXCLUDED
+  # and never fetched. Live upstream, but a ~350 MB pull is an owner
+  # decision → manual.
+  sync_policy: manual
+  # Aligned English rides the SAME segment ids (the ORACC precedent):
+  # -en siblings from translation/en/<translator>/, translator-priority
+  # pick on the 104 double-covered stems, orphans skipped by rule.
+  translations: true
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
