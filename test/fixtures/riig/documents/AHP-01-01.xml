@@ -1,0 +1,288 @@
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="R392">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Vasque du Chastelard de Lardier</title>
+				<title type="corpus">RIIG</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>RIIG</edition>
+				<respStmt>
+                    <resp>First editor</resp>
+                    <persName key="PLT">Pierre-Yves Lambert</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Project coordinator and contributor</resp>
+                    <persName key="CRD">Coline Ruiz Darasse</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="HBT">Hugo Blanchet</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Contributor</resp>
+                    <persName key="DSR">David Stifter</persName>
+                </respStmt>
+				<respStmt>
+                    <resp>Metadata</resp>
+                    <resp>TEI encoding</resp>
+                    <persName key="NCR">Nolwenn Chevalier</persName>
+                </respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<authority>UMR 5607 - Ausonius</authority>
+				<idno type="filename">AHP-01-01</idno>
+				<idno type="corpus-number">0</idno>
+				<date when="2022">2022</date>
+				<availability>
+					<licence target="http://creativecommons.org/licenses/by/4.0/">Cette œuvre est mise à disposition selon les termes de la <ref target="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</ref>. </licence>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note/>
+			</notesStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						<country/>
+						<region/>
+						<settlement/>
+						<repository/>
+						<collection/>
+						<idno type="invNo"/>
+                        <tei:idno xmlns:tei="http://www.tei-c.org/ns/1.0" type="TM">978943</tei:idno>
+						
+						<idno type="localID">G593</idno>
+						<altIdentifier>
+                            <idno type="localID">G-593</idno>
+                        </altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary resp="#RIIG" corresp="https://ausohnum.huma-num.fr/concept/c26683">Indéterminé</summary>
+						<textLang mainLang="xtg-Grek"/>
+					</msContents>
+					<physDesc>
+						<objectDesc>
+							<supportDesc>
+								<support>
+									<desc resp="#PLT">
+                                        <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/144">Vasque</objectType> en <material ref="https://ark.frantiq.fr/ark:/26678/pcrtSVdwKcS3MI">pierre</material>. </desc>
+								</support>
+								<condition>Inscription <rs type="statPreserv" corresp="https://www.eagle-network.eu/voc/statepreserv/lod/5">incomplète</rs>. </condition>
+							</supportDesc>
+							<layoutDesc>
+								<layout>
+									<desc resp="#PLT">L'inscription est <rs type="writing" corresp="https://www.eagle-network.eu/voc/writing/lod/3">gravée</rs>. </desc>
+								</layout>
+							</layoutDesc>
+						</objectDesc>
+						<handDesc>
+							<handNote scribe="unknown">
+								<desc resp="#PLT">
+                                    <rs type="execution" key="capital">Lettres capitales</rs>. </desc>
+							</handNote>
+						</handDesc>
+						<scriptDesc>
+							<scriptNote/>
+						</scriptDesc>
+					</physDesc>
+					<history>
+						<origin>
+							<origDate notBefore="-0100" notAfter="-0001" corresp="http://n2t.net/ark:/99152/p09hq4n9m89" cert="low" evidence="context" resp="#RIIG">-I<hi rend="superscript">er</hi> siècle</origDate>
+							<origPlace type="found">
+								<country ref="https://www.trismegistos.org/place/693">France</country>
+								<region>Provence-Alpes-Côte d'Azur</region>
+								<district>Alpes-de-Haute-Provence</district>
+								<settlement ref="https://riig.huma-num.fr/places/177" corresp="https://www.trismegistos.org/place/21492">
+                                    <placeName type="modern" xml:lang="fr">Lardiers</placeName>
+                                </settlement>
+								<placeName type="provinceItalicRegion">Narbonensis</placeName>
+								<placeName type="ethnic" ref="https://www.trismegistos.org/place/43371">Sogiontii</placeName>
+								<placeName ref="https://riig.huma-num.fr/places/178">Chastelard de Lardiers</placeName>
+								<location cert="medium">
+									<geo decls="#WGS84">44,0655 5,688</geo>
+								</location>
+							</origPlace>
+						</origin>
+						<provenance type="found" resp="#HRD">
+							<rs type="circumstances">Découvert au Chastelard de Lardiers à <placeName type="ancientFindspot">Lardiers</placeName> en <date when="1961">1961</date>. </rs>
+							<rs type="context">Albert Grenier, dans son volume du <hi rend="italic">Manuel d'archéologie</hi> consacré aux sanctuaires et paru en 1960 <note>
+                                    <bibl corresp="https://www.zotero.org/groups/2657791/riig/items/26EQSHVI"><!--Grenier 1960--></bibl>
+                                </note> donne le site comme un exemple du culte des sommets en Narbonnaise. Il s'agit d'un oppidum à trois enceintes, habité de la fin du Bronze au IV<hi rend="superscript">e</hi> s. de notre ère. En 1913, Henry de Gérin-Ricard, apprenant que l'on y découvrait des milliers de lampes votives, lui consacra une courte et excellente étude <note>
+                                    <bibl corresp="https://www.zotero.org/groups/2657791/riig/items/N3VJHUGJ"><!--Gerin-Ricard 1913--></bibl>
+                                </note>. De 1955 à 1960, des fouilles dans le <hi rend="italic">vicus</hi> de Saint-Martin, qui est dans la vallée à l'ouest de l'oppidum montrent qu'il y eut là un centre religieux important, un grand marché et un lieu d'assemblées, fréquenté surtout de la fin de La Tène au III<hi rend="superscript">e</hi> s. et détruit en 260-270, par la grande invasion du temps de Gallien et de Postume. En 1961, on a arraché les arbres et les quartiers de roche qui recouvraient la <hi rend="italic">fauissa</hi> des lampes, sous la grande enceinte préromaine. Puis on a déblayé la <hi rend="italic">fauissa</hi> jusqu'au roc. Le résultat de cette première opération a été la découverte d'environ trois mille lampes entières ou presque et de très nombreux fragments dont beaucoup avec marques et sujets. Elles sont des deux premiers siècles et à côté de celles bien connues de Strobilus, de Fortis ou d'Hosidius Crispus, on en remarque une quantité d'autres, rudimentaires et pauvres, qui attestent le caractère populaire du pélerinage. </rs>
+							<rs type="micro-context">Dans la <hi rend="italic">fauissa</hi> des lampes, ont été découverts de petits anneaux de bronze, des miroirs votifs et de très nombreux fragments de bronze, tous percés d'un trou. Enfin une inscription, sur le rebord d'une vasque de 0,90 m malheureusement brisée. </rs>
+							<rs type="datation">La datation de l'inscription n'est pas exactement connue et ne se fonde que sur l'utilisation du gallo-grec.</rs>
+						</provenance>
+						<provenance type="observed" subtype="reported" resp="#PLT">
+							<p>Publication dans <bibl corresp="http://zotero.org/groups/2657791/items/4FRE2BVN"><!--Rolland 1962-->
+                                    <citedRange unit="page">655-657</citedRange>
+                                </bibl> et illustration <bibl corresp="http://zotero.org/groups/2657791/items/4FRE2BVN"><!--Rolland 1962-->
+                                    <citedRange unit="page">656</citedRange>
+                                    <citedRange unit="figure">fig. 2</citedRange>
+                                </bibl>. </p>
+						</provenance>
+						<provenance type="observed" subtype="reported" resp="#RIIG">
+							<p>Lieu de conservation actuel inconnu. </p>
+						</provenance>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<editorialDecl>
+				<p/>
+			</editorialDecl>
+			<classDecl>
+				<taxonomy>
+					<category/>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="xtg-Grek">gaulois écrit en alphabet grec</language>
+				<language ident="xtg">gaulois transalpin</language>
+				<language ident="fr">français</language>
+			</langUsage>
+			<textClass>
+				<keywords>
+					<list>
+						<item>Histoire -- Protohistoire -- Antiquité</item>
+					</list>
+				</keywords>
+			</textClass>
+			<particDesc>
+				<listPerson type="editorial">
+					<person xml:id="CRD" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?coline.ruiz-darasse">
+						<persName>
+							<forename>Coline</forename>
+							<surname>Ruiz Darasse</surname> (Chargée de recherches au CNRS)
+						</persName>
+					</person>
+					<person xml:id="NPT" corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nathalie.prevot">
+						<persName>
+							<forename>Nathalie</forename>
+							<surname>Prévôt</surname> (Ingénieur CNRS en Humanités Numériques et responsable AusoHNum)</persName>
+					</person>
+					<person xml:id="NCT">
+						<persName>
+							<forename>Nolwenn</forename>
+							<surname>Chevalier</surname> (AI ANR RIIG)</persName>
+					</person>
+				</listPerson>
+			</particDesc>
+		</profileDesc>
+		<revisionDesc status="high">
+			<listChange>
+				<change who="#NPT" when="2020-01-08">XML File programmatically created from CSV file</change>
+				<change who="#NCR" when="2020-10-14">Addition of the RIG data in the XML file</change>
+				<change who="#NCR" when="2020-10-27">Addition of the bibliography</change>
+				<change who="#CRD" when="2020-11-05">First global revision</change>
+				<change who="#CRD" when="2022-01-17">Revision of the reading</change>
+				<change who="#CRD" when="2022-06-21">Global revision</change>
+				<change who="#CRD" when="2023-01-23">Global revision</change>
+			</listChange>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+        <graphic url="https://www.persee.fr/renderIllustration/galia_0016-4119_1962_num_20_2_T1_0656_0000_2.png">
+		<desc type="view">Gallia 20.2, 1962, fig. 2 : Lardiers. Le Châtelard. Vasque de pierre portant l'inscription KAPE...M</desc>
+		<desc type="copyright">Gallia</desc>
+		<desc type="author"/>
+		<desc type="licence">
+			<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+		</desc>
+	</graphic>
+	</facsimile>
+	<text>
+		<body>
+			<div type="edition">
+				<div type="textpart">
+					<ab>
+						<seg resp="#HRD" xml:lang="xtg-Grek" xml:id="HRD-a" cert="low">
+							<lb n="1"/>
+							<w msd="sg" type="idionym" subtype="uncomplete">
+								<choice>
+									<orig>καρ<unclear reason="illegible" cert="medium">ε</unclear>
+                                        <gap extent="unknown" unit="character" reason="lost"/>μ</orig>
+									<reg>καρ<unclear reason="illegible" cert="medium">ε</unclear>
+                                        <gap extent="unknown" unit="character" reason="lost"/>μ</reg>
+								</choice>
+							</w>
+						</seg>
+						<seg resp="#PLT" xml:lang="xtg-Grek" xml:id="PTL-b" cert="medium">
+							<lb n="1"/>
+							<w msd="sg" type="idionym" subtype="uncomplete">
+								<choice>
+									<orig>καρ<unclear reason="illegible" cert="medium">β</unclear>
+                                        <gap extent="unknown" unit="character" reason="lost"/>μ</orig>
+									<reg>καρ<unclear reason="illegible" cert="medium">β</unclear>
+                                        <gap extent="unknown" unit="character" reason="lost"/>μ</reg>
+								</choice>
+							</w>
+						</seg>
+						<!--<seg resp="#XXX" xml:lang="xtg-Grek" xml:id="XXX-1"><w><choice><orig>BIS</orig><reg/></choice></w></seg>-->
+					</ab>
+				</div>
+			</div>
+			
+			<!-- Commentaire : -->
+			<div type="apparatus" corresp="#PLT-a #PLT-b" resp="#PLT"/>
+			<div type="translation"/>
+			<div type="commentary" subtype="sociolinguistic" corresp="#PLT-a" resp="#PLT"/>
+			<div type="commentary" subtype="general"/>
+
+			<!-- Description détaillée du document : -->
+			<div type="commentary" subtype="physDesc">
+				<div type="commentary" subtype="support" resp="#PLT"/>
+				<div type="commentary" subtype="layout" resp="#PLT"/>
+				<div type="commentary" subtype="handNote" resp="#PLT"/>
+			</div>
+			
+			<!-- Description détaillée de l'origine document : -->
+			<div type="commentary" subtype="history">
+				<div type="commentary" subtype="context" resp="#PLT"/>
+				<div type="commentary" subtype="micro-context" resp="#PLT"/>
+				<div type="commentary" subtype="datation" resp="#PLT"/>
+			</div>
+			
+			<!-- Bibliographie : -->
+			<div type="bibliography" subtype="principalEdition">
+				<listBibl>
+					<bibl><!--Lambert 2003-->
+                        <ptr target="http://zotero.org/groups/2657791/items/JLQFFHH9"/>
+                        <citedRange unit="page">176</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography" subtype="otherEditions">
+				<listBibl resp="#PLT">
+					<bibl><!--Rolland 1962-->
+                        <ptr target="http://zotero.org/groups/2657791/items/4FRE2BVN"/>
+                    </bibl>
+				</listBibl>
+				<listBibl resp="#RIIG">
+					<bibl><!--Bérard 1997-->
+                        <ptr target="http://zotero.org/groups/2657791/items/83AF8LMI"/>
+                        <citedRange unit="page">250</citedRange>
+                    </bibl>
+					<bibl><!--Bérard 1997-->
+                        <ptr target="http://zotero.org/groups/2657791/items/83AF8LMI"/>
+                        <citedRange unit="page">250</citedRange>
+                        <citedRange unit="figure">fig. 216</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div type="bibliography">
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/Z8TJBAM5" type="RIG">
+					<bibl/>
+				</listBibl>
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/DKHF4UKH" type="RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+		</body>
+	</text>
+</TEI>

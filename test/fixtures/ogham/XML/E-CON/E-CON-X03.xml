@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng"
+schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng"
+schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>St Clement</title>
+             <editor role="editor" xml:id="NW"><persName>Nora White</persName>                 
+                 <orgName>Maynooth University, Department of Early Irish</orgName></editor>
+                <editor role="editor" xml:id="POC"><persName>Patricia O Connor</persName>
+                <orgName>Maynooth University, Department of Early Irish</orgName></editor>
+                 <!-- <editor>Add name, id etc here</editor>-->
+                 <funder>Irish Research Council (grant no. IRC/W001985/1) and Arts and Humanities Research Council (grant no. AH/W001985/1)</funder>
+                <funder>
+                <ref target="https://research.ie/funding/uk-ireland-collaboration-in-the-digital-humanities-research-grants%e2%80%af/?f=principal-investigator-led">UK-Ireland Collaboration in the Digital Humanities Research Grant</ref>
+                </funder>
+                <respStmt>
+                <name ref="https://orcid.org/0000-0001-7957-651X">Nora White</name>
+                <resp>data collection, editing and encoding</resp>
+                </respStmt>                
+                 <respStmt>
+                    <name xml:id="JB">Jef Bucas</name>
+                      <orgName>Dublin Institute for Advanced Studies</orgName>
+                    <resp>batch conversion to EpiDoc</resp>
+                </respStmt>
+                <respStmt>
+                <name ref="https://orcid.org/0000-0001-5880-4704">Patricia O Connor</name>
+                <resp>editing and encoding</resp>
+                </respStmt>
+                <respStmt>
+                    <name></name>
+                     <orgName></orgName>
+                <resp><!--3d recording, technique and software used--></resp>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <authority>OG(H)AM</authority>
+                <idno type="filename">E-CON-X03</idno>
+                 <idno type="CIIC">473</idno>
+                <idno type="CISP" corresp="https://www.ucl.ac.uk/archaeology/cisp/database/stone/sclem_1.html">SCLEM/1</idno>
+                 <idno type="TM" corresp="www.trismegistos.org/text/168498">168498</idno>
+                 <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</licence>    
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                         <country>England</country>
+                        <repository/>
+                        <idno type="invNo"/>
+                    </msIdentifier>
+                    <msContents>
+                          <msItem>                            
+                            <textLang mainLang="pgl-Ogam" cert="low">Possibly once had primitive Irish written in ogham script</textLang>
+                            <textLang mainLang="la-Latn">Latin written in Latin script</textLang>
+                           </msItem>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><p><ref target="https://www.heritagegateway.org.uk/Gateway/">Historic Environment Record ID</ref>: <idno type="HER">Monument number: 428762</idno></p>
+                                    <material type="stone">Granite</material> 
+                                    <objectType key="monument">Cross</objectType> 
+                                     <dimensions unit="m">
+                                            <height>2.26</height>
+                                            <width>0.4</width>
+                                            <depth>0.37</depth>
+                                     </dimensions>   
+                                    <desc type="decoration">At the top of the stone, there is a <rs type="decoration">cross within a circle</rs> on each face. </desc>
+                                </support>
+                                <condition>An inscribed pillar-stone that was <q>subsequently made into a cross</q> (Okasha 1993, 224). Macalister (1945, 451-452) suggested that the Latin text, which he described as being in good condition, and <q>seems to have been accompanied by an echo in Ogham letters, which have been intentionally broken away</q>. The evidence for an ogham inscription provided by Macalister was extremely deteriorated at the time and is therefore very doubtful: <q>there is a flake on the left-hand edge which begins and ends with the sides of vowel notches: three disintegrated vowel notches can be traced above, the whole making the final I of MAQI. Below the I there is a Q, much again the angle is violently smashed, clearly with intention. There is just room for VITALI in Ogham letters in this fractured space. The opposite angle is also smashed, and the distribution of the fractures corresponds generally to the position and extent of Ogham scores which would express the word TORICI (not TORRICI) read upward</q> (Macalister 1945, 452).  Forsyth reviewed the 3D model of the stone but there does not seem to be any traces of ogham letters extant today. </condition>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>The Latin inscription is on the east face of the stone as it stands at present, and consists of four words written in a vertical line reading downwards (Macalister 1945, 452). According to Macalister, there were also traces of an ogham inscription <q>on the edge of the left-hand side and the front of the shaft</q> of the stone (Okasha 1993, 224). However, Okasha (1993, 226) maintained that it is <q>unlikely that the stone ever contained an ogham text</q>. </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote script="roman">Macalister (1945, 452) observed that the <q>topmost word is in smaller and more cursive letters than the other three, and clearly forms a separate and later inscription</q>, and subsequently concluded that <q>the two inscriptions are not palaeographically compatible, and must be kept apart</q>. Thomas (1994, 270) noted that the inscription contained an angle-bar A and a horizontal I. The letters RI are ligatured. <height min="6" max="14" unit="cm" source="OKA1993">The letters measure 6 to 14 cm in height (Okasha 1993, 224).</height>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace corresp="#findspot">
+                                <placeName type="parish">St Clement</placeName>, <placeName type="county">Cornwall</placeName> <placeName type="country">England</placeName>
+                                <geo>50.255903, -5.016133</geo>
+                            <note>National Grid Reference: SW 8510 4390</note>
+                                </origPlace>
+                            <origDate source="OKA1993">Fifth or sixth century to the eleventh century</origDate>
+                        </origin>
+                        <provenance type="found" when="1754">First mentioned by William Borlase in 1754 when the stone served as a gate-post for the entrance to St. Clement's Vicarage (Macalister 1945, 451). The stone was recorded in the rectory garden in 1863 and moved to its present location in 1938 (Okasha 1993, 224).<!--Ogham only suggested by Macalister.-->  <!--<placeName type="site">Ignioc Stone</placeName>,-->
+                        </provenance>
+                        <provenance type="observed">In St Clement churchyard, near the south door.
+                        </provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="../charDecl.xml" parse="xml" xpointer="symbols"/></encodingDesc>
+<profileDesc>
+<calendarDesc>
+<calendar xml:id="julian">
+<p>Julian Calendar</p>
+</calendar>
+</calendarDesc>
+<langUsage>
+<language ident="en">English</language>
+<language ident="la">Latin</language>
+<language ident="pgl">Primitive Irish</language>
+<language ident="sga">Old Irish</language>
+<language ident="mga">Middle Irish</language>
+<language ident="ga">Irish</language>
+</langUsage>
+<textClass>
+<keywords scheme="https://ontology.inscriptiones.org/type_of_inscription/#vocabularies">
+<term ref="https://ontology.inscriptiones.org/type_of_inscription/#Commemorative">Commemorative</term>
+</keywords>
+</textClass>
+   <!-- <creation>Transcription from previous editor.</creation>-->
+</profileDesc>
+<revisionDesc status="draft">
+<listChange>
+<change when="2023-11-24" who="#JB">Jef Bucas autogenerated EpiDoc output from spreadsheet</change>
+<change when="2024-01-22" who="NW">Nora White updated template, including removing # from bibl tag</change>
+<change when="2024-10-02" who="NW">Nora White updated template for data from England</change> 
+<change when="2024-11-03" who="#JB">Autogenerated EpiDoc output from spreadsheet</change>   
+<change when="2024-11-11" who="#POC">Added and encoded information</change>
+<change when="2024-11-13" who="#POC">Fixed geo coords. Toggle commented media url for now to validate. Added CIIC number to bibl.</change>
+<change when="2024-11-14" who="#POC">Added entry number to Okasha reference in bibl</change>
+<change when="2024-12-03" who="#POC">Added quotation marks for quotations, encoded edition, including formula words, added information on OS Dark Ages to apparatus, added Macalister's reading of Ogham and his discussion of the inscription, added Thomas' bibl details, added Thomas' remarks to handNote and commentary.</change>
+<change when="2024-12-06" who="#POC">Proofreading updates, updated handNote with ligature details, added lb to the apparatus readings.</change>
+<change when="2025-03-28" who="#POC">Added attributes for filtering, added country to origPlace, added CISP and TM link, added decoration section</change>
+     <change when="2025-07-09" who="#NW">Updated text lang as no ogham text surviving.</change>
+</listChange>
+</revisionDesc>
+    </teiHeader>
+    <facsimile>
+        <graphic url="ENG/E-CON-X03-StClement.jpg"><desc>Drawing by Macalister</desc></graphic>
+       <!--<media url="https://skfb.ly/6uUDw" mimeType="text/html"><desc><!-\-3d model by Megan/Gary/? on SketchFab/3dhop-\-></desc></media>-->
+    </facsimile>    
+    <text>
+        <body>
+            <div type="edition" subtype="roman" xml:lang="la-Latn" xml:space="preserve" resp="#NW">
+                <div type="textpart" n="1">
+                <ab>
+                    <lb n="1" style="text-direction:down"/><persName><name nymRef="vitalius">VITALI</name> <w type="formula">FILI</w> <name nymRef="torricus">TOR<hi rend="ligature">RI</hi>CI</name></persName>
+                </ab>
+                </div>
+            <div type="textpart" n="2">
+                <ab>
+                    <lb n="1" style="text-direction:down"/><persName><name nymRef="ignioc">IGNIOC</name></persName>
+                </ab>
+            </div>
+            </div>
+            <div type="apparatus">
+                <listApp>
+                    <app n="1">
+                        <note>The stone is marked as an ogham stone on the Ordnance Survey Map of Britain in the Dark Ages, but there is no ogham inscription listed for this stone on the CISP database. Macalister alone suggested the possibility of an ogham inscription that complemented the Latin inscription, but there is little evidence to support that an ogham inscription existed. </note>
+                    </app>
+                <app n="2">
+                    <note>Macalister (1945, 451-452) read: </note>             
+                    <rdg source="MAC1945"><lb/>Roman: VITALI FILI TORRICI</rdg>
+                    <rdg source="MAC1945"><lb/>Roman: IGNIOC</rdg>
+                    <rdg source="MAC1945"><lb/>Ogham: VITALI MAQI TORICI</rdg>
+                </app>
+                </listApp>
+            </div>
+            <div type="translation" source="OKA1993">
+                <p>Roman: Ignioc. [The stone] of Vitalius, son of Torricus</p>
+            </div>
+            <div type="commentary">
+                <p>Thomas (1994, 270) stated that <q>Vitalis is a Roman name, one of some distinction</q>. Okasha (1993, 226) surmised that if <q>the name VITALI is Latin, this suggests a sixth to eighth century date for the stone, a date which the use of horizontal I probably corroborates</q>. </p>
+            </div>
+            <div type="bibliography">
+                 <listBibl>
+                     <bibl>
+                         <ptr target="MAC1945"/>
+                        <citedRange>451-452, no. 473</citedRange>                       
+                    </bibl>
+                     <bibl>
+                          <ptr target="OKA1993"/>
+                        <citedRange>224-228, no. 46</citedRange>                          
+                     </bibl>
+                     <bibl>
+                         <ptr target="THO1994"/>
+                         <citedRange>270</citedRange>
+                     </bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

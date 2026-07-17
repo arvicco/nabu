@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The four records are byte-identical raw GETs from the verified stable
+# per-record pattern (P25-1, retrieved 2026-07-17). map/corpus.html is a
+# documented TRIM of the 2.6 MB corpus page (its embedded placesgeo
+# GeoJSON reduced to these four records' feature objects, each object
+# byte-identical), so adapter_test stays null (a re-run against the full
+# upstream page would false-fail the fetch tests' id count).
+source: riig
+adapter_test:
+retrieved: 2026-07-17
+files:
+  - path: documents/AHP-01-01.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/AHP-01-01.xml
+    whole: true
+    trim: none (two-alternative-readings + BCE origDate + decimal-comma geo exemplar, whole)
+  - path: documents/ALL-01-01.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/ALL-01-01.xml
+    whole: true
+    trim: none (Gallo-Latin expan/surplus/break="no" exemplar, whole)
+  - path: documents/GAR-10-03.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/GAR-10-03.xml
+    whole: true
+    trim: none (bilingual textparts + <space/> word-division exemplar, whole)
+  - path: documents/VAU-13-01.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/VAU-13-01.xml
+    whole: true
+    trim: none (Segomaros dedication — three readings + French translation divs, whole)
+  - path: map/corpus.html
+    url: https://riig.huma-num.fr/corpus.html?collection=RIIG
+    whole: false
+    trim: real page head + the placesgeo FeatureCollection reduced from 428 features to these four records' (feature objects byte-identical); the full page is 2.6 MB of facet HTML

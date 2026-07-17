@@ -42,18 +42,22 @@ module Nabu
       # torot_annals (the passage-grain annal rows behind the torot documents)
       # and coptic_invalid (P17-1 — year-0/unparseable TT headers, skipped)
       # and edh_undated/edh_invalid (P17-2: undated-but-joined records and the
-      # year-0 tripwire) and corph_undated (P25-0: held texts whose Date prose
-      # resisted the honest parse ladder — the Annals of Ulster shape). The
-      # later-phase fields default so every prior construction stays valid.
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini, :corph,
+      # year-0 tripwire), corph_undated (P25-0: held texts whose Date prose
+      # resisted the honest parse ladder — the Annals of Ulster shape) and
+      # riig_undated/riig_invalid (P25-1). The later-phase fields default so
+      # every prior construction stays valid.
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
+                            :corph, :riig,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
-                            :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated) do
+                            :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
+                            :riig_undated, :riig_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
-                       damaskini: 0, corph: 0, corph_undated: 0, **)
+                       damaskini: 0, corph: 0, corph_undated: 0,
+                       riig: 0, riig_undated: 0, riig_invalid: 0, **)
           super
         end
 
-        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph
+        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig
       end
 
       module_function
@@ -72,15 +76,18 @@ module Nabu
         edh = EdhDates.build(catalog: catalog, canonical_dir: canonical_dir)
         damaskini = DamaskiniDates.build(catalog: catalog, canonical_dir: canonical_dir)
         corph = CorphDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        riig = RiigDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
+                    riig: riig[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
                     edh_undated: edh[:undated], edh_invalid: edh[:invalid],
-                    corph_undated: corph[:undated])
+                    corph_undated: corph[:undated],
+                    riig_undated: riig[:undated], riig_invalid: riig[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -232,3 +239,4 @@ require_relative "axis_builder/coptic_scriptorium_dates"
 require_relative "axis_builder/edh_dates"
 require_relative "axis_builder/damaskini_dates"
 require_relative "axis_builder/corph_dates"
+require_relative "axis_builder/riig_dates"
