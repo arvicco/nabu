@@ -44,15 +44,15 @@ module Nabu
       # and edh_undated/edh_invalid (P17-2: undated-but-joined records and the
       # year-0 tripwire). The P17-1/P17-2 fields default so every prior
       # construction stays valid.
-      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
+      Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini, :riig,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
-                            :coptic_invalid, :edh_undated, :edh_invalid) do
+                            :coptic_invalid, :edh_undated, :edh_invalid, :riig_undated, :riig_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
-                       damaskini: 0, **)
+                       damaskini: 0, riig: 0, riig_undated: 0, riig_invalid: 0, **)
           super
         end
 
-        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini
+        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + riig
       end
 
       module_function
@@ -70,14 +70,16 @@ module Nabu
         coptic = CopticScriptoriumDates.build(catalog: catalog, canonical_dir: canonical_dir)
         edh = EdhDates.build(catalog: catalog, canonical_dir: canonical_dir)
         damaskini = DamaskiniDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        riig = RiigDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
-                    damaskini: damaskini[:documents],
+                    damaskini: damaskini[:documents], riig: riig[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
-                    edh_undated: edh[:undated], edh_invalid: edh[:invalid])
+                    edh_undated: edh[:undated], edh_invalid: edh[:invalid],
+                    riig_undated: riig[:undated], riig_invalid: riig[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -228,3 +230,4 @@ require_relative "axis_builder/chronicle_annals"
 require_relative "axis_builder/coptic_scriptorium_dates"
 require_relative "axis_builder/edh_dates"
 require_relative "axis_builder/damaskini_dates"
+require_relative "axis_builder/riig_dates"

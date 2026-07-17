@@ -153,18 +153,21 @@ module Nabu
                   references: refresh_references(entry))
     end
 
-    # P19-4: after a reference_edges? source loads, re-derive its manifests'
-    # related: urns as kind=reference edges (Nabu::LibraryReferences — pure
-    # function of the loaded documents' metadata, superseding the prior
-    # run). Outside the RunRecorder block like reindexing: the journal is a
-    # third store with its own lifecycle, and a journal failure must surface
-    # as its own error, never falsify the source's run row.
+    # P19-4: after a reference_edges? source loads, re-derive its metadata
+    # related: targets as kind=reference edges (Nabu::LibraryReferences —
+    # pure function of the loaded documents' metadata, superseding the
+    # prior run of the adapter's declared producer; P25-1 generalized the
+    # mechanism to the concordance sources). Outside the RunRecorder block
+    # like reindexing: the journal is a third store with its own lifecycle,
+    # and a journal failure must surface as its own error, never falsify
+    # the source's run row.
     def refresh_references(entry)
       return nil unless entry.adapter_class.reference_edges?
 
       journal = Store::LinksJournal.open!(@config.links_path)
       begin
-        LibraryReferences.new(catalog: @db, journal: journal).run(entry.slug)
+        LibraryReferences.new(catalog: @db, journal: journal)
+                         .run(entry.slug, producer: entry.adapter_class.reference_producer)
       ensure
         journal.disconnect
       end

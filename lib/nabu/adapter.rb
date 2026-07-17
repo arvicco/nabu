@@ -133,8 +133,19 @@ module Nabu
     # local-library manifests)? Declared HERE — beside content_kind and
     # reflex_bearing?, the other capability flags — so SyncRunner can
     # refresh Nabu::LibraryReferences after every load without special-
-    # casing slugs. Default false; the local-library shelf overrides.
+    # casing slugs. Default false; the local-library shelf overrides, and
+    # so do the epigraphic concordance sources (P25-1: riig's RIG sigla,
+    # ogham's dil.ie word links).
     def self.reference_edges? = false
+
+    # The links-journal producer name this adapter's reference edges are
+    # recorded under (P25-1). "library" — the P19-4 manifest producer — is
+    # the default; a source whose related targets are its OWN concordance
+    # assertions names itself, so runs stay attributable and independent
+    # producers over the same id space (ogham vs a future corph, both into
+    # dil.ie) never read as one. Only consulted when reference_edges? is
+    # true.
+    def self.reference_producer = "library"
 
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
