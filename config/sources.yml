@@ -578,6 +578,28 @@ suttacentral:
   # pick on the 104 double-covered stems, orphans skipped by rule.
   translations: true
 
+oshb:
+  adapter: Nabu::Adapters::Oshb
+  enabled: false   # P26-3: awaiting the owner-fired first sync (~174 MB
+                   # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
+                   # 39 OSIS books / ~23,213 verses / ~305,507 morph-tagged
+                   # words projected). CLAUDE.md checklist §6: bin/nabu sync
+                   # oshb, eyeball nabu show urn:nabu:oshb:gen:1.1 (pointed
+                   # בְּרֵאשִׁ֖ית with the WLC mark order intact) + 5 random
+                   # verses and `align "GEN 1.1"` (MT ↔ LXX ↔ Vulgate
+                   # three-legged), then flip.
+  # OSHB — Open Scriptures Hebrew Bible: the Westminster Leningrad Codex
+  # (OSIS XML) + complete OSHM morphology and augmented-Strong's lemmas.
+  # License per layer, verbatim in-repo: WLC text PUBLIC DOMAIN
+  # (LICENSE.md); lemma/morphology CC BY 4.0 ("credit the Open Scriptures
+  # Hebrew Bible Project", README.md) → class open, credit in the manifest
+  # license text. NB the P26-3 NFC exemption (owner ruling 2026-07-18):
+  # hbo/arc text is stored byte-verbatim, never NFC-normalized — upstream's
+  # own anti-NFC warning is measured-true (architecture §3). Upstream is a
+  # completed digitization with occasional corrections: re-syncs are an
+  # owner decision.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

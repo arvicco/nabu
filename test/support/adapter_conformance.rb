@@ -119,8 +119,19 @@ module AdapterConformance
         # subversion of construction fail vividly rather than silently.
         assert_kind_of Nabu::Passage, passage
         refute_empty passage.text, "passage #{passage.urn.inspect} has empty text"
-        assert passage.text.unicode_normalized?(:nfc),
-               "passage #{passage.urn.inspect} text is not NFC"
+        if Nabu::Normalize.nfc_exempt?(passage.language)
+          # The P26-3 per-language NFC exemption (owner ruling 2026-07-18):
+          # hbo/arc text is stored byte-verbatim because NFC reorders the
+          # Masoretic combining-mark order (Normalize::NFC_EXEMPT_LANGUAGES —
+          # the ONE named exception, keyed on the central list so no adapter
+          # can opt another language out here). Well-formed UTF-8 is still
+          # required; the search form below stays NFC for every language.
+          assert passage.text.valid_encoding?,
+                 "passage #{passage.urn.inspect} text is not well-formed UTF-8"
+        else
+          assert passage.text.unicode_normalized?(:nfc),
+                 "passage #{passage.urn.inspect} text is not NFC"
+        end
         assert passage.text_normalized.unicode_normalized?(:nfc),
                "passage #{passage.urn.inspect} text_normalized is not NFC"
       end

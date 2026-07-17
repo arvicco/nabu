@@ -8085,3 +8085,59 @@ JOURNALED (not built, by rule):
 - Owner sync expectation: ~353 MB clone (310 MB tree + 43 MB .git at
   census); ≈7,310 root docs / ≈445,600 passages + ≈4,712 -en siblings
   (≈12,022 docs total).
+
+## P26-3 · OSHB — the Masoretic witness (the ot hub goes three-legged)  [tier: fable] [status: done 2026-07-18 — adapter + oshb-osis family + NFC-exemption seam + alignment config shipped, enabled:false awaiting owner sync; verdicts below] [deps: —]
+Queue lane 2 of the biblical–Indic batch (survey
+.docs/surveys/biblical-indic-survey.md; owner-approved 2026-07-17). The
+Westminster Leningrad Codex (openscriptures/morphhb, OSIS XML, 39 books)
+as the alignment hub's MASORETIC witness: `align "GEN 1.1"` renders
+MT ↔ LXX ↔ Vulgate.
+
+SHIPPED:
+- THE OWNER RULING IMPLEMENTED (2026-07-18, gate decision): per-language
+  NFC exemption. hbo/arc passage text is stored BYTE-VERBATIM — NFC
+  reorders Masoretic combining marks (dagesh/shin-dot ccc 21/24 vs vowel
+  points 10–19; upstream's anti-NFC warning measured true, Ruth 1:1 the
+  pinned byte-identity fixture). Seam: Normalize::NFC_EXEMPT_LANGUAGES
+  (["hbo","arc"], primary-subtag scoped) + Normalize.nfc_exempt? +
+  Validation.verbatim_text! + a language-keyed branch in Passage.new; the
+  conformance suite's NFC assertion branches on the SAME central list (no
+  adapter can opt another language out); text_normalized/query folding
+  still NFC-fold, so folded Hebrew lookup is unaffected (tested end to
+  end: unpointed בראשית finds pointed Gen 1:1 through FTS). Docs:
+  architecture §3 exception bullet + conventions §1 paragraph in the
+  same change (keep-docs-truthful).
+- NEW oshb-osis parser family (DOM, largest book 1.9 MB): verse text
+  assembled from the file's own bytes (morpheme-divider `/` = OSHB
+  markup, removed; joins follow the source's own inter-element
+  whitespace — maqqef/sof-pasuq attach, words space); <w> → P7-5 tokens:
+  lemma = AUGMENTED STRONG'S id VERBATIM (the honest modeling — no
+  headword exists upstream; "b/7225" indexes into passage_lemmas as-is),
+  morph = OSHM code verbatim, immutable word id, lang from the OSHM
+  H/A prefix; ketiv/qere notes attach the qere reading(s) to the ketiv
+  token; alternative/bare notes = annotations, never running text.
+- Language honesty: per-word hbo/arc → per-passage majority (the corph
+  mechanics; Jer 10:11 votes arc, Gen 31:47 keeps token-grain Aramaic
+  inside an hbo verse), document majority hbo.
+- ALIGNMENT (the point): ot work gains "OSHB (WLC, Masoretic)"
+  (cts-verse, 29/39 books). HOLDOUTS journaled in-registry: JER/DAN/1KI
+  per the survey's conservative map (DAN-3: the numbering: remap is
+  witness-global, not chapter-scoped, so the whole book holds out) PLUS
+  PRO/JOL/MAL — measured chapter-grain divergence at packet time (MT
+  31/4/3 vs Swete 29/3/4, read-only census 2026-07-18); EZR/NEH/ECC
+  have no work token. PSA joins the psalms work with the P13-5
+  Hebrew→Greek numbering table REUSED VERBATIM (asserted equal to the
+  WEB witness's table). Three-legged GEN 1.1 fixture-level align test;
+  the live render is the owner's eyeball at sync time.
+- License per layer verbatim (fixture README + manifest + 02-sources row
+  66): WLC text Public Domain, morphology CC BY 4.0 with the "credit the
+  Open Scriptures Hebrew Bible Project" wording carried in the manifest
+  license text; class open.
+- Fixtures: byte-verbatim slices of morphhb@3d15126f (Gen 1+31, Ruth 1,
+  Ps 23, Jer 10, trimmed VerseMap.xml pinned as the non-book); registry
+  oshb enabled:false / sync_policy manual; full first-sync clone ≈174 MB
+  (wlc/ ≈27 MB).
+
+Owner queue: bin/nabu sync oshb, eyeball nabu show urn:nabu:oshb:gen:1.1
+(pointed WLC mark order intact) + 5 random verses + `align "GEN 1.1"`
+three-legged, then flip enabled.

@@ -1,0 +1,45 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: oshb
+# adapter_test is null: every fixture is a documented TRIM (whole: false) —
+# a count-based adapter test re-run against untrimmed upstream files would
+# false-fail (see the schema note in perseus/manifest.yml).
+adapter_test: null
+retrieved: 2026-07-18
+files:
+  - path: wlc/Gen.xml
+    url: https://raw.githubusercontent.com/openscriptures/morphhb/3d15126fb1ef74867fc1434be1942e837932691f/wlc/Gen.xml
+    whole: false
+    trim: >-
+      P26-3 (owner-authorized clone 2026-07-18): byte-verbatim slice —
+      upstream lines 1-757 (header + chapter Gen.1) + 12201-12975 (chapter
+      Gen.31, the token-grain Aramaic pin at 31:47) + closing tags. Pinned
+      at openscriptures/morphhb HEAD 3d15126fb1ef74867fc1434be1942e837932691f.
+  - path: wlc/Ruth.xml
+    url: https://raw.githubusercontent.com/openscriptures/morphhb/3d15126fb1ef74867fc1434be1942e837932691f/wlc/Ruth.xml
+    whole: false
+    trim: >-
+      P26-3: byte-verbatim slice — upstream lines 1-665 (header + chapter
+      Ruth.1: the NFC-instability pin at 1:1, ketiv/qere at 1:8) + closing
+      tags. Same pin.
+  - path: wlc/Ps.xml
+    url: https://raw.githubusercontent.com/openscriptures/morphhb/3d15126fb1ef74867fc1434be1942e837932691f/wlc/Ps.xml
+    whole: false
+    trim: >-
+      P26-3: byte-verbatim slice — upstream lines 1-318 (header) +
+      3538-3604 (chapter Ps.23, the psalms numbering-table exercise:
+      Hebrew 23 = Greek 22) + closing tags. Same pin.
+  - path: wlc/Jer.xml
+    url: https://raw.githubusercontent.com/openscriptures/morphhb/3d15126fb1ef74867fc1434be1942e837932691f/wlc/Jer.xml
+    whole: false
+    trim: >-
+      P26-3: byte-verbatim slice — upstream lines 1-318 (header) +
+      4178-4517 (chapter Jer.10; verse 11 is the whole-verse Aramaic
+      passage-majority exercise) + closing tags. Same pin.
+  - path: wlc/VerseMap.xml
+    url: https://raw.githubusercontent.com/openscriptures/morphhb/3d15126fb1ef74867fc1434be1942e837932691f/wlc/VerseMap.xml
+    whole: false
+    trim: >-
+      P26-3: byte-verbatim slice — upstream lines 1-44 (header comment +
+      the Gen book block) + the closing </verseMap> line. Pinned as the
+      NON-book file discover must exclude. Same pin.
