@@ -75,6 +75,21 @@ module Nabu
         -utf8
       end
 
+      # Valid UTF-8, non-empty — WITHOUT the NFC check: the P26-3 per-language
+      # NFC exemption (Normalize::NFC_EXEMPT_LANGUAGES — Biblical Hebrew/
+      # Aramaic, whose Masoretic combining-mark order NFC would reorder).
+      # Passage construction routes exempt-language text here so the bytes are
+      # stored exactly as upstream ships them; every other caller keeps
+      # nfc_text!. Returns a frozen UTF-8 copy.
+      def verbatim_text!(value, field:)
+        raise ValidationError, "#{field} must be a String, got #{value.inspect}" unless value.is_a?(String)
+
+        utf8 = coerce_utf8(value, field: field)
+        raise ValidationError, "#{field} must not be empty" if utf8.empty?
+
+        -utf8
+      end
+
       def sequence!(value)
         unless value.is_a?(Integer) && value >= 0
           raise ValidationError, "sequence must be a non-negative Integer, got #{value.inspect}"

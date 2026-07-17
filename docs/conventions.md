@@ -31,6 +31,21 @@ shorter.
 gets to assume one text = one byte sequence — which is what makes search,
 deduplication, and the loader's changed-content detection trustworthy.
 
+**The one named exception: Biblical Hebrew and Aramaic (P26-3, owner ruling
+2026-07-18).** NFC does more than compose — it also *reorders* combining
+marks into canonical-combining-class order, and for pointed Hebrew that
+rewrites the text: the WLC ships dagesh/shin-dot before the vowel point
+(ccc 21/24 vs 10–19), so NFC-normalizing changes the byte sequence of most
+pointed words (Ruth 1:1 is the measured pin). Upstream OSHB explicitly warns
+against NFC. So `hbo`/`arc` passage text is stored **byte-verbatim**
+(`Normalize::NFC_EXEMPT_LANGUAGES`; `Passage` validates UTF-8
+well-formedness only for these languages, and the conformance suite asserts
+the same seam). One text = one byte sequence still holds *within* the shelf
+— the WLC is mark-order-consistent — and the search side is unaffected:
+`text_normalized`/query folding pass through NFC + mark strip either way, so
+find-ability never depends on the stored byte order. Every other language
+keeps the refuse-non-NFC invariant (see architecture §3).
+
 Related traps worth knowing:
 
 - **Case-mapping can denormalize.** `"ΐ".downcase` and friends can produce

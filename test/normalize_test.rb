@@ -229,6 +229,31 @@ class NormalizeTest < Minitest::Test
     assert folded.unicode_normalized?(:nfc)
   end
 
+  # -- the per-language NFC exemption (P26-3, owner ruling 2026-07-18) -------
+
+  def test_nfc_exempt_names_hebrew_and_biblical_aramaic_only
+    assert Nabu::Normalize.nfc_exempt?("hbo")
+    assert Nabu::Normalize.nfc_exempt?("arc")
+    assert Nabu::Normalize.nfc_exempt?("hbo-Hebr"), "primary-subtag scoping, like LANGUAGE_FOLDS"
+    refute Nabu::Normalize.nfc_exempt?("grc")
+    refute Nabu::Normalize.nfc_exempt?("he"), "the exemption names the ancient codes the corpus uses"
+    refute Nabu::Normalize.nfc_exempt?(nil)
+  end
+
+  def test_hebrew_search_form_folds_nfc_unstable_wlc_bytes_to_bare_letters
+    # Upstream WLC bytes (Ruth 1:1 בִּימֵי֙): dagesh U+05BC precedes hiriq
+    # U+05B4 — NOT NFC (canonical order swaps them). The SEARCH side folds
+    # through NFC + mark strip regardless, so lookups are unaffected by the
+    # byte-verbatim storage exemption.
+    wlc = "\u05D1\u05BC\u05B4\u05D9\u05DE\u05B5\u05D9\u0599"
+    refute wlc.unicode_normalized?(:nfc)
+    assert_equal "בימי", Nabu::Normalize.search_form(wlc, language: "hbo")
+    # fold-both-sides: a pointed query reaches the same bare-letter form.
+    assert_includes Nabu::Normalize.query_forms(wlc), "בימי"
+    assert_equal "בראשית", Nabu::Normalize.search_form("בְּרֵאשִׁ֖ית", language: "hbo"),
+                 "an unpointed modern query meets pointed Masoretic text"
+  end
+
   # -- query_forms: the query-side union (P6-4) ------------------------------
 
   def test_query_forms_returns_the_generic_form_first
