@@ -5,7 +5,7 @@ require_relative "starling_dbf_parser"
 module Nabu
   module Adapters
     # The StarLing / Tower of Babel adapter (P22-0 + P23-0;
-    # docs/pie-survey.md §3.1): the Indo-European package (IE.exe — a plain
+    # .docs/surveys/pie-survey.md §3.1): the Indo-European package (IE.exe — a plain
     # zip despite the name, 6.2 MB) from starlingdb.org, ingesting its FIVE
     # etymological bases as dictionary shelves — Moscow-school witnesses
     # beside kaikki/LIV/IE-CoR:

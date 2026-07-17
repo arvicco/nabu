@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>RIIG</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="RIIG">
+        <meta name="creator" content="nprevot">
+	<link rel="shortcut icon" href="https://petrae.huma-num.fr/ausonius_icob.png">
+	<!-- Bootstrap 3 -->
+	<link rel="stylesheet" type="text/css" href="/resources/bootstrap/css/bootstrap.min.css">
+	
+	
+	<!--        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>-->
+	<!--        <link rel="stylesheet" type="text/css" href="$shared/resources/css/exist-2.2.css"/>-->
+	<!-- JQuery -->
+	<link href="/resources/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+	<script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.smartmenus.min.js"></script>
+	<script type="text/javascript" src="/resources/js/clipboard.min.js"></script>
+	<!-- Bootstrap -->
+	<script type="text/javascript" src="/resources/bootstrap/js/bootstrap.min.js"></script>
+	<!--        <script type="text/javascript" src="$shared/resources/scripts/jquery/jquery-1.7.1.min.js"/>
+        <script type="text/javascript" src="resources/scripts/jquery-ui.js"/>
+        <script type="text/javascript" src="$shared/resources/scripts/bootstrap-3.0.3.min.js"/>
+-->
+	<!--        <script type="text/javascript" src="/resources/js/loadsource.js"/>-->
+	<script type="text/javascript" src="/resources/js/jquery.searchable.js"></script>
+
+	<!-- leaflet iiif -->
+	<script src="/resources/leaflet-iiif/leaflet.js"></script>
+	<script src="/resources/leaflet-iiif/leaflet-iiif.js"></script>
+	<link rel="stylesheet" href="/resources/leaflet-iiif/leaflet.css">
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="/resources/leaflet/leaflet.css">
+	<link rel="stylesheet" href="/resources/leaflet/leaflet.awesome-markers.css">
+        <!-- keyboard widget css & script -->
+        <link href="/resources/keyboard/css/keyboard.min.css" rel="stylesheet">
+        <link href="/resources/keyboard/css/keyboard-previewkeyset.min.css" rel="stylesheet">
+        <script type="text/javascript" src="/resources/keyboard/dime/jquery.keyboard.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/js/jquery.keyboard.extension-mobile.min.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/js/jquery.keyboard.extension-navigation.min.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/dime/jquery.keyboard.extension-autocomplete.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/dime/keyboardSupport.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/dime/dime.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/layouts/ms-Greek.min.js"></script>
+        <script type="text/javascript" src="/resources/keyboard/layouts/ms-Arabic.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+                $('.keyboard').keyboard({
+                    openOn: null,
+                    stayOpen: false,
+                    alwaysOpen: false,
+                    autoAccept: true,
+                    usePreview: false,
+                    initialFocus: true,
+                    rtl : true,
+                    layout: 'rosmorduc-tla',
+                    hidden: function(event, keyboard, el){
+                       //  keyboard.destroy();
+                     }
+                });
+
+                $('.keyboard-select').click(function () {
+                    var keyboardID = '#' + $(this).data("keyboard-id")
+                    var kb = $(keyboardID).getkeyboard();
+                    //var kb = $('#searchField').getkeyboard();
+                    // change layout based on link ID
+                    kb.options.layout = this.id
+                    // open keyboard if layout is different, or time from it last closing is > 200 ms 
+					if (kb.last.layout !== kb.options.layout || (new Date().getTime() - kb.last.eventTime) > 200) {
+
+                        kb.reveal();
+                    }
+                });
+                //Change fonts
+                $('.swap-font').on('click', function(){
+                    var selectedFont = $(this).data("font-id")
+                    $('.selectableFont').not('.syr').css('font-family', selectedFont);
+                    $("*:lang(syr)").css('font-family', selectedFont)
+                });
+
+            })
+        </script>
+
+	<script>
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip({
+				animated: 'fade',
+				html: true
+			});
+			$('.togglelink').click(function (e) {
+
+				e.preventDefault();
+				var el = $(this);
+
+				if (el.text() == el.data("text-swap")) {
+					el.text(el.data("text-original"));
+
+					el.html('<span class="glyphicon glyphicon-chevron-down"></span>Voir plus');
+				} else {
+					el.data("text-original", el.text());
+					el.text(el.data("text-swap"));
+					el.html('<span class="glyphicon glyphicon-chevron-up"></span>Voir moins');
+				}
+			});
+		});
+	</script>
+	
+	
+	<link rel="stylesheet" type="text/css" href="/resources/css/style_riig.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/style.css">
+	<script type="text/javascript" src="/resources/js/paginate.js"></script>
+	<!-- Matomo -->
+	<script type="text/javascript">
+		var _paq = window._paq = window._paq || [];
+		/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+		_paq.push(['trackPageView']);
+		_paq.push(['enableLinkTracking']);
+		(function () {
+			var u = "https://analyseweb.huma-num.fr/";
+			_paq.push(['setTrackerUrl', u + 'piwik.php']);
+			_paq.push(['setSiteId', '316']);
+			var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+			g.type = 'text/javascript'; g.async = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
+		})();
+	</script>
+	<!-- End Matomo Code -->
+
+</head>
+
+<body>
+<!-- TRIMMED FIXTURE: real corpus.html head + the placesgeo FeatureCollection reduced to 4 verbatim features (of 428); see README.md -->
+<script type="text/javascript">
+//<!--
+      var placesgeo = {"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[5.688,44.0655]},"properties":{"uri":"/exist/apps/riig/documents/AHP-01-01","name":"Vasque du Chastelard de Lardier","riig":"AHP-01-01","rig":"G593","lang":"xtg-Grek","desc":"Indéterminé"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[2.6556,46.2856]},"properties":{"uri":"/exist/apps/riig/documents/ALL-01-01","name":"Pierre de Néris-les-Bains","riig":"ALL-01-01","rig":"L6","lang":"xtg-Latn","desc":"Indéterminé"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[4.348969444444444,43.8403306]},"properties":{"uri":"/exist/apps/riig/documents/GAR-10-03","name":"Chapiteau perdu de la Fontaine","riig":"GAR-10-03","rig":"G205","lang":"xtg-Grek la","desc":"Inscription religieuse / cultuelle"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[5.075984,44.241081]},"properties":{"uri":"/exist/apps/riig/documents/VAU-13-01","name":"Plaque votive de Vaison-la-Romaine","riig":"VAU-13-01","rig":"G153","lang":"xtg-Grek","desc":"Inscription religieuse / cultuelle"}}]};
+//-->
+</script>
+</body></html>

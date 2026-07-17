@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng"
+schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng"
+schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Fardel</title>
+             <editor role="editor" xml:id="NW"><persName>Nora White</persName>                 
+                 <orgName>Maynooth University, Department of Early Irish</orgName></editor>
+                <editor role="editor" xml:id="POC"><persName>Patricia O Connor</persName>
+                <orgName>Maynooth University, Department of Early Irish</orgName></editor> 
+                <editor role="editor" xml:id="MK"><persName>Megan Kasten</persName>
+                <orgName>University of Glasgow</orgName></editor> 
+                 <funder>Irish Research Council (grant no. IRC/W001985/1) and Arts and Humanities Research Council (grant no. AH/W001985/1)</funder>
+                <funder>
+                <ref target="https://research.ie/funding/uk-ireland-collaboration-in-the-digital-humanities-research-grants%e2%80%af/?f=principal-investigator-led">UK-Ireland Collaboration in the Digital Humanities Research Grant</ref>
+                </funder>
+                <respStmt>
+                <name ref="https://orcid.org/0000-0001-7957-651X">Nora White</name>
+                <resp>data collection, editing and encoding</resp>
+                </respStmt>                
+                 <respStmt>
+                    <name xml:id="JB">Jef Bucas</name>
+                      <orgName>Dublin Institute for Advanced Studies</orgName>
+                    <resp>batch conversion to EpiDoc</resp>
+                </respStmt>
+                <respStmt>
+                <name ref="https://orcid.org/0000-0001-5880-4704">Patricia O Connor</name>
+                <resp>editing and encoding</resp>
+                </respStmt>
+                   <respStmt>
+                    <name ref="https://orcid.org/0000-0003-1011-7539">Megan Kasten</name>
+                     <orgName>University of Glasgow (OG(H)AM project)</orgName>
+                   <resp>Capture: Photogrammetry <date when="2023-12-05"/>; Software: Agisoft Metashape</resp>
+                </respStmt>
+                <respStmt>
+                    <name ref="https://orcid.org/0009-0007-9371-6794">Christina Smith</name>
+                     <orgName>British Museum</orgName>
+                   <resp>Capture: Supplementary Photogrammetry <date when="2024-03-08"/></resp>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <authority>OG(H)AM</authority>
+                <idno type="filename">E-DEV-001</idno>
+                 <idno type="CIIC">489</idno>
+                <idno type="CISP" corresp="https://www.ucl.ac.uk/archaeology/cisp/database/stone/fardl_1.html">FARDL/1</idno>
+                 <idno type="TM" corresp="www.trismegistos.org/text/168513">168513</idno>
+                 <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</licence>    
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                         <country>England</country>
+                        <repository>British Museum</repository>
+                        <idno type="invNo">Acc. No. 1861,209.1</idno>
+                        <altIdentifier>
+                            <idno type="geo">51.519530, -0.127020</idno>
+                        </altIdentifier>
+                    </msIdentifier>
+                    <msContents>
+                          <msItem>                            
+                            <textLang mainLang="pgl-Ogam">Primitive Irish written in ogham script</textLang>
+                            <textLang mainLang="la-Latn" otherLangs="pgl-Latn">Latin written in Latin script with word in primitive Irish</textLang>
+                            <textLang otherLangs="cel">Probable Celtic names in both inscriptions.</textLang>
+                           </msItem>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><p><ref target="https://www.heritagegateway.org.uk/Gateway/">Historic Environment Record ID</ref>: <idno type="HER">HER Number: 441290</idno></p>
+                                    <material type="stone">Sandstone</material> 
+                                    <objectType key="monument">Pillar</objectType> 
+                                     <dimensions unit="m">
+                                            <height>1.70</height>
+                                            <width>0.86</width>
+                                            <depth>0.28</depth>
+                                     </dimensions>                                   
+                                </support>
+                                <condition>A red sandstone pillar-stone bearing a bi-version inscription but more unusually it has been used at least twice and seems to be 20 cm shorter today than when its measurements were first recorded (Smirke et al., 1861, 179). The two Latin inscriptions are both complete and the ogham inscription is also <q>legible and complete</q> (Okasha 1993, 106). At some point during 1861 or 1862, however, black paint was applied to the letters of the inscriptions. Okasha (1993, 106) observed that <q>the painted letters are clearly legible but the original texts are probably rather deteriorated.</q> </condition>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout style="vertical" rend="arris_up">The ogham inscription (1) reads vertically upwards on the two angles (up-up) of the front face of the stone (1993, 106). Both lines of the inscription start level and <q>though the first name is shorter, it is emphasised, occupying more of the arris, turning the corner and finishing on the upper surface</q> (Forsyth 2004). There are two Latin inscriptions, one on the front and the other on the back of the stone: both inscriptions face left and read downwards. The Latin inscription on the front of the stone (2) consists of two lines and the Latin inscription on the back of the stone (3) is <q>incised in one line</q> (Okasha 1993, 103). </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote script="ogham">Macalister (1945, 468) described the ogham inscription as <q><rs type="execution" key="pocked" ref="https://www.eagle-network.eu/voc/writing/lod/11.html">pocked</rs> in rather broad scores</q>. The inscription consists of <q>generously spaced strokes evenly spread with no extra space between letters (unless of the same <distinct xml:lang="ga">aicme</distinct>)</q> (Forsyth 2004). 
+                            </handNote>
+                            <handNote script="roman">The two Latin inscriptions are <q>set without panels or framing-lines</q> and are written <q>in a predominantly capital script</q> (Okasha 1993, 103). Macalister (1945, 469) noted that in the Latin inscription on the front face of the stone (2), the Q is <q>of half-uncial shape</q> and in the inscription on the back of the stone (3) <q>the G is of the sickle shape, the R is half-uncial, and the N of the H shape</q>. Forsyth (2004) observed that the inscription on the reverse <q>has a distinctive form of the letter R (in contrast to the standard capital R on the front) and an N with a horizontal cross-stroke (in contrast to the oblique stroke of the capital on the front)</q>. <height min="8" max="11" unit="cm" source="OKA1993">The letters for the inscription on the front of the stone (2) measure between 8 to 11 cm in height (Okasha 1993, 103).</height> <height min="12" max="15" unit="cm" source="OKA1993">The letters for the inscription on the back of the stone (3) are between 12 to 15 cm in height (Okasha 1993, 103).</height></handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace corresp="#findspot">
+                                <placeName type="parish">Cornwood</placeName>, <placeName type="county">Devon</placeName> <placeName type="country">England</placeName>
+                                <geo>50.400019, -3.955761</geo>
+                            <note>National Grid Reference: SX 6110 5740</note>
+                                </origPlace>
+                            <origDate/>
+                        </origin>
+                        <provenance type="found">Rev. Samuel Pearse of Cadleigh first recognised this stone when he spotted it in use as part of a culvert under the road over the Fardel brook, near Ivybridge. The stone was later removed to a farmyard in Fardel where it served as a ring-post for a shed until 1861 when Captain Pode, the owner of the farm, presented the stone to the British Museum. The stone was first mentioned in 1861 by Smirke and later by Brash in 1869.  <!--<placeName type="site">Fardel Farm</placeName>,-->
+                        </provenance>
+                        <provenance type="observed" when="2023">Currently on display next to the Sutton Hoo treasure in the Medieval and Late Antique galleries in the <ref target="https://www.britishmuseum.org/collection/object/H_1861-0209-1">British Museum</ref>. It was examined and 3d recorded for the OG(H)AM project in December 2023.
+                        </provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="../charDecl.xml" parse="xml" xpointer="symbols"/></encodingDesc>
+<profileDesc>
+<calendarDesc>
+<calendar xml:id="julian">
+<p>Julian Calendar</p>
+</calendar>
+</calendarDesc>
+<langUsage>
+<language ident="en">English</language>
+<language ident="la">Latin</language>
+<language ident="pgl">Primitive Irish</language>
+<language ident="sga">Old Irish</language>
+<language ident="mga">Middle Irish</language>
+<language ident="ga">Irish</language>
+</langUsage>
+<textClass>
+<keywords scheme="https://ontology.inscriptiones.org/type_of_inscription/#vocabularies">
+<term ref="https://ontology.inscriptiones.org/type_of_inscription/#Commemorative">Commemorative</term>
+</keywords>
+</textClass>
+   <!-- <creation>Transcription from previous editor.</creation>-->
+</profileDesc>
+<revisionDesc status="draft">
+<listChange>
+<change when="2023-11-24" who="#JB">Jef Bucas autogenerated EpiDoc output from spreadsheet</change>
+<change when="2024-01-22" who="NW">Nora White updated template, including removing # from bibl tag</change>
+<change when="2024-10-02" who="NW">Nora White updated template for data from England</change> 
+<change when="2024-11-03" who="#JB">Autogenerated EpiDoc output from spreadsheet</change>   
+<change when="2024-11-13" who="#POC">Added and encoded information, and toggled out media.</change>
+<change when="2024-11-14" who="#POC">Added and encoded information in edition, layout and commentary, corrected validation errors.</change>
+<change when="2024-11-15" who="#POC">Added and encoded more information from the OG(H)AM blog post on the stone and updated edition to include encoding of the mistake theory</change>
+<change when="2024-12-04" who="#POC">Added and encoded more information from the OG(H)AM and Babelstone blog post, also added proofreading updates such as quotation marks.</change>
+<change when="2024-12-11" who="#NW">Updated edition and apparatus - still needs David's input.</change>
+<change when="2024-12-18" who="#POC">Added bibl details for blogs</change>   
+<change when="2025-01-08" who="#POC">Added lb element for second line of Latin inscription and deleted question marks from lemma and nymRef values</change>
+<change when="2025-01-14" who="#NW">Corrected error in edition adding second line break in ogham.</change>    
+<change when="2025-01-21" who="#POC">Corrected typo and added lb elements to commentary for layout</change>    
+<change when="2025-03-28" who="#POC">Added attributes for filtering, added country to origPlace, added CISP and TM link</change>
+    <change when="2025-06-23" who="#NW">Updated edition, roman/Latin text and xml lang.</change>
+    <change when="2025-08-19" who="#MK"> Updated 3D resp.</change>
+    <change when="2025-08-19" who="#MK"> Updated 3D resp with Smith ORCID</change>
+</listChange>
+</revisionDesc>
+    </teiHeader>
+    <facsimile>
+        <graphic url="ENG/E-DEV-001-Fardel.jpg"><desc>Drawing by Macalister</desc></graphic>
+       <!--<media url="" mimeType="text/html"><desc><!-\-3d model by Megan/Gary/? on SketchFab/3dhop-\-></desc></media>-->
+    </facsimile>    
+    <text>
+        <body>
+            <div type="edition" subtype="ogham" xml:lang="pgl-Ogam" xml:space="preserve" resp="#NW">
+                <div type="textpart" n="1">
+                <ab>                   
+                    <lb n="1" style="text-direction:up"/><persName><name nymRef="#fanoni?">ᚄᚃᚐ<choice><corr>ᚅᚅ</corr><sic>ᚊᚊ</sic></choice>ᚒᚉᚔ</name> 
+                    <lb n="2" style="text-direction:up"/><w type="formula" lemma="maqqas">ᚋᚐᚊᚔ</w> <name nymRef="#qici">ᚊᚔᚉᚔ</name></persName>
+                </ab>
+            </div>
+            </div>
+            <div type="edition" subtype="transliteration" xml:lang="pgl-Ogam" xml:space="preserve" resp="#NW"> 
+                <ab>                                     
+                    <lb n="1" style="text-direction:up"/><persName><name nymRef="#savaqqucus?">SVAQQUCI</name> 
+                    <lb n="2" style="text-direction:up"/><w type="formula" lemma="maqqas">MAQI</w> <name nymRef="#qicus?">QICI</name></persName>
+                </ab>
+            </div>
+            <div type="edition" subtype="roman" xml:lang="la" xml:space="preserve" resp="#NW">   
+                <div type="textpart" n="2" >
+                    <ab>
+                        <lb n="1" style="text-direction:down"/><persName><name nymRef="#fanoni">Fanoni</name> 
+                         <lb n="2" style="text-direction:down"/><w type="formula" lemma="maqqas" xml:lang="pgl">maqui</w> <name nymRef="#rini">Rini</name></persName>
+                    </ab>
+            </div>
+            </div>
+                <div type="edition" subtype="roman" xml:lang="la" xml:space="preserve" resp="#NW">   
+                <div type="textpart" n="3" >
+                    <ab>
+                        <lb n="1" style="text-direction:down"/><persName><name nymRef="#sagranvi">Sagranui</name></persName>
+                    </ab>
+            </div>
+            </div>
+            <div type="apparatus">
+                <listApp>
+                    <app n="1">
+                        <note>It is worth pointing out that the inscription FANONI MAQVI RINI is unique in not translating the formula word (MAQVI) into Latin, although it is spelled according to Latin conventions (i.e. with a V following the Q). For the ogham inscription, SVAQQUCI MAQI QICI, Patrick Sims-Williams (2003, 66-68) highlighted the substitution of SV- for F- in the earliest Latin loanwords into Irish, giving new life to the ‘mistake’ theory that the carver had confused the orientation of the H- and B-<distinct xml:lang="ga">aicme</distinct> letters. There is evidence of similar occurences to support this theory, for example, Airghleann (Arraglen) (I-KER-012, CIIC 114): MAN SOMOGAQQ for MAQ COMOGANN. This makes sense in relation to the first name with QQ for NN, but it is more difficult to explain QICI as a mistake for RINI. Macalister (1945, 469) rejected the 'mistake' theory, maintaining that the three inscriptions represented three distinct phases of use and that there was no connection between them.</note>
+                    </app>
+                    <app n="2">
+                        <note>Patrick Sims-Williams (2003, 66-68) read:</note>
+                        <rdg><lb/>Ogham: SVA[NN]UCI MAQI [R]I[N]I</rdg>
+                    </app>
+                    <app n="3">
+                        <note>Macalister (1945, 469) read:</note>
+                        <rdg><lb/>Ogham: SVAQQUCI MAQI QICI</rdg>
+                        <rdg><lb/>Roman: FANONI MAQVI RINI</rdg>
+                        <rdg><lb/>Roman: SAGRANVI</rdg>
+                    </app>
+                </listApp>
+            </div>
+            <div type="translation" source="OKA1993"> <!--David?-->
+                <p>Ogham (1): [the stone] of Safaqqucus, the son of Qicus</p>
+                <p>Latin (2): of Fanonus, son of Rinus </p>
+                <p>Latin (3): of Sagranuus</p>
+            </div>
+            <div type="commentary">
+                <p>Researching the names in the inscriptions, Okasha (1993, 106) confirmed that FANONI is Celtic and that <q>a similiar name, FANNVCI, occurs on a stone from Stackpole Elidyr Wales</q>. Additionally, the name <q>MAQVIRINI would be Primitive Irish, but the name RINI would be of unknown origin</q> (Okasha 1993, 106). Concerning the name, SAGRANVI, Okasha (1993, 106) noted that <q>the exact form of this name remains uncertain.</q> Regarding the names mentioned in the ogham inscriptions, <q>the MAQ- would indicate a Primitive Irish name</q> while QICI and SAFAQQUCI are probably Celtic (Okasha 1993, 107). Furthermore, <q>the phrase MAQI QIC occurs on an Irish ogham stone from Ballyvooney</q> (Okasha 1993, 107).</p>
+            </div>
+            <div type="bibliography">
+                 <listBibl>
+                     <bibl><ptr target="FOR2024a"/>
+                     <citedRange target="https://ogham.glasgow.ac.uk/index.php/2024/01/24/ogham-in-the-british-museum/"/></bibl>
+                     <bibl><ptr target="MAC1945"/>
+                        <citedRange>468-469, no. 489</citedRange>
+                    </bibl>
+                     <bibl><ptr target="OKA1993"/>
+                     <citedRange>103-108, no. 13</citedRange>
+                     </bibl>
+                     <bibl><ptr target="SIM2003"/>
+                         <citedRange>66-68</citedRange>
+                     </bibl>
+                     <bibl><ptr target="SMI1861"/>
+                         <citedRange>175-179</citedRange>
+                     </bibl>
+                     <bibl><ptr target="WES2009a"/>
+                     <citedRange target="https://www.babelstone.co.uk/Blog/2009/11/ogham-stones-of-cornwall-and-devon.html"/></bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

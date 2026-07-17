@@ -89,7 +89,7 @@ extracts (fetched for URL-liveness only, never byte-compared).
 
 ## P17-3 additions (reconstruction shelf part 2; retrieved 2026-07-13)
 
-Four NEW extracts (the survey docs/recon2-survey.md §4 fixture plan, owner-
+Four NEW extracts (the survey .docs/surveys/recon2-survey.md §4 fixture plan, owner-
 approved) plus five golden lines appended to the existing files. All lines
 byte-verbatim (`select_fixtures_p17_3.py` in scratch, same post-check);
 the three existing extracts re-downloaded 2026-07-13 hash IDENTICAL to the
@@ -161,3 +161,56 @@ Borrow-marker census over all eight live extracts (2026-07-13, scratch):
 tail ("possibly borrowed from …") — all matched `/borrow/i`; the frequent
 non-loan raw_tag "reshaped by analogy or addition of morphemes" carries no
 "borrow" substring and stays false.
+
+## P25-2 additions (attested Celtic; retrieved 2026-07-17)
+
+Three NEW extracts — the P25 Celtic axis (survey
+`.docs/surveys/celtic-survey.md`, gitignored planning material). These are
+ATTESTED languages riding the recon source (the wiktionary-cu precedent:
+attested entries mint reflex edges too, no display asterisk; the codes are
+real ISO 639-3, adopted as themselves). All kept lines byte-verbatim (same
+post-check as above); the license statement on
+https://kaikki.org/dictionary/ re-verified verbatim 2026-07-17 ("This data
+is made available under the same licenses as Wiktionary - both CC-BY-SA
+and GFDL.").
+
+Full-download census (extraction dated 2026-07-09, from the enwiktionary
+dump dated 2026-07-06; sha256 of the full downloads):
+
+- `.../Old%20Irish/kaikki.org-dictionary-OldIrish.jsonl` — 19,776,265 B,
+  **6,564 lines** ("5828 distinct words"; 2,093 with descendants, 3,116
+  with etymology_text, 1,427 naming Proto-Celtic, 1,263 naming PIE — the
+  DIL-derived depth), sha256
+  `6d595de9838796a819100f18809c74f8729db937278c392d888ef713f5814abb`
+  → **3 fixture lines** (upstream lines 693/674/675):
+  - `rí` "king" — THE crosswalk golden: cel-pro/ine-pro etymology kept
+    verbatim in the body (*rīxs, *h₃rḗǵs), descendants mga rí → ga rí /
+    gd rìgh / gv ree; the mga node is the mga shelf's own headword, so
+    the shelf-visited ascent runs Middle Irish rí → Old Irish rí.
+  - `ingen` 1 "daughter" / `ingen` 2 "nail" — the classic DIL homograph
+    pair split by `etymology_number`; ingen 1's etymology carries the
+    Ogham-script Primitive Irish ᚔᚅᚔᚌᚓᚅᚐ (real Ogham codepoints through
+    the NFC boundary).
+- `.../Middle%20Irish/kaikki.org-dictionary-MiddleIrish.jsonl` —
+  1,267,269 B, **767 lines** ("710 distinct words"), sha256
+  `7739a1a0b465298a74d9ec9bcc2eeca41f4992fc00cfb80246836e4650eb2952`
+  → **3 fixture lines** (74/55/37):
+  - `rí` — bottoms the sga golden (the ascent target) with its own
+    ga/gd/gv descendants.
+  - `clann` — the en `clan` node under gd clann carries raw_tags
+    `["borrowed"]` (the Gaelic loan into English); its own etymology is
+    the Latin planta loan chain via Old Irish cland / Old Welsh plant.
+  - `data` "sire, father" — the structural edge: no etymology_text, no
+    descendants.
+- `.../Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl` —
+  1,343,469 B, **766 lines** ("695 distinct words"), sha256
+  `a3a810637fda4822f41e5f49a4896d5fc0ccecd80d0aa7992df4901985602767`
+  → **3 fixture lines** (41/58/59):
+  - `cant` "hundred" — cel-pro *kantom / PIE *ḱm̥tóm etymology, cy cant
+    descendant.
+  - `cam` 1 "step" / `cam` 2 "bent" — `etymology_number` homographs, each
+    with a cy descendant.
+
+Selection recipe: whole JSONL lines picked by upstream line number as
+listed (deterministic; the post-check asserts each emitted line is a
+literal line of the raw download).

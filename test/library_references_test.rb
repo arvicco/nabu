@@ -63,6 +63,33 @@ class LibraryReferencesTest < Minitest::Test
     assert_equal 0, @journal[:links].count
   end
 
+  # P25-1: a scheme-bearing target names a stable external id space and
+  # mints an edge; only bare ":"-less codes stay metadata.
+  def test_external_stable_id_targets_mint_edges
+    make_document(urn: "urn:nabu:local-library:slavistics:leskien",
+                  related: ["https://dil.ie/18492", "rig:G593", "chu"])
+    result = producer.run("local-library")
+
+    assert_equal 2, result.edges_written
+    assert_equal 1, result.skipped_codes
+    assert_equal ["https://dil.ie/18492", "rig:G593"],
+                 @journal[:links].order(:to_urn).select_map(:to_urn)
+  end
+
+  # P25-1: the producer parameter keeps independent asserters over the same
+  # id space apart — supersession stays scoped to (producer, scope).
+  def test_producer_override_runs_supersede_independently
+    make_document(urn: "urn:nabu:local-library:slavistics:leskien", related: ["https://dil.ie/18492"])
+    library_run = producer.run("local-library")
+    ogham_run = producer.run("local-library", producer: "ogham")
+
+    assert_equal "library", @journal[:link_runs].first(id: library_run.run_id)[:producer]
+    assert_equal "ogham", @journal[:link_runs].first(id: ogham_run.run_id)[:producer]
+    assert_equal 0, ogham_run.superseded_runs, "another producer's run is never clobbered"
+    rerun = producer.run("local-library", producer: "ogham")
+    assert_equal 1, rerun.superseded_runs, "its OWN prior run is"
+  end
+
   def test_rerun_supersedes_dropped_entries_drop_their_edges
     doc = make_document(urn: "urn:nabu:local-library:slavistics:leskien",
                         related: ["urn:nabu:ccmh:mar:mt", "urn:nabu:ccmh:zog:mt"])

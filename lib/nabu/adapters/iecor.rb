@@ -7,7 +7,7 @@ require_relative "iecor_cldf_parser"
 module Nabu
   module Adapters
     # IE-CoR — the Indo-European Cognate Relationships database (P18-5;
-    # docs/pie-survey.md §1 is the survey of record): the dataset behind
+    # .docs/surveys/pie-survey.md §1 is the survey of record): the dataset behind
     # Heggarty, Anderson & Scarborough et al. 2023 (*Science* 381), 160
     # varieties × 170 Concepticon-linked meanings, 25,731 lexemes in 4,981
     # member-bearing expert-curated cognate sets, 1,036 curated loan events.

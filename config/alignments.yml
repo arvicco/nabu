@@ -40,7 +40,7 @@ nt:
     - document: urn:nabu:proiel:armenian-nt # xcl — classical Armenian NT (sampled)
     - document: urn:nabu:proiel:marianus   # chu — Codex Marianus (OCS)
     # P12-1: the ISWOC adapter landed — the West-Saxon Gospel of Mark mints
-    # native "MARK 1.1" citation-parts (docs/oe-survey.md). Renders "not
+    # native "MARK 1.1" citation-parts (.docs/surveys/oe-survey.md). Renders "not
     # synced" honestly (P11-9 header summary) until the owner-fired first
     # `nabu sync iswoc`.
     - document: urn:nabu:proiel:wscp       # ang — OE Gospel of Mark (ISWOC)
@@ -203,7 +203,7 @@ nt:
         LUKE: urn:nabu:ccmh:zographensis:luk
         JOHN: urn:nabu:ccmh:zographensis:joh
     # P17-1: the two Coptic NT witnesses (Coptic Scriptorium corpora,
-    # docs/coptic-survey.md §6) — witness #14, the complete Sahidic NT
+    # .docs/surveys/coptic-survey.md §6) — witness #14, the complete Sahidic NT
     # (sahidica.nt, 259 chapter files merged to 27 book documents, ~7,906
     # verse units; J. Warren Wells "academic use only" terms → the source's
     # nc class labels every aligned row, the PROIEL-five posture) and

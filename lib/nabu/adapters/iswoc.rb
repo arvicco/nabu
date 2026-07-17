@@ -15,7 +15,7 @@ module Nabu
     # French and nine medieval Spanish/Portuguese chronicles that are outside
     # this corpus's scope; #document_refs keeps only <source language="ang">,
     # judged from the header the inherited discover already peeks — never
-    # from filenames (docs/oe-survey.md; owner-approved plan in backlog
+    # from filenames (.docs/surveys/oe-survey.md; owner-approved plan in backlog
     # P12-1).
     #
     # == Shared urn:nabu:proiel: namespace (TOROT precedent)
@@ -51,7 +51,7 @@ module Nabu
     # bundles proiel/ + torot/ + menotec/ subtrees. If it is ever adopted as
     # upstream, discovery MUST scope to its iswoc/ subdirectory — the sibling
     # subtrees are the same data already synced by the Proiel and Torot
-    # adapters (double-load hazard, docs/oe-survey.md).
+    # adapters (double-load hazard, .docs/surveys/oe-survey.md).
     class Iswoc < Proiel
       # CC BY-NC-SA 3.0 (US) → license_class "nc".
       MANIFEST = Nabu::SourceManifest.new(

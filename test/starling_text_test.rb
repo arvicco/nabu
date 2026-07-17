@@ -33,7 +33,7 @@ class StarlingTextTest < Minitest::Test
     assert_equal "a\\z", decode(+"a\\z")
   end
 
-  # THE survey pin (docs/pie-survey.md §3.1): the Greek font-shift run from
+  # THE survey pin (.docs/surveys/pie-survey.md §3.1): the Greek font-shift run from
   # pokorny #1 MATERIAL. \x01 opens doublebyte set 1; \x83\xC2 is α and the
   # \x83\xC0 pair composes psili+perispomeni — unipro.lst maps the whole run
   # to U+1F06 ἆ. Verified against the live record (".. gr. ἆ Ausruf ..").

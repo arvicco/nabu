@@ -7,7 +7,7 @@ module Nabu
     # The lila-ttl parser family (P18-6): a minimal Turtle-subset triple
     # reader for the CIRCSE/LiLa lexical-resource files — LIV.ttl (657 KB)
     # and BrillEDL.ttl (3.9 MB), nabu's first RDF inputs. Deliberately NOT a
-    # general Turtle parser and NOT a gem (docs/pie-survey.md §2 costed this
+    # general Turtle parser and NOT a gem (.docs/surveys/pie-survey.md §2 costed this
     # at "a ~150-line extraction akin to a JSONL walk"; the rdf-turtle gem
     # would pull the whole rdf dependency family through the CLAUDE.md gem
     # bar for two small, regular files). The subset was censused first-hand

@@ -14,7 +14,7 @@ files:
   - path: cldf/languages.csv
     url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
     whole: false
-    trim: 13 of 160 varieties — IDs 46 (Lithuanian), 80, 100, 105, 110, 112, 129, 173, 177, 245, 259, 298, 303 (the 12 held-mapped varieties of docs/pie-survey.md §1); recipe in README.md
+    trim: 13 of 160 varieties — IDs 46 (Lithuanian), 80, 100, 105, 110, 112, 129, 173, 177, 245, 259, 298, 303 (the 12 held-mapped varieties of .docs/surveys/pie-survey.md §1); recipe in README.md
   - path: cldf/parameters.csv
     url: https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1
     whole: false

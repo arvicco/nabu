@@ -2,7 +2,7 @@
 
 Real upstream sample from the **Cologne Digital Sanskrit Lexicon (CDSL)**
 MW 1899 XML edition (CLAUDE.md fixture rules; fixture plan owner-approved
-2026-07-13, docs/mw-survey.md §6). Every kept record line is **byte-verbatim**
+2026-07-13, .docs/surveys/mw-survey.md §6). Every kept record line is **byte-verbatim**
 upstream data; only the record SET was trimmed. `mw.dtd` and `mwheader.xml`
 are verbatim whole files — the license grant travels inside the fixture
 exactly as upstream ships it inside the zip.
