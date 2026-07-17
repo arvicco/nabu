@@ -535,7 +535,8 @@ shelf yet → "run nabu sync lexica").
 **How a third dictionary plugs in — done (P12-3, Bosworth-Toller).** The
 schema is deliberately language-agnostic (dictionaries.language is a
 column, entries fold by it), and the plug-in went exactly as designed:
-Bosworth-Toller (Old English; docs/oe-survey.md: official CC BY 4.0 LINDAT
+Bosworth-Toller (Old English; .docs/surveys/oe-survey.md — gitignored
+planning material: official CC BY 4.0 LINDAT
 dump, CSV `id;headword;body` with project-XML bodies) is its own registry
 source with a small CSV adapter (`BosworthToller` + the `bosworth-csv`
 parser family — the first non-TEI dictionary) — same `content_kind
@@ -694,7 +695,7 @@ backfill lands in the live db at the next owner-fired
 revisions — expected, journaled).
 
 **Addendum (P17-3): four more shelves, the multi-hop closure, and the
-`borrowed` flag.** The survey (`docs/recon2-survey.md`) landed all four
+`borrowed` flag.** The survey (`.docs/surveys/recon2-survey.md`) landed all four
 served on-axis kaikki extracts as EXTRACTS rows on the SAME
 `wiktionary-recon` source (registry untouched): Proto-Balto-Slavic
 (`ine-bsl-pro`, 491 records — near-zero direct gold value, stated

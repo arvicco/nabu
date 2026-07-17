@@ -2,7 +2,7 @@
 
 Real EpiDoc records + trimmed CSV siblings for the `edh` adapter
 (`Nabu::Adapters::Edh` / `EdhEpidocParser`), per the owner-approved fixture
-plan in `docs/edh-survey.md` §5. Retrieved **2026-07-13** from the EDH Open
+plan in `.docs/surveys/edh-survey.md` §5. Retrieved **2026-07-13** from the EDH Open
 Data Repository (`https://edh.ub.uni-heidelberg.de/data/download/`): the two
 EpiDoc dump zips were downloaded whole and the three records copied out
 **byte-identical**; the two corpus-wide CSVs were trimmed to the header plus
@@ -31,7 +31,7 @@ same way (whole physical lines, byte-identical; neither has pers rows).
 
 - `text/edh_data_text.csv` — 75 columns; carries what the EpiDoc LACKS:
   the per-record language `nl_text` (HD000082 = `GL`; the `langUsage` header
-  is boilerplate — the trap in `docs/edh-survey.md` §1), the diplomatic
+  is boilerplate — the trap in `.docs/surveys/edh-survey.md` §1), the diplomatic
   majuscule `btext`, `tm_nr` (Trismegistos), findspot coordinates, the
   `i_gattung` genre code (raw, `?`-certainty variants), dating
   `dat_jahr_a`/`dat_jahr_e` (signed years, no year 0).

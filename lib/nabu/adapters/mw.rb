@@ -9,7 +9,7 @@ module Nabu
     # (Monier Monier-Williams, Oxford 1899) in the Cologne Digital Sanskrit
     # Lexicon (CDSL) digitization — the FOURTH dictionary-shelf occupant,
     # completing the per-language desk loop LSJ:grc :: L&S:lat :: B-T:ang ::
-    # MW:san (docs/mw-survey.md is the survey of record). Same content_kind
+    # MW:san (.docs/surveys/mw-survey.md is the survey of record). Same content_kind
     # :dictionary routing, same DictionaryDocument/Entry model, dictionary
     # slug mw, language san. Headwords/in-body Sanskrit are SLP1, transcoded
     # to IAST at this boundary (Nabu::Slp1 — the betacode precedent); the

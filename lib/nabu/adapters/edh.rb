@@ -4,7 +4,7 @@ require "csv"
 
 module Nabu
   module Adapters
-    # The EDH adapter (P17-2; docs/edh-survey.md) — the Epigraphic Database
+    # The EDH adapter (P17-2; .docs/surveys/edh-survey.md) — the Epigraphic Database
     # Heidelberg, 82,450 Latin inscriptions, the third documentary shelf
     # beside the papyri and the tablets. A thin composition of the
     # EdhEpidocParser family with EDH's Open Data dump layout: nine EpiDoc

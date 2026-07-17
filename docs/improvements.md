@@ -205,7 +205,7 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
-### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (docs/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family. ALL THREE SYNCED LIVE 2026-07-14 (owner-fired): iecor 4,981 entries / 26,325 reflex edges (2,308 loan-flagged) + 143 language notes accreted into the local-language dossiers; liv 305 entries / 374 edges; edl 2,860 entries across two shelves / 2,653 edges — the crosswalk stands at 1,036,224 edges across thirteen shelves. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (.docs/surveys/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family. ALL THREE SYNCED LIVE 2026-07-14 (owner-fired): iecor 4,981 entries / 26,325 reflex edges (2,308 loan-flagged) + 143 language notes accreted into the local-language dossiers; liv 305 entries / 374 edges; edl 2,860 entries across two shelves / 2,653 edges — the crosswalk stands at 1,036,224 edges across thirteen shelves. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
 
 **What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
 \*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already
@@ -251,7 +251,8 @@ capability — no other tool joins reconstructions to a private attested
 corpus; the owner's explicitly named axis.
 **Cons/costs.** Asterisk conventions and cross-extract identity are
 messy (\*o(b) vs \*ob); Wiktionary reconstructions are crowd-curated (not
-Derksen — and Derksen is Brill-blocked, docs/slavic-survey-2.md); the
+Derksen — and Derksen is Brill-blocked, .docs/surveys/slavic-survey-2.md,
+gitignored planning material); the
 language-code posture needs a real design call, not a hack.
 **Effort.** fable (identity/posture design) + opus (adapter config +
 descendants crosswalk); 1–2 packets. NO adapter in P13-10 by owner scope.
@@ -320,7 +321,7 @@ downstream; and honestly: no stated owner research axis in Arabic yet.
 Park until the axis exists; the corpus can absorb it whenever.
 **Effort.** scout + fable family, when wanted.
 
-### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [gated — see docs/slavic-survey.md]
+### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [gated — see .docs/surveys/slavic-survey.md]
 
 Surveyed and honestly BLOCKED (license/no-export/scans-only). The unblock
 paths are noted in the survey: writing for data grants (`research_private`
@@ -508,7 +509,7 @@ rather than a decision to make.
       brings the West-Saxon Mark into the hub as witness #8) + ASPR poetry
       (small new TEI family — Beowulf, Exeter Book, fully open) +
       Bosworth-Toller onto the reference shelf (CC BY 4.0 CSV). All three
-      pre-scouted in docs/oe-survey.md.
+      pre-scouted in .docs/surveys/oe-survey.md.
    b. **"The corpus reads itself"**: intertext engine (1.1) + time/place
       axes (1.4) + fragment search (1.5); links table (1.8) lands with
       whichever edge-producer ships first.

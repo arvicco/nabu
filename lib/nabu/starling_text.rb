@@ -5,7 +5,7 @@ require_relative "normalize"
 module Nabu
   # StarLing → Unicode text decoder (P22-0), the boundary transcoder behind
   # the starling-dbf parser family (Betacode/SLP1's sibling for the Tower of
-  # Babel databases; docs/pie-survey.md §3.1).
+  # Babel databases; .docs/surveys/pie-survey.md §3.1).
   #
   # == The encoding (from the published StarLing package, help/encoding.htm)
   #
