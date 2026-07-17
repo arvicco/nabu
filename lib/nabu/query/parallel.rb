@@ -130,6 +130,16 @@ module Nabu
       DAMASKINI_DOCUMENT = /\A(?<work>urn:nabu:damaskini:[^:]+?)(?:-en)?\z/
       private_constant :DAMASKINI_DOCUMENT
 
+      # A SuttaCentral text urn (P26-1): the root text IS the work
+      # (urn:nabu:suttacentral:mn1), its aligned English is the -en variant,
+      # suffix = the shared bilara segment id — verse pairs on every shared
+      # segment, honest one-sided rows where a translation expands or skips.
+      # Stems are hyphen-rich (dhp21-32, pli-tv-bu-vb-as1-7), so the split
+      # anchors on the literal -en tail, exactly the Damaskini stance (no
+      # upstream stem ends in "-en" — censused, frozen).
+      SUTTACENTRAL_DOCUMENT = /\A(?<work>urn:nabu:suttacentral:[^:]+?)(?:-en)?\z/
+      private_constant :SUTTACENTRAL_DOCUMENT
+
       def initialize(catalog:)
         @catalog = catalog
       end
@@ -212,7 +222,7 @@ module Nabu
         if (match = urn.match(CTS_DOCUMENT))
           [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
         elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT) ||
-                       urn.match(DAMASKINI_DOCUMENT))
+                       urn.match(DAMASKINI_DOCUMENT) || urn.match(SUTTACENTRAL_DOCUMENT))
           [match[:work], @catalog[:documents].where(
             Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
           )]
