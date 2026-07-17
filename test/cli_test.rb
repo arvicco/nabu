@@ -1436,14 +1436,19 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_note_scripted_append_writes_canonical_syncs_and_renders_on_show
+  def test_note_scripted_append_is_surgical_fast_and_renders_on_show
     with_note_env do |config, _root|
       out, _err, status = with_config(config) do
         run_cli(["note", ILIAD_DOC, "Collate against Jagić 1883.", "--tags", "collation,ocs"])
       end
       assert_nil status
       assert_match(/noted\s+#{Regexp.escape(ILIAD_DOC)}/, out)
-      assert_match(/local-notes\s+\S+\s+\+1 added/, out, "the shelf's ordinary sync runs after the append")
+      # The 2026-07-18 owner defect: the append ran the shelf's FULL sync
+      # (LocalFetch discovery + the corpus indexer — minutes for one line).
+      # The fast path replaces one topic's derived rows surgically: no sync
+      # furniture may ever appear here again.
+      refute_match(/loading…|indexed \d+ passages|discovery:/, out,
+                   "a note append must never run the sync pipeline")
       assert_match(%r{try: bin/nabu show #{Regexp.escape(ILIAD_DOC)}}, out)
       notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
       assert_equal [ILIAD_DOC], notes.records.map(&:urn)
@@ -1485,7 +1490,8 @@ class CLITest < Minitest::Test
       assert_match(/reads \(dangling\)/, out, "the append says the urn is not held yet")
       listed, _err, list_status = with_config(config) { run_cli(%w[note --list]) }
       assert_nil list_status
-      assert_match(/urn:nabu:planned:vaillant \(dangling\) — \(acquisitions, \d{4}-\d{2}-\d{2}\) Order the reprint\./,
+      pattern = /urn:nabu:planned:vaillant \(dangling\) — \[\h{8}\] \(acquisitions, \d{4}-\d{2}-\d{2}\)/
+      assert_match(pattern,
                    listed)
     end
   end
@@ -1526,12 +1532,65 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_note_list_shows_stable_computed_ids
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "First."]) }
+      out, = with_config(config) { run_cli(%w[note --list]) }
+      id = out[/\[([0-9a-f]{8})\]/, 1]
+      refute_nil id, "--list shows the 8-hex computed id"
+      again, = with_config(config) { run_cli(%w[note --list]) }
+      assert_includes again, "[#{id}]", "ids are content-derived — stable across reads"
+    end
+  end
+
+  def test_note_rm_removes_one_note_and_its_derived_row
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "Keep me."]) }
+      with_config(config) { run_cli(["note", ILIAD_DOC, "Remove me."]) }
+      out, = with_config(config) { run_cli(%w[note --list]) }
+      id = out[/\[([0-9a-f]{8})\] \(notes, [^)]+\) Remove me\./, 1]
+      refute_nil id
+      removed, _err, status = with_config(config) { run_cli(["note", "--rm", id]) }
+      assert_nil status
+      assert_match(/removed\s+\[#{id}\]/, removed)
+      refute_match(/loading…|indexed \d+ passages/, removed, "removal stays surgical")
+      listing, = with_config(config) { run_cli(%w[note --list]) }
+      assert_includes listing, "Keep me."
+      refute_includes listing, "Remove me."
+      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      assert_equal ["Keep me."], notes.records.map(&:note)
+    end
+  end
+
+  def test_note_rm_last_note_deletes_the_topic_file_and_rows
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "Only one.", "--topic", "solo"]) }
+      out, = with_config(config) { run_cli(%w[note --list --topic solo]) }
+      id = out[/\[([0-9a-f]{8})\]/, 1]
+      _rm, _err, status = with_config(config) { run_cli(["note", "--rm", id, "--topic", "solo"]) }
+      assert_nil status
+      refute_path_exists File.join(config.canonical_dir, "local-notes", "solo.yml"),
+                         "an empty notes file is furniture, not content"
+      listing, = with_config(config) { run_cli(%w[note --list --topic solo]) }
+      assert_match(/no notes yet/, listing)
+    end
+  end
+
+  def test_note_rm_unknown_id_is_an_honest_miss
+    with_note_env do |config, _root|
+      with_config(config) { run_cli(["note", ILIAD_DOC, "Something."]) }
+      _out, err, status = with_config(config) { run_cli(%w[note --rm deadbeef]) }
+      assert_equal 1, status
+      assert_match(/no note with id deadbeef/, err)
+    end
+  end
+
   def test_note_list_is_bounded_and_topic_narrowed
     with_note_env do |config, _root|
       with_config(config) { run_cli(["note", ILIAD_DOC, "General note."]) }
       with_config(config) { run_cli(["note", "#{ILIAD_DOC}:1", "Logged.", "--topic", "reading-log"]) }
       out, = with_config(config) { run_cli(%w[note --list --limit 1]) }
-      assert_match(/— \(notes, .*\) General note\./, out)
+      assert_match(/— \[\h{8}\] \(notes, .*\) General note\./, out)
       assert_match(/… and 1 more \(--limit lifts/, out, "the honest total survives the bound")
       narrowed, = with_config(config) { run_cli(%w[note --list --topic reading-log]) }
       assert_match(/Logged\./, narrowed)
@@ -1573,7 +1632,7 @@ class CLITest < Minitest::Test
       db.disconnect
       out, _err, status = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
       assert_nil status
-      assert_match(/owner notes \(1\):\n  \(notes, 2026-07-16\) The anchor verse of the survey\./, out,
+      assert_match(/owner notes \(1\):\n  \[\h{8}\] \(notes, 2026-07-16\) The anchor verse of the survey\./, out,
                    "notes are a lane beside the mined edges")
     end
   end

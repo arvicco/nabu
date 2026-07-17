@@ -41,8 +41,9 @@ material, and object type, with uncertain upstream attributions preserved
 as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 2,852,069 gold lemma annotations in fifteen
-languages — inflection and suppletion included:
+than surface string, over more than 2.85 million gold lemma annotations in
+seventeen languages (Old Irish and Bulgarian joined on 17 July 2026) —
+inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
@@ -148,8 +149,10 @@ never captive to its own tooling.
 ## The reference desk
 
 **Dictionary lookup** (`nabu define LEMMA`) queries the reference shelf
-(LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, and the
-reconstruction dictionaries), with the entry's citations resolved to live
+(LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, the
+reconstruction dictionaries, and — since 17 July 2026 — Vasmer and the
+other StarLing bases and the Slovenian historical dictionaries), with the
+entry's citations resolved to live
 passages in the local catalog:
 
 ```
@@ -188,6 +191,10 @@ Since 14 July 2026 three expert-curated witnesses answer beside the
 Wiktionary-derived chains: the IE-CoR cognacy database (4,981 cognate
 sets), the LIV verbal roots, and de Vaan's Latin etymological dictionary —
 so the same walk can be checked against independently curated scholarship.
+The StarLing bases joined on 17 July 2026 (Pokorny, Nikolayev's PIE
+database, Vasmer, Common Germanic, Baltic), and where the crosswalk has
+no reconstruction path for a form, `etym` now falls back to the plain
+dictionary lookup rather than missing what `define` would find.
 
 **Language cards** (`nabu language CODE`) explain any language code the
 library surfaces — the corpus languages and the 803 Wiktionary etymology
@@ -267,10 +274,40 @@ file is copied in (never moved), metadata candidates are derived
 mechanically (PDF metadata, filename heuristics, sha256) and confirmed
 interactively, with AI assistance (`--assist` pipes a brief to any
 suggester command and prefills the prompts), or scripted (`--yes` plus
-flags); the shelf then syncs and the new urn is printed. Everything on
+flags); the shelf then syncs and the new urn is printed. The command
+also accepts http(s) URLs, downloading first (redirects followed) and
+recording the given address in the manifest. Everything on
 this shelf defaults to the `research_private` license class — catalogued
 and searchable locally, never served or redistributed. The same command
-scaffolds a language dossier (`ingest --shelf language CODE`).
+scaffolds a language dossier (`ingest --shelf language CODE`) or a
+source dossier (`ingest --shelf source SLUG`).
+
+**The content census** (`nabu list [SOURCE]`) is the what-is-held view
+beside `nabu status`'s sync-state view: bare, it prints one line per
+shelf with document, passage, and entry counts, languages, and the
+effective license-class mix; with a source it prints that shelf's card —
+identity, credit line, the curated dossier description, per-language
+breakdown, and date-axis and facet coverage — and
+`--documents` / `--entries` / `--collections` enumerate the holdings
+with filters.
+
+```
+$ bin/nabu list
+$ bin/nabu list corph --documents --limit 10
+```
+
+**Owner notes** (`nabu note URN [TEXT]`) record your own annotations —
+scholia of one's own — against any citable URN the corpus knows:
+documents, passages, ranges, or dictionary entries. The URN is resolved
+against the catalog before anything is written; the notes live as plain
+YAML on a local shelf, render wherever the target is shown (`show`,
+`define`, `links`), and are served to AI clients under the same
+withholding rules as their targets. A bare `nabu note URN` reads back
+what you said; `--list` enumerates.
+
+```
+$ bin/nabu note urn:nabu:ccmh:mar:mt "Collate against Jagić 1883 before citing."
+```
 
 The remaining commands keep the collection alive: `nabu quickstart` syncs
 a curated starter shelf (four sources, about 690 MB) and prints the first

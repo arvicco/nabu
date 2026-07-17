@@ -7936,6 +7936,54 @@ FOLLOW-UPS (journaled, not built):
   beyond the v1 token contract.
 - Language dossier: `nabu ingest --shelf language sga` once live (owner).
 
+## P25-3 · Reference-docs + site truth pass — the public face catches up with Phases 20–25  [tier: fable] [status: done 2026-07-17] [deps: P25-0, P25-1, P25-2]
+The owner asked whether the reference documentation and site were updated
+after the expansion; the answer was no — ~6 phases stale since the
+P19/v1.0.0 sync. Scope: docs/library.md per-shelf stories for every
+`rake site:check` drift shelf; site catch-up; one news post; README
+numbers + command table; 02-sources/ops only where flat-out false.
+All numbers verbatim from the 2026-07-17 live census (38 sources ·
+172,189 docs · 4,308,814 passages · 633,137 entries).
+
+SHIPPED:
+- docs/library.md: header totals rewritten (38 sources, 27 dictionary
+  shelves, gold-lemma languages 15→17 with the row-census caveat stated
+  honestly); new sections §8j StarLing (five bases, the written grant +
+  compiler-credit story), §8k sl-lexica (Pleteršnik/JSV/besedje16), §8l
+  Celtic axis (corph/riig/ogham + the kaikki/UD riders); §8e gains the
+  damaskini block; §8i local shelves rewritten (four shelves;
+  local-library 20 docs/8,725 passages, ingest URL intake; local-source
+  37 dossiers; local-notes); §6 treebank counts + Old Irish pair; §4/§8g
+  papyri + EDH counts refreshed; §9 gains list/note/dossier-gate bullets
+  and the ingest-URL story; `lexica`/`bosworth-toller`/`mw` slugs
+  backticked so the P24-0 mention rule sees them. Drift rule re-run
+  clean: every enabled slug now backtick-mentioned.
+- README.md: numbers paragraph (2026-07-17 census), shelf table (papyri/
+  EDH/treebanks corrected, Slavic row + damaskini, new Celtic row,
+  reference row at 633,137), registry paragraph (38 sources, StarLing/
+  sl-lexica/damaskini/Celtic), Epigraphists updated + Celticists bullet,
+  command table gains `nabu note` and URL-aware `ingest`, lemma rows
+  15→17 languages.
+- site/: library.md (intro, table + Celtic row, new Celtic section,
+  damaskini/reference/local-shelves prose), index.md holdings, sources.md
+  (34 upstream sources, six new rows, UD row, local shelves,
+  acknowledgements), tools.md (lemma count, ingest URLs, new list/note
+  subsections, define/etym StarLing truth), faq.md (holdings + ingest-URL
+  answers), languages.md (sga/xtg/pgl/bul rows, new dictionary rows,
+  gold-lemma section 17 languages). News post
+  2026-07-18-the-library-since-1-0.md — the expansion since 1.0, honest
+  numbers, explicitly NOT a release (the v1.1 tag question stays open).
+- docs/02-sources.md: rows 56–60/63–65 status fragments READY→LIVE with
+  census counts (nothing else touched). docs/ops.md checked — §13 already
+  truthful (URL intake documented), no edit.
+
+HONESTY (numbers not verifiable from the census, stated as such in the
+docs): fresh passage_lemmas row total (last verified 2,852,069 at
+2026-07-14; sga/bul layers landed since), EDH per-language split and
+dated-doc count (2026-07-14 figures kept with their as-of date), papyri
+per-language split (same). Suite + lint green at hand-off; sha in
+worklog `—` (orchestrator fills at merge).
+
 # ── Phase 26 queue: biblical–Indic batch (owner-approved as-is, 2026-07-17; behind Celtic) ─
 # Survey: .docs/surveys/biblical-indic-survey.md (all 5 lanes READY, no
 # unlock emails). Phasing per survey §6:
