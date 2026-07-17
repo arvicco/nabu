@@ -7971,3 +7971,112 @@ worklog `—` (orchestrator fills at merge).
 #    JSON update channel = license_watch item.
 # Riders: 02-sources row 7 correction at DCS promotion; row 44
 #    footnote (Diorisis LXX = another Rahlfs dead end).
+
+# ── Phase 26 ──────────────────────────────────────────────────────────
+
+## P26-0 · lemma-tier column + DCS — gold Sanskrit  [tier: fable] [status: done 2026-07-18 — tier machinery + DCS adapter shipped, enabled:false awaiting owner sync; verdicts below] [deps: —]
+Queue item 1 (biblical–Indic batch, survey §6): the gold/silver lemma
+tier lands BEFORE any silver source exists (Diorisis is queue item 5),
+so the semantics are pinned by tests while every live source is still
+gold; then DCS proves the gold path with the first gold Sanskrit.
+
+SHIPPED — the tier:
+- sources.yml `lemma_tier: gold|silver` per source, ABSENT = GOLD (zero
+  churn for every existing entry; SourceRegistry validates, and
+  #lemma_tiers hands only the non-gold map downstream — absent-is-gold
+  is the wire format end to end).
+- TIER-MECHANISM VERDICT: the per-row tier lives on passage_lemmas in
+  fulltext.sqlite3 — a FULLTEXT-side column, NOT a catalog migration.
+  passage_lemmas is Indexer-built, drop-and-rebuild, never migrated
+  (the P7-5 stance), and the tier is registry posture × source
+  identity, both known at index-build time; sync's reindex and rebuild
+  both thread SourceRegistry#lemma_tiers into Indexer.rebuild!, which
+  resolves source_id→tier once per pass (no third join on the
+  streaming query). Pre-tier fulltext files keep serving: consumers
+  probe for the column and read all-gold (the borrowed_column?
+  pre-migration precedent) — correct, since only gold sources existed
+  before the column.
+- attested_count stays GOLD-ONLY everywhere; ReflexViews resolves a
+  separate labeled silver_count beside it. Renders (define/etym CLI +
+  MCP reflex payloads): "1 passage (+2 silver)"; silver-only reflexes
+  get their own "silver-only (automatic lemmatization…)" section,
+  "silver N passages" — the NEVER-A-BARE-NUMBER rule is pinned by
+  explicit render tests stated as refutations (a silver count must
+  never render where a reader could take it for gold, and gold+silver
+  must never sum).
+- search --lemma includes silver hits with per-hit [silver] labels
+  (gold stays unlabeled — the pre-tier render exactly), a silver
+  footer total, and --gold-only (requires --lemma; refuses --near);
+  MCP lemma hits mirror the labels (tier key on non-gold hits only).
+  `nabu language` scopes its gold-labeled lemma counts to the gold
+  tier.
+- JOURNALED for the Diorisis packet (not built — no silver rows exist
+  yet, so behavior today is identical): the OTHER lemma-table
+  consumers still read both tiers unlabeled — cognates' witness
+  lookups, vocab's corpus frequencies, concord/proximity's
+  surface-form expansion, ReflexRootsIndexer's language scope. Each
+  needs a labeled-or-scoped decision WHEN silver rows first land;
+  grep Store::Indexer::LEMMA_TABLE for the census.
+
+SHIPPED — DCS (Digital Corpus of Sanskrit):
+- 02-sources row 7 was stale TWICE (nonexistent "dcs-data" repo,
+  "custom text format") — CORRECTED: the corpus is standard CoNLL-U
+  (UD-compliant since Aug 2022) at dcs/data/conllu/ inside
+  OliverHellwig/sanskrit. Census at fixture commit 04e0778d
+  (2026-07-18): 15,900 .conllu chapter files / 270 text dirs /
+  ~844 MB / ~5.46M words, + 7,227 .conllu_parsed automatic siblings
+  (NEVER ingested — the *.conllu glob cannot match them, test-pinned)
+  + one stray zero-byte extensionless file (ignored). CC BY 4.0
+  verbatim in BOTH data readmes (quoted in MANIFEST.license, row 7,
+  fixture README).
+- GOLD GATED ON THE MACHINE DECLARATION: lookup/chapter-info.xml
+  (8.9 MB, XML::Reader-streamed per the >5 MB rule) declares
+  <layer type="gold">lexicon</layer> + morpho-syntax for ALL 15,900
+  chapters (1,780 add gold syntax = the Vedic Treebank, the only
+  chapters with filled HEAD/DEPREL); an undeclared or non-gold
+  chapter QUARANTINES with a message naming the gate — never a silent
+  skip, never prose-based gold. lemma_tier ABSENT in sources.yml =
+  gold, by the tier's own contract.
+- GRAIN VERDICT (censused): document per chapter FILE — the corpus's
+  own unit ("each chapter … is in a separate file"); passage per
+  sentence block; urns from upstream's permanent numeric ids,
+  urn:nabu:dcs:<textId>:<chapterId>:<sent_id> (filenames carry
+  spaces/commas/diacritics — names live in titles/metadata). sent_id
+  shapes vary per chapter ("556276_1" vs "10902") — verbatim, both
+  honest. Chapter metadata rides the document: text/chapter names +
+  ids, position, dcsTimeSlot, gold_layers, Vedic <details>
+  (register/veda → document facets).
+- THE FOLD-JOIN PROOF (scout 7/7, now test-pinned): DCS kaṇṭha (2
+  fixture passages) and śīghrá light ReflexViews attested_count
+  through a reflex row folded exactly as starling piet folds its IND
+  stems (fold("kaṇṭha")="kantha", fold("śīghrá")="sighra"); DCS aṃśa
+  hits carry the MW gloss end-to-end on real fixtures of both sources
+  (fold("aṃśa")="amsa"=fold(SLP1 "aMSa")) — zero new fold rules.
+- DEDUP PIN (no dedup wanted): ud/sanskrit-vedic is the same Hellwig
+  Vedic material at a different grain (UD conversion there, native
+  chapters here) — two honest witnesses, the MW-beside-kaikki
+  precedent; the UD dedup guard is for RE-EXPORTS of already-synced
+  sources, which this is not. Pinned in the adapter test header so
+  nobody "fixes" it later.
+- FETCH DESIGN: GitFetch grew an optional sparse: cone (blobless
+  --no-checkout clone + sparse-checkout set --no-cone + checkout;
+  pulls scope the deletion diff/attic to the cone) — the repo is
+  ~1.7 GB, the cone (dcs/data/conllu + dcs/data/readme.md) ~844 MB on
+  disk; git compresses CoNLL-U hard, so expect the first sync to
+  TRANSFER a fraction of that (hundreds of MB), then discover/parse
+  15,900 chapters. Registry enabled:false, sync_policy manual.
+- Fixtures: 3 real chapters (AU 1,1 whole ×35 blocks incl. gold
+  syntax + details; two Suśruta chapters trimmed to header + first 3
+  + the kaṇṭha/śīghra/aṃśa blocks), the trimmed .conllu_parsed
+  sibling (never-discovered pin), the 3 chapter-info entries
+  byte-verbatim, both readmes whole; README + manifest.yml with the
+  pinned commit and re-trim procedure.
+
+Tests +42 (registry 2, indexer 2, lemma search 4, reflex_views 4 [new
+mirror file], language_info 1, cli 4, mcp 2, git_fetch 2, dcs 21 incl.
+conformance/idempotent double-load/gold-gate quarantines/tier + join
+pins/sparse local-git fetch). Suite 3,156 runs / 37,959 assertions
+exit 0 (0 skips) · lint 406 files exit 0. OWNER QUEUE:
+bin/nabu sync dcs (sparse clone, ~844 MB cone), eyeball
+urn:nabu:dcs:5:3656 + `nabu search --lemma kaṇṭha` + 5 random chapters,
+flip enabled, rebuild/reindex.

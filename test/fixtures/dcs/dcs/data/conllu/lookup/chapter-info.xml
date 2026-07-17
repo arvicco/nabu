@@ -1,0 +1,49 @@
+<info>
+		<chapter>
+			<path>Suśrutasaṃhitā/Suśrutasaṃhitā-0034-Su, Sū., 35-3363.conllu</path>
+			<textName>Suśrutasaṃhitā</textName>
+			<textId>5</textId>
+			<chapterName>Su, Sū., 35</chapterName>
+			<chapterId>3363</chapterId>
+			<chapterPosition>35</chapterPosition>
+			<dcsTimeSlot>3</dcsTimeSlot>
+			<annotation>
+				<layer type="gold">morpho-syntax</layer>
+				<layer type="gold">lexicon</layer>
+			</annotation>
+		</chapter>
+		<chapter>
+			<path>Suśrutasaṃhitā/Suśrutasaṃhitā-0115-Su, Ka., 4-3656.conllu</path>
+			<textName>Suśrutasaṃhitā</textName>
+			<textId>5</textId>
+			<chapterName>Su, Ka., 4</chapterName>
+			<chapterId>3656</chapterId>
+			<chapterPosition>116</chapterPosition>
+			<dcsTimeSlot>3</dcsTimeSlot>
+			<annotation>
+				<layer type="gold">morpho-syntax</layer>
+				<layer type="gold">lexicon</layer>
+			</annotation>
+		</chapter>
+		<chapter>
+			<path>Aitareyopaniṣad/Aitareyopaniṣad-0000-AU, 1, 1-8816.conllu</path>
+			<textName>Aitareyopaniṣad</textName>
+			<textId>421</textId>
+			<chapterName>AU, 1, 1</chapterName>
+			<chapterId>8816</chapterId>
+			<chapterPosition>1</chapterPosition>
+			<dcsTimeSlot>1</dcsTimeSlot>
+			<details>
+				<timeSlot>4-PL</timeSlot>
+				<register>prose</register>
+				<veda>RV</veda>
+				<shakha>Āśvalāyana</shakha>
+				<group>U</group>
+			</details>
+			<annotation>
+				<layer type="gold">morpho-syntax</layer>
+				<layer type="gold">lexicon</layer>
+				<layer type="gold">syntax</layer>
+			</annotation>
+		</chapter>
+</info>
