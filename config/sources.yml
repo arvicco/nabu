@@ -557,7 +557,7 @@ corph:
 
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
-  enabled: false   # flip after the owner-fired first sync (~353 MB clone of
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced, --parallel eyeballed)
                    # bilara-data at census time; expected ≈7,310 root docs /
                    # ≈445,600 pli+pra passages + ≈4,712 -en siblings —
                    # CLAUDE.md checklist §6: eyeball
@@ -580,7 +580,7 @@ suttacentral:
 
 oshb:
   adapter: Nabu::Adapters::Oshb
-  enabled: false   # P26-3: awaiting the owner-fired first sync (~174 MB
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced, three-legged align eyeballed)
                    # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
                    # 39 OSIS books / ~23,213 verses / ~305,507 morph-tagged
                    # words projected). CLAUDE.md checklist §6: bin/nabu sync
@@ -601,7 +601,7 @@ oshb:
 
 sarit:
   adapter: Nabu::Adapters::Sarit
-  enabled: false   # P26-2: awaiting the owner-fired first real sync (~204 MB
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
                    # git clone — 170 MB TEI + 33 MB .git at HEAD 1eac9ee;
                    # CLAUDE.md checklist §6: bin/nabu sync sarit, eyeball
                    # nabu show urn:nabu:sarit:astavakragita:1.1, a Devanagari
@@ -622,7 +622,7 @@ sarit:
 
 dcs:
   adapter: Nabu::Adapters::Dcs
-  enabled: false   # awaiting the owner-fired first real sync (P26-0): a SPARSE
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced, MW joins eyeballed)
                    # GitFetch of github.com/OliverHellwig/sanskrit scoped to
                    # dcs/data/conllu (+ dcs/data/readme.md) — the cone is
                    # ~844 MB on disk (15,900 gold chapter files / 270 texts /
