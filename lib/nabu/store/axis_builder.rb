@@ -49,19 +49,22 @@ module Nabu
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
-                            :corph, :riig, :tla_hf, :aes,
+                            :corph, :riig, :tla_hf, :aes, :open_etruscan,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
-                            :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated) do
+                            :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
+                            :open_etruscan_undated, :open_etruscan_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
-                       tla_hf: 0, tla_hf_undated: 0, aes: 0, aes_undated: 0, **)
+                       tla_hf: 0, tla_hf_undated: 0, aes: 0, aes_undated: 0,
+                       open_etruscan: 0, open_etruscan_undated: 0, open_etruscan_invalid: 0, **)
           super
         end
 
         def total
-          hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig + tla_hf + aes
+          hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig + tla_hf +
+            aes + open_etruscan
         end
       end
 
@@ -84,18 +87,22 @@ module Nabu
         riig = RiigDates.build(catalog: catalog, canonical_dir: canonical_dir)
         tla_hf = TlaHfDates.build(catalog: catalog, canonical_dir: canonical_dir)
         aes = AesDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        open_etruscan = OpenEtruscanDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
                     riig: riig[:documents], tla_hf: tla_hf[:documents], aes: aes[:documents],
+                    open_etruscan: open_etruscan[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
                     edh_undated: edh[:undated], edh_invalid: edh[:invalid],
                     corph_undated: corph[:undated],
                     riig_undated: riig[:undated], riig_invalid: riig[:invalid],
-                    tla_hf_undated: tla_hf[:undated], aes_undated: aes[:undated])
+                    tla_hf_undated: tla_hf[:undated], aes_undated: aes[:undated],
+                    open_etruscan_undated: open_etruscan[:undated],
+                    open_etruscan_invalid: open_etruscan[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -250,3 +257,4 @@ require_relative "axis_builder/corph_dates"
 require_relative "axis_builder/riig_dates"
 require_relative "axis_builder/tla_hf_dates"
 require_relative "axis_builder/aes_dates"
+require_relative "axis_builder/open_etruscan_dates"

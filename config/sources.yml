@@ -775,6 +775,71 @@ aed:
   # re-fetch is an owner decision.
   sync_policy: manual
 
+# P29-0: the Etruscan pair — the OpenEtruscan corpus + the Larth ETP
+# glossary (posture attribution throughout; the Larth provenance caveat
+# dissolved 2026-07-14 when upstream added LICENSE CC BY 4.0 on owner
+# request). The kaikki ett extract rides the wiktionary-recon row above
+# (no registry change — the P25-2 precedent).
+open-etruscan:
+  adapter: Nabu::Adapters::OpenEtruscan
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync open-etruscan — two
+                   # FileFetch GETs, 770,613 B Zenodo CSV + 302,495 B Larth
+                   # findspots ≈ 1.0 MB; expect 6,248 docs — 6,094 clean +
+                   # 154 needs_review — plus 1,798 -en siblings, 319
+                   # ocr_failed skipped by rule; eyeball
+                   # nabu show urn:nabu:open-etruscan:cr-2.20 --parallel,
+                   # `nabu search puce` landing on the transliteration
+                   # layer, and 5 random inscriptions, then flip. Expect
+                   # `dated/placed` to pick up ~304 dated + ~396 placed
+                   # rows at the next rebuild, 3 year-0 bounds counted
+                   # invalid.)
+  # OpenEtruscan — Etruscan Machine Learning Corpus (Zenodo 20075836
+  # v1.0.0, 2026-05-07, cc-by-4.0; checked 2026-07-18: no v2 deposit —
+  # v1.0.0 is the only version under concept 20075835). 6,567 inscriptions
+  # (~71% Larth/Vico & Spanakis 2023, ~29% CIE Vol. I), quality-tagged;
+  # ocr_failed rows skipped by rule with discovery-skip accounting. The
+  # findspots sidecar (Larth Data/Etruscan.csv @ pinned commit daf49721)
+  # side-joins 456 city-tagged rows → document_axes places
+  # (AxisBuilder::OpenEtruscanDates; BCE-positive years sign-flipped
+  # there, fixture-pinned). Both artifacts sha256-pinned in the adapter —
+  # drift aborts pre-mutation (owner re-pin decision).
+  sync_policy: frozen
+  # P16-4: the trigram fragment index — inscriptions are the designed
+  # documentary scope; the indexed layer is the scholarly transliteration
+  # (text_normalized derives from it), so damaged-fragment queries speak
+  # Latin letters, not Old Italic codepoints.
+  fuzzy_index: true
+  # translation coverage 1,800/6,567 rows (censused at fixture time):
+  # -en sibling documents ride the same parse (the riig -fr shape). Same
+  # CC BY grant — no license override.
+  translations: true
+  # license_watch candidate (P16-5, owner decision): NOT wired — the
+  # Zenodo API record body carries volatile stats (downloads/views) and
+  # would false-alarm the sha compare (the diorisis figshare lesson); the
+  # record page is an SPA shell. The in-record license field re-reads at
+  # any real refetch, and the deposit is immutable.
+
+larth-etp:
+  adapter: Nabu::Adapters::LarthEtp
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
+                   # GET; expect 1,122 entries; eyeball `nabu define avil`
+                   # (year), `nabu define acil` (the 643/644 homograph
+                   # pair) and 5 random entries, then flip).
+  # Larth ETP glossary — Data/ETP_POS.csv @ pinned commit daf49721
+  # (github.com/GianlucaVico/Larth-Etruscan-NLP, LICENSE CC BY 4.0
+  # re-verified 2026-07-18): 1,122 Etruscan vocabulary rows (952 certain +
+  # 59 uncertain translations, POS + grammatical categories) — the
+  # ETP/Wallace-project scholarly lineage, the SECOND Etruscan dictionary
+  # beside the kaikki ett extract. The sibling raw lists ETPWords/
+  # ETPNames/ETPSuff are the same material pre-merge — journaled, not
+  # ingested. Gold-join censused at fixture time: 649/992 distinct folded
+  # headwords attested in the OpenEtruscan corpus (65.4%), covering
+  # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
+  # occasionally → manual; a re-pin is an owner decision.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

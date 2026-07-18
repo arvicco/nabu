@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The file is a documented TRIM (header + selected byte-verbatim records)
+# of the sha-pinned upstream artifact, so adapter_test stays null (a
+# re-run against the full artifact would false-fail the fixture-count
+# assertions; drift is caught by the adapter's sha pin at any real
+# fetch).
+source: larth-etp
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: ETP_POS.csv
+    url: https://raw.githubusercontent.com/GianlucaVico/Larth-Etruscan-NLP/daf4972175f45b48188fe36671db3a0e081e5130/Data/ETP_POS.csv
+    whole: false
+    trim: header + 9 byte-verbatim rows (indexes 0/2/9/121/461/643/644/647/649 — tuple shapes, uncertainty flag, empty tuple, abbreviation, inferred/suffix flags, homograph pair) — 164,566 B -> ~3 KB; recipe in README.md
