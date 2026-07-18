@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
 
 module Store
   # Nabu::Store::Indexer (P4-1). Catalog is a fresh in-memory SQLite (the house
@@ -339,6 +340,282 @@ module Store
       ensure
         fresh.disconnect
       end
+    end
+
+    # -- incremental per-source refresh (P26-5) ------------------------------
+    # refresh_source! deletes ONE source's rows from the passage-keyed tables
+    # and re-inserts them from the current catalog — the sync-time replacement
+    # for the full drop-and-rebuild. Its contract is ROW IDENTITY: after a
+    # refresh, the fulltext state must equal what a from-scratch rebuild!
+    # would produce (pinned below by building both and comparing row sets).
+
+    def refresh!(slug: "s", **)
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: slug, **)
+    end
+
+    def test_refresh_reindexes_only_that_sources_rows
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "beta", sequence: 0)
+      rebuild!
+
+      # Both sources grow in the catalog; only "s" is refreshed.
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "gamma", sequence: 1)
+      make_passage(lit, urn: "urn:d:lit:2", text_normalized: "delta", sequence: 1)
+      refresh!
+
+      assert_equal %w[urn:d:lit:1 urn:d:s:1 urn:d:s:2], fts.order(:urn).select_map(:urn),
+                   "the refreshed source gains its new row; the other source's slice is untouched"
+    end
+
+    # The FTS-deletion mechanism proof (search before/after): passages_fts is
+    # a REGULAR (contentful) FTS5 table, so per-row DELETE is real deletion —
+    # a removed row must stop matching, and other sources' rows must not.
+    def test_refresh_removes_withdrawn_passages_from_the_index
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "μηνιν αειδε", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "μηνιν ουλομενην", sequence: 0)
+      rebuild!
+      assert_equal 2, match("μηνιν").size, "both searchable before the withdrawal"
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(withdrawn: true)
+      refresh!
+
+      assert_equal %w[urn:d:lit:1], match("μηνιν").map { |row| row.fetch(:urn) },
+                   "the withdrawn passage must stop matching; the other source's hit survives"
+    end
+
+    def test_refresh_returns_the_sources_live_passage_count_only
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1, withdrawn: true)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "gamma", sequence: 0)
+      rebuild!
+
+      assert_equal 1, refresh!, "the count is the SOURCE's live rows, never the corpus total"
+    end
+
+    # The consistency proof: after add + revise + withdraw on one source, an
+    # incremental refresh leaves passages_fts, passage_lemmas (tiers included),
+    # the trigram slice + scope, and the reflex tables row-identical to a
+    # from-scratch rebuild of a fresh fulltext db.
+    def test_refresh_is_row_identical_to_a_full_rebuild
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "outdated", sequence: 1)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "doomed", sequence: 2)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ", sequence: 0,
+                        annotations: token_annotations(%w[στρατηγός στρατηγοσ]))
+      options = { fuzzy_slugs: ["s"], lemma_tiers: { "s" => "silver" } }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, **options)
+
+      # One source mutates: a passage is added, one revised (text AND lemma
+      # annotations change), one withdrawn.
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh", sequence: 3,
+                        annotations: token_annotations(%w[φέρω φέρει]))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
+        text_normalized: "revised", annotations_json: JSON.generate(token_annotations(%w[ὁράω ὁρᾷ]))
+      )
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
+      refresh!(**options)
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
+        %i[passages_fts passage_lemmas passages_trigram passages_trigram_scope
+           reflex_roots reflex_root_stats].each do |table|
+          assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
+                       "#{table} must be row-identical to a from-scratch rebuild"
+        end
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def table_rows(db, table)
+      db[table].all.map { |row| row.sort_by { |key, _| key } }.sort_by(&:inspect)
+    end
+
+    # Bootstrap safety: against a fulltext db that has never been built (the
+    # very first sync), refresh falls back to a FULL rebuild — every source
+    # lands, and the return value is still the refreshed source's own count.
+    def test_refresh_falls_back_to_a_full_rebuild_when_the_index_is_missing
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "beta", sequence: 0)
+
+      assert_equal 1, refresh!, "the fallback still reports the SOURCE's count"
+      assert_equal %w[urn:d:lit:1 urn:d:s:1], fts.order(:urn).select_map(:urn),
+                   "the bootstrap fallback indexes the whole corpus"
+    end
+
+    # A pre-tier fulltext file (passage_lemmas without the P26-0 tier column)
+    # cannot take tiered inserts — refresh detects the old shape and falls
+    # back to the full rebuild, which re-creates the current schema.
+    def test_refresh_falls_back_when_the_lemma_table_predates_the_tier_column
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      rebuild!
+      @fulltext.alter_table(Nabu::Store::Indexer::LEMMA_TABLE) { drop_column :tier }
+
+      assert_equal 1, refresh!
+      assert_equal "gold", lemmas.first.fetch(:tier), "the fallback rebuilt the tiered shape"
+    end
+
+    def test_refresh_updates_the_trigram_slice_of_a_fuzzy_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "ιπποσ", sequence: 0)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: %w[s lit])
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "χαιρειν", sequence: 1)
+      refresh!(fuzzy_slugs: %w[s lit])
+
+      assert_equal %w[urn:d:lit:1 urn:d:s:1 urn:d:s:2], trigrams.order(:urn).select_map(:urn),
+                   "the fuzzy source's trigram slice refreshes; the other slice is untouched"
+      assert_equal %w[lit s], trigram_scope.order(:slug).select_map(:slug)
+    end
+
+    def test_refresh_leaves_the_trigram_index_alone_for_a_non_fuzzy_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "ιπποσ", sequence: 0)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+
+      make_passage(lit, urn: "urn:d:lit:2", text_normalized: "λογοσ", sequence: 1)
+      refresh!(slug: "lit", fuzzy_slugs: ["s"])
+
+      assert_equal %w[urn:d:s:1], trigrams.select_map(:urn),
+                   "a non-fuzzy source's refresh must not touch the trigram index"
+      assert_equal %w[s], trigram_scope.select_map(:slug)
+    end
+
+    # Config-drift, the other direction: a source flagged fuzzy since the
+    # last full build gains its trigram slice AND its scope row at refresh.
+    def test_refresh_adds_the_trigram_slice_of_a_newly_flagged_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)
+      rebuild! # no fuzzy slugs — empty trigram index
+
+      refresh!(fuzzy_slugs: ["s"])
+
+      assert_equal %w[urn:d:s:1], trigrams.select_map(:urn), "the newly flagged source's slice lands"
+      assert_equal %w[s], trigram_scope.select_map(:slug)
+    end
+
+    # Scope honesty on config drift: a source de-flagged since the last full
+    # build loses its trigram rows AND its scope row at its next refresh.
+    def test_refresh_drops_the_trigram_slice_of_a_deflagged_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, fuzzy_slugs: ["s"])
+      assert_equal 1, trigrams.count
+
+      refresh!(fuzzy_slugs: [])
+
+      assert_equal 0, trigrams.count, "the de-flagged source's trigram rows are removed"
+      assert_equal 0, trigram_scope.count, "…and its scope row, so coverage reads honestly"
+    end
+
+    ALIGN_REGISTRY_YAML = <<~YAML
+      nt:
+        witnesses:
+          - label: s-witness
+            extractor: cts-verse
+            documents:
+              MARK: urn:d:s
+    YAML
+
+    def alignment_registry
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "alignments.yml")
+        File.write(path, ALIGN_REGISTRY_YAML)
+        return Nabu::AlignmentRegistry.load(path)
+      end
+    end
+
+    def test_refresh_rebuilds_alignment_refs_when_the_source_holds_a_witness_document
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      registry = alignment_registry
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+      assert_equal 1, @fulltext[:alignment_refs].count
+
+      make_passage(doc, urn: "urn:d:s:1.2", text_normalized: "next verse", sequence: 1)
+      refresh!(alignments: registry)
+
+      assert_equal ["MARK 1.1", "MARK 1.2"], @fulltext[:alignment_refs].order(:ref).select_map(:ref),
+                   "a witness source's refresh regenerates the alignment index"
+    end
+
+    def test_refresh_skips_the_alignment_rebuild_for_a_non_witness_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "prose", sequence: 0)
+      registry = alignment_registry
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+
+      # A sentinel row proves the table was not dropped and rebuilt.
+      @fulltext[:alignment_refs].insert(work: "nt", ref: "SENTINEL", document_urn: "x",
+                                        passage_id: 999, passage_urn: "x", seq: 0)
+      refresh!(slug: "lit", alignments: registry)
+
+      assert_equal 1, @fulltext[:alignment_refs].where(ref: "SENTINEL").count,
+                   "a non-witness source's refresh must not touch the alignment index"
+    end
+
+    def reflex_stats = @fulltext[Nabu::Store::ReflexRootsIndexer::STATS_TABLE]
+
+    def test_refresh_rebuilds_the_reflex_stats_when_the_sources_lemma_rows_change
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      rebuild!
+      assert_equal 1, reflex_stats.where(language: "grc").get(:gold_passages)
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "φερει", sequence: 1,
+                        annotations: token_annotations(%w[φέρω φέρει]))
+      refresh!
+
+      assert_equal 2, reflex_stats.where(language: "grc").get(:gold_passages),
+                   "a lemma-bearing source's refresh re-snapshots the reflex stats"
+    end
+
+    def test_refresh_skips_the_reflex_rebuild_for_a_lemmaless_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "plain", sequence: 0)
+      rebuild!
+
+      # A sentinel row proves the stats table was not dropped and rebuilt.
+      reflex_stats.insert(language: "zz-sentinel", gold_passages: 1)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "more", sequence: 1)
+      refresh!
+
+      assert_equal 1, reflex_stats.where(language: "zz-sentinel").count,
+                   "no lemma rows touched → the reflex closure must not rebuild"
+    end
+
+    # A dictionary sync mints no passages but DOES change the crosswalk the
+    # closure is built from — the caller forces the reflex rebuild.
+    def test_refresh_rebuilds_the_reflex_closure_when_reflexes_changed
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "plain", sequence: 0)
+      rebuild!
+      reflex_stats.insert(language: "zz-sentinel", gold_passages: 1)
+
+      assert_equal 1, refresh!(reflexes_changed: true)
+      assert_equal 0, reflex_stats.where(language: "zz-sentinel").count,
+                   "reflexes_changed forces the closure rebuild"
     end
   end
 end

@@ -113,6 +113,50 @@ What each command does and its exit contract:
   not mounted (the mount-point guard, §9) or any rsync section fails. Full
   detail — the external-volume workflow, the guard, restore, the drill — is §9.
 
+### What `nabu sync <source>` actually does
+
+One sync is four steps, in order, each honest about what it touched:
+
+1. **Fetch canonical.** The adapter brings the upstream snapshot into
+   `canonical/<slug>/` non-destructively: git fetches go through the
+   attic discipline (files upstream scrapped are copied to `.attic/`
+   before the merge, never lost), the >20% mass-deletion breaker can
+   abort the whole sync before anything changes, and the fetched sha is
+   pinned in the history ledger. `--parse-only` skips this step.
+2. **Parse and load the catalog.** Every discovered document is parsed
+   and upserted by URN (unchanged content is skipped byte-identically; a
+   malformed file is quarantined and counted, never silently dropped),
+   and documents that vanished upstream are marked withdrawn — never
+   hard-deleted.
+3. **Derived layers.** Whatever the source's grain mints rides in with
+   the load — dictionary entries and reflex edges, language-dossier
+   records, owner notes — and a reference-bearing shelf re-derives its
+   reference edges into the links journal. (The date/place axes and the
+   facet table regenerate at `nabu rebuild`.)
+4. **Index maintenance — incremental per source (P26-5).** The sync
+   refreshes only THIS source's slice of the fulltext index: its rows
+   are deleted from the search/lemma/trigram tables and re-inserted from
+   the catalog (so a document withdrawn upstream leaves the index here),
+   the alignment index rebuilds only if the source is a registered
+   alignment witness, and the cognate closure only if the source's
+   lemmas or reflex edges changed. Index-inert shelves — notes, language
+   dossiers, source dossiers — skip this step entirely, which is why a
+   `sync local-notes` is instant. The result is row-identical to a full
+   re-index (test-pinned); `nabu rebuild` remains the from-scratch
+   full-reindex path.
+
+One example line, annotated:
+
+```
+corph                    2f4a9c1b8e07  +0 added  ~3 updated  =1281 skipped  -1 withdrawn  !0 errored  indexed 17942 passages (corph)
+```
+
+fetched commit `2f4a9c1b`; 3 documents changed upstream, 1,281 were
+byte-identical, 1 vanished (withdrawn, not deleted), none quarantined;
+the index now carries corph's 17,942 live passages — the count is the
+source's own, not the corpus total, because nothing else was reindexed.
+An index-inert shelf prints no `indexed` fragment at all.
+
 ### What is NOT automated (on purpose)
 
 Per `CLAUDE.md`, **real syncs stay eyeball-verified events.** The weekly

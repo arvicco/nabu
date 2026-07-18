@@ -48,6 +48,11 @@ module Nabu
     # this fraction of a source's live documents. Shares the fetch-side value.
     WITHDRAWAL_THRESHOLD = Nabu::Adapter::MASS_DELETION_THRESHOLD
 
+    # A grain whose content kind mints neither passages nor dictionary
+    # entries cannot change any index — its sync performs NO index work
+    # (P26-5 Part A; pinned by an every-entry-point spy test).
+    INDEX_INERT_KINDS = %i[notes language source].freeze
+
     # What one source's sync did. Mirrors Rebuild::Outcome. On a tripped breaker
     # load_report is nil and #aborted? is true, with +breaker+ carrying the
     # Nabu::SyncAborted (its counts + message) for reporting; otherwise breaker
@@ -141,12 +146,16 @@ module Nabu
       # them before the baseline advances (P18-7: recorded at every ok run).
       warnings = deviation_warnings(source, load_report, adapter)
       Health::QuarantineBaseline.record!(@ledger, entry.slug, errored: load_report.errored)
-      # Reindex the fulltext AFTER the RunRecorder block: the index is
-      # corpus-wide, not per-source, so it must not live inside a source's run
-      # row (an indexing failure surfaces as its own error, never a falsified
-      # run). A full rebuild per successful source is simple and correct;
-      # incremental per-source indexing is the future optimization.
-      indexed = reindex!
+      # Reindex AFTER the RunRecorder block: the index files have their own
+      # lifecycle, so index work must not live inside a source's run row (an
+      # indexing failure surfaces as its own error, never a falsified run).
+      # Incremental since P26-5: an index-inert grain (notes/language/source —
+      # neither passages nor dictionary entries) skips indexing entirely
+      # (indexed nil; the CLI omits the fragment); everything else refreshes
+      # only ITS slice via Indexer.refresh_source!, and +indexed+ is the
+      # SOURCE's live passage count — never the corpus total. `nabu rebuild`
+      # keeps the full Indexer.rebuild! as the from-scratch guarantee.
+      indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -205,18 +214,26 @@ module Nabu
       (delta + [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)]).compact
     end
 
-    # Rebuild the whole FTS5 index (plus lemma + alignment tables) from the
-    # (now-updated) catalog into the fulltext db. Opens its own short-lived
-    # connection to config.fulltext_path so callers need not thread a handle
-    # through. Returns the passage count.
-    def reindex!
+    def index_inert?(adapter)
+      INDEX_INERT_KINDS.include?(adapter.class.content_kind)
+    end
+
+    # Incrementally refresh THIS source's slice of the fulltext index from
+    # the (now-updated) catalog (Store::Indexer.refresh_source!: per-source
+    # FTS/lemma/trigram delete + re-insert; alignment only when the source
+    # holds a registry witness; reflex closure only when its lemma rows or —
+    # for a dictionary sync — the crosswalk changed). Opens its own
+    # short-lived connection to config.fulltext_path so callers need not
+    # thread a handle through. Returns the source's live passage count.
+    def reindex!(entry, adapter)
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
-      Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext,
-                              alignments: AlignmentRegistry.load(@config.alignments_path),
-                              fuzzy_slugs: @registry.fuzzy_slugs,
-                              lemma_tiers: @registry.lemma_tiers)
+      Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
+                                     alignments: AlignmentRegistry.load(@config.alignments_path),
+                                     fuzzy_slugs: @registry.fuzzy_slugs,
+                                     lemma_tiers: @registry.lemma_tiers,
+                                     reflexes_changed: adapter.class.content_kind == :dictionary)
     ensure
       fulltext&.disconnect
     end
