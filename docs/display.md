@@ -58,13 +58,89 @@ bytes:
 **Modes: `--display MODE`** on the render commands:
 
 - `default` — the config-driven policy above.
-- `full` — **no transforms at all**: every stored byte, no isolates. The
-  escape hatch; what you see is what the database holds.
+- `full` — **no transforms at all**: every stored byte, no isolates, no
+  spacing, no colors. The escape hatch; what you see is what the database
+  holds.
 - `plain` — strip every class the language policy defines (`strip` + `keep`):
   consonantal Hebrew, for instance.
+- `translit` (P27-2) — romanized rendering through the language's registered
+  transcoder; see §1a below.
+- `mono` (P27-2) — exactly `default`, minus per-token language coloring;
+  see §1b below.
 
-The mode set is a registry — this phase adds `reading`, `translit` and `mono`
-modes on the same seam, and this table will grow with them.
+The mode set is a registry — the `reading` mode is a future sibling on the
+same seam.
+
+**Grapheme spacing (`spacing:`, P27-2).** A per-language boolean in
+`display.yml`; when true, the render inserts a separator between grapheme
+clusters. Shipped default: `pgl: { spacing: true }` — Primitive Irish is
+attested only in Ogham script, whose letters are stroke clusters on one
+shared stemline and merge into unsegmented runs in a terminal font. Between
+two Ogham letters the separator is U+1680 OGHAM SPACE MARK — the script's
+own stemline-continuing space — so the line stays one stem while letter
+boundaries become visible; `--display full` restores the exact stored run.
+(The corpus's sga-Ogam and und layers can't be keyed per-language without
+hitting Latin-script sga — corph — so they stay unspaced; journaled.)
+
+### 1a. `--display translit` — romanized rendering
+
+Registered transcoders, applied render-time only (footer:
+`display: transliterated (--display full shows all marks)`):
+
+| Languages | Transcoder | Notes |
+|---|---|---|
+| `san` | Devanagari→IAST (`Nabu::Deva`) | IAST shelves (DCS/GRETIL/MW) pass through untouched |
+| `hbo`, `arc` | Hebrew→SBL-style romanization (`Nabu::Hebr`) | general-purpose SBL base with academic ʾ/ʿ/ḥ/ṭ/ś kept where general-purpose would merge distinct letters; every shewa renders ə (vocal/silent is not inferred); no dagesh-forte doubling; matres lectionis render as consonants (*bəreʾshiyt*). Output is LTR Latin — no isolates, and the most legible Masoretic view on a bidi-less terminal (Terminal.app). |
+| `chu`, `orv`, `bul` | Cyrillic→scholarly Latin (`Nabu::Cyrl`) | the display direction of the P27-2 cross-script fold table (ѣ→ě, щ→št, ѫ→ǫ, оу→u); text the source already wrote in Latin (damaskini's diplomatic layer) passes through **byte-identical** — the render layer never rewrites the source's own surface. Combining marks (titla) stay on their letters: stripping is `default` mode's business, not the transcoder's. |
+
+A language with no registered transcoder passes through unchanged — never a
+guessed romanization. **Ogham** deliberately has no transcoder: the corpus
+itself ships the transliteration as a line-aligned *sibling document*
+(`…-translit`, same line numbers) — `nabu show <ogham-urn> --parallel`
+inlines it today, which is the honest surface (a display mode sees only
+text + language, never the catalog; wiring a db lookup into the render seam
+would cross the render-only boundary). Journaled as a possible show-level
+follow-up.
+
+### 1b. Per-token language coloring
+
+Code-switching texts (CorPH's Latin words inside Old Irish sentences,
+OSHB's Aramaic verses inside Hebrew books) carry a per-token `lang` tag in
+their stored token annotations. `nabu show` (single-passage view) colorizes
+tokens whose tag **differs from the passage language** — one stable ANSI
+color per language, named in the footer
+(`display: token colors: lat=cyan …`). The honesty rules:
+
+- **Color only what's honestly tagged**: untagged tokens and base-language
+  tokens stay uncolored. damaskini's tokens carry no language tag (its
+  chu/bul split lives at document grain) — so damaskini text renders
+  uncolored, correctly.
+- A token form that can't be located in the display text paints nothing —
+  never a fabricated span.
+- `NO_COLOR` (any non-empty value) always wins; without it, color appears
+  only on a TTY (`NABU_COLOR=1` forces it for pagers that render ANSI);
+  `--display mono` keeps the default stripping but never colors;
+  `--display full` shows plain stored bytes.
+- Coloring composes with the existing lemma-hit/snippet highlighting — the
+  ANSI escapes are ASCII, untouched by mark stripping and bracket markers.
+
+### 1c. Cross-script search folding (the search layer, not display)
+
+Sibling to the display work, P27-2 extended the **search fold**
+(conventions §9) with per-language *script neutralization*: one language
+spelled in two scripts folds to ONE indexed skeleton, symmetrically at
+index and query time. `search 'धर्मन्'` ≡ `search dharman` (san,
+Devanagari→IAST before the virāma-eating mark strip), and `search vъsta` ≡
+`search въста` ≡ the union of both scripts' hits (chu/orv/bul,
+damaskini's Latin-diplomatic ↔ the Cyrillic shelves). A zero-hit query in
+a script with *no* registered neutralization (Glagolitic, Gothic script)
+prints one honest hint naming what to try.
+
+**Consequence — a fold change invalidates the fulltext index.** The
+neutralization changes `text_normalized` for san/chu/orv/bul passages and
+lemmas, so an index built before P27-2 will miss cross-script queries until
+it is re-derived: one `nabu rebuild` (or per-source `nabu sync <slug>
+--parse-only` resyncs of the affected shelves) refreshes it.
 
 **The honesty footer.** Whenever a transform actually changed something, the
 command ends with one hint line — never silent alteration, and no line when
@@ -129,9 +205,9 @@ not something escape characters from nabu can force:
 |---|---|---|---|
 | Hebrew (hbo/arc) | strips cantillation, keeps points + maqaf, RTL isolates | iTerm2 RTL toggle; Ezra SIL / SBL Hebrew (profile) or Noto Sans Mono (slot) | `bin/nabu show urn:nabu:oshb:gen:1.1` |
 | Greek (grc) | nothing (polytonic intact; `monotonic` opt-in) | any font with polytonic coverage | `bin/nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1` |
-| Cyrillic OCS (chu) | strips titla (titlo/pokrytie/superscripts) | Noto Sans Mono covers the combining range | `bin/nabu align "MARK 2.3"` |
-| Devanagari (san) | strips Vedic accents when present (IAST untouched) | conjunct-capable Devanagari fallback (system default is fine) | `bin/nabu search "dharma" --lang san` |
-| Ogham | nothing | `font-noto-sans-ogham` | `bin/nabu show urn:nabu:ogham:e-dev-001` |
+| Cyrillic OCS (chu) | strips titla (titlo/pokrytie/superscripts); `--display translit` romanizes | Noto Sans Mono covers the combining range | `bin/nabu align "MARK 2.3"` |
+| Devanagari (san) | strips Vedic accents when present (IAST untouched); `--display translit` → IAST | conjunct-capable Devanagari fallback (system default is fine) | `bin/nabu search "dharma" --lang san` |
+| Ogham (pgl) | letter spacing with U+1680 (stemline-continuing); translit via `show --parallel` | `font-noto-sans-ogham` | `bin/nabu show urn:nabu:ogham:e-dev-001` |
 | Coptic | nothing | `font-noto-sans-coptic` | `bin/nabu search ⲛⲟⲩⲧⲉ --lang cop` |
 | Gothic | nothing | `font-noto-sans-gothic` | `bin/nabu search guþ --lang got` |
 | Runic | nothing | `font-noto-sans-runic` | `bin/nabu show urn:nabu:riig:ais-01-01` |
