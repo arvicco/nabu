@@ -722,6 +722,7 @@ tla-hf:
   # transliteration, so no subtag is honest). Versioned artifacts: a v20
   # would be a NEW dataset name — re-fetch is an owner decision.
   sync_policy: manual
+  translations: true
   # German translation coverage is 100% (translation is a required field,
   # censused): -de sibling documents ride the same parse,
   # `show --parallel --lang deu` renders them like the damaskini -en pairs.
