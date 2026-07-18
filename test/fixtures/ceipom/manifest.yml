@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All five CSVs are TRIMS of the full Zenodo v1.3 files (whole: false —
+# a fresh GET returns the full UTF-16 file and is fetched for
+# URL-liveness only, never byte-compared). Trims are BYTE-VERBATIM row
+# slices: BOM + header line + the selected texts' rows, each row's
+# UTF-16LE bytes exactly as upstream serves them (verified subsequence
+# at trim time). adapter_test is null: the adapter test asserts
+# trimmed-set counts, which untrimmed upstream files would false-fail.
+# Zenodo versions are immutable — record 6475427 IS v1.3; drift would
+# mean a NEW record id (a new version), never changed bytes here.
+source: ceipom
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: texts/texts.csv
+    url: https://zenodo.org/records/6475427/files/texts.csv?download=1
+    whole: false
+    trim: 17 of 3,875 text rows (README table; 1,225,788 B -> 5,828 B), BOM+header+rows byte-verbatim
+  - path: sentences/sentences.csv
+    url: https://zenodo.org/records/6475427/files/sentences.csv?download=1
+    whole: false
+    trim: the 17 texts' sentences, text 995 further trimmed to sentences 1070/1129/1405 (26 of 5,303 rows; 809,796 B -> 3,708 B)
+  - path: tokens/tokens.csv
+    url: https://zenodo.org/records/6475427/files/tokens.csv?download=1
+    whole: false
+    trim: tokens of the kept sentences (172 of 37,041 rows; 3,164,822 B -> 15,178 B)
+  - path: analysis/analysis.csv
+    url: https://zenodo.org/records/6475427/files/analysis.csv?download=1
+    whole: false
+    trim: analyses of the kept sentences incl. the one double-analysis token (173 of 36,874 rows; 11,505,480 B -> 52,680 B)
+  - path: links/links.csv
+    url: https://zenodo.org/records/6475427/files/links.csv?download=1
+    whole: false
+    trim: the kept texts' Trismegistos rows incl. text 719's two ids (16 of 3,630 rows; 92,846 B -> 438 B)

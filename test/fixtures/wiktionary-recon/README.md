@@ -210,6 +210,17 @@ dump dated 2026-07-06; sha256 of the full downloads):
     descendant.
   - `cam` 1 "step" / `cam` 2 "bent" — `etymology_number` homographs, each
     with a cy descendant.
+- `.../Umbrian/kaikki.org-dictionary-Umbrian.jsonl` — 1,132,498 B,
+  **500 lines** (whole-corpus census 2026-07-18: 373 with
+  etymology_text, 30 romanization stubs), sha256
+  `c985e245392b56c021eaa4cf5206a1a1838883d4f40f979738a4d4d0faff4d9d`,
+  retrieved 2026-07-18 (the P29-1 CEIPoM rider — the only kaikki-served
+  Italic corpus language) → **3 fixture lines** (2/5/220):
+  - `angla` — plain attested noun form (late Iguvine), no etymology.
+  - `tre` — one of the 30 romanization stubs.
+  - `𐌀𐌛𐌄𐌐𐌄𐌔` "fat, fatty portions of an animal" — Old Italic-script
+    headword (real U+10300-block codepoints through the NFC boundary),
+    Proto-Italic etymology chain + descendants.
 
 Selection recipe: whole JSONL lines picked by upstream line number as
 listed (deterministic; the post-check asserts each emitted line is a
