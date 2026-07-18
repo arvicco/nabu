@@ -691,7 +691,7 @@ oshb:
 
 sdbh:
   adapter: Nabu::Adapters::Sdbh
-  enabled: false   # P30-2 gate: first real sync owner-fired — one 37 MB raw
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # GET (FileFetch, sha256-pinned), 7,932 entries / 260,813
                    # verse-word citation rows projected. CLAUDE.md checklist
                    # §6: bin/nabu sync sdbh, eyeball `nabu define אור`,
@@ -711,7 +711,7 @@ sdbh:
   # by its own README and actively growing: re-syncs are an owner decision.
 sefaria:
   adapter: Nabu::Adapters::Sefaria
-  enabled: false   # flip after the owner-fired first sync (CLAUDE.md checklist
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # §6): bin/nabu sync sefaria — index-driven fetch, books.json
                    # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
                    # then eyeball nabu show
@@ -737,7 +737,7 @@ sefaria:
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
   adapter: Nabu::Adapters::Bhsa
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
                    # tf/2021 + README.md, 118 files ≈ 173 MB of the 1.6 GB
                    # repo — then eyeball nabu show urn:nabu:bhsa:gen:1.1,
@@ -762,7 +762,7 @@ bhsa:
 
 dss:
   adapter: Nabu::Adapters::Dss
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync dss — sparse GitFetch cone
                    # tf/2.0 + docs/about.md, 79 files ≈ 139 MB of the 206 MB
                    # repo — then eyeball nabu show urn:nabu:dss:3q15:1.1,
@@ -1105,7 +1105,7 @@ tir:
 
 iip:
   adapter: Nabu::Adapters::Iip
-  enabled: false   # P30-6: awaiting the owner-fired first real sync
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # (CLAUDE.md checklist §6 — bin/nabu sync iip, eyeball
                    # nabu show urn:nabu:iip:dabb0001 (Jewish Aramaic
                    # architrave, byte-verbatim under the NFC exemption,
@@ -1135,7 +1135,7 @@ iip:
   # at the census) → re-syncs are owner-fired.
 hebrew-lexicon:
   adapter: Nabu::Adapters::HebrewLexicon
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync hebrew-lexicon — plain
                    # GitFetch, 9.2 MB — then eyeball nabu define ברא /
                    # define אלהים, nabu show urn:nabu:dict:hebrew-lexicon:
