@@ -9752,3 +9752,147 @@ real-corpus packet).
   shows); mixed-language inscriptions per the isicily subtag policy.
 - Concordances/ids in headers → reference edges as supported.
 - Registry enabled: false, sync_policy manual.
+
+## P31-0 · ORACC config expansion + UD Hittite  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+
+Near-zero code (the survey's cheapest big win). FOUR new Oracc::PROJECTS
+rows + ONE ud TREEBANKS row; the standing cdl guard applies (unknown
+node ⇒ stop), per-project licenses machine-read at sync.
+
+- **ario** — Achaemenid Royal Inscriptions online
+  (oracc.museum.upenn.edu/json/ario.zip, 2.7 MB): the peo+elx+akk royal
+  trilinguals; license CC0 VERBATIM in metadata.json (verify at fixture
+  time). Old Persian (peo) and Elamite (elx) enter the library as
+  config. Language dossiers for peo/elx with family lanes (Iranian <
+  IE; Elamite isolate — honest lanes).
+- **epsd2/literary** (39.5 MB) — the ETCSL literary corpus
+  ORACC-lemmatized; **epsd2/royal**; **epsd2/earlylit**; AND
+  **epsd2/admin-ur3** (561.8 MB zip — owner-approved 2026-07-19: IN).
+  Expect the Ur III administrative mass to dominate counts; census
+  honestly, quarantine loudly, never guess at unknown nodes.
+- **UD_Hittite-HitTB** row in the ud TREEBANKS map: 136 sentences /
+  1,309 tokens (Hoffner & Melchert examples with real KBo/KUB lines),
+  LICENSE.txt verbatim CC BY-SA 4.0 → license_override attribution
+  (P10-4 mechanics). Fixture per the ud sibling precedent.
+- Fixtures: trimmed real zip members per project + the HitTB conllu
+  slice; registry rows enabled: false where new source rows exist
+  (ORACC projects ride the existing oracc source — flips n/a; document
+  the expected sync deltas in the registry comment).
+
+## P31-1 · TLHdig — the Hittite corpus  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+
+Zenodo record 20328284, TLHbasisONLINE25_1_ZENODO_Beta_03.zip (74.4 MB,
+published 2026-05-21, versioned DOI → sha-pin, ZipFetch). License:
+Zenodo metadata cc-by-4.0 both versions → attribution; prescribed
+citation VERBATIM in the manifest ("Thesaurus Linguarum Hethaeorum
+digitalis, hethiter.net/: TLHdig – Beta Version 0.3 (2025-11-01)").
+Census expectation (Beta 0.2 enumerated): 21,868 per-manuscript XML in
+662 CTH folders; site claims >98% of published Hittite fragments.
+
+- NEW **AOxml parser family** (hethiter.net/ns/AO/1.0 — NOT TEI):
+  <lb> lines carry transliteration AND Unicode cuneiform (cu=); <w>
+  elements carry CANDIDATE morphological analyses
+  (mrp1="tarn=a-@lassen@1SG.PRS@II.3@" — lemma + German gloss + morph);
+  Sumerogram/Akkadogram markers; damage brackets. PROBE REAL FILES
+  FIRST; never invent the format.
+- Multi-candidate analyses are upstream's own hypothesis layer → ride
+  annotations verbatim; the lemma-tier verdict follows what the data
+  honestly claims (multi-candidate ≠ gold — likely annotation-only or
+  silver-labeled; census and report). THE SYNERGY PRIZE: the mrp lemmas
+  should light the 323 starling-piet HITT reflex rows — measure the
+  join at fixture level, report the number.
+- CTH folder layout → facets (CTH number, genre bands if derivable).
+  Language hit (+ embedded Sumerian/Akkadian graphies as annotations,
+  never invented subtags). Surface = transliteration (the ORACC
+  precedent); Unicode cuneiform rides annotations.
+- Registry enabled: false, sync_policy manual (frozen versioned DOI).
+
+## P31-2 · CDLI — the atf family and the universal catalog  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+
+NEW **atf (C-ATF) parser family** + the cdli adapter. Fetch: GitFetch of
+github.com/cdli-gh/data (LFS: cdli_cat.csv 154.8 MB + cdliatf_unblocked
+.atf 86.9 MB — HEAD-verified live), honestly labeled the 2023-10
+snapshot (the daily dump is dead; the cdli.earth API is the freshness
+channel — journaled, not wired). LICENSE = bespoke open grant VERBATIM
+in the manifest ("Text in the pages of CDLI may be freely copied,
+aggregated and re-used … we request … that mention be made of the
+source") → attribution; images entirely out of scope.
+
+- C-ATF: &P-number document headers, #atf: lang lines, @obverse/@column
+  structure, numbered lines, $ state lines, >>Q composite links. NO
+  #lem lines → **silver tier** (lemma search stays ORACC-gold); the
+  translit fold conventions (§9) carry over.
+- **Catalog scope (owner-approved 2026-07-19): ALL artifacts** — every
+  catalog row without ATF becomes a metadata-only document (ogham/
+  isicily precedent at scale — expect ~200-300k at snapshot vintage);
+  periods/proveniences/collections/rulers → date/place axes + facets.
+  A CdliDates axis extractor over the catalog CSV (period → year
+  envelopes where the catalog carries them; honest undated counts).
+- P/Q-number urns (urn:nabu:cdli:p000725). ORACC ids ARE CDLI numbers →
+  reference edges (producer cdli), NEVER deduped (provenance-distinct
+  witnesses). Unique text mass: proto-cuneiform qpc + proto-Elamite
+  (their only home), ED I-III, Old Akkadian, Old Assyrian; 43 catalog
+  languages mapped honestly (unknown → und, never guessed).
+- BUILD THE FAMILY FOR REUSE: P31-3 eBL registers an eBL-ATF dialect
+  right after — keep CDLI policy out of the family core.
+- Registry enabled: false, sync_policy manual. Fixtures: trimmed real
+  ATF slices (incl. P000725 proto-cuneiform + a composite >>Q case) +
+  catalog CSV rows; README with the grant verbatim + shas.
+
+## P31-3 · eBL Fragmentarium  [tier: fable] [status: STAGGERED — dispatch after P31-2 merges] [deps: P31-2 (atf family)]
+
+Zenodo 10.5281/zenodo.10018951 snapshot (fragments.json 73.9 MB, 2023;
+~25k tablets) as the bootstrap; the sanctioned
+ebl.lmu.de/api/fragments/retrieve-all endpoint (37,296 fragments
+live-verified) as the OWNER-FIRED refresh channel only (4-8 min/batch —
+never automatic). LICENSE held at **nc** (JOHD data paper 10.5334/
+johd.148 License section verbatim: CC BY-NC-SA 4.0 for fragments.json)
+against the Zenodo field's cc-by-4.0 — record BOTH verbatim; email №24
+may relabel to attribution (P10-4 mechanics).
+
+- **eBL-ATF as a dialect of the P31-2 atf family** (their Lark grammar
+  in ebl-api is the reference): #tr.en: inline English translations
+  (→ -en siblings or inline annotations — decide from the real data
+  shape, report), #note: apparatus, @i{...} markup, $ ruling lines.
+- Fragment JSON carries museum-number id, script/period, joins, genre,
+  externalNumbers: cdliNumber on ~96% → reference edges into the P31-2
+  space (urn:nabu:cdli:p… — dangling-but-stable if cdli unsynced).
+- The Corpus side (Gilgameš chapter editions) OUT: no packaged dump,
+  the license covers fragments only — journal.
+- Period metadata → axis extractor if structured (census first).
+- Registry enabled: false, sync_policy manual. nc → MCP discipline.
+
+## P31-4 · The Syriac & Ugaritic cluster  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+
+Three sources; two ride the EXISTING text-fabric family (P30-4) as
+registrants #3/#4 — zero family edits expected.
+
+- **syriac-corpus** (github.com/srophe/syriac-corpus; CC BY 4.0 verbatim
+  per-file <availability> + about page, base texts PD → attribution):
+  632 TEI documents of classical Syriac literature. Small NEW
+  srophe-TEI family (their own schema, NOT EpiDoc — probe real files).
+  Language syc; document/passage grain per the TEI structure (census
+  first). The survey's "lowest-friction big win".
+- **cuc** — Copenhagen Ugaritic Corpus (github.com/DT-UCPH/cuc; nc
+  verbatim in every .tf header): 279 tablets / 27,770 words / 146,017
+  signs / 7,616 lines (otype ranges). Text-fabric registrant #3;
+  language uga (NEW axis language — dossier with family lane
+  "Northwest Semitic"). KTU concordances as metadata if carried.
+- **peshitta** — ETCBC/peshitta OT incl. deuterocanon (nc verbatim in
+  docs/about.md): text-fabric registrant #4; language syc. IF the
+  features carry book/chapter/verse, wire the ot-hub witness column
+  (the BHSA precedent — Peshitta joins the six-legged align); census
+  first, report the verdict.
+- SEDRA III journaled (research_private candidate), NOT in this phase.
+- All registry rows enabled: false, sync_policy manual.
+
+## P31-5 · ETCSL native  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+
+The Oxford ETCSL TEI zip via OTA (4.68 MB; the server was FLAKY at
+scout time — VERIFY the artifact first; if it stays unreachable,
+report honestly and ship nothing rather than substitute). License CC
+BY-NC-SA 3.0 → nc, MCP discipline. Value: the ENGLISH TRANSLATIONS +
+the original ETCSL lemma layer as the second witness beside
+epsd2/literary (P31-0) — MW-beside-kaikki, deliberately unmerged,
+meeting at Q-number/ETCSL-number concordances (reference edges).
+Registry enabled: false, sync_policy manual.
