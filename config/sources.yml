@@ -760,6 +760,39 @@ bhsa:
   # is journaled in 02-sources and deliberately NOT wired.
   sync_policy: manual
 
+dss:
+  adapter: Nabu::Adapters::Dss
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync dss — sparse GitFetch cone
+                   # tf/2.0 + docs/about.md, 79 files ≈ 139 MB of the 206 MB
+                   # repo — then eyeball nabu show urn:nabu:dss:3q15:1.1,
+                   # urn:nabu:dss:1qisaa:1.1, an 11q10 Aramaic Job-targum
+                   # line and 5 random lines, then flip).
+  # P30-5: DSS — the Dead Sea Scrolls (Abegg/ETCBC, github.com/ETCBC/dss),
+  # SECOND text-fabric registrant. Census verified against otype.tf at
+  # fixture time: 1,430,241 signs / 500,995 words / 52,895 lines / 11,182
+  # fragments / 1,001 scroll nodes (997 names — 4Q88/4Q483/11Q5/11Q6 each
+  # label two nodes, the second minted with a -2 urn suffix) / 10,450
+  # lexemes. Document = scroll, passage = fragment+line (the corpus's own
+  # citation grain, urn:nabu:dss:<scroll>:<fragment>.<line>); consonantal
+  # Hebrew-script transcription rides the P26-3 NFC exemption
+  # byte-verbatim; per-word lang absent/a/g → hbo/arc/grc (3Q15's Greek
+  # letter clusters); upstream's text-critical cluster nodes (cor/cor2/
+  # cor3, rem/rem2, rec, alt, unc2, vac) ride annotations VERBATIM as
+  # token-index ranges beside each token's flagged "full" bytes. LICENSE:
+  # every .tf header machine-readable "@license=Creative Commons
+  # Attribution-NonCommercial 4.0 International License" + docs/about.md's
+  # Abegg grant ("Martin Abegg graciously gave permission ... under a
+  # CC-BY-NC license") → class nc, MCP-excluded. Version PINNED tf/2.0
+  # (the sparse cone IS the pin). NOT ingested (silver, the goo300k/imp
+  # discipline): the ML-derived *_etcbc features and the v2.0 clause/
+  # phrase nodes (125/315, all in 1Qisaa — about.md: "trained on BHSA ...
+  # This is experimental"); also the lex-NODE lane + occ edges (word-grain
+  # lex rides tokens; OSHB join by consonantal folding measured at fixture
+  # time: 301/372 = 80.9% — journaled in 02-sources row 88, not wired).
+  # No date axis: tf/2.0 carries no period/dating feature (censused).
+  sync_policy: manual
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
