@@ -57,6 +57,52 @@ module Query
 
     # -- tests ---------------------------------------------------------------
 
+    # -- FTS5 syntax hardening (owner report 2026-07-18: `search --help`
+    # crashed with a raw fts5 backtrace; any hyphen-leading token does) ----
+
+    def test_query_with_leading_hyphen_falls_back_to_literal_matching
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "the --help flag itself", sequence: 0, language: "eng")
+      rebuild!
+
+      results = search("--help")
+      assert_equal 1, results.size, "fts5-invalid syntax must retry literally, not crash"
+      assert_equal "urn:d:1:1", results.first.urn
+    end
+
+    def test_hyphenated_query_finds_the_hyphenated_text_literally
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "a beer-jug of Praeneste", sequence: 0, language: "eng")
+      rebuild!
+
+      results = search("beer-jug")
+      assert_equal 1, results.size, "hyphen is an fts5 operator — the literal retry must land"
+    end
+
+    def test_unbalanced_quote_query_never_raises_a_raw_database_error
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "an unclosed thought", sequence: 0, language: "eng")
+      rebuild!
+
+      results = search('"unclosed')
+      assert_equal 1, results.size, "the doubled-quote literal retry must survive an unbalanced quote"
+    end
+
+    def test_deliberate_fts_syntax_still_works_untouched
+      # The REAL power syntax the fold preserves: quoted phrases and prefix
+      # stars. (Uppercase AND/OR/NOT never survived the fold — it lowercases
+      # them into plain terms — so they are not protected behavior.)
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
+      make_passage(doc, urn: "urn:d:1:2", text: "ἄειδε μῆνιν πάλιν", sequence: 1)
+      rebuild!
+
+      phrase = search('"μηνιν αειδε"')
+      assert_equal ["urn:d:1:1"], phrase.map(&:urn), "the quoted phrase must stay a phrase"
+      prefix = search("μην*")
+      assert_equal 2, prefix.size, "the prefix star must stay a prefix query"
+    end
+
     def test_accented_query_matches_the_accented_passage
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)

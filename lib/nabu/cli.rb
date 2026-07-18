@@ -15,6 +15,19 @@ module Nabu
       true
     end
 
+    # `nabu search --help` (owner report 2026-07-18): this Thor build does
+    # not intercept a help flag AFTER a command name, so "--help" reached
+    # FTS5 as the literal query. Route `nabu CMD --help|-h` to `nabu help
+    # CMD` for every known command; a literal "--help" stays searchable via
+    # quoting inside a longer query (the fts literal fallback).
+    def self.start(given_args = ARGV, config = {})
+      if Thor::HELP_MAPPINGS.include?(given_args[1]) &&
+         all_commands.key?(normalize_command_name(given_args.first.to_s))
+        given_args = ["help", given_args.first]
+      end
+      super
+    end
+
     # The --display flag, shared by every command that renders passage text to
     # the terminal (P27-0: show, align, search, concord, parallels, cognates).
     # Modes come from the Nabu::Display registry so sibling packets can add
@@ -4741,7 +4754,11 @@ module Nabu
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
               "edh #{result.axes.edh}, damaskini #{result.axes.damaskini}, corph #{result.axes.corph}, " \
-              "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes})"
+              "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes}, " \
+              "ceipom #{result.axes.ceipom}, " \
+              "isicily #{result.axes.isicily}, " \
+              "open-etruscan #{result.axes.open_etruscan}, " \
+              "lexlep #{result.axes.lexlep}, tir #{result.axes.tir})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

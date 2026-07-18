@@ -264,7 +264,13 @@ not something escape characters from nabu can force:
 - Script-specific Noto casks join the macOS font-fallback cascade once
   installed, even when not the chosen slot font — one command each:
   `brew install --cask font-noto-sans-ogham font-noto-sans-coptic
-  font-noto-sans-gothic font-noto-sans-runic`.
+  font-noto-sans-gothic font-noto-sans-runic font-noto-sans-old-italic`.
+  Old Italic (U+10300–1032F) is the Sabellic axis's block (P29-2): the
+  sabellic-loans etymon headwords are real Old Italic codepoints
+  (𐌓𐌖𐌚𐌓𐌉𐌉𐌔), while the ItAnt/CEIPoM inscription text itself is stored
+  in the editions' Latin transliteration — the language tags
+  (`osc-Ital-x-oscetr`) and script facets name the alphabet the stones
+  carry.
 
 ---
 
@@ -280,6 +286,7 @@ not something escape characters from nabu can force:
 | Coptic | nothing | `font-noto-sans-coptic` | `bin/nabu search ⲛⲟⲩⲧⲉ --lang cop` |
 | Gothic | nothing | `font-noto-sans-gothic` | `bin/nabu search guþ --lang got` |
 | Runic | nothing | `font-noto-sans-runic` | `bin/nabu show urn:nabu:riig:ais-01-01` |
+| Old Italic (osc/xum) | nothing (inscription text is stored in Latin transliteration; the U+10300 block appears in the sabellic-loans etymon headwords) | `font-noto-sans-old-italic` | `bin/nabu etym rufus` (after the sabellic-loans sync) |
 
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any

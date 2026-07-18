@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Both files are documented TRIMS (header + selected byte-verbatim
+# records) of the two sha-pinned upstream artifacts, so adapter_test
+# stays null (a re-run against the full artifacts would false-fail the
+# fixture-count assertions; drift is caught by the adapter's own sha
+# pins at any real fetch).
+source: open-etruscan
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: corpus/openetruscan_clean.csv
+    url: https://zenodo.org/api/records/20075836/files/openetruscan_clean.csv/content
+    whole: false
+    trim: header + 10 byte-verbatim records (records 2/3/6/9/23/111/173/4441/4835/6561 of 6,568 — clean/needs_review/ocr_failed, BCE sign-flip + year-0 pins, the multi-line quoted record) — 770,613 B -> ~4 KB; recipe in README.md
+  - path: findspots/Etruscan.csv
+    url: https://raw.githubusercontent.com/GianlucaVico/Larth-Etruscan-NLP/daf4972175f45b48188fe36671db3a0e081e5130/Data/Etruscan.csv
+    whole: false
+    trim: header + 6 byte-verbatim records (records 2/3/169/198/240/478 of 7,140 — the corpus-joining findspots, the ETP 285 first-wins conflict, the Po 4.4 join-miss residue) — 302,495 B -> ~2 KB; recipe in README.md
