@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.4/tei-epidoc.rng"
+schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.4/tei-epidoc.rng"
+schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<tei:TEI xmlns:dcr="http://www.isocat.org/ns/dcr" xml:id="ItAnt_Oscan_2"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <tei:teiHeader>
+        <tei:fileDesc>
+            <tei:titleStmt>
+                <tei:title type="ItAnt_ID">Inscription ItAnt Oscan 2</tei:title>
+            </tei:titleStmt>
+            <tei:editionStmt>
+                <tei:edition>
+                    <tei:idno>ItAnt Oscan 2</tei:idno>
+                </tei:edition>
+                <tei:editor>
+                    <tei:persName>Francesca Murano</tei:persName>
+                </tei:editor>
+            </tei:editionStmt>         
+            <tei:publicationStmt>
+                <tei:authority>PRIN 2017 "Lingue e culture dell'Italia antica: linguistica storica e modelli digitali | Languages and Cultures of Ancient Italy. Historical Linguistics and Digital Models"</tei:authority>
+                <tei:date>2023</tei:date>
+                <tei:idno type="URI" subtype="handle"></tei:idno>
+                <tei:availability>
+                    <tei:licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).  
+                    </tei:licence>
+                </tei:availability>
+            </tei:publicationStmt>   
+            <tei:sourceDesc>
+                <tei:msDesc>
+                    <tei:msIdentifier>
+                        <tei:settlement ref="https://sws.geonames.org/3180991">Campobasso</tei:settlement>
+                        <tei:institution ana="https://www.musei.molise.beniculturali.it/musei?mid=208&amp;nome=museo-sannitico">Museo Sannitico</tei:institution>
+                        <tei:idno type="museumID"/>                   
+                        <tei:altIdentifier type="cancelled">
+                        <tei:settlement ref="https://sws.geonames.org/3180991">Campobasso</tei:settlement>
+                        <tei:institution ana="https://sabapmolise.beniculturali.it">Soprintendenza Archeologia, Belle Arti e Paesaggio del Molise</tei:institution>
+                        <tei:idno>3974</tei:idno>
+                        </tei:altIdentifier>
+                        <tei:msName>Curse tablet from Monte Vairano</tei:msName>
+                        <tei:altIdentifier type="trismegistos">
+                            <tei:idno source="www.trismegistos.org/text/170774">TM 170774</tei:idno>
+                        </tei:altIdentifier> 
+                        <tei:altIdentifier type="traditionalID">
+                            <tei:idno source="http://zotero.org/groups/2552746/items/IMWMSAVE">ST Sa 36</tei:idno>
+                        </tei:altIdentifier> 
+                        <tei:altIdentifier type="traditionalID">
+                            <tei:idno source="http://zotero.org/groups/2552746/items/IKUTPHDC">ImIt Bouianum 98</tei:idno>
+                        </tei:altIdentifier>
+                        <tei:altIdentifier type="traditionalID">
+                            <tei:idno source="http://zotero.org/groups/2552746/items/XTPTKJU8">Murano 6</tei:idno>
+                        </tei:altIdentifier>
+                    </tei:msIdentifier> 
+                    <tei:msContents>
+                        <tei:summary>Curse table against two men from Aquilonia (Monte Vairano, CB)
+                        </tei:summary>
+                    </tei:msContents>
+                    <tei:physDesc>
+                        <tei:objectDesc>     
+                            <tei:supportDesc>
+                                <tei:support>
+                                    <tei:objectType ana="http://vocab.getty.edu/page/aat/300223016">tablet</tei:objectType>
+                                    <tei:material ana="http://vocab.getty.edu/page/aat/300011022">lead</tei:material>
+                                    <tei:dimensions type="objectDimensions" unit="cm" precision="high" resp="#De_Benedittis1980a">
+                                        <tei:height quantity="6.7">6,7</tei:height>
+                                        <tei:width quantity="1.5">1,5</tei:width>
+                                    </tei:dimensions>
+                                    <tei:rs type="reuse">no</tei:rs>
+                                </tei:support>
+                                <tei:condition>fragmentary
+                                    <tei:note>The tablet was found rolled up and flattened. It broke into five fragments during the unrolling process. The inscription it is exhibited at the Museo Sannitico in Campobasso. Compared to the photographs published by <tei:ref target="http://zotero.org/groups/2552746/items/IUGVNSX4"><tei:bibl>De Beneditts 1980</tei:bibl></tei:ref>, the last fragment of the tablet is now missing.</tei:note>
+                                </tei:condition>
+                            </tei:supportDesc>
+                            <tei:layoutDesc>
+                                <tei:layout columns="2" writtenLines="4">
+                                    <tei:rs type="execution" ana="http://vocab.getty.edu/page/aat/300404794">engraved</tei:rs>
+                                    <tei:rs type="opistography">yes</tei:rs>
+                                    <tei:note type="layoutNotes">Inscribed on both sides, with a line on each.</tei:note> 
+                                </tei:layout>
+                            </tei:layoutDesc>
+                        </tei:objectDesc>
+                        <tei:handDesc>                            
+                            <tei:handNote>
+                                <tei:note type="palaeographicNotes">Words are separated by double dots; the second word-break on face A is a single dot.</tei:note>
+                                <tei:dimensions type="characterDimension" unit="cm" precision="high" resp="#De_Benedittis1980a"> 
+                                    <tei:height atLeast="0.1" atMost="0.6" unit="cm" precision="high" resp="#De_Benedittis1980a">from 0.6 to 0.1</tei:height>
+                                </tei:dimensions>
+                            </tei:handNote>
+                        </tei:handDesc>                                      
+                        <tei:scriptDesc>
+                            <tei:scriptNote>
+                                <tei:rs type="writingSystem" subtype="alphabet" ref="https://www.prin-italia-antica.unifi.it/p166.html#oscan-etruscan">Oscan National alphabet</tei:rs>
+                                <tei:rs type="wordDivision">punctuation</tei:rs>
+                            </tei:scriptNote>
+                        </tei:scriptDesc>
+                    </tei:physDesc>
+                    <tei:history>
+                        <tei:origin> 
+                            <tei:origPlace type="composed">
+                                <tei:placeName type="ancient" ref="https://pleiades.stoa.org/places/438681">Aquilonia, Samnium</tei:placeName>
+                                <tei:placeName type="modern" ref="https://sws.geonames.org/3164966">Monte Vairano (Campobasso)</tei:placeName>
+                            </tei:origPlace>
+                            <tei:origDate notBefore-custom="-0299" notAfter-custom="-0200" cert="medium">3rd century BC</tei:origDate>
+                        </tei:origin>
+                        <tei:provenance type="found" subtype="discovered" when="1979" resp="#De_Benedittis1980a">
+                            <tei:placeName type="ancient" ref="https://pleiades.stoa.org/places/438681">Aquilonia, Samnium</tei:placeName>
+                            <tei:placeName type="modern" ref="https://sws.geonames.org/3164966">Monte Vairano (Campobasso)</tei:placeName>
+                            <tei:placeName type="detailed">found in the inhabited area of the ancient site, inside the Porta Meridionale</tei:placeName>
+                        </tei:provenance>
+                        <tei:provenance type="observed" subtype="autopsied" when="2023" resp="Francesca Murano">
+                            <tei:persName>Francesca Murano</tei:persName>
+                        </tei:provenance>
+                        <tei:provenance type="observed" subtype="autopsied" when="1979">
+                            <tei:persName>Gianfranco De Benedittis</tei:persName>
+                        </tei:provenance>
+                    </tei:history>                       
+                </tei:msDesc>   
+            </tei:sourceDesc> 
+        </tei:fileDesc>
+        <tei:encodingDesc>
+            <tei:p source="https://epidoc.stoa.org/gl/latest/">Marked-up according to the EpiDoc Guidelines</tei:p>
+        </tei:encodingDesc>
+        <tei:profileDesc>
+            <tei:langUsage>
+                <tei:language ident="osc" source="https://iso639-3.sil.org/code/osc">Oscan</tei:language>
+                <tei:language ident="osc-Ital-x-oscetr" source="https://www.prin-italia-antica.unifi.it/p166.html#oscan-etruscan" ana="https://unicode.org/iso15924/iso15924-codes.html">Oscan in National alphabet (Oscan-Etruscan alphabet)</tei:language>
+            </tei:langUsage>
+            <tei:textClass>
+                <tei:keywords scheme="https://www.eagle-network.eu/resources/vocabularies/typeins/">
+                    <tei:term ref="https://www.eagle-network.eu/voc/typeins/lod/76">defixio</tei:term>
+                </tei:keywords>
+            </tei:textClass>
+        </tei:profileDesc>
+    </tei:teiHeader>
+    <tei:facsimile>
+        <tei:graphic n="1" url="http://linsto.dipartimentidieccellenza-dilef.unifi.it/itant/img/ItAnt_Oscan_2.jpg" resp="Francesca Murano">
+            <tei:desc>Inscription ItAnt Oscan 2 (drawing by <tei:persName>Francesca Murano</tei:persName>)<tei:ref target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).</tei:ref>
+            </tei:desc>
+        </tei:graphic>
+        <tei:graphic n="2" url="https://www.studietruschi.org/wp-content/uploads/2021/08/SE48_21.pdf#page=31">
+            <tei:desc>Photograph of the inscription ItAnt Oscan 2 (from <tei:ref target="http://zotero.org/groups/2552746/items/IUGVNSX4"><tei:bibl>De Beneditts 1980</tei:bibl></tei:ref>, pl. XCIV, 1)
+                <tei:ref ana="https://www.studietruschi.org">This file is provided by the Istituto Nazionale di Studi Etruschi ed Italici</tei:ref>
+            </tei:desc>
+        </tei:graphic>     
+    </tei:facsimile>
+    <tei:text>
+        <tei:body>             
+            <tei:div type="edition" subtype="interpretative" xml:space="preserve">
+                <tei:div type="textpart" n="face_a" style="text-direction:r-to-l" rend="ductus:sinistrorse">
+                    <tei:ab>   
+<!-- l. 1 -->                        
+                        <tei:lb n="1" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1"/>
+<!-- Leida;Osc_2_l_1_w_1;pakis -->                        
+                            <tei:name type="praenomen" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1_w_1" ref="#p1">pakis</tei:name>
+                            <tei:pc unit="word">:</tei:pc>
+<!-- Leida;Osc_2_l_1_w_2;heleviis -->                         
+                            <tei:name type="gentilicium" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1_w_2" ref="#p1">heleviis</tei:name>
+                            <tei:pc unit="word">.</tei:pc>
+<!-- Leida;Osc_2_l_1_w_3;tre(bieís) -->                         
+                            <tei:name type="patronymic" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1_w_3" ref="#p1"><tei:expan><tei:abbr>tre</tei:abbr><tei:ex>bieís</tei:ex></tei:expan></tei:name> 
+                    </tei:ab>
+                </tei:div>
+                <tei:div type="textpart" n="face_b" style="text-direction:r-to-l" rend="ductus:sinistrorse">    
+                    <tei:ab>   
+<!-- l. 1b -->                   
+                        <tei:lb n="1b" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1b"/>
+<!-- Leida;Osc_2_l_1b_w_1;statis -->                        
+                            <tei:name type="praenomen" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1b_w_1" ref="#p2">statis</tei:name>
+                            <tei:pc unit="word">:</tei:pc>   
+<!-- Leida;Osc_2_l_1b_w_1;betitis -->                             
+                            <tei:name type="gentilicium" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_2_l_1b_w_2" ref="#p2">betitis</tei:name>    
+                            <tei:pc unit="word">:</tei:pc>
+<!-- Leida;Osc_2_l_1b_w_1;[-] -->                             
+                        <tei:name type="patronymic"><tei:gap reason="lost" extent="unknown" unit="character"/></tei:name>
+                    </tei:ab>
+                </tei:div>
+            </tei:div>
+            <tei:div type="translation" xml:lang="ita">
+                <tei:p>Pacio Helevio figlio di Trebio | Stazio Betitio [figlio di ...]</tei:p>
+                <tei:desc>
+                    <tei:persName>Francesca Murano</tei:persName>
+                    <tei:ref type="licence" target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).</tei:ref>
+                </tei:desc> 
+            </tei:div>
+            <tei:div type="translation" xml:lang="eng">
+                <tei:p>Pacius Helvius son of Trebius | Statius Betitius [son of ...]</tei:p>
+                <tei:desc>
+                    <tei:persName>Francesca Murano</tei:persName>
+                    <tei:ref type="licence" target="http://creativecommons.org/licenses/by-sa/4.0/">This file is licensed under the Creative Commons Attribution-ShareAlike 4.0 license.
+                    </tei:ref>
+                </tei:desc> 
+            </tei:div>            
+            <tei:div type="commentary" xml:lang="eng" resp="Francesca Murano">
+                <tei:note>
+                    <tei:p>The inscription contains two three-member onomastic formulae in the nominative case, relating to the victims of the curse. The patronymic of the second man is not legible beacause of a scratch on the lead; its presence is made certain by the punctuation mark after the gentilicium. The curse present a "minimal formula" of curse textuality (see <tei:ref target="http://zotero.org/groups/2583203/items/7XSWIYVU"><tei:bibl>Murano 2020</tei:bibl></tei:ref>: 204), consisting only of onomastic elements.</tei:p> 
+                </tei:note>
+                <tei:listPerson type="Onomastics">
+                    <tei:person xml:id="p1" xml:lang="osc-Ital-x-oscetr" corresp="#Osc_2_l_1">
+                        <tei:persName>
+                            <tei:name type="praenomen">pakis</tei:name>
+                            <tei:name type="gentilicium">heleviis</tei:name>
+                            <tei:name type="patronymic">tre(bieís)</tei:name>
+                        </tei:persName>
+                    </tei:person>
+                    <tei:person xml:id="p2" xml:lang="osc-Ital-x-oscetr" corresp="#Osc_2_l_1b">
+                        <tei:persName>
+                            <tei:name type="praenomen">statis</tei:name>
+                            <tei:name type="gentilicium">betitis</tei:name>
+                            <tei:name type="patronymic">[-]</tei:name>
+                        </tei:persName>
+                    </tei:person>    
+                </tei:listPerson>
+            </tei:div>
+            <tei:div type="bibliography">
+                <tei:listBibl xmlns="http://www.tei-c.org/ns/1.0">
+                    <tei:biblStruct type="book" xml:id="Murano2013" corresp="http://zotero.org/groups/2552746/items/XTPTKJU8">
+                        <tei:monogr>
+                            <tei:title level="m">Le tabellae defixionum osche</tei:title>
+                            <tei:author>
+                                <tei:forename>Francesca</tei:forename>
+                                <tei:surname>Murano</tei:surname>
+                            </tei:author>
+                            <tei:imprint>
+                                <tei:pubPlace>Pisa - Roma</tei:pubPlace>
+                                <tei:publisher>Serra</tei:publisher>
+                                <tei:date>2013</tei:date>
+                            </tei:imprint>
+                            <tei:biblScope unit="entry">6 (with pl. XVII)</tei:biblScope>
+                        </tei:monogr>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="book" xml:id="ImIt2011" corresp="http://zotero.org/groups/2552746/items/IKUTPHDC">
+                        <tei:monogr>
+                            <tei:title level="m">Imagines Italicae: A Corpus of Italic Inscriptions</tei:title>
+                            <tei:editor>
+                                <tei:forename>Michael</tei:forename>
+                                <tei:surname>Crawford</tei:surname>
+                            </tei:editor>
+                            <tei:imprint>
+                                <tei:pubPlace>London</tei:pubPlace>
+                                <tei:publisher>Institute of Classical Studies, University of London</tei:publisher>
+                                <tei:date>2011</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:series>
+                            <tei:title level="s">Bulletin of the Institute of Classical Studies: Supplement</tei:title>
+                            <tei:biblScope unit="volume">110</tei:biblScope>
+                        </tei:series>
+                        <tei:citedRange unit="entry">Bouianum 98 (with photograph)</tei:citedRange>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="book" xml:id="Rix2002" corresp="http://zotero.org/groups/2552746/items/IMWMSAVE">
+                        <tei:monogr>
+                            <tei:title level="m">Sabellische Texte. Die Texte des Oskischen, Umbrischen und Südpikenischen</tei:title>
+                            <tei:author>
+                                <tei:forename>Helmut</tei:forename>
+                                <tei:surname>Rix</tei:surname>
+                            </tei:author>
+                            <tei:imprint>
+                                <tei:pubPlace>Heidelberg</tei:pubPlace>
+                                <tei:publisher>C. Winter</tei:publisher>
+                                <tei:date>2002</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="entry">no. Sa 36</tei:citedRange>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="bookSection" xml:id="De_Benedittis1980b" corresp="http://zotero.org/groups/2552746/items/VJZEDIIX">
+                        <tei:analytic>
+                            <tei:title level="a">L’oppidum di Monte Vairano ovvero Aquilonia</tei:title>
+                            <tei:author>
+                                <tei:forename>Gianfranco</tei:forename>
+                                <tei:surname>De Benedittis</tei:surname>
+                            </tei:author>
+                        </tei:analytic>
+                        <tei:monogr>
+                            <tei:title level="m">Sannio: Pentri e Frentani dal VI al I sec. a.C. Catalogo della mostra (Isernia, Museo Nazionale, ottobre-dicembre 1980)</tei:title>
+                            <tei:imprint>
+                                <tei:pubPlace>Roma</tei:pubPlace>
+                                <tei:biblScope unit="page">334-335</tei:biblScope>
+                                <tei:publisher>De Luca</tei:publisher>
+                                <tei:date>1980</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="journalArticle" xml:id="De_Benedittis1980a" corresp="http://zotero.org/groups/2552746/items/IUGVNSX4">
+                        <tei:analytic>
+                            <tei:title level="a">Sannio (CB): Monte Vairano</tei:title>
+                            <tei:author>
+                                <tei:forename>Gianfranco</tei:forename>
+                                <tei:surname>De Benedittis</tei:surname>
+                            </tei:author>
+                        </tei:analytic>
+                        <tei:monogr>
+                            <tei:title level="j">Studi Etruschi</tei:title>
+                            <tei:imprint>
+                                <tei:biblScope unit="volume">48</tei:biblScope>
+                                <tei:biblScope unit="page">419-420</tei:biblScope>
+                                <tei:date>1980</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                    </tei:biblStruct>
+                    
+                </tei:listBibl>    
+            </tei:div>   
+        </tei:body>
+    </tei:text>
+</tei:TEI>
