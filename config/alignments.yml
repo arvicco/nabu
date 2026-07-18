@@ -501,6 +501,59 @@ ot:
         HAG: urn:nabu:eng-web:hag
         ZEC: urn:nabu:eng-web:zec
         MAL: urn:nabu:eng-web:mal
+    # P30-3: the TARGUM witness — the ot hub's ARAMAIC leg (`align "GEN 1.1"`
+    # renders MT ↔ LXX ↔ Vulgate ↔ English ↔ Targum). One composite column,
+    # the traditional Targum shelf: ONKELOS on the Torah, JONATHAN on the
+    # Prophets, the ARAMAIC WRITINGS TARGUMS (Mikraot Gedolot / Wikisource
+    # Chronicles). Version choice per book is the PUBLIC-DOMAIN Hebrew-column
+    # (= Aramaic, the shelf ruling) edition: the plain "Onkelos <Book>" text
+    # for the Torah (the CC-BY-SA Yemenite Taj vocalization stays a sibling
+    # document, per-witness only), "Mikraot Gedolot" everywhere it exists,
+    # Wikisource for Chronicles. The OTHER targums of the same books
+    # (Pseudo-Jonathan on the Torah, Targum Jerusalem, Neofiti, Sheni) are
+    # ingested documents but deliberately NOT witnesses — one Aramaic column,
+    # honestly named, beats four cluttered ones (owner call to widen later;
+    # registry-only change).
+    # Versification: the Targums carry the MASORETIC versification (verified
+    # at fixture time: Targum Joel = 4 chapters, Malachi = 3 — MT, not
+    # Greek), so the map mirrors the OSHB witness's conservative holdouts
+    # EXACTLY: 1KI/JER/DAN/PRO/JOL/MAL held out (and DAN/EZR/NEH have no
+    # targum at all — those books are partly Aramaic already); ECC carries no
+    # work token; PSA is registered in the psalms work below with the P13-5
+    # Masoretic remap. "Not synced" until the owner-fired first
+    # `nabu sync sefaria`.
+    - label: Targum (Onkelos/Jonathan/Writings)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:sefaria:onkelos-genesis:onkelos-genesis
+        EXO: urn:nabu:sefaria:onkelos-exodus:onkelos-exodus
+        LEV: urn:nabu:sefaria:onkelos-leviticus:onkelos-leviticus
+        NUM: urn:nabu:sefaria:onkelos-numbers:onkelos-numbers
+        DEU: urn:nabu:sefaria:onkelos-deuteronomy:onkelos-deuteronomy
+        JOS: urn:nabu:sefaria:targum-jonathan-on-joshua:mikraot-gedolot
+        JDG: urn:nabu:sefaria:targum-jonathan-on-judges:mikraot-gedolot
+        RUT: urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot
+        1SA: urn:nabu:sefaria:targum-jonathan-on-i-samuel:mikraot-gedolot
+        2SA: urn:nabu:sefaria:targum-jonathan-on-ii-samuel:mikraot-gedolot
+        2KI: urn:nabu:sefaria:targum-jonathan-on-ii-kings:mikraot-gedolot   # 1KI held out (the OSHB rule)
+        1CH: urn:nabu:sefaria:targum-of-i-chronicles:wikisource-aramaic-targum-to-chronicles
+        2CH: urn:nabu:sefaria:targum-of-ii-chronicles:wikisource-aramaic-targum-to-chronicles
+        EST: urn:nabu:sefaria:aramaic-targum-to-esther:mikraot-gedolot   # Targum Rishon; Sheni per-witness
+        JOB: urn:nabu:sefaria:aramaic-targum-to-job:mikraot-gedolot
+        SNG: urn:nabu:sefaria:aramaic-targum-to-song-of-songs:mikraot-gedolot
+        ISA: urn:nabu:sefaria:targum-jonathan-on-isaiah:mikraot-gedolot
+        LAM: urn:nabu:sefaria:aramaic-targum-to-lamentations:mikraot-gedolot
+        EZK: urn:nabu:sefaria:targum-jonathan-on-ezekiel:mikraot-gedolot
+        HOS: urn:nabu:sefaria:targum-jonathan-on-hosea:mikraot-gedolot
+        AMO: urn:nabu:sefaria:targum-jonathan-on-amos:mikraot-gedolot
+        OBA: urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot
+        JON: urn:nabu:sefaria:targum-jonathan-on-jonah:mikraot-gedolot
+        MIC: urn:nabu:sefaria:targum-jonathan-on-micah:mikraot-gedolot
+        NAM: urn:nabu:sefaria:targum-jonathan-on-nahum:mikraot-gedolot
+        HAB: urn:nabu:sefaria:targum-jonathan-on-habakkuk:mikraot-gedolot
+        ZEP: urn:nabu:sefaria:targum-jonathan-on-zephaniah:mikraot-gedolot
+        HAG: urn:nabu:sefaria:targum-jonathan-on-haggai:mikraot-gedolot
+        ZEC: urn:nabu:sefaria:targum-jonathan-on-zechariah:mikraot-gedolot
 
 # P13-5: the Psalms work — the one book where the versification divergence
 # BITES, faced head-on (the P11-8 OT WEB witness dodged it by omitting Psalms).
@@ -591,3 +644,20 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:oshb:ps  # Hebrew numbering (remapped)
+    # P30-3: the Psalms TARGUM (Mikraot Gedolot, Public Domain — the Aramaic
+    # column of the psalms work). Masoretic-numbered BY DEFINITION (it
+    # translates the MT psalter), so it rides the SAME P13-5 remap table as
+    # the WEB and OSHB witnesses above; the LXX join/split psalms drop and
+    # attest per-witness, never false-aligned. "Not synced" until the
+    # owner-fired first `nabu sync sefaria`.
+    - label: Targum (Psalms)
+      extractor: cts-verse
+      numbering:
+        system: "Hebrew (Masoretic)"
+        ranges:
+          - { from: 1, to: 8, shift: 0 }       # Hebrew 1–8 = Greek 1–8
+          - { from: 11, to: 113, shift: -1 }   # Hebrew 11–113 = Greek 10–112
+          - { from: 117, to: 146, shift: -1 }  # Hebrew 117–146 = Greek 116–145
+          - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
+      documents:
+        PSA: urn:nabu:sefaria:aramaic-targum-to-psalms:mikraot-gedolot  # Hebrew numbering (remapped)

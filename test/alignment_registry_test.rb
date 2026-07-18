@@ -291,15 +291,33 @@ class AlignmentRegistryTest < Minitest::Test
     refute_nil work, "config/alignments.yml must register the ot work (P11-5)"
     labels = work.witnesses.map(&:label)
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
-                  "WEB (English)"], labels,
-                 "P26-3 adds the Masoretic witness — the ot hub goes three-legged (MT/LXX/Vulgate)"
+                  "WEB (English)", "Targum (Onkelos/Jonathan/Writings)"], labels,
+                 "P26-3 adds the Masoretic witness, P30-3 the Aramaic Targum leg — the ot hub " \
+                 "goes five-legged (MT/LXX/Vulgate/English/Targum)"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     vulgate = work.witnesses[1]
     assert_equal "GEN", vulgate.book_for("urn:nabu:vulgate:gen")
-    web = work.witnesses.last
+    web = work.witnesses[3]
     assert_equal "JON", web.book_for("urn:nabu:eng-web:jon"), "P11-8 adds the WEB English OT witness"
+  end
+
+  def test_shipped_ot_targum_witness_mirrors_the_oshb_holdouts
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    targum = work.witnesses.find { |witness| witness.label == "Targum (Onkelos/Jonathan/Writings)" }
+    refute_nil targum, "P30-3: the ot hub's Aramaic leg"
+    assert_equal "cts-verse", targum.extractor
+    assert_equal "GEN", targum.book_for("urn:nabu:sefaria:onkelos-genesis:onkelos-genesis"),
+                 "Torah = Onkelos (the PD plain edition; the Taj vocalization stays per-witness)"
+    assert_equal "OBA", targum.book_for("urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot")
+    assert_equal "RUT", targum.book_for("urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot")
+    oshb = work.witnesses.find { |witness| witness.label == "OSHB (WLC, Masoretic)" }
+    assert_equal oshb.documents.values.sort, targum.documents.values.sort,
+                 "the Targums carry the Masoretic versification (Joel 4ch/Malachi 3ch verified), " \
+                 "so the token map mirrors the OSHB witness's conservative holdouts EXACTLY"
+    assert_nil targum.numbering, "no remap — the map only holds MT-stable books"
   end
 
   def test_shipped_ot_oshb_witness_maps_conservatively_with_the_holdouts_absent
@@ -327,10 +345,11 @@ class AlignmentRegistryTest < Minitest::Test
     work = Nabu::AlignmentRegistry.load(path).work("psalms")
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
-                  "OSHB (WLC, Masoretic)"],
+                  "OSHB (WLC, Masoretic)", "Targum (Psalms)"],
                  work.witnesses.map(&:label),
-                 "P26-3 adds the MT psalter itself; the OE Paris Psalter stays deferred (line grain)"
-    lxx, vulgate, web, oshb = work.witnesses
+                 "P26-3 adds the MT psalter, P30-3 the Psalms Targum; the OE Paris Psalter " \
+                 "stays deferred (line grain)"
+    lxx, vulgate, web, oshb, targum = work.witnesses
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     assert_nil lxx.numbering, "the LXX Greek numbering IS the work vocabulary"
     assert_equal "PSA", vulgate.book_for("urn:nabu:vulgate:psa")
@@ -345,6 +364,10 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal web.numbering, oshb.numbering, "the P13-5 table is reused VERBATIM"
     assert_equal "PSA 22.1", oshb.normalize_ref("PSA 23.1"), "the shepherd psalm aligns MT-beside-LXX"
     assert_nil oshb.normalize_ref("PSA 9.1"), "an LXX join-psalm is dropped, never false-aligned"
+    # P30-3: the Psalms Targum translates the MT psalter — the same table again.
+    assert_equal "PSA", targum.book_for("urn:nabu:sefaria:aramaic-targum-to-psalms:mikraot-gedolot")
+    assert_equal web.numbering, targum.numbering, "the P13-5 table is reused VERBATIM a third time"
+    assert_equal "PSA 22.1", targum.normalize_ref("PSA 23.1")
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
