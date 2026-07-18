@@ -853,6 +853,82 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P28-4: the grouped one-page source map (--sources) --------------------
+
+  def seed_source_map(config)
+    catalog = Nabu::Store.connect(config.catalog_path)
+    { "grc" => "Hellenic < Indo-European", "lat" => "Italic < Indo-European",
+      "sla-pro" => "Slavic < Balto-Slavic < Indo-European (reconstructed)" }.each do |code, body|
+      catalog[:language_records].insert(lang_code: code, kind: "family", body: body, source: "dossier")
+    end
+    catalog[:source_records].insert(
+      slug: "shelf", kind: "description", provenance: "dossier",
+      body: "A fixture shelf of Greek and Latin editions assembled purely so the one-page map renderer " \
+            "meets a first sentence overrunning the hundred-character measure. Second sentence never shows."
+    )
+    catalog.disconnect
+  end
+
+  def test_list_sources_renders_the_grouped_one_page_map
+    with_list_corpus do |config|
+      seed_source_map(config)
+      out, _err, status = with_config(config) { run_cli(%w[list --sources]) }
+      assert_nil status
+      assert_operator out.index("Greek & Latin"), :<, out.index("Slavic"), "the curated header order is pinned"
+      assert_operator out.index("Slavic"), :<, out.index("Other"), "the honest residue closes the map"
+      shelf_line = out.lines.find { |line| line.include?("shelf — ") }
+      assert_match(/\A  shelf — A fixture shelf of Greek and Latin editions/, shelf_line)
+      assert_match(/…$/, shelf_line.chomp, "an overlong first sentence truncates with an honest ellipsis")
+      refute_match(/Second sentence/, out, "only the FIRST sentence of the dossier description renders")
+      assert_match(/^  lex — no description; nabu ingest --shelf source lex$/, out,
+                   "an undescribed source renders the honest stub hint")
+      assert_match(%r{nabu list SLUG for the full card · docs/library\.md for the survey}, out)
+    end
+  end
+
+  def test_list_sources_off_tag_reads_from_the_registry
+    with_list_corpus do |config|
+      seed_source_map(config)
+      File.write(config.sources_path, <<~YAML)
+        shelf:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+        lex:
+          adapter: TestAdapter
+          enabled: false
+          sync_policy: frozen
+        library:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: local
+      YAML
+      out, _err, status = with_config(config) { run_cli(%w[list --sources]) }
+      assert_nil status
+      assert_match(/^  lex \(off\) — no description/, out, "a disabled source stays visible, tagged (off)")
+      refute_match(/shelf \(off\)/, out)
+    end
+  end
+
+  def test_list_sources_composes_with_nothing
+    with_list_corpus do |config|
+      with_config(config) do
+        [%w[list shelf --sources], %w[list --sources --long], %w[list --sources --documents],
+         %w[list --sources --export-source-dossiers]].each do |argv|
+          _out, err, status = run_cli(argv)
+          assert_equal 1, status, "#{argv.join(' ')} must be a named error"
+          assert_match(/--sources/, err)
+        end
+      end
+    end
+  end
+
+  def test_help_list_documents_the_sources_map
+    out, _err, _status = run_cli(%w[help list])
+    assert_match(/--sources/, out)
+    assert_match(/grouped/, out, "the map's grouping promise must be taught")
+  end
+
   # -- search/export --source (P22-1) ----------------------------------------
 
   def test_search_source_scopes_and_unknown_source_misses_honestly

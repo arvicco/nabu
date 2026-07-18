@@ -350,6 +350,18 @@ module Nabu
       go deeper. `nabu list --long` adds each source's description line to
       the census.
 
+      `nabu list --sources` is the one-page onboarding map: every source on
+      one line (slug — the first sentence of its dossier description, ~100
+      chars, honest ellipsis), grouped under family headers (Greek & Latin ·
+      Biblical & Near Eastern · Slavic · Celtic · Indic & Iranian · Egyptian
+      & Coptic · Germanic & Old English · Reference & dictionaries · Your
+      shelves · Other). Groups are DERIVED from the census languages'
+      family lanes (the language-dossier shelf); an optional owner-curated
+      `group:` front-matter key in a source dossier overrides the
+      derivation. Disabled sources stay visible with an (off) tag; a source
+      without a dossier description shows the honest stub hint. Composes
+      with nothing — it IS the whole-library view.
+
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
         --documents    every document: urn — title [lang] license, urn order,
@@ -367,6 +379,7 @@ module Nabu
 
       Examples:
         nabu list                                # the census, every shelf
+        nabu list --sources                      # the one-page grouped map
         nabu list ccmh                           # one shelf's card
         nabu list local-library --documents      # what did I ingest?
         nabu list local-library --collections    # …and how is it filed?
@@ -383,6 +396,8 @@ module Nabu
                      desc: "Enumerate a dictionary source's entries (headword + gloss)"
     option :collections, type: :boolean, default: false,
                          desc: "Collection → document count for manifest-collection shelves"
+    option :sources, type: :boolean, default: false,
+                     desc: "The one-page grouped map: every source's description under family headers"
     option :limit, type: :numeric, default: Nabu::Query::List::DEFAULT_LIMIT,
                    desc: "Maximum rows per enumeration (default #{Nabu::Query::List::DEFAULT_LIMIT}; 0 = all)"
     option :prefix, type: :string, banner: "STR",
@@ -418,7 +433,9 @@ module Nabu
 
       require_axis!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
-      if slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
+      if options[:sources]
+        print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
+      elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
@@ -2157,6 +2174,12 @@ module Nabu
       # error, never a silently ignored flag.
       def validate_list_flags!(slug)
         modes = %i[documents entries collections].select { |flag| options[flag] }
+        if options[:sources] && (!slug.empty? || modes.any? || options.values_at(
+          "long", "export-source-dossiers", "dry-run", "prefix", "lang", "license",
+          "withdrawn", "from", "to", "century"
+        ).any?)
+          raise Thor::Error, "list: --sources is the one-page grouped map — it composes with nothing"
+        end
         raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
         raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
         if options[:"export-source-dossiers"] && (!slug.empty? || modes.any?)
@@ -2228,6 +2251,40 @@ module Nabu
         entries = rows.sum(&:entries)
         parts << "#{entries} entries" if entries.positive?
         parts.join(" · ")
+      end
+
+      # P28-4: the one-page grouped map (`list --sources`) — family headers,
+      # `slug — first sentence` lines (the dossier description, ~100 chars,
+      # honest ellipsis), (off) tags from the REGISTRY (P23-3b: registry
+      # authoritative for enablement; catalog value only for orphans), one
+      # footer pointing deeper. Descriptions are the payload — no counts.
+      def print_source_map(groups, registry)
+        return say("nothing held yet — run nabu sync") if groups.empty?
+
+        groups.each_with_index do |(group, lines), index|
+          say "" if index.positive?
+          say group
+          lines.each { |line| say "  #{source_map_line(line, registry)}" }
+        end
+        say ""
+        say "nabu list SLUG for the full card · docs/library.md for the survey"
+      end
+
+      def source_map_line(line, registry)
+        entry = registry[line.slug]
+        enabled = entry ? entry.enabled : line.enabled
+        off = enabled ? "" : " (off)"
+        return "#{line.slug}#{off} — no description; nabu ingest --shelf source #{line.slug}" unless line.description
+
+        "#{line.slug}#{off} — #{truncate_line(first_sentence(line.description))}"
+      end
+
+      # The first sentence of a dossier description: up to the first
+      # terminal punctuation followed by whitespace; the whole prose when
+      # it is a single sentence.
+      def first_sentence(text)
+        prose = text.tr("\n", " ").squeeze(" ").strip
+        prose[/\A.*?[.!?](?=\s)/] || prose
       end
 
       def print_list_card(card, entry)

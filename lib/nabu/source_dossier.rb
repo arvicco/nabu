@@ -43,7 +43,11 @@ module Nabu
   class SourceDossier
     # The curated front-matter lanes with dedicated keys; anything else
     # scalar becomes an extra lane. `slug` and `provenance` are structural.
-    CURATED_KEYS = %w[description themes key_works].freeze
+    # `group` (P28-4) is OWNER-ONLY: an optional header override for the
+    # `nabu list --sources` map (absent = the family-lane derivation; present
+    # = wins verbatim). No write path — seed/scaffold/ingest never set it;
+    # the owner hand-edits the dossier.
+    CURATED_KEYS = %w[description themes key_works group].freeze
     LIST_KEYS = %w[themes key_works].freeze
     STRUCTURAL_KEYS = %w[slug provenance].freeze
 
@@ -65,14 +69,15 @@ module Nabu
     # prose) — the dossier itself is their authority.
     CURATED_PROVENANCE = "dossier"
 
-    attr_reader :slug, :description, :themes, :key_works, :note, :extras, :sections, :provenance
+    attr_reader :slug, :description, :themes, :key_works, :group, :note, :extras, :sections, :provenance
 
-    def initialize(slug:, description: nil, themes: [], key_works: [], note: nil,
+    def initialize(slug:, description: nil, themes: [], key_works: [], group: nil, note: nil,
                    extras: {}, sections: [], provenance: nil)
       @slug = slug
       @description = description
       @themes = themes
       @key_works = key_works
+      @group = group
       @note = note
       @extras = extras
       @sections = sections
@@ -95,6 +100,7 @@ module Nabu
       note, sections = split_body(match[:body])
       new(slug: declared, description: presence(front["description"]),
           themes: list_from(front["themes"]), key_works: list_from(front["key_works"]),
+          group: presence(front["group"]),
           note: note, extras: extras_from(front), sections: sections,
           provenance: front["provenance"])
     end
@@ -181,6 +187,7 @@ module Nabu
       unless key_works.empty?
         rows << Record.new(kind: "key_work", body: key_works.join(", "), provenance: CURATED_PROVENANCE)
       end
+      rows << Record.new(kind: "group", body: group, provenance: CURATED_PROVENANCE) if group
       rows << Record.new(kind: "note", body: note, provenance: CURATED_PROVENANCE) if note
       extras.each { |kind, body| rows << Record.new(kind: kind, body: body, provenance: CURATED_PROVENANCE) }
       sections.each { |s| rows << Record.new(kind: s.kind, body: s.body, provenance: s.provenance) }
@@ -198,7 +205,8 @@ module Nabu
     def with_section(section)
       kept = sections.reject { |s| s.kind == section.kind }
       self.class.new(slug: slug, description: description, themes: themes, key_works: key_works,
-                     note: note, extras: extras, sections: kept + [section], provenance: provenance)
+                     group: group, note: note, extras: extras, sections: kept + [section],
+                     provenance: provenance)
     end
 
     # Deterministic Markdown render — the inverse of .parse.
@@ -213,6 +221,7 @@ module Nabu
       front["description"] = description if description
       front["themes"] = themes unless themes.empty?
       front["key_works"] = key_works unless key_works.empty?
+      front["group"] = group if group
       extras.each { |key, value| front[key] = value }
       front["provenance"] = provenance if provenance
       YAML.dump(front)
