@@ -46,6 +46,19 @@ class CLITest < Minitest::Test
     assert_nil status, "version should not signal failure"
   end
 
+  def test_dash_dash_help_after_a_command_shows_its_help_not_execution
+    # Owner report 2026-07-18: `nabu search --help` reached FTS5 as the
+    # literal query (raw backtrace). A help flag right after a command name
+    # must route to that command's help, for every command.
+    out, _err, status = run_cli(%w[search --help])
+    assert_match(/Usage:/, out)
+    assert_match(/search/, out)
+    assert_nil status
+
+    out, = run_cli(%w[show -h])
+    assert_match(/Usage:/, out)
+  end
+
   def test_help_lists_all_commands
     out, _err, _status = run_cli(["help"])
     %w[version quickstart sync status rebuild verify search show export define etym].each do |command|
