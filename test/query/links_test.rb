@@ -137,6 +137,45 @@ module Query
       assert_equal "Discussed edition", back.groups.fetch("reference").first.title
     end
 
+    # P28-3, the third resolution grain: an INGESTED dictionary shelf's
+    # entry urns resolve to headword — dictionary title (with the shelf's
+    # language + source license class); dict urns of shelves NOT ingested
+    # (the eDIL/AED forward edges) still read "(not in catalog)".
+    def test_dictionary_entry_counterparts_resolve_at_entry_grain
+      make_passage(doc_urn: "urn:a", urn: "urn:a:1", title: "Alpha")
+      shelf = Nabu::Store::Source.create(
+        slug: "ccl", name: "CCL", adapter_class: "X", license_class: "attribution"
+      )
+      dict = Nabu::Store::Dictionary.create(
+        source_id: shelf.id, slug: "ccl", title: "Comprehensive Coptic Lexicon", language: "cop"
+      )
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dict.id, urn: "urn:nabu:dict:ccl:C1494", entry_id: "C1494",
+        key_raw: "C1494", headword: "ⲕⲁϩ", headword_folded: "ⲕⲁϩ", body: "earth",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      run_id = seed_run
+      Nabu::Store::LinksJournal.write_edge!(
+        @journal, from_urn: "urn:nabu:dict:ccl:C1494", to_urn: "urn:nabu:dict:aed:159410",
+                  kind: "etymology", score: nil, detail: "ⲕⲁϩ ← TLA 159410", run_id: run_id
+      )
+      Nabu::Store::LinksJournal.write_edge!(
+        @journal, from_urn: "urn:a:1", to_urn: "urn:nabu:dict:ccl:C1494",
+                  kind: "reference", score: nil, run_id: run_id
+      )
+
+      entry_edge = reader.run("urn:a:1").groups.fetch("reference").first
+      assert_predicate entry_edge, :resolved?
+      assert_equal ["ⲕⲁϩ — Comprehensive Coptic Lexicon", "cop", "attribution"],
+                   [entry_edge.title, entry_edge.language, entry_edge.license_class]
+
+      own = reader.run("urn:nabu:dict:ccl:C1494")
+      assert_equal "ⲕⲁϩ — Comprehensive Coptic Lexicon", own.title,
+                   "the entry urn resolves its own title too"
+      aed = own.groups.fetch("etymology").first
+      refute_predicate aed, :resolved?, "a not-yet-ingested shelf's urn stays honestly unresolved"
+    end
+
     def test_edges_survive_catalog_absence_of_the_queried_urn
       # The journal outlives catalog rows: urn:a:1 is gone from the catalog
       # (a rebuild off slimmer canonical) but its edges still read by urn.
