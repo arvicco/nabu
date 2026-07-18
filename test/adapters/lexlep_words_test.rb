@@ -157,7 +157,7 @@ class LexlepWordsTest < Minitest::Test
       entry = registry[slug]
       refute_nil entry, "config/sources.yml must register #{slug}"
       assert_equal adapter_class, entry.adapter_class
-      refute entry.enabled, "#{slug}: enabled: false until the owner-fired first sync (checklist §6)"
+      assert entry.enabled, "#{slug}: live (owner order 2026-07-18: all pre-P30 sources flipped)"
       assert_equal "manual", entry.sync_policy
     end
   end

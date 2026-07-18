@@ -487,6 +487,52 @@ gold treebanks (§6) cover only samples; frequency and collocation studies
 at corpus scale with honest `[silver]` labels; edition-vs-edition checks
 against the Perseus/First1K copies of the same works.
 
+## 8o. The Egyptian axis (`aes`, `aed`, `tla-hf`, `ccl`; synced live 2026-07-18)
+
+| | |
+|---|---|
+| **Category** | Three millennia of Egyptian in one axis: the TLA/BBAW corpus snapshot, its dictionary, the official demotic/Late Egyptian freshness channel, and the Coptic lexicon bridge |
+| **Language** | Egyptian in Unicode transliteration (`egy`, Old Kingdom through Roman), with aligned German (`ger`/`deu`) translation siblings; Coptic (`cop`) on the dictionary end |
+| **Size** | `aes`: 13,026 texts / 101,793 sentences (+ 12,985 `-de` siblings) — Pyramid Texts, Book of the Dead, Amarna, Sinuhe and the sawlit literary canon, medical papyri, letters, tomb and rock inscriptions across 16 subcorpora, ≈779k gold lemma tokens (CC BY-SA 4.0). `aed`: 35,052 dictionary entries whose ids ARE the corpus's lemma ids — `define` resolves an AES lemma directly. `tla-hf`: 13,383 demotic + 3,606 Late Egyptian sentences (the only bulk demotic anywhere; corpus v18/v19, 2023–24) with German on every sentence. `ccl`: the Comprehensive Coptic Lexicon (11,284 entries, CC BY-SA) + the ORAEC CC0 crosswalk minting `etymology` edges — the 3,000-year lemma chain (ⲕⲁϩ ← qꜣḥ ← qh) |
+| **Metadata** | Gold lemmatization throughout `aes` (`search --lemma nfr`); hieroglyphs/MdC/Gardiner encodings riding token annotations; conventional Egyptological period envelopes + findspots on the axis; the AED root network (`show urn:nabu:dict:aed:tla866216` walks *nfr*'s 56 derivatives) |
+
+**Research uses:** Egyptology with lemma-true search from the Pyramid
+Texts to demotic contracts; dictionary-resolved reading of any sentence
+(`show --parallel ger`); the egy↔cop diachronic bridge once `ccl` syncs
+(Refubium outage pending); daily-life corpora (medicine, letters, beer
+accounting) through the German layer.
+
+## 8p. Pre-Roman Italy & Sicily (`open-etruscan`, `larth-etp`, `ceipom`, `itant`, `sabellic-loans`, `lexlep`, `lexlep-words`, `tir`, `isicily`; synced live 2026-07-18)
+
+| | |
+|---|---|
+| **Category** | The whole pre-Roman epigraphic map of Italy and Sicily — seven fragmentary languages, most of them in their only machine-readable form |
+| **Language** | Etruscan (`ett`), Oscan (`osc`), Umbrian (`xum`), Faliscan (`xfa`), Venetic (`xve`), Messapic (`cms`), South Picene (`spx`), archaic Latin, Lepontic/Cisalpine Gaulish (`xlp`/`xcg`), Raetic (`xrr`), Sicel (`scx`), Elymian (`xly`), Sicilian Punic and Mamertine Oscan |
+| **Size** | `open-etruscan`: 8,047 docs — 6,248 Etruscan inscriptions + English siblings (CC BY, with the ETP scholarly glossary `larth-etp`, 1,122 entries). `ceipom`: 3,871 texts / 5,303 sentences — the lemmatized, dated, geolocated pre-Roman-Italy database incl. the Fibula Praenestina, Duenos and the complete Iguvine Tables (CC BY-SA). `itant`: 1,160 docs — 501 Oscan + 9 Lepontic critical editions with English/Italian siblings (nc). `sabellic-loans`: 85 curated Latin←Sabellic loan entries (`etym pompeii`). `lexlep`/`lexlep-words`: 494 Cisalpine inscriptions + the 627-word Lepontic lexicon (nc, relabel email pending). `tir`: 389 Raetic inscriptions — the corpus of record (nc, same email). `isicily`: 5,074 docs / 15,369 passages of Sicilian epigraphy across all languages (CC BY) |
+| **Metadata** | Signed-year datings and findspots feeding the axis at the next rebuild; script facets (eight native alphabets); Trismegistos/Imagines Italicae/EDH concordance edges; per-token lemmas and `Classical_Latin_equivalent` bridges on `ceipom`; morphemic analyses on the Lepontic lexicon |
+
+**Research uses:** comparative Italic philology beside the Latin shelves;
+Etruscan reading with a dictionary (`define avil`); loan-flagged
+etymological chains from Rome's neighbors (`etym rufus`); epigraphic
+habit studies across alphabets and centuries; the Sicilian fragmentary
+languages (Sicel, Elymian) in their only digital home.
+
+## 8q. The Hebrew shelf (`hebrew-lexicon`, `sdbh`, `sefaria`, `bhsa`, `dss`, `iip`; synced live 2026-07-18, flipped 2026-07-19)
+
+| | |
+|---|---|
+| **Category** | The Hebrew Bible and Second Temple axis around the P26-3 Masoretic shelf (`oshb`, §8b): two dictionaries, the Aramaic column, the syntax witness, the Scrolls, and the epigraphy |
+| **Language** | Biblical Hebrew (`hbo`) and Aramaic (`arc`) — both byte-verbatim under the NFC exemption — plus the epigraphic mix (Greek/Latin/Phoenician/Syriac on `iip`) |
+| **Size** | `hebrew-lexicon`: 21,144 entries in two shelves — 9,299 augmented-Strong entries (the exact ids OSHB lemmas carry: `define` resolves any OSHB lemma directly, 100.000% join) + the 11,845-entry BDB outline with print-page anchors. `sdbh`: 7,932 UBS semantic-dictionary entries with domains and 260,813 verse-level scripture refs (CC BY-SA). `sefaria`: 103 Targum documents / 57,095 passages (Onkelos, Jonathan, the Writings targums — per-version license gate; unlicensed versions excluded by rule). `bhsa`: 39 books / 23,213 verses with full ETCBC clause/phrase syntax, ketiv-qere hybrid and per-lexeme glosses (nc). `dss`: 1,001 scrolls / 500,995 words / 1.43M signs — Abegg's transcriptions under his own CC BY-NC grant, text-critical flags intact. `iip`: 5,499 inscriptions of Israel/Palestine, ~500 BCE–640 CE, densely dated (nc) |
+| **Metadata** | The `ot` alignment hub runs six-legged (MT ×2 ↔ LXX ↔ Vulgate ↔ English ↔ Onkelos — `align "GEN 1.1"`); BHSA constituency spans are the library's first syntax annotations; DSS clusters carry correction/erasure/reconstruction degrees verbatim; IIP's date axis lights at rebuild |
+
+**Research uses:** Masoretic philology with a real dictionary chain
+(lemma → augmented Strong's → BDB page); semantic-domain study over the
+whole Tanakh; Targum-beside-MT reading; clause-level syntax queries; the
+Scrolls beside the codices for textual criticism; the epigraphic record
+of the same land and centuries. Rabbinic literature proper is a future
+campaign — the Targums are its first bridgehead.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

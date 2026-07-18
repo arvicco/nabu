@@ -58,6 +58,50 @@ module Query
 
     # -- verse-for-verse: every anchor is a 1:1 pair --------------------------
 
+    # P30 review: the P25/P29 nabu-urn sibling shapes were never wired into
+    # the work-pattern chain — riig's 74 -fr siblings, open-etruscan's 1,798
+    # -en and itant's -eng/-ita/-dipl were loaded but invisible to
+    # --parallel (found live during the P29 tour).
+    def test_riig_fr_sibling_pairs
+      load_edition("urn:nabu:riig:all-01-01", "xtg", [%w[1 ieuru]], title: "RIIG ALL-01-01")
+      load_edition("urn:nabu:riig:all-01-01-fr", "fra", [%w[1 offrit]], title: "RIIG ALL-01-01 (fr)")
+
+      result = run_parallel("urn:nabu:riig:all-01-01:1", lang: "fra")
+      assert_equal "fra", result.right&.language, "the riig -fr sibling must pair"
+      pairs = result.groups.count { |g| g.kind == :pair }
+      assert_equal 1, pairs
+    end
+
+    def test_open_etruscan_en_sibling_pairs
+      load_edition("urn:nabu:open-etruscan:cr-2.20", "ett", [%w[1 mi]], title: "Cr 2.20")
+      load_edition("urn:nabu:open-etruscan:cr-2.20-en", "eng", [%w[1 I]], title: "Cr 2.20 (en)")
+
+      result = run_parallel("urn:nabu:open-etruscan:cr-2.20:1", lang: "eng")
+      assert_equal "eng", result.right&.language, "the open-etruscan -en sibling must pair"
+    end
+
+    def test_itant_translation_and_layer_siblings_pair
+      load_edition("urn:nabu:itant:oscan-2", "osc", [%w[1 pakis]], title: "ItAnt Oscan 2")
+      load_edition("urn:nabu:itant:oscan-2-eng", "eng", [%w[1 Pakis]], title: "ItAnt Oscan 2 (eng)")
+      load_edition("urn:nabu:itant:oscan-2-ita", "ita", [%w[1 Pacio]], title: "ItAnt Oscan 2 (ita)")
+
+      assert_equal "eng", run_parallel("urn:nabu:itant:oscan-2:1", lang: "eng").right&.language
+      assert_equal "ita", run_parallel("urn:nabu:itant:oscan-2:1", lang: "ita").right&.language
+    end
+
+    # ISO 639-2 B/T equivalence (owner repro 2026-07-18: tla-hf siblings are
+    # deu, aes siblings are ger — `--parallel ger` must find a deu edition
+    # and vice versa, fold-both-sides style).
+    def test_parallel_lang_accepts_the_equivalent_iso_code_spelling
+      load_edition(GRC_URN, "grc", [%w[1 original]], title: "Work")
+      load_edition(ENG_URN, "deu", [%w[1 übersetzt]], title: "Work (de tr.)")
+
+      assert_equal "deu", run_parallel("#{GRC_URN}:1", lang: "ger").right&.language,
+                   "ger must reach the deu sibling"
+      assert_equal "deu", run_parallel("#{GRC_URN}:1", lang: "de").right&.language,
+                   "the two-letter spelling must reach it too"
+    end
+
     def test_verse_for_verse_translation_is_all_pairs
       load_edition(GRC_URN, "grc", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]], title: "Iliad")
       load_edition(ENG_URN, "eng", [%w[1 Wrath], %w[2 sing], %w[3 goddess]], title: "Iliad (tr.)")

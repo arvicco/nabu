@@ -41,6 +41,20 @@ class FileFetchTest < Minitest::Test
     Nabu::FileFetch.sync!(url: URL, dir: @dir, filename: FILENAME, attic_dir: @attic, guard: guard)
   end
 
+  def test_progress_messages_are_newline_terminated
+    # Owner report 2026-07-19: multi-file sources printed "Downloading
+    # X…Downloading Y…" as one unbroken line — the fetch_line contract is
+    # RAW lines (git streams carry their own terminators), so synthetic
+    # head-messages must self-terminate.
+    stub_file("<TEI>alpha</TEI>")
+    lines = []
+    Nabu::FileFetch.sync!(url: URL, dir: @dir, filename: FILENAME, attic_dir: @attic,
+                          progress: ->(line) { lines << line })
+    downloading = lines.grep(/\ADownloading /)
+    refute_empty downloading
+    downloading.each { |line| assert line.end_with?("\n"), "synthetic fetch lines self-terminate: #{line.inspect}" }
+  end
+
   def test_fresh_fetch_writes_the_file_and_pins_the_body_sha256
     stub_file("<TEI>alpha</TEI>")
     result = sync!

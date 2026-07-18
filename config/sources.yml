@@ -220,7 +220,7 @@ bosworth-toller:
 # crosswalk last moved 2024-08) → manual.
 ccl:
   adapter: Nabu::Adapters::Ccl
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
                    # nabu links urn:nabu:dict:ccl:C1494)
   sync_policy: manual
@@ -533,7 +533,7 @@ ogham:
 
 isicily:
   adapter: Nabu::Adapters::Isicily
-  enabled: false   # P29-4: git clone ~253 MB (70 MB of XML + history);
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # CLAUDE.md checklist §6 — bin/nabu sync isicily,
                    # eyeball nabu show urn:nabu:isicily:isic001620 (the
                    # Mamertine Oscan meddices dedication, osc-Grek) and
@@ -563,7 +563,7 @@ isicily:
 
 itant:
   adapter: Nabu::Adapters::Itant
-  enabled: false   # until the owner-fired first sync is eyeballed (checklist
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
                    # nabu show urn:nabu:itant:oscan-2 (the Monte Vairano
                    # curse tablet, pakis: heleviis. trebieís) beside its
@@ -591,7 +591,7 @@ itant:
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
-  enabled: false   # until the owner-fired first sync is eyeballed
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (bin/nabu sync sabellic-loans — no network, vendored
                    # copy + LocalFetch pin; eyeball `nabu etym rufus` for
                    # the osc 𐌓𐌖𐌚𐌓𐌉𐌉𐌔 / xum 𐌓𐌖𐌚𐌓𐌖 loan pair and
@@ -689,6 +689,110 @@ oshb:
   # completed digitization with occasional corrections: re-syncs are an
   # owner decision.
 
+sdbh:
+  adapter: Nabu::Adapters::Sdbh
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # GET (FileFetch, sha256-pinned), 7,932 entries / 260,813
+                   # verse-word citation rows projected. CLAUDE.md checklist
+                   # §6: bin/nabu sync sdbh, eyeball `nabu define אור`,
+                   # `define בהו` (citations resolving to oshb verse urns
+                   # once oshb is synced) and 5 random entries, then flip.
+  # UBS Dictionary of Biblical Hebrew — the CC BY-SA 4.0 open-license
+  # extract of the Semantic Dictionary of Biblical Hebrew (SDBH, © United
+  # Bible Societies 2000-2023), dictionaries/hebrew/XML/ of
+  # github.com/ubsicap/ubs-open-license. The SECOND Hebrew dictionary
+  # shelf (MW-beside-kaikki: deliberately unmerged). content_kind
+  # :dictionary, language hbo (+arc per entry via the Strong A-space —
+  # 372 all-A entries measured; @HasAramaic marks 680 but includes mixed
+  # Hebrew lemmas with Aramaic homographs, so codes are the signal);
+  # <StrongCodes> sit in the OSHB/OSHM augmented-Strong H/A number space.
+  # Headwords/bodies byte-verbatim (the P26-3 hbo/arc NFC exemption —
+  # 3,217/7,932 lemmas measured non-NFC-stable). Upstream is ~90% complete
+  # by its own README and actively growing: re-syncs are an owner decision.
+sefaria:
+  adapter: Nabu::Adapters::Sefaria
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # §6): bin/nabu sync sefaria — index-driven fetch, books.json
+                   # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
+                   # then eyeball nabu show
+                   # urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot:1.1,
+                   # 5 random passages, and `align "GEN 1.1"` (the Aramaic
+                   # column beside MT ↔ LXX ↔ Vulgate), then flip.
+                   # Expected ≈104 documents: 121 named versions − 3 Tafsir
+                   # Rasag (excluded title) − 13 "unknown" − 1 absent license;
+                   # 12 CC-BY-NC + 1 CC-BY-NC-SA ride license_override: nc,
+                   # 9 CC-BY + 5 CC-BY-SA ride attribution, 77 PD/CC0 open.
+  # Sefaria — the TARGUM SHELF only this phase (P30-3). Upstream restructured:
+  # the git repo is a monthly books.json index (19,705 version entries), texts
+  # live in the public gs://sefaria-export bucket (~26 GB, never wholesale).
+  # NEW fetch shape (Nabu::SefariaFetch): GET index → select the Targum
+  # category's NAMED versions → named-file GETs; the index rides in canonical
+  # so scope is reproducible. THE LICENSE GATE per version, machine-readable
+  # "license" field: PD/CC0 → open, CC-BY/CC-BY-SA → attribution override,
+  # CC-BY-NC(-SA) → nc override (P10-4, MCP-excluded); "unknown"/absent →
+  # never ingested; merged.json never fetched or ingested (pinned in tests).
+  # Sefaria's "Hebrew" column on this shelf IS Aramaic → arc (NFC-exempt,
+  # byte-verbatim); Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
+  # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
+  # monthly; a re-sync is an owner decision → manual.
+bhsa:
+  adapter: Nabu::Adapters::Bhsa
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
+                   # tf/2021 + README.md, 118 files ≈ 173 MB of the 1.6 GB
+                   # repo — then eyeball nabu show urn:nabu:bhsa:gen:1.1,
+                   # urn:nabu:bhsa:ruth:1.8 --display reading (qere
+                   # substitution) and 5 random verses, `align "GEN 1.1"`
+                   # (now FOUR-legged: MT×2 ↔ LXX ↔ Vulgate), then flip).
+  # P30-4: BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC),
+  # the FIRST text-fabric source and nabu's first constituency data.
+  # SECOND Masoretic witness beside oshb at a deliberately different grain
+  # (ETCBC glosses/frequencies/H-A language + clause/phrase spans vs oshb's
+  # Strong's/OSHM) — never merged, the MW-beside-kaikki precedent. Census
+  # verified against otype.tf at fixture time: 426,590 words / 39 books /
+  # 929 chapters / 23,213 verses / 88,131 clauses / 253,203 phrases /
+  # 9,230 lexemes. LICENSE: README.md verbatim CC BY-NC 4.0 citing DOI
+  # 10.17026/dans-z6y-skyh (the GitHub MIT badge covers code only) → class
+  # nc, the proiel/gretil posture. Version PINNED to the frozen tf/2021
+  # dataset (the sparse cone IS the pin); upstream moves rarely and only
+  # in other version dirs → re-syncs are an owner decision.
+  # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
+  # is journaled in 02-sources and deliberately NOT wired.
+  sync_policy: manual
+
+dss:
+  adapter: Nabu::Adapters::Dss
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # checklist §6: bin/nabu sync dss — sparse GitFetch cone
+                   # tf/2.0 + docs/about.md, 79 files ≈ 139 MB of the 206 MB
+                   # repo — then eyeball nabu show urn:nabu:dss:3q15:1.1,
+                   # urn:nabu:dss:1qisaa:1.1, an 11q10 Aramaic Job-targum
+                   # line and 5 random lines, then flip).
+  # P30-5: DSS — the Dead Sea Scrolls (Abegg/ETCBC, github.com/ETCBC/dss),
+  # SECOND text-fabric registrant. Census verified against otype.tf at
+  # fixture time: 1,430,241 signs / 500,995 words / 52,895 lines / 11,182
+  # fragments / 1,001 scroll nodes (997 names — 4Q88/4Q483/11Q5/11Q6 each
+  # label two nodes, the second minted with a -2 urn suffix) / 10,450
+  # lexemes. Document = scroll, passage = fragment+line (the corpus's own
+  # citation grain, urn:nabu:dss:<scroll>:<fragment>.<line>); consonantal
+  # Hebrew-script transcription rides the P26-3 NFC exemption
+  # byte-verbatim; per-word lang absent/a/g → hbo/arc/grc (3Q15's Greek
+  # letter clusters); upstream's text-critical cluster nodes (cor/cor2/
+  # cor3, rem/rem2, rec, alt, unc2, vac) ride annotations VERBATIM as
+  # token-index ranges beside each token's flagged "full" bytes. LICENSE:
+  # every .tf header machine-readable "@license=Creative Commons
+  # Attribution-NonCommercial 4.0 International License" + docs/about.md's
+  # Abegg grant ("Martin Abegg graciously gave permission ... under a
+  # CC-BY-NC license") → class nc, MCP-excluded. Version PINNED tf/2.0
+  # (the sparse cone IS the pin). NOT ingested (silver, the goo300k/imp
+  # discipline): the ML-derived *_etcbc features and the v2.0 clause/
+  # phrase nodes (125/315, all in 1Qisaa — about.md: "trained on BHSA ...
+  # This is experimental"); also the lex-NODE lane + occ edges (word-grain
+  # lex rides tokens; OSHB join by consonantal folding measured at fixture
+  # time: 301/372 = 80.9% — journaled in 02-sources row 88, not wired).
+  # No date axis: tf/2.0 carries no period/dating feature (censused).
+  sync_policy: manual
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
@@ -774,7 +878,7 @@ diorisis:
 
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
-  enabled: false   # awaiting the owner-fired first real sync (checklist §6:
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # bin/nabu sync tla-hf — two FileFetch GETs, 7,284,199 B
                    # (demotic, 13,383 sentences) + 1,904,138 B (Late
                    # Egyptian, 3,606 sentences) ≈ 9.2 MB total; then eyeball
@@ -807,7 +911,7 @@ tla-hf:
 
 aes:
   adapter: Nabu::Adapters::Aes
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync aes — a sparse GitFetch of
                    # github.com/simondschweitzer/aes scoped to files/aes +
                    # README.md (the ~342 MB JSON cone; the ~114 MB relANNIS
@@ -836,7 +940,7 @@ aes:
   translations: true
 aed:
   adapter: Nabu::Adapters::Aed
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync aed — sparse clone, the
                    # ~18 MB dictionary cone of a 651 MB repo — then eyeball
                    # nabu define nfr / define aa / define --lang egy htp
@@ -854,7 +958,7 @@ aed:
 
 ceipom:
   adapter: Nabu::Adapters::Ceipom
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync ceipom — five FileFetch
                    # GETs off Zenodo record 6475427 (texts/sentences/
                    # tokens/analysis/links CSVs, 16.8 MB, UTF-16). Expect
@@ -890,7 +994,7 @@ ceipom:
 # (no registry change — the P25-2 precedent).
 open-etruscan:
   adapter: Nabu::Adapters::OpenEtruscan
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync open-etruscan — two
                    # FileFetch GETs, 770,613 B Zenodo CSV + 302,495 B Larth
                    # findspots ≈ 1.0 MB; expect 6,248 docs — 6,094 clean +
@@ -930,7 +1034,7 @@ open-etruscan:
 
 larth-etp:
   adapter: Nabu::Adapters::LarthEtp
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
                    # GET; expect 1,122 entries; eyeball `nabu define avil`
                    # (year), `nabu define acil` (the 643/644 homograph
@@ -948,7 +1052,7 @@ larth-etp:
   # occasionally → manual; a re-pin is an owner decision.
 lexlep:
   adapter: Nabu::Adapters::Lexlep
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
                    # 50-title api.php batches, minutes at the polite delay —
                    # then eyeball nabu show urn:nabu:lexlep:bi-8 ("sipiu
@@ -969,7 +1073,7 @@ lexlep:
 
 lexlep-words:
   adapter: Nabu::Adapters::LexlepWords
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep-words — 628 Word
                    # pages — then eyeball nabu define uvamokozis / define
                    # --lang xlp and 5 random entries before flipping).
@@ -983,7 +1087,7 @@ lexlep-words:
 
 tir:
   adapter: Nabu::Adapters::Tir
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync tir — ~770 pages — then
                    # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
                    # laþe?) and 5 random inscriptions before flipping).
@@ -997,6 +1101,58 @@ tir:
   # Terms-of-Use grant, empty rightsinfo footer → class nc PENDING
   # licensing email №17; relabel-on-reply. Trismegistos sigla → tm:
   # reference edges.
+  sync_policy: manual
+
+iip:
+  adapter: Nabu::Adapters::Iip
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # (CLAUDE.md checklist §6 — bin/nabu sync iip, eyeball
+                   # nabu show urn:nabu:iip:dabb0001 (Jewish Aramaic
+                   # architrave, byte-verbatim under the NFC exemption,
+                   # inline Greek foreign spans) and urn:nabu:iip:abur0001
+                   # (Greek invocation mosaic) plus 5 random records, then
+                   # flip). Expected census at commit 0b7dc835: 5,535
+                   # records discovered (aaTestFile.xml skipped by rule)
+                   # → 5,499 docs (77 metadata-only, 361 diplomatic-
+                   # fallback) / 17,823 passages — verified with the
+                   # shipped parser over the full clone;
+                   # QUARANTINE FLOOR 36 (7 malformed XML, 29 filename↔
+                   # publicationStmt-idno drift records — all upstream
+                   # defects, named in the parser class note).
+  # P30-6: Inscriptions of Israel/Palestine (Brown University; Satlow;
+  # github.com/Brown-University-Library/iip-texts) — 5,535 EpiDoc
+  # records, Hebrew/Aramaic/Greek/Latin epigraphy of the southern
+  # Levant ~500 BCE–640 CE: grc 2,919 · arc 1,755 · he 376 · la 273 ·
+  # phn/syc/xcl/geo tail. The Jewish Aramaic layer (arc — byte-verbatim
+  # under the P26-3 NFC exemption) is the corpus's distinctive value.
+  # CC BY-NC 4.0 → class nc (the archival copies' own availability
+  # statement; the repo has NO LICENSE file and the working files defer
+  # to a Brown-server xi:include): local research only, never
+  # redistributed, never exposed externally. No concordance idnos exist
+  # → no reference edges. Plain notBefore/notAfter signed years +
+  # settlement findspots → AxisBuilder::IipDates (~5,530 axis rows,
+  # ~270 place-only). Upstream commits sporadically (master tip 2024-07
+  # at the census) → re-syncs are owner-fired.
+hebrew-lexicon:
+  adapter: Nabu::Adapters::HebrewLexicon
+  enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # checklist §6: bin/nabu sync hebrew-lexicon — plain
+                   # GitFetch, 9.2 MB — then eyeball nabu define ברא /
+                   # define אלהים, nabu show urn:nabu:dict:hebrew-lexicon:
+                   # 1254a resolved from an OSHB lemma, and 5 random
+                   # entries before flipping).
+  # P30-1: the OSHB Hebrew Lexicon (openscriptures/HebrewLexicon — same
+  # org as the oshb/morphhb corpus; CC BY 4.0 verbatim readme.md, the
+  # underlying Strong's/BDB texts PD). ONE source, TWO dictionaries (the
+  # lexica LSJ+LS grain): "hebrew-lexicon" = the augmented-Strong shelf
+  # (9,299 AugIndex ids verbatim — THE JOIN CONTRACT: exactly what an
+  # OSHB lemma yields after HebrewLexicon.normalize_lemma, measured
+  # 49,946/49,946 = 100.000% on the live catalog) assembled from
+  # AugIndex + LexicalIndex + HebrewStrong; "bdb" = the Brown-Driver-
+  # Briggs outline (11,845 entries, <status p> print pages as unresolved
+  # citation rows — deep links into the future BDB 1906 scan). New
+  # oshb-lexicon family (OSHB's own XML namespace). Upstream content
+  # frozen since 2019 → re-fetch is an owner decision.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

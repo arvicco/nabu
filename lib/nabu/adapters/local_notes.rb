@@ -58,7 +58,7 @@ module Nabu
       # un-atticked disappearances loudly, trips the house mass-deletion
       # breaker (--force overrides).
       def fetch(workdir, progress: nil, force: false)
-        progress&.call("Scanning #{workdir}…")
+        progress&.call("Scanning #{workdir}…\n")
         result = LocalFetch.sync!(dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME), force: force,
                                   hint: "for local-notes: bin/nabu note URN \"TEXT\"")
         FetchReport.new(sha: result.sha, fetched_at: Time.now,

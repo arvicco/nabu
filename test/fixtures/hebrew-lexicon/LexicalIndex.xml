@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xsi:schemaLocation="http://openscriptures.github.com/morphhb/namespace LiSchema.xsd" 
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns="http://openscriptures.github.com/morphhb/namespace">
+	<part xml:lang="heb">
+		<entry id="aqq">
+			<w xlit="ʾēl">אֵל</w> <pos>N</pos> <def>god</def>
+			<xref bdb="a.dl.ab" strong="410" twot="93a"/>
+			<etym type="sub">arm</etym>
+		</entry>
+		<entry id="aqs">
+			<w xlit="ʾel">אֶל</w> <pos>R</pos> <def>motion to</def>
+			<xref bdb="a.di.aa" strong="413" twot="91"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="arn">
+			<w xlit="ʾĕlōhîm">אֱלֹהִים</w> <pos>N</pos> <def>gods</def>
+			<xref bdb="a.dl.ad" strong="430" twot="93c"/>
+			<etym type="sub">arm</etym>
+		</entry>
+		<entry id="axt">
+			<w xlit="ʾānōkî">אָֽנֹכִ֫י</w> <pos>Pp</pos> <def>I</def>
+			<xref bdb="a.ei.aa" strong="595" twot="130"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="bep">
+			<w xlit="ʾereṣ">אֶ֫רֶץ</w> <pos>N</pos> <def>earth</def>
+			<xref bdb="a.fx.aa" strong="776" twot="167"/>
+			<etym root="ארץ" type="main"/>
+		</entry>
+		<entry id="bgz">
+			<w xlit="ʾăšer">אֲשֶׁר</w> <pos>T</pos> <def>who</def>
+			<xref bdb="a.gk.aa" strong="834" aug="a" twot="184"/>
+			<etym root="אשׁר" type="main">bjl, gjb</etym>
+		</entry>
+		<entry id="bhu">
+			<w xlit="ʾēt">אֵת</w> <pos>T</pos> <def>mark of the accusative</def>
+			<xref bdb="a.gm.aa" strong="853" twot="186"/>
+			<etym root="אות" type="main"/>
+		</entry>
+		<entry id="bps">
+			<w xlit="bēyt-ʾēl">בֵּֽיתְ־אֵל</w> <pos>Np</pos> <def>Beth-el</def>
+			<xref bdb="b.bp.ad" strong="1008" twot="241a"/>
+			<etym type="sub">bog</etym>
+		</entry>
+		<entry id="bxy">
+			<w xlit="bārāʾ">בָּרָא</w> <pos>V</pos> <def>shape</def>
+			<xref bdb="b.cw.aa" strong="1254" aug="a" twot="278"/>
+			<etym root="ברא" type="main">byx</etym>
+		</entry>
+		<entry id="clc">
+			<w xlit="galʿēd">גַּלְעֵד</w> <pos>Np</pos> <def>Galeed</def>
+			<xref bdb="c.cd.ad" strong="1567"/>
+		</entry>
+		<entry id="dez">
+			<w xlit="zōʾt">זֹאת</w> <pos>Pd</pos> <def>this</def>
+			<xref bdb="g.ah.aa" strong="2063" twot="528"/>
+			<etym type="main">dfy</etym>
+		</entry>
+		<entry id="feu">
+			<w xlit="yaʿăqōb">יַעֲקֹב</w> <pos>Np</pos> <def>Jacob</def>
+			<xref bdb="p.eu.aj" strong="3290" twot="1676f"/>
+			<etym type="sub">jtg</etym>
+		</entry>
+		<entry id="fga">
+			<w xlit="yāṣāʾ">יָצָא</w> <pos>V</pos> <def>go out</def>
+			<xref bdb="j.cq.aa" strong="3318" twot="893"/>
+			<etym root="יצא" type="main">fgj, gpp, gpq, kou, npw</etym>
+		</entry>
+		<entry id="gau">
+			<w xlit="lĕ">לְ</w> <pos>R</pos> <def>to</def>
+			<xref bdb="l.aa.ab" strong="l" twot="1063"/>
+			<etym type="sub">gat</etym>
+		</entry>
+		<entry id="gcf">
+			<w xlit="lābān">לָבָן</w> <pos>Np</pos> <def>Laban</def>
+			<xref bdb="l.ak.ad" strong="3837" aug="a"/>
+		</entry>
+		<entry id="gop">
+			<w xlit="môledet">מוֹלֶ֫דֶת</w> <pos>N</pos> <def>kindred</def>
+			<xref bdb="j.bn.ai" strong="4138" twot="867f"/>
+			<etym type="sub">fbi</etym>
+		</entry>
+		<entry id="hcf">
+			<w xlit="min">מִן־</w> <pos>R</pos> <def>out of</def>
+			<xref bdb="m.cl.aa" strong="4480" aug="a" twot="1212"/>
+			<etym type="main">hxh</etym>
+		</entry>
+		<entry id="hkd">
+			<w xlit="maṣṣēbâ">מַצֵּבָה</w> <pos>N</pos> <def>pillar</def>
+			<xref bdb="n.ep.ai" strong="4676" twot="1398g"/>
+			<etym type="sub">ild</etym>
+		</entry>
+		<entry id="hsr">
+			<w xlit="māšaḥ">מָשַׁח</w> <pos>V</pos> <def>smear</def>
+			<xref bdb="m.dt.aa" strong="4886" twot="1255"/>
+			<etym root="משׁח" type="main">hca, hss, hst, htg</etym>
+		</entry>
+		<entry id="iaw">
+			<w xlit="neder">נֶ֫דֶר</w> <pos>N</pos> <def>vow</def>
+			<xref bdb="n.bj.ab" strong="5088" twot="1308a"/>
+			<etym type="sub">iax</etym>
+		</entry>
+		<entry id="iax">
+			<w xlit="nādar">נָדַר</w> <pos>V</pos> <def>vow</def>
+			<xref bdb="n.bj.aa" strong="5087" twot="1308"/>
+			<etym root="נדר" type="main">iaw</etym>
+		</entry>
+		<entry id="jze">
+			<w xlit="ʿattâ">עַתָּ֫ה</w> <pos>D</pos> <def>now</def>
+			<xref bdb="p.dt.ae" strong="6258" twot="1650c"/>
+			<etym type="sub">jpe</etym>
+		</entry>
+		<entry id="let">
+			<w xlit="qûm">קוּם</w> <pos>V</pos> <def>arise</def>
+			<xref bdb="s.av.aa" strong="6965" aug="b" twot="1999"/>
+			<etym root="קום" type="main">fhg, hmi, leu, lev, lgl, lgm, lij, nwu, nwv</etym>
+		</entry>
+		<entry id="lln">
+			<w xlit="qārāʾ">קָרָא</w> <pos>V</pos> <def>call</def>
+			<xref bdb="s.cy.aa" strong="7121" twot="2063"/>
+			<etym root="קרא" type="main">hnd, llp, lmp, lmq</etym>
+		</entry>
+		<entry id="lqb">
+			<w xlit="rēʾšît">רֵאשִׁית</w> <pos>N</pos> <def>beginning</def>
+			<xref bdb="t.ad.ag" strong="7225" twot="2097e"/>
+			<etym type="sub">lpx</etym>
+		</entry>
+		<entry id="mlk">
+			<w xlit="šûb">שׁוּב</w> <pos>V</pos> <def>turn back</def>
+			<xref bdb="v.bn.aa" strong="7725" twot="2340"/>
+			<etym root="שׁוב" type="main">hsj, mll, mlm, mlo, mrl, nym</etym>
+		</entry>
+		<entry id="myh">
+			<w xlit="šām">שָׁם</w> <pos>D</pos> <def>there</def>
+			<xref bdb="v.dv.aa" strong="8033" twot="2404"/>
+			<etym type="main">evy</etym>
+		</entry>
+		<entry id="mzj">
+			<w xlit="šāmayim">שָׁמַיִם</w> <pos>N</pos> <def>heavens</def>
+			<xref bdb="v.dy.ab" strong="8064" twot="2407a"/>
+			<etym type="sub">myu</etym>
+		</entry>
+	</part>
+	<part xml:lang="arc">
+		<entry id="nyx">
+			<w xlit="ʾăbad">אֲבַד</w> <pos>V</pos> <def>perish</def>
+			<xref bdb="xa.ab.aa" strong="7" twot="2555"/>
+			<etym root="אבד" type="main"/>
+		</entry>
+		<entry id="oaf">
+			<w xlit="ʾĕlāh">אֱלָהּ</w> <pos>N</pos> <def>god</def>
+			<xref bdb="xa.an.ab" strong="426" twot="2576"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="oag">
+			<w xlit="ʾēlleh">אֵלֶּה</w> <pos>Pd</pos> <def>these</def>
+			<xref bdb="xa.ao.aa" strong="429" twot="2577"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="oao">
+			<w xlit="ʾămar">אֲמַר</w> <pos>V</pos> <def>say</def>
+			<xref bdb="xa.at.aa" strong="560" twot="2585"/>
+			<etym root="אמר" type="main">oap, onx</etym>
+		</entry>
+		<entry id="ocb">
+			<w xlit="ʾăraʿ">אֲרַע</w> <pos>N</pos> <def>earth</def>
+			<xref bdb="xa.bi.ae" strong="772" twot="2610"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="ocd">
+			<w xlit="ʾăraq">אֲרַק</w> <pos>N</pos> <def>earth</def>
+			<xref bdb="xa.bi.ag" strong="778" twot="2612"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="ofo">
+			<w xlit="dî">דִּי</w> <pos>T</pos> <def>who</def>
+			<xref bdb="xd.ag.aa" strong="1768" twot="2673"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="ogb">
+			<w xlit="dĕnâ">דְּנָה</w> <pos>Pd</pos> <def>this</def>
+			<xref bdb="xd.am.aa" strong="1836" twot="2680"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="oks">
+			<w xlit="yĕgar">יְגַר</w> <pos>N</pos> <def>heap</def>
+			<xref bdb="xj.aa.ac" strong="3026" aug="a" twot="2762"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="onf">
+			<w xlit="lāʾ">לָא</w> <pos>D</pos> <def>not</def>
+			<xref bdb="xl.ab.aa" strong="3809" twot="2808"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="opc">
+			<w xlit="min">מִן</w> <pos>R</pos> <def>from</def>
+			<xref bdb="xm.ak.aa" strong="4481" twot="2833"/>
+			<etym type="main"/>
+		</entry>
+		<entry id="osn">
+			<w xlit="ʿăbad">עֲבַד</w> <pos>V</pos> <def>make</def>
+			<xref bdb="xp.aa.aa" strong="5648" twot="2896"/>
+			<etym root="עבד" type="main">opl, osm, osp</etym>
+		</entry>
+		<entry id="ozm">
+			<w xlit="śāhădû">שָֽׂהֲדוּ</w> <pos>N</pos> <def>testimony</def>
+			<xref bdb="xu.ab.ac" strong="3026" aug="b" twot="3005"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="pas">
+			<w xlit="šāmayin">שָׁמַ֫יִן</w> <pos>N</pos> <def>heavens</def>
+			<xref bdb="xv.au.ab" strong="8065" twot="3038"/>
+			<etym type="single"/>
+		</entry>
+		<entry id="pce">
+			<w xlit="tĕḥôt">תְּחוֹת</w> <pos>R</pos> <def>under</def>
+			<xref bdb="xw.ac.ac" strong="8460" twot="3056"/>
+			<etym type="single"/>
+		</entry>
+	</part>
+</index>
