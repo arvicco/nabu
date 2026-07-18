@@ -9,7 +9,9 @@ description: >-
 Nabu is a piece of personal research infrastructure that gathers the world's
 openly licensed digital corpora of antiquity — Homer and the Greek canon, the
 Latin classics, the documentary papyri of Egypt, the Latin inscriptions of
-the Roman empire, the Sanskrit tradition, cuneiform tablets, the New
+the Roman empire, the Sanskrit tradition and the Pali canon, cuneiform
+tablets, three millennia of Egyptian sentences, the Masoretic Hebrew Bible
+with its Targums, the inscriptions of pre-Roman Italy and Sicily, the New
 Testament in up to fifteen parallel witnesses, the
 complete corpus of Old English poetry — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is

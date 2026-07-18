@@ -152,9 +152,66 @@ MARK 2.3 — New Testament (parallel witnesses)
 …
 ```
 
-The Old Testament runs on the Septuagint ↔ Vulgate ↔ English axis, with the
-Greek/Hebrew Psalm numbering divergence mapped rather than hidden:
-`align "PSA 22.1"` shows the World English Bible's 23.1, labelled as such.
+The Old Testament axis grew its Hebrew legs on 18 July 2026: `align
+"GEN 1.1"` now renders the Masoretic text (byte-verbatim Leningrad Codex,
+twice — OSHB and the ETCBC's BHSA) beside the Septuagint, the Vulgate,
+the English, and Targum Onkelos's Aramaic — six witnesses per verse, with
+the Greek/Hebrew Psalm numbering divergence mapped rather than hidden:
+`align "PSA 22.1"` shows the Hebrew witnesses' 23.1, labelled as such.
 Dictionary lookups close the loop — the LSJ entry for μῆνις resolves its
 citations to live passages in the catalog (see
 [Tools]({{ '/tools/' | relative_url }})).
+
+## For the egyptologist
+
+Three millennia of Egyptian arrived on 18 July 2026 as one axis: the
+TLA/BBAW sentence corpus with gold lemmatization, its dictionary keyed by
+the same lemma ids, the only bulk demotic dataset in existence, and the
+Coptic lexicon with a crosswalk that walks a word across the whole span.
+
+```
+$ bin/nabu show urn:nabu:aes:sawlit:BRMYDZFU3BFT7JLX45UAGVMKMI --parallel ger
+  :IBUBd5wLLFaLn06ZvzVW4ePuFIg
+    egy  šms,w Zꜣ-nh,t ḏd =f
+    ger  Der Gefolgsmann Sinuhe, er sagt:
+…
+$ bin/nabu search --lemma nfr          # every inflection, glossed
+$ bin/nabu show urn:nabu:dict:aed:tla866216   # the root nfr and its 56 derivatives
+$ bin/nabu links urn:nabu:dict:ccl:C1494      # ⲕⲁϩ ← qꜣḥ ← qh, 3,000 years
+```
+
+## For the student of pre-Roman Italy
+
+Seven fragmentary languages landed 18 July 2026, most in their only
+machine-readable form: the oldest Latin in existence, the complete
+Iguvine Tables in Umbrian, Etruscan with a scholarly glossary, Oscan in
+Greek script from Messina, and the Alpine corpora of Lepontic and Raetic.
+
+```
+$ bin/nabu show urn:nabu:ceipom:2:2
+  Manios med fhefhaked Numasioi         # the Fibula Praenestina, 7th c. BCE
+$ bin/nabu show urn:nabu:ceipom:995     # the Iguvine Tables, all 688 sentences
+$ bin/nabu define avil                  # Etruscan "year" (ETP glossary)
+$ bin/nabu etym pompeii
+  Pompeii [lat] (loan) → *pompe [osc] ← *kʷenkʷe [itc-pro] "five"
+```
+
+## For the Hebraist
+
+The Masoretic text is held byte-verbatim — the Leningrad Codex's
+combining-mark order is never normalized away — with full morphology,
+ketiv/qere both preserved, and the verse-aligned Aramaic of the Targums
+beside it. The ETCBC's BHSA adds clause-level syntax; the Dead Sea
+Scrolls (Abegg's transcriptions, 1,001 scrolls) and the augmented-Strong's
+lexicon land with the current release cycle.
+
+```
+$ bin/nabu show urn:nabu:oshb:gen:1.1
+  בְּרֵאשִׁ֖ית בָּרָ֣א אֱלֹהִ֑ים …
+$ bin/nabu align "GEN 1.1"              # six witnesses: MT ×2, LXX, Vulgate, English, Onkelos
+```
+
+A note on scope: the library today serves the Hebrew Bible and Second
+Temple corpora. Rabbinic literature proper — Mishnah, Talmud, midrash —
+is a planned campaign of its own; the Targum shelf and the Jastrow
+dictionary scans are its first bridgeheads.
