@@ -18,13 +18,15 @@ module Nabu
     # The --display flag, shared by every command that renders passage text to
     # the terminal (P27-0: show, align, search, concord, parallels, cognates).
     # Modes come from the Nabu::Display registry so sibling packets can add
-    # modes (reading, translit, mono) without touching this declaration.
+    # modes (reading, …) without touching this declaration.
     def self.display_option
       option :display, type: :string, default: Nabu::Display::DEFAULT_MODE, banner: "MODE",
                        desc: "Display mode: default (config/display.yml policies), " \
                              "full (every stored byte, no transforms), plain (strip all " \
                              "defined mark classes), reading (edition apparatus simplified, " \
-                             "qere read), diplomatic (edition marks as stored) — see docs/display.md"
+                             "qere read), diplomatic (edition marks as stored), " \
+                             "translit (romanized rendering), " \
+                             "mono (default without token colors) — see docs/display.md"
     end
 
     desc "version", "Print the Nabu version"
@@ -697,7 +699,7 @@ module Nabu
                                    .run(query, lang: options[:lang], license: options[:license],
                                                limit: options[:limit].to_i, from: from, to: to, place: place,
                                                facets: facets, source: options[:source])
-      print_search_results(results, facets: facets)
+      print_search_results(results, facets: facets, query: query)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -1947,6 +1949,22 @@ module Nabu
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
 
+    # The no-silent-script-miss table (P27-2). A zero-hit query carrying
+    # codepoints of a script NO fold neutralization covers gets ONE honest
+    # hint naming what to try — the owner incident was exactly a silent
+    # cross-script miss. Censused entries only: Glagolitic rides the OCS
+    # dictionary shelf as variant forms (never passage text), and the
+    # Gothic corpora are romanized (conventions §9). Devanagari and
+    # Cyrillic do NOT hint — their neutralizations already fold them.
+    SCRIPT_MISS_HINTS = {
+      "Glagolitic" => [0x2C00..0x2C5F,
+                       "no cross-script fold is registered for Glagolitic — the Slavic shelves " \
+                       "index Cyrillic and Latin-diplomatic spellings (try въста or vъsta)"],
+      "Gothic-script" => [0x10330..0x1034F,
+                          "no cross-script fold is registered for Gothic script — the Gothic " \
+                          "corpora are romanized (try guþ, jah)"]
+    }.freeze
+
     no_commands do
       # -- display policy (P27-0) ------------------------------------------
       # Passage text reaches the terminal ONLY through display_text, which
@@ -1994,21 +2012,56 @@ module Nabu
         @display_applied ||= Set.new
       end
 
+      # Per-token language coloring (P27-2): the single-passage show view —
+      # the one render where the stored P7-5 tokens annotation is at hand —
+      # colorizes tokens tagged with a language OTHER than the passage's own
+      # (corph's Latin glosses in Old Irish, OSHB's Aramaic verses). Gated
+      # three ways: the mode's #colors? (mono/full say no), NO_COLOR /
+      # NABU_COLOR / tty (Display.color?), and the honest-tagging rule
+      # (untagged and base-language tokens stay uncolored). Painting wraps
+      # PRISTINE token forms before the display transform — ANSI escapes are
+      # ASCII, untouched by mark-class strips and NFC round-trips.
+      def painted_passage_text(passage)
+        return passage.text unless color_output?
+
+        tokens = passage.annotations["tokens"]
+        return passage.text unless tokens.is_a?(Array)
+
+        painted, legend = Nabu::Display::TokenColors.paint(passage.text, tokens: tokens,
+                                                                         language: passage.language)
+        return passage.text if legend.empty?
+
+        display_applied << "token colors: #{legend.map { |lang, color| "#{lang}=#{color}" }.join(' ')}"
+        painted
+      end
+
+      def color_output?
+        mode = display_mode
+        (!mode.respond_to?(:colors?) || mode.colors?) && Nabu::Display.color?(tty: $stdout.tty?)
+      end
+
       # The once-per-invocation honesty footer: named only when a transform
       # actually changed something (compact rule — zero-signal silence).
       #   display: cantillation stripped (--display full shows all marks)
       #   display: cantillation stripped · rtl isolates (--display full shows all marks)
-      # Edition transforms (P27-1) get their own vocabulary and escape hatch:
-      #   display: apparatus simplified: sigla (--display diplomatic shows the edition marks)
+      # One footer per invocation, composing every applied transform's
+      # vocabulary (P27-0 strips · P27-1 edition · P27-2 translit/colors/
+      # spacing); the escape hatch names diplomatic when edition transforms
+      # applied, else full.
       def print_display_footer
         return if display_applied.empty?
 
-        edition = Nabu::Display::EDITION_LABELS & display_applied.to_a
-        strips = display_applied.to_a - [Nabu::Display::ISOLATES] - edition
+        labels = display_applied.to_a
+        edition = Nabu::Display::EDITION_LABELS & labels
         parts = []
+        parts << "transliterated" if labels.delete("translit")
+        colors = labels.select { |label| label.start_with?("token colors") }
+        strips = labels - colors - edition - ["spacing", Nabu::Display::ISOLATES]
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
         parts << "apparatus simplified: #{edition.join(', ')}" unless edition.empty?
-        parts << Nabu::Display::ISOLATES if display_applied.include?(Nabu::Display::ISOLATES)
+        parts << "spacing" if labels.include?("spacing")
+        parts.concat(colors)
+        parts << Nabu::Display::ISOLATES if labels.include?(Nabu::Display::ISOLATES)
         hint = edition.empty? ? "--display full shows all marks" : "--display diplomatic shows the edition marks"
         say "display: #{parts.join(' · ')} (#{hint})"
       end
@@ -2402,7 +2455,7 @@ module Nabu
 
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
-        say "  #{display_text(passage.text, passage.language,
+        say "  #{display_text(painted_passage_text(passage), passage.language,
                               source: passage.source_slug, annotations: passage.annotations)}"
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
@@ -2852,12 +2905,25 @@ module Nabu
         nil
       end
 
+      # One hint line per unregistered script present in the zero-hit query;
+      # silent (zero-signal) otherwise.
+      def print_script_miss_hints(query)
+        return if query.nil?
+
+        SCRIPT_MISS_HINTS.each_value do |(range, hint)|
+          say "note: #{hint}" if query.each_char.any? { |char| range.cover?(char.ord) }
+        end
+      end
+
       # Render hits: urn + optional [language] header, then the FTS snippet
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil)
-        return say("no matches") if results.empty?
+      def print_search_results(results, facets: nil, query: nil)
+        if results.empty?
+          say "no matches"
+          return print_script_miss_hints(query)
+        end
 
         results.each do |result|
           say "#{result.urn}#{" [#{result.language}]" if result.language}"
@@ -3488,7 +3554,7 @@ module Nabu
                                                       limit: options[:limit].to_i, morph: options[:morph],
                                                       source: options[:source],
                                                       gold_only: options[:gold_only])
-        print_lemma_results(results)
+        print_lemma_results(results, query: lemma)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3553,8 +3619,11 @@ module Nabu
       # folded snippet here. Silver (automatic-lemmatization) hits are labeled
       # per hit — gold stays unlabeled, the pre-tier render exactly (P26-0);
       # the footer totals the silver share and names the way out.
-      def print_lemma_results(results)
-        return say("no matches") if results.empty?
+      def print_lemma_results(results, query: nil)
+        if results.empty?
+          say "no matches"
+          return print_script_miss_hints(query)
+        end
 
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms

@@ -8,15 +8,33 @@
 #   keep:     classes kept by default but stripped by `--display plain`
 #   isolates: wrap rendered runs in U+2067/U+2069 (RTL isolate) — harmless
 #             where bidi is absent, correct where present
+#   spacing:  insert a separator between grapheme clusters (P27-2) — the
+#             Ogham legibility knob; between two Ogham letters the separator
+#             is U+1680 OGHAM SPACE MARK, so the stemline stays continuous
 #
 # Mark classes are named codepoint sets defined in Nabu::Display::MARK_CLASSES
 # (cantillation, points, maqaf, vedic-accents, titla, monotonic). `monotonic`
 # (grc) is definable here but deliberately not defaulted.
+#
+# orv/bul carry EMPTY policies deliberately (P27-2): a policy row is what
+# lets `--display translit` reach a language (render passes through policyless
+# languages untouched); their default mode strips nothing — orv titla
+# stripping was not part of the P27-0 owner gate and is not smuggled in here.
+#
+# pgl (Primitive Irish — attested ONLY in Ogham script, so the primary-subtag
+# key is collision-free) defaults spacing ON: Ogham letters are stroke
+# clusters on one shared stemline and merge unsegmented in a terminal;
+# `--display full` restores the exact stored run. The corpus's sga-Ogam/und
+# layers cannot be keyed without hitting Latin-script sga (corph) — journaled
+# residue, backlog P27-2.
 languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
   san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
   chu: { strip: [titla] }
+  orv: {}
+  bul: {}
+  pgl: { spacing: true }
 
 # Edition-level conventions (P27-1) — per-SOURCE rules the `reading` mode
 # executes (`--display diplomatic` shows the marks as stored). Census-first

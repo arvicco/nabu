@@ -96,7 +96,7 @@ class WiktionaryReconTest < Minitest::Test
     slavic = adapter.parse(adapter.discover(FIXTURES).first)
     bog = slavic.entries.find { |e| e.entry_id == "bogъ:noun:2" } || flunk("bogъ:noun:2 missing")
     refute_empty bog.reflexes
-    assert(bog.reflexes.any? { |r| r.language == "chu" && r.word_folded == "богъ" })
+    assert(bog.reflexes.any? { |r| r.language == "chu" && r.word_folded == "bogъ" }) # P27-2 skeleton
   end
 
   # P17-3: the borrowed flag rides the crosswalk edge. In *hlaibaz's real
