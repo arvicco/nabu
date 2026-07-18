@@ -9672,7 +9672,19 @@ MT ↔ LXX ↔ Vulgate ↔ English ↔ Targum).
   eyeball `align "GEN 1.1"` shows the Targum column after sync).
 - Registry enabled: false, sync_policy manual.
 
-## P30-4 · text-fabric family + BHSA — the syntax axis  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+## P30-4 · text-fabric family + BHSA — the syntax axis  [tier: fable] [status: SHIPPED 2026-07-18 — worklog P30-4, sha TBD] [deps: —]
+
+SHIPPED (packet result): family `Nabu::Adapters::TextFabric` (Feature +
+Dataset; anchors/ranges/empty-value cursor/escapes/otype/oslots;
+@edgeValues refused — untested support would be invented format) + adapter
+`Nabu::Adapters::Bhsa`; every briefed census number verified exact against
+otype.tf EXCEPT "64,514 sentences" = the sentence_ATOM count (sentences
+proper 63,717; neither ingested — journaled). Spans contract published in
+architecture §5 for the dss re-registration; qere shape pinned e2e against
+the shipped P27 display policy on the SAME Ruth 1:8 K/Q instance oshb's
+fixture pins. 02-sources row 83 (next-free at packet time — renumber on
+merge collision), registry enabled: false/manual, ot+psalms hub witnesses
+config-only. bridging journaled, not wired.
 
 github.com/ETCBC/bhsa — license README verbatim: CC BY-NC 4.0, cite DOI
 10.17026/dans-z6y-skyh; the GitHub MIT badge covers code only → class
