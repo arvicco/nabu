@@ -1003,3 +1003,12 @@ CLI can do for you). The operating summary:
   defines (consonantal Hebrew). Any applied transform is announced in a
   one-line footer (`display: cantillation stripped (--display full shows
   all marks)`); silence means the bytes are untouched.
+- **P27-2 additions**: `--display translit` romanizes (san→IAST,
+  hbo/arc→SBL-style, chu/orv/bul→scholarly Latin); `--display mono` =
+  default without per-token language coloring (`nabu show` colors
+  code-switched tokens by their stored `lang` tag on a TTY; `NO_COLOR`
+  honored); `pgl` letter-spaces Ogham with U+1680. Search-side, the
+  cross-script fold (conventions §9) makes `धर्मन्`≡`dharman` and
+  `vъsta`≡`въста` ONE query — **an index built before P27-2 misses
+  cross-script hits until one `nabu rebuild` (or per-source resyncs of
+  the san/chu/orv/bul shelves) re-derives it.**

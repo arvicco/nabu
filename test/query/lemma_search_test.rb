@@ -390,5 +390,33 @@ module Query
                    "gold_only on a pre-tier index is a no-op, never a crash"
       assert_equal %w[gold gold], results.map(&:tier)
     end
+
+    # -- cross-script lemma lookup (P27-2) -----------------------------------
+
+    # OWNER REPRO (2026-07-18a), the --lemma half: nabu's reflex render
+    # prints the Devanagari form beside a "nabu search --lemma" hint — the
+    # pasted form must find the passages the DCS-style IAST lemma indexes
+    # (the render/query round-trip contract).
+    def test_devanagari_lemma_paste_finds_the_iast_indexed_attestations
+      doc = make_document(urn: "urn:d:dcs", title: "DCS", language: "san")
+      make_passage(doc, urn: "urn:d:dcs:1", text: "dharman iti", sequence: 0, language: "san",
+                        lemmas: [%w[dharman dharman]])
+      rebuild!
+
+      assert_equal %w[urn:d:dcs:1], search("धर्मन्").map(&:urn),
+                   "the reflex-render Devanagari form folds to the indexed lemma skeleton"
+      assert_equal %w[urn:d:dcs:1], search("dharman").map(&:urn)
+    end
+
+    def test_cyrillic_and_diplomatic_lemma_spellings_meet
+      doc = make_document(urn: "urn:d:zogr", title: "Zographensis", language: "chu")
+      make_passage(doc, urn: "urn:d:zogr:1", text: "и въста мариꙗ", sequence: 0, language: "chu",
+                        lemmas: [%w[въстати въста]])
+      rebuild!
+
+      assert_equal %w[urn:d:zogr:1], search("въстати").map(&:urn)
+      assert_equal %w[urn:d:zogr:1], search("vъstati").map(&:urn),
+                   "the damaskini-style Latin-diplomatic spelling reaches the Cyrillic gold lemma"
+    end
   end
 end
