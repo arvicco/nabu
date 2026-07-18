@@ -91,7 +91,9 @@ module Nabu
         [/slavic/i, "Slavic"],
         [/hellenic|greek|italic|latin/i, "Greek & Latin"],
         [/celtic|goidelic|brittonic|brythonic|gaulish/i, "Celtic"],
-        [/indo-iranian|indo-aryan|\bindic\b|iranian/i, "Indic & Iranian"],
+        # indo-iran covers both spellings in the wild: the dossiers'
+        # "Indo-Iranian" and IE-CoR's clade "Indo-Iranic".
+        [/indo-iran|indo-aryan|\bindic\b|iranian/i, "Indic & Iranian"],
         [/egyptian|coptic/i, "Egyptian & Coptic"],
         [/germanic|anglic/i, "Germanic & Old English"],
         [/semitic|canaanite|aramaic|akkadian|sumerian|hebrew|ugaritic/i, "Biblical & Near Eastern"]
@@ -317,8 +319,26 @@ module Nabu
         derived.empty? ? nil : derived
       end
 
+      # Family evidence per code: the owner-curated family lane wins; codes
+      # without one fall back to their iecor accretion's "clade X" phrase
+      # (2026-07-18: only 45 of 199 dossiers carry family lanes, but the
+      # IE-CoR clade names the family for most of the rest — derived
+      # evidence, honestly weaker, used only in the lane's absence).
       def family_lanes
-        @family_lanes ||= @catalog.table_exists?(:language_records) ? record_lane("family") : {}
+        @family_lanes ||= build_family_lanes
+      end
+
+      def build_family_lanes
+        return {} unless @catalog.table_exists?(:language_records)
+
+        lanes = record_lane("family")
+        @catalog[:language_records].where(kind: "iecor").select_map(%i[lang_code body]).each do |code, body|
+          next if lanes.key?(code)
+
+          clade = body[/clade ([A-Za-z-]+)/, 1]
+          lanes[code] = clade if clade
+        end
+        lanes
       end
 
       # {slug => group} from the dossiers' owner-curated group: lane.
@@ -335,10 +355,16 @@ module Nabu
       end
 
       # The most-attested live language that HAS a family label; ties break
-      # by code. nil when none carries one.
+      # by code. nil when none carries one. English is a translation layer
+      # on every multilingual shelf (aligned -en siblings can outnumber the
+      # source text — damaskini holds 6,036 eng vs 5,123 bul), so eng only
+      # votes when no other labeled language exists.
       def dominant_family_label(source_id)
         counts = language_passage_counts.fetch(source_id, {})
-        code = counts.keys.select { |c| family_label(c) }.min_by { |c| [-counts.fetch(c), c] }
+        labeled = counts.keys.select { |c| family_label(c) }
+        candidates = labeled.reject { |c| c.split("-", 2).first == "eng" }
+        candidates = labeled if candidates.empty?
+        code = candidates.min_by { |c| [-counts.fetch(c), c] }
         code && family_label(code)
       end
 

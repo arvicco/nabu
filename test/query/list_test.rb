@@ -282,6 +282,54 @@ module Query
 
     # -- the dossier shelf (P22-1 live gap: language grain) --------------------
 
+    def test_group_derivation_falls_back_to_iecor_clade_when_family_lane_absent
+      # The live gap (2026-07-18): sga's dossier has no family lane, but its
+      # iecor accretion says "clade Celtic" — corph misfiled under Greek &
+      # Latin because the derivation fell through to its minority Latin.
+      source = make_source(slug: "corph-like", name: "CorPH-like", license_class: "attribution")
+      doc = make_document(source: source, urn: "urn:nabu:corph-like:1", language: "sga")
+      make_passage(doc, urn: "urn:nabu:corph-like:1:1", sequence: 0, language: "sga")
+      @catalog[:language_records].insert(lang_code: "sga", kind: "iecor",
+                                         body: "IE-CoR variety: Old Irish (clade Celtic < Indo-European)",
+                                         source: "iecor")
+      groups = list.source_groups.to_h
+      celtic = groups.fetch("Celtic", []).map(&:slug)
+      assert_includes celtic, "corph-like", "iecor clade evidence must route the family"
+    end
+
+    def test_group_derivation_reads_indo_iranic_clade_spelling
+      # IE-CoR spells the clade "Indo-Iranic" (pli: "clade Indo-Iranic >
+      # Indic") — the live suttacentral shelf leaked it as its own heading
+      # instead of landing under Indic & Iranian.
+      source = make_source(slug: "pali-like", name: "Pali-like", license_class: "open")
+      doc = make_document(source: source, urn: "urn:nabu:pali-like:1", language: "pli")
+      make_passage(doc, urn: "urn:nabu:pali-like:1:1", sequence: 0, language: "pli")
+      @catalog[:language_records].insert(lang_code: "pli", kind: "iecor",
+                                         body: "IE-CoR variety: Pali (clade Indo-Iranic > Indic; Glottocode pali1273)",
+                                         source: "iecor")
+      groups = list.source_groups.to_h
+      indic = groups.fetch("Indic & Iranian", []).map(&:slug)
+      assert_includes indic, "pali-like", "Indo-Iranic must hit the Indic & Iranian net"
+    end
+
+    def test_dominance_prefers_source_language_over_english_translation_layer
+      # The live damaskini shape: the aligned -en siblings hold MORE passages
+      # (6,036 eng vs 5,123 bul), so the translation layer outvoted the source
+      # language and the shelf read Germanic. English never outvotes an
+      # attested source language; an all-English shelf still reads Germanic.
+      source = make_source(slug: "dam-like", name: "Damaskini-like", license_class: "open")
+      bul_doc = make_document(source: source, urn: "urn:nabu:dam-like:1", language: "bul")
+      make_passage(bul_doc, urn: "urn:nabu:dam-like:1:1", sequence: 0, language: "bul")
+      eng_doc = make_document(source: source, urn: "urn:nabu:dam-like:1-en", language: "eng")
+      make_passage(eng_doc, urn: "urn:nabu:dam-like:1-en:1", sequence: 0, language: "eng")
+      make_passage(eng_doc, urn: "urn:nabu:dam-like:1-en:2", sequence: 1, language: "eng")
+      @catalog[:language_records].insert(lang_code: "bul", kind: "family", body: "South Slavic", source: "dossier")
+      @catalog[:language_records].insert(lang_code: "eng", kind: "family", body: "West Germanic", source: "dossier")
+      groups = list.source_groups.to_h
+      slavic = groups.fetch("Slavic", []).map(&:slug)
+      assert_includes slavic, "dam-like", "eng translation passages must not outvote bul"
+    end
+
     def make_language_shelf
       source = Nabu::Store::Source.create(
         slug: "local-language", name: "Language dossiers",
