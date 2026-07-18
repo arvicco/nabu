@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: sdbh
+# adapter_test is null: the fixture is a documented TRIM (whole: false) —
+# a count-based adapter test re-run against the untrimmed 37 MB upstream
+# file would false-fail (see the schema note in perseus/manifest.yml).
+adapter_test: null
+retrieved: 2026-07-18
+files:
+  - path: UBSHebrewDic-v0.9.2-en.XML
+    url: https://raw.githubusercontent.com/ubsicap/ubs-open-license/3a6edd8212df2e1189037ad39687726990c80d56/dictionaries/hebrew/XML/UBSHebrewDic-v0.9.2-en.XML
+    whole: false
+    trim: >-
+      P30-2 (2026-07-18): XML declaration + <Lexicon> root line verbatim,
+      then ELEVEN complete Lexicon_Entry elements sliced byte-for-byte
+      (ids in README.md — no edits inside any entry; 3 of the 11 lemmas
+      are deliberately non-NFC-stable Masoretic byte order), then
+      </Lexicon>. Pinned at ubsicap/ubs-open-license main
+      3a6edd8212df2e1189037ad39687726990c80d56; full-file sha256
+      f80096ea874a7c4a08f7c5dfaf99f67db76c5c71524fbf8aa1dd44ac5ba94a71
+      (37,001,017 bytes).

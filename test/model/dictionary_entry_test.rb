@@ -67,4 +67,38 @@ class DictionaryEntryTest < Minitest::Test
       assert_equal code, entry(language: code).language
     end
   end
+
+  # --- the hbo/arc NFC exemption on the dictionary surface (P30-2) ---------------
+
+  # Masoretic pointing is not NFC-stable (dagesh ccc 21 written before vowel
+  # points ccc 10-19); the P26-3 owner ruling stores hbo/arc bytes verbatim.
+  # Passage already routes exempt text through verbatim validation — the
+  # dictionary surface must too, or no pointed Hebrew headword could ever
+  # construct. בֹּהוּ below is a real SDBH lemma in upstream byte order.
+  BOHU = "בֹּהוּ"
+
+  def test_exempt_language_entries_accept_non_nfc_hebrew_byte_verbatim
+    refute BOHU.unicode_normalized?(:nfc), "the fixture premise: upstream mark order is not NFC"
+    e = entry(language: "hbo", headword: BOHU, key_raw: BOHU,
+              headword_folded: "בהו", body: "glosses: emptiness #{BOHU}")
+    assert_equal BOHU, e.headword, "bytes exactly as upstream shipped them"
+    assert_includes e.body, BOHU
+    assert e.headword_folded.unicode_normalized?(:nfc), "the search form keeps the NFC contract"
+  end
+
+  def test_exempt_language_gloss_is_verbatim_too
+    e = entry(language: "arc", gloss: BOHU)
+    assert_equal BOHU, e.gloss
+  end
+
+  def test_non_exempt_languages_still_reject_non_nfc_text
+    assert_raises(Nabu::ValidationError) { entry(language: "grc", headword: BOHU) }
+    assert_raises(Nabu::ValidationError) { entry(language: "grc", body: BOHU) }
+  end
+
+  def test_exempt_entries_still_reject_empty_and_invalid_text
+    assert_raises(Nabu::ValidationError) { entry(language: "hbo", headword: "") }
+    assert_raises(Nabu::ValidationError) { entry(language: "hbo", body: "") }
+    assert_raises(Nabu::ValidationError) { entry(language: "hbo", headword: "\xC3".b) }
+  end
 end
