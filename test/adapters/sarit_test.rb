@@ -199,7 +199,7 @@ class SaritTest < Minitest::Test
     refute_nil entry, "sarit must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Sarit, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    refute entry.enabled, "sarit stays enabled: false until the owner-fired first real sync"
+    assert entry.enabled, "live (owner sign-off 2026-07-18: synced; 5 quarantines = the documented floor, flipped)"
   end
 
   private

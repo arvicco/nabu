@@ -34,7 +34,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["oshb"]
       refute_nil entry, "oshb must be registered in config/sources.yml"
-      refute entry.enabled, "enabled: false until the owner-fired first sync is verified"
+      assert entry.enabled, "live (owner sign-off 2026-07-18: synced, three-legged align eyeballed, flipped)"
       assert_equal "manual", entry.sync_policy
       assert_equal "oshb", entry.adapter_class.manifest.id
     end

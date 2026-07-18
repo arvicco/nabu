@@ -239,7 +239,7 @@ class SuttacentralTest < Minitest::Test
     entry = registry["suttacentral"]
     refute_nil entry, "suttacentral must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Suttacentral, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync (~353 MB clone)"
+    assert entry.enabled, "live (owner sign-off 2026-07-18: synced, parallel siblings eyeballed, flipped)"
     assert_equal "manual", entry.sync_policy
     assert entry.translations, "-en siblings are the point — the ORACC precedent"
     assert_equal Nabu::Adapters::Suttacentral.manifest, entry.manifest
