@@ -9248,3 +9248,109 @@ OWNER QUEUE: bin/nabu sync aed (sparse ~18 MB cone), eyeball
 `nabu define nfr` / `define aa` / 5 random entries, flip enabled; next
 `nabu rebuild` refolds the two egy-Egyd papyri documents under the new
 fold.
+## P28-3 · CCL — the Coptic dictionary + the egy↔cop diachronic bridge  [tier: fable] [status: done 2026-07-18 — adapter + `ccl-tei` family + `CclEtymologies` producer + fixtures shipped, `enabled: false` awaiting the owner-fired first sync; verdicts below] [deps: — (sibling contracts honored dangling: P28-1 aed urns, P28-2 demotic corpus)]
+
+Two halves, one goal: the 3,000-year lemma chain (hieroglyphic → demotic
+→ Coptic) as real links-journal edges against the live Coptic
+Scriptorium shelf.
+
+SHIPPED — Half 1, the CCL shelf:
+- Source `ccl` (Comprehensive Coptic Lexicon v1.2, Refubium fub188/27813,
+  11,284 entries, `content_kind :dictionary`, language cop, urns
+  `urn:nabu:dict:ccl:<C-id>`). License verbatim BOTH layers: in-file
+  `<licence>` "Licence for this TEI document: Creative Commons,
+  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"; record page
+  "Creative Commons: Namensnennung, Weitergabe unter gleichen
+  Bedingungen" → `attribution`.
+- SCHEMA VERDICT (censused from the full 12,343,129-byte artifact, never
+  assumed): TEI P5 against the project's own Coptic_Lemma_Schema-v1.2.xsd
+  — NOT PersDict, NOT TEI-Lex0 (`<entry xml:id="C<n>">`, no @key, 5,417
+  body-level + 5,867 nested in 1,181 id-less `<superEntry>` groups;
+  entries never nest in entries, so the Reader yields every entry once,
+  flat). NEW small family `ccl-tei` (streaming Reader — 11.77 MB > the
+  5 MB DOM rule — entry-at-a-time DOM; LexiconTeiParser's PATTERN, not
+  its class). Headword = form[@type="lemma"]/orth; exactly ONE lemma-less
+  entry corpus-wide (C11273) → first-orth fallback, pinned. Glosses
+  multi-language confirmed (en ×15,889 / de ×8,911 / fr ×8,911): gloss =
+  first EN quote, all three languages + dialect sigla (usg[@type="geo"])
+  + gramGrp + etym + xr + print bibls linearized into the body. The
+  bibls are print-dictionary strings (CD/CED/KoptHWb/DELC/ChLCS — zero
+  CTS urns): NO citation rows from the TEI itself.
+- FOLD VERDICT (reuse, never invent — the packet's order): the existing
+  P17-1 `cop` fold (Normalize LANGUAGE_FOLDS: delete ⳿ U+2CFF + generic
+  downcase/mark-strip) is what the Scriptorium shelf already searches;
+  CCL headwords fold through the same `Normalize.search_form` with the
+  LexiconTeiParser fold-key strip of morph `-` and `⸗` U+2E17 (×471
+  orths) first. Orth census: Coptic block + shared-Greek Coptic letters
+  (ϣϥϩϫϭϯϧ), supralinear strokes as combining FE24/FE25/FE26 + 0304/0305
+  (all \p{Mn} → the generic strip handles them); zero orths fold empty.
+- ATTESTED-COUNT VERDICT (census honestly, don't force): the
+  lemmatization spaces JOIN — fixture census 319/418 distinct Scriptorium
+  gold lemmas (76.3%) land on CCL headwords through the shared fold
+  (misses: punctuation lemmas, "unknown", names, Greek loanwords); ⲕⲁϩ →
+  C1494+C1495, pinned end-to-end (a real Encomium-of-Michael gold token
+  lemma → folded lookup → both homograph entries). `define ⲕⲁϩ` ↔
+  `search --lemma ⲕⲁϩ` round-trips by fold symmetry with ZERO new
+  machinery; no attested-count column was forced onto define (CCL entries
+  carry no reflexes — ReflexViews stays reconstruction-shelf machinery).
+- Dictionary-mirror conformance + two-artifact WebMock fetch + loader
+  idempotency + crosswalk-revision test + registry row `enabled: false`,
+  `sync_policy: manual` (frozen 2020 deposit).
+
+SHIPPED — Half 2, the ORAEC crosswalk edges:
+- CENSUS (fetched, counted): **2,177 rows**, not the survey's 2,176 (no
+  header row; recount deviation journaled); all width 3, C-ids unique,
+  1,345 both / 350 hiero-only / 482 demotic-only, 220 NEGATIVE demotic
+  word ids; **every crosswalk C-id exists in CCL v1.2** — the fact the
+  packaging verdict rests on.
+- PACKAGING VERDICT: config of the `ccl` adapter, not its own source —
+  its only content is edges (no catalog grain of its own), and the
+  full-coverage census means entry-riding loses nothing. The CSV is the
+  adapter's SECOND FileFetch artifact (`crosswalk/` subdir, the
+  wiktionary-recon two-phase choreography + two probe targets); at parse
+  each matched entry carries its ancestor ids as DictionaryCitations
+  (cts_work/citation nil — the links journal, not the CTS path, resolves
+  them), content-sha'd so a crosswalk change honestly REVISES the entry
+  (pinned). Missing crosswalk file = citation-less parse (day-one state),
+  entries revise when it lands.
+- EDGE-KIND VERDICT: NEW kind `etymology` (the journal's kind vocabulary
+  is open — intertext-design §7 "{parallel, formula, cognate, …}").
+  kind=reference asserts CITATION (manifests, DIL headwords, RIG
+  concordance); a crosswalk row asserts diachronic DESCENT of one lemma —
+  a different claim that must not blur into the citation render.
+- `Nabu::CclEtymologies` — producer #6 on the P25-0 reference_producer
+  seam (seam unchanged; a pure function of the catalog exactly like
+  CorphDilReferences: reads the urn:nabu:dict:-targeted citation rows of
+  the live entries, reruns supersede, rebuild never touches the journal).
+  Edges: `urn:nabu:dict:ccl:<C-id>` → `urn:nabu:dict:aed:<id>` (the
+  P28-1 sibling's stated contract, ids verbatim — dangling until that
+  shelf merges, the established honest pattern) and →
+  `urn:nabu:dict:tla-demotic:<id>` (ids VERBATIM incl. negatives;
+  DELIBERATE forward edges into a stable external space, the dil.ie
+  doctrine — NO bulk demotic lemma list exists anywhere per
+  egyptian-survey §10 risk 6; thesaurus-linguae-aegyptiae.de/lemma/d<id>
+  resolves every one, verified live incl. d-1427; if a future shelf keys
+  the modern "d<id>" spelling, the prefix is a one-line change + rerun).
+  Expected full-corpus yield 3,522 edges (1,695 aed + 1,827 demotic).
+- CHAIN E2E (fixture-level, real bytes end to end): real adapter + real
+  DictionaryLoader over the trimmed fixtures → producer → Query::Links
+  on `urn:nabu:dict:ccl:C1494` shows BOTH ancestor edges of the
+  survey-verified row (ⲕⲁϩ ← qꜣḥ 159410 ← qh 6439), out-direction,
+  score nil, detail naming the headword.
+- Query::Links grew the DICTIONARY-ENTRY resolution grain (own title +
+  counterpart): an INGESTED shelf's dict urns resolve to "headword —
+  dictionary title" + language + source license class — once the shelf
+  is in the catalog, "(not in catalog)" would be dishonest; NOT-ingested
+  dict urns (edil, aed until P28-1 merges) still render unresolved,
+  honestly. Guarded for pre-shelf catalogs.
+
+Fixtures: trimmed byte-verbatim TEI (full teiHeader incl. the licence +
+17 entries across 6 blocks: the C1–C5 superEntry, C9–C10, C16 foreign,
+C74, the C1494–C1500 ⲕⲁϩ cluster, lemma-less C11273) + 6 line-verbatim
+crosswalk rows (hiero-only / entry-less C6 / dem-only / negative /
+both×2); README carries both license quotes verbatim + full-artifact
+shas; manifest.yml wired for the sentinel.
+
+Tests +36 methods (parser 12, adapter 17, producer 6, links reader +1;
+fixture manifests/sentinel ride the existing sweeps). Suite 3,553 runs /
+46,327 assertions exit 0 (0 skips) · lint 438 files exit 0.

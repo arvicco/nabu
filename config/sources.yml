@@ -212,6 +212,19 @@ bosworth-toller:
   # serves the terms without a redirect before enabling):
   # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532
 
+# P28-3: the Coptic dictionary shelf (Comprehensive Coptic Lexicon v1.2,
+# Refubium fub188/27813, CC BY-SA 4.0 in-file) + ORAEC's CC0 egy↔cop
+# crosswalk riding as the second fetched artifact (crosswalk/ subdir; the
+# kind=etymology producer Nabu::CclEtymologies refreshes the links journal
+# after every sync). Both upstreams effectively frozen (2020 deposit;
+# crosswalk last moved 2024-08) → manual.
+ccl:
+  adapter: Nabu::Adapters::Ccl
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
+                   # nabu links urn:nabu:dict:ccl:C1494)
+  sync_policy: manual
+
 ccmh:
   adapter: Nabu::Adapters::Ccmh
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
