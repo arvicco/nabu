@@ -162,6 +162,36 @@ module Query
       assert_equal "σὺ δὲ ".rjust(6), rows.first.left
     end
 
+    # -- P26-4: the lemma tier rides the row (concord is a formatter over
+    # LemmaSearch, so it inherits the label; text mode claims no tier) -------
+
+    def test_lemma_mode_passes_the_tier_through_for_silver_hits
+      silver = Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+      doc = make_document(source: silver, urn: "urn:d:silver", title: "Silver")
+      make_passage(doc, urn: "urn:d:silver:1", text: "σὺ δὲ εἶπας τάδε", sequence: 0,
+                        lemmas: [%w[λέγω εἶπας]])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "diorisis" => "silver" })
+
+      rows = concord(nil, lemma: "λέγω", width: 6)
+      assert_equal ["silver"], rows.map(&:tier), "the renderer needs the tier to tag the row"
+    end
+
+    def test_gold_lemma_mode_and_text_mode_rows_stay_unlabeled
+      doc = make_document(urn: "urn:d:tb", title: "Treebank")
+      make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας τάδε", sequence: 0,
+                        lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+
+      assert_equal ["gold"], concord(nil, lemma: "λέγω").map(&:tier),
+                   "a gold hit carries its tier (renderers leave gold untagged)"
+      assert_equal [nil], concord("ειπασ").map(&:tier),
+                   "an FTS hit makes no annotation claim — tier stays nil"
+    end
+
     # -- filters --------------------------------------------------------------
 
     def test_lang_filter_scopes_the_concordance

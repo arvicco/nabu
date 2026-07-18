@@ -238,6 +238,50 @@ module Query
       assert_equal 0, result.suppressed
     end
 
+    # -- P26-4: gold-tier scope (silver is not reconstruction evidence) -----------
+
+    def silver_source
+      @silver_source ||= Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+    end
+
+    def silver_rebuild!(reg = registry)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: reg,
+                                    lemma_tiers: { "diorisis" => "silver" })
+    end
+
+    # THE REFUTATION: with the grc witness edition declared silver, MARK 1.1
+    # loses its grc evidence and the chu-only remainder is no meet — an
+    # automatic lemmatization must never claim "this verse attests a reflex".
+    def test_a_silver_witness_contributes_no_cognate_evidence
+      @docs["grc-nt"] = Nabu::Store::Document.create(
+        source_id: silver_source.id, urn: "urn:nabu:test:grc-nt", title: "Greek NT (silver)",
+        language: "grc", content_sha256: "x", revision: 1, withdrawn: false
+      )
+      seed_gospel_verses
+      silver_rebuild!
+      assert_empty run_cognates("MARK 1.1").groups,
+                   "the silver grc witness dropped out; chu alone is no cross-language meet"
+    end
+
+    # A silver flood must not re-judge a gold lemma common: the suppression
+    # df and its stats denominator are both gold-scoped, so 60 silver filler
+    # passages change nothing.
+    def test_silver_rows_never_inflate_the_suppression_df
+      seed_gospel_verses
+      doc = Nabu::Store::Document.create(
+        source_id: silver_source.id, urn: "urn:nabu:test:silver-filler", title: "F",
+        language: "chu", content_sha256: "x", revision: 1, withdrawn: false
+      )
+      60.times { make_sentence(doc, ref: "X 1.1", lemmas: ["богъ"]) }
+      silver_rebuild!
+      result = run_cognates("MARK 1.1")
+      assert_equal 1, result.groups.size, "the gold meet survives the silver flood"
+      assert_equal 0, result.suppressed
+    end
+
     # -- honest failure states ----------------------------------------------------
 
     def test_without_the_roots_table_the_error_names_the_fix

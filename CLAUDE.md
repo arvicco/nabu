@@ -30,7 +30,7 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 - Plain Ruby objects; no Rails, no ActiveSupport. `Data.define` for value objects (`Passage`, `DocumentRef`, `SourceManifest`).
 - Keyword arguments for anything with more than two params. No boolean positional args.
 - Errors: subclass `Nabu::Error`; adapters raise `Nabu::ParseError` (quarantines document) vs `Nabu::FetchError` (aborts sync). Never rescue `StandardError` bare.
-- Text is always UTF-8 NFC internally. Normalize at the adapter boundary (`Nabu::Normalize.nfc`), never downstream. Any encoding fix gets a regression test with the offending bytes as fixture.
+- Text is always UTF-8 NFC internally — except the named exemption list (`Normalize::NFC_EXEMPT_LANGUAGES`, currently hbo/arc: Masoretic combining-mark order is not NFC-stable and upstream forbids normalizing; owner ruling 2026-07-18, architecture §3). Normalize at the adapter boundary (`Nabu::Normalize.nfc`), never downstream. Any encoding fix gets a regression test with the offending bytes as fixture.
 - SQL only through Sequel datasets/models in `lib/nabu/store/`. No SQL strings elsewhere. Schema changes only via numbered migrations in `db/migrate/`; never edit an applied migration.
 - Shelling out (mutool, git): through `Nabu::Shell.run` (captures stdout/stderr, raises on nonzero) — never backticks scattered in code.
 

@@ -137,6 +137,31 @@ module Nabu
       "iir" => PROTO_FOLD
     }.freeze
 
+    # == The per-language NFC exemption (P26-3, owner ruling 2026-07-18)
+    #
+    # Nabu stores text NFC — with ONE named exception: Biblical Hebrew and
+    # Biblical Aramaic (the OSHB/WLC languages). NFC reorders Hebrew combining
+    # marks by canonical combining class (dagesh ccc 21 vs vowel points ccc
+    # 10–19, shin/sin dots ccc 24/25), silently rewriting the Masoretic mark
+    # order the Westminster Leningrad Codex ships — upstream OSHB itself warns
+    # "any uses of the OSHB should avoid NFC normalization", and the warning is
+    # measured-true (Ruth 1:1 is not NFC-stable). So hbo/arc passage text is
+    # stored BYTE-VERBATIM: Passage construction skips the NFC check for these
+    # languages (validating UTF-8 well-formedness only), and the conformance
+    # suite asserts byte-honesty instead of NFC form. The SEARCH side is
+    # unaffected: search_form/query_forms fold through NFC + mark strip either
+    # way, so folded lookup keys are identical whichever byte order the source
+    # carried. Scoped by primary subtag, exactly like LANGUAGE_FOLDS; every
+    # other language keeps the NFC invariant untouched (architecture §3,
+    # conventions §1).
+    NFC_EXEMPT_LANGUAGES = %w[hbo arc].freeze
+
+    # True when +language+ (a BCP-47 tag or nil) is exempt from the stored-NFC
+    # invariant — the named hbo/arc exception above, nothing else.
+    def self.nfc_exempt?(language)
+      NFC_EXEMPT_LANGUAGES.include?(primary_subtag(language))
+    end
+
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at
     # the adapter boundary (Passage.new defaults to this — the single place
     # folding happens). Generic fold (NFC → downcase → strip \p{Mn} → NFC)

@@ -77,6 +77,17 @@ module Nabu
     #   Tokens without a lemma (CoNLL-U `_`, MWT ranges, PROIEL empty tokens)
     #   and passages without lemma annotations contribute no rows — honest
     #   absence; the non-treebank ~1.45M passages simply are not here.
+    # - The tier column (P26-0): each row carries its source's lemma TIER —
+    #   "gold" (verified annotation; the default, and everything that existed
+    #   before the column) or "silver" (automatic lemmatization, declared per
+    #   source via sources.yml `lemma_tier: silver` and threaded in as the
+    #   +lemma_tiers+ map). The tier lives HERE, on the fulltext-side rows,
+    #   not in the catalog: it is registry posture × source identity, both
+    #   known at index-build time, and the table drops and rebuilds anyway —
+    #   no catalog migration, no schema change for existing adapters.
+    #   attested_count consumers (ReflexViews) keep gold-only semantics and
+    #   surface silver as a separate labeled count; LemmaSearch serves both
+    #   tiers with per-hit labels and a gold-only filter.
     # == The trigram index (P16-4) — fragment search, documentary scope
     #
     # passages_trigram is a second FTS5 table over the SAME folded search form
@@ -97,6 +108,11 @@ module Nabu
       LEMMA_TABLE = :passage_lemmas
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
+
+      # The default lemma tier (P26-0): a source absent from the lemma_tiers
+      # map is gold — verified annotation, the only kind that existed before
+      # the tier column.
+      GOLD_TIER = "gold"
 
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
@@ -144,19 +160,24 @@ module Nabu
       # `search --fuzzy` degrades to "no rows + honest scope line", never
       # "index missing".
       #
+      # +lemma_tiers+ (P26-0) is SourceRegistry#lemma_tiers — { slug => tier }
+      # for the non-gold sources only (absent slug = gold; nil = every source
+      # gold, the pre-tier world exactly).
+      #
       # Reads the catalog through raw datasets (not the Store models) so it is
       # independent of whichever db the global models are currently bound to.
-      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil)
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.run(CREATE_TABLE)
         create_lemma_table(fulltext)
+        tiers = source_tiers(catalog, lemma_tiers || {})
 
         count = 0
         fulltext.transaction do
           live_passages(catalog).each_slice(BATCH_SIZE) do |batch|
             fulltext[TABLE].multi_insert(batch.map { |row| index_row(row) })
-            fulltext[LEMMA_TABLE].multi_insert(batch.flat_map { |row| lemma_rows(row) })
+            fulltext[LEMMA_TABLE].multi_insert(batch.flat_map { |row| lemma_rows(row, tiers: tiers) })
             count += batch.size
           end
         end
@@ -202,6 +223,10 @@ module Nabu
           String :urn, null: false
           String :language, null: false
           String :surface_forms, null: false
+          # The per-row lemma tier (P26-0, class note): "gold" | "silver".
+          # No index — tier is always a residual filter AFTER an indexed
+          # lemma_folded/urn/language equality.
+          String :tier, null: false
           index :lemma_folded
           # urn index (P15-1): the lemma-aware second signals — parallels'
           # rare-lemma co-occurrence and cognate-in-parallel (design §6) — look
@@ -231,8 +256,21 @@ module Nabu
             Sequel[:passages][:urn],
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
-            Sequel[:passages][:annotations_json]
+            Sequel[:passages][:annotations_json],
+            # source_id rides along for the lemma tier only (P26-0): the
+            # per-source tier resolves through the small source_tiers map, not
+            # a third join on the 2.6M-row streaming pass.
+            Sequel[:documents][:source_id].as(:source_id)
           )
+      end
+
+      # { source_id => tier } from the catalog's sources and the registry's
+      # non-gold map (P26-0). Absent slug = gold; the whole map is a handful
+      # of rows, resolved once per rebuild.
+      def source_tiers(catalog, lemma_tiers)
+        catalog[:sources].select_map(%i[id slug]).to_h do |id, slug|
+          [id, lemma_tiers.fetch(slug, GOLD_TIER)]
+        end
       end
 
       # The trigram pass's slice of live_passages: same two-level visibility
@@ -273,18 +311,20 @@ module Nabu
       # false positive just parses and finds no token lemmas. annotations_json
       # is our own canonical_json output, so a parse failure is real corruption
       # and honestly raises.
-      def lemma_rows(row)
+      def lemma_rows(row, tiers: {})
         json = row.fetch(:annotations_json)
         return [] if json.nil? || !json.include?('"lemma"')
 
         tokens = JSON.parse(json)["tokens"]
         return [] unless tokens.is_a?(Array)
 
+        tier = tiers.fetch(row[:source_id], GOLD_TIER)
         group_lemmas(tokens, language: row.fetch(:language)).map do |folded, entry|
           {
             lemma_folded: folded, lemma_raw: entry[:raw],
             passage_id: row.fetch(:passage_id), urn: row.fetch(:urn),
-            language: row.fetch(:language), surface_forms: entry[:forms].join(", ")
+            language: row.fetch(:language), surface_forms: entry[:forms].join(", "),
+            tier: tier
           }
         end
       end

@@ -1,0 +1,30 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Files 1-2 are whole: true (byte-identical to upstream at HEAD 1eac9ee,
+# 2026-07-18). Files 3-4 are documented TRIMS (whole: false) — a fresh GET
+# returns the full upstream file (the Mahābhārata is 38.6 MB), so they are
+# fetched for URL-liveness only, never byte-compared; re-apply the README
+# trims after any refresh. adapter_test is null: the sarit adapter test
+# asserts trimmed passage counts an untrimmed upstream file would false-fail
+# (the ud/perseus/gretil reason).
+source: sarit
+adapter_test: null
+retrieved: 2026-07-18
+files:
+  - path: astavakragita.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/astavakragita.xml
+    whole: true
+    trim: none (complete short verse text, copied whole; lg/@xml:id rung, IAST)
+  - path: samanyadusana.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/samanyadusana.xml
+    whole: true
+    trim: none (complete short unaddressed text, copied whole; ordinal rung, Devanagari)
+  - path: vatsyayana-nyayabhasya-s1-2.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/vatsyayana-nyayabhasya.xml
+    whole: false
+    trim: teiHeader + div 1 > 1.1 > sūtras 1.1.1-1.1.2 (upstream lines 1..231 + closing tags; ~566 KB -> 22 KB; div/@xml:id path + base-text quotes)
+  - path: mahabharata-devanagari-adi1-svarga1.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/mahabharata-devanagari.xml
+    whole: false
+    trim: teiHeader + ādiparva adhyāya 001 (upstream lines 1..1831) + svargārohaṇaparva adhyāya 001 (lines 487077..487220) + closing tags; 38.6 MB -> 147 KB, two-parva nesting preserved
