@@ -29,6 +29,46 @@ module Nabu
   class Languages
     NOTE_KINDS = %w[name family context].freeze
 
+    # ISO 639-2 kept TWO codes for twenty languages — a bibliographic (B)
+    # and a terminological (T) spelling — and upstream corpora pick either
+    # (owner report 2026-07-18: aes minted German "ger", tla-hf "deu").
+    # Queries accept both, fold-both-sides style: every user-facing --lang /
+    # --parallel filter expands through .code_variants. STORED codes stay
+    # whatever the adapter minted — this is query-side equivalence, never a
+    # migration.
+    ISO_639_2_BT_PAIRS = [
+      %w[alb sqi], %w[arm hye], %w[baq eus], %w[bur mya], %w[chi zho],
+      %w[cze ces], %w[dut nld], %w[fre fra], %w[geo kat], %w[ger deu],
+      %w[gre ell], %w[ice isl], %w[mac mkd], %w[mao mri], %w[may msa],
+      %w[per fas], %w[rum ron], %w[slo slk], %w[tib bod], %w[wel cym]
+    ].freeze
+
+    # The pairs as a code → full-equivalence-set map.
+    CODE_VARIANTS = ISO_639_2_BT_PAIRS.each_with_object({}) do |pair, map|
+      pair.each { |code| map[code] = pair }
+    end.freeze
+
+    # Common ISO 639-1 two-letter spellings for languages the catalog hosts
+    # (typing convenience; the 639-3 code is the resolution target).
+    ISO_639_1 = {
+      "de" => "deu", "en" => "eng", "fr" => "fra", "it" => "ita",
+      "la" => "lat", "el" => "ell", "nl" => "nld", "cs" => "ces",
+      "cy" => "cym", "is" => "isl", "sq" => "sqi", "eu" => "eus",
+      "fa" => "fas", "ro" => "ron", "sk" => "slk", "mk" => "mkd",
+      "ka" => "kat", "hy" => "hye"
+    }.freeze
+
+    # Every code that means the same language as +code+ (itself included);
+    # unknown codes pass through untouched, nil folds to []. Filters use the
+    # returned array in their WHERE so either spelling lands.
+    def self.code_variants(code)
+      return [] if code.nil?
+
+      canonical = code.to_s.downcase
+      canonical = ISO_639_1.fetch(canonical, canonical)
+      CODE_VARIANTS.fetch(canonical, [canonical])
+    end
+
     Family = Data.define(:code, :name, :context)
 
     def initialize(catalog: nil, ledger: nil)

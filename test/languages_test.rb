@@ -44,6 +44,29 @@ class LanguagesTest < Minitest::Test
 
   # -- the census read: filter, then mode over summed counts ------------------------
 
+  # -- ISO 639-2 B/T code equivalence (owner report 2026-07-18: aes minted
+  # German as "ger", tla-hf as "deu" — both legit 639-2, one language;
+  # queries must accept either spelling, fold-both-sides style) ------------
+
+  def test_code_variants_expands_the_bibliographic_terminological_pair
+    assert_equal %w[deu ger], Nabu::Languages.code_variants("ger").sort
+    assert_equal %w[deu ger], Nabu::Languages.code_variants("deu").sort
+    assert_equal %w[fra fre], Nabu::Languages.code_variants("fre").sort
+    assert_equal %w[cym wel], Nabu::Languages.code_variants("cym").sort
+  end
+
+  def test_code_variants_accepts_the_common_two_letter_spellings
+    assert_equal %w[deu ger], Nabu::Languages.code_variants("de").sort
+    assert_equal %w[fra fre], Nabu::Languages.code_variants("fr").sort
+    assert_equal ["eng"], Nabu::Languages.code_variants("en")
+  end
+
+  def test_code_variants_passes_unknown_codes_through_untouched
+    assert_equal ["egy"], Nabu::Languages.code_variants("egy")
+    assert_equal ["xlp"], Nabu::Languages.code_variants("xlp")
+    assert_equal [], Nabu::Languages.code_variants(nil)
+  end
+
   def test_census_name_takes_the_mode_across_dictionaries
     one = dictionary(slug: "d1")
     two = dictionary(slug: "d2")

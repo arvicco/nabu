@@ -119,7 +119,7 @@ module Nabu
                   .where(Sequel[:dictionary_entries][:headword_folded] => variants,
                          Sequel[:dictionary_entries][:withdrawn] => false)
         dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) if recon_only
-        dataset = dataset.where(Sequel[:dictionaries][:language] => lang) if lang
+        dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
                .limit(limit)
                .select(*entry_columns)
