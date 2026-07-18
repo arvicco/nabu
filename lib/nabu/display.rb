@@ -104,6 +104,58 @@ module Nabu
       def initialize(strip: [], keep: [], isolates: false, **rest) = super
     end
 
+    # == Edition-level conventions (P27-1; the `sources:` section)
+    #
+    # Language policies dress SCRIPTS; these dress EDITIONS: transforms keyed
+    # to a source's editorial conventions, executed only by the `reading`
+    # mode (the `diplomatic` mode is the byte-honest view of the same marks).
+    # Census-first like the mark classes: every rule below names a marker
+    # that exists in the shelves' STORED passage bytes (the parsers already
+    # resolve most raw Leiden at parse time — supplements/additions/
+    # expansions/underdots were censused ×0 in stored text and deliberately
+    # have no rules; counts in backlog P27-1).
+    #
+    #   lacuna    "[…]" — the one gap rendering every Leiden parser emits
+    #             (DdbdpParser/CelticLeiden GAP_MARKER; upstream's "[...]",
+    #             "//" forms are normalized at parse time, censused ×0
+    #             stored). ellipsis → "…"; keep → untouched.
+    #   erasures  ⟦…⟧ (EDH damnatio-memoriae, CelticLeiden <del>). An
+    #             erasure is content: default KEEP; unwrap drops the
+    #             brackets, never the text.
+    #   surplus   {…} (CelticLeiden <surplus> — letters carved in error,
+    #             printed but excluded from the regularized reading).
+    #             Default KEEP — unwrapping would present a misspelling as
+    #             fluent text without its marker; unwrap is opt-in.
+    #   sigla     SBLGNT's ⸀⸂⸃ apparatus cross-references (censused ×69/
+    #             ×30/×30; ⸁ and ⸄–⸇ censused ×0 → not in the set). strip →
+    #             removed; keep → untouched.
+    EDITION_RULES = {
+      "lacuna" => { "ellipsis" => [/\[…\]/, "…"].freeze, "keep" => nil }.freeze,
+      "erasures" => { "unwrap" => [/[⟦⟧]/, ""].freeze, "keep" => nil }.freeze,
+      "surplus" => { "unwrap" => [/[{}]/, ""].freeze, "keep" => nil }.freeze,
+      "sigla" => { "strip" => [/[⸀⸂⸃]/, ""].freeze, "keep" => nil }.freeze
+    }.freeze
+
+    # qere_display settings (oshb): which side of a ketiv/qere apparatus
+    # token the reading text shows, and the applied-label each announces.
+    QERE_SETTINGS = %w[qere ketiv both].freeze
+    QERE_LABELS = { "qere" => "qere", "both" => "ketiv+qere" }.freeze
+
+    # The applied-labels edition transforms can emit — the footer separates
+    # these ("apparatus simplified: …") from the mark-class strip vocabulary.
+    EDITION_LABELS = (EDITION_RULES.keys + QERE_LABELS.values).freeze
+
+    # One source's edition conventions from display.yml `sources:`. +reading+
+    # maps rule name → setting; +qere_display+ is the ketiv/qere choice
+    # (nil for sources without that apparatus).
+    SourcePolicy = Data.define(:slug, :reading, :qere_display) do
+      def initialize(slug:, reading: {}, qere_display: nil) = super
+    end
+
+    # The per-render edition context: the source's conventions plus the
+    # passage's stored annotations (the qere word hashes ride there).
+    Edition = Data.define(:policy, :annotations)
+
     # The applied-label for isolate wrapping (footer vocabulary), and the two
     # isolate characters (RIGHT-TO-LEFT ISOLATE / POP DIRECTIONAL ISOLATE).
     ISOLATES = "rtl isolates"
@@ -124,6 +176,19 @@ module Nabu
         raise ConfigError, "#{path}: `languages:` must be a mapping" unless languages.is_a?(Hash)
 
         languages.to_h { |language, spec| [validate_language!(language, path), build_policy(language, spec, path)] }
+      end
+
+      # Parse config/display.yml `sources:` → { "oshb" => SourcePolicy, … }.
+      # Same contract as load_policies: missing file/section = no policies,
+      # malformed = named ConfigError (bad config must never silently strip).
+      def load_source_policies(path)
+        return {} unless File.exist?(path)
+
+        data = YAML.safe_load_file(path) || {}
+        sources = data.fetch("sources", nil) || {}
+        raise ConfigError, "#{path}: `sources:` must be a mapping" unless sources.is_a?(Hash)
+
+        sources.to_h { |slug, spec| [validate_slug!(slug, path), build_source_policy(slug, spec, path)] }
       end
 
       # Register a display mode (the sibling-packet seam). A duplicate name is
@@ -149,11 +214,22 @@ module Nabu
       # policy (primary subtag, like the fold tables), let the mode transform,
       # then wrap in RTL isolates when both mode and policy say so. No policy,
       # or nothing changed ⇒ applied is empty and the text passes through.
-      def render(text, language:, mode:, policies:)
+      #
+      # +source+/+annotations+/+source_policies+ (P27-1) are the OPTIONAL
+      # edition context: when the mode is edition-aware (#render_edition) and
+      # the source has conventions configured, the mode receives them; every
+      # P27-0 mode and caller is untouched by their absence.
+      def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {})
         policy = policies[Normalize.primary_subtag(language)]
-        return Rendered.new(text: text, applied: []) if policy.nil? || text.empty?
+        edition = edition_context(mode, source, annotations, source_policies)
+        return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
 
-        rendered = mode.render(text, language: language, policy: policy)
+        policy ||= Policy.new(language: language)
+        rendered = if edition
+                     mode.render_edition(text, language: language, policy: policy, edition: edition)
+                   else
+                     mode.render(text, language: language, policy: policy)
+                   end
         return rendered unless mode.isolates?(policy)
 
         Rendered.new(text: RLI + rendered.text + PDI, applied: rendered.applied + [ISOLATES])
@@ -184,7 +260,78 @@ module Nabu
         text.length - text.count(RLI + PDI)
       end
 
+      # Apply the edition's configured convention rules to +text+, returning
+      # [transformed, applied] where +applied+ names only the rules that
+      # changed something. Pure codepoint substitution — never a base letter,
+      # never reordering (safe on the NFC-exempt languages too).
+      def apply_edition_rules(text, edition)
+        applied = []
+        working = text
+        edition.policy.reading.each do |rule, setting|
+          pattern, replacement = EDITION_RULES.fetch(rule).fetch(setting)
+          next if pattern.nil?
+
+          swapped = working.gsub(pattern, replacement)
+          applied << rule unless swapped == working
+          working = swapped
+        end
+        [working, applied]
+      end
+
+      # The ketiv/qere token substitution (oshb): the stored text carries the
+      # KETIV (written) form; the qere (read) form rides the token's "qere"
+      # word hashes in the passage annotations. A cursor walks the tokens in
+      # document order — the text was assembled from these very forms, so a
+      # sequential index scan is exact and an identical earlier word can
+      # never be mis-targeted. "both" renders "ketiv [qere]". Display-time
+      # only; without annotations the stored ketiv stands.
+      def apply_qere(text, edition)
+        setting = edition.policy.qere_display
+        tokens = edition.annotations.is_a?(Hash) ? edition.annotations["tokens"] : nil
+        return [text, []] if setting.nil? || setting == "ketiv" || !tokens.is_a?(Array)
+
+        substitute_qere(text, tokens, setting)
+      end
+
       private
+
+      def substitute_qere(text, tokens, setting)
+        out = +""
+        cursor = 0
+        substituted = false
+        tokens.each do |token|
+          form = token["form"].to_s
+          index = form.empty? ? nil : text.index(form, cursor)
+          next if index.nil?
+
+          qere = qere_reading(token)
+          if qere.nil?
+            out << text[cursor...(index + form.length)]
+          else
+            out << text[cursor...index]
+            out << (setting == "both" ? "#{form} [#{qere}]" : qere)
+            substituted = true
+          end
+          cursor = index + form.length
+        end
+        out << text[cursor..]
+        substituted ? [out.freeze, [QERE_LABELS.fetch(setting)]] : [text, []]
+      end
+
+      def qere_reading(token)
+        words = token["qere"]
+        return nil unless words.is_a?(Array)
+
+        reading = words.filter_map { |word| word["form"] }.join(" ")
+        reading.empty? ? nil : reading
+      end
+
+      def edition_context(mode, source, annotations, source_policies)
+        return nil unless source && mode.respond_to?(:render_edition)
+
+        policy = source_policies[source]
+        policy && Edition.new(policy: policy, annotations: annotations)
+      end
 
       def modes
         @modes ||= {}
@@ -228,6 +375,51 @@ module Nabu
 
         raise ConfigError, "#{path}: #{language}: isolates must be true or false, " \
                            "got #{value.inspect}"
+      end
+
+      def validate_slug!(slug, path)
+        unless slug.to_s.match?(/\A[a-z0-9_-]+\z/)
+          raise ConfigError, "#{path}: bad source key #{slug.inspect} — " \
+                             "source slugs only (e.g. oshb, papyri-ddbdp)"
+        end
+        slug
+      end
+
+      def build_source_policy(slug, spec, path)
+        spec = {} if spec.nil?
+        raise ConfigError, "#{path}: #{slug}: source policy must be a mapping" unless spec.is_a?(Hash)
+
+        unknown = spec.keys - %w[reading qere_display]
+        raise ConfigError, "#{path}: #{slug}: unknown key(s) #{unknown.join(', ')}" unless unknown.empty?
+
+        SourcePolicy.new(slug: slug,
+                         reading: validate_rules!(spec["reading"], slug, path),
+                         qere_display: validate_qere_display!(spec["qere_display"], slug, path))
+      end
+
+      def validate_rules!(rules, slug, path)
+        rules = {} if rules.nil?
+        raise ConfigError, "#{path}: #{slug}: reading must be a mapping" unless rules.is_a?(Hash)
+
+        rules.each do |rule, setting|
+          settings = EDITION_RULES.fetch(rule) do
+            raise ConfigError, "#{path}: #{slug}: unknown edition rule #{rule.inspect} " \
+                               "(rules: #{EDITION_RULES.keys.join(', ')})"
+          end
+          next if settings.key?(setting)
+
+          raise ConfigError, "#{path}: #{slug}: #{rule} must be one of " \
+                             "#{settings.keys.join(', ')}, got #{setting.inspect}"
+        end
+        rules
+      end
+
+      def validate_qere_display!(value, slug, path)
+        return nil if value.nil?
+        return value if QERE_SETTINGS.include?(value)
+
+        raise ConfigError, "#{path}: #{slug}: qere_display must be one of " \
+                           "#{QERE_SETTINGS.join(', ')}, got #{value.inspect}"
       end
     end
 
@@ -279,6 +471,46 @@ module Nabu
                     name: "plain",
                     description: "strip every class the language policy defines (e.g. consonantal Hebrew)",
                     classes: :all
+                  ))
+
+    # The edition-aware mode (P27-1): fluent reading. Composes, in order:
+    # ketiv/qere substitution (on the pristine stored bytes, so the token
+    # forms match exactly), the source's configured edition rules, then the
+    # language policy's default strip lists — so Hebrew reading = qere +
+    # cantillation stripped TOGETHER, and a shelf with no source entry
+    # degrades to exactly the default mode's behavior. Without edition
+    # context (callers that know no source), #render is the language path.
+    class ReadingMode
+      def name = "reading"
+
+      def description = "fluent reading: default language strips + per-source edition rules (sources: in display.yml)"
+
+      def render(text, language:, policy:)
+        stripped, applied = Display.strip_classes(text, policy.strip, language: language)
+        Rendered.new(text: stripped, applied: applied)
+      end
+
+      def render_edition(text, language:, policy:, edition:)
+        working, applied = Display.apply_qere(text, edition)
+        working, rule_applied = Display.apply_edition_rules(working, edition)
+        stripped, strip_applied = Display.strip_classes(working, policy.strip, language: language)
+        Rendered.new(text: stripped, applied: applied + rule_applied + strip_applied)
+      end
+
+      def isolates?(policy) = policy.isolates
+    end
+
+    register_mode(ReadingMode.new)
+
+    # `diplomatic` — the byte-honest half of the reading/diplomatic pair:
+    # the edition's marks exactly as stored, no transforms, no isolates.
+    # Today it renders identically to `full`; it is registered under the
+    # editorial-convention name so "--display diplomatic shows the edition
+    # marks" is the reading-mode footer's natural counterpart.
+    register_mode(StripMode.new(
+                    name: "diplomatic",
+                    description: "the edition's marks as stored — byte-honest (reading's counterpart)",
+                    classes: :none, isolates: false
                   ))
   end
 end

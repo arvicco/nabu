@@ -260,3 +260,263 @@ class DisplayTest < Minitest::Test
     end
   end
 end
+
+# Edition-level display transforms (P27-1): per-SOURCE convention rules
+# (config/display.yml `sources:`) executed by the `reading` mode, with
+# `diplomatic` as the byte-honest edition-marks view. Every before/after pin
+# below is REAL stored-passage bytes from the shipping parsers over the
+# checked-in fixtures (census 2026-07-18, counts in backlog P27-1).
+class DisplayEditionTest < Minitest::Test
+  # DDbDP bgu.1.102 lines 6-7 (grc): the parse-time Leiden policy already
+  # reads through supplied/expan/unclear markerless — the stored surface
+  # carries ONLY the "[…]" gap marker (censused ×2 in 32 passages).
+  DDBDP_LINE_6 = "καὶ Οὐήρου τῶν κυρίων Σεβαστῶν Ἐπεὶφ η […]"
+  DDBDP_LINE_7 = "Αἴλιος […]θως ἐπηκολούθησα ταῖς τοῦ ἀργυρίου"
+
+  # EDH HD000082 lines 1:1-2 (lat): del rend="erasure" kept in ⟦…⟧ (the
+  # damnatio-memoriae divergence, censused ×2), gaps "[…]" ×4.
+  EDH_ERASED = "Lucius Licinius Luci ⟦filius Crassu⟧s"
+  EDH_LOST = "[…] […]"
+
+  # RIIG all-01-01 PLT-a:2 (xtg-Latn): surplus {…} kept from <surplus>
+  # (censused ×2); ahp-01-01 HRD-a:1 (xtg-Grek): mid-word gap.
+  RIIG_SURPLUS = "nanton{t}icnos"
+  RIIG_GAP = "καρε[…]μ"
+
+  # SBLGNT 3John 1:4 and John 1:15 (grc): the upstream apparatus sigla
+  # ⸀ (×69) and ⸂…⸃ (×30 pairs) ride the verse text verbatim; John 1:15's
+  # parentheses are the edition's own punctuation, never apparatus.
+  SBLGNT_WORD = "μειζοτέραν τούτων οὐκ ἔχω ⸀χαράν, ἵνα ἀκούω τὰ ἐμὰ τέκνα ἐν ⸀τῇ ἀληθείᾳ περιπατοῦντα."
+  SBLGNT_WORD_READING = "μειζοτέραν τούτων οὐκ ἔχω χαράν, ἵνα ἀκούω τὰ ἐμὰ τέκνα ἐν τῇ ἀληθείᾳ περιπατοῦντα."
+  SBLGNT_PHRASE = "(Ἰωάννης μαρτυρεῖ περὶ αὐτοῦ καὶ κέκραγεν λέγων· Οὗτος ἦν ⸂ὃν εἶπον⸃· " \
+                  "Ὁ ὀπίσω μου ἐρχόμενος ἔμπροσθέν μου γέγονεν, ὅτι πρῶτός μου ἦν·)"
+
+  # OSHB Ruth 1:8 (hbo, NFC-exempt): the ketiv יעשה rides the verse text;
+  # the qere reading attaches to that token as a "qere" word hash. Tokens
+  # below are the fixture's REAL token bytes trimmed to the qere-relevant
+  # neighborhood (the CLI test exercises the full parsed annotations).
+  RUTH_1_8 = "וַתֹּ֤אמֶר נָעֳמִי֙ לִשְׁתֵּ֣י כַלֹּתֶ֔יהָ לֵ֣כְנָה שֹּׁ֔בְנָה אִשָּׁ֖ה לְבֵ֣ית אִמָּ֑הּ יעשה יְהוָ֤ה " \
+             "עִמָּכֶם֙ חֶ֔סֶד כַּאֲשֶׁ֧ר עֲשִׂיתֶ֛ם עִם־הַמֵּתִ֖ים וְעִמָּדִֽי׃"
+  RUTH_1_8_TOKENS = [
+    { "form" => "אִמָּ֑הּ", "lemma" => "517", "morph" => "HNcfsc/Sp3fs", "id" => "08dns", "lang" => "hbo" },
+    { "form" => "יעשה", "lemma" => "6213 a", "morph" => "HVqi3ms", "id" => "08GK3",
+      "type" => "x-ketiv", "lang" => "hbo",
+      "qere" => [{ "form" => "יַ֣עַשׂ", "lemma" => "6213 a", "morph" => "HVqj3ms", "id" => "08nRZ",
+                   "lang" => "hbo" }] },
+    { "form" => "יְהוָ֤ה", "lemma" => "3068", "morph" => "HNp", "id" => "08cpb", "lang" => "hbo" }
+  ].freeze
+  RUTH_ANNOTATIONS = { "tokens" => RUTH_1_8_TOKENS }.freeze
+
+  RLI = "⁧"
+  PDI = "⁩"
+
+  def policies
+    @policies ||= Nabu::Display.load_policies(shipped_config)
+  end
+
+  def source_policies
+    @source_policies ||= Nabu::Display.load_source_policies(shipped_config)
+  end
+
+  def shipped_config
+    File.join(Nabu::Config::PROJECT_ROOT, "config", "display.yml")
+  end
+
+  def render(text, language, mode: "reading", source: nil, annotations: nil)
+    Nabu::Display.render(text, language: language, mode: Nabu::Display.mode(mode),
+                               policies: policies, source: source, annotations: annotations,
+                               source_policies: source_policies)
+  end
+
+  def unwrap(text)
+    text.delete(RLI + PDI)
+  end
+
+  # -- the two new modes on the P27-0 registry -----------------------------
+
+  def test_reading_and_diplomatic_are_registered
+    assert_includes Nabu::Display.mode_names, "reading"
+    assert_includes Nabu::Display.mode_names, "diplomatic"
+  end
+
+  def test_diplomatic_is_byte_identical_on_every_shelf_pin
+    [[DDBDP_LINE_6, "grc", "papyri-ddbdp", nil],
+     [EDH_ERASED, "lat", "edh", nil],
+     [RIIG_SURPLUS, "xtg-Latn", "riig", nil],
+     [SBLGNT_WORD, "grc", "sblgnt", nil],
+     [RUTH_1_8, "hbo", "oshb", RUTH_ANNOTATIONS]].each do |text, lang, source, annotations|
+      rendered = render(text, lang, mode: "diplomatic", source: source, annotations: annotations)
+      assert_equal text, rendered.text, "diplomatic must show the stored edition marks (#{source})"
+      assert_empty rendered.applied
+    end
+  end
+
+  # -- lacuna normalization (papyri-ddbdp, edh, riig) ----------------------
+
+  def test_reading_normalizes_the_gap_marker_to_one_ellipsis
+    rendered = render(DDBDP_LINE_6, "grc", source: "papyri-ddbdp")
+    assert_equal "καὶ Οὐήρου τῶν κυρίων Σεβαστῶν Ἐπεὶφ η …", rendered.text
+    assert_includes rendered.applied, "lacuna"
+  end
+
+  def test_reading_keeps_a_mid_word_gap_mid_word
+    assert_equal "Αἴλιος …θως ἐπηκολούθησα ταῖς τοῦ ἀργυρίου",
+                 render(DDBDP_LINE_7, "grc", source: "papyri-ddbdp").text
+    assert_equal "καρε…μ", render(RIIG_GAP, "xtg-Grek", source: "riig").text
+  end
+
+  def test_reading_normalizes_edh_whole_inscription_lacunae
+    assert_equal "… …", render(EDH_LOST, "lat", source: "edh").text
+  end
+
+  # -- erasures and surplus: content, kept by default ----------------------
+
+  def test_reading_keeps_erasures_bracketed_by_default
+    rendered = render(EDH_ERASED, "lat", source: "edh")
+    assert_equal EDH_ERASED, rendered.text, "an erasure is content — default keeps the ⟦…⟧"
+    assert_empty rendered.applied
+  end
+
+  def test_erasures_unwrap_is_configurable
+    with_sources_yaml("sources:\n  edh: { reading: { erasures: unwrap } }\n") do |sp|
+      rendered = Nabu::Display.render(EDH_ERASED, language: "lat", mode: Nabu::Display.mode("reading"),
+                                                  policies: policies, source: "edh", source_policies: sp)
+      assert_equal "Lucius Licinius Luci filius Crassus", rendered.text
+      assert_includes rendered.applied, "erasures"
+    end
+  end
+
+  def test_reading_keeps_riig_surplus_braces_by_default
+    rendered = render(RIIG_SURPLUS, "xtg-Latn", source: "riig")
+    assert_equal RIIG_SURPLUS, rendered.text, "surplus letters are on the stone — default keeps the {…}"
+  end
+
+  def test_surplus_unwrap_is_configurable
+    with_sources_yaml("sources:\n  riig: { reading: { surplus: unwrap } }\n") do |sp|
+      rendered = Nabu::Display.render(RIIG_SURPLUS, language: "xtg-Latn",
+                                                    mode: Nabu::Display.mode("reading"),
+                                                    policies: policies, source: "riig", source_policies: sp)
+      assert_equal "nantonticnos", rendered.text
+      assert_includes rendered.applied, "surplus"
+    end
+  end
+
+  # -- sblgnt apparatus sigla ----------------------------------------------
+
+  def test_reading_strips_the_sblgnt_apparatus_sigla
+    rendered = render(SBLGNT_WORD, "grc", source: "sblgnt")
+    assert_equal SBLGNT_WORD_READING, rendered.text
+    assert_includes rendered.applied, "sigla"
+  end
+
+  def test_reading_keeps_sblgnt_punctuation_parentheses
+    rendered = render(SBLGNT_PHRASE, "grc", source: "sblgnt")
+    assert rendered.text.start_with?("("), "parentheses are the edition's punctuation, not apparatus"
+    refute_includes rendered.text, "⸂"
+    refute_includes rendered.text, "⸃"
+  end
+
+  def test_default_mode_never_applies_edition_rules
+    rendered = render(SBLGNT_WORD, "grc", mode: "default", source: "sblgnt")
+    assert_equal SBLGNT_WORD, rendered.text, "edition rules belong to reading mode only"
+    assert_empty rendered.applied
+  end
+
+  # -- ketiv/qere (oshb) ---------------------------------------------------
+
+  def test_reading_substitutes_qere_and_composes_with_cantillation_strip
+    rendered = render(RUTH_1_8, "hbo", source: "oshb", annotations: RUTH_ANNOTATIONS)
+    text = unwrap(rendered.text)
+    assert_includes text, "יַעַשׂ", "the qere reading, its cantillation stripped by the hbo policy"
+    refute_includes text, "יעשה", "the ketiv must be substituted away under qere display"
+    assert_includes rendered.applied, "qere"
+    assert_includes rendered.applied, "cantillation"
+    assert_includes rendered.applied, Nabu::Display::ISOLATES, "hbo isolates still wrap reading mode"
+  end
+
+  def test_qere_display_ketiv_leaves_the_written_form
+    with_sources_yaml("sources:\n  oshb: { qere_display: ketiv }\n") do |sp|
+      rendered = Nabu::Display.render(RUTH_1_8, language: "hbo", mode: Nabu::Display.mode("reading"),
+                                                policies: policies, source: "oshb",
+                                                annotations: RUTH_ANNOTATIONS, source_policies: sp)
+      assert_includes unwrap(rendered.text), "יעשה"
+      refute_includes rendered.applied, "qere"
+    end
+  end
+
+  def test_qere_display_both_renders_ketiv_then_qere_bracketed
+    with_sources_yaml("sources:\n  oshb: { qere_display: both }\n") do |sp|
+      rendered = Nabu::Display.render(RUTH_1_8, language: "hbo", mode: Nabu::Display.mode("reading"),
+                                                policies: policies, source: "oshb",
+                                                annotations: RUTH_ANNOTATIONS, source_policies: sp)
+      assert_includes unwrap(rendered.text), "יעשה [יַעַשׂ]", "both = ketiv [qere]"
+      assert_includes rendered.applied, "ketiv+qere"
+    end
+  end
+
+  def test_qere_substitution_without_annotations_is_a_noop
+    rendered = render(RUTH_1_8, "hbo", source: "oshb")
+    assert_includes unwrap(rendered.text), "יעשה", "no annotations → the stored ketiv stands"
+    refute_includes rendered.applied, "qere"
+  end
+
+  # -- config parsing & validation -----------------------------------------
+
+  def test_shipped_sources_config_carries_the_censused_conventions
+    assert_equal({ "lacuna" => "ellipsis" }, source_policies["papyri-ddbdp"].reading)
+    assert_equal "ellipsis", source_policies["edh"].reading["lacuna"]
+    assert_equal "keep", source_policies["edh"].reading["erasures"]
+    assert_equal "keep", source_policies["riig"].reading["surplus"]
+    assert_equal({ "sigla" => "strip" }, source_policies["sblgnt"].reading)
+    assert_equal "qere", source_policies["oshb"].qere_display
+    refute source_policies.key?("ogham"), "ogham censused zero edition marks — no rules invented"
+    refute source_policies.key?("oracc"), "oracc braces/x are content — deliberately left (backlog P27-1)"
+  end
+
+  def test_missing_sources_section_means_no_source_policies
+    with_sources_yaml("languages:\n  hbo: { strip: [cantillation] }\n") do |sp|
+      assert_empty sp
+    end
+  end
+
+  def test_unknown_edition_rule_is_a_named_error
+    error = assert_raises(Nabu::Display::ConfigError) do
+      with_sources_yaml("sources:\n  edh: { reading: { sparkles: strip } }\n") { |_sp| flunk "must raise" }
+    end
+    assert_match(/sparkles/, error.message)
+    assert_match(/lacuna/, error.message, "the error must name the valid rules")
+  end
+
+  def test_unknown_rule_setting_is_a_named_error
+    error = assert_raises(Nabu::Display::ConfigError) do
+      with_sources_yaml("sources:\n  edh: { reading: { lacuna: sideways } }\n") { |_sp| flunk "must raise" }
+    end
+    assert_match(/sideways/, error.message)
+  end
+
+  def test_bad_qere_display_value_is_a_named_error
+    error = assert_raises(Nabu::Display::ConfigError) do
+      with_sources_yaml("sources:\n  oshb: { qere_display: loud }\n") { |_sp| flunk "must raise" }
+    end
+    assert_match(/qere_display/, error.message)
+    assert_match(/loud/, error.message)
+  end
+
+  def test_reading_without_source_context_is_language_strips_only
+    rendered = render(RUTH_1_8, "hbo")
+    text = unwrap(rendered.text)
+    assert_includes text, "יעשה", "no source context → no qere substitution"
+    refute_includes rendered.applied, "qere"
+    assert_includes rendered.applied, "cantillation", "language-level default strips still compose"
+  end
+
+  private
+
+  def with_sources_yaml(content)
+    Dir.mktmpdir("nabu-display-sources") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, content)
+      yield Nabu::Display.load_source_policies(path)
+    end
+  end
+end

@@ -62,9 +62,15 @@ bytes:
   escape hatch; what you see is what the database holds.
 - `plain` — strip every class the language policy defines (`strip` + `keep`):
   consonantal Hebrew, for instance.
+- `reading` — the language default strips **plus** the per-source edition
+  rules of §1a below: apparatus simplified for fluent reading.
+- `diplomatic` — the edition's marks exactly as stored (byte-honest, no
+  isolates; `reading`'s counterpart — today it renders identically to
+  `full`, named so the reading/diplomatic pair speaks the editorial
+  vocabulary).
 
-The mode set is a registry — this phase adds `reading`, `translit` and `mono`
-modes on the same seam, and this table will grow with them.
+The mode set is a registry — `translit` and `mono` modes are planned on the
+same seam, and this table will grow with them.
 
 **The honesty footer.** Whenever a transform actually changed something, the
 command ends with one hint line — never silent alteration, and no line when
@@ -72,6 +78,7 @@ nothing happened:
 
 ```
 display: cantillation stripped (--display full shows all marks)
+display: apparatus simplified: sigla (--display diplomatic shows the edition marks)
 ```
 
 **RTL isolates.** With `isolates: true` (hbo/arc), rendered runs are wrapped
@@ -79,6 +86,64 @@ in U+2067/U+2069 (RTL isolate / pop). In a bidi-capable terminal this keeps
 Hebrew runs coherent inside left-to-right layout lines; where bidi is absent
 the characters are invisible and harmless. Width math (KWIC columns) excludes
 them, so alignment never shifts.
+
+---
+
+## 1a. Edition-level transforms — `--display reading` (P27-1)
+
+Language policies dress *scripts*; the `sources:` section of
+`config/display.yml` dresses *editions* — transforms keyed to a source's
+editorial conventions, executed only by the `reading` mode
+(`--display diplomatic` shows the same marks byte-honest, as stored).
+
+The rules are census-first over the **stored** passage bytes, and the stored
+surface is much leaner than raw Leiden: the parsers already read through
+supplements `[abc]`, editorial additions `<abc>`, expansions `(abc)` and
+unclear-underdots at parse time (all censused ×0 in stored text — no rules
+exist for them; per-shelf counts in the backlog, P27-1). What the shelves
+actually carry, and what `reading` does about it:
+
+| Rule | Marks | Settings | Shipped |
+|---|---|---|---|
+| `lacuna` | `[…]` — the one gap marker every Leiden parser emits | `ellipsis` \| `keep` | papyri-ddbdp, edh, riig → `ellipsis` (`[…]` reads `…`) |
+| `erasures` | `⟦abc⟧` — EDH damnatio memoriae, RIIG/Ogham `<del>` | `keep` \| `unwrap` | `keep` — an erasure is content; unwrap drops only the brackets, never the text |
+| `surplus` | `{abc}` — letters carved in error (RIIG) | `keep` \| `unwrap` | `keep` — unwrapping would present a misspelling as fluent text without its marker |
+| `sigla` | `⸀ ⸂ ⸃` — SBLGNT's apparatus cross-references | `strip` \| `keep` | sblgnt → `strip` (⸁ and ⸄–⸇ censused ×0, not in the set) |
+
+Two shelves deliberately have **no** entry:
+
+- **ogham** — its stored fixtures carry zero edition marks (the glyph and
+  choice machinery resolves everything at parse time).
+- **oracc** — the braces are *determinatives* (`{d}amar-{d}suen`): silent
+  classifiers that keep-text-drop-marker would fuse into the word as a
+  misreading; the standalone `x` marks are illegible-sign placeholders and
+  the rare parentheses are metrological notation (`2(BARIG)`). All content
+  — all kept, journaled in the backlog.
+
+**Ketiv/qere (oshb).** The stored verse text carries the *ketiv* (written)
+form; the *qere* (read) form rides that token's annotations. Per-source
+config `qere_display: qere | ketiv | both` (shipped: `qere`) chooses which
+side `reading` shows; `both` renders "ketiv [qere]". Token-level display
+substitution from the stored annotations — never a re-parse, never stored.
+Hebrew reading mode thus composes naturally: qere read **and** cantillation
+stripped together:
+
+```
+$ bin/nabu show urn:nabu:oshb:ruth:1.8 --display reading
+…
+display: cantillation stripped · apparatus simplified: qere · rtl isolates (--display diplomatic shows the edition marks)
+```
+
+**RIIG orig/reg.** RIIG's parallel editorial readings are separate sibling
+passages by construction (`urn …:PLT-a:1` vs `…:MLE-a:1`), and within one
+passage `<choice>` already keeps the regularized branch — orig and reg never
+share a passage, so there is no display-time choice to make; `reading`'s
+Leiden handling suffices.
+
+**Scope.** Edition rules apply where the command knows the passage's source:
+the `show` family (passage, document listing, range). Search/concord/align
+render under the language policies alone — matching is never affected either
+way (the mode-independence pin covers `reading` and `diplomatic` too).
 
 ---
 

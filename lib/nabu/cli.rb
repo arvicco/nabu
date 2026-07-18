@@ -23,7 +23,8 @@ module Nabu
       option :display, type: :string, default: Nabu::Display::DEFAULT_MODE, banner: "MODE",
                        desc: "Display mode: default (config/display.yml policies), " \
                              "full (every stored byte, no transforms), plain (strip all " \
-                             "defined mark classes) — see docs/display.md"
+                             "defined mark classes), reading (edition apparatus simplified, " \
+                             "qere read), diplomatic (edition marks as stored) — see docs/display.md"
     end
 
     desc "version", "Print the Nabu version"
@@ -1968,11 +1969,23 @@ module Nabu
         raise Thor::Error, e.message
       end
 
+      def display_source_policies
+        @display_source_policies ||= Nabu::Display.load_source_policies(Nabu::Config.load.display_path)
+      rescue Nabu::Display::ConfigError => e
+        raise Thor::Error, e.message
+      end
+
       # Render one run of text for the terminal and remember which transforms
-      # actually applied (for the footer hint).
-      def display_text(text, language)
+      # actually applied (for the footer hint). +source+/+annotations+
+      # (P27-1) are the optional edition context — call sites that know the
+      # passage's source (the show family) pass them so `--display reading`
+      # can apply the per-source convention rules and the ketiv/qere choice;
+      # everywhere else the language-level policies alone apply.
+      def display_text(text, language, source: nil, annotations: nil)
         rendered = Nabu::Display.render(text.to_s, language: language,
-                                                   mode: display_mode, policies: display_policies)
+                                                   mode: display_mode, policies: display_policies,
+                                                   source: source, annotations: annotations,
+                                                   source_policies: display_source_policies)
         display_applied.merge(rendered.applied)
         rendered.text
       end
@@ -1985,14 +1998,19 @@ module Nabu
       # actually changed something (compact rule — zero-signal silence).
       #   display: cantillation stripped (--display full shows all marks)
       #   display: cantillation stripped · rtl isolates (--display full shows all marks)
+      # Edition transforms (P27-1) get their own vocabulary and escape hatch:
+      #   display: apparatus simplified: sigla (--display diplomatic shows the edition marks)
       def print_display_footer
         return if display_applied.empty?
 
-        strips = display_applied.to_a - [Nabu::Display::ISOLATES]
+        edition = Nabu::Display::EDITION_LABELS & display_applied.to_a
+        strips = display_applied.to_a - [Nabu::Display::ISOLATES] - edition
         parts = []
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
+        parts << "apparatus simplified: #{edition.join(', ')}" unless edition.empty?
         parts << Nabu::Display::ISOLATES if display_applied.include?(Nabu::Display::ISOLATES)
-        say "display: #{parts.join(' · ')} (--display full shows all marks)"
+        hint = edition.empty? ? "--display full shows all marks" : "--display diplomatic shows the edition marks"
+        say "display: #{parts.join(' · ')} (#{hint})"
       end
 
       # Reject an unknown --license up front (before opening any db) with the
@@ -2384,7 +2402,8 @@ module Nabu
 
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
-        say "  #{display_text(passage.text, passage.language)}"
+        say "  #{display_text(passage.text, passage.language,
+                              source: passage.source_slug, annotations: passage.annotations)}"
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
@@ -2407,7 +2426,8 @@ module Nabu
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  " \
-              "#{display_text(line.text, document.language)}"
+              "#{display_text(line.text, document.language,
+                              source: document.source_slug, annotations: line.annotations)}"
         end
       end
 
@@ -2424,7 +2444,8 @@ module Nabu
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
           say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  " \
-              "#{display_text(line.text, range.language)}"
+              "#{display_text(line.text, range.language,
+                              source: range.source_slug, annotations: line.annotations)}"
         end
       end
 

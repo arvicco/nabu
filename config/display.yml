@@ -17,3 +17,25 @@ languages:
   arc: { strip: [cantillation], isolates: true }
   san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
   chu: { strip: [titla] }
+
+# Edition-level conventions (P27-1) — per-SOURCE rules the `reading` mode
+# executes (`--display diplomatic` shows the marks as stored). Census-first
+# over the STORED passage bytes: the parsers already resolve most raw Leiden
+# at parse time (supplements/additions/expansions/underdots censused ×0 in
+# stored text — no rules invented for them; counts in backlog P27-1).
+#
+# Keys per source (registry slug):
+#   reading:       rule → setting (rules: lacuna ellipsis|keep,
+#                  erasures/surplus keep|unwrap, sigla strip|keep)
+#   qere_display:  qere | ketiv | both (oshb ketiv/qere apparatus; "both"
+#                  renders "ketiv [qere]")
+#
+# ogham carries zero edition marks in its stored fixtures and oracc's
+# braces/x-marks are content (determinatives misread unwrapped) — neither
+# gets an entry; see backlog P27-1 for the journaled leaves.
+sources:
+  papyri-ddbdp: { reading: { lacuna: ellipsis } }
+  edh: { reading: { lacuna: ellipsis, erasures: keep } } # an erasure is content — ⟦…⟧ stays
+  riig: { reading: { lacuna: ellipsis, surplus: keep } } # {…} marks carver error — stays
+  sblgnt: { reading: { sigla: strip } }
+  oshb: { qere_display: qere }

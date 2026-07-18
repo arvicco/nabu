@@ -1003,3 +1003,9 @@ CLI can do for you). The operating summary:
   defines (consonantal Hebrew). Any applied transform is announced in a
   one-line footer (`display: cantillation stripped (--display full shows
   all marks)`); silence means the bytes are untouched.
+- **Edition-level reading** (P27-1): `--display reading` additionally
+  simplifies per-SOURCE editorial apparatus on the `show` family —
+  `sources:` in `config/display.yml` (Leiden `[…]` lacunae → `…`, SBLGNT
+  apparatus sigla stripped, oshb ketiv/qere via `qere_display:
+  qere|ketiv|both`) — and `--display diplomatic` shows the edition marks
+  byte-honest; see docs/display.md §1a.
