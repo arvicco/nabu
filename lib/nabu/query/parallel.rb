@@ -148,6 +148,14 @@ module Nabu
       # slug ends in "-de" — censused, frozen).
       TLA_HF_DOCUMENT = /\A(?<work>urn:nabu:tla-hf:[^:]+?)(?:-de)?\z/
       private_constant :TLA_HF_DOCUMENT
+      # An AES text urn (P28-0): the Egyptian text IS the work
+      # (urn:nabu:aes:tuebingerstelen:3F5K…), its aligned German is the -de
+      # variant, suffix = the shared sentence id — verse pairs on every
+      # translated sentence, honest one-sided rows where the editor left a
+      # sentence untranslated (or translated a token-less one). Text ids
+      # are uppercase [A-Z0-9] (censused, frozen) — none ends in "-de".
+      AES_DOCUMENT = /\A(?<work>urn:nabu:aes:[^:]+:[^:]+?)(?:-de)?\z/
+      private_constant :AES_DOCUMENT
 
       def initialize(catalog:)
         @catalog = catalog
@@ -232,7 +240,7 @@ module Nabu
           [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
         elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT) ||
                        urn.match(DAMASKINI_DOCUMENT) || urn.match(SUTTACENTRAL_DOCUMENT) ||
-                       urn.match(TLA_HF_DOCUMENT))
+                       urn.match(TLA_HF_DOCUMENT) || urn.match(AES_DOCUMENT))
           [match[:work], @catalog[:documents].where(
             Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
           )]
