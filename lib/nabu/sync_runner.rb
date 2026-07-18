@@ -108,6 +108,11 @@ module Nabu
       end
     end
 
+    # Grains that never touch the fulltext/lemma/trigram/alignment indexes:
+    # dossier-class shelves and owner notes. Everything minting passages or
+    # dictionary entries (the trigram feed) still rebuilds (2026-07-18).
+    INDEX_INERT_KINDS = %i[notes language source].freeze
+
     private
 
     def live_enabled
@@ -214,11 +219,6 @@ module Nabu
     # (now-updated) catalog into the fulltext db. Opens its own short-lived
     # connection to config.fulltext_path so callers need not thread a handle
     # through. Returns the passage count.
-    # Grains that never touch the fulltext/lemma/trigram/alignment indexes:
-    # dossier-class shelves and owner notes. Everything minting passages or
-    # dictionary entries (the trigram feed) still rebuilds.
-    INDEX_INERT_KINDS = %i[notes language source].freeze
-
     def index_inert?(entry)
       INDEX_INERT_KINDS.include?(entry.adapter_class.content_kind)
     rescue Nabu::Error
