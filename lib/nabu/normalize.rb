@@ -116,6 +116,25 @@ module Nabu
     PROTO_FOLD = ->(str) { str.tr("ʰʷˢᶻ", "hwsz").gsub("ˀ", "") }
     private_constant :PROTO_FOLD
 
+    #   egy  the Egyptological-transliteration fold (P28-1), argued from a
+    #        census of all 35,052 AED headwords: the alef ꜣ (U+A723,
+    #        ×12,753; Ꜣ U+A722 ×284 reaches it via downcase) and the ain ꜥ
+    #        (U+A725 ×6,451; Ꜥ U+A724 ×357) are base letters with NO
+    #        decomposition — the generic fold leaves them, and no ASCII
+    #        keyboard carries them — folded to "a", the vocalic reading
+    #        Egyptologists type (ꜥꜣ → "aa"). ʾ (U+02BE MODIFIER LETTER
+    #        RIGHT HALF RING, ×1,036) is Lm like the proto superscripts:
+    #        dropped entirely (gsub 1→0, fold_with_map-safe). Everything
+    #        else measured in the headword inventory (ḥ ḫ ẖ š ṯ ḏ ṱ and
+    #        the semivowel breve U+032F / macron-below U+0331) decomposes
+    #        and falls to the generic Mn strip; the yod is spelled j
+    #        upstream, so no rule. The lone editorial 〈 〉 pair (×1) is
+    #        punctuation, deliberately unruled. Keyed by primary subtag,
+    #        so the papyri egy-Egyd passages refold under it — their
+    #        Demotic transliteration carries the same letter inventory.
+    EGYPTIAN_FOLD = ->(str) { str.tr("ꜣꜥ", "aa").gsub("ʾ", "") }
+    private_constant :EGYPTIAN_FOLD
+
     #   cop  Coptic (P17-1): delete the morphological divider ⳿ (U+2CFF,
     #        category Po — an editorial mark attached to its letter, e.g.
     #        ⲙⲏⲣ⳿, not text). It is the ONLY non-Mn editorial mark the
@@ -137,7 +156,8 @@ module Nabu
       "ine" => PROTO_FOLD,
       "sla" => PROTO_FOLD,
       "itc" => PROTO_FOLD,
-      "iir" => PROTO_FOLD
+      "iir" => PROTO_FOLD,
+      "egy" => EGYPTIAN_FOLD
     }.freeze
 
     # == Script neutralization (P27-2; conventions §9) — the cross-script fold
