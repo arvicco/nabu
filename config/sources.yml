@@ -775,6 +775,38 @@ aed:
   # re-fetch is an owner decision.
   sync_policy: manual
 
+ceipom:
+  adapter: Nabu::Adapters::Ceipom
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6): bin/nabu sync ceipom — five FileFetch
+                   # GETs off Zenodo record 6475427 (texts/sentences/
+                   # tokens/analysis/links CSVs, 16.8 MB, UTF-16). Expect
+                   # 3,871 docs / 5,303 passages (3,875 texts minus the 4
+                   # sentence-less skips; every sentence belongs to a held
+                   # text) and 3,630 tm: reference edges. Eyeball
+                   # nabu show urn:nabu:ceipom:2 (the Fibula Praenestina),
+                   # urn:nabu:ceipom:995 (the Iguvine Tables, 688
+                   # sentences with tablet sections), `nabu links
+                   # urn:nabu:ceipom:2` (tm:256173) + 5 random passages,
+                   # check dated/placed picks up 3,867 ceipom rows (3
+                   # undated · 10 unplaced · 1 invalid inverted-range
+                   # residues) at the next rebuild, then flip.
+  # P29-1: CEIPoM — Corpus of the Epigraphy of the Italian Peninsula in
+  # the 1st Millennium BCE (Reuben Pitts, KU Leuven; Zenodo 6475427 v1.3,
+  # 2022-04-21, concept DOI 10.5281/zenodo.4759134). 3,875 pre-Roman-Italy
+  # texts / 5,303 sentences: Latin 1,834 (incl. Faliscan → xfa), Oscan 902,
+  # Messapic 591 (cms), Venetic 411 (xve), Umbrian 68 (xum — incl. the
+  # Iguvine Tables), Old Sabellic 59 (spx), Greek 10. License field
+  # cc-by-sa-4.0 → attribution (share-alike rider recorded in 02-sources).
+  # Five UTF-16LE(BOM) CSVs — the flat-CSV encoding first. Dependency
+  # tokens + analysis ride annotations; the analysis Lemma column is an
+  # OPAQUE ID (no citation forms in the deposit) → lemma_id verbatim,
+  # NO passage_lemmas minted (honest; the Classical_Latin_equivalent
+  # lemma bridge is journaled v2). Trismegistos links → tm: reference
+  # edges (producer ceipom). Zenodo versions are immutable — a new
+  # version is a NEW record id, so this deposit can never drift:
+  sync_policy: frozen
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

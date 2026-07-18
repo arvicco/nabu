@@ -39,7 +39,9 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-mga" => "https://kaikki.org/dictionary/Middle%20Irish/" \
                         "kaikki.org-dictionary-MiddleIrish.jsonl",
     "wiktionary-wlm" => "https://kaikki.org/dictionary/Middle%20Welsh/" \
-                        "kaikki.org-dictionary-MiddleWelsh.jsonl"
+                        "kaikki.org-dictionary-MiddleWelsh.jsonl",
+    "wiktionary-xum" => "https://kaikki.org/dictionary/Umbrian/" \
+                        "kaikki.org-dictionary-Umbrian.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -72,7 +74,8 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-iir-pro:kaikki.org-dictionary-ProtoIndoIranian.jsonl",
                   "wiktionary-sga:kaikki.org-dictionary-OldIrish.jsonl",
                   "wiktionary-mga:kaikki.org-dictionary-MiddleIrish.jsonl",
-                  "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl"],
+                  "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl",
+                  "wiktionary-xum:kaikki.org-dictionary-Umbrian.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -81,15 +84,16 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_ten_dictionaries
+  def test_parse_yields_the_eleven_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
-                    wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm],
+                    wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
+                    wiktionary-xum],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm],
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm xum],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3], documents.map(&:size)
   end
 
   def test_entries_carry_reflexes_the_crosswalk_edges
@@ -187,6 +191,22 @@ class WiktionaryReconTest < Minitest::Test
     assert_equal first, snapshot.call
   end
 
+  # P29-1 rider: the ATTESTED Umbrian extract (the only kaikki-served
+  # Italic corpus language; CEIPoM's xum lane). Old Italic headwords ride
+  # in real U+10300-block codepoints; the romanization stubs (30 upstream)
+  # parse as plain entries; etymology_text (373/500 upstream) is kept
+  # verbatim in bodies.
+  def test_xum_entries_carry_old_italic_headwords_and_etymologies
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    xum = documents.find { |doc| doc.slug == "wiktionary-xum" }
+    assert_equal "xum", xum.language
+    arepes = xum.entries.find { |e| e.headword == "\u{10300}\u{1031B}\u{10304}\u{10310}\u{10304}\u{10314}" }
+    refute_nil arepes, "the Old Italic-script headword record must parse"
+    assert_match(/Proto-Italic/, arepes.body, "the etymology chain rides verbatim")
+    assert(xum.entries.any? { |e| e.headword == "tre" },
+           "romanization stubs parse as plain entries")
+  end
+
   # --- fetch (WebMock only, no network) ----------------------------------------
 
   def stub_all(status: 200)
@@ -211,10 +231,10 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/sla-pro/, report.notes)
       assert_match(/iir-pro/, report.notes)
       assert_match(/wlm/, report.notes)
-      assert_equal 10, adapter.discover(workdir).count, "all ten extracts discoverable in place"
+      assert_equal 11, adapter.discover(workdir).count, "all eleven extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
-         old-irish middle-irish middle-welsh].each do |subdir|
+         old-irish middle-irish middle-welsh umbrian].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -234,11 +254,11 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 10, targets.size
+    assert_equal 11, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
     assert_equal %w[middle-irish middle-welsh old-irish
                     proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
-                    proto-italic proto-slavic proto-west-germanic],
+                    proto-italic proto-slavic proto-west-germanic umbrian],
                  targets.map(&:state_subdir).sort
     targets.each do |target|
       assert_nil target.metadata_url
@@ -262,7 +282,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 235, first.added
+    assert_equal 238, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -270,7 +290,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 235, second.skipped
+    assert_equal 238, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

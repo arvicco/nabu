@@ -53,3 +53,7 @@ files:
     url: https://kaikki.org/dictionary/Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl
     whole: false
     trim: 3 P25-2 lines retrieved 2026-07-17 (cant — cel-pro/PIE etymology with cy descendant; cam 1/cam 2 — etymology_number homographs) — 1,343,469 B -> 4,580 B; recipe in README.md
+  - path: kaikki.org-dictionary-Umbrian.jsonl
+    url: https://kaikki.org/dictionary/Umbrian/kaikki.org-dictionary-Umbrian.jsonl
+    whole: false
+    trim: 3 P29-1 lines retrieved 2026-07-18 (angla — plain noun form; tre — romanization stub; 𐌀𐌛𐌄𐌐𐌄𐌔 — Old Italic-script headword with itc-pro etymology + descendants) — 1,132,498 B -> 4,945 B; recipe in README.md
