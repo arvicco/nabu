@@ -175,11 +175,7 @@ module Nabu
 
         count = 0
         fulltext.transaction do
-          live_passages(catalog).each_slice(BATCH_SIZE) do |batch|
-            fulltext[TABLE].multi_insert(batch.map { |row| index_row(row) })
-            fulltext[LEMMA_TABLE].multi_insert(batch.flat_map { |row| lemma_rows(row, tiers: tiers) })
-            count += batch.size
-          end
+          count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
         end
         rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
         AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
@@ -187,6 +183,68 @@ module Nabu
         # gold-language scope and suppression stats are snapshots of the lemma
         # table built moments ago in this same pass, so the two can never drift.
         ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        count
+      end
+
+      # Incrementally refresh ONE source's slice of the index (P26-5) — the
+      # sync-time replacement for the full drop-and-rebuild above, which stays
+      # `nabu rebuild`'s from-scratch guarantee. The contract is ROW IDENTITY:
+      # after refresh_source!, the fulltext state equals what rebuild! would
+      # produce from the same catalog (pinned by test).
+      #
+      # Mechanism, table by table:
+      # - passages_fts / passages_trigram are REGULAR (contentful) FTS5
+      #   tables, so per-row DELETE is real deletion (contentless/external-
+      #   content tables would need the special 'delete' insert — not our
+      #   shape). passage_id is UNINDEXED, so rather than one full-table scan
+      #   per IN-batch, ONE streaming scan collects the doomed rowids (every
+      #   row whose passage_id belongs to the source — withdrawn rows
+      #   included, since the loader never hard-deletes a passage row, every
+      #   indexed id resolves against the catalog forever) and the deletes go
+      #   by rowid. ~4.3M-row scan, seconds — against the minutes of a full
+      #   rebuild.
+      # - passage_lemmas deletes by urn IN-batches (B-tree indexed).
+      # - trigram: only touched when the source is in scope — flagged now
+      #   (fuzzy_slugs) or indexed by the last build (the scope table); a
+      #   de-flagged source loses its rows AND its scope row, so coverage
+      #   reads honestly. Live scope: papyri/oracc/edh, 1.71M rows total.
+      # - alignment_refs: rebuilt via AlignmentIndexer ONLY when the source
+      #   holds a registry witness document — the index is registry-scoped
+      #   (157k rows live) so the full rebuild is cheap, and a non-witness
+      #   sync skips it entirely.
+      # - reflex_roots/stats: rebuilt when the source's lemma rows changed
+      #   (84k rows live, ~seconds) or when +reflexes_changed+ says the
+      #   crosswalk itself did (dictionary syncs); a lemma-less source skips.
+      #
+      # Fallback: a fulltext db missing any table (first-ever sync) or whose
+      # lemma table predates the tier column falls back to the full rebuild!.
+      # Returns the SOURCE's live passage count — never the corpus total.
+      def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
+                          lemma_tiers: nil, reflexes_changed: false)
+        unless incremental_ready?(fulltext)
+          rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
+                   fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers)
+          return source_live_count(catalog, slug)
+        end
+
+        source_id = catalog[:sources].where(slug: slug).get(:id)
+        return 0 if source_id.nil?
+
+        ids, urns = source_passage_keys(catalog, source_id)
+        count = 0
+        lemmas_changed = false
+        fulltext.transaction do
+          deleted = delete_source_lemma_rows(fulltext, urns)
+          delete_fts_rows(fulltext, TABLE, ids)
+          count, inserted = insert_passage_batches(
+            fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
+            source_tiers(catalog, lemma_tiers || {})
+          )
+          lemmas_changed = deleted.positive? || inserted.positive?
+          refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+        end
+        refresh_alignment(catalog, fulltext, alignments, source_id)
+        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext) if lemmas_changed || reflexes_changed
         count
       end
 
@@ -212,6 +270,120 @@ module Nabu
           end
         end
         count
+      end
+
+      # -- refresh_source! internals (P26-5) ---------------------------------
+
+      # Every table refresh_source! maintains must already exist in its
+      # CURRENT shape (the tier column is the probe precedent: a pre-tier
+      # lemma table cannot take tiered inserts). Anything missing → the
+      # caller falls back to the full rebuild, which creates them all.
+      def incremental_ready?(fulltext)
+        [TABLE, LEMMA_TABLE, TRIGRAM_TABLE, TRIGRAM_SCOPE_TABLE,
+         AlignmentIndexer::TABLE, ReflexRootsIndexer::TABLE, ReflexRootsIndexer::STATS_TABLE]
+          .all? { |table| fulltext.table_exists?(table) } &&
+          fulltext[LEMMA_TABLE].columns.include?(:tier)
+      end
+
+      # One streaming pass feeding the FTS and lemma tables (shared by
+      # rebuild! and refresh_source!). Returns [passage count, lemma-row
+      # count].
+      def insert_passage_batches(fulltext, dataset, tiers)
+        count = 0
+        lemma_count = 0
+        dataset.each_slice(BATCH_SIZE) do |batch|
+          fulltext[TABLE].multi_insert(batch.map { |row| index_row(row) })
+          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
+          fulltext[LEMMA_TABLE].multi_insert(rows)
+          count += batch.size
+          lemma_count += rows.size
+        end
+        [count, lemma_count]
+      end
+
+      # ALL of the source's passage ids and urns — withdrawn included: rows
+      # indexed while live must be deletable after their withdrawal, and the
+      # catalog never hard-deletes, so this set covers every indexed row the
+      # source ever contributed. Returns [Set of ids, Array of urns].
+      def source_passage_keys(catalog, source_id)
+        ids = Set.new
+        urns = []
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:documents][:source_id] => source_id)
+          .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:urn])
+          .each do |row|
+            ids << row.fetch(:passage_id)
+            urns << row.fetch(:urn)
+          end
+        [ids, urns]
+      end
+
+      # Delete the source's rows from an FTS5 table: one streaming scan
+      # collects the rowids whose passage_id is in +ids+ (passage_id is
+      # UNINDEXED — per-batch IN deletes would each rescan the table), then
+      # targeted rowid deletes. Returns the number of rows deleted.
+      def delete_fts_rows(fulltext, table, ids)
+        return 0 if ids.empty?
+
+        doomed = []
+        fulltext[table].select(:rowid, :passage_id).each do |row|
+          doomed << row.fetch(:rowid) if ids.include?(row.fetch(:passage_id))
+        end
+        doomed.each_slice(BATCH_SIZE) { |batch| fulltext[table].where(rowid: batch).delete }
+        doomed.size
+      end
+
+      # Delete the source's lemma rows by urn (B-tree indexed — no scan).
+      # Returns the number of rows deleted.
+      def delete_source_lemma_rows(fulltext, urns)
+        urns.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[LEMMA_TABLE].where(urn: batch).delete
+        end
+      end
+
+      # The trigram slice: refresh when the source is flagged now, drop its
+      # rows (and scope row) when the last build indexed it but the flag is
+      # gone, and stay entirely hands-off otherwise (class note on
+      # refresh_source!).
+      def refresh_trigram_slice(catalog, fulltext, slug, fuzzy_slugs, ids)
+        fuzzy = fuzzy_slugs.include?(slug)
+        in_scope = !fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).empty?
+        return unless fuzzy || in_scope
+
+        delete_fts_rows(fulltext, TRIGRAM_TABLE, ids) if in_scope
+        if fuzzy
+          fulltext[TRIGRAM_SCOPE_TABLE].insert(slug: slug) unless in_scope
+          trigram_passages(catalog, [slug]).each_slice(BATCH_SIZE) do |batch|
+            fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
+          end
+        else
+          fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).delete
+        end
+      end
+
+      # Full alignment rebuild, but ONLY when the source holds a document the
+      # registry names as a witness — the index is registry-scoped (157k rows
+      # live), so regenerating it whole is cheap and keeps AlignmentIndexer
+      # the single owner of its semantics; every other sync skips it.
+      def refresh_alignment(catalog, fulltext, registry, source_id)
+        return if registry.nil? || registry.empty?
+
+        witness_urns = registry.works.flat_map(&:witnesses).flat_map(&:document_urns)
+        return if catalog[:documents].where(source_id: source_id, urn: witness_urns).empty?
+
+        AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: registry)
+      end
+
+      # The source's live passage count (two-level visibility) — what the
+      # rebuild-fallback path reports, keeping "indexed N" per-source honest.
+      def source_live_count(catalog, slug)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .where(Sequel[:sources][:slug] => slug)
+          .count
       end
 
       # The lemma table (see class note). Plain Sequel DSL — no raw DDL.

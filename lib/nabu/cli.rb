@@ -4377,8 +4377,19 @@ module Nabu
         report = outcome.load_report
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
-          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored  " \
-          "indexed #{outcome.indexed} passages#{format_sync_references(outcome.references)}"
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
+          "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}"
+      end
+
+      # P26-5: syncs index incrementally, so the count is the SOURCE's live
+      # passage rows — "indexed 17942 passages (corph)" — never the corpus
+      # total (which would imply work that no longer happens). Suppressed for
+      # index-inert shelves (indexed nil — no index work at all) and for
+      # zero-passage grains like dictionaries (compact zero-field rule).
+      def format_sync_indexed(outcome)
+        return "" if outcome.indexed.nil? || outcome.indexed.zero?
+
+        "  indexed #{outcome.indexed} passages (#{outcome.slug})"
       end
 
       # P19-4: the reference-edge tail for a local-shelf sync — silent when

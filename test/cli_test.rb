@@ -1034,7 +1034,9 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/corpus\s+parse-only/, out)
       assert_match(/\+2 added/, out)
-      assert_match(/indexed 3 passages/, out) # μῆνιν, ἄειδε, ἄνδρα
+      # P26-5: the sync line reports the SOURCE's own indexed rows, labeled —
+      # never the corpus total.
+      assert_match(/indexed 3 passages \(corpus\)/, out) # μῆνιν, ἄειδε, ἄνδρα
     end
   end
 
@@ -1062,6 +1064,9 @@ class CLITest < Minitest::Test
         out, _err, status = run_cli(%w[sync local-language])
         assert_nil status
         assert_match(/added/, out)
+        # P26-5 Part A: an index-inert shelf's sync does no index work, and
+        # the line honestly omits the "indexed N passages" fragment.
+        refute_match(/indexed \d+ passages/, out, "an inert shelf sync must not claim index work")
 
         ledger = Nabu::Store::Ledger.open!(config.history_path)
         pins = ledger[:pins].where(source_slug: "local-language").select_map(:repo_url)
