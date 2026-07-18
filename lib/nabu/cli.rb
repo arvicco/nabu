@@ -1004,26 +1004,30 @@ module Nabu
     long_desc <<~HELP, wrap: false
       Read the links journal (docs/intertext-design.md §7, architecture §15):
       every batch-mined edge touching URN, BOTH directions, grouped by kind
-      (parallel, formula, cognate, reference). Each edge shows its
-      counterpart urn resolved to the document title and language plus its
-      kind's evidence — a parallel's rarity score, a formula's gram and
+      (parallel, formula, cognate, reference, etymology). Each edge shows
+      its counterpart urn resolved to the document title and language plus
+      its kind's evidence — a parallel's rarity score, a formula's gram and
       count (← the hub locus of the refrain's star; `links <hub>` fans out
       every locus), a cognate's meet (ref · root [shelf] — a gem-pro shelf
       under a Slavic witness reads as a borrowing), a reference's asserting
       manifest (P19-4: a local-library article beside the passages it
-      discusses); → means a batch anchor at URN discovered the counterpart,
+      discusses), an etymology's ancestor lemma (P28-3: a Coptic dictionary
+      entry's hieroglyphic/demotic predecessors from the ORAEC crosswalk);
+      → means a batch anchor at URN discovered the counterpart,
       ← means the edge was found from the other end. The footer cites the
       producer run(s) that minted the edges — scope, parameters, and date —
       so every edge is honest about its provenance.
 
       Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
       survive `nabu rebuild` untouched; counterparts re-resolve against the
-      current catalog (passage grain first, document grain second), and one
-      that no longer resolves is flagged "(not in catalog)" rather than
-      hidden. Edges are minted ONLY by batch producers (`parallels --batch
-      SCOPE`, `formulas --batch SCOPE`, `cognates --batch WORK`, and the
-      local-library sync's manifest `related:` refresh); interactive output
-      never persists.
+      current catalog (passage grain first, document grain second,
+      dictionary-entry grain third — an ingested shelf's urn:nabu:dict:
+      urns read "headword — dictionary"), and one that no longer resolves
+      is flagged "(not in catalog)" rather than hidden. Edges are minted
+      ONLY by batch producers (`parallels --batch SCOPE`, `formulas --batch
+      SCOPE`, `cognates --batch WORK`, and the sync-time reference/etymology
+      refreshes of the declaring sources); interactive output never
+      persists.
 
       Compact shows the first few edges per kind; --long lists all. --db
       reads a journal written elsewhere (a scratch batch run).

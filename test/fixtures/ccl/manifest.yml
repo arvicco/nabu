@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS (whole: false) of the upstream artifacts —
+# a fresh GET returns the full lexicon/crosswalk, so both are fetched for
+# URL-liveness only, never byte-compared. Re-apply the README trim recipes
+# after any refresh.
+source: ccl
+adapter_test: test/adapters/ccl_test.rb
+retrieved: 2026-07-18
+files:
+  - path: lexicon/Comprehensive_Coptic_Lexicon-v1.2-2020.xml
+    url: https://refubium.fu-berlin.de/bitstream/handle/fub188/27813/Comprehensive_Coptic_Lexicon-v1.2-2020.xml?sequence=1&isAllowed=y
+    whole: false
+    trim: full teiHeader + 6 byte-verbatim entry/superEntry blocks (17 of 11,284 entries; C1-C5, C9-C10, C16, C74, C1494-C1500, C11273) — 12,343,129 B -> 44,666 B; recipe in README.md
+  - path: crosswalk/digitizing_coptic_etymologies_coptic_list_entries.csv
+    url: https://raw.githubusercontent.com/oraec/coptic_etymologies/main/digitizing_coptic_etymologies_coptic_list_entries.csv
+    whole: false
+    trim: 6 of 2,177 line-verbatim rows (C5, C6, C9, C74, C1494, C1495) — 35,889 B -> 81 B; recipe in README.md

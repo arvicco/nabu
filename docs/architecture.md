@@ -917,11 +917,17 @@ centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
 
 `db/links.sqlite3` holds the corpus's mined cross-reference graph:
 `links(from_urn, to_urn, kind, score, detail, run_id, created_at)` with
-`kind` ∈ {parallel, formula, cognate, …} and `detail` the per-edge evidence
+`kind` ∈ {parallel, formula, cognate, reference, etymology, …} and `detail`
+the per-edge evidence
 (nil for parallels; the gram for formulas, the meet for cognates — added by
-journal migration 002), plus a `link_runs` companion
+journal migration 002; the headword ← ancestor line for etymology, P28-3),
+plus a `link_runs` companion
 `(producer, scope, params_json, code_version, created_at)` so every edge is
-honest about the run that minted it. The full design is
+honest about the run that minted it. The `links` reader resolves
+counterparts at passage grain first, document grain second, and — P28-3 —
+dictionary-entry grain third (an ingested shelf's `urn:nabu:dict:` urns
+read "headword — dictionary title"; a not-ingested shelf's forward edges
+still render "(not in catalog)", honestly). The full design is
 `docs/intertext-design.md` §7; this is the standing record of what shipped
 and where it lives.
 
