@@ -958,7 +958,10 @@ One Markdown dossier per REGISTERED SOURCE under `canonical/local-source/`
 (architecture §16, shelf three): the shelf's `description` (1–3 sentences,
 the load-bearing lane), `themes`, `key_works` urns, your prose, and
 provenance-headed accretion sections. Served on `nabu list SLUG` cards,
-the `nabu list --long` census, and the MCP `nabu_status` payload.
+the `nabu list --long` census, the grouped `nabu list --sources` map
+(first sentence per source, under family headers derived from the
+language dossiers — an optional owner-only `group:` front-matter key
+overrides a source's derived group), and the MCP `nabu_status` payload.
 
 The workflow:
 

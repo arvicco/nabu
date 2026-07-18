@@ -8897,3 +8897,85 @@ Tests +72 methods (cyrl 17, hebr 8, deva 2, normalize 9, display 19,
 cli 13, search 2, lemma-search 2 — plus reworked folded-key pins across
 8 files). Suite 3,490 runs / 45,970 assertions exit 0 (0 skips) · lint
 432 files exit 0.
+
+# ── Phase 28 ──────────────────────────────────────────────────────────
+
+## P28-4 · `nabu list --sources` — the one-page grouped map of the library  [tier: fable] [status: done 2026-07-18 — mode + derived grouping + docs shipped; verdicts below] [deps: P24-0 (dossier descriptions), P22-1 (Query::List)]
+
+Owner ask (2026-07-18, verbatim): "bin/nabu list --sources that gives a
+one-liner DESCRIPTION of every source - possibly, grouped by
+similarity/language groups? We need to give new user a one-page view of
+what may be relevant for him. Essentially, a short CLI version of
+site/sources."
+
+SHIPPED — the mode:
+- `nabu list --sources`: a fourth list mode beside
+  --documents/--entries/--collections; composes with NOTHING (no SOURCE,
+  no enumeration flag, no --long/--prefix/filters/--export flags — a
+  named guard, first in validate_list_flags!). One line per catalog
+  source under family headers: `slug — <first sentence of the dossier
+  description>` (source_records kind=description, the P24-0 lane),
+  truncated at 100 chars with an honest ellipsis (truncate_line, the
+  --long census's own measure). Undescribed sources render the honest
+  stub hint (`slug — no description; nabu ingest --shelf source SLUG`).
+  Disabled sources stay VISIBLE with an `(off)` tag — a new user should
+  see what exists — enablement read from the REGISTRY (the P23-3b
+  authority ruling; the catalog flag only for registry orphans). One
+  footer line points deeper (`nabu list SLUG for the full card ·
+  docs/library.md for the survey`); NO counts on this view — the census
+  is the numbers surface, descriptions are the payload here.
+
+SHIPPED — grouping, fully derived (zero per-source curation debt):
+1. `group:` front-matter lane in a SOURCE dossier — OWNER-ONLY, wins
+   verbatim (a curated SourceDossier key: parsed/flattened to
+   source_records kind=group/rendered/carried by with_section; the
+   seed exporter, `ingest --shelf source` scaffold, and every other
+   write path NEVER set it — pinned by test; the owner hand-edits the
+   dossier and re-syncs local-source). CONTRACT journaled here: absent
+   = derive; present = wins; unknown labels form their own group.
+2. Local shelves (adapters LocalLanguage/LocalSource/LocalNotes/
+   LocalLibrary — content grains :language/:source/:notes + the
+   library) → "Your shelves".
+3. Otherwise the source's languages (live census passages + dictionary
+   languages) join the language dossiers' family lanes
+   (language_records kind=family; hyphenated codes fall back to their
+   prefix lane — the Languages#family_fallback rule) through a keyword
+   net (Query::List::FAMILY_GROUPS — free-prose lanes like "South
+   Slavic" / "Italic < Indo-European" keyed on family words, the
+   specific ordered before the general so "Egyptian < Afro-Asiatic"
+   never lands in the Semitic net): ONE family → that header; families
+   SPANNED by a dictionary-owning source → "Reference & dictionaries"
+   (single-family dictionaries stay in their family group); spanned on
+   a passage shelf → the DOMINANT language's family (most live
+   passages, ties by code); nothing derivable → honest "Other".
+
+VERDICTS / journal:
+- Header order is a FIXED curated constant (Query::List::GROUP_ORDER):
+  Greek & Latin · Biblical & Near Eastern · Slavic · Celtic · Indic &
+  Iranian · Egyptian & Coptic · Germanic & Old English · Reference &
+  dictionaries · Your shelves · Other — pinned verbatim by test.
+  Derived families the net does not know (e.g. an "Indo-European
+  trunk" lane) mint their own header from the lane's first
+  `<`-segment, trailing parenthetical stripped, and append SORTED
+  before Other; groups with no sources are absent, not empty.
+- Scope verdict: the map enumerates CATALOG sources (the `nabu list`
+  census scope — descriptions and census languages live in the
+  catalog); a registered-but-never-synced source appears at its first
+  sync, exactly like the census.
+- First-sentence heuristic: up to the first terminal punctuation
+  followed by whitespace (whole prose when single-sentence);
+  abbreviation-splitting accepted as the honest cheap rule — the
+  ellipsis and the full card cover the residue.
+- MCP verdict: NO change — nabu_status already serves each source's
+  full dossier description; the grouped render is a human-onboarding
+  surface first (extend serving only when an MCP consumer actually
+  wants groups).
+
+Tests +18: Query::List 10 (curated-order pin, family join, dominant
+language, dictionary span vs single-family, local shelves, override
+wins, unknown-label placement, hyphen fallback, line payload, ordered
+assembly), SourceDossier 3 (group lane parse/flatten/round-trip,
+absent-never-rendered, with_section carry), CLI 5 (grouped render with
+truncation/stub/footer, (off) from the registry, composes-with-nothing
+guards, help anchors). Suite 3,535 runs / 46,169 assertions exit 0 ·
+lint 432 files exit 0.

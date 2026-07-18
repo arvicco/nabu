@@ -97,6 +97,9 @@ shelves. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md).
+On your own install, `bin/nabu list --sources` prints the one-page
+version: every source with a one-line description, grouped by language
+family.
 
 ### Why is the TLG (or Brill, or another paywalled resource) not included?
 
