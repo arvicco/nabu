@@ -999,6 +999,38 @@ tir:
   # reference edges.
   sync_policy: manual
 
+iip:
+  adapter: Nabu::Adapters::Iip
+  enabled: false   # P30-6: awaiting the owner-fired first real sync
+                   # (CLAUDE.md checklist §6 — bin/nabu sync iip, eyeball
+                   # nabu show urn:nabu:iip:dabb0001 (Jewish Aramaic
+                   # architrave, byte-verbatim under the NFC exemption,
+                   # inline Greek foreign spans) and urn:nabu:iip:abur0001
+                   # (Greek invocation mosaic) plus 5 random records, then
+                   # flip). Expected census at commit 0b7dc835: 5,535
+                   # records discovered (aaTestFile.xml skipped by rule)
+                   # → 5,499 docs (77 metadata-only, 361 diplomatic-
+                   # fallback) / 17,823 passages — verified with the
+                   # shipped parser over the full clone;
+                   # QUARANTINE FLOOR 36 (7 malformed XML, 29 filename↔
+                   # publicationStmt-idno drift records — all upstream
+                   # defects, named in the parser class note).
+  # P30-6: Inscriptions of Israel/Palestine (Brown University; Satlow;
+  # github.com/Brown-University-Library/iip-texts) — 5,535 EpiDoc
+  # records, Hebrew/Aramaic/Greek/Latin epigraphy of the southern
+  # Levant ~500 BCE–640 CE: grc 2,919 · arc 1,755 · he 376 · la 273 ·
+  # phn/syc/xcl/geo tail. The Jewish Aramaic layer (arc — byte-verbatim
+  # under the P26-3 NFC exemption) is the corpus's distinctive value.
+  # CC BY-NC 4.0 → class nc (the archival copies' own availability
+  # statement; the repo has NO LICENSE file and the working files defer
+  # to a Brown-server xi:include): local research only, never
+  # redistributed, never exposed externally. No concordance idnos exist
+  # → no reference edges. Plain notBefore/notAfter signed years +
+  # settlement findspots → AxisBuilder::IipDates (~5,530 axis rows,
+  # ~270 place-only). Upstream commits sporadically (master tip 2024-07
+  # at the census) → re-syncs are owner-fired.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
