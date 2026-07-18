@@ -531,6 +531,36 @@ ogham:
   # owner-fired.
   sync_policy: manual
 
+isicily:
+  adapter: Nabu::Adapters::Isicily
+  enabled: false   # P29-4: git clone ~253 MB (70 MB of XML + history);
+                   # CLAUDE.md checklist §6 — bin/nabu sync isicily,
+                   # eyeball nabu show urn:nabu:isicily:isic001620 (the
+                   # Mamertine Oscan meddices dedication, osc-Grek) and
+                   # urn:nabu:isicily:isic002954 (Sicel bare-orig letters)
+                   # plus 5 random records, then flip. Expected census at
+                   # commit db1a4959: 5,074 docs (776 metadata-only) /
+                   # ~15,370 passages; QUARANTINE FLOOR 46 (34 lb without
+                   # @n, 7 textparts without @n, 5 filename↔idno drift
+                   # records — all upstream defects, named in the parser
+                   # class note).
+  # I.Sicily — the inscriptions of ancient Sicily across all languages
+  # (Prag, Oxford / ERC Crossreads; github.com/ISicily/ISicily; Zenodo
+  # DOI 10.5281/zenodo.2556743). 5,120 EpiDoc records: grc 3,194 ·
+  # la 1,232 · Elymian xly 319 · Sicel scx 299 · Sicilian Punic xpu 67 ·
+  # Mamertine Oscan osc 4 · he 2 — the fragmentary Sicilian languages'
+  # only machine-readable home (largely metadata-only catalogue records:
+  # dated/placed headers, concordances). CC BY 4.0 in THREE concordant
+  # layers (repo licence.txt + GitHub license field + every record's
+  # <licence>) → attribution. TM/EDR/EDCS/PHI concordances → reference
+  # edges (producer isicily); the 8 explicit EDH concordances mint
+  # urn:nabu:edh:hd… cross-catalog edges (provenance-distinct witnesses,
+  # never deduped). origDate -custom Julian signed years + Pleiades/
+  # GeoNames findspots → AxisBuilder::IsicilyDates (~5,118 axis rows).
+  # The repo is LIVE (Crossreads lemmatization landing; pushed daily) →
+  # re-syncs are owner-fired.
+  sync_policy: manual
+
 local-source:
   adapter: Nabu::Adapters::LocalSource
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
