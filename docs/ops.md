@@ -980,3 +980,42 @@ The workflow:
    It checks MENTION, never verbatim wording, and never generates — exit
    1 lists the findings; the fixes are the seed command, a description
    edit, or a library.md row.
+
+## 16. Terminal display — mark policies & the `--display` modes (P27-0)
+
+The full reference is **[docs/display.md](display.md)** (what nabu strips
+and why, plus the terminal-side setup — iTerm2's RTL toggle, fonts — that no
+CLI can do for you). The operating summary:
+
+- **What transforms exist**: per-language mark stripping driven by
+  `config/display.yml` — Hebrew cantillation (accents U+0591–05AF; the
+  vowel points and maqaf stay), OCS titla, Vedic accents on Devanagari
+  text — plus RTL isolate wrapping for hbo/arc. Display-time only: the
+  canonical store, the search index, `export` and the MCP surface are
+  never touched, and search hits are identical under every mode.
+- **Where it's configured**: `config/display.yml` (path overridable via
+  `paths: display:` in `nabu.yml`). Delete the file and every command
+  renders raw stored bytes. Unknown classes/languages in the file are
+  named errors, not silent no-ops.
+- **The escape hatch**: `--display full` on show/align/search/concord/
+  parallels/cognates renders every stored byte, no transforms, no
+  isolates. `--display plain` strips everything the language policy
+  defines (consonantal Hebrew). Any applied transform is announced in a
+  one-line footer (`display: cantillation stripped (--display full shows
+  all marks)`); silence means the bytes are untouched.
+- **Edition-level reading** (P27-1): `--display reading` additionally
+  simplifies per-SOURCE editorial apparatus on the `show` family —
+  `sources:` in `config/display.yml` (Leiden `[…]` lacunae → `…`, SBLGNT
+  apparatus sigla stripped, oshb ketiv/qere via `qere_display:
+  qere|ketiv|both`) — and `--display diplomatic` shows the edition marks
+  byte-honest; see docs/display.md §1a.
+
+- **P27-2 additions**: `--display translit` romanizes (san→IAST,
+  hbo/arc→SBL-style, chu/orv/bul→scholarly Latin); `--display mono` =
+  default without per-token language coloring (`nabu show` colors
+  code-switched tokens by their stored `lang` tag on a TTY; `NO_COLOR`
+  honored); `pgl` letter-spaces Ogham with U+1680. Search-side, the
+  cross-script fold (conventions §9) makes `धर्मन्`≡`dharman` and
+  `vъsta`≡`въста` ONE query — **an index built before P27-2 misses
+  cross-script hits until one `nabu rebuild` (or per-source resyncs of
+  the san/chu/orv/bul shelves) re-derives it.**

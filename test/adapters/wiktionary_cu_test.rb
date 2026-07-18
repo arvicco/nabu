@@ -142,7 +142,7 @@ class WiktionaryCuTest < Minitest::Test
     bog = db[:dictionary_entries].where(entry_id: "богъ:noun").first
     assert_equal "urn:nabu:dict:wiktionary-cu:богъ:noun", bog[:urn]
     assert_equal "богъ", bog[:headword]
-    assert_equal "богъ", bog[:headword_folded]
+    assert_equal "bogъ", bog[:headword_folded] # P27-2: the cross-script chu skeleton
     assert_includes bog[:body], "Inherited from Proto-Slavic *bogъ."
   end
 

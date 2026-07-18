@@ -82,4 +82,22 @@ class DevaTest < Minitest::Test
                    "fold(transcode(#{deva})) must equal fold(#{iast})"
     end
   end
+
+  # -- to_iast_with_map (P27-2): the KWIC-alignment variant ------------------
+
+  def test_to_iast_with_map_matches_to_iast_byte_for_byte
+    ["धर्मन्", "नारायणं नमस्कृत्य नरं चैव नरोत्तमम् ।", "क्त कत", "श्री‍‌", "abc धik"].each do |text|
+      iast, map = Nabu::Deva.to_iast_with_map(text)
+      assert_equal Nabu::Deva.to_iast(text), iast
+      assert_equal iast.length, map.length
+    end
+  end
+
+  def test_to_iast_with_map_points_output_chars_at_source_chars
+    # धर्मन् = ध(0) र(1) ्(2) म(3) न(4) ्(5) → "dharman"
+    iast, map = Nabu::Deva.to_iast_with_map("धर्मन्")
+    assert_equal "dharman", iast
+    assert_equal [0, 0, 0, 1, 3, 3, 4], map,
+                 "dh+inherent a ← ध; r ← र (virāma kills its a); m+a ← म; n ← न"
+  end
 end

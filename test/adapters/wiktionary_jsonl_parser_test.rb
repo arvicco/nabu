@@ -64,20 +64,22 @@ class WiktionaryJsonlParserTest < Minitest::Test
     end
   end
 
-  def test_headwords_fold_with_the_generic_chu_fold
-    assert_equal "богъ", entry("богъ:noun").headword_folded # jers are letters, kept
+  def test_headwords_fold_with_the_neutralized_chu_fold
+    # P27-2: the chu fold neutralizes script (Cyrl skeleton) before the
+    # generic mark strip — jers stay letters, on the Latin-diplomatic side.
+    assert_equal "bogъ", entry("богъ:noun").headword_folded
     # ан҃г carries the Cyrillic titlo U+0483 — a combining mark, stripped
     ang = entries.find { |e| e.headword == "ан҃г" } || flunk("titlo fixture word missing")
-    assert_equal "анг", ang.headword_folded
-    # uppercase downcases (proper names)
+    assert_equal "ang", ang.headword_folded
+    # uppercase downcases (proper names); оу collapses to the u skeleton
     isus = entries.find { |e| e.headword == "Исоусъ" } || flunk("Исоусъ missing")
-    assert_equal "исоусъ", isus.headword_folded
+    assert_equal "isusъ", isus.headword_folded
   end
 
   def test_homographs_stay_separate_entries_sharing_a_folded_headword
     group = entries.select { |e| e.headword == "и" }
     assert_equal 3, group.size
-    assert_equal ["и"], group.map(&:headword_folded).uniq
+    assert_equal ["i"], group.map(&:headword_folded).uniq
   end
 
   # --- gloss --------------------------------------------------------------------
@@ -175,7 +177,7 @@ class WiktionaryJsonlParserTest < Minitest::Test
     cu = sla_entry("bogъ:noun:2").reflexes.select { |r| r.lang_code == "cu" }
     assert_equal %w[chu], cu.map(&:language).uniq, "cu maps to the catalog's chu"
     cyrillic = cu.find { |r| r.word == "богъ" } || flunk("Old Cyrillic богъ reflex missing")
-    assert_equal "богъ", cyrillic.word_folded
+    assert_equal "bogъ", cyrillic.word_folded, "P27-2: the chu skeleton crosses the script"
     assert_equal "bogŭ", cyrillic.roman
     glagolitic = cu.find { |r| r.word == "ⰱⱁⰳⱏ" } || flunk("Glagolitic богъ reflex missing")
     assert_equal "ⰱⱁⰳⱏ", glagolitic.word_folded, "script twins fold as themselves, honestly"

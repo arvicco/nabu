@@ -58,6 +58,20 @@ access at all. The library is designed to outlive the services it draws
 from, so offline operation is a design goal rather than a side effect;
 see the principles on the [home page]({{ '/' | relative_url }}).
 
+### Why does Hebrew (or pointed, accented text) look wrong in my terminal?
+
+Two layers are involved, and only one is Nabu's. Nabu's display layer
+(`config/display.yml`, the `--display` flag) decides which marks to draw:
+by default it strips Hebrew cantillation accents and Old Church Slavonic
+titla at render time — announced in a footer, with `--display full` always
+showing every stored byte, and the stored text itself never altered. Text
+direction and fonts, though, belong to the terminal: iTerm2 has an
+experimental right-to-left toggle (Settings → General → Experimental),
+macOS Terminal.app has no bidi support at all, and pointed Hebrew wants a
+scholarly font such as Ezra SIL. The full setup guide — what Nabu strips,
+what the terminal must do, and a per-script table — is
+[docs/display.md](https://github.com/arvicco/nabu/blob/main/docs/display.md).
+
 ### How does Nabu relate to Perseus and Scaife?
 
 It complements rather than competes: Perseus and the Scaife Viewer are

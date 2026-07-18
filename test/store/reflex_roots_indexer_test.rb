@@ -82,7 +82,11 @@ module Store
           dictionary_entry_id: entry.id, seq: seq,
           lang_code: reflex.fetch(:language, "xx"), language: reflex[:language],
           word: reflex.fetch(:word), roman: reflex[:roman],
-          word_folded: reflex.fetch(:word_folded, reflex.fetch(:word)),
+          # default exactly as the real parsers mint it (P27-2: the fold
+          # neutralizes script for chu/orv — hand-seeded rows must match)
+          word_folded: reflex.fetch(:word_folded) do
+            Nabu::Normalize.search_form(reflex.fetch(:word), language: reflex[:language])
+          end,
           roman_folded: reflex[:roman_folded],
           borrowed: reflex[:borrowed] # nil = a row predating the flag reparse
         )
@@ -105,8 +109,12 @@ module Store
 
     def roots = @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE]
 
-    def roots_for(language, lemma_folded)
-      roots.where(language: language, lemma_folded: lemma_folded).select_map(:root_urn).sort
+    # Look up as production readers do: the caller passes the LEMMA as
+    # spelled and the helper folds it (P27-2: search_form neutralizes script
+    # for chu/orv, so the roots table keys are cross-script skeletons).
+    def roots_for(language, lemma)
+      folded = Nabu::Normalize.search_form(lemma, language: language)
+      roots.where(language: language, lemma_folded: folded).select_map(:root_urn).sort
     end
 
     # -- the closure over the real fixtures ----------------------------------
@@ -391,8 +399,9 @@ module Store
 
     # -- P17-3: the multi-hop shelf-visited walk -------------------------------
 
-    def borrowed_of(language, lemma_folded, root_urn)
-      roots.where(language: language, lemma_folded: lemma_folded, root_urn: root_urn)
+    def borrowed_of(language, lemma, root_urn)
+      folded = Nabu::Normalize.search_form(lemma, language: language)
+      roots.where(language: language, lemma_folded: folded, root_urn: root_urn)
            .get(:borrowed)
     end
 

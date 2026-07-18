@@ -99,7 +99,7 @@ class IecorCldfParserTest < Minitest::Test
     chu = heart.reflexes.find { |r| r.language == "chu" } || flunk("chu reflex missing")
     assert_equal "срьдьцє", chu.word
     assert_equal "srĭdĭce", chu.roman
-    assert_equal "срьдьцє", chu.word_folded
+    assert_equal "srьdьce", chu.word_folded # P27-2: the cross-script chu skeleton
     assert_equal "sridice", chu.roman_folded
     got = heart.reflexes.find { |r| r.language == "got" } || flunk("got reflex missing")
     assert_equal "𐌷𐌰𐌹𐍂𐍄𐍉", got.word
