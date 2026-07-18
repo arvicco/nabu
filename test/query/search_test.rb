@@ -57,6 +57,18 @@ module Query
 
     # -- tests ---------------------------------------------------------------
 
+    def test_lang_filter_accepts_the_equivalent_iso_code_spelling
+      # ger/deu are one language in two legit ISO 639-2 spellings (aes vs
+      # tla-hf); the filter expands the equivalence set, fold-both-sides.
+      doc = make_document(source: @open, urn: "urn:d:1", language: "deu")
+      make_passage(doc, urn: "urn:d:1:1", text: "kein Mann und keine Frau", sequence: 0, language: "deu")
+      rebuild!
+
+      assert_equal 1, search("mann", lang: "ger").size, "ger must match deu passages"
+      assert_equal 1, search("mann", lang: "de").size, "two-letter de too"
+      assert_equal 1, search("mann", lang: "deu").size
+    end
+
     # -- FTS5 syntax hardening (owner report 2026-07-18: `search --help`
     # crashed with a raw fts5 backtrace; any hyphen-leading token does) ----
 

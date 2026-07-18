@@ -225,7 +225,7 @@ module Nabu
         return nil if candidates.nil?
 
         rows = candidates
-               .where(language: lang)
+               .where(language: Nabu::Languages.code_variants(lang))
                .exclude(urn: document.fetch(:urn))
                .select(:id, :urn, :title, :language)
                .all

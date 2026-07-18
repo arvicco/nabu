@@ -58,6 +58,19 @@ module Query
 
     # -- verse-for-verse: every anchor is a 1:1 pair --------------------------
 
+    # ISO 639-2 B/T equivalence (owner repro 2026-07-18: tla-hf siblings are
+    # deu, aes siblings are ger — `--parallel ger` must find a deu edition
+    # and vice versa, fold-both-sides style).
+    def test_parallel_lang_accepts_the_equivalent_iso_code_spelling
+      load_edition(GRC_URN, "grc", [%w[1 original]], title: "Work")
+      load_edition(ENG_URN, "deu", [%w[1 übersetzt]], title: "Work (de tr.)")
+
+      assert_equal "deu", run_parallel("#{GRC_URN}:1", lang: "ger").right&.language,
+                   "ger must reach the deu sibling"
+      assert_equal "deu", run_parallel("#{GRC_URN}:1", lang: "de").right&.language,
+                   "the two-letter spelling must reach it too"
+    end
+
     def test_verse_for_verse_translation_is_all_pairs
       load_edition(GRC_URN, "grc", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]], title: "Iliad")
       load_edition(ENG_URN, "eng", [%w[1 Wrath], %w[2 sing], %w[3 goddess]], title: "Iliad (tr.)")
