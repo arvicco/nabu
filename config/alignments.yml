@@ -476,6 +476,46 @@ ot:
         ZEP: urn:nabu:oshb:zeph
         HAG: urn:nabu:oshb:hag
         ZEC: urn:nabu:oshb:zech
+    # P30-4: the BHSA Masoretic witness (ETCBC, urn:nabu:bhsa:<book>) — the
+    # SECOND MT leg, deliberately unmerged with OSHB (different grain:
+    # ETCBC constituency/glosses vs Strong's/OSHM). Same WLC text, same
+    # Masoretic versification, so the book map is OSHB's conservative map
+    # VERBATIM with bhsa urns — every holdout above (JER, DAN, 1KI, PRO,
+    # JOL, MAL; no EZR/NEH/ECC token; PSA in the psalms work) applies for
+    # the same measured reasons. "Not synced" until the owner-fired first
+    # `nabu sync bhsa`.
+    - label: BHSA (ETCBC, Masoretic)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:bhsa:gen
+        EXO: urn:nabu:bhsa:exod
+        LEV: urn:nabu:bhsa:lev
+        NUM: urn:nabu:bhsa:num
+        DEU: urn:nabu:bhsa:deut
+        JOS: urn:nabu:bhsa:josh
+        JDG: urn:nabu:bhsa:judg
+        RUT: urn:nabu:bhsa:ruth
+        1SA: urn:nabu:bhsa:1sam
+        2SA: urn:nabu:bhsa:2sam
+        2KI: urn:nabu:bhsa:2kgs   # 1KI (1Kgs) held out — LXX 3 Kingdoms reorderings
+        1CH: urn:nabu:bhsa:1chr
+        2CH: urn:nabu:bhsa:2chr
+        EST: urn:nabu:bhsa:esth
+        JOB: urn:nabu:bhsa:job
+        SNG: urn:nabu:bhsa:song
+        ISA: urn:nabu:bhsa:isa
+        LAM: urn:nabu:bhsa:lam
+        EZK: urn:nabu:bhsa:ezek
+        HOS: urn:nabu:bhsa:hos
+        AMO: urn:nabu:bhsa:amos
+        OBA: urn:nabu:bhsa:obad
+        JON: urn:nabu:bhsa:jonah
+        MIC: urn:nabu:bhsa:mic
+        NAM: urn:nabu:bhsa:nah
+        HAB: urn:nabu:bhsa:hab
+        ZEP: urn:nabu:bhsa:zeph
+        HAG: urn:nabu:bhsa:hag
+        ZEC: urn:nabu:bhsa:zech
     # P11-8: the World English Bible's OT books — the readable English witness
     # beside the Septuagint and Vulgate. Versification honesty (the §10
     # "whoever registers a witness owns the shared-citation claim" contract):
@@ -591,3 +631,18 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:oshb:ps  # Hebrew numbering (remapped)
+    # P30-4: the BHSA psalter — the second MT leg, Masoretic-numbered by
+    # definition, riding the SAME P13-5 Hebrew→Greek concordance as the WEB
+    # and OSHB witnesses above (identical scheme, identical join/split
+    # holdouts). "Not synced" until the owner-fired first `nabu sync bhsa`.
+    - label: BHSA (ETCBC, Masoretic)
+      extractor: cts-verse
+      numbering:
+        system: "Hebrew (Masoretic)"
+        ranges:
+          - { from: 1, to: 8, shift: 0 }       # Hebrew 1–8 = Greek 1–8
+          - { from: 11, to: 113, shift: -1 }   # Hebrew 11–113 = Greek 10–112
+          - { from: 117, to: 146, shift: -1 }  # Hebrew 117–146 = Greek 116–145
+          - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
+      documents:
+        PSA: urn:nabu:bhsa:ps  # Hebrew numbering (remapped)

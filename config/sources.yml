@@ -689,6 +689,31 @@ oshb:
   # completed digitization with occasional corrections: re-syncs are an
   # owner decision.
 
+bhsa:
+  adapter: Nabu::Adapters::Bhsa
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
+                   # tf/2021 + README.md, 118 files ≈ 173 MB of the 1.6 GB
+                   # repo — then eyeball nabu show urn:nabu:bhsa:gen:1.1,
+                   # urn:nabu:bhsa:ruth:1.8 --display reading (qere
+                   # substitution) and 5 random verses, `align "GEN 1.1"`
+                   # (now FOUR-legged: MT×2 ↔ LXX ↔ Vulgate), then flip).
+  # P30-4: BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC),
+  # the FIRST text-fabric source and nabu's first constituency data.
+  # SECOND Masoretic witness beside oshb at a deliberately different grain
+  # (ETCBC glosses/frequencies/H-A language + clause/phrase spans vs oshb's
+  # Strong's/OSHM) — never merged, the MW-beside-kaikki precedent. Census
+  # verified against otype.tf at fixture time: 426,590 words / 39 books /
+  # 929 chapters / 23,213 verses / 88,131 clauses / 253,203 phrases /
+  # 9,230 lexemes. LICENSE: README.md verbatim CC BY-NC 4.0 citing DOI
+  # 10.17026/dans-z6y-skyh (the GitHub MIT badge covers code only) → class
+  # nc, the proiel/gretil posture. Version PINNED to the frozen tf/2021
+  # dataset (the sparse cone IS the pin); upstream moves rarely and only
+  # in other version dirs → re-syncs are an owner decision.
+  # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
+  # is journaled in 02-sources and deliberately NOT wired.
+  sync_policy: manual
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
