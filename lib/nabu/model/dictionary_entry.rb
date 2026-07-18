@@ -100,12 +100,15 @@ module Nabu
   # - +reflexes+: DictionaryReflex values in descendants-tree depth-first
   #   order (P14-1) — empty for every non-reconstruction shelf.
   #
-  # The P26-3 hbo/arc NFC exemption applies HERE too (P30-2): Masoretic
-  # pointing is not NFC-stable (dagesh ccc 21 written before vowel points
-  # ccc 10-19 — 3,217 of SDBH's 7,932 lemmas measured non-NFC), so an
-  # exempt-language entry's display text (headword/gloss/body) is validated
-  # byte-verbatim exactly as Passage text is; headword_folded is a SEARCH
-  # form and keeps the NFC contract for every language.
+  # The P26-3 hbo/arc NFC exemption applies HERE too (P30-1 + P30-2,
+  # independently required and identically shaped): Masoretic pointing is
+  # not NFC-stable (dagesh ccc 21 written before vowel points ccc 10-19 —
+  # measured: 3,217 of SDBH's 7,932 lemmas and 4,053/3,796/4,720 of the
+  # OSHB lexicon's LexicalIndex/HebrewStrong/BDB headwords are non-NFC),
+  # so an exempt-language entry's display text (headword/gloss/body) is
+  # validated byte-verbatim exactly as Passage text is; headword_folded is
+  # a SEARCH form and keeps the NFC contract for every language — the
+  # exemption never widens to the lookup key.
   DictionaryEntry = Data.define(:entry_id, :key_raw, :language, :headword,
                                 :headword_folded, :gloss, :body, :citations, :reflexes) do
     def initialize(entry_id:, key_raw:, language:, headword:, headword_folded:, body:,

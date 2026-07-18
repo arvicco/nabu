@@ -1,0 +1,30 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All four files are documented TRIMS (whole: false): the real headers
+# (BOM included where upstream has one) plus upstream blocks byte-verbatim
+# in file order with the original closers; recipe, coverage rationale and
+# full-file sha256 pins in README.md. The raw GitHub URLs serve the full
+# upstream files — the sentinel uses them for liveness; a refresh
+# re-fetches WHOLE files, so the trims must be re-cut (README.md
+# procedure) rather than committed raw.
+source: hebrew-lexicon
+adapter_test: test/adapters/hebrew_lexicon_test.rb
+retrieved: 2026-07-18
+files:
+  - path: AugIndex.xml
+    url: https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/AugIndex.xml
+    whole: false
+    trim: 43 of 9,299 rows — the complete normalized-lemma inventory of OSHB fixture verses Gen 1:1, Gen 31:13, Gen 31:47, Jer 10:11 (bare, letter-augmented incl. 1254a, and the non-numeric particle id l)
+  - path: LexicalIndex.xml
+    url: https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/LexicalIndex.xml
+    whole: false
+    trim: the 43 aug-target entries (28 heb-part + 15 arc-part) incl. def/pos-less gau, the aug xref letter on bxy, and non-NFC Masoretic headwords
+  - path: HebrewStrong.xml
+    url: https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/HebrewStrong.xml
+    whole: false
+    trim: the 41 base entries H7…H8460 incl. arc and x-pn entries, inline <w src> refs, and H1254's two-sense meaning
+  - path: BrownDriverBriggs.xml
+    url: https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/BrownDriverBriggs.xml
+    whole: false
+    trim: sections a.aa+a.ab+a.ac (heb), b.cw (b.cw.aa ברא p.135), xa.ab+xa.an (arc) — 19 entries covering nested senses, all five status values, and the rare mid-entry <page p="2"/> anchor

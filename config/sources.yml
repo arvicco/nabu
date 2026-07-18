@@ -1051,6 +1051,26 @@ iip:
   # settlement findspots → AxisBuilder::IipDates (~5,530 axis rows,
   # ~270 place-only). Upstream commits sporadically (master tip 2024-07
   # at the census) → re-syncs are owner-fired.
+hebrew-lexicon:
+  adapter: Nabu::Adapters::HebrewLexicon
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync hebrew-lexicon — plain
+                   # GitFetch, 9.2 MB — then eyeball nabu define ברא /
+                   # define אלהים, nabu show urn:nabu:dict:hebrew-lexicon:
+                   # 1254a resolved from an OSHB lemma, and 5 random
+                   # entries before flipping).
+  # P30-1: the OSHB Hebrew Lexicon (openscriptures/HebrewLexicon — same
+  # org as the oshb/morphhb corpus; CC BY 4.0 verbatim readme.md, the
+  # underlying Strong's/BDB texts PD). ONE source, TWO dictionaries (the
+  # lexica LSJ+LS grain): "hebrew-lexicon" = the augmented-Strong shelf
+  # (9,299 AugIndex ids verbatim — THE JOIN CONTRACT: exactly what an
+  # OSHB lemma yields after HebrewLexicon.normalize_lemma, measured
+  # 49,946/49,946 = 100.000% on the live catalog) assembled from
+  # AugIndex + LexicalIndex + HebrewStrong; "bdb" = the Brown-Driver-
+  # Briggs outline (11,845 entries, <status p> print pages as unresolved
+  # citation rows — deep links into the future BDB 1906 scan). New
+  # oshb-lexicon family (OSHB's own XML namespace). Upstream content
+  # frozen since 2019 → re-fetch is an owner decision.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
