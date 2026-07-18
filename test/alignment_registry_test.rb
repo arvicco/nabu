@@ -291,8 +291,9 @@ class AlignmentRegistryTest < Minitest::Test
     refute_nil work, "config/alignments.yml must register the ot work (P11-5)"
     labels = work.witnesses.map(&:label)
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
-                  "WEB (English)"], labels,
-                 "P26-3 adds the Masoretic witness — the ot hub goes three-legged (MT/LXX/Vulgate)"
+                  "BHSA (ETCBC, Masoretic)", "WEB (English)"], labels,
+                 "P26-3 adds the Masoretic witness; P30-4 adds the second MT leg (BHSA) — " \
+                 "align GEN 1.1 goes four-legged"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
@@ -322,15 +323,30 @@ class AlignmentRegistryTest < Minitest::Test
     assert_nil oshb.numbering, "the ot witness carries NO numbering remap — chapters are native"
   end
 
+  def test_shipped_ot_bhsa_witness_reuses_the_oshb_conservative_map_verbatim
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    oshb = work.witnesses.find { |witness| witness.label == "OSHB (WLC, Masoretic)" }
+    bhsa = work.witnesses.find { |witness| witness.label == "BHSA (ETCBC, Masoretic)" }
+    refute_nil bhsa, "P30-4 registers the second MT leg"
+    assert_equal "cts-verse", bhsa.extractor
+    # Same WLC text, same Masoretic versification: the book map must be
+    # oshb's — same 29 tokens, same holdouts — with bhsa urns.
+    assert_equal oshb.documents.values.sort, bhsa.documents.values.sort
+    assert_equal "GEN", bhsa.book_for("urn:nabu:bhsa:gen"), "align GEN 1.1 goes four-legged"
+    assert_nil bhsa.numbering
+  end
+
   def test_shipped_registry_loads_the_psalms_work_with_the_web_numbering_remap
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
     work = Nabu::AlignmentRegistry.load(path).work("psalms")
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
-                  "OSHB (WLC, Masoretic)"],
+                  "OSHB (WLC, Masoretic)", "BHSA (ETCBC, Masoretic)"],
                  work.witnesses.map(&:label),
-                 "P26-3 adds the MT psalter itself; the OE Paris Psalter stays deferred (line grain)"
-    lxx, vulgate, web, oshb = work.witnesses
+                 "P26-3 adds the MT psalter itself; P30-4 adds the BHSA psalter (same remap); " \
+                 "the OE Paris Psalter stays deferred (line grain)"
+    lxx, vulgate, web, oshb, bhsa = work.witnesses
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     assert_nil lxx.numbering, "the LXX Greek numbering IS the work vocabulary"
     assert_equal "PSA", vulgate.book_for("urn:nabu:vulgate:psa")
@@ -345,6 +361,10 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal web.numbering, oshb.numbering, "the P13-5 table is reused VERBATIM"
     assert_equal "PSA 22.1", oshb.normalize_ref("PSA 23.1"), "the shepherd psalm aligns MT-beside-LXX"
     assert_nil oshb.normalize_ref("PSA 9.1"), "an LXX join-psalm is dropped, never false-aligned"
+    # P30-4: the BHSA psalter — the second MT leg, same Masoretic scheme,
+    # same P13-5 concordance verbatim.
+    assert_equal "PSA", bhsa.book_for("urn:nabu:bhsa:ps")
+    assert_equal oshb.numbering, bhsa.numbering, "the P13-5 table is reused VERBATIM for BHSA too"
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
