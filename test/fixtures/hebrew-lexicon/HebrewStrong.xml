@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lexicon xsi:schemaLocation="http://openscriptures.github.com/morphhb/namespace StrongSchema.xsd" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xmlns="http://openscriptures.github.com/morphhb/namespace">
+	<entry id="H7">
+		<w pos="v" pron="ab-ad'" xlit="ʼăbad" xml:lang="arc">אֲבַד</w>
+		<source>(Aramaic) corresponding to <w src="H6">6</w></source>
+		<usage>destroy, perish.</usage>
+	</entry>
+	<entry id="H410">
+		<w pos="n-m" pron="ale" xlit="ʼêl" xml:lang="heb">אֵל</w>
+		<source>shortened from <w src="H352">352</w>;</source>
+		<meaning><def>strength</def>; as adjective, <def>mighty</def>; especially the <def>Almighty</def> (but used also of any <def>deity</def>)</meaning>
+		<usage>God (god), × goodly, × great, idol, might(-y one), power, strong. Compare names in '-el.'</usage>
+	</entry>
+	<entry id="H413">
+		<w pos="prep" pron="ale" xlit="ʼêl" xml:lang="heb">אֵל</w>
+		<source>(but only used in the shortened constructive form <w pron="el" xlit="ʼel">אֶל</w> ); a primitive particle; properly, denoting motion <def>towards</def>, but occasionally used of a quiescent position, i.e.</source>
+		<meaning><def>near</def>, <def>with</def> or <def>among</def>; often in general, <def>to</def></meaning>
+		<usage>about, according to, after, against, among, as for, at, because(-fore, -side), both...and, by, concerning, for, from, × hath, in(-to), near, (out) of, over, through, to(-ward), under, unto, upon, whether, with(-in).</usage>
+	</entry>
+	<entry id="H426">
+		<w pos="n-m" pron="el-aw'" xlit="ʼĕlâhh" xml:lang="x-pn">אֱלָהּ</w>
+		<source>(Aramaic) corresponding to <w src="H433">433</w>;</source>
+		<meaning><def>God</def></meaning>
+		<usage>God, god.</usage>
+	</entry>
+	<entry id="H429">
+		<w pos="d" pron="ale'-leh" xlit="ʼêlleh" xml:lang="arc">אֵלֶּה</w>
+		<source>(Aramaic) corresponding to <w src="H428">428</w></source>
+		<usage>these.</usage>
+	</entry>
+	<entry id="H430">
+		<w pos="n-m" pron="el-o-heem'" xlit="ʼĕlôhîym" xml:lang="heb">אֱלֹהִים</w>
+		<source>plural of <w src="H433">433</w>;</source>
+		<meaning><def>gods</def> in the ordinary sense; but specifically used (in the plural thus, especially with the article) of the supreme <def>God</def>; occasionally applied by way of deference to <def>magistrates</def>; and sometimes as a superlative</meaning>
+		<usage>angels, × exceeding, God (gods) (-dess, -ly), × (very) great, judges, × mighty.</usage>
+	</entry>
+	<entry id="H560">
+		<w pos="v" pron="am-ar'" xlit="ʼămar" xml:lang="arc">אֲמַר</w>
+		<source>(Aramaic) corresponding to <w src="H559">559</w></source>
+		<usage>command, declare, say, speak, tell.</usage>
+	</entry>
+	<entry id="H595">
+		<w pos="p" pron="aw-no-kee'" xlit="ʼânôkîy" xml:lang="heb">אָנֹכִי</w>
+		<source>sometimes, <w pron="aw-no'-kee" xlit="ʼânôkîy">אָנֹכִי</w>; a primitive pronoun;</source>
+		<meaning><def>I</def></meaning>
+		<usage>I, me, × which.</usage>
+	</entry>
+	<entry id="H772">
+		<w pos="n-m" pron="ar-ah'" xlit="ʼăraʻ" xml:lang="arc">אֲרַע</w>
+		<source>(Aramaic) corresponding to <w src="H776">776</w>;</source>
+		<meaning>the <def>earth</def>; by implication (figuratively) <def>low</def></meaning>
+		<usage>earth, interior.</usage>
+	</entry>
+	<entry id="H776">
+		<w pos="n-f" pron="eh'-rets" xlit="ʼerets" xml:lang="heb">אֶרֶץ</w>
+		<source>from an unused root probably meaning to <def>be firm</def>;</source>
+		<meaning>the <def>earth</def> (at large, or partitively a <def>land</def>)</meaning>
+		<usage>× common, country, earth, field, ground, land, × natins, way, + wilderness, world.</usage>
+	</entry>
+	<entry id="H778">
+		<w pos="n-f" pron="ar-ak'" xlit="ʼăraq" xml:lang="arc">אֲרַק</w>
+		<source>(Aramaic) by transmutation for <w src="H772">772</w>;</source>
+		<meaning>the <def>earth</def></meaning>
+		<usage>earth.</usage>
+	</entry>
+	<entry id="H834">
+		<w pos="r" pron="ash-er'" xlit="ʼăsher" xml:lang="heb">אֲשֶׁר</w>
+		<source>a primitive relative pronoun (of every gender and number);</source>
+		<meaning><def>who</def>, <def>which</def>, <def>what</def>, <def>that</def>; also (as an adverb and a conjunction) <def>when</def>, <def>where</def>, <def>how</def>, <def>because</def>, <def>in order that</def>, etc.</meaning>
+		<usage>× after, × alike, as (soon as), because, × every, for, + forasmuch, + from whence, + how(-soever), × if, (so) that ((thing) which, wherein), × though, + until, + whatsoever, when, where (+ -as, -in, -of, -on, -soever, -with), which, whilst, + whither(-soever), who(-m, -soever, -se). As it is indeclinable, it is often accompanied by the personal pronoun expletively, used to show the connection.</usage>
+	</entry>
+	<entry id="H853">
+		<w pos="prt" pron="ayth" xlit="ʼêth" xml:lang="heb">אֵת</w>
+		<source>apparent contracted from <w src="H226">226</w> in the demonstrative sense of <def>entity</def>;</source>
+		<meaning>properly, <def>self</def> (but generally used to point out more definitely the object of a verb or preposition, <def>even</def> or <def>namely</def>)</meaning>
+		<usage>[as such unrepresented in English].</usage>
+	</entry>
+	<entry id="H1008">
+		<w pos="n-pr-loc" pron="bayth-ale'" xlit="Bêyth-ʼÊl" xml:lang="x-pn">בֵּית־אֵל</w>
+		<source>from <w src="H1004">1004</w> and <w src="H410">410</w>; house of God;</source>
+		<meaning><def>Beth-El</def>, a place in Palestine</meaning>
+		<usage>Beth-el.</usage>
+	</entry>
+	<entry id="H1254">
+		<w pos="v" pron="baw-raw'" xlit="bârâʼ" xml:lang="heb">בָּרָא</w>
+		<source>a primitive root;</source>
+		<meaning>(absolutely) to <def>create</def>; (qualified) to <def>cut down</def> (a wood), <def>select</def>, <def>feed</def> (as formative processes)</meaning>
+		<usage>choose, create (creator), cut down, dispatch, do, make (fat).</usage>
+	</entry>
+	<entry id="H1567">
+		<w pos="n-pr-loc" pron="gal-ade'" xlit="Galʻêd" xml:lang="x-pn">גַּלְעֵד</w>
+		<source>from <w src="H1530">1530</w> and <w src="H5707">5707</w>; heap of testimony;</source>
+		<meaning><def>Galed</def>, a memorial cairn East of the Jordan</meaning>
+		<usage>Galeed.</usage>
+	</entry>
+	<entry id="H1768">
+		<w pos="prt" pron="dee" xlit="dîy" xml:lang="arc">דִּי</w>
+		<source>(Aramaic) apparently for <w src="H1668">1668</w>;</source>
+		<meaning><def>that</def>, used as relative conjunction, and especially (with a preposition) in adverbial phrases; also as preposition <def>of</def></meaning>
+		<usage>× as, but, for(-asmuch  ),   now, of, seeing, than, that, therefore, until,   what (-soever), when, which, whom, whose.</usage>
+	</entry>
+	<entry id="H1836">
+		<w pos="d" pron="dane" xlit="dên" xml:lang="arc">דֵּן</w>
+		<source>(Aramaic) an orthographical variation of <w src="H1791">1791</w>;</source>
+		<meaning><def>this</def></meaning>
+		<usage>(afore-) time,   after this manner, here (-after), one...another, such, there(-fore), these, this (matter),   thus, where(-fore), which.</usage>
+	</entry>
+	<entry id="H2063">
+		<w pos="d" pron="zothe'" xlit="zôʼth" xml:lang="heb">זֹאת</w>
+		<source>irregular feminine of <w src="H2088">2088</w>;</source>
+		<meaning><def>this</def> (often used adverb)</meaning>
+		<usage>hereby (-in, -with), it, likewise, the one (other, same), she, so (much), such (deed), that, therefore, these, this (thing), thus.</usage>
+	</entry>
+	<entry id="H3026">
+		<w pos="n-pr-loc" pron="yegar' sah-had-oo-thaw'" xlit="Yᵉgar Sahădûwthâʼ" xml:lang="x-pn">יְגַר שַׂהֲדוּתָא</w>
+		<source>(Aramaic) from a word derived from an unused root (meaning to gather) and a derivation of a root corresponding to <w src="H7717">7717</w>; heap of the testimony;</source>
+		<meaning><def>Jegar-Sahadutha</def>, a cairn East of the Jordan</meaning>
+		<usage>Jegar-Sahadutha.</usage>
+	</entry>
+	<entry id="H3290">
+		<w pos="n-pr-m" pron="yah-ak-obe'" xlit="Yaʻăqôb" xml:lang="x-pn">יַעֲקֹב</w>
+		<source>from <w src="H6117">6117</w>; heel-catcher (i.e. supplanter);</source>
+		<meaning><def>Jaakob</def>, the Israelitish patriarch</meaning>
+		<usage>Jacob.</usage>
+	</entry>
+	<entry id="H3318">
+		<w pos="v" pron="yaw-tsaw'" xlit="yâtsâʼ" xml:lang="heb">יָצָא</w>
+		<source>a primitive root;</source>
+		<meaning>to <def>go</def> (causatively, <def>bring</def>) <def>out</def>, in a great variety of applications, literally and figuratively, direct and proxim.</meaning>
+		<usage>× after, appear, × assuredly, bear out, × begotten, break out, bring forth (out, up), carry out, come (abroad, out, thereat, without),   be condemned, depart(-ing, -ure), draw forth, in the end, escape, exact, fail, fall (out), fetch forth (out), get away (forth, hence, out), (able to, cause to, let) go abroad (forth, on, out), going out, grow, have forth (out), issue out, lay (lie) out, lead out, pluck out, proceed, pull out, put away, be risen, × scarce, send with commandment, shoot forth, spread, spring out, stand out, × still, × surely, take forth (out), at any time, × to (and fro), utter.</usage>
+	</entry>
+	<entry id="H3809">
+		<w pos="adv" pron="law" xlit="lâʼ" xml:lang="arc">לָא</w>
+		<source>(Aramaic) or <w pron="law" xlit="lâh">לָה</w>; (Aramaic) (Daniel 4:32), corresponding to <w src="H3808">3808</w></source>
+		<usage>or even, neither, no(-ne, -r), (can-) not, as nothing, without.</usage>
+	</entry>
+	<entry id="H3837">
+		<w pos="n-pr-m n-pr-loc" pron="law-bawn'" xlit="Lâbân" xml:lang="x-pn">לָבָן</w>
+		<source>the same as <w src="H3836">3836</w>;</source>
+		<meaning><def>Laban</def>, a Mesopotamian; also a place in the Desert</meaning>
+		<usage>Laban.</usage>
+	</entry>
+	<entry id="H4138">
+		<w pos="n-f" pron="mo-leh'-deth" xlit="môwledeth" xml:lang="heb">מוֹלֶדֶת</w>
+		<source>from <w src="H3205">3205</w>;</source>
+		<meaning><def>nativity</def> (plural birth-place); by implication, <def>lineage</def>, <def>native country</def>; also <def>offspring</def>, <def>family</def></meaning>
+		<usage>begotten, born, issue, kindred, native(-ity).</usage>
+	</entry>
+	<entry id="H4480">
+		<w pos="prep" pron="min" xlit="min" xml:lang="heb">מִן</w>
+		<source>or <w pron="min-nee'" xlit="minnîy">מִנִּי</w>; or <w pron="min-nay'" xlit="minnêy">מִנֵּי</w>; (constructive plural) (Isaiah 30:11); for <w src="H4482">4482</w>;</source>
+		<meaning>properly, a <def>part</def> of; hence (prepositionally), <def>from</def> or <def>out of</def> in many senses</meaning>
+		<usage>above, after, among, at, because of, by (reason of), from (among), in, × neither, × nor, (out) of, over, since, × then, through, × whether, with.</usage>
+	</entry>
+	<entry id="H4481">
+		<w pos="prep" pron="min" xlit="min" xml:lang="arc">מִן</w>
+		<source>(Aramaic) corresponding to <w src="H4480">4480</w></source>
+		<usage>according, after,   because,   before, by, for, from, × him, × more than, (out) of, part, since, × these, to, upon,   when.</usage>
+	</entry>
+	<entry id="H4676">
+		<w pos="n-f" pron="mats-tsay-baw'" xlit="matstsêbâh" xml:lang="heb">מַצֵּבָה</w>
+		<source>feminine (causatively) participle of <w src="H5324">5324</w>;</source>
+		<meaning>something <def>stationed</def>, i.e. a <def>column</def> or (memorial stone); by analogy, an <def>idol</def></meaning>
+		<usage>garrison, (standing) image, pillar.</usage>
+	</entry>
+	<entry id="H4886">
+		<w pos="v" pron="maw-shakh'" xlit="mâshach" xml:lang="heb">מָשַׁח</w>
+		<source>a primitive root;</source>
+		<meaning>to <def>rub with oil</def>, i.e. to <def>anoint</def>; by implication, to <def>consecrate</def>; also to <def>paint</def></meaning>
+		<usage>anoint, paint.</usage>
+	</entry>
+	<entry id="H5087">
+		<w pos="v" pron="naw-dar'" xlit="nâdar" xml:lang="heb">נָדַר</w>
+		<source>a primitive root;</source>
+		<meaning>to <def>promise</def> (pos., to do or give something to God)</meaning>
+		<usage>(make a) vow.</usage>
+	</entry>
+	<entry id="H5088">
+		<w pos="n-m" pron="neh'-der" xlit="neder" xml:lang="heb">נֶדֶר</w>
+		<source>or <w pron="nay'-der" xlit="nêder">נֵדֶר</w>; from <w src="H5087">5087</w>;</source>
+		<meaning>a <def>promise</def> (to God); also (concretely) a <def>thing promised</def></meaning>
+		<usage>vow(-ed).</usage>
+	</entry>
+	<entry id="H5648">
+		<w pos="v" pron="ab-bad'" xlit="ʻăbad" xml:lang="arc">עֲבַד</w>
+		<source>(Aramaic) corresponding to <w src="H5647">5647</w>;</source>
+		<meaning>to <def>do</def>, <def>make</def>, <def>prepare</def>, <def>keep</def>, etc.</meaning>
+		<usage>× cut, do, execute, go on, make, move, work.</usage>
+	</entry>
+	<entry id="H6258">
+		<w pos="adv" pron="at-taw'" xlit="ʻattâh" xml:lang="heb">עַתָּה</w>
+		<source>from <w src="H6256">6256</w>;</source>
+		<meaning><def>at this time</def>, whether adverb, conjunction or expletive</meaning>
+		<usage>henceforth, now, straightway, this time, whereas.</usage>
+	</entry>
+	<entry id="H6965">
+		<w pos="v" pron="koom" xlit="qûwm" xml:lang="heb">קוּם</w>
+		<source>a primitive root;</source>
+		<meaning>to <def>rise</def> (in various applications, literal, figurative, intensive and causative)</meaning>
+		<usage>abide, accomplish, × be clearer, confirm, continue, decree, × be dim, endure, × enemy, enjoin, get up, make good, help, hold, (help to) lift up (again), make, × but newly, ordain, perform, pitch, raise (up), rear (up), remain, (a-) rise (up) (again, against), rouse up, set (up), (e-) stablish, (make to) stand (up), stir up, strengthen, succeed, (as-, make) sure(-ly), (be) up(-hold, -rising).</usage>
+	</entry>
+	<entry id="H7121">
+		<w pos="v" pron="kaw-raw'" xlit="qârâʼ" xml:lang="heb">קָרָא</w>
+		<source>a primitive root (rather identical with <w src="H7122">7122</w> through the idea of accosting a person met);</source>
+		<meaning>to <def>call out to</def> (i.e. properly, address by name, but used in a wide variety of applications)</meaning>
+		<usage>bewray (self), that are bidden, call (for, forth, self, upon), cry (unto), (be) famous, guest, invite, mention, (give) name, preach, (make) proclaim(-ation), pronounce, publish, read, renowned, say.</usage>
+	</entry>
+	<entry id="H7225">
+		<w pos="n-f" pron="ray-sheeth'" xlit="rêʼshîyth" xml:lang="heb">רֵאשִׁית</w>
+		<source>from the same as <w src="H7218">7218</w>;</source>
+		<meaning>the <def>first</def>, in place, time, order or rank (specifically, a <def>firstfruit</def>)</meaning>
+		<usage>beginning, chief(-est), first(-fruits, part, time), principal thing.</usage>
+	</entry>
+	<entry id="H7725">
+		<w pos="v" pron="shoob" xlit="shûwb" xml:lang="heb">שׁוּב</w>
+		<source>a primitive root;</source>
+		<meaning>to <def>turn</def> back (hence, away) transitively or intransitively, literally or figuratively (not necessarily with the idea of <def>return</def> to the starting point); generally to <def>retreat</def>; often adverbial, <def>again</def></meaning>
+		<usage>((break, build, circumcise, dig, do anything, do evil, feed, lay down, lie down, lodge, make, rejoice, send, take, weep)) × again, (cause to) answer (  again), × in any case (wise), × at all, averse, bring (again, back, home again), call (to mind), carry again (back), cease, × certainly, come again (back), × consider,   continually, convert, deliver (again),   deny, draw back, fetch home again, × fro, get (oneself) (back) again, × give (again), go again (back, home), (go) out, hinder, let, (see) more, × needs, be past, × pay, pervert, pull in again, put (again, up again), recall, recompense, recover, refresh, relieve, render (again), requite, rescue, restore, retrieve, (cause to, make to) return, reverse, reward,   say nay, send back, set again, slide back, still, × surely, take back (off), (cause to, make to) turn (again, self again, away, back, back again, backward, from, off), withdraw.</usage>
+	</entry>
+	<entry id="H8033">
+		<w pos="adv" pron="shawm" xlit="shâm" xml:lang="heb">שָׁם</w>
+		<source>a primitive particle (rather from the relative pronoun, <w src="H834">834</w>);</source>
+		<meaning><def>there</def> (transferring to time) <def>then</def>; often <def>thither</def>, or <def>thence</def></meaning>
+		<usage>in it,   thence, there (-in,   of,   out),   thither,   whither.</usage>
+	</entry>
+	<entry id="H8064">
+		<w pos="n-m" pron="shaw-mah'-yim" xlit="shâmayim" xml:lang="heb">שָׁמַיִם</w>
+		<source>dual of an unused singular <w pron="shaw-meh'" xlit="shâmeh">שָׁמֶה</w>; from an unused root meaning to <def>be lofty</def>;</source>
+		<meaning>the <def>sky</def> (as <def>aloft</def>; the dual perhaps alluding to the visible arch in which the clouds move, as well as to the higher ether where the celestial bodies revolve)</meaning>
+		<usage>air, × astrologer, heaven(-s).</usage>
+	</entry>
+	<entry id="H8065">
+		<w pos="n-m" pron="shaw-mah'-yin" xlit="shâmayin" xml:lang="arc">שָׁמַיִן</w>
+		<source>(Aramaic) corresponding to <w src="H8064">8064</w></source>
+		<usage>heaven.</usage>
+	</entry>
+	<entry id="H8460">
+		<w pos="prep" pron="tekh-oth'" xlit="tᵉchôwth" xml:lang="arc">תְּחוֹת</w>
+		<source>(Aramaic) or <w pron="tekh-oth'" xlit="tchôth">תּחֹת</w>; (Aramaic), corresponding to <w src="H8478">8478</w>;</source>
+		<meaning><def>beneath</def></meaning>
+		<usage>under.</usage>
+	</entry>
+</lexicon>

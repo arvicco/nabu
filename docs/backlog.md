@@ -9538,7 +9538,63 @@ Sicily, across all languages". **Existing EpiDoc family + GitFetch.**
 - Language dossiers for scx/xly with honest family lanes.
 - Registry `enabled: false`, sync_policy manual (live repo).
 
-## P30-1 · hebrew-lexicon — define for augmented Strong's  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+## P30-1 · hebrew-lexicon — define for augmented Strong's  [tier: fable] [status: done 2026-07-18 — adapter + `oshb-lexicon` family + fixtures shipped, `enabled: false` awaiting the owner-fired first sync; verdicts below] [deps: —]
+
+SHIPPED (2026-07-18, worktree; sha in worklog). VERDICTS:
+- SHELF GRAIN (censused at fixture time): ONE source, TWO dictionaries
+  (the lexica LSJ+LS precedent) — `hebrew-lexicon` (one entry per
+  AugIndex row, 9,299 upstream: id = the aug value VERBATIM incl. the 8
+  non-numeric particle ids b/c/d/i/k/l/m/s; headword/xlit/pos/gloss from
+  LexicalIndex via aug→LI (0 dangling), full Strong body from
+  HebrewStrong (numeric bases, 0 missing; particles honestly have none),
+  strong/aug/bdb/twot xrefs as body lines) + `bdb` (one entry per
+  BrownDriverBriggs entry, 11,845 upstream; mod/type markers, head line,
+  sense tree one line per <sense> with @n prefixes; <status> workflow
+  values excluded from body). The two shelves meet at `define <hebrew
+  word>` on the folded consonantal skeleton (pinned: ברא finds both).
+- JOIN CONTRACT: `HebrewLexicon.normalize_lemma` ships on the adapter
+  (final /-segment → strip spaces → strip trailing +); fixture-measured
+  1,906/1,906 tokens = 100.000% (506/506 types) over the OSHB fixtures,
+  live survey number 49,946/49,946 carried; the adapter test resolves
+  EVERY real token lemma of Gen 1:1 + Gen 31:13 + Gen 31:47 + Jer 10:11
+  (real OSHB fixture bytes) through the real DictionaryLoader +
+  Define#by_urn.
+- SPEC DRIFT, named: the spec's "BdbMedium.xml" does not exist upstream —
+  the BDB outline file is BrownDriverBriggs.xml (survey had it right).
+- NFC EXEMPTION EXTENDED (model change, the Passage P26-3 precedent):
+  DictionaryEntry headword/gloss/body validate verbatim-UTF-8 for
+  NFC-exempt languages (measured upstream: 4,053 LI / 3,796 HS / 4,720
+  BDB headwords not NFC-stable — dagesh-before-vowel Masoretic order);
+  headword_folded stays NFC for every language. architecture §3 updated.
+- BDB print pages: <status p> (+ the ×2 mid-entry <page p> turns, one
+  fixtured) → citation rows label "BDB p. NNN", cts_work nil, citation =
+  the page — the aed Wb-pages pattern, resolution deferred to the BDB
+  1906 scan (§7 one-liner). Scripture <ref> display text rides the body;
+  the machine @r is deliberately NOT minted (P30-2's verse-keyed lane).
+- ATTESTED-COUNTS MEASUREMENT (honest): gold hbo/arc lemma-index keys vs
+  the shelf at fixture level — 944/1,906 (49.5%) equal a shelf entry id
+  verbatim (bare-number lemmas); 962 (50.5%) need normalize_lemma at
+  query time; the Define#glosses folded-headword handshake lights on 0
+  (OSHB gold lemmas are ids, not Hebrew forms). A define-side aug-id
+  lane (or index-side normalization) is the natural follow-up one-liner,
+  NOT silently claimed.
+- LANGUAGE HONESTY: dictionaries-table grain is one language per shelf →
+  both register hbo (majority: 8,589/9,299 aug entries heb, 23/46 BDB
+  parts); per-entry hbo/arc preserved on domain entries (28/15 in the
+  fixture censused), folds identical; `define --lang arc` filters at
+  dictionary grain — recorded in 02-sources row 83.
+- Registry `enabled: false`, sync_policy manual, plain GitFetch (9.2 MB,
+  no sparse cone needed). Fixtures byte-verbatim slices of all four
+  files (43 aug rows = the COMPLETE normalized-lemma inventory of the
+  four join verses; 43 LI + 41 HS + 19 BDB entries incl. Aramaic parts
+  and the dagesh-first ברא), README with license quote + commit +
+  full-file sha256 pins + the normalization rule.
+- Tests +41 methods (model 3, parser 20 incl. damage paths, adapter 18
+  incl. registry pin). Suite 3,991 runs / 50,709 assertions exit 0
+  (0 skips) · lint 491 files exit 0.
+- OWNER QUEUE: bin/nabu sync hebrew-lexicon, eyeball define ברא /
+  define אלהים / show urn:nabu:dict:hebrew-lexicon:1254a + 5 random
+  entries, flip enabled.
 
 github.com/openscriptures/HebrewLexicon (the OSHB project's own lexicon,
 9.2 MB, CC BY 4.0 → attribution). THE JOIN CONTRACT (survey-measured
