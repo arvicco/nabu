@@ -980,3 +980,26 @@ The workflow:
    It checks MENTION, never verbatim wording, and never generates — exit
    1 lists the findings; the fixes are the seed command, a description
    edit, or a library.md row.
+
+## 16. Terminal display — mark policies & the `--display` modes (P27-0)
+
+The full reference is **[docs/display.md](display.md)** (what nabu strips
+and why, plus the terminal-side setup — iTerm2's RTL toggle, fonts — that no
+CLI can do for you). The operating summary:
+
+- **What transforms exist**: per-language mark stripping driven by
+  `config/display.yml` — Hebrew cantillation (accents U+0591–05AF; the
+  vowel points and maqaf stay), OCS titla, Vedic accents on Devanagari
+  text — plus RTL isolate wrapping for hbo/arc. Display-time only: the
+  canonical store, the search index, `export` and the MCP surface are
+  never touched, and search hits are identical under every mode.
+- **Where it's configured**: `config/display.yml` (path overridable via
+  `paths: display:` in `nabu.yml`). Delete the file and every command
+  renders raw stored bytes. Unknown classes/languages in the file are
+  named errors, not silent no-ops.
+- **The escape hatch**: `--display full` on show/align/search/concord/
+  parallels/cognates renders every stored byte, no transforms, no
+  isolates. `--display plain` strips everything the language policy
+  defines (consonantal Hebrew). Any applied transform is announced in a
+  one-line footer (`display: cantillation stripped (--display full shows
+  all marks)`); silence means the bytes are untouched.
