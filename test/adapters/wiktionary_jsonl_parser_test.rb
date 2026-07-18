@@ -90,6 +90,19 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert_equal "word, speech, utterance", entry("слово:noun").gloss # parent gloss, not the leaf
   end
 
+  def test_gloss_descends_past_colon_introducer_parents_to_the_leaf
+    # Owner report 2026-07-19: `etym persona` glossed the Etruscan 𐌘𐌄𐌓𐌔𐌖
+    # as "The meaning of this term is uncertain. Possibilities include" —
+    # kaikki nests gloss paths, and a parent that ends in ":" is an
+    # INTRODUCER, not a gloss; the leaf ("a mask") is the sense. Parents
+    # without the colon (слово's "word, speech, utterance") stay preferred.
+    ett = File.join(Nabu::TestSupport.fixtures("wiktionary-recon"),
+                    "kaikki.org-dictionary-Etruscan.jsonl")
+    phersu = Nabu::Adapters::WiktionaryJsonlParser.new.entries(ett)
+                                                  .find { |e| e.entry_id == "𐌘𐌄𐌓𐌔𐌖:noun" } || flunk("𐌘𐌄𐌓𐌔𐌖 not parsed")
+    assert_equal "a mask", phersu.gloss
+  end
+
   def test_gloss_trims_a_trailing_colon
     assert_equal "inflection of видѣти (viděti)", entry("видимъ:verb:2").gloss
   end
