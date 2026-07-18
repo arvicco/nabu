@@ -689,6 +689,34 @@ oshb:
   # completed digitization with occasional corrections: re-syncs are an
   # owner decision.
 
+sefaria:
+  adapter: Nabu::Adapters::Sefaria
+  enabled: false   # flip after the owner-fired first sync (CLAUDE.md checklist
+                   # §6): bin/nabu sync sefaria — index-driven fetch, books.json
+                   # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
+                   # then eyeball nabu show
+                   # urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot:1.1,
+                   # 5 random passages, and `align "GEN 1.1"` (the Aramaic
+                   # column beside MT ↔ LXX ↔ Vulgate), then flip.
+                   # Expected ≈104 documents: 121 named versions − 3 Tafsir
+                   # Rasag (excluded title) − 13 "unknown" − 1 absent license;
+                   # 12 CC-BY-NC + 1 CC-BY-NC-SA ride license_override: nc,
+                   # 9 CC-BY + 5 CC-BY-SA ride attribution, 77 PD/CC0 open.
+  # Sefaria — the TARGUM SHELF only this phase (P30-3). Upstream restructured:
+  # the git repo is a monthly books.json index (19,705 version entries), texts
+  # live in the public gs://sefaria-export bucket (~26 GB, never wholesale).
+  # NEW fetch shape (Nabu::SefariaFetch): GET index → select the Targum
+  # category's NAMED versions → named-file GETs; the index rides in canonical
+  # so scope is reproducible. THE LICENSE GATE per version, machine-readable
+  # "license" field: PD/CC0 → open, CC-BY/CC-BY-SA → attribution override,
+  # CC-BY-NC(-SA) → nc override (P10-4, MCP-excluded); "unknown"/absent →
+  # never ingested; merged.json never fetched or ingested (pinned in tests).
+  # Sefaria's "Hebrew" column on this shelf IS Aramaic → arc (NFC-exempt,
+  # byte-verbatim); Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
+  # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
+  # monthly; a re-sync is an owner decision → manual.
+  sync_policy: manual
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
