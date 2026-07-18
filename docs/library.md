@@ -517,6 +517,22 @@ etymological chains from Rome's neighbors (`etym rufus`); epigraphic
 habit studies across alphabets and centuries; the Sicilian fragmentary
 languages (Sicel, Elymian) in their only digital home.
 
+## 8q. The Hebrew shelf (`hebrew-lexicon`, `sdbh`, `sefaria`, `bhsa`, `dss`, `iip`; synced live 2026-07-18, flipped 2026-07-19)
+
+| | |
+|---|---|
+| **Category** | The Hebrew Bible and Second Temple axis around the P26-3 Masoretic shelf (`oshb`, §8b): two dictionaries, the Aramaic column, the syntax witness, the Scrolls, and the epigraphy |
+| **Language** | Biblical Hebrew (`hbo`) and Aramaic (`arc`) — both byte-verbatim under the NFC exemption — plus the epigraphic mix (Greek/Latin/Phoenician/Syriac on `iip`) |
+| **Size** | `hebrew-lexicon`: 21,144 entries in two shelves — 9,299 augmented-Strong entries (the exact ids OSHB lemmas carry: `define` resolves any OSHB lemma directly, 100.000% join) + the 11,845-entry BDB outline with print-page anchors. `sdbh`: 7,932 UBS semantic-dictionary entries with domains and 260,813 verse-level scripture refs (CC BY-SA). `sefaria`: 103 Targum documents / 57,095 passages (Onkelos, Jonathan, the Writings targums — per-version license gate; unlicensed versions excluded by rule). `bhsa`: 39 books / 23,213 verses with full ETCBC clause/phrase syntax, ketiv-qere hybrid and per-lexeme glosses (nc). `dss`: 1,001 scrolls / 500,995 words / 1.43M signs — Abegg's transcriptions under his own CC BY-NC grant, text-critical flags intact. `iip`: 5,499 inscriptions of Israel/Palestine, ~500 BCE–640 CE, densely dated (nc) |
+| **Metadata** | The `ot` alignment hub runs six-legged (MT ×2 ↔ LXX ↔ Vulgate ↔ English ↔ Onkelos — `align "GEN 1.1"`); BHSA constituency spans are the library's first syntax annotations; DSS clusters carry correction/erasure/reconstruction degrees verbatim; IIP's date axis lights at rebuild |
+
+**Research uses:** Masoretic philology with a real dictionary chain
+(lemma → augmented Strong's → BDB page); semantic-domain study over the
+whole Tanakh; Targum-beside-MT reading; clause-level syntax queries; the
+Scrolls beside the codices for textual criticism; the epigraphic record
+of the same land and centuries. Rabbinic literature proper is a future
+campaign — the Targums are its first bridgehead.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

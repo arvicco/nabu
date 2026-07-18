@@ -242,7 +242,7 @@ class HebrewLexiconTest < Minitest::Test
     entry = registry["hebrew-lexicon"]
     refute_nil entry, "config/sources.yml must register hebrew-lexicon"
     assert_equal Nabu::Adapters::HebrewLexicon, entry.adapter_class
-    refute entry.enabled, "hebrew-lexicon stays disabled until the owner-fired first real sync (checklist §6)"
+    assert entry.enabled, "live (owner sign-off 2026-07-19: Hebrew shelf synced, flip ordered)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::HebrewLexicon.manifest, entry.manifest
   end

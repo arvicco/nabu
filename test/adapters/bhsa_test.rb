@@ -34,7 +34,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["bhsa"]
       refute_nil entry, "bhsa must be registered in config/sources.yml"
-      refute entry.enabled, "enabled: false until the owner-fired first real sync (checklist §6)"
+      assert entry.enabled, "live (owner sign-off 2026-07-19: Hebrew shelf synced, flip ordered)"
       assert_equal "manual", entry.sync_policy
       assert_equal "bhsa", entry.adapter_class.manifest.id
     end

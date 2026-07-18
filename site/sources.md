@@ -50,10 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 52 sources below are synced and live as of 18 July 2026. Six more
-(the Hebrew shelf: the OSHB lexicon, SDBH, the Sefaria Targums, BHSA, the
-Dead Sea Scrolls, and the Inscriptions of Israel/Palestine) are built and
-landing through the current release cycle.
+All 58 sources below are synced and live as of 19 July 2026.
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
@@ -106,6 +103,13 @@ landing through the current release cycle.
 | `lexlep`, `lexlep-words` | [Lexicon Leponticum](https://lexlep.univie.ac.at/) (Vienna) | 494 Cisalpine Celtic inscriptions + the 627-word Lepontic lexicon with morphemic analyses (synchronized 18 July 2026) | Conflicting statements (terms CC BY-SA 3.0 vs footer NC) — held at `nc` pending clarification |
 | `tir` | [Thesaurus Inscriptionum Raeticarum](https://tir.univie.ac.at/) (Vienna) | 389 Raetic inscriptions — the corpus of record (synchronized 18 July 2026) | Same conflicting statements — held at `nc` |
 | `isicily` | [I.Sicily](https://github.com/ISicily/ISicily) (Prag, Oxford / ERC Crossreads) | 5,074 inscriptions of ancient Sicily across all its languages — incl. Sicel, Elymian, Sicilian Punic and Mamertine Oscan in their only machine-readable form (synchronized 18 July 2026) | CC BY 4.0 |
+
+| `hebrew-lexicon` | [OpenScriptures HebrewLexicon](https://github.com/openscriptures/HebrewLexicon) | Two dictionaries: 9,299 augmented-Strong entries (every OSHB lemma resolves) + the 11,845-entry BDB outline with print-page anchors (synchronized 18 July 2026) | CC BY 4.0 |
+| `sdbh` | [UBS Semantic Dictionary of Biblical Hebrew](https://github.com/ubsicap/ubs-open-license) | 7,932 entries with semantic domains and 260,813 verse-level scripture references (synchronized 18 July 2026) | CC BY-SA 4.0 |
+| `sefaria` | [Sefaria](https://www.sefaria.org/) (Sefaria-Export, named versions only) | The Targum shelf: Onkelos, Jonathan on the Prophets, the Writings targums — 103 documents / 57,095 Aramaic verses, verse-aligned to the Tanakh (synchronized 18 July 2026) | Per version (PD / CC0 / CC BY / CC BY-SA; NC versions carried as `nc`) |
+| `bhsa` | [ETCBC BHSA](https://github.com/ETCBC/bhsa) | The Hebrew Bible with full clause/phrase syntax, ketiv-qere and per-lexeme glosses — 426,590 words (synchronized 18 July 2026) | CC BY-NC 4.0 |
+| `dss` | [ETCBC dss](https://github.com/ETCBC/dss) (Abegg/Bowley/Cook) | The Dead Sea Scrolls: 1,001 scrolls, 500,995 words, biblical and non-biblical, with text-critical flags intact (synchronized 18 July 2026) | CC BY-NC 4.0 (Abegg's grant) |
+| `iip` | [Inscriptions of Israel/Palestine](https://github.com/Brown-University-Library/iip-texts) (Brown) | 5,499 inscriptions, Hebrew/Aramaic/Greek/Latin, ~500 BCE–640 CE (synchronized 18 July 2026) | CC BY-NC 4.0 |
 
 ## The local shelves
 

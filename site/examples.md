@@ -201,9 +201,10 @@ $ bin/nabu etym pompeii
 The Masoretic text is held byte-verbatim — the Leningrad Codex's
 combining-mark order is never normalized away — with full morphology,
 ketiv/qere both preserved, and the verse-aligned Aramaic of the Targums
-beside it. The ETCBC's BHSA adds clause-level syntax; the Dead Sea
-Scrolls (Abegg's transcriptions, 1,001 scrolls) and the augmented-Strong's
-lexicon land with the current release cycle.
+beside it. The ETCBC's BHSA adds clause-level syntax, the Dead Sea
+Scrolls (Abegg's transcriptions, 1,001 scrolls) sit beside the codices,
+and the augmented-Strong's lexicon resolves every OSHB lemma to its BDB
+entry — all live since 19 July 2026.
 
 ```
 $ bin/nabu show urn:nabu:oshb:gen:1.1

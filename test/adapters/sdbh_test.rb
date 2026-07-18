@@ -302,7 +302,7 @@ class SdbhTest < Minitest::Test
     entry = registry["sdbh"]
     refute_nil entry, "config/sources.yml must register sdbh"
     assert_equal Nabu::Adapters::Sdbh, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first real sync (37 MB fetch)"
+    assert entry.enabled, "live (owner sign-off 2026-07-19: Hebrew shelf synced, flip ordered)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::Sdbh.manifest, entry.manifest
   end
