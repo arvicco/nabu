@@ -45,33 +45,39 @@ module Nabu
       # year-0 tripwire), corph_undated (P25-0: held texts whose Date prose
       # resisted the honest parse ladder — the Annals of Ulster shape),
       # riig_undated/riig_invalid (P25-1) and aes_undated (P28-0: held texts
-      # whose date AND findspot are both the corpus's unknown/"k" values)
-      # and ceipom_undated/ceipom_unplaced/ceipom_invalid (P29-1: the 3
+      # whose date AND findspot are both the corpus's unknown/"k" values),
+      # ceipom_undated/ceipom_unplaced/ceipom_invalid (P29-1: the 3
       # undated texts, the 10 degenerate-Provenance texts, and the one
-      # inverted-range typo — skipped, counted, never stored).
+      # inverted-range typo — skipped, counted, never stored),
+      # and lexlep/tir undated+invalid (P29-3: inscriptions whose Object
+      # page is uncached or carries the wiki's sortdate=0 unknown filler).
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
+                            :lexlep, :tir,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
                             :ceipom_undated, :ceipom_unplaced, :ceipom_invalid,
                             :isicily_undated, :isicily_invalid,
-                            :open_etruscan_undated, :open_etruscan_invalid) do
+                            :open_etruscan_undated, :open_etruscan_invalid,
+                            :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
                        tla_hf: 0, tla_hf_undated: 0, aes: 0, aes_undated: 0,
                        ceipom: 0, ceipom_undated: 0, ceipom_unplaced: 0, ceipom_invalid: 0,
                        isicily: 0, isicily_undated: 0, isicily_invalid: 0,
-                       open_etruscan: 0, open_etruscan_undated: 0, open_etruscan_invalid: 0, **)
+                       open_etruscan: 0, open_etruscan_undated: 0, open_etruscan_invalid: 0,
+                       lexlep: 0, lexlep_undated: 0, lexlep_invalid: 0,
+                       tir: 0, tir_undated: 0, tir_invalid: 0, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
-            tla_hf + aes + ceipom + isicily + open_etruscan
+            tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir
         end
       end
 
@@ -97,6 +103,7 @@ module Nabu
         ceipom = CeipomDates.build(catalog: catalog, canonical_dir: canonical_dir)
         isicily = IsicilyDates.build(catalog: catalog, canonical_dir: canonical_dir)
         open_etruscan = OpenEtruscanDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        vienna = ViennaWikiDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
@@ -104,6 +111,7 @@ module Nabu
                     riig: riig[:documents], tla_hf: tla_hf[:documents], aes: aes[:documents],
                     ceipom: ceipom[:documents], isicily: isicily[:documents],
                     open_etruscan: open_etruscan[:documents],
+                    lexlep: vienna[:lexlep][:documents], tir: vienna[:tir][:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
@@ -115,7 +123,9 @@ module Nabu
                     ceipom_invalid: ceipom[:invalid],
                     isicily_undated: isicily[:undated], isicily_invalid: isicily[:invalid],
                     open_etruscan_undated: open_etruscan[:undated],
-                    open_etruscan_invalid: open_etruscan[:invalid])
+                    open_etruscan_invalid: open_etruscan[:invalid],
+                    lexlep_undated: vienna[:lexlep][:undated], lexlep_invalid: vienna[:lexlep][:invalid],
+                    tir_undated: vienna[:tir][:undated], tir_invalid: vienna[:tir][:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -273,3 +283,4 @@ require_relative "axis_builder/aes_dates"
 require_relative "axis_builder/ceipom_dates"
 require_relative "axis_builder/isicily_dates"
 require_relative "axis_builder/open_etruscan_dates"
+require_relative "axis_builder/vienna_wiki_dates"
