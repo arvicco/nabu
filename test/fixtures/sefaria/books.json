@@ -1,0 +1,206 @@
+{
+ "generated_at": "2026-07-02T07:03:07Z",
+ "bucket": "gs://sefaria-export",
+ "base_url": "https://storage.googleapis.com/sefaria-export",
+ "total_texts": 19705,
+ "special_files": [
+  {
+   "path": "last_export.txt",
+   "url": "https://storage.googleapis.com/sefaria-export/last_export.txt",
+   "size": 26
+  }
+ ],
+ "books": [
+  {
+   "title": "A Jewish Critique of the Philosophy of Martin Buber",
+   "language": "English",
+   "versionTitle": "New York Yeshiva University, 1962",
+   "categories": [
+    "Jewish Thought",
+    "Modern",
+    "Eliezer Berkovits"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Jewish Thought/Modern/Eliezer Berkovits/A Jewish Critique of the Philosophy of Martin Buber/English/New York Yeshiva University, 1962.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Jewish Thought/Modern/Eliezer Berkovits/A Jewish Critique of the Philosophy of Martin Buber/English/New York Yeshiva University, 1962.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Jewish Thought/Modern/Eliezer Berkovits/A Jewish Critique of the Philosophy of Martin Buber/English/New York Yeshiva University, 1962.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Jewish Thought/Modern/Eliezer Berkovits/A Jewish Critique of the Philosophy of Martin Buber/English/New York Yeshiva University, 1962.json"
+  },
+  {
+   "title": "Aramaic Targum to Ruth",
+   "language": "Hebrew",
+   "versionTitle": "Mikraot Gedolot",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Aramaic Targum",
+    "Writings"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.json"
+  },
+  {
+   "title": "Onkelos Genesis",
+   "language": "Hebrew",
+   "versionTitle": "Targum Onkelos, vocalized according to the Yemenite Taj ",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Onkelos",
+    "Torah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Onkelos/Torah/Onkelos Genesis/Hebrew/Targum Onkelos, vocalized according to the Yemenite Taj .json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Onkelos/Torah/Onkelos Genesis/Hebrew/Targum Onkelos, vocalized according to the Yemenite Taj .txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Onkelos/Torah/Onkelos Genesis/Hebrew/Targum Onkelos, vocalized according to the Yemenite Taj .json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Onkelos/Torah/Onkelos Genesis/Hebrew/Targum Onkelos, vocalized according to the Yemenite Taj .json"
+  },
+  {
+   "title": "Onkelos Numbers",
+   "language": "Hebrew",
+   "versionTitle": "Sifsei Chachomim Chumash, Metsudah Publications, 2009",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Onkelos",
+    "Torah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.json"
+  },
+  {
+   "title": "Tafsir Rasag",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Tafsir Rasag"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Targum Jerusalem",
+   "language": "Hebrew",
+   "versionTitle": "Targum Jerusalem on Torah",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jerusalem"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json"
+  },
+  {
+   "title": "Targum Jonathan on Jonah",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jonathan",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Targum Jonathan on Jonah",
+   "language": "Hebrew",
+   "versionTitle": "merged",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jonathan",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/Hebrew/merged.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/Hebrew/merged.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/Hebrew/merged.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/Hebrew/merged.json"
+  },
+  {
+   "title": "Targum Jonathan on Judges",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jonathan",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Judges/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Judges/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Judges/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Judges/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Targum Jonathan on Obadiah",
+   "language": "English",
+   "versionTitle": "Targum Obadiah, translated by Thomas Lenihan",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jonathan",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/English/Targum Obadiah, translated by Thomas Lenihan.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/English/Targum Obadiah, translated by Thomas Lenihan.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/English/Targum Obadiah, translated by Thomas Lenihan.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/English/Targum Obadiah, translated by Thomas Lenihan.json"
+  },
+  {
+   "title": "Targum Jonathan on Obadiah",
+   "language": "Hebrew",
+   "versionTitle": "Mikraot Gedolot",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Jonathan",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json"
+  },
+  {
+   "title": "Targum Neofiti",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Targum Neofiti"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum Neofiti/Targum Neofiti/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Targum Neofiti/Targum Neofiti/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Targum Neofiti/Targum Neofiti/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Targum Neofiti/Targum Neofiti/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Targum Sheni on Esther",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tanakh",
+    "Targum",
+    "Aramaic Targum",
+    "Writings"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json"
+  }
+ ]
+}
