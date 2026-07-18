@@ -689,6 +689,28 @@ oshb:
   # completed digitization with occasional corrections: re-syncs are an
   # owner decision.
 
+sdbh:
+  adapter: Nabu::Adapters::Sdbh
+  enabled: false   # P30-2 gate: first real sync owner-fired — one 37 MB raw
+                   # GET (FileFetch, sha256-pinned), 7,932 entries / 260,813
+                   # verse-word citation rows projected. CLAUDE.md checklist
+                   # §6: bin/nabu sync sdbh, eyeball `nabu define אור`,
+                   # `define בהו` (citations resolving to oshb verse urns
+                   # once oshb is synced) and 5 random entries, then flip.
+  # UBS Dictionary of Biblical Hebrew — the CC BY-SA 4.0 open-license
+  # extract of the Semantic Dictionary of Biblical Hebrew (SDBH, © United
+  # Bible Societies 2000-2023), dictionaries/hebrew/XML/ of
+  # github.com/ubsicap/ubs-open-license. The SECOND Hebrew dictionary
+  # shelf (MW-beside-kaikki: deliberately unmerged). content_kind
+  # :dictionary, language hbo (+arc per entry via the Strong A-space —
+  # 372 all-A entries measured; @HasAramaic marks 680 but includes mixed
+  # Hebrew lemmas with Aramaic homographs, so codes are the signal);
+  # <StrongCodes> sit in the OSHB/OSHM augmented-Strong H/A number space.
+  # Headwords/bodies byte-verbatim (the P26-3 hbo/arc NFC exemption —
+  # 3,217/7,932 lemmas measured non-NFC-stable). Upstream is ~90% complete
+  # by its own README and actively growing: re-syncs are an owner decision.
+  sync_policy: manual
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
