@@ -1,0 +1,111 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a much larger upstream
+# feature file (whole: false — a fresh GET returns the full file and is
+# fetched for URL-liveness only, never byte-compared). adapter_test is null:
+# the BHSA adapter test asserts slice-level counts, which untrimmed
+# upstream files would false-fail. Re-trim per the README table after any
+# refresh. Pinned upstream commit:
+# 4db00e2157915495e1a4d3d57e41223df24775da (master, retrieved 2026-07-18).
+source: bhsa
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: tf/2021/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/otype.tf
+    whole: true
+    trim:
+  - path: tf/2021/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/otext.tf
+    whole: true
+    trim:
+  - path: tf/2021/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/oslots.tf
+    whole: false
+    trim: slice verse nodes + intersecting clause/phrase nodes, gap-anchored (13,526,306 B -> 30,431 B)
+  - path: tf/2021/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/book.tf
+    whole: false
+    trim: 4 book-node + slice verse-grain entries (199,917 B -> 1,227 B)
+  - path: tf/2021/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/chapter.tf
+    whole: false
+    trim: slice verse-grain entries (66,379 B -> 726 B)
+  - path: tf/2021/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/verse.tf
+    whole: false
+    trim: slice verse-grain entries (61,897 B -> 770 B)
+  - path: tf/2021/g_word_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_word_utf8.tf
+    whole: false
+    trim: slice slots (5,392,356 B -> 36,803 B)
+  - path: tf/2021/trailer_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/trailer_utf8.tf
+    whole: false
+    trim: slice slots (834,560 B -> 6,031 B)
+  - path: tf/2021/lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/lex.tf
+    whole: false
+    trim: slice slots, lex-node block dropped (1,792,859 B -> 12,094 B)
+  - path: tf/2021/gloss.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/gloss.tf
+    whole: false
+    trim: slice slots, lex-node block dropped (2,572,582 B -> 16,938 B)
+  - path: tf/2021/freq_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/freq_lex.tf
+    whole: false
+    trim: slice slots, lex-node block dropped (2,000,367 B -> 14,022 B)
+  - path: tf/2021/language.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/language.tf
+    whole: false
+    trim: slice slots, lex-node block dropped (3,058,048 B -> 20,927 B)
+  - path: tf/2021/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/sp.tf
+    whole: false
+    trim: slice slots, lex-node block dropped (2,149,214 B -> 14,853 B)
+  - path: tf/2021/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/vs.tf
+    whole: false
+    trim: slice slots (1,362,302 B -> 9,870 B)
+  - path: tf/2021/vt.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/vt.tf
+    whole: false
+    trim: slice slots (1,427,614 B -> 10,447 B)
+  - path: tf/2021/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/gn.tf
+    whole: false
+    trim: slice slots (1,306,994 B -> 9,029 B)
+  - path: tf/2021/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/nu.tf
+    whole: false
+    trim: slice slots (1,322,812 B -> 9,566 B)
+  - path: tf/2021/ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/ps.tf
+    whole: false
+    trim: slice slots (1,366,212 B -> 9,791 B)
+  - path: tf/2021/qere_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/qere_utf8.tf
+    whole: false
+    trim: the 22 in-slice ketiv/qere entries (36,561 B -> 914 B)
+  - path: tf/2021/qere_trailer_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/qere_trailer_utf8.tf
+    whole: false
+    trim: the 22 in-slice ketiv/qere entries (12,739 B -> 661 B)
+  - path: tf/2021/kq_hybrid.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/kq_hybrid.tf
+    whole: false
+    trim: slice slots incl. the empty-value lines (442,023 B -> 3,513 B)
+  - path: tf/2021/kq_hybrid_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/kq_hybrid_utf8.tf
+    whole: false
+    trim: slice slots incl. the empty-value lines (452,874 B -> 3,640 B)
+  - path: tf/2021/kind.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/kind.tf
+    whole: false
+    trim: the 732 intersecting clause nodes (264,852 B -> 2,676 B)
+  - path: tf/2021/function.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/function.tf
+    whole: false
+    trim: the 2,046 intersecting phrase nodes (1,266,461 B -> 10,697 B)

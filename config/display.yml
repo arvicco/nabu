@@ -67,3 +67,4 @@ sources:
   riig: { reading: { lacuna: ellipsis, surplus: keep } } # {…} marks carver error — stays
   sblgnt: { reading: { sigla: strip } }
   oshb: { qere_display: qere }
+  bhsa: { qere_display: qere } # P30-4: same MT apparatus — bhsa tokens carry the oshb qere shape
