@@ -8643,3 +8643,99 @@ SHIPPED:
   search-mode independence, KWIC column, align layout; config 2; mcp 1
   pristine pin). Suite 3,421 runs / 45,701 assertions exit 0 (0 skips)
   · lint 428 files exit 0.
+
+## P27-1 · Edition-level display transforms — reading/diplomatic + per-edition choices  [tier: fable] [status: done 2026-07-18 — reading/diplomatic modes on the P27-0 seam; censuses & verdicts below] [deps: P27-0]
+
+Layer B of the Display phase (owner-approved): transforms keyed to SOURCE
+editorial conventions, not language — `sources:` in config/display.yml,
+executed only by the new `reading` mode; `diplomatic` is the byte-honest
+counterpart.
+
+SHIPPED:
+- `reading` mode (Display::ReadingMode, registered on the P27-0 registry
+  untouched): ketiv/qere substitution → per-source edition rules → the
+  language policy's default strips, in that order (qere runs on the
+  pristine stored bytes so token forms match exactly; Hebrew reading =
+  qere + cantillation stripped TOGETHER). Without edition context the
+  mode degrades to exactly default-mode behavior. Edition context is an
+  OPT-IN mode capability (#render_edition) — every P27-0 mode and the
+  registered-mode seam are byte-untouched.
+- `diplomatic` mode: no transforms, no isolates — byte-identical to the
+  stored text (pin over every shelf's fixture bytes). Today it renders
+  identically to `full`; registered under the editorial name so the
+  reading-mode footer's "--display diplomatic shows the edition marks"
+  has a real counterpart.
+- EDITION_RULES (census-first, STORED bytes): lacuna ("[…]" → "…",
+  ellipsis|keep), erasures (⟦…⟧, keep|unwrap — default KEEP, an erasure
+  is content), surplus ({…}, keep|unwrap — default KEEP, unwrapping would
+  present the carver's error as fluent text), sigla (⸀⸂⸃, strip|keep).
+  Shipped sources: papyri-ddbdp/edh/riig lacuna ellipsis; edh erasures
+  keep; riig surplus keep; sblgnt sigla strip; oshb qere_display qere.
+- Ketiv/qere (oshb): STORAGE VERDICT — the running text carries the KETIV
+  (<w type="x-ketiv">); the qere reading(s) attach to that token as
+  "qere" word hashes inside annotations["tokens"] (OshbOsisParser P26-3).
+  Display substitution walks the tokens in document order with a cursor
+  (the text was assembled from those very forms — exact, no re-parse);
+  qere_display: qere|ketiv|both, "both" renders "ketiv [qere]". Fixture
+  census: 3 qere tokens (jer 10.13, 10.17, ruth 1.8), all 1-word qere,
+  every ketiv form found verbatim in its passage text.
+- Query::Show carries annotations (PassageResult + PassageLine, parsed
+  from the stored annotations_json) — the CLI show family (passage,
+  document listing, range) passes source + annotations to display_text;
+  every other call site renders under language policies alone (search
+  rows carry no source_slug; extending them is future work, not silently
+  half-done). MCP payloads untouched — pristine.
+- Footer: strips vocabulary unchanged; edition transforms hint as
+  `apparatus simplified: qere, …` and swap the escape hatch to
+  `(--display diplomatic shows the edition marks)`.
+
+PER-SHELF CENSUS (stored passage bytes, parser output over checked-in
+fixtures, 2026-07-18):
+- papyri-ddbdp (32 passages): "[…]" ×2 — NOTHING else. The DdbdpParser
+  print-edition doctrine already reads through supplied/expan/unclear
+  markerless at parse time; supplements/additions/expansions/underdots
+  censused ×0 stored → NO rules invented for them (census-first pin).
+- edh (17 passages): "[…]" ×4; ⟦…⟧ ×2 (HD000082 damnatio memoriae).
+  Upstream "[---]"/"//" lacuna spellings normalize to "[…]" at parse
+  time — censused ×0 stored.
+- riig (42 passages): "[…]" ×9; surplus {…} ×2 (nanton{t}icnos).
+- ogham (17 passages): ZERO edition marks — no sources: entry (nothing
+  censused, nothing stripped).
+- sblgnt (90 passages): ⸀ ×69, ⸂ ×30, ⸃ ×30; ⸁/⸄–⸇ ×0 → excluded from
+  the sigla set. Parentheses ×1 (John 1:15) are the edition's own
+  punctuation — never touched (pin).
+- oracc (59 passages): {} ×25 — DETERMINATIVES ({d}, {ki}, {iti}), not
+  Leiden surplus: keep-text-drop-marker would fuse the silent classifier
+  into the word ({d}amar-{d}suen misreads "damar-suen") — deliberately
+  left. Standalone x ×72 = illegible-sign placeholders (content); "()"
+  ×1 = metrological notation (2(BARIG)); ⸢⸣ half-brackets ×0. NO oracc
+  entry; all three leaves journaled here.
+- oshb (138 passages): no bracket apparatus in text; ketiv/qere as above.
+
+ORIG/REG VERDICT (riig): no display-time choice exists to wire — RIIG's
+parallel editorial readings mint SIBLING passages by seg id
+(ahp-01-01:HRD-a:1 καρε[…]μ vs :PTL-b:1 καρβ[…]μ; the P25-1 grain), and
+within one passage CelticLeiden <choice> keeps the reg branch (orig is
+apparatus, dropped at parse). Reading-mode's Leiden handling suffices;
+no work invented.
+
+DEVIATIONS (from the packet letter, argued):
+- Leiden supplements/additions/expansions/underdot rules NOT implemented:
+  censused ×0 in every shelf's STORED bytes (the parsers resolve raw
+  Leiden at parse time) — "never strip what you haven't censused" wins
+  over the packet's rule list.
+- surplus defaults KEEP (packet named only erasures configurable): {t}
+  marks a carver's error the editor excludes; unwrapping by default would
+  present the misspelling unmarked. unwrap is config-reachable.
+- sigla set is ⸀⸂⸃ exactly as the packet names (⸁ ⸄–⸇ censused ×0,
+  excluded per census-first).
+- Edition rules scope: the show family only (search/concord/align result
+  rows carry no source_slug today); documented in display.md §1a, and
+  matching-independence pinned across reading/diplomatic regardless.
+
+Tests +27 (display_test +22: per-shelf before/after real-byte pins,
+diplomatic byte-identity, qere qere/ketiv/both, config validation,
+shipped-config pin; cli_test +5 e2e: reading qere + footer, diplomatic
+hint-free byte-identity, sblgnt sigla, default-mode silence, document
+listing qere; +2 modes on the search-independence pin). Suite 3,448 runs
+/ 45,834 assertions exit 0 (0 skips) · lint 428 files exit 0.

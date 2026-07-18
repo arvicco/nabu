@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 require_relative "define"
 require_relative "range"
 
@@ -40,15 +42,21 @@ module Nabu
       # A passage in the context of its document + source, with the effective
       # license class (override coalesced over source class), its full
       # provenance trail, and the document's date/place axis (nil when undated).
+      # +annotations+ (P27-1): the stored annotations_json parsed back — the
+      # display layer's edition context (ketiv/qere word hashes ride there).
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
-        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis
+        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis,
+        :annotations
       ) do
-        def initialize(axis: nil, **) = super
+        def initialize(axis: nil, annotations: {}, **) = super
       end
 
-      # One line of a document listing: a passage's urn and text, in sequence.
-      PassageLine = Data.define(:urn, :text, :withdrawn)
+      # One line of a document listing: a passage's urn and text, in sequence
+      # (+annotations+ for the display layer's edition context, P27-1).
+      PassageLine = Data.define(:urn, :text, :withdrawn, :annotations) do
+        def initialize(annotations: {}, **) = super
+      end
 
       # One facet fact (P17-2): "genre" => "epitaph", raw "titsep?" — shown
       # by `show` in one compact line under the document header.
@@ -136,11 +144,8 @@ module Nabu
           .where(document_id: slice.document_id)
           .where(sequence: slice.start_seq..slice.end_seq)
           .order(:sequence)
-          .select(:urn, :text, :withdrawn)
-          .map do |r|
-            PassageLine.new(urn: r.fetch(:urn), text: r.fetch(:text),
-                            withdrawn: truthy?(r.fetch(:withdrawn)))
-          end
+          .select(:urn, :text, :withdrawn, :annotations_json)
+          .map { |r| passage_line(r) }
       end
 
       def passage(urn)
@@ -174,7 +179,8 @@ module Nabu
           document_urn: row.fetch(:document_urn), document_title: row.fetch(:document_title),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           provenance: provenance_events(row.fetch(:passage_id)),
-          axis: axis_for(row.fetch(:document_id))
+          axis: axis_for(row.fetch(:document_id)),
+          annotations: parse_annotations(row)
         )
       end
 
@@ -236,11 +242,20 @@ module Nabu
         @catalog[:passages]
           .where(document_id: document_id)
           .order(:sequence)
-          .select(:urn, :text, :withdrawn)
-          .map do |r|
-            PassageLine.new(urn: r.fetch(:urn), text: r.fetch(:text),
-                            withdrawn: truthy?(r.fetch(:withdrawn)))
-          end
+          .select(:urn, :text, :withdrawn, :annotations_json)
+          .map { |r| passage_line(r) }
+      end
+
+      def passage_line(row)
+        PassageLine.new(urn: row.fetch(:urn), text: row.fetch(:text),
+                        withdrawn: truthy?(row.fetch(:withdrawn)),
+                        annotations: parse_annotations(row))
+      end
+
+      # The stored canonical JSON back to a Hash ("{}" default at load time —
+      # rows never carry NULL/malformed annotations).
+      def parse_annotations(row)
+        JSON.parse(row.fetch(:annotations_json) || "{}")
       end
 
       # Effective license class: document override wins over source class (P1-3).
@@ -260,6 +275,7 @@ module Nabu
           Sequel[:passages][:revision],
           Sequel[:passages][:withdrawn],
           Sequel[:passages][:text],
+          Sequel[:passages][:annotations_json],
           Sequel[:documents][:urn].as(:document_urn),
           Sequel[:documents][:title].as(:document_title),
           Sequel[:sources][:slug].as(:source_slug),

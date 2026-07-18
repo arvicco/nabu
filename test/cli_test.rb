@@ -3565,7 +3565,7 @@ class CLITest < Minitest::Test
   # transforms.
   def test_search_hits_are_identical_under_every_display_mode
     with_hebrew_corpus do |config|
-      outs = %w[default full plain].to_h do |mode|
+      outs = %w[default full plain reading diplomatic].to_h do |mode|
         out, _err, status = with_config(config) { run_cli(["search", "אלהים", "--display", mode]) }
         assert_nil status, "search must succeed under --display #{mode}"
         [mode, out]
@@ -3573,6 +3573,8 @@ class CLITest < Minitest::Test
       urns = outs.transform_values { |out| out.lines.grep(/urn:/).map { |l| l[/urn:\S+/] } }
       assert_equal urns["full"], urns["default"]
       assert_equal urns["full"], urns["plain"]
+      assert_equal urns["full"], urns["reading"], "edition transforms never change matching (P27-1)"
+      assert_equal urns["full"], urns["diplomatic"]
       assert_includes urns["full"].join, "urn:nabu:oshb:gen:1.1"
       assert_includes outs["default"], RLI, "hbo snippets are isolate-wrapped in default mode"
       refute_includes outs["full"], RLI
@@ -3592,6 +3594,64 @@ class CLITest < Minitest::Test
       assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, visible.index("אֱלֹהִים"),
                    "keyword column = width, counted over visible characters"
       assert_includes out, "display: cantillation stripped · rtl isolates (--display full shows all marks)"
+    end
+  end
+
+  # -- edition-level display (P27-1) ---------------------------------------
+
+  # SBLGNT 3John 1:4 exactly as SblgntParser stores it: the upstream ⸀
+  # apparatus sigla ride the verse bytes verbatim.
+  SBLGNT_3JOHN_1_4 = "μειζοτέραν τούτων οὐκ ἔχω ⸀χαράν, ἵνα ἀκούω τὰ ἐμὰ τέκνα ἐν ⸀τῇ ἀληθείᾳ περιπατοῦντα."
+
+  def test_show_display_reading_substitutes_qere_and_hints_the_edition_footer
+    with_edition_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:ruth:1.8 --display reading]) }
+      assert_nil status
+      body = out.delete(RLI + PDI)
+      assert_includes body, "יַעַשׂ", "the qere reading, cantillation stripped by the hbo policy"
+      refute_includes body, "יעשה", "the ketiv must not render under reading mode"
+      assert_equal 1, out.scan("display:").size, "the hint prints exactly once"
+      assert_includes out, "display: cantillation stripped · apparatus simplified: qere · " \
+                           "rtl isolates (--display diplomatic shows the edition marks)"
+    end
+  end
+
+  def test_show_display_diplomatic_is_byte_identical_and_hint_free
+    with_edition_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:ruth:1.8 --display diplomatic]) }
+      assert_nil status
+      assert_includes out, "יעשה", "diplomatic shows the stored ketiv"
+      refute_includes out, RLI, "diplomatic adds no isolates"
+      refute_includes out, "display:", "nothing transformed → no hint (compact rule)"
+    end
+  end
+
+  def test_show_display_reading_strips_sblgnt_sigla_with_the_edition_footer
+    with_edition_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:sblgnt:3john:1.4 --display reading]) }
+      assert_nil status
+      refute_includes out, "⸀", "the apparatus sigla are simplified away"
+      assert_includes out, "μειζοτέραν τούτων οὐκ ἔχω χαράν"
+      assert_includes out, "display: apparatus simplified: sigla (--display diplomatic shows the edition marks)"
+    end
+  end
+
+  def test_show_default_mode_keeps_the_sblgnt_sigla_silently
+    with_edition_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:sblgnt:3john:1.4]) }
+      assert_nil status
+      assert_includes out, SBLGNT_3JOHN_1_4, "edition rules belong to reading mode only"
+      refute_includes out, "display:", "grc has no language policy — silence"
+    end
+  end
+
+  def test_show_document_listing_substitutes_qere_under_reading
+    with_edition_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:ruth --display reading]) }
+      assert_nil status
+      body = out.delete(RLI + PDI)
+      assert_includes body, "יַעַשׂ", "the document listing renders lines through the same edition seam"
+      refute_includes body, "יעשה"
     end
   end
 
@@ -4622,6 +4682,64 @@ class CLITest < Minitest::Test
           content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
+    end
+  end
+
+  # -- edition-level display rig (P27-1) -----------------------------------
+
+  # A catalog carrying REAL edition-apparatus bytes under their registry
+  # slugs: OSHB Ruth (parsed by the shipping adapter from the checked-in
+  # fixture, so the 1:8 ketiv/qere annotations are the full real token
+  # hashes) and the SBLGNT 3John sigla verse. The SHIPPED display.yml sits
+  # beside sources.yml (Config's default display_path).
+  def with_edition_corpus
+    Dir.mktmpdir("nabu-cli-edition") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      FileUtils.cp(File.expand_path("../config/display.yml", __dir__), File.join(root, "display.yml"))
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_edition_corpus(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_edition_corpus(catalog)
+    adapter = Nabu::Adapters::Oshb.new
+    ref = adapter.discover(Nabu::TestSupport.fixtures("oshb")).find { |r| r.id == "urn:nabu:oshb:ruth" }
+    ruth = adapter.parse(ref)
+    seed_edition_document(catalog, slug: "oshb", urn: "urn:nabu:oshb:ruth", title: "Ruth",
+                                   language: ruth.language,
+                                   passages: ruth.passages.map do |p|
+                                     [p.urn, p.language, p.text,
+                                      Nabu::Store::ContentHash.canonical_json(p.annotations)]
+                                   end)
+    seed_edition_document(catalog, slug: "sblgnt", urn: "urn:nabu:sblgnt:3john", title: "ΙΩΑΝΝΟΥ Γ",
+                                   language: "grc",
+                                   passages: [["urn:nabu:sblgnt:3john:1.4", "grc", SBLGNT_3JOHN_1_4, "{}"]])
+  end
+
+  def seed_edition_document(catalog, slug:, urn:, title:, language:, passages:)
+    source_id = catalog[:sources].insert(
+      slug: slug, name: slug, adapter_class: "TestAdapter", license_class: "attribution", enabled: true
+    )
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: title, language: language,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    passages.each_with_index do |(passage_urn, lang, text, annotations_json), sequence|
+      catalog[:passages].insert(
+        document_id: doc_id, urn: passage_urn, sequence: sequence, language: lang,
+        text: text, text_normalized: Nabu::Normalize.search_form(text, language: lang),
+        content_sha256: "x", revision: 1, withdrawn: false, annotations_json: annotations_json
+      )
     end
   end
 
