@@ -3,6 +3,7 @@
 require "uri"
 require "faraday"
 require_relative "normalize"
+require_relative "redirect_follow"
 require_relative "zip_fetch"
 
 module Nabu
@@ -12,11 +13,11 @@ module Nabu
   # gateway as if the owner had it locally, and the staging dir dissolves.
   # Its jobs are the ones a one-shot acquisition needs:
   #
-  # - redirect honesty: a bounded manual follow loop over 301/302/303/307/308
-  #   (MAX_REDIRECTS hops; no redirect middleware exists in the codebase and
-  #   the dependency budget stays shut, so the loop is hand-rolled).
-  #   archive.org 302s every download to a mirror node — the motivating
-  #   case. A relative Location resolves against the current url (URI.join).
+  # - redirect honesty: the bounded follow loop over 301/302/303/307/308
+  #   (MAX_REDIRECTS hops) born here, now the shared Nabu::RedirectFollow
+  #   (ZipFetch/FileFetch ride it too since the 2026-07-18 figshare 302
+  #   incident). archive.org 302s every download to a mirror node — the
+  #   motivating case. A relative Location resolves against the current url.
   # - filename derivation: a Content-Disposition filename= (sanitized —
   #   quotes stripped, any path components dropped) wins; otherwise the
   #   percent-decoded basename of the FINAL url's path; an empty or
@@ -34,10 +35,10 @@ module Nabu
 
     # What counts as a download argument to `nabu ingest`.
     URL_PATTERN = %r{\Ahttps?://}i
-    # Statuses followed; anything else non-200 is terminal.
-    REDIRECT_STATUSES = [301, 302, 303, 307, 308].freeze
-    # Hop cap — beyond this the chain is honestly a loop.
-    MAX_REDIRECTS = 5
+    # The follow doctrine lives in RedirectFollow now; the names stay
+    # readable from here.
+    REDIRECT_STATUSES = RedirectFollow::REDIRECT_STATUSES
+    MAX_REDIRECTS = RedirectFollow::MAX_REDIRECTS
 
     def self.url?(value)
       value.to_s.match?(URL_PATTERN)
@@ -50,38 +51,13 @@ module Nabu
     # GET +url+ (redirects followed), write the body binary into +dir+ under
     # the derived collision-safe name, return the absolute path.
     def fetch(url, dir:)
-      response, final_url = follow(url)
+      response, final_url = RedirectFollow.get(url, http: @http, error: Error)
       path = unique_path(dir, filename_for(response, final_url, url))
       File.binwrite(path, response.body.to_s.b)
       path
     end
 
     private
-
-    # The bounded follow loop: returns [terminal 200 response, its url].
-    def follow(url)
-      current = url
-      hops = 0
-      loop do
-        response = get(current)
-        return [response, current] if response.status == 200
-        raise Error, "HTTP #{response.status} for #{current}" unless REDIRECT_STATUSES.include?(response.status)
-
-        hops += 1
-        raise Error, "too many redirects (more than #{MAX_REDIRECTS} hops) for #{url}" if hops > MAX_REDIRECTS
-
-        location = response.headers["location"].to_s
-        raise Error, "HTTP #{response.status} redirect without a Location header for #{current}" if location.empty?
-
-        current = URI.join(current, location).to_s
-      end
-    end
-
-    def get(url)
-      @http.get(url)
-    rescue Faraday::Error => e
-      raise Error, "transport error for #{url}: #{e.message}"
-    end
 
     # -- filename derivation ---------------------------------------------------
 

@@ -13,6 +13,7 @@ require "test_helper"
 # attic case. No network: WebMock stubs throughout.
 class FileFetchTest < Minitest::Test
   URL = "https://example.org/repository/3009.xml"
+  MIRROR = "https://bitstream.mirror.example.net/content/3009.xml"
   LAST_MODIFIED = "Fri, 19 Jul 2019 12:07:26 GMT"
   FILENAME = "3009.xml"
 
@@ -24,6 +25,10 @@ class FileFetchTest < Minitest::Test
 
   def teardown
     FileUtils.remove_entry(@root)
+    # webmock/minitest chains WebMock.reset! via alias_method :teardown — a
+    # custom teardown MUST call super or the request registry accumulates
+    # across tests (silently, until an assert_requested count lies).
+    super
   end
 
   def stub_file(body, last_modified: LAST_MODIFIED)
@@ -144,6 +149,77 @@ class FileFetchTest < Minitest::Test
   def test_transport_failure_raises_file_fetch_error
     stub_request(:get, URL).to_raise(Faraday::ConnectionFailed.new("boom"))
     assert_raises(Nabu::FileFetch::Error) { sync! }
+  end
+
+  # -- redirects (the figshare/DSpace shape: downloads 302 to a mirror) -------
+
+  def test_follows_a_302_to_the_mirror_and_keys_state_off_the_original_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR)
+      .to_return(status: 200, body: "<TEI>mirror</TEI>", headers: { "Last-Modified" => LAST_MODIFIED })
+    result = sync!
+    assert_equal "<TEI>mirror</TEI>", File.read(File.join(@dir, FILENAME))
+    assert_equal Digest::SHA256.hexdigest("<TEI>mirror</TEI>"), result.sha,
+                 "the pin is the sha of the FINAL body"
+    assert_requested :get, MIRROR
+    state = JSON.parse(File.read(File.join(@dir, Nabu::FileFetch::STATE_FILE)))
+    assert_equal URL, state["url"], "state keys off the ORIGINAL url — mirror targets rotate"
+  end
+
+  def test_relative_redirect_location_resolves_against_the_current_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => "../content/3009.xml" })
+    stub_request(:get, "https://example.org/content/3009.xml")
+      .to_return(status: 200, body: "<TEI>relative</TEI>")
+    sync!
+    assert_equal "<TEI>relative</TEI>", File.read(File.join(@dir, FILENAME))
+  end
+
+  def test_redirect_loop_errors_honestly_at_the_hop_cap
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => URL })
+    error = assert_raises(Nabu::FileFetch::Error) { sync! }
+    assert_match(/more than 5 hops/, error.message, "the cap is named")
+    assert_requested :get, URL, times: 6 # the original request + 5 followed hops
+  end
+
+  def test_redirect_without_location_is_an_honest_error
+    stub_request(:get, URL).to_return(status: 302)
+    error = assert_raises(Nabu::FileFetch::Error) { sync! }
+    assert_match(/Location/, error.message)
+  end
+
+  def test_if_modified_since_rides_the_redirect_and_a_mirror_304_means_untouched
+    stub_file("<TEI>alpha</TEI>")
+    first = sync!
+
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = sync!
+
+    assert second.not_modified, "a 304 from the mirror (post-redirect) is honored"
+    assert_equal first.sha, second.sha, "a 304 keeps the previously pinned sha"
+    assert_equal "<TEI>alpha</TEI>", File.read(File.join(@dir, FILENAME))
+  end
+
+  def test_if_modified_since_rides_the_redirect_to_a_changed_mirror_body
+    stub_file("<TEI>alpha</TEI>")
+    sync!
+
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 200, body: "<TEI>beta</TEI>",
+                 headers: { "Last-Modified" => "Sat, 20 Jul 2019 12:07:26 GMT" })
+    result = sync!
+
+    refute result.not_modified
+    assert_equal "<TEI>beta</TEI>", File.read(File.join(@dir, FILENAME))
+    assert_equal Digest::SHA256.hexdigest("<TEI>beta</TEI>"), result.sha
   end
 
   def test_missing_last_modified_means_next_fetch_is_unconditional
