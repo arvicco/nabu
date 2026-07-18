@@ -1,0 +1,1143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>-->
+<!--<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/xsd/tei_all.xsd"?>-->
+<?xml-model href="Coptic_Lemma_Schema-v1.2.xsd"?>
+<TEI xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:svg="http://www.w3.org/2000/svg"
+  xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Comprehensive Coptic Lexicon: Including Loanwords from Ancient Greek</title>
+        <author ref="http://d-nb.info/gnd/1050347110">Burns, Dylan Michael</author>
+        <author ref="http://d-nb.info/gnd/1162448369">Feder, Frank</author>
+        <author>John, Katrin</author>
+        <author>Kupreyev, Maxim </author>
+        <editor>Akademienvorhaben Strukturen und Transformationen des Wortschatzes der ägyptischen
+          Sprache, Berlin-Brandenburgische Akademie der Wissenschaften</editor>
+        <editor>Database and Dictionary of Greek Loanwords in Coptic, Ägyptologisches Seminar, Freie
+          Universität Berlin</editor>
+        <respStmt>
+          <resp>Compilation</resp>
+          <persName>Almond, Mathew</persName>
+          <persName>Becker, Sina</persName>     
+          <persName>Brose, Marc</persName>
+          <persName>Burns, Dylan Michael</persName>
+          <persName>Dahlgren, Sonja</persName>
+          <persName>Delhez, Julien</persName>
+          <persName>Frank, Feder</persName>
+          <persName>Grons, Anne</persName>
+          <persName>Hagen, Joost</persName>
+          <persName>Jung, Mariana</persName>
+          <persName>Koch, Elisabeth</persName>
+          <persName>Krastel, Lena</persName>
+          <persName>Krueger, Frederic</persName>
+          <persName>Kupreyev, Maxim</persName>
+          <persName>Moje, Jan</persName>
+          <persName>Naether, Franziska</persName>
+          <persName>Petersdorff, Janik</persName>
+          <persName>Scharfenberger, Philipp</persName>          
+          <persName>Sörgel, Anne</persName>
+          <persName>Speranskaja, Nina</persName>
+          <persName>Sperveslage, Gunnar</persName>
+          <persName>Walter, Vincent</persName>
+          <persName>Winterberg, Alberto</persName>
+        </respStmt>
+        <respStmt>
+          <resp>Encoding / conversion</resp>
+          <persName>John, Katrin</persName>
+          <persName>Kupreyev, Maxim</persName>
+        </respStmt>
+        <principal ref="http://d-nb.info/gnd/142266140">Richter, Tonio Sebastian</principal>
+        <funder>Akademienprogramm der Union der deutschen Akademien der Wissenschaften</funder>
+        <funder>Deutsche Forschungsgemeinschaft</funder>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1.2"/>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>Akademienvorhaben Strukturen und Transformationen des Wortschatzes der
+          ägyptischen Sprache, Berlin-Brandenburgische Akademie der Wissenschaften</publisher>
+        <publisher>Database and Dictionary of Greek Loanwords in Coptic, Ägyptologisches Seminar,
+          Freie Universität Berlin</publisher>
+        <distributor>Freie Universität Berlin</distributor>
+        <date when="2020-07-16"/>
+        <pubPlace>Berlin</pubPlace>
+        <idno type="edition">v1.2</idno>
+        <idno type="DOI">10.17169/refubium-27566</idno>
+        <availability>
+          <licence target="http://creativecommons.org/licenses/by-sa/4.0/">Licence for this TEI
+            document: Creative Commons, Attribution-ShareAlike 4.0 International (CC BY-SA
+            4.0)</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <listBibl>
+          <head><note/></head>
+          <biblStruct>
+            <monogr>
+              <author>Crum, W.</author>
+              <title>A Coptic Dictionary</title>
+              <imprint>
+                <publisher>Clarendon Press</publisher>
+                <pubPlace>Oxford</pubPlace>
+                <date>1939</date>
+              </imprint>
+            </monogr>
+            <note><abbr>CD</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Černý, J.</author>
+              <title>Coptic Etymological Dictionary</title>
+              <imprint>
+                <publisher>Cambridge Univ. Press</publisher>
+                <pubPlace>Cambridge</pubPlace>
+                <date>1976</date>
+              </imprint>
+            </monogr>
+            <note>
+              <abbr>CED</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Westendorf, W.</author>
+              <title>Koptisches Handwörterbuch</title>
+              <imprint>
+                <publisher>Winter</publisher>
+                <pubPlace>Heidelberg</pubPlace>
+                <date>1965 (1977)</date>
+              </imprint>
+            </monogr>
+            <note><abbr>KoptHWb</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Vycichl, W.</author>
+              <title>Dictionnaire étymologique de la langue copte</title>
+              <imprint>
+                <publisher>Peeters</publisher>
+                <pubPlace>Leuven</pubPlace>
+                <date>1983</date>
+              </imprint>
+            </monogr>
+            <note><abbr>DELC</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Cherix, P. </author>
+              <title>Lexique Copte (dialecte sahidique)</title>
+              <imprint>
+                <publisher>Copticherix</publisher>
+                <pubPlace/>
+                <date>2006-2018</date>
+              </imprint>
+            </monogr>
+            <note><abbr>ChLCS</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Orlandi, T.</author>
+              <title>Koptische Papyri theologischen Inhalts</title>
+              <imprint>
+                <publisher>Hollinek</publisher>
+                <pubPlace>Wien</pubPlace>
+                <date>1974</date>
+              </imprint>
+            </monogr>
+            <series>
+              <title>Mitteilungen aus der Papyrussammlung der Österreichischen Nationalbibliothek
+                (Papyrus Erzherzog Rainer) / Neue Serie</title>
+              <biblScope unit="volume">9</biblScope>
+            </series>
+            <note><abbr>ONB</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Förster, H.</author>
+              <title>Wörterbuch der griechischen Wörter in den koptischen dokumentarischen
+                Texten</title>
+              <imprint>
+                <publisher>de Gruyter</publisher>
+                <pubPlace>Berlin/Boston</pubPlace>
+                <date>2002</date>
+              </imprint>
+            </monogr>
+            <note><abbr>WbGWKDT</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Kasser, R. </author>
+              <title>Compléments au dictionnaire copte de Crum</title>
+              <imprint>
+                <publisher>Inst. Français d'Archéologie Orientale</publisher>
+                <pubPlace>Kairo</pubPlace>
+                <date>1964</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Kasser CDC</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Layton, B.</author>
+              <title>A Coptic grammar: with a chrestomathy and glossary; Sahidic dialect</title>
+              <imprint>
+                <publisher>Harrassowitz</publisher>
+                <pubPlace>Wiesbaden</pubPlace>
+                <date>2000</date>
+              </imprint>
+            </monogr>
+            <note><abbr>LCG</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Till, W.</author>
+              <title>Koptische Dialektgrammatik: mit Lesestücken und Wörterbuch</title>
+              <imprint>
+                <publisher>Beck</publisher>
+                <pubPlace>München</pubPlace>
+                <date>1961</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Till D</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Osing, J.</author>
+              <title>Der spätägyptische Papyrus BM 10808</title>
+              <imprint>
+                <publisher>Harrassowitz</publisher>
+                <pubPlace>Wiesbaden</pubPlace>
+                <date>1976</date>
+              </imprint>
+            </monogr>
+            <note>
+              <abbr>Osing, Pap. Ox.</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Bauer, W.</author>
+              <author>Aland, K. </author>
+              <author>Aland, B. </author>
+              <title>Griechisch-deutsches Wörterbuch zu den Schriften des Neuen Testaments und der
+                frühchristlichen Literatur</title>
+              <imprint>
+                <publisher>de Gruyter</publisher>
+                <pubPlace>Berlin</pubPlace>
+                <date>1988</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Bauer</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Danker, F.W. </author>
+              <author>Bauer, W.</author>
+              <title>A Greek-English Lexicon of the New Testament and other Early Christian
+                Literature</title>
+              <imprint>
+                <publisher>University of Chicago Press</publisher>
+                <pubPlace>Chicago/London</pubPlace>
+                <date>2000</date>
+              </imprint>
+            </monogr>
+            <note><abbr>BDAG</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Daris, S.</author>
+              <title>Il lessico Latino nel Greco d'Egitto</title>
+              <imprint>
+                <publisher>Ediciones Aldecoa</publisher>
+                <pubPlace>Barcelona</pubPlace>
+                <date>1991</date>
+              </imprint>
+            </monogr>
+            <series>
+              <title>Estudis de Papirologia i Filologia Biblica</title>
+              <biblScope unit="volume">2</biblScope>
+            </series>
+            <note><abbr>Daris 1991</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Denniston, J.D.</author>
+              <title>The Greek Particles</title>
+              <imprint>
+                <publisher>Clarendon Press</publisher>
+                <pubPlace>London</pubPlace>
+                <date>1959</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Denniston 1959</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>du Cange, C. F.</author>
+              <title>Glossarium ad scriptores mediae et infimae Graecitatis I-II</title>
+              <imprint>
+                <publisher>Akademische Druck- und Verlagsanstalt</publisher>
+                <pubPlace>Graz</pubPlace>
+                <date>1958</date>
+              </imprint>
+            </monogr>
+            <note><abbr>du Cange</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Hatch, E. </author>
+              <author>Redpath, H.A.</author>
+              <title>A concordance to the Septuagint and the other Greek versions of the Old
+                Testament (including the apocryphal books), Supplement</title>
+              <imprint>
+                <publisher>Akademische Druck- und Verlagsanstalt</publisher>
+                <pubPlace>Graz</pubPlace>
+                <date>1906</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Hatch/Redpath 1906</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Kontopoulos, N.</author>
+              <title>A Lexicon of Modern Greek-English and English-Modern Greek</title>
+              <imprint>
+                <publisher>B. Tatikidos, Trübner and Co.</publisher>
+                <pubPlace>Smyrna/London</pubPlace>
+                <date>1868</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Kontopoulos</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Lampe, G.W.H.</author>
+              <title>A patristic Greek lexicon</title>
+              <imprint>
+                <publisher>Clarendon Press</publisher>
+                <pubPlace>Oxford</pubPlace>
+                <date>1978</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Lampe</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Trapp, E.</author>
+              <title>Lexikon zur byzantinischen Gräzität, besonderes des 9.-12. Jahrhunderts,
+                Philosophisch-historische Klasse, Denkschriften</title>
+              <imprint>
+                <publisher>Österreichische Akademie der Wissenschaften</publisher>
+                <pubPlace>Wien</pubPlace>
+                <date>2001</date>
+              </imprint>
+            </monogr>
+            <series>
+              <title>Veröffentlichungen der Kommission für Byzantinistik</title>
+              <biblScope unit="volume">238; VI/1-4</biblScope>
+            </series>
+            <note><abbr>LBG</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Liddell, H.G.</author>
+              <author>Scott, R. </author>
+              <author>Jones, H.S.</author>
+              <title>A Greek-English lexicon</title>
+              <imprint>
+                <publisher>Clarendon Press</publisher>
+                <pubPlace>Oxford</pubPlace>
+                <date>1968</date>
+              </imprint>
+            </monogr>
+            <note><abbr>LSJ</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Liddell, H.G.</author>
+              <author>Scott, R. </author>
+              <author>Jones, H.S.</author>
+              <title>A Greek-English lexicon/Supplement</title>
+              <imprint>
+                <publisher>Clarendon Press</publisher>
+                <pubPlace>Oxford</pubPlace>
+                <date>1968</date>
+              </imprint>
+            </monogr>
+            <note><abbr>LSJ Suppl.</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Muraoka, T. </author>
+              <title>A Greek-English Lexicon of the Septuagint</title>
+              <imprint>
+                <publisher>Peeters</publisher>
+                <pubPlace>Louvain/Paris/Walpole</pubPlace>
+                <date>2009</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Muraoka 2009</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Passow, F.</author>
+              <author>Rost, V.C.F.</author>
+              <author>Palm, F. </author>
+              <title>Handwörterbuch der griechischen Sprache</title>
+              <imprint>
+                <publisher>Vogel</publisher>
+                <pubPlace>Leipzig</pubPlace>
+                <date>1841</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Passow</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Preisigke, F.</author>
+              <title>Wörterbuch der griechischen Papyrusurkunden mit Einschluß der griechischen
+                Inschriften, Aufschriften, Ostraka, Mumienschilder usw. aus Ägypten</title>
+              <imprint>
+                <publisher>Selbstverlag der Erben</publisher>
+                <pubPlace>Berlin</pubPlace>
+                <date>1925-1931</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Preisigke</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Sophocles, E.A.</author>
+              <title>Greek Lexicon of the Roman and Byzantine Periods (From B. C. 146 to A. D. 1100.
+                Memorial Edition)</title>
+              <imprint>
+                <publisher>Harvard University Press/Harrassowitz</publisher>
+                <pubPlace>Cambridge/Leipzig</pubPlace>
+                <date> 1914</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Sophocles</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Richter, T.S.</author>
+              <title>Neue koptische medizinische Rezepte</title>
+              <imprint>
+                <publisher>de Gruyter</publisher>
+                <pubPlace>Berlin</pubPlace>
+                <date>2014</date>
+              </imprint>
+            </monogr>
+            <series>
+              <title>Zeitschrift für Ägyptische Sprache und Altertumskunde</title>
+              <biblScope unit="volume"> 141(2)</biblScope>
+              <biblScope unit="page">154-194</biblScope>
+            </series>
+            <note><abbr>T. S. Richter 2014b</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Till, W.C.</author>
+              <title>Arzneikunde der Kopten</title>
+              <imprint>
+                <publisher>Akademie Verlag</publisher>
+                <pubPlace>Berlin</pubPlace>
+                <date>1951</date>
+              </imprint>
+            </monogr>
+            <note><abbr>Till 1951a</abbr></note>
+          </biblStruct>
+          <biblStruct>
+            <monogr>
+              <author>Berkowitz, L.</author>
+              <author>Squitier, K.A.</author>
+              <title>Thesaurus Linguae Graecae (Canon of Greek Authors and Works)</title>
+              <imprint>
+                <publisher>Oxford University Press</publisher>
+                <pubPlace>New York/Oxford</pubPlace>
+                <date>1990</date>
+              </imprint>
+            </monogr>
+            <note><abbr>TLG</abbr></note>
+          </biblStruct>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="grc-Grek">Ancient Greek</language>
+        <language ident="grc-Copt">Ancient Greek loanwords in Coptic</language>
+        <language ident="cop-Copt">Coptic</language>
+        <language ident="en">English</language>
+        <language ident="de">German</language>
+        <language ident="fr">French</language>
+      </langUsage>
+      <abstract>
+        <p>TEI XML compliant "Comprehensive Coptic Lexicon" including both original Egyptian-Coptic
+          lemmata and loanwords from ancient Greek. Joint release of the BBAW Academy research
+          project "Strukturen und Transformationen des Wortschatzes der ägyptischen Sprache",
+          Berlin-Brandenburgische Akademie der Wissenschaften, Berlin and the "Database and
+          Dictionary of Greek Loanwords in Coptic (DDGLC)" project, Freie Universität Berlin. </p>
+      </abstract>
+      <textClass>
+        <keywords>
+          <term>Lexicon</term>
+          <term>Coptic</term>
+          <term>Greek</term>
+          <term>loanwords</term>
+          <term>Sahidic</term>
+          <term>1st millennium CE</term>
+        </keywords>
+      </textClass>
+
+    </profileDesc>
+
+    <revisionDesc>
+      <listChange>
+      <listChange  xml:id="v1.2">
+        <change>Unified use of the parenthesis "( )" in word forms (https://github.com/KELLIA/dictionary/wiki/A0:-Project:-Remove-brackets-from-orthographic-variants).</change>
+        <change>Unified the location of the written forms, which are now in "orth" tag only (#85, #109, #83). </change>
+        <change>Assigned dialect information to Sahidic forms, which, perceived as default, did not have dialect explicitly encoded.</change>
+        <change>In line with LEX-0 conventions improved the readability of "sense" element, which now contains a unique ID and a single "cit type="translation"" tag.</change>
+        <change>Adopted XML Schema to allow deprecated forms and entries as well as versioning.</change>
+        <change>Resolved 45 issues, which included correcting the orthographic, grammatical and semantic information of the existing entries. For the full list see https://github.com/KELLIA/dictionary/issues?q=is%3Aissue+is%3Aclosed </change>
+        <change>Created new entries: the 1st person singular (ⲓ, ⲧ), plural (ⲛ) and 3rd person singular (ϥ) pronouns (#105); ⲉ- as conditional (#112); ⲗⲟⲓϭⲉ "a cause", ⲗⲱϭⲉ  "to lie hid" (#116).</change>
+        <change>Unique IDs assigned to all newly created or disambiquated forms and entries.</change>
+        <change>Improved usability of the Graeco-Coptic section due to exclusion or change of a number of  senses</change>
+        <change>Linked Greek head words to Perseus Greek morphology tool via the UI of Coptic Dictionary Online</change>
+        <change>DDGLC lemma IDs are now displayed in entry view of Coptic Dictionary Online.</change>
+        <change>Treated GitHub issues for the Graeco-Coptic section: #125, #121, #84 and #76.</change>
+      </listChange>
+        <listChange xml:id="deprecated">
+          <change>Unification of the use of parenthesis "( )" in Egyptian-Coptic word forms has led to the deprecation of a number of forms. These are marked with the attribute "change" and value "#deprecated"</change>
+          <change>Exclusion or change of a number of senses in Greek-Coptic words has led to the deprecation of a number of forms and entries. These are marked with the attribute "change" and value "#deprecated".</change>
+      </listChange>
+        <listChange xml:id="added">
+          <change>Unification of the use of the parenthesis "( )" in Egyptian-Coptic word forms has led to the creation of a number of new forms. These are marked with the attribute "change" and value "#added"</change>  
+        </listChange>
+      </listChange>
+    </revisionDesc>
+
+  </teiHeader>
+  <text>
+    <body>
+        <superEntry>
+        <entry type="hom" xml:id="C1">
+          <form type="lemma" xml:id="CF1">
+            <usg type="geo">S</usg><orth>ⲁ</orth>
+          </form>
+          <form xml:id="CF2">
+            <usg type="geo">S</usg><orth>ⲁ</orth>
+          </form>
+          <gramGrp>
+            <pos>Zahlzeichen</pos>
+            <note>erster Buchstabe des Alphabeths ⲁⲗⲫⲁ</note>
+          </gramGrp>
+          <sense xml:id="CS1">
+            <cit type="translation"><quote xml:lang="de">Eins</quote>
+            <quote xml:lang="en">one</quote>
+            <quote xml:lang="fr">un</quote>
+            <bibl>CD 1a; CED 1; KoptHWb 1</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="hom" xml:id="C2">
+          <form type="lemma" xml:id="CF3">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF4">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF5">
+            <usg type="geo">B</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF6">
+            <usg type="geo">A</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF7">
+            <usg type="geo">L</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF8">
+            <usg type="geo">F</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF9">
+            <usg type="geo">Ak</usg>
+            <orth>ⲁ-</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status nominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF10">
+            <usg type="geo">S</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF11">
+            <usg type="geo">B</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF12">
+            <usg type="geo">A</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF13">
+            <usg type="geo">L</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF14">
+            <usg type="geo">F</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <form type="inflected" xml:id="CF15">
+            <usg type="geo">Ak</usg>
+            <orth>ⲁ⸗</orth>
+            <gramGrp>
+              <pos>Verbalpräfix</pos>
+              <subc>Status pronominalis</subc>
+            </gramGrp>
+          </form>
+          <gramGrp>
+            <pos>Verbalpräfix</pos>
+            <subc>Perfekt ⲁ-</subc>
+          </gramGrp>
+          <xr type="syn">
+            <ref target="#ⲁϩ(ⲁ)-">Verbalpräfix Perfekt I</ref>
+          </xr>
+          <xr type="syn">
+            <ref target="#ϩⲁ-">Verbalpräfix Perfekt I</ref>
+          </xr>
+          <sense xml:id="CS2">
+            <cit type="translation"><def xml:lang="de">Präfix Perfekt I</def>
+            <def xml:lang="en">verbal prefix perfect I</def>
+            <def xml:lang="fr">préfixe verbal parfait I</def>
+            <bibl>CD 1a; CED 1; KoptHWb 1; DELC 1-2</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="hom" xml:id="C3">
+          <form type="lemma" xml:id="CF16">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF17">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF18">
+            <usg type="geo">B</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF19">
+            <usg type="geo">A</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF20">
+            <usg type="geo">L</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF21">
+            <usg type="geo">F</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF22">
+            <usg type="geo">Ak</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF23">
+            <usg type="geo">A</usg>
+            <orth>ⲉ-</orth>
+          </form>
+          <form xml:id="CF24">
+            <usg type="geo">L</usg>
+            <orth>ⲉ-</orth>
+          </form>
+          <form xml:id="CF25">
+            <usg type="geo">Ak</usg>
+            <orth>ⲉ-</orth>
+          </form>
+          <gramGrp>
+            <pos>Verbalpräfix</pos>
+            <subc>Imperativpräfix ⲁ-</subc>
+          </gramGrp>
+          <sense xml:id="CS3">
+            <cit type="translation"><def xml:lang="de">Präformativ des Imperativs</def>
+            <def xml:lang="en">prefix of imperative</def>
+            <def xml:lang="fr">préfixe de l'impératif</def>
+            <bibl>CD 1a; CED 1; KoptHWb 1; DELC 2-3</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="hom" xml:id="C4">
+          <form type="lemma" xml:id="CF26">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF27">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF28">
+            <usg type="geo">B</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF29">
+            <usg type="geo">A</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF30">
+            <usg type="geo">L</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF31">
+            <usg type="geo">F</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF32">
+            <usg type="geo">B</usg>
+            <orth>ⲁⲩ-</orth>
+          </form>
+          <gramGrp>
+            <pos>Partikel</pos>
+          </gramGrp>
+          <xr type="cf">
+            <ref target="#ⲛⲁ-">ungefähr</ref>
+          </xr>
+          <sense xml:id="CS4">
+            <cit type="translation"><quote xml:lang="de">ungefähr</quote>
+              <def xml:lang="de">unbestimme Angabe</def>
+            <quote xml:lang="en">about</quote>
+              <def xml:lang="en">marking indefinitness</def>
+            <quote xml:lang="fr">approximativement, environ</quote>
+              <def xml:lang="fr">indiquant une approximation</def>
+            <bibl>CD 1ab; CED 1; KoptHWb 1; DELC 3; ChLCS 3a</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="hom" xml:id="C5">
+          <form type="lemma" xml:id="CF33">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF34">
+            <usg type="geo">S</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF35">
+            <usg type="geo">B</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF36">
+            <usg type="geo">L</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <form xml:id="CF37">
+            <usg type="geo">F</usg>
+            <orth>ⲁ-</orth>
+          </form>
+          <gramGrp>
+            <pos>Nominalpräfix</pos>
+            <gen>m.</gen>
+            <subc>zur Bildung von Ortsangaben</subc>
+          </gramGrp>
+          <xr type="cf">
+            <ref target="#ⲁⲛⲍⲏⲃⲉ">Schule</ref>
+            <ref target="#ⲁⲛⲁϩⲱⲣ">Schatzhaus, Speicher</ref>
+          </xr>
+          <sense xml:id="CS5">
+            <cit type="example">
+              <quote>ⲁⲛⲍⲏⲃⲉ</quote>
+              <quote>ⲁⲛⲁϩⲱⲣ</quote>
+            </cit>
+            <cit type="translation"><quote xml:lang="de">Haus, Gebiet, Umgebung</quote>
+            <quote xml:lang="en">house, region, environment</quote>
+            <quote xml:lang="fr">domaine, région, environnement</quote>
+            <bibl>KoptHWb 1</bibl>
+            </cit></sense>
+        </entry>
+      </superEntry>
+        <superEntry>
+        <entry xml:id="C9">
+          <form type="lemma" xml:id="CF47">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲱⲕ</orth>
+          </form>
+          <form xml:id="CF48">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲱⲕ</orth>
+          </form>
+          <form xml:id="CF49">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲟⲕ</orth>
+          </form>
+          <form xml:id="CF50">
+            <usg type="geo">B</usg>
+            <orth>ⲁⲃⲟⲕ</orth>
+          </form>
+          <form xml:id="CF51">
+            <usg type="geo">S</usg>
+            <orth>ⲁϥⲟⲕ</orth>
+          </form>
+          <form type="inflected" xml:id="CF52">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲟⲟⲕⲉ</orth>
+            <gramGrp>
+              <number>pl.</number>
+            </gramGrp>
+          </form>
+          <form xml:id="CF53">
+            <usg type="geo">A</usg>
+            <orth>ⲁⲃⲁⲕⲉ</orth>
+            <gramGrp>
+              <number>pl.</number>
+            </gramGrp>
+          </form>
+          <form xml:id="CF54">
+            <usg type="geo">B</usg>
+            <orth>ⲁⲃⲟⲕⲓ</orth>
+            <gramGrp>
+              <number>pl.</number>
+            </gramGrp>
+          </form>
+          <form xml:id="CF55">
+            <usg type="geo">F</usg>
+            <orth>ⲁⲃⲁⲁⲕⲓ</orth>
+            <gramGrp>
+              <number>pl.</number>
+            </gramGrp>
+          </form>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <gen>m.</gen>
+          </gramGrp>
+          <sense xml:id="CS9">
+            <ref type="Greek">κόραξ, κορώνη</ref>
+            <cit type="translation"><quote xml:lang="de">Rabe, Krähe</quote>
+            <quote xml:lang="en">raven, crow</quote>
+            <quote xml:lang="fr">corbeau, corneille</quote>
+            <bibl>CD 2b; CED 2; KoptHWb 2; DELC 4; ChLCS 3a</bibl>
+            </cit></sense>
+        </entry>
+        <entry xml:id="C10">
+          <form type="lemma" xml:id="CF56">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲟⲕⲉ</orth>
+          </form>
+          <form xml:id="CF57">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲟⲕⲉ</orth>
+          </form>
+          <form xml:id="CF58">
+            <usg type="geo">B</usg>
+            <orth>ⲁⲃⲟⲕⲓ</orth>
+          </form>
+          <form type="inflected" xml:id="CF59">
+            <usg type="geo">S</usg>
+            <orth>ⲁⲃⲟⲟⲕⲉ</orth>
+            <gramGrp>
+              <number>pl.</number>
+            </gramGrp>
+          </form>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <gen>f.</gen>
+          </gramGrp>
+
+          <sense xml:id="CS10">
+            <ref type="Greek">κόραξ, κορώνη</ref>
+            <cit type="translation"><quote xml:lang="de">Rabe, Krähe</quote>
+            <quote xml:lang="en">raven, crow</quote>
+            <quote xml:lang="fr">corbeau, corneille</quote>
+            <bibl>CD 2b; KoptHWb 2; DELC 4; ChLCS 3a</bibl>
+            </cit></sense>
+        </entry>
+      </superEntry>
+        <entry type="foreign" xml:id="C16">
+        <form type="lemma" xml:id="CF71">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲃⲁϭⲏⲉⲓⲛ</orth>
+        </form>
+        <form change="#added #v1.2" corresp="CF75" xml:id="CF31420">
+          <usg type="geo">B</usg>
+          <orth>ⲃⲁϫⲏⲓⲛⲓ</orth>
+        </form>
+        <form change="#added #v1.2" corresp="CF75" xml:id="CF31421">
+          <usg type="geo">B</usg>
+          <orth>ⲃⲁϫⲓⲛⲓ</orth>
+        </form>
+        <form xml:id="CF72">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲃⲁϭⲏⲉⲓⲛ</orth>
+        </form>
+        <form xml:id="CF73">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲃⲁⲕⲏⲓⲛⲉ</orth>
+        </form>
+        <form xml:id="CF74">
+          <usg type="geo">B</usg>
+          <orth>ⲁⲃⲁϫⲏⲓⲛⲓ</orth>
+        </form>
+        <form xml:id="CF75" change="#deprecated #v1.2" corresp="'CF31420', 'CF31421'">
+          <usg type="geo">B</usg>
+          <orth>ⲃⲁϫ(ⲏ)ⲓⲛⲓ</orth>
+        </form>
+        <form xml:id="CF76">
+          <usg type="geo">F</usg>
+          <orth>ⲁⲃⲓϭⲉⲛⲓ</orth>
+        </form>
+        <gramGrp>
+          <pos>Subst.</pos>
+          <gen>f.</gen>
+        </gramGrp>
+        <etym>
+          <note>persisches Lehnwort</note>
+        </etym>
+        <sense xml:id="CS16">
+          <cit type="translation"><quote xml:lang="de">Glas</quote>
+          <quote xml:lang="en">glass</quote>
+          <quote xml:lang="fr">verre</quote>
+          <bibl>CD 3a; CED 3; KoptHWb 2; DELC 4; ChLCS 3a</bibl>
+          </cit></sense>
+      </entry>
+        <entry xml:id="C74">
+        <form type="lemma" xml:id="CF254">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲗⲱⲟⲩⲉ</orth>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <number>pl.</number>
+          </gramGrp>
+        </form>
+        <form xml:id="CF255">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲗⲱⲟⲩⲉ</orth>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <number>pl.</number>
+          </gramGrp>
+        </form>
+        <form xml:id="CF256">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲗⲱⲟⲩ</orth>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <number>pl.</number>
+          </gramGrp>
+        </form>
+        <form xml:id="CF257">
+          <usg type="geo">S</usg>
+          <orth>ⲁⲗⲱⲟⲩⲓ</orth>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <number>pl.</number>
+          </gramGrp>
+        </form>
+        <sense xml:id="CS85">
+          <cit type="translation"><quote xml:lang="de">Bündel, Zweig (von Trauben)</quote>
+          <quote xml:lang="en">bunch (of grapes)</quote>
+          <quote xml:lang="fr">grappes (raisin), bottes, paquets</quote>
+          <bibl>CD 6b; KoptHWb 4, 485; ChLCS 3b</bibl>
+          </cit></sense>
+      </entry>
+        <superEntry>
+        <entry xml:id="C1494">
+          <form type="lemma" xml:id="CF4415"><usg type="geo">S</usg><orth>ⲕⲁϩ</orth></form>
+          <form xml:id="CF4416"><usg type="geo">S</usg><orth>ⲕⲁϩ</orth></form>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <gen>m.</gen>
+          </gramGrp>
+          <sense xml:id="CS1741">
+            <cit type="translation"><quote xml:lang="de">Erde, Boden</quote>
+            <quote xml:lang="en">earth, soil</quote>
+            <quote xml:lang="fr">terre</quote>
+            <bibl>CD 131ab; KoptHWb 73; ChLCS 20a</bibl>
+            </cit></sense>
+          <sense xml:id="CS1742">
+            <cit type="translation"><quote xml:lang="de">Erde, Land</quote>
+            <quote xml:lang="en">earth, land, country</quote>
+            <quote xml:lang="fr">terre, pays</quote>
+            <bibl>CD 131b; KoptHWb 73; ChLCS 20a</bibl>
+            </cit></sense>
+          <sense xml:id="CS1743">
+            <cit type="translation"><quote xml:lang="de">Landmaße</quote>
+            <quote xml:lang="en">measures of land</quote>
+            <quote xml:lang="fr">mesures de terre</quote>
+            <bibl>CD 131b</bibl>
+            </cit></sense>
+        </entry>
+        <entry xml:id="C1495">
+          <form type="lemma" xml:id="CF4417"><usg type="geo">S</usg><orth>ⲕⲁϩ</orth></form>
+          <form xml:id="CF4418"><usg type="geo">S</usg><orth>ⲕⲁϩ</orth></form>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <gen>f.</gen>
+          </gramGrp>
+          <sense xml:id="CS1744">
+            <cit type="translation"><quote xml:lang="de">Bezirk, Provinz</quote>
+            <quote xml:lang="en">district, province</quote>
+            <quote xml:lang="fr">district, province</quote>
+            <bibl>CD 131b; KoptHWb 73; ChLCS 20a</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="compound" xml:id="C1496">
+          <form type="lemma" xml:id="CF4419">
+            <orth>ⲁⲧⲕⲁϩⲓ</orth>
+            <usg type="geo">B</usg>
+          </form>
+          <form xml:id="CF4420">
+            <orth>ⲁⲧⲕⲁϩⲓ</orth>
+            <usg type="geo">B</usg>
+          </form>
+          <gramGrp>
+            <pos>Adj.</pos>
+          </gramGrp>
+          <sense xml:id="CS1745">
+            <cit type="translation"><quote xml:lang="de">bodenlos, ohne Boden</quote>
+            <quote xml:lang="en">without ground</quote>
+            <quote xml:lang="fr">sans fond</quote>
+            <bibl>CD 131b</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="compound" xml:id="C1497">
+          <form type="lemma" xml:id="CF4421">
+            <usg type="geo">S</usg><orth>ⲣⲕⲁϩ</orth>
+          </form>
+          <form xml:id="CF4422">
+            <usg type="geo">S</usg><orth>ⲣⲕⲁϩ</orth>
+          </form>
+          <form xml:id="CF4423">
+            <usg type="geo">S</usg><orth>ⲉⲣⲕⲁϩ</orth>
+          </form>
+          <gramGrp>
+            <pos>Vb.</pos>
+            <subc>Kompositverb</subc>
+          </gramGrp>
+          <xr type="cf">
+            <ref target="#ⲉⲓⲣⲉ">machen, tun</ref>
+          </xr>
+          <sense xml:id="CS1746">
+            <cit type="translation"><quote xml:lang="de">Erde werden, Staub werden</quote>
+            <quote xml:lang="en">become earth, dust</quote>
+            <quote xml:lang="fr">devenir terre, devenir poussière</quote>
+            <bibl>CD 131b</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="compound" xml:id="C1498">
+          <form type="lemma" xml:id="CF4424">
+            <usg type="geo">S</usg><orth>ⲣⲙⲛⲕⲁϩ</orth>
+          </form>
+          <form xml:id="CF4425">
+            <usg type="geo">S</usg><orth>ⲣⲙⲛⲕⲁϩ</orth>
+          </form>
+          <form xml:id="CF4426">
+            <usg type="geo">S</usg><orth>ⲣⲙⲕⲁϩ</orth>
+          </form>
+          <gramGrp>
+            <pos>Subst.</pos>
+          </gramGrp>
+          <xr type="cf">
+            <ref target="#ⲣⲙ(ⲛ)"> man of, from . . . (nominal prefix) </ref>
+          </xr>
+          <sense xml:id="CS1747">
+            <cit type="translation"><quote xml:lang="de">Erdenbewohner, irdischer Mensch</quote>
+            <quote xml:lang="en">man of earth</quote>
+            <quote xml:lang="fr">homme de la terre, terrien</quote>
+            <bibl>CD 131b; KoptHWb 73</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="compound" xml:id="C1499">
+          <form type="lemma" xml:id="CF4427"><usg type="geo">S</usg><orth>ⲟⲩⲁⲙⲕⲁϩ</orth></form>
+          <form xml:id="CF4428"><usg type="geo">S</usg><orth>ⲟⲩⲁⲙⲕⲁϩ</orth></form>
+          <gramGrp>
+            <pos>Subst.</pos>
+            <gen>f.</gen>
+          </gramGrp>
+          <sense xml:id="CS1748">
+            <cit type="translation"><quote xml:lang="de">"Erdesser"</quote>
+              <note xml:lang="de">Erosionsprozess oder -auslöser</note>
+            <quote xml:lang="en">earth-eater</quote>
+              <note xml:lang="en">a corroding process or agent</note>
+            <quote xml:lang="fr">"mangeur de terre"</quote>
+            <bibl>CD 131b</bibl>
+            </cit></sense>
+        </entry>
+        <entry type="compound" xml:id="C1500">
+          <form type="lemma" xml:id="CF4429"><usg type="geo">S</usg><orth>ⲃⲁⲓⲕⲁϩ</orth></form>
+          <form xml:id="CF4430"><usg type="geo">S</usg><orth>ⲃⲁⲓⲕⲁϩ</orth></form>
+          <gramGrp>
+            <pos>Subst.</pos>
+          </gramGrp>
+          <sense xml:id="CS1749">
+            <cit type="translation"><quote xml:lang="de">"Erdträger"</quote>
+              <note xml:lang="de">Gerät oder Werkzeug</note>
+            <quote xml:lang="en">earth-carrier</quote>
+              <note xml:lang="en">utensil or tool</note>
+            <quote xml:lang="fr"> "porteur de terre"</quote>
+            <bibl>CD 131b; KoptHWb 73</bibl>
+            </cit></sense>
+        </entry>
+      </superEntry>
+        <entry xml:id="C11273">
+          <form type="inflected" xml:id="CF1591">
+            <usg type="geo">S</usg>
+            <orth>ⲃⲁⲕ-</orth>
+            <gramGrp>
+              <pos>Adj.</pos>
+              <subc>Participium conjunctum</subc>
+            </gramGrp>
+          </form>
+          <sense xml:id="CS414">
+            <cit type="translation"><quote xml:lang="de">laufend, werfend</quote>
+            <quote xml:lang="en">going, throwing</quote>
+            <quote xml:lang="fr">de course, jetant </quote>
+            <bibl>CD 29a; KoptHWb 22; DELC 27; ChLCS 7b</bibl>
+            </cit></sense>
+        </entry>
+    </body>
+</text>
+</TEI>

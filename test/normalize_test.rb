@@ -222,6 +222,27 @@ class NormalizeTest < Minitest::Test
     assert_equal folded.length, map.length
   end
 
+  def test_egyptological_transliteration_folds_to_ascii
+    # P28-1 (conventions.md §9): the Egyptological alef ꜣ (U+A723) and ain ꜥ
+    # (U+A725) are base letters with NO decomposition — the generic fold
+    # leaves them — and ʾ (U+02BE MODIFIER LETTER RIGHT HALF RING) is Lm,
+    # untouched exactly like the proto superscripts. Census over all 35,052
+    # AED headwords: ꜣ ×12,753 (+Ꜣ ×284), ꜥ ×6,451 (+Ꜥ ×357), ʾ ×1,036 are
+    # the only letters the generic fold cannot reach; every dotted/lined
+    # consonant (ḥ ḫ ẖ š ṯ ḏ ṱ) decomposes and falls to the Mn strip. All
+    # words are real AED fixture headwords.
+    assert_equal "aj.wj", form("ꜣj.wj", "egy")
+    assert_equal "aa", form("ꜥꜣ", "egy")
+    assert_equal "hap-r", form("ḥꜣp-rʾ", "egy"), "ʾ drops entirely — no ASCII typist spells it"
+    assert_equal "abd", form("Ꜣbḏ", "egy"), "downcase maps Ꜣ→ꜣ (U+A722→U+A723) before the rule"
+    assert_equal "hai", form("ḥꜣi̯", "egy"), "the semivowel breve (U+032F) is Mn — generic strip"
+    assert_equal "hw.t-ka", form("ḥw.t-kꜣ", "egy"), "compound punctuation is text, kept"
+    # fold_with_map stays byte-identical to search_form under the 1→0 ʾ drop.
+    folded, map = Nabu::Normalize.fold_with_map("ḥꜣp-rʾ", language: "egy")
+    assert_equal "hap-r", folded
+    assert_equal folded.length, map.length
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end

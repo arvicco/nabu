@@ -350,6 +350,18 @@ module Nabu
       go deeper. `nabu list --long` adds each source's description line to
       the census.
 
+      `nabu list --sources` is the one-page onboarding map: every source on
+      one line (slug — the first sentence of its dossier description, ~100
+      chars, honest ellipsis), grouped under family headers (Greek & Latin ·
+      Biblical & Near Eastern · Slavic · Celtic · Indic & Iranian · Egyptian
+      & Coptic · Germanic & Old English · Reference & dictionaries · Your
+      shelves · Other). Groups are DERIVED from the census languages'
+      family lanes (the language-dossier shelf); an optional owner-curated
+      `group:` front-matter key in a source dossier overrides the
+      derivation. Disabled sources stay visible with an (off) tag; a source
+      without a dossier description shows the honest stub hint. Composes
+      with nothing — it IS the whole-library view.
+
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
         --documents    every document: urn — title [lang] license, urn order,
@@ -367,6 +379,7 @@ module Nabu
 
       Examples:
         nabu list                                # the census, every shelf
+        nabu list --sources                      # the one-page grouped map
         nabu list ccmh                           # one shelf's card
         nabu list local-library --documents      # what did I ingest?
         nabu list local-library --collections    # …and how is it filed?
@@ -383,6 +396,8 @@ module Nabu
                      desc: "Enumerate a dictionary source's entries (headword + gloss)"
     option :collections, type: :boolean, default: false,
                          desc: "Collection → document count for manifest-collection shelves"
+    option :sources, type: :boolean, default: false,
+                     desc: "The one-page grouped map: every source's description under family headers"
     option :limit, type: :numeric, default: Nabu::Query::List::DEFAULT_LIMIT,
                    desc: "Maximum rows per enumeration (default #{Nabu::Query::List::DEFAULT_LIMIT}; 0 = all)"
     option :prefix, type: :string, banner: "STR",
@@ -418,7 +433,9 @@ module Nabu
 
       require_axis!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
-      if slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
+      if options[:sources]
+        print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
+      elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
@@ -1004,26 +1021,30 @@ module Nabu
     long_desc <<~HELP, wrap: false
       Read the links journal (docs/intertext-design.md §7, architecture §15):
       every batch-mined edge touching URN, BOTH directions, grouped by kind
-      (parallel, formula, cognate, reference). Each edge shows its
-      counterpart urn resolved to the document title and language plus its
-      kind's evidence — a parallel's rarity score, a formula's gram and
+      (parallel, formula, cognate, reference, etymology). Each edge shows
+      its counterpart urn resolved to the document title and language plus
+      its kind's evidence — a parallel's rarity score, a formula's gram and
       count (← the hub locus of the refrain's star; `links <hub>` fans out
       every locus), a cognate's meet (ref · root [shelf] — a gem-pro shelf
       under a Slavic witness reads as a borrowing), a reference's asserting
       manifest (P19-4: a local-library article beside the passages it
-      discusses); → means a batch anchor at URN discovered the counterpart,
+      discusses), an etymology's ancestor lemma (P28-3: a Coptic dictionary
+      entry's hieroglyphic/demotic predecessors from the ORAEC crosswalk);
+      → means a batch anchor at URN discovered the counterpart,
       ← means the edge was found from the other end. The footer cites the
       producer run(s) that minted the edges — scope, parameters, and date —
       so every edge is honest about its provenance.
 
       Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
       survive `nabu rebuild` untouched; counterparts re-resolve against the
-      current catalog (passage grain first, document grain second), and one
-      that no longer resolves is flagged "(not in catalog)" rather than
-      hidden. Edges are minted ONLY by batch producers (`parallels --batch
-      SCOPE`, `formulas --batch SCOPE`, `cognates --batch WORK`, and the
-      local-library sync's manifest `related:` refresh); interactive output
-      never persists.
+      current catalog (passage grain first, document grain second,
+      dictionary-entry grain third — an ingested shelf's urn:nabu:dict:
+      urns read "headword — dictionary"), and one that no longer resolves
+      is flagged "(not in catalog)" rather than hidden. Edges are minted
+      ONLY by batch producers (`parallels --batch SCOPE`, `formulas --batch
+      SCOPE`, `cognates --batch WORK`, and the sync-time reference/etymology
+      refreshes of the declaring sources); interactive output never
+      persists.
 
       Compact shows the first few edges per kind; --long lists all. --db
       reads a journal written elsewhere (a scratch batch run).
@@ -2157,6 +2178,12 @@ module Nabu
       # error, never a silently ignored flag.
       def validate_list_flags!(slug)
         modes = %i[documents entries collections].select { |flag| options[flag] }
+        if options[:sources] && (!slug.empty? || modes.any? || options.values_at(
+          "long", "export-source-dossiers", "dry-run", "prefix", "lang", "license",
+          "withdrawn", "from", "to", "century"
+        ).any?)
+          raise Thor::Error, "list: --sources is the one-page grouped map — it composes with nothing"
+        end
         raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
         raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
         if options[:"export-source-dossiers"] && (!slug.empty? || modes.any?)
@@ -2228,6 +2255,40 @@ module Nabu
         entries = rows.sum(&:entries)
         parts << "#{entries} entries" if entries.positive?
         parts.join(" · ")
+      end
+
+      # P28-4: the one-page grouped map (`list --sources`) — family headers,
+      # `slug — first sentence` lines (the dossier description, ~100 chars,
+      # honest ellipsis), (off) tags from the REGISTRY (P23-3b: registry
+      # authoritative for enablement; catalog value only for orphans), one
+      # footer pointing deeper. Descriptions are the payload — no counts.
+      def print_source_map(groups, registry)
+        return say("nothing held yet — run nabu sync") if groups.empty?
+
+        groups.each_with_index do |(group, lines), index|
+          say "" if index.positive?
+          say group
+          lines.each { |line| say "  #{source_map_line(line, registry)}" }
+        end
+        say ""
+        say "nabu list SLUG for the full card · docs/library.md for the survey"
+      end
+
+      def source_map_line(line, registry)
+        entry = registry[line.slug]
+        enabled = entry ? entry.enabled : line.enabled
+        off = enabled ? "" : " (off)"
+        return "#{line.slug}#{off} — no description; nabu ingest --shelf source #{line.slug}" unless line.description
+
+        "#{line.slug}#{off} — #{truncate_line(first_sentence(line.description))}"
+      end
+
+      # The first sentence of a dossier description: up to the first
+      # terminal punctuation followed by whitespace; the whole prose when
+      # it is a single sentence.
+      def first_sentence(text)
+        prose = text.tr("\n", " ").squeeze(" ").strip
+        prose[/\A.*?[.!?](?=\s)/] || prose
       end
 
       def print_list_card(card, entry)
@@ -4188,32 +4249,76 @@ module Nabu
       # streaming (callbacks stay nil) and one plain line per 100 documents.
       def progress_reporter
         tty = $stderr.tty?
+        state = { stage: nil, started: nil, processed: 0, errored: 0, last: 0 }
+        @progress_state = state
         Nabu::ProgressReporter.new(
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
-          on_load_tick: load_tick(tty)
+          on_load_tick: load_tick(tty, state),
+          on_stage: stage_tick(tty, state)
         )
       end
 
-      def load_tick(tty)
-        last = 0
+      # Owner feedback (2026-07-18): a long rebuild must name the source it
+      # is on and how long each stage took. A stage closes when the next one
+      # opens (or at finish_progress), its line ending in final counts +
+      # elapsed; sync paths never call stage, so they keep the bare counter.
+      def stage_tick(tty, state)
+        lambda do |label|
+          close_stage(state)
+          state[:stage] = label
+          state[:started] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+          state[:processed] = state[:errored] = state[:last] = 0
+          $stderr.print("\r\e[K  #{label}… ") if tty
+        end
+      end
+
+      def close_stage(state)
+        return if state[:stage].nil?
+
+        line = "  #{state[:stage]}… #{stage_counts(state)}#{format_elapsed(state)}"
+        $stderr.tty? ? $stderr.print("\r\e[K#{line}\n") : warn(line)
+        state[:stage] = nil
+      end
+
+      # Zero docs is an axis/facet/index stage, not an empty shelf — show
+      # only the timing (compact-output convention: suppress zero fields).
+      def stage_counts(state)
+        return "" if state[:processed].zero? && state[:errored].zero?
+
+        "#{state[:processed]} docs#{quarantine_suffix(state[:errored])} "
+      end
+
+      def format_elapsed(state)
+        secs = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
+        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+      end
+
+      def load_tick(tty, state)
         lambda do |processed, errored|
+          state[:processed] = processed
+          state[:errored] = errored
+          label = state[:stage] || "loading"
           if tty
-            $stderr.print("\r#{loading_line(processed, errored)}  ")
-          elsif processed - last >= 100
-            last = processed
-            warn(loading_line(processed, errored))
+            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}  ")
+          elsif processed - state[:last] >= (state[:stage] ? 1000 : 100)
+            state[:last] = processed
+            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}")
           end
         end
       end
 
-      def loading_line(processed, errored)
-        suffix = errored.positive? ? " (#{errored} quarantined)" : ""
-        "  loading… #{processed} docs#{suffix}"
+      def quarantine_suffix(errored)
+        errored.positive? ? " (#{errored} quarantined)" : ""
       end
 
-      # Break off the \r-updated counter line before the final counts, tty only.
+      # Break off the \r-updated counter line before the final counts —
+      # closing the open stage (with its timing) when there is one.
       def finish_progress
-        $stderr.print("\n") if $stderr.tty?
+        if @progress_state && @progress_state[:stage]
+          close_stage(@progress_state)
+        elsif $stderr.tty?
+          $stderr.print("\n")
+        end
       end
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
@@ -4636,7 +4741,7 @@ module Nabu
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
               "edh #{result.axes.edh}, damaskini #{result.axes.damaskini}, corph #{result.axes.corph}, " \
-              "riig #{result.axes.riig})"
+              "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

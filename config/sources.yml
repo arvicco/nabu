@@ -212,6 +212,19 @@ bosworth-toller:
   # serves the terms without a redirect before enabling):
   # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532
 
+# P28-3: the Coptic dictionary shelf (Comprehensive Coptic Lexicon v1.2,
+# Refubium fub188/27813, CC BY-SA 4.0 in-file) + ORAEC's CC0 egy↔cop
+# crosswalk riding as the second fetched artifact (crosswalk/ subdir; the
+# kind=etymology producer Nabu::CclEtymologies refreshes the links journal
+# after every sync). Both upstreams effectively frozen (2020 deposit;
+# crosswalk last moved 2024-08) → manual.
+ccl:
+  adapter: Nabu::Adapters::Ccl
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
+                   # nabu links urn:nabu:dict:ccl:C1494)
+  sync_policy: manual
+
 ccmh:
   adapter: Nabu::Adapters::Ccmh
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
@@ -681,6 +694,86 @@ diorisis:
   # every real fetch.
   sync_policy: manual
   lemma_tier: silver
+
+tla-hf:
+  adapter: Nabu::Adapters::TlaHf
+  enabled: false   # awaiting the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync tla-hf — two FileFetch GETs, 7,284,199 B
+                   # (demotic, 13,383 sentences) + 1,904,138 B (Late
+                   # Egyptian, 3,606 sentences) ≈ 9.2 MB total; then eyeball
+                   # urn:nabu:tla-hf:demotic-v18:1 --parallel --lang deu,
+                   # a late-egyptian hieroglyphs annotation and 5 random
+                   # passages, check `dated/placed` picks up ~16,279
+                   # passage-grain axis rows at the next rebuild, then flip).
+  # Thesaurus Linguae Aegyptiae — the OFFICIAL Hugging Face org
+  # (huggingface.co/thesaurus-linguae-aegyptiae), CC BY-SA 4.0 verbatim on
+  # both dataset cards → attribution (the cards' citation is the required
+  # attribution; it travels in the adapter manifest). ONE source, two
+  # dataset rows (the starling-BASES configuration pattern):
+  # tla-demotic-v18-premium — the only bulk demotic artifact anywhere —
+  # and tla-late_egyptian-v19-premium (with the Unicode hieroglyph layer).
+  # THE TLA'S FRESHNESS CHANNEL: curated sentence-grain extracts of corpus
+  # v18 (2023) / v19 (2024), published 2024–2025 — versus the frozen 2018
+  # AES snapshot (02-sources row 15); when an AES/AED shelf lands, these
+  # rows share its TLA lemma-ID space (the dictionary join). Passages are
+  # `egy` with the stage as a document facet (stage: demotic /
+  # late-egyptian — the damaskini Norm precedent; the cards' egy-Egyd /
+  # egy-Egyp/Egyh are SCRIPT subtags while the stored surface is Latin
+  # transliteration, so no subtag is honest). Versioned artifacts: a v20
+  # would be a NEW dataset name — re-fetch is an owner decision.
+  sync_policy: manual
+  translations: true
+  # German translation coverage is 100% (translation is a required field,
+  # censused): -de sibling documents ride the same parse,
+  # `show --parallel --lang deu` renders them like the damaskini -en pairs.
+  # Same CC BY-SA grant (same cards) — no license override.
+
+aes:
+  adapter: Nabu::Adapters::Aes
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6): bin/nabu sync aes — a sparse GitFetch of
+                   # github.com/simondschweitzer/aes scoped to files/aes +
+                   # README.md (the ~342 MB JSON cone; the ~114 MB relANNIS
+                   # re-export stays outside the cone). Expect 13,026 docs /
+                   # 101,793 passages (+ 12,985 -de siblings / 100,633
+                   # German passages) and ≈779k gold lemma tokens. Eyeball
+                   # nabu show urn:nabu:aes:tuebingerstelen:3F5KUVWQG5EPBM7GMQ6ZFVO5OQ
+                   # --parallel ger + `nabu search --lemma ẖn.w` + 5 random
+                   # passages, then flip.
+  # AES — Ancient Egyptian Sentences (Schweitzer/TLA-BBAW): 101,796
+  # lemmatized sentences / 13,026 texts / 16 subcorpora (Pyramid Texts,
+  # Book of the Dead, Amarna, Ramesside letters, medical, sawlit …).
+  # License verbatim in the repo README: "All files: CC-BY-SA 4.0" →
+  # attribution. lemma_tier ABSENT = gold: TLA lemmatization is
+  # editor-verified — the Egyptian gold-lemma mint; token lemma_id carries
+  # the AED lemmaID verbatim (P28-1's dictionary joins on it exactly).
+  # FRESHNESS: this repo is the FROZEN January-2018 TLA snapshot while TLA
+  # itself is at corpus v20 — the official TLA Hugging Face datasets are
+  # the freshness channel (P28-2's lane); a re-fetch of this snapshot is an
+  # owner decision, not a schedule.
+  sync_policy: manual
+  # sentence_translation coverage is 98.9% (censused whole at fixture
+  # time): -de German sibling documents ride the same parse, aligned on
+  # sentence ids — `show --parallel ger` renders verse pairs. Same CC BY-SA
+  # grant ("All files") — no license override.
+  translations: true
+aed:
+  adapter: Nabu::Adapters::Aed
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync aed — sparse clone, the
+                   # ~18 MB dictionary cone of a 651 MB repo — then eyeball
+                   # nabu define nfr / define aa / define --lang egy htp
+                   # and 5 random entries before flipping).
+  # P28-1: the Egyptian dictionary shelf — the TLA/BBAW Ägyptische
+  # Wortliste (github.com/simondschweitzer/aed-tei, files/dictionary.xml,
+  # 35,052 entries; CC BY-SA 4.0 verbatim in-file <availability>). New
+  # aed-tei parser family (TEI P5, NOT the PersDict shape). THE JOIN
+  # CONTRACT: entry ids are the upstream xml:ids verbatim — the TLA
+  # lemmaIDs the AES corpus (P28-0) mints as gold lemmas — so
+  # urn:nabu:dict:aed:<lemmaID> is exactly what an AES annotation
+  # predicts. Upstream is a 2019 frozen export with occasional edits:
+  # re-fetch is an owner decision.
+  sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
 #

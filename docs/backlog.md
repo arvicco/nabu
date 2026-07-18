@@ -8897,3 +8897,460 @@ Tests +72 methods (cyrl 17, hebr 8, deva 2, normalize 9, display 19,
 cli 13, search 2, lemma-search 2 — plus reworked folded-key pins across
 8 files). Suite 3,490 runs / 45,970 assertions exit 0 (0 skips) · lint
 432 files exit 0.
+
+# ── Phase 28 ──────────────────────────────────────────────────────────
+
+## P28-4 · `nabu list --sources` — the one-page grouped map of the library  [tier: fable] [status: done 2026-07-18 — mode + derived grouping + docs shipped; verdicts below] [deps: P24-0 (dossier descriptions), P22-1 (Query::List)]
+
+Owner ask (2026-07-18, verbatim): "bin/nabu list --sources that gives a
+one-liner DESCRIPTION of every source - possibly, grouped by
+similarity/language groups? We need to give new user a one-page view of
+what may be relevant for him. Essentially, a short CLI version of
+site/sources."
+
+SHIPPED — the mode:
+- `nabu list --sources`: a fourth list mode beside
+  --documents/--entries/--collections; composes with NOTHING (no SOURCE,
+  no enumeration flag, no --long/--prefix/filters/--export flags — a
+  named guard, first in validate_list_flags!). One line per catalog
+  source under family headers: `slug — <first sentence of the dossier
+  description>` (source_records kind=description, the P24-0 lane),
+  truncated at 100 chars with an honest ellipsis (truncate_line, the
+  --long census's own measure). Undescribed sources render the honest
+  stub hint (`slug — no description; nabu ingest --shelf source SLUG`).
+  Disabled sources stay VISIBLE with an `(off)` tag — a new user should
+  see what exists — enablement read from the REGISTRY (the P23-3b
+  authority ruling; the catalog flag only for registry orphans). One
+  footer line points deeper (`nabu list SLUG for the full card ·
+  docs/library.md for the survey`); NO counts on this view — the census
+  is the numbers surface, descriptions are the payload here.
+
+SHIPPED — grouping, fully derived (zero per-source curation debt):
+1. `group:` front-matter lane in a SOURCE dossier — OWNER-ONLY, wins
+   verbatim (a curated SourceDossier key: parsed/flattened to
+   source_records kind=group/rendered/carried by with_section; the
+   seed exporter, `ingest --shelf source` scaffold, and every other
+   write path NEVER set it — pinned by test; the owner hand-edits the
+   dossier and re-syncs local-source). CONTRACT journaled here: absent
+   = derive; present = wins; unknown labels form their own group.
+2. Local shelves (adapters LocalLanguage/LocalSource/LocalNotes/
+   LocalLibrary — content grains :language/:source/:notes + the
+   library) → "Your shelves".
+3. Otherwise the source's languages (live census passages + dictionary
+   languages) join the language dossiers' family lanes
+   (language_records kind=family; hyphenated codes fall back to their
+   prefix lane — the Languages#family_fallback rule) through a keyword
+   net (Query::List::FAMILY_GROUPS — free-prose lanes like "South
+   Slavic" / "Italic < Indo-European" keyed on family words, the
+   specific ordered before the general so "Egyptian < Afro-Asiatic"
+   never lands in the Semitic net): ONE family → that header; families
+   SPANNED by a dictionary-owning source → "Reference & dictionaries"
+   (single-family dictionaries stay in their family group); spanned on
+   a passage shelf → the DOMINANT language's family (most live
+   passages, ties by code); nothing derivable → honest "Other".
+
+VERDICTS / journal:
+- Header order is a FIXED curated constant (Query::List::GROUP_ORDER):
+  Greek & Latin · Biblical & Near Eastern · Slavic · Celtic · Indic &
+  Iranian · Egyptian & Coptic · Germanic & Old English · Reference &
+  dictionaries · Your shelves · Other — pinned verbatim by test.
+  Derived families the net does not know (e.g. an "Indo-European
+  trunk" lane) mint their own header from the lane's first
+  `<`-segment, trailing parenthetical stripped, and append SORTED
+  before Other; groups with no sources are absent, not empty.
+- Scope verdict: the map enumerates CATALOG sources (the `nabu list`
+  census scope — descriptions and census languages live in the
+  catalog); a registered-but-never-synced source appears at its first
+  sync, exactly like the census.
+- First-sentence heuristic: up to the first terminal punctuation
+  followed by whitespace (whole prose when single-sentence);
+  abbreviation-splitting accepted as the honest cheap rule — the
+  ellipsis and the full card cover the residue.
+- MCP verdict: NO change — nabu_status already serves each source's
+  full dossier description; the grouped render is a human-onboarding
+  surface first (extend serving only when an MCP consumer actually
+  wants groups).
+
+Tests +18: Query::List 10 (curated-order pin, family join, dominant
+language, dictionary span vs single-family, local shelves, override
+wins, unknown-label placement, hyphen fallback, line payload, ordered
+assembly), SourceDossier 3 (group lane parse/flatten/round-trip,
+absent-never-rendered, with_section carry), CLI 5 (grouped render with
+truncation/stub/footer, (off) from the registry, composes-with-nothing
+guards, help anchors). Suite 3,535 runs / 46,169 assertions exit 0 ·
+lint 432 files exit 0.
+
+## P28-2 · TLA official Hugging Face datasets — demotic + late Egyptian  [tier: fable] [status: done 2026-07-18 — adapter + `tla-jsonl` family + passage-grain date axis shipped, `enabled: false` awaiting the owner-fired first sync (~9.2 MB, two GETs); verdicts below] [deps: —]
+
+The TLA's OFFICIAL Hugging Face org (`thesaurus-linguae-aegyptiae`):
+`tla-demotic-v18-premium` (13,383 sentences — the only bulk demotic
+artifact anywhere) + `tla-late_egyptian-v19-premium` (3,606 sentences,
+with hieroglyphs). The FRESHNESS channel (corpus v18 2023 / v19 2024,
+published 2024–2025) vs the frozen 2018 AES snapshot (02-sources row 15).
+
+SHIPPED (2026-07-18):
+- `Nabu::Adapters::TlaHf` + `Nabu::Adapters::TlaJsonlParser` (the
+  `tla-jsonl` family: ONE reader shared by adapter and axis extractor so
+  numbering/date parsing can never drift), registry `tla-hf`
+  `enabled: false`, `sync_policy: manual`, `translations: true`.
+- FETCH: FileFetch ×2 over the plain-HTTPS resolve URLs
+  (`…/resolve/main/train.jsonl` — censused card file layout: README.md +
+  train.jsonl per dataset, nothing else; the CDN 302 rides the shipped
+  RedirectFollow; NO hf CLI, NO new gems), each dataset in its own
+  subdir, the wiktionary-recon two-phase choreography (both prepare →
+  breaker sees the combined doomed set → both complete). Probe :http_zip
+  per resolve URL against the FileFetch state pins. Full artifact sizes
+  for the owner's sync: demotic 7,284,199 B, late Egyptian 1,904,138 B
+  (sha256s in test/fixtures/tla-hf/README.md).
+- ONE-OR-TWO-SOURCES VERDICT: ONE source, two DATASETS rows (the
+  starling-BASES / wiktionary-recon EXTRACTS configuration pattern) —
+  same org, same JSONL shape modulo two optional fields, same license,
+  same fetch machinery; two adapters would duplicate everything but a
+  hash literal.
+- FIELD CENSUS (full artifacts, 2026-07-18): shared `transliteration` /
+  `lemmatization` (`<TLA lemma ID>|<lemma>` pairs — demotic `d`/`dm`
+  prefixed 99,102+18,212 tokens, late bare numeric 24,437; 0 malformed) /
+  `UPOS` / `glossing` / `translation` (German) /
+  `dateNotBefore`+`dateNotAfter` (integer strings or empty); demotic-only
+  `authors`; late-only `hieroglyphs` (Unicode v15 + `<g>JSesh</g>`
+  fallback tags, kept verbatim in annotations). The four token fields
+  split to IDENTICAL counts on every record of both corpora (censused 0
+  misalignments → a mismatch is ParseError damage, never a shrug).
+- IDENTITY VERDICT (journaled): upstream ships NO sentence/text ids —
+  identity is the record's 1-based line number in the sha-pinned
+  canonical file (urn:nabu:tla-hf:demotic-v18:207; the starling
+  file-order precedent). Deterministic while the frozen artifact is
+  unchanged; a changed upstream file is a new fetch and honestly
+  re-mints. Fixture trims renumber accordingly (documented in the
+  fixture README — provenance, not identity).
+- LANGUAGE VERDICT (journaled): passages `egy` (ISO 639-3, both cards'
+  own tag), translations `deu`. The cards' prose "egy-Egyd" /
+  "egy-Egyp, egy-Egyh" are ISO 15924 SCRIPT subtags — and the stored
+  surface is LATIN transliteration, so a script subtag would
+  misdescribe what we hold. STAGE (Demotic / Late Egyptian) rides as a
+  document facet (`stage`) — the damaskini Norm precedent; no invented
+  subtags, journaled here.
+- DATE AXIS: `Store::AxisBuilder::TlaHfDates` — the pre-cooked
+  dateNotBefore/dateNotAfter signed integers (censused: historical
+  years, no year 0, no inverted ranges; demotic -664..475, late
+  -1539..-332) wired at PASSAGE grain (dates vary per sentence — the
+  ChronicleAnnals shape): one document envelope row + one row per dated
+  record (passage_seq_from/to = sequence), expected 16,281 rows at the
+  first live rebuild (12,673 demotic + 3,606 late dated sentences + the
+  2 document envelopes); 710
+  undated demotic records skipped, counted, never guessed. Summary
+  gains tla_hf/tla_hf_undated (defaulted — prior constructions stay
+  valid); the rebuild CLI line prints the new source.
+- LEMMA FLOW: expert-generated lemmatization → gold tier (the P26-0
+  absent-is-gold contract); tokens carry form/lemma_id/lemma/upos/gloss,
+  the lemma transliteration feeds passage_lemmas (e2e-tested), and
+  lemma_id keeps the TLA lemma-ID join open for a future AED/AES shelf.
+- NFC: 118 demotic + 9 late transliterations (and 13 demotic
+  translations) ship decomposed h+U+0331 → NFC ẖ U+1E96 at the adapter
+  boundary (egy is not NFC-exempt); pinned on a byte-verbatim fixture
+  record.
+- -de SIBLINGS: German translations as `-de` sibling documents (the
+  damaskini -en pattern), suffix-aligned; Query::Parallel gains
+  TLA_HF_DOCUMENT (-de tail anchor — no dataset slug ends in "-de",
+  censused, frozen).
+- Tests: conformance + adapter pins (32 runs) + axis extractor (5 runs)
+  incl. idempotent double-load, the gold-lemma e2e, the date-axis pins
+  and the extractor↔adapter mint drift pin. Fixtures byte-verbatim
+  (lines 1/2/306/355 demotic — incl. the first non-NFC and first
+  undated records — and 1/2/782 late), README with verbatim license
+  quotes + full-artifact sha256s + sizes.
+- Docs: 02-sources row 72; registry comments carry the freshness-channel
+  framing.
+
+## P28-0 · AES — the Egyptian corpus and gold-lemma mint  [tier: fable] [status: done 2026-07-18 — adapter + aes-json family + AesDates axis + -de siblings shipped; verdicts below]
+
+The phase headliner: `github.com/simondschweitzer/aes` — the TLA/BBAW
+January-2018 snapshot, 101,796 lemmatized sentences / 13,026 texts / 16
+subcorpus JSON files (~342 MB). License VERBATIM in the repo README:
+"All files: CC-BY-SA 4.0" → `attribution` (quoted in manifest + fixture
+README + 02-sources row 70).
+
+CENSUS VERDICTS (whole-corpus, at pinned commit 35276d25):
+
+- **Grain**: sentences CONTIGUOUS per text in file order in all 16 files;
+  a text never spans subcorpora; sentence ids globally unique;
+  owner/date/findspot constant per text (0 conflicts). Document = the AED
+  TEXT (`urn:nabu:aes:<subcorpus>:<AED-id>`), passage = the sentence on
+  upstream's stable sentence id, sequence = file order.
+- **Language codes**: the JSON carries NO language or stage tags (no such
+  field in schema or data; the snapshot brands itself "Earlier Egyptian"
+  yet spans OK–Roman) → uniform `egy` (ISO 639-2 Egyptian (Ancient)),
+  stage subtags never invented.
+- **Surface**: the Unicode TRANSLITERATION (written_form, space-joined) —
+  the scholarly citation surface, the ORACC-translit precedent.
+  Hieroglyphs (entity-decoded), MdC and Gardiner numbers ride the token
+  annotations. JOURNALED (not wired): a `--display` hieroglyph mode over
+  the token `hiero_unicode` layer — the P27 mode registry makes it a
+  render-only follow-up, no re-parse.
+- **THE TRAP, confirmed live and pinned with real fixture bytes**:
+  `hiero_unicode` is HTML-entity-encoded (`&#x13099;`; all 241,414
+  occurrences hex-numeric, zero literal hieroglyphs, zero entities in any
+  other field) — decoded at the adapter boundary. Second boundary
+  regression: 13,682 written forms carry deprecated U+2329/U+232A angle
+  brackets → NFC-composed to U+3008/3009 by the standard boundary nfc
+  (both pinned on offending bytes).
+- **Token-less sentences**: 3 corpus-wide, never a whole text — no
+  citable Egyptian surface → no original passage (their German still
+  rides the sibling as a one-sided parallel row). Fixtured (the real
+  NS6BAIQRENELJM2A2LDNHIYK6E).
+- **Sibling verdict**: sentence_translation is the editor's German,
+  100,633/101,796 = 98.9% coverage → the translations:true machinery FITS
+  (the Damaskini shape): one `-de` sibling per text with ≥1 translated
+  sentence (12,985 of 13,026), language `ger` (the Freising German tag),
+  passages on the SAME sentence ids; Query::Parallel gained the AES work
+  pattern (text ids are uppercase [A-Z0-9], none ends in "-de" — the
+  literal-tail stance) → `show --parallel ger` renders verse pairs. Same
+  CC BY-SA grant ("All files") — no license override.
+- **Axis coverage**: date takes SIX values corpus-wide ("OK & FIP"
+  ×36,326 / "NK" ×33,177 / "TIP - Roman times" ×16,426 / "MK & SIP"
+  ×14,205 / "unknown" ×1,660 / degenerate "k" ×2 — both bbawarchive,
+  fixtured); findspot 8 coarse regions. AxisBuilder::AesDates maps the
+  four real periods to conventional Egyptological envelopes (Shaw 2000;
+  the corpus's own thesaurus doi 10.5281/zenodo.3581069 defines the
+  vocabulary, no absolute years) — OK&FIP [-2686,-2025], MK&SIP
+  [-2055,-1550], NK [-1550,-1069], TIP-Roman [-1069,395] — place verbatim
+  ("unknown" is not a place); unmapped values counted undated, never
+  guessed. Projected: 12,893 dated + 14 place-only rows, 119 undated.
+  Facets: subcorpus (16) / period (4) / findspot (7).
+- **Fetch**: sparse GitFetch (P26-0 recipe) cone `files/aes` + root
+  `README.md` — sparse IS warranted: the `files/relANNIS/` ANNIS
+  re-export (~114 MB of zips, same data) stays outside the cone.
+  Frozen snapshot (TLA at corpus v20) → sync_policy manual; the official
+  TLA HF datasets are the freshness channel (P28-2's lane).
+
+THE LEMMAID JOIN CONTRACT (P28-1 builds on this): every lemmatized token
+annotation carries `lemma` = lemma_form (the shared treebank contract →
+passage_lemmas, tier GOLD — TLA lemmatization is editor-verified; absent
+from lemma_tiers = gold, the P26-0 contract) AND `lemma_id` = the AED
+lemmaID VERBATIM ("123130" — the TLA lemma space, AED at
+simondschweitzer.github.io/aed). P28-1's AED dictionary mints its entry
+ids from the SAME space, so the join is EXACT STRING EQUALITY
+lemma_id == entry_id — no folding, no transliteration round-trip, no
+homograph heuristics. Token `_id` and `zaehler` deliberately not ingested
+(zaehler = position we already keep; _id joins only the excluded relANNIS
+export).
+
+Projected first sync: 26,011 docs (13,026 texts + 12,985 -de) / 202,426
+passages (101,793 translit + 100,633 German) / ≈779k gold egy lemma
+tokens; ~342 MB cone on disk (git compresses JSON heavily on the wire).
+
+Fixtures: byte-verbatim sentence-block slices of 3 real subcorpora
+(tuebingerstelen: NK + findspot + `&#x13099;` + U+2329; bbawarchive: the
+real "k" text + the token-less sentence; sawlit: an untranslated
+sentence + lemma-less tokens) + aesschema.json whole; upstream commit
+35276d2527cca1a055e31ed5f6683e777717170f pinned in README + manifest
+(root README.md quoted, not fixtured — path collides with the house
+fixture README).
+
+Tests +34 methods (adapter 28 incl. conformance suite, entity-decode +
+NFC-bracket regressions on real bytes, idempotent double-load, the
+lemma-index e2e — LemmaSearch finds both attesting AES passages at tier
+gold — parallel verse-pair pin, sparse local-git fetch; axis 6 incl. the
+frozen-mint drift pin). Suite 3,551 runs / 46,843 assertions exit 0
+(0 skips) · lint 436 files exit 0.
+
+OWNER QUEUE: `bin/nabu sync aes` (sparse ~342 MB cone), eyeball
+`nabu show urn:nabu:aes:tuebingerstelen:3F5KUVWQG5EPBM7GMQ6ZFVO5OQ
+--parallel ger` + `nabu search --lemma ẖn.w` + 5 random passages + the
+axis line (expect aes 12,907 dated/placed), then flip enabled.
+## P28-1 · AED — the Egyptian dictionary shelf (define/etym for egy)  [tier: fable] [status: done 2026-07-18 — awaiting review; verdicts below]
+
+Source: github `aed-tei` (the TLA/BBAW dictionary export),
+`files/dictionary.xml` — 35,052 entries, 18 MB, TEI P5. In-file
+`<availability>` verbatim: "Metadata and texts are released as Creative
+Commons, Attribution-ShareAlike 4.0 (CC BY-SA 4.0)" → `attribution`,
+quoted in the manifest. One authorized clone to scratch; fixture = a
+byte-verbatim 31-entry slice + README (license quote, upstream sha
+`462c722e0323e05641aea2eee8cdf1e27303d939`).
+
+THE JOIN CONTRACT (the packet's point, as implemented): AED entry ids
+are the upstream `xml:id` VERBATIM ("tla550034") — the TLA lemmaIDs the
+AES corpus (P28-0, sibling in flight) mints as gold lemmas — so the
+minted urn
+
+    urn:nabu:dict:aed:<lemmaID>
+
+is exactly what an AES annotation predicts. AES token references spell
+the id in TEI prefix notation ("tla:550034", per the corpus's own
+prefixDef); normalizing that to "tla550034" is the AES side's one
+obligation. Test-pinned END-TO-END through the REAL DictionaryLoader:
+the fixture loads, a hand-made AES-SHAPED lemma reference (honestly
+labeled — P28-0's code is not merged) predicts the urn, and
+Define#by_urn resolves it to the nfr adjective with gloss and license
+intact. `define nfr` fans out the homograph cluster; ReflexViews
+attested counts light when both shelves are live.
+
+SHIPPED:
+- `Nabu::Adapters::AedTeiParser` (new `aed-tei` family — TEI P5 default
+  namespace, NOT the PersDict shape): Nokogiri Reader streaming
+  (18 MB > the 5 MB DOM rule), per-entry strict mini-DOM +
+  remove_namespaces!. Censused over all 35,052 entries: exactly one
+  form/orth, one gramGrp/term, one sense, one bibl each — the parser
+  raises ParseError on missing id/orth, honest to that census.
+- `Nabu::Adapters::Aed`: content_kind :dictionary, slug `aed`, language
+  `egy`, GitFetch with SPARSE CONE ["files/dictionary.xml", "README.md"]
+  (the DCS recipe) — the repo's other ~55,000 files are AES text
+  surfaces (651 MB working tree) that belong to P28-0's own source, not
+  this shelf. Registry `enabled: false`, `sync_policy: manual`.
+- conventions §9 `egy` fold: ꜣ→a (Ꜣ via downcase), ꜥ→a, ʾ (U+02BE, Lm)
+  dropped — census-argued (ꜣ ×12,753, ꜥ ×6,451, ʾ ×1,036 are the ONLY
+  letters the generic fold cannot reach); everything else measured to
+  fall to the generic strip (ḥ ḫ ẖ š ṯ ḏ ṱ decompose; i̯/macron-below
+  are Mn; yod is spelled j upstream — no rule; 〈〉 ×1 stays paste-only).
+  `define nfr`, `define aa` (ꜥꜣ), `define hap-r` (ḥꜣp-rʾ), `aj.wj` all
+  land from ASCII — test-pinned. Journaled: keyed by primary subtag so
+  the two live papyri egy-Egyd Demotic documents refold at the next
+  planned `nabu rebuild` (the §9 rebuild-storm caveat, NOT vacuous this
+  time — flagged, trivial at 2 documents).
+
+VERDICTS (censused from real data, per the packet):
+- Wb page citations → dictionary_citations, the ZRC print-citation
+  shape (the Hebrew-BDB deep-link pattern): label + urn_raw = the bibl
+  segment VERBATIM, cts_work nil (⇒ Define resolves nothing — honest
+  until a Wb local-library scan exists; JOURNALED SYNERGY: when a
+  scanned Wb lands in the local library, `citation` already carries
+  volume.page as the deep-link key). Segment rule /\AWb\s/ per
+  ";"-split segment: 13,369 bibl-initial + 34 mid-bibl = 13,403 minted
+  upstream; the "Wb 3. 293.2-6" dot-after-volume quirk (×32) parses
+  too. Other print references (MedWb, KoptHWb, Meeks, GDG, LGG, FCD…)
+  mint NO rows — they read verbatim in the body's bibl line.
+- Root cross-refs → BODY CROSS-REFERENCE LINES, not reflex rows: the
+  census killed the reflex option honestly — an xr ref is an EMPTY
+  `<ref target="tla…"/>` carrying no surface form and no language, so
+  a DictionaryReflex (word required) cannot be minted without
+  fabrication. All eight censused types land as "type: id, id" lines
+  verbatim (root ×13,470, rootOf ×3,254, partOf ×1,674, contains ×837,
+  referencing ×82, referencedBy ×78, predecessor ×2, successor ×2),
+  and every id resolves through the join contract (`nabu show
+  urn:nabu:dict:aed:<id>`).
+- Gloss lane = GERMAN (the file's complete lane: de on 35,053 cits =
+  100% of entries, TLA's own curated Bedeutung; en covers only 16,971)
+  — one language per shelf beats a mixed en-else-de lane; the English
+  (and the two fr/it oddball) translations ride the body verbatim as
+  their own labeled lines, searchable and rendered by define.
+- Language `egy`: the file's own claims censused — the dictionary
+  header carries no ISO tag (title "Ägyptische Wortliste"; the repo's
+  text files say mainLang="Egyp", a non-ISO local code); `egy` is the
+  ISO 639-2 code for Egyptian (Ancient), the shelf-level tag.
+
+Tests +32 methods (aed-tei parser 17, aed adapter 14 incl. the
+cross-shelf join pin, normalize egy fold 1 with 9 assertions, fixture
+manifest rides the existing sweep). Registry census untouched
+(enabled: false). Suite 3,549 runs / 46,353 assertions exit 0 (0
+skips) · lint 436 files exit 0.
+
+OWNER QUEUE: bin/nabu sync aed (sparse ~18 MB cone), eyeball
+`nabu define nfr` / `define aa` / 5 random entries, flip enabled; next
+`nabu rebuild` refolds the two egy-Egyd papyri documents under the new
+fold.
+## P28-3 · CCL — the Coptic dictionary + the egy↔cop diachronic bridge  [tier: fable] [status: done 2026-07-18 — adapter + `ccl-tei` family + `CclEtymologies` producer + fixtures shipped, `enabled: false` awaiting the owner-fired first sync; verdicts below] [deps: — (sibling contracts honored dangling: P28-1 aed urns, P28-2 demotic corpus)]
+
+Two halves, one goal: the 3,000-year lemma chain (hieroglyphic → demotic
+→ Coptic) as real links-journal edges against the live Coptic
+Scriptorium shelf.
+
+SHIPPED — Half 1, the CCL shelf:
+- Source `ccl` (Comprehensive Coptic Lexicon v1.2, Refubium fub188/27813,
+  11,284 entries, `content_kind :dictionary`, language cop, urns
+  `urn:nabu:dict:ccl:<C-id>`). License verbatim BOTH layers: in-file
+  `<licence>` "Licence for this TEI document: Creative Commons,
+  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"; record page
+  "Creative Commons: Namensnennung, Weitergabe unter gleichen
+  Bedingungen" → `attribution`.
+- SCHEMA VERDICT (censused from the full 12,343,129-byte artifact, never
+  assumed): TEI P5 against the project's own Coptic_Lemma_Schema-v1.2.xsd
+  — NOT PersDict, NOT TEI-Lex0 (`<entry xml:id="C<n>">`, no @key, 5,417
+  body-level + 5,867 nested in 1,181 id-less `<superEntry>` groups;
+  entries never nest in entries, so the Reader yields every entry once,
+  flat). NEW small family `ccl-tei` (streaming Reader — 11.77 MB > the
+  5 MB DOM rule — entry-at-a-time DOM; LexiconTeiParser's PATTERN, not
+  its class). Headword = form[@type="lemma"]/orth; exactly ONE lemma-less
+  entry corpus-wide (C11273) → first-orth fallback, pinned. Glosses
+  multi-language confirmed (en ×15,889 / de ×8,911 / fr ×8,911): gloss =
+  first EN quote, all three languages + dialect sigla (usg[@type="geo"])
+  + gramGrp + etym + xr + print bibls linearized into the body. The
+  bibls are print-dictionary strings (CD/CED/KoptHWb/DELC/ChLCS — zero
+  CTS urns): NO citation rows from the TEI itself.
+- FOLD VERDICT (reuse, never invent — the packet's order): the existing
+  P17-1 `cop` fold (Normalize LANGUAGE_FOLDS: delete ⳿ U+2CFF + generic
+  downcase/mark-strip) is what the Scriptorium shelf already searches;
+  CCL headwords fold through the same `Normalize.search_form` with the
+  LexiconTeiParser fold-key strip of morph `-` and `⸗` U+2E17 (×471
+  orths) first. Orth census: Coptic block + shared-Greek Coptic letters
+  (ϣϥϩϫϭϯϧ), supralinear strokes as combining FE24/FE25/FE26 + 0304/0305
+  (all \p{Mn} → the generic strip handles them); zero orths fold empty.
+- ATTESTED-COUNT VERDICT (census honestly, don't force): the
+  lemmatization spaces JOIN — fixture census 319/418 distinct Scriptorium
+  gold lemmas (76.3%) land on CCL headwords through the shared fold
+  (misses: punctuation lemmas, "unknown", names, Greek loanwords); ⲕⲁϩ →
+  C1494+C1495, pinned end-to-end (a real Encomium-of-Michael gold token
+  lemma → folded lookup → both homograph entries). `define ⲕⲁϩ` ↔
+  `search --lemma ⲕⲁϩ` round-trips by fold symmetry with ZERO new
+  machinery; no attested-count column was forced onto define (CCL entries
+  carry no reflexes — ReflexViews stays reconstruction-shelf machinery).
+- Dictionary-mirror conformance + two-artifact WebMock fetch + loader
+  idempotency + crosswalk-revision test + registry row `enabled: false`,
+  `sync_policy: manual` (frozen 2020 deposit).
+
+SHIPPED — Half 2, the ORAEC crosswalk edges:
+- CENSUS (fetched, counted): **2,177 rows**, not the survey's 2,176 (no
+  header row; recount deviation journaled); all width 3, C-ids unique,
+  1,345 both / 350 hiero-only / 482 demotic-only, 220 NEGATIVE demotic
+  word ids; **every crosswalk C-id exists in CCL v1.2** — the fact the
+  packaging verdict rests on.
+- PACKAGING VERDICT: config of the `ccl` adapter, not its own source —
+  its only content is edges (no catalog grain of its own), and the
+  full-coverage census means entry-riding loses nothing. The CSV is the
+  adapter's SECOND FileFetch artifact (`crosswalk/` subdir, the
+  wiktionary-recon two-phase choreography + two probe targets); at parse
+  each matched entry carries its ancestor ids as DictionaryCitations
+  (cts_work/citation nil — the links journal, not the CTS path, resolves
+  them), content-sha'd so a crosswalk change honestly REVISES the entry
+  (pinned). Missing crosswalk file = citation-less parse (day-one state),
+  entries revise when it lands.
+- EDGE-KIND VERDICT: NEW kind `etymology` (the journal's kind vocabulary
+  is open — intertext-design §7 "{parallel, formula, cognate, …}").
+  kind=reference asserts CITATION (manifests, DIL headwords, RIG
+  concordance); a crosswalk row asserts diachronic DESCENT of one lemma —
+  a different claim that must not blur into the citation render.
+- `Nabu::CclEtymologies` — producer #6 on the P25-0 reference_producer
+  seam (seam unchanged; a pure function of the catalog exactly like
+  CorphDilReferences: reads the urn:nabu:dict:-targeted citation rows of
+  the live entries, reruns supersede, rebuild never touches the journal).
+  Edges: `urn:nabu:dict:ccl:<C-id>` → `urn:nabu:dict:aed:<id>` (the
+  P28-1 sibling's stated contract, ids verbatim — dangling until that
+  shelf merges, the established honest pattern) and →
+  `urn:nabu:dict:tla-demotic:<id>` (ids VERBATIM incl. negatives;
+  DELIBERATE forward edges into a stable external space, the dil.ie
+  doctrine — NO bulk demotic lemma list exists anywhere per
+  egyptian-survey §10 risk 6; thesaurus-linguae-aegyptiae.de/lemma/d<id>
+  resolves every one, verified live incl. d-1427; if a future shelf keys
+  the modern "d<id>" spelling, the prefix is a one-line change + rerun).
+  Expected full-corpus yield 3,522 edges (1,695 aed + 1,827 demotic).
+- CHAIN E2E (fixture-level, real bytes end to end): real adapter + real
+  DictionaryLoader over the trimmed fixtures → producer → Query::Links
+  on `urn:nabu:dict:ccl:C1494` shows BOTH ancestor edges of the
+  survey-verified row (ⲕⲁϩ ← qꜣḥ 159410 ← qh 6439), out-direction,
+  score nil, detail naming the headword.
+- Query::Links grew the DICTIONARY-ENTRY resolution grain (own title +
+  counterpart): an INGESTED shelf's dict urns resolve to "headword —
+  dictionary title" + language + source license class — once the shelf
+  is in the catalog, "(not in catalog)" would be dishonest; NOT-ingested
+  dict urns (edil, aed until P28-1 merges) still render unresolved,
+  honestly. Guarded for pre-shelf catalogs.
+
+Fixtures: trimmed byte-verbatim TEI (full teiHeader incl. the licence +
+17 entries across 6 blocks: the C1–C5 superEntry, C9–C10, C16 foreign,
+C74, the C1494–C1500 ⲕⲁϩ cluster, lemma-less C11273) + 6 line-verbatim
+crosswalk rows (hiero-only / entry-less C6 / dem-only / negative /
+both×2); README carries both license quotes verbatim + full-artifact
+shas; manifest.yml wired for the sentinel.
+
+Tests +36 methods (parser 12, adapter 17, producer 6, links reader +1;
+fixture manifests/sentinel ride the existing sweeps). Suite 3,553 runs /
+46,327 assertions exit 0 (0 skips) · lint 438 files exit 0.

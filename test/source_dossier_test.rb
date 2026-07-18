@@ -74,6 +74,40 @@ class SourceDossierTest < Minitest::Test
     assert dossier.note.unicode_normalized?(:nfc)
   end
 
+  # -- the optional group: lane (P28-4) ------------------------------------
+  # Owner-curated only: `nabu list --sources` derives groups from family
+  # lanes unless a dossier carries group:, which then wins verbatim. The
+  # seed/scaffold paths NEVER write it (absent = nil, never rendered).
+
+  GROUPED = "---\nslug: ccmh\ndescription: OCS gospel codices.\ngroup: Slavic\n---\n"
+
+  def test_group_lane_parses_flattens_and_round_trips
+    dossier = Nabu::SourceDossier.parse(GROUPED, slug: "ccmh")
+    assert_equal "Slavic", dossier.group
+    refute dossier.extras.key?("group"), "group is a curated lane, not an extra"
+    record = dossier.records.find { |r| r.kind == "group" }
+    assert_equal "Slavic", record.body
+    assert_equal Nabu::SourceDossier::CURATED_PROVENANCE, record.provenance
+    reparsed = Nabu::SourceDossier.parse(dossier.render, slug: "ccmh")
+    assert_equal "Slavic", reparsed.group
+    assert_equal dossier.render, reparsed.render, "render must be a fixed point with the group lane"
+  end
+
+  def test_group_absent_is_nil_and_never_rendered
+    dossier = Nabu::SourceDossier.new(slug: "edh", description: "Latin inscriptions.")
+    assert_nil dossier.group
+    refute_match(/^group:/, dossier.render, "the seed/scaffold construction path never writes the owner-only lane")
+    assert_nil(dossier.records.find { |r| r.kind == "group" })
+  end
+
+  def test_with_section_carries_the_group_lane
+    dossier = Nabu::SourceDossier.parse(GROUPED, slug: "ccmh")
+    revised = dossier.with_section(
+      Nabu::SourceDossier::Section.new(kind: "witness:x", provenance: "x", date: "2026-07-18", body: "B.")
+    )
+    assert_equal "Slavic", revised.group
+  end
+
   def test_format_errors_name_the_defect
     error = assert_raises(Nabu::SourceDossier::FormatError) do
       Nabu::SourceDossier.parse("no front matter", slug: "edh")

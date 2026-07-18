@@ -79,8 +79,11 @@ module Nabu
       end
 
       # The queried urn's own display title: its document's title whether the
-      # urn names a passage or a document. :unknown when the catalog holds
-      # neither (distinct from a nil title on a known row).
+      # urn names a passage or a document — or, third grain (P28-3), a
+      # dictionary entry's "headword — dictionary" (the shelf's minted
+      # urn:nabu:dict: urns are edge endpoints since P25-0; once the shelf
+      # is INGESTED, "(not in catalog)" would be dishonest). :unknown when
+      # the catalog holds none (distinct from a nil title on a known row).
       def resolve_own_title(urn)
         passage = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
@@ -89,7 +92,10 @@ module Nabu
         return passage[:title] if passage
 
         document = @catalog[:documents].where(urn: urn).select(:title).first
-        document ? document[:title] : :unknown
+        return document[:title] if document
+
+        entry = dictionary_resolutions([urn])[urn]
+        entry ? entry[:title] : :unknown
       end
 
       # One catalog query resolves every counterpart urn to title/language/
@@ -104,6 +110,8 @@ module Nabu
         rows = passage_resolutions(urns)
         unresolved = urns - rows.keys
         rows = rows.merge(document_resolutions(unresolved)) unless unresolved.empty?
+        unresolved = urns - rows.keys
+        rows = rows.merge(dictionary_resolutions(unresolved)) unless unresolved.empty?
         edges.map { |edge| edge.merge(resolution: rows[counterpart(edge)]) }
              .sort_by { |edge| [-(edge[:score] || 0.0), counterpart(edge)] }
       end
@@ -129,6 +137,31 @@ module Nabu
                   Sequel[:documents][:title].as(:title),
                   license_expr.as(:license_class))
           .to_hash(:urn)
+      end
+
+      # The dictionary-entry grain (P28-3): an INGESTED shelf's
+      # urn:nabu:dict: urns resolve to "headword — dictionary title" with
+      # the shelf's language and its source's license class; urns of
+      # shelves not (yet) ingested — eDIL, the AED/demotic siblings —
+      # still fall through to "(not in catalog)", honestly. Guarded for
+      # pre-shelf catalogs (the read path opens whatever file exists).
+      def dictionary_resolutions(urns)
+        return {} unless @catalog.table_exists?(:dictionary_entries)
+
+        @catalog[:dictionary_entries]
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .join(:sources, id: Sequel[:dictionaries][:source_id])
+          .where(Sequel[:dictionary_entries][:urn] => urns)
+          .select(Sequel[:dictionary_entries][:urn].as(:urn),
+                  Sequel[:dictionary_entries][:headword].as(:headword),
+                  Sequel[:dictionaries][:title].as(:dictionary_title),
+                  Sequel[:dictionaries][:language].as(:language),
+                  Sequel[:sources][:license_class].as(:license_class))
+          .to_hash(:urn)
+          .transform_values do |row|
+            { urn: row[:urn], title: "#{row[:headword]} — #{row[:dictionary_title]}",
+              language: row[:language], license_class: row[:license_class] }
+          end
       end
 
       def counterpart(edge)

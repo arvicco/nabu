@@ -68,6 +68,41 @@ module Nabu
       DossierRow = Data.define(:code, :name, :family)
       EntryRow = Data.define(:headword, :gloss, :dictionary_slug, :language)
 
+      # One line of the grouped source map (`nabu list --sources`, P28-4).
+      # +enabled+ is the CATALOG's flag — the CLI overrides it with the
+      # registry's for registered slugs (P23-3b, registry authoritative).
+      SourceLine = Data.define(:slug, :enabled, :description)
+
+      REFERENCE_GROUP = "Reference & dictionaries"
+      LOCAL_GROUP = "Your shelves"
+      OTHER_GROUP = "Other"
+      # The FIXED curated header order of the map (P28-4, journaled in the
+      # backlog): unknown derived family labels append before Other; groups
+      # with no sources are simply absent.
+      GROUP_ORDER = ["Greek & Latin", "Biblical & Near Eastern", "Slavic", "Celtic",
+                     "Indic & Iranian", "Egyptian & Coptic", "Germanic & Old English",
+                     REFERENCE_GROUP, LOCAL_GROUP, OTHER_GROUP].freeze
+      # Family-lane prose → curated header, FIRST match wins. The lanes are
+      # free prose ("South Slavic", "Italic < Indo-European"), so this is a
+      # keyword net, ordered so the specific fires before the general
+      # (Egyptian before the Semitic net: "Egyptian < Afro-Asiatic" is not
+      # Near Eastern by the Semitic keyword).
+      FAMILY_GROUPS = [
+        [/slavic/i, "Slavic"],
+        [/hellenic|greek|italic|latin/i, "Greek & Latin"],
+        [/celtic|goidelic|brittonic|brythonic|gaulish/i, "Celtic"],
+        # indo-iran covers both spellings in the wild: the dossiers'
+        # "Indo-Iranian" and IE-CoR's clade "Indo-Iranic".
+        [/indo-iran|indo-aryan|\bindic\b|iranian/i, "Indic & Iranian"],
+        [/egyptian|coptic/i, "Egyptian & Coptic"],
+        [/germanic|anglic/i, "Germanic & Old English"],
+        [/semitic|canaanite|aramaic|akkadian|sumerian|hebrew|ugaritic/i, "Biblical & Near Eastern"]
+      ].freeze
+      # The local shelves (architecture §16 content grains :language /
+      # :source / :notes + the library) — always "Your shelves".
+      LOCAL_SHELF_ADAPTERS = %w[Nabu::Adapters::LocalLanguage Nabu::Adapters::LocalSource
+                                Nabu::Adapters::LocalNotes Nabu::Adapters::LocalLibrary].freeze
+
       DEFAULT_LIMIT = 50
       # The language-dossier shelf holds language_records, not documents —
       # detected from the catalog itself (adapter_class), never the registry
@@ -219,7 +254,133 @@ module Nabu
         @catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
       end
 
+      # The grouped source map (`nabu list --sources`, P28-4):
+      # [[group, [SourceLine, …]], …] in GROUP_ORDER (unknown derived labels
+      # before Other), slug order within each group. Grouping is DERIVED —
+      # a dossier's owner-curated `group:` lane (source_records kind=group)
+      # wins; else local shelves read "Your shelves"; else the source's
+      # census+dictionary languages join the language dossiers' family
+      # lanes (hyphenated codes fall back to their prefix lane): one family
+      # → that family's header; several + dictionaries → Reference; several
+      # on a passage shelf → the dominant (most-attested) language's
+      # family; nothing derivable → the honest Other.
+      def source_groups
+        descs = descriptions
+        grouped = Hash.new { |hash, key| hash[key] = [] }
+        @catalog[:sources].order(:slug).select(:id, :slug, :adapter_class, :enabled).all.each do |source|
+          grouped[group_for(source)] << SourceLine.new(slug: source.fetch(:slug),
+                                                       enabled: source.fetch(:enabled),
+                                                       description: descs[source.fetch(:slug)])
+        end
+        group_order(grouped.keys).map { |group| [group, grouped.fetch(group)] }
+      end
+
       private
+
+      # Curated order first, unknown labels (sorted) before Other.
+      def group_order(present)
+        ordered = (GROUP_ORDER - [OTHER_GROUP]).select { |group| present.include?(group) }
+        ordered += (present - GROUP_ORDER).sort
+        ordered << OTHER_GROUP if present.include?(OTHER_GROUP)
+        ordered
+      end
+
+      def group_for(source)
+        override = group_overrides[source.fetch(:slug)]
+        return override if override
+        return LOCAL_GROUP if LOCAL_SHELF_ADAPTERS.include?(source.fetch(:adapter_class))
+
+        id = source.fetch(:id)
+        labels = family_labels(id)
+        return OTHER_GROUP if labels.empty?
+        return labels.first if labels.size == 1
+        return REFERENCE_GROUP if dictionary_source_ids.include?(id)
+
+        dominant_family_label(id) || labels.first
+      end
+
+      # The distinct family labels of every language the source holds
+      # (live passages + dictionary languages), language order.
+      def family_labels(source_id)
+        langs = ((census_languages[source_id] || []) + dictionary_languages(source_id)).uniq.sort
+        langs.filter_map { |code| family_label(code) }.uniq
+      end
+
+      # One code's label: the family lane (hyphenated codes fall back to
+      # their prefix lane — the Languages#family_fallback rule) through the
+      # keyword net; an unmatched lane derives its own label (first
+      # `<`-segment, trailing parenthetical stripped); no lane → nil.
+      def family_label(code)
+        body = family_lanes[code] || family_lanes[code.split("-", 2).first]
+        return nil unless body
+
+        FAMILY_GROUPS.each { |pattern, group| return group if body.match?(pattern) }
+        derived = body.split("<").first.to_s.sub(/\s*\([^)]*\)\s*\z/, "").strip
+        derived.empty? ? nil : derived
+      end
+
+      # Family evidence per code: the owner-curated family lane wins; codes
+      # without one fall back to their iecor accretion's "clade X" phrase
+      # (2026-07-18: only 45 of 199 dossiers carry family lanes, but the
+      # IE-CoR clade names the family for most of the rest — derived
+      # evidence, honestly weaker, used only in the lane's absence).
+      def family_lanes
+        @family_lanes ||= build_family_lanes
+      end
+
+      def build_family_lanes
+        return {} unless @catalog.table_exists?(:language_records)
+
+        lanes = record_lane("family")
+        @catalog[:language_records].where(kind: "iecor").select_map(%i[lang_code body]).each do |code, body|
+          next if lanes.key?(code)
+
+          clade = body[/clade ([A-Za-z-]+)/, 1]
+          lanes[code] = clade if clade
+        end
+        lanes
+      end
+
+      # {slug => group} from the dossiers' owner-curated group: lane.
+      def group_overrides
+        @group_overrides ||= if @catalog.table_exists?(:source_records)
+                               @catalog[:source_records].where(kind: "group").select_hash(:slug, :body)
+                             else
+                               {}
+                             end
+      end
+
+      def dictionary_source_ids
+        @dictionary_source_ids ||= dictionary_shelf? ? @catalog[:dictionaries].distinct.select_map(:source_id) : []
+      end
+
+      # The most-attested live language that HAS a family label; ties break
+      # by code. nil when none carries one. English is a translation layer
+      # on every multilingual shelf (aligned -en siblings can outnumber the
+      # source text — damaskini holds 6,036 eng vs 5,123 bul), so eng only
+      # votes when no other labeled language exists.
+      def dominant_family_label(source_id)
+        counts = language_passage_counts.fetch(source_id, {})
+        labeled = counts.keys.select { |c| family_label(c) }
+        candidates = labeled.reject { |c| c.split("-", 2).first == "eng" }
+        candidates = labeled if candidates.empty?
+        code = candidates.min_by { |c| [-counts.fetch(c), c] }
+        code && family_label(code)
+      end
+
+      def language_passage_counts
+        @language_passage_counts ||= live_passages
+                                     .exclude(Sequel[:passages][:language] => nil)
+                                     .group(Sequel[:documents][:source_id], Sequel[:passages][:language])
+                                     .select(Sequel[:documents][:source_id].as(:source_id),
+                                             Sequel[:passages][:language].as(:language),
+                                             Sequel.function(:count).*.as(:count))
+                                     .all
+                                     .group_by { |row| row.fetch(:source_id) }
+                                     .transform_values do |rows|
+                                       rows.to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+                                     end
+      end
 
       def language_grain?(source)
         source.fetch(:adapter_class) == LANGUAGE_ADAPTER && @catalog.table_exists?(:language_records)
