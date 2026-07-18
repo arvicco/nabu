@@ -2935,6 +2935,16 @@ class CLITest < Minitest::Test
 
   # -- show --parallel (P7-4, span-grouped P8-1b) ----------------------------
 
+  # OSHB Gen 1:1 / TOROT zogr exactly as the parsers store them (P27-0
+  # display pins, exercised end-to-end through the CLI; see display_test.rb).
+  HBO_GEN_1_1 = "בְּרֵאשִׁ֖ית בָּרָ֣א אֱלֹהִ֑ים אֵ֥ת הַשָּׁמַ֖יִם וְאֵ֥ת הָאָֽרֶץ׃"
+  HBO_GEN_1_1_NO_CANT = "בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָֽרֶץ׃"
+  HBO_GEN_1_1_CONSONANTAL = "בראשית ברא אלהים את השמים ואת הארץ׃"
+  CHU_ZOGR = "тъ васъ крьститъ дх҃омь ст҃ъꙇмь ꙇ огн҄емь·"
+  CHU_ZOGR_NO_TITLA = "тъ васъ крьститъ дхомь стъꙇмь ꙇ огн҄емь·"
+  RLI = "⁧"
+  PDI = "⁩"
+
   GRC_URN = "urn:cts:greekLit:tg1.w1.perseus-grc2"
   ENG_URN = "urn:cts:greekLit:tg1.w1.perseus-eng2"
 
@@ -3488,6 +3498,113 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[export --format plain --license bogus]) }
       assert_equal 1, status
       assert_match(/unknown license/i, err)
+    end
+  end
+
+  # -- display policy (P27-0) ----------------------------------------------
+
+  def test_show_default_display_strips_cantillation_and_hints_once
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:gen:1.1]) }
+      assert_nil status
+      assert_includes out, HBO_GEN_1_1_NO_CANT, "cantillation stripped, points kept"
+      refute_includes out, HBO_GEN_1_1, "the marked bytes must not render in default mode"
+      assert_equal 1, out.scan("display:").size, "the hint prints exactly once"
+      assert_includes out, "display: cantillation stripped · rtl isolates (--display full shows all marks)"
+    end
+  end
+
+  def test_show_display_full_is_byte_identical_and_hint_free
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:gen:1.1 --display full]) }
+      assert_nil status
+      assert_includes out, HBO_GEN_1_1, "full mode shows the stored bytes"
+      refute_includes out, RLI, "full mode adds no isolates"
+      refute_includes out, "display:", "nothing transformed → no hint (compact rule)"
+    end
+  end
+
+  def test_show_display_plain_renders_consonantal_hebrew
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:gen:1.1 --display plain]) }
+      assert_nil status
+      assert_includes out, HBO_GEN_1_1_CONSONANTAL
+      assert_includes out, "display:", "plain mode transforms → hint"
+    end
+  end
+
+  def test_show_display_chu_titla_footer_matches_the_house_form
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:torot:zogr:1]) }
+      assert_nil status
+      assert_includes out, CHU_ZOGR_NO_TITLA
+      assert_includes out, "display: titla stripped (--display full shows all marks)"
+      refute_includes out, RLI, "chu has no isolates policy"
+    end
+  end
+
+  def test_show_unknown_display_mode_is_a_named_error
+    with_hebrew_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:gen:1.1 --display sideways]) }
+      assert_equal 1, status
+      assert_match(/sideways/, err)
+      assert_match(/default/, err, "the error names the registered modes")
+    end
+  end
+
+  def test_no_display_hint_when_language_has_no_policy
+    with_parallel_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(["show", "#{GRC_URN}:1"]) }
+      assert_nil status
+      refute_includes out, "display:", "grc has no policy — silence, not a no-op hint"
+    end
+  end
+
+  # The independence pin: --display changes RENDER only. The same query must
+  # return the same hits under every mode, and matching/folding never see the
+  # transforms.
+  def test_search_hits_are_identical_under_every_display_mode
+    with_hebrew_corpus do |config|
+      outs = %w[default full plain].to_h do |mode|
+        out, _err, status = with_config(config) { run_cli(["search", "אלהים", "--display", mode]) }
+        assert_nil status, "search must succeed under --display #{mode}"
+        [mode, out]
+      end
+      urns = outs.transform_values { |out| out.lines.grep(/urn:/).map { |l| l[/urn:\S+/] } }
+      assert_equal urns["full"], urns["default"]
+      assert_equal urns["full"], urns["plain"]
+      assert_includes urns["full"].join, "urn:nabu:oshb:gen:1.1"
+      assert_includes outs["default"], RLI, "hbo snippets are isolate-wrapped in default mode"
+      refute_includes outs["full"], RLI
+    end
+  end
+
+  # KWIC width pin: the keyword column must sit at exactly --width visible
+  # characters — isolates excluded from the math, and the stripped (shorter)
+  # left context re-padded so columns still line up.
+  def test_concord_keyword_column_ignores_isolates_and_stripped_marks
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord אלהים]) }
+      assert_nil status
+      row = out.lines.find { |line| line.include?("urn:nabu:oshb:gen:1.1") }
+      refute_nil row, "the Hebrew verse must appear as a KWIC row"
+      visible = row.delete(RLI + PDI)
+      assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, visible.index("אֱלֹהִים"),
+                   "keyword column = width, counted over visible characters"
+      assert_includes out, "display: cantillation stripped · rtl isolates (--display full shows all marks)"
+    end
+  end
+
+  def test_align_layout_is_identical_apart_from_the_text_transforms
+    with_hebrew_corpus do |config|
+      default_out, _err, status = with_config(config) { run_cli(["align", "GEN", "1.1"]) }
+      assert_nil status
+      full_out, _err2, = with_config(config) { run_cli(["align", "GEN", "1.1", "--display", "full"]) }
+      assert_includes default_out, "#{RLI}#{HBO_GEN_1_1_NO_CANT}#{PDI}"
+      assert_includes full_out, HBO_GEN_1_1
+      structural = ->(out) { out.lines.reject { |l| l.include?("אֱ") || l.include?("display:") } }
+      assert_equal structural.call(full_out), structural.call(default_out),
+                   "every non-Hebrew line (headers, labels, urns) must be unaffected by the transforms"
     end
   end
 
@@ -4441,6 +4558,70 @@ class CLITest < Minitest::Test
         sources_path: File.join(cfg, "sources.yml"), config_path: File.join(cfg, "nabu.yml")
       )
       yield config, target
+    end
+  end
+
+  # -- display policy rig (P27-0) ------------------------------------------
+
+  # A built + indexed corpus of one hbo document (OSHB verses) and one eng
+  # sibling, with the SHIPPED config/display.yml copied beside sources.yml
+  # (Config's default display_path) and a two-witness alignment registry so
+  # show/search/concord/align all run under real display policies.
+  def with_hebrew_corpus
+    Dir.mktmpdir("nabu-cli-display") do |root|
+      registry_yaml = <<~YAML
+        genesis:
+          title: "Genesis"
+          witnesses:
+            - label: oshb
+              extractor: cts-verse
+              documents:
+                GEN: urn:nabu:oshb:gen
+            - label: web
+              extractor: cts-verse
+              documents:
+                GEN: urn:nabu:eng-web:gen
+      YAML
+      alignments = File.join(root, "alignments.yml")
+      File.write(alignments, registry_yaml)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      FileUtils.cp(File.expand_path("../config/display.yml", __dir__), File.join(root, "display.yml"))
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_hebrew_corpus(catalog)
+      index_aligned_corpus(config, catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_hebrew_corpus(catalog)
+    source_id = catalog[:sources].insert(
+      slug: "oshb", name: "OSHB", adapter_class: "TestAdapter", license_class: "attribution",
+      enabled: true
+    )
+    [["urn:nabu:oshb:gen", "Genesis", "hbo", [["1.1", HBO_GEN_1_1]]],
+     ["urn:nabu:eng-web:gen", "Genesis (WEB)", "eng",
+      [["1.1", "In the beginning, God created the heavens and the earth."]]],
+     ["urn:nabu:torot:zogr", "Zographensis", "chu", [["1", CHU_ZOGR]]]].each do |doc_urn, title, lang, passages|
+      doc_id = catalog[:documents].insert(
+        source_id: source_id, urn: doc_urn, title: title, language: lang,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      passages.each_with_index do |(tail, text), sequence|
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: sequence, language: lang,
+          text: text, text_normalized: Nabu::Normalize.search_form(text, language: lang),
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
     end
   end
 

@@ -1,0 +1,19 @@
+# Display-time mark policies (P27-0; docs/display.md) — how passage text is
+# dressed for the TERMINAL, per language. Render-only: the canonical store,
+# the search index, and MCP output never pass through these; `--display full`
+# shows the stored bytes, and any applied transform is announced in a footer.
+#
+# Keys per language (primary subtag):
+#   strip:    mark classes removed in the default display mode
+#   keep:     classes kept by default but stripped by `--display plain`
+#   isolates: wrap rendered runs in U+2067/U+2069 (RTL isolate) — harmless
+#             where bidi is absent, correct where present
+#
+# Mark classes are named codepoint sets defined in Nabu::Display::MARK_CLASSES
+# (cantillation, points, maqaf, vedic-accents, titla, monotonic). `monotonic`
+# (grc) is definable here but deliberately not defaulted.
+languages:
+  hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
+  arc: { strip: [cantillation], isolates: true }
+  san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
+  chu: { strip: [titla] }

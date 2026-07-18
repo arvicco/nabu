@@ -479,6 +479,22 @@ module MCP
       assert_equal @grc.urn, body.fetch("document_urn")
     end
 
+    # P27-0 pin: the display layer (config/display.yml, --display modes) is a
+    # CLI-render concern only. MCP text is ALWAYS pristine — an hbo passage
+    # comes back byte-identical, cantillation and all, no isolates — whatever
+    # the repo's display config says.
+    def test_show_serves_pristine_bytes_untouched_by_display_policy
+      verse = "בְּרֵאשִׁ֖ית בָּרָ֣א אֱלֹהִ֑ים אֵ֥ת הַשָּׁמַ֖יִם וְאֵ֥ת הָאָֽרֶץ׃"
+      hbo = make_document(urn: "urn:nabu:oshb:gen", title: "Genesis", language: "hbo")
+      make_passage(hbo, urn: "#{hbo.urn}:1.1", text: verse, sequence: 0, language: "hbo")
+      rebuild!
+      assert File.exist?(File.join(Nabu::Config::PROJECT_ROOT, "config", "display.yml")),
+             "the pin is only honest while a display policy is actually shipped"
+      body = payload(call("nabu_show", { "urn" => "#{hbo.urn}:1.1" }))
+      assert_equal verse, body.fetch("text"), "MCP text must be the stored bytes, never display-stripped"
+      refute_includes body.fetch("text"), "⁧", "no RTL isolates on the MCP surface"
+    end
+
     def test_show_document_lists_passages_each_with_license_fields
       seed_corpus
       body = payload(call("nabu_show", { "urn" => @grc.urn }))

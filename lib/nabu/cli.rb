@@ -2,6 +2,7 @@
 
 require "thor"
 require_relative "version"
+require_relative "display"
 
 module Nabu
   # Command-line entry point. Only `version` is functional in Phase 0; the
@@ -12,6 +13,17 @@ module Nabu
     # surface a clean stderr message and a non-zero exit status.
     def self.exit_on_failure?
       true
+    end
+
+    # The --display flag, shared by every command that renders passage text to
+    # the terminal (P27-0: show, align, search, concord, parallels, cognates).
+    # Modes come from the Nabu::Display registry so sibling packets can add
+    # modes (reading, translit, mono) without touching this declaration.
+    def self.display_option
+      option :display, type: :string, default: Nabu::Display::DEFAULT_MODE, banner: "MODE",
+                       desc: "Display mode: default (config/display.yml policies), " \
+                             "full (every stored byte, no transforms), plain (strip all " \
+                             "defined mark classes) — see docs/display.md"
     end
 
     desc "version", "Print the Nabu version"
@@ -641,8 +653,10 @@ module Nabu
     option :gold_only, type: :boolean, default: false,
                        desc: "With --lemma: gold (verified) annotations only — exclude silver " \
                              "(automatic) lemmatization"
+    display_option
     def search(query = nil)
       query = query.to_s.strip
+      display_mode
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
          (options[:near] || options[:lemma])
         raise Thor::Error, "search: --from/--to/--century/--place/--type/--province/--material compose " \
@@ -683,6 +697,7 @@ module Nabu
                                                limit: options[:limit].to_i, from: from, to: to, place: place,
                                                facets: facets, source: options[:source])
       print_search_results(results, facets: facets)
+      print_display_footer
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -732,8 +747,10 @@ module Nabu
                    desc: "Context characters per side (default #{Nabu::Query::Concord::DEFAULT_WIDTH})"
     option :lemma, type: :string, banner: "FORM",
                    desc: "Exact-lemma concordance over the gold treebanks (replaces the text query)"
+    display_option
     def concord(query = nil)
       query = query.to_s.strip
+      display_mode
       lemma = options[:lemma]
       if lemma
         raise Thor::Error, "concord: --lemma replaces the text query — give one or the other" unless query.empty?
@@ -759,6 +776,7 @@ module Nabu
                                     license: options[:license], limit: options[:limit].to_i, width: options[:width].to_i
       )
       print_concord_rows(rows)
+      print_display_footer
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -851,8 +869,10 @@ module Nabu
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    display_option
     def parallels(urn = nil)
       urn = urn.to_s.strip
+      display_mode
       validate_license!(options[:license])
       return batch_parallels(urn) if options[:batch]
 
@@ -873,6 +893,7 @@ module Nabu
                                      .run(urn, limit: options[:limit].to_i,
                                                lang: options[:lang], license: options[:license])
       print_parallels(result, urn: urn, long: options[:long])
+      print_display_footer
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -1125,17 +1146,25 @@ module Nabu
                     desc: "With --random: draw only from this source (default: the whole corpus)"
     option :count, type: :numeric, default: 1,
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
+    display_option
     def show(urn = nil)
       urn = urn.to_s.strip
+      display_mode
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      return show_random(catalog, urn) if options[:random]
+      if options[:random]
+        show_random(catalog, urn)
+        return print_display_footer
+      end
       raise Thor::Error, "show: --source requires --random" if options[:source]
       raise Thor::Error, "show: give a urn" if urn.empty?
 
-      return show_parallel(catalog, urn, options[:parallel], config) if options[:parallel]
+      if options[:parallel]
+        show_parallel(catalog, urn, options[:parallel], config)
+        return print_display_footer
+      end
 
       result = Nabu::Query::Show.new(catalog: catalog).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
@@ -1143,6 +1172,7 @@ module Nabu
       print_show(result)
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
+      print_display_footer
     rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
       # A range urn that names two endpoints but can't be honoured (endpoint
       # missing, or reversed), or an unknown --random --source: a clean stderr
@@ -1272,10 +1302,12 @@ module Nabu
                   desc: "Lift the #{Nabu::Query::Align::MAX_REFS}-ref range ceiling and render every ref " \
                         "(compact clips a huge range by default); with --collate, also print each " \
                         "witness's full tokens instead of only its divergences"
+    display_option
     def align(*ref_parts)
       ref = ref_parts.join(" ").strip
       raise Thor::Error, "align: give a citation ref (e.g. MARK 2.3) or a passage urn" if ref.empty?
 
+      display_mode
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -1293,6 +1325,7 @@ module Nabu
                                    .run(ref, work: options[:work], long: options[:long])
         print_align(result)
       end
+      print_display_footer
     rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
       raise Thor::Error, e.message
     ensure
@@ -1621,8 +1654,10 @@ module Nabu
                    desc: "Map the whole WORK once and persist kind=cognate edges to the links journal"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    display_option
     def cognates(*target_parts)
       target = target_parts.join(" ").strip
+      display_mode
       return batch_cognates(target) if options[:batch]
 
       if options[:db]
@@ -1641,6 +1676,7 @@ module Nabu
                                     .run(target, work: options[:work], langs: parse_langs(options[:langs]),
                                                  all: options[:all], long: options[:long])
       print_cognates(result)
+      print_display_footer
     rescue Nabu::Query::Cognates::Error, Nabu::ValidationError => e
       raise Thor::Error, e.message
     ensure
@@ -1911,6 +1947,54 @@ module Nabu
     BATCH_PROGRESS_EVERY = 200
 
     no_commands do
+      # -- display policy (P27-0) ------------------------------------------
+      # Passage text reaches the terminal ONLY through display_text, which
+      # applies the per-language display.yml policy under the --display mode
+      # and records what changed; print_display_footer then hints ONCE per
+      # invocation — never silent alteration, never a hint when nothing
+      # happened. MCP and export never touch this path: pristine text.
+
+      # Resolve --display MODE against the registry; validate before any
+      # output so an unknown mode is a clean named error.
+      def display_mode
+        @display_mode ||= Nabu::Display.mode(options[:display] || Nabu::Display::DEFAULT_MODE)
+      rescue Nabu::Display::UnknownModeError => e
+        raise Thor::Error, e.message
+      end
+
+      def display_policies
+        @display_policies ||= Nabu::Display.load_policies(Nabu::Config.load.display_path)
+      rescue Nabu::Display::ConfigError => e
+        raise Thor::Error, e.message
+      end
+
+      # Render one run of text for the terminal and remember which transforms
+      # actually applied (for the footer hint).
+      def display_text(text, language)
+        rendered = Nabu::Display.render(text.to_s, language: language,
+                                                   mode: display_mode, policies: display_policies)
+        display_applied.merge(rendered.applied)
+        rendered.text
+      end
+
+      def display_applied
+        @display_applied ||= Set.new
+      end
+
+      # The once-per-invocation honesty footer: named only when a transform
+      # actually changed something (compact rule — zero-signal silence).
+      #   display: cantillation stripped (--display full shows all marks)
+      #   display: cantillation stripped · rtl isolates (--display full shows all marks)
+      def print_display_footer
+        return if display_applied.empty?
+
+        strips = display_applied.to_a - [Nabu::Display::ISOLATES]
+        parts = []
+        parts << "#{strips.join(', ')} stripped" unless strips.empty?
+        parts << Nabu::Display::ISOLATES if display_applied.include?(Nabu::Display::ISOLATES)
+        say "display: #{parts.join(' · ')} (--display full shows all marks)"
+      end
+
       # Reject an unknown --license up front (before opening any db) with the
       # closed enum of valid classes, so the user sees the choices. Shared by
       # search and export.
@@ -2300,7 +2384,7 @@ module Nabu
 
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
-        say "  #{passage.text}"
+        say "  #{display_text(passage.text, passage.language)}"
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
@@ -2322,7 +2406,8 @@ module Nabu
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
-          say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+          say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  " \
+              "#{display_text(line.text, document.language)}"
         end
       end
 
@@ -2338,7 +2423,8 @@ module Nabu
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
-          say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  #{line.text}"
+          say "    #{passage_label(range, line)}#{withdrawn_tag(line.withdrawn)}  " \
+              "#{display_text(line.text, range.language)}"
         end
       end
 
@@ -2471,7 +2557,8 @@ module Nabu
           say "    #{parallel_line(result.left.language, line, width)}"
         end
         say "  #{result.right.language} #{block_coverage(group)}"
-        say "    #{group.translation.text}#{withdrawn_tag(group.translation.withdrawn)}"
+        say "    #{display_text(group.translation.text, result.right.language)}" \
+            "#{withdrawn_tag(group.translation.withdrawn)}"
       end
 
       # `[:1.1 — covers :1.1–:1.43; range shows :1.5–:1.10]` — the anchor, the
@@ -2554,7 +2641,7 @@ module Nabu
         when :no_match   then say "    #{witness.label} — not attested"
         else
           witness.sentences.each do |sentence|
-            say "    #{witness.label}  #{sentence.text}" \
+            say "    #{witness.label}  #{display_text(sentence.text, witness.language)}" \
                 "#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
           end
         end
@@ -2581,7 +2668,7 @@ module Nabu
 
         witness.sentences.each do |sentence|
           say "  #{sentence.urn}#{align_native_note(witness, sentence)}#{align_span_note(sentence, ref)}"
-          say "    #{sentence.text}"
+          say "    #{display_text(sentence.text, witness.language)}"
         end
       end
 
@@ -2640,26 +2727,27 @@ module Nabu
       def print_collation_cell(cell, long:)
         base = cell.readings.find(&:is_base)
         say "  [#{cell.language}/#{cell.script}] #{cell.readings.size} witnesses, base #{cell.base_label}"
-        say "    = #{base.label}  #{base.tokens.join(' ')}"
+        say "    = #{base.label}  #{display_text(base.tokens.join(' '), cell.language)}"
         cell.readings.reject(&:is_base).each do |reading|
-          say "      #{reading.label}  #{collation_reading_body(reading, long: long)}"
+          say "      #{reading.label}  #{collation_reading_body(reading, long: long, language: cell.language)}"
         end
       end
 
-      def collation_reading_body(reading, long:)
-        return reading.tokens.join(" ") if long
+      def collation_reading_body(reading, long:, language:)
+        return display_text(reading.tokens.join(" "), language) if long
         return "(agrees with base)" if reading.edits.empty?
 
-        reading.edits.map { |edit| format_collation_edit(edit) }.join("; ")
+        reading.edits.map { |edit| format_collation_edit(edit, language) }.join("; ")
       end
 
       # Apparatus marks: a substitution as "base → variant", an omission as
       # "om. base" (the witness lacks it), an insertion as "add. variant".
-      def format_collation_edit(edit)
+      def format_collation_edit(edit, language)
         case edit.op
-        when :sub then "#{edit.base.join(' ')} → #{edit.witness.join(' ')}"
-        when :del then "om. #{edit.base.join(' ')}"
-        when :ins then "add. #{edit.witness.join(' ')}"
+        when :sub
+          "#{display_text(edit.base.join(' '), language)} → #{display_text(edit.witness.join(' '), language)}"
+        when :del then "om. #{display_text(edit.base.join(' '), language)}"
+        when :ins then "add. #{display_text(edit.witness.join(' '), language)}"
         end
       end
 
@@ -2673,7 +2761,7 @@ module Nabu
                    "not collated — sole witness of its language here"
                  end
         say "  [#{aside.language}/#{aside.script}] #{aside.label}  license: #{aside.license_class}  (#{reason})"
-        say "    #{aside.text}"
+        say "    #{display_text(aside.text, aside.language)}"
       end
 
       def print_collation_missing(missing)
@@ -2719,7 +2807,7 @@ module Nabu
         label = language.to_s.ljust(width)
         return "#{label}—" if line.nil?
 
-        "#{label}#{line.text}#{withdrawn_tag(line.withdrawn)}"
+        "#{label}#{display_text(line.text, language)}#{withdrawn_tag(line.withdrawn)}"
       end
 
       def withdrawn_tag(withdrawn)
@@ -2752,7 +2840,7 @@ module Nabu
 
         results.each do |result|
           say "#{result.urn}#{" [#{result.language}]" if result.language}"
-          say "  #{result.snippet}"
+          say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)#{facet_footer(facets)}"
@@ -2777,7 +2865,7 @@ module Nabu
         else
           results.each do |result|
             say "#{result.urn}#{" [#{result.language}]" if result.language}"
-            say "  #{long ? result.folded_marked : result.snippet}"
+            say "  #{display_text(long ? result.folded_marked : result.snippet, result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets)}"
@@ -2795,14 +2883,31 @@ module Nabu
       def print_concord_rows(rows)
         return say("no matches") if rows.empty?
 
+        width = options[:width].to_i
         rows.each do |row|
           tier = row.tier == "silver" ? " [silver]" : ""
-          say "#{row.left}#{row.keyword}#{row.right}  #{row.urn}#{" [#{row.language}]" if row.language}#{tier}"
+          left, keyword, right = concord_display_pieces(row, width)
+          say "#{left}#{keyword}#{right}  #{row.urn}#{" [#{row.language}]" if row.language}#{tier}"
         end
         footer = "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
         silver = rows.count { |row| row.tier == "silver" }
         footer += " — #{silver} silver (automatic lemmatization)" if silver.positive?
         say footer
+      end
+
+      # Concord's columns were padded by Concord over the PRE-display pieces;
+      # a display transform (stripped marks, isolate wrapping) changes their
+      # lengths, so re-pad here over VISIBLE characters (isolates excluded —
+      # Display.visible_length) to keep the keyword column at exactly +width+.
+      # Combining marks count 1 in the width math either way (the documented
+      # house simplification); stripping them only tightens the columns.
+      def concord_display_pieces(row, width)
+        left = display_text(row.left.sub(/\A +/, ""), row.language)
+        right = display_text(row.right.sub(/ +\z/, ""), row.language)
+        keyword = display_text(row.keyword, row.language)
+        left_pad = [width - Nabu::Display.visible_length(left), 0].max
+        right_pad = [width - Nabu::Display.visible_length(right), 0].max
+        [(" " * left_pad) + left, keyword, right + (" " * right_pad)]
       end
 
       # Render `parallels` (P15-1): the anchor line, then one hit per document —
@@ -2831,8 +2936,10 @@ module Nabu
         grams = "#{hit.shared_gram_count} #{hit.shared_gram_count == 1 ? 'gram' : 'grams'}"
         say "#{hit.urn}#{" [#{hit.language}]" if hit.language}  " \
             "score #{format('%.2f', hit.score)} · #{grams}#{loci}"
-        compact_list(hit.evidence, long: long) { |span| long ? span : truncate_line(span, PARALLELS_SPAN_CHARS) }
-          .each { |line| say "  #{line}" }
+        lines = compact_list(hit.evidence, long: long) do |span|
+          display_text(long ? span : truncate_line(span, PARALLELS_SPAN_CHARS), hit.language)
+        end
+        lines.each { |line| say "  #{line}" }
       end
 
       def print_lemma_echoes(echoes, long:)
@@ -3327,6 +3434,7 @@ module Nabu
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
                                    facets: facets, source: options[:source])
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets)
+        print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
                            "(#{query.inspect} folds to #{e.folded.inspect}) — the trigram floor"
@@ -3360,6 +3468,7 @@ module Nabu
                                                       source: options[:source],
                                                       gold_only: options[:gold_only])
         print_lemma_results(results)
+        print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
       ensure
@@ -3411,6 +3520,7 @@ module Nabu
           source: options[:source]
         )
         print_search_results(results)
+        print_display_footer
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -3432,7 +3542,7 @@ module Nabu
           tier = result.tier == "gold" ? "" : " [#{result.tier}]"
           say "#{result.urn}#{" [#{result.language}]" if result.language}#{tier}  " \
               "#{result.lemma} → #{forms}#{gloss}#{morph}"
-          say "  #{truncate_line(result.text)}"
+          say "  #{display_text(truncate_line(result.text), result.language)}"
         end
         silver = results.count { |result| result.tier == "silver" }
         footer = "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
@@ -3952,7 +4062,8 @@ module Nabu
         end
         group.witnesses.each do |witness|
           loan = witness.borrowed ? " (loan)" : ""
-          say "    #{witness.language.ljust(4)} #{witness.lemma}#{loan}#{cognates_surfaces(witness)}"
+          say "    #{witness.language.ljust(4)} #{display_text(witness.lemma, witness.language)}" \
+              "#{loan}#{cognates_surfaces(witness)}"
           next unless options[:long]
 
           witness.document_urns.each do |urn|
@@ -3965,7 +4076,9 @@ module Nabu
       # The attested forms, shown when they add anything over the lemma.
       def cognates_surfaces(witness)
         forms = witness.surfaces - [witness.lemma]
-        forms.empty? ? "" : " — attested as #{forms.join(', ')}"
+        return "" if forms.empty?
+
+        " — attested as #{forms.map { |form| display_text(form, witness.language) }.join(', ')}"
       end
 
       def print_resolved_citations(result)
