@@ -15,6 +15,19 @@ module Nabu
       true
     end
 
+    # `nabu search --help` (owner report 2026-07-18): this Thor build does
+    # not intercept a help flag AFTER a command name, so "--help" reached
+    # FTS5 as the literal query. Route `nabu CMD --help|-h` to `nabu help
+    # CMD` for every known command; a literal "--help" stays searchable via
+    # quoting inside a longer query (the fts literal fallback).
+    def self.start(given_args = ARGV, config = {})
+      if Thor::HELP_MAPPINGS.include?(given_args[1]) &&
+         all_commands.key?(normalize_command_name(given_args.first.to_s))
+        given_args = ["help", given_args.first]
+      end
+      super
+    end
+
     # The --display flag, shared by every command that renders passage text to
     # the terminal (P27-0: show, align, search, concord, parallels, cognates).
     # Modes come from the Nabu::Display registry so sibling packets can add
