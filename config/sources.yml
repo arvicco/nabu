@@ -972,7 +972,7 @@ lexlep-words:
   enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
                    # checklist §6: bin/nabu sync lexlep-words — 628 Word
                    # pages — then eyeball nabu define uvamokozis / define
-                   # --lang lep and 5 random entries before flipping).
+                   # --lang xlp and 5 random entries before flipping).
   # P29-3: LexLep's "Dictionary of Attested Forms" — the 628-word
   # etymological lexicon of Lepontic / Cisalpine Gaulish (the packet
   # brief's "202" was the Morpheme category, journaled v2) as the lep

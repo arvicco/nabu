@@ -52,6 +52,14 @@ class LexlepTest < Minitest::Test
 
   # --- discovery ------------------------------------------------------------
 
+  def test_lepontic_maps_to_xlp_never_lepcha
+    # Review pin (P29-3 merge): ISO 639-3 "lep" is Lepcha (Sino-Tibetan);
+    # Lepontic is "xlp". The packet spec's "lep" slip must never ship —
+    # the itant packet caught it independently (its upstream even tags
+    # Lepontic as Cisalpine Gaulish xcg).
+    assert_equal "xlp", Nabu::Adapters::Lexlep::LANGUAGE_MAP.fetch("Lepontic")
+  end
+
   def test_discover_yields_one_ref_per_inscription_page
     refs = adapter.discover(FIXTURES).to_a
     assert_equal %w[urn:nabu:lexlep:ao-1.1 urn:nabu:lexlep:be-1 urn:nabu:lexlep:bg-1 urn:nabu:lexlep:bi-8],

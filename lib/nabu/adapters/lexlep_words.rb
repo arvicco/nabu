@@ -30,7 +30,7 @@ module Nabu
     # ARE the attested forms, Leiden markers and all ("aes", ")ae?(",
     # "a?"); entry language = the page's own language param (Cisalpine
     # Gaulish → xcg, Celtic → cel, unknown → und — per-entry, the honest
-    # grain; the shelf's cover language is lep per the packet). The body
+    # grain; the shelf's cover language is xlp (Lepontic)). The body
     # carries the template's grammatical lanes (type, stem class, number/
     # case/gender, morphemic and phonemic analyses flattened from their
     # {{m}}/{{p}} templates) and the scrubbed Commentary — where the
@@ -41,7 +41,7 @@ module Nabu
       CATEGORIES = [WORD_CATEGORY].freeze
 
       DICTIONARY_SLUG = "lexlep-words"
-      LANGUAGE = "lep"
+      LANGUAGE = "xlp" # Lepontic (ISO 639-3 xlp; "lep" is Lepcha — review-pinned)
       TITLE = "Lexicon Leponticum — Dictionary of Attested Forms"
 
       # The grammatical params rendered into the body, in display order.

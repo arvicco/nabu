@@ -45,7 +45,7 @@ module Nabu
       URN_PREFIX = "urn:nabu:lexlep:"
 
       LANGUAGE_MAP = {
-        "Lepontic" => "lep",
+        "Lepontic" => "xlp", # ISO 639-3: xlp Lepontic; "lep" is Lepcha (review-pinned)
         "Cisalpine Gaulish" => "xcg",
         "Transalpine Gaulish" => "xtg",
         "Celtic" => "cel",

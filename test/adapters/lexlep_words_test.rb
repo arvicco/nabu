@@ -19,6 +19,12 @@ class LexlepWordsTest < Minitest::Test
 
   # --- manifest (the conformance mirror) ------------------------------------
 
+  def test_shelf_cover_language_is_xlp_never_lepcha
+    # Review pin (P29-3 merge): the shelf covers Lexicon Leponticum —
+    # cover language xlp (Lepontic), NOT "lep" (Lepcha, the spec slip).
+    assert_equal "xlp", Nabu::Adapters::LexlepWords::LANGUAGE
+  end
+
   def test_manifest_is_valid_and_holds_the_shared_nc_posture
     manifest = adapter.manifest
     assert_kind_of Nabu::SourceManifest, manifest
