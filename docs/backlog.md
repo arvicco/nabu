@@ -8416,3 +8416,87 @@ proximity 1, parallels 1, cli 3). Suite + lint exit 0 at hand-off
 + `nabu search --lemma θεός` (expect [silver] labels) + 5 random
 passages, confirm the 53-file skip census line, flip enabled,
 rebuild/reindex.
+
+## P26-5 · Incremental per-source indexing — syncs stop paying the corpus-wide reindex  [tier: fable] [status: done 2026-07-18 — refresh_source! + inert-grain skip + honest sync line shipped; verdicts below] [deps: P26-0]
+
+The owner-triaged defect: every sync of every source ended in
+SyncRunner#reindex! → Indexer.rebuild!, which drops the fulltext +
+lemma tables and re-inserts all ~4.3M live passages, then rebuilds the
+trigram and alignment indexes — minutes per sync regardless of what
+changed; a two-file `sync local-notes` paid the full price. Owner
+decision 2026-07-18: A+B approved; NO `nabu index` command; syncs keep
+auto-indexing where it makes sense; `nabu rebuild` owns full
+re-indexing.
+
+SHIPPED — Part A (index-inert grains skip indexing entirely):
+- Content kinds `:notes`, `:language`, `:source` mint neither passages
+  nor dictionary entries → their syncs perform NO index work at all
+  (`SyncRunner::INDEX_INERT_KINDS`; `indexed: nil`, the CLI omits the
+  fragment). Pinned by an every-entry-point spy test (hand-rolled
+  singleton swap — minitest 6 ships no stub): rebuild!,
+  refresh_source!, rebuild_trigram!, AlignmentIndexer.rebuild!,
+  ReflexRootsIndexer.rebuild! all raise; a notes/language/source-shelf
+  sync completes without even creating the fulltext file.
+
+SHIPPED — Part B (passage/dictionary syncs index incrementally):
+- `Indexer.refresh_source!(catalog:, fulltext:, slug:, …)`: delete the
+  source's rows from passages_fts + passage_lemmas (+ trigram slice),
+  re-insert from the current catalog, tier map preserved. CONTRACT =
+  ROW IDENTITY: after a refresh the fulltext state equals a
+  from-scratch rebuild! of the same catalog — pinned by building both
+  and comparing full row sets (fts, lemmas incl. tiers, trigram +
+  scope, reflex closure + stats) across add/revise/withdraw mutations.
+- FTS-DELETION VERDICT: passages_fts/passages_trigram are REGULAR
+  (contentful) FTS5 tables — per-row DELETE is real deletion (the
+  contentless/'delete'-command hazard does not apply); proven by
+  search-before/after tests. passage_id is UNINDEXED, so deletion is
+  ONE streaming rowid scan (collect doomed rowids by Set membership —
+  withdrawn ids included, since the loader never hard-deletes, every
+  indexed id resolves forever) + batched rowid deletes — never a scan
+  per IN-batch. passage_lemmas deletes by its indexed urn column.
+- TRIGRAM VERDICT (measured live 2026-07-18): 1,713,160 rows, scope
+  papyri-ddbdp/oracc/edh (all sync_policy manual/frozen — rarely
+  synced). Per-source slice refresh: rows deleted+reinserted only when
+  the source is flagged now OR was indexed by the last build; a
+  de-flagged source loses rows AND scope row (honest coverage); a
+  non-fuzzy source's sync never touches the table.
+- ALIGNMENT VERDICT (measured live): alignment_refs = 157,285 rows,
+  registry-scoped — full AlignmentIndexer.rebuild! per sync is cheap
+  AND gated: it fires only when the synced source holds a registry
+  witness document; every other sync skips it (sentinel-pinned).
+- REFLEX-CLOSURE VERDICT (measured live): reflex_roots 84,150 +
+  stats 17 rows — rebuilt only when the source's lemma rows changed
+  (delete/insert counts) or, for dictionary syncs, unconditionally
+  (`reflexes_changed:` — the crosswalk feeding the closure changed);
+  a lemma-less passage source skips it (sentinel-pinned).
+- FALLBACKS (honest, one-time): fulltext missing any table (first-ever
+  sync) or passage_lemmas predating the P26-0 tier column → full
+  rebuild!, then the SOURCE's live count is still what's reported —
+  so the first sync against the owner's live pre-P26-5 file just works.
+- OUTPUT HONESTY: the sync line's fragment is now
+  "indexed N passages (slug)" — the SOURCE's live rows, never the
+  corpus total; suppressed at nil (inert) and 0 (dictionary grains,
+  compact zero-field rule). `nabu rebuild`'s corpus-total line is
+  untouched — there it IS the corpus.
+- `nabu rebuild` keeps the full rebuild! path byte-untouched — the
+  from-scratch guarantee and the only full-reindex surface.
+- PROJECTED sync-time impact (queued P26 syncs): the per-sync
+  fixed cost drops from a full 4.3M-passage + 3.0M-lemma-row rebuild
+  (+1.7M trigram + alignment + closure) to one fts rowid scan +
+  the source's own slice — e.g. corph re-sync re-inserts 17,942
+  passages, dcs ≈516k projected inserts instead of ~4.8M, diorisis
+  likewise; local-notes/language/source syncs do zero index work.
+  Live timing proof is the review gate's (orchestrator).
+- DOCS: architecture §5 index-lifecycle bullet (rebuild stays the pure
+  function; syncs maintain incrementally under the row-identity
+  guarantee) + §10 rebuild-safety and §12 closure choke-point sentences;
+  ops.md "What `nabu sync <source>` actually does" (fetch/attic → load/
+  quarantine → derived layers → incremental index maintenance, one
+  annotated example line); site/faq.md "What happens when I sync a
+  source?" (+ why notes/dossier syncs are instant); site/tools.md
+  checked — wording not falsified, untouched.
+- Tests +18 (indexer refresh 15 incl. row-identity + both fallbacks +
+  trigram/alignment/reflex gates; sync_runner 3 spy/honesty/withdrawal
+  pins + dictionary-indexed assertion; cli pins updated/added in-place).
+  Suite 3,368 runs / 45,501 assertions exit 0 (0 skips) · lint 424
+  files exit 0.

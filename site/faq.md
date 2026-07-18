@@ -128,6 +128,23 @@ posture and license of every source are on
 documented in
 [docs/ops.md](https://github.com/arvicco/nabu/blob/main/docs/ops.md).
 
+### What happens when I sync a source?
+
+Four things, in order: the upstream snapshot is fetched into the
+canonical store non-destructively (anything upstream deleted is kept in
+an attic, and a circuit-breaker aborts a sync that would gut the
+source); every document is parsed and upserted into the catalog by its
+URN, with malformed files quarantined and counted rather than silently
+dropped; whatever the source derives — dictionary entries, reference
+links, annotations — is refreshed; and the search indexes are brought
+up to date incrementally, touching only that source's rows rather than
+re-indexing the whole collection. The sync's report says exactly what
+changed, down to the per-source indexed count. Syncing a notes or
+dossier shelf is instant, because those shelves feed no search index —
+there is simply no index work to do. A full re-index from scratch
+remains available as `nabu rebuild`, which regenerates the entire
+database from canonical data.
+
 ## Licenses and use
 
 ### What do the license classes mean?
