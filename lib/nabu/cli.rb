@@ -18,12 +18,13 @@ module Nabu
     # The --display flag, shared by every command that renders passage text to
     # the terminal (P27-0: show, align, search, concord, parallels, cognates).
     # Modes come from the Nabu::Display registry so sibling packets can add
-    # modes (reading, translit, mono) without touching this declaration.
+    # modes (reading, …) without touching this declaration.
     def self.display_option
       option :display, type: :string, default: Nabu::Display::DEFAULT_MODE, banner: "MODE",
                        desc: "Display mode: default (config/display.yml policies), " \
                              "full (every stored byte, no transforms), plain (strip all " \
-                             "defined mark classes) — see docs/display.md"
+                             "defined mark classes), translit (romanized rendering), " \
+                             "mono (default without token colors) — see docs/display.md"
     end
 
     desc "version", "Print the Nabu version"
@@ -1997,17 +1998,52 @@ module Nabu
         @display_applied ||= Set.new
       end
 
+      # Per-token language coloring (P27-2): the single-passage show view —
+      # the one render where the stored P7-5 tokens annotation is at hand —
+      # colorizes tokens tagged with a language OTHER than the passage's own
+      # (corph's Latin glosses in Old Irish, OSHB's Aramaic verses). Gated
+      # three ways: the mode's #colors? (mono/full say no), NO_COLOR /
+      # NABU_COLOR / tty (Display.color?), and the honest-tagging rule
+      # (untagged and base-language tokens stay uncolored). Painting wraps
+      # PRISTINE token forms before the display transform — ANSI escapes are
+      # ASCII, untouched by mark-class strips and NFC round-trips.
+      def painted_passage_text(passage)
+        return passage.text unless color_output?
+
+        tokens = passage.annotations["tokens"]
+        return passage.text unless tokens.is_a?(Array)
+
+        painted, legend = Nabu::Display::TokenColors.paint(passage.text, tokens: tokens,
+                                                                         language: passage.language)
+        return passage.text if legend.empty?
+
+        display_applied << "token colors: #{legend.map { |lang, color| "#{lang}=#{color}" }.join(' ')}"
+        painted
+      end
+
+      def color_output?
+        mode = display_mode
+        (!mode.respond_to?(:colors?) || mode.colors?) && Nabu::Display.color?(tty: $stdout.tty?)
+      end
+
       # The once-per-invocation honesty footer: named only when a transform
       # actually changed something (compact rule — zero-signal silence).
       #   display: cantillation stripped (--display full shows all marks)
       #   display: cantillation stripped · rtl isolates (--display full shows all marks)
+      #   display: transliterated (--display full shows all marks)
+      #   display: token colors: lat=cyan (--display full shows all marks)
       def print_display_footer
         return if display_applied.empty?
 
-        strips = display_applied.to_a - [Nabu::Display::ISOLATES]
+        labels = display_applied.to_a
         parts = []
+        parts << "transliterated" if labels.delete("translit")
+        colors = labels.select { |label| label.start_with?("token colors") }
+        strips = labels - colors - ["spacing", Nabu::Display::ISOLATES]
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
-        parts << Nabu::Display::ISOLATES if display_applied.include?(Nabu::Display::ISOLATES)
+        parts << "spacing" if labels.include?("spacing")
+        parts.concat(colors)
+        parts << Nabu::Display::ISOLATES if labels.include?(Nabu::Display::ISOLATES)
         say "display: #{parts.join(' · ')} (--display full shows all marks)"
       end
 
@@ -2400,7 +2436,7 @@ module Nabu
 
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
-        say "  #{display_text(passage.text, passage.language)}"
+        say "  #{display_text(painted_passage_text(passage), passage.language)}"
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"

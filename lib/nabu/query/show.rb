@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 require_relative "define"
 require_relative "range"
 
@@ -42,9 +44,10 @@ module Nabu
       # provenance trail, and the document's date/place axis (nil when undated).
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
-        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis
+        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis,
+        :annotations
       ) do
-        def initialize(axis: nil, **) = super
+        def initialize(axis: nil, annotations: {}, **) = super
       end
 
       # One line of a document listing: a passage's urn and text, in sequence.
@@ -174,8 +177,21 @@ module Nabu
           document_urn: row.fetch(:document_urn), document_title: row.fetch(:document_title),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           provenance: provenance_events(row.fetch(:passage_id)),
-          axis: axis_for(row.fetch(:document_id))
+          axis: axis_for(row.fetch(:document_id)),
+          annotations: parse_annotations(row[:annotations_json])
         )
+      end
+
+      # The stored annotations hash (P27-2 — token language coloring reads
+      # the P7-5 "tokens" layer at render time); {} on absent or unparseable
+      # JSON — the inspector degrades, never crashes.
+      def parse_annotations(json)
+        return {} if json.nil? || json.empty?
+
+        parsed = JSON.parse(json)
+        parsed.is_a?(Hash) ? parsed : {}
+      rescue JSON::ParserError
+        {}
       end
 
       def build_document(row)
@@ -260,6 +276,7 @@ module Nabu
           Sequel[:passages][:revision],
           Sequel[:passages][:withdrawn],
           Sequel[:passages][:text],
+          Sequel[:passages][:annotations_json],
           Sequel[:documents][:urn].as(:document_urn),
           Sequel[:documents][:title].as(:document_title),
           Sequel[:sources][:slug].as(:source_slug),

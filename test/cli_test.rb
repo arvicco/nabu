@@ -2984,6 +2984,16 @@ class CLITest < Minitest::Test
   HBO_GEN_1_1_NO_CANT = "בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָֽרֶץ׃"
   HBO_GEN_1_1_CONSONANTAL = "בראשית ברא אלהים את השמים ואת הארץ׃"
   CHU_ZOGR = "тъ васъ крьститъ дх҃омь ст҃ъꙇмь ꙇ огн҄емь·"
+
+  # The corph token-language shape (P7-5 "tokens" contract): a Latin gloss
+  # word inside an Old Irish sentence, one untagged token (P27-2 coloring).
+  CORPH_TOKENS = {
+    "tokens" => [
+      { "form" => "amail", "lang" => "sga" },
+      { "form" => "rongab" },
+      { "form" => "grammatica", "lang" => "lat" }
+    ]
+  }.freeze
   CHU_ZOGR_NO_TITLA = "тъ васъ крьститъ дхомь стъꙇмь ꙇ огн҄емь·"
   RLI = "⁧"
   PDI = "⁩"
@@ -3651,7 +3661,79 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- translit display + token coloring (P27-2) ---------------------------
+
+  def test_show_display_translit_romanizes_hebrew_and_says_so
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:gen:1.1 --display translit]) }
+      assert_nil status
+      assert_includes out, "bəreʾshiyt baraʾ ʾelohiym ʾet hashamayim wəʾet haʾarets."
+      refute_includes out, RLI, "romanized output is LTR — no isolates"
+      assert_includes out, "display: transliterated (--display full shows all marks)"
+    end
+  end
+
+  def test_show_display_translit_romanizes_cyrillic
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:torot:zogr:1 --display translit]) }
+      assert_nil status
+      assert_includes out, "tъ vasъ krьstitъ dx҃omь st҃ъimь i ogn҄emь·",
+                      "scholarly Latin, marks preserved (stripping is default mode's business)"
+    end
+  end
+
+  def test_show_colors_code_switched_tokens_when_forced_on
+    with_hebrew_corpus do |config|
+      out, _err, status = with_env("NABU_COLOR" => "1") do
+        with_config(config) { run_cli(%w[show urn:nabu:corph:0001:1]) }
+      end
+      assert_nil status
+      assert_includes out, "\e[36mgrammatica\e[0m", "the lat token is colored"
+      refute_match(/\e\[\d+mamail/, out, "base-language tokens stay uncolored")
+      refute_match(/\e\[\d+mrongab/, out, "untagged tokens stay uncolored")
+      assert_includes out, "display: token colors: lat=cyan (--display full shows all marks)"
+    end
+  end
+
+  def test_show_display_mono_disables_token_colors
+    with_hebrew_corpus do |config|
+      out, _err, status = with_env("NABU_COLOR" => "1") do
+        with_config(config) { run_cli(%w[show urn:nabu:corph:0001:1 --display mono]) }
+      end
+      assert_nil status
+      refute_includes out, "\e[", "--display mono renders without ANSI color"
+      refute_includes out, "token colors"
+    end
+  end
+
+  def test_show_stays_colorless_on_captured_output_by_default
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:corph:0001:1]) }
+      assert_nil status
+      refute_includes out, "\e[", "piped/captured output carries no ANSI unless NABU_COLOR forces it"
+    end
+  end
+
+  def test_export_is_pristine_under_translit_and_colors
+    with_hebrew_corpus do |config|
+      out, _err, status = with_env("NABU_COLOR" => "1") do
+        with_config(config) { run_cli(%w[export --format jsonl]) }
+      end
+      assert_nil status
+      assert_includes out, HBO_GEN_1_1, "export carries the stored bytes — display never touches it"
+      refute_includes out, "\e["
+    end
+  end
+
   private
+
+  def with_env(pairs)
+    saved = pairs.keys.to_h { |key| [key, ENV.fetch(key, nil)] }
+    pairs.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+    yield
+  ensure
+    saved.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+  end
 
   # A config whose db/ has been fully built (catalog + fulltext index) by a real
   # parse-only sync of the two-document TestAdapter corpus. Yields the config.
@@ -4653,16 +4735,19 @@ class CLITest < Minitest::Test
     [["urn:nabu:oshb:gen", "Genesis", "hbo", [["1.1", HBO_GEN_1_1]]],
      ["urn:nabu:eng-web:gen", "Genesis (WEB)", "eng",
       [["1.1", "In the beginning, God created the heavens and the earth."]]],
-     ["urn:nabu:torot:zogr", "Zographensis", "chu", [["1", CHU_ZOGR]]]].each do |doc_urn, title, lang, passages|
+     ["urn:nabu:torot:zogr", "Zographensis", "chu", [["1", CHU_ZOGR]]],
+     ["urn:nabu:corph:0001", "Computus", "sga",
+      [["1", "amail rongab grammatica", CORPH_TOKENS]]]].each do |doc_urn, title, lang, passages|
       doc_id = catalog[:documents].insert(
         source_id: source_id, urn: doc_urn, title: title, language: lang,
         content_sha256: "x", revision: 1, withdrawn: false
       )
-      passages.each_with_index do |(tail, text), sequence|
+      passages.each_with_index do |(tail, text, annotations), sequence|
         catalog[:passages].insert(
           document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: sequence, language: lang,
           text: text, text_normalized: Nabu::Normalize.search_form(text, language: lang),
-          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+          content_sha256: "x", revision: 1, withdrawn: false,
+          annotations_json: JSON.generate(annotations || {})
         )
       end
     end
