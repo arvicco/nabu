@@ -141,7 +141,7 @@ module Query
       seed_gospel_verses
       rebuild!
       table = @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE]
-      row = table.where(language: "chu", lemma_folded: "богъ",
+      row = table.where(language: "chu", lemma_folded: "bogъ", # P27-2 skeleton key
                         root_urn: "urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root").first
       refute_nil row, "the closure must hold the chu богъ → *bʰeh₂g- row"
       table.insert(row)

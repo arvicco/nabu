@@ -8544,3 +8544,356 @@ SHIPPED:
   contract pins, diorisis 1). Suite 3,384 runs / 45,549 assertions
   exit 0 (0 skips) · lint 426 files exit 0. The live
   `bin/nabu sync diorisis` is the orchestrator's review proof.
+
+# ── Phase 27 ──────────────────────────────────────────────────────────
+
+## P27-0 · Display policy core + script-level mark classes  [tier: fable] [status: done 2026-07-18 — Nabu::Display shipped, six render commands wired; verdicts below]
+
+Owner-gated design (2026-07-18, "one big Display phase"): ONE render-only
+policy module applied where passage text reaches the terminal; MCP and
+export always pristine; canonical/db untouched.
+
+SHIPPED:
+- `Nabu::Display` (lib/nabu/display.rb): named mark classes (data-driven,
+  one place), per-language policies from `config/display.yml`
+  (missing file = pass-through; unknown class/language/isolates value =
+  named ConfigError), a MODE REGISTRY (the sibling seam), grapheme-safe
+  stripping, RTL isolate wrapping, `visible_length` for width math.
+- CENSUS (real fixture bytes, 2026-07-18 — the sets are census-backed):
+  · cantillation U+0591–05AF: OSHB Gen/Jer/Ps/Ruth carry 25 distinct
+    accents, ×1,436 total (0591 ×133, 0596 ×254, 05A3 ×243, 05A5 ×248,
+    05B* points excluded by definition).
+  · points: U+05B0–05BC ×5,538, shin/sin dots 05C1 ×230 / 05C2 ×74,
+    05C7 ×0; METEG U+05BD ×252 INCLUDED (Unicode names it HEBREW POINT
+    METEG; census-backed) — a deliberate extension of the spec's
+    enumeration; rafe U+05BF censused ×0 → left OUT ("never strip what
+    you haven't censused"). Sof pasuq 05C3 ×138 / paseq 05C0 ×14 are
+    punctuation — unclassified, always kept.
+  · maqaf U+05BE ×258 — its own class; strips to a SPACE (never fuses
+    the joined words); in `keep` for hbo (default shows it).
+  · vedic-accents U+0951/0952: censused ×0 across the san shelves — DCS
+    is IAST romanization, the SARIT Devanagari fixtures are unaccented.
+    The class is live machinery, honestly journaled as a measured no-op
+    today (policy scoped by primary subtag: san/san-Deva/san-Latn).
+  · titla U+0483 + U+0487 + U+2DE0–2DFF: torot 0483 ×49, ud (orv
+    birchbark) ×51, wiktionary-cu 0483 ×39 / 0487 ×1 / 2DED ×2. The
+    CCMH FIXTURES CARRY NONE — that corpus stores the Helsinki 7-bit
+    ASCII transliteration verbatim (titlo encoded as `!`), so the spec's
+    "OCS shelves use these heavily" is true of TOROT, not CCMH — journaled
+    as measured. Palatalization U+0484 (torot ×22) is NOT a titlo → NOT
+    in the set.
+  · monotonic (grc, OPTIONAL — definable, never defaulted): U+0300/0313/
+    0314/0342/0343/0345; a STRIP, not a polytonic→monotonic conversion
+    (conversion = a later packet's mode).
+- GRAPHEME SAFETY: NFC languages strip via NFD→delete→NFC (precomposed
+  marks reachable); NFC-EXEMPT hbo/arc (P26-3) strip IN PLACE, bytes
+  never normalized — test-pinned on a dagesh+sheva+etnahta sequence.
+- MODES: default (policy strip lists) / full (no transforms, no
+  isolates — the byte-honest escape hatch) / plain (strip+keep union =
+  consonantal Hebrew). Registry seam: modes are objects (#name,
+  #description, #render(text, language:, policy:) → Rendered,
+  #isolates?(policy)); `Display.register_mode` adds (duplicate name =
+  error, never silent replace); `Display.mode` names the registry on a
+  miss. Sibling packets (reading/translit/mono) register and appear in
+  --display without reshaping CLI or module.
+- CALL-SITE CENSUS (cli.rb; every place passage text reached stdout):
+  print_show_passage/_document/_range; parallel_line + block translation
+  (show --parallel); print_align_witness + print_align_range_witness +
+  collation cell/edits/aside (align, --collate); print_search_results
+  (search + --near), print_fuzzy_results, print_lemma_results (pristine
+  line); print_concord_rows; print_parallel_hit evidence + lemma echoes'
+  surfaces stay folded-label; print_cognates witness lemma + surfaces.
+  All funnel through ONE helper (display_text) + per-command
+  print_display_footer. define/etym/vocab/export untouched (dictionary
+  shelf + data surfaces, out of scope).
+- FOOTER: once per invocation, only when a transform actually changed
+  bytes (compact rule): `display: cantillation stripped · rtl isolates
+  (--display full shows all marks)`; chu form byte-pinned as
+  `display: titla stripped (--display full shows all marks)`.
+- ISOLATES: U+2067/U+2069 wrap for hbo/arc runs (config-driven);
+  excluded from ALL width math (Display.visible_length); concord re-pads
+  its KWIC columns over visible characters post-transform (keyword
+  column pinned at exactly --width); align layout byte-identical apart
+  from the text runs (structural-lines pin).
+- INDEPENDENCE PINS: same search hits under every --display mode;
+  `show --display full` byte-identical to db text; MCP nabu_show serves
+  pristine bytes with the shipped display.yml present (tools_test pin).
+- Config seam: `Config#display_path` (`paths: display:` override,
+  default config/display.yml, kwarg default beside sources.yml — test
+  rigs opt IN by placing a display.yml; all pre-P27 rigs untouched).
+- DEVIATIONS (from the letter of the spec, argued): (1) meteg U+05BD
+  into `points` (Unicode name + census ×252; without it "plain" is not
+  consonantal); (2) maqaf strips to space, not empty (deleting would
+  fuse עַל־פְּנֵי into one word); (3) mixed-language documents render
+  document-listing lines under the DOCUMENT language policy
+  (PassageLine carries no language; hbo/arc Daniel-Ezra splits land in
+  the same script family, correct in practice).
+- DOCS: NEW public docs/display.md (owner addendum 2026-07-18) — nabu's
+  display layer + the verified terminal-side facts (iTerm2 ≥3.6.0
+  experimental RTL toggle under Settings→General→Experimental;
+  Terminal.app no bidi; non-ASCII font slot is per-codepoint → Noto Sans
+  Mono same-size, Ezra SIL/SBL Hebrew via a dedicated profile; Noto
+  script casks join the fallback cascade) + per-script quick table with
+  real-shelf test commands. ops.md §16 summary → links it; site/faq.md
+  new Q (terminal display) → links it; site/tools.md checked — no
+  display discussion, untouched.
+- Tests +37 (display_test 25 unit incl. fixture-byte pins for
+  hbo/chu/san + config validation + registry seam; cli 9 e2e incl.
+  footer presence/absence, full byte-identity, consonantal plain,
+  search-mode independence, KWIC column, align layout; config 2; mcp 1
+  pristine pin). Suite 3,421 runs / 45,701 assertions exit 0 (0 skips)
+  · lint 428 files exit 0.
+
+## P27-1 · Edition-level display transforms — reading/diplomatic + per-edition choices  [tier: fable] [status: done 2026-07-18 — reading/diplomatic modes on the P27-0 seam; censuses & verdicts below] [deps: P27-0]
+
+Layer B of the Display phase (owner-approved): transforms keyed to SOURCE
+editorial conventions, not language — `sources:` in config/display.yml,
+executed only by the new `reading` mode; `diplomatic` is the byte-honest
+counterpart.
+
+SHIPPED:
+- `reading` mode (Display::ReadingMode, registered on the P27-0 registry
+  untouched): ketiv/qere substitution → per-source edition rules → the
+  language policy's default strips, in that order (qere runs on the
+  pristine stored bytes so token forms match exactly; Hebrew reading =
+  qere + cantillation stripped TOGETHER). Without edition context the
+  mode degrades to exactly default-mode behavior. Edition context is an
+  OPT-IN mode capability (#render_edition) — every P27-0 mode and the
+  registered-mode seam are byte-untouched.
+- `diplomatic` mode: no transforms, no isolates — byte-identical to the
+  stored text (pin over every shelf's fixture bytes). Today it renders
+  identically to `full`; registered under the editorial name so the
+  reading-mode footer's "--display diplomatic shows the edition marks"
+  has a real counterpart.
+- EDITION_RULES (census-first, STORED bytes): lacuna ("[…]" → "…",
+  ellipsis|keep), erasures (⟦…⟧, keep|unwrap — default KEEP, an erasure
+  is content), surplus ({…}, keep|unwrap — default KEEP, unwrapping would
+  present the carver's error as fluent text), sigla (⸀⸂⸃, strip|keep).
+  Shipped sources: papyri-ddbdp/edh/riig lacuna ellipsis; edh erasures
+  keep; riig surplus keep; sblgnt sigla strip; oshb qere_display qere.
+- Ketiv/qere (oshb): STORAGE VERDICT — the running text carries the KETIV
+  (<w type="x-ketiv">); the qere reading(s) attach to that token as
+  "qere" word hashes inside annotations["tokens"] (OshbOsisParser P26-3).
+  Display substitution walks the tokens in document order with a cursor
+  (the text was assembled from those very forms — exact, no re-parse);
+  qere_display: qere|ketiv|both, "both" renders "ketiv [qere]". Fixture
+  census: 3 qere tokens (jer 10.13, 10.17, ruth 1.8), all 1-word qere,
+  every ketiv form found verbatim in its passage text.
+- Query::Show carries annotations (PassageResult + PassageLine, parsed
+  from the stored annotations_json) — the CLI show family (passage,
+  document listing, range) passes source + annotations to display_text;
+  every other call site renders under language policies alone (search
+  rows carry no source_slug; extending them is future work, not silently
+  half-done). MCP payloads untouched — pristine.
+- Footer: strips vocabulary unchanged; edition transforms hint as
+  `apparatus simplified: qere, …` and swap the escape hatch to
+  `(--display diplomatic shows the edition marks)`.
+
+PER-SHELF CENSUS (stored passage bytes, parser output over checked-in
+fixtures, 2026-07-18):
+- papyri-ddbdp (32 passages): "[…]" ×2 — NOTHING else. The DdbdpParser
+  print-edition doctrine already reads through supplied/expan/unclear
+  markerless at parse time; supplements/additions/expansions/underdots
+  censused ×0 stored → NO rules invented for them (census-first pin).
+- edh (17 passages): "[…]" ×4; ⟦…⟧ ×2 (HD000082 damnatio memoriae).
+  Upstream "[---]"/"//" lacuna spellings normalize to "[…]" at parse
+  time — censused ×0 stored.
+- riig (42 passages): "[…]" ×9; surplus {…} ×2 (nanton{t}icnos).
+- ogham (17 passages): ZERO edition marks — no sources: entry (nothing
+  censused, nothing stripped).
+- sblgnt (90 passages): ⸀ ×69, ⸂ ×30, ⸃ ×30; ⸁/⸄–⸇ ×0 → excluded from
+  the sigla set. Parentheses ×1 (John 1:15) are the edition's own
+  punctuation — never touched (pin).
+- oracc (59 passages): {} ×25 — DETERMINATIVES ({d}, {ki}, {iti}), not
+  Leiden surplus: keep-text-drop-marker would fuse the silent classifier
+  into the word ({d}amar-{d}suen misreads "damar-suen") — deliberately
+  left. Standalone x ×72 = illegible-sign placeholders (content); "()"
+  ×1 = metrological notation (2(BARIG)); ⸢⸣ half-brackets ×0. NO oracc
+  entry; all three leaves journaled here.
+- oshb (138 passages): no bracket apparatus in text; ketiv/qere as above.
+
+ORIG/REG VERDICT (riig): no display-time choice exists to wire — RIIG's
+parallel editorial readings mint SIBLING passages by seg id
+(ahp-01-01:HRD-a:1 καρε[…]μ vs :PTL-b:1 καρβ[…]μ; the P25-1 grain), and
+within one passage CelticLeiden <choice> keeps the reg branch (orig is
+apparatus, dropped at parse). Reading-mode's Leiden handling suffices;
+no work invented.
+
+DEVIATIONS (from the packet letter, argued):
+- Leiden supplements/additions/expansions/underdot rules NOT implemented:
+  censused ×0 in every shelf's STORED bytes (the parsers resolve raw
+  Leiden at parse time) — "never strip what you haven't censused" wins
+  over the packet's rule list.
+- surplus defaults KEEP (packet named only erasures configurable): {t}
+  marks a carver's error the editor excludes; unwrapping by default would
+  present the misspelling unmarked. unwrap is config-reachable.
+- sigla set is ⸀⸂⸃ exactly as the packet names (⸁ ⸄–⸇ censused ×0,
+  excluded per census-first).
+- Edition rules scope: the show family only (search/concord/align result
+  rows carry no source_slug today); documented in display.md §1a, and
+  matching-independence pinned across reading/diplomatic regardless.
+
+Tests +27 (display_test +22: per-shelf before/after real-byte pins,
+diplomatic byte-identity, qere qere/ketiv/both, config validation,
+shipped-config pin; cli_test +5 e2e: reading qere + footer, diplomatic
+hint-free byte-identity, sblgnt sigla, default-mode silence, document
+listing qere; +2 modes on the search-independence pin). Suite 3,448 runs
+/ 45,834 assertions exit 0 (0 skips) · lint 428 files exit 0.
+
+## P27-2 · Cross-script search folding + transliteration display + language coloring  [tier: fable] [status: done 2026-07-18 — awaiting review; owner repro pins in tests; live rebuild is the review gate's]
+
+Owner-approved; driven by two LIVE incidents (2026-07-18): (a) `search
+'धर्मन्'` silently missed what `search dharman` found — while nabu's own
+reflex render prints the Devanagari form beside a "nabu search --lemma"
+hint; (b) `search vъsta` (3 hits, damaskini Latin-diplomatic) vs `search
+въста` (20 hits, Cyrillic shelves) — one word, disjoint sets by script.
+
+SHIPPED — Part 1, the cross-script FOLD (index-affecting):
+- `Normalize::SCRIPT_NEUTRALIZATIONS`: per-language script neutralization
+  BEFORE the generic fold, symmetric at index (search_form) and query
+  (query_forms) time; each neutralizer is a with_map callable so
+  fold_with_map composes maps and KWIC points a skeleton match back at
+  the pristine Devanagari/Cyrillic span (map-correctness pins).
+- san → Deva.to_iast (P26-2 transcoder PROMOTED from the SARIT adapter
+  into the fold; idempotent on IAST shelves — DCS/GRETIL/MW refold to
+  identical bytes). ORDER IS THE INCIDENT: the fold's \p{Mn} strip eats
+  the virāma (क्त vs कत) — the transcode must run first. OWNER REPRO
+  PINNED end-to-end: `search 'धर्मन्'` ≡ `search dharman` (union of the
+  Devanagari and IAST shelves), and query_forms('धर्मन्') covers the DCS
+  lemma form (the reflex-render → search --lemma round-trip contract).
+- chu/orv/bul → `Nabu::Cyrl` (NEW), the census-built Cyrillic↔scholarly-
+  Latin skeleton. bul included by census: 20 of damaskini's 23 witnesses
+  are bul under the SAME diplomatic conventions (packet said chu/orv;
+  without bul the vъsta pin fails on the majority shelf — deviation,
+  argued). CENSUS (ingested damaskini conllu FORM/lemma columns vs
+  torot/ud-orv/wiktionary-cu inventory; damaskini TSV layers censused
+  but NOT ingested — evidence only): Latin side carries š ž č ě ę ź,
+  x for х (xodinie, xva), literal jers ъ/ь, "št" for щ (šte), j-iotation
+  (ljubovъ), "ou" for оу (oubi = оуби; upstream's OWN lemma column folds
+  it to ubija), literal residues ѯ ѳ ћ џ ꙫ. THE WIDENINGS (ambiguity →
+  one skeleton, never a guess, each with a fixture example):
+  · щ ≡ шт ≡ "št" (šte / щедроты) — the digraph both spellings share.
+  · оу ≡ у ≡ "ou" ≡ "u" (oubi/оуби; ꙋ ×111 ud-orv; ѹ) — a genuine o+u
+    hiatus (по-учение → pučenie) conflates IDENTICALLY on both sides,
+    so the fold stays symmetric. Note the bounded cross-language cost:
+    an "ou"-bearing ASCII query gains a u-variant in the union (the
+    þing→thing precedent).
+  · iotated vowels → j-digraphs: ю→ju ꙗ/я→ja ѥ→je ѩ→ję ѭ→jǫ й→j
+    (нашей → našej — scholarly j, where pre-P27-2 the breve strip gave и).
+  · ѵ→v on damaskini's own evidence (Параскеѵи → its diplomatic
+    Paraskevi); the izhitsa i-reading is context the fold cannot
+    recover — journaled, not guessed.
+  · letterforms by census: і/ї/ꙇ→i, ꙑ→y, ѡ/ѻ→o, ѿ→ot, ѕ/ꙃ→dz, ѯ→ks,
+    ѱ→ps, є→e, ꙁ→z; unlisted precomposed Cyrillic decomposes so its
+    base maps and its marks fall to the generic strip (torot ӑ).
+  DELIBERATE NON-RULES (evidence said no): ѳ/ћ/џ/ꙫ stay literal — BOTH
+  layers carry the characters, so identity already crosses the scripts,
+  and ѳ→f vs ѳ→th would guess between readings; jers stay DISTINCT — the
+  apostrophe-jer convention (kól'koto) lives only in the NON-ingested
+  accented TSV column, ʼ/ʹ/ʺ censused ×0 in every ingested surface; х→x
+  only (no h/ch widening — h is a real Latin letter in the corpus);
+  Glagolitic UNREGISTERED (wiktionary-cu carries it only as headword
+  variant forms → the script-miss hint, below). Wiktionary's ŭ/ĭ jer
+  romanization stays covered by the dictionary shelves' dual
+  word_folded/roman_folded keys, not by the fold.
+- OWNER REPRO PINNED end-to-end: `search vъsta` ≡ `search въста` ≡ the
+  union of the Latin-diplomatic and Cyrillic hits (query/search test).
+- No silent script misses: `CLI::SCRIPT_MISS_HINTS` — a zero-hit search
+  (text or --lemma) whose query carries Glagolitic (U+2C00–2C5F) or
+  Gothic-script (U+10330–1034F) codepoints prints ONE hint naming what
+  to try; ordinary misses and neutralized scripts stay silent (pins).
+- CCMH DEVIATION (censused): the packet's "proiel/CCMH Cyrillic" premise
+  is half-true — CCMH stores the Helsinki 7-bit ASCII transliteration
+  verbatim (S=š as capitals, titlo as `!`), a THIRD convention that is
+  case-significant and would need a parser-scoped decode (the P14-5
+  search_source seam), NOT a language-keyed fold (capital S in other chu
+  shelves is just S). Journaled as follow-up; the Cyrillic side of the
+  incident is torot/ud-orv/wiktionary-cu, all covered. The fold DOES
+  apply to CCMH text as-is (ASCII passes through; its one pinned
+  text_normalized is byte-unchanged).
+- RIPPLES, argued in-commit: folded-key pins across the dictionary/
+  reflex chain update to the skeletons (богъ→bogъ …); reflex-walk test
+  helpers now fold their lookup lemmas exactly as production readers do;
+  etym's bare-form headword fallback is SUPPRESSED under an explicit
+  --lang (the cross-script fold made Cyrillic spellings reach Latin
+  proto headwords directly — the fallback would leak past the filter).
+- CONSEQUENCE (stated, not executed): the fold change invalidates
+  text_normalized for san/chu/orv/bul → ONE `nabu rebuild` (or
+  per-source resyncs) refreshes the live fulltext index. NOT run here —
+  the owner's live db is untouched (docs/display.md §1c + ops.md note).
+
+SHIPPED — Part 2, `--display translit` (render-only, P27-0 registry):
+- san→IAST (Deva), hbo/arc→SBL-style (NEW `Nabu::Hebr`), chu/orv/bul→
+  scholarly Latin (Cyrl's display direction; damaskini's own Latin
+  surface passes through byte-identical — render never rewrites the
+  source's surface; оу→u is deterministic scholarly practice, applied).
+- Hebr STYLE JOURNAL (census-scoped to the OSHB codepoint inventory;
+  per-codepoint cluster reader, order-independent over the NFC-exempt
+  Masoretic bytes): general-purpose SBL base + academic ʾ/ʿ/ḥ/ṭ/ś kept
+  where general-purpose merges distinct letters; begadkefat splits only
+  where audible (b/v, k/kh, p/f — dagesh decides); NO dagesh-forte
+  doubling; every shewa → ə (vocal/silent not inferred); matres
+  lectionis render as consonants (bəreʾshiyt, not bereshit) — a
+  transcoder, not a vocalization engine; shuruq (ו+dagesh, no vowel)→u,
+  holam male (ו+holam alone)→o; maqaf→"-", sof pasuq→".", paseq→"|";
+  cantillation+meteg leave no residue. LTR Latin output → NO isolates
+  (also the most legible Masoretic view on bidi-less Terminal.app).
+- OGHAM VERDICT (censused): the transliteration is a line-aligned
+  SIBLING DOCUMENT (…-translit, urn-suffix alignment; `show --parallel`
+  inlines it today — one indexed lookup, cheap at the db). Wiring that
+  lookup into the render seam would cross the render-only boundary (a
+  mode sees text + language, never the store) → journaled follow-up
+  (a show-level inline), documented pointer to --parallel instead of a
+  hack. No pgl transcoder invented.
+- Modes registered: translit + mono; --display desc + docs updated;
+  footer vocabulary extended (transliterated / spacing / token colors —
+  strips keep the exact P27-0 byte-pinned forms).
+
+SHIPPED — Part 3, per-token language coloring:
+- COLORING CENSUS (how token language rides annotations, per shelf):
+  corph — annotations.tokens[].lang, mapped ISO (sga/lat/ang/non/grc)
+  or lang_source verbatim when unmappable; oshb — tokens[].lang from
+  the OSHM H/A morph prefix (hbo/arc; Jer 10:11 the live case);
+  damaskini — NO token-level language: the chu/bul split is DOCUMENT
+  grain (adapter DOCS map), CoNLL-U MISC is `_` on every token →
+  damaskini renders uncolored, correctly (the packet's "damaskini
+  (chu/bul)" expectation is document-grain reality — deviation, argued).
+- `Display::TokenColors.paint`: tokens tagged with a language OTHER than
+  the passage's own wrap in ANSI (stable palette, first-seen order);
+  untagged/base-language tokens uncolored; unlocatable forms paint
+  nothing (never a fabricated span); legend only for languages actually
+  painted. Applied in `nabu show` (single-passage view — the one render
+  with the tokens annotation at hand; Show::PassageResult now carries
+  annotations, {} default). Gates: mode#colors? (mono/full → no),
+  Display.color? (NO_COLOR any-non-empty always wins; NABU_COLOR forces;
+  else TTY only — captured/piped output stays clean, pinned). Composes
+  with snippet-bracket highlighting (ANSI is ASCII; pins) and with mark
+  stripping (paint pristine forms first, strip regexes never touch
+  escapes). Footer: `display: token colors: lat=cyan …`.
+
+SHIPPED — Part 4, grapheme spacing:
+- `spacing:` per-language display.yml key (validated boolean; full mode
+  never spaces). RENDER JUDGMENT (journaled): Ogham letters are stroke
+  clusters hanging on ONE shared stemline — abutting letters merge into
+  unsegmented stroke runs in a monospace terminal, so spacing genuinely
+  aids letter-by-letter reading; the separator between two Ogham letters
+  is U+1680 OGHAM SPACE MARK, whose glyph IS a stemline segment — the
+  line stays one continuous stem (an ASCII space would break it); plain
+  space elsewhere; existing separators never doubled. DEFAULT-ON for pgl
+  (Primitive Irish is attested ONLY in Ogham — the primary-subtag key is
+  collision-free). RESIDUE (journaled): sga-Ogam and und ogham layers
+  cannot be keyed per-language without spacing corph's Latin-script sga
+  — follow-up would need script-scoped (not language-scoped) policies.
+- orv/bul get deliberately EMPTY display.yml policies (a policy row is
+  the translit reach-through; orv titla stripping was NOT part of the
+  P27-0 owner gate and is not smuggled in).
+
+Pins: search hits identical under every --display mode (P27-0 pin, now
+covering translit/mono); `show --display full` byte-identity; MCP
+pristine; export pristine under forced colors; fold/query symmetry
+round-trip property over both scripts per neutralized language.
+
+Tests +72 methods (cyrl 17, hebr 8, deva 2, normalize 9, display 19,
+cli 13, search 2, lemma-search 2 — plus reworked folded-key pins across
+8 files). Suite 3,490 runs / 45,970 assertions exit 0 (0 skips) · lint
+432 files exit 0.

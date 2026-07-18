@@ -67,29 +67,47 @@ module Nabu
     # Transcode +text+ to IAST, NFC-normalized. Characters outside the
     # inventory pass through unchanged.
     def to_iast(text)
+      to_iast_with_map(text).first
+    end
+
+    # Transcode with a character-index map (P27-2, the KWIC contract):
+    # returns [iast, map] where map[i] is the index, into +text+'s
+    # characters, of the character that produced iast[i]. The inherent "a"
+    # attributes to its consonant; multi-char values (dh, ai) attribute every
+    # output char to the one source char. The table's values are NFC-stable,
+    # so the join needs no whole-string renormalization pass — pinned by the
+    # byte-parity test against to_iast's original output.
+    def to_iast_with_map(text)
       out = +""
-      pending_a = false
-      text.to_s.each_char do |char|
+      map = []
+      pending = nil # index of the consonant whose inherent "a" is open
+      emit = lambda do |piece, index|
+        piece.each_char do |produced|
+          out << produced
+          map << index
+        end
+      end
+      text.to_s.each_char.with_index do |char, i|
         if (vowel = VOWEL_SIGNS[char])
-          out << vowel
-          pending_a = false
+          emit.call(vowel, i)
+          pending = nil
         elsif char == VIRAMA
-          pending_a = false
+          pending = nil
         else
-          out << "a" if pending_a
-          pending_a = false
+          emit.call("a", pending) if pending
+          pending = nil
           next if DROPPED.include?(char)
 
           if (consonant = CONSONANTS[char])
-            out << consonant
-            pending_a = true
+            emit.call(consonant, i)
+            pending = i
           else
-            out << (INDEPENDENT_VOWELS[char] || OTHERS[char] || char)
+            emit.call(INDEPENDENT_VOWELS[char] || OTHERS[char] || char, i)
           end
         end
       end
-      out << "a" if pending_a
-      out.unicode_normalize(:nfc)
+      emit.call("a", pending) if pending
+      [out.unicode_normalize(:nfc), map]
     end
   end
 end

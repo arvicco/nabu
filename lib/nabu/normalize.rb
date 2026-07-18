@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "deva"
+require_relative "cyrl"
+
 module Nabu
   # Text normalization at the adapter boundary. Nabu stores text as UTF-8 NFC
   # internally; upstream sources vary (decomposed accents, precomposed, mixed).
@@ -137,6 +140,36 @@ module Nabu
       "iir" => PROTO_FOLD
     }.freeze
 
+    # == Script neutralization (P27-2; conventions §9) — the cross-script fold
+    #
+    # Some corpora spell ONE language in TWO scripts: SARIT stores Devanagari
+    # where DCS/GRETIL/MW store IAST (san); damaskini stores a Latin
+    # diplomatic transliteration where TOROT/UD/wiktionary-cu store Cyrillic
+    # (chu/orv/bul — bul included because 20 of damaskini's 23 witnesses are
+    # bul under the SAME diplomatic conventions). A per-codepoint fold cannot
+    # bridge scripts (Devanagari's inherent "a" is context-sensitive; оу is a
+    # digraph), so a NEUTRALIZATION step runs BEFORE the generic fold — and,
+    # critically, before the \p{Mn} strip eats the virāma that distinguishes
+    # क्त (kta) from कत (kata): the 2026-07-18 owner incident (`search
+    # 'धर्मन्'` silently missing what `search dharman` found) was exactly
+    # query_forms stripping the virāma first.
+    #
+    # Each entry is a with_map callable: str → [neutralized, char-index map]
+    # (fold_with_map composes the maps for KWIC). Applied SYMMETRICALLY:
+    # search_form neutralizes documents at the adapter boundary, query_forms
+    # adds each neutralized variant to the union. The Cyrl table's widenings
+    # and deliberate non-rules are documented (and journaled) on Nabu::Cyrl.
+    #
+    # Changing (or adding) a neutralization changes text_normalized for its
+    # languages: the rebuild-storm caveat at the end of §9 applies — plan one
+    # `nabu rebuild`, which refreshes the fulltext index.
+    SCRIPT_NEUTRALIZATIONS = {
+      "san" => Deva.method(:to_iast_with_map),
+      "chu" => Cyrl.method(:neutralize_with_map),
+      "orv" => Cyrl.method(:neutralize_with_map),
+      "bul" => Cyrl.method(:neutralize_with_map)
+    }.freeze
+
     # == The per-language NFC exemption (P26-3, owner ruling 2026-07-18)
     #
     # Nabu stores text NFC — with ONE named exception: Biblical Hebrew and
@@ -164,12 +197,18 @@ module Nabu
 
     # The TRUE search form stored in Passage#text_normalized, minted ONCE at
     # the adapter boundary (Passage.new defaults to this — the single place
-    # folding happens). Generic fold (NFC → downcase → strip \p{Mn} → NFC)
-    # plus the language's extra rules from LANGUAGE_FOLDS. The pristine text
-    # is never touched; this is a derived, per-passage search column.
+    # folding happens). NFC → downcase → script neutralization (P27-2, when
+    # the language has one — BEFORE the mark strip, see above) → generic fold
+    # (strip \p{Mn} → NFC) → the language's extra rules from LANGUAGE_FOLDS.
+    # The pristine text is never touched; this is a derived, per-passage
+    # search column.
     def self.search_form(text, language:)
-      folded = fold_diacritics(nfc(text).downcase)
-      extra = LANGUAGE_FOLDS[primary_subtag(language)]
+      subtag = primary_subtag(language)
+      src = nfc(text).downcase
+      neutralizer = SCRIPT_NEUTRALIZATIONS[subtag]
+      src = neutralizer.call(src).first if neutralizer
+      folded = fold_diacritics(src)
+      extra = LANGUAGE_FOLDS[subtag]
       extra ? extra.call(folded) : folded
     end
 
@@ -185,9 +224,22 @@ module Nabu
     # generic variant still matches languages whose rule table is empty
     # (Gothic "jah" stays findable even though the lat variant folds the
     # query to "iah").
+    # P27-2: the union now also carries each SCRIPT_NEUTRALIZATIONS variant —
+    # extra_L(generic(neutralize_L(query))) — so a query spelled in EITHER of
+    # a language's scripts covers that language's indexed skeleton (the same
+    # cannot-miss argument, with neutralization folded into "how the document
+    # was folded").
     def self.query_forms(query)
-      generic = fold_diacritics(nfc(query).downcase)
-      [generic, *LANGUAGE_FOLDS.values.map { |extra| extra.call(generic) }].uniq
+      src = nfc(query).downcase
+      generic = fold_diacritics(src)
+      keys = LANGUAGE_FOLDS.keys | SCRIPT_NEUTRALIZATIONS.keys
+      variants = keys.map do |key|
+        neutralizer = SCRIPT_NEUTRALIZATIONS[key]
+        folded = neutralizer ? fold_diacritics(neutralizer.call(src).first) : generic
+        extra = LANGUAGE_FOLDS[key]
+        extra ? extra.call(folded) : folded
+      end
+      [generic, *variants].uniq
     end
 
     # Fold +text+ exactly as search_form does, but return a CHARACTER-INDEX
@@ -208,21 +260,49 @@ module Nabu
     # against Greek with combining marks. A character that folds away entirely
     # (a lone combining mark) contributes nothing to folded/map, keeping the
     # surviving indices exact.
+    # P27-2: a neutralized language (san/chu/orv/bul) first runs its
+    # neutralizer's with_map over the downcased source — digraph collapses
+    # and the inherent-a logic land on the neutralizer's own map — then the
+    # per-char fold composes the two maps. Per-char downcasing (identical to
+    # the pre-P27-2 path) keeps the source indices aligned.
     def self.fold_with_map(text, language:)
+      subtag = primary_subtag(language)
       src = nfc(text)
-      extra = LANGUAGE_FOLDS[primary_subtag(language)]
+      extra = LANGUAGE_FOLDS[subtag]
+      neutral, source_map = neutral_with_identity_or_map(src, subtag)
       folded = +""
       map = []
-      src.each_char.with_index do |char, i|
-        piece = fold_diacritics(char.downcase)
+      neutral.each_char.with_index do |char, i|
+        piece = fold_diacritics(char)
         piece = extra.call(piece) if extra
         piece.each_char do |folded_char|
           folded << folded_char
-          map << i
+          map << source_map[i]
         end
       end
       [folded, map]
     end
+
+    # [neutralized-or-downcased string, output-char → source-char index map].
+    # Per-char downcase with each produced char mapped to its source char
+    # (faithful to the pre-P27-2 loop even for 1→n downcases); a neutralizer
+    # then composes its own map on top.
+    def self.neutral_with_identity_or_map(src, subtag)
+      down = +""
+      down_map = []
+      src.each_char.with_index do |char, i|
+        char.downcase.each_char do |produced|
+          down << produced
+          down_map << i
+        end
+      end
+      neutralizer = SCRIPT_NEUTRALIZATIONS[subtag]
+      return [down, down_map] unless neutralizer
+
+      neutral, neutral_map = neutralizer.call(down)
+      [neutral, neutral_map.map { |j| down_map[j] }]
+    end
+    private_class_method :neutral_with_identity_or_map
 
     # "grc-Grek" → "grc": rule-table keys are primary subtags only.
     def self.primary_subtag(language)
