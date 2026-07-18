@@ -682,6 +682,24 @@ diorisis:
   sync_policy: manual
   lemma_tier: silver
 
+aed:
+  adapter: Nabu::Adapters::Aed
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync aed — sparse clone, the
+                   # ~18 MB dictionary cone of a 651 MB repo — then eyeball
+                   # nabu define nfr / define aa / define --lang egy htp
+                   # and 5 random entries before flipping).
+  # P28-1: the Egyptian dictionary shelf — the TLA/BBAW Ägyptische
+  # Wortliste (github.com/simondschweitzer/aed-tei, files/dictionary.xml,
+  # 35,052 entries; CC BY-SA 4.0 verbatim in-file <availability>). New
+  # aed-tei parser family (TEI P5, NOT the PersDict shape). THE JOIN
+  # CONTRACT: entry ids are the upstream xml:ids verbatim — the TLA
+  # lemmaIDs the AES corpus (P28-0) mints as gold lemmas — so
+  # urn:nabu:dict:aed:<lemmaID> is exactly what an AES annotation
+  # predicts. Upstream is a 2019 frozen export with occasional edits:
+  # re-fetch is an owner decision.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

@@ -8897,3 +8897,96 @@ Tests +72 methods (cyrl 17, hebr 8, deva 2, normalize 9, display 19,
 cli 13, search 2, lemma-search 2 — plus reworked folded-key pins across
 8 files). Suite 3,490 runs / 45,970 assertions exit 0 (0 skips) · lint
 432 files exit 0.
+
+# ── Phase 28 ──────────────────────────────────────────────────────────
+
+## P28-1 · AED — the Egyptian dictionary shelf (define/etym for egy)  [tier: fable] [status: done 2026-07-18 — awaiting review; verdicts below]
+
+Source: github `aed-tei` (the TLA/BBAW dictionary export),
+`files/dictionary.xml` — 35,052 entries, 18 MB, TEI P5. In-file
+`<availability>` verbatim: "Metadata and texts are released as Creative
+Commons, Attribution-ShareAlike 4.0 (CC BY-SA 4.0)" → `attribution`,
+quoted in the manifest. One authorized clone to scratch; fixture = a
+byte-verbatim 31-entry slice + README (license quote, upstream sha
+`462c722e0323e05641aea2eee8cdf1e27303d939`).
+
+THE JOIN CONTRACT (the packet's point, as implemented): AED entry ids
+are the upstream `xml:id` VERBATIM ("tla550034") — the TLA lemmaIDs the
+AES corpus (P28-0, sibling in flight) mints as gold lemmas — so the
+minted urn
+
+    urn:nabu:dict:aed:<lemmaID>
+
+is exactly what an AES annotation predicts. AES token references spell
+the id in TEI prefix notation ("tla:550034", per the corpus's own
+prefixDef); normalizing that to "tla550034" is the AES side's one
+obligation. Test-pinned END-TO-END through the REAL DictionaryLoader:
+the fixture loads, a hand-made AES-SHAPED lemma reference (honestly
+labeled — P28-0's code is not merged) predicts the urn, and
+Define#by_urn resolves it to the nfr adjective with gloss and license
+intact. `define nfr` fans out the homograph cluster; ReflexViews
+attested counts light when both shelves are live.
+
+SHIPPED:
+- `Nabu::Adapters::AedTeiParser` (new `aed-tei` family — TEI P5 default
+  namespace, NOT the PersDict shape): Nokogiri Reader streaming
+  (18 MB > the 5 MB DOM rule), per-entry strict mini-DOM +
+  remove_namespaces!. Censused over all 35,052 entries: exactly one
+  form/orth, one gramGrp/term, one sense, one bibl each — the parser
+  raises ParseError on missing id/orth, honest to that census.
+- `Nabu::Adapters::Aed`: content_kind :dictionary, slug `aed`, language
+  `egy`, GitFetch with SPARSE CONE ["files/dictionary.xml", "README.md"]
+  (the DCS recipe) — the repo's other ~55,000 files are AES text
+  surfaces (651 MB working tree) that belong to P28-0's own source, not
+  this shelf. Registry `enabled: false`, `sync_policy: manual`.
+- conventions §9 `egy` fold: ꜣ→a (Ꜣ via downcase), ꜥ→a, ʾ (U+02BE, Lm)
+  dropped — census-argued (ꜣ ×12,753, ꜥ ×6,451, ʾ ×1,036 are the ONLY
+  letters the generic fold cannot reach); everything else measured to
+  fall to the generic strip (ḥ ḫ ẖ š ṯ ḏ ṱ decompose; i̯/macron-below
+  are Mn; yod is spelled j upstream — no rule; 〈〉 ×1 stays paste-only).
+  `define nfr`, `define aa` (ꜥꜣ), `define hap-r` (ḥꜣp-rʾ), `aj.wj` all
+  land from ASCII — test-pinned. Journaled: keyed by primary subtag so
+  the two live papyri egy-Egyd Demotic documents refold at the next
+  planned `nabu rebuild` (the §9 rebuild-storm caveat, NOT vacuous this
+  time — flagged, trivial at 2 documents).
+
+VERDICTS (censused from real data, per the packet):
+- Wb page citations → dictionary_citations, the ZRC print-citation
+  shape (the Hebrew-BDB deep-link pattern): label + urn_raw = the bibl
+  segment VERBATIM, cts_work nil (⇒ Define resolves nothing — honest
+  until a Wb local-library scan exists; JOURNALED SYNERGY: when a
+  scanned Wb lands in the local library, `citation` already carries
+  volume.page as the deep-link key). Segment rule /\AWb\s/ per
+  ";"-split segment: 13,369 bibl-initial + 34 mid-bibl = 13,403 minted
+  upstream; the "Wb 3. 293.2-6" dot-after-volume quirk (×32) parses
+  too. Other print references (MedWb, KoptHWb, Meeks, GDG, LGG, FCD…)
+  mint NO rows — they read verbatim in the body's bibl line.
+- Root cross-refs → BODY CROSS-REFERENCE LINES, not reflex rows: the
+  census killed the reflex option honestly — an xr ref is an EMPTY
+  `<ref target="tla…"/>` carrying no surface form and no language, so
+  a DictionaryReflex (word required) cannot be minted without
+  fabrication. All eight censused types land as "type: id, id" lines
+  verbatim (root ×13,470, rootOf ×3,254, partOf ×1,674, contains ×837,
+  referencing ×82, referencedBy ×78, predecessor ×2, successor ×2),
+  and every id resolves through the join contract (`nabu show
+  urn:nabu:dict:aed:<id>`).
+- Gloss lane = GERMAN (the file's complete lane: de on 35,053 cits =
+  100% of entries, TLA's own curated Bedeutung; en covers only 16,971)
+  — one language per shelf beats a mixed en-else-de lane; the English
+  (and the two fr/it oddball) translations ride the body verbatim as
+  their own labeled lines, searchable and rendered by define.
+- Language `egy`: the file's own claims censused — the dictionary
+  header carries no ISO tag (title "Ägyptische Wortliste"; the repo's
+  text files say mainLang="Egyp", a non-ISO local code); `egy` is the
+  ISO 639-2 code for Egyptian (Ancient), the shelf-level tag.
+
+Tests +32 methods (aed-tei parser 17, aed adapter 14 incl. the
+cross-shelf join pin, normalize egy fold 1 with 9 assertions, fixture
+manifest rides the existing sweep). Registry census untouched
+(enabled: false). Suite 3,549 runs / 46,353 assertions exit 0 (0
+skips) · lint 436 files exit 0.
+
+OWNER QUEUE: bin/nabu sync aed (sparse ~18 MB cone), eyeball
+`nabu define nfr` / `define aa` / 5 random entries, flip enabled; next
+`nabu rebuild` refolds the two egy-Egyd papyri documents under the new
+fold.
