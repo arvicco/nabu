@@ -4249,32 +4249,76 @@ module Nabu
       # streaming (callbacks stay nil) and one plain line per 100 documents.
       def progress_reporter
         tty = $stderr.tty?
+        state = { stage: nil, started: nil, processed: 0, errored: 0, last: 0 }
+        @progress_state = state
         Nabu::ProgressReporter.new(
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
-          on_load_tick: load_tick(tty)
+          on_load_tick: load_tick(tty, state),
+          on_stage: stage_tick(tty, state)
         )
       end
 
-      def load_tick(tty)
-        last = 0
+      # Owner feedback (2026-07-18): a long rebuild must name the source it
+      # is on and how long each stage took. A stage closes when the next one
+      # opens (or at finish_progress), its line ending in final counts +
+      # elapsed; sync paths never call stage, so they keep the bare counter.
+      def stage_tick(tty, state)
+        lambda do |label|
+          close_stage(state)
+          state[:stage] = label
+          state[:started] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+          state[:processed] = state[:errored] = state[:last] = 0
+          $stderr.print("\r\e[K  #{label}… ") if tty
+        end
+      end
+
+      def close_stage(state)
+        return if state[:stage].nil?
+
+        line = "  #{state[:stage]}… #{stage_counts(state)}#{format_elapsed(state)}"
+        $stderr.tty? ? $stderr.print("\r\e[K#{line}\n") : warn(line)
+        state[:stage] = nil
+      end
+
+      # Zero docs is an axis/facet/index stage, not an empty shelf — show
+      # only the timing (compact-output convention: suppress zero fields).
+      def stage_counts(state)
+        return "" if state[:processed].zero? && state[:errored].zero?
+
+        "#{state[:processed]} docs#{quarantine_suffix(state[:errored])} "
+      end
+
+      def format_elapsed(state)
+        secs = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
+        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+      end
+
+      def load_tick(tty, state)
         lambda do |processed, errored|
+          state[:processed] = processed
+          state[:errored] = errored
+          label = state[:stage] || "loading"
           if tty
-            $stderr.print("\r#{loading_line(processed, errored)}  ")
-          elsif processed - last >= 100
-            last = processed
-            warn(loading_line(processed, errored))
+            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}  ")
+          elsif processed - state[:last] >= (state[:stage] ? 1000 : 100)
+            state[:last] = processed
+            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}")
           end
         end
       end
 
-      def loading_line(processed, errored)
-        suffix = errored.positive? ? " (#{errored} quarantined)" : ""
-        "  loading… #{processed} docs#{suffix}"
+      def quarantine_suffix(errored)
+        errored.positive? ? " (#{errored} quarantined)" : ""
       end
 
-      # Break off the \r-updated counter line before the final counts, tty only.
+      # Break off the \r-updated counter line before the final counts —
+      # closing the open stage (with its timing) when there is one.
       def finish_progress
-        $stderr.print("\n") if $stderr.tty?
+        if @progress_state && @progress_state[:stage]
+          close_stage(@progress_state)
+        elsif $stderr.tty?
+          $stderr.print("\n")
+        end
       end
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
