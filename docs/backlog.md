@@ -8897,3 +8897,102 @@ Tests +72 methods (cyrl 17, hebr 8, deva 2, normalize 9, display 19,
 cli 13, search 2, lemma-search 2 — plus reworked folded-key pins across
 8 files). Suite 3,490 runs / 45,970 assertions exit 0 (0 skips) · lint
 432 files exit 0.
+
+# ── Phase 28 ──────────────────────────────────────────────────────────
+
+## P28-0 · AES — the Egyptian corpus and gold-lemma mint  [tier: fable] [status: done 2026-07-18 — adapter + aes-json family + AesDates axis + -de siblings shipped; verdicts below]
+
+The phase headliner: `github.com/simondschweitzer/aes` — the TLA/BBAW
+January-2018 snapshot, 101,796 lemmatized sentences / 13,026 texts / 16
+subcorpus JSON files (~342 MB). License VERBATIM in the repo README:
+"All files: CC-BY-SA 4.0" → `attribution` (quoted in manifest + fixture
+README + 02-sources row 70).
+
+CENSUS VERDICTS (whole-corpus, at pinned commit 35276d25):
+
+- **Grain**: sentences CONTIGUOUS per text in file order in all 16 files;
+  a text never spans subcorpora; sentence ids globally unique;
+  owner/date/findspot constant per text (0 conflicts). Document = the AED
+  TEXT (`urn:nabu:aes:<subcorpus>:<AED-id>`), passage = the sentence on
+  upstream's stable sentence id, sequence = file order.
+- **Language codes**: the JSON carries NO language or stage tags (no such
+  field in schema or data; the snapshot brands itself "Earlier Egyptian"
+  yet spans OK–Roman) → uniform `egy` (ISO 639-2 Egyptian (Ancient)),
+  stage subtags never invented.
+- **Surface**: the Unicode TRANSLITERATION (written_form, space-joined) —
+  the scholarly citation surface, the ORACC-translit precedent.
+  Hieroglyphs (entity-decoded), MdC and Gardiner numbers ride the token
+  annotations. JOURNALED (not wired): a `--display` hieroglyph mode over
+  the token `hiero_unicode` layer — the P27 mode registry makes it a
+  render-only follow-up, no re-parse.
+- **THE TRAP, confirmed live and pinned with real fixture bytes**:
+  `hiero_unicode` is HTML-entity-encoded (`&#x13099;`; all 241,414
+  occurrences hex-numeric, zero literal hieroglyphs, zero entities in any
+  other field) — decoded at the adapter boundary. Second boundary
+  regression: 13,682 written forms carry deprecated U+2329/U+232A angle
+  brackets → NFC-composed to U+3008/3009 by the standard boundary nfc
+  (both pinned on offending bytes).
+- **Token-less sentences**: 3 corpus-wide, never a whole text — no
+  citable Egyptian surface → no original passage (their German still
+  rides the sibling as a one-sided parallel row). Fixtured (the real
+  NS6BAIQRENELJM2A2LDNHIYK6E).
+- **Sibling verdict**: sentence_translation is the editor's German,
+  100,633/101,796 = 98.9% coverage → the translations:true machinery FITS
+  (the Damaskini shape): one `-de` sibling per text with ≥1 translated
+  sentence (12,985 of 13,026), language `ger` (the Freising German tag),
+  passages on the SAME sentence ids; Query::Parallel gained the AES work
+  pattern (text ids are uppercase [A-Z0-9], none ends in "-de" — the
+  literal-tail stance) → `show --parallel ger` renders verse pairs. Same
+  CC BY-SA grant ("All files") — no license override.
+- **Axis coverage**: date takes SIX values corpus-wide ("OK & FIP"
+  ×36,326 / "NK" ×33,177 / "TIP - Roman times" ×16,426 / "MK & SIP"
+  ×14,205 / "unknown" ×1,660 / degenerate "k" ×2 — both bbawarchive,
+  fixtured); findspot 8 coarse regions. AxisBuilder::AesDates maps the
+  four real periods to conventional Egyptological envelopes (Shaw 2000;
+  the corpus's own thesaurus doi 10.5281/zenodo.3581069 defines the
+  vocabulary, no absolute years) — OK&FIP [-2686,-2025], MK&SIP
+  [-2055,-1550], NK [-1550,-1069], TIP-Roman [-1069,395] — place verbatim
+  ("unknown" is not a place); unmapped values counted undated, never
+  guessed. Projected: 12,893 dated + 14 place-only rows, 119 undated.
+  Facets: subcorpus (16) / period (4) / findspot (7).
+- **Fetch**: sparse GitFetch (P26-0 recipe) cone `files/aes` + root
+  `README.md` — sparse IS warranted: the `files/relANNIS/` ANNIS
+  re-export (~114 MB of zips, same data) stays outside the cone.
+  Frozen snapshot (TLA at corpus v20) → sync_policy manual; the official
+  TLA HF datasets are the freshness channel (P28-2's lane).
+
+THE LEMMAID JOIN CONTRACT (P28-1 builds on this): every lemmatized token
+annotation carries `lemma` = lemma_form (the shared treebank contract →
+passage_lemmas, tier GOLD — TLA lemmatization is editor-verified; absent
+from lemma_tiers = gold, the P26-0 contract) AND `lemma_id` = the AED
+lemmaID VERBATIM ("123130" — the TLA lemma space, AED at
+simondschweitzer.github.io/aed). P28-1's AED dictionary mints its entry
+ids from the SAME space, so the join is EXACT STRING EQUALITY
+lemma_id == entry_id — no folding, no transliteration round-trip, no
+homograph heuristics. Token `_id` and `zaehler` deliberately not ingested
+(zaehler = position we already keep; _id joins only the excluded relANNIS
+export).
+
+Projected first sync: 26,011 docs (13,026 texts + 12,985 -de) / 202,426
+passages (101,793 translit + 100,633 German) / ≈779k gold egy lemma
+tokens; ~342 MB cone on disk (git compresses JSON heavily on the wire).
+
+Fixtures: byte-verbatim sentence-block slices of 3 real subcorpora
+(tuebingerstelen: NK + findspot + `&#x13099;` + U+2329; bbawarchive: the
+real "k" text + the token-less sentence; sawlit: an untranslated
+sentence + lemma-less tokens) + aesschema.json whole; upstream commit
+35276d2527cca1a055e31ed5f6683e777717170f pinned in README + manifest
+(root README.md quoted, not fixtured — path collides with the house
+fixture README).
+
+Tests +34 methods (adapter 28 incl. conformance suite, entity-decode +
+NFC-bracket regressions on real bytes, idempotent double-load, the
+lemma-index e2e — LemmaSearch finds both attesting AES passages at tier
+gold — parallel verse-pair pin, sparse local-git fetch; axis 6 incl. the
+frozen-mint drift pin). Suite 3,551 runs / 46,843 assertions exit 0
+(0 skips) · lint 436 files exit 0.
+
+OWNER QUEUE: `bin/nabu sync aes` (sparse ~342 MB cone), eyeball
+`nabu show urn:nabu:aes:tuebingerstelen:3F5KUVWQG5EPBM7GMQ6ZFVO5OQ
+--parallel ger` + `nabu search --lemma ẖn.w` + 5 random passages + the
+axis line (expect aes 12,907 dated/placed), then flip enabled.

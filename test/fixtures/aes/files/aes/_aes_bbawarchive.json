@@ -1,0 +1,262 @@
+{
+  "IBUBd6p9a4LerEzYpRTvEGPVh3g": {
+    "text": "26BP5JT5RZEDHDDU2R5TMUBD24",
+    "owner": "Stefan Grunert",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Middle Egypt (from Kairo to Assiut)",
+    "sentence_translation": "keine Übersetzung vorhanden",
+    "token": [
+      {
+        "_id": "IBUBdzvCetVHk0cxlKW2j3xbAFU",
+        "lineCount": " [1]",
+        "written_form": "[W]sr,t-[⸮_?]",
+        "mdc": "[w]sr,t-[⸮_?]",
+        "cotext_translation": "[männlicher Personenname]",
+        "lemma_form": "_",
+        "lemmaID": "850830",
+        "zaehler": "1",
+        "pos": "entity_name"
+      }
+    ]
+  },
+  "IBUBd5yQdZzbSE8TsmQVGvI8nKk": {
+    "text": "26BP5JT5RZEDHDDU2R5TMUBD24",
+    "owner": "Stefan Grunert",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Middle Egypt (from Kairo to Assiut)",
+    "sentence_translation": "keine Übersetzung vorhanden",
+    "token": [
+      {
+        "_id": "IBUBdwoWgJgqQUr3iNpCRIqeL40",
+        "lineCount": " [2]",
+        "written_form": "[ṯḥ]n,t",
+        "mdc": "[TH]n,t",
+        "cotext_translation": "Fayence; Glas (aus Silicium)",
+        "lemma_form": "ṯḥn.t",
+        "lemmaID": "176620",
+        "zaehler": "1",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "feminine"
+      }
+    ]
+  },
+  "IBUBdwPy4SkB4EWiu3RQDPwmahc": {
+    "text": "26BP5JT5RZEDHDDU2R5TMUBD24",
+    "owner": "Stefan Grunert",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Middle Egypt (from Kairo to Assiut)",
+    "sentence_translation": "keine Übersetzung vorhanden",
+    "token": [
+      {
+        "_id": "IBUBd6Qn3vUlM03KsmKUcGi3Suw",
+        "lineCount": " [3]",
+        "written_form": "⸢sw⸣",
+        "mdc": "⸢sw⸣",
+        "cotext_translation": "Monatstag",
+        "lemma_form": "sw",
+        "lemmaID": "854542",
+        "zaehler": "1",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "masculine"
+      },
+      {
+        "_id": "IBUBd3kdxYNskE7msrdVC14Er24",
+        "lineCount": " [3]",
+        "written_form": "⸢13⸣",
+        "mdc": "⸢13⸣",
+        "cotext_translation": "[Kardinalzahl (ganze Zahlen und Brüche) in Ziffernschreibung]",
+        "lemma_form": "1...n",
+        "lemmaID": "850814",
+        "zaehler": "2",
+        "pos": "numeral",
+        "number": "cardinal"
+      }
+    ]
+  },
+  "IBUBdxHWAVN3UUTkvy2EIRJhvFM": {
+    "text": "26BP5JT5RZEDHDDU2R5TMUBD24",
+    "owner": "Stefan Grunert",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Middle Egypt (from Kairo to Assiut)",
+    "sentence_translation": "keine Übersetzung vorhanden",
+    "token": [
+      {
+        "_id": "IBUBd42QW2fca0KvgaFwS8VzA8k",
+        "lineCount": " [4]",
+        "written_form": "[ṯḥ]n,t",
+        "mdc": "[TH]n,t",
+        "cotext_translation": "Fayence",
+        "lemma_form": "ṯḥn.t",
+        "lemmaID": "176620",
+        "zaehler": "1",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "feminine"
+      }
+    ]
+  },
+  "IBUBd7W06hZCOUOouuqGiQEcuek": {
+    "text": "IMLY3YQIZFHHNJUGOZXVPOJTGU",
+    "owner": "Stephan Seidlmayer",
+    "corpus": "bbawarchive",
+    "date": "k",
+    "findspot": "unknown",
+    "sentence_translation": "Erdmandeln",
+    "token": [
+      {
+        "_id": "IBUBdwBWzsUIqEa1se45WaK7KSI",
+        "lineCount": " Sp. x+1.1, Zl. x+9",
+        "written_form": "wꜥḥ",
+        "mdc": "waH",
+        "cotext_translation": "Erdmandeln",
+        "lemma_form": "wꜥḥ",
+        "lemmaID": "44830",
+        "zaehler": "1",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "masculine"
+      }
+    ]
+  },
+  "IBUBd7wpYXThcEPNnpuRNfcFwxY": {
+    "text": "NS6BAIQRENELJM2A2LDNHIYK6E",
+    "owner": "Stephan Seidlmayer",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Upper Egypt (South of Assiut)",
+    "sentence_translation": "der \"Siegler des unterägyptischen Königs\", \"einzige Königsfreund\", \"Königsdiener\", Vorsteher der Schreiber der Arbeitermannschaften Metjenu",
+    "token": [
+      {
+        "_id": "IBUBd4dHiX2gRUuHosQgZQpHQB8",
+        "lineCount": " [3.3.2]",
+        "written_form": "ḫtm(,tj)-bjtj",
+        "mdc": "xtm(,tj)-bjtj",
+        "cotext_translation": "\"Siegler des Königs von Unterägypten\"",
+        "lemma_form": "ḫtm.tj-bj.tj",
+        "lemmaID": "400193",
+        "zaehler": "1",
+        "pos": "epitheton_title",
+        "epitheton": "title"
+      },
+      {
+        "_id": "IBUBdQ7DfZ5kO0C1saaB0YxJJgc",
+        "lineCount": " [3.3.2]",
+        "written_form": "smr-wꜥ,t(j)",
+        "mdc": "smr-wa,t(j)",
+        "cotext_translation": "Einziger Freund (des Königs)",
+        "lemma_form": "smr-wꜥ.tj",
+        "lemmaID": "400142",
+        "zaehler": "2",
+        "pos": "epitheton_title",
+        "epitheton": "title"
+      },
+      {
+        "_id": "IBUBd82bLErtlEW0l0JYEedpPSE",
+        "lineCount": " [3.3.2]",
+        "written_form": "ẖr(,j)-tp-nswt",
+        "mdc": "Xr(,j)-tp-nswt",
+        "cotext_translation": "Diener des Königs",
+        "lemma_form": "ẖr.j-tp-nswt",
+        "lemmaID": "450367",
+        "zaehler": "3",
+        "pos": "epitheton_title",
+        "epitheton": "title"
+      },
+      {
+        "_id": "IBUBdQZiFXPfYEKOsEQlchwODXc",
+        "lineCount": " [3.3.2]",
+        "written_form": "(j)m(,j)-rʾ-zẖꜣ(,ww)-ꜥpr,pl",
+        "mdc": "(j)m(,j)-rA-zXA(,ww)-apr,pl",
+        "cotext_translation": "Vorsteher der Mannschaftsschreiber",
+        "lemma_form": "jm.j-rʾ-zẖꜣ.ww-ꜥpr.w",
+        "lemmaID": "450121",
+        "zaehler": "4",
+        "pos": "epitheton_title",
+        "epitheton": "title"
+      },
+      {
+        "_id": "IBUBdQbXs2XgqUDkh9EYQQqVBVM",
+        "lineCount": " [3.3.2]",
+        "written_form": "Mṯn,w",
+        "mdc": "mTn,w",
+        "cotext_translation": "Metschenu",
+        "lemma_form": "Mṯn.w",
+        "lemmaID": "850669",
+        "zaehler": "5",
+        "pos": "entity_name",
+        "name": "person_name"
+      }
+    ]
+  },
+  "IBUBdwhVm5N370o5pPu6HEUHvQc": {
+    "text": "NS6BAIQRENELJM2A2LDNHIYK6E",
+    "owner": "Stephan Seidlmayer",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Upper Egypt (South of Assiut)",
+    "sentence_translation": "Erdmandeln, Gerste, isched-Früchte",
+    "token": [
+      {
+        "_id": "IBUBdzwYisRC5kkFqzQLUygZWE4",
+        "lineCount": " [3.3.2]",
+        "written_form": "wꜥḥ",
+        "mdc": "waH",
+        "cotext_translation": "Erdmandel, Rhizomknollen (cyperus esculentus)",
+        "lemma_form": "wꜥḥ",
+        "lemmaID": "44830",
+        "zaehler": "1",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "masculine"
+      },
+      {
+        "_id": "IBUBd5o9GRV78UjRq7WLlyicTPE",
+        "lineCount": " [3.3.2]",
+        "written_form": "sẖ,t",
+        "mdc": "sX,t",
+        "cotext_translation": "Gerste",
+        "lemma_form": "sẖ.t",
+        "lemmaID": "143330",
+        "zaehler": "2",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "feminine"
+      },
+      {
+        "_id": "IBUBd9e8QjrvnkkqkOYG3G0Z2Rs",
+        "lineCount": " [3.3.2]",
+        "written_form": "jšd,t",
+        "mdc": "jSd,t",
+        "cotext_translation": "[Frucht vom Ischedet-Baum]",
+        "lemma_form": "jšd.t",
+        "lemmaID": "32170",
+        "zaehler": "3",
+        "pos": "substantive",
+        "numerus": "singular",
+        "status": "st_absolutus",
+        "genus": "feminine"
+      }
+    ]
+  },
+  "IBUBd4R4jQOm80W1gMPGfy493eQ": {
+    "text": "NS6BAIQRENELJM2A2LDNHIYK6E",
+    "owner": "Stephan Seidlmayer",
+    "corpus": "bbawarchive",
+    "date": "OK & FIP",
+    "findspot": "Upper Egypt (South of Assiut)",
+    "sentence_translation": "{Chui-en-Chenemu}",
+    "token": []
+  }
+}
