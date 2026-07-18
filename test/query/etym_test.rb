@@ -265,6 +265,11 @@ module Query
       make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
       rebuild!
       assert_empty etym("богъ", lang: "got")
+      # P27-2: the cross-script fold lets the Cyrillic spelling reach the
+      # Latin *bogъ headword directly — but an explicit --lang suppresses the
+      # unfiltered bare-form fallback, so the scoped miss stays honest.
+      assert_empty etym("bogъ", lang: "got")
+      refute_empty etym("богъ", lang: "chu"), "the honored filter still matches its own language"
     end
 
     def test_without_a_fulltext_db_counts_are_nil_but_the_walk_works

@@ -72,12 +72,18 @@ module Nabu
 
         reflex = proto_rows_by_reflex(term, lang: lang, limit: limit)
                  .map { |row, matched| build_result(row, matched: matched) }
+        return reflex unless reflex.empty?
+
         # Bare-form fallback (P14-10): the reflex path missed, so the user most
         # likely typed the RECONSTRUCTION form itself (bʰewgʰ, or ASCII bhewgh)
         # rather than an attested descendant. Try the -pro shelves' own
         # headwords — asterisk optional (zsh globs a bare *), trailing-hyphen
-        # tolerant (root entries store *bʰewgʰ-), folded through §9.
-        reflex.empty? ? headword_results(direct, limit: limit) : reflex
+        # tolerant (root entries store *bʰewgʰ-), folded through §9. An
+        # explicit --lang stays honored: the fallback is UNfiltered by design
+        # (headwords have no reflex language), so a lang-scoped miss is an
+        # honest empty — newly load-bearing since P27-2, when the cross-script
+        # fold made Cyrillic spellings reach Latin proto headwords directly.
+        lang ? [] : headword_results(direct, limit: limit)
       end
 
       # The shelves actually present in the crosswalk (P24-2): distinct
