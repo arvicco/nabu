@@ -8544,3 +8544,102 @@ SHIPPED:
   contract pins, diorisis 1). Suite 3,384 runs / 45,549 assertions
   exit 0 (0 skips) · lint 426 files exit 0. The live
   `bin/nabu sync diorisis` is the orchestrator's review proof.
+
+# ── Phase 27 ──────────────────────────────────────────────────────────
+
+## P27-0 · Display policy core + script-level mark classes  [tier: fable] [status: done 2026-07-18 — Nabu::Display shipped, six render commands wired; verdicts below]
+
+Owner-gated design (2026-07-18, "one big Display phase"): ONE render-only
+policy module applied where passage text reaches the terminal; MCP and
+export always pristine; canonical/db untouched.
+
+SHIPPED:
+- `Nabu::Display` (lib/nabu/display.rb): named mark classes (data-driven,
+  one place), per-language policies from `config/display.yml`
+  (missing file = pass-through; unknown class/language/isolates value =
+  named ConfigError), a MODE REGISTRY (the sibling seam), grapheme-safe
+  stripping, RTL isolate wrapping, `visible_length` for width math.
+- CENSUS (real fixture bytes, 2026-07-18 — the sets are census-backed):
+  · cantillation U+0591–05AF: OSHB Gen/Jer/Ps/Ruth carry 25 distinct
+    accents, ×1,436 total (0591 ×133, 0596 ×254, 05A3 ×243, 05A5 ×248,
+    05B* points excluded by definition).
+  · points: U+05B0–05BC ×5,538, shin/sin dots 05C1 ×230 / 05C2 ×74,
+    05C7 ×0; METEG U+05BD ×252 INCLUDED (Unicode names it HEBREW POINT
+    METEG; census-backed) — a deliberate extension of the spec's
+    enumeration; rafe U+05BF censused ×0 → left OUT ("never strip what
+    you haven't censused"). Sof pasuq 05C3 ×138 / paseq 05C0 ×14 are
+    punctuation — unclassified, always kept.
+  · maqaf U+05BE ×258 — its own class; strips to a SPACE (never fuses
+    the joined words); in `keep` for hbo (default shows it).
+  · vedic-accents U+0951/0952: censused ×0 across the san shelves — DCS
+    is IAST romanization, the SARIT Devanagari fixtures are unaccented.
+    The class is live machinery, honestly journaled as a measured no-op
+    today (policy scoped by primary subtag: san/san-Deva/san-Latn).
+  · titla U+0483 + U+0487 + U+2DE0–2DFF: torot 0483 ×49, ud (orv
+    birchbark) ×51, wiktionary-cu 0483 ×39 / 0487 ×1 / 2DED ×2. The
+    CCMH FIXTURES CARRY NONE — that corpus stores the Helsinki 7-bit
+    ASCII transliteration verbatim (titlo encoded as `!`), so the spec's
+    "OCS shelves use these heavily" is true of TOROT, not CCMH — journaled
+    as measured. Palatalization U+0484 (torot ×22) is NOT a titlo → NOT
+    in the set.
+  · monotonic (grc, OPTIONAL — definable, never defaulted): U+0300/0313/
+    0314/0342/0343/0345; a STRIP, not a polytonic→monotonic conversion
+    (conversion = a later packet's mode).
+- GRAPHEME SAFETY: NFC languages strip via NFD→delete→NFC (precomposed
+  marks reachable); NFC-EXEMPT hbo/arc (P26-3) strip IN PLACE, bytes
+  never normalized — test-pinned on a dagesh+sheva+etnahta sequence.
+- MODES: default (policy strip lists) / full (no transforms, no
+  isolates — the byte-honest escape hatch) / plain (strip+keep union =
+  consonantal Hebrew). Registry seam: modes are objects (#name,
+  #description, #render(text, language:, policy:) → Rendered,
+  #isolates?(policy)); `Display.register_mode` adds (duplicate name =
+  error, never silent replace); `Display.mode` names the registry on a
+  miss. Sibling packets (reading/translit/mono) register and appear in
+  --display without reshaping CLI or module.
+- CALL-SITE CENSUS (cli.rb; every place passage text reached stdout):
+  print_show_passage/_document/_range; parallel_line + block translation
+  (show --parallel); print_align_witness + print_align_range_witness +
+  collation cell/edits/aside (align, --collate); print_search_results
+  (search + --near), print_fuzzy_results, print_lemma_results (pristine
+  line); print_concord_rows; print_parallel_hit evidence + lemma echoes'
+  surfaces stay folded-label; print_cognates witness lemma + surfaces.
+  All funnel through ONE helper (display_text) + per-command
+  print_display_footer. define/etym/vocab/export untouched (dictionary
+  shelf + data surfaces, out of scope).
+- FOOTER: once per invocation, only when a transform actually changed
+  bytes (compact rule): `display: cantillation stripped · rtl isolates
+  (--display full shows all marks)`; chu form byte-pinned as
+  `display: titla stripped (--display full shows all marks)`.
+- ISOLATES: U+2067/U+2069 wrap for hbo/arc runs (config-driven);
+  excluded from ALL width math (Display.visible_length); concord re-pads
+  its KWIC columns over visible characters post-transform (keyword
+  column pinned at exactly --width); align layout byte-identical apart
+  from the text runs (structural-lines pin).
+- INDEPENDENCE PINS: same search hits under every --display mode;
+  `show --display full` byte-identical to db text; MCP nabu_show serves
+  pristine bytes with the shipped display.yml present (tools_test pin).
+- Config seam: `Config#display_path` (`paths: display:` override,
+  default config/display.yml, kwarg default beside sources.yml — test
+  rigs opt IN by placing a display.yml; all pre-P27 rigs untouched).
+- DEVIATIONS (from the letter of the spec, argued): (1) meteg U+05BD
+  into `points` (Unicode name + census ×252; without it "plain" is not
+  consonantal); (2) maqaf strips to space, not empty (deleting would
+  fuse עַל־פְּנֵי into one word); (3) mixed-language documents render
+  document-listing lines under the DOCUMENT language policy
+  (PassageLine carries no language; hbo/arc Daniel-Ezra splits land in
+  the same script family, correct in practice).
+- DOCS: NEW public docs/display.md (owner addendum 2026-07-18) — nabu's
+  display layer + the verified terminal-side facts (iTerm2 ≥3.6.0
+  experimental RTL toggle under Settings→General→Experimental;
+  Terminal.app no bidi; non-ASCII font slot is per-codepoint → Noto Sans
+  Mono same-size, Ezra SIL/SBL Hebrew via a dedicated profile; Noto
+  script casks join the fallback cascade) + per-script quick table with
+  real-shelf test commands. ops.md §16 summary → links it; site/faq.md
+  new Q (terminal display) → links it; site/tools.md checked — no
+  display discussion, untouched.
+- Tests +37 (display_test 25 unit incl. fixture-byte pins for
+  hbo/chu/san + config validation + registry seam; cli 9 e2e incl.
+  footer presence/absence, full byte-identity, consonantal plain,
+  search-mode independence, KWIC column, align layout; config 2; mcp 1
+  pristine pin). Suite 3,421 runs / 45,701 assertions exit 0 (0 skips)
+  · lint 428 files exit 0.
