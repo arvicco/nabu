@@ -561,6 +561,53 @@ isicily:
   # re-syncs are owner-fired.
   sync_policy: manual
 
+itant:
+  adapter: Nabu::Adapters::Itant
+  enabled: false   # until the owner-fired first sync is eyeballed (checklist
+                   # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
+                   # nabu show urn:nabu:itant:oscan-2 (the Monte Vairano
+                   # curse tablet, pakis: heleviis. trebieís) beside its
+                   # -ita/-eng siblings, urn:nabu:itant:lepontic-1 beside
+                   # -dipl, and 5 random records, then flip). Expect 1,160
+                   # docs (dry-run censused on the full clone, 0 quarantines):
+                   # 500 interpretative + 9 -dipl + 641 translation siblings
+                   # (320 ita + 321 eng) + 10 metadata-only lost inscriptions.
+  # Corpus ItAnt (DigItAnt, PRIN 2017 CNR-ILC/UniFI; cite Murano et al.,
+  # JOCCH 16.3 (2023), 10.1145/3606703): 501 Oscan + 9 Lepontic EpiDoc
+  # records (2026-07-18 census). CC BY-NC-SA 4.0 in README + license.txt +
+  # every record's <licence> → nc (MCP default-excluded). Second witness
+  # beside CEIPoM's Oscan — deliberately unmerged, meeting at the shared
+  # tm: reference edges. RE-SYNC WATCH (journaled): the Venetic_/Faliscan_
+  # dirs are README-only ("available once the revision process is
+  # completed") — a later owner-fired sync picks them up; nothing promised.
+  # Lexicon_ItAnt (OntoLex-lemon TTL sibling repo) is v2, journaled — the
+  # first RDF dictionary-format decision is owner-gated (2026-07-18).
+  sync_policy: manual
+  # P29-2: ita + eng translation divs ride as -ita/-eng sibling documents
+  # where records carry prose (336 each upstream; the parser's own census
+  # decides, the riig -fr pattern). The eng divs' in-div CC BY-SA ref is
+  # recorded in the fixture README; siblings keep the source-level nc.
+  translations: true
+
+sabellic-loans:
+  adapter: Nabu::Adapters::SabellicLoans
+  enabled: false   # until the owner-fired first sync is eyeballed
+                   # (bin/nabu sync sabellic-loans — no network, vendored
+                   # copy + LocalFetch pin; eyeball `nabu etym rufus` for
+                   # the osc 𐌓𐌖𐌚𐌓𐌉𐌉𐌔 / xum 𐌓𐌖𐌚𐌓𐌖 loan pair and
+                   # `nabu define '𐌖𐌌𐌄𐌍'`, then flip). Expect 85 entries
+                   # across three shelves: sabellic-osc 48 / sabellic-xum
+                   # 11 / sabellic-sbv 26.
+  # P29-2 rider: Sabellic → Latin curated loan edges (the P17-3 borrowed
+  # pattern). config/sabellic_loans.yml IS the artifact — word lists from
+  # the en.wiktionary "Latin terms borrowed/derived from Oscan/Umbrian/
+  # Sabine" category pages (retrieved 2026-07-18; borrowed 23/6/13,
+  # derived supersets 48/11/26), etyma from each entry's own {{bor}}/
+  # {{der}} template, Old Italic script verbatim. CC BY-SA + GFDL →
+  # attribution. No upstream, no network: en.wiktionary is the cited
+  # provenance, re-curation is a repo change — sync_policy local.
+  sync_policy: local
+
 local-source:
   adapter: Nabu::Adapters::LocalSource
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
