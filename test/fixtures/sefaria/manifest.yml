@@ -1,0 +1,69 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The version files are bucket objects under
+# https://storage.googleapis.com/sefaria-export/ at the SAME relative path
+# they are checked in under (percent-encoded in the urls below — the bucket
+# keys contain spaces, and one versionTitle carries upstream's own trailing
+# space). WHOLE entries are byte-verbatim upstream; the three TRIM entries
+# slice only the `text` arrays (metadata keys byte-identical; original full
+# shas in README.md), and books.json is a documented index SLICE — so those
+# are fetched for URL-liveness only. adapter_test is null: the adapter test
+# pins fixture-exact passage counts that a drifted upstream file would
+# false-fail.
+source: sefaria
+adapter_test: null
+retrieved: 2026-07-18
+files:
+  - path: books.json
+    url: https://raw.githubusercontent.com/Sefaria/Sefaria-Export/master/books.json
+    whole: false
+    trim: index header + first special_files entry + 13 of 19,705 book entries kept (the fixture files below, one merged sibling, one non-Targum selector negative); entry blocks byte-identical (20.2 MB -> 12 KB)
+  - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Obadiah/Hebrew/Mikraot%20Gedolot.json
+    whole: true
+    trim: none (complete single-chapter book, copied whole)
+  - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/English/Targum Obadiah, translated by Thomas Lenihan.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Obadiah/English/Targum%20Obadiah%2C%20translated%20by%20Thomas%20Lenihan.json
+    whole: true
+    trim: none (complete file, copied whole; license "unknown" -> rule skip)
+  - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Jonah/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole; footnote markup exemplar)
+  - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Jonah/Hebrew/merged.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Jonah/Hebrew/merged.json
+    whole: true
+    trim: none (complete merged file, copied whole; NO license field -> never ingested)
+  - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Judges/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Judges/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole; NAMED version with NO license field -> rule skip)
+  - path: json/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Aramaic%20Targum/Writings/Targum%20Sheni%20on%20Esther/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole; depth-3 sectionNames)
+  - path: json/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Aramaic%20Targum/Writings/Aramaic%20Targum%20to%20Ruth/Hebrew/Mikraot%20Gedolot.json
+    whole: true
+    trim: none (complete file, copied whole)
+  - path: json/Tanakh/Targum/Targum Neofiti/Targum Neofiti/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Neofiti/Targum%20Neofiti/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete partial translation, copied whole)
+  - path: json/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Tafsir%20Rasag/Tafsir%20Rasag/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole; excluded-title exemplar)
+  - path: json/Tanakh/Targum/Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jerusalem/Targum%20Jerusalem/Hebrew/Targum%20Jerusalem%20on%20Torah.json
+    whole: false
+    trim: text dict sliced to each Torah book's first 2 chapters; metadata + schema byte-identical (353 KB -> 15 KB; original sha256 in README.md)
+  - path: json/Tanakh/Targum/Onkelos/Torah/Onkelos Genesis/Hebrew/Targum Onkelos, vocalized according to the Yemenite Taj .json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Onkelos/Torah/Onkelos%20Genesis/Hebrew/Targum%20Onkelos%2C%20vocalized%20according%20to%20the%20Yemenite%20Taj%20.json
+    whole: false
+    trim: text sliced to chapter 1; metadata byte-identical (359 KB -> 8 KB; original sha256 in README.md; NB upstream's trailing space in the filename)
+  - path: json/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Onkelos/Torah/Onkelos%20Numbers/Hebrew/Sifsei%20Chachomim%20Chumash%2C%20Metsudah%20Publications%2C%202009.json
+    whole: false
+    trim: text sliced to chapter 1; metadata byte-identical (300 KB -> 13 KB; original sha256 in README.md)
