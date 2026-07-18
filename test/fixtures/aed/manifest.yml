@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The dictionary file is a documented TRIM (whole: false): the real
+# teiHeader plus 31 upstream <entry> elements byte-verbatim in file order
+# with the original closers; recipe and entry-coverage rationale in
+# README.md. The raw GitHub URL serves the full 18 MB upstream file — the
+# sentinel uses it for liveness; a refresh re-fetches the WHOLE file, so
+# the trim must be re-cut (README.md procedure) rather than committed raw.
+source: aed
+adapter_test: test/adapters/aed_test.rb
+retrieved: 2026-07-18
+files:
+  - path: files/dictionary.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/dictionary.xml
+    whole: false
+    trim: 31 of 35,052 entries — the nfr homograph cluster + roots (join contract), empty-bibl root entries, Wb citation shapes incl. the dot-after-volume quirk, de/en/fr/it translation lanes, all eight xr types, and the egy-fold orthography quirks (ꜣ Ꜣ ꜥ ʾ i̯ ṱ 〈〉)
