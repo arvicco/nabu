@@ -696,7 +696,7 @@ module Nabu
                                    .run(query, lang: options[:lang], license: options[:license],
                                                limit: options[:limit].to_i, from: from, to: to, place: place,
                                                facets: facets, source: options[:source])
-      print_search_results(results, facets: facets)
+      print_search_results(results, facets: facets, query: query)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -1946,6 +1946,22 @@ module Nabu
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
 
+    # The no-silent-script-miss table (P27-2). A zero-hit query carrying
+    # codepoints of a script NO fold neutralization covers gets ONE honest
+    # hint naming what to try — the owner incident was exactly a silent
+    # cross-script miss. Censused entries only: Glagolitic rides the OCS
+    # dictionary shelf as variant forms (never passage text), and the
+    # Gothic corpora are romanized (conventions §9). Devanagari and
+    # Cyrillic do NOT hint — their neutralizations already fold them.
+    SCRIPT_MISS_HINTS = {
+      "Glagolitic" => [0x2C00..0x2C5F,
+                       "no cross-script fold is registered for Glagolitic — the Slavic shelves " \
+                       "index Cyrillic and Latin-diplomatic spellings (try въста or vъsta)"],
+      "Gothic-script" => [0x10330..0x1034F,
+                          "no cross-script fold is registered for Gothic script — the Gothic " \
+                          "corpora are romanized (try guþ, jah)"]
+    }.freeze
+
     no_commands do
       # -- display policy (P27-0) ------------------------------------------
       # Passage text reaches the terminal ONLY through display_text, which
@@ -2831,12 +2847,25 @@ module Nabu
         nil
       end
 
+      # One hint line per unregistered script present in the zero-hit query;
+      # silent (zero-signal) otherwise.
+      def print_script_miss_hints(query)
+        return if query.nil?
+
+        SCRIPT_MISS_HINTS.each_value do |(range, hint)|
+          say "note: #{hint}" if query.each_char.any? { |char| range.cover?(char.ord) }
+        end
+      end
+
       # Render hits: urn + optional [language] header, then the FTS snippet
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil)
-        return say("no matches") if results.empty?
+      def print_search_results(results, facets: nil, query: nil)
+        if results.empty?
+          say "no matches"
+          return print_script_miss_hints(query)
+        end
 
         results.each do |result|
           say "#{result.urn}#{" [#{result.language}]" if result.language}"
@@ -3467,7 +3496,7 @@ module Nabu
                                                       limit: options[:limit].to_i, morph: options[:morph],
                                                       source: options[:source],
                                                       gold_only: options[:gold_only])
-        print_lemma_results(results)
+        print_lemma_results(results, query: lemma)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3532,8 +3561,11 @@ module Nabu
       # folded snippet here. Silver (automatic-lemmatization) hits are labeled
       # per hit — gold stays unlabeled, the pre-tier render exactly (P26-0);
       # the footer totals the silver share and names the way out.
-      def print_lemma_results(results)
-        return say("no matches") if results.empty?
+      def print_lemma_results(results, query: nil)
+        if results.empty?
+          say "no matches"
+          return print_script_miss_hints(query)
+        end
 
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms

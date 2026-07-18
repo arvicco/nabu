@@ -96,19 +96,22 @@ class NormalizeTest < Minitest::Test
     assert_equal "iuuenemque", form("iuvenemque", "lat") # Perseus Ausonius fixture word
   end
 
-  def test_ocs_titlo_and_palatalization_strip_but_letterforms_survive
+  def test_ocs_titlo_and_palatalization_strip_and_the_skeleton_crosses_scripts
     # Real TOROT zogr fixture forms: дх҃омь (U+0483 titlo), огн҄емь (U+0484
-    # palatalization), ст҃ъꙇмь (titlo + the ꙇ letterform, which must survive —
-    # letterform normalization is deliberately NOT done, conventions.md §9).
-    assert_equal "дхомь", form("дх҃омь", "chu")
-    assert_equal "огнемь", form("огн҄емь", "chu")
-    assert_equal "стъꙇмь", form("ст҃ъꙇмь", "chu")
+    # palatalization), ст҃ъꙇмь (titlo + the ꙇ letterform). Since P27-2 the chu
+    # form is the CROSS-SCRIPT skeleton (Cyrl neutralization → generic fold):
+    # marks still strip, and the letters land on the Latin-diplomatic side of
+    # the damaskini bridge (ꙇ → i by the censused letterform table — the §9
+    # "letterform variants" open question, answered by the cross-script fold).
+    assert_equal "dxomь", form("дх҃омь", "chu")
+    assert_equal "ognemь", form("огн҄емь", "chu")
+    assert_equal "stъimь", form("ст҃ъꙇмь", "chu")
   end
 
-  def test_old_east_slavic_gets_the_generic_fold_only
-    # й is NFD и + U+0306 breve (Mn), so it folds to и — a documented side
-    # effect of the generic mark strip, not a letterform rule.
-    assert_equal "всякии", form("всякий", "orv")
+  def test_old_east_slavic_folds_to_the_same_skeleton
+    # й maps to j in the Cyrl table (scholarly practice, нашей → našej) —
+    # before P27-2 it fell to the generic breve strip (и).
+    assert_equal "vsjakij", form("всякий", "orv")
   end
 
   def test_gothic_and_sanskrit_get_the_generic_fold_only
@@ -327,5 +330,99 @@ class NormalizeTest < Minitest::Test
     assert_equal folded.length, map.length
     # nfc collapses α+acute into ά (one char), so every folded char maps in range.
     assert(map.all? { |i| i < Nabu::Normalize.nfc(nfd).chars.length })
+  end
+
+  # -- script neutralization (P27-2): cross-script fold, both sides ----------
+
+  # OWNER REPRO (2026-07-18a): `search 'धर्मन्'` was a silent miss while
+  # `search dharman` hit — query_forms stripped the virāma (Mn) before any
+  # transcode could see it. The neutralization runs Deva→IAST FIRST, on both
+  # sides, so the Devanagari spelling and the IAST spelling are ONE form.
+  def test_search_form_neutralizes_devanagari_before_the_virama_strip
+    assert_equal "dharman", Nabu::Normalize.search_form("धर्मन्", language: "san")
+    assert_equal Nabu::Normalize.search_form("dharman", language: "san"),
+                 Nabu::Normalize.search_form("धर्मन्", language: "san")
+  end
+
+  def test_query_forms_covers_the_devanagari_spelling
+    assert_includes Nabu::Normalize.query_forms("धर्मन्"), "dharman",
+                    "the reflex-render Devanagari form pasted into search --lemma must fold to the DCS lemma form"
+  end
+
+  # OWNER REPRO (2026-07-18b): `search vъsta` (damaskini's Latin-diplomatic
+  # surface) and `search въста` (the Cyrillic shelves) returned DISJOINT
+  # result sets for the same word. Both spellings now fold to one skeleton,
+  # in the index (search_form) and in the query union (query_forms).
+  def test_slavic_search_forms_cross_the_script_boundary
+    %w[chu orv bul].each do |language|
+      assert_equal Nabu::Normalize.search_form("vъsta", language: language),
+                   Nabu::Normalize.search_form("въста", language: language),
+                   "#{language}: one word, one skeleton"
+    end
+    %w[vъsta въста].each do |spelling|
+      variants = Nabu::Normalize.query_forms(spelling)
+      assert_includes variants, Nabu::Normalize.search_form("vъsta", language: "chu"),
+                      "query_forms(#{spelling}) must cover the indexed skeleton"
+    end
+  end
+
+  def test_slavic_neutralization_folds_real_torot_bytes_to_the_skeleton
+    assert_equal "tъ vasъ krьstitъ dxomь stъimь i ognemь·",
+                 Nabu::Normalize.search_form("тъ васъ крьститъ дх҃омь ст҃ъꙇмь ꙇ огн҄емь·", language: "chu")
+  end
+
+  def test_slavic_neutralization_is_symmetric_on_the_u_digraph_widening
+    # veles "oubi" (Latin) = оуби (Cyrillic); upstream's own lemma is ubija.
+    assert_equal Nabu::Normalize.search_form("oubi", language: "chu"),
+                 Nabu::Normalize.search_form("оуби", language: "chu")
+    assert_includes Nabu::Normalize.query_forms("оуби"), "ubi"
+  end
+
+  # The round-trip property, both neutralized scripts: a query spelled the
+  # way the source spells it folds — on some variant — to exactly the
+  # indexed form. (The §9 union invariant, extended to neutralization.)
+  def test_query_forms_covers_every_neutralized_document_form
+    samples = {
+      "san" => ["धर्मन्", "नारायणं नमस्कृत्य", "kṛṣṇa"],
+      "chu" => %w[крьститъ vъsta щедроты oubi],
+      "orv" => %w[Петрушъка нашей],
+      "bul" => %w[světъ поучение]
+    }
+    samples.each do |language, texts|
+      texts.each do |text|
+        assert_includes Nabu::Normalize.query_forms(text),
+                        Nabu::Normalize.search_form(text, language: language),
+                        "query_forms(#{text.inspect}) must cover the #{language} document form"
+      end
+    end
+  end
+
+  # Unaffected languages keep their exact pre-P27-2 forms — neutralization is
+  # scoped by primary subtag, never a global rewrite.
+  def test_neutralization_leaves_other_languages_untouched
+    assert_equal "μηνισ", Nabu::Normalize.search_form("μῆνις", language: "grc")
+    assert_equal "бимь", Nabu::Normalize.search_form("бимь", language: "sl"),
+                 "Cyrillic bytes under a NON-neutralized language stay Cyrillic"
+  end
+
+  def test_fold_with_map_equality_extends_to_neutralized_languages
+    { "धर्मः पुरुषस्य" => "san", "тъ васъ крьститъ дх҃омь" => "chu",
+      "slnce to kolkoto ima světъ" => "bul", "и оуби нашей ѿ" => "orv" }.each do |text, language|
+      folded, map = Nabu::Normalize.fold_with_map(text, language: language)
+      assert_equal Nabu::Normalize.search_form(text, language: language), folded
+      assert_equal folded.length, map.length
+    end
+  end
+
+  # Mapping correctness across the script boundary: a match located in the
+  # Latin skeleton points back at the pristine CYRILLIC span (KWIC honesty).
+  def test_fold_with_map_maps_a_skeleton_match_back_to_the_cyrillic_span
+    text = "тъ васъ крьститъ"
+    folded, map = Nabu::Normalize.fold_with_map(text, language: "chu")
+    index = folded.index("krьstitъ")
+    refute_nil index
+    start = map[index]
+    finish = map[index + "krьstitъ".length - 1] + 1
+    assert_equal "крьститъ", Nabu::Normalize.nfc(text).chars[start...finish].join
   end
 end

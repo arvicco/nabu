@@ -131,6 +131,39 @@ module Query
       assert_equal %w[urn:d:1:1], search("дх҃омь").map(&:urn), "titlo spelling"
     end
 
+    # -- cross-script neutralization (P27-2) ---------------------------------
+
+    # OWNER REPRO (2026-07-18b), pinned end to end: `search vъsta` returned
+    # damaskini's Latin-diplomatic hits, `search въста` the Cyrillic shelves'
+    # — disjoint sets for the same word. Either spelling must now return the
+    # UNION of both shelves.
+    def test_slavic_query_spellings_return_the_union_of_both_scripts
+      latin = make_document(source: @open, urn: "urn:d:dam", title: "Damaskini", language: "bul")
+      make_passage(latin, urn: "urn:d:dam:1", text: "i vъsta petka", sequence: 0, language: "bul")
+      cyrillic = make_document(source: @open, urn: "urn:d:zogr", title: "Zographensis", language: "chu")
+      make_passage(cyrillic, urn: "urn:d:zogr:1", text: "и въста мариꙗ", sequence: 0, language: "chu")
+      rebuild!
+
+      union = %w[urn:d:dam:1 urn:d:zogr:1]
+      assert_equal union, search("vъsta").map(&:urn).sort, "Latin-diplomatic spelling reaches both shelves"
+      assert_equal union, search("въста").map(&:urn).sort, "Cyrillic spelling reaches both shelves"
+    end
+
+    # OWNER REPRO (2026-07-18a), pinned end to end: the Devanagari spelling
+    # (as nabu's own reflex render prints it) and the IAST spelling find the
+    # same passages — SARIT-style Devanagari and DCS-style IAST alike.
+    def test_devanagari_and_iast_query_spellings_find_both_script_shelves
+      deva = make_document(source: @open, urn: "urn:d:sarit", title: "Sarit", language: "san-Deva")
+      make_passage(deva, urn: "urn:d:sarit:1", text: "धर्मन् इति", sequence: 0, language: "san-Deva")
+      iast = make_document(source: @open, urn: "urn:d:dcs", title: "DCS", language: "san")
+      make_passage(iast, urn: "urn:d:dcs:1", text: "dharman iti", sequence: 0, language: "san")
+      rebuild!
+
+      union = %w[urn:d:dcs:1 urn:d:sarit:1]
+      assert_equal union, search("धर्मन्").map(&:urn).sort, "the pasted reflex-render form finds its passages"
+      assert_equal union, search("dharman").map(&:urn).sort, "the IAST spelling finds the same set"
+    end
+
     def test_snippet_marks_the_match_in_the_folded_form
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)

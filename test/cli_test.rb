@@ -1952,6 +1952,39 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search zzzznotfound]) }
       assert_nil status, "zero hits is not a failure"
       assert_match(/no matches/i, out)
+      refute_match(/note:/, out, "an ordinary miss carries no script hint — zero-signal silence")
+    end
+  end
+
+  # -- the no-silent-script-miss hints (P27-2) -------------------------------
+
+  def test_search_glagolitic_zero_hit_prints_the_cross_script_hint
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search ⰲⱏⱄⱅⰰ]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/Glagolitic/, out, "the hint names the unregistered script")
+      assert_match(/въста or vъsta/, out, "the hint names what to try")
+    end
+  end
+
+  def test_search_gothic_script_zero_hit_hints_the_romanization
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search 𐌲𐌿𐌸]) }
+      assert_nil status
+      assert_match(/Gothic corpora are romanized/, out)
+      assert_match(/guþ/, out)
+    end
+  end
+
+  def test_search_zero_hit_in_a_neutralized_script_stays_silent
+    # Devanagari and Cyrillic have registered fold neutralizations — a miss
+    # there is a real miss, never a script hint.
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search धधधनही]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      refute_match(/note:/, out)
     end
   end
 
@@ -2248,6 +2281,16 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search --lemma τίθημι]) }
       assert_nil status, "zero hits is not a failure"
       assert_match(/no matches/i, out)
+    end
+  end
+
+  def test_search_lemma_zero_hit_in_an_unregistered_script_hints_too
+    # The owner incident was a --lemma paste; the hint covers that path.
+    with_treebank_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma ⰳⰾⰰⰳⱁⰾⱏ]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/Glagolitic/, out)
     end
   end
 

@@ -142,8 +142,9 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal 39, rows.size
     assert_equal((0...39).to_a, rows.map { |r| r[:seq] })
     first = rows.first
-    assert_equal %w[orv orv богъ bogŭ богъ bogu],
-                 first.values_at(:lang_code, :language, :word, :roman, :word_folded, :roman_folded)
+    assert_equal %w[orv orv богъ bogŭ bogъ bogu],
+                 first.values_at(:lang_code, :language, :word, :roman, :word_folded, :roman_folded),
+                 "P27-2: word_folded is the cross-script orv skeleton; the pristine word stays Cyrillic"
     cu = rows.find { |r| r[:lang_code] == "cu" && r[:word] == "богъ" }
     assert_equal "chu", cu[:language]
 

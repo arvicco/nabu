@@ -376,7 +376,27 @@ macrons all fall to the same strip.
 | `ang` | æ→`ae`, þ→`th`, ð→`th` | The Old English fold (P12-3), argued from Bosworth-Toller's own practice, not assumed: B-T alphabetizes æ as "ae" (the dump files æppel between a-h- and a-l- words) and **interfiles þ and ð as ONE letter** after T — its dump's own `<sort>` field folds æðele → `aetþele` and þing → `tþing`, i.e. the dictionary itself folds æ→ae and buckets ð/þ identically. These are also the ASCII transliterations a user types (`define aethele`, `search thing`). ð→`d` was considered and REJECTED: it would split the þ/ð pair B-T unifies (OE scribes used them interchangeably for the same dental fricative; the dump has no ð-initial headwords at all — ð lives medially: ǽg-hwæðer). Wynn (ƿ) gets no rule deliberately: edited OE prints w. Vowel length (á, ǣ) falls to the generic mark strip, matching B-T's alphabetization of accented vowels as base letters. Implemented as `gsub`, not `tr` (1→2 expansions; `fold_with_map` handles non-length-preserving folds, and downcase runs first so Æ/Þ/Ð reach the rule lowercased). Query-union note: `þing` gains an ang variant `thing` that also matches English text — the same bounded cross-language tradeoff as lat v→u, harmless since æ/þ/ð barely occur outside the OE corpora. The rule landed BEFORE any ang corpus was synced (aspr/iswoc/bosworth-toller all `enabled: false` at the time), so the rebuild-storm caveat below was satisfied vacuously. |
 | `gem`, `ine`, `sla`, `itc`, `iir` (one shared rule) | modifier letters ʰ→`h`, ʷ→`w`, ˢ→`s`, ᶻ→`z`; ˀ→dropped | The reconstruction/proto fold (P14-10; extended P17-3), scoped to the Wiktionary reconstruction shelves (gem-pro/ine-pro/sla-pro; P17-3 adds ine-bsl-pro/gmw-pro/itc-pro/iir-pro). PIE and its daughters write aspirates and labiovelars with the phonetic **superscript modifier letters** ʰ (U+02B0) and ʷ (U+02B7): `*bʰewgʰ-`, `*gʷʰew-`. These are Unicode category **Lm (modifier letter)**, NOT combining marks — the generic fold's `\p{Mn}` strip does not touch them and plain downcase leaves them alone — so an ASCII typist's `bhewgh` could never reach `*bʰewgʰ-` without this rule (exactly the ſ→s / ς→σ "one sound, an untypable glyph" situation). A census of all 13,053 P14-1 reconstruction headwords found ʰ and ʷ as the **only** modifier letters present (ʰ ×516, ʷ ×193); the P17-3 shelf census adds three more, measured not assumed: ˢ (U+02E2) and ᶻ (U+1DBB) in Proto-Indo-Iranian sibilant clusters (`*adᶻdʰáH`, `*witˢtás`; ˢ×12, ᶻ×9) → `s`/`z` (tr), and ˀ (U+02C0, MODIFIER LETTER GLOTTAL STOP) in Proto-Balto-Slavic laryngeal notation (`*wárˀnāˀ`, ×310 in headwords) → dropped entirely (no ASCII typist spells it; `gsub`, a 1→0 fold that is `fold_with_map`-safe because the character contributes nothing to folded/map). Every other non-ASCII character is either a base letter that stays (jers ъ/ь, yuses ǫ/ę, þ) or a combining mark the generic strip already drops (the syllabic-consonant ring U+0325, macrons, the acute over é). Keyed by primary subtag: `itc`/`iir` join the shared lambda; `ine-bsl-pro` already folds under the `ine` key; **`gmw` deliberately gets no key** — Proto-West Germanic headwords carry no Lm characters (measured over all 5,551 records) and rules are added on evidence, not symmetry. No attested corpus is tagged with a bare collective code, so ONLY the -pro shelves refold; and because the query union ORs the variants, a bare `*` root query is trailing-hyphen tolerant at the query layer (`Etym`/`Define` also fold the star form). The star is quoted in shell examples (`etym '*form'`) because zsh globs a bare `*`; the bare proto form now resolves without it. |
 | `sl` | Bohorič long s ſ→s | The historical-Slovene fold (P13-9). goo300k/IMP passage text is the pristine Early Modern print surface, where non-final s is set as ſ (U+017F): "ſvoje", "dvanajſt", "oblaſt". The generic fold does NOT touch it — ſ is already lowercase, carries no combining mark, and plain `downcase` leaves it alone (only Unicode FULL case folding maps ſ→s) — so without this rule every ſ-bearing word is unfindable by any modern query. Exactly the grc ς→σ situation: one letter, two positional glyphs; Unicode's own case-folding table agrees. `tr`, length-preserving. Bohorič digraphs (zh=č, ſh=š) are deliberately NOT rewritten — that is orthographic modernization (the corpora's own `<reg>` layer, an annotation), never a fold; haček letters (č/š/ž) fall to the generic mark strip on both sides. The rule landed BEFORE any sl corpus was synced (goo300k/imp both `enabled: false`), so the rebuild-storm caveat below was satisfied vacuously. |
-| everything else (`chu`, `orv`, `got`, `san`, unknown) | none — generic fold only | See below. |
+| everything else (`got`, unknown) | none — generic fold only | See below. |
+
+**Script neutralization (P27-2, `Normalize::SCRIPT_NEUTRALIZATIONS`) — the
+cross-script fold.** Some corpora spell ONE language in TWO scripts, and a
+per-codepoint rule cannot bridge them (Devanagari's inherent *a* is
+context-sensitive; оу is a digraph). For these languages a neutralization
+step runs BEFORE the generic fold, symmetrically on both sides — documents
+at the adapter boundary, queries in the `query_forms` union:
+
+| language | neutralization | why |
+| --- | --- | --- |
+| `san` | Devanagari→IAST (`Nabu::Deva`, the P26-2 transcoder promoted from the SARIT adapter into the fold itself) | SARIT stores Devanagari where DCS/GRETIL/MW store IAST. Ordering is the whole point: the generic fold strips the virāma (U+094D, category Mn) — the mark that distinguishes क्त (*kta*) from कत (*kata*) — so the transcode must run first. The 2026-07-18 owner incident (`search 'धर्मन्'` silently missing what `search dharman` found, with nabu's own reflex render advertising the Devanagari paste) was exactly `query_forms` stripping the virāma before any transcode. Idempotent on IAST text: DCS/GRETIL shelves refold to identical bytes. |
+| `chu`, `orv`, `bul` | Cyrillic↔scholarly-Latin skeleton (`Nabu::Cyrl`) | damaskini stores a Latin diplomatic transliteration (`vъsta`, `šte`, `xodinie`, `oubi`) where TOROT/UD/wiktionary-cu store Cyrillic (`въста`, `щ…`, `х…`, `оуби`) — the 2026-07-18 owner incident was the SAME word returning disjoint result sets by script. `bul` joins `chu`/`orv` because 20 of damaskini's 23 witnesses are bul under the same conventions. The table is census-built from the ingested damaskini conllu FORM/lemma columns against the Cyrillic shelves' inventory; its widenings (щ ≡ шт ≡ `št`; оу ≡ у ≡ `ou` ≡ `u` — upstream's own veles lemma folds `oubi`→`ubija`; iotated vowels → j-digraphs; ѵ→v per damaskini's own Параскеѵи→Paraskevi) and its deliberate NON-rules (ѳ/ћ/џ kept literal — both layers carry them; jers stay distinct — no apostrophe-jer attested in any ingested layer; х→x only, no h/ch widening; Glagolitic unregistered → the zero-hit hint) are journaled on `Nabu::Cyrl`. |
+
+Each neutralizer is a `with_map` callable, so `fold_with_map` composes its
+character map with the fold's own — KWIC highlighting points a skeleton
+match back at the pristine Devanagari/Cyrillic span. A zero-hit query
+carrying codepoints of a script with NO registered neutralization
+(Glagolitic, Gothic script — censused) prints one honest hint naming what
+to try (`CLI::SCRIPT_MISS_HINTS`); registered scripts never hint — their
+misses are real misses.
 
 **Why the query can't just pick a rule:** queries carry no language, so
 `Normalize.query_forms` returns the *union* — the generic form plus each
@@ -410,14 +430,14 @@ the akk/sux fold already opens to spaces on both sides.
   with the marks; adscript spelled as a full letter iota (αι) is *not*
   folded away. Folding it would require dictionary knowledge (real
   diphthongs vs adscript) — left alone.
-- **OCS / Old East Slavic letterforms.** The zogr fixture's real titla
-  (U+0483) and palatalization marks (U+0484) strip as Mn — verified against
-  TOROT text (дх҃омь → дхомь). But letterform variants (ꙇ vs и vs і, ѡ vs о,
-  оу vs у) are kept distinct: they are orthographically meaningful to Slavic
-  editors and no established search-normalization practice was found to
-  cite. If corpus experience shows misses, a letterform table is a
-  one-place change here. Note one side effect: й folds to и (its breve is
-  Mn) — acceptable, standard Russian search behavior.
+- **OCS / Old East Slavic letterforms — ANSWERED by P27-2.** The zogr
+  fixture's real titla (U+0483) and palatalization marks (U+0484) still
+  strip as Mn. The letterform question ("ꙇ vs и vs і, ѡ vs о, оу vs у kept
+  distinct — if corpus experience shows misses, a letterform table is a
+  one-place change here") was settled by a live owner miss (vъsta/въста):
+  the `Nabu::Cyrl` neutralization above IS that one-place table, argued
+  from damaskini's own diplomatic practice rather than invented. й now
+  folds to j (the scholarly convention, нашей → našej), not to и.
 - **Sanskrit (Vedic, IAST romanization).** IAST diacritics are *phonemic*
   (ā vs a distinguishes words), and the generic strip conflates them
   (kṛṣṇa → krsna). That is the accepted price of diacritic-insensitive
