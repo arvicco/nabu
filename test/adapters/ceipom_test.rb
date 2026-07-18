@@ -331,7 +331,7 @@ class CeipomTest < Minitest::Test
     entry = registry["ceipom"]
     refute_nil entry, "config/sources.yml must register ceipom"
     assert_equal Nabu::Adapters::Ceipom, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first real sync (checklist §6)"
+    assert entry.enabled, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "frozen", entry.sync_policy, "Zenodo versions are immutable — a frozen deposit"
     assert_equal "gold", entry.lemma_tier,
                  "the registry default; NB zero lemma rows mint in v1 (lemma IDs upstream, class note)"

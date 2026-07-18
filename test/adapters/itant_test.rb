@@ -127,7 +127,7 @@ class ItantTest < Minitest::Test
     entry = registry["itant"]
     refute_nil entry, "itant must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Itant, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync is eyeballed (checklist §6)"
+    assert entry.enabled, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "manual", entry.sync_policy
     assert entry.translations, "-ita/-eng siblings ride the registry flag"
   end

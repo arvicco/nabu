@@ -220,7 +220,7 @@ bosworth-toller:
 # crosswalk last moved 2024-08) → manual.
 ccl:
   adapter: Nabu::Adapters::Ccl
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
                    # nabu links urn:nabu:dict:ccl:C1494)
   sync_policy: manual
@@ -533,7 +533,7 @@ ogham:
 
 isicily:
   adapter: Nabu::Adapters::Isicily
-  enabled: false   # P29-4: git clone ~253 MB (70 MB of XML + history);
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # CLAUDE.md checklist §6 — bin/nabu sync isicily,
                    # eyeball nabu show urn:nabu:isicily:isic001620 (the
                    # Mamertine Oscan meddices dedication, osc-Grek) and
@@ -563,7 +563,7 @@ isicily:
 
 itant:
   adapter: Nabu::Adapters::Itant
-  enabled: false   # until the owner-fired first sync is eyeballed (checklist
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
                    # nabu show urn:nabu:itant:oscan-2 (the Monte Vairano
                    # curse tablet, pakis: heleviis. trebieís) beside its
@@ -591,7 +591,7 @@ itant:
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
-  enabled: false   # until the owner-fired first sync is eyeballed
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (bin/nabu sync sabellic-loans — no network, vendored
                    # copy + LocalFetch pin; eyeball `nabu etym rufus` for
                    # the osc 𐌓𐌖𐌚𐌓𐌉𐌉𐌔 / xum 𐌓𐌖𐌚𐌓𐌖 loan pair and
@@ -845,7 +845,7 @@ diorisis:
 
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
-  enabled: false   # awaiting the owner-fired first real sync (checklist §6:
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # bin/nabu sync tla-hf — two FileFetch GETs, 7,284,199 B
                    # (demotic, 13,383 sentences) + 1,904,138 B (Late
                    # Egyptian, 3,606 sentences) ≈ 9.2 MB total; then eyeball
@@ -878,7 +878,7 @@ tla-hf:
 
 aes:
   adapter: Nabu::Adapters::Aes
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync aes — a sparse GitFetch of
                    # github.com/simondschweitzer/aes scoped to files/aes +
                    # README.md (the ~342 MB JSON cone; the ~114 MB relANNIS
@@ -907,7 +907,7 @@ aes:
   translations: true
 aed:
   adapter: Nabu::Adapters::Aed
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync aed — sparse clone, the
                    # ~18 MB dictionary cone of a 651 MB repo — then eyeball
                    # nabu define nfr / define aa / define --lang egy htp
@@ -925,7 +925,7 @@ aed:
 
 ceipom:
   adapter: Nabu::Adapters::Ceipom
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync ceipom — five FileFetch
                    # GETs off Zenodo record 6475427 (texts/sentences/
                    # tokens/analysis/links CSVs, 16.8 MB, UTF-16). Expect
@@ -961,7 +961,7 @@ ceipom:
 # (no registry change — the P25-2 precedent).
 open-etruscan:
   adapter: Nabu::Adapters::OpenEtruscan
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync open-etruscan — two
                    # FileFetch GETs, 770,613 B Zenodo CSV + 302,495 B Larth
                    # findspots ≈ 1.0 MB; expect 6,248 docs — 6,094 clean +
@@ -1001,7 +1001,7 @@ open-etruscan:
 
 larth-etp:
   adapter: Nabu::Adapters::LarthEtp
-  enabled: false   # flip after the owner-fired first sync + eyeball
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
                    # GET; expect 1,122 entries; eyeball `nabu define avil`
                    # (year), `nabu define acil` (the 643/644 homograph
@@ -1019,7 +1019,7 @@ larth-etp:
   # occasionally → manual; a re-pin is an owner decision.
 lexlep:
   adapter: Nabu::Adapters::Lexlep
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
                    # 50-title api.php batches, minutes at the polite delay —
                    # then eyeball nabu show urn:nabu:lexlep:bi-8 ("sipiu
@@ -1040,7 +1040,7 @@ lexlep:
 
 lexlep-words:
   adapter: Nabu::Adapters::LexlepWords
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep-words — 628 Word
                    # pages — then eyeball nabu define uvamokozis / define
                    # --lang xlp and 5 random entries before flipping).
@@ -1054,7 +1054,7 @@ lexlep-words:
 
 tir:
   adapter: Nabu::Adapters::Tir
-  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+  enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync tir — ~770 pages — then
                    # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
                    # laþe?) and 5 random inscriptions before flipping).
