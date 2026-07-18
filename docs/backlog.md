@@ -9486,6 +9486,38 @@ TWO sources).
   unclassified-Tyrsenian? — record what scholarship says, honestly).
 - Registry `enabled: false` both.
 
+SHIPPED (2026-07-18, worktree; sha in worklog). CENSUS VERDICTS from the
+design probe (api.php categoryinfo, ground truth): the brief's advertised
+counts were LABEL-SHUFFLED — lexlep actual: Inscription 494 (+ subcat
+Coin) · Word 628 · Object 419 · Site 134 · Morpheme 202 · Character 34 ·
+Reference 1,475 (the brief's "628 inscriptions" is the Word category; the
+lexicon is 628 words, not 202 — 202 is Morpheme); tir actual: Inscription
+389 · Word 155 · Object 294 · Site 82 · Character 37 · Reference 926 (the
+brief's "155 inscriptions" is the Word category). THREE registry rows,
+not two: content_kind is one closed routing per adapter, so lexlep's two
+grains are `lexlep` (:passages) + `lexlep-words` (:dictionary), beside
+`tir` — the aes/aed precedent. Reading grammar deciphered against the
+wiki's own HTML rendering: " / " line separator, "A!B" tokens (B = the
+marked scholarly form = passage text; A = the Word-page link form →
+passage "words" annotations), literal `space` = word divider, `unknown`
+reading → metadata-only document (the ogham path). V2 JOURNALED:
+tir-words (155 {{word}} pages, same parser — real content, e.g. aχvil ↔
+Etr. acvil per Rix 1998), lexlep Morpheme pages (202),
+Character/Reference categories, print sigla PID/IR/MLR/Mancini,
+reading→Word-page edges (annotations already carry the link forms).
+OWNER QUEUE:
+- `bin/nabu sync lexlep` → eyeball `show urn:nabu:lexlep:bi-8` + 5
+  random, flip; `bin/nabu sync lexlep-words` → `define --lang lep`
+  eyeball, flip; `bin/nabu sync tir` → `show urn:nabu:tir:bz-10.1` + 5
+  random, flip.
+- Language dossiers once live: `nabu ingest --shelf language lep` (name
+  Lepontic, family "Celtic < Indo-European"), `--shelf language xcg`
+  (Cisalpine Gaulish, same lane), `--shelf language xrr` (name Raetic,
+  family honest per scholarship: "Tyrsenian (with Etruscan and Lemnian;
+  Rix 1998) — non-Indo-European", context from the TIR main page).
+- Licensing email №17 (queued): on reply, relabel lexlep/lexlep-words/
+  tir license_class in one commit (P10-4 mechanics, no urns change).
+
 ## P29-4 · I.Sicily — the epigraphy of ancient Sicily  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
 
 github.com/ISicily/ISicily (Prag, Oxford; ERC Crossreads) — license

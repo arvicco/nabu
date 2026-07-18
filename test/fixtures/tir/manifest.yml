@@ -1,0 +1,103 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# API-ENVELOPE PROVENANCE. Retrieved 2026-07-18 from https://tir.univie.ac.at/api.php in the
+# fetcher's own batch shape (generator=categorymembers + prop=revisions&
+# rvprop=content|ids|timestamp&rvslots=main); each page file is the
+# Nabu::WikiFetch per-page envelope with the API's wikitext byte-verbatim
+# inside; each map file is the member list TRIMMED to the checked-in
+# pages (rows verbatim). A raw re-GET returns upstream's CURRENT revid —
+# a living wiki — so every entry is refetchable: false: `fixtures:check`
+# skips them and `fixtures:refresh` refuses to touch them; drift is
+# caught by the revid-driven fetch itself at any real re-sync.
+source: tir
+adapter_test:
+files:
+  - path: map/Inscription.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: member list reduced to the checked-in pages; rows byte-verbatim
+  - path: map/Object.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: member list reduced to the checked-in pages; rows byte-verbatim
+  - path: map/Site.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: member list reduced to the checked-in pages; rows byte-verbatim
+  - path: pages/Inscription/AK-1.1.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Inscription/AK-1.12.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Inscription/BZ-10.1.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Object/AK-1%20rock.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Object/BZ-10%20slab.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Site/Achenkirch.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Site/Bozen%20%2F%20Bolzano.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Site/Pfatten%20%2F%20Vadena.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://tir.univie.ac.at/api.php
+    copied: 2026-07-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
