@@ -1,0 +1,10 @@
+,Etruscan,Translations,POS,Is inferred,Is suffix,Abbreviation of,Suffix indexes,city name,place name,name,epithet,theo,cogn,prae,nomen,nom,acc,masc,fem,nas-part,nasa-part,u-part,θ-impv,θ-part,θas-part,as-part,act,pass,non-past,past,impv,jussive,necess,inanim,anim,indef,def,deictic particle,enclitic particle,enclitic conj,dem,adv,art,conj,post,pro,rel,subord,neg,num,1st gen,2nd gen,1st abl,2nd abl,loc,1st pert,2nd pert,1st pers,2nd pers,3rd pers,pl,gen,abl,pert,TAG
+0,isa,"((True, 'the'),)",def art nom,False,True,,,,,,,,,,,1,,,,,,,,,,,,,,,,,,,,0,1,,,,,,1,,,,,,,,0,0,0,0,0,0,0,,,,,False,False,False,ADP
+2,x,"((True, 'and'),)",enclitic conj,False,True,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,,,,,,,,,,,,False,False,False,PRT
+9,pi,(),enclitic particle,False,True,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,,,,,,,,,,,,,False,False,False,DET
+121,a,"((True, 'aule'),)",masc prae nom acc,False,False,aule,,,,,,,0,1,0,1,1,1,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,,,,,False,False,False,NOUN
+461,σ'la,"((True, 'the'),)",def art 2nd gen,True,False,,,,,,,,,,,0,0,,,,,,,,,,,,,,,,,,,0,1,,,,,,1,,,,,,,,0,1,0,0,0,0,0,,,,,True,False,False,DET
+643,acil,"((True, ''), (True, 'is necessary'))",nom acc,False,False,,,,,,,,,,,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,,,,,False,False,False,ADJ
+644,acil,"((True, 'work'), (False, 'product'))",nom acc,False,False,,,,,,,,,,,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,,,,,False,False,False,NOUN
+647,acnanas,"((True, 'having given birth to'),)",nas-part,False,False,,,,,,,,,,,,,,,1,0,0,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,False,False,False,VERB
+649,avil,"((True, 'year'),)",nom acc,False,False,,,,,,,,,,,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,,,,,False,False,False,NOUN
