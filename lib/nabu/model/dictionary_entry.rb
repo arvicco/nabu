@@ -99,6 +99,15 @@ module Nabu
   # - +citations+: DictionaryCitation values in entry order.
   # - +reflexes+: DictionaryReflex values in descendants-tree depth-first
   #   order (P14-1) — empty for every non-reconstruction shelf.
+  #
+  # NFC exemption (P30-1, the Passage P26-3 precedent): entries in an
+  # NFC-exempt language (Normalize::NFC_EXEMPT_LANGUAGES — Biblical Hebrew/
+  # Aramaic) keep headword/gloss/body BYTE-VERBATIM, because NFC reorders the
+  # Masoretic combining-mark order upstream forbids normalizing (measured on
+  # the OSHB lexicon: 4,053 LexicalIndex / 3,796 HebrewStrong / 4,720 BDB
+  # headwords are not NFC-stable). headword_folded stays NFC for every
+  # language — the search form is minted through Normalize.search_form and
+  # the exemption never widens to the lookup key.
   DictionaryEntry = Data.define(:entry_id, :key_raw, :language, :headword,
                                 :headword_folded, :gloss, :body, :citations, :reflexes) do
     def initialize(entry_id:, key_raw:, language:, headword:, headword_folded:, body:,
@@ -110,14 +119,15 @@ module Nabu
         raise ValidationError, "reflexes must be an Array of Nabu::DictionaryReflex"
       end
 
+      text = Normalize.nfc_exempt?(language) ? Model::Validation.method(:verbatim_text!) : Model::Validation.method(:nfc_text!)
       super(
         entry_id: Model::Validation.present_string!(entry_id, field: "entry_id"),
         key_raw: Model::Validation.present_string!(key_raw, field: "key_raw"),
         language: Model::Validation.language!(language),
-        headword: Model::Validation.nfc_text!(headword, field: "headword"),
+        headword: text.call(headword, field: "headword"),
         headword_folded: Model::Validation.nfc_text!(headword_folded, field: "headword_folded"),
-        gloss: gloss.nil? ? nil : Model::Validation.nfc_text!(gloss, field: "gloss"),
-        body: Model::Validation.nfc_text!(body, field: "body"),
+        gloss: gloss.nil? ? nil : text.call(gloss, field: "gloss"),
+        body: text.call(body, field: "body"),
         citations: citations.freeze,
         reflexes: reflexes.freeze
       )
