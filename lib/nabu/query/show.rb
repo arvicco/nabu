@@ -252,10 +252,17 @@ module Nabu
                         annotations: parse_annotations(row))
       end
 
-      # The stored canonical JSON back to a Hash ("{}" default at load time —
-      # rows never carry NULL/malformed annotations).
+      # The stored annotations hash (P27-1/P27-2 union): row JSON back to a
+      # Hash; {} on absent or unparseable — render-time inspectors (token
+      # coloring, qere) degrade, never crash.
       def parse_annotations(row)
-        JSON.parse(row.fetch(:annotations_json) || "{}")
+        json = row[:annotations_json]
+        return {} if json.nil? || json.empty?
+
+        parsed = JSON.parse(json)
+        parsed.is_a?(Hash) ? parsed : {}
+      rescue JSON::ParserError
+        {}
       end
 
       # Effective license class: document override wins over source class (P1-3).

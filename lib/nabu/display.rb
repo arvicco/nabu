@@ -3,6 +3,9 @@
 require "yaml"
 require_relative "errors"
 require_relative "normalize"
+require_relative "deva"
+require_relative "cyrl"
+require_relative "hebr"
 
 module Nabu
   # Display-time text policy (P27-0). ONE place that decides how passage text
@@ -99,9 +102,14 @@ module Nabu
 
     # One language's display policy from config/display.yml. +strip+ applies
     # in default mode; +keep+ names classes default mode leaves alone but
-    # plain mode strips too; +isolates+ wraps rendered runs in U+2067/U+2069.
-    Policy = Data.define(:language, :strip, :keep, :isolates) do
-      def initialize(strip: [], keep: [], isolates: false, **rest) = super
+    # plain mode strips too; +isolates+ wraps rendered runs in U+2067/U+2069;
+    # +spacing+ (P27-2) inserts a separator between grapheme clusters — the
+    # Ogham legibility knob (adjacent letters share one continuous stemline
+    # and their stroke runs merge unsegmented in a terminal; between two
+    # Ogham letters the separator is U+1680 OGHAM SPACE MARK, the script's
+    # own stemline-continuing space, so the line stays one stem).
+    Policy = Data.define(:language, :strip, :keep, :isolates, :spacing) do
+      def initialize(strip: [], keep: [], isolates: false, spacing: false, **rest) = super
     end
 
     # == Edition-level conventions (P27-1; the `sources:` section)
@@ -162,6 +170,11 @@ module Nabu
     RLI = "⁧"
     PDI = "⁩"
 
+    # Grapheme spacing (P27-2): the Ogham block and its own space mark —
+    # U+1680 renders as a stemline segment, so spaced letters stay one stem.
+    OGHAM_BLOCK = (0x1680..0x169F)
+    OGHAM_SPACE = "\u1680"
+
     DEFAULT_MODE = "default"
 
     class << self
@@ -218,7 +231,8 @@ module Nabu
       # +source+/+annotations+/+source_policies+ (P27-1) are the OPTIONAL
       # edition context: when the mode is edition-aware (#render_edition) and
       # the source has conventions configured, the mode receives them; every
-      # P27-0 mode and caller is untouched by their absence.
+      # P27-0 mode and caller is untouched by their absence. Grapheme spacing
+      # (P27-2) applies after the mode render when policy and mode allow.
       def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {})
         policy = policies[Normalize.primary_subtag(language)]
         edition = edition_context(mode, source, annotations, source_policies)
@@ -230,9 +244,39 @@ module Nabu
                    else
                      mode.render(text, language: language, policy: policy)
                    end
+        rendered = space_graphemes(rendered) if policy.spacing && mode_allows_spacing?(mode)
         return rendered unless mode.isolates?(policy)
 
         Rendered.new(text: RLI + rendered.text + PDI, applied: rendered.applied + [ISOLATES])
+      end
+
+      # Insert a separator between adjacent grapheme clusters (never next to
+      # an existing separator): U+1680 between two Ogham-block chars, plain
+      # space otherwise. Announced as "spacing" only when something changed.
+      def space_graphemes(rendered)
+        clusters = rendered.text.grapheme_clusters
+        spaced = +""
+        clusters.each_with_index do |cluster, i|
+          spaced << cluster
+          follower = clusters[i + 1]
+          next if follower.nil? || separator?(cluster) || separator?(follower)
+
+          spaced << (ogham?(cluster) && ogham?(follower) ? OGHAM_SPACE : " ")
+        end
+        return rendered if spaced == rendered.text
+
+        Rendered.new(text: spaced, applied: rendered.applied + ["spacing"])
+      end
+
+      # NO_COLOR (any non-empty value) always wins; NABU_COLOR forces color
+      # for captured/piped output (tests, pagers that render ANSI); otherwise
+      # color only on a TTY, so piped output stays clean.
+      def color?(tty:)
+        no_color = ENV.fetch("NO_COLOR", "")
+        return false unless no_color.empty?
+        return true unless ENV.fetch("NABU_COLOR", "").empty?
+
+        tty
       end
 
       # Strip the named +classes+ from +text+, grapheme-safe, returning
@@ -337,6 +381,20 @@ module Nabu
         @modes ||= {}
       end
 
+      # The P27-2 mode-contract extensions default permissively for modes
+      # registered before them (the P27-0 seam promises no reshaping).
+      def mode_allows_spacing?(mode)
+        !mode.respond_to?(:spacing?) || mode.spacing?
+      end
+
+      def separator?(cluster)
+        cluster.match?(/\A[[:space:]]\z/) # [[:space:]] is Unicode-aware — covers U+1680 too
+      end
+
+      def ogham?(cluster)
+        OGHAM_BLOCK.cover?(cluster.ord)
+      end
+
       def validate_language!(language, path)
         unless language.to_s.match?(/\A[a-z]{2,3}\z/)
           raise ConfigError, "#{path}: bad language key #{language.inspect} — " \
@@ -349,13 +407,14 @@ module Nabu
         spec = {} if spec.nil?
         raise ConfigError, "#{path}: #{language}: policy must be a mapping" unless spec.is_a?(Hash)
 
-        unknown = spec.keys - %w[strip keep isolates]
+        unknown = spec.keys - %w[strip keep isolates spacing]
         raise ConfigError, "#{path}: #{language}: unknown key(s) #{unknown.join(', ')}" unless unknown.empty?
 
         Policy.new(language: language,
                    strip: validate_classes!(spec["strip"], language, path),
                    keep: validate_classes!(spec["keep"], language, path),
-                   isolates: validate_isolates!(spec["isolates"], language, path))
+                   isolates: validate_boolean!(spec["isolates"], "isolates", language, path),
+                   spacing: validate_boolean!(spec["spacing"], "spacing", language, path))
       end
 
       def validate_classes!(names, language, path)
@@ -369,11 +428,11 @@ module Nabu
         names
       end
 
-      def validate_isolates!(value, language, path)
+      def validate_boolean!(value, key, language, path)
         return false if value.nil?
         return value if [true, false].include?(value)
 
-        raise ConfigError, "#{path}: #{language}: isolates must be true or false, " \
+        raise ConfigError, "#{path}: #{language}: #{key} must be true or false, " \
                            "got #{value.inspect}"
       end
 
@@ -426,15 +485,20 @@ module Nabu
     # The built-in mode family: pick a class list from the policy, strip.
     # +classes+ is a selector over the policy — :strip (the default lists),
     # :all (strip + keep, e.g. consonantal Hebrew), :none (the escape hatch) —
-    # so no language knowledge is hard-coded here.
+    # so no language knowledge is hard-coded here. The P27-2 contract
+    # extensions: #colors? gates per-token language coloring (mono/full say
+    # no), #spacing? gates grapheme spacing (full says no); modes registered
+    # without these methods default permissively (the no-reshaping promise).
     class StripMode
       attr_reader :name, :description
 
-      def initialize(name:, description:, classes:, isolates: true)
+      def initialize(name:, description:, classes:, isolates: true, colors: true, spacing: true)
         @name = name
         @description = description
         @classes = classes
         @isolates = isolates
+        @colors = colors
+        @spacing = spacing
       end
 
       def render(text, language:, policy:)
@@ -445,6 +509,10 @@ module Nabu
       def isolates?(policy)
         @isolates && policy.isolates
       end
+
+      def colors? = @colors
+
+      def spacing? = @spacing
 
       private
 
@@ -457,6 +525,48 @@ module Nabu
       end
     end
 
+    # `--display translit` (P27-2): render passage text through the
+    # language's registered transcoder — san Devanagari→IAST (Nabu::Deva),
+    # hbo/arc→SBL-style romanization (Nabu::Hebr), chu/orv/bul Cyrillic→
+    # scholarly Latin (Nabu::Cyrl — the display direction of the P27-2
+    # cross-script fold table; Latin-diplomatic text passes through
+    # byte-identical, the render layer never rewrites the source's own
+    # surface). A language with no transcoder passes through with nothing
+    # applied — never a guess. Output is romanized/LTR, so no RTL isolates.
+    #
+    # Ogham (censused verdict): the corpus's transliteration is a parallel
+    # SIBLING DOCUMENT (…-translit, line-aligned by urn suffix), not a
+    # transcode — `show URN --parallel` inlines it today. Wiring that
+    # catalog lookup into this render seam would cross the render-only
+    # boundary (a mode sees text + language, never the store), so the
+    # sibling inline is journaled as a follow-up, not hacked in here.
+    class TranslitMode
+      TRANSCODERS = {
+        "san" => Deva.method(:to_iast),
+        "hbo" => Hebr.method(:to_sbl),
+        "arc" => Hebr.method(:to_sbl),
+        "chu" => Cyrl.method(:to_translit),
+        "orv" => Cyrl.method(:to_translit),
+        "bul" => Cyrl.method(:to_translit)
+      }.freeze
+
+      def name = "translit"
+
+      def description = "romanized rendering (san Deva→IAST, hbo/arc→SBL, chu/orv/bul→scholarly Latin)"
+
+      def render(text, language:, policy:) # rubocop:disable Lint/UnusedMethodArgument
+        transcoder = TRANSCODERS[Normalize.primary_subtag(language)]
+        out = transcoder ? transcoder.call(text) : text
+        Rendered.new(text: out, applied: out == text ? [] : ["translit"])
+      end
+
+      def isolates?(_policy) = false
+
+      def colors? = true
+
+      def spacing? = true
+    end
+
     register_mode(StripMode.new(
                     name: DEFAULT_MODE,
                     description: "config-driven per-language stripping (display.yml strip lists)",
@@ -465,7 +575,7 @@ module Nabu
     register_mode(StripMode.new(
                     name: "full",
                     description: "no transforms — every stored byte, the escape hatch",
-                    classes: :none, isolates: false
+                    classes: :none, isolates: false, colors: false, spacing: false
                   ))
     register_mode(StripMode.new(
                     name: "plain",
@@ -512,5 +622,60 @@ module Nabu
                     description: "the edition's marks as stored — byte-honest (reading's counterpart)",
                     classes: :none, isolates: false
                   ))
+    register_mode(StripMode.new(
+                    name: "mono",
+                    description: "default stripping without per-token language coloring",
+                    classes: :strip, colors: false
+                  ))
+    register_mode(TranslitMode.new)
+
+    # Per-token language coloring (P27-2): in code-switching texts (corph
+    # sga/lat glosses, OSHB's Aramaic verses) tokens tagged — in the stored
+    # P7-5 "tokens" annotation — with a language OTHER than the passage's
+    # own are wrapped in an ANSI color, one stable color per language
+    # (first-seen order). Base-language and untagged tokens stay uncolored:
+    # color only what is honestly tagged. Token forms are located
+    # sequentially in the display text; a form that cannot be found paints
+    # nothing — never a fabricated span. NO_COLOR/mono/full gate this at
+    # the CLI via Display.color? and mode#colors?.
+    module TokenColors
+      # name → ANSI SGR code, in assignment order.
+      PALETTE = [["cyan", 36], ["yellow", 33], ["magenta", 35],
+                 ["green", 32], ["red", 31], ["blue", 34]].freeze
+      RESET = "\e[0m"
+
+      module_function
+
+      # → [painted text, { language => color name } legend]. +tokens+ is the
+      # stored tokens annotation (array of hashes); +language+ the passage
+      # language (its primary subtag is the uncolored baseline).
+      def paint(text, tokens:, language:)
+        base = Normalize.primary_subtag(language)
+        foreign = tokens.select { |token| token.is_a?(Hash) && token["lang"] && token["lang"] != base }
+        return [text, {}] if foreign.empty?
+
+        colors = assign_colors(foreign)
+        painted = +""
+        rest = text
+        used = {}
+        foreign.each do |token|
+          form = token["form"].to_s
+          index = form.empty? ? nil : rest.index(form)
+          next if index.nil?
+
+          name, code = colors.fetch(token["lang"])
+          used[token["lang"]] = name
+          painted << rest[0, index] << "\e[#{code}m" << form << RESET
+          rest = rest[(index + form.length)..]
+        end
+        [painted + rest, used]
+      end
+
+      def assign_colors(foreign)
+        foreign.map { |token| token["lang"] }.uniq
+               .each_with_index.to_h { |lang, i| [lang, PALETTE[i % PALETTE.size]] }
+      end
+      private_class_method :assign_colors
+    end
   end
 end

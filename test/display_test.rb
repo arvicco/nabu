@@ -250,7 +250,178 @@ class DisplayTest < Minitest::Test
     end
   end
 
+  # -- translit mode (P27-2) -------------------------------------------------
+
+  # Real i-may-010 ogham line (test/fixtures/ogham) and a real GRETIL
+  # Mahabharata opening (the deva_test sample).
+  OGHAM_LINE = "ᚇᚑᚈᚐᚌᚅᚔ"
+  MBH_DEVA = "नारायणं नमस्कृत्य नरं चैव नरोत्तमम् ।"
+
+  def test_translit_is_registered_with_mono
+    assert_equal %w[mono translit], Nabu::Display.mode_names.sort & %w[mono translit]
+  end
+
+  def test_translit_romanizes_hebrew_sbl_style_without_isolates
+    rendered = render(GEN_1_1, "hbo", mode: "translit")
+    assert_equal "bəreʾshiyt baraʾ ʾelohiym ʾet hashamayim wəʾet haʾarets.", rendered.text
+    assert_includes rendered.applied, "translit"
+    refute_includes rendered.text, RLI, "romanized output is LTR — isolates would be wrong"
+  end
+
+  def test_translit_transcodes_devanagari_to_iast
+    rendered = render(MBH_DEVA, "san-Deva", mode: "translit")
+    assert_equal "nārāyaṇaṃ namaskṛtya naraṃ caiva narottamam |", rendered.text
+    assert_includes rendered.applied, "translit"
+  end
+
+  def test_translit_renders_cyrillic_scholarly_latin_marks_preserved
+    rendered = render(ZOGR, "chu", mode: "translit")
+    assert_equal "tъ vasъ krьstitъ dx҃omь st҃ъimь i ogn҄emь·", rendered.text,
+                 "the transcoder romanizes letters; mark stripping stays default mode's business"
+  end
+
+  def test_translit_is_a_noop_on_already_romanized_shelves
+    rendered = render(DCS_IAST, "san", mode: "translit")
+    assert_equal DCS_IAST, rendered.text
+    assert_empty rendered.applied, "nothing changed → nothing to hint"
+  end
+
+  def test_translit_passes_untranscoded_languages_through
+    text = "μῆνιν ἄειδε"
+    with_yaml("languages:\n  grc: { strip: [monotonic] }\n") do |path|
+      custom = Nabu::Display.load_policies(path)
+      rendered = Nabu::Display.render(text, language: "grc", mode: Nabu::Display.mode("translit"),
+                                            policies: custom)
+      assert_equal text, rendered.text, "no grc transcoder — pass through, never guess"
+      assert_empty rendered.applied
+    end
+  end
+
+  def test_orv_and_bul_have_policies_so_translit_reaches_them
+    assert policies.key?("orv"), "config/display.yml carries orv (empty policy — translit seam)"
+    assert policies.key?("bul"), "config/display.yml carries bul (empty policy — translit seam)"
+    rendered = render("и оуби", "orv", mode: "translit")
+    assert_equal "i ubi", rendered.text
+  end
+
+  def test_full_mode_still_byte_identical_with_the_new_modes
+    [[GEN_1_1, "hbo"], [ZOGR, "chu"], [MBH_DEVA, "san-Deva"], [OGHAM_LINE, "pgl-Ogam"]].each do |text, lang|
+      rendered = render(text, lang, mode: "full")
+      assert_equal text, rendered.text
+      assert_empty rendered.applied
+    end
+  end
+
+  # -- mono mode (P27-2): default strips, no colors --------------------------
+
+  def test_mono_strips_like_default
+    rendered = render(ZOGR, "chu", mode: "mono")
+    assert_equal ZOGR_NO_TITLA, rendered.text
+    assert_includes rendered.applied, "titla"
+  end
+
+  def test_mode_color_contract
+    assert Nabu::Display.mode("default").colors?
+    assert Nabu::Display.mode("translit").colors?
+    refute Nabu::Display.mode("mono").colors?, "--display mono disables token coloring"
+    refute Nabu::Display.mode("full").colors?, "full is the byte-honest escape hatch"
+  end
+
+  # -- grapheme spacing (P27-2) ----------------------------------------------
+
+  def test_pgl_spacing_inserts_ogham_space_marks_between_letters
+    rendered = render(OGHAM_LINE, "pgl-Ogam")
+    # seven letters joined by U+1680 OGHAM SPACE MARK — the script's own
+    # stemline-continuing separator, never ASCII space between letters
+    assert_equal OGHAM_LINE.chars.join("\u1680"), rendered.text
+    assert_includes rendered.applied, "spacing"
+  end
+
+  def test_spacing_skips_existing_separators_and_full_mode
+    rendered = render("ᚇᚑ ᚈᚐ", "pgl-Ogam")
+    assert_equal "ᚇ ᚑ ᚈ ᚐ", rendered.text, "existing spaces never double up"
+    assert_equal OGHAM_LINE, render(OGHAM_LINE, "pgl-Ogam", mode: "full").text
+  end
+
+  def test_spacing_config_validates_booleans
+    with_yaml("languages:\n  pgl: { spacing: sideways }\n") do |path|
+      error = assert_raises(Nabu::Display::ConfigError) { Nabu::Display.load_policies(path) }
+      assert_match(/spacing/, error.message)
+    end
+  end
+
+  def test_spacing_in_a_non_ogham_script_uses_plain_spaces
+    with_yaml("languages:\n  got: { spacing: true }\n") do |path|
+      custom = Nabu::Display.load_policies(path)
+      rendered = Nabu::Display.render("𐌲𐌿𐌸", language: "got", mode: Nabu::Display.mode("default"),
+                                             policies: custom)
+      assert_equal "𐌲 𐌿 𐌸", rendered.text
+    end
+  end
+
+  # -- per-token language coloring (P27-2) -----------------------------------
+
+  # Real corph shape: sga passage with a code-switched Latin token; the token
+  # "lang" contract is the P7-5 tokens annotation (corph/oshb census).
+  def test_paint_colors_only_tokens_tagged_with_another_language
+    text = "amail rongab grammatica"
+    tokens = [
+      { "form" => "amail", "lang" => "sga" },
+      { "form" => "rongab" }, # untagged — must stay uncolored
+      { "form" => "grammatica", "lang" => "lat" }
+    ]
+    painted, legend = Nabu::Display::TokenColors.paint(text, tokens: tokens, language: "sga")
+    assert_includes painted, "\e[36mgrammatica\e[0m", "the lat token wears the first palette color"
+    refute_includes painted, "\e[36mamail", "base-language tokens stay uncolored"
+    refute_match(/\e\[\d+mrongab/, painted, "untagged tokens stay uncolored — color only what is honestly tagged")
+    assert_equal({ "lat" => "cyan" }, legend)
+  end
+
+  def test_paint_locates_tokens_sequentially_and_skips_honest_misses
+    text = "ab ab"
+    tokens = [{ "form" => "ab", "lang" => "lat" }, { "form" => "zz", "lang" => "lat" }]
+    painted, = Nabu::Display::TokenColors.paint(text, tokens: tokens, language: "sga")
+    assert painted.start_with?("\e[36mab\e[0m"), "first occurrence painted"
+    assert painted.end_with?(" ab"), "the unlocatable zz paints nothing — never a fabricated span"
+  end
+
+  def test_paint_composes_with_snippet_brackets
+    text = "dixit [grammatica] est"
+    tokens = [{ "form" => "grammatica", "lang" => "lat" }]
+    painted, = Nabu::Display::TokenColors.paint(text, tokens: tokens, language: "sga")
+    assert_includes painted, "[\e[36mgrammatica\e[0m]", "existing highlight brackets survive around the color"
+  end
+
+  def test_paint_with_no_cross_language_tokens_is_a_noop
+    text = "בְּרֵאשִׁית"
+    tokens = [{ "form" => "בְּרֵאשִׁית", "lang" => "hbo" }]
+    painted, legend = Nabu::Display::TokenColors.paint(text, tokens: tokens, language: "hbo")
+    assert_equal text, painted
+    assert_empty legend
+  end
+
+  def test_color_gate_honors_no_color_and_nabu_color
+    with_env("NO_COLOR" => "1", "NABU_COLOR" => nil) do
+      refute Nabu::Display.color?(tty: true), "NO_COLOR wins over everything"
+    end
+    with_env("NO_COLOR" => nil, "NABU_COLOR" => "1") do
+      assert Nabu::Display.color?(tty: false), "NABU_COLOR forces color for captured output"
+    end
+    with_env("NO_COLOR" => nil, "NABU_COLOR" => nil) do
+      assert Nabu::Display.color?(tty: true)
+      refute Nabu::Display.color?(tty: false), "piped output stays clean by default"
+    end
+  end
+
   private
+
+  def with_env(pairs)
+    saved = pairs.keys.to_h { |key| [key, ENV.fetch(key, nil)] }
+    pairs.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+    yield
+  ensure
+    saved.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+  end
 
   def with_yaml(content)
     Dir.mktmpdir("nabu-display") do |dir|
