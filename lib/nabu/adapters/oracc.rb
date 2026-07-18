@@ -373,7 +373,7 @@ module Nabu
           ids = translated_ids(project_dir(workdir, project))
           next nil if ids.empty?
 
-          progress&.call("Crawling #{project} translations (#{ids.size} texts)…")
+          progress&.call("Crawling #{project} translations (#{ids.size} texts)…\n")
           counts = crawl_project!(workdir, project, ids, zip_changed: !fetches.fetch(project).not_modified?)
           "#{slug(project)} html-en: #{counts[:fetched]} fetched, " \
             "#{counts[:cached]} cached, #{counts[:missing]} missing"

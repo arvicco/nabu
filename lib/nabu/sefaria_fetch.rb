@@ -215,7 +215,7 @@ module Nabu
     end
 
     def get(url, conditional:)
-      @progress&.call("Downloading #{url}…")
+      @progress&.call("Downloading #{url}…\n")
       response, = RedirectFollow.get(url, http: @http, error: Error,
                                           headers: conditional, accept: [200, 304])
       response

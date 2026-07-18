@@ -107,7 +107,7 @@ module Nabu
       # hasn't reached yet), reports un-atticked disappearances loudly, and
       # trips the house mass-deletion breaker (--force overrides).
       def fetch(workdir, progress: nil, force: false)
-        progress&.call("Scanning #{workdir}…")
+        progress&.call("Scanning #{workdir}…\n")
         result = LocalFetch.sync!(
           dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME), force: force,
           hint: "for local-library: create #{SLUG}/<collection>/ with files + a manifest.yml"

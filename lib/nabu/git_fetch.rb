@@ -154,7 +154,7 @@ module Nabu
         Shell.run("git", "clone", "--depth", "1", *pin, @repo_url, @dir)
         return
       end
-      @progress.call("Cloning #{@repo_url}…")
+      @progress.call("Cloning #{@repo_url}…\n")
       Shell.stream("git", "clone", "--progress", "--depth", "1", *pin, @repo_url, @dir) { |line| @progress.call(line) }
     end
 
@@ -163,7 +163,7 @@ module Nabu
     def sparse_clone(pin)
       args = ["clone", "--depth", "1", "--filter=blob:none", "--no-checkout", *pin, @repo_url, @dir]
       if @progress
-        @progress.call("Cloning #{@repo_url} (sparse: #{@sparse.join(', ')})…")
+        @progress.call("Cloning #{@repo_url} (sparse: #{@sparse.join(', ')})…\n")
         Shell.stream("git", *args.insert(1, "--progress")) { |line| @progress.call(line) }
       else
         Shell.run("git", *args)
@@ -181,7 +181,7 @@ module Nabu
         Shell.run("git", "-C", @dir, "fetch", "--quiet", "origin", target)
         return
       end
-      @progress.call("Pulling #{@repo_url}…")
+      @progress.call("Pulling #{@repo_url}…\n")
       Shell.stream("git", "-C", @dir, "fetch", "--progress", "origin", target) { |line| @progress.call(line) }
     end
 
