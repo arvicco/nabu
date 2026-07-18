@@ -69,14 +69,22 @@ catalog on sync.
 | `xhu` | Hurrian | Isolated lexical-list column entries from the cuneiform shelf. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
 | `san` | Sanskrit (Vedic) | The Universal Dependencies Vedic treebank's gold-annotated sentences. |
-| `pol` / `ita` / `ger` | Polish / Italian / German | Modern scholarly translations of the Freising Manuscripts. |
+| `pol` / `ita` / `ger` / `deu` | Polish / Italian / German | Modern scholarly translation layers (Freising, ItAnt, the Egyptian shelves — `ger` and `deu` are both accepted at every query filter). |
 | `grc-Latn` | Greek (romanized) | Two papyri whose Greek survives only in Latin transliteration. |
-| `egy-Egyd` | Egyptian (Demotic) | Two Demotic documentary papyri. |
+| `egy` | Egyptian | The whole span in Unicode transliteration (added 18 July 2026): 101,793 gold-lemmatized sentences from the Pyramid Texts to the sawlit literary canon, plus 13,383 Demotic and 3,606 Late Egyptian sentences from the TLA — with German translation siblings throughout. |
+| `hbo` | Biblical Hebrew | The Masoretic text of the Leningrad Codex, byte-verbatim (the combining-mark order is never normalized), fully morphology-tagged with ketiv/qere preserved (added 18 July 2026). |
+| `pli` | Pali | The complete Tipiṭaka in roman script (Mahāsaṅgīti), segment-aligned to English (added 18 July 2026). |
+| `ett` | Etruscan | 6,248 inscriptions with English siblings and the ETP scholarly glossary — Tyrsenian, honestly isolate-adjacent (added 18 July 2026). |
+| `osc` / `xum` / `spx` | Oscan / Umbrian / South Picene | The Sabellic axis: CEIPoM's lemmatized epigraphy (incl. the complete Iguvine Tables), ItAnt's critical editions, Mamertine Oscan in Greek script on Sicily (added 18 July 2026). |
+| `xfa` / `xve` / `cms` | Faliscan / Venetic / Messapic | CEIPoM's dated, geolocated inscriptions — for Messapic and Venetic the largest machine-readable corpora in existence (added 18 July 2026). |
+| `xlp` / `xcg` / `xrr` | Lepontic / Cisalpine Gaulish / Raetic | The Alpine corner: Lexicon Leponticum's inscriptions and 627-word lexicon, the Raetic corpus of record (added 18 July 2026). |
+| `scx` / `xly` / `xpu` | Sicel / Elymian / Sicilian Punic | The fragmentary languages of pre-Greek Sicily, in their only digital home (I.Sicily, added 18 July 2026). |
+| `egy-Egyd` | Egyptian (Demotic script tag) | Two Demotic documentary papyri on the papyrus shelf (the bulk demotic corpus lives under `egy`). |
 | `xct` / `xct-Latn` | Classical Tibetan | A stray GRETIL text (native and transliterated). |
 | `xcl` | Classical Armenian | The fifth-century Armenian New Testament, gold-lemmatized. |
 | `uga` | Ugaritic | A lexical-list trace from the cuneiform shelf. |
 | `ta-Latn` | Tamil (romanized) | One GRETIL stray. |
-| `arc` | Aramaic | A single cuneiform-shelf document. |
+| `arc` | Aramaic | Biblical Aramaic (Daniel, Ezra) in the Masoretic shelf, the verse-aligned Targums (Onkelos, Jonathan, the Writings targums), and a cuneiform-shelf trace (grown 18 July 2026). |
 | `en` | English (legacy tag) | One GRETIL stray using the two-letter tag; everything else standardizes on `eng`. |
 | `und` | Undetermined | Five inscriptions whose language the upstream record could not determine — coded honestly rather than guessed. |
 

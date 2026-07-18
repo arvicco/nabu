@@ -9537,3 +9537,218 @@ Sicily, across all languages". **Existing EpiDoc family + GitFetch.**
   support.
 - Language dossiers for scx/xly with honest family lanes.
 - Registry `enabled: false`, sync_policy manual (live repo).
+
+## P30-1 · hebrew-lexicon — define for augmented Strong's  [tier: fable] [status: done 2026-07-18 — adapter + `oshb-lexicon` family + fixtures shipped, `enabled: false` awaiting the owner-fired first sync; verdicts below] [deps: —]
+
+SHIPPED (2026-07-18, worktree; sha in worklog). VERDICTS:
+- SHELF GRAIN (censused at fixture time): ONE source, TWO dictionaries
+  (the lexica LSJ+LS precedent) — `hebrew-lexicon` (one entry per
+  AugIndex row, 9,299 upstream: id = the aug value VERBATIM incl. the 8
+  non-numeric particle ids b/c/d/i/k/l/m/s; headword/xlit/pos/gloss from
+  LexicalIndex via aug→LI (0 dangling), full Strong body from
+  HebrewStrong (numeric bases, 0 missing; particles honestly have none),
+  strong/aug/bdb/twot xrefs as body lines) + `bdb` (one entry per
+  BrownDriverBriggs entry, 11,845 upstream; mod/type markers, head line,
+  sense tree one line per <sense> with @n prefixes; <status> workflow
+  values excluded from body). The two shelves meet at `define <hebrew
+  word>` on the folded consonantal skeleton (pinned: ברא finds both).
+- JOIN CONTRACT: `HebrewLexicon.normalize_lemma` ships on the adapter
+  (final /-segment → strip spaces → strip trailing +); fixture-measured
+  1,906/1,906 tokens = 100.000% (506/506 types) over the OSHB fixtures,
+  live survey number 49,946/49,946 carried; the adapter test resolves
+  EVERY real token lemma of Gen 1:1 + Gen 31:13 + Gen 31:47 + Jer 10:11
+  (real OSHB fixture bytes) through the real DictionaryLoader +
+  Define#by_urn.
+- SPEC DRIFT, named: the spec's "BdbMedium.xml" does not exist upstream —
+  the BDB outline file is BrownDriverBriggs.xml (survey had it right).
+- NFC EXEMPTION EXTENDED (model change, the Passage P26-3 precedent):
+  DictionaryEntry headword/gloss/body validate verbatim-UTF-8 for
+  NFC-exempt languages (measured upstream: 4,053 LI / 3,796 HS / 4,720
+  BDB headwords not NFC-stable — dagesh-before-vowel Masoretic order);
+  headword_folded stays NFC for every language. architecture §3 updated.
+- BDB print pages: <status p> (+ the ×2 mid-entry <page p> turns, one
+  fixtured) → citation rows label "BDB p. NNN", cts_work nil, citation =
+  the page — the aed Wb-pages pattern, resolution deferred to the BDB
+  1906 scan (§7 one-liner). Scripture <ref> display text rides the body;
+  the machine @r is deliberately NOT minted (P30-2's verse-keyed lane).
+- ATTESTED-COUNTS MEASUREMENT (honest): gold hbo/arc lemma-index keys vs
+  the shelf at fixture level — 944/1,906 (49.5%) equal a shelf entry id
+  verbatim (bare-number lemmas); 962 (50.5%) need normalize_lemma at
+  query time; the Define#glosses folded-headword handshake lights on 0
+  (OSHB gold lemmas are ids, not Hebrew forms). A define-side aug-id
+  lane (or index-side normalization) is the natural follow-up one-liner,
+  NOT silently claimed.
+- LANGUAGE HONESTY: dictionaries-table grain is one language per shelf →
+  both register hbo (majority: 8,589/9,299 aug entries heb, 23/46 BDB
+  parts); per-entry hbo/arc preserved on domain entries (28/15 in the
+  fixture censused), folds identical; `define --lang arc` filters at
+  dictionary grain — recorded in 02-sources row 83.
+- Registry `enabled: false`, sync_policy manual, plain GitFetch (9.2 MB,
+  no sparse cone needed). Fixtures byte-verbatim slices of all four
+  files (43 aug rows = the COMPLETE normalized-lemma inventory of the
+  four join verses; 43 LI + 41 HS + 19 BDB entries incl. Aramaic parts
+  and the dagesh-first ברא), README with license quote + commit +
+  full-file sha256 pins + the normalization rule.
+- Tests +41 methods (model 3, parser 20 incl. damage paths, adapter 18
+  incl. registry pin). Suite 3,991 runs / 50,709 assertions exit 0
+  (0 skips) · lint 491 files exit 0.
+- OWNER QUEUE: bin/nabu sync hebrew-lexicon, eyeball define ברא /
+  define אלהים / show urn:nabu:dict:hebrew-lexicon:1254a + 5 random
+  entries, flip enabled.
+
+github.com/openscriptures/HebrewLexicon (the OSHB project's own lexicon,
+9.2 MB, CC BY 4.0 → attribution). THE JOIN CONTRACT (survey-measured
+live, 2026-07-18): entries keyed by augmented-Strong id — the exact ids
+OSHB lemmas carry; 49,946/49,946 tokens (100.000%) joined across
+Gen+Ruth+Dan+Jer INCL. Aramaic Daniel after ONE mechanical
+normalization: OSHB lemma "b/1254 a" → strip prefix segments before the
+final "/" → collapse internal space → "1254a". Zero dangling refs at any
+hop of the AugIndex → LexicalIndex → BDB chain.
+
+- Four XML files (own OSHB namespace — new small XML family):
+  HebrewStrong.xml (Strong's entries, headwords, xlit, POS, full
+  definitions), AugIndex.xml (augmented ids → Strong base), LexicalIndex
+  .xml (id → BDB outline + gloss), BdbMedium.xml (the BDB outline with
+  print-page anchors `<status p="NNN">`).
+- content_kind :dictionary, TWO shelves or one? — census the natural
+  grain at fixture time (Strong's entries + BDB outline could be one
+  source, two dictionaries — the lexica LSJ+LS precedent). Language hbo
+  + arc entries per the id space (H/A prefixes).
+- `define` resolves an OSHB lemma id directly (the aed lemmaID→urn
+  precedent: urn:nabu:dict:hebrew-lexicon:<id>); attested counts light
+  via the existing gold hbo/arc lemma index — measure and report.
+- BDB print-page anchors mint print-page citation rows (the aed Wb-pages
+  pattern: label verbatim, cts_work nil, resolution deferred until the
+  BDB 1906 scan lands in local-library — the §7 one-liner pairs with
+  this packet).
+- Registry enabled: false, sync_policy manual (GitFetch, small).
+- Fixtures: byte-verbatim entry samples from all four files incl. an
+  Aramaic entry and a `1254a`-style augmented id; README with license
+  quote + shas + the normalization rule pinned.
+
+## P30-2 · sdbh — the UBS semantic dictionary  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+UBS Semantic Dictionary of Biblical Hebrew via github.com/ubsicap/
+ubs-open-license (CC BY-SA 4.0 → attribution; quote verbatim from the
+repo). v0.9.2 at survey time: 7,932 entries / 16,220 definitions /
+23,879 glosses / semantic domains / 260,813 verse-word-level scripture
+references. `<StrongCodes>` in the same H/A number space as P30-1/OSHB.
+
+- SAX/Reader family (the file is large); content_kind :dictionary,
+  language hbo (+arc as tagged). Second shelf beside P30-1
+  (MW-beside-kaikki, deliberately unmerged).
+- Semantic domains → the entry body (and a facet-like lane if natural);
+  scripture references → citation rows (verse-keyed — they resolve
+  against oshb urns; measure the resolution rate, report honestly).
+- HONESTY CARRIED: survey-measured token coverage vs OSHB is 78–80%;
+  the misses include high-frequency function words (בֵּן, כִּי, עַל absent
+  upstream v0.9.2) — record verbatim in 02-sources, never paper over.
+- Registry enabled: false, sync_policy manual.
+
+## P30-3 · sefaria — the Targum column  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+Sefaria-Export RESTRUCTURED upstream (2026 reality; old row 11 stale):
+texts live in a public GCS bucket (~26 GB total — NOT fetched), the git
+repo is a lightweight monthly index (books.json, 19,705 version entries
+/ 6,456 titles). THE ONE-PHASE BITE: the Targum shelf — 46 titles / 200
+files / 28.1 MB: Onkelos, Jonathan on all Prophets, the Writings
+targums, Neofiti, Jerusalem, Sheni. Verse-aligned to the same Tanakh
+versification → the ot alignment hub gains its ARAMAIC leg (five-legged:
+MT ↔ LXX ↔ Vulgate ↔ English ↔ Targum).
+
+- NEW fetch shape: index-driven named-file GETs (books.json → the Targum
+  subset's per-version JSON files from the bucket). Scope discipline:
+  ONLY the Targum shelf this phase; the index rides in canonical so the
+  scope is reproducible.
+- THE LICENSE GATE (per-version, machine-readable): each version JSON
+  carries a "license" field — ingest named versions only, class per
+  version (PD/CC-BY/CC-BY-SA → attribution or open; any CC-BY-NC
+  version → nc with license_override per document); **merged.json files
+  carry NO license field and are NEVER ingested** (pin this rule in a
+  test).
+- Schema-driven JSON family (Sefaria's own schema/section structure);
+  language arc (Aramaic); document per title/version, passage per verse;
+  hub wiring via the cts-verse refs (the oshb/vulgate precedent —
+  eyeball `align "GEN 1.1"` shows the Targum column after sync).
+- Registry enabled: false, sync_policy manual.
+
+## P30-4 · text-fabric family + BHSA — the syntax axis  [tier: fable] [status: SHIPPED 2026-07-18 — worklog P30-4, sha TBD] [deps: —]
+
+SHIPPED (packet result): family `Nabu::Adapters::TextFabric` (Feature +
+Dataset; anchors/ranges/empty-value cursor/escapes/otype/oslots;
+@edgeValues refused — untested support would be invented format) + adapter
+`Nabu::Adapters::Bhsa`; every briefed census number verified exact against
+otype.tf EXCEPT "64,514 sentences" = the sentence_ATOM count (sentences
+proper 63,717; neither ingested — journaled). Spans contract published in
+architecture §5 for the dss re-registration; qere shape pinned e2e against
+the shipped P27 display policy on the SAME Ruth 1:8 K/Q instance oshb's
+fixture pins. 02-sources row 83 (next-free at packet time — renumber on
+merge collision), registry enabled: false/manual, ot+psalms hub witnesses
+config-only. bridging journaled, not wired.
+
+github.com/ETCBC/bhsa — license README verbatim: CC BY-NC 4.0, cite DOI
+10.17026/dans-z6y-skyh; the GitHub MIT badge covers code only → class
+nc, MCP-excluded (PROIEL discipline). Version PINNED: tf/2021 (sparse
+GitFetch cone, 118 files ≈ 173 MB of the 1.6 GB repo).
+
+- NEW `text-fabric` parser family in PLAIN RUBY (~150 lines, no new
+  gems): each .tf = @key=value header block, blank line, then one value
+  per line with line position encoding the node number (explicit
+  node<TAB>value anchors allowed); otype.tf = range<TAB>type; oslots.tf
+  = the edge file. Build the family for REUSE — P30-5 dss registers
+  second (and peshitta/SP later).
+- Census (verified): 426,590 words / 39 books / 929 chapters / 23,213
+  verses / 88,131 clauses / 253,203 phrases / 64,514 sentences / 9,230
+  lexemes. Document = book, passage = verse (OSIS-style refs from
+  book+chapter+verse features → the ot hub via cts-verse, the oshb
+  precedent). SECOND MT witness at a different grain — deliberately
+  unmerged (MW-beside-kaikki).
+- Features riding annotations: words + morphology + per-lexeme English
+  gloss (gloss.tf) + freq_lex/freq_occ + language (H/A — cross-checks
+  OSHM) + the ketiv-qere hybrid layer (kq_hybrid; the P27 qere display
+  contract applies). NABU'S FIRST CONSTITUENCY DATA: clause/phrase spans
+  as span annotations — write a SHORT design note in the packet (docs/
+  architecture-worthy if it generalizes) BEFORE implementing.
+- Sibling repo `bridging` (MIT — the OSHB↔BHSA word-level crosswalk):
+  journaled, not wired.
+- Registry enabled: false, sync_policy manual.
+
+## P30-5 · dss — the Dead Sea Scrolls  [tier: fable] [status: STAGGERED — dispatch after P30-4 merges] [deps: P30-4 (text-fabric family)]
+
+github.com/ETCBC/dss (206 MB, active). LICENSE: the expected Abegg/
+Accordance encumbrance DISSOLVED — docs/about.md verbatim: "Martin
+Abegg graciously gave permission to Jarod Jacobs to use his data and to
+distribute the results under a CC-BY-NC license"; every .tf header
+carries @license=CC BY-NC 4.0 machine-readable → nc, MCP-excluded.
+
+- Second text-fabric registrant (the P30-4 family verbatim). Version
+  pinned tf/2.0. Census: 1,430,241 signs / 500,995 words / 52,895 lines
+  / 11,182 fragments / 1,001 scrolls / 10,450 lexemes; hbo + arc per
+  word; biblical vs non-biblical feature → facet.
+- Document = scroll, passage = fragment+line (the corpus's own citation
+  grain: 1QS f1:3). Reconstructed/uncertain sign flags (cor/alt/
+  brackets) ride annotations VERBATIM, never flattened — pin the policy
+  with real fixture bytes.
+- v2.0 ML-derived clause/phrase boundaries = SILVER (the goo300k
+  discipline; label, never gold). Lexeme lane joins OSHB only via
+  consonantal folding — measure at fixture time, report the honest
+  number, promise nothing.
+- Period/script metadata → date axis (the biggest Hebrew date-axis
+  extension; census the feature shapes at fixture time, extractor if
+  structured — the isicily discipline).
+- Registry enabled: false, sync_policy manual.
+
+## P30-6 · iip — Inscriptions of Israel/Palestine  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+Brown University's IIP: 5,536 EpiDoc XML files, Hebrew/Aramaic/Greek/
+Latin inscriptions ~500 BCE–640 CE, CC BY-NC 4.0 → nc, MCP-excluded.
+EXISTING EpiDoc family + GitFetch (riig/isicily precedent — the cheap
+real-corpus packet).
+
+- CENSUS FIRST (the isicily discipline): real file count, language mix
+  (@xml:lang histogram), dating/findspot header structure — axis
+  extractor only if the headers carry structure; report what you found.
+- Languages mapped honestly (heb/arc/grc/lat + whatever the census
+  shows); mixed-language inscriptions per the isicily subtag policy.
+- Concordances/ids in headers → reference edges as supported.
+- Registry enabled: false, sync_policy manual.

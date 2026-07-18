@@ -1447,7 +1447,7 @@ module Nabu
       shelf_langs = catalog[:dictionaries].distinct.order(:language).select_map(:language)
       @shelf_summary = "the shelf holds #{catalog[:dictionaries].count} dictionaries " \
                        "(#{shelf_langs.join(', ')})"
-      if options[:lang] && !shelf_langs.include?(options[:lang])
+      if options[:lang] && !Nabu::Languages.code_variants(options[:lang]).intersect?(shelf_langs)
         raise Thor::Error, "define: --lang must be a language on the live shelf " \
                            "(#{shelf_langs.join(', ')})"
       end
@@ -4758,7 +4758,8 @@ module Nabu
               "ceipom #{result.axes.ceipom}, " \
               "isicily #{result.axes.isicily}, " \
               "open-etruscan #{result.axes.open_etruscan}, " \
-              "lexlep #{result.axes.lexlep}, tir #{result.axes.tir})"
+              "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
+              "iip #{result.axes.iip})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

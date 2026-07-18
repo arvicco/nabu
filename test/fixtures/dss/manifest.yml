@@ -1,0 +1,163 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a much larger upstream
+# feature file (whole: false — a fresh GET returns the full file and is
+# fetched for URL-liveness only, never byte-compared). adapter_test is null:
+# the DSS adapter test asserts slice-level counts, which untrimmed upstream
+# files would false-fail. Re-trim per the README table after any refresh.
+# Pinned upstream commit:
+# 2403d16654984fc5567a5bd263086d9ad2a7a1dd (master, retrieved 2026-07-18).
+source: dss
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: tf/2.0/after.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/after.tf
+    whole: false
+    trim: slice sign+word entries (5192280 B -> 17204 B)
+  - path: tf/2.0/alt.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/alt.tf
+    whole: false
+    trim: slice sign entries (4028 B -> 556 B)
+  - path: tf/2.0/biblical.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/biblical.tf
+    whole: false
+    trim: slice cluster/fragment/line/scroll/word entries (536438 B -> 1760 B)
+  - path: tf/2.0/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/book.tf
+    whole: false
+    trim: slice word entries (856457 B -> 1886 B)
+  - path: tf/2.0/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/chapter.tf
+    whole: false
+    trim: slice word entries (599762 B -> 1321 B)
+  - path: tf/2.0/cl.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/cl.tf
+    whole: false
+    trim: slice word entries (2175309 B -> 8528 B)
+  - path: tf/2.0/cor.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/cor.tf
+    whole: false
+    trim: slice sign entries (24721 B -> 899 B)
+  - path: tf/2.0/fragment.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/fragment.tf
+    whole: false
+    trim: slice fragment+line entries (268441 B -> 1225 B)
+  - path: tf/2.0/full.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/full.tf
+    whole: false
+    trim: slice word entries (3586074 B -> 12448 B)
+  - path: tf/2.0/glyph.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/glyph.tf
+    whole: false
+    trim: slice sign+word entries (7358405 B -> 26122 B)
+  - path: tf/2.0/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/gn.tf
+    whole: false
+    trim: slice word entries (1451933 B -> 6101 B)
+  - path: tf/2.0/halfverse.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/halfverse.tf
+    whole: false
+    trim: header-only (zero in-slice entries) (2552 B -> 552 B)
+  - path: tf/2.0/intl.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/intl.tf
+    whole: false
+    trim: header-only (zero in-slice entries) (4993 B -> 589 B)
+  - path: tf/2.0/lang.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lang.tf
+    whole: false
+    trim: slice sign+word entries (418353 B -> 2156 B)
+  - path: tf/2.0/lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lex.tf
+    whole: false
+    trim: slice word entries (lex-node block dropped) (4452296 B -> 16605 B)
+  - path: tf/2.0/line.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/line.tf
+    whole: false
+    trim: slice line entries (119086 B -> 1106 B)
+  - path: tf/2.0/md.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/md.tf
+    whole: false
+    trim: slice word entries (26309 B -> 585 B)
+  - path: tf/2.0/merr.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/merr.tf
+    whole: false
+    trim: header-only (zero in-slice entries) (555 B -> 540 B)
+  - path: tf/2.0/morpho.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/morpho.tf
+    whole: false
+    trim: slice word entries (2369611 B -> 8879 B)
+  - path: tf/2.0/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/nu.tf
+    whole: false
+    trim: slice word entries (1451288 B -> 6098 B)
+  - path: tf/2.0/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/oslots.tf
+    whole: false
+    trim: slice cluster/fragment/line/scroll/word nodes, gap-anchored (14394455 B -> 26748 B)
+  - path: tf/2.0/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/otext.tf
+    whole: true
+    trim:
+  - path: tf/2.0/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/otype.tf
+    whole: true
+    trim:
+  - path: tf/2.0/ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/ps.tf
+    whole: false
+    trim: slice word entries (481024 B -> 1034 B)
+  - path: tf/2.0/punc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/punc.tf
+    whole: false
+    trim: slice word entries (329665 B -> 1611 B)
+  - path: tf/2.0/rec.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/rec.tf
+    whole: false
+    trim: slice sign entries (1886681 B -> 3368 B)
+  - path: tf/2.0/rem.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/rem.tf
+    whole: false
+    trim: slice sign entries (10396 B -> 1032 B)
+  - path: tf/2.0/script.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/script.tf
+    whole: false
+    trim: slice sign+word entries (61876 B -> 3850 B)
+  - path: tf/2.0/scroll.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/scroll.tf
+    whole: false
+    trim: slice scroll+fragment+line entries (378532 B -> 1949 B)
+  - path: tf/2.0/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/sp.tf
+    whole: false
+    trim: slice word entries (2836506 B -> 9263 B)
+  - path: tf/2.0/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/st.tf
+    whole: false
+    trim: slice word entries (871409 B -> 5483 B)
+  - path: tf/2.0/type.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/type.tf
+    whole: false
+    trim: slice sign+cluster+word entries (10781272 B -> 35049 B)
+  - path: tf/2.0/unc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/unc.tf
+    whole: false
+    trim: slice sign entries (652154 B -> 1738 B)
+  - path: tf/2.0/vac.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vac.tf
+    whole: false
+    trim: slice sign entries (32498 B -> 972 B)
+  - path: tf/2.0/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/verse.tf
+    whole: false
+    trim: slice word entries (563822 B -> 1312 B)
+  - path: tf/2.0/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vs.tf
+    whole: false
+    trim: slice word entries (819020 B -> 2120 B)
+  - path: tf/2.0/vt.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vt.tf
+    whole: false
+    trim: slice word entries (838258 B -> 1917 B)

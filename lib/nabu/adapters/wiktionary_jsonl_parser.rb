@@ -122,7 +122,21 @@ module Nabu
         first = Array(record["senses"]).find { |sense| Array(sense["glosses"]).any? }
         return nil unless first
 
-        text = first["glosses"].first.to_s.gsub(/\s+/, " ").strip.sub(/:\z/, "")
+        # Kaikki nests gloss paths parent-first. An informative parent is
+        # the right headline — "word, speech, utterance" over its
+        # subsenses, "inflection of видѣти:" over its morphological tags
+        # (both pinned below) — but an EDITORIAL-SENTENCE introducer
+        # ("The meaning of this term is uncertain. Possibilities
+        # include:") is hedging, not a gloss: descend to the leaf ("a
+        # mask" — owner report 2026-07-19, the 𐌘𐌄𐌓𐌔𐌖 pin). The
+        # distinguisher: a colon-terminated parent containing sentence
+        # punctuation or the "… include:" phrase.
+        glosses = first["glosses"].map { |g| g.to_s.gsub(/\s+/, " ").strip }
+        while glosses.size > 1 && glosses.first.end_with?(":") &&
+              (glosses.first.include?(". ") || glosses.first.match?(/\binclude:\z/i))
+          glosses.shift
+        end
+        text = glosses.first.to_s.sub(/:\z/, "")
         text.empty? ? nil : Nabu::Normalize.nfc(text)
       end
 

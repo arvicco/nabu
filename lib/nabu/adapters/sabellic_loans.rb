@@ -142,7 +142,7 @@ module Nabu
         target = File.join(workdir, FILENAME)
         bytes = File.binread(CONFIG_PATH)
         unless File.file?(target) && File.binread(target) == bytes
-          progress&.call("Vendoring #{FILENAME}…")
+          progress&.call("Vendoring #{FILENAME}…\n")
           File.binwrite("#{target}.tmp", bytes)
           File.rename("#{target}.tmp", target)
         end

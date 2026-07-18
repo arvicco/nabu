@@ -193,7 +193,7 @@ module Nabu
       def crawl_records!(workdir, ids, map_changed:, progress: nil)
         dir = File.join(workdir, DOCUMENTS_DIRNAME)
         FileUtils.mkdir_p(dir)
-        progress&.call("Crawling #{ids.size} RIIG records…")
+        progress&.call("Crawling #{ids.size} RIIG records…\n")
         counts = { fetched: 0, cached: 0 }
         ids.each do |id|
           target = File.join(dir, "#{id}.xml")

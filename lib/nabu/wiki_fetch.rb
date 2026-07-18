@@ -204,7 +204,7 @@ module Nabu
       @cached += members.size - stale.size
       return if stale.empty?
 
-      @progress&.call("Fetching #{stale.size} #{category} page(s) (#{members.size - stale.size} cached)…")
+      @progress&.call("Fetching #{stale.size} #{category} page(s) (#{members.size - stale.size} cached)…\n")
       stale.keys.each_slice(CONTENT_BATCH) { |titles| crawl_batch!(category, titles) }
     end
 

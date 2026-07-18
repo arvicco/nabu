@@ -180,7 +180,7 @@ module Nabu
     # Redirects followed (figshare 302s to a mirror); a 304 — first hop or
     # post-redirect — is a terminal answer, not an error.
     def get_zip(headers = conditional_headers)
-      @progress&.call("Downloading #{@url}…")
+      @progress&.call("Downloading #{@url}…\n")
       response, = RedirectFollow.get(@url, http: @http, error: Error,
                                            headers: headers, accept: [200, 304])
       response

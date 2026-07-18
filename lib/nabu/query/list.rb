@@ -179,7 +179,7 @@ module Nabu
         dataset = @catalog[:documents]
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:sources][:slug] => slug)
-        dataset = dataset.where(Sequel[:documents][:language] => lang) if lang
+        dataset = dataset.where(Sequel[:documents][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
         if withdrawn_only
           dataset = dataset.where(
@@ -204,7 +204,7 @@ module Nabu
                   .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
                   .where(Sequel[:dictionaries][:source_id] => source.fetch(:id),
                          Sequel[:dictionary_entries][:withdrawn] => false)
-        dataset = dataset.where(Sequel[:dictionaries][:language] => lang) if lang
+        dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(prefix_expr(prefix)) if prefix
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         page(dataset, limit) { |row| build_entry_row(row) }

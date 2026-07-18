@@ -62,7 +62,7 @@ module Nabu
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:sources][:slug] => source) if source
-        dataset = dataset.where(Sequel[:passages][:language] => lang) if lang
+        dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }

@@ -157,6 +157,30 @@ module Nabu
       AES_DOCUMENT = /\A(?<work>urn:nabu:aes:[^:]+:[^:]+?)(?:-de)?\z/
       private_constant :AES_DOCUMENT
 
+      # A RIIG inscription urn (P25-1, wired at P30 review — the 74 -fr
+      # siblings were loaded but invisible to --parallel until then): the
+      # inscription IS the work (urn:nabu:riig:all-01-01), its French
+      # sibling the -fr variant. Stems are hyphen-rich but none ends in
+      # "-fr" (censused, frozen) — the literal-tail Damaskini stance.
+      RIIG_DOCUMENT = /\A(?<work>urn:nabu:riig:[^:]+?)(?:-fr)?\z/
+      private_constant :RIIG_DOCUMENT
+
+      # An OpenEtruscan inscription urn (P29-0, wired at P30 review): the
+      # inscription IS the work (urn:nabu:open-etruscan:cr-2.20), its
+      # English sibling the -en variant. Stems are hyphen-and-dot-rich but
+      # none ends in "-en" (censused, frozen).
+      OPEN_ETRUSCAN_DOCUMENT = /\A(?<work>urn:nabu:open-etruscan:[^:]+?)(?:-en)?\z/
+      private_constant :OPEN_ETRUSCAN_DOCUMENT
+
+      # A Corpus_ItAnt urn (P29-2, wired at P30 review): the interpretative
+      # edition IS the work (urn:nabu:itant:oscan-2); -eng/-ita are the
+      # translation siblings and -dipl the diplomatic layer (the ogham
+      # layer-sibling shape — same language, reachable by explicit
+      # --parallel osc). Stems end in digits, never in these tails
+      # (censused, frozen).
+      ITANT_DOCUMENT = /\A(?<work>urn:nabu:itant:[^:]+?)(?:-(?:eng|ita|dipl))?\z/
+      private_constant :ITANT_DOCUMENT
+
       def initialize(catalog:)
         @catalog = catalog
       end
@@ -225,7 +249,7 @@ module Nabu
         return nil if candidates.nil?
 
         rows = candidates
-               .where(language: lang)
+               .where(language: Nabu::Languages.code_variants(lang))
                .exclude(urn: document.fetch(:urn))
                .select(:id, :urn, :title, :language)
                .all
@@ -240,7 +264,9 @@ module Nabu
           [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
         elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT) ||
                        urn.match(DAMASKINI_DOCUMENT) || urn.match(SUTTACENTRAL_DOCUMENT) ||
-                       urn.match(TLA_HF_DOCUMENT) || urn.match(AES_DOCUMENT))
+                       urn.match(TLA_HF_DOCUMENT) || urn.match(AES_DOCUMENT) ||
+                       urn.match(RIIG_DOCUMENT) || urn.match(OPEN_ETRUSCAN_DOCUMENT) ||
+                       urn.match(ITANT_DOCUMENT))
           [match[:work], @catalog[:documents].where(
             Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
           )]
