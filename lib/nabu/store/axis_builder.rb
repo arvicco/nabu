@@ -47,17 +47,20 @@ module Nabu
       # riig_undated/riig_invalid (P25-1). The later-phase fields default so
       # every prior construction stays valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
-                            :corph, :riig,
+                            :corph, :riig, :tla_hf,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
-                            :riig_undated, :riig_invalid) do
+                            :riig_undated, :riig_invalid, :tla_hf_undated) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
-                       riig: 0, riig_undated: 0, riig_invalid: 0, **)
+                       riig: 0, riig_undated: 0, riig_invalid: 0,
+                       tla_hf: 0, tla_hf_undated: 0, **)
           super
         end
 
-        def total = hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig
+        def total
+          hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig + tla_hf
+        end
       end
 
       module_function
@@ -77,17 +80,19 @@ module Nabu
         damaskini = DamaskiniDates.build(catalog: catalog, canonical_dir: canonical_dir)
         corph = CorphDates.build(catalog: catalog, canonical_dir: canonical_dir)
         riig = RiigDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        tla_hf = TlaHfDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
-                    riig: riig[:documents],
+                    riig: riig[:documents], tla_hf: tla_hf[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
                     edh_undated: edh[:undated], edh_invalid: edh[:invalid],
                     corph_undated: corph[:undated],
-                    riig_undated: riig[:undated], riig_invalid: riig[:invalid])
+                    riig_undated: riig[:undated], riig_invalid: riig[:invalid],
+                    tla_hf_undated: tla_hf[:undated])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -240,3 +245,4 @@ require_relative "axis_builder/edh_dates"
 require_relative "axis_builder/damaskini_dates"
 require_relative "axis_builder/corph_dates"
 require_relative "axis_builder/riig_dates"
+require_relative "axis_builder/tla_hf_dates"

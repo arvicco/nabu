@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are TRIMS of the full Hugging Face train.jsonl artifacts
+# (whole: false — a fresh GET returns the full file and is fetched for
+# URL-liveness only, never byte-compared). Lines are byte-verbatim; see
+# the README for the upstream line provenance and full-artifact sha256s.
+source: tla-hf
+adapter_test: test/adapters/tla_hf_test.rb
+retrieved: 2026-07-18
+files:
+  - path: demotic-v18/train.jsonl
+    url: https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/tla-demotic-v18-premium/resolve/main/train.jsonl
+    whole: false
+    trim: upstream lines 1, 2, 306, 355 byte-verbatim (7,284,199 B / 13,383 lines -> 1,826 B / 4 lines)
+  - path: late-egyptian-v19/train.jsonl
+    url: https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/tla-late_egyptian-v19-premium/resolve/main/train.jsonl
+    whole: false
+    trim: upstream lines 1, 2, 782 byte-verbatim (1,904,138 B / 3,606 lines -> 2,956 B / 3 lines)
