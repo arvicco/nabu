@@ -139,7 +139,7 @@ module Nabu
     # Redirects followed (the DSpace/figshare mirror shape); a 304 — first
     # hop or post-redirect — is a terminal answer, not an error.
     def get_file(headers = conditional_headers)
-      @progress&.call("Downloading #{@url}…")
+      @progress&.call("Downloading #{@url}…\n")
       response, = RedirectFollow.get(@url, http: @http, error: Error,
                                            headers: headers, accept: [200, 304])
       response
