@@ -68,7 +68,8 @@ module Query
 
       result = run_parallel("urn:nabu:riig:all-01-01:1", lang: "fra")
       assert_equal "fra", result.right&.language, "the riig -fr sibling must pair"
-      assert_equal 1, result.groups.count { |g| g.kind == :pair }
+      pairs = result.groups.count { |g| g.kind == :pair }
+      assert_equal 1, pairs
     end
 
     def test_open_etruscan_en_sibling_pairs
