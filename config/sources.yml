@@ -648,7 +648,7 @@ dcs:
 
 diorisis:
   adapter: Nabu::Adapters::Diorisis
-  enabled: false   # P26-4: awaiting the owner-fired first real sync (ZipFetch of
+  enabled: true    # flipped 2026-07-18 (owner sign-off: synced via P26-6 live proof — 764 docs / 502,865 passages, 53 Rahlfs files excluded by rule, eyeballed)
                    # the frozen figshare v1 zip — 194,443,428 bytes, md5
                    # f3a26efa7e7d2b93d1bcca26900d180a verified against figshare's
                    # own metadata, sha256-pinned in the adapter; ~2.5 GB unpacked,
