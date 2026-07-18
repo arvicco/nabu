@@ -59,6 +59,28 @@ class RebuildTest < Minitest::Test
     assert_equal %w[corpus], second.outcomes.map(&:slug)
   end
 
+  # -- progress stages (owner feedback 2026-07-18: a long rebuild must say
+  # which source it is on, and the CLI adds per-stage timing) ---------------
+
+  def test_rebuild_announces_each_source_and_trailing_phase_as_a_stage
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
+    rebuilder.run(progress: reporter)
+
+    assert_equal ["corpus", "date/place axis", "facets", "fulltext index"], stages
+  end
+
+  def test_progress_reporter_stage_is_nil_safe
+    Nabu::ProgressReporter.new.stage("anything") # no on_stage → no-op, no raise
+  end
+
   # -- fulltext index is rebuilt too (P4-1) --------------------------------
 
   def test_rebuild_populates_the_fulltext_index
