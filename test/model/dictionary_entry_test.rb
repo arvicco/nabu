@@ -67,4 +67,39 @@ class DictionaryEntryTest < Minitest::Test
       assert_equal code, entry(language: code).language
     end
   end
+
+  # --- The P30-1 NFC exemption (Normalize::NFC_EXEMPT_LANGUAGES) ------------------
+
+  # Upstream Masoretic bytes: bet + dagesh (ccc 21) BEFORE qamats (ccc 18) —
+  # the mark order the WLC and the OSHB lexicon ship, which NFC would reorder
+  # (the P26-3 owner ruling). Measured upstream: 4,053 LexicalIndex / 3,796
+  # HebrewStrong / 4,720 BDB headwords are not NFC-normalized.
+  # בָּרָא exactly as LexicalIndex.xml ships it: bet, dagesh, qamats, resh,
+  # qamats, alef - spelled in escapes so no editor can silently reorder it.
+  MASORETIC = "\u05D1\u05BC\u05B8\u05E8\u05B8\u05D0"
+
+  def test_exempt_language_headword_gloss_and_body_stay_byte_verbatim
+    refute MASORETIC.unicode_normalized?(:nfc), "the exemplar must exercise the exemption"
+    %w[hbo arc].each do |language|
+      e = entry(language: language, headword: MASORETIC, headword_folded: "ברא",
+                gloss: MASORETIC, body: MASORETIC)
+      assert_equal MASORETIC.bytes, e.headword.bytes, "#{language} headword must keep upstream byte order"
+      assert_equal MASORETIC.bytes, e.gloss.bytes
+      assert_equal MASORETIC.bytes, e.body.bytes
+    end
+  end
+
+  def test_non_exempt_language_still_rejects_non_nfc_text
+    assert_raises(Nabu::ValidationError) { entry(headword: MASORETIC) }
+    assert_raises(Nabu::ValidationError) { entry(body: MASORETIC) }
+    assert_raises(Nabu::ValidationError) { entry(gloss: MASORETIC) }
+  end
+
+  def test_exempt_language_headword_folded_stays_nfc_checked
+    # The search form is minted NFC for every language (Normalize.search_form);
+    # the exemption never widens to the folded lookup key.
+    assert_raises(Nabu::ValidationError) do
+      entry(language: "hbo", headword: MASORETIC, headword_folded: MASORETIC)
+    end
+  end
 end
