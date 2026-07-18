@@ -1,0 +1,39 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Whole byte-identical raw GETs from the upstream repo at main (commit
+# b60146fe7743ab14c8fd66f657ca218e172eb0f6, retrieved 2026-07-18); the raw
+# URLs below track the branch, so a future upstream revision surfaces as
+# honest drift on `fixtures:check`, never a silent mismatch.
+source: itant
+adapter_test: test/adapters/itant_test.rb
+retrieved: 2026-07-18
+files:
+  - path: Oscan_inscriptions_newEditions/ItAnt_Oscan_2.xml
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/Oscan_inscriptions_newEditions/ItAnt_Oscan_2.xml
+    whole: true
+    trim: none (word tokens + pc interpuncts + expan + gap + TM/ImIt/ST/Murano concordances + ita/eng translations)
+  - path: Oscan_inscriptions_newEditions/ItAnt_Oscan_492.xml
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/Oscan_inscriptions_newEditions/ItAnt_Oscan_492.xml
+    whole: true
+    trim: none (ligature wrapping a corr/sic choice inside an abbr; empty ex; supplied around expansion and interpunct)
+  - path: Oscan_inscriptions_newEditions/ItAnt_Oscan_576.xml
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/Oscan_inscriptions_newEditions/ItAnt_Oscan_576.xml
+    whole: true
+    trim: none (lost inscription — empty edition div, the metadata-only case)
+  - path: Oscan_inscriptions_newEditions/README_Oscan_corpus.txt
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/Oscan_inscriptions_newEditions/README_Oscan_corpus.txt
+    whole: true
+    trim: none (non-XML corpus-dir file — pins that discovery never mints it)
+  - path: CelticOfItaly_inscriptions_newEditions/ItAnt_Lepontic_1.xml
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/CelticOfItaly_inscriptions_newEditions/ItAnt_Lepontic_1.xml
+    whole: true
+    trim: none (diplomatic + interpretative layer pair; xcg langUsage; per-textpart translations)
+  - path: CelticOfItaly_inscriptions_newEditions/license.txt
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/CelticOfItaly_inscriptions_newEditions/license.txt
+    whole: true
+    trim: none (the per-dir copy of the CC BY-NC-SA grant)
+  - path: license.txt
+    url: https://raw.githubusercontent.com/DigItAnt/Corpus_ItAnt/main/license.txt
+    whole: true
+    trim: none (the repo-root grant, verbatim)

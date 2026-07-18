@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.stoa.org/epidoc/schema/9.2/tei-epidoc.rng"
+    schematypens="http://relaxng.org/ns/structure/1.0"?> 
+<?xml-model href="https://www.stoa.org/epidoc/schema/9.2/tei-epidoc.rng"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<tei:TEI xmlns:dcr="http://www.isocat.org/ns/dcr" xml:id="ItAnt_Oscan_492"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <tei:teiHeader>
+        <tei:fileDesc>
+            <tei:titleStmt>
+                <tei:title type="ItAnt_ID">Inscription ItAnt Oscan 492</tei:title>
+            </tei:titleStmt>
+            <tei:editionStmt>
+                <tei:edition>
+                    <tei:idno>ItAnt Oscan 492</tei:idno>
+                </tei:edition>
+                <tei:editor>
+                    <tei:persName>Francesco Benassai</tei:persName>
+                </tei:editor>
+            </tei:editionStmt>         
+            <tei:publicationStmt>
+                <tei:authority>PRIN 2017 "Lingue e culture dell'Italia antica: linguistica storica e modelli digitali | Languages and Cultures of Ancient Italy. Historical Linguistics and Digital Models"</tei:authority>
+                <tei:date>2023</tei:date>
+                <tei:idno type="URI" subtype="handle"></tei:idno>
+                <tei:availability>
+                    <tei:licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).  
+                    </tei:licence>
+                </tei:availability>
+            </tei:publicationStmt>   
+            <tei:sourceDesc>
+                <tei:msDesc>
+                    <tei:msIdentifier>
+                        <tei:settlement ref="lost inscription">lost inscription</tei:settlement>                       
+                        <tei:altIdentifier type="trismegistos">
+                            <tei:idno source="https://www.trismegistos.org/text/170712">TM 170712</tei:idno>
+                        </tei:altIdentifier> 
+                        <tei:altIdentifier type="traditionalID">
+                            <tei:idno source="http://zotero.org/groups/2552746/items/IMWMSAVE">ST tSa 37</tei:idno>
+                        </tei:altIdentifier> 
+                        <tei:altIdentifier type="traditionalID">
+                            <tei:idno source="http://zotero.org/groups/2552746/items/IKUTPHDC">ImIt Bouianum 36 (1)</tei:idno>
+                        </tei:altIdentifier>
+                    </tei:msIdentifier> 
+                    <tei:msContents>
+                        <tei:summary>Stamp on a roof tile (?) discovered before 1900 at Bovianum (Boiano, CB). The inscription is now lost and known only from a sketch by Bonifacio Chiovitti.</tei:summary>
+                    </tei:msContents>
+                    <tei:physDesc>
+                        <tei:objectDesc>     
+                            <tei:supportDesc>
+                                <tei:support>
+                                    <tei:objectType ana="http://vocab.getty.edu/page/aat/300010669">tegula</tei:objectType>                
+                                    <tei:material ana="http://vocab.getty.edu/page/aat/300010669">terracotta</tei:material>
+                                    <tei:dimensions type="objectDimensions" unit="cm" precision="high"/>
+                                    <tei:rs type="reuse">no</tei:rs>
+                                </tei:support>
+                                <tei:condition>lost inscription</tei:condition>   
+                            </tei:supportDesc>
+                            <tei:layoutDesc>
+                                <tei:layout columns="1" writtenLines="1">
+                                    <tei:rs type="execution" ana="http://vocab.getty.edu/page/aat/300239001">stamp</tei:rs>
+                                    <tei:rs type="opistography">no</tei:rs>
+                                    <tei:note type="layoutNotes"></tei:note>
+                                    <tei:dimensions type="lineDimension" unit="cm" precision="high"/> 
+                                </tei:layout>
+                            </tei:layoutDesc>
+                        </tei:objectDesc>
+                        <tei:handDesc>                            
+                            <tei:handNote>
+                                <tei:note type="palaeographicNotes"><tei:rs type="c" xml:lang="osc-Ital-x-oscetr" corresp="Osc_492_l_1_w_1">A⌜E⌝</tei:rs> in ligature</tei:note>
+                                <tei:dimensions type="characterDimension" unit="cm" precision="high"/>
+                            </tei:handNote>
+                        </tei:handDesc>                                      
+                        <tei:scriptDesc>
+                            <tei:scriptNote>
+                                <tei:rs type="writingSystem" subtype="alphabet" ref="https://www.prin-italia-antica.unifi.it/p166.html#oscan-etruscan">Oscan National alphabet</tei:rs>
+                                <tei:rs type="wordDivision">punctuation</tei:rs>
+                            </tei:scriptNote>
+                        </tei:scriptDesc>
+                        <tei:decoDesc>
+                            <tei:decoNote></tei:decoNote>   
+                        </tei:decoDesc>
+                    </tei:physDesc>
+                    <tei:history>
+                        <tei:origin> 
+                            <tei:origPlace type="composed">
+                                <tei:placeName type="ancient" ref="https://pleiades.stoa.org/places/432725">Bovianum, Samnium</tei:placeName>
+                                <tei:placeName type="modern" ref="https://sws.geonames.org/3181939">Boiano (CB)</tei:placeName>
+                            </tei:origPlace>
+                            <tei:origDate notBefore-custom="-0125" notAfter-custom="-0075" cert="medium" evidence="lettering" resp="#ImIt2011">late 2nd - early 1st century BC</tei:origDate>
+                        </tei:origin>
+                        <tei:provenance type="found" subtype="discovered" notAfter="1900">
+                            <tei:placeName type="ancient" ref="https://pleiades.stoa.org/places/432725">Bovianum, Samnium</tei:placeName>
+                            <tei:placeName type="modern" ref="https://sws.geonames.org/3181939">Boiano (CB)</tei:placeName>
+                            <tei:placeName type="detailed"/>
+                        </tei:provenance>
+                        <tei:provenance type="observed" when="2021">
+                            <tei:persName>Francesca Murano</tei:persName>
+                        </tei:provenance>
+                    </tei:history>                       
+                </tei:msDesc>   
+            </tei:sourceDesc> 
+        </tei:fileDesc>
+        <tei:encodingDesc>
+            <tei:p source="https://epidoc.stoa.org/gl/latest/">Marked-up according to the EpiDoc Guidelines</tei:p>
+        </tei:encodingDesc>
+        <tei:profileDesc>
+            <tei:langUsage>
+                <tei:language ident="osc" source="https://iso639-3.sil.org/code/osc">Oscan</tei:language>
+                <tei:language ident="osc-Ital-x-oscetr" source="https://www.prin-italia-antica.unifi.it/p166.html#oscan-etruscan" ana="https://unicode.org/iso15924/iso15924-codes.html">Oscan in National alphabet (Oscan-Etruscan alphabet)</tei:language>
+            </tei:langUsage>
+            <tei:textClass>
+                <tei:keywords scheme="https://www.eagle-network.eu/resources/vocabularies/typeins/">
+                    <tei:term ref="https://www.eagle-network.eu/voc/typeins/lod/118">tile stamp</tei:term>
+                </tei:keywords>
+            </tei:textClass>
+        </tei:profileDesc>
+    </tei:teiHeader>
+    <tei:facsimile>
+        <tei:graphic n="1" url="http://linsto.dipartimentidieccellenza-dilef.unifi.it/itant/img/ItAnt_Oscan_492.jpg">
+            <tei:desc>Inscription ItAnt Oscan 492 (drawing by <tei:persName>Francesca Murano</tei:persName>)
+                <tei:ref target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).</tei:ref>
+            </tei:desc>
+        </tei:graphic>       
+        <tei:graphic n="2" url="https://www.studietruschi.org/wp-content/uploads/2021/07/SE46_22.pdf#page=25">
+            <tei:desc>Fac-simile of the inscription ItAnt Oscan 492 by Bonifacio Chiovitti (from <tei:ref target="http://zotero.org/groups/2552746/items/3NP7P7IK"><tei:bibl>De Benedittis 1978</tei:bibl></tei:ref>, no. A11, 1)
+                <tei:ref ana="https://www.studietruschi.org">This file is provided by the Istituto Nazionale di Studi Etruschi ed Italici</tei:ref>
+            </tei:desc>
+        </tei:graphic>       
+    </tei:facsimile>
+    <tei:text>
+        <tei:body>             
+            <tei:div type="edition" subtype="interpretative" xml:space="preserve">
+                <tei:div type="textpart" n="face_a" style="text-direction:r-to-l" rend="ductus:sinistrorse">
+                    <tei:ab>   
+                        <tei:lb n="1" xml:id="Osc_492_l_1"/>
+<!-- Leida;Osc_492_l_1;ba⌜e⌝(z) [.s( )] -->
+                            <tei:name type="praenomen" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_492_l_1_w_1" ref="#p1"><tei:expan><tei:abbr>b<tei:hi rend="ligature">a<tei:choice><tei:corr>e</tei:corr><tei:sic>v</tei:sic></tei:choice></tei:hi></tei:abbr><tei:ex>z</tei:ex></tei:expan></tei:name>
+                            <tei:pc unit="word"><tei:supplied reason="lost">.</tei:supplied></tei:pc>                      
+                            <tei:name type="gentilicium" xml:lang="osc-Ital-x-oscetr" xml:id="Osc_492_l_1_w_2" ref="#p1"><tei:supplied reason="lost"><tei:expan><tei:abbr>s</tei:abbr><tei:ex></tei:ex></tei:expan></tei:supplied></tei:name>
+                    </tei:ab>
+                </tei:div>
+            </tei:div>
+            <tei:div type="translation" xml:lang="ita">
+                <tei:p>Bae(tus) S( )</tei:p>
+                <tei:desc>
+                    <tei:persName>Francesco Benassai</tei:persName>
+                    <tei:ref type="licence" target="https://creativecommons.org/licenses/by-nc-sa/4.0/">This file is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license – (CC BY-NC-SA 4.0).</tei:ref>
+                </tei:desc> 
+            </tei:div>
+            <tei:div type="translation" xml:lang="eng">
+                <tei:p>Bae(tus) S( )</tei:p>
+                <tei:desc>
+                    <tei:persName>Francesco Benassai</tei:persName>
+                    <tei:ref type="licence" target="http://creativecommons.org/licenses/by-sa/4.0/">This file is licensed under the Creative Commons Attribution-ShareAlike 4.0 license.
+                    </tei:ref>
+                </tei:desc> 
+            </tei:div>            
+            <tei:div type="apparatus" xml:lang="eng" resp="Francesco Benassai">
+                <tei:listApp>
+                    <tei:app from="#Osc_492_l_1">
+                        <tei:lem corresp="#Osc_492_l_1_w_1">bae(z)</tei:lem>
+                        <tei:rdg corresp="#Osc_492_l_1_w_1">bav( )
+                            <tei:ref target="http://zotero.org/groups/2552746/items/IMWMSAVE"><tei:bibl>Rix 2002</tei:bibl></tei:ref>
+                        </tei:rdg>
+                    </tei:app>
+                </tei:listApp>                
+            </tei:div>
+            <tei:div type="commentary" xml:lang="eng" resp="Francesco Benassai">
+                <tei:note>
+                    <tei:p>The stamp was part of the collection belonging to <tei:ref target="https://en.wikipedia.org/wiki/Bonifacio_Chiovitti">Bonifacio Chiovitti</tei:ref>. After Chiovitti's death his collection was missed. This stamp is part of a series of six (ItAnt Oscan 492, <tei:ref target="ItAnt_Oscan_493.xml">493</tei:ref>, <tei:ref target="ItAnt_Oscan_494.xml">494</tei:ref>, <tei:ref target="ItAnt_Oscan_495.xml">495</tei:ref>, <tei:ref target="ItAnt_Oscan_496.xml">496</tei:ref> and <tei:ref target="ItAnt_Oscan_497.xml">497</tei:ref>) that were lost and of which now only the drawing made by Chiovitti in one of his notebooks remains. For the Chivitti collection, see <tei:ref target="http://zotero.org/groups/2552746/items/3NP7P7IK"><tei:bibl>De Benedittis 1978</tei:bibl></tei:ref>: 410 and <tei:ref target="http://zotero.org/groups/2552746/items/3K5FH3X8"><tei:bibl>De Benedittis 1986</tei:bibl></tei:ref>.</tei:p>
+                </tei:note>
+                <tei:note>
+                    <tei:p>The six stamps diplay some differences. The sixth (<tei:ref target="ItAnt_Oscan_497.xml">ItAnt Oscan 497</tei:ref>) seems to be the more complete and constitutes the basis for the edition of the series.</tei:p>
+                    <tei:p>In Chiovitti's notebook, the third of letter of the praenomen is written as <tei:rs type="c" xml:lang="osc-Ital-x-oscetr" corresp="Osc_492_l_1_w_1">V</tei:rs> in ItAnt Oscan 492 and <tei:ref target="ItAnt_Oscan_495.xml">495</tei:ref>. From the comparison with the other exemplars, it is seems more problable that the correct reading is <tei:rs type="name" xml:lang="osc-Ital-x-oscetr" corresp="Osc_492_l_1_w_1">BAE(Z)</tei:rs>, not <tei:rs type="name" xml:lang="osc-Ital-x-oscetr" corresp="Osc_492_l_1_w_1">BAV( )</tei:rs>, with <tei:rs type="c" xml:lang="osc-Ital-x-oscetr" corresp="Osc_492_l_1_w_1">AE</tei:rs> reflecting Latin influence in the spelling of the diphthong.</tei:p>
+                    <tei:p>Contra <tei:ref target="http://zotero.org/groups/2552746/items/IMWMSAVE"><tei:bibl>Rix, St 2002</tei:bibl></tei:ref>, editing the text of the series as <tei:rs type="name" xml:lang="osc-Ital-x-oscetr">BAV( ) . S( )</tei:rs>.</tei:p> 
+                </tei:note>
+                <tei:listPerson type="Onomastics">
+                    <tei:person xml:id="p1" xml:lang="osc-Ital-x-oscetr">
+                        <tei:persName>
+                            <tei:name type="praenomen">bae(z)</tei:name>
+                            <tei:name type="gentilicium">[s( )]</tei:name>                    
+                        </tei:persName>
+                    </tei:person>
+                </tei:listPerson>
+            </tei:div>
+            <tei:div type="bibliography">
+                <tei:listBibl xmlns="http://www.tei-c.org/ns/1.0">
+                    <tei:biblStruct type="journalArticle" xml:id="DeBenedittis1978" corresp="http://zotero.org/groups/2552746/items/3NP7P7IK">
+                        <tei:analytic>
+                            <tei:title level="a">Sannio (CB): Piana di Boiano</tei:title>
+                            <tei:author>
+                                <tei:forename>Gianfranco</tei:forename>
+                                <tei:surname>De Benedittis</tei:surname>
+                            </tei:author>
+                        </tei:analytic>
+                        <tei:monogr>
+                            <tei:title level="j">Studi Etruschi</tei:title>
+                            <tei:imprint>
+                                <tei:biblScope unit="volume">46</tei:biblScope>
+                                <tei:biblScope unit="page"></tei:biblScope>
+                                <tei:date>1978</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="page">414 no. 11 (with Chiovitti's drawing, p. 419, A11)</tei:citedRange>                        
+                    </tei:biblStruct>                   
+                    <tei:biblStruct type="book" xml:id="Poccetti1979" corresp="http://zotero.org/groups/2552746/items/JFW9XW6P">
+                        <tei:monogr>
+                            <tei:title level="m">Nuovi documenti italici a complemento del Manuale di E. Vetter</tei:title>
+                            <tei:author>
+                                <tei:forename>Paolo</tei:forename>
+                                <tei:surname>Poccetti</tei:surname>
+                            </tei:author>
+                            <tei:imprint>
+                                <tei:pubPlace>Pisa</tei:pubPlace>
+                                <tei:publisher>Giardini Editore</tei:publisher>
+                                <tei:date>1979</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="entry">49</tei:citedRange>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="bookSection" xml:id="Capini1980" corresp="http://zotero.org/groups/2552746/items/RIRSLZH9">
+                        <tei:analytic>
+                            <tei:title level="a">Bolli laterizi</tei:title>
+                            <tei:author>
+                                <tei:forename>Stefania</tei:forename>
+                                <tei:surname>Capini</tei:surname>
+                            </tei:author>
+                        </tei:analytic>
+                        <tei:monogr>
+                            <tei:title level="m">Sannio: Pentri e Frentani dal VI al I sec. a.C. Catalogo della mostra (Isernia, Museo Nazionale, ottobre-dicembre 1980)</tei:title>
+                            <tei:imprint>
+                                <tei:pubPlace>Roma</tei:pubPlace>
+                                <tei:biblScope unit="page">226–228</tei:biblScope>
+                                <tei:publisher>De Luca</tei:publisher>
+                                <tei:date>1980</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="entry">1, p. 228</tei:citedRange>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="book" xml:id="Rix2002" corresp="http://zotero.org/groups/2552746/items/IMWMSAVE">
+                        <tei:monogr>
+                            <tei:title level="m">Sabellische Texte. Die Texte des Oskischen, Umbrischen und Südpikenischen</tei:title>
+                            <tei:author>
+                                <tei:forename>Helmut</tei:forename>
+                                <tei:surname>Rix</tei:surname>
+                            </tei:author>
+                            <tei:imprint>
+                                <tei:pubPlace>Heidelberg</tei:pubPlace>
+                                <tei:publisher>C. Winter</tei:publisher>
+                                <tei:date>2002</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="entry">tSa 33</tei:citedRange>
+                    </tei:biblStruct>
+                    <tei:biblStruct type="book" xml:id="ImIt2011" corresp="http://zotero.org/groups/2552746/items/IKUTPHDC">
+                        <tei:monogr>
+                            <tei:title level="m">Imagines Italicae: A Corpus of Italic Inscriptions</tei:title>
+                            <tei:editor>
+                                <tei:forename>Michael</tei:forename>
+                                <tei:surname>Crawford</tei:surname>
+                            </tei:editor>
+                            <tei:imprint>
+                                <tei:pubPlace>London</tei:pubPlace>
+                                <tei:publisher>Institute of Classical Studies, University of London</tei:publisher>
+                                <tei:date>2011</tei:date>
+                            </tei:imprint>
+                        </tei:monogr>
+                        <tei:citedRange unit="entry">Bouianum 36 Stamp (1) (with Chiovitti's drawing)</tei:citedRange>
+                    </tei:biblStruct>                   
+                </tei:listBibl>   
+            </tei:div>   
+        </tei:body>
+    </tei:text>
+</tei:TEI>
