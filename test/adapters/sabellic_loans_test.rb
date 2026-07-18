@@ -144,7 +144,7 @@ class SabellicLoansTest < Minitest::Test
     entry = registry["sabellic-loans"]
     refute_nil entry, "sabellic-loans must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::SabellicLoans, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync is eyeballed"
+    assert entry.enabled, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "local", entry.sync_policy, "no upstream, no network — the curation is the artifact"
   end
 end

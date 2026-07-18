@@ -285,7 +285,7 @@ class TlaHfTest < Minitest::Test
     entry = registry["tla-hf"]
     refute_nil entry, "tla-hf must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::TlaHf, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first real sync (checklist §6)"
+    assert entry.enabled, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert entry.translations, "translation coverage is 100% — -de siblings ride the same parse"
     assert_equal Nabu::Adapters::TlaHf.manifest, entry.manifest
   end
