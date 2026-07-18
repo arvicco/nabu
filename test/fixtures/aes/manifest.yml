@@ -1,0 +1,32 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The three subcorpus files are TRIMS of much larger upstream files (whole:
+# false — a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared); the schema is a byte-verbatim whole. The
+# repo's root README.md (the license grant) is deliberately NOT fixtured —
+# its path would collide with this directory's own README.md; the grant is
+# quoted there verbatim. Re-trim per the README recipe after any refresh.
+# adapter_test is null: the AES adapter test asserts trimmed-text counts,
+# which untrimmed upstream files would false-fail. Pinned upstream commit:
+# 35276d2527cca1a055e31ed5f6683e777717170f (master, retrieved 2026-07-18).
+source: aes
+adapter_test:
+retrieved: 2026-07-18
+files:
+  - path: files/aes/aesschema.json
+    url: https://raw.githubusercontent.com/simondschweitzer/aes/master/files/aes/aesschema.json
+    whole: true
+    trim:
+  - path: files/aes/_aes_tuebingerstelen.json
+    url: https://raw.githubusercontent.com/simondschweitzer/aes/master/files/aes/_aes_tuebingerstelen.json
+    whole: false
+    trim: texts 3F5KUVWQG5EPBM7GMQ6ZFVO5OQ + 5YVC3WZOGZHSBGXTIEM7ZUG2UA, byte-verbatim sentence blocks (823,861 B -> 74,184 B)
+  - path: files/aes/_aes_bbawarchive.json
+    url: https://raw.githubusercontent.com/simondschweitzer/aes/master/files/aes/_aes_bbawarchive.json
+    whole: false
+    trim: texts 26BP5JT5RZEDHDDU2R5TMUBD24 + IMLY3YQIZFHHNJUGOZXVPOJTGU (degenerate date "k") + NS6BAIQRENELJM2A2LDNHIYK6E (token-less sentence), byte-verbatim sentence blocks (5,855,067 B -> 8,330 B)
+  - path: files/aes/_aes_sawlit.json
+    url: https://raw.githubusercontent.com/simondschweitzer/aes/master/files/aes/_aes_sawlit.json
+    whole: false
+    trim: texts 2PD2OKCZCRELBGQD6NCAMOFEWA (one untranslated sentence) + YSJ3UHIOBJEILCD7KFQIGVOCLY, byte-verbatim sentence blocks (90,848,753 B -> 32,099 B)

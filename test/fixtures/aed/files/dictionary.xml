@@ -1,0 +1,739 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="aed_schema.xsd"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Ägyptische Wortliste</title>
+        <respStmt>
+          <resp>converted to XML encodings</resp>
+          <name ref="http://d-nb.info/gnd/173759734">Simon D. Schweitzer</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>TLA-project</publisher>
+        <date>2019-08-10</date>
+        <availability xml:lang="en" status="free">
+          <licence target="http://creativecommons.org/licenses/by-sa/4.0/">Metadata and texts are released as Creative Commons, Attribution-ShareAlike 4.0 (CC BY-SA 4.0)</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Based on <ref target="urn:nbn:de:kobv:b4-opus4-29190">Teilauszug der Datenbank des Vorhabens "Strukturen und Transformationen des Wortschatzes der ägyptischen Sprache" vom Januar 2018</ref></p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <entry xml:id="tla1">
+        <form>
+          <orth>ꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Geier; Vogel (allg.)</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 1, 1.1</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>vulture; bird (gen.)</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla863246"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla10">
+        <form>
+          <orth>ꜣj.wj</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Doppelverband, Kreuzverband (?) (med.)</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 1, 2.8; MedWb 1 f.; vgl. KoptHWb 290</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>pair of bandages (med.)</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla863258"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla100">
+        <form>
+          <orth>Ꜣbḏ</orth>
+        </form>
+        <gramGrp>
+          <term>entity_name/gods_name</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Der Fischer</quote>
+          </cit>
+          <cit>
+            <bibl>Meeks, AL 78.0031</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>Fisher</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla863987"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla100000">
+        <form>
+          <orth>ḥw.t-šn.wt</orth>
+        </form>
+        <gramGrp>
+          <term>entity_name/org_name</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Haus der Schenut-Bäume (?) (Heiligtum der Nut in Heliopolis)</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 4, 503.6; GDG IV, 134</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>Mansion-of-? (sanctuary of Nut at Heliopolis)</quote>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla100010">
+        <form>
+          <orth>ḥw.t-kꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Haus des Ka (Grabkapelle); Kapelle (im Tempel)</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3, 5.14-20</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>ka-house (tomb chapel); chapel (for a statue in a temple)</quote>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla10010">
+        <form>
+          <orth>=wj</orth>
+        </form>
+        <gramGrp>
+          <term>particle/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Admirativendung]; [Admirativpartikel]</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 1, 270; EAG § 834; GEG § 49; Schenkel, Einf., 104</bibl>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla100150">
+        <form>
+          <orth>ḥꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>das Hinten (in Präpositionen)</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3, 10.1-13; FCD 161</bibl>
+          </cit>
+        </sense>
+        <xr type="partOf">
+          <ref target="tla854528"/>
+        </xr>
+        <xr type="root">
+          <ref target="tla870659"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla100650">
+        <form>
+          <orth>ḥꜣi̯</orth>
+        </form>
+        <gramGrp>
+          <term>verb/verb_3-inf</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>klagen; (jmdn.) beklagen; kreischen; (bei der Totenfeier) tanzen</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3, 6.10-11; Allen, Inflection, 571; FCD 160; Van der Molen, Dictionary of Coffin Texts, 302 f.</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>to mourn; to screech; to dance (at the funeral)</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla872681"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla10130">
+        <form>
+          <orth>=ṯn</orth>
+        </form>
+        <gramGrp>
+          <term>pronoun/personal_pronoun</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Suffix Pron. pl.2.c.]</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 5, 371.14-16; EAG § 159; Schenkel, Einf., 105; Junge, Näg. Gr., 53</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>you; your; yours (suffix pron., 2nd per. pl.)</quote>
+          </cit>
+        </sense>
+        <xr type="referencedBy">
+          <ref target="tla172370"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla101340">
+        <form>
+          <orth>ḥꜣp-rʾ</orth>
+        </form>
+        <gramGrp>
+          <term>verb/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>verschwiegen</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3, 30.18</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>to keep silence (about)</quote>
+          </cit>
+        </sense>
+        <xr type="partOf">
+          <ref target="tla101300"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla101810">
+        <form>
+          <orth>ḥꜣd.t</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_fem</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Substantiv]</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3, 36.9; vgl. Van der Molen, Dictionary of Coffin Texts, 311</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>basket; container (as a unit of capacity for vegetables)</quote>
+          </cit>
+        </sense>
+        <xr type="referencing">
+          <ref target="tla101800"/>
+        </xr>
+        <xr type="root">
+          <ref target="tla872699"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla103">
+        <form>
+          <orth>Ꜣbḏ.w</orth>
+        </form>
+        <gramGrp>
+          <term>entity_name/place_name</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Abydos</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 1, 9.1; GDG I, 3; LÄ I, 29 ff.</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>Abydos</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla863990"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla106670">
+        <form>
+          <orth>ḥnb.wt</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_fem</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Schwanzquaste (?)</quote>
+          </cit>
+          <cit>
+            <bibl>Meeks, AL 78.2717; Van der Molen, Dictionary of Coffin Texts, 338</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>[noun]</quote>
+          </cit>
+        </sense>
+        <xr type="predecessor">
+          <ref target="tla873407"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla118230">
+        <form>
+          <orth>ḫnm.w</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Geruch</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 3. 293.2-6; FCD 193; Wilson, Ptol. Lexikon, 734</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>smell (usually pleasant)</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla870668"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla128690">
+        <form>
+          <orth>sꜥꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Bordbrett des Schiffes</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 4, 43.1; Jones, Naut. Titles, 183 f. (134)</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>gunwale; thole board</quote>
+          </cit>
+        </sense>
+        <xr type="predecessor">
+          <ref target="tla866258"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla134370">
+        <form>
+          <orth>smꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>verb/verb_3-lit</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>schlachten; töten</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 4. 122.7-123.11</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>to slay</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla865976"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla400458">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>adverb/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>gut; schön; froh</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 256.12-15; EAG § 750.2a; GEG § 205.4</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>well; happily</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla866216"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla550034">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>adjective/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>gut; schön; vollkommen</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 253.1-256.15</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>good; beautiful; perfect; finished</quote>
+          </cit>
+        </sense>
+        <xr type="partOf">
+          <ref target="tla83470"/>
+        </xr>
+        <xr type="root">
+          <ref target="tla866216"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla550123">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>particle/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Null; nicht; [Negationswort]</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 257.8-10; FCD 132; GEG § 351</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>[negative word]</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla866216"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla83460">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Speiseröhre</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 252.12; Wilson, Ptol. Lexikon, 516; Fairman, ZÄS 91, 1964, 8</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>[heart with windpipe (hieroglyph)]</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla872102"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla83470">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>verb/verb_3-lit</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>gut sein; schön sein; vollkommen sein; vollendet sein</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 253.1-256.15</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>to be good; to be beautiful; to be perfect</quote>
+          </cit>
+        </sense>
+        <xr type="contains">
+          <ref target="tla550034"/>
+          <ref target="tla853734"/>
+        </xr>
+        <xr type="partOf">
+          <ref target="tla854519"/>
+        </xr>
+        <xr type="root">
+          <ref target="tla866216"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla83500">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Guter; Schöner</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 2, 257.12-15</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>good one; beautiful one</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla866216"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla851379">
+        <form>
+          <orth>nb-ns.t-ḥtm-ḥtm-〈m〉-mꜣj.w</orth>
+        </form>
+        <gramGrp>
+          <term>epitheton_title/epith_god</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>der Herr des Throns, der zweifach mit Löwen (versehen ist)</quote>
+          </cit>
+          <cit>
+            <bibl>Goyon, Pap. Imouthès, Col. 6.1; vgl. LGG III, 671c</bibl>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla863246">
+        <form>
+          <orth>ꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Geier]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+        <xr type="rootOf">
+          <ref target="tla1"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla863258">
+        <form>
+          <orth>ꜣj</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Bindenpaar]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+        <xr type="rootOf">
+          <ref target="tla10"/>
+          <ref target="tla68630"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla863564">
+        <form>
+          <orth>rʾ-ꜥ-wnm</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Bankett</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+          <cit type="translation" xml:lang="fr">
+            <quote>banquet</quote>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla866216">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[gut; schön]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+        <xr type="rootOf">
+          <ref target="tla400458"/>
+          <ref target="tla550034"/>
+          <ref target="tla83470"/>
+          <ref target="tla854519"/>
+          <ref target="tla83480"/>
+          <ref target="tla83500"/>
+          <ref target="tla83510"/>
+          <ref target="tla83520"/>
+          <ref target="tla83540"/>
+          <ref target="tla83550"/>
+          <ref target="tla83560"/>
+          <ref target="tla83580"/>
+          <ref target="tla83610"/>
+          <ref target="tla83630"/>
+          <ref target="tla83650"/>
+          <ref target="tla851970"/>
+          <ref target="tla855980"/>
+          <ref target="tla857441"/>
+          <ref target="tla83870"/>
+          <ref target="tla400467"/>
+          <ref target="tla83600"/>
+          <ref target="tla854638"/>
+          <ref target="tla400468"/>
+          <ref target="tla83920"/>
+          <ref target="tla859229"/>
+          <ref target="tla83530"/>
+          <ref target="tla83930"/>
+          <ref target="tla857447"/>
+          <ref target="tla83710"/>
+          <ref target="tla857448"/>
+          <ref target="tla857449"/>
+          <ref target="tla83660"/>
+          <ref target="tla857446"/>
+          <ref target="tla83670"/>
+          <ref target="tla83680"/>
+          <ref target="tla83690"/>
+          <ref target="tla83700"/>
+          <ref target="tla83720"/>
+          <ref target="tla83730"/>
+          <ref target="tla83750"/>
+          <ref target="tla83760"/>
+          <ref target="tla853340"/>
+          <ref target="tla857445"/>
+          <ref target="tla863684"/>
+          <ref target="tla865463"/>
+          <ref target="tla70690"/>
+          <ref target="tla550123"/>
+          <ref target="tla852023"/>
+          <ref target="tla854664"/>
+          <ref target="tla83880"/>
+          <ref target="tla83890"/>
+          <ref target="tla83910"/>
+          <ref target="tla83940"/>
+          <ref target="tla137350"/>
+          <ref target="tla137360"/>
+          <ref target="tla137370"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla866258">
+        <form>
+          <orth>ꜥꜣ</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Säule; Stab; Balken]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+        <xr type="rootOf">
+          <ref target="tla34800"/>
+          <ref target="tla450393"/>
+        </xr>
+        <xr type="successor">
+          <ref target="tla128690"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla867539">
+        <form>
+          <orth>wrṱ</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Stock (?); Käfig (?)]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+      </entry>
+      <entry xml:id="tla872102">
+        <form>
+          <orth>nfr</orth>
+        </form>
+        <gramGrp>
+          <term>root/</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>[Speiseröhre]</quote>
+          </cit>
+          <cit>
+            <bibl/>
+          </cit>
+        </sense>
+        <xr type="rootOf">
+          <ref target="tla83460"/>
+        </xr>
+      </entry>
+      <entry xml:id="tla875429">
+        <form>
+          <orth>Bnmnt</orth>
+        </form>
+        <gramGrp>
+          <term>entity_name/place_name</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Benevent</quote>
+          </cit>
+          <cit>
+            <bibl>Erman, ZÄS 34, 1896, 156</bibl>
+          </cit>
+          <cit type="translation" xml:lang="it">
+            <quote>Benevento</quote>
+          </cit>
+        </sense>
+      </entry>
+    </body>
+  </text>
+</TEI>

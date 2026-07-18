@@ -282,6 +282,54 @@ module Query
 
     # -- the dossier shelf (P22-1 live gap: language grain) --------------------
 
+    def test_group_derivation_falls_back_to_iecor_clade_when_family_lane_absent
+      # The live gap (2026-07-18): sga's dossier has no family lane, but its
+      # iecor accretion says "clade Celtic" — corph misfiled under Greek &
+      # Latin because the derivation fell through to its minority Latin.
+      source = make_source(slug: "corph-like", name: "CorPH-like", license_class: "attribution")
+      doc = make_document(source: source, urn: "urn:nabu:corph-like:1", language: "sga")
+      make_passage(doc, urn: "urn:nabu:corph-like:1:1", sequence: 0, language: "sga")
+      @catalog[:language_records].insert(lang_code: "sga", kind: "iecor",
+                                         body: "IE-CoR variety: Old Irish (clade Celtic < Indo-European)",
+                                         source: "iecor")
+      groups = list.source_groups.to_h
+      celtic = groups.fetch("Celtic", []).map(&:slug)
+      assert_includes celtic, "corph-like", "iecor clade evidence must route the family"
+    end
+
+    def test_group_derivation_reads_indo_iranic_clade_spelling
+      # IE-CoR spells the clade "Indo-Iranic" (pli: "clade Indo-Iranic >
+      # Indic") — the live suttacentral shelf leaked it as its own heading
+      # instead of landing under Indic & Iranian.
+      source = make_source(slug: "pali-like", name: "Pali-like", license_class: "open")
+      doc = make_document(source: source, urn: "urn:nabu:pali-like:1", language: "pli")
+      make_passage(doc, urn: "urn:nabu:pali-like:1:1", sequence: 0, language: "pli")
+      @catalog[:language_records].insert(lang_code: "pli", kind: "iecor",
+                                         body: "IE-CoR variety: Pali (clade Indo-Iranic > Indic; Glottocode pali1273)",
+                                         source: "iecor")
+      groups = list.source_groups.to_h
+      indic = groups.fetch("Indic & Iranian", []).map(&:slug)
+      assert_includes indic, "pali-like", "Indo-Iranic must hit the Indic & Iranian net"
+    end
+
+    def test_dominance_prefers_source_language_over_english_translation_layer
+      # The live damaskini shape: the aligned -en siblings hold MORE passages
+      # (6,036 eng vs 5,123 bul), so the translation layer outvoted the source
+      # language and the shelf read Germanic. English never outvotes an
+      # attested source language; an all-English shelf still reads Germanic.
+      source = make_source(slug: "dam-like", name: "Damaskini-like", license_class: "open")
+      bul_doc = make_document(source: source, urn: "urn:nabu:dam-like:1", language: "bul")
+      make_passage(bul_doc, urn: "urn:nabu:dam-like:1:1", sequence: 0, language: "bul")
+      eng_doc = make_document(source: source, urn: "urn:nabu:dam-like:1-en", language: "eng")
+      make_passage(eng_doc, urn: "urn:nabu:dam-like:1-en:1", sequence: 0, language: "eng")
+      make_passage(eng_doc, urn: "urn:nabu:dam-like:1-en:2", sequence: 1, language: "eng")
+      @catalog[:language_records].insert(lang_code: "bul", kind: "family", body: "South Slavic", source: "dossier")
+      @catalog[:language_records].insert(lang_code: "eng", kind: "family", body: "West Germanic", source: "dossier")
+      groups = list.source_groups.to_h
+      slavic = groups.fetch("Slavic", []).map(&:slug)
+      assert_includes slavic, "dam-like", "eng translation passages must not outvote bul"
+    end
+
     def make_language_shelf
       source = Nabu::Store::Source.create(
         slug: "local-language", name: "Language dossiers",
@@ -383,6 +431,113 @@ module Query
       make_source_shelf
       error = assert_raises(Nabu::Query::List::Error) { list.documents("local-source") }
       assert_match(/card/, error.message)
+    end
+
+    # -- source_groups (P28-4: the one-page grouped map) ---------------------
+
+    def seed_family_lanes
+      { "chu" => "South Slavic", "grc" => "Hellenic < Indo-European", "lat" => "Italic < Indo-European",
+        "sla-pro" => "Slavic < Balto-Slavic < Indo-European (reconstructed)",
+        "ine-pro" => "Indo-European trunk (reconstructed)", "zle" => "East Slavic" }.each do |code, body|
+        @catalog[:language_records].insert(lang_code: code, kind: "family", body: body, source: "dossier")
+      end
+    end
+
+    def group_of(slug)
+      list.source_groups.find { |_group, lines| lines.any? { |line| line.slug == slug } }&.first
+    end
+
+    def test_source_groups_pins_the_curated_header_order
+      assert_equal ["Greek & Latin", "Biblical & Near Eastern", "Slavic", "Celtic",
+                    "Indic & Iranian", "Egyptian & Coptic", "Germanic & Old English",
+                    "Reference & dictionaries", "Your shelves", "Other"],
+                   Nabu::Query::List::GROUP_ORDER
+    end
+
+    def test_source_groups_join_census_languages_to_family_lanes
+      seed_family_lanes
+      seed_ccmh
+      assert_equal "Slavic", group_of("ccmh"), "chu's South Slavic lane lands the shelf under Slavic"
+      assert_equal "Other", group_of("local-library"), "no languages, no family lane — the honest residue"
+    end
+
+    def test_source_groups_dominant_language_family_decides_multi_family_shelves
+      seed_family_lanes
+      doc = make_document(source: @ccmh, urn: "urn:nabu:ccmh:mix", language: "grc")
+      make_passage(doc, urn: "urn:nabu:ccmh:mix:1", sequence: 0, language: "grc")
+      make_passage(doc, urn: "urn:nabu:ccmh:mix:2", sequence: 1, language: "grc")
+      make_passage(doc, urn: "urn:nabu:ccmh:mix:3", sequence: 2, language: "chu")
+      assert_equal "Greek & Latin", group_of("ccmh"), "the dominant language's family wins"
+    end
+
+    def test_source_groups_dictionary_spanning_families_reads_reference
+      seed_family_lanes
+      grc_dict = make_dictionary(source: @ccmh, slug: "lsj", language: "grc")
+      make_entry(grc_dict, entry_id: "g1", headword: "μῆνις", folded: "μηνισ")
+      slav = make_dictionary(source: @ccmh, slug: "sla-pro", language: "sla-pro")
+      make_entry(slav, entry_id: "n1", headword: "bogъ", folded: "bogъ")
+      assert_equal "Reference & dictionaries", group_of("ccmh")
+    end
+
+    def test_source_groups_single_family_dictionary_stays_in_its_family
+      seed_family_lanes
+      dict = make_dictionary(source: @ccmh, slug: "sla-pro", language: "sla-pro")
+      make_entry(dict, entry_id: "n1", headword: "bogъ", folded: "bogъ")
+      assert_equal "Slavic", group_of("ccmh")
+    end
+
+    def test_source_groups_local_shelves_read_your_shelves
+      %w[LocalLanguage LocalSource LocalNotes LocalLibrary].each_with_index do |cls, i|
+        Nabu::Store::Source.create(slug: "shelf-#{i}", name: cls, adapter_class: "Nabu::Adapters::#{cls}",
+                                   license_class: "open", enabled: true)
+      end
+      4.times { |i| assert_equal "Your shelves", group_of("shelf-#{i}") }
+    end
+
+    def test_source_groups_override_lane_wins_over_derivation
+      seed_family_lanes
+      seed_ccmh
+      make_source_shelf
+      @catalog[:source_records].insert(slug: "ccmh", kind: "group", body: "Celtic", provenance: "dossier")
+      assert_equal "Celtic", group_of("ccmh"), "the dossier's group: lane wins over the derived Slavic"
+    end
+
+    def test_source_groups_unknown_labels_append_before_other
+      seed_family_lanes
+      doc = make_document(source: @ccmh, urn: "urn:nabu:ccmh:ie", language: "ine-pro")
+      make_passage(doc, urn: "urn:nabu:ccmh:ie:1", sequence: 0, language: "ine-pro")
+      groups = list.source_groups.map(&:first)
+      assert_includes groups, "Indo-European trunk",
+                      "an unmatched family derives its own label, parenthetical stripped"
+      assert_operator groups.index("Indo-European trunk"), :<, groups.index("Other"),
+                      "unknown derived families append before Other"
+    end
+
+    def test_source_groups_hyphen_code_falls_back_to_the_family_prefix_lane
+      seed_family_lanes
+      doc = make_document(source: @ccmh, urn: "urn:nabu:ccmh:orth", language: "zle-ort")
+      make_passage(doc, urn: "urn:nabu:ccmh:orth:1", sequence: 0, language: "zle-ort")
+      assert_equal "Slavic", group_of("ccmh"), "zle-ort reads the zle family lane"
+    end
+
+    def test_source_groups_lines_carry_description_and_enabled
+      seed_family_lanes
+      seed_ccmh
+      make_source_shelf
+      @catalog[:sources].where(slug: "ccmh").update(enabled: false)
+      line = list.source_groups.flat_map(&:last).find { |l| l.slug == "ccmh" }
+      assert_equal "OCS gospel codices with a diplomatic layer.", line.description
+      refute line.enabled
+    end
+
+    def test_source_groups_orders_present_groups_by_the_curated_constant
+      seed_family_lanes
+      seed_ccmh
+      latin = make_source(slug: "anthology", name: "Anthology", license_class: "open")
+      doc = make_document(source: latin, urn: "urn:nabu:anthology:a", language: "lat")
+      make_passage(doc, urn: "urn:nabu:anthology:a:1", sequence: 0, language: "lat")
+      assert_equal([["Greek & Latin", %w[anthology]], ["Slavic", %w[ccmh]], ["Other", %w[local-library]]],
+                   list.source_groups.map { |group, lines| [group, lines.map(&:slug)] })
     end
   end
 end

@@ -220,17 +220,18 @@ column entries.
 | | |
 |---|---|
 | **Category** | Scripture editions serving the alignment hub (§9) |
-| **Language** | Latin (`lat`), Greek (`grc`), English (`eng`) |
-| **Size** | `vulgate`: 73 books / 35,809 verses (the complete Clementine canon, public domain). `sblgnt`: 27 books / 7,939 verses (SBL Greek NT, CC BY 4.0). `eng-web`: 84 books / 37,624 verses (World English Bible, public domain — the readable English witness, P11-8). LXX: no separate source — Swete's Septuagint lives in First1K (§2) and is hub-wired |
-| **Metadata** | Native book.chapter.verse citations (`urn:nabu:vulgate:jon:2.1`); every verse a hub-alignable ref |
+| **Language** | Latin (`lat`), Greek (`grc`), English (`eng`), Biblical Hebrew (`hbo`) |
+| **Size** | `vulgate`: 73 books / 35,809 verses (the complete Clementine canon, public domain). `sblgnt`: 27 books / 7,939 verses (SBL Greek NT, CC BY 4.0). `oshb`: 39 books / 23,213 verses (Open Scriptures Hebrew Bible, synced live 2026-07-18 — the complete Westminster Leningrad Codex with OSHM morphology and augmented-Strong's lemmas; text public domain, morphology CC BY 4.0). `eng-web`: 84 books / 37,624 verses (World English Bible, public domain — the readable English witness, P11-8). LXX: no separate source — Swete's Septuagint lives in First1K (§2) and is hub-wired |
+| **Metadata** | Native book.chapter.verse citations (`urn:nabu:vulgate:jon:2.1`, `urn:nabu:oshb:gen:1.1`); every verse a hub-alignable ref. OSHB verses carry per-word morphology and both ketiv/qere readings (the *ketiv* in the stored text, the *qere* riding the token's annotations — the `reading` display mode shows the qere, docs/display.md); `hbo` text is stored byte-verbatim under the NFC exemption (Masoretic mark order is not NFC-stable — owner ruling 2026-07-18, architecture §3) |
 
 With these aboard, the NT hub registers **fifteen witnesses** (Greek NT,
 Vulgate, Gothic, Armenian, PROIEL Marianus, West-Saxon Gospels, SBLGNT,
 Clementine, WEB English, the four CCMH OCS codices — §8e — and, since the
 2026-07-13 Coptic sync, the Sahidic and Bohairic NT — §8f); `align "MARK
 2.3"` attests fourteen of them (per-witness verse coverage stays honestly
-fragmentary), and `align "GEN 1.1"` opens the OT axis (Septuagint ↔
-Vulgate ↔ English).
+fragmentary), and `align "GEN 1.1"` opens the OT axis — since the
+2026-07-18 `oshb` sync a **four-legged** one (Masoretic Hebrew ↔
+Septuagint ↔ Vulgate ↔ English).
 Rahlfs' LXX was honestly blocked on CATSS license terms — recorded in
 02-sources.
 
@@ -452,6 +453,39 @@ Continental Celtic epigraphic record beside the insular one (RIIG's
 Segomaros dedication against the Kerry stones); ogham palaeography with
 layer-aligned transliterations; Celtic comparanda joined to the
 reconstruction shelves.
+
+## 8m. The Indic expansion (`dcs`, `sarit`, `suttacentral`; synced live 2026-07-18)
+
+| | |
+|---|---|
+| **Category** | Three shelves that widen the Indic axis beyond GRETIL (§5): gold-lemmatized Sanskrit, scholarly TEI editions, and the Pali Tipiṭaka |
+| **Language** | Sanskrit (`san` — Devanagari and IAST surfaces, both reachable from IAST queries via the Deva→IAST search fold), Pali (`pli`, roman script) plus the Patna Dhammapada's Prakrit (`pra`), with aligned English siblings on `suttacentral` |
+| **Size** | `dcs`: 15,741 docs / 753,093 passages — Digital Corpus of Sanskrit (Hellwig; CC BY 4.0 → `attribution`): 270 texts in gold chapter files, ~5.46M words with human-verified sandhi splitting, lemmatization and morphology — **the first gold Sanskrit occupant of the lemma index** (deliberately unmerged with `ud/sanskrit-vedic`'s same-material treebanks: two honest witnesses at different grains). `sarit`: 78 docs / 345,601 passages — SARIT scholarly TEI editions (censused per-file: BY-SA + one MIT, zero NC → `attribution`): ~60 works GRETIL lacks, incl. a complete **Mahābhārata in the Southern Recension** (Kumbakonam — not the vulgate MW cites, so no MW joins promised on it); 5 quarantines = the documented parse floor. `suttacentral`: 12,022 docs / 654,974 passages — SuttaCentral bilara-data (license read per publication from the repo's own records: overwhelmingly CC0): the whole Tipiṭaka in roman-script Pali (Mahāsaṅgīti) with translator-picked English siblings riding the same segment ids (the ORACC precedent) |
+| **Metadata** | DCS: per-token gold lemmas and morphology feeding `search --lemma` and `define`'s attested counts; SARIT: 41/83 files carry a native Devanagari surface, kept canonical while the search layer folds; SuttaCentral: segment-id citations (`urn:nabu:suttacentral:mn1:1.1`) with `--parallel` English |
+
+Together with GRETIL these put the Sanskrit shelf past **1.8M passages**
+with three independent witnesses of the tradition — a breadth corpus (§5),
+a gold-annotation corpus, and critical editions — plus the canon of a
+second Indic language beside them.
+
+**Research uses:** lemma-true Sanskrit search at scale (gold counts,
+never guesses); commentary and recension comparison (Southern vs. vulgate
+Mahābhārata); Pali–Sanskrit comparative work in one library; Buddhist
+studies with segment-aligned translations.
+
+## 8n. The Greek silver layer (`diorisis`, synced live 2026-07-18)
+
+| | |
+|---|---|
+| **Category** | Lemmatized second editions of the Greek canon — the library's **first silver source** (P26-0 tier contract: machine-produced annotation, every count labeled `[silver]`, never presented as gold attestation) |
+| **Language** | Ancient Greek (`grc`), Homer to early Byzantium |
+| **Size** | 764 docs / 502,865 passages — the Diorisis Ancient Greek Corpus (Vatri & McGillivray 2018, sha256-pinned figshare artifact; in-file CC BY-SA → `attribution`): ~10.2M words tokenized, lemmatized and morphologically analyzed. 53 Septuagint files (Rahlfs lineage, CATSS-encumbered) are excluded by rule at discovery — the skip is censused in every sync line |
+| **Metadata** | Per-token automatic lemmas and morphology; 806/809 works are provenance-distinct second editions of texts already held (742 Perseus, 102 First1K) — deliberately unmerged witnesses; the value is the lemma layer at scale |
+
+**Research uses:** lemma search across the whole Greek canon where the
+gold treebanks (§6) cover only samples; frequency and collocation studies
+at corpus scale with honest `[silver]` labels; edition-vs-edition checks
+against the Perseus/First1K copies of the same works.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

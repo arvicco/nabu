@@ -99,6 +99,7 @@ module Nabu
       skips = []
       @registry.each_source do |entry|
         if replayable?(entry)
+          progress&.stage(entry.slug)
           outcomes << replay(db, ledger, entry, progress)
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
@@ -108,11 +109,14 @@ module Nabu
       # The date/place axis (P15-2) is f(canonical): rebuild it from canonical
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
+      progress&.stage("date/place axis")
       axes = Store::AxisBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
+      progress&.stage("facets")
       facets = Store::FacetBuilder.rebuild!(catalog: db)
       # Reindex ONCE after all sources are back — the index is corpus-wide.
+      progress&.stage("fulltext index")
       # The alignment registry (config, not derived) rides in so alignment_refs
       # regenerates with the re-minted passage ids (architecture §10).
       indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
