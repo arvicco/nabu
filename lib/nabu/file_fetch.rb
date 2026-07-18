@@ -5,6 +5,8 @@ require "fileutils"
 require "json"
 require "faraday"
 
+require_relative "redirect_follow"
+
 module Nabu
   # Non-destructive single-file HTTP download — ZipFetch's sibling for
   # upstreams that serve ONE plain file (P12-2; architecture §8). OTA serves
@@ -42,6 +44,11 @@ module Nabu
   # FetchReport pin), and the url. The remote-health probe reads the same
   # last_modified pin for drift (Health::RemoteProbe via HttpProbeTarget's
   # state_file).
+  #
+  # The GET follows redirects (RedirectFollow, the ZipFetch doctrine):
+  # If-Modified-Since rides every hop, a 304 is honored pre-redirect or from
+  # the mirror, and the state file keys off the ORIGINAL url — never the
+  # rotating redirect target.
   class FileFetch
     # HTTP-level failure (non-200/304, transport error). Adapters wrap it in
     # Nabu::FetchError.
@@ -129,14 +136,13 @@ module Nabu
 
     private
 
+    # Redirects followed (the DSpace/figshare mirror shape); a 304 — first
+    # hop or post-redirect — is a terminal answer, not an error.
     def get_file(headers = conditional_headers)
       @progress&.call("Downloading #{@url}…")
-      response = @http.get(@url, nil, headers)
-      raise Error, "HTTP #{response.status} for #{@url}" unless [200, 304].include?(response.status)
-
+      response, = RedirectFollow.get(@url, http: @http, error: Error,
+                                           headers: headers, accept: [200, 304])
       response
-    rescue Faraday::Error => e
-      raise Error, "transport error for #{@url}: #{e.message}"
     end
 
     # If-Modified-Since only when a previous fetch stored Last-Modified AND

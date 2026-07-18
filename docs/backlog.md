@@ -8500,3 +8500,47 @@ SHIPPED — Part B (passage/dictionary syncs index incrementally):
   pins + dictionary-indexed assertion; cli pins updated/added in-place).
   Suite 3,368 runs / 45,501 assertions exit 0 (0 skips) · lint 424
   files exit 0.
+
+## P26-6 · ZipFetch/FileFetch follow redirects — figshare's 302 front door  [tier: fable] [status: done 2026-07-18 — RedirectFollow extracted + both fetchers wired; verdicts below] [deps: P26-4]
+
+The owner's live incident 2026-07-18: `bin/nabu sync diorisis` →
+`diorisis fetch failed … HTTP 302 for
+https://ndownloader.figshare.com/files/11296247`. figshare's
+ndownloader ALWAYS 302s to a rotating S3 mirror; ZipFetch and
+FileFetch treated any non-200/304 as an error (every earlier zip/file
+upstream served 200 directly — first contact). UrlDownload already
+carried the proven bounded follow loop (P20-0, the archive.org case).
+
+SHIPPED:
+- SHARED-SEAM VERDICT: the loop is EXTRACTED to `Nabu::RedirectFollow`
+  (one module, three riders — not three copies, not a wrapper on
+  default_http, which would have hidden the terminal-status/error-class
+  differences). Parameterized by the caller's error class, the accept
+  list ([200] UrlDownload, [200, 304] the sync fetchers) and per-hop
+  headers. Doctrine verbatim from UrlDownload: 301/302/303/307/308,
+  MAX_REDIRECTS 5, relative Location via URI.join against the CURRENT
+  url, honest errors naming the hop cap / the missing Location / the
+  transport failure. UrlDownload adopted it — behavior byte-identical,
+  its tests untouched and green (constants re-exported by reference).
+- CONDITIONAL-GET VERDICT: If-Modified-Since rides EVERY hop, and 304
+  sits in the sync fetchers' accept list — so a 304 is honored whether
+  it arrives at the FIRST hop (pre-redirect; upstream answered the
+  conditional itself) or from the mirror after the 302 (figshare's
+  actual shape: ndownloader 302s even conditional GETs; S3 answers).
+  Both flows test-pinned for ZipFetch AND FileFetch.
+- ORIGINAL-URL DOCTRINE: state files (.zip-fetch.json/.file-fetch.json
+  Last-Modified + sha pins) key off the ORIGINAL url, never the
+  redirect target — mirror targets rotate (the UrlDownload precedent);
+  pinned by asserting state "url" after a redirect-delivered fetch.
+- RIG FIX (found by the new assert_requested counts): ZipFetchTest and
+  FileFetchTest defined `teardown` without `super`, silently clobbering
+  webmock/minitest's alias-chained WebMock.reset! — the request
+  registry accumulated across tests in exactly those two classes.
+  `super` restored; no existing assertion depended on the accumulation.
+- Diorisis regression: the adapter's fetch against a WebMock'd
+  figshare 302 → S3 200 completes with the sha pin verified on the
+  FINAL body (the mirror-request asserted).
+- Tests +16 (zip_fetch 5, file_fetch 6, redirect_follow 4 helper-
+  contract pins, diorisis 1). Suite 3,384 runs / 45,549 assertions
+  exit 0 (0 skips) · lint 426 files exit 0. The live
+  `bin/nabu sync diorisis` is the orchestrator's review proof.

@@ -6,6 +6,8 @@ require "json"
 require "tmpdir"
 require "faraday"
 
+require_relative "redirect_follow"
+
 module Nabu
   # Non-destructive HTTP-zip download-and-unpack — the first NON-git fetch
   # path (P10-1; architecture §8). ORACC's open data ships as a per-project
@@ -40,6 +42,12 @@ module Nabu
   # FetchReport carries) and replayed as `If-Modified-Since`; a 304 means the
   # tree is current and nothing is touched. The state file and the attic are
   # never treated as upstream deletions.
+  #
+  # The GET follows redirects (RedirectFollow — figshare's ndownloader 302s
+  # every artifact to a rotating S3 mirror, the 2026-07-18 diorisis
+  # incident); If-Modified-Since rides every hop, a 304 is honored whether
+  # it arrives pre-redirect or from the mirror, and the state file keys off
+  # the ORIGINAL url, never the redirect target.
   #
   # == The attic manifest
   #
@@ -169,14 +177,13 @@ module Nabu
 
     private
 
+    # Redirects followed (figshare 302s to a mirror); a 304 — first hop or
+    # post-redirect — is a terminal answer, not an error.
     def get_zip(headers = conditional_headers)
       @progress&.call("Downloading #{@url}…")
-      response = @http.get(@url, nil, headers)
-      raise Error, "HTTP #{response.status} for #{@url}" unless [200, 304].include?(response.status)
-
+      response, = RedirectFollow.get(@url, http: @http, error: Error,
+                                           headers: headers, accept: [200, 304])
       response
-    rescue Faraday::Error => e
-      raise Error, "transport error for #{@url}: #{e.message}"
     end
 
     # If-Modified-Since only when a previous fetch stored Last-Modified AND
