@@ -183,6 +183,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
 - `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the gold-treebank lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output).
 - `passages_trigram` + `passages_trigram_scope` (P16-4, intertext design §4, same file and lifecycle): the fragment-search index behind `search --fuzzy` — a second FTS5 table over the SAME folded `text_normalized`, tokenized into character trigrams for infix/mid-word matching (`]μηνιν αει[` on a damaged papyrus). DOCUMENTARY SCOPE ONLY: sources flagged `fuzzy_index: true` in config/sources.yml (papyri-ddbdp + oracc; an owner posture like `enabled`/`translations` — the whole corpus would cost 3.6–4.1 GB, the documentary shelves 257 MB measured at 6.43 B/char, 8.6 s build). The scope table records the slugs each build actually indexed, so the query surface reports real coverage instead of trusting config. Query semantics are two-phase: trigram candidates (implicit-AND MATCH of the fragment's trigrams — co-occurrence, not contiguity), then substring verification against the stored folded text (Query::Fuzzy). Sub-ms to ~10 ms measured live.
+- Index lifecycle (P26-5): `nabu rebuild` keeps the pure-function guarantee — `Indexer.rebuild!` drops every fulltext-side table and regenerates the lot from the catalog, and it is the ONLY full-reindex surface (owner decision: no separate `nabu index` command). Syncs now maintain the index INCREMENTALLY: `Indexer.refresh_source!` deletes the synced source's rows from the FTS/lemma/trigram tables (the FTS tables are regular contentful FTS5, so per-row DELETE is real deletion; one streaming rowid scan stands in for the missing passage_id index) and re-inserts them from the current catalog, rebuilds `alignment_refs` only when the source holds a registry witness document, and rebuilds the reflex closure only when the source's lemma rows or reflex edges changed. The contract is ROW IDENTITY — after a refresh, the fulltext state equals what a from-scratch `rebuild!` would produce (test-pinned) — and the sync line's "indexed N passages (slug)" is the SOURCE's count, never the corpus total. Index-inert grains (`:notes`, `:language`, `:source` — no passages, no dictionary entries) skip index work entirely. A fulltext file that is missing tables (first sync) or predates the tier column falls back to the full rebuild.
 - `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
 - `license_class` enum (`open`, `attribution`, `nc`, `research_private`, `restricted`) drives query/export filters.
 - Lock tolerance (P17-7): every SQLite file runs `journal_mode=WAL`, set idempotently on each read-write connect (the pragma persists in the file, so existing dbs self-heal on first open — no migration; readonly connects inherit what the file says). WAL is the fit for the real usage pattern — N readers (MCP, agents, CLI) + 1 writer (sync/rebuild/batch producers) without mutual blocking; pre-WAL, a reader's shared lock crashed a running rebuild's commit (`SQLite3::BusyException`, owner defect 2026-07-13). Every connect, readonly included, also carries `busy_timeout` = 10 s (`Store::BUSY_TIMEOUT_MS`: longest legitimate lock holder is seconds-scale — batch links readbacks, loader/indexer commits — plus margin), which covers writer-vs-writer overlap and not-yet-flipped rollback-mode files. Cost: `-wal`/`-shm` sidecars sit next to each db while connections are open — `nabu backup` copies live sidecars with each db and prunes stale ones at the target (ops §9/§10).
@@ -321,11 +322,15 @@ stays addressable, the Incipit stance again.
 
 **Rebuild-safety.** The registry is config — canonical-adjacent, in git, in
 the backup set, untouched by rebuild. The index is a pure function of
-(catalog, registry) and is rebuilt inside every `Indexer.rebuild!` (both
-call sites: SyncRunner#reindex!, Rebuild) — so `nabu rebuild` regenerates
-alignment for free, id re-minting and all (the index carries re-minted
-passage_ids precisely because it is dropped and rebuilt with them). No
-hand-curated rows exist anywhere in db/.
+(catalog, registry) and is rebuilt whole inside `Indexer.rebuild!` (`nabu
+rebuild`) — so a rebuild regenerates alignment for free, id re-minting and
+all (the index carries re-minted passage_ids precisely because it is
+dropped and rebuilt with them). Since P26-5, a sync regenerates it only
+when the synced source actually holds a registry witness document
+(`Indexer.refresh_source!`'s relevance gate — the index is registry-scoped,
+157k rows live, so the full regeneration is cheap when it fires and skipped
+entirely when it cannot matter). No hand-curated rows exist anywhere in
+db/.
 
 **Query surface: a new `align` subcommand.** `nabu align REF [--work ID]`
 (REF may also be a passage urn, pivoting from a show/search hit into its
@@ -658,7 +663,9 @@ reflexes of the SAME reconstruction root — got salt ~ chu соль under PIE
 30 roots in under a second (design doc `intertext-design.md` §6). The join
 is staged through `reflex_roots(language, lemma_folded, root_urn)` — a
 derived closure table built by `Store::ReflexRootsIndexer` from
-`Indexer.rebuild!` (the single choke point: sync's reindex and rebuild),
+`Indexer.rebuild!` (and, since P26-5, from a sync's incremental
+`refresh_source!` whenever the synced source's lemma rows or reflex edges
+changed — a lemma-less source's sync skips it),
 living in fulltext.sqlite3 beside `passage_lemmas` (~50k rows / ~4 MB /
 ~4 s live). The closure is the etym walk, precomputed and bounded the same
 way: direct reflex edges (word AND roman folds — the script bridge) plus

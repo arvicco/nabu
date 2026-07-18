@@ -183,6 +183,48 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # P26-5 Part A: an index-inert local shelf — its content kind mints neither
+  # passages nor dictionary entries, so its sync must perform NO index work.
+  # discover yields nothing (the loaders take an empty batch); one subclass
+  # per inert kind so the routing is pinned for all three.
+  class InertShelf < Nabu::Adapter
+    def self.slug = raise(NotImplementedError)
+    def self.kind = raise(NotImplementedError)
+    def self.content_kind = kind
+
+    def self.manifest
+      Nabu::SourceManifest.new(
+        id: slug, name: slug, license: "Owner-authored (local shelf)", license_class: "open",
+        upstream_url: "canonical/#{slug} (local)", parser_family: "plaintext"
+      )
+    end
+
+    def fetch(_workdir, **) = Nabu::FetchReport.new(sha: "s", fetched_at: Time.now, notes: nil)
+
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      self
+    end
+
+    def parse(_ref) = raise(NotImplementedError)
+  end
+
+  class NotesShelf < InertShelf
+    def self.slug = "notes-shelf"
+    def self.kind = :notes
+  end
+
+  class LanguageShelfSrc < InertShelf
+    def self.slug = "language-shelf"
+    def self.kind = :language
+  end
+
+  class SourceShelfSrc < InertShelf
+    def self.slug = "source-shelf"
+    def self.kind = :source
+  end
+
   class LiveEnabled  < CountingSource; def self.slug = "live-enabled";  end
   class LiveDisabled < CountingSource; def self.slug = "live-disabled"; end
   class ManualSrc    < CountingSource; def self.slug = "manual-src";    end
@@ -416,6 +458,86 @@ class SyncRunnerTest < Minitest::Test
     assert_nil aborted.indexed
   end
 
+  # --- incremental per-source indexing (P26-5) -----------------------------
+
+  # Every Indexer entry point a sync could reach — the inert-sync spy pins
+  # them ALL. (Minitest 6 ships no stub/mock, so the spy is a hand-rolled
+  # singleton-method swap, restored in ensure.)
+  INDEXER_ENTRY_POINTS = [
+    [Nabu::Store::Indexer, :rebuild!],
+    [Nabu::Store::Indexer, :refresh_source!],
+    [Nabu::Store::Indexer, :rebuild_trigram!],
+    [Nabu::Store::AlignmentIndexer, :rebuild!],
+    [Nabu::Store::ReflexRootsIndexer, :rebuild!]
+  ].freeze
+
+  def forbidding_index_work
+    originals = INDEXER_ENTRY_POINTS.map do |mod, name|
+      original = mod.method(name)
+      mod.define_singleton_method(name) do |*_args, **_kwargs|
+        raise "#{mod}.#{name} invoked — index work is forbidden for an index-inert sync"
+      end
+      [mod, name, original]
+    end
+    yield
+  ensure
+    originals&.each { |mod, name, original| mod.define_singleton_method(name, original) }
+  end
+
+  # Part A: an index-inert grain's sync must never invoke ANY Indexer entry
+  # point — the spy raises on every one of them — and reports indexed: nil
+  # (the CLI omits the fragment). No fulltext file may even be created.
+  def test_index_inert_shelf_syncs_perform_no_index_work
+    [NotesShelf, LanguageShelfSrc, SourceShelfSrc].each do |klass|
+      runner = make_runner(registry(entry(klass.slug, klass, enabled: true, sync_policy: "local")))
+      outcome = forbidding_index_work { runner.sync(klass.slug) }
+      refute outcome.aborted?
+      assert_nil outcome.indexed, "#{klass.slug}: an inert sync carries no index count"
+      refute File.exist?(config.fulltext_path), "#{klass.slug}: no fulltext file may be created"
+    end
+  end
+
+  # Part B honesty: the Outcome's indexed count is the SOURCE's live passage
+  # count, never the corpus total — and the sync refreshes only its own slice.
+  def test_sync_indexed_count_is_the_sources_not_the_corpus_total
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner.sync("breaker")
+
+    # Another source's rows land in the catalog between syncs (they enter the
+    # index at THEIR OWN sync or at `nabu rebuild` — not at breaker's).
+    other = Nabu::Store::Source.create(slug: "other", name: "O", adapter_class: "X", license_class: "open")
+    doc = Nabu::Store::Document.create(source_id: other.id, urn: "urn:o:1", title: "t", language: "grc",
+                                       content_sha256: "x", revision: 1, withdrawn: false)
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:o:1:1", sequence: 0, language: "grc",
+                                text: "β", text_normalized: "β", content_sha256: "x", revision: 1,
+                                withdrawn: false)
+
+    outcome = runner.sync("breaker")
+    assert_equal 2, outcome.indexed, "the count is breaker's own live passages, not the corpus total"
+  end
+
+  # The withdrawn-document pin: a doc withdrawn upstream LEAVES the index at
+  # the source's next sync (the incremental refresh deletes its rows).
+  def test_withdrawn_document_leaves_the_index_at_its_next_sync
+    urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
+    BreakerAdapter.reset!(urns: urns)
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner.sync("breaker")
+
+    BreakerAdapter.urns = urns.first(4) # exactly at the 20% threshold — no trip
+    outcome = runner.sync("breaker")
+    assert_equal 1, outcome.load_report.withdrawn
+    assert_equal 4, outcome.indexed
+
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert_equal urns.first(4).map { |urn| "#{urn}:1" }.sort,
+                 fulltext[:passages_fts].select_map(:urn).sort,
+                 "the withdrawn document's passage must leave the index"
+  ensure
+    fulltext&.disconnect
+  end
+
   # --- inline deviation warnings (P5-5, delta-aware since P18-7) ------------
 
   # A sync whose errored count moved off the recorded ledger baseline emits one
@@ -499,6 +621,8 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, Nabu::Store::Document.count, "a dictionary source must create no documents"
     assert_equal 8, Nabu::Store::DictionaryEntry.count
     assert_empty outcome.warnings
+    assert_equal 0, outcome.indexed,
+                 "a dictionary source indexes no passages (its index work is the reflex closure)"
   end
 
   # --- sync_all policy filtering ------------------------------------------
