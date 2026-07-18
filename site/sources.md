@@ -50,7 +50,10 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 34 sources below are synced and live as of 17 July 2026.
+All 52 sources below are synced and live as of 18 July 2026. Six more
+(the Hebrew shelf: the OSHB lexicon, SDBH, the Sefaria Targums, BHSA, the
+Dead Sea Scrolls, and the Inscriptions of Israel/Palestine) are built and
+landing through the current release cycle.
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|
@@ -85,6 +88,24 @@ All 34 sources below are synced and live as of 17 July 2026.
 | `corph` | [CorPH — Corpus PalaeoHibernicum](https://chronhib.maynoothuniversity.ie/) (ERC ChronHib, Maynooth) | 76 Early Irish documents, 7th–10th c., gold-lemmatized — the library's first Old Irish (synchronized 17 July 2026) | MIT |
 | `riig` | [RIIG — Recueil informatisé des inscriptions gauloises](https://riig.huma-num.fr/) (ANR, Ausonius/Bordeaux) | 428 Gaulish inscriptions, Gallo-Greek and Gallo-Latin, with French translations (synchronized 17 July 2026) | CC BY 4.0 (in-file grant) |
 | `ogham` | [Ogham in 3D](https://ogham.celt.dias.ie/) v2.0 (DIAS / Maynooth) | ~500 ogham stones in real Ogham codepoints with transliteration layers (synchronized 17 July 2026) | Conflicting statements (site CC BY-NC-SA vs in-file CC BY 4.0) — held at the restrictive `nc` reading pending clarification |
+
+| `dcs` | [Digital Corpus of Sanskrit](https://github.com/OliverHellwig/sanskrit) (Hellwig) | 15,741 gold-lemmatized Sanskrit chapters across 270 texts, ~5.46M analyzed words (synchronized 18 July 2026) | CC BY 4.0 |
+| `sarit` | [SARIT](https://sarit.indology.info/) | 78 scholarly TEI editions incl. a complete Southern-Recension Mahābhārata, Devanagari + IAST (synchronized 18 July 2026) | CC BY-SA (per file) |
+| `suttacentral` | [SuttaCentral](https://suttacentral.net/) bilara-data | The Pali Tipiṭaka (Mahāsaṅgīti) + the Patna Dhammapada, with segment-aligned English (synchronized 18 July 2026) | CC0 (per publication) |
+| `oshb` | [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb) | The Westminster Leningrad Codex — 39 books, 23,213 verses with full morphology and ketiv/qere, byte-verbatim Masoretic text (synchronized 18 July 2026) | Text public domain; morphology CC BY 4.0 |
+| `diorisis` | [Diorisis Ancient Greek Corpus](https://doi.org/10.6084/m9.figshare.6187256) (Vatri &amp; McGillivray) | 764 lemmatized second editions of the Greek canon, ~10.2M words — the library's first silver-tier source, labeled as such (synchronized 18 July 2026) | CC BY-SA 3.0 US (in-file) |
+| `aes` | [Ancient Egyptian Sentences](https://github.com/simondschweitzer/aes) (TLA/BBAW snapshot) | 13,026 Egyptian texts / 101,793 gold-lemmatized sentences — Pyramid Texts to Sinuhe to medical papyri — with aligned German (synchronized 18 July 2026) | CC BY-SA 4.0 |
+| `aed` | [Ägyptische Wortliste](https://github.com/simondschweitzer/aed-tei) (TLA/BBAW) | 35,052 Egyptian dictionary entries keyed by the corpus's own lemma ids (synchronized 18 July 2026) | CC BY-SA 4.0 |
+| `tla-hf` | [Thesaurus Linguae Aegyptiae](https://huggingface.co/thesaurus-linguae-aegyptiae) official datasets | 13,383 Demotic + 3,606 Late Egyptian sentences with German — the only bulk demotic anywhere (synchronized 18 July 2026) | CC BY-SA 4.0 |
+| `ccl` | [Comprehensive Coptic Lexicon](https://refubium.fu-berlin.de/handle/fub188/27813) (BBAW/DDGLC) | 11,284 Coptic dictionary entries + the ORAEC egy↔cop crosswalk as etymology edges (synchronized 18 July 2026) | CC BY-SA 4.0 (in-file); crosswalk CC0 |
+| `open-etruscan` | [OpenEtruscan](https://doi.org/10.5281/zenodo.20075836) | 6,248 Etruscan inscriptions with English siblings (synchronized 18 July 2026) | CC BY 4.0 |
+| `larth-etp` | [Larth / Etruscan Texts Project glossary](https://github.com/GianlucaVico/Larth-Etruscan-NLP) | The ETP scholarly Etruscan glossary, 1,122 entries (synchronized 18 July 2026) | CC BY 4.0 |
+| `ceipom` | [CEIPoM](https://doi.org/10.5281/zenodo.4759134) (Pitts) | 3,871 pre-Roman-Italy texts — Oscan, Messapic, Venetic, Umbrian, South Picene, Faliscan, archaic Latin — lemmatized, dated, geolocated; incl. the Fibula Praenestina and the complete Iguvine Tables (synchronized 18 July 2026) | CC BY-SA 4.0 |
+| `itant` | [Corpus ItAnt](https://github.com/DigItAnt/Corpus_ItAnt) (CNR-ILC/UniFI) | 501 Oscan + 9 Lepontic critical editions with English/Italian translations (synchronized 18 July 2026) | CC BY-NC-SA 4.0 |
+| `sabellic-loans` | en.wiktionary curation | 85 Latin lemmas with Oscan/Umbrian/Sabine etyma, loan-flagged (curated 18 July 2026) | CC BY-SA + GFDL |
+| `lexlep`, `lexlep-words` | [Lexicon Leponticum](https://lexlep.univie.ac.at/) (Vienna) | 494 Cisalpine Celtic inscriptions + the 627-word Lepontic lexicon with morphemic analyses (synchronized 18 July 2026) | Conflicting statements (terms CC BY-SA 3.0 vs footer NC) — held at `nc` pending clarification |
+| `tir` | [Thesaurus Inscriptionum Raeticarum](https://tir.univie.ac.at/) (Vienna) | 389 Raetic inscriptions — the corpus of record (synchronized 18 July 2026) | Same conflicting statements — held at `nc` |
+| `isicily` | [I.Sicily](https://github.com/ISicily/ISicily) (Prag, Oxford / ERC Crossreads) | 5,074 inscriptions of ancient Sicily across all its languages — incl. Sicel, Elymian, Sicilian Punic and Mamertine Oscan in their only machine-readable form (synchronized 18 July 2026) | CC BY 4.0 |
 
 ## The local shelves
 
