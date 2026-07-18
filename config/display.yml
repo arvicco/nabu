@@ -27,6 +27,16 @@
 # `--display full` restores the exact stored run. The corpus's sga-Ogam/und
 # layers cannot be keyed without hitting Latin-script sga (corph) — journaled
 # residue, backlog P27-2.
+#
+# Old Italic (U+10300–1032F; P29-2): the Sabellic axis names this block —
+# ItAnt's osc-Ital-x-oscetr/xcg-Ital-x-xcglep language tags and CEIPoM's
+# script column DECLARE the script while their stored text is Latin
+# transliteration (censused ×0 Old Italic chars), but the sabellic-loans
+# etymon headwords (𐌓𐌖𐌚𐌓𐌉𐌉𐌔) and any future kaikki-Umbrian shelf carry
+# REAL codepoints. No policy row: census-first — there is nothing to strip
+# and no transcoder to register; the terminal-side story (the
+# font-noto-sans-old-italic cask) lives in docs/display.md §2–3 beside the
+# ogham/coptic entries.
 languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
