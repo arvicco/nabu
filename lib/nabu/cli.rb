@@ -4743,7 +4743,8 @@ module Nabu
               "edh #{result.axes.edh}, damaskini #{result.axes.damaskini}, corph #{result.axes.corph}, " \
               "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes}, " \
               "ceipom #{result.axes.ceipom}, " \
-              "isicily #{result.axes.isicily})"
+              "isicily #{result.axes.isicily}, " \
+              "open-etruscan #{result.axes.open_etruscan})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
