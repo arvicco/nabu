@@ -946,6 +946,57 @@ larth-etp:
   # headwords attested in the OpenEtruscan corpus (65.4%), covering
   # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
   # occasionally → manual; a re-pin is an owner decision.
+lexlep:
+  adapter: Nabu::Adapters::Lexlep
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
+                   # 50-title api.php batches, minutes at the polite delay —
+                   # then eyeball nabu show urn:nabu:lexlep:bi-8 ("sipiu
+                   # koil[ ]ios", the Cerrione stela) and 5 random
+                   # inscriptions before flipping).
+  # P29-3: Lexicon Leponticum (lexlep.univie.ac.at, Stifter/Salomon/Braun
+  # et al.) — the digital edition of Cisalpine Celtic: 494 Inscription
+  # pages (+ 419 Objects / 134 Sites joined into facets, place and the
+  # date axis; api.php categoryinfo census 2026-07-18). NEW wiki-template
+  # family over Nabu::WikiFetch (MediaWiki api.php category crawl,
+  # revid-driven, UA-identified, throttled). LICENSE CONFLICT held at the
+  # restrictive reading: Project:Terms of use grants CC BY-SA 3.0 + GFDL
+  # but scopes "for scientific use only", and the wiki's own rightsinfo
+  # footer says CC BY-NC-SA 4.0 → class nc PENDING licensing email №17
+  # (queued, owner sends); relabel-on-reply, the P10-4 override mechanics.
+  # A living wiki → re-syncs are owner-fired.
+  sync_policy: manual
+
+lexlep-words:
+  adapter: Nabu::Adapters::LexlepWords
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync lexlep-words — 628 Word
+                   # pages — then eyeball nabu define uvamokozis / define
+                   # --lang lep and 5 random entries before flipping).
+  # P29-3: LexLep's "Dictionary of Attested Forms" — the 628-word
+  # etymological lexicon of Lepontic / Cisalpine Gaulish (the packet
+  # brief's "202" was the Morpheme category, journaled v2) as the lep
+  # dictionary shelf row. SIBLING of lexlep: content_kind is one closed
+  # routing per adapter (aes/aed precedent), so the wiki's two grains are
+  # two rows sharing WikiFetch + wiki-template + the nc posture above.
+  sync_policy: manual
+
+tir:
+  adapter: Nabu::Adapters::Tir
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync tir — ~770 pages — then
+                   # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
+                   # laþe?) and 5 random inscriptions before flipping).
+  # P29-3: Thesaurus Inscriptionum Raeticarum (tir.univie.ac.at,
+  # Schumacher/Salomon/Kluge/Bajc/Braun) — the Raetic (xrr, Tyrsenian per
+  # the wiki's own Main Page) corpus of record, actively edited: 389
+  # Inscription pages (+ 294 Objects / 82 Sites; api.php categoryinfo
+  # census 2026-07-18 — the brief's "155" was the Word category, journaled
+  # v2 as a tir-words sibling). Same wiki-template family and fetch path
+  # as lexlep. "Scientific use only" scoping over the CC BY-SA 3.0 + GFDL
+  # Terms-of-Use grant, empty rightsinfo footer → class nc PENDING
+  # licensing email №17; relabel-on-reply. Trismegistos sigla → tm:
+  # reference edges.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
