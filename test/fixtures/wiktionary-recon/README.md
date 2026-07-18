@@ -210,7 +210,49 @@ dump dated 2026-07-06; sha256 of the full downloads):
     descendant.
   - `cam` 1 "step" / `cam` 2 "bent" — `etymology_number` homographs, each
     with a cy descendant.
+- `.../Umbrian/kaikki.org-dictionary-Umbrian.jsonl` — 1,132,498 B,
+  **500 lines** (whole-corpus census 2026-07-18: 373 with
+  etymology_text, 30 romanization stubs), sha256
+  `c985e245392b56c021eaa4cf5206a1a1838883d4f40f979738a4d4d0faff4d9d`,
+  retrieved 2026-07-18 (the P29-1 CEIPoM rider — the only kaikki-served
+  Italic corpus language) → **3 fixture lines** (2/5/220):
+  - `angla` — plain attested noun form (late Iguvine), no etymology.
+  - `tre` — one of the 30 romanization stubs.
+  - `𐌀𐌛𐌄𐌐𐌄𐌔` "fat, fatty portions of an animal" — Old Italic-script
+    headword (real U+10300-block codepoints through the NFC boundary),
+    Proto-Italic etymology chain + descendants.
 
 Selection recipe: whole JSONL lines picked by upstream line number as
 listed (deterministic; the post-check asserts each emitted line is a
 literal line of the raw download).
+
+## P29-0 addition (attested Etruscan; retrieved 2026-07-18)
+
+One NEW extract — the Etruscan axis rider on the OpenEtruscan packet.
+ATTESTED language on the recon source (the wiktionary-cu/P25-2
+precedent: no display asterisk; `ett` is real ISO 639-3, adopted as
+itself). All kept lines byte-verbatim; the license statement on
+https://kaikki.org/dictionary/ re-verified verbatim 2026-07-18 ("This
+data is made available under the same licenses as Wiktionary - both
+CC-BY-SA and GFDL.").
+
+Full-download census (sha256 of the full download):
+
+- `https://kaikki.org/dictionary/Etruscan/kaikki.org-dictionary-Etruscan.jsonl`
+  — 637,430 B, **493 lines** (485 distinct words; 419 Old Italic-script
+  headwords + 73 `pos: romanization` stubs; 179 with etymology_text; 10
+  records carry descendants → 11 Latin edges, **8 upstream-flagged
+  borrowed** — the Etruscan→Latin loan layer), sha256
+  `cc9ee00245ad383f60d75a3a6dcc3594cae0b3d68e123e1b02a1507da62c2786`
+  → **4 fixture lines** (upstream lines 1/18/37/266):
+  - `vetus` (line 1) — the romanization-stub shape (pos "romanization",
+    gloss "romanization of 𐌅𐌄𐌕𐌖𐌔").
+  - `𐌀𐌅𐌉𐌋` (line 18) — Old Italic headword with etymology_text and an
+    UNFLAGGED la Aulus descendant (borrowed: false, not NULL).
+  - `𐌘𐌄𐌓𐌔𐌖` (line 37) — THE loan-edge golden: la persōna descendant
+    raw_tags `["borrowed", "uncertain"]` under an intermediate ett node
+    raw_tags `["reshaped by analogy or addition of morphemes",
+    "uncertain"]` (no /borrow/i substring → false) — the per-edge
+    honesty the closure ORs along the path.
+  - `𐌋𐌀𐌍𐌉𐌔𐌕𐌀` (line 266) — the clean borrowed case: la lanista
+    raw_tags `["borrowed"]`.

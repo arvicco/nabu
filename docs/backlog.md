@@ -9354,3 +9354,186 @@ shas; manifest.yml wired for the sentinel.
 Tests +36 methods (parser 12, adapter 17, producer 6, links reader +1;
 fixture manifests/sentinel ride the existing sweeps). Suite 3,553 runs /
 46,327 assertions exit 0 (0 skips) · lint 438 files exit 0.
+
+## P29-0 · OpenEtruscan + the Larth riders  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+The gate-approved P17-5 Phase B scope (owner 2026-07-13) + the two feeds
+Larth's CC-BY LICENSE unlocked (thread closed 2026-07-14). Posture:
+`attribution` throughout.
+
+- **OpenEtruscan CSV adapter** — Zenodo record 20075836 v1.0.0
+  (2026-05-07, cc-by-4.0; license_watch on the record; check for a v2
+  deposit at build time and use the newest version). NEW **flat-csv
+  parser family**. Skip `ocr_failed` rows by rule (discovery-skip
+  accounting); `fuzzy_index: true`; BCE sign-flip regression pin (dates
+  are BCE-positive upstream — flip to signed years, pin with a fixture
+  row). Language `ett`. Carry the author's own data-quality caveat
+  verbatim in 02-sources: "many inscriptions are really noisy and not
+  really reliable".
+- **kaikki `ett` EXTRACTS row** on the wiktionary-jsonl dictionary
+  adapter (config + fixture only — the wiktionary-recon EXTRACTS
+  precedent).
+- **ETP_POS glossary via Larth** (`gh repo GianlucaVico/Larth-Etruscan-NLP`,
+  LICENSE CC-BY-4.0 re-verified 2026-07-18): `ETP_POS.csv` (vocabulary,
+  POS, translations — Wallace-project scholarly lineage) as a second
+  Etruscan dictionary row. ETPWords/ETPNames/ETPSuff journaled, not
+  ingested.
+- **Larth findspot side-join**: `Data/Etruscan.csv` carries 456
+  city-tagged rows OpenEtruscan dropped; side-join on the shared ids →
+  `document_axes` place rows (EtruscanDates/places extractor as
+  fits — no dates promised, places only).
+- **Etruscan→Latin curated loan edges** (P17-3 `borrowed` pattern).
+- **ett gold-join measurement** at fixture time; report the number,
+  promise nothing.
+- Registry `enabled: false`, sync_policy per artifact freshness
+  (frozen Zenodo pin). Fixtures: trimmed real CSV rows incl. one
+  ocr_failed skip + BCE pin; README with license quote + sha.
+
+## P29-1 · CEIPoM — the pre-Roman-Italy corpus  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+Zenodo 6475427 v1.3 (Pitts, KU Leuven, 2022-04-21; concept DOI
+10.5281/zenodo.4759134), license field `cc-by-sa-4.0` → `attribution`
+(SA rider recorded). Five UTF-16 CSVs, 16.8 MB, FileFetch per CSV,
+`sync_policy: frozen`. **UTF-16 (BOM) is a first for flat CSV — fixture
+must pin it.** Flat-csv family sibling of P29-0 (different shape:
+relational five-file; share helpers only if natural — orchestrator
+reconciles at merge).
+
+- Grain: document = text (3,875 in texts.csv), passage = sentence
+  (5,303 in sentences.csv; sentence 2 = Fibula Praenestina "Manios med
+  fhefhaked Numasioi", sentence 5 = Duenos — pin both). Languages:
+  Latin 1,834 (variety Faliscan 420 → `xfa`; Faliscan/Latin 35;
+  archaic Latin stays `lat`) · Oscan 902 `osc` · Messapic 591 `cms` ·
+  Venetic 411 `xve` · Umbrian 68 `xum` · Old Sabellic 59 (South Picene
+  → `spx`) · Greek 10 `grc`.
+- **CeipomDates axis**: 3,872/3,875 dated (signed years, e.g. -675.0),
+  3,815 lat/long → date AND place rows; honest undated/unplaced
+  residues in the Summary (AxisBuilder pattern).
+- **Script facet** from the per-text script column (Latin/Oscan/
+  Messapic/Venetic/Greek/Etruscan/South Picene/Nocera + mixed).
+- tokens.csv (dependency relations SBJ/OBJ/PRED + head pointers) +
+  analysis.csv (lemma, morph, POS, gloss, meaning category,
+  Classical_Latin_equivalent) → `annotations["tokens"]` + passage
+  lemmas. **Lemma tier: gold WITH the single-scholar curation caveat
+  verbatim in 02-sources** (owner-gated 2026-07-18); never call it
+  "treebank-gold" in docs.
+- **Classical_Latin_equivalent join measurement** against the gold
+  Latin lemma keys — report the number, journal wiring as v2.
+- links.csv: 3,630 TM ids → reference edges (Burman precedent);
+  EDCS/CIL/"(Imagines Italicae)" reference strings carried verbatim.
+- Fixture check: Iguvine Tables presence among the 68 Umbrian texts
+  (tablet VII?) — report honestly.
+- **Rider: kaikki Umbrian EXTRACTS row** (`xum`; the only served
+  Italic language — 500 records, 373 with etymology_text, 30
+  romanization stubs; 1.13 MB JSONL): config + fixture on
+  wiktionary-jsonl.
+- Registry `enabled: false`. New language dossiers accreted with
+  `family:` lanes for osc/xum/xfa/xve/cms/spx (the P28-4r lesson).
+
+## P29-2 · Corpus_ItAnt — the EpiDoc edition witness  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+github.com/DigItAnt/Corpus_ItAnt (CNR-ILC/UniFI PRIN 2017; cite Murano
+et al., JOCCH 16.3 (2023), 10.1145/3606703). License verbatim README +
+license.txt + per-file TEI availability: CC BY-NC-SA 4.0 → `nc`.
+**Existing EpiDoc parser family + GitFetch** (riig precedent).
+
+- `Oscan_inscriptions_newEditions` 502 files + `CelticOfItaly_…` 10
+  (Lepontic → `lep`, xtg-adjacent; riig's neighbors). Venetic_/
+  Faliscan_ dirs are README-only — journal the re-sync watch, promise
+  nothing.
+- EpiDoc 9.5, word-tokenized `<w xml:lang="osc-Ital-x-oscetr">` with
+  ligature/direction markup, diplomatic + interpretative divs (keep
+  both citable — the corpus's own structure decides the rung).
+- Headers: Trismegistos ids + Imagines Italicae concordances ("ImIt
+  Bouianum 104, 2") → reference edges; Getty AAT object/material →
+  facets; GeoNames findspots → axis places; editors in metadata.
+- Second-witness doctrine beside CEIPoM's Oscan (MW-beside-kaikki):
+  deliberately unmerged, provenance-distinct.
+- **Rider: Sabellic→Latin curated loan edges** (P17-3 `borrowed`
+  pattern; en.wiktionary categoryinfo verified 2026-07-18: Latin ←
+  Oscan 23 borrowed/48 derived, ← Umbrian 6/11, ← Sabine 13).
+- **Rider: Old Italic display row** — display.yml + docs/display.md
+  gain the U+10300 Old Italic note + `font-noto-sans-old-italic` cask
+  beside the ogham/coptic entries (CEIPoM script column + ItAnt lang
+  tags + kaikki-Umbrian headwords all land in this block).
+- Lexicon_ItAnt (OntoLex-lemon TTL sibling): v2, journaled — first RDF
+  dictionary-format decision deferred (owner-gated 2026-07-18).
+- Registry `enabled: false`, sync_policy manual.
+
+## P29-3 · LexLep + TIR — the Vienna wiki family  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+The ogham precedent: both wikis' own Project:Terms-of-Use pages grant
+CC BY-SA 3.0 + GFDL (fetched verbatim via api.php 2026-07-18) while the
+LexLep footer says BY-NC-SA and both preambles say "scientific use
+only" → ingest at `nc`-conservative NOW; licensing email №17 (queued,
+owner sends) relabels to attribution later via P10-4 override
+mechanics. NEW **wiki-family parser** (MediaWiki api.php: page dumps
+per category; the two sites share templates and machinery — ONE family,
+TWO sources).
+
+- **lexlep** (lexlep.univie.ac.at, Stifter/Salomon/Braun): Lepontic +
+  Cisalpine Gaulish. Census verbatim: Inscription 628 · Word 202 ·
+  Object 516 · Site 441 · Morpheme 42 · Character 1475 · Reference
+  3544. Documents = inscriptions; the **202-word etymological lexicon
+  → dictionary shelf row** (`lep`); sites/objects → axis places and
+  facets as the data supports.
+- **tir** (tir.univie.ac.at, Schumacher/Salomon/Kluge/Bajc/Braun):
+  Raetic (`xrr`) corpus of record, actively updated. Census:
+  Inscription 155 · Object 389 · Site 294 · Word 11 · Character 926.
+- Respect the wikis: throttled fetches, sync_policy manual, cache
+  pages under canonical (the fetch analogue conventions).
+- Language dossiers for `lep`/`xrr` with family lanes (Celtic /
+  unclassified-Tyrsenian? — record what scholarship says, honestly).
+- Registry `enabled: false` both.
+
+SHIPPED (2026-07-18, worktree; sha in worklog). CENSUS VERDICTS from the
+design probe (api.php categoryinfo, ground truth): the brief's advertised
+counts were LABEL-SHUFFLED — lexlep actual: Inscription 494 (+ subcat
+Coin) · Word 628 · Object 419 · Site 134 · Morpheme 202 · Character 34 ·
+Reference 1,475 (the brief's "628 inscriptions" is the Word category; the
+lexicon is 628 words, not 202 — 202 is Morpheme); tir actual: Inscription
+389 · Word 155 · Object 294 · Site 82 · Character 37 · Reference 926 (the
+brief's "155 inscriptions" is the Word category). THREE registry rows,
+not two: content_kind is one closed routing per adapter, so lexlep's two
+grains are `lexlep` (:passages) + `lexlep-words` (:dictionary), beside
+`tir` — the aes/aed precedent. Reading grammar deciphered against the
+wiki's own HTML rendering: " / " line separator, "A!B" tokens (B = the
+marked scholarly form = passage text; A = the Word-page link form →
+passage "words" annotations), literal `space` = word divider, `unknown`
+reading → metadata-only document (the ogham path). V2 JOURNALED:
+tir-words (155 {{word}} pages, same parser — real content, e.g. aχvil ↔
+Etr. acvil per Rix 1998), lexlep Morpheme pages (202),
+Character/Reference categories, print sigla PID/IR/MLR/Mancini,
+reading→Word-page edges (annotations already carry the link forms).
+OWNER QUEUE:
+- `bin/nabu sync lexlep` → eyeball `show urn:nabu:lexlep:bi-8` + 5
+  random, flip; `bin/nabu sync lexlep-words` → `define --lang lep`
+  eyeball, flip; `bin/nabu sync tir` → `show urn:nabu:tir:bz-10.1` + 5
+  random, flip.
+- Language dossiers once live: `nabu ingest --shelf language lep` (name
+  Lepontic, family "Celtic < Indo-European"), `--shelf language xcg`
+  (Cisalpine Gaulish, same lane), `--shelf language xrr` (name Raetic,
+  family honest per scholarship: "Tyrsenian (with Etruscan and Lemnian;
+  Rix 1998) — non-Indo-European", context from the TIR main page).
+- Licensing email №17 (queued): on reply, relabel lexlep/lexlep-words/
+  tir license_class in one commit (P10-4 mechanics, no urns change).
+
+## P29-4 · I.Sicily — the epigraphy of ancient Sicily  [tier: fable] [status: dispatched 2026-07-18] [deps: —]
+
+github.com/ISicily/ISicily (Prag, Oxford; ERC Crossreads) — license
+field CC-BY-4.0 (gh api, 2026-07-18), pushed 2026-07-18, Zenodo DOI
+10.5281/zenodo.2556743. TEI EpiDoc, "the inscriptions of ancient
+Sicily, across all languages". **Existing EpiDoc family + GitFetch.**
+
+- ≥1,000 files by API cap (~4–5k expected) — census at fixture time
+  and report the real language mix. Majority Greek/Latin
+  (Hellenistic–Roman); the unique value: **Sicel `scx`, Elymian `xly`,
+  Sicilian Punic, Mamertine Oscan** — their only machine-readable home.
+- Overlap honesty: Latin items may intersect EDH Sicily — provenance-
+  distinct witnesses (standing doctrine); census the intersection,
+  promise nothing.
+- Dating/findspot TEI headers → axis extractor if present (census
+  first); I.Sicily ids + concordances → reference edges as the headers
+  support.
+- Language dossiers for scx/xly with honest family lanes.
+- Registry `enabled: false`, sync_policy manual (live repo).

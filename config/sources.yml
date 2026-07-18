@@ -531,6 +531,83 @@ ogham:
   # owner-fired.
   sync_policy: manual
 
+isicily:
+  adapter: Nabu::Adapters::Isicily
+  enabled: false   # P29-4: git clone ~253 MB (70 MB of XML + history);
+                   # CLAUDE.md checklist §6 — bin/nabu sync isicily,
+                   # eyeball nabu show urn:nabu:isicily:isic001620 (the
+                   # Mamertine Oscan meddices dedication, osc-Grek) and
+                   # urn:nabu:isicily:isic002954 (Sicel bare-orig letters)
+                   # plus 5 random records, then flip. Expected census at
+                   # commit db1a4959: 5,074 docs (776 metadata-only) /
+                   # ~15,370 passages; QUARANTINE FLOOR 46 (34 lb without
+                   # @n, 7 textparts without @n, 5 filename↔idno drift
+                   # records — all upstream defects, named in the parser
+                   # class note).
+  # I.Sicily — the inscriptions of ancient Sicily across all languages
+  # (Prag, Oxford / ERC Crossreads; github.com/ISicily/ISicily; Zenodo
+  # DOI 10.5281/zenodo.2556743). 5,120 EpiDoc records: grc 3,194 ·
+  # la 1,232 · Elymian xly 319 · Sicel scx 299 · Sicilian Punic xpu 67 ·
+  # Mamertine Oscan osc 4 · he 2 — the fragmentary Sicilian languages'
+  # only machine-readable home (largely metadata-only catalogue records:
+  # dated/placed headers, concordances). CC BY 4.0 in THREE concordant
+  # layers (repo licence.txt + GitHub license field + every record's
+  # <licence>) → attribution. TM/EDR/EDCS/PHI concordances → reference
+  # edges (producer isicily); the 8 explicit EDH concordances mint
+  # urn:nabu:edh:hd… cross-catalog edges (provenance-distinct witnesses,
+  # never deduped). origDate -custom Julian signed years + Pleiades/
+  # GeoNames findspots → AxisBuilder::IsicilyDates (~5,118 axis rows).
+  # The repo is LIVE (Crossreads lemmatization landing; pushed daily) →
+  # re-syncs are owner-fired.
+  sync_policy: manual
+
+itant:
+  adapter: Nabu::Adapters::Itant
+  enabled: false   # until the owner-fired first sync is eyeballed (checklist
+                   # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
+                   # nabu show urn:nabu:itant:oscan-2 (the Monte Vairano
+                   # curse tablet, pakis: heleviis. trebieís) beside its
+                   # -ita/-eng siblings, urn:nabu:itant:lepontic-1 beside
+                   # -dipl, and 5 random records, then flip). Expect 1,160
+                   # docs (dry-run censused on the full clone, 0 quarantines):
+                   # 500 interpretative + 9 -dipl + 641 translation siblings
+                   # (320 ita + 321 eng) + 10 metadata-only lost inscriptions.
+  # Corpus ItAnt (DigItAnt, PRIN 2017 CNR-ILC/UniFI; cite Murano et al.,
+  # JOCCH 16.3 (2023), 10.1145/3606703): 501 Oscan + 9 Lepontic EpiDoc
+  # records (2026-07-18 census). CC BY-NC-SA 4.0 in README + license.txt +
+  # every record's <licence> → nc (MCP default-excluded). Second witness
+  # beside CEIPoM's Oscan — deliberately unmerged, meeting at the shared
+  # tm: reference edges. RE-SYNC WATCH (journaled): the Venetic_/Faliscan_
+  # dirs are README-only ("available once the revision process is
+  # completed") — a later owner-fired sync picks them up; nothing promised.
+  # Lexicon_ItAnt (OntoLex-lemon TTL sibling repo) is v2, journaled — the
+  # first RDF dictionary-format decision is owner-gated (2026-07-18).
+  sync_policy: manual
+  # P29-2: ita + eng translation divs ride as -ita/-eng sibling documents
+  # where records carry prose (336 each upstream; the parser's own census
+  # decides, the riig -fr pattern). The eng divs' in-div CC BY-SA ref is
+  # recorded in the fixture README; siblings keep the source-level nc.
+  translations: true
+
+sabellic-loans:
+  adapter: Nabu::Adapters::SabellicLoans
+  enabled: false   # until the owner-fired first sync is eyeballed
+                   # (bin/nabu sync sabellic-loans — no network, vendored
+                   # copy + LocalFetch pin; eyeball `nabu etym rufus` for
+                   # the osc 𐌓𐌖𐌚𐌓𐌉𐌉𐌔 / xum 𐌓𐌖𐌚𐌓𐌖 loan pair and
+                   # `nabu define '𐌖𐌌𐌄𐌍'`, then flip). Expect 85 entries
+                   # across three shelves: sabellic-osc 48 / sabellic-xum
+                   # 11 / sabellic-sbv 26.
+  # P29-2 rider: Sabellic → Latin curated loan edges (the P17-3 borrowed
+  # pattern). config/sabellic_loans.yml IS the artifact — word lists from
+  # the en.wiktionary "Latin terms borrowed/derived from Oscan/Umbrian/
+  # Sabine" category pages (retrieved 2026-07-18; borrowed 23/6/13,
+  # derived supersets 48/11/26), etyma from each entry's own {{bor}}/
+  # {{der}} template, Old Italic script verbatim. CC BY-SA + GFDL →
+  # attribution. No upstream, no network: en.wiktionary is the cited
+  # provenance, re-curation is a repo change — sync_policy local.
+  sync_policy: local
+
 local-source:
   adapter: Nabu::Adapters::LocalSource
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
@@ -773,6 +850,153 @@ aed:
   # urn:nabu:dict:aed:<lemmaID> is exactly what an AES annotation
   # predicts. Upstream is a 2019 frozen export with occasional edits:
   # re-fetch is an owner decision.
+  sync_policy: manual
+
+ceipom:
+  adapter: Nabu::Adapters::Ceipom
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6): bin/nabu sync ceipom — five FileFetch
+                   # GETs off Zenodo record 6475427 (texts/sentences/
+                   # tokens/analysis/links CSVs, 16.8 MB, UTF-16). Expect
+                   # 3,871 docs / 5,303 passages (3,875 texts minus the 4
+                   # sentence-less skips; every sentence belongs to a held
+                   # text) and 3,630 tm: reference edges. Eyeball
+                   # nabu show urn:nabu:ceipom:2 (the Fibula Praenestina),
+                   # urn:nabu:ceipom:995 (the Iguvine Tables, 688
+                   # sentences with tablet sections), `nabu links
+                   # urn:nabu:ceipom:2` (tm:256173) + 5 random passages,
+                   # check dated/placed picks up 3,867 ceipom rows (3
+                   # undated · 10 unplaced · 1 invalid inverted-range
+                   # residues) at the next rebuild, then flip.
+  # P29-1: CEIPoM — Corpus of the Epigraphy of the Italian Peninsula in
+  # the 1st Millennium BCE (Reuben Pitts, KU Leuven; Zenodo 6475427 v1.3,
+  # 2022-04-21, concept DOI 10.5281/zenodo.4759134). 3,875 pre-Roman-Italy
+  # texts / 5,303 sentences: Latin 1,834 (incl. Faliscan → xfa), Oscan 902,
+  # Messapic 591 (cms), Venetic 411 (xve), Umbrian 68 (xum — incl. the
+  # Iguvine Tables), Old Sabellic 59 (spx), Greek 10. License field
+  # cc-by-sa-4.0 → attribution (share-alike rider recorded in 02-sources).
+  # Five UTF-16LE(BOM) CSVs — the flat-CSV encoding first. Dependency
+  # tokens + analysis ride annotations; the analysis Lemma column is an
+  # OPAQUE ID (no citation forms in the deposit) → lemma_id verbatim,
+  # NO passage_lemmas minted (honest; the Classical_Latin_equivalent
+  # lemma bridge is journaled v2). Trismegistos links → tm: reference
+  # edges (producer ceipom). Zenodo versions are immutable — a new
+  # version is a NEW record id, so this deposit can never drift:
+  sync_policy: frozen
+# P29-0: the Etruscan pair — the OpenEtruscan corpus + the Larth ETP
+# glossary (posture attribution throughout; the Larth provenance caveat
+# dissolved 2026-07-14 when upstream added LICENSE CC BY 4.0 on owner
+# request). The kaikki ett extract rides the wiktionary-recon row above
+# (no registry change — the P25-2 precedent).
+open-etruscan:
+  adapter: Nabu::Adapters::OpenEtruscan
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync open-etruscan — two
+                   # FileFetch GETs, 770,613 B Zenodo CSV + 302,495 B Larth
+                   # findspots ≈ 1.0 MB; expect 6,248 docs — 6,094 clean +
+                   # 154 needs_review — plus 1,798 -en siblings, 319
+                   # ocr_failed skipped by rule; eyeball
+                   # nabu show urn:nabu:open-etruscan:cr-2.20 --parallel,
+                   # `nabu search puce` landing on the transliteration
+                   # layer, and 5 random inscriptions, then flip. Expect
+                   # `dated/placed` to pick up ~304 dated + ~396 placed
+                   # rows at the next rebuild, 3 year-0 bounds counted
+                   # invalid.)
+  # OpenEtruscan — Etruscan Machine Learning Corpus (Zenodo 20075836
+  # v1.0.0, 2026-05-07, cc-by-4.0; checked 2026-07-18: no v2 deposit —
+  # v1.0.0 is the only version under concept 20075835). 6,567 inscriptions
+  # (~71% Larth/Vico & Spanakis 2023, ~29% CIE Vol. I), quality-tagged;
+  # ocr_failed rows skipped by rule with discovery-skip accounting. The
+  # findspots sidecar (Larth Data/Etruscan.csv @ pinned commit daf49721)
+  # side-joins 456 city-tagged rows → document_axes places
+  # (AxisBuilder::OpenEtruscanDates; BCE-positive years sign-flipped
+  # there, fixture-pinned). Both artifacts sha256-pinned in the adapter —
+  # drift aborts pre-mutation (owner re-pin decision).
+  sync_policy: frozen
+  # P16-4: the trigram fragment index — inscriptions are the designed
+  # documentary scope; the indexed layer is the scholarly transliteration
+  # (text_normalized derives from it), so damaged-fragment queries speak
+  # Latin letters, not Old Italic codepoints.
+  fuzzy_index: true
+  # translation coverage 1,800/6,567 rows (censused at fixture time):
+  # -en sibling documents ride the same parse (the riig -fr shape). Same
+  # CC BY grant — no license override.
+  translations: true
+  # license_watch candidate (P16-5, owner decision): NOT wired — the
+  # Zenodo API record body carries volatile stats (downloads/views) and
+  # would false-alarm the sha compare (the diorisis figshare lesson); the
+  # record page is an SPA shell. The in-record license field re-reads at
+  # any real refetch, and the deposit is immutable.
+
+larth-etp:
+  adapter: Nabu::Adapters::LarthEtp
+  enabled: false   # flip after the owner-fired first sync + eyeball
+                   # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
+                   # GET; expect 1,122 entries; eyeball `nabu define avil`
+                   # (year), `nabu define acil` (the 643/644 homograph
+                   # pair) and 5 random entries, then flip).
+  # Larth ETP glossary — Data/ETP_POS.csv @ pinned commit daf49721
+  # (github.com/GianlucaVico/Larth-Etruscan-NLP, LICENSE CC BY 4.0
+  # re-verified 2026-07-18): 1,122 Etruscan vocabulary rows (952 certain +
+  # 59 uncertain translations, POS + grammatical categories) — the
+  # ETP/Wallace-project scholarly lineage, the SECOND Etruscan dictionary
+  # beside the kaikki ett extract. The sibling raw lists ETPWords/
+  # ETPNames/ETPSuff are the same material pre-merge — journaled, not
+  # ingested. Gold-join censused at fixture time: 649/992 distinct folded
+  # headwords attested in the OpenEtruscan corpus (65.4%), covering
+  # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
+  # occasionally → manual; a re-pin is an owner decision.
+lexlep:
+  adapter: Nabu::Adapters::Lexlep
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
+                   # 50-title api.php batches, minutes at the polite delay —
+                   # then eyeball nabu show urn:nabu:lexlep:bi-8 ("sipiu
+                   # koil[ ]ios", the Cerrione stela) and 5 random
+                   # inscriptions before flipping).
+  # P29-3: Lexicon Leponticum (lexlep.univie.ac.at, Stifter/Salomon/Braun
+  # et al.) — the digital edition of Cisalpine Celtic: 494 Inscription
+  # pages (+ 419 Objects / 134 Sites joined into facets, place and the
+  # date axis; api.php categoryinfo census 2026-07-18). NEW wiki-template
+  # family over Nabu::WikiFetch (MediaWiki api.php category crawl,
+  # revid-driven, UA-identified, throttled). LICENSE CONFLICT held at the
+  # restrictive reading: Project:Terms of use grants CC BY-SA 3.0 + GFDL
+  # but scopes "for scientific use only", and the wiki's own rightsinfo
+  # footer says CC BY-NC-SA 4.0 → class nc PENDING licensing email №17
+  # (queued, owner sends); relabel-on-reply, the P10-4 override mechanics.
+  # A living wiki → re-syncs are owner-fired.
+  sync_policy: manual
+
+lexlep-words:
+  adapter: Nabu::Adapters::LexlepWords
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync lexlep-words — 628 Word
+                   # pages — then eyeball nabu define uvamokozis / define
+                   # --lang xlp and 5 random entries before flipping).
+  # P29-3: LexLep's "Dictionary of Attested Forms" — the 628-word
+  # etymological lexicon of Lepontic / Cisalpine Gaulish (the packet
+  # brief's "202" was the Morpheme category, journaled v2) as the lep
+  # dictionary shelf row. SIBLING of lexlep: content_kind is one closed
+  # routing per adapter (aes/aed precedent), so the wiki's two grains are
+  # two rows sharing WikiFetch + wiki-template + the nc posture above.
+  sync_policy: manual
+
+tir:
+  adapter: Nabu::Adapters::Tir
+  enabled: false   # awaiting the owner-fired first real sync (CLAUDE.md
+                   # checklist §6: bin/nabu sync tir — ~770 pages — then
+                   # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
+                   # laþe?) and 5 random inscriptions before flipping).
+  # P29-3: Thesaurus Inscriptionum Raeticarum (tir.univie.ac.at,
+  # Schumacher/Salomon/Kluge/Bajc/Braun) — the Raetic (xrr, Tyrsenian per
+  # the wiki's own Main Page) corpus of record, actively edited: 389
+  # Inscription pages (+ 294 Objects / 82 Sites; api.php categoryinfo
+  # census 2026-07-18 — the brief's "155" was the Word category, journaled
+  # v2 as a tir-words sibling). Same wiki-template family and fetch path
+  # as lexlep. "Scientific use only" scoping over the CC BY-SA 3.0 + GFDL
+  # Terms-of-Use grant, empty rightsinfo footer → class nc PENDING
+  # licensing email №17; relabel-on-reply. Trismegistos sigla → tm:
+  # reference edges.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

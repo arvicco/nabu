@@ -5,14 +5,17 @@ require_relative "wiktionary_jsonl_parser"
 module Nabu
   module Adapters
     # The reconstruction shelf source (P14-1, architecture §12; extended
-    # P17-3, P25-2): English Wiktionary's reconstruction pseudo-languages —
-    # plus, since P25-2, three ATTESTED medieval Celtic languages — via the
-    # kaikki.org wiktextract extraction. ONE source shipping TEN
+    # P17-3, P25-2, P29-0, P29-1): English Wiktionary's reconstruction
+    # pseudo-languages — plus, since P25-2, ATTESTED languages — via the
+    # kaikki.org wiktextract extraction. ONE source shipping ELEVEN
     # dictionaries (Proto-Slavic sla-pro, Proto-Indo-European ine-pro,
     # Proto-Germanic gem-pro; P17-3 adds Proto-Balto-Slavic ine-bsl-pro,
     # Proto-West Germanic gmw-pro, Proto-Italic itc-pro, Proto-Indo-Iranian
     # iir-pro; P25-2 adds Old Irish sga, Middle Irish mga, Middle Welsh
-    # wlm), each its own JSONL through the SAME wiktionary-jsonl family
+    # wlm; P29-1 adds Umbrian xum — the CEIPoM rider, the only
+    # kaikki-served Italic corpus language; P29-0 adds Etruscan ett —
+    # whose descendants trees carry the Etruscan→Latin loan edges),
+    # each its own JSONL through the SAME wiktionary-jsonl family
     # as wiktionary-cu, with `reflexes: true`: the records' `descendants`
     # trees flatten into DictionaryReflex edges — the crosswalk that links
     # reconstructed headwords to attested in-catalog lemmas (`nabu etym`).
@@ -76,10 +79,10 @@ module Nabu
     class WiktionaryRecon < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "wiktionary-recon",
-        name: "Wiktionary reconstructions + attested Celtic — kaikki.org " \
+        name: "Wiktionary reconstructions + attested Celtic, Italic and Etruscan — kaikki.org " \
               "machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, " \
               "Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, " \
-              "Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh)",
+              "Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan)",
         license: "CC-BY-SA + GFDL (verbatim kaikki.org/dictionary/: \"This data is made available " \
                  "under the same licenses as Wiktionary - both CC-BY-SA and GFDL.\")",
         license_class: "attribution",
@@ -170,6 +173,33 @@ module Nabu
           url: "https://kaikki.org/dictionary/Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl",
           language: "wlm",
           title: "Wiktionary — Middle Welsh (kaikki.org extract)"
+        }.freeze,
+        # -- P29-1 rider (the CEIPoM Italic axis): Umbrian, the only
+        # kaikki-served Italic corpus language (500 records, 373 with
+        # etymology_text, 30 romanization stubs; 1.13 MB; census
+        # 2026-07-18). Attested, the P25-2 pattern verbatim; Old Italic
+        # headwords ride in real U+10300-block codepoints (𐌀𐌛𐌄𐌐𐌄𐌔).
+        "wiktionary-xum" => {
+          subdir: "umbrian",
+          filename: "kaikki.org-dictionary-Umbrian.jsonl",
+          url: "https://kaikki.org/dictionary/Umbrian/kaikki.org-dictionary-Umbrian.jsonl",
+          language: "xum",
+          title: "Wiktionary — Umbrian (kaikki.org extract)"
+        },
+        # -- P29-0 (the Etruscan axis; OpenEtruscan packet rider) --
+        # ATTESTED, the wiktionary-cu precedent again (no display
+        # asterisk; ett is real ISO 639-3). 493 records / 485 distinct
+        # words at fixture time (419 Old Italic-script headwords, 73
+        # romanization stubs), 179 with etymology_text; the descendants
+        # trees carry the Etruscan→Latin LOAN edges (11 lat edges, 8
+        # upstream-flagged borrowed: persōna, lanista, Carthāgō…) — the
+        # P17-3 borrowed machinery mints them with zero new code.
+        "wiktionary-ett" => {
+          subdir: "etruscan",
+          filename: "kaikki.org-dictionary-Etruscan.jsonl",
+          url: "https://kaikki.org/dictionary/Etruscan/kaikki.org-dictionary-Etruscan.jsonl",
+          language: "ett",
+          title: "Wiktionary — Etruscan (kaikki.org extract)"
         }.freeze
       }.freeze
 

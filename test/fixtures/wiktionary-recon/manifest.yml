@@ -1,9 +1,10 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All ten files are documented TRIMs (whole: false) of the upstream
-# extracts (235 of 28,736 lines total: 226 recon strata + P17-3 goldens
-# + 9 P25-2 Celtic lines; every kept line byte-verbatim), so a fresh GET
+# All eleven files are documented TRIMs (whole: false) of the upstream
+# extracts (239 of 29,229 lines total: 226 recon strata + P17-3 goldens
+# + 9 P25-2 Celtic lines + 4 P29-0 Etruscan lines; every kept line
+# byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
 # byte-compared. Re-apply the README extraction recipes after any
 # refresh. NOTE the upstream files are labelled DEPRECATED (wiktextract
@@ -53,3 +54,11 @@ files:
     url: https://kaikki.org/dictionary/Middle%20Welsh/kaikki.org-dictionary-MiddleWelsh.jsonl
     whole: false
     trim: 3 P25-2 lines retrieved 2026-07-17 (cant — cel-pro/PIE etymology with cy descendant; cam 1/cam 2 — etymology_number homographs) — 1,343,469 B -> 4,580 B; recipe in README.md
+  - path: kaikki.org-dictionary-Umbrian.jsonl
+    url: https://kaikki.org/dictionary/Umbrian/kaikki.org-dictionary-Umbrian.jsonl
+    whole: false
+    trim: 3 P29-1 lines retrieved 2026-07-18 (angla — plain noun form; tre — romanization stub; 𐌀𐌛𐌄𐌐𐌄𐌔 — Old Italic-script headword with itc-pro etymology + descendants) — 1,132,498 B -> 4,945 B; recipe in README.md
+  - path: kaikki.org-dictionary-Etruscan.jsonl
+    url: https://kaikki.org/dictionary/Etruscan/kaikki.org-dictionary-Etruscan.jsonl
+    whole: false
+    trim: 4 P29-0 lines retrieved 2026-07-18 (vetus — romanization stub; 𐌀𐌅𐌉𐌋 — unflagged la edge; 𐌘𐌄𐌓𐌔𐌖 — la persōna borrowed under a non-loan intermediate; 𐌋𐌀𐌍𐌉𐌔𐌕𐌀 — clean borrowed lanista) — 637,430 B -> ~11 KB; recipe in README.md

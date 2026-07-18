@@ -1,0 +1,38 @@
+id,raw_text,canonical_transliterated,canonical_italic,canonical_words_only,translation,year_from,year_to,intact_token_ratio,data_quality
+CIE 2609,𐌅𐌄:𐌐𐌖𐌊𐌄:𐌅,ve:puce:f,𐌅𐌄:𐌐𐌖𐌂𐌄:𐌚,ve puce f,,,,1.000,clean
+CIE 2615,𐌈𐌀𐌍𐌉𐌀:𐌐𐌖𐌋𐌅𐌍𐌄𐌉:𐌕𐌖𐌕𐌍𐌀𐌔𐌀,θania:pulfnei:tutnasa,𐌈𐌀𐌍𐌉𐌀:𐌐𐌖𐌋𐌚𐌍𐌄𐌉:𐌕𐌖𐌕𐌍𐌀𐌔𐌀,θania pulfnei tutnasa,,,,1.000,clean
+CIE 2616,IAN8VJV1 ANV+: VEA,IAN8VJV1 ANV+: VEA,,,,,,0.000,ocr_failed
+Cr 2.20,mi karkanas θahvna,mi karkanas θahvna,𐌌𐌉 𐌊𐌀𐌓𐌊𐌀𐌍𐌀𐌔 𐌈𐌀𐌇𐌅𐌍𐌀,mi karkanas θahvna,I (am) the container of Karkana,675.0,650.0,1.000,clean
+Ve 6.2,mi<ni> mamarce zinace,mi<ni> mamarce zinace,𐌌𐌉<𐌍𐌉> 𐌌𐌀𐌌𐌀𐌓𐌂𐌄 𐌆𐌉𐌍𐌀𐌂𐌄,mamarce zinace,Mamarce made me.,650.0,625.0,0.667,clean
+ETP 313,arnθ • vipina • cuφre,arnθ • vipina • cuφre,𐌀𐌓𐌍𐌈 • 𐌅𐌉𐌐𐌉𐌍𐌀 • 𐌂𐌖𐌘𐌓𐌄,arnθ vipina cuφre,,100.0,0.0,1.000,clean
+ETP 240,vel • ber comsn a • velosa {i},vel • ber comsn a • velosa {i},𐌅𐌄𐌋 • 𐌁𐌄𐌓 𐌂𐌏𐌌𐌔𐌍 𐌀 • 𐌅𐌄𐌋𐌏𐌔𐌀 {𐌉},vel ber comsn a velosa,"Vel Percomsna, the (son) of Vel.",100.0,0.0,0.833,clean
+ETP 192,cleusinas : laris : larisal : clan,cleusinas laris larisal clan,𐌂𐌋𐌄𐌖𐌔𐌉𐌍𐌀𐌔 𐌋𐌀𐌓𐌉𐌔 𐌋𐌀𐌓𐌉𐌔𐌀𐌋 𐌂𐌋𐌀𐌍,cleusinas laris larisal clan,"Laris Cleusinas, son of Laris.",275.0,250.0,1.000,clean
+CIE 262,IИAƧUƧVƎMVAJ IAN.ƆMƎJ,InAsUsVeMVAJ IAN.cMeJ,,,,,,0.000,needs_review
+"CIE 52a, b","--- Lamina A ---
+1. v.supni astnei
+2. v.supni larθi puinei X
+3. v.supni velanial
+4. v.supni ceicnal
+5. l.velusna felmviai
+6. v.velusna v calati
+7. v.puina armnial
+8. l.larθi fulnei
+9. pultace ceicna icapuni
+10. l.larθi θepza
+11. cure malave pultace
+12. l??? ist? v? v? θa
+13. vlcae fulθuna
+14. l.ultace (?)
+--- Lamina B ---
+1. acep fulθuna mazutini
+2. l.larθi θa armne
+3. alθruz fulθuna
+4. l.larθi
+5. a.velani puine
+6. a.velusna
+7. fasta l.larθi
+8. laθi plavi urmte
+9. l.armne
+10. masve ceicnei
+11. qaves etra qvi
+12. θusce θimv larθi paqe",--- Lamina A ---\n1. v.supni astnei\n2. v.supni larθi puinei X\n3. v.supni velanial\n4. v.supni ceicnal\n5. l.velusna felmviai\n6. v.velusna v calati\n7. v.puina armnial\n8. l.larθi fulnei\n9. pultace ceicna icapuni\n10. l.larθi θepza\n11. cure malave pultace\n12. l??? ist? v? v? θa\n13. vlcae fulθuna\n14. l.ultace (?)\n--- Lamina B ---\n1. acep fulθuna mazutini\n2. l.larθi θa armne\n3. alθruz fulθuna\n4. l.larθi\n5. a.velani puine\n6. a.velusna\n7. fasta l.larθi\n8. laθi plavi urmte\n9. l.armne\n10. masve ceicnei\n11. qaves etra qvi\n12. θusce θimv larθi paqe,,,,,,0.000,ocr_failed

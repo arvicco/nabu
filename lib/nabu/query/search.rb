@@ -66,7 +66,7 @@ module Nabu
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        hits = fts_hits(match_expression(variants), inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
+        hits = fts_hits_with_literal_fallback(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -83,6 +83,28 @@ module Nabu
       end
 
       private
+
+      # The user's text passes through as FTS5 syntax first (power queries —
+      # AND/OR/NEAR/"phrases" — keep working verbatim). When FTS5 rejects it
+      # (owner report 2026-07-18: `search --help` crashed with a raw fts5
+      # backtrace; so does any hyphen-leading or unbalanced-quote query),
+      # retry ONCE with every token literal-quoted (internal quotes doubled
+      # — the escaped form cannot syntax-error), so hyphenated words and
+      # option-looking strings just search. Non-fts errors re-raise.
+      def fts_hits_with_literal_fallback(variants, inner_limit:, urn: nil)
+        fts_hits(match_expression(variants), inner_limit: inner_limit, urn: urn)
+      rescue Sequel::DatabaseError => e
+        raise unless e.message.match?(/fts5|unterminated string|no such column/)
+
+        literal = variants.map { |variant| literal_expression(variant) }
+        fts_hits(match_expression(literal), inner_limit: inner_limit, urn: urn)
+      end
+
+      # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal
+      # double quotes doubled per the FTS5 string rules.
+      def literal_expression(text)
+        text.split.map { |token| %("#{token.gsub('"', '""')}") }.join(" ")
+      end
 
       # One variant passes through untouched (preserving the user's own FTS
       # syntax exactly as before); multiple variants are each parenthesized

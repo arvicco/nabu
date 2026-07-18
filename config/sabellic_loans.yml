@@ -1,0 +1,224 @@
+# Sabellic → Latin curated loan rows (P29-2 rider; the P17-3 `borrowed`
+# pattern). Curated 2026-07-18 from the en.wiktionary category pages —
+# member lists fetched via the MediaWiki API, etyma read from each Latin
+# entry's own {{bor|la|…}}/{{der|la|…}} etymology template (Old Italic
+# script forms verbatim; a leading * marks a reconstructed etymon).
+# relation: borrowed = the lemma sits in the "Latin terms borrowed from X"
+# category (an explicit loan → the reflex edge's borrowed flag reads true);
+# derived = only in the "Latin terms derived from X" superset (indirect or
+# unspecified transmission → borrowed false, the P17-3 no-marker semantics).
+# Category counts at retrieval: Oscan 23 borrowed / 48 derived · Umbrian
+# 6 / 11 · Sabine 13 / 26.
+# License: CC BY-SA 4.0 + GFDL (the Wiktionary dual grant).
+
+retrieved: "2026-07-18"
+sources:
+  osc:
+    name: Oscan
+    borrowed_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_borrowed_from_Oscan"
+    derived_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_derived_from_Oscan"
+    words:
+      - latin: "-eius"
+        relation: derived
+      - latin: "Abella"
+        relation: borrowed
+      - latin: "Arpinum"
+        relation: derived
+      - latin: "Arrius"
+        relation: borrowed
+        etymon: "*𐌀𐌓𐌓𐌉𐌄𐌔"
+        translit: "*Arries"
+      - latin: "Atella"
+        relation: derived
+        etymon: "𐌀𐌃𐌄𐌓𐌋"
+      - latin: "Calavius"
+        relation: borrowed
+        etymon: "𐌊𐌀𐌋𐌀𐌅𐌉𐌉𐌔"
+      - latin: "Casinum"
+        relation: derived
+      - latin: "Flusor"
+        relation: borrowed
+        etymon: "𐌅𐌋𐌖𐌖𐌔𐌀"
+      - latin: "Gavius"
+        relation: derived
+      - latin: "Herennius"
+        relation: derived
+      - latin: "Hirpini"
+        relation: derived
+      - latin: "Italia"
+        relation: derived
+        etymon: "𐌅𐌝𐌕𐌄𐌋𐌉𐌞"
+      - latin: "Larinum"
+        relation: borrowed
+      - latin: "Lucania"
+        relation: derived
+      - latin: "Mamurra"
+        relation: derived
+      - latin: "Marius"
+        relation: derived
+      - latin: "Monnius"
+        relation: derived
+      - latin: "Mons Casinus"
+        relation: borrowed
+      - latin: "Nola"
+        relation: derived
+        etymon: "𐌍𐌞𐌅𐌋𐌞"
+      - latin: "Pescennius"
+        relation: derived
+      - latin: "Pompeii"
+        relation: borrowed
+        etymon: "*pompe"
+      - latin: "Pompeius"
+        relation: borrowed
+      - latin: "Pompeji"
+        relation: borrowed
+        etymon: "*pompe"
+      - latin: "Pomponius"
+        relation: derived
+        etymon: "*pompe"
+      - latin: "Pontius"
+        relation: derived
+        etymon: "𐌐𐌏𐌍𐌕𐌖𐌔"
+      - latin: "Salernum"
+        relation: derived
+      - latin: "Salvius"
+        relation: borrowed
+        etymon: "𐌔𐌀𐌋𐌀𐌅𐌉𐌉𐌔"
+      - latin: "Statius"
+        relation: borrowed
+        etymon: "𐌔𐌕𐌀𐌀𐌕𐌉𐌔"
+      - latin: "Taburnus"
+        relation: borrowed
+      - latin: "Tifernus"
+        relation: borrowed
+      - latin: "Vesuvius"
+        relation: derived
+        etymon: "𐌚𐌄𐌔𐌚"
+      - latin: "Vibius"
+        relation: borrowed
+        etymon: "𐌅𐌉𐌁𐌉𐌔"
+      - latin: "bassus"
+        relation: borrowed
+      - latin: "brutus"
+        relation: borrowed
+      - latin: "bufo"
+        relation: derived
+      - latin: "caria"
+        relation: borrowed
+      - latin: "heries"
+        relation: borrowed
+        etymon: "heriam"
+      - latin: "lumbus"
+        relation: derived
+      - latin: "mamphur"
+        relation: derived
+      - latin: "mephitis"
+        relation: derived
+        etymon: "𐌌𐌄𐌚𐌉𐌞"
+      - latin: "pila"
+        relation: derived
+      - latin: "prope"
+        relation: borrowed
+      - latin: "rosa"
+        relation: derived
+      - latin: "rufus"
+        relation: borrowed
+        etymon: "𐌓𐌖𐌚𐌓𐌉𐌉𐌔"
+      - latin: "salaputium"
+        relation: borrowed
+      - latin: "supparum"
+        relation: derived
+      - latin: "tofus"
+        relation: borrowed
+      - latin: "volaemum"
+        relation: borrowed
+  xum:
+    name: Umbrian
+    borrowed_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_borrowed_from_Umbrian"
+    derived_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_derived_from_Umbrian"
+    words:
+      - latin: "Alfius"
+        relation: derived
+      - latin: "Iguvium"
+        relation: borrowed
+        etymon: "𐌉𐌊𐌖𐌅𐌉𐌖𐌌"
+      - latin: "Propertius"
+        relation: derived
+      - latin: "Vibius"
+        relation: borrowed
+      - latin: "gumia"
+        relation: borrowed
+        etymon: "𐌊𐌖𐌌𐌉𐌀𐌚"
+      - latin: "iuniperus"
+        relation: derived
+      - latin: "lumbus"
+        relation: derived
+      - latin: "monedula"
+        relation: derived
+      - latin: "omentum"
+        relation: borrowed
+        etymon: "𐌖𐌌𐌄𐌍"
+      - latin: "robus"
+        relation: borrowed
+      - latin: "rufus"
+        relation: borrowed
+        etymon: "𐌓𐌖𐌚𐌓𐌖"
+  sbv:
+    name: Sabine
+    borrowed_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_borrowed_from_Sabine"
+    derived_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_derived_from_Sabine"
+    words:
+      - latin: "Claudius"
+        relation: derived
+      - latin: "Crepuscus"
+        relation: borrowed
+      - latin: "Cures"
+        relation: derived
+      - latin: "Gavius"
+        relation: derived
+      - latin: "Lista"
+        relation: derived
+      - latin: "Marius"
+        relation: derived
+      - latin: "Nero"
+        relation: borrowed
+        etymon: "nero"
+      - latin: "Paeligni"
+        relation: derived
+      - latin: "Pontius"
+        relation: derived
+      - latin: "Quirinus"
+        relation: derived
+      - latin: "Quirites"
+        relation: borrowed
+      - latin: "Terentius"
+        relation: borrowed
+      - latin: "Tibur"
+        relation: borrowed
+        etymon: "teba"
+      - latin: "Volesus"
+        relation: borrowed
+      - latin: "catanum"
+        relation: borrowed
+      - latin: "creperum"
+        relation: borrowed
+      - latin: "crepusculum"
+        relation: derived
+      - latin: "hirpex"
+        relation: derived
+      - latin: "hirpus"
+        relation: borrowed
+      - latin: "iuniperus"
+        relation: borrowed
+      - latin: "obsidianus"
+        relation: derived
+      - latin: "quiris"
+        relation: derived
+      - latin: "similixula"
+        relation: borrowed
+      - latin: "spurium"
+        relation: borrowed
+      - latin: "strena"
+        relation: borrowed
+      - latin: "teba"
+        relation: derived
