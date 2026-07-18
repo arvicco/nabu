@@ -102,6 +102,24 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  def test_display_path_defaults_under_config
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config", "display.yml"), config.display_path
+    end
+  end
+
+  def test_display_path_override_resolves_against_root
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        paths:
+          display: policies/terminal.yml
+      YAML
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "policies", "terminal.yml"), config.display_path
+    end
+  end
+
   def test_catalog_path_is_under_db_dir
     Dir.mktmpdir do |root|
       config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
