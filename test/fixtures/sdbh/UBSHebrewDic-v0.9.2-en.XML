@@ -1,0 +1,557 @@
+<?xml version="1.0"?>
+<Lexicon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Lexicon_Entry Id="000001000000000" Lemma="אֵב" Version="5" HasAramaic="true" InLXX="false" AlphaPos="א">
+    <StrongCodes>
+      <Strong>H0003</Strong>
+      <Strong>A0004</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="000001001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun m</PartOfSpeech>
+        </PartsOfSpeech>
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word />
+          </RelatedLemma>
+        </RelatedLemmas>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="000001001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="001002004" Source="" SourceCode="">Vegetation</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2020-05-18 16:00:24" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= part of a plant or tree that is typically surrounded by brightly colored petals and will eventually develop into a fruit</DefinitionShort>
+                <Glosses>
+                  <Gloss>blossom</Gloss>
+                  <Gloss>flower</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02200601100016</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+          <LEXMeaning Id="000001001002000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="002001001056" Source="" SourceCode="">Stage</LEXDomain>
+            </LEXDomains>
+            <LEXCollocations>
+              <LEXCollocation>בְּאֵב</LEXCollocation>
+            </LEXCollocations>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-03-19 12:46:16" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= state in which a plant or tree has developed blossoms</DefinitionShort>
+                <Glosses>
+                  <Gloss>blossom</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>01800801200006</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+          <LEXMeaning Id="000001001003000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="001002008003004" Source="" SourceCode="">Fruits</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2020-05-18 16:00:24" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= part of a plant or tree that carries the seed and is often edible</DefinitionShort>
+                <Glosses>
+                  <Gloss>fruit</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02700400900008</LEXReference>
+              <LEXReference>02700401100032</LEXReference>
+              <LEXReference>02700401800010</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="000002000000000" Lemma="אַב" Version="5" HasAramaic="true" InLXX="false" AlphaPos="א">
+    <StrongCodes>
+      <Strong>A0002</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="000002001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun m</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="000002001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="001002007012" Source="" SourceCode="">Relatives</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-12-31 13:15:24" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= direct male progenitor; ► who normally provides protection, care, instruction, and discipline; ≈ is usually regarded with respect and associated with wisdom, security, and comfort</DefinitionShort>
+                <Glosses>
+                  <Gloss>father</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02700500200032</LEXReference>
+              <LEXReference>02700501100026</LEXReference>
+              <LEXReference>02700501100054</LEXReference>
+              <LEXReference>02700501100068</LEXReference>
+              <LEXReference>02700501300052</LEXReference>
+              <LEXReference>02700501800034</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+          <LEXMeaning Id="000002001002000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="001002007012" Source="" SourceCode="">Relatives</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-12-31 13:15:24" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= indirect male progenitor</DefinitionShort>
+                <Glosses>
+                  <Gloss>forefather</Gloss>
+                  <Gloss>ancestor</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>01500401500014</LEXReference>
+              <LEXReference>01500501200010</LEXReference>
+              <LEXReference>02700202300006</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="000095000000000" Lemma="אָגוּר" Version="5" HasAramaic="false" InLXX="false" AlphaPos="א">
+    <StrongCodes>
+      <Strong>H0094</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="000095001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>name</PartOfSpeech>
+        </PartsOfSpeech>
+        <MeaningsOfName>
+          <MeaningOfName LanguageCode="en" />
+        </MeaningsOfName>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="000095001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="003001007" Source="" SourceCode="">Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-08-23 15:55:31" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= man; ◄ son of {L:Jakeh&lt;SDBH:יָקֶה&gt;}; ► wise man</DefinitionShort>
+                <Glosses>
+                  <Gloss>Agur</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02003000100004</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="000856000000000" Lemma="בֹּהוּ" Version="5" HasAramaic="false" InLXX="false" AlphaPos="ב">
+    <StrongCodes>
+      <Strong>H0922</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Enio R. Mueller</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="000856001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun m</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="000856001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="002002002006" Source="" SourceCode="">Non-Exist</LEXDomain>
+            </LEXDomains>
+            <LEXSynonyms>
+              <LEXSynonym>תֹּהוּ</LEXSynonym>
+            </LEXSynonyms>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-12-31 13:42:56" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= location that is devoid of any life and without any structure or order; ≈ used exclusively in a word pair together with its rhyming synonym {L:תֹּהוּ&lt;SDBH:תֹּהוּ&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>emptiness</Gloss>
+                  <Gloss>wasteland</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>00100100200014</LEXReference>
+              <LEXReference>02303401100038</LEXReference>
+              <LEXReference>02400402300018</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="002328000000000" Lemma="חַלָּשׁ" Version="5" HasAramaic="false" InLXX="false" AlphaPos="ח">
+    <StrongCodes>
+      <Strong>H2523</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="002328001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun m</PartOfSpeech>
+        </PartsOfSpeech>
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>חלשׁ</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="002328001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="002001001059" Source="" SourceCode="">Strong</LEXDomain>
+            </LEXDomains>
+            <LEXSynonyms>
+              <LEXSynonym>חשׁל</LEXSynonym>
+            </LEXSynonyms>
+            <LEXAntonyms>
+              <LEXAntonym>גִּבֹּור</LEXAntonym>
+            </LEXAntonyms>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2018-01-15 04:51:43" LastEditedBy="administrator">
+                <DefinitionLong />
+                <DefinitionShort>= state in which humans have run out of physical strength</DefinitionShort>
+                <Glosses>
+                  <Gloss>weak</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02900401000020</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="002346000000000" Lemma="חָמֹוץ" Version="5" HasAramaic="false" InLXX="false" AlphaPos="ח">
+    <StrongCodes>
+      <Strong>H2541</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>02300101700012</Reference>
+        </References>
+        <Content>MT HOTTP-A RSV NJB | NIV NJPS NRSV REB GNT CEV {L:חָמוּץ&lt;SDBH:חָמוּץ&gt;} "oppressed"</Content>
+      </Note>
+    </Notes>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="002346001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun m</PartOfSpeech>
+        </PartsOfSpeech>
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>חמץ</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="002346001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="002003003022" Source="" SourceCode="">Unsafe</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2010-04-19 10:08:29" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses>
+                  <Gloss>oppressor</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02300101700012{N:001}</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003359000000000" Lemma="כִּנְעָה" Version="3" HasAramaic="false" InLXX="false" AlphaPos="כ">
+    <StrongCodes>
+      <Strong>H3666</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003359001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun f</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003359001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="001" Source="" SourceCode="">Objects</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2016-12-21 16:39:57" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= a bundled quantity of belongings to be carried while on a journey</DefinitionShort>
+                <Glosses>
+                  <Gloss>load</Gloss>
+                  <Gloss>pack</Gloss>
+                  <Gloss>bundle</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02401001700008</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003363000000000" Lemma="כנף" Version="5" HasAramaic="false" InLXX="false" AlphaPos="כ">
+    <StrongCodes>
+      <Strong>H3670</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003363001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>כָּנָף</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003363001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="002002001010" Source="" SourceCode="">Hide</LEXDomain>
+            </LEXDomains>
+            <LEXForms>
+              <LEXForm>verb nif</LEXForm>
+            </LEXForms>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2009-05-04 13:59:29" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= action by which deities make themselves unavailable</DefinitionShort>
+                <Glosses>
+                  <Gloss>to hide oneself</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>02303002000024{N:001}</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003803000000000" Lemma="מֹופַעַת" Version="3" HasAramaic="false" InLXX="false" AlphaPos="מ">
+    <StrongCodes />
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>02404802100030</Reference>
+        </References>
+        <Content>{A:MT-K} | {A:MT-Q} מֵיפַעַת</Content>
+      </Note>
+    </Notes>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003803001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>name</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings />
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="006318000000000" Lemma="צְפַתָה" Version="5" HasAramaic="false" InLXX="false" AlphaPos="צ">
+    <StrongCodes>
+      <Strong>6859</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="006318001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>name</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="006318001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="003001008" Source="" SourceCode="">Names of Landforms</LEXDomain>
+            </LEXDomains>
+            <LEXCollocations>
+              <LEXCollocation>גֵּיא צְפַתָה</LEXCollocation>
+            </LEXCollocations>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2016-02-18 16:08:29" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= valley; ◄ located near {L:Mareshah&lt;SDBH:מָרֵשָׁה&gt;} in the {L:Shephelah&lt;SDBH:שְׁפֵלָה&gt;}; ► location where {L:Asa&lt;SDBH:אָסָא&gt;} fought with {L:Zerah&lt;SDBH:זֶרַח&gt;} the Cushite</DefinitionShort>
+                <Glosses>
+                  <Gloss>Valley of Zephathah</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>01401400900022</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="006756000000000" Lemma="רְחֹבֹת עִיר" Version="5" HasAramaic="false" InLXX="false" AlphaPos="ר">
+    <StrongCodes>
+      <Strong>Reinier de Blois</Strong>
+    </StrongCodes>
+    <Authors />
+    <Contributors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="006756001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>name</PartOfSpeech>
+        </PartsOfSpeech>
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="006756001001000" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain Code="003001010" Source="" SourceCode="">Names of Locations</LEXDomain>
+            </LEXDomains>
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-12-14 20:33:37" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= town; ◄ in Mesopotamia; ► built by {L:Nimrod&lt;SDBH:נִמְרֹד&gt;} after the {L:flood&lt;SDBH:מַבּוּל&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Rehoboth-Ir</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXReferences>
+              <LEXReference>00101001100028</LEXReference>
+            </LEXReferences>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+</Lexicon>
