@@ -145,8 +145,13 @@ module Nabu
       # corpus-wide, not per-source, so it must not live inside a source's run
       # row (an indexing failure surfaces as its own error, never a falsified
       # run). A full rebuild per successful source is simple and correct;
-      # incremental per-source indexing is the future optimization.
-      indexed = reindex!
+      # incremental per-source indexing is the future optimization — EXCEPT
+      # for index-inert grains (owner defect 2026-07-18: a two-file
+      # local-notes sync paid a 4.3M-passage rebuild): a source whose
+      # content kind mints neither passages nor dictionary entries
+      # (:notes/:language/:source) cannot change the index, so it skips
+      # the rebuild honestly (indexed: nil — the CLI omits the fragment).
+      indexed = index_inert?(entry) ? nil : reindex!
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -209,6 +214,17 @@ module Nabu
     # (now-updated) catalog into the fulltext db. Opens its own short-lived
     # connection to config.fulltext_path so callers need not thread a handle
     # through. Returns the passage count.
+    # Grains that never touch the fulltext/lemma/trigram/alignment indexes:
+    # dossier-class shelves and owner notes. Everything minting passages or
+    # dictionary entries (the trigram feed) still rebuilds.
+    INDEX_INERT_KINDS = %i[notes language source].freeze
+
+    def index_inert?(entry)
+      INDEX_INERT_KINDS.include?(entry.adapter_class.content_kind)
+    rescue Nabu::Error
+      false
+    end
+
     def reindex!
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))

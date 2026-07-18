@@ -485,6 +485,34 @@ class SyncRunnerTest < Minitest::Test
     assert_empty runner.sync("breaker").warnings
   end
 
+  # --- index-inert grains skip the corpus-wide reindex (2026-07-18) ---------
+
+  class NotesKindAdapter < Nabu::Adapter
+    def self.manifest
+      Nabu::SourceManifest.new(id: "inert-notes", name: "Notes shelf", license: "own",
+                               license_class: "open", upstream_url: "file:///dev/null",
+                               parser_family: "notes")
+    end
+
+    def self.content_kind = :notes
+    def fetch(_workdir, **) = Nabu::FetchReport.new(sha: "x", fetched_at: Time.now)
+    def discover(_workdir) = []
+  end
+
+  def test_index_inert_source_skips_the_corpus_reindex
+    runner = make_runner(registry(entry("inert-notes", NotesKindAdapter, enabled: true)))
+    original = Nabu::Store::Indexer.method(:rebuild!)
+    Nabu::Store::Indexer.define_singleton_method(:rebuild!) do |**|
+      raise "a notes-grain sync must never rebuild the corpus index"
+    end
+    begin
+      outcome = runner.sync("inert-notes")
+      assert_nil outcome.indexed, "indexed: nil — the CLI omits the fragment"
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:rebuild!, original)
+    end
+  end
+
   # --- dictionary-shaped sources (P11-4) ------------------------------------
 
   def test_dictionary_source_routes_to_the_dictionary_loader

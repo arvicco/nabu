@@ -4378,7 +4378,7 @@ module Nabu
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored  " \
-          "indexed #{outcome.indexed} passages#{format_sync_references(outcome.references)}"
+          "#{"indexed #{outcome.indexed} passages" if outcome.indexed}#{format_sync_references(outcome.references)}"
       end
 
       # P19-4: the reference-edge tail for a local-shelf sync — silent when
@@ -4416,7 +4416,7 @@ module Nabu
           say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
         end
         say "  #{format_report('TOTAL', total_report(result))}"
-        say "  indexed #{result.indexed} passages"
+        say "  indexed #{result.indexed} passages" if result.indexed
         if result.axes
           say "  dated/placed #{result.axes.total} documents " \
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
