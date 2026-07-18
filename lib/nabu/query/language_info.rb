@@ -47,7 +47,7 @@ module Nabu
           codes[row.fetch(:language)][:documents] = row.fetch(:count) if row.fetch(:language)
         end
         if lemma_index?
-          @fulltext[Store::Indexer::LEMMA_TABLE].group_and_count(:language).each do |row|
+          gold_lemma_rows.group_and_count(:language).each do |row|
             codes[row.fetch(:language)][:lemma_rows] = row.fetch(:count)
           end
         end
@@ -74,7 +74,18 @@ module Nabu
       def lemma_rows(code)
         return 0 unless lemma_index?
 
-        @fulltext[Store::Indexer::LEMMA_TABLE].where(language: code).count
+        gold_lemma_rows.where(language: code).count
+      end
+
+      # The card's lemma line SAYS gold (P26-0): silver (automatic) rows are
+      # excluded so the label stays honest. A pre-tier index has no tier
+      # column — and no silver rows — so the unfiltered dataset is the same
+      # gold-only count.
+      def gold_lemma_rows
+        dataset = @fulltext[Store::Indexer::LEMMA_TABLE]
+        return dataset unless dataset.columns.include?(:tier)
+
+        dataset.where(tier: Store::Indexer::GOLD_TIER)
       end
 
       def shelves(code)

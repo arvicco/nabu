@@ -265,8 +265,17 @@ module Nabu
 
       # -- second signal: rare-lemma co-occurrence -----------------------------
 
-      # Passages sharing ≥2 of the anchor's RARE gold lemmas, rarity-weighted.
-      # Empty (one cheap query) unless the anchor carries gold lemmas.
+      # Passages sharing ≥2 of the anchor's RARE lemmas, rarity-weighted.
+      # Empty (one cheap query) unless the anchor carries lemmas.
+      #
+      # BOTH TIERS, deliberately (P26-4, the P26-0 journaled decision): the
+      # echo is a HEURISTIC DISCOVERY signal — candidate parallels the
+      # reader judges from the rendered text, never attestation counts — and
+      # the silver layer is what gives Greek literature lemma echoes at all
+      # (the Perseus editions carry no annotations; their Diorisis second
+      # editions do). Silver rows also IMPROVE the rarity estimate: a lemma
+      # gold-rare but corpus-common is genuinely undiagnostic, and the df
+      # now sees it (test-pinned).
       def lemma_echoes(anchor, lang:, license:, limit:)
         rare = rare_anchor_lemmas(anchor.fetch(:urn))
         return [] if rare.size < 2

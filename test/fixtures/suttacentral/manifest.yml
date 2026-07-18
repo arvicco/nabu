@@ -1,0 +1,49 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All data files are WHOLE upstream files (byte-verbatim), refetchable from
+# raw.githubusercontent.com on the `published` branch. _publication.json is a
+# documented SLICE (6 of 140 entries, entry blocks byte-identical) — a fresh
+# GET returns the full 140-entry file, so it is fetched for URL-liveness only.
+# adapter_test is null: the suttacentral adapter test pins fixture-exact
+# segment counts that a drifted upstream file would false-fail.
+source: suttacentral
+adapter_test: null
+retrieved: 2026-07-18
+files:
+  - path: root/pli/ms/sutta/sn/sn35/sn35.24_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pli/ms/sutta/sn/sn35/sn35.24_root-pli-ms.json
+    whole: true
+    trim: none (complete sutta file, copied whole)
+  - path: translation/en/sujato/sutta/sn/sn35/sn35.24_translation-en-sujato.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/sn/sn35/sn35.24_translation-en-sujato.json
+    whole: true
+    trim: none (complete translation file, copied whole)
+  - path: root/pli/ms/sutta/kn/dhp/dhp21-32_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pli/ms/sutta/kn/dhp/dhp21-32_root-pli-ms.json
+    whole: true
+    trim: none (complete range-stem file, copied whole)
+  - path: translation/en/sujato/sutta/kn/dhp/dhp21-32_translation-en-sujato.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/kn/dhp/dhp21-32_translation-en-sujato.json
+    whole: true
+    trim: none (complete translation file, copied whole)
+  - path: translation/en/suddhaso/sutta/kn/dhp/dhp21-32_translation-en-suddhaso.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/suddhaso/sutta/kn/dhp/dhp21-32_translation-en-suddhaso.json
+    whole: true
+    trim: none (complete alternate translation, copied whole)
+  - path: root/pra/pts/sutta/pdhp/pdhp1-13_root-pra-pts.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pra/pts/sutta/pdhp/pdhp1-13_root-pra-pts.json
+    whole: true
+    trim: none (complete Patna Dhammapada file, copied whole)
+  - path: translation/en/anandajoti/sutta/pdhp/pdhp1-13_translation-en-anandajoti.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/anandajoti/sutta/pdhp/pdhp1-13_translation-en-anandajoti.json
+    whole: true
+    trim: none (complete BY-SA translation, copied whole)
+  - path: root/pli/ms/xplayground/xplayground1_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pli/ms/xplayground/xplayground1_root-pli-ms.json
+    whole: true
+    trim: none (upstream sandbox file, copied whole)
+  - path: _publication.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/_publication.json
+    whole: false
+    trim: 6 of 140 publication entries kept (scpub1, scpub4, scpub7, scpub53, scpub64, scpub69); entry blocks byte-identical to upstream (304 KB -> 13 KB)

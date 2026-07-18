@@ -215,7 +215,8 @@ module Nabu
       fulltext = Store.connect_fulltext(@config.fulltext_path)
       Store::Indexer.rebuild!(catalog: @db, fulltext: fulltext,
                               alignments: AlignmentRegistry.load(@config.alignments_path),
-                              fuzzy_slugs: @registry.fuzzy_slugs)
+                              fuzzy_slugs: @registry.fuzzy_slugs,
+                              lemma_tiers: @registry.lemma_tiers)
     ensure
       fulltext&.disconnect
     end

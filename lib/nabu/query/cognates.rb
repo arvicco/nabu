@@ -41,6 +41,16 @@ module Nabu
     #   A word/roman double-fold cannot double-match either: the closure
     #   keys word and roman folds as distinct lemma_folded strings and a
     #   gold lemma carries exactly one folded form.
+    # - GOLD TIER ONLY (P26-4, the P26-0 journaled decision): cognates is
+    #   RECONSTRUCTION EVIDENCE — a witness word claims "this verse attests
+    #   a reflex of this root", and an automatic (silver) lemmatization is
+    #   not that claim. Both the witness lookup and the suppression df are
+    #   scoped to gold rows, matching ReflexRootsIndexer's gold-scoped
+    #   closure and stats (numerator and denominator agree). A silver
+    #   witness edition simply contributes no cognate evidence — honest
+    #   absence, exactly like a witness with no annotations at all. A
+    #   pre-tier index has no tier column and reads all-gold (the
+    #   borrowed_column? precedent).
     class Cognates
       # A caller-fixable problem (unknown work, unattested ref, index not
       # built): CLI/MCP turn the message into exit 1 / isError.
@@ -235,12 +245,13 @@ module Nabu
         finish_groups(raw, common, documents)
       end
 
-      # passage_urn => its gold-lemma index rows (language-filtered when
-      # --langs is active). Batched IN() — a whole-work query holds ~65k urns.
+      # passage_urn => its GOLD lemma index rows (language-filtered when
+      # --langs is active; silver rows are not reconstruction evidence —
+      # class note). Batched IN() — a whole-work query holds ~65k urns.
       def lemma_rows_for(hits, langs)
         rows = Hash.new { |hash, key| hash[key] = [] }
         hits.map { |hit| hit.fetch(:passage_urn) }.uniq.each_slice(URN_BATCH) do |batch|
-          dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(urn: batch)
+          dataset = gold_lemma_rows.where(urn: batch)
           dataset = dataset.where(language: langs) if langs
           dataset.select(:urn, :language, :lemma_folded, :lemma_raw, :surface_forms)
                  .each { |row| rows[row.fetch(:urn)] << row }
@@ -267,13 +278,15 @@ module Nabu
       end
 
       # The (language, lemma_folded) pairs the suppression judges common:
-      # corpus df ≥ max(floor, ratio × the language's gold passages).
+      # corpus GOLD df ≥ max(floor, ratio × the language's gold passages) —
+      # tier-scoped on both sides of the division (the stats table is
+      # gold-scoped too), so a silver flood can never re-judge a word common.
       def common_pairs(lemma_rows)
         totals = @fulltext[Store::ReflexRootsIndexer::STATS_TABLE].as_hash(:language, :gold_passages)
         lemma_rows.values.flatten.group_by { |row| row.fetch(:language) }
                                  .each_with_object({}) do |(language, rows), common|
           threshold = [STOP_MIN_DF, (totals.fetch(language, 0) * STOP_RATIO)].max
-          @fulltext[Store::Indexer::LEMMA_TABLE]
+          gold_lemma_rows
             .where(language: language, lemma_folded: rows.map { |row| row.fetch(:lemma_folded) }.uniq)
             .group_and_count(:lemma_folded)
             .each do |row|
@@ -304,6 +317,22 @@ module Nabu
           end
         end
         raw
+      end
+
+      # The gold-tier lemma dataset (class note; P26-4). A pre-tier index
+      # has no tier column — and no silver rows — so the unfiltered dataset
+      # is the same gold-only set (the borrowed_column? precedent).
+      def gold_lemma_rows
+        dataset = @fulltext[Store::Indexer::LEMMA_TABLE]
+        return dataset unless tier_column?
+
+        dataset.where(tier: Store::Indexer::GOLD_TIER)
+      end
+
+      def tier_column?
+        return @tier_column unless @tier_column.nil?
+
+        @tier_column = @fulltext[Store::Indexer::LEMMA_TABLE].columns.include?(:tier)
       end
 
       # Apply suppression + the ≥2-distinct-languages rule, resolve roots,

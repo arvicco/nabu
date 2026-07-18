@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="sarit__nyāyabhāṣya">
+  <teiHeader xml:lang="en">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" subtype="base-text">Nyāyasūtra</title>
+        <title type="sub" subtype="commentary">Nyāyabhāṣya</title>
+	    <author role="base-author">Akṣapāda Gotama</author>
+        <author role="commentator">Vātsyāyana</author>
+        <respStmt>
+          <orgName>Young Buddhist Association of the University of Tokyo
+                        (Bussei)</orgName>
+          <resp>Creation of machine-readable version</resp>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>SARIT: Search and Retrieval of Indic Texts</authority>
+        <availability status="restricted">
+          <p>Copyright Notice</p>
+          <p>Copyright (C) Young Buddhist Association of the University of Tokyo (Bussei) </p>
+          <p>
+            <ref target="http://creativecommons.org/licenses/by-sa/3.0/" type="licence">Distributed by <ref target="http://sarit.indology.info" type="url">SARIT</ref> under a Creative Commons Attribution-ShareAlike 3.0
+                            Unported License. </ref>
+                    </p>
+                    <p>Under this licence, you are free <list>
+                            <item>to Share — to copy, distribute and transmit the work</item>
+                            <item>to Remix — to adapt the work </item>
+                        </list></p>
+                    <p>Under the following conditions:</p>
+                    <p>
+                        <list>
+                            <item>Attribution — You must attribute the work in the manner specified
+                                by the author or licensor (but not in any way that suggests that
+                                they endorse you or your use of the work).</item>
+              <item>Share Alike — If you alter, transform, or build upon this work,
+                                you may distribute the resulting work only under the same or similar
+                                license to this one.</item>
+            </list>
+          </p>
+          <p>More information and fuller details of this license are given on the Creative
+                        Commons website.</p>
+          <p>SARIT assumes no responsibility for unauthorised use that infringes the
+                        rights of any copyright owners, known or unknown.</p>
+        </availability>
+        <date>2013-2016</date>
+        <idno>2013-04-29</idno>
+      </publicationStmt>
+      <notesStmt>
+        <note> Based on the Tārānātha Nyāyatarkatīrtha and Amarendramohana Tarkatīrtha
+                    edition, Calcutta 1936--1944. Does not include Uddyotakara or Viśvanātha's
+                    commentaries. Data entered by the Young Buddhist Association of the University
+                    of Tokyo (Bussei) </note>
+      </notesStmt>
+      <sourceDesc>
+        <bibl xml:id="nyāyadarśana" sameAs="http://katalog.ub.uni-heidelberg.de/titel/66141713">
+          <title> Title Nyāyadarśanam: with Vātsyāyana's bhāṣ̣ya, Uddyotakara's
+                        vārttika, Vācaspati Miśra's tātparyaṭ̣īkā and Viśvanatha's vṛtti ..
+                        with an introduction by Narendra Chandra Vedantatirtha.</title>
+          <editor>Taranatha Nyaya-Tarkatirtha and Amarendramohan Tarkatirtha</editor>
+          <publisher>Metropolitan Print. and Pub. House</publisher>
+          <pubPlace>Calcutta</pubPlace>
+          <series n="18, 19">Calcutta Sanskrit Series</series>
+          <date>1936-1944</date>
+          <note/>
+        </bibl>
+        <biblStruct type="book" xml:id="Thakur1997">
+          <monogr>
+            <title level="m">Gautamīyanyāyadarśana With Bhāṣya of Vātsyāyana</title>
+            <author>
+              <forename>Anantalal</forename>
+              <surname>Thakur</surname>
+            </author>
+            <imprint>
+              <publisher>Indian Council of Philosophical Research</publisher>
+              <date>1997</date>
+              <pubPlace>New Delhi</pubPlace>
+            </imprint>
+          </monogr>
+          <series>
+            <title type="main" level="s">Nyāyacaturgranthikā</title>
+            <biblScope unit="volume">1</biblScope>
+          </series>
+        </biblStruct>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p>The published edition from which this e-text was transcribed is printed in the
+                    Devanāgarī script. The electronic text below is in a lossless transliteration
+                    using the Latin alphabet. The transliteration scheme used is the IAST (<ref target="http://en.wikipedia.org/wiki/International_Alphabet_of_Sanskrit_Transliteration">The International Alphabet of Sanskrit Transliteration</ref>). IAST differs
+                    in small ways from ISO 15919, but is preferred by most working Sanskrit
+                    scholars. Conversion of this file to ISO 15919 can be achieved by performing the
+                    following replacements throughout the file: <code> ṛ -&gt; r̥ and ṃ -&gt; ṁ </code>
+                </p>
+        <p>Text division is as Devanāgarī ("ityevam" not "ity evam".) </p>
+        <p>Quotations are tagged with quote elements.</p>
+        <p>Due to a gross search-and-replace error, some ṛ vowels may be missing</p>
+        <normalization>
+          <p>Initial vowel elision for avagraha is reversed and marked with a + sign:
+                        e.g., "prathamo+adhyāyaḥ"</p>
+        </normalization>
+      </editorialDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2011-07-07" who="Young Buddhist Association of the University of Tokyo (Bussei) "> Initial file
+                creation </change>
+      <change when="2013-04-22" who="Dominik Wujastyk">Editing and conversion to TEI</change>
+      <change when="2013-04-28" who="Dominik Wujastyk">Reworked the divisions of the text,
+                marking the adhyāyas and āhnikas.</change>
+      <change when="2013-04-29" who="Dominik Wujastyk">Corrections to text divisions.</change>
+      <change when="2013-04-29" who="Dominik Wujastyk">Placed quotations within quote
+            tags.</change>
+	    <change when="2015-04-22" who="Patrick McAllister">Rewinding the "gross search-and-replace error" (turns out that there were more than a few 'ṛ'-s missing), and adopted the `div' elements for Nyāyasūtra passages to `quote' elements.</change>
+      <change when="2016-11-23" who="https://viaf.org/viaf/308710472/">Updated the file description, commented out notes with the rend-attribute "none", added numbers at the end of each sūtra, relocated the closing tags of some quotes, removed the rend-attribute "double", replaced brackets in head-elements with <gi>supplied</gi> and expanded the abbreviations A, Ā, and Sū in the headings.</change>
+	    
+    </revisionDesc>
+  </teiHeader>
+  <text xml:id="nyāyabhāṣya" xml:lang="sa-Latn">
+    <body>
+      <div xml:id="nyāyabhāṣya__1">
+        <head><supplied>Adhyāya 1</supplied></head>
+        <div xml:id="nyāyabhāṣya__1.1">
+          <head><supplied>Adhyāya 1, Āhnika 1</supplied></head>
+          <div xml:id="nyāyabhāṣya__1.1.1">
+            <head><supplied>Adhyāya 1, Āhnika 1, Sūtra 1</supplied></head>
+            <p><pb n="1"/>pramaṇato 'rthapratipattau pravṛttisāmarthyād arthavat pramāṇam/</p>
+            <p><pb n="21"/>
+pramāṇam antareṇa nārthapratipattiḥ, nārhtapratipattim antareṇa pravṛttisāmarthyam/ pramāṇena khalv ayaṃ jñātārtham abhīpsati jihāsati vā/ tasyepsājihāsāprayuktasya samīhā pravṛttir ity ucyate/ sāmrthyaṃ punar asyāḥ phalenābhisambandhaḥ/ samīhamānas tam artham abhīpsan jihāsan vā tam artham āpnoti jahāti vā/ arthas tu sukhaṃ sukhahetuś ca, duḥkhaṃ duḥkhahetuś ca/</p>
+            <p><pb n="22"/>
+so 'yaṃ pramāṇārtho 'parisaṅkhyeyaḥ, prāṇabhṛdbhedasyāparisaṅkhyeyatvāt/ arthavati ca pramāṇe pramātā prameyaṃ pramitir ity arthavanti bhavanti/ kasmāt? anyatamāpāye 'rthasyānupapatteḥ/</p>
+            <p><pb n="24"/>
+tatra yasyepsājihāsāprayuktasya pravṛttiḥ sa pramātā, sa yenārthaṃ pramiṇoti tat pramāṇam, yo 'rthaḥ pramīyate tat prameyam, yad arthavijñānaṃ sā pramitiḥ, catasṛṣu caivaṃvidhāsv arthatattvaṃ parisamāpyate/
+kiṃ punas tattvam? sataś ca sadbhāvo 'sataśüEcāsadbhāvaḥ/ sat sad iti gṛhyamāṇaṃ yathābhūtam aviparītaṃ tattvaṃ bhavati/</p>
+            <p><!--<note type="encodingProduct" rend="none">% yathābhūtam aviparītaṃ tattvaṃ bhavati/]</note>--><pb n="25"/>
+asac cāsad iti gṛhyamāṇaṃ yathābhūtam aviparītaṃ tattvaṃ bhavati/</p>
+            <p><pb n="26"/>
+katham uttarasya pramāṇenopalabdhir iti? saty upalabhyamāne tadanupalabdheḥ pradīpavat/ yathā darśakena dīpena dṛśye gṛhyamāṇe tad iva yan na gṛhyate, tan nāsti/ yady abhaviṣyad idam iva vyajñāsyata, vijñānābhāvān nāstīti/ evaṃ pramāṇena sati gṛhyamāṇe tad iva yan na gṛhyate,</p>
+            <p><pb n="27"/>
+tan nāsti/ yady abhaviṣyad idam iva vyajñāsyata, vijñānābhāvān nāstīti/ tad evaṃ sataḥ prakāśakaṃ pramāṇam asad api prakāśayatīti/</p>
+            <p><pb n="28"/>
+sac ca khalu ṣoḍaśadhā vyūḍham upadekṣyate/ tāsāṃ khalv āsāṃ sadvidhānām—</p>
+            <quote type="base-text" n="NyāSū__1.1.1">
+              <p>pramāṇaprameyasaṃśayaprayojanadṛṣṭāntasiddhāntāvayavatarkanirṇayavādajalpavitaṇḍāhetvābhāsacchalajātinigrahasthānānāṃ tattvajñānān niḥśreyasādhigamaḥ // 1.1.1 //</p>
+            </quote>
+            <p><pb n="29"/>
+nirdeśe yathāvacanaṃ vigrahaḥ/ cārthe dvandvasamāsaḥ/ pramāṇādīnāṃ tattvam iti śaiṣikī ṣaṣṭhī/</p>
+            <p><pb n="31"/>
+tattvasya jñānaṃ niḥśreyasasyādhigama iti karmaṇi ṣaṣṭhau/ ta etāvanto vidyamānārthāḥ, yeṣām aviparītajñānārtham ihopadeśaḥ/</p>
+            <p>% vidyamānārthā, ...] p/32
+so 'yam anavayavena tantrārtha uddiṣṭo veditavyaḥ/ ātmādeḥ khalu prameyasya tattvajñānān niḥśreyasādhigamaḥ/</p>
+            <p><pb n="33"/>
+tac caitad uttarasūtreṇānūdyata iti/ heyam, tasya nirvartakaṃ hānam ātyantikam, tasyopāyo 'dhigantavya ity etāni catvāry arthapadāni samyag buddhvā niḥśreyasam adhigacchati/</p>
+            <p><pb n="34"/>
+tatra saṃśayādīnāṃ pṛthagvacanam anarthakam — saṃśayādayo yathāsambhavaṃ pramāṇeṣu prameyeṣu cāntarbhavanto na vyatiricyanta iti? satyam etat, imās tu catasro vidyāḥ pṛthakprasthānāḥ prāṇabhṛtām anugrahāyopadiśyante, yāsāṃ caturthīyam ānvīkṣikī nyāyavidyā/</p>
+            <p><!--<note type="encodingProduct" rend="none">% -prasthānāḥ prāṇabhṛtām ... ]</note>--><pb n="35"/>
+tasyāḥ pṛthakprasthānāḥ saṃśayādayaḥ padārthāḥ/ teṣāṃ pṛthagvacanam antareṇādhyātmavidyāmātram iyaṃ syāt, yathopaniṣadaḥ/ tasmāt saṃśayādibhiḥ padārthaiḥ pṛthak prasthāpyate/ tatra nānupalabdhe na nirṇīte 'rthe nyāyaḥ pravartate, kiṃ tarhi? saṃśayite 'rthe/ yathoktaṃ — <quote>vimṛśya pakṣapratipakṣābhyām arthāvadhāraṇaṃ nirṇayaḥ</quote> iti/ vimarśaḥ — saṃśayaḥ/ pakṣapratipakṣau — nyāyapravṛttiḥ/ arthāvadhāraṇaṃ — nirṇayas tattvajñānam iti/ sa ca <quote>ayaṃ kiṃsvid</quote> iti vastuvimarśamātram anavadhāraṇaṃ jñānaṃ saṃśayaḥ, prameye 'ntarbhavann evam arthaṃ pṛthag ucyate/</p>
+            <p><pb n="37"/>
+atha prayojanam — yena prayuktaḥ pravartate, tat prayojanam/ yam artham abhīpsan jihāsan vā karmārabhate,</p>
+            <p><!--<note type="encodingProduct" rend="none">% karmārabhate]</note>--><pb n="38"/>
+tenānena sarve prāṇinaḥ sarvāṇi karmāṇi sarvāś ca vidyā vyāptāḥ, tadāśrayaś ca nyāyaḥ pravartate/ kaḥ punar ayaṃ nyāyaḥ? pramāṇair arthaparīkṣaṇaṃ nyāyaḥ/</p>
+            <p><pb n="39"/>
+pratyakṣāgamāśritam anumānam, sānvīkṣā/ pratyakṣāgamābhyām īkṣitasyānvīkṣaṇam anvīkṣā/ tayā pravarttata ity ānvīkṣikī — nyāyavidyā — nyāyaśāstram/ yat punar anumānaṃ pratyakṣāgamaviruddhaṃ nyāyābhāsaḥ sa iti/</p>
+            <p><pb n="44"/>
+tatra vādajalpau saprayojanau/ vitaṇḍā tu parīkṣyate/ vitaṇḍayā pravartamāno vaitaṇḍikaḥ/ sa prayojanam anuyukto yadi pratipadyate so 'sya pakṣaḥ so 'sya siddhānta iti, vaitaṇḍikatvaṃ jahāti/ atha na pratipadyate nāyaṃ laukiko na parīkṣaka ity āpadyate/ athāpi parapakṣapratiṣedhajñāpanaṃ prayojanaṃ bravīti, etad api tādṛg eva/ yo jñāpayati yo jānāti yena jñāpyate yac ca jñāpyate etac ca pratipadyate yadi, tadā vaitaṇḍikatvaṃ jahāti/ atha na pratipadyate, parapakṣapratiṣedhajñāpanaṃ prayojanam ity etad asya vākyam anarthakaṃ bhavati/ vākyasamūhaś ca sthāpanāhīno vitaṇḍā, tasya yady abhidheyaṃ pratipadyate, so 'sya pakṣaḥ sthāpanīyo bhavati/ atha na pratipadyate, pralāpamātram anarthakaṃ bhavati, vitaṇḍātvaṃ nivartata iti/
+atha dṛṣṭāntaḥ pratyakṣaviṣayo 'rthaḥ, yatra laukikaparīkṣakāṇāṃ darśanaṃ na vyāhanyate/</p>
+            <p><pb n="45"/>
+sa ca prameyam/ tasya pṛthagvacanaṃ ca tadāśrayāv anumānāgamau, tasmin sati syātām anumānāgamau asati ca na syātām/ tadāśrayā ca nyāyapravṛttiḥ/ dṛṣṭāntavirodhena ca parapakṣapratiṣedho vacanīyo bhavati, dṛṣṭāntasamādhinā ca svapakṣaḥ sādhanīyo bhavati/ nāstikaś ca dṛṣṭāntam abhyupagacchann āstikatvaṃ jahāti/ anabhyupagacchan kiṃsādhanaḥ param upālabheteti/ niruktena ca dṛṣṭāntena śakyam abhidhātuṃ <quote>sādhyasādharmyāt taddharmabhāvī dṛṣṭānta udāharaṇam</quote> <quote>tadviparyayād viparītam</quote> iti/</p>
+            <p><pb n="46"/>
+asty ayam ity anujñāyamāno 'rthaḥ siddhāntaḥ/ sa ca prameyam/ tasya pṛthagvacanaṃ satsu siddhāntabhedeṣu vādajalpavitaṇḍāḥ pravartante, nāto 'nyatheti/</p>
+            <p><pb n="47"/>
+sādhanīyārthasya yāvati śabdasamūhe siddhiḥ parisamāpyate tasya pañcāvayavāḥ pratijñādayaḥ, samūham apekṣyāvayavā ucyante/</p>
+            <p><pb n="48"/>
+teṣu pramāṇasamavāyaḥ, āgamaḥ pratijñā/ hetur anumānam/</p>
+            <p><pb n="51"/>
+udāharaṇaṃ pratyakṣam/ upanayanam upamānam/</p>
+            <p><pb n="52"/>
+sarveṣām ekārthasamavāye sāmarthyapradarśanaṃ nigamanam iti/ so 'yaṃ paramo nyāya iti/ etena vādajalpavitaṇḍāḥ pravartante nāto 'nyatheti/</p>
+            <p><pb n="53"/>
+tadāśrayā ca tattvavyavasthā/ te caite 'vayavāḥ śabdaviśeṣāḥ santaḥ prameye 'ntarbhūtā evamarthaṃ pṛthag ucyanta iti/
+tarko na pramāṇasaṃgṛhīto, na pramāṇāntaram, pramāṇānām anugrāhakas tattvajñānāya kalpate/ tasyodāharaṇam — kim idaṃ janma kṛtakena hetunā nirvartyate, āhosvid akṛtakena, athākasmikam iti?</p>
+            <p><!--<note type="encodingProduct" rend="none">% -ākasmikam iti?]</note>--><pb n="54"/>
+evam avijñāte 'rthe kāraṇopapattyā ūhaḥ pravarttate — yadi kṛtakena hetunā nirvartyate, hetūcchedād upapanno 'yaṃ janmocchedaḥ/ athākṛtakena hetunā, tato hetūcchedasyāśakyatvād anupapanno janmocchedaḥ/ athākasmikam, ato 'kasmān nirvartyamānaṃ na punar nivartsyatīti nivṛttikāraṇaṃ nopapadyate, tena janmānuccheda iti/ etasmiṃs tarkaviṣaye karmanimittaṃ janmeti pramāṇāni pravarttamānāni tarkeṇānugṛhante,</p>
+            <p><pb n="55"/>
+tattvajñānaviṣayasya vibhāgāt tattvajñānāya kalpate tarka iti/ so 'yam itthambhūtas tarkaḥ pramāṇasahito vāde sādhanāyopālambhāya cārthasya bhavatīty evam arthaṃ pṛghag ucyate prameyāntarbhūto 'pīti/</p>
+            <p><pb n="56"/>
+nirṇayas tattvajñānaṃ pramāṇānāṃ phalam, tadavasāno vādaḥ, tasya pālanārthaṃ jalpaviṭaṇḍe/ tāv etau tarkanirṇayau lokayātrāṃ vahata iti/ so 'yaṃ nirṇayaḥ prameyāntarbhūta evamarthaṃ pṛthag uddīṣṭa iti/</p>
+            <p><pb n="57"/>
+vādaḥ khalu nānāpravaktṛkaḥ pratyadhikaraṇasādhano 'nyatarādhikaraṇanirṇayāvasāno vākyasamūhaḥ/</p>
+            <p><!--<note type="encodingProduct" rend="none">% vākyasamūhaḥ/]</note>--><pb n="58"/>
+pṛthag uddiṣṭa upalakṣaṇārtham/ upalakṣitena vyavahāras tattvajñānāya bhavatīti/ <quote>tadviśeṣau jalpavitaṇḍe tattvādhyavasāyasaṃrakṣaṇārtham</quote> ity uktam/</p>
+            <p><pb n="59"/>
+nigrahasthānebhyaḥ pṛthag uddhiṣṭā hetvābhāsā vāde codanīyā bhaviṣyantīti/</p>
+            <p><pb n="62"/>
+jalpavitaṇḍayos tu nigrahasthānānīti/</p>
+            <p><pb n="63"/>
+chalajātinigrahasthānānāṃ pṛthagupadeśa upalakṣaṇārtham iti/ upalakṣitānāṃ svavākye parivarjanam, chalajātinigrahasthānānāṃ paravākye paryanuyogaḥ/ jāteś ca pareṇa prayujyamānāyāḥ sulabhaḥ samādhiḥ, svayaṃ ca sukaraḥ prayoga iti/</p>
+            <p><pb n="64"/>
+seyam ānvīkṣikī pramāṇādibhiḥ padārthair vibhajyamānā —
+pradīpaḥ sarvavidyānām upāyaḥ sarvakarmaṇām/
+āśrayaḥ sarvadharmāṇāṃ vidyoddeśe prakīrtitā//</p>
+            <p><pb n="65"/>
+tad idaṃ tattvajñānaṃ niḥśreyasādhigamārthaṃ yathāvidyaṃ veditavyam/ iha tv adhyātmavidyāyām ātmādijñānaṃ tattvajñānam/ niḥśreyasādhigamo 'pavargaprāptiḥ//1//</p>
+          </div>
+          <div xml:id="nyāyabhāṣya__1.1.2">
+            <head><supplied>Adhyāya 1, Āhnika 1, Sūtra 2</supplied></head>
+            <p><pb n="67"/>
+tat khalu niḥśreyasaṃ kiṃ tattvajñānāntaram eva bhavati? nety ucyate/ kiṃ tarhi? tattvajñānāt —</p>
+            <pb n="69"/>
+            <quote type="base-text" n="NyāSū__1.1.2">
+              <p>duḥkhajanmapravṛttidoṣamithyājñānām uttarottarāpāye tadanantarāpāyād apavargaḥ // 1.1.2 //</p>
+            </quote>
+            <p><pb n="70"/>
+tatrātmādyapavargaparyantaprameye mithyājñānam anekaprakārakaṃ varttate/</p>
+            <p><pb n="71"/>
+ātmani tāvan nāstīti, anātmani ātmeti duḥkhe sukham iti anitye nityam ity atrāṇe trāṇam iti,</p>
+            <p><!--<note type="encodingProduct" rend="none">% atrāṇe trāṇam iti]</note>--><pb n="76"/>
+sabhaye nirbhayam iti, jugupsite 'bhimatam iti, hātavye apratihātavyam iti, pravṛttau nāsti karma, nāsti karmaphalam iti, doṣeṣu nāyaṃ doṣanimittaḥ saṃsāra iti, pretyabhāve nāsti jantur jīvo vā sattva ātmā vā, yaḥ preyāt, pretya ca bhaved iti, animittaṃ janma, animitto janmoparama ity ādimān pretyabhāvaḥ, anantaś ceti, naimittikaḥ sann akarmanimittaḥ pretyabhāva iti, dehendriyabuddhivedanāsantānocchedapratisandhānābhyāṃ nirātmakaḥ pretyabhāva iti/ apavarge bhīṣmaḥ khalv ayaṃ sarvakāyoparamaḥ, sarvaviprayoge 'pavarge bahu ca bhadrakaṃ lupyata iti kathaṃ buddhimān sarvasukhocchedam acaitanyam amum apavargaṃ rocayed iti/
+etasmān mithyājñānād anukūleṣu rāgaḥ, pratikūleṣu dveṣaḥ/ rāgadveṣādhikārāc cāsatyerṣyamāyālobhādayo doṣā bhavanti/ doṣaiḥ prayuktaḥ śarīreṇa pravarttamāno hiṃsāsteyapratiṣiddhamaithunāny ācarati, vācānṛtaparuṣasūcanāsambaddhāni, manasā paradrohaṃ paradravyābhīpsāṃ nāstikyaṃ ceti/ seyaṃ pāpātmikā pravṛttir adharmāya/
+atha śubhā — śarīreṇa dānaṃ paritrāṇaṃ paricaraṇaṃ ca, vācā satyaṃ hitaṃ priyaṃ svādhyāyaṃ ceti, manasā dayām aspṛhāṃ śraddhāṃ ceti/ seyaṃ dharmāya/
+atra pravṛttisādhanau dharmādharmau pravṛttiśabdenoktau, yathānnasādhanāḥ prāṇāḥ <quote>annaṃ vai prāṇinaḥ prāṇā</quote>iti/</p>
+            <p><pb n="77"/>
+seyaṃ pravṛttiḥ kutsitasyābhipūjitasya ca janmanaḥ kāraṇam/ janma punaḥ śarīrendriyabuddhīnāṃ nikāyaviśiṣṭaḥ prādurbhāvaḥ, tasmin sati duḥkham/ tat punaḥ pratikūlavedanīyaṃ bādhanā pīḍā tāpa iti/ ta ime mithyājñānādayo duḥkhāntā dharmā avicchedenaiva pravartamānāḥ saṃsāra iti/</p>
+            <p><pb n="78"/>
+yadā tu tattvajñānān mithyājñānam apaiti, tadā mithyājñānāpāye doṣā apayanti, doṣāpāye pravṛttir apaiti,</p>
+            <p><!--<note type="encodingProduct" rend="none">% pravṛttir apaiti,]</note>--><pb n="80"/>
+pravṛttyapāye janmāpaiti, janmāpāye duḥkham apaiti, duḥkhāpāye ca ātyantiko 'pavargo niḥśreyasam iti/</p>
+            <p><pb n="82"/>
+tattvajñānaṃ tu khalu mithyājñānaviparyayeṇa vyākhyātam/ ātmani — tāvad astīti, anātmani — anātmeti, evaṃ duḥkhe 'nitye 'trāṇe sabhaye jugupsite hātavye ca yathāviṣayaṃ veditavyam, pravṛttau — asti karma, asti karmaphalam iti, doṣeṣu — doṣanimitto 'yaṃ saṃsāra iti, pretyabhāve khalu — asti jantur jīvaḥ sattva ātmā vā, yaḥ pretya bhaved iti, nimittavaj janma, nimittavān janmoparama ity anādiḥ pretyabhāvo 'pavargānta iti, naimittikaḥ san pretyabhāvaḥ pravṛttinimitta iti, sātmakaḥ san dehendriyabuddhivedanāsantānocchedapratisandhānābhyāṃ pravarttata iti, apavarge śāntaḥ khalv ayaṃ sarvaviprayogaḥ sarvoparamo 'pavargaḥ, bahu ca kṛcchaṃ ghoraṃ pāpakaṃ lupyata iti kathaṃ buddhimān sarvaduḥkhocchedaṃ sarvaduḥkhāsaṃvidam apavargaṃ na rocayed iti,</p>
+            <p><!--<note type="encodingProduct" rend="none">% -m apavargaṃ na rocayed iti,]</note>--><pb n="83"/>
+tad yathā madhuviṣasampṛktānnam anādeyam iti, evaṃ sukhaṃ duḥkhānuṣaktam anādeyam iti//2//</p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

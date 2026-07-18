@@ -53,8 +53,15 @@ module Nabu
       # One KWIC row. +left+ and +right+ are already trimmed to the requested
       # width (left right-justified, right left-justified, ellipsis where
       # clipped); +keyword+ is the pristine matched span. license_class and
-      # language ride along for the MCP contract and the CLI tag.
-      Row = Data.define(:urn, :language, :license_class, :left, :keyword, :right)
+      # language ride along for the MCP contract and the CLI tag. +tier+
+      # (P26-4, the P26-0 journaled decision — concord is a FORMATTER over
+      # LemmaSearch, so it inherits the label): the lemma-mode hit's lemma
+      # tier ("gold" | "silver"), passed through so renderers tag silver
+      # rows exactly as search --lemma does; nil in text mode (an FTS hit
+      # makes no annotation claim).
+      Row = Data.define(:urn, :language, :license_class, :left, :keyword, :right, :tier) do
+        def initialize(tier: nil, **rest) = super
+      end
 
       DEFAULT_WIDTH = 40
       ELLIPSIS = "…"
@@ -113,7 +120,8 @@ module Nabu
         left, keyword, right = split_on_span(display, span)
         Row.new(
           urn: result.urn, language: result.language, license_class: result.license_class,
-          left: trim_left(left, width), keyword: keyword, right: trim_right(right, width)
+          left: trim_left(left, width), keyword: keyword, right: trim_right(right, width),
+          tier: (result.tier if result.respond_to?(:tier))
         )
       end
 

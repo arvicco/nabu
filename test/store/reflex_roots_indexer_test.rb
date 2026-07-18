@@ -251,6 +251,58 @@ module Store
       assert_equal({ "chu" => 2, "got" => 1 }, stats)
     end
 
+    # -- P26-4: the tier scope (gold is literal, not "annotated") ------------
+
+    def silver_source
+      @silver_source ||= Nabu::Store::Source.create(
+        slug: "diorisis", name: "Diorisis", adapter_class: "TestAdapter",
+        license_class: "attribution"
+      )
+    end
+
+    def make_silver_passage(language:, lemma:, form: lemma)
+      urn_stem = "urn:nabu:test:silver:#{language}"
+      document = Nabu::Store::Document[urn: urn_stem] || Nabu::Store::Document.create(
+        source_id: silver_source.id, urn: urn_stem, title: "S", language: language,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      seq = @catalog[:passages].where(document_id: document.id).count
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: "#{urn_stem}:#{seq + 1}", sequence: seq,
+        language: language, text: form, text_normalized: form,
+        annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => form }] }),
+        content_sha256: "x", revision: 1
+      )
+    end
+
+    def silver_rebuild!
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "diorisis" => "silver" })
+    end
+
+    # A language whose only lemma rows are silver stays OUT of the closure:
+    # the table is reconstruction evidence, and automatic lemmatization
+    # carries no attestation claim (Cognates' gold scope depends on this).
+    def test_a_silver_only_language_is_not_in_the_closure_scope
+      load_recon_fixtures!
+      make_silver_passage(language: "chu", lemma: "богъ")
+      silver_rebuild!
+      assert_empty roots.distinct.select_map(:language),
+                   "silver-only chu must not enter the gold closure scope"
+    end
+
+    def test_stats_count_gold_tier_rows_only
+      make_gold_passage(language: "chu", lemma: "богъ")
+      make_silver_passage(language: "chu", lemma: "богъ")
+      make_silver_passage(language: "grc", lemma: "θεός")
+      silver_rebuild!
+      stats = @fulltext[Nabu::Store::ReflexRootsIndexer::STATS_TABLE]
+              .as_hash(:language, :gold_passages)
+      assert_equal({ "chu" => 1 }, stats,
+                   "the suppression denominator counts gold passages only — a silver flood " \
+                   "must not re-calibrate it, and silver-only grc has no row at all")
+    end
+
     def test_rebuild_is_drop_and_recreate_idempotent_and_deterministic
       load_recon_fixtures!
       make_gold_passage(language: "chu", lemma: "богъ")

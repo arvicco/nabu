@@ -198,11 +198,43 @@ class GitFetchTest < Minitest::Test
     assert_equal "master moved on\n", File.read(File.join(@dir, "alpha.txt"))
   end
 
+  # --- sparse checkout (P26-0) ----------------------------------------------
+  # A sparse fetch scopes the working tree (and, over a real transport, the
+  # blob transfer — local clones ignore --filter, warned and harmless) to the
+  # declared paths: the DCS case, where dcs/data/conllu is 844 MB of a much
+  # larger research repo.
+
+  def test_sparse_clone_materializes_only_the_declared_paths
+    make_repo("keep/data.txt" => "in cone\n", "papers/big.pdf" => "outside\n")
+
+    result = sync!(sparse: ["keep"])
+
+    assert_equal head(@upstream), result.sha
+    assert File.file?(File.join(@dir, "keep", "data.txt"))
+    refute File.exist?(File.join(@dir, "papers", "big.pdf")),
+           "paths outside the sparse cone must not materialize"
+  end
+
+  def test_sparse_pull_attics_cone_deletions_and_ignores_outside_ones
+    make_repo("keep/data.txt" => "v1\n", "keep/other.txt" => "o\n", "papers/big.pdf" => "outside\n")
+    sync!(sparse: ["keep"])
+    delete_upstream("keep/data.txt")
+    delete_upstream("papers/big.pdf")
+
+    result = sync!(sparse: ["keep"])
+
+    assert_equal ["keep/data.txt"], result.atticked,
+                 "only cone deletions are this source's retained assets"
+    refute File.exist?(File.join(@dir, "keep", "data.txt")), "the merge applies the cone deletion"
+    assert_equal "v1\n", File.read(File.join(@attic, "keep", "data.txt"))
+    assert File.file?(File.join(@dir, "keep", "other.txt"))
+  end
+
   private
 
-  def sync!(guard: nil, progress: nil, ref: nil)
+  def sync!(guard: nil, progress: nil, ref: nil, sparse: nil)
     Nabu::GitFetch.sync!(repo_url: @upstream, dir: @dir, attic_dir: @attic,
-                         progress: progress, guard: guard, ref: ref)
+                         progress: progress, guard: guard, ref: ref, sparse: sparse)
   end
 
   def make_repo(files)

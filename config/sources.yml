@@ -555,6 +555,133 @@ corph:
   # dormant → manual, one-shot in practice.
   sync_policy: manual
 
+suttacentral:
+  adapter: Nabu::Adapters::Suttacentral
+  enabled: false   # flip after the owner-fired first sync (~353 MB clone of
+                   # bilara-data at census time; expected ≈7,310 root docs /
+                   # ≈445,600 pli+pra passages + ≈4,712 -en siblings —
+                   # CLAUDE.md checklist §6: eyeball
+                   # nabu show urn:nabu:suttacentral:mn1:1.1 --parallel,
+                   # a dhp verse and 5 random passages, then flip).
+  # SuttaCentral bilara-data, branch `published` (P26-1) — the whole
+  # Tipiṭaka in roman-script Pali (root/pli/ms, Mahāsaṅgīti; 7,289 files)
+  # plus the Patna Dhammapada (root/pra/pts, `pra`). License read PER
+  # PUBLICATION from the repo's own _publication.json (censused 138 CC0 +
+  # 1 Public Domain root + 1 CC BY-SA 3.0 — Ānandajoti's English pdhp,
+  # whose -en documents carry license_override: attribution, P10-4);
+  # the legacy NC-ND html_text layer (separate sc-data repo) is EXCLUDED
+  # and never fetched. Live upstream, but a ~350 MB pull is an owner
+  # decision → manual.
+  sync_policy: manual
+  # Aligned English rides the SAME segment ids (the ORACC precedent):
+  # -en siblings from translation/en/<translator>/, translator-priority
+  # pick on the 104 double-covered stems, orphans skipped by rule.
+  translations: true
+
+oshb:
+  adapter: Nabu::Adapters::Oshb
+  enabled: false   # P26-3: awaiting the owner-fired first sync (~174 MB
+                   # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
+                   # 39 OSIS books / ~23,213 verses / ~305,507 morph-tagged
+                   # words projected). CLAUDE.md checklist §6: bin/nabu sync
+                   # oshb, eyeball nabu show urn:nabu:oshb:gen:1.1 (pointed
+                   # בְּרֵאשִׁ֖ית with the WLC mark order intact) + 5 random
+                   # verses and `align "GEN 1.1"` (MT ↔ LXX ↔ Vulgate
+                   # three-legged), then flip.
+  # OSHB — Open Scriptures Hebrew Bible: the Westminster Leningrad Codex
+  # (OSIS XML) + complete OSHM morphology and augmented-Strong's lemmas.
+  # License per layer, verbatim in-repo: WLC text PUBLIC DOMAIN
+  # (LICENSE.md); lemma/morphology CC BY 4.0 ("credit the Open Scriptures
+  # Hebrew Bible Project", README.md) → class open, credit in the manifest
+  # license text. NB the P26-3 NFC exemption (owner ruling 2026-07-18):
+  # hbo/arc text is stored byte-verbatim, never NFC-normalized — upstream's
+  # own anti-NFC warning is measured-true (architecture §3). Upstream is a
+  # completed digitization with occasional corrections: re-syncs are an
+  # owner decision.
+
+sarit:
+  adapter: Nabu::Adapters::Sarit
+  enabled: false   # P26-2: awaiting the owner-fired first real sync (~204 MB
+                   # git clone — 170 MB TEI + 33 MB .git at HEAD 1eac9ee;
+                   # CLAUDE.md checklist §6: bin/nabu sync sarit, eyeball
+                   # nabu show urn:nabu:sarit:astavakragita:1.1, a Devanagari
+                   # Mahābhārata passage found via its IAST spelling, and 5
+                   # random passages, then flip).
+  # SARIT — Search and Retrieval of Indic Texts (github.com/sarit/
+  # SARIT-corpus): 83 scholarly TEI editions / ~170 MB, ~60 works GRETIL
+  # lacks incl. a complete Mahābhārata (38.6 MB, SOUTHERN Recension —
+  # Kumbakonam 1906–1910, NOT the Calcutta vulgate MW cites: no MW citation
+  # joins promised on it). License censused per-file 2026-07-18: CC BY-SA
+  # 4.0 x56 + CC BY-SA 3.0 x26 + MIT x1, ZERO NC → class attribution (the
+  # GRETIL-posture upgrade; GRETIL itself stays nc). The parser re-verifies
+  # every file's <availability> at parse and quarantines anything outside
+  # BY-SA/MIT. 41/83 files carry a Devanagari surface: canonical text keeps
+  # the native script, the search layer folds a Deva→IAST transcode
+  # (Nabu::Deva), so IAST queries land on both scripts. Upstream is a
+  # dormant scholarly project (last merge 2021) → re-syncs owner-fired.
+
+dcs:
+  adapter: Nabu::Adapters::Dcs
+  enabled: false   # awaiting the owner-fired first real sync (P26-0): a SPARSE
+                   # GitFetch of github.com/OliverHellwig/sanskrit scoped to
+                   # dcs/data/conllu (+ dcs/data/readme.md) — the cone is
+                   # ~844 MB on disk (15,900 gold chapter files / 270 texts /
+                   # ~5.46M words; git compresses the CoNLL-U heavily on the
+                   # wire, expect a fraction of that to transfer). CLAUDE.md
+                   # checklist §6: bin/nabu sync dcs, eyeball
+                   # nabu show urn:nabu:dcs:5:3656 (Suśruta, Kalpasthāna 4)
+                   # + 5 random chapters + `nabu search --lemma kaṇṭha`, then
+                   # flip. Expect the odd stray non-.conllu file upstream to
+                   # be ignored by the glob, and any chapter chapter-info.xml
+                   # does not declare gold to quarantine loudly.
+  # Digital Corpus of Sanskrit (Hellwig; CC BY 4.0 verbatim in both data
+  # readmes → attribution). GOLD is machine-declared per chapter in
+  # lookup/chapter-info.xml (<layer type="gold">lexicon</layer> on all
+  # 15,900 at fixture time) — the adapter gates on the declaration and never
+  # touches the automatic .conllu_parsed siblings. lemma_tier ABSENT = gold:
+  # DCS is the first gold Sanskrit occupant of the lemma index. NO dedup vs
+  # ud/sanskrit-vedic (same Hellwig Vedic material at a different grain —
+  # two honest witnesses, the MW-beside-kaikki precedent; backlog P26-0).
+  # Upstream dump regenerates occasionally from the DCS database → re-syncs
+  # are owner-fired.
+  sync_policy: manual
+
+diorisis:
+  adapter: Nabu::Adapters::Diorisis
+  enabled: false   # P26-4: awaiting the owner-fired first real sync (ZipFetch of
+                   # the frozen figshare v1 zip — 194,443,428 bytes, md5
+                   # f3a26efa7e7d2b93d1bcca26900d180a verified against figshare's
+                   # own metadata, sha256-pinned in the adapter; ~2.5 GB unpacked,
+                   # 820 XML files. CLAUDE.md checklist §6: bin/nabu sync diorisis,
+                   # eyeball urn:nabu:diorisis:0012:001 (the Iliad) + 5 random
+                   # passages + `nabu search --lemma θεός` — expect [silver]
+                   # labels throughout — then flip. Expect discovery to census
+                   # 53 files skipped by rule: the Septuagint exclusion below.)
+  # Diorisis Ancient Greek Corpus (Vatri & McGillivray 2018, figshare v1) —
+  # ~10.2M words of tokenized, lemmatized, morphologically analyzed Greek.
+  # THE FIRST SILVER SOURCE: upstream's own in-file words are "corpus
+  # conversion and automatic annotation" (TreeTagger flags, 1/n confidence
+  # fractions on the tokens themselves), so lemma_tier: silver — every count
+  # renders labeled, never as gold attestation (the P26-0 tier contract).
+  # LICENSE (in-file doctrine proof #3): every one of the 820 files declares
+  # CC BY-SA 3.0 US in its own header, which GOVERNS over the figshare
+  # page's CC BY 4.0 claim → attribution. THE RAHLFS EXCLUSION: 53 files
+  # are the Septuagint (tlgAuthor 0527, Bibliotheca Augustana = Rahlfs
+  # lineage, CATSS-encumbered — 02-sources row 44); discover skips them by
+  # the machine-readable header field, parse refuses belt-and-braces, the
+  # fetched artifact stays whole. 806/809 works are second editions of
+  # texts already held (742 Perseus, 102 First1K) — deliberately unmerged,
+  # provenance-distinct witnesses; the value is the lemma layer at scale.
+  # LICENSE WATCH / FUTURE REFRESH (journaled, not wired): upstream also
+  # runs a token-gated JSON update channel (per-file v1.6 versions vs this
+  # 2018 XML zip); the figshare zip stays the pinned artifact — a refresh
+  # means a new owner-verified pin, never a silent re-download. No
+  # license_watch URL: the figshare API body carries volatile stats and
+  # would false-alarm the hash compare; the in-file licenses re-read at
+  # every real fetch.
+  sync_policy: manual
+  lemma_tier: silver
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

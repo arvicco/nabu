@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osis xmlns="http://www.bibletechnologies.net/2003/OSIS/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bibletechnologies.net/2003/OSIS/namespace http://www.bibletechnologies.net/osisCore.2.1.1.xsd">
+  <osisText xml:lang="he" osisIDWork="OSHB" osisRefWork="Bible">
+    <header>
+      <revisionDesc resp="dt">
+        <date>2018.12.14</date>
+        <p>Release of full morphology</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2016.03.03</date>
+        <p>Updated to WLC version 4.20.</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2013.12.11</date>
+        <p>First release of morphology on selected portions.</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2013.07.10</date>
+        <p>Updated to WLC version 4.18.</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2012.07.18</date>
+        <p>Updated to WLC version 4.16.</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2011.01.21</date>
+        <p>Updated to WLC version 4.14.</p>
+      </revisionDesc>
+      <revisionDesc resp="dt">
+        <date>2008.08.08</date>
+        <p>Convert the Westminster Leningrad Codex files from TEI markup to OSIS book files.</p>
+      </revisionDesc>
+      <work osisWork="OSHB" xml:lang="he">
+        <title>Open Scriptures Hebrew Bible</title>
+        <contributor role="edt">Daniel Owens</contributor>
+        <contributor role="edt">David Troidl</contributor>
+        <date>2007.9.16</date>
+        <identifier type="URL">https://github.com/openscriptures/morphhb</identifier>
+        <rights type="x-BY">Creative Commons Attribution 4.0</rights>
+        <refSystem>Bible.MT</refSystem>
+      </work>
+      <work osisWork="WLC" xml:lang="he">
+        <title>Westminster Leningrad Codex</title>
+        <contributor role="edt">Christopher V. Kimball</contributor>
+        <date>2007.9.16</date>
+        <identifier type="URL">http://www.tanach.us/Tanach.xml</identifier>
+        <rights>Public Domain</rights>
+        <refSystem>Bible.MT</refSystem>
+      </work>
+      <work osisWork="BHS" xml:lang="he">
+        <title>BHS unaccented with Strongs</title>
+        <contributor role="edt">Joseph Planeta</contributor>
+        <contributor role="edt">Rev. Graham Nind</contributor>
+        <description>Unaccented Biblia Hebraica Stuttgartensia Hebrew with Strong's numbers by Rev. Graham.</description>
+        <identifier type="URL">http://www.faithofgod.net/</identifier>
+        <identifier type="URL">http://www.grahamnind.dsl.pipex.com/files</identifier>
+        <rights>Public Domain</rights>
+      </work>
+      <work osisWork="Strong" xml:lang="en">
+        <title>A Concise Dictionary of the Words in the Hebrew Bible</title>
+        <title type="sub">with their Renderings in the King James Version</title>
+        <contributor role="edt">David Troidl</contributor>
+        <contributor role="edt">David Instone-Brewer</contributor>
+        <creator role="edt">James Strong, LL.D., S.T.D.</creator>
+        <date>1894</date>
+        <description resp="dib">The data came from several PD sources which were full of errors. I cleaned them by comparing them to each other and (where necessary) looking at the original.</description>
+        <publisher>Hunt &amp; Eaton</publisher>
+        <identifier type="URL">www.2LetterLookup.com</identifier>
+        <source>The exhaustive concordance of the Bible:</source>
+        <rights>Public Domain</rights>
+        <refSystem>Dict.Strongs</refSystem>
+      </work>
+      <work osisWork="OSHM" xml:lang="en">
+        <title>Open Scriptures Hebrew Morphology</title>
+        <contributor role="ctb">Chapel Presson</contributor>
+        <contributor role="ctb">Daniel Owens</contributor>
+        <contributor role="ctb">David Troidl</contributor>
+        <contributor role="ctb">Jesse Griffin</contributor>
+        <contributor role="ctb">Andy Hubert</contributor>
+        <contributor role="ctb">Angela Westmoreland</contributor>
+        <contributor role="ctb">Grant Ailie</contributor>
+        <contributor role="ctb">Joel Ruark</contributor>
+        <contributor role="ctb">Kenny Hilliard</contributor>
+        <contributor role="ctb">Luong Hao Tran</contributor>
+        <contributor role="ctb">Nathan Wilson</contributor>
+        <contributor role="ctb">Ryan Davis</contributor>
+        <contributor role="ctb">Aaron Laws</contributor>
+        <contributor role="ctb">Adam Nagelvoort</contributor>
+        <contributor role="ctb">Adriel Ickler</contributor>
+        <contributor role="ctb">Agus Santoso</contributor>
+        <contributor role="ctb">Andy Hophd</contributor>
+        <contributor role="ctb">Angelo Salais</contributor>
+        <contributor role="ctb">Annie Jeong</contributor>
+        <contributor role="ctb">Ariel Tidre Ferreira</contributor>
+        <contributor role="ctb">Artsiom Vorsa</contributor>
+        <contributor role="ctb">artyom vorsa</contributor>
+        <contributor role="ctb">Ashley Whitlatch</contributor>
+        <contributor role="ctb">Austen Dutton</contributor>
+        <contributor role="ctb">Barry Smith</contributor>
+        <contributor role="ctb">Ben Dwyer</contributor>
+        <contributor role="ctb">Ben Wulpi</contributor>
+        <contributor role="ctb">Benjamin Epstein</contributor>
+        <contributor role="ctb">Bill Chaffin</contributor>
+        <contributor role="ctb">Braxton Bogard</contributor>
+        <contributor role="ctb">Bret Stewart</contributor>
+        <contributor role="ctb">Bruce Taylor</contributor>
+        <contributor role="ctb">Bryant Huang</contributor>
+        <contributor role="ctb">Caleb Maclennan</contributor>
+        <contributor role="ctb">chad buel</contributor>
+        <contributor role="ctb">Chase Parkey</contributor>
+        <contributor role="ctb">Cheryl Riddell</contributor>
+        <contributor role="ctb">Chris McKirgan</contributor>
+        <contributor role="ctb">Christof  Bucherer</contributor>
+        <contributor role="ctb">ciro izzo</contributor>
+        <contributor role="ctb">Clemens Gudenus</contributor>
+        <contributor role="ctb">Cody Kingham</contributor>
+        <contributor role="ctb">Cody Marceau</contributor>
+        <contributor role="ctb">Collin Hatcher</contributor>
+        <contributor role="ctb">Connie Andrews</contributor>
+        <contributor role="ctb">Damien Riegel</contributor>
+        <contributor role="ctb">Dan Simmons</contributor>
+        <contributor role="ctb">Daniel Bowman</contributor>
+        <contributor role="ctb">Danielle Pamela</contributor>
+        <contributor role="ctb">Darla Nine</contributor>
+        <contributor role="ctb">Darrell Smith</contributor>
+        <contributor role="ctb">Dave Jones</contributor>
+        <contributor role="ctb">Dave Whitman</contributor>
+        <contributor role="ctb">David Carr</contributor>
+        <contributor role="ctb">David Cohen</contributor>
+        <contributor role="ctb">David Laycock</contributor>
+        <contributor role="ctb">David Lewis</contributor>
+        <contributor role="ctb">David Roth</contributor>
+        <contributor role="ctb">David Uhrik</contributor>
+        <contributor role="ctb">Diana Zhang</contributor>
+        <contributor role="ctb">Diego Chaves</contributor>
+        <contributor role="ctb">Dmitriy Kashelevskiy</contributor>
+        <contributor role="ctb">doug hendren</contributor>
+        <contributor role="ctb">Eddy Yates</contributor>
+        <contributor role="ctb">Edgar Vorsa</contributor>
+        <contributor role="ctb">Eduardo Martorano</contributor>
+        <contributor role="ctb">Eiichi  Masuda </contributor>
+        <contributor role="ctb">Eliezer Abreu</contributor>
+        <contributor role="ctb">Eric Wong</contributor>
+        <contributor role="ctb">Esther Dang</contributor>
+        <contributor role="ctb">Ferenczi Kristof</contributor>
+        <contributor role="ctb">Flavio Souza</contributor>
+        <contributor role="ctb">Frederick Edelstein</contributor>
+        <contributor role="ctb">Gantumur Luvsangombo</contributor>
+        <contributor role="ctb">Gary Rickman</contributor>
+        <contributor role="ctb">Geert Kok</contributor>
+        <contributor role="ctb">Gerald Broadbent</contributor>
+        <contributor role="ctb">Gergely Juhasz</contributor>
+        <contributor role="ctb">Giancarlos Toro</contributor>
+        <contributor role="ctb">Greg Walton</contributor>
+        <contributor role="ctb">Hamidreza Hatamikasavand</contributor>
+        <contributor role="ctb">Hector Molano</contributor>
+        <contributor role="ctb">Hermanus Taute</contributor>
+        <contributor role="ctb">hermon chan</contributor>
+        <contributor role="ctb">Hyman Robles</contributor>
+        <contributor role="ctb">Hyunsoo Yang</contributor>
+        <contributor role="ctb">inhyuk lee</contributor>
+        <contributor role="ctb">Israel Andrade</contributor>
+        <contributor role="ctb">Israel Ruiz</contributor>
+        <contributor role="ctb">Jack Weinbender</contributor>
+        <contributor role="ctb">JaiHee Kwak</contributor>
+        <contributor role="ctb">James Bejon</contributor>
+        <contributor role="ctb">James Castell</contributor>
+        <contributor role="ctb">James Cuenod</contributor>
+        <contributor role="ctb">James Duguid</contributor>
+        <contributor role="ctb">Jean veran</contributor>
+        <contributor role="ctb">JeanJacques KRIEF</contributor>
+        <contributor role="ctb">Jeff Goo</contributor>
+        <contributor role="ctb">Jeong Jae Yoo</contributor>
+        <contributor role="ctb">Jeremiah Myers</contributor>
+        <contributor role="ctb">Jeremy Bullard</contributor>
+        <contributor role="ctb">jessica jones</contributor>
+        <contributor role="ctb">Jiri Richter</contributor>
+        <contributor role="ctb">Joao Luis Fedel Goncalves</contributor>
+        <contributor role="ctb">Joel Peeters</contributor>
+        <contributor role="ctb">Joel Rubin</contributor>
+        <contributor role="ctb">john knightley</contributor>
+        <contributor role="ctb">John Mellison</contributor>
+        <contributor role="ctb">John Studebaker</contributor>
+        <contributor role="ctb">jonatas margiotta</contributor>
+        <contributor role="ctb">Jonathan Walsh</contributor>
+        <contributor role="ctb">jony clynn</contributor>
+        <contributor role="ctb">Jose Martinez</contributor>
+        <contributor role="ctb">joseph lee</contributor>
+        <contributor role="ctb">Joseph Li</contributor>
+        <contributor role="ctb">Joseph MICHEL</contributor>
+        <contributor role="ctb">Judy Hendren</contributor>
+        <contributor role="ctb">Julia Tang</contributor>
+        <contributor role="ctb">Justin So</contributor>
+        <contributor role="ctb">Juswaldy Jusman</contributor>
+        <contributor role="ctb">Kap Soo LEE</contributor>
+        <contributor role="ctb">Kara Bohall</contributor>
+        <contributor role="ctb">Karel Jongeling</contributor>
+        <contributor role="ctb">Kathy Scott</contributor>
+        <contributor role="ctb">Keanan Bovie</contributor>
+        <contributor role="ctb">Keith Hanson</contributor>
+        <contributor role="ctb">Keith Kresge</contributor>
+        <contributor role="ctb">Kevin Andersson</contributor>
+        <contributor role="ctb">Kevin Johanson</contributor>
+        <contributor role="ctb">Kevin Townsend</contributor>
+        <contributor role="ctb">Kiriana Kingston</contributor>
+        <contributor role="ctb">Laurentiu Gabriel Ionescu</contributor>
+        <contributor role="ctb">LEE Arrington</contributor>
+        <contributor role="ctb">Lee Bruckner</contributor>
+        <contributor role="ctb">Len Clark</contributor>
+        <contributor role="ctb">Leng Xiong</contributor>
+        <contributor role="ctb">LENO VICTOR DE SANTANA</contributor>
+        <contributor role="ctb">libor neuman</contributor>
+        <contributor role="ctb">lisa lisa</contributor>
+        <contributor role="ctb">M Cecil Dietz</contributor>
+        <contributor role="ctb">Malkalain Greenwell</contributor>
+        <contributor role="ctb">Marc Cordova</contributor>
+        <contributor role="ctb">Marfeal Santiago</contributor>
+        <contributor role="ctb">Marianne Szpilka</contributor>
+        <contributor role="ctb">Martin Daly</contributor>
+        <contributor role="ctb">Matan Bino</contributor>
+        <contributor role="ctb">Matthew Schug</contributor>
+        <contributor role="ctb">Max Pilo</contributor>
+        <contributor role="ctb">Micahel Leong</contributor>
+        <contributor role="ctb">Michael Fenn</contributor>
+        <contributor role="ctb">Michael Nicholson</contributor>
+        <contributor role="ctb">Miguel SANTOS</contributor>
+        <contributor role="ctb">Mike Brown</contributor>
+        <contributor role="ctb">mike fenn</contributor>
+        <contributor role="ctb">mirlande amazan</contributor>
+        <contributor role="ctb">Moongui Ulbrich</contributor>
+        <contributor role="ctb">Napoleon Gasilan</contributor>
+        <contributor role="ctb">Natashia Roy</contributor>
+        <contributor role="ctb">Nathan Bierma</contributor>
+        <contributor role="ctb">Nathan Lee</contributor>
+        <contributor role="ctb">Nathan Wilson</contributor>
+        <contributor role="ctb">Neil Cadman</contributor>
+        <contributor role="ctb">Okyob Jeon</contributor>
+        <contributor role="ctb">omer omer</contributor>
+        <contributor role="ctb">Onur Yos</contributor>
+        <contributor role="ctb">Paul Cook</contributor>
+        <contributor role="ctb">Pete Myers</contributor>
+        <contributor role="ctb">pete Norcross</contributor>
+        <contributor role="ctb">Peter Erdodi</contributor>
+        <contributor role="ctb">Peter Ho</contributor>
+        <contributor role="ctb">peter zimonyi</contributor>
+        <contributor role="ctb">Petr Miencil</contributor>
+        <contributor role="ctb">Petr Vejmelka</contributor>
+        <contributor role="ctb">phyl ma</contributor>
+        <contributor role="ctb">ralph zak</contributor>
+        <contributor role="ctb">Ramos Simanjuntak</contributor>
+        <contributor role="ctb">Rebeca Martinez</contributor>
+        <contributor role="ctb">Regina Hong</contributor>
+        <contributor role="ctb">Rendhi Vianirio</contributor>
+        <contributor role="ctb">Ricardo  Luiz Pinto</contributor>
+        <contributor role="ctb">Richard Baker</contributor>
+        <contributor role="ctb">Robert Berger</contributor>
+        <contributor role="ctb">Robert Holmstedt</contributor>
+        <contributor role="ctb">robert saunders</contributor>
+        <contributor role="ctb">Roberta Potgieter</contributor>
+        <contributor role="ctb">rocket fortyfive</contributor>
+        <contributor role="ctb">Rodrigo Castro</contributor>
+        <contributor role="ctb">Ross Tenneson</contributor>
+        <contributor role="ctb">Ruairidh MacLean</contributor>
+        <contributor role="ctb">Ruben Kraiem</contributor>
+        <contributor role="ctb">Sebastien GOEURY</contributor>
+        <contributor role="ctb">Shane Pimental</contributor>
+        <contributor role="ctb">Sharon Hamel</contributor>
+        <contributor role="ctb">Shawn Goodwin</contributor>
+        <contributor role="ctb">shukai cheung</contributor>
+        <contributor role="ctb">Siew GuoFen</contributor>
+        <contributor role="ctb">silas army</contributor>
+        <contributor role="ctb">Simon Pan</contributor>
+        <contributor role="ctb">Sir Robert Burbridge</contributor>
+        <contributor role="ctb">Soliman Hanna</contributor>
+        <contributor role="ctb">Spyros Karalis</contributor>
+        <contributor role="ctb">Stephen Durkee</contributor>
+        <contributor role="ctb">Steve Beukema</contributor>
+        <contributor role="ctb">SunGyo Kim</contributor>
+        <contributor role="ctb">Talia  Smith</contributor>
+        <contributor role="ctb">Thien Tran</contributor>
+        <contributor role="ctb">Thierry Tchiakpe</contributor>
+        <contributor role="ctb">tiago thorlby</contributor>
+        <contributor role="ctb">Timothy Keiderling</contributor>
+        <contributor role="ctb">timothy yeh</contributor>
+        <contributor role="ctb">Todd Patterson</contributor>
+        <contributor role="ctb">Toe Set</contributor>
+        <contributor role="ctb">Tomas Uher</contributor>
+        <contributor role="ctb">Troy Nelson</contributor>
+        <contributor role="ctb">uriel arevalo</contributor>
+        <contributor role="ctb">Vanda Bayer</contributor>
+        <contributor role="ctb">Vladimir Polyanskia</contributor>
+        <contributor role="ctb">w s</contributor>
+        <contributor role="ctb">Wally Kimball</contributor>
+        <contributor role="ctb">walt seevers</contributor>
+        <contributor role="ctb">Wattanavadee Jitpakdee</contributor>
+        <contributor role="ctb">Wayne Buchanan</contributor>
+        <contributor role="ctb">Wellington Machado</contributor>
+        <contributor role="ctb">Wendy Kwan</contributor>
+        <contributor role="ctb">Wesley Walker</contributor>
+        <contributor role="ctb">William Pak</contributor>
+        <contributor role="ctb">william stewart</contributor>
+        <contributor role="ctb">Xi Li</contributor>
+        <contributor role="ctb">yasu shimizu</contributor>
+        <contributor role="ctb">Yoo sung  Chang</contributor>
+        <contributor role="ctb">zac rigsby</contributor>
+        <contributor role="ctb">Zack Vera</contributor>
+        <contributor role="ctb">zhishi Lin</contributor>
+        <contributor role="ctb">Zsolt Jarai</contributor>
+        <creator role="edt">Open Scriptures Hebrew Bible Project</creator>
+        <date>2019.1.13</date>
+        <identifier type="URL">https://github.com/openscriptures/morphhb</identifier>
+        <rights type="x-BY">Creative Commons Attribution 4.0</rights>
+        <refSystem>Dict.oshm</refSystem>
+      </work>
+      <workPrefix path="//w/@lemma" osisWork="Strong"/>
+      <workPrefix path="//w/@morph" osisWork="OSHM"/>
+    </header>
+    <div type="book" osisID="Jer">
+      <chapter osisID="Jer.10">
+        <verse osisID="Jer.10.1">
+          <w lemma="8085" morph="HVqv2mp" id="24P8j">שִׁמְע֣וּ</w>
+          <w lemma="853" morph="HTo" id="24b9e">אֶת</w><seg type="x-maqqef">־</seg><w lemma="d/1697" n="0.0.1" morph="HTd/Ncmsa" id="247pd">הַ/דָּבָ֗ר</w>
+          <w lemma="834 a" morph="HTr" id="24B4V">אֲשֶׁ֨ר</w>
+          <w lemma="1696" morph="HVpp3ms" id="24ikF">דִּבֶּ֧ר</w>
+          <w lemma="3068" n="0.0.0" morph="HNp" id="2466C">יְהוָ֛ה</w>
+          <w lemma="5921 a" n="0.0" morph="HR/Sp2mp" id="244bg">עֲלֵי/כֶ֖ם</w>
+          <w lemma="1004 b" morph="HNcmsc" id="24Kgg">בֵּ֥ית</w>
+          <w lemma="3478" n="0" morph="HNp" id="24M2B">יִשְׂרָאֵֽל</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.2">
+          <w lemma="3541" n="1.1.1.0" morph="HD" id="24NU6">כֹּ֣ה</w>
+          <seg type="x-paseq">׀</seg>
+          <w lemma="559" morph="HVqp3ms" id="24ukR">אָמַ֣ר</w>
+          <w lemma="3068" n="1.1.1" morph="HNp" id="24ojb">יְהוָ֗ה</w>
+          <w lemma="413" morph="HR" id="24Ft6">אֶל</w><seg type="x-maqqef">־</seg><w lemma="1870" morph="HNcbsc" id="24fja">דֶּ֤רֶךְ</w>
+          <w lemma="d/1471 a" n="1.1.0" morph="HTd/Ncmpa" id="24phB">הַ/גּוֹיִם֙</w>
+          <w lemma="408" morph="HTn" id="24Fww">אַל</w><seg type="x-maqqef">־</seg><w lemma="3925" n="1.1" morph="HVqj2mp" id="24wY4">תִּלְמָ֔דוּ</w>
+          <w lemma="c/m/226" morph="HC/R/Ncbpc" id="2491B">וּ/מֵ/אֹת֥וֹת</w>
+          <w lemma="d/8064" n="1.0" morph="HTd/Ncmpa" id="24qim">הַ/שָּׁמַ֖יִם</w>
+          <w lemma="408" morph="HTn" id="24bDb">אַל</w><seg type="x-maqqef">־</seg><w lemma="2865" n="1" morph="HVNj2mp" id="24bJB">תֵּחָ֑תּוּ</w>
+          <w lemma="3588 a" morph="HC" id="24LbJ">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="2865" morph="HVqi3mp" id="24pwG">יֵחַ֥תּוּ</w>
+          <w lemma="d/1471 a" n="0.0" morph="HTd/Ncmpa" id="24pBV">הַ/גּוֹיִ֖ם</w>
+          <w lemma="m/1992" n="0" morph="HR/Pp3mp" id="24mui">מֵ/הֵֽמָּה</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.3">
+          <w lemma="3588 a" morph="HC" id="2411H">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="2708" morph="HNcbpc" id="24Yer">חֻקּ֥וֹת</w>
+          <w lemma="d/5971 a" n="1.0" morph="HTd/Ncmpa" id="24Ua5">הָֽ/עַמִּ֖ים</w>
+          <w lemma="1892" morph="HNcmsa" id="24drz">הֶ֣בֶל</w>
+          <w lemma="1931" n="1" morph="HPp3ms" id="24mWC">ה֑וּא</w>
+          <w lemma="3588 a" morph="HC" id="24euh">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="6086" n="0.1.0" morph="HNcmsa" id="24iWd">עֵץ֙</w>
+          <w lemma="m/3293 a" morph="HR/Ncmsa" id="24tJY">מִ/יַּ֣עַר</w>
+          <w lemma="3772" n="0.1" morph="HVqp3ms/Sp3ms" id="24wX7">כְּרָת֔/וֹ</w>
+          <w lemma="4639" morph="HNcmsc" id="24264">מַעֲשֵׂ֥ה</w>
+          <w lemma="3027" morph="HNcbdc" id="24nWK">יְדֵ֥י</w><seg type="x-maqqef">־</seg><w lemma="2796" n="0.0" morph="HNcmsa" id="24FhW">חָרָ֖שׁ</w>
+          <w lemma="b/4621" n="0" morph="HRd/Ncmsa" id="24xwC">בַּֽ/מַּעֲצָֽד</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.4">
+          <w lemma="b/3701" morph="HR/Ncmsa" id="24Gfv">בְּ/כֶ֥סֶף</w>
+          <w lemma="c/b/2091" n="1.0" morph="HC/R/Ncmsa" id="24pu7">וּ/בְ/זָהָ֖ב</w>
+          <w lemma="3302" n="1" morph="HVpi3ms/Sp3ms" id="24NZd">יְיַפֵּ֑/הוּ</w>
+          <w lemma="b/4548" morph="HR/Ncbpa" id="24SP9">בְּ/מַסְמְר֧וֹת</w>
+          <w lemma="c/b/4717" n="0.0.0" morph="HC/R/Ncfpa" id="248M7">וּ/בְ/מַקָּב֛וֹת</w>
+          <w lemma="2388" n="0.0" morph="HVpi3mp/Sp3mp" id="24dJj">יְחַזְּק֖וּ/ם</w>
+          <w lemma="c/3808" morph="HC/Tn" id="24edC">וְ/ל֥וֹא</w>
+          <w lemma="6328" n="0" morph="HVhi3ms" id="24mRn">יָפִֽיק</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.5">
+          <w lemma="k/8560" morph="HR/Ncmsc" id="24axV">כְּ/תֹ֨מֶר</w>
+          <w lemma="4749" morph="HNcfsa" id="24o7u">מִקְשָׁ֥ה</w>
+          <w lemma="1992" n="1.1.0" morph="HPp3mp" id="24ihd">הֵ֨מָּה֙</w>
+          <w lemma="c/3808" morph="HC/Tn" id="24vRG">וְ/לֹ֣א</w>
+          <w lemma="1696" n="1.1" morph="HVpi3mp" id="24fGs">יְדַבֵּ֔רוּ</w>
+          <w lemma="5375" morph="HVqa" id="245QH">נָשׂ֥וֹא</w>
+          <w lemma="5375" n="1.0" morph="HVNi3mp" id="24R1Q">יִנָּשׂ֖וּא</w>
+          <w lemma="3588 a" morph="HC" id="24ckh">כִּ֣י</w>
+          <w lemma="3808" morph="HTn" id="24z9U">לֹ֣א</w>
+          <w lemma="6805" n="1" morph="HVqi3mp" id="24ySc">יִצְעָ֑דוּ</w>
+          <w lemma="408" morph="HTn" id="24hPW">אַל</w><seg type="x-maqqef">־</seg><w lemma="3372" morph="HVqj2mp" id="24CfY">תִּֽירְא֤וּ</w>
+          <w lemma="m" n="0.1.0" morph="HR/Sp3mp" id="24b31">מֵ/הֶם֙</w>
+          <w lemma="3588 a" morph="HC" id="24PmK">כִּי</w><seg type="x-maqqef">־</seg><w lemma="3808" morph="HTn" id="24DVx">לֹ֣א</w>
+          <w lemma="7489 a" n="0.1" morph="HVhi3mp" id="24XEf">יָרֵ֔עוּ</w>
+          <w lemma="c/1571" morph="HC/Ta" id="2456w">וְ/גַם</w><seg type="x-maqqef">־</seg><w lemma="3190" n="0.0" morph="HVha" id="24h2d">הֵיטֵ֖יב</w>
+          <w lemma="369" morph="HTn" id="24GLn">אֵ֥ין</w>
+          <w lemma="853" n="0" morph="HTo/Sp3mp" id="242mU">אוֹתָֽ/ם</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.6">
+          <w lemma="m/369" morph="HR/Tn" id="24gjo">מֵ/אֵ֥ין</w>
+          <w lemma="3644" n="1.0" morph="HR/Sp2ms" id="24jvq">כָּמ֖וֹ/ךָ</w>
+          <w lemma="3068" n="1" morph="HNp" id="24kmi">יְהוָ֑ה</w>
+          <w lemma="1419 a" morph="HAamsa" id="24uRv">גָּד֥וֹל</w>
+          <w lemma="859 a" n="0.0.0" morph="HPp2ms" id="24YCW">אַתָּ֛ה</w>
+          <w lemma="c/1419 a" morph="HC/Aamsa" id="24uJ1">וְ/גָד֥וֹל</w>
+          <w lemma="8034" n="0.0" morph="HNcmsc/Sp2ms" id="2471E">שִׁמְ/ךָ֖</w>
+          <w lemma="b/1369" n="0" morph="HR/Ncfsa" id="24kBH">בִּ/גְבוּרָֽה</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.7">
+          <w lemma="4310" morph="HTi" id="24tFR">מִ֣י</w>
+          <w lemma="3808" morph="HTn" id="24oGq">לֹ֤א</w>
+          <w lemma="3372" n="1.1.0" morph="HVqi3ms/Sp2ms" id="24REV">יִֽרָאֲ/ךָ֙</w>
+          <w lemma="4428" morph="HNcmsc" id="24XBk">מֶ֣לֶךְ</w>
+          <w lemma="d/1471 a" n="1.1" morph="HTd/Ncmpa" id="24WEz">הַ/גּוֹיִ֔ם</w>
+          <w lemma="3588 a" morph="HC" id="24b9h">כִּ֥י</w>
+          <w lemma="l" n="1.0" morph="HR/Sp2ms" id="24jKo">לְ/ךָ֖</w>
+          <w lemma="2969" n="1" morph="HVqp3fs" id="245EL">יָאָ֑תָה</w>
+          <w lemma="3588 a" morph="HC" id="24CTs">כִּ֣י</w>
+          <w lemma="b/3605" morph="HR/Ncmsc" id="24Cz7">בְ/כָל</w><seg type="x-maqqef">־</seg><w lemma="2450" morph="HAampc" id="244NJ">חַכְמֵ֧י</w>
+          <w lemma="d/1471 a" n="0.0.0" morph="HTd/Ncmpa" id="24nWS">הַ/גּוֹיִ֛ם</w>
+          <w lemma="c/b/3605" morph="HC/R/Ncmsc" id="24CJ3">וּ/בְ/כָל</w><seg type="x-maqqef">־</seg><w lemma="4438" n="0.0" morph="HNcfsc/Sp3mp" id="24Ymk">מַלְכוּתָ֖/ם</w>
+          <w lemma="m/369" morph="HR/Tn" id="24fAS">מֵ/אֵ֥ין</w>
+          <w lemma="3644" n="0" morph="HR/Sp2ms" id="24x3S">כָּמֽוֹ/ךָ</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.8">
+          <w lemma="c/b/259" n="1.0" morph="HC/R/Acfsa" id="244tb">וּ/בְ/אַחַ֖ת</w>
+          <w lemma="1197 b" morph="HVqi3mp" id="24a6P">יִבְעֲר֣וּ</w>
+          <w lemma="c/3688" n="1" morph="HC/Vqi3mp" id="24nWj">וְ/יִכְסָ֑לוּ</w>
+          <w lemma="4148" morph="HNcmsc" id="24eKZ">מוּסַ֥ר</w>
+          <w lemma="1892" n="0.0" morph="HNcmpa" id="24tM8">הֲבָלִ֖ים</w>
+          <w lemma="6086" morph="HNcmsa" id="24CrC">עֵ֥ץ</w>
+          <w lemma="1931" n="0" morph="HPp3ms" id="24q3W">הֽוּא</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.9">
+          <w lemma="3701" morph="HNcmsa" id="24yMr">כֶּ֣סֶף</w>
+          <w lemma="7554" n="1.1.1.0" morph="HVPsmsa" id="248Ci">מְרֻקָּ֞ע</w>
+          <w lemma="m/8659" morph="HR/Np" id="24jsc">מִ/תַּרְשִׁ֣ישׁ</w>
+          <w lemma="935" n="1.1.1" morph="HVHi3ms" id="24kGg">יוּבָ֗א</w>
+          <w lemma="c/2091" n="1.1.0" morph="HC/Ncmsa" id="24miQ">וְ/זָהָב֙</w>
+          <w lemma="m/210" n="1.1" morph="HR/Np" id="24Q6Z">מֵֽ/אוּפָ֔ז</w>
+          <w lemma="4639" morph="HNcmsc" id="24auq">מַעֲשֵׂ֥ה</w>
+          <w lemma="2796" n="1.0" morph="HNcmsa" id="24Nmy">חָרָ֖שׁ</w>
+          <w lemma="c/3027" morph="HC/Ncbdc" id="24HXq">וִ/ידֵ֣י</w>
+          <w lemma="6884" n="1" morph="HVqrmsa" id="24Prq">צוֹרֵ֑ף</w>
+          <w lemma="8504" morph="HNcfsc" id="24GoM">תְּכֵ֤לֶת</w>
+          <w lemma="c/713" n="0.1.0" morph="HC/Ncmsa" id="24Qit">וְ/אַרְגָּמָן֙</w>
+          <w lemma="3830" n="0.1" morph="HNcmsc/Sp3mp" id="24EWH">לְבוּשָׁ֔/ם</w>
+          <w lemma="4639" morph="HNcmsc" id="24v1C">מַעֲשֵׂ֥ה</w>
+          <w lemma="2450" n="0.0" morph="HAampa" id="24tNG">חֲכָמִ֖ים</w>
+          <w lemma="3605" n="0" morph="HNcmsc/Sp3mp" id="24Hag">כֻּלָּֽ/ם</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.10">
+          <w lemma="c/3068" morph="HC/Np" id="24n52">וַֽ/יהוָ֤ה</w>
+          <w lemma="430" n="1.1.0" morph="HNcmpa" id="24eDt">אֱלֹהִים֙</w>
+          <w lemma="571" n="1.1" morph="HNcfsa" id="248jm">אֱמֶ֔ת</w>
+          <w lemma="1931" morph="HPp3ms" id="24o98">הֽוּא</w><seg type="x-maqqef">־</seg><w lemma="430" morph="HNcmpa" id="245ax">אֱלֹהִ֥ים</w>
+          <w lemma="2416 a" n="1.0" morph="HAampa" id="24ce1">חַיִּ֖ים</w>
+          <w lemma="c/4428" morph="HC/Ncmsc" id="24iyi">וּ/מֶ֣לֶךְ</w>
+          <w lemma="5769" n="1" morph="HNcmsa" id="249mB">עוֹלָ֑ם</w>
+          <w lemma="m/7110 a" n="0.1.0" morph="HR/Ncmsc/Sp3ms" id="241yE">מִ/קִּצְפּ/וֹ֙</w>
+          <w lemma="7493" morph="HVqi3fs" id="24kZi">תִּרְעַ֣שׁ</w>
+          <w lemma="d/776" n="0.1" morph="HTd/Ncbsa" id="24XWn">הָ/אָ֔רֶץ</w>
+          <w lemma="c/3808" morph="HC/Tn" id="24N3v">וְ/לֹֽא</w><seg type="x-maqqef">־</seg><w lemma="3557" morph="HVhi3mp" id="24WjB">יָכִ֥לוּ</w>
+          <w lemma="1471 a" n="0.0" morph="HNcmpa" id="24z8A">גוֹיִ֖ם</w>
+          <w lemma="2195" n="0" morph="HNcmsc/Sp3ms" id="24CqV">זַעְמֽ/וֹ</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.11">
+          <w lemma="k/1836" n="1.2.0" morph="AR/Pdxcs" id="24gaD">כִּ/דְנָה֙</w>
+          <w lemma="560" morph="AVqi2mp" id="24iXd">תֵּאמְר֣וּן</w>
+          <w lemma="l" n="1.2" morph="AR/Sp3mp" id="24MD3">לְ/ה֔וֹם</w>
+          <w lemma="426" n="1.1" morph="ANcmpd/Td" id="24HgW">אֱלָ֣הַיָּ֔/א</w>
+          <w lemma="1768" morph="ATr" id="24ns5">דִּֽי</w><seg type="x-maqqef">־</seg><w lemma="8065" morph="ANcmpd/Td" id="24jBp">שְׁמַיָּ֥/א</w>
+          <w lemma="c/778" n="1.0" morph="AC/Ncfsd/Td" id="24YWJ">וְ/אַרְקָ֖/א</w>
+          <w lemma="3809" morph="ATn" id="24SNT">לָ֣א</w>
+          <w lemma="5648" n="1" morph="AVqp3mp" id="243ye">עֲבַ֑דוּ</w>
+          <w lemma="7" morph="AVqi3mp" id="24sN7">יֵאבַ֧דוּ</w>
+          <w lemma="m/772" n="0.0.0" morph="AR/Ncfsd/Td" id="24X85">מֵֽ/אַרְעָ֛/א</w>
+          <w lemma="c/4481" morph="AC/R" id="24oVd">וּ/מִן</w><seg type="x-maqqef">־</seg><w lemma="8460" morph="AR" id="24Qiq">תְּח֥וֹת</w>
+          <w lemma="8065" n="0.0" morph="ANcmpd/Td" id="24hE4">שְׁמַיָּ֖/א</w>
+          <w lemma="429" n="0" morph="APdxcp" id="24pej">אֵֽלֶּה</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.12">
+          <w lemma="6213 a" morph="HVqrmsc" id="24Y5A">עֹשֵׂ֥ה</w>
+          <w lemma="776" n="1.1.0" morph="HNcbsa" id="24ti3">אֶ֨רֶץ֙</w>
+          <w lemma="b/3581 b" n="1.1" morph="HR/Ncmsc/Sp3ms" id="24XtY">בְּ/כֹח֔/וֹ</w>
+          <w lemma="3559 a" morph="HVhrmsa" id="24kBb">מֵכִ֥ין</w>
+          <w lemma="8398" n="1.0" morph="HNcfsa" id="24CAc">תֵּבֵ֖ל</w>
+          <w lemma="b/2451" n="1" morph="HR/Ncfsc/Sp3ms" id="24dWV">בְּ/חָכְמָת֑/וֹ</w>
+          <w lemma="c/b/8394" n="0.0" morph="HC/R/Ncfsc/Sp3ms" id="24atD">וּ/בִ/תְבוּנָת֖/וֹ</w>
+          <w lemma="5186" morph="HVqp3ms" id="24Uit">נָטָ֥ה</w>
+          <w lemma="8064" n="0" morph="HNcmpa" id="24mrd">שָׁמָֽיִם</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.13">
+          <w lemma="l/6963 a" morph="HR/Ncmsc" id="248NY">לְ/ק֨וֹל</w>
+          <w lemma="5414" n="1.1.0.0" morph="HVqc/Sp3ms" id="24BdS">תִּתּ֜/וֹ</w>
+          <w lemma="1995 a" morph="HNcmsc" id="247d1">הֲמ֥וֹן</w>
+          <w lemma="4325" n="1.1.0" morph="HNcmpa" id="24iGP">מַ֨יִם֙</w>
+          <w lemma="b/8064" n="1.1" morph="HRd/Ncmpa" id="24LXv">בַּ/שָּׁמַ֔יִם</w>
+          <w lemma="c/5927" morph="HC/Vhw3ms" id="24YrG">וַ/יַּעֲלֶ֥ה</w>
+          <w lemma="5387 b" n="1.0" morph="HNcmpa" id="24SBB">נְשִׂאִ֖ים</w>
+          <w lemma="m/7097 a" morph="HR/Ncbsc" id="24EcU">מִ/קְצֵ֣ה</w>
+          <w type="x-ketiv" lemma="776" morph="HNcbsa" id="24Yth">ארץ</w><note type="variant"><catchWord>ארץ</catchWord><rdg type="x-qere"><w lemma="d/776" n="1" morph="HTd/Ncbsa" id="24fZb">הָ/אָ֑רֶץ</w></rdg></note>
+          <w lemma="1300 b" morph="HNcmpa" id="24G6t">בְּרָקִ֤ים</w>
+          <w lemma="l/4306" n="0.1.0" morph="HRd/Ncmsa" id="244zB">לַ/מָּטָר֙</w>
+          <w lemma="6213 a" n="0.1" morph="HVqp3ms" id="24DaG">עָשָׂ֔ה</w>
+          <w lemma="c/3318" morph="HC/Vhw3ms" id="24USD">וַ/יּ֥וֹצֵא</w>
+          <w lemma="7307" n="0.0" morph="HNcbsa" id="242W4">ר֖וּחַ</w>
+          <w lemma="m/214" n="0" morph="HR/Ncmpc/Sp3ms" id="24Uzr">מֵ/אֹצְרֹתָֽי/ו</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.14">
+          <w lemma="1197 b" morph="HVNp3ms" id="245bQ">נִבְעַ֤ר</w>
+          <w lemma="3605" morph="HNcmsc" id="24whG">כָּל</w><seg type="x-maqqef">־</seg><w lemma="120" n="1.1.0" morph="HNcmsa" id="24Ztm">אָדָם֙</w>
+          <w lemma="m/1847" n="1.1" morph="HR/Ncfsa" id="24gob">מִ/דַּ֔עַת</w>
+          <w lemma="3001" morph="HVhp3ms" id="24QLb">הֹבִ֥ישׁ</w>
+          <w lemma="3605" morph="HNcmsc" id="24CzH">כָּל</w><seg type="x-maqqef">־</seg><w lemma="6884" n="1.0" morph="HVqrmsa" id="24SRf">צוֹרֵ֖ף</w>
+          <w lemma="m/6459" n="1" morph="HR/Ncmsa" id="24aUL">מִ/פָּ֑סֶל</w>
+          <w lemma="3588 a" n="0.0.0" morph="HC" id="24ABu">כִּ֛י</w>
+          <w lemma="8267" morph="HNcmsa" id="24Qno">שֶׁ֥קֶר</w>
+          <w lemma="5262" n="0.0" morph="HNcmsc/Sp3ms" id="24faU">נִסְכּ֖/וֹ</w>
+          <w lemma="c/3808" morph="HC/Tn" id="24xJG">וְ/לֹא</w><seg type="x-maqqef">־</seg><w lemma="7307" morph="HNcbsa" id="24mUS">ר֥וּחַ</w>
+          <w lemma="b" n="0" morph="HR/Sp3mp" id="24rbb">בָּֽ/ם</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.15">
+          <w lemma="1892" morph="HNcmsa" id="247s1">הֶ֣בֶל</w>
+          <w lemma="1992" n="1.1" morph="HPp3mp" id="24g7p">הֵ֔מָּה</w>
+          <w lemma="4639" n="1.0" morph="HNcmsc" id="24SNp">מַעֲשֵׂ֖ה</w>
+          <w lemma="8595" n="1" morph="HNcmpa" id="24Fjh">תַּעְתֻּעִ֑ים</w>
+          <w lemma="b/6256" morph="HR/Ncbsc" id="24aH9">בְּ/עֵ֥ת</w>
+          <w lemma="6486" n="0.0" morph="HNcfsc/Sp3mp" id="24kv5">פְּקֻדָּתָ֖/ם</w>
+          <w lemma="6" n="0" morph="HVqi3mp" id="24RUm">יֹאבֵֽדוּ</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.16">
+          <w lemma="3808" morph="HTn" id="24NJw">לֹֽא</w><seg type="x-maqqef">־</seg><w lemma="k/428" n="1.2.1.0" morph="HR/Pdxcp" id="24pgX">כְ/אֵ֜לֶּה</w>
+          <w lemma="2506 a" morph="HNcmsc" id="24pvp">חֵ֣לֶק</w>
+          <w lemma="3290" n="1.2.1" morph="HNp" id="24g9e">יַעֲקֹ֗ב</w>
+          <w lemma="3588 a" morph="HC" id="24qtY">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="3335" morph="HVqrmsc" id="24mno">יוֹצֵ֤ר</w>
+          <w lemma="d/3605" n="1.2.0" morph="HTd/Ncmsa" id="245Ne">הַ/כֹּל֙</w>
+          <w lemma="1931" n="1.2" morph="HPp3ms" id="24kfA">ה֔וּא</w>
+          <w lemma="c/3478" n="1.1" morph="HC/Np" id="24o9X">וְ/יִ֨שְׂרָאֵ֔ל</w>
+          <w lemma="7626" n="1.0" morph="HNcmsc" id="24qEq">שֵׁ֖בֶט</w>
+          <w lemma="5159" n="1" morph="HNcfsc/Sp3ms" id="24FMs">נַֽחֲלָת֑/וֹ</w>
+          <w lemma="3068" morph="HNp" id="24uss">יְהוָ֥ה</w>
+          <w lemma="6635 b" n="0.0" morph="HNcbpa" id="24LSu">צְבָא֖וֹת</w>
+          <w lemma="8034" n="0" morph="HNcmsc/Sp3ms" id="24X7L">שְׁמֽ/וֹ</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.17">
+          <w lemma="622" morph="HVqv2fs" id="24acK">אִסְפִּ֥י</w>
+          <w lemma="m/776" n="1.0" morph="HR/Ncbsc" id="24Bfx">מֵ/אֶ֖רֶץ</w>
+          <w lemma="3666" n="1" morph="HNcfsc/Sp2fs" id="24Jcq">כִּנְעָתֵ֑/ךְ</w>
+          <w type="x-ketiv" lemma="3427" morph="HVqrfsa" id="24yxB">ישבתי</w><note type="variant"><catchWord>ישבתי</catchWord><rdg type="x-qere"><w lemma="3427" n="0.0" morph="HVqrfsa" id="24EMh">יֹשֶׁ֖בֶת</w></rdg></note>
+          <w lemma="b/4692" n="0" morph="HRd/Ncmsa" id="24oSC">בַּ/מָּצֽוֹר</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.18">
+          <w lemma="3588 a" morph="HC" id="24x6j">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="3541" n="1.1.0" morph="HD" id="24sqj">כֹה֙</w>
+          <w lemma="559" morph="HVqp3ms" id="24U8L">אָמַ֣ר</w>
+          <w lemma="3068" n="1.1" morph="HNp" id="24N1A">יְהוָ֔ה</w>
+          <w lemma="2005" morph="HTm/Sp1cs" id="24S7G">הִנְ/נִ֥י</w>
+          <w lemma="7049 a" n="1.0.0" morph="HVqrmsa" id="24jyn">קוֹלֵ֛עַ</w>
+          <w lemma="853" morph="HTo" id="24K1A">אֶת</w><seg type="x-maqqef">־</seg><w lemma="3427" morph="HVqrmpc" id="24uDX">יוֹשְׁבֵ֥י</w>
+          <w lemma="d/776" n="1.0" morph="HTd/Ncbsa" id="24xoq">הָ/אָ֖רֶץ</w>
+          <w lemma="b/6471" morph="HRd/Ncfsa" id="24p8s">בַּ/פַּ֣עַם</w>
+          <w lemma="d/2063" n="1" morph="HTd/Pdxfs" id="24u7q">הַ/זֹּ֑את</w>
+          <w lemma="c/6887 b" morph="HC/Vhq1cs" id="24WtS">וַ/הֲצֵר֥וֹתִי</w>
+          <w lemma="l" n="0.0" morph="HR/Sp3mp" id="24PiF">לָ/הֶ֖ם</w>
+          <w lemma="4616" morph="HR" id="24wyB">לְמַ֥עַן</w>
+          <w lemma="4672" n="0" morph="HVqi3mp" id="24uBF">יִמְצָֽאוּ</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.19">
+          <w lemma="188" morph="HTj" id="24wqi">א֥וֹי</w>
+          <w lemma="l" n="1.1.0" morph="HR/Sp1cs" id="24Fm8">לִ/י֙</w>
+          <w lemma="5921 a" morph="HR" id="245Sy">עַל</w><seg type="x-maqqef">־</seg><w lemma="7667" n="1.1" morph="HNcmsc/Sp1cs" id="242gS">שִׁבְרִ֔/י</w>
+          <w lemma="2470 a" n="1.0" morph="HVNrfsa" id="24Jut">נַחְלָ֖ה</w>
+          <w lemma="4347" n="1" morph="HNcfsc/Sp1cs" id="24p3n">מַכָּתִ֑/י</w>
+          <w lemma="c/589" morph="HC/Pp1cs" id="24d68">וַ/אֲנִ֣י</w>
+          <w lemma="559" n="0.1" morph="HVqp1cs" id="24qeT">אָמַ֔רְתִּי</w>
+          <w lemma="389" n="0.0.0" morph="HTa" id="242pY">אַ֛ךְ</w>
+          <w lemma="2088" morph="HPdxms" id="24hYY">זֶ֥ה</w>
+          <w lemma="2483" n="0.0" morph="HNcmsc" id="24gz6">חֳלִ֖י</w>
+          <w lemma="c/5375" n="0" morph="HC/Vqi1cs/Sp3ms" id="24YKe">וְ/אֶשָּׂאֶֽ/נּוּ</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.20">
+          <w lemma="168" morph="HNcmsc/Sp1cs" id="24LnX">אָהֳלִ֣/י</w>
+          <w lemma="7703" n="1.1" morph="HVPp3ms" id="24fBS">שֻׁדָּ֔ד</w>
+          <w lemma="c/3605" morph="HC/Ncmsc" id="24r2p">וְ/כָל</w><seg type="x-maqqef">־</seg><w lemma="4340" n="1.0" morph="HNcmpc/Sp1cs" id="24RiY">מֵיתָרַ֖/י</w>
+          <w lemma="5423" n="1" morph="HVNp3cp" id="24ZhF">נִתָּ֑קוּ</w>
+          <w lemma="1121 a" morph="HNcmpc/Sp1cs" id="24M4z">בָּנַ֤/י</w>
+          <w lemma="3318" n="0.2.0" morph="HVqp3cp/Sp1cs" id="24t9s">יְצָאֻ֨/נִי֙</w>
+          <w lemma="c/369" n="0.2" morph="HC/Tn/Sp3mp" id="24ubY">וְ/אֵינָ֔/ם</w>
+          <w lemma="369" morph="HTn" id="24hDs">אֵין</w><seg type="x-maqqef">־</seg><w lemma="5186" morph="HVqrmsa" id="24tti">נֹטֶ֥ה</w>
+          <w lemma="5750" n="0.1.0" morph="HD" id="24Ht3">עוֹד֙</w>
+          <w lemma="168" n="0.1" morph="HNcmsc/Sp1cs" id="2437A">אָהֳלִ֔/י</w>
+          <w lemma="c/6965 b" n="0.0" morph="HC/Vhrmsa" id="24ZhJ">וּ/מֵקִ֖ים</w>
+          <w lemma="3407" n="0" morph="HNcfpc/Sp1cs" id="24SmQ">יְרִיעוֹתָֽ/י</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.21">
+          <w lemma="3588 a" morph="HC" id="24MZa">כִּ֤י</w>
+          <w lemma="1197 b" n="1.1.0" morph="HVNp3cp" id="24zKB">נִבְעֲרוּ֙</w>
+          <w lemma="d/7462 b" n="1.1" morph="HTd/Vqrmpa" id="24eLd">הָֽ/רֹעִ֔ים</w>
+          <w lemma="c/853" morph="HC/To" id="24o5N">וְ/אֶת</w><seg type="x-maqqef">־</seg><w lemma="3068" n="1.0" morph="HNp" id="24S8J">יְהוָ֖ה</w>
+          <w lemma="3808" morph="HTn" id="24wdY">לֹ֣א</w>
+          <w lemma="1875" n="1" morph="HVqp3cp" id="244qA">דָרָ֑שׁוּ</w>
+          <w lemma="5921 a" morph="HR" id="24vHo">עַל</w><seg type="x-maqqef">־</seg><w lemma="3651 c" n="0.1.0" morph="HTm" id="24JGD">כֵּן֙</w>
+          <w lemma="3808" morph="HTn" id="246uD">לֹ֣א</w>
+          <w lemma="7919 a" n="0.1" morph="HVhp3cp" id="24CXt">הִשְׂכִּ֔ילוּ</w>
+          <w lemma="c/3605" morph="HC/Ncmsc" id="24Pwy">וְ/כָל</w><seg type="x-maqqef">־</seg><w lemma="4830" n="0.0" morph="HNcfsc/Sp3mp" id="248Dn">מַרְעִיתָ֖/ם</w>
+          <w lemma="6327 a" n="0" morph="HVNp3fs" id="24avv">נָפֽוֹצָה</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.22">
+          <w lemma="6963 a" morph="HNcmsc" id="24bKm">ק֤וֹל</w>
+          <w lemma="8052" n="1.1.0" morph="HNcfsa" id="244Vj">שְׁמוּעָה֙</w>
+          <w lemma="2009" morph="HTm" id="241Ae">הִנֵּ֣ה</w>
+          <w lemma="935" n="1.1" morph="HVqrfsa" id="24Kmu">בָאָ֔ה</w>
+          <w lemma="c/7494" morph="HC/Ncmsa" id="24yUJ">וְ/רַ֥עַשׁ</w>
+          <w lemma="1419 a" n="1.0" morph="HAamsa" id="24UZY">גָּד֖וֹל</w>
+          <w lemma="m/776" morph="HR/Ncbsc" id="24t13">מֵ/אֶ֣רֶץ</w>
+          <w lemma="6828" n="1" morph="HNcfsa" id="24SW7">צָפ֑וֹן</w>
+          <w lemma="l/7760 a" n="0.0.0.0" morph="HR/Vqc" id="24znf">לָ/שׂ֞וּם</w>
+          <w lemma="853" morph="HTo" id="2412R">אֶת</w><seg type="x-maqqef">־</seg><w lemma="5892 b" morph="HNcfpc" id="24Wm7">עָרֵ֧י</w>
+          <w lemma="3063" n="0.0.0" morph="HNp" id="24Jxk">יְהוּדָ֛ה</w>
+          <w lemma="8077 a" n="0.0" morph="HNcfsa" id="24zc3">שְׁמָמָ֖ה</w>
+          <w lemma="4583" morph="HNcbsc" id="24hE9">מְע֥וֹן</w>
+          <w lemma="8577 a" n="0" morph="HNcmpa" id="24NHf">תַּנִּֽים</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-samekh">ס</seg>
+        </verse>
+        <verse osisID="Jer.10.23">
+          <w lemma="3045" morph="HVqp1cs" id="24d3H">יָדַ֣עְתִּי</w>
+          <w lemma="3068" n="1.1" morph="HNp" id="24hmj">יְהוָ֔ה</w>
+          <w lemma="3588 a" n="1.0.0" morph="HC" id="24GSJ">כִּ֛י</w>
+          <w lemma="3808" morph="HTn" id="24RMB">לֹ֥א</w>
+          <w lemma="l/120" n="1.0" morph="HRd/Ncmsa" id="242am">לָ/אָדָ֖ם</w>
+          <w lemma="1870" n="1" morph="HNcbsc/Sp3ms" id="24Pwx">דַּרְכּ֑/וֹ</w>
+          <w lemma="3808" morph="HTn" id="24sNu">לֹֽא</w><seg type="x-maqqef">־</seg><w lemma="l/376" morph="HR/Ncmsa" id="24SGp">לְ/אִ֣ישׁ</w>
+          <w lemma="1980" n="0.1" morph="HVqrmsa" id="24AKE">הֹלֵ֔ךְ</w>
+          <w lemma="c/3559 a" n="0.0" morph="HC/Vhc" id="24BdE">וְ/הָכִ֖ין</w>
+          <w lemma="853" morph="HTo" id="24Z58">אֶֽת</w><seg type="x-maqqef">־</seg><w lemma="6806" n="0" morph="HNcmsc/Sp3ms" id="24sXJ">צַעֲדֽ/וֹ</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.24">
+          <w lemma="3256" morph="HVpv2ms/Sp1cs" id="24nEL">יַסְּרֵ֥/נִי</w>
+          <w lemma="3068" n="1.0" morph="HNp" id="24LDB">יְהוָ֖ה</w>
+          <w lemma="389" morph="HTa" id="24Lsc">אַךְ</w><seg type="x-maqqef">־</seg><w lemma="b/4941" n="1" morph="HR/Ncmsa" id="244Se">בְּ/מִשְׁפָּ֑ט</w>
+          <w lemma="408" morph="HTn" id="24KM8">אַל</w><seg type="x-maqqef">־</seg><w lemma="b/639" n="0.0" morph="HR/Ncmsc/Sp2ms" id="249DU">בְּ/אַפְּ/ךָ֖</w>
+          <w lemma="6435" morph="HC" id="244Q5">פֶּן</w><seg type="x-maqqef">־</seg><w lemma="4591" n="0" morph="HVhi2ms/Sp1cs" id="24NAz">תַּמְעִטֵֽ/נִי</w><seg type="x-sof-pasuq">׃</seg>
+        </verse>
+        <verse osisID="Jer.10.25">
+          <w lemma="8210" morph="HVqv2ms" id="24xWi">שְׁפֹ֣ךְ</w>
+          <w lemma="2534" n="1.2.1" morph="HNcfsc/Sp2ms" id="24kqa">חֲמָתְ/ךָ֗</w>
+          <w lemma="5921 a" morph="HR" id="24Awb">עַל</w><seg type="x-maqqef">־</seg><w lemma="d/1471 a" n="1.2.0" morph="HTd/Ncmpa" id="24Us6">הַ/גּוֹיִם֙</w>
+          <w lemma="834 a" morph="HTr" id="24XWb">אֲשֶׁ֣ר</w>
+          <w lemma="3808" morph="HTn" id="24AzE">לֹֽא</w><seg type="x-maqqef">־</seg><w lemma="3045" n="1.2" morph="HVqp3cp/Sp2ms" id="24zMc">יְדָע֔וּ/ךָ</w>
+          <w lemma="c/5921 a" n="1.1.0" morph="HC/R" id="24f4L">וְ/עַל֙</w>
+          <w lemma="4940" n="1.1" morph="HNcfpa" id="24zMh">מִשְׁפָּח֔וֹת</w>
+          <w lemma="834 a" morph="HTr" id="24uRx">אֲשֶׁ֥ר</w>
+          <w lemma="b/8034" n="1.0" morph="HR/Ncmsc/Sp2ms" id="24u5G">בְּ/שִׁמְ/ךָ֖</w>
+          <w lemma="3808" morph="HTn" id="24V2c">לֹ֣א</w>
+          <w lemma="7121" n="1" morph="HVqp3cp" id="24GoD">קָרָ֑אוּ</w>
+          <w lemma="3588 a" morph="HC" id="24Euf">כִּֽי</w><seg type="x-maqqef">־</seg><w lemma="398" morph="HVqp3cp" id="24hmw">אָכְל֣וּ</w>
+          <w lemma="853" morph="HTo" id="24Hme">אֶֽת</w><seg type="x-maqqef">־</seg><w lemma="3290" n="0.1.1" morph="HNp" id="24pDV">יַעֲקֹ֗ב</w>
+          <w lemma="c/398" n="0.1.0" morph="HC/Vqp3cp/Sp3ms" id="24zCP">וַ/אֲכָלֻ֨/הוּ֙</w>
+          <w lemma="c/3615" n="0.1" morph="HC/Vpw3mp/Sp3ms" id="24QxP">וַ/יְכַלֻּ֔/הוּ</w>
+          <w lemma="c/853" morph="HC/To" id="24ihJ">וְ/אֶת</w><seg type="x-maqqef">־</seg><w lemma="5116 a" n="0.0" morph="HNcbsc/Sp3ms" id="24NR3">נָוֵ֖/הוּ</w>
+          <w lemma="8074" n="0" morph="HVhp3cp" id="24Wsp">הֵשַֽׁמּוּ</w><seg type="x-sof-pasuq">׃</seg>
+          <seg type="x-pe">פ</seg>
+        </verse>
+      </chapter>
+    </div>
+  </osisText>
+</osis>

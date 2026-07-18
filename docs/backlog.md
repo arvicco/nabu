@@ -8027,3 +8027,392 @@ worklog `—` (orchestrator fills at merge).
 #    JSON update channel = license_watch item.
 # Riders: 02-sources row 7 correction at DCS promotion; row 44
 #    footnote (Diorisis LXX = another Rahlfs dead end).
+
+# ── Phase 26 ──────────────────────────────────────────────────────────
+
+## P26-1 · SuttaCentral — the Pali axis  [tier: fable] [status: done 2026-07-18 — adapter + bilara-json family + fixtures shipped, enabled:false awaiting the owner-fired first sync; verdicts below] [deps: —]
+
+Queue item 3 (biblical–Indic batch): `suttacentral/bilara-data`, branch
+`published` — the whole Tipiṭaka in roman-script Pali, English as `-en`
+sibling documents keyed by THE SAME segment ids.
+
+SHIPPED:
+- `BilaraJsonParser` (NEW family `bilara-json`): flat ordered JSON segment
+  map → passages. Citation = segment id minus the redundant `<stem>:`
+  prefix; RANGE-STEM files (dhp21-32, sn23.23-33, pli-tv-bu-vb-as1-7 —
+  6,707 segments censused) keep the FULL per-item id, colons intact.
+  Blank segments (14 corpus-wide) skip by rule; edge whitespace stripped,
+  interior verbatim (pdhp's inline `<unclear>` kept); heading block
+  (leading `0.x` run of the first item) → title, stem fallback.
+- `Suttacentral` adapter: scope root/pli/ms (Mahāsaṅgīti, 7,289 files; the
+  xplayground sandbox skips by rule) + root/pra/pts (Patna Dhammapada, 22
+  files, `pra` — in scope because its English translation IS the license
+  outlier). urn urn:nabu:suttacentral:<stem>, frozen. GitFetch PINNED to
+  branch `published` (the P17-1 ref pin). `-en` siblings file-driven with
+  the frozen TRANSLATOR_PRIORITY pick (104 double-covered stems, all
+  sujato+other); 179 orphan en stems (sujato name/ glossaries, patton's
+  Āgama translations of lzh roots) skip by rule. Per-publication license
+  gate machine-read from _publication.json: 138 CC0 + 1 PD (scpub64, the
+  root) + 1 CC BY-SA 3.0 (scpub69, Ānandajoti's en pdhp) → pdhp-en mints
+  license_override "attribution" (P10-4); no-record trees ride LICENSE.md's
+  CC0 blanket; unmappable license = loud FetchError; gate only where the
+  file exists (the ORACC attic stance verbatim).
+- Query::Parallel SUTTACENTRAL_DOCUMENT work family (the Damaskini literal
+  `-en` tail split — stems are hyphen-rich); honest one-sided rows pinned
+  (en expands the root's blank `…pe…` ellipsis at sn35.24:1.5, leaves the
+  `Dutiyaṁ.` colophon untranslated).
+- New `pli`/`pra` language axes on the generic fold (dhammā/dhamma pinned;
+  no LANGUAGE_FOLDS key needed — measured).
+- Registry `enabled: false`, sync_policy manual, translations: true; docs
+  02-sources row 66; fixtures = 8 whole byte-verbatim upstream files + a
+  _publication.json slice (entry blocks byte-identical), commit
+  cebbf6181dafbbde155cce7f0357426cc65e5668 pinned in the README.
+
+JOURNALED (not built, by rule):
+- The sc-data parallels graph (8,221 relations / 49,685 refs, upstream
+  declares it non-copyrightable) = a FUTURE intertext packet — different
+  repo, not fetched here.
+- language-notes rider (witness:suttacentral on pli): NOT honest today —
+  the accretion hook lives in Store::DictionaryLoader
+  (accrete_adapter_language_notes) and suttacentral is a :passages source
+  routed to Store::Loader, which has no such hook. The pli dossier is the
+  owner's scaffold (canonical/ is not written from a worktree); wire a
+  witness lane if/when a passages-loader hook exists.
+- The 32 non-English translation languages, root/san + root/lzh parallels,
+  and the alternate translators of double-covered stems (suddhaso/soma/
+  kovilo variants) = future scope decisions; UD_Pali-PaliCanon v2.19
+  (2026-11-15, BY-SA, manual-native lemmas) = future config-only gold.
+- Owner sync expectation: ~353 MB clone (310 MB tree + 43 MB .git at
+  census); ≈7,310 root docs / ≈445,600 passages + ≈4,712 -en siblings
+  (≈12,022 docs total).
+
+## P26-3 · OSHB — the Masoretic witness (the ot hub goes three-legged)  [tier: fable] [status: done 2026-07-18 — adapter + oshb-osis family + NFC-exemption seam + alignment config shipped, enabled:false awaiting owner sync; verdicts below] [deps: —]
+Queue lane 2 of the biblical–Indic batch (survey
+.docs/surveys/biblical-indic-survey.md; owner-approved 2026-07-17). The
+Westminster Leningrad Codex (openscriptures/morphhb, OSIS XML, 39 books)
+as the alignment hub's MASORETIC witness: `align "GEN 1.1"` renders
+MT ↔ LXX ↔ Vulgate.
+
+SHIPPED:
+- THE OWNER RULING IMPLEMENTED (2026-07-18, gate decision): per-language
+  NFC exemption. hbo/arc passage text is stored BYTE-VERBATIM — NFC
+  reorders Masoretic combining marks (dagesh/shin-dot ccc 21/24 vs vowel
+  points 10–19; upstream's anti-NFC warning measured true, Ruth 1:1 the
+  pinned byte-identity fixture). Seam: Normalize::NFC_EXEMPT_LANGUAGES
+  (["hbo","arc"], primary-subtag scoped) + Normalize.nfc_exempt? +
+  Validation.verbatim_text! + a language-keyed branch in Passage.new; the
+  conformance suite's NFC assertion branches on the SAME central list (no
+  adapter can opt another language out); text_normalized/query folding
+  still NFC-fold, so folded Hebrew lookup is unaffected (tested end to
+  end: unpointed בראשית finds pointed Gen 1:1 through FTS). Docs:
+  architecture §3 exception bullet + conventions §1 paragraph in the
+  same change (keep-docs-truthful).
+- NEW oshb-osis parser family (DOM, largest book 1.9 MB): verse text
+  assembled from the file's own bytes (morpheme-divider `/` = OSHB
+  markup, removed; joins follow the source's own inter-element
+  whitespace — maqqef/sof-pasuq attach, words space); <w> → P7-5 tokens:
+  lemma = AUGMENTED STRONG'S id VERBATIM (the honest modeling — no
+  headword exists upstream; "b/7225" indexes into passage_lemmas as-is),
+  morph = OSHM code verbatim, immutable word id, lang from the OSHM
+  H/A prefix; ketiv/qere notes attach the qere reading(s) to the ketiv
+  token; alternative/bare notes = annotations, never running text.
+- Language honesty: per-word hbo/arc → per-passage majority (the corph
+  mechanics; Jer 10:11 votes arc, Gen 31:47 keeps token-grain Aramaic
+  inside an hbo verse), document majority hbo.
+- ALIGNMENT (the point): ot work gains "OSHB (WLC, Masoretic)"
+  (cts-verse, 29/39 books). HOLDOUTS journaled in-registry: JER/DAN/1KI
+  per the survey's conservative map (DAN-3: the numbering: remap is
+  witness-global, not chapter-scoped, so the whole book holds out) PLUS
+  PRO/JOL/MAL — measured chapter-grain divergence at packet time (MT
+  31/4/3 vs Swete 29/3/4, read-only census 2026-07-18); EZR/NEH/ECC
+  have no work token. PSA joins the psalms work with the P13-5
+  Hebrew→Greek numbering table REUSED VERBATIM (asserted equal to the
+  WEB witness's table). Three-legged GEN 1.1 fixture-level align test;
+  the live render is the owner's eyeball at sync time.
+- License per layer verbatim (fixture README + manifest + 02-sources row
+  66): WLC text Public Domain, morphology CC BY 4.0 with the "credit the
+  Open Scriptures Hebrew Bible Project" wording carried in the manifest
+  license text; class open.
+- Fixtures: byte-verbatim slices of morphhb@3d15126f (Gen 1+31, Ruth 1,
+  Ps 23, Jer 10, trimmed VerseMap.xml pinned as the non-book); registry
+  oshb enabled:false / sync_policy manual; full first-sync clone ≈174 MB
+  (wlc/ ≈27 MB).
+
+Owner queue: bin/nabu sync oshb, eyeball nabu show urn:nabu:oshb:gen:1.1
+(pointed WLC mark order intact) + 5 random verses + `align "GEN 1.1"`
+three-legged, then flip enabled.
+
+## P26-2 · SARIT adapter — the open scholarly Sanskrit shelf  [tier: fable] [status: done 2026-07-18 — adapter + `sarit` family + `Nabu::Deva` shipped, `enabled: false` awaiting the owner-fired first sync (~204 MB clone)] [deps: —]
+
+The GRETIL-posture upgrade: 83 scholarly TEI editions (~170 MB,
+github.com/sarit/SARIT-corpus @ `1eac9ee`) whose headers were ALL censused
+at parse-scout AND re-verified by this packet's whole-corpus dry run —
+**CC BY-SA 4.0 ×56, CC BY-SA 3.0 ×26, MIT ×1, zero NC** → class
+`attribution` (GRETIL stays nc-locked). ~60 works GRETIL lacks, incl. a
+complete Mahābhārata (38.6 MB) and full Caraka/Suśruta.
+
+Shipped:
+- `Nabu::Deva` — one-way Devanagari→IAST transcoder (Slp1/Betacode
+  precedent; inherent-a logic is context-sensitive, so it can never be a
+  conventions-§9 fold rule and must run before the virāma-stripping generic
+  fold).
+- `SaritParser` — new bespoke streaming family (SIBLING of GretilParser:
+  rung strategy, but citations mined from TEI apparatus, never in-text
+  marker regexes). Unit grain lg/standalone-l/p; ladder @n → stripped
+  @xml:id → block-quote inheritance (base-text sūtras) → div-scoped
+  ordinals (non-canonical flag); `:b<k>` collision suffixes; per-file
+  license gate (BY-SA/MIT else quarantine) carried in
+  `Document#metadata["license"]`; `<lb break="no"/>` word joins; apparatus
+  `<note>`/`<head>` drops. Reader-only (9 files >5 MB; static streaming
+  proof à la EpidocParser).
+- `Sarit` adapter — flat-root discover (teiCorpus wrapper + header template
+  skipped by rule, censused), language ladder text→body→script-sniff
+  (sa→san, braj→bra, avadhi→awa), urn `urn:nabu:sarit:<filename-stem>`,
+  GitFetch. Registry `enabled: false`, `sync_policy: manual`.
+- SCRIPT VERDICT: native script stays the canonical surface (41/83
+  Devanagari); the search layer folds the Deva→IAST transcode
+  (text_normalized = san fold of `Deva.to_iast`, the ccmh-txt
+  documented-derivation mechanism). Proven end-to-end in the adapter test:
+  one IAST FTS query lands on the IAST aṣṭāvakragītā AND the Devanagari
+  MBh. v1 limitation, documented: Devanagari-TYPED queries are not
+  transcoded query-side (query_forms' generic fold strips the virāma
+  first) — future packet if wanted.
+- MBh RECENSION VERDICT: SARIT's MBh is the SOUTHERN RECENSION (Kumbakonam,
+  Krishnacharya & Vyasacharya 1906–1910, per its own editionStmt) — not
+  BORI, not the Calcutta vulgate MW's `MB.` citations reference → NO
+  MW-citation joins promised on it (docs say so; MwSigla untouched).
+- Fixtures (4): astavakragita + samanyadusana whole; nyāyabhāṣya sūtras
+  1.1.1–1.1.2 trim; MBh two-parva trim (147 KB, the trimmed-but-big
+  streaming fixture) — README + manifest, license verbatim.
+- Dry run over the full clone (projected first sync): 78 docs / 345,601
+  passages; 5 honest quarantines, all named (4 `<ab>`-shaped Braj/Awadhi
+  texts + list-shaped ayurvedasutram — small v2 rungs, the P9-4c
+  precedent).
+
+Docs: 02-sources row 68; fixtures README. Suite + lint green at hand-off;
+sha in worklog `—` (orchestrator fills at merge).
+
+## P26-0 · lemma-tier column + DCS — gold Sanskrit  [tier: fable] [status: done 2026-07-18 — tier machinery + DCS adapter shipped, enabled:false awaiting owner sync; verdicts below] [deps: —]
+Queue item 1 (biblical–Indic batch, survey §6): the gold/silver lemma
+tier lands BEFORE any silver source exists (Diorisis is queue item 5),
+so the semantics are pinned by tests while every live source is still
+gold; then DCS proves the gold path with the first gold Sanskrit.
+
+SHIPPED — the tier:
+- sources.yml `lemma_tier: gold|silver` per source, ABSENT = GOLD (zero
+  churn for every existing entry; SourceRegistry validates, and
+  #lemma_tiers hands only the non-gold map downstream — absent-is-gold
+  is the wire format end to end).
+- TIER-MECHANISM VERDICT: the per-row tier lives on passage_lemmas in
+  fulltext.sqlite3 — a FULLTEXT-side column, NOT a catalog migration.
+  passage_lemmas is Indexer-built, drop-and-rebuild, never migrated
+  (the P7-5 stance), and the tier is registry posture × source
+  identity, both known at index-build time; sync's reindex and rebuild
+  both thread SourceRegistry#lemma_tiers into Indexer.rebuild!, which
+  resolves source_id→tier once per pass (no third join on the
+  streaming query). Pre-tier fulltext files keep serving: consumers
+  probe for the column and read all-gold (the borrowed_column?
+  pre-migration precedent) — correct, since only gold sources existed
+  before the column.
+- attested_count stays GOLD-ONLY everywhere; ReflexViews resolves a
+  separate labeled silver_count beside it. Renders (define/etym CLI +
+  MCP reflex payloads): "1 passage (+2 silver)"; silver-only reflexes
+  get their own "silver-only (automatic lemmatization…)" section,
+  "silver N passages" — the NEVER-A-BARE-NUMBER rule is pinned by
+  explicit render tests stated as refutations (a silver count must
+  never render where a reader could take it for gold, and gold+silver
+  must never sum).
+- search --lemma includes silver hits with per-hit [silver] labels
+  (gold stays unlabeled — the pre-tier render exactly), a silver
+  footer total, and --gold-only (requires --lemma; refuses --near);
+  MCP lemma hits mirror the labels (tier key on non-gold hits only).
+  `nabu language` scopes its gold-labeled lemma counts to the gold
+  tier.
+- JOURNALED for the Diorisis packet (not built — no silver rows exist
+  yet, so behavior today is identical): the OTHER lemma-table
+  consumers still read both tiers unlabeled — cognates' witness
+  lookups, vocab's corpus frequencies, concord/proximity's
+  surface-form expansion, ReflexRootsIndexer's language scope. Each
+  needs a labeled-or-scoped decision WHEN silver rows first land;
+  grep Store::Indexer::LEMMA_TABLE for the census.
+
+SHIPPED — DCS (Digital Corpus of Sanskrit):
+- 02-sources row 7 was stale TWICE (nonexistent "dcs-data" repo,
+  "custom text format") — CORRECTED: the corpus is standard CoNLL-U
+  (UD-compliant since Aug 2022) at dcs/data/conllu/ inside
+  OliverHellwig/sanskrit. Census at fixture commit 04e0778d
+  (2026-07-18): 15,900 .conllu chapter files / 270 text dirs /
+  ~844 MB / ~5.46M words, + 7,227 .conllu_parsed automatic siblings
+  (NEVER ingested — the *.conllu glob cannot match them, test-pinned)
+  + one stray zero-byte extensionless file (ignored). CC BY 4.0
+  verbatim in BOTH data readmes (quoted in MANIFEST.license, row 7,
+  fixture README).
+- GOLD GATED ON THE MACHINE DECLARATION: lookup/chapter-info.xml
+  (8.9 MB, XML::Reader-streamed per the >5 MB rule) declares
+  <layer type="gold">lexicon</layer> + morpho-syntax for ALL 15,900
+  chapters (1,780 add gold syntax = the Vedic Treebank, the only
+  chapters with filled HEAD/DEPREL); an undeclared or non-gold
+  chapter QUARANTINES with a message naming the gate — never a silent
+  skip, never prose-based gold. lemma_tier ABSENT in sources.yml =
+  gold, by the tier's own contract.
+- GRAIN VERDICT (censused): document per chapter FILE — the corpus's
+  own unit ("each chapter … is in a separate file"); passage per
+  sentence block; urns from upstream's permanent numeric ids,
+  urn:nabu:dcs:<textId>:<chapterId>:<sent_id> (filenames carry
+  spaces/commas/diacritics — names live in titles/metadata). sent_id
+  shapes vary per chapter ("556276_1" vs "10902") — verbatim, both
+  honest. Chapter metadata rides the document: text/chapter names +
+  ids, position, dcsTimeSlot, gold_layers, Vedic <details>
+  (register/veda → document facets).
+- THE FOLD-JOIN PROOF (scout 7/7, now test-pinned): DCS kaṇṭha (2
+  fixture passages) and śīghrá light ReflexViews attested_count
+  through a reflex row folded exactly as starling piet folds its IND
+  stems (fold("kaṇṭha")="kantha", fold("śīghrá")="sighra"); DCS aṃśa
+  hits carry the MW gloss end-to-end on real fixtures of both sources
+  (fold("aṃśa")="amsa"=fold(SLP1 "aMSa")) — zero new fold rules.
+- DEDUP PIN (no dedup wanted): ud/sanskrit-vedic is the same Hellwig
+  Vedic material at a different grain (UD conversion there, native
+  chapters here) — two honest witnesses, the MW-beside-kaikki
+  precedent; the UD dedup guard is for RE-EXPORTS of already-synced
+  sources, which this is not. Pinned in the adapter test header so
+  nobody "fixes" it later.
+- FETCH DESIGN: GitFetch grew an optional sparse: cone (blobless
+  --no-checkout clone + sparse-checkout set --no-cone + checkout;
+  pulls scope the deletion diff/attic to the cone) — the repo is
+  ~1.7 GB, the cone (dcs/data/conllu + dcs/data/readme.md) ~844 MB on
+  disk; git compresses CoNLL-U hard, so expect the first sync to
+  TRANSFER a fraction of that (hundreds of MB), then discover/parse
+  15,900 chapters. Registry enabled:false, sync_policy manual.
+- Fixtures: 3 real chapters (AU 1,1 whole ×35 blocks incl. gold
+  syntax + details; two Suśruta chapters trimmed to header + first 3
+  + the kaṇṭha/śīghra/aṃśa blocks), the trimmed .conllu_parsed
+  sibling (never-discovered pin), the 3 chapter-info entries
+  byte-verbatim, both readmes whole; README + manifest.yml with the
+  pinned commit and re-trim procedure.
+
+Tests +42 (registry 2, indexer 2, lemma search 4, reflex_views 4 [new
+mirror file], language_info 1, cli 4, mcp 2, git_fetch 2, dcs 21 incl.
+conformance/idempotent double-load/gold-gate quarantines/tier + join
+pins/sparse local-git fetch). Suite 3,156 runs / 37,959 assertions
+exit 0 (0 skips) · lint 406 files exit 0. OWNER QUEUE:
+bin/nabu sync dcs (sparse clone, ~844 MB cone), eyeball
+urn:nabu:dcs:5:3656 + `nabu search --lemma kaṇṭha` + 5 random chapters,
+flip enabled, rebuild/reindex.
+
+## P26-4 · Diorisis — the SILVER Greek lemma layer  [tier: fable] [status: done 2026-07-18 — adapter + `diorisis` streaming family + fixtures + the per-surface tier verdicts shipped, enabled:false awaiting the owner-fired first sync; verdicts below] [deps: P26-0]
+Queue item 5 (biblical–Indic batch, survey §6): the tier's first
+occupant — ~10.2M words of automatically lemmatized Greek arriving as
+silver, never gold, over a canon the catalog already holds bare.
+
+SHIPPED — the corpus:
+- ARTIFACT: figshare v1 (2018) zip, 194,443,428 bytes, md5
+  f3a26efa7e7d2b93d1bcca26900d180a — VERIFIED byte-for-byte against
+  figshare's own published computed_md5 at the census download —
+  sha256 fb32b7ff…19b65 pinned in the adapter (ZipFetch, the IE-CoR
+  prepare→verify-pin→breaker→complete choreography; a mismatch aborts
+  with the tree untouched). 820 XML / ~2.5 GB unpacked. Whole-corpus
+  census run over the real zip: 538,011 sentences / 10,206,421 words /
+  98.5% lemmatized (81.8–100% per file); provenance Perseus 752 /
+  Bibliotheca Augustana 60 / Mikros Apoplous 8; body inventory CLOSED
+  (sentence/word/lemma/analysis/punct); sentence ids unique per file;
+  TreeTagger=true on 1.84M words with 1/n disambiguated fractions
+  (1.0/0.5/0.33/…); 153,593 entry-less (unlemmatized) words; 429
+  non-NFC lemma entries (NFC'd at the boundary).
+- LICENSE (in-file doctrine proof #3): figshare page says CC BY 4.0;
+  ALL 820 files' own publicationStmt declare "Creative Commons
+  Attribution-ShareAlike 3.0 United States License" — the in-file
+  declaration GOVERNS; both quoted in the manifest + 02-sources row
+  69; class attribution.
+- SILVER, NEVER GOLD: upstream's own in-file words are "corpus
+  conversion and automatic annotation" (editionStmt) — sources.yml
+  `lemma_tier: silver`; the whole tier render verified end to end on
+  REAL fixture bytes (silver rows in passage_lemmas, [silver]-labeled
+  LemmaSearch hits, --gold-only exclusion, ReflexViews silver_count
+  beside a nil attested_count — never a bare number).
+- THE RAHLFS EXCLUSION (row 44 xref): 53/820 files are the Septuagint
+  — machine-readable header identity tlgAuthor 0527 (sourceDesc
+  Bibliotheca Augustana = the Rahlfs lineage; scout text-diffed
+  divergent from held Swete tlg0527). discover skips by rule with an
+  honest discovery_skips census (53 upstream / 1 in fixtures); parse
+  refuses belt-and-braces (a rights exclusion deserves both layers);
+  the fetched artifact stays whole in canonical.
+- SECOND EDITIONS, deliberately: 806/809 works already held (742
+  Perseus, 102 First1K) — Diorisis mints its own documents
+  (provenance-distinct second editions, the MW-beside-kaikki
+  precedent); no dedup, no cross-links; the value IS the lemma layer.
+- PARSER VERDICT: new bespoke `diorisis` streaming family (sibling of
+  ProielParser's shape) — TEI.2 P4-era XML, no namespace, no XML
+  declaration, so no TEI/EpiDoc family fits; Reader-only pinned
+  structurally (76 files >5 MB, Polybius 76.1 MB). Word forms are TLG
+  Beta Code decoded through the EXISTING Nabu::Betacode (census: zero
+  out-of-inventory characters; zero new fold rules); punct marks kept
+  VERBATIM glued left (")" is a Beta Code breathing — decoding punct
+  would fabricate combining marks); lemma entry = Unicode, NFC'd.
+  Annotations: lean tokens (id/form/lemma/lemma_id/pos + tree_tagger/
+  disambiguated only where TreeTagger actually fired + analyses); the
+  Perseus-style prose morph strings are a THIRD morphology dialect —
+  deliberately NOT wired into --morph (MorphFacets speaks UD+PROIEL;
+  absence over a wrong mapping).
+- GRAIN VERDICT (frozen minting): document per work file,
+  urn:nabu:diorisis:<tlgAuthor>:<tlgId> (header-peeked, streamed);
+  passage per sentence on upstream's file-stable sentence ids
+  (censused unique; the zip is frozen, so ids are the stability
+  contract). location is NOT identity — it repeats (poetry lines),
+  goes empty (142 files incl. all 53 LXX + Aristides), and free-forms
+  ("APr.Α", "6,7", "fragment") — it rides as the verbatim citation in
+  annotations. Header metadata (author/title/genre/subgenre/creation
+  date/provenance ref+URL/tlg ids) rides document metadata.
+- Registry: enabled:false, sync_policy manual (frozen artifact),
+  lemma_tier: silver; license_watch deliberately UNSET (figshare API
+  body carries volatile stats — hash compare would false-alarm); the
+  token-gated per-file JSON update channel (v1.6) journaled in
+  sources.yml comments as the future-refresh watch item.
+- PROJECTED first sync: ≈767 docs / ≈516,500 passages / ≈9.6M words →
+  ≈6–7M silver lemma rows (the fulltext db roughly triples; the
+  2.85M-row gold index is untouched by every gold-scoped surface).
+
+SHIPPED — the P26-0 journaled per-surface verdicts (each TDD'd):
+- cognates: GOLD-SCOPED (witness lookups + suppression df both) —
+  reconstruction evidence; a silver witness contributes NO cognate
+  evidence (refutation-pinned), and a silver flood cannot re-judge a
+  gold lemma common.
+- ReflexRootsIndexer: GOLD-SCOPED (closure language scope + stats
+  gold_passages denominators) — a silver-only language stays out of
+  the closure; numerator and denominator agree with cognates.
+- vocab: LABELED + gold reference — silver documents DO profile (that
+  is the Diorisis value) under an explicit "silver lemmas / lemma
+  tier: silver (automatic lemmatization…)" render, never the gold
+  name; corpus reference frequencies, corpus total and the
+  gold-bearing-languages listing stay gold-scoped (the documented
+  denominator keeps its meaning).
+- concord: LABELED pass-through — a formatter over LemmaSearch
+  inherits the hit tier; CLI tags [silver] rows + silver footer, MCP
+  rows carry tier key on non-gold only (the lemma-hit mirror); text
+  mode claims no tier (nil).
+- proximity: BOTH TIERS, deliberately — the lemma anchor is retrieval
+  expansion (hits are real text judged from snippets, no annotation
+  claim rendered); silver-attested inflections expand the anchor,
+  mirroring search --lemma's inclusive stance (test-pinned).
+- parallels (censused beyond the journal's four): BOTH TIERS,
+  deliberately — lemma echoes are a heuristic discovery signal, and
+  silver df IMPROVES the rarity estimate (gold-rare-but-corpus-common
+  is genuinely undiagnostic); test-pinned.
+- language_info: already gold-scoped at P26-0 (no change).
+
+Fixtures: Hymn 13 To Demeter WHOLE (8.3 KB — repeating locations,
+entry-less lemma, TreeTagger fractions, Beta Code capitals/elision),
+Thucydides trimmed to header + 3 sentences (dotted citations, the
+36.9 MB file the streaming rule exists for), LXX Abdias trimmed +
+PINNED AS EXCLUDED (empty locations documented), README with both
+license quotes + md5/sha256 + re-trim procedure.
+
+Tests +23 net adapter/parser (10 parser + 23 adapter incl.
+conformance, exclusion census + belt-and-braces refusal, idempotent
+double-load, silver tier end-to-end, sha-pin fetch trio) + 11 tier
+surfaces (cognates 2, reflex_roots 2, vocab 4, concord 2 [+1 MCP],
+proximity 1, parallels 1, cli 3). Suite + lint exit 0 at hand-off
+(exact counts in worklog). OWNER QUEUE: bin/nabu sync diorisis
+(194 MB download, md5/sha-pinned), eyeball urn:nabu:diorisis:0012:001
++ `nabu search --lemma θεός` (expect [silver] labels) + 5 random
+passages, confirm the 53-file skip census line, flip enabled,
+rebuild/reindex.
