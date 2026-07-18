@@ -4741,7 +4741,8 @@ module Nabu
               "(hgv #{result.axes.hgv}, goo300k #{result.axes.goo300k}, imp #{result.axes.imp}, " \
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
               "edh #{result.axes.edh}, damaskini #{result.axes.damaskini}, corph #{result.axes.corph}, " \
-              "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes})"
+              "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes}, " \
+              "isicily #{result.axes.isicily})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

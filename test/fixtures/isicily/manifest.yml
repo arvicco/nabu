@@ -1,0 +1,59 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Nine byte-identical whole files from github.com/ISicily/ISicily at
+# commit db1a4959f4bb2fc42468e7f1ac0d017b2cafe928 (master, retrieved
+# 2026-07-18). sha below = the git blob sha of each file at that commit
+# (verifiable with `git cat-file`/the GitHub blobs API); URL = the
+# commit-pinned raw path. adapter_test stays null: adapter tests
+# enumerate their own expectations against this 9-record tree.
+source: isicily
+adapter_test:
+retrieved: 2026-07-18
+commit: db1a4959f4bb2fc42468e7f1ac0d017b2cafe928
+files:
+  - path: inscriptions/ISic000001.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic000001.xml
+    blob_sha: 737acd78f90a7413b2193442c51ad6d9ae83eb07
+    whole: true
+    trim: none (interpunct <g> + expan + simple-lemmatized layer + CE date + GeoNames-only findspot)
+  - path: inscriptions/ISic000451.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic000451.xml
+    blob_sha: 83b270f2ea5a85fd4bbcf9ee3b54480fc8a0a656
+    whole: true
+    trim: none (self-closed <g/> + choice/orig/reg + lb break="no" inside the kept reg branch)
+  - path: inscriptions/ISic000764.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic000764.xml
+    blob_sha: a094ad17e607624139dad8a5a62f21ed56d87298
+    whole: true
+    trim: none (EDH 015282 concordance exemplar — one of 8 corpus-wide; full TM/EDR/EDCS set)
+  - path: inscriptions/ISic001510.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic001510.xml
+    blob_sha: 94cf3049d83d0ff4effe5c5bd9f6c711c85850bb
+    whole: true
+    trim: none (Sicilian Punic xpu — 𐤀, r-to-l lb style, BCE date, Pleiades Selinus)
+  - path: inscriptions/ISic001620.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic001620.xml
+    blob_sha: 87e4d925e11ecc25721f93d569fdca1641251794
+    whole: true
+    trim: none (Mamertine Oscan osc-Grek — supplied/unclear, per-passage edition language)
+  - path: inscriptions/ISic001895.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic001895.xml
+    blob_sha: d4720295a80ac6747193ae6bb59177086546e126
+    whole: true
+    trim: none (textpart sections n=1/n=2 — per-section line restarts, textpart-path urns)
+  - path: inscriptions/ISic002954.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic002954.xml
+    blob_sha: 93ecf7f5500c9b9eb370f2e943328ceb0be50291
+    whole: true
+    trim: none (Sicel scx — bare <orig> outside choice KEPT, gaps + unclear)
+  - path: inscriptions/ISic003475.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic003475.xml
+    blob_sha: f28bf81bb22c8530705bebb16f7296d138578136
+    whole: true
+    trim: none (Greek + simple-lemmatized layer + BCE date)
+  - path: inscriptions/ISic020002.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic020002.xml
+    blob_sha: 87ae83a9d635d1886e16b017bcc5ea73123cd99f
+    whole: true
+    trim: none (Elymian xly metadata-only — note-only edition, zero citable lines, axis-bearing header)
