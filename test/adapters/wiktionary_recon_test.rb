@@ -4,12 +4,13 @@ require "test_helper"
 require "tmpdir"
 
 # The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
-# P25-2 Celtic): ONE source, TEN dictionaries — kaikki.org's Proto-Slavic /
-# Proto-Indo-European / Proto-Germanic plus the P17-3 Proto-Balto-Slavic /
-# Proto-West Germanic / Proto-Italic / Proto-Indo-Iranian wiktextract
-# extracts, and the P25-2 ATTESTED Celtic extracts (Old Irish sga, Middle
-# Irish mga, Middle Welsh wlm — the wiktionary-cu attested precedent),
-# through the existing wiktionary-jsonl
+# P25-2 Celtic; P29-0 Etruscan): ONE source, ELEVEN dictionaries —
+# kaikki.org's Proto-Slavic / Proto-Indo-European / Proto-Germanic plus
+# the P17-3 Proto-Balto-Slavic / Proto-West Germanic / Proto-Italic /
+# Proto-Indo-Iranian wiktextract extracts, the P25-2 ATTESTED Celtic
+# extracts (Old Irish sga, Middle Irish mga, Middle Welsh wlm — the
+# wiktionary-cu attested precedent), and the P29-0 attested Etruscan
+# extract (ett), through the existing wiktionary-jsonl
 # family with reflexes: on. Dictionary-shaped (no passage conformance
 # suite); mirrors the WiktionaryCuTest checks for the dictionary shape and
 # adds the multi-file FileFetch choreography (per-extract subdirs, shared
@@ -39,7 +40,9 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-mga" => "https://kaikki.org/dictionary/Middle%20Irish/" \
                         "kaikki.org-dictionary-MiddleIrish.jsonl",
     "wiktionary-wlm" => "https://kaikki.org/dictionary/Middle%20Welsh/" \
-                        "kaikki.org-dictionary-MiddleWelsh.jsonl"
+                        "kaikki.org-dictionary-MiddleWelsh.jsonl",
+    "wiktionary-ett" => "https://kaikki.org/dictionary/Etruscan/" \
+                        "kaikki.org-dictionary-Etruscan.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -72,7 +75,8 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-iir-pro:kaikki.org-dictionary-ProtoIndoIranian.jsonl",
                   "wiktionary-sga:kaikki.org-dictionary-OldIrish.jsonl",
                   "wiktionary-mga:kaikki.org-dictionary-MiddleIrish.jsonl",
-                  "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl"],
+                  "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl",
+                  "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -81,15 +85,42 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_ten_dictionaries
+  def test_parse_yields_the_eleven_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
-                    wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm],
+                    wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
+                    wiktionary-ett],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm],
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm ett],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 4], documents.map(&:size)
+  end
+
+  # P29-0: the attested Etruscan extract — Old Italic headwords with the
+  # etymology kept verbatim, AND the Etruscan→Latin curated loan edges
+  # riding the P17-3 borrowed machinery: 𐌘𐌄𐌓𐌔𐌖 (phersu, the masked
+  # figure) names Latin persōna flagged borrowed while its intermediate
+  # ett *𐌘𐌄𐌓𐌔𐌖𐌍𐌀 node ("reshaped by analogy…") parses false — the
+  # exact per-edge honesty the closure ORs along the path. lanista is the
+  # clean borrowed case; the romanization stubs mint as entries too (the
+  # kaikki page structure, censused 73/493).
+  def test_ett_entries_mint_the_etruscan_to_latin_borrowed_edges
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    ett = documents.find { |doc| doc.slug == "wiktionary-ett" }
+    phersu = ett.entries.find { |e| e.entry_id == "𐌘𐌄𐌓𐌔𐌖:noun" } || flunk("𐌘𐌄𐌓𐌔𐌖:noun missing")
+    persona = phersu.reflexes.find { |r| r.language == "lat" } || flunk("lat persōna edge missing")
+    assert persona.borrowed, "persōna is upstream-flagged borrowed — the ett→lat loan edge"
+    assert_equal "persona", persona.word_folded, "the lat fold makes it define/etym-typable"
+    reshaped = phersu.reflexes.find { |r| r.language == "ett" } || flunk("ett intermediate missing")
+    refute reshaped.borrowed, "'reshaped by analogy' carries no borrow substring — false, not NULL"
+
+    lanista = ett.entries.find { |e| e.entry_id == "𐌋𐌀𐌍𐌉𐌔𐌕𐌀:noun" } || flunk("lanista entry missing")
+    assert(lanista.reflexes.any? { |r| r.language == "lat" && r.word_folded == "lanista" && r.borrowed },
+           "the clean borrowed lanista edge")
+
+    assert(ett.entries.any? { |e| e.entry_id == "vetus:romanization" },
+           "romanization stubs mint as entries")
   end
 
   def test_entries_carry_reflexes_the_crosswalk_edges
@@ -211,10 +242,11 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/sla-pro/, report.notes)
       assert_match(/iir-pro/, report.notes)
       assert_match(/wlm/, report.notes)
-      assert_equal 10, adapter.discover(workdir).count, "all ten extracts discoverable in place"
+      assert_match(/ett/, report.notes)
+      assert_equal 11, adapter.discover(workdir).count, "all eleven extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
-         old-irish middle-irish middle-welsh].each do |subdir|
+         old-irish middle-irish middle-welsh etruscan].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -234,9 +266,9 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 10, targets.size
+    assert_equal 11, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[middle-irish middle-welsh old-irish
+    assert_equal %w[etruscan middle-irish middle-welsh old-irish
                     proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
                     proto-italic proto-slavic proto-west-germanic],
                  targets.map(&:state_subdir).sort
@@ -262,7 +294,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 235, first.added
+    assert_equal 239, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -270,7 +302,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 235, second.skipped
+    assert_equal 239, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 
