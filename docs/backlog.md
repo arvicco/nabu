@@ -8979,3 +8979,85 @@ absent-never-rendered, with_section carry), CLI 5 (grouped render with
 truncation/stub/footer, (off) from the registry, composes-with-nothing
 guards, help anchors). Suite 3,535 runs / 46,169 assertions exit 0 ·
 lint 432 files exit 0.
+
+## P28-2 · TLA official Hugging Face datasets — demotic + late Egyptian  [tier: fable] [status: done 2026-07-18 — adapter + `tla-jsonl` family + passage-grain date axis shipped, `enabled: false` awaiting the owner-fired first sync (~9.2 MB, two GETs); verdicts below] [deps: —]
+
+The TLA's OFFICIAL Hugging Face org (`thesaurus-linguae-aegyptiae`):
+`tla-demotic-v18-premium` (13,383 sentences — the only bulk demotic
+artifact anywhere) + `tla-late_egyptian-v19-premium` (3,606 sentences,
+with hieroglyphs). The FRESHNESS channel (corpus v18 2023 / v19 2024,
+published 2024–2025) vs the frozen 2018 AES snapshot (02-sources row 15).
+
+SHIPPED (2026-07-18):
+- `Nabu::Adapters::TlaHf` + `Nabu::Adapters::TlaJsonlParser` (the
+  `tla-jsonl` family: ONE reader shared by adapter and axis extractor so
+  numbering/date parsing can never drift), registry `tla-hf`
+  `enabled: false`, `sync_policy: manual`, `translations: true`.
+- FETCH: FileFetch ×2 over the plain-HTTPS resolve URLs
+  (`…/resolve/main/train.jsonl` — censused card file layout: README.md +
+  train.jsonl per dataset, nothing else; the CDN 302 rides the shipped
+  RedirectFollow; NO hf CLI, NO new gems), each dataset in its own
+  subdir, the wiktionary-recon two-phase choreography (both prepare →
+  breaker sees the combined doomed set → both complete). Probe :http_zip
+  per resolve URL against the FileFetch state pins. Full artifact sizes
+  for the owner's sync: demotic 7,284,199 B, late Egyptian 1,904,138 B
+  (sha256s in test/fixtures/tla-hf/README.md).
+- ONE-OR-TWO-SOURCES VERDICT: ONE source, two DATASETS rows (the
+  starling-BASES / wiktionary-recon EXTRACTS configuration pattern) —
+  same org, same JSONL shape modulo two optional fields, same license,
+  same fetch machinery; two adapters would duplicate everything but a
+  hash literal.
+- FIELD CENSUS (full artifacts, 2026-07-18): shared `transliteration` /
+  `lemmatization` (`<TLA lemma ID>|<lemma>` pairs — demotic `d`/`dm`
+  prefixed 99,102+18,212 tokens, late bare numeric 24,437; 0 malformed) /
+  `UPOS` / `glossing` / `translation` (German) /
+  `dateNotBefore`+`dateNotAfter` (integer strings or empty); demotic-only
+  `authors`; late-only `hieroglyphs` (Unicode v15 + `<g>JSesh</g>`
+  fallback tags, kept verbatim in annotations). The four token fields
+  split to IDENTICAL counts on every record of both corpora (censused 0
+  misalignments → a mismatch is ParseError damage, never a shrug).
+- IDENTITY VERDICT (journaled): upstream ships NO sentence/text ids —
+  identity is the record's 1-based line number in the sha-pinned
+  canonical file (urn:nabu:tla-hf:demotic-v18:207; the starling
+  file-order precedent). Deterministic while the frozen artifact is
+  unchanged; a changed upstream file is a new fetch and honestly
+  re-mints. Fixture trims renumber accordingly (documented in the
+  fixture README — provenance, not identity).
+- LANGUAGE VERDICT (journaled): passages `egy` (ISO 639-3, both cards'
+  own tag), translations `deu`. The cards' prose "egy-Egyd" /
+  "egy-Egyp, egy-Egyh" are ISO 15924 SCRIPT subtags — and the stored
+  surface is LATIN transliteration, so a script subtag would
+  misdescribe what we hold. STAGE (Demotic / Late Egyptian) rides as a
+  document facet (`stage`) — the damaskini Norm precedent; no invented
+  subtags, journaled here.
+- DATE AXIS: `Store::AxisBuilder::TlaHfDates` — the pre-cooked
+  dateNotBefore/dateNotAfter signed integers (censused: historical
+  years, no year 0, no inverted ranges; demotic -664..475, late
+  -1539..-332) wired at PASSAGE grain (dates vary per sentence — the
+  ChronicleAnnals shape): one document envelope row + one row per dated
+  record (passage_seq_from/to = sequence), expected 16,281 rows at the
+  first live rebuild (12,673 demotic + 3,606 late dated sentences + the
+  2 document envelopes); 710
+  undated demotic records skipped, counted, never guessed. Summary
+  gains tla_hf/tla_hf_undated (defaulted — prior constructions stay
+  valid); the rebuild CLI line prints the new source.
+- LEMMA FLOW: expert-generated lemmatization → gold tier (the P26-0
+  absent-is-gold contract); tokens carry form/lemma_id/lemma/upos/gloss,
+  the lemma transliteration feeds passage_lemmas (e2e-tested), and
+  lemma_id keeps the TLA lemma-ID join open for a future AED/AES shelf.
+- NFC: 118 demotic + 9 late transliterations (and 13 demotic
+  translations) ship decomposed h+U+0331 → NFC ẖ U+1E96 at the adapter
+  boundary (egy is not NFC-exempt); pinned on a byte-verbatim fixture
+  record.
+- -de SIBLINGS: German translations as `-de` sibling documents (the
+  damaskini -en pattern), suffix-aligned; Query::Parallel gains
+  TLA_HF_DOCUMENT (-de tail anchor — no dataset slug ends in "-de",
+  censused, frozen).
+- Tests: conformance + adapter pins (32 runs) + axis extractor (5 runs)
+  incl. idempotent double-load, the gold-lemma e2e, the date-axis pins
+  and the extractor↔adapter mint drift pin. Fixtures byte-verbatim
+  (lines 1/2/306/355 demotic — incl. the first non-NFC and first
+  undated records — and 1/2/782 late), README with verbatim license
+  quotes + full-artifact sha256s + sizes.
+- Docs: 02-sources row 72; registry comments carry the freshness-channel
+  framing.
