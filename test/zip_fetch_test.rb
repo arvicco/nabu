@@ -11,6 +11,7 @@ require "test_helper"
 # the Oracc adapter fetch tests, which zip the checked-in fixtures).
 class ZipFetchTest < Minitest::Test
   URL = "https://example.org/json/proj.zip"
+  MIRROR = "https://s3.mirror.example.net/pfiles/proj.zip"
   LAST_MODIFIED = "Sat, 01 Mar 2026 10:00:00 GMT"
 
   def setup
@@ -21,11 +22,21 @@ class ZipFetchTest < Minitest::Test
 
   def teardown
     FileUtils.remove_entry(@root)
+    # webmock/minitest chains WebMock.reset! via alias_method :teardown — a
+    # custom teardown MUST call super or the request registry accumulates
+    # across tests (silently, until an assert_requested count lies).
+    super
   end
 
   # Build a zip whose single top-level dir is proj/ containing +files+
-  # (relative path => content), and stub URL with it.
-  def stub_zip(files, last_modified: LAST_MODIFIED)
+  # (relative path => content), and stub +url+ with it.
+  def stub_zip(files, last_modified: LAST_MODIFIED, url: URL)
+    headers = { "Content-Type" => "application/zip" }
+    headers["Last-Modified"] = last_modified if last_modified
+    stub_request(:get, url).to_return(status: 200, body: zip_body(files), headers: headers)
+  end
+
+  def zip_body(files)
     Dir.mktmpdir("zip-fetch-upstream") do |staging|
       files.each do |rel, content|
         path = File.join(staging, "proj", rel)
@@ -34,9 +45,7 @@ class ZipFetchTest < Minitest::Test
       end
       zip = File.join(staging, "proj.zip")
       Nabu::Shell.run("zip", "-q", "-r", zip, "proj", chdir: staging)
-      headers = { "Content-Type" => "application/zip" }
-      headers["Last-Modified"] = last_modified if last_modified
-      stub_request(:get, URL).to_return(status: 200, body: File.binread(zip), headers: headers)
+      File.binread(zip)
     end
   end
 
@@ -133,6 +142,56 @@ class ZipFetchTest < Minitest::Test
   def test_http_failure_raises_zip_fetch_error
     stub_request(:get, URL).to_return(status: 500)
     assert_raises(Nabu::ZipFetch::Error) { sync! }
+  end
+
+  # -- redirects (the figshare ndownloader shape: EVERY download 302s) --------
+
+  def test_follows_a_302_to_the_mirror_and_keys_state_off_the_original_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_zip({ "a.json" => "alpha" }, url: MIRROR)
+    result = sync!
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_requested :get, MIRROR
+    refute result.not_modified
+    state = JSON.parse(File.read(File.join(@dir, Nabu::ZipFetch::STATE_FILE)))
+    assert_equal URL, state["url"], "state keys off the ORIGINAL url — mirror targets rotate"
+  end
+
+  def test_relative_redirect_location_resolves_against_the_current_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => "../files/proj.zip" })
+    stub_zip({ "a.json" => "alpha" }, url: "https://example.org/files/proj.zip")
+    sync!
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_redirect_loop_errors_honestly_at_the_hop_cap
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => URL })
+    error = assert_raises(Nabu::ZipFetch::Error) { sync! }
+    assert_match(/more than 5 hops/, error.message, "the cap is named")
+    assert_requested :get, URL, times: 6 # the original request + 5 followed hops
+  end
+
+  def test_redirect_without_location_is_an_honest_error
+    stub_request(:get, URL).to_return(status: 302)
+    error = assert_raises(Nabu::ZipFetch::Error) { sync! }
+    assert_match(/Location/, error.message)
+  end
+
+  def test_conditional_get_rides_the_redirect_and_a_mirror_304_means_untouched
+    stub_zip({ "a.json" => "alpha" })
+    first = sync!
+
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = sync!
+
+    assert second.not_modified, "a 304 from the mirror (post-redirect) is honored"
+    assert_equal first.sha, second.sha, "a 304 keeps the previously pinned sha"
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
   end
 
   def test_missing_last_modified_means_next_fetch_is_unconditional

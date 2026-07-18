@@ -243,6 +243,25 @@ class DiorisisTest < Minitest::Test
     end
   end
 
+  # The 2026-07-18 live incident: figshare's ndownloader ALWAYS 302s to an
+  # S3 mirror — the fetch must follow it and verify the pin on the FINAL body.
+  def test_fetch_follows_the_figshare_302_to_the_mirror_and_pins_the_final_body
+    body = zip_body
+    mirror = "https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/11296247/Diorisis.zip"
+    stub_request(:get, Nabu::Adapters::Diorisis::ZIP_URL)
+      .to_return(status: 302, headers: { "Location" => mirror })
+    stub_request(:get, mirror)
+      .to_return(status: 200, body: body,
+                 headers: { "Last-Modified" => "Wed, 02 May 2018 18:27:12 GMT" })
+    Dir.mktmpdir do |work|
+      report = Nabu::Adapters::Diorisis.new(pin: Digest::SHA256.hexdigest(body)).fetch(work)
+      assert_equal Digest::SHA256.hexdigest(body), report.sha,
+                   "the sha pin verifies against the mirror-delivered body"
+      assert_requested :get, mirror
+      assert_equal 2, adapter.discover(work).to_a.size
+    end
+  end
+
   private
 
   def ref_for(urn)
