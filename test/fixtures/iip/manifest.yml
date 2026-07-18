@@ -1,0 +1,45 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Six byte-identical whole files from
+# github.com/Brown-University-Library/iip-texts at commit
+# 0b7dc8358ccdfd0c9391f049da4839fbd91c26e5 (master tip, retrieved
+# 2026-07-18). sha below = the git blob sha of each file at that commit
+# (verifiable with `git cat-file`/the GitHub blobs API); URL = the
+# commit-pinned raw path. adapter_test stays null: adapter tests
+# enumerate their own expectations against this 6-record tree.
+source: iip
+adapter_test:
+retrieved: 2026-07-18
+commit: 0b7dc8358ccdfd0c9391f049da4839fbd91c26e5
+files:
+  - path: epidoc-files/abur0001.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/abur0001.xml
+    blob_sha: 52c8167d243f5838914c135f04774462795227c0
+    whole: true
+    trim: none (grc; implicit first line + expan/abbr/ex + break="no" + geo-in-settlement + Talmudic period)
+  - path: epidoc-files/dabb0001.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/dabb0001.xml
+    blob_sha: 2b9133fc5eb963abf07b38fc16291661b18607f1
+    whole: true
+    trim: none (arc NFC-exempt byte-verbatim + otherLangs + foreign grc spans + heb-tagged div on an arc record)
+  - path: epidoc-files/jeru0490.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/jeru0490.xml
+    blob_sha: 446491bbcfd35c61f7b2f1ce9026d66b9c9dc53c
+    whole: true
+    trim: none (he→heb NFC-at-boundary + choice of unclears + word-dividing-dot g + BCE date + no pubstmt idno)
+  - path: epidoc-files/caes0022.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/caes0022.xml
+    blob_sha: 32224c4c3f181fe60e4a79fb8ef8ffbbe3c44513
+    whole: true
+    trim: none (la→lat + textparts n="a"/"b" → ordinal p1/p2 path + stray lb between textparts)
+  - path: epidoc-files/hkur0001.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/hkur0001.xml
+    blob_sha: 1b16d984d05180d11d0a856b5a5a5f553e2484db
+    whole: true
+    trim: none (arc diplomatic-only fallback + leading lb + hamm0071 internal-id drift + unhashed multi-token facets)
+  - path: epidoc-files/caes0371.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/caes0371.xml
+    blob_sha: 08b689911ff7bf28c059115afd24789af69588f4
+    whole: true
+    trim: none (x-unknown→und metadata-only — no edition divs, period="Unknown", place-only axis row)
