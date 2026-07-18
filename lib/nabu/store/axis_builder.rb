@@ -45,26 +45,31 @@ module Nabu
       # year-0 tripwire), corph_undated (P25-0: held texts whose Date prose
       # resisted the honest parse ladder — the Annals of Ulster shape),
       # riig_undated/riig_invalid (P25-1) and aes_undated (P28-0: held texts
-      # whose date AND findspot are both the corpus's unknown/"k" values).
+      # whose date AND findspot are both the corpus's unknown/"k" values)
+      # and ceipom_undated/ceipom_unplaced/ceipom_invalid (P29-1: the 3
+      # undated texts, the 10 degenerate-Provenance texts, and the one
+      # inverted-range typo — skipped, counted, never stored).
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
-                            :corph, :riig, :tla_hf, :aes, :isicily,
+                            :corph, :riig, :tla_hf, :aes, :ceipom, :isicily,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
+                            :ceipom_undated, :ceipom_unplaced, :ceipom_invalid,
                             :isicily_undated, :isicily_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
                        tla_hf: 0, tla_hf_undated: 0, aes: 0, aes_undated: 0,
+                       ceipom: 0, ceipom_undated: 0, ceipom_unplaced: 0, ceipom_invalid: 0,
                        isicily: 0, isicily_undated: 0, isicily_invalid: 0, **)
           super
         end
 
         def total
-          hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig + tla_hf +
-            aes + isicily
+          hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
+            tla_hf + aes + ceipom + isicily
         end
       end
 
@@ -87,13 +92,14 @@ module Nabu
         riig = RiigDates.build(catalog: catalog, canonical_dir: canonical_dir)
         tla_hf = TlaHfDates.build(catalog: catalog, canonical_dir: canonical_dir)
         aes = AesDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        ceipom = CeipomDates.build(catalog: catalog, canonical_dir: canonical_dir)
         isicily = IsicilyDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
                     riig: riig[:documents], tla_hf: tla_hf[:documents], aes: aes[:documents],
-                    isicily: isicily[:documents],
+                    ceipom: ceipom[:documents], isicily: isicily[:documents],
                     hgv_files: hgv[:files], hgv_invalid: hgv[:invalid],
                     oracc_undated: oracc[:undated], torot_annals: torot[:annals],
                     coptic_invalid: coptic[:invalid],
@@ -101,6 +107,8 @@ module Nabu
                     corph_undated: corph[:undated],
                     riig_undated: riig[:undated], riig_invalid: riig[:invalid],
                     tla_hf_undated: tla_hf[:undated], aes_undated: aes[:undated],
+                    ceipom_undated: ceipom[:undated], ceipom_unplaced: ceipom[:unplaced],
+                    ceipom_invalid: ceipom[:invalid],
                     isicily_undated: isicily[:undated], isicily_invalid: isicily[:invalid])
       end
 
@@ -256,4 +264,5 @@ require_relative "axis_builder/corph_dates"
 require_relative "axis_builder/riig_dates"
 require_relative "axis_builder/tla_hf_dates"
 require_relative "axis_builder/aes_dates"
+require_relative "axis_builder/ceipom_dates"
 require_relative "axis_builder/isicily_dates"

@@ -4742,6 +4742,7 @@ module Nabu
               "oracc #{result.axes.oracc}, torot #{result.axes.torot}, coptic #{result.axes.coptic}, " \
               "edh #{result.axes.edh}, damaskini #{result.axes.damaskini}, corph #{result.axes.corph}, " \
               "riig #{result.axes.riig}, tla-hf #{result.axes.tla_hf}, aes #{result.axes.aes}, " \
+              "ceipom #{result.axes.ceipom}, " \
               "isicily #{result.axes.isicily})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
