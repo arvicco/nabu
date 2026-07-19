@@ -34,14 +34,22 @@ module Nabu
     class OncojLexiconParser
       TEI_NS = "http://www.tei-c.org/ns/1.0"
 
+      # Empty-<orth/> bound stems skipped by the last each_entry walk
+      # (owner's first real sync, 2026-07-19: 3 upstream — l080424-class
+      # entries whose citation form lives only in their <re> compounds).
+      # A structurally MISSING <orth> element still raises.
+      attr_reader :skipped_empty_orth
+
       # Parse the lexicon file, yielding Nabu::DictionaryEntry per <entry>
       # in file order. Raises Nabu::ParseError on malformed XML.
       def each_entry(path)
         return enum_for(:each_entry, path) unless block_given?
 
         seen = Hash.new(0)
+        @skipped_empty_orth = 0
         entries(path).each do |entry|
-          yield build_entry(entry, seen, path)
+          built = build_entry(entry, seen, path)
+          yield built if built
         end
       end
 
@@ -74,7 +82,16 @@ module Nabu
         nth = seen[upstream_id]
         seen[upstream_id] += 1
         headword = first_orth(entry)
-        raise Nabu::ParseError, "#{path}: entry #{upstream_id}: no <orth> headword" if headword.nil?
+        if headword.nil?
+          # Present-but-empty <orth/> = a censused upstream shape (bound
+          # stems, citation form only in compounds) -> skip by rule.
+          # No <orth> element at all = a structural surprise -> loud.
+          if entry.at_xpath("./tei:form/tei:orth", "tei" => TEI_NS)
+            @skipped_empty_orth += 1
+            return nil
+          end
+          raise Nabu::ParseError, "#{path}: entry #{upstream_id}: no <orth> headword"
+        end
 
         gloss = squeeze(entry.at_xpath("./tei:sense/tei:def", "tei" => TEI_NS)&.text)
         Nabu::DictionaryEntry.new(

@@ -54,7 +54,7 @@ class OncojLexiconTest < Minitest::Test
     document = parsed
     assert_equal "oncoj-lexicon", document.slug
     assert_equal "ojp", document.language
-    assert_equal 112, document.count, "the fixture trim carries 112 byte-verbatim entries"
+    assert_equal 112, document.count, "113 fixture entries, 112 mint (the l080424 empty-orth stem skips by rule)"
   end
 
   def test_auxiliary_entry_renders_forms_pos_inflection_and_sense
@@ -89,6 +89,20 @@ class OncojLexiconTest < Minitest::Test
     assert_equal "titipapa", entry.headword
     assert_equal "father and mother", entry.gloss
     assert_includes entry.body, "compound: titi (l050641) · papa (l051720)"
+  end
+
+  # Owner's first real sync (2026-07-19): the FULL lexicon carries 3
+  # entries whose <orth/> is present but EMPTY — bound stems whose
+  # citation form lives only in their <re> compounds (l080424 "young and
+  # lovely" -> ura-waka). The loud no-headword rule quarantined the whole
+  # one-document shelf. Empty-orth entries skip by rule (censused); a
+  # structurally missing <orth> element stays loud.
+  def test_empty_orth_bound_stems_skip_by_rule_not_quarantine
+    refute entries_by_id.key?("l080424"),
+           "the empty-orth bound stem must not mint a headword-less entry"
+    lexicon_parser = Nabu::Adapters::OncojLexiconParser.new
+    lexicon_parser.each_entry(File.join(FIXTURES, "lexicon.xml")).to_a
+    assert_equal 1, lexicon_parser.skipped_empty_orth, "the skip is censused, not silent"
   end
 
   def test_the_corpus_join_headword_is_the_first_orth
