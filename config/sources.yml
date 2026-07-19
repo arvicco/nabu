@@ -1628,6 +1628,35 @@ oncoj-lexicon:
   # and §C citation as oncoj. Frozen with the tag; owner re-pins.
   sync_policy: frozen
 
+cbeta:
+  adapter: Nabu::Adapters::Cbeta
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync cbeta — sparse
+                   # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
+                   # working tree (T 2,471 files / 816 MB + X 1,236 files /
+                   # 645 MB at upstream 2026.R1) — expect 3,707 documents at
+                   # print-line grain (LARGE: T01n0001 alone is 13,072 lb
+                   # lines; budget the load accordingly); eyeball
+                   # nabu show urn:nabu:cbeta:T85n2884:1390a24, an X passage
+                   # and 5 random lines, then flip.
+  # P33-2: CBETA xml-p5 (github.com/cbeta-org/xml-p5, release 2026.R1),
+  # scoped to the two central canons T (Taishō, vols 1–85) + X
+  # (Xuzangjing, vols 1–88); the other 24 Category A canon dirs are a
+  # future scope decision (skipped by rule, censused). LICENSE — the
+  # canon-level gate: Category A = CC BY-NC-SA 4.0 (cbeta.org/copyright
+  # 「Creative Commons 姓名標示-非商業性-相同方式分享 4.0 國際授權條款」 +
+  # every file's own header grant, re-verified at parse) → class nc,
+  # MCP-excluded; the four named Category B corpora (Y 印順法師佛學著作集,
+  # LC 呂澂佛學著作集, TX 太虛大師全書, YP 演培法師全集 — 類別 B：不屬於
+  # 創用 CC 條款授權之文獻) are NEVER ingested: outside the sparse cone
+  # AND refused by canon dir at discover (test-pinned). license_watch on
+  # cbeta.org/copyright is a candidate — OWNER decision before enabling
+  # (the P16-5 no-redirect rule must be verified first). Upstream ships
+  # dated releases (2026.R1, 2026-05-10) → a fresh sync is an owner
+  # decision: manual. OVERLAP: SuttaCentral's 272 lzh Āgama docs re-edit
+  # SEVEN Taishō numbers (T26/T99/T125/T765/T1536/T1537/T1548, all in T)
+  # — provenance-distinct witnesses, never deduped.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
