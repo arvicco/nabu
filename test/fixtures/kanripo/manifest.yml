@@ -27,6 +27,14 @@ files:
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR1h.txt
     whole: false
     trim: org header + the complete KR1h0004 entry block
+  - path: KR-Catalog/KR/KR2a.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR2a.txt
+    whole: false
+    trim: org header + the complete KR2a0001, KR2a0038 and KR2a0039 entry blocks (23,052 B -> 2,569 B; KR2a0039 is a real catalog id with NO github repo - wave 2's recorded-absent case)
+  - path: KR-Catalog/KR/KR2g.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR2g.txt
+    whole: false
+    trim: org header + the complete KR2g0007 entry block (24,451 B -> 421 B)
   - path: KR-Catalog/KR/KR3a.txt
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR3a.txt
     whole: false
@@ -69,6 +77,34 @@ files:
     trim: none
   - path: KR1h0004/KR1h0004_020.txt
     url: https://raw.githubusercontent.com/kanripo/KR1h0004/master/KR1h0004_020.txt
+    whole: true
+    trim: none
+  - path: KR2a0001/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR2a0001/master/Readme.org
+    whole: true
+    trim: none (repo-trim - 13 of 14 section files omitted from the fixture dir)
+  - path: KR2a0001/KR2a0001_201.txt
+    url: https://raw.githubusercontent.com/kanripo/KR2a0001/master/KR2a0001_201.txt
+    whole: true
+    trim: none
+  - path: KR2a0038/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR2a0038/master/Readme.org
+    whole: true
+    trim: none (repo-trim - 547 of 548 juan files omitted from the fixture dir)
+  - path: KR2a0038/KR2a0038_046.txt
+    url: https://raw.githubusercontent.com/kanripo/KR2a0038/master/KR2a0038_046.txt
+    whole: true
+    trim: none
+  - path: KR2g0007/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR2g0007/master/Readme.org
+    whole: true
+    trim: none
+  - path: KR2g0007/KR2g0007_000.txt
+    url: https://raw.githubusercontent.com/kanripo/KR2g0007/master/KR2g0007_000.txt
+    whole: true
+    trim: none
+  - path: KR2g0007/KR2g0007_001.txt
+    url: https://raw.githubusercontent.com/kanripo/KR2g0007/master/KR2g0007_001.txt
     whole: true
     trim: none
   - path: KR3a0001/Readme.org

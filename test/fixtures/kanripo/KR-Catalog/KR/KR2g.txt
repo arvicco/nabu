@@ -1,0 +1,22 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR2g ZB2g 傳記類
+*** KR2g0007 杜工部年譜-宋-趙子櫟
+:PROPERTIES:
+:KR_ID: KR2g0007
+:CUSTOM_ID:  ZB2g0006
+:SOURCE:   四庫全書 文淵閣版, V446.6, p251
+:EXTENT: 1 卷
+:BOOK:   1
+:DATE:   1091
+:_RESP:    （宋）趙子櫟
+:END:
+**** 人物
+***** 趙子櫟
+      :PROPERTIES:
+      :DYNASTY:  宋
+      :FUNCTION: 撰
+      :END:
+
+**** 版本
+***** WYG
