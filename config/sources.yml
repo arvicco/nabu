@@ -1628,6 +1628,31 @@ oncoj-lexicon:
   # and §C citation as oncoj. Frozen with the tag; owner re-pins.
   sync_policy: frozen
 
+tls:
+  adapter: Nabu::Adapters::Tls
+  enabled: false   # P33-4: awaiting the owner-fired first sync (sparse
+                   # GitFetch of tls-kr/tls-data, cone concepts/ + words/
+                   # ~112 MB working tree out of the 4.7 GB repo; CLAUDE.md
+                   # checklist §6: bin/nabu sync tls, eyeball nabu define 棄
+                   # (six concept blocks incl. ABANDON with urns) and
+                   # define DIE (definition + criteria + member words),
+                   # then flip). Expect 3,018 och entries on tls-concepts +
+                   # 20,163 on tls-words (2 skip-by-rule strays censused:
+                   # the percent-encoded CRONY-uuid duplicate, the
+                   # empty-orth superEntry aggregate).
+  # Thesaurus Linguae Sericae (Harbsmeier) — the first ONOMASIOLOGICAL
+  # shelf: concepts (definition + synonym-group criteria + hypernymy/
+  # taxonymy/antonymy/see pointer urns + member words inverted from the
+  # words side) and words (superEntry grain, every entry block naming its
+  # concept + urn, pinyin/OC/MC readings, sense uuids verbatim — the join
+  # keys of the DEFERRED attestation crosswalk: 111,484 tls:ann rows in
+  # notes/doc + notes/swl target text seg ids the catalog does not hold;
+  # 02-sources row 106 records that and the rest of the repo census).
+  # CC BY-SA 4.0 (LICENSE.md, sha256-identical in tls-texts + tls-data;
+  # both README badges say CC BY 4.0 — recorded discrepancy, LICENSE
+  # governs). Upstream is a live eXist-db working repo → manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

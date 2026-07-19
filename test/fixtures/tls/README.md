@@ -1,0 +1,58 @@
+# TLS fixtures — Thesaurus Linguae Sericae (tls-kr/tls-data)
+
+Retrieved 2026-07-20 from https://github.com/tls-kr/tls-data (master,
+pushed 2026-07-09). All files are byte-verbatim upstream except the one
+trim noted below. Layout mirrors the sparse fetch cone (`concepts/` +
+`words/<hex>/`).
+
+## concepts/
+
+- `TWO.xml` — a full-featured concept: translations, old-/modern-chinese
+  criteria notes, taxonymy + hypernymy pointers, source references.
+- `ABANDON.xml` — hypernymy pointer + source reference + the EMPTY
+  `<div type="words">` slot that is the norm upstream (3,018 of 3,019
+  files) — membership is inverted from the words side.
+- `CRONY.xml` — the uuid-collision partner of the stray below.
+- `%E5%AC%96…%E5%85%B8.xml` (percent-encoded Chinese basename) — the ONE
+  upstream stray: different content but the SAME `xml:id` as CRONY.xml.
+  Loading both would flap the entry revision on every sync, so the
+  adapter skips `%`-bearing basenames by rule (censused in
+  `discovery_skips`).
+
+## words/
+
+- `0/uuid-0002ba3b-….xml` — 陪貳, one entry (concept TWO), the full
+  pinyin/OC/MC pron row.
+- `f/uuid-fbba1aa8-….xml` — 棄, six entries (DISCARD … ABANDON …),
+  entry-level `<def>` discussion, usg currency/valuation marks.
+- `f/uuid-f27c793b-….xml` — 舍, eleven entries incl. REJECT twice and the
+  捨 variant orth on its own entry block.
+- `a/uuid-a5cc024e-….xml` — 勑, a real word with NO entries (one of two
+  upstream): mints a minimal entry, not a skip.
+- `e/uuid-ea74382d-….xml` — **TRIMMED**: the upstream file is the ONE
+  empty-orth superEntry aggregate (305,395 bytes, 477 orth-less entries);
+  the fixture keeps the real bytes of the root element + first entry with
+  a closing `</superEntry>` appended. The adapter skips empty-orth
+  superEntries by rule (censused).
+
+## LICENSE.md
+
+Byte-verbatim upstream (CC BY-SA 4.0; sha256
+`00ce3c549534e5e26393c4310350b355d610c0295a32ba9cafc7420cbedd3194`,
+identical in tls-kr/tls-texts and tls-kr/tls-data). Both repos' READMEs
+carry a CC BY 4.0 badge instead — the discrepancy is recorded in the
+manifest; the LICENSE.md grant governs.
+
+## Refresh recipe
+
+```
+git clone --depth 1 --filter=blob:none --no-checkout https://github.com/tls-kr/tls-data.git
+cd tls-data && git sparse-checkout set concepts words && git checkout master
+cp concepts/{TWO,ABANDON,CRONY}.xml <fixtures>/concepts/
+cp 'concepts/%E5%AC%96'*.xml <fixtures>/concepts/
+cp words/0/uuid-0002ba3b-*.xml <fixtures>/words/0/
+cp words/f/uuid-fbba1aa8-*.xml words/f/uuid-f27c793b-*.xml <fixtures>/words/f/
+cp words/a/uuid-a5cc024e-*.xml <fixtures>/words/a/
+# trim words/e/uuid-ea74382d-*.xml to root + first </entry>, append </superEntry>
+cp LICENSE.md <fixtures>/
+```
