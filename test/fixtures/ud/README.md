@@ -9,9 +9,10 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
   `old-east-slavic-ruthenian` (packet P13-1b); **2026-07-17** for the two Old
   Irish glosses treebanks (`old-irish-dipsgg`, `old-irish-dipwbg`, packet
   P25-2); **2026-07-19** for the Hittite treebank (`hittite-hittb`, packet
-  P31-0) and for the two Perseus treebanks (`ancient-greek-perseus`,
-  `latin-perseus`, packet P31-6) — all from `master` of each treebank's UD
-  repo via `raw.githubusercontent.com`.
+  P31-0), for the two Perseus treebanks (`ancient-greek-perseus`,
+  `latin-perseus`, packet P31-6) and for the two Classical Chinese treebanks
+  (`classical-chinese-kyoto`, `classical-chinese-tuecl`, packet P32-0) — all
+  from `master` of each treebank's UD repo via `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
   `.docs/surveys/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
@@ -38,6 +39,8 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `hittite-hittb/hit_hittb-ud-test-head50.conllu` | `UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu` | 118,705 | 46,175 | 50 |
 | `ancient-greek-perseus/grc_perseus-ud-test-head50.conllu` | `UD_Ancient_Greek-Perseus/master/grc_perseus-ud-test.conllu` | 1,979,022 | 85,337 | 50 |
 | `latin-perseus/la_perseus-ud-test-head50.conllu` | `UD_Latin-Perseus/master/la_perseus-ud-test.conllu` | 1,153,778 | 61,276 | 50 |
+| `classical-chinese-kyoto/lzh_kyoto-ud-test-head50.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-test.conllu` | 2,698,869 | 22,472 | 50 |
+| `classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu` | `UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu` | 59,420 | 29,817 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -141,6 +144,47 @@ is fully populated file-wide (grc 20,959/20,959 word lines, lat
 10,964/10,964); Latin MISC carries `LId=` lemma-sense indices (e.g. `LId=tu1`),
 kept verbatim.
 
+### Classical Chinese pair trim note (P32-0)
+
+Both fixtures are the plain **first 50 complete sentence blocks** of their
+upstream test split, retrieved 2026-07-19 from `master`; upstream file sha256
+at retrieval:
+
+- `lzh_kyoto-ud-test.conllu`
+  `e492ba5f5054ee560c33197e1681a5c18c3f21adff7dca82be3ed4af09cbf1e5`
+  (5,528 blocks upstream; **no** multiword-token range line and **no** empty
+  node file-wide — checked across ALL THREE Kyoto splits, not just test:
+  Classical Chinese is written character-per-word, no clitic fusion — nothing
+  extra to preserve). The head-50 is a single
+  `# newdoc id = KR1h0004_001` run — 論語 學而篇第一 (Analects book 1,
+  Kanripo id KR1h0004), title sentence + paragraphs 1–9, 233 word lines.
+  SCALE NOTE (the honest census, 2026-07-19): the WHOLE Kyoto treebank is
+  86,239 sentences / 433,169 word lines / 9,641 distinct lemmas across
+  train (74,609 sents / 36,466,278 B) + dev (6,102 / 3,032,014 B) + test
+  (5,528 / 2,698,869 B) ≈ 42.2 MB of conllu — 論語, 孟子, 禮記, 十八史略,
+  楚辭, 戰國策, 唐詩三百首 and three sutras (README census; v2.18-era
+  master). This one treebank dwarfs the rest of the `ud` source combined.
+  LEMMA fully populated file-wide (433,169/433,169); XPOS carries the
+  Kyoto four-field kanbun tags (`v,動詞,行為,動作`), MISC carries `Gloss=`
+  English glosses — all ride the token annotations verbatim.
+- `lzh_tuecl-ud-test.conllu`
+  `596d6b22837e0e5bc72471dc6d10d80029da276c4e3298d89bfd4a1c1727fa2a`
+  (100 blocks upstream — the whole treebank is 100 sentences / 648 word
+  lines of Zhuangzi's 逍遥游 "Enjoyment in Untroubled Ease", test-set only,
+  the DipWBG shape; no MWT/empty nodes file-wide; head-50 = sentences 1–50).
+  QUIRK, deliberately inside the trim: TueCL carries **free-form comment
+  lines with no `= `** — bare Chinese working notes (`# 北方的海里有一条大鱼`),
+  annotator questions (`# ???宿是名词`), and `# gloss = …` English lines —
+  which the parser must (and does) ignore, interpreting only
+  sent_id/text/source. LEMMA populated on 646/648 word lines (2 honest `_`
+  gaps upstream); XPOS is `_` throughout; some MISC carry `Translit=`
+  variant-character notes (`通“溟”`), kept verbatim.
+
+Comment lines: Kyoto has `# newdoc id`, `# newpar text`, per-sentence
+`# sent_id` (`KR1h0004_001_par1_3-7` — Kanripo doc + paragraph + character
+span) and `# text`; TueCL has per-sentence `# sent_id` (plain integers 1–100),
+`# text`, most blocks `# gloss`, plus the free-form notes above.
+
 ### Latin-ITTB multiword-token (MWT) rule
 
 The plan called for the first 50 blocks **plus** every sentence block anywhere in
@@ -234,13 +278,39 @@ adapter test even though no extra append was needed.
   and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. → license
   class `attribution` via the P10-4 per-document `license_override` (the
   birchbark/RNC mechanics exactly).
+- **UD_Classical_Chinese-Kyoto** — **CC BY-SA 4.0 by LICENSE.txt, with a
+  RECORDED UPSTREAM DISCREPANCY** (verified 2026-07-19, the P32-0 license
+  gate). `LICENSE.txt`, quoted verbatim and in its entirety:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+  **but** the `README.md` machine-readable metadata says `License: PD` — the
+  two grants CONTRADICT each other (unlike every other treebank here except
+  the PROIEL 3.0-vs-4.0 version slip, this is a substantive PD-vs-BY-SA
+  fork). Ruling: **LICENSE.txt is authoritative** — the Ruthenian precedent
+  (the in-repo license file governs over secondary metadata; GitHub's
+  license field there read `NOASSERTION` and we followed LICENSE.txt), and
+  BY-SA is also the conservative reading (treating PD-claimed data as BY-SA
+  can never over-share; the reverse could). → license class `attribution`
+  via the P10-4 per-document `license_override`; the `ud` source class
+  stays `nc`. If upstream ever reconciles the two, re-read at that fixture
+  refresh — never from memory.
+- **UD_Classical_Chinese-TueCL** — **CC BY-SA 4.0** (verified 2026-07-19, the
+  P32-0 license gate). `LICENSE.txt` is byte-identical to Kyoto's (same
+  verbatim "Attribution-ShareAlike 4.0 International" / by-sa/4.0 link) and
+  `README.md` machine-readable metadata AGREES: `License: CC BY-SA 4.0` —
+  consistent, no discrepancy. → license class `attribution` via the same
+  P10-4 per-document `license_override`.
 
 All three OES licenses were confirmed BEFORE the fixtures were committed (packet
 gate: had any said anything other than CC BY-SA 4.0 the treebank would have been
-dropped); likewise both Old Irish licenses at P25-2 and both Perseus licenses
-at P31-6. The `ud` manifest still declares the most-restrictive class present —
-`nc` (PROIEL/ITTB/DipSGG/Perseus) — so the BY-SA-only treebanks are never
-over-shared.
+dropped); likewise both Old Irish licenses at P25-2, both Perseus licenses
+at P31-6 and both Classical Chinese licenses at P32-0 (the Kyoto PD-vs-BY-SA
+discrepancy recorded above, LICENSE.txt ruling). The `ud` manifest still
+declares the most-restrictive class present — `nc` (PROIEL/ITTB/DipSGG/Perseus)
+— so the BY-SA-only treebanks are never over-shared.
 
 ## Structure notes (for the CoNLL-U parser + UD adapter, P3-3)
 

@@ -78,6 +78,37 @@ ud:
   # +2 docs (censused: 2,273 sentences / 29,223 words); so +5 docs /
   # +16,192 passages total, grc/lat lemma lanes gain treebank-gold rows
   # (no new language).
+  # P32-0 (2026-07-19): TREEBANKS grew to fourteen — classical-chinese-kyoto
+  # + classical-chinese-tuecl (language lzh, the library's first lzh lane;
+  # both BY-SA 4.0 by LICENSE.txt → per-document attribution override.
+  # KYOTO LICENSE DISCREPANCY RECORDED: its README metadata says
+  # `License: PD`, contradicting LICENSE.txt — LICENSE.txt authoritative,
+  # see test/fixtures/ud/README.md).
+  # ============ SCALE HONESTY — READ BEFORE THE NEXT SYNC ============
+  # UD_Classical_Chinese-Kyoto is ~42.2 MB of conllu: 86,239 sentences /
+  # 433,169 words / 9,641 lemmas (censused whole 2026-07-19: train 74,609
+  # sents / 36.5 MB, dev 6,102 / 3.0 MB, test 5,528 / 2.7 MB). This ONE
+  # treebank DWARFS everything the ud source has synced to date (the four
+  # treebanks of the 2026-07-04 first sync sum to 76,642 sentences — all
+  # thirteen treebank repos were censused whole upstream at P32-0 fixture
+  # time) and is ~3.2x the largest single treebank in the set
+  # (Sanskrit-Vedic 27,182 sents / ITTB 26,977 are next). Honest bound: it
+  # does NOT exceed the COMBINED thirteen-other-treebank registry, which
+  # sums to 107,664 sentences / 1,493,979 words — but it alone grows that
+  # total by +80%. The next owner-fired `bin/nabu sync ud` is a step
+  # change, not an increment:
+  # +2 repo clones; Kyoto ships train/dev/test = +3 docs / +86,239
+  # passages, TueCL ships test only = +1 doc / +100 passages; so +4 docs /
+  # +86,339 passages total, and lzh enters the lemma-indexed languages at
+  # ~433k token rows in one bite. Budget sync time accordingly.
+  # ===================================================================
+  # P32-0 JOURNAL — UD_Old_Japanese-LMJ NOT taken (2026-07-19): the repo is
+  # misnamed (its dev material is Heike/Late-Middle-Japanese era, not Old
+  # Japanese) and its master branch is EMPTY of data — verified at fixture
+  # time: master holds only CONTRIBUTING.md, LICENSE.txt and a template
+  # README, no .conllu. Old Japanese arrives via ONCOJ instead (P32-2,
+  # 02-sources row 97). Watch upstream: if LMJ's master ever gains data,
+  # it is a NEW license-gate decision, not a config flip.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
