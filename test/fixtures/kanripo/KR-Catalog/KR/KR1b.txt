@@ -1,0 +1,14 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR1b ZB1b 書類
+*** KR1b0049 古文尚書寃詞-清-毛奇齡
+:PROPERTIES:
+:KR_ID: KR1b0049
+:CUSTOM_ID:  ZB1b0044
+:SOURCE:   四庫全書 文淵閣版, V66.3, p543
+:EXTENT: 8 卷
+:BOOK:   3
+:_RESP:    （清）毛奇齡
+:END:
+**** 人物
+***** 毛奇齡

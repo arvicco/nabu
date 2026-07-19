@@ -1,0 +1,14 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR4j ZB4j 詞曲類
+*** KR4j0026 無住詞-宋-陳與義
+:PROPERTIES:
+:KR_ID: KR4j0026
+:CUSTOM_ID:  ZB4e0023
+:SOURCE:   四庫全書 文淵閣版, V1487.24, p549
+:EXTENT: 2 卷
+:BOOK:   1
+:_RESP:    （宋）陳與義
+:END:
+**** 人物
+***** 陳與義

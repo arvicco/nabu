@@ -1,0 +1,13 @@
+# -*- mode: org; -*-
+
+** KR1a ZB1a 易類
+*** KR1a0170 易緯坤靈圖-漢-鄭玄
+:PROPERTIES:
+:KR_ID: KR1a0170
+:CUSTOM_ID:  ZB1a0167
+:SOURCE:   四庫全書 文淵閣版, V53.11, p909
+:EXTENT: 1 卷
+:BOOK:   (1)
+:END:
+**** 人物
+***** 鄭玄
