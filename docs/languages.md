@@ -14,7 +14,7 @@ curated context, and live holdings, in ~0.2 s. **The curation's home is
 the `canonical/local-language/` dossier shelf (architecture §16)** — one
 Markdown file per code, edit it in any editor, then `nabu sync
 local-language` re-derives the card. The owner-fired migration is
-complete: **199 dossiers** on disk derive **329 `language_records`**
+complete: the dossiers on disk derive the catalog's `language_records`
 (name, family, context, and the IE-CoR witness sections — that shelf's
 first programmatic writer), and the `config/languages.yml` seed is
 retired. The derived names census (`language_names`, from the held kaikki
