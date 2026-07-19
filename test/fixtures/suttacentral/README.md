@@ -83,6 +83,47 @@ translations (CC0 + the one BY-SA) are ingested.
 | `translation/en/patton/sutta/sa/sa101-200/sa158_translation-en-patton.json` | whole | patton's `-en` sibling of an lzh root — an ex-orphan (paired the moment `root/lzh/sct` entered scope); SAME 10 segment ids as the root (exact 1:1 here); publication scpub20, CC0 → no override |
 | `root/lzh/sct/abhidhamma/sg/t1536.12_root-lzh-sct.json` | whole | lzh abhidhamma root with a Taisho-number stem (`t1536.12`); basket `abhidhamma` / collection `sg`; NO English file → honestly sibling-less |
 | `_publication.json` | SLICE | 8 of 140 publication entries (scpub1, scpub4, scpub7, scpub20, scpub39, scpub53, scpub64, scpub69), entry blocks byte-identical to upstream; drives the per-publication license gate + override |
+| `parallels/parallels.json` | SLICE | the sc-data parallels graph (P32-6): 10 of 8,221 relation entries, value-identical to upstream, at the adapter's fetch-target path (`parallels/`, not upstream's `relationship/`) — see below |
+
+## The parallels graph slice (P32-6)
+
+Fetched FRESH **2026-07-19** from the commit-pinned raw URL
+
+    https://raw.githubusercontent.com/suttacentral/sc-data/8b3bcaf61c3e4d4d80dc131df3d1b7fb8d1d1311/relationship/parallels.json
+
+(sc-data commit `8b3bcaf6…`, 2026-07-13, "sc issue 3003 adding iti
+parallels" — the latest commit touching the file; whole-file sha256
+`cba7f314a32aeecc9cba9381b5f6b781567be75c5dc69d5d1d755b2cd6465f1e`,
+1,509,922 bytes, byte-identical to the 2026-07-16 scout snapshot).
+10 relation entries kept, value-identical to upstream, covering the FULL
+censused shape vocabulary (8,221 entries: 5,646 `parallels` + 2,512
+`mentions` + 63 `retells`; 49,685 uid refs, 17,006 `~`-prefixed, 17,662
+`#`-suffixed, 1,132 free-text print citations):
+
+- `mentions` star with the SAME counterpart document cited at two
+  segments (`mnd9#57.1`, `mnd9#61.1` → one document-grain edge);
+- `parallels` with a `~` resolved-by-inference uid (`~sag#sag13`) plus
+  the REVERSE re-assertion from the sag side (`["sag#sag13", "~sn1.1"]`
+  → the same unordered pair, first-seen detail wins);
+- a 10-uid `parallels` clique containing the free-text print citation
+  `"Manusmṛti 6.77"` (skipped by rule, censused);
+- the pinned **an7.68 clique** (`ea39.1`/`ma1`/`t27`/`t1536.8`, all with
+  `#a-#b` Taishō line ranges) — the an7.68 ↔ ma1 edge both ends minted
+  in the live catalog;
+- a `retells` pair (`dn19` ↔ `cp5`);
+- a `parallels` entry with two segments of ONE document (`ja546#256…`,
+  `ja546#280…` → same-doc pair skipped, censused);
+- a partial-only fan (`an4.16#3.1` + two `~` uids — full×partial edges
+  only, never partial×partial) including the corpus's one
+  `uid:segment` COLON variant (`~t765.132:10.0`, censused twice);
+- the thig11.1 ↔ thi-ap19 pair asserted under TWO kinds (`mentions` +
+  `retells` → one edge, both kind clauses in the detail).
+
+License: sc-data ships NO license file; SuttaCentral's licensing page
+states verbatim: "In addition, the reference data, including information
+on parallels, is not an "original creation" and as such does not fall
+within the scope of copyright." — and all original SuttaCentral material
+is CC0 1.0.
 
 ## Format notes (upstream reality, do not "fix")
 

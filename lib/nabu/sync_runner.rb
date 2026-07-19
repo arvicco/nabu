@@ -166,15 +166,20 @@ module Nabu
     # reference edges via the adapter's declared producer (the manifests'
     # related: urns for the library shelf, the token DIL ids for corph —
     # a pure function of the loaded rows, superseding the prior run).
-    # Outside the RunRecorder block like reindexing: the journal is a
-    # third store with its own lifecycle, and a journal failure must surface
-    # as its own error, never falsify the source's run row.
+    # +workdir+ rides along for the producer whose input is a canonical
+    # file rather than catalog rows (P32-6, the suttacentral parallels
+    # graph — read-only on canonical, like the loader); the catalog-derived
+    # producers ignore it. Outside the RunRecorder block like reindexing:
+    # the journal is a third store with its own lifecycle, and a journal
+    # failure must surface as its own error, never falsify the source's
+    # run row.
     def refresh_references(entry)
       return nil unless entry.adapter_class.reference_edges?
 
       journal = Store::LinksJournal.open!(@config.links_path)
       begin
-        entry.adapter_class.reference_producer(catalog: @db, journal: journal).run(entry.slug)
+        entry.adapter_class.reference_producer(catalog: @db, journal: journal)
+             .run(entry.slug, workdir: workdir_for(entry.slug))
       ensure
         journal.disconnect
       end

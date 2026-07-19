@@ -60,8 +60,9 @@ module Nabu
 
     # Re-derive every etymology edge for the source at +slug+ from its
     # live entries' ancestor citations, superseding the prior
-    # (producer, scope) run atomically.
-    def run(slug)
+    # (producer, scope) run atomically. +workdir+ rides the P32-6 producer
+    # seam; this producer derives everything from the catalog and ignores it.
+    def run(slug, workdir: nil) # rubocop:disable Lint/UnusedMethodArgument
       counts = { inserted: 0, refreshed: 0 }
       run_id = superseded = nil
       @journal.transaction do
