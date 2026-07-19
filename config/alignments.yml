@@ -594,6 +594,53 @@ ot:
         ZEP: urn:nabu:sefaria:targum-jonathan-on-zephaniah:mikraot-gedolot
         HAG: urn:nabu:sefaria:targum-jonathan-on-haggai:mikraot-gedolot
         ZEC: urn:nabu:sefaria:targum-jonathan-on-zechariah:mikraot-gedolot
+    # P31-4: the PESHITTA witness — the ot hub's SYRIAC leg, the SEVENTH
+    # (`align "GEN 1.1"` renders MT×2 ↔ LXX ↔ Vulgate ↔ WEB ↔ Targum ↔
+    # Peshitta). One document per ETCBC book node (urn:nabu:peshitta:
+    # <siglum> — the Leiden VTS / Codex Ambrosianus electronic text).
+    # Versification: MEASURED Masoretic at packet time (chapter-grain
+    # census over all 39 protocanonical books matched the MT grid exactly
+    # — Joel 4 ch, Malachi 3 ch, Proverbs 31, Psalms 150 Hebrew-numbered;
+    # verse spot-checks Jonah 1:16 + 2:11, Ps 22:2 "my God, my God"), so
+    # the book map mirrors the OSHB witness's conservative holdouts
+    # EXACTLY: 1KI/JER/DAN/PRO/JOL/MAL held out, EZR/NEH/ECC carry no
+    # work token, PSA is registered in the psalms work below with the
+    # P13-5 Masoretic remap. The deuterocanon (Sirach, Judith, the A/B
+    # recension pairs…) attests per-witness only — no OT work tokens
+    # exist for it. "Not synced" until the owner-fired first
+    # `nabu sync peshitta`.
+    - label: Peshitta (Syriac, ETCBC)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:peshitta:gn
+        EXO: urn:nabu:peshitta:ex
+        LEV: urn:nabu:peshitta:lv
+        NUM: urn:nabu:peshitta:nm
+        DEU: urn:nabu:peshitta:dt
+        JOS: urn:nabu:peshitta:jos
+        JDG: urn:nabu:peshitta:jd
+        RUT: urn:nabu:peshitta:ru
+        1SA: urn:nabu:peshitta:sm1
+        2SA: urn:nabu:peshitta:sm2
+        2KI: urn:nabu:peshitta:rg2   # 1KI (Rg1) held out — LXX 3 Kingdoms reorderings (the OSHB rule)
+        1CH: urn:nabu:peshitta:chr1
+        2CH: urn:nabu:peshitta:chr2
+        EST: urn:nabu:peshitta:est
+        JOB: urn:nabu:peshitta:jb
+        SNG: urn:nabu:peshitta:ct    # Canticum
+        ISA: urn:nabu:peshitta:is
+        LAM: urn:nabu:peshitta:thr   # Threni
+        EZK: urn:nabu:peshitta:ez
+        HOS: urn:nabu:peshitta:hs
+        AMO: urn:nabu:peshitta:am
+        OBA: urn:nabu:peshitta:ob
+        JON: urn:nabu:peshitta:jon
+        MIC: urn:nabu:peshitta:mi
+        NAM: urn:nabu:peshitta:na
+        HAB: urn:nabu:peshitta:hb
+        ZEP: urn:nabu:peshitta:zf
+        HAG: urn:nabu:peshitta:hg
+        ZEC: urn:nabu:peshitta:sa    # upstream's own siglum for Zechariah
 
 # P13-5: the Psalms work — the one book where the versification divergence
 # BITES, faced head-on (the P11-8 OT WEB witness dodged it by omitting Psalms).
@@ -716,3 +763,23 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:sefaria:aramaic-targum-to-psalms:mikraot-gedolot  # Hebrew numbering (remapped)
+    # P31-4: the PESHITTA psalter — MEASURED Hebrew/Masoretic numbering
+    # (150 psalms; Ps 22 opens at verse 2 with "my God, my God" — the MT
+    # titulus-as-verse-1 convention with the unprinted superscription;
+    # Ps 23:1 is the shepherd), riding the SAME P13-5 Hebrew→Greek
+    # concordance as the WEB/OSHB/BHSA/Targum witnesses above (fifth
+    # reuse; the LXX join/split psalms drop and attest per-witness).
+    # Verses absent upstream (the titulus verse-1 slots) simply attest
+    # "not attested". "Not synced" until the owner-fired first
+    # `nabu sync peshitta`.
+    - label: Peshitta (Syriac, ETCBC)
+      extractor: cts-verse
+      numbering:
+        system: "Hebrew (Masoretic)"
+        ranges:
+          - { from: 1, to: 8, shift: 0 }       # Hebrew 1–8 = Greek 1–8
+          - { from: 11, to: 113, shift: -1 }   # Hebrew 11–113 = Greek 10–112
+          - { from: 117, to: 146, shift: -1 }  # Hebrew 117–146 = Greek 116–145
+          - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
+      documents:
+        PSA: urn:nabu:peshitta:ps  # Hebrew numbering (remapped)

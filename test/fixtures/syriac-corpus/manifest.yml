@@ -1,0 +1,35 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every fixture is a byte-verbatim WHOLE upstream file (drift is real
+# drift), so adapter_test re-runs against fresh copies. Pinned upstream
+# commit: 833adc148cc356a6c70c16f81b22df9188df717a (main, retrieved
+# 2026-07-19).
+source: syriac-corpus
+adapter_test: test/adapters/syriac_corpus_test.rb
+retrieved: 2026-07-19
+files:
+  - path: data/tei/1.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/1.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
+  - path: data/tei/116.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/116.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
+  - path: data/tei/142.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/142.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
+  - path: data/tei/170.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/170.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
+  - path: data/tei/250.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/250.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
+  - path: data/tei/687.xml
+    url: https://raw.githubusercontent.com/srophe/syriac-corpus/main/data/tei/687.xml
+    whole: true
+    trim: none (whole file — the srophe corpus's files are small enough to keep intact)
