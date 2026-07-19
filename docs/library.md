@@ -1,10 +1,11 @@
 # The Library — content review
 
-**As of 2026-07-19** (post Phases 26–31, the pre-release census). Live
-totals: **737,299 documents / 11,357,320 passages** across the **69
-registered, synced sources**. The reference shelf holds **711,376
-dictionary entries** across thirty-nine dictionary shelves (§8c, §8h,
-§8j, §8k, §8m, §8o, §8q). The lemma layer, censused fresh this date:
+**As of 2026-07-20** (post Phase 32, the Sino-axis phase; v1.1.0 cut
+2026-07-19). Live totals: **742,616 documents / 11,433,174 passages
+and 1,139,727 dictionary entries** across the **76 registered sources**
+(69 enabled; the P32 newcomers await their flip cycle). The reference
+shelf spans forty-six dictionary shelves (§8c, §8h, §8j, §8k, §8m,
+§8o, §8q, §8s). The lemma layer, censused fresh this date:
 **12,474,060 gold rows in 22 languages** plus **8,000,317 silver rows in
 8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
 upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
@@ -543,6 +544,23 @@ editions; Ugaritic epic beside the Hebrew shelf; the Peshitta beside six
 other OT witnesses; a millennium of Syriac prose. The two silver-tier
 corpora never contaminate gold lemma search — `--gold-only` excludes
 them, and every hit carries its tier label.
+
+## 8s. The Sino axis (`oncoj`, `oncoj-lexicon`, `baxter-sagart`, `tshet-uinh`, `unihan`, `edrdg`, `hdic` + the `ud`/`wiktionary-recon`/`suttacentral` expansions; built 2026-07-19, flips pending)
+
+| | |
+|---|---|
+| **Category** | Classical Chinese through historic Japanese — Phase 32, the owner's Far Eastern axis |
+| **Language** | Literary Chinese (`lzh`), Old/Middle Chinese reconstruction lanes (`och`/`ltc`), Old Japanese (`ojp`), with modern `jpn` reading/gloss backstops |
+| **Size** | `ud` +2 treebanks: UD_Classical_Chinese-Kyoto (86,239 gold sentences / 433,169 tokens — Analects, Mencius, Liji, Chuci, Tang poetry) + TueCL. `suttacentral` +326 docs: the 272 Taishō Āgama roots already held (scope flip, zero fetch) + 54 Patton English siblings, CC0 verbatim — plus the parallels graph as ~195k reference edges (4,788 both-ends-minted today; the pli↔lzh axis). `oncoj`: 4,991 texts — the complete Man'yōšū and all OJ poetry, line grain, man'yōgana riding annotations (annotation CC BY 4.0). `oncoj-lexicon`: 5,868 ojp entries (99.8% of corpus token lemmas resolve). `baxter-sagart`: 4,959 rows → och+ltc lanes (CC BY via the wayback-preserved grant). `tshet-uinh`: the 廣韻 critical edition, 25,336 character-position entries (CC0), 校本 apparatus honest. `unihan`: 65,092 codepoints (Unicode License V3). `edrdg`: KANJIDIC2 + JMdict, 231k entries (CC BY-SA, nightly upstream). `hdic`: five Heian character-dictionary databases, 96,414 entries (BY-SA per file — LICENSE-file contradiction journaled, owner ruling pending). `wiktionary-recon` +2 extracts: ojp (532) + zh (323,840 — MC + dual OC reconstructions) |
+| **Metadata** | The Sinoxenic bridge is character-keyed joins: KANJIDIC2→Unihan 99.5% by codepoint, HDIC→Unihan 95.9–99.9% per database; the Kyoto treebank is built on Kanripo texts (the P33 crosswalk); ETCSL-style two-witness honesty holds for B-S-beside-kaikki reconstruction systems |
+
+**Research uses:** Classical Chinese with gold morphology; the Kālāma
+Sutta beside its Madhyama-āgama parallel through the parallels graph;
+the Man'yōšū lemma-searchable with its own lexicon; a character's
+journey from Old Chinese reconstruction through Qieyun phonology to
+its go-on/kan-on Japanese readings — the axis the bridge shelves exist
+to serve. Kanripo (the 9,355-text Chinese library) and CBETA (the
+Taishō canon) are the planned P33 continuations.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 
