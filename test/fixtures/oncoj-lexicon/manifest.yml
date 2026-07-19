@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# lexicon.xml is a documented line-verbatim trim of the sha-pinned
+# release-tag file, so adapter_test stays null (a re-run against the
+# full lexicon would false-fail the entry-count assertions). README is
+# whole — the tag is immutable, so a byte-diff that DIFFERS is drift.
+source: oncoj-lexicon
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: lexicon.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/lexicon.xml
+    whole: false
+    trim: >-
+      91 superEntry blocks (112 entries) kept line-byte-verbatim in file
+      order between the original 3-line header and </div> — the corpus
+      fixtures' lemma cover set + EOJ-usg / def-less / duplicate-id
+      exemplars; 3,405,964 B -> 56,296 B; recipe in
+      test/fixtures/oncoj/README.md
+  - path: README
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/README
+    whole: true
+    trim: none (the upstream corpus README — the verbatim license §D and citation §C source)
