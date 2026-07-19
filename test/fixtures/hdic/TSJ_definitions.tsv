@@ -1,0 +1,59 @@
+#   HDIC Project
+#   Integrated Database of Hanzi Dictionaries in Early Japan
+#
+#   TSJ: Tenjibon Shinsen Jikyo database -- Headwords and definitions
+#
+#   Tenjibon Shinsen Jikyo 新撰字鏡, Tenji copy 天治本.
+#   A complete manuscript of 1124 is held by the Imperial Household Archives.
+#   Buddhist monk Shoju 昌住, c. 898-901.
+#   A Hanzi (Chinese character) dictionary.
+#
+#   TSJ_definitions.tsv
+#   Version: 1.2.41
+#   Date published: June 28, 2018
+#   Last modified: July 8, 2026
+#
+#   Copyright (c) 2018-2026 HDIC project, IKEDA Shoju (Chair, Professor Emeritus, Hokkaido University)
+#   LI Yuan (Person in charge of text data proofreading)
+#   LIU Guanwei (Person in charge of image database design and implementation)
+#   Contact: ikeda.shoju@gmail.com, liyuansapporo@yahoo.co.jp, toyjack@gmail.com
+#
+#   Data License Information and Access Rights
+#   License: 
+#   Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)
+#   Access Rights (Availability): 
+#   Open access
+#
+#   TSV format information:
+#   [SJID (svvwwxyyz): Book(vv), leaf(ww), recto-verso(x), line(yy) and number(z). Refer to TSJ_entries.tsv]
+#   SJ2ID: For headword of two or more characters, add 'a, b, ..., n' at the end of SJID
+#   Entry_word: Headword
+#   SJ_def: Definition of pronunciation, meaning and variant(s)
+#   SJ_def_remarks: Editor's notes
+#   ZhangLei_page: Xin zhuan zi jing xiao zhu 新撰字鏡校注
+#
+#   Abbreviations:
+#   山田攷異: 山田孝雄『新撰字鏡攷異并索引』六合館，1916
+#   山田索引：同
+#   国語索引：京都大学文学部国語学国文学研究室編『新撰字鏡国語索引』1958、再版臨川書店，1975
+#   張磊校注: 張磊・吴美富『新撰字鏡校注』浙江大学出版社，2024
+# 
+#   Acknowledgments:
+#   We are grateful to the Imperial Household Archives 宮内廳書陵部 for permission to publish the decipherment text of TSJ.
+#   This work was supported by JSPS KAKENHI Grant Number 25370506, 16H03422, 19H00526, 23K17500, 25K00466 and 26K21717.
+#
+TSJ2ID	Entry_word	SJ_def	SJ_remarks	ZhangLei_page
+s0104a601	天	躰年他前二反。平聲：顛也，尊也，頂也，君清輕在上也。		1
+s0104a602a	𬻃⿳一丷兀𠕹⿳一⿰从兀	四字皆天，古文。		1
+s0104a701	⿸疒⿱龷天	天字。		1
+s0104a702a	昊⿱⿰日白平	二同。下老反。上聲：昊天夏天也。		1
+s0104a704	⿱曰⿰干乇	上同字。		1
+s0104a705	鬵	字林反。釜属也。倭云加奈戸。𩱭字。		1
+s0104a801	替	他計反。去：癈也，代也。	字頭：原作“⿱⿰天天曰”。	1
+s0104a802	吞	土天土言二反。平：食也，咽也，滅也。又曲音，頓音。		1
+s0104a803	𡘸	古典反。上：小束也。		1
+s0104a804	昋	古惠反。去。或作炅。光明也，人姓也。和云比加利弖留。	字頭：原作“⿱天日”。	2
+s0104b101	䪞	才盍反。入：悪也。		2
+s0104b102	𠿓	□(先)盍反。入：醜也。加太奈志。	注文：享和本作“先盍反。入：醜。倭云加太奈志”。新撰字鏡攷異5頁。	2
+s0811a303a		三同。余據反。去：烏。		692
+#   eof				
