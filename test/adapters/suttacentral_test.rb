@@ -266,11 +266,14 @@ class SuttacentralTest < Minitest::Test
   # --- fetch (local fixture repo, branch `published`; no network) -------------
 
   def test_fetch_clones_the_published_branch_then_pulls
+    graph = File.read(File.join(FIXTURES, "parallels", "parallels.json"))
+    stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+      .to_return(status: 200, body: graph)
     Dir.mktmpdir do |root|
       upstream = File.join(root, "upstream")
       make_git_repo(upstream)
       workdir = File.join(root, "work")
-      adapter = suttacentral_pointing_at(upstream)
+      adapter = suttacentral_pointing_at(upstream, graph_pin: Digest::SHA256.hexdigest(graph))
 
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
@@ -285,6 +288,48 @@ class SuttacentralTest < Minitest::Test
     Dir.mktmpdir do |root|
       adapter = suttacentral_pointing_at(File.join(root, "does-not-exist"))
       assert_raises(Nabu::FetchError) { adapter.fetch(File.join(root, "work")) }
+    end
+  end
+
+  # --- the parallels graph rider (P32-6) --------------------------------------
+
+  def test_declares_the_parallels_graph_reference_producer
+    assert Nabu::Adapters::Suttacentral.reference_edges?,
+           "the sc-data parallels graph mints kind=reference edges after each sync"
+    producer = Nabu::Adapters::Suttacentral.reference_producer(catalog: nil, journal: nil)
+    assert_instance_of Nabu::SuttacentralParallels, producer
+  end
+
+  def test_fetch_lands_the_sha_pinned_parallels_graph_beside_the_clone
+    graph = File.read(File.join(FIXTURES, "parallels", "parallels.json"))
+    stub = stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+           .to_return(status: 200, body: graph)
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      make_git_repo(upstream)
+      workdir = File.join(root, "work")
+      adapter = suttacentral_pointing_at(upstream, graph_pin: Digest::SHA256.hexdigest(graph))
+
+      report = adapter.fetch(workdir)
+      assert_equal graph, File.read(File.join(workdir, "parallels", "parallels.json"))
+      assert_match(/parallels graph/, report.notes)
+      assert_match(/8b3bcaf6/, report.notes, "the sc-data commit pin is provenance, surfaced")
+      assert_equal git(upstream, "rev-parse", "HEAD"), report.sha,
+                   "the source pin stays the bilara-data HEAD — the graph rides notes only"
+    end
+    assert_requested(stub)
+  end
+
+  def test_fetch_aborts_on_a_parallels_graph_pin_mismatch
+    stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+      .to_return(status: 200, body: "[]")
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      make_git_repo(upstream)
+      adapter = suttacentral_pointing_at(upstream, graph_pin: "0" * 64)
+      error = assert_raises(Nabu::FetchError) { adapter.fetch(File.join(root, "work")) }
+      assert_match(/parallels graph/, error.message)
+      assert_match(/pin/, error.message)
     end
   end
 
@@ -326,8 +371,8 @@ class SuttacentralTest < Minitest::Test
     File.write(path, JSON.generate(publications))
   end
 
-  def suttacentral_pointing_at(upstream)
-    adapter = Nabu::Adapters::Suttacentral.new
+  def suttacentral_pointing_at(upstream, graph_pin: nil)
+    adapter = graph_pin ? Nabu::Adapters::Suttacentral.new(graph_pin: graph_pin) : Nabu::Adapters::Suttacentral.new
     adapter.define_singleton_method(:repo_url) { upstream }
     adapter
   end
