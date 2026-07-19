@@ -1240,6 +1240,40 @@ etcsl:
   # automatic annotation.
   sync_policy: frozen   # corpus completed October 2006; the LLDS artifact is immutable
   translations: true    # the English prose translations are half the packet's value
+cdli:
+  adapter: Nabu::Adapters::Cdli
+  enabled: false   # P31-2: flip after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync cdli — GitFetch clone +
+                   # LFS materialization, 154.8 MB csv + 86.9 MB atf —
+                   # then eyeball nabu show urn:nabu:cdli:p000725
+                   # (proto-cuneiform, >>Q composite links) beside a
+                   # metadata-only artifact and 5 random tablets).
+                   # MEASURED census at snapshot d66b12b (full payloads
+                   # through the production parser+Loader, 2026-07-19):
+                   # 353,156 docs loaded (135,201 with text / 218,097
+                   # metadata-only — the owner-approved universal
+                   # catalog), 2,186,961 passages; QUARANTINE FLOOR 142
+                   # (junk lines — missing-dot labels, a stray BOM,
+                   # "& blank space" — upstream defects named in the
+                   # AtfParser class note); discovery skips 54 duplicate
+                   # &P headers by rule. Timing on this box: discover
+                   # 45 s (1.2 GB RSS), parse+load 9.0 min (657 docs/s),
+                   # catalog +1.15 GB.
+  # P31-2: CDLI — the universal cuneiform catalog + C-ATF transliteration
+  # mass (github.com/cdli-gh/data; HONESTLY the 2023-10 snapshot — the
+  # daily dump is dead, cdli.earth API journaled as the freshness
+  # channel, not wired). New atf parser family (built for reuse: eBL-ATF
+  # registers as a dialect in P31-3). License = the bespoke open grant
+  # from cdli.earth/terms-of-use VERBATIM in the manifest → attribution;
+  # images entirely out of scope. NO #lem lines exist in C-ATF → the
+  # tier below is a defensive pin: nothing from cdli may ever enter the
+  # lemma index as gold (lemma search stays ORACC-gold). Periods (the
+  # catalog's own year envelopes) → AxisBuilder::CdliDates; genre/
+  # period/provenience/collection/ruler → facets; >>Q + composite_id +
+  # bdtns concordances → reference edges (producer cdli). Snapshot is
+  # frozen-in-practice but the repo is live git → re-syncs owner-fired.
+  sync_policy: manual
+  lemma_tier: silver
 
 # Template for the next source (leave commented until its adapter exists):
 #
