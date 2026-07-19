@@ -230,6 +230,23 @@ class GitFetchTest < Minitest::Test
     assert File.file?(File.join(@dir, "keep", "other.txt"))
   end
 
+  # Root-anchored sparse patterns ("/lexicon.xml" — the sparse-checkout
+  # spelling for a file at the repo root) must survive a RE-SYNC: the pull
+  # path reuses the cone as a `git diff` pathspec scope, where a leading
+  # slash is fatal ("outside repository", exit 128 — the ONCOJ owner repro
+  # 2026-07-20; the fresh clone worked, every re-sync died).
+  def test_sparse_pull_survives_root_anchored_patterns
+    make_repo("root.txt" => "v1\n", "papers/big.pdf" => "outside\n")
+    sync!(sparse: ["/root.txt"])
+    delete_upstream("root.txt")
+
+    result = sync!(sparse: ["/root.txt"])
+
+    assert_equal ["root.txt"], result.atticked,
+                 "the root-anchored cone deletion attics like any other"
+    refute File.exist?(File.join(@dir, "root.txt"))
+  end
+
   private
 
   def sync!(guard: nil, progress: nil, ref: nil, sparse: nil)
