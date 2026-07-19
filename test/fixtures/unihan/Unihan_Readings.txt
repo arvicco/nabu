@@ -1,0 +1,177 @@
+# Unihan_Readings.txt
+# Date: 2025-07-24 00:00:00 GMT [KL]
+# Unicode Version 17.0.0
+#
+# Unicode Character Database
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# For documentation, see https://www.unicode.org/reports/tr38/
+#
+# This file contains data on the following fields from the Unihan database:
+#	kCantonese
+#	kDefinition
+#	kFanqie
+#	kHangul
+#	kHanyuPinlu
+#	kHanyuPinyin
+#	kJapanese
+#	kJapaneseKun
+#	kJapaneseOn
+#	kKorean
+#	kMandarin
+#	kSMSZD2003Readings
+#	kTang
+#	kTGHZ2013
+#	kVietnamese
+#	kXHC1983
+#	kZhuang
+#
+U+3403	kCantonese	zim1
+U+340A	kCantonese	si6
+U+340B	kCantonese	tou2
+U+349A	kCantonese	wan2
+U+349A	kDefinition	(same as 穩) firm; stable; secure, dependent upon others
+U+349A	kFanqie	烏本 於靳
+U+349A	kHangul	온:N 은:N
+U+349A	kHanyuPinyin	10231.080:yìn,wěn
+U+349A	kJapanese	イン オン
+U+349A	kMandarin	yìn
+U+4E00	kCantonese	jat1
+U+4E00	kDefinition	one; a, an; alone
+U+4E00	kFanqie	於悉
+U+4E00	kHangul	일:0E
+U+4E00	kHanyuPinlu	yī(32747)
+U+4E00	kHanyuPinyin	10001.010:yī
+U+4E00	kJapanese	イチ イツ ひと ひとつ
+U+4E00	kJapaneseKun	HITOTSU HITOTABI HAJIME
+U+4E00	kJapaneseOn	ICHI ITSU
+U+4E00	kKorean	IL
+U+4E00	kMandarin	yī
+U+4E00	kSMSZD2003Readings	yī粵jat1
+U+4E00	kTGHZ2013	430.150:yī
+U+4E00	kTang	*qit qit
+U+4E00	kVietnamese	nhất
+U+4E00	kXHC1983	1351.020:yī 1360.040:yí 1368.160:yì
+U+4E9A	kCantonese	aa3
+U+4E9A	kDefinition	Asia; second
+U+4E9A	kHanyuPinlu	yà(26)
+U+4E9A	kMandarin	yà
+U+4E9A	kTGHZ2013	420.130:yà
+U+4E9A	kXHC1983	1321.020:yà
+U+4E9C	kCantonese	aa3
+U+4E9C	kDefinition	Asia; second
+U+4E9C	kHangul	아:N
+U+4E9C	kJapanese	ア アク つぐ
+U+4E9C	kJapaneseKun	TSUGU
+U+4E9C	kJapaneseOn	A ATSU OU
+U+4E9C	kKorean	A
+U+4E9C	kMandarin	yà
+U+4E9E	kCantonese	aa3
+U+4E9E	kDefinition	Asia; second; used as a prefix to names
+U+4E9E	kFanqie	衣嫁
+U+4E9E	kHangul	아:0E
+U+4E9E	kHanyuPinlu	yà(26)
+U+4E9E	kHanyuPinyin	10023.020:yà,yā,è
+U+4E9E	kJapanese	ア アク オウ つぐ
+U+4E9E	kJapaneseKun	TSUGU
+U+4E9E	kJapaneseOn	A ATSU OU
+U+4E9E	kKorean	A
+U+4E9E	kMandarin	yà
+U+4E9E	kSMSZD2003Readings	yà粵aa3
+U+4E9E	kTang	qà
+U+4E9E	kXHC1983	1321.021:yà
+U+4EBA	kCantonese	jan4
+U+4EBA	kDefinition	man; people; mankind; someone else
+U+4EBA	kFanqie	如鄰
+U+4EBA	kHangul	인:0E
+U+4EBA	kHanyuPinlu	rén(16866) ren(280)
+U+4EBA	kHanyuPinyin	10101.100:rén
+U+4EBA	kJapanese	ジン ニン ひと
+U+4EBA	kJapaneseKun	HITO
+U+4EBA	kJapaneseOn	JIN NIN
+U+4EBA	kKorean	IN
+U+4EBA	kMandarin	rén
+U+4EBA	kSMSZD2003Readings	rén粵jan4
+U+4EBA	kTGHZ2013	313.110:rén
+U+4EBA	kTang	*njin njin
+U+4EBA	kVietnamese	nhân
+U+4EBA	kXHC1983	0959.010:rén
+U+4F53	kCantonese	tai2
+U+4F53	kDefinition	body; group, class, body, unit; inferior
+U+4F53	kFanqie	蒲本
+U+4F53	kHangul	분:1N
+U+4F53	kHanyuPinlu	tǐ(1746)
+U+4F53	kHanyuPinyin	10130.010:bèn,cuì,tǐ
+U+4F53	kJapanese	タイ テイ ホン ボン からだ
+U+4F53	kJapaneseKun	KARADA
+U+4F53	kJapaneseOn	TEI TAI HON
+U+4F53	kKorean	PWUN CHEY
+U+4F53	kMandarin	tǐ
+U+4F53	kTGHZ2013	363.070:tī 364.100:tǐ
+U+4F53	kVietnamese	thể
+U+4F53	kXHC1983	1127.010:tī 1129.030:tǐ
+U+5929	kCantonese	tin1
+U+5929	kDefinition	sky, heaven; god, celestial
+U+5929	kFanqie	他前
+U+5929	kHangul	천:0E
+U+5929	kHanyuPinlu	tiān(5162) tian(64)
+U+5929	kHanyuPinyin	10522.010:tiān
+U+5929	kJapanese	テン デン あめ あま そら
+U+5929	kJapaneseKun	AME SORA
+U+5929	kJapaneseOn	TEN
+U+5929	kKorean	CHEN
+U+5929	kMandarin	tiān
+U+5929	kSMSZD2003Readings	tiān粵tin1
+U+5929	kTGHZ2013	365.020:tiān
+U+5929	kTang	*ten
+U+5929	kVietnamese	thiên
+U+5929	kXHC1983	1131.050:tiān
+U+611B	kCantonese	oi3
+U+611B	kDefinition	love, be fond of, like
+U+611B	kFanqie	烏代
+U+611B	kHangul	애:0E
+U+611B	kHanyuPinlu	ài(1137)
+U+611B	kHanyuPinyin	42323.010:ài
+U+611B	kJapanese	アイ エ おしむ めでる いとしい かなしい
+U+611B	kJapaneseKun	MEDERU OSHIMU ITOSHII
+U+611B	kJapaneseOn	AI
+U+611B	kKorean	AY
+U+611B	kMandarin	ài
+U+611B	kSMSZD2003Readings	ài粵oi3
+U+611B	kTang	*qə̀i
+U+611B	kXHC1983	0004.111:ài
+U+7231	kCantonese	oi3
+U+7231	kDefinition	love, be fond of, like
+U+7231	kHanyuPinlu	ài(1137)
+U+7231	kJapanese	アイ エ エン オン いつくしみ いつくしむ おしむ めでる
+U+7231	kMandarin	ài
+U+7231	kTGHZ2013	002.150:ài
+U+7231	kXHC1983	0004.110:ài
+U+9AD4	kCantonese	tai2
+U+9AD4	kDefinition	body; group, class, body, unit
+U+9AD4	kFanqie	他禮
+U+9AD4	kHangul	체:0E
+U+9AD4	kHanyuPinlu	tǐ(1746)
+U+9AD4	kHanyuPinyin	74419.030:tǐ,tī
+U+9AD4	kJapanese	テイ タイ からだ
+U+9AD4	kJapaneseKun	KARADA
+U+9AD4	kJapaneseOn	TEI TAI
+U+9AD4	kKorean	CHEY
+U+9AD4	kMandarin	tǐ
+U+9AD4	kSMSZD2003Readings	tǐ粵tai2 tī粵tai2
+U+9AD4	kTang	*těi
+U+9AD4	kVietnamese	thể
+U+9AD4	kXHC1983	1127.011:tī 1129.031:tǐ
+U+9B75	kCantonese	fan4
+U+9B75	kDefinition	shrimp
+U+9B75	kFanqie	符分 房吻 敷粉 匹問
+U+9B75	kHanyuPinyin	74678.120:fén,fèn
+U+9B75	kJapanese	フン ブン えび
+U+9B75	kJapaneseKun	EBI
+U+9B75	kJapaneseOn	FUN BUN
+U+9B75	kMandarin	fén
+U+2000B	kJapanese	ジョウ たけ
+
+# EOF
