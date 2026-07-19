@@ -292,9 +292,10 @@ class AlignmentRegistryTest < Minitest::Test
     labels = work.witnesses.map(&:label)
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
                   "BHSA (ETCBC, Masoretic)", "WEB (English)",
-                  "Targum (Onkelos/Jonathan/Writings)"], labels,
+                  "Targum (Onkelos/Jonathan/Writings)", "Peshitta (Syriac, ETCBC)"], labels,
                  "P26-3 adds the Masoretic witness, P30-4 the second MT leg (BHSA), P30-3 " \
-                 "the Aramaic Targum leg — align GEN 1.1 spans MT/MT2/LXX/Vulgate/English/Targum"
+                 "the Aramaic Targum leg, P31-4 the Syriac Peshitta leg — align GEN 1.1 " \
+                 "spans MT/MT2/LXX/Vulgate/English/Targum/Peshitta"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
@@ -355,16 +356,35 @@ class AlignmentRegistryTest < Minitest::Test
     assert_nil bhsa.numbering
   end
 
+  def test_shipped_ot_peshitta_witness_mirrors_the_oshb_holdouts
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    peshitta = work.witnesses.find { |witness| witness.label == "Peshitta (Syriac, ETCBC)" }
+    refute_nil peshitta, "P31-4: the ot hub's Syriac leg — the seventh"
+    assert_equal "cts-verse", peshitta.extractor
+    assert_equal "GEN", peshitta.book_for("urn:nabu:peshitta:gn"), "align GEN 1.1 goes seven-legged"
+    assert_equal "2KI", peshitta.book_for("urn:nabu:peshitta:rg2")
+    assert_equal "LAM", peshitta.book_for("urn:nabu:peshitta:thr"), "upstream's Threni siglum"
+    oshb = work.witnesses.find { |witness| witness.label == "OSHB (WLC, Masoretic)" }
+    assert_equal oshb.documents.values.sort, peshitta.documents.values.sort,
+                 "the Peshitta carries the Masoretic versification (MEASURED at packet time: " \
+                 "chapter census over all 39 protocanonical books, Joel 4ch/Malachi 3ch/Jonah " \
+                 "1:16+2:11), so the token map mirrors the OSHB conservative holdouts EXACTLY"
+    assert_nil peshitta.numbering, "no remap — the map only holds MT-stable books"
+  end
+
   def test_shipped_registry_loads_the_psalms_work_with_the_web_numbering_remap
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
     work = Nabu::AlignmentRegistry.load(path).work("psalms")
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
-                  "OSHB (WLC, Masoretic)", "BHSA (ETCBC, Masoretic)", "Targum (Psalms)"],
+                  "OSHB (WLC, Masoretic)", "BHSA (ETCBC, Masoretic)", "Targum (Psalms)",
+                  "Peshitta (Syriac, ETCBC)"],
                  work.witnesses.map(&:label),
                  "P26-3 adds the MT psalter, P30-4 the BHSA psalter (same remap), P30-3 the " \
-                 "Psalms Targum; the OE Paris Psalter stays deferred (line grain)"
-    lxx, vulgate, web, oshb, bhsa, targum = work.witnesses
+                 "Psalms Targum, P31-4 the Peshitta psalter (same remap again); the OE Paris " \
+                 "Psalter stays deferred (line grain)"
+    lxx, vulgate, web, oshb, bhsa, targum, peshitta = work.witnesses
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     assert_nil lxx.numbering, "the LXX Greek numbering IS the work vocabulary"
     assert_equal "PSA", vulgate.book_for("urn:nabu:vulgate:psa")
@@ -387,6 +407,11 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "PSA", targum.book_for("urn:nabu:sefaria:aramaic-targum-to-psalms:mikraot-gedolot")
     assert_equal web.numbering, targum.numbering, "the P13-5 table is reused VERBATIM again"
     assert_equal "PSA 22.1", targum.normalize_ref("PSA 23.1")
+    # P31-4: the Peshitta psalter — measured Hebrew-numbered (150 psalms,
+    # Ps 22 opens at verse 2 with "my God, my God") — the same table, fifth reuse.
+    assert_equal "PSA", peshitta.book_for("urn:nabu:peshitta:ps")
+    assert_equal web.numbering, peshitta.numbering, "the P13-5 table is reused VERBATIM for the Peshitta"
+    assert_equal "PSA 22.1", peshitta.normalize_ref("PSA 23.1"), "the shepherd psalm aligns Syriac-beside-LXX"
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
