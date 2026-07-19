@@ -42,12 +42,36 @@ module Nabu
     #   page (before the first anchor, or in a file with no anchors) would
     #   be silently lost or mis-cited — both raise Nabu::ParseError (loud
     #   quarantine; every probed file is anchor-first).
+    #
+    # == KR2 census additions (P33-1, seven KR2 + three KR5 repos probed
+    #    2026-07-20)
+    #
+    # - RE-ASSERTED anchors: big KR2 texts repeat the OPEN page's anchor
+    #   mid-page (SBCK 大清一統志: 1,507 instances across 178 of 210 files,
+    #   every one the currently open page — zero closed-page repeats; WYG
+    #   明史 re-asserts after an interleaved volume anchor). A re-assertion
+    #   is a no-op — same page continues; an anchor re-opening a CLOSED page
+    #   is still the loud duplicate ParseError.
+    # - EDITION-VOLUME anchors `<pb:KR2a0038_WYG_WYG0297-0606c>`: the text's
+    #   own id + edition, but an ALPHA-prefixed volume ordinal of the PRINT
+    #   edition and an a/b/c register (the three text-registers of a 四庫
+    #   page; the leaf-side grain has no c). They interleave the leaf-side
+    #   pagination mid-page: recorded verbatim on the open page as
+    #   annotations "edition_pages", never page text, never a page boundary.
+    #   Anchors of a DIFFERENT text id (the KR5 witness overlays' `<pb:
+    #   CK-KZ_JY001_01p001a>` + `<md:>` milestones) stay unrecognized —
+    #   their files fail the loud text-outside-page path, which is the P33-1
+    #   verdict on KR5: no ingestion without its own parser wave.
     class MandokuParser
       TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+)\.txt\z/
       HEADER_LINE = /\A#(?:\+|\s|-|\z)/
       PROPERTY = /\A#\+PROPERTY:\s+(?<key>\S+)\s+(?<value>.*)\z/
       TITLE = /\A#\+TITLE:\s+(?<value>.*)\z/
       ANCHOR = /<pb:(?<anchor>(?<text>KR\d[a-z]\d{4})_(?<edition>[^_>]+)_(?<juan>\d+)-(?<page>\d+[ab]))>/
+      # The print edition's own volume pagination interleaved mid-page (the
+      # KR2 census): same text id, alpha-prefixed volume ordinal, a–c
+      # register. Never a page boundary — an annotation on the open page.
+      EDITION_PAGE = /<pb:(?<anchor>(?<text>KR\d[a-z]\d{4})_(?<edition>[^_>]+)_(?<volume>[A-Z]+\d+)-(?<page>\d+[a-c]))>/
       SRC_COMMENT = /\A#\s+src:\s+(?<ref>.*)\z/
       HEADING = /\A(?<stars>\*+)\s+(?<text>.*)\z/
       GAIJI = /&[A-Za-z][A-Za-z0-9-]*;/
@@ -112,7 +136,7 @@ module Nabu
       def append_pages!(document, files, urn:)
         state = { document: document, urn: urn, sequence: 0, seen: {}, page: nil }
         files.each do |file|
-          state[:pending] = { "src_refs" => [], "headings" => [] }
+          state[:pending] = empty_annotations
           each_line(file) { |line| consume_line(state, file, line) }
           flush_page!(state) # pages never span files (juan = file grain)
         end
@@ -154,6 +178,7 @@ module Nabu
       end
 
       def append_text(state, file, fragment)
+        fragment = extract_edition_pages(state, fragment)
         text = fragment.delete(PILCROW).strip
         return if text.empty?
 
@@ -162,15 +187,36 @@ module Nabu
         state[:page][:lines] << fragment.delete(PILCROW).rstrip
       end
 
+      # Strip the interleaved edition-volume anchors (the KR2 census shape)
+      # out of the print line, recording each verbatim on the page open at
+      # that point (pending before the first page — unattested, but the
+      # comment/heading precedent applies).
+      def extract_edition_pages(state, fragment)
+        fragment.gsub(EDITION_PAGE) do
+          bucket = state[:page] ? state[:page][:annotations] : state[:pending]
+          bucket["edition_pages"] << Regexp.last_match[:anchor]
+          ""
+        end
+      end
+
       def open_page!(state, file, match)
-        flush_page!(state)
         key = "#{match[:juan]}:#{match[:page]}"
+        # Re-asserting the OPEN page's anchor is upstream's way of resuming
+        # the leaf-side pagination after an interleave (census: 1,507
+        # instances in 大清一統志 alone, every one the open page) — no-op.
+        return if state[:page] && state[:page][:key] == key
+
+        flush_page!(state)
         raise ParseError, "#{file}: duplicate page anchor <pb:#{match[:anchor]}>" if state[:seen].key?(key)
 
         state[:seen][key] = true
         annotations = state[:pending]
-        state[:pending] = { "src_refs" => [], "headings" => [] }
+        state[:pending] = empty_annotations
         state[:page] = { key: key, anchor: match[:anchor], lines: [], annotations: annotations }
+      end
+
+      def empty_annotations
+        { "src_refs" => [], "headings" => [], "edition_pages" => [] }
       end
 
       # Emit the open page as a passage; empty pages (no print lines) are
@@ -192,7 +238,7 @@ module Nabu
         annotations = { "anchor" => page[:anchor] }
         gaiji = text.scan(GAIJI)
         annotations["gaiji"] = gaiji unless gaiji.empty?
-        %w[headings src_refs].each do |key|
+        %w[headings src_refs edition_pages].each do |key|
           values = page[:annotations][key]
           annotations[key] = values unless values.empty?
         end

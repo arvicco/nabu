@@ -5,17 +5,19 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# Nabu::Adapters::Kanripo (P33-0): nabu's first many-repo source — the
-# Kanseki Repository, one GitHub repo per text, discovered through the
-# KR-Catalog index and parsed by the mandoku family. Fixtures are seven real
-# texts (2–3 per wave-1 class KR1/KR3/KR4) fetched individually 2026-07-20
-# plus a trimmed KR-Catalog slice; see test/fixtures/kanripo/README.md.
+# Nabu::Adapters::Kanripo (P33-0; KR2 wave 2 P33-1): nabu's first many-repo
+# source — the Kanseki Repository, one GitHub repo per text, discovered
+# through the KR-Catalog index and parsed by the mandoku family. Fixtures
+# are ten real texts (2–3 per wave class KR1/KR2/KR3/KR4) fetched
+# individually 2026-07-20 plus a trimmed KR-Catalog slice; see
+# test/fixtures/kanripo/README.md.
 class KanripoTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = File.expand_path("../fixtures/kanripo", __dir__)
 
-  TEXT_IDS = %w[KR1a0170 KR1h0004 KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026].freeze
+  TEXT_IDS = %w[KR1a0170 KR1h0004 KR2a0001 KR2a0038 KR2g0007
+                KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026].freeze
 
   def conformance_adapter
     Nabu::Adapters::Kanripo.new
@@ -52,7 +54,7 @@ class KanripoTest < Minitest::Test
 
     classes = refs.map { |ref| ref.metadata["class"] }
     assert_equal TEXT_IDS.map { |id| "urn:nabu:kanripo:#{id}" }, refs.map(&:id)
-    assert_equal %w[KR1 KR1 KR3 KR3 KR3 KR4 KR4], classes
+    assert_equal %w[KR1 KR1 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4], classes
     refs.each { |ref| assert File.directory?(ref.path), "ref path must be the text dir" }
   end
 
@@ -104,7 +106,7 @@ class KanripoTest < Minitest::Test
     adapter = conformance_adapter
     total = adapter.discover(FIXTURES).sum { |ref| adapter.parse(ref).size }
 
-    assert_equal 139, total
+    assert_equal 253, total
   end
 
   # -- fetch (local rig — no network, the house pattern) ---------------------

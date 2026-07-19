@@ -1660,20 +1660,30 @@ kanripo:
   adapter: Nabu::Adapters::Kanripo
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync kanripo — the
                    # first many-repo wave (KanripoFetch, architecture §8):
-                   # KR-Catalog clone + 2,934 per-text shallow clones
-                   # (census 2026-07-20: KR1 719 repos/~204 MB git, KR3
-                   # 867/~513 MB, KR4 1,348/~566 MB; 61 catalog ids have
-                   # no repo → recorded absent). At the default 2 s pacing
-                   # the wave is ~1.6 h of pauses + transfer — resumable:
-                   # re-running resumes where it died, refetching nothing.
-                   # Eyeball 論語 (urn:nabu:kanripo:KR1h0004) juan 1 and 5
-                   # random pages, then flip.
-  sync_policy: manual   # ~3k-repo waves are owner-fired, never --all
-  # P33-0 (2026-07-20): wave 1 of the Kanseki Repository — `classes:` is
-  # the ACQUISITION scope (KR1 經 classics + KR3 子 masters + KR4 集
-  # belles-lettres; the KR-Catalog census for these classes is 732 + 886
-  # + 1,371 = 2,989 text ids). KR2 histories + KR5 Daoist are P33-1;
-  # KR6 Buddhist is EXCLUDED this phase (doctrine call journaled in
+                   # KR-Catalog clone + 3,512 per-text shallow clones
+                   # (census 2026-07-20: KR1 719 repos/~204 MB git, KR2
+                   # 578/~459 MB, KR3 867/~513 MB, KR4 1,348/~566 MB; 63
+                   # of the 3,569 wave ids have no repo → recorded absent).
+                   # At the default 2 s pacing the combined wave is ~2 h of
+                   # pauses (KR2's share ~20 min) + ~1.7 GB transfer —
+                   # resumable: re-running resumes where it died,
+                   # refetching nothing. Eyeball 論語
+                   # (urn:nabu:kanripo:KR1h0004) juan 1 and 5 random
+                   # pages, then flip.
+  sync_policy: manual   # ~3.5k-repo waves are owner-fired, never --all
+  # P33-0 wave 1 + P33-1 wave 2 (2026-07-20): `classes:` is the
+  # ACQUISITION scope, listed in 四部 order — ORDER IS COSMETIC (the wave
+  # fetches the sorted union of the classes' catalog ids). Wave 1 = KR1 經
+  # classics + KR3 子 masters + KR4 集 belles-lettres (732 + 886 + 1,371
+  # = 2,989 catalog ids); wave 2 (P33-1) adds KR2 史 histories: 580
+  # catalog ids / 578 repos (~459 MB git — the 二十四史 live here; two ids
+  # have NO repo: KR2a0039 清史稿 + KR2d0020 → recorded absent; 4 KR2
+  # repos incl. the whole KR2p 出土簡帛 subclass are UN-catalogued →
+  # outside the catalog-driven scope, censused in 02-sources row 104).
+  # KR5 道 (the Daozang) is censused + REPORTED ONLY (P33-1): its DZJY
+  # witness overlays (`<md:>` milestones) don't parse under the mandoku
+  # family — ingestion needs its own parser wave, owner's call. KR6
+  # Buddhist is EXCLUDED this phase (doctrine call journaled in
   # 02-sources row 104 — CBETA is the scholarly Buddhist shelf).
   # Narrowing classes never withdraws held texts (discover is on-disk-
   # driven); widening is a config-only change. The pacing knob is
@@ -1683,7 +1693,7 @@ kanripo:
   # premodern Chinese texts. Licensed as CC BY SA 4.0." + ytenx
   # DATA_LICENSE.md corroboration; №25 Wittern confirmation email SENT,
   # non-blocking → attribution.
-  classes: [KR1, KR3, KR4]
+  classes: [KR1, KR2, KR3, KR4]
 
 # Template for the next source (leave commented until its adapter exists):
 #
