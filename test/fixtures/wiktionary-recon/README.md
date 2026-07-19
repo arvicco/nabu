@@ -263,6 +263,16 @@ One NEW extract — the Sino axis opens (P32). ATTESTED language on the
 recon source (the wiktionary-cu/P25-2 precedent: no display asterisk;
 `ojp` is real ISO 639-3, adopted as itself). All kept lines
 byte-verbatim (same post-check as above); the license statement on
+## P32-3 addition (attested Chinese; retrieved 2026-07-19)
+
+One NEW extract — **wiktionary-zh**, the whole-macrolanguage Chinese
+extract (language `zho`; the OWNER-APPROVED ~1.1 GB disk call). ATTESTED
+language on the recon source (the wiktionary-cu/P25-2 precedent), and the
+ONLY extract parsed with `historical_sounds: true`: the per-entry
+`sounds` rows tagged `Middle-Chinese` / `Old-Chinese` (+ the school —
+`Baxter-Sagart` / `Zhengzhang`) surface as body lines; nothing else in
+`sounds` (modern lect romanizations, IPA) enters bodies. All kept lines
+byte-verbatim (post-check as ever); the license statement on
 https://kaikki.org/dictionary/ re-verified verbatim 2026-07-19 ("This
 data is made available under the same licenses as Wiktionary - both
 CC-BY-SA and GFDL.").
@@ -302,3 +312,30 @@ Full-download census (sha256 of the full download; the kaikki page's own
 Selection recipe: whole JSONL lines picked by upstream line number as
 listed (deterministic; the post-check asserts each emitted line is a
 literal line of the raw download). Totals: 5 lines, 7,257 B.
+Full-download census (2026-07-19; upstream Last-Modified 2026-07-16):
+
+- `https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl`
+  — **1,181,142,520 B (~1.1 GiB), 323,840 lines** (303,963 distinct
+  words), sha256
+  `e0b6c4ed6aac4d311f1cfbd3109014541889d06287065276970a24ec5b7a2fdd`.
+  **MC/OC census (the reconstruction value):** 23,484 records carry a
+  Middle Chinese reading; 19,382 an Old Chinese reconstruction — 8,158
+  Baxter-Sagart, 19,273 Zhengzhang (**Zhengzhang arrives ONLY via
+  kaikki** — ytenx is license-blocked, see docs/02-sources.md row 50).
+  8,098 records carry `descendants` (the Sino-Xenic ja/ko/vi loan
+  lanes); 26,184 carry etymology_text; pos landscape: soft-redirect
+  123,055 · noun 90,150 · verb 34,092 · character 29,879 · name 19,314 …
+  → **6 fixture lines** (upstream lines 2/3/4/9/122/18894):
+  - `GDP` noun (line 2) — a modern term: full modern `sounds`, NO MC/OC
+    rows — pins that no historical lines are invented.
+  - `A` verb (line 3) / `A` adj (line 4) — `etymology_number` homographs
+    (ids A:verb:1 / A:adj:2).
+  - `犬` character (line 9) — THE golden: MC `khwenX` + OC Baxter-Sagart
+    `/*[k]ʷʰˤ[e][n]ʔ/` + OC Zhengzhang `/*kʰʷeːnʔ/`, all three
+    fixture-pinned as body lines.
+  - `MD` soft-redirect (line 122) — the dominant record shape (123,055
+    upstream): no-gloss stub, honest nil.
+  - `茶` character (line 18894) — the Sino-Xenic loan pin: descendants
+    carry ja 茶 (roman `cha`) / ryu / ko 차(茶) readings raw_tags
+    `["borrowed"]`; the ja/ko codes pass through unmapped (display-only
+    until a CJK gold shelf lands — the P32-4 bridge's future join).

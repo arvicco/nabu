@@ -364,6 +364,16 @@ wiktionary-recon:
                    # entries, ~1.26 MB, sha256 67ca3b02… at fixture time);
                    # the GET is OWNER-FIRED at the next sync. Same row, no
                    # registry change.
+  # P32-3 (2026-07-19): THIRTEENTH extract wiktionary-zh — LOUD SCALE
+  # WARNING: the kaikki Chinese extract is ~1.1 GB IN ONE GET
+  # (1,181,142,520 B, 323,840 records — ~9x the other twelve extracts
+  # COMBINED) and the next owner-fired `bin/nabu sync wiktionary-recon`
+  # will download it. Owner approved the disk call (P32 plan 2026-07-19).
+  # Expect +323,840 zho entries (23,484 with Middle Chinese readings,
+  # 19,382 with OC reconstructions — 8,158 Baxter-Sagart / 19,273
+  # Zhengzhang; 8,098 with Sino-Xenic descendants) and a matching
+  # catalog-growth step. The extract stays canonical-verbatim (never
+  # trimmed); censuses in test/fixtures/wiktionary-recon/README.md.
   sync_policy: manual
 
 freising:
@@ -1465,6 +1475,43 @@ syriac-corpus:
   # uniformly "Creative Commons — Attribution 4.0 International — CC BY
   # 4.0" (base texts PD per the availability note) → class attribution.
   # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
+  sync_policy: manual
+
+baxter-sagart:
+  adapter: Nabu::Adapters::BaxterSagart
+  enabled: false  # P32-3: awaiting the owner-fired first sync (one 410 KB GET,
+                  # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
+                  # baxter-sagart, eyeball `nabu define 天` / `define 馬` on
+                  # both lanes, then flip). Expect 4,959 rows → 9,918 entries
+                  # (each row mints in BOTH lanes: baxter-sagart-oc och +
+                  # baxter-sagart-mc ltc — the EDL two-lanes precedent).
+  # The Baxter & Sagart 2014 OC reconstruction via the yawnoc TSV dump
+  # (commit-pinned a448f53a, sha256-verified before the tree mutates).
+  # LICENSE = THE PROVENANCE CHAIN (recorded whole in the manifest): the
+  # authors' University of Michigan host is DEAD (403); its CC BY 4.0 grant
+  # survives verbatim in the Wayback capture 2025-03-12
+  # (web.archive.org/web/20250312164901/http://ocbaxtersagart.lsait.lsa.umich.edu/);
+  # the TSV repo is license-less — the content license governs; attribution
+  # to Baxter & Sagart 2014. Stands BESIDE the kaikki wiktionary-zh B-S
+  # readings as a provenance-distinct witness — never deduped.
+  sync_policy: manual
+
+tshet-uinh:
+  adapter: Nabu::Adapters::TshetUinh
+  enabled: false  # P32-3: awaiting the owner-fired first sync (~10 MB
+                  # GitFetch clone of nk2028/tshet-uinh-data; CLAUDE.md
+                  # checklist §6: bin/nabu sync tshet-uinh, eyeball
+                  # `nabu define 東` (音韻地位 端一東平 + the long 釋義) and a
+                  # 校本-annotated row, then flip). Expect 25,336 ltc entries
+                  # on the guangyun shelf (character × phonological position).
+  # 廣韻 critical edition (澤存堂本 + 校本 corrections AS ANNOTATIONS, never
+  # silent fixes — the documented upstream syntax, quoted in
+  # test/fixtures/tshet-uinh/README.md). CC0 1.0 (full legal code verified
+  # IN-REPO, LICENSE at root, 2026-07-19). The repo's other files (王三
+  # 17,232 rows in-progress, 王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
+  # analyses) are censused in 02-sources row 99, not ingested; sibling
+  # zhongyuan-data (中原音韻, CC0) journaled there too — format + language-tag
+  # honesty reasons, an owner call.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
