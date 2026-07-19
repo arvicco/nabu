@@ -11,8 +11,9 @@ module Nabu
     # in each adapter, so the eBL-ATF dialect (P31-3) can register against
     # the same core without inheriting CDLI decisions. The dialect seams are
     # the constructor policy (language_map / related_target) plus the
-    # #directive and #classify_at methods a dialect subclass overrides —
-    # override points, not configuration soup.
+    # #directive, #classify_at, #unrecognized and #document_language methods
+    # a dialect subclass overrides — override points, not configuration soup
+    # (EblAtfParser is the first registrant beside the C-ATF core).
     #
     # == The line grammar (censused over the full 86.9 MB dump, 2026-07-19)
     #
@@ -199,8 +200,16 @@ module Nabu
         when /\A>>/ then composite_link(text, state)
         when TEXT_LINE then text_line(Regexp.last_match, state)
         else
-          fail_line(state, "unrecognized line #{text.inspect}")
+          unrecognized(text, state)
         end
+      end
+
+      # The fall-through seam: what the grammar cannot classify. The core
+      # quarantines honestly; a dialect with additional line types the loop
+      # has no case for (eBL-ATF "// …" parallels, P31-3) overrides this and
+      # falls back to super for genuine junk.
+      def unrecognized(text, state)
+        fail_line(state, "unrecognized line #{text.inspect}")
       end
 
       def header(match, state)

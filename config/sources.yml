@@ -1274,6 +1274,46 @@ cdli:
   # frozen-in-practice but the repo is live git → re-syncs owner-fired.
   sync_policy: manual
   lemma_tier: silver
+ebl:
+  adapter: Nabu::Adapters::Ebl
+  enabled: false   # P31-3: flip after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync ebl — one 73.9 MB GET,
+                   # sha-pinned — then eyeball nabu show
+                   # urn:nabu:ebl:1868,0523.2 (tr.en riders, @i{} markup)
+                   # beside urn:nabu:ebl:im.61678 (Ur III %sux, date
+                   # facet) and 5 random fragments). MEASURED census at
+                   # the snapshot (full payload through the production
+                   # adapter, 2026-07-19): 23,288 docs (23,289 members −
+                   # the K.5808 byte-identical twin, skipped by rule) /
+                   # 325,728 passages / 66 zero-text metadata-only /
+                   # QUARANTINE FLOOR 0; languages akk 19,673 · sux 3,615
+                   # (%-shift rule); 19,230 reference edges; parse+census
+                   # ~6 s on this box.
+  # P31-3: eBL Fragmentarium — the Electronic Babylonian Library's
+  # transliterated museum fragments (Kuyunjik/Babylon…), eBL-ATF as the
+  # atf family's SECOND dialect (EblAtfParser — the family seams built in
+  # P31-2 carried it without weakening the C-ATF core). Bootstrap = the
+  # citable Zenodo snapshot 10.5281/zenodo.10018951 (2023-10-18,
+  # fragments.json 73.9 MB, sha256-pinned; the live Fragmentarium had
+  # 37,296 fragments at scout time — the deposit packages the 23,289
+  # TRANSLITERATED ones). The sanctioned ebl.lmu.de/api/fragments/
+  # retrieve-all endpoint (4-8 min/batch) is the OWNER-FIRED refresh
+  # channel ONLY — documented, never automated. LICENSE CONFLICT recorded
+  # verbatim in the manifest: JOHD 10.5334/johd.148 License section says
+  # CC BY-NC-SA 4.0 for fragments.json, the Zenodo field says cc-by-4.0 —
+  # class held at nc (MCP-excluded per standing nc discipline) until
+  # email №24 resolves it. The eBL Corpus side (Gilgameš chapter
+  # editions) is OUT: no packaged dump, the grant covers fragments only.
+  # #tr.en/#tr.ar/#tr.de per-line translations ride as tr annotations
+  # (the P31-2 carry, extents verbatim); cdliNumber (79.9%) →
+  # urn:nabu:cdli:p… edges into the P31-2 space, editedInOraccProject →
+  # urn:nabu:oracc:<proj>:<P> edges, bdtns concordance (producer ebl).
+  # Period vocabulary carries no year envelopes → facets only, no axis
+  # extractor. #lem exists on ONE fragment (BM.47447, 71 lines) → carried
+  # verbatim as annotations, nothing enters the lemma index; the tier
+  # below is the cdli-style defensive pin, not a lemma claim.
+  sync_policy: manual   # versioned DOI is frozen; refresh = owner-fired retrieve-all, then a deliberate re-pin
+  lemma_tier: silver
 cuc:
   adapter: Nabu::Adapters::Cuc
   enabled: false   # until the owner-fired first real sync (checklist §6:
