@@ -16,12 +16,16 @@ module Nabu
     #   on. Validated against the file's actual header on the first read —
     #   a silently renamed upstream column must fail loudly (naming the
     #   missing columns and the file), never yield nil-filled rows.
+    # - +col_sep+ (P32-3): the field separator, "," by default. "\t" serves
+    #   Excel-style TSV dumps (the Baxter-Sagart TSV), whose fields keep
+    #   stdlib CSV quoting semantics ("""mansion"" of the zodiac…" decodes).
     # - #each_row streams string-keyed hashes in file order (CSV::Row
     #   converted; values are Strings or nil, exactly as stdlib CSV parses
     #   them). Malformed CSV raises Nabu::ParseError naming file and line.
     class FlatCsvParser
-      def initialize(required_headers: [])
+      def initialize(required_headers: [], col_sep: ",")
         @required_headers = required_headers
+        @col_sep = col_sep
       end
 
       # Stream +path+'s records as string-keyed hashes, in file order.
@@ -32,7 +36,7 @@ module Nabu
         return enum_for(:each_row, path) unless block
 
         checked = false
-        CSV.foreach(path, headers: true, encoding: Encoding::UTF_8) do |row|
+        CSV.foreach(path, headers: true, encoding: Encoding::UTF_8, col_sep: @col_sep) do |row|
           hash = row.to_h.transform_keys { |key| key.nil? ? "" : key }
           unless checked
             check_headers!(hash.keys, path)
