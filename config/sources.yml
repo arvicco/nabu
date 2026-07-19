@@ -1222,6 +1222,25 @@ hebrew-lexicon:
   # frozen since 2019 → re-fetch is an owner decision.
   sync_policy: manual
 
+etcsl:
+  adapter: Nabu::Adapters::Etcsl
+  enabled: false   # P31-5: awaiting owner-fired first sync (bin/nabu sync etcsl, ~4.9 MB zip)
+  # P31-5: the Electronic Text Corpus of Sumerian Literature, Revised
+  # edition (Oxford, October 2006) — 394 hand-lemmatized Sumerian
+  # composites + 381 paired English prose translations (-en siblings),
+  # one frozen zip on the OTA's LLDS record (hdl 20.500.14106/2518;
+  # sha256-pinned in the adapter — the legacy ota.bodleian server was
+  # down 2026-07-18/19, LLDS is the OTA's current CLARIN-UK home).
+  # CC BY-NC-SA 3.0 (record-level grant, quoted verbatim in the
+  # manifest) → nc. Second witness beside epsd2/literary (P31-0),
+  # deliberately unmerged — concordance via "etcsl:<num>" reference
+  # edges. lemma_tier stays the gold default: the lemma layer is the
+  # editors' hand-assigned lexeme assignment (citation form + word
+  # class + gloss per word form; upstream readme + manual), not
+  # automatic annotation.
+  sync_policy: frozen   # corpus completed October 2006; the LLDS artifact is immutable
+  translations: true    # the English prose translations are half the packet's value
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
