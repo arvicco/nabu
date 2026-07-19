@@ -25,13 +25,17 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-17** the shelves hold **172,189 documents / 4,308,814
-passages** in some two dozen ancient languages — from proto-cuneiform
+As of **2026-07-19** the shelves hold **737,299 documents / 11,357,320
+passages** in nearly a hundred language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to 19th-century Slovenian, with
-Gaulish inscriptions and Irish ogham stones the newest arrivals — plus
-**633,137 dictionary entries** across twenty-seven dictionary shelves
-and **over 2.85 million gold lemma annotations in 17 languages**. (All
-numbers in this README are read from the live catalog, never estimated.)
+the Ancient Near East the newest arrival: the Hittite tablet corpus, the
+CDLI's 353,156-artifact cuneiform catalog, the eBL Fragmentarium,
+Ugaritic, a millennium of Syriac, and the Sumerian literary canon in two
+scholarly editions — plus **711,376 dictionary entries** across
+thirty-nine dictionary shelves and **over 12.4 million gold lemma
+annotations in 22 languages** (a further 8.0 million ride an honestly
+labelled silver tier). (All numbers in this README are read from the
+live catalog, never estimated.)
 
 ## Quickstart
 

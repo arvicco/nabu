@@ -7,12 +7,13 @@ description: >-
   and Celtic.
 ---
 
-Live counts as of **17 July 2026**: **172,189 documents / 4,308,814
-passages** across 38 registered, synced sources, plus **633,137
-dictionary entries** on the reference shelf and over **2.85 million gold
-lemma annotations in seventeen languages** (the exact row count of
-2,852,069 dates from the 14 July census; the Old Irish and Bulgarian gold
-layers joined on 17 July). The authoritative shelf map, refreshed at every
+Live counts as of **19 July 2026**: **737,299 documents / 11,357,320
+passages** across 69 registered, synced sources, plus **711,376
+dictionary entries** on the reference shelf and over **12.4 million gold
+lemma annotations in twenty-two languages** (censused 19 July 2026;
+a further 8,000,317 lemma rows in eight languages ride an honestly
+labelled silver tier — machine-suggested or upstream-undisambiguated,
+excluded from gold-only search). The authoritative shelf map, refreshed at every
 development gate, is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md)
 in the repository; the numbers below are taken from it, and were read from
@@ -135,22 +136,71 @@ dependency syntax per token — from four families: PROIEL (the parallel New
 Testament in Greek, Latin, Gothic, Classical Armenian, and Old Church
 Slavonic, with classical prose), TOROT (Old East Slavic and OCS, from
 birchbark letters to Avvakum), ISWOC (Old English prose and the West-Saxon
-Gospels), and nine ancient-language treebanks from Universal Dependencies
-(including Thomas Aquinas, Vedic Sanskrit, Ruthenian, and — since 17 July
-2026 — the two Old Irish glosses treebanks, St Gall Priscian and
-Würzburg). Together with the ORACC, goo300k, Coptic Scriptorium, CorPH,
-and damaskini gold layers these feed a lemma index of over 2.85 million
-rows in seventeen languages.
+Gospels), and twelve ancient-language treebanks from Universal
+Dependencies (Thomas Aquinas, Vedic Sanskrit, Ruthenian, the two Old
+Irish glosses treebanks, and — since 19 July 2026 — Hittite (HitTB) and
+the two Perseus conversions for Ancient Greek and Latin). Together with
+the ORACC, goo300k, Coptic Scriptorium, CorPH, damaskini, DCS, AES, and
+ETCSL gold layers these feed a lemma index of over 12.4 million gold
+rows in twenty-two languages.
 
-## Cuneiform
+## Cuneiform and the Ancient Near East
 
-The Open Richly Annotated Cuneiform Corpus (ORACC), 33 projects: 21,692
-documents and 385,243 passages, including the **complete State Archives of
-Assyria**, the royal inscriptions of Tiglath-pileser III, Ur III royal
-inscriptions, an Old Babylonian archive, and the lexical-list tradition —
-with upstream gold lemmatization for Akkadian and Sumerian and 8,911
-aligned English translations, so a tablet displays transliteration beside
-running English, line by line. Released by ORACC under CC0.
+The Open Richly Annotated Cuneiform Corpus (ORACC), 38 projects: 104,722
+documents and 1,588,133 passages, including the **complete State Archives
+of Assyria**, the Achaemenid royal trilinguals (Old Persian and Elamite
+enter the library here), and the four ePSD2 corpora with the Ur III
+administrative mass — with upstream gold lemmatization for Akkadian and
+Sumerian, so a tablet displays transliteration beside running English,
+line by line. Released by ORACC under CC0.
+
+Around it, since 19 July 2026, the rest of the cuneiform world: the
+**CDLI universal catalog** (353,156 artifacts under CDLI's open grant,
+135,201 of them transliterated — proto-cuneiform and proto-Elamite's
+only machine-readable home, with periods, proveniences, and collections
+as browsable axes from Uruk IV to the Achaemenids); the **TLHdig Hittite
+corpus** (23,486 tablet manuscripts, >98% of published Hittite
+fragments, CC BY, with candidate morphology carried at an honest silver
+tier); the **eBL Fragmentarium** (23,288 fragments with inline English,
+cross-linked to their CDLI records); the **Electronic Text Corpus of
+Sumerian Literature** (394 hand-lemmatized composites with English prose
+siblings, deliberately unmerged from ePSD2's editions of the same
+poems); and the **Copenhagen Ugaritic Corpus** (279 KTU tablets with
+per-sign cuneiform and damage flags).
+
+## Egyptian
+
+Three millennia of Egyptian in Unicode transliteration (synchronized 18
+July 2026): 101,793 gold-lemmatized sentences from the Pyramid Texts to
+the sawlit literary canon (AES, CC BY-SA), the only bulk Demotic
+anywhere (13,383 sentences) plus Late Egyptian from the Thesaurus
+Linguae Aegyptiae's official datasets, the 35,052-entry Ägyptische
+Wortliste as the dictionary shelf, and the Comprehensive Coptic Lexicon
+whose egy↔cop crosswalk turns Egyptian etymology into resolvable edges.
+
+## Hebrew and Aramaic
+
+The Masoretic text of the Leningrad Codex byte-verbatim (the
+combining-mark order is never normalized), fully morphology-tagged with
+ketiv/qere preserved; the ETCBC BHSA beside it with full clause/phrase
+syntax — the library's first constituency data; the Dead Sea Scrolls
+(1,001 scrolls under Abegg's own CC BY-NC grant); the verse-aligned
+Targums; the **Peshitta Old Testament** as the alignment hub's Syriac
+leg; the **Digital Syriac Corpus** (632 documents — a millennium of
+classical Syriac, CC BY); the augmented-Strong's lexicon that resolves
+every OSHB lemma to its BDB entry; the UBS Semantic Dictionary; and the
+epigraphy of Israel/Palestine (5,499 inscriptions).
+
+## Pre-Roman Italy and Sicily
+
+The Etruscan corpus (6,248 OpenEtruscan inscriptions with English
+siblings and the ETP glossary), CEIPoM's lemmatized epigraphy of the
+whole peninsula (3,871 texts — Oscan, Umbrian with the complete Iguvine
+Tables, Venetic, Messapic, South Picene, Faliscan, archaic Latin
+including the Fibula Praenestina), Corpus ItAnt's critical editions,
+the Lexicon Leponticum and Raetic corpora of record from Vienna, and
+I.Sicily's 5,074 inscriptions across all the languages of ancient
+Sicily. Synchronized 18 July 2026.
 
 ## Biblical editions
 
@@ -159,8 +209,10 @@ books, public domain), the SBL Greek New Testament (CC BY), and the World
 English Bible (public domain) as the readable English witness. With these
 aboard, one Gospel citation renders across up to fifteen registered
 witnesses (the two Coptic dialects joined on 13 July 2026), and
-the Old Testament axis runs Septuagint ↔ Vulgate ↔ English, with the
-Greek/Hebrew Psalm numbering divergence mapped explicitly.
+the Old Testament axis runs seven-legged — Masoretic text (twice, at two
+annotation grains) ↔ Septuagint ↔ Vulgate ↔ English ↔ Targum Onkelos ↔
+Peshitta — with the Greek/Hebrew Psalm numbering divergence mapped
+explicitly.
 
 ## Old English
 
@@ -192,8 +244,8 @@ facets.
 
 ## Reference shelf
 
-Twenty-seven dictionary shelves as structured data rather than page
-images — 633,137 entries as of 17 July 2026.
+Thirty-nine dictionary shelves as structured data rather than page
+images — 711,376 entries as of 19 July 2026.
 Liddell-Scott-Jones (116,497 entries), Lewis &amp; Short (51,636),
 Bosworth-Toller (62,815), the Monier-Williams Sanskrit-English dictionary
 (193,890, synchronized 13 July 2026, with transliteration-tolerant lookup

@@ -6,7 +6,7 @@ description: >-
   dictionaries, and the gold-lemma index, with the code conventions.
 ---
 
-As of **17 July 2026** — a live inventory: every code below appears in the
+As of **19 July 2026** — a live inventory: every code below appears in the
 catalog, the lemma index, or the reference shelf. The maintained original of
 this page is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
@@ -18,7 +18,7 @@ explains any code the tools surface — the corpus languages below and the
 one card: name, family, curated historical context, and live holdings. An
 unknown code is reported honestly, with a family hint. Since 14 July 2026
 the curated layer behind these cards is file-backed: one plain Markdown
-dossier per language code (199 dossiers) on the library's local
+dossier per language code (213 dossiers) on the library's local
 language-dossier shelf, editable in any editor and re-derived into the
 catalog on sync.
 
@@ -49,9 +49,9 @@ catalog on sync.
 | Code | Language | Notes |
 |---|---|---|
 | `grc` | Ancient Greek | The library's largest language by passages — Homer through the papyri to Swete's Septuagint, both Greek New Testaments, and the inscriptional bilinguals, polytonic. |
-| `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions). |
+| `akk` | Akkadian | East Semitic language of Babylon and Assyria: ORACC's gold-lemmatized corpora (SAA letters, omens, royal inscriptions) plus the CDLI transliteration mass and the eBL Fragmentarium with inline English (grown 19 July 2026). |
 | `eng` | English | The translation layer — Perseus and First1K editions, the WEB Bible, tablet translations; never an original. |
-| `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists. |
+| `sux` | Sumerian | The language isolate of the earliest written literature — the ETCSL literary canon in two scholarly editions (Oxford's hand-lemmatized composites and ORACC's ePSD2), the Ur III administrative mass, and the great lexical lists (grown 19 July 2026). |
 | `cop` | Coptic | The last stage of Egyptian: documentary papyri plus the literary Coptic Scriptorium shelf (Sahidic and Bohairic, live since 13 July 2026), the fifteenth lemma-searchable language. |
 | `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine Bible, papyrus fragments, and 80,561 inscriptions — the largest language by documents. |
 | `san-Latn` | Sanskrit (IAST) | The GRETIL shelf — Vedas to early-modern śāstra — in international transliteration with accents preserved. |
@@ -65,7 +65,7 @@ catalog on sync.
 | `pgl` | Primitive Irish | The ogham stones, in real Ogham codepoints with aligned transliteration layers (added 17 July 2026; held `nc` pending a license clarification). |
 | `bul` | Bulgarian (pre-standardized) | The damaskini witnesses of the Church Slavonic–Bulgarian continuum, 15th–19th c., gold-annotated (added 17 July 2026). |
 | `ar` | Arabic | A handful of early Islamic-era documentary papyri. |
-| `hit` | Hittite | Anatolian entries in the multilingual cuneiform lexical lists. |
+| `hit` | Hittite | The TLHdig corpus — 23,486 tablet manuscripts, >98% of published Hittite fragments, with candidate morphology at an honest silver tier — plus the gold HitTB treebank and the lexical-list traces (grown 19 July 2026). |
 | `xhu` | Hurrian | Isolated lexical-list column entries from the cuneiform shelf. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
 | `san` | Sanskrit (Vedic) | The Universal Dependencies Vedic treebank's gold-annotated sentences. |
@@ -78,11 +78,15 @@ catalog on sync.
 | `osc` / `xum` / `spx` | Oscan / Umbrian / South Picene | The Sabellic axis: CEIPoM's lemmatized epigraphy (incl. the complete Iguvine Tables), ItAnt's critical editions, Mamertine Oscan in Greek script on Sicily (added 18 July 2026). |
 | `xfa` / `xve` / `cms` | Faliscan / Venetic / Messapic | CEIPoM's dated, geolocated inscriptions — for Messapic and Venetic the largest machine-readable corpora in existence (added 18 July 2026). |
 | `xlp` / `xcg` / `xrr` | Lepontic / Cisalpine Gaulish / Raetic | The Alpine corner: Lexicon Leponticum's inscriptions and 627-word lexicon, the Raetic corpus of record (added 18 July 2026). |
+| `peo` | Old Persian | The Achaemenid royal trilinguals (ario): the cuneiform court language of Darius and Xerxes, lemmatized upstream (added 19 July 2026). |
+| `elx` | Elamite | The Elamite versions of the Achaemenid trilinguals — tagged per word by upstream, honestly lemma-less (added 19 July 2026). |
+| `syc` | Classical Syriac | The Digital Syriac Corpus (632 documents) and the ETCBC Peshitta OT — the Aramaic axis extended by a millennium; the Peshitta is the verse-alignment hub's seventh leg (added 19 July 2026). |
+| `xeb` | Eblaite | The CDLI catalog's Ebla tablets — the third-millennium East Semitic sister of Akkadian (added 19 July 2026). |
 | `scx` / `xly` / `xpu` | Sicel / Elymian / Sicilian Punic | The fragmentary languages of pre-Greek Sicily, in their only digital home (I.Sicily, added 18 July 2026). |
 | `egy-Egyd` | Egyptian (Demotic script tag) | Two Demotic documentary papyri on the papyrus shelf (the bulk demotic corpus lives under `egy`). |
 | `xct` / `xct-Latn` | Classical Tibetan | A stray GRETIL text (native and transliterated). |
 | `xcl` | Classical Armenian | The fifth-century Armenian New Testament, gold-lemmatized. |
-| `uga` | Ugaritic | A lexical-list trace from the cuneiform shelf. |
+| `uga` | Ugaritic | The Copenhagen Ugaritic Corpus: 279 KTU tablets / 27,770 words in alphabetic cuneiform with per-sign damage flags (added 19 July 2026). |
 | `ta-Latn` | Tamil (romanized) | One GRETIL stray. |
 | `arc` | Aramaic | Biblical Aramaic (Daniel, Ezra) in the Masoretic shelf, the verse-aligned Targums (Onkelos, Jonathan, the Writings targums), and a cuneiform-shelf trace (grown 18 July 2026). |
 | `en` | English (legacy tag) | One GRETIL stray using the two-letter tag; everything else standardizes on `eng`. |
