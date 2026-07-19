@@ -9,8 +9,9 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
   `old-east-slavic-ruthenian` (packet P13-1b); **2026-07-17** for the two Old
   Irish glosses treebanks (`old-irish-dipsgg`, `old-irish-dipwbg`, packet
   P25-2); **2026-07-19** for the Hittite treebank (`hittite-hittb`, packet
-  P31-0) — all from `master` of each treebank's UD repo via
-  `raw.githubusercontent.com`.
+  P31-0) and for the two Perseus treebanks (`ancient-greek-perseus`,
+  `latin-perseus`, packet P31-6) — all from `master` of each treebank's UD
+  repo via `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
   `.docs/surveys/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
@@ -35,6 +36,8 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `old-irish-dipsgg/sga_dipsgg-ud-test-head50.conllu` | `UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu` | 37,231 | 24,075 | 50 |
 | `old-irish-dipwbg/sga_dipwbg-ud-test.conllu` | `UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu` | 32,767 | 32,767 (whole) | 34 |
 | `hittite-hittb/hit_hittb-ud-test-head50.conllu` | `UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu` | 118,705 | 46,175 | 50 |
+| `ancient-greek-perseus/grc_perseus-ud-test-head50.conllu` | `UD_Ancient_Greek-Perseus/master/grc_perseus-ud-test.conllu` | 1,979,022 | 85,337 | 50 |
+| `latin-perseus/la_perseus-ud-test-head50.conllu` | `UD_Latin-Perseus/master/la_perseus-ud-test.conllu` | 1,153,778 | 61,276 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -109,6 +112,35 @@ Laws §10`), spanning Old/Middle/New Hittite. The LEMMA column is fully
 populated (1,309/1,309 file-wide; Sumerograms lemmatized to their Hittite
 readings where known, e.g. `LÚ.U19.LU-an` → `antuhša-`). Language `hit`.
 
+### Perseus pair trim note (P31-6)
+
+Both fixtures are the plain **first 50 complete sentence blocks** of their
+upstream test split, retrieved 2026-07-19 from `master`; upstream file sha256
+at retrieval:
+
+- `grc_perseus-ud-test.conllu`
+  `e18d47c395c0ec8da678fb5e315ce6d90133e88c25ed2a55bc72a2a66e6254d5`
+  (1,306 blocks upstream; **no** multiword-token range line and **no** empty
+  node file-wide, checked across the whole split — nothing extra to preserve).
+  The head-50 is a single `# newdoc id = tlg0008.tlg001.perseus-grc1.12.tb.xml`
+  run — Athenaeus, *Deipnosophists* book 12 (the whole test split is Athenaeus
+  books 12–13; the treebank's Homer/Hesiod/tragedy bulk sits in the other
+  splits, honest note).
+- `la_perseus-ud-test.conllu`
+  `e0e53fdcc8040a2a6d3b6e7b5dfa69fa35d355ce11cae0682b61e6848745d386`
+  (939 blocks upstream, 189 MWT range lines file-wide, no empty nodes;
+  **exactly 1 MWT range falls inside the head-50** — block 16, sent
+  `phi0690.phi003.perseus-lat1.tb.xml@66`, the enclitic `5-6 mecum` →
+  `me` + `cum` — so the ITTB MWT machinery is exercised without any append).
+  The head-50 is Vergil, *Aeneid* (`phi0690.phi003`); the split's other
+  newdocs (Ovid, Petronius, Phaedrus) fall past the head.
+
+Comment lines in both: `# newdoc id`, per-sentence `# sent_id`
+(`<perseus-file>@<n>`, globally unique) and `# text`. The LEMMA (col 3) column
+is fully populated file-wide (grc 20,959/20,959 word lines, lat
+10,964/10,964); Latin MISC carries `LId=` lemma-sense indices (e.g. `LId=tu1`),
+kept verbatim.
+
 ### Latin-ITTB multiword-token (MWT) rule
 
 The plan called for the first 50 blocks **plus** every sentence block anywhere in
@@ -179,6 +211,19 @@ adapter test even though no extra append was needed.
   and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. → license
   class `attribution` via the P10-4 per-document `license_override` (the
   birchbark/RNC/DipWBG mechanics exactly); the `ud` source class stays `nc`.
+- **UD_Ancient_Greek-Perseus** and **UD_Latin-Perseus** — **CC BY-NC-SA 2.5
+  Generic** (verified 2026-07-19, the P31-6 license gate). Each repo's
+  `LICENSE.txt` opens, quoted verbatim (identical in both):
+  > This work is licensed under the Creative Commons Attribution-NonCommercial-
+  > ShareAlike 2.5 Generic License. To view a copy of this license, visit
+  >
+  > http://creativecommons.org/licenses/by-nc-sa/2.5/
+
+  and each `README.md` machine-readable metadata block agrees:
+  `License: CC BY-NC-SA 2.5`. Consistent (unlike the PROIEL 3.0-vs-4.0
+  discrepancy), just an old license version. → NonCommercial-ShareAlike:
+  **no override** — both treebanks ride the `ud` source's `nc` class
+  unchanged (the PROIEL/ITTB/DipSGG posture, NOT the P10-4 mechanics).
 - **UD_Old_Irish-DipWBG** — **CC BY-SA 4.0** (verified 2026-07-17, the P25-2
   license gate). `LICENSE.txt`, quoted verbatim:
   > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
@@ -192,9 +237,10 @@ adapter test even though no extra append was needed.
 
 All three OES licenses were confirmed BEFORE the fixtures were committed (packet
 gate: had any said anything other than CC BY-SA 4.0 the treebank would have been
-dropped); likewise both Old Irish licenses at P25-2. The `ud` manifest still
-declares the most-restrictive class present — `nc` (PROIEL/ITTB/DipSGG) — so
-the BY-SA-only treebanks are never over-shared.
+dropped); likewise both Old Irish licenses at P25-2 and both Perseus licenses
+at P31-6. The `ud` manifest still declares the most-restrictive class present —
+`nc` (PROIEL/ITTB/DipSGG/Perseus) — so the BY-SA-only treebanks are never
+over-shared.
 
 ## Structure notes (for the CoNLL-U parser + UD adapter, P3-3)
 
