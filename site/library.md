@@ -285,18 +285,18 @@ printed abbreviation.
 
 Four shelves hold material that is authored or acquired rather than
 downloaded. A language-dossier shelf carries the library's per-language
-curation — one plain Markdown file per language code, 199 dossiers as of
-17 July 2026, feeding the `nabu language` reference cards. A local-library
+curation — one plain Markdown file per language code, feeding the
+`nabu language` reference cards. A local-library
 shelf files the owner's own PDFs, scans, and offprints as catalogued,
 page-cited collections through the `nabu ingest` command (see
 [Tools]({{ '/tools/' | relative_url }})), which since July 2026 also
 accepts http(s) URLs, downloading first and recording the given address
 in the manifest; everything on this shelf is held under
 the library's strictest access class by default and is never served or
-redistributed. It is now in use: 20 documents as of 17 July 2026. A
-source-dossier shelf carries a curated description of every registered
-source — 37 dossiers served on the `nabu list` census and checked
+redistributed. A source-dossier shelf carries a curated description of
+every registered source, served on the `nabu list` census and checked
 against the shelf map at every development gate. And a notes shelf
 records the owner's own annotations on any citable URN through
 `nabu note` — scholia of one's own, rendered wherever the target is
-shown; it awaits its first entry.
+shown. What these shelves hold is the owner's private business: their
+contents and counts are deliberately absent from this site.

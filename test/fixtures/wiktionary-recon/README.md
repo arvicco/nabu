@@ -256,3 +256,86 @@ Full-download census (sha256 of the full download):
     honesty the closure ORs along the path.
   - `𐌋𐌀𐌍𐌉𐌔𐌕𐌀` (line 266) — the clean borrowed case: la lanista
     raw_tags `["borrowed"]`.
+
+## P32-5 addition (attested Old Japanese; retrieved 2026-07-19)
+
+One NEW extract — the Sino axis opens (P32). ATTESTED language on the
+recon source (the wiktionary-cu/P25-2 precedent: no display asterisk;
+`ojp` is real ISO 639-3, adopted as itself). All kept lines
+byte-verbatim (same post-check as above); the license statement on
+## P32-3 addition (attested Chinese; retrieved 2026-07-19)
+
+One NEW extract — **wiktionary-zh**, the whole-macrolanguage Chinese
+extract (language `zho`; the OWNER-APPROVED ~1.1 GB disk call). ATTESTED
+language on the recon source (the wiktionary-cu/P25-2 precedent), and the
+ONLY extract parsed with `historical_sounds: true`: the per-entry
+`sounds` rows tagged `Middle-Chinese` / `Old-Chinese` (+ the school —
+`Baxter-Sagart` / `Zhengzhang`) surface as body lines; nothing else in
+`sounds` (modern lect romanizations, IPA) enters bodies. All kept lines
+byte-verbatim (post-check as ever); the license statement on
+https://kaikki.org/dictionary/ re-verified verbatim 2026-07-19 ("This
+data is made available under the same licenses as Wiktionary - both
+CC-BY-SA and GFDL.").
+
+Full-download census (sha256 of the full download; the kaikki page's own
+"413 distinct words" figure matches the count):
+
+- `https://kaikki.org/dictionary/Old%20Japanese/kaikki.org-dictionary-OldJapanese.jsonl`
+  — 1,255,674 B, **532 lines** (413 distinct words; 297 CJK + 231 kana +
+  1 romanized `ko2ro2su` headwords; 390 with etymology_text, 87 naming
+  Proto-Japonic; **178 records quote the Man'yōshū** in sense examples
+  (208 example blocks) — raw-record density only: Wiktionary quotations
+  are unanchored, so entry `citations` stay empty per the family
+  contract; 301 records carry descendants → 333 worded edges: 327 ja +
+  2 ain + 1 ltc + 1 en + 1 und + 1 jpx-hcj; 3 records with a
+  borrow-flagged edge), sha256
+  `67ca3b02f612cbb464f3adf19ca104374aa877dd799c47580f3d0b6814ebf762`
+  → **5 fixture lines** (upstream lines 21/22/72/506/523):
+  - `心` 1 "heart, mind" / `心` 2 "inner feelings" — the homograph pair
+    pinning the extract's ONE format deviation: `etymology_number` is a
+    STRING here (`"1"`/`"2"`; every other live extract ships integers —
+    188 of the 532 records carry it). The parser interpolates either,
+    so the split mints 心:noun:1 / 心:noun:2 unchanged. 心 1 carries
+    the Proto-Japonic *kəkərə etymology verbatim, a ja kokoro
+    descendant, and Man'yōshū quotations (book 2 poem 144) whose romans
+    ride the kō/otsu vowel-grade subscripts (ko₂ko₂ro₂).
+  - `我` "I" (line 72) — the Sino-axis crosswalk light: descendants ja
+    我 (unflagged) + Middle Chinese `ltc 倭` whose nested ja 倭 node is
+    raw_tags `["borrowed"]` — the per-edge honesty on the one ltc edge
+    in the extract.
+  - `ko2ro2su` "to kill" (line 506) — the lone ASCII-romanized headword
+    (kō/otsu vowel grades as plain digits in the page title); folds as
+    itself.
+  - `黃葉つ` (line 523) — the one pos `soft-redirect` record (no-gloss
+    senses, upstream `redirects` field): the structural edge.
+
+Selection recipe: whole JSONL lines picked by upstream line number as
+listed (deterministic; the post-check asserts each emitted line is a
+literal line of the raw download). Totals: 5 lines, 7,257 B.
+Full-download census (2026-07-19; upstream Last-Modified 2026-07-16):
+
+- `https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl`
+  — **1,181,142,520 B (~1.1 GiB), 323,840 lines** (303,963 distinct
+  words), sha256
+  `e0b6c4ed6aac4d311f1cfbd3109014541889d06287065276970a24ec5b7a2fdd`.
+  **MC/OC census (the reconstruction value):** 23,484 records carry a
+  Middle Chinese reading; 19,382 an Old Chinese reconstruction — 8,158
+  Baxter-Sagart, 19,273 Zhengzhang (**Zhengzhang arrives ONLY via
+  kaikki** — ytenx is license-blocked, see docs/02-sources.md row 50).
+  8,098 records carry `descendants` (the Sino-Xenic ja/ko/vi loan
+  lanes); 26,184 carry etymology_text; pos landscape: soft-redirect
+  123,055 · noun 90,150 · verb 34,092 · character 29,879 · name 19,314 …
+  → **6 fixture lines** (upstream lines 2/3/4/9/122/18894):
+  - `GDP` noun (line 2) — a modern term: full modern `sounds`, NO MC/OC
+    rows — pins that no historical lines are invented.
+  - `A` verb (line 3) / `A` adj (line 4) — `etymology_number` homographs
+    (ids A:verb:1 / A:adj:2).
+  - `犬` character (line 9) — THE golden: MC `khwenX` + OC Baxter-Sagart
+    `/*[k]ʷʰˤ[e][n]ʔ/` + OC Zhengzhang `/*kʰʷeːnʔ/`, all three
+    fixture-pinned as body lines.
+  - `MD` soft-redirect (line 122) — the dominant record shape (123,055
+    upstream): no-gloss stub, honest nil.
+  - `茶` character (line 18894) — the Sino-Xenic loan pin: descendants
+    carry ja 茶 (roman `cha`) / ryu / ko 차(茶) readings raw_tags
+    `["borrowed"]`; the ja/ko codes pass through unmapped (display-only
+    until a CJK gold shelf lands — the P32-4 bridge's future join).

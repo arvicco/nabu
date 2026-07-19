@@ -1,0 +1,40 @@
+# Unihan_Variants.txt
+# Date: 2025-07-24 00:00:00 GMT [KL]
+# Unicode Version 17.0.0
+#
+# Unicode Character Database
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# For documentation, see https://www.unicode.org/reports/tr38/
+#
+# This file contains data on the following fields from the Unihan database:
+#	kSemanticVariant
+#	kSimplifiedVariant
+#	kSpecializedSemanticVariant
+#	kSpoofingVariant
+#	kTraditionalVariant
+#	kZVariant
+#
+U+340A	kSpoofingVariant	U+340B
+U+340B	kSpoofingVariant	U+340A
+U+349A	kSemanticVariant	U+7A69<kFenn,kMatthews
+U+349A	kSpecializedSemanticVariant	U+6587<kFenn
+U+4E00	kSemanticVariant	U+5F0C<kLau,kMatthews,kMeyerWempe U+58F9<kLau,kMatthews,kMeyerWempe
+U+4E00	kSpecializedSemanticVariant	U+58F9
+U+4E9A	kTraditionalVariant	U+4E9E
+U+4E9E	kSimplifiedVariant	U+4E9A
+U+4EBA	kSemanticVariant	U+4EBB<kMatthews
+U+4F53	kSemanticVariant	U+9AD4<kMatthews U+8EC6<kFenn
+U+4F53	kSimplifiedVariant	U+4F53
+U+4F53	kTraditionalVariant	U+4F53 U+9AD4
+U+5929	kSemanticVariant	U+975D<kMatthews
+U+5929	kSpoofingVariant	U+2BBDB
+U+611B	kSimplifiedVariant	U+7231
+U+7231	kTraditionalVariant	U+611B
+U+9AD4	kSemanticVariant	U+4F53<kMatthews
+U+9AD4	kSimplifiedVariant	U+4F53
+U+9B75	kSimplifiedVariant	U+2B68D
+
+# EOF

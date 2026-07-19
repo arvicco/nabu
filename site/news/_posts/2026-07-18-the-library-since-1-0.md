@@ -65,7 +65,7 @@ resolution-checked before anything is written, rendered wherever the
 target is shown, and served to AI clients under the target's withholding
 rules. And **`nabu ingest` now accepts URLs**, downloading first and
 recording the given address in the manifest; the owner's local-library
-shelf, empty by design at 1.0, holds its first 20 documents.
+shelf, empty by design at 1.0, has entered use.
 
 **Honesty notes.** The ogham shelf's license conflict is recorded
 verbatim in the source inventory and the shelf is held at `nc` pending a

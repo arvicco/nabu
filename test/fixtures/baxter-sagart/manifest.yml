@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The file is a documented TRIM (header + selected byte-verbatim rows) of
+# the sha-pinned upstream artifact, so adapter_test stays null (a re-run
+# against the full artifact would false-fail the fixture-count
+# assertions; drift is caught by the adapter's sha pin at any real
+# fetch).
+source: baxter-sagart
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: BaxterSagartOC2015-10-13.tsv
+    url: https://raw.githubusercontent.com/yawnoc/baxter-sagart-old-chinese/a448f53a311dc11fe903a98323a4cfd3ba5322c1/BaxterSagartOC2015-10-13.tsv
+    whole: false
+    trim: header + 9 byte-verbatim rows (full-file lines 2/3/6/763/764/781/1975/3242/3880 — plain rows, the 隘 polyphone pair, a non-NFC gloss, the one py-less row, the one CSV-quoted gloss) — 410,266 B -> ~1.5 KB; recipe in README.md

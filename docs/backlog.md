@@ -9923,3 +9923,194 @@ treebanks (the P31-0 rebalance precedent — 2/12 = 16.7% must not trip).
 Registry: NO enabled flip (`ud` is live; expected sync delta documented
 in sources.yml comments — docs at UD's one-doc-per-treebank-split
 grain). Docs: 02-sources row 4 (ud) + row 17 cross-note, worklog.
+
+# Phase 32 — the Sino axis opens (approved 2026-07-19: all six packets; HDIC in P32-4; kaikki-zh in P32-3; Kanripo non-blocking → P33)
+
+Source of truth: the owner-approved plan (orchestrator holds it); licenses
+below were live-verified at scout time 2026-07-19 and MUST be re-read
+verbatim at fixture time. Standing rules apply: TDD, real-byte fixtures,
+license gates never from memory, enabled: false until owner flip, worklog
+sha TBD for orchestrator fill, 02-sources row collisions renumbered at
+merge (current max row: 96).
+
+## P32-0 · UD Classical Chinese rows  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+`Ud::TREEBANKS` 12 → 14: **classical-chinese-kyoto**
+(UD_Classical_Chinese-Kyoto — 86,239 sentences / 433,169 tokens / 9,641
+lemmas; 論語/孟子/禮記/十八史略/楚辭/戰國策/唐詩三百首 + three sutras; v2.18
+active) + **classical-chinese-tuecl** (100 sentences, test-only rider).
+Language `lzh` both. LICENSE GATE: Kyoto LICENSE.txt verbatim CC BY-SA
+4.0 vs README metadata `License: PD` — record the discrepancy,
+LICENSE.txt authoritative (Ruthenian precedent) → P10-4 attribution
+override; TueCL LICENSE.txt CC BY-SA (README agrees). The P31-0/P31-6
+HitTB shape: config rows + real head-slice fixtures (sha256 + date +
+recipe in test/fixtures/ud/README.md, manifest extended) + breaker-test
+rebalance re-derived at 14 (never weakened). SCALE HONESTY: ~42 MB
+conllu, ~86k sentences — this one treebank dwarfs the whole current ud
+source; document the expected sync delta in sources.yml comments
+loudly. UD_Old_Japanese-LMJ NOT taken (misnamed Heike/LMJ, master
+branch empty — journal in the ud row, watch upstream). Docs: 02-sources
+row 4 extension. Measure (promise nothing): sample join of Kyoto lemmas
+vs any existing lzh keys (SuttaCentral lzh may land in the sibling
+packet — no dep, just report).
+
+## P32-1 · SuttaCentral lzh scope flip  [tier: fable] [status: SHIPPED 2026-07-19 — worklog P32-1, sha TBD] [deps: —]
+
+SHIPPED (packet result): ROOT_TREES + "root/lzh/sct" → [lzh, sct] — one
+config row, no machinery changes (siblings/publication-gate/segment grain
+all pre-existed). 272 lzh roots + patton's 54 ma/sa -en siblings mint
+(orphan census 179 → 125); lzh publications censused verbatim: scpub39
+(roots) + scpub20/scpub35 (patton) all "Creative Commons Zero"/"CC0" →
+no overrides. NB the spec's "synced sc-data tree" is bilara-data's own
+_publication.json (sc-data is a separate, never-synced repo). SYNERGY
+MEASURED against the scout's 2026-07-16 sc-data parallels snapshot:
+237/8,221 relations pair minted pli/pra with minted lzh (223 parallels +
+14 mentions; 129/272 lzh stems touched; ~110 more await unpublished da*
+roots). Delta in sources.yml: +326 docs / ≈+42,676 passages via
+--parse-only. Fixtures from canonical byte-verbatim (commit 84d9560);
+02-sources row 66 updated (incl. truthing the stale READY→LIVE status).
+
+ORIGINAL SPEC — ZERO FETCH: 272 root/lzh files already in
+canonical/suttacentral/root/lzh/sct/ (MA/SA/EA/minor/abhidhamma),
+skipped today by the adapter's own scope rule (lib/nabu/adapters/
+suttacentral.rb:21), plus Charles Patton's English translations of lzh
+roots among the "179 orphan en stems" (02-sources row 66). Widen the
+scope rule: mint lzh root documents (+ paired -en siblings via the
+standing sibling machinery), segment grain like the Pali shelf,
+language lzh. License: census the lzh publication entries in the synced
+sc-data tree at fixture time — per-file/publication license machinery
+already exists; quote what the lzh publications actually declare.
+Fixtures FROM CANONICAL (trimmed real files, README recipe; no
+network). THE SYNERGY MEASURE (promise nothing): the sc-data parallels
+graph (8,221 relations) — census how many pli↔lzh parallels RESOLVE
+once lzh mints; report the number. Re-parse via --parse-only mechanics;
+document the expected doc/passage delta in sources.yml comments. Docs:
+02-sources row 66 update. NB the orphan-en census may include non-lzh
+stems — only the lzh-paired ones mint; the census stays honest.
+
+## P32-2 · ONCOJ — Old Japanese  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+The Japanese flagship: github.com/ONCOJ/data, GitFetch PINNED to the
+"release" tag (2021-12-26 — the sanctioned periodic release; document
+that the project site continues and re-pin is an owner decision).
+4,991 texts — complete Man'yōshū (MYS 1–20), Kojiki kayō (KK), Nihon
+Shoki kayō (NSK), Bussokuseki-ka (BS), Fudoki kayō (FK), Senmyō —
+lemmatized + parsed (Frellesvig, Oxford-NINJAL). LICENSE verbatim
+README §D: "The corpus annotation (the grammatical analysis) is
+licensed under the Creative Commons Attribution 4.0 International
+License." (texts 7th–8th c. PD) → attribution; the prescribed citation
+format (§C) verbatim in the manifest. THE FORMAT DECISION at fixture
+time: probe oncoj.csv (11.6 MB flat spine) vs xml/ (4,991 per-text
+files, richer) — pick with reasons in the fixture README, never invent
+structure. Document = text (urn:nabu:oncoj:<corpus-id>, upstream ids —
+MYS.1.1 shapes); passage = the corpus's own unit; carry OJ romanization
+AND man'yōgana (which is display text vs annotation = what the data
+honestly distinguishes; a display.yml row only if the census supports
+it). lexicon.xml (3.4 MB) = a dictionary-kind SIBLING shelf (one
+source, two content kinds is NOT the house shape — register a second
+source `oncoj-lexicon` sharing the fetch tree if needed; follow the
+lexica precedent) → ojp joins the lemma-indexed languages; lemma links
+from tokens into the lexicon censused and measured. NEW family (name it
+honestly by what the format is). Docs: 02-sources row 97 claim
+(renumber-on-merge note). Language dossier one-liner for ojp queued for
+the owner (canonical/ unreachable from worktrees).
+
+## P32-3 · The reconstruction shelf — baxter-sagart + tshet-uinh + kaikki-zh  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+Three lanes, one packet (all dictionary-machinery):
+(1) **baxter-sagart**: the ~4,959-row TSV from
+yawnoc/baxter-sagart-old-chinese (pushed 2026-07-11; zi/pinyin/MC/OC/
+gloss/GSR/HYDZD/radical/strokes/Unicode) via FileFetch, sha-pinned.
+LICENSE = THE PROVENANCE CHAIN, recorded verbatim in the manifest: the
+original host's grant "are licensed under CC BY 4.0" (dead site;
+wayback capture 2025-03-12 — quote + capture URL), content CC BY →
+attribution to Baxter & Sagart 2014; the TSV repo itself is
+license-less (the content license governs); the wayback xlsx
+(BaxterSagartOC2015-10-13.xlsx) named as second witness, not fetched
+unless cheap. Entries mint och (OC) + ltc (MC) lanes.
+(2) **tshet-uinh**: nk2028/tshet-uinh-data, CC0 (GitHub license field —
+verify in-repo too). 廣韻.csv with the 校本 correction-annotation syntax
+(documented upstream — parse honestly, corrections as annotations not
+silent fixes), 王一/王三, 韻鏡 ×2, fanqie tables. Census the file set
+whole; grain = character × phonological position; ltc. zhongyuan-data
+(中原音韻, CC0) as a second registrant IF the family fits — else
+journaled with reasons.
+(3) **wiktionary-zh** (OWNER-APPROVED disk call): the kaikki Chinese
+extract (~1.1 GB JSONL) as a wiktionary-recon EXTRACTS row — the
+existing wiktionary-jsonl family reads the shape; scout sample showed
+per-entry Middle Chinese sound rows + BOTH Baxter-Sagart and Zhengzhang
+OC. CENSUS the full file at fixture time (counts of MC/OC-bearing
+entries); the extract is canonical-verbatim (never trimmed). Expected
+sync ~1.1 GB download — document loudly. B-S-beside-kaikki =
+MW-beside-kaikki, never deduped; Zhengzhang arrives ONLY via kaikki
+(ytenx is blocked — the survey's license fork, note in docs).
+Docs: 02-sources rows 98–99 claims + wiktionary-recon row 50 extension.
+Dossier one-liners for och/ltc queued for the owner.
+
+## P32-4 · The Sinoxenic character bridge — unihan + edrdg + hdic  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+Three dictionary-kind registrants (owner-approved incl. HDIC):
+(1) **unihan**: Unihan.zip (8.5 MB, Last-Modified 2025-08-18) —
+LICENSE = Unicode License V3, verbatim ("Permission is hereby granted,
+free of charge … without restriction …") → open. Shelf keyed by
+codepoint: kJapaneseOn/kJapaneseKun (the on'yomi strata — the bridge's
+spine), kHanyuPinyin, kDefinition, variant fields (census which
+k-fields are dense enough to carry; report the field census).
+(2) **edrdg**: KANJIDIC2 (kanjidic2.xml.gz 1.49 MB) + JMdict
+(JMdict_e.gz 10.5 MB) — EDRDG licence page verbatim: "The dictionary
+files are made available under a Creative Commons Attribution-ShareAlike
+Licence (V4.0)." → attribution. Upstream builds NIGHTLY → sync_policy
+manual with Last-Modified pins (FileFetch mechanics); fixture = a
+stable trimmed slice with the build date recorded. KANJIDIC2
+on/kun/nanori readings; JMdict as the modern jpn gloss backstop.
+(3) **hdic**: github.com/shikeda/HDIC (the ACTIVE upstream — pushed
+2026-07-15; nk2028/HDIC is a stale 2022 mirror, do not fetch it).
+README verbatim: "Creative Commons Attribution-ShareAlike 4.0
+International License (CC BY-SA 4.0) … Open access" → attribution.
+Heian-period hanzi dictionaries (Yuanben Yupian lanes sampled upstream;
+census the actual file set/databases at fixture time — TBM/Shinsen
+Jikyō presence is project-claimed, verify before promising). Entries =
+the earliest Japanese lexicography, character-keyed.
+JOIN MEASURE (promise nothing): Unihan↔KANJIDIC2 by codepoint,
+HDIC↔Unihan where ids allow — censused percentages in the report.
+Docs: 02-sources rows 100–102 claims (renumber-on-merge note).
+
+## P32-5 · kaikki Old Japanese extract  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+One wiktionary-recon EXTRACTS row: **wiktionary-ojp** (kaikki.org
+Old Japanese extract, 1.2 MB, 532 entries / 390 with etymology_text /
+178 citing the Man'yōshū — counted whole at scout time; re-census at
+fixture). The P25-2 attested-language pattern verbatim (sga/mga/wlm
+precedent): EXTRACTS row + registry pins + fixture slice + README.
+Language ojp; joins the recon crosswalk beside ONCOJ's corpus
+attestations (measure the folded-lemma overlap vs the ONCOJ lexicon IF
+P32-2 has landed in your base — no dep otherwise, just report). Docs:
+wiktionary-recon row 50 extension (NB P32-3 also extends row 50 —
+sibling collision expected, orchestrator merges).
+
+## P32-6 · SuttaCentral parallels graph  [tier: fable] [status: dispatched 2026-07-19] [deps: P32-1 merged (lzh minted)]
+Owner-added rider 2026-07-19 ("add parallels graph as a rider", off the
+live lzh tour). The sc-data parallels graph — journaled since P26-1
+(02-sources row 66) — becomes reference edges. SOURCE OF TRUTH:
+`misc/parallels.json` in the SEPARATE suttacentral/sc-data repo (the
+bilara-data sync never touches it): 8,221 relation lists of sutta uids
+(shapes: {"parallels": [...]}, {"mentions": [...]}; uid grammar
+`uid#segment`, `~`-prefixed = resolved-by-inference — census the full
+shape vocabulary before parsing, never invent). FETCH: FileFetch of the
+raw file (sha-pinned; document the upstream commit) — do NOT clone
+sc-data whole. EDGES: producer `suttacentral` via the standing
+reference-edges machinery (Adapter.reference_edges? / LibraryReferences
+with a custom producer — study the etcsl/cdli/riig producers first);
+from_urn/to_urn = urn:nabu:suttacentral:<uid> document urns (segment
+suffixes recorded in detail, not minted as passage targets — parallel
+relations are document-grain upstream); relation kind (parallels vs
+mentions vs resembling — whatever the census finds) rides the edge
+detail; `~` inference flags preserved. HONESTY: most uids in the graph
+are NOT in the catalog (unpublished da*, t* Taishō beyond the published
+subset, vinaya…) — dangling-but-stable edges are the isicily tm:
+precedent BUT since these ARE suttacentral's own id space, mint the
+urn:nabu form anyway (they resolve the day upstream publishes; the 237
+pli↔lzh measured pairs resolve TODAY). Census: how many edges have both
+ends minted / one end / neither — the three-way count in the report and
+the 02-sources row. The links surface (`nabu links <urn>`) then serves
+the Kālāma Sutta ↔ MA 16 hop natively. Registry: this rides the
+existing suttacentral source (no new source, no flip); sync_policy note
+— the graph refresh is owner-fired with the ordinary sync. Fixtures:
+a trimmed real parallels.json slice covering every censused shape.
+Docs: 02-sources row 66 extension, worklog (sha TBD). Tests: producer +
+loader idempotency + the an7.68↔ma1 edge pinned end-to-end.

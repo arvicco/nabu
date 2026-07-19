@@ -1,0 +1,103 @@
+# HDIC Project
+# HDIC is an abbreviation of the Integrated Database of Hanzi Dictionaries in Early Japan
+#
+# YYP: Yuanben Yupian 原本玉篇 database
+#
+# *Yupian* 玉篇, original edition 原本. Gu Yewang 顧野王 of the Liang dynasty 梁, 543.
+# This file is intended as a full-text entry-level dataset for the surviving old manuscript fragments preserved in Japan.
+# The present transcription is still provisional and not yet fully proofread. Users must consult the facsimile reproductions
+# and the published printed transcriptions when using the data for research purposes.
+#
+# Introduction to the *Yuanben Yupian* (YYP)
+#
+# The term Yuanben Yupian (原本玉篇, “original Yupian”) designates the tradition of Tang-dynasty manuscript copies of the Yupian,
+# the lexicon compiled by Gu Yewang (顧野王) of the Liang dynasty. No complete scroll survives today; only fragments and partial
+# rolls are extant. In Japan, surviving portions are today preserved in institutions such as the Daitōkyū Kinen Bunko, Waseda
+# University, the Kyoto National Museum, Fujita Museum, Jingū Bunko, Daifukukō-ji, Kōzan-ji, and Ishiyama-dera. The current dataset
+# contains 2,087 entry-level records. Known portions include juan 8 (Heart radical); juan 9, now divided among Waseda University,
+# the Kyoto National Museum, and an untraced fragment; juan 18 latter portion (preserving radical 271 放部 through 274 工部,
+# and radical 277 卜部 through 284 方部, including the 卜, 車, and 舟 sections); juan 19 (Water radical 285); juan 22
+# (from radical 343 山部 through radical 356 厽部, ending at 參); juan 24 (Fish radical 397); and juan 27
+# (from 糸部 425 through 索部 431). Many of these witnesses are designated
+# National Treasures or Important Cultural Properties.
+#
+# As foundational resources for full-text transcription, the facsimile volumes published in the 1930s series Tōhō Bunka Sōsho
+# (東方文化叢書) remain standard points of reference. Additional sources include the 1882 carved edition in Li Shichang and Yang
+# Shoujing’s *Guyi Congshu* (古逸叢書), Luo Zhenyu’s 1917 facsimile edition, and the 1985 Zhonghua Shuju edition. The sectional
+# sequence of juan 27 can be reconstructed by combining the Kōzan-ji and Ishiyama-dera manuscripts, while images of juan 9 are
+# publicly available through Waseda University’s digital collection. Recent scholarship, notably Yao Yongming’s *Yuanben Yupian
+# Canjuan Jiaozheng* (《原本玉篇殘卷校證》, 2023), has further advanced the collation and philological study of the surviving manuscripts.
+#
+# Version: 1.1.6
+# Date: 23 May 2026
+# Last update : 21 June 2026
+#
+# Copyright (c) 2026 HDIC project, IKEDA Shoju (Chair, Professor Emeritus, Hokkaido University)
+# Contact: ikeda.shoju@gmail.com, liyuansapporo@yahoo.co.jp, toyjack@gmail.com
+#
+# Data License Information and Access Rights
+# License:
+# Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)
+# Access Rights (Availability):
+# Open access
+#
+# File Format Information:
+# Delimiter: Tab (\t)
+# Encoding: UTF-8
+# Header Row: The line immediately following these comment lines is the header row containing column names.
+#
+# Column Description:
+# YYID              Item ID. Begins with `Y`, followed by volume and location-based numbering as assigned in the working data.
+# YY_vol_radical    Volume and radical number, e.g. `v08#088`, `v27#425`.
+# Entry             Headword.
+# Lv_page           Page or location reference used in the Lü Hao (Lv Hao) 呂浩 reference framework.
+# Yao_page          Page or location reference used in the Yao Yongming 姚永銘 reference framework; available only for a small portion of the dataset.
+# YY_def            Definition of pronunciation, meaning, variants, and citations.
+# YY_remarks        Editor's notes and structural notes in the working data.
+# TBID              Cross-reference ID to `KTB.tsv` when available.
+# SYID              Cross-reference ID to `SYP.tsv` when available; `△` indicates no direct correspondence was assigned in the current data.
+# YY_img_filename   Image filename corresponding to the entry in the current image set; this refers to an internal working image set, not publicly released.
+#
+# Data Conventions:
+# - Empty fields are represented by an empty string ("").
+# - Cross-reference columns (`TBID`, `SYID`) preserve the current working values as-is.
+# - `YY_def` retains punctuation, omission markers, and editorial signs exactly as entered in the source spreadsheet.
+# - `YY_remarks` retains current editorial comments, including notes such as `重文`, `有再注字`, `字体注`, and `原本補入`.
+#
+# Primary Sources:
+# - Surviving manuscript fragments of the original *Yupian* preserved in Japan, including vols. 8, 9, 18, 19, 22, 24, and 27.
+# - Major holders include Kōzan-ji 高山寺, Ishiyama-dera 石山寺, Waseda University, Kyoto National Museum, Fujita Museum, Jingū Bunko, Dai Tōkyū Kinen Bunko, and Daifukukō-ji.
+#
+# Reproductions and Reference Editions:
+# - 黎庶昌・楊守敬『古逸叢書』所収『原本玉篇』, 1882.
+# - 羅振玉跋『原本玉篇残巻』, 1917.
+# - 東方文化叢書第六所収の各巻影印, 東方文化学院, 1933-1935.
+# - 『原本玉篇残巻』, 中華書局, 1985.
+#
+# Editions and annotated studies
+# - Okai Shingo, *Gyokuhen no Kenkyū* (『玉篇の研究』), The Toyo Bunko, 1933.
+# - Mabuchi Kazuo, “Gyokuhen Itsubun Hosei” (「玉篇佚文補正」), *Tokyo Bunrika Daigaku Kokugo Kokubun Gakkai Kiyō* (『東京文理科大学国語国文学会紀要』), 3: 1–153, 1952.
+# - Kōzanji Tenseki Monjo Sōgō Chōsadan, *Kōzanji Kojisho Shiryō Daiichi* (『高山寺古辞書資料第一』), University of Tokyo Press, 1977.
+# - Hu Jixuan, *Yupian Jiaoshi* (《玉篇校釋》), Shanghai Guji Chubanshe, 1989.
+# - Zang Kehe, *Zhonggu Hanzì Liubian* (《中古漢字流變》), East China Normal University Press, 2008.
+# - Lv Hao, *〈Yupian〉 Wenxian Kaoshu* (《〈玉篇〉文獻考述》), Shanghai People’s Publishing House, 2018.
+# - Yao Yongming, *Yuanben Yupian Canjuan Jiaozheng* (《原本玉篇殘卷校證》), Zhejiang Guji Chubanshe, 2023.
+#
+# This work was supported by JSPS KAKENHI Grant Number 25370506, 16H03422, 19H00526, 23K17500 and 25K00466.
+#
+# Notes:
+# - `Yao_page` remains a work-in-progress reference field.
+#
+YYID	YY_vol_radical	Entry	Lv_page	Yao_page	YY_def	YY_remarks	TBID	SYID	YY_img_filename
+Y08000001-1	v08#088	愇	121	10	（前闕）与怨慽同，爲忿恨之恨也。	心部。	3_005_A61	a078b062	Y08a-01-01-1.jpg
+Y08000001-2	v08#088	𢞰	121	10	眉隕反。《說文》：古文閔字也。閔，病也。存門部。	心部。重文	3_005_A62	△	Y08a-01-01-2.jpg
+Y08000002-1	v08#088	𢙶	121	11	古顔反。《說文》：古文姦字也。姦，私也，邪也，爲也，賊在外也。在女部。タメ	心部。重文。有再注字。	3_005_B11	a081b103	Y08a-01-02-1.jpg
+Y08000003-1	v08#088	愅	121	11	公翮反。《字書》：亦諽字。諽，更也，變也。⿰食力也，謹也，戒也。在言部。	心部。有再注字。⿰食力：當作“飭”。トウサク	3_005_B12	a077a066	Y08a-01-03-1.jpg
+Y08000004-1	v08#088	愬	121	11	所革反。《周易》：愬〻終吉。王弼曰：處多懼之地故曰愬〻也。《公羊傳》：愬而再拝。何休曰：愬，驚皃也。《說文》：亦𧦡字也。野王案：𧦡，告也，𧫭也。又音蘇故反。在言部。ナリ	心部。有再注字。	3_005_B21	a080b085	Y08a-01-04-1.jpg
+Y08000006-1	v08#088	惸	121	12	仇營反。《尚書》：無害惸獨。孔安国曰：惸單也，謂無兄弟也，無子曰獨。《周礼》：凡遠近惸獨老幼之欲有復於上者。《鄭玄》：曰：無兄弟曰惸。《字書》：亦煢字。煢〻，無所依也。在卂部。或為嬛字。（以下欠）	心部。	3_005_B22	a078b063	Y08a-02-01-1.jpg
+Y08000009-1	v08#088	憥	121	12	力高反。《說文》：古文勞（以下欠）	心部。	3_005_B31	a080b046	Y08a-02-04-1.jpg
+Y09101001-1	v09#091	話	122	14	胡快反。《尚書》：乃話民之弗率。孔安国曰：話，善言也。《說文》：合會善言也。《廣雅》：話，調也，謂啁調也。《聲類》：□(訛)言也。	言部始。□：原本蟲損，胡本作「訛」。	3_011_A11	a083b022	Y09a-02-01-1.jpg
+Y09101001-2	v09#091	譮	122	14	《說文》：籀文，話字也。《聲類》：或儈字也。儈，合儈市也。音古會反。在人部。人部（衍歟）。《字書》：古文爲𦧵字，在舌部也。	重文。字体注：聲類、或儈字也、儈合儈市也。音古會反。在人部。人部字書、古文為𦧵字、在舌部也。	3_011_A12	a083b024	Y09a-02-01-2.jpg
+Y09101002-1	v09#091	諈	122	15	竹恚反。《尓雅》：諈諉，累□。郭璞曰：以事相属累為諈也。	累□：胡本作「累也」。	3_011_A13	a083b025	Y09a-02-02-1.jpg
+Y09101003-1	v09#091	諉	122	15	女恚反。《漢書》：尚有可諉者。孟康子曰：諉，累也。蔡謨曰：諉，託也，猶言委罪彭生也。		3_011_A21	a083b031	Y09a-02-03-1.jpg
+Y09101003-2	v09#091	警	122	15	居影反。《尚書》：□(降)水警予。孔安国曰：警，戒也。《周礼》：正歳則以法警戒群吏。鄭玄曰：警謂□□（敕解）之也。《左氏傳》：□（以）警于夷。杜預曰：警懼戎狄也，又曰：軍衛不徹警也。《礼記》：大□（昕）鼓徴，所以警衆也。鄭玄曰：警，猶起也。《廣雅》：驚〻不安也。或為儆字，在人部也。チョク	蟲損胡本“救解”呂本“敕敬”姚本“敕觧”。字体注：或為儆字、在人部也。スクカイロホンチョクケイヨウホンチョク	3_011_A22	a083b032	Y09a-02-03-2.jpg
