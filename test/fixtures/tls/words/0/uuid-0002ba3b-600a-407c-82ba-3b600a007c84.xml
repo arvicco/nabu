@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<superEntry xmlns="http://www.tei-c.org/ns/1.0" xml:id="uuid-0002ba3b-600a-407c-82ba-3b600a007c84" n="1">
+    <form>
+        <orth>陪貳</orth>
+    </form>
+    <entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="TWO" tls:concept-id="uuid-c4a2e239-0e1f-4a1b-8b9e-02a7fc557e6e" xml:id="uuid-dae14b25-c408-49fd-8959-27f2c8ec5540" n="1">
+            <form corresp="#uuid-377e0c5a-8faa-43db-9ad1-80e0ff08019e #uuid-b1fb13df-3e69-44de-9165-932760aed399">
+<orth>陪貳</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">péi èr</pron>
+                <pron xml:lang="zh-x-oc">bɯɯ njis</pron>
+                <pron xml:lang="zh-x-mc">buo̝i ȵi</pron>
+            </form>
+<sense xml:id="uuid-0e8f7780-8092-4180-9677-a227d28c7aee" n="1">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-a8e89bab-49e1-4426-b230-0ec7887fd8b4">NP</tls:syn-func>
+                </gramGrp>
+  <def>pair, two together</def>
+            </sense>
+</entry>
+</superEntry>
