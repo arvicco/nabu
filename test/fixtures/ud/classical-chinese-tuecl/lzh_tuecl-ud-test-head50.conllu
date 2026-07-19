@@ -1,0 +1,593 @@
+# sent_id = 1
+# text = 北冥有魚
+# gloss = In the Northern Ocean there is a fish
+# 北方的海里有一条大鱼
+1	北	北	NOUN	_	Case=Loc	2	nmod	_	Gloss=north|SpaceAfter=No
+2	冥	冥	NOUN	_	Degree=Pos	3	nsubj	_	Gloss=sea|SpaceAfter=No|Translit=通“溟”
+3	有	有	VERB	_	_	0	root	_	Gloss=have|SpaceAfter=No
+4	魚	魚	NOUN	_	_	3	obj	_	Gloss=fish|SpaceAfter=No
+
+# sent_id = 2
+# text = 其名爲鯤
+# gloss = the name of which is Kun
+# 他的名字叫鲲
+1	其	其	PRON	_	Person=3|PronType=Prs	2	det	_	Gloss=[3PRON]|SpaceAfter=No
+2	名	名	NOUN	_	_	4	nsubj	_	Gloss=name|SpaceAfter=No
+3	爲	爲	AUX	_	_	4	cop	_	Gloss=be|SpaceAfter=No|Translit=为
+4	鯤	鯤	PROPN	_	NameType=Giv	0	root	_	Gloss=[given-name]|SpaceAfter=No
+
+# sent_id = 3
+# text = 鯤之大不知其幾千里也
+# 鲲非常巨大，不知道有几千里长
+1	鯤	鯤	PROPN	_	NameType=Giv	3	nmod	_	Gloss=[given-name]|SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	大	大	VERB	_	Degree=Pos	5	dislocated	_	Gloss=big|SpaceAfter=No
+4	不	不	ADV	_	Polarity=Neg	5	advmod	_	Gloss=not|SpaceAfter=No
+5	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+6	其	其	PRON	_	Person=3|PronType=Prs	9	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+7	幾	幾	ADV	_	_	8	amod	_	Gloss=how-many|SpaceAfter=No|Translit=几
+8	千	千	NUM	_	_	9	nummod	_	Gloss=thousand|SpaceAfter=No
+9	里	里	NOUN	_	NounType=Clf	5	ccomp	_	Gloss=[distance-unit]|SpaceAfter=No
+10	也	也	PART	_	_	9	discourse	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 4
+# text = 化而爲鳥
+# gloss = It changes into a bird
+# 变化为鸟
+1	化	化	VERB	_	_	0	root	_	Gloss=transform|SpaceAfter=No
+2	而	而	CCONJ	_	_	4	cc	_	Gloss=and|SpaceAfter=No
+3	爲	爲	AUX	_	_	4	cop	_	Gloss=be|SpaceAfter=No
+4	鳥	鳥	NOUN	_	_	1	conj	_	Gloss=bird|SpaceAfter=No
+
+# sent_id = 5
+# text = 其名爲鵬
+# gloss = with the name of Peng
+# 它的名字叫鹏
+1	其	其	PRON	_	Person=3|PronType=Prs	2	det	_	Gloss=[3PRON]|SpaceAfter=No
+2	名	名	NOUN	_	_	4	nsubj	_	Gloss=name|SpaceAfter=No
+3	爲	爲	AUX	_	_	4	cop	_	Gloss=be|SpaceAfter=No
+4	鵬	鵬	NOUN	_	_	0	root	_	SpaceAfter=No
+
+# sent_id = 6
+# text = 鵬之背不知其幾千里也
+# gloss = the back of which is (also) - I do not know how many li in extent
+# 鹏的脊背，不知道有几千里长
+1	鵬	鵬	NOUN	_	_	3	nmod	_	SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	背	背	NOUN	_	_	5	dislocated	_	Gloss=back|SpaceAfter=No
+4	不	不	ADV	_	Polarity=Neg	5	advmod	_	Gloss=not|SpaceAfter=No
+5	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+6	其	其	PRON	_	Person=3|PronType=Prs	9	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+7	幾	幾	ADV	_	_	8	amod	_	Gloss=how-many|SpaceAfter=No
+8	千	千	NUM	_	_	9	nmod	_	Gloss=thousand|SpaceAfter=No
+9	里	里	NOUN	_	NounType=Clf	5	ccomp	_	Gloss=[distance-unit]|SpaceAfter=No
+10	也	也	PART	_	_	5	discourse	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 7
+# text = 怒而飛
+# gloss = When this bird rouses itself and flies
+# 当它振动翅膀奋起直飞时。怒：奋起，这里指鼓起翅膀。
+1	怒	怒	VERB	_	_	0	root	_	Gloss=angry|SpaceAfter=No
+2	而	而	CCONJ	_	_	3	cc	_	Gloss=and|SpaceAfter=No
+3	飛	飛	VERB	_	_	1	conj	_	Gloss=fly|SpaceAfter=No|Translit=飞
+
+# sent_id = 8
+# text = 其翼若垂天之雲
+# gloss = its wings are like clouds all round the sky
+# 它的翅膀就好像挂在天边的云彩
+# ???垂，通“陲”，边陲，边际。垂天，指天边
+1	其	其	PRON	_	Person=3|PronType=Prs	2	nmod	_	Gloss=[3PRON]|SpaceAfter=No
+2	翼	翼	NOUN	_	_	3	nsubj	_	Gloss=wing|SpaceAfter=No
+3	若	若	VERB	_	Degree=Equ	0	root	_	Gloss=be-like|SpaceAfter=No
+4	垂	垂	VERB	_	_	7	acl	_	Gloss=hang-down|SpaceAfter=No|Translit=通“陲”
+5	天	天	NOUN	_	Case=Loc	4	obl	_	Gloss=heaven|SpaceAfter=No
+6	之	之	SCONJ	_	_	4	mark	_	Gloss='s|SpaceAfter=No
+7	雲	雲	NOUN	_	_	3	obj	_	Gloss=cloud|SpaceAfter=No|Translit=云
+
+# sent_id = 9
+# text = 是鳥也海運則將徙於南冥
+# gloss = This bird (namely Kun), when the sea is moving, it removes to the Southern Ocean.
+# 这只鸟，大风吹动海水的时候就要迁徙到南方的大海去了。海运：海水运动，此处指汹涌的海涛 (sea wave)
+1	是	是	PRON	_	PronType=Dem	2	det	_	Gloss=this|SpaceAfter=No
+2	鳥	鳥	NOUN	_	_	8	nsubj	_	Gloss=bird|SpaceAfter=No|Translit=鸟
+3	也	也	PART	_	_	2	case	_	Gloss=that-which|SpaceAfter=No
+4	海	海	NOUN	_	Case=Loc	5	nsubj	_	Gloss=sea|SpaceAfter=No
+5	運	運	VERB	_	_	8	advcl	_	Gloss=revolve|SpaceAfter=No|Translit=运
+6	則	則	ADV	_	AdvType=Tim	8	advmod	_	Gloss=then|SpaceAfter=No|Translit=则
+7	將	將	ADV	_	AdvType=Tim|Tense=Fut	8	advmod	_	Gloss=about-to|SpaceAfter=No|Translit=将
+8	徙	徙	VERB	_	_	0	root	_	Gloss=move|SpaceAfter=No
+9	於	於	ADP	_	_	11	case	_	Gloss=at|SpaceAfter=No|Translit=于
+10	南	南	NOUN	_	Case=Loc	11	obl:lmod	_	Gloss=south|SpaceAfter=No
+11	冥	冥	VERB	_	Degree=Pos	8	obl	_	Gloss=dark|SpaceAfter=No
+
+# sent_id = 10
+# text = 南冥者天池也
+# gloss =  The Southern Ocean is the Pool of Heaven.
+# 南方的大海，是一个天然的大池子
+# ???天池是天然形成的池子，不是天上的池子
+# Should not make too much difference in the anotation scheme
+1	南	南	ADJ	_	_	2	amod	_	Gloss=north|SpaceAfter=No
+2	冥	冥	NOUN	_	Degree=Pos	5	nsubj	_	Gloss=dark|SpaceAfter=No
+3	者	者	PART	_	_	2	case	_	Gloss=that-which|SpaceAfter=No
+4	天	天	NOUN	_	Case=Loc	5	nmod	_	Gloss=heaven|SpaceAfter=No
+5	池	池	NOUN	_	Case=Loc	0	root	_	Gloss=pond|SpaceAfter=No
+6	也	也	PART	_	_	5	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 11
+# text = 齊諧者志怪者也
+# gloss = There is the (book called) Qi's Xie, a record of marvels
+# 《齐谐》是一部专门记载怪异事情的书
+# 齐和谐可以拆开
+1	齊	齊諧	PROPN	_	_	2	nsubj	_	Gloss=bookname|SpaceAfter=No|Translit=諧
+2	諧	齊諧	PROPN	_	_	6	nsubj	_	Gloss=bookname|SpaceAfter=No|Translit=諧
+3	者	者	PART	_	_	2	case	_	Gloss=that-which|SpaceAfter=No
+4	志	志	ADJ	_	_	5	amod	_	Gloss=record|SpaceAfter=No
+5	怪	怪	NOUN	_	Degree=Pos	6	nmod	_	SpaceAfter=No
+6	者	者	NOUN	_	_	0	root	_	SpaceAfter=No
+7	也	也	PART	_	_	6	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 12
+# text = 諧之言曰
+# gloss = In Xie, it says:
+# 这本书上记载说
+1	諧	諧	NOUN	_	_	3	nmod	_	NameTypr=BookName|SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	言	言	NOUN	_	_	4	nsubj	_	Gloss=speech|SpaceAfter=No
+4	曰	曰	VERB	_	_	0	root	_	Gloss=say|SpaceAfter=No
+
+# sent_id = 13
+# text = 鵬之徙於南冥也
+# gloss  = Peng's removing to the Southern Ocean
+# 鹏鸟迁徙到南冥时
+1	鵬	鵬	NOUN	_	_	3	nsubj	_	SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	徙	徙	VERB	_	_	0	root	_	Gloss=immigrate|SpaceAfter=No
+4	於	於	ADP	_	_	5	case	_	Gloss=at|SpaceAfter=No|Translit=于
+5	南	南	NOUN	_	Case=Loc	6	nmod	_	Gloss=south|SpaceAfter=No
+6	冥	冥	NOUN	_	Degree=Pos	3	obj	_	Gloss=Ocean|SpaceAfter=No
+7	也	也	PART	_	_	6	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 14
+# text = 水擊三千里
+# gloss = it flaps (its wings) on the water for 3000 li.
+# 翅膀拍击水面，激起三千里的波涛
+1	水	水	NOUN	_	_	2	obj	_	Gloss=water|SpaceAfter=No
+2	擊	擊	VERB	_	_	0	root	_	Gloss=strike|SpaceAfter=No|Translit=击
+3	三千	三千	NUM	_	_	1	nummod	_	Gloss=three-thousand|SpaceAfter=No
+4	里	里	NOUN	_	NounType=Clf	3	clf	_	Gloss=[distance-unit]|SpaceAfter=No
+
+# sent_id = 15
+# text = 摶扶摇而上者九萬里
+# gloss = it ascends on a whirlwind for 90,000 li
+# 鹏鸟奋起而飞，环绕着旋风，飞上了九万里高空
+# ??? 扶摇：一种旋风，又名飙，由地面急剧盘旋而上的暴风，所以是名词
+1	摶	摶	VERB	_	_	5	acl	_	SpaceAfter=No|Translit=抟
+2	扶摇	扶	NOUN	_	_	1	obj	_	Gloss=support|SpaceAfter=No
+3	而	而	CCONJ	_	_	1	cc	_	Gloss=and|SpaceAfter=No
+4	上	上	NOUN	_	Case=Loc	1	conj	_	Gloss=up|SpaceAfter=No
+5	者	者	PART	_	_	8	nsubj	_	Gloss=that-which|SpaceAfter=No
+6	九	九	NUM	_	_	7	nmod	_	Gloss=nine|SpaceAfter=No
+7	萬	萬	NUM	_	_	8	nmod	_	Gloss=ten-thousand|SpaceAfter=No|Translit=万
+8	里	里	NOUN	_	NounType=Clf	0	root	_	Gloss=[distance-unit]|SpaceAfter=No
+
+# sent_id = 16
+# text = 去以六月息者也
+# gloss = it leaves (North Sea) and relies on the wind at June. 
+# ???乘着六月的大风离开了北海。息，大风。
+1	去	去	VERB	_	_	6	nsubj	_	Gloss=go-away|SpaceAfter=No
+2	以	以	ADV	_	_	5	advmod	_	Gloss=use|SpaceAfter=No
+3	六	六	NUM	_	_	4	nummod	_	Gloss=six|SpaceAfter=No
+4	月	月	NOUN	_	Case=Tem	5	obl:tmod	_	Gloss=months|SpaceAfter=No
+5	息	息	NOUN	_	_	1	parataxis	_	Gloss=wind|SpaceAfter=No
+6	者	者	NOUN	_	_	0	root	_	Gloss=that-which|SpaceAfter=No
+7	也	也	PART	_	_	6	discourse	_	Gloss=a|SpaceAfter=No
+
+# sent_id = 17
+# text = 野馬也塵埃也生物之以息相吹也
+# gloss = (But similar to this is the movement of the breezes which we call) the horses of the fields, of the dust (which quivers in the sunbeams), and of living things as they are blown against one another by the air.
+# 野马（奔腾），尘埃（飘扬），都是生物气息互相吹拂所致
+1	野	野	NOUN	_	Case=Loc	2	nmod	_	Gloss=uncultivated-land|SpaceAfter=No
+2	馬	馬	NOUN	_	_	0	root	_	Gloss=horse|SpaceAfter=No
+3	也	也	PART	_	_	2	discourse	_	Gloss=that-which|SpaceAfter=No
+4	塵	塵	NOUN	_	_	5	nmod	_	SpaceAfter=No
+5	埃	埃	NOUN	_	_	2	parataxis	_	SpaceAfter=No
+6	也	也	PART	_	_	5	discourse	_	Gloss=that-which|SpaceAfter=No
+7	生	生	ADJ	_	_	8	amod	_	Gloss=alive|SpaceAfter=No
+8	物	物	NOUN	_	_	11	nsubj	_	Gloss=thing|SpaceAfter=No
+9	之	之	SCONJ	_	_	11	mark	_	Gloss='s|SpaceAfter=No
+10	以	以	ADV	_	_	11	advmod	_	Gloss=use|SpaceAfter=No
+11	息	息	VERB	_	_	13	csubj	_	Gloss=breathe|SpaceAfter=No
+12	相	相	ADV	_	_	13	advmod	_	Gloss=each-other|SpaceAfter=No
+13	吹	吹	VERB	_	_	2	parataxis	_	SpaceAfter=No
+14	也	也	PART	_	_	13	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 18
+# text = 天之蒼蒼其正色邪
+# gloss = the azure of the sky, maybe it's the true colour?
+# 我们所见湛蓝的天空，那是它真正的颜色吗?
+# ???其，或许。
+1	天	天	NOUN	_	Case=Loc	3	nsubj	_	Gloss=heaven|SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	蒼蒼	蒼蒼	ADJ	_	_	6	dislocated	_	Gloss=dark-blue|SpaceAfter=No
+4	其	其	PRON	_	Person=3|PronType=Prs	6	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+5	正	正	VERB	_	Degree=Pos	6	amod	_	Gloss=correct|SpaceAfter=No
+6	色	色	NOUN	_	_	0	root	_	Gloss=colour|SpaceAfter=No
+7	邪	邪	PART	_	_	6	discourse:sp	_	Gloss=[Q]|SpaceAfter=No
+
+# sent_id = 19
+# text = 其遠而无所至極邪
+# gloss =  it extent, is it no way to reach the end?
+# 它是无边无际的吗？
+1	其	其	PRON	_	Person=3|PronType=Prs	2	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+2	遠	遠	VERB	_	Degree=Pos	0	root	_	Gloss=distant|SpaceAfter=No
+3	而	而	CCONJ	_	_	2	cc	_	Gloss=and|SpaceAfter=No
+4	无	無	VERB	_	Polarity=Neg	7	acl	_	Gloss=not-have|SpaceAfter=No
+5	所	所	PART	_	_	6	case	_	Gloss=that-which|SpaceAfter=No
+6	至	至	VERB	_	_	4	obj	_	Gloss=arrive|SpaceAfter=No
+7	極	極	NOUN	_	_	2	conj	_	Gloss=reach-the-end|SpaceAfter=No
+8	邪	邪	PART	_	_	2	discourse:sp	_	Gloss=[Q]|SpaceAfter=No
+
+# sent_id = 20
+# text = 其視下也亦若是則已矣
+# gloss = what Peng looking down saw, should also be just like this.
+# 鹏鸟所见，大概也是这个样子吧。已，罢了，auxiliary，that's all.
+1	其	其	PRON	_	Person=3|PronType=Prs	2	obj	_	Gloss=[3PRON]|SpaceAfter=No
+2	視	視	VERB	_	_	6	csubj	_	Gloss=look-at|SpaceAfter=No
+3	下	下	NOUN	_	Case=Loc	2	nmod	_	Gloss=down|SpaceAfter=No
+4	也	也	PART	_	_	2	mark	_	Gloss=that-which|SpaceAfter=No
+5	亦	亦	ADV	_	_	6	advmod	_	Gloss=also|SpaceAfter=No
+6	若	若	VERB	_	Degree=Equ	9	advcl	_	Gloss=be-like|SpaceAfter=No
+7	是	是	PRON	_	PronType=Dem	6	obj	_	Gloss=this|SpaceAfter=No
+8	則	則	ADV	_	AdvType=Tim	9	advmod	_	Gloss=then|SpaceAfter=No
+9	已	已	VERB	_	_	0	root	_	Gloss=stop|SpaceAfter=No
+10	矣	矣	PART	_	_	9	discourse:sp	_	Gloss=[PFV]|SpaceAfter=No
+
+# sent_id = 21
+# text = 且夫水之積也不厚
+# gloss = And moreover, (to speak of) the accumulation of water; if it be not great, it will not have strength to support a large boat.
+# 汇积的水不深
+# ???且夫，拆开
+1	且	且	ADV	_	_	5	advmod	_	SpaceAfter=No|Gloss=[modal-particle]
+2	夫	_	PRON	_	_	1	fixed	_	SpaceAfter=No
+3	水	水	NOUN	_	_	5	nmod	_	Gloss=water|SpaceAfter=No
+4	之	之	SCONJ	_	_	3	case	_	Gloss='s|SpaceAfter=No
+5	積	積	NOUN	_	_	8	nsubj	_	Gloss=accumulate|SpaceAfter=No
+6	也	也	PART	_	_	5	case	_	Gloss=that-which|SpaceAfter=No
+7	不	不	ADV	_	Polarity=Neg	8	advmod	_	Gloss=not|SpaceAfter=No
+8	厚	厚	VERB	_	Degree=Pos	0	root	_	Gloss=thick|SpaceAfter=No
+
+# sent_id = 22
+# text = 則負大舟也无力
+# gloss = if it be not great, it will not have strength to support a large boat.
+# 浮载大船就没有力量
+1	則	則	ADV	_	AdvType=Tim	2	advmod	_	Gloss=then|SpaceAfter=No
+2	負	負	VERB	_	_	6	csubj	_	Gloss=carry|SpaceAfter=No
+3	大	大	ADJ	_	_	4	amod	_	Gloss=big|SpaceAfter=No
+4	舟	舟	NOUN	_	_	2	obj	_	Gloss=boat|SpaceAfter=No
+5	也	也	PART	_	_	2	mark	_	Gloss=that-which|SpaceAfter=No
+6	无	無	VERB	_	Polarity=Neg	0	root	_	Gloss=not-have|SpaceAfter=No
+7	力	力	NOUN	_	_	6	obj	_	Gloss=strength|SpaceAfter=No
+
+# sent_id = 23
+# text = 覆杯水於坳堂之上
+# gloss = If you pour the water out of a cup into a depression in the floor
+# 倒杯水在庭堂的低洼处。覆：倾倒。坳堂：指堂中低凹处。坳（ào）：名词，凹陷不平。
+1	覆	覆	VERB	_	_	0	root	_	Gloss=pour|SpaceAfter=No
+2	杯	杯	NOUN	_	_	3	nmod	_	Gloss=cup|SpaceAfter=No
+3	水	水	NOUN	_	_	1	obj	_	Gloss=water|SpaceAfter=No
+4	於	於	ADP	_	_	8	case	_	Gloss=at|SpaceAfter=No
+5	坳	坳	NOUN	_	_	6	nmod	_	Gloss=Low-lying place|SpaceAfter=No
+6	堂	堂	NOUN	_	Case=Loc	8	nmod	_	Gloss=hall|SpaceAfter=No
+7	之	之	SCONJ	_	_	6	case	_	Gloss='s|SpaceAfter=No
+8	上	上	NOUN	_	Case=Loc	1	obl:lmod	_	Gloss=up|SpaceAfter=No
+
+# sent_id = 24
+# text = 則芥爲之舟
+# gloss = then little bits of  become boats.
+# 那么小草就是它承载的船。之，代词，代指前面的水，它（杯水）的。
+# ???confirm “之”现在的pos是否正确
+1	則	則	ADV	_	AdvType=Tim	3	advmod	_	Gloss=then|SpaceAfter=No
+2	芥	芥	NOUN	_	_	3	nsubj	_	Gloss=grass|SpaceAfter=No
+3	爲	爲	VERB	_	_	0	root	_	Gloss=become|SpaceAfter=No
+4	之	之	PRON	_	Person=3|PronType=Prs	5	nmod	_	Gloss=[3PRON]|SpaceAfter=No
+5	舟	舟	NOUN	_	_	3	conj	_	Gloss=boat|SpaceAfter=No
+
+# sent_id = 25
+# text = 置杯焉則膠
+# gloss =  Place a cup in it, and it will stick to the ground
+# 将杯子放于其中则胶着搁浅。置，放。焉，于此。胶，指着地。
+1	置	置	VERB	_	_	5	csubj	_	Gloss=place|SpaceAfter=No
+2	杯	杯	NOUN	_	_	1	obj	_	Gloss=cup|SpaceAfter=No
+3	焉	焉	PRON	_	PronType=Dem	1	obl	_	Gloss=there|SpaceAfter=No
+4	則	則	ADV	_	AdvType=Tim	5	amod	_	Gloss=then|SpaceAfter=No
+5	膠	膠	VERB	_	_	0	root	_	Gloss=[surname]|SpaceAfter=No
+
+# sent_id = 26
+# text = 水淺而舟大也
+# gloss = (since) the water is shallow and the boat is large
+# （因为）水太浅但船太大
+1	水	水	NOUN	_	_	2	nsubj	_	Gloss=water|SpaceAfter=No
+2	淺	淺	ADJ	_	_	0	root	_	Gloss=shallow|SpaceAfter=No|Translit=浅
+3	而	而	CCONJ	_	_	5	cc	_	Gloss=and|SpaceAfter=No
+4	舟	舟	NOUN	_	_	5	nsubj	_	Gloss=boat|SpaceAfter=No
+5	大	大	ADJ	_	_	2	conj	_	Gloss=big|SpaceAfter=No
+6	也	也	PART	_	_	2	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 27
+# text = 風之積也不厚
+# 风聚积的力量不雄厚
+1	風	風	NOUN	_	_	3	nsubj	_	Gloss=wind|SpaceAfter=No|Translit=风
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	積	積	VERB	_	_	6	csubj	_	Gloss=accumulate|SpaceAfter=No|Translit=积
+4	也	也	PART	_	_	3	mark	_	Gloss=that-which|SpaceAfter=No
+5	不	不	ADV	_	Polarity=Neg	6	advmod	_	Gloss=not|SpaceAfter=No
+6	厚	厚	VERB	_	Degree=Pos	0	root	_	Gloss=thick|SpaceAfter=No
+
+# sent_id = 28
+# text = 則其負大翼也无力
+# gloss = then it doesn't have the strength to support the great wings of Peng.
+# (风)便无法托负巨大的翅膀
+1	則	則	ADV	_	AdvType=Tim	7	advmod	_	Gloss=then|SpaceAfter=No|Translit=则
+2	其	其	PRON	_	Person=3|PronType=Prs	3	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+3	負	負	VERB	_	_	7	csubj	_	Gloss=owe|SpaceAfter=No|Translit=负
+4	大	大	ADJ	_	_	5	amod	_	Gloss=big|SpaceAfter=No
+5	翼	翼	NOUN	_	_	3	obj	_	Gloss=wing|SpaceAfter=No
+6	也	也	PART	_	_	3	mark	_	Gloss=that-which|SpaceAfter=No
+7	无	無	VERB	_	Polarity=Neg	0	root	_	Gloss=not-have|SpaceAfter=No
+8	力	力	NOUN	_	_	7	obj	_	Gloss=strength|SpaceAfter=No
+
+# sent_id = 29
+# text = 故九萬里則風斯在下矣
+# gloss = Therefore when Peng flies up ninety-thousand li, he needs to have the wind under him like this.
+# 所以，(鹏鸟飞在)九万里高空，风就在它的身下。斯：则，就。
+# ???“斯”不是代词
+1	故	故	ADV	_	_	8	advmod	_	Gloss=therefore|SpaceAfter=No
+2	九	九	NUM	_	_	3	nummod	_	Gloss=nine|SpaceAfter=No
+3	萬	萬	NUM	_	_	4	nummod	_	Gloss=ten-thousand|SpaceAfter=No|Translit=万
+4	里	里	NOUN	_	NounType=Clf	8	dislocated	_	Gloss=[distance-unit]|SpaceAfter=No
+5	則	則	ADV	_	AdvType=Tim	8	advmod	_	Gloss=then|SpaceAfter=No|Translit=则
+6	風	風	VERB	_	_	8	nsubj	_	Gloss=blow|SpaceAfter=No|Translit=风
+7	斯	斯	ADV	_	_	8	advmod	_	Gloss=this|SpaceAfter=No
+8	在	在	VERB	_	_	0	root	_	Gloss=be-present|SpaceAfter=No
+9	下	下	NOUN	_	Case=Loc	8	obl	_	Gloss=down|SpaceAfter=No
+10	矣	矣	PART	_	_	8	discourse:sp	_	Gloss=[PFV]|SpaceAfter=No
+
+# sent_id = 30
+# text = 而後乃今培風
+# gloss = (Only after) this, rely on the wind
+# 然后方能凭借风力(飞行)。而后乃今：“今而后乃”的倒文，意为“这样，然后才……”。培，凭借。
+# ???倒装的话，pos有变化吗
+1	而	而	CCONJ	_	_	5	advmod	_	Gloss=and|SpaceAfter=No
+2	後	後	NOUN	_	Case=Tem	5	obl:tmod	_	Gloss=after|SpaceAfter=No
+3	乃	乃	ADV	_	AdvType=Tim	5	advmod	_	Gloss=then|SpaceAfter=No
+4	今	今	NOUN	_	Case=Tem	5	obl:tmod	_	Gloss=now|SpaceAfter=No
+5	培	培	VERB	_	_	0	root	_	Gloss=depend|SpaceAfter=No
+6	風	風	NOUN	_	_	5	obj	_	Gloss=wind|SpaceAfter=No
+
+# sent_id = 31
+# text = 背負青天而莫之夭閼者
+# gloss =  can he ride on the blue sky with nothing to stop him
+# not sure about 者 could also be mark with csubj, and used with next sentence
+# 背负着青天，毫无阻挡。“而莫之夭阏者”一句为倒装句，实为“而莫夭阏之者”，译为“而没有能够阻碍它的事物“。其中“之”为代词，代指“鲲鹏”。夭，挫折。阏，遏制，阻止。
+# ???倒装影响，以及夭阏的词性修改的影响。
+1	背	背	VERB	_	_	10	acl	_	Gloss=disobey|SpaceAfter=No
+2	負	負	VERB	_	_	1	flat:vv	_	Gloss=owe|SpaceAfter=No
+3	青	靑	ADJ	_	_	4	compound	_	Gloss=[place-name]|SpaceAfter=No
+4	天	天	NOUN	_	Case=Loc	1	obj	_	Gloss=heaven|SpaceAfter=No
+5	而	而	CCONJ	_	_	8	cc	_	Gloss=and|SpaceAfter=No
+6	莫	莫	ADV	_	Polarity=Neg	8	obl:tmod	_	Gloss=none|SpaceAfter=No
+7	之	之	SCONJ	_	_	6	case	_	Gloss=[3PRON]|SpaceAfter=No
+8	夭	夭	VERB	_	Degree=Pos	1	conj	_	Gloss=difficulty|SpaceAfter=No
+9	閼	閼	PROPN	_	NameType=Sur	8	flat	_	Gloss=[surname]|SpaceAfter=No
+10	者	者	NOUN	_	_	0	root	_	Gloss=that-which|SpaceAfter=No
+
+# sent_id = 32
+# text = 而後乃今將圖南
+# gloss =  it could plan its way to the South.
+# 这样就能飞到南方了。而后乃今：“今而后乃”的倒装。相当于“这时……然后才”。
+# ???乃，才，对pos影响
+1	而	而	CCONJ	_	_	6	advmod	_	Gloss=and|SpaceAfter=No
+2	後	後	ADV	_	_	6	advmod	_	Gloss=after|SpaceAfter=No
+3	乃	乃	ADV	_	AdvType=Tim	6	advmod	_	Gloss=then|SpaceAfter=No
+4	今	今	ADV	_	_	6	advmod	_	Gloss=now|SpaceAfter=No
+5	將	將	ADV	_	AdvType=Tim|Tense=Fut	6	advmod	_	Gloss=about-to|SpaceAfter=No
+6	圖	圖	VERB	_	_	0	root	_	Gloss=plan|SpaceAfter=No
+7	南	南	NOUN	_	Case=Loc	6	obj	_	Gloss=south|SpaceAfter=No
+
+# sent_id = 33
+# text = 蜩與鷽鳩笑之曰
+# gloss = A cicada and a little dove laughed at it, saying,
+# 寒蝉与小灰雀讥笑鹏，说
+1	蜩	蜩	NOUN	_	_	4	nsubj	_	Gloss=Insect|SpaceAfter=No
+2	與	與	CCONJ	_	_	3	cc	_	Gloss=and|SpaceAfter=No
+3	鷽鳩	鷽鳩	NOUN	_	_	1	conj	_	SpaceAfter=No
+4	笑	笑	VERB	_	_	0	root	_	Gloss=laugh|SpaceAfter=No
+5	之	之	PRON	_	Person=3|PronType=Prs	4	obj	_	Gloss=[3PRON]|SpaceAfter=No
+6	曰	曰	VERB	_	_	4	parataxis	_	Gloss=say|SpaceAfter=No
+
+# sent_id = 34
+# text = 我決起而飛
+# gloss = We make an effort and fly
+# 我猛地跃起而飞。決（xuè）：疾速地。決起，迅速跃起。
+1	我	我	PRON	_	Person=1|PronType=Prs	3	nsubj	_	Gloss=[1PRON]|SpaceAfter=No
+2	決	決	ADV	_	_	3	advmod	_	Gloss=fastly|SpaceAfter=No
+3	起	起	VERB	_	_	0	root	_	Gloss=arise|SpaceAfter=No
+4	而	而	CCONJ	_	_	5	cc	_	Gloss=and|SpaceAfter=No
+5	飛	飛	VERB	_	_	3	conj	_	Gloss=fly|SpaceAfter=No
+
+# sent_id = 35
+# text = 槍榆枋
+# gloss = towards an elm or sapanwood tree
+# 碰到榆树和檀树的树枝就停止。抢（qiāng）：触，碰，着落。“抢”也作“枪”。榆枋：两种树名。榆，榆树。枋，檀木。
+# 这句话不完整，是“槍榆枋而止”
+# Might be variation in different corpuses
+1	槍	槍	VERB	_	_	0	root	_	Gloss-hit|SpaceAfter=No
+2	榆	楡	NOUN	_	_	1	obj	_	Gloss=elm|SpaceAfter=No
+3	枋	枋	NOUN	_	_	2	parataxis	_	SpaceAfter=No
+
+# sent_id = 36
+# text = 	時則不至
+# gloss =  and sometimes if can't reach it,
+# 有时假设飞不上去
+1	時	時	NOUN	_	Case=Tem	4	obl:tmod	_	Gloss=sometimes|SpaceAfter=No
+2	則	則	ADV	_	AdvType=Tim	4	advmod	_	Gloss=if|SpaceAfter=No
+3	不	不	ADV	_	Polarity=Neg	4	advmod	_	Gloss=not|SpaceAfter=No
+4	至	至	VERB	_	_	0	root	_	Gloss=arrive/meet|SpaceAfter=No
+
+# sent_id = 37
+# text = 而控於地而已矣
+# gloss = then land on the ground is enough. 
+# 那么落在地上就好了。控：投，落下。
+1	而	而	CCONJ	_	_	2	advmod	_	Gloss=then|SpaceAfter=No
+2	控	控	VERB	_	_	0	root	_	Gloss=land|SpaceAfter=No
+3	於	於	ADP	_	_	4	case	_	Gloss=at|SpaceAfter=No|Translit=于
+4	地	地	NOUN	_	Case=Loc	2	obl:lmod	_	Gloss=earth|SpaceAfter=No
+5	而	而	ADV	_	_	2	advmod	_	Gloss=and|SpaceAfter=No
+6	已	_	ADV	_	_	5	fixed	_	SpaceAfter=No
+7	矣	矣	PART	_	_	2	discourse:sp	_	Gloss=[PFV]|SpaceAfter=No
+
+# sent_id = 38
+# text = 奚以之九萬里而南爲
+# gloss = why rising to 90,000 li and fly towards the South?'
+# 为什么要到九万里的高空再向南飞呢。奚以：何以。之：去到。南：名词作动词，向南（飞行）。为：做，成为。
+1	奚	奚	PRON	_	PronType=Int	3	obj	_	Gloss=how|SpaceAfter=No
+2	以	以	ADP	_	_	1	case	_	Gloss=use|SpaceAfter=No
+3	之	之	PRON	_	Person=3|PronType=Prs	0	root	_	Gloss=[3PRON]|SpaceAfter=No
+4	九萬	九	NUM	_	_	5	nummod	_	Gloss=ninety-thousand|SpaceAfter=No
+5	里	里	NOUN	_	NounType=Clf	3	obj	_	Gloss=[distance-unit]|SpaceAfter=No
+6	而	而	CCONJ	_	_	8	cc	_	Gloss=and|SpaceAfter=No
+7	南	南	VERB	_	_	8	advcl	_	Gloss=south|SpaceAfter=No
+8	爲	爲	VERB	_	_	3	conj	_	Gloss=make|SpaceAfter=No
+
+# sent_id = 39
+# text = 適莽蒼者三湌而反
+# gloss = He who goes to the grassy suburbs, returning to the third meal (of the day)
+# 到近郊去的人，一天就可以返回。适：去，往。莽苍：色彩朦胧，遥远不可辨析，本指郊野的颜色，这里引申为近郊。三餐：指一日。意思是只需一日之粮。反：同“返”，返回。
+# ???莽蒼是用形容词做名词，近郊。“適莽蒼者，三湌而反”，是可以拆成两句的吧。
+1	適	適	VERB	_	_	4	acl	_	Gloss=go-to|SpaceAfter=No
+2	莽	莽	NOUN	_	_	3	nmod	_	Gloss=[given-name]|SpaceAfter=No
+3	蒼	蒼	VERB	_	Degree=Pos	1	obj	_	Gloss=dark-blue|SpaceAfter=No
+4	者	者	PART	_	_	8	nsubj	_	Gloss=that-which|SpaceAfter=No
+5	三	三	NUM	_	_	6	nummod	_	Gloss=three|SpaceAfter=No
+6	湌	湌	NOUN	_	_	8	advcl	_	Gloss=meal|SpaceAfter=No
+7	而	而	PART	_	_	8	mark	_	Gloss=and|SpaceAfter=No
+8	反	反	VERB	_	_	0	root	_	Gloss=return|SpaceAfter=No|Translit=通"返"
+
+# sent_id = 40
+# text = 腹猶果然
+# 肚子还是饱的。犹：还。果然：吃饱的样子。
+# ???“果然”变成了形容词。
+1	腹	腹	NOUN	_	_	3	nsubj	_	Gloss=stomach|SpaceAfter=No
+2	猶	猶	ADV	_	Degree=Equ	3	advmod	_	Gloss=still|SpaceAfter=No|Translit=犹
+3	果	果	VERB	_	_	0	root	_	Gloss=full|SpaceAfter=No
+4	然	然	PART	_	_	3	fixed	_	Gloss=[suffix]|SpaceAfter=No
+
+# sent_id = 41
+# text = 適百里者宿舂糧
+# 到百里之外去的人，晚上就要准备第二天的干粮。宿舂粮：即舂宿粮，舂捣一宿的粮食。舂（chōng）粮：把谷物的壳捣掉，指准备粮食。宿：这里指一夜，头一夜。
+# ???宿是名词
+1	適	適	VERB	_	_	4	acl	_	Gloss=go-to|SpaceAfter=No|Translit=适
+2	百	百	NUM	_	_	3	nummod	_	Gloss=hundred|SpaceAfter=No
+3	里	里	NOUN	_	NounType=Clf	1	obj	_	Gloss=[distance-unit]|SpaceAfter=No
+4	者	者	PART	_	_	6	nsubj	_	Gloss=that-which|SpaceAfter=No
+5	宿	宿	VERB	_	_	6	iobj	_	Gloss=stay|SpaceAfter=No
+6	舂	舂	VERB	_	_	0	root	_	Gloss=make|SpaceAfter=No
+7	糧	糧	NOUN	_	_	6	obj	_	Gloss=grain|SpaceAfter=No|Translit=粮
+
+# sent_id = 42
+# text = 適千里者三月聚糧
+# 到千里之外去的人，就需要三个月的时间来收集粮食。
+1	適	適	VERB	_	_	4	acl	_	Gloss=go-to|SpaceAfter=No|Translit=适
+2	千	千	NUM	_	_	3	nummod	_	Gloss=thousand|SpaceAfter=No
+3	里	里	NOUN	_	NounType=Clf	1	obj	_	Gloss=[distance-unit]|SpaceAfter=No
+4	者	者	PART	_	_	7	nsubj	_	Gloss=that-which|SpaceAfter=No
+5	三	三	NUM	_	_	6	nummod	_	Gloss=three|SpaceAfter=No
+6	月	月	NOUN	_	Case=Tem	7	obl:tmod	_	Gloss=month|SpaceAfter=No
+7	聚	聚	VERB	_	_	0	root	_	Gloss=collect|SpaceAfter=No
+8	糧	糧	NOUN	_	_	7	obj	_	Gloss=grain|SpaceAfter=No|Translit=粮
+
+# sent_id = 43
+# text = 之二蟲又何知
+# gloss = how could these two small animals know
+# 这两个小动物当然不懂得这些道理。之：此，这。
+1	之	之	DET	_	_	3	det	_	Gloss=[3PRON]|SpaceAfter=No
+2	二	二	NUM	_	_	3	nummod	_	Gloss=two|SpaceAfter=No
+3	蟲	蟲	NOUN	_	_	6	nsubj	_	Gloss=insect|SpaceAfter=No
+4	又	又	ADV	_	_	6	advmod	_	Gloss=also|SpaceAfter=No
+5	何	何	ADV	_	AdvType=Cau	6	advmod	_	Gloss=what|SpaceAfter=No
+6	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+
+# sent_id = 44
+# text = 小知不及大知
+# gloss = The knowledge of that which is small does not reach to that which is great; 
+# 小智慧不如大智慧。知，通“智”，智慧。
+1	小	小	ADJ	_	_	2	amod	_	Gloss=small|SpaceAfter=No
+2	知	知	NOUN	_	_	4	nsubj	_	Gloss=know|SpaceAfter=No|Translit=通“智”
+3	不	不	ADV	_	Polarity=Neg	4	advmod	_	Gloss=not|SpaceAfter=No
+4	及	及	VERB	_	_	0	root	_	Gloss=reach|SpaceAfter=No
+5	大	大	ADJ	_	_	6	amod	_	Gloss=big|SpaceAfter=No
+6	知	知	NOUN	_	_	4	obj	_	Gloss=know|SpaceAfter=No|Translit=通“智”
+
+# sent_id = 45
+# text = 小年不及大年
+# gloss =  (the experience of) a few years does not reach to that of many. 
+# 寿命短的理解不了寿命长的
+1	小	小	ADJ	_	_	2	amod	_	Gloss=small|SpaceAfter=No
+2	年	年	NOUN	_	Case=Tem	4	nsubj	_	Gloss=age|SpaceAfter=No
+3	不	不	ADV	_	Polarity=Neg	4	advmod	_	Gloss=not|SpaceAfter=No
+4	及	及	VERB	_	_	0	root	_	Gloss=reach|SpaceAfter=No
+5	大	大	ADJ	_	_	6	amod	_	Gloss=big|SpaceAfter=No
+6	年	年	NOUN	_	Case=Tem	4	obj	_	Gloss=age|SpaceAfter=No
+
+# sent_id = 46
+# text = 奚以知其然也
+# gloss = How do we know that it is so?
+# 怎么知道是这样的呢？
+# ???”然“应该是代词
+1	奚	奚	PRON	_	PronType=Int	3	obj	_	Gloss=how|SpaceAfter=No
+2	以	以	VERB	_	_	1	case	_	Gloss=use|SpaceAfter=No
+3	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+4	其	其	PRON	_	Person=3|PronType=Prs	5	nsubj	_	Gloss=[3PRON]|SpaceAfter=No
+5	然	然	VERB	_	Degree=Pos	3	ccomp	_	Gloss=like-this|SpaceAfter=No
+6	也	也	PART	_	_	3	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 47
+# text = 朝菌不知晦朔
+# gloss = the mush room that born at morning and die at might does not know (what takes place between) the beginning and the end of a month
+# 朝菌不知道有月初月末。晦朔：晦，农历每月的最后一天，朔，农历每月的第一天。一说“晦”指月末，“朔”指月初。
+1	朝菌	朝菌	NOUN	_	_	3	nsubj	_	Gloss=a kind of mushroom|SpaceAfter=No
+2	不	不	ADV	_	Polarity=Neg	3	advmod	_	Gloss=not|SpaceAfter=No
+3	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+4	晦	晦	NOUN	_	Case=Tem	5	parataxis	_	Gloss=last-day-of-month|SpaceAfter=No
+5	朔	朔	NOUN	_	Case=Tem	3	obj	_	Gloss=first-day-of-the-new-moon|SpaceAfter=No
+
+# sent_id = 48
+# text = 蟪蛄不知春秋
+# gloss = the short-lived cicada does not know (what takes place between) the spring and autumn
+# 寒蝉不知道有春天和秋天
+1	蟪蛄	蟪蛄	NOUN	_	_	3	nsubj	_	Gloss=[a-kind-of-insect]|SpaceAfter=No
+2	不	不	ADV	_	Polarity=Neg	3	advmod	_	Gloss=not|SpaceAfter=No
+3	知	知	VERB	_	_	0	root	_	Gloss=know|SpaceAfter=No
+4	春	春	NOUN	_	Case=Tem	5	parataxis	_	Gloss=[book-name]|SpaceAfter=No
+5	秋	秋	NOUN	_	Case=Tem	3	obj	_	Gloss=[book-name]|SpaceAfter=No
+
+# sent_id = 49
+# text = 此小年也
+# These are instances of a short term of life. 
+# 这是寿命短的
+1	此	此	PRON	_	PronType=Dem	3	nsubj	_	Gloss=this|SpaceAfter=No
+2	小	小	ADJ	_	_	3	amod	_	Gloss=small|SpaceAfter=No
+3	年	年	NOUN	_	Case=Tem	0	root	_	Gloss=year|SpaceAfter=No
+4	也	也	PART	_	_	3	discourse:sp	_	Gloss=[final-particle]|SpaceAfter=No
+
+# sent_id = 50
+# text = 楚之南有冥靈者
+# gloss = In the south of Chu there is the (tree) called Ming-ling,
+# 楚国的南方有一颗叫冥灵的大树
+1	楚	楚	PROPN	_	Case=Loc|NameType=Nat	3	nmod	_	Gloss=[country-name]|SpaceAfter=No
+2	之	之	SCONJ	_	_	1	case	_	Gloss='s|SpaceAfter=No
+3	南	南	NOUN	_	Case=Loc	4	nsubj	_	Gloss=south|SpaceAfter=No
+4	有	有	VERB	_	_	0	root	_	Gloss=have|SpaceAfter=No
+5	冥靈	冥靈	PROPN	_	_	6	nmod	_	Gloss=a kind of tree|SpaceAfter=No
+6	者	者	PART	_	_	4	obj	_	Gloss=that-which|SpaceAfter=No
+

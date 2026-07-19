@@ -31,8 +31,10 @@ module Nabu
     # CC BY-SA, Latin-ITTB CC BY-NC-SA, all three Old East Slavic treebanks
     # (Birchbark, RNC, Ruthenian) CC BY-SA 4.0, Old Irish DipSGG CC BY-NC-SA
     # 4.0 and DipWBG CC BY-SA 4.0 (P25-2), both Perseus treebanks CC BY-NC-SA
-    # 2.5 Generic (P31-6). The manifest declares the most restrictive class
-    # present (nc) so query/export filters never over-share.
+    # 2.5 Generic (P31-6), both Classical Chinese treebanks CC BY-SA 4.0 by
+    # LICENSE.txt (P32-0 — Kyoto's README metadata says PD, a recorded
+    # discrepancy; LICENSE.txt authoritative). The manifest declares the most
+    # restrictive class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
       # and in the urn; value = its upstream repo and ISO 639-3 language tag.
@@ -159,6 +161,36 @@ module Nabu
         "latin-perseus" => {
           repo: "https://github.com/UniversalDependencies/UD_Latin-Perseus",
           language: "lat"
+        },
+        # P32-0 (the Sino axis opens): the two Classical Chinese treebanks,
+        # treebanks thirteen and fourteen, language lzh — the library's first
+        # lzh occupants. classical-chinese-kyoto (Kyoto University, Yasuoka
+        # et al.) is 86,239 sentences / 433,169 words / 9,641 lemmas across
+        # 論語, 孟子, 禮記, 十八史略, 楚辭, 戰國策, 唐詩三百首 and three sutras
+        # (~42 MB of conllu — this ONE treebank dwarfs the rest of the ud
+        # source combined; see the sync-delta note in sources.yml).
+        # classical-chinese-tuecl (Tübingen) is the 100-sentence Zhuangzi
+        # 逍遥游 rider, test-set only (the DipWBG shape). No re-export guard
+        # concern: neither converts a source nabu syncs. No MWT/empty nodes
+        # in either corpus (character-per-word, no clitic fusion).
+        #
+        # LICENSE GATE PASSED at fixture time 2026-07-19, WITH A RECORDED
+        # DISCREPANCY: Kyoto's LICENSE.txt is verbatim the BY-SA grant ("The
+        # treebank is licensed under the Creative Commons License
+        # Attribution-ShareAlike 4.0 International") but its README
+        # machine-readable metadata says `License: PD` — LICENSE.txt is
+        # authoritative (the Ruthenian NOASSERTION precedent: the in-repo
+        # grant governs, and BY-SA is the conservative reading) → the P10-4
+        # per-document attribution override. TueCL's LICENSE.txt carries the
+        # SAME verbatim BY-SA 4.0 grant and its README agrees
+        # (`License: CC BY-SA 4.0`) → same override; source class stays nc.
+        "classical-chinese-kyoto" => {
+          repo: "https://github.com/UniversalDependencies/UD_Classical_Chinese-Kyoto",
+          language: "lzh", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        "classical-chinese-tuecl" => {
+          repo: "https://github.com/UniversalDependencies/UD_Classical_Chinese-TueCL",
+          language: "lzh", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

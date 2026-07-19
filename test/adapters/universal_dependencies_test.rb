@@ -18,6 +18,8 @@ class UniversalDependenciesTest < Minitest::Test
 
   EXPECTED_URNS = [
     "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50",
+    "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50",
+    "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50",
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
@@ -115,6 +117,25 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "lat", lat[:language]
   end
 
+  # --- registration pins (P32-0) -------------------------------------------
+  #
+  # The two Classical Chinese treebanks — the Sino axis's UD entry point.
+  # classical-chinese-kyoto (UD_Classical_Chinese-Kyoto) is the Kyoto
+  # University treebank: 86,239 sentences / 433,169 words across 論語, 孟子,
+  # 禮記, 十八史略, 楚辭, 戰國策, 唐詩三百首 and three sutras;
+  # classical-chinese-tuecl (UD_Classical_Chinese-TueCL) is the Tübingen
+  # 100-sentence Zhuangzi 逍遥游 rider, test-set only (the DipWBG shape).
+  # No re-export guard concern: neither converts a source nabu syncs.
+  def test_treebanks_registers_the_two_classical_chinese_treebanks
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    kyoto = treebanks.fetch("classical-chinese-kyoto")
+    assert_equal "https://github.com/UniversalDependencies/UD_Classical_Chinese-Kyoto", kyoto[:repo]
+    assert_equal "lzh", kyoto[:language]
+    tuecl = treebanks.fetch("classical-chinese-tuecl")
+    assert_equal "https://github.com/UniversalDependencies/UD_Classical_Chinese-TueCL", tuecl[:repo]
+    assert_equal "lzh", tuecl[:language]
+  end
+
   # --- per-treebank license override (P10-4; extended P25-2) ---------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
@@ -128,7 +149,14 @@ class UniversalDependenciesTest < Minitest::Test
   # P31-6: both Perseus treebanks are verbatim CC BY-NC-SA 2.5 Generic
   # (LICENSE.txt + README metadata agree) → NonCommercial → bare, no override
   # (the DipSGG posture).
-  OVERRIDE_SLUGS = %w[hittite-hittb old-east-slavic-birchbark old-east-slavic-rnc
+  # P32-0: both Classical Chinese treebanks carry the BY-SA 4.0 LICENSE.txt
+  # grant verbatim → attribution override. NB Kyoto's README metadata says
+  # `License: PD` — a real upstream discrepancy, recorded in the fixture
+  # README; LICENSE.txt is authoritative (the Ruthenian NOASSERTION
+  # precedent: the in-repo grant governs). TueCL's README agrees with its
+  # LICENSE.txt.
+  OVERRIDE_SLUGS = %w[classical-chinese-kyoto classical-chinese-tuecl hittite-hittb
+                      old-east-slavic-birchbark old-east-slavic-rnc
                       old-east-slavic-ruthenian old-irish-dipwbg].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
@@ -174,7 +202,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_twelve_files_sorted_by_urn
+  def test_discover_finds_exactly_fourteen_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -185,6 +213,8 @@ class UniversalDependenciesTest < Minitest::Test
 
     expected_languages = {
       "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50" => "grc",
+      "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50" => "lzh",
+      "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50" => "lzh",
       "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50" => "got",
       "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50" => "grc",
       "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50" => "hit",
@@ -263,6 +293,40 @@ class UniversalDependenciesTest < Minitest::Test
     mwt = lat.passages.find { |p| p.urn.end_with?(":phi0690.phi003.perseus-lat1.tb.xml@66") }
     refute_nil mwt, "the one MWT sentence of the head-50 must parse"
     assert_includes mwt.text, "animo mecum ante peregi"
+  end
+
+  # P32-0 round-trip on the two Classical Chinese fixtures. Neither test
+  # split contains any MWT range or empty node file-wide (see the fixture
+  # README — Classical Chinese is written character-per-word, no clitic
+  # fusion). TueCL's free-form Chinese working-note comments (`# ???…`,
+  # bare `# 北方的海里…` lines with no `=`) must ride through ignored —
+  # only sent_id/text/source are interpreted by the parser.
+  def test_parse_round_trips_the_classical_chinese_fixtures
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES)
+                     .select { |r| r.metadata["treebank"].start_with?("classical-chinese") }
+                     .to_h { |r| [r.metadata["treebank"], adapter.parse(r)] }
+
+    kyoto = by_slug.fetch("classical-chinese-kyoto")
+    assert_equal "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50", kyoto.urn
+    assert_equal 50, kyoto.size
+    assert_equal "lzh", kyoto.language
+    # The Analects opener (學而篇第一, sent KR1h0004_001_par1_3-7): 學而時習之
+    # "to learn and in time practise it" — the head-50 is one newdoc,
+    # KR1h0004_001 (論語 book 1).
+    opening = kyoto.passages.find { |p| p.urn.end_with?(":KR1h0004_001_par1_3-7") }
+    refute_nil opening, "the Analects 學而時習之 sentence must parse"
+    assert_equal "學而時習之", opening.text
+
+    tuecl = by_slug.fetch("classical-chinese-tuecl")
+    assert_equal "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50", tuecl.urn
+    assert_equal 50, tuecl.size
+    assert_equal "lzh", tuecl.language
+    # Zhuangzi 逍遥游 sentence 1: 北冥有魚 "In the Northern Ocean there is a
+    # fish" — its block carries a bare no-`=` Chinese comment line.
+    fish = tuecl.passages.first
+    assert_equal "#{tuecl.urn}:1", fish.urn
+    assert_equal "北冥有魚", fish.text
   end
 
   # --- lemma plumbing for the orv treebanks (P10-2) -----------------------
@@ -348,6 +412,22 @@ class UniversalDependenciesTest < Minitest::Test
     lat_row = lemmas.where(language: "lat", urn: lat_urn, lemma_raw: "ego").first
     refute_nil lat_row, "expected a passage_lemmas row for the lat lemma ego (MWT member)"
     assert_includes lat_row[:surface_forms], "me"
+
+    # P32-0: both Classical Chinese treebanks flow through the same unchanged
+    # plumbing — lzh becomes a lemma-indexed language (its first occupants:
+    # no other source mints lzh today). Readable rows: the Analects
+    # 學而時習之 verb lemma 學 "study" (Kyoto; lemma = surface, the
+    # character-per-word norm) and the Zhuangzi opener's 魚 "fish" (TueCL).
+    assert_operator lemmas.where(language: "lzh").count, :>, 0,
+                    "the Classical Chinese treebanks must contribute passage_lemmas rows"
+    kyoto_urn = "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50:KR1h0004_001_par1_3-7"
+    kyoto_row = lemmas.where(language: "lzh", urn: kyoto_urn, lemma_raw: "學").first
+    refute_nil kyoto_row, "expected a passage_lemmas row for the lzh lemma 學"
+    assert_includes kyoto_row[:surface_forms], "學"
+    tuecl_urn = "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50:1"
+    tuecl_row = lemmas.where(language: "lzh", urn: tuecl_urn, lemma_raw: "魚").first
+    refute_nil tuecl_row, "expected a passage_lemmas row for the lzh lemma 魚"
+    assert_includes tuecl_row[:surface_forms], "魚"
   ensure
     fulltext&.disconnect
   end
@@ -438,10 +518,11 @@ class UniversalDependenciesTest < Minitest::Test
       adapter.fetch(workdir)
 
       # First repo gains a file; the LAST THREE repos each lose their only
-      # treebank file (3 of #{slugs.size} ingestible files = 25% > 20% → trip;
-      # 3 is still the MINIMUM tripping count at twelve treebanks — two
-      # deletions are 2/#{slugs.size} = 16.7%, below the breaker now that the
-      # set has grown to twelve with the Perseus pair, P31-6).
+      # treebank file (3 of #{slugs.size} ingestible files = 21.4% > 20% →
+      # trip; 3 is still the MINIMUM tripping count at fourteen treebanks —
+      # two deletions are 2/#{slugs.size} = 14.3%, below the breaker now that
+      # the set has grown to fourteen with the Classical Chinese pair, P32-0.
+      # Re-derived, not weakened: 3 > 0.2 × 14 = 2.8 still holds).
       first = slugs.first
       doomed = slugs.last(3)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
