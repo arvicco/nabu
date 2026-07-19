@@ -13,6 +13,15 @@ require "fileutils"
 # mid-line (the page break falls inside a print line), ¶ terminating each
 # print line, `**` org headings as navigation (no ¶ — not page text),
 # `# src:` alignment comments, `&KR0809;`-style gaiji refs verbatim.
+#
+# P33-1 (KR2 wave-2 census, seven KR2 + three KR5 repos probed 2026-07-20)
+# adds two REAL shapes the wave-1 probe set missed, both attested in the
+# fixture set: re-asserted anchors for the still-open page (pervasive in
+# SBCK 大清一統志 — 1,507 instances, every one the OPEN page; a closed
+# page's anchor stays a loud duplicate) and the text's own edition-VOLUME
+# anchors `<pb:KR2a0038_WYG_WYG0297-0606c>` (alpha-prefixed volume ordinal,
+# a/b/c print registers) interleaved mid-page in the WYG 明史 — annotated,
+# never page text, never a page boundary.
 class MandokuParserTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/kanripo", __dir__)
 
@@ -129,6 +138,59 @@ class MandokuParserTest < Minitest::Test
     refute page.annotations.key?("gaiji")
     refute page.annotations.key?("headings")
     refute page.annotations.key?("src_refs")
+  end
+
+  # -- KR2 wave-2 shapes (P33-1 census) --------------------------------------
+
+  def test_reasserted_anchor_for_the_open_page_is_a_no_op
+    # 明史 juan 46 re-asserts <pb:KR2a0038_WYG_046-10b> mid-page after an
+    # interleaved edition-volume anchor: one page, text spanning the
+    # re-assertion, no duplicate error (the 大清一統志 shows the same shape
+    # 1,507 times — always the OPEN page).
+    document = parse("KR2a0038")
+
+    pages = document.passages.select { |passage| passage.urn.end_with?(":046:10b") }
+    assert_equal 1, pages.size
+    assert_includes pages.first.text, "祿勸州"   # before the re-assertion
+    assert_includes pages.first.text, "鎮沅府"   # after the re-assertion
+  end
+
+  def test_edition_volume_anchors_are_annotations_not_text_and_not_pages
+    # <pb:KR2a0038_WYG_WYG0297-0606c>: the text's own id + edition with an
+    # ALPHA-prefixed volume ordinal and an a/b/c print register — the WYG
+    # print edition's volume pagination riding inside the leaf-side page.
+    document = parse("KR2a0038")
+
+    open_page = document.passages.find { |passage| passage.urn.end_with?(":046:10b") }
+    assert_equal ["KR2a0038_WYG_WYG0297-0606c"], open_page.annotations["edition_pages"]
+    fifteen_a = document.passages.find { |passage| passage.urn.end_with?(":046:15a") }
+    assert_equal ["KR2a0038_WYG_WYG0297-0609b"], fifteen_a.annotations["edition_pages"]
+    refute_includes open_page.text, "<pb:"
+    assert open_page.text.include?("西距府二十\n里"), "mid-line text around the volume anchor must survive"
+    assert(document.passages.none? { |passage| passage.urn.include?("WYG0297") })
+  end
+
+  def test_tls_base_edition_sections_parse_at_the_anchor_grain
+    # 史記 (BASEEDITION tls) files are SECTION ordinals, not juan (_201 is
+    # 表 part 1; its header says JUAN 1): the anchor's NNN still matches the
+    # file suffix and the urn takes the digits verbatim.
+    document = parse("KR2a0001")
+
+    assert_equal "史記", document.title
+    assert_equal "tls", document.metadata["edition"]
+    assert_equal 8, document.size
+    assert_equal "urn:nabu:kanripo:KR2a0001:201:1a", document.passages.first.urn
+    assert_includes document.passages.first.annotations["headings"],
+                    { "level" => 2, "text" => "2 表" }
+    assert_includes document.passages.first.text, "太史公曰："
+  end
+
+  def test_wyg_biography_fixture_parses_whole
+    document = parse("KR2g0007")
+
+    assert_equal "杜工部年譜", document.title
+    assert_equal "WYG", document.metadata["edition"]
+    assert_equal 25, document.size
   end
 
   # -- file walking ---------------------------------------------------------
