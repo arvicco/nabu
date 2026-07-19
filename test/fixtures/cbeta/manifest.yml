@@ -1,0 +1,34 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Whole files are byte-identical to upstream master 2b8ab8d ("CBETA
+# 2026.R1", retrieved 2026-07-20). T01n0001-xu.xml is a documented TRIM
+# (whole: false) — a fresh GET returns the full 2.9 MB file, so it is
+# fetched for URL-liveness only; re-apply the README trim after any
+# refresh. adapter_test is null: the cbeta adapter test asserts trimmed
+# passage sets an untrimmed upstream file would false-fail (the
+# ud/perseus/sarit reason).
+source: cbeta
+adapter_test: null
+retrieved: 2026-07-20
+files:
+  - path: T/T85/T85n2884.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T85/T85n2884.xml
+    whole: true
+    trim: none (complete short text, copied whole; gaiji + witness list + taisho-notes back matter)
+  - path: T/T01/T01n0001-xu.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T01/T01n0001.xml
+    whole: false
+    trim: teiHeader + body through lg lgT01p0001c0301 (lb 0001a01..0001c12) + back trimmed to 6 app + 1 cb:tt; 2.9 MB -> 42 KB
+  - path: X/X01/X01n0001.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/X/X01/X01n0001.xml
+    whole: true
+    trim: none (complete short text, copied whole; R150 witness lb stream + inline notes)
+  - path: X/X55/X55n0899.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/X/X55/X55n0899.xml
+    whole: true
+    trim: none (complete short text, copied whole; ed-before-n attribute order + cb:mulu TOC entries)
+  - path: canons.json
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/canons.json
+    whole: true
+    trim: none (upstream's canon registry, copied whole)
