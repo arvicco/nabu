@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/tls.rnc" type="application/relax-ng-compact-syntax"?>
+<div xmlns="http://www.tei-c.org/ns/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tls="http://hxwd.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" type="concept" xml:id="uuid-c4a2e239-0e1f-4a1b-8b9e-02a7fc557e6e">
+<head>TWO</head>
+    <list type="translations">
+        <item xml:lang="zh">兩個</item>
+        <item xml:lang="och">二</item>
+    </list>
+<div type="definition">
+<p>The NUMBER which is the BIGGER successor of ONE.</p>
+    </div>
+<div type="notes">
+<div type="old-chinese-criteria">
+<p>1. The general word is èr 二, a word which shows an extraordinary semantic and syntactic flexibility.</p>
+<p>2. Liǎng 兩 is common when the reference is to a natural pair, but there are also many cases where the definite reference is merely to an aforementioned couple of items, and there are even a good number of cases where the reference is to any indefinite number of two things. Also the word regularly means "both the objects" when it precedes a transitive verb, and the word is never used as an ordinal number. Moreover, in complex numbers the word is not used.</p>
+<p>3. O ㄆ偶 and ǒu 耦 refers to a man-made or artificial pair or pairing.</p>
+<p>4. Zài 再 is mostly adverbial and refers to an action being performed twice.</p>
+<p>5. Chóng 重 is mostly adnominal and refers to something being two-layered.</p>
+<p>6. Bèi 倍 "double" refers to twice the amount of something.</p>
+        </div>
+<div type="modern-chinese-criteria">
+<p>二</p>
+<p>兩</p>
+<p>倆</p>
+<p>對兒</p>
+        </div>
+    </div>
+<div type="pointers">
+        <list type="taxonymy">
+<item>
+                <ref target="#uuid-3762c04a-9ca0-4fd6-b04e-2e24b1f91682">DIVIDE</ref>
+            </item>
+        </list>
+    <list type="hypernymy">
+            <item>
+                <ref target="#uuid-dd1c8de7-8201-4782-b6e3-960df290eae7">NUMBER</ref>
+            </item>
+        </list>
+    </div>
+<div type="source-references">
+        <listBibl>
+<bibl>
+                <ref target="#uuid-ab831347-9626-498d-aa1e-eb43eae72d05">DOEDERLEIN 1840</ref>
+<title>Lateinische Synonyme und Etymologien</title>
+                <note>
+<p>DOUBLE</p>
+<p>duplex refers to double numbers of something as a distinct abstract articulated quantity.</p>
+<p>duplum refers to double amounts of some stuff as a continuous quantity.</p>
+<p>geminus refers to that which is paired or comes in pairs of different items.</p>
+<p>duplicatus refers to that which consists of a pair of copies of the same thing.</p>
+<p/>
+<p>dupliciter refers to different manners or double purpose, adverbially: "in two different ways".</p>
+<p>bifariam refers to different places, adverbially: "in both places"</p>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-8a7b3e79-a326-45b5-8419-1ea3245117f8">HANFEI TONGYI 2004</ref>
+<title>韓非子同義詞研究</title>
+                <biblScope unit="page">364</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-ebe4710d-bf7c-496a-8815-9e6f1c15c1a9">WANG LI 2000</ref>
+<title>王力古漢語字典</title>
+                <biblScope unit="page">58</biblScope>
+                <note>
+<p>1. The conventional idea that lia3ng 兩 must refer to natural pairs, repeated in WL, is not borne out by the facts.  Our analysis shows a wide variety of cases that are clear and neat exceptions to this traditional rule. </p>
+<p>2. WL does not mention the important use of lia3ng 兩 as a dual object quantifier. Other unmentioned syntactic differences abound, and interestingly lia3ng 兩 cannot be used in classifier constructions. Indeed, most of the peculiarities of lia3ng 兩 are restrictions with respect to a wide range of current uses of e4r 二.</p>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-b425a52b-7c3a-4b26-a4a5-8c5a55eaf19b">GRACE ZHANG 2010</ref>
+<title>Using Chinese Synonyms</title>
+                <biblScope unit="page">107</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-bbf731db-f5e8-4da6-9d88-b10c69b707ad">PILLON 1850</ref>
+<title>Handbook of Greek Synonymes, from the French of M. Alex. Pillon, Librarian of the Bibliothèque Royale , at Paris, and one of the editors of the new edition of Plaché's Dictionnaire Grec-Français, edited, with notes, by the Rev. Thomas Kerchever Arnold, M.A. Rector of Lyndon, and late fellow of Trinity College, Cambridge</title>
+                <biblScope unit="page">no.181</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-ecfe1810-16d7-46f0-901d-6fc0c0808a34">HONG CHENGYU 2009</ref>
+<title>古漢語常用詞同義詞詞典</title>
+                <biblScope unit="page">281</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+<bibl>
+                <ref target="#uuid-e8e00c8c-6f7d-429d-82a5-84721abe7cc7">T.W.HARBSMEIER 2004</ref>
+<title>A New Dictionary of Classical Greek Synonyms</title>
+                <biblScope unit="page">NO.194</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+        </listBibl>
+    </div>
+<div type="words">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
