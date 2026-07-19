@@ -11,7 +11,9 @@ openly licensed digital corpora of antiquity — Homer and the Greek canon, the
 Latin classics, the documentary papyri of Egypt, the Latin inscriptions of
 the Roman empire, the Sanskrit tradition and the Pali canon, cuneiform
 tablets, three millennia of Egyptian sentences, the Masoretic Hebrew Bible
-with its Targums, the inscriptions of pre-Roman Italy and Sicily, the New
+with its Targums and Peshitta, the Hittite tablet corpus, the universal
+CDLI catalog of cuneiform, the Ugaritic tablets, a millennium of Syriac,
+the inscriptions of pre-Roman Italy and Sicily, the New
 Testament in up to fifteen parallel witnesses, the
 complete corpus of Old English poetry — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is
@@ -30,13 +32,17 @@ draws from.
 
 ## The holdings, in brief
 
-As of **17 July 2026**, the catalog records **172,189 documents** comprising
-**4,308,814 passages** in some two dozen ancient languages — from
+As of **19 July 2026**, the catalog records **737,299 documents** comprising
+**11,357,320 passages** in nearly a hundred language codes — from
 proto-cuneiform tablets of the late fourth millennium BCE to
-nineteenth-century Slovenian, with Gaulish inscriptions and Irish ogham
-stones the newest arrivals — together with **633,137 dictionary entries**
-on the reference shelf and over **2.85 million gold-standard lemma
-annotations in seventeen languages**. All figures on this site are read
+nineteenth-century Slovenian, with the Ancient Near East the newest
+arrival: the Hittite corpus, the CDLI catalog of over 350,000 cuneiform
+artifacts, the eBL Fragmentarium, Ugaritic, Syriac, and the Sumerian
+literary canon in two scholarly editions — together with **711,376
+dictionary entries** on the reference shelf and over **12.4 million
+gold-standard lemma annotations in twenty-two languages** (a further 8.0
+million machine-suggested annotations are carried at an honestly labelled
+silver tier). All figures on this site are read
 from the live catalog, never estimated, and carry the date on which they
 were read.
 
@@ -117,6 +123,6 @@ surface carries its license class.
   organized by scholarly task.
 - [Examples]({{ '/examples/' | relative_url }}) — worked walk-throughs for a
   classicist, a papyrologist, a slavist, a comparativist, an assyriologist,
-  and a biblical scholar.
+  a hittitologist, and a biblical scholar.
 - [About]({{ '/about/' | relative_url }}) — what this project is, who it is
   for, and how it is built.

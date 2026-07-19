@@ -36,7 +36,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["cuc"]
       refute_nil entry, "cuc must be registered in config/sources.yml"
-      refute entry.enabled, "enabled: false until the owner-fired first real sync (checklist §6)"
+      assert entry.enabled, "flipped 2026-07-19 (owner sign-off: rebuild verified, all P31 sources on)"
       assert_equal "manual", entry.sync_policy
       assert_equal "cuc", entry.adapter_class.manifest.id
     end

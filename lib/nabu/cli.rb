@@ -4789,13 +4789,30 @@ module Nabu
         ledger = open_or_create_ledger(config)
         report = Nabu::Health::RemoteProbe.new(
           registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
-        ).run
+        ).run(progress: remote_health_ticker)
+        $stderr.print("\r\e[K") if $stderr.tty? # clear the ticker before the table
         print_remote_health(report)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
       ensure
         ledger&.disconnect
+      end
+
+      # The transient probe ticker (P31 rider — the same owner ask as the
+      # P28-5 rebuild progress): on a TTY, one stderr line naming the source
+      # currently on the wire, overwritten in place and cleared before the
+      # table prints. Non-TTY prints nothing — the table already lists every
+      # source, and pipes stay clean (compact-output convention).
+      def remote_health_ticker
+        return nil unless $stderr.tty?
+
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        lambda do |slug, index, total|
+          elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+          suffix = elapsed >= 1 ? format(" %ds", elapsed) : ""
+          $stderr.print("\r\e[K  probing #{index}/#{total} #{slug}…#{suffix}")
+        end
       end
 
       # --backfill-pins (P15-7): record ledger pins for sources synced before

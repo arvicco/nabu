@@ -1,22 +1,16 @@
 # The Library — content review
 
-**As of 2026-07-17** (post Phases 20–25). Live totals:
-**172,189 documents / 4,308,814 passages** across the **38 registered,
-synced sources** — 25 corpus sources carrying documents (the
-`local-library` shelf now among them, 20 owner-ingested docs — §8i) + 10
-reference sources carrying dictionary entries only (`lexica`,
-`bosworth-toller`, `mw`, `wiktionary-cu`, `wiktionary-recon`, `sl-lexica`,
-`starling`, and the etymological trio `iecor`/`liv`/`edl`) + 3
-canonical-memory shelves (`local-language` 199 dossiers, `local-source`
-37 source dossiers, `local-notes` — empty until the owner's first
-annotations). The reference shelf holds **633,137 dictionary entries**
-across twenty-seven dictionary shelves (§8c, §8h, §8j, §8k). The gold
-lemma layer stood at **2,852,069 rows in 15 languages** at the 2026-07-14
-census; since then the CorPH sync added the first Old Irish (`sga`) gold
-lemmas and damaskini its Balkan Slavic rows (Bulgarian the seventeenth
-gold language) — a fresh `passage_lemmas` row census is owed at the next
-full review. The code-per-language map lives in
-[languages.md](languages.md).
+**As of 2026-07-19** (post Phases 26–31, the pre-release census). Live
+totals: **737,299 documents / 11,357,320 passages** across the **69
+registered, synced sources**. The reference shelf holds **711,376
+dictionary entries** across thirty-nine dictionary shelves (§8c, §8h,
+§8j, §8k, §8m, §8o, §8q). The lemma layer, censused fresh this date:
+**12,474,060 gold rows in 22 languages** plus **8,000,317 silver rows in
+8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
+upstream-undisambiguated, always labelled). Canonical-memory shelves:
+`local-language` 213 dossiers, `local-source` 73 source dossiers,
+`local-notes` first 2 notes, `local-library` 20 owner-ingested docs
+(§8i). The code-per-language map lives in [languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 db/catalog.sqlite3 "PRAGMA query_only=ON; …"` — the WAL-safe
@@ -532,6 +526,24 @@ whole Tanakh; Targum-beside-MT reading; clause-level syntax queries; the
 Scrolls beside the codices for textual criticism; the epigraphic record
 of the same land and centuries. Rabbinic literature proper is a future
 campaign — the Targums are its first bridgehead.
+
+## 8r. The Ancient Near East (`tlhdig`, `cdli`, `ebl`, `cuc`, `peshitta`, `syriac-corpus`, `etcsl` + the `oracc`/`ud` expansions; synced live 2026-07-19, flipped 2026-07-19)
+
+| | |
+|---|---|
+| **Category** | The cuneiform world beyond ORACC, plus the Iranian flank and the Syriac millennium — Phase 31 |
+| **Language** | Hittite (`hit`) at corpus scale, Sumerian/Akkadian mass (`sux`/`akk`), Ugaritic (`uga`, new axis language), Classical Syriac (`syc`), Old Persian (`peo`) and Elamite (`elx`) via the Achaemenid trilinguals, Eblaite (`xeb`), proto-cuneiform (`qpc`) and proto-Elamite at CDLI |
+| **Size** | `tlhdig`: 23,486 Hittite manuscripts / 402,195 lines — >98% of published fragments, candidate morphology at silver (72.6% disambiguated mints lemmas). `cdli`: 353,156 artifacts / 2,186,961 passages — 135,201 C-ATF transliterations + the whole catalog as metadata-only documents with period/provenience/collection axes. `ebl`: 23,288 Fragmentarium fragments / 325,728 lines with inline English, 79.9% carrying CDLI cross-links (nc pending the license-discrepancy email). `oracc` grew 33→38 projects to 104,722 docs / 1,588,133 passages (ario + the four ePSD2 corpora incl. the Ur III administrative mass). `cuc`: 279 KTU tablets / 27,770 words with a per-sign cuneiform lane (nc). `peshitta`: 65 books / 31,341 verses (nc). `syriac-corpus`: 632 TEI documents / 134,726 passages (CC BY per file). `etcsl`: 775 documents / 42,577 passages — 394 hand-lemmatized composites + 381 English prose siblings (nc). `ud` grew to 12 treebanks (+HitTB gold Hittite, +the two Perseus conversions) |
+| **Metadata** | The `ot` hub runs seven-legged (the Peshitta the Syriac leg, versification measured Masoretic); the CDLI date axis (329,948 period-parsed rows) stretches the library from Uruk IV to the Achaemenids; eBL→CDLI and ETCSL↔ePSD2 reference edges cross-link the shelf; the starling Anatolian reflex columns light against TLHdig (205/306 HITT keys join) |
+
+**Research uses:** Hittitology at fragment scale with honest silver
+labelling; Assyriology across the whole catalogued artifact space —
+proto-cuneiform and proto-Elamite have their only machine-readable home
+here; Sumerian literature in two deliberately unmerged scholarly
+editions; Ugaritic epic beside the Hebrew shelf; the Peshitta beside six
+other OT witnesses; a millennium of Syriac prose. The two silver-tier
+corpora never contaminate gold lemma search — `--gold-only` excludes
+them, and every hit carries its tier label.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

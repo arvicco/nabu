@@ -155,10 +155,10 @@ class RemoteProbeTest < Minitest::Test
     )
   end
 
-  def probe(registry, shell, canonical_dir: nil)
+  def probe(registry, shell, canonical_dir: nil, progress: nil)
     Nabu::Health::RemoteProbe.new(
       registry: registry, ledger: @ledger, shell: shell, canonical_dir: canonical_dir
-    ).run
+    ).run(progress: progress)
   end
 
   # A shell that must never be consulted — the HTTP-zip path does no
@@ -888,6 +888,20 @@ class RemoteProbeTest < Minitest::Test
       assert_match(/local tree missing/, row.liveness.detail)
       assert_equal :local, row.drift
     end
+  end
+
+  # P31 rider (owner: `health --remote` now runs long enough to justify a
+  # progress print-out): run yields each source to the injected progress
+  # callback BEFORE probing it — (slug, index 1-based, total) in registry
+  # order — so the CLI can name the source currently on the wire. No
+  # callback → no calls, the library stays print-free either way.
+  def test_run_reports_progress_per_source_in_registry_order
+    shell = FakeShell.new(GITHUB_URL => "abc123\tHEAD\n", NONGITHUB_URL => "def456\tHEAD\n")
+    seen = []
+    probe(registry_of(["one", "ProbeGithubAdapter", true], ["two", "ProbeNonGithubAdapter", true]),
+          shell, progress: ->(slug, index, total) { seen << [slug, index, total] })
+
+    assert_equal [["one", 1, 2], ["two", 2, 2]], seen
   end
 
   # A NON-local-policy source whose adapter declares no upstream repos is a
