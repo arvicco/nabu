@@ -338,6 +338,8 @@ module Nabu
 
       def probe_git_source(entry)
         urls = entry.adapter_class.upstream_repo_urls
+        return no_upstream_health(entry) if urls.empty?
+
         pins = pins_for(entry.slug)
         probes = urls.map { |url| probe_repo(url) }
         multi = probes.size > 1
@@ -348,6 +350,22 @@ module Nabu
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,
           license: source_license(entry) { license_status(probes, pins, multi: multi) }
+        )
+      end
+
+      # A non-local-policy entry whose adapter declares no upstream repos is a
+      # registration bug (the P24-1 local-notes slip: a local shelf missing
+      # `sync_policy: local` falls through to this probe). Degrade to an
+      # honest broken row naming the likely cause — never crash the command.
+      def no_upstream_health(entry)
+        SourceHealth.new(
+          slug: entry.slug, enabled: entry.enabled, upstream: "(none declared)",
+          liveness: Liveness.new(
+            status: :gone,
+            detail: "no upstream repos declared — local shelf missing sync_policy: local?"
+          ),
+          drift: :unknown, drift_detail: nil,
+          license: unchecked("no upstream to read")
         )
       end
 
