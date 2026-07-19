@@ -73,8 +73,10 @@ module Nabu
     # Adapter.reference_producer — "library" for the P19-4 manifests, the
     # source's own name for the P25-1 concordance sources). Supersedes the
     # prior (producer, scope) run atomically — deleted assertions drop
-    # their edges.
-    def run(slug, producer: @producer)
+    # their edges. +workdir+ rides the P32-6 producer seam (SyncRunner
+    # passes the source's canonical dir); this producer derives everything
+    # from the catalog and ignores it.
+    def run(slug, producer: @producer, workdir: nil) # rubocop:disable Lint/UnusedMethodArgument
       counts = { inserted: 0, refreshed: 0, codes: 0 }
       run_id = superseded = nil
       @journal.transaction do

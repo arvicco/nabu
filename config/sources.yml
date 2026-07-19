@@ -757,8 +757,16 @@ suttacentral:
   # 1 Public Domain root + 1 CC BY-SA 3.0 — Ānandajoti's English pdhp,
   # whose -en documents carry license_override: attribution, P10-4);
   # the legacy NC-ND html_text layer (separate sc-data repo) is EXCLUDED
-  # and never fetched. Live upstream, but a ~350 MB pull is an owner
-  # decision → manual.
+  # and never fetched — EXCEPT its parallels graph (P32-6): fetch stage 2
+  # lands sc-data's relationship/parallels.json (commit-pinned raw URL,
+  # sha256-verified; SuttaCentral declares the parallels reference data
+  # non-copyrightable, and its original material CC0) beside the clone,
+  # and the suttacentral producer refreshes ~195k document-grain
+  # kind=reference edges after every sync. The graph refresh is
+  # OWNER-FIRED with the ordinary sync — a newer graph means bumping
+  # PARALLELS_COMMIT + PARALLELS_SHA256 in the adapter (a parse-only sync
+  # without the fetched file leaves standing edges untouched). Live
+  # upstream, but a ~350 MB pull is an owner decision → manual.
   sync_policy: manual
   # Aligned English rides the SAME segment ids (the ORACC precedent):
   # -en siblings from translation/en/<translator>/, translator-priority

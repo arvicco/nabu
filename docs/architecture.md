@@ -984,6 +984,20 @@ journal's own forward-only track: nullable, in-place, zero data loss):
 meet under a Slavic witness reads as a borrowing (§12). Scope = the work id;
 common-word suppression stays on (`--all` lifts it, recorded in params_json).
 
+**Reference producers (#4–#7).** The sync-driven kind=`reference` lane
+(each documented in its class comment): #4 `LibraryReferences` (P19-4, the
+manifests' `related:` urns — also instantiated under a source's own
+producer name for the concordance adapters, P25-1), #5
+`CorphDilReferences` (P25-0, token DIL ids), #6 `CclEtymologies` (P28-3,
+kind=etymology), and #7 `SuttacentralParallels` (P32-6, the sc-data
+parallels graph — 195,287 document-grain edges expanded per upstream's own
+loader semantics). SyncRunner re-runs the adapter's declared producer
+(`Adapter.reference_producer`) after every load of a `reference_edges?`
+source, passing the source's canonical workdir — the seam for the one
+producer whose input is a canonical FILE (read-only, like the loader)
+rather than catalog rows; #7 without its fetched graph file is a no-op
+that supersedes nothing, so standing edges survive parse-only syncs.
+
 **Read surface.** `nabu links <urn>` — edges BOTH directions grouped by
 kind, each counterpart re-resolved against the *current* catalog by urn
 (title/language/license; a counterpart a rebuild dropped reads "(not in

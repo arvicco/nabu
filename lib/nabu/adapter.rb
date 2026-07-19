@@ -138,9 +138,13 @@ module Nabu
     def self.reference_edges? = false
 
     # The producer SyncRunner runs for a reference_edges? source (P25-0):
-    # anything with #run(slug) returning a LibraryReferences::Result-shaped
-    # value. Default: the P19-4 manifest-related: producer; an adapter whose
-    # reference edges come from elsewhere (corph's token DIL ids) overrides.
+    # anything with #run(slug, workdir:) returning a
+    # LibraryReferences::Result-shaped value (+workdir+ is the source's
+    # canonical dir — for the producer whose input is a canonical file, P32-6;
+    # catalog-derived producers ignore it). Default: the P19-4
+    # manifest-related: producer; an adapter whose reference edges come from
+    # elsewhere (corph's token DIL ids, suttacentral's parallels graph)
+    # overrides.
     def self.reference_producer(catalog:, journal:)
       LibraryReferences.new(catalog: catalog, journal: journal)
     end
