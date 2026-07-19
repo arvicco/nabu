@@ -67,6 +67,17 @@ ud:
   # class stays nc). EXPECTED SYNC DELTA at the next owner-fired
   # `bin/nabu sync ud` (no per-treebank enablement exists): +1 repo clone,
   # +1 doc / 136 passages, hit joins the lemma-indexed languages.
+  # P31-6 (2026-07-19): TREEBANKS grew to twelve — ancient-greek-perseus +
+  # latin-perseus (UD conversions of the native Perseus AGDT/LDT v2.1,
+  # 02-sources row 17's UD half; both verbatim CC BY-NC-SA 2.5 Generic →
+  # ride the source nc class bare, no override). EXPECTED SYNC DELTA at the
+  # next owner-fired `bin/nabu sync ud`: +2 repo clones; docs at UD's
+  # one-doc-per-treebank-split grain — UD_Ancient_Greek-Perseus ships
+  # train/dev/test = +3 docs (censused 2026-07-19: 13,919 sentences /
+  # 202,989 words), UD_Latin-Perseus ships train/test only, NO dev split =
+  # +2 docs (censused: 2,273 sentences / 29,223 words); so +5 docs /
+  # +16,192 passages total, grc/lat lemma lanes gain treebank-gold rows
+  # (no new language).
 
 proiel:
   adapter: Nabu::Adapters::Proiel
