@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module Nabu
   module Query
     # `nabu show URN --parallel [LANG]` (P7-4, span-grouped P8-1b): resolve a
@@ -76,7 +78,11 @@ module Nabu
     # an inspection surface (see Show's header for the rationale).
     class Parallel
       # One side's passage: its citation suffix, urn, text, withdrawn flag.
-      Line = Data.define(:suffix, :urn, :text, :withdrawn)
+      # +anchor+ is the suffix this line aligns AT when it differs from its
+      # own citation — upstream's "corresp" annotation on prose-paragraph
+      # translations (ETCSL P31-5: p1 anchors at :A.1). nil = anchor by own
+      # suffix, the P8-1b default.
+      Line = Data.define(:suffix, :urn, :text, :withdrawn, :anchor)
 
       # One aligned group. +kind+ is one of:
       #   :pair        1:1 verse — a single original whose suffix == anchor,
@@ -181,6 +187,13 @@ module Nabu
       ITANT_DOCUMENT = /\A(?<work>urn:nabu:itant:[^:]+?)(?:-(?:eng|ita|dipl))?\z/
       private_constant :ITANT_DOCUMENT
 
+      # ETCSL composites and their -en prose-translation siblings (P31-5; the
+      # tail is the composition number, dots inside one colon segment). The
+      # journaled P30-7 chain follow-up, landed on the owner's first-sync
+      # repro 2026-07-19.
+      ETCSL_DOCUMENT = /\A(?<work>urn:nabu:etcsl:[^:]+?)(?:-en)?\z/
+      private_constant :ETCSL_DOCUMENT
+
       def initialize(catalog:)
         @catalog = catalog
       end
@@ -266,7 +279,7 @@ module Nabu
                        urn.match(DAMASKINI_DOCUMENT) || urn.match(SUTTACENTRAL_DOCUMENT) ||
                        urn.match(TLA_HF_DOCUMENT) || urn.match(AES_DOCUMENT) ||
                        urn.match(RIIG_DOCUMENT) || urn.match(OPEN_ETRUSCAN_DOCUMENT) ||
-                       urn.match(ITANT_DOCUMENT))
+                       urn.match(ITANT_DOCUMENT) || urn.match(ETCSL_DOCUMENT))
           [match[:work], @catalog[:documents].where(
             Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
           )]
@@ -311,14 +324,24 @@ module Nabu
         groups
       end
 
-      # The translation anchors (suffix present in the original), each carrying
-      # its original position, translation index, translation Line, and the
-      # original Lines it owns (its position up to the next anchor's). Ordered
-      # by original position so ownership intervals partition the original.
+      # The translation anchors (anchor suffix present in the original), each
+      # carrying its original position, translation index, translation Line,
+      # and the original Lines it owns (its position up to the next
+      # anchor's). A line's anchor suffix is its own citation, or its
+      # "corresp" annotation when upstream aligns prose against lines (the
+      # ETCSL shape). Duplicate anchors at one position keep the first in
+      # translation order — the rest fall one-sided rather than crash on an
+      # empty ownership slice. Ordered by original position so ownership
+      # intervals partition the original.
       def anchor_slices(translation, original, position)
+        seen = {}
         anchors = translation.each_with_index.filter_map do |line, ti|
-          pos = position[line.suffix]
-          { suffix: line.suffix, line: line, pos: pos, ti: ti } if pos
+          key = line.anchor || line.suffix
+          pos = position[key]
+          next if pos.nil? || seen[pos]
+
+          seen[pos] = true
+          { suffix: key, line: line, pos: pos, ti: ti }
         end
         anchors.sort_by! { |anchor| anchor.fetch(:pos) }
         anchors.each_with_index do |anchor, k|
@@ -396,10 +419,12 @@ module Nabu
         @catalog[:passages]
           .where(document_id: document.fetch(:id))
           .order(:sequence)
-          .select(:urn, :text, :withdrawn)
+          .select(:urn, :text, :withdrawn, :annotations_json)
           .map do |row|
+            corresp = JSON.parse(row[:annotations_json] || "{}")["corresp"]
             Line.new(suffix: row.fetch(:urn).delete_prefix(urn), urn: row.fetch(:urn),
-                     text: row.fetch(:text), withdrawn: [true, 1].include?(row.fetch(:withdrawn)))
+                     text: row.fetch(:text), withdrawn: [true, 1].include?(row.fetch(:withdrawn)),
+                     anchor: corresp && ":#{corresp}")
           end
       end
     end
