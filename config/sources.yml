@@ -695,10 +695,20 @@ suttacentral:
                    # CLAUDE.md checklist §6: eyeball
                    # nabu show urn:nabu:suttacentral:mn1:1.1 --parallel,
                    # a dhp verse and 5 random passages, then flip).
+                   # P32-1 lzh scope flip (2026-07-19): the NEXT parse mints
+                   # +272 lzh root docs (≈38,644 passages — 38,646 segments,
+                   # 2 empty skipped by rule) + 54 patton -en siblings
+                   # (≈4,032 passages) = +326 docs / ≈+42,676 passages over
+                   # the live counts. ZERO FETCH — root/lzh/sct is already
+                   # in the synced tree; land the delta with
+                   # `bin/nabu sync suttacentral --parse-only`.
   # SuttaCentral bilara-data, branch `published` (P26-1) — the whole
   # Tipiṭaka in roman-script Pali (root/pli/ms, Mahāsaṅgīti; 7,289 files)
-  # plus the Patna Dhammapada (root/pra/pts, `pra`). License read PER
-  # PUBLICATION from the repo's own _publication.json (censused 138 CC0 +
+  # plus the Patna Dhammapada (root/pra/pts, `pra`) plus, since P32-1,
+  # the Literary Chinese Āgamas (root/lzh/sct, "SuttaCentral Taisho",
+  # 272 files, `lzh` — scpub39 CC0; patton's English sa/ma siblings
+  # scpub20/scpub35 CC0). License read PER PUBLICATION from the repo's
+  # own _publication.json (censused 138 CC0 +
   # 1 Public Domain root + 1 CC BY-SA 3.0 — Ānandajoti's English pdhp,
   # whose -en documents carry license_override: attribution, P10-4);
   # the legacy NC-ND html_text layer (separate sc-data repo) is EXCLUDED
@@ -707,7 +717,8 @@ suttacentral:
   sync_policy: manual
   # Aligned English rides the SAME segment ids (the ORACC precedent):
   # -en siblings from translation/en/<translator>/, translator-priority
-  # pick on the 104 double-covered stems, orphans skipped by rule.
+  # pick on the 104 double-covered stems, orphans skipped by rule
+  # (125 orphan stems since the lzh flip un-orphaned patton's 54).
   translations: true
 
 oshb:
