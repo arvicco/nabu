@@ -4759,7 +4759,7 @@ module Nabu
               "isicily #{result.axes.isicily}, " \
               "open-etruscan #{result.axes.open_etruscan}, " \
               "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
-              "iip #{result.axes.iip})"
+              "iip #{result.axes.iip}, cdli #{result.axes.cdli})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

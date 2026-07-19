@@ -52,12 +52,15 @@ module Nabu
       # and lexlep/tir undated+invalid (P29-3: inscriptions whose Object
       # page is uncached or carries the wiki's sortdate=0 unknown filler)
       # and iip_undated/iip_invalid (P30-6: dateless-but-placed records —
-      # period="Unknown" headers — and the year-0 tripwire).
+      # period="Unknown" headers — and the year-0 tripwire),
+      # and cdli_undated/cdli_invalid (P31-2: catalog rows whose period
+      # string carries no year envelope — "uncertain", "fake (modern)" —
+      # and the ascending-range/year-0 tripwire).
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
-                            :lexlep, :tir, :iip,
+                            :lexlep, :tir, :iip, :cdli,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
@@ -65,7 +68,7 @@ module Nabu
                             :isicily_undated, :isicily_invalid,
                             :open_etruscan_undated, :open_etruscan_invalid,
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
-                            :iip_undated, :iip_invalid) do
+                            :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -75,13 +78,14 @@ module Nabu
                        open_etruscan: 0, open_etruscan_undated: 0, open_etruscan_invalid: 0,
                        lexlep: 0, lexlep_undated: 0, lexlep_invalid: 0,
                        tir: 0, tir_undated: 0, tir_invalid: 0,
-                       iip: 0, iip_undated: 0, iip_invalid: 0, **)
+                       iip: 0, iip_undated: 0, iip_invalid: 0,
+                       cdli: 0, cdli_undated: 0, cdli_invalid: 0, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
-            tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip
+            tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli
         end
       end
 
@@ -109,6 +113,7 @@ module Nabu
         open_etruscan = OpenEtruscanDates.build(catalog: catalog, canonical_dir: canonical_dir)
         vienna = ViennaWikiDates.build(catalog: catalog, canonical_dir: canonical_dir)
         iip = IipDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        cdli = CdliDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
@@ -131,7 +136,9 @@ module Nabu
                     open_etruscan_invalid: open_etruscan[:invalid],
                     lexlep_undated: vienna[:lexlep][:undated], lexlep_invalid: vienna[:lexlep][:invalid],
                     tir_undated: vienna[:tir][:undated], tir_invalid: vienna[:tir][:invalid],
-                    iip: iip[:documents], iip_undated: iip[:undated], iip_invalid: iip[:invalid])
+                    iip: iip[:documents], iip_undated: iip[:undated], iip_invalid: iip[:invalid],
+                    cdli: cdli[:documents], cdli_undated: cdli[:undated],
+                    cdli_invalid: cdli[:invalid])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -291,3 +298,4 @@ require_relative "axis_builder/isicily_dates"
 require_relative "axis_builder/open_etruscan_dates"
 require_relative "axis_builder/vienna_wiki_dates"
 require_relative "axis_builder/iip_dates"
+require_relative "axis_builder/cdli_dates"

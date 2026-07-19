@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM PROVENANCE. Both files are documented TRIMS of the two Git
+# LFS payloads of github.com/cdli-gh/data at commit d66b12b0 (2023-10-11
+# snapshot), downloaded 2026-07-19 through the LFS Batch API and
+# sha256-verified against the pointer oids (README.md table) before
+# slicing. There is no raw URL that serves the trim — re-acquiring means
+# re-downloading 240 MB of LFS payloads — so both entries are
+# refetchable: false; recipe in README.md.
+source: cdli
+adapter_test:
+retrieved: 2026-07-19
+commit: d66b12b065af39a57d640576b4c7e098db5dac7f
+files:
+  - path: cdliatf_unblocked.atf
+    refetchable: false
+    provenance: local-trim
+    reason: 7 byte-verbatim blocks sliced from the 86.9 MB LFS payload (oid 2896ec25…); no raw URL serves the trim
+    upstream: https://github.com/cdli-gh/data
+    copied: 2026-07-19
+    whole: false
+    trim: blocks P000001/P000725/P225015/P323717/P469841 (both duplicate blocks)/P480562/P519727 of 135,255 — >>Q + >>A links, both link-def spellings, #tr.en + #tr-en, multi-object, stray-space header, dup header; 86,897,831 B -> ~4 KB
+  - path: cdli_cat.csv
+    refetchable: false
+    provenance: local-trim
+    reason: header + 12 content-verbatim rows re-serialized from the 154.8 MB LFS payload (oid 2e3232f7…); no raw URL serves the trim
+    upstream: https://github.com/cdli-gh/data
+    copied: 2026-07-19
+    whole: false
+    trim: rows for the 7 ATF blocks + 5 metadata-only artifacts (P008113 proto-Elamite, P104749 bdtns+ruler, P274853 fake-modern, P282287 Hittite, P519993 trilingual) of 353,283; 154,768,722 B -> ~13 KB
