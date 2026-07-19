@@ -1421,6 +1421,63 @@ syriac-corpus:
   # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
   sync_policy: manual
 
+# P32-4: the Sinoxenic character bridge — three dictionary-kind registrants.
+# The shelf keys speak one join language: Unihan entry ids are "U+XXXX"
+# codepoints, KANJIDIC2 mints the same key (13,043 of its 13,108 kanji land
+# in Unihan's carried set — 99.5%), and the HDIC headword characters map to
+# codepoints (95.9–99.9% of single-character headwords per database resolve
+# into Unihan's carried set). All three enabled: false until the owner-fired
+# first sync (CLAUDE.md checklist §6).
+
+unihan:
+  adapter: Nabu::Adapters::Unihan
+  enabled: false   # awaiting owner-fired first sync (checklist §6:
+                   # bin/nabu sync unihan — 8.5 MB zip GET, ~65k entries —
+                   # then eyeball nabu define 一 / nabu show
+                   # urn:nabu:dict:unihan:U+4E00 and 5 random entries, flip).
+  # The Unicode Han Database (Unicode License V3 → open), Unihan.zip at
+  # /Public/UCD/latest/ (8.5 MB, Last-Modified 2025-08-18 = Unicode 17.0.0).
+  # One entry per codepoint carrying a carried field: 65,092 of 102,999
+  # total Unihan codepoints (census on UnihanTxtParser). /latest/ moves at
+  # each annual Unicode release; re-adopting a new major version is an
+  # owner decision.
+  sync_policy: manual
+
+edrdg:
+  adapter: Nabu::Adapters::Edrdg
+  enabled: false   # awaiting owner-fired first sync (checklist §6:
+                   # bin/nabu sync edrdg — 1.5 MB + 10.5 MB gz GETs,
+                   # 13,108 + 217,951 entries — then eyeball nabu define 愛
+                   # and 5 random jmdict entries, flip).
+  # KANJIDIC2 + JMdict_e (EDRDG, CC BY-SA 4.0 verbatim from the licence
+  # page → attribution). SCALE/CHURN HONESTY: upstream REBUILDS BOTH FILES
+  # NIGHTLY (verified Last-Modified 2026-07-19 03:30 GMT, in-file build
+  # stamps 2026-07-19) — sync_policy manual means each owner-fired sync
+  # adopts THAT NIGHT'S build and every re-sync WILL rewrite canonical;
+  # the per-dictionary .file-fetch.json pins + in-file build stamps
+  # (<date_of_creation>, "JMdict created:") date what canonical holds.
+  # ~218k jmdict entries make this the largest dictionary shelf after a
+  # sync (lexica is 168k).
+  sync_policy: manual
+
+hdic:
+  adapter: Nabu::Adapters::Hdic
+  enabled: false   # awaiting owner-fired first sync AND the license ruling
+                   # below (checklist §6: bin/nabu sync hdic — git clone
+                   # ~50 MB — then eyeball nabu define 天 across tsj/syp,
+                   # urn:nabu:dict:ktb:1_016_A51, flip).
+  # HDIC — Heian-period hanzi dictionaries (github.com/shikeda/HDIC, the
+  # ACTIVE upstream, pushed 2026-07-15; nk2028/HDIC is a stale 2022 mirror,
+  # never fetched). Five published databases → five dictionaries: yyp/ktb/
+  # tsj/syp/krm (96,415 upstream rows total). LICENSE DISCREPANCY (owner
+  # gate, see Nabu::Adapters::Hdic): README + every data-file header grant
+  # CC BY-SA 4.0 "Open access" (→ attribution, the scout verdict), but the
+  # repo LICENSE file is the CC BY-NC-SA 4.0 legalcode (template mismatch
+  # in upstream commit 72cfe74, 2022-02-02). If the owner rules the LICENSE
+  # file authoritative (Kyoto/Ruthenian precedent), tighten to nc BEFORE
+  # any enable. Upstream actively maintained → re-syncs owner-fired.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

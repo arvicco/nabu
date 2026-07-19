@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS (whole: false) of members of Unihan.zip
+# (8,518,517 B, sha256 f7a48b2b…, Last-Modified 2025-08-18 = Unicode
+# 17.0.0): 16 codepoints' lines kept byte-verbatim under the full comment
+# headers. A fresh GET returns the zip, so the URL is fetched for
+# URL-liveness only, never byte-compared; re-apply the README recipe after
+# any refresh. NB the /latest/ URL moves at each annual Unicode release.
+source: unihan
+adapter_test: test/adapters/unihan_test.rb
+retrieved: 2026-07-19
+files:
+  - path: Unihan_Readings.txt
+    url: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
+    whole: false
+    trim: member Unihan_Readings.txt (8.4 MB, 67,916 codepoints) -> all lines of 16 selected codepoints (145 lines incl. header); recipe in README.md
+  - path: Unihan_Variants.txt
+    url: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
+    whole: false
+    trim: member Unihan_Variants.txt (587 KB) -> all lines of the same 16 codepoints (19 lines incl. header); recipe in README.md

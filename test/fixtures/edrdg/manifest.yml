@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS (whole: false) of NIGHTLY-rebuilt
+# upstream .gz artifacts (build stamps 2026-07-19 recorded in README.md) —
+# a fresh GET returns that night's gzip and can never byte-match a plain
+# trimmed slice, so both URLs are fetched for URL-liveness only. Re-apply
+# the README recipes and RE-RECORD the build stamps after any refresh.
+source: edrdg
+adapter_test: test/adapters/edrdg_test.rb
+retrieved: 2026-07-19
+files:
+  - path: kanjidic2.xml
+    url: http://ftp.edrdg.org/pub/Nihongo/kanjidic2.xml.gz
+    whole: false
+    trim: gunzipped kanjidic2.xml (13,108 characters, build 2026-200 / 2026-07-19) -> prolog+DTD+header verbatim + 10 selected <character> blocks + closing tag; recipe in README.md
+  - path: JMdict_e.xml
+    url: http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
+    whole: false
+    trim: gunzipped JMdict_e (217,951 entries, build 2026-07-19) -> prolog + full DOCTYPE entity subset verbatim + created-comment + 6 selected <entry> blocks + closing tag; recipe in README.md
