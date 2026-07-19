@@ -10082,3 +10082,35 @@ attestations (measure the folded-lemma overlap vs the ONCOJ lexicon IF
 P32-2 has landed in your base — no dep otherwise, just report). Docs:
 wiktionary-recon row 50 extension (NB P32-3 also extends row 50 —
 sibling collision expected, orchestrator merges).
+
+## P32-6 · SuttaCentral parallels graph  [tier: fable] [status: dispatched 2026-07-19] [deps: P32-1 merged (lzh minted)]
+Owner-added rider 2026-07-19 ("add parallels graph as a rider", off the
+live lzh tour). The sc-data parallels graph — journaled since P26-1
+(02-sources row 66) — becomes reference edges. SOURCE OF TRUTH:
+`misc/parallels.json` in the SEPARATE suttacentral/sc-data repo (the
+bilara-data sync never touches it): 8,221 relation lists of sutta uids
+(shapes: {"parallels": [...]}, {"mentions": [...]}; uid grammar
+`uid#segment`, `~`-prefixed = resolved-by-inference — census the full
+shape vocabulary before parsing, never invent). FETCH: FileFetch of the
+raw file (sha-pinned; document the upstream commit) — do NOT clone
+sc-data whole. EDGES: producer `suttacentral` via the standing
+reference-edges machinery (Adapter.reference_edges? / LibraryReferences
+with a custom producer — study the etcsl/cdli/riig producers first);
+from_urn/to_urn = urn:nabu:suttacentral:<uid> document urns (segment
+suffixes recorded in detail, not minted as passage targets — parallel
+relations are document-grain upstream); relation kind (parallels vs
+mentions vs resembling — whatever the census finds) rides the edge
+detail; `~` inference flags preserved. HONESTY: most uids in the graph
+are NOT in the catalog (unpublished da*, t* Taishō beyond the published
+subset, vinaya…) — dangling-but-stable edges are the isicily tm:
+precedent BUT since these ARE suttacentral's own id space, mint the
+urn:nabu form anyway (they resolve the day upstream publishes; the 237
+pli↔lzh measured pairs resolve TODAY). Census: how many edges have both
+ends minted / one end / neither — the three-way count in the report and
+the 02-sources row. The links surface (`nabu links <urn>`) then serves
+the Kālāma Sutta ↔ MA 16 hop natively. Registry: this rides the
+existing suttacentral source (no new source, no flip); sync_policy note
+— the graph refresh is owner-fired with the ordinary sync. Fixtures:
+a trimmed real parallels.json slice covering every censused shape.
+Docs: 02-sources row 66 extension, worklog (sha TBD). Tests: producer +
+loader idempotency + the an7.68↔ma1 edge pinned end-to-end.
