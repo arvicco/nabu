@@ -1,0 +1,40 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All six files live INSIDE the frozen Zenodo Beta 0.3 zip (no per-file
+# raw URL), so none is whole-file byte-comparable by a plain GET: each is
+# a byte-verbatim WHOLE of its in-zip file (whole: false only because the
+# URL is the 74.4 MB zip, not the file). The sentinel fetches the zip URL
+# for liveness only. The versioned-DOI artifact is immutable (md5
+# f9acbc8db3111cc7dd88d82f7819a912, sha256-pinned in the adapter): drift
+# at this URL is an incident, never an update — a new Beta version mints
+# a NEW Zenodo record. adapter_test is null: untrimmed upstream copies
+# would be identical anyway, and the suite runs against this directory.
+source: tlhdig
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: "CTH 626_XML_HFR/KBo 52.195+.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (16,722 B) at its real relative path"
+  - path: "CTH 433_XML_BESRIT/KBo 43.277.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (4,215 B) at its real relative path"
+  - path: "CTH 314_XML_TLH/KUB 4.8.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (12,048 B) at its real relative path"
+  - path: "CTH 786_XML_HFR/KBo 20.119.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (25,974 B) at its real relative path"
+  - path: "quarantine/KUB 10.7.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of in-zip CTH 612_XML_TLH/KUB 10.7.xml (2,173 B) — the NOT-WELL-FORMED quarantine exemplar, moved under quarantine/ so discover never yields it"
+  - path: "quarantine/304_e.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of in-zip CTH 222_XML_TLH/304_e.xml (1,004 B) — the LINE-LESS quarantine exemplar, moved under quarantine/ so discover never yields it"
