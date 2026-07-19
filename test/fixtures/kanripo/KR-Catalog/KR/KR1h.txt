@@ -1,0 +1,5 @@
+# -*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID %15EXTENT %30_RESP
+
+** KR1h ZB1h 四書類
+*** KR1h0004 論語(正文)--

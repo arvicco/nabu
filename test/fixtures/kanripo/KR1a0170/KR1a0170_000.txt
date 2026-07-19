@@ -1,0 +1,5 @@
+# -*- mode: mandoku-view; -*-
+#+TITLE: 易緯坤靈圖
+#+DATE: 2015-08-24 22:01:24.436439
+#+PROPERTY: ID KR1a0170
+#+PROPERTY: BASEEDITION WYG    

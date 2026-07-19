@@ -1,0 +1,14 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR3a ZB3a 儒家類
+*** KR3a0001 孔子家語-魏-王肅
+:PROPERTIES:
+:KR_ID: KR3a0001
+:CUSTOM_ID:  ZB3a0001
+:SOURCE:   四庫全書 文淵閣版, V695.1, p1
+:EXTENT: 10 卷
+:BOOK:   2
+:_RESP:    （魏）王肅
+:END:
+**** 人物
+***** 王肅
