@@ -7215,7 +7215,7 @@ MCP registry 1, list-card 2, parser fallback 6, adapter/rebuild
 expectations updated to 5 fixture records). Docs: ops.md §anomalies +
 §11 table, architecture sources-mirror note + invariants wording,
 README/library.md invariant name, source_registry authority comment,
-edh-survey status block, 02-sources row 51 (status LIVE + fixture
+edh-survey status block, 02-sources row 94 (EDH, ex-51; status LIVE + fixture
 list). Owner queue: `bin/nabu sync edh --parse-only` lands the 26
 (+26 docs, errored 27→1, one loud -26 delta line, then quiet).
 
