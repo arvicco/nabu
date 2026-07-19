@@ -1628,6 +1628,35 @@ oncoj-lexicon:
   # and §C citation as oncoj. Frozen with the tag; owner re-pins.
   sync_policy: frozen
 
+kanripo:
+  adapter: Nabu::Adapters::Kanripo
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync kanripo — the
+                   # first many-repo wave (KanripoFetch, architecture §8):
+                   # KR-Catalog clone + 2,934 per-text shallow clones
+                   # (census 2026-07-20: KR1 719 repos/~204 MB git, KR3
+                   # 867/~513 MB, KR4 1,348/~566 MB; 61 catalog ids have
+                   # no repo → recorded absent). At the default 2 s pacing
+                   # the wave is ~1.6 h of pauses + transfer — resumable:
+                   # re-running resumes where it died, refetching nothing.
+                   # Eyeball 論語 (urn:nabu:kanripo:KR1h0004) juan 1 and 5
+                   # random pages, then flip.
+  sync_policy: manual   # ~3k-repo waves are owner-fired, never --all
+  # P33-0 (2026-07-20): wave 1 of the Kanseki Repository — `classes:` is
+  # the ACQUISITION scope (KR1 經 classics + KR3 子 masters + KR4 集
+  # belles-lettres; the KR-Catalog census for these classes is 732 + 886
+  # + 1,371 = 2,989 text ids). KR2 histories + KR5 Daoist are P33-1;
+  # KR6 Buddhist is EXCLUDED this phase (doctrine call journaled in
+  # 02-sources row 104 — CBETA is the scholarly Buddhist shelf).
+  # Narrowing classes never withdraws held texts (discover is on-disk-
+  # driven); widening is a config-only change. The pacing knob is
+  # Nabu::KanripoFetch::DEFAULT_DELAY (2 s between network operations,
+  # conservative; the adapter's fetch_delay seam is the override point).
+  # License: org-level grant verbatim "Comprehensive collection of
+  # premodern Chinese texts. Licensed as CC BY SA 4.0." + ytenx
+  # DATA_LICENSE.md corroboration; №25 Wittern confirmation email SENT,
+  # non-blocking → attribution.
+  classes: [KR1, KR3, KR4]
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

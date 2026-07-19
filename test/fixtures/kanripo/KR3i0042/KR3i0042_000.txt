@@ -1,0 +1,5 @@
+# -*- mode: mandoku-view; -*-
+#+TITLE: 菌譜
+#+DATE: 2015-08-24 23:18:42.536238
+#+PROPERTY: ID KR3i0042
+#+PROPERTY: BASEEDITION WYG    
