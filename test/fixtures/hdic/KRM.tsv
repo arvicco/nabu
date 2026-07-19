@@ -1,0 +1,62 @@
+# HDIC Project
+# HDIC is an abbreviation of the Integrated Database of Hanzi Dictionaries in Early Japan
+#
+# KRM: Kanchi’inbon Ruiju Myogisho database
+#
+# Ruiju myogishō 類聚名義抄, Kanchi’in copy 観智院本, reorganized edition 改編本. 
+# anonymous Buddhist monk, the latter half of the 12th century.
+#
+# Version: 1.1.347
+# Date: 11 March 2022
+# Last update : 17 March 2025
+#
+# Copyright (c) 2022-2025 HDIC project, IKEDA Shoju (Chair, Professor Emeritus, Hokkaido University)
+# Research group of Linguistics, Hokkaido University Faculty of Humanities and Human Siences
+# North 10, West 7, Kita-ku Sapporo, Hokkaido, 060-0810 Japan
+# Contact: ikeda.shoju@gmail.com, liyuansapporo@yahoo.co.jp, toyjack@gmail.com, kleinekuma@gmail.com
+#
+# Data License Information and Access Rights
+# License: 
+# Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)
+# Access Rights (Availability): 
+# Open access
+#
+# KRM Format information:
+#   KRID_n            Item serial number
+#   KRID_sn           Entry serial number
+#   KR2ID             Kazama edition item ID number, K, Book(ww), page(xxx),line(y) and column(zz), in the case of plural items appeared in column, entry rankings are also recorded as 1,2,…,n.
+#   KRID              Kazama edition entry ID number, K, Book(ww), page(xxx),line(y) and column(zz), in occasion of the headword with single character form, entry ranking is recorded as 0. While, in occasion of the headword with plural character form, entry rankings are recorded as 1,2,…,n. Moreover, in the case of plural items appeared in column, entry rankings are also recorded as 1,2,…,n.
+#   KR_Tenri_p        Tenri editon item ID number, T, volume(a/b/c), page(xxx),line(y) and column(zz)
+#   KR_vol_name       Volume name, from 仏上 to 僧下
+#   KR_radical        Radical name, from 人 to 雑
+#   KR_vol_radical    Volune and radical number, from v1#1(第1帖第1) to v10#120(第10帖第120)
+#   Entry             Headword
+#   Entry_original    Original character form
+#   Def               Definition of pronunciation, meaning and variant(s)
+#   Remarks           Editor's notes
+#
+#   Abbreviations:
+#   正宗索引: 正宗敦夫編『類聚名義抄 仮名索引』日本古典全集刊行会，1939-1940
+#   望月和訓集成: 望月郁子編『類聚名義抄：四種声点付和訓集成』(笠間索引叢刊44)笠間書院，1974
+#   草川和訓集成: 草川昇編『五本対照類聚名義抄和訓集成』汲古書院，2000
+#   西端誤写考察: 西端幸雄「類聚名義抄における誤写の考察」『訓点語と訓点資料』45，1971
+#   西端誤写諸例: 西端幸雄「類聚名義抄における誤写の諸例」『訓点語と訓点資料』52，1973
+#
+# Acknowledgments:
+# We are grateful to Tenri Central Library and Yagi Shoten for permission to publish the decipherment text of KRM.
+#
+# This work was supported by JSPS KAKENHI Grant Number 16H03422, 19H00526, 23K17500.
+#
+KRID_n	KRID_sn	KR2ID	KRID	KR_Tenri_p	KR_vol_name	KR_radical	KR_vol_radical	Entry	Entry_original	Def	Remarks
+F00001	S00001	K0100131	K01001310	Ta023310	仏上	人	v1#1	人	〇	音仁(L")「ニン」　ヒト(HL)　ワレ(LL)　サネ　マホル　ユク	
+F00002	S00002	K0100133	K01001331	Ta023331	仏上	人	v1#1	一／人	〇／〇	ヒトリ(LH@)	
+F00003	S00004	K0100134	K01001341	Ta023341	仏上	人	v1#1	二／人	〇／〇	フタリ(HHL)	高山寺本になし。岡田研究183頁。
+F00004	S00006	K0100141	K01001411	Ta023411	仏上	人	v1#1	五／ー（人）	〇／〇	イトリ(LHL)	
+F00005	S00008	K0100142	K01001421	Ta023421	仏上	人	v1#1	ー（人）／等	〇／〇	ヒトヽモ(HHH"H)	
+F00006	S00010	K0100143	K01001431	Ta023431	仏上	人	v1#1	湯／ー（人）	〇／〇	ユヱ(L@)	
+F00007	S00012	K0100144	K01001441	Ta023441	仏上	人	v1#1	真／人	〇／〇	マフト(HHL)	
+F00008	S00014	K0100151	K01001511	Ta023511	仏上	人	v1#1	漁／ー（人）	〇／〇	アマ(LL)	
+F00009	S00016	K0100152	K01001521	Ta023521	仏上	人	v1#1	海／ー（人）	〇／〇	同上	高山寺本は次項に「人魚　イヲノナ」あり。高山寺本が観智院本より以前である説の反例（岡田研究182頁）。池田按：蓮成院本は「分註式」で「人魚」あり。
+F00010	S00018	K0100153	K01001531	Ta023531	仏上	人	v1#1	盗／ー（人）	〇／〇	ヌスヒト	
+F00011	S00020	K0100154	K01001541	Ta023541	仏上	人	v1#1	不／良／人	〇／〇／〇	同上	
+F00012	S00023	K0100161	K01001611	Ta023611	仏上	人	v1#1	毛／ー（人）	〇／〇	ヱヒス	

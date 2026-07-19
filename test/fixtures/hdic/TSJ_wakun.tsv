@@ -1,0 +1,84 @@
+#   HDIC Project
+#   Integrated Database of Hanzi Dictionaries in Early Japan
+#
+#   TSJ: Tenjibon Shinsen Jikyo database -- Wakun (Japanese readings)
+#
+#   Tenjibon Shinsen Jikyo 新撰字鏡, Tenji copy 天治本.
+#   A complete manuscript of 1124 is held by the Imperial Household Archives.
+#   Buddhist monk Shoju 昌住, c. 898-901.
+#   A Hanzi (Chinese character) dictionary.
+#
+#   TSJ_wakun.tsv
+#   Version: 1.1.8
+#   Date published: January 17, 2026
+#   Last modified: July 15, 2026
+#
+#   Copyright (c) 2018-2026 HDIC project, IKEDA Shoju (Chair, Professor Emeritus, Hokkaido University)
+#   LI Yuan (Person in charge of text data proofreading)
+#   LIU Guanwei (Person in charge of image database design and implementation)
+#   Contact: ikeda.shoju@gmail.com, liyuansapporo@yahoo.co.jp, toyjack@gmail.com
+#   License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+#
+#   Column Definitions:
+# 1. tsj_id: Location in the Tenji-bon manuscript (Vol/Leaf/Side/Line/Char).
+# 2. sj_w_id: Unique permanent reference ID (format: sj_w00001). 'sj' = Shinsen Jikyō, 'w' = wakun. Designed for scalability and cross-dictionary comparative research.
+# 3. rinsen_loc: Reference to the Rinsen Shoten Shinsen Jikyō facsimile edition (1967).
+# 4. entry_text: Headword as it appears in the Tenji-bon, including single characters, compounds, and variant forms.
+# 5. entry_type: Classification of the headword based on its structure (single_char, compound, or variant).
+# 6. char_count: Number of characters in the headword. single_char and variant entries are uniformly recorded as 1 (variant forms are treated as the same character); compound entries are recorded as 2 or more according to their actual character count.
+# 7. kana_char_count: Number of kana characters in reading_historical_kana (the wakun reading in historical kana orthography). 0 if no reading is recorded.
+# 8. def_manyogana: Wakun in Man'yōgana (Tenji-bon). Marks: □ (illegible), ( ) (supplement), # (Kyōwa-bon variant). Blank if absent in Tenji-bon.
+# 9. reading_kana_kanji: Katakana and Kanji notation (historical orthography) based on the Kyoto University Index (1975).
+# 10. kyowa_entry_text: Headword as it appears in the Kyōwa-bon manuscript.
+# 11. kyowa_manyogana: Wakun in Man'yōgana (Kyōwa-bon). Marked with '#' for word form differences from Tenji-bon. Blank if absent in Kyōwa-bon.
+# 12. kyowa_loc: Location identifier in the Kyōwa-bon manuscript (Folio/Side/Line/Char).
+# 13. zhang_page: Page reference in Zhang & Wu, "Xin zhuan zi jing xiao zhu" 新撰字鏡校注 (Zhejiang University Press, 2024).
+# 14. reading_historical_kana: Wakun in Hiragana (historical orthography) based on the Kyoto University Index (1975).
+# 15. nikkoku_example_check: Status in Nikkoku (2nd Ed.).
+#     ✓            = Tenji cited as example in Nikkoku; Shinsen Jikyō listed in 表記 field.
+#     ✓享和本       = Kyowa cited as example in Nikkoku; Shinsen Jikyō listed in 表記 field.
+#     日国表記未収   = Nikkoku entry exists but Shinsen Jikyō not listed in 表記 field.
+#     listed        = Shinsen Jikyō listed in 表記 field but not cited as example.
+#     pending       = presence of corresponding entry in Nikkoku under investigation.
+#     no entry      = confirmed absent from Nikkoku (nikkoku_id = N/A).
+#     (Note: Additional reference notes, specific contexts, or textual variants may be appended to these classifications.)
+# 16. nikkoku_id: Reference ID for the Nikkoku 2nd Ed. entry. Note that an ID does not guarantee the verification of citation status in Col 15.
+# 17. remarks: Research notes on textual variants, reading normalization, and comments on Zhang's commentary.
+# 18. pos: Part-of-speech classification of the wakun (e.g., 名詞, 動詞, 形容詞, 形容動詞, 副詞, 連語).
+#
+#   Abbreviations & References:
+#   国語索引: 京都大学文学部国語学国文学研究室編『新撰字鏡国語索引』1958、再版臨川書店、1975.
+#     (Kyoto Index): "Shinsen Jikyō Kokugo Sakuin" (Index of Japanese Readings) compiled by Kyoto University, 1975.
+#   張磊校注: 張磊・吴美富『新撰字鏡校注』浙江大学出版社、2024.
+#     (Zhang Lei): Zhang Lei & Wu Meifu, "Xin zhuan zi jing xiao zhu" 新撰字鏡校注 (Zhejiang University Press, 2024).
+#   山田索引: 山田孝雄『新撰字鏡攷異并索引』六合館、1916.
+#     (Yamada Index): Yamada Yoshio, "Shinsen Jikyō Kōi narabini Sakuin" (1916).
+#   山田攷異: 山田孝雄『新撰字鏡攷異并索引』六合館、1916.
+#     (Yamada Kōi): Yamada Yoshio, "Shinsen Jikyō Kōi narabini Sakuin" (1916).
+#   日国: 『日本国語大辞典 第二版』小学館、2000-2002.
+#     (Nikkoku): "Nihon Kokugo Daijiten" (Comprehensive Dictionary of the Japanese Language), 2nd Ed.
+#
+#   Acknowledgments:
+#   We are grateful to the Imperial Household Archives 宮内庁書陵部 for permission to publish the decipherment text of TSJ.
+#   This work was supported by JSPS KAKENHI Grant Number 25370506, 16H03422, 19H00526, 23K17500, 25K00466 and 26K21717.
+#
+#   Changelog:
+#   v1.1.7 (2026-07-02):
+#     - col 4 (entry_text): Converted IDS notation to Unicode characters (14 occurrences).
+#   v1.1.2 (2026-05-22):
+#     - Updated col 13 (nikkoku_example_check): expanded value set with detailed descriptions (listed, pending, no entry).
+#     - Revised col 15 (remarks): additional research notes incorporated from tsj_wakun20260522.xlsx.
+#   v1.1.1 (2026-05-21):
+#     - Added col 16 (pos): part-of-speech classification added for 3,420 of 3,828 entries.
+#     - Expanded col 15 (remarks): morphological and etymological analysis notes added to 267 entries.
+#     - Corrected col 7 (reading_kana_kanji) in 25 entries and col 12 (reading_historical_kana) in 8 entries.
+#     - Updated col 14 (nikkoku_id) in 19 entries and col 13 (nikkoku_example_check) in 6 entries.
+#     - Normalized col 11 (zhang_page): replaced 42 "#N/A" string values with blank.
+#     - Corrected col 1 (tsj_id) in 3 entries (e.g., s1222a711 -> s1242a711 for sj_w03408-03409).
+#     - Corrected col 4 (entry_text) and col 8 (kyowa_entry_text) in 4 entries each (e.g., 𧥶 -> 䚾 for sj_w00800-00801).
+#     - Cleared all fields of sj_w00146 (reading reassigned; previously recorded as 腡 テノアヤ).
+#   v1.0.1 (2026-02-10): Minor corrections to nikkoku data and textual variants.
+#
+tsj_id	sj_w_id	rinsen_loc	entry_text	entry_type	char_count	kana_char_count	def_manyogana	reading_kana_kanji	kyowa_entry_text	kyowa_manyogana	kyowa_loc	zhang_page	reading_historical_kana	nikkoku_example_check	nikkoku_id	remarks	pos
+s0104a705	sj_w00001	新21-75	鬵	単字	1	3	倭云加奈戸	カナヘ（鬵）	鬵	倭云加奈戸	01a31	1	かなへ	✓	200200e00719O8R6hx9U		名詞
+s0104a804	sj_w00002	新21-84	昋	単字	1	5	和云比加利弖留	ヒカリテル（昋）	昋	倭云比加利天留	01a32	2	ひかりてる	no entry	N/A	名詞（ヒカリ）＋動詞（テル）；Head: テル；	連語（定義文・主述構造）
