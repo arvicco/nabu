@@ -123,18 +123,19 @@ All 58 sources below are synced and live as of 19 July 2026.
 Four further registered sources hold no upstream at all — they are the
 library's shelves for authored and acquired material, synchronized by
 re-scanning local files rather than fetching. The language-dossier shelf
-(`local-language`) carries the library's own per-language curation, 213
-Markdown dossiers as of 19 July 2026. The local-library shelf
+(`local-language`) carries the library's own per-language curation, one
+Markdown dossier per language code. The local-library shelf
 (`local-library`) files the owner's PDFs, scans, and offprints through
 the `nabu ingest` command (which also accepts http(s) URLs, downloading
 first and recording the address in the manifest); everything on it
 defaults to the `research_private` class — catalogued and searchable
-locally, never served or redistributed — and it holds 20
-documents as of 19 July 2026. The source-dossier shelf (`local-source`)
-carries a curated description of every registered source, 73 dossiers
-served on the `nabu list` census. The notes shelf (`local-notes`)
-records the owner's annotations on any citable URN through `nabu note`;
-it holds its first two notes. Licenses on
+locally, never served or redistributed. The source-dossier shelf
+(`local-source`) carries a curated description of every registered
+source, served on the `nabu list` census. The notes shelf
+(`local-notes`) records the owner's annotations on any citable URN
+through `nabu note`. What these shelves hold is, by design, the owner's
+private business — their contents and counts appear nowhere public.
+Licenses on
 these shelves belong to whatever the owner files there; the class system
 above is the gate that keeps restricted personal material private.
 

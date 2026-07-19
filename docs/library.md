@@ -7,10 +7,9 @@ dictionary entries** across thirty-nine dictionary shelves (§8c, §8h,
 §8j, §8k, §8m, §8o, §8q). The lemma layer, censused fresh this date:
 **12,474,060 gold rows in 22 languages** plus **8,000,317 silver rows in
 8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
-upstream-undisambiguated, always labelled). Canonical-memory shelves:
-`local-language` 213 dossiers, `local-source` 73 source dossiers,
-`local-notes` first 2 notes, `local-library` 20 owner-ingested docs
-(§8i). The code-per-language map lives in [languages.md](languages.md).
+upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
+curation and acquisitions — their counts and contents stay out of public
+documentation by rule. The code-per-language map lives in [languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog
 (`sqlite3 db/catalog.sqlite3 "PRAGMA query_only=ON; …"` — the WAL-safe
@@ -556,8 +555,8 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   Markdown file per code under `canonical/local-language/` (YAML front
   matter for name/family/extras, free prose as curated context,
   provenance-headed accretion sections per witness). The owner-fired
-  migration is complete — **199 dossiers** on disk deriving **329
-  `language_records`** in the catalog (name/family/context lanes plus the
+  migration is complete — one dossier per curated code deriving the
+  catalog's `language_records` (name/family/context lanes plus the
   IE-CoR witness sections), and the `config/languages.yml` ledger seed is
   retired: the dossiers are now the single home of language curation.
   Edit a dossier in any editor, `nabu sync local-language` re-derives the
@@ -567,9 +566,9 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   extraction (mutool) where a text layer exists, `research_private` by
   default — catalogued and searchable locally, never served over MCP
   without per-call opt-in, never redistributed. `related:` manifest lines
-  are derived into the links journal as `kind=reference` edges. **In use
-  since the first ingests: 20 documents / 8,725 passages** in a dozen
-  languages, mixed `research_private`/`nc`/`open` per item. `nabu ingest`
+  are derived into the links journal as `kind=reference` edges. In use
+  since the first ingests, mixed `research_private`/`nc`/`open` per item
+  (counts private by rule). `nabu ingest`
   (ops §13) is the front door — and since P20-0 it **takes http(s) URLs**
   too, downloading first (redirects followed, atomic staging, the given
   URL recorded in the manifest's `source_url:` lane), with metadata
@@ -579,7 +578,8 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   Markdown + YAML dossier per registered source under
   `canonical/local-source/` — the curated 1–3-sentence content
   description served on `nabu list` cards and MCP `nabu_status`, plus
-  themes, key-work urns, and accretion sections. **37 dossiers**, seeded
+  themes, key-work urns, and accretion sections. One dossier per
+  registered source, seeded
   by `nabu list --export-source-dossiers` and owner-edited thereafter;
   `rake site:check` gate-checks dossier-vs-library.md mention drift
   (never generates). Written only through `Nabu::SourceShelf`.
@@ -692,7 +692,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   family, curated context, live holdings (zero fields suppressed);
   unknown codes miss honestly with a family hint; ~0.2 s. The card's
   authored layer now lives in the **`canonical/local-language/` dossier
-  shelf** (199 dossiers → 329 derived records, §8i; the ledger seed is
+  shelf** (one dossier per curated code, §8i; the ledger seed is
   retired), the derived names census is **filled** (160 name records from
   the owner's wiktionary resyncs — the inline `[code · Name]` rendering
   in `etym --long` is active), and the live-count joins complete the
