@@ -60,6 +60,24 @@ ud:
   adapter: Nabu::Adapters::UniversalDependencies
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
+  # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
+  # (UD_Hittite-HitTB: 136 sentences / 1,309 words of Hoffner & Melchert
+  # tutorial examples with real KBo/KUB source lines; language hit;
+  # CC BY-SA 4.0 verbatim → per-document attribution override, source
+  # class stays nc). EXPECTED SYNC DELTA at the next owner-fired
+  # `bin/nabu sync ud` (no per-treebank enablement exists): +1 repo clone,
+  # +1 doc / 136 passages, hit joins the lemma-indexed languages.
+  # P31-6 (2026-07-19): TREEBANKS grew to twelve — ancient-greek-perseus +
+  # latin-perseus (UD conversions of the native Perseus AGDT/LDT v2.1,
+  # 02-sources row 17's UD half; both verbatim CC BY-NC-SA 2.5 Generic →
+  # ride the source nc class bare, no override). EXPECTED SYNC DELTA at the
+  # next owner-fired `bin/nabu sync ud`: +2 repo clones; docs at UD's
+  # one-doc-per-treebank-split grain — UD_Ancient_Greek-Perseus ships
+  # train/dev/test = +3 docs (censused 2026-07-19: 13,919 sentences /
+  # 202,989 words), UD_Latin-Perseus ships train/test only, NO dev split =
+  # +2 docs (censused: 2,273 sentences / 29,223 words); so +5 docs /
+  # +16,192 passages total, grc/lat lemma lanes gain treebank-gold rows
+  # (no new language).
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -123,6 +141,26 @@ oracc:
                    # FULL SAA (saa01–saa21 + saas2), riao, ribo, blms, the
                    # four dcclt subprojects (~159 MB of new zips) — the
                    # owner-fired re-sync after merge pulls the new projects.
+                   # P31-0 (owner-approved 2026-07-19) extended to 38: ario
+                   # (2.7 MB — Achaemenid trilinguals; Old Persian peo +
+                   # Elamite elx enter the library, tagged per l-node by
+                   # upstream; elx honestly unlemmatized — no gloss-elx)
+                   # and the four ePSD2 corpora epsd2/literary (39.5 MB),
+                   # epsd2/royal (15.1 MB), epsd2/earlylit (1.3 MB),
+                   # epsd2/admin/ur3 (561.8 MB — registered under its TRUE
+                   # three-segment path; the zip unpacks DOUBLY nested,
+                   # epsd2-admin-ur3/admin/ur3/…). All five CC0 verbatim at
+                   # fixture time; the per-project gate re-reads at sync.
+                   # EXPECTED SYNC DELTAS (owner-fired, no enabled flip —
+                   # the projects ride this existing source): ~618 MB of
+                   # new zips; ~82,900 new tablet docs (ario 173 of 175
+                   # non-empty + literary 1,022 + royal 1,928 + earlylit 43
+                   # + admin/ur3 80,181 — the Ur III mass will DOMINATE
+                   # library counts; lem on 79,664 of its texts) plus ~365
+                   # crawled -en siblings (tr-en: ario 173, literary 90,
+                   # royal 101, earlylit 1, admin/ur3 0); a handful of
+                   # catalog-only skeletons skip by rule (census honestly,
+                   # quarantine loudly — the standing unknown-node guard).
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
@@ -490,6 +528,10 @@ local-notes:
   # scholia of one's own, one YAML list per topic file, indexed into the
   # derived urn_notes and rendered on show/define/links (MCP serves notes by
   # default, withheld wherever the target document is withheld).
+  sync_policy: local   # P31 rider fix: was missing (unlike the three sibling
+                       # shelves), so the manual default routed this
+                       # upstream-less shelf at the git probe and crashed
+                       # `health --remote` (owner report 2026-07-19).
 
 riig:
   adapter: Nabu::Adapters::Riig
@@ -792,6 +834,46 @@ dss:
   # time: 301/372 = 80.9% — journaled in 02-sources row 88, not wired).
   # No date axis: tf/2.0 carries no period/dating feature (censused).
   sync_policy: manual
+
+tlhdig:
+  adapter: Nabu::Adapters::Tlhdig
+  enabled: false   # awaiting the owner-fired first sync (CLAUDE.md checklist
+                   # §6: bin/nabu sync tlhdig — one 74.4 MB GET, ~385 MB
+                   # unpacked; expect ~23,490 documents = 23,937 files − 1
+                   # censused twin skip − ~450 loud quarantines (224 not
+                   # well-formed + ~226 line-less conversion casualties, the
+                   # deposit's own Beta reality); eyeball
+                   # urn:nabu:tlhdig:626:hfr:kbo.52.195+ + 5 random passages
+                   # + `nabu search --lemma ḫūmant` — expect [silver] labels
+                   # throughout — then flip).
+  # TLHdig — Thesaurus Linguarum Hethaeorum digitalis (hethiter.net/TLHdig,
+  # Hethitologie-Portal Mainz): the Hittite corpus — >98% of published
+  # fragments in transliteration. Beta 0.3 as ONE frozen Zenodo deposit
+  # (record 20328284, 2026-05-21; 74,449,198 bytes, Zenodo md5
+  # f9acbc8db3111cc7dd88d82f7819a912 verified byte-for-byte, sha256-pinned
+  # in the adapter) — 23,937 AOxml manuscripts in 826 CTH folders (663
+  # CTH numbers; folder suffix = contributing HPM sub-project → facets).
+  # THE mrp HYPOTHESIS LAYER RIDES VERBATIM; it is upstream's own
+  # candidate machinery (annot editor="auto"; 27.4% of analyzed words
+  # multi-candidate unresolved), so lemma_tier: silver — only the
+  # disambiguated subset (digit-selected 453,819 + single-candidate
+  # 95,986 = 72.6% of 757,728 analyzed words, censused corpus-wide) mints
+  # lemma keys, every count labeled, never gold. Languages per line from
+  # the censused map only (hit/akk/sux/xhu/xht/xlu/plq — junk lg values
+  # → und + verbatim raw); Sumerogram/Akkadogram graphies ride tokens.
+  # THE PIET SEAM (measured 2026-07-19, promised nothing): 316 starling-
+  # piet HITT reflex rows (306 distinct folded keys) vs the disambiguated
+  # TLHdig lemma keys → 205 = 67.0% join (215 = 70.3% vs all candidates).
+  # LICENSE: Zenodo license field cc-by-4.0 (both Beta versions) →
+  # attribution; the prescribed citation rides the manifest verbatim.
+  # QUARANTINE HONESTY: ~450 damaged files (not well-formed XML +
+  # line-less stubs) quarantine loudly at sync — Beta reality, censused,
+  # never patched. The versioned DOI is immutable: a pin mismatch is
+  # corruption, never an update; new Beta versions mint NEW Zenodo
+  # records (an owner-verified re-pin, journaled — Beta 0.2 stays the
+  # deprecated predecessor record).
+  sync_policy: manual
+  lemma_tier: silver
 
 sarit:
   adapter: Nabu::Adapters::Sarit
@@ -1153,6 +1235,190 @@ hebrew-lexicon:
   # citation rows — deep links into the future BDB 1906 scan). New
   # oshb-lexicon family (OSHB's own XML namespace). Upstream content
   # frozen since 2019 → re-fetch is an owner decision.
+  sync_policy: manual
+
+etcsl:
+  adapter: Nabu::Adapters::Etcsl
+  enabled: false   # P31-5: awaiting owner-fired first sync (bin/nabu sync etcsl, ~4.9 MB zip)
+  # P31-5: the Electronic Text Corpus of Sumerian Literature, Revised
+  # edition (Oxford, October 2006) — 394 hand-lemmatized Sumerian
+  # composites + 381 paired English prose translations (-en siblings),
+  # one frozen zip on the OTA's LLDS record (hdl 20.500.14106/2518;
+  # sha256-pinned in the adapter — the legacy ota.bodleian server was
+  # down 2026-07-18/19, LLDS is the OTA's current CLARIN-UK home).
+  # CC BY-NC-SA 3.0 (record-level grant, quoted verbatim in the
+  # manifest) → nc. Second witness beside epsd2/literary (P31-0),
+  # deliberately unmerged — concordance via "etcsl:<num>" reference
+  # edges. lemma_tier stays the gold default: the lemma layer is the
+  # editors' hand-assigned lexeme assignment (citation form + word
+  # class + gloss per word form; upstream readme + manual), not
+  # automatic annotation.
+  sync_policy: frozen   # corpus completed October 2006; the LLDS artifact is immutable
+  translations: true    # the English prose translations are half the packet's value
+cdli:
+  adapter: Nabu::Adapters::Cdli
+  enabled: false   # P31-2: flip after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync cdli — GitFetch clone +
+                   # LFS materialization, 154.8 MB csv + 86.9 MB atf —
+                   # then eyeball nabu show urn:nabu:cdli:p000725
+                   # (proto-cuneiform, >>Q composite links) beside a
+                   # metadata-only artifact and 5 random tablets).
+                   # MEASURED census at snapshot d66b12b (full payloads
+                   # through the production parser+Loader, 2026-07-19):
+                   # 353,156 docs loaded (135,201 with text / 218,097
+                   # metadata-only — the owner-approved universal
+                   # catalog), 2,186,961 passages; QUARANTINE FLOOR 142
+                   # (junk lines — missing-dot labels, a stray BOM,
+                   # "& blank space" — upstream defects named in the
+                   # AtfParser class note); discovery skips 54 duplicate
+                   # &P headers by rule. Timing on this box: discover
+                   # 45 s (1.2 GB RSS), parse+load 9.0 min (657 docs/s),
+                   # catalog +1.15 GB.
+  # P31-2: CDLI — the universal cuneiform catalog + C-ATF transliteration
+  # mass (github.com/cdli-gh/data; HONESTLY the 2023-10 snapshot — the
+  # daily dump is dead, cdli.earth API journaled as the freshness
+  # channel, not wired). New atf parser family (built for reuse: eBL-ATF
+  # registers as a dialect in P31-3). License = the bespoke open grant
+  # from cdli.earth/terms-of-use VERBATIM in the manifest → attribution;
+  # images entirely out of scope. NO #lem lines exist in C-ATF → the
+  # tier below is a defensive pin: nothing from cdli may ever enter the
+  # lemma index as gold (lemma search stays ORACC-gold). Periods (the
+  # catalog's own year envelopes) → AxisBuilder::CdliDates; genre/
+  # period/provenience/collection/ruler → facets; >>Q + composite_id +
+  # bdtns concordances → reference edges (producer cdli). Snapshot is
+  # frozen-in-practice but the repo is live git → re-syncs owner-fired.
+  sync_policy: manual
+  lemma_tier: silver
+ebl:
+  adapter: Nabu::Adapters::Ebl
+  enabled: false   # P31-3: flip after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync ebl — one 73.9 MB GET,
+                   # sha-pinned — then eyeball nabu show
+                   # urn:nabu:ebl:1868,0523.2 (tr.en riders, @i{} markup)
+                   # beside urn:nabu:ebl:im.61678 (Ur III %sux, date
+                   # facet) and 5 random fragments). MEASURED census at
+                   # the snapshot (full payload through the production
+                   # adapter, 2026-07-19): 23,288 docs (23,289 members −
+                   # the K.5808 byte-identical twin, skipped by rule) /
+                   # 325,728 passages / 66 zero-text metadata-only /
+                   # QUARANTINE FLOOR 0; languages akk 19,673 · sux 3,615
+                   # (%-shift rule); 19,230 reference edges; parse+census
+                   # ~6 s on this box.
+  # P31-3: eBL Fragmentarium — the Electronic Babylonian Library's
+  # transliterated museum fragments (Kuyunjik/Babylon…), eBL-ATF as the
+  # atf family's SECOND dialect (EblAtfParser — the family seams built in
+  # P31-2 carried it without weakening the C-ATF core). Bootstrap = the
+  # citable Zenodo snapshot 10.5281/zenodo.10018951 (2023-10-18,
+  # fragments.json 73.9 MB, sha256-pinned; the live Fragmentarium had
+  # 37,296 fragments at scout time — the deposit packages the 23,289
+  # TRANSLITERATED ones). The sanctioned ebl.lmu.de/api/fragments/
+  # retrieve-all endpoint (4-8 min/batch) is the OWNER-FIRED refresh
+  # channel ONLY — documented, never automated. LICENSE CONFLICT recorded
+  # verbatim in the manifest: JOHD 10.5334/johd.148 License section says
+  # CC BY-NC-SA 4.0 for fragments.json, the Zenodo field says cc-by-4.0 —
+  # class held at nc (MCP-excluded per standing nc discipline) until
+  # email №24 resolves it. The eBL Corpus side (Gilgameš chapter
+  # editions) is OUT: no packaged dump, the grant covers fragments only.
+  # #tr.en/#tr.ar/#tr.de per-line translations ride as tr annotations
+  # (the P31-2 carry, extents verbatim); cdliNumber (79.9%) →
+  # urn:nabu:cdli:p… edges into the P31-2 space, editedInOraccProject →
+  # urn:nabu:oracc:<proj>:<P> edges, bdtns concordance (producer ebl).
+  # Period vocabulary carries no year envelopes → facets only, no axis
+  # extractor. #lem exists on ONE fragment (BM.47447, 71 lines) → carried
+  # verbatim as annotations, nothing enters the lemma index; the tier
+  # below is the cdli-style defensive pin, not a lemma claim.
+  sync_policy: manual   # versioned DOI is frozen; refresh = owner-fired retrieve-all, then a deliberate re-pin
+  lemma_tier: silver
+cuc:
+  adapter: Nabu::Adapters::Cuc
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync cuc — sparse GitFetch cone tf/0.2.8 +
+                   # README.md, 19 files ≈ 3.5 MB — then eyeball
+                   # nabu show urn:nabu:cuc:ktu-1.14:I.1 (Keret),
+                   # urn:nabu:cuc:ktu-1.4:V.1 (Baal) and 5 random lines,
+                   # then flip).
+  # P31-4: CUC — the Copenhagen Ugaritic Corpus (CACCHT project,
+  # github.com/DT-UCPH/cuc), THIRD text-fabric registrant and the FIRST
+  # uga source — a NEW axis language (dossier: `bin/nabu ingest --shelf
+  # language uga`, family lane "Northwest Semitic"). Census verified
+  # against otype.tf at the pinned commit 0408967b (2026-07-19): 146,017
+  # signs / 27,770 words / 7,616 lines / 334 columns / 279 tablets (the
+  # upstream README's "278" undercounts its own otype). Document =
+  # tablet (urn:nabu:cuc:ktu-<n>.<n> from the censused-uniform "KTU
+  # <n>.<n>" names), passage = column.line — the corpus's own citation
+  # grain. Text = the corpus's own {sign} transliteration stream; the
+  # cuneiform lane (usign) + per-sign text-critical flags (cert, emen
+  # restored/redundant/excised/missing/remark, alt, cont) ride each
+  # token's "signs" entries verbatim. 72 whitespace-only lines skipped +
+  # listed in document metadata (never faked). LICENSE: every .tf header
+  # verbatim — British spelling — "@licence=Creative Commons
+  # Attribution-NonCommercial 4.0 International License" → class nc,
+  # MCP-excluded. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
+  # upstream is work-in-progress, new versions land in new dirs →
+  # re-pin is an owner decision.
+  sync_policy: manual
+
+peshitta:
+  adapter: Nabu::Adapters::Peshitta
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync peshitta — sparse GitFetch cone tf/0.2 +
+                   # docs/about.md, 13 files ≈ 9 MB — then eyeball
+                   # nabu show urn:nabu:peshitta:gn:1.1,
+                   # urn:nabu:peshitta:ps:23.1 (the shepherd psalm, Hebrew
+                   # numbering) and 5 random verses, `align "GEN 1.1"` (now
+                   # SEVEN-legged: MT×2 ↔ LXX ↔ Vulgate ↔ WEB ↔ Targum ↔
+                   # Peshitta), then flip).
+  # P31-4: the Peshitta OT incl. deuterocanon (ETCBC/peshitta; OCR of the
+  # Leiden Vetus Testamentum Syriace / Codex Ambrosianus, syrocr +
+  # Text-Fabric conversion), FOURTH text-fabric registrant. Census
+  # verified against otype.tf at the pinned commit 9850f5ad (2026-07-19):
+  # 426,835 words / 65 books / 1,269 chapters / 31,341 verses. Document =
+  # book (urn:nabu:peshitta:<siglum downcased> — gn, orm_a; the A/B
+  # manuscript recensions are honest sibling documents with the witness
+  # letter riding metadata + verse annotations verbatim), passage = verse
+  # <doc>:<chapter>.<verse>. Language syc; ~492 upstream word forms are
+  # non-NFC (seyame/point order) → NFC at the adapter boundary per house
+  # rule (syc is NOT on the exemption list). MEASURED MT versification
+  # (chapter-grain census over all 39 protocanonical books + verse spot
+  # checks: Joel 4 ch / Malachi 3 ch / Jonah 1:16+2:11 / Psalms 150
+  # Hebrew-numbered) → the ot hub's SEVENTH leg with the OSHB/BHSA/Targum
+  # conservative map verbatim (config/alignments.yml; same holdouts), and
+  # the psalms work rides the P13-5 Hebrew→Greek remap (fourth reuse).
+  # LICENSE: docs/about.md verbatim "The plain text of the Peshitta, its
+  # conversion to Text-Fabric format, is subject to the CC-BY-NC license"
+  # (the conversion program alone is MIT) → class nc, MCP-excluded.
+  # Version PINNED tf/0.2 (the sparse cone IS the pin); upstream is
+  # archived/unsupported (repostatus badge) → effectively frozen.
+  sync_policy: manual
+
+syriac-corpus:
+  adapter: Nabu::Adapters::SyriacCorpus
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync syriac-corpus — sparse GitFetch cone
+                   # data/tei, 632 TEI files ≈ 39 MB — then eyeball
+                   # nabu show urn:nabu:syriac-corpus:1:2 (Aphrahat Dem. 1
+                   # §1), a hymn line of a memra doc and 5 random passages,
+                   # then flip).
+  # P31-4: the Digital Syriac Corpus (srophe/syriac-corpus; BYU/Oxford/
+  # Vanderbilt/Texas A&M) — 632 TEI documents of classical Syriac
+  # literature (Aphrahat, Ephrem, Jacob of Serugh, the Peshitta NT
+  # letters…), the survey's "lowest-friction big win". NEW srophe-tei
+  # family (their own TEI application, NOT EpiDoc — censused over all 632
+  # files: body divs of 16 types carrying p/ab/lg/l/head blocks; 1,958 of
+  # 6,801 divs unnumbered, block numbering partial → passages minted by
+  # document-order block ordinal with the div path + block tag/@n riding
+  # annotations as the citation lane — the ADDRESSABILITY VERDICT: no
+  # uniform upstream citation scheme exists). Document = file
+  # (urn:nabu:syriac-corpus:<file number> — the syriaccorpus.org id;
+  # 69.xml and 126.xml carry MISMATCHED <idno> URIs (61, 125 — one a
+  # duplicate, one a filename gap), so the FILENAME mints identity and
+  # idno rides metadata verbatim). Language syc (langUsage censused
+  # uniformly "syr"); per-block xml:lang syr/en/ar → syc/eng/ara.
+  # Apparatus <note>s stripped from text, riding annotations verbatim.
+  # LICENSE: per-file <availability> censused over ALL 632 files —
+  # uniformly "Creative Commons — Attribution 4.0 International — CC BY
+  # 4.0" (base texts PD per the availability note) → class attribution.
+  # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

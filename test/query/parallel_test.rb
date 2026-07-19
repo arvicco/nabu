@@ -28,9 +28,10 @@ module Query
       document = Nabu::Document.new(
         urn: urn, language: language, title: title, canonical_path: "/canonical/src/#{urn.split(':').last}.xml"
       )
-      passages.each_with_index do |(suffix, text), index|
+      passages.each_with_index do |(suffix, text, annotations), index|
         document << Nabu::Passage.new(
-          urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index
+          urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index,
+          annotations: annotations || {}
         )
       end
       @loader.load([document], full: false)
@@ -78,6 +79,42 @@ module Query
 
       result = run_parallel("urn:nabu:open-etruscan:cr-2.20:1", lang: "eng")
       assert_equal "eng", result.right&.language, "the open-etruscan -en sibling must pair"
+    end
+
+    # P31 rider (owner repro 2026-07-19, first etcsl sync): the -en prose
+    # siblings loaded but --parallel couldn't reach them — the etcsl tail
+    # shape was the journaled P30-7 chain follow-up.
+    def test_etcsl_en_sibling_pairs
+      load_edition("urn:nabu:etcsl:1.8.2.1", "sux", [%w[A.1 ud]], title: "Lugalbanda")
+      load_edition("urn:nabu:etcsl:1.8.2.1-en", "eng", [%w[1 When]], title: "Lugalbanda (en)")
+
+      result = run_parallel("urn:nabu:etcsl:1.8.2.1:A.1", lang: "eng")
+      assert_equal "eng", result.right&.language, "the etcsl -en sibling must pair"
+    end
+
+    # The prose translation's passages cite by paragraph ordinal (p1, p2 —
+    # never equal to a line id), but each carries upstream's own anchor as
+    # the "corresp" annotation. The anchor mechanism must read it: p1
+    # anchors at A.1 and owns the lines up to the next anchor's (a :block),
+    # instead of every group falling one-sided (the owner's first-sync
+    # repro: "0 paired, 509 sux only, 34 eng only").
+    def test_corresp_annotation_anchors_a_prose_translation
+      load_edition("urn:nabu:etcsl:1.8.2.1", "sux",
+                   [%w[A.1 ud], %w[A.2 ul], %w[A.3 an], %w[A.4 ki]], title: "Lugalbanda")
+      load_edition("urn:nabu:etcsl:1.8.2.1-en", "eng",
+                   [["p1", "When...", { "corresp" => "A.1", "lines" => "1-3" }],
+                    ["p2", "Then...", { "corresp" => "A.4", "lines" => "4-6" }]],
+                   title: "Lugalbanda (en)")
+
+      result = run_parallel("urn:nabu:etcsl:1.8.2.1", lang: "eng")
+      blocks = result.groups.select { |g| g.kind == :block }
+      assert_equal 1, blocks.size, "p1 owns A.1..A.3 as a block"
+      assert_equal ":A.1", blocks.first.covers_first
+      assert_equal ":A.3", blocks.first.covers_last
+      pairs = result.groups.select { |g| g.kind == :pair }
+      assert_equal 1, pairs.size, "p2 anchors at A.4 alone — a 1:1 pair"
+      assert_equal 0, result.groups.count { |g| g.kind == :translation },
+                   "no prose paragraph falls one-sided when its anchor resolves"
     end
 
     def test_itant_translation_and_layer_siblings_pair

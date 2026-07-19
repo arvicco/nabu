@@ -1,0 +1,57 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE (the oracc pattern). ETCSL's delivery unit is the
+# single etcsl.zip on the OTA's LLDS record (hdl 20.500.14106/2518); no raw
+# per-file URL serves transliterations/ or translations/ individually, so
+# every entry is refetchable: false: `fixtures:check` SKIPS them (printing
+# the reason) and `fixtures:refresh` refuses to touch them. Re-acquiring
+# means re-downloading the zip (sha256
+# d1a35b396399216deaeb483d5954ae603662e73c4e77f23e39f2e7b58466962b,
+# retrieved 2026-07-19) and re-applying the README trim procedure. The
+# corpus is complete (October 2006) and frozen upstream — drift is not
+# expected, ever.
+source: etcsl
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: transliterations/c.1.8.2.1.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from etcsl.zip on the LLDS record — no raw per-file URL exists
+    upstream: https://llds.ling-phil.ox.ac.uk/llds/xmlui/bitstream/handle/20.500.14106/2518/etcsl.zip?sequence=12&isAllowed=y
+    copied: 2026-07-19
+    whole: false
+    trim: lines 1-230 ++ 4019-4079 of the CRLF original (README procedure) — header + div1 A lines 1-10, whole div1 B, closers
+  - path: translations/t.1.8.2.1.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from etcsl.zip on the LLDS record — no raw per-file URL exists
+    upstream: https://llds.ling-phil.ox.ac.uk/llds/xmlui/bitstream/handle/20.500.14106/2518/etcsl.zip?sequence=12&isAllowed=y
+    copied: 2026-07-19
+    whole: false
+    trim: lines 1-46 ++ 127-133 of the CRLF original (README procedure) — header + p1-p3, whole div1 B (gap-only p35), closers
+  - path: transliterations/c.2.5.2.3.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from etcsl.zip on the LLDS record — no raw per-file URL exists
+    upstream: https://llds.ling-phil.ox.ac.uk/llds/xmlui/bitstream/handle/20.500.14106/2518/etcsl.zip?sequence=12&isAllowed=y
+    copied: 2026-07-19
+    whole: true
+    trim: none (lg + trailer exemplar, whole)
+  - path: translations/t.2.5.2.3.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from etcsl.zip on the LLDS record — no raw per-file URL exists
+    upstream: https://llds.ling-phil.ox.ac.uk/llds/xmlui/bitstream/handle/20.500.14106/2518/etcsl.zip?sequence=12&isAllowed=y
+    copied: 2026-07-19
+    whole: true
+    trim: none (lg-holding-p + trailer sibling exemplar, whole)
+  - path: transliterations/c.0.2.01.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from etcsl.zip on the LLDS record — no raw per-file URL exists
+    upstream: https://llds.ling-phil.ox.ac.uk/llds/xmlui/bitstream/handle/20.500.14106/2518/etcsl.zip?sequence=12&isAllowed=y
+    copied: 2026-07-19
+    whole: true
+    trim: none (flat catalogue, &hr; rulings, no paired translation — whole)

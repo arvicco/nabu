@@ -17,9 +17,12 @@ class UniversalDependenciesTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/ud", __dir__)
 
   EXPECTED_URNS = [
+    "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50",
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
+    "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
+    "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
@@ -96,18 +99,39 @@ class UniversalDependenciesTest < Minitest::Test
                  "natively via proiel/torot; a chu UD treebank would double-load it. Found: #{chu.inspect}"
   end
 
+  # --- registration pins (P31-6) -------------------------------------------
+  #
+  # The two Perseus treebanks (UD conversions of the native AGDT/LDT v2.1,
+  # 02-sources row 17's UD half). The chu-PROIEL re-export guard does NOT
+  # apply: nabu has never synced the native AGLDT — there is no double-load.
+  # And no overlap with greek-proiel/latin-ittb (different upstream data).
+  def test_treebanks_registers_the_two_perseus_treebanks
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    grc = treebanks.fetch("ancient-greek-perseus")
+    assert_equal "https://github.com/UniversalDependencies/UD_Ancient_Greek-Perseus", grc[:repo]
+    assert_equal "grc", grc[:language]
+    lat = treebanks.fetch("latin-perseus")
+    assert_equal "https://github.com/UniversalDependencies/UD_Latin-Perseus", lat[:repo]
+    assert_equal "lat", lat[:language]
+  end
+
   # --- per-treebank license override (P10-4; extended P25-2) ---------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
   # derived treebanks). The three Old East Slavic treebanks (Birchbark, RNC,
-  # Ruthenian) and Old Irish DipWBG (P25-2, verbatim "CC BY-SA 4.0") are
+  # Ruthenian), Old Irish DipWBG (P25-2, verbatim "CC BY-SA 4.0") and
+  # Hittite HitTB (P31-0, LICENSE.txt verbatim the same BY-SA 4.0 grant) are
   # CC BY-SA 4.0 → attribution: they carry a per-document license_override so
   # the shareable shelf labels them honestly, while the bare treebanks —
   # the four legacy ones plus Old Irish DipSGG (P25-2, verbatim
   # "CC BY-NC-SA 4.0") — inherit the source class nc (override NULL).
-  OVERRIDE_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc old-east-slavic-ruthenian
-                      old-irish-dipwbg].freeze
-  BARE_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic old-irish-dipsgg].freeze
+  # P31-6: both Perseus treebanks are verbatim CC BY-NC-SA 2.5 Generic
+  # (LICENSE.txt + README metadata agree) → NonCommercial → bare, no override
+  # (the DipSGG posture).
+  OVERRIDE_SLUGS = %w[hittite-hittb old-east-slavic-birchbark old-east-slavic-rnc
+                      old-east-slavic-ruthenian old-irish-dipwbg].freeze
+  BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
+                  sanskrit-vedic old-irish-dipsgg].freeze
 
   def test_treebanks_map_sets_attribution_only_on_the_by_sa_entries
     treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
@@ -150,7 +174,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_nine_files_sorted_by_urn
+  def test_discover_finds_exactly_twelve_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -160,9 +184,12 @@ class UniversalDependenciesTest < Minitest::Test
     by_urn = refs.to_h { |ref| [ref.id, ref] }
 
     expected_languages = {
+      "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50" => "grc",
       "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50" => "got",
       "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50" => "grc",
+      "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50" => "hit",
       "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt" => "lat",
+      "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50" => "lat",
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50" => "orv",
@@ -209,6 +236,33 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal ref.id, document.urn
     assert_equal 50, document.size
     assert_equal "got", document.language
+  end
+
+  # P31-6 round-trip on the two Perseus fixtures. The Latin head-50 carries
+  # exactly one multiword-token range (`5-6 mecum` → `me` + `cum`, sent @66) —
+  # the ITTB essetque machinery on a second treebank; the Greek test split has
+  # no MWT ranges file-wide (see the fixture README).
+  def test_parse_round_trips_the_perseus_fixtures
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES)
+                     .select { |r| r.metadata["treebank"].include?("perseus") }
+                     .to_h { |r| [r.metadata["treebank"], adapter.parse(r)] }
+
+    grc = by_slug.fetch("ancient-greek-perseus")
+    assert_equal "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50", grc.urn
+    assert_equal 50, grc.size
+    assert_equal "grc", grc.language
+    opening = grc.passages.first
+    assert_equal "#{grc.urn}:tlg0008.tlg001.perseus-grc1.12.tb.xml@197", opening.urn
+    assert_includes opening.text, "ζῶσι δὲ καὶ οὗτοι τὸν αὐτὸν τρόπον"
+
+    lat = by_slug.fetch("latin-perseus")
+    assert_equal "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50", lat.urn
+    assert_equal 50, lat.size
+    assert_equal "lat", lat.language
+    mwt = lat.passages.find { |p| p.urn.end_with?(":phi0690.phi003.perseus-lat1.tb.xml@66") }
+    refute_nil mwt, "the one MWT sentence of the head-50 must parse"
+    assert_includes mwt.text, "animo mecum ante peregi"
   end
 
   # --- lemma plumbing for the orv treebanks (P10-2) -----------------------
@@ -266,6 +320,34 @@ class UniversalDependenciesTest < Minitest::Test
     wbg_row = lemmas.where(language: "sga", lemma_raw: "airbág").first
     refute_nil wbg_row, "expected a passage_lemmas row for the sga lemma airbág"
     assert_equal "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test:1", wbg_row[:urn]
+
+    # P31-0: Hittite flows through the same unchanged plumbing — hit becomes
+    # a lemma-indexed language. A readable row: Laws §10 (sent_id 5.7, the
+    # KBo 6.2 i 16-17 example), verb ḫūnink- "injure", attested by the
+    # transliterated surface form ḫu-ú-ni-ik-zi.
+    assert_operator lemmas.where(language: "hit").count, :>, 0,
+                    "the Hittite treebank must contribute passage_lemmas rows"
+    hit_row = lemmas.where(language: "hit", lemma_raw: "ḫūnink-").first
+    refute_nil hit_row, "expected a passage_lemmas row for the hit lemma ḫūnink-"
+    assert_equal "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50:5.7", hit_row[:urn]
+    assert_includes hit_row[:surface_forms], "ḫu-ú-ni-ik-zi"
+
+    # P31-6: the two Perseus treebanks contribute lemma rows to the ALREADY
+    # lemma-indexed grc/lat lanes through the same unchanged plumbing (filtered
+    # by urn — greek-proiel/latin-ittb also populate those languages). Readable
+    # rows: the Athenaeus opener's verb ζάω "live" (surface ζῶσι) and, from the
+    # Aeneid MWT sentence (mecum → me + cum), the member-token lemma ego
+    # (surface me) — MWT members index like plain words, the ITTB mechanics.
+    grc_urn = "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50:" \
+              "tlg0008.tlg001.perseus-grc1.12.tb.xml@197"
+    grc_row = lemmas.where(language: "grc", urn: grc_urn, lemma_raw: "ζάω").first
+    refute_nil grc_row, "expected a passage_lemmas row for the grc lemma ζάω"
+    assert_includes grc_row[:surface_forms], "ζῶσι"
+    lat_urn = "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50:" \
+              "phi0690.phi003.perseus-lat1.tb.xml@66"
+    lat_row = lemmas.where(language: "lat", urn: lat_urn, lemma_raw: "ego").first
+    refute_nil lat_row, "expected a passage_lemmas row for the lat lemma ego (MWT member)"
+    assert_includes lat_row[:surface_forms], "me"
   ensure
     fulltext&.disconnect
   end
@@ -355,12 +437,13 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST TWO repos each lose their only
-      # treebank file (2 of #{slugs.size} ingestible files ≈ 22% > 20% → trip;
-      # a single deletion is only 1/#{slugs.size} ≈ 11%, below the breaker, now
-      # that the set has grown to nine treebanks).
+      # First repo gains a file; the LAST THREE repos each lose their only
+      # treebank file (3 of #{slugs.size} ingestible files = 25% > 20% → trip;
+      # 3 is still the MINIMUM tripping count at twelve treebanks — two
+      # deletions are 2/#{slugs.size} = 16.7%, below the breaker now that the
+      # set has grown to twelve with the Perseus pair, P31-6).
       first = slugs.first
-      doomed = slugs.last(2)
+      doomed = slugs.last(3)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -378,7 +461,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 2"
+      assert_includes report.notes, "atticked 3"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"

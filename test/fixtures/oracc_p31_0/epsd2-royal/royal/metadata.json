@@ -1,0 +1,62 @@
+{
+ "type": "metadata",
+ "project": "epsd2/royal",
+ "source": "http://oracc.org/epsd2/royal",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T16:29:27",
+ "config": {
+  "pathname": "epsd2/royal",
+  "name": "epsd2/epsd2 royal corpus",
+  "abbrev": "epsd2/royal",
+  "project-type": "corpus",
+  "blurb": "",
+  "public": "",
+  "options": {
+   "g2": "yes",
+   "v2": "yes",
+   "cbd-oid": "yes",
+   "build-approved-policy": "atf",
+   "catalog-build-policy": "auto",
+   "cbd-article-summaries": "yes",
+   "cbd-bases-table": "yes",
+   "cbd-forms-inline": "no",
+   "cbd-forms-table": "yes",
+   "cbd-mode": "static",
+   "cbd-usages": "no",
+   "cbd-with-all": "yes",
+   "json-mode": "manual",
+   "l2-quick-freqs": "yes",
+   "lem-simplify": "yes",
+   "pager-default-glo": "sux",
+   "sum-alias": "yes",
+   "fuzzy-alias": "yes",
+   "%sux": "epsd2/names epsd2",
+   "%akk": "epsd2/akks epsd2/names",
+   "%sux-x-emesal": "epsd2/emesal:sux-x-emesal",
+   "cbd-no-harvest": "epsd2 epsd2/emesal epsd2/names epsd2/akks"
+  }
+ },
+ "formats": {
+  "atf": [
+   "Q001016"
+  ],
+  "lem": [
+   "Q001016"
+  ],
+  "tr-en": [
+   "Q001016"
+  ],
+  "xtf": [
+   "Q001016"
+  ]
+ },
+ "witnesses": {
+  "Q001016": {
+   "has-witness": [
+    "epsd2/royal:P222340"
+   ]
+  }
+ }
+}

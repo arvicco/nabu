@@ -1,0 +1,53 @@
+<TEI.2 id="t.1.8.2.1">
+<teiHeader lang="eng">
+<fileDesc>
+<titleStmt>
+<title>Lugalbanda in the mountain cave -- an English prose translation</title>
+<respStmt><name>Jeremy Black</name><resp>Project Director and Editor</resp></respStmt>
+<respStmt><name>G&aacute;bor Z&oacute;lyomi</name><resp>Editor</resp></respStmt>
+<respStmt><name>Graham Cunningham</name><resp>Editor</resp></respStmt>
+<respStmt><name>Eleanor Robson</name><resp>Technical Developer</resp></respStmt>
+<respStmt><name>Jarle Ebeling</name><resp>Technical Developer</resp></respStmt>
+</titleStmt>
+<publicationStmt>
+<distributor>The Electronic Text Corpus of Sumerian Literature
+</distributor><address><addrLine>The Oriental Institute, University of Oxford, Pusey Lane, Oxford OX1 2LE, UK, email etcsl&commat;orinst.ox.ac.uk, http://etcsl.orinst.ox.ac.uk</addrLine></address>
+<date>1999</date>
+</publicationStmt>
+<seriesStmt><p>The Electronic Text Corpus of Sumerian Literature aims to make accessible over 400 literary works composed in the Sumerian language in ancient Mesopotamia during the late third and early second millennia BC. The works are in Sumerian composite transliteration and English prose translation with bibliographical information on each composition.</p></seriesStmt>
+<sourceDesc>
+<p>Sources are listed in the header of the composite text</p>
+</sourceDesc>
+</fileDesc>
+<revisionDesc>
+<change><date>26.iii.1998-09.iv.1998</date><respStmt><name>JAB</name><resp>editor</resp></respStmt>
+<item>adapting translation</item></change>
+<change><date>22.iv.1998</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>proofreading</item></change>
+<change><date>19.iv.1999</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>minor corrections</item></change>
+<change><date>19.iv.1999</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>SGML tagging</item></change>
+<change><date>23.iv.1999</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>proofreading SGML</item></change>
+<change><date>22.iv.1999</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>web publication</item></change>
+<change><date>01.vi.2003</date><respStmt><name>GC/JE</name><resp>editor/technical developer</resp></respStmt>
+<item>XML/TEI conversion</item></change>
+</revisionDesc>
+</teiHeader>
+<text lang="eng">
+<body>
+<div1 type="segment" n="A">
+<p id="t1821.p1" n="1-19" corresp="c1821.A.1">When in ancient days heaven was separated from earth, when in ancient days that which was fitting &X;&X;, when after the ancient harvests &X;&X; barley was eaten (?), when boundaries were laid out and borders were fixed, when boundary-stones were placed and inscribed with names, when dykes and canals were purified, when &X;&X; wells were dug straight down; when the bed of the <w type="WN">Euphrates</w>, the plenteous river of <w type="SN">Unug</w>, was opened up, when &X;&X;, when &X;&X;, when holy <w type="DN">An</w> removed &X;&X;, when the offices of <foreign lang="sux">en</foreign> and king were famously exercised at <w type="SN">Unug</w>, when the sceptre and staff of <w type="SN">Kulaba</w> were held high in battle -- in battle, <w type="DN">Inana's</w> game; when the black-headed were blessed with long life, in their settled ways and in their &X;&X;, when they presented the mountain goats with pounding hooves and the mountain stags beautiful with their antlers to <w type="RN">Enmerkar</w> son of <w type="DN">Utu</w> --</p>
+<p id="t1821.p2" n="20-34" corresp="c1821.A.20">-- now at that time the king set his mace towards the city, <w type="RN">Enmerkar</w> son of <w type="DN">Utu</w> prepared an &X;&X; expedition against <w type="SN">Aratta</w>, the mountain of the holy divine powers. He was going to set off to destroy the rebel land; the lord began a mobilization of his city. The herald made the horn signal sound in all the lands. Now levied <w type="SN">Unug</w> took the field with the wise king, indeed levied <w type="SN">Kulaba</w> followed <w type="RN">Enmerkar</w>. <w type="SN">Unug's</w> levy was a flood, <w type="SN">Kulaba's</w> levy was a clouded sky. As they covered the ground like heavy fog, the dense dust whirled up by them reached up to heaven. As if to rooks on the best seed, rising up, he called to the people. Each one gave his fellow the sign.</p>
+<p id="t1821.p3" n="35-46" corresp="c1821.A.35">Their king went at their head, to go at the &X;&X; of the army. <w type="RN">Enmerkar</w> went at their head, to go at the &X;&X; of the army.
+<gap extent="2 lines unclear"/>
+&X;&X; <foreign lang="sux">gu-nida</foreign> emmer-grain to grow abundantly. When <ref id="t1821.r1" targType="note" target="t1821.n1">the righteous one who takes counsel with <w type="DN">Enlil</w></ref> <note id="t1821.n1" lang="eng" target="t1821.r1">i.e. <w type="RN">Enmerkar</w></note> took away the whole of <w type="SN">Kulaba</w>, like sheep they bent over at the slope of the mountains, &X;&X; at the edge of the hills they ran forward like wild bulls. He sought &X;&X; at the side -- they recognised the way. He sought &X;&X;.</p>
+</div1><div1 type="segment" id="t1821.seg1" n="B">
+<note lang="eng" target="t1821.seg1">it is possible that this fragment does not belong to the same composition</note>
+<p id="t1821.p35" n="1-7" corresp="c1821.B.1"><gap extent="7 lines unclear"/>
+<gap extent="unknown no. of lines missing to end"/></p>
+</div1></body>
+</text>
+</TEI.2>

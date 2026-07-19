@@ -1,0 +1,62 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — fetched for URL-liveness only, never
+# byte-compared). adapter_test is null: the Peshitta adapter test asserts
+# slice-level counts, which untrimmed upstream files would false-fail.
+# Re-trim per the README table after any refresh. Pinned upstream commit:
+# 9850f5addade26f681334aa475570bef9b0b440a (master, retrieved 2026-07-19).
+source: peshitta
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: tf/0.2/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/book.tf
+    whole: false
+    trim: slice book entries (123087 B -> 1249 B)
+  - path: tf/0.2/book@en.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/book@en.tf
+    whole: false
+    trim: slice book entries (1161 B -> 550 B)
+  - path: tf/0.2/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/chapter.tf
+    whole: false
+    trim: slice verse-node entries (87371 B -> 859 B)
+  - path: tf/0.2/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/oslots.tf
+    whole: false
+    trim: slice book/chapter/verse nodes, gap-anchored entries (440119 B -> 3313 B)
+  - path: tf/0.2/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.2/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.2/trailer.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/trailer.tf
+    whole: false
+    trim: slice word entries (882602 B -> 6708 B)
+  - path: tf/0.2/trailer_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/trailer_etcbc.tf
+    whole: false
+    trim: slice word entries (908595 B -> 7016 B)
+  - path: tf/0.2/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/verse.tf
+    whole: false
+    trim: slice verse-node entries (83728 B -> 899 B)
+  - path: tf/0.2/witness.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/witness.tf
+    whole: false
+    trim: slice book/chapter/verse entries (5282 B -> 521 B)
+  - path: tf/0.2/word.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/word.tf
+    whole: false
+    trim: slice word entries (4353441 B -> 30150 B)
+  - path: tf/0.2/word_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/peshitta/master/tf/0.2/word_etcbc.tf
+    whole: false
+    trim: slice word entries (2390324 B -> 16795 B)

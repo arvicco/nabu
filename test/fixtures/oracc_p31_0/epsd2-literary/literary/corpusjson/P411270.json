@@ -1,0 +1,634 @@
+{
+  "type": "cdl",
+  "project": "epsd2/literary",
+  "source": "http://oracc.org/epsd2/literary",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2022-12-07T16:18:03",
+  "textid": "P411270",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "P411270.U0",
+      "cdl": [
+        {
+          "node": "d",
+          "subtype": "tablet",
+          "type": "object",
+          "ref": "P411270.x514.1",
+          "label": "x514"
+        },
+        {
+          "node": "d",
+          "type": "surface",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "type": "nonx",
+          "ref": "P411270.2",
+          "strict": "0",
+          "extent": "595",
+          "state": "other"
+        },
+        {
+          "node": "d",
+          "subtype": "obverse",
+          "type": "surface",
+          "ref": "P411270.o.3",
+          "label": "o"
+        },
+        {
+          "node": "d",
+          "type": "nonx",
+          "ref": "P411270.4",
+          "strict": "0",
+          "state": "other"
+        },
+        {
+          "node": "c",
+          "type": "discourse",
+          "subtype": "body",
+          "id": "P411270.U1",
+          "cdl": [
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "id": "P411270.U2",
+              "label": "o 1",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.5",
+                  "n": "1",
+                  "label": "o 1"
+                },
+                {
+                  "node": "d",
+                  "type": "field-start",
+                  "ref": "P411270.5.f1",
+                  "subtype": "tx"
+                },
+                {
+                  "node": "l",
+                  "frag": "lu₂",
+                  "id": "P411270.l08cca",
+                  "ref": "P411270.5.1",
+                  "ftype": "tx",
+                  "inst": "lu[person]N",
+                  "exosig": "@epsd2/literary%sux:lu₂=lu[person//person]N'N$lu/lu₂#~",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "lu₂",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "v": "lu₂",
+                        "id": "P411270.5.1.0"
+                      }
+                    ],
+                    "cf": "lu",
+                    "gw": "person",
+                    "sense": "person",
+                    "norm0": "lu",
+                    "pos": "N",
+                    "epos": "N",
+                    "base": "lu₂",
+                    "morph": "~"
+                  },
+                  "props": [
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.5.1"
+                    },
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "value": "tx",
+                      "ngram": "-1",
+                      "ref": "P411270.5.1"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "tug₂",
+                  "id": "P411270.l08ccb",
+                  "ref": "P411270.5.2",
+                  "ftype": "tx",
+                  "inst": "tug[textile]N",
+                  "exosig": "@epsd2/literary%sux:tug₂=tug[textile//textile, garment]N'N$tug/tug₂#~",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "tug₂",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "v": "tug₂",
+                        "id": "P411270.5.2.0"
+                      }
+                    ],
+                    "cf": "tug",
+                    "gw": "textile",
+                    "sense": "textile, garment",
+                    "norm0": "tug",
+                    "pos": "N",
+                    "epos": "N",
+                    "base": "tug₂",
+                    "morph": "~"
+                  },
+                  "props": [
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.5.2"
+                    },
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "value": "tx",
+                      "ngram": "-1",
+                      "ref": "P411270.5.2"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "tuku-me-en",
+                  "id": "P411270.l08ccc",
+                  "ref": "P411270.5.3",
+                  "ftype": "tx",
+                  "inst": "tuku[acquire]V/t",
+                  "exosig": "@epsd2/literary%sux:tuku-me-en=tuku[acquire//to acquire, get]V/t'V/t$tuku;*a,men/tuku#~;*a,men",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "tuku-me-en",
+                    "gdl": [
+                      {
+                        "v": "tuku",
+                        "id": "P411270.5.3.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "me",
+                        "id": "P411270.5.3.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "en",
+                        "id": "P411270.5.3.2"
+                      }
+                    ],
+                    "cf": "tuku",
+                    "gw": "acquire",
+                    "sense": "to acquire, get",
+                    "norm0": "tuku;*a,men",
+                    "pos": "V/t",
+                    "epos": "V/t",
+                    "base": "tuku",
+                    "morph": "~;*a,men"
+                  },
+                  "props": [
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.5.3"
+                    },
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "value": "tx",
+                      "ngram": "-1",
+                      "ref": "P411270.5.3"
+                    }
+                  ]
+                },
+                {
+                  "node": "d",
+                  "type": "field-end",
+                  "subtype": "tx"
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "P411270.U4",
+              "label": "o 2",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.6",
+                  "n": "2",
+                  "label": "o 2"
+                },
+                {
+                  "node": "d",
+                  "type": "field-start",
+                  "ref": "P411270.6.f1",
+                  "subtype": "tx"
+                },
+                {
+                  "node": "l",
+                  "frag": "dim₂-ma-zu",
+                  "id": "P411270.l08ccd",
+                  "ref": "P411270.6.1",
+                  "ftype": "tx",
+                  "inst": "dimma[thought]N",
+                  "exosig": "@epsd2/literary%sux:dim₂-ma-zu=dimma[thought//thought, planning]N'N$dimma,zu/dim₂-ma#~,zu",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "dim₂-ma-zu",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "v": "dim₂",
+                        "id": "P411270.6.1.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ma",
+                        "id": "P411270.6.1.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "zu",
+                        "id": "P411270.6.1.2"
+                      }
+                    ],
+                    "cf": "dimma",
+                    "gw": "thought",
+                    "sense": "thought, planning",
+                    "norm0": "dimma,zu",
+                    "pos": "N",
+                    "epos": "N",
+                    "base": "dim₂-ma",
+                    "morph": "~,zu"
+                  },
+                  "props": [
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.6.1"
+                    },
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "value": "tx",
+                      "ngram": "-1",
+                      "ref": "P411270.6.1"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "me-a",
+                  "id": "P411270.l08cce",
+                  "ref": "P411270.6.2",
+                  "ftype": "tx",
+                  "inst": "mea[where?]QP",
+                  "exosig": "@epsd2/literary%sux:me-a=mea[where?//where?]QP'QP$mea/me-a#~",
+                  "exoprj": "epsd2",
+                  "exolng": "sux",
+                  "f": {
+                    "lang": "sux",
+                    "form": "me-a",
+                    "gdl": [
+                      {
+                        "v": "me",
+                        "id": "P411270.6.2.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "a",
+                        "id": "P411270.6.2.1"
+                      }
+                    ],
+                    "cf": "mea",
+                    "gw": "where?",
+                    "sense": "where?",
+                    "norm0": "mea",
+                    "pos": "QP",
+                    "epos": "QP",
+                    "base": "me-a",
+                    "morph": "~"
+                  },
+                  "props": [
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.6.2"
+                    },
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "value": "tx",
+                      "ngram": "-1",
+                      "ref": "P411270.6.2"
+                    }
+                  ]
+                },
+                {
+                  "node": "d",
+                  "type": "field-end",
+                  "subtype": "tx"
+                },
+                {
+                  "node": "d",
+                  "type": "nonx",
+                  "ref": "P411270.7",
+                  "strict": "1",
+                  "extent": "2",
+                  "scope": "line",
+                  "state": "blank"
+                },
+                {
+                  "node": "d",
+                  "subtype": "reverse",
+                  "type": "surface",
+                  "ref": "P411270.r.8",
+                  "label": "r"
+                },
+                {
+                  "node": "d",
+                  "type": "nonx",
+                  "ref": "P411270.9",
+                  "strict": "0",
+                  "state": "other"
+                },
+                {
+                  "node": "d",
+                  "type": "nonx",
+                  "ref": "P411270.10",
+                  "strict": "1",
+                  "extent": "1",
+                  "scope": "line",
+                  "state": "blank"
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "P411270.U6",
+              "label": "r 2",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.11",
+                  "n": "2",
+                  "label": "r 2"
+                },
+                {
+                  "node": "d",
+                  "frag": "*",
+                  "type": "nonw",
+                  "ref": "P411270.11.0.a",
+                  "lang": "sux",
+                  "delim": ""
+                },
+                {
+                  "node": "l",
+                  "frag": "⸢LUGAL⸣",
+                  "id": "P411270.l08ccf",
+                  "ref": "P411270.11.1",
+                  "inst": "%sux:LUGAL=",
+                  "f": {
+                    "lang": "sux",
+                    "form": "LUGAL",
+                    "gdl": [
+                      {
+                        "s": "LUGAL",
+                        "id": "P411270.11.1.0",
+                        "break": "damaged",
+                        "queried": "1",
+                        "ho": "1",
+                        "hc": "1"
+                      }
+                    ]
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "P411270.11.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.11.1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "P411270.U8",
+              "label": "r 3",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.12",
+                  "n": "3",
+                  "label": "r 3"
+                },
+                {
+                  "node": "d",
+                  "frag": "*",
+                  "type": "nonw",
+                  "ref": "P411270.12.0.a",
+                  "lang": "sux",
+                  "delim": ""
+                },
+                {
+                  "node": "l",
+                  "frag": "IB",
+                  "id": "P411270.l08cd0",
+                  "ref": "P411270.12.1",
+                  "inst": "%sux:IB=",
+                  "f": {
+                    "lang": "sux",
+                    "form": "IB",
+                    "gdl": [
+                      {
+                        "s": "IB",
+                        "id": "P411270.12.1.0"
+                      }
+                    ]
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "P411270.12.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.12.1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "P411270.U10",
+              "label": "r 4",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.13",
+                  "n": "4",
+                  "label": "r 4"
+                },
+                {
+                  "node": "d",
+                  "frag": "*",
+                  "type": "nonw",
+                  "ref": "P411270.13.0.a",
+                  "lang": "sux",
+                  "delim": ""
+                },
+                {
+                  "node": "l",
+                  "frag": "TAB",
+                  "id": "P411270.l08cd1",
+                  "ref": "P411270.13.1",
+                  "inst": "%sux:TAB=",
+                  "f": {
+                    "lang": "sux",
+                    "form": "TAB",
+                    "gdl": [
+                      {
+                        "s": "TAB",
+                        "id": "P411270.13.1.0"
+                      }
+                    ]
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "P411270.13.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.13.1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "tag": "#auto",
+              "id": "P411270.U12",
+              "label": "r 5",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "P411270.14",
+                  "n": "5",
+                  "label": "r 5"
+                },
+                {
+                  "node": "d",
+                  "frag": "*",
+                  "type": "nonw",
+                  "ref": "P411270.14.0.a",
+                  "lang": "sux",
+                  "delim": ""
+                },
+                {
+                  "node": "l",
+                  "frag": "U₂",
+                  "id": "P411270.l08cd2",
+                  "ref": "P411270.14.1",
+                  "inst": "%sux:U₂=",
+                  "f": {
+                    "lang": "sux",
+                    "form": "U₂",
+                    "gdl": [
+                      {
+                        "s": "U₂",
+                        "id": "P411270.14.1.0",
+                        "queried": "1"
+                      }
+                    ]
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "P411270.14.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "P411270.14.1"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
