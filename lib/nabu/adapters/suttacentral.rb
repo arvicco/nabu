@@ -11,20 +11,27 @@ module Nabu
     # translations keyed by THE SAME segment ids, ingested as `-en` sibling
     # documents (the ORACC/Damaskini precedent; `show URN --parallel`).
     #
-    # == Scope (censused at the pinned survey commit, 2026-07-18)
+    # == Scope (censused at the pinned survey commit, 2026-07-18; lzh flip
+    #    censused against the synced canonical tree, P32-1, 2026-07-19)
     #
-    # Two root trees: root/pli/ms — the Mahāsaṅgīti Tipiṭāka, 7,289 files
+    # Three root trees: root/pli/ms — the Mahāsaṅgīti Tipiṭāka, 7,289 files
     # (one of which is upstream's own xplayground sandbox, skipped by rule) —
-    # and root/pra/pts — the 22 Patna Dhammapada files, language `pra`
+    # root/pra/pts — the 22 Patna Dhammapada files, language `pra`
     # (upstream's own tag; in scope because its English translation is THE
-    # licensing outlier, see below). Out of scope: root/en (site blurbs/UI
-    # strings, not canon), root/misc, root/san + root/lzh (Sanskrit/Chinese
-    # parallels — a future scope decision), the 32 non-English translation
-    # languages, and — EXCLUDED by honesty — SuttaCentral's LEGACY
-    # translations (the `html_text` layer in the separate sc-data repo,
-    # largely CC BY-NC-ND; a different repo/layer this adapter never
+    # licensing outlier, see below) — and root/lzh/sct (P32-1) — the 272
+    # Literary Chinese Āgama files, "SuttaCentral Taisho" (scpub39, CC0):
+    # sutta 205 (ma 15 / sa 49 / ea 1 / lzh-minor 140) + abhidhamma 67
+    # (sag 33 / lzh-dk 22 / sg 12), language `lzh`, stems disjoint from
+    # pli/pra (censused: zero collisions across 7,583 stems). Out of scope:
+    # root/en (site blurbs/UI strings, not canon), root/misc, root/san
+    # (Sanskrit fragments — a future scope decision), the 32 non-English
+    # translation languages, and — EXCLUDED by honesty — SuttaCentral's
+    # LEGACY translations (the `html_text` layer in the separate sc-data
+    # repo, largely CC BY-NC-ND; a different repo/layer this adapter never
     # touches). The sc-data parallels graph (8,221 relations, declared
-    # non-copyrightable) is future intertext-packet material, not fetched.
+    # non-copyrightable) is future intertext-packet material, not fetched
+    # (measured at P32-1: 237 relations pair a minted pli/pra text with a
+    # minted lzh text — 223 parallels + 14 mentions).
     #
     # == Identity (FROZEN minting)
     #
@@ -65,9 +72,15 @@ module Nabu
     # 104 stems are double-covered (always sujato + one other, censused);
     # TRANSLATOR_PRIORITY (coverage-ordered at census time, frozen) picks
     # ONE deterministically, the losers are censused rule skips. Orphan
-    # English files (179 stems: sujato's name/ glossaries, patton's Āgama
-    # translations of lzh roots) are skipped by rule — a translation without
-    # its root is unrenderable (the ORACC orphan-fragment rule).
+    # English files (125 stems since the P32-1 lzh flip: sujato's name/
+    # glossaries plus en files whose roots bilara has not published — the
+    # pre-flip census was 179, and patton's 54 Āgama translations of ma/sa
+    # roots stopped being orphans the moment their lzh roots minted; no lzh
+    # stem is double-covered) are skipped by rule — a translation without
+    # its root is unrenderable (the ORACC orphan-fragment rule). The lzh
+    # -en publications are patton's scpub20 (sa) / scpub35 (ma), both CC0
+    # verbatim ("Creative Commons Zero" / "CC0"); scpub36 (ea19) and
+    # scpub37 (da) cover trees the published branch does not yet carry.
     #
     # == fetch (the shared git path, pinned to `published`)
     #
@@ -81,6 +94,7 @@ module Nabu
       # Root tree → [language, edition slug]. The published branch's other
       # root trees are out of scope (see class note).
       ROOT_TREES = {
+        "root/lzh/sct" => %w[lzh sct],
         "root/pli/ms" => %w[pli ms],
         "root/pra/pts" => %w[pra pts]
       }.freeze
@@ -110,7 +124,7 @@ module Nabu
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "suttacentral",
-        name: "SuttaCentral — bilara-data segmented Tipiṭaka (Pali + aligned English)",
+        name: "SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English)",
         license: "Root: Public Domain (scpub64, \"an ancient sacred text… free of known restrictions " \
                  "under copyright law\"); translations CC0 per publication (138/140; LICENSE.md " \
                  "blanket), except scpub69 CC BY-SA 3.0 → per-document override",
