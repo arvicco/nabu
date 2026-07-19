@@ -9839,7 +9839,7 @@ source") → attribution; images entirely out of scope.
   ATF slices (incl. P000725 proto-cuneiform + a composite >>Q case) +
   catalog CSV rows; README with the grant verbatim + shas.
 
-## P31-3 · eBL Fragmentarium  [tier: fable] [status: STAGGERED — dispatch after P31-2 merges] [deps: P31-2 (atf family)]
+## P31-3 · eBL Fragmentarium  [tier: fable] [status: SHIPPED 2026-07-19 — worklog P31-3, sha TBD] [deps: P31-2 (atf family)]
 
 Zenodo 10.5281/zenodo.10018951 snapshot (fragments.json 73.9 MB, 2023;
 ~25k tablets) as the bootstrap; the sanctioned
