@@ -58,14 +58,24 @@ module Nabu
       # never a crosswalk join candidate.
       LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san" }.freeze
 
+      # The historical-phonology sound tags (P32-3, opt-in below): the
+      # kaikki Chinese extract carries per-entry `sounds` rows tagged
+      # Middle-Chinese ("khwenX") and Old-Chinese with the reconstruction's
+      # author school (Baxter-Sagart / Zhengzhang). Everything else in
+      # `sounds` (modern lect romanizations, IPA) stays out of bodies.
+      HISTORICAL_SOUND_TAGS = %w[Middle-Chinese Old-Chinese].freeze
+
       # Parse +path+ and return DictionaryEntry values in file order.
       # +language+ is the ISO 639-3 code the entries carry and fold by;
       # kaikki's own lang_code is 639-1 ("cu") and stays in the raw record.
       # +reflexes+ turns on descendants-tree extraction (reconstruction
-      # shelves only).
-      def initialize(language: "chu", reflexes: false)
+      # shelves only). +historical_sounds+ (P32-3) turns on the
+      # Middle/Old-Chinese sound lines (the wiktionary-zh extract only —
+      # off elsewhere so existing shelf bodies never shift).
+      def initialize(language: "chu", reflexes: false, historical_sounds: false)
         @language = language
         @reflexes = reflexes
+        @historical_sounds = historical_sounds
       end
 
       def entries(path)
@@ -148,8 +158,26 @@ module Nabu
           numbered ? "#{index + 1}. #{line}" : line
         end
         etymology = record["etymology_text"].to_s.strip
-        text = [etymology, *lines].reject(&:empty?).join("\n")
+        text = [etymology, *historical_sound_lines(record), *lines].reject(&:empty?).join("\n")
         Nabu::Normalize.nfc(text)
+      end
+
+      # "Middle Chinese: khwenX" / "Old Chinese (Baxter-Sagart): /*[k]ʷʰˤ[e][n]ʔ/"
+      # — one line per historical sound row, upstream order, zh_pron
+      # verbatim. Modern records simply have none (no lines invented).
+      def historical_sound_lines(record)
+        return [] unless @historical_sounds
+
+        Array(record["sounds"]).filter_map do |sound|
+          tags = Array(sound["tags"])
+          stage = (tags & HISTORICAL_SOUND_TAGS).first
+          pron = sound["zh_pron"].to_s.strip
+          next if stage.nil? || pron.empty?
+
+          school = (tags - HISTORICAL_SOUND_TAGS).first
+          label = stage.tr("-", " ")
+          school ? "#{label} (#{school}): #{pron}" : "#{label}: #{pron}"
+        end
       end
 
       def sense_line(sense)

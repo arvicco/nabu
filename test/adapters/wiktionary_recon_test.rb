@@ -44,7 +44,9 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-xum" => "https://kaikki.org/dictionary/Umbrian/" \
                         "kaikki.org-dictionary-Umbrian.jsonl",
     "wiktionary-ett" => "https://kaikki.org/dictionary/Etruscan/" \
-                        "kaikki.org-dictionary-Etruscan.jsonl"
+                        "kaikki.org-dictionary-Etruscan.jsonl",
+    "wiktionary-zh" => "https://kaikki.org/dictionary/Chinese/" \
+                       "kaikki.org-dictionary-Chinese.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -79,7 +81,8 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-mga:kaikki.org-dictionary-MiddleIrish.jsonl",
                   "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl",
                   "wiktionary-xum:kaikki.org-dictionary-Umbrian.jsonl",
-                  "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl"],
+                  "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl",
+                  "wiktionary-zh:kaikki.org-dictionary-Chinese.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -88,16 +91,58 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_twelve_dictionaries
+  def test_parse_yields_the_thirteen_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
                     wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
-                    wiktionary-xum wiktionary-ett],
+                    wiktionary-xum wiktionary-ett wiktionary-zh],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm xum ett],
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
+                    sga mga wlm xum ett zho],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 6], documents.map(&:size)
+  end
+
+  # P32-3: the Chinese extract (wiktionary-zh, language zho) — the ONLY
+  # extract with historical_sounds: the per-entry Middle Chinese reading
+  # plus BOTH Old Chinese reconstructions (Baxter-Sagart AND Zhengzhang —
+  # Zhengzhang arrives ONLY via kaikki; ytenx is license-blocked) surface
+  # as body lines. 犬 pins all three; the modern GDP record pins honest
+  # absence (no MC/OC, no lines). The B-S readings here stand BESIDE the
+  # baxter-sagart source's own shelf — provenance-distinct, never deduped.
+  def test_zh_entries_carry_middle_and_old_chinese_readings
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    zh = documents.find { |doc| doc.slug == "wiktionary-zh" }
+    quan = zh.entries.find { |e| e.entry_id == "犬:character" } || flunk("犬:character missing")
+    assert_match(/Middle Chinese: khwenX/, quan.body)
+    assert_match(%r{Old Chinese \(Baxter-Sagart\): /\*\[k\]ʷʰˤ\[e\]\[n\]ʔ/}, quan.body)
+    assert_match(%r{Old Chinese \(Zhengzhang\): /\*kʰʷeːnʔ/}, quan.body)
+
+    gdp = zh.entries.find { |e| e.entry_id == "GDP:noun" } || flunk("GDP:noun missing")
+    refute_match(/Middle Chinese|Old Chinese/, gdp.body,
+                 "a modern term has no historical readings — no lines invented")
+  end
+
+  # P32-3: the zh descendants trees carry the Sino-Xenic loan lanes — 茶
+  # names Japanese/Korean readings upstream-flagged borrowed. The ja/ko
+  # codes pass through unmapped (display-only until a CJK gold shelf
+  # lands); homographs split by etymology_number as everywhere; the
+  # dominant soft-redirect records (123,055 of 323,840 upstream) mint
+  # honest no-gloss entries.
+  def test_zh_entries_mint_sinoxenic_borrowed_edges_and_redirect_stubs
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    zh = documents.find { |doc| doc.slug == "wiktionary-zh" }
+    cha = zh.entries.find { |e| e.entry_id == "茶:character" } || flunk("茶:character missing")
+    ja = cha.reflexes.find { |r| r.lang_code == "ja" } || flunk("ja 茶 edge missing")
+    assert ja.borrowed, "the Japanese reading is upstream-flagged borrowed"
+    assert_equal "cha", ja.roman_folded, "the roman bridge folds for lookup"
+
+    assert(zh.entries.any? { |e| e.entry_id == "A:verb:1" } &&
+           zh.entries.any? { |e| e.entry_id == "A:adj:2" },
+           "etymology_number homographs split as everywhere")
+    md = zh.entries.find { |e| e.entry_id == "MD:soft-redirect" } || flunk("soft-redirect missing")
+    assert_nil md.gloss, "soft-redirects are honest no-gloss stubs"
   end
 
   # P29-0: the attested Etruscan extract — Old Italic headwords with the
@@ -263,10 +308,11 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/wlm/, report.notes)
       assert_match(/xum/, report.notes)
       assert_match(/ett/, report.notes)
-      assert_equal 12, adapter.discover(workdir).count, "all twelve extracts discoverable in place"
+      assert_match(/zho/, report.notes)
+      assert_equal 13, adapter.discover(workdir).count, "all thirteen extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
-         old-irish middle-irish middle-welsh umbrian etruscan].each do |subdir|
+         old-irish middle-irish middle-welsh umbrian etruscan chinese].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -286,9 +332,9 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 12, targets.size
+    assert_equal 13, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[etruscan middle-irish middle-welsh old-irish
+    assert_equal %w[chinese etruscan middle-irish middle-welsh old-irish
                     proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
                     proto-italic proto-slavic proto-west-germanic umbrian],
                  targets.map(&:state_subdir).sort
@@ -314,7 +360,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 242, first.added
+    assert_equal 248, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -322,7 +368,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 242, second.skipped
+    assert_equal 248, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 
