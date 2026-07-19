@@ -528,6 +528,10 @@ local-notes:
   # scholia of one's own, one YAML list per topic file, indexed into the
   # derived urn_notes and rendered on show/define/links (MCP serves notes by
   # default, withheld wherever the target document is withheld).
+  sync_policy: local   # P31 rider fix: was missing (unlike the three sibling
+                       # shelves), so the manual default routed this
+                       # upstream-less shelf at the git probe and crashed
+                       # `health --remote` (owner report 2026-07-19).
 
 riig:
   adapter: Nabu::Adapters::Riig
