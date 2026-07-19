@@ -1155,6 +1155,98 @@ hebrew-lexicon:
   # frozen since 2019 → re-fetch is an owner decision.
   sync_policy: manual
 
+cuc:
+  adapter: Nabu::Adapters::Cuc
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync cuc — sparse GitFetch cone tf/0.2.8 +
+                   # README.md, 19 files ≈ 3.5 MB — then eyeball
+                   # nabu show urn:nabu:cuc:ktu-1.14:I.1 (Keret),
+                   # urn:nabu:cuc:ktu-1.4:V.1 (Baal) and 5 random lines,
+                   # then flip).
+  # P31-4: CUC — the Copenhagen Ugaritic Corpus (CACCHT project,
+  # github.com/DT-UCPH/cuc), THIRD text-fabric registrant and the FIRST
+  # uga source — a NEW axis language (dossier: `bin/nabu ingest --shelf
+  # language uga`, family lane "Northwest Semitic"). Census verified
+  # against otype.tf at the pinned commit 0408967b (2026-07-19): 146,017
+  # signs / 27,770 words / 7,616 lines / 334 columns / 279 tablets (the
+  # upstream README's "278" undercounts its own otype). Document =
+  # tablet (urn:nabu:cuc:ktu-<n>.<n> from the censused-uniform "KTU
+  # <n>.<n>" names), passage = column.line — the corpus's own citation
+  # grain. Text = the corpus's own {sign} transliteration stream; the
+  # cuneiform lane (usign) + per-sign text-critical flags (cert, emen
+  # restored/redundant/excised/missing/remark, alt, cont) ride each
+  # token's "signs" entries verbatim. 72 whitespace-only lines skipped +
+  # listed in document metadata (never faked). LICENSE: every .tf header
+  # verbatim — British spelling — "@licence=Creative Commons
+  # Attribution-NonCommercial 4.0 International License" → class nc,
+  # MCP-excluded. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
+  # upstream is work-in-progress, new versions land in new dirs →
+  # re-pin is an owner decision.
+  sync_policy: manual
+
+peshitta:
+  adapter: Nabu::Adapters::Peshitta
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync peshitta — sparse GitFetch cone tf/0.2 +
+                   # docs/about.md, 13 files ≈ 9 MB — then eyeball
+                   # nabu show urn:nabu:peshitta:gn:1.1,
+                   # urn:nabu:peshitta:ps:23.1 (the shepherd psalm, Hebrew
+                   # numbering) and 5 random verses, `align "GEN 1.1"` (now
+                   # SEVEN-legged: MT×2 ↔ LXX ↔ Vulgate ↔ WEB ↔ Targum ↔
+                   # Peshitta), then flip).
+  # P31-4: the Peshitta OT incl. deuterocanon (ETCBC/peshitta; OCR of the
+  # Leiden Vetus Testamentum Syriace / Codex Ambrosianus, syrocr +
+  # Text-Fabric conversion), FOURTH text-fabric registrant. Census
+  # verified against otype.tf at the pinned commit 9850f5ad (2026-07-19):
+  # 426,835 words / 65 books / 1,269 chapters / 31,341 verses. Document =
+  # book (urn:nabu:peshitta:<siglum downcased> — gn, orm_a; the A/B
+  # manuscript recensions are honest sibling documents with the witness
+  # letter riding metadata + verse annotations verbatim), passage = verse
+  # <doc>:<chapter>.<verse>. Language syc; ~492 upstream word forms are
+  # non-NFC (seyame/point order) → NFC at the adapter boundary per house
+  # rule (syc is NOT on the exemption list). MEASURED MT versification
+  # (chapter-grain census over all 39 protocanonical books + verse spot
+  # checks: Joel 4 ch / Malachi 3 ch / Jonah 1:16+2:11 / Psalms 150
+  # Hebrew-numbered) → the ot hub's SEVENTH leg with the OSHB/BHSA/Targum
+  # conservative map verbatim (config/alignments.yml; same holdouts), and
+  # the psalms work rides the P13-5 Hebrew→Greek remap (fourth reuse).
+  # LICENSE: docs/about.md verbatim "The plain text of the Peshitta, its
+  # conversion to Text-Fabric format, is subject to the CC-BY-NC license"
+  # (the conversion program alone is MIT) → class nc, MCP-excluded.
+  # Version PINNED tf/0.2 (the sparse cone IS the pin); upstream is
+  # archived/unsupported (repostatus badge) → effectively frozen.
+  sync_policy: manual
+
+syriac-corpus:
+  adapter: Nabu::Adapters::SyriacCorpus
+  enabled: false   # until the owner-fired first real sync (checklist §6:
+                   # bin/nabu sync syriac-corpus — sparse GitFetch cone
+                   # data/tei, 632 TEI files ≈ 39 MB — then eyeball
+                   # nabu show urn:nabu:syriac-corpus:1:2 (Aphrahat Dem. 1
+                   # §1), a hymn line of a memra doc and 5 random passages,
+                   # then flip).
+  # P31-4: the Digital Syriac Corpus (srophe/syriac-corpus; BYU/Oxford/
+  # Vanderbilt/Texas A&M) — 632 TEI documents of classical Syriac
+  # literature (Aphrahat, Ephrem, Jacob of Serugh, the Peshitta NT
+  # letters…), the survey's "lowest-friction big win". NEW srophe-tei
+  # family (their own TEI application, NOT EpiDoc — censused over all 632
+  # files: body divs of 16 types carrying p/ab/lg/l/head blocks; 1,958 of
+  # 6,801 divs unnumbered, block numbering partial → passages minted by
+  # document-order block ordinal with the div path + block tag/@n riding
+  # annotations as the citation lane — the ADDRESSABILITY VERDICT: no
+  # uniform upstream citation scheme exists). Document = file
+  # (urn:nabu:syriac-corpus:<file number> — the syriaccorpus.org id;
+  # 69.xml and 126.xml carry MISMATCHED <idno> URIs (61, 125 — one a
+  # duplicate, one a filename gap), so the FILENAME mints identity and
+  # idno rides metadata verbatim). Language syc (langUsage censused
+  # uniformly "syr"); per-block xml:lang syr/en/ar → syc/eng/ara.
+  # Apparatus <note>s stripped from text, riding annotations verbatim.
+  # LICENSE: per-file <availability> censused over ALL 632 files —
+  # uniformly "Creative Commons — Attribution 4.0 International — CC BY
+  # 4.0" (base texts PD per the availability note) → class attribution.
+  # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
