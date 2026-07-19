@@ -63,3 +63,14 @@ personal name 62 · pronoun 45 · …
 Corpus join (measured on the full release): 5,792/5,802 distinct corpus
 lemma ids resolve here (99.8%); 5,793/5,871 entries are cited by the
 corpus (98.7%).
+
+## l080424 addendum (2026-07-19, owner's first real sync)
+
+The `l080424-main` superEntry (671 bytes, byte-verbatim from the synced
+canonical at tag fd34a1b2) joined the trim after the first real sync
+quarantined the whole shelf: its `<orth/>` is present but EMPTY — a
+bound adjective stem ("young and lovely") whose citation form exists
+only in its `<re>` compounds (ura-waka, l050109+l007209). 3 such
+entries exist upstream; they skip by rule (censused via
+`OncojLexiconParser#skipped_empty_orth`), while a structurally missing
+`<orth>` element still raises.

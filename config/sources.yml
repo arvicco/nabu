@@ -1603,7 +1603,7 @@ oncoj-lexicon:
   adapter: Nabu::Adapters::OncojLexicon
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj-lexicon —
                    # sparse GitFetch (lexicon.xml + README, 3.4 MB, same
-                   # pinned tag) — expect 5,871 entries; eyeball nabu
+                   # pinned tag) — expect 5,868 entries (5,871 upstream − 3 empty-orth bound stems, skip-by-rule censused); eyeball nabu
                    # define titipapa / define --lang ojp atwo and 5 random
                    # entries, then flip.
   # P32-2: the ONCOJ lexicon — "the dictionary database for the corpus"

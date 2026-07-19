@@ -1869,4 +1869,27 @@
             </re>
         </entry>
     </superEntry>
+    <superEntry xml:id="l080424-main">
+        <entry xml:id="l080424">
+            <form>
+                <orth/>
+                <gramGrp>
+                    <pos>adjective</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>young and lovely</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l050109">ura</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l007209">waka</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
 </div>
