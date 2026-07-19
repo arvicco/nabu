@@ -10178,7 +10178,7 @@ witnesses, never deduped; Taishō-number reference edges measured at
 fixture time, promised nothing. Registry enabled: false, sync_policy
 manual. Docs: 02-sources row 105 claim.
 
-## P33-3 · Kyoto↔Kanripo crosswalk  [tier: fable] [status: staggered — dispatch after P33-0 merges] [deps: P33-0]
+## P33-3 · Kyoto↔Kanripo crosswalk  [tier: fable] [status: dispatched 2026-07-20] [deps: P33-0]
 The UD Kyoto treebank names its source texts by Kanripo id (README +
 Kyoto's ud-kanbun GitLab). Once P33-0 mints those texts: census the id
 map first (how many Kyoto source ids fall inside the KR1/3/4 wave),

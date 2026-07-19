@@ -66,6 +66,10 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of lzh_kyoto-ud-test.conllu (5,528 blocks upstream — one newdoc, Analects book 1; no MWT/empty-node lines across all three Kyoto splits; P32-0) (2,698,869 B -> 22,472 B)
+  - path: classical-chinese-kyoto/lzh_kyoto-ud-dev-slices.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-dev.conllu
+    whole: false
+    trim: first 3 complete sentence blocks of each of six real newdoc runs of lzh_kyoto-ud-dev.conllu (6,102 blocks / 26 newdocs upstream; KR1h0004_012+_013, KR1h0001_011, KR4a0001_005, KR6f0082_001, KR2e0003_029 — the P33-3 crosswalk fixture, sha256 in the README) (3,032,014 B -> 9,831 B)
   - path: classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu
     whole: false

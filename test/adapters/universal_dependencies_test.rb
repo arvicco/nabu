@@ -18,6 +18,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   EXPECTED_URNS = [
     "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50",
+    "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-dev-slices",
     "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50",
     "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50",
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
@@ -202,7 +203,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_fourteen_files_sorted_by_urn
+  def test_discover_finds_exactly_fifteen_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -213,6 +214,7 @@ class UniversalDependenciesTest < Minitest::Test
 
     expected_languages = {
       "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50" => "grc",
+      "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-dev-slices" => "lzh",
       "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50" => "lzh",
       "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50" => "lzh",
       "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50" => "got",
@@ -563,6 +565,15 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal Nabu::Adapters::UniversalDependencies, entry.adapter_class
     assert_equal "ud", entry.manifest.id
     assert_equal Nabu::Adapters::UniversalDependencies.manifest, entry.manifest
+  end
+
+  # --- the Kyoto↔Kanripo crosswalk rider (P33-3) ---------------------------
+
+  def test_declares_the_kyoto_kanripo_crosswalk_reference_producer
+    assert Nabu::Adapters::UniversalDependencies.reference_edges?,
+           "the Kyoto treebank's own Kanripo newdoc ids mint kind=reference edges after each sync"
+    producer = Nabu::Adapters::UniversalDependencies.reference_producer(catalog: nil, journal: nil)
+    assert_instance_of Nabu::KyotoKanripoCrosswalk, producer
   end
 
   private

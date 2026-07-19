@@ -40,6 +40,7 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `ancient-greek-perseus/grc_perseus-ud-test-head50.conllu` | `UD_Ancient_Greek-Perseus/master/grc_perseus-ud-test.conllu` | 1,979,022 | 85,337 | 50 |
 | `latin-perseus/la_perseus-ud-test-head50.conllu` | `UD_Latin-Perseus/master/la_perseus-ud-test.conllu` | 1,153,778 | 61,276 | 50 |
 | `classical-chinese-kyoto/lzh_kyoto-ud-test-head50.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-test.conllu` | 2,698,869 | 22,472 | 50 |
+| `classical-chinese-kyoto/lzh_kyoto-ud-dev-slices.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-dev.conllu` | 3,032,014 | 9,831 | 18 |
 | `classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu` | `UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu` | 59,420 | 29,817 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
@@ -184,6 +185,23 @@ Comment lines: Kyoto has `# newdoc id`, `# newpar text`, per-sentence
 `# sent_id` (`KR1h0004_001_par1_3-7` — Kanripo doc + paragraph + character
 span) and `# text`; TueCL has per-sentence `# sent_id` (plain integers 1–100),
 `# text`, most blocks `# gloss`, plus the free-form notes above.
+
+### Kyoto dev-slices trim note (P33-3, the Kanripo crosswalk)
+
+`classical-chinese-kyoto/lzh_kyoto-ud-dev-slices.conllu` — retrieved
+2026-07-20 from `master` (`lzh_kyoto-ud-dev.conllu`, sha256
+`b67614202e30006f9cada1abccbd8f04371f50bd9821791db4c3932a3fd6b3a7`,
+3,032,014 B, 6,102 blocks, 26 newdocs). NOT a head-50: the crosswalk
+producer needs several Kanripo texts in one file, and the dev head is all
+論語 — so the trim is the **first 3 complete sentence blocks of each of six
+real `# newdoc id` runs**, verbatim in file order within each run, blocks
+intact: `KR1h0004_012` + `KR1h0004_013` (論語 books 12–13 — a two-juan span
+for the detail line), `KR1h0001_011` (孟子), `KR4a0001_005` (楚辭 遠遊 —
+wave-1 KR4), `KR6f0082_001` (佛說阿彌陀經 — the KR6 sutra the README
+mis-lists under train; the data is authoritative) and `KR2e0003_029`
+(戰國策 西周 — out-of-wave KR2, the dangling-edge case). 18 blocks, 9,831 B.
+The full-split id census (all three splits, 2026-07-20) lives in
+`Nabu::KyotoKanripoCrosswalk`'s class note.
 
 ### Latin-ITTB multiword-token (MWT) rule
 
