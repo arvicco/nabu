@@ -10114,3 +10114,86 @@ existing suttacentral source (no new source, no flip); sync_policy note
 a trimmed real parallels.json slice covering every censused shape.
 Docs: 02-sources row 66 extension, worklog (sha TBD). Tests: producer +
 loader idempotency + the an7.68↔ma1 edge pinned end-to-end.
+
+# Phase 33 — the Sino axis, second phase: Kanripo + CBETA (approved 2026-07-20: all five packets; Kanripo first wave KR1+KR3+KR4; CBETA T+X; pacing = conservative defaults, owner-adjustable; KR6 = excluded this phase, doctrine call journaled)
+
+Source of truth: `.docs/surveys/sino-survey.md` lanes SINO-D/E + the P32
+outcomes. Standing rules apply (TDD, real-byte fixtures, licenses verbatim
+at fixture time, enabled: false until owner flip, worklog sha TBD for
+orchestrator fill, 02-sources rows renumbered at merge — current max 103
+after P32; №25 Wittern is SENT and NON-BLOCKING).
+
+## P33-0 · Kanripo — many-repo fetch + mandoku family, wave 1: KR1+KR3+KR4  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+nabu's FIRST many-repo source (github.com/kanripo: 9,355 one-text repos).
+DESIGN NOTE BEFORE CODE (the BHSA precedent) on the fetch: KR-Catalog
+repo (org-mode catalogs, 3.4 MB) cloned as the discovery index; per-text
+SHALLOW fetches of scoped texts only; polite sequential pacing with a
+configurable delay (default conservative — document the knob; owner had
+no constraint, design for resumability: an interrupted wave resumes
+without refetching); per-text commit pins in a fetch ledger (sefaria
+index-driven precedent, git-flavored). SCOPE = registry `classes:` list,
+THIS WAVE **KR1 (classics) + KR3 (masters) + KR4 (belles-lettres)**
+(owner-widened at the gate) — CENSUS SIZES FIRST from the catalog
+(text counts + estimated bytes per class) and REPORT before any bulk
+fetch; the Kyoto treebank's source texts (論語 = KR1h0004 …) fall in
+this wave. NEW `mandoku` family: org-mode headers (#+TITLE, #+DATE,
+#+PROPERTY ID/BASEEDITION/JUAN), `<pb:KRnXXXX_ed_NNN-Na>` page anchors →
+citation grain text:juan:leaf-side(-line per the census), ¶ line marks,
+** chapter headings; gaiji refs verbatim as annotations, NOT resolved
+(KR-Gaiji journaled). Document = text urn:nabu:kanripo:<KR-id>; edition
+choice per text (BASEEDITION vs multiple edition dirs — census the real
+layout, never invent). LICENSE: the org-level grant verbatim
+("Comprehensive collection of premodern Chinese texts. Licensed as CC
+BY SA 4.0.") + ytenx corroboration + the №25-pending note → attribution.
+KR6 EXCLUDED this phase (doctrine call journaled — CBETA is the
+scholarly Buddhist shelf; a future witness wave stays possible). KR2/KR5
+excluded from this wave (P33-1). Registry enabled: false, sync_policy
+manual. Docs: 02-sources row 104 claim (renumber-on-merge note). lzh
+dossier accretion queued for the owner.
+
+## P33-1 · Kanripo wave 2 — KR2 histories (+ KR5 census)  [tier: fable] [status: staggered — dispatch after P33-0 merges] [deps: P33-0]
+`classes:` config extension + censuses + fixtures for KR2's quirks
+(dynastic-history volume structure — the 二十四史 may be the largest
+single class; census text counts + bytes and REPORT, the owner decides
+the sync moment per class). KR5 censused and REPORTED (in/out = owner
+call at merge; no ingestion without the report). The dss-behind-bhsa
+stagger: same family, second registrant wave.
+
+## P33-2 · CBETA — Taishō + Xuzangjing  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+cbeta-org/xml-p5 (1.2 GB, 29 canon dirs, active). SCOPE (owner-widened):
+**T (Taishō vols 1–85) + X (Xuzangjing)**. NEW family `cbeta-tei`
+(TEI P5 + cb: namespace: gaiji <g>, interlinear notes, witness
+apparatus 【CB】【大】…; SAX/Reader per the >5 MB house rule — census file
+sizes). Passage grain = the encoded Taishō/Xuzangjing
+volume/page/register/line (census the lb/xml:id encoding on real files
+FIRST). THE CANON-LEVEL LICENSE GATE (Sefaria precedent at canon
+grain): Category A (T, X, …) = CC BY-NC-SA 4.0 verbatim from
+cbeta.org/copyright + in-file availability headers → nc, MCP-excluded;
+the named Category B exclusions (Y 印順法師佛學著作集, 呂澂, 太虛, 演培 …)
+NEVER ingested — refuse by canon dir, test-pinned, the exclusion list
+quoted verbatim. Fetch: GitFetch sparse cone [T/, X/, canons.json,
+schema] if the layout allows (census; report the cone size). OVERLAP
+HONESTY: SuttaCentral lzh Āgamas re-edit T sutras — provenance-distinct
+witnesses, never deduped; Taishō-number reference edges measured at
+fixture time, promised nothing. Registry enabled: false, sync_policy
+manual. Docs: 02-sources row 105 claim.
+
+## P33-3 · Kyoto↔Kanripo crosswalk  [tier: fable] [status: staggered — dispatch after P33-0 merges] [deps: P33-0]
+The UD Kyoto treebank names its source texts by Kanripo id (README +
+Kyoto's ud-kanbun GitLab). Once P33-0 mints those texts: census the id
+map first (how many Kyoto source ids fall inside the KR1/3/4 wave),
+then reference edges via the P32-6 producer seam (study it; a small
+dedicated producer or the ud adapter's — pick with reasons). Document-
+grain edges treebank↔kanripo; measured coverage in the report. SMALL.
+
+## P33-4 · TLS — Thesaurus Linguae Sericae  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+tls-kr org: tls-texts + tls-data, BOTH LICENSE.md verbatim CC BY-SA 4.0.
+A NEW shelf kind (onomasiological concept net: concepts → member words →
+text attestations). Census the eXist-db XML layout WHOLE before shaping;
+then a short DESIGN NOTE: how a concept shelf maps onto the dictionary
+machinery (entries = concepts? words? both as linked shelves?) — OR an
+honest deferral proposal with reasons (a valid packet outcome: ship the
+census + design note + nothing else if the machinery genuinely doesn't
+fit; the orchestrator/owner decide at merge). If shaped: registry
+enabled: false, manual; docs row 106 claim. Trim-first candidate —
+if your census says the fit is bad, say so early and cheaply.
