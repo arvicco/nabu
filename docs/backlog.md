@@ -9896,3 +9896,30 @@ the original ETCSL lemma layer as the second witness beside
 epsd2/literary (P31-0) — MW-beside-kaikki, deliberately unmerged,
 meeting at Q-number/ETCSL-number concordances (reference edges).
 Registry enabled: false, sync_policy manual.
+
+## P31-6 · UD Perseus treebank pair  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
+Owner-added 2026-07-19 (anc.md check: the one cheap unclaimed open item —
+"Perseus Ancient Greek and Latin Treebanks", 02-sources row 17's UD half).
+The P31-0 HitTB shape exactly: TWO `UniversalDependencies::TREEBANKS`
+config rows, no new code expected — `ancient-greek-perseus`
+(UD_Ancient_Greek-Perseus, ~202k tokens: Homer, Hesiod, tragedy,
+Herodotus per the AGLDT canon) + `latin-perseus` (UD_Latin-Perseus,
+~29k tokens: Caesar, Cicero, Vergil, Ovid…). LICENSE GATE AT FIXTURE
+TIME, never from memory: read each repo's LICENSE.txt + README metadata
+verbatim; BY-SA → the P10-4 per-document attribution override
+(birchbark/RNC/HitTB mechanics), BY-NC-SA → ride the source `nc` class
+bare (the DipSGG posture). Whichever verdict, record it verbatim.
+DEDUP HONESTY: these convert the NATIVE AGLDT treebanks (row 17), which
+nabu has never synced — the chu-PROIEL re-export guard does NOT apply;
+and no overlap with `greek-proiel`/`latin-ittb` (different upstream
+data). vs perseus-greek/latin TEXT sources: same works at treebank
+grain = distinct witnesses, never deduped (standing doctrine, the
+DipSGG-beside-CorPH precedent). Languages grc/lat — both already
+lemma-indexed; treebank lemmas join the existing gold lanes (measure a
+sample join at fixture time, promise nothing). Fixtures: head-slice per
+treebank (the HitTB recipe: real bytes, upstream sha256 pinned, README
+date+URL+recipe); check the breaker-threshold test still balances at 12
+treebanks (the P31-0 rebalance precedent — 2/12 = 16.7% must not trip).
+Registry: NO enabled flip (`ud` is live; expected sync delta documented
+in sources.yml comments — docs at UD's one-doc-per-treebank-split
+grain). Docs: 02-sources row 4 (ud) + row 17 cross-note, worklog.
