@@ -1,0 +1,1895 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="../vsarpj.rnc" type="compact"?>
+<div xmlns="http://www.tei-c.org/ns/1.0">
+    <superEntry xml:id="l000002-main">
+        <entry corresp="36983" xml:id="l000002">
+            <form>
+                <orth>-m-</orth>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="aStem" type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[conjectural]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000006-main">
+        <entry corresp="19587" xml:id="l000006a">
+            <form>
+                <orth>-n-</orth>
+                <orth>-zu</orth>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="aStem" type="irr">conclusive: -zu, -nu; adnominal: -nu;
+                        exclamatory: -ne; infinitive: -ni, -zu; gerund: -nito, -zute, -zuni,
+                        -zusite, -de (from EMJ); concessive: -nedo; provisional: -neba; conditional:
+                        -zupa; nominal: -naku</iType>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[negative]</def>
+            </sense>
+        </entry>
+        <entry corresp="19587" xml:id="l000006b">
+            <form>
+                <usg type="geo">EOJ</usg>
+                <orth>-nana</orth>
+                <orth>-nani</orth>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="aStem" type="irr"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[negative]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000009-main">
+        <entry xml:id="l000009">
+            <form>
+                <orth>-s-</orth>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="aStem" type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[respect]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000018-main">
+        <entry corresp="28679" xml:id="l000018">
+            <form>
+                <orth>-n-</orth>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="iStem" type="nIrr"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[perfective]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000024-main">
+        <entry corresp="39865" xml:id="l000024">
+            <form>
+                <orth>-yer-</orth>
+                <orth>-ar-</orth>
+                <note>-ar- is EOJ</note>
+                <gramGrp>
+                    <pos>auxiliary</pos>
+                    <iType affixType="bStem" type="rIrr"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[stative]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000032-main">
+        <entry xml:id="l000032">
+            <form>
+                <orth>-kar-</orth>
+                <gramGrp>
+                    <pos>secondary adjectival copula</pos>
+                    <iType type="rIrr"/>
+                </gramGrp>
+            </form>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l000033">-ku</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l030125a">ar</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000035-main">
+        <entry corresp="36233" xml:id="l000035">
+            <form>
+                <orth>mi</orth>
+                <gramGrp>
+                    <pos>prefix</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[honorific]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000503-main">
+        <entry corresp="7889" xml:id="l000503">
+            <form>
+                <orth>ga</orth>
+                <orth>go</orth>
+                <note>result of vowel assimilation, presumably: only as wago omop-, wago opokimi
+                    etc.</note>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[genitive case particle]</def>
+            </sense>
+        </entry>
+        <entry corresp="7889" xml:id="l000503b">
+            <form>
+                <usg type="geo">EOJ</usg>
+                <orth>ka</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[genitive case particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000506-main">
+        <entry corresp="5568" xml:id="l000506">
+            <form>
+                <orth>ka</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[focus particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000510-main">
+        <entry corresp="12738" xml:id="l000510">
+            <form>
+                <orth>koso</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <form>
+                <usg type="geo">EOJ</usg>
+                <orth>kwoso</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[focus particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000514-main">
+        <entry xml:id="l000514">
+            <form>
+                <orth>mo</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[topic particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000519-main">
+        <entry corresp="28178" xml:id="l000519">
+            <form>
+                <orth>ni</orth>
+                <orth>n</orth>
+                <orth>na</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[dative case particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000520-main">
+        <entry corresp="28989" xml:id="l000520">
+            <form>
+                <orth>no</orth>
+                <orth>nwo</orth>
+                <note>nwo reflects merger of no and nwo</note>
+                <orth>na</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[genitive case particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000522-main">
+        <entry corresp="29321" xml:id="l000522">
+            <form>
+                <orth>pa</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[topic particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000525-main">
+        <entry corresp="13857" xml:id="l000525a">
+            <form>
+                <orth>sape</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[restrictive particle]</def>
+            </sense>
+        </entry>
+        <entry corresp="13857" xml:id="l000525b">
+            <form>
+                <orth>sapeni</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[restrictive particle + copula; typically marks subjects]</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l000525a">sape</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l031965">ni</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000527-main">
+        <entry corresp="21528" xml:id="l000527">
+            <form>
+                <orth>so</orth>
+                <orth>zo</orth>
+                <orth>ze</orth>
+                <orth>to</orth>
+                <note>ze is EOJ</note>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[focus particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000534-main">
+        <entry corresp="41407" xml:id="l000534">
+            <form>
+                <orth>wo</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[accusative case particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000537-main">
+        <entry corresp="94987" xml:id="l000537">
+            <form>
+                <orth>ya</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[focus particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000538-main">
+        <entry corresp="38980" xml:id="l000538">
+            <form>
+                <orth>yo</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[interjectional particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l000540-main">
+        <entry xml:id="l000540a">
+            <form>
+                <orth>ywori</orth>
+                <orth>yori</orth>
+                <note>yori is in EOJ and/or reflects merger of ywo and yo</note>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[ablative case particle]</def>
+            </sense>
+        </entry>
+        <entry xml:id="l000540b">
+            <form>
+                <orth>ywo</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[ablative case particle]</def>
+            </sense>
+        </entry>
+        <entry xml:id="l000540c">
+            <form>
+                <orth>yuri</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[ablative case particle]</def>
+            </sense>
+        </entry>
+        <entry xml:id="l000540d">
+            <form>
+                <orth>yu</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[ablative case particle]</def>
+            </sense>
+        </entry>
+        <entry xml:id="l000540e">
+            <form>
+                <orth>ywo</orth>
+                <gramGrp>
+                    <pos>particle</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[conjunctional particle]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l002001-main">
+        <entry corresp="31499" xml:id="l002001">
+            <form>
+                <orth>pito</orth>
+                <orth>pita</orth>
+                <note>pita is found once in EOJ</note>
+                <gramGrp>
+                    <pos>numeral</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>one</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l002002-main">
+        <entry corresp="32850" xml:id="l002002">
+            <form>
+                <orth>puta</orth>
+                <gramGrp>
+                    <pos>numeral</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>two</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l002016-main">
+        <entry xml:id="l002016">
+            <form>
+                <orth>ri</orth>
+                <gramGrp>
+                    <pos>counter</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>counter for people</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l004058-main">
+        <entry xml:id="l004058">
+            <form>
+                <orth>tana</orth>
+                <gramGrp>
+                    <pos>adverb</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>completely</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l007011-main">
+        <entry corresp="38020" xml:id="l007011">
+            <form>
+                <orth>moro</orth>
+                <gramGrp>
+                    <pos>adjective</pos>
+                    <iType type="none"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>all</def>
+            </sense>
+            <sense n="2">
+                <def>both</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030125-main">
+        <entry xml:id="l030125a">
+            <form type="stem">
+                <orth>ar</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="rIrr"/>
+                    <gram type="class">stative</gram>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"/>
+                    <gram>s</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>exist</def>
+            </sense>
+            <sense n="2">
+                <def>live</def>
+            </sense>
+            <re>
+                <form>
+                    <orth>
+                        <ref target="l000026"/>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry corresp="1176" xml:id="l030125b">
+            <form type="noun">
+                <orth>ari</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>existing</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030170-main">
+        <entry corresp="2038" xml:id="l030170a">
+            <form type="stem">
+                <orth>itar</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">motion</gram>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"
+                        transsubtype="unaccusative"/>
+                    <gram>l</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>arrive</def>
+            </sense>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000050">-r-</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030206-main">
+        <entry xml:id="l030206a">
+            <form type="stem">
+                <orth>imas</orth>
+                <orth>mas</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">stative</gram>
+                    <gram type="class">motion</gram>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"/>
+                    <gram>l</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>be</def>
+            </sense>
+            <sense n="2">
+                <def>come</def>
+            </sense>
+            <sense n="3">
+                <def>go [respect]</def>
+            </sense>
+            <re type="transitivity">
+                <form>
+                    <orth>
+                        <ref target="l030207a">imase</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry xml:id="l030206b">
+            <form type="noun">
+                <orth>imasi</orth>
+                <orth>masi</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030282-main">
+        <entry xml:id="l030282a">
+            <form type="stem">
+                <orth>unag</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>hang around neck</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030341-main">
+        <entry corresp="215413" xml:id="l030341a">
+            <form type="stem">
+                <orth>osinabe</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="LB"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>push down (e.g., to make bow)</def>
+            </sense>
+            <re subtype="VV" type="compound">
+                <form>
+                    <orth>
+                        <ref target="l030349a">os</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l031298a">nabe</ref>
+                    </orth>
+                </form>
+            </re>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000052">-e-</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030349-main">
+        <entry corresp="4963" xml:id="l030349a">
+            <form type="stem">
+                <orth>os</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">caused motion</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>push</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030565-main">
+        <entry corresp="8399" xml:id="l030565a">
+            <form type="stem">
+                <orth>kik</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">psych</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>hear</def>
+            </sense>
+        </entry>
+        <entry corresp="54819" xml:id="l030565b">
+            <form type="noun">
+                <orth>kiki</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l030853-main">
+        <entry xml:id="l030853a">
+            <form type="stem">
+                <orth>sik</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>rule</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031144-main">
+        <entry corresp="24562" xml:id="l031144a">
+            <form type="stem">
+                <orth>tukur</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>make</def>
+            </sense>
+        </entry>
+        <entry corresp="24551" xml:id="l031144b">
+            <form type="noun">
+                <orth>tukuri</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031178-main">
+        <entry corresp="24762" xml:id="l031178a">
+            <form type="stem">
+                <orth>tum</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>pluck</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031213-main">
+        <entry corresp="26516" xml:id="l031213a">
+            <form type="stem">
+                <orth>todomar</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>stop</def>
+            </sense>
+            <sense n="2">
+                <def>be left behind</def>
+            </sense>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000050">-r-</ref>
+                    </orth>
+                </form>
+            </re>
+            <re type="transitivity">
+                <form>
+                    <orth>
+                        <ref target="l031214a">todomwi</ref>
+                    </orth>
+                </form>
+                <form>
+                    <orth>
+                        <ref target="l031215a">todome</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031298-main">
+        <entry xml:id="l031298a">
+            <form type="stem">
+                <orth>nabe</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="LB"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>make bow</def>
+            </sense>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000052">-e-</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031391-main">
+        <entry xml:id="l031391a">
+            <form type="stem">
+                <orth>nor</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">speech</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>say</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031497-main">
+        <entry corresp="31640" xml:id="l031497a">
+            <form type="stem">
+                <orth>pibik</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">motion</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>reverberate</def>
+            </sense>
+        </entry>
+        <entry corresp="31639" xml:id="l031497b">
+            <form type="noun">
+                <orth>pibiki</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031761-main">
+        <entry xml:id="l031761a">
+            <form type="stem">
+                <orth>mot</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>hold</def>
+            </sense>
+            <re type="transitivity">
+                <form>
+                    <orth>
+                        <ref target="l031762a">mote</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry corresp="137988" xml:id="l031761b">
+            <form type="noun">
+                <orth>moti</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031840-main">
+        <entry xml:id="l031840a">
+            <form type="stem">
+                <orth>yuk</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">motion</gram>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"/>
+                    <gram>l</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>go</def>
+            </sense>
+            <sense n="2">
+                <def>depart, leave</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref target="l030145a">ik</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry xml:id="l031840b">
+            <form type="noun">
+                <orth>yuki</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031842-main">
+        <entry corresp="38835" xml:id="l031842a">
+            <form type="stem">
+                <orth>yusur</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">caused motion</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>shake t</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031898-main">
+        <entry xml:id="l031898a">
+            <form type="stem">
+                <orth>wakare</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="LB"/>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"
+                        transsubtype="unaccusative"/>
+                    <gram>s</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>be split</def>
+            </sense>
+            <sense n="2">
+                <def>be parted</def>
+            </sense>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000050">-r-</ref>
+                    </orth>
+                    <orth>
+                        <ref target="f000052">-e-</ref>
+                    </orth>
+                </form>
+            </re>
+            <re type="transitivity">
+                <form>
+                    <orth>
+                        <ref target="l031902a">wak</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l031903a">wake</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry corresp="41181" xml:id="l031898b">
+            <form type="noun">
+                <orth>wakare</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031910-main">
+        <entry corresp="41291" xml:id="l031910a">
+            <form type="stem">
+                <orth>watar</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                    <gram type="class">motion</gram>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"/>
+                    <gram>l</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>go across</def>
+            </sense>
+            <re type="derivation">
+                <form>
+                    <orth>
+                        <ref target="f000050">-r-</ref>
+                    </orth>
+                </form>
+            </re>
+            <re type="transitivity">
+                <form>
+                    <orth>
+                        <ref target="l031908a">watas</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+        <entry corresp="70356" xml:id="l031910b">
+            <form type="noun">
+                <orth>watari</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>deverbal</subc>
+                </gramGrp>
+            </form>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031957-main">
+        <entry corresp="5360" xml:id="l031957a">
+            <form type="stem">
+                <orth>wor</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="rIrr"/>
+                    <gram type="trans" transtype="intransitive" ana="Zixi"/>
+                    <gram>e</gram>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>be sitting</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l031965-main">
+        <entry corresp="28039" xml:id="l031965">
+            <form type="stem">
+                <orth>no</orth>
+                <orth>ni</orth>
+                <gramGrp>
+                    <pos>copula</pos>
+                    <iType type="irr">adnominal: no; infinitive: ni, no; gerund: nite, nito, nisite;
+                        semblative: nasu, nosu</iType>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>copula</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l032048-main">
+        <entry xml:id="l032048a">
+            <note type="private">not in JDB</note>
+            <form type="stem">
+                <orth>mit</orth>
+                <gramGrp>
+                    <pos>verb</pos>
+                    <iType type="QD"/>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[unknown; used in the makura kotoba 'swora mitu']</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l042029-main">
+        <entry corresp="93993" xml:id="l042029">
+            <form>
+                <orth>ko</orth>
+                <gramGrp>
+                    <pos>pronoun</pos>
+                    <subc>demonstrative (proximal)</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>this (one)</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l042057-main">
+        <entry corresp="41100" xml:id="l042057">
+            <form>
+                <orth>wa</orth>
+                <gramGrp>
+                    <pos>pronoun</pos>
+                    <subc>personal</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>1st person pronoun</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l042059-main">
+        <entry corresp="41378" xml:id="l042059">
+            <form>
+                <orth>ware</orth>
+                <orth>waro</orth>
+                <note>waro is an EOJ form, in 20.4343</note>
+                <gramGrp>
+                    <pos>pronoun</pos>
+                    <subc>personal</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>1st person pronoun</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050001-main">
+        <entry xml:id="l050001a">
+            <form>
+                <orth>ame</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>exposed</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>heaven</def>
+            </sense>
+            <sense n="2">
+                <def>rain</def>
+            </sense>
+        </entry>
+        <entry xml:id="l050001b">
+            <form>
+                <orth>ama</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>covert</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>heaven</def>
+            </sense>
+            <sense n="2">
+                <def>rain</def>
+            </sense>
+        </entry>
+        <entry xml:id="l050001c">
+            <form>
+                <orth>same</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>rain</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050005-main">
+        <entry xml:id="l050005a">
+            <form>
+                <orth>kamwi</orth>
+                <orth>kami</orth>
+                <note>kami reflects merger of mwi and mi and is also EOJ</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>exposed</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>spirit, god</def>
+            </sense>
+        </entry>
+        <entry xml:id="l050005b">
+            <form>
+                <orth>kamu</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>covert</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>spirit, god</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050006-main">
+        <entry xml:id="l050006a">
+            <form>
+                <orth>ipye</orth>
+                <orth>pye</orth>
+                <orth>ipe</orth>
+                <note>ipe is EOJ</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>exposed</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>house</def>
+            </sense>
+        </entry>
+        <entry xml:id="l050006c">
+            <form>
+                <usg type="geo">EOJ</usg>
+                <orth>ipa</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>covert</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>house</def>
+            </sense>
+        </entry>
+        <entry xml:id="l050006d">
+            <form>
+                <usg type="geo">EOJ</usg>
+                <orth>ipi</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                    <subc>covert</subc>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>house</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050015-main">
+        <entry corresp="24614" xml:id="l050015">
+            <form>
+                <orth>tuti</orth>
+                <orth>tusi</orth>
+                <note>tusi is an EOJ form</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>earth</def>
+            </sense>
+            <sense n="2">
+                <def>ground</def>
+            </sense>
+            <sense n="3">
+                <def>soil</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050025-main">
+        <entry corresp="7355" xml:id="l050025">
+            <form>
+                <orth>kapa</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>river</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050028-main">
+        <entry corresp="11786" xml:id="l050028">
+            <form>
+                <orth>kwo</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>child</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050046-main">
+        <entry corresp="31500" xml:id="l050046">
+            <form>
+                <orth>pito</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>person, people</def>
+            </sense>
+            <sense n="2">
+                <def>woman, women</def>
+            </sense>
+            <sense n="2">
+                <def>other than self</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050063-main">
+        <entry xml:id="l050063">
+            <form>
+                <orth>tame</orth>
+                <orth>ta</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>purpose, benefit, sake</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050067-main">
+        <entry corresp="43559" xml:id="l050067">
+            <form>
+                <orth>na</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>greens</def>
+            </sense>
+            <sense n="2">
+                <def>fish</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050068-main">
+        <entry corresp="27435" xml:id="l050068">
+            <form>
+                <orth>na</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>name</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050091-main">
+        <entry xml:id="l050091">
+            <form>
+                <orth>miti</orth>
+                <orth>ti</orth>
+                <orth>di</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>road</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050374-main">
+        <entry xml:id="l050374">
+            <form>
+                <orth>pukusi</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>digging stick</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l052577">pu</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l090104">kusi</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050402-main">
+        <entry xml:id="l050402">
+            <form>
+                <orth>titipapa</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>father and mother</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l050641">titi</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l051720">papa</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050420-main">
+        <entry xml:id="l050420">
+            <form>
+                <orth>tanabata</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>shelf loom</def>
+            </sense>
+            <sense n="2">
+                <def>the Weaver</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l050949">tana</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l090324">pata</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050486-main">
+        <entry xml:id="l050486">
+            <form>
+                <orth>moropito</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>everyone</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l007011">moro</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l050046">pito</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050607-main">
+        <entry xml:id="l050607">
+            <form>
+                <orth>anatama</orth>
+                <orth>anadama</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>holed jewel</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l050809">ana</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l052078">tama</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050641-main">
+        <entry xml:id="l050641">
+            <form>
+                <orth>titi</orth>
+                <orth>sisi</orth>
+                <note>sisi is EOJ</note>
+                <orth>toti</orth>
+                <note>toti is EOJ</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>father</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref taget="l050762">ti</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050809-main">
+        <entry xml:id="l050809">
+            <form>
+                <orth>ana</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>hole</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l050877-main">
+        <entry xml:id="l050877">
+            <form>
+                <orth>atwo</orth>
+                <orth>ato</orth>
+                <note>ato likely reflects merger of two and to</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>foot, sole of the foot</def>
+            </sense>
+            <sense n="2">
+                <def>footprint</def>
+            </sense>
+            <sense n="3">
+                <def>trace, trail</def>
+            </sense>
+            <sense n="4">
+                <def>foot of the bed</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l051130-main">
+        <entry corresp="1812" xml:id="l051130">
+            <form>
+                <orth>isi</orth>
+                <orth>si</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>stone</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref target="l050104">iswo</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l080302">osi</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l080302">osu</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l051206-main">
+        <entry xml:id="l051206">
+            <form>
+                <orth>kapara</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>river flats</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l051337-main">
+        <entry xml:id="l051337">
+            <form>
+                <orth>kuni</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>land</def>
+            </sense>
+            <sense n="2">
+                <def>nation</def>
+            </sense>
+            <sense n="3">
+                <def>place of origin</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l080185-main">
+        <entry xml:id="l080185">
+            <form>
+                <orth>mikapa</orth>
+                <gramGrp>
+                    <pos>place name</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>Mikawa</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l051720-main">
+        <entry xml:id="l051720">
+            <form>
+                <orth>papa</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>mother</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052017-main">
+        <entry xml:id="l052017">
+            <form>
+                <orth>misumaru</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>pearl necklace or bracelet</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref target="l000035">mi</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052049-main">
+        <entry xml:id="l052049">
+            <form>
+                <orth>swora</orth>
+                <orth>sora</orth>
+                <note>sora probably reflects merger of swo and so</note>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>sky</def>
+            </sense>
+            <sense n="2">
+                <def>state of mind</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052078-main">
+        <entry xml:id="l052078">
+            <form>
+                <orth>tama</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>jewel</def>
+            </sense>
+            <sense n="2">
+                <def>pearl</def>
+            </sense>
+            <sense n="3">
+                <def>beautiful</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052092-main">
+        <entry xml:id="l052092">
+            <form>
+                <orth>tani</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>valley</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052341-main">
+        <entry xml:id="l052341">
+            <form>
+                <orth>woka</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>hill</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052386-main">
+        <entry xml:id="l052386">
+            <form>
+                <orth>yamato</orth>
+                <gramGrp>
+                    <pos>place name</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>Yamato</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l052392-main">
+        <entry xml:id="l052392">
+            <form>
+                <orth>yasu</orth>
+                <gramGrp>
+                    <pos>place name</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>Yasu</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l080001-main">
+        <entry xml:id="l080001">
+            <form>
+                <orth>oto</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>younger sibling</def>
+            </sense>
+            <sense n="2">
+                <def>young and beautiful</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref target="l051690">otopi</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l091023-main">
+        <entry xml:id="l091023">
+            <form>
+                <orth>sworamitu</orth>
+                <orth>sworanimitu</orth>
+                <gramGrp>
+                    <pos>mk</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[MK]</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090120-main">
+        <entry xml:id="l090120">
+            <form>
+                <orth>kwo</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>basket</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090122-main">
+        <entry xml:id="l090122">
+            <form>
+                <orth>adisikwitakapikwone</orth>
+                <gramGrp>
+                    <pos>personal name</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>Ajishiki-takahikone</def>
+            </sense>
+            <re type="related">
+                <form>
+                    <orth>
+                        <ref target="l080096">adisikwitakapikwone</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l051759">pikwo</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090126-main">
+        <entry xml:id="l090126">
+            <form>
+                <orth>se</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>boy</def>
+            </sense>
+            <sense n="2">
+                <def>dear, beloved</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090324-main">
+        <entry xml:id="l090324">
+            <form>
+                <orth>pata</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>loom</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090412-main">
+        <entry xml:id="l090412">
+            <form>
+                <orth>putami</orth>
+                <gramGrp>
+                    <pos>place name</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>Futami</def>
+            </sense>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090747-main">
+        <entry xml:id="l090747">
+            <form>
+                <orth>pitori</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>alone, by oneself</def>
+            </sense>
+            <sense n="2">
+                <def>one person</def>
+            </sense>
+            <sense n="3">
+                <def>no one else</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l002001">pito</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l002016">ri</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090819main">
+        <entry xml:id="l090819">
+            <form>
+                <orth>takigwikoru</orth>
+                <gramGrp>
+                    <pos>mk</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>[MK for kamakura]</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l031000a">tak</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l050003a">kwi</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l030752a">kor</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l090819-main">
+        <entry xml:id="l090819">
+            <form>
+                <orth>takamiya</orth>
+                <gramGrp>
+                    <pos>noun</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>palace built on a height</def>
+            </sense>
+            <sense n="1">
+                <def>tall palace</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l007005">taka</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l050018">miya</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+    <superEntry xml:id="l080424-main">
+        <entry xml:id="l080424">
+            <form>
+                <orth/>
+                <gramGrp>
+                    <pos>adjective</pos>
+                </gramGrp>
+            </form>
+            <sense n="1">
+                <def>young and lovely</def>
+            </sense>
+            <re type="compound">
+                <form>
+                    <orth>
+                        <ref target="l050109">ura</ref>
+                    </orth>
+                    <orth>
+                        <ref target="l007209">waka</ref>
+                    </orth>
+                </form>
+            </re>
+        </entry>
+    </superEntry>
+</div>

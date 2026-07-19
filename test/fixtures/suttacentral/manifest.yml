@@ -43,7 +43,23 @@ files:
     url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pli/ms/xplayground/xplayground1_root-pli-ms.json
     whole: true
     trim: none (upstream sandbox file, copied whole)
+  - path: root/lzh/sct/sutta/sa/sa101-200/sa158_root-lzh-sct.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/lzh/sct/sutta/sa/sa101-200/sa158_root-lzh-sct.json
+    whole: true
+    trim: none (complete lzh Agama root, copied whole 2026-07-19 from the synced canonical tree at commit 84d9560 — P32-1 zero-fetch rule)
+  - path: translation/en/patton/sutta/sa/sa101-200/sa158_translation-en-patton.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/patton/sutta/sa/sa101-200/sa158_translation-en-patton.json
+    whole: true
+    trim: none (complete patton translation, copied whole 2026-07-19 from the synced canonical tree at commit 84d9560)
+  - path: root/lzh/sct/abhidhamma/sg/t1536.12_root-lzh-sct.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/lzh/sct/abhidhamma/sg/t1536.12_root-lzh-sct.json
+    whole: true
+    trim: none (complete lzh abhidhamma root, no English sibling; copied whole 2026-07-19 from the synced canonical tree at commit 84d9560)
   - path: _publication.json
     url: https://raw.githubusercontent.com/suttacentral/bilara-data/published/_publication.json
     whole: false
-    trim: 6 of 140 publication entries kept (scpub1, scpub4, scpub7, scpub53, scpub64, scpub69); entry blocks byte-identical to upstream (304 KB -> 13 KB)
+    trim: 8 of 140 publication entries kept (scpub1, scpub4, scpub7, scpub20, scpub39, scpub53, scpub64, scpub69); entry blocks byte-identical to upstream (304 KB -> 18 KB); scpub20/scpub39 (the lzh publications) added 2026-07-19 from the synced canonical tree at commit 84d9560
+  - path: parallels/parallels.json
+    url: https://raw.githubusercontent.com/suttacentral/sc-data/8b3bcaf61c3e4d4d80dc131df3d1b7fb8d1d1311/relationship/parallels.json
+    whole: false
+    trim: 10 of 8,221 relation entries kept (P32-6; fetched fresh 2026-07-19, upstream sha256 cba7f314..., byte-identical to the 2026-07-16 scout snapshot); entry objects value-identical to upstream, chosen to cover every censused shape — parallels/mentions/retells, `~` inference prefixes, `#segment` and `#a-#b` range suffixes, the uid:segment colon variant, a free-text print citation, a same-document segment pair, a reverse re-assertion, and one pair carried by two kinds; landed at parallels/ (the adapter's fetch target), NOT the upstream relationship/ path

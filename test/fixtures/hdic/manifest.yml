@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All six files are documented TRIMS (whole: false) of TSVs in the
+# github.com/shikeda/HDIC repo at commit c8c36835 (2026-07-15): full
+# comment header + column row + a small id-selected row set, bytes
+# verbatim. The raw.githubusercontent URLs below serve the CURRENT master
+# — upstream is actively maintained, so a fresh GET may differ from the
+# pinned commit; fetched for URL-liveness only. Recipe in README.md.
+source: hdic
+adapter_test: test/adapters/hdic_test.rb
+retrieved: 2026-07-19
+files:
+  - path: YYP.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/YYP.tsv
+    whole: false
+    trim: header + first 12 of 2,087 rows
+  - path: KTB.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/KTB.tsv
+    whole: false
+    trim: header + first 12 of 18,932 rows
+  - path: TSJ_definitions.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/TSJ_definitions.tsv
+    whole: false
+    trim: header + first 12 of 19,980 rows + s0104a804 (wakun exemplar) + s0811a303a (the one empty-headword row)
+  - path: TSJ_wakun.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/TSJ_wakun.tsv
+    whole: false
+    trim: header + rows s0104a705/s0104a804 of 3,828
+  - path: SYP.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/SYP.tsv
+    whole: false
+    trim: header + first 12 of 22,809 rows
+  - path: KRM.tsv
+    url: https://raw.githubusercontent.com/shikeda/HDIC/master/KRM.tsv
+    whole: false
+    trim: header + first 12 of 32,607 rows

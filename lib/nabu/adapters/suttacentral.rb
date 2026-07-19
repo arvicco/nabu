@@ -2,6 +2,9 @@
 
 require "json"
 
+require_relative "../file_fetch"
+require_relative "../suttacentral_parallels"
+
 module Nabu
   module Adapters
     # The SuttaCentral adapter (P26-1; biblical–Indic survey lane 3): the
@@ -11,20 +14,49 @@ module Nabu
     # translations keyed by THE SAME segment ids, ingested as `-en` sibling
     # documents (the ORACC/Damaskini precedent; `show URN --parallel`).
     #
-    # == Scope (censused at the pinned survey commit, 2026-07-18)
+    # == Scope (censused at the pinned survey commit, 2026-07-18; lzh flip
+    #    censused against the synced canonical tree, P32-1, 2026-07-19)
     #
-    # Two root trees: root/pli/ms — the Mahāsaṅgīti Tipiṭāka, 7,289 files
+    # Three root trees: root/pli/ms — the Mahāsaṅgīti Tipiṭāka, 7,289 files
     # (one of which is upstream's own xplayground sandbox, skipped by rule) —
-    # and root/pra/pts — the 22 Patna Dhammapada files, language `pra`
+    # root/pra/pts — the 22 Patna Dhammapada files, language `pra`
     # (upstream's own tag; in scope because its English translation is THE
-    # licensing outlier, see below). Out of scope: root/en (site blurbs/UI
-    # strings, not canon), root/misc, root/san + root/lzh (Sanskrit/Chinese
-    # parallels — a future scope decision), the 32 non-English translation
-    # languages, and — EXCLUDED by honesty — SuttaCentral's LEGACY
-    # translations (the `html_text` layer in the separate sc-data repo,
-    # largely CC BY-NC-ND; a different repo/layer this adapter never
-    # touches). The sc-data parallels graph (8,221 relations, declared
-    # non-copyrightable) is future intertext-packet material, not fetched.
+    # licensing outlier, see below) — and root/lzh/sct (P32-1) — the 272
+    # Literary Chinese Āgama files, "SuttaCentral Taisho" (scpub39, CC0):
+    # sutta 205 (ma 15 / sa 49 / ea 1 / lzh-minor 140) + abhidhamma 67
+    # (sag 33 / lzh-dk 22 / sg 12), language `lzh`, stems disjoint from
+    # pli/pra (censused: zero collisions across 7,583 stems). Out of scope:
+    # root/en (site blurbs/UI strings, not canon), root/misc, root/san
+    # (Sanskrit fragments — a future scope decision), the 32 non-English
+    # translation languages, and — EXCLUDED by honesty — SuttaCentral's
+    # LEGACY translations (the `html_text` layer in the separate sc-data
+    # repo, largely CC BY-NC-ND; a different repo/layer this adapter fetches
+    # exactly ONE file of — the parallels graph, see below).
+    #
+    # == The parallels graph rider (P32-6)
+    #
+    # sc-data's relationship/parallels.json (8,221 relation lists, 49,685
+    # uid refs; NOT misc/ — the P26-1 journal's path drifted upstream, and
+    # the sibling relationship/new_parallels.json, a 24 MB per-uid derived
+    # view, is not the source of truth) becomes kind=reference edges via
+    # Nabu::SuttacentralParallels (reference_edges? + the producer seam),
+    # refreshed by SyncRunner after every sync. #fetch stage 2 lands the
+    # file at <workdir>/parallels/parallels.json through FileFetch from the
+    # COMMIT-pinned raw URL (PARALLELS_COMMIT), sha256-verified against
+    # PARALLELS_SHA256 — a mismatch aborts with the tree untouched (the
+    # etcsl pin choreography; the commit-pinned URL is immutable, so a
+    # mismatch is corruption). Refreshing the graph = the owner bumps BOTH
+    # constants to a newer sc-data commit with the ordinary sync — never
+    # a silent drift. License: the graph carries no in-repo grant (sc-data
+    # has no LICENSE file); SuttaCentral's licensing page states, verbatim:
+    # "In addition, the reference data, including information on parallels,
+    # is not an "original creation" and as such does not fall within the
+    # scope of copyright." — and all original SuttaCentral material is CC0
+    # ("All original material created by SuttaCentral is dedicated to the
+    # Public Domain by means of Creative Commons Zero (CC0 1.0 Universal)").
+    # Either way inside the source's "open" class — no override. (Measured
+    # at P32-1: 237 relations pair a minted pli/pra text with a minted lzh
+    # text — 223 parallels + 14 mentions.)
     #
     # == Identity (FROZEN minting)
     #
@@ -65,9 +97,15 @@ module Nabu
     # 104 stems are double-covered (always sujato + one other, censused);
     # TRANSLATOR_PRIORITY (coverage-ordered at census time, frozen) picks
     # ONE deterministically, the losers are censused rule skips. Orphan
-    # English files (179 stems: sujato's name/ glossaries, patton's Āgama
-    # translations of lzh roots) are skipped by rule — a translation without
-    # its root is unrenderable (the ORACC orphan-fragment rule).
+    # English files (125 stems since the P32-1 lzh flip: sujato's name/
+    # glossaries plus en files whose roots bilara has not published — the
+    # pre-flip census was 179, and patton's 54 Āgama translations of ma/sa
+    # roots stopped being orphans the moment their lzh roots minted; no lzh
+    # stem is double-covered) are skipped by rule — a translation without
+    # its root is unrenderable (the ORACC orphan-fragment rule). The lzh
+    # -en publications are patton's scpub20 (sa) / scpub35 (ma), both CC0
+    # verbatim ("Creative Commons Zero" / "CC0"); scpub36 (ea19) and
+    # scpub37 (da) cover trees the published branch does not yet carry.
     #
     # == fetch (the shared git path, pinned to `published`)
     #
@@ -81,6 +119,7 @@ module Nabu
       # Root tree → [language, edition slug]. The published branch's other
       # root trees are out of scope (see class note).
       ROOT_TREES = {
+        "root/lzh/sct" => %w[lzh sct],
         "root/pli/ms" => %w[pli ms],
         "root/pra/pts" => %w[pra pts]
       }.freeze
@@ -108,9 +147,17 @@ module Nabu
 
       URN_PREFIX = "urn:nabu:suttacentral:"
 
+      # The parallels graph pin (class note): the sc-data commit whose
+      # relationship/parallels.json is fetched, and that file's sha256
+      # (1,509,922 bytes, retrieved 2026-07-19). Bump BOTH to refresh.
+      PARALLELS_COMMIT = "8b3bcaf61c3e4d4d80dc131df3d1b7fb8d1d1311"
+      PARALLELS_SHA256 = "cba7f314a32aeecc9cba9381b5f6b781567be75c5dc69d5d1d755b2cd6465f1e"
+      PARALLELS_URL = "https://raw.githubusercontent.com/suttacentral/sc-data/" \
+                      "#{PARALLELS_COMMIT}/relationship/parallels.json".freeze
+
       MANIFEST = Nabu::SourceManifest.new(
         id: "suttacentral",
-        name: "SuttaCentral — bilara-data segmented Tipiṭaka (Pali + aligned English)",
+        name: "SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English)",
         license: "Root: Public Domain (scpub64, \"an ancient sacred text… free of known restrictions " \
                  "under copyright law\"); translations CC0 per publication (138/140; LICENSE.md " \
                  "blanket), except scpub69 CC BY-SA 3.0 → per-document override",
@@ -123,11 +170,21 @@ module Nabu
         MANIFEST
       end
 
+      # The parallels-graph edges (class note; P32-6).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        SuttacentralParallels.new(catalog: catalog, journal: journal)
+      end
+
       # +translations+: when true (the registry row's posture), discover also
       # yields one -en sibling ref per root stem with an English file.
-      def initialize(translations: false)
+      # +graph_pin+ overrides the parallels-graph sha256 (tests; an owner
+      # re-pin drill).
+      def initialize(translations: false, graph_pin: PARALLELS_SHA256)
         super()
         @translations = translations
+        @graph_pin = graph_pin
       end
 
       # One DocumentRef per root segment file under the in-scope trees (plus
@@ -175,14 +232,51 @@ module Nabu
         )
       end
 
-      # Clone or non-destructively pull bilara-data pinned to the published
-      # branch (Adapter#git_fetch! → Nabu::GitFetch: attic + pre-merge
-      # mass-deletion breaker). No network in tests: local fixture repo.
+      # Stage 1: clone or non-destructively pull bilara-data pinned to the
+      # published branch (Adapter#git_fetch! → Nabu::GitFetch: attic +
+      # pre-merge mass-deletion breaker). Stage 2: the parallels graph via
+      # sha-pinned FileFetch (class note). The FetchReport pin stays the
+      # bilara-data HEAD; the graph sha and its sc-data commit ride notes.
+      # No network in tests: local fixture repo + WebMock'd graph URL.
       def fetch(workdir, progress: nil, force: false)
-        git_fetch!(repo_url: repo_url, workdir: workdir, progress: progress, force: force, ref: BRANCH)
+        report = git_fetch!(repo_url: repo_url, workdir: workdir, progress: progress, force: force, ref: BRANCH)
+        graph = fetch_parallels_graph!(workdir, progress: progress, force: force)
+        report.with(notes: [report.notes, graph_note(graph)].compact.join("; "))
       end
 
       private
+
+      # FileFetch with the phases driven by hand so the sha pin is checked
+      # BETWEEN download and any tree mutation (the etcsl choreography); a
+      # 304 replays the stored pin and touches nothing.
+      def fetch_parallels_graph!(workdir, progress:, force:)
+        fetch = Nabu::FileFetch.new(
+          url: PARALLELS_URL, dir: File.join(workdir, SuttacentralParallels::DIRNAME),
+          filename: SuttacentralParallels::FILENAME,
+          attic_dir: File.join(workdir, ATTIC_DIRNAME, SuttacentralParallels::DIRNAME), progress: progress
+        )
+        fetch.prepare!
+        verify_graph_pin!(fetch)
+        guard_mass_deletion!(workdir, fetch.doomed_paths, force: force)
+        fetch.complete!
+        fetch
+      rescue FileFetch::Error => e
+        raise Nabu::FetchError, "suttacentral parallels graph fetch failed into #{workdir}: #{e.message}"
+      end
+
+      def verify_graph_pin!(fetch)
+        return if fetch.not_modified? || fetch.sha == @graph_pin
+
+        raise Nabu::FetchError,
+              "suttacentral: parallels graph misses the sha256 pin (expected #{@graph_pin}, got " \
+              "#{fetch.sha}) — the sc-data commit-pinned URL is immutable, so this is corruption; " \
+              "an upstream refresh is an OWNER re-pin of PARALLELS_COMMIT + PARALLELS_SHA256"
+      end
+
+      def graph_note(fetch)
+        state = fetch.not_modified? ? "not modified (304)" : "sha pin verified"
+        "parallels graph #{state} (sc-data #{PARALLELS_COMMIT[0, 8]})"
+      end
 
       # Split out so tests can point a singleton at a local git tmpdir (the
       # house pattern), keeping fetch off the network.

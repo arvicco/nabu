@@ -3,17 +3,20 @@
 require "test_helper"
 require "tmpdir"
 
-# SuttaCentral adapter tests (P26-1): bilara-data, branch `published` — the
-# whole Tipiṭaka in roman-script Pali (root/pli/ms, the Mahāsaṅgīti edition)
-# plus the Patna Dhammapada (root/pra/pts), with English translations as
-# `-en` sibling documents keyed by THE SAME segment ids (the ORACC/Damaskini
-# precedent). The fixtures pin: the frozen urn grain (document per file stem,
-# passage per segment), the range-stem citation rule, the per-publication
-# license gate (138/140 CC0 + 1 PD + 1 CC BY-SA 3.0 — the pdhp outlier →
-# license_override "attribution", P10-4), the translator-priority pick on
-# double-covered stems, the sandbox/orphan/alternate skip census, and the
-# root ↔ -en suffix-equality alignment. No network: fetch runs against a
-# local fixture git repo whose branch is named `published`.
+# SuttaCentral adapter tests (P26-1; lzh scope P32-1): bilara-data, branch
+# `published` — the whole Tipiṭaka in roman-script Pali (root/pli/ms, the
+# Mahāsaṅgīti edition) plus the Patna Dhammapada (root/pra/pts) plus the
+# Literary Chinese Āgamas (root/lzh/sct, the SuttaCentral Taisho edition,
+# language `lzh`), with English translations as `-en` sibling documents
+# keyed by THE SAME segment ids (the ORACC/Damaskini precedent). The
+# fixtures pin: the frozen urn grain (document per file stem, passage per
+# segment), the range-stem citation rule, the per-publication license gate
+# (138/140 CC0 + 1 PD + 1 CC BY-SA 3.0 — the pdhp outlier →
+# license_override "attribution", P10-4; the lzh publications scpub39/
+# scpub20 are plain CC0), the translator-priority pick on double-covered
+# stems, the sandbox/orphan/alternate skip census, and the root ↔ -en
+# suffix-equality alignment. No network: fetch runs against a local fixture
+# git repo whose branch is named `published`.
 class SuttacentralTest < Minitest::Test
   include AdapterConformance
 
@@ -22,10 +25,14 @@ class SuttacentralTest < Minitest::Test
   ROOT_URNS = %w[
     urn:nabu:suttacentral:dhp21-32
     urn:nabu:suttacentral:pdhp1-13
+    urn:nabu:suttacentral:sa158
     urn:nabu:suttacentral:sn35.24
+    urn:nabu:suttacentral:t1536.12
   ].freeze
 
-  ALL_URNS = (ROOT_URNS + ROOT_URNS.map { |u| "#{u}-en" }).sort.freeze
+  # Every root except t1536.12 has an English file — the abhidhamma root
+  # honestly stays sibling-less (patton translates only ma/sa/ea19 today).
+  ALL_URNS = (ROOT_URNS + (ROOT_URNS - %w[urn:nabu:suttacentral:t1536.12]).map { |u| "#{u}-en" }).sort.freeze
 
   def conformance_adapter
     Nabu::Adapters::Suttacentral.new(translations: true)
@@ -80,6 +87,9 @@ class SuttacentralTest < Minitest::Test
     assert_equal "pli", by_id.fetch("urn:nabu:suttacentral:sn35.24")["language"]
     assert_equal "pra", by_id.fetch("urn:nabu:suttacentral:pdhp1-13")["language"],
                  "the Patna Dhammapada root is tagged pra by upstream — never relabeled pli"
+    assert_equal "lzh", by_id.fetch("urn:nabu:suttacentral:sa158")["language"],
+                 "the Chinese Āgamas (root/lzh/sct) are in scope since P32-1"
+    assert_equal "lzh", by_id.fetch("urn:nabu:suttacentral:t1536.12")["language"]
   end
 
   def test_double_covered_stems_resolve_by_translator_priority
@@ -174,6 +184,52 @@ class SuttacentralTest < Minitest::Test
     assert_equal "pts", pdhp.metadata["edition"]
   end
 
+  # --- the lzh shelf (P32-1 scope flip; root/lzh/sct) -------------------------
+
+  def test_lzh_root_parses_at_segment_grain_with_upstream_citations
+    document = parse_urn("urn:nabu:suttacentral:sa158")
+    assert_equal "lzh", document.language
+    assert_equal 10, document.size, "all 10 segments non-blank (2 empty segments corpus-wide in lzh)"
+    assert_equal "雜阿含經 — (一五八)", document.title, "heading block 0.1–0.2, edge whitespace stripped"
+    assert_equal "urn:nabu:suttacentral:sa158:1.1",
+                 document.find { |p| p.text == "如是我聞。" }.urn,
+                 "segment ids minus the redundant stem prefix — the same citation rule as the Pali shelf"
+  end
+
+  def test_lzh_roots_carry_sct_edition_and_basket_facets
+    sa = parse_urn("urn:nabu:suttacentral:sa158")
+    assert_equal "sct", sa.metadata["edition"]
+    assert_equal({ "value" => "sutta", "raw" => "sutta" }, sa.metadata.dig("facets", "basket"))
+    assert_equal({ "value" => "sa", "raw" => "sa" }, sa.metadata.dig("facets", "collection"))
+
+    abhidhamma = parse_urn("urn:nabu:suttacentral:t1536.12")
+    assert_equal({ "value" => "abhidhamma", "raw" => "abhidhamma" },
+                 abhidhamma.metadata.dig("facets", "basket"))
+    assert_equal({ "value" => "sg", "raw" => "sg" }, abhidhamma.metadata.dig("facets", "collection"))
+  end
+
+  def test_lzh_root_pairs_with_pattons_en_sibling_under_the_cc0_publication
+    translation = parse_urn("urn:nabu:suttacentral:sa158-en")
+    assert_equal "eng", translation.language
+    assert_equal "translation", translation.metadata["kind"]
+    assert_equal "patton", translation.metadata["translator"],
+                 "patton's Āgama files stop being orphans the moment their lzh roots mint"
+    assert_equal "scpub20", translation.metadata["publication"]
+    assert_nil translation.license_override, "scpub20 is CC0 — inherits the source's open class"
+    root_suffixes = parse_urn("urn:nabu:suttacentral:sa158").map { |p| p.urn[/[^:]+\z/] }
+    assert_equal root_suffixes, translation.map { |p| p.urn[/[^:]+\z/] },
+                 "sa158 aligns 1:1 — same 10 segment ids on both sides"
+    assert_equal "Thus have I heard:", translation.find { |p| p.urn.end_with?(":1.1") }.text,
+                 "edge whitespace stripped, as on the Pali shelf"
+  end
+
+  def test_an_lzh_root_without_an_english_file_stays_sibling_less
+    refs = conformance_adapter.discover(FIXTURES).to_a
+    assert(refs.any? { |r| r.id == "urn:nabu:suttacentral:t1536.12" })
+    assert_nil refs.find { |r| r.id == "urn:nabu:suttacentral:t1536.12-en" },
+               "no patton file for the abhidhamma root — an honest one-sided document"
+  end
+
   # --- parse: -en siblings ----------------------------------------------------
 
   def test_en_sibling_shares_the_root_citation_suffixes
@@ -210,11 +266,14 @@ class SuttacentralTest < Minitest::Test
   # --- fetch (local fixture repo, branch `published`; no network) -------------
 
   def test_fetch_clones_the_published_branch_then_pulls
+    graph = File.read(File.join(FIXTURES, "parallels", "parallels.json"))
+    stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+      .to_return(status: 200, body: graph)
     Dir.mktmpdir do |root|
       upstream = File.join(root, "upstream")
       make_git_repo(upstream)
       workdir = File.join(root, "work")
-      adapter = suttacentral_pointing_at(upstream)
+      adapter = suttacentral_pointing_at(upstream, graph_pin: Digest::SHA256.hexdigest(graph))
 
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
@@ -229,6 +288,48 @@ class SuttacentralTest < Minitest::Test
     Dir.mktmpdir do |root|
       adapter = suttacentral_pointing_at(File.join(root, "does-not-exist"))
       assert_raises(Nabu::FetchError) { adapter.fetch(File.join(root, "work")) }
+    end
+  end
+
+  # --- the parallels graph rider (P32-6) --------------------------------------
+
+  def test_declares_the_parallels_graph_reference_producer
+    assert Nabu::Adapters::Suttacentral.reference_edges?,
+           "the sc-data parallels graph mints kind=reference edges after each sync"
+    producer = Nabu::Adapters::Suttacentral.reference_producer(catalog: nil, journal: nil)
+    assert_instance_of Nabu::SuttacentralParallels, producer
+  end
+
+  def test_fetch_lands_the_sha_pinned_parallels_graph_beside_the_clone
+    graph = File.read(File.join(FIXTURES, "parallels", "parallels.json"))
+    stub = stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+           .to_return(status: 200, body: graph)
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      make_git_repo(upstream)
+      workdir = File.join(root, "work")
+      adapter = suttacentral_pointing_at(upstream, graph_pin: Digest::SHA256.hexdigest(graph))
+
+      report = adapter.fetch(workdir)
+      assert_equal graph, File.read(File.join(workdir, "parallels", "parallels.json"))
+      assert_match(/parallels graph/, report.notes)
+      assert_match(/8b3bcaf6/, report.notes, "the sc-data commit pin is provenance, surfaced")
+      assert_equal git(upstream, "rev-parse", "HEAD"), report.sha,
+                   "the source pin stays the bilara-data HEAD — the graph rides notes only"
+    end
+    assert_requested(stub)
+  end
+
+  def test_fetch_aborts_on_a_parallels_graph_pin_mismatch
+    stub_request(:get, Nabu::Adapters::Suttacentral::PARALLELS_URL)
+      .to_return(status: 200, body: "[]")
+    Dir.mktmpdir do |root|
+      upstream = File.join(root, "upstream")
+      make_git_repo(upstream)
+      adapter = suttacentral_pointing_at(upstream, graph_pin: "0" * 64)
+      error = assert_raises(Nabu::FetchError) { adapter.fetch(File.join(root, "work")) }
+      assert_match(/parallels graph/, error.message)
+      assert_match(/pin/, error.message)
     end
   end
 
@@ -270,8 +371,8 @@ class SuttacentralTest < Minitest::Test
     File.write(path, JSON.generate(publications))
   end
 
-  def suttacentral_pointing_at(upstream)
-    adapter = Nabu::Adapters::Suttacentral.new
+  def suttacentral_pointing_at(upstream, graph_pin: nil)
+    adapter = graph_pin ? Nabu::Adapters::Suttacentral.new(graph_pin: graph_pin) : Nabu::Adapters::Suttacentral.new
     adapter.define_singleton_method(:repo_url) { upstream }
     adapter
   end

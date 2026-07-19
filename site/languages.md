@@ -18,7 +18,7 @@ explains any code the tools surface — the corpus languages below and the
 one card: name, family, curated historical context, and live holdings. An
 unknown code is reported honestly, with a family hint. Since 14 July 2026
 the curated layer behind these cards is file-backed: one plain Markdown
-dossier per language code (213 dossiers) on the library's local
+dossier per language code on the library's local
 language-dossier shelf, editable in any editor and re-derived into the
 catalog on sync.
 

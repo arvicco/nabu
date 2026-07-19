@@ -5,16 +5,21 @@ require_relative "wiktionary_jsonl_parser"
 module Nabu
   module Adapters
     # The reconstruction shelf source (P14-1, architecture §12; extended
-    # P17-3, P25-2, P29-0, P29-1): English Wiktionary's reconstruction
+    # P17-3, P25-2, P29-0, P29-1, P32-5): English Wiktionary's reconstruction
     # pseudo-languages — plus, since P25-2, ATTESTED languages — via the
-    # kaikki.org wiktextract extraction. ONE source shipping ELEVEN
+    # kaikki.org wiktextract extraction. ONE source shipping FOURTEEN
     # dictionaries (Proto-Slavic sla-pro, Proto-Indo-European ine-pro,
     # Proto-Germanic gem-pro; P17-3 adds Proto-Balto-Slavic ine-bsl-pro,
     # Proto-West Germanic gmw-pro, Proto-Italic itc-pro, Proto-Indo-Iranian
     # iir-pro; P25-2 adds Old Irish sga, Middle Irish mga, Middle Welsh
     # wlm; P29-1 adds Umbrian xum — the CEIPoM rider, the only
     # kaikki-served Italic corpus language; P29-0 adds Etruscan ett —
-    # whose descendants trees carry the Etruscan→Latin loan edges),
+    # whose descendants trees carry the Etruscan→Latin loan edges;
+    # P32-5 adds Old Japanese ojp — the Sino-axis desk beside ONCOJ's
+    # corpus attestations;
+    # P32-3 adds Chinese zho — the ~1.1 GB whole-macrolanguage extract
+    # whose Middle/Old Chinese sound rows are the Sino reconstruction
+    # lane, historical_sounds: true on that extract alone),
     # each its own JSONL through the SAME wiktionary-jsonl family
     # as wiktionary-cu, with `reflexes: true`: the records' `descendants`
     # trees flatten into DictionaryReflex edges — the crosswalk that links
@@ -66,7 +71,7 @@ module Nabu
     #
     # == fetch / sync policy
     #
-    # Ten FileFetch single-file syncs, one per extract, each in ITS OWN
+    # Thirteen FileFetch single-file syncs, one per extract, each in ITS OWN
     # subdir (FileFetch is one-file-per-dir by design: any other file in
     # the dir is doomed, and there is one state file per dir), attics under
     # the shared top-level <workdir>/.attic/<subdir>/ so discover_with_attic
@@ -75,14 +80,15 @@ module Nabu
     # SET, then all complete. sync_policy: manual; the P17-3 extracts land
     # in the live catalog at the next owner-fired sync (~60 MB across the
     # four new GETs, +7,586 entries); likewise the P25-2 Celtic extracts
-    # (~22.4 MB across three GETs, +8,097 entries).
+    # (~22.4 MB across three GETs, +8,097 entries) and the P32-5 Old
+    # Japanese extract (one ~1.26 MB GET, +532 entries).
     class WiktionaryRecon < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "wiktionary-recon",
-        name: "Wiktionary reconstructions + attested Celtic, Italic and Etruscan — kaikki.org " \
-              "machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, " \
-              "Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, " \
-              "Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan)",
+        name: "Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — " \
+              "kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, " \
+              "Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; " \
+              "Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese)",
         license: "CC-BY-SA + GFDL (verbatim kaikki.org/dictionary/: \"This data is made available " \
                  "under the same licenses as Wiktionary - both CC-BY-SA and GFDL.\")",
         license_class: "attribution",
@@ -200,7 +206,45 @@ module Nabu
           url: "https://kaikki.org/dictionary/Etruscan/kaikki.org-dictionary-Etruscan.jsonl",
           language: "ett",
           title: "Wiktionary — Etruscan (kaikki.org extract)"
-        }.freeze
+        }.freeze,
+        # -- P32-5 (the Sino axis opens): Old Japanese, ATTESTED, the
+        # P25-2 pattern verbatim (no display asterisk; ojp is real ISO
+        # 639-3). 532 records / 413 distinct words at fixture time
+        # (2026-07-19): 390 with etymology_text (87 naming Proto-Japonic),
+        # 178 records quoting the Man'yōshū in sense examples (raw-record
+        # density only — Wiktionary quotations are unanchored, citations
+        # stay empty per the family contract); 301 with descendants → 333
+        # worded edges (327 ja + 2 ain + 1 ltc + 1 en). etymology_number
+        # is a STRING in this extract ("1"/"2"; integers everywhere else)
+        # — the parser interpolates either, entry_ids unchanged.
+        "wiktionary-ojp" => {
+          subdir: "old-japanese",
+          filename: "kaikki.org-dictionary-OldJapanese.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Japanese/kaikki.org-dictionary-OldJapanese.jsonl",
+          language: "ojp",
+          title: "Wiktionary — Old Japanese (kaikki.org extract)"
+        },
+        # -- P32-3 (the Sino reconstruction shelf; OWNER-APPROVED disk
+        # call) -- ATTESTED Chinese, the whole-macrolanguage extract:
+        # ~1.1 GB / 323,840 records (census 2026-07-19 on the full file;
+        # upstream Last-Modified 2026-07-16) — BY FAR the largest extract
+        # on this source; the owner-fired sync downloads ~1.1 GB in ONE
+        # GET. The reconstruction value is the per-entry `sounds` rows:
+        # 23,484 records carry a Middle Chinese reading, 19,382 an Old
+        # Chinese reconstruction (8,158 Baxter-Sagart, 19,273 Zhengzhang —
+        # Zhengzhang arrives ONLY via kaikki; ytenx is license-blocked),
+        # surfaced as body lines via historical_sounds (the one extract
+        # with the flag). 8,098 records carry descendants — the Sino-Xenic
+        # ja/ko/vi loan lanes (茶 → borrowed ja/ko readings, fixture-
+        # pinned). B-S-beside-kaikki = MW-beside-kaikki, never deduped.
+        "wiktionary-zh" => {
+          subdir: "chinese",
+          filename: "kaikki.org-dictionary-Chinese.jsonl",
+          url: "https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl",
+          language: "zho",
+          title: "Wiktionary — Chinese (kaikki.org extract; Middle/Old Chinese readings)",
+          historical_sounds: true
+        }
       }.freeze
 
       def self.manifest
@@ -253,7 +297,8 @@ module Nabu
           slug: slug, language: extract.fetch(:language),
           title: extract.fetch(:title), canonical_path: document_ref.path
         )
-        WiktionaryJsonlParser.new(language: extract.fetch(:language), reflexes: true)
+        WiktionaryJsonlParser.new(language: extract.fetch(:language), reflexes: true,
+                                  historical_sounds: extract.fetch(:historical_sounds, false))
                              .entries(document_ref.path).each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e
