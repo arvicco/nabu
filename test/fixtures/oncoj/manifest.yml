@@ -1,0 +1,46 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The xml/ texts and README are whole byte-verbatim upstream files at the
+# frozen "release" tag (commit fd34a1b2, 2021-12-26) — the tag is
+# immutable, so a byte-diff that DIFFERS is real drift. lexicon.xml is a
+# documented line-verbatim trim, so adapter_test stays null (a re-run
+# against the full lexicon would false-fail the entry-count assertions).
+source: oncoj
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: xml/BS.1.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/xml/BS.1.xml
+    whole: true
+    trim: none
+  - path: xml/MYS.1.1.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/xml/MYS.1.1.xml
+    whole: true
+    trim: none
+  - path: xml/KK.6.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/xml/KK.6.xml
+    whole: true
+    trim: none
+  - path: xml/MYS.10.2033.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/xml/MYS.10.2033.xml
+    whole: true
+    trim: none
+  - path: xml/MYS.3.276b.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/xml/MYS.3.276b.xml
+    whole: true
+    trim: none
+  - path: README
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/README
+    whole: true
+    trim: none (the upstream corpus README — the verbatim license §D and citation §C source)
+  - path: lexicon.xml
+    url: https://raw.githubusercontent.com/ONCOJ/data/release/lexicon.xml
+    whole: false
+    trim: >-
+      91 superEntry blocks (112 entries) kept line-byte-verbatim in file
+      order between the original 3-line header and </div>: the 87
+      superEntries covering every w/@lemma id of the five fixture texts,
+      plus l000006-main (EOJ usg variant), l000032-main (def-less),
+      l090819main + l090819-main (the upstream duplicate entry-id pair) —
+      3,405,964 B -> 56,296 B; recipe in README.md
