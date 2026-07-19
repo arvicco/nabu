@@ -9953,8 +9953,23 @@ row 4 extension. Measure (promise nothing): sample join of Kyoto lemmas
 vs any existing lzh keys (SuttaCentral lzh may land in the sibling
 packet — no dep, just report).
 
-## P32-1 · SuttaCentral lzh scope flip  [tier: fable] [status: dispatched 2026-07-19] [deps: —]
-ZERO FETCH: 272 root/lzh files already in
+## P32-1 · SuttaCentral lzh scope flip  [tier: fable] [status: SHIPPED 2026-07-19 — worklog P32-1, sha TBD] [deps: —]
+
+SHIPPED (packet result): ROOT_TREES + "root/lzh/sct" → [lzh, sct] — one
+config row, no machinery changes (siblings/publication-gate/segment grain
+all pre-existed). 272 lzh roots + patton's 54 ma/sa -en siblings mint
+(orphan census 179 → 125); lzh publications censused verbatim: scpub39
+(roots) + scpub20/scpub35 (patton) all "Creative Commons Zero"/"CC0" →
+no overrides. NB the spec's "synced sc-data tree" is bilara-data's own
+_publication.json (sc-data is a separate, never-synced repo). SYNERGY
+MEASURED against the scout's 2026-07-16 sc-data parallels snapshot:
+237/8,221 relations pair minted pli/pra with minted lzh (223 parallels +
+14 mentions; 129/272 lzh stems touched; ~110 more await unpublished da*
+roots). Delta in sources.yml: +326 docs / ≈+42,676 passages via
+--parse-only. Fixtures from canonical byte-verbatim (commit 84d9560);
+02-sources row 66 updated (incl. truthing the stale READY→LIVE status).
+
+ORIGINAL SPEC — ZERO FETCH: 272 root/lzh files already in
 canonical/suttacentral/root/lzh/sct/ (MA/SA/EA/minor/abhidhamma),
 skipped today by the adapter's own scope rule (lib/nabu/adapters/
 suttacentral.rb:21), plus Charles Patton's English translations of lzh
