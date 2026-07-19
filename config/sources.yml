@@ -837,7 +837,7 @@ dss:
 
 tlhdig:
   adapter: Nabu::Adapters::Tlhdig
-  enabled: false   # awaiting the owner-fired first sync (CLAUDE.md checklist
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # §6: bin/nabu sync tlhdig — one 74.4 MB GET, ~385 MB
                    # unpacked; expect ~23,490 documents = 23,937 files − 1
                    # censused twin skip − ~450 loud quarantines (224 not
@@ -1239,7 +1239,7 @@ hebrew-lexicon:
 
 etcsl:
   adapter: Nabu::Adapters::Etcsl
-  enabled: false   # P31-5: awaiting owner-fired first sync (bin/nabu sync etcsl, ~4.9 MB zip)
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
   # P31-5: the Electronic Text Corpus of Sumerian Literature, Revised
   # edition (Oxford, October 2006) — 394 hand-lemmatized Sumerian
   # composites + 381 paired English prose translations (-en siblings),
@@ -1257,7 +1257,7 @@ etcsl:
   translations: true    # the English prose translations are half the packet's value
 cdli:
   adapter: Nabu::Adapters::Cdli
-  enabled: false   # P31-2: flip after the owner-fired first sync
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified — 353,156 docs / 2.19M passages, all P31 on for release)
                    # (checklist §6: bin/nabu sync cdli — GitFetch clone +
                    # LFS materialization, 154.8 MB csv + 86.9 MB atf —
                    # then eyeball nabu show urn:nabu:cdli:p000725
@@ -1291,7 +1291,7 @@ cdli:
   lemma_tier: silver
 ebl:
   adapter: Nabu::Adapters::Ebl
-  enabled: false   # P31-3: flip after the owner-fired first sync
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # (checklist §6: bin/nabu sync ebl — one 73.9 MB GET,
                    # sha-pinned — then eyeball nabu show
                    # urn:nabu:ebl:1868,0523.2 (tr.en riders, @i{} markup)
@@ -1331,7 +1331,7 @@ ebl:
   lemma_tier: silver
 cuc:
   adapter: Nabu::Adapters::Cuc
-  enabled: false   # until the owner-fired first real sync (checklist §6:
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync cuc — sparse GitFetch cone tf/0.2.8 +
                    # README.md, 19 files ≈ 3.5 MB — then eyeball
                    # nabu show urn:nabu:cuc:ktu-1.14:I.1 (Keret),
@@ -1360,7 +1360,7 @@ cuc:
 
 peshitta:
   adapter: Nabu::Adapters::Peshitta
-  enabled: false   # until the owner-fired first real sync (checklist §6:
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync peshitta — sparse GitFetch cone tf/0.2 +
                    # docs/about.md, 13 files ≈ 9 MB — then eyeball
                    # nabu show urn:nabu:peshitta:gn:1.1,
@@ -1393,7 +1393,7 @@ peshitta:
 
 syriac-corpus:
   adapter: Nabu::Adapters::SyriacCorpus
-  enabled: false   # until the owner-fired first real sync (checklist §6:
+  enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync syriac-corpus — sparse GitFetch cone
                    # data/tei, 632 TEI files ≈ 39 MB — then eyeball
                    # nabu show urn:nabu:syriac-corpus:1:2 (Aphrahat Dem. 1

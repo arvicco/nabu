@@ -57,12 +57,12 @@ All 58 sources below are synced and live as of 19 July 2026.
 | `perseus-greek`, `perseus-latin` | [Perseus Digital Library](https://www.perseus.tufts.edu/) (PerseusDL canonical-greekLit / canonical-latinLit) | The classical Greek and Latin canons with English translations | CC BY-SA |
 | `first1k-greek` | [First1KGreek, Open Greek &amp; Latin](https://opengreekandlatin.github.io/First1KGreek/) | Post-classical Greek prose, incl. Swete's Septuagint | CC BY-SA |
 | `papyri-ddbdp` | [papyri.info](https://papyri.info/) — Duke Databank of Documentary Papyri | 61,414 documentary papyri | CC BY |
-| `oracc` | [ORACC](https://oracc.museum.upenn.edu/), 33 projects incl. the State Archives of Assyria | Cuneiform transliterations with gold lemmatization | CC0 (per project); translation prose CC BY-SA |
+| `oracc` | [ORACC](https://oracc.museum.upenn.edu/), 38 projects incl. the State Archives of Assyria, the Achaemenid royal trilinguals (ario — Old Persian and Elamite) and the four ePSD2 corpora with the Ur III administrative mass | 104,722 cuneiform tablets with gold lemmatization (synchronized 19 July 2026) | CC0 (per project); translation prose CC BY-SA |
 | `gretil` | [GRETIL](https://gretil.sub.uni-goettingen.de/), Göttingen | 780 Sanskrit (and related) TEI editions | CC BY-NC-SA 4.0 |
 | `proiel` | [PROIEL treebank](https://proiel.github.io/) | Parallel NT (Greek, Latin, Gothic, Armenian, OCS) + classical prose, gold-annotated | CC BY-NC-SA |
 | `torot` | [TOROT](https://torottreebank.github.io/) — Tromsø OCS and Old Russian Treebank | OCS and Old East Slavic, gold-annotated | CC BY-NC-SA |
 | `iswoc` | [ISWOC treebank](https://github.com/iswoc/iswoc-treebank), Oslo | Old English prose and the West-Saxon Gospels, gold-annotated | CC BY-NC-SA |
-| `ud` | [Universal Dependencies](https://universaldependencies.org/) (nine ancient treebanks) | Latin (Aquinas), Vedic Sanskrit, Gothic, Greek, Old East Slavic (birchbark, RNC, Ruthenian), Old Irish glosses (St Gall Priscian, Würzburg — since 17 July 2026) | CC BY-SA / CC BY-NC-SA per treebank |
+| `ud` | [Universal Dependencies](https://universaldependencies.org/) (twelve ancient treebanks) | Latin (Aquinas, Perseus), Ancient Greek (Perseus), Vedic Sanskrit, Gothic, Greek, Old East Slavic (birchbark, RNC, Ruthenian), Old Irish glosses (St Gall Priscian, Würzburg), Hittite (HitTB — since 19 July 2026) | CC BY-SA / CC BY-NC-SA per treebank |
 | `lexica` | [PerseusDL lexica](https://github.com/PerseusDL/lexica) | Liddell-Scott-Jones; Lewis &amp; Short | CC BY-SA 4.0 |
 | `vulgate` | [open-bibles](https://github.com/seven1m/open-bibles) / [eBible.org](https://ebible.org/) (Tweedale text) | The complete Clementine Vulgate, 73 books | Public domain |
 | `sblgnt` | [SBL Greek New Testament](https://sblgnt.com/) (SBL / Logos) | Critical edition of the Greek NT | CC BY 4.0 |
@@ -104,6 +104,13 @@ All 58 sources below are synced and live as of 19 July 2026.
 | `tir` | [Thesaurus Inscriptionum Raeticarum](https://tir.univie.ac.at/) (Vienna) | 389 Raetic inscriptions — the corpus of record (synchronized 18 July 2026) | Same conflicting statements — held at `nc` |
 | `isicily` | [I.Sicily](https://github.com/ISicily/ISicily) (Prag, Oxford / ERC Crossreads) | 5,074 inscriptions of ancient Sicily across all its languages — incl. Sicel, Elymian, Sicilian Punic and Mamertine Oscan in their only machine-readable form (synchronized 18 July 2026) | CC BY 4.0 |
 
+| `tlhdig` | [TLHdig](https://www.hethiter.net/) (Thesaurus Linguarum Hethaeorum digitalis, Hethitologie-Portal Mainz) | The Hittite corpus: 23,486 tablet manuscripts in 663 CTH compositions — >98% of published Hittite fragments, with cuneiform, transliteration and candidate morphology (synchronized 19 July 2026) | CC BY 4.0 |
+| `cdli` | [CDLI](https://cdli.mpiwg-berlin.mpg.de/) (Cuneiform Digital Library Initiative) | The universal cuneiform catalog: 353,156 artifacts — 135,201 transliterations plus catalog records for the whole artifact space, proto-cuneiform to Achaemenid, with periods, proveniences and collections as browsable axes (2023 snapshot, synchronized 19 July 2026) | Bespoke open grant (attribution; images excluded) |
+| `ebl` | [electronic Babylonian Library](https://www.ebl.lmu.de/) Fragmentarium (LMU Munich) | 23,288 tablet fragments from the museum drawers — ~326k lines with inline English translations, 79.9% cross-linked to their CDLI records (2023 snapshot, synchronized 19 July 2026) | Held at CC BY-NC-SA 4.0 (the data paper's grant) pending clarification of the deposit's CC BY field |
+| `cuc` | [Copenhagen Ugaritic Corpus](https://github.com/DT-UCPH/cuc) (CACCHT) | 279 Ugaritic tablets / 27,770 words — most of the KTU corpus, independently re-encoded, with per-sign cuneiform and damage flags (synchronized 19 July 2026) | CC BY-NC 4.0 |
+| `peshitta` | [ETCBC peshitta](https://github.com/ETCBC/peshitta) | The Peshitta Old Testament incl. deuterocanon — 65 books / 31,341 verses; the Syriac leg of the verse-alignment hub (synchronized 19 July 2026) | CC BY-NC 4.0 |
+| `syriac-corpus` | [Digital Syriac Corpus](https://syriaccorpus.org/) (Srophé) | 632 classical Syriac TEI documents — a millennium of literature (synchronized 19 July 2026) | CC BY 4.0 (per file) |
+| `etcsl` | [ETCSL](https://etcsl.orinst.ox.ac.uk/) (Oxford, via the OTA/LLDS record) | The Electronic Text Corpus of Sumerian Literature: 394 hand-lemmatized composites + 381 English prose translations (synchronized 19 July 2026) | CC BY-NC-SA 3.0 |
 | `hebrew-lexicon` | [OpenScriptures HebrewLexicon](https://github.com/openscriptures/HebrewLexicon) | Two dictionaries: 9,299 augmented-Strong entries (every OSHB lemma resolves) + the 11,845-entry BDB outline with print-page anchors (synchronized 18 July 2026) | CC BY 4.0 |
 | `sdbh` | [UBS Semantic Dictionary of Biblical Hebrew](https://github.com/ubsicap/ubs-open-license) | 7,932 entries with semantic domains and 260,813 verse-level scripture references (synchronized 18 July 2026) | CC BY-SA 4.0 |
 | `sefaria` | [Sefaria](https://www.sefaria.org/) (Sefaria-Export, named versions only) | The Targum shelf: Onkelos, Jonathan on the Prophets, the Writings targums — 103 documents / 57,095 Aramaic verses, verse-aligned to the Tanakh (synchronized 18 July 2026) | Per version (PD / CC0 / CC BY / CC BY-SA; NC versions carried as `nc`) |
@@ -116,18 +123,18 @@ All 58 sources below are synced and live as of 19 July 2026.
 Four further registered sources hold no upstream at all — they are the
 library's shelves for authored and acquired material, synchronized by
 re-scanning local files rather than fetching. The language-dossier shelf
-(`local-language`) carries the library's own per-language curation, 199
-Markdown dossiers as of 17 July 2026. The local-library shelf
+(`local-language`) carries the library's own per-language curation, 213
+Markdown dossiers as of 19 July 2026. The local-library shelf
 (`local-library`) files the owner's PDFs, scans, and offprints through
 the `nabu ingest` command (which also accepts http(s) URLs, downloading
 first and recording the address in the manifest); everything on it
 defaults to the `research_private` class — catalogued and searchable
-locally, never served or redistributed — and it holds its first 20
-documents as of 17 July 2026. The source-dossier shelf (`local-source`)
-carries a curated description of every registered source, 37 dossiers
+locally, never served or redistributed — and it holds 20
+documents as of 19 July 2026. The source-dossier shelf (`local-source`)
+carries a curated description of every registered source, 73 dossiers
 served on the `nabu list` census. The notes shelf (`local-notes`)
 records the owner's annotations on any citable URN through `nabu note`;
-it awaits its first entry. Licenses on
+it holds its first two notes. Licenses on
 these shelves belong to whatever the owner files there; the class system
 above is the gate that keeps restricted personal material private.
 
@@ -149,8 +156,13 @@ CIRCSE group, whose linked-data editions carry LIV and de Vaan; George
 Starostin and the StarLing / Tower of Babel project, with the compilers
 of its constituent databases; ZRC SAZU, whose dictionaries carry the
 Slovenian lexicographic tradition; the ChronHib project at Maynooth
-(CorPH); the RIIG project at Ausonius / Bordeaux; and the Ogham in 3D
-project at DIAS. Users of
+(CorPH); the RIIG project at Ausonius / Bordeaux; the Ogham in 3D
+project at DIAS; the Hethitologie-Portal Mainz and the TLHdig team; the
+Cuneiform Digital Library Initiative; the electronic Babylonian Library
+at LMU Munich; the ETCBC at the Vrije Universiteit Amsterdam, whose
+text-fabric editions carry the BHSA, the Scrolls and the Peshitta; the
+CACCHT project in Copenhagen; the Srophé / Digital Syriac Corpus
+editors; and the ETCSL project at Oxford with the Oxford Text Archive. Users of
 this software are bound by, and should credit, these upstream projects
 under their respective terms.
 
