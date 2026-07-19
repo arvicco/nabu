@@ -13,9 +13,9 @@ source: ud
 adapter_test:
 # retrieved: first four treebanks 2026-07-03; the two old-east-slavic-* added
 # under P10-2 were retrieved 2026-07-09; the two old-irish-* added under
-# P25-2 were retrieved 2026-07-17; hittite-hittb added under P31-0 and the
-# two *-perseus treebanks added under P31-6 were retrieved 2026-07-19 (see
-# README).
+# P25-2 were retrieved 2026-07-17; hittite-hittb added under P31-0, the
+# two *-perseus treebanks added under P31-6 and the two classical-chinese-*
+# treebanks added under P32-0 were retrieved 2026-07-19 (see README).
 retrieved: 2026-07-03
 files:
   - path: gothic-proiel/got_proiel-ud-test-head50.conllu
@@ -62,6 +62,14 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Latin-Perseus/master/la_perseus-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of la_perseus-ud-test.conllu (939 blocks upstream; 1 of its 189 MWT range lines falls inside the head — mecum, sent @66; P31-6) (1,153,778 B -> 61,276 B)
+  - path: classical-chinese-kyoto/lzh_kyoto-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of lzh_kyoto-ud-test.conllu (5,528 blocks upstream — one newdoc, Analects book 1; no MWT/empty-node lines across all three Kyoto splits; P32-0) (2,698,869 B -> 22,472 B)
+  - path: classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of lzh_tuecl-ud-test.conllu (100 blocks upstream — the whole Zhuangzi 逍遥游 treebank, test-only; free-form no-`=` comment lines kept inside the trim; P32-0) (59,420 B -> 29,817 B)
   - path: old-irish-dipwbg/sga_dipwbg-ud-test.conllu
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu
     whole: true
