@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The file is a documented TRIM (header + selected byte-verbatim rows) of
+# the upstream CSV, so adapter_test stays null (a re-run against the full
+# file would false-fail the fixture-count assertions).
+source: tshet-uinh
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: 韻書/廣韻.csv
+    url: https://raw.githubusercontent.com/nk2028/tshet-uinh-data/main/韻書/廣韻.csv
+    whole: false
+    trim: header + 12 byte-verbatim rows (小韻號.字號 1.1/1.2/2.43/133.1/157.1/318.9/961.1/961.1a1/1692a.1/1919.1/1919.2/3067.1 — every documented 校本 annotation type, 直音, suffixed ids, nil-gloss) — 1,640,287 B -> ~3 KB; recipe in README.md

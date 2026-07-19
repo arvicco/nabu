@@ -2,10 +2,9 @@
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
 # All thirteen files are documented TRIMs (whole: false) of the upstream
-# extracts (247 of 30,261 lines total: 226 recon strata + P17-3 goldens
-# + 9 P25-2 Celtic lines + 3 P29-1 Umbrian lines + 4 P29-0 Etruscan
-# lines + 5 P32-5 Old Japanese lines; every kept line
-# byte-verbatim), so a fresh GET
+# extracts (253 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
+# Celtic + 3 P29-1 Umbrian + 4 P29-0 Etruscan + 5 P32-5 Old Japanese
+# + 6 P32-3 Chinese lines; every kept line byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
 # byte-compared. Re-apply the README extraction recipes after any
 # refresh. NOTE the upstream files are labelled DEPRECATED (wiktextract
@@ -67,3 +66,7 @@ files:
     url: https://kaikki.org/dictionary/Old%20Japanese/kaikki.org-dictionary-OldJapanese.jsonl
     whole: false
     trim: 5 P32-5 lines retrieved 2026-07-19 (心 1/心 2 — the STRING etymology_number homograph pair, Proto-Japonic etymology + Man'yōshū quotation; 我 — the ltc 倭 edge with nested borrowed ja node; ko2ro2su — the lone ASCII-romanized headword; 黃葉つ — the one soft-redirect record) — 1,255,674 B -> 7,257 B; recipe in README.md
+  - path: kaikki.org-dictionary-Chinese.jsonl
+    url: https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl
+    whole: false
+    trim: 6 P32-3 lines retrieved 2026-07-19 (upstream lines 2/3/4/9/122/18894 — GDP no-MC modern noun; A verb/adj etymology_number homographs; 犬 — MC + BOTH OC reconstructions; MD soft-redirect stub; 茶 — Sino-Xenic borrowed ja/ryu/ko descendants) — 1,181,142,520 B -> ~180 KB; recipe in README.md

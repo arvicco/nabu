@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 
 # The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
-# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese): ONE source, THIRTEEN
+# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese; P32-3 Chinese): ONE source, FOURTEEN
 # dictionaries — kaikki.org's Proto-Slavic / Proto-Indo-European /
 # Proto-Germanic plus the P17-3 Proto-Balto-Slavic / Proto-West Germanic /
 # Proto-Italic / Proto-Indo-Iranian wiktextract extracts, the P25-2
@@ -47,7 +47,9 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-ett" => "https://kaikki.org/dictionary/Etruscan/" \
                         "kaikki.org-dictionary-Etruscan.jsonl",
     "wiktionary-ojp" => "https://kaikki.org/dictionary/Old%20Japanese/" \
-                        "kaikki.org-dictionary-OldJapanese.jsonl"
+                        "kaikki.org-dictionary-OldJapanese.jsonl",
+    "wiktionary-zh" => "https://kaikki.org/dictionary/Chinese/" \
+                       "kaikki.org-dictionary-Chinese.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -83,7 +85,8 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl",
                   "wiktionary-xum:kaikki.org-dictionary-Umbrian.jsonl",
                   "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl",
-                  "wiktionary-ojp:kaikki.org-dictionary-OldJapanese.jsonl"],
+                  "wiktionary-ojp:kaikki.org-dictionary-OldJapanese.jsonl",
+                  "wiktionary-zh:kaikki.org-dictionary-Chinese.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -92,17 +95,17 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_thirteen_dictionaries
+  def test_parse_yields_the_fourteen_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
                     wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
-                    wiktionary-xum wiktionary-ett wiktionary-ojp],
+                    wiktionary-xum wiktionary-ett wiktionary-ojp wiktionary-zh],
                  documents.map(&:slug)
     assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
-                    sga mga wlm xum ett ojp],
+                    sga mga wlm xum ett ojp zho],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 6], documents.map(&:size)
   end
 
   # P32-5: the attested Old Japanese extract (the P25-2/P29 pattern
@@ -305,7 +308,8 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/xum/, report.notes)
       assert_match(/ett/, report.notes)
       assert_match(/ojp/, report.notes)
-      assert_equal 13, adapter.discover(workdir).count, "all thirteen extracts discoverable in place"
+      assert_match(/zho/, report.notes)
+      assert_equal 14, adapter.discover(workdir).count, "all fourteen extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
          old-irish middle-irish middle-welsh umbrian etruscan old-japanese].each do |subdir|
@@ -328,9 +332,9 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 13, targets.size
+    assert_equal 14, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[etruscan middle-irish middle-welsh old-irish old-japanese
+    assert_equal %w[chinese etruscan middle-irish middle-welsh old-irish old-japanese
                     proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
                     proto-italic proto-slavic proto-west-germanic umbrian],
                  targets.map(&:state_subdir).sort
@@ -356,7 +360,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 247, first.added
+    assert_equal 253, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -364,7 +368,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 247, second.skipped
+    assert_equal 253, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 
