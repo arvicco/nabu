@@ -106,9 +106,13 @@ class EtcslTest < Minitest::Test
     assert_equal "Lugalbanda in the mountain cave -- a composite transliteration", document.title
     assert_equal "composite", document.metadata["kind"]
     assert_equal "1.8.2.1", document.metadata["etcsl_no"]
-    # Self key first (the epsd2/literary concordance anchor), then the body
-    # xref targets (the OB catalogue citations in line A.1's editorial note).
-    assert_equal %w[etcsl:1.8.2.1 etcsl:0.2.01 etcsl:0.2.02 etcsl:0.2.04],
+    # The body xref targets (the OB catalogue citations in line A.1's
+    # editorial note) as FULL urns — in-catalog targets resolve in `links`
+    # (the isicily→EDH precedent; owner repro 2026-07-19: compact keys
+    # rendered "(not in catalog)" on documents that ARE in the catalog).
+    # The self-assertion lives in metadata["etcsl_no"], never as a
+    # self-loop edge; epsd2 concordance producers target these same urns.
+    assert_equal %w[urn:nabu:etcsl:0.2.01 urn:nabu:etcsl:0.2.02 urn:nabu:etcsl:0.2.04],
                  document.metadata["related"]
 
     passages = document.passages
@@ -150,9 +154,9 @@ class EtcslTest < Minitest::Test
     document = parse(CATALOGUE)
     assert_equal 62, document.passages.size
     assert_equal "lugal-me-en cag4-ta", document.passages.first.text
-    assert_includes document.metadata["related"], "etcsl:1.8.2.1",
+    assert_includes document.metadata["related"], "urn:nabu:etcsl:1.8.2.1",
                     "the catalogue's incipit xrefs mint the concordance edges"
-    assert_equal 47, document.metadata["related"].size, "self key + 46 unique xref targets"
+    assert_equal 46, document.metadata["related"].size, "46 unique xref targets, no self-loop"
   end
 
   # -- translation siblings ---------------------------------------------------

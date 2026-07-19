@@ -219,13 +219,17 @@ module Nabu
         text.empty? ? nil : text
       end
 
-      # "etcsl:<num>": self first, then the //body//xref[@doc] targets
-      # (class note), deduped in document order.
+      # The //body//xref[@doc] targets as FULL urns, deduped in document
+      # order — every target is an in-catalog etcsl document, and in-catalog
+      # targets mint resolvable urns (the isicily→EDH precedent; compact
+      # keys are for external id spaces like tm:). No self-loop: the
+      # document's own number is metadata["etcsl_no"], and the epsd2
+      # concordance producers target these same urns.
       def related(xml, number)
-        keys = ["etcsl:#{number}"]
+        keys = []
         xml.xpath("//text/body//xref[@doc]").each do |xref|
           target = xref["doc"][/\A[ct]\.(\d.*)\z/, 1]
-          keys << "etcsl:#{target}" if target
+          keys << "urn:nabu:etcsl:#{target}" if target && target != number
         end
         keys.uniq
       end
