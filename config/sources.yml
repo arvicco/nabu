@@ -820,6 +820,46 @@ dss:
   # No date axis: tf/2.0 carries no period/dating feature (censused).
   sync_policy: manual
 
+tlhdig:
+  adapter: Nabu::Adapters::Tlhdig
+  enabled: false   # awaiting the owner-fired first sync (CLAUDE.md checklist
+                   # §6: bin/nabu sync tlhdig — one 74.4 MB GET, ~385 MB
+                   # unpacked; expect ~23,490 documents = 23,937 files − 1
+                   # censused twin skip − ~450 loud quarantines (224 not
+                   # well-formed + ~226 line-less conversion casualties, the
+                   # deposit's own Beta reality); eyeball
+                   # urn:nabu:tlhdig:626:hfr:kbo.52.195+ + 5 random passages
+                   # + `nabu search --lemma ḫūmant` — expect [silver] labels
+                   # throughout — then flip).
+  # TLHdig — Thesaurus Linguarum Hethaeorum digitalis (hethiter.net/TLHdig,
+  # Hethitologie-Portal Mainz): the Hittite corpus — >98% of published
+  # fragments in transliteration. Beta 0.3 as ONE frozen Zenodo deposit
+  # (record 20328284, 2026-05-21; 74,449,198 bytes, Zenodo md5
+  # f9acbc8db3111cc7dd88d82f7819a912 verified byte-for-byte, sha256-pinned
+  # in the adapter) — 23,937 AOxml manuscripts in 826 CTH folders (663
+  # CTH numbers; folder suffix = contributing HPM sub-project → facets).
+  # THE mrp HYPOTHESIS LAYER RIDES VERBATIM; it is upstream's own
+  # candidate machinery (annot editor="auto"; 27.4% of analyzed words
+  # multi-candidate unresolved), so lemma_tier: silver — only the
+  # disambiguated subset (digit-selected 453,819 + single-candidate
+  # 95,986 = 72.6% of 757,728 analyzed words, censused corpus-wide) mints
+  # lemma keys, every count labeled, never gold. Languages per line from
+  # the censused map only (hit/akk/sux/xhu/xht/xlu/plq — junk lg values
+  # → und + verbatim raw); Sumerogram/Akkadogram graphies ride tokens.
+  # THE PIET SEAM (measured 2026-07-19, promised nothing): 316 starling-
+  # piet HITT reflex rows (306 distinct folded keys) vs the disambiguated
+  # TLHdig lemma keys → 205 = 67.0% join (215 = 70.3% vs all candidates).
+  # LICENSE: Zenodo license field cc-by-4.0 (both Beta versions) →
+  # attribution; the prescribed citation rides the manifest verbatim.
+  # QUARANTINE HONESTY: ~450 damaged files (not well-formed XML +
+  # line-less stubs) quarantine loudly at sync — Beta reality, censused,
+  # never patched. The versioned DOI is immutable: a pin mismatch is
+  # corruption, never an update; new Beta versions mint NEW Zenodo
+  # records (an owner-verified re-pin, journaled — Beta 0.2 stays the
+  # deprecated predecessor record).
+  sync_policy: manual
+  lemma_tier: silver
+
 sarit:
   adapter: Nabu::Adapters::Sarit
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
