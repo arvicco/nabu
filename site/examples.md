@@ -109,10 +109,16 @@ likely borrowing, not common descent.
 
 ## For the assyriologist
 
-The cuneiform shelf holds 21,692 ORACC documents (CC0) across 33 projects,
-including the complete State Archives of Assyria, with upstream gold
-lemmatization feeding `search --lemma` for Akkadian and Sumerian, and 8,911
-aligned English translations. A state letter reads with its facing English,
+The cuneiform shelf now holds 104,722 ORACC documents (CC0) across 38
+projects — the complete State Archives of Assyria, the ePSD2 corpora with
+the Ur III administrative mass, the Achaemenid trilinguals — with upstream
+gold lemmatization feeding `search --lemma` for Akkadian and Sumerian.
+Beside it sit the CDLI's 353,156 catalogued artifacts (135,201 of them
+transliterated: proto-cuneiform and proto-Elamite's only machine-readable
+home), the eBL Fragmentarium's 23,288 fragments with inline English, and
+the Sumerian literary canon in two scholarly editions (ETCSL beside
+ePSD2, deliberately unmerged, meeting at reference edges — all
+synchronized 19 July 2026). A state letter reads with its facing English,
 line-anchored:
 
 ```
@@ -134,6 +140,30 @@ urn:nabu:oracc:rinap-rinap1:Q003443:1 [akk]
 
 — a royal inscription of Tiglath-pileser III, "as far as Mount Saue, which
 abuts Lebanon."
+
+## For the hittitologist
+
+TLHdig (Hethitologie-Portal Mainz) brings >98% of the published Hittite
+tablet fragments: 23,486 manuscripts in 663 CTH compositions, each line
+carrying transliteration, Unicode cuneiform, and upstream's candidate
+morphological analyses — served at an honest silver tier (only
+upstream-disambiguated analyses mint searchable lemmas; the rest ride as
+annotations). The UD HitTB treebank adds 1,309 gold-lemmatized words from
+Hoffner & Melchert's grammar, and the Anatolian reflex columns of the
+comparative shelf light against the corpus:
+
+```
+$ bin/nabu search --lemma ḫūmant --lang hit     # "all/every" across the corpus
+urn:nabu:tlhdig:101:tlh:kub.21.9:7 [hit] [silver]  ḫumant → ḫu-u-ma-an-da
+  e-e]p-ta KUR.KUR°ḪI.A°-ia-ši ḫu-u-ma-an-da za-aḫ-ḫ[e-er]
+…
+
+$ bin/nabu etym water                           # the textbook heteroclite, now corpus-attested
+  ← *wódr̥ [ine-pro] — Wiktionary — Proto-Indo-European …
+  [hit] 𒉿𒀀𒋻 (wātar) — silver 704 passages
+```
+
+Both runs are pasted live (19 July 2026, trimmed lines marked).
 
 ## For the biblical scholar
 
@@ -209,7 +239,7 @@ entry — all live since 19 July 2026.
 ```
 $ bin/nabu show urn:nabu:oshb:gen:1.1
   בְּרֵאשִׁ֖ית בָּרָ֣א אֱלֹהִ֑ים …
-$ bin/nabu align "GEN 1.1"              # six witnesses: MT ×2, LXX, Vulgate, English, Onkelos
+$ bin/nabu align "GEN 1.1"              # seven witnesses: MT ×2, LXX, Vulgate, English, Onkelos, Peshitta
 ```
 
 A note on scope: the library today serves the Hebrew Bible and Second
