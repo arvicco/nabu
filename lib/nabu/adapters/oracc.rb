@@ -107,6 +107,21 @@ module Nabu
       # out of scope), blms, and the four dcclt subprojects — 33 projects,
       # ~159 MB of zips across the 28 new ones. All CC0-expected per the
       # P9-5a family scout; the per-project license gate is the guarantee.
+      #
+      # P31-0 (2026-07-19) +ario (Achaemenid Royal Inscriptions online,
+      # 2.7 MB — the peo+elx+akk royal trilinguals; Old Persian and Elamite
+      # enter the library here, tagged per l-node by upstream) and the four
+      # ePSD2 corpora: epsd2/literary (39.5 MB — the ETCSL literary corpus
+      # ORACC-lemmatized), epsd2/royal (15.1 MB), epsd2/earlylit (1.3 MB),
+      # and epsd2/admin/ur3 (561.8 MB, owner-approved 2026-07-19 — the Ur
+      # III administrative mass, ~80k texts; expect it to dominate counts).
+      # NOTE the registered path is the TRUE ORACC project path
+      # epsd2/admin/ur3 (three segments — /epsd2/admin-ur3/ soft-404s on
+      # the site); its zip is the slug epsd2-admin-ur3.zip and unpacks
+      # DOUBLY nested (epsd2/admin/ur3/…), which project_dir resolves. All
+      # five verified CC0 verbatim at fixture time (2026-07-19,
+      # metadata.json read from each zip); the license gate re-reads at
+      # every sync — 38 projects.
       PROJECTS = %w[
         rimanum etcsri saao/saa01 rinap/rinap1 dcclt
         saao/saa02 saao/saa03 saao/saa04 saao/saa05 saao/saa06 saao/saa07
@@ -115,6 +130,7 @@ module Nabu
         saao/saa20 saao/saa21 saao/saas2
         riao ribo blms
         dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
+        ario epsd2/literary epsd2/royal epsd2/earlylit epsd2/admin/ur3
       ].freeze
 
       # Translation-crawl scope. Stage 1 (P13-4, owner 2026-07-11 "Two-stage
@@ -251,7 +267,7 @@ module Nabu
       # (dcclt/jena nests under <slug>/jena/), so it mirrors project_dir.
       def proxy_corpus?(workdir, project)
         base = File.join(workdir, slug(project))
-        [base, File.join(base, project.split("/").last)].any? do |dir|
+        [base, nested_root(base, project)].any? do |dir|
           path = File.join(dir, "corpus.json")
           next false unless File.exist?(path)
 
@@ -313,16 +329,26 @@ module Nabu
       # (saao/saa01, rinap/rinap1) unpack with a NESTED ROOT —
       # <workdir>/saao-saa01/saa01/corpusjson — so discover looking only at
       # <slug>/corpusjson silently ingested 0 of their 361 texts. Prefer the
-      # top level; fall back to the subproject's last path segment (the nested
-      # root the zip carries). Returns the base dir unchanged when neither holds
-      # corpusjson (never fetched, or damaged) — the caller yields no refs and
-      # the discovery accounting renders that loudly.
+      # top level; fall back to the subproject's path segments after the
+      # first (the nested root the zip carries — ONE segment for saao/saa01,
+      # TWO for the doubly nested epsd2/admin/ur3, whose zip root is the
+      # full project path, P31-0). Returns the base dir unchanged when
+      # neither holds corpusjson (never fetched, or damaged) — the caller
+      # yields no refs and the discovery accounting renders that loudly.
       def project_dir(workdir, project)
         base = File.join(workdir, slug(project))
         return base if Dir.exist?(File.join(base, "corpusjson"))
 
-        nested = File.join(base, project.split("/").last)
+        nested = nested_root(base, project)
         Dir.exist?(File.join(nested, "corpusjson")) ? nested : base
+      end
+
+      # The in-tree root a subproject zip nests under: its project path
+      # minus the leading segment (ZipFetch strips only the single shared
+      # top-level dir). saao/saa01 → saa01; epsd2/admin/ur3 → admin/ur3;
+      # a top-level project nests nowhere (the base itself).
+      def nested_root(base, project)
+        File.join(base, *project.split("/").drop(1))
       end
 
       # The zip URL for a project — split out so tests could repoint a

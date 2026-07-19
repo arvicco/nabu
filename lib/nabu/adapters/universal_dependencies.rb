@@ -115,6 +115,23 @@ module Nabu
         "old-irish-dipwbg" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipWBG",
           language: "sga", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P31-0 (Anatolian axis): the one Hittite treebank in UD — 136
+        # sentences / 1,309 words of Hoffner & Melchert's tutorial examples
+        # (A Grammar of the Hittite Language, Part 2), each with its real
+        # KBo/KUB/Laws source line, spanning Old/Middle/New Hittite.
+        # Test-set only (the DipWBG shape); clitic chains (ta=an, nu=za…)
+        # arrive as CoNLL-U multiword-token ranges the parser already
+        # handles (the Latin-ITTB essetque mechanics). Language hit.
+        # LICENSE GATE PASSED at fixture time 2026-07-19: LICENSE.txt is
+        # verbatim the BY-SA grant ("The treebank is licensed under the
+        # Creative Commons License Attribution-ShareAlike 4.0
+        # International") + README metadata `License: CC BY-SA 4.0` → the
+        # P10-4 per-document attribution override, the birchbark/RNC
+        # mechanics exactly; the SOURCE class stays nc.
+        "hittite-hittb" => {
+          repo: "https://github.com/UniversalDependencies/UD_Hittite-HitTB",
+          language: "hit", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

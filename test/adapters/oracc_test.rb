@@ -150,6 +150,145 @@ module Adapters
       assert_predicate skips, :clean?
     end
 
+    # -- P31-0: ario + the four epsd2 corpora (config expansion) ---------------
+    #
+    # Five new PROJECTS rows ride the existing machinery against their own
+    # fixture tree (the oracc_p14_9 own-tree precedent — the main discover-
+    # walked corpus stays byte-stable). What the tree pins:
+    #   * ario (Achaemenid royal trilinguals): peo/elx/akk tagged per l-node
+    #     UPSTREAM — Old Persian and Elamite enter as data, not config. ario
+    #     labels lines by VERSION ("Persian 1" → Persian.1).
+    #   * epsd2 subprojects unpack NESTED (epsd2/literary/…), and admin/ur3
+    #     is DOUBLY nested (epsd2/admin/ur3/… — the real zip root, verified
+    #     by ranged read 2026-07-19), which project_dir must resolve.
+    #   * the license gate reads CC0 from every one of the five trees.
+    EXPANSION = Nabu::TestSupport.fixtures("oracc_p31_0")
+
+    EXPANSION_URNS = %w[
+      urn:nabu:oracc:ario:Q007149
+      urn:nabu:oracc:ario:Q007203
+      urn:nabu:oracc:ario:Q007267
+      urn:nabu:oracc:epsd2-admin-ur3:P119709
+      urn:nabu:oracc:epsd2-admin-ur3:P133815
+      urn:nabu:oracc:epsd2-earlylit:P010246
+      urn:nabu:oracc:epsd2-earlylit:P323472
+      urn:nabu:oracc:epsd2-literary:P411270
+      urn:nabu:oracc:epsd2-literary:Q000553
+      urn:nabu:oracc:epsd2-royal:Q001016
+    ].freeze
+
+    def test_projects_includes_the_p31_expansion_rows
+      %w[ario epsd2/literary epsd2/royal epsd2/earlylit epsd2/admin/ur3].each do |project|
+        assert_includes Nabu::Adapters::Oracc::PROJECTS, project
+      end
+    end
+
+    def test_discover_finds_the_expansion_projects_including_the_doubly_nested_root
+      ids = Nabu::Adapters::Oracc.new.discover(EXPANSION).map(&:id)
+      assert_equal EXPANSION_URNS, ids
+    end
+
+    def test_discover_resolves_expansion_titles_from_the_catalogue
+      refs = Nabu::Adapters::Oracc.new.discover(EXPANSION).to_h { |ref| [ref.id, ref] }
+      assert_equal "Darius I  16", refs["urn:nabu:oracc:ario:Q007149"].metadata["title"]
+      assert_equal "Ur-Nanše 01", refs["urn:nabu:oracc:epsd2-royal:Q001016"].metadata["title"]
+      assert_equal "TÉL 297 = L ---", refs["urn:nabu:oracc:epsd2-admin-ur3:P133815"].metadata["title"]
+    end
+
+    def test_parse_derives_peo_and_elx_from_the_ario_data
+      adapter = Nabu::Adapters::Oracc.new
+      refs = adapter.discover(EXPANSION).to_h { |ref| [ref.id, ref] }
+
+      # DPd (Darius I 16): pure Old Persian, version-named line labels.
+      peo = adapter.parse(refs["urn:nabu:oracc:ario:Q007149"])
+      assert_equal "peo", peo.language
+      assert_equal "urn:nabu:oracc:ario:Q007149:Persian.1", peo.first.urn
+      assert_equal "d-a-r-y-v-u-š", peo.first.text
+
+      # A2Sa (Artaxerxes II 02): pure Elamite — elx tagged upstream, and
+      # honestly UNLEMMATIZED (ario ships no gloss-elx; tokens carry lang
+      # but no cf), so elx enters the library without lemma rows.
+      elx = adapter.parse(refs["urn:nabu:oracc:ario:Q007267"])
+      assert_equal "elx", elx.language
+      assert_equal "{DIŠ}da-ri-ia-ma-u-iš x", elx.first.text
+      assert_empty(elx.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lemma"] } })
+
+      # DPa (Darius I 69): the royal trilingual — one text, three versions;
+      # every token keeps its honest per-word tag, the majority base subtag
+      # (akk, 4 tokens vs 3 peo / 3 elx) is the per-text primary.
+      tri = adapter.parse(refs["urn:nabu:oracc:ario:Q007203"])
+      assert_equal "akk", tri.language
+      token_langs = tri.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lang"] } }.uniq.sort
+      assert_equal %w[akk elx peo], token_langs
+    end
+
+    def test_parse_reads_the_epsd2_corpora_as_sumerian
+      adapter = Nabu::Adapters::Oracc.new
+      refs = adapter.discover(EXPANSION).to_h { |ref| [ref.id, ref] }
+
+      royal = adapter.parse(refs["urn:nabu:oracc:epsd2-royal:Q001016"])
+      assert_equal "sux", royal.language
+      assert_equal "ur-{d}nanše", royal.first.text
+
+      literary = adapter.parse(refs["urn:nabu:oracc:epsd2-literary:Q000553"])
+      assert_equal "sux", literary.language
+      assert_equal 8, literary.size
+
+      admin = adapter.parse(refs["urn:nabu:oracc:epsd2-admin-ur3:P133815"])
+      assert_equal "sux", admin.language
+      assert_equal "urn:nabu:oracc:epsd2-admin-ur3:P133815:o.1", admin.first.urn
+      assert_equal "4(u) gur ša₃-gal uz", admin.first.text
+    end
+
+    def test_parse_skips_the_expansion_catalog_only_skeletons_by_rule
+      adapter = Nabu::Adapters::Oracc.new
+      refs = adapter.discover(EXPANSION).to_h { |ref| [ref.id, ref] }
+      # P119709 (admin/ur3) is an EMPTY-cdl skeleton, P010246 (earlylit) an
+      # object/surface skeleton with no transcribed lines — both upstream
+      # catalog-only norms, skipped by rule, never quarantined.
+      %w[urn:nabu:oracc:epsd2-admin-ur3:P119709 urn:nabu:oracc:epsd2-earlylit:P010246].each do |urn|
+        error = assert_raises(Nabu::DocumentSkipped) { adapter.parse(refs[urn]) }
+        assert_equal "catalog-only (no content)", error.reason
+      end
+    end
+
+    def test_expansion_fixture_load_produces_peo_lemma_rows
+      catalog = store_test_db
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      source = Nabu::Store::Source.create(
+        slug: "oracc", name: "ORACC", adapter_class: "Nabu::Adapters::Oracc", license_class: "open"
+      )
+      Nabu::Store::Loader.new(db: catalog, source: source)
+                         .load_from(Nabu::Adapters::Oracc.new, workdir: EXPANSION, full: true)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+
+      lemmas = fulltext[:passage_lemmas]
+      # Old Persian citation forms flow through the unchanged cf plumbing:
+      # xšāyaθiya- "king" (DPd Persian 2, surface XŠ — the logogram).
+      assert_operator lemmas.where(language: "peo").count, :>, 0
+      row = lemmas.where(language: "peo", lemma_raw: "xšāyaθiya-").first
+      refute_nil row, "expected a passage_lemmas row for the peo lemma xšāyaθiya-"
+      assert_equal "urn:nabu:oracc:ario:Q007149:Persian.2", row[:urn]
+      assert_includes row[:surface_forms], "XŠ"
+      # The trilingual indexes under its PRIMARY language (the standing
+      # per-passage rule — Sumerian year-names inside Akkadian rimanum
+      # texts ride under akk the same way): adam "I" (DPa Persian 1) lands
+      # as an akk row, its per-word peo tag intact in the annotations.
+      adam = lemmas.where(lemma_raw: "adam").first
+      refute_nil adam, "expected a passage_lemmas row for the lemma adam"
+      assert_equal %w[akk urn:nabu:oracc:ario:Q007203:Persian.1], [adam[:language], adam[:urn]]
+      # Elamite is honestly lemma-less (no gloss-elx upstream)…
+      assert_equal 0, lemmas.where(language: "elx").count
+      # …while the epsd2 corpora contribute Sumerian rows (šaggal "fodder",
+      # P133815 o 1 — the Ur III administrative mass is gold-lemmatized).
+      assert_operator lemmas.where(language: "sux").count, :>, 0
+      sux_row = lemmas.where(language: "sux", lemma_raw: "šaggal").first
+      refute_nil sux_row, "expected a passage_lemmas row for the sux lemma šaggal"
+      assert_equal "urn:nabu:oracc:epsd2-admin-ur3:P133815:o.1", sux_row[:urn]
+    ensure
+      fulltext&.disconnect
+    end
+
     # -- license (read per project, never hardcoded) --------------------------
 
     def test_discover_accepts_the_machine_read_cc0_license

@@ -1,0 +1,52 @@
+{
+ "type": "catalogue",
+ "project": "epsd2/admin/ur3",
+ "source": "http://oracc.org/epsd2/admin/ur3",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T11:48:26",
+ "members": {
+  "P133815": {
+   "langs": "0x02000000",
+   "project": "epsd2/admin/ur3",
+   "id_text": "P133815",
+   "bdtns_id": "015668",
+   "designation": "TÉL 297 = L ---",
+   "period": "Ur III",
+   "genre": "Administrative",
+   "supergenre": "ELA",
+   "provenience": "Girsu",
+   "primary_publication": "TÉL 297",
+   "publication_history": "Virolleaud, C., Lambert, M. (1968) TÉL 297",
+   "museum_no": "L ---",
+   "date_of_origin": "0000 - 00 - 00",
+   "language": "Sumerian",
+   "status": "D",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P133815"
+  },
+  "P119709": {
+   "langs": "0x02000000",
+   "project": "epsd2/admin/ur3",
+   "id_text": "P119709",
+   "bdtns_id": "035334",
+   "designation": "BM 012339",
+   "period": "Ur III",
+   "genre": "Administrative",
+   "supergenre": "ELA",
+   "provenience": "Girsu",
+   "museum_no": "BM 012339",
+   "date_of_origin": "XXXX - 00 - 00",
+   "language": "Sumerian",
+   "object_type": "Tablet",
+   "status": "A",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P119709"
+  }
+ },
+ "summaries": {
+  "P133815": "<p id=\"P133815\">epsd2/admin/ur3:P133815 = TÉL 297 = L ---. Ur III Girsu (Administrative)</p>",
+  "P119709": "<p id=\"P119709\">epsd2/admin/ur3:P119709 = BM 012339. Ur III Girsu (Administrative)</p>"
+ }
+}

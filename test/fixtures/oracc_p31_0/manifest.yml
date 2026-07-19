@@ -1,0 +1,118 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE (P31-0 expansion projects). ORACC serves NO raw
+# per-file URLs — the delivery unit is the per-project zip; every entry was
+# extracted 2026-07-19 from its project zip (four zips downloaded whole and
+# sha256-recorded in the README; the 561.8 MB epsd2-admin-ur3.zip read by
+# HTTP ranged requests, never downloaded whole). A raw GET of any listed
+# path is impossible, so every entry is refetchable: false. Re-acquiring
+# means re-fetching the project zip (or ranged members) and re-applying the
+# README extract/trim procedure. corpusjson members are byte-verbatim
+# whole; catalogue.json trimmed to the fixtured ids; metadata.json whole
+# for ario/earlylit/literary, formats(/witnesses)-trimmed for royal and
+# admin-ur3 (see README).
+source: oracc_p31_0
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: ario/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted whole from https://oracc.museum.upenn.edu/json/ario.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/ario.zip
+  - path: ario/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from ario.zip, members/summaries trimmed to the 3 fixtured Q-numbers (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/ario.zip
+  - path: ario/corpusjson/Q007149.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of ario.zip (DPd — pure Old Persian, lemmatized)
+    upstream: https://oracc.museum.upenn.edu/json/ario.zip
+  - path: ario/corpusjson/Q007203.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of ario.zip (DPa — the peo/elx/akk royal trilingual)
+    upstream: https://oracc.museum.upenn.edu/json/ario.zip
+  - path: ario/corpusjson/Q007267.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of ario.zip (A2Sa — pure Elamite, honestly unlemmatized upstream)
+    upstream: https://oracc.museum.upenn.edu/json/ario.zip
+  - path: epsd2-literary/literary/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted whole from epsd2-literary.zip (nested root epsd2/literary/) — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-literary.zip
+  - path: epsd2-literary/literary/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from epsd2-literary.zip, members/summaries trimmed to the 2 fixtured ids (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-literary.zip
+  - path: epsd2-literary/literary/corpusjson/Q000553.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of epsd2-literary.zip (Šulgi letter composite, lemmatized)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-literary.zip
+  - path: epsd2-literary/literary/corpusjson/P411270.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of epsd2-literary.zip (manuscript witness with field-start tabular d-nodes)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-literary.zip
+  - path: epsd2-royal/royal/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from epsd2-royal.zip, formats lists + witnesses trimmed to the fixtured Q001016 (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-royal.zip
+  - path: epsd2-royal/royal/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from epsd2-royal.zip, members/summaries trimmed to the fixtured Q001016 (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-royal.zip
+  - path: epsd2-royal/royal/corpusjson/Q001016.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of epsd2-royal.zip (Ur-Nanše 01, minimal lemmatized composite)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-royal.zip
+  - path: epsd2-earlylit/earlylit/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted whole from epsd2-earlylit.zip (nested root epsd2/earlylit/) — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-earlylit.zip
+  - path: epsd2-earlylit/earlylit/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from epsd2-earlylit.zip, members/summaries trimmed to the 2 fixtured P-numbers (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-earlylit.zip
+  - path: epsd2-earlylit/earlylit/corpusjson/P323472.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of epsd2-earlylit.zip (CUNES 49-08-067, Early Dynastic, lemmatized)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-earlylit.zip
+  - path: epsd2-earlylit/earlylit/corpusjson/P010246.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of epsd2-earlylit.zip (824-byte object/surface skeleton — the skip-by-rule shape)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-earlylit.zip
+  - path: epsd2-admin-ur3/admin/ur3/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: ranged-read member of epsd2-admin-ur3.zip (561.8 MB, never downloaded whole), formats lists trimmed to the 2 fixtured P-numbers (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-admin-ur3.zip
+  - path: epsd2-admin-ur3/admin/ur3/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: ranged-read member of epsd2-admin-ur3.zip (63.8 MB upstream), members/summaries trimmed to the 2 fixtured P-numbers (README recipe)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-admin-ur3.zip
+  - path: epsd2-admin-ur3/admin/ur3/corpusjson/P133815.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim ranged-read member of epsd2-admin-ur3.zip (typical Ur III receipt, gold-lemmatized)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-admin-ur3.zip
+  - path: epsd2-admin-ur3/admin/ur3/corpusjson/P119709.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim ranged-read member of epsd2-admin-ur3.zip (456-byte empty-cdl skeleton — the skip-by-rule shape)
+    upstream: https://oracc.museum.upenn.edu/json/epsd2-admin-ur3.zip

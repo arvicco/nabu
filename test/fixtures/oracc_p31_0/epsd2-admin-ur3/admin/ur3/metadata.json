@@ -1,0 +1,45 @@
+{
+ "type": "metadata",
+ "project": "epsd2/admin/ur3",
+ "source": "http://oracc.org/epsd2/admin/ur3",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T16:03:49",
+ "config": {
+  "pathname": "epsd2/admin/ur3",
+  "name": "ePSD2/CDLI Ur III Corpus",
+  "abbrev": "epsd2/admin/ur3",
+  "project-type": "corpus",
+  "blurb": "",
+  "public": "",
+  "options": {
+   "atf-batch": "yes",
+   "cbd-oid": "yes",
+   "cbd-use-psus": "%sux:epsd2/admin/names",
+   "cbd-no-harvest": "epsd2 epsd2/admin/names epsd2/names",
+   "build-approved-policy": "atf",
+   "catalog-build-policy": "auto",
+   "cbd-mode": "static",
+   "%sux": ". epsd2/admin/names epsd2 epsd2/names",
+   "sum-alias": "yes",
+   "fuzzy-alias": "yes",
+   "l2-quick-freqs": "yes",
+   "json-mode": "manual",
+   "lem-simplify": "yes"
+  }
+ },
+ "formats": {
+  "atf": [
+   "P119709",
+   "P133815"
+  ],
+  "lem": [
+   "P133815"
+  ],
+  "xtf": [
+   "P119709",
+   "P133815"
+  ]
+ }
+}
