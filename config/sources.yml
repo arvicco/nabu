@@ -1421,6 +1421,58 @@ syriac-corpus:
   # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
   sync_policy: manual
 
+oncoj:
+  adapter: Nabu::Adapters::Oncoj
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj — sparse
+                   # GitFetch of github.com/ONCOJ/data pinned to the
+                   # "release" TAG (commit fd34a1b2, 2021-12-26; cone
+                   # xml/ + lexicon.xml + README ≈ 30 MB) — expect 4,991
+                   # docs / ~33,192 line passages; eyeball nabu show
+                   # urn:nabu:oncoj:MYS.1.1:0 (kwo mo yo / 篭毛與, the
+                   # Man'yōshū opening) and 5 random lines, then flip.
+  # P32-2: ONCOJ — the Oxford-NINJAL Corpus of Old Japanese (Frellesvig
+  # et al., Oxford–NINJAL): 4,991 lemmatized+parsed poetic texts — the
+  # complete Man'yōshū (4,693) + NSK 133 / KK 112 / BS 21 / FK 20 /
+  # SNK 8 / JSHT 4 (NB the packet brief's "Senmyō" is NOT in this
+  # release — project-site-only). NEW oncoj-xml family: document = text
+  # (upstream ids), passage = the corpus's own LINE (lb ids verbatim;
+  # two censused duplicate-id files re-mint "-b"); text = the romanized
+  # analysis (upstream's own "transliteration" layer, ASCII — no
+  # display.yml row), the attested man'yōgana line rides annotations
+  # (lb/@corresp, 33,192/33,192 censused), tokens carry pos +
+  # log/phon/… script segments + lemma. ojp joins the lemma-indexed
+  # languages: w/@lemma ids resolve against lexicon.xml in this cone to
+  # the oncoj-lexicon sibling's headwords (measured: 5,792/5,802
+  # distinct ids = 99.8%, 125,020/125,043 occurrences = 99.98%); lemma
+  # tier stays gold (hand-curated scholarly annotation). LICENSE README
+  # §D verbatim: "The corpus annotation (the grammatical analysis) is
+  # licensed under the Creative Commons Attribution 4.0 International
+  # License." (texts 7th–8th c. PD) → attribution; the §C citation
+  # verbatim in the manifest. The release tag is immutable and the
+  # project site continues → frozen; re-pin is an owner decision.
+  sync_policy: frozen
+
+oncoj-lexicon:
+  adapter: Nabu::Adapters::OncojLexicon
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj-lexicon —
+                   # sparse GitFetch (lexicon.xml + README, 3.4 MB, same
+                   # pinned tag) — expect 5,871 entries; eyeball nabu
+                   # define titipapa / define --lang ojp atwo and 5 random
+                   # entries, then flip.
+  # P32-2: the ONCOJ lexicon — "the dictionary database for the corpus"
+  # (upstream README §B) as the ojp dictionary shelf: 5,871 entries /
+  # 5,527 superEntries (censused; the ONE upstream duplicate id l090819
+  # re-mints "-b", the starling collision precedent). SIBLING of oncoj:
+  # content_kind is one closed routing per adapter (the lexlep/
+  # lexlep-words precedent), so the repo's two grains are two rows
+  # sharing the pinned "release" tag, each with its own sparse cone.
+  # Entry ids are exactly the w/@lemma space corpus tokens speak
+  # (5,793/5,871 entries corpus-cited = 98.7%); headword = first orth =
+  # the very form the corpus adapter mints as token lemma, so define
+  # meets search --lemma on identical folds. Same §D CC BY 4.0 grant
+  # and §C citation as oncoj. Frozen with the tag; owner re-pins.
+  sync_policy: frozen
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
