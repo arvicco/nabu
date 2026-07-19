@@ -149,9 +149,15 @@ module Nabu
         @canonical_dir = canonical_dir
       end
 
-      def run
+      # +progress+ (P31 rider, owner: the probe now runs long enough to
+      # justify a print-out): a callable receiving (slug, index 1-based,
+      # total) BEFORE each source goes on the wire — the CLI names the
+      # source currently probing. nil → silent; the library never prints.
+      def run(progress: nil)
         checked_at = Time.now
-        rows = @registry.each_source.map do |entry|
+        entries = @registry.each_source.to_a
+        rows = entries.each_with_index.map do |entry, index|
+          progress&.call(entry.slug, index + 1, entries.size)
           health = probe_source(entry)
           persist(health, checked_at)
           health
