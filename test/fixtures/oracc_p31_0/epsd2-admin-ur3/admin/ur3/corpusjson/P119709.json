@@ -1,0 +1,18 @@
+{
+  "type": "cdl",
+  "project": "epsd2/admin/ur3",
+  "source": "http://oracc.org/epsd2/admin/ur3",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2022-12-07T12:22:19",
+  "textid": "P119709",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "P119709.U0",
+      "cdl": []
+    }
+  ]
+}

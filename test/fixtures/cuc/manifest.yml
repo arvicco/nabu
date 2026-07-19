@@ -1,0 +1,91 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — a fresh GET returns the full file and is
+# fetched for URL-liveness only, never byte-compared). adapter_test is null:
+# the CUC adapter test asserts slice-level counts, which untrimmed upstream
+# files would false-fail. Re-trim per the README table after any refresh.
+# Pinned upstream commit:
+# 0408967b1808c1f22c69e299d302b1e7b5e26354 (main, retrieved 2026-07-19).
+source: cuc
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: tf/0.2.8/alt.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/alt.tf
+    whole: false
+    trim: slice sign entries (146587 B -> 517 B)
+  - path: tf/0.2.8/cert.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/cert.tf
+    whole: false
+    trim: slice sign entries (478896 B -> 29534 B)
+  - path: tf/0.2.8/column.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/column.tf
+    whole: false
+    trim: slice column entries (1200 B -> 566 B)
+  - path: tf/0.2.8/cont.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/cont.tf
+    whole: false
+    trim: slice sign entries (147403 B -> 504 B)
+  - path: tf/0.2.8/emen.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/emen.tf
+    whole: false
+    trim: slice sign entries (563793 B -> 26052 B)
+  - path: tf/0.2.8/g_cons.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/g_cons.tf
+    whole: false
+    trim: slice word entries (124223 B -> 7229 B)
+  - path: tf/0.2.8/language.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/language.tf
+    whole: false
+    trim: slice word entries (250396 B -> 13563 B)
+  - path: tf/0.2.8/line.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/line.tf
+    whole: false
+    trim: slice line entries (20566 B -> 1584 B)
+  - path: tf/0.2.8/oslots.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/oslots.tf
+    whole: false
+    trim: slice column/line/tablet/word nodes, gap-anchored entries (448752 B -> 23453 B)
+  - path: tf/0.2.8/otext.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.2.8/otype.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.2.8/side.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/side.tf
+    whole: false
+    trim: slice line entries (41299 B -> 2664 B)
+  - path: tf/0.2.8/sign.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/sign.tf
+    whole: false
+    trim: slice sign entries (316599 B -> 15800 B)
+  - path: tf/0.2.8/tablet.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/tablet.tf
+    whole: false
+    trim: slice tablet entries (3036 B -> 617 B)
+  - path: tf/0.2.8/tablet_info.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/tablet_info.tf
+    whole: false
+    trim: slice tablet entries (1008 B -> 902 B)
+  - path: tf/0.2.8/trailer.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/trailer.tf
+    whole: false
+    trim: slice word entries (42162 B -> 4094 B)
+  - path: tf/0.2.8/trailer_emen.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/trailer_emen.tf
+    whole: false
+    trim: slice word entries (51342 B -> 3170 B)
+  - path: tf/0.2.8/usign.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/usign.tf
+    whole: false
+    trim: slice sign entries (506695 B -> 25869 B)
+  - path: tf/0.2.8/utrailer.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/cuc/main/tf/0.2.8/utrailer.tf
+    whole: false
+    trim: slice word entries (83865 B -> 5783 B)

@@ -1,0 +1,55 @@
+{
+ "type": "catalogue",
+ "project": "epsd2/earlylit",
+ "source": "http://oracc.org/epsd2/earlylit",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T16:16:46",
+ "members": {
+  "P323472": {
+   "langs": "0x02000000",
+   "project": "epsd2/earlylit",
+   "id_text": "P323472",
+   "designation": "CUNES 49-08-067 = CUSAS 23, 205",
+   "period": "Old Akkadian",
+   "subgenre": "school text: literary text",
+   "genre": "Literary",
+   "supergenre": "LIT",
+   "provenience": "uncertain",
+   "primary_publication": "CUSAS 23, 205",
+   "museum_no": "CUNES 49-08-067",
+   "language": "Sumerian",
+   "object_type": "tablet",
+   "status": "D",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P323472"
+  },
+  "P010246": {
+   "langs": "0x02000000",
+   "project": "epsd2/earlylit",
+   "id_text": "P010246",
+   "designation": "IM — = Biggs, Robert D., OIP 099 (1974) 305; Gragg, Gene, 1969; Biggs 1971; OIP 99, 90f.; Edzard 1974; Edzard 1976-80, 572; Wilcke 1991, 275f.; 283; Geller 1996",
+   "period": "Early Dynastic IIIa",
+   "subgenre": "Hymns addressed to or concerning temples",
+   "genre": "Literary",
+   "supergenre": "LIT",
+   "provenience": "Abu Salabikh",
+   "primary_publication": "CDLI Literary 000751, ex. 010",
+   "publication_history": "Biggs, Robert D., OIP 099 (1974) 305; Gragg, Gene, 1969; Biggs 1971; OIP 99, 90f.; Edzard 1974; Edzard 1976-80, 572; Wilcke 1991, 275f.; 283; Geller 1996",
+   "excavation_no": "AbS-T 0352",
+   "museum_no": "IM —",
+   "language": "Sumerian",
+   "object_type": "tablet",
+   "status": "I",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P010246",
+   "public": "no",
+   "images": []
+  }
+ },
+ "summaries": {
+  "P323472": "<p id=\"P323472\">epsd2/earlylit:P323472 = CUNES 49-08-067 = CUSAS 23, 205. Old Akkadian uncertain (Literary/&gt;school text: literary text)</p>",
+  "P010246": "<p id=\"P010246\">epsd2/earlylit:P010246 = IM — = Biggs, Robert D., OIP 099 (1974) 305; Gragg, Gene, 1969; Biggs 1971; OIP 99, 90f.; Edzard 1974; Edzard 1976-80, 572; Wilcke 1991, 275f.; 283; Geller 1996. Early Dynastic IIIa Abu Salabikh (Literary/&gt;Hymns addressed to or concerning temples)</p>"
+ }
+}

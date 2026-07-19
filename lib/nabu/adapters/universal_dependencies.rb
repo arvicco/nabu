@@ -30,8 +30,9 @@ module Nabu
     # self-contradictory, LICENSE files): PROIEL is CC BY-NC-SA, Sanskrit-Vedic
     # CC BY-SA, Latin-ITTB CC BY-NC-SA, all three Old East Slavic treebanks
     # (Birchbark, RNC, Ruthenian) CC BY-SA 4.0, Old Irish DipSGG CC BY-NC-SA
-    # 4.0 and DipWBG CC BY-SA 4.0 (P25-2). The manifest declares the most
-    # restrictive class present (nc) so query/export filters never over-share.
+    # 4.0 and DipWBG CC BY-SA 4.0 (P25-2), both Perseus treebanks CC BY-NC-SA
+    # 2.5 Generic (P31-6). The manifest declares the most restrictive class
+    # present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
       # and in the urn; value = its upstream repo and ISO 639-3 language tag.
@@ -115,6 +116,49 @@ module Nabu
         "old-irish-dipwbg" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipWBG",
           language: "sga", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P31-0 (Anatolian axis): the one Hittite treebank in UD — 136
+        # sentences / 1,309 words of Hoffner & Melchert's tutorial examples
+        # (A Grammar of the Hittite Language, Part 2), each with its real
+        # KBo/KUB/Laws source line, spanning Old/Middle/New Hittite.
+        # Test-set only (the DipWBG shape); clitic chains (ta=an, nu=za…)
+        # arrive as CoNLL-U multiword-token ranges the parser already
+        # handles (the Latin-ITTB essetque mechanics). Language hit.
+        # LICENSE GATE PASSED at fixture time 2026-07-19: LICENSE.txt is
+        # verbatim the BY-SA grant ("The treebank is licensed under the
+        # Creative Commons License Attribution-ShareAlike 4.0
+        # International") + README metadata `License: CC BY-SA 4.0` → the
+        # P10-4 per-document attribution override, the birchbark/RNC
+        # mechanics exactly; the SOURCE class stays nc.
+        "hittite-hittb" => {
+          repo: "https://github.com/UniversalDependencies/UD_Hittite-HitTB",
+          language: "hit", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P31-6 (02-sources row 17's UD half): the UD conversions of the
+        # native Perseus AGDT/LDT v2.1 ("automatic conversion of a selection
+        # of passages from the Ancient Greek and Latin Dependency Treebank
+        # 2.1", both READMEs). Greek ~202k tokens (Homer, Hesiod, tragedy,
+        # Herodotus…), Latin ~29k (Caesar-era canon: Cicero, Vergil, Ovid…).
+        # DEDUP HONESTY: nabu has never synced the native AGLDT, so the
+        # chu-PROIEL re-export guard does NOT apply — no double-load; no
+        # overlap with greek-proiel/latin-ittb (different upstream data); and
+        # vs the perseus-greek/latin TEXT sources these are the same works at
+        # treebank grain = distinct witnesses, never deduped (the
+        # DipSGG-beside-CorPH doctrine).
+        #
+        # LICENSE GATE PASSED at fixture time 2026-07-19: each repo's
+        # LICENSE.txt is verbatim "This work is licensed under the Creative
+        # Commons Attribution-NonCommercial-ShareAlike 2.5 Generic License."
+        # and each README's metadata reads `License: CC BY-NC-SA 2.5` —
+        # consistent, NonCommercial → both ride the SOURCE's nc class bare,
+        # no override key (the DipSGG posture, NOT the P10-4 mechanics).
+        "ancient-greek-perseus" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ancient_Greek-Perseus",
+          language: "grc"
+        },
+        "latin-perseus" => {
+          repo: "https://github.com/UniversalDependencies/UD_Latin-Perseus",
+          language: "lat"
         }
       }.freeze
 

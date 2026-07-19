@@ -1,0 +1,291 @@
+<TEI.2 id="c.1.8.2.1">
+<teiHeader lang="eng">
+<fileDesc>
+<titleStmt>
+<title>Lugalbanda in the mountain cave -- a composite transliteration</title>
+<respStmt><name>Jeremy Black</name><resp>Project Director and Editor</resp></respStmt>
+<respStmt><name>G&aacute;bor Z&oacute;lyomi</name><resp>Editor</resp></respStmt>
+<respStmt><name>Graham Cunningham</name><resp>Editor</resp></respStmt>
+<respStmt><name>Eleanor Robson</name><resp>Technical Developer</resp></respStmt>
+<respStmt><name>Jarle Ebeling</name><resp>Technical Developer</resp></respStmt>
+</titleStmt>
+<publicationStmt>
+<distributor>The Electronic Text Corpus of Sumerian Literature
+</distributor><address><addrLine>The Oriental Institute, University of Oxford, Pusey Lane, Oxford OX1 2LE, UK, email etcsl&commat;orinst.ox.ac.uk, http://etcsl.orinst.ox.ac.uk</addrLine></address>
+<date>1999</date>
+</publicationStmt>
+<seriesStmt><p>The Electronic Text Corpus of Sumerian Literature aims to make accessible over 400 literary works composed in the Sumerian language in ancient Mesopotamia during the late third and early second millennia BC. The works are in Sumerian composite transliteration and English prose translation with bibliographical information on each composition.</p></seriesStmt>
+<sourceDesc>
+<listBibl type="secondary">
+<bibl><xref from="b81">Alster 1997</xref><biblScope type="page">568</biblScope><biblScope type="contents">translation, commentary</biblScope><note>ll. 158-160</note></bibl>
+<bibl><xref from="b128">Black 1996</xref><biblScope type="page">39-40</biblScope><biblScope type="contents">commentary</biblScope></bibl>
+<bibl><xref from="b167">Wilcke 1969</xref><biblScope type="contents">composite text, translation, commentary</biblScope><note>ll. 1-259, in various places in the volume</note></bibl>
+<bibl><xref from="b172">Wilcke 1987</xref><biblScope type="page">122-124</biblScope><note>summary and list of mss.</note></bibl>
+<bibl><xref from="b157">Vanstiphout 1995</xref><biblScope type="page">9</biblScope><note>list of mss.</note></bibl>
+<bibl><xref from="b173">Hallo 1983</xref><biblScope type="contents">composite text, translation, handcopy, commentary</biblScope><note>edition of ll. 260-378</note></bibl>
+<bibl><xref from="b174">Falkowitz 1983</xref><note>discussion of relation to Lugalbanda</note></bibl>
+<bibl><xref from="b176">Vanstiphout 1998h</xref><biblScope type="contents">commentary</biblScope></bibl>
+<bibl><xref from="b265">Civil 1989b</xref><biblScope type="contents">composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b297">Wilcke 1998</xref><biblScope type="contents">composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b300">Vanstiphout 1997b</xref><biblScope type="contents">score transliteration, composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b307">Krecher 1996</xref><biblScope type="contents">composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b308">Krecher 1996a</xref><biblScope type="contents">composite text, translation</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b311">Civil 1992</xref><biblScope type="contents">composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b488">Black 1998</xref><biblScope type="contents">translation, commentary</biblScope></bibl>
+<bibl><xref from="b688">Hall 1985</xref><biblScope type="page">529-533</biblScope><biblScope type="contents">commentary</biblScope></bibl>
+</listBibl>
+<listBibl type="tablets">
+<bibl><biblScope type="museumNumber">AO 8896 (TRS 90)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">AUAM 73.2389! (RA 70 144, photo)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">BM 16920 (CT 42 46)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 6792 (SEM 20)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 7085 (obv. FTS fig. 75)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 8337</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 9234 (HAV 4)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 14138 (SEM 111)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 15128</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 15361</biblScope></bibl>
+<bibl><biblScope type="museumNumber">HS 1449 (TMH NF 3 8; WK 16, photo)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">HS 1471 (TMH NF 3 9; WK 17, photo)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">HS 1479 (TMH NF 3 10; WK 18, photo)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">HS 1517 (TMH NF 3 11) + Ni 4102! (ISET 1 70)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 1325</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 1362 + N 1412</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 1594</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 3119</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 3302</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 3378</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 3732</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 6591</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 6767</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 7211</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 7227</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 7278</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 2511 (SRT 33)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4237 (ISET 1 82)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4276 (ISET 1 80)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4286 (where?)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4291 (ISET 2 42)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4405 (ISET 2 43) + Ni 9933 (ISET 1 148)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4427 (ISET 1 95)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4553 (ISET 2 45)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9648 (ISET 2 44)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9677 (ISET 2 44)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9913 (ISET 1 138)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9959 (ISET 1 144)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">OECT 1 pl. 9</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UET 6/3 205</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UM 29-16-228</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UM 29-16-248</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UM 29-16-367</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UM 29-16-421</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UM 29-16-433</biblScope></bibl>
+<bibl><biblScope type="museumNumber">YBC 4623 (JAOS 103 ***)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">2N-T461</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T374 = A 30224</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T775 = IM 58698</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T902,74 (SLTF 7)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T906,222 (SLTF 7)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T917,368 (SLTF 8)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T919,454 (SLTF 7)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T919,467 (SLTF 8)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3N-T916,361 (SLTF 88)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">6N-T638</biblScope><note>Ur III recension ***.</note></bibl>
+</listBibl>
+</sourceDesc>
+</fileDesc>
+<revisionDesc>
+<change><date>26.iii.1998-09.iv.1998</date><respStmt><name>JAB</name><resp>editor</resp></respStmt>
+<item>standardisation</item></change>
+<change><date>22.iv.1998</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>proofreading</item></change>
+<change><date>19.iv.1999</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>minor corrections</item></change>
+<change><date>19.iv.1999</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>SGML tagging</item></change>
+<change><date>22.iv.1999</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>proofreading SGML</item></change>
+<change><date>22.iv.1999</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>web publication</item></change>
+<change><date>01.vi.2003</date><respStmt><name>GC/JE</name><resp>editor/technical developer</resp></respStmt>
+<item>XML/TEI conversion</item></change>
+<change><date>30.iii.2005</date><respStmt><name>GC/JE</name><resp>senior editor/technical developer</resp></respStmt>
+<item>lemmatised version published</item></change>
+</revisionDesc>
+</teiHeader>
+<text lang="sux">
+<body>
+<div1 type="segment" n="A">
+<l n="1" id="c1821.A.1" corresp="t1821.p1">
+<supplied/>
+<w form="ud" lemma="ud" pos="N" label="day(light)">ud</w>
+<w form="ul" lemma="ul" pos="N" label="distant time">ul</w>
+<w form="an" lemma="an" pos="N" label="heaven">an</w>
+<w form="ki-ta" lemma="ki" pos="N" label="place">ki-ta</w>
+<w form="ba9-ra2-a-ba" lemma="bad" pos="V" label="to open">ba9-ra2-a-ba</w>
+<suppliedEnd/>
+<note lang="eng">Cited in <xref doc="c.0.2.01" from="c0201.38">OB catalogue from Nibru, at Philadelphia, 0.2.01, line 38</xref>; <xref doc="c.0.2.02" from="c0202.22">OB catalogue in the Louvre, 0.2.02, line 22</xref>; <xref doc="c.0.2.04" from="c0204.37">OB catalogue from Urim (U2), 0.2.04, line 37</xref></note>
+</l>
+<l n="2" id="c1821.A.2" corresp="t1821.p1">
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+<damage/>
+<w form="ul-e" lemma="ul" pos="N" label="distant time">ul<damageEnd/>-e</w>
+<w form="suh10" lemma="suh10" pos="N" label="crown">suh10</w>
+<damage/>
+<w form="kece2-da" lemma="kece2" pos="V" label="to bind">kece2<damageEnd/>-<supplied/>da</w>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="3" id="c1821.A.3" corresp="t1821.p1">
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+<damage/>
+<w form="ul" lemma="ul" pos="N" label="distant time"><unclear cert="qry">ul</unclear></w>
+<damageEnd/>
+<w form="buru14" lemma="buru14" pos="N" label="harvest (time)">buru14</w>
+<w form="ul-e" lemma="ul" pos="N" label="distant time">ul-e</w>
+<w form="ce" lemma="ce" pos="N" label="barley">ce</w>
+<damage/>
+<w form="KA&times;X-Xbr-a-ba" lemma="KA&times;X" label="KA&times;X">KA&times;X<damageEnd/>-<supplied/>(X)<suppliedEnd/>-a-ba</w>
+</l>
+<l n="4" id="c1821.A.4" corresp="t1821.p1">
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<w form="in" lemma="in" pos="N" label="zone">in</w>
+<suppliedEnd/>
+<damage/>
+<w form="ba-dub-ba" lemma="dub" pos="V" label="to heap up">ba<damageEnd/>-dub-ba</w>
+<w form="ki" lemma="ki" pos="N" label="place">ki</w>
+<w form="ba-sur-ra-a-ba" lemma="sur" pos="V" label="to drip">ba-sur-ra-a-ba</w>
+</l>
+<l n="5" id="c1821.A.5" corresp="t1821.p1">
+<supplied/>
+<w form="Xbr" lemma="Xbr" label="Xbr">(X)</w>
+<w form="na" lemma="na4" pos="N" label="stone">na</w>
+<suppliedEnd/>
+<damage/>
+<w form="ba-du3-a-ba" lemma="du3" pos="V" label="to erect">ba<damageEnd/>-du3-a-ba</w>
+<w form="mu" lemma="mu" pos="N" label="name">mu</w>
+<w form="ba-sar-ra-a-ba" lemma="sar" pos="V" label="to write">ba-sar-ra-a-ba</w>
+</l>
+<l n="6" id="c1821.A.6" corresp="t1821.p1">
+<supplied/>
+<w form="Xbr" lemma="Xbr" label="Xbr">(X)</w>
+<suppliedEnd/>
+<damage/>
+<w form="eg2" lemma="eg2" pos="N" label="embankment">eg2</w>
+<damageEnd/>
+<w form="pa5-re" lemma="pa5" pos="N" label="canal">pa5-re</w>
+<w form="cu-luh" lemma="cu-luh" pos="N" label="ritual cleansing">cu-luh</w>
+<w form="ak-a-ba" lemma="ak" pos="V" label="to do">ak-a-ba</w>
+</l>
+<l n="7" id="c1821.A.7" corresp="t1821.p1">
+<supplied/>
+<w form="Xbr" lemma="Xbr" label="Xbr">(X)</w>
+<suppliedEnd/>
+<damage/>
+<w form="AD-gin7" lemma="AD" label="AD">AD<damageEnd/>-gin7</w>
+<w form="X" lemma="X" label="X">X</w>
+<w form="pu2" lemma="pu2" pos="N" label="(water) hole">pu2</w>
+<phr type="VP" lemma="si sa2" label="to make straight">
+<w form="si" lemma="si" pos="N" label="horn">si</w>
+<w form="sa2-sa2-a-ba" lemma="sa2" pos="V" label="to equal" form-type="RR">sa2-sa2-a-ba</w>
+</phr>
+</l>
+<l n="8" id="c1821.A.8" corresp="t1821.p1">
+<w form="&id2;buranuna" lemma="buranuna" pos="N" type="WN" label="Euphrates" det="&id2;"><supplied/>&id2;<suppliedEnd/><damage/>buranuna<damageEnd/></w>
+<w form="id2" lemma="id2" pos="N" label="watercourse">id2</w>
+<damage/>
+<w form="he2-jal2-la" lemma="he2-jal2" pos="N" label="plenty">he2<damageEnd/>-jal2-la</w>
+<w form="unug&ki;-ga-ke4" lemma="unug" pos="N" type="SN" label="Unug" det="&ki;">unug&ki;-ga-<damage/>ke4<damageEnd/></w>
+<supplied/>
+<w form="ki" lemma="ki" pos="N" label="place">ki</w>
+<suppliedEnd/>
+<damage/>
+<w form="in-dar-ra-a-ba" lemma="dar" pos="V" label="to split">in<damageEnd/>-dar-ra-a-ba</w>
+</l>
+<l n="9" id="c1821.A.9" corresp="t1821.p1">
+<supplied/>
+<w form="Xbr" lemma="Xbr" label="Xbr">(X)</w>
+<w form="X" lemma="X" label="X">X</w>
+<suppliedEnd/>
+<w form="NUN" lemma="NUN" label="NUN">NUN</w>
+<w form="BI" lemma="BI" label="BI"><unclear cert="qry">BI</unclear></w>
+<w form="TAB" lemma="TAB" label="TAB">TAB</w>
+<w form="du3-a-ba" lemma="du3" pos="V" label="to erect">du3-a-ba</w>
+</l>
+<l n="10" id="c1821.A.10" corresp="t1821.p1">
+<supplied/>
+<w form="Xbr" lemma="Xbr" label="Xbr">(X)</w>
+<w form="X" lemma="X" label="X">X</w>
+<suppliedEnd/>
+<damage/>
+<w form="ha-la" lemma="ha-la" pos="N" label="share">ha<damageEnd/>-la</w>
+<w form="UL" lemma="UL" label="UL">UL</w>
+<w form="TAB" lemma="TAB" label="TAB">TAB</w>
+<w form="jar-ra-ba" lemma="jar" pos="V" label="to place">jar-ra-ba</w>
+</l>
+</div1>
+<div1 type="segment" id="c1821.seg1" n="B">
+<note lang="eng" target="c1821.seg1">It is possible that this fragment does not belong to the same composition</note>
+<l n="1" id="c1821.B.1" corresp="t1821.p35">
+<w form="X" lemma="X" label="X">X</w>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="2" id="c1821.B.2" corresp="t1821.p35">
+<w form="AB" lemma="AB" label="AB">AB</w>
+<damage/>
+<w form="BUR2" lemma="BUR2" label="BUR&s2;">BUR2</w>
+<damageEnd/>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="3" id="c1821.B.3" corresp="t1821.p35">
+<w form="unu2" lemma="unu2" pos="N" label="(dining) hall">unu2</w>
+<w form="&d;&X;" lemma="X" pos="N" type="DN" label="unclear" det="&d;"><damage/>&d;<damageEnd/><supplied/>&X;<suppliedEnd/></w>
+</l>
+<l n="4" id="c1821.B.4" corresp="t1821.p35">
+<w form="igi" lemma="igi" pos="N" label="eye">igi</w>
+<w form="an-na" lemma="an" pos="N" label="heaven">an-<damage/>na</w>
+<damageEnd/>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="5" id="c1821.B.5" corresp="t1821.p35">
+<w form="&d;nanna" lemma="nanna" pos="N" type="DN" label="Nanna" det="&d;">&d;<damage/>nanna<damageEnd/></w>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="6" id="c1821.B.6" corresp="t1821.p35">
+<damage/>
+<w form="KA" lemma="KA" label="KA">KA</w>
+<damageEnd/>
+<w form="ZA" lemma="ZA" label="ZA">ZA</w>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<l n="7" id="c1821.B.7" corresp="t1821.p35">
+<supplied/>
+<w form="X" lemma="X" label="X">X</w>
+<suppliedEnd/>
+<damage/>
+<w form="DA" lemma="DA" label="DA">DA</w>
+<damageEnd/>
+<supplied/>
+<w form="&X;" lemma="&X;" label="&X;">&X;</w>
+<suppliedEnd/>
+</l>
+<gap extent="unknown no. of lines missing"/>
+</div1>
+</body>
+</text>
+</TEI.2>

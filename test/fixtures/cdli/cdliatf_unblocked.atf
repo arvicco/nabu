@@ -1,0 +1,146 @@
+&P000001 = CDLI Lexical 000002, ex. 065
+#atf: lang qpc
+@tablet
+@obverse
+@column 1
+$ beginning broken
+1'. 1(N01) , [...]
+>>Q000002 014
+2'. 1(N01) , TIM ABGAL#
+>>Q000002 015
+3'. 1(N01) , KINGAL#
+>>Q000002 016
+@column 2
+$ beginning broken
+1'. 1(N01) , [...]
+>>Q000002 030
+2'. 1(N01) , GAL~a# UMUN2#
+>>Q000002 031
+3'. 1(N01) , GAL~a UMUN2 KU3~a
+>>Q000002 032
+@column 3
+$ beginning broken
+1'. 1(N01) , DUB~a SANGA~a#
+>>Q000002 048
+2'. 1(N01) , SUG5# SAG#
+>>Q000002 049
+3'. 1(N01) , UB SAG#
+>>Q000002 050
+@reverse
+1. [N] , [...]
+>>Q000002 colophon
+
+&P000725 = UET 2, 264
+#version: 0.1
+#atf: lang qpc
+#atf def linktext A = Q000002 = Archaic Lu A
+@obverse
+@column 1
+1. 1(N01) , [...] X
+>>A 21
+2. 1(N01) , GAL~a# NI~b
+>>A 23
+3. 1(N01) , GAL~a# KISAL~b1
+>>A 22
+4. 1(N01) , GAL~a# SILA4~a#
+>>A 24
+5. 1(N01) , [...]
+>>A 25
+6. 1(N01) , [...] BU~a#
+>>A 26
+7. 1(N01) , GAL~a NESAG2~a
+>>A 27
+8. 1(N01) , [...]
+>>A 28
+@column 2
+1. 1(N01) , [...]
+>>A 37
+2. 1(N01) , GAL~a ERIN#
+>>A 38
+3. 1(N01) , GAL~a [...]
+>>A 39
+4. 1(N01) , GAL~a# [...]
+>>A 40
+5. 1(N01) , [...]
+>>A 41
+@reverse
+@column 1
+1. [...] , MUSZ3~a# SI A AMA~b# X [...]
+
+&P469841 = Anonymous 469843 
+#atf: lang sux 
+@tablet 
+@obverse 
+1. 1(gesz2) 4(disz) 1/2(disz) gurusz u4 1(disz)-sze3 
+2. 5(asz) ug3-IL2 
+3. ki ur-{gesz}gigir-ta 
+4. lugal-e-ba-an-sa6 
+5. i3-dab5 
+$ blank space  
+@reverse 
+$ blank space  
+1. mu us2-sa bad3 ba-du3 
+$ blank space  
+
+&P469841 = Anonymous 0700 
+#atf: lang sux 
+@tablet 
+@obverse 
+1. 3(u) sa gi 
+2. 2(gesz2) {gesz}e2-da-ka ki szesz-a-ni 
+3. kiszib3 a-kal-la 
+@reverse 
+1. sza3 bala-a 
+2. mu us2-sa a-ra2 3(disz@t)-kam si-mu-ru-um 
+$ blank space 
+# seal impression 
+@seal 1 
+1. a-kal-la 
+2. dub-sar 
+3. dumu ur-nigar{gar} 
+
+&P225015 = TIM 10, 038
+#atf: use lexical
+#link: def A = Q000047 = OB Nippur Lu
+@obverse?
+1. sze ba
+|| A 791
+2. siki ba
+|| A 793
+3. i3 ba
+|| A 792
+
+&P323717 = CUSAS 03, 1403 
+#atf: lang sux 
+@tablet 
+$ (lost) 
+@envelope 
+$ (fragment) 
+@seal 1 
+1. me-{d}isztaran 
+2. dumu-munus lugal 
+3. puzur4-a-ku-um 
+4. lu2 azlag2 ARAD2-zu 
+$ (following Mayr) 
+&P480562 = 1935-01-12, 0067 (BM)
+#atf: lang sux
+@object weight
+@surface a
+1. 1/3(disz) ma-na
+#tr.en: one-third mina
+& P519727 = RINAP 2, Sargon II 05 composite 
+#atf: lang akk 
+@object composite text 
+@surface a 
+$ beginning broken 
+1'. [...] x x x x x? x x x x [...] 
+#tr.en: ... 
+>>Q006486 001' 
+2'. _kur-gi{muszen}-mesz uz-tur{muszen}-mesz_ ma-har-szu2-un aq-qi2 asz2-szu2 sza2-kan _bad5-bad5_ {disz}{d}marduk-a-szum2-na _dumu_ {disz}ia-ki-ni _numun_ {lu2}kal-di hi-ri-is, _gal5-la2_ 
+#tr-en: geese (and) ducks before them I sacrificed. In order to bring about the defeat of Mardtuk-apla-iddina (Merodach-baladan II), descendant of Yakin, of Chaldean descent, the (very) image of a gallu(-demon) 
+>>Q006486 002' 
+3'. lem-ni am-hur-szu2-nu-ti i-na su-pe-e u3 te-me-qi ma-har-szu-un ut-nin ul-tu i-sin-ni _en gal_-i {d}marduk u2-szal-li-mu x [...] 
+#tr.en: evil, I appealed to them (the gods). With entreaties and supplications I prayed to them. After the festival of the great lord, Marduk, I had finished ... 
+>>Q006486 003' 
+$ rest broken 
+

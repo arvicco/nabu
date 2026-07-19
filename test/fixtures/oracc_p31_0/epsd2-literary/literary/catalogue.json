@@ -1,0 +1,48 @@
+{
+ "type": "catalogue",
+ "project": "epsd2/literary",
+ "source": "http://oracc.org/epsd2/literary",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T16:16:59",
+ "members": {
+  "Q000553": {
+   "project": "epsd2/literary",
+   "id_composite": "Q000553",
+   "designation": "Letter from Šulgi (?) to Aradĝu about troops",
+   "supergenre": "LIT",
+   "genre": "Literary",
+   "subgenre": "Royal correspondence",
+   "period": "Old Babylonian",
+   "publication_history": "[http://etcsl.orinst.ox.ac.uk/cgi-bin/etcsl.cgi?text=c.3.1.13.1&display=Crit&charenc=gcirc ETCSL 3.1.13.1]",
+   "keywords": "Third Dynasty of Ur",
+   "provenience": "Nippur",
+   "distribution": "Nippur [1]",
+   "sources": "P343792",
+   "provdist": "Nippur (Ni 9703 (ISET 2 120) c′</src>)",
+   "sec1": "Royal correspondence",
+   "chap": "Letters",
+   "sec2": "Third Dynasty of Ur"
+  },
+  "P411270": {
+   "langs": "0x02000000",
+   "project": "epsd2/literary",
+   "id_text": "P411270",
+   "designation": "CUNES 51-02-036",
+   "period": "Old Babylonian",
+   "genre": "Lexical",
+   "supergenre": "LEX",
+   "provenience": "uncertain",
+   "primary_publication": "unpublished unassigned ?",
+   "museum_no": "CUNES 51-02-036",
+   "language": "Sumerian",
+   "object_type": "other (see object remarks)",
+   "status": "D"
+  }
+ },
+ "summaries": {
+  "Q000553": "<p id=\"Q000553\">epsd2/literary:Q000553 = Letter from Šulgi (?) to Aradĝu about troops. Old Babylonian Nippur (Literary/&gt;Royal correspondence)</p>",
+  "P411270": "<p id=\"P411270\">epsd2/literary:P411270 = CUNES 51-02-036. Old Babylonian uncertain (Lexical)</p>"
+ }
+}

@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM PROVENANCE. fragments.json here is a documented TRIM of the
+# Zenodo record 10018951 fragments.json (73,854,507 B, md5-verified
+# against the record's published checksum before slicing, sha256
+# 4e970d87… pinned in the adapter). There is no raw URL that serves the
+# trim — re-acquiring means re-downloading the 73.9 MB deposit — so the
+# entry is refetchable: false; recipe in README.md. The versioned DOI is
+# immutable, so drift is impossible short of Zenodo corruption.
+source: ebl
+adapter_test:
+retrieved: 2026-07-19
+files:
+  - path: fragments.json
+    refetchable: false
+    provenance: local-trim
+    reason: 14 byte-verbatim member objects sliced from the 73.9 MB Zenodo artifact; no raw URL serves the trim
+    upstream: https://zenodo.org/records/10018951/files/fragments.json
+    copied: 2026-07-19
+    whole: false
+    trim: members K.11360/K.12174/K.13942/K.2954/K.5808 (both duplicate copies)/IM.75911/BM.47447/IM.61678/K.21002/1868,0523.2/"U.7321 ?"/K.20565/N.7458 of 23,289 — tr extents, // parallels, #lem, %sux+%es shifts, zero-text, dup _id; 73,854,507 B -> ~89 KB
