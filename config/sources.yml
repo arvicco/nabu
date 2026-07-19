@@ -329,6 +329,10 @@ wiktionary-recon:
                    # (added ine-bsl-pro/gmw-pro/itc-pro/iir-pro); the four new
                    # ~60 MB GETs + closure rebuild are OWNER-FIRED (+7,586
                    # entries → ~20,639). Same source row, no registry change.
+                   # P32-5 (2026-07-19): + attested Old Japanese ojp (532
+                   # entries, ~1.26 MB, sha256 67ca3b02… at fixture time);
+                   # the GET is OWNER-FIRED at the next sync. Same row, no
+                   # registry change.
   sync_policy: manual
 
 freising:
