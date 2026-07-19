@@ -13,7 +13,8 @@ source: ud
 adapter_test:
 # retrieved: first four treebanks 2026-07-03; the two old-east-slavic-* added
 # under P10-2 were retrieved 2026-07-09; the two old-irish-* added under
-# P25-2 were retrieved 2026-07-17 (see README).
+# P25-2 were retrieved 2026-07-17; hittite-hittb added under P31-0 was
+# retrieved 2026-07-19 (see README).
 retrieved: 2026-07-03
 files:
   - path: gothic-proiel/got_proiel-ud-test-head50.conllu
@@ -48,6 +49,10 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of sga_dipsgg-ud-test.conllu (64 blocks upstream — the annotated subset of the 3,471 St Gall glosses; no MWT/empty-node lines; P25-2) (37,231 B -> 24,075 B)
+  - path: hittite-hittb/hit_hittb-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of hit_hittb-ud-test.conllu (136 blocks upstream; 98 MWT clitic-chain range lines fall inside the head, no empty nodes file-wide; P31-0) (118,705 B -> 46,175 B)
   - path: old-irish-dipwbg/sga_dipwbg-ud-test.conllu
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu
     whole: true

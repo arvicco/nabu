@@ -1,0 +1,31 @@
+{
+ "type": "catalogue",
+ "project": "epsd2/royal",
+ "source": "http://oracc.org/epsd2/royal",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2022-12-07T16:23:19",
+ "members": {
+  "Q001016": {
+   "project": "epsd2/royal",
+   "id_composite": "Q001016",
+   "designation": "Ur-Nanše 01",
+   "supergenre": "LIT",
+   "genre": "Royal Inscription",
+   "period": "Early Dynastic IIIb",
+   "place": "Lagaš",
+   "ruler": "Ur-Nanše",
+   "provenience": "Girsu",
+   "distribution": "Girsu [1]",
+   "sources": "P222340",
+   "provdist": "Girsu (AO 04109 = RIME 1.09.01.01, ex. 01)",
+   "trans": [
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "Q001016": "<p id=\"Q001016\">epsd2/royal:Q001016 = Ur-Nanše 01. Early Dynastic IIIb Girsu (Royal Inscription)</p>"
+ }
+}

@@ -19,6 +19,7 @@ class UniversalDependenciesTest < Minitest::Test
   EXPECTED_URNS = [
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
+    "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
@@ -100,13 +101,14 @@ class UniversalDependenciesTest < Minitest::Test
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
   # derived treebanks). The three Old East Slavic treebanks (Birchbark, RNC,
-  # Ruthenian) and Old Irish DipWBG (P25-2, verbatim "CC BY-SA 4.0") are
+  # Ruthenian), Old Irish DipWBG (P25-2, verbatim "CC BY-SA 4.0") and
+  # Hittite HitTB (P31-0, LICENSE.txt verbatim the same BY-SA 4.0 grant) are
   # CC BY-SA 4.0 → attribution: they carry a per-document license_override so
   # the shareable shelf labels them honestly, while the bare treebanks —
   # the four legacy ones plus Old Irish DipSGG (P25-2, verbatim
   # "CC BY-NC-SA 4.0") — inherit the source class nc (override NULL).
-  OVERRIDE_SLUGS = %w[old-east-slavic-birchbark old-east-slavic-rnc old-east-slavic-ruthenian
-                      old-irish-dipwbg].freeze
+  OVERRIDE_SLUGS = %w[hittite-hittb old-east-slavic-birchbark old-east-slavic-rnc
+                      old-east-slavic-ruthenian old-irish-dipwbg].freeze
   BARE_SLUGS = %w[gothic-proiel greek-proiel latin-ittb sanskrit-vedic old-irish-dipsgg].freeze
 
   def test_treebanks_map_sets_attribution_only_on_the_by_sa_entries
@@ -150,7 +152,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_nine_files_sorted_by_urn
+  def test_discover_finds_exactly_ten_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -162,6 +164,7 @@ class UniversalDependenciesTest < Minitest::Test
     expected_languages = {
       "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50" => "got",
       "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50" => "grc",
+      "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50" => "hit",
       "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt" => "lat",
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50" => "orv",
@@ -266,6 +269,17 @@ class UniversalDependenciesTest < Minitest::Test
     wbg_row = lemmas.where(language: "sga", lemma_raw: "airbág").first
     refute_nil wbg_row, "expected a passage_lemmas row for the sga lemma airbág"
     assert_equal "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test:1", wbg_row[:urn]
+
+    # P31-0: Hittite flows through the same unchanged plumbing — hit becomes
+    # a lemma-indexed language. A readable row: Laws §10 (sent_id 5.7, the
+    # KBo 6.2 i 16-17 example), verb ḫūnink- "injure", attested by the
+    # transliterated surface form ḫu-ú-ni-ik-zi.
+    assert_operator lemmas.where(language: "hit").count, :>, 0,
+                    "the Hittite treebank must contribute passage_lemmas rows"
+    hit_row = lemmas.where(language: "hit", lemma_raw: "ḫūnink-").first
+    refute_nil hit_row, "expected a passage_lemmas row for the hit lemma ḫūnink-"
+    assert_equal "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50:5.7", hit_row[:urn]
+    assert_includes hit_row[:surface_forms], "ḫu-ú-ni-ik-zi"
   ensure
     fulltext&.disconnect
   end
@@ -355,12 +369,12 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST TWO repos each lose their only
-      # treebank file (2 of #{slugs.size} ingestible files ≈ 22% > 20% → trip;
-      # a single deletion is only 1/#{slugs.size} ≈ 11%, below the breaker, now
-      # that the set has grown to nine treebanks).
+      # First repo gains a file; the LAST THREE repos each lose their only
+      # treebank file (3 of #{slugs.size} ingestible files = 30% > 20% → trip;
+      # two deletions are exactly 2/#{slugs.size} = 20%, NOT above the breaker
+      # now that the set has grown to ten treebanks with Hittite, P31-0).
       first = slugs.first
-      doomed = slugs.last(2)
+      doomed = slugs.last(3)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -378,7 +392,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 2"
+      assert_includes report.notes, "atticked 3"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"

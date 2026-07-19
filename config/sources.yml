@@ -60,6 +60,13 @@ ud:
   adapter: Nabu::Adapters::UniversalDependencies
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
+  # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
+  # (UD_Hittite-HitTB: 136 sentences / 1,309 words of Hoffner & Melchert
+  # tutorial examples with real KBo/KUB source lines; language hit;
+  # CC BY-SA 4.0 verbatim → per-document attribution override, source
+  # class stays nc). EXPECTED SYNC DELTA at the next owner-fired
+  # `bin/nabu sync ud` (no per-treebank enablement exists): +1 repo clone,
+  # +1 doc / 136 passages, hit joins the lemma-indexed languages.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -123,6 +130,26 @@ oracc:
                    # FULL SAA (saa01–saa21 + saas2), riao, ribo, blms, the
                    # four dcclt subprojects (~159 MB of new zips) — the
                    # owner-fired re-sync after merge pulls the new projects.
+                   # P31-0 (owner-approved 2026-07-19) extended to 38: ario
+                   # (2.7 MB — Achaemenid trilinguals; Old Persian peo +
+                   # Elamite elx enter the library, tagged per l-node by
+                   # upstream; elx honestly unlemmatized — no gloss-elx)
+                   # and the four ePSD2 corpora epsd2/literary (39.5 MB),
+                   # epsd2/royal (15.1 MB), epsd2/earlylit (1.3 MB),
+                   # epsd2/admin/ur3 (561.8 MB — registered under its TRUE
+                   # three-segment path; the zip unpacks DOUBLY nested,
+                   # epsd2-admin-ur3/admin/ur3/…). All five CC0 verbatim at
+                   # fixture time; the per-project gate re-reads at sync.
+                   # EXPECTED SYNC DELTAS (owner-fired, no enabled flip —
+                   # the projects ride this existing source): ~618 MB of
+                   # new zips; ~82,900 new tablet docs (ario 173 of 175
+                   # non-empty + literary 1,022 + royal 1,928 + earlylit 43
+                   # + admin/ur3 80,181 — the Ur III mass will DOMINATE
+                   # library counts; lem on 79,664 of its texts) plus ~365
+                   # crawled -en siblings (tr-en: ario 173, literary 90,
+                   # royal 101, earlylit 1, admin/ur3 0); a handful of
+                   # catalog-only skeletons skip by rule (census honestly,
+                   # quarantine loudly — the standing unknown-node guard).
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual

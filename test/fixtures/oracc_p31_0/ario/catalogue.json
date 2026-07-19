@@ -1,0 +1,97 @@
+{
+ "type": "catalogue",
+ "project": "ario",
+ "source": "http://oracc.org/ario",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-01-23T14:03:13",
+ "members": {
+  "Q007149": {
+   "langs": "0x01000000",
+   "project": "ario",
+   "credits": "Based on Rüdiger Schmitt, Die altpersischen Inschriften der Achaimeniden: Editio minor mit deutscher Übersetzung (2009). Digitized, lemmatized, and updated by Henry Heitmann-Gordon, 2016-19, for the Munich Open-access Cuneiform Corpus Initiative (MOCCI), a corpus-building initiative funded by LMU Munich and the Alexander von Humboldt Foundation (through the establishment of the Alexander von Humboldt Chair for Ancient History of the Near and Middle East) and based at the Historisches Seminar - Abteilung Alte Geschichte of Ludwig-Maximilians-Universität München. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/ario/Q007149/.",
+   "designation": "Darius I  16",
+   "display_name": "ARIo DKa",
+   "dynastic_seat": "Persia",
+   "genre": "Royal Inscription",
+   "id_composite": "Q007149",
+   "language": "Old Persian",
+   "period": "Achaemenid",
+   "pleiades_id": "776181",
+   "popular_name": "DKa",
+   "primary_publication": "Darius I  16",
+   "provenience": "El-Khargeh",
+   "pleiades_coord": "[30.553476,25.438054]",
+   "ruler": "Darius I",
+   "script": "Old Persian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Darius I",
+   "supergenre": "LIT",
+   "trans": [
+    "en",
+    "de"
+   ]
+  },
+  "Q007203": {
+   "langs": "0x09000000",
+   "project": "ario",
+   "credits": "Based on Rüdiger Schmitt, Altpersische Siegel-Inschriften (1981). Digitized, lemmatized, and updated by Henry Heitmann-Gordon, 2016-19, for the Munich Open-access Cuneiform Corpus Initiative (MOCCI), a corpus-building initiative funded by LMU Munich and the Alexander von Humboldt Foundation (through the establishment of the Alexander von Humboldt Chair for Ancient History of the Near and Middle East) and based at the Historisches Seminar - Abteilung Alte Geschichte of Ludwig-Maximilians-Universität München. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/ario/Q007203/.",
+   "designation": "Darius I  69",
+   "display_name": "ARIo SDa-h",
+   "dynastic_seat": "Persia",
+   "genre": "Royal Inscription",
+   "id_composite": "Q007203",
+   "language": "Akkadian, Elamite, Persian",
+   "period": "Achaemenid",
+   "pleiades_id": "922698",
+   "popular_name": "SDa-h",
+   "primary_publication": "Darius I  69",
+   "provenience": "Persia",
+   "pleiades_coord": "[51.5,30.5]",
+   "ruler": "Darius I",
+   "script": "Old Persian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Darius I",
+   "supergenre": "LIT",
+   "trans": [
+    "en",
+    "de"
+   ]
+  },
+  "Q007267": {
+   "langs": "0x01000000",
+   "project": "ario",
+   "credits": "Based on Weissbach, Franz H., \"Die Inschriften\", in: Friedrich Wetzel, Erich Schmidt, Alfred Mallwitz (eds.), Das Babylon der Spätzeit, Berlin 1957, 48f. Digitized, lemmatized, and updated by Henry Heitmann-Gordon, 2016-19, for the Munich Open-access Cuneiform Corpus Initiative (MOCCI), a corpus-building initiative funded by LMU Munich and the Alexander von Humboldt Foundation (through the establishment of the Alexander von Humboldt Chair for Ancient History of the Near and Middle East) and based at the Historisches Seminar - Abteilung Alte Geschichte of Ludwig-Maximilians-Universität München. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/ario/Q007267/.",
+   "designation": "Artaxerxes II 02",
+   "display_name": "ARIo A²B²b",
+   "dynastic_seat": "Persia",
+   "genre": "Royal Inscription",
+   "id_composite": "Q007267",
+   "language": "Elamite",
+   "period": "Achaemenid",
+   "pleiades_id": "893951",
+   "popular_name": "A²B²b",
+   "primary_publication": "Artaxerxes II 02",
+   "provenience": "Babylon",
+   "pleiades_coord": "[44.422236,32.543395]",
+   "ruler": "Artaxerxes II",
+   "script": "Old Persian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Artaxerxes II",
+   "supergenre": "LIT",
+   "trans": [
+    "de",
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "Q007149": "<p id=\"Q007149\">ario:Q007149 = Darius I  16. Achaemenid El-Khargeh (Royal Inscription/&gt;Darius I)</p>",
+  "Q007203": "<p id=\"Q007203\">ario:Q007203 = Darius I  69. Achaemenid Persia (Royal Inscription/&gt;Darius I)</p>",
+  "Q007267": "<p id=\"Q007267\">ario:Q007267 = Artaxerxes II 02. Achaemenid Babylon (Royal Inscription/&gt;Artaxerxes II)</p>"
+ }
+}

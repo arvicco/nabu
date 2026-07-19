@@ -1,0 +1,37 @@
+{
+  "type": "cdl",
+  "project": "epsd2/earlylit",
+  "source": "http://oracc.org/epsd2/earlylit",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2022-12-07T16:16:47",
+  "textid": "P010246",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "P010246.U0",
+      "cdl": [
+        {
+          "node": "d",
+          "type": "object",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "type": "surface",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "type": "nonx",
+          "ref": "P010246.1",
+          "strict": "0",
+          "extent": "308",
+          "state": "other"
+        }
+      ]
+    }
+  ]
+}

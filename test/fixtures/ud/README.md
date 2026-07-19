@@ -8,7 +8,8 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
   `old-east-slavic-rnc`, packet P10-2); **2026-07-11** for the third,
   `old-east-slavic-ruthenian` (packet P13-1b); **2026-07-17** for the two Old
   Irish glosses treebanks (`old-irish-dipsgg`, `old-irish-dipwbg`, packet
-  P25-2) — all from `master` of each treebank's UD repo via
+  P25-2); **2026-07-19** for the Hittite treebank (`hittite-hittb`, packet
+  P31-0) — all from `master` of each treebank's UD repo via
   `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
@@ -33,6 +34,7 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu` | `UD_Old_East_Slavic-Ruthenian/master/orv_ruthenian-ud-test.conllu` | 940,453 | 309,311 | 50 |
 | `old-irish-dipsgg/sga_dipsgg-ud-test-head50.conllu` | `UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu` | 37,231 | 24,075 | 50 |
 | `old-irish-dipwbg/sga_dipwbg-ud-test.conllu` | `UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu` | 32,767 | 32,767 (whole) | 34 |
+| `hittite-hittb/hit_hittb-ud-test-head50.conllu` | `UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu` | 118,705 | 46,175 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -88,6 +90,24 @@ the treebank language tag is `sga`, the same one-tag-per-treebank practice
 as RNC's Middle Russian under `orv`. Note the SAME St Gall glosses arrive
 at a different grain via CorPH (sibling packet P25-0, morphology) — two
 honest witnesses, NO dedup (the MW-beside-kaikki precedent).
+
+### Hittite HitTB trim note (P31-0)
+
+`hittite-hittb/hit_hittb-ud-test-head50.conllu` is the plain **first 50
+complete sentence blocks** of `hit_hittb-ud-test.conllu` (136 blocks upstream —
+the whole treebank: 136 sentences / 1,309 words of Hoffner & Melchert tutorial
+examples, test-set only, the DipWBG shape; upstream file sha256
+`a55968a8a694503431cfceebf06fad3d2de6a509cc32f92f53710b58fa5fd019` at
+retrieval). The treebank is RICH in **multiword-token range lines** — clitic
+chains (`ta=an`, `nu=za`, `n=an=ši`…) are split into syntactic words under an
+MWT range, 255 range lines file-wide, **98 inside this head-50** — so the
+Latin-ITTB MWT machinery is exercised massively; no empty nodes file-wide.
+Comment lines are per-sentence `# sent_id` (Hoffner & Melchert section
+numbers, e.g. `5.7`), `# text` (bound transliteration), `# translation`, and
+`# source` — the REAL manuscript/edition locus (`KBo 6.2 i 16-17 (OH/OS) =
+Laws §10`), spanning Old/Middle/New Hittite. The LEMMA column is fully
+populated (1,309/1,309 file-wide; Sumerograms lemmatized to their Hittite
+readings where known, e.g. `LÚ.U19.LU-an` → `antuhša-`). Language `hit`.
 
 ### Latin-ITTB multiword-token (MWT) rule
 
@@ -149,6 +169,16 @@ adapter test even though no extra append was needed.
   and `README.md` machine-readable metadata agrees: `License: CC BY-NC-SA 4.0`.
   → NonCommercial-ShareAlike: **no override** — the treebank rides the `ud`
   source's `nc` class unchanged (the PROIEL/ITTB class).
+- **UD_Hittite-HitTB** — **CC BY-SA 4.0** (verified 2026-07-19, the P31-0
+  license gate). `LICENSE.txt`, quoted verbatim and in its entirety:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+  and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. → license
+  class `attribution` via the P10-4 per-document `license_override` (the
+  birchbark/RNC/DipWBG mechanics exactly); the `ud` source class stays `nc`.
 - **UD_Old_Irish-DipWBG** — **CC BY-SA 4.0** (verified 2026-07-17, the P25-2
   license gate). `LICENSE.txt`, quoted verbatim:
   > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.

@@ -1,0 +1,248 @@
+{
+  "type": "metadata",
+  "project": "epsd2/earlylit",
+  "source": "http://oracc.org/epsd2/earlylit",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2022-12-07T16:16:59",
+  "config": {
+    "pathname": "epsd2/earlylit",
+    "name": "epsd2/Early Sumerian Literature",
+    "abbrev": "epsd2/earlylit",
+    "project-type": "corpus",
+    "blurb": "",
+    "public": "",
+    "options": {
+      "%sux": ". epsd2 epsd2/names",
+      "cbd-oid": "yes",
+      "build-approved-policy": "atf",
+      "catalog-build-policy": "auto",
+      "cbd-article-summaries": "yes",
+      "cbd-bases-table": "yes",
+      "cbd-forms-inline": "no",
+      "cbd-forms-table": "yes",
+      "cbd-mode": "static",
+      "cbd-no-harvest": "epsd2 epsd2/emesal epsd2/names",
+      "cbd-post-process": "epsd2-epadify.plx",
+      "cbd-usages": "yes",
+      "cbd-with-all": "yes",
+      "cbd-super-list": "sux",
+      "l2-quick-freqs": "yes",
+      "sum-alias": "yes",
+      "lem-simplify": "yes",
+      "fuzzy-alias": "yes",
+      "super-merge": "no",
+      "json-mode": "manual"
+    }
+  },
+  "formats": {
+    "atf": [
+      "P010232",
+      "P010233",
+      "P010246",
+      "P010248",
+      "P010251",
+      "P010263",
+      "P010275",
+      "P010473",
+      "P010533",
+      "P010537",
+      "P010604",
+      "P010606",
+      "P010610",
+      "P010611",
+      "P010638",
+      "P010657",
+      "P010776",
+      "P121337",
+      "P221705",
+      "P221796",
+      "P221797",
+      "P221798",
+      "P221800",
+      "P222183",
+      "P222241",
+      "P222243",
+      "P226038",
+      "P226039",
+      "P226041",
+      "P256012",
+      "P273861",
+      "P274188",
+      "P301718",
+      "P315470",
+      "P323467",
+      "P323468",
+      "P323469",
+      "P323472",
+      "P323974",
+      "P342652",
+      "P368428",
+      "P415954",
+      "Q009323"
+    ],
+    "lem": [
+      "P010232",
+      "P010233",
+      "P010263",
+      "P010473",
+      "P010533",
+      "P010537",
+      "P010604",
+      "P010606",
+      "P010610",
+      "P010611",
+      "P010638",
+      "P010657",
+      "P010776",
+      "P121337",
+      "P221705",
+      "P221796",
+      "P221797",
+      "P221798",
+      "P221800",
+      "P222183",
+      "P222241",
+      "P222243",
+      "P226038",
+      "P256012",
+      "P274188",
+      "P301718",
+      "P315470",
+      "P323467",
+      "P323468",
+      "P323469",
+      "P323472",
+      "P323974",
+      "P342652",
+      "P368428",
+      "P415954",
+      "Q009323"
+    ],
+    "tr-en": [
+      "P323468"
+    ],
+    "xtf": [
+      "P010232",
+      "P010233",
+      "P010246",
+      "P010248",
+      "P010251",
+      "P010263",
+      "P010275",
+      "P010473",
+      "P010533",
+      "P010537",
+      "P010604",
+      "P010606",
+      "P010610",
+      "P010611",
+      "P010638",
+      "P010657",
+      "P010776",
+      "P121337",
+      "P221705",
+      "P221796",
+      "P221797",
+      "P221798",
+      "P221800",
+      "P222183",
+      "P222241",
+      "P222243",
+      "P226038",
+      "P226039",
+      "P226041",
+      "P256012",
+      "P273861",
+      "P274188",
+      "P301718",
+      "P315470",
+      "P323467",
+      "P323468",
+      "P323469",
+      "P323472",
+      "P323974",
+      "P342652",
+      "P368428",
+      "P415954",
+      "Q009323"
+    ]
+  },
+  "witnesses": {
+    "P010232": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P010537": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P010604": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P010606": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P010657": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P010776": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P222243": {
+      "is-witness-of": [
+        "epsd2/literary:Q000782"
+      ]
+    },
+    "P226038": {
+      "is-witness-of": [
+        "epsd2/literary:Q000751"
+      ]
+    },
+    "P256012": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P273861": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P368428": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "P415954": {
+      "is-witness-of": [
+        "epsd2/earlylit:Q006205"
+      ]
+    },
+    "Q006205": {
+      "has-witness": [
+        "epsd2/earlylit:P010232",
+        "epsd2/earlylit:P010537",
+        "epsd2/earlylit:P010604",
+        "epsd2/earlylit:P010606",
+        "epsd2/earlylit:P010657",
+        "epsd2/earlylit:P010776",
+        "epsd2/earlylit:P256012",
+        "epsd2/earlylit:P273861",
+        "epsd2/earlylit:P368428",
+        "epsd2/earlylit:P415954"
+      ]
+    }
+  }
+}
