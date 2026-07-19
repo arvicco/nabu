@@ -4,13 +4,14 @@ require "test_helper"
 require "tmpdir"
 
 # The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
-# P25-2 Celtic; P29-0 Etruscan): ONE source, ELEVEN dictionaries —
-# kaikki.org's Proto-Slavic / Proto-Indo-European / Proto-Germanic plus
-# the P17-3 Proto-Balto-Slavic / Proto-West Germanic / Proto-Italic /
-# Proto-Indo-Iranian wiktextract extracts, the P25-2 ATTESTED Celtic
-# extracts (Old Irish sga, Middle Irish mga, Middle Welsh wlm — the
-# wiktionary-cu attested precedent), and the P29-0 attested Etruscan
-# extract (ett), through the existing wiktionary-jsonl
+# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese): ONE source, THIRTEEN
+# dictionaries — kaikki.org's Proto-Slavic / Proto-Indo-European /
+# Proto-Germanic plus the P17-3 Proto-Balto-Slavic / Proto-West Germanic /
+# Proto-Italic / Proto-Indo-Iranian wiktextract extracts, the P25-2
+# ATTESTED Celtic extracts (Old Irish sga, Middle Irish mga, Middle Welsh
+# wlm — the wiktionary-cu attested precedent), the P29 attested Umbrian
+# (xum) and Etruscan (ett) extracts, and the P32-5 attested Old Japanese
+# extract (ojp), through the existing wiktionary-jsonl
 # family with reflexes: on. Dictionary-shaped (no passage conformance
 # suite); mirrors the WiktionaryCuTest checks for the dictionary shape and
 # adds the multi-file FileFetch choreography (per-extract subdirs, shared
@@ -44,7 +45,9 @@ class WiktionaryReconTest < Minitest::Test
     "wiktionary-xum" => "https://kaikki.org/dictionary/Umbrian/" \
                         "kaikki.org-dictionary-Umbrian.jsonl",
     "wiktionary-ett" => "https://kaikki.org/dictionary/Etruscan/" \
-                        "kaikki.org-dictionary-Etruscan.jsonl"
+                        "kaikki.org-dictionary-Etruscan.jsonl",
+    "wiktionary-ojp" => "https://kaikki.org/dictionary/Old%20Japanese/" \
+                        "kaikki.org-dictionary-OldJapanese.jsonl"
   }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
@@ -79,7 +82,8 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-mga:kaikki.org-dictionary-MiddleIrish.jsonl",
                   "wiktionary-wlm:kaikki.org-dictionary-MiddleWelsh.jsonl",
                   "wiktionary-xum:kaikki.org-dictionary-Umbrian.jsonl",
-                  "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl"],
+                  "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl",
+                  "wiktionary-ojp:kaikki.org-dictionary-OldJapanese.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
   end
@@ -88,16 +92,53 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_twelve_dictionaries
+  def test_parse_yields_the_thirteen_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
                     wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
-                    wiktionary-xum wiktionary-ett],
+                    wiktionary-xum wiktionary-ett wiktionary-ojp],
                  documents.map(&:slug)
-    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro sga mga wlm xum ett],
+    assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
+                    sga mga wlm xum ett ojp],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5], documents.map(&:size)
+  end
+
+  # P32-5: the attested Old Japanese extract (the P25-2/P29 pattern
+  # verbatim). Upstream quirks pinned: `etymology_number` ships as a
+  # STRING here ("1"/"2" — every other live extract carries integers;
+  # the parser interpolates either, so 心 "heart/mind" and 心 "inner
+  # feelings" split into 心:noun:1 / 心:noun:2 exactly like ingen);
+  # the Proto-Japonic etymology rides verbatim in bodies; 我 "I" mints
+  # a Middle Chinese 倭 edge whose nested ja 倭 node is upstream-flagged
+  # borrowed (the Sino-axis crosswalk light — /borrow/i per edge, the
+  # P17-3 machinery); ko2ro2su is the lone ASCII-romanized headword
+  # (kō/otsu vowel grades as plain digits in the page title); 黃葉つ is
+  # the one pos "soft-redirect" record (no-gloss, structural edge).
+  def test_ojp_entries_split_string_homographs_and_mint_the_ltc_edge
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    ojp = documents.find { |doc| doc.slug == "wiktionary-ojp" }
+    assert_equal "ojp", ojp.language
+
+    kokoro = ojp.entries.find { |e| e.entry_id == "心:noun:1" } || flunk("心:noun:1 missing")
+    assert_match(/Proto-Japonic \*kəkərə/, kokoro.body) # the etymology chain, kept verbatim
+    assert(kokoro.reflexes.any? { |r| r.language == "ja" && r.roman == "kokoro" },
+           "心 must mint the Japanese descendant edge")
+    assert(ojp.entries.any? { |e| e.entry_id == "心:noun:2" },
+           "the string etymology_number \"2\" must split the homograph")
+
+    wa = ojp.entries.find { |e| e.entry_id == "我:pron:1" } || flunk("我:pron:1 missing")
+    ltc = wa.reflexes.find { |r| r.language == "ltc" } || flunk("ltc 倭 edge missing")
+    refute ltc.borrowed, "the ltc 倭 node itself carries no borrow tag"
+    assert(wa.reflexes.any? { |r| r.language == "ja" && r.word == "倭" && r.borrowed },
+           "the nested ja 倭 node is upstream-flagged borrowed")
+
+    korosu = ojp.entries.find { |e| e.entry_id == "ko2ro2su:verb" } || flunk("ko2ro2su:verb missing")
+    assert_equal "ko2ro2su", korosu.headword_folded, "digit vowel-grade notation survives the fold"
+
+    assert(ojp.entries.any? { |e| e.entry_id == "黃葉つ:soft-redirect" },
+           "the soft-redirect record mints an entry")
   end
 
   # P29-0: the attested Etruscan extract — Old Italic headwords with the
@@ -263,10 +304,11 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/wlm/, report.notes)
       assert_match(/xum/, report.notes)
       assert_match(/ett/, report.notes)
-      assert_equal 12, adapter.discover(workdir).count, "all twelve extracts discoverable in place"
+      assert_match(/ojp/, report.notes)
+      assert_equal 13, adapter.discover(workdir).count, "all thirteen extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
-         old-irish middle-irish middle-welsh umbrian etruscan].each do |subdir|
+         old-irish middle-irish middle-welsh umbrian etruscan old-japanese].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -286,9 +328,9 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 12, targets.size
+    assert_equal 13, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[etruscan middle-irish middle-welsh old-irish
+    assert_equal %w[etruscan middle-irish middle-welsh old-irish old-japanese
                     proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
                     proto-italic proto-slavic proto-west-germanic umbrian],
                  targets.map(&:state_subdir).sort
@@ -314,7 +356,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 242, first.added
+    assert_equal 247, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -322,7 +364,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 242, second.skipped
+    assert_equal 247, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 
