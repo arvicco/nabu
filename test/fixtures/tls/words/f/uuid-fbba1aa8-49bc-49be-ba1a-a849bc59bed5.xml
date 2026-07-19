@@ -1,0 +1,164 @@
+<superEntry xmlns="http://www.tei-c.org/ns/1.0" xml:id="uuid-fbba1aa8-49bc-49be-ba1a-a849bc59bed5" n="6"><form><orth>棄</orth></form><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="DISCARD" tls:concept-id="uuid-2aa87a64-bc2b-49a7-88d4-99361624b20c" xml:id="uuid-332574da-def8-4947-b4b6-56c3d7b96720" n="84">
+            <form corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+<orth>棄</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                <pron xml:lang="zh-x-oc">khils</pron>
+                <pron xml:lang="zh-x-mc">khi</pron>
+            </form>
+            <def>The standard general words for discarding something is qì 棄 (ant. qǔ 取 "choose to retain") and the somewhat rarer juān 捐.
+</def>
+<sense xml:id="uuid-fa11bf1f-e345-480c-8a59-7b294a4a3297">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-8717712d-14a4-4ae2-be7a-6e18e61d929b">n</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-7bbb1c42-06ca-4f3b-81e5-682c75fe8eaa">object</tls:sem-feat>
+                    <usg type="warring-states-currency">3</usg>
+                </gramGrp>
+  <def>what has been discarded</def>
+            </sense>
+<sense xml:id="uuid-6188520c-cac3-4139-b5d5-374a03c323c5" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-e64a7a95-b54b-4c94-9d6d-f55dbf079701">vt(oN)</tls:syn-func>
+                </gramGrp>
+  <def>discard the contextually determinate N</def>
+            </sense>
+<sense xml:id="uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10" n="20">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp>
+  <def>abandon; set aside; discard (as no longe of use), throw away (useless things);  refuse to accept</def>
+            </sense>
+<sense xml:id="uuid-5e2b1efe-0426-4202-aad8-87ea77bcc2d3" n="34">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</tls:sem-feat>
+                    <usg type="valuation">-</usg>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp>
+  <def>(unjustifiably) reject (proposals); abandon (a person); jetison; disregard (orders etc)</def>
+            </sense>
+<sense xml:id="uuid-ea9bcd85-cfbc-47f7-adf9-0238f69bf94b" n="10">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</tls:sem-feat>
+                </gramGrp>
+  <def>abandon, reject</def>
+            </sense>
+<sense xml:id="uuid-65bdba66-23fb-4037-8ebe-1a7292bfa633" n="5">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</tls:sem-feat>
+                </gramGrp>
+  <def>discard (oneself), reject (oneself)</def>
+            </sense>
+<sense xml:id="uuid-6d7840fc-a55a-451e-9e41-4d67bb2b333c">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-b110bae1-02d5-4c66-ad13-7c04b3ee3ad9">mathematical term</tls:sem-feat>
+                </gramGrp>
+  <def>CHEMLA 2003:</def>
+            </sense>
+<sense xml:id="uuid-23dae6f8-322b-4bf4-9030-0d1d2649c930" n="3">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-5100e402-4cb5-4b99-929f-be674b3757d4">N=human</tls:sem-feat>
+                    <usg type="warring-states-currency">4</usg>
+                </gramGrp>
+  <def>break with (somebody); reject (someone) as unworthy</def>
+            </sense>
+<sense xml:id="uuid-a18644b1-0868-4a91-8c3a-7d3bdfccda08" n="5">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-988c2bcf-3cdd-4b9e-b8a4-615fe3f7f81e">passive</tls:sem-feat>
+                    <usg type="warring-states-currency">3</usg>
+                </gramGrp>
+  <def>be rejected, be abandoned</def>
+            </sense>
+<sense xml:id="uuid-e1ba73ad-cd2e-4061-b07d-d5d3f6ad4b19" n="1">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-0bcf295a-0ea1-450f-8a23-bf9130c190ff">vtt(oN1.)+N2</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-64680f0a-c653-46cb-820e-3f4936ff0225">N2=place</tls:sem-feat>
+                </gramGrp>
+  <def resp="#wilke" updated="2022-09-10T16:46:43.183+09:00">throw contextually determinate N1 away into N2</def>
+            </sense>
+<sense xml:id="uuid-0b5b924c-2828-4d6a-9a7c-739513d3dc11">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-a2c810ab-05c4-4ed2-86eb-c954618d8429">vttoN1.+N2</tls:syn-func>
+                </gramGrp>
+  <def>discard N1 in the place N2</def>
+            </sense>
+<sense xml:id="uuid-ca03d151-7d0c-44ec-aa83-705f05659b0f" resp="#dsehnal" tls:created="2019-12-17T03:45:28.253+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func><tls:sem-feat corresp="#uuid-6f2fab01-1156-4ed8-9b64-74c1e7455915">middle voice</tls:sem-feat></gramGrp><def>be bound to rejection; get abandoned; be lost</def></sense><sense xml:id="uuid-f260ebe0-7d19-4119-84d9-deefa73a1109" resp="#CH" tls:created="2019-12-18T04:04:30.047+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func></gramGrp><def>throw away, discard</def></sense><sense xml:id="uuid-86cf3148-e98c-4838-8f31-48e98c183838" resp="#CH" tls:created="2020-04-13T17:50:16.251+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-e0354a6b-29b1-4b41-a494-59df1daddc7e">vttoN1.+prep+N2</tls:syn-func></gramGrp><def>discard N1 in the place N2</def></sense><sense xml:id="uuid-5c5e45d2-f93a-48d9-9e45-d2f93aa8d994" resp="#zadrapa" tls:created="2020-06-01T18:15:07.639+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-b7389587-f098-4784-92fb-2c802547dd5f">vt[oN{REFLEX}]</tls:syn-func></gramGrp><def>give oneself up as hopeless, abandon oneself to a dissipated life</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="DIVORCE" tls:concept-id="uuid-89830aaf-48a4-49cf-8f0c-4132c2f21dcd" xml:id="uuid-9b88bb43-1ced-419e-b6b5-81501bdff9e5" n="5">
+            <form corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+<orth>棄</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                <pron xml:lang="zh-x-oc">khils</pron>
+                <pron xml:lang="zh-x-mc">khi</pron>
+            </form>
+<sense xml:id="uuid-fdeb2313-d831-4b82-a1a6-2680807040b3" n="3">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                </gramGrp>
+  <def>discard&gt; divorce; get divorced from [it is obviously difficult to say whether this is a separate meaning.  This entry just serves as a reminder that the discarding can be figuratively of wives one divorces.  Cf. English: "he ditched her"]</def>
+            </sense>
+<sense xml:id="uuid-e60e4e3f-68ce-4e06-b3f6-3d251f4de2f0" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-988c2bcf-3cdd-4b9e-b8a4-615fe3f7f81e">passive</tls:sem-feat>
+                </gramGrp>
+  <def>be divorced</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="LOSE" tls:concept-id="uuid-51879394-c456-43cb-b877-ec241b593a75" xml:id="uuid-19520a2a-d329-4659-848e-6a253be5b4c3" n="2">
+            <form corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+<orth>棄</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                <pron xml:lang="zh-x-oc">khils</pron>
+                <pron xml:lang="zh-x-mc">khi</pron>
+            </form>
+<sense xml:id="uuid-b5be0bf7-5827-452d-aefe-eeb731191c83" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                    <usg type="warring-states-currency">3</usg>
+                </gramGrp>
+  <def>lose (e.g. hair, when washing one's hair)</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="LEAVE" tls:concept-id="uuid-96881deb-8b80-42c1-8bc9-c8815cd3517b" xml:id="uuid-15363b9c-0a97-4279-b63b-9c0a97627934" n="1"><form><orth>棄</orth><pron xml:lang="zh-Latn-x-pinyin">qì</pron></form><def/><sense xml:id="uuid-f90b74fc-5838-4a5a-8b74-fc58386a5a26" resp="#wilke" tls:created="2020-07-02T04:14:51.341+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func></gramGrp><def>let go of; leave alone</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="ABANDON" tls:concept-id="uuid-42b36b25-735c-42c0-9644-15df57265a2f" xml:id="uuid-4fec9f15-5d8a-4694-a36c-faee73830c1e" n="8"><form corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04"><orth>棄</orth><pron xml:lang="zh-Latn-x-pinyin">qì</pron><pron xml:lang="zh-x-mc" resp="rec:baxter">khjijH</pron><pron xml:lang="zh-x-oc" resp="rec:pan-wuyun">khils</pron></form><sense xml:id="uuid-2a94e76d-fa88-401d-ab9e-3a4c293e72e8" resp="#CH" tls:created="2019-12-27T18:42:42.238+09:00" n="6"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func></gramGrp><def>abandon</def></sense><sense xml:id="uuid-416d1d5b-81d7-4951-ad1d-5b81d75951b3" resp="#CH" tls:created="2024-02-13T19:24:23.233+09:00" n="2"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func><tls:sem-feat corresp="#uuid-92ae8363-92d9-4b96-80a4-b07bc6788113">reflexive.自</tls:sem-feat></gramGrp><def>abandon one's real self</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="DISREGARD" tls:concept-id="uuid-904cd3b9-1db0-4d32-8171-e35473ec6401" xml:id="uuid-946c5389-8b1b-4bee-9701-be5543b28133" n="22">
+            <form corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+<orth>棄</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                <pron xml:lang="zh-x-oc">khils</pron>
+                <pron xml:lang="zh-x-mc">khi</pron>
+            </form>
+            <def>Qì 棄 is to reject as unworthy of one's attention and often to disregard defiantly.
+</def>
+<sense xml:id="uuid-f4745f01-5f4a-4de4-85f2-413662d5510a" n="1">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-3089d27c-a8a0-4ba1-a3ae-5cd513e4f523">nab.t:post-N</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</tls:sem-feat>
+                    <usg type="warring-states-currency">3</usg>
+                </gramGrp>
+  <def>dismissal</def>
+            </sense>
+<sense xml:id="uuid-2d7e4fe0-98be-423b-b381-fe2ac87570a3" n="20">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                    <usg type="warring-states-currency">2</usg>
+                </gramGrp>
+  <def>disregard, dismiss as irrelevant; dismiss as unimportant; forget all about; disobey</def>
+            </sense>
+<sense xml:id="uuid-99daa75c-412d-40e0-9aa7-5c412de0e0f1" resp="#zadrapa" tls:created="2020-05-22T22:28:02.513+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-e64a7a95-b54b-4c94-9d6d-f55dbf079701">vt(oN)</tls:syn-func></gramGrp><def>disregard contextually determinate N, dismiss contextually determinate N as irrelevant</def></sense></entry></superEntry>

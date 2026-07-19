@@ -1,0 +1,184 @@
+<superEntry xmlns="http://www.tei-c.org/ns/1.0" xml:id="uuid-f27c793b-e97c-404e-bc79-3be97cf04e8f" n="10"><form><orth>舍</orth></form><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="STOP" tls:concept-id="uuid-6f413584-adaf-4fe7-b0e9-c9b428555e40" xml:id="uuid-0c5155aa-4f63-4598-86a2-d4caded9d43d" n="8">
+            <form corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shě</pron>
+                <pron xml:lang="zh-x-oc">lʰaʔ</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+<sense xml:id="uuid-b6b91c43-6145-46de-a05e-30e40b564428" n="5">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-c20780b3-41f9-491b-bb61-a269c1c4b48f">vi</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</tls:sem-feat>
+                    <usg type="register">2</usg>
+                    <usg type="warring-states-currency">3</usg>
+                </gramGrp>
+  <def resp="#CH" updated="2024-02-13T05:14:22.761+09:00">stop; desist, give up one's ways, give up one's efforts</def>
+            </sense>
+<sense xml:id="uuid-e844b5a1-a34b-4100-93f1-6e5e55d81e57" n="3">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                </gramGrp>
+  <def>give up on (an activity one is egaged in)</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="LENGTH MEASURES" tls:concept-id="uuid-32bca9a8-1a22-42ff-a2df-fc5833e0b11a" xml:id="uuid-682cdd0a-85ab-4c72-94f0-013e68a480d2" n="3">
+            <form corresp="#uuid-bf021f93-0da3-46e1-8590-7c90ac8dddab">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shè</pron>
+                <pron xml:lang="zh-x-oc">lʰas</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+<sense xml:id="uuid-9edaa001-bae6-4395-a177-4f1eb6913f60" n="3">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-8717712d-14a4-4ae2-be7a-6e18e61d929b">n</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-ae986cb1-c2bf-4084-b875-4eaad9376929">measure</tls:sem-feat>
+                </gramGrp>
+  <def>three hundred paces</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="EXCEPT" tls:concept-id="uuid-9fe06619-da66-4a6b-9987-bbcdd1f703d3" xml:id="uuid-9b8ecc2b-1b2b-48be-8ecc-2b1b2b38bec5" n="4"><form corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5"><orth>舍</orth><pron xml:lang="zh-Latn-x-pinyin">shě</pron><pron xml:lang="zh-x-mc" resp="rec:baxter">syaeX</pron><pron xml:lang="zh-x-oc" resp="rec:pan-wuyun">lʰaʔ</pron></form><sense xml:id="uuid-a680c8a5-3dd3-4305-80c8-a53dd3b305c2" resp="#zadrapa" tls:created="2020-05-28T04:27:33.658+09:00" n="4"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-9e8c327b-579d-4514-8c83-481fa450974a">vtoN.adV</tls:syn-func></gramGrp><def>except for N</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="PARDON" tls:concept-id="uuid-247311de-b762-4cdf-92db-b006cb9fdf7d" xml:id="uuid-1dccb9f4-1830-4a9f-8234-a43f13832ce8" n="8">
+            <form corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shě</pron>
+                <pron xml:lang="zh-x-oc">lʰaʔ</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+            <def>Shě 捨/舍 refers to an administrative act of dismissing a legal case against a culprit or dismissing a culprit from detention for a crime he has committed.
+</def>
+            <form corresp="#uuid-f49d33ab-15bc-4004-a97b-a1159e03c66e">
+<orth>捨</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shě</pron>
+                <pron xml:lang="zh-x-oc">lʰaʔ</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+            <def>Shě 捨/舍 refers to an administrative act of dismissing a legal case against a culprit or dismissing a culprit from detention for a crime he has committed.
+</def>
+<sense xml:id="uuid-8784abc9-0bcf-4b54-bfc6-66774b56de38" n="6">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                </gramGrp>
+  <def>let off and forgive; forgive (a crime); spare</def>
+            </sense>
+<sense xml:id="uuid-ee6c21e5-c18b-4e61-aad1-548a0bb230ea" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-53cee9f8-4041-45e5-ae55-f0bfdec33a11">vt[oN]</tls:syn-func>
+                </gramGrp>
+  <def>let the contextually determinate person off</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="EGO" tls:concept-id="uuid-5a6418f0-0044-439d-a1eb-858537fd25e2" xml:id="uuid-dca29427-0dc6-4a49-9983-76359fe06384" n="1">
+            <form corresp="#uuid-bf021f93-0da3-46e1-8590-7c90ac8dddab">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shè</pron>
+                <pron xml:lang="zh-x-oc">lʰas</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+<sense xml:id="uuid-185b4bd0-421d-4498-b4b7-14dd6f3cf166" n="1">
+<gramGrp>
+                    <pos/>
+  <tls:syn-func corresp="#uuid-6f8dc450-db82-4ffc-9b0a-79d25148fe2b">npr[post=npro1]</tls:syn-func>
+                </gramGrp>
+  <def>abbreviation of Shīshè, here used in pronominal function</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="ABANDON" tls:concept-id="uuid-42b36b25-735c-42c0-9644-15df57265a2f" xml:id="uuid-75f8091b-7a17-4100-b809-1b7a17d1000f" n="4"><form corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5"><orth>舍</orth><pron xml:lang="zh-Latn-x-pinyin">shě</pron><pron xml:lang="zh-x-mc" resp="rec:baxter">syaeX</pron><pron xml:lang="zh-x-oc" resp="rec:pan-wuyun">lʰaʔ</pron></form><sense xml:id="uuid-cc0d6a33-b3c0-4a2d-8d6a-33b3c07a2d52" resp="#CH" tls:created="2024-02-13T21:26:36.099+09:00" n="4"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func><tls:sem-feat corresp="#uuid-20e72b12-d3da-4d93-82a7-4d85d052a415">abstract</tls:sem-feat></gramGrp><def resp="#CH" updated="2024-02-24T00:50:01.509+09:00">=捨 abandon</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="DWELL" tls:concept-id="uuid-b84fc9a7-bc9d-4554-9546-1fc3a21015b7" xml:id="uuid-002fe36a-f1d9-415c-ab06-590ca125082e" n="23">
+            <form corresp="#uuid-bf021f93-0da3-46e1-8590-7c90ac8dddab">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shè</pron>
+                <pron xml:lang="zh-x-oc">lʰas</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+            <def>Shè 舍 and sù 宿 refer to spending the night in a certain place.
+</def>
+<sense xml:id="uuid-c449bc2f-196e-4f1e-b82c-ed8f8a1428f3" n="6">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-e64a7a95-b54b-4c94-9d6d-f55dbf079701">vt(oN)</tls:syn-func>
+                </gramGrp>
+  <def>set up one's army camp; stop for the night</def>
+            </sense>
+<sense xml:id="uuid-da7d5645-de1a-4926-a491-aa32230f3776" n="12">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-739c24ae-d585-4fff-9ac2-2547b1050f16">vt+prep+N</tls:syn-func>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp>
+  <def>take temporary lodging (with somebody or in a certain place); (of army) encamp at</def>
+            </sense>
+<sense xml:id="uuid-8b6589e7-c04a-4dc3-b2d6-c55a3b8be256" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp>
+  <def>spend the night in (a place); take temporary lodging with or at</def>
+            </sense>
+<sense xml:id="uuid-f7784075-6870-496d-aca7-921aa80fab8b" n="2">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-fac754df-5669-4052-9dda-6244f229371f">causative</tls:sem-feat>
+                    <usg type="warring-states-currency">4</usg>
+                </gramGrp>
+  <def>cause to dwell</def>
+            </sense>
+<sense xml:id="uuid-bb47c244-44c7-4076-87c2-4444c7d07631" resp="#dsehnal" tls:created="2026-06-13T16:49:50.586+09:00" n="1"><gramGrp><pos>V</pos><tls:syn-func corresp="#uuid-0bcf295a-0ea1-450f-8a23-bf9130c190ff">vtt(oN1.)+N2</tls:syn-func><tls:sem-feat corresp="#uuid-fac754df-5669-4052-9dda-6244f229371f">causative</tls:sem-feat></gramGrp><def>cause the contextually determinate N1 to dwell in N2</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="DWELLING" tls:concept-id="uuid-56bf35ea-dd91-4992-b06d-79f679208295" xml:id="uuid-919e38b1-0f6e-45b6-a635-a8021a4ea35c" n="23">
+            <form corresp="#uuid-bf021f93-0da3-46e1-8590-7c90ac8dddab">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shè</pron>
+                <pron xml:lang="zh-x-oc">lʰas</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+                <listBibl>
+<bibl>
+                        <ref target="#uuid-71cc6340-5a8f-41ae-83b2-178447c6895a">DUAN DESEN 1992A</ref>
+<title>簡明古漢語同義詞詞典</title>
+                        <biblScope unit="page">727</biblScope>
+                        <note>
+<p>WANG FENGYANG CIBIAN 800</p>
+                        </note>
+                    </bibl>
+                </listBibl>
+            </form>
+            <def>The most current general word for a dwelling of any kind noble or ordinary is shè 舍.
+</def>
+<sense xml:id="uuid-4865a52a-ff7a-468a-b329-139a5595319b" n="20">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-8717712d-14a4-4ae2-be7a-6e18e61d929b">n</tls:syn-func>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp>
+  <def>dwelling; humble home; often used by guests only for a night or two;   temporary hut;  humble designation of one's own home;  also abstract: place to assemble and exist in; encampment (of army)</def>
+            </sense>
+<sense xml:id="uuid-fd8c118d-300d-4b0a-aa14-a73a71dc42db" n="3">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-8717712d-14a4-4ae2-be7a-6e18e61d929b">n</tls:syn-func>
+  <tls:sem-feat corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</tls:sem-feat>
+                </gramGrp>
+  <def>(abstract:) abode, dwelling place</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="GUEST HOUSE" tls:concept-id="uuid-e722b573-067f-4618-857a-23d4b8512db2" xml:id="uuid-933d6e45-ba3d-445d-a278-e4c7def80592" n="4">
+            <form corresp="#uuid-bf021f93-0da3-46e1-8590-7c90ac8dddab">
+<orth>舍</orth>
+                <pron xml:lang="zh-Latn-x-pinyin">shè</pron>
+                <pron xml:lang="zh-x-oc">lʰas</pron>
+                <pron xml:lang="zh-x-mc">ɕɣɛ</pron>
+            </form>
+            <def>The general word for an official resthouse of any kind is shè 舍, but the word also refers specifically to non-official "hotels" on the roadside.
+</def>
+<sense xml:id="uuid-3e66af66-b6c1-4bf4-83d2-4b2119f5741a" n="3">
+<gramGrp>
+                    <pos>N</pos>
+  <tls:syn-func corresp="#uuid-8717712d-14a4-4ae2-be7a-6e18e61d929b">n</tls:syn-func>
+                </gramGrp>
+  <def>traditionally: any resthouse;   from Warring States times onwards: popular non-official roadside guesthouse</def>
+            </sense>
+<sense xml:id="uuid-b55406c3-d1aa-48a6-9f73-8590bf30f009" n="1">
+<gramGrp>
+                    <pos>V</pos>
+  <tls:syn-func corresp="#uuid-c20780b3-41f9-491b-bb61-a269c1c4b48f">vi</tls:syn-func>
+                </gramGrp>
+  <def>live in a guest house</def>
+            </sense>
+</entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="REJECT" tls:concept-id="uuid-c632e13b-a2ea-4b93-b2e1-3ba2eaab9325" xml:id="uuid-091e67ab-db17-4145-9e67-abdb17914566" n="1"><form corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5"><orth>舍</orth><pron xml:lang="zh-Latn-x-pinyin">shě</pron><pron xml:lang="zh-x-mc" resp="rec:baxter">syaeX</pron><pron xml:lang="zh-x-oc" resp="rec:pan-wuyun">lʰaʔ</pron></form><sense xml:id="uuid-c970e35c-9608-4fa7-b0e3-5c96080fa757" resp="#CH" tls:created="2022-08-14T19:51:02.382+09:00" n="1"><gramGrp><pos>N</pos><tls:syn-func corresp="#uuid-76be1df4-3d73-4e5f-bbc2-729542645bc8">nab</tls:syn-func></gramGrp><def>=捨 opting against things; choosing to reject options</def></sense></entry><entry xmlns:tls="http://hxwd.org/ns/1.0" tls:concept="REJECT" tls:concept-id="uuid-c632e13b-a2ea-4b93-b2e1-3ba2eaab9325" type="word" xml:id="uuid-937f9103-e2af-444a-bf91-03e2af844ac7" resp="#CH" tls:created="2025-08-12T01:05:10.657+09:00" n="2"><form corresp="#uuid-f49d33ab-15bc-4004-a97b-a1159e03c66e"><orth>捨</orth><pron xml:lang="zh-Latn-x-pinyin">shě</pron><pron xml:lang="zh-x-mc" resp="rec:baxter">syaeX</pron><pron xml:lang="zh-x-oc" resp="rec:pan-wuyun">lʰaʔ</pron></form><sense xml:id="uuid-d83299ca-5da1-4713-b299-ca5da1071327" resp="#CH" tls:created="2025-08-12T01:05:10.657+09:00" n="1"><gramGrp><pos>N</pos><tls:syn-func corresp="#uuid-76be1df4-3d73-4e5f-bbc2-729542645bc8">nab</tls:syn-func></gramGrp><def>rejection; opting against; antipathy towards</def></sense></entry></superEntry>
