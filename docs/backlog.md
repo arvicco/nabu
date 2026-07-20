@@ -10479,7 +10479,7 @@ numbers from run history/progress timestamps, say so honestly.
 Acceptance: the hotspot table (numbers before optimization, §6b);
 tiers the P36-2/P36-3 dispatch decisions.
 
-## P36-1 · Derivation stamps + `rebuild --incremental`  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P36-1 · Derivation stamps + `rebuild --incremental`  [tier: fable] [status: done 2026-07-20] [deps: —]
 Per-source fingerprint at load: canonical tree sha + parser-family
 code digest + fold-rules version + migration level. `--incremental`
 skips fingerprint-clean sources; dirty ones re-derive with per-source
