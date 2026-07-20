@@ -60,7 +60,11 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "lexlep",
         name: "Lexicon Leponticum (LexLep) — Cisalpine Celtic inscriptions (Univ. Vienna)",
-        license: "UNRESOLVED CONFLICT, restrictive reading held (licensing email №17 queued): " \
+        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (№17 reply, C. Salomon, 2026-07-20, verbatim: " \
+                 "\"the information provided is indeed contradictory and outdated … I will … go with " \
+                 "CC BY-NC-SA 4.0. I would therefore ask you to also use NC for the LexLep and TIR data " \
+                 "in your library.\") — the conservative nc hold CONFIRMED, no reclass. Historical " \
+                 "conflict kept for the record: " \
                  "Project:Terms of use verbatim \"created and licenced for scientific use only. In line " \
                  "with Wikimedia's terms of use the content of this site is is available under conditions " \
                  "specified by the following licences: (1) the Creative Commons Attribution-ShareAlike 3.0 " \

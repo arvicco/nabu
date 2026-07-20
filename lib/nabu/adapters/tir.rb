@@ -55,7 +55,11 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "tir",
         name: "Thesaurus Inscriptionum Raeticarum (TIR) — Raetic corpus of record (Univ. Vienna)",
-        license: "Scientific-use scoping held at the restrictive reading (licensing email №17 queued): " \
+        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (№17 reply, C. Salomon, 2026-07-20, verbatim: " \
+                 "\"the information provided is indeed contradictory and outdated … I will … go with " \
+                 "CC BY-NC-SA 4.0. I would therefore ask you to also use NC for the LexLep and TIR data " \
+                 "in your library.\") — the conservative nc hold CONFIRMED, no reclass. Historical " \
+                 "conflict kept for the record: " \
                  "Project:Terms of Use verbatim \"Thesaurus Inscriptionum Raeticarum (TIR) is an " \
                  "interactive online lexicon created and licensed for scientific use only. In line with " \
                  "Wikimedia's terms of use the content of this site is available under conditions " \

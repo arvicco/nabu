@@ -187,7 +187,13 @@ module Nabu
       #
       # Reads the catalog through raw datasets (not the Store models) so it is
       # independent of whichever db the global models are currently bound to.
-      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil)
+      # +profile+ (P36-0) is a Nabu::RebuildProfile or nil — when present, the
+      # four corpus-wide sub-stages (fts+lemma streaming pass, trigram,
+      # alignment refs, reflex roots) each fold their wall time into it. The FTS
+      # tokenize and lemma build are ONE stage (fts_lemma): they share this
+      # single streaming row scan, so separating them would need a per-passage
+      # timer. nil keeps the sync-time incremental path unmeasured.
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.run(CREATE_TABLE)
@@ -195,16 +201,38 @@ module Nabu
         tiers = source_tiers(catalog, lemma_tiers || {})
 
         count = 0
-        fulltext.transaction do
-          count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+        timed(profile, :fts_lemma) do
+          fulltext.transaction do
+            count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+          end
+          # P36-2: the lemma table was created BARE (create_lemma_table); build
+          # its three B-tree indexes now, in one sorted pass over the populated
+          # table, rather than maintaining them incrementally across millions of
+          # per-row inserts. Still inside the fts_lemma stage and BEFORE the
+          # reflex pass, which reads passage_lemmas by these very indexes.
+          create_lemma_indexes(fulltext)
         end
-        rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
-        AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        timed(profile, :trigram) do
+          rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+        end
+        timed(profile, :alignment) do
+          AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        end
         # The cognate root closure (P15-3) rebuilds AFTER passage_lemmas: its
         # gold-language scope and suppression stats are snapshots of the lemma
         # table built moments ago in this same pass, so the two can never drift.
-        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        timed(profile, :reflex) do
+          ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        end
         count
+      end
+
+      # Fold a corpus-wide index sub-stage's wall time into +profile+, or just
+      # run the block when there is none (P36-0).
+      def timed(profile, stage, &)
+        return yield if profile.nil?
+
+        profile.measure(scope: Nabu::RebuildProfile::CORPUS, stage: stage, &)
       end
 
       # Incrementally refresh ONE source's slice of the index (P26-5) — the
@@ -407,7 +435,12 @@ module Nabu
           .count
       end
 
-      # The lemma table (see class note). Plain Sequel DSL — no raw DDL.
+      # The lemma table (see class note). Plain Sequel DSL — no raw DDL. Created
+      # BARE (P36-2): the three secondary indexes are deferred to
+      # #create_lemma_indexes, built in one pass after the bulk insert rather
+      # than maintained incrementally per row. rebuild! owns that call; the
+      # sync incremental path (refresh_source!) never creates this table, so it
+      # always sees the indexes the last rebuild left.
       def create_lemma_table(fulltext)
         fulltext.create_table(LEMMA_TABLE) do
           String :lemma_folded, null: false
@@ -420,19 +453,24 @@ module Nabu
           # No index — tier is always a residual filter AFTER an indexed
           # lemma_folded/urn/language equality.
           String :tier, null: false
-          index :lemma_folded
-          # urn index (P15-1): the lemma-aware second signals — parallels'
-          # rare-lemma co-occurrence and cognate-in-parallel (design §6) — look
-          # a passage's lemmas up BY urn (the anchor probe). Without this the
-          # anchor lookup scans 2.6M rows (~1.7 s measured); with it, one B-tree
-          # hit. ~30–45 MB, rebuilt with the table (never migrated — the fulltext
-          # db is derived-of-derived; class note).
-          index :urn
-          # language index (P18-4 follow-up): `nabu language CODE` counts a
-          # language's gold rows; without this the card scans 2.85M rows
-          # (owner-measured 11.6 s per card across the three unindexed scans).
-          index :language
         end
+      end
+
+      # Build the lemma table's three deferred secondary indexes (P36-2) over
+      # the now-populated table, in one sorted pass each:
+      # - lemma_folded: the primary lemma-search key.
+      # - urn (P15-1): the lemma-aware second signals — parallels' rare-lemma
+      #   co-occurrence and cognate-in-parallel (design §6) — look a passage's
+      #   lemmas up BY urn. Without it the anchor lookup scans 2.6M rows
+      #   (~1.7 s measured); with it, one B-tree hit. ~30–45 MB.
+      # - language (P18-4 follow-up): `nabu language CODE` counts a language's
+      #   gold rows; without it the card scans 2.85M rows (owner-measured 11.6 s
+      #   per card). All rebuilt with the table (never migrated — the fulltext
+      #   db is derived-of-derived; class note).
+      def create_lemma_indexes(fulltext)
+        fulltext.add_index(LEMMA_TABLE, :lemma_folded)
+        fulltext.add_index(LEMMA_TABLE, :urn)
+        fulltext.add_index(LEMMA_TABLE, :language)
       end
 
       # Streaming dataset of catalog rows for every live passage under a live

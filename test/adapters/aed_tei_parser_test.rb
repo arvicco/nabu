@@ -6,7 +6,7 @@ require "tmpdir"
 # The aed-tei parser family (P28-1): the TLA/BBAW Ägyptische Wortliste —
 # TEI P5 (default namespace), one flat <entry xml:id="tla…"> per lemma with
 # exactly one form/orth, one gramGrp/term, one sense (censused over all
-# 35,052 upstream entries). The fixture is a byte-verbatim 31-entry slice of
+# 35,052 upstream entries). The fixture is a byte-verbatim 32-entry slice of
 # the real files/dictionary.xml (see test/fixtures/aed/README.md).
 class AedTeiParserTest < Minitest::Test
   FIXTURE = File.join(Nabu::TestSupport.fixtures("aed"), "files", "dictionary.xml")
@@ -20,7 +20,7 @@ class AedTeiParserTest < Minitest::Test
   # --- stream + identity --------------------------------------------------------
 
   def test_streams_every_entry_in_file_order
-    assert_equal 31, entries.size
+    assert_equal 32, entries.size
     assert_equal %w[tla1 tla10 tla100], entries.first(3).map(&:entry_id)
   end
 
