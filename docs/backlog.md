@@ -10216,6 +10216,17 @@ nomenclature moves to "timeline" (new packet P35-4); dual-tagging over
 folding (tlhdig = cuneiform+hittite); docs/axes.md public; `--all`
 flat, `--axis NAME[,…]` selects and groups.
 
+Second next-phase request (owner, 2026-07-20): Sinitic character
+display — design note drafted (orchestrator-held): four workstreams —
+East-Asian-width-aware column math (the cli.rb/concord.rb self-named
+gap; P35 candidate), kanripo gaiji placeholder policy in display.yml
+(cbeta needs no rule — upstream <g> fallback text already stored),
+unihan-derived trad/simp/z-variant SEARCH fold for lzh (conventions §9
+seam, semantic variants excluded; index re-derive consequence), CJK
+fonts/ambiguous-width doc section (Noto CJK + Jigmo for Ext-B+).
+Recommended split: width → P35; variant fold + gaiji config/docs +
+KR-Gaiji resolution → the next Sino phase beside KR5 (D34-a).
+
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
 TBD for orchestrator fill, 02-sources renumber at merge — current max 106).
