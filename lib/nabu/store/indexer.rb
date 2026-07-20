@@ -205,6 +205,12 @@ module Nabu
           fulltext.transaction do
             count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
           end
+          # P36-2: the lemma table was created BARE (create_lemma_table); build
+          # its three B-tree indexes now, in one sorted pass over the populated
+          # table, rather than maintaining them incrementally across millions of
+          # per-row inserts. Still inside the fts_lemma stage and BEFORE the
+          # reflex pass, which reads passage_lemmas by these very indexes.
+          create_lemma_indexes(fulltext)
         end
         timed(profile, :trigram) do
           rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
@@ -429,7 +435,12 @@ module Nabu
           .count
       end
 
-      # The lemma table (see class note). Plain Sequel DSL — no raw DDL.
+      # The lemma table (see class note). Plain Sequel DSL — no raw DDL. Created
+      # BARE (P36-2): the three secondary indexes are deferred to
+      # #create_lemma_indexes, built in one pass after the bulk insert rather
+      # than maintained incrementally per row. rebuild! owns that call; the
+      # sync incremental path (refresh_source!) never creates this table, so it
+      # always sees the indexes the last rebuild left.
       def create_lemma_table(fulltext)
         fulltext.create_table(LEMMA_TABLE) do
           String :lemma_folded, null: false
@@ -442,19 +453,24 @@ module Nabu
           # No index — tier is always a residual filter AFTER an indexed
           # lemma_folded/urn/language equality.
           String :tier, null: false
-          index :lemma_folded
-          # urn index (P15-1): the lemma-aware second signals — parallels'
-          # rare-lemma co-occurrence and cognate-in-parallel (design §6) — look
-          # a passage's lemmas up BY urn (the anchor probe). Without this the
-          # anchor lookup scans 2.6M rows (~1.7 s measured); with it, one B-tree
-          # hit. ~30–45 MB, rebuilt with the table (never migrated — the fulltext
-          # db is derived-of-derived; class note).
-          index :urn
-          # language index (P18-4 follow-up): `nabu language CODE` counts a
-          # language's gold rows; without this the card scans 2.85M rows
-          # (owner-measured 11.6 s per card across the three unindexed scans).
-          index :language
         end
+      end
+
+      # Build the lemma table's three deferred secondary indexes (P36-2) over
+      # the now-populated table, in one sorted pass each:
+      # - lemma_folded: the primary lemma-search key.
+      # - urn (P15-1): the lemma-aware second signals — parallels' rare-lemma
+      #   co-occurrence and cognate-in-parallel (design §6) — look a passage's
+      #   lemmas up BY urn. Without it the anchor lookup scans 2.6M rows
+      #   (~1.7 s measured); with it, one B-tree hit. ~30–45 MB.
+      # - language (P18-4 follow-up): `nabu language CODE` counts a language's
+      #   gold rows; without it the card scans 2.85M rows (owner-measured 11.6 s
+      #   per card). All rebuilt with the table (never migrated — the fulltext
+      #   db is derived-of-derived; class note).
+      def create_lemma_indexes(fulltext)
+        fulltext.add_index(LEMMA_TABLE, :lemma_folded)
+        fulltext.add_index(LEMMA_TABLE, :urn)
+        fulltext.add_index(LEMMA_TABLE, :language)
       end
 
       # Streaming dataset of catalog rows for every live passage under a live
