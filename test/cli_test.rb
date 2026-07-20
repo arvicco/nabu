@@ -1115,6 +1115,94 @@ class CLITest < Minitest::Test
     assert_match(/grouped/, out, "the map's grouping promise must be taught")
   end
 
+  # -- P35-1: list --axis (the research-axes grouped census) -----------------
+
+  # Bare `--axis`: every axis in the ratified (file) order, each led by its
+  # verbatim persona line, members carrying the SAME census fragments the flat
+  # view uses, the tag-semantics note stated ONCE.
+  def test_list_axis_groups_the_census_under_every_axis_with_persona_lines
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis]) }
+      assert_nil status, "the grouped census exits 0"
+      # The tag-semantics note is stated exactly once, in the header area.
+      assert_equal 1, out.lines.count { |line| line.include?("a source appears under every desk") },
+                   "the tag semantics are stated once, not per axis"
+      # Axis header = name + the persona rendered VERBATIM (P35-0 render data).
+      assert_match(/^classical — The Classicist — Greek and Latin, Homer to the grammarians\.$/, out)
+      assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
+      assert_match(/^reference — The Lexicographer — the dictionary shelves\.$/, out)
+      # Members render the same census line, indented under their axis.
+      assert_match(/^  shelf\s+docs=2 pass=3\s+langs=grc,lat\s+license=nc,open/, out)
+      assert_match(/^  lex\s+entries=2\s+langs=sla-pro\s+license=attribution/, out)
+      # Ratified order: classical before slavic before reference (file order).
+      assert_operator out.index("classical — "), :<, out.index("slavic — ")
+      assert_operator out.index("slavic — "), :<, out.index("reference — ")
+    end
+  end
+
+  # A source tagged with two axes appears under BOTH — dual-tagging is the
+  # point (D35), not a bug to fold away.
+  def test_list_axis_renders_a_source_under_each_of_its_axes
+    with_axis_corpus do |config|
+      out, _err, _status = with_config(config) { run_cli(%w[list --axis]) }
+      slavic = out.index("slavic — ")
+      reference = out.index("reference — ")
+      lex_under_slavic = out.index("  lex", slavic)
+      lex_under_reference = out.index("  lex", reference)
+      assert_operator lex_under_slavic, :<, reference, "lex renders under slavic"
+      assert_operator lex_under_reference, :>, reference, "lex ALSO renders under reference"
+    end
+  end
+
+  # `--axis NAME`: exactly that one axis's group.
+  def test_list_axis_names_a_single_axis
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis slavic]) }
+      assert_nil status
+      assert_match(/^slavic — The Slavicist/, out)
+      assert_match(/^  lex\b/, out)
+      assert_match(/^  library\b/, out)
+      refute_match(/^classical — /, out, "a single-axis request shows only that axis")
+      refute_match(/^reference — /, out)
+    end
+  end
+
+  # `--axis a,b`: several axes, in the order requested.
+  def test_list_axis_selects_several_axes_in_the_requested_order
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis reference,classical]) }
+      assert_nil status
+      assert_match(/^reference — /, out)
+      assert_match(/^classical — /, out)
+      refute_match(/^slavic — /, out)
+      assert_operator out.index("reference — "), :<, out.index("classical — "),
+                      "an explicit list renders in the order the owner asked for"
+    end
+  end
+
+  # An unknown axis is a clean error naming the known set — the resolution
+  # guarantee (never a silent empty group).
+  def test_list_axis_unknown_names_the_known_set
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[list --axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
+      assert_match(/classical.*slavic.*reference/, err, "the miss names the known axes")
+    end
+  end
+
+  # The owner ruling: bare `nabu list` stays FLAT and byte-unchanged — the
+  # axis grouping is opt-in only.
+  def test_list_without_axis_stays_flat_and_ungrouped
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list]) }
+      assert_nil status
+      refute_match(/appears under every desk/, out, "the flat census carries no axis note")
+      refute_match(/The Classicist/, out, "the flat census carries no persona lines")
+      assert_match(/^shelf\s+docs=2 pass=3/, out, "the flat census line is unindented and unchanged")
+    end
+  end
+
   # -- search/export --source (P22-1) ----------------------------------------
 
   def test_search_source_scopes_and_unknown_source_misses_honestly
@@ -2155,6 +2243,31 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
       assert_match(/corpus.*docs=2.*no run history/, out)
+    end
+  end
+
+  # P35-1: `status --axis` rides the same grouping over the status table —
+  # each axis's persona header, its member rows beneath (a source under each
+  # axis it serves), the tag note once. The wide status line is unchanged.
+  def test_status_axis_groups_the_status_table_under_the_axes
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[status --axis]) }
+      assert_nil status
+      assert_equal(1, out.lines.count { |line| line.include?("a source appears under every desk") })
+      assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
+      # The member row is the SAME status line (state, policy, up=, counts),
+      # merely indented under its axis; lex serves slavic AND reference.
+      assert_match(/^  lex\s+on\s+frozen\s+up=frozen\s+docs=0 pass=0/, out)
+      assert_operator out.index("  lex", out.index("slavic — ")), :<, out.index("reference — ")
+      assert_operator out.index("  lex", out.index("reference — ")), :>, out.index("reference — ")
+    end
+  end
+
+  def test_status_axis_unknown_names_the_known_set
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[status --axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
     end
   end
 
@@ -4294,6 +4407,57 @@ class CLITest < Minitest::Test
           adapter: TestAdapter
           enabled: true
           sync_policy: local
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_list_shelf(catalog)
+      seed_list_lex(catalog)
+      seed_list_library(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # The list-corpus rig plus a research-axes registry (config/axes.yml beside
+  # sources.yml) and an `axes:` membership on every source (P35-1). shelf is
+  # the classicist's; lex is dual-tagged slavic AND reference (D35 dual-tagging);
+  # library is the slavicist's. Personas are custom so tests can pin verbatim.
+  def with_axis_corpus
+    Dir.mktmpdir("nabu-cli-axis") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        classical:
+          persona: "The Classicist — Greek and Latin, Homer to the grammarians."
+          desc: "The Greco-Roman literary lane."
+        slavic:
+          persona: "The Slavicist — Cyril and Methodius to the damaskini."
+          desc: "Old Church Slavonic and its daughters."
+        reference:
+          persona: "The Lexicographer — the dictionary shelves."
+          desc: "The reference works."
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        shelf:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+          axes: [classical]
+        lex:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: frozen
+          axes: [slavic, reference]
+        library:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: local
+          axes: [slavic]
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),

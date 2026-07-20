@@ -33,6 +33,37 @@ module Nabu
       registry.each_source.map { |entry| render_entry(entry, db, ledger, width, cells[entry.slug], up_w) }.join("\n")
     end
 
+    # `status --axis` (P35-1): the SAME rows as #render, grouped under the
+    # research axes (config/axes.yml). Each axis leads with its verbatim
+    # persona line and then its member rows, indented — a source under each
+    # axis it serves (dual-tagging, D35). Column widths (slug, up=) are global
+    # across every registered source, so the aligned status line is unchanged
+    # and alignment stays stable across groups. +axes+ is the pre-resolved,
+    # ordered Axis list (the CLI owns resolution + the unknown-axis error);
+    # +tag_note+ is the once-stated tag-semantics line.
+    def render_grouped(registry:, db:, ledger:, axes:, tag_note:)
+      return "No sources registered." if registry.empty?
+
+      width = registry.each_source.map { |entry| entry.slug.length }.max
+      cache = probe_cache(ledger)
+      cells = registry.each_source.to_h do |entry|
+        [entry.slug, upstream_cell(entry, cache[entry.slug], ledger: ledger)]
+      end
+      up_w = cells.values.map(&:length).max
+      lines = [tag_note]
+      axes.each do |axis|
+        lines << ""
+        lines << "#{axis.name} — #{axis.persona}"
+        members = registry.each_source.select { |entry| entry.axes.include?(axis.name) }
+        if members.empty?
+          lines << "  (no sources on this axis)"
+        else
+          members.each { |entry| lines << "  #{render_entry(entry, db, ledger, width, cells[entry.slug], up_w)}" }
+        end
+      end
+      lines.join("\n")
+    end
+
     def render_entry(entry, db, ledger, width, up_cell, up_w)
       head = "#{entry.slug.ljust(width)}  #{state(entry.enabled).ljust(3)}  #{entry.sync_policy.ljust(6)}"
       return "#{head}  no database (run nabu sync)" if db.nil?
