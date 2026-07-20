@@ -61,24 +61,30 @@ module Nabu
       end
 
       def serialize_jsonl(row)
-        JSON.generate(
+        annotations, error = parse_annotations(row.fetch(:annotations_json))
+        record = {
           urn: row.fetch(:urn),
           language: row.fetch(:language),
           text: row.fetch(:text),
           text_normalized: row.fetch(:text_normalized),
-          annotations: parse_annotations(row.fetch(:annotations_json))
-        )
+          annotations: annotations
+        }
+        record[:annotations_error] = error if error
+        JSON.generate(record)
       end
 
       # annotations_json is stored as canonical JSON (default "{}"); parse it so
       # the emitted line carries a JSON object, not a quoted string. A NULL or
-      # blank column degrades to an empty object.
+      # blank column degrades to an empty object. Returns [annotations, error]:
+      # unparseable JSON exports {} PLUS an explicit error note on the line
+      # (H9, P35-6 — the skip-with-note rule; a silent {} would read as "this
+      # passage has no annotations", which is not what the store says).
       def parse_annotations(json)
-        return {} if json.nil? || json.strip.empty?
+        return [{}, nil] if json.nil? || json.strip.empty?
 
-        JSON.parse(json)
+        [JSON.parse(json), nil]
       rescue JSON::ParserError
-        {}
+        [{}, "stored annotations_json is invalid JSON — annotations skipped"]
       end
 
       # Live passages (passage and its document both non-withdrawn), optionally

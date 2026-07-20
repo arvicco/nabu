@@ -4142,6 +4142,25 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_show_notes_unreadable_annotations_instead_of_silently_dropping
+    with_window_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:passages].where(urn: "urn:w:tok:1").update(annotations_json: "{broken")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1]) }
+      assert_nil status
+      assert_match(/note: stored annotations are unreadable \(invalid JSON\) — skipped/, out,
+                   "H9: a corrupt annotation lane must announce itself, not pose as unannotated")
+
+      tokens_out, _err2, = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_match(/stored annotations are unreadable/, tokens_out)
+
+      doc_out, _err3, = with_config(config) { run_cli(%w[show urn:w:tok]) }
+      assert_match(/1 passage carries unreadable stored annotations/, doc_out)
+    end
+  end
+
   def test_show_tokens_on_a_document_urn_names_the_grain
     with_window_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:w:lat --tokens]) }
