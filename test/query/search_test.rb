@@ -438,5 +438,68 @@ module Query
                    "no facet row → absent under an active facet filter"
       assert_equal 2, search("manibus").size, "both visible without a facet filter"
     end
+
+    # -- the loans facet (P34-2 — the P17-1 promise: per-passage loan-code
+    # counts already ride annotations["loans"]; the facet READS them, no
+    # reparse, no extra table) ---------------------------------------------
+
+    # A passage whose annotations carry the P17-1 loans shape, written with
+    # the loader's own serializer (ContentHash.canonical_json), so the test
+    # pins the read side of the stored contract.
+    def loaned(urn, text, loans, language: "cop")
+      doc = make_document(source: @open, urn: urn, language: language)
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "#{urn}:1", sequence: 1, language: language,
+        text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
+        annotations_json: Nabu::Store::ContentHash.canonical_json(
+          { "tokens" => [], "loans" => loans }
+        ),
+        content_sha256: "x", revision: 1
+      )
+      doc
+    end
+
+    def test_loans_filter_keeps_only_passages_carrying_the_code
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 2 })
+      loaned("urn:c:2", "ⲡⲛⲟⲩⲧⲉ ⲥⲁⲃⲃⲁⲧⲟⲛ", { "hbo" => 1 })
+      rebuild!
+      assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "grc").map(&:urn)
+      assert_equal %w[urn:c:2:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "hbo").map(&:urn)
+      assert_equal 2, search("ⲡⲛⲟⲩⲧⲉ").size, "both visible without a loans filter"
+    end
+
+    def test_loans_filter_matches_verbatim_codes_case_insensitively
+      # Unknown upstream language names pass through verbatim ("Akkadian");
+      # the filter matches them case-insensitively, the house facet rule.
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ", { "Akkadian" => 1 })
+      rebuild!
+      assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "akkadian").map(&:urn)
+      assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "Akkadian").map(&:urn)
+    end
+
+    def test_loanless_passages_fall_out_under_a_loans_filter
+      # No loans key at all (the parser omits the empty hash) AND a passage
+      # whose text mentions "loans" but has no loans annotation — the JSON
+      # probe must not be fooled by a substring.
+      doc = make_document(source: @open, urn: "urn:plain", language: "eng")
+      make_passage(doc, urn: "urn:plain:1", text: "loans of the temple", sequence: 1, language: "eng")
+      loaned("urn:c:1", "loans of the temple", { "grc" => 1 }, language: "eng")
+      rebuild!
+      assert_equal %w[urn:c:1:1], search("loans temple", loans: "grc").map(&:urn),
+                   "a loans-free passage falls out, even when its text says 'loans'"
+    end
+
+    def test_unknown_loan_code_is_an_honest_absence
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ", { "grc" => 2 })
+      rebuild!
+      assert_empty search("ⲡⲛⲟⲩⲧⲉ", loans: "xyz"), "an unattested code finds nothing, never errors"
+    end
+
+    def test_loans_filter_composes_with_lang
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 1 }, language: "cop")
+      loaned("urn:c:2", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 1 }, language: "eng")
+      rebuild!
+      assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "grc", lang: "cop").map(&:urn)
+    end
   end
 end

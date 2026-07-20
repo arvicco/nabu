@@ -844,6 +844,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- list --loans (P34-2): the loans census + the saturation enumeration ---
+
+  def test_list_loans_census_and_honest_miss
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans]) }
+      assert_nil status
+      assert_match(/grc\s+tokens=3\s+passages=2\s+docs=1/, out)
+      assert_match(/Akkadian\s+tokens=1\s+passages=1\s+docs=1/, out, "verbatim codes census too")
+      assert_match(/hbo\s+tokens=1\s+passages=1\s+docs=1/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list plain --loans]) }
+      assert_nil status, "an honest miss is not a failure"
+      assert_match(/no loan annotations/, out)
+    end
+  end
+
+  def test_list_loans_code_ranks_documents_by_saturation
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans grc]) }
+      assert_nil status
+      assert_match(/urn:nabu:cs:a — Alpha \[cop\] tokens=3 passages=2/, out)
+      refute_match(/urn:nabu:cs:b/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans xyz]) }
+      assert_nil status, "an unattested code is an honest miss, exit 0"
+      assert_match(/no documents carry/, out)
+    end
+  end
+
+  def test_list_loans_flag_guards
+    with_loans_corpus do |config|
+      with_config(config) do
+        _out, err, status = run_cli(%w[list --loans])
+        assert_equal 1, status
+        assert_match(/give a SOURCE/, err)
+
+        _out, err, status = run_cli(%w[list cs --loans grc --documents])
+        assert_equal 1, status
+        assert_match(/one of/, err)
+      end
+    end
+  end
+
   def test_list_flag_guards_are_honest
     with_list_corpus do |config|
       with_config(config) do
@@ -2203,6 +2246,43 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --type epitaph]) }
       assert_equal 1, status
       assert_match(/no facet table.*rebuild/i, err)
+    end
+  end
+
+  # -- search --loans (P34-2, the P17-1 promise: the facet reads the stored
+  # per-passage loan-code counts, no reparse) --------------------------------
+
+  def test_search_loans_filters_and_names_the_filter
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans grc]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:a:1", out)
+      assert_match("urn:nabu:cs:a:2", out)
+      refute_match("urn:nabu:cs:b:1", out) # hbo/Akkadian loans only
+      refute_match("urn:nabu:cs:c:1", out) # loan-free — honest absence
+      assert_match(/loans: grc/, out, "the active loans filter is named in the footer")
+    end
+  end
+
+  def test_search_loans_composes_with_fuzzy_and_lang
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ⲛⲟⲩⲧ --loans hbo]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:b:1", out)
+      refute_match("urn:nabu:cs:a:1", out)
+      assert_match(/loans: hbo/, out)
+
+      out2, _err2, status2 = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans grc --lang eng]) }
+      assert_nil status2
+      assert_match(/no matches/i, out2, "the loans corpus is Coptic — --lang eng empties it honestly")
+    end
+  end
+
+  def test_search_loans_verbatim_code_matches_case_insensitively
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans akkadian]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:b:1", out, "the verbatim upstream code (Akkadian) matches case-folded")
     end
   end
 
@@ -4093,6 +4173,58 @@ class CLITest < Minitest::Test
       fulltext.disconnect
       catalog.disconnect
       yield config
+    end
+  end
+
+  # A loans (P34-2) corpus: one Coptic-shaped source ("cs") whose passages
+  # carry the P17-1 loans annotation ({code => token count}, the loader's own
+  # canonical_json), one loan-free source ("plain") — trigram-indexed so the
+  # fuzzy composition is testable.
+  def with_loans_corpus
+    Dir.mktmpdir("nabu-cli-loans") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      cs = catalog[:sources].insert(slug: "cs", name: "Coptic", adapter_class: "TestAdapter",
+                                    license_class: "open", enabled: true)
+      plain = catalog[:sources].insert(slug: "plain", name: "Plain", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+      seed_loan_document(catalog, cs, "urn:nabu:cs:a", "Alpha",
+                         [["ⲡⲛⲟⲩⲧⲉ ⲛⲁⲅⲁⲑⲟⲥ", { "grc" => 2 }], ["ⲡⲛⲟⲩⲧⲉ ⲡⲉ", { "grc" => 1 }]])
+      seed_loan_document(catalog, cs, "urn:nabu:cs:b", "Beta",
+                         [["ⲡⲛⲟⲩⲧⲉ ⲥⲁⲃⲃⲁⲧⲟⲛ", { "hbo" => 1, "Akkadian" => 1 }]])
+      seed_loan_document(catalog, cs, "urn:nabu:cs:c", "Gamma", [["ⲡⲛⲟⲩⲧⲉ ⲟⲩⲟⲉⲓⲛ", nil]])
+      seed_loan_document(catalog, plain, "urn:nabu:plain:a", "Plain", [["ⲡⲛⲟⲩⲧⲉ", nil]])
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil,
+                                    fuzzy_slugs: %w[cs plain])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_loan_document(catalog, source_id, doc_urn, title, passages)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: title, language: "cop",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    passages.each_with_index do |(text, loans), seq|
+      annotations = { "tokens" => [] }
+      annotations["loans"] = loans if loans
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "#{doc_urn}:#{seq + 1}", sequence: seq, language: "cop",
+        text: text, text_normalized: Nabu::Normalize.search_form(text, language: "cop"),
+        annotations_json: Nabu::Store::ContentHash.canonical_json(annotations),
+        content_sha256: "#{doc_urn}p#{seq}", revision: 1, withdrawn: false
+      )
     end
   end
 
