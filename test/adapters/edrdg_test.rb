@@ -187,7 +187,7 @@ class EdrdgTest < Minitest::Test
     entry = registry["edrdg"]
     refute_nil entry, "config/sources.yml must register edrdg"
     assert_equal Nabu::Adapters::Edrdg, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync (CLAUDE.md checklist §6)"
+    assert entry.enabled, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
     assert_equal "manual", entry.sync_policy
   end
 end
