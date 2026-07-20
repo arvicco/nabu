@@ -796,11 +796,12 @@ module Nabu
       One row per passage: a passage with the keyword twice shows its first
       occurrence.
 
-      Layout: left context is trimmed to --width characters per side (default
-      40) and right-justified so the keyword column lines up; the right context
-      is trimmed to the same width; clipped context is marked with …. Each row
-      ends with the passage urn and [language]. Alignment counts display
-      characters (fine for grc/lat/chu); it does not model East-Asian width.
+      Layout: left context is trimmed to --width cells per side (default 40)
+      and right-justified so the keyword column lines up; the right context is
+      trimmed to the same width; clipped context is marked with …. Each row
+      ends with the passage urn and [language]. Alignment counts East-Asian
+      display width (Nabu::Display.width), so a lzh/ojp Han line lines up its
+      keyword column exactly where a grc line does — each ideograph two cells.
 
       Filters (as in search): --lang, --license, --limit (default 20).
 
@@ -3153,18 +3154,15 @@ module Nabu
       end
 
       # Concord's columns were padded by Concord over the PRE-display pieces;
-      # a display transform (stripped marks, isolate wrapping) changes their
-      # lengths, so re-pad here over VISIBLE characters (isolates excluded —
-      # Display.visible_length) to keep the keyword column at exactly +width+.
-      # Combining marks count 1 in the width math either way (the documented
-      # house simplification); stripping them only tightens the columns.
+      # a display transform (stripped marks, isolate wrapping, token coloring)
+      # changes their cell width, so re-pad here over DISPLAY CELLS
+      # (Nabu::Display.rjust/ljust — ANSI SGR and isolates count 0, wide
+      # clusters count 2) to keep the keyword column at exactly +width+ cells.
       def concord_display_pieces(row, width)
         left = display_text(row.left.sub(/\A +/, ""), row.language)
         right = display_text(row.right.sub(/ +\z/, ""), row.language)
         keyword = display_text(row.keyword, row.language)
-        left_pad = [width - Nabu::Display.visible_length(left), 0].max
-        right_pad = [width - Nabu::Display.visible_length(right), 0].max
-        [(" " * left_pad) + left, keyword, right + (" " * right_pad)]
+        [Nabu::Display.rjust(left, width), keyword, Nabu::Display.ljust(right, width)]
       end
 
       # Render `parallels` (P15-1): the anchor line, then one hit per document —
@@ -3852,9 +3850,11 @@ module Nabu
 
         say ""
         say "  distinctive vocabulary (log-odds vs corpus, top #{distinctive.size}):"
-        width = distinctive.map { |e| e.lemma.length }.max
+        # Pad the lemma column by display cells (P35-7): a lzh/ojp lemma of Han
+        # is two cells per ideograph, so char-count ljust would drift the table.
+        width = distinctive.map { |e| Nabu::Display.width(e.lemma) }.max
         distinctive.each do |entry|
-          say "    #{entry.lemma.ljust(width)}  #{entry.doc_count}× here · " \
+          say "    #{Nabu::Display.ljust(entry.lemma, width)}  #{entry.doc_count}× here · " \
               "#{commafy(entry.corpus_freq)}× corpus  (z=#{format('%.1f', entry.score)})"
         end
       end

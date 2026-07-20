@@ -10437,7 +10437,7 @@ Acceptance: HARDEN/GENERALIZE verdicts adjudicated by the owner at
 the gate like decision items; suite green with the new conformance
 suite enforced.
 
-## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: done 2026-07-20] [deps: —]
 Goal: the Sinitic display note's workstream A — one
 Nabu::Display.width (grapheme × EAW class: W/F=2, isolates/ANSI=0)
 used by every column-aligned surface (concord KWIC, align, show

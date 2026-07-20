@@ -2,6 +2,7 @@
 
 require "json"
 require_relative "../normalize"
+require_relative "../display"
 require_relative "search"
 require_relative "lemma_search"
 
@@ -44,11 +45,12 @@ module Nabu
     #
     # == Alignment
     #
-    # Left context is rendered to EXACTLY +width+ display characters (padded or
+    # Left context is rendered to EXACTLY +width+ display CELLS (padded or
     # ellipsis-truncated), so the keyword's left edge sits in the same column
-    # on every row. Padding is by String#length (character count) — deliberately
-    # not East-Asian display width; grc/lat/chru fixed-width terminals are the
-    # target, and over-engineering CJK width is out of scope.
+    # on every row. Padding and clipping go through Nabu::Display.width (P35-7),
+    # which counts East-Asian wide (Han/kana/hangul/fullwidth) clusters as two
+    # cells — a lzh KWIC line aligns exactly where a grc one does. For narrow
+    # (grc/lat/chu) text width == String#length, so their output is unchanged.
     class Concord
       # One KWIC row. +left+ and +right+ are already trimmed to the requested
       # width (left right-justified, right left-justified, ellipsis where
@@ -215,22 +217,55 @@ module Nabu
         [chars[0...start].join, chars[start...finish].join, chars[finish..].join]
       end
 
-      # Left context, right-justified to exactly +width+ chars: pad short lines
-      # on the left; clip long ones to the last width-1 chars behind a leading
-      # ellipsis (the near context is what matters for reading the keyword).
+      # Left context, right-justified to exactly +width+ display cells: pad
+      # short lines on the left; clip long ones to the last (width-1) cells
+      # behind a leading ellipsis (the near context is what matters for reading
+      # the keyword). Cells, not chars, so wide (Han/kana) context clips and
+      # pads to the same column a narrow line does.
       def trim_left(str, width)
-        return str.rjust(width) if str.length <= width
+        return Nabu::Display.rjust(str, width) if Nabu::Display.width(str) <= width
 
-        ELLIPSIS + str[(str.length - width + 1)..]
+        ELLIPSIS + take_last_cells(str, width - 1)
       end
 
-      # Right context, left-justified to exactly +width+ chars: pad short lines
-      # on the right; clip long ones to the first width-1 chars before a
-      # trailing ellipsis. Equal-width left AND right also aligns the urn tag.
+      # Right context, left-justified to exactly +width+ display cells: pad
+      # short lines on the right; clip long ones to the first (width-1) cells
+      # before a trailing ellipsis. Equal-width left AND right also aligns the
+      # urn tag.
       def trim_right(str, width)
-        return str.ljust(width) if str.length <= width
+        return Nabu::Display.ljust(str, width) if Nabu::Display.width(str) <= width
 
-        str[0, width - 1] + ELLIPSIS
+        take_first_cells(str, width - 1) + ELLIPSIS
+      end
+
+      # The longest suffix / prefix of whole grapheme clusters whose display
+      # width fits within +budget+ cells — never splitting a wide cluster, so
+      # the clip lands on a cell boundary (a trailing gap of at most one cell
+      # is closed by the caller's re-pad).
+      def take_last_cells(str, budget)
+        kept = []
+        used = 0
+        str.grapheme_clusters.reverse_each do |cluster|
+          cell = Nabu::Display.width(cluster)
+          break if used + cell > budget
+
+          kept.unshift(cluster)
+          used += cell
+        end
+        kept.join
+      end
+
+      def take_first_cells(str, budget)
+        kept = []
+        used = 0
+        str.grapheme_clusters.each do |cluster|
+          cell = Nabu::Display.width(cluster)
+          break if used + cell > budget
+
+          kept << cluster
+          used += cell
+        end
+        kept.join
       end
     end
   end
