@@ -81,28 +81,48 @@ module Nabu
       # const: a text property (shingle arithmetic), not a corpus count
       GRAM_SIZE = 4
 
-      # A gram in ≥ this many passages is not distinctive evidence (its rank
-      # weight would be ≤ 1/COMMON_GRAM_DF ≈ 0) AND enumerating its hits would be
-      # wasteful — so we cap the probe here and drop the gram from scoring. Pure
-      # cost/relevance bound: a real quotation's grams are far rarer than this.
-      # census: 5505159, 2026-07-20, live passages — tuned at 3.76M (133 ppm of
-      # corpus), now 91 ppm: an ABSOLUTE cutoff narrows recall as the corpus
-      # grows; corpus-relative refactor journaled for the gate (P35-6, fulltext
-      # mid-reindex at re-measure so gram dfs could not be re-probed)
+      # A gram in ≥ the corpus-relative cutoff many passages is not distinctive
+      # evidence (its rank weight 1/df ≈ 0) AND enumerating its hits would be
+      # wasteful — so we cap the probe there and drop the gram from scoring.
+      #
+      # D36-a (owner ruling 2026-07-20): the cutoff is CORPUS-RELATIVE, a fixed
+      # fraction of the live passage count snapshot once per run
+      # (#snapshot_cutoffs → max(COMMON_GRAM_DF, round(RATIO × count))). An
+      # ABSOLUTE cutoff narrows recall as the corpus grows — 500 was 133 ppm of
+      # the 3.76M tuning corpus but had decayed to 20 ppm at the settled 24.4M —
+      # so the ratio holds the tuning-era selectivity as the corpus scales. This
+      # RATIO is the tuning numerator (500 grams of 3.76M): a fixed corpus
+      # property, so a derived-expression const, not a census measurement.
+      # const: the D36-a tuning ratio — 500 distinctive grams of the 3.76M
+      # tuning corpus (≈133 ppm), invariant under corpus growth
+      COMMON_GRAM_DF_RATIO = Rational(500, 3_760_000)
+
+      # The absolute floor AND the unavailable-count fallback: the tuning-era
+      # cutoff, binding only for corpora below the tuning size (where the
+      # relative cutoff would over-prune) and when the live count cannot be read.
+      # census: 24415015, 2026-07-20, live fulltext passages (settled full
+      # rebuild); tuned at 3.76M where 500 grams ≈ 133 ppm — the D36-a floor
       COMMON_GRAM_DF = 500
 
       # Join+dedupe this many top-scored candidate passages to fill the page
       # (enough that document-grain grouping still yields `limit` documents).
-      # census: 5505159, 2026-07-20, live passages; page-fill overfetch (the
+      # census: 24415015, 2026-07-20, live passages; page-fill overfetch (the
       # INNER_LIMIT_FACTOR class — document grouping thins candidates)
       CANDIDATE_FACTOR = 30
       MIN_CANDIDATES = 300
 
-      # A rarity cap on the lemma-co-occurrence signal: a lemma attested in more
-      # than this many passages is too common to diagnose an echo (and bounds the
-      # IN-list probe). Content words in the live corpus sit well under it.
-      # census: 5505159, 2026-07-20, live passages — tuned at 3.76M; same
-      # absolute-cutoff drift as COMMON_GRAM_DF, journaled with it (P35-6)
+      # A rarity cap on the lemma-co-occurrence signal, CORPUS-RELATIVE exactly
+      # like COMMON_GRAM_DF (D36-a): a lemma attested in more than this fraction
+      # of the corpus is too common to diagnose an echo (and bounds the IN-list
+      # probe). Runtime cutoff max(RARE_LEMMA_DF, round(RATIO × count)), snapshot
+      # per run. Content words in the live corpus sit well under it.
+      # const: the D36-a tuning ratio — 2,000 lemmas of the 3.76M tuning corpus
+      # (≈532 ppm), invariant under corpus growth
+      RARE_LEMMA_DF_RATIO = Rational(2_000, 3_760_000)
+
+      # The absolute floor AND the unavailable-count fallback (tuning-era cutoff).
+      # census: 24415015, 2026-07-20, live fulltext passages (settled full
+      # rebuild); tuned at 3.76M where 2,000 lemmas ≈ 532 ppm — the D36-a floor
       RARE_LEMMA_DF = 2_000
 
       # One intertext hit, grouped to document grain. `score` is the summed
@@ -143,6 +163,7 @@ module Nabu
         anchor = load_anchor(urn)
         return nil if anchor.nil?
 
+        snapshot_cutoffs
         tokens = gram_tokens(anchor.fetch(:text_normalized))
         grams = shingle(tokens, GRAM_SIZE)
         scores, matched = probe_grams(grams, anchor_passage_id: anchor.fetch(:passage_id))
@@ -155,6 +176,36 @@ module Nabu
       end
 
       private
+
+      # Snapshot the D36-a corpus-relative cutoffs for this run: read the live
+      # passage count ONCE and derive both df caps from it, so every gram/lemma
+      # probe in the run shares one consistent corpus view.
+      def snapshot_cutoffs
+        count = corpus_passage_count
+        @common_gram_df = relative_cutoff(count, COMMON_GRAM_DF_RATIO, COMMON_GRAM_DF)
+        @rare_lemma_df = relative_cutoff(count, RARE_LEMMA_DF_RATIO, RARE_LEMMA_DF)
+      end
+
+      # The corpus's live passage high-water mark. max(id) is an O(1) B-tree max
+      # on the catalog passages table — instant even on the 24M-row live table,
+      # where a count(*) is ~40 s — and the withdrawn rows it overcounts (~0.02%)
+      # are immaterial to a ppm cutoff. nil (empty or unreadable table) trips the
+      # absolute fallback in #relative_cutoff.
+      def corpus_passage_count
+        @catalog[:passages].max(:id)
+      rescue Sequel::DatabaseError
+        nil
+      end
+
+      # round(count × ratio), floored at the absolute tuning cutoff (which also
+      # serves as the fallback when +count+ is unavailable). The floor binds
+      # below the tuning corpus size so small corpora are never over-pruned; the
+      # ratio binds above it so recall does not narrow as the corpus grows.
+      def relative_cutoff(count, ratio, floor)
+        return floor if count.nil? || count.zero?
+
+        [(count * ratio).round, floor].max
+      end
 
       # The anchor row from the CATALOG (urn is uniquely indexed there, so this
       # is one B-tree hit — no scan of the UNINDEXED urn column in the FTS table).
@@ -183,7 +234,7 @@ module Nabu
         gram_index.each do |gram, indices|
           rows = fts_probe(gram)
           df = rows.size
-          next if df.zero? || df >= COMMON_GRAM_DF
+          next if df.zero? || df >= @common_gram_df
 
           weight = 1.0 / df
           rows.each do |row|
@@ -210,7 +261,7 @@ module Nabu
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", phrase(gram)))
           .select(:passage_id)
-          .limit(COMMON_GRAM_DF)
+          .limit(@common_gram_df)
           .all
       end
 
@@ -305,7 +356,7 @@ module Nabu
         folded = @fulltext[Store::Indexer::LEMMA_TABLE].where(urn: urn).distinct.select_map(:lemma_folded)
         folded.each_with_object({}) do |lemma, acc|
           df = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: lemma).count
-          acc[lemma] = df if df.between?(2, RARE_LEMMA_DF)
+          acc[lemma] = df if df.between?(2, @rare_lemma_df)
         end
       end
 

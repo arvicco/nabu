@@ -1,21 +1,24 @@
 # The Library — content review
 
-**As of 2026-07-20** (post Phases 32–33, the Sino axes; v1.1.0 cut
-2026-07-19). Live totals: **742,616 documents / 11,433,174 passages
-and 1,145,596 dictionary entries** across the **79 registered sources**
-(69 enabled; the P32/P33 newcomers await their flip cycles — the
-Kanripo and CBETA syncs are the next step change). The reference shelf
-spans forty-nine dictionary shelves (§8c, §8h, §8j, §8k, §8m, §8o,
-§8q, §8s, §8t). The lemma layer, censused fresh this date:
-**12,474,060 gold rows in 22 languages** plus **8,000,317 silver rows in
-8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
+**As of 2026-07-20** (post the settled full rebuild, which loaded the
+Sino and Chinese-library axes; v1.1.0 cut 2026-07-19). Live totals:
+**751,300 documents / 24,415,015 passages and 1,168,775 dictionary
+entries** across the **80 registered sources** (78 enabled). The
+**Kanripo and CBETA syncs are the step change they were promised to be**:
+Literary Chinese (`lzh`) is now the largest language in the library at
+13.0M passages, more than doubling the whole corpus. The reference shelf
+spans **54 dictionary shelves** (§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s,
+§8t). The lemma layer, censused fresh this date: **12,597,062 gold rows
+in 23 languages** plus **8,000,317 silver rows in 8** (the
+CDLI/TLHdig/Diorisis honest tier — machine-suggested or
 upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
 curation and acquisitions — their counts and contents stay out of public
 documentation by rule. The code-per-language map lives in [languages.md](languages.md).
 
-This is a living document. Numbers are read from the live catalog
-(`sqlite3 db/catalog.sqlite3 "PRAGMA query_only=ON; …"` — the WAL-safe
-read-only convention, ops §10), not estimated. See §10 for the review
+This is a living document. Numbers are read from the live catalog, not
+estimated — via a `readonly: true` Sequel/sqlite3 session (the WAL-safe
+read-only convention, ops §10; the `sqlite3` CLI now fails to open the
+24 GB catalog, so the Ruby gem is the read path). See §10 for the review
 cadence that keeps it truthful.
 
 ---
@@ -142,7 +145,7 @@ texts that mostly exist as scanned books elsewhere.
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
 | **Size** | 75 docs / 175,742 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (23 / 91,336) — plus `iswoc` (5 / 2,536, §8d) in the same family |
 | **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (nine treebanks incl. Old East Slavic birchbark letters, Middle Russian RNC, Ruthenian, and — since the 2026-07-17 sync — the two Old Irish glosses treebanks DipSGG/DipWBG; birchbark/RNC/Ruthenian/DipWBG CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
-| **Metadata** | The gold lemma layer: `passage_lemmas` totals **2,852,069 rows in 15 languages** (lat 583k, orv 455k, grc 379k, san 190k, chu 123k, got 99k, ang 25k, xcl 18k from the treebank family; akk 361k, sux 171k + Hurrian/Ugaritic/Hittite scatter from ORACC gold — §8; sl 214k from goo300k — §8e; cop 233k from Coptic Scriptorium — §8f), searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
+| **Metadata** | The gold lemma layer: `passage_lemmas` totals **12,597,062 rows in 23 languages** (post the settled full rebuild). The pools, by size: san 5.54M and sux 2.97M lead (DCS + ORACC/ETCSL), then egy 799k (§8o), lat 621k, grc 563k, orv 455k, akk 363k, hbo 277k (§8q), cop 233k (§8f), sl 214k (§8e), chu 130k, ojp 123k (§8s, ONCOJ), sga 113k (§8l, CorPH), got 99k, bul 42k, ang 25k, xcl 18k, with peo/arc/hit/uga/elx/xhu the small gold tails. Searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
 Vulgate + Gothic Wulfila + Classical Armenian + OCS Codex Marianus — five
@@ -546,7 +549,7 @@ other OT witnesses; a millennium of Syriac prose. The two silver-tier
 corpora never contaminate gold lemma search — `--gold-only` excludes
 them, and every hit carries its tier label.
 
-## 8s. The Sino axis (`oncoj`, `oncoj-lexicon`, `baxter-sagart`, `tshet-uinh`, `unihan`, `edrdg`, `hdic` + the `ud`/`wiktionary-recon`/`suttacentral` expansions; built 2026-07-19, flips pending)
+## 8s. The Sino axis (`oncoj`, `oncoj-lexicon`, `baxter-sagart`, `tshet-uinh`, `unihan`, `edrdg`, `hdic` + the `ud`/`wiktionary-recon`/`suttacentral` expansions; flipped live in the full rebuild 2026-07-20 — `hdic` alone still held disabled pending the LICENSE-file ruling)
 
 | | |
 |---|---|
@@ -563,7 +566,7 @@ its go-on/kan-on Japanese readings — the axis the bridge shelves exist
 to serve. Kanripo (the 9,355-text Chinese library) and CBETA (the
 Taishō canon) are the planned P33 continuations.
 
-## 8t. The Chinese libraries (`kanripo`, `cbeta`, `tls`; built 2026-07-20, syncs/flips pending)
+## 8t. The Chinese libraries (`kanripo`, `cbeta`, `tls`; flipped live in the full rebuild 2026-07-20 — `lzh` is now the library's largest language at 13.0M passages)
 
 | | |
 |---|---|
