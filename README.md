@@ -25,17 +25,19 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-19** the shelves hold **737,299 documents / 11,357,320
+As of **2026-07-20** the shelves hold **751,300 documents / 24,415,015
 passages** in nearly a hundred language codes — from proto-cuneiform
-tablets of the late 4th millennium BCE to 19th-century Slovenian, with
-the Ancient Near East the newest arrival: the Hittite tablet corpus, the
-CDLI's 353,156-artifact cuneiform catalog, the eBL Fragmentarium,
-Ugaritic, a millennium of Syriac, and the Sumerian literary canon in two
-scholarly editions — plus **711,376 dictionary entries** across
-thirty-nine dictionary shelves and **over 12.4 million gold lemma
-annotations in 22 languages** (a further 8.0 million ride an honestly
-labelled silver tier). (All numbers in this README are read from the
-live catalog, never estimated.)
+tablets of the late 4th millennium BCE to 19th-century Slovenian. The
+newest and largest arrival is the Chinese library: with Kanripo and CBETA
+loaded, **Literary Chinese is now the biggest language in the corpus at
+13.0 million passages** — the Kanseki Repository of classical Chinese and
+the CBETA Buddhist canon, beside the Ancient Near East (the Hittite tablet
+corpus, the CDLI's 353,156-artifact cuneiform catalog, the eBL
+Fragmentarium, a millennium of Syriac, and the Sumerian literary canon).
+Plus **1,168,775 dictionary entries** across fifty-four dictionary shelves
+and **over 12.5 million gold lemma annotations in 23 languages** (a further
+8.0 million ride an honestly labelled silver tier). (All numbers in this
+README are read from the live catalog, never estimated.)
 
 ## Quickstart
 
@@ -285,10 +287,12 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Celtic | CorPH Early Irish (gold-lemmatized: Annals of Ulster, the great gloss corpora), RIIG Gaulish inscriptions (with French siblings), the Ogham in 3D stones (real Ogham codepoints + transliteration layers) | 1,387 / 20,318 | CC BY / MIT (ogham `nc` pending clarification) |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik (`nabu define` / `etym`) | 633,137 entries | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-All 38 registered sources are enabled and synced — 34 upstream sources
-plus four local shelves (the language dossiers and source dossiers live,
-the owner's library shelf holding its first 20 ingested documents, the
-notes shelf awaiting its first annotation). The etymology desk now hears
+Of the **80 registered sources, 78 are enabled and synced** (only
+`hdic`, pending a LICENSE-file ruling, and the `bridging` meta-source are
+held) — the upstream corpora plus four local shelves (the language
+dossiers and source dossiers live, the owner's library shelf holding its
+first 20 ingested documents, the notes shelf awaiting its first
+annotation). The etymology desk now hears
 from three tiers of witnesses: the Wiktionary-derived chains, the
 expert-curated trio synced 2026-07-14 — **IE-CoR** (4,981 cognate sets /
 26,325 reflex rows, 2,308 loan-flagged), **LIV-LOD** (305 PIE verbal
