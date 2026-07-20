@@ -466,4 +466,71 @@ class NormalizeTest < Minitest::Test
     finish = map[index + "krьstitъ".length - 1] + 1
     assert_equal "крьститъ", Nabu::Normalize.nfc(text).chars[start...finish].join
   end
+
+  # -- the Han variant fold (P37-2) ------------------------------------------
+
+  # The §9 contract for lzh: trad/simp/z spellings of one character index as
+  # ONE traditional skeleton — 說 (stored by kanripo/cbeta), 説 (z-variant
+  # glyph in Japanese-transmitted editions), 说 (what a modern typist types).
+  def test_lzh_search_form_folds_variants_to_the_traditional_skeleton
+    assert_equal "不亦說乎", Nabu::Normalize.search_form("不亦說乎", language: "lzh")
+    assert_equal "不亦說乎", Nabu::Normalize.search_form("不亦説乎", language: "lzh")
+    assert_equal "不亦說乎", Nabu::Normalize.search_form("不亦说乎", language: "lzh")
+  end
+
+  # och dictionary headwords (Baxter-Sagart, TLS) fold by the same table, so
+  # a simplified-typed lookup reaches the traditional headword's entry.
+  def test_och_headwords_fold_like_lzh
+    assert_equal "說", Nabu::Normalize.search_form("说", language: "och")
+    assert_equal "馬", Nabu::Normalize.search_form("马", language: "och")
+  end
+
+  # The union invariant extends to the Han fold: a query spelled in ANY of
+  # the variant forms covers the indexed lzh/och skeleton.
+  def test_query_forms_covers_the_han_variant_spellings
+    %w[不亦說乎 不亦説乎 不亦说乎].each do |query|
+      variants = Nabu::Normalize.query_forms(query)
+      %w[lzh och].each do |language|
+        assert_includes variants, form(query, language),
+                        "query_forms(#{query.inspect}) must cover the #{language} document form"
+      end
+    end
+  end
+
+  # Refusals hold at the fold boundary: self-listing characters are their own
+  # traditional words (时/了/台), and semantic variants never fold (㐀/丘) —
+  # the conservative line, censused on Nabu::Ops::HaniFoldBuilder.
+  def test_lzh_search_form_leaves_refused_characters_alone
+    assert_equal "时了台㐀丘", Nabu::Normalize.search_form("时了台㐀丘", language: "lzh")
+  end
+
+  # Other languages are byte-unchanged: the fold is keyed lzh/och only.
+  # Japanese keeps its shinjitai (値段 stays; 呉 would fold under lzh), and
+  # the unihan shelf's zho headwords stay literal on both spellings.
+  def test_han_fold_leaves_other_languages_untouched
+    # (mark-free text: the GENERIC fold already strips kana dakuten as \p{Mn},
+    # pre-P37-2 behavior — the pin here is about Han codepoints only)
+    assert_equal "値段の学問", Nabu::Normalize.search_form("値段の学問", language: "ja")
+    assert_equal "说文解字", Nabu::Normalize.search_form("说文解字", language: "zho")
+    assert_equal "呉音", Nabu::Normalize.search_form("呉音", language: "jpn")
+    assert_equal "μηνισ", Nabu::Normalize.search_form("μῆνις", language: "grc")
+  end
+
+  # fold_with_map equality extends to the Han fold (per-codepoint 1→1), and
+  # a skeleton match points back at the pristine variant-glyph span.
+  def test_fold_with_map_equality_extends_to_lzh
+    %w[不亦説乎 子曰學而時習之 说文解字注].each do |text|
+      folded, map = Nabu::Normalize.fold_with_map(text, language: "lzh")
+      assert_equal Nabu::Normalize.search_form(text, language: "lzh"), folded
+      assert_equal folded.length, map.length
+    end
+  end
+
+  def test_fold_with_map_maps_a_han_skeleton_match_back_to_the_pristine_span
+    text = "不亦説乎"
+    folded, map = Nabu::Normalize.fold_with_map(text, language: "lzh")
+    index = folded.index("說")
+    refute_nil index
+    assert_equal "説", Nabu::Normalize.nfc(text).chars[map[index]]
+  end
 end
