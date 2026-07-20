@@ -60,9 +60,11 @@ module Nabu
       # --province/--material); +source+ (P22-1) scopes to one source slug.
       # +urn+ restricts the match to one passage — a ranking-independent
       # "is this passage findable by this query" probe (the health golden
-      # replay), not a pagination knob.
+      # replay), not a pagination knob. +loans+ (P34-2) keeps only passages
+      # whose stored annotations carry ≥1 loan token of that origin code
+      # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil)
+              facets: nil, source: nil, loans: nil)
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
@@ -72,7 +74,8 @@ module Nabu
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
         rows = catalog_rows(ordered_ids, lang: lang, license: license,
-                                         from: from, to: to, place: place, facets: facets, source: source)
+                                         from: from, to: to, place: place, facets: facets, source: source,
+                                         loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
 
         # Reassemble in FTS rank order (the catalog query returns no order),

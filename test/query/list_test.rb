@@ -539,5 +539,77 @@ module Query
       assert_equal([["Greek & Latin", %w[anthology]], ["Slavic", %w[ccmh]], ["Other", %w[local-library]]],
                    list.source_groups.map { |group, lines| [group, lines.map(&:slug)] })
     end
+
+    # -- the loans facet on list (P34-2): census + per-code enumeration ------
+
+    # A passage carrying the P17-1 loans annotation shape, written with the
+    # loader's own serializer, so list reads the stored contract.
+    def make_loan_passage(document, urn:, sequence:, loans:, withdrawn: false)
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: urn, sequence: sequence, language: "cop",
+        text: "text #{sequence}", text_normalized: "text #{sequence}",
+        annotations_json: Nabu::Store::ContentHash.canonical_json(
+          { "tokens" => [], "loans" => loans }
+        ),
+        content_sha256: "x", revision: 1, withdrawn: withdrawn
+      )
+    end
+
+    def seed_loans_shelf
+      cs = make_source(slug: "cs", name: "Coptic", license_class: "open")
+      a = make_document(source: cs, urn: "urn:cs:a", language: "cop", title: "Mark")
+      b = make_document(source: cs, urn: "urn:cs:b", language: "cop", title: "Besa")
+      make_loan_passage(a, urn: "urn:cs:a:1", sequence: 0, loans: { "grc" => 2, "hbo" => 1 })
+      make_loan_passage(a, urn: "urn:cs:a:2", sequence: 1, loans: { "grc" => 1 })
+      make_loan_passage(b, urn: "urn:cs:b:1", sequence: 0, loans: { "grc" => 3 })
+      make_passage(b, urn: "urn:cs:b:2", sequence: 1, language: "cop") # loan-free
+      cs
+    end
+
+    def test_loans_census_tallies_codes_docs_passages_and_tokens
+      seed_loans_shelf
+      rows = list.loans_census("cs")
+      assert_equal [["grc", 2, 3, 6], ["hbo", 1, 1, 1]],
+                   rows.map { |r| [r.code, r.docs, r.passages, r.tokens] },
+                   "token-count order: grc 2 docs / 3 passages / 6 tokens, then hbo"
+    end
+
+    def test_loans_census_excludes_withdrawn_rows
+      cs = seed_loans_shelf
+      gone = make_document(source: cs, urn: "urn:cs:w", language: "cop", withdrawn: true)
+      make_loan_passage(gone, urn: "urn:cs:w:1", sequence: 0, loans: { "grc" => 9 })
+      c = make_document(source: cs, urn: "urn:cs:c", language: "cop")
+      make_loan_passage(c, urn: "urn:cs:c:1", sequence: 0, loans: { "grc" => 9 }, withdrawn: true)
+      rows = list.loans_census("cs")
+      assert_equal [["grc", 2, 3, 6], ["hbo", 1, 1, 1]],
+                   rows.map { |r| [r.code, r.docs, r.passages, r.tokens] },
+                   "withdrawn documents and passages contribute nothing"
+    end
+
+    def test_loans_census_is_empty_for_a_loanless_source
+      seed_ccmh
+      assert_empty list.loans_census("ccmh")
+    end
+
+    def test_loans_census_unknown_source_raises
+      assert_raises(Nabu::Query::List::Error) { list.loans_census("nope") }
+    end
+
+    def test_loan_documents_ranks_documents_by_token_count
+      seed_loans_shelf
+      page = list.loan_documents("cs", code: "grc")
+      assert_equal 2, page.total
+      assert_equal [["urn:cs:a", "Mark", "cop", 3, 2], ["urn:cs:b", "Besa", "cop", 3, 1]],
+                   page.rows.map { |r| [r.urn, r.title, r.language, r.tokens, r.passages] },
+                   "token-count desc, urn as the tiebreak"
+    end
+
+    def test_loan_documents_matches_the_code_case_insensitively_and_honors_limit
+      seed_loans_shelf
+      page = list.loan_documents("cs", code: "GRC", limit: 1)
+      assert_equal 2, page.total, "the total stays honest past the page"
+      assert_equal %w[urn:cs:a], page.rows.map(&:urn)
+      assert_empty list.loan_documents("cs", code: "xyz").rows, "an unattested code is an honest miss"
+    end
   end
 end
