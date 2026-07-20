@@ -108,7 +108,7 @@ module Nabu
       # the max folded tokens between the two terms (see class note). +lang+ /
       # +license+ / +source+ filter catalog-side exactly as in Search.
       def run(near:, query: nil, lemma: nil, window: DEFAULT_WINDOW, lang: nil, license: nil, limit: 20,
-              source: nil, loans: nil)
+              source: nil, sources: nil, loans: nil)
         unless [query, lemma].compact.one?
           raise ArgumentError, "give exactly one of query or lemma as the proximity anchor"
         end
@@ -123,7 +123,7 @@ module Nabu
         inner_limit = limit * Search::INNER_LIMIT_FACTOR
         hits = fts_hits(match, inner_limit: inner_limit)
         results = assemble(hits, lang: lang, license: license, limit: limit, inner_limit: inner_limit,
-                                 source: source, loans: loans)
+                                 source: source, sources: sources, loans: loans)
         announce_expansion_clip
         results
       end
@@ -209,17 +209,18 @@ module Nabu
       # Reassemble in FTS rank order after the catalog join drops filtered rows,
       # then trim to the page — the Search#run tail verbatim (including the
       # exhausted-inner-window completeness note).
-      def assemble(hits, lang:, license:, limit:, inner_limit:, source: nil, loans: nil)
+      def assemble(hits, lang:, license:, limit:, inner_limit:, source: nil, sources: nil, loans: nil)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
-        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, loans: loans)
+        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, sources: sources,
+                                         loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
         page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, source, loans].compact.any?,
+          filters_active: [lang, license, source, loans].compact.any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
         page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }

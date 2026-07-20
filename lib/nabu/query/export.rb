@@ -36,10 +36,13 @@ module Nabu
 
       # Return an Enumerator of serialized lines (Strings, no trailing newline).
       # +format+ is "plain" or "jsonl"; +lang+/+license+/+source+ (P22-1,
-      # one source slug) are optional filters.
-      def run(format:, lang: nil, license: nil, source: nil)
+      # one source slug) are optional filters. +sources+ (P37-8, `--axis`) is the
+      # multi-source generalization of +source+: an axis expands to its member
+      # slugs and the stream is scoped to `slug IN (...)`, AND-composing with
+      # +source+; an empty list is no filter.
+      def run(format:, lang: nil, license: nil, source: nil, sources: nil)
         serialize = serializer(format)
-        dataset = export_dataset(lang: lang, license: license, source: source)
+        dataset = export_dataset(lang: lang, license: license, source: source, sources: sources)
         Enumerator.new do |yielder|
           dataset.each { |row| yielder << serialize.call(row) }
         end
@@ -91,13 +94,14 @@ module Nabu
       # Live passages (passage and its document both non-withdrawn), optionally
       # filtered by language and effective license class, in stable primary-key
       # order (index-backed, so the stream never buffers a sort).
-      def export_dataset(lang:, license:, source: nil)
+      def export_dataset(lang:, license:, source: nil, sources: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:sources][:slug] => source) if source
+        dataset = dataset.where(Sequel[:sources][:slug] => sources) if sources && !sources.empty?
         dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset.select(*columns).order(Sequel[:passages][:id])

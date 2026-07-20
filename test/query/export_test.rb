@@ -129,6 +129,24 @@ module Query
       assert_empty export(format: "plain", source: "nc", lang: "lat").to_a, "filters compose"
     end
 
+    # --axis (P37-8): the membership filter is the multi-source generalization
+    # of --source — an axis expands to its member slugs and the stream is
+    # scoped to `slug IN (...)`. An empty list is no filter; it AND-composes
+    # with the single --source and every other filter.
+    def test_sources_membership_filter_scopes_the_stream
+      open_doc = make_document(source: @open, urn: "urn:d:open")
+      make_passage(open_doc, urn: "urn:d:open:1", text: "libertas", sequence: 0)
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "vinculum", sequence: 0)
+
+      assert_equal %w[libertas vinculum].sort, export(format: "plain", sources: %w[open nc]).to_a.sort
+      assert_equal ["vinculum"], export(format: "plain", sources: %w[nc]).to_a
+      assert_equal %w[libertas vinculum].sort, export(format: "plain", sources: []).to_a.sort,
+                   "an empty membership list is no filter"
+      assert_empty export(format: "plain", sources: %w[nc], source: "open").to_a,
+                   "the axis filter AND-composes with the single --source"
+    end
+
     def test_withdrawn_passage_and_document_are_excluded
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "kept", sequence: 0)
