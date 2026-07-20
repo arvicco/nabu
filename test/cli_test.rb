@@ -169,8 +169,9 @@ class CLITest < Minitest::Test
   end
 
   # -- P14-11: --long expands the truncated reflex/cognate lists ------------
-  # The ONE truncation in the define/etym renderers is print_reflexes' "other
-  # reflexes (not attested here)" cap (first 10 inline + "… and N more"). The
+  # The truncations in the define/etym renderers are print_reflexes' "other
+  # reflexes (not attested here)" cap (first 10 inline + "… and N more") and
+  # print_resolved_citations' cap (P34-4, tested with the TLS shelf below). The
   # *zima fixture entry names 26 non-attested reflexes, so the cap fires by
   # default and --long must expand every one, grouped by language. The
   # attested list is already unbounded, so it needs no flag.
@@ -228,6 +229,49 @@ class CLITest < Minitest::Test
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
       assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "grouped headers name the code inline (P18-4)")
       refute_match(/ and \d+ more$/, out)
+    end
+  end
+
+  # -- P34-4: TLS attestation citations on the define render ------------------
+  # The fixture 棄 carries 7 attestation citations; with 論語 held (page
+  # 005:22a as a passage) and 孟子 held document-only, 5 resolve — one at
+  # page grain, four at document grain (the Define fallback) — and the two
+  # CH-text rows stay honestly unresolved (absent from the resolved list).
+
+  def test_define_resolves_tls_attestations_at_page_and_document_grain
+    with_tls_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      assert_match(/resolved citations \(in this corpus — nabu show <urn>\):/, out)
+      assert_match(/論語 005-22a\.4 「棄而違之。」 · sense uuid-5e2b1efe.* → urn:nabu:kanripo:KR1h0004:005:22a/,
+                   out, "the page probe hits the held 論語 passage")
+      assert_match(/孟子 001-6a\.7 「棄甲曳兵而走。」 · sense uuid-8f745d61.* → urn:nabu:kanripo:KR1h0001$/,
+                   out, "孟子 is held document-only — the fallback resolves to the text")
+      refute_match(/說苑.*→/, out, "the CH-text attestations resolve to nothing — never invented")
+    end
+  end
+
+  def test_define_resolved_citations_are_capped_by_default_and_long_expands
+    with_tls_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      qi = db[:dictionary_entries].where(entry_id: "uuid-fbba1aa8-49bc-49be-ba1a-a849bc59bed5").first
+      10.times do |n|
+        db[:dictionary_citations].insert(
+          dictionary_entry_id: qi[:id], seq: 100 + n, urn_raw: "(seeded)",
+          cts_work: "urn:nabu:kanripo:KR1h0004", citation: nil, label: format("extra-%02d", n + 1)
+        )
+      end
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      assert_match(/… and 3 more \(--long shows all\)/, out, "15 resolved, 12 shown")
+      refute_match(/extra-10/, out, "the tail is summarised, not listed")
+
+      long_out, _err2, long_status = with_config(config) { run_cli(%w[define 棄 --long]) }
+      assert_nil long_status
+      assert_match(/extra-10/, long_out, "--long expands every resolved citation")
+      refute_match(/more \(--long shows all\)/, long_out)
     end
   end
 
@@ -4522,6 +4566,47 @@ class CLITest < Minitest::Test
   # (the query-layer fixtures) for the define/etym --long surface. No fulltext
   # db is built, so every reflex counts as "not attested here" — exactly the
   # list the P14-11 flag expands. The caller stubs Config.load with the config.
+  # P34-4: the TLS shelf loaded from fixtures (notes/ attestations included)
+  # plus a seeded kanripo side — 論語 with its 005:22a PAGE as a held
+  # passage, 孟子 as a document only — so `define 棄` exercises every
+  # resolution grain: page hit, document-grain fallback, and the honest
+  # unresolved CH-text rows.
+  def with_tls_shelf
+    Dir.mktmpdir("nabu-cli-tls") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "tls", name: "TLS", adapter_class: "Nabu::Adapters::Tls", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::Tls.new, workdir: Nabu::TestSupport.fixtures("tls"))
+      kanripo = Nabu::Store::Source.create(
+        slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",
+        license_class: "attribution"
+      )
+      lunyu = Nabu::Store::Document.create(
+        source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0004", title: "論語", language: "lzh",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      Nabu::Store::Passage.create(
+        document_id: lunyu.id, urn: "urn:nabu:kanripo:KR1h0004:005:22a", sequence: 0,
+        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha256: "x", revision: 1
+      )
+      Nabu::Store::Document.create(
+        source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0001", title: "孟子", language: "lzh",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      db.disconnect
+      yield config
+    end
+  end
+
   def with_recon_shelf
     Dir.mktmpdir("nabu-cli-recon") do |root|
       config = Nabu::Config.new(

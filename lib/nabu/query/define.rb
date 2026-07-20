@@ -203,7 +203,16 @@ module Nabu
         existing = @catalog[:passages]
                    .where(urn: candidates, withdrawn: false)
                    .select_map(:urn).to_set
-        candidates.find { |urn| existing.include?(urn) }
+        found = candidates.find { |urn| existing.include?(urn) }
+        return found if found
+
+        # P34-4: a HELD document-urn work whose page probe missed still
+        # resolves — to the document. TLS cites kanripo texts by
+        # (juan, page) whose pagination only sometimes matches the held
+        # edition's anchors; the text-grain claim stays honest when the
+        # page does not. CTS works keep the old nil (an abstract work,
+        # not a show-able doc).
+        document_urn?(work) ? edition_urns.first : nil
       end
 
       # A cts_work that IS an in-catalog document urn (urn:nabu:… — the MW

@@ -247,6 +247,47 @@ class GitFetchTest < Minitest::Test
     refute File.exist?(File.join(@dir, "root.txt"))
   end
 
+  # A source may GROW its cone across releases (P34-4: tls added notes/doc +
+  # notes/swl for the attestation crosswalk). A re-sync with a wider cone
+  # must materialize the new paths on an EXISTING checkout — and never
+  # narrow: a path in the local cone but not in the declared one (an
+  # owner-widened checkout) stays put, because hiding materialized canonical
+  # files is the destructive-fetch sin.
+  def test_pull_widens_a_grown_sparse_cone
+    make_repo("keep/data.txt" => "in cone\n", "notes/ann.xml" => "attestations\n",
+              "papers/big.pdf" => "outside\n")
+    sync!(sparse: ["keep"])
+    refute File.exist?(File.join(@dir, "notes", "ann.xml")), "not in the original cone"
+
+    sync!(sparse: %w[keep notes])
+
+    assert File.file?(File.join(@dir, "keep", "data.txt"))
+    assert File.file?(File.join(@dir, "notes", "ann.xml")), "the widened cone materializes"
+    refute File.exist?(File.join(@dir, "papers", "big.pdf")), "still sparse outside the cone"
+  end
+
+  def test_pull_never_narrows_a_locally_wider_cone
+    make_repo("keep/data.txt" => "in cone\n", "extra/local.txt" => "owner-widened\n")
+    sync!(sparse: %w[keep extra])
+
+    sync!(sparse: ["keep"])
+
+    assert File.file?(File.join(@dir, "extra", "local.txt")),
+           "a locally wider cone is kept — widening is union, never replacement"
+  end
+
+  def test_pull_of_a_full_checkout_never_sparsifies_it
+    make_repo("keep/data.txt" => "v1\n", "papers/big.pdf" => "everything\n")
+    sync! # full clone, no cone
+    commit_upstream("keep/data.txt" => "v2\n")
+
+    sync!(sparse: ["keep"])
+
+    assert File.file?(File.join(@dir, "papers", "big.pdf")),
+           "a full checkout already holds everything — sparsifying would hide canonical files"
+    assert_equal "v2\n", File.read(File.join(@dir, "keep", "data.txt"))
+  end
+
   private
 
   def sync!(guard: nil, progress: nil, ref: nil, sparse: nil)
