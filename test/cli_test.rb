@@ -1361,6 +1361,106 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- sync <axis> / --axis (P35-2): axis expansion as pure per-source fan-out -
+
+  # Bare `sync <axis>` expands to the axis's ENABLED members (registration
+  # order), syncs each through the ordinary per-source path, and reports the
+  # disabled members by name on ONE skip line — never silently. `blue` is a
+  # member of `alpha` but disabled, so it is skipped, not synced.
+  def test_sync_bare_axis_expands_enabled_members_and_skips_disabled
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync alpha --parse-only]) }
+      assert_nil status
+      assert_match(/^axis alpha — The Alphaist/, out, "the axis header names the hat, persona verbatim")
+      assert_match(/^red\s+parse-only\s+\+2 added/, out, "enabled member red synced")
+      assert_match(/^green\s+parse-only\s+\+2 added/, out, "enabled member green synced")
+      assert_match(/^skipped \(disabled\): blue$/, out, "disabled member named on one skip line")
+      refute_match(/^blue\s+parse-only/, out, "a disabled axis member is never synced")
+      refute_match(/^gold\s+parse-only/, out, "a member of another axis is not pulled in")
+    end
+  end
+
+  # Slug-first resolution: a name that IS a source slug takes the explicit
+  # per-source path (no axis header), unchanged — the axis machinery only
+  # engages when the name is NOT a slug (the collision-free guarantee makes
+  # this unambiguous).
+  def test_sync_resolves_exact_slug_before_axis
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync red --parse-only]) }
+      assert_nil status
+      assert_match(/^red\s+parse-only\s+\+2 added/, out)
+      refute_match(/^axis /, out, "an exact slug is the explicit-request path, never axis-grouped")
+      refute_match(/^green\s+parse-only/, out, "slug resolution syncs only that source")
+    end
+  end
+
+  # The frozen contract: the per-source report line under an axis group is
+  # BYTE-identical to the line a direct `sync <slug>` prints — grouping is
+  # pure fan-out onto the existing per-source path.
+  def test_sync_axis_per_source_line_is_byte_identical_to_direct_sync
+    # Two independent envs (fresh db each) so both syncs load from scratch —
+    # the comparison is the LINE FORMAT, not load-order idempotency.
+    direct_line = with_axis_sync_env do |config|
+      out, = with_config(config) { run_cli(%w[sync red --parse-only]) }
+      out.lines.find { |l| l.start_with?("red ") }
+    end
+    grouped_line = with_axis_sync_env do |config|
+      out, = with_config(config) { run_cli(%w[sync alpha --parse-only]) }
+      out.lines.find { |l| l.start_with?("red ") }
+    end
+    refute_nil direct_line
+    assert_equal direct_line, grouped_line, "the per-source line must be byte-unchanged by grouping"
+  end
+
+  # `--axis a,b` selects multiple axes and prints one group per axis, in the
+  # order given, each expanding independently.
+  def test_sync_multi_axis_selects_and_groups
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync --axis alpha,beta --parse-only]) }
+      assert_nil status
+      alpha_at = out.index("axis alpha —")
+      beta_at = out.index("axis beta —")
+      refute_nil alpha_at
+      refute_nil beta_at
+      assert alpha_at < beta_at, "groups print in the requested order"
+      assert_match(/^gold\s+parse-only\s+\+2 added/, out, "beta's member gold synced under its group")
+      assert(out.index("gold ") > beta_at, "gold is grouped under beta, not alpha")
+    end
+  end
+
+  # `sync --all` output stays FLAT: enabled+live sources, no axis headers.
+  def test_sync_all_output_stays_flat_with_axes_registered
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync --all --parse-only]) }
+      assert_nil status
+      refute_match(/^axis /, out, "--all is a flat batch, never axis-grouped")
+      assert_match(/red\s+parse-only/, out)
+      assert_match(/gold\s+parse-only/, out)
+    end
+  end
+
+  # An unknown name is neither slug nor axis: the error names BOTH namespaces
+  # so the user sees the axes too.
+  def test_sync_unknown_name_error_names_axes
+    with_axis_sync_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync nope --parse-only]) }
+      assert_equal 1, status
+      assert_match(/unknown source/i, err)
+      assert_match(/axes/i, err, "the error grows to name the axis namespace too")
+      assert_match(/alpha/, err, "and lists the known axes")
+    end
+  end
+
+  # `--axis` with an unknown axis name errors, naming the known axes.
+  def test_sync_axis_flag_unknown_axis_errors
+    with_axis_sync_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync --axis nope --parse-only]) }
+      assert_equal 1, status
+      assert_match(/unknown axis/i, err)
+      assert_match(/alpha/, err)
+    end
+  end
+
   # -- sync --review (P18-7): the optional post-sync hook --------------------
 
   # The hook gets the JSON brief on stdin (tool-agnostic stub: a shell
@@ -5049,6 +5149,47 @@ class CLITest < Minitest::Test
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  # An axis env (P35-2): a real axes.yml beside a sources.yml whose rows carry
+  # `axes:` membership, so SourceRegistry.load builds the AxisRegistry and the
+  # `sync <axis>` / `--axis` resolution has something to resolve against. Two
+  # axes (alpha, beta); alpha holds red+green (enabled) and blue (DISABLED, to
+  # exercise the skip line); beta holds gold. Every source live+enabled-or-not
+  # with its own distinct canonical files (TestAdapter mints urns from
+  # filenames — no cross-source urn collisions). The caller stubs Config.load.
+  def with_axis_sync_env
+    Dir.mktmpdir("nabu-cli-axis") do |root|
+      rows = {
+        "red" => { axes: %w[alpha], enabled: true },
+        "green" => { axes: %w[alpha], enabled: true },
+        "blue" => { axes: %w[alpha], enabled: false },
+        "gold" => { axes: %w[beta], enabled: true }
+      }
+      sources = +""
+      rows.each do |slug, spec|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+        File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        sources << "#{slug}:\n  adapter: TestAdapter\n  enabled: #{spec[:enabled]}\n  " \
+                   "sync_policy: live\n  axes: [#{spec[:axes].join(', ')}]\n"
+      end
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        alpha:
+          persona: "The Alphaist — first letters, read whole."
+          desc: "The alpha lane."
+        beta:
+          persona: "The Betaist — second letters, read whole."
+          desc: "The beta lane."
+      YAML
+      path = File.join(root, "sources.yml")
+      File.write(path, sources)
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: path, config_path: "(test)"
       )
     end
   end

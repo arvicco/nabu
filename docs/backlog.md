@@ -10384,7 +10384,7 @@ axes, tag semantics stated once); `--axis slavic` one axis;
 Acceptance: house cli_test patterns; persona line renders; `--all`
 surfaces unchanged.
 
-## P35-2 · `nabu sync --axis` / bare-axis expansion  [tier: opus] [status: dispatched 2026-07-20] [deps: P35-0]
+## P35-2 · `nabu sync --axis` / bare-axis expansion  [tier: opus] [status: done] [deps: P35-0]
 Goal: `sync celtic` resolves exact-slug-first-then-axis; expands to
 the axis's ENABLED members; disabled members reported by name as
 skipped (one line, never silent); `sync --axis a,b` selects+groups;
