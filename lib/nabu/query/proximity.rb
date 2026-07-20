@@ -84,7 +84,11 @@ module Nabu
       # distinct folded forms), so this cap is never reached in practice for the
       # attested languages — it only guards FTS5's expression-tree limits
       # against a pathological lemma. Deterministic slice (surface_forms come
-      # back index-ordered), so results stay stable.
+      # back index-ordered), so results stay stable — and the clip is
+      # ANNOUNCED (P35-6): reaching the cap sets incomplete_hint so a clipped
+      # expansion never poses as the whole paradigm.
+      # census: 5505159, 2026-07-20, live passages; P14-8 measured λέγω→140
+      # folded forms at 3.76M (fulltext mid-reindex at re-measure — re-diff at gate)
       MAX_LEMMA_FORMS = 400
 
       def initialize(catalog:, fulltext:)
@@ -105,6 +109,7 @@ module Nabu
         end
 
         @incomplete_hint = nil
+        @expansion_clipped = false
         near_variants = folded_variants(near)
         anchor = lemma ? lemma_surface_forms(lemma) : folded_variants(query)
         return [] if near_variants.empty? || anchor.empty?
@@ -112,8 +117,10 @@ module Nabu
         match = near_match(anchor, near_variants, window.to_i)
         inner_limit = limit * Search::INNER_LIMIT_FACTOR
         hits = fts_hits(match, inner_limit: inner_limit)
-        assemble(hits, lang: lang, license: license, limit: limit, inner_limit: inner_limit,
-                       source: source, loans: loans)
+        results = assemble(hits, lang: lang, license: license, limit: limit, inner_limit: inner_limit,
+                                 source: source, loans: loans)
+        announce_expansion_clip
+        results
       end
 
       private
@@ -152,7 +159,20 @@ module Nabu
           language = row.fetch(:language)
           row.fetch(:surface_forms).split(", ").map { |form| Nabu::Normalize.search_form(form, language: language) }
         end
-        forms.reject(&:empty?).uniq.first(MAX_LEMMA_FORMS)
+        distinct = forms.reject(&:empty?).uniq
+        @expansion_clipped = distinct.size > MAX_LEMMA_FORMS
+        distinct.first(MAX_LEMMA_FORMS)
+      end
+
+      # L5 (P35-6): a clipped lemma expansion must never pose as the whole
+      # paradigm — the clip rides the same announcement channel the
+      # inner-window hint uses (CLI 'note:' line, MCP note field).
+      def announce_expansion_clip
+        return unless @expansion_clipped
+
+        clip = "lemma expansion clipped at #{MAX_LEMMA_FORMS} surface forms — " \
+               "rare inflections may be missed"
+        @incomplete_hint = [@incomplete_hint, clip].compact.join("; ")
       end
 
       # OR of NEAR clauses over the cartesian product of the two sides' folded

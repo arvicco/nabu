@@ -75,19 +75,30 @@ module Nabu
       LICENSE_CLASSES = Nabu::Model::Validation::LICENSE_CLASSES
 
       # Never served unless include_restricted: true names them explicitly.
+      # const: the license model's private classes (Model::Validation) — code,
+      # not corpus
       EXCLUDED_LICENSE_CLASSES = %w[research_private restricted].freeze
 
+      # The MCP response caps (H5/H6): era-bound to MODEL-CONTEXT norms, not
+      # to the corpus — a bounded surface serving a model's context window,
+      # every truncation carrying an honest note, the CLI unbounded. Re-affirm
+      # when the era's context norms shift, not when the corpus grows.
+      # census: 200000, 2026-07-20, tokens — the era's typical model context; caps re-affirmed
       SEARCH_DEFAULT_LIMIT = 10
       SEARCH_MAX_LIMIT = 50
       SEARCH_DEFAULT_WINDOW = Query::Proximity::DEFAULT_WINDOW
       # A generous proximity ceiling: beyond this the NEAR window spans most
       # passages and stops meaning "near". Clamps the arg, honest note.
+      # census: 33, 2026-07-20, papyri-ddbdp mean passage length in chars (lit
+      # passages run longer) — 50 tokens still spans most passages
       SEARCH_MAX_WINDOW = 50
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
       CONCORD_DEFAULT_LIMIT = 10
       CONCORD_MAX_LIMIT = 50
       CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       CONCORD_MAX_WIDTH = 120
       PARALLELS_DEFAULT_LIMIT = 10
       PARALLELS_MAX_LIMIT = 50
@@ -95,15 +106,18 @@ module Nabu
       LINKS_MAX_LIMIT = 100
       # Per-hit evidence spans carried in the payload (this surface is bounded;
       # a hit sharing more spans notes the truncation, the CLI is unbounded).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       PARALLELS_EVIDENCE_CAP = 12
       DEFINE_DEFAULT_LIMIT = 3
       DEFINE_MAX_LIMIT = 10
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
       # The reconstruction walk (P14-1): proto entries per query, and the
       # cognate cap per entry (attested first — gem-pro trees run to ~150
       # reflexes; the CLI is the unbounded surface).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       ETYM_DEFAULT_LIMIT = 3
       ETYM_MAX_LIMIT = 10
       ETYM_MAX_COGNATES = 20
@@ -115,10 +129,12 @@ module Nabu
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
       # Cognates-in-parallel (P15-3): (verse, root) groups per response — a
       # whole-work batch can hold thousands; this surface stays bounded.
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       COGNATES_DEFAULT_LIMIT = 10
       COGNATES_MAX_LIMIT = 50
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
+      # const: a retry-grace choice, not a corpus claim
       BUSY_ATTEMPTS = 3
 
       NO_CORPUS_NOTE = "no corpus here yet — run `nabu sync <source>` or `nabu rebuild` " \

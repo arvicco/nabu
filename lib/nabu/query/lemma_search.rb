@@ -55,7 +55,9 @@ module Nabu
 
       # Pull more index hits than the caller's limit so that catalog-side
       # filtering (language/license/withdrawn) can drop rows and still fill
-      # the page (same factor as Search).
+      # the page (same factor as Search). Exhaustion is ANNOUNCED (P35-6)
+      # via incomplete_hint, as in Search.
+      # census: 5505159, 2026-07-20, live passages at re-measure (3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)

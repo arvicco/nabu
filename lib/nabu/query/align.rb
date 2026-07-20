@@ -88,6 +88,7 @@ module Nabu
       # Rendered-ref cap for a range/chapter query — an honest ceiling on one
       # screenful, mirroring nabu_define's body cap. Beyond it the result is
       # truncated with a note (narrow the range).
+      # const: render ceiling, truncation announced — a UX bound, not a corpus claim
       MAX_REFS = 200
 
       # The range separator in a citation-range query. As in Query::Range, the

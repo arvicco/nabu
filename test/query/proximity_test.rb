@@ -216,6 +216,25 @@ module Query
       rebuild!
     end
 
+    # L5 (P35-6): the MAX_LEMMA_FORMS guard used to clip silently — a
+    # pathological lemma's expansion lost rare inflections with no trace.
+    # The clip now rides the same announcement channel.
+    def test_lemma_expansion_clip_is_announced
+      cap = Nabu::Query::Proximity::MAX_LEMMA_FORMS
+      doc = make_document(urn: "urn:d:grc")
+      pairs = (0..cap).map { |i| ["λέγω", "form#{i}"] }
+      make_passage(doc, urn: "urn:d:grc:1", text: "λέγει ὁ θεός", sequence: 0, lemmas: pairs)
+      rebuild!
+
+      query = Nabu::Query::Proximity.new(catalog: @catalog, fulltext: @fulltext)
+      query.run(lemma: "λέγω", near: "θεός", limit: 5)
+      assert_match(/lemma expansion clipped at #{cap} surface forms/, query.incomplete_hint.to_s,
+                   "a clipped expansion must never pose as the whole paradigm")
+
+      query.run(query: "λέγει", near: "θεός", limit: 5)
+      assert_nil query.incomplete_hint, "a text anchor never clips — and the flag resets per run"
+    end
+
     def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
       seed_window_exhausting_pairs
 

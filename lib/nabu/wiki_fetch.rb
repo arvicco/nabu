@@ -67,10 +67,12 @@ module Nabu
 
     # api.php limits: 500 category members per list request (the anonymous
     # cap), 50 titles per revisions-content request.
+    # const: MediaWiki api.php anonymous caps (upstream spec)
     MEMBER_LIMIT = 500
     CONTENT_BATCH = 50
 
     # Seconds between HTTP requests (sequential, polite).
+    # const: API politeness pause, not a corpus claim
     DELAY = 1.0
 
     USER_AGENT = "nabu/#{Nabu::VERSION} (personal research corpus; " \

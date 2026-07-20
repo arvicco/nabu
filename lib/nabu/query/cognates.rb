@@ -85,17 +85,24 @@ module Nabu
 
       # Rendered-group ceiling for the compact default (house rule, as
       # align's MAX_REFS): --long lifts it.
+      # const: compact-render ceiling, announced via truncated: and lifted by
+      # --long — a UX bound, not a corpus claim
       MAX_GROUPS = 200
 
       # Common-word suppression: df ≥ max(STOP_MIN_DF, STOP_RATIO × the
       # language's gold passages). The ratio is calibrated on the live corpus
       # (function words 36–72%, wanted cognates ≤ 8.4%); the absolute floor
       # keeps tiny gold corpora (uga: 125 passages) from judging everything
-      # common.
+      # common. The ratio is corpus-RELATIVE by design; the absolute floor
+      # binds only tiny gold corpora and LOOSENS (not tightens) as they grow.
+      # census: 5505159, 2026-07-20, live passages; per-language gold counts
+      # not re-probed (fulltext mid-reindex at re-measure) — P15-3 calibration
+      # stands, re-diff at gate
       STOP_RATIO = 0.10
       STOP_MIN_DF = 50
 
       # passage-urn IN() batching (SQLite bound-parameter comfort).
+      # const: SQLite bound-parameter comfort, not a corpus claim
       URN_BATCH = 500
 
       include CatalogJoin

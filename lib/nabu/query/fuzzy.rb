@@ -63,6 +63,7 @@ module Nabu
       # passage for anyone rendering the edition instead.
       Result = Data.define(:urn, :language, :text, :snippet, :folded_marked, :document_title, :license_class)
 
+      # const: the trigram floor — a 3-gram index cannot see shorter fragments
       MIN_QUERY_CHARS = 3
       # Editorial marks stripped from the QUERY before folding (class note):
       # square brackets (lacuna edges as typed off a papyrus edition) and the
@@ -70,11 +71,14 @@ module Nabu
       EDITORIAL_MARKS = /[\[\]]/
       # Folded-snippet context window, chars per side (DDbDP passages average
       # 34 chars — most render whole).
+      # census: 33, 2026-07-20, papyri-ddbdp mean passage length (chars) — claim holds
       SNIPPET_CONTEXT = 40
 
       # Same candidate over-fetch as Search: catalog-side filters (language/
       # license/date) and the verify phase both drop rows; fetch enough
-      # candidates to still fill the page.
+      # candidates to still fill the page. Exhaustion is ANNOUNCED (P35-6)
+      # via incomplete_hint, as in Search.
+      # census: 5505159, 2026-07-20, live passages at re-measure (3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)
