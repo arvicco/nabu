@@ -200,6 +200,19 @@ class TlsTest < Minitest::Test
                  "論語 attestations in sense doc order, page-sorted within a sense"
   end
 
+  # P34-r1 (owner sync 2026-07-20): the real notes files carry duplicated
+  # xml:ids (the fixture embeds CH1a0907's verbatim doubled ann-less seg
+  # pair) — libxml2 registers xml:id as an ID type and its validity errors
+  # were spewing "ID ... already defined" to the terminal's stderr on every
+  # sync. The parse must stay SILENT on this censused upstream quirk (and
+  # still dedupe at the (sense, seg) grain — the doubled seg is ann-less, so
+  # citation counts are untouched).
+  def test_duplicate_xml_ids_in_notes_do_not_spew_to_stderr
+    _out, err = capture_subprocess_io { words_doc }
+    refute_match(/validity error/, err,
+                 "libxml validity noise must not leak to the terminal on upstream duplicate xml:ids")
+  end
+
   def test_citations_cover_both_upstream_ann_shapes
     she = words_doc.entries.find { |entry| entry.headword == "舍" }
     assert_equal 2, she.citations.size, "tls:ann-prefixed (孟子) + default-ns (論語) both parse"

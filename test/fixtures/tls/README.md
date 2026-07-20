@@ -84,3 +84,9 @@ concepts shelf: it is a genuinely empty placeholder — head "N/A",
 definition `<p/>`, empty notes/pointers/words. Content-empty concepts
 skip by rule (censused via `TlsXmlParser#skipped_empty_concepts`, 1
 upstream); a concept with ANY content that fails to render still raises.
+
+- `notes/doc/CH1a0907-ann.xml` also carries the file's REAL duplicated
+  `xml:id` pair (`CH1a0907_CHANT_005-13a.96`, two identical ann-less segs,
+  byte-verbatim from upstream `faee21a2a725` — the quirk that made libxml2
+  spew `validity error: ID already defined` to stderr on every owner sync;
+  P34-r1 pins that the parse stays silent and the segs dedupe).

@@ -332,9 +332,20 @@ module Nabu
       # Stream one ann file (class note: 13 MB — never DOM whole), yielding
       # each ann element as its own small parsed fragment. outer_xml carries
       # the in-scope namespace declarations, so both upstream shapes parse.
+      # NOERROR|NOWARNING: upstream files carry duplicated xml:ids (doubled
+      # ann-less segs, doubled ann uuids — real, censused, deduped at the
+      # (sense, seg) grain downstream), and libxml2 registers xml:id as an
+      # ID type, spewing "validity error: ID already defined" to the
+      # terminal's stderr for each (P34-r1, owner sync 2026-07-20). Fatal
+      # syntax errors still raise through the reader iteration below.
       def each_ann_fragment(path)
         File.open(path) do |io|
-          reader = Nokogiri::XML::Reader.from_io(io)
+          reader = Nokogiri::XML::Reader.from_io(
+            io, nil, nil,
+            Nokogiri::XML::ParseOptions::DEFAULT_XML |
+            Nokogiri::XML::ParseOptions::NOERROR |
+            Nokogiri::XML::ParseOptions::NOWARNING
+          )
           reader.each do |node|
             next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
             next unless node.name.sub(/\A.*:/, "") == "ann"
