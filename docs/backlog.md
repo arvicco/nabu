@@ -10365,7 +10365,7 @@ selects AND groups; docs/axes.md is PUBLIC. Zero syncs, zero new
 sources — this phase makes the registry's shape visible and the
 surfaces honest.
 
-## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: done 2026-07-20] [deps: —]
 Goal: axis definitions block (name, persona one-liner, desc, order)
 + list-valued `axes:` key on EVERY source row, the owner-ratified
 mapping (the plan's draft table + D35-a/D35-d amendments; re-verify
