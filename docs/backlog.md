@@ -10525,7 +10525,7 @@ KR5 (~84 MB, owner-fired) + KR-Gaiji (pre-approved, small). The
 owner's overnight `rebuild --profile` may run concurrently — the hard
 fence (no main-checkout db/canonical writes) binds every packet.
 
-## P37-0 · Char-structure + Bunkankun survey  [tier: survey/network] [status: dispatched 2026-07-20] [deps: —]
+## P37-0 · Char-structure + Bunkankun survey  [tier: survey/network] [status: done 2026-07-20 — survey delivered, no repo diff by design] [deps: —]
 `.docs/surveys/char-structure-survey.md`: decomposition-source
 verdicts (cjkvi-ids license lineage/CHISE GPL; BabelStone IDS; edrdg
 RADKFILE; nk2028 phonetic series) + ask.bunkankun.org (catalog shape,
@@ -10552,7 +10552,7 @@ ruling): registry row + sanctioned fetch config + refs→Unicode/IDS
 mapping where upstream provides; poor mapping ⇒ placeholder-only +
 journal.
 
-## P37-4 · `nabu char` + component search  [tier: opus] [status: ready] [deps: P37-0]
+## P37-4 · `nabu char` + component search  [tier: opus] [status: dispatched 2026-07-20 — survey-ratified: BabelStone IDS in (open), RADKFILE in (edrdg row-101 licence), cjkvi-ids OUT (GPL data)] [deps: P37-0]
 The Jisho bar: char card (radical+name, strokes, components, variants,
 readings incl. Mandarin/Korean, OC/Qieyun/HDIC/TLS diachronic column,
 corpus attestation) + explicit modes (--radical/--strokes/
