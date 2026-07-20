@@ -749,5 +749,59 @@ module Store
       params = JSON.parse(events.first.params_json)
       assert_equal doc_urn("clash"), params.fetch("urn")
     end
+
+    # -- rebuild batch transactions (P36-2) ----------------------------------
+
+    # tx_batch (rebuild only) collapses many per-document transactions into one
+    # per batch; the persisted result must be identical to the per-document
+    # path. A batch of 2 forces a mid-stream flush (alpha, beta) then a trailing
+    # flush (a lone third) — every boundary exercised.
+    def test_tx_batch_persists_identically_to_per_document
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 2)
+      report = batched.load([alpha, beta, build_document("gamma", [%w[1 πόλις]])])
+
+      assert_report report, added: 3
+      assert_equal 1, doc_row("alpha").revision
+      assert_equal 1, doc_row("gamma").revision
+      assert_equal "μῆνιν", passage_row("alpha", "1").text
+      # 3 documents + 4 passages journaled "loaded", exactly as per-document.
+      assert_equal 7, Nabu::Store::Provenance.count
+    end
+
+    # A savepoint per document means a constraint violation still rolls back
+    # ONLY itself inside a shared batch transaction — its siblings, committed
+    # together in the same transaction, survive (the per-document isolation the
+    # sync path gets from a top-level transaction). tx_batch 10 holds all three
+    # in one transaction, so only the savepoint can save the siblings.
+    def test_tx_batch_isolates_a_constraint_violation_via_savepoint
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 10)
+      clash = Nabu::Document.new(
+        urn: doc_urn("clash"), language: "grc", title: "Clash",
+        canonical_path: "/canonical/test_adapter/clash.txt"
+      )
+      clash << Nabu::Passage.new(
+        urn: "#{doc_urn('alpha')}:1", language: "grc",
+        text: "δόλος", text_normalized: "δόλος", sequence: 0
+      )
+
+      report = batched.load([alpha, clash, beta])
+
+      assert_report report, added: 2, errored: 1
+      assert_nil doc_row("clash")   # savepoint rolled back just this document
+      refute_nil doc_row("alpha")   # committed with the batch
+      refute_nil doc_row("beta")    # committed with the batch
+      assert_equal 1, provenance_events(event: "quarantined").size
+    end
+
+    # The P2-6 progress contract survives batching: one running-count tick per
+    # document, in input order, ticked only AFTER the document actually lands.
+    def test_tx_batch_ticks_once_per_document_in_order
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 2)
+      ticks = []
+      batched.load([alpha, beta, build_document("gamma", [%w[1 πόλις]])],
+                   on_document: ->(processed, errored) { ticks << [processed, errored] })
+
+      assert_equal [[1, 0], [2, 0], [3, 0]], ticks
+    end
   end
 end

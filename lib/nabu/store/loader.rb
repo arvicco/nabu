@@ -77,11 +77,20 @@ module Nabu
       #   parse call and the per-document insert transaction each fold their
       #   wall time into the source's :parse / :insert component buckets. nil on
       #   the sync path, so only `nabu rebuild` pays the (per-document) sampling.
-      def initialize(db:, source:, ledger: nil, profile: nil)
+      # tx_batch: nil (default, the sync path) keeps ONE top-level transaction
+      #   per document. An Integer (rebuild only) batches up to that many parsed
+      #   documents into a SINGLE transaction, each under a per-document
+      #   SAVEPOINT — so a constraint-violating document still rolls back only
+      #   itself while the batch's siblings commit together (P36-2). Collapsing
+      #   ~N per-document commits into N/batch is the bulk-load win; the fixed
+      #   batch (rather than one transaction for a whole mega-source) bounds the
+      #   uncommitted WAL frames a 353k-document source would otherwise pile up.
+      def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil)
         @db = db
         @source = source
         @ledger = ledger
         @profile = profile
+        @tx_batch = tx_batch
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -137,14 +146,28 @@ module Nabu
           processed += 1
           on_document&.call(processed, counts[:errored])
         end
+        # P36-2 batch buffer: in tx_batch mode, parsed documents accumulate here
+        # and #flush_batch persists up to tx_batch of them in one transaction
+        # (each a savepoint). nil tx_batch never buffers — the sync path keeps
+        # its per-document transaction exactly. #flush ticks per document AFTER
+        # it lands, preserving the P2-6 "one running-count tick per document"
+        # contract; quarantine/skip flush first so ticks stay in input order.
+        buffer = []
+        flush = -> { flush_batch(buffer, counts, tick) }
         process = lambda do |document, retained = nil|
           # Even a document that fails to persist was present upstream, so its
           # urn still shields the existing row from the withdrawal sweep.
           seen_urns.add(document.urn)
-          load_document(document, counts, retained)
-          tick.call
+          if @tx_batch
+            buffer << [document, retained]
+            flush.call if buffer.size >= @tx_batch
+          else
+            load_document(document, counts, retained)
+            tick.call
+          end
         end
         quarantine = lambda do |ref, error|
+          flush.call
           counts[:errored] += 1
           journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
           tick.call
@@ -155,11 +178,13 @@ module Nabu
         # (the 0-byte case's stance). Its urn still shields any existing row from
         # the withdrawal sweep, exactly as a quarantined ref does.
         skip = lambda do |ref, _reason|
+          flush.call
           counts[:skipped_by_rule] += 1
           seen_urns.add(ref.id)
           tick.call
         end
         yield(process, quarantine, skip)
+        flush.call
         sweep_withdrawn(seen_urns, counts) if full
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
@@ -168,12 +193,35 @@ module Nabu
         )
       end
 
-      # One transaction per document; a constraint violation rolls back only
-      # this document, is journaled, and the batch moves on. +retained+ is
-      # nil for live documents, or the "retired" provenance params (possibly
-      # empty) for documents rediscovered from the attic.
-      def load_document(document, counts, retained = nil)
-        outcome = time_insert { @db.transaction { upsert_document(document, retained) } }
+      # Persist one buffered batch (P36-2) inside a SINGLE transaction, each
+      # document under a savepoint, ticking after each lands. The whole flush
+      # is timed as this source's :insert (one measure, not per document — the
+      # savepoint path deliberately does not re-time, so nothing double-counts).
+      # A no-op when the buffer is empty; clears it either way.
+      def flush_batch(buffer, counts, tick)
+        return if buffer.empty?
+
+        time_insert do
+          @db.transaction do
+            buffer.each do |document, retained|
+              load_document(document, counts, retained, savepoint: true)
+              tick.call
+            end
+          end
+        end
+        buffer.clear
+      end
+
+      # Persist one document in its own transaction (sync path) or, when
+      # +savepoint+ (rebuild batch), in a SAVEPOINT nested in the caller's batch
+      # transaction. Either way a constraint violation rolls back only this
+      # document (savepoint release for the batch), is journaled, and the batch
+      # moves on. Only the top-level (sync) path times itself as :insert — in a
+      # batch the enclosing #flush_batch already does. +retained+ is nil for live
+      # documents, or the "retired" provenance params for attic rediscoveries.
+      def load_document(document, counts, retained = nil, savepoint: false)
+        txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained) } }
+        outcome = savepoint ? txn.call : time_insert(&txn)
         counts[outcome] += 1
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1

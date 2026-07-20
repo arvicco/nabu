@@ -119,6 +119,33 @@ class RebuildTest < Minitest::Test
     assert_in_delta profile.load_total + profile.index_total, profile.grand_total, 1e-9
   end
 
+  # -- deferred secondary indexes are recreated (P36-2) --------------------
+
+  # Rebuild drops the non-unique bulk-table indexes, replays with them absent,
+  # and recreates them at the end — the finished catalog must carry them again
+  # (a query-time regression otherwise), while the fulltext lemma table gets
+  # its three deferred B-tree indexes back too.
+  def test_rebuild_leaves_the_deferred_indexes_in_place
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    db = Nabu::Store.connect(catalog_path)
+    passage_idx = db.indexes(:passages).values.map { |i| i[:columns] }
+    provenance_idx = db.indexes(:provenance).values.map { |i| i[:columns] }
+    assert_includes passage_idx, [:document_id]
+    assert_includes passage_idx, [:language]
+    assert_includes provenance_idx, [:passage_id]
+    assert_includes provenance_idx, [:document_id]
+  ensure
+    db&.disconnect
+  end
+
   # -- fulltext index is rebuilt too (P4-1) --------------------------------
 
   def test_rebuild_populates_the_fulltext_index
