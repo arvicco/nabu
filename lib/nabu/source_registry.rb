@@ -37,7 +37,13 @@ module Nabu
     # a source whose lemmatization is AUTOMATIC (Diorisis-style) declares
     # `lemma_tier: silver` and its passage_lemmas rows carry the label all
     # the way to the render (attested_count stays gold-only everywhere).
-    LEMMA_TIERS = %w[gold silver].freeze
+    # "equivalence" (P34-3, owner-decided): scholar-curated CROSS-LANGUAGE
+    # equivalence — CEIPoM's Classical-Latin-equivalent column minting Latin
+    # keys on non-Latin passages. A different honesty from silver (silver
+    # means upstream-automatic; this is curated, but it is not attestation
+    # in the key's language either), so it is its own label at every render
+    # and --gold-only excludes it like any non-gold tier.
+    LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
 
     # One registry line. adapter_class_name is a String resolved on demand.

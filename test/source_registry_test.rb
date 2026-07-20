@@ -269,6 +269,21 @@ class SourceRegistryTest < Minitest::Test
                  "absent-is-gold is the wire format: only non-gold sources are mapped")
   end
 
+  # P34-3: the third tier. "equivalence" is scholar-curated cross-language
+  # equivalence (CEIPoM's Classical-Latin-equivalent column) — a DIFFERENT
+  # honesty from silver (upstream-automatic), so it is its own label, never
+  # folded into either existing tier.
+  def test_lemma_tier_equivalence_accepted_and_mapped_as_non_gold
+    registry = load_registry(<<~YAML)
+      ceipom-src:
+        adapter: A
+        lemma_tier: equivalence
+    YAML
+    assert_equal "equivalence", registry["ceipom-src"].lemma_tier
+    assert_equal({ "ceipom-src" => "equivalence" }, registry.lemma_tiers,
+                 "equivalence rides the same non-gold wire format as silver")
+  end
+
   def test_unknown_lemma_tier_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)

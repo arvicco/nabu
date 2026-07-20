@@ -10271,7 +10271,7 @@ its Coptic descendant → its Greek loans neighborhood), promised
 nothing, measured. CLI surface changes need tests at the CLI level
 (the house cli_test patterns). Docs + worklog.
 
-## P34-3 · CEIPoM Classical-Latin-equivalent lemma wiring  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P34-3 · CEIPoM Classical-Latin-equivalent lemma wiring  [tier: fable] [status: done 2026-07-20] [deps: —]
 The P29-1 measured join (3,952 CLE values; 37.0% types / 79.9% tokens
 vs live gold Latin keys) goes live: CLE values mint lemma-index rows as
 LATIN keys on the non-Latin passages (Oscan/Umbrian/Faliscan/Venetic…),
