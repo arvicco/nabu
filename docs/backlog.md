@@ -10447,3 +10447,17 @@ toggle note); measurement not policy — no --display mode, no footer.
 Acceptance: KWIC alignment pinned on real lzh fixture lines; the
 cli.rb/concord.rb "does not model East-Asian width" confessions
 retired; grc/lat/chu rendering byte-unchanged (suite pins).
+
+Next-phase candidates (owner question 2026-07-20, rebuild duration): the
+P36 REBUILD PAIR — (1) rebuild profiler: measure parse vs insert vs FTS
+tokenize vs trigram vs timeline/facet/lemma builders on the live corpus
+(§6b: numbers before optimization); (2) derivation stamps: per-source
+input fingerprint (canonical tree sha + parser-family code digest +
+fold-rules version + migration level) recorded at load; `rebuild
+--incremental` skips fingerprint-clean sources with per-source FTS
+delete+reinsert; full rebuild remains, incremental ≡ full pinned by
+test. Ruling context: frozen/unchanged sources need NO re-derivation
+IFF all four inputs are unchanged — bytes alone don't suffice (this
+week's parser/fold churn is the counterexample). Bulk-load pragmas +
+deferred index creation + parallel parse workers as riders per the
+profile.
