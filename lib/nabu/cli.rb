@@ -787,6 +787,14 @@ module Nabu
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
+    option :radical, type: :numeric, banner: "N",
+                     desc: "Character filter: KangXi radical number 1-214 (Unihan kRSUnicode); " \
+                           "composes with --strokes/--char-component and a text query"
+    option :strokes, type: :string, banner: "A-B",
+                     desc: "Character filter: total-stroke range A-B (or a single N; Unihan kTotalStrokes)"
+    option :char_component, type: :string, banner: "C",
+                            desc: "Character filter: characters CONTAINING C anywhere in their " \
+                                  "structure (KRADFILE ∪ BabelStone IDS transitive containment)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -812,6 +820,14 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if char_filter_options?
+        if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
+          raise Thor::Error, "search: the character filters (--radical/--strokes/--char-component) are " \
+                             "character-level structure search — they do not combine with the word-level " \
+                             "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
+        end
+        return char_structured_search(query)
       end
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
@@ -3927,6 +3943,78 @@ module Nabu
       # Same open/close discipline as the sibling search paths; the trigram
       # table missing means the fulltext index predates P16-4, an honest
       # reindex hint, exactly the lemma-index precedent.
+      def char_filter_options?
+        options[:radical] || options[:strokes] || options[:char_component]
+      end
+
+      # --strokes N or A-B → an inclusive [low, high] range, or nil.
+      def parse_strokes_option
+        raw = options[:strokes]&.strip or return nil
+        if (m = raw.match(/\A(\d+)\z/))
+          [m[1].to_i, m[1].to_i]
+        elsif (m = raw.match(/\A(\d+)-(\d+)\z/))
+          [m[1].to_i, m[2].to_i].minmax
+        else
+          raise Thor::Error, "search: --strokes takes N or A-B (e.g. --strokes 8 or --strokes 8-12)"
+        end
+      end
+
+      # The explicit character-structure search (P37-4): --radical/--strokes/
+      # --char-component resolve to a glyph set (CharFilter), which filters
+      # Han-language passages by containment, composing with a plain text
+      # query. Kept visibly distinct from FTS — the footer names the filters.
+      def char_structured_search(query)
+        validate_license!(options[:license])
+        if options[:radical] && !options[:radical].to_i.between?(1, 214)
+          raise Thor::Error, "search: --radical is a KangXi radical number 1-214 (got #{options[:radical]})"
+        end
+
+        strokes = parse_strokes_option
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless catalog.table_exists?(:dictionary_entries)
+          raise Thor::Error, "no char shelf in this catalog — run nabu sync unihan (for --radical/" \
+                             "--strokes) or babelstone-ids/kradfile (for --char-component)"
+        end
+        validate_source!(catalog, options[:source])
+
+        outcome = Nabu::Query::CharSearch.new(catalog: catalog, fulltext: fulltext)
+                                         .run(query, radical: options[:radical]&.to_i, strokes: strokes,
+                                                     component: options[:char_component], lang: options[:lang],
+                                                     license: options[:license], source: options[:source],
+                                                     limit: options[:limit].to_i)
+        print_char_search_results(outcome, query: query)
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_char_search_results(outcome, query:)
+        labels = outcome.labels.join(" AND ")
+        if outcome.resolved_empty
+          return say("no characters match [#{labels}] in the held char shelves — sync unihan " \
+                     "(--radical/--strokes) or babelstone-ids/kradfile (--char-component)")
+        end
+        if outcome.results.empty?
+          tail = query.empty? ? "" : " that also match #{query.inspect}"
+          return say("no passages carry a character matching [#{labels}]#{tail} " \
+                     "(#{outcome.char_count} characters resolved)")
+        end
+
+        outcome.results.each do |result|
+          say "#{result.urn}  [#{result.language}]  {#{result.matched.join(' ')}}"
+          say "  #{result.text}"
+        end
+        say ""
+        text_note = query.empty? ? "" : "; text query #{query.inspect}"
+        say "character filter: [#{labels}] — #{outcome.char_count} " \
+            "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
+        say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
       def fuzzy_search(query)
         raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
 
