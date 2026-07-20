@@ -10226,6 +10226,13 @@ seam, semantic variants excluded; index re-derive consequence), CJK
 fonts/ambiguous-width doc section (Noto CJK + Jigmo for Ext-B+).
 Recommended split: width → P35; variant fold + gaiji config/docs +
 KR-Gaiji resolution → the next Sino phase beside KR5 (D34-a).
+Owner addendum (2026-07-20): variant-fold approach agreed (semantic
+variants OUT of standard search) — AND a separate char-structure
+search mode (components/radicals/strokes/visual similarity, à la
+Jisho) is requested: own option set, survey of decomposition sources
+first (cjkvi-ids/CHISE/BabelStone IDS/edrdg RADKFILE; unihan kRS*
+fields = same held zip). Survey precedes the next Sino phase plan;
+never silently mixed into text search.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
