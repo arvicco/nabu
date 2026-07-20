@@ -10237,7 +10237,7 @@ quarantine rules; the census numbers are the contract) + registry
 declarations + corresp-style honesty where alignment is loose.
 Docs: architecture §parallel note, 02-sources isicily row, worklog.
 
-## P34-1 · The Masoretic word crosswalk — ETCBC/bridging  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P34-1 · The Masoretic word crosswalk — ETCBC/bridging  [tier: fable] [status: done] [deps: —]
 ETCBC `bridging` repo (MIT — verify in-repo verbatim): the OSHB↔BHSA
 word-level crosswalk, journaled at P30-4. Census the format WHOLE
 (what grain, what coverage, which versions it pins — the repo maps
