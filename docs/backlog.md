@@ -10516,3 +10516,66 @@ advanced, ~2,170/~2,200 siblings minted. Owner call: leave quarantined
 (honest, recommended) vs teach sibling parse to tolerate missing lb @n
 via synthesized anchors. Full classification in the orchestrator-held
 baseline note.
+
+# Phase 37 — the Sino phase: the largest shelf gets its instruments (approved 2026-07-20; rulings: all 8 packets + axis rider = 9 · fold ships NOW (owner schedules the lzh re-derive) · KR-Gaiji fetch PRE-APPROVED · axis ops ride as P37-8)
+
+Source of truth: the owner-approved plan (orchestrator holds it). lzh
+= 13.0M passages, the library's largest language. New data this phase:
+KR5 (~84 MB, owner-fired) + KR-Gaiji (pre-approved, small). The
+owner's overnight `rebuild --profile` may run concurrently — the hard
+fence (no main-checkout db/canonical writes) binds every packet.
+
+## P37-0 · Char-structure + Bunkankun survey  [tier: survey/network] [status: dispatched 2026-07-20] [deps: —]
+`.docs/surveys/char-structure-survey.md`: decomposition-source
+verdicts (cjkvi-ids license lineage/CHISE GPL; BabelStone IDS; edrdg
+RADKFILE; nk2028 phonetic series) + ask.bunkankun.org (catalog shape,
+license, fetch) + the Jisho 棄-page benchmark (display-note inventory).
+Output: ratified source list + option grammar for P37-4.
+
+## P37-1 · KR5 Daozang witness-overlay parser  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+Per the P33-1 characterization: overlay repos need `<md:>` milestones
++ witness-scheme pb anchors + @fw running headers. Overlay extension
+(loud on anything new), KR5 joins `classes:`, censuses + fixtures per
+the P33-1 pattern. Owner-fired ~84 MB sync at the gate.
+
+## P37-2 · The lzh variant fold  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+Trad↔simp↔z-variant fold derived from HELD unihan (semantic variants
+OUT); lzh (+och headwords); canonical form = traditional; conventions
+§9 entry; census of participating held codepoints. RULED: ships now;
+the fold-version bump dirties lzh sources and the owner schedules the
+~13M-passage re-derive.
+
+## P37-3 · Gaiji: placeholder + KR-Gaiji resolution  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+display.yml `kanripo: { gaiji: placeholder }` (⬚ + honesty footer;
+cbeta = documented non-entry). KR-Gaiji fetch PRE-APPROVED (owner
+ruling): registry row + sanctioned fetch config + refs→Unicode/IDS
+mapping where upstream provides; poor mapping ⇒ placeholder-only +
+journal.
+
+## P37-4 · `nabu char` + component search  [tier: opus] [status: ready] [deps: P37-0]
+The Jisho bar: char card (radical+name, strokes, components, variants,
+readings incl. Mandarin/Korean, OC/Qieyun/HDIC/TLS diachronic column,
+corpus attestation) + explicit modes (--radical/--strokes/
+--char-component); unihan kRS* field expansion; CJK fonts doc rides.
+Match synchronic field-for-field where shelves back it, exceed
+diachronically, never render an unbacked field.
+
+## P37-5 · TLS attestation growth re-census  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+Wave complete: re-census KR-shaped ann resolution vs the 80.3%
+dispatch-day rate; tls re-parse re-mints citations; report new rate +
+the define surface. Rider-sized.
+
+## P37-6 · Parallel parse workers  [tier: fable] [status: blocked — overnight profile verdict] [deps: profile]
+The P36-3 carryover: dispatch ONLY on a parse-bound split from the
+owner's instrumented rebuild. NO-GO ⇒ journaled why.
+
+## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: blocked — overnight profile] [deps: profile]
+The 16-minute target: fixture-scale prototype + what-breaks note
+(refresh_source! delete contract, query paths); NO production switch.
+
+## P37-8 · Axis-scoped operations  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+The D35-b follow-ups ride (owner-ruled): `search --axis` (membership
+filter composing with every search path), `export --axis`, the
+`nabu axis NAME` desk card (persona, members, held counts, gold
+coverage — the `nabu language` mold). health --axis only if it fits
+cleanly; journal otherwise.
