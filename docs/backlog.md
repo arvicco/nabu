@@ -10198,7 +10198,7 @@ fit; the orchestrator/owner decide at merge). If shaped: registry
 enabled: false, manual; docs row 106 claim. Trim-first candidate —
 if your census says the fit is bad, say so early and cheaply.
 
-# Phase 34 — the weave phase: journaled follow-ups & cross-source seams (approved 2026-07-20 as recommended: five packets; KR5 stays journaled pending the owner ruling; P34-0 seam = REGISTRY key; P34-3 tier = distinct "equivalence" label)
+# Phase 34 — the weave phase: journaled follow-ups & cross-source seams (approved 2026-07-20 as recommended: five packets; P34-0 seam = REGISTRY key; P34-3 tier = distinct "equivalence" label. D34-a KR5 ruling, owner 2026-07-20: keep for the next Sino phase — P34-5 does not dispatch this phase; the P33-1 census + overlay characterization stay the entry point when that phase elaborates)
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
@@ -10207,7 +10207,7 @@ ZERO new large syncs this phase: every packet ships capability over data
 already held; the owner's ongoing Kanripo/CBETA syncs must be undisturbed
 (no adapter/fetch changes to kanripo/cbeta outside P34-4's read-only census).
 
-## P34-0 · --parallel work-pattern generalization + the I.Sicily siblings  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P34-0 · --parallel work-pattern generalization + the I.Sicily siblings  [tier: fable] [status: done — merged ecc9b0f 2026-07-20] [deps: —]
 The Query::Parallel work-pattern chain is ten hand-frozen regexes (CTS,
 ORACC, FREISING, DAMASKINI, SUTTACENTRAL, TLA_HF, AES, RIIG,
 OPEN_ETRUSCAN+ITANT, ETCSL) — it has bitten in P29, P30 AND P32 (every
