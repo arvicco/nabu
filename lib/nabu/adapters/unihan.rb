@@ -17,9 +17,11 @@ module Nabu
     # Unihan.zip, 8,518,517 bytes, Last-Modified 2025-08-18 (Unicode
     # 17.0.0, in-file date 2025-07-24) at unicode.org/Public/UCD/latest/.
     # Eight member files; the adapter reads Unihan_Readings.txt (67,916
-    # codepoints) + Unihan_Variants.txt — the carried-field census and the
-    # censused-out fields are documented on UnihanTxtParser. 65,092
-    # codepoints carry at least one carried field and mint entries.
+    # codepoints) + Unihan_Variants.txt + Unihan_IRGSources.txt (the
+    # radical-stroke fields kRSUnicode/kTotalStrokes, P37-4 expansion) — the
+    # carried-field census and the censused-out fields are documented on
+    # UnihanTxtParser. 65,092 codepoints carry at least one carried field and
+    # mint entries.
     # The /latest/ URL moves with each Unicode release (annual cadence) —
     # sync_policy manual; the .zip-fetch.json Last-Modified pin plus the
     # in-file version headers date every canonical tree.
@@ -60,6 +62,10 @@ module Nabu
 
       READINGS_FILE = "Unihan_Readings.txt"
       VARIANTS_FILE = "Unihan_Variants.txt"
+      # Radical-stroke members (P37-4): kRSUnicode + kTotalStrokes live in
+      # IRGSources; kRSKangXi historically in RadicalStrokeCounts (dropped in
+      # recent Unihan). Both globbed, whichever is present is read.
+      RADICAL_STROKE_FILES = %w[Unihan_IRGSources.txt Unihan_RadicalStrokeCounts.txt].freeze
       DICTIONARY_SLUG = "unihan"
       LANGUAGE = "zho"
       TITLE = "Unihan — the Unicode Han Database (Unicode Character Database)"
@@ -105,9 +111,11 @@ module Nabu
           slug: DICTIONARY_SLUG, language: LANGUAGE,
           title: TITLE, canonical_path: document_ref.path
         )
+        dir = File.dirname(document_ref.path)
         UnihanTxtParser.new
                        .entries(document_ref.path,
-                                variants_path: File.join(File.dirname(document_ref.path), VARIANTS_FILE),
+                                variants_path: File.join(dir, VARIANTS_FILE),
+                                radical_stroke_paths: RADICAL_STROKE_FILES.map { |name| File.join(dir, name) },
                                 language: LANGUAGE)
                        .each { |entry| document << entry }
         document

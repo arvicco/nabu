@@ -1,0 +1,32 @@
+# Unihan_IRGSources.txt
+# Date: 2025-07-24 00:00:00 GMT [KL]
+# Unicode Version 17.0.0
+#
+# Unicode Character Database
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# For documentation, see https://www.unicode.org/reports/tr38/
+#
+# Trimmed P37-4 fixture slice: the radical-stroke fields kRSUnicode and
+# kTotalStrokes for a handful of the codepoints already carried in the
+# Readings/Variants siblings (real UCD values), plus one non-carried field
+# (kIRG_GSource) per codepoint so the parser's censor is exercised. The
+# real member carries the whole IRG source-reference set.
+#
+U+4E00	kIRG_GSource	G0-523B
+U+4E00	kRSUnicode	1.0
+U+4E00	kTotalStrokes	1
+U+4EBA	kIRG_GSource	G0-4842
+U+4EBA	kRSUnicode	9.0
+U+4EBA	kTotalStrokes	2
+U+5929	kIRG_GSource	G0-4C6C
+U+5929	kRSUnicode	37.1
+U+5929	kTotalStrokes	4
+U+611B	kIRG_GSource	G0-302E
+U+611B	kRSUnicode	61.9
+U+611B	kTotalStrokes	13
+U+68C4	kIRG_GSource	G0-4674
+U+68C4	kRSUnicode	75.8
+U+68C4	kTotalStrokes	12

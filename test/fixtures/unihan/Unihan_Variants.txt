@@ -31,6 +31,7 @@ U+4F53	kSimplifiedVariant	U+4F53
 U+4F53	kTraditionalVariant	U+4F53 U+9AD4
 U+5929	kSemanticVariant	U+975D<kMatthews
 U+5929	kSpoofingVariant	U+2BBDB
+U+68C4	kSimplifiedVariant	U+5F03
 U+611B	kSimplifiedVariant	U+7231
 U+7231	kTraditionalVariant	U+611B
 U+9AD4	kSemanticVariant	U+4F53<kMatthews
