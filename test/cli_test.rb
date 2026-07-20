@@ -317,6 +317,56 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P34-3: the equivalence tier on the search/concord/reflex renders --------
+  # Latin keys minted from scholar-curated Classical-Latin equivalents on
+  # non-Latin passages (CEIPoM). Every render labels them "equivalence" —
+  # never a bare number, never mistakable for attestation, never "silver".
+
+  def test_search_lemma_labels_equivalence_hits_and_gold_only_excludes_them
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma quinque]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:cle:osc:1 \[osc\] \[equivalence\]/, out,
+                   "the hit is an Oscan passage under a Latin key — it says so")
+      assert_match(/2 equivalence \(scholar-curated Classical-Latin equivalents; --gold-only excludes\)/,
+                   out, "the footer totals the equivalence hits and names their nature")
+
+      gold, _err2, status2 = with_config(config) { run_cli(%w[search --lemma quinque --gold-only]) }
+      assert_nil status2
+      assert_match(/no matches/, gold, "--gold-only excludes the equivalence tier wholesale")
+
+      mixed, _err3, status3 = with_config(config) { run_cli(%w[search --lemma hiems --gold-only]) }
+      assert_nil status3
+      assert_match(/urn:nabu:test:treebank:lat:1/, mixed)
+      refute_match(/urn:nabu:test:cle/, mixed, "--gold-only keeps only the attested Latin hit")
+    end
+  end
+
+  def test_concord_lemma_mode_tags_equivalence_rows_and_totals_them
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord --lemma quinque]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:cle:osc:1 \[osc\] \[equivalence\]$/, out, "equivalence rows say so")
+      assert_match(/— 2 equivalence \(Classical-Latin equivalents\)$/, out,
+                   "the footer totals the equivalence share")
+    end
+  end
+
+  def test_define_renders_equivalence_counts_labeled_beside_gold
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/^ {2}\[lat\] hiems — 1 passage \(\+2 equivalence\)$/, out,
+                   "the gold count keeps its meaning; equivalence rides beside it, labeled")
+      refute_match(/\[lat\] hiems — 3 passage/, out,
+                   "gold and equivalence must never sum into one number")
+      assert_match(/equivalence-only \(scholar-curated Classical-Latin equivalents/, out)
+      assert_match(/^ {2}\[lat\] quinque — equivalence 2 passages$/, out,
+                   "an equivalence-only reflex renders labeled, never as a bare number")
+      refute_match(/\[lat\] quinque — 2 passages/, out)
+    end
+  end
+
   # -- P24-2: define/etym coordination — etym must not miss what define finds --
 
   # THE incident (owner, 2026-07-16): `define сигать` finds the Vasmer
@@ -4705,6 +4755,80 @@ class CLITest < Minitest::Test
         db.disconnect
       end
       yield config
+    end
+  end
+
+  # The P34-3 rig: a gold Latin attestation of hiems beside an equivalence
+  # source (CEIPoM-shaped: no "lemma" key, the Classical-Latin equivalent
+  # under latin_equivalent) whose Oscan passages key quinque ×2 and hiems ×2,
+  # plus lat reflex rows on the fixture's *zima entry for the define render.
+  def with_equivalence_recon_shelf
+    with_recon_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      begin
+        gold = Nabu::Store::Source.create(
+          slug: "treebank", name: "Treebank", adapter_class: "TestAdapter", license_class: "open"
+        )
+        seed_gold_lat_passage(gold)
+        equiv = Nabu::Store::Source.create(
+          slug: "cle", name: "CLE", adapter_class: "TestAdapter", license_class: "attribution"
+        )
+        seed_equivalence_passages(equiv)
+        seed_lat_reflexes(db, %w[hiems quinque])
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+        begin
+          Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
+                                        lemma_tiers: { "cle" => "equivalence" })
+        ensure
+          fulltext.disconnect
+        end
+      ensure
+        db.disconnect
+      end
+      yield config
+    end
+  end
+
+  def seed_gold_lat_passage(source)
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:test:treebank:lat", title: "T", language: "lat",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    Nabu::Store::Passage.create(
+      document_id: document.id, urn: "urn:nabu:test:treebank:lat:1", sequence: 0,
+      language: "lat", text: "hiemps", text_normalized: "hiemps",
+      annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "hiems", "form" => "hiemps" }] }),
+      content_sha256: "x", revision: 1
+    )
+  end
+
+  def seed_equivalence_passages(source)
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:test:cle:osc", title: "Tabula", language: "osc",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    pairs = [%w[quinque pomtis], %w[quinque pumperias], %w[hiems heivam], %w[hiems heivas]]
+    pairs.each_with_index do |(cle, form), i|
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: "urn:nabu:test:cle:osc:#{i + 1}", sequence: i,
+        language: "osc", text: form, text_normalized: form,
+        annotations_json: JSON.generate(
+          { "tokens" => [{ "lemma_id" => "1a", "latin_equivalent" => cle, "form" => form }] }
+        ),
+        content_sha256: "x", revision: 1
+      )
+    end
+  end
+
+  def seed_lat_reflexes(db, words)
+    entry_id = db[:dictionary_entries].where(urn: "urn:nabu:dict:wiktionary-sla-pro:zima:noun")
+                                      .get(:id) ||
+               flunk("*zima entry missing from the recon fixture")
+    words.each_with_index do |word, i|
+      db[:dictionary_reflexes].insert(
+        dictionary_entry_id: entry_id, seq: 90 + i, lang_code: "lat", language: "lat",
+        word: word, word_folded: Nabu::Normalize.search_form(word, language: "lat")
+      )
     end
   end
 

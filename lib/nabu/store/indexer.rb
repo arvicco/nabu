@@ -87,7 +87,9 @@ module Nabu
     #   no catalog migration, no schema change for existing adapters.
     #   attested_count consumers (ReflexViews) keep gold-only semantics and
     #   surface silver as a separate labeled count; LemmaSearch serves both
-    #   tiers with per-hit labels and a gold-only filter.
+    #   tiers with per-hit labels and a gold-only filter. The third tier,
+    #   "equivalence" (P34-3), mints from a DIFFERENT token key — see the
+    #   EQUIVALENCE_TIER constants below.
     # == The trigram index (P16-4) — fragment search, documentary scope
     #
     # passages_trigram is a second FTS5 table over the SAME folded search form
@@ -113,6 +115,25 @@ module Nabu
       # map is gold — verified annotation, the only kind that existed before
       # the tier column.
       GOLD_TIER = "gold"
+
+      # The equivalence tier (P34-3): a source declared `lemma_tier:
+      # equivalence` (CEIPoM) carries NO citation-form "lemma" key — its
+      # lemma layer is an opaque ID space — but its tokens carry
+      # scholar-curated Classical-Latin equivalents under EQUIVALENCE_KEY.
+      # Those values mint the source's lemma-index rows as LATIN keys
+      # (folded AND labeled EQUIVALENCE_LANGUAGE) on the non-Latin passages,
+      # so `search --lemma quinque` reaches Oscan and Umbrian. The tier is
+      # DISTINCT from silver by owner ruling: silver means
+      # upstream-automatic; this is curated cross-language equivalence — a
+      # different honesty — and it is never attestation in the key's
+      # language, so every gold-scoped consumer excludes it and every
+      # render labels it. Should a second equivalence source ever arrive
+      # with a different key/target language, generalize these constants
+      # into per-source registry config; one source does not justify the
+      # machinery today.
+      EQUIVALENCE_TIER = "equivalence"
+      EQUIVALENCE_KEY = "latin_equivalent"
+      EQUIVALENCE_LANGUAGE = "lat"
 
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
@@ -484,13 +505,15 @@ module Nabu
       # is our own canonical_json output, so a parse failure is real corruption
       # and honestly raises.
       def lemma_rows(row, tiers: {})
+        tier = tiers.fetch(row[:source_id], GOLD_TIER)
+        return equivalence_rows(row) if tier == EQUIVALENCE_TIER
+
         json = row.fetch(:annotations_json)
         return [] if json.nil? || !json.include?('"lemma"')
 
         tokens = JSON.parse(json)["tokens"]
         return [] unless tokens.is_a?(Array)
 
-        tier = tiers.fetch(row[:source_id], GOLD_TIER)
         group_lemmas(tokens, language: row.fetch(:language)).map do |folded, entry|
           {
             lemma_folded: folded, lemma_raw: entry[:raw],
@@ -501,12 +524,40 @@ module Nabu
         end
       end
 
+      # The equivalence source's rows (P34-3, class constants above): keys
+      # come from EQUIVALENCE_KEY only — never from "lemma", which the tier
+      # declaration says is not a citation form there — and both the fold
+      # and the stored language are EQUIVALENCE_LANGUAGE (a lemma row's
+      # language IS the language its key is a dictionary form of; the hit's
+      # passage keeps its own language catalog-side). The surface forms are
+      # the non-Latin attestations, which is what makes a cross-language
+      # hit readable ("quinque attested as pumperias").
+      def equivalence_rows(row)
+        json = row.fetch(:annotations_json)
+        return [] if json.nil? || !json.include?("\"#{EQUIVALENCE_KEY}\"")
+
+        tokens = JSON.parse(json)["tokens"]
+        return [] unless tokens.is_a?(Array)
+
+        group_lemmas(tokens, language: EQUIVALENCE_LANGUAGE, key: EQUIVALENCE_KEY)
+          .map do |folded, entry|
+            {
+              lemma_folded: folded, lemma_raw: entry[:raw],
+              passage_id: row.fetch(:passage_id), urn: row.fetch(:urn),
+              language: EQUIVALENCE_LANGUAGE, surface_forms: entry[:forms].join(", "),
+              tier: EQUIVALENCE_TIER
+            }
+          end
+      end
+
       # { folded lemma => { raw:, forms: [] } } over the passage's tokens.
       # forms stays empty for a lemma attested only by form-less tokens
       # (PROIEL empty tokens carry no lemma in practice, but stay tolerated).
-      def group_lemmas(tokens, language:)
+      # +key+ is the token field the dictionary form is read from — "lemma"
+      # for the treebank families, EQUIVALENCE_KEY for the equivalence tier.
+      def group_lemmas(tokens, language:, key: "lemma")
         tokens.each_with_object({}) do |token, grouped|
-          lemma = token["lemma"] if token.is_a?(Hash)
+          lemma = token[key] if token.is_a?(Hash)
           next if lemma.nil? || lemma.empty?
 
           folded = Normalize.search_form(lemma, language: language)

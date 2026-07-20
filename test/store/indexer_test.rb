@@ -260,6 +260,136 @@ module Store
                    "the declared silver source's rows carry the tier"
     end
 
+    # -- the equivalence tier (P34-3) ----------------------------------------
+    # A source declared `lemma_tier: equivalence` (CEIPoM) has NO citation-form
+    # "lemma" key — its tokens carry scholar-curated Classical-Latin
+    # equivalents under "latin_equivalent". Those values mint lemma rows as
+    # LATIN keys (folded AND labeled lat) on the non-Latin passages, under the
+    # distinct "equivalence" tier: never gold (not attestation), never silver
+    # (not automatic).
+
+    def make_equivalence_source(slug: "cle")
+      Nabu::Store::Source.create(
+        slug: slug, name: "CLE", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+    end
+
+    # The CEIPoM token shape: opaque lemma_id, no "lemma" key, CLE riding
+    # under "latin_equivalent" (absent when upstream held the "-" null).
+    def cle_annotations(*pairs)
+      { "tokens" => pairs.map do |cle, form|
+        { "lemma_id" => "12970a", "latin_equivalent" => cle, "form" => form }.compact
+      end }
+    end
+
+    def equivalence_rebuild!(slug: "cle")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { slug => "equivalence" })
+    end
+
+    def test_equivalence_source_mints_latin_keys_under_the_equivalence_tier
+      doc = make_document(urn: "urn:d:ig", source: make_equivalence_source)
+      make_passage(doc, urn: "urn:d:ig:1", text_normalized: "aves anzeriates", sequence: 0,
+                        language: "xum", annotations: cle_annotations(%w[avis aves]))
+      equivalence_rebuild!
+
+      row = lemmas.first
+      refute_nil row, "the CLE value must mint a lemma-index row"
+      assert_equal "equivalence", row.fetch(:tier)
+      assert_equal "lat", row.fetch(:language),
+                   "the key is a Latin dictionary form — folded and labeled lat, " \
+                   "not the passage's language"
+      assert_equal "auis", row.fetch(:lemma_folded), "CLE folds by the LAT rule (v→u)"
+      assert_equal "avis", row.fetch(:lemma_raw), "the raw key keeps the scholar's spelling"
+      assert_equal "aves", row.fetch(:surface_forms),
+                   "the non-Latin surface forms ride along — what makes the hit readable"
+    end
+
+    def test_equivalence_tokens_without_the_cle_key_mint_no_rows
+      doc = make_document(urn: "urn:d:1", source: make_equivalence_source)
+      # The lean "-"-skipping adapter omits the key entirely on null CLE.
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0, language: "osc",
+                        annotations: { "tokens" => [{ "lemma_id" => "9a", "form" => "x" }] })
+      equivalence_rebuild!
+
+      assert_equal 0, lemmas.count, "no CLE, no row — honest absence"
+    end
+
+    def test_equivalence_source_never_minted_from_a_lemma_key
+      # The tier declaration says the source's OWN lemma layer is not a
+      # citation form (CEIPoM: opaque IDs) — an equivalence source reads
+      # latin_equivalent ONLY, so a stray "lemma" key cannot leak in as a
+      # gold-shaped row under the equivalence label.
+      doc = make_document(urn: "urn:d:1", source: make_equivalence_source)
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0, language: "osc",
+                        annotations: { "tokens" => [{ "lemma" => "12970a", "form" => "x" }] })
+      equivalence_rebuild!
+
+      assert_equal 0, lemmas.count
+    end
+
+    def test_equivalence_rows_group_per_folded_key_with_gold_sources_unaffected
+      gold_doc = make_document(urn: "urn:d:gold")
+      make_passage(gold_doc, urn: "urn:d:gold:1", text_normalized: "x", sequence: 0,
+                             annotations: token_annotations(%w[λέγω λέγει]))
+      cle_doc = make_document(urn: "urn:d:cle", source: make_equivalence_source)
+      make_passage(cle_doc, urn: "urn:d:cle:1", text_normalized: "y", sequence: 0,
+                            language: "xum",
+                            annotations: cle_annotations(%w[avis aves], %w[avis avif],
+                                                         %w[observo anzeriates]))
+      equivalence_rebuild!
+
+      assert_equal "gold", lemmas.where(urn: "urn:d:gold:1").get(:tier),
+                   "a source absent from the map stays gold, untouched"
+      avis = lemmas.where(urn: "urn:d:cle:1", lemma_folded: "auis").all
+      assert_equal 1, avis.size, "one row per (passage, folded key), not per token"
+      assert_equal "aves, avif", avis.first.fetch(:surface_forms),
+                   "distinct surface forms aggregate on the one row"
+      assert_equal %w[equivalence equivalence],
+                   lemmas.where(urn: "urn:d:cle:1").select_map(:tier),
+                   "every CLE row carries the equivalence tier"
+    end
+
+    def test_equivalence_rebuild_is_idempotent
+      doc = make_document(urn: "urn:d:1", source: make_equivalence_source)
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0, language: "xum",
+                        annotations: cle_annotations(%w[avis aves]))
+
+      equivalence_rebuild!
+      equivalence_rebuild!
+
+      assert_equal 1, lemmas.count, "drop+recreate leaves no duplicate equivalence rows"
+    end
+
+    # The rebuild invariant (P34-3): an incremental refresh of the equivalence
+    # source leaves the lemma table row-identical to a from-scratch rebuild —
+    # equivalence rows are derived data, re-derived at every rebuild.
+    def test_equivalence_refresh_is_row_identical_to_a_full_rebuild
+      source = make_equivalence_source
+      doc = make_document(urn: "urn:d:cle", source: source)
+      make_passage(doc, urn: "urn:d:cle:1", text_normalized: "x", sequence: 0, language: "xum",
+                        annotations: cle_annotations(%w[avis aves]))
+      options = { lemma_tiers: { "cle" => "equivalence" } }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, **options)
+
+      make_passage(doc, urn: "urn:d:cle:2", text_normalized: "y", sequence: 1, language: "xum",
+                        annotations: cle_annotations(%w[porta persondro]))
+      Nabu::Store::Passage.first(urn: "urn:d:cle:1").update(
+        annotations_json: JSON.generate(cle_annotations(%w[observo anzeriates]))
+      )
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext,
+                                           slug: "cle", **options)
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
+        assert_equal table_rows(fresh, :passage_lemmas), table_rows(@fulltext, :passage_lemmas),
+                     "refreshed equivalence rows must equal a from-scratch rebuild"
+      ensure
+        fresh.disconnect
+      end
+    end
+
     # -- the trigram fragment index (P16-4) ----------------------------------
 
     def trigrams = @fulltext[Nabu::Store::Indexer::TRIGRAM_TABLE]

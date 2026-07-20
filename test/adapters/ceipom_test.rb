@@ -24,7 +24,10 @@ require "tmpdir"
 # `Lemma` is an opaque lemma ID ("12444a"), NOT a citation form — so tokens
 # carry `lemma_id` verbatim and NO "lemma" key is minted (the indexer's
 # contract says a lemma is a dictionary form; an ID would poison the lemma
-# surfaces). Zero passage_lemmas rows, stated honestly.
+# surfaces). Since P34-3 the lemma index rows come from the OTHER column:
+# `Classical_Latin_equivalent` values mint LATIN keys on the non-Latin
+# passages under the distinct "equivalence" tier (scholar-curated
+# cross-language equivalence — never gold, never silver).
 class CeipomTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
@@ -333,11 +336,69 @@ class CeipomTest < Minitest::Test
     assert_equal Nabu::Adapters::Ceipom, entry.adapter_class
     assert entry.enabled, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "frozen", entry.sync_policy, "Zenodo versions are immutable — a frozen deposit"
-    assert_equal "gold", entry.lemma_tier,
-                 "the registry default; NB zero lemma rows mint in v1 (lemma IDs upstream, class note)"
+    assert_equal "equivalence", entry.lemma_tier,
+                 "P34-3: the CLE join is live — Classical-Latin equivalents mint lemma rows " \
+                 "under the distinct equivalence tier (never gold: the ID-opaque lemma layer " \
+                 "still mints nothing)"
+  end
+
+  # -- the equivalence tier, end to end on real fixtures -----------------------
+  # P34-3: the P29-1 measured CLE join goes live. `Classical_Latin_equivalent`
+  # values mint passage_lemmas rows as LATIN keys on the non-Latin passages,
+  # tier "equivalence" — scholar-curated cross-language equivalence, distinct
+  # from gold (attestation) and silver (automatic).
+
+  def test_cle_values_index_as_latin_keys_under_the_equivalence_tier
+    catalog, fulltext = indexed_store
+    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
+    refute_equal 0, rows.count, "the fixture carries CLE-bearing tokens"
+    assert_equal ["equivalence"], rows.select_map(:tier).uniq,
+                 "every CEIPoM lemma row carries the equivalence tier — never gold, never silver"
+    assert_equal ["lat"], rows.select_map(:language).uniq,
+                 "the keys are Latin dictionary forms regardless of the passage's language"
+    avis = rows.where(lemma_folded: "auis").select_map(:urn)
+    assert_equal %W[#{IGUVINE_URN}:1070 #{IGUVINE_URN}:1129 #{IGUVINE_URN}:1405], avis.sort,
+                 "avis (folded auis by the lat rule) keys the three Iguvine bird-augury sentences"
+  ensure
+    fulltext&.disconnect
+    catalog&.disconnect
+  end
+
+  def test_lemma_search_surfaces_the_iguvine_tables_by_latin_key_labeled
+    catalog, fulltext = indexed_store
+    search = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+    results = search.run("avis")
+    assert_equal %W[#{IGUVINE_URN}:1070 #{IGUVINE_URN}:1129 #{IGUVINE_URN}:1405],
+                 results.map(&:urn),
+                 "a Latin dictionary form finds the Umbrian passages — the point of the join"
+    assert_equal %w[equivalence equivalence equivalence], results.map(&:tier),
+                 "every hit says equivalence — never mistakable for Latin attestation"
+    assert_equal %w[xum xum xum], results.map(&:language),
+                 "the hit's language stays the passage's own — the text IS Umbrian"
+    assert(results.none? { |r| r.surface_forms.empty? },
+           "the Umbrian surface forms ride along, keeping the hit readable")
+
+    assert_empty search.run("avis", gold_only: true),
+                 "--gold-only excludes the equivalence layer wholesale"
+  ensure
+    fulltext&.disconnect
+    catalog&.disconnect
   end
 
   private
+
+  def indexed_store
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(
+      slug: "ceipom", name: "CEIPoM", adapter_class: "Nabu::Adapters::Ceipom",
+      license_class: "attribution"
+    )
+    Nabu::Store::Loader.new(db: catalog, source: source).load_from(adapter, workdir: workdir)
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext,
+                                  lemma_tiers: { "ceipom" => "equivalence" })
+    [catalog, fulltext]
+  end
 
   def ref_for(urn)
     adapter.discover(workdir).find { |ref| ref.id == urn } or
