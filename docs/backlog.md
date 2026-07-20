@@ -10375,7 +10375,7 @@ declares ≥1 axis; every declared axis exists in the definitions
 block; axis names NEVER collide with source slugs (the resolution
 guarantee); the design note argues axes.yml-vs-sources.yml placement.
 
-## P35-1 · `nabu list --axis` + status grouping  [tier: opus] [status: ready] [deps: P35-0]
+## P35-1 · `nabu list --axis` + status grouping  [tier: opus] [status: dispatched 2026-07-20] [deps: P35-0]
 Goal: `list --axis` = grouped listing (axis header: name + persona
 line; members with held counts; a source appears under each of its
 axes, tag semantics stated once); `--axis slavic` one axis;
@@ -10384,7 +10384,7 @@ axes, tag semantics stated once); `--axis slavic` one axis;
 Acceptance: house cli_test patterns; persona line renders; `--all`
 surfaces unchanged.
 
-## P35-2 · `nabu sync --axis` / bare-axis expansion  [tier: opus] [status: ready] [deps: P35-0]
+## P35-2 · `nabu sync --axis` / bare-axis expansion  [tier: opus] [status: dispatched 2026-07-20] [deps: P35-0]
 Goal: `sync celtic` resolves exact-slug-first-then-axis; expands to
 the axis's ENABLED members; disabled members reported by name as
 skipped (one line, never silent); `sync --axis a,b` selects+groups;
