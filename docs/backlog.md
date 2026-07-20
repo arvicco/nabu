@@ -10573,7 +10573,7 @@ owner's instrumented rebuild. NO-GO ⇒ journaled why.
 The 16-minute target: fixture-scale prototype + what-breaks note
 (refresh_source! delete contract, query paths); NO production switch.
 
-## P37-8 · Axis-scoped operations  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P37-8 · Axis-scoped operations  [tier: opus] [status: done] [deps: —]
 The D35-b follow-ups ride (owner-ruled): `search --axis` (membership
 filter composing with every search path), `export --axis`, the
 `nabu axis NAME` desk card (persona, members, held counts, gold
