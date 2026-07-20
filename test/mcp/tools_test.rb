@@ -826,6 +826,41 @@ module MCP
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_define", {}) }
     end
 
+    # -- the define lang set is live-derived (P35-6 L4 GENERALIZE) -------------
+    # The P11 hardcoded-list lesson, closing its last survivor: the advertised
+    # and accepted dictionary languages come from the catalog's dictionaries
+    # table at serve time — a newly synced shelf appears with zero code change.
+
+    # The nabu_define lang enum as tools/list serves it right now.
+    def define_lang_enum
+      tools.definitions.find { |tool| tool[:name] == "nabu_define" }
+                       .fetch(:inputSchema).dig(:properties, :lang, :enum)
+    end
+
+    def test_define_advertises_and_accepts_catalog_derived_languages
+      @catalog[:dictionaries].insert(source_id: @open.id, slug: "mw",
+                                     title: "Monier-Williams", language: "san")
+
+      schema = tools.definitions.find { |tool| tool[:name] == "nabu_define" }.fetch(:inputSchema)
+      assert_includes schema.dig(:properties, :lang, :enum), "san",
+                      "a newly synced shelf language must be advertised, not invisible"
+
+      result = call("nabu_define", { "lemma" => "dharma", "lang" => "san" })
+      refute result[:isError], "a catalog-held shelf language must be accepted"
+
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_define", { "lemma" => "x", "lang" => "zz" })
+      end
+      assert_match(/san/, error.message, "the rejection names the LIVE shelf set, not a frozen list")
+    end
+
+    def test_define_schema_degrades_without_a_catalog
+      schema = tools(catalog: nil).definitions.find { |tool| tool[:name] == "nabu_define" }
+                                              .fetch(:inputSchema)
+      assert_nil schema.dig(:properties, :lang, :enum),
+                 "no catalog — no shelf set to advertise; lang stays free-form rather than lying"
+    end
+
     def test_define_no_match_is_informative
       seed_shelf
       result = call("nabu_define", { "lemma" => "βλαβλα" })
@@ -855,7 +890,7 @@ module MCP
       assert_equal "noble", entry.fetch("gloss")
       assert_equal "attribution", entry.fetch("license_class")
       assert_empty entry.fetch("citations"), "no OE crosswalk yet — citations start empty"
-      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "ang"
+      assert_includes define_lang_enum, "ang", "the live-derived enum advertises the synced shelf"
     end
 
     # P13-10: the OCS shelf — nabu_define reaches Wiktionary-OCS through the
@@ -882,7 +917,7 @@ module MCP
       assert_includes entry.fetch("body"), "Inherited from Proto-Slavic *bogъ.",
                       "the etymology chain must survive into the MCP body"
       assert_empty entry.fetch("citations"), "Wiktionary quotes are unanchored — citations start empty"
-      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "chu"
+      assert_includes define_lang_enum, "chu", "the live-derived enum advertises the synced shelf"
     end
 
     def test_define_withholds_restricted_dictionaries_by_default
