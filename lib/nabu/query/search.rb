@@ -54,7 +54,7 @@ module Nabu
 
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
       # +lang+ filters on passage language; +license+ on effective license class.
-      # +from+/+to+/+place+ (P15-2) filter on the document's date/place axis
+      # +from+/+to+/+place+ (P15-2) filter on the document's timeline
       # (signed historical years, place LIKE pattern); +facets+ (P17-2) on the
       # document's facet rows ({facet name => pattern} — search --type/
       # --province/--material); +source+ (P22-1) scopes to one source slug.

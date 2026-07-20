@@ -2266,7 +2266,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- search date/place axis (P15-2) --------------------------------------
+  # -- search timeline (P15-2) --------------------------------------
 
   def test_search_from_to_filters_by_date
     with_dated_corpus do |config|
@@ -2523,7 +2523,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_show_prints_the_date_place_axis_line
+  def test_show_prints_the_timeline_line
     with_dated_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
       assert_nil status

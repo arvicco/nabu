@@ -6,12 +6,12 @@ module Nabu
   module Store
     # Populates the catalog's document_facets table (P17-2, migration 009 —
     # the genre facet, edh-survey §4.3) from the loaded documents'
-    # metadata_json "facets" key. A post-load pass like the AxisBuilder, but
+    # metadata_json "facets" key. A post-load pass like the TimelineBuilder, but
     # reading the CATALOG rather than canonical: the loader already persisted
     # each document's adapter-emitted facets (themselves f(canonical) — the
     # parser reads the record's own EAGLE terms, the adapter joins the CSV
     # raw codes), so the rebuild pass is a cheap projection, no canonical
-    # re-parse. Wired into Rebuild#run after the axis; facets = f(catalog) =
+    # re-parse. Wired into Rebuild#run after the timeline; facets = f(catalog) =
     # f(canonical), and `nabu rebuild` regenerates the table (the invariant).
     #
     # Full-rebuild semantics: drop every row, re-project. Rows are skinny
