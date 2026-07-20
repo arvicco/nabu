@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS of the full upstream features (whole:
+# false — a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared). adapter_test is null: the bridging/bhsa lane
+# tests assert slice-level counts, which untrimmed upstream files would
+# false-fail. Re-trim per the README recipe after any refresh. Pinned
+# upstream commit: 324598bb3f9cb3a36543e77ac61e4b0f77addf82 (master,
+# retrieved 2026-07-20).
+source: bridging
+adapter_test:
+retrieved: 2026-07-20
+files:
+  - path: tf/2021/osm.tf
+    url: https://raw.githubusercontent.com/ETCBC/bridging/master/tf/2021/osm.tf
+    whole: false
+    trim: bhsa fixture content slots, gap-anchored (2,278,326 B -> 15,616 B)
+  - path: tf/2021/osm_sf.tf
+    url: https://raw.githubusercontent.com/ETCBC/bridging/master/tf/2021/osm_sf.tf
+    whole: false
+    trim: bhsa fixture content slots, gap-anchored (642,465 B -> 5,191 B)
