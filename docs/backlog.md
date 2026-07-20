@@ -10538,7 +10538,7 @@ Per the P33-1 characterization: overlay repos need `<md:>` milestones
 (loud on anything new), KR5 joins `classes:`, censuses + fixtures per
 the P33-1 pattern. Owner-fired ~84 MB sync at the gate.
 
-## P37-2 · The lzh variant fold  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P37-2 · The lzh variant fold  [tier: fable] [status: done] [deps: —]
 Trad↔simp↔z-variant fold derived from HELD unihan (semantic variants
 OUT); lzh (+och headwords); canonical form = traditional; conventions
 §9 entry; census of participating held codepoints. RULED: ships now;

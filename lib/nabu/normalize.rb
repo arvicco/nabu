@@ -9,6 +9,7 @@ require "unicode_normalize/normalize"
 
 require_relative "deva"
 require_relative "cyrl"
+require_relative "hani"
 
 module Nabu
   # Text normalization at the adapter boundary. Nabu stores text as UTF-8 NFC
@@ -142,6 +143,20 @@ module Nabu
     EGYPTIAN_FOLD = ->(str) { str.tr("ꜣꜥ", "aa").gsub("ʾ", "") }
     private_constant :EGYPTIAN_FOLD
 
+    #   lzh/och  the Han variant fold (P37-2): trad↔simp↔z-variant codepoints
+    #        collapse to ONE traditional skeleton (說/説/说 → 說), per the
+    #        GENERATED Nabu::Hani table derived from the held Unihan
+    #        Variants data — kTraditionalVariant/kSimplifiedVariant/kZVariant
+    #        ONLY (semantic variants are different words; folding them is a
+    #        lie). Canonical form = the traditional codepoint (what
+    #        kanripo/cbeta store); resolution rule, refusal censuses and
+    #        provenance on Nabu::Ops::HaniFoldBuilder + lib/nabu/hani.rb's
+    #        header; regenerate with `rake fold:hani`. Keyed lzh (the
+    #        kanripo/cbeta/suttacentral corpora) and och (Baxter-Sagart/TLS
+    #        dictionary headwords) — deliberately NOT zho/ja: the unihan
+    #        shelf's own headwords stay byte-literal (the query union reaches
+    #        both spellings), and Japanese text keeps its shinjitai (値段
+    #        stays 値段). Per-codepoint 1→1 (String#tr), fold_with_map-safe.
     #   cop  Coptic (P17-1): delete the morphological divider ⳿ (U+2CFF,
     #        category Po — an editorial mark attached to its letter, e.g.
     #        ⲙⲏⲣ⳿, not text). It is the ONLY non-Mn editorial mark the
@@ -151,8 +166,13 @@ module Nabu
     #        (the improvements §2.2 "supralinear strokes" question,
     #        answered; conventions §9). 1→0 deletion — fold_with_map
     #        handles chars that fold away entirely.
+    HAN_FOLD = ->(str) { Hani.fold(str) }
+    private_constant :HAN_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
+      "lzh" => HAN_FOLD,
+      "och" => HAN_FOLD,
       "cop" => ->(str) { str.delete("⳿") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
