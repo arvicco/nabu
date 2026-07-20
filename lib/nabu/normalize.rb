@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# EAGER, deliberately: String#unicode_normalize defers requiring the stdlib's
+# tables to its first call. A many-hour sync's first nfc happens at the
+# fetch→load boundary, hours in — where a resource-exhausted process turns
+# the deferred require into a bogus `cannot load such file` LoadError
+# (2026-07-20 kanripo incident). Load the tables while the process is young.
+require "unicode_normalize/normalize"
+
 require_relative "deva"
 require_relative "cyrl"
 
