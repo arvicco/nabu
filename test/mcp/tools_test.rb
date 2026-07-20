@@ -134,6 +134,31 @@ module MCP
       assert_equal "μῆνιν ἄειδε θεά", hit.fetch("text")
     end
 
+    # The exhausted-inner-window honesty hint (P35-6, dev-loop §6b): MCP asks
+    # limit+1, so limit 1 makes the inner window 20 — twenty short lat rows
+    # fill it, the one grc match sits beyond, and the lang filter empties the
+    # page. The note must announce the possibly-incomplete page.
+    def test_search_incomplete_page_under_filters_notes_it
+      lat = make_document(urn: "urn:w:lat", language: "lat")
+      20.times do |i|
+        make_passage(lat, urn: "urn:w:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
+      end
+      grc = make_document(urn: "urn:w:grc", language: "grc")
+      make_passage(grc, urn: "urn:w:grc:1", sequence: 0,
+                        text: "arma sits far down the rank because this passage carries many more words than the rest")
+      rebuild!
+
+      result = call("nabu_search", { "query" => "arma", "lang" => "grc", "limit" => 1 })
+      refute result[:isError]
+      body = payload(result)
+      assert_empty body.fetch("matches")
+      assert_match(/page may be incomplete under these filters/, body.fetch("note"),
+                   "the filter-emptied page must not masquerade as a clean no-matches")
+
+      honest = payload(call("nabu_search", { "query" => "arma", "lang" => "lat", "limit" => 1 }))
+      refute_match(/page may be incomplete/, honest.fetch("note"), "a full page carries no hint")
+    end
+
     def test_search_lemma_mode_finds_inflected_attestations
       doc = make_document(urn: "urn:d:tb", title: "Treebank")
       make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,

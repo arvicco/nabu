@@ -769,11 +769,12 @@ module Nabu
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
 
-      results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
-                                   .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i, from: from, to: to, place: place,
-                                               facets: facets, source: options[:source], loans: loans)
-      print_search_results(results, facets: facets, query: query, loans: loans)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+      results = searcher.run(query, lang: options[:lang], license: options[:license],
+                                    limit: options[:limit].to_i, from: from, to: to, place: place,
+                                    facets: facets, source: options[:source], loans: loans)
+      print_search_results(results, facets: facets, query: query, loans: loans,
+                                    incomplete: searcher.incomplete_hint)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -3084,9 +3085,13 @@ module Nabu
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil, query: nil, loans: nil)
+      # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
+      # printed whenever present, so a filter-emptied page never masquerades
+      # as a complete answer.
+      def print_search_results(results, facets: nil, query: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3096,6 +3101,7 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
+        say "note: #{incomplete}" if incomplete
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc" — empty
@@ -3113,7 +3119,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
         else
@@ -3124,6 +3130,7 @@ module Nabu
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
         end
+        say "note: #{incomplete}" if incomplete
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
       end
@@ -3691,7 +3698,7 @@ module Nabu
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
                                    facets: facets, source: options[:source], loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,
-                                     loans: loans_filter)
+                                     loans: loans_filter, incomplete: fuzzy.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -3720,12 +3727,12 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-                                          .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i, morph: options[:morph],
-                                                      source: options[:source],
-                                                      gold_only: options[:gold_only], loans: loans_filter)
-        print_lemma_results(results, query: lemma)
+        searcher = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(lemma, lang: options[:lang], license: options[:license],
+                                      limit: options[:limit].to_i, morph: options[:morph],
+                                      source: options[:source],
+                                      gold_only: options[:gold_only], loans: loans_filter)
+        print_lemma_results(results, query: lemma, incomplete: searcher.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3772,12 +3779,13 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+        searcher = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
           lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
           source: options[:source], loans: loans_filter
         )
-        print_search_results(results, loans: loans_filter)
+        print_search_results(results, loans: loans_filter, incomplete: searcher.incomplete_hint)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -3792,9 +3800,10 @@ module Nabu
       # equivalence: a Latin key on a non-Latin passage, scholar-curated,
       # never attestation); the footer totals each non-gold share and names
       # the way out.
-      def print_lemma_results(results, query: nil)
+      def print_lemma_results(results, query: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3816,6 +3825,7 @@ module Nabu
                     "--gold-only excludes)"
         end
         say footer
+        say "note: #{incomplete}" if incomplete
       end
 
       # Render a vocab profile (P14-3): the header (urn, title, language, scope),

@@ -102,20 +102,27 @@ module Nabu
       # trigram floor.
       def run(fragment, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil, facets: nil,
               source: nil, loans: nil)
+        @incomplete_hint = nil
         variants = query_variants(fragment)
-        hits = candidates(variants, inner_limit: limit * INNER_LIMIT_FACTOR)
+        inner_limit = limit * INNER_LIMIT_FACTOR
+        hits = candidates(variants, inner_limit: inner_limit)
         verified = hits.filter_map do |row|
           match = locate(row.fetch(:text_normalized), variants)
           [row.fetch(:passage_id), row.fetch(:text_normalized), match] if match
         end
-        return [] if verified.empty?
 
         rows = catalog_rows(verified.map(&:first), lang: lang, license: license,
                                                    from: from, to: to, place: place, facets: facets,
                                                    source: source, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
-        verified.filter_map { |id, folded, match| build_result(rows[id], folded, match) if rows[id] }
-                .first(limit)
+        page = verified.filter_map { |id, folded, match| [rows[id], folded, match] if rows[id] }
+                       .first(limit)
+        note_page_completeness(
+          window_exhausted: hits.size >= inner_limit,
+          filters_active: [lang, license, from, to, place, source, loans].compact.any? || (facets || {}).any?,
+          page_size: page.size, limit: limit
+        )
+        page.map { |row, folded, match| build_result(row, folded, match) }
       end
 
       private
