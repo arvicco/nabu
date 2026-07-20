@@ -10545,7 +10545,7 @@ OUT); lzh (+och headwords); canonical form = traditional; conventions
 the fold-version bump dirties lzh sources and the owner schedules the
 ~13M-passage re-derive.
 
-## P37-3 · Gaiji: placeholder + KR-Gaiji resolution  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P37-3 · Gaiji: placeholder + KR-Gaiji resolution  [tier: opus] [status: done 2026-07-20] [deps: —]
 display.yml `kanripo: { gaiji: placeholder }` (⬚ + honesty footer;
 cbeta = documented non-entry). KR-Gaiji fetch PRE-APPROVED (owner
 ruling): registry row + sanctioned fetch config + refs→Unicode/IDS

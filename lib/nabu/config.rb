@@ -99,6 +99,13 @@ module Nabu
       File.dirname(config_path)
     end
 
+    # The gaiji resolution maps directory (P37-3): config/gaiji/<source>.tsv,
+    # the curated faithful ref→glyph maps the `reading` mode consults. Derived
+    # from display.yml's own location so it follows a relocated/restored tree.
+    def gaiji_dir
+      File.join(File.dirname(display_path), "gaiji")
+    end
+
     # The catalog SQLite file (architecture §5), derived from db_dir.
     def catalog_path
       File.join(db_dir, CATALOG_DB_FILENAME)
