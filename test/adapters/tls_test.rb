@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "tmpdir"
+require "fileutils"
 
 # Tls adapter tests (P33-4): the Thesaurus Linguae Sericae as the dictionary
 # shelf's first onomasiological occupant — ONE source, TWO dictionaries
@@ -9,6 +10,8 @@ require "tmpdir"
 # from the words side into concept bodies. Fixtures are byte-verbatim
 # upstream files (one trimmed — test/fixtures/tls/README.md).
 class TlsTest < Minitest::Test
+  include StoreTestDB
+
   FIXTURES = Nabu::TestSupport.fixtures("tls")
 
   CONCEPTS_URN = "urn:nabu:dict:tls-concepts:"
@@ -169,6 +172,81 @@ class TlsTest < Minitest::Test
     assert_equal "word: 勑", chi.body
   end
 
+  # --- attestation citations (P34-4) ------------------------------------------
+  # notes/doc + notes/swl carry the sense-level attestation lane: each
+  # tls:ann links (seg id, sense uuid), and word entries mint one
+  # DictionaryCitation per distinct pair whose sense they own. KR-shaped
+  # text ids carry cts_work urn:nabu:kanripo:<id>; segs matching the
+  # mandoku anchor grammar carry citation "<juan>:<page>" (the kanripo
+  # passage key). Fixtures are trimmed REAL ann files (README).
+
+  def test_word_entries_mint_citations_from_the_notes_attestations
+    qi = words_doc.entries.find { |entry| entry.headword == "棄" }
+    assert_equal 7, qi.citations.size, "7 fixture attestations name 棄's senses"
+
+    first = qi.citations.first # sense doc order, then (text, juan, page, line)
+    assert_nil first.cts_work, "CH1a0907 is a TLS-side text id — no kanripo claim"
+    assert_nil first.citation
+    assert_equal "#CH1a0907_CHANT_010-21a.6 #uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10", first.urn_raw
+    assert_match(/說苑 010-21a\.6 「管仲半棄酒，」/, first.label)
+    assert_match(/sense uuid-8f745d61/, first.label, "the sense binding rides the label")
+
+    meng = qi.citations[2]
+    assert_equal "urn:nabu:kanripo:KR1h0001", meng.cts_work
+    assert_equal "001:6a", meng.citation, "the kanripo passage key (juan:page)"
+    assert_match(/孟子 001-6a\.7 「棄甲曳兵而走。」/, meng.label)
+
+    assert_equal %w[005:22a 018:31a 013:30a 017:27a], qi.citations[3..].map(&:citation),
+                 "論語 attestations in sense doc order, page-sorted within a sense"
+  end
+
+  def test_citations_cover_both_upstream_ann_shapes
+    she = words_doc.entries.find { |entry| entry.headword == "舍" }
+    assert_equal 2, she.citations.size, "tls:ann-prefixed (孟子) + default-ns (論語) both parse"
+    assert_equal %w[urn:nabu:kanripo:KR1h0001 urn:nabu:kanripo:KR1h0004], she.citations.map(&:cts_work)
+    assert_equal %w[008:21a 009:19a], she.citations.map(&:citation)
+    assert_match(/不舍晝夜/, she.citations.first.label)
+  end
+
+  def test_unattested_words_and_concepts_carry_no_citations
+    pei_er = words_doc.entries.find { |entry| entry.headword == "陪貳" }
+    assert_empty pei_er.citations
+    concepts_doc.entries.each { |entry| assert_empty entry.citations }
+  end
+
+  def test_notes_absence_is_an_honest_citation_free_parse
+    Dir.mktmpdir do |root|
+      FileUtils.cp_r(File.join(FIXTURES, "concepts"), root)
+      FileUtils.cp_r(File.join(FIXTURES, "words"), root)
+      refs = adapter.discover(root).to_a
+      words = adapter.parse(refs.find { |ref| ref.id.start_with?("tls-words") })
+      words.entries.each { |entry| assert_empty entry.citations }
+    end
+  end
+
+  def test_citations_are_stable_across_two_parses
+    first = words_doc.entries.map(&:citations)
+    second = words_doc.entries.map(&:citations)
+    assert_equal first, second
+  end
+
+  # The seg-id grammar census (P34-4, upstream 2026-07-20): 99.7% match
+  # <text>_<edition>_<juan>-<page>[.line]; the strays (REAL censused ids
+  # below) keep text-grain honesty — KR-shaped ids still claim the kanripo
+  # document, page probes are never invented.
+  def test_seg_reference_maps_the_censused_grammar_and_its_strays
+    parser = Nabu::Adapters::TlsXmlParser.new
+    ref = parser.seg_reference("KR1h0004_tls_005-22a.4")
+    assert_equal ["urn:nabu:kanripo:KR1h0004", "005:22a", "005-22a.4"],
+                 [ref.cts_work, ref.citation, ref.ref]
+    stray = parser.seg_reference("KR3f0032_tls_001-p0007a-s2-seg1a")
+    assert_equal "urn:nabu:kanripo:KR3f0032", stray.cts_work, "KR text id still claims the document"
+    assert_nil stray.citation, "a non-anchor seg never invents a page"
+    cbeta = parser.seg_reference("T52n2102_CBETA_001-0001c0101.s16")
+    assert_nil cbeta.cts_work, "Taishō ids are not kanripo texts — no claim this packet"
+    assert_nil cbeta.citation
+  end
+
   # --- shared contracts -------------------------------------------------------
 
   def test_headwords_fold_for_lookup
@@ -189,6 +267,26 @@ class TlsTest < Minitest::Test
       assert entry.headword.unicode_normalized?(:nfc), entry.entry_id
       assert entry.body.unicode_normalized?(:nfc), entry.entry_id
     end
+  end
+
+  # --- loader round-trip (P34-4): citations land and stay idempotent ----------
+
+  def test_citation_rows_land_and_reload_is_idempotent
+    db = store_test_db
+    source = Nabu::Store::Source.create(
+      slug: "tls", name: "TLS", adapter_class: "Nabu::Adapters::Tls",
+      license_class: "attribution", enabled: false
+    )
+    loader = Nabu::Store::DictionaryLoader.new(db: db, source: source)
+
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal 9, db[:dictionary_citations].count, "棄 7 + 舍 2 — the fixture attestation census"
+    qi = db[:dictionary_entries].where(entry_id: "uuid-fbba1aa8-49bc-49be-ba1a-a849bc59bed5").first
+    assert_equal 7, db[:dictionary_citations].where(dictionary_entry_id: qi[:id]).count
+
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal 9, db[:dictionary_citations].count, "idempotent reload keeps counts"
+    assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq, "no revision flap"
   end
 
   # --- registry ---------------------------------------------------------------

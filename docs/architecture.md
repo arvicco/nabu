@@ -532,7 +532,23 @@ Everything else — URN-less bibls (inscriptions, AP), non-CTS values
 ("Dig. 33.6.9"), malformed upstream urns (`…:Orat::2:27:120`), works not
 ingested — stays as display text with a nil resolution: a lexicon's
 citations are best-effort by upstream reality, and the miss-rate is honest,
-never fuzzed.
+never fuzzed. A `cts_work` may also be an in-catalog DOCUMENT urn
+(`urn:nabu:…` — P17-4, MW→GRETIL: Mn./Pāṇ. cite at document grain by
+design), where the held document is itself the resolution when the
+citation is nil — and, since P34-4, also when a passage-grain probe
+MISSES on a held document: TLS attestations cite Kanripo texts by
+`<juan>:<page>` (the mandoku passage key), and the held edition's
+pagination only sometimes agrees with TLS's, so the page probe hits where
+it honestly can and falls back to the text — never to nothing — while
+unheld texts keep nil. The TLS attestation crosswalk (P34-4) is the
+volume case of this machinery: one `dictionary_citations` row per
+distinct (sense uuid, seg id) pair in tls-data's notes/doc + notes/swl
+(~190K attestations; sense uuids join the tls-words bodies, KR-shaped
+text ids claim `urn:nabu:kanripo:<KR-id>`, TLS-side/Taishō ids mint
+display-only rows), re-derived at every parse from canonical — resolution
+coverage grows as kanripo sync waves land, with zero stored state. The
+CLI caps the resolved-citation print (first 12, `--long` expands); MCP
+was already capped.
 
 **Query surface: `nabu define` + MCP `nabu_define`.** The CLI prints
 entries whole (the λόγος entry is ~300 KB of text — the CLI is the

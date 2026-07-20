@@ -10296,7 +10296,7 @@ outcome in the report: `search --lemma quinque` surfacing the Iguvine
 Tables, real output. Re-derive at rebuild — the lemma index is derived
 data; no canonical changes. Docs + worklog.
 
-## P34-4 · TLS attestation crosswalk  [tier: fable] [status: dispatched 2026-07-20] [deps: none hard — censuses whatever Kanripo state exists]
+## P34-4 · TLS attestation crosswalk  [tier: fable] [status: done 2026-07-20] [deps: none hard — censuses whatever Kanripo state exists]
 The P33-4 deferred lane: 111,484 sense-level attributions (notes/doc
 38,346 + notes/swl 73,138; 36,764 distinct senses, 99.6% resolvable
 into tls-words). The attested texts are largely Kanripo-format ids —

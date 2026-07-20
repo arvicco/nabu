@@ -278,6 +278,20 @@ module Query
       assert_nil mn.resolved_urn, "Manusmṛti is not in this catalog — an honest miss"
     end
 
+    # P34-4 (the TLS attestation crosswalk): a document-urn work that IS held
+    # still resolves — to the DOCUMENT — when the cited passage is not a held
+    # passage urn. TLS cites kanripo texts by (juan, page) whose pagination
+    # only sometimes matches the held edition's anchors; the text-grain claim
+    # stays honest when the page probe misses. Unheld works keep nil.
+    def test_a_missed_passage_probe_on_a_held_document_falls_back_to_the_document_urn
+      seed_mw_shelf
+      make_document(urn: "urn:nabu:gretil:sa_Rgveda-edAufrecht", language: "san-Latn")
+
+      citation = define("aṃśa").first.citations.find { |c| c.label == "RV. v, 86, 5" }
+      assert_equal "urn:nabu:gretil:sa_Rgveda-edAufrecht", citation.resolved_urn,
+                   "no held passage matches 5.086.05 — the held text itself is the honest resolution"
+    end
+
     def test_mw_citations_of_unheld_works_and_authority_labels_stay_unresolved
       seed_mw_shelf
       citations = define("bhāṣ").first.citations

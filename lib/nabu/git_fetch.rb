@@ -138,6 +138,7 @@ module Nabu
 
       attic_doomed!
       Shell.run("git", "-C", @dir, "merge", "--ff-only", "--quiet", "FETCH_HEAD")
+      widen_sparse_cone!
     end
 
     def head_sha
@@ -199,6 +200,35 @@ module Nabu
       scope = @sparse ? ["--", *@sparse.map { |path| path.delete_prefix("/") }] : []
       Shell.run("git", "-C", @dir, "diff", "--name-only", "--diff-filter=D",
                 "--find-renames", "-z", "HEAD", "FETCH_HEAD", *scope).split("\0")
+    end
+
+    # A source may GROW its sparse cone across releases (P34-4: tls added
+    # notes/doc + notes/swl for the attestation crosswalk), and clone-time
+    # `sparse-checkout set` never re-runs on the pull path — so an existing
+    # checkout reconciles here, AFTER the merge (the new paths materialize
+    # at the merged head). The re-declared cone is the UNION of the current
+    # patterns and the declared ones: widening only, never narrowing — an
+    # owner-widened checkout keeps its extra paths, and a FULL checkout
+    # (sparse-checkout list exits 128) is never sparsified, because hiding
+    # materialized canonical files is the destructive-fetch sin (class
+    # note). Same no-cone pattern grammar as sparse_clone, so list output
+    # and declared paths compare directly.
+    def widen_sparse_cone!
+      return unless @sparse
+      return unless (current = sparse_cone_patterns)
+
+      union = current | @sparse
+      return if union == current
+
+      Shell.run("git", "-C", @dir, "sparse-checkout", "set", "--no-cone", *union)
+    end
+
+    # The checkout's current sparse patterns, nil for a full (non-sparse)
+    # checkout — `sparse-checkout list` exits 128 there.
+    def sparse_cone_patterns
+      Shell.run("git", "-C", @dir, "sparse-checkout", "list").split("\n").map(&:strip).reject(&:empty?)
+    rescue Shell::Error
+      nil
     end
 
     # Copy each doomed file into the attic — first copy wins — and record the
