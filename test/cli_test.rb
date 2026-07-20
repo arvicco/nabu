@@ -1230,6 +1230,114 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search/export --axis membership filter (P37-8) ------------------------
+
+  # `search --axis` expands to the desk's member slugs and filters passages by
+  # source membership — the multi-source generalization of --source. alpha
+  # holds red+green (synced); beta's gold source is outside it. The footer
+  # names the desk.
+  def test_search_axis_filters_to_members_and_names_the_desk
+    with_axis_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν --axis alpha]) }
+      assert_nil status
+      assert_match(/red-one/, out, "an alpha member is a hit")
+      assert_match(/green-one/, out)
+      refute_match(/gold-one/, out, "beta's source is outside the alpha desk")
+      assert_match(/· axis: alpha/, out, "the footer names the desk")
+    end
+  end
+
+  # The flat search footer (no --axis) names no axis — the surface is byte-
+  # unchanged when the filter is absent (the pinned flat surface).
+  def test_search_without_axis_names_no_axis_in_the_footer
+    with_axis_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν]) }
+      assert_nil status
+      refute_match(/axis:/, out, "the flat search footer carries no axis fragment")
+    end
+  end
+
+  # An unknown axis is refused naming the known set — the P35-1 resolution
+  # guarantee, applied to the search membership filter.
+  def test_search_axis_unknown_names_the_known_set
+    with_axis_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
+      assert_match(/alpha.*beta/, err, "the miss names the known axes")
+    end
+  end
+
+  # `export --axis` scopes the stream to the desk's members (the same
+  # expansion as search); beta = gold only, alpha's sources absent.
+  def test_export_axis_scopes_the_stream_to_members
+    with_axis_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[export --format jsonl --axis beta]) }
+      assert_nil status
+      assert_match(/gold-one/, out, "beta's member is in the stream")
+      refute_match(/red-one/, out, "an alpha member is outside the beta desk")
+      refute_match(/green-one/, out)
+
+      _out, err, bad = with_config(config) { run_cli(%w[export --format plain --axis nope]) }
+      assert_equal 1, bad
+      assert_match(/unknown axis "nope"/, err)
+    end
+  end
+
+  # -- nabu axis desk card (P37-8) -------------------------------------------
+
+  # `nabu axis NAME`: the desk card in the `nabu language` mold — persona
+  # verbatim, desc, members with enablement + holdings (a disabled, unsynced
+  # member says it holds nothing), gold coverage, and the shipped affordances.
+  def test_axis_card_renders_persona_desc_members_holdings_gold_and_commands
+    with_axis_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis alpha]) }
+      assert_nil status
+      assert_match(/^alpha — The Alphaist — first letters, read whole\.$/, out, "persona verbatim")
+      assert_match(/The alpha lane\./, out, "the membership rationale (desc)")
+      assert_match(/members \(3\):/, out, "every member the desk tags")
+      assert_match(/red\s+on\s+docs=/, out, "an enabled, held member shows its counts")
+      assert_match(/green\s+on\s+docs=/, out)
+      assert_match(/blue\s+off\s+nothing held yet/, out, "a disabled, unheld member says so")
+      assert_match(/gold lemmas:/, out, "the aggregate gold-lemma coverage line")
+      assert_match(/commands: nabu list --axis alpha · nabu sync alpha/, out, "the shipped affordances")
+    end
+  end
+
+  # Bare `nabu axis`: one persona line per desk, in ratified (file) order.
+  def test_axis_bare_lists_every_desk_with_its_persona
+    with_axis_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis]) }
+      assert_nil status
+      assert_match(/research axes — the library's desks \(2\):/, out)
+      assert_match(/^  alpha\s+The Alphaist — first letters, read whole\.$/, out)
+      assert_match(/^  beta\s+The Betaist — second letters, read whole\.$/, out)
+      assert_operator out.index("alpha"), :<, out.index("beta"), "ratified file order"
+      assert_match(/nabu axis NAME for the full desk card/, out)
+    end
+  end
+
+  # An unknown axis card is refused naming the known set.
+  def test_axis_card_unknown_names_the_known_set
+    with_axis_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
+      assert_match(/alpha.*beta/, err)
+    end
+  end
+
+  # No corpus is not an error: the persona and membership still print, holdings
+  # degrade to an honest "no database" (the with_axis_sync_env env, unsynced).
+  def test_axis_card_without_a_corpus_still_prints_the_desk
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis alpha]) }
+      assert_nil status
+      assert_match(/^alpha — The Alphaist/, out)
+      assert_match(/no database \(run nabu sync\)/, out, "holdings degrade honestly with no catalog")
+    end
+  end
+
   # status is implemented (P1-6). Against an empty registry with no catalog db,
   # it reports "no sources" and exits cleanly (0). (The shipped sources.yml now
   # registers perseus-greek, so this behaviour is tested against an isolated
@@ -5602,6 +5710,20 @@ class CLITest < Minitest::Test
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: path, config_path: "(test)"
       )
+    end
+  end
+
+  # with_axis_sync_env, synced + indexed (P37-8): red+green (alpha, enabled)
+  # and gold (beta, enabled) are parsed into the catalog and the FTS index;
+  # blue (alpha, DISABLED) is deliberately left unsynced, so it holds nothing
+  # — the axis card's "nothing held yet" member. Drives the search/export
+  # --axis membership filter and the `nabu axis` desk card.
+  def with_axis_indexed_corpus
+    with_axis_sync_env do |config|
+      with_config(config) do
+        %w[red green gold].each { |slug| capture_io { Nabu::CLI.start(["sync", slug, "--parse-only"]) } }
+      end
+      yield config
     end
   end
 

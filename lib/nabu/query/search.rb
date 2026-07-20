@@ -67,7 +67,7 @@ module Nabu
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil, loans: nil)
+              facets: nil, source: nil, sources: nil, loans: nil)
         @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
@@ -80,7 +80,7 @@ module Nabu
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
         rows = catalog_rows(ordered_ids, lang: lang, license: license,
                                          from: from, to: to, place: place, facets: facets, source: source,
-                                         loans: loans)
+                                         sources: sources, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
 
         # Reassemble in FTS rank order (the catalog query returns no order),
@@ -88,7 +88,8 @@ module Nabu
         page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, from, to, place, source, loans].compact.any? || (facets || {}).any?,
+          filters_active: [lang, license, from, to, place, source, loans].compact.any? ||
+            (facets || {}).any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
         page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
