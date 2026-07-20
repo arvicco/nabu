@@ -300,5 +300,62 @@ module Query
 
       assert_empty parallels("urn:wd:od:1.1").hits, "withdrawn passages never surface (two-level visibility)"
     end
+
+    # == D36-a: corpus-relative common-gram / rare-lemma cutoffs ===============
+    #
+    # Owner ruling 2026-07-20: the two df cutoffs are a FRACTION of the live
+    # passage count, snapshot once per run, not frozen absolutes — an absolute
+    # cutoff narrows recall as the corpus grows. The tuning-era constants stay
+    # as the numerators (and the floor / unavailable-count fallback).
+
+    def test_the_ratios_reproduce_the_tuning_era_absolute_cutoffs
+      tuning = 3_760_000
+      assert_equal 500, (Nabu::Query::Parallels::COMMON_GRAM_DF_RATIO * tuning).round,
+                   "500 grams of the 3.76M tuning corpus (≈133 ppm) — the ratio's numerator"
+      assert_equal 2_000, (Nabu::Query::Parallels::RARE_LEMMA_DF_RATIO * tuning).round,
+                   "2,000 lemmas of the 3.76M tuning corpus (≈532 ppm)"
+    end
+
+    def test_cutoffs_snapshot_the_live_corpus_by_the_tuning_ratio
+      doc = make_document(urn: "urn:cr:d", title: "D")
+      make_passage(doc, urn: "urn:cr:d:1", text: ODYSSEY_1_1, sequence: 0)
+      rebuild!
+      eng = engine
+      # The settled live corpus (24,415,015 passages) → 133 ppm of it. (No
+      # minitest/mock in this suite: override the count read on the instance.)
+      eng.define_singleton_method(:corpus_passage_count) { 24_415_015 }
+      eng.run("urn:cr:d:1")
+      assert_equal 3_247, eng.instance_variable_get(:@common_gram_df),
+                   "round(24.4M × 500/3.76M) — the relative cutoff tracks the grown corpus"
+      assert_equal 12_987, eng.instance_variable_get(:@rare_lemma_df),
+                   "round(24.4M × 2,000/3.76M)"
+    end
+
+    def test_cutoffs_hold_at_the_absolute_floor_below_the_tuning_size
+      doc = make_document(urn: "urn:fl:d", title: "D")
+      make_passage(doc, urn: "urn:fl:d:1", text: ODYSSEY_1_1, sequence: 0)
+      rebuild!
+      eng = engine
+      eng.run("urn:fl:d:1") # a handful of passages: round(n×ratio) ≪ floor
+      assert_equal Nabu::Query::Parallels::COMMON_GRAM_DF,
+                   eng.instance_variable_get(:@common_gram_df),
+                   "below the tuning size the tuning constant is the floor — small corpora stay unpruned"
+      assert_equal Nabu::Query::Parallels::RARE_LEMMA_DF,
+                   eng.instance_variable_get(:@rare_lemma_df)
+    end
+
+    def test_cutoffs_fall_back_to_the_floor_when_the_corpus_count_is_unavailable
+      doc = make_document(urn: "urn:fb:d", title: "D")
+      make_passage(doc, urn: "urn:fb:d:1", text: ODYSSEY_1_1, sequence: 0)
+      rebuild!
+      eng = engine
+      eng.define_singleton_method(:corpus_passage_count) { nil }
+      eng.run("urn:fb:d:1")
+      assert_equal Nabu::Query::Parallels::COMMON_GRAM_DF,
+                   eng.instance_variable_get(:@common_gram_df),
+                   "an unreadable corpus count trips the absolute fallback, not a zero cutoff"
+      assert_equal Nabu::Query::Parallels::RARE_LEMMA_DF,
+                   eng.instance_variable_get(:@rare_lemma_df)
+    end
   end
 end

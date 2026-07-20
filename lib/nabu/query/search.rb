@@ -47,7 +47,7 @@ module Nabu
       # (language/license) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
-      # census: 5505159, 2026-07-20, live passages at re-measure (3.76M at tuning)
+      # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)
