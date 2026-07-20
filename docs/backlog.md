@@ -10238,6 +10238,11 @@ where shelves back it (live 棄-page inventory in the orchestrator-held
 note is the acceptance benchmark), exceed it on the historical axis
 (OC reconstruction, Qieyun, hdic positions, TLS senses, classical
 attestation) — sino/jap workflows designed to that bar.
+Gate observation (2026-07-20, P34 runbook step 3): `show` has no view
+of a passage's token annotations — eyeballing the new bhsa osm lane
+took an export|grep pipeline. Journal: a `show --tokens` (raw stored
+annotations, honest verbatim render) is a small QoL packet candidate
+for P35's CLI pass.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
