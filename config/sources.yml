@@ -1128,11 +1128,20 @@ ceipom:
   # Five UTF-16LE(BOM) CSVs — the flat-CSV encoding first. Dependency
   # tokens + analysis ride annotations; the analysis Lemma column is an
   # OPAQUE ID (no citation forms in the deposit) → lemma_id verbatim,
-  # NO passage_lemmas minted (honest; the Classical_Latin_equivalent
-  # lemma bridge is journaled v2). Trismegistos links → tm: reference
+  # never a "lemma" key. The lemma-index rows come from the OTHER column
+  # (P34-3, the journaled v2 bridge gone live): Classical_Latin_equivalent
+  # values mint LATIN keys on the non-Latin passages under the distinct
+  # "equivalence" tier below — scholar-curated cross-language equivalence,
+  # not attestation and not automatic lemmatization, so it is neither gold
+  # nor silver and --gold-only excludes it. The curation caveat, stated
+  # plainly: CEIPoM is a single-scholar corpus — every lemmatization,
+  # dependency relation and Classical-Latin equivalence is Reuben Pitts's
+  # own curation (KU Leuven dissertation corpus), editor-verified in
+  # intent but not multiply reviewed. Trismegistos links → tm: reference
   # edges (producer ceipom). Zenodo versions are immutable — a new
   # version is a NEW record id, so this deposit can never drift:
   sync_policy: frozen
+  lemma_tier: equivalence
 # P29-0: the Etruscan pair — the OpenEtruscan corpus + the Larth ETP
 # glossary (posture attribution throughout; the Larth provenance caveat
 # dissolved 2026-07-14 when upstream added LICENSE CC BY 4.0 on owner

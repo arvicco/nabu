@@ -1111,6 +1111,57 @@ module MCP
       assert_equal "silver", silver_hit.fetch("tier"), "silver hits say so"
     end
 
+    # -- P34-3: the equivalence tier in the payloads -------------------------
+    # CEIPoM-shaped rows: Latin keys minted from scholar-curated
+    # Classical-Latin equivalents on non-Latin passages, tier "equivalence".
+
+    def seed_equivalence_corpus
+      seed_recon_shelf
+      equiv = Nabu::Store::Source.create(
+        slug: "cle", name: "CLE", adapter_class: "TestAdapter", license_class: "attribution",
+        enabled: true
+      )
+      doc = make_document(source: equiv, urn: "urn:nabu:test:cle:osc", title: "Tabula",
+                          language: "osc")
+      3.times do |i|
+        make_passage(doc, urn: "urn:nabu:test:cle:osc:#{i + 1}", text: "deivai", sequence: i,
+                          language: "osc",
+                          tokens: [{ "lemma_id" => "1a", "latin_equivalent" => "deus",
+                                     "form" => "deivai" }])
+      end
+      bog_id = @catalog[:dictionary_entries]
+               .where(urn: "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2").get(:id)
+      @catalog[:dictionary_reflexes].insert(
+        dictionary_entry_id: bog_id, seq: 99, lang_code: "lat", language: "lat",
+        word: "deus", word_folded: "deus"
+      )
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "cle" => "equivalence" })
+    end
+
+    def test_search_lemma_payload_labels_equivalence_hits
+      seed_equivalence_corpus
+      matches = payload(call("nabu_search", { "lemma" => "deus" })).fetch("matches")
+      hit = matches.find { |m| m.fetch("urn") == "urn:nabu:test:cle:osc:1" }
+      refute_nil hit, "the Latin key must surface the Oscan passage"
+      assert_equal "equivalence", hit.fetch("tier"),
+                   "equivalence hits say so — never mistakable for attestation"
+      assert_equal "osc", hit.fetch("language"), "the hit's language stays the passage's own"
+    end
+
+    def test_etym_payload_serves_equivalence_count_labeled_beside_nil_gold
+      seed_equivalence_corpus
+      entries = payload(call("nabu_etym", { "lemma" => "богъ", "lang" => "chu" })).fetch("entries")
+      cognates = entries.first.fetch("cognates")
+      lat = cognates.find { |c| c["language"] == "lat" && c["word"] == "deus" }
+      refute_nil lat
+      assert_nil lat.fetch("attested_count"),
+                 "equivalence alone never claims gold attestation — the text is not Latin"
+      assert_equal 3, lat.fetch("equivalence_count"),
+                   "the scholar-curated count rides beside it, labeled"
+      refute lat.key?("silver_count"), "equivalence is NOT silver — a different honesty"
+    end
+
     # P26-4: concord is a formatter over LemmaSearch, so its rows mirror the
     # lemma-hit labels — tier key on non-gold rows only; gold and text-mode
     # rows carry no tier key at all.

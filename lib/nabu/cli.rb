@@ -685,7 +685,8 @@ module Nabu
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     option :gold_only, type: :boolean, default: false,
                        desc: "With --lemma: gold (verified) annotations only — exclude silver " \
-                             "(automatic) lemmatization"
+                             "(automatic) lemmatization and equivalence (scholar-curated " \
+                             "Classical-Latin equivalents on non-Latin passages)"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -3038,21 +3039,24 @@ module Nabu
       # Render KWIC rows (P8-3): left + keyword + right (each side already
       # trimmed to width by Concord), then the urn + [language] tag. The left
       # context is a fixed width, so keyword columns align down the page.
-      # Silver lemma-mode rows carry the search --lemma tag (P26-4); gold and
-      # text-mode rows render exactly as before. The footer totals the silver
-      # share so a mixed page is never silently mixed.
+      # Non-gold lemma-mode rows carry the search --lemma tag (P26-4 silver,
+      # P34-3 equivalence); gold and text-mode rows render exactly as before.
+      # The footer totals each non-gold share so a mixed page is never
+      # silently mixed.
       def print_concord_rows(rows)
         return say("no matches") if rows.empty?
 
         width = options[:width].to_i
         rows.each do |row|
-          tier = row.tier == "silver" ? " [silver]" : ""
+          tier = row.tier && row.tier != "gold" ? " [#{row.tier}]" : ""
           left, keyword, right = concord_display_pieces(row, width)
           say "#{left}#{keyword}#{right}  #{row.urn}#{" [#{row.language}]" if row.language}#{tier}"
         end
         footer = "#{rows.size} #{rows.size == 1 ? 'line' : 'lines'} (KWIC; keyword in pristine text, corpus order)"
         silver = rows.count { |row| row.tier == "silver" }
         footer += " — #{silver} silver (automatic lemmatization)" if silver.positive?
+        equivalence = rows.count { |row| row.tier == "equivalence" }
+        footer += " — #{equivalence} equivalence (Classical-Latin equivalents)" if equivalence.positive?
         say footer
       end
 
@@ -3690,9 +3694,11 @@ module Nabu
       # Render lemma hits: urn + language, the dictionary form with the surface
       # form(s) that attest it, then the PRISTINE passage line (truncated) —
       # the surface form already marks the match, so readability wins over a
-      # folded snippet here. Silver (automatic-lemmatization) hits are labeled
-      # per hit — gold stays unlabeled, the pre-tier render exactly (P26-0);
-      # the footer totals the silver share and names the way out.
+      # folded snippet here. Non-gold hits are labeled per hit — gold stays
+      # unlabeled, the pre-tier render exactly (P26-0 silver; P34-3
+      # equivalence: a Latin key on a non-Latin passage, scholar-curated,
+      # never attestation); the footer totals each non-gold share and names
+      # the way out.
       def print_lemma_results(results, query: nil)
         if results.empty?
           say "no matches"
@@ -3711,6 +3717,11 @@ module Nabu
         silver = results.count { |result| result.tier == "silver" }
         footer = "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} (exact lemma match; text is pristine)"
         footer += " — #{silver} silver (automatic lemmatization; --gold-only excludes)" if silver.positive?
+        equivalence = results.count { |result| result.tier == "equivalence" }
+        if equivalence.positive?
+          footer += " — #{equivalence} equivalence (scholar-curated Classical-Latin equivalents; " \
+                    "--gold-only excludes)"
+        end
         say footer
       end
 
@@ -3892,18 +3903,23 @@ module Nabu
       # The tier rule (P26-0): attested_count IS the gold count — a silver
       # (automatic-lemmatization) count renders beside it as "(+N silver)",
       # and a silver-ONLY reflex gets its own labeled section, "silver N
-      # passages". NEVER a bare number that could read as gold.
+      # passages". NEVER a bare number that could read as gold. The
+      # equivalence tier (P34-3) rides the same contract with its own name:
+      # "(+N equivalence)" beside gold, an equivalence-only section below —
+      # scholar-curated Classical-Latin equivalents on non-Latin passages,
+      # never attestation.
       def print_reflexes(reflexes)
         return if reflexes.empty?
 
         attested, uncounted = reflexes.partition(&:attested_count)
-        silver_only, rest = uncounted.partition(&:silver_count)
+        silver_only, unattested = uncounted.partition(&:silver_count)
+        equivalence_only, rest = unattested.partition(&:equivalence_count)
         unless attested.empty?
           say ""
           say "attested in this corpus (nabu search --lemma):"
           attested.sort_by { |r| -r.attested_count }.each do |r|
             say "  [#{r.language}] #{reflex_form(r)} — #{r.attested_count} " \
-                "#{r.attested_count == 1 ? 'passage' : 'passages'}#{silver_suffix(r)}"
+                "#{r.attested_count == 1 ? 'passage' : 'passages'}#{tier_suffixes(r)}"
           end
         end
         unless silver_only.empty?
@@ -3914,15 +3930,27 @@ module Nabu
                 "#{r.silver_count == 1 ? 'passage' : 'passages'}"
           end
         end
+        unless equivalence_only.empty?
+          say ""
+          say "equivalence-only (scholar-curated Classical-Latin equivalents on non-Latin " \
+              "passages — not attested in this language; nabu search --lemma):"
+          equivalence_only.sort_by { |r| -r.equivalence_count }.each do |r|
+            say "  [#{r.language}] #{reflex_form(r)} — equivalence #{r.equivalence_count} " \
+                "#{r.equivalence_count == 1 ? 'passage' : 'passages'}"
+          end
+        end
         return if rest.empty?
 
         say ""
         options[:long] ? print_reflexes_expanded(rest) : print_reflexes_capped(rest)
       end
 
-      # The labeled silver rider on a gold-attested line (P26-0).
-      def silver_suffix(reflex)
-        reflex.silver_count ? " (+#{reflex.silver_count} silver)" : ""
+      # The labeled non-gold riders on a gold-attested line (P26-0 silver,
+      # P34-3 equivalence) — each tier under its own name, never summed.
+      def tier_suffixes(reflex)
+        suffix = reflex.silver_count ? " (+#{reflex.silver_count} silver)" : ""
+        suffix += " (+#{reflex.equivalence_count} equivalence)" if reflex.equivalence_count
+        suffix
       end
 
       # Compact default (house compact-CLI rule): the first ten non-attested

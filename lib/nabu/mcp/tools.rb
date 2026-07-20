@@ -979,8 +979,9 @@ module Nabu
           # morph (P13-6): decoded morphology evidence, present only on a
           # --morph-filtered hit (nil otherwise, so ordinary lemma hits are
           # unchanged).
-          # tier (P26-0): present only on NON-gold hits — the CLI mirror
-          # (silver labeled per hit, gold unlabeled as ever).
+          # tier (P26-0, P34-3): present only on NON-gold hits — the CLI
+          # mirror (silver/equivalence labeled per hit, gold unlabeled as
+          # ever).
           lemma_hit = base.merge(lemma: result.lemma, surface_forms: result.surface_forms,
                                  gloss: result.gloss)
           lemma_hit = lemma_hit.merge(tier: result.tier) unless result.tier == "gold"
@@ -1166,19 +1167,25 @@ module Nabu
 
       # Shared reflex/cognate list rendering (define + etym): gold-attested
       # first (by count, descending), then silver-only (P26-0 — labeled by
-      # the silver_count key, attested_count honestly null), then the rest,
-      # capped with an honest total. attested_count stays GOLD-only; a
-      # silver_count key appears only where silver rows exist — never summed
-      # into attested_count, never a bare number.
+      # the silver_count key, attested_count honestly null), then
+      # equivalence-only (P34-3 — the equivalence_count key:
+      # scholar-curated Classical-Latin equivalents on non-Latin passages,
+      # never attestation), then the rest, capped with an honest total.
+      # attested_count stays GOLD-only; a silver_count / equivalence_count
+      # key appears only where such rows exist — never summed into
+      # attested_count, never a bare number.
       def reflex_fields(views, cap:, key: :reflexes)
         attested, uncounted = views.partition(&:attested_count)
-        silver_only, rest = uncounted.partition(&:silver_count)
+        silver_only, unattested = uncounted.partition(&:silver_count)
+        equivalence_only, rest = unattested.partition(&:equivalence_count)
         ordered = attested.sort_by { |view| -view.attested_count } +
-                  silver_only.sort_by { |view| -view.silver_count } + rest
+                  silver_only.sort_by { |view| -view.silver_count } +
+                  equivalence_only.sort_by { |view| -view.equivalence_count } + rest
         shown = ordered.first(cap).map do |view|
           row = { lang_code: view.lang_code, language: view.language, word: view.word,
                   roman: view.roman, attested_count: view.attested_count }
           row[:silver_count] = view.silver_count if view.silver_count
+          row[:equivalence_count] = view.equivalence_count if view.equivalence_count
           row
         end
         fields = { key => shown, :"#{key}_total" => views.size }
