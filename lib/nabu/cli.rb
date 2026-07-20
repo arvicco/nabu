@@ -1212,11 +1212,20 @@ module Nabu
                                                   #   "covers :1.1–:1.43; range shows :1.5–:1.10"
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
+        nabu show urn:nabu:oshb:gen:1:1 --tokens  # + the stored token annotations,
+                                                  #   verbatim (form, lemma, osm, …)
+
+      TOKENS (--tokens): appends the passage's stored token annotations as
+      one line per token — `form` first, then every key the store holds for
+      that token, exactly as stored (the honest raw view; nothing decoded,
+      nothing invented). A passage without token annotations, and a
+      document/range urn, say so.
 
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
       "withdrawn" or "retired upstream" actually holds; read a Greek work
-      you can't sight-read next to its English translation.
+      you can't sight-read next to its English translation; inspect the
+      exact lemma/morphology evidence a treebank stored for one passage.
     HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
@@ -1228,10 +1237,16 @@ module Nabu
                     desc: "With --random: draw only from this source (default: the whole corpus)"
     option :count, type: :numeric, default: 1,
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
+    option :tokens, type: :boolean, default: false,
+                    desc: "Append the passage's stored token annotations verbatim (form + every key present)"
     display_option
     def show(urn = nil)
       urn = urn.to_s.strip
       display_mode
+      if options[:tokens] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --tokens does not compose with --random/--parallel"
+      end
+
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
@@ -1252,6 +1267,7 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+      print_show_tokens(result) if options[:tokens]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
@@ -2633,6 +2649,35 @@ module Nabu
         passage.provenance.each do |event|
           say "    #{event.at}  #{event.event}#{"  #{event.tool}" if event.tool}"
         end
+      end
+
+      # `show URN --tokens` (P35-6, the journaled gate find): the honest RAW
+      # view of the stored token annotations — one line per token, `form`
+      # first, then EVERY other key exactly as stored (lemma/gloss/osm/lang/
+      # …, nested values as compact JSON). No display transforms, no
+      # invention; a passage without tokens, and a non-passage grain, both
+      # say so instead of rendering nothing.
+      def print_show_tokens(result)
+        unless result.is_a?(Nabu::Query::Show::PassageResult)
+          return say "--tokens renders at passage grain — give a passage urn"
+        end
+
+        tokens = result.annotations["tokens"]
+        tokens = tokens.is_a?(Array) ? tokens.grep(Hash) : []
+        return say "no token annotations stored for this passage" if tokens.empty?
+
+        say "tokens (#{tokens.size}):"
+        tokens.each { |token| say "  #{token_line(token)}" }
+      end
+
+      # One token as `form=… key=…` pairs, form first, stored key order after,
+      # non-scalar values as compact JSON — verbatim, never interpreted.
+      def token_line(token)
+        keys = (["form"] + token.keys).uniq.select { |key| token.key?(key) }
+        keys.map do |key|
+          value = token[key]
+          "#{key}=#{value.is_a?(String) ? value : JSON.generate(value)}"
+        end.join("  ")
       end
 
       def print_show_document(document)

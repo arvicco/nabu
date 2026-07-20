@@ -4117,6 +4117,39 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --tokens (P35-6, the journaled gate find): the honest raw view of
+  # the stored token annotations — form plus EVERY key present, verbatim, no
+  # invention; absences say so.
+
+  def test_show_tokens_renders_every_stored_annotation_key_verbatim
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_nil status
+      assert_match(/tokens \(1\):/, out)
+      assert_match(/form=בָּרָא/, out)
+      assert_match(/lemma=ברא/, out)
+      assert_match(/gloss=create/, out)
+      assert_match(/osm=HVqp3ms/, out)
+      assert_match(/lang=hbo/, out, "every annotation key rides along — the raw view invents nothing")
+    end
+  end
+
+  def test_show_tokens_on_an_unannotated_passage_says_so
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:grc:1 --tokens]) }
+      assert_nil status
+      assert_match(/no token annotations stored for this passage/, out)
+    end
+  end
+
+  def test_show_tokens_on_a_document_urn_names_the_grain
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:lat --tokens]) }
+      assert_nil status
+      assert_match(/--tokens renders at passage grain — give a passage urn/, out)
+    end
+  end
+
   def test_export_is_pristine_under_translit_and_colors
     with_hebrew_corpus do |config|
       out, _err, status = with_env("NABU_COLOR" => "1") do
@@ -4361,6 +4394,10 @@ class CLITest < Minitest::Test
                    0, "grc")
     nc_doc = window_document(catalog, nc_id, "urn:w:nc", "grc")
     window_passage(catalog, nc_doc, "urn:w:nc:1", "εἶπας", 0, "grc", lemmas: [%w[λέγω εἶπας]])
+    tok_doc = window_document(catalog, open_id, "urn:w:tok", "hbo")
+    window_passage(catalog, tok_doc, "urn:w:tok:1", "בָּרָא", 0, "hbo",
+                   raw_tokens: [{ "form" => "בָּרָא", "lemma" => "ברא", "gloss" => "create",
+                                  "osm" => "HVqp3ms", "lang" => "hbo" }])
   end
 
   def window_document(catalog, source_id, urn, language)
@@ -4370,8 +4407,8 @@ class CLITest < Minitest::Test
     )
   end
 
-  def window_passage(catalog, doc_id, urn, text, sequence, language, lemmas: [])
-    tokens = lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } }
+  def window_passage(catalog, doc_id, urn, text, sequence, language, lemmas: [], raw_tokens: [])
+    tokens = lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } + raw_tokens
     catalog[:passages].insert(
       document_id: doc_id, urn: urn, sequence: sequence, language: language,
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
