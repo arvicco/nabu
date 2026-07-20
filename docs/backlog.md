@@ -10342,3 +10342,23 @@ page anchors: the mapping decision is the packet's design note; an
 honest partial wiring beats a fake complete one). Fetch: the notes/
 dirs join the tls sparse cone (~more MB — census and report). Docs +
 worklog.
+
+# Phase 35 — the CLI/display pass (Sinitic-display workstream 1 of 4; orchestrator holds the full plan)
+
+## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: done 2026-07-20] [deps: —]
+ONE `Nabu::Display.width` (grapheme × East-Asian-Width class: W/F = 2,
+bidi isolates U+2066–2069 and ANSI SGR = 0) now measures every
+column-aligned surface — concord KWIC padding+clipping, the CLI re-pad,
+the distinctive-vocabulary lemma column — via display CELLS, not
+String#length; `ljust`/`rjust` companions do the padding. The EAW table
+is transcribed from EastAsianWidth.txt Unicode 16.0.0, corpus-scoped
+(CJK Unified + Ext A–I via the plane-2/3 W-default rule, kana + kana
+extensions, hangul, bopomofo, Yi, CJK radicals/strokes/symbols/
+punctuation, Tangut/Khitan/Nushu, fullwidth forms); ambiguous-A renders
+narrow (the Unicode default — terminal's toggle, documented not
+modelled). Measurement not policy: no `--display` mode, no footer. The
+cli.rb + concord.rb "does not model East-Asian width" confessions are
+retired. Ambiguous census over the held lzh/ojp fixture passages: 10 of
+48,673 codepoints (0.02%), all U+25A1 □ missing-glyph placeholders,
+recorded with the iTerm2 ambiguous-width toggle note in display.md §2.
+grc/lat/chu output byte-unchanged (width == length there; suite pins).

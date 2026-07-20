@@ -154,9 +154,62 @@ class DisplayTest < Minitest::Test
     refute_includes render(ZOGR, "chu").text, RLI
   end
 
-  def test_visible_length_ignores_isolates
+  # -- East-Asian display width (P35-7) — the one column-math seam ----------
+  #
+  # Real Han from the kanripo fixture (KR1h0004 Lunyu): 其為人也 etc. Fullwidth
+  # forms and kana come from the ojp/lzh reality the Sino wave landed.
+  LZH_HAN = "其為人也孝弟" # 6 CJK Unified Ideographs (U+4E00–9FFF)
+  CJK_PUNCT = "「，」"              # U+300C wide bracket, U+FF0C fullwidth comma, U+300D
+  KANA = "あア"                    # hiragana A (U+3042) + katakana A (U+30A2)
+  FULLWIDTH_A = "Ａ" # U+FF21 fullwidth latin capital A
+
+  def width(text) = Nabu::Display.width(text)
+
+  def test_width_of_ascii_and_greek_is_one_cell_per_char
+    assert_equal 3, width("abc")
+    assert_equal 5, width("μῆνιν"), "grc is narrow — precomposed circumflex included"
+  end
+
+  def test_width_of_han_ideographs_is_two_cells_each
+    assert_equal 12, width(LZH_HAN)
+    assert_equal 2, width("人")
+  end
+
+  def test_width_of_kana_is_two_cells_each
+    assert_equal 4, width(KANA)
+  end
+
+  def test_width_of_fullwidth_and_wide_punctuation_is_two_cells
+    assert_equal 6, width(CJK_PUNCT), "「 ， 」 each render two cells"
+    assert_equal 2, width(FULLWIDTH_A)
+  end
+
+  def test_combining_marks_take_the_base_grapheme_width
+    assert_equal 1, width("é"), "e + combining acute is one narrow cluster"
+    assert_equal 1, width("μ͂"), "mu + combining perispomeni is one narrow cluster"
+    assert_equal 2, width("人́"), "a wide base plus a combining mark stays two cells"
+  end
+
+  def test_isolates_are_zero_width
+    assert_equal 2, width("#{RLI}人#{PDI}"), "RTL isolates U+2066–2069 draw nothing"
+    assert_equal 0, width(RLI + PDI)
+  end
+
+  def test_ansi_escape_sequences_are_zero_width
+    assert_equal 2, width("\e[36m人\e[0m"), "SGR color codes draw nothing"
+    assert_equal 3, width("\e[33mabc\e[0m")
+  end
+
+  def test_mixed_string_sums_display_cells
+    assert_equal 3, width("a人"), "1 + 2"
+    assert_equal 5, width("其b，"), "2 + 1 + 2"
+    assert_equal 0, width("")
+  end
+
+  def test_width_ignores_isolates_on_rendered_hebrew
     rendered = render(GEN_1_1_CONSONANTAL, "hbo", mode: "plain")
-    assert_equal GEN_1_1_CONSONANTAL.length, Nabu::Display.visible_length(rendered.text)
+    assert_equal GEN_1_1_CONSONANTAL.length, Nabu::Display.width(rendered.text),
+                 "consonantal Hebrew is narrow; the isolate wrap adds no cells"
   end
 
   # -- the mode registry (the sibling-packet seam) -------------------------
