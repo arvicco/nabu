@@ -1850,6 +1850,35 @@ kanripo:
   # its catalog component lives at ask.bunkankun.org (journaled — a
   # future catalog/fetch seam candidate, next Sino phase survey).
   classes: [KR1, KR2, KR3, KR4]
+
+kr-gaiji:
+  adapter: Nabu::Adapters::KrGaiji
+  axes: [sinitic]
+  enabled: false   # PERMANENTLY false — a feature module, not a text source
+                   # (the P34-1 bridging precedent): discover mints no
+                   # documents, so there is nothing to serve or flip. The row
+                   # exists to give the owner the sanctioned GitFetch path for
+                   # the gaiji resolution map. OWNER QUEUE (P37-3): optional —
+                   # bin/nabu sync kr-gaiji (sparse cone ≈ a few hundred KB,
+                   # charlist.org.txt + README only) lands canonical/kr-gaiji
+                   # so config/gaiji/kanripo.tsv can be regenerated when KR-Gaiji
+                   # advances. The map already ships curated, so the fetch is a
+                   # refresh path, not a prerequisite — placeholder + the 972
+                   # faithful resolutions work today with no sync.
+  # P37-3: KR-Gaiji — the Kanseki Repository's not-yet-encoded characters
+  # (github.com/kanripo/KR-Gaiji). charlist.org.txt lists 5,254 `&KR\d+;`
+  # gaiji refs; census (commit 662fd61d) found only 972 (36.4% of the
+  # 1,751,360 occurrences) carry a single real Unicode codepoint — those are
+  # curated into config/gaiji/kanripo.tsv and resolved to real glyphs by the
+  # `reading` mode; the 707 refs with only a lossy "normalized" substitute
+  # (51.8% of occurrences) and the 3,564 image-only refs (11.2%) stay the ⬚
+  # placeholder — placeholder, never a fake glyph (owner honesty gate).
+  # License rides the kanripo org grant verbatim (no per-repo LICENSE):
+  # "Comprehensive collection of premodern Chinese texts. Licensed as CC BY
+  # SA 4.0." → attribution. The sparse cone [charlist.org.txt, README.md]
+  # skips the 5,232-PNG images/ tree the resolution never needs.
+  sync_policy: manual
+
 tls:
   adapter: Nabu::Adapters::Tls
   axes: [sinitic]

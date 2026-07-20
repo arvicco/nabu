@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# charlist.org.txt is a documented TRIM of the full upstream charlist (5,254
+# rows -> 9 hand-picked rows covering every mapping class the census found;
+# whole: false — a fresh GET returns the full file and is fetched for
+# URL-liveness only, never byte-compared). adapter_test is null: kr-gaiji is a
+# feature module (no discover→parse round-trip), and the resolution map it
+# feeds is the shipped config/gaiji/kanripo.tsv, not this trim. Pinned upstream
+# commit: 662fd61d3f564e26c62810329aff3b9bae9fff99 (master, 2019-11-30,
+# retrieved 2026-07-20).
+source: kr-gaiji
+adapter_test:
+retrieved: 2026-07-20
+files:
+  - path: charlist.org.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Gaiji/master/charlist.org.txt
+    whole: false
+    trim: 9 hand-picked rows covering every census class (241 KB -> 484 B)

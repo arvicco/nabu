@@ -189,8 +189,26 @@ actually carry, and what `reading` does about it:
 | `erasures` | `⟦abc⟧` — EDH damnatio memoriae, RIIG/Ogham `<del>` | `keep` \| `unwrap` | `keep` — an erasure is content; unwrap drops only the brackets, never the text |
 | `surplus` | `{abc}` — letters carved in error (RIIG) | `keep` \| `unwrap` | `keep` — unwrapping would present a misspelling as fluent text without its marker |
 | `sigla` | `⸀ ⸂ ⸃` — SBLGNT's apparatus cross-references | `strip` \| `keep` | sblgnt → `strip` (⸁ and ⸄–⸇ censused ×0, not in the set) |
+| `gaiji` | `&KR\d+;` — kanripo's not-yet-encoded-character refs (P37-3) | `placeholder` \| `refs` | kanripo → `placeholder` (resolve to the real glyph where KR-Gaiji gives a codepoint, else ⬚; refs kept verbatim under diplomatic) |
 
-Two shelves deliberately have **no** entry:
+**Gaiji (kanripo, P37-3).** The mandoku parser keeps kanripo's not-yet-encoded
+characters as `&KR\d+;` references verbatim in the stored text. In `reading`
+mode `gaiji: placeholder` swaps each ref for either its **resolved glyph**
+(when the KR-Gaiji charlist gives a single real Unicode codepoint — the
+faithful subset curated into `config/gaiji/kanripo.tsv`) or the **⬚ placeholder
+box** (U+2B1A) — never a fake glyph. The census verdict is honest and partial:
+of KR-Gaiji's 5,254 refs, only 972 (36.4% of the 1,751,360 gaiji *occurrences*)
+carry a real codepoint; the 707 refs (51.8%) with only a lossy "normalized"
+substitute and the 3,564 image-only refs (11.2%) stay the placeholder. The
+footer counts what stayed unresolved:
+
+```
+$ bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading
+子曰𫠦學而⬚時習之
+display: 1 unresolved gaiji (1 resolved) (--display diplomatic shows the gaiji refs)
+```
+
+Three shelves deliberately have **no** entry:
 
 - **ogham** — its stored fixtures carry zero edition marks (the glyph and
   choice machinery resolves everything at parse time).
@@ -199,6 +217,9 @@ Two shelves deliberately have **no** entry:
   misreading; the standalone `x` marks are illegible-sign placeholders and
   the rare parentheses are metrological notation (`2(BARIG)`). All content
   — all kept, journaled in the backlog.
+- **cbeta** — its gaiji `<g>` fallback *text* is resolved at parse time and
+  is already the stored reading surface (P33-2), so there is no `&KR;`-style
+  ref to display-transform. A documented non-entry, exactly the ogham logic.
 
 **Ketiv/qere (oshb).** The stored verse text carries the *ketiv* (written)
 form; the *qere* (read) form rides that token's annotations. Per-source
@@ -323,6 +344,7 @@ default is right.
 | Gothic | nothing | `font-noto-sans-gothic` | `bin/nabu search guþ --lang got` |
 | Runic | nothing | `font-noto-sans-runic` | `bin/nabu show urn:nabu:riig:ais-01-01` |
 | Old Italic (osc/xum) | nothing (inscription text is stored in Latin transliteration; the U+10300 block appears in the sabellic-loans etymon headwords) | `font-noto-sans-old-italic` | `bin/nabu etym rufus` (after the sabellic-loans sync) |
+| Han (lzh, kanripo) | measures CJK cells (§2); `reading` resolves `&KR\d+;` gaiji to the real glyph or ⬚ placeholder (P37-3), refs kept under `diplomatic` | any font with CJK Ext-B coverage (resolved glyphs reach plane 2, e.g. 𫠦 U+2B826) | `bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading` |
 
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any

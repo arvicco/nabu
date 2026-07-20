@@ -45,7 +45,18 @@ module Nabu
     # The result of rendering one run of text: the display text plus the names
     # of the transforms that actually changed something (mark-class names, and
     # ISOLATES when a wrap was added). +applied+ empty ⇒ text == input.
-    Rendered = Data.define(:text, :applied)
+    # +gaiji+ (P37-3) is an optional GaijiTally when the reading mode resolved
+    # or placeheld `&KR\d+;` refs — nil for every other render, so the count
+    # rides out to the CLI footer without touching the applied vocabulary.
+    Rendered = Data.define(:text, :applied, :gaiji) do
+      def initialize(text:, applied:, gaiji: nil) = super
+    end
+
+    # The gaiji outcome of one render (P37-3): how many `&KR\d+;` refs the
+    # reading mode turned into a real resolved glyph vs. left as the ⬚
+    # placeholder box. Summed across passages by the CLI for the honesty
+    # footer; never a label in +applied+ (a Set would drop the count).
+    GaijiTally = Data.define(:resolved, :unresolved)
 
     # A named codepoint set. +codepoints+ is an array of Integer/Range;
     # +replacement+ is what each stripped codepoint becomes — "" for combining
@@ -149,20 +160,39 @@ module Nabu
     QERE_SETTINGS = %w[qere ketiv both].freeze
     QERE_LABELS = { "qere" => "qere", "both" => "ketiv+qere" }.freeze
 
+    # Gaiji (P37-3; kanripo). The mandoku parser keeps not-yet-encoded
+    # characters as `&KR\d+;` references verbatim in the stored text. In
+    # `reading` mode, a source configured `gaiji: placeholder` swaps each such
+    # ref for either its RESOLVED glyph (when the KR-Gaiji charlist gives a
+    # single real Unicode codepoint — the faithful subset in
+    # config/gaiji/<source>.tsv) or the ⬚ placeholder box (U+2B1A) otherwise —
+    # never a fake glyph. `gaiji: refs` (and every non-reading mode) keeps the
+    # refs verbatim; the diplomatic view is the byte-honest counterpart. cbeta
+    # is a documented NON-entry: its `<g>` fallback text is already the stored
+    # reading surface (parser resolves it at parse time), so there is nothing
+    # to display-transform.
+    GAIJI_REF = /&(KR\d+);/
+    GAIJI_PLACEHOLDER = "\u{2B1A}" # ⬚ DOTTED SQUARE
+    GAIJI_SETTINGS = %w[placeholder refs].freeze
+
     # The applied-labels edition transforms can emit — the footer separates
     # these ("apparatus simplified: …") from the mark-class strip vocabulary.
     EDITION_LABELS = (EDITION_RULES.keys + QERE_LABELS.values).freeze
 
     # One source's edition conventions from display.yml `sources:`. +reading+
     # maps rule name → setting; +qere_display+ is the ketiv/qere choice
-    # (nil for sources without that apparatus).
-    SourcePolicy = Data.define(:slug, :reading, :qere_display) do
-      def initialize(slug:, reading: {}, qere_display: nil) = super
+    # (nil for sources without that apparatus); +gaiji+ is the KR-ref policy
+    # (placeholder | refs | nil — P37-3).
+    SourcePolicy = Data.define(:slug, :reading, :qere_display, :gaiji) do
+      def initialize(slug:, reading: {}, qere_display: nil, gaiji: nil) = super
     end
 
     # The per-render edition context: the source's conventions plus the
-    # passage's stored annotations (the qere word hashes ride there).
-    Edition = Data.define(:policy, :annotations)
+    # passage's stored annotations (the qere word hashes ride there) and the
+    # source's gaiji resolution map (P37-3; empty for non-gaiji sources).
+    Edition = Data.define(:policy, :annotations, :gaiji_map) do
+      def initialize(policy:, annotations:, gaiji_map: {}) = super
+    end
 
     # The applied-label for isolate wrapping (footer vocabulary), and the two
     # isolate characters (RIGHT-TO-LEFT ISOLATE / POP DIRECTIONAL ISOLATE).
@@ -271,6 +301,25 @@ module Nabu
         sources.to_h { |slug, spec| [validate_slug!(slug, path), build_source_policy(slug, spec, path)] }
       end
 
+      # Parse a gaiji resolution map (P37-3): a TSV of `ref-id<TAB>glyph` lines
+      # (`#` comments and blanks ignored) → { "KR0001" => "𫠦", … }. This is the
+      # curated FAITHFUL subset shipped in config/gaiji/<source>.tsv (census in
+      # its header). A missing file is an empty map — resolution degrades to
+      # placeholder-only, never an error (the placeholder ships regardless).
+      def load_gaiji_map(path)
+        return {} unless File.exist?(path)
+
+        map = {}
+        File.foreach(path, encoding: Encoding::UTF_8) do |line|
+          line = line.chomp
+          next if line.empty? || line.start_with?("#")
+
+          id, glyph = line.split("\t", 2)
+          map[id] = glyph if id && glyph && !glyph.empty?
+        end
+        map.freeze
+      end
+
       # Register a display mode (the sibling-packet seam). A duplicate name is
       # an Error — modes are added, never silently replaced.
       def register_mode(mode)
@@ -300,9 +349,10 @@ module Nabu
       # the source has conventions configured, the mode receives them; every
       # P27-0 mode and caller is untouched by their absence. Grapheme spacing
       # (P27-2) applies after the mode render when policy and mode allow.
-      def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {})
+      def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {},
+                 gaiji_map: {})
         policy = policies[Normalize.primary_subtag(language)]
-        edition = edition_context(mode, source, annotations, source_policies)
+        edition = edition_context(mode, source, annotations, source_policies, gaiji_map)
         return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
 
         policy ||= Policy.new(language: language)
@@ -314,7 +364,8 @@ module Nabu
         rendered = space_graphemes(rendered) if policy.spacing && mode_allows_spacing?(mode)
         return rendered unless mode.isolates?(policy)
 
-        Rendered.new(text: RLI + rendered.text + PDI, applied: rendered.applied + [ISOLATES])
+        Rendered.new(text: RLI + rendered.text + PDI, applied: rendered.applied + [ISOLATES],
+                     gaiji: rendered.gaiji)
       end
 
       # Insert a separator between adjacent grapheme clusters (never next to
@@ -332,7 +383,7 @@ module Nabu
         end
         return rendered if spaced == rendered.text
 
-        Rendered.new(text: spaced, applied: rendered.applied + ["spacing"])
+        Rendered.new(text: spaced, applied: rendered.applied + ["spacing"], gaiji: rendered.gaiji)
       end
 
       # NO_COLOR (any non-empty value) always wins; NABU_COLOR forces color
@@ -414,6 +465,30 @@ module Nabu
       # sequential index scan is exact and an identical earlier word can
       # never be mis-targeted. "both" renders "ketiv [qere]". Display-time
       # only; without annotations the stored ketiv stands.
+      # Resolve/placehold the `&KR\d+;` gaiji refs in +text+ (P37-3), returning
+      # [rendered, GaijiTally]. Only fires when the source policy is
+      # `gaiji: placeholder`; otherwise the refs stay verbatim and the tally is
+      # zero. A ref whose id is in the edition's gaiji_map becomes its real
+      # glyph (resolved); every other `&KR…;` ref becomes the ⬚ placeholder
+      # (unresolved). Pure codepoint substitution — safe on NFC-exempt text.
+      def apply_gaiji(text, edition)
+        return [text, GaijiTally.new(resolved: 0, unresolved: 0)] unless edition.policy.gaiji == "placeholder"
+
+        resolved = 0
+        unresolved = 0
+        out = text.gsub(GAIJI_REF) do
+          glyph = edition.gaiji_map[Regexp.last_match(1)]
+          if glyph
+            resolved += 1
+            glyph
+          else
+            unresolved += 1
+            GAIJI_PLACEHOLDER
+          end
+        end
+        [out, GaijiTally.new(resolved: resolved, unresolved: unresolved)]
+      end
+
       def apply_qere(text, edition)
         setting = edition.policy.qere_display
         tokens = edition.annotations.is_a?(Hash) ? edition.annotations["tokens"] : nil
@@ -455,11 +530,11 @@ module Nabu
         reading.empty? ? nil : reading
       end
 
-      def edition_context(mode, source, annotations, source_policies)
+      def edition_context(mode, source, annotations, source_policies, gaiji_map = {})
         return nil unless source && mode.respond_to?(:render_edition)
 
         policy = source_policies[source]
-        policy && Edition.new(policy: policy, annotations: annotations)
+        policy && Edition.new(policy: policy, annotations: annotations, gaiji_map: gaiji_map)
       end
 
       # Strip the zero-width noise (ANSI SGR + bidi isolates) before measuring.
@@ -546,12 +621,21 @@ module Nabu
         spec = {} if spec.nil?
         raise ConfigError, "#{path}: #{slug}: source policy must be a mapping" unless spec.is_a?(Hash)
 
-        unknown = spec.keys - %w[reading qere_display]
+        unknown = spec.keys - %w[reading qere_display gaiji]
         raise ConfigError, "#{path}: #{slug}: unknown key(s) #{unknown.join(', ')}" unless unknown.empty?
 
         SourcePolicy.new(slug: slug,
                          reading: validate_rules!(spec["reading"], slug, path),
-                         qere_display: validate_qere_display!(spec["qere_display"], slug, path))
+                         qere_display: validate_qere_display!(spec["qere_display"], slug, path),
+                         gaiji: validate_gaiji!(spec["gaiji"], slug, path))
+      end
+
+      def validate_gaiji!(value, slug, path)
+        return nil if value.nil?
+        return value if GAIJI_SETTINGS.include?(value)
+
+        raise ConfigError, "#{path}: #{slug}: gaiji must be one of " \
+                           "#{GAIJI_SETTINGS.join(', ')}, got #{value.inspect}"
       end
 
       def validate_rules!(rules, slug, path)
@@ -699,10 +783,11 @@ module Nabu
       end
 
       def render_edition(text, language:, policy:, edition:)
-        working, applied = Display.apply_qere(text, edition)
+        working, gaiji = Display.apply_gaiji(text, edition)
+        working, applied = Display.apply_qere(working, edition)
         working, rule_applied = Display.apply_edition_rules(working, edition)
         stripped, strip_applied = Display.strip_classes(working, policy.strip, language: language)
-        Rendered.new(text: stripped, applied: applied + rule_applied + strip_applied)
+        Rendered.new(text: stripped, applied: applied + rule_applied + strip_applied, gaiji: gaiji)
       end
 
       def isolates?(policy) = policy.isolates

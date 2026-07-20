@@ -57,10 +57,20 @@ languages:
 #                  erasures/surplus keep|unwrap, sigla strip|keep)
 #   qere_display:  qere | ketiv | both (oshb ketiv/qere apparatus; "both"
 #                  renders "ketiv [qere]")
+#   gaiji:         placeholder | refs (P37-3; kanripo `&KR\d+;` refs — see below)
 #
 # ogham carries zero edition marks in its stored fixtures and oracc's
 # braces/x-marks are content (determinatives misread unwrapped) — neither
 # gets an entry; see backlog P27-1 for the journaled leaves.
+#
+# GAIJI (P37-3): the mandoku parser keeps kanripo's not-yet-encoded characters
+# as `&KR\d+;` references verbatim in text. `gaiji: placeholder` makes the
+# `reading` mode swap each ref for its RESOLVED glyph when config/gaiji/
+# kanripo.tsv (the faithful KR-Gaiji codepoint subset) maps it, else the ⬚
+# placeholder box — never a fake glyph; `--display diplomatic` keeps refs
+# verbatim. cbeta is a documented NON-entry: its `<g>` fallback text is already
+# the stored reading surface (the parser resolves it at parse time, P33-2), so
+# there is no ref to display-transform — exactly the ogham/oracc no-entry logic.
 sources:
   papyri-ddbdp: { reading: { lacuna: ellipsis } }
   edh: { reading: { lacuna: ellipsis, erasures: keep } } # an erasure is content — ⟦…⟧ stays
@@ -68,3 +78,4 @@ sources:
   sblgnt: { reading: { sigla: strip } }
   oshb: { qere_display: qere }
   bhsa: { qere_display: qere } # P30-4: same MT apparatus — bhsa tokens carry the oshb qere shape
+  kanripo: { gaiji: placeholder } # P37-3: &KR\d+; refs → resolved glyph or ⬚ placeholder in reading mode
