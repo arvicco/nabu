@@ -47,9 +47,35 @@ module Nabu
       say Nabu::VERSION
     end
 
-    desc "sync [SOURCE]", "Fetch and load a source (or --all live sources) into the store"
+    desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
+    long_desc <<~HELP, wrap: false
+      Fetch and load into the store. The positional NAME resolves EXACT SLUG
+      FIRST, then axis: a source slug syncs that one source (the explicit
+      request — a disabled source syncs anyway, with a note); a name that is
+      not a slug but IS a research axis (config/axes.yml) expands to the
+      axis's members. Axis names can never equal source slugs (a load-time
+      guarantee), so the resolution is unambiguous.
+
+      Axis expansion is PURE fan-out onto the per-source path: each member
+      syncs exactly as `sync <slug>` would, per-source report lines
+      byte-unchanged, under a one-line axis header. The asymmetry to know:
+      an axis expansion is NOT an explicit per-source request, so DISABLED
+      members are SKIPPED — reported by name on one `skipped (disabled): …`
+      line, never silently — whereas `sync <disabled-slug>` (explicit) still
+      syncs. `--axis a,b` selects several axes and prints one group each, in
+      order. `--all` is a flat batch (enabled + live sources), never grouped.
+
+      Examples:
+        nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
+        nabu sync celtic          # the celtic axis's enabled members
+        nabu sync --axis celtic,italic --parse-only
+        nabu sync --all
+    HELP
     option :all, type: :boolean, default: false,
                  desc: "Sync every enabled source with sync_policy: live"
+    option :axis, type: :string, banner: "NAME[,NAME...]",
+                  desc: "Sync the enabled members of one or more research axes (config/axes.yml), " \
+                        "grouped; disabled members are skipped by name (an axis is not an explicit request)"
     option :parse_only, type: :boolean, default: false,
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
@@ -66,7 +92,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db, ledger)
+      run_sync(runner, registry, slug, db, ledger)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -4462,6 +4488,72 @@ module Nabu
         elsif $stderr.tty?
           $stderr.print("\n")
         end
+      end
+
+      # sync dispatch (P35-2): --all first (flat batch), then --axis (grouped),
+      # then the positional NAME resolved EXACT-SLUG-FIRST-THEN-AXIS. The
+      # slug/axis namespaces can never collide (a load-time guarantee), so a
+      # name that is not a slug but is an axis is unambiguous; a name that is
+      # neither is the unknown-target error (naming BOTH namespaces). A nil
+      # name falls to sync_one's own "slug or --all" guard, unchanged.
+      def run_sync(runner, registry, slug, db, ledger)
+        return sync_all(runner) if options[:all]
+        return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
+        return sync_one(runner, registry, slug, db, ledger) if slug.nil? || registry[slug]
+        return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
+
+        raise Thor::Error, unknown_sync_target_message(registry, slug)
+      end
+
+      # sync <axis> / --axis a,b: expand each named axis to its members and
+      # sync them through the ORDINARY per-source path (sync_one), so every
+      # per-source report line is byte-identical to a direct sync — grouping
+      # is pure fan-out. One axis header precedes each group; DISABLED members
+      # are skipped (an axis expansion is not an explicit per-source request)
+      # and named on one `skipped (disabled): …` line, never silently. A slug
+      # reachable via two selected axes syncs once, under its first group.
+      def sync_axes(runner, registry, names, db, ledger)
+        names = names.map(&:strip).reject(&:empty?)
+        raise Thor::Error, "sync --axis: name at least one axis — known axes: #{axis_menu(registry)}" if names.empty?
+
+        unknown = names.reject { |name| registry.axes[name] }
+        unless unknown.empty?
+          raise Thor::Error, "sync --axis: unknown axis #{unknown.first.inspect} — known axes: #{axis_menu(registry)}"
+        end
+
+        synced = []
+        names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
+      end
+
+      # One axis's group: the header, then each not-yet-synced ENABLED member
+      # through sync_one, then the named skip line for the disabled members.
+      def sync_axis_group(runner, registry, name, db, ledger, synced)
+        enabled, disabled = registry.axis_members(name).partition { |member| registry[member].enabled }
+        say axis_header(registry.axes[name])
+        (enabled - synced).each do |member|
+          sync_one(runner, registry, member, db, ledger)
+          synced << member
+        end
+        say "skipped (disabled): #{disabled.join(', ')}" unless disabled.empty?
+      end
+
+      # The one-line axis header: the hat's persona verbatim (first-class
+      # render data, P35-0), grouping the members below it.
+      def axis_header(axis)
+        "axis #{axis.name} — #{axis.persona}"
+      end
+
+      # The known-axes menu for error messages, honest when none are defined.
+      def axis_menu(registry)
+        names = registry.axes.names
+        names.empty? ? "(none defined)" : names.join(", ")
+      end
+
+      # A name that is neither source slug nor axis: name both namespaces so
+      # the user sees the axes too (the error the unknown-slug path grew into).
+      def unknown_sync_target_message(registry, name)
+        slugs = registry.slugs.empty? ? "(none)" : registry.slugs.join(", ")
+        "unknown source or axis #{name.inspect} — sources: #{slugs}; axes: #{axis_menu(registry)}"
       end
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a
