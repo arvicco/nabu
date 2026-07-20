@@ -389,6 +389,13 @@ module Nabu
         --collections  collection → document count for shelves whose urns
                        carry a manifest collection segment (local-library);
                        an honest miss elsewhere, exit 0.
+        --loans [CODE] the language-contact lens (P34-2, the stored P17-1
+                       per-passage loan-token counts — no reparse). Bare:
+                       the census, one row per loan-origin code (tokens/
+                       passages/docs, token order). With CODE: the documents
+                       carrying such loan tokens, most-saturated first,
+                       honoring --limit. An honest miss on shelves without
+                       the layer, exit 0.
 
       Examples:
         nabu list                                # the census, every shelf
@@ -399,6 +406,9 @@ module Nabu
         nabu list lexica --entries --prefix log  # λόγος and its neighbors
         nabu list papyri-ddbdp --documents --century 6 --limit 5
         nabu list shelf --documents --withdrawn  # the stewardship lens
+        nabu list coptic-scriptorium --loans     # the loan-origin census
+        nabu list coptic-scriptorium --loans grc --limit 10
+                                                 # the most Greek-saturated books
 
       Use cases: enumerate a shelf without sqlite3 one-liners; a license
       audit before an export; eyeballing what an ingest actually filed.
@@ -409,6 +419,9 @@ module Nabu
                      desc: "Enumerate a dictionary source's entries (headword + gloss)"
     option :collections, type: :boolean, default: false,
                          desc: "Collection → document count for manifest-collection shelves"
+    option :loans, type: :string, banner: "[CODE]", lazy_default: "",
+                   desc: "The loan-origin census (bare), or the documents carrying CODE loan tokens, " \
+                         "most-saturated first (P17-1 annotations — Coptic Scriptorium)"
     option :sources, type: :boolean, default: false,
                      desc: "The one-page grouped map: every source's description under family headers"
     option :limit, type: :numeric, default: Nabu::Query::List::DEFAULT_LIMIT,
@@ -457,6 +470,12 @@ module Nabu
         print_list_entries(slug, query.entries(slug, prefix: options[:prefix], lang: options[:lang],
                                                      limit: options[:limit].to_i))
       elsif options[:collections] then print_list_collections(slug, query.collections(slug))
+      elsif options[:loans]
+        code = options[:loans].strip
+        if code.empty? then print_list_loans_census(slug, query.loans_census(slug))
+        else
+          print_list_loan_documents(code, query.loan_documents(slug, code: code, limit: options[:limit].to_i))
+        end
       else
         print_list_card(query.card(slug), registry_entry(config, slug))
       end
@@ -615,6 +634,22 @@ module Nabu
       filters they do not combine with --lemma/--near. Facet rows land at
       `nabu rebuild` (like the date/place axis).
 
+      LOANS (--loans CODE): the language-contact facet (P34-2, reading the
+      P17-1 annotations) — keep only passages carrying at least one token
+      the corpus tags as borrowed from CODE. Passage-grained and read
+      straight off each passage's stored token annotations: no reparse, no
+      rebuild step. Codes are the mapped origins grc / hbo / arc / lat /
+      egy plus any verbatim upstream name (Akkadian, Arabic, Phoenician,
+      Persian…), matched case-insensitively; an unattested code finds
+      nothing, honestly. Today the Coptic Scriptorium shelf carries the
+      layer (~56k of its passages bear Greek loan tokens). Unlike the
+      document facets, --loans composes with EVERYTHING: the text query,
+      --fuzzy, --lemma/--morph, --near, and all of --lang/--license/
+      --source/date/place/facet filters — the loans corpus is
+      gold-lemmatized, so `--lemma ⲛⲟⲩⲧⲉ --loans grc` is the designed
+      move (attestations of a Coptic lemma in Greek-loan-bearing verses).
+      `nabu list coptic-scriptorium --loans` is the census view.
+
       Sources ingesting parallel translations (registry `translations: true`,
       P7-4) make those English passages ordinary search hits; --lang eng
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
@@ -645,6 +680,10 @@ module Nabu
                                                    #   one province (EDH facets)
         nabu search --fuzzy "votum solvit" --type "votive%" --material Sandstein
                                                    # V S L M on sandstone votives
+        nabu search ⲡⲛⲟⲩⲧⲉ --loans grc --lang cop   # "God" in verses that carry
+                                                   #   Greek loan tokens
+        nabu search --lemma ⲕⲁϩ --loans grc         # a Coptic lemma's attestations
+                                                   #   inside the Greek-contact zone
 
       Use cases: find a half-remembered line; concordance-style scans of a
       word across six corpora at once; checking which sources attest a term
@@ -679,6 +718,9 @@ module Nabu
                       desc: "Roman-province facet filter (Germania inferior, pannonia%)"
     option :material, type: :string, banner: "PATTERN",
                       desc: "Material facet filter (Marmor, sandstein%)"
+    option :loans, type: :string, banner: "CODE",
+                   desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
+                         "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -714,6 +756,7 @@ module Nabu
       from, to = date_window
       place = options[:place]
       facets = facet_filters
+      loans = loans_filter
       config = Nabu::Config.load
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -728,8 +771,8 @@ module Nabu
       results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
                                    .run(query, lang: options[:lang], license: options[:license],
                                                limit: options[:limit].to_i, from: from, to: to, place: place,
-                                               facets: facets, source: options[:source])
-      print_search_results(results, facets: facets, query: query)
+                                               facets: facets, source: options[:source], loans: loans)
+      print_search_results(results, facets: facets, query: query, loans: loans)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -2173,6 +2216,15 @@ module Nabu
         filters.empty? ? nil : filters
       end
 
+      # The active loans code (P34-2), or nil. No validation beyond the strip:
+      # the code rides as a bound value (never SQL or a JSON path), so any
+      # string is safe and an unattested one is an honest no-match. Needs no
+      # rebuild guard either — annotations_json is initial schema.
+      def loans_filter
+        code = options[:loans].to_s.strip
+        code.empty? ? nil : code
+      end
+
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
       # naming the valid slugs (the define-miss pattern). Validated against
       # the CATALOG — what is held is what can be filtered.
@@ -2191,13 +2243,16 @@ module Nabu
       # error, never a silently ignored flag.
       def validate_list_flags!(slug)
         modes = %i[documents entries collections].select { |flag| options[flag] }
+        modes << :loans if options[:loans]
         if options[:sources] && (!slug.empty? || modes.any? || options.values_at(
           "long", "export-source-dossiers", "dry-run", "prefix", "lang", "license",
           "withdrawn", "from", "to", "century"
         ).any?)
           raise Thor::Error, "list: --sources is the one-page grouped map — it composes with nothing"
         end
-        raise Thor::Error, "list: give one of --documents, --entries, --collections per invocation" if modes.size > 1
+        if modes.size > 1
+          raise Thor::Error, "list: give one of --documents, --entries, --collections, --loans per invocation"
+        end
         raise Thor::Error, "list: give a SOURCE with --#{modes.first}" if slug.empty? && modes.any?
         if options[:"export-source-dossiers"] && (!slug.empty? || modes.any?)
           raise Thor::Error, "list: --export-source-dossiers scaffolds ALL registered sources — " \
@@ -2383,6 +2438,32 @@ module Nabu
         page.rows.each do |row|
           gloss = row.gloss.to_s.gsub(/\s+/, " ").strip
           say "#{row.headword} [#{row.dictionary_slug}]#{" — #{truncate_line(gloss)}" unless gloss.empty?}"
+        end
+        print_list_tail(page)
+      end
+
+      # The loans census (P34-2): one row per loan-origin code, token-count
+      # order — read straight off the stored P17-1 annotations, no reparse.
+      def print_list_loans_census(slug, rows)
+        if rows.empty?
+          return say("no loan annotations in #{slug} passages (the language-of-origin layer — " \
+                     "Coptic Scriptorium parses carry it)")
+        end
+
+        width = rows.map { |row| row.code.length }.max
+        rows.each do |row|
+          say "#{row.code.ljust(width)}  tokens=#{row.tokens}  passages=#{row.passages}  docs=#{row.docs}"
+        end
+      end
+
+      # `list SOURCE --loans CODE`: the saturation enumeration, most
+      # loan-token-heavy documents first.
+      def print_list_loan_documents(code, page)
+        return say("no documents carry #{code} loan tokens") if page.rows.empty?
+
+        page.rows.each do |row|
+          say "#{row.urn} — #{row.title}#{" [#{row.language}]" if row.language} " \
+              "tokens=#{row.tokens} passages=#{row.passages}"
         end
         print_list_tail(page)
       end
@@ -2993,7 +3074,7 @@ module Nabu
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil, query: nil)
+      def print_search_results(results, facets: nil, query: nil, loans: nil)
         if results.empty?
           say "no matches"
           return print_script_miss_hints(query)
@@ -3004,15 +3085,17 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)#{facet_footer(facets)}"
+            "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
       end
 
-      # " · facets: genre=epitaph province=pannonia%" — empty when no facet
-      # filter is active (zero-signal silence, the compact rule).
-      def facet_footer(facets)
-        return "" if facets.nil? || facets.empty?
-
-        " · facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}"
+      # " · facets: genre=epitaph province=pannonia% · loans: grc" — empty
+      # when no facet/loans filter is active (zero-signal silence, the
+      # compact rule).
+      def facet_footer(facets, loans: nil)
+        parts = []
+        parts << "facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}" if facets&.any?
+        parts << "loans: #{loans}" if loans
+        parts.empty? ? "" : " · #{parts.join(' · ')}"
       end
 
       # Render fuzzy hits (P16-4): the search-hit shape (urn + [language],
@@ -3020,7 +3103,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false, facets: nil)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil)
         if results.empty?
           say "no matches"
         else
@@ -3029,7 +3112,7 @@ module Nabu
             say "  #{display_text(long ? result.folded_marked : result.snippet, result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets)}"
+              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
         end
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
@@ -3593,8 +3676,9 @@ module Nabu
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
-                                   facets: facets, source: options[:source])
-        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets)
+                                   facets: facets, source: options[:source], loans: loans_filter)
+        print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,
+                                     loans: loans_filter)
         print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -3627,7 +3711,7 @@ module Nabu
                                           .run(lemma, lang: options[:lang], license: options[:license],
                                                       limit: options[:limit].to_i, morph: options[:morph],
                                                       source: options[:source],
-                                                      gold_only: options[:gold_only])
+                                                      gold_only: options[:gold_only], loans: loans_filter)
         print_lemma_results(results, query: lemma)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
@@ -3678,9 +3762,9 @@ module Nabu
         results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
           lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
-          source: options[:source]
+          source: options[:source], loans: loans_filter
         )
-        print_search_results(results)
+        print_search_results(results, loans: loans_filter)
         print_display_footer
       ensure
         catalog&.disconnect

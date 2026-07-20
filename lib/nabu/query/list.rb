@@ -59,6 +59,10 @@ module Nabu
       Dated = Data.define(:docs, :min, :max)
       FacetRow = Data.define(:facet, :values, :docs)
       DictionaryRow = Data.define(:slug, :title, :language, :entries)
+      # The loans facet's two grains (P34-2): one census row per loan-origin
+      # code, and one enumeration row per loan-bearing document.
+      LoanRow = Data.define(:code, :docs, :passages, :tokens)
+      LoanDocRow = Data.define(:urn, :title, :language, :tokens, :passages)
 
       # One enumeration page: the rows shown plus the HONEST total, so the
       # renderer can say "… N more — raise --limit".
@@ -226,6 +230,50 @@ module Nabu
           out[segments.first] += 1 if segments.size >= 2
         end
         counts.empty? ? nil : counts
+      end
+
+      # The loans census (P34-2, the P17-1 promise): one row per loan-origin
+      # code over the source's LIVE passages — distinct documents, passages,
+      # and the summed token counts — read straight off the stored
+      # annotations_json ("loans" is the {code => token count} object the
+      # Coptic Scriptorium parser tallies per passage; verbatim upstream
+      # names census as stored). Token-count order, code as the tiebreak;
+      # empty for a shelf whose parses carry no language-of-origin layer
+      # (the CLI words the honest miss). Query-time like the search facet:
+      # no projection table, nothing extra for `nabu rebuild` to maintain.
+      def loans_census(slug)
+        source = source_row!(slug)
+        loan_join(source.fetch(:id))
+          .group(Sequel[:loan][:key])
+          .select(
+            Sequel[:loan][:key].as(:code),
+            Sequel.function(:count, Sequel[:passages][:document_id]).distinct.as(:docs),
+            Sequel.function(:count, Sequel[:passages][:id]).distinct.as(:passages),
+            Sequel.function(:sum, Sequel[:loan][:value]).as(:tokens)
+          )
+          .order(Sequel.desc(:tokens), Sequel[:loan][:key])
+          .all
+          .map { |row| LoanRow.new(**row.slice(:code, :docs, :passages, :tokens)) }
+      end
+
+      # `--loans CODE`: the saturation enumeration — live documents carrying
+      # ≥1 loan token of that origin, with their summed token and passage
+      # counts, most-saturated first (urn as the tiebreak). Case-insensitive
+      # on the code (the facet house rule); an unattested code is an honest
+      # empty page, never an error.
+      def loan_documents(slug, code:, limit: DEFAULT_LIMIT)
+        source = source_row!(slug)
+        dataset = loan_join(source.fetch(:id))
+                  .where(Sequel.function(:lower, Sequel[:loan][:key]) => code.to_s.downcase)
+                  .group(Sequel[:documents][:id])
+                  .select(
+                    Sequel[:documents][:urn], Sequel[:documents][:title],
+                    Sequel[:documents][:language],
+                    Sequel.function(:sum, Sequel[:loan][:value]).as(:tokens),
+                    Sequel.function(:count, Sequel[:passages][:id]).distinct.as(:passages)
+                  )
+                  .order(Sequel.desc(:tokens), Sequel[:documents][:urn])
+        page(dataset, limit) { |row| LoanDocRow.new(**row.slice(:urn, :title, :language, :tokens, :passages)) }
       end
 
       # The dossier shelf's --documents: one row per language code (name and
@@ -586,6 +634,23 @@ module Nabu
         total = dataset.count
         rows = (limit.to_i.positive? ? dataset.limit(limit.to_i) : dataset).all
         Page.new(rows: rows.map(&), total: total)
+      end
+
+      # The loans base join (P34-2): the source's live passages cross-applied
+      # to json_each over their stored "loans" object — one row per (passage,
+      # code) with `loan.key`/`loan.value` alongside the passage columns. The
+      # LIKE probe skips the JSON walk for the loan-free majority; json_each
+      # on a missing path yields zero rows, so loan-less passages simply
+      # contribute nothing.
+      def loan_join(source_id)
+        @catalog
+          .from(:passages,
+                Sequel.function(:json_each, Sequel[:passages][:annotations_json], "$.loans").as(:loan))
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:documents][:source_id] => source_id,
+                 Sequel[:passages][:withdrawn] => false,
+                 Sequel[:documents][:withdrawn] => false)
+          .where(Sequel.like(Sequel[:passages][:annotations_json], '%"loans"%'))
       end
 
       def build_doc_row(row)
