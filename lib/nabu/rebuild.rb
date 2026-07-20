@@ -23,6 +23,16 @@ module Nabu
   #   parser regression (P1-4), so it is surfaced as a warning (collected, never
   #   aborting the rebuild).
   class Rebuild
+    # How many parsed documents the plain Loader batches into one transaction
+    # during rebuild (P36-2). Rebuild replays each source as pure inserts, so
+    # ~one commit per document is wasteful; batching collapses them while a
+    # per-document savepoint keeps a bad document from rolling back its batch.
+    # A FIXED batch (not one transaction per whole source) bounds the
+    # uncommitted WAL frames a 353k-document source (cdli) would otherwise pile
+    # up — the memory/disk ceiling the single-mega-transaction alternative
+    # lacked (measured: the fixed batch matches its speed without the ceiling).
+    LOAD_TX_BATCH = 1_000
+
     # A source that was replayed, carrying its LoadReport. +quarantine+
     # (P18-7) is the DELTA-aware quarantine finding for this replay — nil when
     # the errored count matches the recorded ledger baseline, so a standing
@@ -100,7 +110,11 @@ module Nabu
       FileUtils.rm_f(db_path)
       FileUtils.rm_f(fulltext_path) # the index is derived-of-derived; drop it too
       db = fresh_db
-      fulltext = Store.connect_fulltext(fulltext_path)
+      # P36-2: bulk-load with the non-unique secondary indexes DROPPED, then
+      # build them in one pass at the end (Store.create_deferred_indexes!). A
+      # crashed rebuild is simply re-run, so a transiently index-less db is safe.
+      Store.drop_deferred_indexes!(db)
+      fulltext = Store.connect_fulltext(fulltext_path, rebuild: true)
       outcomes = []
       skips = []
       @registry.each_source do |entry|
@@ -118,6 +132,10 @@ module Nabu
         end
       end
       replay_enrichments(db)
+      # P36-2: the bulk insert is done — build the deferred secondary indexes in
+      # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
+      # on passages.document_id.
+      Store.create_deferred_indexes!(db)
       # The timeline (P15-2) is f(canonical): rebuild it from canonical
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
@@ -201,7 +219,8 @@ module Nabu
       when :source
         Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
-        Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile)
+        Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile,
+                          tx_batch: LOAD_TX_BATCH)
       end
     end
 
@@ -233,7 +252,11 @@ module Nabu
 
     def fresh_db
       FileUtils.mkdir_p(File.dirname(db_path))
-      db = Store.connect(db_path)
+      # rebuild: true — the fast-and-unsafe rebuild-mode connection profile
+      # (Store.rebuild_pragmas!): synchronous=OFF + big cache, sound only
+      # because this db is regenerated from canonical/ (a crashed rebuild is
+      # re-run, never recovered).
+      db = Store.connect(db_path, rebuild: true)
       Store.migrate!(db)
       Store.setup!(db)
       db
