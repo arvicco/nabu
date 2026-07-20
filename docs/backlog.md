@@ -10232,7 +10232,12 @@ search mode (components/radicals/strokes/visual similarity, à la
 Jisho) is requested: own option set, survey of decomposition sources
 first (cjkvi-ids/CHISE/BabelStone IDS/edrdg RADKFILE; unihan kRS*
 fields = same held zip). Survey precedes the next Sino phase plan;
-never silently mixed into text search.
+never silently mixed into text search. Presentation bar (owner
+2026-07-20): match Jisho's kanji-page completeness field-for-field
+where shelves back it (live 棄-page inventory in the orchestrator-held
+note is the acceptance benchmark), exceed it on the historical axis
+(OC reconstruction, Qieyun, hdic positions, TLS senses, classical
+attestation) — sino/jap workflows designed to that bar.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
