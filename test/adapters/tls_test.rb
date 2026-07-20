@@ -74,8 +74,21 @@ class TlsTest < Minitest::Test
     document = concepts_doc
     assert_equal "tls-concepts", document.slug
     assert_equal "och", document.language
-    assert_equal 3, document.size, "the percent-encoded stray is skipped by rule"
+    assert_equal 3, document.size,
+                 "the percent-encoded stray AND the content-empty N-A placeholder skip by rule"
     assert_equal document.size, document.entries.map(&:entry_id).uniq.size
+  end
+
+  # Owner's first real sync (2026-07-20): concepts/N-A.xml is a genuinely
+  # empty placeholder (head "N/A", definition <p/>, no notes/pointers/
+  # members) — an empty body fails validation and quarantined the WHOLE
+  # one-document shelf. Content-empty concepts skip by rule, censused.
+  def test_content_empty_concept_skips_by_rule_not_quarantine
+    parser = Nabu::Adapters::TlsXmlParser.new
+    entries = parser.concept_entries(File.join(FIXTURES, "concepts"))
+    refute entries.any? { |e| e.headword == "N/A" },
+           "the N-A placeholder must not mint an empty entry"
+    assert_equal 1, parser.skipped_empty_concepts, "the skip is censused, not silent"
   end
 
   def test_concept_entry_id_is_the_uuid_pointer_targets_name

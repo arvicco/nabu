@@ -38,3 +38,6 @@ files:
   - path: LICENSE.md
     url: https://raw.githubusercontent.com/tls-kr/tls-data/master/LICENSE.md
     whole: true
+  - path: concepts/N-A.xml
+    whole: true
+    note: the content-empty placeholder (owner sync repro 2026-07-20) — skip-by-rule exemplar
