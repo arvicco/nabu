@@ -287,8 +287,13 @@ class SdbhTest < Minitest::Test
     assert_equal "urn:nabu:oshb:gen:1.2", resolved.fetch("Gen 1:2 w7"),
                  "Gen 1 is in the oshb fixture — a live verse-grain hit"
     assert_nil resolved.fetch("Isa 34:11 w19"), "Isaiah is not in the catalog — honest book miss"
-    assert_nil resolved.fetch("Jer 4:23 w9"),
-               "Jeremiah IS held but the fixture carries only chapter 10 — honest verse-grain miss"
+    # P34-4 (the TLS attestation crosswalk generalized the Define rule): a
+    # HELD document-urn work whose verse probe misses now resolves to the
+    # DOCUMENT — the held book is an honest text-grain answer (previously a
+    # bare nil; production oshb holds every verse, so the fallback only
+    # shows on partial holdings like this fixture's chapter-10-only Jeremiah).
+    assert_equal "urn:nabu:oshb:jer", resolved.fetch("Jer 4:23 w9"),
+                 "Jeremiah IS held; the missed verse falls back to the book document"
 
     kinah = define.run("כנעה").find { |r| r.urn == "urn:nabu:dict:sdbh:003359000000000" }
     assert_equal ["urn:nabu:oshb:jer:10.17"], kinah.citations.map(&:resolved_urn),
