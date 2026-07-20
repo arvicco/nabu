@@ -112,6 +112,11 @@ ud:
   # README, no .conllu. Old Japanese arrives via ONCOJ instead (P32-2,
   # 02-sources row 97). Watch upstream: if LMJ's master ever gains data,
   # it is a NEW license-gate decision, not a config flip.
+  # №26 REPLY (2026-07-20, GitHub issue, mr-martian/UD): release is
+  # BLOCKED on validator errors (the quest.ms.mff.cuni.cz validation
+  # report is the readiness signal to watch) and the ojp label STAYS —
+  # ISO 639 has no Late-Middle-Japanese code. At the future gate nabu
+  # picks its own stage label (languages.md rule 3), not upstream's ojp.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
