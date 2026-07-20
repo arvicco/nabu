@@ -10365,7 +10365,7 @@ selects AND groups; docs/axes.md is PUBLIC. Zero syncs, zero new
 sources — this phase makes the registry's shape visible and the
 surfaces honest.
 
-## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: ready] [deps: —]
+## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
 Goal: axis definitions block (name, persona one-liner, desc, order)
 + list-valued `axes:` key on EVERY source row, the owner-ratified
 mapping (the plan's draft table + D35-a/D35-d amendments; re-verify
@@ -10400,7 +10400,7 @@ refresh rides the gate as usual.
 Acceptance: page documents shipped behavior only; a registry-drift
 check ties the page's axis list to the definitions block.
 
-## P35-4 · The timeline nomenclature move  [tier: opus] [status: ready] [deps: —]
+## P35-4 · The timeline nomenclature move  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
 Goal: D35-c executed — date/place vocabulary becomes "timeline"
 across docs prose, user-facing strings, and code names (DateAxis,
 require_axis!, print_axis, AxisBuilder → timeline names); schema
@@ -10410,7 +10410,7 @@ Acceptance: zero output drift outside the renamed words themselves
 (suite pins); docs grep-clean of the old sense ("axis" = research
 axis only).
 
-## P35-5 · The assumption inventory  [tier: opus] [status: ready] [deps: —]
+## P35-5 · The assumption inventory  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
 Goal: dev-loop §6b pass 1 — harvest every era-bound-assumption site
 in lib/ into ONE census table (file:line · literal/enumeration ·
 stated justification or none · failure mode if false · growth axis
@@ -10437,7 +10437,7 @@ Acceptance: HARDEN/GENERALIZE verdicts adjudicated by the owner at
 the gate like decision items; suite green with the new conformance
 suite enforced.
 
-## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: ready] [deps: —]
+## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
 Goal: the Sinitic display note's workstream A — one
 Nabu::Display.width (grapheme × EAW class: W/F=2, isolates/ANSI=0)
 used by every column-aligned surface (concord KWIC, align, show
