@@ -10248,6 +10248,14 @@ BY-SA 4.0 governs all KR text repos (registry comment upgraded). NEW
 watch item from the same mail: "Bunkankun", his Kanripo successor;
 catalog component at ask.bunkankun.org — next-Sino-phase survey
 candidate (catalog/fetch seam). Reply draft in the thread log.
+Gate observation ×2 (2026-07-20, runbook steps 7/8): the shared
+inner-window pattern (limit×10 FTS candidates pre catalog filtering;
+LemmaSearch INNER_LIMIT_FACTOR and Search alike) renders a bare "no
+matches" when the window exhausts before the filters — matches EXIST
+at higher limits. Journal: an honesty hint ("page may be incomplete —
+raise --limit") when the inner window was exhausted with filters
+active; P35 CLI-pass candidate beside show --tokens. Pre-existing,
+bit twice at one gate.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
