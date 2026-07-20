@@ -251,6 +251,42 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P34-r2 (gate find, 2026-07-20): with the CJK shelves live, a Han headword
+  # matches 6+ dictionaries and DEFAULT_LIMIT=5 silently hid the rest —
+  # `define 棄` never showed tls-words (slug-alphabetical order, truncated
+  # without a word). The cap must announce itself, and --long must lift it.
+  def test_define_shelf_cap_announces_truncation_and_long_lifts_it
+    with_tls_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      filler = Nabu::Store::Source.create(
+        slug: "filler", name: "Filler", adapter_class: "X", license_class: "attribution"
+      )
+      5.times do |n|
+        dict_id = db[:dictionaries].insert(
+          source_id: filler.id, slug: format("aaa-%<n>d", n: n), title: format("Filler %<n>d", n: n),
+          language: "lzh"
+        )
+        db[:dictionary_entries].insert(
+          dictionary_id: dict_id, entry_id: format("f%<n>d", n: n), urn: format("urn:nabu:dict:aaa-%<n>d:f%<n>d", n: n),
+          key_raw: "棄", headword: "棄", headword_folded: "棄", gloss: "filler", body: "filler",
+          content_sha256: "x", withdrawn: false
+        )
+      end
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      refute_match(/tls-words/, out, "slug order truncates tls-words out at the default cap")
+      assert_match(/… 1 more entry matches \(--long shows all; --limit raises the cap\)/, out,
+                   "silent truncation is the defect under test")
+
+      long_out, _err2, long_status = with_config(config) { run_cli(%w[define 棄 --long]) }
+      assert_nil long_status
+      assert_match(/tls-words/, long_out, "--long lifts the shelf cap")
+      refute_match(/more entry matches|more entries match/, long_out)
+    end
+  end
+
   def test_define_resolved_citations_are_capped_by_default_and_long_expands
     with_tls_shelf do |config|
       db = Nabu::Store.connect(config.catalog_path)

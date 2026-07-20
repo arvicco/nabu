@@ -120,10 +120,11 @@ module Nabu
                          Sequel[:dictionary_entries][:withdrawn] => false)
         dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) if recon_only
         dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
-        dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
-               .limit(limit)
-               .select(*entry_columns)
-               .all
+        dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
+        # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
+        # caps at render so truncation can announce itself honestly).
+        dataset = dataset.limit(limit) if limit
+        dataset.select(*entry_columns).all
       end
 
       def entry_columns
