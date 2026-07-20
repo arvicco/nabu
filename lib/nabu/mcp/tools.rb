@@ -108,8 +108,9 @@ module Nabu
       ETYM_MAX_LIMIT = 10
       ETYM_MAX_COGNATES = 20
       DEFINE_MAX_REFLEXES = ETYM_MAX_COGNATES
-      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro
-                        ine-bsl-pro gmw-pro itc-pro iir-pro].freeze
+      # The define lang set is NOT a constant: it is live-derived from the
+      # catalog's dictionaries table at serve time (#define_langs — P35-6 L4,
+      # retiring the last survivor of the P11 hardcoded-list lesson).
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
       # Cognates-in-parallel (P15-3): (verse, root) groups per response — a
@@ -421,11 +422,12 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: DEFINE_LANGS,
-                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                               "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
-                               "(Old Church Slavonic), sla-pro/ine-pro/gem-pro → the " \
-                               "Wiktionary reconstruction shelves." },
+          lang: { type: "string",
+                  description: "Dictionary language. The enum (when present) is the LIVE set " \
+                               "of shelves this catalog holds — e.g. grc → LSJ, lat → Lewis & " \
+                               "Short, ang → Bosworth-Toller (Old English), chu → Wiktionary " \
+                               "(Old Church Slavonic), *-pro → the Wiktionary reconstruction " \
+                               "shelves." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -584,10 +586,12 @@ module Nabu
         @links = links
       end
 
-      # tools/list shape: [{name:, description:, inputSchema:}].
+      # tools/list shape: [{name:, description:, inputSchema:}]. nabu_define's
+      # lang enum is injected LIVE (#define_langs) so the advertised language
+      # set can never rot into a hand-frozen list again (P35-6 L4).
       def definitions
         TOOLS.map do |name, tool|
-          { name: name, description: tool.fetch(:description), inputSchema: tool.fetch(:input_schema) }
+          { name: name, description: tool.fetch(:description), inputSchema: input_schema(name, tool) }
         end
       end
 
@@ -774,13 +778,13 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !DEFINE_LANGS.include?(lang)
-          raise InvalidArguments, "lang must be one of #{DEFINE_LANGS.join(', ')} " \
-                                  "(the shelves this corpus holds)"
-        end
-
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         return note(NO_SHELF_NOTE) unless catalog.table_exists?(:dictionary_entries)
+
+        if lang && (langs = define_langs).any? && !langs.include?(lang)
+          raise InvalidArguments, "lang must be one of #{langs.join(', ')} " \
+                                  "(the dictionary shelves this catalog holds)"
+        end
 
         limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
@@ -998,6 +1002,33 @@ module Nabu
       end
 
       # -- define internals ---------------------------------------------------------
+
+      # The dictionary languages this catalog actually holds, live-derived at
+      # serve time (P35-6 L4; the P11 hardcoded-list lesson): a newly synced
+      # shelf language is advertised and accepted with zero code change. []
+      # when the catalog (or its shelf table) is unavailable — the degrade
+      # path: no enum is advertised and no lang is rejected, rather than
+      # validating against a stale frozen list.
+      def define_langs
+        catalog = resolve(@catalog)
+        return [] unless catalog&.table_exists?(:dictionaries)
+
+        catalog[:dictionaries].distinct.order(:language).select_map(:language)
+      end
+
+      # The served input schema for one tool: nabu_define's lang enum is
+      # injected from the live shelf set (absent when there is none to
+      # advertise); every other schema is the frozen constant.
+      def input_schema(name, tool)
+        schema = tool.fetch(:input_schema)
+        return schema unless name == "nabu_define"
+
+        langs = define_langs
+        return schema if langs.empty?
+
+        lang = schema.dig(:properties, :lang).merge(enum: langs)
+        schema.merge(properties: schema.fetch(:properties).merge(lang: lang))
+      end
 
       def define_miss_note(lemma)
         langs = @catalog[:dictionaries].distinct.order(:language).select_map(:language)
