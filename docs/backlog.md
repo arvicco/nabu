@@ -10256,6 +10256,16 @@ at higher limits. Journal: an honesty hint ("page may be incomplete —
 raise --limit") when the inner window was exhausted with filters
 active; P35 CLI-pass candidate beside show --tokens. Pre-existing,
 bit twice at one gate.
+P35 PACKET PAIR ADDED (owner-approved 2026-07-20): P35-5 assumption
+inventory (mechanical sweep of era-bound literals/enumerations/silent
+fallbacks into one census table; no behavior changes) + P35-6
+recalibration & honesty invariants [deps: P35-5] (re-measure each site
+against the live catalog; OK/HARDEN/GENERALIZE/RETIRE; the journaled
+gate finds land here; residue = render-conformance suite, `# census:`
+comment convention in the gate scan, gate-checklist re-diff line).
+Process ratified into dev-loop §6b (recalibration after growth waves).
+Full sketches in the orchestrator-held plan; elaborate after the P34
+gate with the rest of P35.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
