@@ -25,7 +25,28 @@ module Nabu
     #
     # Expects the including class to hold the catalog handle in @catalog.
     module CatalogJoin
+      # The exhausted-inner-window honesty hint (P35-6, dev-loop §6b — this
+      # lie bit twice at the P34 gate): every index-backed page is filled
+      # from a bounded inner window (limit × INNER_LIMIT_FACTOR index hits)
+      # that the catalog join then thins. When the window came back FULL and
+      # a catalog-side filter was active and the page still came back short,
+      # matches may exist beyond the window — the surface must say so
+      # instead of serving a clean-looking short (or empty) page. One house
+      # line, shared verbatim by every surface, CLI and MCP alike.
+      INCOMPLETE_PAGE_HINT = "page may be incomplete under these filters — raise --limit to search deeper"
+
+      # nil, or INCOMPLETE_PAGE_HINT after a #run whose page may be missing
+      # matches beyond the inner window. Reset on every run.
+      attr_reader :incomplete_hint
+
       private
+
+      # Record the completeness verdict for the page a run just filled (the
+      # class-note condition: full inner window AND active catalog filters
+      # AND a short page).
+      def note_page_completeness(window_exhausted:, filters_active:, page_size:, limit:)
+        @incomplete_hint = window_exhausted && filters_active && page_size < limit ? INCOMPLETE_PAGE_HINT : nil
+      end
 
       # Look the index hits' passage_ids up in the catalog, applying the
       # two-level visibility rule (neither passage nor its document withdrawn)

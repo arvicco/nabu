@@ -4290,6 +4290,102 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) ---------
+  # The P34 gate repro at the CLI: with_window_corpus (private helper below)
+  # fills the limit×10 inner window with rows the catalog-side filter
+  # rejects, so every search surface serves a clean-looking empty page —
+  # which must now announce itself.
+
+  def test_search_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      assert_nil status, "an incomplete page is a note, never a failure"
+      assert_match(/no matches/i, out)
+      assert_match(/page may be incomplete under these filters — raise --limit/, out,
+                   "the P34 gate lie: an empty page with matches beyond the inner window must say so")
+
+      full, _err2, = with_config(config) { run_cli(%w[search arma --lang lat --limit 1]) }
+      refute_match(/page may be incomplete/, full, "a full page carries no hint")
+    end
+  end
+
+  def test_proximity_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --near cano --lang grc --limit 1]) }
+      assert_nil status
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  def test_lemma_search_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --license nc --limit 1]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  def test_fuzzy_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy arma --lang grc --limit 1]) }
+      assert_nil status
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  # -- show --tokens (P35-6, the journaled gate find): the honest raw view of
+  # the stored token annotations — form plus EVERY key present, verbatim, no
+  # invention; absences say so.
+
+  def test_show_tokens_renders_every_stored_annotation_key_verbatim
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_nil status
+      assert_match(/tokens \(1\):/, out)
+      assert_match(/form=בָּרָא/, out)
+      assert_match(/lemma=ברא/, out)
+      assert_match(/gloss=create/, out)
+      assert_match(/osm=HVqp3ms/, out)
+      assert_match(/lang=hbo/, out, "every annotation key rides along — the raw view invents nothing")
+    end
+  end
+
+  def test_show_tokens_on_an_unannotated_passage_says_so
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:grc:1 --tokens]) }
+      assert_nil status
+      assert_match(/no token annotations stored for this passage/, out)
+    end
+  end
+
+  def test_show_notes_unreadable_annotations_instead_of_silently_dropping
+    with_window_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:passages].where(urn: "urn:w:tok:1").update(annotations_json: "{broken")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1]) }
+      assert_nil status
+      assert_match(/note: stored annotations are unreadable \(invalid JSON\) — skipped/, out,
+                   "H9: a corrupt annotation lane must announce itself, not pose as unannotated")
+
+      tokens_out, _err2, = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_match(/stored annotations are unreadable/, tokens_out)
+
+      doc_out, _err3, = with_config(config) { run_cli(%w[show urn:w:tok]) }
+      assert_match(/1 passage carries unreadable stored annotations/, doc_out)
+    end
+  end
+
+  def test_show_tokens_on_a_document_urn_names_the_grain
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:lat --tokens]) }
+      assert_nil status
+      assert_match(/--tokens renders at passage grain — give a passage urn/, out)
+    end
+  end
+
   def test_export_is_pristine_under_translit_and_colors
     with_hebrew_corpus do |config|
       out, _err, status = with_env("NABU_COLOR" => "1") do
@@ -4536,6 +4632,75 @@ class CLITest < Minitest::Test
       document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
       content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+  end
+
+  # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) ---------
+  # The P34 gate repro at the CLI: a corpus where the limit×10 inner window
+  # fills with rows the catalog-side filter rejects, so every search surface
+  # serves a clean-looking empty page — which must now announce itself.
+
+  # Ten short open/lat rows dominate the bm25 (and urn-ordered lemma) inner
+  # window; the one row the filters WANT sits beyond it: a grc passage for
+  # --lang (text search / --near / --fuzzy), an nc λέγω attestation for
+  # --lemma --license nc. Fuzzy scope covers the whole corpus.
+  def with_window_corpus
+    Dir.mktmpdir("nabu-cli-window") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_window_corpus(catalog)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: %w[open nc])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_window_corpus(catalog)
+    open_id = catalog[:sources].insert(slug: "open", name: "Open", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+    nc_id = catalog[:sources].insert(slug: "nc", name: "NC", adapter_class: "TestAdapter",
+                                     license_class: "nc", enabled: true)
+    lat_doc = window_document(catalog, open_id, "urn:w:lat", "lat")
+    10.times do |i|
+      window_passage(catalog, lat_doc, "urn:w:lat:#{i}", "arma virumque cano", i, "lat",
+                     lemmas: [%w[λέγω λέγειν]])
+    end
+    grc_doc = window_document(catalog, open_id, "urn:w:grc", "grc")
+    window_passage(catalog, grc_doc, "urn:w:grc:1",
+                   "arma sits before cano yet far down the rank because this passage carries many more words",
+                   0, "grc")
+    nc_doc = window_document(catalog, nc_id, "urn:w:nc", "grc")
+    window_passage(catalog, nc_doc, "urn:w:nc:1", "εἶπας", 0, "grc", lemmas: [%w[λέγω εἶπας]])
+    tok_doc = window_document(catalog, open_id, "urn:w:tok", "hbo")
+    window_passage(catalog, tok_doc, "urn:w:tok:1", "בָּרָא", 0, "hbo",
+                   raw_tokens: [{ "form" => "בָּרָא", "lemma" => "ברא", "gloss" => "create",
+                                  "osm" => "HVqp3ms", "lang" => "hbo" }])
+  end
+
+  def window_document(catalog, source_id, urn, language)
+    catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: urn, language: language,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+  end
+
+  def window_passage(catalog, doc_id, urn, text, sequence, language, lemmas: [], raw_tokens: [])
+    tokens = lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } + raw_tokens
+    catalog[:passages].insert(
+      document_id: doc_id, urn: urn, sequence: sequence, language: language,
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
+      content_sha256: "x", revision: 1, withdrawn: false,
+      annotations_json: JSON.generate({ "tokens" => tokens })
     )
   end
 

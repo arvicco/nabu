@@ -72,6 +72,19 @@ module Query
       assert_equal "Homer", record.fetch("annotations").fetch("speaker")
     end
 
+    # H9 (P35-6): a corrupt annotations_json row exports an empty object PLUS
+    # an explicit annotations_error note — never a silent {} that reads as
+    # "this passage has no annotations".
+    def test_jsonl_unreadable_annotations_carry_an_error_note
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν", annotations_json: "{not json", sequence: 0)
+
+      record = JSON.parse(export(format: "jsonl").first)
+      assert_equal({}, record.fetch("annotations"))
+      assert_match(/invalid JSON/, record.fetch("annotations_error"),
+                   "the dropped lane must be announced on the exported line")
+    end
+
     def test_jsonl_empty_annotations_is_an_object
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν", sequence: 0)

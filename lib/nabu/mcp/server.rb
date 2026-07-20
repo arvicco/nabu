@@ -53,6 +53,7 @@ module Nabu
       }.freeze
 
       # JSON-RPC 2.0 error codes.
+      # const: JSON-RPC 2.0 spec codes
       PARSE_ERROR = -32_700
       INVALID_REQUEST = -32_600
       METHOD_NOT_FOUND = -32_601
