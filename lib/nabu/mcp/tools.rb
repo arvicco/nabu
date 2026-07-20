@@ -622,11 +622,12 @@ module Nabu
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
-                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph,
-                                         from: from, to: to, place: place)
+        results, incomplete = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
+                                                     window: window, lang: args["lang"], license: license,
+                                                     limit: limit + 1, morph: morph,
+                                                     from: from, to: to, place: place)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_search(results, limit: limit, catalog: catalog)
+        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -935,37 +936,42 @@ module Nabu
         [from, to, place]
       end
 
+      # Returns [results, incomplete_hint] — the hint is the query layer's
+      # exhausted-inner-window announcement (P35-6), nil on an honest page.
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil)
-        if near
-          return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
-            query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
-            near: near, window: window, lang: lang, license: license, limit: limit
-          )
-        end
-        if mode == :lemma
-          return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-                                   .run(term, lang: lang, license: license, limit: limit, morph: morph)
-        end
-
-        Query::Search.new(catalog: catalog, fulltext: fulltext)
-                     .run(term, lang: lang, license: license, limit: limit, from: from, to: to, place: place)
+        results, searcher =
+          if near
+            searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
+                          near: near, window: window, lang: lang, license: license, limit: limit), searcher]
+          elsif mode == :lemma
+            searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
+          else
+            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(term, lang: lang, license: license, limit: limit,
+                                from: from, to: to, place: place), searcher]
+          end
+        [results, searcher.incomplete_hint]
       end
 
-      def render_search(results, limit:, catalog:)
-        return json(matches: [], note: "no matches", coverage: coverage_hint(catalog)) if results.empty?
+      def render_search(results, limit:, catalog:, incomplete: nil)
+        if results.empty?
+          return json(matches: [], note: ["no matches", incomplete].compact.join(" — "),
+                      coverage: coverage_hint(catalog))
+        end
 
         shown = results.first(limit)
         sources = sources_by_urn(catalog, shown.map(&:urn))
-        json(
-          matches: shown.map { |result| match_payload(result, sources) },
-          note: if results.size > limit
-                  "more than #{limit} matches, showing #{limit} — raise limit " \
-                    "(max #{SEARCH_MAX_LIMIT}) or refine"
-                else
-                  "#{shown.size} matches, showing #{shown.size}"
-                end
-        )
+        note = if results.size > limit
+                 "more than #{limit} matches, showing #{limit} — raise limit " \
+                   "(max #{SEARCH_MAX_LIMIT}) or refine"
+               else
+                 "#{shown.size} matches, showing #{shown.size}"
+               end
+        note = "#{note} — #{incomplete}" if incomplete
+        json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
       end
 
       def match_payload(result, sources)

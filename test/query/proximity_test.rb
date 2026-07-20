@@ -200,5 +200,41 @@ module Query
       assert_raises(ArgumentError) { prox(near: "θεός", window: 5) }
       assert_raises(ArgumentError) { prox(query: "λόγος", lemma: "λέγω", near: "θεός", window: 5) }
     end
+    # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) --------
+    # Ten short NEAR hits outrank (bm25) the one grc-labeled longer row;
+    # limit 1 makes the inner window exactly 10 (Search::INNER_LIMIT_FACTOR),
+    # so the lang filter empties the page while a match exists beyond it.
+
+    def seed_window_exhausting_pairs(lat_rows: 10)
+      doc = make_document(urn: "urn:d:lat", language: "lat")
+      lat_rows.times do |i|
+        make_passage(doc, urn: "urn:d:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
+      end
+      grc = make_document(urn: "urn:d:grc", language: "grc")
+      long_text = "arma sits before cano yet far down the rank because this passage carries many more words"
+      make_passage(grc, urn: "urn:d:grc:1", sequence: 0, language: "grc", text: long_text)
+      rebuild!
+    end
+
+    def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
+      seed_window_exhausting_pairs
+
+      query = Nabu::Query::Proximity.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run(query: "arma", near: "cano", lang: "grc", limit: 1)
+      assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
+                   "an empty page with matches beyond the window must announce itself"
+    end
+
+    def test_unexhausted_window_or_full_page_carries_no_hint
+      seed_window_exhausting_pairs(lat_rows: 3)
+
+      query = Nabu::Query::Proximity.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:d:grc:1], query.run(query: "arma", near: "cano", lang: "grc", limit: 1).map(&:urn)
+      assert_nil query.incomplete_hint, "the window reached the grc row — the page is honest"
+
+      refute_empty query.run(query: "arma", near: "cano", limit: 1)
+      assert_nil query.incomplete_hint, "no catalog-side filter was active"
+    end
   end
 end
