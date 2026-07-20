@@ -744,3 +744,96 @@ class DisplayEditionTest < Minitest::Test
     end
   end
 end
+
+# Gaiji resolution + placeholder (P37-3): the kanripo `reading`-mode transform
+# for `&KR\d+;` not-yet-encoded-character references. A ref the curated map
+# resolves becomes its real glyph; every other becomes the ⬚ placeholder box —
+# never a fake glyph. diplomatic/full/default keep refs verbatim.
+class DisplayGaijiTest < Minitest::Test
+  # A short lzh run carrying one FAITHFUL ref (KR0001 → 𫠦, in the shipped map)
+  # and one IMAGE-ONLY ref (KR0809, the parser's own example — unresolvable).
+  KANRIPO_LINE = "子曰&KR0001;學而&KR0809;時習之"
+  FAITHFUL_MAP = { "KR0001" => "𫠦" }.freeze
+  PLACEHOLDER = "\u{2B1A}" # ⬚
+
+  def render(text, mode:, source: "kanripo", gaiji_map: FAITHFUL_MAP, gaiji: "placeholder")
+    with_kanripo_policy(gaiji) do |sp|
+      Nabu::Display.render(text, language: "lzh", mode: Nabu::Display.mode(mode),
+                                 policies: {}, source: source,
+                                 source_policies: sp, gaiji_map: gaiji_map)
+    end
+  end
+
+  def test_reading_resolves_the_faithful_ref_and_placeholds_the_rest
+    rendered = render(KANRIPO_LINE, mode: "reading")
+    assert_equal "子曰𫠦學而#{PLACEHOLDER}時習之", rendered.text
+    refute_includes rendered.text, "&KR", "no raw ref survives reading mode"
+  end
+
+  def test_reading_tallies_resolved_and_unresolved_for_the_footer
+    tally = render(KANRIPO_LINE, mode: "reading").gaiji
+    assert_equal 1, tally.resolved, "KR0001 mapped to a real codepoint"
+    assert_equal 1, tally.unresolved, "KR0809 is image-only → placeholder"
+  end
+
+  def test_diplomatic_keeps_the_refs_verbatim
+    rendered = render(KANRIPO_LINE, mode: "diplomatic")
+    assert_equal KANRIPO_LINE, rendered.text, "the byte-honest view shows the refs as stored"
+    assert_nil rendered.gaiji, "no gaiji transform ran → no tally"
+  end
+
+  def test_full_keeps_the_refs_verbatim
+    assert_equal KANRIPO_LINE, render(KANRIPO_LINE, mode: "full").text
+  end
+
+  def test_default_mode_never_resolves_gaiji
+    assert_equal KANRIPO_LINE, render(KANRIPO_LINE, mode: "default").text,
+                 "gaiji resolution belongs to reading mode only"
+  end
+
+  def test_refs_setting_keeps_them_verbatim_even_in_reading
+    rendered = render(KANRIPO_LINE, mode: "reading", gaiji: "refs")
+    assert_equal KANRIPO_LINE, rendered.text
+    assert_equal 0, rendered.gaiji.resolved
+    assert_equal 0, rendered.gaiji.unresolved
+  end
+
+  def test_a_bad_gaiji_setting_is_a_named_error
+    error = assert_raises(Nabu::Display::ConfigError) do
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "display.yml")
+        File.write(path, "sources:\n  kanripo: { gaiji: sparkle }\n")
+        Nabu::Display.load_source_policies(path)
+      end
+    end
+    assert_match(/gaiji/, error.message)
+    assert_match(/placeholder/, error.message, "the error names the valid settings")
+  end
+
+  def test_shipped_display_yml_gives_kanripo_the_placeholder_policy
+    sp = Nabu::Display.load_source_policies(File.join(Nabu::Config::PROJECT_ROOT, "config", "display.yml"))
+    assert_equal "placeholder", sp["kanripo"].gaiji
+  end
+
+  def test_shipped_gaiji_map_resolves_a_known_ref_and_omits_the_unresolvable
+    map = Nabu::Display.load_gaiji_map(File.join(Nabu::Config::PROJECT_ROOT, "config", "gaiji", "kanripo.tsv"))
+    assert_equal "𫠦", map["KR0001"], "the faithful codepoint ships"
+    assert_nil map["KR0809"], "the image-only ref is deliberately not in the faithful map"
+    assert_operator map.size, :>, 900, "the curated faithful subset (972 refs at census)"
+  end
+
+  def test_missing_gaiji_map_is_an_empty_map_not_an_error
+    assert_empty Nabu::Display.load_gaiji_map("/no/such/gaiji.tsv"),
+                 "resolution degrades to placeholder-only, never a load error"
+  end
+
+  private
+
+  def with_kanripo_policy(gaiji)
+    Dir.mktmpdir("nabu-gaiji") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  kanripo: { gaiji: #{gaiji} }\n")
+      yield Nabu::Display.load_source_policies(path)
+    end
+  end
+end

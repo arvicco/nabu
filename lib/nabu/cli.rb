@@ -2179,13 +2179,39 @@ module Nabu
         rendered = Nabu::Display.render(text.to_s, language: language,
                                                    mode: display_mode, policies: display_policies,
                                                    source: source, annotations: annotations,
-                                                   source_policies: display_source_policies)
+                                                   source_policies: display_source_policies,
+                                                   gaiji_map: gaiji_map_for(source))
         display_applied.merge(rendered.applied)
+        record_gaiji(rendered.gaiji)
         rendered.text
       end
 
       def display_applied
         @display_applied ||= Set.new
+      end
+
+      # The source's curated gaiji resolution map (P37-3), memoized per source:
+      # config/gaiji/<source>.tsv (only kanripo ships one today). A source with
+      # no file gets an empty map — reading mode then placeholder-only, and the
+      # non-show call sites (no source) never load a map at all.
+      def gaiji_map_for(source)
+        return {} unless source
+
+        (@gaiji_maps ||= {})[source] ||=
+          Nabu::Display.load_gaiji_map(File.join(Nabu::Config.load.gaiji_dir, "#{source}.tsv"))
+      end
+
+      # Running [resolved, unresolved] gaiji tallies for the once-per-invocation
+      # footer (summed across every passage a show-family command renders).
+      def display_gaiji
+        @display_gaiji ||= [0, 0]
+      end
+
+      def record_gaiji(tally)
+        return unless tally
+
+        display_gaiji[0] += tally.resolved
+        display_gaiji[1] += tally.unresolved
       end
 
       # Per-token language coloring (P27-2): the single-passage show view —
@@ -2225,7 +2251,9 @@ module Nabu
       # spacing); the escape hatch names diplomatic when edition transforms
       # applied, else full.
       def print_display_footer
-        return if display_applied.empty?
+        resolved, unresolved = display_gaiji
+        gaiji = resolved.positive? || unresolved.positive?
+        return if display_applied.empty? && !gaiji
 
         labels = display_applied.to_a
         edition = Nabu::Display::EDITION_LABELS & labels
@@ -2235,11 +2263,33 @@ module Nabu
         strips = labels - colors - edition - ["spacing", Nabu::Display::ISOLATES]
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
         parts << "apparatus simplified: #{edition.join(', ')}" unless edition.empty?
+        parts << gaiji_clause(resolved, unresolved) if gaiji
         parts << "spacing" if labels.include?("spacing")
         parts.concat(colors)
         parts << Nabu::Display::ISOLATES if labels.include?(Nabu::Display::ISOLATES)
-        hint = edition.empty? ? "--display full shows all marks" : "--display diplomatic shows the edition marks"
-        say "display: #{parts.join(' · ')} (#{hint})"
+        say "display: #{parts.join(' · ')} (#{display_footer_hint(edition, gaiji)})"
+      end
+
+      # The escape-hatch hint: diplomatic when any edition-level transform ran
+      # (apparatus OR gaiji — both are "shown as stored" under diplomatic),
+      # naming "refs" when gaiji is the only edition transform; else full.
+      def display_footer_hint(edition, gaiji)
+        return "--display diplomatic shows the edition marks" unless edition.empty?
+        return "--display diplomatic shows the gaiji refs" if gaiji
+
+        "--display full shows all marks"
+      end
+
+      # The gaiji footer clause (P37-3): unresolved refs became ⬚ placeholders,
+      # resolved ones became real glyphs — say both honestly.
+      def gaiji_clause(resolved, unresolved)
+        if unresolved.positive? && resolved.positive?
+          "#{unresolved} unresolved gaiji (#{resolved} resolved)"
+        elsif unresolved.positive?
+          "#{unresolved} unresolved gaiji"
+        else
+          "#{resolved} gaiji resolved"
+        end
       end
 
       # Reject an unknown --license up front (before opening any db) with the
