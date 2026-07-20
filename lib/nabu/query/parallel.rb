@@ -2,6 +2,8 @@
 
 require "json"
 
+require_relative "sibling_families"
+
 module Nabu
   module Query
     # `nabu show URN --parallel [LANG]` (P7-4, span-grouped P8-1b): resolve a
@@ -58,20 +60,20 @@ module Nabu
     #
     # == Sibling selection
     #
-    # Sibling = same work prefix (urn:cts:<ns>:<tg>.<work>.), document
-    # language = LANG, different urn. When several qualify the highest version
-    # wins (numeric then letter: eng10 > eng2).
+    # Sibling = same work, document language = LANG, different urn. When
+    # several qualify the highest version wins (numeric then letter:
+    # eng10 > eng2), except that the work's OWN document outranks its
+    # variants when it qualifies.
     #
-    # ORACC tablets (P13-4) are the second sibling family: the tablet urn
-    # (urn:nabu:oracc:<project>:<textid>) IS the work, and its aligned
-    # translations are `<work>-<variant>` documents (…:P224395-en) whose
-    # passage suffixes are the tablet's own line labels (:o.1) — so the same
-    # suffix span-grouping applies unchanged, and the paragraph-grained SAA
-    # units render exactly like the card-cited English Homers. Both
-    # directions resolve (tablet → -en; -en → tablet via lang "akk"/"sux").
-    # P/Q textids never contain a hyphen, so the -variant split is exact.
-    #
-    # Other non-CTS urns (papyri, treebanks) have no work prefix and
+    # WHAT COUNTS AS A WORK is declared per source in the registry
+    # (`siblings:` on the sources.yml row, P34-0) and compiled by
+    # Query::SiblingFamilies — see its class note for the full design
+    # (the CTS dotted-version form; the urn:nabu `<work>-<variant>`
+    # families, ORACC P13-4 first, whose passage suffixes are the work's
+    # own line labels, so the same suffix span-grouping applies unchanged
+    # and the paragraph-grained SAA units render exactly like the
+    # card-cited English Homers; both directions resolve). A urn whose
+    # source declares no family (papyri, treebanks) has no work notion and
     # therefore no siblings — Result#right is nil and the CLI says so.
     #
     # Show-family semantics: withdrawn passages are included, flagged — this is
@@ -112,90 +114,13 @@ module Nabu
       # document/range urn); groups are pre-filtered to the scope/slice.
       Result = Data.define(:left, :right, :groups, :scope)
 
-      CTS_DOCUMENT = /\A(?<work>urn:cts:[^:]+:[^:]+\.[^:]+)\.[^:.]+\z/
-      private_constant :CTS_DOCUMENT
-
-      # An ORACC document urn: the tablet itself (the work) or one of its
-      # translation variants (work-en, …). See "Sibling selection".
-      ORACC_DOCUMENT = /\A(?<work>urn:nabu:oracc:[^:]+:[^:-]+)(?:-[a-z]+)?\z/
-      private_constant :ORACC_DOCUMENT
-
-      # A Freising monument urn (P13-11): the critical transcription IS the
-      # work (urn:nabu:freising:bs1), its layers are "-" variants (bs1-dt,
-      # bs1-pt, bs1-tr-eng, …). Same suffix span-grouping as ORACC; the
-      # layers are line-for-line, so every anchor is a verse pair.
-      FREISING_DOCUMENT = /\A(?<work>urn:nabu:freising:bs\d+)(?:-[a-z-]+)?\z/
-      private_constant :FREISING_DOCUMENT
-
-      # A Damaskini witness urn (P23-1): the witness IS the work
-      # (urn:nabu:damaskini:veles--trojanskata), its aligned English is the
-      # -en variant, suffix = the sentence number — verse pairs throughout.
-      # Doc ids are hyphen-rich ("berlinski--slovo-petki"), so unlike ORACC
-      # the variant split anchors on the literal -en tail (the only variant
-      # this source mints; no upstream id ends in "-en" — censused, frozen).
-      DAMASKINI_DOCUMENT = /\A(?<work>urn:nabu:damaskini:[^:]+?)(?:-en)?\z/
-      private_constant :DAMASKINI_DOCUMENT
-
-      # A SuttaCentral text urn (P26-1): the root text IS the work
-      # (urn:nabu:suttacentral:mn1), its aligned English is the -en variant,
-      # suffix = the shared bilara segment id — verse pairs on every shared
-      # segment, honest one-sided rows where a translation expands or skips.
-      # Stems are hyphen-rich (dhp21-32, pli-tv-bu-vb-as1-7), so the split
-      # anchors on the literal -en tail, exactly the Damaskini stance (no
-      # upstream stem ends in "-en" — censused, frozen).
-      SUTTACENTRAL_DOCUMENT = /\A(?<work>urn:nabu:suttacentral:[^:]+?)(?:-en)?\z/
-      private_constant :SUTTACENTRAL_DOCUMENT
-
-      # A TLA-HF dataset urn (P28-2): the dataset IS the work
-      # (urn:nabu:tla-hf:demotic-v18), its aligned GERMAN translation is the
-      # -de variant, suffix = the record's line number — verse pairs
-      # throughout. Stems are hyphen-rich (late-egyptian-v19), so the split
-      # anchors on the literal -de tail, the Damaskini stance (no dataset
-      # slug ends in "-de" — censused, frozen).
-      TLA_HF_DOCUMENT = /\A(?<work>urn:nabu:tla-hf:[^:]+?)(?:-de)?\z/
-      private_constant :TLA_HF_DOCUMENT
-      # An AES text urn (P28-0): the Egyptian text IS the work
-      # (urn:nabu:aes:tuebingerstelen:3F5K…), its aligned German is the -de
-      # variant, suffix = the shared sentence id — verse pairs on every
-      # translated sentence, honest one-sided rows where the editor left a
-      # sentence untranslated (or translated a token-less one). Text ids
-      # are uppercase [A-Z0-9] (censused, frozen) — none ends in "-de".
-      AES_DOCUMENT = /\A(?<work>urn:nabu:aes:[^:]+:[^:]+?)(?:-de)?\z/
-      private_constant :AES_DOCUMENT
-
-      # A RIIG inscription urn (P25-1, wired at P30 review — the 74 -fr
-      # siblings were loaded but invisible to --parallel until then): the
-      # inscription IS the work (urn:nabu:riig:all-01-01), its French
-      # sibling the -fr variant. Stems are hyphen-rich but none ends in
-      # "-fr" (censused, frozen) — the literal-tail Damaskini stance.
-      RIIG_DOCUMENT = /\A(?<work>urn:nabu:riig:[^:]+?)(?:-fr)?\z/
-      private_constant :RIIG_DOCUMENT
-
-      # An OpenEtruscan inscription urn (P29-0, wired at P30 review): the
-      # inscription IS the work (urn:nabu:open-etruscan:cr-2.20), its
-      # English sibling the -en variant. Stems are hyphen-and-dot-rich but
-      # none ends in "-en" (censused, frozen).
-      OPEN_ETRUSCAN_DOCUMENT = /\A(?<work>urn:nabu:open-etruscan:[^:]+?)(?:-en)?\z/
-      private_constant :OPEN_ETRUSCAN_DOCUMENT
-
-      # A Corpus_ItAnt urn (P29-2, wired at P30 review): the interpretative
-      # edition IS the work (urn:nabu:itant:oscan-2); -eng/-ita are the
-      # translation siblings and -dipl the diplomatic layer (the ogham
-      # layer-sibling shape — same language, reachable by explicit
-      # --parallel osc). Stems end in digits, never in these tails
-      # (censused, frozen).
-      ITANT_DOCUMENT = /\A(?<work>urn:nabu:itant:[^:]+?)(?:-(?:eng|ita|dipl))?\z/
-      private_constant :ITANT_DOCUMENT
-
-      # ETCSL composites and their -en prose-translation siblings (P31-5; the
-      # tail is the composition number, dots inside one colon segment). The
-      # journaled P30-7 chain follow-up, landed on the owner's first-sync
-      # repro 2026-07-19.
-      ETCSL_DOCUMENT = /\A(?<work>urn:nabu:etcsl:[^:]+?)(?:-en)?\z/
-      private_constant :ETCSL_DOCUMENT
-
-      def initialize(catalog:)
+      # +families+ (P34-0): the registry-declared work patterns — by default
+      # the shipped sources.yml compile. The ten per-source regex constants
+      # that used to live here retired into `siblings:` declarations; see
+      # SiblingFamilies for the design note on what each encoded.
+      def initialize(catalog:, families: SiblingFamilies.default)
         @catalog = catalog
+        @families = families
       end
 
       # Resolve +urn+ (document, passage, or range) and align against the +lang+
@@ -251,12 +176,12 @@ module Nabu
         @catalog[:documents].where(criteria).select(:id, :urn, :title, :language).first
       end
 
-      # The LANG edition of the same work, or nil. Three work families: CTS
-      # editions (work prefix + "." + edition slug), ORACC tablets and
-      # Freising monuments (the work urn itself + "-" variants). The work's
-      # OWN document outranks its variants when it qualifies (bs1-tr-eng →
-      # sl resolves to the critical bs1, not the highest-sorting -tr-slv);
-      # otherwise the highest version wins.
+      # The LANG edition of the same work, or nil. Two work-family shapes
+      # (SiblingFamilies): CTS editions (work prefix + "." + edition slug)
+      # and the urn:nabu families (the work urn itself + "-" variants). The
+      # work's OWN document outranks its variants when it qualifies
+      # (bs1-tr-eng → sl resolves to the critical bs1, not the
+      # highest-sorting -tr-slv); otherwise the highest version wins.
       def sibling_edition(document, lang)
         work, candidates = work_candidates(document.fetch(:urn))
         return nil if candidates.nil?
@@ -271,17 +196,19 @@ module Nabu
       end
 
       # [work urn, dataset of documents sharing it], or nil for a urn with
-      # no work notion (papyri, treebanks).
+      # no work notion (papyri, treebanks — no declared family). CTS
+      # candidates are the dotted editions (the work urn itself is never a
+      # document); variant candidates are the bare work + its "-" variants.
       def work_candidates(urn)
-        if (match = urn.match(CTS_DOCUMENT))
-          [match[:work], @catalog[:documents].where(Sequel.like(:urn, "#{match[:work]}.%"))]
-        elsif (match = urn.match(ORACC_DOCUMENT) || urn.match(FREISING_DOCUMENT) ||
-                       urn.match(DAMASKINI_DOCUMENT) || urn.match(SUTTACENTRAL_DOCUMENT) ||
-                       urn.match(TLA_HF_DOCUMENT) || urn.match(AES_DOCUMENT) ||
-                       urn.match(RIIG_DOCUMENT) || urn.match(OPEN_ETRUSCAN_DOCUMENT) ||
-                       urn.match(ITANT_DOCUMENT) || urn.match(ETCSL_DOCUMENT))
-          [match[:work], @catalog[:documents].where(
-            Sequel.|(Sequel.like(:urn, "#{match[:work]}-%"), { urn: match[:work] })
+        match = @families.match(urn)
+        return nil if match.nil?
+
+        work = match.work
+        if match.family == :cts
+          [work, @catalog[:documents].where(Sequel.like(:urn, "#{work}.%"))]
+        else
+          [work, @catalog[:documents].where(
+            Sequel.|(Sequel.like(:urn, "#{work}-%"), { urn: work })
           )]
         end
       end

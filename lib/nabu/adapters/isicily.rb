@@ -80,8 +80,23 @@ module Nabu
         LibraryReferences.new(catalog: catalog, journal: journal, producer: "isicily")
       end
 
-      # One DocumentRef per record file, sorted by urn. A workdir without
-      # inscriptions/ yields nothing (the day-one pre-clone state).
+      TRANSLATION_TITLES = { "eng" => "English", "ita" => "Italian" }.freeze
+
+      # ISO 639-3 (stored document language) → the urn sibling suffix.
+      TRANSLATION_SUFFIXES = { "eng" => "en", "ita" => "it" }.freeze
+
+      # +translations+ arrives via SourceRegistry::Entry#build_adapter for
+      # the opted-in registry row (P34-0). Off (the default) mints the base
+      # records + their -translit layer siblings only; on adds the -en/-it
+      # translation siblings.
+      def initialize(translations: false)
+        super()
+        @translations = translations
+      end
+
+      # One DocumentRef per record file plus its citable siblings, sorted by
+      # urn. A workdir without inscriptions/ yields nothing (the day-one
+      # pre-clone state).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
@@ -89,7 +104,17 @@ module Nabu
       end
 
       def parse(document_ref)
-        IsicilyEpidocParser.new.parse(document_ref.path, urn: document_ref.id)
+        metadata = document_ref.metadata
+        parser = IsicilyEpidocParser.new
+        case metadata["kind"]
+        when "translation"
+          parse_translation(document_ref, metadata.fetch("language"))
+        when "transliteration"
+          layer = IsicilyEpidocParser::TRANSLITERATION_LAYER
+          parser.parse(document_ref.path, urn: document_ref.id, layer: layer)
+        else
+          parser.parse(document_ref.path, urn: document_ref.id)
+        end
       end
 
       # One git repo, the shared non-destructive choreography (fetch →
@@ -103,13 +128,79 @@ module Nabu
       def document_refs(workdir)
         Dir.glob(File.join(workdir, INSCRIPTIONS_DIRNAME, "ISic*.xml"))
            .select { |path| RECORD_FILENAME.match?(File.basename(path)) }
-           .map do |path|
+           .flat_map { |path| record_refs(File.expand_path(path)) }
+           .sort_by(&:id)
+      end
+
+      # The base record ref + its citable siblings (the parser's own census
+      # decides which layers/translations are real — the ogham/itant
+      # discipline). An unreadable record still mints its base ref, whose
+      # parse re-raises the real error as the honest quarantine.
+      def record_refs(path)
+        base = "#{IsicilyEpidocParser::URN_PREFIX}#{File.basename(path, '.xml').downcase}"
+        refs = [Nabu::DocumentRef.new(source_id: manifest.id, id: base, path: path)]
+        census = record_siblings(path)
+        return refs if census.nil?
+
+        if census.transliteration
+          refs << Nabu::DocumentRef.new(source_id: manifest.id, id: "#{base}-translit", path: path,
+                                        metadata: { "kind" => "transliteration" })
+        end
+        refs + translation_refs(base, path, census)
+      end
+
+      def translation_refs(base, path, census)
+        return [] unless @translations
+
+        census.translations.map do |language|
           Nabu::DocumentRef.new(
-            source_id: manifest.id,
-            id: "#{IsicilyEpidocParser::URN_PREFIX}#{File.basename(path, '.xml').downcase}",
-            path: File.expand_path(path)
+            source_id: manifest.id, id: "#{base}-#{TRANSLATION_SUFFIXES.fetch(language)}", path: path,
+            metadata: { "kind" => "translation", "language" => language }
           )
-        end.sort_by(&:id)
+        end
+      end
+
+      # nil = unreadable record (malformed XML): only the base ref is
+      # minted, its parse re-raising the quarantine.
+      def record_siblings(path)
+        IsicilyEpidocParser.new.siblings(path)
+      rescue ParseError
+        nil
+      end
+
+      # The -en/-it sibling: one passage per translation paragraph, cited
+      # p<ordinal>, the first carrying upstream's whole-text corresp anchor
+      # at the primary's first line (loose-alignment honesty — the ETCSL
+      # mechanism, never per-line invention).
+      def parse_translation(document_ref, language)
+        parser = IsicilyEpidocParser.new
+        base = document_ref.id.delete_suffix("-#{TRANSLATION_SUFFIXES.fetch(language)}")
+        original = parser.parse(document_ref.path, urn: base)
+        anchor = original.first&.urn&.delete_prefix("#{base}:")
+        document = Nabu::Document.new(
+          urn: document_ref.id, language: language,
+          title: translation_title(original.title, language),
+          canonical_path: document_ref.path, metadata: { "kind" => "translation" }
+        )
+        parser.translations(document_ref.path, anchor_suffix: anchor).fetch(language, [])
+              .each_with_index do |(cite, text, corresp), sequence|
+          document << Nabu::Passage.new(
+            urn: "#{document_ref.id}:#{cite}", language: language, text: text, sequence: sequence,
+            annotations: corresp ? { "corresp" => corresp } : {}
+          )
+        end
+        if document.empty?
+          raise ParseError, "#{document_ref.path}: no #{language} translation prose for #{document_ref.id}"
+        end
+
+        document
+      rescue ValidationError => e
+        raise ParseError, "#{document_ref.path}: #{e.message}"
+      end
+
+      def translation_title(title, language)
+        label = "#{TRANSLATION_TITLES.fetch(language)} translation"
+        title ? "#{title} — #{label}" : label
       end
     end
   end

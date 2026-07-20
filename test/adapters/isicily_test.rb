@@ -3,27 +3,44 @@
 require "test_helper"
 require "tmpdir"
 
-# I.Sicily adapter tests (P29-4): discovery over the cloned inscriptions/
-# tree, the isicily-epidoc line grain (textpart paths, break="no", the
-# kept bare <orig>, the metadata-only records), the lemma-layer words
-# annotations, the concordance reference-edge targets, and the honest
-# language mapping. Includes the shared AdapterConformance suite;
-# fixtures are 9 whole real records (test/fixtures/isicily/README.md).
+# I.Sicily adapter tests (P29-4, siblings P34-0): discovery over the
+# cloned inscriptions/ tree, the isicily-epidoc line grain (textpart
+# paths, break="no", the kept bare <orig>, the metadata-only records),
+# the lemma-layer words annotations, the concordance reference-edge
+# targets, the honest language mapping, and the -translit/-en/-it
+# sibling minting. Includes the shared AdapterConformance suite;
+# fixtures are 12 whole real records (test/fixtures/isicily/README.md).
 class IsicilyTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = Nabu::TestSupport.fixtures("isicily")
 
+  # Plain (translations-off) discovery: the base records + the ungated
+  # -translit layer siblings (the itant -dipl stance), never -en/-it.
   ALL_URNS = %w[
-    urn:nabu:isicily:isic000001 urn:nabu:isicily:isic000451
-    urn:nabu:isicily:isic000764 urn:nabu:isicily:isic001510
-    urn:nabu:isicily:isic001620 urn:nabu:isicily:isic001895
-    urn:nabu:isicily:isic002954 urn:nabu:isicily:isic003475
-    urn:nabu:isicily:isic020002
+    urn:nabu:isicily:isic000001 urn:nabu:isicily:isic000006
+    urn:nabu:isicily:isic000451 urn:nabu:isicily:isic000764
+    urn:nabu:isicily:isic001510 urn:nabu:isicily:isic001620
+    urn:nabu:isicily:isic001895 urn:nabu:isicily:isic002954
+    urn:nabu:isicily:isic003360 urn:nabu:isicily:isic003360-translit
+    urn:nabu:isicily:isic003475 urn:nabu:isicily:isic020002
+    urn:nabu:isicily:isic020307 urn:nabu:isicily:isic020307-translit
+  ].freeze
+
+  # The -en/-it siblings a translations-on discovery adds (the six
+  # fixtures with NON-EMPTY en prose; only ISic000006 carries it prose —
+  # comment-only divs mint nothing).
+  TRANSLATION_URNS = %w[
+    urn:nabu:isicily:isic000001-en urn:nabu:isicily:isic000006-en
+    urn:nabu:isicily:isic000006-it urn:nabu:isicily:isic000451-en
+    urn:nabu:isicily:isic001620-en urn:nabu:isicily:isic001895-en
+    urn:nabu:isicily:isic003475-en
   ].freeze
 
   def conformance_adapter
-    Nabu::Adapters::Isicily.new
+    # translations: true — the registry row's posture (P34-0); the
+    # -en/-it/-translit siblings must satisfy the same contract.
+    Nabu::Adapters::Isicily.new(translations: true)
   end
 
   def conformance_workdir
@@ -73,6 +90,13 @@ class IsicilyTest < Minitest::Test
   def test_discover_mints_one_ref_per_inscription_file_sorted
     refs = Nabu::Adapters::Isicily.new.discover(FIXTURES).to_a
     assert_equal ALL_URNS, refs.map(&:id)
+  end
+
+  def test_discover_with_translations_adds_the_en_and_it_siblings
+    refs = Nabu::Adapters::Isicily.new(translations: true).discover(FIXTURES).to_a
+    assert_equal (ALL_URNS + TRANSLATION_URNS).sort, refs.map(&:id),
+                 "non-empty en/it prose mints a sibling ref; comment-only and lang-less " \
+                 "translation divs mint nothing"
   end
 
   def test_discover_ignores_non_record_files_in_inscriptions
@@ -258,6 +282,74 @@ class IsicilyTest < Minitest::Test
                  metadata["related"]
   end
 
+  # --- the -translit layer sibling (P34-0) ------------------------------------
+
+  def test_transliteration_edition_mints_a_translit_sibling_line_for_line
+    document = parse("urn:nabu:isicily:isic003360")
+    sibling = parse("urn:nabu:isicily:isic003360-translit")
+    assert_equal "scx", sibling.language,
+                 "the sibling document keeps the record's mainLang identity, like its base"
+    assert_equal ["urn:nabu:isicily:isic003360-translit:1"], sibling.map(&:urn),
+                 "line suffixes mirror the primary edition's — suffix-equality --parallel"
+    assert_equal ["scx-Latn"], sibling.map(&:language).uniq,
+                 "the transliteration div's own xml:lang rides the passages"
+    assert_equal(document.map { |p| p.urn.delete_prefix(document.urn) },
+                 sibling.map { |p| p.urn.delete_prefix(sibling.urn) })
+    assert_match(/RAROTA/, sibling.first.text)
+    assert_equal "transliteration", sibling.metadata["layer"]
+    assert_match(/transliteration/, sibling.title.to_s)
+  end
+
+  def test_partial_transliteration_keeps_only_its_own_lines
+    sibling = parse("urn:nabu:isicily:isic020307-translit")
+    assert_equal ["urn:nabu:isicily:isic020307-translit:2"], sibling.map(&:urn),
+                 "upstream transliterated only line 2 of 1-2 — line 1 stays honestly absent"
+    assert_equal "mchacnem", sibling.first.text
+    assert_equal ["xly-Latn"], sibling.map(&:language).uniq
+  end
+
+  def test_records_without_a_citable_transliteration_mint_no_translit_ref
+    refs = Nabu::Adapters::Isicily.new.discover(FIXTURES).to_a
+    refute_includes refs.map(&:id), "urn:nabu:isicily:isic000001-translit",
+                    "no transliteration edition, no sibling"
+  end
+
+  # --- the -en/-it translation siblings (P34-0) -------------------------------
+
+  def test_en_translation_parses_with_the_whole_text_corresp_anchor
+    document = parse("urn:nabu:isicily:isic000006-en")
+    assert_equal "eng", document.language
+    assert_equal "Funerary inscription for Gaius Iulius Felix and Appuleia Rogata — " \
+                 "English translation", document.title
+    assert_equal ["urn:nabu:isicily:isic000006-en:p1"], document.map(&:urn)
+    assert_equal "Gaius Iulis Felix lived for [--] years. Appuleia Rogata lived for [--] years",
+                 document.first.text
+    assert_equal "1", document.first.annotations["corresp"],
+                 "the whole-text prose anchors at the primary's first line — coarse-block " \
+                 "honesty (the ETCSL corresp mechanism), never per-line invention"
+    assert_equal "translation", document.metadata["kind"]
+  end
+
+  def test_it_translation_parses_beside_the_en_one
+    document = parse("urn:nabu:isicily:isic000006-it")
+    assert_equal "ita", document.language
+    assert_match(/Italian translation/, document.title)
+    assert_equal "Gaio Giulio Felice visse anni [--]. Appuleia Rogata visse anni [--]",
+                 document.first.text
+    assert_equal "1", document.first.annotations["corresp"]
+  end
+
+  def test_multi_paragraph_translation_anchors_only_its_first_paragraph
+    document = parse("urn:nabu:isicily:isic001620-en")
+    assert_equal %w[
+      urn:nabu:isicily:isic001620-en:p1
+      urn:nabu:isicily:isic001620-en:p2
+    ], document.map(&:urn), "the Latinised re-rendering is a second paragraph"
+    assert_equal "1", document.first.annotations["corresp"]
+    refute document.to_a.last.annotations.key?("corresp"),
+           "later paragraphs carry NO invented alignment — they fall honestly one-sided"
+  end
+
   # --- identity ---------------------------------------------------------------
 
   def test_urn_mismatch_is_a_parse_error
@@ -272,7 +364,9 @@ class IsicilyTest < Minitest::Test
   private
 
   def parse(urn)
-    adapter = Nabu::Adapters::Isicily.new
+    # translations on so the -en/-it sibling refs resolve; base + -translit
+    # refs are identical either way.
+    adapter = Nabu::Adapters::Isicily.new(translations: true)
     ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
     refute_nil ref, "no ref #{urn}"
     adapter.parse(ref)

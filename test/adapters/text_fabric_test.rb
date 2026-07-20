@@ -62,6 +62,14 @@ module Adapters
       assert_equal "Jona", book.fetch(1_428_926), "the line after an anchor is anchor+1"
     end
 
+    def test_max_node_is_the_last_covered_node
+      verse = load_feature("verse")
+      assert_equal 1_434_822, verse.max_node, "the fixture's last verse node (Dan 2:7)"
+      qere = load_feature("qere_utf8")
+      assert_equal qere.each_pair.to_a.last.first, qere.max_node,
+                   "sparse features answer with their last anchored node"
+    end
+
     def test_each_pair_expands_runs_in_ascending_order
       verse = load_feature("verse")
       pairs = verse.each_pair.to_a

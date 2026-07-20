@@ -29,6 +29,24 @@ module Nabu
     # (subtype "primary", plus the 13 records whose only edited text is
     # subtype "transliteration-primary").
     #
+    # == --parallel siblings (P34-0)
+    #
+    # Two families of sibling document ride --parallel (adapter-minted,
+    # registry-declared `siblings: ["-en", "-it", "-translit"]`):
+    #   * -translit — the "transliteration" edition (a Latin-script
+    #     RENDERING of a Greek-script carving), lines under the primary's
+    #     OWN suffixes (line-for-line pairing), a bare layer marker. Minted
+    #     on the 54 records whose transliteration edition carries citable
+    #     letters (of 631 declared; 576 are empty <ab/> placeholders → mint
+    #     nothing, the ogham/riig skip-by-rule discipline).
+    #   * -en / -it — the <div type="translation"> prose (translations: true
+    #     gates these). One passage per non-empty <p>, cited p<ordinal>; the
+    #     first paragraph anchors at the primary's first line via a
+    #     synthesized "corresp" (whole-text coarse block — the ETCSL
+    #     loose-alignment mechanism, never per-line invention). 1,178 en /
+    #     387 it records. Comment-placeholder and language-less divs mint
+    #     nothing.
+    #
     # == Passage = the LINE; textpart-relative numbering (the EDH shape)
     #
     #   urn = <document-urn>[:<textpart-n>…][:b<k>]:<lb n>
@@ -139,6 +157,36 @@ module Nabu
       # Edition subtypes whose text is the record's own edited reading.
       PRIMARY_SUBTYPES = %w[primary transliteration-primary].freeze
 
+      # The transliteration edition (P34-0): a parallel Latin-script
+      # RENDERING of the primary carving, minted as a -translit SIBLING
+      # (the ogham/itant layer-sibling shape — suffix-equal to the primary,
+      # so --parallel pairs line-for-line). Its own subtype, distinct from
+      # the "transliteration-primary" records whose ONLY edited text it is.
+      TRANSLITERATION_SUBTYPE = "transliteration"
+
+      # The -translit sibling's urn suffix (abbreviated, the ogham -translit
+      # precedent) — distinct from the edition SUBTYPE spelling above.
+      TRANSLITERATION_URN_SUFFIX = "translit"
+
+      # The parse layers: the base document (its primary editions + lemma
+      # words + full header metadata) and the -translit layer sibling.
+      PRIMARY_LAYER = :primary
+      TRANSLITERATION_LAYER = :transliteration
+
+      # <div type="translation"> @xml:lang spellings → ISO 639-3, the only
+      # served translation languages (P34-0; 1,178 records mint an -en
+      # sibling, 387 an -it, measured over the parser at commit db1a4959 —
+      # the journal's div-count contract was 1,182 en / 389 it, the small
+      # gap being multi-div records + divs whose prose folds empty).
+      # Other-language and language-less divs (comment placeholders) mint
+      # nothing.
+      TRANSLATION_LANGUAGES = { "en" => "eng", "it" => "ita" }.freeze
+
+      # The sibling census discovery reads: which -translit / translation
+      # siblings a record's editions actually support (declared-but-empty
+      # layers mint nothing — the ogham/riig discipline).
+      Siblings = Data.define(:transliteration, :translations)
+
       # Upstream tags → ISO 639-3. "xx" is upstream's explicit unknown;
       # grc/xly/scx/xpu/osc/heb are already 639-3 and pass through.
       LANGUAGE_MAP = { "la" => "lat", "he" => "heb", "xx" => "und" }.freeze
@@ -162,29 +210,85 @@ module Nabu
       Line = Data.define(:urn_suffix, :text, :language, :annotations)
       private_constant :Line
 
-      # Parse one record file into a Nabu::Document. Zero citable lines →
-      # the metadata-only document (class note), never a quarantine.
-      def parse(path, urn:)
+      # Parse one record file's +layer+ into a Nabu::Document. The primary
+      # layer (default) is the base document: zero citable lines → the
+      # metadata-only document (class note), never a quarantine, and it
+      # carries the lemma words + full header metadata. The transliteration
+      # layer is the -translit SIBLING (P34-0): the Latin-script rendering's
+      # lines under the SAME suffixes as the primary, a bare layer marker
+      # for metadata, no lemma join, no metadata-only fallback (discovery
+      # only mints the ref when the layer is citable).
+      def parse(path, urn:, layer: PRIMARY_LAYER)
         doc = read_xml(path)
-        validate_identity!(doc, path: path, urn: urn)
+        validate_identity!(doc, path: path, urn: urn, layer: layer)
         language = document_language(doc)
+        return transliteration_document(doc, urn: urn, path: path, language: language) if layer == TRANSLITERATION_LAYER
+
         extraction = extract(doc, path: path, document_language: language)
         document = Nabu::Document.new(
           urn: urn, language: language, title: title_of(doc), canonical_path: path,
           metadata: metadata(doc, text_layer: extraction.any?)
         )
+        append_lines(document, extraction, urn: urn)
+        document
+      rescue ValidationError => e
+        raise ParseError, "#{path}: #{e.message}"
+      end
+
+      # The served translation prose as { "eng" => [[cite, text, corresp],
+      # …], "ita" => … } — one entry per non-empty <p> of each served
+      # translation div, cited "p<ordinal>". The FIRST paragraph anchors at
+      # +anchor_suffix+ (the primary's first line — a whole-text coarse
+      # block, the ETCSL corresp mechanism); later paragraphs carry nil
+      # (no invented alignment). Empty/comment-only and other-language divs
+      # yield nothing.
+      def translations(path, anchor_suffix:)
+        doc = read_xml(path)
+        translation_pairs(doc, anchor_suffix: anchor_suffix)
+      end
+
+      # The sibling census for discovery (class note): the -translit layer's
+      # citability + the served translation languages. Malformed XML raises
+      # ParseError — the adapter turns that into the metadata-only ref whose
+      # parse re-raises the honest quarantine.
+      def siblings(path)
+        doc = read_xml(path)
+        language = document_language(doc)
+        Siblings.new(
+          transliteration: transliteration_citable?(doc, path: path, language: language),
+          translations: translation_pairs(doc, anchor_suffix: nil).keys
+        )
+      end
+
+      private
+
+      def append_lines(document, extraction, urn:)
         extraction.each_with_index do |line, sequence|
           document << Nabu::Passage.new(
             urn: "#{urn}:#{line.urn_suffix}", language: line.language,
             text: line.text, annotations: line.annotations, sequence: sequence
           )
         end
-        document
-      rescue ValidationError => e
-        raise ParseError, "#{path}: #{e.message}"
       end
 
-      private
+      # The -translit sibling document: the transliteration edition's lines
+      # under the primary's own suffixes (line-for-line --parallel), a bare
+      # layer marker, the record's mainLang identity.
+      def transliteration_document(doc, urn:, path:, language:)
+        document = Nabu::Document.new(
+          urn: urn, language: language,
+          title: transliteration_title(title_of(doc)), canonical_path: path,
+          metadata: { "layer" => TRANSLITERATION_SUBTYPE }
+        )
+        extraction = extract(doc, path: path, document_language: language,
+                                  subtypes: [TRANSLITERATION_SUBTYPE], fallback: false)
+        append_lines(document, extraction, urn: urn)
+        document
+      end
+
+      def transliteration_title(title)
+        title ? "#{title} — transliteration" : "Transliteration"
+      end
 
       def read_xml(path)
         doc = Nokogiri::XML(File.read(path), &:strict)
@@ -196,15 +300,19 @@ module Nabu
 
       # -- identity + header ----------------------------------------------------
 
-      def validate_identity!(doc, path:, urn:)
+      # Validates the caller urn against the record's <idno filename>,
+      # allowing the -translit sibling suffix, and returns the BARE base
+      # urn (the primary document's urn).
+      def validate_identity!(doc, path:, urn:, layer: PRIMARY_LAYER)
         filename = doc.at_xpath("//idno[@type='filename']")&.text.to_s.strip
         raise ParseError, "#{path}: no <idno type=\"filename\"> found in teiHeader" if filename.empty?
 
         minted = "#{URN_PREFIX}#{filename.downcase}"
-        return if minted == urn
+        suffix = layer == TRANSLITERATION_LAYER ? "-#{TRANSLITERATION_URN_SUFFIX}" : ""
+        return minted if "#{minted}#{suffix}" == urn
 
         raise ParseError, "#{path}: urn mismatch: caller says #{urn.inspect}, " \
-                          "<idno type=\"filename\"> #{filename.inspect} mints #{minted.inspect}"
+                          "<idno type=\"filename\"> #{filename.inspect} mints #{"#{minted}#{suffix}".inspect}"
       end
 
       def document_language(doc)
@@ -335,20 +443,57 @@ module Nabu
 
       # -- the edition walk -----------------------------------------------------
 
-      # All citable lines of the record's primary editions, in document
-      # order; the whole-edition :text fallback when text exists but no
-      # line ever opened; [] for the metadata-only shape.
-      def extract(doc, path:, document_language:)
+      # All citable lines of the record's +subtypes+ editions, in document
+      # order; the whole-edition :text fallback (when +fallback+) if text
+      # exists but no line opened; [] otherwise. The lemma join applies to
+      # the primary layer only (the transliteration layer carries no
+      # simple-lemmatized twin).
+      def extract(doc, path:, document_language:, subtypes: PRIMARY_SUBTYPES, fallback: true)
         editions = doc.xpath("//div[@type='edition']").select do |div|
-          PRIMARY_SUBTYPES.include?(div["subtype"])
+          subtypes.include?(div["subtype"])
         end
-        lemmas = lemma_index(doc)
+        lemmas = subtypes == PRIMARY_SUBTYPES ? lemma_index(doc) : {}
         extraction = Extraction.new(path: path, document_language: document_language)
         editions.each do |edition|
           language = normalize_language(edition["lang"]) || document_language
           extraction.edition(edition, language: language, lemmas: lemmas)
         end
-        extraction.lines
+        extraction.lines(fallback: fallback)
+      end
+
+      # True when the transliteration edition opens ≥1 citable LINE. Of the
+      # 631 transliteration edition divs corpus-wide (commit db1a4959), 576
+      # carry NO text (declared-but-empty `<ab/>` — the placeholders the
+      # editors have not filled) and mint nothing (the ogham/riig skip-by-
+      # rule discipline); the 54 with citable Latin-script letters mint a
+      # -translit sibling. (The gap between 631 and 54 is the P34-0 census
+      # honesty: the journal's "631 transliteration editions" counted every
+      # declared layer, not the filled ones.)
+      def transliteration_citable?(doc, path:, language:)
+        extract(doc, path: path, document_language: language,
+                     subtypes: [TRANSLITERATION_SUBTYPE], fallback: false).any?
+      end
+
+      # { "eng" => [[cite, text, corresp], …], "ita" => … } over the served
+      # translation divs' non-empty <p>s (class note). The first paragraph
+      # anchors at +anchor_suffix+ (nil during census, when only the served
+      # languages matter), the rest at nil.
+      def translation_pairs(doc, anchor_suffix:)
+        pairs = {}
+        doc.xpath("//div[@type='translation']").each do |div|
+          language = TRANSLATION_LANGUAGES[div["lang"].to_s.strip]
+          next if language.nil?
+
+          seen = 0
+          div.xpath("./p").each do |paragraph|
+            text = presence(paragraph.text)
+            next if text.nil?
+
+            seen += 1
+            (pairs[language] ||= []) << ["p#{seen}", text, seen == 1 ? anchor_suffix : nil]
+          end
+        end
+        pairs
       end
 
       # @n → @lemma over the simple-lemmatized layer's tokens (class
@@ -389,7 +534,7 @@ module Nabu
           close_line
         end
 
-        def lines
+        def lines(fallback: true)
           previous_scope = :none
           result = @raw_lines.filter_map do |line|
             text = CelticLeiden.fold(line[:buffer])
@@ -403,7 +548,7 @@ module Nabu
             Line.new(urn_suffix: mint_suffix(line), text: text,
                      language: line[:language], annotations: annotations(line))
           end
-          return result unless result.empty?
+          return result if !result.empty? || !fallback
 
           whole_edition_fallback
         end
