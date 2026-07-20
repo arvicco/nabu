@@ -50,10 +50,22 @@ class UnihanTest < Minitest::Test
     assert_kind_of Nabu::DictionaryDocument, document
     assert_equal "unihan", document.slug
     assert_equal "zho", document.language
-    assert_equal 15, document.size
+    assert_equal 16, document.size
     entry = document.find { |e| e.entry_id == "U+4E9E" }
     assert_includes entry.body, "kSimplifiedVariant: U+4E9A",
                     "the Variants sibling file is merged into the codepoint entries"
+  end
+
+  def test_radical_stroke_fields_are_censused_in_from_the_irgsources_member
+    document = adapter.parse(adapter.discover(FIXTURES).first)
+    qi = document.find { |e| e.entry_id == "U+68C4" }
+    refute_nil qi, "the acceptance character 棄 mints an entry"
+    assert_includes qi.body, "kRSUnicode: 75.8", "KangXi radical 75, 8 residual strokes"
+    assert_includes qi.body, "kTotalStrokes: 12"
+    refute_includes qi.body, "kIRG_GSource",
+                    "non-carried IRGSources fields stay censused out (the census contract)"
+    assert_includes qi.body, "kMandarin: qì"
+    assert_includes qi.body, "kSimplifiedVariant: U+5F03", "棄 → 弃 (the trad→simp fold)"
   end
 
   def test_entry_ids_are_unique_and_stable_across_independent_passes
@@ -67,7 +79,7 @@ class UnihanTest < Minitest::Test
     Dir.mktmpdir do |dir|
       FileUtils.cp(File.join(FIXTURES, "Unihan_Readings.txt"), dir)
       document = adapter.parse(adapter.discover(dir).first)
-      assert_equal 13, document.size,
+      assert_equal 14, document.size,
                    "the variants-only codepoints (U+340A/U+340B, the spoofing pair) cannot mint without the file"
       refute(document.any? { |e| e.entry_id == "U+340A" })
     end
@@ -79,7 +91,7 @@ class UnihanTest < Minitest::Test
     @zip_body ||= Dir.mktmpdir do |tmp|
       zip = File.join(tmp, "Unihan.zip")
       Dir.chdir(FIXTURES) do
-        Nabu::Shell.run("zip", "-q", zip, "Unihan_Readings.txt", "Unihan_Variants.txt")
+        Nabu::Shell.run("zip", "-q", zip, "Unihan_Readings.txt", "Unihan_Variants.txt", "Unihan_IRGSources.txt")
       end
       File.binread(zip)
     end
@@ -94,7 +106,7 @@ class UnihanTest < Minitest::Test
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
       assert_match(/\A\h{64}\z/, report.sha)
-      assert_equal 15, adapter.parse(adapter.discover(workdir).first).size
+      assert_equal 16, adapter.parse(adapter.discover(workdir).first).size
 
       stub_request(:get, ZIP_URL)
         .with(headers: { "If-Modified-Since" => "Mon, 18 Aug 2025 15:51:14 GMT" })
@@ -134,12 +146,12 @@ class UnihanTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_with_codepoint_urns
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 15, first.added
+    assert_equal 16, first.added
     assert_equal 0, first.errored
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 15, second.skipped
+    assert_equal 16, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
 
     one = db[:dictionary_entries].where(entry_id: "U+4E00").first

@@ -1,0 +1,118 @@
+#
+#                           K R A D F I L E
+#
+#	Copyright 2001/2007 Michael Raine, James Breen and the Electronic
+#       Dictionary Research & Development Group 
+#	See: http://www.edrdg.org/edrdg/licence.html
+#       for permissions for use and redistribution.
+# 
+# This is the data file from which the "radkfile" is made, which in turn
+# drives the multi-radical lookup method in XJDIC, WWWJDIC and possibly 
+# other dictionary and related software.
+# 
+# The file is based on work done in 1994/1995 by Michael Raine in which he
+# analyzed all the JIS1/2 kanji and identified the constituent radicals and 
+# other common elements, with the intention of facilitating the selection of
+# kanji within a dictionary program by identifying multiple elements.
+# The file was revised by Jim Breen in September 1995. Further revisions were
+# done in 1998/9 at the suggestion of Wolfgang Conrath, then a revision was
+# carried out in 2001 using suggestions from Yutaka Ohno based on a similar
+# decomposition made by Kobayashi. Further amendments were made in July
+# 2001 after suggestions from Hendrik.
+#
+# The file has been updated on numerous occasions since then.
+# 
+# The file consists of 6,355 lines of text; one for each of the 
+# JIS X 0208-1997 kanji. Each line is a follows:
+# - the kanji itself,
+# - a space followed by a colon (:) followed by a space,
+# - one or more radicals/elements which can be seen in the kanji. These
+#   are drawn from JIS X 0208-1997. Where the element alone is not in
+#   JIS X 0208, a kanji which contains the element is used instead.
+#
+# The decomposition is based on what can be seen in typical kanji
+# glyphs. Elements themselves can be further subdivided. For example,
+# Àå is an element and so is ¸ı, so the elements in ÏÃ are <¸ı Àå ¸À>.
+# 
+# The elements used have been drawn from JIS X 0208. As this codeset
+# does not contain the exact elements, characters have been chosen
+# which contain the element. For example, çè is used for the kusa-kanmuri
+# element at the top, and Ë® is used for the kozato element on the right.
+#
+# The mappings of the characters used to the characters in the Unicode,
+# mostly in the, "CJK Radicals Supplement" and "KangXi Radicals", are below.
+#
+# ²½ U+2E85
+# Ğ¤ U+201A2
+# Öõ U+4E37
+# ´¢ U+2E89
+# ¹ş U+2ECC
+# ¾° U+2E8C
+# Ë» U+2E96
+# Ù© U+2E98
+# ½Á U+2EA1
+# ÈÈ U+2EA8
+# çè U+2EBE
+# Ë® U+2ECF
+# ïô U+2ED6
+# Ï· U+2EB9
+# Û¿ U+2EA3
+# Îé U+2EAD
+# áË U+2F67
+# ã» U+2F71
+# ½é U+2EC2
+# Çã U+2EB2
+# Å© U+5547
+# ¸ğ U+20089
+# 
+# Jim Breen, Tokyo, January 2001
+#            Melbourne, July 2001
+#            Melbourne, Dec  2004
+#            Melbourne, Oct  2013
+#            Melbourne, Mar  2023
+#
+####### CHANGES (some of them) ############################
+# Nov 2004 - È¬ replaced by ¥Ï and Öõ
+# Aug 2005 - added ÀÆ; replaced éµ with óî
+# Jan 2006 - added °ì to º£
+# Apr 2006 - changed ºÁ, ºÂ and ºÃ from Æş to ¿Í
+# Aug 2006 - added ÒÇ to ´í and Íñ, dropped ´¢ from °¢
+# Sep 2006 - added Åá and »á to óî and derivatives
+# Nov 2006 - added Öß as an indexer, replacing Àî for many kanji
+# Jan 2007 - revised ½Õ¿ºÁÕÂÙÄØÊğÊôÊûËÀÌ«íÔ adding ¿Í and removing ¥Î
+# Sep 2007 - made sure all the »å indices also had Öö and ¾®
+# Apr 2008 - added ×° to all cases of óî
+# Dec 2008 - added ¥Ï to Á§,Ê´; °ì and ¡Ã to ÃÖ; ¡Ã and Ğ¦ to Èİ
+# Jun 2013 - added Õù to Ö±Ø¾Ì±İâŞ£Ì²åÎæ«
+# Jun 2013 - added Âç to ½Õµ¬ÂÙÄØ¿º¿Áµ¬ËËóÏ
+# Jun 2013 - changed ½ü to use ¼¨, as with Í¾
+# Jun 2013 - added ¿Í to ¸ğ¾ş½ı´¥±öÉü²ùÊ¢Î×
+# Jun 2013 - added »å to ½°, Åá to ÈÉ, Ò± to ëÌ
+# Oct 2013 - repaired a lot of É÷ cases to include ÑÜ and Ãî (Matthew Heyse)
+# Mar 2014 - added ò® to İµ (Dmitri Gribenko)
+# May 2014 - added Ò± to »« and ÊÌ (via Kim Ahlstr«Óm)
+# Jun 2014 - added to ¶â (²¦ ¥Ï Ğ¤ Öõ)
+# Jun 2014 - added Û¿ to all of the ÇÏ-containing kanji and two of the Ä» kanji
+# Aug 2014 - a major set of updates triggered by Ben Bullock's feedback. See
+#            http://www.lemoda.net/japanese/kradfix/index.html
+#            and the discussion on the edict-jmdict@yahoogroups.com list
+# Feb 2015 - adding another shape, as in the top of ¸ğ.
+# Jun 2015 - added ¸ğ to 179 kanji as suggested by Ben Bullock
+# Aug 2020 - changed Ôé to Ú¾ for µ«, Ì³ and Ì¸
+# Jul 2021 - added ·î to áò
+# Oct 2021 - removed Í¸ from Ø¥ - wasn't on our list.
+# Apr 2022 - add Ñá to kanji containing ½Ğ.
+# May 2022 - à­ and ÊÒ added to Ê¥
+# Jun 2022 - made sure the É× pattern is indexed by Æó + ¿Í and Ğµ + Âç
+# May 2023 - changed ÇÑ to have Æó instead of °ì
+###########################################################
+°¦ : ¿´ ÄŞ ÑÌ Ôé
+°ì : °ì
+´ş : °ì ÌÚ Ğµ Ñá ÒÓ
+¹» : Éã ÌÚ Ğµ
+ºà : ¥Î °ì ÌÚ Ğ­
+À¤ : ¡Ã °ì À¤
+Â¼ : À£ ÌÚ
+Å· : °ì Âç Æó
+ËÜ : °ì ÌÚ
+ÎÓ : ÌÚ
