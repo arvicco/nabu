@@ -1546,7 +1546,7 @@ syriac-corpus:
 
 baxter-sagart:
   adapter: Nabu::Adapters::BaxterSagart
-  enabled: false  # P32-3: awaiting the owner-fired first sync (one 410 KB GET,
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
                   # baxter-sagart, eyeball `nabu define 天` / `define 馬` on
                   # both lanes, then flip). Expect 4,959 rows → 9,918 entries
@@ -1565,7 +1565,7 @@ baxter-sagart:
 
 tshet-uinh:
   adapter: Nabu::Adapters::TshetUinh
-  enabled: false  # P32-3: awaiting the owner-fired first sync (~10 MB
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                   # GitFetch clone of nk2028/tshet-uinh-data; CLAUDE.md
                   # checklist §6: bin/nabu sync tshet-uinh, eyeball
                   # `nabu define 東` (音韻地位 端一東平 + the long 釋義) and a
@@ -1589,7 +1589,7 @@ tshet-uinh:
 
 unihan:
   adapter: Nabu::Adapters::Unihan
-  enabled: false   # awaiting owner-fired first sync (checklist §6:
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # bin/nabu sync unihan — 8.5 MB zip GET, ~65k entries —
                    # then eyeball nabu define 一 / nabu show
                    # urn:nabu:dict:unihan:U+4E00 and 5 random entries, flip).
@@ -1603,7 +1603,7 @@ unihan:
 
 edrdg:
   adapter: Nabu::Adapters::Edrdg
-  enabled: false   # awaiting owner-fired first sync (checklist §6:
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # bin/nabu sync edrdg — 1.5 MB + 10.5 MB gz GETs,
                    # 13,108 + 217,951 entries — then eyeball nabu define 愛
                    # and 5 random jmdict entries, flip).
@@ -1637,7 +1637,7 @@ hdic:
   sync_policy: manual
 oncoj:
   adapter: Nabu::Adapters::Oncoj
-  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj — sparse
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # GitFetch of github.com/ONCOJ/data pinned to the
                    # "release" TAG (commit fd34a1b2, 2021-12-26; cone
                    # xml/ + lexicon.xml + README ≈ 30 MB) — expect 4,991
@@ -1668,7 +1668,7 @@ oncoj:
 
 oncoj-lexicon:
   adapter: Nabu::Adapters::OncojLexicon
-  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj-lexicon —
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # sparse GitFetch (lexicon.xml + README, 3.4 MB, same
                    # pinned tag) — expect 5,868 entries (5,871 upstream − 3 empty-orth bound stems, skip-by-rule censused); eyeball nabu
                    # define titipapa / define --lang ojp atwo and 5 random
@@ -1689,7 +1689,7 @@ oncoj-lexicon:
 
 cbeta:
   adapter: Nabu::Adapters::Cbeta
-  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync cbeta — sparse
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at
@@ -1717,7 +1717,7 @@ cbeta:
   sync_policy: manual
 kanripo:
   adapter: Nabu::Adapters::Kanripo
-  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync kanripo — the
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # first many-repo wave (KanripoFetch, architecture §8):
                    # KR-Catalog clone + 3,512 per-text shallow clones
                    # (census 2026-07-20: KR1 719 repos/~204 MB git, KR2
@@ -1760,7 +1760,7 @@ kanripo:
   classes: [KR1, KR2, KR3, KR4]
 tls:
   adapter: Nabu::Adapters::Tls
-  enabled: false   # P33-4: awaiting the owner-fired first sync (sparse
+  enabled: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # GitFetch of tls-kr/tls-data; the P34-4 cone is
                    # concepts/ + words/ + notes/doc + notes/swl, ~441 MB
                    # working tree out of the 4.7 GB repo — an existing

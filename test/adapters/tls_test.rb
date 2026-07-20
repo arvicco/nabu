@@ -309,7 +309,7 @@ class TlsTest < Minitest::Test
     entry = registry["tls"]
     refute_nil entry, "config/sources.yml must register tls"
     assert_equal Nabu::Adapters::Tls, entry.adapter_class
-    refute entry.enabled, "enabled stays false until the owner-fired first sync"
+    assert entry.enabled, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
     assert_equal "manual", entry.sync_policy
   end
 end
