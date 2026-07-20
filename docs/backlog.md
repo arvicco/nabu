@@ -10200,6 +10200,15 @@ if your census says the fit is bad, say so early and cheaply.
 
 # Phase 34 — the weave phase: journaled follow-ups & cross-source seams (approved 2026-07-20 as recommended: five packets; P34-0 seam = REGISTRY key; P34-3 tier = distinct "equivalence" label. D34-a KR5 ruling, owner 2026-07-20: keep for the next Sino phase — P34-5 does not dispatch this phase; the P33-1 census + overlay characterization stay the entry point when that phase elaborates)
 
+Next-phase request (owner, 2026-07-20): group the grown source list
+logically with user personas as a first-rate consideration — research
+AXES as a registry dimension so `nabu list --axis` and
+`nabu sync celtic`/`slavic`/… work naturally. Plan drafted
+(orchestrator holds it: personas distilled, ~15-axis tag set + draft
+79-slug mapping, `axes:` registry seam per the P34-0 `siblings:`
+precedent, slug-collision validation, 4-packet sketch); elaborates
+after the P34 gate per the loop.
+
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
 TBD for orchestrator fill, 02-sources renumber at merge — current max 106).
