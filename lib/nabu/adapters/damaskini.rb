@@ -66,7 +66,7 @@ module Nabu
     # "19th (post 1817)"; xrulev's year rides in an edition line), an
     # optional scribe line, locus/edition references, and the chapter
     # title. TsvHeader reads that block (anchored on the `text` column-
-    # header row); dates feed Store::AxisBuilder::DamaskiniDates. The TSV
+    # header row); dates feed Store::TimelineBuilder::DamaskiniDates. The TSV
     # TOKEN layers (accented | Cyrillic | diplomatic orthography, folio
     # anchors, chunk divisions, cross-text refs) are deliberately NOT
     # ingested here: column layouts vary per file and five files disagree

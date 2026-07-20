@@ -36,7 +36,7 @@ module Nabu
       # message into a clean stderr line + exit 1 (the Random::Error pattern).
       class Error < Nabu::Error; end
 
-      include CatalogJoin # license_expr + axis_exists (the shared join rules)
+      include CatalogJoin # license_expr + timeline_exists (the shared join rules)
 
       # One census row (`nabu list`). +languages+ is the sorted union of live
       # passage languages and dictionary languages; +license_classes+ the
@@ -48,7 +48,7 @@ module Nabu
 
       # One source's card (`nabu list SOURCE`). +languages+ maps language →
       # live passage count; +dictionaries+ lists DictionaryRow values;
-      # +dated+ is a Dated (or nil when no axis rows); +facets+ FacetRow
+      # +dated+ is a Dated (or nil when no timeline rows); +facets+ FacetRow
       # values ([] when none); +collections+ {collection => doc count} or nil.
       Card = Data.define(:slug, :name, :adapter_class, :enabled, :license_text, :license_classes,
                          :docs, :passages, :entries, :withdrawn, :retired,
@@ -191,7 +191,7 @@ module Nabu
             Sequel.expr(Sequel[:documents][:retired_upstream] => true)
           )
         end
-        dataset = dataset.where(axis_exists(from: from, to: to, place: nil)) if from || to
+        dataset = dataset.where(timeline_exists(from: from, to: to, place: nil)) if from || to
         page(dataset.order(Sequel[:documents][:urn]), limit) { |row| build_doc_row(row) }
       end
 

@@ -221,7 +221,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
 - Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch.
-- **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, axis extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
+- **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, timeline extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
 - Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational).
 
@@ -846,7 +846,7 @@ symbolic packets like this one produce as a side effect. Batch/corpus-wide
 mining and its persisted `links` edges (design §7) are a later rider on this
 same gram machinery, not this packet.
 
-## 14. The date/place axis — when and where a document is from (P15-2)
+## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
 texts", "only Oxyrhynchus", "plot this word across centuries". The full
@@ -857,14 +857,14 @@ dates + TOROT chronicle annals, P16-3).
 
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
-several axis rows, and most of the corpus is *undated* — an absence, never a
+several timeline rows, and most of the corpus is *undated* — an absence, never a
 row. Columns: `(document_id, not_before, not_after, precision, date_raw,
 place_name, place_ref, axis_source, passage_seq_from, passage_seq_to)`. The
 date model is signed historical years with no year 0 (conventions §11); the
 nullable `passage_seq_*` pair rides for Part 2's passage-grain, document-grain
 rows leaving them NULL.
 
-**axes = f(canonical), regenerated on rebuild.** `Store::AxisBuilder` is a
+**timelines = f(canonical), regenerated on rebuild.** `Store::TimelineBuilder` is a
 post-load pass — like the Indexer, but writing the CATALOG rather than the
 fulltext index — wired into `Rebuild#run` after every source is replayed. The
 HGV extractor reads the `HGV_meta_EpiDoc` XML and joins its `ddb-hybrid` idno
@@ -876,7 +876,7 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
 
-**Part 2a — ORACC catalogue dates (`AxisBuilder::OraccDates`, P16-3).** Every
+**Part 2a — ORACC catalogue dates (`TimelineBuilder::OraccDates`, P16-3).** Every
 ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,
 25,502 members) found `period` on 25,330 members and `date_of_origin` on
 7,343 (SAA regnal formulas `Sargon2.000.00.00` / eponym `Esarhaddon.limu
@@ -894,19 +894,19 @@ Brinkman's chronology; Neo-Assyrian → −911..−612, Old Babylonian →
 are deliberately unmapped: skipped and counted (`oracc_undated`). Place =
 `provenience` verbatim (minus unclear/uncertain/unknown) + a Pleiades URL
 from `pleiades_id`. A translation document (`…-en`, P13-4) carries its
-tablet's axis row — the artifact's date, so the English witness inherits the
+tablet's timeline row — the artifact's date, so the English witness inherits the
 time filter. Scratch-measured coverage: 21,558 of 21,692 oracc documents
 (99.4%) carry a row — 21,517 dated (99.2%), 41 place-only, 172 undated
 members counted, 3 documents absent from any catalogue (upstream drift).
 
-**Part 2b — TOROT chronicle annals (`AxisBuilder::ChronicleAnnals`, P16-3):
+**Part 2b — TOROT chronicle annals (`TimelineBuilder::ChronicleAnnals`, P16-3):
 the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns
 as designed. Census: the annal year is structural — chronicle `<div>` titles
 carry the anno-mundi year (`6360: Mikhail …`, bare `6361`, ranges
 `6369–6370`); exactly five TOROT sources are annalistic (lav 89 AM divs of
 91, pvl-hyp 24/24, kiev-hyp 4/4, nov-sin 163/163, suz-lav 76/76 — 356 divs;
 no other source has one, so a shape + AM-plausibility gate (5500..7300)
-replaces any allowlist). AM → CE via `DateAxis.am_to_ce`: the Byzantine
+replaces any allowlist). AM → CE via `Timeline.am_to_ce`: the Byzantine
 epoch is 1 Sep 5509 BCE, so AM Y is stored as the honest span
 [Y−5509, Y−5508] — the full September-style year; the Rus chronicles' mixed
 March/ultra-March styles make a ±1 residue (Jan–Feb of a March-style year)
@@ -919,7 +919,7 @@ catalog sequence of its sentences, joined by the ProielParser's
 see the chronicle once. Scratch-measured: 5 chronicles, 345 annal rows —
 11 nov-sin annal divs are EMPTY upstream (year heading, no text) and anchor
 nothing. Grand total after Part 2: 83,233 dated/placed documents, 83,578
-axis rows, `document_axes` = 13.9 MB (design budget < 20 MB holds).
+timeline rows, `document_axes` = 13.9 MB (design budget < 20 MB holds).
 `vocab --by-century` counts document-grain rows only (`passage_seq_from IS
 NULL`) — a histogram labelled "documents" must not tally a 163-annal
 chronicle 163 times; `search --from/--to/--century/--place` EXISTS over all
@@ -929,7 +929,7 @@ stands ready for passage-grain queries.
 **Query surface.** `search --from/--to/--century/--place` compose through the
 shared `CatalogJoin` as one correlated NULL-aware EXISTS on `document_axes`
 (document-grained, so a multi-row document never multiplies passages). `show`
-prints the axis line ("date: 292 CE · Oxyrhynchos") when present. `vocab
+prints the timeline line ("date: 292 CE · Oxyrhynchos") when present. `vocab
 --by-century` (`Query::Century`) is the diachronic payoff: the dated corpus
 bucketed by century, or — with a text query — a word plotted across the
 centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args

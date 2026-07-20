@@ -167,28 +167,28 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:fuzzy_unindexed, entry("perseus-greek"))
   end
 
-  # -- flag-vs-artifact: axis extractor families vs document_axes -------------
+  # -- flag-vs-artifact: timeline extractor families vs document_axes -------------
 
-  def test_axis_family_with_zero_rows_is_loud
+  def test_timeline_family_with_zero_rows_is_loud
     source = seed_source("edh")
     seed_docs(source, 2)
 
-    finding = find(:axis_missing, entry("edh"))
+    finding = find(:timeline_missing, entry("edh"))
     assert_predicate finding, :loud?
-    assert_match(/axis extractor \(edh\)/, finding.message)
+    assert_match(/timeline extractor \(edh\)/, finding.message)
     assert_match(/nabu rebuild/, finding.message)
   end
 
-  def test_axis_family_with_rows_is_silent_and_non_family_sources_never_check
+  def test_timeline_family_with_rows_is_silent_and_non_family_sources_never_check
     source = seed_source("edh")
     doc = seed_docs(source, 1).first
     @db[:document_axes].insert(document_id: doc[:id], not_before: 100, not_after: 200,
                                axis_source: "edh")
-    assert_nil find(:axis_missing, entry("edh"))
+    assert_nil find(:timeline_missing, entry("edh"))
 
     plain = seed_source("perseus-greek")
     seed_docs(plain, 1)
-    assert_nil find(:axis_missing, entry("perseus-greek"))
+    assert_nil find(:timeline_missing, entry("perseus-greek"))
   end
 
   # -- flag-vs-artifact: reflex-bearing adapters vs dictionary_reflexes -------

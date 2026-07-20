@@ -281,7 +281,7 @@ what each digitization IS — e.g. SBLGNT ≠ NA28 — and don't pretend
 otherwise); LXX digitization licensing needs the honest scout treatment.
 **Effort.** scout + 2–3 small opus adapters.
 
-### 2.2 Coptic Scriptorium  [SHIPPED — Phase 17 P17-1: `coptic-scriptorium` adapter (new TT parser family), cop = gold-lemma language #15 ONCE SYNCED, Sahidic (`nc`) + Bohairic (`attribution`) NT witnesses #14/#15 registered in alignments.yml, language-of-origin loans layer, Wikification entities, MS-date axis extractor. SYNCED LIVE 2026-07-13 (owner sign-off; the first attempt's unzip failure re-run clean) and completed by Phase 18 P18-1's coverage pass (188 → 482 of 483 upstream corpora): 482 docs / 74,169 passages, cop live as gold-lemma language #15 with 233,020 rows, NT witnesses #14/#15 attesting in the hub]
+### 2.2 Coptic Scriptorium  [SHIPPED — Phase 17 P17-1: `coptic-scriptorium` adapter (new TT parser family), cop = gold-lemma language #15 ONCE SYNCED, Sahidic (`nc`) + Bohairic (`attribution`) NT witnesses #14/#15 registered in alignments.yml, language-of-origin loans layer, Wikification entities, MS-date timeline extractor. SYNCED LIVE 2026-07-13 (owner sign-off; the first attempt's unzip failure re-run clean) and completed by Phase 18 P18-1's coverage pass (188 → 482 of 483 upstream corpora): 482 docs / 74,169 passages, cop live as gold-lemma language #15 with 233,020 rows, NT witnesses #14/#15 attesting in the hub]
 
 **What.** Coptic corpora (Sahidic), TEI + **treebank-annotated**, CC BY.
 We already hold 28k unannotated Coptic passages via papyri; this adds
@@ -295,7 +295,7 @@ conventions §9.
 **Effort.** scout + opus adapter; possibly ConlluParser reuse (they publish
 UD-format treebanks too — the cheap path, verify).
 
-### 2.3 Epigraphic Database Heidelberg — Latin inscriptions  [SHIPPED — Phase 17 P17-2: `edh` adapter (EpiDoc parser family reuse), migration 009 `document_facets` (genre/province/material/object_type + `search --type/--province/--material`), persons prosopography in `metadata_json`, date extractor projecting ~+60k dated documents. SYNCED LIVE 2026-07-13 (owner sign-off), `sync_policy: frozen` (upstream archived — preservation posture): 81,856 inscriptions / 406,281 passages, `document_facets` at 256,518 rows, 81,416 dated documents on the axis, 27 quarantines triaged at gate 18 and baseline-anchored]
+### 2.3 Epigraphic Database Heidelberg — Latin inscriptions  [SHIPPED — Phase 17 P17-2: `edh` adapter (EpiDoc parser family reuse), migration 009 `document_facets` (genre/province/material/object_type + `search --type/--province/--material`), persons prosopography in `metadata_json`, date extractor projecting ~+60k dated documents. SYNCED LIVE 2026-07-13 (owner sign-off), `sync_policy: frozen` (upstream archived — preservation posture): 81,856 inscriptions / 406,281 passages, `document_facets` at 256,518 rows, 81,416 dated documents on the timeline, 27 quarantines triaged at gate 18 and baseline-anchored]
 
 **What.** EDH: ~80k Latin inscriptions, EpiDoc TEI, CC BY-SA, bulk
 downloads. **Our EpiDoc family nearly reuses directly** (Leiden conventions

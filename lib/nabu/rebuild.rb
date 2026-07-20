@@ -42,7 +42,7 @@ module Nabu
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
     Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets) do
-      # +axes+ (P15-2) is the AxisBuilder::Summary of the date/place axis
+      # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
       # replayed documents' metadata. Both default nil for callers/tests that
@@ -106,11 +106,11 @@ module Nabu
         end
       end
       replay_enrichments(db)
-      # The date/place axis (P15-2) is f(canonical): rebuild it from canonical
+      # The timeline (P15-2) is f(canonical): rebuild it from canonical
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
-      progress&.stage("date/place axis")
-      axes = Store::AxisBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      progress&.stage("timeline")
+      axes = Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets")

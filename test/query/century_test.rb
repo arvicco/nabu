@@ -4,7 +4,7 @@ require "test_helper"
 
 module Query
   # Nabu::Query::Century (P15-2, `vocab --by-century`): the diachronic histogram
-  # over the date/place axis. Catalog is a fresh in-memory store; the fulltext
+  # over the timeline. Catalog is a fresh in-memory store; the fulltext
   # index is rebuilt with the real Indexer so the "plot this word" path is
   # exercised end to end.
   class CenturyTest < Minitest::Test

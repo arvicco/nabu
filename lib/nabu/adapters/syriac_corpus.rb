@@ -64,7 +64,7 @@ module Nabu
     # lane), "idno" (verbatim), "status" (revisionDesc quality label —
     # uncorrectedTranscription/Edited/ProofedDigitalEdition…: silver is
     # LABELED, the goo300k discipline), "orig_date" (profileDesc origDate
-    # attrs + text — the date-axis lane, extractor a future packet).
+    # attrs + text — the timeline lane, extractor a future packet).
     class SyriacCorpus < Nabu::Adapter
       REPO_URL = "https://github.com/srophe/syriac-corpus"
 

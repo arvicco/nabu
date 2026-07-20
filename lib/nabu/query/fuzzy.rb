@@ -95,7 +95,7 @@ module Nabu
       # Substring-search +fragment+ and return up to +limit+ Results in bm25
       # candidate order. Filters compose exactly as Search: +lang+ on passage
       # language, +license+ on effective class, +from+/+to+/+place+ on the
-      # document date/place axis, +facets+ (P17-2) on the document facet rows
+      # document timeline, +facets+ (P17-2) on the document facet rows
       # — a fragmentary formula scoped `--type epitaph` is the designed use —
       # plus +source+ (P22-1) on the source slug and +loans+ (P34-2) on the
       # passage's stored loan-code counts. Raises QueryTooShort below the

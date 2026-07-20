@@ -42,8 +42,8 @@ module Nabu
     #
     # year_from/year_to are BCE-POSITIVE upstream ("675.0" = 675 BCE) and
     # carried VERBATIM in document metadata; the sign flip to signed
-    # historical years happens in ONE place, the axis extractor
-    # (Store::AxisBuilder::OpenEtruscanDates), pinned by fixture. The
+    # historical years happens in ONE place, the timeline extractor
+    # (Store::TimelineBuilder::OpenEtruscanDates), pinned by fixture. The
     # findspot side-join rides the second fetched artifact (the ccl
     # crosswalk precedent): Larth's Data/Etruscan.csv carries the 456
     # city-tagged rows OpenEtruscan dropped in cleaning; the extractor
@@ -146,7 +146,7 @@ module Nabu
       # anything outside [a-z0-9.] collapsed to "-" ("CIE 2609" →
       # …:cie-2609, "Cr 2.20" → …:cr-2.20, "CIE 52a, b" → …:cie-52a-b).
       # Censused unique across the full corpus (6,567 ids, 0 collisions).
-      # The axis extractor mints join urns through this same method — one
+      # The timeline extractor mints join urns through this same method — one
       # rule, no drift.
       def self.urn_for(row_id)
         slug = row_id.strip.downcase.gsub(/[^a-z0-9.]+/, "-").gsub(/\A-+|-+\z/, "")

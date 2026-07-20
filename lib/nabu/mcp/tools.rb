@@ -351,7 +351,7 @@ module Nabu
                      description: "Exact effective license class filter." },
           from: { type: "integer",
                   description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
-                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document date/place axis " \
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline " \
                                "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
                                "undated and absent under a date filter. Text search only (not lemma)." },
           to: { type: "integer",
@@ -907,7 +907,7 @@ module Nabu
         fulltext
       end
 
-      # Resolve the date/place axis args (P15-2), honestly scoped to plain text
+      # Resolve the timeline args (P15-2), honestly scoped to plain text
       # search — the dated corpus (papyri) is not lemmatized, and proximity is a
       # different index path — so date/place with lemma or near is a usage error.
       # `century` is shorthand for a from/to window; year 0 and from>to are
@@ -927,7 +927,7 @@ module Nabu
           raise InvalidArguments, "century is shorthand for from/to — use one or the other" if from || to
           raise InvalidArguments, "there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if century.zero?
 
-          from, to = Nabu::DateAxis.century_bounds(century)
+          from, to = Nabu::Timeline.century_bounds(century)
         end
         raise InvalidArguments, "there is no year 0 (1 BCE is -1, 1 CE is 1)" if from&.zero? || to&.zero?
         raise InvalidArguments, "from #{from} is after to #{to} (BCE years are negative)" if from && to && from > to
@@ -1761,7 +1761,7 @@ module Nabu
         stripped.empty? ? nil : stripped
       end
 
-      # A signed-integer arg (the date/place axis years, P15-2), or nil. A
+      # A signed-integer arg (the timeline years, P15-2), or nil. A
       # JSON number that isn't an integer is a usage error, not a silent coerce.
       def int_arg(args, key)
         value = args[key]
