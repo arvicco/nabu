@@ -81,7 +81,7 @@ module Nabu
       # gold-lemmatized (cop, P17-1), so unlike the document facets this
       # filter deliberately composes with the lemma anchor.
       def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil,
-              gold_only: false, loans: nil)
+              sources: nil, gold_only: false, loans: nil)
         @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
@@ -91,8 +91,8 @@ module Nabu
           # The morph path pulls the WHOLE candidate set (no inner window —
           # see #run_with_morph), so its pages are always complete.
           return run_with_morph(variants, facets, lang: lang, license: license, limit: limit,
-                                                  urn: urn, source: source, gold_only: gold_only,
-                                                  loans: loans)
+                                                  urn: urn, source: source, sources: sources,
+                                                  gold_only: gold_only, loans: loans)
         end
 
         inner_limit = limit * INNER_LIMIT_FACTOR
@@ -100,14 +100,15 @@ module Nabu
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
-        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, loans: loans)
+        rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, sources: sources,
+                                         loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
         by_id = hits.to_h { |row| [row.fetch(:passage_id), row] }
 
         page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, source, loans].compact.any?,
+          filters_active: [lang, license, source, loans].compact.any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
         results = page.map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
@@ -133,14 +134,14 @@ module Nabu
       #   3. a passage with ≥1 such token is a hit — its surface_forms and morph
       #      evidence restricted to the MATCHING tokens (not the whole lemma's
       #      attestations), then the ordinary catalog page-fill and glossing.
-      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil,
+      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil, sources: nil,
                          gold_only: false, loans: nil)
         passage_ids, tiers = candidate_passages(variants, urn: urn, gold_only: gold_only)
         return [] if passage_ids.empty?
 
         variant_set = variants.to_set
         rows = annotated_catalog_rows(passage_ids, lang: lang, license: license, source: source,
-                                                   loans: loans)
+                                                   sources: sources, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
         results = passage_ids.filter_map do |id|
           row = rows[id] and morph_hit(row, variant_set, facets, tier: tiers[id])
@@ -176,8 +177,8 @@ module Nabu
 
       # Catalog rows for the candidate passages, carrying annotations_json for
       # the morph post-filter alongside the usual display/visibility columns.
-      def annotated_catalog_rows(passage_ids, lang:, license:, source: nil, loans: nil)
-        visible_passages(lang: lang, license: license, source: source, loans: loans)
+      def annotated_catalog_rows(passage_ids, lang:, license:, source: nil, sources: nil, loans: nil)
+        visible_passages(lang: lang, license: license, source: source, sources: sources, loans: loans)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns, Sequel[:passages][:annotations_json].as(:annotations_json))
           .all
