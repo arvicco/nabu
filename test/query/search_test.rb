@@ -501,5 +501,55 @@ module Query
       rebuild!
       assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "grc", lang: "cop").map(&:urn)
     end
+
+    # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) --------
+    # The P34 gate repro: the limit×INNER_LIMIT_FACTOR FTS window fills with
+    # rows a catalog-side filter then rejects, so the page comes back short
+    # (or empty) while matches exist beyond the window. The result semantics
+    # stay as they are — but the surface must SAY the page may be incomplete.
+
+    # Ten short Latin rows outrank (bm25 penalizes length) one longer Greek
+    # row; limit 1 makes the inner window exactly 10, so the Greek match sits
+    # beyond it and the lang filter empties the page.
+    def seed_window_exhausting_corpus(lat_rows: 10)
+      lat = make_document(source: @open, urn: "urn:d:lat", language: "lat")
+      lat_rows.times do |i|
+        make_passage(lat, urn: "urn:d:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
+      end
+      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", sequence: 0, language: "grc",
+                        text: "arma sits far down the rank because this passage carries many more words than the rest")
+      rebuild!
+    end
+
+    def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
+      seed_window_exhausting_corpus
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("arma", lang: "grc", limit: 1)
+      assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
+                   "an empty page with matches beyond the window must announce itself"
+    end
+
+    def test_unexhausted_window_under_filters_is_an_honest_empty
+      seed_window_exhausting_corpus(lat_rows: 3)
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("arma", lang: "xcl", limit: 1)
+      assert_empty results
+      assert_nil query.incomplete_hint, "the window held every match — this empty is the truth"
+    end
+
+    def test_full_page_or_no_filters_carries_no_hint
+      seed_window_exhausting_corpus
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      refute_empty query.run("arma", limit: 1)
+      assert_nil query.incomplete_hint, "no catalog-side filter was active — the page is honest"
+
+      refute_empty query.run("arma", lang: "lat", limit: 1)
+      assert_nil query.incomplete_hint, "a full page under filters needs no hint"
+    end
   end
 end

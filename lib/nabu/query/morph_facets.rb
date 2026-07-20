@@ -74,6 +74,8 @@ module Nabu
 
       # Canonical order for rendering a token's decoded features as evidence
       # (keys outside the list sort last, alphabetically stable enough).
+      # const: display convention over the UD/PROIEL feature vocabulary; an
+      # unlisted key still renders (sorts last), so growth cannot hide one
       DISPLAY_ORDER = %w[person number gender case tense mood voice aspect degree
                          verbform polarity prontype definite].freeze
 

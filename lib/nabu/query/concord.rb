@@ -174,6 +174,15 @@ module Nabu
       # The hit's "hyphen_join" tail from the catalog row (the annotation the
       # ccmh-txt parser records; nil for everything else). One lookup per
       # retried row only — a formatter-grade cost.
+      #
+      # H9 adjudication (P35-6): the ParserError rescue stays a silent nil,
+      # DELIBERATELY — unlike show/export (which note the unreadable lane),
+      # a corrupt row here costs only the keyword-highlight span of one KWIC
+      # row, and the [0, 0] no-highlight fallback is itself the documented
+      # honest degrade (locate_hyphen_joined's class note). Plumbing a note
+      # channel through every KWIC row for a highlight micro-feature fails
+      # the small-diffs test; show(urn) on the same row DOES announce the
+      # corruption.
       def hyphen_tail(urn)
         json = @catalog[:passages].where(urn: urn).get(:annotations_json)
         return nil unless json

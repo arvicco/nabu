@@ -827,11 +827,12 @@ module Nabu
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
 
-      results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
-                                   .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i, from: from, to: to, place: place,
-                                               facets: facets, source: options[:source], loans: loans)
-      print_search_results(results, facets: facets, query: query, loans: loans)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+      results = searcher.run(query, lang: options[:lang], license: options[:license],
+                                    limit: options[:limit].to_i, from: from, to: to, place: place,
+                                    facets: facets, source: options[:source], loans: loans)
+      print_search_results(results, facets: facets, query: query, loans: loans,
+                                    incomplete: searcher.incomplete_hint)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -1270,11 +1271,20 @@ module Nabu
                                                   #   "covers :1.1–:1.43; range shows :1.5–:1.10"
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
+        nabu show urn:nabu:oshb:gen:1:1 --tokens  # + the stored token annotations,
+                                                  #   verbatim (form, lemma, osm, …)
+
+      TOKENS (--tokens): appends the passage's stored token annotations as
+      one line per token — `form` first, then every key the store holds for
+      that token, exactly as stored (the honest raw view; nothing decoded,
+      nothing invented). A passage without token annotations, and a
+      document/range urn, say so.
 
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
       "withdrawn" or "retired upstream" actually holds; read a Greek work
-      you can't sight-read next to its English translation.
+      you can't sight-read next to its English translation; inspect the
+      exact lemma/morphology evidence a treebank stored for one passage.
     HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
@@ -1286,10 +1296,16 @@ module Nabu
                     desc: "With --random: draw only from this source (default: the whole corpus)"
     option :count, type: :numeric, default: 1,
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
+    option :tokens, type: :boolean, default: false,
+                    desc: "Append the passage's stored token annotations verbatim (form + every key present)"
     display_option
     def show(urn = nil)
       urn = urn.to_s.strip
       display_mode
+      if options[:tokens] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --tokens does not compose with --random/--parallel"
+      end
+
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
@@ -1310,6 +1326,7 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+      print_show_tokens(result) if options[:tokens]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
@@ -2111,6 +2128,11 @@ module Nabu
                           "corpora are romanized (try guþ, jah)"]
     }.freeze
 
+    # H9 (P35-6): the skip-with-note rule for a corrupt annotations_json —
+    # Show marks the parse failure (ANNOTATIONS_UNREADABLE) and every
+    # render that would have used the lane says so.
+    ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
+
     no_commands do
       # -- display policy (P27-0) ------------------------------------------
       # Passage text reaches the terminal ONLY through display_text, which
@@ -2740,12 +2762,57 @@ module Nabu
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_timeline(passage.timeline)
+        # H9 (P35-6): a corrupt annotation lane announces itself instead of
+        # posing as an unannotated passage.
+        say "  note: #{ANNOTATIONS_UNREADABLE_NOTE}" if annotations_unreadable?(passage)
         return if passage.provenance.empty?
 
         say "  provenance:"
         passage.provenance.each do |event|
           say "    #{event.at}  #{event.event}#{"  #{event.tool}" if event.tool}"
         end
+      end
+
+      # `show URN --tokens` (P35-6, the journaled gate find): the honest RAW
+      # view of the stored token annotations — one line per token, `form`
+      # first, then EVERY other key exactly as stored (lemma/gloss/osm/lang/
+      # …, nested values as compact JSON). No display transforms, no
+      # invention; a passage without tokens, and a non-passage grain, both
+      # say so instead of rendering nothing.
+      def print_show_tokens(result)
+        unless result.is_a?(Nabu::Query::Show::PassageResult)
+          return say "--tokens renders at passage grain — give a passage urn"
+        end
+        return say ANNOTATIONS_UNREADABLE_NOTE if annotations_unreadable?(result)
+
+        tokens = result.annotations["tokens"]
+        tokens = tokens.is_a?(Array) ? tokens.grep(Hash) : []
+        return say "no token annotations stored for this passage" if tokens.empty?
+
+        say "tokens (#{tokens.size}):"
+        tokens.each { |token| say "  #{token_line(token)}" }
+      end
+
+      # One token as `form=… key=…` pairs, form first, stored key order after,
+      # non-scalar values as compact JSON — verbatim, never interpreted.
+      def token_line(token)
+        keys = (["form"] + token.keys).uniq.select { |key| token.key?(key) }
+        keys.map do |key|
+          value = token[key]
+          "#{key}=#{value.is_a?(String) ? value : JSON.generate(value)}"
+        end.join("  ")
+      end
+
+      def annotations_unreadable?(result)
+        result.annotations[Nabu::Query::Show::ANNOTATIONS_UNREADABLE] == true
+      end
+
+      def print_unreadable_annotations_count(lines)
+        count = lines.count { |line| annotations_unreadable?(line) }
+        return unless count.positive?
+
+        say "  note: #{count} #{count == 1 ? 'passage carries' : 'passages carry'} " \
+            "unreadable stored annotations (invalid JSON) — skipped"
       end
 
       def print_show_document(document)
@@ -2761,6 +2828,7 @@ module Nabu
               "#{display_text(line.text, document.language,
                               source: document.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(document.passages)
       end
 
       # Render a range (P7-6): the document header like a document listing, an
@@ -2779,6 +2847,7 @@ module Nabu
               "#{display_text(line.text, range.language,
                               source: range.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(range.passages)
       end
 
       # The timeline line (P15-2), when the document has one. A date span
@@ -3198,9 +3267,13 @@ module Nabu
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil, query: nil, loans: nil)
+      # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
+      # printed whenever present, so a filter-emptied page never masquerades
+      # as a complete answer.
+      def print_search_results(results, facets: nil, query: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3210,6 +3283,7 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
+        say "note: #{incomplete}" if incomplete
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc" — empty
@@ -3227,7 +3301,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
         else
@@ -3238,6 +3312,7 @@ module Nabu
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
         end
+        say "note: #{incomplete}" if incomplete
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
       end
@@ -3802,7 +3877,7 @@ module Nabu
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
                                    facets: facets, source: options[:source], loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,
-                                     loans: loans_filter)
+                                     loans: loans_filter, incomplete: fuzzy.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -3831,12 +3906,12 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-                                          .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i, morph: options[:morph],
-                                                      source: options[:source],
-                                                      gold_only: options[:gold_only], loans: loans_filter)
-        print_lemma_results(results, query: lemma)
+        searcher = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(lemma, lang: options[:lang], license: options[:license],
+                                      limit: options[:limit].to_i, morph: options[:morph],
+                                      source: options[:source],
+                                      gold_only: options[:gold_only], loans: loans_filter)
+        print_lemma_results(results, query: lemma, incomplete: searcher.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3883,12 +3958,13 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+        searcher = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
           lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
           source: options[:source], loans: loans_filter
         )
-        print_search_results(results, loans: loans_filter)
+        print_search_results(results, loans: loans_filter, incomplete: searcher.incomplete_hint)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -3903,9 +3979,10 @@ module Nabu
       # equivalence: a Latin key on a non-Latin passage, scholar-curated,
       # never attestation); the footer totals each non-gold share and names
       # the way out.
-      def print_lemma_results(results, query: nil)
+      def print_lemma_results(results, query: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3927,6 +4004,7 @@ module Nabu
                     "--gold-only excludes)"
         end
         say footer
+        say "note: #{incomplete}" if incomplete
       end
 
       # Render a vocab profile (P14-3): the header (urn, title, language, scope),

@@ -100,6 +100,28 @@ namespace :site do
   end
 end
 
+# Gate rider (P35-6, dev-loop §6b rule 3): every era-bound literal in
+# query/render/fetch code carries its `# census: <n>, <date>[, basis]` or
+# `# const: <reason>` justification. PRESENCE check only (staleness is the
+# gate reviewer's re-diff duty); also enforced inside the suite
+# (test/ops/census_check_test.rb), so `rake test` catches an unstamped
+# literal the day it lands. Exit 1 lists the misses.
+namespace :census do
+  desc "Gate check: era-bound literals carry # census:/# const: markers (miss = exit 1)"
+  task :check do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    findings = Nabu::Ops::CensusCheck.new(root: __dir__).findings
+    findings.each { |f| puts "UNSTAMPED #{f.path}:#{f.line} #{f.constant} — #{f.message}" }
+    if findings.empty?
+      puts "census:check clean — every era-bound literal carries its census/const marker"
+    else
+      abort "census:check found #{findings.size} unstamped era-bound literal(s)"
+    end
+  end
+end
+
 # Print the drill report to stdout.
 def print_drill_report(report)
   puts "Restore drill"

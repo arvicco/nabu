@@ -45,6 +45,9 @@ module Nabu
 
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
       # (language/license) can drop non-matching rows and still fill the page.
+      # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
+      # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
+      # census: 5505159, 2026-07-20, live passages at re-measure (3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)
@@ -65,10 +68,12 @@ module Nabu
       # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, loans: nil)
+        @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn)
+        inner_limit = limit * INNER_LIMIT_FACTOR
+        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -80,9 +85,13 @@ module Nabu
 
         # Reassemble in FTS rank order (the catalog query returns no order),
         # dropping ids filtered out catalog-side, then trim to the page.
-        ordered_ids.filter_map { |id| rows[id] }
-                   .first(limit)
-                   .map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
+        page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        note_page_completeness(
+          window_exhausted: hits.size >= inner_limit,
+          filters_active: [lang, license, from, to, place, source, loans].compact.any? || (facets || {}).any?,
+          page_size: page.size, limit: limit
+        )
+        page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
       end
 
       private

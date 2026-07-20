@@ -148,6 +148,13 @@ live corpus does. Standing rules:
    class into gate-checked invariants. Gate runbooks with EXPECT lines
    against real data are the recalibration instrument — keep writing
    them.
+5. **Gate checklist line (P35-6, standing)**: at every phase gate run
+   `bundle exec rake census:check` (presence of the markers — also
+   enforced inside the suite) AND re-diff the RECORDED census numbers
+   against the live catalog (`sqlite3 "file:db/catalog.sqlite3?mode=ro"`)
+   — a stamped number that has drifted materially is a review question
+   for exactly the constant beside it; sites stamped while an index was
+   mid-rebuild (the stamp says so) are re-measured first.
 
 ## 7. Phase & packet breakdown
 
