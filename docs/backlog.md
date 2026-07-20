@@ -10197,3 +10197,100 @@ census + design note + nothing else if the machinery genuinely doesn't
 fit; the orchestrator/owner decide at merge). If shaped: registry
 enabled: false, manual; docs row 106 claim. Trim-first candidate —
 if your census says the fit is bad, say so early and cheaply.
+
+# Phase 34 — the weave phase: journaled follow-ups & cross-source seams (approved 2026-07-20 as recommended: five packets; P34-0 seam = REGISTRY key; P34-3 tier = distinct "equivalence" label. D34-a KR5 ruling, owner 2026-07-20: keep for the next Sino phase — P34-5 does not dispatch this phase; the P33-1 census + overlay characterization stay the entry point when that phase elaborates)
+
+Next-phase request (owner, 2026-07-20): group the grown source list
+logically with user personas as a first-rate consideration — research
+AXES as a registry dimension so `nabu list --axis` and
+`nabu sync celtic`/`slavic`/… work naturally. Plan drafted
+(orchestrator holds it: personas distilled, ~15-axis tag set + draft
+79-slug mapping, `axes:` registry seam per the P34-0 `siblings:`
+precedent, slug-collision validation, 4-packet sketch); elaborates
+after the P34 gate per the loop.
+
+Source of truth: the owner-approved plan (orchestrator holds it). Standing
+rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
+TBD for orchestrator fill, 02-sources renumber at merge — current max 106).
+ZERO new large syncs this phase: every packet ships capability over data
+already held; the owner's ongoing Kanripo/CBETA syncs must be undisturbed
+(no adapter/fetch changes to kanripo/cbeta outside P34-4's read-only census).
+
+## P34-0 · --parallel work-pattern generalization + the I.Sicily siblings  [tier: fable] [status: done — merged ecc9b0f 2026-07-20] [deps: —]
+The Query::Parallel work-pattern chain is ten hand-frozen regexes (CTS,
+ORACC, FREISING, DAMASKINI, SUTTACENTRAL, TLA_HF, AES, RIIG,
+OPEN_ETRUSCAN+ITANT, ETCSL) — it has bitten in P29, P30 AND P32 (every
+new sibling shape = an owner repro + a rider). GENERALIZE, seam =
+REGISTRY (owner-decided): a `siblings:` key on the source row declaring
+the suffix grammar (e.g. `["-en"]`, `["-fr"]`, `["-(eng|ita|dipl)"]`,
+or the CTS dotted-version form) → ONE generic matcher; study all ten
+patterns first and write the design note (what each literal tail
+encodes — version-token ordering, the CTS `.%` LIKE shape — before
+unifying). MIGRATION DISCIPLINE: every existing source's parallel tests
+pass UNCHANGED (behavior pinned exactly — zero drift); the ten regex
+constants retire only when their registry declarations reproduce them
+test-for-test. Then the journaled invisible siblings ride free:
+**isicily -en/-it** (1,182 en / 389 it non-empty translation divs,
+censused P29-4) and **-translit** (631 transliteration editions) —
+sibling MINTING in the isicily adapter (study its metadata-only and
+quarantine rules; the census numbers are the contract) + registry
+declarations + corresp-style honesty where alignment is loose.
+Docs: architecture §parallel note, 02-sources isicily row, worklog.
+
+## P34-1 · The Masoretic word crosswalk — ETCBC/bridging  [tier: fable] [status: done] [deps: —]
+ETCBC `bridging` repo (MIT — verify in-repo verbatim): the OSHB↔BHSA
+word-level crosswalk, journaled at P30-4. Census the format WHOLE
+(what grain, what coverage, which versions it pins — the repo maps
+specific OSHB/BHSA releases; verify ours match, report honestly if
+not). Design per what the data IS: word-grain reference edges vs a
+crosswalk lane on annotations (say why). Payoff surfaces named in the
+packet report with live examples: OSHB verse → its BHSA constituency
+data. ALSO census (report-only) the DSS consonantal-fold lane vs OSHB
+(the P30-5 "honestly partial" join) — numbers, no wiring unless clean.
+Fetch: plain GitFetch, small. Registry: a links-journal producer or a
+lane, NOT a text source (no enabled flip involved unless a real source
+row is needed — justify either way). Docs + worklog per convention.
+
+## P34-2 · Coptic loans facet + the Egyptian etymology chain  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+Ship the P17-1 promise: the per-passage loan-code counts already stored
+in annotations become a readable facet (`--loans` on search/list — study
+how existing facets read document_facets vs annotations; the design
+said "a future --loans facet reads them without reparse" — honor that).
+Plus the borrowing surface: find Coptic passages whose loan tokens come
+from Greek (language-of-origin tags ride per-token since P17-1). Then
+MEASURE the egy↔cop↔grc chain end-to-end via CCL's etymology edges
+(P28-3) — a real tour exemplar in the report (a Pyramid-Texts word →
+its Coptic descendant → its Greek loans neighborhood), promised
+nothing, measured. CLI surface changes need tests at the CLI level
+(the house cli_test patterns). Docs + worklog.
+
+## P34-3 · CEIPoM Classical-Latin-equivalent lemma wiring  [tier: fable] [status: done 2026-07-20] [deps: —]
+The P29-1 measured join (3,952 CLE values; 37.0% types / 79.9% tokens
+vs live gold Latin keys) goes live: CLE values mint lemma-index rows as
+LATIN keys on the non-Latin passages (Oscan/Umbrian/Faliscan/Venetic…),
+under a DISTINCT tier label **"equivalence"** (owner-decided — silver
+means upstream-automatic; this is scholar-curated cross-language
+equivalence, a different honesty). Every surface that renders tiers
+learns the label (search hits, --gold-only exclusion, ReflexViews if
+touched — census the tier-consuming surfaces first and list them in
+the design note). The single-scholar caveat rides verbatim. Measured
+outcome in the report: `search --lemma quinque` surfacing the Iguvine
+Tables, real output. Re-derive at rebuild — the lemma index is derived
+data; no canonical changes. Docs + worklog.
+
+## P34-4 · TLS attestation crosswalk  [tier: fable] [status: dispatched 2026-07-20] [deps: none hard — censuses whatever Kanripo state exists]
+The P33-4 deferred lane: 111,484 sense-level attributions (notes/doc
+38,346 + notes/swl 73,138; 36,764 distinct senses, 99.6% resolvable
+into tls-words). The attested texts are largely Kanripo-format ids —
+CENSUS how many attested text ids match the owner's SYNCED kanripo
+tree at packet time (read-only on /Users/vb/Dev/nabu/canonical/kanripo
+if present — the owner's wave sync may still be running; census
+whatever exists, report the resolution rate honestly, design for the
+rate to grow as waves land). Mint dictionary_citations where targets
+resolve to real passages (study how citations resolve — LSJ/MW
+precedent) OR reference edges where only document grain resolves —
+per what the seg-ids honestly support (they are TLS-side seg ids, not
+page anchors: the mapping decision is the packet's design note; an
+honest partial wiring beats a fake complete one). Fetch: the notes/
+dirs join the tls sparse cone (~more MB — census and report). Docs +
+worklog.
