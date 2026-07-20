@@ -41,13 +41,15 @@ module Nabu
 
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
-    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets) do
+    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile) do
       # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
-      # replayed documents' metadata. Both default nil for callers/tests that
-      # predate them, so every existing construction stays valid.
-      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil)
+      # replayed documents' metadata. +profile+ (P36-0) is the always-on
+      # RebuildProfile of per-source/per-stage wall times (nil only for the
+      # pre-P36 construction paths). All default nil so every existing
+      # construction stays valid.
+      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil, profile: nil)
         super
       end
 
@@ -90,6 +92,10 @@ module Nabu
     # live per-document ticks; the runner stays print-free.
     def run(progress: nil)
       db_existed = File.exist?(db_path)
+      # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
+      # boundary; per document for parse/insert), so it runs on every rebuild —
+      # observability only, never persisted, so rebuild-safe by construction.
+      profile = RebuildProfile.new
       ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
       FileUtils.rm_f(db_path)
       FileUtils.rm_f(fulltext_path) # the index is derived-of-derived; drop it too
@@ -100,7 +106,12 @@ module Nabu
       @registry.each_source do |entry|
         if replayable?(entry)
           progress&.stage(entry.slug)
-          outcomes << replay(db, ledger, entry, progress)
+          # The :load roll-up is the authoritative per-source number (parse +
+          # insert + adapter build + run-recorder); parse/insert split rides
+          # inside it via the loader's component timers.
+          outcomes << profile.measure(scope: entry.slug, stage: :load) do
+            replay(db, ledger, entry, progress, profile)
+          end
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
         end
@@ -110,21 +121,28 @@ module Nabu
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
       progress&.stage("timeline")
-      axes = Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      axes = profile.measure(scope: RebuildProfile::CORPUS, stage: :timeline) do
+        Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      end
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets")
-      facets = Store::FacetBuilder.rebuild!(catalog: db)
+      facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
+        Store::FacetBuilder.rebuild!(catalog: db)
+      end
       # Reindex ONCE after all sources are back — the index is corpus-wide.
       progress&.stage("fulltext index")
       # The alignment registry (config, not derived) rides in so alignment_refs
-      # regenerates with the re-minted passage ids (architecture §10).
+      # regenerates with the re-minted passage ids (architecture §10). The
+      # profile threads in so the index's own sub-stages (fts+lemma / trigram /
+      # alignment / reflex) are timed as corpus stages.
       indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
                                         alignments: AlignmentRegistry.load(@config.alignments_path),
                                         fuzzy_slugs: @registry.fuzzy_slugs,
-                                        lemma_tiers: @registry.lemma_tiers)
+                                        lemma_tiers: @registry.lemma_tiers,
+                                        profile: profile)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
-                 skips: skips, indexed: indexed, axes: axes, facets: facets)
+                 skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -140,12 +158,12 @@ module Nabu
     # keep it for the Outcome too. The loader gets the ledger for durable
     # revision journaling — a replay into a fresh catalog only INSERTS, so it
     # writes no revisions (tested), but the seam stays uniform.
-    def replay(db, ledger, entry, progress)
+    def replay(db, ledger, entry, progress, profile = nil)
       source = entry.sync_source!(db)
       adapter = entry.build_adapter
       report = nil
       Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
-        report = build_loader(adapter, db, ledger, source).load_from(
+        report = build_loader(adapter, db, ledger, source, profile).load_from(
           adapter,
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
@@ -165,11 +183,16 @@ module Nabu
     # is idempotent, so a replay re-derives the same dossier sections and
     # touches nothing), language dossier shelves through the
     # LanguageDossierLoader, the owner-notes shelf through the NoteLoader.
-    def build_loader(adapter, db, ledger, source)
+    # +profile+ (P36-0) is threaded into the two loaders that carry the corpus
+    # mass — the plain text Loader and the DictionaryLoader — so their parse /
+    # insert split is captured. The three dossier/note shelf loaders handle a
+    # handful of tiny administrative documents; they take no profile, so those
+    # sources show only their :load roll-up (measured by the caller), no split.
+    def build_loader(adapter, db, ledger, source, profile = nil)
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
-                                    canonical_dir: @config.canonical_dir)
+                                    canonical_dir: @config.canonical_dir, profile: profile)
       when :language
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
       when :notes
@@ -177,7 +200,7 @@ module Nabu
       when :source
         Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
-        Store::Loader.new(db: db, source: source, ledger: ledger)
+        Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile)
       end
     end
 

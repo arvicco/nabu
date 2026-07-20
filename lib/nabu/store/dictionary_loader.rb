@@ -41,11 +41,12 @@ module Nabu
       # canonical/<canonical_dir>/local-language via Nabu::LanguageShelf (the
       # local shelf's sanctioned write gateway). nil (callers that cannot
       # name the corpus root — bare loader tests) accretes nothing, honestly.
-      def initialize(db:, source:, ledger: nil, canonical_dir: nil)
+      def initialize(db:, source:, ledger: nil, canonical_dir: nil, profile: nil)
         @db = db
         @source = source
         @ledger = ledger
         @canonical_dir = canonical_dir
+        @profile = profile # Nabu::RebuildProfile or nil (P36-0; nil on sync)
       end
 
       # Load an enumerable of Nabu::DictionaryDocument values.
@@ -62,7 +63,7 @@ module Nabu
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
               begin
-                adapter.parse(ref)
+                time_parse { adapter.parse(ref) }
               rescue Nabu::ParseError => e
                 quarantine.call(ref, e)
                 next
@@ -75,6 +76,13 @@ module Nabu
       end
 
       private
+
+      # P36-0 stage timers, no-op without a profile (sync path untouched); under
+      # `nabu rebuild` they fold parse / insert wall time into this source's
+      # component buckets. Per dictionary FILE, not per entry.
+      def time_parse(&) = @profile ? @profile.measure(scope: @source.slug, stage: :parse, &) : yield
+
+      def time_insert(&) = @profile ? @profile.measure(scope: @source.slug, stage: :insert, &) : yield
 
       def run(full:, on_document: nil)
         counts = Hash.new(0)
@@ -105,15 +113,17 @@ module Nabu
       # shields its row from the withdrawal sweep even if persisting fails
       # mid-file (the transaction rolls the file back as one unit).
       def load_document(document, counts, seen)
-        @db.transaction do
-          dictionary = upsert_dictionary(document)
-          census = Hash.new(0)
-          document.each do |entry|
-            seen.add([document.slug, entry.entry_id])
-            counts[upsert_entry(dictionary, document, entry)] += 1
-            entry.reflexes.each { |reflex| census[[reflex.lang_code, reflex.lang_name]] += 1 if reflex.lang_name }
+        time_insert do
+          @db.transaction do
+            dictionary = upsert_dictionary(document)
+            census = Hash.new(0)
+            document.each do |entry|
+              seen.add([document.slug, entry.entry_id])
+              counts[upsert_entry(dictionary, document, entry)] += 1
+              entry.reflexes.each { |reflex| census[[reflex.lang_code, reflex.lang_name]] += 1 if reflex.lang_name }
+            end
+            replace_name_census(dictionary, census)
           end
-          replace_name_census(dictionary, census)
         end
         accrete_document_language_notes(document)
       rescue Sequel::DatabaseError => e

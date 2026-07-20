@@ -1276,6 +1276,46 @@ class CLITest < Minitest::Test
     end
   end
 
+  # rebuild --profile prints the per-source/per-stage timing table (P36-0).
+  def test_rebuild_profile_prints_the_stage_timing_table
+    with_rebuild_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --profile]) }
+
+      assert_nil status
+      # The normal result still prints…
+      assert_match(/Dropped catalog db/, out)
+      # …then the profile table with its header, the source row, corpus stages,
+      # the share column, and the stage-share summary.
+      assert_match(/Rebuild profile — wall time by stage/, out)
+      assert_match(/^\s+corpus\s+[\d.]+s\s+[\d.]+%/, out)
+      assert_match(/fts\+lemma reindex/, out)
+      assert_match(/trigram/, out)
+      assert_match(/GRAND TOTAL/, out)
+      assert_match(/parse.*of load/, out)
+    end
+  end
+
+  # Without --profile the table is absent (opt-in report; stage lines still ride
+  # on stderr progress, untouched here).
+  def test_rebuild_without_profile_prints_no_table
+    with_rebuild_env do |config|
+      out, _err, = with_config(config) { run_cli(%w[rebuild]) }
+
+      refute_match(/Rebuild profile/, out)
+      refute_match(/GRAND TOTAL/, out)
+    end
+  end
+
+  # --profile on a dry run adds nothing (there is no run to time).
+  def test_rebuild_dry_run_with_profile_prints_no_table
+    with_rebuild_env do |config|
+      out, _err, = with_config(config) { run_cli(%w[rebuild --dry-run --profile]) }
+
+      assert_match(/dry run/i, out)
+      refute_match(/Rebuild profile/, out)
+    end
+  end
+
   # -- backup (P7-2) -------------------------------------------------------
 
   def test_backup_runs_to_a_local_target_and_reports_ok

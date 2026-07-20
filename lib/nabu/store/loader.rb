@@ -73,10 +73,15 @@ module Nabu
       # db: the Sequel database (Store.setup! already applied);
       # source: the Store::Source row this load belongs to;
       # ledger: the history ledger db (Ledger.setup! applied) or nil.
-      def initialize(db:, source:, ledger: nil)
+      # profile: a Nabu::RebuildProfile (P36-0) or nil — when present, the
+      #   parse call and the per-document insert transaction each fold their
+      #   wall time into the source's :parse / :insert component buckets. nil on
+      #   the sync path, so only `nabu rebuild` pays the (per-document) sampling.
+      def initialize(db:, source:, ledger: nil, profile: nil)
         @db = db
         @source = source
         @ledger = ledger
+        @profile = profile
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -101,7 +106,7 @@ module Nabu
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
               begin
-                adapter.parse(ref)
+                time_parse { adapter.parse(ref) }
               rescue Nabu::DocumentSkipped => e
                 skip.call(ref, e)
                 next
@@ -115,6 +120,14 @@ module Nabu
       end
 
       private
+
+      # P36-0 stage timers: no-op (just yield) without a profile, so the sync
+      # path is untouched; under `nabu rebuild` they fold the call's wall time
+      # into this source's parse / insert component buckets. Per DOCUMENT, not
+      # per passage — the always-on granularity the profiler budget allows.
+      def time_parse(&) = @profile ? @profile.measure(scope: @source.slug, stage: :parse, &) : yield
+
+      def time_insert(&) = @profile ? @profile.measure(scope: @source.slug, stage: :insert, &) : yield
 
       def run(full:, on_document: nil)
         counts = Hash.new(0)
@@ -160,7 +173,7 @@ module Nabu
       # nil for live documents, or the "retired" provenance params (possibly
       # empty) for documents rediscovered from the attic.
       def load_document(document, counts, retained = nil)
-        outcome = @db.transaction { upsert_document(document, retained) }
+        outcome = time_insert { @db.transaction { upsert_document(document, retained) } }
         counts[outcome] += 1
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1
