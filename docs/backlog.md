@@ -10487,12 +10487,12 @@ FTS delete+reinsert. THE INVARIANT IS SACRED: full rebuild remains the
 reference; test pins incremental ≡ full (counts + shas) on a fixture
 corpus with one dirtied source.
 
-## P36-2 · Bulk-load engineering  [tier: opus] [status: ready] [deps: P36-0]
+## P36-2 · Bulk-load engineering  [tier: opus] [status: dispatched 2026-07-20 — P36-0 verdict GO] [deps: P36-0]
 Rebuild-only pragmas, per-source transactions, deferred secondary-index
 creation — each measured against the P36-0 baseline; no un-measured
 optimizations.
 
-## P36-3 · Parallel parse workers  [tier: fable] [status: ready — dispatch ONLY if P36-0 shows parse-bound] [deps: P36-0]
+## P36-3 · Parallel parse workers  [tier: fable] [status: ready — P36-0 verdict: warranted, awaiting the parse/insert split from the next instrumented rebuild] [deps: P36-0]
 N parsers, one writer behind a queue. If FTS reindex dominates, does
 not dispatch; journal says why.
 
