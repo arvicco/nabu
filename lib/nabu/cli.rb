@@ -4245,13 +4245,22 @@ module Nabu
         " — attested as #{forms.map { |form| display_text(form, witness.language) }.join(', ')}"
       end
 
+      # Compact default (house compact-CLI rule, the print_reflexes
+      # precedent's inline-cap shape): TLS attestation citations (P34-4)
+      # put thousands of resolved rows on common words (之 carries 2,587
+      # attestations), so the first 12 print inline and the tail is
+      # summarised; --long expands every one. LSJ/MW-scale entries sit
+      # under the cap and never see it.
       def print_resolved_citations(result)
         resolved = result.citations.select(&:resolved_urn)
         return if resolved.empty?
 
         say ""
         say "resolved citations (in this corpus — nabu show <urn>):"
-        resolved.each { |citation| say "  #{citation.label} → #{citation.resolved_urn}" }
+        shown = options[:long] ? resolved : resolved.first(12)
+        shown.each { |citation| say "  #{citation.label} → #{citation.resolved_urn}" }
+        rest = resolved.size - shown.size
+        say "  … and #{rest} more (--long shows all)" if rest.positive?
       end
 
       # A print-free runner needs a sink for live progress; the CLI owns all

@@ -61,9 +61,13 @@ module Nabu
         parser_family: "tls-xml"
       )
 
-      # The sparse-checkout cone (P26-0 GitFetch): only the two ingested
-      # dirs' blobs come down; everything else stays upstream.
-      SPARSE_PATHS = %w[concepts words].freeze
+      # The sparse-checkout cone (P26-0 GitFetch): only the ingested dirs'
+      # blobs come down; everything else stays upstream. P34-4 widened the
+      # cone with the attestation lane (notes/doc 138 MB + notes/swl 191 MB
+      # measured 2026-07-20 — one `<textid>-ann.xml` per attested text;
+      # notes/search's 69,050 cached dumps stay excluded); GitFetch widens
+      # an existing checkout's cone on the next pull.
+      SPARSE_PATHS = %w[concepts words notes/doc notes/swl].freeze
 
       # The two dictionaries this source carries. :dir anchors discover;
       # the concepts parse reads the words dir as a sibling (the
@@ -155,7 +159,15 @@ module Nabu
 
       def entries_for(slug, document_ref)
         parser = Adapters::TlsXmlParser.new
-        return parser.word_entries(document_ref.path) if slug == "tls-words"
+        if slug == "tls-words"
+          # The attestation lane (P34-4) reads notes/ as a sibling of the
+          # words dir — the member_index cross-file precedent. No notes on
+          # disk (pre-widening checkouts, attic partials) = an honest
+          # citation-free parse.
+          notes_dir = File.join(File.dirname(document_ref.path), "notes")
+          attestations = Dir.exist?(notes_dir) ? parser.attestation_index(notes_dir) : nil
+          return parser.word_entries(document_ref.path, attestations: attestations)
+        end
 
         words_dir = File.join(File.dirname(document_ref.path), DICTIONARIES.fetch("tls-words").fetch(:dir))
         members = Dir.exist?(words_dir) ? parser.member_index(words_dir) : nil

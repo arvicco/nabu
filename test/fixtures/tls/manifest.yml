@@ -35,6 +35,22 @@ files:
     url: https://raw.githubusercontent.com/tls-kr/tls-data/master/words/e/uuid-ea74382d-1bf2-4940-b438-2d1bf2794042.xml
     whole: false
     trim: root superEntry + first entry byte-verbatim, closing </superEntry> appended (upstream file is 305,395 B / 477 orth-less entries — the one empty-orth aggregate; the fixture pins the skip rule)
+  - path: notes/swl/KR1h0004-ann.xml
+    url: https://raw.githubusercontent.com/tls-kr/tls-data/master/notes/swl/KR1h0004-ann.xml
+    whole: false
+    trim: teiHeader + 5 real segs byte-verbatim (005-22a.4, 009-19a.1, 013-30a.1, 017-27a.1, 018-31a.5 — the 論語 attestations of the fixture words 棄/舍; upstream file is 13 MB / 2,935 segs), closing tags appended (P34-4, retrieved 2026-07-20)
+  - path: notes/doc/KR1h0001-ann.xml
+    url: https://raw.githubusercontent.com/tls-kr/tls-data/master/notes/doc/KR1h0001-ann.xml
+    whole: false
+    trim: teiHeader + 2 real segs byte-verbatim (001-6a.7, 008-21a.4 — the tls:ann-PREFIXED upstream shape), closing tags appended (P34-4, retrieved 2026-07-20)
+  - path: notes/doc/CH1a0907-ann.xml
+    url: https://raw.githubusercontent.com/tls-kr/tls-data/master/notes/doc/CH1a0907-ann.xml
+    whole: false
+    trim: teiHeader + 2 real segs byte-verbatim (010-21a.6, 016-27a.2 — a NON-KR text id, 說苑; the display-only citation path), closing tags appended (P34-4, retrieved 2026-07-20)
   - path: LICENSE.md
     url: https://raw.githubusercontent.com/tls-kr/tls-data/master/LICENSE.md
     whole: true
+  - path: concepts/N-A.xml
+    url: https://raw.githubusercontent.com/tls-kr/tls-data/master/concepts/N-A.xml
+    whole: true
+    note: the content-empty placeholder (owner sync repro 2026-07-20) — skip-by-rule exemplar

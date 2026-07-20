@@ -1697,23 +1697,29 @@ kanripo:
 tls:
   adapter: Nabu::Adapters::Tls
   enabled: false   # P33-4: awaiting the owner-fired first sync (sparse
-                   # GitFetch of tls-kr/tls-data, cone concepts/ + words/
-                   # ~112 MB working tree out of the 4.7 GB repo; CLAUDE.md
+                   # GitFetch of tls-kr/tls-data; the P34-4 cone is
+                   # concepts/ + words/ + notes/doc + notes/swl, ~441 MB
+                   # working tree out of the 4.7 GB repo — an existing
+                   # checkout widens its cone on the next sync; CLAUDE.md
                    # checklist §6: bin/nabu sync tls, eyeball nabu define 棄
-                   # (six concept blocks incl. ABANDON with urns) and
+                   # (six concept blocks incl. ABANDON with urns, sense
+                   # attestations resolving into synced kanripo texts) and
                    # define DIE (definition + criteria + member words),
                    # then flip). Expect 3,018 och entries on tls-concepts +
                    # 20,163 on tls-words (2 skip-by-rule strays censused:
                    # the percent-encoded CRONY-uuid duplicate, the
-                   # empty-orth superEntry aggregate).
+                   # empty-orth superEntry aggregate) + ~189K attestation
+                   # citations on attested words.
   # Thesaurus Linguae Sericae (Harbsmeier) — the first ONOMASIOLOGICAL
   # shelf: concepts (definition + synonym-group criteria + hypernymy/
   # taxonymy/antonymy/see pointer urns + member words inverted from the
   # words side) and words (superEntry grain, every entry block naming its
-  # concept + urn, pinyin/OC/MC readings, sense uuids verbatim — the join
-  # keys of the DEFERRED attestation crosswalk: 111,484 tls:ann rows in
-  # notes/doc + notes/swl target text seg ids the catalog does not hold;
-  # 02-sources row 106 records that and the rest of the repo census).
+  # concept + urn, pinyin/OC/MC readings, sense uuids verbatim — joined
+  # since P34-4 by the attestation crosswalk: notes/doc + notes/swl
+  # tls:ann rows (191,484 censused 2026-07-20) mint dictionary_citations
+  # per (sense, seg) pair; KR-shaped text ids resolve into synced kanripo
+  # texts at page or document grain AT QUERY TIME, so coverage grows as
+  # kanripo waves land; 02-sources row 106 records the census).
   # CC BY-SA 4.0 (LICENSE.md, sha256-identical in tls-texts + tls-data;
   # both README badges say CC BY 4.0 — recorded discrepancy, LICENSE
   # governs). Upstream is a live eXist-db working repo → manual.

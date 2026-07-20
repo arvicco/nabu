@@ -1,0 +1,377 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="KR1h0004-ann">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Annotations for 論語</title>
+            </titleStmt>
+            <publicationStmt>
+                <p>published electronically as part of the TLS project at https://hxwd.org</p>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Created by members of the TLS project</p>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <creation>Initially created: <date>2019-03-26T13:08:54.554+09:00</date> by CH</creation>
+        <textClass><catRef scheme="#tls-dates" target="#dat08110"/></textClass></profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>Annotations</head>
+                <p xml:id="KR1h0004-start">
+                    <seg xml:id="KR1h0004_tls_005-22a.4">
+                        <line>棄而違之。</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DISCARD" xml:id="uuid-4d3c25a3-3d22-4e5d-bc25-a33d22de5dec">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_005-22a.4 #uuid-5e2b1efe-0426-4202-aad8-87ea77bcc2d3"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_005-22a.4" pos="1">棄而違之。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">but he abandoned him and turned against him.</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+                                <orth>棄</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-5e2b1efe-0426-4202-aad8-87ea77bcc2d3">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</sem-feat>
+                           <usg type="valuation">-</usg>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def>(unjustifiably) reject (proposals); abandon (a person); jetison; disregard (orders etc)</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="AND" xml:id="uuid-a08a09b7-ff89-4ea5-8a09-b7ff894ea586">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_005-22a.4 #uuid-efaf0665-0eee-4228-bad5-da590f4e6aa0"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_005-22a.4" pos="2">棄而違之。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">but he abandoned him and turned against him.</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-d4f6516f-ad7d-4a23-a222-ee0e2b5082e8">
+                                <orth>而</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">ér</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-efaf0665-0eee-4228-bad5-da590f4e6aa0">
+                                <gramGrp>
+                           <pos>P</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-e6732f75-9b17-4560-a0ea-501e1b4c7442">padV1.postV2</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-ab6330a5-6702-4cee-aa98-dcd58b5cd498">sequence</sem-feat>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def>and then, and thereupon; 拜而受之" accepted this with a bow"   (often coordinates two verbal predicates with the same subject)</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="OFFEND" xml:id="uuid-aae73df0-f526-4f9e-a73d-f0f526cf9e43">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_005-22a.4 #uuid-cd1ad22d-ff66-404d-b9ee-5caacea3ca98"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_005-22a.4" pos="3">棄而違之。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">but he abandoned him and turned against him.</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-08b2cb4c-f634-4cc5-b24a-8227c5c99f9d">
+                                <orth>違</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">wéi</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-cd1ad22d-ff66-404d-b9ee-5caacea3ca98">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                           <usg type="warring-states-currency">4</usg>
+                        </gramGrp>
+                                <def>contravene, flout; be disobedient to; ZUO Xi 23: offend against (Heaven, one's husband etc.); go against (the agricultural seasons); disobey (an order) very occasionally used nominally: error</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+                    <seg xml:id="KR1h0004_tls_009-19a.1">
+                        <line>不舍晝夜。」</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="STOP" xml:id="uuid-42cb05fb-3bf5-4d26-8b05-fb3bf5bd2688">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_009-19a.1 #uuid-b6b91c43-6145-46de-a05e-30e40b564428"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_009-19a.1" pos="2">不舍晝夜。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Without intermittance, day or night."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-3c1879b8-3bd0-413a-95b5-69d2f36731e5">
+                                <orth>舍</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">shě</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-b6b91c43-6145-46de-a05e-30e40b564428">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-c20780b3-41f9-491b-bb61-a269c1c4b48f">vi</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</sem-feat>
+                           <usg type="register">2</usg>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>desist, give up one's ways, give up one's efforts</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DAY" xml:id="uuid-fde94eff-d965-4222-a94e-ffd9654222ec">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_009-19a.1 #uuid-ae8b4be7-084b-4ba4-bff9-da1260f54f1a"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_009-19a.1" pos="3">不舍晝夜。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Without intermittance, day or night."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-09428a96-b453-4219-bed2-60879298930c #uuid-a77afa11-50b7-416a-853e-e10b12372781">
+                                <orth>晝夜</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">zhòu yè</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-ae8b4be7-084b-4ba4-bff9-da1260f54f1a">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-2c776536-43e0-43f7-82fb-0b812718bcc3">NPpostadV</syn-func>
+                           <usg type="warring-states-currency">4</usg>
+                        </gramGrp>
+                                <def>generally: throughout day and night</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DAY" xml:id="uuid-e83657a7-32a5-4502-b657-a732a5b502d3">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_009-19a.1 #uuid-85187dd5-7a9c-494a-8d93-d5affd873300"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_009-19a.1" pos="3">不舍晝夜。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Without intermittance, day or night."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-09428a96-b453-4219-bed2-60879298930c">
+                                <orth>晝</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">zhòu</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-85187dd5-7a9c-494a-8d93-d5affd873300">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-583254b8-1e3a-46fd-b7ed-7e83ec0620ae">npostadV</syn-func>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>during the daytime</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="NIGHT" xml:id="uuid-c914e719-a207-4a8c-94e7-19a2077a8c92">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_009-19a.1 #uuid-0c127182-b3b2-44d1-80a5-4fd51122f5f2"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_009-19a.1" pos="4">不舍晝夜。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Without intermittance, day or night."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-a77afa11-50b7-416a-853e-e10b12372781">
+                                <orth>夜</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">yè</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-0c127182-b3b2-44d1-80a5-4fd51122f5f2">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-583254b8-1e3a-46fd-b7ed-7e83ec0620ae">npostadV</syn-func>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>during the night, at nighttime</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+                    <seg xml:id="KR1h0004_tls_013-30a.1">
+                        <line>不可棄也。」</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DISCARD" xml:id="uuid-b4aa2471-60ef-451e-aa24-7160ef151e65">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_013-30a.1 #uuid-a18644b1-0868-4a91-8c3a-7d3bdfccda08"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_013-30a.1" pos="3">不可棄也。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">one is not to be rejected."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+                                <orth>棄</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-a18644b1-0868-4a91-8c3a-7d3bdfccda08">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-988c2bcf-3cdd-4b9e-b8a4-615fe3f7f81e">passive</sem-feat>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>be rejected, be abandoned</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+                    <seg xml:id="KR1h0004_tls_017-27a.1">
+                        <line>德之棄也。」</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="VIRTUE" xml:id="uuid-2315ba87-72af-4cc3-95ba-8772af8cc3fc">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_017-27a.1 #uuid-1cdab186-9017-4847-a833-2ab92f47da4a"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_017-27a.1" pos="1">德之棄也。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">is rejection of virtue."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-954bd8cd-51ba-485f-b7f3-e5c5176e16c8">
+                                <orth>德</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">dé</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-1cdab186-9017-4847-a833-2ab92f47da4a">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-76be1df4-3d73-4e5f-bbc2-729542645bc8">nab</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-98e7674b-b362-466f-9568-d0c14470282a">psych</sem-feat>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>the highest form of virtue, true virtue, true inner power</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DISREGARD" xml:id="uuid-25a82580-c42f-4cdd-a825-80c42f4cdd72">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_017-27a.1 #uuid-f4745f01-5f4a-4de4-85f2-413662d5510a"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_017-27a.1" pos="3">德之棄也。」</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">is rejection of virtue."</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+                                <orth>棄</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-f4745f01-5f4a-4de4-85f2-413662d5510a">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-3089d27c-a8a0-4ba1-a3ae-5cd513e4f523">nab.t:post-N</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</sem-feat>
+                           <usg type="warring-states-currency">3</usg>
+                        </gramGrp>
+                                <def>dismissal</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+                    <seg xml:id="KR1h0004_tls_018-31a.5">
+                        <line>故舊無大故，則不棄也。</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="FRIEND" xml:id="uuid-0c9d75bf-823f-4836-9d75-bf823f883656">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_018-31a.5 #uuid-7c835006-d6a1-4a66-8404-d4e4039fdca6"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_018-31a.5" pos="1">故舊無大故，則不棄也。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Old friends he will not dismiss without substantial reason</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-cee00179-0689-42fe-a172-52bfa48c1729 #uuid-600f7130-ea25-4628-996b-5d9323615a8b">
+                                <orth>故舊</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">gù jiù</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-7c835006-d6a1-4a66-8404-d4e4039fdca6">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-0ae78c50-f7f7-4ab0-bb28-9375998ac032">NP{N1=N2}</syn-func>
+                        </gramGrp>
+                                <def>old companions</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="GREAT" xml:id="uuid-d818b0ad-edba-45dc-98b0-adedba45dca0">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_018-31a.5 #uuid-9e9e76cd-5c23-4be2-9cb8-4df692edb674"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_018-31a.5" pos="4">故舊無大故，則不棄也。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Old friends he will not dismiss without substantial reason</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-ae3f9bb5-89cd-46d2-bc7a-cb2ef0e9d8d8">
+                                <orth>大</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">dà</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-9e9e76cd-5c23-4be2-9cb8-4df692edb674">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fed035db-e7bd-4d23-bd05-9698b26e38f9">vadN</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</sem-feat>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def>large-scale, great; overall (not partial or small-minded); fundamental; of a higher order</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DISCARD" xml:id="uuid-820358c3-ea17-4d9c-8358-c3ea175d9cf4">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#KR1h0004_tls_018-31a.5 #uuid-5e2b1efe-0426-4202-aad8-87ea77bcc2d3"/>
+                            <text>
+                                <srcline title="論語" target="#KR1h0004_tls_018-31a.5" pos="9">故舊無大故，則不棄也。</srcline>
+                                <line title="論語 (en)" src="C. Harbsmeier">Old friends he will not dismiss without substantial reason</line>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+                                <orth>棄</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-5e2b1efe-0426-4202-aad8-87ea77bcc2d3">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                           <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-2e48851c-928e-40f0-ae0d-2bf3eafeaa17">figurative</sem-feat>
+                           <usg type="valuation">-</usg>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def>(unjustifiably) reject (proposals); abandon (a person); jetison; disregard (orders etc)</def>
+                            </sense>
+                            <metadata resp="#CH" created="2019-03-26T13:08:54.554+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added</resp>
+                                    <name>CH</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>
