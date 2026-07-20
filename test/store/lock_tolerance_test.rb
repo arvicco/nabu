@@ -109,7 +109,58 @@ class LockToleranceTest < Minitest::Test
     assert_equal "wal", readonly.fetch("PRAGMA journal_mode").single_value, "WAL persists in the file"
   end
 
+  # -- rebuild-mode connection profile (P36-2) -----------------------------
+
+  # rebuild: true keeps WAL (the P17-7 concurrency guarantee) AND layers the
+  # fast-and-unsafe rebuild pragmas on top: synchronous=OFF (no per-commit
+  # fsync — sound only because a crashed rebuild is re-run from canonical/) and
+  # a large page cache. A plain connect leaves synchronous at its WAL default.
+  def test_rebuild_mode_sets_synchronous_off_but_keeps_wal
+    path = db_path("rebuild")
+    db = connect { Nabu::Store.connect(path, rebuild: true) }
+
+    assert_equal "wal", db.fetch("PRAGMA journal_mode").single_value
+    assert_equal 0, db.fetch("PRAGMA synchronous").single_value # 0 = OFF
+    assert_equal Nabu::Store::REBUILD_CACHE_KIB, db.fetch("PRAGMA cache_size").single_value
+  end
+
+  def test_plain_connect_leaves_synchronous_at_the_wal_default
+    db = connect { Nabu::Store.connect(db_path("plain")) }
+
+    refute_equal 0, db.fetch("PRAGMA synchronous").single_value # NOT forced OFF
+  end
+
+  def test_fulltext_rebuild_mode_sets_the_same_profile
+    db = connect { Nabu::Store.connect_fulltext(db_path("ft-rebuild"), rebuild: true) }
+
+    assert_equal "wal", db.fetch("PRAGMA journal_mode").single_value
+    assert_equal 0, db.fetch("PRAGMA synchronous").single_value
+  end
+
+  # -- deferred secondary indexes (P36-2) ----------------------------------
+
+  # drop_deferred_indexes! then create_deferred_indexes! is a round-trip: the
+  # migrated schema's enumerated non-unique indexes vanish and return, and the
+  # unique/identity indexes are never touched.
+  def test_deferred_indexes_drop_and_recreate_round_trips
+    db = connect { Nabu::Store.connect(db_path("deferred")) }
+    Nabu::Store.migrate!(db)
+    before = index_names(db, :passages) + index_names(db, :provenance)
+
+    Nabu::Store.drop_deferred_indexes!(db)
+    dropped = before - (index_names(db, :passages) + index_names(db, :provenance))
+    refute_empty dropped, "the enumerated indexes were actually dropped"
+    # The unique/identity indexes survive the drop.
+    assert(index_names(db, :passages).any? { |n| n.to_s.include?("urn") })
+
+    Nabu::Store.create_deferred_indexes!(db)
+    after = index_names(db, :passages) + index_names(db, :provenance)
+    assert_equal before.sort, after.sort, "every deferred index is back"
+  end
+
   private
+
+  def index_names(db, table) = db.indexes(table).keys
 
   # Every production connect path, rw before readonly so the rw connect
   # creates the file (and flips it to WAL) for the readonly one. Ledger and
