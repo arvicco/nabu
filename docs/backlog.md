@@ -10258,7 +10258,7 @@ Fetch: plain GitFetch, small. Registry: a links-journal producer or a
 lane, NOT a text source (no enabled flip involved unless a real source
 row is needed — justify either way). Docs + worklog per convention.
 
-## P34-2 · Coptic loans facet + the Egyptian etymology chain  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P34-2 · Coptic loans facet + the Egyptian etymology chain  [tier: fable] [status: done 2026-07-20] [deps: —]
 Ship the P17-1 promise: the per-passage loan-code counts already stored
 in annotations become a readable facet (`--loans` on search/list — study
 how existing facets read document_facets vs annotations; the design
