@@ -44,6 +44,14 @@ class Kanjidic2ParserTest < Minitest::Test
     assert_match(/stroke_count 7/, asia.body)
   end
 
+  def test_desk_reference_codes_ride_the_body_for_the_char_card
+    love = by_id.fetch("U+611B") # 愛
+    assert_match(/^skip: 2-4-9$/, love.body, "the primary SKIP code (misclass variants excluded)")
+    assert_match(/^four_corner: 2024\.7$/, love.body)
+    assert_match(/^jis208: 1-16-06$/, love.body)
+    assert_match(/^dic: .*nelson_c 2829/, love.body, "a curated dic_number set")
+  end
+
   def test_non_english_meanings_stay_upstream
     entries.each do |entry|
       refute_match(/m_lang/, entry.body)
