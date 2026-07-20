@@ -10342,3 +10342,15 @@ page anchors: the mapping decision is the packet's design note; an
 honest partial wiring beats a fake complete one). Fetch: the notes/
 dirs join the tls sparse cone (~more MB — census and report). Docs +
 worklog.
+
+# Phase 35 — the axes phase: research axes over the grown source list (D35 rulings 2026-07-20 — the ratified set and the phase request live in the Phase-34 note above; packets elaborate from the orchestrator-held plan)
+
+## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: done] [deps: —]
+Axis definitions block (name, persona one-liner, desc, order) + a
+list-valued `axes:` key on EVERY source row — the owner-ratified
+18-axis mapping, every row re-verified against its adapter manifest,
+not the table (corrections journaled in the worklog entry).
+Acceptance: registry validation invariants test-pinned — every source
+declares ≥1 axis; every declared axis exists in the definitions block;
+axis names NEVER collide with source slugs (the resolution guarantee);
+the design note argues axes.yml-vs-sources.yml placement.

@@ -27,12 +27,19 @@
 #                                        #   (search --fuzzy; P16-4, design §4 —
 #                                        #   documentary sources only, index
 #                                        #   economics; default false)
+#     axes: [classical, ...]             # research-axis memberships (P35-0) —
+#                                        #   REQUIRED, >= 1, names defined in
+#                                        #   config/axes.yml. Axes are TAGS
+#                                        #   (multi-membership deliberate,
+#                                        #   whole-source grain); an axis name
+#                                        #   never equals a slug (validated)
 #
 # Registered sources follow. `enabled: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
 
 perseus-greek:
   adapter: Nabu::Adapters::Perseus
+  axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
@@ -43,6 +50,7 @@ perseus-greek:
 
 perseus-latin:
   adapter: Nabu::Adapters::PerseusLatin
+  axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
   enabled: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
   sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
@@ -50,6 +58,7 @@ perseus-latin:
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
+  axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: live
@@ -61,6 +70,8 @@ first1k-greek:
 
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
+  # P35-0 vs the D35 draft: +celtic (two sga treebanks) +sinitic (two lzh treebanks) — TREEBANKS-verified
+  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
@@ -120,6 +131,7 @@ ud:
 
 proiel:
   adapter: Nabu::Adapters::Proiel
+  axes: [classical, slavic, germanic]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   # Upstream proiel-treebank is frozen at release 20180408; its successor is
   # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
@@ -130,6 +142,7 @@ proiel:
 
 torot:
   adapter: Nabu::Adapters::Torot
+  axes: [slavic]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
   # unlike the frozen proiel-treebank it still gets occasional releases:
@@ -140,6 +153,7 @@ torot:
 
 iswoc:
   adapter: Nabu::Adapters::Iswoc
+  axes: [germanic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11 ("merged, flip"): synced, 5 OE texts /
                    # 2,536 sentences, OE Mark live as hub witness #9 (9-of-9 eyeballed).
   sync_policy: frozen
@@ -148,6 +162,7 @@ iswoc:
 
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
+  axes: [epigraphy]
   enabled: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
   # idp.data updates continuously (born-digital editing platform), but a
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
@@ -160,6 +175,7 @@ papyri-ddbdp:
 
 gretil:
   adapter: Nabu::Adapters::Gretil
+  axes: [indic, buddhist]
   enabled: true    # OWNER SIGN-OFF 2026-07-08: first real sync fired and eyeballed
                    # ("Enable GRETIL pls, it's synced"). 773 docs / 696,158 passages
                    # live after P9-4c recovery (118 -> 8 quarantines); Rāmāyaṇa,
@@ -171,6 +187,7 @@ gretil:
 
 oracc:
   adapter: Nabu::Adapters::Oracc
+  axes: [cuneiform]
   siblings: ["-[a-z]+"]  # P34-0 (was P13-4 frozen): any lowercase run — P/Q textids are hyphen-free
   enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
@@ -223,6 +240,7 @@ oracc:
 
 lexica:
   adapter: Nabu::Adapters::Lexica
+  axes: [classical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10 ("flip all sources enabled" after
                    # P11 merge): synced, 168,133 entries (LSJ + L&S incl. the
                    # recovered alpha/theta files), define/nabu_define eyeballed.
@@ -236,6 +254,7 @@ lexica:
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate
+  axes: [classical, biblical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
                    # (complete Clementine canon), align OT witness eyeballed
                    # (GEN 1.1, JON 1 trilingual).
@@ -250,6 +269,7 @@ vulgate:
 
 eng-web:
   adapter: Nabu::Adapters::EngWeb
+  axes: [biblical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
                    # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
@@ -264,6 +284,7 @@ eng-web:
 
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
+  axes: [biblical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
                    # NT witness live in align; show --random eyeballed.
                    # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
@@ -276,12 +297,14 @@ sblgnt:
 
 aspr:
   adapter: Nabu::Adapters::Aspr
+  axes: [germanic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 349 poems / 30,550 lines,
                    # Beowulf canonical ordinals eyeballed (A4.1:1-5).
   sync_policy: manual
 
 bosworth-toller:
   adapter: Nabu::Adapters::BosworthToller
+  axes: [germanic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 62,815 entries; define
                    # aethele/thaet folding + lemma-gloss bridge eyeballed.
   sync_policy: manual
@@ -298,6 +321,7 @@ bosworth-toller:
 # crosswalk last moved 2024-08) → manual.
 ccl:
   adapter: Nabu::Adapters::Ccl
+  axes: [egyptian]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
                    # nabu links urn:nabu:dict:ccl:C1494)
@@ -305,6 +329,7 @@ ccl:
 
 ccmh:
   adapter: Nabu::Adapters::Ccmh
+  axes: [slavic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
                    # verses, Assemanianus Mt 1:1 eyeballed.
                    # P14-5 (2026-07-12): +3 txt docs (Suprasliensis + the
@@ -316,6 +341,7 @@ ccmh:
 
 goo300k:
   adapter: Nabu::Adapters::Goo300k
+  axes: [slavic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 89 docs / 8,397 passages,
                    # gold Early Modern Slovenian eyeballed.
   sync_policy: manual
@@ -325,6 +351,7 @@ goo300k:
 
 imp:
   adapter: Nabu::Adapters::Imp
+  axes: [slavic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 658 docs / 404,897 passages
                    # (silver annotation, text-only), eyeballed.
   # license_watch candidate (P16-5, owner decision — the CC BY-SA 4.0 grant
@@ -333,6 +360,7 @@ imp:
 
 damaskini:
   adapter: Nabu::Adapters::Damaskini
+  axes: [slavic]
   siblings: ["-en"]  # P34-0 (was P23-1 frozen): literal tail — doc ids are hyphen-rich, none ends in -en
   enabled: true    # flipped 2026-07-16 (owner sign-off: synced, 46 docs incl. -en siblings, eyeballed)
                    # bitstreams, ~1.7 MB total → 23 docs / 6,036 sentences +
@@ -357,12 +385,16 @@ damaskini:
 
 wiktionary-cu:
   adapter: Nabu::Adapters::WiktionaryCu
+  axes: [slavic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define
                    # богъ → god with Proto-Slavic chain eyeballed.
   sync_policy: manual
 
 wiktionary-recon:
   adapter: Nabu::Adapters::WiktionaryRecon
+  # P35-0 vs the D35 draft: +celtic/italic/sinitic/japonic — the manifest's own attested extracts
+  # (sga/mga/wlm Celtic, xum/ett Italic-Etruscan, zho, ojp); etym stays the primary desk
+  axes: [etym, celtic, italic, sinitic, japonic]
   enabled: true    # OWNER SIGN-OFF 2026-07-12 ("w-recon scanned, etym works,
                    # flip it on"): synced, 13,053 entries across the three
                    # proto-extracts; etym walk eyeballed by owner.
@@ -388,6 +420,7 @@ wiktionary-recon:
 
 freising:
   adapter: Nabu::Adapters::Freising
+  axes: [slavic]
   siblings: ["-[a-z-]+"]  # P34-0 (was P13-11 frozen): multi-segment layer tails — works are bs<digits>
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 27 docs / 2,037 lines,
                    # GLAGOLITE eyeballed; MCP default-exclusion verified live
@@ -401,6 +434,7 @@ freising:
 
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
+  axes: [egyptian, biblical]
   enabled: true    # owner sign-off 2026-07-13: synced 482 docs / 74,169 passages
                    # (P18-1 coverage pass, 1 honest quarantine), eyeballed, flipped.
                    # Original gate note (~2.8 GB clone; CLAUDE.md
@@ -419,6 +453,7 @@ coptic-scriptorium:
 
 mw:
   adapter: Nabu::Adapters::Mw
+  axes: [indic]
   enabled: true    # owner sign-off 2026-07-13: synced 193,890 entries, flipped.
                    # Original gate note (P17-4): first real sync owner-fired — 11 MB
                    # zip fetch, 286,525 records / 193,890 grouped entries,
@@ -432,6 +467,7 @@ mw:
 
 edh:
   adapter: Nabu::Adapters::Edh
+  axes: [epigraphy]
   enabled: true    # owner sign-off 2026-07-13: synced 81,856 docs / 406,281 passages
                    # (27 quarantines pending triage), flipped. Original gate note
                    # (P17-2): awaiting the owner-fired first (and only) sync —
@@ -450,6 +486,7 @@ edh:
 
 iecor:
   adapter: Nabu::Adapters::Iecor
+  axes: [etym]
   enabled: true    # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
                    # owner sign-off 2026-07-14: synced 4,981 entries / 26k reflex rows, eyeballed, flipped.
                    # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync iecor,
@@ -466,6 +503,7 @@ iecor:
 
 liv:
   adapter: Nabu::Adapters::Liv
+  axes: [etym]
   enabled: true    # P18-6: awaiting the owner-fired first sync (657 KB GET →
                    # owner sign-off 2026-07-14: synced 305 etymons / 385 lat edges (post blank-node fix), eyeballed, flipped.
                    # 305 PIE verbal etymons / ~385 lat reflex edges; CLAUDE.md
@@ -478,6 +516,7 @@ liv:
 
 edl:
   adapter: Nabu::Adapters::Edl
+  axes: [etym]
   enabled: true    # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
                    # owner sign-off 2026-07-14: synced 2,860 entries / 2,653 edges, eyeballed, flipped.
                    # ~2,653 reflex edges across two shelves; eyeball
@@ -488,6 +527,7 @@ edl:
 
 starling:
   adapter: Nabu::Adapters::Starling
+  axes: [etym]
   enabled: true    # flipped 2026-07-16 (owner sign-off: synced, piet 3,291 landed incl. 574-b, eyeballed)
                    # 6.2 MB IE.exe zip → five shelves: 2,222 pokorny roots +
                    # 3,291 piet etymologies (P22-0; the live piet quarantine —
@@ -514,6 +554,7 @@ starling:
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
+  axes: [slavic]
   enabled: true    # flipped 2026-07-16 (owner sign-off: synced, 139,405 entries across 3 dictionaries, eyeballed)
                    # GETs, ~7 MB total → 103,185 + 8,461 + 27,759 = 139,405
                    # entries across pletersnik/jsv/besedje16; CLAUDE.md
@@ -530,6 +571,7 @@ sl-lexica:
 
 local-language:
   adapter: Nabu::Adapters::LocalLanguage
+  axes: [local]
   enabled: true    # P19-1: enabled by DEFAULT, deliberately -- the checklist's
                    # "enabled: false until first real sync" guards network cost
                    # and unverified licenses, and a LOCAL shelf has neither
@@ -546,6 +588,7 @@ local-language:
 
 local-library:
   adapter: Nabu::Adapters::LocalLibrary
+  axes: [local]
   enabled: true    # P19-4: enabled by DEFAULT — the P19-1 argument verbatim:
                    # the checklist's "enabled: false until first real sync"
                    # guards network cost and unverified licenses, and a LOCAL
@@ -568,6 +611,7 @@ local-library:
 
 local-notes:
   adapter: Nabu::Adapters::LocalNotes
+  axes: [local]
   enabled: true    # P24-1: enabled by DEFAULT -- the P19-1 local-shelf argument
                    # verbatim: the checklist's "enabled: false until first real
                    # sync" guards network cost and unverified licenses, and a
@@ -591,6 +635,7 @@ local-notes:
 
 riig:
   adapter: Nabu::Adapters::Riig
+  axes: [epigraphy, celtic]
   siblings: ["-fr"]  # P34-0 (was P25-1/P30 frozen): literal tail — no upstream id ends in -fr
   enabled: true    # flipped 2026-07-18 (owner sign-off: 477 docs live; sibling-peek quarantine noise = open hotfix)
                    # corpus map + 428 EpiDoc records, polite sequential;
@@ -615,6 +660,7 @@ riig:
 
 ogham:
   adapter: Nabu::Adapters::Ogham
+  axes: [epigraphy, celtic]
   enabled: true    # flipped 2026-07-18 (owner sign-off: 834 docs live; empty-layer quarantine noise = open hotfix; class stays nc pending registry #14)
                    # git clone; CLAUDE.md checklist §6 — bin/nabu sync
                    # ogham, eyeball nabu show urn:nabu:ogham:i-may-010
@@ -632,6 +678,7 @@ ogham:
 
 isicily:
   adapter: Nabu::Adapters::Isicily
+  axes: [epigraphy, italic]
   siblings: ["-en", "-it", "-translit"]  # P34-0: record ids are isic<digits> — trivially tail-free
   translations: true  # P34-0: the -en/-it prose translation siblings (1,184/389 non-empty divs)
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
@@ -664,6 +711,7 @@ isicily:
 
 itant:
   adapter: Nabu::Adapters::Itant
+  axes: [epigraphy, italic]
   siblings: ["-(eng|ita|dipl)"]  # P34-0 (was P29-2/P30 frozen): the closed minted-tail set — stems end in digits
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
@@ -693,6 +741,7 @@ itant:
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
+  axes: [italic, etym]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (bin/nabu sync sabellic-loans — no network, vendored
                    # copy + LocalFetch pin; eyeball `nabu etym rufus` for
@@ -712,6 +761,7 @@ sabellic-loans:
 
 local-source:
   adapter: Nabu::Adapters::LocalSource
+  axes: [local]
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
                    # argument verbatim: the checklist's "enabled: false until
                    # first real sync" guards network cost and unverified
@@ -732,6 +782,7 @@ local-source:
 
 corph:
   adapter: Nabu::Adapters::Corph
+  axes: [celtic]
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 76 docs / 17,942 gold sga passages, eyeballed)
   # CorPH / Corpus PalaeoHibernicum (ERC ChronHib, Maynooth) — 78 Early Irish
   # texts, 7th–10th c. (Annals of Ulster, Vita Columbae, Blathmac, the
@@ -749,6 +800,8 @@ corph:
 
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
+  # P35-0 vs the D35 draft: +sinitic — the P32-1 lzh Agamas ride this same row (whole-source tagging)
+  axes: [indic, buddhist, sinitic]
   siblings: ["-en"]  # P34-0 (was P26-1 frozen): literal tail — stems like dhp21-32 are hyphen-rich, none ends in -en
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced, --parallel eyeballed)
                    # bilara-data at census time; expected ≈7,310 root docs /
@@ -792,6 +845,7 @@ suttacentral:
 
 oshb:
   adapter: Nabu::Adapters::Oshb
+  axes: [biblical, hebrew]
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced, three-legged align eyeballed)
                    # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
                    # 39 OSIS books / ~23,213 verses / ~305,507 morph-tagged
@@ -813,6 +867,7 @@ oshb:
 
 sdbh:
   adapter: Nabu::Adapters::Sdbh
+  axes: [biblical, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # GET (FileFetch, sha256-pinned), 7,932 entries / 260,813
                    # verse-word citation rows projected. CLAUDE.md checklist
@@ -833,6 +888,7 @@ sdbh:
   # by its own README and actively growing: re-syncs are an owner decision.
 sefaria:
   adapter: Nabu::Adapters::Sefaria
+  axes: [biblical, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # §6): bin/nabu sync sefaria — index-driven fetch, books.json
                    # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
@@ -859,6 +915,7 @@ sefaria:
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
   adapter: Nabu::Adapters::Bhsa
+  axes: [biblical, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
                    # tf/2021 + README.md, 118 files ≈ 173 MB of the 1.6 GB
@@ -886,6 +943,8 @@ bhsa:
 
 bridging:
   adapter: Nabu::Adapters::Bridging
+  # P35-0: the feature module rides its host bhsa's desks (D35 spec: hebrew+biblical)
+  axes: [biblical, hebrew]
   enabled: false   # PERMANENTLY false — a feature module, not a text source:
                    # discover mints no documents, so there is nothing to
                    # serve or flip. The row exists to give the owner the
@@ -914,6 +973,7 @@ bridging:
 
 dss:
   adapter: Nabu::Adapters::Dss
+  axes: [biblical, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync dss — sparse GitFetch cone
                    # tf/2.0 + docs/about.md, 79 files ≈ 139 MB of the 206 MB
@@ -947,6 +1007,7 @@ dss:
 
 tlhdig:
   adapter: Nabu::Adapters::Tlhdig
+  axes: [epigraphy, hittite, cuneiform]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # §6: bin/nabu sync tlhdig — one 74.4 MB GET, ~385 MB
                    # unpacked; expect ~23,490 documents = 23,937 files − 1
@@ -987,6 +1048,7 @@ tlhdig:
 
 sarit:
   adapter: Nabu::Adapters::Sarit
+  axes: [indic, buddhist]
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced 78 docs / 345,601 passages; the 5 named quarantines = the documented P26-2 floor)
                    # git clone — 170 MB TEI + 33 MB .git at HEAD 1eac9ee;
                    # CLAUDE.md checklist §6: bin/nabu sync sarit, eyeball
@@ -1008,6 +1070,7 @@ sarit:
 
 dcs:
   adapter: Nabu::Adapters::Dcs
+  axes: [indic]
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced, MW joins eyeballed)
                    # GitFetch of github.com/OliverHellwig/sanskrit scoped to
                    # dcs/data/conllu (+ dcs/data/readme.md) — the cone is
@@ -1034,6 +1097,7 @@ dcs:
 
 diorisis:
   adapter: Nabu::Adapters::Diorisis
+  axes: [classical]
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced via P26-6 live proof — 764 docs / 502,865 passages, 53 Rahlfs files excluded by rule, eyeballed)
                    # the frozen figshare v1 zip — 194,443,428 bytes, md5
                    # f3a26efa7e7d2b93d1bcca26900d180a verified against figshare's
@@ -1070,6 +1134,7 @@ diorisis:
 
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
+  axes: [egyptian]
   siblings: ["-de"]  # P34-0 (was P28-2 frozen): literal tail — no dataset slug ends in -de
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # bin/nabu sync tla-hf — two FileFetch GETs, 7,284,199 B
@@ -1104,6 +1169,7 @@ tla-hf:
 
 aes:
   adapter: Nabu::Adapters::Aes
+  axes: [egyptian]
   siblings: ["-de"]  # P34-0 (was P28-0 frozen): literal tail — text ids are uppercase [A-Z0-9]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync aes — a sparse GitFetch of
@@ -1134,6 +1200,7 @@ aes:
   translations: true
 aed:
   adapter: Nabu::Adapters::Aed
+  axes: [egyptian]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync aed — sparse clone, the
                    # ~18 MB dictionary cone of a 651 MB repo — then eyeball
@@ -1152,6 +1219,7 @@ aed:
 
 ceipom:
   adapter: Nabu::Adapters::Ceipom
+  axes: [epigraphy, italic]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync ceipom — five FileFetch
                    # GETs off Zenodo record 6475427 (texts/sentences/
@@ -1197,6 +1265,7 @@ ceipom:
 # (no registry change — the P25-2 precedent).
 open-etruscan:
   adapter: Nabu::Adapters::OpenEtruscan
+  axes: [epigraphy, italic]
   siblings: ["-en"]  # P34-0 (was P29-0/P30 frozen): literal tail — no upstream id ends in -en
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync open-etruscan — two
@@ -1238,6 +1307,7 @@ open-etruscan:
 
 larth-etp:
   adapter: Nabu::Adapters::LarthEtp
+  axes: [italic]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
                    # GET; expect 1,122 entries; eyeball `nabu define avil`
@@ -1256,6 +1326,7 @@ larth-etp:
   # occasionally → manual; a re-pin is an owner decision.
 lexlep:
   adapter: Nabu::Adapters::Lexlep
+  axes: [epigraphy, celtic, italic]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
                    # 50-title api.php batches, minutes at the polite delay —
@@ -1277,6 +1348,8 @@ lexlep:
 
 lexlep-words:
   adapter: Nabu::Adapters::LexlepWords
+  # P35-0: absent from the D35 draft — mirrors lexlep (two grains of one wiki share their desks)
+  axes: [epigraphy, celtic, italic]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync lexlep-words — 628 Word
                    # pages — then eyeball nabu define uvamokozis / define
@@ -1291,6 +1364,7 @@ lexlep-words:
 
 tir:
   adapter: Nabu::Adapters::Tir
+  axes: [epigraphy, italic]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6: bin/nabu sync tir — ~770 pages — then
                    # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
@@ -1309,6 +1383,7 @@ tir:
 
 iip:
   adapter: Nabu::Adapters::Iip
+  axes: [epigraphy, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # (CLAUDE.md checklist §6 — bin/nabu sync iip, eyeball
                    # nabu show urn:nabu:iip:dabb0001 (Jewish Aramaic
@@ -1339,6 +1414,7 @@ iip:
   # at the census) → re-syncs are owner-fired.
 hebrew-lexicon:
   adapter: Nabu::Adapters::HebrewLexicon
+  axes: [biblical, hebrew]
   enabled: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync hebrew-lexicon — plain
                    # GitFetch, 9.2 MB — then eyeball nabu define ברא /
@@ -1361,6 +1437,7 @@ hebrew-lexicon:
 
 etcsl:
   adapter: Nabu::Adapters::Etcsl
+  axes: [cuneiform]
   siblings: ["-en"]  # P34-0 (was P31-5 frozen): literal tail on the composition number
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
   # P31-5: the Electronic Text Corpus of Sumerian Literature, Revised
@@ -1380,6 +1457,7 @@ etcsl:
   translations: true    # the English prose translations are half the packet's value
 cdli:
   adapter: Nabu::Adapters::Cdli
+  axes: [cuneiform]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified — 353,156 docs / 2.19M passages, all P31 on for release)
                    # (checklist §6: bin/nabu sync cdli — GitFetch clone +
                    # LFS materialization, 154.8 MB csv + 86.9 MB atf —
@@ -1414,6 +1492,7 @@ cdli:
   lemma_tier: silver
 ebl:
   adapter: Nabu::Adapters::Ebl
+  axes: [cuneiform]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # (checklist §6: bin/nabu sync ebl — one 73.9 MB GET,
                    # sha-pinned — then eyeball nabu show
@@ -1454,6 +1533,7 @@ ebl:
   lemma_tier: silver
 cuc:
   adapter: Nabu::Adapters::Cuc
+  axes: [cuneiform]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync cuc — sparse GitFetch cone tf/0.2.8 +
                    # README.md, 19 files ≈ 3.5 MB — then eyeball
@@ -1483,6 +1563,7 @@ cuc:
 
 peshitta:
   adapter: Nabu::Adapters::Peshitta
+  axes: [biblical, syriac]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync peshitta — sparse GitFetch cone tf/0.2 +
                    # docs/about.md, 13 files ≈ 9 MB — then eyeball
@@ -1516,6 +1597,7 @@ peshitta:
 
 syriac-corpus:
   adapter: Nabu::Adapters::SyriacCorpus
+  axes: [biblical, syriac]
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
                    # bin/nabu sync syriac-corpus — sparse GitFetch cone
                    # data/tei, 632 TEI files ≈ 39 MB — then eyeball
@@ -1546,6 +1628,7 @@ syriac-corpus:
 
 baxter-sagart:
   adapter: Nabu::Adapters::BaxterSagart
+  axes: [sinitic]
   enabled: false  # P32-3: awaiting the owner-fired first sync (one 410 KB GET,
                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
                   # baxter-sagart, eyeball `nabu define 天` / `define 馬` on
@@ -1565,6 +1648,7 @@ baxter-sagart:
 
 tshet-uinh:
   adapter: Nabu::Adapters::TshetUinh
+  axes: [sinitic]
   enabled: false  # P32-3: awaiting the owner-fired first sync (~10 MB
                   # GitFetch clone of nk2028/tshet-uinh-data; CLAUDE.md
                   # checklist §6: bin/nabu sync tshet-uinh, eyeball
@@ -1589,6 +1673,7 @@ tshet-uinh:
 
 unihan:
   adapter: Nabu::Adapters::Unihan
+  axes: [sinitic, japonic]
   enabled: false   # awaiting owner-fired first sync (checklist §6:
                    # bin/nabu sync unihan — 8.5 MB zip GET, ~65k entries —
                    # then eyeball nabu define 一 / nabu show
@@ -1603,6 +1688,7 @@ unihan:
 
 edrdg:
   adapter: Nabu::Adapters::Edrdg
+  axes: [japonic]
   enabled: false   # awaiting owner-fired first sync (checklist §6:
                    # bin/nabu sync edrdg — 1.5 MB + 10.5 MB gz GETs,
                    # 13,108 + 217,951 entries — then eyeball nabu define 愛
@@ -1620,6 +1706,7 @@ edrdg:
 
 hdic:
   adapter: Nabu::Adapters::Hdic
+  axes: [sinitic, japonic]
   enabled: false   # awaiting owner-fired first sync AND the license ruling
                    # below (checklist §6: bin/nabu sync hdic — git clone
                    # ~50 MB — then eyeball nabu define 天 across tsj/syp,
@@ -1637,6 +1724,7 @@ hdic:
   sync_policy: manual
 oncoj:
   adapter: Nabu::Adapters::Oncoj
+  axes: [japonic]
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj — sparse
                    # GitFetch of github.com/ONCOJ/data pinned to the
                    # "release" TAG (commit fd34a1b2, 2021-12-26; cone
@@ -1668,6 +1756,7 @@ oncoj:
 
 oncoj-lexicon:
   adapter: Nabu::Adapters::OncojLexicon
+  axes: [japonic]
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync oncoj-lexicon —
                    # sparse GitFetch (lexicon.xml + README, 3.4 MB, same
                    # pinned tag) — expect 5,868 entries (5,871 upstream − 3 empty-orth bound stems, skip-by-rule censused); eyeball nabu
@@ -1689,6 +1778,7 @@ oncoj-lexicon:
 
 cbeta:
   adapter: Nabu::Adapters::Cbeta
+  axes: [buddhist, sinitic]
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync cbeta — sparse
                    # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
@@ -1717,6 +1807,7 @@ cbeta:
   sync_policy: manual
 kanripo:
   adapter: Nabu::Adapters::Kanripo
+  axes: [sinitic]
   enabled: false   # CLAUDE.md checklist §6: bin/nabu sync kanripo — the
                    # first many-repo wave (KanripoFetch, architecture §8):
                    # KR-Catalog clone + 3,512 per-text shallow clones
@@ -1760,6 +1851,7 @@ kanripo:
   classes: [KR1, KR2, KR3, KR4]
 tls:
   adapter: Nabu::Adapters::Tls
+  axes: [sinitic]
   enabled: false   # P33-4: awaiting the owner-fired first sync (sparse
                    # GitFetch of tls-kr/tls-data; the P34-4 cone is
                    # concepts/ + words/ + notes/doc + notes/swl, ~441 MB
