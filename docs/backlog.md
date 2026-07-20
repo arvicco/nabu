@@ -10423,7 +10423,7 @@ Acceptance: the table in the packet report (NO behavior changes) +
 a `# census: <number>, <date>` comment-convention proposal for the
 gate's conventions scan.
 
-## P35-6 · Recalibration + the honesty invariants  [tier: fable] [status: ready] [deps: P35-5]
+## P35-6 · Recalibration + the honesty invariants  [tier: fable] [status: dispatched 2026-07-20] [deps: P35-5]
 Goal: dev-loop §6b passes 2–3 — per inventoried site: blame the era,
 RE-MEASURE against the live catalog, classify OK (document with
 census+date) / HARDEN / GENERALIZE / RETIRE; the journaled gate finds
