@@ -55,7 +55,9 @@ module Nabu
 
       # Pull more index hits than the caller's limit so that catalog-side
       # filtering (language/license/withdrawn) can drop rows and still fill
-      # the page (same factor as Search).
+      # the page (same factor as Search). Exhaustion is ANNOUNCED (P35-6)
+      # via incomplete_hint, as in Search.
+      # census: 5505159, 2026-07-20, live passages at re-measure (3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)
@@ -80,18 +82,21 @@ module Nabu
       # filter deliberately composes with the lemma anchor.
       def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil,
               gold_only: false, loans: nil)
+        @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         facets = morph.to_s.strip.empty? ? nil : MorphFacets.parse(morph)
         if facets
+          # The morph path pulls the WHOLE candidate set (no inner window —
+          # see #run_with_morph), so its pages are always complete.
           return run_with_morph(variants, facets, lang: lang, license: license, limit: limit,
                                                   urn: urn, source: source, gold_only: gold_only,
                                                   loans: loans)
         end
 
-        hits = lemma_hits(variants, inner_limit: limit * INNER_LIMIT_FACTOR, urn: urn,
-                                    gold_only: gold_only)
+        inner_limit = limit * INNER_LIMIT_FACTOR
+        hits = lemma_hits(variants, inner_limit: inner_limit, urn: urn, gold_only: gold_only)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -99,9 +104,13 @@ module Nabu
                .to_h { |row| [row.fetch(:passage_id), row] }
         by_id = hits.to_h { |row| [row.fetch(:passage_id), row] }
 
-        results = ordered_ids.filter_map { |id| rows[id] }
-                             .first(limit)
-                             .map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
+        page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        note_page_completeness(
+          window_exhausted: hits.size >= inner_limit,
+          filters_active: [lang, license, source, loans].compact.any?,
+          page_size: page.size, limit: limit
+        )
+        results = page.map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
         attach_glosses(results)
       end
 

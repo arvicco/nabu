@@ -2,14 +2,14 @@
 
 require "json"
 
-require_relative "../date_axis"
+require_relative "../timeline"
 
 module Nabu
   module Adapters
     # The `tla-jsonl` family reader (P28-2): one record per line of the TLA's
     # official Hugging Face train.jsonl artifacts. ONE reader shared by the
-    # adapter (Adapters::TlaHf) and the date-axis extractor
-    # (Store::AxisBuilder::TlaHfDates), so record numbering and date parsing
+    # adapter (Adapters::TlaHf) and the timeline extractor
+    # (Store::TimelineBuilder::TlaHfDates), so record numbering and date parsing
     # can never drift between the two.
     #
     # == Record shape (censused 2026-07-18 on both full artifacts;
@@ -120,15 +120,15 @@ module Nabu
       end
 
       # A signed historical year, or nil for upstream's empty string. Both
-      # corpora are censused free of year 0 — DateAxis's tripwire would
+      # corpora are censused free of year 0 — Timeline's tripwire would
       # surface one as damage (ParseError), never a silent skip.
       def year(fields, key, number, path)
         raw = fields[key]
         return nil if raw.nil? || raw.to_s.strip.empty?
 
-        DateAxis.parse_year(raw) or
+        Timeline.parse_year(raw) or
           raise ParseError, "#{path}: line #{number}: unparseable #{key} #{raw.inspect}"
-      rescue DateAxis::InvalidYear => e
+      rescue Timeline::InvalidYear => e
         raise ParseError, "#{path}: line #{number}: #{e.message}"
       end
     end

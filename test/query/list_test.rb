@@ -56,7 +56,7 @@ module Query
       )
     end
 
-    def make_axis(doc, not_before:, not_after:)
+    def make_timeline(doc, not_before:, not_after:)
       @catalog[:document_axes].insert(document_id: doc.id, not_before: not_before,
                                       not_after: not_after, axis_source: "hgv")
     end
@@ -137,9 +137,9 @@ module Query
       assert_nil card.collections
     end
 
-    def test_card_dated_coverage_when_axis_rows_exist
+    def test_card_dated_coverage_when_timeline_rows_exist
       doc = seed_ccmh
-      make_axis(doc, not_before: -113, not_after: 602)
+      make_timeline(doc, not_before: -113, not_after: 602)
       card = list.card("ccmh")
       assert_equal 1, card.dated.docs
       assert_equal(-113, card.dated.min)
@@ -214,7 +214,7 @@ module Query
                    list.documents("ccmh", withdrawn_only: true).rows.map(&:urn)
     end
 
-    def test_documents_date_window_filters_on_the_axis
+    def test_documents_date_window_filters_on_the_timeline
       seed_document_pile
       dated = @catalog[:documents].where(urn: "urn:nabu:ccmh:mar:mt").first
       @catalog[:document_axes].insert(document_id: dated[:id], not_before: 850, not_after: 900,

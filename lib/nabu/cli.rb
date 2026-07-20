@@ -9,6 +9,11 @@ module Nabu
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    # The tag-semantics note the axis-grouped surfaces (`list --axis`,
+    # `status --axis`, P35-1) state ONCE: axes are TAGS over the source list,
+    # so a source appears under every axis it serves — never a folder owning it.
+    AXIS_TAG_NOTE = "Axes are tags, not folders — a source appears under every desk it serves."
+
     # Raise Thor::Error (rather than aborting the process abruptly) so failures
     # surface a clean stderr message and a non-zero exit status.
     def self.exit_on_failure?
@@ -47,9 +52,35 @@ module Nabu
       say Nabu::VERSION
     end
 
-    desc "sync [SOURCE]", "Fetch and load a source (or --all live sources) into the store"
+    desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
+    long_desc <<~HELP, wrap: false
+      Fetch and load into the store. The positional NAME resolves EXACT SLUG
+      FIRST, then axis: a source slug syncs that one source (the explicit
+      request — a disabled source syncs anyway, with a note); a name that is
+      not a slug but IS a research axis (config/axes.yml) expands to the
+      axis's members. Axis names can never equal source slugs (a load-time
+      guarantee), so the resolution is unambiguous.
+
+      Axis expansion is PURE fan-out onto the per-source path: each member
+      syncs exactly as `sync <slug>` would, per-source report lines
+      byte-unchanged, under a one-line axis header. The asymmetry to know:
+      an axis expansion is NOT an explicit per-source request, so DISABLED
+      members are SKIPPED — reported by name on one `skipped (disabled): …`
+      line, never silently — whereas `sync <disabled-slug>` (explicit) still
+      syncs. `--axis a,b` selects several axes and prints one group each, in
+      order. `--all` is a flat batch (enabled + live sources), never grouped.
+
+      Examples:
+        nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
+        nabu sync celtic          # the celtic axis's enabled members
+        nabu sync --axis celtic,italic --parse-only
+        nabu sync --all
+    HELP
     option :all, type: :boolean, default: false,
                  desc: "Sync every enabled source with sync_policy: live"
+    option :axis, type: :string, banner: "NAME[,NAME...]",
+                  desc: "Sync the enabled members of one or more research axes (config/axes.yml), " \
+                        "grouped; disabled members are skipped by name (an axis is not an explicit request)"
     option :parse_only, type: :boolean, default: false,
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
@@ -66,7 +97,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      options[:all] ? sync_all(runner) : sync_one(runner, registry, slug, db, ledger)
+      run_sync(runner, registry, slug, db, ledger)
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -323,6 +354,9 @@ module Nabu
     HELP
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
+    option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
+                  desc: "Group the status table under the research axes (config/axes.yml): bare = all in " \
+                        "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
     def status
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -333,7 +367,14 @@ module Nabu
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+      # --axis (P35-1): the same rows grouped under the research desks.
+      report = if options[:axis]
+                 Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
+                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+               else
+                 Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+               end
+      say report
     ensure
       db&.disconnect
       ledger&.disconnect
@@ -357,7 +398,7 @@ module Nabu
       architecture §16 — seed the shelf once with
       --export-source-dossiers), license class(es) with the source's
       credit line when it carries one, counts, a per-language passage
-      breakdown, its dictionaries (dictionary shelves), date-axis coverage
+      breakdown, its dictionaries (dictionary shelves), timeline coverage
       (dated docs + year range) when present, genre-facet and collection
       summaries when present. A card, not a dump — the enumerations below
       go deeper. `nabu list --long` adds each source's description line to
@@ -375,13 +416,21 @@ module Nabu
       without a dossier description shows the honest stub hint. Composes
       with nothing — it IS the whole-library view.
 
+      `nabu list --axis` groups the census under the research axes (the
+      owner's desks, config/axes.yml): each axis leads with its persona
+      line, then the same census rows, indented. Axes are TAGS, not folders
+      — a source appears under every axis it serves (stated once). Bare
+      --axis shows every axis in the ratified order; `--axis slavic` one
+      axis; `--axis a,b` those axes only. An unknown axis names the known
+      set. The bare (ungrouped) census is unchanged.
+
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
         --documents    every document: urn — title [lang] license, urn order,
                        withdrawn/retired flagged inline. Filters: --lang,
                        --license, --withdrawn (ONLY withdrawn/retired — the
-                       stewardship lens), --from/--to/--century (the date
-                       axis, as in search).
+                       stewardship lens), --from/--to/--century (the
+                       timeline, as in search).
         --entries      a dictionary shelf's entries: headword [dict] — gloss.
                        Filters: --lang (dictionary language), --prefix STR
                        (folded headword prefix — bh finds *bʰer-, the define
@@ -400,6 +449,8 @@ module Nabu
       Examples:
         nabu list                                # the census, every shelf
         nabu list --sources                      # the one-page grouped map
+        nabu list --axis                         # the census, grouped by desk
+        nabu list --axis slavic                  # one desk's shelves
         nabu list ccmh                           # one shelf's card
         nabu list local-library --documents      # what did I ingest?
         nabu list local-library --collections    # …and how is it filed?
@@ -434,12 +485,16 @@ module Nabu
     option :withdrawn, type: :boolean, default: false,
                        desc: "With --documents: ONLY withdrawn/retired documents (the stewardship lens)"
     option :from, type: :numeric, banner: "YEAR",
-                  desc: "With --documents: earliest date on the axis (negative = BCE)"
-    option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the axis"
+                  desc: "With --documents: earliest date on the timeline (negative = BCE)"
+    option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the timeline"
     option :century, type: :numeric, banner: "N",
                      desc: "With --documents: one century's --from/--to shorthand (6, -2)"
     option :long, type: :boolean, default: false,
                   desc: "Census only: add each source's dossier description line (the local-source shelf)"
+    option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
+                  desc: "Group the census under the research axes (config/axes.yml): bare = all in " \
+                        "ratified order, NAME[,NAME…] = those axes only. A source appears under each " \
+                        "axis it serves"
     option :"export-source-dossiers", type: :boolean, default: false,
                                       desc: "Owner one-shot: scaffold a canonical/local-source dossier for " \
                                             "EVERY registered source, descriptions seeded from existing " \
@@ -457,9 +512,12 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      require_axis!(catalog) if from || to
+      require_timeline!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
-      if options[:sources]
+      if options[:axis]
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        print_census_by_axis(query.census, selected_axes(registry.axes), registry)
+      elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
       elsif options[:documents]
@@ -632,7 +690,7 @@ module Nabu
       with no facet row falls out under an active filter (honest absence:
       only faceted sources — inscriptions — can match). Like the date
       filters they do not combine with --lemma/--near. Facet rows land at
-      `nabu rebuild` (like the date/place axis).
+      `nabu rebuild` (like the timeline).
 
       LOANS (--loans CODE): the language-contact facet (P34-2, reading the
       P17-1 annotations) — keep only passages carrying at least one token
@@ -765,15 +823,16 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-      require_axis!(catalog) if from || to || place
+      require_timeline!(catalog) if from || to || place
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
 
-      results = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
-                                   .run(query, lang: options[:lang], license: options[:license],
-                                               limit: options[:limit].to_i, from: from, to: to, place: place,
-                                               facets: facets, source: options[:source], loans: loans)
-      print_search_results(results, facets: facets, query: query, loans: loans)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+      results = searcher.run(query, lang: options[:lang], license: options[:license],
+                                    limit: options[:limit].to_i, from: from, to: to, place: place,
+                                    facets: facets, source: options[:source], loans: loans)
+      print_search_results(results, facets: facets, query: query, loans: loans,
+                                    incomplete: searcher.incomplete_hint)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -796,11 +855,12 @@ module Nabu
       One row per passage: a passage with the keyword twice shows its first
       occurrence.
 
-      Layout: left context is trimmed to --width characters per side (default
-      40) and right-justified so the keyword column lines up; the right context
-      is trimmed to the same width; clipped context is marked with …. Each row
-      ends with the passage urn and [language]. Alignment counts display
-      characters (fine for grc/lat/chu); it does not model East-Asian width.
+      Layout: left context is trimmed to --width cells per side (default 40)
+      and right-justified so the keyword column lines up; the right context is
+      trimmed to the same width; clipped context is marked with …. Each row
+      ends with the passage urn and [language]. Alignment counts East-Asian
+      display width (Nabu::Display.width), so a lzh/ojp Han line lines up its
+      keyword column exactly where a grc line does — each ideograph two cells.
 
       Filters (as in search): --lang, --license, --limit (default 20).
 
@@ -1211,11 +1271,20 @@ module Nabu
                                                   #   "covers :1.1–:1.43; range shows :1.5–:1.10"
         nabu show urn:cts:greekLit:tlg0013.tlg013.perseus-eng2:1 --parallel grc
                                                   # one translated line + its original
+        nabu show urn:nabu:oshb:gen:1:1 --tokens  # + the stored token annotations,
+                                                  #   verbatim (form, lemma, osm, …)
+
+      TOKENS (--tokens): appends the passage's stored token annotations as
+      one line per token — `form` first, then every key the store holds for
+      that token, exactly as stored (the honest raw view; nothing decoded,
+      nothing invented). A passage without token annotations, and a
+      document/range urn, say so.
 
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
       "withdrawn" or "retired upstream" actually holds; read a Greek work
-      you can't sight-read next to its English translation.
+      you can't sight-read next to its English translation; inspect the
+      exact lemma/morphology evidence a treebank stored for one passage.
     HELP
     option :full_urn, type: :boolean, default: false,
                       desc: "List document passages with absolute urns instead of :suffixes"
@@ -1227,10 +1296,16 @@ module Nabu
                     desc: "With --random: draw only from this source (default: the whole corpus)"
     option :count, type: :numeric, default: 1,
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
+    option :tokens, type: :boolean, default: false,
+                    desc: "Append the passage's stored token annotations verbatim (form + every key present)"
     display_option
     def show(urn = nil)
       urn = urn.to_s.strip
       display_mode
+      if options[:tokens] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --tokens does not compose with --random/--parallel"
+      end
+
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
@@ -1251,6 +1326,7 @@ module Nabu
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
+      print_show_tokens(result) if options[:tokens]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
@@ -1796,7 +1872,7 @@ module Nabu
       list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
 
       DIACHRONY (--by-century): instead of one document's lemmas, plot the DATED
-      corpus across centuries (P15-2, the date/place axis). Bare, it is the shape
+      corpus across centuries (P15-2, the timeline). Bare, it is the shape
       of your dated holdings — one row per century (BCE/CE), the document count.
       With a text QUERY it becomes "plot this word across centuries": how many
       dated documents attest the term in each century. Composes with --lang,
@@ -2052,6 +2128,11 @@ module Nabu
                           "corpora are romanized (try guþ, jah)"]
     }.freeze
 
+    # H9 (P35-6): the skip-with-note rule for a corrupt annotations_json —
+    # Show marks the parse failure (ANNOTATIONS_UNREADABLE) and every
+    # render that would have used the lane says so.
+    ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
+
     no_commands do
       # -- display policy (P27-0) ------------------------------------------
       # Passage text reaches the terminal ONLY through display_text, which
@@ -2178,7 +2259,7 @@ module Nabu
           idx = options[:century].to_i
           raise Thor::Error, "date filter: there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if idx.zero?
 
-          return Nabu::DateAxis.century_bounds(idx)
+          return Nabu::Timeline.century_bounds(idx)
         end
 
         from = coerce_year(options[:from], "--from")
@@ -2202,14 +2283,14 @@ module Nabu
       # A date/place filter needs document_axes; a catalog that predates
       # migration 008 (never rebuilt) hasn't got it. Fail with a clear pointer
       # rather than a Sequel "no such table".
-      def require_axis!(catalog)
+      def require_timeline!(catalog)
         return if catalog.table_exists?(:document_axes)
 
-        raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
+        raise Thor::Error, "no timeline (this catalog predates it) — run nabu rebuild"
       end
 
       # A facet filter needs document_facets (migration 009) — same honest
-      # pointer as the axis guard.
+      # pointer as the timeline guard.
       def require_facets!(catalog)
         return if catalog.table_exists?(:document_facets)
 
@@ -2260,6 +2341,15 @@ module Nabu
         ).any?)
           raise Thor::Error, "list: --sources is the one-page grouped map — it composes with nothing"
         end
+        # --axis groups the bare census under the research desks; it is a
+        # census view, not an enumeration — like --sources, it composes with
+        # nothing (a SOURCE, an enumeration, --long, --sources are all a
+        # different question).
+        if options[:axis] && (!slug.empty? || modes.any? || options[:sources] ||
+                              options.values_at("long", "export-source-dossiers", "dry-run").any?)
+          raise Thor::Error, "list: --axis groups the census under the research axes — " \
+                             "drop the SOURCE/enumeration flags"
+        end
         if modes.size > 1
           raise Thor::Error, "list: give one of --documents, --entries, --collections, --loans per invocation"
         end
@@ -2306,6 +2396,52 @@ module Nabu
           description = descriptions && descriptions[row.slug]
           say "#{' ' * (width + 2)}#{truncate_line(description)}" if description
         end
+        say census_summary(rows)
+      end
+
+      # Resolve the --axis value to the ordered Axis list to render (P35-1).
+      # Bare (empty) --axis = every axis in the ratified file order; a
+      # comma-list = those axes, in the order asked (deduped, first wins). An
+      # unknown name is a clean error naming the known set — the resolution
+      # guarantee (an axis name can never collide with a slug, so this is
+      # unambiguous). No axes defined at all is its own honest miss.
+      def selected_axes(axis_registry)
+        if axis_registry.empty?
+          raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
+        end
+
+        spec = options[:axis].to_s.strip
+        return axis_registry.each_axis.to_a if spec.empty?
+
+        spec.split(",").map(&:strip).reject(&:empty?).uniq.map do |name|
+          axis_registry[name] ||
+            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: #{axis_registry.names.join(', ')}")
+        end
+      end
+
+      # `list --axis` (P35-1): the census grouped under the research axes
+      # (the owner's desks, config/axes.yml). The tag-semantics note is
+      # stated once up front; each axis leads with its VERBATIM persona line
+      # (P35-0 first-class render data) and then the SAME census rows the
+      # flat view prints, indented — a source under every axis it serves
+      # (dual-tagging, D35). An axis with nothing held yet says so honestly.
+      # Slug width is global so alignment is stable across groups.
+      def print_census_by_axis(rows, axes, registry)
+        return say("nothing held yet — run nabu sync") if rows.empty?
+
+        width = rows.map { |row| row.slug.length }.max
+        say AXIS_TAG_NOTE
+        axes.each do |axis|
+          say ""
+          say "#{axis.name} — #{axis.persona}"
+          members = rows.select { |row| registry[row.slug]&.axes&.include?(axis.name) }
+          if members.empty?
+            say "  (nothing held on this axis yet)"
+          else
+            members.each { |row| say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+          end
+        end
+        say ""
         say census_summary(rows)
       end
 
@@ -2404,7 +2540,7 @@ module Nabu
         parts.empty? ? "empty" : parts.join(" ")
       end
 
-      # The optional card layers: date-axis coverage, facet summary, and the
+      # The optional card layers: timeline coverage, facet summary, and the
       # collections census (inlined when small, deferred to --collections
       # when it would swamp the card).
       def print_card_axes(card)
@@ -2625,7 +2761,10 @@ module Nabu
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
-        print_axis(passage.axis)
+        print_timeline(passage.timeline)
+        # H9 (P35-6): a corrupt annotation lane announces itself instead of
+        # posing as an unannotated passage.
+        say "  note: #{ANNOTATIONS_UNREADABLE_NOTE}" if annotations_unreadable?(passage)
         return if passage.provenance.empty?
 
         say "  provenance:"
@@ -2634,12 +2773,54 @@ module Nabu
         end
       end
 
+      # `show URN --tokens` (P35-6, the journaled gate find): the honest RAW
+      # view of the stored token annotations — one line per token, `form`
+      # first, then EVERY other key exactly as stored (lemma/gloss/osm/lang/
+      # …, nested values as compact JSON). No display transforms, no
+      # invention; a passage without tokens, and a non-passage grain, both
+      # say so instead of rendering nothing.
+      def print_show_tokens(result)
+        unless result.is_a?(Nabu::Query::Show::PassageResult)
+          return say "--tokens renders at passage grain — give a passage urn"
+        end
+        return say ANNOTATIONS_UNREADABLE_NOTE if annotations_unreadable?(result)
+
+        tokens = result.annotations["tokens"]
+        tokens = tokens.is_a?(Array) ? tokens.grep(Hash) : []
+        return say "no token annotations stored for this passage" if tokens.empty?
+
+        say "tokens (#{tokens.size}):"
+        tokens.each { |token| say "  #{token_line(token)}" }
+      end
+
+      # One token as `form=… key=…` pairs, form first, stored key order after,
+      # non-scalar values as compact JSON — verbatim, never interpreted.
+      def token_line(token)
+        keys = (["form"] + token.keys).uniq.select { |key| token.key?(key) }
+        keys.map do |key|
+          value = token[key]
+          "#{key}=#{value.is_a?(String) ? value : JSON.generate(value)}"
+        end.join("  ")
+      end
+
+      def annotations_unreadable?(result)
+        result.annotations[Nabu::Query::Show::ANNOTATIONS_UNREADABLE] == true
+      end
+
+      def print_unreadable_annotations_count(lines)
+        count = lines.count { |line| annotations_unreadable?(line) }
+        return unless count.positive?
+
+        say "  note: #{count} #{count == 1 ? 'passage carries' : 'passages carry'} " \
+            "unreadable stored annotations (invalid JSON) — skipped"
+      end
+
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
-        print_axis(document.axis)
+        print_timeline(document.timeline)
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
@@ -2647,6 +2828,7 @@ module Nabu
               "#{display_text(line.text, document.language,
                               source: document.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(document.passages)
       end
 
       # Render a range (P7-6): the document header like a document listing, an
@@ -2657,7 +2839,7 @@ module Nabu
         lang = range.language ? " [#{range.language}]" : ""
         say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
         say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
-        print_axis(range.axis)
+        print_timeline(range.timeline)
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
@@ -2665,23 +2847,24 @@ module Nabu
               "#{display_text(line.text, range.language,
                               source: range.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(range.passages)
       end
 
-      # The date/place axis line (P15-2), when the document has one. A date span
+      # The timeline line (P15-2), when the document has one. A date span
       # ("113 BCE", "501–700 CE", "≤ 257 BCE") with the informative precision
       # ("low"/"high", not the derived exact/range/year) and the provenance
       # place; place-only rows print as "place:". Undated documents print
       # nothing (an absence, never an error).
-      def print_axis(axis)
-        return if axis.nil?
+      def print_timeline(timeline)
+        return if timeline.nil?
 
-        span = Nabu::DateAxis.format_span(axis.not_before, axis.not_after)
-        place = axis.place_name ? " · #{axis.place_name}" : ""
+        span = Nabu::Timeline.format_span(timeline.not_before, timeline.not_after)
+        place = timeline.place_name ? " · #{timeline.place_name}" : ""
         if span
-          note = %w[exact range year].include?(axis.precision) ? "" : " (#{axis.precision})"
+          note = %w[exact range year].include?(timeline.precision) ? "" : " (#{timeline.precision})"
           say "  date: #{span}#{note}#{place}"
-        elsif axis.place_name
-          say "  place: #{axis.place_name}"
+        elsif timeline.place_name
+          say "  place: #{timeline.place_name}"
         end
       end
 
@@ -3084,9 +3267,13 @@ module Nabu
       # (diacritic-folded highlight). The footer labels that so nobody reads the
       # stripped accents in the highlight as corpus truth; active facet filters
       # (P17-2) are named in one compact footer line — and only then.
-      def print_search_results(results, facets: nil, query: nil, loans: nil)
+      # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
+      # printed whenever present, so a filter-emptied page never masquerades
+      # as a complete answer.
+      def print_search_results(results, facets: nil, query: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3096,6 +3283,7 @@ module Nabu
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
+        say "note: #{incomplete}" if incomplete
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc" — empty
@@ -3113,7 +3301,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil, incomplete: nil)
         if results.empty?
           say "no matches"
         else
@@ -3124,6 +3312,7 @@ module Nabu
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
         end
+        say "note: #{incomplete}" if incomplete
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
         say "fuzzy index covers: #{covered}"
       end
@@ -3153,18 +3342,15 @@ module Nabu
       end
 
       # Concord's columns were padded by Concord over the PRE-display pieces;
-      # a display transform (stripped marks, isolate wrapping) changes their
-      # lengths, so re-pad here over VISIBLE characters (isolates excluded —
-      # Display.visible_length) to keep the keyword column at exactly +width+.
-      # Combining marks count 1 in the width math either way (the documented
-      # house simplification); stripping them only tightens the columns.
+      # a display transform (stripped marks, isolate wrapping, token coloring)
+      # changes their cell width, so re-pad here over DISPLAY CELLS
+      # (Nabu::Display.rjust/ljust — ANSI SGR and isolates count 0, wide
+      # clusters count 2) to keep the keyword column at exactly +width+ cells.
       def concord_display_pieces(row, width)
         left = display_text(row.left.sub(/\A +/, ""), row.language)
         right = display_text(row.right.sub(/ +\z/, ""), row.language)
         keyword = display_text(row.keyword, row.language)
-        left_pad = [width - Nabu::Display.visible_length(left), 0].max
-        right_pad = [width - Nabu::Display.visible_length(right), 0].max
-        [(" " * left_pad) + left, keyword, right + (" " * right_pad)]
+        [Nabu::Display.rjust(left, width), keyword, Nabu::Display.ljust(right, width)]
       end
 
       # Render `parallels` (P15-1): the anchor line, then one hit per document —
@@ -3683,7 +3869,7 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
-        require_axis!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
@@ -3691,7 +3877,7 @@ module Nabu
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
                                    facets: facets, source: options[:source], loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,
-                                     loans: loans_filter)
+                                     loans: loans_filter, incomplete: fuzzy.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -3720,12 +3906,12 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-                                          .run(lemma, lang: options[:lang], license: options[:license],
-                                                      limit: options[:limit].to_i, morph: options[:morph],
-                                                      source: options[:source],
-                                                      gold_only: options[:gold_only], loans: loans_filter)
-        print_lemma_results(results, query: lemma)
+        searcher = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(lemma, lang: options[:lang], license: options[:license],
+                                      limit: options[:limit].to_i, morph: options[:morph],
+                                      source: options[:source],
+                                      gold_only: options[:gold_only], loans: loans_filter)
+        print_lemma_results(results, query: lemma, incomplete: searcher.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3772,12 +3958,13 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
-        results = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
+        searcher = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
           lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
           source: options[:source], loans: loans_filter
         )
-        print_search_results(results, loans: loans_filter)
+        print_search_results(results, loans: loans_filter, incomplete: searcher.incomplete_hint)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -3792,9 +3979,10 @@ module Nabu
       # equivalence: a Latin key on a non-Latin passage, scholar-curated,
       # never attestation); the footer totals each non-gold share and names
       # the way out.
-      def print_lemma_results(results, query: nil)
+      def print_lemma_results(results, query: nil, incomplete: nil)
         if results.empty?
           say "no matches"
+          say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
@@ -3816,6 +4004,7 @@ module Nabu
                     "--gold-only excludes)"
         end
         say footer
+        say "note: #{incomplete}" if incomplete
       end
 
       # Render a vocab profile (P14-3): the header (urn, title, language, scope),
@@ -3852,9 +4041,11 @@ module Nabu
 
         say ""
         say "  distinctive vocabulary (log-odds vs corpus, top #{distinctive.size}):"
-        width = distinctive.map { |e| e.lemma.length }.max
+        # Pad the lemma column by display cells (P35-7): a lzh/ojp lemma of Han
+        # is two cells per ideograph, so char-count ljust would drift the table.
+        width = distinctive.map { |e| Nabu::Display.width(e.lemma) }.max
         distinctive.each do |entry|
-          say "    #{entry.lemma.ljust(width)}  #{entry.doc_count}× here · " \
+          say "    #{Nabu::Display.ljust(entry.lemma, width)}  #{entry.doc_count}× here · " \
               "#{commafy(entry.corpus_freq)}× corpus  (z=#{format('%.1f', entry.score)})"
         end
       end
@@ -3884,7 +4075,7 @@ module Nabu
         catalog = open_catalog(config)
         raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-        require_axis!(catalog)
+        require_timeline!(catalog)
         fulltext = open_fulltext(config) unless query.empty?
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" if !query.empty? && fulltext.nil?
 
@@ -4423,7 +4614,7 @@ module Nabu
         state[:stage] = nil
       end
 
-      # Zero docs is an axis/facet/index stage, not an empty shelf — show
+      # Zero docs is a timeline/facet/index stage, not an empty shelf — show
       # only the timing (compact-output convention: suppress zero fields).
       def stage_counts(state)
         return "" if state[:processed].zero? && state[:errored].zero?
@@ -4462,6 +4653,72 @@ module Nabu
         elsif $stderr.tty?
           $stderr.print("\n")
         end
+      end
+
+      # sync dispatch (P35-2): --all first (flat batch), then --axis (grouped),
+      # then the positional NAME resolved EXACT-SLUG-FIRST-THEN-AXIS. The
+      # slug/axis namespaces can never collide (a load-time guarantee), so a
+      # name that is not a slug but is an axis is unambiguous; a name that is
+      # neither is the unknown-target error (naming BOTH namespaces). A nil
+      # name falls to sync_one's own "slug or --all" guard, unchanged.
+      def run_sync(runner, registry, slug, db, ledger)
+        return sync_all(runner) if options[:all]
+        return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
+        return sync_one(runner, registry, slug, db, ledger) if slug.nil? || registry[slug]
+        return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
+
+        raise Thor::Error, unknown_sync_target_message(registry, slug)
+      end
+
+      # sync <axis> / --axis a,b: expand each named axis to its members and
+      # sync them through the ORDINARY per-source path (sync_one), so every
+      # per-source report line is byte-identical to a direct sync — grouping
+      # is pure fan-out. One axis header precedes each group; DISABLED members
+      # are skipped (an axis expansion is not an explicit per-source request)
+      # and named on one `skipped (disabled): …` line, never silently. A slug
+      # reachable via two selected axes syncs once, under its first group.
+      def sync_axes(runner, registry, names, db, ledger)
+        names = names.map(&:strip).reject(&:empty?)
+        raise Thor::Error, "sync --axis: name at least one axis — known axes: #{axis_menu(registry)}" if names.empty?
+
+        unknown = names.reject { |name| registry.axes[name] }
+        unless unknown.empty?
+          raise Thor::Error, "sync --axis: unknown axis #{unknown.first.inspect} — known axes: #{axis_menu(registry)}"
+        end
+
+        synced = []
+        names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
+      end
+
+      # One axis's group: the header, then each not-yet-synced ENABLED member
+      # through sync_one, then the named skip line for the disabled members.
+      def sync_axis_group(runner, registry, name, db, ledger, synced)
+        enabled, disabled = registry.axis_members(name).partition { |member| registry[member].enabled }
+        say axis_header(registry.axes[name])
+        (enabled - synced).each do |member|
+          sync_one(runner, registry, member, db, ledger)
+          synced << member
+        end
+        say "skipped (disabled): #{disabled.join(', ')}" unless disabled.empty?
+      end
+
+      # The one-line axis header: the hat's persona verbatim (first-class
+      # render data, P35-0), grouping the members below it.
+      def axis_header(axis)
+        "axis #{axis.name} — #{axis.persona}"
+      end
+
+      # The known-axes menu for error messages, honest when none are defined.
+      def axis_menu(registry)
+        names = registry.axes.names
+        names.empty? ? "(none defined)" : names.join(", ")
+      end
+
+      # A name that is neither source slug nor axis: name both namespaces so
+      # the user sees the axes too (the error the unknown-slug path grew into).
+      def unknown_sync_target_message(registry, name)
+        slugs = registry.slugs.empty? ? "(none)" : registry.slugs.join(", ")
+        "unknown source or axis #{name.inspect} — sources: #{slugs}; axes: #{axis_menu(registry)}"
       end
 
       # sync <slug>: explicit, unconditional (disabled sources allowed, with a

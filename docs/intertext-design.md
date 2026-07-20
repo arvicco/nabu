@@ -166,7 +166,7 @@ lookup model — the P11-8 range grammar composes for free). MCP: a
 **Cost.** Zero schema; ≤13 witnesses × ~20 tokens per verse — query-time
 LCS is trivial. Effort: **1 opus packet.**
 
-## 3. The date/place axis — generalized, not HGV-only
+## 3. The timeline — generalized, not HGV-only
 
 **Persona and question.** The historical linguist and the documentary
 historian: "only 2nd-century texts", "only Oxyrhynchus", "plot this word
@@ -187,7 +187,7 @@ date_raw, place_name, place_ref, axis_source)` — signed astronomical years;
 `date_raw` keeps the upstream string so honesty survives normalization;
 `place_ref` carries the TM/Pleiades URL when HGV has one (strings, no
 gazetteer — the §1.4 stance holds). Populated at load time by per-source
-axis extractors reading canonical (loader stage, so `nabu rebuild`
+timeline extractors reading canonical (loader stage, so `nabu rebuild`
 regenerates it — the invariant holds; the Indexer never re-parses
 canonical, unchanged). The chronicle passage-grain case rides as a nullable
 `(passage_seq_from, passage_seq_to)` pair on extra rows — document-grain
@@ -198,7 +198,7 @@ fake midpoint.
 **Query surface.** `search --from -300 --to 200 --place oxyrhynch%`
 (composing with --lang/--license/--lemma/--near through the same
 CatalogJoin two-step measured in P14-8 — date rows join document-side, so
-the filter is one more EXISTS/IN). `show` prints the axis line when
+the filter is one more EXISTS/IN). `show` prints the timeline line when
 present. The linguist payoff: `vocab --by-century` / `concord --from --to`
 — diachronic frequency as a bucketed GROUP BY over the same table. Display
 honesty everywhere: most of the corpus is undated; "no date" is an absence,
@@ -397,7 +397,7 @@ symbolic packets generate as a side effect.
    John 1:1→Fathers). **Riders:** passage_lemmas(urn) index; the
    rare-lemma co-occurrence second signal; `formulas` (item 5) as a
    shared-machinery rider if the packet stays light, else it's P15-5.
-2. **P15-2 · date/place axis, part 1** — opus + fable date-model review,
+2. **P15-2 · timeline, part 1** — opus + fable date-model review,
    1 packet. `document_axes` migration; HGV + goo300k/IMP extractors;
    `search --from/--to/--place`; `vocab --by-century` payoff. (Part 2 —
    ORACC regnal mapping + chronicle annal grain — is a follow-on small

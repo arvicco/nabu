@@ -74,7 +74,7 @@ module Nabu
       DictionaryEntry: :dictionary_entries,
       DictionaryCitation: :dictionary_citations,
       DictionaryReflex: :dictionary_reflexes,
-      DocumentAxis: :document_axes,
+      DocumentTimeline: :document_axes,
       LanguageName: :language_names,
       LanguageRecord: :language_records,
       UrnNote: :urn_notes,
@@ -179,7 +179,7 @@ module Nabu
         require_relative "store/dictionary_entry"
         require_relative "store/dictionary_citation"
         require_relative "store/dictionary_reflex"
-        require_relative "store/document_axis"
+        require_relative "store/document_timeline"
         require_relative "store/language_name"
         require_relative "store/language_record"
         require_relative "store/urn_note"
@@ -201,6 +201,6 @@ require_relative "store/source_dossier_loader"
 require_relative "store/run_recorder"
 require_relative "store/indexer"
 require_relative "store/alignment_indexer"
-require_relative "store/axis_builder"
+require_relative "store/timeline_builder"
 require_relative "store/facet_builder"
 require_relative "store/reflex_roots_indexer"

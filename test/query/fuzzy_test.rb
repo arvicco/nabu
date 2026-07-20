@@ -213,5 +213,41 @@ module Query
       assert_match(/\A#{'α' * 60} στ\[ρατηγ\]οσ #{'ω' * 60}\z/, result.folded_marked,
                    "--long form is the whole folded passage, match bracketed")
     end
+    # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) --------
+    # Ten short candidates outrank (bm25) the one lat-labeled longer row;
+    # limit 1 makes the trigram candidate window exactly 10, so the lang
+    # filter empties the page while a verified match exists beyond it.
+
+    def seed_window_exhausting_fragments(grc_rows: 10)
+      doc = make_document
+      grc_rows.times do |i|
+        make_passage(doc, urn: "urn:d:pap:#{i}", text: "τῶι στρατηγῶι", sequence: i)
+      end
+      lat_doc = make_document(source: @papyri, urn: "urn:d:pap-lat", language: "lat")
+      make_passage(lat_doc, urn: "urn:d:pap-lat:1", sequence: 0, language: "lat",
+                            text: "στρατηγ down the rank because this passage carries many more words than the rest")
+      rebuild!
+    end
+
+    def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
+      seed_window_exhausting_fragments
+
+      query = fuzzy
+      results = query.run("ρατηγ", lang: "lat", limit: 1)
+      assert_empty results, "the candidate window holds only filter-rejected rows (the P34 gate repro)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
+                   "an empty page with matches beyond the window must announce itself"
+    end
+
+    def test_unexhausted_window_or_full_page_carries_no_hint
+      seed_window_exhausting_fragments(grc_rows: 3)
+
+      query = fuzzy
+      assert_equal %w[urn:d:pap-lat:1], query.run("ρατηγ", lang: "lat", limit: 1).map(&:urn)
+      assert_nil query.incomplete_hint, "the window reached the lat row — the page is honest"
+
+      refute_empty query.run("ρατηγ", limit: 1)
+      assert_nil query.incomplete_hint, "no catalog-side filter was active"
+    end
   end
 end

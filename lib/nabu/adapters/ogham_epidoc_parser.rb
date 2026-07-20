@@ -339,7 +339,7 @@ module Nabu
       end
 
       # origDate is usually empty upstream (104/504 carry attrs); attrs +
-      # text verbatim when present — the axis promotion is a censused
+      # text verbatim when present — the timeline promotion is a censused
       # follow-up, not this packet's claim.
       def extract_date(doc)
         node = doc.at_xpath("//origin/origDate") or return {}

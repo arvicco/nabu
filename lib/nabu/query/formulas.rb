@@ -87,6 +87,7 @@ module Nabu
       GRAM_SIZE_RANGE = (2..8)
       # Example loci kept per gram in the lean pass (compact render shows these;
       # --long re-walks for the complete list).
+      # const: compact-render sample size, complete list one flag away — a UX bound
       EXAMPLE_LOCI = 3
 
       # One mined formula: the folded gram (marks stripped, like Search's

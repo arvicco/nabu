@@ -1115,6 +1115,94 @@ class CLITest < Minitest::Test
     assert_match(/grouped/, out, "the map's grouping promise must be taught")
   end
 
+  # -- P35-1: list --axis (the research-axes grouped census) -----------------
+
+  # Bare `--axis`: every axis in the ratified (file) order, each led by its
+  # verbatim persona line, members carrying the SAME census fragments the flat
+  # view uses, the tag-semantics note stated ONCE.
+  def test_list_axis_groups_the_census_under_every_axis_with_persona_lines
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis]) }
+      assert_nil status, "the grouped census exits 0"
+      # The tag-semantics note is stated exactly once, in the header area.
+      assert_equal 1, out.lines.count { |line| line.include?("a source appears under every desk") },
+                   "the tag semantics are stated once, not per axis"
+      # Axis header = name + the persona rendered VERBATIM (P35-0 render data).
+      assert_match(/^classical — The Classicist — Greek and Latin, Homer to the grammarians\.$/, out)
+      assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
+      assert_match(/^reference — The Lexicographer — the dictionary shelves\.$/, out)
+      # Members render the same census line, indented under their axis.
+      assert_match(/^  shelf\s+docs=2 pass=3\s+langs=grc,lat\s+license=nc,open/, out)
+      assert_match(/^  lex\s+entries=2\s+langs=sla-pro\s+license=attribution/, out)
+      # Ratified order: classical before slavic before reference (file order).
+      assert_operator out.index("classical — "), :<, out.index("slavic — ")
+      assert_operator out.index("slavic — "), :<, out.index("reference — ")
+    end
+  end
+
+  # A source tagged with two axes appears under BOTH — dual-tagging is the
+  # point (D35), not a bug to fold away.
+  def test_list_axis_renders_a_source_under_each_of_its_axes
+    with_axis_corpus do |config|
+      out, _err, _status = with_config(config) { run_cli(%w[list --axis]) }
+      slavic = out.index("slavic — ")
+      reference = out.index("reference — ")
+      lex_under_slavic = out.index("  lex", slavic)
+      lex_under_reference = out.index("  lex", reference)
+      assert_operator lex_under_slavic, :<, reference, "lex renders under slavic"
+      assert_operator lex_under_reference, :>, reference, "lex ALSO renders under reference"
+    end
+  end
+
+  # `--axis NAME`: exactly that one axis's group.
+  def test_list_axis_names_a_single_axis
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis slavic]) }
+      assert_nil status
+      assert_match(/^slavic — The Slavicist/, out)
+      assert_match(/^  lex\b/, out)
+      assert_match(/^  library\b/, out)
+      refute_match(/^classical — /, out, "a single-axis request shows only that axis")
+      refute_match(/^reference — /, out)
+    end
+  end
+
+  # `--axis a,b`: several axes, in the order requested.
+  def test_list_axis_selects_several_axes_in_the_requested_order
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis reference,classical]) }
+      assert_nil status
+      assert_match(/^reference — /, out)
+      assert_match(/^classical — /, out)
+      refute_match(/^slavic — /, out)
+      assert_operator out.index("reference — "), :<, out.index("classical — "),
+                      "an explicit list renders in the order the owner asked for"
+    end
+  end
+
+  # An unknown axis is a clean error naming the known set — the resolution
+  # guarantee (never a silent empty group).
+  def test_list_axis_unknown_names_the_known_set
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[list --axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
+      assert_match(/classical.*slavic.*reference/, err, "the miss names the known axes")
+    end
+  end
+
+  # The owner ruling: bare `nabu list` stays FLAT and byte-unchanged — the
+  # axis grouping is opt-in only.
+  def test_list_without_axis_stays_flat_and_ungrouped
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list]) }
+      assert_nil status
+      refute_match(/appears under every desk/, out, "the flat census carries no axis note")
+      refute_match(/The Classicist/, out, "the flat census carries no persona lines")
+      assert_match(/^shelf\s+docs=2 pass=3/, out, "the flat census line is unindented and unchanged")
+    end
+  end
+
   # -- search/export --source (P22-1) ----------------------------------------
 
   def test_search_source_scopes_and_unknown_source_misses_honestly
@@ -1358,6 +1446,106 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/disabled; syncing anyway/i, out)
       assert_match(/\+2 added/, out)
+    end
+  end
+
+  # -- sync <axis> / --axis (P35-2): axis expansion as pure per-source fan-out -
+
+  # Bare `sync <axis>` expands to the axis's ENABLED members (registration
+  # order), syncs each through the ordinary per-source path, and reports the
+  # disabled members by name on ONE skip line — never silently. `blue` is a
+  # member of `alpha` but disabled, so it is skipped, not synced.
+  def test_sync_bare_axis_expands_enabled_members_and_skips_disabled
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync alpha --parse-only]) }
+      assert_nil status
+      assert_match(/^axis alpha — The Alphaist/, out, "the axis header names the hat, persona verbatim")
+      assert_match(/^red\s+parse-only\s+\+2 added/, out, "enabled member red synced")
+      assert_match(/^green\s+parse-only\s+\+2 added/, out, "enabled member green synced")
+      assert_match(/^skipped \(disabled\): blue$/, out, "disabled member named on one skip line")
+      refute_match(/^blue\s+parse-only/, out, "a disabled axis member is never synced")
+      refute_match(/^gold\s+parse-only/, out, "a member of another axis is not pulled in")
+    end
+  end
+
+  # Slug-first resolution: a name that IS a source slug takes the explicit
+  # per-source path (no axis header), unchanged — the axis machinery only
+  # engages when the name is NOT a slug (the collision-free guarantee makes
+  # this unambiguous).
+  def test_sync_resolves_exact_slug_before_axis
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync red --parse-only]) }
+      assert_nil status
+      assert_match(/^red\s+parse-only\s+\+2 added/, out)
+      refute_match(/^axis /, out, "an exact slug is the explicit-request path, never axis-grouped")
+      refute_match(/^green\s+parse-only/, out, "slug resolution syncs only that source")
+    end
+  end
+
+  # The frozen contract: the per-source report line under an axis group is
+  # BYTE-identical to the line a direct `sync <slug>` prints — grouping is
+  # pure fan-out onto the existing per-source path.
+  def test_sync_axis_per_source_line_is_byte_identical_to_direct_sync
+    # Two independent envs (fresh db each) so both syncs load from scratch —
+    # the comparison is the LINE FORMAT, not load-order idempotency.
+    direct_line = with_axis_sync_env do |config|
+      out, = with_config(config) { run_cli(%w[sync red --parse-only]) }
+      out.lines.find { |l| l.start_with?("red ") }
+    end
+    grouped_line = with_axis_sync_env do |config|
+      out, = with_config(config) { run_cli(%w[sync alpha --parse-only]) }
+      out.lines.find { |l| l.start_with?("red ") }
+    end
+    refute_nil direct_line
+    assert_equal direct_line, grouped_line, "the per-source line must be byte-unchanged by grouping"
+  end
+
+  # `--axis a,b` selects multiple axes and prints one group per axis, in the
+  # order given, each expanding independently.
+  def test_sync_multi_axis_selects_and_groups
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync --axis alpha,beta --parse-only]) }
+      assert_nil status
+      alpha_at = out.index("axis alpha —")
+      beta_at = out.index("axis beta —")
+      refute_nil alpha_at
+      refute_nil beta_at
+      assert alpha_at < beta_at, "groups print in the requested order"
+      assert_match(/^gold\s+parse-only\s+\+2 added/, out, "beta's member gold synced under its group")
+      assert(out.index("gold ") > beta_at, "gold is grouped under beta, not alpha")
+    end
+  end
+
+  # `sync --all` output stays FLAT: enabled+live sources, no axis headers.
+  def test_sync_all_output_stays_flat_with_axes_registered
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync --all --parse-only]) }
+      assert_nil status
+      refute_match(/^axis /, out, "--all is a flat batch, never axis-grouped")
+      assert_match(/red\s+parse-only/, out)
+      assert_match(/gold\s+parse-only/, out)
+    end
+  end
+
+  # An unknown name is neither slug nor axis: the error names BOTH namespaces
+  # so the user sees the axes too.
+  def test_sync_unknown_name_error_names_axes
+    with_axis_sync_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync nope --parse-only]) }
+      assert_equal 1, status
+      assert_match(/unknown source/i, err)
+      assert_match(/axes/i, err, "the error grows to name the axis namespace too")
+      assert_match(/alpha/, err, "and lists the known axes")
+    end
+  end
+
+  # `--axis` with an unknown axis name errors, naming the known axes.
+  def test_sync_axis_flag_unknown_axis_errors
+    with_axis_sync_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync --axis nope --parse-only]) }
+      assert_equal 1, status
+      assert_match(/unknown axis/i, err)
+      assert_match(/alpha/, err)
     end
   end
 
@@ -2058,6 +2246,31 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P35-1: `status --axis` rides the same grouping over the status table —
+  # each axis's persona header, its member rows beneath (a source under each
+  # axis it serves), the tag note once. The wide status line is unchanged.
+  def test_status_axis_groups_the_status_table_under_the_axes
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[status --axis]) }
+      assert_nil status
+      assert_equal(1, out.lines.count { |line| line.include?("a source appears under every desk") })
+      assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
+      # The member row is the SAME status line (state, policy, up=, counts),
+      # merely indented under its axis; lex serves slavic AND reference.
+      assert_match(/^  lex\s+on\s+frozen\s+up=frozen\s+docs=0 pass=0/, out)
+      assert_operator out.index("  lex", out.index("slavic — ")), :<, out.index("reference — ")
+      assert_operator out.index("  lex", out.index("reference — ")), :>, out.index("reference — ")
+    end
+  end
+
+  def test_status_axis_unknown_names_the_known_set
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[status --axis nope]) }
+      assert_equal 1, status
+      assert_match(/unknown axis "nope"/, err)
+    end
+  end
+
   # -- health (P5-3 remote, P5-5 local) ------------------------------------
 
   # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
@@ -2266,7 +2479,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- search date/place axis (P15-2) --------------------------------------
+  # -- search timeline (P15-2) --------------------------------------
 
   def test_search_from_to_filters_by_date
     with_dated_corpus do |config|
@@ -2523,7 +2736,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_show_prints_the_date_place_axis_line
+  def test_show_prints_the_timeline_line
     with_dated_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
       assert_nil status
@@ -3933,9 +4146,12 @@ class CLITest < Minitest::Test
     end
   end
 
-  # KWIC width pin: the keyword column must sit at exactly --width visible
-  # characters — isolates excluded from the math, and the stripped (shorter)
-  # left context re-padded so columns still line up.
+  # KWIC width pin: the keyword column must sit at exactly --width display
+  # CELLS (P35-7) — isolates and ANSI excluded, combining marks (Hebrew
+  # points) counted 0 within their grapheme cluster, and the stripped
+  # (shorter) left context re-padded so columns line up. The char index of
+  # the keyword exceeds the cell width here because the pointed consonants
+  # carry combining marks — the cell column is the honest alignment measure.
   def test_concord_keyword_column_ignores_isolates_and_stripped_marks
     with_hebrew_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[concord אלהים]) }
@@ -3943,8 +4159,9 @@ class CLITest < Minitest::Test
       row = out.lines.find { |line| line.include?("urn:nabu:oshb:gen:1.1") }
       refute_nil row, "the Hebrew verse must appear as a KWIC row"
       visible = row.delete(RLI + PDI)
-      assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, visible.index("אֱלֹהִים"),
-                   "keyword column = width, counted over visible characters"
+      prefix = visible[0...visible.index("אֱלֹהִים")]
+      assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, Nabu::Display.width(prefix),
+                   "keyword column = width, counted over display cells (combining marks add 0)"
       assert_includes out, "display: cantillation stripped · rtl isolates (--display full shows all marks)"
     end
   end
@@ -4070,6 +4287,102 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:corph:0001:1]) }
       assert_nil status
       refute_includes out, "\e[", "piped/captured output carries no ANSI unless NABU_COLOR forces it"
+    end
+  end
+
+  # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) ---------
+  # The P34 gate repro at the CLI: with_window_corpus (private helper below)
+  # fills the limit×10 inner window with rows the catalog-side filter
+  # rejects, so every search surface serves a clean-looking empty page —
+  # which must now announce itself.
+
+  def test_search_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      assert_nil status, "an incomplete page is a note, never a failure"
+      assert_match(/no matches/i, out)
+      assert_match(/page may be incomplete under these filters — raise --limit/, out,
+                   "the P34 gate lie: an empty page with matches beyond the inner window must say so")
+
+      full, _err2, = with_config(config) { run_cli(%w[search arma --lang lat --limit 1]) }
+      refute_match(/page may be incomplete/, full, "a full page carries no hint")
+    end
+  end
+
+  def test_proximity_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --near cano --lang grc --limit 1]) }
+      assert_nil status
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  def test_lemma_search_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --license nc --limit 1]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  def test_fuzzy_incomplete_page_under_filters_prints_the_hint
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy arma --lang grc --limit 1]) }
+      assert_nil status
+      assert_match(/page may be incomplete under these filters — raise --limit/, out)
+    end
+  end
+
+  # -- show --tokens (P35-6, the journaled gate find): the honest raw view of
+  # the stored token annotations — form plus EVERY key present, verbatim, no
+  # invention; absences say so.
+
+  def test_show_tokens_renders_every_stored_annotation_key_verbatim
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_nil status
+      assert_match(/tokens \(1\):/, out)
+      assert_match(/form=בָּרָא/, out)
+      assert_match(/lemma=ברא/, out)
+      assert_match(/gloss=create/, out)
+      assert_match(/osm=HVqp3ms/, out)
+      assert_match(/lang=hbo/, out, "every annotation key rides along — the raw view invents nothing")
+    end
+  end
+
+  def test_show_tokens_on_an_unannotated_passage_says_so
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:grc:1 --tokens]) }
+      assert_nil status
+      assert_match(/no token annotations stored for this passage/, out)
+    end
+  end
+
+  def test_show_notes_unreadable_annotations_instead_of_silently_dropping
+    with_window_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:passages].where(urn: "urn:w:tok:1").update(annotations_json: "{broken")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:tok:1]) }
+      assert_nil status
+      assert_match(/note: stored annotations are unreadable \(invalid JSON\) — skipped/, out,
+                   "H9: a corrupt annotation lane must announce itself, not pose as unannotated")
+
+      tokens_out, _err2, = with_config(config) { run_cli(%w[show urn:w:tok:1 --tokens]) }
+      assert_match(/stored annotations are unreadable/, tokens_out)
+
+      doc_out, _err3, = with_config(config) { run_cli(%w[show urn:w:tok]) }
+      assert_match(/1 passage carries unreadable stored annotations/, doc_out)
+    end
+  end
+
+  def test_show_tokens_on_a_document_urn_names_the_grain
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:w:lat --tokens]) }
+      assert_nil status
+      assert_match(/--tokens renders at passage grain — give a passage urn/, out)
     end
   end
 
@@ -4207,6 +4520,57 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The list-corpus rig plus a research-axes registry (config/axes.yml beside
+  # sources.yml) and an `axes:` membership on every source (P35-1). shelf is
+  # the classicist's; lex is dual-tagged slavic AND reference (D35 dual-tagging);
+  # library is the slavicist's. Personas are custom so tests can pin verbatim.
+  def with_axis_corpus
+    Dir.mktmpdir("nabu-cli-axis") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        classical:
+          persona: "The Classicist — Greek and Latin, Homer to the grammarians."
+          desc: "The Greco-Roman literary lane."
+        slavic:
+          persona: "The Slavicist — Cyril and Methodius to the damaskini."
+          desc: "Old Church Slavonic and its daughters."
+        reference:
+          persona: "The Lexicographer — the dictionary shelves."
+          desc: "The reference works."
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        shelf:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+          axes: [classical]
+        lex:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: frozen
+          axes: [slavic, reference]
+        library:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: local
+          axes: [slavic]
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_list_shelf(catalog)
+      seed_list_lex(catalog)
+      seed_list_library(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
   def seed_list_shelf(catalog)
     src = catalog[:sources].insert(slug: "shelf", name: "Shelf", adapter_class: "TestAdapter",
                                    license: "CC BY-NC 4.0 (compiled by Test)",
@@ -4268,6 +4632,75 @@ class CLITest < Minitest::Test
       document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
       content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
+  end
+
+  # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) ---------
+  # The P34 gate repro at the CLI: a corpus where the limit×10 inner window
+  # fills with rows the catalog-side filter rejects, so every search surface
+  # serves a clean-looking empty page — which must now announce itself.
+
+  # Ten short open/lat rows dominate the bm25 (and urn-ordered lemma) inner
+  # window; the one row the filters WANT sits beyond it: a grc passage for
+  # --lang (text search / --near / --fuzzy), an nc λέγω attestation for
+  # --lemma --license nc. Fuzzy scope covers the whole corpus.
+  def with_window_corpus
+    Dir.mktmpdir("nabu-cli-window") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_window_corpus(catalog)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: %w[open nc])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_window_corpus(catalog)
+    open_id = catalog[:sources].insert(slug: "open", name: "Open", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+    nc_id = catalog[:sources].insert(slug: "nc", name: "NC", adapter_class: "TestAdapter",
+                                     license_class: "nc", enabled: true)
+    lat_doc = window_document(catalog, open_id, "urn:w:lat", "lat")
+    10.times do |i|
+      window_passage(catalog, lat_doc, "urn:w:lat:#{i}", "arma virumque cano", i, "lat",
+                     lemmas: [%w[λέγω λέγειν]])
+    end
+    grc_doc = window_document(catalog, open_id, "urn:w:grc", "grc")
+    window_passage(catalog, grc_doc, "urn:w:grc:1",
+                   "arma sits before cano yet far down the rank because this passage carries many more words",
+                   0, "grc")
+    nc_doc = window_document(catalog, nc_id, "urn:w:nc", "grc")
+    window_passage(catalog, nc_doc, "urn:w:nc:1", "εἶπας", 0, "grc", lemmas: [%w[λέγω εἶπας]])
+    tok_doc = window_document(catalog, open_id, "urn:w:tok", "hbo")
+    window_passage(catalog, tok_doc, "urn:w:tok:1", "בָּרָא", 0, "hbo",
+                   raw_tokens: [{ "form" => "בָּרָא", "lemma" => "ברא", "gloss" => "create",
+                                  "osm" => "HVqp3ms", "lang" => "hbo" }])
+  end
+
+  def window_document(catalog, source_id, urn, language)
+    catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: urn, language: language,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+  end
+
+  def window_passage(catalog, doc_id, urn, text, sequence, language, lemmas: [], raw_tokens: [])
+    tokens = lemmas.map { |lemma, form| { "lemma" => lemma, "form" => form } } + raw_tokens
+    catalog[:passages].insert(
+      document_id: doc_id, urn: urn, sequence: sequence, language: language,
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
+      content_sha256: "x", revision: 1, withdrawn: false,
+      annotations_json: JSON.generate({ "tokens" => tokens })
     )
   end
 
@@ -5049,6 +5482,47 @@ class CLITest < Minitest::Test
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  # An axis env (P35-2): a real axes.yml beside a sources.yml whose rows carry
+  # `axes:` membership, so SourceRegistry.load builds the AxisRegistry and the
+  # `sync <axis>` / `--axis` resolution has something to resolve against. Two
+  # axes (alpha, beta); alpha holds red+green (enabled) and blue (DISABLED, to
+  # exercise the skip line); beta holds gold. Every source live+enabled-or-not
+  # with its own distinct canonical files (TestAdapter mints urns from
+  # filenames — no cross-source urn collisions). The caller stubs Config.load.
+  def with_axis_sync_env
+    Dir.mktmpdir("nabu-cli-axis") do |root|
+      rows = {
+        "red" => { axes: %w[alpha], enabled: true },
+        "green" => { axes: %w[alpha], enabled: true },
+        "blue" => { axes: %w[alpha], enabled: false },
+        "gold" => { axes: %w[beta], enabled: true }
+      }
+      sources = +""
+      rows.each do |slug, spec|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+        File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        sources << "#{slug}:\n  adapter: TestAdapter\n  enabled: #{spec[:enabled]}\n  " \
+                   "sync_policy: live\n  axes: [#{spec[:axes].join(', ')}]\n"
+      end
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        alpha:
+          persona: "The Alphaist — first letters, read whole."
+          desc: "The alpha lane."
+        beta:
+          persona: "The Betaist — second letters, read whole."
+          desc: "The beta lane."
+      YAML
+      path = File.join(root, "sources.yml")
+      File.write(path, sources)
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: path, config_path: "(test)"
       )
     end
   end

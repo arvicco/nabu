@@ -113,7 +113,7 @@ module Nabu
     #   Strong headword — measured, reported, not wired.
     # - The transliteration lanes (*e/*o variants, g_cons, srcLn, nr,
     #   sim, note_etcbc) — the Unicode main variants are the surface.
-    # - No date axis: tf/2.0 carries NO period/dating feature (censused —
+    # - No timeline: tf/2.0 carries NO period/dating feature (censused —
     #   "script" is paleohebrew/greekcapital, a script fact riding tokens,
     #   not a date). The isicily verdict: nothing structured to extract.
     #

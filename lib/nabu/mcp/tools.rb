@@ -75,19 +75,30 @@ module Nabu
       LICENSE_CLASSES = Nabu::Model::Validation::LICENSE_CLASSES
 
       # Never served unless include_restricted: true names them explicitly.
+      # const: the license model's private classes (Model::Validation) — code,
+      # not corpus
       EXCLUDED_LICENSE_CLASSES = %w[research_private restricted].freeze
 
+      # The MCP response caps (H5/H6): era-bound to MODEL-CONTEXT norms, not
+      # to the corpus — a bounded surface serving a model's context window,
+      # every truncation carrying an honest note, the CLI unbounded. Re-affirm
+      # when the era's context norms shift, not when the corpus grows.
+      # census: 200000, 2026-07-20, tokens — the era's typical model context; caps re-affirmed
       SEARCH_DEFAULT_LIMIT = 10
       SEARCH_MAX_LIMIT = 50
       SEARCH_DEFAULT_WINDOW = Query::Proximity::DEFAULT_WINDOW
       # A generous proximity ceiling: beyond this the NEAR window spans most
       # passages and stops meaning "near". Clamps the arg, honest note.
+      # census: 33, 2026-07-20, papyri-ddbdp mean passage length in chars (lit
+      # passages run longer) — 50 tokens still spans most passages
       SEARCH_MAX_WINDOW = 50
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
       CONCORD_DEFAULT_LIMIT = 10
       CONCORD_MAX_LIMIT = 50
       CONCORD_DEFAULT_WIDTH = Query::Concord::DEFAULT_WIDTH
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       CONCORD_MAX_WIDTH = 120
       PARALLELS_DEFAULT_LIMIT = 10
       PARALLELS_MAX_LIMIT = 50
@@ -95,29 +106,35 @@ module Nabu
       LINKS_MAX_LIMIT = 100
       # Per-hit evidence spans carried in the payload (this surface is bounded;
       # a hit sharing more spans notes the truncation, the CLI is unbounded).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       PARALLELS_EVIDENCE_CAP = 12
       DEFINE_DEFAULT_LIMIT = 3
       DEFINE_MAX_LIMIT = 10
       # LSJ entries run to hundreds of KB (λόγος); this surface is bounded.
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
       # The reconstruction walk (P14-1): proto entries per query, and the
       # cognate cap per entry (attested first — gem-pro trees run to ~150
       # reflexes; the CLI is the unbounded surface).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       ETYM_DEFAULT_LIMIT = 3
       ETYM_MAX_LIMIT = 10
       ETYM_MAX_COGNATES = 20
       DEFINE_MAX_REFLEXES = ETYM_MAX_COGNATES
-      DEFINE_LANGS = %w[grc lat ang chu sla-pro ine-pro gem-pro
-                        ine-bsl-pro gmw-pro itc-pro iir-pro].freeze
+      # The define lang set is NOT a constant: it is live-derived from the
+      # catalog's dictionaries table at serve time (#define_langs — P35-6 L4,
+      # retiring the last survivor of the P11 hardcoded-list lesson).
       # Rendered-ref ceiling for a range/chapter nabu_align (the query enforces it).
       MAX_ALIGN_REFS = Query::Align::MAX_REFS
       # Cognates-in-parallel (P15-3): (verse, root) groups per response — a
       # whole-work batch can hold thousands; this surface stays bounded.
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       COGNATES_DEFAULT_LIMIT = 10
       COGNATES_MAX_LIMIT = 50
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
+      # const: a retry-grace choice, not a corpus claim
       BUSY_ATTEMPTS = 3
 
       NO_CORPUS_NOTE = "no corpus here yet — run `nabu sync <source>` or `nabu rebuild` " \
@@ -351,7 +368,7 @@ module Nabu
                      description: "Exact effective license class filter." },
           from: { type: "integer",
                   description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
-                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document date/place axis " \
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline " \
                                "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
                                "undated and absent under a date filter. Text search only (not lemma)." },
           to: { type: "integer",
@@ -421,11 +438,12 @@ module Nabu
         properties: {
           lemma: { type: "string",
                    description: "Dictionary form to look up (e.g. λόγος, virtus)." },
-          lang: { type: "string", enum: DEFINE_LANGS,
-                  description: "Dictionary language: grc → LSJ, lat → Lewis & Short, " \
-                               "ang → Bosworth-Toller (Old English), chu → Wiktionary " \
-                               "(Old Church Slavonic), sla-pro/ine-pro/gem-pro → the " \
-                               "Wiktionary reconstruction shelves." },
+          lang: { type: "string",
+                  description: "Dictionary language. The enum (when present) is the LIVE set " \
+                               "of shelves this catalog holds — e.g. grc → LSJ, lat → Lewis & " \
+                               "Short, ang → Bosworth-Toller (Old English), chu → Wiktionary " \
+                               "(Old Church Slavonic), *-pro → the Wiktionary reconstruction " \
+                               "shelves." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -584,10 +602,12 @@ module Nabu
         @links = links
       end
 
-      # tools/list shape: [{name:, description:, inputSchema:}].
+      # tools/list shape: [{name:, description:, inputSchema:}]. nabu_define's
+      # lang enum is injected LIVE (#define_langs) so the advertised language
+      # set can never rot into a hand-frozen list again (P35-6 L4).
       def definitions
         TOOLS.map do |name, tool|
-          { name: name, description: tool.fetch(:description), inputSchema: tool.fetch(:input_schema) }
+          { name: name, description: tool.fetch(:description), inputSchema: input_schema(name, tool) }
         end
       end
 
@@ -622,11 +642,12 @@ module Nabu
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near, window: window,
-                                         lang: args["lang"], license: license, limit: limit + 1, morph: morph,
-                                         from: from, to: to, place: place)
+        results, incomplete = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
+                                                     window: window, lang: args["lang"], license: license,
+                                                     limit: limit + 1, morph: morph,
+                                                     from: from, to: to, place: place)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_search(results, limit: limit, catalog: catalog)
+        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -773,13 +794,13 @@ module Nabu
       def define(args)
         lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
         lang = string_arg(args, "lang")
-        if lang && !DEFINE_LANGS.include?(lang)
-          raise InvalidArguments, "lang must be one of #{DEFINE_LANGS.join(', ')} " \
-                                  "(the shelves this corpus holds)"
-        end
-
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         return note(NO_SHELF_NOTE) unless catalog.table_exists?(:dictionary_entries)
+
+        if lang && (langs = define_langs).any? && !langs.include?(lang)
+          raise InvalidArguments, "lang must be one of #{langs.join(', ')} " \
+                                  "(the dictionary shelves this catalog holds)"
+        end
 
         limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
@@ -907,7 +928,7 @@ module Nabu
         fulltext
       end
 
-      # Resolve the date/place axis args (P15-2), honestly scoped to plain text
+      # Resolve the timeline args (P15-2), honestly scoped to plain text
       # search — the dated corpus (papyri) is not lemmatized, and proximity is a
       # different index path — so date/place with lemma or near is a usage error.
       # `century` is shorthand for a from/to window; year 0 and from>to are
@@ -927,7 +948,7 @@ module Nabu
           raise InvalidArguments, "century is shorthand for from/to — use one or the other" if from || to
           raise InvalidArguments, "there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if century.zero?
 
-          from, to = Nabu::DateAxis.century_bounds(century)
+          from, to = Nabu::Timeline.century_bounds(century)
         end
         raise InvalidArguments, "there is no year 0 (1 BCE is -1, 1 CE is 1)" if from&.zero? || to&.zero?
         raise InvalidArguments, "from #{from} is after to #{to} (BCE years are negative)" if from && to && from > to
@@ -935,37 +956,42 @@ module Nabu
         [from, to, place]
       end
 
+      # Returns [results, incomplete_hint] — the hint is the query layer's
+      # exhausted-inner-window announcement (P35-6), nil on an honest page.
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil)
-        if near
-          return Query::Proximity.new(catalog: catalog, fulltext: fulltext).run(
-            query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
-            near: near, window: window, lang: lang, license: license, limit: limit
-          )
-        end
-        if mode == :lemma
-          return Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-                                   .run(term, lang: lang, license: license, limit: limit, morph: morph)
-        end
-
-        Query::Search.new(catalog: catalog, fulltext: fulltext)
-                     .run(term, lang: lang, license: license, limit: limit, from: from, to: to, place: place)
+        results, searcher =
+          if near
+            searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
+                          near: near, window: window, lang: lang, license: license, limit: limit), searcher]
+          elsif mode == :lemma
+            searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
+          else
+            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext)
+            [searcher.run(term, lang: lang, license: license, limit: limit,
+                                from: from, to: to, place: place), searcher]
+          end
+        [results, searcher.incomplete_hint]
       end
 
-      def render_search(results, limit:, catalog:)
-        return json(matches: [], note: "no matches", coverage: coverage_hint(catalog)) if results.empty?
+      def render_search(results, limit:, catalog:, incomplete: nil)
+        if results.empty?
+          return json(matches: [], note: ["no matches", incomplete].compact.join(" — "),
+                      coverage: coverage_hint(catalog))
+        end
 
         shown = results.first(limit)
         sources = sources_by_urn(catalog, shown.map(&:urn))
-        json(
-          matches: shown.map { |result| match_payload(result, sources) },
-          note: if results.size > limit
-                  "more than #{limit} matches, showing #{limit} — raise limit " \
-                    "(max #{SEARCH_MAX_LIMIT}) or refine"
-                else
-                  "#{shown.size} matches, showing #{shown.size}"
-                end
-        )
+        note = if results.size > limit
+                 "more than #{limit} matches, showing #{limit} — raise limit " \
+                   "(max #{SEARCH_MAX_LIMIT}) or refine"
+               else
+                 "#{shown.size} matches, showing #{shown.size}"
+               end
+        note = "#{note} — #{incomplete}" if incomplete
+        json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
       end
 
       def match_payload(result, sources)
@@ -992,6 +1018,33 @@ module Nabu
       end
 
       # -- define internals ---------------------------------------------------------
+
+      # The dictionary languages this catalog actually holds, live-derived at
+      # serve time (P35-6 L4; the P11 hardcoded-list lesson): a newly synced
+      # shelf language is advertised and accepted with zero code change. []
+      # when the catalog (or its shelf table) is unavailable — the degrade
+      # path: no enum is advertised and no lang is rejected, rather than
+      # validating against a stale frozen list.
+      def define_langs
+        catalog = resolve(@catalog)
+        return [] unless catalog&.table_exists?(:dictionaries)
+
+        catalog[:dictionaries].distinct.order(:language).select_map(:language)
+      end
+
+      # The served input schema for one tool: nabu_define's lang enum is
+      # injected from the live shelf set (absent when there is none to
+      # advertise); every other schema is the frozen constant.
+      def input_schema(name, tool)
+        schema = tool.fetch(:input_schema)
+        return schema unless name == "nabu_define"
+
+        langs = define_langs
+        return schema if langs.empty?
+
+        lang = schema.dig(:properties, :lang).merge(enum: langs)
+        schema.merge(properties: schema.fetch(:properties).merge(lang: lang))
+      end
 
       def define_miss_note(lemma)
         langs = @catalog[:dictionaries].distinct.order(:language).select_map(:language)
@@ -1761,7 +1814,7 @@ module Nabu
         stripped.empty? ? nil : stripped
       end
 
-      # A signed-integer arg (the date/place axis years, P15-2), or nil. A
+      # A signed-integer arg (the timeline years, P15-2), or nil. A
       # JSON number that isn't an integer is a usage error, not a silent coerce.
       def int_arg(args, key)
         value = args[key]

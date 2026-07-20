@@ -31,6 +31,7 @@ module Nabu
       class Error < Nabu::Error; end
 
       # Sampler ceiling: an eyeball ritual is a handful, never a firehose.
+      # const: a UX bound, not a corpus claim
       MAX_COUNT = 20
 
       include CatalogJoin

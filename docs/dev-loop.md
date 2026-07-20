@@ -115,6 +115,47 @@ The principle: **inside the sandbox, full freedom — the boundary itself is har
 - **Two-strike rule** (§4) bounds wasted spend on any one packet.
 - **The loop never marks its own phase done** — a phase ends at a human-merged PR, full stop.
 
+## 6b. Recalibration after growth waves (owner-ratified 2026-07-20, the P34-gate lesson)
+
+Every literal in code — a limit, a window multiplier, a hand-frozen
+enumeration, a lazy initialization — is a **census claim about the corpus
+at authoring time**. Expansion phases falsify these claims *by
+succeeding*, and the expensive failures are the ones that keep producing
+correct-looking output: a clean short list, a tidy "no matches", a card
+with no hint of what it omitted. (Specimens, all P34: Define's fetch-time
+5-shelf cap silently hiding tls-words once a Han headword matched 11
+dictionaries; the limit×10 FTS inner window emptying pages under composed
+filters; the ten frozen `--parallel` regexes; the lazy stdlib require
+dying hours into a wave.)
+
+The suite cannot catch this class — characterization tests are loyal to
+era-bound behavior and pin it as correct. Only measurement against the
+live corpus does. Standing rules:
+
+1. **Cap at render, never at fetch** — a fetch-time cap destroys the
+   count that honesty needs.
+2. **Every truncating or empty-returning surface adopts the honesty
+   vocabulary**: "… N more" tails, "page may be incomplete" hints,
+   skip-by-rule census notes. Silence that looks like completeness is a
+   defect, not a default.
+3. **Era-bound constants carry their justification**: a
+   `# census: <number>, <date>` comment beside the literal, so future
+   invalidation is a greppable review question, not an archaeology dig.
+4. **After every expansion wave, schedule the three-pass audit** as
+   consolidation work: mechanical inventory of assumption sites →
+   per-site recalibration against the live catalog (blame the era,
+   re-measure, classify OK / HARDEN / GENERALIZE / RETIRE) → convert the
+   class into gate-checked invariants. Gate runbooks with EXPECT lines
+   against real data are the recalibration instrument — keep writing
+   them.
+5. **Gate checklist line (P35-6, standing)**: at every phase gate run
+   `bundle exec rake census:check` (presence of the markers — also
+   enforced inside the suite) AND re-diff the RECORDED census numbers
+   against the live catalog (`sqlite3 "file:db/catalog.sqlite3?mode=ro"`)
+   — a stamped number that has drifted materially is a review question
+   for exactly the constant beside it; sites stamped while an index was
+   mid-rebuild (the stamp says so) are re-measured first.
+
 ## 7. Phase & packet breakdown
 
 Build order follows `docs/02-sources.md` synthesis (1 → 2 → 4 → 3/5 → 10 …). Packet lists below are the plan; each phase's packets get their full Goal/Acceptance elaboration at the previous phase's gate.

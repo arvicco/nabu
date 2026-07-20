@@ -134,6 +134,31 @@ module MCP
       assert_equal "μῆνιν ἄειδε θεά", hit.fetch("text")
     end
 
+    # The exhausted-inner-window honesty hint (P35-6, dev-loop §6b): MCP asks
+    # limit+1, so limit 1 makes the inner window 20 — twenty short lat rows
+    # fill it, the one grc match sits beyond, and the lang filter empties the
+    # page. The note must announce the possibly-incomplete page.
+    def test_search_incomplete_page_under_filters_notes_it
+      lat = make_document(urn: "urn:w:lat", language: "lat")
+      20.times do |i|
+        make_passage(lat, urn: "urn:w:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
+      end
+      grc = make_document(urn: "urn:w:grc", language: "grc")
+      make_passage(grc, urn: "urn:w:grc:1", sequence: 0,
+                        text: "arma sits far down the rank because this passage carries many more words than the rest")
+      rebuild!
+
+      result = call("nabu_search", { "query" => "arma", "lang" => "grc", "limit" => 1 })
+      refute result[:isError]
+      body = payload(result)
+      assert_empty body.fetch("matches")
+      assert_match(/page may be incomplete under these filters/, body.fetch("note"),
+                   "the filter-emptied page must not masquerade as a clean no-matches")
+
+      honest = payload(call("nabu_search", { "query" => "arma", "lang" => "lat", "limit" => 1 }))
+      refute_match(/page may be incomplete/, honest.fetch("note"), "a full page carries no hint")
+    end
+
     def test_search_lemma_mode_finds_inflected_attestations
       doc = make_document(urn: "urn:d:tb", title: "Treebank")
       make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,
@@ -251,7 +276,7 @@ module MCP
       assert_match(/open/, error.message, "the message teaches the valid classes")
     end
 
-    # -- nabu_search date/place axis (P15-2) -----------------------------------
+    # -- nabu_search timeline (P15-2) -----------------------------------
 
     def test_search_from_to_filters_by_date
       a = make_document(urn: "urn:nabu:ddbdp:a")
@@ -801,6 +826,41 @@ module MCP
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_define", {}) }
     end
 
+    # -- the define lang set is live-derived (P35-6 L4 GENERALIZE) -------------
+    # The P11 hardcoded-list lesson, closing its last survivor: the advertised
+    # and accepted dictionary languages come from the catalog's dictionaries
+    # table at serve time — a newly synced shelf appears with zero code change.
+
+    # The nabu_define lang enum as tools/list serves it right now.
+    def define_lang_enum
+      tools.definitions.find { |tool| tool[:name] == "nabu_define" }
+                       .fetch(:inputSchema).dig(:properties, :lang, :enum)
+    end
+
+    def test_define_advertises_and_accepts_catalog_derived_languages
+      @catalog[:dictionaries].insert(source_id: @open.id, slug: "mw",
+                                     title: "Monier-Williams", language: "san")
+
+      schema = tools.definitions.find { |tool| tool[:name] == "nabu_define" }.fetch(:inputSchema)
+      assert_includes schema.dig(:properties, :lang, :enum), "san",
+                      "a newly synced shelf language must be advertised, not invisible"
+
+      result = call("nabu_define", { "lemma" => "dharma", "lang" => "san" })
+      refute result[:isError], "a catalog-held shelf language must be accepted"
+
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_define", { "lemma" => "x", "lang" => "zz" })
+      end
+      assert_match(/san/, error.message, "the rejection names the LIVE shelf set, not a frozen list")
+    end
+
+    def test_define_schema_degrades_without_a_catalog
+      schema = tools(catalog: nil).definitions.find { |tool| tool[:name] == "nabu_define" }
+                                              .fetch(:inputSchema)
+      assert_nil schema.dig(:properties, :lang, :enum),
+                 "no catalog — no shelf set to advertise; lang stays free-form rather than lying"
+    end
+
     def test_define_no_match_is_informative
       seed_shelf
       result = call("nabu_define", { "lemma" => "βλαβλα" })
@@ -830,7 +890,7 @@ module MCP
       assert_equal "noble", entry.fetch("gloss")
       assert_equal "attribution", entry.fetch("license_class")
       assert_empty entry.fetch("citations"), "no OE crosswalk yet — citations start empty"
-      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "ang"
+      assert_includes define_lang_enum, "ang", "the live-derived enum advertises the synced shelf"
     end
 
     # P13-10: the OCS shelf — nabu_define reaches Wiktionary-OCS through the
@@ -857,7 +917,7 @@ module MCP
       assert_includes entry.fetch("body"), "Inherited from Proto-Slavic *bogъ.",
                       "the etymology chain must survive into the MCP body"
       assert_empty entry.fetch("citations"), "Wiktionary quotes are unanchored — citations start empty"
-      assert_includes Nabu::MCP::Tools::DEFINE_SCHEMA.dig(:properties, :lang, :enum), "chu"
+      assert_includes define_lang_enum, "chu", "the live-derived enum advertises the synced shelf"
     end
 
     def test_define_withholds_restricted_dictionaries_by_default

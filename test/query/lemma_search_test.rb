@@ -442,5 +442,42 @@ module Query
       assert_equal %w[urn:d:zogr:1], search("vъstati").map(&:urn),
                    "the damaskini-style Latin-diplomatic spelling reaches the Cyrillic gold lemma"
     end
+    # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) --------
+    # Ten open-licensed rows fill the urn-ordered inner window (limit 1 ×
+    # factor 10); the one nc attestation sorts after them, so the license
+    # filter empties the page while a match exists beyond the window.
+
+    def seed_window_exhausting_lemmas(open_rows: 10)
+      doc = make_document(urn: "urn:d:a")
+      open_rows.times do |i|
+        make_passage(doc, urn: "urn:d:a:#{i}", text: "λέγειν", sequence: i,
+                          lemmas: [%w[λέγω λέγειν]])
+      end
+      nc_doc = make_document(urn: "urn:d:z", source: @nc)
+      make_passage(nc_doc, urn: "urn:d:z:1", text: "εἶπας", sequence: 0,
+                           lemmas: [%w[λέγω εἶπας]])
+      rebuild!
+    end
+
+    def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
+      seed_window_exhausting_lemmas
+
+      query = Nabu::Query::LemmaSearch.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("λέγω", license: "nc", limit: 1)
+      assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
+                   "an empty page with matches beyond the window must announce itself"
+    end
+
+    def test_unexhausted_window_or_full_page_carries_no_hint
+      seed_window_exhausting_lemmas(open_rows: 3)
+
+      query = Nabu::Query::LemmaSearch.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:d:z:1], query.run("λέγω", license: "nc", limit: 1).map(&:urn)
+      assert_nil query.incomplete_hint, "the window reached the nc row — the page is honest"
+
+      refute_empty query.run("λέγω", limit: 1)
+      assert_nil query.incomplete_hint, "no catalog-side filter was active"
+    end
   end
 end
