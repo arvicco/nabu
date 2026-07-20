@@ -485,6 +485,158 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/classes/, error.message)
   end
 
+  # -- research axes (P35-0: the axes registry seam) ------------------------
+  # Definitions live in config/axes.yml (AxisRegistryTest); membership is a
+  # list-valued `axes:` key on every source row. Three load-time invariants:
+  # every source declares >= 1 axis (once definitions exist), every declared
+  # axis exists in the definitions, and axis names NEVER collide with source
+  # slugs — the resolution guarantee for the future `nabu sync <axis>` /
+  # `list --axis` surfaces (P35-1/2).
+
+  TWO_AXES = <<~YAML
+    classical:
+      persona: "The Classicist."
+      desc: "Greco-Roman letters."
+    celtic:
+      persona: "The Celticist."
+      desc: "From Lepontic stones to the glossators."
+  YAML
+
+  def test_axes_default_empty_when_no_definitions_file
+    entry = load_registry(<<~YAML)["minimal-src"]
+      minimal-src:
+        adapter: Some::Adapter
+    YAML
+    assert_equal [], entry.axes, "bootstrap/test mode: no axes.yml, no axes required"
+  end
+
+  def test_axes_parse_from_the_sibling_definitions_file
+    registry = load_registry_with_axes(TWO_AXES, <<~YAML)
+      corph-src:
+        adapter: A
+        axes: [celtic]
+      lexica-src:
+        adapter: B
+        axes: [classical, celtic]
+    YAML
+    assert_equal %w[celtic], registry["corph-src"].axes
+    assert_equal %w[classical celtic], registry["lexica-src"].axes
+    assert_equal %w[classical celtic], registry.axes.names, "the definitions ride the registry"
+  end
+
+  def test_axis_members_lists_slugs_in_registration_order
+    registry = load_registry_with_axes(TWO_AXES, <<~YAML)
+      corph-src:
+        adapter: A
+        axes: [celtic]
+      lexica-src:
+        adapter: B
+        axes: [classical, celtic]
+    YAML
+    assert_equal %w[corph-src lexica-src], registry.axis_members("celtic")
+    assert_equal %w[lexica-src], registry.axis_members("classical")
+    assert_equal [], registry.axis_members("nonexistent")
+  end
+
+  def test_source_without_axes_raises_once_definitions_exist
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry_with_axes(TWO_AXES, <<~YAML)
+        bare-src:
+          adapter: A
+      YAML
+    end
+    assert_match(/bare-src/, error.message)
+    assert_match(/at least one/, error.message)
+  end
+
+  def test_empty_or_non_list_axes_raises_naming_the_slug
+    ["axes: []", "axes: classical", "axes: [1]"].each do |bad|
+      error = assert_raises(Nabu::ValidationError, "#{bad.inspect} must be rejected") do
+        load_registry_with_axes(TWO_AXES, <<~YAML)
+          my-src:
+            adapter: A
+            #{bad}
+        YAML
+      end
+      assert_match(/my-src/, error.message)
+      assert_match(/axes/, error.message)
+    end
+  end
+
+  def test_duplicate_axes_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry_with_axes(TWO_AXES, <<~YAML)
+        my-src:
+          adapter: A
+          axes: [celtic, celtic]
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/duplicate/, error.message)
+  end
+
+  def test_unknown_axis_raises_naming_slug_and_axis
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry_with_axes(TWO_AXES, <<~YAML)
+        my-src:
+          adapter: A
+          axes: [classical, sinitic]
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/sinitic/, error.message)
+    assert_match(/unknown axis/, error.message)
+  end
+
+  def test_axis_name_colliding_with_a_source_slug_is_a_load_error
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry_with_axes(TWO_AXES, <<~YAML)
+        celtic:
+          adapter: A
+          axes: [classical]
+      YAML
+    end
+    assert_match(/celtic/, error.message)
+    assert_match(/collide/, error.message)
+  end
+
+  # The shipped registry: the owner-ratified 18-axis set over all 80 sources.
+  # Loading the REAL config enforces all three invariants on the real mapping;
+  # the pins below freeze the ratified structure (definitions order, the D35-d
+  # dual-tagging ruling, the whole-source memberships).
+  def test_shipped_registry_mapping_is_valid_and_ratified
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+
+    assert_equal %w[classical epigraphy slavic germanic celtic italic etym biblical hebrew
+                    syriac hittite cuneiform egyptian indic buddhist sinitic japonic local],
+                 registry.axes.names, "the 18 ratified axes, in render order"
+
+    registry.each_source do |entry|
+      refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"
+    end
+    registry.axes.names.each do |axis|
+      refute_empty registry.axis_members(axis), "axis #{axis} must have at least one member"
+      assert registry.axes[axis].persona.start_with?("The "),
+             "axis #{axis}: persona is first-class render data (the hat, house voice)"
+    end
+
+    # D35-d: tlhdig rides BOTH cuneiform AND hittite — dual-tagging over folding.
+    assert_includes registry["tlhdig"].axes, "cuneiform"
+    assert_includes registry["tlhdig"].axes, "hittite"
+    # The hebrew/biblical coexistence is BY DESIGN (D35-a): cross-language hat + language desk.
+    assert_equal %w[biblical hebrew], registry["oshb"].axes.sort
+    assert_equal %w[biblical hebrew], registry["bridging"].axes.sort, "the feature module rides its host's desks"
+    # The Librarian's four local shelves, and nothing else.
+    assert_equal %w[local-language local-library local-notes local-source],
+                 registry.axis_members("local").sort
+    # Manifest-verified corrections vs the draft table (see the P35-0 report):
+    assert_includes registry["ud"].axes, "sinitic", "UD ships two lzh treebanks (P32-0)"
+    assert_includes(registry["ud"].axes, "celtic", "UD ships two sga treebanks")
+    assert_includes registry["suttacentral"].axes, "sinitic", "the lzh Agamas (P32-1)"
+    assert_equal registry["lexlep"].axes, registry["lexlep-words"].axes,
+                 "the two grains of one wiki share their desks"
+  end
+
   # -- lazy adapter resolution --------------------------------------------
 
   def test_unknown_adapter_class_is_lazy
@@ -566,6 +718,17 @@ class SourceRegistryTest < Minitest::Test
     Dir.mktmpdir do |dir|
       path = File.join(dir, "sources.yml")
       File.write(path, yaml)
+      return Nabu::SourceRegistry.load(path)
+    end
+  end
+
+  # P35-0: axes.yml is the sources.yml SIBLING — writing both into one tmpdir
+  # exercises the default wiring (no explicit axes_path at any call site).
+  def load_registry_with_axes(axes_yaml, sources_yaml)
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "axes.yml"), axes_yaml)
+      path = File.join(dir, "sources.yml")
+      File.write(path, sources_yaml)
       return Nabu::SourceRegistry.load(path)
     end
   end
