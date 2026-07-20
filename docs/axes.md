@@ -179,7 +179,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
 
-**Members** (10): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `cbeta`, `kanripo`, `tls`
+**Members** (11): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`
 
 ### japonic
 

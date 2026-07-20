@@ -4292,6 +4292,27 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_show_reading_resolves_and_placeholds_kanripo_gaiji
+    with_kanripo_gaiji_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:kanripo:KR1h0004:001:1a --display reading]) }
+      assert_nil status
+      assert_includes out, "子曰𫠦學而⬚時習之", "KR0001 resolves to its real glyph, KR0809 → placeholder box"
+      refute_includes out, "&KR", "no raw ref survives reading mode"
+      assert_includes out, "display: 1 unresolved gaiji (1 resolved) (--display diplomatic shows the gaiji refs)"
+    end
+  end
+
+  def test_show_diplomatic_keeps_kanripo_gaiji_refs_verbatim
+    with_kanripo_gaiji_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:kanripo:KR1h0004:001:1a --display diplomatic]) }
+      assert_nil status
+      assert_includes out, "子曰&KR0001;學而&KR0809;時習之", "the byte-honest view keeps the refs as stored"
+      refute_includes out, "display:", "nothing transformed → no footer (compact rule)"
+    end
+  end
+
   def test_show_document_listing_substitutes_qere_under_reading
     with_edition_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:oshb:ruth --display reading]) }
@@ -5852,6 +5873,43 @@ class CLITest < Minitest::Test
       Nabu::Store.migrate!(catalog)
       Nabu::Store.setup!(catalog)
       seed_edition_corpus(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A one-passage kanripo corpus for the P37-3 gaiji lane: 論語 001:1a carrying
+  # one FAITHFUL ref (&KR0001; → 𫠦, in the shipped map) and one IMAGE-ONLY ref
+  # (&KR0809;, unresolvable). Copies BOTH the shipped display.yml (kanripo
+  # gaiji: placeholder) and the shipped config/gaiji dir into root so the
+  # reading mode reaches the real resolution map through the stubbed Config.
+  def with_kanripo_gaiji_corpus
+    Dir.mktmpdir("nabu-cli-gaiji") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      FileUtils.cp(File.expand_path("../config/display.yml", __dir__), File.join(root, "display.yml"))
+      FileUtils.cp_r(File.expand_path("../config/gaiji", __dir__), File.join(root, "gaiji"))
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      kanripo = Nabu::Store::Source.create(
+        slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",
+        license_class: "attribution"
+      )
+      doc = Nabu::Store::Document.create(
+        source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0004", title: "論語", language: "lzh",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      text = "子曰&KR0001;學而&KR0809;時習之"
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "urn:nabu:kanripo:KR1h0004:001:1a", sequence: 0,
+        language: "lzh", text: text, text_normalized: text, content_sha256: "x", revision: 1
+      )
       catalog.disconnect
       yield config
     end
