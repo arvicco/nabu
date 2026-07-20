@@ -10496,7 +10496,7 @@ optimizations.
 N parsers, one writer behind a queue. If FTS reindex dominates, does
 not dispatch; journal says why.
 
-## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: done 2026-07-20] [deps: —]
 The P34-2 defect: 1,695 aed-side edges dangle (`dict:aed:159410`
 producer vs `dict:aed:tla159410` shelf). Decide re-mint vs
 resolution-normalize (study the canonical id space; links journal

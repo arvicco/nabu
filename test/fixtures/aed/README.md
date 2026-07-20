@@ -17,11 +17,11 @@ is the authoritative one and is quoted in the adapter manifest.
 
 ## Trim procedure
 
-`files/dictionary.xml` here is the real teiHeader plus 31 upstream
+`files/dictionary.xml` here is the real teiHeader plus 32 upstream
 `<entry>` elements copied byte-verbatim in file order, with the original
 `</body></text></TEI>` closers (nothing rewrapped, nothing reindented).
 
-## What the 31 entries cover
+## What the 32 entries cover
 
 - **The join-contract cluster**: the `nfr` homographs tla400458 (adverb),
   tla550034 (adjective), tla550123 (particle), tla83460/83470/83500, and
@@ -49,3 +49,11 @@ is the authoritative one and is quoted in the adapter manifest.
   the semivowel breve i̯ U+032F (tla100650), ṱ (tla867539), compound
   punctuation ḥw.t-kꜣ (tla100010), leading `=` clitic (tla10010), and
   the lone editorial 〈 〉 pair in the corpus (tla851379).
+- **The egy↔cop etymology target** (added P36-4): tla159410 (qꜣḥ
+  "Nilschlamm; Lehmmörtel" / "Nile clay; mortar") — the AED entry the
+  ORAEC crosswalk row `C1494,159410,6439` names as the hieroglyphic
+  ancestor of Coptic ⲕⲁϩ (CCL C1494). It anchors the CclEtymologies
+  end-to-end oracle: the crosswalk stores the bare lemma id `159410`,
+  but this shelf mints `urn:nabu:dict:aed:tla159410` from the upstream
+  `@xml:id` verbatim, so the etymology producer must restore the `tla`
+  prefix for the edge to land here.
