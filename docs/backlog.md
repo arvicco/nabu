@@ -10410,7 +10410,7 @@ Acceptance: zero output drift outside the renamed words themselves
 (suite pins); docs grep-clean of the old sense ("axis" = research
 axis only).
 
-## P35-5 · The assumption inventory  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P35-5 · The assumption inventory  [tier: opus] [status: done 2026-07-20] [deps: —]
 Goal: dev-loop §6b pass 1 — harvest every era-bound-assumption site
 in lib/ into ONE census table (file:line · literal/enumeration ·
 stated justification or none · failure mode if false · growth axis
