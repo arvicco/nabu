@@ -192,7 +192,11 @@ module Nabu
     # A sparse repo scopes the diff to its cone (class note): deletions
     # outside it are not this source's assets.
     def deleted_relpaths
-      scope = @sparse ? ["--", *@sparse] : []
+      # Sparse-checkout patterns admit a root-anchoring "/" ("/lexicon.xml"
+      # = the file at the repo root); a diff PATHSPEC does not — a leading
+      # slash is fatal there. Same cone, two grammars: translate at this
+      # boundary (the ONCOJ owner repro, 2026-07-20).
+      scope = @sparse ? ["--", *@sparse.map { |path| path.delete_prefix("/") }] : []
       Shell.run("git", "-C", @dir, "diff", "--name-only", "--diff-filter=D",
                 "--find-renames", "-z", "HEAD", "FETCH_HEAD", *scope).split("\0")
     end

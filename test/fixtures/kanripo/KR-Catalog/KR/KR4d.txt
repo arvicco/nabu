@@ -1,0 +1,14 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR4d ZB4d 別集類-宋
+*** KR4d0525 鯨背吟集-元-朱晞顏
+:PROPERTIES:
+:KR_ID: KR4d0525
+:CUSTOM_ID:  ZB4b0615
+:SOURCE:   四庫全書 文淵閣版, V1214.3, p427
+:EXTENT: 1 卷
+:BOOK:   1
+:_RESP:    （元）朱晞顏
+:END:
+**** 人物
+***** 朱晞顏

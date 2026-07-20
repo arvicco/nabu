@@ -1628,6 +1628,97 @@ oncoj-lexicon:
   # and §C citation as oncoj. Frozen with the tag; owner re-pins.
   sync_policy: frozen
 
+cbeta:
+  adapter: Nabu::Adapters::Cbeta
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync cbeta — sparse
+                   # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
+                   # working tree (T 2,471 files / 816 MB + X 1,236 files /
+                   # 645 MB at upstream 2026.R1) — expect 3,707 documents at
+                   # print-line grain (LARGE: T01n0001 alone is 13,072 lb
+                   # lines; budget the load accordingly); eyeball
+                   # nabu show urn:nabu:cbeta:T85n2884:1390a24, an X passage
+                   # and 5 random lines, then flip.
+  # P33-2: CBETA xml-p5 (github.com/cbeta-org/xml-p5, release 2026.R1),
+  # scoped to the two central canons T (Taishō, vols 1–85) + X
+  # (Xuzangjing, vols 1–88); the other 24 Category A canon dirs are a
+  # future scope decision (skipped by rule, censused). LICENSE — the
+  # canon-level gate: Category A = CC BY-NC-SA 4.0 (cbeta.org/copyright
+  # 「Creative Commons 姓名標示-非商業性-相同方式分享 4.0 國際授權條款」 +
+  # every file's own header grant, re-verified at parse) → class nc,
+  # MCP-excluded; the four named Category B corpora (Y 印順法師佛學著作集,
+  # LC 呂澂佛學著作集, TX 太虛大師全書, YP 演培法師全集 — 類別 B：不屬於
+  # 創用 CC 條款授權之文獻) are NEVER ingested: outside the sparse cone
+  # AND refused by canon dir at discover (test-pinned). license_watch on
+  # cbeta.org/copyright is a candidate — OWNER decision before enabling
+  # (the P16-5 no-redirect rule must be verified first). Upstream ships
+  # dated releases (2026.R1, 2026-05-10) → a fresh sync is an owner
+  # decision: manual. OVERLAP: SuttaCentral's 272 lzh Āgama docs re-edit
+  # SEVEN Taishō numbers (T26/T99/T125/T765/T1536/T1537/T1548, all in T)
+  # — provenance-distinct witnesses, never deduped.
+  sync_policy: manual
+kanripo:
+  adapter: Nabu::Adapters::Kanripo
+  enabled: false   # CLAUDE.md checklist §6: bin/nabu sync kanripo — the
+                   # first many-repo wave (KanripoFetch, architecture §8):
+                   # KR-Catalog clone + 3,512 per-text shallow clones
+                   # (census 2026-07-20: KR1 719 repos/~204 MB git, KR2
+                   # 578/~459 MB, KR3 867/~513 MB, KR4 1,348/~566 MB; 63
+                   # of the 3,569 wave ids have no repo → recorded absent).
+                   # At the default 2 s pacing the combined wave is ~2 h of
+                   # pauses (KR2's share ~20 min) + ~1.7 GB transfer —
+                   # resumable: re-running resumes where it died,
+                   # refetching nothing. Eyeball 論語
+                   # (urn:nabu:kanripo:KR1h0004) juan 1 and 5 random
+                   # pages, then flip.
+  sync_policy: manual   # ~3.5k-repo waves are owner-fired, never --all
+  # P33-0 wave 1 + P33-1 wave 2 (2026-07-20): `classes:` is the
+  # ACQUISITION scope, listed in 四部 order — ORDER IS COSMETIC (the wave
+  # fetches the sorted union of the classes' catalog ids). Wave 1 = KR1 經
+  # classics + KR3 子 masters + KR4 集 belles-lettres (732 + 886 + 1,371
+  # = 2,989 catalog ids); wave 2 (P33-1) adds KR2 史 histories: 580
+  # catalog ids / 578 repos (~459 MB git — the 二十四史 live here; two ids
+  # have NO repo: KR2a0039 清史稿 + KR2d0020 → recorded absent; 4 KR2
+  # repos incl. the whole KR2p 出土簡帛 subclass are UN-catalogued →
+  # outside the catalog-driven scope, censused in 02-sources row 104).
+  # KR5 道 (the Daozang) is censused + REPORTED ONLY (P33-1): its DZJY
+  # witness overlays (`<md:>` milestones) don't parse under the mandoku
+  # family — ingestion needs its own parser wave, owner's call. KR6
+  # Buddhist is EXCLUDED this phase (doctrine call journaled in
+  # 02-sources row 104 — CBETA is the scholarly Buddhist shelf).
+  # Narrowing classes never withdraws held texts (discover is on-disk-
+  # driven); widening is a config-only change. The pacing knob is
+  # Nabu::KanripoFetch::DEFAULT_DELAY (2 s between network operations,
+  # conservative; the adapter's fetch_delay seam is the override point).
+  # License: org-level grant verbatim "Comprehensive collection of
+  # premodern Chinese texts. Licensed as CC BY SA 4.0." + ytenx
+  # DATA_LICENSE.md corroboration; №25 Wittern confirmation email SENT,
+  # non-blocking → attribution.
+  classes: [KR1, KR2, KR3, KR4]
+tls:
+  adapter: Nabu::Adapters::Tls
+  enabled: false   # P33-4: awaiting the owner-fired first sync (sparse
+                   # GitFetch of tls-kr/tls-data, cone concepts/ + words/
+                   # ~112 MB working tree out of the 4.7 GB repo; CLAUDE.md
+                   # checklist §6: bin/nabu sync tls, eyeball nabu define 棄
+                   # (six concept blocks incl. ABANDON with urns) and
+                   # define DIE (definition + criteria + member words),
+                   # then flip). Expect 3,018 och entries on tls-concepts +
+                   # 20,163 on tls-words (2 skip-by-rule strays censused:
+                   # the percent-encoded CRONY-uuid duplicate, the
+                   # empty-orth superEntry aggregate).
+  # Thesaurus Linguae Sericae (Harbsmeier) — the first ONOMASIOLOGICAL
+  # shelf: concepts (definition + synonym-group criteria + hypernymy/
+  # taxonymy/antonymy/see pointer urns + member words inverted from the
+  # words side) and words (superEntry grain, every entry block naming its
+  # concept + urn, pinyin/OC/MC readings, sense uuids verbatim — the join
+  # keys of the DEFERRED attestation crosswalk: 111,484 tls:ann rows in
+  # notes/doc + notes/swl target text seg ids the catalog does not hold;
+  # 02-sources row 106 records that and the rest of the repo census).
+  # CC BY-SA 4.0 (LICENSE.md, sha256-identical in tls-texts + tls-data;
+  # both README badges say CC BY 4.0 — recorded discrepancy, LICENSE
+  # governs). Upstream is a live eXist-db working repo → manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

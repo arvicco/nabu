@@ -1,0 +1,13 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR3g ZB3g 術數類
+*** KR3g0023 青囊奧語-唐-楊筠松
+:PROPERTIES:
+:KR_ID: KR3g0023
+:CUSTOM_ID:  ZB3g0024
+:SOURCE:   四庫全書 文淵閣版, V808.5, p89
+:EXTENT: 1 卷
+:BOOK:   (1)
+:END:
+**** 人物
+***** 楊筠松

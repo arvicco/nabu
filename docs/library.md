@@ -1,11 +1,12 @@
 # The Library — content review
 
-**As of 2026-07-20** (post Phase 32, the Sino-axis phase; v1.1.0 cut
+**As of 2026-07-20** (post Phases 32–33, the Sino axes; v1.1.0 cut
 2026-07-19). Live totals: **742,616 documents / 11,433,174 passages
-and 1,139,727 dictionary entries** across the **76 registered sources**
-(69 enabled; the P32 newcomers await their flip cycle). The reference
-shelf spans forty-six dictionary shelves (§8c, §8h, §8j, §8k, §8m,
-§8o, §8q, §8s). The lemma layer, censused fresh this date:
+and 1,145,596 dictionary entries** across the **79 registered sources**
+(69 enabled; the P32/P33 newcomers await their flip cycles — the
+Kanripo and CBETA syncs are the next step change). The reference shelf
+spans forty-nine dictionary shelves (§8c, §8h, §8j, §8k, §8m, §8o,
+§8q, §8s, §8t). The lemma layer, censused fresh this date:
 **12,474,060 gold rows in 22 languages** plus **8,000,317 silver rows in
 8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
 upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
@@ -561,6 +562,21 @@ journey from Old Chinese reconstruction through Qieyun phonology to
 its go-on/kan-on Japanese readings — the axis the bridge shelves exist
 to serve. Kanripo (the 9,355-text Chinese library) and CBETA (the
 Taishō canon) are the planned P33 continuations.
+
+## 8t. The Chinese libraries (`kanripo`, `cbeta`, `tls`; built 2026-07-20, syncs/flips pending)
+
+| | |
+|---|---|
+| **Category** | The Sino axis's bookshelf — Phase 33: the two great Chinese text libraries and the concept lexicon |
+| **Language** | Literary Chinese (`lzh`) at library scale; Old Chinese (`och`) concept/word shelves |
+| **Size** | `kanripo`: nabu's first many-repo source — waves 1+2 = KR1 classics + KR2 histories + KR3 masters + KR4 belles-lettres, 3,569 catalog ids / 3,512 repos / ~1.7 GB, catalog-driven shallow fetches with polite pacing and a resumable per-text ledger; editions are git branches (master = base edition); citation grain text:juan:leaf-side from the mandoku page anchors; org-level CC BY-SA grant (№25 confirmation outstanding, non-blocking). `cbeta`: the Taishō (T, 2,471 files / 816 MB) + Xuzangjing (X, 1,236 / 645 MB) in CBETA's TEI — the Taishō citation (page-register-line) rides free from the lb milestones; CC BY-NC-SA per the canon-level gate, the four Category B corpora refused by rule; all 272 held lzh Āgamas map into T. `tls`: the Thesaurus Linguae Sericae concept net as two och dictionaries — 3,018 concepts + 20,163 word superEntries (100% concept-linked), membership inverted from the words dir; CC BY-SA (the README badge discrepancy recorded) |
+| **Metadata** | Producer #8 links the Kyoto treebank to its Kanripo source texts (all 936 treebank documents carry KR-ids; 44% resolve at wave 1, 56% more at wave 2); KR5 characterized as the Daozang (in/out ruling pending — witness-overlay parser needed first); the TLS attestation lane (111k sense-level attributions) journaled as a future crosswalk |
+
+**Research uses:** the Analects readable beside its gold treebank
+annotation and its TLS concept net; the Taishō canon at scholarly
+citation grain with the Āgama parallels pointing in; dynastic histories
+and the literary anthologies at page grain — the open ctext.org
+substitute, on the researcher's own disk.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

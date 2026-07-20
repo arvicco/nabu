@@ -55,10 +55,16 @@ module Nabu
     # +lemma_tier+ (P26-0): the tier this source's lemma annotations enter the
     # passage_lemmas index under (LEMMA_TIERS; default gold — absent means
     # gold, so existing entries never change).
+    # +classes+ (P33-0): the acquisition scope of a many-repo source
+    # (kanripo `classes: [KR1, KR3, KR4]`) — an owner posture like
+    # enabled/translations, passed to the adapter's `classes:` keyword by
+    # build_adapter. nil (the default) leaves the adapter's own default
+    # scope; the adapter validates the class vocabulary.
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier) do
+                        :license_watch, :fuzzy_index, :lemma_tier, :classes) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
-                     license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER)
+                     license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER,
+                     classes: nil)
         super
       end
 
@@ -72,19 +78,22 @@ module Nabu
       end
 
       # Construct the adapter this entry configures — THE construction seam
-      # for sync/rebuild/verify, so every pipeline agrees on the flag. Flag
-      # off (the default) is the plain no-arg construction every adapter
-      # supports; flag on passes `translations: true`, and an adapter without
-      # that keyword is a configuration error naming source and class, not an
-      # ArgumentError crash.
+      # for sync/rebuild/verify, so every pipeline agrees on the flags. All
+      # flags off (the default) is the plain no-arg construction every
+      # adapter supports; `translations: true` and a `classes:` list pass as
+      # keywords, and an adapter without the keyword is a configuration
+      # error naming source and class, not an ArgumentError crash.
       def build_adapter
-        return adapter_class.new unless translations
+        kwargs = {}
+        kwargs[:translations] = true if translations
+        kwargs[:classes] = classes if classes
+        return adapter_class.new if kwargs.empty?
 
         begin
-          adapter_class.new(translations: true)
+          adapter_class.new(**kwargs)
         rescue ArgumentError
           raise ValidationError, "source #{slug}: adapter #{adapter_class_name} does not support " \
-                                 "`translations: true` (no translations: keyword on its initializer)"
+                                 "`#{kwargs.keys.join(', ')}` (missing keyword on its initializer)"
         end
       end
 
@@ -153,10 +162,23 @@ module Nabu
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
-        lemma_tier: lemma_tier!(slug, config)
+        lemma_tier: lemma_tier!(slug, config),
+        classes: classes!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    # nil (adapter default scope) or a non-empty list of non-empty strings;
+    # the class VOCABULARY is the adapter's to validate (P33-0).
+    def self.classes!(slug, config)
+      list = config.fetch("classes", nil)
+      return nil if list.nil?
+      return list if list.is_a?(Array) && !list.empty? && list.all? { |c| c.is_a?(String) && !c.strip.empty? }
+
+      raise ValidationError,
+            "source #{slug.inspect}: classes must be a non-empty list of strings, got #{list.inspect}"
+    end
+    private_class_method :classes!
 
     def self.lemma_tier!(slug, config)
       tier = config.fetch("lemma_tier", DEFAULT_LEMMA_TIER)

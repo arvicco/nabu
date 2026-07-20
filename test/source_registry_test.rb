@@ -322,6 +322,81 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/FakeAdapter/, error.message)
   end
 
+  # -- classes list (P33-0, the many-repo scope) ----------------------------
+
+  def test_classes_defaults_nil
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+    YAML
+    assert_nil entry.classes
+  end
+
+  def test_classes_parses_a_list_of_strings
+    entry = load_registry(<<~YAML)["kanripo"]
+      kanripo:
+        adapter: Nabu::Adapters::Kanripo
+        classes: [KR1, KR3, KR4]
+    YAML
+    assert_equal %w[KR1 KR3 KR4], entry.classes
+  end
+
+  def test_non_list_classes_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        kanripo:
+          adapter: Nabu::Adapters::Kanripo
+          classes: KR1
+      YAML
+    end
+    assert_match(/kanripo/, error.message)
+    assert_match(/classes/, error.message)
+  end
+
+  def test_empty_or_non_string_classes_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        kanripo:
+          adapter: Nabu::Adapters::Kanripo
+          classes: []
+      YAML
+    end
+    assert_match(/classes/, error.message)
+
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        kanripo:
+          adapter: Nabu::Adapters::Kanripo
+          classes: [1, 2]
+      YAML
+    end
+    assert_match(/classes/, error.message)
+  end
+
+  def test_build_adapter_passes_classes_to_a_supporting_adapter
+    entry = load_registry(<<~YAML)["kanripo"]
+      kanripo:
+        adapter: Nabu::Adapters::Kanripo
+        classes: [KR1]
+    YAML
+
+    adapter = entry.build_adapter
+    assert_instance_of Nabu::Adapters::Kanripo, adapter
+    assert_equal ["KR1"], adapter.classes
+  end
+
+  def test_build_adapter_classes_on_an_unsupporting_adapter_raises
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+        classes: [KR1]
+    YAML
+
+    error = assert_raises(Nabu::ValidationError) { entry.build_adapter }
+    assert_match(/fake-src/, error.message)
+    assert_match(/classes/, error.message)
+  end
+
   # -- lazy adapter resolution --------------------------------------------
 
   def test_unknown_adapter_class_is_lazy
