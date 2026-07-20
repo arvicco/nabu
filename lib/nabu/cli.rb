@@ -9,6 +9,11 @@ module Nabu
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    # The tag-semantics note the axis-grouped surfaces (`list --axis`,
+    # `status --axis`, P35-1) state ONCE: axes are TAGS over the source list,
+    # so a source appears under every axis it serves — never a folder owning it.
+    AXIS_TAG_NOTE = "Axes are tags, not folders — a source appears under every desk it serves."
+
     # Raise Thor::Error (rather than aborting the process abruptly) so failures
     # surface a clean stderr message and a non-zero exit status.
     def self.exit_on_failure?
@@ -349,6 +354,9 @@ module Nabu
     HELP
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
+    option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
+                  desc: "Group the status table under the research axes (config/axes.yml): bare = all in " \
+                        "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
     def status
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -359,7 +367,14 @@ module Nabu
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      say Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+      # --axis (P35-1): the same rows grouped under the research desks.
+      report = if options[:axis]
+                 Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
+                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+               else
+                 Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+               end
+      say report
     ensure
       db&.disconnect
       ledger&.disconnect
@@ -401,6 +416,14 @@ module Nabu
       without a dossier description shows the honest stub hint. Composes
       with nothing — it IS the whole-library view.
 
+      `nabu list --axis` groups the census under the research axes (the
+      owner's desks, config/axes.yml): each axis leads with its persona
+      line, then the same census rows, indented. Axes are TAGS, not folders
+      — a source appears under every axis it serves (stated once). Bare
+      --axis shows every axis in the ratified order; `--axis slavic` one
+      axis; `--axis a,b` those axes only. An unknown axis names the known
+      set. The bare (ungrouped) census is unchanged.
+
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
         --documents    every document: urn — title [lang] license, urn order,
@@ -426,6 +449,8 @@ module Nabu
       Examples:
         nabu list                                # the census, every shelf
         nabu list --sources                      # the one-page grouped map
+        nabu list --axis                         # the census, grouped by desk
+        nabu list --axis slavic                  # one desk's shelves
         nabu list ccmh                           # one shelf's card
         nabu list local-library --documents      # what did I ingest?
         nabu list local-library --collections    # …and how is it filed?
@@ -466,6 +491,10 @@ module Nabu
                      desc: "With --documents: one century's --from/--to shorthand (6, -2)"
     option :long, type: :boolean, default: false,
                   desc: "Census only: add each source's dossier description line (the local-source shelf)"
+    option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
+                  desc: "Group the census under the research axes (config/axes.yml): bare = all in " \
+                        "ratified order, NAME[,NAME…] = those axes only. A source appears under each " \
+                        "axis it serves"
     option :"export-source-dossiers", type: :boolean, default: false,
                                       desc: "Owner one-shot: scaffold a canonical/local-source dossier for " \
                                             "EVERY registered source, descriptions seeded from existing " \
@@ -485,7 +514,10 @@ module Nabu
 
       require_timeline!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
-      if options[:sources]
+      if options[:axis]
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        print_census_by_axis(query.census, selected_axes(registry.axes), registry)
+      elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
       elsif options[:documents]
@@ -2287,6 +2319,15 @@ module Nabu
         ).any?)
           raise Thor::Error, "list: --sources is the one-page grouped map — it composes with nothing"
         end
+        # --axis groups the bare census under the research desks; it is a
+        # census view, not an enumeration — like --sources, it composes with
+        # nothing (a SOURCE, an enumeration, --long, --sources are all a
+        # different question).
+        if options[:axis] && (!slug.empty? || modes.any? || options[:sources] ||
+                              options.values_at("long", "export-source-dossiers", "dry-run").any?)
+          raise Thor::Error, "list: --axis groups the census under the research axes — " \
+                             "drop the SOURCE/enumeration flags"
+        end
         if modes.size > 1
           raise Thor::Error, "list: give one of --documents, --entries, --collections, --loans per invocation"
         end
@@ -2333,6 +2374,52 @@ module Nabu
           description = descriptions && descriptions[row.slug]
           say "#{' ' * (width + 2)}#{truncate_line(description)}" if description
         end
+        say census_summary(rows)
+      end
+
+      # Resolve the --axis value to the ordered Axis list to render (P35-1).
+      # Bare (empty) --axis = every axis in the ratified file order; a
+      # comma-list = those axes, in the order asked (deduped, first wins). An
+      # unknown name is a clean error naming the known set — the resolution
+      # guarantee (an axis name can never collide with a slug, so this is
+      # unambiguous). No axes defined at all is its own honest miss.
+      def selected_axes(axis_registry)
+        if axis_registry.empty?
+          raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
+        end
+
+        spec = options[:axis].to_s.strip
+        return axis_registry.each_axis.to_a if spec.empty?
+
+        spec.split(",").map(&:strip).reject(&:empty?).uniq.map do |name|
+          axis_registry[name] ||
+            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: #{axis_registry.names.join(', ')}")
+        end
+      end
+
+      # `list --axis` (P35-1): the census grouped under the research axes
+      # (the owner's desks, config/axes.yml). The tag-semantics note is
+      # stated once up front; each axis leads with its VERBATIM persona line
+      # (P35-0 first-class render data) and then the SAME census rows the
+      # flat view prints, indented — a source under every axis it serves
+      # (dual-tagging, D35). An axis with nothing held yet says so honestly.
+      # Slug width is global so alignment is stable across groups.
+      def print_census_by_axis(rows, axes, registry)
+        return say("nothing held yet — run nabu sync") if rows.empty?
+
+        width = rows.map { |row| row.slug.length }.max
+        say AXIS_TAG_NOTE
+        axes.each do |axis|
+          say ""
+          say "#{axis.name} — #{axis.persona}"
+          members = rows.select { |row| registry[row.slug]&.axes&.include?(axis.name) }
+          if members.empty?
+            say "  (nothing held on this axis yet)"
+          else
+            members.each { |row| say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+          end
+        end
+        say ""
         say census_summary(rows)
       end
 

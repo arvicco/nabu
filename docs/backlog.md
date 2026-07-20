@@ -10375,7 +10375,7 @@ declares ≥1 axis; every declared axis exists in the definitions
 block; axis names NEVER collide with source slugs (the resolution
 guarantee); the design note argues axes.yml-vs-sources.yml placement.
 
-## P35-1 · `nabu list --axis` + status grouping  [tier: opus] [status: dispatched 2026-07-20] [deps: P35-0]
+## P35-1 · `nabu list --axis` + status grouping  [tier: opus] [status: done 2026-07-20] [deps: P35-0]
 Goal: `list --axis` = grouped listing (axis header: name + persona
 line; members with held counts; a source appears under each of its
 axes, tag semantics stated once); `--axis slavic` one axis;
