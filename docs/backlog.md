@@ -10393,7 +10393,7 @@ Acceptance: per-source report lines byte-unchanged (frozen contract —
 grouping is pure expansion); resolution + skip-reporting test-pinned;
 `sync --all` output stays flat.
 
-## P35-3 · docs/axes.md — the public atlas page  [tier: opus] [status: ready] [deps: P35-0, P35-1, P35-2]
+## P35-3 · docs/axes.md — the public atlas page  [tier: opus] [status: dispatched 2026-07-20] [deps: P35-0, P35-1, P35-2]
 Goal: the personas + axes + membership page, PUBLIC (D35-e), written
 from the live registry (never hand-duplicated rows); languages.md
 refresh rides the gate as usual.
