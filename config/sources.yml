@@ -704,7 +704,7 @@ isicily:
   # edges (producer isicily); the 8 explicit EDH concordances mint
   # urn:nabu:edh:hd… cross-catalog edges (provenance-distinct witnesses,
   # never deduped). origDate -custom Julian signed years + Pleiades/
-  # GeoNames findspots → AxisBuilder::IsicilyDates (~5,118 axis rows).
+  # GeoNames findspots → TimelineBuilder::IsicilyDates (~5,118 axis rows).
   # The repo is LIVE (Crossreads lemmatization landing; pushed daily) →
   # re-syncs are owner-fired.
   sync_policy: manual
@@ -1002,7 +1002,7 @@ dss:
   # This is experimental"); also the lex-NODE lane + occ edges (word-grain
   # lex rides tokens; OSHB join by consonantal folding measured at fixture
   # time: 301/372 = 80.9% — journaled in 02-sources row 88, not wired).
-  # No date axis: tf/2.0 carries no period/dating feature (censused).
+  # No timeline: tf/2.0 carries no period/dating feature (censused).
   sync_policy: manual
 
 tlhdig:
@@ -1286,7 +1286,7 @@ open-etruscan:
   # ocr_failed rows skipped by rule with discovery-skip accounting. The
   # findspots sidecar (Larth Data/Etruscan.csv @ pinned commit daf49721)
   # side-joins 456 city-tagged rows → document_axes places
-  # (AxisBuilder::OpenEtruscanDates; BCE-positive years sign-flipped
+  # (TimelineBuilder::OpenEtruscanDates; BCE-positive years sign-flipped
   # there, fixture-pinned). Both artifacts sha256-pinned in the adapter —
   # drift aborts pre-mutation (owner re-pin decision).
   sync_policy: frozen
@@ -1336,7 +1336,7 @@ lexlep:
   # P29-3: Lexicon Leponticum (lexlep.univie.ac.at, Stifter/Salomon/Braun
   # et al.) — the digital edition of Cisalpine Celtic: 494 Inscription
   # pages (+ 419 Objects / 134 Sites joined into facets, place and the
-  # date axis; api.php categoryinfo census 2026-07-18). NEW wiki-template
+  # timeline; api.php categoryinfo census 2026-07-18). NEW wiki-template
   # family over Nabu::WikiFetch (MediaWiki api.php category crawl,
   # revid-driven, UA-identified, throttled). LICENSE CONFLICT held at the
   # restrictive reading: Project:Terms of use grants CC BY-SA 3.0 + GFDL
@@ -1409,7 +1409,7 @@ iip:
   # to a Brown-server xi:include): local research only, never
   # redistributed, never exposed externally. No concordance idnos exist
   # → no reference edges. Plain notBefore/notAfter signed years +
-  # settlement findspots → AxisBuilder::IipDates (~5,530 axis rows,
+  # settlement findspots → TimelineBuilder::IipDates (~5,530 axis rows,
   # ~270 place-only). Upstream commits sporadically (master tip 2024-07
   # at the census) → re-syncs are owner-fired.
 hebrew-lexicon:
@@ -1484,7 +1484,7 @@ cdli:
   # images entirely out of scope. NO #lem lines exist in C-ATF → the
   # tier below is a defensive pin: nothing from cdli may ever enter the
   # lemma index as gold (lemma search stays ORACC-gold). Periods (the
-  # catalog's own year envelopes) → AxisBuilder::CdliDates; genre/
+  # catalog's own year envelopes) → TimelineBuilder::CdliDates; genre/
   # period/provenience/collection/ruler → facets; >>Q + composite_id +
   # bdtns concordances → reference edges (producer cdli). Snapshot is
   # frozen-in-practice but the repo is live git → re-syncs owner-fired.
