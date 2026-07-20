@@ -10207,7 +10207,14 @@ AXES as a registry dimension so `nabu list --axis` and
 (orchestrator holds it: personas distilled, ~15-axis tag set + draft
 79-slug mapping, `axes:` registry seam per the P34-0 `siblings:`
 precedent, slug-collision validation, 4-packet sketch); elaborates
-after the P34 gate per the loop.
+after the P34 gate per the loop. D35 RULINGS (owner, 2026-07-20, all
+six landed — details in the orchestrator-held plan): axis set approved
++ `hebrew`/`syriac`/`hittite` added; cross-cutting axes IN with a
+use-case brief (treebank/lexicon candidates, axis-scoped ops
+follow-ups); "axis" = research axis everywhere and ALL date
+nomenclature moves to "timeline" (new packet P35-4); dual-tagging over
+folding (tlhdig = cuneiform+hittite); docs/axes.md public; `--all`
+flat, `--axis NAME[,…]` selects and groups.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha
