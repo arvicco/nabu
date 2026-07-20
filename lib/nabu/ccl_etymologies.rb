@@ -8,10 +8,14 @@ module Nabu
   # producer re-derives those rows into kind=etymology edges after every
   # ccl sync — from urn:nabu:dict:ccl:<C-id> to:
   #
-  # - urn:nabu:dict:aed:<TLA lemma id> — the P28-1 sibling shelf's minted
-  #   urn space (ids verbatim from the crosswalk, the same ids AES tokens
-  #   carry). Dangling until that shelf lands is the established honest
-  #   pattern (P25-0): edges mint regardless of sibling merge order.
+  # - urn:nabu:dict:aed:tla<TLA lemma id> — the P28-1 sibling shelf's
+  #   minted urn space. The ORAEC crosswalk stores the lemma id BARE
+  #   ("159410"), but the aed shelf keys on the upstream @xml:id verbatim
+  #   ("tla159410"), so this producer RE-MINTS the aed leg with the "tla"
+  #   prefix (shelf_urn / AED_BARE_ID) — the P36-4 reconcile of the P34-2
+  #   defect (0/1,695 aed legs resolved when minted bare). Dangling until
+  #   that shelf is ingested is the established honest pattern (P25-0):
+  #   edges mint regardless of sibling merge order.
   # - urn:nabu:dict:tla-demotic:<word id> — verbatim TLA demotic word
   #   numbers (220 of them negative). NO bulk demotic lemma list exists
   #   anywhere (egyptian-survey §10 risk 6: AED is hieroglyphic-hieratic,
@@ -46,7 +50,22 @@ module Nabu
     PRODUCER = "ccl"
     KIND = "etymology"
     ANCESTOR_URN_PREFIX = "urn:nabu:dict:"
-    CODE_VERSION = "ccl-etymologies/1 nabu/#{VERSION}".freeze
+    CODE_VERSION = "ccl-etymologies/2 nabu/#{VERSION}".freeze
+
+    # The AED shelf (P28-1) mints entry urns from the upstream @xml:id
+    # VERBATIM — "tla<n>", never renumbered, never prefixed — so its urn
+    # space is urn:nabu:dict:aed:tla<n>. But the ORAEC crosswalk CSV stores
+    # the hieroglyphic TLA lemma id as a BARE number ("159410"), and the
+    # ccl parser mints the ancestor citation from it verbatim
+    # (urn:nabu:dict:aed:159410). The crosswalk is the deviant form, not the
+    # shelf: this re-mint restores the "tla" prefix so the etymology edge
+    # lands on the shelf's real entry urn (P36-4; the P34-2 defect was
+    # 0/1,695 aed legs resolving). Anchored to the bare-numeric aed local
+    # id, so it is idempotent (an already-prefixed urn passes through) and
+    # touches ONLY the aed leg — the demotic urn:nabu:dict:tla-demotic:<id>
+    # forward edges (into TLA's stable external id space, no shelf) are left
+    # verbatim BY DESIGN, negatives and all.
+    AED_BARE_ID = /\A(urn:nabu:dict:aed:)(\d+)\z/
 
     # What one refresh did — the LibraryReferences::Result shape, so the
     # CLI sync summary renders every producer identically.
@@ -81,11 +100,20 @@ module Nabu
     def write_edges(slug, run_id, counts)
       ancestor_citations(slug).each do |row|
         outcome = Store::LinksJournal.write_edge!(
-          @journal, from_urn: row[:entry_urn], to_urn: row[:urn_raw], kind: KIND,
+          @journal, from_urn: row[:entry_urn], to_urn: shelf_urn(row[:urn_raw]), kind: KIND,
                     score: nil, run_id: run_id, detail: "#{row[:headword]} ← #{row[:label]}"
         )
         counts[outcome == :inserted ? :inserted : :refreshed] += 1
       end
+    end
+
+    # The crosswalk-derived citation urn as the sibling shelf actually mints
+    # it: restore the "tla" prefix on a bare-numeric aed leg (class note).
+    # Everything else (already-prefixed aed urns, the demotic forward edges)
+    # passes through untouched.
+    def shelf_urn(urn_raw)
+      m = AED_BARE_ID.match(urn_raw)
+      m ? "#{m[1]}tla#{m[2]}" : urn_raw
     end
 
     # The urn:nabu:dict:-targeted citation rows of the live entries of the
