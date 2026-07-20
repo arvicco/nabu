@@ -547,6 +547,9 @@ module Nabu
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
     option :dry_run, type: :boolean, default: false,
                      desc: "Print what would happen and change nothing"
+    option :incremental, type: :boolean, default: false,
+                         desc: "Keep the catalog; re-derive only fingerprint-dirty sources " \
+                               "(full rebuild remains the reference)"
     def rebuild
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -554,6 +557,7 @@ module Nabu
       # point, so a real run needs no confirmation. An empty registry has nothing
       # to replay.
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
+      return rebuild_incremental(config, registry) if options[:incremental]
 
       rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
       if options[:dry_run]
@@ -5112,6 +5116,50 @@ module Nabu
         parts << "-#{refs.superseded_edges}" if refs.superseded_edges.positive?
         counts = parts.empty? ? "0" : parts.join(" ")
         "  refs #{counts}"
+      end
+
+      # rebuild --incremental (P36-1): dirty sources re-derive through the
+      # rebuild replay seam + per-source index refresh; clean ones are
+      # skipped on their derivation stamp. Refusals (schema drift, orphan
+      # rows, no catalog) are loud exit-1 errors — full rebuild required.
+      def rebuild_incremental(config, registry)
+        incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry)
+        return print_incremental_plan(incremental.plan) if options[:dry_run]
+
+        result = incremental.run(progress: progress_reporter)
+        finish_progress
+        print_incremental_result(result)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+
+      # --dry-run --incremental: the owner's planning view — one clean/dirty
+      # verdict per source, nothing touched.
+      def print_incremental_plan(plan)
+        say "Dry run — nothing will change."
+        raise Thor::Error, "cannot rebuild incrementally: #{plan.refusal}" if plan.refusal
+
+        say "Incremental rebuild against #{plan.db_path}:"
+        plan.verdicts.each do |verdict|
+          case verdict.state
+          in :clean then say "  clean   #{verdict.slug} (stamp #{verdict.stamp_short})"
+          in :dirty then say "  dirty   #{verdict.slug} (#{verdict.reason})"
+          in :skip then say "  skip    #{verdict.slug} (no canonical data)"
+          end
+        end
+      end
+
+      def print_incremental_result(result)
+        say "Incremental rebuild against #{result.db_path}:"
+        result.cleans.each { |clean| say "  #{clean.slug} clean (stamp #{clean.stamp_short})" }
+        result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
+        result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        result.warnings.each do |outcome|
+          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
+        end
+        say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
+            "skipped #{result.skips.size}"
+        say "  indexed #{result.indexed} passages" if result.indexed
       end
 
       # --dry-run: report the plan, touch nothing.
