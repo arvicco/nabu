@@ -332,7 +332,7 @@ module Query
                    "the urn filter still requires the query to match"
     end
 
-    # -- the date/place axis filter (P15-2) ----------------------------------
+    # -- the timeline filter (P15-2) ----------------------------------
 
     def dated(urn, text, not_before, not_after, place: nil)
       doc = make_document(source: @open, urn: urn)
@@ -355,7 +355,7 @@ module Query
       assert_equal %w[urn:b:1], search("στρατηγος", from: 500).map(&:urn).sort
     end
 
-    def test_open_ended_axis_row_survives_a_from_filter
+    def test_open_ended_timeline_row_survives_a_from_filter
       dated("urn:a", "στρατηγος", nil, -257) # notAfter-only → not_before is −∞
       rebuild!
       # A NULL not_after would silently drop this row from a --to query; a NULL
@@ -378,7 +378,7 @@ module Query
       dated("urn:a", "στρατηγος", -113, -113)
       rebuild!
       assert_equal %w[urn:a:1], search("στρατηγος", from: -400, to: 100).map(&:urn),
-                   "no axis row → absent under an active date filter"
+                   "no timeline row → absent under an active date filter"
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
     end
 
@@ -412,7 +412,7 @@ module Query
                    "the raw code (certainty rider included) is queryable"
     end
 
-    def test_facet_filters_compose_with_each_other_and_the_date_axis
+    def test_facet_filters_compose_with_each_other_and_the_timeline
       faceted("urn:e:1", "dis manibus",
               { "genre" => %w[epitaph titsep], "province" => ["Pannonia inferior", "PaI"] },
               not_before: 101, not_after: 200)
@@ -500,6 +500,56 @@ module Query
       loaned("urn:c:2", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 1 }, language: "eng")
       rebuild!
       assert_equal %w[urn:c:1:1], search("ⲡⲛⲟⲩⲧⲉ", loans: "grc", lang: "cop").map(&:urn)
+    end
+
+    # -- the exhausted-inner-window honesty hint (P35-6, dev-loop §6b) --------
+    # The P34 gate repro: the limit×INNER_LIMIT_FACTOR FTS window fills with
+    # rows a catalog-side filter then rejects, so the page comes back short
+    # (or empty) while matches exist beyond the window. The result semantics
+    # stay as they are — but the surface must SAY the page may be incomplete.
+
+    # Ten short Latin rows outrank (bm25 penalizes length) one longer Greek
+    # row; limit 1 makes the inner window exactly 10, so the Greek match sits
+    # beyond it and the lang filter empties the page.
+    def seed_window_exhausting_corpus(lat_rows: 10)
+      lat = make_document(source: @open, urn: "urn:d:lat", language: "lat")
+      lat_rows.times do |i|
+        make_passage(lat, urn: "urn:d:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
+      end
+      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", sequence: 0, language: "grc",
+                        text: "arma sits far down the rank because this passage carries many more words than the rest")
+      rebuild!
+    end
+
+    def test_exhausted_inner_window_under_filters_reports_the_incomplete_page
+      seed_window_exhausting_corpus
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("arma", lang: "grc", limit: 1)
+      assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
+                   "an empty page with matches beyond the window must announce itself"
+    end
+
+    def test_unexhausted_window_under_filters_is_an_honest_empty
+      seed_window_exhausting_corpus(lat_rows: 3)
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("arma", lang: "xcl", limit: 1)
+      assert_empty results
+      assert_nil query.incomplete_hint, "the window held every match — this empty is the truth"
+    end
+
+    def test_full_page_or_no_filters_carries_no_hint
+      seed_window_exhausting_corpus
+
+      query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      refute_empty query.run("arma", limit: 1)
+      assert_nil query.incomplete_hint, "no catalog-side filter was active — the page is honest"
+
+      refute_empty query.run("arma", lang: "lat", limit: 1)
+      assert_nil query.incomplete_hint, "a full page under filters needs no hint"
     end
   end
 end

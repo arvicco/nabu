@@ -1,0 +1,88 @@
+# Nabu research-axes registry (P35-0, owner-ratified D35 2026-07-20; see
+# docs/architecture.md §5 and Nabu::AxisRegistry).
+#
+# One entry per axis, keyed by its name (lowercase [a-z0-9_-]); file order IS
+# the render order. Axes are TAGS over the source list — the owner's research
+# desks — and multi-membership is the point (dual-tagging over folding;
+# tlhdig rides cuneiform AND hittite by ruling D35-d). Membership is the
+# list-valued `axes:` key on each source row in sources.yml, validated at
+# load: every source declares >= 1 axis, every declared axis exists here,
+# and an axis name may NEVER equal a source slug (the resolution guarantee
+# for `nabu sync <axis>` / `list --axis`). Membership is whole-source (no
+# per-document axes in v1) — where only part of a shelf fits, the honest
+# note rides the desc, never a fake partition. `persona:` is first-class
+# render data: the hat's one-liner, house voice, printed verbatim by the
+# P35-1/2 surfaces. "Axis" always means research axis; the date/place
+# mechanism of architecture §14 is renamed "timeline" (P35-4).
+
+classical:
+  persona: "The Classicist — Greek and Latin letters read whole, Homer to the late grammarians."
+  desc: "The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one."
+
+epigraphy:
+  persona: "The Papyrologist-Epigraphist — reads what survives on stone, sherd, papyrus and tablet, lacunae and all."
+  desc: "Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep."
+
+slavic:
+  persona: "The Slavicist — Cyril and Methodius to the damaskini, canon to vernacular."
+  desc: "Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane, Balkan damaskini, and the Church Slavonic dictionary shelves."
+
+germanic:
+  persona: "The Germanicist — Gothic, Old English verse and prose, the northern word-hoard."
+  desc: "Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic riding the proiel/ud treebanks."
+
+celtic:
+  persona: "The Celticist — from Lepontic stones to the Old Irish glossators."
+  desc: "Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, and the kaikki attested-Celtic extracts riding wiktionary-recon."
+
+italic:
+  persona: "The Italicist — the languages of pre-Roman Italy, Oscan to Etruscan to Raetic."
+  desc: "The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane."
+
+etym:
+  persona: "The Comparative Indo-Europeanist — laryngeals, reflex chains, the long descent of words."
+  desc: "The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding."
+
+biblical:
+  persona: "The Biblical scholar — one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses."
+  desc: "The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design."
+
+hebrew:
+  persona: "The Hebraist — Masoretic vowels, Qumran consonants, the Aramaic of the Targums."
+  desc: "The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine."
+
+syriac:
+  persona: "The Syriacist — the Peshitta and the estrangela bookshelf."
+  desc: "The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design."
+
+hittite:
+  persona: "The Hittitologist — Anatolia in cuneiform, KBo and KUB by tablet and line."
+  desc: "The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank."
+
+cuneiform:
+  persona: "The Assyriologist — Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire."
+  desc: "The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist."
+
+egyptian:
+  persona: "The Egyptologist — hieroglyphs to Coptic, one language across four millennia of script."
+  desc: "The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium."
+
+indic:
+  persona: "The Indologist — Veda to sastra, the Sanskrit library and its instruments."
+  desc: "The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon."
+
+buddhist:
+  persona: "The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons."
+  desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist."
+
+sinitic:
+  persona: "The Sinologist — the classical Chinese written world and its phonological deep past."
+  desc: "Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon."
+
+japonic:
+  persona: "The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition."
+  desc: "The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon."
+
+local:
+  persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."
+  desc: "The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source."

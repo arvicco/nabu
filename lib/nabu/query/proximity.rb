@@ -84,7 +84,11 @@ module Nabu
       # distinct folded forms), so this cap is never reached in practice for the
       # attested languages — it only guards FTS5's expression-tree limits
       # against a pathological lemma. Deterministic slice (surface_forms come
-      # back index-ordered), so results stay stable.
+      # back index-ordered), so results stay stable — and the clip is
+      # ANNOUNCED (P35-6): reaching the cap sets incomplete_hint so a clipped
+      # expansion never poses as the whole paradigm.
+      # census: 5505159, 2026-07-20, live passages; P14-8 measured λέγω→140
+      # folded forms at 3.76M (fulltext mid-reindex at re-measure — re-diff at gate)
       MAX_LEMMA_FORMS = 400
 
       def initialize(catalog:, fulltext:)
@@ -104,13 +108,19 @@ module Nabu
           raise ArgumentError, "give exactly one of query or lemma as the proximity anchor"
         end
 
+        @incomplete_hint = nil
+        @expansion_clipped = false
         near_variants = folded_variants(near)
         anchor = lemma ? lemma_surface_forms(lemma) : folded_variants(query)
         return [] if near_variants.empty? || anchor.empty?
 
         match = near_match(anchor, near_variants, window.to_i)
-        hits = fts_hits(match, inner_limit: limit * Search::INNER_LIMIT_FACTOR)
-        assemble(hits, lang: lang, license: license, limit: limit, source: source, loans: loans)
+        inner_limit = limit * Search::INNER_LIMIT_FACTOR
+        hits = fts_hits(match, inner_limit: inner_limit)
+        results = assemble(hits, lang: lang, license: license, limit: limit, inner_limit: inner_limit,
+                                 source: source, loans: loans)
+        announce_expansion_clip
+        results
       end
 
       private
@@ -149,7 +159,20 @@ module Nabu
           language = row.fetch(:language)
           row.fetch(:surface_forms).split(", ").map { |form| Nabu::Normalize.search_form(form, language: language) }
         end
-        forms.reject(&:empty?).uniq.first(MAX_LEMMA_FORMS)
+        distinct = forms.reject(&:empty?).uniq
+        @expansion_clipped = distinct.size > MAX_LEMMA_FORMS
+        distinct.first(MAX_LEMMA_FORMS)
+      end
+
+      # L5 (P35-6): a clipped lemma expansion must never pose as the whole
+      # paradigm — the clip rides the same announcement channel the
+      # inner-window hint uses (CLI 'note:' line, MCP note field).
+      def announce_expansion_clip
+        return unless @expansion_clipped
+
+        clip = "lemma expansion clipped at #{MAX_LEMMA_FORMS} surface forms — " \
+               "rare inflections may be missed"
+        @incomplete_hint = [@incomplete_hint, clip].compact.join("; ")
       end
 
       # OR of NEAR clauses over the cartesian product of the two sides' folded
@@ -179,17 +202,22 @@ module Nabu
       end
 
       # Reassemble in FTS rank order after the catalog join drops filtered rows,
-      # then trim to the page — the Search#run tail verbatim.
-      def assemble(hits, lang:, license:, limit:, source: nil, loans: nil)
+      # then trim to the page — the Search#run tail verbatim (including the
+      # exhausted-inner-window completeness note).
+      def assemble(hits, lang:, license:, limit:, inner_limit:, source: nil, loans: nil)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
         rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
-        ordered_ids.filter_map { |id| rows[id] }
-                   .first(limit)
-                   .map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
+        page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        note_page_completeness(
+          window_exhausted: hits.size >= inner_limit,
+          filters_active: [lang, license, source, loans].compact.any?,
+          page_size: page.size, limit: limit
+        )
+        page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
       end
 
       def build_result(row, snippet)

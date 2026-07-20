@@ -25,13 +25,34 @@ module Nabu
     #
     # Expects the including class to hold the catalog handle in @catalog.
     module CatalogJoin
+      # The exhausted-inner-window honesty hint (P35-6, dev-loop §6b — this
+      # lie bit twice at the P34 gate): every index-backed page is filled
+      # from a bounded inner window (limit × INNER_LIMIT_FACTOR index hits)
+      # that the catalog join then thins. When the window came back FULL and
+      # a catalog-side filter was active and the page still came back short,
+      # matches may exist beyond the window — the surface must say so
+      # instead of serving a clean-looking short (or empty) page. One house
+      # line, shared verbatim by every surface, CLI and MCP alike.
+      INCOMPLETE_PAGE_HINT = "page may be incomplete under these filters — raise --limit to search deeper"
+
+      # nil, or INCOMPLETE_PAGE_HINT after a #run whose page may be missing
+      # matches beyond the inner window. Reset on every run.
+      attr_reader :incomplete_hint
+
       private
+
+      # Record the completeness verdict for the page a run just filled (the
+      # class-note condition: full inner window AND active catalog filters
+      # AND a short page).
+      def note_page_completeness(window_exhausted:, filters_active:, page_size:, limit:)
+        @incomplete_hint = window_exhausted && filters_active && page_size < limit ? INCOMPLETE_PAGE_HINT : nil
+      end
 
       # Look the index hits' passage_ids up in the catalog, applying the
       # two-level visibility rule (neither passage nor its document withdrawn)
       # plus the optional language and license filters. No ordering: the
       # caller restores its own index order. +from+/+to+/+place+ (P15-2) add the
-      # document-grained date/place axis filter; +facets+ (P17-2) the
+      # document-grained timeline filter; +facets+ (P17-2) the
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
@@ -48,10 +69,10 @@ module Nabu
       # own scoping (Random's source filter + ORDER BY RANDOM(), a caller's
       # id join). One place for the visibility rule so it can never drift.
       #
-      # +from+/+to+/+place+ (P15-2, the date/place axis) filter on the
+      # +from+/+to+/+place+ (P15-2, the timeline) filter on the
       # document's document_axes rows — a single correlated EXISTS, so a
-      # document with several axis rows (a chronicle's annals, Part 2) never
-      # multiplies passage rows. A document with NO axis row is undated and
+      # document with several timeline rows (a chronicle's annals, Part 2) never
+      # multiplies passage rows. A document with NO timeline row is undated and
       # falls out under any active date/place filter (an absence, never an
       # error). +source+ (P22-1, `--source SLUG`) filters on the already-joined
       # sources row — validated CLI-side, so an unknown slug never reaches here
@@ -66,7 +87,7 @@ module Nabu
         dataset = dataset.where(Sequel[:sources][:slug] => source) if source
         dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
-        dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
+        dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
         dataset
@@ -78,7 +99,7 @@ module Nabu
       # `(not_after IS NULL OR not_after >= from)`, and likewise the lower bound.
       # A closed-interval overlap `nb <= to AND na >= from` (NOT naive
       # containment, which would drop every precision="low" century-range doc).
-      def axis_exists(from:, to:, place:)
+      def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
         sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
         sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from

@@ -80,11 +80,18 @@ module Nabu
     # nil (the default) = the source mints no parallel siblings. Declaring
     # a tail is a CENSUS CLAIM: no upstream document id may end in it —
     # the per-source freeze the retired regex constants used to encode.
+    # +axes+ (P35-0): the source's research-axis memberships — a non-empty
+    # list of names defined in config/axes.yml (AxisRegistry), validated at
+    # load. Axes are TAGS (multi-membership deliberate, whole-source grain);
+    # once a definitions file exists EVERY source must declare >= 1, and an
+    # axis name may never equal a source slug (the resolution guarantee for
+    # `nabu sync <axis>` / `list --axis`, P35-1/2). [] only in bootstrap/
+    # test mode (no axes.yml beside the sources file).
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings) do
+                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
                      license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER,
-                     classes: nil, siblings: nil)
+                     classes: nil, siblings: nil, axes: [])
         super
       end
 
@@ -153,17 +160,28 @@ module Nabu
 
     # Parse config/sources.yml at +path+. A missing or empty file is a valid,
     # empty registry. Any structural or per-entry problem raises
-    # Nabu::ValidationError naming the offending slug.
-    def self.load(path)
+    # Nabu::ValidationError naming the offending slug. Axis definitions load
+    # from the SIBLING axes.yml by default (override via +axes_path+, tests
+    # only) — every call site keeps passing just the sources path, and a
+    # redirected registry brings its own axes file or none.
+    def self.load(path, axes_path: nil)
+      axes = AxisRegistry.load(axes_path || File.join(File.dirname(path.to_s), "axes.yml"))
       data = File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
       unless data.is_a?(Hash)
         raise ValidationError, "sources registry must be a mapping of slug => entry, got #{data.class}"
       end
 
-      new(data.map { |slug, config| build_entry(slug, config) })
+      entries = data.map { |slug, config| build_entry(slug, config, axis_registry: axes) }
+      collisions = axes.names & entries.map(&:slug)
+      unless collisions.empty?
+        raise ValidationError, "axis name #{collisions.first.inspect} collides with a source slug — " \
+                               "axis names must never equal slugs (the resolution guarantee)"
+      end
+
+      new(entries, axes: axes)
     end
 
-    def self.build_entry(slug, config)
+    def self.build_entry(slug, config, axis_registry: AxisRegistry.new([]))
       unless slug.is_a?(String) && slug.match?(Model::Validation::SLUG_SHAPE)
         raise ValidationError, "source #{slug.inspect}: slug must be a lowercase slug ([a-z0-9_-])"
       end
@@ -184,10 +202,38 @@ module Nabu
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
         lemma_tier: lemma_tier!(slug, config),
         classes: classes!(slug, config),
-        siblings: siblings!(slug, config)
+        siblings: siblings!(slug, config),
+        axes: axes!(slug, config, axis_registry)
       )
     end
     private_class_method :build_entry
+
+    # The three P35-0 membership rules, at load like every other invariant:
+    # once definitions exist, absent/empty axes is an error (every source
+    # lands >= 1 desk); names must be defined; duplicates are noise. The
+    # slug-collision rule is global and lives in .load.
+    def self.axes!(slug, config, registry)
+      value = config.fetch("axes", nil)
+      if value.nil?
+        return [] if registry.empty?
+
+        raise ValidationError, "source #{slug.inspect}: must declare at least one research axis " \
+                               "(axes: [...]; definitions in config/axes.yml)"
+      end
+      unless value.is_a?(Array) && !value.empty? && value.all?(String)
+        raise ValidationError, "source #{slug.inspect}: axes must be a non-empty list of axis names, " \
+                               "got #{value.inspect}"
+      end
+      raise ValidationError, "source #{slug.inspect}: axes list has duplicates: #{value.inspect}" if
+        value.uniq != value
+
+      unknown = value - registry.names
+      return value if unknown.empty?
+
+      raise ValidationError, "source #{slug.inspect}: unknown axis #{unknown.first.inspect} — " \
+                             "not defined in the axes registry"
+    end
+    private_class_method :axes!
 
     # nil (no siblings), CTS_SIBLINGS, or a non-empty list of "-"-leading
     # tail patterns each compiling as a regex fragment — caught at load,
@@ -274,8 +320,20 @@ module Nabu
     end
     private_class_method :sync_policy!
 
-    def initialize(entries)
+    # The research-axes definitions this registry was validated against
+    # (AxisRegistry; empty in bootstrap/test mode). P35-1/2 render from it.
+    attr_reader :axes
+
+    def initialize(entries, axes: AxisRegistry.new([]))
       @entries = entries.to_h { |entry| [entry.slug, entry] }
+      @axes = axes
+    end
+
+    # Slugs tagged with +axis_name+, registration order — the membership
+    # seam the axis-scoped surfaces (`sync <axis>`, `list --axis`) read.
+    # Unknown names return [] (the caller decides how loud to be).
+    def axis_members(axis_name)
+      @entries.each_value.select { |entry| entry.axes.include?(axis_name) }.map(&:slug)
     end
 
     # Yield each Entry in registration order; returns an Enumerator without a

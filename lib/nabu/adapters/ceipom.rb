@@ -84,15 +84,15 @@ module Nabu
     # `Lemma_frequency` (a derived corpus statistic) and `Analysis_ID`
     # (joins nothing in the deposit) are deliberately not ingested.
     #
-    # == Reference edges + axis + facets
+    # == Reference edges + timeline + facets
     #
     # links.csv Trismegistos ids ride as metadata "related" ["tm:256173"]
     # → kind=reference edges via the shared reference_producer seam
     # (producer "ceipom", the riig `rig:` compact-key precedent). EDCS/CIL/
     # Imagines Italicae reference strings ride verbatim as metadata
     # "reference". Dates (signed-year floats, e.g. "-675.0") and WGS84
-    # coordinates ride verbatim in metadata; Store::AxisBuilder::CeipomDates
-    # re-reads texts.csv for the date/place axis (3,872/3,875 dated,
+    # coordinates ride verbatim in metadata; Store::TimelineBuilder::CeipomDates
+    # re-reads texts.csv for the timeline (3,872/3,875 dated,
     # 3,815 placed — the residues counted honestly). The per-text Script
     # column mints the `script` facet (8 censused single values slugged;
     # any "/"-mixed value → "mixed"; empty → no facet, verbatim metadata
@@ -404,8 +404,8 @@ module Nabu
 
       # Verbatim text metadata + the script facet + the Trismegistos
       # related targets. Dates/coordinates ride verbatim as upstream spells
-      # them (signed-year floats, WGS84) — the axis extractor re-reads
-      # canonical, the EDH coordinates decision keeps them out of the axis.
+      # them (signed-year floats, WGS84) — the timeline extractor re-reads
+      # canonical, the EDH coordinates decision keeps them out of the timeline.
       def document_metadata(corpus, text_id, row)
         metadata = {
           "text_id" => text_id,

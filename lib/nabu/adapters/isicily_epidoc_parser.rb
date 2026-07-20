@@ -3,7 +3,7 @@
 require "nokogiri"
 
 require_relative "celtic_leiden"
-require_relative "../date_axis"
+require_relative "../timeline"
 
 module Nabu
   module Adapters
@@ -395,16 +395,16 @@ module Nabu
       # zero-padded; 2,117 BCE records); 3 records use the plain
       # attributes — the fallback. A year-0 bound ("-0000", 1 record) or
       # an unparseable one keeps raw/cert/evidence and drops the bounds
-      # (the axis builder counts it invalid).
+      # (the timeline builder counts it invalid).
       def extract_date(doc)
         node = doc.at_xpath("//origin/origDate") or return {}
         result = {}
         begin
-          not_before = DateAxis.parse_year(node["notBefore-custom"] || node["notBefore"])
-          not_after = DateAxis.parse_year(node["notAfter-custom"] || node["notAfter"])
+          not_before = Timeline.parse_year(node["notBefore-custom"] || node["notBefore"])
+          not_after = Timeline.parse_year(node["notAfter-custom"] || node["notAfter"])
           result["not_before"] = not_before if not_before
           result["not_after"] = not_after if not_after
-        rescue DateAxis::InvalidYear
+        rescue Timeline::InvalidYear
           nil # bounds dropped; raw/cert/evidence still recorded below
         end
         { "raw" => presence(node.text), "cert" => presence(node["cert"]),

@@ -38,7 +38,7 @@ module Store
       assert_equal "{}", @db[:documents].first(id: id)[:metadata_json]
     end
 
-    # P15-2: the date/place axis is document-keyed, signed-integer-year columns.
+    # P15-2: the timeline is document-keyed, signed-integer-year columns.
     def test_document_axes_columns
       columns = @db.schema(:document_axes).to_h
       assert_equal :integer, columns[:not_before][:type]

@@ -139,7 +139,7 @@ class OpenEtruscanTest < Minitest::Test
   def test_bce_positive_years_are_carried_verbatim_in_metadata
     document = parse_urn("urn:nabu:open-etruscan:ve-6.2")
     assert_equal "650.0", document.metadata.fetch("year_from"),
-                 "upstream's BCE-positive convention is canonical here; the SIGNED flip is the axis extractor's"
+                 "upstream's BCE-positive convention is canonical here; the SIGNED flip is the timeline extractor's"
     assert_equal "625.0", document.metadata.fetch("year_to")
   end
 

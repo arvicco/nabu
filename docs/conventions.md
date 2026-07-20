@@ -523,7 +523,7 @@ carries no `--long`.
 
 ## 11. Dates — signed historical years, no year 0 (P15-2)
 
-The date/place axis (`document_axes`, architecture §14) stores a document's
+The timeline (`document_axes`, architecture §14) stores a document's
 date as **signed integer historical years**: negative = BCE, positive = CE,
 and **there is no year 0** — 1 BCE is `-1`, 1 CE is `+1`. This is *not*
 astronomical/ISO-8601 numbering (where year 0 = 1 BCE and `-0113` would mean
@@ -544,7 +544,7 @@ Consequences that hold everywhere dates are handled:
   `(501, 700, "low")`. A point (`when`) stores `not_before == not_after`.
 - **Centuries** use a signed index that also skips 0 (1st c. CE = 1, 1st c.
   BCE = -1), so ascending index *is* chronological order (`-2 < -1 < 1 < 2` =
-  2nd c. BCE, 1st c. BCE, 1st c. CE, 2nd c. CE). `Nabu::DateAxis` owns the whole
+  2nd c. BCE, 1st c. BCE, 1st c. CE, 2nd c. CE). `Nabu::Timeline` owns the whole
   model (parse, century index/label/bounds, span formatting) in one place;
   it raises on a literal year 0 (the malformed-source / astronomical-source
   tripwire). A ranged document buckets in its *earliest* century, and the CLI

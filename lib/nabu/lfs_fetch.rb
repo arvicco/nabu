@@ -38,6 +38,7 @@ module Nabu
 
     POINTER_PREFIX = "version https://git-lfs.github.com/spec/v1"
     # Pointer files are ~130 bytes; anything past this is payload.
+    # const: the git-lfs pointer-file spec size, not a corpus claim
     POINTER_MAX_BYTES = 512
 
     STATE_FILE = ".lfs-fetch.json"

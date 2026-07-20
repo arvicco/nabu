@@ -272,6 +272,42 @@ not something escape characters from nabu can force:
   (`osc-Ital-x-oscetr`) and script facets name the alphabet the stones
   carry.
 
+### East-Asian width (CJK) — what nabu models, what the terminal owns
+
+Chinese/Japanese/Korean ideographs, kana, hangul and fullwidth forms occupy
+**two terminal cells** each. nabu *does* model this: `Nabu::Display.width`
+(P35-7) measures every column-aligned surface — concord KWIC, the
+distinctive-vocabulary table, aligned columns — in display **cells**, not
+`String#length`, classifying each grapheme by its Unicode East-Asian-Width
+class (transcribed from **EastAsianWidth.txt, Unicode 16.0.0**; W/F = 2, all
+else = 1). So a lzh (Literary Chinese) or ojp (Old Japanese) KWIC line lines
+its keyword column up exactly where a Greek line does. This is measurement,
+not policy: there is no `--display` mode and no footer for it — cell width is
+a rendering fact the terminal already enforces.
+
+The one thing nabu leaves to the terminal is the **Ambiguous (A)** width
+class. Unicode assigns a handful of codepoints (Greek/Cyrillic letters, some
+punctuation, geometric shapes, the □ missing-glyph box) an *ambiguous* width:
+narrow in a Latin context, wide in a legacy CJK context. nabu measures them
+**narrow (one cell)** — the Unicode default — because the corpus text is
+ancient scholarship read in a modern UTF-8 terminal, not a legacy
+double-byte one. A **fixture-scale census** of the held lzh/ojp passages
+(kanripo + cbeta + oncoj; tls is a lexicon, no passage text) found **10
+ambiguous codepoints out of 48,673** (0.02%) — every one of them U+25A1 □
+WHITE SQUARE, kanripo's placeholder for an unmappable glyph. ojp's
+man'yōgana original rides the passage *annotations*, not the rendered
+(romanized) KWIC text, so the corpus's actual wide-text exposure is the lzh
+Han. At that scale the ambiguous class is a rounding error, and the narrow
+default is right.
+
+- **iTerm2 users: keep "Treat ambiguous-width characters as double-width"
+  OFF** (Settings → Profiles → Text). With it ON, the terminal draws those
+  ambiguous codepoints two cells wide while nabu measured them as one, and a
+  column padded by nabu drifts by exactly that count. OFF matches nabu's
+  measurement, and — per the census — barely matters either way for this
+  corpus. (macOS Terminal.app has no such toggle; it treats ambiguous as
+  narrow, already matching nabu.)
+
 ---
 
 ## 3. Per-script quick table
