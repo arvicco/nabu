@@ -66,7 +66,124 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- the structure-search modes (search --radical/--strokes/--char-component) ---
+
+  def test_radical_filter_finds_passages_carrying_a_radical_75_character
+    with_search_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --radical 75]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:qi.*棄/m, out, "the 棄 passage (radical 75 木)")
+      refute_match(/urn:nabu:test:tian/, out, "天 is radical 37, excluded")
+      assert_match(/character filter: \[radical 75\]/, out, "the footer names the filter distinctly")
+    end
+  end
+
+  def test_strokes_range_filter
+    with_search_catalog do |config|
+      out, = with_config(config) { run_cli(%w[search --strokes 1-4]) }
+      assert_match(/urn:nabu:test:tian/, out, "天(4)/一(1)/人(2) are in range")
+      refute_match(/urn:nabu:test:qi\b/, out, "棄(12) is out of range")
+      assert_match(/character filter: \[1-4 strokes\]/, out)
+    end
+  end
+
+  def test_char_component_union_transitive_containment
+    with_search_catalog do |config|
+      out, = with_config(config) { run_cli(%w[search --char-component 木]) }
+      # 棄 (KRADFILE lists 木; IDS ⿻廿木) and 林 (⿰木木) both contain 木.
+      assert_match(/urn:nabu:test:qi\b/, out)
+      assert_match(/urn:nabu:test:lin/, out)
+      refute_match(/urn:nabu:test:tian/, out, "天 contains no 木")
+      assert_match(/character filter: \[contains 木\]/, out)
+    end
+  end
+
+  def test_char_filters_and_together
+    with_search_catalog do |config|
+      # radical 75 = {棄}; strokes 1 = {一}; the intersection is empty → an
+      # honest zero-character resolution, not a silent empty page.
+      out, = with_config(config) { run_cli(%w[search --radical 75 --strokes 1]) }
+      assert_match(/no characters match \[radical 75 AND 1 strokes\]/, out)
+    end
+  end
+
+  def test_char_filter_composes_with_a_text_query
+    with_search_catalog do |config|
+      # The FTS token for a Han run is the whole run (unicode61); the exact
+      # run is the searchable form. The char filter then ANDs on top.
+      out, = with_config(config) { run_cli(%w[search 林木森森 --char-component 木]) }
+      assert_match(/urn:nabu:test:lin/, out, "林木森森 matches the text query AND contains 木")
+      refute_match(/urn:nabu:test:qi\b/, out, "棄 contains 木 but does not match the text query")
+      assert_match(/text query "林木森森"/, out)
+    end
+  end
+
+  def test_char_filters_reject_word_level_combination
+    with_search_catalog do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --radical 75 --lemma foo]) }
+      assert_equal 1, status
+      assert_match(/character-level structure search/, err)
+    end
+  end
+
+  def test_radical_out_of_range_errors
+    with_search_catalog do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --radical 999]) }
+      assert_equal 1, status
+      assert_match(/KangXi radical number 1-214/, err)
+    end
+  end
+
   private
+
+  def with_search_catalog
+    Dir.mktmpdir("nabu-char-search") do |root|
+      config = char_config(root)
+      db, fulltext = open_dbs(config)
+      load_dictionary(db, "unihan", "Nabu::Adapters::Unihan", Nabu::Adapters::Unihan.new, "unihan")
+      load_dictionary(db, "babelstone-ids", "Nabu::Adapters::BabelstoneIds",
+                      Nabu::Adapters::BabelstoneIds.new, "babelstone-ids")
+      load_dictionary(db, "kradfile", "Nabu::Adapters::Kradfile", Nabu::Adapters::Kradfile.new, "kradfile")
+      source = Nabu::Store::Source.create(
+        slug: "test", name: "test", adapter_class: "Nabu::Adapters::Kanripo", license_class: "open"
+      )
+      { "qi" => "棄而違之。", "lin" => "林木森森。", "tian" => "天下一人。" }.each do |slug, text|
+        seed_passage(source, slug, text)
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      db.disconnect
+      fulltext.disconnect
+      yield config
+    end
+  end
+
+  def seed_passage(source, slug, text)
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:test:#{slug}", title: slug, language: "lzh",
+      content_sha256: slug, revision: 1, withdrawn: false
+    )
+    Nabu::Store::Passage.create(
+      document_id: document.id, urn: "urn:nabu:test:#{slug}:1", sequence: 0,
+      language: "lzh", text: text, text_normalized: text, content_sha256: slug, revision: 1
+    )
+  end
+
+  def char_config(root)
+    config = Nabu::Config.new(
+      canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+      sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+    )
+    FileUtils.mkdir_p(config.db_dir)
+    config
+  end
+
+  def open_dbs(config)
+    db = Nabu::Store.connect(config.catalog_path)
+    Nabu::Store.migrate!(db)
+    Nabu::Store.setup!(db)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    [db, fulltext]
+  end
 
   def with_char_catalog
     Dir.mktmpdir("nabu-char") do |root|
