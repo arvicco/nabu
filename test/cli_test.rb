@@ -1313,6 +1313,9 @@ class CLITest < Minitest::Test
 
       assert_match(/dry run/i, out)
       refute_match(/Rebuild profile/, out)
+    end
+  end
+
   # -- rebuild --incremental (P36-1) ---------------------------------------
 
   def test_rebuild_incremental_dry_run_reports_verdicts_and_changes_nothing
