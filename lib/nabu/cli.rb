@@ -2643,6 +2643,9 @@ module Nabu
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_axis(passage.axis)
+        # H9 (P35-6): a corrupt annotation lane announces itself instead of
+        # posing as an unannotated passage.
+        say "  note: #{ANNOTATIONS_UNREADABLE_NOTE}" if annotations_unreadable?(passage)
         return if passage.provenance.empty?
 
         say "  provenance:"
@@ -2661,6 +2664,7 @@ module Nabu
         unless result.is_a?(Nabu::Query::Show::PassageResult)
           return say "--tokens renders at passage grain — give a passage urn"
         end
+        return say ANNOTATIONS_UNREADABLE_NOTE if annotations_unreadable?(result)
 
         tokens = result.annotations["tokens"]
         tokens = tokens.is_a?(Array) ? tokens.grep(Hash) : []
@@ -2680,6 +2684,23 @@ module Nabu
         end.join("  ")
       end
 
+      # H9 (P35-6): the skip-with-note rule for a corrupt annotations_json —
+      # Show marks the parse failure (ANNOTATIONS_UNREADABLE) and every
+      # render that would have used the lane says so.
+      ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
+
+      def annotations_unreadable?(result)
+        result.annotations[Nabu::Query::Show::ANNOTATIONS_UNREADABLE] == true
+      end
+
+      def print_unreadable_annotations_count(lines)
+        count = lines.count { |line| annotations_unreadable?(line) }
+        return unless count.positive?
+
+        say "  note: #{count} #{count == 1 ? 'passage carries' : 'passages carry'} " \
+            "unreadable stored annotations (invalid JSON) — skipped"
+      end
+
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
@@ -2693,6 +2714,7 @@ module Nabu
               "#{display_text(line.text, document.language,
                               source: document.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(document.passages)
       end
 
       # Render a range (P7-6): the document header like a document listing, an
@@ -2711,6 +2733,7 @@ module Nabu
               "#{display_text(line.text, range.language,
                               source: range.source_slug, annotations: line.annotations)}"
         end
+        print_unreadable_annotations_count(range.passages)
       end
 
       # The date/place axis line (P15-2), when the document has one. A date span

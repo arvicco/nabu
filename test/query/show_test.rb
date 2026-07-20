@@ -61,6 +61,21 @@ module Query
       assert(result.provenance.all?(Nabu::Query::Show::ProvenanceEvent))
     end
 
+    # H9 (P35-6): a corrupt annotations_json row must not silently drop the
+    # annotation lane — the parse failure is MARKED so renderers can say so
+    # (skip-with-note over silent skip; the passage text itself still serves).
+    def test_unreadable_annotations_json_is_marked_not_silently_dropped
+      load_document("1", [%w[1 μῆνιν]])
+      Nabu::Store::Passage.first(urn: "urn:d:1:1").update(annotations_json: "{not json")
+
+      result = show("urn:d:1:1")
+      assert_equal({ Nabu::Query::Show::ANNOTATIONS_UNREADABLE => true }, result.annotations)
+
+      line = show("urn:d:1").passages.first
+      assert_equal({ Nabu::Query::Show::ANNOTATIONS_UNREADABLE => true }, line.annotations,
+                   "document-grain lines carry the marker too")
+    end
+
     def test_provenance_is_chronological
       load_document("1", [%w[1 μῆνιν]])
       passage = Nabu::Store::Passage.first(urn: "urn:d:1:1")

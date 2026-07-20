@@ -104,6 +104,11 @@ module Nabu
       # attested-counts read nil here — an honest absence, not a zero.
       DICT_URN_PREFIX = "urn:nabu:dict:"
 
+      # Marker key set in +annotations+ when the stored annotations_json
+      # failed to parse (see #parse_annotations) — a reserved name, never
+      # minted by any adapter.
+      ANNOTATIONS_UNREADABLE = "annotations_unreadable"
+
       def dictionary_entry(urn)
         return nil unless @catalog.table_exists?(:dictionary_entries)
 
@@ -253,8 +258,12 @@ module Nabu
       end
 
       # The stored annotations hash (P27-1/P27-2 union): row JSON back to a
-      # Hash; {} on absent or unparseable — render-time inspectors (token
-      # coloring, qere) degrade, never crash.
+      # Hash; {} on absent — an honest nothing. Unparseable JSON is NOT
+      # nothing (H9, P35-6): the annotation lane exists but cannot be read,
+      # so the hash carries the ANNOTATIONS_UNREADABLE marker instead of
+      # masquerading as an unannotated passage — renderers say so (the
+      # skip-with-note rule, the P34-r0/r1 precedent) while inspectors that
+      # dig real keys (token coloring, qere) still degrade, never crash.
       def parse_annotations(row)
         json = row[:annotations_json]
         return {} if json.nil? || json.empty?
@@ -262,7 +271,7 @@ module Nabu
         parsed = JSON.parse(json)
         parsed.is_a?(Hash) ? parsed : {}
       rescue JSON::ParserError
-        {}
+        { ANNOTATIONS_UNREADABLE => true }
       end
 
       # Effective license class: document override wins over source class (P1-3).
