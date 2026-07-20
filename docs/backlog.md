@@ -10243,6 +10243,11 @@ of a passage's token annotations — eyeballing the new bhsa osm lane
 took an export|grep pipeline. Journal: a `show --tokens` (raw stored
 annotations, honest verbatim render) is a small QoL packet candidate
 for P35's CLI pass.
+№25 CLOSED (2026-07-20): Wittern confirms in writing — org-level CC
+BY-SA 4.0 governs all KR text repos (registry comment upgraded). NEW
+watch item from the same mail: "Bunkankun", his Kanripo successor;
+catalog component at ask.bunkankun.org — next-Sino-phase survey
+candidate (catalog/fetch seam). Reply draft in the thread log.
 
 Source of truth: the owner-approved plan (orchestrator holds it). Standing
 rules apply (TDD, no behavioral drift without a pinned reason, worklog sha

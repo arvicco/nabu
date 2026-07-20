@@ -1750,8 +1750,13 @@ kanripo:
   # conservative; the adapter's fetch_delay seam is the override point).
   # License: org-level grant verbatim "Comprehensive collection of
   # premodern Chinese texts. Licensed as CC BY SA 4.0." + ytenx
-  # DATA_LICENSE.md corroboration; №25 Wittern confirmation email SENT,
-  # non-blocking → attribution.
+  # DATA_LICENSE.md corroboration; №25 CONFIRMED by the maintainer in
+  # writing 2026-07-20 (C. Wittern: "Yes the idea is to license
+  # everything that needs a license as CC BY SA 4.0 … these should
+  # inherit the license of the org.") → attribution, SA rider.
+  # Upstream watch: Wittern is building "Bunkankun", a Kanripo successor;
+  # its catalog component lives at ask.bunkankun.org (journaled — a
+  # future catalog/fetch seam candidate, next Sino phase survey).
   classes: [KR1, KR2, KR3, KR4]
 tls:
   adapter: Nabu::Adapters::Tls
