@@ -874,7 +874,37 @@ bhsa:
   # dataset (the sparse cone IS the pin); upstream moves rarely and only
   # in other version dirs → re-syncs are an owner decision.
   # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
-  # is journaled in 02-sources and deliberately NOT wired.
+  # is WIRED as of P34-1: the bridging feature-module row below lands
+  # canonical/bridging, and this adapter's tokens carry osm/osm_sf when the
+  # module is present (re-parse after the module sync lights the lane up).
+  sync_policy: manual
+
+bridging:
+  adapter: Nabu::Adapters::Bridging
+  enabled: false   # PERMANENTLY false — a feature module, not a text source:
+                   # discover mints no documents, so there is nothing to
+                   # serve or flip. The row exists to give the owner the
+                   # sanctioned GitFetch path. OWNER QUEUE (P34-1):
+                   # bin/nabu sync bridging (sparse cone ≈ 3 MB), then
+                   # bin/nabu sync bhsa --parse-only to light the token
+                   # lane, eyeball nabu show urn:nabu:bhsa:gen:1.1 tokens
+                   # (osm HR/HNcfsa/HVqp3ms...) — no enabled flip involved.
+  # P34-1: ETCBC/bridging — the OSHB↔BHSA word-level crosswalk (the sibling
+  # journaled at P30-4, now wired). Two Text-Fabric node features over the
+  # BHSA tf/2021 slot space: osm = the OSHB morph tag of the first OSM
+  # morpheme aligned to each BHSA word, osm_sf = the second (pronominal
+  # suffix); alignment computed upstream by consonantal matching. Census at
+  # commit 324598bb: osm covers 420,108/426,590 BHSA words (98.5%), 259
+  # honest "*" problem markers, osm_sf 49,376; BHSA side pinned hard
+  # (@coreData=BHSA @version=2021, max node = 426,590 = our tf/2021 pin);
+  # OSHB side is morphhb master ~2021-12-09 (no commit recorded upstream) —
+  # measured against our morphhb 3d15126 (2024-08-27): 99.05% of verses
+  # carry identical per-verse OSM tag sequences, 80 verses of in-place
+  # single-tag retagging (HR/HRd mostly), zero ordering drift, so the
+  # word alignment stays fully valid. LICENSE MIT verbatim ("Copyright (c)
+  # 2019 Dirk Roorda") → attribution, the corph posture; the values surface
+  # only on bhsa passages whose nc class governs serving. Upstream is a
+  # completed comparison build → re-syncs are an owner decision.
   sync_policy: manual
 
 dss:
