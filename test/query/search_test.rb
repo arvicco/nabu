@@ -222,6 +222,22 @@ module Query
       assert_equal union, search("dharman").map(&:urn).sort, "the IAST spelling finds the same set"
     end
 
+    # P37-2, the §9 symmetry proof end to end: kanripo/cbeta store traditional
+    # 說, Japanese-transmitted editions write the z-variant 説, a modern typist
+    # types simplified 说 — all three query spellings must find the one stored
+    # passage, because document AND query fold to the same traditional
+    # skeleton (Nabu::Hani, derived from held Unihan variant data).
+    def test_han_variant_query_spellings_find_the_traditional_lzh_passage
+      doc = make_document(source: @open, urn: "urn:d:kr", title: "Lunyu", language: "lzh")
+      make_passage(doc, urn: "urn:d:kr:1", text: "不亦說乎，不亦樂乎", sequence: 0, language: "lzh")
+      rebuild!
+
+      %w[不亦說乎 不亦説乎 不亦说乎].each do |spelling|
+        assert_equal ["urn:d:kr:1"], search(spelling).map(&:urn),
+                     "#{spelling} must fold to the stored traditional skeleton"
+      end
+    end
+
     def test_snippet_marks_the_match_in_the_folded_form
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
