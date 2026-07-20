@@ -59,7 +59,7 @@ class AedTest < Minitest::Test
     assert_kind_of Nabu::DictionaryDocument, document
     assert_equal "aed", document.slug
     assert_equal "egy", document.language
-    assert_equal 31, document.size
+    assert_equal 32, document.size
   end
 
   def test_entry_ids_are_unique_and_stable_across_independent_passes
@@ -92,13 +92,13 @@ class AedTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_with_stable_urns
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 31, first.added
+    assert_equal 32, first.added
     assert_equal 0, first.errored
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 31, second.skipped
-    assert_equal 31, db[:dictionary_entries].count
+    assert_equal 32, second.skipped
+    assert_equal 32, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
 
     vulture = db[:dictionary_entries].where(entry_id: "tla1").first
