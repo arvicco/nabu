@@ -10470,7 +10470,7 @@ the owner's ONGOING rebuild — fixture-corpus measurement + read-only
 run history only, until the owner declares the reindex settled (it
 reached kanripo, the tail source, as this was committed).
 
-## P36-0 · The rebuild profiler  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P36-0 · The rebuild profiler  [tier: opus] [status: done 2026-07-20] [deps: —]
 Per-source/per-stage timing (parse / insert / FTS tokenize / trigram /
 timeline-facet-lemma builders / corpus-wide reindex): `rebuild
 --profile` report + kept-on stage lines in normal progress. The

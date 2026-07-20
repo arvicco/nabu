@@ -187,7 +187,13 @@ module Nabu
       #
       # Reads the catalog through raw datasets (not the Store models) so it is
       # independent of whichever db the global models are currently bound to.
-      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil)
+      # +profile+ (P36-0) is a Nabu::RebuildProfile or nil — when present, the
+      # four corpus-wide sub-stages (fts+lemma streaming pass, trigram,
+      # alignment refs, reflex roots) each fold their wall time into it. The FTS
+      # tokenize and lemma build are ONE stage (fts_lemma): they share this
+      # single streaming row scan, so separating them would need a per-passage
+      # timer. nil keeps the sync-time incremental path unmeasured.
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.run(CREATE_TABLE)
@@ -195,16 +201,32 @@ module Nabu
         tiers = source_tiers(catalog, lemma_tiers || {})
 
         count = 0
-        fulltext.transaction do
-          count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+        timed(profile, :fts_lemma) do
+          fulltext.transaction do
+            count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+          end
         end
-        rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
-        AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        timed(profile, :trigram) do
+          rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+        end
+        timed(profile, :alignment) do
+          AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+        end
         # The cognate root closure (P15-3) rebuilds AFTER passage_lemmas: its
         # gold-language scope and suppression stats are snapshots of the lemma
         # table built moments ago in this same pass, so the two can never drift.
-        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        timed(profile, :reflex) do
+          ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        end
         count
+      end
+
+      # Fold a corpus-wide index sub-stage's wall time into +profile+, or just
+      # run the block when there is none (P36-0).
+      def timed(profile, stage, &)
+        return yield if profile.nil?
+
+        profile.measure(scope: Nabu::RebuildProfile::CORPUS, stage: stage, &)
       end
 
       # Incrementally refresh ONE source's slice of the index (P26-5) — the

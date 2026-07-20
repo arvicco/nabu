@@ -547,6 +547,8 @@ module Nabu
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
     option :dry_run, type: :boolean, default: false,
                      desc: "Print what would happen and change nothing"
+    option :profile, type: :boolean, default: false,
+                     desc: "Print the per-source/per-stage timing table after the rebuild (P36-0)"
     def rebuild
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -557,11 +559,13 @@ module Nabu
 
       rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
       if options[:dry_run]
+        # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
       else
         result = rebuilder.run(progress: progress_reporter)
         finish_progress
         print_result(result)
+        print_profile(result.profile) if options[:profile]
       end
     end
 
@@ -5151,6 +5155,35 @@ module Nabu
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
+      end
+
+      # The P36-0 profile table: every source's load and every corpus stage,
+      # heaviest first with its share of the grand total, then a stage-share
+      # summary (parse/insert inside load; corpus index total) — the numbers
+      # that tier P36-2 (bulk load) vs P36-3 (parallel parse). Print-only:
+      # the profile is in-memory observability, never persisted, so `nabu
+      # rebuild` regenerates it wholesale every run.
+      def print_profile(profile)
+        return if profile.nil? || profile.empty?
+
+        width = [profile.rows.map { |label, _, _| label.to_s.length }.max || 0, 18].max
+        say ""
+        say "Rebuild profile — wall time by stage (heaviest first):"
+        profile.rows.each do |label, secs, share|
+          say format("  %-#{width}s  %10s  %5.1f%%", label, format_duration(secs), share * 100)
+        end
+        say "  #{'-' * (width + 20)}"
+        say format("  %-#{width}s  %10s   (of load)", "parse", format_duration(profile.parse_total))
+        say format("  %-#{width}s  %10s   (of load)", "insert", format_duration(profile.insert_total))
+        say format("  %-#{width}s  %10s", "load total", format_duration(profile.load_total))
+        say format("  %-#{width}s  %10s", "corpus index total", format_duration(profile.index_total))
+        say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
+        say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
+      end
+
+      # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
+      def format_duration(secs)
+        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
       end
 
       def format_report(label, report)
