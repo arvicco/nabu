@@ -734,6 +734,28 @@
           </cit>
         </sense>
       </entry>
+      <entry xml:id="tla159410">
+        <form>
+          <orth>qꜣḥ</orth>
+        </form>
+        <gramGrp>
+          <term>substantive/substantive_masc</term>
+        </gramGrp>
+        <sense>
+          <cit type="translation" xml:lang="de">
+            <quote>Nilschlamm; Lehmmörtel</quote>
+          </cit>
+          <cit>
+            <bibl>Wb 5, 12.9-12; FCD 276; Harris, Minerals, 205</bibl>
+          </cit>
+          <cit type="translation" xml:lang="en">
+            <quote>Nile clay; mortar (of clay)</quote>
+          </cit>
+        </sense>
+        <xr type="root">
+          <ref target="tla873902"/>
+        </xr>
+      </entry>
     </body>
   </text>
 </TEI>

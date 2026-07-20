@@ -547,6 +547,11 @@ module Nabu
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"
     option :dry_run, type: :boolean, default: false,
                      desc: "Print what would happen and change nothing"
+    option :profile, type: :boolean, default: false,
+                     desc: "Print the per-source/per-stage timing table after the rebuild (P36-0)"
+    option :incremental, type: :boolean, default: false,
+                         desc: "Keep the catalog; re-derive only fingerprint-dirty sources " \
+                               "(full rebuild remains the reference)"
     def rebuild
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -554,14 +559,17 @@ module Nabu
       # point, so a real run needs no confirmation. An empty registry has nothing
       # to replay.
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
+      return rebuild_incremental(config, registry) if options[:incremental]
 
       rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
       if options[:dry_run]
+        # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
       else
         result = rebuilder.run(progress: progress_reporter)
         finish_progress
         print_result(result)
+        print_profile(result.profile) if options[:profile]
       end
     end
 
@@ -5114,6 +5122,50 @@ module Nabu
         "  refs #{counts}"
       end
 
+      # rebuild --incremental (P36-1): dirty sources re-derive through the
+      # rebuild replay seam + per-source index refresh; clean ones are
+      # skipped on their derivation stamp. Refusals (schema drift, orphan
+      # rows, no catalog) are loud exit-1 errors — full rebuild required.
+      def rebuild_incremental(config, registry)
+        incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry)
+        return print_incremental_plan(incremental.plan) if options[:dry_run]
+
+        result = incremental.run(progress: progress_reporter)
+        finish_progress
+        print_incremental_result(result)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+
+      # --dry-run --incremental: the owner's planning view — one clean/dirty
+      # verdict per source, nothing touched.
+      def print_incremental_plan(plan)
+        say "Dry run — nothing will change."
+        raise Thor::Error, "cannot rebuild incrementally: #{plan.refusal}" if plan.refusal
+
+        say "Incremental rebuild against #{plan.db_path}:"
+        plan.verdicts.each do |verdict|
+          case verdict.state
+          in :clean then say "  clean   #{verdict.slug} (stamp #{verdict.stamp_short})"
+          in :dirty then say "  dirty   #{verdict.slug} (#{verdict.reason})"
+          in :skip then say "  skip    #{verdict.slug} (no canonical data)"
+          end
+        end
+      end
+
+      def print_incremental_result(result)
+        say "Incremental rebuild against #{result.db_path}:"
+        result.cleans.each { |clean| say "  #{clean.slug} clean (stamp #{clean.stamp_short})" }
+        result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
+        result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
+        result.warnings.each do |outcome|
+          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
+        end
+        say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
+            "skipped #{result.skips.size}"
+        say "  indexed #{result.indexed} passages" if result.indexed
+      end
+
       # --dry-run: report the plan, touch nothing.
       def print_plan(plan)
         say "Dry run — nothing will change."
@@ -5151,6 +5203,35 @@ module Nabu
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
+      end
+
+      # The P36-0 profile table: every source's load and every corpus stage,
+      # heaviest first with its share of the grand total, then a stage-share
+      # summary (parse/insert inside load; corpus index total) — the numbers
+      # that tier P36-2 (bulk load) vs P36-3 (parallel parse). Print-only:
+      # the profile is in-memory observability, never persisted, so `nabu
+      # rebuild` regenerates it wholesale every run.
+      def print_profile(profile)
+        return if profile.nil? || profile.empty?
+
+        width = [profile.rows.map { |label, _, _| label.to_s.length }.max || 0, 18].max
+        say ""
+        say "Rebuild profile — wall time by stage (heaviest first):"
+        profile.rows.each do |label, secs, share|
+          say format("  %-#{width}s  %10s  %5.1f%%", label, format_duration(secs), share * 100)
+        end
+        say "  #{'-' * (width + 20)}"
+        say format("  %-#{width}s  %10s   (of load)", "parse", format_duration(profile.parse_total))
+        say format("  %-#{width}s  %10s   (of load)", "insert", format_duration(profile.insert_total))
+        say format("  %-#{width}s  %10s", "load total", format_duration(profile.load_total))
+        say format("  %-#{width}s  %10s", "corpus index total", format_duration(profile.index_total))
+        say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
+        say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
+      end
+
+      # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
+      def format_duration(secs)
+        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
       end
 
       def format_report(label, report)

@@ -81,6 +81,71 @@ class RebuildTest < Minitest::Test
     Nabu::ProgressReporter.new.stage("anything") # no on_stage → no-op, no raise
   end
 
+  # -- the stage profiler (P36-0) rides on every rebuild --------------------
+
+  def test_rebuild_result_carries_a_profile_with_per_source_and_corpus_stages
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    profile = rebuilder.run.profile
+    refute_nil profile, "every rebuild carries a RebuildProfile"
+    refute_predicate profile, :empty?
+
+    # The source got a :load roll-up with a parse/insert split (plain Loader is
+    # instrumented), and the corpus-wide stages all ran.
+    assert_equal %w[corpus], profile.source_scopes
+    breakdown = profile.breakdown("corpus")
+    refute_nil breakdown, "the plain Loader records a parse/insert split"
+    assert_operator breakdown[:parse], :>=, 0.0
+    assert_operator breakdown[:insert], :>=, 0.0
+    # parse + insert are components of :load, never exceeding it (allow a small
+    # epsilon for the roll-up's own clock-read overhead).
+    assert_operator breakdown[:parse] + breakdown[:insert], :<=,
+                    profile.seconds(scope: "corpus", stage: :load) + 1e-3
+
+    corpus_stages = profile.corpus_stages
+    assert_includes corpus_stages, :timeline
+    assert_includes corpus_stages, :facets
+    assert_includes corpus_stages, :fts_lemma
+    assert_includes corpus_stages, :trigram
+
+    # The grand total is the sum of the load roll-up plus the corpus stages, and
+    # every recorded stage is non-negative (monotonic clock).
+    assert_operator profile.grand_total, :>, 0.0
+    assert_in_delta profile.load_total + profile.index_total, profile.grand_total, 1e-9
+  end
+
+  # -- deferred secondary indexes are recreated (P36-2) --------------------
+
+  # Rebuild drops the non-unique bulk-table indexes, replays with them absent,
+  # and recreates them at the end — the finished catalog must carry them again
+  # (a query-time regression otherwise), while the fulltext lemma table gets
+  # its three deferred B-tree indexes back too.
+  def test_rebuild_leaves_the_deferred_indexes_in_place
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    db = Nabu::Store.connect(catalog_path)
+    passage_idx = db.indexes(:passages).values.map { |i| i[:columns] }
+    provenance_idx = db.indexes(:provenance).values.map { |i| i[:columns] }
+    assert_includes passage_idx, [:document_id]
+    assert_includes passage_idx, [:language]
+    assert_includes provenance_idx, [:passage_id]
+    assert_includes provenance_idx, [:document_id]
+  ensure
+    db&.disconnect
+  end
+
   # -- fulltext index is rebuilt too (P4-1) --------------------------------
 
   def test_rebuild_populates_the_fulltext_index

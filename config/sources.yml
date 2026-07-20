@@ -1707,8 +1707,9 @@ edrdg:
 hdic:
   adapter: Nabu::Adapters::Hdic
   axes: [sinitic, japonic]
-  enabled: false   # awaiting owner-fired first sync AND the license ruling
-                   # below (checklist §6: bin/nabu sync hdic — git clone
+  enabled: true    # flipped 2026-07-20 (D36-d owner ruling: license GO;
+                   # first sync owner-fired as usual)
+                   # (checklist §6: bin/nabu sync hdic — git clone
                    # ~50 MB — then eyeball nabu define 天 across tsj/syp,
                    # urn:nabu:dict:ktb:1_016_A51, flip).
   # HDIC — Heian-period hanzi dictionaries (github.com/shikeda/HDIC, the

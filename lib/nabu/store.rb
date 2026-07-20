@@ -86,6 +86,30 @@ module Nabu
     # See the class doc: longest legitimate lock holder (seconds) + margin.
     BUSY_TIMEOUT_MS = 10_000
 
+    # == Rebuild-mode pragmas (P36-2) — NEVER on the live sync path
+    #
+    # `nabu rebuild` drops the derived catalog and regenerates it from
+    # canonical/ alone (architecture §1); the db it is writing is therefore
+    # DISPOSABLE for the length of the run. That licenses a fast-and-unsafe
+    # connection profile the live sync path must never use:
+    #
+    # - synchronous=OFF: skip the per-commit fsync. A power loss or OS crash
+    #   mid-rebuild can leave the derived catalog corrupt — which is FINE and
+    #   the whole point of derived data: db/ is a pure function of canonical/,
+    #   so a crashed rebuild is simply RE-RUN (rm + rebuild), never recovered.
+    #   On the LIVE sync path a crash must not corrupt the catalog (it holds
+    #   the derived mirror read live by MCP/CLI), so this stays rebuild-only.
+    # - WAL STAYS ON (write_ahead_log! still runs first): it keeps concurrent
+    #   readers safe from the P17-7 BusyException and never blocks the writer.
+    #   synchronous=OFF is the durability knob under WAL; the corruption window
+    #   is power-loss / OS-crash, NOT a clean process abort.
+    # - a large page cache + in-memory temp store: fewer cache spills during
+    #   the bulk insert and secondary-index (re)builds, which land in memory
+    #   rather than a temp file.
+    #
+    # Negative cache_size is KiB of page cache; -262_144 → 256 MiB.
+    REBUILD_CACHE_KIB = -262_144
+
     module_function
 
     # Open a Sequel database for +url+ (e.g. "sqlite::memory:" or a file path).
@@ -95,12 +119,16 @@ module Nabu
     # surface must be POSITIVELY unable to write — the engine refuses, not
     # just our code declining to). Readonly connects carry the busy timeout
     # too: a reader waiting on a rollback-mode writer's commit is just as
-    # real as the reverse.
-    def connect(url, readonly: false)
+    # real as the reverse. +rebuild+ (P36-2) layers the fast-and-unsafe
+    # rebuild-mode pragmas ON TOP of WAL — for `nabu rebuild` ONLY.
+    def connect(url, readonly: false, rebuild: false)
       db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
       if db.database_type == :sqlite
         db.run("PRAGMA foreign_keys = ON")
-        write_ahead_log!(db) unless readonly
+        unless readonly
+          write_ahead_log!(db)
+          rebuild_pragmas!(db) if rebuild
+        end
       end
       db
     end
@@ -109,10 +137,28 @@ module Nabu
     # from the catalog). Same scheme-less-path handling as #connect so callers
     # can pass config.fulltext_path directly. No foreign_keys pragma: the index
     # is a standalone FTS5 table with no relational integrity to enforce (its
-    # only link to the catalog is the UNINDEXED passage_id column).
-    def connect_fulltext(url, readonly: false)
+    # only link to the catalog is the UNINDEXED passage_id column). +rebuild+
+    # (P36-2) applies the same rebuild-mode profile — the fulltext db is
+    # derived-of-derived, so it is even more disposable.
+    def connect_fulltext(url, readonly: false, rebuild: false)
       db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
-      write_ahead_log!(db) if !readonly && db.database_type == :sqlite
+      if !readonly && db.database_type == :sqlite
+        write_ahead_log!(db)
+        rebuild_pragmas!(db) if rebuild
+      end
+      db
+    end
+
+    # Apply the rebuild-mode pragmas (class doc above) to a connected read-write
+    # SQLite handle; no-op for a non-sqlite handle. REBUILD ONLY — synchronous=OFF
+    # trades crash-durability for speed and is only sound because the whole db
+    # is regenerable from canonical/. Returns +db+.
+    def rebuild_pragmas!(db)
+      return db unless db.database_type == :sqlite
+
+      db.run("PRAGMA synchronous = OFF")
+      db.run("PRAGMA cache_size = #{REBUILD_CACHE_KIB}")
+      db.run("PRAGMA temp_store = MEMORY")
       db
     end
 
@@ -131,6 +177,48 @@ module Nabu
     # ("sqlite::memory:", "postgres://…") pass through untouched.
     def sqlite_url(url)
       url.match?(/\A[a-z][a-z0-9+.-]*:/i) ? url : "sqlite://#{url}"
+    end
+
+    # == Deferred secondary indexes (P36-2)
+    #
+    # Non-unique secondary indexes on the bulk-load tables that `nabu rebuild`
+    # DROPS after migrating the fresh schema and recreates once the replay is
+    # done. Deferring turns ~N per-row B-tree maintenance ops during the bulk
+    # insert into a single bulk CREATE INDEX at the end (SQLite builds an index
+    # over an already-populated table in one sorted pass — cheaper than
+    # incremental maintenance across millions of inserts).
+    #
+    # STRICTLY non-unique, query-only accelerators, enumerated explicitly
+    # against the schema the migrations create (an applied migration is NEVER
+    # edited — this drops/recreates the INDEX objects at rebuild time only):
+    # passages' document_id (001) + language (013) and provenance's passage_id
+    # + document_id (001) — the two highest-insert-volume tables of a replay.
+    # Dropping them can never change what a rebuild PRODUCES. Deliberately NOT
+    # here: unique / constraint indexes (urn, (document_id, sequence)) which
+    # enforce identity and back the loader's insert-time lookups, and
+    # documents.source_id which the per-source withdrawal sweep needs live.
+    # Sequel derives the same default index name from the column spec that
+    # create_table/add_index used, so drop-by-columns matches what was created.
+    DEFERRED_REBUILD_INDEXES = [
+      { table: :passages,   columns: :document_id },
+      { table: :passages,   columns: :language },
+      { table: :provenance, columns: :passage_id },
+      { table: :provenance, columns: :document_id }
+    ].freeze
+
+    # Drop the deferred secondary indexes (class doc) so the bulk replay does no
+    # incremental maintenance on them. REBUILD ONLY. Returns +db+.
+    def drop_deferred_indexes!(db)
+      DEFERRED_REBUILD_INDEXES.each { |ix| db.drop_index(ix[:table], ix[:columns]) }
+      db
+    end
+
+    # Recreate the deferred secondary indexes over the now-populated tables,
+    # after the replay and before the query-side rebuild stages that use them
+    # (timeline/facets/indexer joins on passages.document_id). Returns +db+.
+    def create_deferred_indexes!(db)
+      DEFERRED_REBUILD_INDEXES.each { |ix| db.add_index(ix[:table], ix[:columns]) }
+      db
     end
 
     # Apply all pending migrations from db/migrate to +db+. Returns +db+.
@@ -199,6 +287,7 @@ require_relative "store/language_dossier_loader"
 require_relative "store/note_loader"
 require_relative "store/source_dossier_loader"
 require_relative "store/run_recorder"
+require_relative "store/derivation_stamp"
 require_relative "store/indexer"
 require_relative "store/alignment_indexer"
 require_relative "store/timeline_builder"

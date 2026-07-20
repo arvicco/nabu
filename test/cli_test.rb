@@ -1276,6 +1276,84 @@ class CLITest < Minitest::Test
     end
   end
 
+  # rebuild --profile prints the per-source/per-stage timing table (P36-0).
+  def test_rebuild_profile_prints_the_stage_timing_table
+    with_rebuild_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --profile]) }
+
+      assert_nil status
+      # The normal result still prints…
+      assert_match(/Dropped catalog db/, out)
+      # …then the profile table with its header, the source row, corpus stages,
+      # the share column, and the stage-share summary.
+      assert_match(/Rebuild profile — wall time by stage/, out)
+      assert_match(/^\s+corpus\s+[\d.]+s\s+[\d.]+%/, out)
+      assert_match(/fts\+lemma reindex/, out)
+      assert_match(/trigram/, out)
+      assert_match(/GRAND TOTAL/, out)
+      assert_match(/parse.*of load/, out)
+    end
+  end
+
+  # Without --profile the table is absent (opt-in report; stage lines still ride
+  # on stderr progress, untouched here).
+  def test_rebuild_without_profile_prints_no_table
+    with_rebuild_env do |config|
+      out, _err, = with_config(config) { run_cli(%w[rebuild]) }
+
+      refute_match(/Rebuild profile/, out)
+      refute_match(/GRAND TOTAL/, out)
+    end
+  end
+
+  # --profile on a dry run adds nothing (there is no run to time).
+  def test_rebuild_dry_run_with_profile_prints_no_table
+    with_rebuild_env do |config|
+      out, _err, = with_config(config) { run_cli(%w[rebuild --dry-run --profile]) }
+
+      assert_match(/dry run/i, out)
+      refute_match(/Rebuild profile/, out)
+    end
+  end
+
+  # -- rebuild --incremental (P36-1) ---------------------------------------
+
+  def test_rebuild_incremental_dry_run_reports_verdicts_and_changes_nothing
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) } # full build writes the stamps
+      File.write(File.join(config.canonical_dir, "corpus", "one.txt"), "Iliad\nμῆνιν\nἄειδε\nνέος\n")
+      bytes = File.binread(config.catalog_path)
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental --dry-run]) }
+
+      assert_nil status
+      assert_match(/dry run/i, out)
+      assert_match(/dirty\s+corpus \(canonical\)/, out)
+      assert_equal bytes, File.binread(config.catalog_path), "dry run must write nothing"
+    end
+  end
+
+  def test_rebuild_incremental_skips_clean_sources_on_their_stamp
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental]) }
+
+      assert_nil status
+      assert_match(/corpus clean \(stamp \h{12}\)/, out)
+      assert_match(/re-derived 0, clean 1, skipped 0/, out)
+    end
+  end
+
+  def test_rebuild_incremental_without_catalog_fails_loudly
+    with_rebuild_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[rebuild --incremental]) }
+
+      assert_equal 1, status
+      assert_match(/full rebuild required/, err)
+    end
+  end
+
   # -- backup (P7-2) -------------------------------------------------------
 
   def test_backup_runs_to_a_local_target_and_reports_ok
