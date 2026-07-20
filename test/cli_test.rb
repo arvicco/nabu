@@ -1313,6 +1313,41 @@ class CLITest < Minitest::Test
 
       assert_match(/dry run/i, out)
       refute_match(/Rebuild profile/, out)
+  # -- rebuild --incremental (P36-1) ---------------------------------------
+
+  def test_rebuild_incremental_dry_run_reports_verdicts_and_changes_nothing
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) } # full build writes the stamps
+      File.write(File.join(config.canonical_dir, "corpus", "one.txt"), "Iliad\nμῆνιν\nἄειδε\nνέος\n")
+      bytes = File.binread(config.catalog_path)
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental --dry-run]) }
+
+      assert_nil status
+      assert_match(/dry run/i, out)
+      assert_match(/dirty\s+corpus \(canonical\)/, out)
+      assert_equal bytes, File.binread(config.catalog_path), "dry run must write nothing"
+    end
+  end
+
+  def test_rebuild_incremental_skips_clean_sources_on_their_stamp
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental]) }
+
+      assert_nil status
+      assert_match(/corpus clean \(stamp \h{12}\)/, out)
+      assert_match(/re-derived 0, clean 1, skipped 0/, out)
+    end
+  end
+
+  def test_rebuild_incremental_without_catalog_fails_loudly
+    with_rebuild_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[rebuild --incremental]) }
+
+      assert_equal 1, status
+      assert_match(/full rebuild required/, err)
     end
   end
 

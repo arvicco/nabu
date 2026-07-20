@@ -112,6 +112,7 @@ module Nabu
           outcomes << profile.measure(scope: entry.slug, stage: :load) do
             replay(db, ledger, entry, progress, profile)
           end
+          stamp!(db, entry)
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
         end
@@ -202,6 +203,20 @@ module Nabu
       else
         Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile)
       end
+    end
+
+    # P36-1: record the derivation fingerprint this replay just satisfied —
+    # the identity `rebuild --incremental` compares to skip clean sources. A
+    # full rebuild re-derives everything, so stamping here is correct by
+    # construction; a weak fingerprint writes no stamp (absent = dirty).
+    def stamp!(db, entry)
+      Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprints.for_source(entry))
+    end
+
+    # Shared with IncrementalRebuild (subclass): one computer per run so the
+    # code/fold digests are hashed once, not per source.
+    def fingerprints
+      @fingerprints ||= DerivationFingerprint.new(config: @config)
     end
 
     # Enrichment replay is OUT OF SCOPE for rebuild-of-text (architecture §6):
