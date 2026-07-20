@@ -32,24 +32,24 @@ module Nabu
       # One provenance journal entry (architecture §5), chronological.
       ProvenanceEvent = Data.define(:event, :tool, :at)
 
-      # The document's date/place axis (P15-2), when it has one — shown by
+      # The document's timeline (P15-2), when it has one — shown by
       # `show` under the document/passage header. Signed historical years
       # (negative = BCE); either bound may be nil (open-ended). nil when the
       # document is undated (an absence, honestly blank).
-      Axis = Data.define(:not_before, :not_after, :precision, :date_raw,
-                         :place_name, :place_ref, :axis_source)
+      Timeline = Data.define(:not_before, :not_after, :precision, :date_raw,
+                             :place_name, :place_ref, :axis_source)
 
       # A passage in the context of its document + source, with the effective
       # license class (override coalesced over source class), its full
-      # provenance trail, and the document's date/place axis (nil when undated).
+      # provenance trail, and the document's timeline (nil when undated).
       # +annotations+ (P27-1): the stored annotations_json parsed back — the
       # display layer's edition context (ketiv/qere word hashes ride there).
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
-        :document_urn, :document_title, :source_slug, :license_class, :provenance, :axis,
+        :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
         :annotations
       ) do
-        def initialize(axis: nil, annotations: {}, **) = super
+        def initialize(timeline: nil, annotations: {}, **) = super
       end
 
       # One line of a document listing: a passage's urn and text, in sequence
@@ -68,9 +68,9 @@ module Nabu
       # (P17-2): the document's facet rows, [] when unfaceted.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :axis, :facets
+        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets
       ) do
-        def initialize(axis: nil, facets: [], **) = super
+        def initialize(timeline: nil, facets: [], **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -79,9 +79,9 @@ module Nabu
       # passage_label reuse (it reads +urn+ + +passages+) works unchanged.
       RangeResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class, :revision,
-        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn, :axis
+        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn, :timeline
       ) do
-        def initialize(axis: nil, **) = super
+        def initialize(timeline: nil, **) = super
       end
 
       def initialize(catalog:)
@@ -134,7 +134,7 @@ module Nabu
           retired_upstream: truthy?(header.fetch(:retired_upstream)),
           passages: slice_passages(slice), total: slice.total,
           start_urn: slice.start_urn, end_urn: slice.end_urn,
-          axis: axis_for(slice.document_id)
+          timeline: timeline_for(slice.document_id)
         )
       end
 
@@ -179,7 +179,7 @@ module Nabu
           document_urn: row.fetch(:document_urn), document_title: row.fetch(:document_title),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           provenance: provenance_events(row.fetch(:passage_id)),
-          axis: axis_for(row.fetch(:document_id)),
+          timeline: timeline_for(row.fetch(:document_id)),
           annotations: parse_annotations(row)
         )
       end
@@ -191,13 +191,13 @@ module Nabu
           revision: row.fetch(:revision), withdrawn: truthy?(row.fetch(:withdrawn)),
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
-          axis: axis_for(row.fetch(:document_id)),
+          timeline: timeline_for(row.fetch(:document_id)),
           facets: facets_for(row.fetch(:document_id))
         )
       end
 
       # The document's facet rows (P17-2), [] when unfaceted or when the
-      # catalog predates migration 009 — degrade, never crash (axis_for's
+      # catalog predates migration 009 — degrade, never crash (timeline_for's
       # stance). Ordered by facet name for a stable render.
       def facets_for(document_id)
         return [] unless @catalog.table_exists?(:document_facets)
@@ -209,19 +209,19 @@ module Nabu
           .map { |r| Facet.new(facet: r.fetch(:facet), value: r.fetch(:value), raw: r[:raw]) }
       end
 
-      # The document's date/place axis (P15-2), or nil when undated. A document
-      # may carry several axis rows (Part 2's chronicle annals); `show` renders
+      # The document's timeline (P15-2), or nil when undated. A document
+      # may carry several timeline rows (Part 2's chronicle annals); `show` renders
       # the primary (earliest not_before) one — document-grain rows are a single
       # row today. `document_axes` may be absent from a catalog that predates
       # migration 008 (never rebuilt): degrade to nil, never crash.
-      def axis_for(document_id)
+      def timeline_for(document_id)
         return nil unless @catalog.table_exists?(:document_axes)
 
         row = @catalog[:document_axes].where(document_id: document_id)
                                       .order(Sequel.function(:coalesce, :not_before, :not_after)).first
         return nil if row.nil?
 
-        Axis.new(
+        Timeline.new(
           not_before: row[:not_before], not_after: row[:not_after], precision: row[:precision],
           date_raw: row[:date_raw], place_name: row[:place_name], place_ref: row[:place_ref],
           axis_source: row[:axis_source]

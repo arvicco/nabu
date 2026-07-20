@@ -3,7 +3,7 @@
 require "nokogiri"
 
 require_relative "celtic_leiden"
-require_relative "../date_axis"
+require_relative "../timeline"
 require_relative "../normalize"
 
 module Nabu
@@ -95,7 +95,7 @@ module Nabu
     #    "other_languages" => ["grc", …],
     #    "date" => {"not_before"/"not_after" (signed years via plain
     #               notBefore/notAfter; zero year-0 in the corpus, the
-    #               DateAxis tripwire drops bounds if one appears)/
+    #               Timeline tripwire drops bounds if one appears)/
     #               "raw"/"period" (@period verbatim — 4,903 Periodo
     #               URIs, 622 text values)},
     #    "place" => {"region"/"settlement" (own text, excluding the
@@ -261,7 +261,7 @@ module Nabu
       end
 
       # origin/date → signed years (plain notBefore/notAfter — the corpus
-      # has no -custom dialect and zero year-0 bounds; the DateAxis
+      # has no -custom dialect and zero year-0 bounds; the Timeline
       # tripwire drops bounds, keeping raw/period, if one ever appears).
       # @period rides verbatim: 4,903 Periodo URIs, 622 text values
       # ("Talmudic", "Unknown").
@@ -269,11 +269,11 @@ module Nabu
         node = doc.at_xpath("//history/origin/date") or return {}
         result = {}
         begin
-          not_before = DateAxis.parse_year(node["notBefore"])
-          not_after = DateAxis.parse_year(node["notAfter"])
+          not_before = Timeline.parse_year(node["notBefore"])
+          not_after = Timeline.parse_year(node["notAfter"])
           result["not_before"] = not_before if not_before
           result["not_after"] = not_after if not_after
-        rescue DateAxis::InvalidYear
+        rescue Timeline::InvalidYear
           nil # bounds dropped; raw/period still recorded below
         end
         { "raw" => presence(node.text), "period" => presence(node["period"]) }

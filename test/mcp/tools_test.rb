@@ -251,7 +251,7 @@ module MCP
       assert_match(/open/, error.message, "the message teaches the valid classes")
     end
 
-    # -- nabu_search date/place axis (P15-2) -----------------------------------
+    # -- nabu_search timeline (P15-2) -----------------------------------
 
     def test_search_from_to_filters_by_date
       a = make_document(urn: "urn:nabu:ddbdp:a")

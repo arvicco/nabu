@@ -12,7 +12,7 @@ module Nabu
   #   loaded or quarantined document.
   # - +on_stage+: called with a label when a new unit of work begins (owner
   #   feedback 2026-07-18: a long rebuild must say which source it is on) —
-  #   Rebuild announces each replayed slug and the trailing axis/facet/index
+  #   Rebuild announces each replayed slug and the trailing timeline/facet/index
   #   phases; the CLI adds the timing.
   #
   # All fields are nil-safe: a reporter with nil callables is a no-op, so

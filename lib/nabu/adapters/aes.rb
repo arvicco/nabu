@@ -84,14 +84,14 @@ module Nabu
     # `show --parallel ger` renders verse pairs. Same CC BY-SA grant ("All
     # files") — no license override.
     #
-    # == Dates/findspot → the axis, subcorpus/period/findspot → facets
+    # == Dates/findspot → the timeline, subcorpus/period/findspot → facets
     #
     # date is one of SIX values corpus-wide ("OK & FIP", "MK & SIP", "NK",
     # "TIP - Roman times", "unknown", degenerate "k" ×2 sentences);
     # findspot one of 8 coarse regions. The four real periods and seven
     # real regions ride as facets (frozen census-complete maps below;
     # unmapped values keep the verbatim metadata but mint no facet and no
-    # axis row — Store::AxisBuilder::AesDates counts them undated).
+    # timeline row — Store::TimelineBuilder::AesDates counts them undated).
     #
     # == License / fetch / freshness
     #
@@ -128,7 +128,7 @@ module Nabu
 
       # The corpus's date vocabulary → facet slugs (census-complete over all
       # 101,796 sentences; "unknown" and the degenerate "k" deliberately
-      # unmapped — verbatim metadata only, no facet, no axis row).
+      # unmapped — verbatim metadata only, no facet, no timeline row).
       PERIOD_FACETS = {
         "OK & FIP" => "ok-fip",
         "MK & SIP" => "mk-sip",

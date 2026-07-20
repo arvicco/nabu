@@ -396,7 +396,7 @@ Read the report — it names the source and the signal.
   baseline (announced at the sync/rebuild that moved it), or drifted
   cumulatively above its low-water mark across ok runs (§11). Triage as a
   spike; an accepted new level goes quiet on its own (the baseline advances).
-- **fuzzy_index flagged but … / axis extractor … 0 rows / reflexes … 0 rows /
+- **fuzzy_index flagged but … / timeline extractor … 0 rows / reflexes … 0 rows /
   language_names census …** — flag-vs-artifact (§11): config or code promises
   a derived surface the database does not hold. The message names the fix
   (a reindex, a rebuild, or a `--parse-only` resync).
@@ -768,7 +768,7 @@ before, nothing new:
 | partial load | that failed run journaled provenance rows — it half-loaded | loud |
 | synced-vs-populated | latest run `succeeded` + zero rows in the source's grain (docs/entries/records) — `enabled` deliberately ignored (the disabled-liv case) | loud |
 | fuzzy-vs-trigram | `fuzzy_index: true` but the trigram index is absent/empty or the source is outside its built scope | loud |
-| axis-vs-rows | an axis extractor family ships for the source, `document_axes` has 0 rows | loud |
+| timeline-vs-rows | a timeline extractor family ships for the source, `document_axes` has 0 rows | loud |
 | reflex-vs-rows | `Adapter.reflex_bearing?` true, entries loaded, `dictionary_reflexes` empty | loud |
 | language census | reflex rows present, `language_names` census empty | loud |
 | quarantine creep | the baseline has drifted above its low-water anchor (below) | soft/loud |

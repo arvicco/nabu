@@ -332,7 +332,7 @@ module Query
                    "the urn filter still requires the query to match"
     end
 
-    # -- the date/place axis filter (P15-2) ----------------------------------
+    # -- the timeline filter (P15-2) ----------------------------------
 
     def dated(urn, text, not_before, not_after, place: nil)
       doc = make_document(source: @open, urn: urn)
@@ -355,7 +355,7 @@ module Query
       assert_equal %w[urn:b:1], search("στρατηγος", from: 500).map(&:urn).sort
     end
 
-    def test_open_ended_axis_row_survives_a_from_filter
+    def test_open_ended_timeline_row_survives_a_from_filter
       dated("urn:a", "στρατηγος", nil, -257) # notAfter-only → not_before is −∞
       rebuild!
       # A NULL not_after would silently drop this row from a --to query; a NULL
@@ -378,7 +378,7 @@ module Query
       dated("urn:a", "στρατηγος", -113, -113)
       rebuild!
       assert_equal %w[urn:a:1], search("στρατηγος", from: -400, to: 100).map(&:urn),
-                   "no axis row → absent under an active date filter"
+                   "no timeline row → absent under an active date filter"
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
     end
 
@@ -412,7 +412,7 @@ module Query
                    "the raw code (certainty rider included) is queryable"
     end
 
-    def test_facet_filters_compose_with_each_other_and_the_date_axis
+    def test_facet_filters_compose_with_each_other_and_the_timeline
       faceted("urn:e:1", "dis manibus",
               { "genre" => %w[epitaph titsep], "province" => ["Pannonia inferior", "PaI"] },
               not_before: 101, not_after: 200)

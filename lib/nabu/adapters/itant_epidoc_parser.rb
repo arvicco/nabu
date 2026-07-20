@@ -297,18 +297,18 @@ module Nabu
         slug.empty? ? nil : "imit:#{slug}"
       end
 
-      # origDate's notBefore-custom/notAfter-custom signed years (DateAxis
+      # origDate's notBefore-custom/notAfter-custom signed years (Timeline
       # semantics — all 510 records carry the pair); raw/cert/evidence ride
       # verbatim.
       def extract_date(doc)
         node = doc.at_xpath("//origin/origDate") or return {}
         result = {}
         begin
-          not_before = DateAxis.parse_year(node["notBefore-custom"] || node["notBefore"])
-          not_after = DateAxis.parse_year(node["notAfter-custom"] || node["notAfter"])
+          not_before = Timeline.parse_year(node["notBefore-custom"] || node["notBefore"])
+          not_after = Timeline.parse_year(node["notAfter-custom"] || node["notAfter"])
           result["not_before"] = not_before if not_before
           result["not_after"] = not_after if not_after
-        rescue DateAxis::InvalidYear
+        rescue Timeline::InvalidYear
           nil # bounds dropped; the raw fields below stay honest
         end
         { "raw" => presence(node.text), "cert" => presence(node["cert"]),
@@ -317,7 +317,7 @@ module Nabu
       end
 
       # The findspot (origPlace): ancient name + Pleiades ref, modern name
-      # + GeoNames ref — the axis-places layer.
+      # + GeoNames ref — the timeline-places layer.
       def extract_place(doc)
         origin = doc.at_xpath("//origin/origPlace") or return {}
         ancient = origin.at_xpath("./placeName[@type='ancient']")

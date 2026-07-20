@@ -37,7 +37,7 @@ module Nabu
     # == Identity and grain
     #
     # Document = the P-number artifact: urn:nabu:cdli:p000725 (urn_for is
-    # the ONE minting rule — the axis extractor joins through it, no
+    # the ONE minting rule — the timeline extractor joins through it, no
     # drift). Passage = the line within object/face/column (AtfParser class
     # note). Q composites are NOT documents here (no &Q blocks exist in
     # the dump): >>Q links and catalog composite_id mint

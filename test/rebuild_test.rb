@@ -74,7 +74,7 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "date/place axis", "facets", "fulltext index"], stages
+    assert_equal ["corpus", "timeline", "facets", "fulltext index"], stages
   end
 
   def test_progress_reporter_stage_is_nil_safe
@@ -102,7 +102,7 @@ class RebuildTest < Minitest::Test
     end
   end
 
-  # -- date/place axis is rebuilt from canonical (P15-2) -------------------
+  # -- timeline is rebuilt from canonical (P15-2) -------------------
 
   def test_rebuild_regenerates_the_document_axes
     write_sources(<<~YAML)
@@ -115,7 +115,7 @@ class RebuildTest < Minitest::Test
     result = rebuilder.run
 
     # The TestAdapter corpus carries no HGV/goo300k/IMP urns, so zero rows — but
-    # the pass RAN (a Summary, so `nabu rebuild` regenerates the axis) and the
+    # the pass RAN (a Summary, so `nabu rebuild` regenerates the timeline) and the
     # table exists in the fresh catalog.
     refute_nil result.axes
     assert_equal 0, result.axes.total
@@ -128,7 +128,7 @@ class RebuildTest < Minitest::Test
 
   # -- facets are rebuilt from the replayed documents (P17-2) ----------------
 
-  def test_rebuild_regenerates_document_facets_and_edh_axis_end_to_end
+  def test_rebuild_regenerates_document_facets_and_edh_timeline_end_to_end
     write_sources(<<~YAML)
       edh:
         adapter: Nabu::Adapters::Edh
@@ -137,7 +137,7 @@ class RebuildTest < Minitest::Test
     YAML
     # The checked-in edh fixture IS the canonical layout — replaying it
     # exercises the whole chain: parse (EAGLE terms + CSV join) → loader
-    # (metadata_json) → FacetBuilder (facet rows) + EdhDates (axis rows).
+    # (metadata_json) → FacetBuilder (facet rows) + EdhDates (timeline rows).
     FileUtils.mkdir_p(@canonical)
     FileUtils.cp_r(Nabu::TestSupport.fixtures("edh"), File.join(@canonical, "edh"))
     FileUtils.rm_f(Dir[File.join(@canonical, "edh", "{README.md,manifest.yml}")])

@@ -10400,7 +10400,7 @@ refresh rides the gate as usual.
 Acceptance: page documents shipped behavior only; a registry-drift
 check ties the page's axis list to the definitions block.
 
-## P35-4 · The timeline nomenclature move  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P35-4 · The timeline nomenclature move  [tier: opus] [status: done 2026-07-20] [deps: —]
 Goal: D35-c executed — date/place vocabulary becomes "timeline"
 across docs prose, user-facing strings, and code names (DateAxis,
 require_axis!, print_axis, AxisBuilder → timeline names); schema
