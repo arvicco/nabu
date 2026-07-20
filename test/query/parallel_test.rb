@@ -480,6 +480,58 @@ module Query
                                "hyphen-rich range stems must not confuse the variant split"
     end
 
+    # -- I.Sicily records (P34-0): <record> ↔ -en/-it/-translit ------------------
+
+    ISIC_URN = "urn:nabu:isicily:isic000006"
+
+    def test_isicily_translit_sibling_pairs_line_for_line
+      load_edition("urn:nabu:isicily:isic003360", "scx", [%w[1 ΡΑΡΟΤΑ]], title: "Vase of Rarota")
+      load_edition("urn:nabu:isicily:isic003360-translit", "scx",
+                   [%w[1 RAROTA]], title: "Vase of Rarota — transliteration")
+
+      result = run_parallel("urn:nabu:isicily:isic003360", lang: "scx")
+      assert_equal "urn:nabu:isicily:isic003360-translit", result.right&.urn,
+                   "the layer sibling is reachable by explicit --parallel scx (the itant -dipl stance)"
+      assert_equal [:pair], kinds(result), "identical line suffixes pair 1:1"
+    end
+
+    def test_isicily_prose_translation_blocks_via_its_corresp_anchor
+      load_edition(ISIC_URN, "lat", [%w[1 C·Iulius], %w[2 Felix], %w[3 vixit], %w[4 annis]],
+                   title: "Epitaph")
+      load_edition("#{ISIC_URN}-en", "eng",
+                   [["p1", "Gaius Iulius Felix lived for [--] years.", { "corresp" => "1" }]],
+                   title: "Epitaph — English translation")
+
+      result = run_parallel(ISIC_URN, lang: "eng")
+      assert_equal "#{ISIC_URN}-en", result.right&.urn
+      assert_equal [:block], kinds(result),
+                   "the whole-text prose anchors at the first line and owns the record as ONE block " \
+                   "— whole-text grain made explicit, never per-line invention"
+      block = result.groups.first
+      assert_equal ":1", block.covers_first
+      assert_equal ":4", block.covers_last
+
+      back = run_parallel("#{ISIC_URN}-en", lang: "lat")
+      assert_equal ISIC_URN, back.right&.urn, "the -en resolves back to its record"
+    end
+
+    def test_isicily_it_sibling_resolves_beside_the_en_one
+      load_edition(ISIC_URN, "lat", [%w[1 C·Iulius]], title: "Epitaph")
+      load_edition("#{ISIC_URN}-en", "eng", [["p1", "Gaius…", { "corresp" => "1" }]])
+      load_edition("#{ISIC_URN}-it", "ita", [["p1", "Gaio…", { "corresp" => "1" }]])
+
+      assert_equal "#{ISIC_URN}-en", run_parallel(ISIC_URN, lang: "eng").right&.urn
+      assert_equal "#{ISIC_URN}-it", run_parallel(ISIC_URN, lang: "ita").right&.urn
+    end
+
+    def test_isicily_sibling_lookup_never_crosses_records
+      load_edition(ISIC_URN, "lat", [%w[1 C·Iulius]], title: "Epitaph")
+      load_edition("urn:nabu:isicily:isic000001-en", "eng", [["p1", "Other record."]])
+
+      result = run_parallel(ISIC_URN, lang: "eng")
+      assert_nil result.right, "an -en document of a DIFFERENT record is not a sibling"
+    end
+
     # -- visibility (show-family semantics) --------------------------------------
 
     def test_withdrawn_passages_are_included_and_flagged

@@ -1,17 +1,24 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# Nine byte-identical whole files from github.com/ISicily/ISicily at
+# Twelve byte-identical whole files from github.com/ISicily/ISicily at
 # commit db1a4959f4bb2fc42468e7f1ac0d017b2cafe928 (master, retrieved
-# 2026-07-18). sha below = the git blob sha of each file at that commit
-# (verifiable with `git cat-file`/the GitHub blobs API); URL = the
-# commit-pinned raw path. adapter_test stays null: adapter tests
-# enumerate their own expectations against this 9-record tree.
+# 2026-07-18; ISic000006/003360/020307 added 2026-07-20 for the P34-0
+# sibling minting, extracted from the same pinned commit). sha below =
+# the git blob sha of each file at that commit (verifiable with
+# `git cat-file`/the GitHub blobs API); URL = the commit-pinned raw
+# path. adapter_test stays null: adapter tests enumerate their own
+# expectations against this 12-record tree.
 source: isicily
 adapter_test:
 retrieved: 2026-07-18
 commit: db1a4959f4bb2fc42468e7f1ac0d017b2cafe928
 files:
+  - path: inscriptions/ISic000006.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic000006.xml
+    blob_sha: 1b6764d6bed0f5e2333228f49fd623248de535c4
+    whole: true
+    trim: none (non-empty en AND it translation divs — the -en/-it sibling exemplar, P34-0)
   - path: inscriptions/ISic000001.xml
     url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic000001.xml
     blob_sha: 737acd78f90a7413b2193442c51ad6d9ae83eb07
@@ -47,6 +54,11 @@ files:
     blob_sha: 93ecf7f5500c9b9eb370f2e943328ceb0be50291
     whole: true
     trim: none (Sicel scx — bare <orig> outside choice KEPT, gaps + unclear)
+  - path: inscriptions/ISic003360.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic003360.xml
+    blob_sha: 8d3f580e9b51dcfb2215caf5e82d95e9ba2c405b
+    whole: true
+    trim: none (Sicel scx-Grek primary + scx-Latn transliteration edition, line-for-line — the -translit exemplar, P34-0)
   - path: inscriptions/ISic003475.xml
     url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic003475.xml
     blob_sha: f28bf81bb22c8530705bebb16f7296d138578136
@@ -57,3 +69,8 @@ files:
     blob_sha: 87ae83a9d635d1886e16b017bcc5ea73123cd99f
     whole: true
     trim: none (Elymian xly metadata-only — note-only edition, zero citable lines, axis-bearing header)
+  - path: inscriptions/ISic020307.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic020307.xml
+    blob_sha: 0ae9d3cc8bfdb38560067d830ab6cc5508190f35
+    whole: true
+    trim: none (Elymian partial transliteration — translit lb n=2 only, of primary lines 1-2; empty en/it divs mint nothing, P34-0)
