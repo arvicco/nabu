@@ -454,6 +454,7 @@ useful to others.
 |---|---|
 | [docs/quickstart.md](docs/quickstart.md) | Zero to first search, copy-pasteable, honest about sizes and timings. |
 | [docs/library.md](docs/library.md) | The shelf map: every corpus with contents, counts, licenses, and research uses. |
+| [docs/axes.md](docs/axes.md) | The research axes: the eighteen scholarly desks, their personas, and which sources each tags. |
 | [docs/01-concept.md](docs/01-concept.md) | The vision: what Nabu is, workflows, principles, what success looks like. |
 | [docs/mcp.md](docs/mcp.md) | The MCP server: ten read-only tools, registration recipes, quoting etiquette. |
 | [docs/conventions.md](docs/conventions.md) | Field notes for working with ancient-text corpora (Unicode/NFC, citations, editions, licensing) — start here if you're new to the domain. |
