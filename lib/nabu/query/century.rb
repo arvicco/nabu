@@ -34,6 +34,7 @@ module Nabu
 
       # Passage-id slices for the IN lookup (SQLite bound-variable ceiling), the
       # vocab/parallels precedent.
+      # const: SQLite bound-parameter comfort, not a corpus claim
       SLICE = 500
 
       def initialize(catalog:, fulltext: nil)

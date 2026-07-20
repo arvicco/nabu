@@ -27,6 +27,7 @@ module Nabu
     # non-withdrawn documents, with the same effective-license semantics
     # (document override coalesced over source class) and exact-class filter.
     class Export
+      # const: the implemented serializers — falsified by code change, not corpus growth
       FORMATS = %w[plain jsonl].freeze
 
       def initialize(catalog:)

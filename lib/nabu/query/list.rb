@@ -104,6 +104,8 @@ module Nabu
       ].freeze
       # The local shelves (architecture §16 content grains :language /
       # :source / :notes + the library) — always "Your shelves".
+      # const: the sanctioned local-shelf gateways — a new shelf is a code
+      # change (architecture §16), not corpus growth
       LOCAL_SHELF_ADAPTERS = %w[Nabu::Adapters::LocalLanguage Nabu::Adapters::LocalSource
                                 Nabu::Adapters::LocalNotes Nabu::Adapters::LocalLibrary].freeze
 

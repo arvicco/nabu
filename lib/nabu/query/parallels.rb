@@ -78,22 +78,31 @@ module Nabu
 
       # The gram size the design measured (4-grams: Odyssey 8 tokens → 5 grams,
       # John 17 → 14, Thucydides 120 → 117 — all n−4+1).
+      # const: a text property (shingle arithmetic), not a corpus count
       GRAM_SIZE = 4
 
       # A gram in ≥ this many passages is not distinctive evidence (its rank
       # weight would be ≤ 1/COMMON_GRAM_DF ≈ 0) AND enumerating its hits would be
       # wasteful — so we cap the probe here and drop the gram from scoring. Pure
       # cost/relevance bound: a real quotation's grams are far rarer than this.
+      # census: 5505159, 2026-07-20, live passages — tuned at 3.76M (133 ppm of
+      # corpus), now 91 ppm: an ABSOLUTE cutoff narrows recall as the corpus
+      # grows; corpus-relative refactor journaled for the gate (P35-6, fulltext
+      # mid-reindex at re-measure so gram dfs could not be re-probed)
       COMMON_GRAM_DF = 500
 
       # Join+dedupe this many top-scored candidate passages to fill the page
       # (enough that document-grain grouping still yields `limit` documents).
+      # census: 5505159, 2026-07-20, live passages; page-fill overfetch (the
+      # INNER_LIMIT_FACTOR class — document grouping thins candidates)
       CANDIDATE_FACTOR = 30
       MIN_CANDIDATES = 300
 
       # A rarity cap on the lemma-co-occurrence signal: a lemma attested in more
       # than this many passages is too common to diagnose an echo (and bounds the
       # IN-list probe). Content words in the live corpus sit well under it.
+      # census: 5505159, 2026-07-20, live passages — tuned at 3.76M; same
+      # absolute-cutoff drift as COMMON_GRAM_DF, journaled with it (P35-6)
       RARE_LEMMA_DF = 2_000
 
       # One intertext hit, grouped to document grain. `score` is the summed
