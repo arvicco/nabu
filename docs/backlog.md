@@ -10352,3 +10352,98 @@ page anchors: the mapping decision is the packet's design note; an
 honest partial wiring beats a fake complete one). Fetch: the notes/
 dirs join the tls sparse cone (~more MB — census and report). Docs +
 worklog.
+
+# Phase 35 — the atlas phase: personas, research axes, honest surfaces (elaborated 2026-07-20 post-P34 gate; all six D35 rulings in hand + the owner-approved audit pair + the Sinitic width workstream)
+
+Source of truth: the owner-approved plan + rulings (orchestrator holds
+it). D35 rulings binding throughout: axes = the research dimension
+("axis" everywhere; ALL date nomenclature moves to "timeline");
+18-axis tag set (the 15 distilled + hebrew/syriac/hittite); axes are
+TAGS (multi-membership by design, dual-tagging over folding — tlhdig
+= cuneiform+hittite); `--all` stays flat, `--axis NAME[,NAME…]`
+selects AND groups; docs/axes.md is PUBLIC. Zero syncs, zero new
+sources — this phase makes the registry's shape visible and the
+surfaces honest.
+
+## P35-0 · The axes registry seam + the ratified mapping  [tier: fable] [status: ready] [deps: —]
+Goal: axis definitions block (name, persona one-liner, desc, order)
++ list-valued `axes:` key on EVERY source row, the owner-ratified
+mapping (the plan's draft table + D35-a/D35-d amendments; re-verify
+every row against its adapter manifest, not the table).
+Acceptance: registry validation invariants test-pinned — every source
+declares ≥1 axis; every declared axis exists in the definitions
+block; axis names NEVER collide with source slugs (the resolution
+guarantee); the design note argues axes.yml-vs-sources.yml placement.
+
+## P35-1 · `nabu list --axis` + status grouping  [tier: opus] [status: ready] [deps: P35-0]
+Goal: `list --axis` = grouped listing (axis header: name + persona
+line; members with held counts; a source appears under each of its
+axes, tag semantics stated once); `--axis slavic` one axis;
+`--axis a,b` multi; unknown axis errors naming the known set;
+`status --axis` rides along if it fits the layout.
+Acceptance: house cli_test patterns; persona line renders; `--all`
+surfaces unchanged.
+
+## P35-2 · `nabu sync --axis` / bare-axis expansion  [tier: opus] [status: ready] [deps: P35-0]
+Goal: `sync celtic` resolves exact-slug-first-then-axis; expands to
+the axis's ENABLED members; disabled members reported by name as
+skipped (one line, never silent); `sync --axis a,b` selects+groups;
+composes with --parse-only and every sync flag.
+Acceptance: per-source report lines byte-unchanged (frozen contract —
+grouping is pure expansion); resolution + skip-reporting test-pinned;
+`sync --all` output stays flat.
+
+## P35-3 · docs/axes.md — the public atlas page  [tier: opus] [status: ready] [deps: P35-0, P35-1, P35-2]
+Goal: the personas + axes + membership page, PUBLIC (D35-e), written
+from the live registry (never hand-duplicated rows); languages.md
+refresh rides the gate as usual.
+Acceptance: page documents shipped behavior only; a registry-drift
+check ties the page's axis list to the definitions block.
+
+## P35-4 · The timeline nomenclature move  [tier: opus] [status: ready] [deps: —]
+Goal: D35-c executed — date/place vocabulary becomes "timeline"
+across docs prose, user-facing strings, and code names (DateAxis,
+require_axis!, print_axis, AxisBuilder → timeline names); schema
+stays put (derived-table rename only if the rebuild path regenerates
+it anyway — argue in the design note).
+Acceptance: zero output drift outside the renamed words themselves
+(suite pins); docs grep-clean of the old sense ("axis" = research
+axis only).
+
+## P35-5 · The assumption inventory  [tier: opus] [status: ready] [deps: —]
+Goal: dev-loop §6b pass 1 — harvest every era-bound-assumption site
+in lib/ into ONE census table (file:line · literal/enumeration ·
+stated justification or none · failure mode if false · growth axis
+that kills it). Sweep classes: numeric literals in query/render/fetch
+code; hand-enumerated lists over slugs/languages/shapes; every
+.limit(/.first(/truncation; rescue-or-empty fallbacks; render paths
+that can print "no X"; lazy resource initialization; confessing
+comments ("fine for", "for now", "does not model", "today").
+Acceptance: the table in the packet report (NO behavior changes) +
+a `# census: <number>, <date>` comment-convention proposal for the
+gate's conventions scan.
+
+## P35-6 · Recalibration + the honesty invariants  [tier: fable] [status: ready] [deps: P35-5]
+Goal: dev-loop §6b passes 2–3 — per inventoried site: blame the era,
+RE-MEASURE against the live catalog, classify OK (document with
+census+date) / HARDEN / GENERALIZE / RETIRE; the journaled gate finds
+land here (show --tokens; the exhausted-inner-window "page may be
+incomplete" hint; any remaining silent caps). Durable residue: the
+render-conformance suite (every truncating surface announces what it
+hid; every empty result under active filters explains itself), the
+`# census:` convention wired into the gate scan, a phase-gate
+checklist line re-diffing recorded census numbers.
+Acceptance: HARDEN/GENERALIZE verdicts adjudicated by the owner at
+the gate like decision items; suite green with the new conformance
+suite enforced.
+
+## P35-7 · East-Asian-width-aware rendering  [tier: opus] [status: ready] [deps: —]
+Goal: the Sinitic display note's workstream A — one
+Nabu::Display.width (grapheme × EAW class: W/F=2, isolates/ANSI=0)
+used by every column-aligned surface (concord KWIC, align, show
+card, status tables); ambiguous-width census over held lzh/ojp
+passages recorded in display.md §2 (+ the iTerm2 ambiguous-width
+toggle note); measurement not policy — no --display mode, no footer.
+Acceptance: KWIC alignment pinned on real lzh fixture lines; the
+cli.rb/concord.rb "does not model East-Asian width" confessions
+retired; grc/lat/chu rendering byte-unchanged (suite pins).
