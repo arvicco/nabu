@@ -42,7 +42,10 @@ class CclEtymologiesTest < Minitest::Test
     result = Nabu::Query::Links.new(catalog: @catalog, journal: @journal).run("urn:nabu:dict:ccl:C1494")
     refute_nil result
     edges = result.groups.fetch("etymology")
-    assert_equal %w[urn:nabu:dict:aed:159410 urn:nabu:dict:tla-demotic:6439],
+    # The aed leg carries the SHELF's real entry urn — the crosswalk's bare
+    # "159410" re-minted with the "tla" prefix the AED @xml:id space uses
+    # (P36-4); the demotic leg rides its verbatim word id (no shelf).
+    assert_equal %w[urn:nabu:dict:aed:tla159410 urn:nabu:dict:tla-demotic:6439],
                  edges.map(&:urn).sort
     edges.each do |edge|
       assert_equal :out, edge.direction, "the descendant asserts its ancestors"
@@ -52,6 +55,37 @@ class CclEtymologiesTest < Minitest::Test
     end
     assert_equal "ⲕⲁϩ — #{Nabu::Adapters::Ccl::TITLE}", result.title,
                  "the queried dictionary-entry urn resolves to its own headword"
+  end
+
+  # The P36-4 acceptance oracle: with the AED shelf ingested BESIDE ccl, the
+  # C1494 egy↔cop tour resolves through the aed leg end to end — Coptic ⲕⲁϩ
+  # → Egyptian qꜣḥ (urn:nabu:dict:aed:tla159410). The ORAEC crosswalk stores
+  # the bare TLA lemma id "159410"; the AED shelf mints its urns from the
+  # upstream @xml:id verbatim ("tla159410", never renumbered), so the
+  # producer must re-mint the aed leg with the "tla" prefix or the edge
+  # dangles (the P34-2 defect: 0/1,695 resolved). The demotic leg stays
+  # dangling BY DESIGN — no demotic dictionary shelf exists.
+  def test_the_aed_leg_resolves_end_to_end_with_the_shelf_on_the_catalog
+    aed = Nabu::Store::Source.create(
+      slug: "aed", name: "AED", adapter_class: "Nabu::Adapters::Aed", license_class: "attribution"
+    )
+    Nabu::Store::DictionaryLoader.new(db: @catalog, source: aed)
+                                 .load_from(Nabu::Adapters::Aed.new, workdir: Nabu::TestSupport.fixtures("aed"))
+    producer.run("ccl")
+
+    result = Nabu::Query::Links.new(catalog: @catalog, journal: @journal).run("urn:nabu:dict:ccl:C1494")
+    etymology = result.groups.fetch("etymology")
+
+    aed_edge = etymology.find { |edge| edge.urn.start_with?("urn:nabu:dict:aed:") }
+    assert_equal "urn:nabu:dict:aed:tla159410", aed_edge.urn,
+                 "the crosswalk's bare 159410 re-mints to the shelf's tla-prefixed urn"
+    assert aed_edge.resolved?, "the aed leg lands on the ingested Egyptian shelf entry"
+    assert_equal "egy", aed_edge.language
+    assert_match(/qꜣḥ/, aed_edge.title, "resolves to the Egyptian headword — Ägyptische Wortliste")
+
+    demotic_edge = etymology.find { |edge| edge.urn.start_with?("urn:nabu:dict:tla-demotic:") }
+    refute demotic_edge.resolved?,
+           "the demotic leg still dangles BY DESIGN (no demotic dictionary shelf)"
   end
 
   def test_mints_every_crosswalk_edge_of_the_fixture

@@ -10496,12 +10496,29 @@ optimizations.
 N parsers, one writer behind a queue. If FTS reindex dominates, does
 not dispatch; journal says why.
 
-## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: done 2026-07-20] [deps: —]
 The P34-2 defect: 1,695 aed-side edges dangle (`dict:aed:159410`
 producer vs `dict:aed:tla159410` shelf). Decide re-mint vs
 resolution-normalize (study the canonical id space; links journal
 supersede makes re-mint clean); acceptance = the egy↔cop tour resolves
 end-to-end via `nabu links`/`etym`.
+
+RESOLVED (RE-MINT, option a): the id-space study found the AED shelf is
+canonical — its entry urns are the upstream `@xml:id` VERBATIM
+(`tla159410`, "never renumbered, never prefixed"), while the ORAEC
+crosswalk CSV is the deviant form (it drops the `tla` prefix, storing
+bare `159410`). So `CclEtymologies` now RE-MINTS the aed leg at
+edge-write time (`shelf_urn`/`AED_BARE_ID`: restore `tla` on a
+bare-numeric aed local id; idempotent; demotic legs untouched). The
+journal carries the true shelf urn — not a read-time shim (option b,
+rejected: the journal must be honest). The fix lives in the PRODUCER,
+not the ccl parser's citation seed, so a producer rerun alone re-mints
+production with no ccl re-parse. OWNER-QUEUE (after the rebuild
+completes): `bin/nabu sync ccl --parse-only` (no network — re-parses
+ccl and re-runs the reference producer). Expect: the 1,695 aed
+etymology legs re-mint as `urn:nabu:dict:aed:tla<id>` and resolve
+against the aed shelf; the demotic legs (`tla-demotic:<id>`) still
+dangle BY DESIGN (no demotic dictionary shelf — a future seam).
 
 ## P36-5 · Gate-docs refresh + the re-measures  [tier: opus] [status: blocked — awaiting owner "reindex settled"] [deps: owner]
 languages.md + library.md live refresh; the three reindex-blocked
