@@ -3933,9 +3933,12 @@ class CLITest < Minitest::Test
     end
   end
 
-  # KWIC width pin: the keyword column must sit at exactly --width visible
-  # characters — isolates excluded from the math, and the stripped (shorter)
-  # left context re-padded so columns still line up.
+  # KWIC width pin: the keyword column must sit at exactly --width display
+  # CELLS (P35-7) — isolates and ANSI excluded, combining marks (Hebrew
+  # points) counted 0 within their grapheme cluster, and the stripped
+  # (shorter) left context re-padded so columns line up. The char index of
+  # the keyword exceeds the cell width here because the pointed consonants
+  # carry combining marks — the cell column is the honest alignment measure.
   def test_concord_keyword_column_ignores_isolates_and_stripped_marks
     with_hebrew_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[concord אלהים]) }
@@ -3943,8 +3946,9 @@ class CLITest < Minitest::Test
       row = out.lines.find { |line| line.include?("urn:nabu:oshb:gen:1.1") }
       refute_nil row, "the Hebrew verse must appear as a KWIC row"
       visible = row.delete(RLI + PDI)
-      assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, visible.index("אֱלֹהִים"),
-                   "keyword column = width, counted over visible characters"
+      prefix = visible[0...visible.index("אֱלֹהִים")]
+      assert_equal Nabu::Query::Concord::DEFAULT_WIDTH, Nabu::Display.width(prefix),
+                   "keyword column = width, counted over display cells (combining marks add 0)"
       assert_includes out, "display: cantillation stripped · rtl isolates (--display full shows all marks)"
     end
   end

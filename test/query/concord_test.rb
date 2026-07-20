@@ -124,6 +124,41 @@ module Query
       assert_equal %w[μῆνιν μῆνις], rows.map(&:keyword)
     end
 
+    # -- East-Asian display width (P35-7) ------------------------------------
+    #
+    # Real Han (kanripo KR1h0004 Lunyu vocabulary): under char-count math a
+    # padded left context of ideographs is width CHARS but 2×width display
+    # cells, so the keyword column drifts right on Han lines. The alignment
+    # authority is display cells (Nabu::Display.width), not String#length.
+    # The keyword "道之本" is a punctuation-bounded FTS token so unicode61
+    # returns all three passages; concord then locates it in pristine text.
+    def test_kwic_left_context_aligns_by_display_cells_on_lzh_han
+      doc = make_document(urn: "urn:d:lzh", title: "論語", language: "lzh")
+      make_passage(doc, urn: "urn:d:lzh:1", text: "人，道之本。", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:lzh:2", text: "天地人，道之本。", sequence: 1, language: "lzh")
+      make_passage(doc, urn: "urn:d:lzh:3", text: "上，道之本。", sequence: 2, language: "lzh")
+      rebuild!
+
+      rows = concord("道之本", width: 12)
+      assert_equal 3, rows.size, "the punctuation-bounded Han token matches every passage"
+      assert_equal ["道之本"], rows.map(&:keyword).uniq
+      assert_equal [12], rows.map { |r| Nabu::Display.width(r.left) }.uniq,
+                   "every left context is exactly width DISPLAY CELLS → the keyword column lines up"
+    end
+
+    def test_kwic_clips_wide_context_by_display_cells_not_char_count
+      doc = make_document(urn: "urn:d:lzh", title: "論語", language: "lzh")
+      # 8 ideographs of left context (16 cells) must clip to fit width 8.
+      make_passage(doc, urn: "urn:d:lzh:1", text: "天地人也孝弟忠信，道之本。",
+                        sequence: 0, language: "lzh")
+      rebuild!
+
+      row = concord("道之本", width: 8).first
+      assert row.left.start_with?("…"), "clipped wide context is marked with a leading ellipsis"
+      assert_operator Nabu::Display.width(row.left), :<=, 8,
+                      "the clipped-plus-ellipsis left context never exceeds width cells"
+    end
+
     # -- occurrence policy: first occurrence per passage ---------------------
 
     def test_multiple_occurrences_in_one_passage_yield_one_row_at_the_first
