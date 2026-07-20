@@ -1499,9 +1499,18 @@ module Nabu
       fulltext = open_fulltext(config)
       ledger = open_ledger(config)
       @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      # Fetch every matching shelf, cap at render (P34-r2): with the CJK
+      # shelves live a Han headword matches 6+ dictionaries, and the old
+      # fetch-time cap hid the tail silently (the gate found `define 棄`
+      # missing tls-words). --long lifts the cap; compact announces it.
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
-                                   .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
-      print_define_results(lemma, results, catalog: catalog)
+                                   .run(lemma, lang: options[:lang], limit: nil)
+      shown = options[:long] ? results : results.first(options[:limit].to_i)
+      print_define_results(lemma, shown, catalog: catalog)
+      if (hidden = results.size - shown.size).positive?
+        say format("… %<n>d more %<verb>s (--long shows all; --limit raises the cap)",
+                   n: hidden, verb: hidden == 1 ? "entry matches" : "entries match")
+      end
     ensure
       catalog&.disconnect
       fulltext&.disconnect
