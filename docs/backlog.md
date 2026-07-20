@@ -10503,7 +10503,16 @@ resolution-normalize (study the canonical id space; links journal
 supersede makes re-mint clean); acceptance = the egy↔cop tour resolves
 end-to-end via `nabu links`/`etym`.
 
-## P36-5 · Gate-docs refresh + the re-measures  [tier: opus] [status: blocked — awaiting owner "reindex settled"] [deps: owner]
+## P36-5 · Gate-docs refresh + the re-measures  [tier: opus] [status: dispatched 2026-07-20 — rebuild completed 16:09, settled corpus 24.4M passages] [deps: —]
 languages.md + library.md live refresh; the three reindex-blocked
 census stamps re-measured; D36-a corpus-relative df cutoffs implemented
 in parallels.rb (measured before/after — the ruling's execution).
+
+D36-e (journaled at the rebuild's isicily warning, classified 2026-07-20):
+the +29 quarantine delta = P34-0 sibling docs of structurally-defective
+upstream files (lb/@n, textpart/@n, urn mismatch, dup urns) meeting the
+full canonical tree at first rebuild — working as designed, baseline
+advanced, ~2,170/~2,200 siblings minted. Owner call: leave quarantined
+(honest, recommended) vs teach sibling parse to tolerate missing lb @n
+via synthesized anchors. Full classification in the orchestrator-held
+baseline note.
