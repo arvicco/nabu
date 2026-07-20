@@ -26,8 +26,8 @@ module Nabu
     # carry Leiden Unified transliteration, `<TLA lemma ID>|<lemma>` pairs
     # (the SAME stable lemma space AED/AES use — the dictionary join, once an
     # AED shelf lands), UPOS, glossing, a German translation, and pre-cooked
-    # dateNotBefore/dateNotAfter integers (wired into the date axis by
-    # Store::AxisBuilder::TlaHfDates at passage grain).
+    # dateNotBefore/dateNotAfter integers (wired into the timeline by
+    # Store::TimelineBuilder::TlaHfDates at passage grain).
     #
     # == Identity (FROZEN minting)
     #

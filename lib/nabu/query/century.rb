@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../date_axis"
+require_relative "../timeline"
 require_relative "../normalize"
 
 module Nabu
@@ -21,7 +21,7 @@ module Nabu
     # counts the documents whose range spans more than one century, so the CLI
     # prints "bucketed by earliest year; N span multiple centuries".
     #
-    # The signed century index (Nabu::DateAxis) is the bucket key AND the
+    # The signed century index (Nabu::Timeline) is the bucket key AND the
     # chronological sort key (-2 < -1 < 1 < 2 = 2c BCE, 1c BCE, 1c CE, 2c CE),
     # so buckets need only be sorted by index.
     class Century
@@ -52,7 +52,7 @@ module Nabu
 
       # Every dated, visible document as { document_id, not_before, not_after },
       # with the optional language/license/date/place filters applied directly
-      # on the axis join (one table, so no correlated EXISTS needed here).
+      # on the timeline join (one table, so no correlated EXISTS needed here).
       # DOCUMENT-grain rows only (passage_seq_from NULL): a chronicle's
       # passage-grain annal rows (P16-3) would count one document dozens of
       # times in a histogram labelled "documents" — its document-grain
@@ -74,7 +74,7 @@ module Nabu
                   axes[:not_after].as(:not_after)).all
       end
 
-      # Keep only axis rows whose document attests the term (any live passage,
+      # Keep only timeline rows whose document attests the term (any live passage,
       # language-scoped, matches the folded FTS query).
       def restrict_to_term(rows, term, lang:)
         matching = matching_document_ids(term, lang: lang)
@@ -117,12 +117,12 @@ module Nabu
           year = nb || na
           next if year.nil?
 
-          buckets[Nabu::DateAxis.century_index(year)] += 1
+          buckets[Nabu::Timeline.century_index(year)] += 1
           total += 1
-          multi += 1 if nb && na && Nabu::DateAxis.century_index(nb) != Nabu::DateAxis.century_index(na)
+          multi += 1 if nb && na && Nabu::Timeline.century_index(nb) != Nabu::Timeline.century_index(na)
         end
         ordered = buckets.sort_by { |index, _| index }
-                         .map { |index, n| Bucket.new(index: index, label: Nabu::DateAxis.century_label(index), documents: n) }
+                         .map { |index, n| Bucket.new(index: index, label: Nabu::Timeline.century_label(index), documents: n) }
         Result.new(buckets: ordered, total_documents: total, multi_century: multi, query: query)
       end
 

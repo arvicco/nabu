@@ -227,7 +227,7 @@ class IsicilyTest < Minitest::Test
     assert_equal({ "not_before" => -500, "not_after" => -480,
                    "raw" => "500—480 BCE",
                    "evidence" => "archaeological-context material-context lettering" },
-                 document.metadata["date"], "the axis-bearing header still rides")
+                 document.metadata["date"], "the timeline-bearing header still rides")
     assert_equal "Segesta", document.metadata.dig("place", "ancient")
     assert_equal "https://pleiades.stoa.org/places/462487", document.metadata.dig("place", "ancient_ref")
   end

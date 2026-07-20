@@ -2,7 +2,7 @@
 
 Trimmed real upstream samples for the `open-etruscan` adapter
 (`Nabu::Adapters::OpenEtruscan` / `FlatCsvParser` — the first flat-csv
-corpus) and the `AxisBuilder::OpenEtruscanDates` extractor. Retrieved
+corpus) and the `TimelineBuilder::OpenEtruscanDates` extractor. Retrieved
 **2026-07-18** (the sanctioned fixture snapshot, not a full sync). Layout
 mirrors the canonical workdir the adapter fetches into: `corpus/` (the
 Zenodo artifact) + `findspots/` (the Larth sidecar).

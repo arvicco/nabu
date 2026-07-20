@@ -292,7 +292,7 @@ bridged to Bosworth-Toller definitions.
 | **Language** | Old Church Slavonic (`chu`), Bulgarian on the Church-Slavonic→Bulgarian continuum (`bul`), Slovenian incl. its historical stages (`sl`), plus the Freising translation layers (`lat`, `eng`, `ger`, `ita`, `pol`) and the damaskini English siblings |
 | **Period** | ~1000 CE (Freising Manuscripts) through 1899 (IMP print) |
 | **Size** | `ccmh`: 19 docs / 28,786 passages — four gospel codices in Helsinki-ASCII transliteration (Zographensis, Marianus, **Assemanianus**, **Savvina kniga**), CC BY → `attribution`. `freising`: 27 docs / 2,037 lines — the Brižinski spomeniki in three aligned transcription layers + five modern translations, CC BY-ND → `research_private` (the first MCP-default-excluded source). `goo300k`: 89 docs / 8,397 passages — **gold-annotated** Early Modern Slovenian (1584–1899), the `sl` gold-lemma shelf (214k lemma rows). `imp`: 658 docs / 404,897 passages — the silver-annotated IMP print corpus, the library's fourth-largest shelf by passages (the EDH inscriptions, §8g, edge past it by ~1,400). `damaskini`: 46 docs / 12,072 passages — 23 gold-annotated Balkan Slavic witnesses, 15th–19th c., plus their 23 English sibling translations (synced live 2026-07-17) |
-| **Metadata** | CCMH: folio-line citations, hyphen-split words searchable whole; freising: per-layer parallel citation; goo300k/imp: CE year in the urn (`…:sigil-1584`) feeding the date axis (§9) — all 747 Slovene docs dated; damaskini: gold lemma + MULTEXT-East MSD, Norm/Origin document facets, TSV-header dates and places on the axis |
+| **Metadata** | CCMH: folio-line citations, hyphen-split words searchable whole; freising: per-layer parallel citation; goo300k/imp: CE year in the urn (`…:sigil-1584`) feeding the timeline (§9) — all 747 Slovene docs dated; damaskini: gold lemma + MULTEXT-East MSD, Norm/Origin document facets, TSV-header dates and places on the timeline |
 
 The four CCMH codices join the alignment hub (witnesses 10–13 of the NT)
 and are the substrate of `align REF --collate` — a raw-token apparatus per
@@ -311,7 +311,7 @@ full English sibling translation (`show --parallel` works), classified
 honestly by the corpus's own Norm scheme (`chu` ×3 / `bul` ×20, the
 deposit's own "Bulgarian" usage quoted in 02-sources row 60), with
 dialectal Origin riding as document facets and the TSV-header dates
-(1536–1860) on the chronological axis.
+(1536–1860) on the timeline.
 
 **Research uses:** OCS textual criticism with a live apparatus; Slavic
 diachrony continued past the treebanks (§6) into Early Modern print *and*
@@ -329,7 +329,7 @@ near-contemporaries.
 | **Period** | Roughly 3rd–10th c. CE, the Christian-Egypt corpus |
 | **Size** | 482 docs / 74,169 passages — 482 of the 483 upstream corpora aboard (P18-1 coverage pass; the one remainder is an honest quarantine) |
 | **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.2.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
-| **Metadata** | Upstream **gold lemmatization** — **233,020 `cop` lemma rows**, gold-lemma language **#15**; language-of-origin loan tags (the Greek layer inside Coptic); Wikification entities; manuscript-date axis rows (340 dated documents) |
+| **Metadata** | Upstream **gold lemmatization** — **233,020 `cop` lemma rows**, gold-lemma language **#15**; language-of-origin loan tags (the Greek layer inside Coptic); Wikification entities; manuscript-timeline rows (340 dated documents) |
 
 Synced and flipped by the owner 2026-07-13 (the first sync attempt's unzip
 failure re-run clean; P18-1 then lifted coverage from the initial 188
@@ -352,7 +352,7 @@ documentary Coptic papyri (§4) across the literary/documentary line.
 | **Period** | Roman Republic through Late Antiquity, empire-wide — provinces from Britannia to Arabia |
 | **Size** | 81,881 docs / 406,306 passages — the largest shelf by documents (48% of the library; counts as of 2026-07-17) |
 | **Source** | `edh` (Epigraphic Database Heidelberg), license: `attribution` (CC BY-SA 4.0); **`sync_policy: frozen`** — upstream archived 2021, this is a one-shot preservation snapshot (27 quarantines, triaged at gate 18: 26 lb-less inscriptions carried to P19, 1 malformed upstream XML, all baseline-anchored) |
-| **Metadata** | The library's first **genre facets** (migration 009): `document_facets` live at **256,518 rows** (genre/province/material/object_type, `?`-certainty preserved in `raw`) behind `search --type/--province/--material`; **81,416 dated documents** on the axis (§9); persons prosopography in `metadata_json`; Leiden ⟦…⟧ rendering for every `del`; `fuzzy_index: true` |
+| **Metadata** | The library's first **genre facets** (migration 009): `document_facets` live at **256,518 rows** (genre/province/material/object_type, `?`-certainty preserved in `raw`) behind `search --type/--province/--material`; **81,416 dated documents** on the timeline (§9); persons prosopography in `metadata_json`; Leiden ⟦…⟧ rendering for every `del`; `fuzzy_index: true` |
 
 Synced and flipped by the owner 2026-07-13. Inscriptions beside papyri
 (§4) and tablets (§8) complete the documentary triangle, and the facet
@@ -435,7 +435,7 @@ grain; Baroque sermon lexis with in-context quotations.
 | **Category** | The library's newest language axis (.docs/surveys/celtic-survey.md): Early Irish gold annotation, Gaulish and Primitive Irish epigraphy, plus dictionary and treebank riders |
 | **Language** | Old/Early Irish (`sga`), Gaulish (`xtg`, Gallo-Greek and Gallo-Latin scripts), Primitive Irish (`pgl`, real Ogham codepoints), with Latin companions and Pictish/Old Norse rarities coded honestly |
 | **Size** | `corph`: 76 docs / 17,942 passages — CorPH / Corpus PalaeoHibernicum (ERC ChronHib, Maynooth; MIT → `attribution`): 7th–10th-c. texts (Annals of Ulster, Vita Columbae, Blathmac, the Milan/St Gall/Würzburg gloss corpora, law, poetry, computus) with 136,559 gold-lemmatized tokens — **the first `sga` gold lemmas**. `riig`: 477 docs / 1,323 passages — RIIG (ANR, Ausonius/Bordeaux; CC BY 4.0 in-file → `attribution`): 428 Gaulish inscriptions with per-editor readings, morphosyntax, dated findspots, and French sibling translations. `ogham`: 834 docs / 1,053 passages — OG(H)AM / Ogham in 3D v2.0 (DIAS/Maynooth): ~500 ogham stones in real Ogham codepoints with transliteration/roman sibling layers; **license conflict held at the restrictive reading → `nc`** (site says BY-NC-SA, in-file records say CC BY 4.0; clarification email pending, relabel on reply) |
-| **Metadata** | CorPH: per-token language and dil.ie headword keys (→ links-journal reference edges — the eDIL bridge), ChronHib text dates on the axis; RIIG: signed-year `origDate` + WGS84 findspots on the axis, RIG print-corpus concordance as reference edges; ogham: dil.ie word links, logainm.ie place ids, CIIC/CISP concordances |
+| **Metadata** | CorPH: per-token language and dil.ie headword keys (→ links-journal reference edges — the eDIL bridge), ChronHib text dates on the timeline; RIIG: signed-year `origDate` + WGS84 findspots on the timeline, RIG print-corpus concordance as reference edges; ogham: dil.ie word links, logainm.ie place ids, CIIC/CISP concordances |
 
 The axis's riders land elsewhere in the library: the three attested-Celtic
 kaikki extracts (`wiktionary-sga`/`-mga`/`-wlm`, 8,097 entries on the
@@ -489,7 +489,7 @@ against the Perseus/First1K copies of the same works.
 | **Category** | Three millennia of Egyptian in one axis: the TLA/BBAW corpus snapshot, its dictionary, the official demotic/Late Egyptian freshness channel, and the Coptic lexicon bridge |
 | **Language** | Egyptian in Unicode transliteration (`egy`, Old Kingdom through Roman), with aligned German (`ger`/`deu`) translation siblings; Coptic (`cop`) on the dictionary end |
 | **Size** | `aes`: 13,026 texts / 101,793 sentences (+ 12,985 `-de` siblings) — Pyramid Texts, Book of the Dead, Amarna, Sinuhe and the sawlit literary canon, medical papyri, letters, tomb and rock inscriptions across 16 subcorpora, ≈779k gold lemma tokens (CC BY-SA 4.0). `aed`: 35,052 dictionary entries whose ids ARE the corpus's lemma ids — `define` resolves an AES lemma directly. `tla-hf`: 13,383 demotic + 3,606 Late Egyptian sentences (the only bulk demotic anywhere; corpus v18/v19, 2023–24) with German on every sentence. `ccl`: the Comprehensive Coptic Lexicon (11,284 entries, CC BY-SA) + the ORAEC CC0 crosswalk minting `etymology` edges — the 3,000-year lemma chain (ⲕⲁϩ ← qꜣḥ ← qh) |
-| **Metadata** | Gold lemmatization throughout `aes` (`search --lemma nfr`); hieroglyphs/MdC/Gardiner encodings riding token annotations; conventional Egyptological period envelopes + findspots on the axis; the AED root network (`show urn:nabu:dict:aed:tla866216` walks *nfr*'s 56 derivatives) |
+| **Metadata** | Gold lemmatization throughout `aes` (`search --lemma nfr`); hieroglyphs/MdC/Gardiner encodings riding token annotations; conventional Egyptological period envelopes + findspots on the timeline; the AED root network (`show urn:nabu:dict:aed:tla866216` walks *nfr*'s 56 derivatives) |
 
 **Research uses:** Egyptology with lemma-true search from the Pyramid
 Texts to demotic contracts; dictionary-resolved reading of any sentence
@@ -504,7 +504,7 @@ accounting) through the German layer.
 | **Category** | The whole pre-Roman epigraphic map of Italy and Sicily — seven fragmentary languages, most of them in their only machine-readable form |
 | **Language** | Etruscan (`ett`), Oscan (`osc`), Umbrian (`xum`), Faliscan (`xfa`), Venetic (`xve`), Messapic (`cms`), South Picene (`spx`), archaic Latin, Lepontic/Cisalpine Gaulish (`xlp`/`xcg`), Raetic (`xrr`), Sicel (`scx`), Elymian (`xly`), Sicilian Punic and Mamertine Oscan |
 | **Size** | `open-etruscan`: 8,047 docs — 6,248 Etruscan inscriptions + English siblings (CC BY, with the ETP scholarly glossary `larth-etp`, 1,122 entries). `ceipom`: 3,871 texts / 5,303 sentences — the lemmatized, dated, geolocated pre-Roman-Italy database incl. the Fibula Praenestina, Duenos and the complete Iguvine Tables (CC BY-SA). `itant`: 1,160 docs — 501 Oscan + 9 Lepontic critical editions with English/Italian siblings (nc). `sabellic-loans`: 85 curated Latin←Sabellic loan entries (`etym pompeii`). `lexlep`/`lexlep-words`: 494 Cisalpine inscriptions + the 627-word Lepontic lexicon (nc, relabel email pending). `tir`: 389 Raetic inscriptions — the corpus of record (nc, same email). `isicily`: 5,074 docs / 15,369 passages of Sicilian epigraphy across all languages (CC BY) |
-| **Metadata** | Signed-year datings and findspots feeding the axis at the next rebuild; script facets (eight native alphabets); Trismegistos/Imagines Italicae/EDH concordance edges; per-token lemmas and `Classical_Latin_equivalent` bridges on `ceipom`; morphemic analyses on the Lepontic lexicon |
+| **Metadata** | Signed-year datings and findspots feeding the timeline at the next rebuild; script facets (eight native alphabets); Trismegistos/Imagines Italicae/EDH concordance edges; per-token lemmas and `Classical_Latin_equivalent` bridges on `ceipom`; morphemic analyses on the Lepontic lexicon |
 
 **Research uses:** comparative Italic philology beside the Latin shelves;
 Etruscan reading with a dictionary (`define avil`); loan-flagged
@@ -519,7 +519,7 @@ languages (Sicel, Elymian) in their only digital home.
 | **Category** | The Hebrew Bible and Second Temple axis around the P26-3 Masoretic shelf (`oshb`, §8b): two dictionaries, the Aramaic column, the syntax witness, the Scrolls, and the epigraphy |
 | **Language** | Biblical Hebrew (`hbo`) and Aramaic (`arc`) — both byte-verbatim under the NFC exemption — plus the epigraphic mix (Greek/Latin/Phoenician/Syriac on `iip`) |
 | **Size** | `hebrew-lexicon`: 21,144 entries in two shelves — 9,299 augmented-Strong entries (the exact ids OSHB lemmas carry: `define` resolves any OSHB lemma directly, 100.000% join) + the 11,845-entry BDB outline with print-page anchors. `sdbh`: 7,932 UBS semantic-dictionary entries with domains and 260,813 verse-level scripture refs (CC BY-SA). `sefaria`: 103 Targum documents / 57,095 passages (Onkelos, Jonathan, the Writings targums — per-version license gate; unlicensed versions excluded by rule). `bhsa`: 39 books / 23,213 verses with full ETCBC clause/phrase syntax, ketiv-qere hybrid and per-lexeme glosses (nc). `dss`: 1,001 scrolls / 500,995 words / 1.43M signs — Abegg's transcriptions under his own CC BY-NC grant, text-critical flags intact. `iip`: 5,499 inscriptions of Israel/Palestine, ~500 BCE–640 CE, densely dated (nc) |
-| **Metadata** | The `ot` alignment hub runs six-legged (MT ×2 ↔ LXX ↔ Vulgate ↔ English ↔ Onkelos — `align "GEN 1.1"`); BHSA constituency spans are the library's first syntax annotations; DSS clusters carry correction/erasure/reconstruction degrees verbatim; IIP's date axis lights at rebuild |
+| **Metadata** | The `ot` alignment hub runs six-legged (MT ×2 ↔ LXX ↔ Vulgate ↔ English ↔ Onkelos — `align "GEN 1.1"`); BHSA constituency spans are the library's first syntax annotations; DSS clusters carry correction/erasure/reconstruction degrees verbatim; IIP's timeline lights at rebuild |
 
 **Research uses:** Masoretic philology with a real dictionary chain
 (lemma → augmented Strong's → BDB page); semantic-domain study over the
@@ -535,7 +535,7 @@ campaign — the Targums are its first bridgehead.
 | **Category** | The cuneiform world beyond ORACC, plus the Iranian flank and the Syriac millennium — Phase 31 |
 | **Language** | Hittite (`hit`) at corpus scale, Sumerian/Akkadian mass (`sux`/`akk`), Ugaritic (`uga`, new axis language), Classical Syriac (`syc`), Old Persian (`peo`) and Elamite (`elx`) via the Achaemenid trilinguals, Eblaite (`xeb`), proto-cuneiform (`qpc`) and proto-Elamite at CDLI |
 | **Size** | `tlhdig`: 23,486 Hittite manuscripts / 402,195 lines — >98% of published fragments, candidate morphology at silver (72.6% disambiguated mints lemmas). `cdli`: 353,156 artifacts / 2,186,961 passages — 135,201 C-ATF transliterations + the whole catalog as metadata-only documents with period/provenience/collection axes. `ebl`: 23,288 Fragmentarium fragments / 325,728 lines with inline English, 79.9% carrying CDLI cross-links (nc pending the license-discrepancy email). `oracc` grew 33→38 projects to 104,722 docs / 1,588,133 passages (ario + the four ePSD2 corpora incl. the Ur III administrative mass). `cuc`: 279 KTU tablets / 27,770 words with a per-sign cuneiform lane (nc). `peshitta`: 65 books / 31,341 verses (nc). `syriac-corpus`: 632 TEI documents / 134,726 passages (CC BY per file). `etcsl`: 775 documents / 42,577 passages — 394 hand-lemmatized composites + 381 English prose siblings (nc). `ud` grew to 12 treebanks (+HitTB gold Hittite, +the two Perseus conversions) |
-| **Metadata** | The `ot` hub runs seven-legged (the Peshitta the Syriac leg, versification measured Masoretic); the CDLI date axis (329,948 period-parsed rows) stretches the library from Uruk IV to the Achaemenids; eBL→CDLI and ETCSL↔ePSD2 reference edges cross-link the shelf; the starling Anatolian reflex columns light against TLHdig (205/306 HITT keys join) |
+| **Metadata** | The `ot` hub runs seven-legged (the Peshitta the Syriac leg, versification measured Masoretic); the CDLI timeline (329,948 period-parsed rows) stretches the library from Uruk IV to the Achaemenids; eBL→CDLI and ETCSL↔ePSD2 reference edges cross-link the shelf; the starling Anatolian reflex columns light against TLHdig (205/306 HITT keys join) |
 
 **Research uses:** Hittitology at fragment scale with honest silver
 labelling; Assyriology across the whole catalogued artifact space —
@@ -652,7 +652,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   (fulltext.sqlite3 at 2.3 GB with the index aboard) — EDH joined the
   indexed scope at its 2026-07-13 sync (§8g) — and the BGU 6.1470 mid-word
   Odyssey demo runs against the real index.
-- **Date/place axis** (P15-2, extended P16-3 and P17-2): `document_axes`
+- **Timeline** (P15-2, extended P16-3 and P17-2): `document_axes`
   (migration 008) holds **165,334 dated/placed records covering 163,821
   documents live** — EDH inscription dates (81,416, the largest
   contributor since that shelf's 2026-07-13 sync), HGV for the papyri
@@ -660,7 +660,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   Slovene goo300k/IMP year-suffixed urns (747), Coptic manuscript dates
   (340), and TOROT chronicle AM annals (350 records over 5 chronicles).
   `search --from/--to/--century/--place` scope by signed historical year
-  (negative = BCE, no year 0) and provenance; `show` prints the axis line
+  (negative = BCE, no year 0) and provenance; `show` prints the timeline line
   ("date: 292 CE · Oxyrhynchos"); `--century -7` reaches the Assyrian
   letters.
 - **Document facets** (P17-2, migration 009): `document_facets`
@@ -747,7 +747,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   view beside `status`'s sync-state view — bare, one line per shelf with
   document/passage/entry counts, languages, and the effective
   license-class mix; with a SOURCE, one shelf's card (identity, credit
-  line, dossier description, per-language breakdown, date-axis and facet
+  line, dossier description, per-language breakdown, timeline and facet
   coverage). `--documents`/`--entries`/`--collections` enumerate with
   filters; `--source SLUG` also joined search/export as a filter in the
   same packet.

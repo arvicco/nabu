@@ -10342,3 +10342,14 @@ page anchors: the mapping decision is the packet's design note; an
 honest partial wiring beats a fake complete one). Fetch: the notes/
 dirs join the tls sparse cone (~more MB — census and report). Docs +
 worklog.
+
+## P35-4 · The timeline nomenclature move  [tier: opus] [status: done 2026-07-20] [deps: —]
+"axis" is being repurposed for Phase 35 RESEARCH axes; the OLD date/place
+sense moves to "timeline" across docs prose, user-facing strings, and code
+names (DateAxis, require_axis!, print_axis, AxisBuilder → timeline names).
+Schema stays put (derived-table rename only if the rebuild path regenerates
+it wholesale — argue in the design note; storage kept). Acceptance: zero
+output drift outside the renamed words themselves (suite pins); docs
+grep-clean of the old sense ("axis" = research axis only). Does NOT touch
+the axes seam, sources.yml, or any --axis CLI flag (sibling packet). Ruling
+D35-c 2026-07-20. Docs + worklog.

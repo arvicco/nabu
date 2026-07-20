@@ -357,7 +357,7 @@ module Nabu
       architecture §16 — seed the shelf once with
       --export-source-dossiers), license class(es) with the source's
       credit line when it carries one, counts, a per-language passage
-      breakdown, its dictionaries (dictionary shelves), date-axis coverage
+      breakdown, its dictionaries (dictionary shelves), timeline coverage
       (dated docs + year range) when present, genre-facet and collection
       summaries when present. A card, not a dump — the enumerations below
       go deeper. `nabu list --long` adds each source's description line to
@@ -380,8 +380,8 @@ module Nabu
         --documents    every document: urn — title [lang] license, urn order,
                        withdrawn/retired flagged inline. Filters: --lang,
                        --license, --withdrawn (ONLY withdrawn/retired — the
-                       stewardship lens), --from/--to/--century (the date
-                       axis, as in search).
+                       stewardship lens), --from/--to/--century (the
+                       timeline, as in search).
         --entries      a dictionary shelf's entries: headword [dict] — gloss.
                        Filters: --lang (dictionary language), --prefix STR
                        (folded headword prefix — bh finds *bʰer-, the define
@@ -434,8 +434,8 @@ module Nabu
     option :withdrawn, type: :boolean, default: false,
                        desc: "With --documents: ONLY withdrawn/retired documents (the stewardship lens)"
     option :from, type: :numeric, banner: "YEAR",
-                  desc: "With --documents: earliest date on the axis (negative = BCE)"
-    option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the axis"
+                  desc: "With --documents: earliest date on the timeline (negative = BCE)"
+    option :to, type: :numeric, banner: "YEAR", desc: "With --documents: latest date on the timeline"
     option :century, type: :numeric, banner: "N",
                      desc: "With --documents: one century's --from/--to shorthand (6, -2)"
     option :long, type: :boolean, default: false,
@@ -457,7 +457,7 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      require_axis!(catalog) if from || to
+      require_timeline!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
       if options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
@@ -632,7 +632,7 @@ module Nabu
       with no facet row falls out under an active filter (honest absence:
       only faceted sources — inscriptions — can match). Like the date
       filters they do not combine with --lemma/--near. Facet rows land at
-      `nabu rebuild` (like the date/place axis).
+      `nabu rebuild` (like the timeline).
 
       LOANS (--loans CODE): the language-contact facet (P34-2, reading the
       P17-1 annotations) — keep only passages carrying at least one token
@@ -765,7 +765,7 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-      require_axis!(catalog) if from || to || place
+      require_timeline!(catalog) if from || to || place
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
 
@@ -1796,7 +1796,7 @@ module Nabu
       list and the hapax spellings printed (default #{Nabu::Query::Vocab::DEFAULT_LIMIT}).
 
       DIACHRONY (--by-century): instead of one document's lemmas, plot the DATED
-      corpus across centuries (P15-2, the date/place axis). Bare, it is the shape
+      corpus across centuries (P15-2, the timeline). Bare, it is the shape
       of your dated holdings — one row per century (BCE/CE), the document count.
       With a text QUERY it becomes "plot this word across centuries": how many
       dated documents attest the term in each century. Composes with --lang,
@@ -2178,7 +2178,7 @@ module Nabu
           idx = options[:century].to_i
           raise Thor::Error, "date filter: there is no century 0 (1st c. CE is 1, 1st c. BCE is -1)" if idx.zero?
 
-          return Nabu::DateAxis.century_bounds(idx)
+          return Nabu::Timeline.century_bounds(idx)
         end
 
         from = coerce_year(options[:from], "--from")
@@ -2202,14 +2202,14 @@ module Nabu
       # A date/place filter needs document_axes; a catalog that predates
       # migration 008 (never rebuilt) hasn't got it. Fail with a clear pointer
       # rather than a Sequel "no such table".
-      def require_axis!(catalog)
+      def require_timeline!(catalog)
         return if catalog.table_exists?(:document_axes)
 
-        raise Thor::Error, "no date/place axis (this catalog predates it) — run nabu rebuild"
+        raise Thor::Error, "no timeline (this catalog predates it) — run nabu rebuild"
       end
 
       # A facet filter needs document_facets (migration 009) — same honest
-      # pointer as the axis guard.
+      # pointer as the timeline guard.
       def require_facets!(catalog)
         return if catalog.table_exists?(:document_facets)
 
@@ -2404,7 +2404,7 @@ module Nabu
         parts.empty? ? "empty" : parts.join(" ")
       end
 
-      # The optional card layers: date-axis coverage, facet summary, and the
+      # The optional card layers: timeline coverage, facet summary, and the
       # collections census (inlined when small, deferred to --collections
       # when it would swamp the card).
       def print_card_axes(card)
@@ -2625,7 +2625,7 @@ module Nabu
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
-        print_axis(passage.axis)
+        print_timeline(passage.timeline)
         return if passage.provenance.empty?
 
         say "  provenance:"
@@ -2639,7 +2639,7 @@ module Nabu
         lang = document.language ? " [#{document.language}]" : ""
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
-        print_axis(document.axis)
+        print_timeline(document.timeline)
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
@@ -2657,7 +2657,7 @@ module Nabu
         lang = range.language ? " [#{range.language}]" : ""
         say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
         say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
-        print_axis(range.axis)
+        print_timeline(range.timeline)
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
         range.passages.each do |line|
@@ -2667,21 +2667,21 @@ module Nabu
         end
       end
 
-      # The date/place axis line (P15-2), when the document has one. A date span
+      # The timeline line (P15-2), when the document has one. A date span
       # ("113 BCE", "501–700 CE", "≤ 257 BCE") with the informative precision
       # ("low"/"high", not the derived exact/range/year) and the provenance
       # place; place-only rows print as "place:". Undated documents print
       # nothing (an absence, never an error).
-      def print_axis(axis)
-        return if axis.nil?
+      def print_timeline(timeline)
+        return if timeline.nil?
 
-        span = Nabu::DateAxis.format_span(axis.not_before, axis.not_after)
-        place = axis.place_name ? " · #{axis.place_name}" : ""
+        span = Nabu::Timeline.format_span(timeline.not_before, timeline.not_after)
+        place = timeline.place_name ? " · #{timeline.place_name}" : ""
         if span
-          note = %w[exact range year].include?(axis.precision) ? "" : " (#{axis.precision})"
+          note = %w[exact range year].include?(timeline.precision) ? "" : " (#{timeline.precision})"
           say "  date: #{span}#{note}#{place}"
-        elsif axis.place_name
-          say "  place: #{axis.place_name}"
+        elsif timeline.place_name
+          say "  place: #{timeline.place_name}"
         end
       end
 
@@ -3683,7 +3683,7 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
-        require_axis!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
@@ -3884,7 +3884,7 @@ module Nabu
         catalog = open_catalog(config)
         raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-        require_axis!(catalog)
+        require_timeline!(catalog)
         fulltext = open_fulltext(config) unless query.empty?
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" if !query.empty? && fulltext.nil?
 
@@ -4423,7 +4423,7 @@ module Nabu
         state[:stage] = nil
       end
 
-      # Zero docs is an axis/facet/index stage, not an empty shelf — show
+      # Zero docs is a timeline/facet/index stage, not an empty shelf — show
       # only the timing (compact-output convention: suppress zero fields).
       def stage_counts(state)
         return "" if state[:processed].zero? && state[:errored].zero?

@@ -30,7 +30,7 @@ module Nabu
     #   an honestly-empty-by-design source does not exist to exempt.
     # - Flag-vs-artifact: fuzzy_index flagged but the trigram index absent /
     #   empty / scope-less for the source (the flag was ON a full day with no
-    #   trigram table); an axis extractor family shipping for the source but
+    #   trigram table); a timeline extractor family shipping for the source but
     #   zero document_axes rows; reflex extraction shipping but zero
     #   dictionary_reflexes rows (cu shipped reflex code with 0 rows pending
     #   resync); reflex rows present but the language_names census empty.
@@ -53,7 +53,7 @@ module Nabu
     # (the pending-migrations line covers the why).
     class Invariants
       # slug => the axis_source value its extractor family writes
-      # (Store::AxisBuilder and axis_builder/*).
+      # (Store::TimelineBuilder and timeline_builder/*).
       AXIS_FAMILIES = {
         "papyri-ddbdp" => "hgv",
         "goo300k" => "goo300k",
@@ -82,7 +82,7 @@ module Nabu
           partial_load(entry),
           synced_unpopulated(entry),
           fuzzy_vs_trigram(entry),
-          axis_vs_rows(entry),
+          timeline_vs_rows(entry),
           reflex_vs_rows(entry),
           language_names_vs_reflexes(entry),
           dossiers_vs_records(entry),
@@ -218,15 +218,15 @@ module Nabu
         nil
       end
 
-      def axis_vs_rows(entry)
+      def timeline_vs_rows(entry)
         family = AXIS_FAMILIES[entry.slug]
         return nil unless family && @catalog && table?(@catalog, :document_axes)
         return nil unless live_documents(entry.slug).positive?
         return nil if @catalog[:document_axes].where(axis_source: family).any?
 
         Finding.new(
-          kind: :axis_missing, severity: :loud,
-          message: "axis extractor (#{family}) ships for this source but document_axes has 0 rows — " \
+          kind: :timeline_missing, severity: :loud,
+          message: "timeline extractor (#{family}) ships for this source but document_axes has 0 rows — " \
                    "run nabu rebuild (axes regenerate at rebuild)"
         )
       end

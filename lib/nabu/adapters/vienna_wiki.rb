@@ -35,11 +35,11 @@ module Nabu
     # resolves both page files and parse merges them into document
     # metadata: facets (object_type/material — EDH's vocabulary — plus
     # genre from type_inscription) and "place" (site, country, province,
-    # WGS84 verbatim as metadata — the EDH coordinates decision; the axis
+    # WGS84 verbatim as metadata — the EDH coordinates decision; the timeline
     # has no coordinate columns). A missing object/site page is an honest
     # absence: fewer metadata keys, never an error. Dating stays OUT of
-    # document metadata — AxisBuilder::ViennaWikiDates reads it from
-    # canonical at axis-build time (axes = f(canonical)).
+    # document metadata — TimelineBuilder::ViennaWikiDates reads it from
+    # canonical at timeline-build time (timelines = f(canonical)).
     #
     # == Concordances → reference edges
     #

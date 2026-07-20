@@ -56,7 +56,7 @@ module Nabu
     # no-value sentinel) / genres (hierarchical category paths, first path
     # facets as "A/B/C") / collection / museum → facets. The structured
     # king-year "date" field (39 fragments) and "datesInText" ride
-    # verbatim — too thin for an axis extractor (census verdict; period
+    # verbatim — too thin for a timeline extractor (census verdict; period
     # names carry no year envelopes, so no CdliDates sibling is minted).
     # externalNumbers ride verbatim; edges minted per the P25-1
     # edge-worthiness rule: cdliNumber (18,610 = 79.9% of fragments) →

@@ -241,19 +241,19 @@ module Nabu
            .uniq { |siglum| siglum.delete("-").downcase }
       end
 
-      # origDate → signed years (DateAxis semantics: RIIG writes signed
+      # origDate → signed years (Timeline semantics: RIIG writes signed
       # historical years, "-0100"). The raw text ("-Ier siècle"), cert and
       # evidence ride verbatim. A malformed year 0 keeps the raw fields and
-      # drops the bounds (the axis builder counts it invalid).
+      # drops the bounds (the timeline builder counts it invalid).
       def extract_date(doc)
         node = doc.at_xpath("//origin/origDate") or return {}
         result = {}
         begin
-          not_before = DateAxis.parse_year(node["notBefore"] || node["when"])
-          not_after = DateAxis.parse_year(node["notAfter"] || node["when"])
+          not_before = Timeline.parse_year(node["notBefore"] || node["when"])
+          not_after = Timeline.parse_year(node["notAfter"] || node["when"])
           result["not_before"] = not_before if not_before
           result["not_after"] = not_after if not_after
-        rescue DateAxis::InvalidYear
+        rescue Timeline::InvalidYear
           nil # bounds dropped; raw/cert/evidence still recorded below
         end
         { "raw" => presence(node.text), "cert" => presence(node["cert"]),

@@ -252,7 +252,7 @@ class CeipomTest < Minitest::Test
     assert_equal "ceipom", producer.producer
   end
 
-  # -- dates/places ride verbatim in metadata (the axis reads canonical) -------
+  # -- dates/places ride verbatim in metadata (the timeline reads canonical) -------
 
   def test_dates_and_coordinates_ride_verbatim_as_upstream_spells_them
     metadata = adapter.parse(ref_for(FIBULA_URN)).metadata
