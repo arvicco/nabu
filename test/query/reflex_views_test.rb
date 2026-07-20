@@ -96,6 +96,77 @@ module Query
       view = chu_bog_view
       assert_nil view.attested_count
       assert_nil view.silver_count, "absence stays honest on the silver side too"
+      assert_nil view.equivalence_count, "and on the equivalence side (P34-3)"
+    end
+
+    # -- the equivalence tier (P34-3) ---------------------------------------
+    # CEIPoM-style rows: Latin keys minted from scholar-curated
+    # Classical-Latin equivalents on non-Latin passages. They surface as a
+    # labeled +equivalence_count+ beside the gold count — never silently
+    # dropped, never summed into attestation.
+
+    def equivalence_source
+      @equivalence_source ||= Nabu::Store::Source.create(
+        slug: "cle", name: "CLE", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+    end
+
+    # The CEIPoM token shape: no "lemma" key, the CLE under latin_equivalent.
+    def make_cle_passages(cle:, form:, count:, language: "osc")
+      urn_stem = "urn:nabu:test:cle:#{language}"
+      document = Nabu::Store::Document.create(
+        source_id: equivalence_source.id, urn: urn_stem, title: "T", language: language,
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      count.times do |i|
+        Nabu::Store::Passage.create(
+          document_id: document.id, urn: "#{urn_stem}:#{i + 1}", sequence: i,
+          language: language, text: form, text_normalized: form,
+          annotations_json: JSON.generate(
+            { "tokens" => [{ "lemma_id" => "1a", "latin_equivalent" => cle, "form" => form }] }
+          ),
+          content_sha256: "x", revision: 1
+        )
+      end
+    end
+
+    # A lat reflex row on the fixture entry — the crosswalk side the Latin
+    # equivalence keys join against.
+    def seed_lat_reflex(word)
+      @catalog[:dictionary_reflexes].insert(
+        dictionary_entry_id: bog_entry_id, seq: 99, lang_code: "lat", language: "lat",
+        word: word, word_folded: Nabu::Normalize.search_form(word, language: "lat")
+      )
+    end
+
+    def lat_view(word)
+      views = Nabu::Query::ReflexViews.new(catalog: @catalog, fulltext: @fulltext)
+                                      .for_entry(bog_entry_id)
+      views.find { |v| v.language == "lat" && v.word == word } || flunk("lat #{word} view missing")
+    end
+
+    def test_equivalence_count_rides_labeled_beside_the_gold_count
+      seed_lat_reflex("deus")
+      make_passages(source: @gold, language: "lat", lemma: "deus", form: "dei", count: 2)
+      make_cle_passages(cle: "deus", form: "deivai", count: 3)
+      rebuild!(lemma_tiers: { "auto" => "silver", "cle" => "equivalence" })
+
+      view = lat_view("deus")
+      assert_equal 2, view.attested_count, "attested_count keeps its gold-only meaning"
+      assert_equal 3, view.equivalence_count,
+                   "the scholar-curated equivalence rows count BESIDE it, labeled"
+      assert_nil view.silver_count
+    end
+
+    def test_equivalence_only_reflex_reads_nil_attested_and_a_labeled_count
+      seed_lat_reflex("deus")
+      make_cle_passages(cle: "deus", form: "deivai", count: 3)
+      rebuild!(lemma_tiers: { "cle" => "equivalence" })
+
+      view = lat_view("deus")
+      assert_nil view.attested_count,
+                 "equivalence alone never claims attestation — the text is not Latin"
+      assert_equal 3, view.equivalence_count
     end
 
     # A fulltext index built before the tier column existed: every row is a

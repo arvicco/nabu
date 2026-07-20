@@ -185,6 +185,58 @@ module Adapters
       assert_equal "hbo", parse_urn("urn:nabu:bhsa:ruth").language
     end
 
+    # -- the bridging crosswalk lane (P34-1) ----------------------------------
+
+    def test_tokens_carry_the_bridging_osm_lane_verbatim
+      passage = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.1")
+      tokens = passage.annotations["tokens"]
+      assert_equal "HC", tokens.first["osm"], "slot 298558 (the conjunction) carries OSHB's morph tag"
+      assert_equal "HVqw3ms", tokens[1]["osm"], "OSM tags ride verbatim — the ETCBC/bridging projection"
+    end
+
+    def test_two_morpheme_words_carry_the_suffix_tag_beside
+      passage = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.2")
+      token = passage.annotations["tokens"].find { |t| t["n"] == 298_578 }
+      assert_equal "HR", token["osm"], "the first OSM morpheme fills osm"
+      assert_equal "HSp3fs", token["osm_sf"], "the second (the pronominal suffix) rides osm_sf verbatim"
+    end
+
+    def test_empty_form_slots_carry_no_osm
+      passage = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.5")
+      elided = passage.annotations["tokens"].reject { |t| t.key?("form") }
+      refute_empty elided
+      assert(elided.none? { |t| t.key?("osm") },
+             "bridging links no OSM morpheme to a surfaceless slot — absent upstream, absent here")
+      content = passage.annotations["tokens"].select { |t| t.key?("form") }
+      assert(content.all? { |t| t.key?("osm") }, "every content slot in the slice is covered")
+    end
+
+    def test_the_lane_is_absent_without_the_bridging_module
+      Dir.mktmpdir do |dir|
+        FileUtils.cp_r(FIXTURES, File.join(dir, "bhsa"))
+        adapter = Nabu::Adapters::Bhsa.new
+        ref = adapter.discover(File.join(dir, "bhsa")).find { |r| r.id == "urn:nabu:bhsa:jonah" }
+        tokens = adapter.parse(ref).passages.first.annotations["tokens"]
+        assert(tokens.none? { |t| t.key?("osm") || t.key?("osm_sf") },
+               "no canonical/bridging sibling → the lane stays honestly off")
+      end
+    end
+
+    def test_a_misaligned_bridging_module_is_a_parse_error
+      Dir.mktmpdir do |dir|
+        FileUtils.cp_r(FIXTURES, File.join(dir, "bhsa"))
+        module_dir = File.join(dir, "bridging", "tf", "2021")
+        FileUtils.mkdir_p(module_dir)
+        FileUtils.cp(File.join(Nabu::TestSupport.fixtures("bridging"), "tf", "2021", "osm.tf"), module_dir)
+        File.open(File.join(module_dir, "osm.tf"), "a") { |f| f.puts "500000\tHR" }
+        adapter = Nabu::Adapters::Bhsa.new
+        ref = adapter.discover(File.join(dir, "bhsa")).find { |r| r.id == "urn:nabu:bhsa:jonah" }
+        error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+        assert_match(/bridging/, error.message)
+        assert_match(/426,590|max slot/, error.message, "the guard names the slot-space mismatch")
+      end
+    end
+
     # -- idempotency ----------------------------------------------------------
 
     def test_double_load_is_idempotent

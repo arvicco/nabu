@@ -50,12 +50,22 @@ module Nabu
     #   111,484 upstream tls:ann attestations point at (notes/doc +
     #   notes/swl, NOT in the fetch cone; the deferred crosswalk needs
     #   them here).
-    # - citations, reflexes: none. TLS attestations target seg ids of texts
-    #   the catalog does not hold (and DictionaryCitation is CTS-shaped);
-    #   concept->member edges are onomasiological, not etymological, so
-    #   minting them as dictionary_reflexes would pollute the etym/cognates
-    #   lanes (architecture §12) — both deliberately deferred, recorded in
-    #   02-sources row 106.
+    # - citations (P34-4 — the attestation crosswalk): one DictionaryCitation
+    #   per distinct (sense uuid, seg id) attestation in notes/doc +
+    #   notes/swl (one `<textid>-ann.xml` per attested TEXT; each tls:ann's
+    #   <link target="#<seg> #<sense>"/> binds one word sense to one text
+    #   segment). The seg-id grammar mirrors the mandoku pb-anchor grammar —
+    #   `<text>_<edition>_<juan>-<leaf><side>[.line]` (99.7% censused
+    #   2026-07-20) — so a KR-shaped text id claims cts_work
+    #   urn:nabu:kanripo:<KR-id> and citation "<juan>:<page>", the kanripo
+    #   PASSAGE key; Query::Define probes the page at query time and falls
+    #   back to the held document when the held edition's pagination
+    #   disagrees (TLS's juan/page division only sometimes matches). Non-KR
+    #   text ids (TLS-side CH…, Taishō T…) mint display-only rows (nil
+    #   cts_work) — no invented links. No reflexes: concept->member edges
+    #   are onomasiological, not etymological — minting them as
+    #   dictionary_reflexes would pollute the etym/cognates lanes
+    #   (architecture §12); recorded in 02-sources row 106.
     #
     # == Skip rules (censused by Tls#discovery_skips)
     #
@@ -81,18 +91,102 @@ module Nabu
       # The pointer-list kinds censused upstream, rendered in this order.
       POINTER_KINDS = %w[hypernymy taxonymy antonymy mereonymy see wordnet].freeze
 
+      # -- the attestation lane (P34-4) ---------------------------------------
+
+      # The two notes/ subdirs of the sparse cone that carry tls:ann rows.
+      NOTES_DIRS = %w[doc swl].freeze
+
+      # The P33-3 Kanripo id grammar, and the passage-urn prefix frozen by
+      # P33-0 — the crosswalk's target id space.
+      KANRIPO_URN_PREFIX = "urn:nabu:kanripo:"
+      KR_TEXT_ID = /\AKR\d[a-z]\d{4}\z/
+
+      # The censused seg-id grammar: the mandoku pb-anchor shape with an
+      # edition token and an optional line suffix. Strays (0.3%: CBETA-style
+      # sentence ids, "-p0007a-s2-seg1a" subdivisions) keep text grain only.
+      SEG_ANCHOR = /\A(?<text>[^_]+)_[^_]+_(?<juan>\d+)-(?<page>\d+[a-c])(?:\.(?<line>\d+))?\z/
+
+      # One tls:ann occurrence: which seg, quoting what, from which titled
+      # text (title/quote may be empty — honest absences).
+      Attestation = Data.define(:seg, :title, :quote)
+
+      # A seg id mapped to what it honestly supports: cts_work only for
+      # KR-shaped text ids, citation (the kanripo passage key
+      # "<juan>:<page>") only under the anchor grammar, ref as the
+      # human-readable display form, sort_key for deterministic order.
+      SegReference = Data.define(:text_id, :cts_work, :citation, :ref, :sort_key)
+
       # Concept files: one DictionaryEntry per concepts/*.xml (sorted by
       # basename), skipping percent-encoded strays. +members+ is the
       # inverted membership index from +member_index+ — nil renders an
       # honest entry without the words section (attic partials).
+      # CONTENT-EMPTY concepts (the N-A.xml placeholder found at the
+      # owner's first real sync 2026-07-20: head "N/A", empty definition
+      # <p/>, no notes/pointers/members — an empty body would fail
+      # validation and quarantine the whole shelf) skip by rule, censused
+      # via +skipped_empty_concepts+.
       def concept_entries(concepts_dir, members: nil)
-        concept_files(concepts_dir).map { |path| build_concept_entry(path, members) }
+        @skipped_empty_concepts = 0
+        concept_files(concepts_dir).filter_map { |path| build_concept_entry(path, members) }
       end
 
+      # Content-empty concept files skipped by the last concept_entries
+      # walk (1 upstream: N-A.xml).
+      attr_reader :skipped_empty_concepts
+
       # Word files: one DictionaryEntry per words/<hex>/*.xml (sorted by
-      # relative path), skipping the empty-orth aggregate.
-      def word_entries(words_dir)
-        word_files(words_dir).filter_map { |path| build_word_entry(path) }
+      # relative path), skipping the empty-orth aggregate. +attestations+ is
+      # the attestation_index of a sibling notes/ dir — nil (no notes on
+      # disk: pre-P34-4 checkouts, attic partials, the concepts-only case)
+      # parses honestly citation-free.
+      def word_entries(words_dir, attestations: nil)
+        word_files(words_dir).filter_map { |path| build_word_entry(path, attestations) }
+      end
+
+      # sense uuid -> [Attestation…] across notes/doc + notes/swl (one
+      # `<textid>-ann.xml` per attested text; both tls:ann shapes — the
+      # doc-side prefixed and the swl-side default-namespace one — appear
+      # upstream, so element lookups are namespace-agnostic). Files reach
+      # 13 MB, so the reader STREAMS (the >5 MB SAX rule) and DOM-parses
+      # each small ann subtree alone. (sense, seg) pairs dedupe on first
+      # sight in sorted path order (the doc/swl overlap is real upstream:
+      # 285 pairs censused 2026-07-20).
+      def attestation_index(notes_dir)
+        index = Hash.new { |hash, key| hash[key] = [] }
+        seen = Set.new
+        ann_files(notes_dir).each do |path|
+          each_ann_fragment(path) do |ann|
+            link = ann.at_xpath(%(.//*[local-name()="link"]))
+            seg, sense = link&.[]("target").to_s.split.map { |token| token.delete_prefix("#") }
+            next if seg.nil? || sense.nil? || !seen.add?([sense, seg])
+
+            srcline = ann.at_xpath(%(.//*[local-name()="srcline"]))
+            index[sense] << Attestation.new(seg: seg, title: squeeze(srcline&.[]("title").to_s),
+                                            quote: squeeze(srcline&.text.to_s))
+          end
+        end
+        index
+      end
+
+      # What one seg id honestly supports (class census note): text grain
+      # whenever the id prefix is KR-shaped, page grain only under the
+      # anchor grammar. Resolution happens at QUERY time (Query::Define);
+      # nothing resolved is ever stored.
+      def seg_reference(seg_id)
+        text_id = seg_id[/\A[^_]+/].to_s
+        cts_work = text_id.match?(KR_TEXT_ID) ? "#{KANRIPO_URN_PREFIX}#{text_id}" : nil
+        match = SEG_ANCHOR.match(seg_id)
+        unless match
+          return SegReference.new(text_id: text_id, cts_work: cts_work, citation: nil,
+                                  ref: seg_id, sort_key: [text_id, 0, 0, "", 0, seg_id])
+        end
+
+        ref = "#{match[:juan]}-#{match[:page]}#{match[:line] && ".#{match[:line]}"}"
+        SegReference.new(
+          text_id: text_id, cts_work: cts_work,
+          citation: cts_work && "#{match[:juan]}:#{match[:page]}", ref: ref,
+          sort_key: [text_id, match[:juan].to_i, match[:page].to_i, match[:page][-1], match[:line].to_i, seg_id]
+        )
       end
 
       # concept uuid -> [[orth, pinyin, first sense def], …] in (orth, file)
@@ -160,11 +254,16 @@ module Nabu
         source_reference_lines(root, lines)
         member_lines(members ? members.fetch(entry_id, []) : [], lines)
 
+        if lines.empty?
+          @skipped_empty_concepts += 1
+          return nil
+        end
+
         build_entry(entry_id: entry_id, key_raw: head, headword: head,
                     gloss: definition.first, lines: lines, path: path)
       end
 
-      def build_word_entry(path)
+      def build_word_entry(path, attestations = nil)
         doc = parse_xml(path)
         root = doc.root
         entry_id = xml_id!(root, path)
@@ -172,17 +271,18 @@ module Nabu
         return nil if orth.empty? # the aggregate record — censused skip
 
         lines = ["word: #{orth}"]
+        sense_ids = []
         gloss = nil
         root.xpath("./tei:entry", "tei" => TEI_NS).each_with_index do |entry, index|
           gloss ||= first_present(entry.xpath("./tei:sense/tei:def", "tei" => TEI_NS).map { |node| squeeze(node.text) })
-          entry_block_lines(entry, index, orth, lines)
+          entry_block_lines(entry, index, orth, lines, sense_ids)
         end
 
-        build_entry(entry_id: entry_id, key_raw: orth, headword: orth,
-                    gloss: gloss, lines: lines, path: path)
+        build_entry(entry_id: entry_id, key_raw: orth, headword: orth, gloss: gloss, lines: lines, path: path,
+                    citations: attestations ? citations_for(sense_ids, attestations) : [])
       end
 
-      def entry_block_lines(entry, index, super_orth, lines)
+      def entry_block_lines(entry, index, super_orth, lines, sense_ids = [])
         concept = entry.attribute_with_ns("concept", TLS_NS)&.value.to_s
         concept_id = entry.attribute_with_ns("concept-id", TLS_NS)&.value.to_s
         entry_orth = text_at(entry, "./tei:form/tei:orth")
@@ -193,7 +293,69 @@ module Nabu
         pron_line(entry, lines)
         entry_note = squeeze(text_at(entry, "./tei:def"))
         lines << "note: #{entry_note}" unless entry_note.empty?
-        entry.xpath("./tei:sense", "tei" => TEI_NS).each { |sense| sense_line(sense, lines) }
+        entry.xpath("./tei:sense", "tei" => TEI_NS).each do |sense|
+          sense_line(sense, lines)
+          sense_id = sense["xml:id"].to_s
+          sense_ids << sense_id unless sense_id.empty?
+        end
+      end
+
+      # One DictionaryCitation per attestation of this word's senses, in
+      # sense DOCUMENT order then (text, juan, page, line) — deterministic,
+      # so content hashes never flap across parses (loader idempotency).
+      def citations_for(sense_ids, attestations)
+        sense_ids.flat_map do |sense_id|
+          attestations.fetch(sense_id, [])
+                      .map { |attestation| [attestation, seg_reference(attestation.seg)] }
+                      .sort_by { |_, reference| reference.sort_key }
+                      .map { |attestation, reference| attestation_citation(attestation, reference, sense_id) }
+        end
+      end
+
+      # urn_raw is the upstream link target VERBATIM (canonical means
+      # canonical); the label reads title + ref + quote and names its sense
+      # uuid — the join key back to the body's sense lines.
+      def attestation_citation(attestation, reference, sense_id)
+        title = attestation.title.empty? ? reference.text_id : attestation.title
+        label = "#{title} #{reference.ref}"
+        label << " 「#{attestation.quote}」" unless attestation.quote.empty?
+        label << " · sense #{sense_id}"
+        Nabu::DictionaryCitation.new(urn_raw: "##{attestation.seg} ##{sense_id}",
+                                     cts_work: reference.cts_work, citation: reference.citation,
+                                     label: Nabu::Normalize.nfc(label))
+      end
+
+      def ann_files(notes_dir)
+        NOTES_DIRS.flat_map { |sub| Dir.glob(File.join(notes_dir, sub, "*-ann.xml")) }.sort
+      end
+
+      # Stream one ann file (class note: 13 MB — never DOM whole), yielding
+      # each ann element as its own small parsed fragment. outer_xml carries
+      # the in-scope namespace declarations, so both upstream shapes parse.
+      # NOERROR|NOWARNING: upstream files carry duplicated xml:ids (doubled
+      # ann-less segs, doubled ann uuids — real, censused, deduped at the
+      # (sense, seg) grain downstream), and libxml2 registers xml:id as an
+      # ID type, spewing "validity error: ID already defined" to the
+      # terminal's stderr for each (P34-r1, owner sync 2026-07-20). Fatal
+      # syntax errors still raise through the reader iteration below.
+      def each_ann_fragment(path)
+        File.open(path) do |io|
+          reader = Nokogiri::XML::Reader.from_io(
+            io, nil, nil,
+            Nokogiri::XML::ParseOptions::DEFAULT_XML |
+            Nokogiri::XML::ParseOptions::NOERROR |
+            Nokogiri::XML::ParseOptions::NOWARNING
+          )
+          reader.each do |node|
+            next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+            next unless node.name.sub(/\A.*:/, "") == "ann"
+
+            fragment = Nokogiri::XML(node.outer_xml)
+            yield fragment.root if fragment.root
+          end
+        end
+      rescue Nokogiri::XML::SyntaxError => e
+        raise Nabu::ParseError, "tls: #{path}: #{e.message}"
       end
 
       def pron_line(entry, lines)
@@ -292,7 +454,7 @@ module Nabu
         end
       end
 
-      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:)
+      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:, citations: [])
         Nabu::DictionaryEntry.new(
           entry_id: entry_id,
           key_raw: Nabu::Normalize.nfc(key_raw),
@@ -300,7 +462,8 @@ module Nabu
           headword: Nabu::Normalize.nfc(headword),
           headword_folded: Nabu::Normalize.search_form(headword, language: LANGUAGE),
           gloss: gloss.nil? || gloss.empty? ? nil : Nabu::Normalize.nfc(gloss),
-          body: Nabu::Normalize.nfc(lines.join("\n"))
+          body: Nabu::Normalize.nfc(lines.join("\n")),
+          citations: citations
         )
       rescue Nabu::ValidationError => e
         raise Nabu::ParseError, "tls: #{path}: #{e.message}"

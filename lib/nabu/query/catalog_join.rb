@@ -34,9 +34,10 @@ module Nabu
       # document-grained date/place axis filter; +facets+ (P17-2) the
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
-      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil)
+      def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
+                       loans: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
-                         facets: facets, source: source)
+                         facets: facets, source: source, loans: loans)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -55,7 +56,8 @@ module Nabu
       # error). +source+ (P22-1, `--source SLUG`) filters on the already-joined
       # sources row — validated CLI-side, so an unknown slug never reaches here
       # as a silent empty result.
-      def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil)
+      def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
+                           loans: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -66,6 +68,7 @@ module Nabu
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(axis_exists(from: from, to: to, place: place)) if from || to || place
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
+        dataset = dataset.where(loans_exists(loans)) if loans
         dataset
       end
 
@@ -97,6 +100,28 @@ module Nabu
           .where(facets[:document_id] => Sequel[:documents][:id], facets[:facet] => facet.to_s)
           .where(Sequel.ilike(facets[:value], pattern) | Sequel.ilike(facets[:raw], pattern))
           .exists
+      end
+
+      # The loans facet (P34-2, honoring P17-1's "a future --loans facet reads
+      # them without reparse"): a correlated EXISTS over the passage's OWN
+      # stored annotations — json_each unpacks the "loans" object ({code =>
+      # token count}, the language-contact layer the Coptic Scriptorium
+      # parser tallies per passage) and the code matches case-insensitively
+      # (the facet house rule; verbatim upstream names like "Akkadian" stay
+      # queryable as typed or folded). PASSAGE-grain, unlike the document
+      # facets above, and pure query-time: no projection table, so `nabu
+      # rebuild` has nothing extra to maintain — the loader's annotations_json
+      # IS the facet store. The code rides as a bound value (never a JSON
+      # path), so any string is safe and an unattested one is an honest empty.
+      # The LIKE probe cheaply skips the JSON walk for the loan-free majority;
+      # json_each on a missing/NULL path yields zero rows, never an error.
+      def loans_exists(code)
+        loan = Sequel[:loan]
+        exists = @catalog
+                 .from(Sequel.function(:json_each, Sequel[:passages][:annotations_json], "$.loans").as(:loan))
+                 .where(Sequel.function(:lower, loan[:key]) => code.to_s.downcase)
+                 .exists
+        Sequel.like(Sequel[:passages][:annotations_json], '%"loans"%') & exists
       end
 
       # Effective license class: document override wins over source class (P1-3).

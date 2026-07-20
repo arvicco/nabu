@@ -269,6 +269,21 @@ class SourceRegistryTest < Minitest::Test
                  "absent-is-gold is the wire format: only non-gold sources are mapped")
   end
 
+  # P34-3: the third tier. "equivalence" is scholar-curated cross-language
+  # equivalence (CEIPoM's Classical-Latin-equivalent column) — a DIFFERENT
+  # honesty from silver (upstream-automatic), so it is its own label, never
+  # folded into either existing tier.
+  def test_lemma_tier_equivalence_accepted_and_mapped_as_non_gold
+    registry = load_registry(<<~YAML)
+      ceipom-src:
+        adapter: A
+        lemma_tier: equivalence
+    YAML
+    assert_equal "equivalence", registry["ceipom-src"].lemma_tier
+    assert_equal({ "ceipom-src" => "equivalence" }, registry.lemma_tiers,
+                 "equivalence rides the same non-gold wire format as silver")
+  end
+
   def test_unknown_lemma_tier_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
@@ -371,6 +386,79 @@ class SourceRegistryTest < Minitest::Test
       YAML
     end
     assert_match(/classes/, error.message)
+  end
+
+  # -- siblings (P34-0: the --parallel work-pattern seam) -------------------
+
+  def test_siblings_defaults_nil
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+    YAML
+    assert_nil entry.siblings
+  end
+
+  def test_siblings_parses_a_list_of_tail_patterns
+    entry = load_registry(<<~YAML)["itant"]
+      itant:
+        adapter: Nabu::Adapters::Itant
+        siblings: ["-(eng|ita|dipl)"]
+    YAML
+    assert_equal ["-(eng|ita|dipl)"], entry.siblings
+  end
+
+  def test_siblings_parses_the_cts_marker
+    entry = load_registry(<<~YAML)["perseus-greek"]
+      perseus-greek:
+        adapter: Nabu::Adapters::Perseus
+        siblings: cts
+    YAML
+    assert_equal "cts", entry.siblings
+  end
+
+  def test_non_cts_scalar_siblings_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: "-en"
+      YAML
+    end
+    assert_match(/damaskini/, error.message)
+    assert_match(/siblings/, error.message)
+  end
+
+  def test_empty_or_tailless_siblings_list_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: []
+      YAML
+    end
+    assert_match(/siblings/, error.message)
+
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: ["en"]
+      YAML
+    end
+    assert_match(/siblings/, error.message)
+    assert_match(/"en"/, error.message)
+  end
+
+  def test_unparseable_sibling_tail_regex_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: ["-(en"]
+      YAML
+    end
+    assert_match(/damaskini/, error.message)
+    assert_match(/siblings/, error.message)
   end
 
   def test_build_adapter_passes_classes_to_a_supporting_adapter

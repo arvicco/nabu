@@ -96,6 +96,11 @@ module Nabu
         def edge? = kind == :edge
         def empty? = @starts.empty?
 
+        # The last node the feature covers (runs are ascending), nil when
+        # empty — a sibling feature MODULE (ETCBC/bridging, P34-1) is sanity-
+        # checked against the core dataset's slot space via this.
+        def max_node = @ends.last
+
         # The value at +node+, or +default+ when the feature does not cover
         # it. Binary search over the ascending runs.
         def fetch(node, default = nil)

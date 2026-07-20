@@ -290,6 +290,10 @@ module Nabu
         token["qere"] = qere if qere
         hybrid = corpus.kq_hybrid(slot)
         token["kq_hybrid"] = hybrid if hybrid
+        osm = corpus.osm(slot)
+        token["osm"] = osm if osm
+        osm_sf = corpus.osm_sf(slot)
+        token["osm_sf"] = osm_sf if osm_sf
         token
       end
 
@@ -387,6 +391,14 @@ module Nabu
           @dataset.feature("kq_hybrid_utf8").fetch(slot)
         end
 
+        # The ETCBC/bridging crosswalk lane (P34-1): OSHB's OSM morph tag(s)
+        # for this word, read from the sibling feature MODULE
+        # canonical/bridging/tf/2021 when the owner has synced it — nil (lane
+        # off) when the module is absent. Values ride verbatim, including
+        # upstream's honest "*" problem marker.
+        def osm(slot) = bridging["osm"]&.fetch(slot)
+        def osm_sf(slot) = bridging["osm_sf"]&.fetch(slot)
+
         # Constituents (clauses/phrases) intersecting a verse, via the
         # once-per-dataset slot index.
         def constituents_of(verse_node)
@@ -394,6 +406,38 @@ module Nabu
         end
 
         private
+
+        # Lazy sibling-module load: dataset dir <root>/bhsa/tf/2021 →
+        # module dir <root>/bridging/tf/2021 (the same layout in canonical/
+        # and in test/fixtures/). Absent module = {} — the lane simply
+        # stays off; a module whose nodes exceed the dataset's slot space is
+        # a version misalignment and refuses loudly (osm is meaningless off
+        # its own slot numbering).
+        def bridging
+          @bridging ||= load_bridging
+        end
+
+        def load_bridging
+          module_dir = File.expand_path(File.join(dir, "..", "..", "..", "bridging", TF_DIR))
+          osm_path = File.join(module_dir, "osm.tf")
+          return {} unless File.file?(osm_path)
+
+          features = { "osm" => Nabu::Adapters::TextFabric::Feature.load(osm_path) }
+          sf_path = File.join(module_dir, "osm_sf.tf")
+          features["osm_sf"] = Nabu::Adapters::TextFabric::Feature.load(sf_path) if File.file?(sf_path)
+          features.each_value { |feature| guard_bridging!(feature) }
+          features
+        end
+
+        def guard_bridging!(feature)
+          max_node = feature.max_node
+          return if max_node.nil? || max_node <= @dataset.max_slot
+
+          raise Nabu::ParseError,
+                "#{feature.path}: bridging module covers node #{max_node} beyond the dataset's " \
+                "max slot #{@dataset.max_slot} (BHSA tf/2021 pins 426,590 words) — the module and " \
+                "the core dataset are version-misaligned, and osm off its own slot space is noise"
+        end
 
         def verse?(node)
           node.between?(verse_range.first, verse_range.last)

@@ -1,0 +1,132 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="CH1a0907-ann">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Annotations for 說苑</title>
+            </titleStmt>
+            <publicationStmt>
+                <p>published electronically as part of the TLS project at https://hxwd.org</p>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Created by members of the TLS project</p>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <creation>Initially created: <date>2019-12-05T16:16:50.843+09:00</date> by dsehnal</creation>
+        <textClass><catRef scheme="#tls-dates" target="#dat05000"/></textClass></profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>Annotations</head>
+                <p xml:id="CH1a0907-start">
+<seg xml:id="CH1a0907_CHANT_010-21a.6">
+                        <line>管仲半棄酒，</line>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="HALF" xml:id="uuid-eb30ac97-526e-49b2-b0ac-97526e39b2db">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_010-21a.6 #uuid-e934aa49-3e5c-4b9b-9970-4155901a8acb"/>
+                            <text>
+                                <srcline title="說苑" target="#CH1a0907_CHANT_010-21a.6" pos="3">管仲半棄酒，</srcline>
+                                <line title="" src=""/>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-5b9da490-7627-4010-80e0-98d0faca9faf">
+                                <orth>半</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">bàn</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-e934aa49-3e5c-4b9b-9970-4155901a8acb">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-91666c59-4a69-460f-8cd3-9ddbff370ae5">nadV</syn-func>
+                           <usg type="warring-states-currency">4</usg>
+                        </gramGrp>
+                                <def>half, half-way; to the tune of one half, half of the number</def>
+                            </sense>
+                            <metadata resp="#dsehnal" created="2019-12-17T02:55:17.993+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added and approved</resp>
+                                    <name>dsehnal</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="DISCARD" xml:id="uuid-78702c88-96c6-409f-b02c-8896c6d09f8a">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_010-21a.6 #uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10"/>
+                            <text>
+                                <srcline title="說苑" target="#CH1a0907_CHANT_010-21a.6" pos="4">管仲半棄酒，</srcline>
+                                <line title="" src=""/>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04">
+                                <orth>棄</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">qì</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10">
+                                <gramGrp>
+                           <pos>V</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def>abandon; set aside; discard (as no longe of use), throw away (useless things);  refuse to accept</def>
+                            </sense>
+                            <metadata resp="#dsehnal" created="2019-12-17T02:55:44.997+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added and approved</resp>
+                                    <name>dsehnal</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                        <ann xmlns="http://hxwd.org/ns/1.0" concept="LIQUOR" xml:id="uuid-5d64e20d-5f5d-4cb7-a4e2-0d5f5d8cb7e7">
+                            <link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_010-21a.6 #uuid-c496eb95-590e-416b-9727-9c76c567e408"/>
+                            <text>
+                                <srcline title="說苑" target="#CH1a0907_CHANT_010-21a.6" pos="5">管仲半棄酒，</srcline>
+                                <line title="" src=""/>
+                            </text>
+                            <form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-359a79ae-d0f5-4e16-bdd7-195338702acc">
+                                <orth>酒</orth>
+                                <pron xml:lang="zh-Latn-x-pinyin">jiǔ</pron>
+                            </form>
+                            <sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-c496eb95-590e-416b-9727-9c76c567e408">
+                                <gramGrp>
+                           <pos>N</pos>
+                           <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-e917a78b-5500-4276-a5fe-156b8bdecb7b">nm</syn-func>
+                           <usg type="warring-states-currency">5</usg>
+                        </gramGrp>
+                                <def resp="#CH" updated="2020-01-13T18:32:25.431+09:00">ale</def>
+                            </sense>
+                            <metadata resp="#dsehnal" created="2019-12-17T02:56:04.974+09:00">
+                                <respStmt xmlns="http://www.tei-c.org/ns/1.0">
+                                    <resp>added and approved</resp>
+                                    <name>dsehnal</name>
+                                </respStmt>
+                            </metadata>
+                        </ann>
+                    </seg>
+<seg xml:id="CH1a0907_CHANT_016-27a.2"><line>無以淫泆棄業</line><ann xmlns="http://hxwd.org/ns/1.0" concept="NEVER" xml:id="uuid-25dcd928-3e05-4b22-9cd9-283e05db2285"><link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_016-27a.2 #uuid-a99b89c4-dacf-4534-9b89-c4dacf2534e4"/><text><srcline title="說苑" target="#CH1a0907_CHANT_016-27a.2" pos="6">無以淫泆棄業</srcline><line title="" transl-id="CH1a0907-en-90d7b501" src=""/></text><form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-5de002ac-c1a1-4519-a177-4a3afcc155bb"><orth>無</orth><pron xml:lang="zh-Latn-x-pinyin">wú</pron></form><sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-a99b89c4-dacf-4534-9b89-c4dacf2534e4"><gramGrp><pos>V</pos><syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-0b09b6e0-ddea-45f8-8b4a-5d427d67044b">vt+V(0)</syn-func><sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-b8276c57-c108-44c8-8c01-ad92679a9163">imperative</sem-feat></gramGrp><def>never!</def></sense><metadata resp="#dsehnal" created="2023-07-16T03:50:52.607+09:00"><respStmt xmlns="http://www.tei-c.org/ns/1.0"><resp>added</resp><name notBefore="2023-07-16T03:50:52.607+09:00">dsehnal</name></respStmt></metadata></ann><ann xmlns="http://hxwd.org/ns/1.0" concept="BECAUSE" xml:id="uuid-e719f366-e03b-4186-99f3-66e03bf1868c"><link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_016-27a.2 #uuid-47dc3450-bf32-4d72-ac79-701d6764a2bc"/><text><srcline title="說苑" target="#CH1a0907_CHANT_016-27a.2" pos="7">無以淫泆棄業</srcline><line title="" transl-id="CH1a0907-en-90d7b501" src=""/></text><form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-4a877402-3023-41b9-8e4b-e2d63ebfa81c"><orth>以</orth><pron xml:lang="zh-Latn-x-pinyin">yǐ</pron></form><sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-47dc3450-bf32-4d72-ac79-701d6764a2bc"><gramGrp>
+                    <pos>V</pos>
+  <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-9e8c327b-579d-4514-8c83-481fa450974a">vtoN.adV</syn-func>
+  <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-ee80ba53-f7eb-484d-b807-f36f9e0404a7">subjective</sem-feat>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp><def>on the grounds of;    because of</def></sense><metadata resp="#dsehnal" created="2023-07-16T03:51:44.115+09:00"><respStmt xmlns="http://www.tei-c.org/ns/1.0"><resp>added</resp><name notBefore="2023-07-16T03:51:44.115+09:00">dsehnal</name></respStmt></metadata></ann><ann xmlns="http://hxwd.org/ns/1.0" concept="LEWD" xml:id="uuid-7a577397-dc7d-493d-9773-97dc7dc93df8"><link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_016-27a.2 #uuid-94889545-fddb-431b-8659-90573342aebb"/><text><srcline title="說苑" target="#CH1a0907_CHANT_016-27a.2" pos="8">無以淫泆棄業</srcline><line title="" transl-id="CH1a0907-en-90d7b501" src=""/></text><form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-ded15339-eff3-4713-932d-8994c69808e5 #uuid-745b9318-dde2-4912-b6ef-da9cce758802 #uuid-ded15339-eff3-4713-932d-8994c69808e5 #uuid-e28c3f19-eabb-452e-aeb8-890704d07ae4"><orth>淫佚</orth><orth>淫泆</orth><pron xml:lang="zh-Latn-x-pinyin">yín yì</pron><pron xml:lang="zh-Latn-x-pinyin">yín yì</pron></form><sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-94889545-fddb-431b-8659-90573342aebb"><gramGrp>
+                    <pos>N</pos>
+  <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-db0698e7-db2f-4ee3-9a20-0c2b2e0cebf0">NPab</syn-func>
+  <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</sem-feat>
+                </gramGrp><def>licentiousness, extravagance; (sexual) indulgence</def></sense><metadata resp="#dsehnal" created="2023-07-16T03:52:04.6+09:00"><respStmt xmlns="http://www.tei-c.org/ns/1.0"><resp>added</resp><name notBefore="2023-07-16T03:52:04.6+09:00">dsehnal</name></respStmt></metadata></ann><ann xmlns="http://hxwd.org/ns/1.0" concept="DISCARD" xml:id="uuid-6204190e-bdc0-4343-8419-0ebdc0734381"><link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_016-27a.2 #uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10"/><text><srcline title="說苑" target="#CH1a0907_CHANT_016-27a.2" pos="10">無以淫泆棄業</srcline><line title="" transl-id="CH1a0907-en-90d7b501" src=""/></text><form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8030720f-e197-4e6f-b8b6-ce0fed0aaf04"><orth>棄</orth><pron xml:lang="zh-Latn-x-pinyin">qì</pron></form><sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-8f745d61-7ec6-4d08-a960-cc98b59fcc10"><gramGrp>
+                    <pos>V</pos>
+  <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-fbfb2371-2537-4a99-a876-41b15ec2463c">vtoN</syn-func>
+                    <usg type="warring-states-currency">5</usg>
+                </gramGrp><def>abandon; set aside; discard (as no longe of use), throw away (useless things);  refuse to accept</def></sense><metadata resp="#dsehnal" created="2023-07-16T03:52:26.477+09:00"><respStmt xmlns="http://www.tei-c.org/ns/1.0"><resp>added</resp><name notBefore="2023-07-16T03:52:26.477+09:00">dsehnal</name></respStmt></metadata></ann><ann xmlns="http://hxwd.org/ns/1.0" concept="WORK" xml:id="uuid-b66582c0-7c66-44d7-a582-c07c66e4d7f8"><link xmlns="http://www.tei-c.org/ns/1.0" target="#CH1a0907_CHANT_016-27a.2 #uuid-60a09964-03da-45e1-a419-848d77b15856"/><text><srcline title="說苑" target="#CH1a0907_CHANT_016-27a.2" pos="11">無以淫泆棄業</srcline><line title="" transl-id="CH1a0907-en-90d7b501" src=""/></text><form xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-22182188-70f5-47d8-842c-29ff8ebb4402"><orth>業</orth><pron xml:lang="zh-Latn-x-pinyin">yè</pron></form><sense xmlns="http://www.tei-c.org/ns/1.0" corresp="#uuid-60a09964-03da-45e1-a419-848d77b15856"><gramGrp>
+                    <pos>N</pos>
+  <syn-func xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-76be1df4-3d73-4e5f-bbc2-729542645bc8">nab</syn-func>
+  <sem-feat xmlns="http://hxwd.org/ns/1.0" corresp="#uuid-f55cff2f-f0e3-4f08-a89c-5d08fcf3fe89">act</sem-feat>
+                    <usg type="warring-states-currency">4</usg>
+                </gramGrp><def resp="#CH" updated="2020-12-15T03:47:29.707+09:00">profession, professional task; trade; professional tasks; performance of one's duties, professional achievements</def></sense><metadata resp="#dsehnal" created="2023-07-16T03:52:55.44+09:00"><respStmt xmlns="http://www.tei-c.org/ns/1.0"><resp>added</resp><name notBefore="2023-07-16T03:52:55.44+09:00">dsehnal</name></respStmt></metadata></ann></seg>
+<seg xml:id="CH1a0907_CHANT_005-13a.96">
+                        <line>而後良言進。
+                    </line>
+                    </seg>
+                    <seg xml:id="CH1a0907_CHANT_005-13a.96">
+                        <line>而後良言進。
+                    </line>
+                    </seg>
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>

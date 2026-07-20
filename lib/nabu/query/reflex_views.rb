@@ -26,14 +26,21 @@ module Nabu
     # column reads all-gold (only gold sources existed then — the
     # borrowed_column? pre-migration precedent).
     #
+    # +equivalence_count+ (P34-3) counts the EQUIVALENCE rows — Latin keys
+    # minted from scholar-curated Classical-Latin equivalents on non-Latin
+    # passages (CEIPoM) — under the same never-summed, always-labeled,
+    # nil-honest contract as silver. It is curated, but it is not
+    # attestation in the key's language: renderers say "equivalence",
+    # never "automatic" and never a bare number.
+    #
     # +borrowed+ (P17-3) is the stored per-edge loan flag: true (the
     # upstream node carried the marker — renderers label "(loan)"), false
     # (parsed unflagged), or nil (the row predates the migration-010
     # flag-aware reparse — unknown, never a claimed false).
     class ReflexViews
       View = Data.define(:lang_code, :language, :word, :roman, :attested_count, :borrowed,
-                         :silver_count) do
-        def initialize(silver_count: nil, **rest) = super
+                         :silver_count, :equivalence_count) do
+        def initialize(silver_count: nil, equivalence_count: nil, **rest) = super
       end
 
       def initialize(catalog:, fulltext: nil)
@@ -68,6 +75,7 @@ module Nabu
             word: row.fetch(:word), roman: row.fetch(:roman),
             attested_count: tiers[Store::Indexer::GOLD_TIER],
             silver_count: tiers["silver"],
+            equivalence_count: tiers[Store::Indexer::EQUIVALENCE_TIER],
             borrowed: row[:borrowed]
           )
         end

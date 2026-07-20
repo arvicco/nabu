@@ -93,6 +93,30 @@ module Query
       assert_empty search(""), "an empty lemma matches nothing"
     end
 
+    # -- the loans facet composes with lemma search (P34-2) --------------------
+
+    # The loans corpus (Coptic Scriptorium) is gold-lemmatized (P17-1 language
+    # #15), so unlike the document facets the loans filter DOES compose with
+    # --lemma: both read the same stored passage row, no reparse.
+    def test_lemma_search_composes_with_the_loans_filter
+      doc = make_document(urn: "urn:d:cop", language: "cop", title: "Mark")
+      [["urn:d:cop:1", { "grc" => 1 }], ["urn:d:cop:2", nil]].each_with_index do |(urn, loans), seq|
+        annotations = { "tokens" => [{ "lemma" => "ⲛⲟⲩⲧⲉ", "form" => "ⲛⲟⲩⲧⲉ" }] }
+        annotations["loans"] = loans if loans
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: urn, sequence: seq, language: "cop",
+          text: "ⲡⲛⲟⲩⲧⲉ #{seq}", text_normalized: Nabu::Normalize.search_form("ⲡⲛⲟⲩⲧⲉ", language: "cop"),
+          annotations_json: Nabu::Store::ContentHash.canonical_json(annotations),
+          content_sha256: "x", revision: 1
+        )
+      end
+      rebuild!
+
+      assert_equal %w[urn:d:cop:1 urn:d:cop:2], search("ⲛⲟⲩⲧⲉ").map(&:urn)
+      assert_equal %w[urn:d:cop:1], search("ⲛⲟⲩⲧⲉ", loans: "grc").map(&:urn),
+                   "the loans conjunct narrows the lemma hits to Greek-loan-bearing passages"
+    end
+
     # -- dictionary gloss integration (P11-4) ----------------------------------
 
     # A lemma hit carries its dictionary shelf gloss when a dictionary of the
