@@ -177,6 +177,73 @@ module Nabu
 
     DEFAULT_MODE = "default"
 
+    # == East-Asian display width (P35-7) — MEASUREMENT, not policy
+    #
+    # The terminal draws CJK ideographs, kana, hangul and fullwidth forms two
+    # cells wide; every column-aligned surface (concord KWIC, the align label
+    # column's text, the distinctive-vocabulary table) must pad by CELLS, not
+    # by String#length, or Han lines drift ~2× right of the keyword column.
+    # `Display.width` is the ONE seam; `ljust`/`rjust` are its padding
+    # companions. There is no --display mode and no footer for it: width is a
+    # rendering fact the terminal already enforces, not an editorial choice.
+    #
+    # Classification is by Unicode East_Asian_Width, transcribed from
+    # EastAsianWidth.txt **Unicode 16.0.0** (the plane-2/3 W-default rule below
+    # also absorbs the CJK Extension I additions and any Unicode 17 CJK growth):
+    #   - W (Wide) and F (Fullwidth) codepoints render TWO cells.
+    #   - Every other class — including A (Ambiguous) — renders ONE cell here.
+    #     Ambiguous is width-1 by the Unicode narrow default; a terminal that
+    #     draws it double (iTerm2's "ambiguous-width" toggle) is the operator's
+    #     to switch OFF, documented in docs/display.md §2 but never modelled.
+    #   - Codepoints not covered by the table below default NARROW (one cell).
+    #
+    # Scope is corpus-focused (the Sino wave: lzh Han, ojp kana + man'yōgana):
+    # CJK Unified + Extensions A–I, kana and its extensions, hangul, bopomofo,
+    # Yi, CJK radicals/strokes/symbols/punctuation, Tangut/Khitan/Nushu, and the
+    # fullwidth forms. Wide pictographic emoji (also W by EAW) are out of the
+    # ancient-text corpus and deliberately omitted — they would render narrow
+    # here; add their ranges if a corpus ever needs them.
+    EAST_ASIAN_WIDE = [
+      0x1100..0x115F,     # Hangul Jamo (W)
+      0x2E80..0x2E99,     # CJK Radicals Supplement (W)
+      0x2E9B..0x2EF3,     # CJK Radicals Supplement (W)
+      0x2F00..0x2FD5,     # Kangxi Radicals (W)
+      0x2FF0..0x2FFF,     # Ideographic Description Characters (W)
+      0x3000..0x303E,     # CJK Symbols and Punctuation, incl. U+3000 IDEOGRAPHIC SPACE (W)
+      0x3041..0x3096,     # Hiragana (W)
+      0x3099..0x30FF,     # combining kana voicing marks + Katakana (W)
+      0x3105..0x312F,     # Bopomofo + extensions (W)
+      0x3131..0x318E,     # Hangul Compatibility Jamo (W)
+      0x3190..0x31E5,     # Kanbun, CJK Strokes (W)
+      0x31EF..0x31FF,     # Ideographic symbol + Katakana Phonetic Extensions (W)
+      0x3200..0x32FF,     # Enclosed CJK Letters and Months (W)
+      0x3300..0x33FF,     # CJK Compatibility (W)
+      0x3400..0x4DBF,     # CJK Unified Ideographs Extension A (W)
+      0x4E00..0x9FFF,     # CJK Unified Ideographs (W)
+      0xA000..0xA48C,     # Yi Syllables (W)
+      0xA490..0xA4C6,     # Yi Radicals (W)
+      0xA960..0xA97C,     # Hangul Jamo Extended-A (W)
+      0xAC00..0xD7A3,     # Hangul Syllables (W)
+      0xF900..0xFAFF,     # CJK Compatibility Ideographs (W)
+      0xFE10..0xFE19,     # Vertical Forms (W)
+      0xFE30..0xFE52,     # CJK Compatibility Forms (W)
+      0xFE54..0xFE66,     # Small Form Variants (W)
+      0xFE68..0xFE6B,     # Small Form Variants (W)
+      0xFF01..0xFF60,     # Fullwidth ASCII variants (F)
+      0xFFE0..0xFFE6,     # Fullwidth signs (F)
+      0x16FE0..0x16FE4,   # Tangut/Nushu iteration & reading marks (W)
+      0x17000..0x18CD5,   # Tangut, Tangut Components, Khitan Small Script (W)
+      0x18D00..0x18D08,   # Tangut Supplement (W)
+      0x1AFF0..0x1B2FB,   # Kana Extended-B, Kana Supplement/Extended-A, Small Kana, Nushu (W)
+      0x20000..0x2FFFD,   # Plane 2 — CJK Ext B–F, I + Compat Supplement (W by Unicode default)
+      0x30000..0x3FFFD    # Plane 3 — CJK Ext G, H (W by Unicode default)
+    ].freeze
+
+    # Zero-width for measurement: ANSI SGR color sequences (the token-coloring
+    # RESET/paint codes) and the bidi isolates (U+2066–2069, RTL wrapping).
+    ANSI_SGR = /\e\[[0-9;]*m/
+    BIDI_ISOLATES = /[\u{2066}-\u{2069}]/
+
     class << self
       # Parse config/display.yml → { "hbo" => Policy, ... }. A missing file is
       # no policies (display becomes a pass-through); a malformed one is a
@@ -297,11 +364,29 @@ module Nabu
         [exempt ? working : working.unicode_normalize(:nfc), applied]
       end
 
-      # Character count minus the isolate characters — the width the terminal
-      # actually draws. Column math over displayed text must use this, never
-      # String#length, so isolate wrapping cannot shift a padded column.
-      def visible_length(text)
-        text.length - text.count(RLI + PDI)
+      # The number of terminal CELLS +text+ draws (P35-7): grapheme clusters
+      # summed by East-Asian width, wide (W/F) = 2 and everything else = 1,
+      # with ANSI SGR sequences and bidi isolates measured as 0. Column math
+      # over displayed text MUST use this, never String#length — a Han cluster
+      # is one character but two cells, so char-count padding drifts the column.
+      # A cluster is classified by its FIRST codepoint (its base), so combining
+      # marks fused onto a base add nothing and never split a grapheme.
+      def width(text)
+        measurable(text).grapheme_clusters.sum { |cluster| wide_grapheme?(cluster) ? 2 : 1 }
+      end
+
+      # ljust/rjust by DISPLAY WIDTH: pad with spaces until +text+ occupies
+      # +target+ cells (left- or right-justified). Already ≥ target ⇒ returned
+      # untouched (like String#ljust/rjust). For narrow (grc/lat/chu) text these
+      # are byte-identical to String#ljust/rjust — width == length there.
+      def ljust(text, target)
+        pad = target - width(text)
+        pad.positive? ? text + (" " * pad) : text
+      end
+
+      def rjust(text, target)
+        pad = target - width(text)
+        pad.positive? ? (" " * pad) + text : text
       end
 
       # Apply the edition's configured convention rules to +text+, returning
@@ -375,6 +460,19 @@ module Nabu
 
         policy = source_policies[source]
         policy && Edition.new(policy: policy, annotations: annotations)
+      end
+
+      # Strip the zero-width noise (ANSI SGR + bidi isolates) before measuring.
+      def measurable(text)
+        text.gsub(ANSI_SGR, "").gsub(BIDI_ISOLATES, "")
+      end
+
+      # A grapheme cluster is wide iff its base (first) codepoint is East-Asian
+      # W or F. Small frozen range table (EAST_ASIAN_WIDE); a linear scan is
+      # ample for the short strings column math measures.
+      def wide_grapheme?(cluster)
+        codepoint = cluster.ord
+        EAST_ASIAN_WIDE.any? { |range| range.cover?(codepoint) }
       end
 
       def modes
