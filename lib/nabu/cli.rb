@@ -2069,6 +2069,11 @@ module Nabu
                           "corpora are romanized (try guþ, jah)"]
     }.freeze
 
+    # H9 (P35-6): the skip-with-note rule for a corrupt annotations_json —
+    # Show marks the parse failure (ANNOTATIONS_UNREADABLE) and every
+    # render that would have used the lane says so.
+    ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
+
     no_commands do
       # -- display policy (P27-0) ------------------------------------------
       # Passage text reaches the terminal ONLY through display_text, which
@@ -2683,11 +2688,6 @@ module Nabu
           "#{key}=#{value.is_a?(String) ? value : JSON.generate(value)}"
         end.join("  ")
       end
-
-      # H9 (P35-6): the skip-with-note rule for a corrupt annotations_json —
-      # Show marks the parse failure (ANNOTATIONS_UNREADABLE) and every
-      # render that would have used the lane says so.
-      ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
 
       def annotations_unreadable?(result)
         result.annotations[Nabu::Query::Show::ANNOTATIONS_UNREADABLE] == true
