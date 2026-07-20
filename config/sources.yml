@@ -33,6 +33,7 @@
 
 perseus-greek:
   adapter: Nabu::Adapters::Perseus
+  siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
   sync_policy: live
   # P7-4, owner-approved strategic review: ingest the English editions already
@@ -42,12 +43,14 @@ perseus-greek:
 
 perseus-latin:
   adapter: Nabu::Adapters::PerseusLatin
+  siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
   enabled: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
   sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
   translations: true  # owner 2026-07-07: aligned English editions, same mechanism as perseus-greek (P7-4)
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
+  siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: live
   # P9-1, owner-directed 2026-07-08 (Phase 9): ingest the ~45 English editions
@@ -163,6 +166,7 @@ gretil:
 
 oracc:
   adapter: Nabu::Adapters::Oracc
+  siblings: ["-[a-z]+"]  # P34-0 (was P13-4 frozen): any lowercase run — P/Q textids are hyphen-free
   enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
                    # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
@@ -324,6 +328,7 @@ imp:
 
 damaskini:
   adapter: Nabu::Adapters::Damaskini
+  siblings: ["-en"]  # P34-0 (was P23-1 frozen): literal tail — doc ids are hyphen-rich, none ends in -en
   enabled: true    # flipped 2026-07-16 (owner sign-off: synced, 46 docs incl. -en siblings, eyeballed)
                    # bitstreams, ~1.7 MB total → 23 docs / 6,036 sentences +
                    # 23 -en siblings; CLAUDE.md checklist §6 — eyeball
@@ -378,6 +383,7 @@ wiktionary-recon:
 
 freising:
   adapter: Nabu::Adapters::Freising
+  siblings: ["-[a-z-]+"]  # P34-0 (was P13-11 frozen): multi-segment layer tails — works are bs<digits>
   enabled: true    # OWNER SIGN-OFF 2026-07-11: synced, 27 docs / 2,037 lines,
                    # GLAGOLITE eyeballed; MCP default-exclusion verified live
                    # (research_private, CC BY-ND 2.5 SI).
@@ -580,6 +586,7 @@ local-notes:
 
 riig:
   adapter: Nabu::Adapters::Riig
+  siblings: ["-fr"]  # P34-0 (was P25-1/P30 frozen): literal tail — no upstream id ends in -fr
   enabled: true    # flipped 2026-07-18 (owner sign-off: 477 docs live; sibling-peek quarantine noise = open hotfix)
                    # corpus map + 428 EpiDoc records, polite sequential;
                    # CLAUDE.md checklist §6 — bin/nabu sync riig, eyeball
@@ -620,6 +627,8 @@ ogham:
 
 isicily:
   adapter: Nabu::Adapters::Isicily
+  siblings: ["-en", "-it", "-translit"]  # P34-0: record ids are isic<digits> — trivially tail-free
+  translations: true  # P34-0: the -en/-it prose translation siblings (1,184/389 non-empty divs)
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # CLAUDE.md checklist §6 — bin/nabu sync isicily,
                    # eyeball nabu show urn:nabu:isicily:isic001620 (the
@@ -650,6 +659,7 @@ isicily:
 
 itant:
   adapter: Nabu::Adapters::Itant
+  siblings: ["-(eng|ita|dipl)"]  # P34-0 (was P29-2/P30 frozen): the closed minted-tail set — stems end in digits
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # §6 — bin/nabu sync itant [git clone, ~10 MB], eyeball
                    # nabu show urn:nabu:itant:oscan-2 (the Monte Vairano
@@ -734,6 +744,7 @@ corph:
 
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
+  siblings: ["-en"]  # P34-0 (was P26-1 frozen): literal tail — stems like dhp21-32 are hyphen-rich, none ends in -en
   enabled: true    # flipped 2026-07-18 (owner sign-off: synced, --parallel eyeballed)
                    # bilara-data at census time; expected ≈7,310 root docs /
                    # ≈445,600 pli+pra passages + ≈4,712 -en siblings —
@@ -1024,6 +1035,7 @@ diorisis:
 
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
+  siblings: ["-de"]  # P34-0 (was P28-2 frozen): literal tail — no dataset slug ends in -de
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # bin/nabu sync tla-hf — two FileFetch GETs, 7,284,199 B
                    # (demotic, 13,383 sentences) + 1,904,138 B (Late
@@ -1057,6 +1069,7 @@ tla-hf:
 
 aes:
   adapter: Nabu::Adapters::Aes
+  siblings: ["-de"]  # P34-0 (was P28-0 frozen): literal tail — text ids are uppercase [A-Z0-9]
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # checklist §6): bin/nabu sync aes — a sparse GitFetch of
                    # github.com/simondschweitzer/aes scoped to files/aes +
@@ -1140,6 +1153,7 @@ ceipom:
 # (no registry change — the P25-2 precedent).
 open-etruscan:
   adapter: Nabu::Adapters::OpenEtruscan
+  siblings: ["-en"]  # P34-0 (was P29-0/P30 frozen): literal tail — no upstream id ends in -en
   enabled: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
                    # (checklist §6: bin/nabu sync open-etruscan — two
                    # FileFetch GETs, 770,613 B Zenodo CSV + 302,495 B Larth
@@ -1303,6 +1317,7 @@ hebrew-lexicon:
 
 etcsl:
   adapter: Nabu::Adapters::Etcsl
+  siblings: ["-en"]  # P34-0 (was P31-5 frozen): literal tail on the composition number
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
   # P31-5: the Electronic Text Corpus of Sumerian Literature, Revised
   # edition (Oxford, October 2006) — 394 hand-lemmatized Sumerian
