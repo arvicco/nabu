@@ -373,6 +373,79 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/classes/, error.message)
   end
 
+  # -- siblings (P34-0: the --parallel work-pattern seam) -------------------
+
+  def test_siblings_defaults_nil
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+    YAML
+    assert_nil entry.siblings
+  end
+
+  def test_siblings_parses_a_list_of_tail_patterns
+    entry = load_registry(<<~YAML)["itant"]
+      itant:
+        adapter: Nabu::Adapters::Itant
+        siblings: ["-(eng|ita|dipl)"]
+    YAML
+    assert_equal ["-(eng|ita|dipl)"], entry.siblings
+  end
+
+  def test_siblings_parses_the_cts_marker
+    entry = load_registry(<<~YAML)["perseus-greek"]
+      perseus-greek:
+        adapter: Nabu::Adapters::Perseus
+        siblings: cts
+    YAML
+    assert_equal "cts", entry.siblings
+  end
+
+  def test_non_cts_scalar_siblings_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: "-en"
+      YAML
+    end
+    assert_match(/damaskini/, error.message)
+    assert_match(/siblings/, error.message)
+  end
+
+  def test_empty_or_tailless_siblings_list_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: []
+      YAML
+    end
+    assert_match(/siblings/, error.message)
+
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: ["en"]
+      YAML
+    end
+    assert_match(/siblings/, error.message)
+    assert_match(/"en"/, error.message)
+  end
+
+  def test_unparseable_sibling_tail_regex_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        damaskini:
+          adapter: Nabu::Adapters::Damaskini
+          siblings: ["-(en"]
+      YAML
+    end
+    assert_match(/damaskini/, error.message)
+    assert_match(/siblings/, error.message)
+  end
+
   def test_build_adapter_passes_classes_to_a_supporting_adapter
     entry = load_registry(<<~YAML)["kanripo"]
       kanripo:

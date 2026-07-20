@@ -85,9 +85,19 @@ module Nabu
       # basename), skipping percent-encoded strays. +members+ is the
       # inverted membership index from +member_index+ — nil renders an
       # honest entry without the words section (attic partials).
+      # CONTENT-EMPTY concepts (the N-A.xml placeholder found at the
+      # owner's first real sync 2026-07-20: head "N/A", empty definition
+      # <p/>, no notes/pointers/members — an empty body would fail
+      # validation and quarantine the whole shelf) skip by rule, censused
+      # via +skipped_empty_concepts+.
       def concept_entries(concepts_dir, members: nil)
-        concept_files(concepts_dir).map { |path| build_concept_entry(path, members) }
+        @skipped_empty_concepts = 0
+        concept_files(concepts_dir).filter_map { |path| build_concept_entry(path, members) }
       end
+
+      # Content-empty concept files skipped by the last concept_entries
+      # walk (1 upstream: N-A.xml).
+      attr_reader :skipped_empty_concepts
 
       # Word files: one DictionaryEntry per words/<hex>/*.xml (sorted by
       # relative path), skipping the empty-orth aggregate.
@@ -159,6 +169,11 @@ module Nabu
         pointer_lines(root, lines)
         source_reference_lines(root, lines)
         member_lines(members ? members.fetch(entry_id, []) : [], lines)
+
+        if lines.empty?
+          @skipped_empty_concepts += 1
+          return nil
+        end
 
         build_entry(entry_id: entry_id, key_raw: head, headword: head,
                     gloss: definition.first, lines: lines, path: path)

@@ -56,3 +56,12 @@ cp words/a/uuid-a5cc024e-*.xml <fixtures>/words/a/
 # trim words/e/uuid-ea74382d-*.xml to root + first </entry>, append </superEntry>
 cp LICENSE.md <fixtures>/
 ```
+
+## N-A.xml addendum (2026-07-20, owner's first real sync)
+
+`concepts/N-A.xml` (475 bytes, byte-verbatim from the synced canonical at
+faee21a2) joined the trim after the first real sync quarantined the whole
+concepts shelf: it is a genuinely empty placeholder — head "N/A",
+definition `<p/>`, empty notes/pointers/words. Content-empty concepts
+skip by rule (censused via `TlsXmlParser#skipped_empty_concepts`, 1
+upstream); a concept with ANY content that fails to render still raises.
