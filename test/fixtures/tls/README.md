@@ -1,9 +1,9 @@
 # TLS fixtures — Thesaurus Linguae Sericae (tls-kr/tls-data)
 
 Retrieved 2026-07-20 from https://github.com/tls-kr/tls-data (master,
-pushed 2026-07-09). All files are byte-verbatim upstream except the one
-trim noted below. Layout mirrors the sparse fetch cone (`concepts/` +
-`words/<hex>/`).
+pushed 2026-07-09). All files are byte-verbatim upstream except the
+trims noted below. Layout mirrors the sparse fetch cone (`concepts/` +
+`words/<hex>/` + `notes/doc` + `notes/swl` since P34-4).
 
 ## concepts/
 
@@ -35,6 +35,23 @@ trim noted below. Layout mirrors the sparse fetch cone (`concepts/` +
   a closing `</superEntry>` appended. The adapter skips empty-orth
   superEntries by rule (censused).
 
+## notes/ (P34-4 — the attestation crosswalk)
+
+One `<textid>-ann.xml` per attested text; upstream files reach 13 MB, so
+each fixture is **TRIMMED**: teiHeader + selected real `<seg>` blocks
+byte-verbatim, closing tags appended. Retrieved 2026-07-20.
+
+- `swl/KR1h0004-ann.xml` — 論語, the swl default-namespace `<ann>` shape;
+  5 segs (005-22a.4, 009-19a.1, 013-30a.1, 017-27a.1, 018-31a.5) whose
+  anns attest the fixture words 棄 and 舍 (不舍晝夜). All five pages
+  exist as `<pb:KR1h0004_CHANT_…>` anchors in the synced kanripo text —
+  the page-grain resolution path.
+- `doc/KR1h0001-ann.xml` — 孟子, the doc-side `<tls:ann>` PREFIXED shape;
+  2 segs (001-6a.7 棄甲曳兵而走, 008-21a.4).
+- `doc/CH1a0907-ann.xml` — 說苑 under a NON-KR text id (CH…): the
+  display-only citation path (nil cts_work, never invented); 2 segs
+  (010-21a.6, 016-27a.2).
+
 ## LICENSE.md
 
 Byte-verbatim upstream (CC BY-SA 4.0; sha256
@@ -47,12 +64,29 @@ manifest; the LICENSE.md grant governs.
 
 ```
 git clone --depth 1 --filter=blob:none --no-checkout https://github.com/tls-kr/tls-data.git
-cd tls-data && git sparse-checkout set concepts words && git checkout master
+cd tls-data && git sparse-checkout set concepts words notes/doc notes/swl && git checkout master
 cp concepts/{TWO,ABANDON,CRONY}.xml <fixtures>/concepts/
 cp 'concepts/%E5%AC%96'*.xml <fixtures>/concepts/
 cp words/0/uuid-0002ba3b-*.xml <fixtures>/words/0/
 cp words/f/uuid-fbba1aa8-*.xml words/f/uuid-f27c793b-*.xml <fixtures>/words/f/
 cp words/a/uuid-a5cc024e-*.xml <fixtures>/words/a/
 # trim words/e/uuid-ea74382d-*.xml to root + first </entry>, append </superEntry>
+# trim notes/swl/KR1h0004-ann.xml, notes/doc/KR1h0001-ann.xml and
+# notes/doc/CH1a0907-ann.xml to teiHeader + the segs listed above, append closing tags
 cp LICENSE.md <fixtures>/
 ```
+
+## N-A.xml addendum (2026-07-20, owner's first real sync)
+
+`concepts/N-A.xml` (475 bytes, byte-verbatim from the synced canonical at
+faee21a2) joined the trim after the first real sync quarantined the whole
+concepts shelf: it is a genuinely empty placeholder — head "N/A",
+definition `<p/>`, empty notes/pointers/words. Content-empty concepts
+skip by rule (censused via `TlsXmlParser#skipped_empty_concepts`, 1
+upstream); a concept with ANY content that fails to render still raises.
+
+- `notes/doc/CH1a0907-ann.xml` also carries the file's REAL duplicated
+  `xml:id` pair (`CH1a0907_CHANT_005-13a.96`, two identical ann-less segs,
+  byte-verbatim from upstream `faee21a2a725` — the quirk that made libxml2
+  spew `validity error: ID already defined` to stderr on every owner sync;
+  P34-r1 pins that the parse stays silent and the segs dedupe).

@@ -169,8 +169,9 @@ class CLITest < Minitest::Test
   end
 
   # -- P14-11: --long expands the truncated reflex/cognate lists ------------
-  # The ONE truncation in the define/etym renderers is print_reflexes' "other
-  # reflexes (not attested here)" cap (first 10 inline + "… and N more"). The
+  # The truncations in the define/etym renderers are print_reflexes' "other
+  # reflexes (not attested here)" cap (first 10 inline + "… and N more") and
+  # print_resolved_citations' cap (P34-4, tested with the TLS shelf below). The
   # *zima fixture entry names 26 non-attested reflexes, so the cap fires by
   # default and --long must expand every one, grouped by language. The
   # attested list is already unbounded, so it needs no flag.
@@ -228,6 +229,85 @@ class CLITest < Minitest::Test
       assert_match(/other reflexes \(not attested here\) — all 26, grouped by language:/, out)
       assert_match(/^ {2}\[dsb · Lower Sorbian\] zyma$/, out, "grouped headers name the code inline (P18-4)")
       refute_match(/ and \d+ more$/, out)
+    end
+  end
+
+  # -- P34-4: TLS attestation citations on the define render ------------------
+  # The fixture 棄 carries 7 attestation citations; with 論語 held (page
+  # 005:22a as a passage) and 孟子 held document-only, 5 resolve — one at
+  # page grain, four at document grain (the Define fallback) — and the two
+  # CH-text rows stay honestly unresolved (absent from the resolved list).
+
+  def test_define_resolves_tls_attestations_at_page_and_document_grain
+    with_tls_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      assert_match(/resolved citations \(in this corpus — nabu show <urn>\):/, out)
+      assert_match(/論語 005-22a\.4 「棄而違之。」 · sense uuid-5e2b1efe.* → urn:nabu:kanripo:KR1h0004:005:22a/,
+                   out, "the page probe hits the held 論語 passage")
+      assert_match(/孟子 001-6a\.7 「棄甲曳兵而走。」 · sense uuid-8f745d61.* → urn:nabu:kanripo:KR1h0001$/,
+                   out, "孟子 is held document-only — the fallback resolves to the text")
+      refute_match(/說苑.*→/, out, "the CH-text attestations resolve to nothing — never invented")
+    end
+  end
+
+  # P34-r2 (gate find, 2026-07-20): with the CJK shelves live, a Han headword
+  # matches 6+ dictionaries and DEFAULT_LIMIT=5 silently hid the rest —
+  # `define 棄` never showed tls-words (slug-alphabetical order, truncated
+  # without a word). The cap must announce itself, and --long must lift it.
+  def test_define_shelf_cap_announces_truncation_and_long_lifts_it
+    with_tls_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      filler = Nabu::Store::Source.create(
+        slug: "filler", name: "Filler", adapter_class: "X", license_class: "attribution"
+      )
+      5.times do |n|
+        dict_id = db[:dictionaries].insert(
+          source_id: filler.id, slug: format("aaa-%<n>d", n: n), title: format("Filler %<n>d", n: n),
+          language: "lzh"
+        )
+        db[:dictionary_entries].insert(
+          dictionary_id: dict_id, entry_id: format("f%<n>d", n: n), urn: format("urn:nabu:dict:aaa-%<n>d:f%<n>d", n: n),
+          key_raw: "棄", headword: "棄", headword_folded: "棄", gloss: "filler", body: "filler",
+          content_sha256: "x", withdrawn: false
+        )
+      end
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      refute_match(/tls-words/, out, "slug order truncates tls-words out at the default cap")
+      assert_match(/… 1 more entry matches \(--long shows all; --limit raises the cap\)/, out,
+                   "silent truncation is the defect under test")
+
+      long_out, _err2, long_status = with_config(config) { run_cli(%w[define 棄 --long]) }
+      assert_nil long_status
+      assert_match(/tls-words/, long_out, "--long lifts the shelf cap")
+      refute_match(/more entry matches|more entries match/, long_out)
+    end
+  end
+
+  def test_define_resolved_citations_are_capped_by_default_and_long_expands
+    with_tls_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      qi = db[:dictionary_entries].where(entry_id: "uuid-fbba1aa8-49bc-49be-ba1a-a849bc59bed5").first
+      10.times do |n|
+        db[:dictionary_citations].insert(
+          dictionary_entry_id: qi[:id], seq: 100 + n, urn_raw: "(seeded)",
+          cts_work: "urn:nabu:kanripo:KR1h0004", citation: nil, label: format("extra-%02d", n + 1)
+        )
+      end
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[define 棄]) }
+      assert_nil status
+      assert_match(/… and 3 more \(--long shows all\)/, out, "15 resolved, 12 shown")
+      refute_match(/extra-10/, out, "the tail is summarised, not listed")
+
+      long_out, _err2, long_status = with_config(config) { run_cli(%w[define 棄 --long]) }
+      assert_nil long_status
+      assert_match(/extra-10/, long_out, "--long expands every resolved citation")
+      refute_match(/more \(--long shows all\)/, long_out)
     end
   end
 
@@ -314,6 +394,56 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/gold lemmas: 1 token/, out)
       refute_match(/lemma tier:/, out, "gold renders exactly as before — no label noise")
+    end
+  end
+
+  # -- P34-3: the equivalence tier on the search/concord/reflex renders --------
+  # Latin keys minted from scholar-curated Classical-Latin equivalents on
+  # non-Latin passages (CEIPoM). Every render labels them "equivalence" —
+  # never a bare number, never mistakable for attestation, never "silver".
+
+  def test_search_lemma_labels_equivalence_hits_and_gold_only_excludes_them
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma quinque]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:cle:osc:1 \[osc\] \[equivalence\]/, out,
+                   "the hit is an Oscan passage under a Latin key — it says so")
+      assert_match(/2 equivalence \(scholar-curated Classical-Latin equivalents; --gold-only excludes\)/,
+                   out, "the footer totals the equivalence hits and names their nature")
+
+      gold, _err2, status2 = with_config(config) { run_cli(%w[search --lemma quinque --gold-only]) }
+      assert_nil status2
+      assert_match(/no matches/, gold, "--gold-only excludes the equivalence tier wholesale")
+
+      mixed, _err3, status3 = with_config(config) { run_cli(%w[search --lemma hiems --gold-only]) }
+      assert_nil status3
+      assert_match(/urn:nabu:test:treebank:lat:1/, mixed)
+      refute_match(/urn:nabu:test:cle/, mixed, "--gold-only keeps only the attested Latin hit")
+    end
+  end
+
+  def test_concord_lemma_mode_tags_equivalence_rows_and_totals_them
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[concord --lemma quinque]) }
+      assert_nil status
+      assert_match(/urn:nabu:test:cle:osc:1 \[osc\] \[equivalence\]$/, out, "equivalence rows say so")
+      assert_match(/— 2 equivalence \(Classical-Latin equivalents\)$/, out,
+                   "the footer totals the equivalence share")
+    end
+  end
+
+  def test_define_renders_equivalence_counts_labeled_beside_gold
+    with_equivalence_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/^ {2}\[lat\] hiems — 1 passage \(\+2 equivalence\)$/, out,
+                   "the gold count keeps its meaning; equivalence rides beside it, labeled")
+      refute_match(/\[lat\] hiems — 3 passage/, out,
+                   "gold and equivalence must never sum into one number")
+      assert_match(/equivalence-only \(scholar-curated Classical-Latin equivalents/, out)
+      assert_match(/^ {2}\[lat\] quinque — equivalence 2 passages$/, out,
+                   "an equivalence-only reflex renders labeled, never as a bare number")
+      refute_match(/\[lat\] quinque — 2 passages/, out)
     end
   end
 
@@ -841,6 +971,49 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[list shelf --collections]) }
       assert_nil status, "an honest miss is not a failure"
       assert_match(/no collection segments/, out)
+    end
+  end
+
+  # -- list --loans (P34-2): the loans census + the saturation enumeration ---
+
+  def test_list_loans_census_and_honest_miss
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans]) }
+      assert_nil status
+      assert_match(/grc\s+tokens=3\s+passages=2\s+docs=1/, out)
+      assert_match(/Akkadian\s+tokens=1\s+passages=1\s+docs=1/, out, "verbatim codes census too")
+      assert_match(/hbo\s+tokens=1\s+passages=1\s+docs=1/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list plain --loans]) }
+      assert_nil status, "an honest miss is not a failure"
+      assert_match(/no loan annotations/, out)
+    end
+  end
+
+  def test_list_loans_code_ranks_documents_by_saturation
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans grc]) }
+      assert_nil status
+      assert_match(/urn:nabu:cs:a — Alpha \[cop\] tokens=3 passages=2/, out)
+      refute_match(/urn:nabu:cs:b/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[list cs --loans xyz]) }
+      assert_nil status, "an unattested code is an honest miss, exit 0"
+      assert_match(/no documents carry/, out)
+    end
+  end
+
+  def test_list_loans_flag_guards
+    with_loans_corpus do |config|
+      with_config(config) do
+        _out, err, status = run_cli(%w[list --loans])
+        assert_equal 1, status
+        assert_match(/give a SOURCE/, err)
+
+        _out, err, status = run_cli(%w[list cs --loans grc --documents])
+        assert_equal 1, status
+        assert_match(/one of/, err)
+      end
     end
   end
 
@@ -2203,6 +2376,43 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --type epitaph]) }
       assert_equal 1, status
       assert_match(/no facet table.*rebuild/i, err)
+    end
+  end
+
+  # -- search --loans (P34-2, the P17-1 promise: the facet reads the stored
+  # per-passage loan-code counts, no reparse) --------------------------------
+
+  def test_search_loans_filters_and_names_the_filter
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans grc]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:a:1", out)
+      assert_match("urn:nabu:cs:a:2", out)
+      refute_match("urn:nabu:cs:b:1", out) # hbo/Akkadian loans only
+      refute_match("urn:nabu:cs:c:1", out) # loan-free — honest absence
+      assert_match(/loans: grc/, out, "the active loans filter is named in the footer")
+    end
+  end
+
+  def test_search_loans_composes_with_fuzzy_and_lang
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --fuzzy ⲛⲟⲩⲧ --loans hbo]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:b:1", out)
+      refute_match("urn:nabu:cs:a:1", out)
+      assert_match(/loans: hbo/, out)
+
+      out2, _err2, status2 = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans grc --lang eng]) }
+      assert_nil status2
+      assert_match(/no matches/i, out2, "the loans corpus is Coptic — --lang eng empties it honestly")
+    end
+  end
+
+  def test_search_loans_verbatim_code_matches_case_insensitively
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search ⲡⲛⲟⲩⲧⲉ --loans akkadian]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:b:1", out, "the verbatim upstream code (Akkadian) matches case-folded")
     end
   end
 
@@ -4096,6 +4306,58 @@ class CLITest < Minitest::Test
     end
   end
 
+  # A loans (P34-2) corpus: one Coptic-shaped source ("cs") whose passages
+  # carry the P17-1 loans annotation ({code => token count}, the loader's own
+  # canonical_json), one loan-free source ("plain") — trigram-indexed so the
+  # fuzzy composition is testable.
+  def with_loans_corpus
+    Dir.mktmpdir("nabu-cli-loans") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      cs = catalog[:sources].insert(slug: "cs", name: "Coptic", adapter_class: "TestAdapter",
+                                    license_class: "open", enabled: true)
+      plain = catalog[:sources].insert(slug: "plain", name: "Plain", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+      seed_loan_document(catalog, cs, "urn:nabu:cs:a", "Alpha",
+                         [["ⲡⲛⲟⲩⲧⲉ ⲛⲁⲅⲁⲑⲟⲥ", { "grc" => 2 }], ["ⲡⲛⲟⲩⲧⲉ ⲡⲉ", { "grc" => 1 }]])
+      seed_loan_document(catalog, cs, "urn:nabu:cs:b", "Beta",
+                         [["ⲡⲛⲟⲩⲧⲉ ⲥⲁⲃⲃⲁⲧⲟⲛ", { "hbo" => 1, "Akkadian" => 1 }]])
+      seed_loan_document(catalog, cs, "urn:nabu:cs:c", "Gamma", [["ⲡⲛⲟⲩⲧⲉ ⲟⲩⲟⲉⲓⲛ", nil]])
+      seed_loan_document(catalog, plain, "urn:nabu:plain:a", "Plain", [["ⲡⲛⲟⲩⲧⲉ", nil]])
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil,
+                                    fuzzy_slugs: %w[cs plain])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_loan_document(catalog, source_id, doc_urn, title, passages)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: title, language: "cop",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    passages.each_with_index do |(text, loans), seq|
+      annotations = { "tokens" => [] }
+      annotations["loans"] = loans if loans
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "#{doc_urn}:#{seq + 1}", sequence: seq, language: "cop",
+        text: text, text_normalized: Nabu::Normalize.search_form(text, language: "cop"),
+        annotations_json: Nabu::Store::ContentHash.canonical_json(annotations),
+        content_sha256: "#{doc_urn}p#{seq}", revision: 1, withdrawn: false
+      )
+    end
+  end
+
   # A fuzzy (P16-4) corpus: one documentary source ("pap", trigram-indexed)
   # and one literary source ("lit", word-index only) sharing a damaged-text
   # fragment, built through the real Indexer with the documentary scope.
@@ -4522,6 +4784,47 @@ class CLITest < Minitest::Test
   # (the query-layer fixtures) for the define/etym --long surface. No fulltext
   # db is built, so every reflex counts as "not attested here" — exactly the
   # list the P14-11 flag expands. The caller stubs Config.load with the config.
+  # P34-4: the TLS shelf loaded from fixtures (notes/ attestations included)
+  # plus a seeded kanripo side — 論語 with its 005:22a PAGE as a held
+  # passage, 孟子 as a document only — so `define 棄` exercises every
+  # resolution grain: page hit, document-grain fallback, and the honest
+  # unresolved CH-text rows.
+  def with_tls_shelf
+    Dir.mktmpdir("nabu-cli-tls") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "tls", name: "TLS", adapter_class: "Nabu::Adapters::Tls", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::Tls.new, workdir: Nabu::TestSupport.fixtures("tls"))
+      kanripo = Nabu::Store::Source.create(
+        slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",
+        license_class: "attribution"
+      )
+      lunyu = Nabu::Store::Document.create(
+        source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0004", title: "論語", language: "lzh",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      Nabu::Store::Passage.create(
+        document_id: lunyu.id, urn: "urn:nabu:kanripo:KR1h0004:005:22a", sequence: 0,
+        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha256: "x", revision: 1
+      )
+      Nabu::Store::Document.create(
+        source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0001", title: "孟子", language: "lzh",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      db.disconnect
+      yield config
+    end
+  end
+
   def with_recon_shelf
     Dir.mktmpdir("nabu-cli-recon") do |root|
       config = Nabu::Config.new(
@@ -4573,6 +4876,80 @@ class CLITest < Minitest::Test
         db.disconnect
       end
       yield config
+    end
+  end
+
+  # The P34-3 rig: a gold Latin attestation of hiems beside an equivalence
+  # source (CEIPoM-shaped: no "lemma" key, the Classical-Latin equivalent
+  # under latin_equivalent) whose Oscan passages key quinque ×2 and hiems ×2,
+  # plus lat reflex rows on the fixture's *zima entry for the define render.
+  def with_equivalence_recon_shelf
+    with_recon_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      begin
+        gold = Nabu::Store::Source.create(
+          slug: "treebank", name: "Treebank", adapter_class: "TestAdapter", license_class: "open"
+        )
+        seed_gold_lat_passage(gold)
+        equiv = Nabu::Store::Source.create(
+          slug: "cle", name: "CLE", adapter_class: "TestAdapter", license_class: "attribution"
+        )
+        seed_equivalence_passages(equiv)
+        seed_lat_reflexes(db, %w[hiems quinque])
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+        begin
+          Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
+                                        lemma_tiers: { "cle" => "equivalence" })
+        ensure
+          fulltext.disconnect
+        end
+      ensure
+        db.disconnect
+      end
+      yield config
+    end
+  end
+
+  def seed_gold_lat_passage(source)
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:test:treebank:lat", title: "T", language: "lat",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    Nabu::Store::Passage.create(
+      document_id: document.id, urn: "urn:nabu:test:treebank:lat:1", sequence: 0,
+      language: "lat", text: "hiemps", text_normalized: "hiemps",
+      annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "hiems", "form" => "hiemps" }] }),
+      content_sha256: "x", revision: 1
+    )
+  end
+
+  def seed_equivalence_passages(source)
+    document = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:test:cle:osc", title: "Tabula", language: "osc",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    pairs = [%w[quinque pomtis], %w[quinque pumperias], %w[hiems heivam], %w[hiems heivas]]
+    pairs.each_with_index do |(cle, form), i|
+      Nabu::Store::Passage.create(
+        document_id: document.id, urn: "urn:nabu:test:cle:osc:#{i + 1}", sequence: i,
+        language: "osc", text: form, text_normalized: form,
+        annotations_json: JSON.generate(
+          { "tokens" => [{ "lemma_id" => "1a", "latin_equivalent" => cle, "form" => form }] }
+        ),
+        content_sha256: "x", revision: 1
+      )
+    end
+  end
+
+  def seed_lat_reflexes(db, words)
+    entry_id = db[:dictionary_entries].where(urn: "urn:nabu:dict:wiktionary-sla-pro:zima:noun")
+                                      .get(:id) ||
+               flunk("*zima entry missing from the recon fixture")
+    words.each_with_index do |word, i|
+      db[:dictionary_reflexes].insert(
+        dictionary_entry_id: entry_id, seq: 90 + i, lang_code: "lat", language: "lat",
+        word: word, word_folded: Nabu::Normalize.search_form(word, language: "lat")
+      )
     end
   end
 

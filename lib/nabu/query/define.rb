@@ -120,10 +120,11 @@ module Nabu
                          Sequel[:dictionary_entries][:withdrawn] => false)
         dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) if recon_only
         dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
-        dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
-               .limit(limit)
-               .select(*entry_columns)
-               .all
+        dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
+        # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
+        # caps at render so truncation can announce itself honestly).
+        dataset = dataset.limit(limit) if limit
+        dataset.select(*entry_columns).all
       end
 
       def entry_columns
@@ -203,7 +204,16 @@ module Nabu
         existing = @catalog[:passages]
                    .where(urn: candidates, withdrawn: false)
                    .select_map(:urn).to_set
-        candidates.find { |urn| existing.include?(urn) }
+        found = candidates.find { |urn| existing.include?(urn) }
+        return found if found
+
+        # P34-4: a HELD document-urn work whose page probe missed still
+        # resolves — to the document. TLS cites kanripo texts by
+        # (juan, page) whose pagination only sometimes matches the held
+        # edition's anchors; the text-grain claim stays honest when the
+        # page does not. CTS works keep the old nil (an abstract work,
+        # not a show-able doc).
+        document_urn?(work) ? edition_urns.first : nil
       end
 
       # A cts_work that IS an in-catalog document urn (urn:nabu:… — the MW

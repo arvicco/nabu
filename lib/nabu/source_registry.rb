@@ -26,12 +26,24 @@ module Nabu
     SYNC_POLICIES = %w[live manual frozen local].freeze
     DEFAULT_SYNC_POLICY = "manual"
 
+    # The `siblings:` marker for the CTS dotted-version form (P34-0): the
+    # source mints urn:cts documents whose editions share a work prefix and
+    # differ in the trailing dotted version token. Non-CTS sources declare a
+    # LIST of variant-tail patterns instead (see siblings! below).
+    CTS_SIBLINGS = "cts"
+
     # The lemma-index tiers (P26-0). ABSENT = gold — every adapter that
     # existed before the tier did keeps its meaning with zero registry churn;
     # a source whose lemmatization is AUTOMATIC (Diorisis-style) declares
     # `lemma_tier: silver` and its passage_lemmas rows carry the label all
     # the way to the render (attested_count stays gold-only everywhere).
-    LEMMA_TIERS = %w[gold silver].freeze
+    # "equivalence" (P34-3, owner-decided): scholar-curated CROSS-LANGUAGE
+    # equivalence — CEIPoM's Classical-Latin-equivalent column minting Latin
+    # keys on non-Latin passages. A different honesty from silver (silver
+    # means upstream-automatic; this is curated, but it is not attestation
+    # in the key's language either), so it is its own label at every render
+    # and --gold-only excludes it like any non-gold tier.
+    LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
 
     # One registry line. adapter_class_name is a String resolved on demand.
@@ -60,11 +72,19 @@ module Nabu
     # enabled/translations, passed to the adapter's `classes:` keyword by
     # build_adapter. nil (the default) leaves the adapter's own default
     # scope; the adapter validates the class vocabulary.
+    # +siblings+ (P34-0): the `--parallel` work-pattern declaration — HOW
+    # this source's sibling documents spell their variant suffixes. Either
+    # CTS_SIBLINGS (the dotted-version form) or a list of "-"-leading tail
+    # patterns (`["-en"]`, `["-(eng|ita|dipl)"]`, `["-[a-z]+"]`), each a
+    # regex fragment anchored by the compiler (Query::SiblingFamilies).
+    # nil (the default) = the source mints no parallel siblings. Declaring
+    # a tail is a CENSUS CLAIM: no upstream document id may end in it —
+    # the per-source freeze the retired regex constants used to encode.
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier, :classes) do
+                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
                      license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER,
-                     classes: nil)
+                     classes: nil, siblings: nil)
         super
       end
 
@@ -163,10 +183,41 @@ module Nabu
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
         lemma_tier: lemma_tier!(slug, config),
-        classes: classes!(slug, config)
+        classes: classes!(slug, config),
+        siblings: siblings!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    # nil (no siblings), CTS_SIBLINGS, or a non-empty list of "-"-leading
+    # tail patterns each compiling as a regex fragment — caught at load,
+    # not inside a live --parallel session (P34-0).
+    def self.siblings!(slug, config)
+      value = config.fetch("siblings", nil)
+      return nil if value.nil?
+      return value if value == CTS_SIBLINGS
+
+      if value.is_a?(Array) && !value.empty?
+        bad = value.find { |tail| !valid_sibling_tail?(tail) }
+        return value if bad.nil?
+
+        raise ValidationError, "source #{slug.inspect}: siblings tail #{bad.inspect} must be a " \
+                               "\"-\"-leading regex fragment"
+      end
+      raise ValidationError, "source #{slug.inspect}: siblings must be #{CTS_SIBLINGS.inspect} or a " \
+                             "non-empty list of \"-\"-leading tail patterns, got #{value.inspect}"
+    end
+    private_class_method :siblings!
+
+    def self.valid_sibling_tail?(tail)
+      return false unless tail.is_a?(String) && tail.start_with?("-")
+
+      Regexp.new(tail)
+      true
+    rescue RegexpError
+      false
+    end
+    private_class_method :valid_sibling_tail?
 
     # nil (adapter default scope) or a non-empty list of non-empty strings;
     # the class VOCABULARY is the adapter's to validate (P33-0).

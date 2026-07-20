@@ -3,6 +3,26 @@
 require "test_helper"
 
 class NormalizeTest < Minitest::Test
+  # 2026-07-20 incident regression: the owner's many-hour kanripo sync died
+  # at the FIRST parse-time nfc call with LoadError on the stdlib's lazy
+  # `require "unicode_normalize/normalize"` (String#unicode_normalize defers
+  # it to first use; under late-run resource exhaustion, require's load-path
+  # probe fails and masquerades as "cannot load such file"). The stdlib must
+  # therefore be loaded EAGERLY when nabu/normalize loads — long syncs may
+  # never depend on a first-use require surviving hours into a run.
+  def test_unicode_normalize_stdlib_is_loaded_eagerly_not_on_first_use
+    # A fresh interpreter, nabu loaded, NO nfc call made — the stdlib must
+    # already be in $LOADED_FEATURES (in-process assertion would be vacuous:
+    # this suite has long since triggered the lazy path).
+    lib = File.expand_path("../lib", __dir__)
+    out = Nabu::Shell.run(
+      RbConfig.ruby, "-I", lib, "-r", "nabu",
+      "-e", 'puts $LOADED_FEATURES.any? { |f| f.include?("unicode_normalize/normalize") }'
+    )
+    assert_equal "true", out.strip,
+                 "unicode_normalize/normalize must be required at load time by lib/nabu/normalize.rb"
+  end
+
   # NFD-decomposed polytonic Greek "andra" (ἄνδρα), built from explicit
   # codepoints so the fixture stays decomposed regardless of how the editor or
   # filesystem stores the file bytes:
