@@ -1,0 +1,29 @@
+<?xml-model href="../schema/tls.rnc" type="application/relax-ng-compact-syntax"?><div xmlns="http://www.tei-c.org/ns/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tls="http://hxwd.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" type="concept" xml:id="uuid-42b36b25-735c-42c0-9644-15df57265a2f">
+<head>ABANDON</head>
+<div type="definition">
+
+    <p resp="#chris" modified="2021-03-19T14:24:09.507+09:00">DISCARD SOMEONE WHOM ONE SHOULD CARE FOR.</p></div>
+<div type="notes"><div type="old-chinese-criteria" resp="#CH" modified="2026-02-23T22:01:43.093+09:00"><p>&lt;div&gt;1. The most general term for discarding something reluctantly, abandoning what one would have liked to keep, care for or continue to do, is qì 棄, which is more current under the concept DISCARD.&lt;/div&gt;&lt;div&gt;2. Shě 捨/舍 is less dramatic and less abrupt and can have abstract objects.&lt;/div&gt;</p></div></div>
+<div type="pointers">
+        <list type="hypernymy">
+            <item>
+                <ref target="#uuid-2aa87a64-bc2b-49a7-88d4-99361624b20c">DISCARD</ref>
+            </item>
+        </list>
+    </div>
+<div type="source-references">
+        <listBibl>
+<bibl>
+                <ref target="#uuid-dd880ef8-7a84-4159-b910-4eac902c9273">ROBERTS 1998</ref>
+<title>Encyclopedia of Comparative Iconography</title>
+                <biblScope unit="page">3</biblScope>
+                <note>
+<p/>
+                </note>
+            </bibl>
+        </listBibl>
+    </div>
+<div type="words">
+
+    </div>
+</div>

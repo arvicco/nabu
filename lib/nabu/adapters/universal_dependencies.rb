@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../kyoto_kanripo_crosswalk"
+
 module Nabu
   module Adapters
     # The Universal Dependencies adapter (architecture §3, packet P3-3): a thin
@@ -212,6 +214,17 @@ module Nabu
       # by TREEBANKS so the probe output is stable.
       def self.upstream_repo_urls
         TREEBANKS.values.map { |treebank| treebank[:repo] }
+      end
+
+      # P33-3: the Kyoto treebank names its source texts by Kanripo id in
+      # its own `# newdoc id` lines (KR1h0004_001 = 論語 book 1) — the
+      # crosswalk producer re-derives treebank↔kanripo kind=reference
+      # edges from the canonical conllu files after every sync (the P32-6
+      # canonical-file producer seam; see KyotoKanripoCrosswalk).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        KyotoKanripoCrosswalk.new(catalog: catalog, journal: journal)
       end
 
       # Walk <workdir>/<treebank-slug>/*.conllu (sorted), one DocumentRef per

@@ -1,0 +1,142 @@
+#-*- mode: org; -*-
+#+COLUMNS: %30ITEM %15CUSTOM_ID
+** KR2a ZB2a 正史類
+*** KR2a0001 史記-漢-司馬遷
+:PROPERTIES:
+:KR_ID: KR2a0001
+:CUSTOM_ID:  ZB2a0001
+:SOURCE:   四庫全書 文淵閣版, V243.1, p1 - V244.1
+:EXTENT: 130 卷
+:BOOK:   42
+:_RESP:    （漢）司馬遷,（南朝宋）裴駰,（唐）司馬貞,（唐）張守節
+:END:
+**** 人物
+***** 司馬遷
+      :PROPERTIES:
+      :DYNASTY:  漢
+      :FUNCTION: 撰
+      :DATES:    ca. -145 - ca. -86
+      :END:
+
+***** 裴駰
+      :PROPERTIES:
+      :DYNASTY:  南朝宋
+      :FUNCTION: 集解
+      :END:
+
+***** 司馬貞
+      :PROPERTIES:
+      :DYNASTY:  唐
+      :FUNCTION: 索隱
+      :END:
+
+***** 張守節
+      :PROPERTIES:
+      :DYNASTY:  唐
+      :FUNCTION: 正義
+      :END:
+
+**** 版本
+***** WYG
+**** (附)考證
+      :PROPERTIES:
+      :TYPE:   appendix
+      :EXTENT: # 卷
+      :BOOK:   (42)
+      :END:
+***** 人物
+****** 張照
+      :PROPERTIES:
+      :DYNASTY:  清
+      :FUNCTION: 撰
+      :END:
+
+**** 補史記三皇本紀
+      :PROPERTIES:
+      :TYPE:   appendix
+      :EXTENT: 1 卷
+      :BOOK:   (42)
+      :END:
+***** 人物
+****** 司馬貞
+      :PROPERTIES:
+      :DYNASTY:  唐
+      :FUNCTION: 撰
+      :FUNCTION: 注
+      :END:
+
+**** 史記正義論例諡法解列國分野
+      :PROPERTIES:
+      :TYPE:   appendix
+      :EXTENT: 1 卷
+      :BOOK:   (42)
+      :END:
+***** 人物
+****** 張守節
+      :PROPERTIES:
+      :DYNASTY:  唐
+      :FUNCTION: 撰
+      :END:
+
+*** KR2a0038 明史-清-張廷玉
+:PROPERTIES:
+:KR_ID: KR2a0038
+:CUSTOM_ID:  ZB2a0038
+:SOURCE:   四庫全書 文淵閣版, V297.1, p1 - V302.1
+:EXTENT: 332 卷
+:BOOK:   145
+:_RESP:    （清）張廷玉
+:END:
+**** 人物
+***** 張廷玉
+      :PROPERTIES:
+      :DYNASTY:  清
+      :FUNCTION: 奉敕撰
+      :DATES:    1672 - 1755
+      :END:
+
+**** 版本
+***** WYG
+**** 目錄
+      :PROPERTIES:
+      :TYPE:   appendix
+      :EXTENT: 4 卷
+      :BOOK:   (145)
+      :END:
+
+**** (附)考證
+      :PROPERTIES:
+      :TYPE:   appendix
+      :EXTENT: # 卷
+      :BOOK:   (145)
+      :END:
+***** 人物
+****** 嚴福
+      :PROPERTIES:
+      :DYNASTY:  清
+      :FUNCTION: 撰
+      :END:
+
+****** 方煒
+      :PROPERTIES:
+      :DYNASTY:  清
+      :FUNCTION: 撰
+      :END:
+
+*** KR2a0039 清史稿-民國-等
+:PROPERTIES:
+:KR_ID: KR2a0039
+:CUSTOM_ID:  ZB2a0039
+:DYNASTY: 民國
+:RESP: 趙爾巽 等
+:_RESP:    （民國）趙爾巽 等
+:END:
+**** dynasty: 民國
+**** 人物
+***** 趙爾巽 等
+:PROPERTIES:
+:FUNCTION: 巽
+:DYNASTY: 民國
+:END:
+**** 版本
+***** SBCK
