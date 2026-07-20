@@ -10461,3 +10461,49 @@ IFF all four inputs are unchanged — bytes alone don't suffice (this
 week's parser/fold churn is the counterexample). Bulk-load pragmas +
 deferred index creation + parallel parse workers as riders per the
 profile.
+
+# Phase 36 — the engine phase: rebuild performance & deferred maintenance (approved 2026-07-20; rulings D36-a corpus-relative · D36-b silent confirmed · D36-c house line · D36-d hdic license GO, flipped)
+
+Source of truth: the owner-approved plan (orchestrator holds it). Zero
+syncs, zero new sources, zero canonical changes; nothing may disturb
+the owner's ONGOING rebuild — fixture-corpus measurement + read-only
+run history only, until the owner declares the reindex settled (it
+reached kanripo, the tail source, as this was committed).
+
+## P36-0 · The rebuild profiler  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+Per-source/per-stage timing (parse / insert / FTS tokenize / trigram /
+timeline-facet-lemma builders / corpus-wide reindex): `rebuild
+--profile` report + kept-on stage lines in normal progress. The
+running rebuild can't be instrumented retroactively — recover coarse
+numbers from run history/progress timestamps, say so honestly.
+Acceptance: the hotspot table (numbers before optimization, §6b);
+tiers the P36-2/P36-3 dispatch decisions.
+
+## P36-1 · Derivation stamps + `rebuild --incremental`  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+Per-source fingerprint at load: canonical tree sha + parser-family
+code digest + fold-rules version + migration level. `--incremental`
+skips fingerprint-clean sources; dirty ones re-derive with per-source
+FTS delete+reinsert. THE INVARIANT IS SACRED: full rebuild remains the
+reference; test pins incremental ≡ full (counts + shas) on a fixture
+corpus with one dirtied source.
+
+## P36-2 · Bulk-load engineering  [tier: opus] [status: ready] [deps: P36-0]
+Rebuild-only pragmas, per-source transactions, deferred secondary-index
+creation — each measured against the P36-0 baseline; no un-measured
+optimizations.
+
+## P36-3 · Parallel parse workers  [tier: fable] [status: ready — dispatch ONLY if P36-0 shows parse-bound] [deps: P36-0]
+N parsers, one writer behind a queue. If FTS reindex dominates, does
+not dispatch; journal says why.
+
+## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+The P34-2 defect: 1,695 aed-side edges dangle (`dict:aed:159410`
+producer vs `dict:aed:tla159410` shelf). Decide re-mint vs
+resolution-normalize (study the canonical id space; links journal
+supersede makes re-mint clean); acceptance = the egy↔cop tour resolves
+end-to-end via `nabu links`/`etym`.
+
+## P36-5 · Gate-docs refresh + the re-measures  [tier: opus] [status: blocked — awaiting owner "reindex settled"] [deps: owner]
+languages.md + library.md live refresh; the three reindex-blocked
+census stamps re-measured; D36-a corpus-relative df cutoffs implemented
+in parallels.rb (measured before/after — the ruling's execution).

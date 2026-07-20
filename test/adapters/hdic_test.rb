@@ -160,7 +160,7 @@ class HdicTest < Minitest::Test
     entry = registry["hdic"]
     refute_nil entry, "config/sources.yml must register hdic"
     assert_equal Nabu::Adapters::Hdic, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync AND the license ruling"
+    assert entry.enabled, "live (D36-d owner ruling 2026-07-20: license GO; first sync owner-fired as usual)"
     assert_equal "manual", entry.sync_policy
   end
 
