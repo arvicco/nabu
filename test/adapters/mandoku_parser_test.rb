@@ -193,6 +193,248 @@ class MandokuParserTest < Minitest::Test
     assert_equal 25, document.size
   end
 
+  # -- KR5 witness overlays (P37-1 census, ten witness + four plain KR5 repos
+  #    probed 2026-07-20) ----------------------------------------------------
+  #
+  # DZJY overlay repos transcribe the WITNESS edition (CK-KZ 重刊道藏輯要):
+  # file lines are the witness's print columns, witness `<pb:>` anchors carry
+  # a `<juan>p<leaf><side>` page component (THREE id arrangements censused —
+  # `CK-KZ_JY001_01p001a`, `KR5a0004_CK-KZ_01p001a`, `CK-KZ_KR5i0030_01p001a`)
+  # and become the citable page structure; `<md:>` milestones mark where the
+  # BASE edition's pages fall inside the witness text (annotations, never
+  # boundaries); `@fw` running headers are the witness page's forme work.
+  # Witness pages SPAN file boundaries (the carry), and ¶ marks the base
+  # edition's line ends mid-line.
+
+  def test_witness_overlay_document_carries_witness_metadata
+    document = parse("KR5a0001")
+
+    assert_equal "元始無量度人上品妙經", document.title
+    assert_equal "HFL", document.metadata["edition"]
+    assert_equal "CK-KZ", document.metadata["witness"]
+    assert_equal "witness", document.metadata["page_scheme"]
+    assert_equal "KR5", document.metadata["class"]
+  end
+
+  def test_witness_pages_mint_at_witness_juan_leafside_grain
+    document = parse("KR5a0001")
+
+    # 111 witness pages in the fixture files (_001–_003), 109 minted — the
+    # two empty pages (adjacent anchors, below) never mint a citation.
+    assert_equal 109, document.size
+    assert_equal "urn:nabu:kanripo:KR5a0001:01:001a", document.passages.first.urn
+    assert_equal "urn:nabu:kanripo:KR5a0001:01:056a", document.passages.last.urn
+    assert_equal (1..109).to_a, document.map(&:sequence)
+  end
+
+  def test_witness_page_text_is_witness_columns_with_overlay_markup_stripped
+    page = parse("KR5a0001").passages.first
+
+    # File lines are the WITNESS's print columns — the newline preserves the
+    # witness's breaks; ¶ (the BASE edition's line ends, falling mid-column)
+    # and every overlay construct are stripped out of the text.
+    assert page.text.start_with?("道言昔於始青天中碧落空歌大浮黎土受元始度人无量上\n品元始天尊當說是經周")
+    assert page.text.end_with?("皆開聰說經")
+    refute_includes page.text, "¶"
+    refute_includes page.text, "<md:"
+    refute_includes page.text, "@fw"
+    assert_equal "CK-KZ_JY001_01p001a", page.annotations["anchor"]
+  end
+
+  def test_running_heads_and_base_pages_ride_the_witness_page_annotations
+    page = parse("KR5a0001").passages.first
+
+    # "@fw重<md:KR5a0001_HFL_001-001a>¶刋道藏輯要" — the fw text carries an
+    # embedded base-page milestone and a ¶: both extracted, the running head
+    # recorded as it reads.
+    assert_equal %w[重刋道藏輯要 元始无量度人上品妙經卷之一], page.annotations["fw"]
+    # The base edition's front-matter pages (000-001a…000-002b, pilcrow-only
+    # runs BEFORE the first witness anchor) attach pending to the first
+    # witness page, then 001-001a/001-001b fall inside it.
+    assert_equal %w[
+      KR5a0001_HFL_000-001a KR5a0001_HFL_000-001b KR5a0001_HFL_000-002a
+      KR5a0001_HFL_000-002b KR5a0001_HFL_001-001a KR5a0001_HFL_001-001b
+    ], page.annotations["base_pages"]
+  end
+
+  def test_empty_witness_pages_are_dropped_without_minting
+    document = parse("KR5a0001")
+
+    # <pb:CK-KZ_JY001_01p034b><pb:CK-KZ_JY001_01p035a> — adjacent anchors,
+    # the witness page is blank: dropped, the neighbours mint.
+    urns = document.map(&:urn)
+    refute_includes urns, "urn:nabu:kanripo:KR5a0001:01:022b"
+    refute_includes urns, "urn:nabu:kanripo:KR5a0001:01:034b"
+    assert_includes urns, "urn:nabu:kanripo:KR5a0001:01:034a"
+    assert_includes urns, "urn:nabu:kanripo:KR5a0001:01:035a"
+  end
+
+  def test_overlay_headings_shed_pilcrows_and_embedded_milestones
+    document = parse("KR5a0001")
+    page = document.passages.find { |passage| passage.urn.end_with?(":01:012b") }
+
+    # "** 諸天中大梵隱語无量音　　道君譔¶<md:KR5a0001_HFL_001-015a>¶"
+    assert_includes page.annotations["headings"],
+                    { "level" => 2, "text" => "諸天中大梵隱語无量音　　道君譔" }
+    assert_includes page.annotations["headings"], { "level" => 3, "text" => "元始靈書上篇" }
+    assert_includes page.annotations["base_pages"], "KR5a0001_HFL_001-015a"
+  end
+
+  def test_witness_pages_carry_across_file_boundaries
+    # KR5a0004 (textid_CK-KZ arrangement): page 02p048a opens in _006 and its
+    # text runs into _007 (whose body is the single carried column "諸") —
+    # witness pages span files, unlike the plain family's juan-file grain.
+    document = parse("KR5a0004")
+
+    assert_equal 1, document.size
+    page = document.passages.first
+    assert_equal "urn:nabu:kanripo:KR5a0004:02:048a", page.urn
+    assert_equal "KR5a0004_CK-KZ_02p048a", page.annotations["anchor"]
+    assert_includes page.text, "顯功德品" # from _006
+    assert page.text.end_with?("是時善音童子及諸仙\n諸"), "the _007 column must carry"
+    assert_equal %w[KR5a0004_HFL_005-012b KR5a0004_HFL_006-001a], page.annotations["base_pages"]
+  end
+
+  def test_witness_first_arrangement_with_the_text_id_as_container
+    # KR5i0030: <pb:CK-KZ_KR5i0030_01p001a> — witness siglum first, the text
+    # id in the container slot; BASEEDITION CK-KZ IS the witness (no <md:>).
+    document = parse("KR5i0030")
+
+    # "#+TITLE:唱道真言 Changdao Zhenyan" — no space after the colon (the
+    # KR5i header variant), value verbatim including the romanization.
+    assert_equal "唱道真言 Changdao Zhenyan", document.title
+    assert_equal 9, document.size
+    assert_equal "urn:nabu:kanripo:KR5i0030:01:001a", document.passages.first.urn
+    assert_equal "urn:nabu:kanripo:KR5i0030:02:003a", document.passages.last.urn
+    assert document.passages.first.text.start_with?("唱道眞言序")
+    assert_equal "CK-KZ", document.metadata["edition"]
+    assert_equal "CK-KZ", document.metadata["witness"]
+    refute document.passages.first.annotations.key?("base_pages")
+  end
+
+  def test_md_edition_rides_verbatim_even_against_the_declared_baseedition
+    # KR5c0091 declares BASEEDITION HFL but its milestones say WYG — headers
+    # lie in real repos, so the md edition is recorded verbatim, never
+    # validated.
+    document = parse("KR5c0091")
+
+    assert_equal 42, document.size
+    assert_equal "HFL", document.metadata["edition"]
+    assert_equal %w[KR5c0091_WYG_000-1a KR5c0091_WYG_001-1a KR5c0091_WYG_001-1b],
+                 document.passages.first.annotations["base_pages"]
+  end
+
+  def test_plain_mandoku_kr5_repo_parses_at_the_leafside_grain_today
+    document = parse("KR5g0001")
+
+    assert_equal "大慧靜慈妙樂天尊說福德五聖經", document.title
+    assert_equal 16, document.size
+    assert_equal "urn:nabu:kanripo:KR5g0001:000:001a", document.passages.first.urn
+    assert_equal "urn:nabu:kanripo:KR5g0001:000:008b", document.passages.last.urn
+    assert_equal "DZ1192", document.metadata["dzid"]
+    refute document.metadata.key?("page_scheme")
+    assert document.passages.first.text.start_with?("三經同卷滿一")
+  end
+
+  # -- witness overlay loud paths (real-byte defects) ------------------------
+
+  STRAY_KR5A0004_000 = <<~STRAY # the real KR5a0004_000.txt, byte-verbatim
+    # -*- mode: mandoku-view -*-
+    #+TITLE: 元始天尊説無上内祕眞藏經
+    #+DATE: 2015-08-28 23:34:16
+    #+PROPERTY: BASEEDITION HFL
+    #+PROPERTY: WITNESS CK-KZ
+    #+PROPERTY: JUAN 0
+
+    八
+  STRAY
+
+  def test_stray_text_outside_any_witness_page_raises_parse_error
+    # The REAL KR5a0004_000.txt is a header block plus one stray 八 — text
+    # with no page anchor anywhere. Unciteable text quarantines the text
+    # loudly (the file is kept out of the fixture mirror for exactly this
+    # reason; the trim is documented in the fixture README).
+    with_mutated_text("KR5a0004") do |dir|
+      File.write(File.join(dir, "KR5a0004_000.txt"), STRAY_KR5A0004_000)
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5a0004") }
+      assert_match(/text before the first page anchor/, error.message)
+    end
+  end
+
+  def test_witness_anchor_in_a_leafside_document_raises_mixed_schemes
+    with_mutated_text("KR5g0001") do |dir|
+      file = File.join(dir, "KR5g0001_000.txt")
+      File.write(file, "#{File.read(file)}<pb:CK-KZ_JY001_01p001a>\n殘¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5g0001") }
+      assert_match(/mixed page anchor schemes/, error.message)
+    end
+  end
+
+  def test_leafside_anchor_in_a_witness_document_raises_mixed_schemes
+    with_mutated_text("KR5i0030") do |dir|
+      file = File.join(dir, "KR5i0030_002.txt")
+      File.write(file, "#{File.read(file)}<pb:KR5i0030_HFL_002-1a>¶\n殘¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5i0030") }
+      assert_match(/mixed page anchor schemes/, error.message)
+    end
+  end
+
+  def test_base_page_milestone_in_a_leafside_document_raises
+    with_mutated_text("KR5g0001") do |dir|
+      file = File.join(dir, "KR5g0001_000.txt")
+      File.write(file, "#{File.read(file)}<md:KR5g0001_HFL_000-1a>¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5g0001") }
+      assert_match(/base-page milestone/, error.message)
+    end
+  end
+
+  def test_witness_anchor_with_an_unknown_head_component_raises
+    with_mutated_text("KR5a0001") do |dir|
+      file = File.join(dir, "KR5a0001_003.txt")
+      File.write(file, "#{File.read(file)}<pb:QQ-ZZ_JY001_99p001a>\n殘¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5a0001") }
+      assert_match(/unrecognized witness page anchor/, error.message)
+    end
+  end
+
+  def test_unrecognized_page_anchor_shape_raises
+    # A c-register witness page (real shape only in edition-volume anchors,
+    # never in witness pages) matches no censused anchor form — loud, never
+    # silent text pollution.
+    with_mutated_text("KR5a0001") do |dir|
+      file = File.join(dir, "KR5a0001_003.txt")
+      File.write(file, "#{File.read(file)}<pb:CK-KZ_JY001_99p001c>\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5a0001") }
+      assert_match(/unrecognized page anchor/, error.message)
+    end
+  end
+
+  def test_unknown_at_code_raises
+    with_mutated_text("KR5a0001") do |dir|
+      file = File.join(dir, "KR5a0001_003.txt")
+      File.write(file, "#{File.read(file)}@kr 異碼¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5a0001") }
+      assert_match(/unrecognized at-code/, error.message)
+    end
+  end
+
+  def test_duplicate_witness_page_anchor_raises
+    with_mutated_text("KR5i0030") do |dir|
+      file = File.join(dir, "KR5i0030_002.txt")
+      File.write(file, "#{File.read(file)}<pb:CK-KZ_KR5i0030_01p001a>¶\n再¶\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5i0030") }
+      assert_match(/duplicate page anchor/, error.message)
+    end
+  end
+
   # -- file walking ---------------------------------------------------------
 
   def test_header_only_juan_files_contribute_no_passages

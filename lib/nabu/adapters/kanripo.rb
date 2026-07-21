@@ -19,12 +19,15 @@ module Nabu
     # adds KR2 史 histories — 580 catalog ids / 578 repos / ~459 MB (two ids
     # have no repo: KR2a0039 清史稿, KR2d0020 — the recorded-absent path;
     # four KR2 repos are un-catalogued, incl. the whole KR2p 簡帛 subclass,
-    # and stay outside the catalog-driven scope). KR5 道 (the Daozang) is
-    # CENSUSED, NOT INGESTED — its DZJY witness overlays carry `<md:>`
-    # milestones + witness `<pb:>` anchors the mandoku family loudly
-    # rejects; in/out is the owner's call on the P33-1 report. KR6 is
-    # EXCLUDED this phase (doctrine call journaled in 02-sources: CBETA is
-    # the scholarly Buddhist shelf). `classes:` scopes ACQUISITION only —
+    # and stay outside the catalog-driven scope). Wave 3 (P37-1) adds KR5 道
+    # — the Daozang: 1,663 catalog ids / 1,660 repos / only ~84 MB git
+    # (owner-fired sync; 949 repos < 15 KB — mostly short scriptures); its
+    # DZJY witness-overlay repos (`<md:>` base-page milestones + witness
+    # `<pb:…NNpNNNa>` anchors + `@fw` running headers) parse since the P37-1
+    # MandokuParser extension — the witness pages are the citable structure.
+    # KR6 is EXCLUDED this phase (doctrine call journaled in 02-sources:
+    # CBETA is the scholarly Buddhist shelf). `classes:` scopes ACQUISITION
+    # only —
     # discover ingests whatever texts are on disk, so an owner narrowing the
     # config never mass-withdraws held texts.
     #
@@ -58,10 +61,10 @@ module Nabu
       ORG_URL = "https://github.com/kanripo"
       CATALOG_URL = "#{ORG_URL}/KR-Catalog".freeze
 
-      # Waves 1+2 (P33-0/P33-1), in 四部 order — the ORDER is cosmetic: the
-      # wave scope is the sorted union of the classes' catalog ids. The
-      # registry's `classes:` list overrides this.
-      DEFAULT_CLASSES = %w[KR1 KR2 KR3 KR4].freeze
+      # Waves 1–3 (P33-0/P33-1/P37-1), in 四部+道 order — the ORDER is
+      # cosmetic: the wave scope is the sorted union of the classes' catalog
+      # ids. The registry's `classes:` list overrides this.
+      DEFAULT_CLASSES = %w[KR1 KR2 KR3 KR4 KR5].freeze
       VALID_CLASS = /\AKR[1-6]\z/
 
       TEXT_DIR = /\AKR\d[a-z]\d{4}\z/
@@ -69,8 +72,8 @@ module Nabu
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "kanripo",
-        name: "Kanripo — Kanseki Repository 漢籍リポジトリ (waves 1–2: KR1 classics, KR2 histories, " \
-              "KR3 masters, KR4 belles-lettres)",
+        name: "Kanripo — Kanseki Repository 漢籍リポジトリ (waves 1–3: KR1 classics, KR2 histories, " \
+              "KR3 masters, KR4 belles-lettres, KR5 Daoist canon)",
         license: "Org-level grant verbatim: \"Comprehensive collection of premodern Chinese texts. " \
                  "Licensed as CC BY SA 4.0.\" (github.com/kanripo org description; no per-repo LICENSE " \
                  "file; corroborated by ytenx DATA_LICENSE.md; confirmation email to C. Wittern sent " \
