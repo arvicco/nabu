@@ -11,7 +11,7 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 ## The shelves
 
-A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
 |---|---|---|---|---|
@@ -22,6 +22,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `kradfile` | dictionary | attribution | not enabled | 6,355 entries |
 | `oncoj` | annotated corpus | attribution | enabled · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | enabled · frozen | 5,869 entries |
+| `aozora` | texts | open | not enabled | not synced yet |
 
 ## The desk's instruments
 
