@@ -96,21 +96,25 @@ namespace :fold do
     puts "NOTE: a changed table changes lzh/och text_normalized — plan the §9 rebuild (owner-scheduled)."
   end
 
-  desc "Regenerate lib/nabu/jpn.rb from canonical/unihan/Unihan_OtherMappings.txt (or [path])"
-  task :jpn, [:mappings_path] do |_task, args|
+  desc "Regenerate lib/nabu/jpn.rb from Unihan (kJinmeiyoKanji/kJoyoKanji) + KANJIDIC2 variants"
+  task :jpn, [:mappings_path, :kanjidic_path] do |_task, args|
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
 
-    path = args[:mappings_path] ||
-           File.expand_path("canonical/unihan/Unihan_OtherMappings.txt", __dir__)
-    builder = Nabu::Ops::JpnFoldBuilder.new(mappings_path: path)
+    mappings = args[:mappings_path] ||
+               File.expand_path("canonical/unihan/Unihan_OtherMappings.txt", __dir__)
+    kanjidic = args[:kanjidic_path] ||
+               File.expand_path("canonical/edrdg/kanjidic2/kanjidic2.xml.gz", __dir__)
+    builder = Nabu::Ops::JpnFoldBuilder.new(mappings_path: mappings, kanjidic_path: kanjidic)
     File.write(File.expand_path("lib/nabu/jpn.rb", __dir__), builder.render)
     census = builder.census
-    puts "lib/nabu/jpn.rb regenerated: #{census.reform_pairs} reform pairs, #{census.fold_entries} " \
-         "fold entries (Unihan #{census.unihan_version}, file date #{census.unihan_date})"
-    puts "dropped: #{census.nfc_identity_dropped} NFC-identity (compat ideographs), " \
-         "#{census.merges_refused.size} many-to-one merges refused; " \
-         "#{census.hani_composed} composed onto the shinjitai via hani"
+    puts "lib/nabu/jpn.rb regenerated: #{census.reform_pairs} reform 1:1 pairs, #{census.fold_entries} " \
+         "fold entries (Unihan #{census.unihan_version}, KANJIDIC2 #{census.kanjidic_version})"
+    puts "  lane 1 jinmeiyō: #{census.jinmeiyo_pairs}  lane 2 kanjidic 1:1: #{census.kanjidic_singles}  " \
+         "merges: #{census.merges.size} (#{census.merges.values.sum(&:size)} olds)"
+    puts "refused: #{census.ambiguous_refused.size} one-to-many ambiguous, " \
+         "#{census.jinmeiyo_conflicts.size} jinmeiyō-lane conflicts; " \
+         "dropped #{census.nfc_identity_dropped} NFC-identity"
     puts "NOTE: a changed table changes jpn text_normalized — plan the §9 rebuild (owner-scheduled)."
   end
 end

@@ -4,110 +4,143 @@ require "test_helper"
 require "tmpdir"
 
 module Ops
-  # Nabu::Ops::JpnFoldBuilder (P38-4): the generator behind lib/nabu/jpn.rb.
-  # Dev-time ops code, tested the FixtureSentinel way — logic against tmp
-  # inputs, no network. The kJinmeiyoKanji lines below are BYTE-VERBATIM from
-  # canonical/unihan/Unihan_OtherMappings.txt (Unicode 17.0.0, file date
-  # 2025-07-24), hand-SELECTED to cover each branch, never hand-invented —
-  # except the two clearly-labelled synthetic merge lines, which exercise the
-  # deterministic merge-refusal the real file happens not to need.
+  # Nabu::Ops::JpnFoldBuilder (P38-4 / P38-r1): the generator behind
+  # lib/nabu/jpn.rb. Dev-time ops code, tested against tmp Unihan inputs (byte-
+  # verbatim kJinmeiyoKanji/kJoyoKanji lines from Unihan 17.0.0) plus the
+  # trimmed real KANJIDIC2 fixture (test/fixtures/kanjidic2/kanjidic2-sample.xml).
+  # No network. Every fixture kanji is real upstream data; the fixture README
+  # documents what each branch pins.
   class JpnFoldBuilderTest < Minitest::Test
-    HEADER = <<~TXT
+    KANJIDIC = File.expand_path("../fixtures/kanjidic2/kanjidic2-sample.xml", __dir__)
+
+    # Unihan header + the two fields the builder reads: kJinmeiyoKanji (lane 1
+    # pointers) and kJoyoKanji (the jōyō SET, half of the lane-2 filter).
+    #   U+570B(國) → U+56FD(国)   a jinmeiyō 1:1 reform pair
+    #   U+6E1A(渚) → U+FA46(渚)   compat ideograph — NFC-identity, dropped
+    # kJoyoKanji lines mark the fixture's jōyō chars: 国 医 弁 崎 埼 缶 学.
+    UNIHAN = <<~TXT
       # Unihan_OtherMappings.txt
       # Date: 2025-07-24 00:00:00 GMT [KL]
       # Unicode Version 17.0.0
       #
+      U+570B\tkJinmeiyoKanji\t2010:U+56FD
+      U+6E1A\tkJinmeiyoKanji\t2010:U+FA46
+      U+56FD\tkJoyoKanji\t2010
+      U+533B\tkJoyoKanji\t2010
+      U+5F01\tkJoyoKanji\t2010
+      U+5D0E\tkJoyoKanji\t2010
+      U+57FC\tkJoyoKanji\t2010
+      U+7F36\tkJoyoKanji\t2010
+      U+5B66\tkJoyoKanji\t2010
     TXT
 
-    # Real pointer lines:
-    #   國(U+570B) → 国(U+56FD)   normal reform pair (kyūjitai is traditional)
-    #   搖(U+6416) → 揺(U+63FA)   hani-composed: Hani.fold(搖)=揺, so the OLD
-    #                            form folds onto the new (the 奨↔奬 family)
-    #   渚(U+6E1A) → 渚(U+FA46)   compat ideograph — NFC-identity, dropped
-    #   乙(U+4E59) 2010           no pointer — a plain jinmeiyō, ignored
-    REAL_LINES = <<~TXT
-      U+4E59	kJinmeiyoKanji	2010
-      U+570B	kJinmeiyoKanji	2010:U+56FD
-      U+6416	kJinmeiyoKanji	2010:U+63FA
-      U+6E1A	kJinmeiyoKanji	2010:U+FA46
-    TXT
-
-    # SYNTHETIC (not in the real file): two old forms 辨(U+8FA8) 瓣(U+74E3)
-    # pointing at ONE new form 弁(U+5F01) — the reform-merge the builder must
-    # REFUSE rather than pick a winner.
-    SYNTHETIC_MERGE = <<~TXT
-      U+8FA8	kJinmeiyoKanji	2010:U+5F01
-      U+74E3	kJinmeiyoKanji	2010:U+5F01
-    TXT
-
-    def build(body)
+    def build
       Dir.mktmpdir do |dir|
         path = File.join(dir, "Unihan_OtherMappings.txt")
-        File.write(path, HEADER + body)
-        yield Nabu::Ops::JpnFoldBuilder.new(mappings_path: path, generated_on: "2026-07-21")
+        File.write(path, UNIHAN)
+        yield Nabu::Ops::JpnFoldBuilder.new(mappings_path: path, kanjidic_path: KANJIDIC,
+                                            generated_on: "2026-07-21")
       end
     end
 
-    def test_reads_provenance_from_the_header
-      build(REAL_LINES) do |b|
+    def test_reads_provenance_from_both_sources
+      build do |b|
         assert_equal "17.0.0", b.census.unihan_version
         assert_equal "2025-07-24", b.census.unihan_date
+        assert_equal "2026-202", b.census.kanjidic_version
+        assert_equal "2026-07-21", b.census.kanjidic_date
       end
     end
 
-    def test_normal_pair_folds_new_to_old_and_records_the_reform
-      build(REAL_LINES) do |b|
+    def test_lane1_jinmeiyo_pair_folds_new_to_the_traditional_skeleton
+      build do |b|
         assert_equal "國", b.fold_table["国"]
         assert_equal "國", b.reform_pairs["国"]
+        assert_equal 1, b.census.jinmeiyo_pairs
         refute b.fold_table.key?("國"), "the kyūjitai is the skeleton — not a key"
       end
     end
 
-    def test_nfc_identity_compat_ideographs_are_dropped
-      build(REAL_LINES) do |b|
+    def test_lane1_nfc_identity_compat_ideograph_is_dropped
+      build do |b|
         assert_equal 1, b.census.nfc_identity_dropped
         refute b.reform_pairs.key?("渚")
       end
     end
 
-    def test_lines_without_a_pointer_are_ignored
-      build(REAL_LINES) do |b|
-        # U+4E59 (乙) is a plain jinmeiyō with no old form — never a pair.
-        refute_includes b.reform_pairs.values, "乙"
-        refute b.fold_table.key?("乙")
+    def test_lane2_clean_single_folds_but_stays_out_of_the_semantic_table
+      # 醫 (no grade) ↔ 医 (grade 3, kJoyoKanji): a clean kanjidic single — it
+      # FOLDS (findability) but is NOT a semantic reform pair (kanjidic variant
+      # links are not reliable "old forms"; NEW/OLD stays jinmeiyō-authoritative).
+      build do |b|
+        assert_equal "醫", b.fold_table["医"]
+        refute b.reform_pairs.key?("医"), "kanjidic singles are fold-only, not semantic pairs"
+        assert_operator b.census.kanjidic_singles, :>=, 1
+        refute b.fold_table.key?("醫"), "the kyūjitai is the skeleton"
       end
     end
 
-    def test_hani_composition_folds_the_old_form_when_hani_moves_the_kyujitai
-      build(REAL_LINES) do |b|
-        # Hani.fold(搖)=揺, so the canonical is the shinjitai and the OLD form
-        # (搖) folds onto it; the reform pair still reads new=揺 / old=搖.
-        assert_equal "揺", b.fold_table["搖"]
-        assert_equal "搖", b.reform_pairs["揺"]
-        assert_equal 1, b.census.hani_composed
+    def test_lane2_merge_collapses_distinct_words_onto_the_shinjitai
+      # 弁 ← 辨/瓣/辯: three distinct classical words, admitted as a merge onto
+      # 弁's own skeleton (Hani keeps 辨/瓣/辯 apart — the lzh lane is untouched).
+      build do |b|
+        %w[辨 瓣 辯].each { |old| assert_equal "弁", b.fold_table[old], "#{old} must fold to 弁" }
+        assert_equal Nabu::Hani.fold("弁"), b.fold_table["辨"]
+        assert_includes b.census.merges.keys, "弁"
+        # 辧/辮 decode from 弁's variants but are absent from the trimmed fixture
+        # (not literals) so they are not claimants here — only 辨/瓣/辯 are.
+        assert_equal %w[瓣 辨 辯].sort, b.census.merges["弁"].sort
+        refute b.reform_pairs.key?("弁"), "a merge has no single kyūjitai — not a 1:1 pair"
+        # The Chinese lane stays distinct — the merge lives only in the jpn fold.
+        refute_equal Nabu::Hani.fold("辨"), Nabu::Hani.fold("瓣")
       end
     end
 
-    def test_reform_merges_are_refused_and_censused
-      build(REAL_LINES + SYNTHETIC_MERGE) do |b|
-        refute b.reform_pairs.key?("弁"), "a many-to-one merge must not resolve"
-        refute_includes b.fold_table.keys, "辨"
-        refute_includes b.fold_table.keys, "瓣"
-        assert_equal 2, b.census.merges_refused.size
+    def test_lane2_one_to_many_ambiguity_is_refused_and_censused
+      # 碕 is variant-linked to TWO jōyō forms (崎 AND 埼) → never pick; refuse.
+      build do |b|
+        refute b.fold_table.key?("碕"), "an ambiguous old must not fold"
+        refused = b.census.ambiguous_refused.to_h
+        assert_equal %w[埼 崎], refused["碕"].sort
+        # and neither jōyō target folds (its only claimant was the refused 碕)
+        refute b.fold_table.key?("崎")
+        refute b.fold_table.key?("埼")
       end
     end
 
-    def test_census_counts_match_the_selected_fixture
-      build(REAL_LINES) do |b|
-        assert_equal 3, b.census.raw_pointers      # 國, 搖, 渚 (乙 has no pointer)
-        assert_equal 1, b.census.nfc_identity_dropped
-        assert_equal 2, b.census.reform_pairs      # 国/國, 揺/搖
-        assert_equal 2, b.census.fold_entries
+    def test_jis212_variants_are_refused_a_different_standard
+      # 學/斈/斅 carry a <variant var_type="jis212">1-33-55</variant>; decoding
+      # that JIS X 0212 kuten through the 0213 plane-1 table would misread it as
+      # 宋 (U+5B8B). The builder must never introduce that spurious edge.
+      build do |b|
+        refute b.fold_table.key?("宋"), "jis212 misread 宋 must not be a fold key"
+        refute_includes b.fold_table.values, "宋", "jis212 misread 宋 must not be a fold target"
       end
     end
 
-    def test_render_emits_a_loadable_module_with_a_working_fold
-      build(REAL_LINES) do |b|
+    def test_itaiji_cluster_folds_every_variant_onto_the_shinjitai_skeleton
+      # 学 ← 學/斈/斅 (itaiji of one word): all fold onto Hani.fold(学)=學, a
+      # clean fixed point (學 is never itself a key).
+      build do |b|
+        assert_equal "學", b.fold_table["学"]
+        assert_equal "學", b.fold_table["斈"]
+        assert_equal "學", b.fold_table["斅"]
+        refute b.fold_table.key?("學"), "學 is the skeleton — a fixed point"
+      end
+    end
+
+    def test_every_value_is_a_fixed_point_and_single_codepoint
+      build do |b|
+        b.fold_table.each do |from, to|
+          assert_equal 1, from.length
+          assert_equal 1, to.length
+          refute b.fold_table.key?(to), "#{to.inspect} is a fold target but also a key"
+        end
+      end
+    end
+
+    def test_render_emits_a_loadable_module_with_a_working_merge_fold
+      build do |b|
         source = b.render
         assert_includes source, "module Nabu"
         assert_includes source, "module Jpn"
@@ -115,8 +148,11 @@ module Ops
         mod.module_eval(source)
         jpn = mod.const_get(:Nabu).const_get(:Jpn)
         assert_equal "國", jpn.fold("国")
-        assert_equal "國", jpn.old_form("国")
-        assert_equal "国", jpn.new_form("國")
+        assert_equal "醫", jpn.fold("医"), "the kanjidic single folds"
+        assert_equal "弁", jpn.fold("辨")
+        assert_equal jpn.fold("辨"), jpn.fold("弁"), "the merge is reachable through fold equality"
+        assert_equal "國", jpn.old_form("国"), "the jinmeiyō semantic pair survives"
+        assert_nil jpn.old_form("医"), "kanjidic singles are fold-only, not semantic"
       end
     end
   end

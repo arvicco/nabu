@@ -67,7 +67,7 @@ module Nabu
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil, sources: nil, loans: nil)
+              facets: nil, source: nil, sources: nil, loans: nil, exact: false)
         @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
@@ -84,15 +84,32 @@ module Nabu
                .to_h { |row| [row.fetch(:passage_id), row] }
 
         # Reassemble in FTS rank order (the catalog query returns no order),
-        # dropping ids filtered out catalog-side, then trim to the page.
-        page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        # dropping ids filtered out catalog-side. The folded FTS gives
+        # CANDIDATES; --exact (P38-r1) then keeps only passages whose PRISTINE
+        # stored text contains the query glyph-literally — the candidates-then-
+        # verify pattern (the fuzzy/define precedent), no unfolded index needed.
+        candidates = ordered_ids.filter_map { |id| rows[id] }
+        candidates = candidates.select { |row| exact_glyph_match?(row.fetch(:text), query) } if exact
+        page = candidates.first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, from, to, place, source, loans].compact.any? ||
+          filters_active: exact || [lang, license, from, to, place, source, loans].compact.any? ||
             (facets || {}).any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
         page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
+      end
+
+      # --exact verification: every whitespace token of the NFC-normalized
+      # query must appear as a glyph-literal substring in the NFC-normalized
+      # stored text. Glyph-exact, NOT display-exact — the query is NFC-folded
+      # (so a decomposed input still matches composed storage) but nothing
+      # else: no diacritic strip, no case fold, no reform fold. This is what
+      # tells 弁 (the folded default, which also finds 辨/瓣/辯) apart from a
+      # literal 弁.
+      def exact_glyph_match?(text, query)
+        haystack = Nabu::Normalize.nfc(text.to_s)
+        Nabu::Normalize.nfc(query.to_s).split.all? { |token| haystack.include?(token) }
       end
 
       private
