@@ -819,7 +819,10 @@ class DisplayGaijiTest < Minitest::Test
     map = Nabu::Display.load_gaiji_map(File.join(Nabu::Config::PROJECT_ROOT, "config", "gaiji", "kanripo.tsv"))
     assert_equal "𫠦", map["KR0001"], "the faithful codepoint ships"
     assert_nil map["KR0809"], "the image-only ref is deliberately not in the faithful map"
-    assert_operator map.size, :>, 900, "the curated faithful subset (972 refs at census)"
+    # census recalibrated in P38-1: was 972, but 547 of those were Private-Use
+    # codepoints (tofu off the mandoku font) — purged from the faithful lane. The
+    # exact count + full lane invariants live in test/gaiji_tables_test.rb.
+    assert_equal 427, map.size, "the curated faithful subset after the P38-1 PUA purge"
   end
 
   def test_missing_gaiji_map_is_an_empty_map_not_an_error
