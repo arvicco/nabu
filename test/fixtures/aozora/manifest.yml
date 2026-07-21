@@ -25,3 +25,30 @@ files:
     url: https://www.aozora.gr.jp/index_pages/list_person_all_extended_utf8.zip
     whole: false
     trim: header + 6 person-work rows for works 056078/059898/054333 (16 MB CSV inside upstream zip -> 4 KB)
+  # --- P38-i1 incident regressions (copied from the owner's live canonical;
+  # the encoding-fix rule: offending bytes ride as fixtures) ---
+  - path: cards/000608/files/51135_ruby_65180.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical sync (the live-sync crash artifact); a raw GET
+      would also work, but the fixture pins the exact bytes that crashed the owner's first sync
+    canonical: canonical/aozora/cards/000608/files/51135_ruby_65180.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/000608/files/51135_ruby_65180.zip
+    copied: 2026-07-21
+    whole: true
+    trim: none (検疫と荷物検査, Sugimura Sojinkan — PD 新字旧仮名; the single member is named
+      ken\xFCfekito_nimotsu_kensa.txt, invalid in UTF-8 AND CP932 — the P38-i1 offender, must PARSE)
+  - path: cards/001562/files/56151_ruby_60063.zip
+    refetchable: false
+    provenance: local-trim
+    reason: first 4,096 bytes of the genuinely corrupt 549 KB upstream zip (central directory
+      absent from the full file too); re-acquiring means a canonical sync, and the trim is
+      deliberately still-not-a-zip — the quarantine exemplar
+    canonical: canonical/aozora/cards/001562/files/56151_ruby_60063.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/001562/files/56151_ruby_60063.zip
+    copied: 2026-07-21
+    whole: false
+    trim: first 4,096 of 561,972 bytes (head -c 4096) — corrupt either way ("End-of-central-directory
+      signature not found"); must QUARANTINE with ParseError, never abort. NB the live index row for
+      work 056151 now points at 56151_ruby_70005.zip (upstream re-proof), so this zip is also the
+      real stranded-zip exemplar for the unrecognized discovery census — no index row added for it
