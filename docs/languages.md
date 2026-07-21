@@ -59,7 +59,7 @@ extracts) is **filled** — 160 name records, feeding the inline
 
 | Code | Language | One sentence |
 |---|---|---|
-| `lzh` | Literary Chinese | The library's largest language by passages (13.0M) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line. |
+| `lzh` | Literary Chinese | The library's largest language by passages (13.0M) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
 | `grc` | Ancient Greek | The largest *Western* language and second overall (1.99M passages) — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists — 3.03M passages, the largest cuneiform language. |
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions) — now joined at scale by the CDLI and eBL fragment shelves. |
