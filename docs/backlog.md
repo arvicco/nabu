@@ -10495,6 +10495,12 @@ optimizations.
 ## P36-3 · Parallel parse workers  [tier: fable] [status: ready — P36-0 verdict: warranted, awaiting the parse/insert split from the next instrumented rebuild] [deps: P36-0]
 N parsers, one writer behind a queue. If FTS reindex dominates, does
 not dispatch; journal says why.
+VERDICT (instrumented rebuild, 2026-07-21): parse 42m20s vs insert
+119m58s of 164m22s load — the corpus is INSERT-bound, not parse-bound;
+by the packet's own rule it does not dispatch. (Producer-consumer
+overlap could at most hide the 42m under the 120m insert — journaled
+as a future rider IF insert ever stops dominating.) The insert side is
+the frontier: P37-7's design note + further bulk-load work.
 
 ## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: done 2026-07-20] [deps: —]
 The P34-2 defect: 1,695 aed-side edges dangle (`dict:aed:159410`
@@ -10565,13 +10571,34 @@ Wave complete: re-census KR-shaped ann resolution vs the 80.3%
 dispatch-day rate; tls re-parse re-mints citations; report new rate +
 the define surface. Rider-sized.
 
-## P37-6 · Parallel parse workers  [tier: fable] [status: blocked — overnight profile verdict] [deps: profile]
+## P37-6 · Parallel parse workers  [tier: fable] [status: NO-GO 2026-07-21 — profile verdict: INSERT-bound] [deps: profile]
 The P36-3 carryover: dispatch ONLY on a parse-bound split from the
 owner's instrumented rebuild. NO-GO ⇒ journaled why.
 
-## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: blocked — overnight profile] [deps: profile]
+## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: dispatched 2026-07-21 — profile in hand] [deps: —]
 The 16-minute target: fixture-scale prototype + what-breaks note
 (refresh_source! delete contract, query paths); NO production switch.
+PROFILE CONTEXT (2026-07-21): corpus index total 11m30s (fts+lemma
+9m09s fused · trigram 18.9s · reflex 10.7s · alignment 2.6s) — already
+−40% vs the pre-P36-2 16m16s; the note's real target is now ALSO the
+insert side (fulltext double text storage, 12 GB) and the 120m
+catalog insert.
+
+MEGA-SOURCE LOAD REGRESSION (found in the same profile — investigation
+journaled, owner-visible): sources with MANY passages per document got
+SLOWER vs the pre-P36 baseline at identical doc counts — kanripo
+17m47s→61m13s wall (×3.4), cbeta 21m48s→35m51s (×1.6), diorisis
+5m16s→11m09s (×2.1), ud 34s→1m46s (×3) — while many-docs-few-passages
+sources got FASTER (cdli −30%, edh −40%, papyri/aes/mw/lexica all
+faster) and the corpus reindex −40%. Prime suspect: the P36-2 stack
+(batch grain or a deferred index a per-passage path needs) interacting
+with mega-documents — exactly the fixture-scale blind spot P36-2's
+report flagged. Needs a one-source bisect at live scale (kanripo,
+toggling pragmas/batch/deferred-index) BEFORE any further bulk-load
+work; net grand total still ≈3h (175m52s) vs the 2h35m-ish prior, so
+this regression more than ate the fixture-projected wins on the lzh
+giants. Rides P37-7's owner or its own rider — orchestrator call at
+dispatch.
 
 ## P37-8 · Axis-scoped operations  [tier: opus] [status: done] [deps: —]
 The D35-b follow-ups ride (owner-ruled): `search --axis` (membership
