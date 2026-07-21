@@ -10682,7 +10682,7 @@ Unihan; occurrence-weighted coverage report before/after (col 2 =
 occurrence counts), census-stamped per §6b. Acceptance: tables +
 counts, suite green.
 
-## P38-2 · The display ladder  [tier: opus] [status: dispatched] [deps: P38-1]
+## P38-2 · The display ladder  [tier: opus] [status: done 2026-07-21 — merged 17bb70b; `gaiji: ladder` shipped as kanripo policy; substitute mark ⌈…⌉ (U+2308/09, collision-surveyed); placeholder mode preserved as config; suite 5,079 green] [deps: P38-1]
 Reading-mode render: faithful glyph → IDS → marked substitute
 (visibly bracketed, distinct from edh erasure ⟦…⟧) → ⬚ + counted
 footer. display.yml grammar `gaiji: ladder` (`placeholder` stays
