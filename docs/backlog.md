@@ -10706,7 +10706,7 @@ config-only lane (hani-fold mold) if the data supports; else journal
 with the census. Char card jpn corpus counts; japonic axis page +
 docs refresh; gate news post rides.
 
-## P38-i1 · Aozora first-sync crash (incident, live 2026-07-21)  [status: agent resumed on fix]
+## P38-i1 · Aozora first-sync crash (incident, live 2026-07-21)  [status: done — merged; fix 20a7521, worklog entry has the full account]
 Crash at doc ~9,471: real zips carry junk-byte member filenames
 (neither UTF-8 nor CP932) — unzip -Z1 listing decode raised, and the
 unrescued ArgumentError ABORTED the sync (ParseError contract
