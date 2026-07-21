@@ -10707,7 +10707,12 @@ with the census. Char card jpn corpus counts; japonic axis page +
 docs refresh; gate news post rides.
 
 ## D38 decision items
-- D38-b (open, for the gate): jpn fold COVERAGE EXTENSION. The shipped
+- D38-b RULED (owner, 2026-07-21): jōyō-filtered extension, NOW as
+  rider P38-r1 (not P39) — "THIS is japonic-focused Phase after all";
+  the owner's pending full rebuild amortizes the fold-change
+  re-derive. Merge-refusal stays (orchestrator interpretation stated:
+  jōyō filter disambiguates one-to-many; 辨/瓣/辯→弁-class reform
+  merges refused via censused list — owner may veto). Original item: The shipped
   fold covers ONLY the 173 jinmeiyō-listed old-forms — the one clean
   1:1 signal held Unihan provides. The famous high-frequency reform
   pairs (學/学, 體/体, 醫/医, 觀/観 …) are NOT jinmeiyō-listed and stay
