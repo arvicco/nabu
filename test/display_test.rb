@@ -756,11 +756,13 @@ class DisplayGaijiTest < Minitest::Test
   FAITHFUL_MAP = { "KR0001" => "𫠦" }.freeze
   PLACEHOLDER = "\u{2B1A}" # ⬚
 
-  def render(text, mode:, source: "kanripo", gaiji_map: FAITHFUL_MAP, gaiji: "placeholder")
+  def render(text, mode:, source: "kanripo", gaiji_map: FAITHFUL_MAP, gaiji: "placeholder",
+             gaiji_ids: {}, gaiji_substitutes: {})
     with_kanripo_policy(gaiji) do |sp|
       Nabu::Display.render(text, language: "lzh", mode: Nabu::Display.mode(mode),
                                  policies: {}, source: source,
-                                 source_policies: sp, gaiji_map: gaiji_map)
+                                 source_policies: sp, gaiji_map: gaiji_map,
+                                 gaiji_ids: gaiji_ids, gaiji_substitutes: gaiji_substitutes)
     end
   end
 
@@ -810,9 +812,9 @@ class DisplayGaijiTest < Minitest::Test
     assert_match(/placeholder/, error.message, "the error names the valid settings")
   end
 
-  def test_shipped_display_yml_gives_kanripo_the_placeholder_policy
+  def test_shipped_display_yml_gives_kanripo_the_ladder_policy
     sp = Nabu::Display.load_source_policies(File.join(Nabu::Config::PROJECT_ROOT, "config", "display.yml"))
-    assert_equal "placeholder", sp["kanripo"].gaiji
+    assert_equal "ladder", sp["kanripo"].gaiji, "P38-2 made the four-rung ladder kanripo's shipped policy"
   end
 
   def test_shipped_gaiji_map_resolves_a_known_ref_and_omits_the_unresolvable
@@ -838,5 +840,125 @@ class DisplayGaijiTest < Minitest::Test
       File.write(path, "sources:\n  kanripo: { gaiji: #{gaiji} }\n")
       yield Nabu::Display.load_source_policies(path)
     end
+  end
+end
+
+# The four-rung gaiji display LADDER (P38-2; `gaiji: ladder`). Each `&KR\d+;`
+# ref resolves at the first rung that holds it: FAITHFUL glyph (unmarked) → IDS
+# composition (inline) → SUBSTITUTE (marked ⌈…⌉) → ⬚ placeholder. Rungs 1/3/4
+# are exercised with real refs from the shipped tables; rung 2 (empty for
+# kanripo) with a test-scoped IDS table injected through the same seam.
+class DisplayGaijiLadderTest < Minitest::Test
+  PLACEHOLDER = "\u{2B1A}"                 # ⬚
+  MARK_OPEN = "\u{2308}"                   # ⌈
+  MARK_CLOSE = "\u{2309}"                  # ⌉
+
+  # Real data: KR0001 faithful (𫠦), KR4710 a PUA-rescued substitute-only ref
+  # (脊, per test/gaiji_tables_test.rb), KR0809 an image-only tail ref (no lane).
+  FAITHFUL = { "KR0001" => "𫠦" }.freeze
+  SUBSTITUTES = { "KR4710" => "脊" }.freeze
+  # Rung 2 is empty for kanripo today — a test-scoped table (our config shape,
+  # not upstream data) in the ref→IDS-sequence form Aozora (P38-3) will populate.
+  IDS = { "KR9001" => "⿰氵丐" }.freeze
+
+  def ladder(text, gaiji_map: FAITHFUL, gaiji_ids: IDS, gaiji_substitutes: SUBSTITUTES)
+    Dir.mktmpdir("nabu-ladder") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  kanripo: { gaiji: ladder }\n")
+      sp = Nabu::Display.load_source_policies(path)
+      Nabu::Display.render(text, language: "lzh", mode: Nabu::Display.mode("reading"),
+                                 policies: {}, source: "kanripo", source_policies: sp,
+                                 gaiji_map: gaiji_map, gaiji_ids: gaiji_ids,
+                                 gaiji_substitutes: gaiji_substitutes)
+    end
+  end
+
+  def test_rung1_faithful_glyph_is_rendered_unmarked
+    rendered = ladder("子曰&KR0001;學")
+    assert_equal "子曰𫠦學", rendered.text, "the faithful codepoint is the character — no mark"
+    assert_equal 1, rendered.gaiji.faithful
+  end
+
+  def test_rung2_ids_composition_is_rendered_inline
+    rendered = ladder("氵&KR9001;水")
+    assert_equal "氵⿰氵丐水", rendered.text, "the IDS sequence renders inline (Aozora's live lane)"
+    assert_equal 1, rendered.gaiji.ids
+  end
+
+  def test_rung3_substitute_is_rendered_visibly_marked
+    rendered = ladder("&KR4710;椎")
+    assert_equal "#{MARK_OPEN}脊#{MARK_CLOSE}椎", rendered.text,
+                 "a lossy substitute is wrapped in ⌈…⌉ so it is never quoted unaware"
+    assert_equal 1, rendered.gaiji.substitute
+  end
+
+  def test_rung4_unmapped_ref_falls_to_the_placeholder
+    rendered = ladder("學&KR0809;時")
+    assert_equal "學#{PLACEHOLDER}時", rendered.text, "an image-only ref is the ⬚ box — never a fake glyph"
+    assert_equal 1, rendered.gaiji.placeholder
+  end
+
+  def test_all_four_rungs_in_one_line_tally_per_rung
+    rendered = ladder("子&KR0001;曰&KR9001;學&KR4710;而&KR0809;之")
+    assert_equal "子𫠦曰⿰氵丐學#{MARK_OPEN}脊#{MARK_CLOSE}而#{PLACEHOLDER}之", rendered.text
+    refute_includes rendered.text, "&KR", "no raw ref survives the ladder"
+    tally = rendered.gaiji
+    assert_equal 1, tally.faithful
+    assert_equal 1, tally.ids
+    assert_equal 1, tally.substitute
+    assert_equal 1, tally.placeholder
+  end
+
+  def test_faithful_wins_over_a_ref_present_in_a_lower_lane
+    # Lanes are disjoint by construction, but the ladder must still resolve at
+    # the HIGHEST rung: a ref in both faithful and substitute renders faithful,
+    # unmarked, and never touches the substitute counter.
+    rendered = ladder("&KR0001;", gaiji_substitutes: { "KR0001" => "X" })
+    assert_equal "𫠦", rendered.text
+    assert_equal 1, rendered.gaiji.faithful
+    assert_equal 0, rendered.gaiji.substitute
+  end
+
+  def test_placeholder_mode_never_consults_the_lower_lanes
+    # `gaiji: placeholder` is rungs 1 + 4 ONLY (P37-3, preserved): even with the
+    # IDS and substitute tables in hand, an unfaithful ref is the ⬚ box.
+    Dir.mktmpdir("nabu-ladder") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  kanripo: { gaiji: placeholder }\n")
+      sp = Nabu::Display.load_source_policies(path)
+      rendered = Nabu::Display.render("&KR4710;&KR9001;", language: "lzh",
+                                                          mode: Nabu::Display.mode("reading"), policies: {},
+                                                          source: "kanripo", source_policies: sp,
+                                                          gaiji_map: FAITHFUL, gaiji_ids: IDS,
+                                                          gaiji_substitutes: SUBSTITUTES)
+      assert_equal "#{PLACEHOLDER}#{PLACEHOLDER}", rendered.text
+      assert_equal 2, rendered.gaiji.placeholder
+      assert_equal 0, rendered.gaiji.substitute
+      assert_equal 0, rendered.gaiji.ids
+    end
+  end
+
+  def test_diplomatic_keeps_refs_verbatim_under_ladder_policy
+    Dir.mktmpdir("nabu-ladder") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  kanripo: { gaiji: ladder }\n")
+      sp = Nabu::Display.load_source_policies(path)
+      rendered = Nabu::Display.render("&KR4710;", language: "lzh",
+                                                  mode: Nabu::Display.mode("diplomatic"), policies: {},
+                                                  source: "kanripo", source_policies: sp,
+                                                  gaiji_substitutes: SUBSTITUTES)
+      assert_equal "&KR4710;", rendered.text, "the byte-honest view keeps the ref as stored"
+      assert_nil rendered.gaiji, "no gaiji transform ran → no tally"
+    end
+  end
+
+  def test_shipped_substitute_lane_marks_a_pua_rescued_ref
+    # End-to-end against the SHIPPED tables (KR4710 → 脊, the P38-1 rescue).
+    root = Nabu::Config::PROJECT_ROOT
+    faithful = Nabu::Display.load_gaiji_map(File.join(root, "config", "gaiji", "kanripo.tsv"))
+    subs = Nabu::Display.load_gaiji_map(File.join(root, "config", "gaiji", "kanripo-substitutes.tsv"))
+    rendered = ladder("&KR4710;", gaiji_map: faithful, gaiji_ids: {}, gaiji_substitutes: subs)
+    assert_equal "#{MARK_OPEN}脊#{MARK_CLOSE}", rendered.text
+    assert_nil faithful["KR4710"], "the rescued ref is NOT in the faithful lane"
   end
 end
