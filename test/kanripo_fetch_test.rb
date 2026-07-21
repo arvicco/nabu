@@ -51,6 +51,44 @@ class KanripoFetchTest < Minitest::Test
     assert_equal "absent", ledger.dig("texts", "KR1b0049", "status")
   end
 
+  # P37-r1 (owner's KR5 wave, 2026-07-21): upstream repos can EXIST yet hold
+  # ZERO commits (KR5c0144 — "cloned an empty repository"). The old flow
+  # died pinning HEAD on the fresh clone, then the on-disk empty clone
+  # wedged EVERY re-run (existing-clone failures propagate). An empty repo
+  # must be recorded like an absent one (status "empty", retried on catalog
+  # advance), the useless clone removed, and the wave must move on.
+  def test_empty_upstream_repo_records_empty_and_wave_continues
+    empty_dir = File.join(@upstream, "KR1a0171")
+    FileUtils.mkdir_p(empty_dir)
+    Nabu::Shell.run("git", "-C", empty_dir, "init", "-q")
+    add_catalog_id("KR1a0171")
+
+    result = sync!
+
+    assert_equal %w[KR1a0170 KR3g0023], result.cloned.sort, "the wave completes past the empty repo"
+    assert_includes result.absent, "KR1a0171", "an empty repo reports beside the absent ids"
+    assert_equal "empty", read_ledger.dig("texts", "KR1a0171", "status")
+    refute Dir.exist?(File.join(@dir, "KR1a0171")), "the zero-data clone is removed, not left to wedge"
+  end
+
+  def test_wedged_empty_clone_on_disk_unwedges_on_the_next_wave
+    # Reproduce the owner's state: a prior run left an empty clone behind.
+    empty_dir = File.join(@upstream, "KR1a0171")
+    FileUtils.mkdir_p(empty_dir)
+    Nabu::Shell.run("git", "-C", empty_dir, "init", "-q")
+    add_catalog_id("KR1a0171")
+    wedged = File.join(@dir, "KR1a0171")
+    FileUtils.mkdir_p(wedged)
+    Nabu::Shell.run("git", "clone", "-q", empty_dir, wedged)
+
+    result = sync!
+
+    assert_includes result.absent, "KR1a0171"
+    assert_equal "empty", read_ledger.dig("texts", "KR1a0171", "status")
+    refute Dir.exist?(wedged)
+    assert_equal %w[KR1a0170 KR3g0023], result.cloned.sort
+  end
+
   def test_scope_is_the_configured_classes_only
     result = sync!(classes: ["KR3"])
 
@@ -175,6 +213,14 @@ class KanripoFetchTest < Minitest::Test
       classes: classes, delay: delay, guard: guard,
       sleeper: ->(seconds) { @slept << seconds }
     )
+  end
+
+  def add_catalog_id(id)
+    kclass = id[0, 4]
+    path = File.join(@upstream, "KR-Catalog", "KR", "#{kclass}.txt")
+    extra = "*** #{id} 測試空倉\n:PROPERTIES:\n:KR_ID: #{id}\n:END:\n"
+    content = (File.exist?(path) ? File.read(path) : "") + extra
+    commit_file(File.join(@upstream, "KR-Catalog"), "KR/#{kclass}.txt", content)
   end
 
   def seed_catalog
