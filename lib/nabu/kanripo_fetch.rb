@@ -138,10 +138,17 @@ module Nabu
       return @skipped += 1 if pinned_current?(id)
 
       dir = text_dir(id)
+      # P37-r1: a prior wave's EMPTY clone (upstream repo exists with zero
+      # commits — KR5c0144, 2026-07-21) wedges every existing-clone git
+      # operation. It holds zero canonical data, so removing it is not the
+      # destructive-fetch sin; re-clone fresh below and re-judge (upstream
+      # may have gained commits since).
+      FileUtils.rm_rf(dir) if Dir.exist?(File.join(dir, ".git")) && empty_clone?(dir)
       pull = GitFetch.new(repo_url: "#{@repo_base}/#{id}", dir: dir,
                           attic_dir: File.join(@attic_dir, id), progress: @progress)
       fresh = !Dir.exist?(File.join(dir, ".git"))
       return unless prepare_text!(pull, id, fresh: fresh)
+      return record_empty!(id, dir) if empty_clone?(dir)
 
       @guard&.call(dir, pull.doomed_paths)
       pull.complete!
@@ -158,7 +165,28 @@ module Nabu
       pin = ledger.dig("texts", id)
       return false unless pin && pin["catalog_sha"] == @catalog_sha
 
-      pin["status"] == "absent" || Dir.exist?(File.join(text_dir(id), ".git"))
+      %w[absent empty].include?(pin["status"]) || Dir.exist?(File.join(text_dir(id), ".git"))
+    end
+
+    # A clone whose repository has no commits: HEAD verifies in every real
+    # text repo; an upstream-empty repo (P37-r1) fails it. Only called when
+    # .git exists, so the failure is unambiguous.
+    def empty_clone?(dir)
+      Shell.run("git", "-C", dir, "rev-parse", "--verify", "-q", "HEAD")
+      false
+    rescue Shell::Error
+      true
+    end
+
+    # The empty-repo verdict: pinned like "absent" (skipped until the
+    # catalog advances, then re-judged), reported in the absent list, and
+    # the zero-data clone removed so it can never wedge a later wave.
+    def record_empty!(id, dir)
+      record_text!(id, { "status" => "empty", "catalog_sha" => @catalog_sha })
+      FileUtils.rm_rf(dir)
+      @absent << id
+      pace!
+      nil
     end
 
     # Phase 1 for one text. A FRESH clone failing with git's not-found
