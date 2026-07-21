@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The sample is a decompressed, hand-trimmed slice of the held KANJIDIC2
+# (canonical/edrdg/kanjidic2/kanjidic2.xml.gz): 17 <character> blocks copied
+# BYTE-VERBATIM, the DTD internal subset removed so it parses standalone.
+# local-trim / non-refetchable — upstream ships one gzipped XML, so a raw GET
+# returns the whole compressed corpus, not this decompressed subset.
+source: kanjidic2
+adapter_test: null
+retrieved: 2026-07-21
+files:
+  - path: kanjidic2-sample.xml
+    refetchable: false
+    provenance: local-trim
+    reason: 17 verbatim <character> blocks lifted from the held gz + decompressed; re-acquiring = the whole kanjidic2.xml.gz, not a raw GET of this subset
+    canonical: canonical/edrdg/kanjidic2/kanjidic2.xml.gz
+    upstream: http://www.edrdg.org/kanjidic/kanjidic2.xml.gz
+    copied: 2026-07-21
+    whole: false
+    trim: 17 of ~13,108 entries (国 國 医 醫 弁 辨 瓣 辯 崎 埼 碕 缶 罐 學 学 斈 斅); DTD subset removed
