@@ -19,6 +19,10 @@ development gate, is
 in the repository; the numbers below are taken from it, and were read from
 the live catalog, not estimated.
 
+The same shelves, grouped by the owner's research desks rather than by
+collection — each with its instruments, CLI recipes and terminal setup — are
+the [research axes]({{ '/axis/' | relative_url }}).
+
 | Collection | Contents | Period | Size | License class |
 |---|---|---|---|---|
 | Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen, with 650 aligned English translations | 8th c. BCE – 3rd c. CE | 1,418 docs / 394,706 passages | CC BY-SA |

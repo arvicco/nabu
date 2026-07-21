@@ -58,24 +58,117 @@ module Nabu
     #   page; the leaf-side grain has no c). They interleave the leaf-side
     #   pagination mid-page: recorded verbatim on the open page as
     #   annotations "edition_pages", never page text, never a page boundary.
-    #   Anchors of a DIFFERENT text id (the KR5 witness overlays' `<pb:
-    #   CK-KZ_JY001_01p001a>` + `<md:>` milestones) stay unrecognized —
-    #   their files fail the loud text-outside-page path, which is the P33-1
-    #   verdict on KR5: no ingestion without its own parser wave.
+    #
+    # == KR5 witness overlays (P37-1, ten witness + four plain KR5 repos
+    #    probed 2026-07-20)
+    #
+    # The DZJY overlay repos (WITNESS CK-KZ 重刊道藏輯要) transcribe the
+    # WITNESS edition: file lines are the witness's print columns, and the
+    # citable page structure is the witness's own `<pb:>` anchors, whose page
+    # component is `<juan>p<leaf><side>` (never the plain `-` form). THREE
+    # anchor arrangements censused — `CK-KZ_JY001_01p001a` (witness siglum +
+    # DZJY volume), `KR5a0004_CK-KZ_01p001a` (text id + witness), and
+    # `CK-KZ_KR5i0030_01p001a` (witness siglum + text id) — so a witness
+    # anchor is accepted iff its FIRST component is the text id or the
+    # declared WITNESS; anything else is a loud ParseError. Passage urn =
+    # <text-urn>:<witness-juan>:<leaf><side>, digits verbatim; the census
+    # found (juan, leaf-side) unique per repo in every probe, and the
+    # duplicate-anchor error keeps that honest at sync.
+    #
+    # - Witness pages SPAN file boundaries (pervasive: 10/17 files of
+    #   KR5b0147 open mid-page) — in the witness scheme the open page CARRIES
+    #   across files instead of flushing at the juan-file grain. Sorted file
+    #   order need not follow witness page order (KR5c0067's _000 front
+    #   matter sits at witness juan 03, _001–_010 walk juan 02) — keys are
+    #   global, so the carry stays correct.
+    # - `<md:<KR-id>_<edition>_<NNN>-<leaf><side>>` milestones mark where the
+    #   BASE edition's pages fall inside the witness text: annotations
+    #   "base_pages" on the open page (pending → first page before the first
+    #   anchor), never page text, never a boundary. The md edition component
+    #   is recorded VERBATIM and never validated against BASEEDITION —
+    #   KR5c0091 declares HFL but milestones say WYG (headers lie).
+    # - `@fw` lines (line-initial only) are the witness page's running
+    #   headers (forme work): annotations "fw", with embedded ¶ and `<md:>`
+    #   milestones extracted ("@fw重<md:…_001-001a>¶刋道藏輯要" reads
+    #   重刋道藏輯要). Any other at-code is a loud ParseError.
+    # - ¶ marks the BASE edition's line ends (they fall mid-line); overlay
+    #   headings DO carry ¶ and embedded milestones — both extracted from
+    #   the heading text (plain-scheme headings carry neither, unchanged).
+    # - ONE page scheme per document: the first page anchor locks it, and a
+    #   leaf-side anchor in a witness document (or vice versa, or an `<md:>`/
+    #   `@fw` in a leaf-side document) raises — every censused repo is
+    #   scheme-pure. Documents in the witness scheme carry metadata
+    #   "page_scheme" => "witness" plus the declared "witness" siglum.
+    # - Anything `<…>`-shaped that survives anchor/milestone extraction is a
+    #   loud ParseError (unrecognized construct) — never silent text
+    #   pollution (census: zero stray angle brackets in any probed repo).
+    #
+    # == P37-r2 regression census (the FULL live KR1–4 tree, 3,506 texts,
+    #    old-vs-new parsed 2026-07-21 — the probe sets above missed these)
+    #
+    # The P37-1 loudness above regressed 31 previously-served KR1–2 texts
+    # (+KR3/4 equivalents); the wild shapes, each now handled or ruled:
+    # - "</TEI¶" as a juan file's final line (12 texts, always right after a
+    #   page anchor): the mandoku TEI export's dangling close tag →
+    #   annotations "cruft", never text (pre-P37 it was served as a junk
+    #   passage).
+    # - '<折 t="33"/>' self-closed inline elements inside commentary (the
+    #   CRUFT second alternative) → "cruft", surrounding text preserved.
+    # - Bare angle brackets ("昏>昏>" across the KR3e medical shelf, "=>",
+    #   KR4a0001's lone "　<" line): canonical text bytes, not constructs —
+    #   ride byte-identically. Only a `<…>` pair or repeated `<` can be an
+    #   unextracted tag (markup never spans a print line).
+    # - Juan-less "<pb:KR2a0012_WYG_1a>" tags beside a real anchor —
+    #   upstream's own history calls them "spurious pbs" → "cruft", never a
+    #   boundary.
+    # - Edition-volume register d (KR2h0003/KR2k0054/KR2k0060) and leaf-side
+    #   side d (KR1h0024's 030-6d singleton): the [a-d] classes, verbatim.
+    # - KEEP-LOUD (deliberate): unresolved git merge-conflict markers
+    #   ("<<<<<<< HEAD", KR1j0018) — both hunk versions present in the file;
+    #   canonical damage a parser must never serve silently.
     class MandokuParser
       TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+)\.txt\z/
       HEADER_LINE = /\A#(?:\+|\s|-|\z)/
       PROPERTY = /\A#\+PROPERTY:\s+(?<key>\S+)\s+(?<value>.*)\z/
-      TITLE = /\A#\+TITLE:\s+(?<value>.*)\z/
-      ANCHOR = /<pb:(?<anchor>(?<text>KR\d[a-z]\d{4})_(?<edition>[^_>]+)_(?<juan>\d+)-(?<page>\d+[ab]))>/
+      # KR5i repos ship `#+TITLE:唱道真言 Changdao Zhenyan` — no space after
+      # the colon (P37-1 census): the separator is optional, value verbatim.
+      TITLE = /\A#\+TITLE:\s*(?<value>.*)\z/
+      # Any page-break tag; the inner form decides plain page vs edition-
+      # volume annotation vs witness page — or raises (never silent).
+      PAGE_BREAK = /<pb:(?<anchor>[^>]*)>/
+      # Side class [a-d]: the corpus's single nonstandard side (KR1h0024's
+      # …030-6d, the P37-r2 census) mints verbatim like every other anchor —
+      # pre-P37 the whole tag rode as junk text inside the open page.
+      ANCHOR = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<juan>\d+)-(?<page>\d+[a-d])\z/
       # The print edition's own volume pagination interleaved mid-page (the
       # KR2 census): same text id, alpha-prefixed volume ordinal, a–c
       # register. Never a page boundary — an annotation on the open page.
-      EDITION_PAGE = /<pb:(?<anchor>(?<text>KR\d[a-z]\d{4})_(?<edition>[^_>]+)_(?<volume>[A-Z]+\d+)-(?<page>\d+[a-c]))>/
+      # Register class [a-d]: a–c censused at P33-1; d attested in the wild
+      # WYG volumes (KR2h0003/KR2k0054/KR2k0060, the P37-r2 census).
+      EDITION_PAGE = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<volume>[A-Z]+\d+)-(?<page>\d+[a-d])\z/
+      # Degenerate pb tags (P37-r2 census): juan-less "<pb:KR2a0012_WYG_1a>"
+      # (always right beside a real anchor — upstream's own commit history
+      # calls them "spurious pbs") and side-less "<pb:KR4h0159_WYG_065-60>"
+      # (the side letter typo'd into a 0, between anchors 6a and 7a). Cruft
+      # annotations, never boundaries.
+      SPURIOUS_PB = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?:\d+[a-d]|\d+-\d+)\z/
+      # The witness page form (the KR5 overlay census): juan `p` leaf-side.
+      WITNESS_PAGE = /\A(?<head>[^_]+)_(?<container>[^_]+)_(?<juan>\d+)p(?<page>\d+[ab])\z/
+      # Base-edition page milestones overlaid on the witness text.
+      MILESTONE = /<md:(?<anchor>[^>]*)>/
+      # Leaked export markup censused in the REAL corpus (P37-r2): the
+      # mandoku TEI export's dangling close tag ("</TEI¶" as a juan file's
+      # final line — 12 KR1/KR2 texts) and self-closed inline elements
+      # ('<折 t="33"/>' in KR1c0009's commentary). Pre-P37 these rode
+      # SILENTLY AS TEXT; now they ride annotations "cruft" verbatim — never
+      # page text, never silently dropped. Any OTHER `<…>`-shaped survivor
+      # is still the loud unrecognized-construct ParseError.
+      CRUFT = Regexp.union(%r{</TEI(?=¶|\z)}, %r{<[^<>]+/>})
       SRC_COMMENT = /\A#\s+src:\s+(?<ref>.*)\z/
       HEADING = /\A(?<stars>\*+)\s+(?<text>.*)\z/
       GAIJI = /&[A-Za-z][A-Za-z0-9-]*;/
       PILCROW = "¶"
+      FW = /\A@fw/
 
       LANGUAGE = "lzh"
 
@@ -87,11 +180,12 @@ module Nabu
         raise ParseError, "#{dir}: no #{text_id}_*.txt juan files" if files.empty?
 
         headers = read_headers(files)
+        state = collect_pages(files, urn: urn, text_id: text_id, witness: headers["witness"])
         document = Nabu::Document.new(
           urn: urn, language: LANGUAGE, canonical_path: File.expand_path(dir),
-          title: headers["title"], metadata: document_metadata(text_id, headers)
+          title: headers["title"], metadata: document_metadata(text_id, headers, state[:scheme])
         )
-        append_pages!(document, files, urn: urn)
+        state[:passages].each { |passage| document << passage }
         document
       end
 
@@ -124,28 +218,38 @@ module Nabu
         headers
       end
 
-      def document_metadata(text_id, headers)
+      def document_metadata(text_id, headers, scheme)
         metadata = { "class" => text_id[0, 3] }
         metadata["edition"] = headers["baseedition"] if headers["baseedition"]
         metadata["cat"] = headers["cat"] if headers["cat"]
+        metadata["dzid"] = headers["dzid"] if headers["dzid"]
+        metadata["witness"] = headers["witness"] if headers["witness"]
+        metadata["page_scheme"] = "witness" if scheme == :witness
         metadata
       end
 
       # -- page assembly ---------------------------------------------------
 
-      def append_pages!(document, files, urn:)
-        state = { document: document, urn: urn, sequence: 0, seen: {}, page: nil }
+      def collect_pages(files, urn:, text_id:, witness:)
+        state = { passages: [], urn: urn, text_id: text_id, witness: witness,
+                  scheme: nil, sequence: 0, seen: {}, page: nil, pending: empty_annotations }
         files.each do |file|
-          state[:pending] = empty_annotations
+          # Plain scheme: pages never span files (juan = file grain) and
+          # dangling pendings drop. The witness scheme CARRIES both (the
+          # census: witness pages routinely cross the file seams).
+          state[:pending] = empty_annotations unless state[:scheme] == :witness
           each_line(file) { |line| consume_line(state, file, line) }
-          flush_page!(state) # pages never span files (juan = file grain)
+          flush_page!(state) unless state[:scheme] == :witness
         end
+        flush_page!(state)
+        state
       end
 
       def consume_line(state, file, line)
         return if line.empty?
         return consume_comment(state, line) if line.start_with?("#")
-        return consume_heading(state, line) if HEADING.match?(line)
+        return consume_at_code(state, file, line) if line.start_with?("@")
+        return consume_heading(state, file, line) if HEADING.match?(line)
 
         consume_text_line(state, file, line)
       end
@@ -154,31 +258,91 @@ module Nabu
         match = SRC_COMMENT.match(line)
         return unless match
 
-        bucket = state[:page] ? state[:page][:annotations] : state[:pending]
-        bucket["src_refs"] << match[:ref].strip
+        annotation_bucket(state)["src_refs"] << match[:ref].strip
       end
 
-      def consume_heading(state, line)
+      # `@fw` = the witness page's running header (forme work; the only
+      # censused at-code): milestones and ¶ extracted, the head recorded as
+      # it reads. Any other at-code is new — loud.
+      def consume_at_code(state, file, line)
+        raise ParseError, "#{file}: unrecognized at-code (#{line[0, 20].inspect})" unless FW.match?(line)
+
+        text = clean_fragment(state, file, line.sub(FW, "")).delete(PILCROW).strip
+        annotation_bucket(state)["fw"] << text unless text.empty?
+      end
+
+      def consume_heading(state, file, line)
         match = HEADING.match(line)
-        bucket = state[:page] ? state[:page][:annotations] : state[:pending]
-        bucket["headings"] << { "level" => match[:stars].length, "text" => match[:text].strip }
+        # Overlay headings carry ¶ and embedded milestones (plain-scheme
+        # headings carry neither — a no-op there).
+        text = clean_fragment(state, file, match[:text]).delete(PILCROW).strip
+        annotation_bucket(state)["headings"] << { "level" => match[:stars].length, "text" => text }
       end
 
-      # Split the physical line on page anchors: each fragment belongs to the
-      # page open at that point; an anchor closes the current page and opens
-      # the next.
+      # Split the physical line on page-break tags: each fragment belongs to
+      # the page open at that point; a page anchor closes the current page
+      # and opens the next (an edition-volume anchor only annotates).
       def consume_text_line(state, file, line)
         rest = line
-        while (match = ANCHOR.match(rest))
+        while (match = PAGE_BREAK.match(rest))
           append_text(state, file, match.pre_match)
-          open_page!(state, file, match)
+          consume_page_break(state, file, match[:anchor])
           rest = match.post_match
         end
         append_text(state, file, rest)
       end
 
+      def consume_page_break(state, file, anchor)
+        if (match = ANCHOR.match(anchor))
+          open_page!(state, file, anchor, match, :leafside)
+        elsif EDITION_PAGE.match?(anchor)
+          annotation_bucket(state)["edition_pages"] << anchor
+        elsif (match = WITNESS_PAGE.match(anchor))
+          witness_page!(state, file, anchor, match)
+        elsif SPURIOUS_PB.match?(anchor)
+          annotation_bucket(state)["cruft"] << "<pb:#{anchor}>"
+        else
+          raise ParseError, "#{file}: unrecognized page anchor <pb:#{anchor}>"
+        end
+      end
+
+      # A witness anchor's first component is the text id or the declared
+      # WITNESS in every censused arrangement — anything else is new.
+      def witness_page!(state, file, anchor, match)
+        lock_scheme!(state, file, :witness, anchor)
+        unless match[:head] == state[:text_id] || match[:head] == state[:witness]
+          raise ParseError, "#{file}: unrecognized witness page anchor <pb:#{anchor}>"
+        end
+
+        open_page!(state, file, anchor, match, :witness)
+      end
+
+      def lock_scheme!(state, file, scheme, anchor)
+        state[:scheme] ||= scheme
+        return if state[:scheme] == scheme
+
+        raise ParseError, "#{file}: mixed page anchor schemes at <pb:#{anchor}>"
+      end
+
+      def open_page!(state, file, anchor, match, scheme)
+        lock_scheme!(state, file, scheme, anchor)
+        key = "#{match[:juan]}:#{match[:page]}"
+        # Re-asserting the OPEN page's anchor is upstream's way of resuming
+        # the pagination after an interleave (census: 1,507 instances in
+        # 大清一統志 alone, every one the open page) — no-op.
+        return if state[:page] && state[:page][:key] == key
+
+        flush_page!(state)
+        raise ParseError, "#{file}: duplicate page anchor <pb:#{anchor}>" if state[:seen].key?(key)
+
+        state[:seen][key] = true
+        annotations = state[:pending]
+        state[:pending] = empty_annotations
+        state[:page] = { key: key, anchor: anchor, lines: [], annotations: annotations }
+      end
+
       def append_text(state, file, fragment)
-        fragment = extract_edition_pages(state, fragment)
+        fragment = clean_fragment(state, file, fragment)
         text = fragment.delete(PILCROW).strip
         return if text.empty?
 
@@ -187,36 +351,45 @@ module Nabu
         state[:page][:lines] << fragment.delete(PILCROW).rstrip
       end
 
-      # Strip the interleaved edition-volume anchors (the KR2 census shape)
-      # out of the print line, recording each verbatim on the page open at
-      # that point (pending before the first page — unattested, but the
-      # comment/heading precedent applies).
-      def extract_edition_pages(state, fragment)
-        fragment.gsub(EDITION_PAGE) do
-          bucket = state[:page] ? state[:page][:annotations] : state[:pending]
-          bucket["edition_pages"] << Regexp.last_match[:anchor]
+      # Extract `<md:>` base-page milestones (verbatim, onto the open page —
+      # pending before the first) and refuse anything `<…>`-shaped that
+      # survives: an unrecognized construct silently riding as text would be
+      # a mis-citation.
+      def clean_fragment(state, file, fragment)
+        cleaned = fragment.gsub(MILESTONE) do
+          milestone = Regexp.last_match[:anchor]
+          if state[:scheme] == :leafside
+            raise ParseError, "#{file}: base-page milestone <md:#{milestone}> in a leaf-side document"
+          end
+
+          annotation_bucket(state)["base_pages"] << milestone
           ""
         end
+        cleaned = cleaned.gsub(CRUFT) do |junk|
+          annotation_bucket(state)["cruft"] << junk
+          ""
+        end
+        # Bare angle brackets are canonical text, not constructs (P37-r2
+        # census: "昏>昏>" through the KR3e medical shelf, "=>", KR4a0001's
+        # lone "　<" line) — mandoku markup never spans a print line, so a
+        # single `<` with no `>` (or any `>` with no `<`) cannot be a tag.
+        # A `<…>` pair or repeated `<` (the conflict-marker shape) is still
+        # the loud unrecognized construct.
+        lt = cleaned.count("<")
+        if lt >= 2 || (lt == 1 && cleaned.include?(">"))
+          raise ParseError, "#{file}: unrecognized construct (#{cleaned.strip[0, 30].inspect})"
+        end
+
+        cleaned
       end
 
-      def open_page!(state, file, match)
-        key = "#{match[:juan]}:#{match[:page]}"
-        # Re-asserting the OPEN page's anchor is upstream's way of resuming
-        # the leaf-side pagination after an interleave (census: 1,507
-        # instances in 大清一統志 alone, every one the open page) — no-op.
-        return if state[:page] && state[:page][:key] == key
-
-        flush_page!(state)
-        raise ParseError, "#{file}: duplicate page anchor <pb:#{match[:anchor]}>" if state[:seen].key?(key)
-
-        state[:seen][key] = true
-        annotations = state[:pending]
-        state[:pending] = empty_annotations
-        state[:page] = { key: key, anchor: match[:anchor], lines: [], annotations: annotations }
+      def annotation_bucket(state)
+        state[:page] ? state[:page][:annotations] : state[:pending]
       end
 
       def empty_annotations
-        { "src_refs" => [], "headings" => [], "edition_pages" => [] }
+        { "src_refs" => [], "headings" => [], "edition_pages" => [], "base_pages" => [], "fw" => [],
+          "cruft" => [] }
       end
 
       # Emit the open page as a passage; empty pages (no print lines) are
@@ -227,7 +400,7 @@ module Nabu
         return if page.nil? || page[:lines].empty?
 
         text = Nabu::Normalize.nfc(page[:lines].join("\n"))
-        state[:document] << Nabu::Passage.new(
+        state[:passages] << Nabu::Passage.new(
           urn: "#{state[:urn]}:#{page[:key]}", language: LANGUAGE, text: text,
           sequence: (state[:sequence] += 1),
           annotations: passage_annotations(page, text)
@@ -238,7 +411,7 @@ module Nabu
         annotations = { "anchor" => page[:anchor] }
         gaiji = text.scan(GAIJI)
         annotations["gaiji"] = gaiji unless gaiji.empty?
-        %w[headings src_refs edition_pages].each do |key|
+        %w[headings src_refs edition_pages base_pages fw cruft].each do |key|
           values = page[:annotations][key]
           annotations[key] = values unless values.empty?
         end

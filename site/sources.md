@@ -50,7 +50,10 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 58 sources below are synced and live as of 19 July 2026.
+All 58 sources below are synced and live as of 19 July 2026. Grouped by the
+owner's research desks rather than alphabetically — with each desk's member
+shelves, license mix and sync status on one page — the same sources appear on
+the [research axes]({{ '/axis/' | relative_url }}).
 
 | Source | Upstream project | Contents | License |
 |---|---|---|---|

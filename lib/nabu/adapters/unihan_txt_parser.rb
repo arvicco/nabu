@@ -37,16 +37,28 @@ module Nabu
         kSpecializedSemanticVariant kZVariant kSpoofingVariant
       ].freeze
 
-      FIELD_ORDER = (READING_FIELDS + VARIANT_FIELDS).freeze
+      # Radical-stroke fields (P37-4 field expansion — the `nabu char` header
+      # and the `search --radical`/`--strokes` filters). These live NOT in
+      # the Readings/Variants members but in Unihan_IRGSources.txt
+      # (kRSUnicode "75.8" = KangXi radical 75, 8 residual strokes;
+      # kTotalStrokes "12"), with kRSKangXi carried too though current Unihan
+      # no longer ships it (historically Unihan_RadicalStrokeCounts.txt) — an
+      # absent field simply mints nothing, the honest "absent, not —" posture.
+      RADICAL_STROKE_FIELDS = %w[kRSUnicode kRSKangXi kTotalStrokes].freeze
+
+      FIELD_ORDER = (READING_FIELDS + VARIANT_FIELDS + RADICAL_STROKE_FIELDS).freeze
 
       # One DictionaryEntry per codepoint that carries at least one carried
       # field, sorted by numeric codepoint (the upstream files sort by the
       # ASCII of "U+…", which interleaves plane 2 before the BMP CJK blocks
       # — numeric order is the stable, honest shelf order).
-      def entries(readings_path, variants_path: nil, language: "zho")
+      def entries(readings_path, variants_path: nil, radical_stroke_paths: [], language: "zho")
         fields = Hash.new { |hash, key| hash[key] = {} }
         collect(readings_path, READING_FIELDS, fields)
         collect(variants_path, VARIANT_FIELDS, fields) if variants_path && File.file?(variants_path)
+        radical_stroke_paths.each do |path|
+          collect(path, RADICAL_STROKE_FIELDS, fields) if path && File.file?(path)
+        end
         fields.keys.sort_by { |code| codepoint(code) }
                    .map { |code| entry(code, fields[code], language) }
       end

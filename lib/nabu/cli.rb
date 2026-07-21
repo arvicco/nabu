@@ -760,6 +760,9 @@ module Nabu
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
     option :source, type: :string, banner: "SLUG",
                     desc: "Restrict to one source (`nabu list` names the slugs)"
+    option :axis, type: :string, banner: "NAME[,NAME...]",
+                  desc: "Restrict to the members of one or more research axes (config/axes.yml) — the " \
+                        "multi-source generalization of --source; composes with every path and filter"
     option :limit, type: :numeric, default: 20, desc: "Maximum number of hits"
     option :lemma, type: :string, banner: "FORM",
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
@@ -787,6 +790,14 @@ module Nabu
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
+    option :radical, type: :numeric, banner: "N",
+                     desc: "Character filter: KangXi radical number 1-214 (Unihan kRSUnicode); " \
+                           "composes with --strokes/--char-component and a text query"
+    option :strokes, type: :string, banner: "A-B",
+                     desc: "Character filter: total-stroke range A-B (or a single N; Unihan kTotalStrokes)"
+    option :char_component, type: :string, banner: "C",
+                            desc: "Character filter: characters CONTAINING C anywhere in their " \
+                                  "structure (KRADFILE ∪ BabelStone IDS transitive containment)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -813,6 +824,14 @@ module Nabu
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
       end
+      if char_filter_options?
+        if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
+          raise Thor::Error, "search: the character filters (--radical/--strokes/--char-component) are " \
+                             "character-level structure search — they do not combine with the word-level " \
+                             "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
+        end
+        return char_structured_search(query)
+      end
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
@@ -834,12 +853,14 @@ module Nabu
       require_timeline!(catalog) if from || to || place
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
+      axis_names, axis_slugs = axis_membership(command: "search", config: config)
 
       searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
-                                    facets: facets, source: options[:source], loans: loans)
-      print_search_results(results, facets: facets, query: query, loans: loans,
+                                    facets: facets, source: options[:source], sources: axis_slugs,
+                                    loans: loans)
+      print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint)
       print_display_footer
     ensure
@@ -1688,6 +1709,71 @@ module Nabu
       ledger&.disconnect
     end
 
+    desc "char CHAR", "The character desk card: structure, readings, and the diachronic column"
+    long_desc <<~HELP, wrap: false
+      The character card (P37-4): one Han character composed from every shelf
+      the library holds — the join no single dictionary site offers. It
+      matches Jisho's synchronic completeness field-for-field where a shelf
+      backs it, and exceeds it diachronically with a column no online
+      dictionary carries. The binding rule: a field whose shelf can't back
+      THIS character is ABSENT, never rendered "—".
+
+      Sections, in render order (each names its backing shelf; absent
+      sections are silently omitted):
+
+        header        glyph · total strokes · KangXi radical number+name
+                      (Unihan kRSUnicode/kTotalStrokes)
+        decomposition the IDS structure + its components, each with the
+                      follow-up commands to walk into it (BabelStone IDS)
+        components    the flat component index Jisho searches (KRADFILE)
+        variants      trad/simp/semantic/z-variant forms (Unihan)
+        readings ja   on/kun/nanori + meanings (KANJIDIC2)
+        readings      Mandarin/Korean/Vietnamese + the Unihan kJapanese layer
+        pedagogy      Jōyō grade · JLPT · newspaper frequency (KANJIDIC2)
+        desk-ref      the reference codes, zero suppressed — Unicode always,
+                      four-corner/SKIP/JIS/dic numbers where KANJIDIC2 holds
+                      them
+        — the diachronic column (where nabu exceeds Jisho) —
+        Old Chinese   Baxter-Sagart reconstruction + gloss
+        Middle Chinese Qieyun reading, 反切, 音韻地位 (tshet-uinh)
+        early Japan   positions in the Heian hanzi dictionaries (HDIC)
+        TLS           sense-level concepts + classical attestation counts
+        corpus        attestation frequency across the held corpora
+        search        the printed `search CHAR*`-family follow-ups
+
+      Give exactly ONE character — the card's grain is a single glyph. The
+      component-search siblings are `nabu search --radical N`,
+      `--strokes A-B` and `--char-component C`.
+
+      Examples:
+        nabu char 棄       # reject/abandon — radical 75 木, the whole card
+        nabu char 木       # the component itself; its containment neighbours
+    HELP
+    def char(glyph = nil)
+      glyph = glyph.to_s.strip
+      raise Thor::Error, "char: give a character (e.g. nabu char 棄)" if glyph.empty?
+      if glyph.each_char.to_a.size > 1
+        raise Thor::Error, "char: the card's grain is a single character — give one glyph " \
+                           "(#{glyph}); search --char-component #{glyph.each_char.first} finds " \
+                           "characters that contain one"
+      end
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_entries)
+        raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync unihan " \
+                           "(or nabu rebuild after one)"
+      end
+
+      fulltext = open_fulltext(config)
+      card = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext).run(glyph)
+      print_char_card(card)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -1756,6 +1842,59 @@ module Nabu
       catalog&.disconnect
       fulltext&.disconnect
       ledger&.disconnect
+    end
+
+    desc "axis [NAME]", "The research-axis desk card: persona, members, holdings, gold coverage (config/axes.yml)"
+    long_desc <<~HELP, wrap: false
+      The research axes are the owner's desks — TAGS over the source list
+      (config/axes.yml), a source appearing under every desk it serves
+      (dual-tagging is the point, D35). This is their reference card, the
+      `nabu language` mold pointed at a whole desk instead of a code.
+
+      Bare `nabu axis` lists every desk in ratified (file) order — name and
+      persona, one line each. `nabu axis NAME` prints the full card:
+
+      - PERSONA, the hat's one-liner, verbatim from config/axes.yml, and the
+        membership rationale (desc) beneath it.
+      - MEMBERS, every source the desk tags, each with its enablement (on/off,
+        from the registry — the authoritative flip) and its live holdings
+        (documents/passages, dictionary entries, dossiers, languages, license
+        mix — the same census fragments `nabu list` prints). Zero fields are
+        suppressed; a member holding nothing yet says so.
+      - GOLD COVERAGE, the aggregate gold-lemma rows across the desk's held
+        languages (nabu search --lemma) — honest zero when none are gold.
+      - the shipped affordances: `nabu list --axis NAME`, `nabu sync NAME`.
+
+      An unknown axis is refused naming the known set (the slug/axis collision
+      guarantee makes a bare name unambiguous). No corpus yet is not an error:
+      the persona and membership still print, holdings say "no database".
+
+      Examples:
+        nabu axis                  # every desk, one persona line each
+        nabu axis celtic           # the Celticist's desk, full card
+        nabu axis biblical         # the cross-language scripture hat
+    HELP
+    def axis(name = nil)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      axes = registry.axes
+      raise Thor::Error, "axis: no research axes are defined (config/axes.yml)" if axes.empty?
+
+      catalog = open_catalog(config)
+      fulltext = catalog ? open_fulltext(config) : nil
+      name = name.to_s.strip
+      if name.empty?
+        print_axis_list(axes)
+      else
+        definition = axes[name] ||
+                     raise(Thor::Error, "axis: unknown axis #{name.inspect} — known axes: #{axes.names.join(', ')}")
+        census = catalog ? Nabu::Query::List.new(catalog: catalog).census : nil
+        info = catalog ? Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext) : nil
+        print_axis_card(definition, registry: registry, census: census, info: info)
+      end
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
     end
 
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
@@ -2038,6 +2177,9 @@ module Nabu
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
     option :source, type: :string, banner: "SLUG",
                     desc: "Restrict to one source (`nabu list` names the slugs)"
+    option :axis, type: :string, banner: "NAME[,NAME...]",
+                  desc: "Restrict to the members of one or more research axes (config/axes.yml) — the " \
+                        "multi-source generalization of --source"
     def export
       format = validate_format!(options[:format])
       validate_license!(options[:license])
@@ -2046,9 +2188,10 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       validate_source!(catalog, options[:source])
+      _axis_names, axis_slugs = axis_membership(command: "export", config: config)
       lines = Nabu::Query::Export.new(catalog: catalog)
                                  .run(format: format, lang: options[:lang], license: options[:license],
-                                      source: options[:source])
+                                      source: options[:source], sources: axis_slugs)
       # Stream: write each serialized line as it arrives — never join a
       # 238k-passage corpus into one string.
       lines.each { |line| $stdout.puts(line) }
@@ -2179,13 +2322,39 @@ module Nabu
         rendered = Nabu::Display.render(text.to_s, language: language,
                                                    mode: display_mode, policies: display_policies,
                                                    source: source, annotations: annotations,
-                                                   source_policies: display_source_policies)
+                                                   source_policies: display_source_policies,
+                                                   gaiji_map: gaiji_map_for(source))
         display_applied.merge(rendered.applied)
+        record_gaiji(rendered.gaiji)
         rendered.text
       end
 
       def display_applied
         @display_applied ||= Set.new
+      end
+
+      # The source's curated gaiji resolution map (P37-3), memoized per source:
+      # config/gaiji/<source>.tsv (only kanripo ships one today). A source with
+      # no file gets an empty map — reading mode then placeholder-only, and the
+      # non-show call sites (no source) never load a map at all.
+      def gaiji_map_for(source)
+        return {} unless source
+
+        (@gaiji_maps ||= {})[source] ||=
+          Nabu::Display.load_gaiji_map(File.join(Nabu::Config.load.gaiji_dir, "#{source}.tsv"))
+      end
+
+      # Running [resolved, unresolved] gaiji tallies for the once-per-invocation
+      # footer (summed across every passage a show-family command renders).
+      def display_gaiji
+        @display_gaiji ||= [0, 0]
+      end
+
+      def record_gaiji(tally)
+        return unless tally
+
+        display_gaiji[0] += tally.resolved
+        display_gaiji[1] += tally.unresolved
       end
 
       # Per-token language coloring (P27-2): the single-passage show view —
@@ -2225,7 +2394,9 @@ module Nabu
       # spacing); the escape hatch names diplomatic when edition transforms
       # applied, else full.
       def print_display_footer
-        return if display_applied.empty?
+        resolved, unresolved = display_gaiji
+        gaiji = resolved.positive? || unresolved.positive?
+        return if display_applied.empty? && !gaiji
 
         labels = display_applied.to_a
         edition = Nabu::Display::EDITION_LABELS & labels
@@ -2235,11 +2406,33 @@ module Nabu
         strips = labels - colors - edition - ["spacing", Nabu::Display::ISOLATES]
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
         parts << "apparatus simplified: #{edition.join(', ')}" unless edition.empty?
+        parts << gaiji_clause(resolved, unresolved) if gaiji
         parts << "spacing" if labels.include?("spacing")
         parts.concat(colors)
         parts << Nabu::Display::ISOLATES if labels.include?(Nabu::Display::ISOLATES)
-        hint = edition.empty? ? "--display full shows all marks" : "--display diplomatic shows the edition marks"
-        say "display: #{parts.join(' · ')} (#{hint})"
+        say "display: #{parts.join(' · ')} (#{display_footer_hint(edition, gaiji)})"
+      end
+
+      # The escape-hatch hint: diplomatic when any edition-level transform ran
+      # (apparatus OR gaiji — both are "shown as stored" under diplomatic),
+      # naming "refs" when gaiji is the only edition transform; else full.
+      def display_footer_hint(edition, gaiji)
+        return "--display diplomatic shows the edition marks" unless edition.empty?
+        return "--display diplomatic shows the gaiji refs" if gaiji
+
+        "--display full shows all marks"
+      end
+
+      # The gaiji footer clause (P37-3): unresolved refs became ⬚ placeholders,
+      # resolved ones became real glyphs — say both honestly.
+      def gaiji_clause(resolved, unresolved)
+        if unresolved.positive? && resolved.positive?
+          "#{unresolved} unresolved gaiji (#{resolved} resolved)"
+        elsif unresolved.positive?
+          "#{unresolved} unresolved gaiji"
+        else
+          "#{resolved} gaiji resolved"
+        end
       end
 
       # Reject an unknown --license up front (before opening any db) with the
@@ -2333,6 +2526,29 @@ module Nabu
 
         known = catalog[:sources].order(:slug).select_map(:slug)
         raise Thor::Error, "unknown source #{slug.inspect} — the catalog holds: #{known.join(', ')}"
+      end
+
+      # --axis NAME[,NAME…] (P37-8, search/export): resolve the named research
+      # axes to the union of their member slugs — the membership filter, the
+      # multi-source generalization of --source. Returns [axis names in the
+      # order asked, member slugs] or nil when --axis is absent. An unknown
+      # axis is refused naming the known set (the P35-1 resolution guarantee),
+      # and an empty registry says so; the slug/axis collision guarantee makes
+      # a bare name unambiguous.
+      def axis_membership(command:, config:)
+        spec = options[:axis].to_s.strip
+        return nil if spec.empty?
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        axes = registry.axes
+        raise Thor::Error, "#{command}: no research axes are defined (config/axes.yml)" if axes.empty?
+
+        names = spec.split(",").map(&:strip).reject(&:empty?).uniq
+        names.each do |name|
+          axes[name] ||
+            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: #{axes.names.join(', ')}")
+        end
+        [names, names.flat_map { |name| registry.axis_members(name) }.uniq]
       end
 
       # -- list (P22-1) renderers -------------------------------------------
@@ -2477,6 +2693,66 @@ module Nabu
         entries = rows.sum(&:entries)
         parts << "#{entries} entries" if entries.positive?
         parts.join(" · ")
+      end
+
+      # Bare `nabu axis` (P37-8): one line per desk — name and persona — in
+      # ratified (file) order, the `nabu language --list` mold. The full card
+      # is one `nabu axis NAME` away.
+      def print_axis_list(axes)
+        say "research axes — the library's desks (#{axes.size}):"
+        width = axes.names.map(&:length).max || 0
+        axes.each_axis { |axis| say "  #{axis.name.ljust(width)}  #{axis.persona}" }
+        say "nabu axis NAME for the full desk card (members, holdings, gold coverage)"
+      end
+
+      # `nabu axis NAME` (P37-8): the research-axis desk card, the `nabu
+      # language` mold pointed at a whole desk. The persona rides verbatim
+      # (first-class render data), then the membership rationale (desc); then
+      # every member the desk tags with its enablement (on/off, from the
+      # authoritative registry) and its live holdings (the same census
+      # fragments `nabu list` prints); then the aggregate gold-lemma coverage
+      # across the desk's held languages; then the shipped affordances. Zero
+      # fields suppressed — a member holding nothing says so, a desk with no
+      # gold says so, no corpus at all still prints persona + membership.
+      def print_axis_card(axis, registry:, census:, info:)
+        say "#{axis.name} — #{axis.persona}"
+        say_wrapped(axis.desc, indent: 2)
+        members = registry.axis_members(axis.name)
+        by_slug = (census || []).to_h { |row| [row.slug, row] }
+        say "  members (#{members.size}):"
+        width = members.map(&:length).max || 0
+        members.each do |slug|
+          state = registry[slug]&.enabled ? "on " : "off"
+          say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
+        end
+        print_axis_gold(members, by_slug, info)
+        say "  commands: nabu list --axis #{axis.name} · nabu sync #{axis.name}"
+      end
+
+      # One member's holdings cell: the census fragments when the source holds
+      # something, an honest "nothing held yet" when it is in the registry but
+      # empty, and "no database" when the corpus was never built.
+      def axis_member_holdings(row, census:)
+        return "no database (run nabu sync)" if census.nil?
+        return "nothing held yet" if row.nil?
+
+        census_fragments(row).join("  ")
+      end
+
+      # The desk's aggregate gold-lemma coverage: gold lemma rows summed over
+      # the languages its members actually hold (nabu search --lemma). Honest
+      # zero when the held languages carry no gold, honest "no held languages"
+      # when the desk holds nothing dated in a language yet.
+      def print_axis_gold(members, by_slug, info)
+        langs = members.flat_map { |slug| by_slug[slug]&.languages || [] }.uniq.sort
+        return say("  gold lemmas: no held languages yet") if langs.empty?
+
+        total = info ? langs.sum { |code| info.relevance(code).lemma_rows } : 0
+        if total.positive?
+          say "  gold lemmas: #{commas(total)} rows across #{langs.join(', ')} (nabu search --lemma)"
+        else
+          say "  gold lemmas: none in the held languages (#{langs.join(', ')})"
+        end
       end
 
       # P28-4: the one-page grouped map (`list --sources`) — family headers,
@@ -3278,7 +3554,7 @@ module Nabu
       # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
       # printed whenever present, so a filter-emptied page never masquerades
       # as a complete answer.
-      def print_search_results(results, facets: nil, query: nil, loans: nil, incomplete: nil)
+      def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil)
         if results.empty?
           say "no matches"
           say "note: #{incomplete}" if incomplete
@@ -3290,17 +3566,19 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
+            "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
       end
 
-      # " · facets: genre=epitaph province=pannonia% · loans: grc" — empty
-      # when no facet/loans filter is active (zero-signal silence, the
-      # compact rule).
-      def facet_footer(facets, loans: nil)
+      # " · facets: genre=epitaph province=pannonia% · loans: grc · axis: celtic"
+      # — empty when no facet/loans/axis filter is active (zero-signal silence,
+      # the compact rule). The axis names the desk(s) the membership filter
+      # scoped to (P37-8).
+      def facet_footer(facets, loans: nil, axis: nil)
         parts = []
         parts << "facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}" if facets&.any?
         parts << "loans: #{loans}" if loans
+        parts << "axis: #{Array(axis).join(',')}" if axis && !Array(axis).empty?
         parts.empty? ? "" : " · #{parts.join(' · ')}"
       end
 
@@ -3309,7 +3587,7 @@ module Nabu
       # the snippet window, house rule), plus ONE scope line — the fuzzy
       # index is documentary-only, so every render names what it covers (the
       # honest answer when --lang grc "finds nothing" in the literary corpus).
-      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil, incomplete: nil)
+      def print_fuzzy_results(results, scope:, long: false, facets: nil, loans: nil, axis: nil, incomplete: nil)
         if results.empty?
           say "no matches"
         else
@@ -3318,7 +3596,7 @@ module Nabu
             say "  #{display_text(long ? result.folded_marked : result.snippet, result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans)}"
+              "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
         end
         say "note: #{incomplete}" if incomplete
         covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
@@ -3862,6 +4140,78 @@ module Nabu
       # Same open/close discipline as the sibling search paths; the trigram
       # table missing means the fulltext index predates P16-4, an honest
       # reindex hint, exactly the lemma-index precedent.
+      def char_filter_options?
+        options[:radical] || options[:strokes] || options[:char_component]
+      end
+
+      # --strokes N or A-B → an inclusive [low, high] range, or nil.
+      def parse_strokes_option
+        raw = options[:strokes]&.strip or return nil
+        if (m = raw.match(/\A(\d+)\z/))
+          [m[1].to_i, m[1].to_i]
+        elsif (m = raw.match(/\A(\d+)-(\d+)\z/))
+          [m[1].to_i, m[2].to_i].minmax
+        else
+          raise Thor::Error, "search: --strokes takes N or A-B (e.g. --strokes 8 or --strokes 8-12)"
+        end
+      end
+
+      # The explicit character-structure search (P37-4): --radical/--strokes/
+      # --char-component resolve to a glyph set (CharFilter), which filters
+      # Han-language passages by containment, composing with a plain text
+      # query. Kept visibly distinct from FTS — the footer names the filters.
+      def char_structured_search(query)
+        validate_license!(options[:license])
+        if options[:radical] && !options[:radical].to_i.between?(1, 214)
+          raise Thor::Error, "search: --radical is a KangXi radical number 1-214 (got #{options[:radical]})"
+        end
+
+        strokes = parse_strokes_option
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless catalog.table_exists?(:dictionary_entries)
+          raise Thor::Error, "no char shelf in this catalog — run nabu sync unihan (for --radical/" \
+                             "--strokes) or babelstone-ids/kradfile (for --char-component)"
+        end
+        validate_source!(catalog, options[:source])
+
+        outcome = Nabu::Query::CharSearch.new(catalog: catalog, fulltext: fulltext)
+                                         .run(query, radical: options[:radical]&.to_i, strokes: strokes,
+                                                     component: options[:char_component], lang: options[:lang],
+                                                     license: options[:license], source: options[:source],
+                                                     limit: options[:limit].to_i)
+        print_char_search_results(outcome, query: query)
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_char_search_results(outcome, query:)
+        labels = outcome.labels.join(" AND ")
+        if outcome.resolved_empty
+          return say("no characters match [#{labels}] in the held char shelves — sync unihan " \
+                     "(--radical/--strokes) or babelstone-ids/kradfile (--char-component)")
+        end
+        if outcome.results.empty?
+          tail = query.empty? ? "" : " that also match #{query.inspect}"
+          return say("no passages carry a character matching [#{labels}]#{tail} " \
+                     "(#{outcome.char_count} characters resolved)")
+        end
+
+        outcome.results.each do |result|
+          say "#{result.urn}  [#{result.language}]  {#{result.matched.join(' ')}}"
+          say "  #{result.text}"
+        end
+        say ""
+        text_note = query.empty? ? "" : "; text query #{query.inspect}"
+        say "character filter: [#{labels}] — #{outcome.char_count} " \
+            "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
+        say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
       def fuzzy_search(query)
         raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
 
@@ -3880,12 +4230,14 @@ module Nabu
         require_timeline!(catalog) if from || to || options[:place]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
-                                   facets: facets, source: options[:source], loans: loans_filter)
+                                   facets: facets, source: options[:source], sources: axis_slugs,
+                                   loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,
-                                     loans: loans_filter, incomplete: fuzzy.incomplete_hint)
+                                     loans: loans_filter, axis: axis_names, incomplete: fuzzy.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::Fuzzy::QueryTooShort => e
         raise Thor::Error, "search: --fuzzy needs at least 3 characters after folding " \
@@ -3914,12 +4266,13 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
         searcher = Nabu::Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
         results = searcher.run(lemma, lang: options[:lang], license: options[:license],
                                       limit: options[:limit].to_i, morph: options[:morph],
-                                      source: options[:source],
+                                      source: options[:source], sources: axis_slugs,
                                       gold_only: options[:gold_only], loans: loans_filter)
-        print_lemma_results(results, query: lemma, incomplete: searcher.incomplete_hint)
+        print_lemma_results(results, query: lemma, axis: axis_names, incomplete: searcher.incomplete_hint)
         print_display_footer
       rescue Nabu::Query::MorphFacets::Error => e
         raise Thor::Error, "search: #{e.message}"
@@ -3966,13 +4319,15 @@ module Nabu
         end
 
         validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
         searcher = Nabu::Query::Proximity.new(catalog: catalog, fulltext: fulltext)
         results = searcher.run(
           query: lemma ? nil : positional_query, lemma: lemma, near: near, window: window,
           lang: options[:lang], license: options[:license], limit: options[:limit].to_i,
-          source: options[:source], loans: loans_filter
+          source: options[:source], sources: axis_slugs, loans: loans_filter
         )
-        print_search_results(results, loans: loans_filter, incomplete: searcher.incomplete_hint)
+        print_search_results(results, loans: loans_filter, axis: axis_names,
+                                      incomplete: searcher.incomplete_hint)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -3987,7 +4342,7 @@ module Nabu
       # equivalence: a Latin key on a non-Latin passage, scholar-curated,
       # never attestation); the footer totals each non-gold share and names
       # the way out.
-      def print_lemma_results(results, query: nil, incomplete: nil)
+      def print_lemma_results(results, query: nil, axis: nil, incomplete: nil)
         if results.empty?
           say "no matches"
           say "note: #{incomplete}" if incomplete
@@ -4011,6 +4366,7 @@ module Nabu
           footer += " — #{equivalence} equivalence (scholar-curated Classical-Latin equivalents; " \
                     "--gold-only excludes)"
         end
+        footer += " · axis: #{Array(axis).join(',')}" if axis && !Array(axis).empty?
         say footer
         say "note: #{incomplete}" if incomplete
       end
@@ -4185,6 +4541,155 @@ module Nabu
         say result.body
         print_reflexes(result.reflexes)
         print_resolved_citations(result)
+      end
+
+      # The character card (P37-4): each section printed only when a held
+      # shelf backs it for this glyph (the "absent, never —" rule). The
+      # diachronic column is what nabu adds over Jisho; the synchronic
+      # sections match it field-for-field where the shelves reach.
+      def print_char_card(card)
+        return say("no dictionary shelf in this catalog yet — run nabu sync unihan") if card.nil?
+
+        say "#{card.glyph}  #{card.codepoint}#{char_header_tail(card)}"
+        print_char_decomposition(card)
+        print_char_components(card)
+        print_char_variants(card)
+        print_char_ja_readings(card)
+        print_char_sinoxenic(card)
+        print_char_pedagogy(card)
+        print_char_desk_reference(card)
+        print_char_diachronic(card)
+        print_char_corpus(card)
+        print_char_search_affordances(card)
+        print_char_absence(card)
+      end
+
+      # glyph · N strokes · radical M NAME — only the parts Unihan backs.
+      def char_header_tail(card)
+        parts = []
+        parts << "#{card.total_strokes} strokes" if card.total_strokes
+        parts << "radical #{card.radical.number} #{card.radical.glyph} #{card.radical.name}" if card.radical
+        parts.empty? ? "" : "  ·  #{parts.join('  ·  ')}"
+      end
+
+      def print_char_decomposition(card)
+        return if card.ids.empty?
+
+        say ""
+        say "decomposition (BabelStone IDS):"
+        card.ids.each do |ids|
+          tag = ids.sources ? " (#{ids.sources})" : ""
+          say "  #{ids.sequence}#{tag}"
+          ids.components.each do |component|
+            say "    #{component} — nabu char #{component} · nabu search --char-component #{component}"
+          end
+        end
+      end
+
+      def print_char_components(card)
+        return if card.components.empty?
+
+        say ""
+        say "components (KRADFILE index): #{card.components.join(' ')}"
+      end
+
+      def print_char_variants(card)
+        return if card.variants.empty?
+
+        say ""
+        say "variants:"
+        card.variants.each do |variant|
+          say "  #{variant.relation}: #{variant.glyph} (#{variant.codepoint}) — nabu char #{variant.glyph}"
+        end
+      end
+
+      def print_char_ja_readings(card)
+        readings = card.readings_ja or return
+        say ""
+        say "readings (ja, KANJIDIC2):"
+        say "  on: #{readings[:on].join('、')}" if readings[:on].any?
+        say "  kun: #{readings[:kun].join('、')}" if readings[:kun].any?
+        say "  nanori: #{readings[:nanori].join('、')}" if readings[:nanori].any?
+        say "  meanings: #{readings[:meanings].join('; ')}" if readings[:meanings].any?
+      end
+
+      def print_char_sinoxenic(card)
+        return if card.readings_sinoxenic.empty?
+
+        say ""
+        say "readings (sinoxenic, Unihan):"
+        card.readings_sinoxenic.each { |label, value| say "  #{label}: #{value}" }
+      end
+
+      def print_char_pedagogy(card)
+        pedagogy = card.pedagogy or return
+        say ""
+        labels = { "grade" => "Jōyō grade", "jlpt" => "JLPT", "freq" => "newspaper freq" }
+        say "pedagogy: #{pedagogy.map { |k, v| "#{labels[k]} #{v}" }.join('  ·  ')}"
+      end
+
+      def print_char_desk_reference(card)
+        return if card.desk_reference.empty?
+
+        say ""
+        say "desk reference: #{card.desk_reference.map { |k, v| "#{k} #{v}" }.join('  ·  ')}"
+      end
+
+      # The diachronic column — the half no dictionary site carries.
+      def print_char_diachronic(card)
+        print_char_shelf_block("Old Chinese (Baxter-Sagart)", card.old_chinese)
+        print_char_shelf_block("Middle Chinese (Qieyun / Baxter-Sagart)", card.middle_chinese)
+        print_char_shelf_block("early-Japan lexicography (HDIC)", card.early_japan)
+        print_char_tls(card.tls)
+      end
+
+      def print_char_shelf_block(label, entries)
+        return if entries.empty?
+
+        say ""
+        say "#{label}:"
+        entries.each do |entry|
+          say "  [#{entry.slug}] #{entry.gloss || entry.lines.first}"
+          entry.lines.each { |line| say "    #{line}" }
+        end
+      end
+
+      def print_char_tls(entries)
+        return if entries.empty?
+
+        say ""
+        say "TLS (Thesaurus Linguae Sericae):"
+        entries.each do |entry|
+          attest = entry.attestations.positive? ? " — #{entry.attestations} attestation(s)" : ""
+          say "  [#{entry.slug}] #{entry.gloss}#{attest}"
+          entry.lines.each { |line| say "    #{line}" }
+        end
+      end
+
+      def print_char_corpus(card)
+        return if card.corpus.empty?
+
+        say ""
+        totals = card.corpus.sort_by { |_, count| -count }
+                            .map { |lang, count| "#{lang} #{count}" }.join("  ·  ")
+        say "corpus attestation: #{totals}"
+      end
+
+      def print_char_search_affordances(card)
+        say ""
+        say "search: nabu search #{card.glyph}  ·  nabu search --char-component #{card.glyph}" \
+            "#{"  ·  nabu search --radical #{card.radical.number}" if card.radical}"
+      end
+
+      # When NOTHING backed the card, say so honestly (the glyph is unknown to
+      # every held shelf) rather than printing a bare header.
+      def print_char_absence(card)
+        return unless card.held_shelves.empty? && card.ids.empty? && card.components.empty? &&
+                      card.radical.nil? && card.corpus.empty?
+
+        say ""
+        say "no held shelf carries #{card.glyph} yet — sync the CJK shelves " \
+            "(unihan, edrdg, babelstone-ids, kradfile, baxter-sagart, tshet-uinh, hdic, tls)"
       end
 
       # A reconstruction entry's descendant reflexes (P14-1): attested-here

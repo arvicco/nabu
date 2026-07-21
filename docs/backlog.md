@@ -10495,6 +10495,12 @@ optimizations.
 ## P36-3 · Parallel parse workers  [tier: fable] [status: ready — P36-0 verdict: warranted, awaiting the parse/insert split from the next instrumented rebuild] [deps: P36-0]
 N parsers, one writer behind a queue. If FTS reindex dominates, does
 not dispatch; journal says why.
+VERDICT (instrumented rebuild, 2026-07-21): parse 42m20s vs insert
+119m58s of 164m22s load — the corpus is INSERT-bound, not parse-bound;
+by the packet's own rule it does not dispatch. (Producer-consumer
+overlap could at most hide the 42m under the 120m insert — journaled
+as a future rider IF insert ever stops dominating.) The insert side is
+the frontier: P37-7's design note + further bulk-load work.
 
 ## P36-4 · The aed etymology-edge reconcile  [tier: opus] [status: done 2026-07-20] [deps: —]
 The P34-2 defect: 1,695 aed-side edges dangle (`dict:aed:159410`
@@ -10516,3 +10522,107 @@ advanced, ~2,170/~2,200 siblings minted. Owner call: leave quarantined
 (honest, recommended) vs teach sibling parse to tolerate missing lb @n
 via synthesized anchors. Full classification in the orchestrator-held
 baseline note.
+
+# Phase 37 — the Sino phase: the largest shelf gets its instruments (approved 2026-07-20; rulings: all 8 packets + axis rider = 9 · fold ships NOW (owner schedules the lzh re-derive) · KR-Gaiji fetch PRE-APPROVED · axis ops ride as P37-8)
+
+Source of truth: the owner-approved plan (orchestrator holds it). lzh
+= 13.0M passages, the library's largest language. New data this phase:
+KR5 (~84 MB, owner-fired) + KR-Gaiji (pre-approved, small). The
+owner's overnight `rebuild --profile` may run concurrently — the hard
+fence (no main-checkout db/canonical writes) binds every packet.
+
+## P37-0 · Char-structure + Bunkankun survey  [tier: survey/network] [status: done 2026-07-20 — survey delivered, no repo diff by design] [deps: —]
+`.docs/surveys/char-structure-survey.md`: decomposition-source
+verdicts (cjkvi-ids license lineage/CHISE GPL; BabelStone IDS; edrdg
+RADKFILE; nk2028 phonetic series) + ask.bunkankun.org (catalog shape,
+license, fetch) + the Jisho 棄-page benchmark (display-note inventory).
+Output: ratified source list + option grammar for P37-4.
+
+## P37-1 · KR5 Daozang witness-overlay parser  [tier: fable] [status: done 2026-07-20] [deps: —]
+Per the P33-1 characterization: overlay repos need `<md:>` milestones
++ witness-scheme pb anchors + @fw running headers. Overlay extension
+(loud on anything new), KR5 joins `classes:`, censuses + fixtures per
+the P33-1 pattern. Owner-fired ~84 MB sync at the gate.
+
+## P37-2 · The lzh variant fold  [tier: fable] [status: done] [deps: —]
+Trad↔simp↔z-variant fold derived from HELD unihan (semantic variants
+OUT); lzh (+och headwords); canonical form = traditional; conventions
+§9 entry; census of participating held codepoints. RULED: ships now;
+the fold-version bump dirties lzh sources and the owner schedules the
+~13M-passage re-derive.
+
+## P37-3 · Gaiji: placeholder + KR-Gaiji resolution  [tier: opus] [status: done 2026-07-20] [deps: —]
+display.yml `kanripo: { gaiji: placeholder }` (⬚ + honesty footer;
+cbeta = documented non-entry). KR-Gaiji fetch PRE-APPROVED (owner
+ruling): registry row + sanctioned fetch config + refs→Unicode/IDS
+mapping where upstream provides; poor mapping ⇒ placeholder-only +
+journal.
+
+## P37-4 · `nabu char` + component search  [tier: opus] [status: done 2026-07-20 — BabelStone IDS + KRADFILE acquired (enabled:false), Unihan kRS* + KANJIDIC2 desk-code expansion, `nabu char` card, `search --radical/--strokes/--char-component`] [deps: P37-0]
+The Jisho bar: char card (radical+name, strokes, components, variants,
+readings incl. Mandarin/Korean, OC/Qieyun/HDIC/TLS diachronic column,
+corpus attestation) + explicit modes (--radical/--strokes/
+--char-component); unihan kRS* field expansion; CJK fonts doc rides.
+Match synchronic field-for-field where shelves back it, exceed
+diachronically, never render an unbacked field.
+
+## P37-5 · TLS attestation growth re-census  [tier: opus] [status: done 2026-07-21] [deps: —]
+Wave complete: re-census KR-shaped ann resolution vs the 80.3%
+dispatch-day rate; tls re-parse re-mints citations; report new rate +
+the define surface. Rider-sized.
+
+## P37-6 · Parallel parse workers  [tier: fable] [status: NO-GO 2026-07-21 — profile verdict: INSERT-bound] [deps: profile]
+The P36-3 carryover: dispatch ONLY on a parse-bound split from the
+owner's instrumented rebuild. NO-GO ⇒ journaled why.
+
+## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: done] [deps: —]
+The 16-minute target: fixture-scale prototype + what-breaks note
+(refresh_source! delete contract, query paths); NO production switch.
+PROFILE CONTEXT (2026-07-21): corpus index total 11m30s (fts+lemma
+9m09s fused · trigram 18.9s · reflex 10.7s · alignment 2.6s) — already
+−40% vs the pre-P36-2 16m16s; the note's real target is now ALSO the
+insert side (fulltext double text storage, 12 GB) and the 120m
+catalog insert.
+
+MEGA-SOURCE LOAD REGRESSION (found in the same profile — investigation
+journaled, owner-visible): sources with MANY passages per document got
+SLOWER vs the pre-P36 baseline at identical doc counts — kanripo
+17m47s→61m13s wall (×3.4), cbeta 21m48s→35m51s (×1.6), diorisis
+5m16s→11m09s (×2.1), ud 34s→1m46s (×3) — while many-docs-few-passages
+sources got FASTER (cdli −30%, edh −40%, papyri/aes/mw/lexica all
+faster) and the corpus reindex −40%. Prime suspect: the P36-2 stack
+(batch grain or a deferred index a per-passage path needs) interacting
+with mega-documents — exactly the fixture-scale blind spot P36-2's
+report flagged. Needs a one-source bisect at live scale (kanripo,
+toggling pragmas/batch/deferred-index) BEFORE any further bulk-load
+work; net grand total still ≈3h (175m52s) vs the 2h35m-ish prior, so
+this regression more than ate the fixture-projected wins on the lzh
+giants. Rides P37-7's owner or its own rider — orchestrator call at
+dispatch.
+
+## P37-8 · Axis-scoped operations  [tier: opus] [status: done] [deps: —]
+The D35-b follow-ups ride (owner-ruled): `search --axis` (membership
+filter composing with every search path), `export --axis`, the
+`nabu axis NAME` desk card (persona, members, held counts, gold
+coverage — the `nabu language` mold). health --axis only if it fits
+cleanly; journal otherwise.
+
+## P37-9 · Per-axis site pages — /axis/<name>/  [tier: opus] [status: done 2026-07-21] [deps: —] [owner-requested at the P37 gate]
+Owner ask (2026-07-21, verbatim intent): second-layer site pages, one
+per research axis (nabu/axis/celtic …), each carrying ALL relevant
+usability context FOR THAT axis. Ship: site/axis/<name>.md × 18
+(Jekyll, permalink /axis/<name>/), GENERATED from the live registry +
+per-axis curated context — persona + desc verbatim, member table
+(source, holdings kind, license class, sync status), the desk's
+gold-lemma/dictionary/alignment coverage, axis-specific CLI recipes
+(list/sync/search/export --axis, nabu axis card, plus the axis's OWN
+surfaces: char/variant-fold for sinitic, --loans for egyptian, MT/DSS
+alignment for hebrew, timeline/facets for epigraphy…), and the
+axis-relevant terminal/display setup (RTL+fonts for hebrew/syriac, CJK
+fonts/width for sinitic/japonic, Ogham spacing for celtic — mined from
+docs/display.md). An /axis/ index page + site nav link. Generator =
+committed script (rake task) reading config/axes.yml + sources.yml +
+docs sources; pages committed (the static-site discipline); drift
+check in the suite pinning the 18 pages' member lists to the registry
+(the docs/axes.md precedent). Curated prose lives in a per-axis
+fragments file the generator merges — hand-edited, never overwritten.
