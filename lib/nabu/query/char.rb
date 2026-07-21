@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "../jpn"
 require_relative "../kangxi_radicals"
 require_relative "../adapters/ids_txt_parser"
 require_relative "define"
@@ -86,7 +87,7 @@ module Nabu
           radical: radical(unihan), total_strokes: total_strokes(unihan),
           ids: ids_of(by_slug["babelstone-ids"]&.first),
           components: components_of(by_slug["kradfile"]&.first),
-          variants: variants_of(unihan),
+          variants: variants_of(unihan) + jpn_reform_variants(glyph),
           readings_ja: ja_readings(by_slug["kanjidic2"]&.first),
           readings_sinoxenic: sinoxenic_readings(unihan),
           pedagogy: pedagogy(by_slug["kanjidic2"]&.first),
@@ -134,6 +135,20 @@ module Nabu
             code = token[/\AU\+\h{4,6}/] or next
             Variant.new(relation: relation, glyph: codepoint_to_glyph(code), codepoint: code)
           end
+        end
+      end
+
+      # The Japanese kyūjitai↔shinjitai reform cross-reference (P38-4): a
+      # shinjitai names its old form, a kyūjitai its new form — the hani-fold
+      # display precedent, from the held-Unihan-derived Nabu::Jpn table (not a
+      # dictionary shelf, so surfaced here even when no CJK shelf backs the
+      # card). Empty for characters that are not one of the 173 reform pairs.
+      def jpn_reform_variants(glyph)
+        [["kyūjitai (Japanese old form)", Nabu::Jpn.old_form(glyph)],
+         ["shinjitai (Japanese new form)", Nabu::Jpn.new_form(glyph)]].filter_map do |relation, other|
+          next unless other
+
+          Variant.new(relation: relation, glyph: other, codepoint: format("U+%04X", other.ord))
         end
       end
 
