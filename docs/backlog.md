@@ -10710,9 +10710,14 @@ docs refresh; gate news post rides.
 - D38-b RULED (owner, 2026-07-21): jōyō-filtered extension, NOW as
   rider P38-r1 (not P39) — "THIS is japonic-focused Phase after all";
   the owner's pending full rebuild amortizes the fold-change
-  re-derive. Merge-refusal stays (orchestrator interpretation stated:
-  jōyō filter disambiguates one-to-many; 辨/瓣/辯→弁-class reform
-  merges refused via censused list — owner may veto). Original item: The shipped
+  re-derive. AMENDED same day: merges ADMITTED ("match modern reading
+  habits by default — as long as there is an option to look for EXACT
+  match along with it") → named admitted-merges census list
+  (reversible), merge entries fold to Hani.fold(shinjitai) (1:1 pairs
+  keep Hani.fold(old); lzh lane untouched), and `search --exact`
+  ships in the rider (folded-FTS candidates + glyph-literal
+  post-filter on stored text; loud refusal on unsupported paths;
+  empty-result honesty). Original item: The shipped
   fold covers ONLY the 173 jinmeiyō-listed old-forms — the one clean
   1:1 signal held Unihan provides. The famous high-frequency reform
   pairs (學/学, 體/体, 醫/医, 觀/観 …) are NOT jinmeiyō-listed and stay
