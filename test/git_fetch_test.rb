@@ -276,6 +276,44 @@ class GitFetchTest < Minitest::Test
            "a locally wider cone is kept — widening is union, never replacement"
   end
 
+  # GLOB-pattern cones (P38-3, the aozora shape): the no-cone sparse grammar
+  # is gitignore-style, so a cone can be a filename PATTERN over a wide tree
+  # — cards/*/files/*_ruby_*.zip picks the ~210 MB of text zips out of a
+  # 22.8 GB repo whose per-author dirs also hold card pages, XHTML and ebk
+  # binaries. Pinned here so the grammar the aozora adapter relies on can
+  # never regress silently.
+  def test_sparse_clone_materializes_glob_pattern_cones
+    make_repo("cards/000001/files/1_ruby_9.zip" => "text zip\n",
+              "cards/000001/files/1_5555.html" => "xhtml\n",
+              "cards/000001/card1.html" => "card page\n",
+              "index_pages/list.zip" => "index\n")
+
+    sync!(sparse: ["cards/*/files/*_ruby_*.zip", "index_pages/list.zip"])
+
+    assert File.file?(File.join(@dir, "cards", "000001", "files", "1_ruby_9.zip"))
+    assert File.file?(File.join(@dir, "index_pages", "list.zip"))
+    refute File.exist?(File.join(@dir, "cards", "000001", "files", "1_5555.html")),
+           "non-matching siblings inside a matched dir stay outside the cone"
+    refute File.exist?(File.join(@dir, "cards", "000001", "card1.html"))
+  end
+
+  def test_sparse_pull_attics_glob_cone_deletions_and_ignores_outside_ones
+    make_repo("cards/000001/files/1_ruby_9.zip" => "v1\n",
+              "cards/000001/files/2_ruby_7.zip" => "kept\n",
+              "cards/000001/card1.html" => "card page\n")
+    cone = ["cards/*/files/*_ruby_*.zip"]
+    sync!(sparse: cone)
+    delete_upstream("cards/000001/files/1_ruby_9.zip")
+    delete_upstream("cards/000001/card1.html")
+
+    result = sync!(sparse: cone)
+
+    assert_equal ["cards/000001/files/1_ruby_9.zip"], result.atticked,
+                 "only glob-cone deletions are this source's retained assets"
+    assert_equal "v1\n", File.read(File.join(@attic, "cards", "000001", "files", "1_ruby_9.zip"))
+    assert File.file?(File.join(@dir, "cards", "000001", "files", "2_ruby_7.zip"))
+  end
+
   def test_pull_of_a_full_checkout_never_sparsifies_it
     make_repo("keep/data.txt" => "v1\n", "papers/big.pdf" => "everything\n")
     sync! # full clone, no cone
