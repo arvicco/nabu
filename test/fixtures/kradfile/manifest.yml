@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A documented TRIM (whole: false) of the EDRDG kradfile (base pair,
+# JIS X 0208, 6,355 kanji): the real #-comment header kept verbatim, then 10
+# selected kanji lines (棄 and 木-containing / non-木 controls), preserved
+# byte-verbatim in the historical EUC-JP encoding — the decode regression the
+# adapter guards. Upstream is kradfile.gz; re-apply the README recipe (gunzip
+# then trim) after any refresh.
+source: kradfile
+adapter_test: test/adapters/kradfile_test.rb
+retrieved: 2026-07-20
+files:
+  - path: kradfile
+    url: http://ftp.edrdg.org/pub/Nihongo/kradfile.gz
+    whole: false
+    trim: kradfile (EUC-JP, 6,355 kanji) -> the real header + 10 selected kanji lines, EUC-JP byte-verbatim; recipe in README.md

@@ -179,7 +179,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
 
-**Members** (10): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `cbeta`, `kanripo`, `tls`
+**Members** (12): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`
 
 ### japonic
 
@@ -187,7 +187,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (6): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `oncoj`, `oncoj-lexicon`
+**Members** (7): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`
 
 ### local
 
@@ -199,9 +199,12 @@ The canonical-memory shelves (architecture §16): local-language, local-library,
 
 ## Working the axes — the commands
 
-Three shipped surfaces read the registry. All three take an axis by name;
-axis names never collide with source slugs, so a bare name resolves
-unambiguously to a desk.
+The shipped surfaces read the registry. Each takes an axis by name; axis
+names never collide with source slugs, so a bare name resolves unambiguously
+to a desk. They come in three families: the **grouped views** (`list`/`status
+--axis`), which regroup a flat table under the desks; the **membership
+filter** (`search`/`export --axis`), which scopes a query to a desk's shelves;
+and the **desk card** (`nabu axis`), the reference page for one desk.
 
 - **`nabu list --axis`** — the shelf census grouped under the desks. Bare
   `--axis` renders every desk in the ratified order; `--axis slavic` renders
@@ -230,10 +233,34 @@ unambiguously to a desk.
   anyway, with a note. The desk is a convenience over the enabled shelf; the
   slug is a direct order.
 
+- **`nabu search --axis NAME[,NAME…]`** and **`nabu export --axis`** — the
+  membership *filter*: the named desks expand to the union of their member
+  slugs and the query is scoped to those shelves — `slug IN (…)`, the
+  multi-source generalization of `--source SLUG`. It composes with every
+  search path (text, `--lemma`, `--fuzzy`, `--near`) and every other filter,
+  and AND-composes with a single `--source`; the search footer names the
+  desk. Being an ordinary catalog-side filter, it also arms the inner-window
+  honesty hint (a clean-looking short page under the filter announces
+  `page may be incomplete under these filters — raise --limit`). An unknown
+  axis is refused naming the known set.
+
+- **`nabu axis [NAME]`** — the desk *card*, the `nabu language` mold pointed
+  at a whole desk. Bare `nabu axis` lists every desk with its persona line;
+  `nabu axis celtic` prints the full card: the persona verbatim, the
+  membership rationale, every member source with its enablement and live
+  holdings (documents/passages, entries, languages, license mix — a member
+  holding nothing says so), the aggregate gold-lemma coverage across the
+  desk's held languages, and the shipped affordances (`list --axis NAME`,
+  `sync NAME`). Zero fields are suppressed; no corpus yet still prints the
+  persona and membership, holdings reading `no database`.
+
   ```
   nabu list --axis                      # the whole census, grouped by desk
   nabu list --axis slavic               # one desk's shelves
   nabu status --axis celtic,italic      # two desks' health
+  nabu search μηνιν --axis celtic       # search scoped to the celtic shelves
+  nabu export --format jsonl --axis biblical > scripture.jsonl
+  nabu axis celtic                      # the Celticist's desk card
   nabu sync celtic                      # the celtic desk's enabled members
   nabu sync --axis celtic,italic --parse-only
   ```

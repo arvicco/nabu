@@ -71,6 +71,25 @@ module Query
 
     # -- lookup ---------------------------------------------------------------
 
+    # P37-2: och headwords (Baxter-Sagart/TLS shape) store the traditional
+    # skeleton — a lookup typed in simplified (or the 説 z-glyph) reaches the
+    # entry through the query_forms union, fold-both-sides.
+    def test_han_variant_spellings_reach_the_och_headword
+      dict = @catalog[:dictionaries].insert(source_id: @source.id, slug: "baxter-sagart",
+                                            title: "Baxter-Sagart", language: "och")
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dict, urn: "urn:nabu:dict:baxter-sagart:shuo", entry_id: "shuo", key_raw: "說",
+        headword: "說", headword_folded: Nabu::Normalize.search_form("說", language: "och"),
+        gloss: "speak, explain", body: "說 body", content_sha256: "x", revision: 1, withdrawn: false
+      )
+
+      %w[說 説 说].each do |spelling|
+        results = define(spelling).select { |r| r.dictionary_slug == "baxter-sagart" }
+        assert_equal ["說"], results.map(&:headword),
+                     "#{spelling} must reach the traditional och headword"
+      end
+    end
+
     def test_defines_a_greek_lemma_with_license_label_and_gloss
       results = define("μῆνις")
       assert_equal 1, results.size

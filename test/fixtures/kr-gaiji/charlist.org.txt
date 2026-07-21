@@ -1,0 +1,10 @@
+#+STARTUP: inlineimages
+KR0001	00040519	𫠦	所	[[file:images/KR0001.png]]
+KR0002	00039893		若	[[file:images/KR0002.png]]
+KR0005	00027142	將	将	[[file:images/KR0005.png]]
+KR0007	00022701	𤣥	玄	[[file:images/KR0007.png]]
+KR0008	00022501			[[file:images/KR0008.png]]
+KR0132	00002576	𦒿 	耆	[[file:images/KR0132.png]]
+KR0198	00001893	[沔-丏+丐]	沔	[[file:images/KR0198.png]]
+KR0359	00000980	㴱?	深?	[[file:images/KR0359.png]]
+KR0809	00000256			[[file:images/KR0809.png]]

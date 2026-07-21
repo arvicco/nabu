@@ -296,6 +296,22 @@ $ bin/nabu list
 $ bin/nabu list corph --documents --limit 10
 ```
 
+**Working by research desk.** The flat source list is also tagged into
+eighteen [research axes]({{ '/axis/' | relative_url }}) — the owner's
+scholarly desks (the Classicist, the Assyriologist, the Sinologist…). A
+source wears every desk it serves, and four surfaces read those tags:
+`nabu list --axis NAME` groups the census under a desk, `nabu search --axis
+NAME` scopes a query to a desk's shelves (the multi-source generalization of
+`--source`), `nabu sync NAME` syncs a desk's enabled members, and `nabu axis
+NAME` prints the desk card — members, live holdings, and gold coverage. Each
+desk's own page collects its shelves, instruments, CLI recipes and terminal
+setup.
+
+```
+$ bin/nabu axis celtic
+$ bin/nabu search μηνιν --axis celtic
+```
+
 **Owner notes** (`nabu note URN [TEXT]`) record your own annotations —
 scholia of one's own — against any citable URN the corpus knows:
 documents, passages, ranges, or dictionary entries. The URN is resolved

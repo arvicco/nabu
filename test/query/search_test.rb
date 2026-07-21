@@ -222,6 +222,22 @@ module Query
       assert_equal union, search("dharman").map(&:urn).sort, "the IAST spelling finds the same set"
     end
 
+    # P37-2, the §9 symmetry proof end to end: kanripo/cbeta store traditional
+    # 說, Japanese-transmitted editions write the z-variant 説, a modern typist
+    # types simplified 说 — all three query spellings must find the one stored
+    # passage, because document AND query fold to the same traditional
+    # skeleton (Nabu::Hani, derived from held Unihan variant data).
+    def test_han_variant_query_spellings_find_the_traditional_lzh_passage
+      doc = make_document(source: @open, urn: "urn:d:kr", title: "Lunyu", language: "lzh")
+      make_passage(doc, urn: "urn:d:kr:1", text: "不亦說乎，不亦樂乎", sequence: 0, language: "lzh")
+      rebuild!
+
+      %w[不亦說乎 不亦説乎 不亦说乎].each do |spelling|
+        assert_equal ["urn:d:kr:1"], search(spelling).map(&:urn),
+                     "#{spelling} must fold to the stored traditional skeleton"
+      end
+    end
+
     def test_snippet_marks_the_match_in_the_folded_form
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
@@ -265,6 +281,44 @@ module Query
       assert_equal %w[urn:d:nc:1], search("libertas", source: "nc").map(&:urn)
       assert_equal %w[urn:d:nc:1], search("libertas", source: "nc", license: "nc").map(&:urn)
       assert_empty search("libertas", source: "nc", license: "open"), "filters compose"
+    end
+
+    # --axis (P37-8): the membership filter is the multi-source generalization
+    # of --source — an axis expands to member slugs and hits are scoped to
+    # `slug IN (...)`. An empty list is no filter; it AND-composes with every
+    # other catalog-side filter.
+    def test_sources_membership_filter_scopes_hits
+      open_doc = make_document(source: @open, urn: "urn:d:open")
+      make_passage(open_doc, urn: "urn:d:open:1", text: "libertas", sequence: 0)
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "libertas", sequence: 0)
+      rebuild!
+
+      assert_equal %w[urn:d:nc:1 urn:d:open:1], search("libertas", sources: %w[open nc]).map(&:urn).sort
+      assert_equal %w[urn:d:nc:1], search("libertas", sources: %w[nc]).map(&:urn)
+      assert_equal %w[urn:d:nc:1 urn:d:open:1], search("libertas", sources: []).map(&:urn).sort,
+                   "an empty membership list is no filter"
+      assert_empty search("libertas", sources: %w[nc], source: "open"),
+                   "the axis filter AND-composes with the single --source"
+    end
+
+    # The membership filter is catalog-side, so it arms the P35-6 inner-window
+    # honesty hint exactly like --source: a full inner window thinned to a
+    # short page under an active axis filter announces itself.
+    def test_sources_membership_filter_arms_the_incomplete_hint
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      open_doc = make_document(source: @open, urn: "urn:d:open")
+      # Ten open rows fill the limit×10 inner window; the one nc row the axis
+      # filter wants sits beyond it.
+      10.times { |i| make_passage(open_doc, urn: "urn:d:open:#{i}", text: "aurora", sequence: i) }
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "aurora", sequence: 0)
+      rebuild!
+
+      page = searcher.run("aurora", sources: %w[nc], limit: 1)
+      assert_operator page.size, :<, 1 + 1
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, searcher.incomplete_hint,
+                   "the axis membership filter arms the exhausted-window hint"
     end
 
     # A document on an "open" source with an "nc" override must filter as nc and

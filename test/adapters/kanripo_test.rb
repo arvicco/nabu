@@ -17,7 +17,8 @@ class KanripoTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/kanripo", __dir__)
 
   TEXT_IDS = %w[KR1a0170 KR1h0004 KR2a0001 KR2a0038 KR2g0007
-                KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026].freeze
+                KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026
+                KR5a0001 KR5a0004 KR5c0091 KR5g0001 KR5i0030].freeze
 
   def conformance_adapter
     Nabu::Adapters::Kanripo.new
@@ -54,7 +55,7 @@ class KanripoTest < Minitest::Test
 
     classes = refs.map { |ref| ref.metadata["class"] }
     assert_equal TEXT_IDS.map { |id| "urn:nabu:kanripo:#{id}" }, refs.map(&:id)
-    assert_equal %w[KR1 KR1 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4], classes
+    assert_equal %w[KR1 KR1 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4 KR5 KR5 KR5 KR5 KR5], classes
     refs.each { |ref| assert File.directory?(ref.path), "ref path must be the text dir" }
   end
 
@@ -106,7 +107,26 @@ class KanripoTest < Minitest::Test
     adapter = conformance_adapter
     total = adapter.discover(FIXTURES).sum { |ref| adapter.parse(ref).size }
 
-    assert_equal 253, total
+    # 253 (waves 1–2) + 177 KR5 (109 + 1 + 42 + 16 + 9 — P37-1 census).
+    assert_equal 430, total
+  end
+
+  def test_wave_three_default_classes_include_the_daozang
+    assert_equal %w[KR1 KR2 KR3 KR4 KR5], Nabu::Adapters::Kanripo::DEFAULT_CLASSES
+  end
+
+  def test_parses_a_daozang_witness_overlay_at_witness_page_grain
+    # KR5a0001 度人經 (DZJY overlay): the witness edition CK-KZ is the
+    # citable page structure; base-edition HFL pages ride annotations.
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |candidate| candidate.id.end_with?("KR5a0001") }
+    document = adapter.parse(ref)
+
+    assert_equal "元始無量度人上品妙經", document.title
+    assert_equal "KR5", document.metadata["class"]
+    assert_equal "witness", document.metadata["page_scheme"]
+    assert_equal "CK-KZ", document.metadata["witness"]
+    assert_equal "urn:nabu:kanripo:KR5a0001:01:001a", document.passages.first.urn
   end
 
   # -- fetch (local rig — no network, the house pattern) ---------------------

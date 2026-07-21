@@ -105,7 +105,7 @@ module Nabu
       # passage's stored loan-code counts. Raises QueryTooShort below the
       # trigram floor.
       def run(fragment, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil, facets: nil,
-              source: nil, loans: nil)
+              source: nil, sources: nil, loans: nil)
         @incomplete_hint = nil
         variants = query_variants(fragment)
         inner_limit = limit * INNER_LIMIT_FACTOR
@@ -117,13 +117,14 @@ module Nabu
 
         rows = catalog_rows(verified.map(&:first), lang: lang, license: license,
                                                    from: from, to: to, place: place, facets: facets,
-                                                   source: source, loans: loans)
+                                                   source: source, sources: sources, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
         page = verified.filter_map { |id, folded, match| [rows[id], folded, match] if rows[id] }
                        .first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, from, to, place, source, loans].compact.any? || (facets || {}).any?,
+          filters_active: [lang, license, from, to, place, source, loans].compact.any? ||
+            (facets || {}).any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
         page.map { |row, folded, match| build_result(row, folded, match) }

@@ -128,6 +128,15 @@ U+5929	kTGHZ2013	365.020:tiān
 U+5929	kTang	*ten
 U+5929	kVietnamese	thiên
 U+5929	kXHC1983	1131.050:tiān
+U+68C4	kCantonese	hei3
+U+68C4	kDefinition	reject, abandon, discard
+U+68C4	kFanqie	詰利
+U+68C4	kJapanese	キ すてる
+U+68C4	kJapaneseKun	SUTERU
+U+68C4	kJapaneseOn	KI
+U+68C4	kKorean	KI
+U+68C4	kMandarin	qì
+U+68C4	kVietnamese	khí
 U+611B	kCantonese	oi3
 U+611B	kDefinition	love, be fond of, like
 U+611B	kFanqie	烏代

@@ -1723,6 +1723,44 @@ hdic:
   # file authoritative (Kyoto/Ruthenian precedent), tighten to nc BEFORE
   # any enable. Upstream actively maintained → re-syncs owner-fired.
   sync_policy: manual
+
+babelstone-ids:
+  adapter: Nabu::Adapters::BabelstoneIds
+  axes: [sinitic]
+  enabled: false   # P37-4: enable only after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync babelstone-ids — one 3.1 MB
+                   # UTF-8 file GET, 97,680 entries — then eyeball
+                   # nabu char 棄 and nabu show urn:nabu:dict:babelstone-ids:U+68C4,
+                   # flip).
+  # BabelStone IDS (Andrew West) — Ideographic Description Sequences for
+  # every CJK Unified Ideograph, the decomposition spine behind `nabu char`
+  # and `search --char-component` (Unicode 16.0, 97,680 entries). PD-style
+  # dedication verbatim in the file header §2 → license_class open (the
+  # P37-0 survey reversed the display note's cjkvi-ids seed guess: cjkvi-ids
+  # is GPLv2-on-data + stale-since-2019, OUT; West's independent
+  # re-derivation inherits no copyleft, IN). Single-file sha-pinned
+  # FileFetch from babelstone.co.uk; actively maintained, low cadence.
+  sync_policy: manual
+
+kradfile:
+  adapter: Nabu::Adapters::Kradfile
+  axes: [japonic]
+  enabled: false   # P37-4: enable only after the owner-fired first sync
+                   # (checklist §6: bin/nabu sync kradfile — one ~46 KB gz
+                   # GET, 6,355 kanji — then eyeball nabu char 棄's component
+                   # index and search --char-component 木, flip).
+  # KRADFILE (Raine, Breen & EDRDG) — the kanji→component decomposition
+  # index behind Jisho's multi-radical search, feeding `nabu char`'s
+  # component-index row + `search --char-component` flat containment over
+  # its JIS X 0208 span (6,355 kanji; BabelStone IDS supplies the pan-CJK
+  # transitive span it cannot reach). SAME EDRDG CC BY-SA 4.0 document the
+  # edrdg row already quotes → attribution, zero new licence surface (P37-0
+  # survey, citing the edrdg-row precedent verbatim). Historically EUC-JP,
+  # transcoded to UTF-8 NFC at the boundary; single-file sha-pinned
+  # FileFetch; low cadence (last revision Aug 2021). The base pair only —
+  # the KRADFILE2/RADKFILE2 JIS X 0212 extension (© Jim Rose) is OUT of v1.
+  sync_policy: manual
+
 oncoj:
   adapter: Nabu::Adapters::Oncoj
   axes: [japonic]
@@ -1831,11 +1869,22 @@ kanripo:
   # have NO repo: KR2a0039 清史稿 + KR2d0020 → recorded absent; 4 KR2
   # repos incl. the whole KR2p 出土簡帛 subclass are UN-catalogued →
   # outside the catalog-driven scope, censused in 02-sources row 104).
-  # KR5 道 (the Daozang) is censused + REPORTED ONLY (P33-1): its DZJY
-  # witness overlays (`<md:>` milestones) don't parse under the mandoku
-  # family — ingestion needs its own parser wave, owner's call. KR6
-  # Buddhist is EXCLUDED this phase (doctrine call journaled in
-  # 02-sources row 104 — CBETA is the scholarly Buddhist shelf).
+  # Wave 3 (P37-1, 2026-07-20) adds KR5 道 — the Daozang: 1,663 catalog
+  # ids over 10 subclasses / 1,660 repos / only ~84 MB git (949 repos
+  # < 15 KB; 4 ids repo-less → recorded absent; ~55 min of pauses at the
+  # 2 s knob) — the OWNER-FIRED wave-3 sync is the P37-1 gate step:
+  # `bin/nabu sync kanripo` re-pulls nothing already held and adds the
+  # KR5 texts; eyeball 度人經 urn:nabu:kanripo:KR5a0001 (witness-page
+  # urns :01:001a…) + 5 random KR5 passages. The DZJY witness overlays
+  # (`<md:>` base-page milestones + witness `<pb:CK-KZ_…NNpNNNa>`
+  # anchors + `@fw` running headers; ~459 overlay files censused via
+  # code search) parse since the P37-1 MandokuParser extension: witness
+  # pages are the citable structure, base-edition pages ride
+  # annotations, anything un-censused quarantines loudly (the census
+  # found e.g. KR5a0004's stray front-matter 八 — such texts quarantine
+  # by design and surface in the sync report). KR6 Buddhist is EXCLUDED
+  # this phase (doctrine call journaled in 02-sources row 104 — CBETA is
+  # the scholarly Buddhist shelf).
   # Narrowing classes never withdraws held texts (discover is on-disk-
   # driven); widening is a config-only change. The pacing knob is
   # Nabu::KanripoFetch::DEFAULT_DELAY (2 s between network operations,
@@ -1849,7 +1898,36 @@ kanripo:
   # Upstream watch: Wittern is building "Bunkankun", a Kanripo successor;
   # its catalog component lives at ask.bunkankun.org (journaled — a
   # future catalog/fetch seam candidate, next Sino phase survey).
-  classes: [KR1, KR2, KR3, KR4]
+  classes: [KR1, KR2, KR3, KR4, KR5]
+
+kr-gaiji:
+  adapter: Nabu::Adapters::KrGaiji
+  axes: [sinitic]
+  enabled: false   # PERMANENTLY false — a feature module, not a text source
+                   # (the P34-1 bridging precedent): discover mints no
+                   # documents, so there is nothing to serve or flip. The row
+                   # exists to give the owner the sanctioned GitFetch path for
+                   # the gaiji resolution map. OWNER QUEUE (P37-3): optional —
+                   # bin/nabu sync kr-gaiji (sparse cone ≈ a few hundred KB,
+                   # charlist.org.txt + README only) lands canonical/kr-gaiji
+                   # so config/gaiji/kanripo.tsv can be regenerated when KR-Gaiji
+                   # advances. The map already ships curated, so the fetch is a
+                   # refresh path, not a prerequisite — placeholder + the 972
+                   # faithful resolutions work today with no sync.
+  # P37-3: KR-Gaiji — the Kanseki Repository's not-yet-encoded characters
+  # (github.com/kanripo/KR-Gaiji). charlist.org.txt lists 5,254 `&KR\d+;`
+  # gaiji refs; census (commit 662fd61d) found only 972 (36.4% of the
+  # 1,751,360 occurrences) carry a single real Unicode codepoint — those are
+  # curated into config/gaiji/kanripo.tsv and resolved to real glyphs by the
+  # `reading` mode; the 707 refs with only a lossy "normalized" substitute
+  # (51.8% of occurrences) and the 3,564 image-only refs (11.2%) stay the ⬚
+  # placeholder — placeholder, never a fake glyph (owner honesty gate).
+  # License rides the kanripo org grant verbatim (no per-repo LICENSE):
+  # "Comprehensive collection of premodern Chinese texts. Licensed as CC BY
+  # SA 4.0." → attribution. The sparse cone [charlist.org.txt, README.md]
+  # skips the 5,232-PNG images/ tree the resolution never needs.
+  sync_policy: manual
+
 tls:
   adapter: Nabu::Adapters::Tls
   axes: [sinitic]

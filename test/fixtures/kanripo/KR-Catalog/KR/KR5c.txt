@@ -1,0 +1,66 @@
+# -*- mode: org; -*-
+** KR5c ZB5c 洞神部
+# ** CMTS0301	本文類 Scripture
+*** KR5c0091 道德真經註(四)--吳澄
+:PROPERTIES:
+:KR_ID: KR5c0091
+:CUSTOM_ID: ZB5c0088
+:TTC: 666 - 667
+:DZ: DZ0704
+:page: 120780a
+:ZHDZ: ZHDZ12p0577
+:XWDZ: XWDZ21p0481
+:BASEEDITION: HFL
+:HFL: HFL短上004
+:EXTRA_ID: DZJY:JY053
+:END:
+**** 目次
+￥０ 老子（臨川呉澄述）
+￥１ 道經上
+￥２ 道經下
+￥３ 徳經上
+￥４ 徳經下
+￥４ ［題記］（臨川呉澄題）
+
+**** 人物
+***** 吳澄
+     :PROPERTIES:
+     :ZI:       幼請
+     :HAO:      草廬
+     :DATES:    1249 - 1333
+     :END:
+**** 版本
+***** SJB
+***** ZHDZ
+***** WYG 道德眞經注
+:PROPERTIES:
+:CUSTOM_ID:  ZB3n0008
+:SOURCE:   四庫全書 文淵閣版, V1055.9, p257
+:EXTENT: 4 卷
+:BOOK:   2
+:END:
+****** 人物
+******* 吳澄
+      :PROPERTIES:
+      :DYNASTY:  元
+      :FUNCTION: 撰
+      :DATES:    1249 - 1331
+      :END:
+
+# *CH030334	3090	道德真經集解序說(宋-董思靖)　	12/0821	21/0545	　	　
+***** DZJY  *JY053 道德真經註  Daode zhenjing zhu			:can:
+:PROPERTIES:
+:EXTENT:  4 juan
+:LODGE:  心 10 
+:KZ:  5: 2069-2113
+:BR:  5: 290-93
+:CT:  704
+:DZ: DZ0704 / JY053
+:END:
+道德真經註 
+DZJ0: [[dzjy:JY053/JY053_01.txt][JY053 道德真經註 ]]
+****** Work notes
+
+****** Comments
+
+

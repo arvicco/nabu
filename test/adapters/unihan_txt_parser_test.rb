@@ -23,7 +23,7 @@ class UnihanTxtParserTest < Minitest::Test
 
   def test_one_entry_per_codepoint_with_a_carried_field_in_numeric_order
     assert_equal %w[U+340A U+340B U+349A U+4E00 U+4E9A U+4E9C U+4E9E U+4EBA U+4F53
-                    U+5929 U+611B U+7231 U+9AD4 U+9B75 U+2000B],
+                    U+5929 U+611B U+68C4 U+7231 U+9AD4 U+9B75 U+2000B],
                  entries.map(&:entry_id),
                  "numeric codepoint order — plane 2 (U+2000B) sorts LAST, " \
                  "though the upstream ASCII sort puts it before U+3400"

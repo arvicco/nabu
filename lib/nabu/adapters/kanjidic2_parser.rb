@@ -17,6 +17,10 @@ module Nabu
     class Kanjidic2Parser
       LANGUAGE = "jpn"
 
+      # Curated dic_number references for the desk card (the whole set is 20+
+      # cross-reference indices; these are the ones a reader reaches for).
+      DIC_REFS = %w[nelson_c halpern_njecd heisig moro].freeze
+
       # +io+: any IO yielding the XML (File or Zlib::GzipReader).
       def entries(io)
         collected = []
@@ -55,8 +59,31 @@ module Nabu
           reading_line(character, "ja_kun", "kun"),
           list_line("nanori", character.xpath(".//nanori").map(&:text)),
           list_line("meaning", meanings(character)),
-          misc_line(character)
+          misc_line(character),
+          *desk_reference_lines(character)
         ].compact
+      end
+
+      # The desk-reference codes (P37-4 — the `nabu char` desk block, zero
+      # fields suppressed): the SKIP + four-corner query codes, the JIS
+      # codepoints, and a curated dic_number set — each as its own
+      # "label: value" line so the char card can surface them structurally.
+      def desk_reference_lines(character)
+        lines = []
+        skip = character.at('.//q_code[@qc_type="skip"][not(@skip_misclass)]')&.text
+        lines << "skip: #{skip}" if skip
+        four_corner = character.at('.//q_code[@qc_type="four_corner"]')&.text
+        lines << "four_corner: #{four_corner}" if four_corner
+        %w[jis208 jis212 jis213].each do |jis|
+          value = character.at(%(.//cp_value[@cp_type="#{jis}"]))&.text
+          lines << "#{jis}: #{value}" if value
+        end
+        dic = DIC_REFS.filter_map do |type|
+          value = character.at(%(.//dic_ref[@dr_type="#{type}"]))&.text
+          "#{type} #{value}" if value
+        end
+        lines << "dic: #{dic.join('、')}" unless dic.empty?
+        lines
       end
 
       def reading_line(character, r_type, label)

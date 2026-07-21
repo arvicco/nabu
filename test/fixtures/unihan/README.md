@@ -41,16 +41,21 @@ data; only the codepoint SET was trimmed.
 - `kJapanese` (added in Unicode 15.1) is DENSER than the legacy
   kJapaneseOn/kJapaneseKun pair it supersedes — all three are carried.
 
-## These files — 16 codepoints, all their Readings + Variants lines
+## These files — 17 codepoints, all their Readings + Variants lines
 
-`Unihan_Readings.txt` (145 lines) + `Unihan_Variants.txt` (19 lines),
-full comment headers kept verbatim. The set:
+`Unihan_Readings.txt` + `Unihan_Variants.txt`, plus (P37-4) a trimmed
+`Unihan_IRGSources.txt` carrying the radical-stroke fields
+(kRSUnicode/kTotalStrokes, + one ignored kIRG_GSource per codepoint to
+exercise the census) for 5 of them — U+4E00 (1.0/1), U+4EBA (9.0/2),
+U+5929 (37.1/4), U+611B (61.9/13), U+68C4 棄 (75.8/12). Full comment
+headers kept verbatim. The set:
 
 | Codepoints | Why |
 |---|---|
 | U+4E00 一, U+5929 天, U+4EBA 人 | full-strata rows (definition, fanqie, Tang readings, all three Japanese layers, Korean/Vietnamese); 天/人 tie to the HDIC fixtures (TSJ s0104a601, KRM F00001) |
 | U+4E9C 亜 / U+4E9E 亞 / U+4E9A 亚 | the Japanese-shinjitai / traditional / simplified variant triangle (kSimplifiedVariant, kTraditionalVariant) |
 | U+611B 愛 / U+7231 爱, U+9AD4 體 / U+4F53 体 | more variant pairs incl. the JMdict fixture headword 愛 |
+| U+68C4 棄 | **the P37-4 acceptance character** (`nabu char 棄`): readings (qì / キ すてる / KI / khí), kSimplifiedVariant U+5F03 弃, and the IRGSources kRSUnicode 75.8 / kTotalStrokes 12 |
 | U+9B75 鬵 | ties to the TSJ wakun fixture row (sj_w00001 カナヘ) |
 | U+340A / U+340B | the kSpoofingVariant pair — U+340A mints from the Variants file alone |
 | U+349A | kSpecializedSemanticVariant with source tag (`U+6587<kFenn`) verbatim |
@@ -61,7 +66,8 @@ full comment headers kept verbatim. The set:
 
 ```ruby
 KEEP = %w[U+3403 U+340A U+340B U+349A U+4E00 U+4E9A U+4E9C U+4E9E U+4EBA
-          U+4F53 U+5929 U+611B U+7231 U+9AD4 U+9B75 U+2000B]
-# for each of the two member files: keep every `#`/blank line verbatim,
-# keep a data line iff its first tab field is in KEEP
+          U+4F53 U+5929 U+611B U+68C4 U+7231 U+9AD4 U+9B75 U+2000B]
+# for each member file (Readings, Variants, and the P37-4 IRGSources trim):
+# keep every `#`/blank line verbatim, keep a data line iff its first tab
+# field is in KEEP
 ```

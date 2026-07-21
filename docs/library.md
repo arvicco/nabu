@@ -572,14 +572,28 @@ Taishō canon) are the planned P33 continuations.
 |---|---|
 | **Category** | The Sino axis's bookshelf — Phase 33: the two great Chinese text libraries and the concept lexicon |
 | **Language** | Literary Chinese (`lzh`) at library scale; Old Chinese (`och`) concept/word shelves |
-| **Size** | `kanripo`: nabu's first many-repo source — waves 1+2 = KR1 classics + KR2 histories + KR3 masters + KR4 belles-lettres, 3,569 catalog ids / 3,512 repos / ~1.7 GB, catalog-driven shallow fetches with polite pacing and a resumable per-text ledger; editions are git branches (master = base edition); citation grain text:juan:leaf-side from the mandoku page anchors; org-level CC BY-SA grant (№25 confirmation outstanding, non-blocking). `cbeta`: the Taishō (T, 2,471 files / 816 MB) + Xuzangjing (X, 1,236 / 645 MB) in CBETA's TEI — the Taishō citation (page-register-line) rides free from the lb milestones; CC BY-NC-SA per the canon-level gate, the four Category B corpora refused by rule; all 272 held lzh Āgamas map into T. `tls`: the Thesaurus Linguae Sericae concept net as two och dictionaries — 3,018 concepts + 20,163 word superEntries (100% concept-linked), membership inverted from the words dir; CC BY-SA (the README badge discrepancy recorded) |
-| **Metadata** | Producer #8 links the Kyoto treebank to its Kanripo source texts (all 936 treebank documents carry KR-ids; 44% resolve at wave 1, 56% more at wave 2); KR5 characterized as the Daozang (in/out ruling pending — witness-overlay parser needed first); the TLS attestation lane (111k sense-level attributions) journaled as a future crosswalk |
+| **Size** | `kanripo`: nabu's first many-repo source — waves 1+2 = KR1 classics + KR2 histories + KR3 masters + KR4 belles-lettres, 3,569 catalog ids / 3,512 repos / ~1.7 GB, catalog-driven shallow fetches with polite pacing and a resumable per-text ledger; editions are git branches (master = base edition); citation grain text:juan:leaf-side from the mandoku page anchors; org-level CC BY-SA grant (№25 CONFIRMED by the maintainer in writing 2026-07-20). `cbeta`: the Taishō (T, 2,471 files / 816 MB) + Xuzangjing (X, 1,236 / 645 MB) in CBETA's TEI — the Taishō citation (page-register-line) rides free from the lb milestones; CC BY-NC-SA per the canon-level gate, the four Category B corpora refused by rule; all 272 held lzh Āgamas map into T. `tls`: the Thesaurus Linguae Sericae concept net as two och dictionaries — 3,018 concepts + 20,163 word superEntries (100% concept-linked), membership inverted from the words dir; CC BY-SA (the README badge discrepancy recorded) |
+| **Metadata** | Producer #8 links the Kyoto treebank to its Kanripo source texts (all 936 treebank documents carry KR-ids; 44% resolve at wave 1, 56% more at wave 2); KR5 shipped as wave 3 (P37-1: the witness-overlay parser; owner sync pending — see §8u); the TLS attestation lane SHIPPED (P34-4): 189K sense-level dictionary_citations resolving into kanripo at page/document grain — 80.2% of KR-shaped citations resolve at the settled census (2026-07-21), +5.6% more the day the KR5 sync lands |
 
 **Research uses:** the Analects readable beside its gold treebank
 annotation and its TLS concept net; the Taishō canon at scholarly
 citation grain with the Āgama parallels pointing in; dynastic histories
 and the literary anthologies at page grain — the open ctext.org
 substitute, on the researcher's own disk.
+
+## 8u. The character desk & the Sino instruments (`babelstone-ids`, `kradfile`, `kr-gaiji` + the KR5 Daozang wave; Phase 37, 2026-07-21 — shelves await the owner-fired first syncs)
+
+| | |
+|---|---|
+| **Category** | The largest shelf gets its instruments: character-structure search, the variant fold, gaiji rendering, and the Daozang |
+| **Language** | Literary Chinese (`lzh`), Old Chinese (`och`) headwords, Japanese kanji (`ja` desk data) |
+| **Size** | `babelstone-ids`: Andrew West's Ideographic Description Sequences — 97,680 characters at Unicode 16.0, public-domain dedication verbatim in the file, one 3.1 MB fetch (supersedes the GPL-encumbered cjkvi-ids, ruled OUT). `kradfile`: the EDRDG component→kanji index (the file Jisho itself searches) — 6,355 kanji under the same CC BY-SA licence document as KANJIDIC2/JMdict. `kr-gaiji`: a feature-module row (no documents) — the Kanripo gaiji map censused whole: 5,254 refs / 1.75M occurrences, 972 refs (36.4% of occurrences) map to real codepoints and resolve in `--display reading`; the rest render an honest ⬚ with a counted footer. KR5 道 the Daozang: 1,663 catalog ids / 1,660 repos / ~84 MB join the kanripo `classes:` via the witness-overlay parser (DZJY repos transcribe the CK-KZ witness edition; its page anchors are the citable structure) |
+| **Metadata** | `nabu char 棄` — the character card: radical + strokes (unihan kRS*), IDS decomposition, components, variants, readings from kun/on through Mandarin and Korean, and the diachronic column no dictionary site offers — Old Chinese (Baxter-Sagart), Qieyun (tshet-uinh), Heian lexicography (hdic), TLS senses with classical attestations, corpus counts. `search --radical N / --strokes A-B / --char-component 木` — explicit character-structure modes, never mixed into text search. The trad/simp/z variant fold (6,050 unihan-derived pairs, semantic variants refused) folds 說/説/说 to one search skeleton; the ~13M-passage lzh re-derive rides the owner's next incremental rebuild |
+
+**Research uses:** a character looked up once and answered across four
+millennia of use — structure, sound, and attestation on one card; simplified-
+script queries reaching the traditional-script corpus; the Daozang at witness
+page grain beside the Buddhist and Confucian canons.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

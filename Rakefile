@@ -72,6 +72,31 @@ namespace :ops do
   end
 end
 
+# The Han variant-fold table (P37-2). Regenerates lib/nabu/hani.rb from the
+# HELD Unihan Variants data — read-only on canonical/, writes ONLY the
+# generated lib file. Changing the table changes text_normalized for lzh/och:
+# the conventions §9 rebuild-storm caveat applies (P36-1 fingerprints dirty;
+# the owner schedules the re-derive). Provenance and the resolution rule live
+# on Nabu::Ops::HaniFoldBuilder.
+namespace :fold do
+  desc "Regenerate lib/nabu/hani.rb from canonical/unihan/Unihan_Variants.txt (or [path])"
+  task :hani, [:variants_path] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    path = args[:variants_path] || File.expand_path("canonical/unihan/Unihan_Variants.txt", __dir__)
+    builder = Nabu::Ops::HaniFoldBuilder.new(variants_path: path)
+    File.write(File.expand_path("lib/nabu/hani.rb", __dir__), builder.render)
+    census = builder.census
+    puts "lib/nabu/hani.rb regenerated: #{builder.table.size} pairs " \
+         "(Unihan #{census.unihan_version}, file date #{census.unihan_date})"
+    puts "refused: #{census.self_ambiguous.size} self-listing, #{census.multi_trad.size} multi-traditional, " \
+         "#{census.trad_simp_conflicts.size} trad/simp conflicts, #{census.z_conflicts.size} z-conflicts, " \
+         "#{census.cycles} cycle(s); #{census.semantic_lines_excluded} semantic lines excluded"
+    puts "NOTE: a changed table changes lzh/och text_normalized — plan the §9 rebuild (owner-scheduled)."
+  end
+end
+
 # Gate rider (P24-0, site/MAINTENANCE.md standing duty): flag drift between
 # the canonical/local-source dossier descriptions and the public map
 # (docs/library.md; site/library.md is its printed copy, covered
@@ -97,6 +122,29 @@ namespace :site do
     else
       abort "site:check found #{findings.size} drift finding(s)"
     end
+  end
+
+  desc "Regenerate the per-axis site pages (site/axis/*.md + /axis/ index) from the registry + fragments + live counts"
+  task :axes do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "date"
+
+    config = Nabu::Config.load
+    # The catalog is read READ-ONLY for the holdings numbers; NABU_AXES_CATALOG
+    # points the generator at another checkout's live db (a worktree run wants
+    # the main checkout's synced catalog for honest, dated counts).
+    catalog_path = ENV.fetch("NABU_AXES_CATALOG", config.catalog_path)
+    generator = Nabu::Ops::AxisPages.new(
+      registry: Nabu::SourceRegistry.load(config.sources_path),
+      fragments_path: File.expand_path("site/axis/_fragments.yml", __dir__),
+      output_dir: File.expand_path("site/axis", __dir__),
+      catalog_path: catalog_path,
+      as_of: Date.today
+    )
+    results = generator.generate!
+    counts = File.exist?(catalog_path) ? "live catalog #{catalog_path}" : "no catalog (holdings say so)"
+    puts "site:axes wrote #{results.size} pages (#{results.size - 1} desks + index) — #{counts}"
   end
 end
 

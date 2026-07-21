@@ -56,9 +56,9 @@ module Nabu
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                       loans: nil)
+                       sources: nil, loans: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
-                         facets: facets, source: source, loans: loans)
+                         facets: facets, source: source, sources: sources, loans: loans)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -76,15 +76,22 @@ module Nabu
       # falls out under any active date/place filter (an absence, never an
       # error). +source+ (P22-1, `--source SLUG`) filters on the already-joined
       # sources row — validated CLI-side, so an unknown slug never reaches here
-      # as a silent empty result.
+      # as a silent empty result. +sources+ (P37-8, `--axis`) is the multi-source
+      # generalization of +source+: a research axis expands to its member slugs
+      # and filters on `slug IN (...)` — an ordinary catalog-side conjunct, so it
+      # composes with every search path exactly as the single-slug filter does
+      # (and, being catalog-side, arms the inner-window honesty hint). An empty
+      # list is treated as no filter (never a silent `IN ()`); it AND-composes
+      # with +source+ when both are given.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                           loans: nil)
+                           sources: nil, loans: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .where(Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:sources][:slug] => source) if source
+        dataset = dataset.where(Sequel[:sources][:slug] => sources) if sources && !sources.empty?
         dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
