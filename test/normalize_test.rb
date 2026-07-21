@@ -504,16 +504,43 @@ class NormalizeTest < Minitest::Test
     assert_equal "时了台㐀丘", Nabu::Normalize.search_form("时了台㐀丘", language: "lzh")
   end
 
-  # Other languages are byte-unchanged: the fold is keyed lzh/och only.
-  # Japanese keeps its shinjitai (値段 stays; 呉 would fold under lzh), and
-  # the unihan shelf's zho headwords stay literal on both spellings.
+  # The Han (lzh/och) fold is keyed lzh/och only; the jpn fold (P38-4) is its
+  # own separate table. Other languages stay byte-unchanged: the unihan shelf's
+  # zho headwords stay literal on both spellings, and a bare "ja" tag (not the
+  # corpus's "jpn") is unkeyed.
   def test_han_fold_leaves_other_languages_untouched
     # (mark-free text: the GENERIC fold already strips kana dakuten as \p{Mn},
     # pre-P37-2 behavior — the pin here is about Han codepoints only)
     assert_equal "値段の学問", Nabu::Normalize.search_form("値段の学問", language: "ja")
     assert_equal "说文解字", Nabu::Normalize.search_form("说文解字", language: "zho")
-    assert_equal "呉音", Nabu::Normalize.search_form("呉音", language: "jpn")
     assert_equal "μηνισ", Nabu::Normalize.search_form("μῆνις", language: "grc")
+  end
+
+  # The §9 contract for jpn (P38-4): kyūjitai and shinjitai spellings of one
+  # reform pair index as ONE skeleton — the same traditional skeleton the
+  # lzh/och Han fold assigns (國), so Japanese old/new and Chinese trad/simp
+  # meet rather than fight. The fold is the 173 jinmeiyō reform pairs only.
+  def test_jpn_search_form_folds_kyujitai_and_shinjitai_to_one_skeleton
+    assert_equal "國語", Nabu::Normalize.search_form("国語", language: "jpn")
+    assert_equal "國語", Nabu::Normalize.search_form("國語", language: "jpn")
+    # composes with the lzh Han fold: identical skeleton, not a competing one.
+    assert_equal Nabu::Normalize.search_form("國", language: "lzh"),
+                 Nabu::Normalize.search_form("国", language: "jpn")
+    # out-of-scope pairs (kyūjitai not a name-kanji) stay literal, honestly.
+    assert_equal "学問", Nabu::Normalize.search_form("学問", language: "jpn")
+    # a z-variant glyph that is not a reform pair is left alone.
+    assert_equal "呉音", Nabu::Normalize.search_form("呉音", language: "jpn")
+  end
+
+  # The union invariant extends to the jpn fold: a query in EITHER form covers
+  # the indexed jpn skeleton (and the shared skeleton reaches lzh/och too).
+  def test_query_forms_covers_the_jpn_reform_spellings
+    %w[国 國].each do |query|
+      variants = Nabu::Normalize.query_forms(query)
+      assert_includes variants, form(query, "jpn"),
+                      "query_forms(#{query.inspect}) must cover the jpn document form"
+      assert_includes variants, "國", "the shared traditional skeleton is in the union"
+    end
   end
 
   # fold_with_map equality extends to the Han fold (per-codepoint 1→1), and
