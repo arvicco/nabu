@@ -70,6 +70,20 @@ module Nabu
     class Loader
       TOOL = "nabu-loader"
 
+      # The row-aware batch cap (P37-7): in tx_batch mode a batch also flushes
+      # once its buffered documents carry this many PASSAGES, so the grain is
+      # bounded in rows, not just documents. Why: the P36-2 doc-count grain
+      # let mega-document sources (kanripo/cbeta/diorisis/ud — thousands of
+      # passages per document) pile hundreds of MBs into ONE transaction, and
+      # the per-document savepoints' statement journal — held in RAM under the
+      # rebuild pragmas' temp_store=MEMORY — grows with the whole transaction
+      # (measured ×1.8 at fixture scale, ×1.6–3.4 live: the mega-source load
+      # regression). 10k rows keeps a transaction's dirty set tens-of-MBs; the
+      # extra commits are near-free under the rebuild profile's
+      # synchronous=OFF, and many-docs-few-passages sources still batch by
+      # document count exactly as before.
+      TX_BATCH_ROWS = 10_000
+
       # db: the Sequel database (Store.setup! already applied);
       # source: the Store::Source row this load belongs to;
       # ledger: the history ledger db (Ledger.setup! applied) or nil.
@@ -85,12 +99,17 @@ module Nabu
       #   ~N per-document commits into N/batch is the bulk-load win; the fixed
       #   batch (rather than one transaction for a whole mega-source) bounds the
       #   uncommitted WAL frames a 353k-document source would otherwise pile up.
-      def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil)
+      # tx_batch_rows (P37-7, batch mode only): the companion PASSAGE-row cap —
+      #   a batch flushes when either bound fills, so mega-document sources
+      #   cannot turn the document grain into a multi-GB transaction (see
+      #   TX_BATCH_ROWS for the measured why).
+      def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS)
         @db = db
         @source = source
         @ledger = ledger
         @profile = profile
         @tx_batch = tx_batch
+        @tx_batch_rows = tx_batch_rows
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -153,14 +172,19 @@ module Nabu
         # it lands, preserving the P2-6 "one running-count tick per document"
         # contract; quarantine/skip flush first so ticks stay in input order.
         buffer = []
-        flush = -> { flush_batch(buffer, counts, tick) }
+        buffered_rows = 0
+        flush = lambda do
+          flush_batch(buffer, counts, tick)
+          buffered_rows = 0
+        end
         process = lambda do |document, retained = nil|
           # Even a document that fails to persist was present upstream, so its
           # urn still shields the existing row from the withdrawal sweep.
           seen_urns.add(document.urn)
           if @tx_batch
             buffer << [document, retained]
-            flush.call if buffer.size >= @tx_batch
+            buffered_rows += document.size
+            flush.call if buffer.size >= @tx_batch || buffered_rows >= @tx_batch_rows
           else
             load_document(document, counts, retained)
             tick.call
