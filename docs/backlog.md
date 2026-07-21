@@ -10747,3 +10747,29 @@ census read after a clean pass.
   discovery (skip, not quarantine) and remain per-work opt-in
   candidates for a later phase. No orthography cut — the 旧字 slice
   stays a curated view idea, not an ingest boundary.
+
+# ── P39 candidates (journaled at the P38 gate) ─────────────────────
+#
+# 1. REGISTRY SEMANTICS (owner-raised 2026-07-21/22, design agreed in
+#    chat — the P39 opener): (a) kind: source | shelf | module — the
+#    86-row registry conflates true upstream sources with local-*
+#    gateway shelves and feature modules (kr-gaiji/bridging); list/
+#    status group by kind, modules behind --all, sync on a module
+#    prints its nature, censuses become "80 sources + 4 shelves + 2
+#    modules" everywhere (README/02-sources/axis pages — §6b honesty).
+#    (b) sync vocabulary: sync_policy gates ONLY sync --all membership
+#    but reads as an upstream-activity claim; rename live→auto, keep
+#    manual with an honest legend on every surface, frozen stays,
+#    local DROPPED (redundant with kind: shelf). Owner leaned rename.
+# 2. FOLD-DIGEST GRANULARITY (journaled 2026-07-21): per-language fold
+#    digests + language-scoped fold-module seam so a jpn-only fold
+#    change stops dirtying all sources (the P38 all-dirty event).
+# 3. jpn fold coverage watch: NEW/OLD char-card cross-ref stays
+#    jinmeiyō-only; 碕/嵜 ambiguity refusals; merge list reversible.
+# 4. Aozora quarantine-census triage (~1.5k gap classes: index↔tree
+#    re-proof drift, delimiter-less legacy, UTF-8 five, corrupt zips)
+#    + attic-rediscovery design + the display-ladder aozora wiring
+#    (aozora-ids lane for description-only gaiji).
+# 5. Carried: contentless-FTS5 implementation (P37-7 note), Aozora
+#    in-copyright per-work opt-ins, Bunkankun watch, KR2p,
+#    MAX_LEMMA_FORMS=400 watch, KR2o0001/KR3l0002 duplicate anchors.
