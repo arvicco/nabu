@@ -10700,13 +10700,25 @@ license rows; language jpn; japonic axis; conformance suite + real
 trimmed fixtures (one ruby-dense, one gaiji-bearing);
 enabled:false until owner-fired first sync verifies.
 
-## P38-4 · Japanese char-desk closure  [tier: opus] [status: ready] [deps: P38-3]
+## P38-4 · Japanese char-desk closure  [tier: opus] [status: done 2026-07-21 — merged; fold GO: 173 kyūjitai↔shinjitai pairs from held Unihan kJinmeiyoKanji (Nabu::Jpn, rake fold:jpn, hani-composed: Jpn.fold("国")==Hani.fold("國")=="國"; merges refused, 0 found); char card cross-references old/new forms; japonic fragment + conventions §9 refreshed; suite 5,137 green] [deps: P38-3]
 kyūjitai↔shinjitai fold: survey held Unihan/KANJIDIC variant fields —
 config-only lane (hani-fold mold) if the data supports; else journal
 with the census. Char card jpn corpus counts; japonic axis page +
 docs refresh; gate news post rides.
 
 ## D38 decision items
+- D38-b (open, for the gate): jpn fold COVERAGE EXTENSION. The shipped
+  fold covers ONLY the 173 jinmeiyō-listed old-forms — the one clean
+  1:1 signal held Unihan provides. The famous high-frequency reform
+  pairs (學/学, 體/体, 醫/医, 觀/観 …) are NOT jinmeiyō-listed and stay
+  literal: a search for 学 does not reach 學 in kyūjitai works.
+  Extension would mine KANJIDIC2's kuten variants, which are
+  one-to-many (學→{学,斈}) and need a disambiguation policy (plausible
+  rule: fold only pairs whose target is jōyō-listed) — a policy
+  invention the mold forbids without an owner ruling. Options:
+  (1) ship as-is, journal the gap; (2) rule the jōyō-filtered
+  KANJIDIC2 extension for a P38 rider or P39. Recommendation: (2) —
+  the gap sits exactly on the desk's main use case.
 - D38-a (owner, 2026-07-21): RULED — Option 1, PD text only:
   every work with 作品著作権フラグ=なし and a text file (~17,488
   works, ~0.7 GB raw, single license_class public_domain with 底本
