@@ -102,6 +102,30 @@ module Nabu
     # - Anything `<…>`-shaped that survives anchor/milestone extraction is a
     #   loud ParseError (unrecognized construct) — never silent text
     #   pollution (census: zero stray angle brackets in any probed repo).
+    #
+    # == P37-r2 regression census (the FULL live KR1–4 tree, 3,506 texts,
+    #    old-vs-new parsed 2026-07-21 — the probe sets above missed these)
+    #
+    # The P37-1 loudness above regressed 31 previously-served KR1–2 texts
+    # (+KR3/4 equivalents); the wild shapes, each now handled or ruled:
+    # - "</TEI¶" as a juan file's final line (12 texts, always right after a
+    #   page anchor): the mandoku TEI export's dangling close tag →
+    #   annotations "cruft", never text (pre-P37 it was served as a junk
+    #   passage).
+    # - '<折 t="33"/>' self-closed inline elements inside commentary (the
+    #   CRUFT second alternative) → "cruft", surrounding text preserved.
+    # - Bare angle brackets ("昏>昏>" across the KR3e medical shelf, "=>",
+    #   KR4a0001's lone "　<" line): canonical text bytes, not constructs —
+    #   ride byte-identically. Only a `<…>` pair or repeated `<` can be an
+    #   unextracted tag (markup never spans a print line).
+    # - Juan-less "<pb:KR2a0012_WYG_1a>" tags beside a real anchor —
+    #   upstream's own history calls them "spurious pbs" → "cruft", never a
+    #   boundary.
+    # - Edition-volume register d (KR2h0003/KR2k0054/KR2k0060) and leaf-side
+    #   side d (KR1h0024's 030-6d singleton): the [a-d] classes, verbatim.
+    # - KEEP-LOUD (deliberate): unresolved git merge-conflict markers
+    #   ("<<<<<<< HEAD", KR1j0018) — both hunk versions present in the file;
+    #   canonical damage a parser must never serve silently.
     class MandokuParser
       TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+)\.txt\z/
       HEADER_LINE = /\A#(?:\+|\s|-|\z)/
@@ -112,15 +136,34 @@ module Nabu
       # Any page-break tag; the inner form decides plain page vs edition-
       # volume annotation vs witness page — or raises (never silent).
       PAGE_BREAK = /<pb:(?<anchor>[^>]*)>/
-      ANCHOR = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<juan>\d+)-(?<page>\d+[ab])\z/
+      # Side class [a-d]: the corpus's single nonstandard side (KR1h0024's
+      # …030-6d, the P37-r2 census) mints verbatim like every other anchor —
+      # pre-P37 the whole tag rode as junk text inside the open page.
+      ANCHOR = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<juan>\d+)-(?<page>\d+[a-d])\z/
       # The print edition's own volume pagination interleaved mid-page (the
       # KR2 census): same text id, alpha-prefixed volume ordinal, a–c
       # register. Never a page boundary — an annotation on the open page.
-      EDITION_PAGE = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<volume>[A-Z]+\d+)-(?<page>\d+[a-c])\z/
+      # Register class [a-d]: a–c censused at P33-1; d attested in the wild
+      # WYG volumes (KR2h0003/KR2k0054/KR2k0060, the P37-r2 census).
+      EDITION_PAGE = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?<volume>[A-Z]+\d+)-(?<page>\d+[a-d])\z/
+      # Degenerate pb tags (P37-r2 census): juan-less "<pb:KR2a0012_WYG_1a>"
+      # (always right beside a real anchor — upstream's own commit history
+      # calls them "spurious pbs") and side-less "<pb:KR4h0159_WYG_065-60>"
+      # (the side letter typo'd into a 0, between anchors 6a and 7a). Cruft
+      # annotations, never boundaries.
+      SPURIOUS_PB = /\A(?<text>KR\d[a-z]\d{4})_(?<edition>[^_]+)_(?:\d+[a-d]|\d+-\d+)\z/
       # The witness page form (the KR5 overlay census): juan `p` leaf-side.
       WITNESS_PAGE = /\A(?<head>[^_]+)_(?<container>[^_]+)_(?<juan>\d+)p(?<page>\d+[ab])\z/
       # Base-edition page milestones overlaid on the witness text.
       MILESTONE = /<md:(?<anchor>[^>]*)>/
+      # Leaked export markup censused in the REAL corpus (P37-r2): the
+      # mandoku TEI export's dangling close tag ("</TEI¶" as a juan file's
+      # final line — 12 KR1/KR2 texts) and self-closed inline elements
+      # ('<折 t="33"/>' in KR1c0009's commentary). Pre-P37 these rode
+      # SILENTLY AS TEXT; now they ride annotations "cruft" verbatim — never
+      # page text, never silently dropped. Any OTHER `<…>`-shaped survivor
+      # is still the loud unrecognized-construct ParseError.
+      CRUFT = Regexp.union(%r{</TEI(?=¶|\z)}, %r{<[^<>]+/>})
       SRC_COMMENT = /\A#\s+src:\s+(?<ref>.*)\z/
       HEADING = /\A(?<stars>\*+)\s+(?<text>.*)\z/
       GAIJI = /&[A-Za-z][A-Za-z0-9-]*;/
@@ -256,6 +299,8 @@ module Nabu
           annotation_bucket(state)["edition_pages"] << anchor
         elsif (match = WITNESS_PAGE.match(anchor))
           witness_page!(state, file, anchor, match)
+        elsif SPURIOUS_PB.match?(anchor)
+          annotation_bucket(state)["cruft"] << "<pb:#{anchor}>"
         else
           raise ParseError, "#{file}: unrecognized page anchor <pb:#{anchor}>"
         end
@@ -320,7 +365,20 @@ module Nabu
           annotation_bucket(state)["base_pages"] << milestone
           ""
         end
-        raise ParseError, "#{file}: unrecognized construct (#{cleaned.strip[0, 30].inspect})" if cleaned.match?(/[<>]/)
+        cleaned = cleaned.gsub(CRUFT) do |junk|
+          annotation_bucket(state)["cruft"] << junk
+          ""
+        end
+        # Bare angle brackets are canonical text, not constructs (P37-r2
+        # census: "昏>昏>" through the KR3e medical shelf, "=>", KR4a0001's
+        # lone "　<" line) — mandoku markup never spans a print line, so a
+        # single `<` with no `>` (or any `>` with no `<`) cannot be a tag.
+        # A `<…>` pair or repeated `<` (the conflict-marker shape) is still
+        # the loud unrecognized construct.
+        lt = cleaned.count("<")
+        if lt >= 2 || (lt == 1 && cleaned.include?(">"))
+          raise ParseError, "#{file}: unrecognized construct (#{cleaned.strip[0, 30].inspect})"
+        end
 
         cleaned
       end
@@ -330,7 +388,8 @@ module Nabu
       end
 
       def empty_annotations
-        { "src_refs" => [], "headings" => [], "edition_pages" => [], "base_pages" => [], "fw" => [] }
+        { "src_refs" => [], "headings" => [], "edition_pages" => [], "base_pages" => [], "fw" => [],
+          "cruft" => [] }
       end
 
       # Emit the open page as a passage; empty pages (no print lines) are
@@ -352,7 +411,7 @@ module Nabu
         annotations = { "anchor" => page[:anchor] }
         gaiji = text.scan(GAIJI)
         annotations["gaiji"] = gaiji unless gaiji.empty?
-        %w[headings src_refs edition_pages base_pages fw].each do |key|
+        %w[headings src_refs edition_pages base_pages fw cruft].each do |key|
           values = page[:annotations][key]
           annotations[key] = values unless values.empty?
         end

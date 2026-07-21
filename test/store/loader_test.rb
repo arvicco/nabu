@@ -478,6 +478,30 @@ module Store
       assert_empty provenance_events(event: "quarantined")
     end
 
+    # P37-r2 — the KR5-wave incident: a held document whose files STOP
+    # parsing (a stricter parser, upstream corruption) quarantines loudly,
+    # but must NEVER be withdrawn by the full-sync sweep — the text is still
+    # present upstream; recognition failed, not the text. The held revision
+    # stays served untouched.
+    def test_quarantined_ref_shields_its_held_row_from_the_withdrawal_sweep
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      row = Nabu::Store::Document.first(urn: "urn:nabu:test_adapter:beta")
+      held_revision = row.revision
+      held_sha = row.content_sha256
+
+      report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES, full: true)
+
+      assert_equal 1, report.errored
+      assert_equal 0, report.withdrawn, "a quarantined ref is present upstream — never withdrawn"
+      row.refresh
+      refute row.withdrawn, "quarantine must not withdraw the held document"
+      assert_equal held_revision, row.revision, "quarantine must not touch the held revision"
+      assert_equal held_sha, row.content_sha256, "quarantine must not touch the held content"
+      assert_empty provenance_events(event: "withdrawn")
+      # The quarantine itself is journaled loudly, as before.
+      assert_equal 1, provenance_events(event: "quarantined").size
+    end
+
     def test_skipped_ref_shields_its_row_from_the_withdrawal_sweep
       # Load beta as a real document first (via the plain adapter), then a full
       # load where beta is skipped-by-rule must NOT withdraw the existing row.
