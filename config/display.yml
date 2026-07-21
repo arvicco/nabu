@@ -57,20 +57,29 @@ languages:
 #                  erasures/surplus keep|unwrap, sigla strip|keep)
 #   qere_display:  qere | ketiv | both (oshb ketiv/qere apparatus; "both"
 #                  renders "ketiv [qere]")
-#   gaiji:         placeholder | refs (P37-3; kanripo `&KR\d+;` refs — see below)
+#   gaiji:         ladder | placeholder | refs (P38-2; kanripo `&KR\d+;` — below)
 #
 # ogham carries zero edition marks in its stored fixtures and oracc's
 # braces/x-marks are content (determinatives misread unwrapped) — neither
 # gets an entry; see backlog P27-1 for the journaled leaves.
 #
-# GAIJI (P37-3): the mandoku parser keeps kanripo's not-yet-encoded characters
-# as `&KR\d+;` references verbatim in text. `gaiji: placeholder` makes the
-# `reading` mode swap each ref for its RESOLVED glyph when config/gaiji/
-# kanripo.tsv (the faithful KR-Gaiji codepoint subset) maps it, else the ⬚
-# placeholder box — never a fake glyph; `--display diplomatic` keeps refs
-# verbatim. cbeta is a documented NON-entry: its `<g>` fallback text is already
-# the stored reading surface (the parser resolves it at parse time, P33-2), so
-# there is no ref to display-transform — exactly the ogham/oracc no-entry logic.
+# GAIJI (P38-2): the mandoku parser keeps kanripo's not-yet-encoded characters
+# as `&KR\d+;` references verbatim in text. `gaiji: ladder` makes the `reading`
+# mode resolve each ref per character down FOUR descending rungs:
+#   1. FAITHFUL   — real codepoint (config/gaiji/kanripo.tsv), rendered UNMARKED
+#   2. IDS        — description sequence (kanripo-ids.tsv, e.g. ⿰氵丐), inline;
+#                   empty for kanripo today, live for Aozora (P38-3)
+#   3. SUBSTITUTE — lossy read-through (kanripo-substitutes.tsv), rendered
+#                   VISIBLY MARKED in ⌈…⌉ (U+2308/2309 ceiling brackets —
+#                   unclaimed by any other convention, so a stand-in is never
+#                   quoted unaware; docs/display.md §1a)
+#   4. ⬚ placeholder (U+2B1A) — last resort, never a fake glyph
+# `gaiji: placeholder` (the P37-3 behavior, preserved) is rungs 1 + 4 ONLY —
+# faithful glyph or ⬚ box, the IDS/substitute lanes never consulted.
+# `--display diplomatic` keeps refs verbatim. cbeta is a documented NON-entry:
+# its `<g>` fallback text is already the stored reading surface (the parser
+# resolves it at parse time, P33-2), so there is no ref to display-transform —
+# exactly the ogham/oracc no-entry logic.
 sources:
   papyri-ddbdp: { reading: { lacuna: ellipsis } }
   edh: { reading: { lacuna: ellipsis, erasures: keep } } # an erasure is content — ⟦…⟧ stays
@@ -78,4 +87,4 @@ sources:
   sblgnt: { reading: { sigla: strip } }
   oshb: { qere_display: qere }
   bhsa: { qere_display: qere } # P30-4: same MT apparatus — bhsa tokens carry the oshb qere shape
-  kanripo: { gaiji: placeholder } # P37-3: &KR\d+; refs → resolved glyph or ⬚ placeholder in reading mode
+  kanripo: { gaiji: ladder } # P38-2: &KR\d+; → faithful | IDS | ⌈substitute⌉ | ⬚ in reading mode

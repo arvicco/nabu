@@ -13,7 +13,7 @@ The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed),
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `ccl` | dictionary | attribution | enabled · manual | 11,284 entries |
 | `coptic-scriptorium` | texts | nc | enabled · manual | 482 docs / 74,169 passages |

@@ -238,6 +238,38 @@ module Query
       end
     end
 
+    # P38-r1: --exact is the glyph-literal escape hatch. The default fold makes
+    # 說/説/说 one skeleton (above); --exact keeps only passages whose STORED
+    # text carries the query glyph-for-glyph. The lzh passage stores 說, so
+    # --exact 說 finds it while --exact 説 (a candidate under the fold) does not.
+    def test_exact_keeps_only_the_glyph_literal_hit_among_folded_candidates
+      doc = make_document(source: @open, urn: "urn:d:kr", title: "Lunyu", language: "lzh")
+      make_passage(doc, urn: "urn:d:kr:1", text: "不亦說乎，不亦樂乎", sequence: 0, language: "lzh")
+      rebuild!
+
+      assert_equal ["urn:d:kr:1"], search("不亦說乎", exact: true).map(&:urn),
+                   "the stored glyph 說 matches --exact"
+      assert_empty search("不亦説乎", exact: true),
+                   "説 is a fold candidate but not the stored glyph — --exact drops it"
+      assert_equal ["urn:d:kr:1"], search("不亦説乎").map(&:urn),
+                   "without --exact the z-variant still finds the passage"
+    end
+
+    # The Japanese reform-merge escape hatch: the default finds 弁 by a 辨 query
+    # (the admitted merge); --exact tells them apart.
+    def test_exact_distinguishes_an_admitted_japanese_merge
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Ben", language: "jpn")
+      make_passage(doc, urn: "urn:d:jp:1", text: "弁論", sequence: 0, language: "jpn")
+      rebuild!
+
+      assert_equal ["urn:d:jp:1"], search("辨論").map(&:urn),
+                   "the default fold reaches the shinjitai 弁 from a kyūjitai 辨 query"
+      assert_equal ["urn:d:jp:1"], search("弁論", exact: true).map(&:urn),
+                   "--exact matches the stored shinjitai glyph"
+      assert_empty search("辨論", exact: true),
+                   "辨 is a merged old form, not the stored glyph — --exact drops it"
+    end
+
     def test_snippet_marks_the_match_in_the_folded_form
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)

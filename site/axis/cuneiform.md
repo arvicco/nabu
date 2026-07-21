@@ -13,7 +13,7 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `oracc` | tablets | open | enabled · manual | 104,722 docs / 1,588,133 passages |
 | `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |

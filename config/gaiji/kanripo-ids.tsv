@@ -1,0 +1,22 @@
+# Kanripo gaiji ladder — lane 2 of 4: the IDS (Ideographic Description Sequence)
+# map (P38-1). Rung 2 of the ladder documented in kanripo.tsv: consulted when a
+# `&KR\d+;` ref has no FAITHFUL codepoint (rung 1) but DOES have a well-formed
+# IDS composition, which the renderer shows as the description sequence itself
+# (e.g. ⿰氵某) — more informative than the ⬚ box when no single codepoint fits.
+#
+# ref-id <TAB> ids-sequence (Unicode IDCs U+2FF0–2FFB + component glyphs).
+#
+# POLICY: a mandoku `[...]` composition in charlist column 3 that, once resolved
+# against BabelStone IDS, does NOT correspond to an already-ENCODED character
+# (else it belongs in the faithful lane). Disjoint from the other two lanes.
+#
+# census: 0, 2026-07-21, IDS refs — 0.00% of gaiji occurrences. The KR-Gaiji
+# charlist holds exactly ONE column-3 composition, KR0198 `[沔-丏+丐]`; its
+# resolution ⿰氵丐 IS an encoded glyph form of 沔 (U+6C94, Z-source
+# decomposition per BabelStone IDS.TXT), so it lands in the faithful lane and
+# this lane ships empty. The lane + its ref→sequence shape are shipped now so
+# Aozora (P38-3), whose gaiji ARE largely IDS compositions, populates it here.
+#
+# Shape/derivation example (documentation only — NOT a data row, KR0198 is
+# faithful):  KR0198<TAB>⿰氵丐   # 沔=⿰氵丏, sub 丏→丐 ⇒ ⿰氵丐 = 沔(U+6C94)
+# Source: KR-Gaiji charlist.org.txt @ 662fd61d + BabelStone IDS (held).

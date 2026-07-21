@@ -82,6 +82,8 @@ class CLITest < Minitest::Test
     assert_match(%r{OR/NOT are not supported}i, out, "must be honest about booleans")
     assert_match(/Examples:/, out)
     assert_match(/--lang/, out)
+    assert_match(/--exact/, out, "must document the glyph-literal escape hatch")
+    assert_match(/学 finds 學|弁 finds 辨/, out, "must state the reform-fold default it opts out of")
   end
 
   def test_help_show_documents_urn_shapes_and_full_urn
@@ -2617,6 +2619,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- search --exact (P38-r1): the glyph-literal escape hatch ---------------
+
+  def test_search_exact_matches_the_glyph_literal_form
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μῆνιν --exact]) }
+      assert_nil status, "a successful --exact search exits 0"
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
+      assert_match(/glyph-exact/, out, "the footer names the glyph-exact mode")
+    end
+  end
+
+  # Empty-under-filter honesty (P35): the accented passage is a fold CANDIDATE
+  # for the unaccented query, but --exact drops it (no literal μηνιν in μῆνιν);
+  # the no-matches message must own that it applied the glyph-literal filter.
+  def test_search_exact_empty_result_explains_the_filter
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν --exact]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/--exact matched glyph-literally/, out, "the empty page names the --exact filter")
+    end
+  end
+
+  def test_search_exact_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --exact --lemma λέγω μηνιν])
+    assert_equal 1, status
+    assert_match(/--exact.*does not combine/i, err)
+  end
+
   # -- the no-silent-script-miss hints (P27-2) -------------------------------
 
   def test_search_glagolitic_zero_hit_prints_the_cross_script_hint
@@ -4400,14 +4431,27 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_show_reading_resolves_and_placeholds_kanripo_gaiji
+  def test_show_reading_ladder_faithful_is_silent_placeholder_announced
     with_kanripo_gaiji_corpus do |config|
       out, _err, status =
         with_config(config) { run_cli(%w[show urn:nabu:kanripo:KR1h0004:001:1a --display reading]) }
       assert_nil status
-      assert_includes out, "子曰𫠦學而⬚時習之", "KR0001 resolves to its real glyph, KR0809 → placeholder box"
+      assert_includes out, "子曰𫠦學而⬚時習之", "KR0001 → its real glyph (silent), KR0809 → ⬚ placeholder"
       refute_includes out, "&KR", "no raw ref survives reading mode"
-      assert_includes out, "display: 1 unresolved gaiji (1 resolved) (--display diplomatic shows the gaiji refs)"
+      # ladder: the faithful glyph needs no announcement; only the ⬚ box does.
+      assert_includes out, "display: 1 unresolved gaiji (--display diplomatic shows the gaiji refs)"
+      refute_includes out, "(1 resolved)", "faithful is silent under the ladder — no P37-3 resolved count"
+    end
+  end
+
+  def test_show_reading_ladder_marks_a_substitute_and_counts_the_rung
+    with_kanripo_gaiji_corpus(text: "子&KR4710;曰&KR0809;") do |config|
+      out, _err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:kanripo:KR1h0004:001:1a --display reading]) }
+      assert_nil status
+      assert_includes out, "子⌈脊⌉曰⬚", "KR4710 → the marked substitute ⌈脊⌉; KR0809 → ⬚ placeholder"
+      assert_includes out,
+                      "display: 1 substituted, 1 unresolved gaiji (--display diplomatic shows the gaiji refs)"
     end
   end
 
@@ -6000,12 +6044,13 @@ class CLITest < Minitest::Test
     end
   end
 
-  # A one-passage kanripo corpus for the P37-3 gaiji lane: 論語 001:1a carrying
-  # one FAITHFUL ref (&KR0001; → 𫠦, in the shipped map) and one IMAGE-ONLY ref
-  # (&KR0809;, unresolvable). Copies BOTH the shipped display.yml (kanripo
-  # gaiji: placeholder) and the shipped config/gaiji dir into root so the
-  # reading mode reaches the real resolution map through the stubbed Config.
-  def with_kanripo_gaiji_corpus
+  # A one-passage kanripo corpus for the gaiji ladder: 論語 001:1a, default text
+  # carrying one FAITHFUL ref (&KR0001; → 𫠦) and one IMAGE-ONLY ref (&KR0809;,
+  # unresolvable). Copies BOTH the shipped display.yml (kanripo gaiji: ladder,
+  # P38-2) and the shipped config/gaiji dir into root so reading mode reaches
+  # the real three-lane tables through the stubbed Config. Pass +text:+ to
+  # exercise a substitute-lane ref (e.g. &KR4710; → the marked ⌈脊⌉).
+  def with_kanripo_gaiji_corpus(text: "子曰&KR0001;學而&KR0809;時習之")
     Dir.mktmpdir("nabu-cli-gaiji") do |root|
       sources = File.join(root, "sources.yml")
       File.write(sources, "# none\n")
@@ -6027,7 +6072,6 @@ class CLITest < Minitest::Test
         source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0004", title: "論語", language: "lzh",
         content_sha256: "x", revision: 1, withdrawn: false
       )
-      text = "子曰&KR0001;學而&KR0809;時習之"
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:nabu:kanripo:KR1h0004:001:1a", sequence: 0,
         language: "lzh", text: text, text_normalized: text, content_sha256: "x", revision: 1

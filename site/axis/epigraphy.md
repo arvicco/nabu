@@ -13,7 +13,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | enabled · manual | 61,414 docs / 921,611 passages |
 | `edh` | inscriptions | attribution | enabled · frozen | 81,881 docs / 406,306 passages |
