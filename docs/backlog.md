@@ -10717,6 +10717,7 @@ the live canonical (offender whole + corrupt trim). 613-quarantine
 census read after a clean pass.
 
 ## D38 decision items
+- P38-r1 DONE 2026-07-21 (merged; rider commit 79553a5): 744 fold entries = 173 jinmeiyō + 341 kanjidic 1:1 + 79 admitted merges/185 olds; jis212 refused-and-proved (宋 misread pin); intersection jōyō signal; stroke-count discriminator keeps Chinese simplifications (弃/笔) from becoming fold canonicals; NEW/OLD char-card cross-ref stays jinmeiyō-only (honesty); search --exact live (candidates-then-verify, loud refusals, empty-page honesty). Suite 5,147 green post-merge; fold equalities + Hani-lane distinctness + --exact verified live by orchestrator.
 - D38-b RULED (owner, 2026-07-21): jōyō-filtered extension, NOW as
   rider P38-r1 (not P39) — "THIS is japonic-focused Phase after all";
   the owner's pending full rebuild amortizes the fold-change
