@@ -10691,7 +10691,7 @@ tests per rung incl. footer counts; docs/display.md CJK font-install
 section (Jigmo, Plangothic, BabelStone Han). Acceptance: golden
 renders exercising all four rungs; conformance suite green.
 
-## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: dispatched — fixtures+jis0213 asset pre-committed 94c7a0f] [deps: P38-0, D38-a]
+## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: done 2026-07-21 — merged 04f1f00; GitFetch needed NO change (P26-0 sparse: takes glob cones — 2 new pin tests); suite 5,115 green. JOURNALED: attic-rediscovery gap (index-driven discovery can't rediscover atticked works — future design); license_class mapped to `open` (no public_domain enum; vulgate precedent — owner may want a distinct class, gate flag); ~5 UTF-8-text works skip-by-rule; first-sync watch: unknown-command census, gaiji_unresolved (旧字-heavy), ruby orphans, delimiter-structure quarantines] [deps: P38-0, D38-a]
 New parser family: Shift_JIS→UTF-8 NFC at the boundary; ruby
 (furigana) as annotation layer, never inline text; gaiji resolved at
 parse time — JIS X 0213 → real codepoint, component description →
