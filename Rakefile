@@ -95,6 +95,24 @@ namespace :fold do
          "#{census.cycles} cycle(s); #{census.semantic_lines_excluded} semantic lines excluded"
     puts "NOTE: a changed table changes lzh/och text_normalized — plan the §9 rebuild (owner-scheduled)."
   end
+
+  desc "Regenerate lib/nabu/jpn.rb from canonical/unihan/Unihan_OtherMappings.txt (or [path])"
+  task :jpn, [:mappings_path] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    path = args[:mappings_path] ||
+           File.expand_path("canonical/unihan/Unihan_OtherMappings.txt", __dir__)
+    builder = Nabu::Ops::JpnFoldBuilder.new(mappings_path: path)
+    File.write(File.expand_path("lib/nabu/jpn.rb", __dir__), builder.render)
+    census = builder.census
+    puts "lib/nabu/jpn.rb regenerated: #{census.reform_pairs} reform pairs, #{census.fold_entries} " \
+         "fold entries (Unihan #{census.unihan_version}, file date #{census.unihan_date})"
+    puts "dropped: #{census.nfc_identity_dropped} NFC-identity (compat ideographs), " \
+         "#{census.merges_refused.size} many-to-one merges refused; " \
+         "#{census.hani_composed} composed onto the shinjitai via hani"
+    puts "NOTE: a changed table changes jpn text_normalized — plan the §9 rebuild (owner-scheduled)."
+  end
 end
 
 # Gate rider (P24-0, site/MAINTENANCE.md standing duty): flag drift between
