@@ -452,6 +452,165 @@ class MandokuParserTest < Minitest::Test
     refute_includes document.passages.map(&:text).join, "目次"
   end
 
+  # -- censused cruft: leaked markup that pre-P37 rode silently AS TEXT ------
+  #
+  # P37-r2 (the KR5-wave regression): the P37-1 loudness tightening
+  # quarantined KR1–4 texts whose files carry leaked export markup that the
+  # pre-P37 parser served as literal passage text. The censused shapes (real
+  # corpus, 2026-07-21) are handled as verbatim "cruft" annotations — never
+  # page text, never silently dropped; anything else `<…>`-shaped stays a
+  # loud ParseError.
+
+  def test_dangling_tei_close_fragment_is_cruft_annotation_never_text
+    # 12 real KR1/KR2 texts end a juan file with a bare "</TEI¶" line right
+    # after a page anchor (e.g. KR1a0030_002.txt) — the mandoku TEI export's
+    # close tag leaking into the org file.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}</TEI¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      refute_includes last.text, "TEI"
+      assert_equal ["</TEI"], last.annotations["cruft"]
+    end
+  end
+
+  def test_page_whose_only_content_is_cruft_is_dropped_without_minting
+    # The censused corpus shape: a fresh anchor, then "</TEI¶", end of file
+    # (KR1a0030_002.txt). The cruft-only page mints no passage — the pre-P37
+    # parser served it with literal text "</TEI", which was junk.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}<pb:KR3g0023_WYG_000-99a>¶\n</TEI¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      refute_includes document.passages.map(&:urn), "urn:nabu:kanripo:KR3g0023:000:99a"
+    end
+  end
+
+  def test_leaked_self_closed_inline_tag_is_cruft_annotation_stripped_from_text
+    # KR1c0009_001.txt carries '<折 t="33"/>' inside commentary — a leaked
+    # inline element; the edition text around it is real and must survive.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}好逑<折 t=\"33\"/>雌雄¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_includes last.text, "好逑雌雄"
+      refute_includes last.text, "折 t="
+      assert_equal ["<折 t=\"33\"/>"], last.annotations["cruft"]
+    end
+  end
+
+  def test_nonstandard_page_side_mints_a_verbatim_page
+    # KR1h0024_030.txt: the corpus's single side-d anchor (…030-6d between
+    # 6b and 7a — an upstream anomaly). Verbatim minting, page cited as-is;
+    # pre-P37 the whole tag rode as junk text inside page 6b.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}<pb:KR3g0023_WYG_000-99d>¶\n異葉之文¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_equal "urn:nabu:kanripo:KR3g0023:000:99d", last.urn
+      assert_equal "異葉之文", last.text
+    end
+  end
+
+  def test_bare_gt_without_a_tag_opening_rides_as_text
+    # KR1j0029_010.txt has "昏>(虚郎切…" and KR2a0001_202.txt "…要刪焉。=>"
+    # — stray > bytes in real dictionary/commentary text, no < anywhere. A
+    # bare > cannot be an unextracted tag: it is canonical text, served
+    # byte-identically (the pre-P37 contract).
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}昏>又呼光切¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      assert_includes document.passages.last.text, "昏>又呼光切"
+    end
+  end
+
+  def test_bare_lt_without_a_closing_gt_rides_as_text
+    # KR4a0001_010.txt line 2861 is "　<" — a lone < byte in the Chuci text.
+    # One < with no > in the fragment cannot be a tag (mandoku markup never
+    # spans a print line): canonical text, served byte-identically. Two or
+    # more < (the conflict-marker shape) or a <…> pair stay loud.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}　<¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      assert_includes document.passages.last.text, "　<"
+    end
+  end
+
+  def test_spurious_juanless_pb_is_cruft_annotation_never_a_boundary
+    # KR2a0012_000.txt: "<pb:KR2a0012_WYG_1a><pb:KR2a0012_WYG_000-1b>¶" — a
+    # degenerate juan-less pb right before the real anchor; upstream's own
+    # commit history calls these "spurious pbs". Annotated verbatim, never a
+    # page boundary, never text.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}<pb:KR3g0023_WYG_9a><pb:KR3g0023_WYG_000-99a>¶\n頁上之文¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_equal "urn:nabu:kanripo:KR3g0023:000:99a", last.urn
+      assert_equal ["<pb:KR3g0023_WYG_9a>"], document.passages[-2].annotations["cruft"]
+      refute_includes document.passages.map(&:urn), "urn:nabu:kanripo:KR3g0023:000:9a"
+    end
+  end
+
+  def test_sideless_pb_is_cruft_annotation_never_a_boundary
+    # KR4h0159_065.txt: anchors run …6a, 60, 7a — "<pb:KR4h0159_WYG_065-60>"
+    # typos the side letter into a 0. The other degenerate-anchor shape:
+    # cruft annotation on the open page, never a boundary, never text.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}<pb:KR3g0023_WYG_000-60>¶\n殘葉之文¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_includes last.annotations["cruft"], "<pb:KR3g0023_WYG_000-60>"
+      assert_includes last.text, "殘葉之文"
+      refute(document.passages.any? { |p| p.urn.end_with?(":000:60") })
+    end
+  end
+
+  def test_edition_volume_register_d_is_an_annotation_like_a_to_c
+    # KR2h0003_004.txt: <pb:KR2h0003_WYG_WYG0462-0527d> — the WYG volume
+    # pagination's fourth register; a–c were censused at P33-1, d at P37-r2.
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}上文<pb:KR3g0023_WYG_WYG0462-0527d>下文¶\n")
+
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_includes last.annotations["edition_pages"], "KR3g0023_WYG_WYG0462-0527d"
+      # Text on both sides of the tag survives; the corpus only ever carries
+      # these tags at print-line ends (2026-07-21 census: zero old-vs-new
+      # content diffs), so the split-at-tag layout is unexercised in the
+      # wild and pinned here as-is.
+      assert_includes last.text, "上文\n下文"
+    end
+  end
+
+  def test_git_conflict_markers_stay_a_loud_parse_error
+    # KR1j0018_002.txt carries an UNRESOLVED merge conflict (<<<<<<< HEAD /
+    # ======= / >>>>>>> …): both hunk versions present — canonical damage a
+    # parser must never serve silently. KEEP-LOUD (P37-r2 ruling).
+    with_mutated_text("KR3g0023") do |dir|
+      file = File.join(dir, "KR3g0023_000.txt")
+      File.write(file, "#{File.read(file)}<<<<<<< HEAD\n甲本之文¶\n=======\n乙本之文¶\n>>>>>>> c8e280c\n")
+
+      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR3g0023") }
+      assert_match(/unrecognized construct/, error.message)
+    end
+  end
+
   # -- loud failure paths (synthetic defects on real bytes) ------------------
 
   def test_duplicate_page_anchor_raises_parse_error

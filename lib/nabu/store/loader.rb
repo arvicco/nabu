@@ -190,9 +190,16 @@ module Nabu
             tick.call
           end
         end
+        # A quarantined ref's document is still PRESENT upstream — only its
+        # parse failed — so its urn shields any held row from the withdrawal
+        # sweep (P37-r2: the KR5-wave incident withdrew 102 held kanripo
+        # texts because a stricter parser quarantined them; recognition
+        # getting stricter must never unserve held content). ref.id is the
+        # document urn by the adapter contract (Adapter#discover_with_attic).
         quarantine = lambda do |ref, error|
           flush.call
           counts[:errored] += 1
+          seen_urns.add(ref.id)
           journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
           tick.call
         end
