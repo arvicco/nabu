@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The two work-zips are byte-identical upstream copies (whole: true — upstream
+# stores text as single-txt zips and the adapter unzips on read, so the zip IS
+# the fixture). The index CSV is a documented trim of the 16 MB published
+# index (19,493 rows -> header + 6 person-work rows for works 056078/059898/
+# 054333); a fresh GET returns the zipped full file, so it is fetched for
+# URL-liveness only, never byte-compared. adapter_test stays null until the
+# P38-3 adapter lands (set it then if fixtures remain whole: true... the CSV
+# trim keeps it null per the schema rule).
+source: aozora
+adapter_test:
+retrieved: 2026-07-21
+files:
+  - path: cards/001257/files/56078_ruby_51155.zip
+    url: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/001257/files/56078_ruby_51155.zip
+    whole: true
+    trim: none
+  - path: cards/001257/files/59898_ruby_70679.zip
+    url: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/001257/files/59898_ruby_70679.zip
+    whole: true
+    trim: none
+  - path: index_pages/list_person_all_extended_utf8.csv
+    url: https://www.aozora.gr.jp/index_pages/list_person_all_extended_utf8.zip
+    whole: false
+    trim: header + 6 person-work rows for works 056078/059898/054333 (16 MB CSV inside upstream zip -> 4 KB)
