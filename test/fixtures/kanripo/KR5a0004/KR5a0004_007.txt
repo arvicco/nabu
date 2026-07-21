@@ -1,0 +1,9 @@
+# -*- mode: mandoku-view -*-
+#+TITLE: 元始天尊説無上内祕眞藏經
+#+DATE: 2015-08-28 23:34:16
+#+PROPERTY: BASEEDITION HFL
+#+PROPERTY: WITNESS CK-KZ
+#+PROPERTY: LASTPB  <md:KR5a0004_HFL_006-001a>
+#+PROPERTY: JUAN 7
+
+諸

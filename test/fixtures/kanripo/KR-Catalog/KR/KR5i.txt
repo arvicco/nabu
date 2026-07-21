@@ -1,0 +1,23 @@
+#-*- mode: org; -*-
+** KR5i ZB5i 清代道教文獻
+# 『道藏輯要』藏外文獻
+*** KR5i0030 唱道真言--
+   :PROPERTIES:
+:KR_ID: KR5i0030
+   :BASEEDITION: CK-KZ
+   :EXTRA_ID: DZJY:JY114
+   :END:
+**** 版本
+***** DZJY  唱道真言
+:PROPERTIES:
+:EXTENT:  5 juan
+:LODGE:  斗 5
+:KZ:  8:3103-48*
+:END:
+唱道真言
+DZJY: [[dzjy:JY114/JY114_01.txt][JY114 唱道真言]]
+****** Work notes
+
+****** Comments
+
+
