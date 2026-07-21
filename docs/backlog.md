@@ -10560,7 +10560,7 @@ corpus attestation) + explicit modes (--radical/--strokes/
 Match synchronic field-for-field where shelves back it, exceed
 diachronically, never render an unbacked field.
 
-## P37-5 · TLS attestation growth re-census  [tier: opus] [status: dispatched 2026-07-20] [deps: —]
+## P37-5 · TLS attestation growth re-census  [tier: opus] [status: done 2026-07-21] [deps: —]
 Wave complete: re-census KR-shaped ann resolution vs the 80.3%
 dispatch-day rate; tls re-parse re-mints citations; report new rate +
 the define surface. Rider-sized.
