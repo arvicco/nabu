@@ -49,6 +49,31 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  def test_char_notes_the_japanese_reform_cross_reference_and_covers_jpn_corpus
+    with_char_catalog do |config|
+      # 國 is a kyūjitai — the card names its shinjitai 国, and the corpus
+      # column now carries the jpn holding.
+      out, = with_config(config) { run_cli(%w[char 國]) }
+      assert_match(/shinjitai \(Japanese new form\): 国 \(U\+56FD\)/, out)
+      assert_match(/corpus attestation:.*jpn 1/, out)
+
+      # and the reverse: 国 names its kyūjitai 國 (the hani-fold display precedent).
+      back, = with_config(config) { run_cli(%w[char 国]) }
+      assert_match(/kyūjitai \(Japanese old form\): 國 \(U\+570B\)/, back)
+    end
+  end
+
+  def test_char_of_a_non_reform_glyph_has_no_jpn_cross_reference_and_zero_jpn_is_graceful
+    with_char_catalog do |config|
+      out, = with_config(config) { run_cli(%w[char 棄]) }
+      refute_match(/shinjitai|kyūjitai/, out, "棄 is not a reform pair — no jpn cross-reference")
+      # 棄 has no jpn attestation in the fixture: the column shows lzh only,
+      # never an empty/placeholder jpn entry.
+      assert_match(/corpus attestation: lzh 1/, out)
+      refute_match(/jpn/, out)
+    end
+  end
+
   def test_bare_char_errors_helpfully
     with_char_catalog do |config|
       _out, err, status = with_config(config) { run_cli(%w[char]) }
@@ -213,6 +238,20 @@ class CharCommandTest < Minitest::Test
       Nabu::Store::Passage.create(
         document_id: document.id, urn: "urn:nabu:kanripo:KR1h0004:005:22a", sequence: 0,
         language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha256: "x", revision: 1
+      )
+      # A jpn holding carrying both reform spellings — so the card's corpus
+      # column covers jpn (P38-4) and both 國 and 国 attest.
+      aozora = Nabu::Store::Source.create(
+        slug: "aozora", name: "Aozora Bunko", adapter_class: "Nabu::Adapters::Aozora",
+        license_class: "open"
+      )
+      jpn_doc = Nabu::Store::Document.create(
+        source_id: aozora.id, urn: "urn:nabu:aozora:000001", title: "見本", language: "jpn",
+        content_sha256: "y", revision: 1, withdrawn: false
+      )
+      Nabu::Store::Passage.create(
+        document_id: jpn_doc.id, urn: "urn:nabu:aozora:000001:1", sequence: 0,
+        language: "jpn", text: "國語と国語。", text_normalized: "國語と國語。", content_sha256: "y", revision: 1
       )
       db.disconnect
       yield config
