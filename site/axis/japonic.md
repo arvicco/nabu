@@ -9,6 +9,14 @@ description: >-
 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
+The desk spans two eras of Japanese. Old Japanese (ojp) is live now
+through ONCOJ and its lexicon; the modern lane arrives with **Aozora
+Bunko** (青空文庫, `enabled: false` pending the owner's first sync) — the
+public-domain library at paragraph grain, ~17,488 works. Its scope is PD
+text ONLY: discovery excludes the in-copyright works before any file is
+touched. Ruby (振り仮名) readings ride as annotations over the base text,
+never spliced into it; the 底本 colophon is carried as document metadata.
+
 ## The shelves
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
@@ -31,6 +39,14 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
   kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
   shared with the Sinologist, KRADFILE's radical-component index, and the
   kaikki ojp extract on `wiktionary-recon`.
+- **The kyūjitai↔shinjitai reform fold (P38-4):** modern (`jpn`) search
+  folds old-form and new-form spellings of a reform pair onto one skeleton
+  — a query for 国 reaches 國 and vice versa, and onto the SAME skeleton
+  the Sinologist's Han fold uses, so Aozora and kanripo meet. Derived from
+  the held Unihan kJinmeiyoKanji pointers (173 reform pairs); `nabu char`
+  cross-references each pair's kyūjitai/shinjitai. Honestly bounded: it
+  covers the jinmeiyō old-forms only — the non-name pairs 學/学, 體/体,
+  醫/医, 觀/観 are out of scope and stay literal (conventions §9).
 
 ## Working the japonic desk
 
@@ -47,6 +63,8 @@ This desk's own surfaces:
 
 ```
 nabu char 天                           # the character card, with KANJIDIC2 readings and desk codes
+nabu char 國                           # the reform cross-reference — a kyūjitai names its shinjitai 国
+nabu search 国                         # folds to 國, so a modern-form query finds both spellings (jpn/lzh)
 nabu search --char-component 木 --strokes 8-12  # KRADFILE component containment on the Han corpus
 nabu search --radical 75 --axis japonic  # the KangXi-radical filter
 nabu show ONCOJ-URN                   # Old Japanese — romanization and original layers per ONCOJ's design
@@ -60,6 +78,15 @@ nabu show ONCOJ-URN                   # Old Japanese — romanization and origin
   Install the Noto CJK casks plus **Jigmo**, and keep iTerm2's
   ambiguous-width toggle **off**. nabu models CJK cell width, so aligned
   columns stay aligned.
+- **Gaiji (Aozora, once synced):** Aozora's not-yet-encoded characters
+  resolve at parse — JIS X 0213 kuten and explicit `U+XXXX` notations map
+  mechanically through `config/jis0213`; component-description-only
+  notations stay verbatim loud sentinels. On the render side `--display
+  reading` runs the four-rung gaiji ladder (faithful glyph → IDS
+  composition → marked `⌈substitute⌉` → ⬚ box), and `--display diplomatic`
+  keeps the refs byte-honest; the IDS rung, empty for kanripo, is live
+  machinery here since Aozora's gaiji are largely IDS compositions
+  (docs/display.md §1a).
 
 The full guidance, per script, is on the [display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).
 
