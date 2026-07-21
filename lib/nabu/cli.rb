@@ -609,7 +609,15 @@ module Nabu
       Full-text search over every live passage, bm25-ranked. Matching is
       diacritic- and case-insensitive on BOTH sides: μηνιν finds μῆνιν,
       ΜΗΝΙΝ finds both — type without accents, breathings, or iota
-      subscripts and still hit the polytonic editions.
+      subscripts and still hit the polytonic editions. The fold also matches
+      modern Japanese reading habits: 学 finds 學, 弁 finds 辨/瓣/辯.
+
+      EXACT (--exact): glyph-literal match — the query must appear in the
+      passage's stored text exactly as typed (NFC-normalized, but nothing
+      else: no diacritic strip, no case fold, no reform fold). Use it to tell a
+      literal 弁 apart from the default's 弁/辨/瓣/辯. It runs the normal folded
+      search for candidates, then keeps only glyph-literal hits — so it does
+      not combine with --fuzzy/--near/--lemma/--morph or the character filters.
 
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
@@ -806,6 +814,9 @@ module Nabu
                        desc: "With --lemma: gold (verified) annotations only — exclude silver " \
                              "(automatic) lemmatization and equivalence (scholar-curated " \
                              "Classical-Latin equivalents on non-Latin passages)"
+    option :exact, type: :boolean, default: false,
+                   desc: "Glyph-literal match; the default fold matches modern reading habits " \
+                         "(学 finds 學, 弁 finds 辨/瓣/辯) — --exact does not"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -823,6 +834,14 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if options[:exact] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph])
+        raise Thor::Error, "search: --exact is glyph-literal substring matching over the plain " \
+                           "text query — it does not combine with --fuzzy/--near/--lemma/--morph"
+      end
+      if options[:exact] && char_filter_options?
+        raise Thor::Error, "search: --exact is a word-level glyph-literal filter — it does not " \
+                           "combine with the character-structure filters (--radical/--strokes/--char-component)"
       end
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -859,9 +878,9 @@ module Nabu
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
-                                    loans: loans)
+                                    loans: loans, exact: options[:exact])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
-                                    incomplete: searcher.incomplete_hint)
+                                    incomplete: searcher.incomplete_hint, exact: options[:exact])
       print_display_footer
     ensure
       catalog&.disconnect
@@ -3586,9 +3605,16 @@ module Nabu
       # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
       # printed whenever present, so a filter-emptied page never masquerades
       # as a complete answer.
-      def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil)
+      def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
+                               exact: false)
         if results.empty?
           say "no matches"
+          # Empty-under-filter honesty (P35): --exact suppressed the folded
+          # candidates, so a "no matches" here must name the filter it applied.
+          if exact
+            say "note: --exact matched glyph-literally (the default fold would also find " \
+                "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
+          end
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -3598,7 +3624,8 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
+            "(#{'glyph-exact; ' if exact}highlights are diacritic-folded)" \
+            "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
       end
 

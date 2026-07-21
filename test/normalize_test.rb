@@ -516,20 +516,23 @@ class NormalizeTest < Minitest::Test
     assert_equal "μηνισ", Nabu::Normalize.search_form("μῆνις", language: "grc")
   end
 
-  # The §9 contract for jpn (P38-4): kyūjitai and shinjitai spellings of one
-  # reform pair index as ONE skeleton — the same traditional skeleton the
-  # lzh/och Han fold assigns (國), so Japanese old/new and Chinese trad/simp
-  # meet rather than fight. The fold is the 173 jinmeiyō reform pairs only.
+  # The §9 contract for jpn (P38-4 / P38-r1): kyūjitai and shinjitai spellings
+  # of one reform pair index as ONE skeleton — the same traditional skeleton the
+  # lzh/och Han fold assigns (國), so Japanese old/new and Chinese trad/simp meet
+  # rather than fight. The fold is TWO lanes: the 173 jinmeiyō pairs plus the
+  # KANJIDIC2-jōyō lane (744 fold entries), which lands the reform pairs whose
+  # old form is not a name-kanji (學/学) and admits the polygraphic merges.
   def test_jpn_search_form_folds_kyujitai_and_shinjitai_to_one_skeleton
     assert_equal "國語", Nabu::Normalize.search_form("国語", language: "jpn")
     assert_equal "國語", Nabu::Normalize.search_form("國語", language: "jpn")
     # composes with the lzh Han fold: identical skeleton, not a competing one.
     assert_equal Nabu::Normalize.search_form("國", language: "lzh"),
                  Nabu::Normalize.search_form("国", language: "jpn")
-    # out-of-scope pairs (kyūjitai not a name-kanji) stay literal, honestly.
-    assert_equal "学問", Nabu::Normalize.search_form("学問", language: "jpn")
-    # a z-variant glyph that is not a reform pair is left alone.
-    assert_equal "呉音", Nabu::Normalize.search_form("呉音", language: "jpn")
+    # the flagship non-name pair 學/学 now folds too (lane 2, KANJIDIC2-jōyō).
+    assert_equal "學問", Nabu::Normalize.search_form("学問", language: "jpn")
+    assert_equal "學問", Nabu::Normalize.search_form("學問", language: "jpn")
+    # a z-cluster glyph (呉/吳/吴, one word) unifies onto its skeleton.
+    assert_equal "吳音", Nabu::Normalize.search_form("呉音", language: "jpn")
   end
 
   # The union invariant extends to the jpn fold: a query in EITHER form covers

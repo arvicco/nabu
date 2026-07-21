@@ -39,14 +39,16 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
   kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
   shared with the Sinologist, KRADFILE's radical-component index, and the
   kaikki ojp extract on `wiktionary-recon`.
-- **The kyūjitai↔shinjitai reform fold (P38-4):** modern (`jpn`) search
-  folds old-form and new-form spellings of a reform pair onto one skeleton
-  — a query for 国 reaches 國 and vice versa, and onto the SAME skeleton
-  the Sinologist's Han fold uses, so Aozora and kanripo meet. Derived from
-  the held Unihan kJinmeiyoKanji pointers (173 reform pairs); `nabu char`
-  cross-references each pair's kyūjitai/shinjitai. Honestly bounded: it
-  covers the jinmeiyō old-forms only — the non-name pairs 學/学, 體/体,
-  醫/医, 觀/観 are out of scope and stay literal (conventions §9).
+- **The kyūjitai↔shinjitai reform fold (P38-4 + P38-r1):** modern (`jpn`)
+  search folds old-form, new-form and merged spellings onto one skeleton —
+  matching modern reading habits, onto the SAME skeleton the Sinologist's Han
+  fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan
+  kJinmeiyoKanji name-kanji pairs, plus a KANJIDIC2-jōyō lane (744 fold
+  entries) that lands the high-frequency non-name pairs 學/学, 體/体, 醫/医,
+  觀/観 and admits the famous merges (辨/瓣/辯 → 弁). `nabu search --exact` is
+  the glyph-literal escape hatch when you need 弁 apart from 辨/瓣/辯; `nabu
+  char` cross-references each authoritative jinmeiyō pair's kyūjitai/shinjitai
+  (conventions §9).
 
 ## Working the japonic desk
 
@@ -64,7 +66,8 @@ This desk's own surfaces:
 ```
 nabu char 天                           # the character card, with KANJIDIC2 readings and desk codes
 nabu char 國                           # the reform cross-reference — a kyūjitai names its shinjitai 国
-nabu search 国                         # folds to 國, so a modern-form query finds both spellings (jpn/lzh)
+nabu search 学                         # folds to 學 (and 弁 finds 辨/瓣/辯) — modern reading habits across jpn/lzh
+nabu search 弁 --exact                 # the glyph-literal escape hatch — only the stored 弁
 nabu search --char-component 木 --strokes 8-12  # KRADFILE component containment on the Han corpus
 nabu search --radical 75 --axis japonic  # the KangXi-radical filter
 nabu show ONCOJ-URN                   # Old Japanese — romanization and original layers per ONCOJ's design
