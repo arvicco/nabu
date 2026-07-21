@@ -13,7 +13,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
@@ -22,9 +22,9 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `tshet-uinh` | dictionary | open | enabled · manual | 25,336 entries |
 | `unihan` | dictionary | open | enabled · manual | 102,998 entries |
 | `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
-| `babelstone-ids` | dictionary | open | not enabled | 97,680 entries |
+| `babelstone-ids` | dictionary | open | enabled · manual | 97,680 entries |
 | `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
-| `kanripo` | texts | attribution | enabled · manual | 3,415 docs / 4,230,895 passages |
+| `kanripo` | texts | attribution | enabled · manual | 5,028 docs / 4,436,181 passages |
 | `kr-gaiji` | texts | attribution | not enabled | nothing held yet |
 | `tls` | dictionary | attribution | enabled · manual | 23,179 entries |
 

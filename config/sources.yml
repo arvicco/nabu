@@ -1727,7 +1727,7 @@ hdic:
 babelstone-ids:
   adapter: Nabu::Adapters::BabelstoneIds
   axes: [sinitic]
-  enabled: false   # P37-4: enable only after the owner-fired first sync
+  enabled: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync babelstone-ids — one 3.1 MB
                    # UTF-8 file GET, 97,680 entries — then eyeball
                    # nabu char 棄 and nabu show urn:nabu:dict:babelstone-ids:U+68C4,
@@ -1745,7 +1745,7 @@ babelstone-ids:
 kradfile:
   adapter: Nabu::Adapters::Kradfile
   axes: [japonic]
-  enabled: false   # P37-4: enable only after the owner-fired first sync
+  enabled: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync kradfile — one ~46 KB gz
                    # GET, 6,355 kanji — then eyeball nabu char 棄's component
                    # index and search --char-component 木, flip).
@@ -1963,28 +1963,7 @@ tls:
 aozora:
   adapter: Nabu::Adapters::Aozora
   axes: [japonic]
-  enabled: false   # P38-3: enable only after the owner-fired first sync
-                   # (checklist §6: bin/nabu sync aozora — sparse GitFetch of
-                   # github.com/aozorabunko/aozorabunko, cone = cards/*/files/
-                   # *_{ruby,txt}_*.zip + the index zip, ~210 MB of text zips
-                   # out of the 22.8 GB repo; expect ~17,488 PD work docs at
-                   # paragraph-line grain — then eyeball nabu show
-                   # urn:nabu:aozora:056078:9 (驛傳馬車, the first prose
-                   # paragraph) and 5 random passages incl. one ruby-dense
-                   # 新字新仮名 work, check the sync report's unknown-command
-                   # and unresolved-gaiji counts, then flip).
-  # P38-3: Aozora Bunko 青空文庫 — the Japanese PD library (first of the
-  # aozora-ruby parser family). SCOPE = D38-a (owner ruling 2026-07-21):
-  # PD text only — discovery excludes the 488 in-copyright works
-  # (作品著作権フラグ=あり) BEFORE any file access; they stay per-work
-  # opt-in candidates for a later phase. License: PD works are freely
-  # redistributable (取り扱い規準 verbatim in the manifest) → class open;
-  # Aozora requests title/author/底本 attribution — the parser carries the
-  # 底本 colophon as document metadata. Gaiji: JIS X 0213 kuten + explicit
-  # U+XXXX resolve mechanically at parse (config/jis0213 table); component-
-  # description-only notations stay verbatim loud sentinels counted per
-  # document (display-ladder wiring is a P38-2-family follow-up). Upstream
-  # is pushed continuously → re-syncs are owner-fired.
+  enabled: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

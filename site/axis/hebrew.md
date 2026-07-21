@@ -13,7 +13,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `oshb` | texts | open | enabled · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | enabled · manual | 7,932 entries |

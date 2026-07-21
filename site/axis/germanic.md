@@ -13,7 +13,7 @@ Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic rid
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
