@@ -10552,7 +10552,7 @@ ruling): registry row + sanctioned fetch config + refs→Unicode/IDS
 mapping where upstream provides; poor mapping ⇒ placeholder-only +
 journal.
 
-## P37-4 · `nabu char` + component search  [tier: opus] [status: dispatched 2026-07-20 — survey-ratified: BabelStone IDS in (open), RADKFILE in (edrdg row-101 licence), cjkvi-ids OUT (GPL data)] [deps: P37-0]
+## P37-4 · `nabu char` + component search  [tier: opus] [status: done 2026-07-20 — BabelStone IDS + KRADFILE acquired (enabled:false), Unihan kRS* + KANJIDIC2 desk-code expansion, `nabu char` card, `search --radical/--strokes/--char-component`] [deps: P37-0]
 The Jisho bar: char card (radical+name, strokes, components, variants,
 readings incl. Mandarin/Korean, OC/Qieyun/HDIC/TLS diachronic column,
 corpus attestation) + explicit modes (--radical/--strokes/

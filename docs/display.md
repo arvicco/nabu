@@ -272,6 +272,36 @@ not something escape characters from nabu can force:
   (`osc-Ital-x-oscetr`) and script facets name the alphabet the stones
   carry.
 
+### CJK fonts (Han ideographs, kana) — the coverage problem
+
+The Sinitic/Japonic axes (lzh/och/ojp, and the `nabu char` card) render Han
+ideographs and kana. For the BMP CJK the terminal needs a CJK font in the
+non-ASCII slot or the fallback cascade:
+
+- `brew install --cask font-noto-sans-cjk-sc` (Simplified) covers the
+  common ideographs; add `font-noto-sans-cjk-tc` (Traditional) and
+  `font-noto-sans-cjk-jp` (Japanese glyph forms) as the regional forms you
+  read call for. These join the macOS fallback cascade once installed, the
+  same mechanism as the script Notos above.
+
+- **The real gap is rare characters.** kanripo/cbeta and the decomposition
+  shelves reach CJK Extension B and beyond (plane 2+, U+20000 up), where Noto
+  CJK stops. Install **Jigmo** (the Hanazono/HanaMin successor; it covers
+  every encoded Han character) as the fallback font for those — same cascade
+  mechanism. The census IS the justification: a scan of this repo's Sinitic
+  fixtures (BabelStone IDS + KRADFILE + Unihan) finds **6 distinct Ext-B+
+  codepoints already present** — the IDS component stubs 𠃊 (U+200CA),
+  𠃋 (U+200CB), 𠄏 (U+2010F), 𠆢 (U+201A2) that build common characters
+  (棄's 木 = ⿻十𠆢), plus 𢖩 (U+225A9) and the Ext-F 𬻌 (U+2CECC). Every one
+  of these renders as ⬚/□ (missing glyph) under Noto CJK alone; Jigmo draws
+  them. At corpus scale the count is far larger — the rare-char tail is where
+  a second font install earns its keep.
+
+- **Ambiguous-width toggle OFF** (the East-Asian width section below): nabu
+  measures the ambiguous class narrow, so leave iTerm2's "treat
+  ambiguous-width as double-width" off to match. Vertical CJK layout is a
+  deliberate non-goal — terminals are horizontal.
+
 ### East-Asian width (CJK) — what nabu models, what the terminal owns
 
 Chinese/Japanese/Korean ideographs, kana, hangul and fullwidth forms occupy
@@ -323,6 +353,8 @@ default is right.
 | Gothic | nothing | `font-noto-sans-gothic` | `bin/nabu search guþ --lang got` |
 | Runic | nothing | `font-noto-sans-runic` | `bin/nabu show urn:nabu:riig:ais-01-01` |
 | Old Italic (osc/xum) | nothing (inscription text is stored in Latin transliteration; the U+10300 block appears in the sabellic-loans etymon headwords) | `font-noto-sans-old-italic` | `bin/nabu etym rufus` (after the sabellic-loans sync) |
+| Han (lzh/och) | width-aware column alignment; variant fold at search (conventions §9); gaiji → ⬚ placeholder (kanripo); IDS operators (⿰⿱…) render as visible operator+parts runs | Noto CJK (`font-noto-sans-cjk-sc`/`-tc`/`-jp`) for the BMP; **Jigmo** for Ext-B+ rare chars | `bin/nabu char 棄` · `bin/nabu show urn:nabu:kanripo:KR1h0004` |
+| Kana/kanji (ojp) | oncoj romanization/original layers per its own design; man'yōgana rides the annotations, not the romanized KWIC | Noto CJK + Jigmo (same cascade) | `bin/nabu char 天` · an oncoj urn |
 
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any

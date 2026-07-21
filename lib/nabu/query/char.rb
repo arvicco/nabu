@@ -45,7 +45,8 @@ module Nabu
         :old_chinese, :middle_chinese, :early_japan, :tls, :corpus, :held_shelves
       )
 
-      # Slugs that are their own diachronic buckets.
+      # const: the five HDIC databases as their own diachronic buckets — a
+      # fixed shelf-slug list (the P32-4 census), not a corpus count.
       HDIC_SLUGS = %w[yyp ktb tsj syp krm].freeze
 
       # The sinoxenic reading strata Unihan carries (Jisho shows Mandarin +

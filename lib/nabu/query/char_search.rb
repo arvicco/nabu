@@ -35,11 +35,11 @@ module Nabu
       # count + honesty flags.
       Outcome = Data.define(:results, :labels, :char_count, :incomplete, :resolved_empty)
 
-      # The char-only passage-scan bound (fixture/research scale; the index is
-      # the production path). With a text query the FTS window bounds instead.
+      # const: the char-only passage-scan bound — a fixture/research-scale UX
+      # cap (the char-posting index is the production path), not a corpus count.
       SCAN_CAP = 5000
-      # How many FTS hits to pull before the containment thin, so a page can
-      # still fill after most are dropped.
+      # const: FTS hits pulled before the containment thin, so a page can still
+      # fill after most are dropped — a fetch-window bound, not a corpus count.
       FTS_FETCH = 500
 
       def initialize(catalog:, fulltext:)
