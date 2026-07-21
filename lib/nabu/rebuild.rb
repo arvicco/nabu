@@ -31,6 +31,11 @@ module Nabu
     # uncommitted WAL frames a 353k-document source (cdli) would otherwise pile
     # up — the memory/disk ceiling the single-mega-transaction alternative
     # lacked (measured: the fixed batch matches its speed without the ceiling).
+    # The loader additionally caps a batch at Loader::TX_BATCH_ROWS buffered
+    # passages (P37-7): a document count alone let mega-document sources
+    # (kanripo/cbeta shape) turn one batch into a multi-GB transaction whose
+    # savepoint statement journal — in RAM under the rebuild pragmas'
+    # temp_store=MEMORY — caused the measured ×1.6–3.4 load regression.
     LOAD_TX_BATCH = 1_000
 
     # A source that was replayed, carrying its LoadReport. +quarantine+
