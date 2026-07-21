@@ -10649,7 +10649,23 @@ faithful+marked-substitute ≈ ~88% of occurrences visible (vs 36%
 faithful today). Hard fence binds every packet: no main-checkout
 db/ or canonical/ writes; canonical reads via absolute path only.
 
-## P38-0 · Aozora Bunko survey  [tier: survey/network] [status: dispatched] [deps: —]
+## P38-0 · Aozora Bunko survey  [tier: survey/network] [status: done 2026-07-21 — survey delivered (.docs/surveys/aozora-survey.md), no repo diff by design] [deps: —]
+FINDINGS: 17,831 works / 17,676 with text / text = Shift_JIS(CP932)
+zips inside a 22.8 GB repo of which text is only ~210 MB zipped
+(~0.7 GB raw). License: 17,343 PD (作品著作権フラグ=なし) vs 488
+in-copyright (354 with text) — per-work flag in the 55-column index
+CSV, which also carries orthography class, 底本 colophon, and
+per-file URLs+encodings. Gaiji: 3 classes — JIS X 0213 kuten
+(mechanical→Unicode), explicit U+XXXX (direct), component-description
+only (→ IDS lane / sentinel). Fetch: sparse partial clone
+(--filter=blob:none + sparse-checkout on cards/*/files/*_{ruby,txt}_*.zip
++ index) through GitFetch — needs a GitFetch sparse capability
+(P38-3 seam); canonical = the zips, adapter unzips on read.
+Orthography census: 10,956 新字新仮名 · 4,569 新字旧仮名 · 2,184
+旧字旧仮名 · 101 旧字新仮名 · 21 その他 (incl. kanbun); classical
+tail thin and mostly modern critical editions (Kojiki = Takeda 校註).
+Survey rec for D38-a: PD-text-only (~17.5k works, single license
+class); in-copyright 488 deferred to per-work opt-in.
 Upstream shape (aozorabunko GitHub mirror: size, layout, index CSV —
 NO full clone; API/raw reads only), per-work license census (PD vs
 CC), the Aozora format spec (ruby grammar; gaiji notation classes:
