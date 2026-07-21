@@ -416,13 +416,13 @@ class AozoraTest < Minitest::Test
 
   # --- registry round-trip ----------------------------------------------------
 
-  def test_registry_resolves_aozora_disabled_manual
+  def test_registry_resolves_aozora_enabled_manual
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["aozora"]
     refute_nil entry, "aozora must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Aozora, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    refute entry.enabled, "enabled flips only after the owner-fired first real sync"
+    assert entry.enabled, "first real sync verified + owner-flipped 2026-07-21 (16,004 works)"
   end
 
   private

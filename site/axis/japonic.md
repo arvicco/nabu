@@ -21,16 +21,16 @@ never spliced into it; the 底本 colophon is carried as document metadata.
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `unihan` | dictionary | open | enabled · manual | 102,998 entries |
 | `edrdg` | dictionary | attribution | enabled · manual | 231,106 entries |
 | `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
-| `kradfile` | dictionary | attribution | not enabled | 6,355 entries |
+| `kradfile` | dictionary | attribution | enabled · manual | 6,355 entries |
 | `oncoj` | annotated corpus | attribution | enabled · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | enabled · frozen | 5,869 entries |
-| `aozora` | texts | open | not enabled | not synced yet |
+| `aozora` | texts | open | enabled · manual | 16,004 docs / 2,975,682 passages |
 
 ## The desk's instruments
 
@@ -41,14 +41,14 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
   kaikki ojp extract on `wiktionary-recon`.
 - **The kyūjitai↔shinjitai reform fold (P38-4 + P38-r1):** modern (`jpn`)
   search folds old-form, new-form and merged spellings onto one skeleton —
-  matching modern reading habits, onto the SAME skeleton the Sinologist's Han
-  fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan
-  kJinmeiyoKanji name-kanji pairs, plus a KANJIDIC2-jōyō lane (744 fold
+  matching modern reading habits, onto the SAME skeleton the Sinologist's
+  Han fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan
+  kJinmeiyoKanji name-kanji pairs, PLUS a KANJIDIC2-jōyō lane (744 fold
   entries) that lands the high-frequency non-name pairs 學/学, 體/体, 醫/医,
-  觀/観 and admits the famous merges (辨/瓣/辯 → 弁). `nabu search --exact` is
-  the glyph-literal escape hatch when you need 弁 apart from 辨/瓣/辯; `nabu
-  char` cross-references each authoritative jinmeiyō pair's kyūjitai/shinjitai
-  (conventions §9).
+  觀/観 and admits the famous merges (辨/瓣/辯 → 弁). `nabu search --exact`
+  is the glyph-literal escape hatch when you need 弁 apart from 辨/瓣/辯.
+  `nabu char` cross-references each authoritative jinmeiyō pair's
+  kyūjitai/shinjitai (conventions §9).
 
 ## Working the japonic desk
 
@@ -67,7 +67,7 @@ This desk's own surfaces:
 nabu char 天                           # the character card, with KANJIDIC2 readings and desk codes
 nabu char 國                           # the reform cross-reference — a kyūjitai names its shinjitai 国
 nabu search 学                         # folds to 學 (and 弁 finds 辨/瓣/辯) — modern reading habits across jpn/lzh
-nabu search 弁 --exact                 # the glyph-literal escape hatch — only the stored 弁
+nabu search 弁 --exact                 # the glyph-literal escape hatch — only the stored 弁, not the merged olds
 nabu search --char-component 木 --strokes 8-12  # KRADFILE component containment on the Han corpus
 nabu search --radical 75 --axis japonic  # the KangXi-radical filter
 nabu show ONCOJ-URN                   # Old Japanese — romanization and original layers per ONCOJ's design
