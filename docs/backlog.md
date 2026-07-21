@@ -10673,7 +10673,7 @@ JIS X 0213 refs / component descriptions / image-only), fetch
 strategy + volume, scope options. Feeds D38-a + the P38-3 parser
 spec. Delivered via report (survey doc is orchestrator-held).
 
-## P38-1 · Gaiji ladder tables  [tier: opus] [status: dispatched] [deps: —]
+## P38-1 · Gaiji ladder tables  [tier: opus] [status: done 2026-07-21 — merged e3dc9d7; HEADLINE: 547 PUA rows purged from the shipped faithful table (P37-3 bug, independently verified); lanes 427 faithful / 562 substitute / 0 IDS (kanripo); occurrence coverage 36.55% + 45.25% = 81.80%, ⬚ 18.20%; owner glance at gate — display changes for 547 refs, strictly more honest] [deps: —]
 From held charlist: reconcile 982 direct-glyph refs vs shipped 972
 (`?`-uncertainty policy stated in table header); substitute table
 (707 refs) as its OWN config/gaiji/ lane, never merged with faithful;
@@ -10707,5 +10707,10 @@ with the census. Char card jpn corpus counts; japonic axis page +
 docs refresh; gate news post rides.
 
 ## D38 decision items
-- D38-a: Aozora scope (full mirror vs curated subset) — ruled after
-  P38-0 lands.
+- D38-a (owner, 2026-07-21): RULED — Option 1, PD text only:
+  every work with 作品著作権フラグ=なし and a text file (~17,488
+  works, ~0.7 GB raw, single license_class public_domain with 底本
+  colophon attribution). The 488 in-copyright works are excluded from
+  discovery (skip, not quarantine) and remain per-work opt-in
+  candidates for a later phase. No orthography cut — the 旧字 slice
+  stays a curated view idea, not an ingest boundary.
