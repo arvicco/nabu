@@ -189,24 +189,53 @@ actually carry, and what `reading` does about it:
 | `erasures` | `⟦abc⟧` — EDH damnatio memoriae, RIIG/Ogham `<del>` | `keep` \| `unwrap` | `keep` — an erasure is content; unwrap drops only the brackets, never the text |
 | `surplus` | `{abc}` — letters carved in error (RIIG) | `keep` \| `unwrap` | `keep` — unwrapping would present a misspelling as fluent text without its marker |
 | `sigla` | `⸀ ⸂ ⸃` — SBLGNT's apparatus cross-references | `strip` \| `keep` | sblgnt → `strip` (⸁ and ⸄–⸇ censused ×0, not in the set) |
-| `gaiji` | `&KR\d+;` — kanripo's not-yet-encoded-character refs (P37-3) | `placeholder` \| `refs` | kanripo → `placeholder` (resolve to the real glyph where KR-Gaiji gives a codepoint, else ⬚; refs kept verbatim under diplomatic) |
+| `gaiji` | `&KR\d+;` — kanripo's not-yet-encoded-character refs (P38-2) | `ladder` \| `placeholder` \| `refs` | kanripo → `ladder` (faithful glyph → IDS → marked `⌈substitute⌉` → ⬚; refs kept verbatim under diplomatic) |
 
-**Gaiji (kanripo, P37-3).** The mandoku parser keeps kanripo's not-yet-encoded
-characters as `&KR\d+;` references verbatim in the stored text. In `reading`
-mode `gaiji: placeholder` swaps each ref for either its **resolved glyph**
-(when the KR-Gaiji charlist gives a single real Unicode codepoint — the
-faithful subset curated into `config/gaiji/kanripo.tsv`) or the **⬚ placeholder
-box** (U+2B1A) — never a fake glyph. The census verdict is honest and partial:
-of KR-Gaiji's 5,254 refs, only 972 (36.4% of the 1,751,360 gaiji *occurrences*)
-carry a real codepoint; the 707 refs (51.8%) with only a lossy "normalized"
-substitute and the 3,564 image-only refs (11.2%) stay the placeholder. The
-footer counts what stayed unresolved:
+**Gaiji (kanripo, P38-2) — the display ladder.** The mandoku parser keeps
+kanripo's not-yet-encoded characters as `&KR\d+;` references verbatim in the
+stored text. In `reading` mode `gaiji: ladder` resolves each ref *per
+character*, down four rungs of descending fidelity — the first rung that holds
+the ref wins:
+
+| Rung | Source table | Rendering | Example (`&KR…;` →) |
+|---|---|---|---|
+| 1. **Faithful** | `config/gaiji/kanripo.tsv` | the real codepoint, **unmarked** — it *is* the character | `&KR0001;` → `𫠦` |
+| 2. **IDS** | `config/gaiji/kanripo-ids.tsv` | the Ideographic Description Sequence, inline | `&KR…;` → `⿰氵丐` |
+| 3. **Substitute** | `config/gaiji/kanripo-substitutes.tsv` | a lossy read-through, **visibly marked** `⌈…⌉` | `&KR4710;` → `⌈脊⌉` |
+| 4. **⬚ placeholder** | — | the honest box (U+2B1A) — never a fake glyph | `&KR0809;` → `⬚` |
+
+The **substitute mark `⌈…⌉`** (U+2308 LEFT CEILING / U+2309 RIGHT CEILING) is a
+deliberately *unclaimed* pair — it collides with none of the editorial brackets
+already in use (erasures `⟦…⟧`, lacuna `[…]`, surplus `{…}`, sigla `⸀⸂⸃`, the
+`⬚` placeholder, the IDS operators `⿰`–`⿻`) — so a lossy stand-in glyph can
+**never be quoted unaware** as if it were the faithful character. It is BMP and
+present in monospace/Noto Sans Mono, so it renders in a terminal.
+
+The **IDS rung is empty for kanripo today** (its one charlist composition,
+KR0198 `[沔-丏+丐]`, resolved to an *encoded* glyph 沔 and so lands on the
+faithful rung); the rung is live machinery for the Aozora source (P38-3), whose
+gaiji are largely IDS compositions. The census stays honest and partial: of
+KR-Gaiji's refs, 427 carry a faithful codepoint and 562 more a single-glyph
+substitute (cumulatively **81.8%** of the 1,751,360 gaiji *occurrences*); the
+rest stay the ⬚ box.
+
+The **honesty footer never goes silent** on a lossy or failed resolution, but
+the faithful rung needs no announcement (it *is* the text). It aggregates the
+lower rungs — substitutes shown, IDS compositions, and placeholders remaining:
 
 ```
 $ bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading
 子曰𫠦學而⬚時習之
-display: 1 unresolved gaiji (1 resolved) (--display diplomatic shows the gaiji refs)
+display: 1 unresolved gaiji (--display diplomatic shows the gaiji refs)
+
+# a passage that also hits the substitute rung:
+子⌈脊⌉曰⬚
+display: 1 substituted, 1 unresolved gaiji (--display diplomatic shows the gaiji refs)
 ```
+
+`gaiji: placeholder` (the P37-3 behavior, preserved as config) is **rungs 1 + 4
+only** — faithful glyph or the ⬚ box, with the IDS and substitute lanes never
+consulted; its footer keeps the older `N unresolved gaiji (M resolved)` shape.
 
 Three shelves deliberately have **no** entry:
 
@@ -307,16 +336,33 @@ non-ASCII slot or the fallback cascade:
 
 - **The real gap is rare characters.** kanripo/cbeta and the decomposition
   shelves reach CJK Extension B and beyond (plane 2+, U+20000 up), where Noto
-  CJK stops. Install **Jigmo** (the Hanazono/HanaMin successor; it covers
-  every encoded Han character) as the fallback font for those — same cascade
-  mechanism. The census IS the justification: a scan of this repo's Sinitic
-  fixtures (BabelStone IDS + KRADFILE + Unihan) finds **6 distinct Ext-B+
-  codepoints already present** — the IDS component stubs 𠃊 (U+200CA),
+  CJK stops. This is exactly the tail the gaiji ladder (§1a) resolves to a real
+  codepoint — the faithful and substitute rungs both put *encoded but unfonted*
+  characters on screen, so the font, not nabu, is what decides whether you see
+  the glyph or a ⬚ box. The census IS the justification: a scan of this repo's
+  Sinitic fixtures (BabelStone IDS + KRADFILE + Unihan) finds **6 distinct
+  Ext-B+ codepoints already present** — the IDS component stubs 𠃊 (U+200CA),
   𠃋 (U+200CB), 𠄏 (U+2010F), 𠆢 (U+201A2) that build common characters
   (棄's 木 = ⿻十𠆢), plus 𢖩 (U+225A9) and the Ext-F 𬻌 (U+2CECC). Every one
-  of these renders as ⬚/□ (missing glyph) under Noto CJK alone; Jigmo draws
-  them. At corpus scale the count is far larger — the rare-char tail is where
-  a second font install earns its keep.
+  of these renders as ⬚/□ (missing glyph) under Noto CJK alone. At corpus
+  scale the count is far larger — the rare-char tail is where a second font
+  install earns its keep. Three cover it, in the macOS font-fallback cascade
+  (download the `.ttf`/`.otf` and double-click, or drop it in `~/Library/Fonts`;
+  none is a Homebrew cask):
+
+  - **Jigmo** (the Hanazono/HanaMin successor) — one family covering *every*
+    encoded Han character across all extensions; the broadest single install,
+    ships as `Jigmo.ttf` / `Jigmo2.ttf` / `Jigmo3.ttf` (install all three).
+  - **Plangothic** (Plangothic P1/P2) — a modern gothic-style face with very
+    deep Ext-B through Ext-I coverage; the most legible of the three at
+    terminal sizes, and actively maintained.
+  - **BabelStone Han** — Andrew West's font, strong on the rare CJK blocks and
+    the CJK-symbol/IDS ranges; a good third fallback for anything the other two
+    miss.
+
+  Once installed they join the fallback cascade automatically; the terminal
+  picks whichever family has the glyph, so having all three maximises coverage
+  of the plane-2+ tail.
 
 - **Ambiguous-width toggle OFF** (the East-Asian width section below): nabu
   measures the ambiguous class narrow, so leave iTerm2's "treat
@@ -374,8 +420,8 @@ default is right.
 | Gothic | nothing | `font-noto-sans-gothic` | `bin/nabu search guþ --lang got` |
 | Runic | nothing | `font-noto-sans-runic` | `bin/nabu show urn:nabu:riig:ais-01-01` |
 | Old Italic (osc/xum) | nothing (inscription text is stored in Latin transliteration; the U+10300 block appears in the sabellic-loans etymon headwords) | `font-noto-sans-old-italic` | `bin/nabu etym rufus` (after the sabellic-loans sync) |
-| Han (lzh, kanripo) | measures CJK cells (§2); `reading` resolves `&KR\d+;` gaiji to the real glyph or ⬚ placeholder (P37-3), refs kept under `diplomatic` | any font with CJK Ext-B coverage (resolved glyphs reach plane 2, e.g. 𫠦 U+2B826) | `bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading` |
-| Kana/kanji (ojp) | oncoj romanization/original layers per its own design; man'yōgana rides the annotations, not the romanized KWIC | Noto CJK + Jigmo (same cascade) | `bin/nabu char 天` · an oncoj urn |
+| Han (lzh, kanripo) | measures CJK cells (§2); `reading` runs the four-rung gaiji ladder (§1a) — faithful glyph → IDS → `⌈substitute⌉` → ⬚ (P38-2), refs kept under `diplomatic` | any font with CJK Ext-B+ coverage — Jigmo / Plangothic / BabelStone Han (§2); resolved glyphs reach plane 2 (𫠦 U+2B826) | `bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading` |
+| Kana/kanji (ojp) | oncoj romanization/original layers per its own design; man'yōgana rides the annotations, not the romanized KWIC | Noto CJK + Jigmo/Plangothic/BabelStone Han (same cascade) | `bin/nabu char 天` · an oncoj urn |
 
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any
