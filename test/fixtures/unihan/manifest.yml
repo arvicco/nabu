@@ -3,7 +3,7 @@
 #
 # Both files are documented TRIMS (whole: false) of members of Unihan.zip
 # (8,518,517 B, sha256 f7a48b2b…, Last-Modified 2025-08-18 = Unicode
-# 17.0.0): 16 codepoints' lines kept byte-verbatim under the full comment
+# 17.0.0): 17 codepoints' lines (the P37-4 acceptance character 棄 U+68C4 added) kept byte-verbatim under the full comment
 # headers. A fresh GET returns the zip, so the URL is fetched for
 # URL-liveness only, never byte-compared; re-apply the README recipe after
 # any refresh. NB the /latest/ URL moves at each annual Unicode release.
@@ -14,8 +14,12 @@ files:
   - path: Unihan_Readings.txt
     url: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
     whole: false
-    trim: member Unihan_Readings.txt (8.4 MB, 67,916 codepoints) -> all lines of 16 selected codepoints (145 lines incl. header); recipe in README.md
+    trim: member Unihan_Readings.txt (8.4 MB, 67,916 codepoints) -> all lines of 17 selected codepoints (155 lines incl. header); recipe in README.md
   - path: Unihan_Variants.txt
     url: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
     whole: false
-    trim: member Unihan_Variants.txt (587 KB) -> all lines of the same 16 codepoints (19 lines incl. header); recipe in README.md
+    trim: member Unihan_Variants.txt (587 KB) -> all lines of the same 17 codepoints (20 lines incl. header); recipe in README.md
+  - path: Unihan_IRGSources.txt
+    url: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
+    whole: false
+    trim: member Unihan_IRGSources.txt -> the kRSUnicode/kTotalStrokes lines (+ one ignored kIRG_GSource) for 5 codepoints incl. 棄 (P37-4 radical-stroke field expansion); recipe in README.md

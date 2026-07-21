@@ -790,6 +790,14 @@ module Nabu
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
+    option :radical, type: :numeric, banner: "N",
+                     desc: "Character filter: KangXi radical number 1-214 (Unihan kRSUnicode); " \
+                           "composes with --strokes/--char-component and a text query"
+    option :strokes, type: :string, banner: "A-B",
+                     desc: "Character filter: total-stroke range A-B (or a single N; Unihan kTotalStrokes)"
+    option :char_component, type: :string, banner: "C",
+                            desc: "Character filter: characters CONTAINING C anywhere in their " \
+                                  "structure (KRADFILE ∪ BabelStone IDS transitive containment)"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -815,6 +823,14 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if char_filter_options?
+        if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
+          raise Thor::Error, "search: the character filters (--radical/--strokes/--char-component) are " \
+                             "character-level structure search — they do not combine with the word-level " \
+                             "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
+        end
+        return char_structured_search(query)
       end
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
@@ -1691,6 +1707,71 @@ module Nabu
       catalog&.disconnect
       fulltext&.disconnect
       ledger&.disconnect
+    end
+
+    desc "char CHAR", "The character desk card: structure, readings, and the diachronic column"
+    long_desc <<~HELP, wrap: false
+      The character card (P37-4): one Han character composed from every shelf
+      the library holds — the join no single dictionary site offers. It
+      matches Jisho's synchronic completeness field-for-field where a shelf
+      backs it, and exceeds it diachronically with a column no online
+      dictionary carries. The binding rule: a field whose shelf can't back
+      THIS character is ABSENT, never rendered "—".
+
+      Sections, in render order (each names its backing shelf; absent
+      sections are silently omitted):
+
+        header        glyph · total strokes · KangXi radical number+name
+                      (Unihan kRSUnicode/kTotalStrokes)
+        decomposition the IDS structure + its components, each with the
+                      follow-up commands to walk into it (BabelStone IDS)
+        components    the flat component index Jisho searches (KRADFILE)
+        variants      trad/simp/semantic/z-variant forms (Unihan)
+        readings ja   on/kun/nanori + meanings (KANJIDIC2)
+        readings      Mandarin/Korean/Vietnamese + the Unihan kJapanese layer
+        pedagogy      Jōyō grade · JLPT · newspaper frequency (KANJIDIC2)
+        desk-ref      the reference codes, zero suppressed — Unicode always,
+                      four-corner/SKIP/JIS/dic numbers where KANJIDIC2 holds
+                      them
+        — the diachronic column (where nabu exceeds Jisho) —
+        Old Chinese   Baxter-Sagart reconstruction + gloss
+        Middle Chinese Qieyun reading, 反切, 音韻地位 (tshet-uinh)
+        early Japan   positions in the Heian hanzi dictionaries (HDIC)
+        TLS           sense-level concepts + classical attestation counts
+        corpus        attestation frequency across the held corpora
+        search        the printed `search CHAR*`-family follow-ups
+
+      Give exactly ONE character — the card's grain is a single glyph. The
+      component-search siblings are `nabu search --radical N`,
+      `--strokes A-B` and `--char-component C`.
+
+      Examples:
+        nabu char 棄       # reject/abandon — radical 75 木, the whole card
+        nabu char 木       # the component itself; its containment neighbours
+    HELP
+    def char(glyph = nil)
+      glyph = glyph.to_s.strip
+      raise Thor::Error, "char: give a character (e.g. nabu char 棄)" if glyph.empty?
+      if glyph.each_char.to_a.size > 1
+        raise Thor::Error, "char: the card's grain is a single character — give one glyph " \
+                           "(#{glyph}); search --char-component #{glyph.each_char.first} finds " \
+                           "characters that contain one"
+      end
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+      unless catalog.table_exists?(:dictionary_entries)
+        raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync unihan " \
+                           "(or nabu rebuild after one)"
+      end
+
+      fulltext = open_fulltext(config)
+      card = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext).run(glyph)
+      print_char_card(card)
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
     end
 
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
@@ -4059,6 +4140,78 @@ module Nabu
       # Same open/close discipline as the sibling search paths; the trigram
       # table missing means the fulltext index predates P16-4, an honest
       # reindex hint, exactly the lemma-index precedent.
+      def char_filter_options?
+        options[:radical] || options[:strokes] || options[:char_component]
+      end
+
+      # --strokes N or A-B → an inclusive [low, high] range, or nil.
+      def parse_strokes_option
+        raw = options[:strokes]&.strip or return nil
+        if (m = raw.match(/\A(\d+)\z/))
+          [m[1].to_i, m[1].to_i]
+        elsif (m = raw.match(/\A(\d+)-(\d+)\z/))
+          [m[1].to_i, m[2].to_i].minmax
+        else
+          raise Thor::Error, "search: --strokes takes N or A-B (e.g. --strokes 8 or --strokes 8-12)"
+        end
+      end
+
+      # The explicit character-structure search (P37-4): --radical/--strokes/
+      # --char-component resolve to a glyph set (CharFilter), which filters
+      # Han-language passages by containment, composing with a plain text
+      # query. Kept visibly distinct from FTS — the footer names the filters.
+      def char_structured_search(query)
+        validate_license!(options[:license])
+        if options[:radical] && !options[:radical].to_i.between?(1, 214)
+          raise Thor::Error, "search: --radical is a KangXi radical number 1-214 (got #{options[:radical]})"
+        end
+
+        strokes = parse_strokes_option
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+        unless catalog.table_exists?(:dictionary_entries)
+          raise Thor::Error, "no char shelf in this catalog — run nabu sync unihan (for --radical/" \
+                             "--strokes) or babelstone-ids/kradfile (for --char-component)"
+        end
+        validate_source!(catalog, options[:source])
+
+        outcome = Nabu::Query::CharSearch.new(catalog: catalog, fulltext: fulltext)
+                                         .run(query, radical: options[:radical]&.to_i, strokes: strokes,
+                                                     component: options[:char_component], lang: options[:lang],
+                                                     license: options[:license], source: options[:source],
+                                                     limit: options[:limit].to_i)
+        print_char_search_results(outcome, query: query)
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_char_search_results(outcome, query:)
+        labels = outcome.labels.join(" AND ")
+        if outcome.resolved_empty
+          return say("no characters match [#{labels}] in the held char shelves — sync unihan " \
+                     "(--radical/--strokes) or babelstone-ids/kradfile (--char-component)")
+        end
+        if outcome.results.empty?
+          tail = query.empty? ? "" : " that also match #{query.inspect}"
+          return say("no passages carry a character matching [#{labels}]#{tail} " \
+                     "(#{outcome.char_count} characters resolved)")
+        end
+
+        outcome.results.each do |result|
+          say "#{result.urn}  [#{result.language}]  {#{result.matched.join(' ')}}"
+          say "  #{result.text}"
+        end
+        say ""
+        text_note = query.empty? ? "" : "; text query #{query.inspect}"
+        say "character filter: [#{labels}] — #{outcome.char_count} " \
+            "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
+        say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
       def fuzzy_search(query)
         raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
 
@@ -4388,6 +4541,155 @@ module Nabu
         say result.body
         print_reflexes(result.reflexes)
         print_resolved_citations(result)
+      end
+
+      # The character card (P37-4): each section printed only when a held
+      # shelf backs it for this glyph (the "absent, never —" rule). The
+      # diachronic column is what nabu adds over Jisho; the synchronic
+      # sections match it field-for-field where the shelves reach.
+      def print_char_card(card)
+        return say("no dictionary shelf in this catalog yet — run nabu sync unihan") if card.nil?
+
+        say "#{card.glyph}  #{card.codepoint}#{char_header_tail(card)}"
+        print_char_decomposition(card)
+        print_char_components(card)
+        print_char_variants(card)
+        print_char_ja_readings(card)
+        print_char_sinoxenic(card)
+        print_char_pedagogy(card)
+        print_char_desk_reference(card)
+        print_char_diachronic(card)
+        print_char_corpus(card)
+        print_char_search_affordances(card)
+        print_char_absence(card)
+      end
+
+      # glyph · N strokes · radical M NAME — only the parts Unihan backs.
+      def char_header_tail(card)
+        parts = []
+        parts << "#{card.total_strokes} strokes" if card.total_strokes
+        parts << "radical #{card.radical.number} #{card.radical.glyph} #{card.radical.name}" if card.radical
+        parts.empty? ? "" : "  ·  #{parts.join('  ·  ')}"
+      end
+
+      def print_char_decomposition(card)
+        return if card.ids.empty?
+
+        say ""
+        say "decomposition (BabelStone IDS):"
+        card.ids.each do |ids|
+          tag = ids.sources ? " (#{ids.sources})" : ""
+          say "  #{ids.sequence}#{tag}"
+          ids.components.each do |component|
+            say "    #{component} — nabu char #{component} · nabu search --char-component #{component}"
+          end
+        end
+      end
+
+      def print_char_components(card)
+        return if card.components.empty?
+
+        say ""
+        say "components (KRADFILE index): #{card.components.join(' ')}"
+      end
+
+      def print_char_variants(card)
+        return if card.variants.empty?
+
+        say ""
+        say "variants:"
+        card.variants.each do |variant|
+          say "  #{variant.relation}: #{variant.glyph} (#{variant.codepoint}) — nabu char #{variant.glyph}"
+        end
+      end
+
+      def print_char_ja_readings(card)
+        readings = card.readings_ja or return
+        say ""
+        say "readings (ja, KANJIDIC2):"
+        say "  on: #{readings[:on].join('、')}" if readings[:on].any?
+        say "  kun: #{readings[:kun].join('、')}" if readings[:kun].any?
+        say "  nanori: #{readings[:nanori].join('、')}" if readings[:nanori].any?
+        say "  meanings: #{readings[:meanings].join('; ')}" if readings[:meanings].any?
+      end
+
+      def print_char_sinoxenic(card)
+        return if card.readings_sinoxenic.empty?
+
+        say ""
+        say "readings (sinoxenic, Unihan):"
+        card.readings_sinoxenic.each { |label, value| say "  #{label}: #{value}" }
+      end
+
+      def print_char_pedagogy(card)
+        pedagogy = card.pedagogy or return
+        say ""
+        labels = { "grade" => "Jōyō grade", "jlpt" => "JLPT", "freq" => "newspaper freq" }
+        say "pedagogy: #{pedagogy.map { |k, v| "#{labels[k]} #{v}" }.join('  ·  ')}"
+      end
+
+      def print_char_desk_reference(card)
+        return if card.desk_reference.empty?
+
+        say ""
+        say "desk reference: #{card.desk_reference.map { |k, v| "#{k} #{v}" }.join('  ·  ')}"
+      end
+
+      # The diachronic column — the half no dictionary site carries.
+      def print_char_diachronic(card)
+        print_char_shelf_block("Old Chinese (Baxter-Sagart)", card.old_chinese)
+        print_char_shelf_block("Middle Chinese (Qieyun / Baxter-Sagart)", card.middle_chinese)
+        print_char_shelf_block("early-Japan lexicography (HDIC)", card.early_japan)
+        print_char_tls(card.tls)
+      end
+
+      def print_char_shelf_block(label, entries)
+        return if entries.empty?
+
+        say ""
+        say "#{label}:"
+        entries.each do |entry|
+          say "  [#{entry.slug}] #{entry.gloss || entry.lines.first}"
+          entry.lines.each { |line| say "    #{line}" }
+        end
+      end
+
+      def print_char_tls(entries)
+        return if entries.empty?
+
+        say ""
+        say "TLS (Thesaurus Linguae Sericae):"
+        entries.each do |entry|
+          attest = entry.attestations.positive? ? " — #{entry.attestations} attestation(s)" : ""
+          say "  [#{entry.slug}] #{entry.gloss}#{attest}"
+          entry.lines.each { |line| say "    #{line}" }
+        end
+      end
+
+      def print_char_corpus(card)
+        return if card.corpus.empty?
+
+        say ""
+        totals = card.corpus.sort_by { |_, count| -count }
+                            .map { |lang, count| "#{lang} #{count}" }.join("  ·  ")
+        say "corpus attestation: #{totals}"
+      end
+
+      def print_char_search_affordances(card)
+        say ""
+        say "search: nabu search #{card.glyph}  ·  nabu search --char-component #{card.glyph}" \
+            "#{"  ·  nabu search --radical #{card.radical.number}" if card.radical}"
+      end
+
+      # When NOTHING backed the card, say so honestly (the glyph is unknown to
+      # every held shelf) rather than printing a bare header.
+      def print_char_absence(card)
+        return unless card.held_shelves.empty? && card.ids.empty? && card.components.empty? &&
+                      card.radical.nil? && card.corpus.empty?
+
+        say ""
+        say "no held shelf carries #{card.glyph} yet — sync the CJK shelves " \
+            "(unihan, edrdg, babelstone-ids, kradfile, baxter-sagart, tshet-uinh, hdic, tls)"
       end
 
       # A reconstruction entry's descendant reflexes (P14-1): attested-here
