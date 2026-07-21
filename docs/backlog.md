@@ -10575,7 +10575,7 @@ the define surface. Rider-sized.
 The P36-3 carryover: dispatch ONLY on a parse-bound split from the
 owner's instrumented rebuild. NO-GO ⇒ journaled why.
 
-## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: dispatched 2026-07-21 — profile in hand] [deps: —]
+## P37-7 · External-content FTS5 design note  [tier: fable, DESIGN ONLY] [status: done] [deps: —]
 The 16-minute target: fixture-scale prototype + what-breaks note
 (refresh_source! delete contract, query paths); NO production switch.
 PROFILE CONTEXT (2026-07-21): corpus index total 11m30s (fts+lemma

@@ -793,6 +793,38 @@ module Store
       assert_equal 1, provenance_events(event: "quarantined").size
     end
 
+    # The batch grain is row-aware (P37-7): tx_batch caps DOCUMENTS per
+    # transaction, tx_batch_rows caps buffered PASSAGE rows — whichever fills
+    # first flushes. Mega-document sources (kanripo/cbeta shape: thousands of
+    # passages per document) otherwise pile GBs into one transaction, and the
+    # per-document savepoints' statement journal — held in RAM under the
+    # rebuild pragmas' temp_store=MEMORY — grows with the whole transaction
+    # (the measured P36-2 mega-source load regression). Transaction boundaries
+    # are observed via the SQL log: each flush is one COMMIT.
+    def test_tx_batch_rows_caps_buffered_passages_per_transaction
+      io = StringIO.new
+      @db.loggers << Logger.new(io)
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger,
+                                        tx_batch: 10, tx_batch_rows: 3)
+      # Four 2-passage documents, cumulative rows 2/4/2/4: the row cap (3)
+      # flushes after delta and after zeta; the doc cap (10) never fills.
+      report = batched.load(
+        [build_document("gamma", [%w[1 πόλις], %w[2 θεός]]),
+         build_document("delta", [%w[1 λόγος], %w[2 μῦθος]]),
+         build_document("epsilon", [%w[1 ἔργον], %w[2 νόμος]]),
+         build_document("zeta", [%w[1 δῆμος], %w[2 ξένος]])]
+      )
+      @db.loggers.clear
+
+      assert_report report, added: 4
+      # 2 row-capped batch flushes + the withdrawal sweep = 3 transactions.
+      commits = io.string.lines.count { |line| line.include?("COMMIT") }
+
+      assert_equal 3, commits
+      # Persisted result identical to any other grain: 4 docs + 8 passages.
+      assert_equal 12, Nabu::Store::Provenance.count
+    end
+
     # The P2-6 progress contract survives batching: one running-count tick per
     # document, in input order, ticked only AFTER the document actually lands.
     def test_tx_batch_ticks_once_per_document_in_order
