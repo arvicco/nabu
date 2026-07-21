@@ -10706,6 +10706,16 @@ config-only lane (hani-fold mold) if the data supports; else journal
 with the census. Char card jpn corpus counts; japonic axis page +
 docs refresh; gate news post rides.
 
+## P38-i1 · Aozora first-sync crash (incident, live 2026-07-21)  [status: agent resumed on fix]
+Crash at doc ~9,471: real zips carry junk-byte member filenames
+(neither UTF-8 nor CP932) — unzip -Z1 listing decode raised, and the
+unrescued ArgumentError ABORTED the sync (ParseError contract
+violation). Also ≥2 genuinely corrupt upstream zips found in the live
+canonical. Fix: binary-safe member handling (never decode names),
+ParseError wrap on the zip-read path, real regression fixtures from
+the live canonical (offender whole + corrupt trim). 613-quarantine
+census read after a clean pass.
+
 ## D38 decision items
 - D38-b RULED (owner, 2026-07-21): jōyō-filtered extension, NOW as
   rider P38-r1 (not P39) — "THIS is japonic-focused Phase after all";
