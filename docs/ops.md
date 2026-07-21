@@ -861,6 +861,15 @@ Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
 the subset the owner promotes to a version number.
 
+The site carries GENERATED pages that must be reprojected as part of the
+gate site refresh (MAINTENANCE.md), so the committed, deployed site is
+current: run `bundle exec rake site:axes` to regenerate the per-axis desk
+pages (`site/axis/<name>.md` + the `/axis/` index) from the live registry
+and the read-only catalog counts, and commit the result before the release
+push. The suite (`test/site/axis_pages_test.rb`) fails if the pages have
+drifted from the registry, so this is a green-gate precondition, not a
+discretionary step.
+
 ## 13. Ingesting your own material (P19-5)
 
 `nabu ingest FILE... [--collection NAME]` is the front door for local

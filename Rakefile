@@ -123,6 +123,29 @@ namespace :site do
       abort "site:check found #{findings.size} drift finding(s)"
     end
   end
+
+  desc "Regenerate the per-axis site pages (site/axis/*.md + /axis/ index) from the registry + fragments + live counts"
+  task :axes do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "date"
+
+    config = Nabu::Config.load
+    # The catalog is read READ-ONLY for the holdings numbers; NABU_AXES_CATALOG
+    # points the generator at another checkout's live db (a worktree run wants
+    # the main checkout's synced catalog for honest, dated counts).
+    catalog_path = ENV.fetch("NABU_AXES_CATALOG", config.catalog_path)
+    generator = Nabu::Ops::AxisPages.new(
+      registry: Nabu::SourceRegistry.load(config.sources_path),
+      fragments_path: File.expand_path("site/axis/_fragments.yml", __dir__),
+      output_dir: File.expand_path("site/axis", __dir__),
+      catalog_path: catalog_path,
+      as_of: Date.today
+    )
+    results = generator.generate!
+    counts = File.exist?(catalog_path) ? "live catalog #{catalog_path}" : "no catalog (holdings say so)"
+    puts "site:axes wrote #{results.size} pages (#{results.size - 1} desks + index) — #{counts}"
+  end
 end
 
 # Gate rider (P35-6, dev-loop §6b rule 3): every era-bound literal in

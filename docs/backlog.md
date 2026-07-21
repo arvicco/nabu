@@ -10607,7 +10607,7 @@ filter composing with every search path), `export --axis`, the
 coverage — the `nabu language` mold). health --axis only if it fits
 cleanly; journal otherwise.
 
-## P37-9 · Per-axis site pages — /axis/<name>/  [tier: opus] [status: dispatched 2026-07-21] [deps: —] [owner-requested at the P37 gate]
+## P37-9 · Per-axis site pages — /axis/<name>/  [tier: opus] [status: done 2026-07-21] [deps: —] [owner-requested at the P37 gate]
 Owner ask (2026-07-21, verbatim intent): second-layer site pages, one
 per research axis (nabu/axis/celtic …), each carrying ALL relevant
 usability context FOR THAT axis. Ship: site/axis/<name>.md × 18

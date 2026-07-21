@@ -1,0 +1,544 @@
+# Per-axis curated fragments for the site/axis/<name>.md pages (P37-9).
+#
+# This file is HAND-EDITED and is READ, never written, by the generator
+# (`rake site:axes`, Nabu::Ops::AxisPages). The generator projects the
+# registry facts (persona, desc, member list) and the live holdings counts;
+# everything a human curates about a desk lives HERE:
+#
+#   kinds:            slug => holds-label override for the member table's
+#                     "Holds" column, where the coarse adapter content_kind
+#                     (dictionary / texts / …) under-describes the shelf
+#                     (treebank, inscriptions, papyri, feature-module).
+#   <axis>:
+#     blurb:          one hand-prose paragraph under the desc (optional).
+#     instruments:    the desk's tools — gold-lemma languages, dictionary
+#                     shelves, alignment works, reference/etym coverage.
+#     recipes:        list of {cmd, note} — the axis's OWN shipped surfaces
+#                     beyond the generic quartet (every cmd must be real).
+#     display:        terminal/display setup for the axis's scripts, mined
+#                     from docs/display.md §2/§3 (optional — omit if none).
+#
+# Registry changes are pinned by test/site/axis_pages_test.rb; this curated
+# prose is not (it is the human layer). Keep every recipe a REAL command.
+# Honesty guards this file lives by: --loans is coptic-scriptorium-only;
+# --fuzzy indexes only papyri-ddbdp + edh + oracc; there is no `nabu
+# timeline` (the timeline surface is --from/--to/--century/--place and
+# `vocab --by-century`); display.md names no cuneiform, hieroglyph, or
+# dedicated Syriac font, so this file names none.
+
+kinds:
+  # treebanks (annotated dependency corpora — content_kind :passages)
+  ud: treebank
+  proiel: treebank
+  torot: treebank
+  dcs: treebank
+  oncoj: annotated corpus
+  # documentary / epigraphic shelves
+  papyri-ddbdp: papyri
+  edh: inscriptions
+  riig: inscriptions
+  isicily: inscriptions
+  itant: inscriptions
+  ceipom: inscriptions
+  open-etruscan: inscriptions
+  tir: inscriptions
+  iip: inscriptions
+  ogham: inscriptions
+  lexlep: inscriptions
+  # cuneiform tablet corpora
+  tlhdig: tablets
+  oracc: tablets
+  cdli: tablet catalog
+  ebl: tablets
+  cuc: tablets
+  # the cross-language bridging module
+  bridging: crosswalk module
+  # the reconstruction / cognacy shelves that are not plain dictionaries
+  iecor: cognacy dataset
+  starling: etymological bases
+
+classical:
+  instruments: |
+    - **Gold-lemma languages:** grc and lat — the Perseus canons, First1KGreek,
+      Diorisis, and the grc/lat PROIEL and UD treebanks. `search --lemma`,
+      `vocab`, `formulas` and `cognates` are all at their richest here.
+    - **Dictionaries:** LSJ and Lewis & Short, both on the `lexica` shelf
+      (`nabu define μῆνις`, `nabu define virtus`).
+    - **Alignment works:** `nt` (Greek NT, Vulgate, SBLGNT) and — through the
+      LXX and the Vulgate — `ot` and `psalms`. The Classicist owns both
+      LXX-side witnesses.
+  recipes:
+    - cmd: 'nabu align "MARK 2.3"'
+      note: the parallel-witness card, Greek NT beside the Vulgate
+    - cmd: 'nabu parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1'
+      note: intertext and reception off Iliad 1.1
+    - cmd: 'nabu vocab urn:nabu:proiel:cic-off'
+      note: distinctive vocabulary of Cicero, De officiis
+    - cmd: 'nabu formulas urn:cts:greekLit:tlg0012.tlg001.perseus-grc2'
+      note: Homer's repeated formulas, ranked by count x length
+    - cmd: 'nabu search λόγος --near θεός --window 5 --lang grc'
+      note: collocation search, lemma- and elision-aware
+    - cmd: 'nabu define μῆνις'
+      note: LSJ and Lewis & Short on the lexica shelf
+  display: |
+    - **Polytonic Greek (grc):** nabu leaves it intact (a `monotonic` display
+      mode is opt-in). Any font with polytonic coverage works; for uniform
+      metrics across Greek, IAST and Cyrillic, fill iTerm2's non-ASCII slot
+      with **Noto Sans Mono** at the same size as the ASCII font.
+    - **Latin (lat):** nothing special — the terminal's default font suffices.
+
+epigraphy:
+  instruments: |
+    - **Documentary corpora at the artifact grain:** papyri (papyri-ddbdp),
+      the Latin inscriptions of the Empire (EDH, with genre/province/material
+      facets), the Continental Celtic (RIIG), Italic (ItAnt, CEIPoM), Etruscan
+      and Raetic (TIR) editions, ogham stones, Hittite tablets (TLHdig), and
+      the Levant (IIP).
+    - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
+      shelves — **papyri-ddbdp, EDH and ORACC**. The other epigraphic shelves
+      (RIIG, ogham, ItAnt…) are searched with plain `search --axis epigraphy`.
+    - **The timeline desk:** 163,821 documents carry a date or place, so
+      `--from/--to`, `--century` and `--place` scope the stones and sherds by
+      when and where. EDH's genre facets (`--type/--province/--material`) live.
+  recipes:
+    - cmd: "nabu search --fuzzy ']ανδρα μοι εν['"
+      note: damaged-line substring search, typed straight off the edition
+    - cmd: 'nabu search --type epitaph --province Britannia --material marble'
+      note: EDH genre facets composing together
+    - cmd: 'nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%'
+      note: the Oxyrhynchite strategoi by date and provenance
+    - cmd: 'nabu search --century -3 --axis epigraphy'
+      note: one century's stones (negative = BCE, no year 0)
+    - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
+      note: an ogham stone beside its transliteration sibling
+    - cmd: 'nabu search --lemma precor --axis epigraphy'
+      note: CEIPoM equivalence keys reach the Iguvine Tables' pesnimu
+  display: |
+    - **Ogham (pgl):** nabu spaces the letters with U+1680 (stemline-continuing)
+      so they do not merge; install `font-noto-sans-ogham`.
+    - **Old Italic / Runic:** the inscription text is stored in Latin
+      transliteration (the language tags name the alphabet); the native blocks
+      surface only in headwords — install `font-noto-sans-old-italic` and
+      `font-noto-sans-runic` for those.
+    - **Cuneiform / Hittite tablets:** stored in Latin transliteration, so no
+      cuneiform font is needed.
+
+slavic:
+  instruments: |
+    - **Gold-lemma languages:** chu (Old Church Slavonic) and orv (Old Russian)
+      — PROIEL (Codex Marianus), TOROT (Zographensis), the four CCMH gospel
+      codices, plus the Slovenian historical lane (goo300k, IMP, 1584-1899).
+    - **Dictionaries:** the Wiktionary OCS shelf (`wiktionary-cu`) and the
+      Slovenian historical shelf (`sl-lexica`, Pleteršnik and the 16th-c.
+      inventory).
+    - **Alignment work:** `nt`. The `chu` witnesses are PROIEL's Marianus plus
+      the four CCMH codices — so `align --collate` builds a real apparatus.
+  recipes:
+    - cmd: 'nabu align "MARK 2.3" --collate'
+      note: the CCMH gospel apparatus beside the Cyrillic Marianus column
+    - cmd: 'nabu etym богъ --lang chu'
+      note: the reflex chain back through Proto-Slavic
+    - cmd: 'nabu define *bogъ'
+      note: the reconstruction shelf, with its descendant reflexes
+    - cmd: 'nabu search въста --axis slavic'
+      note: cross-script fold — Cyrillic finds the Latin-diplomatic vъsta
+    - cmd: 'nabu list sl-lexica --entries --prefix bh'
+      note: headword-prefix browse into the Slovenian shelf
+  display: |
+    - **Cyrillic OCS (chu):** nabu strips the titla (titlo, pokrytie,
+      superscript letters) and keeps the points; `--display translit` romanizes
+      via `Nabu::Cyrl` (ѣ to ě, щ to št, оу to u). **Noto Sans Mono** covers the
+      combining range in the terminal's non-ASCII slot.
+
+germanic:
+  instruments: |
+    - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks)
+      and ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark).
+    - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
+      æ/þ/ð to find æþele).
+    - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC
+      West-Saxon Gospel of Mark). The Gothic × OCS `cognates` join is strongest
+      from this desk.
+  recipes:
+    - cmd: 'nabu show urn:nabu:aspr:A4.1:1'
+      note: Beowulf, line 1
+    - cmd: 'nabu cognates "LUKE 14.34" --langs got,chu'
+      note: salt ~ соль meeting at PIE *sḗh₂l in the salt saying
+    - cmd: 'nabu cognates nt --langs got,chu'
+      note: the whole New Testament, Gothic against Old Church Slavonic
+    - cmd: 'nabu define aethele --lang ang'
+      note: Bosworth-Toller, with the æ/þ/ð fold
+    - cmd: 'nabu search --lemma cyning --morph case=gen --lang ang'
+      note: a morphology facet over the UD/PROIEL feature vocabulary
+    - cmd: 'nabu formulas urn:nabu:aspr:A4.1'
+      note: the Old English poetic formulas of Beowulf
+  display: |
+    - **Gothic (got):** nabu does nothing; install `font-noto-sans-gothic`.
+    - **Old English (ang):** Latin script with æ/þ/ð — any extended-Latin font
+      (Noto Sans Mono covers it); no install needed.
+
+celtic:
+  instruments: |
+    - **Gold-lemma language:** sga (Early Irish — CorPH's Annals of Ulster and
+      the Milan / St Gall / Würzburg glosses, plus the Old Irish UD treebanks).
+    - **Epigraphy:** RIIG (Gaulish), ogham (Primitive Irish), Lexicon
+      Leponticum and its word shelf (Lepontic).
+    - **Etymology:** the kaikki attested-Celtic extracts on `wiktionary-recon`;
+      `nabu etym` walks the Proto-Celtic chains, `nabu define *root` scopes to
+      the reconstruction shelves.
+  recipes:
+    - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
+      note: an ogham stone beside its transliteration sibling
+    - cmd: 'nabu search μηνιν --axis celtic'
+      note: a query scoped to just the Celticist's shelves
+    - cmd: 'nabu search --lemma --lang sga --axis celtic WORD'
+      note: CorPH's gold Early Irish, by dictionary form
+    - cmd: 'nabu etym LEMMA'
+      note: the wiktionary-recon Proto-Celtic reflex chain
+    - cmd: 'nabu define *root'
+      note: the reconstruction shelves, with reflexes
+  display: |
+    - **Ogham (pgl):** nabu spaces the letters with U+1680 so the stemline
+      reads continuously; install `font-noto-sans-ogham`.
+    - **Old Irish / Gaulish / Lepontic:** Latin-script (CorPH carries per-token
+      Latin code-switch coloring in `show`); the terminal default font works.
+    - Note: RIIG and ogham are **not** in the `--fuzzy` index — use plain
+      `search --axis celtic` for them.
+
+italic:
+  instruments: |
+    - **The languages of pre-Roman Italy:** Sabellic — Oscan, Umbrian,
+      Faliscan (CEIPoM), Etruscan (open-etruscan, larth-etp), Venetic and
+      Raetic (TIR, ItAnt), Lepontic at the Celtic border, I.Sicily's island mix.
+    - **The equivalence tier:** CEIPoM's scholar-curated Classical-Latin keys
+      sit on the pre-Roman passages — `search --lemma precor` reaches the
+      Iguvine Tables' `pesnimu`, tagged `[equivalence]` (never counted as
+      attestation; `--gold-only` excludes it).
+    - **Etymology:** the Sabellic-to-Latin loan lane (`sabellic-loans`) and the
+      Proto-Italic reconstructions reachable through `nabu etym`.
+  recipes:
+    - cmd: 'nabu search --lemma precor --axis italic'
+      note: the CEIPoM equivalence key onto the Iguvine Tables
+    - cmd: 'nabu etym rufus'
+      note: the Sabellic-loan etymon chain (Old Italic headwords)
+    - cmd: 'nabu search --century -3 --axis italic'
+      note: the pre-Roman inscriptions, where dated
+    - cmd: 'nabu define *root'
+      note: Proto-Italic reconstructions on the etym shelves
+  display: |
+    - **Old Italic (osc/xum):** the inscription text is stored in Latin
+      transliteration (the language tags, e.g. `osc-Ital-x-oscetr`, name the
+      alphabet). The U+10300 block itself appears only in the sabellic-loans
+      etymon headwords (𐌓𐌖𐌚𐌓𐌉𐌉𐌔) — install `font-noto-sans-old-italic` to
+      read those.
+
+etym:
+  instruments: |
+    - **The reconstruction shelves:** the kaikki proto-extracts
+      (`wiktionary-recon`), IE-CoR cognacy (`iecor`), LIV's PIE verbal etymons
+      (`liv`), de Vaan's Latin (`edl`), the five StarLing bases including
+      Vasmer's Russian (`starling`), and the curated loan edges (`sabellic-loans`).
+    - **The walk:** `nabu etym` closes the reflex graph hop by hop, flagging
+      `(loan)` edges along the way; `nabu define *headword` scopes to the
+      reconstruction shelves; `nabu cognates` crosses the crosswalk with the
+      alignment hub.
+    - Non-IE lanes of the same shelves ride their own axes too — dual-tagging,
+      never folding.
+  recipes:
+    - cmd: 'nabu etym богъ --lang chu'
+      note: a multi-hop proto-to-proto walk with per-edge loan flags
+    - cmd: 'nabu define *bʰer-'
+      note: a leading * scopes to the reconstruction shelves; --long expands
+    - cmd: 'nabu etym rufus'
+      note: the Sabellic-to-Latin loan etymon
+    - cmd: 'nabu cognates nt --langs got,chu'
+      note: same-root verses across the aligned witnesses
+    - cmd: 'nabu language zle-ort'
+      note: decode an etymology cognate-list language code
+  display: |
+    - Mostly Latin and IPA reconstruction text. Cyrillic reflexes render under
+      **Noto Sans Mono**; Old Italic reflex headwords (sabellic-loans) need
+      `font-noto-sans-old-italic`. No RTL or CJK concerns.
+
+biblical:
+  instruments: |
+    - **Every alignment work at once.** `nt`: SBLGNT (grc), the Vulgate (lat),
+      WEB (eng), Coptic Scriptorium (Sahidic and Bohairic cop). `ot` and
+      `psalms`: OSHB and BHSA (hbo Masoretic), the Sefaria Targum (arc), the
+      Peshitta (syriac), the LXX and the Vulgate, WEB — `psalms` carries the
+      LXX↔Masoretic renumbering.
+    - **Dictionaries:** the Hebrew lexicon (`hebrew-lexicon`) and the Semantic
+      Dictionary of Biblical Hebrew (`sdbh`).
+    - **The contact facet:** Coptic Scriptorium is the `--loans` shelf —
+      `search --loans grc` keeps only passages carrying Greek loanwords.
+  recipes:
+    - cmd: 'nabu align "MARK 2.3"'
+      note: the New Testament verse across up to fifteen witnesses
+    - cmd: 'nabu align "GEN 1.1"'
+      note: Masoretic, LXX, Vulgate, WEB, Targum and Peshitta together
+    - cmd: 'nabu align "PSA 22.1"'
+      note: the Greek psalm number, remapped to the Masoretic witnesses
+    - cmd: 'nabu search ⲛⲟⲩⲧⲉ --lang cop --loans grc'
+      note: Coptic passages that carry a Greek loanword
+    - cmd: 'nabu cognates ot --langs hbo,syriac'
+      note: same-root verses, Hebrew against Syriac
+    - cmd: 'nabu list coptic-scriptorium --loans'
+      note: the donor-language census of the loan tags
+  display: |
+    - **Hebrew and Aramaic (hbo/arc):** nabu strips cantillation, keeps the
+      points and maqaf, and wraps runs in RTL isolates. The terminal must do
+      the bidi: **iTerm2 ≥ 3.6.0** has an experimental RTL toggle (Settings →
+      General → Experimental); **Terminal.app has no bidi at all**. Use **Ezra
+      SIL** or **SBL Hebrew** in a dedicated iTerm2 profile (Ezra SIL at +4pt),
+      or **Noto Sans Mono** in the non-ASCII slot at the ASCII size.
+    - **Syriac (Peshitta):** also RTL — the same iTerm2 toggle.
+    - **Coptic:** install `font-noto-sans-coptic`.
+    - On a bidi-less terminal, `--display translit` gives the most legible view
+      (SBL-style LTR romanization via `Nabu::Hebr`).
+
+hebrew:
+  instruments: |
+    - **The Hebrew-and-Aramaic language desk:** OSHB (the Westminster Leningrad
+      Codex), BHSA (ETCBC), the Dead Sea Scrolls consonantal text (`dss`), the
+      Sefaria Targums (arc), and IIP's inscriptions of Israel/Palestine.
+    - **Dictionaries:** `sdbh` (the Semantic Dictionary of Biblical Hebrew) and
+      the `hebrew-lexicon` shelf.
+    - **Alignment works:** `ot` and `psalms` — OSHB, BHSA and the Targum are
+      the Masoretic witnesses; `psalms` carries the Masoretic→Greek renumbering.
+  recipes:
+    - cmd: 'nabu show urn:nabu:oshb:gen:1.1'
+      note: Genesis 1.1 in pointed Masoretic Hebrew
+    - cmd: 'nabu show urn:nabu:oshb:ruth:1.8 --display reading'
+      note: qere resolved and cantillation stripped together
+    - cmd: 'nabu align "GEN 1.1"'
+      note: the Masoretic text beside the LXX and the versions
+    - cmd: 'nabu show urn:nabu:oshb:gen:1.1 --display translit'
+      note: SBL-style LTR romanization for a bidi-less terminal
+    - cmd: 'nabu define LEMMA'
+      note: SDBH and the Hebrew lexicon
+  display: |
+    - **Hebrew and Aramaic (hbo/arc):** cantillation stripped, points and maqaf
+      kept, runs wrapped in RTL isolates. The terminal owns the bidi: the
+      **iTerm2 RTL toggle** (Terminal.app has none); **Ezra SIL** or **SBL
+      Hebrew** in a dedicated profile (+4pt), or **Noto Sans Mono** in the
+      non-ASCII slot. `--display translit` (via `Nabu::Hebr`) is the legible
+      fallback where bidi is unavailable.
+    - Note: hbo/arc are NFC-exempt, so `--display full` is byte-identical to the
+      Masoretic source (mark order preserved).
+
+syriac:
+  instruments: |
+    - **The Syriac language desk:** the ETCBC Peshitta (Leiden VTS / Codex
+      Ambrosianus, by book node) and the Digital Syriac Corpus — a millennium
+      of Syriac beside the biblical hat.
+    - **Alignment works:** `ot` and `psalms` carry the Peshitta as the Syriac
+      leg (`urn:nabu:peshitta:<siglum>`).
+  recipes:
+    - cmd: 'nabu align "GEN 1.1"'
+      note: the Peshitta as one leg of the Old Testament hub
+    - cmd: 'nabu align "PSA 22.1"'
+      note: the Peshitta psalter, Masoretic-numbered and remapped
+    - cmd: 'nabu show urn:nabu:peshitta:gn'
+      note: a Peshitta book document
+    - cmd: 'nabu cognates ot --langs syriac,hbo'
+      note: Syriac against Hebrew, same-root verses
+  display: |
+    - **Syriac (estrangela) is RTL** — the same terminal requirement as Hebrew:
+      the iTerm2 ≥ 3.6.0 RTL toggle on (Terminal.app cannot). display.md names
+      no dedicated Syriac font; use a Unicode font with Syriac coverage in the
+      fallback cascade (Noto Sans Mono is the general recommendation).
+
+hittite:
+  instruments: |
+    - **The Hittite desk:** TLHdig's tablet corpus (KBo and KUB by tablet and
+      line — dual-tagged cuneiform, its lines also carrying Akkadian, Sumerian,
+      Luwian, Hattic and Hurrian) and the UD Hittite treebank (gold `hit`).
+    - No dictionary shelf or alignment work rides this desk yet.
+  recipes:
+    - cmd: 'nabu search --lemma --lang hit --axis hittite WORD'
+      note: the gold UD Hittite morphology
+    - cmd: 'nabu search --century -13 --axis hittite'
+      note: the tablets by date, where dated
+    - cmd: 'nabu search --axis hittite WORD'
+      note: a query across TLHdig and the treebank
+  display: |
+    - **TLHdig tablets** are stored in Latin transliteration, so no cuneiform
+      font is needed. No RTL or CJK concerns. Note: TLHdig is not in the
+      `--fuzzy` index — use plain `search --axis hittite`.
+
+cuneiform:
+  instruments: |
+    - **The tablet world:** ORACC (royal inscriptions, lexical lists, gold
+      Akkadian/Sumerian lemmatization, aligned English), the CDLI catalog,
+      ETCSL's Sumerian literature, eBL's Fragmentarium, the Copenhagen Ugaritic
+      Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
+    - **The fragment desk:** ORACC is in the `--fuzzy` trigram index, so
+      `search --fuzzy … --axis cuneiform` finds broken lines.
+    - **The deepest timeline:** ORACC's catalogue and regnal dates put 21,558
+      documents on the calendar — `--century -7` reaches the Assyrian letters.
+  recipes:
+    - cmd: 'nabu show --random --source oracc'
+      note: pull a random tablet from the ORACC shelf
+    - cmd: 'nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel'
+      note: Akkadian beside its running English translation
+    - cmd: 'nabu search --century -7 --axis cuneiform'
+      note: the 7th-century-BCE Assyrian letters, by regnal date
+    - cmd: 'nabu search --fuzzy FRAGMENT --axis cuneiform'
+      note: trigram fragment search over the ORACC tablets
+    - cmd: 'nabu search --lemma --lang akk --axis cuneiform WORD'
+      note: the gold ORACC Akkadian lemmatization
+  display: |
+    - ORACC, CDLI and ETCSL text is stored in **Latin transliteration**
+      (subscript indices, `{d}`-style determinatives) — display.md ships no
+      cuneiform font and none is required. No RTL or CJK concerns.
+
+egyptian:
+  instruments: |
+    - **The hieroglyph-to-Coptic continuum:** the TLA corpora and word list
+      (`tla-hf`, `aes`, `aed`), the Coptic lexicon with its egy-cop crosswalk
+      (`ccl`), and Coptic Scriptorium (the complete Sahidic and Bohairic NT,
+      gold-lemmatized).
+    - **The contact facet:** Coptic Scriptorium is the `--loans` shelf, with
+      131K+ Greek loan tokens tagged — `search --loans grc` and
+      `list coptic-scriptorium --loans` read them.
+    - **Alignment work:** Coptic Scriptorium supplies the two Coptic columns of
+      the `nt` work.
+  recipes:
+    - cmd: 'nabu search ⲛⲟⲩⲧⲉ --lang cop --loans grc'
+      note: Coptic passages that carry a Greek loanword
+    - cmd: 'nabu list coptic-scriptorium --loans grc'
+      note: the most loan-saturated Coptic documents
+    - cmd: 'nabu align "MARK 2.3"'
+      note: the Sahidic and Bohairic columns of the verse
+    - cmd: 'nabu define ⲛⲟⲩⲧⲉ'
+      note: the Coptic lexicon, following the egy-cop crosswalk
+  display: |
+    - **Coptic:** nabu strips nothing; install `font-noto-sans-coptic` (Coptic
+      is LTR, so no bidi toggle).
+    - **Hieroglyphic TLA text:** display.md names no hieroglyph font — read it
+      through the TLA transcription rather than expecting glyph rendering.
+
+indic:
+  instruments: |
+    - **The Sanskrit, Prakrit and Pali lane:** GRETIL (780 editions — epic,
+      purāṇa, kāvya, śāstra, the Ṛgveda with Vedic accents), SARIT, the DCS
+      treebank (IAST), the Vedic UD treebank, and SuttaCentral's canon.
+    - **Dictionary:** Monier-Williams (`mw`) — 193,890 entries, SLP1
+      transcoded to IAST; its citations resolve into GRETIL at verse grain and
+      its Greek/Latin/Gothic cognate notes feed `nabu etym`.
+  recipes:
+    - cmd: 'nabu define amsa'
+      note: Monier-Williams, with GRETIL-resolved citations
+    - cmd: 'nabu search धर्मन् --lang san'
+      note: the cross-script fold — Devanagari finds the IAST dharman
+    - cmd: 'nabu show GRETIL-URN --display translit'
+      note: Devanagari rendered to IAST (IAST shelves pass through)
+    - cmd: 'nabu search --lemma --lang san --morph case=loc --axis indic WORD'
+      note: Vedic UD / DCS gold morphology
+    - cmd: 'nabu vocab GRETIL-URN'
+      note: distinctive vocabulary of a text or commentary layer
+  display: |
+    - **Devanagari (san):** nabu strips Vedic accents when present (IAST is left
+      untouched); `--display translit` renders to IAST via `Nabu::Deva`. A
+      conjunct-capable Devanagari fallback is needed — the macOS system default
+      suffices. IAST diacritics (ā, ṁ, ṭ) render uniformly under **Noto Sans
+      Mono** in the non-ASCII slot.
+
+buddhist:
+  instruments: |
+    - **Cross-canon by design:** SuttaCentral (the Pali canon and the Āgamas),
+      SARIT, GRETIL whole (only part is Buddhist — the honest whole-source
+      note), and CBETA (the Buddhist canon in Literary Chinese).
+    - Monier-Williams is reachable through the Indic overlap; no alignment work
+      rides this desk.
+  recipes:
+    - cmd: 'nabu search --axis buddhist WORD'
+      note: one query across the Pali, Sanskrit and Chinese canons
+    - cmd: 'nabu search dukkha --lang pli --axis buddhist'
+      note: the Pali canon
+    - cmd: 'nabu search --lang lzh --axis buddhist WORD'
+      note: CBETA's Literary Chinese
+    - cmd: 'nabu parallels CBETA-OR-SUTTACENTRAL-URN'
+      note: reception and echo across the canon
+    - cmd: 'nabu vocab GRETIL-URN'
+      note: a Buddhist text's vocabulary profile
+  display: |
+    - **Sanskrit / Pali (IAST):** **Noto Sans Mono**; Devanagari needs a
+      conjunct-capable fallback (system default is fine).
+    - **CBETA Literary Chinese (lzh):** install the Noto CJK casks plus
+      **Jigmo** for rare Ext-B+ Han, and keep iTerm2's "treat ambiguous-width
+      as double-width" **off** to match nabu's narrow measurement.
+
+sinitic:
+  instruments: |
+    - **Literary and classical Chinese with its phonology:** Kanripo (the
+      largest single shelf) and CBETA, the UD lzh treebanks, SuttaCentral's
+      Āgamas, and the kaikki zh extract on `wiktionary-recon`.
+    - **The reconstruction instruments:** Baxter-Sagart Old Chinese
+      (`baxter-sagart`), the Qieyun-system Middle Chinese database
+      (`tshet-uinh`), Unihan, the Heian hanzi dictionaries (`hdic`, held),
+      BabelStone IDS decomposition, and TLS at the sense grain.
+    - **The character desk:** `nabu char` joins every shelf onto one glyph, and
+      `search --radical/--strokes/--char-component` filters the Han corpus.
+  recipes:
+    - cmd: 'nabu char 棄'
+      note: the character card — strokes, radical, IDS, OC/MC, TLS senses
+    - cmd: 'nabu search --char-component 木 --strokes 8-12'
+      note: component containment AND a total-stroke range
+    - cmd: 'nabu search --radical 75 --axis sinitic'
+      note: the KangXi-radical filter on Han passages
+    - cmd: 'nabu define 道 --long'
+      note: TLS at the sense grain, with classical attestation
+    - cmd: 'nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading'
+      note: gaiji &KR…; refs resolved to the real glyph or a placeholder
+  display: |
+    - **Han (lzh, kanripo):** nabu measures CJK cells (`Nabu::Display.width`),
+      so KWIC columns line up; `--display reading` resolves `&KR\d+;` gaiji.
+    - Install `font-noto-sans-cjk-sc`, `-tc` and `-jp` for the common
+      ideographs, and **Jigmo** (covers every encoded Han) for the Extension-B+
+      tail the kanripo shelf reaches. Keep iTerm2's "treat ambiguous-width as
+      double-width" **off** to match nabu's narrow measurement.
+
+japonic:
+  instruments: |
+    - **The Japanese lane:** the ONCOJ Old Japanese corpus and its lexicon,
+      EDRDG's dictionaries (JMdict / KANJIDIC family — these feed `nabu char`'s
+      kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
+      shared with the Sinologist, KRADFILE's radical-component index, and the
+      kaikki ojp extract on `wiktionary-recon`.
+  recipes:
+    - cmd: 'nabu char 天'
+      note: the character card, with KANJIDIC2 readings and desk codes
+    - cmd: 'nabu search --char-component 木 --strokes 8-12'
+      note: KRADFILE component containment on the Han corpus
+    - cmd: 'nabu search --radical 75 --axis japonic'
+      note: the KangXi-radical filter
+    - cmd: 'nabu show ONCOJ-URN'
+      note: Old Japanese — romanization and original layers per ONCOJ's design
+  display: |
+    - **Kana / kanji (ojp):** ONCOJ carries romanization and original layers by
+      its own design (man'yōgana rides the annotations, not the romanized KWIC).
+      Install the Noto CJK casks plus **Jigmo**, and keep iTerm2's
+      ambiguous-width toggle **off**. nabu models CJK cell width, so aligned
+      columns stay aligned.
+
+local:
+  instruments: |
+    - **The Librarian's own shelves** (architecture §16): language dossiers
+      (`local-language`, the `nabu language` cards re-derive from Markdown),
+      the owner's library of PDFs and scans (`local-library`), owner notes
+      (`local-notes`), and curated source dossiers (`local-source`).
+    - These are the write-gateway shelves, fed by `nabu ingest` and `nabu
+      note` — no dictionary, alignment or etymology coverage.
+  recipes:
+    - cmd: 'nabu ingest ~/scans/vaillant-1950-manuel.pdf --collection slavistics'
+      note: copy a PDF into the library, derive metadata, mint a urn
+    - cmd: 'nabu ingest --shelf language CODE'
+      note: scaffold a language dossier
+    - cmd: 'nabu note URN "a working annotation"'
+      note: attach an owner note to any urn; read it back with `nabu note URN`
+    - cmd: 'nabu sync local-language'
+      note: re-derive the language cards after editing the dossiers
+  display: |
+    - Owner-authored Markdown, YAML and PDF — no ancient-script display
+      concerns; the terminal default font suffices.

@@ -9,9 +9,13 @@ description: >-
 
 Six short walk-throughs, one per discipline, using real commands and output
 from live runs of 11–12 July 2026. Nothing below is a mock-up; trims are
-marked with ellipses.
+marked with ellipses. Each discipline is also a **research desk** — one of
+the eighteen [research axes]({{ '/axis/' | relative_url }}), where that
+desk's shelves, instruments, CLI recipes and terminal setup live on one page.
 
 ## For the classicist
+
+*The [Classical desk]({{ '/axis/classical/' | relative_url }}).*
 
 The Perseus Greek and Latin canons and First1KGreek put 2,209 Greek and
 Latin editions on the desk, 872 of them with aligned English translations —
@@ -33,6 +37,8 @@ Oxyrhynchus quoting the opening of John — the kind of cross-shelf find
 design.
 
 ## For the papyrologist
+
+*The [Epigraphy desk]({{ '/axis/epigraphy/' | relative_url }}) — papyri, stones and sherds.*
 
 The library holds 61,414 documents of the Duke Databank of Documentary
 Papyri, with the Leiden editorial conventions preserved. Fragment search is
@@ -56,6 +62,8 @@ centuries.
 
 ## For the slavist
 
+*The [Slavic desk]({{ '/axis/slavic/' | relative_url }}).*
+
 The Old Church Slavonic canon is held complete across its editions:
 Marianus, Zographensis, Assemanianus, Savvina kniga, and Suprasliensis
 (folio-line cited, with hyphen-split words searchable whole), beside Old
@@ -78,6 +86,8 @@ marianus — Codex Marianus [chu]   license: nc
 ```
 
 ## For the comparativist
+
+*The [Etymology desk]({{ '/axis/etym/' | relative_url }}).*
 
 The reconstruction shelf walks attested words to their proto-forms and
 cognates, with corpus attestation counts at every step:
@@ -108,6 +118,8 @@ two languages meet — a Proto-Germanic meet for a Slavic word reads as a
 likely borrowing, not common descent.
 
 ## For the assyriologist
+
+*The [Cuneiform desk]({{ '/axis/cuneiform/' | relative_url }}).*
 
 The cuneiform shelf now holds 104,722 ORACC documents (CC0) across 38
 projects — the complete State Archives of Assyria, the ePSD2 corpora with
@@ -143,6 +155,8 @@ abuts Lebanon."
 
 ## For the hittitologist
 
+*The [Hittite desk]({{ '/axis/hittite/' | relative_url }}).*
+
 TLHdig (Hethitologie-Portal Mainz) brings >98% of the published Hittite
 tablet fragments: 23,486 manuscripts in 663 CTH compositions, each line
 carrying transliteration, Unicode cuneiform, and upstream's candidate
@@ -166,6 +180,8 @@ $ bin/nabu etym water                           # the textbook heteroclite, now 
 Both runs are pasted live (19 July 2026, trimmed lines marked).
 
 ## For the biblical scholar
+
+*The [Biblical desk]({{ '/axis/biblical/' | relative_url }}) — one text across every witness language.*
 
 The New Testament is held in up to fifteen registered witnesses — two
 Greek editions, two Latin, Gothic, Classical Armenian, five Old Church
@@ -194,6 +210,8 @@ citations to live passages in the catalog (see
 
 ## For the egyptologist
 
+*The [Egyptian desk]({{ '/axis/egyptian/' | relative_url }}).*
+
 Three millennia of Egyptian arrived on 18 July 2026 as one axis: the
 TLA/BBAW sentence corpus with gold lemmatization, its dictionary keyed by
 the same lemma ids, the only bulk demotic dataset in existence, and the
@@ -212,6 +230,8 @@ $ bin/nabu links urn:nabu:dict:ccl:C1494      # ⲕⲁϩ ← qꜣḥ ← qh, 3,0
 
 ## For the student of pre-Roman Italy
 
+*The [Italic desk]({{ '/axis/italic/' | relative_url }}).*
+
 Seven fragmentary languages landed 18 July 2026, most in their only
 machine-readable form: the oldest Latin in existence, the complete
 Iguvine Tables in Umbrian, Etruscan with a scholarly glossary, Oscan in
@@ -227,6 +247,8 @@ $ bin/nabu etym pompeii
 ```
 
 ## For the Hebraist
+
+*The [Hebrew desk]({{ '/axis/hebrew/' | relative_url }}) — and its [terminal setup]({{ '/axis/hebrew/' | relative_url }}#terminal-setup) for right-to-left reading.*
 
 The Masoretic text is held byte-verbatim — the Leningrad Codex's
 combining-mark order is never normalized away — with full morphology,

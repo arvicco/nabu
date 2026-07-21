@@ -48,6 +48,20 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    Atom feed (`/feed.xml`, jekyll-feed) carries it on deploy; nothing else
    to do. Gates that cut a tagged release follow the fuller checklist in
    docs/ops.md §12 (CITATION.cff version/date bump, GitHub release, DOI).
+7. **Per-axis pages** (P37-9): the `site/axis/<name>.md` desk pages and the
+   `/axis/` index are GENERATED — `bundle exec rake site:axes` reprojects
+   them from the live registry (`config/axes.yml` + `config/sources.yml`),
+   the curated `site/axis/_fragments.yml` (recipes, display notes, the
+   desk's instruments — HAND-EDITED, never overwritten), and the live
+   catalog counts (read-only, stamped with today's as-of date). Re-run it
+   at every gate so the holdings numbers and the as-of dates refresh, and
+   whenever an axis or a membership changes in the registry (a drift the
+   suite already fails on — `test/site/axis_pages_test.rb` pins each page's
+   persona, desc and member list to the registry; only the dated counts are
+   free to drift). Commit the regenerated pages — they are static-site
+   artifacts, deployed only on a push to `site/**`. New per-axis prose (a
+   fresh CLI recipe, a display note) is a `_fragments.yml` edit followed by
+   a regeneration.
 
 ## Hard rules
 
