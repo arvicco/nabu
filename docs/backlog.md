@@ -10606,3 +10606,23 @@ filter composing with every search path), `export --axis`, the
 `nabu axis NAME` desk card (persona, members, held counts, gold
 coverage — the `nabu language` mold). health --axis only if it fits
 cleanly; journal otherwise.
+
+## P37-9 · Per-axis site pages — /axis/<name>/  [tier: opus] [status: dispatched 2026-07-21] [deps: —] [owner-requested at the P37 gate]
+Owner ask (2026-07-21, verbatim intent): second-layer site pages, one
+per research axis (nabu/axis/celtic …), each carrying ALL relevant
+usability context FOR THAT axis. Ship: site/axis/<name>.md × 18
+(Jekyll, permalink /axis/<name>/), GENERATED from the live registry +
+per-axis curated context — persona + desc verbatim, member table
+(source, holdings kind, license class, sync status), the desk's
+gold-lemma/dictionary/alignment coverage, axis-specific CLI recipes
+(list/sync/search/export --axis, nabu axis card, plus the axis's OWN
+surfaces: char/variant-fold for sinitic, --loans for egyptian, MT/DSS
+alignment for hebrew, timeline/facets for epigraphy…), and the
+axis-relevant terminal/display setup (RTL+fonts for hebrew/syriac, CJK
+fonts/width for sinitic/japonic, Ogham spacing for celtic — mined from
+docs/display.md). An /axis/ index page + site nav link. Generator =
+committed script (rake task) reading config/axes.yml + sources.yml +
+docs sources; pages committed (the static-site discipline); drift
+check in the suite pinning the 18 pages' member lists to the registry
+(the docs/axes.md precedent). Curated prose lives in a per-axis
+fragments file the generator merges — hand-edited, never overwritten.
