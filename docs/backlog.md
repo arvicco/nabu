@@ -10626,3 +10626,70 @@ docs sources; pages committed (the static-site discipline); drift
 check in the suite pinning the 18 pages' member lists to the registry
 (the docs/axes.md precedent). Curated prose lives in a per-axis
 fragments file the generator merges — hand-edited, never overwritten.
+
+## D37 rulings (owner, 2026-07-21, post-gate)
+- D37-a (gaiji substitute lane): SUPERSEDED by the display-ladder
+  ruling — per-character ladder: real codepoint → IDS composition →
+  MARKED substitute (never silent) → ⬚ + counted footer as true last
+  resort; plus the CJK font-install note in docs/display.md.
+  Implementation = P38-1/P38-2 (plan: .docs/p38-japanese-plan.md).
+- D37-b (contentless FTS5 implementation): DEFERRED — "index rework
+  we can do other time." Stays journaled as a future-phase candidate
+  with the P37-7 design note as its spec.
+- P38 direction (owner): the Japanese phase — Aozora Bunko + the
+  gaiji display ladder as the phase essence.
+
+# Phase 38 — the Japanese phase: Aozora Bunko + the gaiji display ladder (approved 2026-07-21: all five packets; D38-a Aozora scope ruled post-survey)
+
+Source of truth: .docs/p38-japanese-plan.md (orchestrator holds it).
+Ground truth censused 2026-07-21 from held canonical/kr-gaiji
+charlist: 5,254 refs — 982 direct glyph (shipped 972), 707
+substitute-only, 1 composition, 3,564 image-only tail. Ladder target:
+faithful+marked-substitute ≈ ~88% of occurrences visible (vs 36%
+faithful today). Hard fence binds every packet: no main-checkout
+db/ or canonical/ writes; canonical reads via absolute path only.
+
+## P38-0 · Aozora Bunko survey  [tier: survey/network] [status: dispatched] [deps: —]
+Upstream shape (aozorabunko GitHub mirror: size, layout, index CSV —
+NO full clone; API/raw reads only), per-work license census (PD vs
+CC), the Aozora format spec (ruby grammar; gaiji notation classes:
+JIS X 0213 refs / component descriptions / image-only), fetch
+strategy + volume, scope options. Feeds D38-a + the P38-3 parser
+spec. Delivered via report (survey doc is orchestrator-held).
+
+## P38-1 · Gaiji ladder tables  [tier: opus] [status: dispatched] [deps: —]
+From held charlist: reconcile 982 direct-glyph refs vs shipped 972
+(`?`-uncertainty policy stated in table header); substitute table
+(707 refs) as its OWN config/gaiji/ lane, never merged with faithful;
+the lone composition → IDS; verify faithful codepoints against held
+Unihan; occurrence-weighted coverage report before/after (col 2 =
+occurrence counts), census-stamped per §6b. Acceptance: tables +
+counts, suite green.
+
+## P38-2 · The display ladder  [tier: opus] [status: ready] [deps: P38-1]
+Reading-mode render: faithful glyph → IDS → marked substitute
+(visibly bracketed, distinct from edh erasure ⟦…⟧) → ⬚ + counted
+footer. display.yml grammar `gaiji: ladder` (`placeholder` stays
+valid = rungs 1+4, preserving P37-3 as config). Render-conformance
+tests per rung incl. footer counts; docs/display.md CJK font-install
+section (Jigmo, Plangothic, BabelStone Han). Acceptance: golden
+renders exercising all four rungs; conformance suite green.
+
+## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: ready] [deps: P38-0, D38-a]
+New parser family: Shift_JIS→UTF-8 NFC at the boundary; ruby
+(furigana) as annotation layer, never inline text; gaiji resolved at
+parse time — JIS X 0213 → real codepoint, component description →
+IDS, unresolvable → loud ref for the display ladder. Per-work
+license rows; language jpn; japonic axis; conformance suite + real
+trimmed fixtures (one ruby-dense, one gaiji-bearing);
+enabled:false until owner-fired first sync verifies.
+
+## P38-4 · Japanese char-desk closure  [tier: opus] [status: ready] [deps: P38-3]
+kyūjitai↔shinjitai fold: survey held Unihan/KANJIDIC variant fields —
+config-only lane (hani-fold mold) if the data supports; else journal
+with the census. Char card jpn corpus counts; japonic axis page +
+docs refresh; gate news post rides.
+
+## D38 decision items
+- D38-a: Aozora scope (full mirror vs curated subset) — ruled after
+  P38-0 lands.
