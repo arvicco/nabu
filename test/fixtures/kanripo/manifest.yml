@@ -159,3 +159,79 @@ files:
     url: https://raw.githubusercontent.com/kanripo/KR4j0026/master/KR4j0026_001.txt
     whole: true
     trim: none
+  - path: KR-Catalog/KR/KR5a.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR5a.txt
+    whole: false
+    trim: org header + the complete KR5a0001 and KR5a0004 entry blocks (707,066 B -> 23,835 B; KR5a0001's block carries the whole DZJY 目次 and the DZJY:JY001 witness id)
+  - path: KR-Catalog/KR/KR5c.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR5c.txt
+    whole: false
+    trim: org header + the complete KR5c0091 entry block (498,482 B -> 1,289 B)
+  - path: KR-Catalog/KR/KR5g.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR5g.txt
+    whole: false
+    trim: org header + the complete KR5g0001 entry block (628,011 B -> 540 B)
+  - path: KR-Catalog/KR/KR5i.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR5i.txt
+    whole: false
+    trim: org header + the complete KR5i0030 entry block (43,645 B -> 412 B)
+  - path: KR5a0001/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5a0001/master/Readme.org
+    whole: true
+    trim: none (repo-trim - juan 004-061 of the 62 juan files omitted from the fixture dir)
+  - path: KR5a0001/KR5a0001_000.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0001/master/KR5a0001_000.txt
+    whole: true
+    trim: none (header-only file, real upstream shape)
+  - path: KR5a0001/KR5a0001_001.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0001/master/KR5a0001_001.txt
+    whole: true
+    trim: none
+  - path: KR5a0001/KR5a0001_002.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0001/master/KR5a0001_002.txt
+    whole: true
+    trim: none
+  - path: KR5a0001/KR5a0001_003.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0001/master/KR5a0001_003.txt
+    whole: true
+    trim: none
+  - path: KR5a0004/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5a0004/master/Readme.org
+    whole: true
+    trim: none (repo-trim - 9 of 11 juan files omitted, INCLUDING the real KR5a0004_000.txt whose stray unciteable text quarantines the text; its 181 bytes are reproduced verbatim in the parser test)
+  - path: KR5a0004/KR5a0004_006.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0004/master/KR5a0004_006.txt
+    whole: true
+    trim: none
+  - path: KR5a0004/KR5a0004_007.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5a0004/master/KR5a0004_007.txt
+    whole: true
+    trim: none
+  - path: KR5c0091/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5c0091/master/Readme.org
+    whole: true
+    trim: none (repo-trim - 4 of 5 juan files omitted from the fixture dir)
+  - path: KR5c0091/KR5c0091_001.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5c0091/master/KR5c0091_001.txt
+    whole: true
+    trim: none
+  - path: KR5g0001/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5g0001/master/Readme.org
+    whole: true
+    trim: none
+  - path: KR5g0001/KR5g0001_000.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5g0001/master/KR5g0001_000.txt
+    whole: true
+    trim: none
+  - path: KR5i0030/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5i0030/master/Readme.org
+    whole: true
+    trim: none (repo-trim - juan 003-004 of the 4 juan files omitted from the fixture dir)
+  - path: KR5i0030/KR5i0030_001.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5i0030/master/KR5i0030_001.txt
+    whole: true
+    trim: none
+  - path: KR5i0030/KR5i0030_002.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5i0030/master/KR5i0030_002.txt
+    whole: true
+    trim: none

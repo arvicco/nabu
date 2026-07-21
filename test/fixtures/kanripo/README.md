@@ -1,9 +1,10 @@
-# Kanripo fixture — Kanseki Repository, waves 1–2 (P33-0, P33-1)
+# Kanripo fixture — Kanseki Repository, waves 1–3 (P33-0, P33-1, P37-1)
 
-Ten real texts (2–3 per wave class KR1/KR2/KR3/KR4) fetched individually
-from github.com/kanripo — one repo per text — plus trimmed slices of the
-KR-Catalog discovery index. The directory mirrors the canonical workdir the
-adapter fetches: `KR-Catalog/` beside per-text dirs named by KR id.
+Fifteen real texts (2–3 per wave class KR1/KR2/KR3/KR4, five KR5) fetched
+individually from github.com/kanripo — one repo per text — plus trimmed
+slices of the KR-Catalog discovery index. The directory mirrors the
+canonical workdir the adapter fetches: `KR-Catalog/` beside per-text dirs
+named by KR id.
 
 - **Retrieved:** 2026-07-20, via `git clone --depth 1
   https://github.com/kanripo/<name>` (master — Kanripo keeps alternate
@@ -27,6 +28,11 @@ adapter fetches: `KR-Catalog/` beside per-text dirs named by KR id.
 | KR3i0042 | 菌譜 | KR3 | WYG | whole repo | none | 6c2e78f41d6432b7f55c84bfd752413eb6f2be50 |
 | KR4d0525 | 鯨背吟集 | KR4 | WYG | whole repo | none | 3556dec68237d96bc6de65357b478b2c8bacea98 |
 | KR4j0026 | 無住詞 | KR4 | WYG | whole repo | none | e858eb7c47573893df92c59d4f166b66e2544c81 |
+| KR5a0001 | 元始無量度人上品妙經 | KR5 | HFL + witness CK-KZ | Readme + juan 000–003 of 62 | repo-trim: 58 juan files omitted | 76ae4bb351cbf1beb0f44b60bd7f587123322352 |
+| KR5a0004 | 元始天尊説無上内祕眞藏經 | KR5 | HFL + witness CK-KZ | Readme + juan 006 + 007 of 11 | repo-trim: 9 juan files omitted (incl. the stray-text `_000`, below) | 487e4634f9d812fbfaf4adf5541d3d3adb86297c |
+| KR5c0091 | 道德眞經註 | KR5 | HFL + witness CK-KZ | Readme + juan 001 of 5 | repo-trim: 4 juan files omitted | eea2723ca2d4b35730021de0ab84ed3f47b1c5b7 |
+| KR5g0001 | 大慧靜慈妙樂天尊說福德五聖經 | KR5 | HFL (plain) | whole repo (single 000 file) | none | 1b2c20b7e0b23cd6a444f79f2608d10311b2e75e |
+| KR5i0030 | 唱道真言 | KR5 | CK-KZ (= witness) | Readme + juan 001 + 002 of 4 | repo-trim: 2 juan files omitted | d0d59038dee74e517bf9ac5735766cd3858156b7 |
 
 Chosen to attest the censused format spread: CHANT vs WYG vs SBCK base
 editions; multi-branch repo (KR3a0001: master + SBCK + WYG + _data
@@ -53,13 +59,47 @@ from the suffix — anchor NNN still equals the file suffix, all-`a` sides,
 and `_100` (not fixtured, 538 KB) carries 1,894 `# src:` SHIJI refs.
 KR2g0007 杜工部年譜 is a small whole WYG 傳記 repo.
 
+The five KR5 texts (P37-1, retrieved 2026-07-20) attest the Daozang wave-3
+census — fourteen KR5 repos probed whole, ~459 DZJY overlay files located
+org-wide by code search. KR5g0001 is a PLAIN-mandoku KR5 repo (parses at
+the leaf-side grain; carries the new `DZID`/`SOURCE` header properties —
+DZ1192 — and the `mode: mandoku-view;` semicolon mode-line variant). The
+other four are DZJY WITNESS-OVERLAY repos (`WITNESS CK-KZ` 重刊道藏輯要):
+the file transcribes the witness's print columns, the witness's own `<pb:>`
+anchors (page component `<juan>p<leaf><side>`, never the plain `-` form)
+are the citable page structure, `<md:>` milestones mark where the BASE
+edition's pages fall inside the witness text, and `@fw` lines are running
+headers. All three censused anchor arrangements are attested: KR5a0001
+度人經 `<pb:CK-KZ_JY001_01p001a>` (witness siglum + DZJY volume; also @fw
+with embedded ¶/`<md:>`, the base edition's pilcrow-only front-matter pages
+000-001a–000-002b before the first witness anchor, headings carrying ¶ and
+milestones, empty witness pages as adjacent anchors, and the `LASTPB`
+header property echoing the file's last milestone); KR5a0004
+`<pb:KR5a0004_CK-KZ_02p048a>` (text id + witness — juan 006+007 pin the
+CROSS-FILE page carry: page 02p048a opens in `_006` and its last column is
+`_007`'s whole body; the omitted REAL `_000` is a header block plus one
+stray unciteable 八 — reproduced byte-verbatim in the parser test as the
+loud-quarantine case); KR5i0030 `<pb:CK-KZ_KR5i0030_01p001a>` (witness
+siglum + text id as container; `BASEEDITION CK-KZ` IS the witness, no
+`<md:>`, no `JUAN` property, `#-*- mode: org; -*-` mode line, and the
+`#+TITLE:唱道真言 Changdao Zhenyan` no-space/romanized title variant).
+KR5c0091 道德眞經註 pins the md-edition lie: header `BASEEDITION HFL`, but
+every milestone says `WYG` — the md edition is recorded verbatim, never
+validated. Witness (juan, leaf-side) pairs are unique per repo in every
+probe; KR5c0067 (probed, not fixtured) shows sorted file order need not
+follow witness page order (`_000` front matter at witness juan 03).
+
 ## KR-Catalog slices (upstream HEAD 927469cd1543dfeed828151090b0bdd366b11ef4)
 
 `KR-Catalog/README.org` is whole. Each `KR-Catalog/KR/KR<sub>.txt` is the
-real file's org header (through the `**` subclass heading) plus the
-complete `***` entry block(s) for: KR1a0170, KR1b0049 (KR1b), KR1h0004,
-KR2a0001 + KR2a0038 + KR2a0039 (KR2a), KR2g0007, KR3a0001, KR3g0023,
-KR3i0042, KR4d0525, KR4j0026. **KR1b0049 古文尚書寃詞 and KR2a0039 清史稿
+real file's org header (through the `**` subclass heading, including any
+`#+LINK`/comment lines before the first entry) plus the complete `***`
+entry block(s) for: KR1a0170, KR1b0049 (KR1b), KR1h0004, KR2a0001 +
+KR2a0038 + KR2a0039 (KR2a), KR2g0007, KR3a0001, KR3g0023, KR3i0042,
+KR4d0525, KR4j0026, KR5a0001 + KR5a0004 (KR5a — KR5a0001's block carries
+the whole DZJY 目次 plus the 版本 witness listing naming `DZJY:JY001`, the
+volume id in its witness anchors), KR5c0091, KR5g0001, KR5i0030; the
+KR-Catalog HEAD is unchanged since P33-0. **KR1b0049 古文尚書寃詞 and KR2a0039 清史稿
 are real catalog ids with NO github repo** (61 wave-1 + 2 wave-2 such ids
 censused 2026-07-20; KR2's other is KR2d0020) — the fetch tests'
 recorded-absent case. The inverse shape is KR2-only: **4 un-catalogued KR2

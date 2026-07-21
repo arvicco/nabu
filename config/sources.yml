@@ -1831,11 +1831,22 @@ kanripo:
   # have NO repo: KR2a0039 清史稿 + KR2d0020 → recorded absent; 4 KR2
   # repos incl. the whole KR2p 出土簡帛 subclass are UN-catalogued →
   # outside the catalog-driven scope, censused in 02-sources row 104).
-  # KR5 道 (the Daozang) is censused + REPORTED ONLY (P33-1): its DZJY
-  # witness overlays (`<md:>` milestones) don't parse under the mandoku
-  # family — ingestion needs its own parser wave, owner's call. KR6
-  # Buddhist is EXCLUDED this phase (doctrine call journaled in
-  # 02-sources row 104 — CBETA is the scholarly Buddhist shelf).
+  # Wave 3 (P37-1, 2026-07-20) adds KR5 道 — the Daozang: 1,663 catalog
+  # ids over 10 subclasses / 1,660 repos / only ~84 MB git (949 repos
+  # < 15 KB; 4 ids repo-less → recorded absent; ~55 min of pauses at the
+  # 2 s knob) — the OWNER-FIRED wave-3 sync is the P37-1 gate step:
+  # `bin/nabu sync kanripo` re-pulls nothing already held and adds the
+  # KR5 texts; eyeball 度人經 urn:nabu:kanripo:KR5a0001 (witness-page
+  # urns :01:001a…) + 5 random KR5 passages. The DZJY witness overlays
+  # (`<md:>` base-page milestones + witness `<pb:CK-KZ_…NNpNNNa>`
+  # anchors + `@fw` running headers; ~459 overlay files censused via
+  # code search) parse since the P37-1 MandokuParser extension: witness
+  # pages are the citable structure, base-edition pages ride
+  # annotations, anything un-censused quarantines loudly (the census
+  # found e.g. KR5a0004's stray front-matter 八 — such texts quarantine
+  # by design and surface in the sync report). KR6 Buddhist is EXCLUDED
+  # this phase (doctrine call journaled in 02-sources row 104 — CBETA is
+  # the scholarly Buddhist shelf).
   # Narrowing classes never withdraws held texts (discover is on-disk-
   # driven); widening is a config-only change. The pacing knob is
   # Nabu::KanripoFetch::DEFAULT_DELAY (2 s between network operations,
@@ -1849,7 +1860,7 @@ kanripo:
   # Upstream watch: Wittern is building "Bunkankun", a Kanripo successor;
   # its catalog component lives at ask.bunkankun.org (journaled — a
   # future catalog/fetch seam candidate, next Sino phase survey).
-  classes: [KR1, KR2, KR3, KR4]
+  classes: [KR1, KR2, KR3, KR4, KR5]
 tls:
   adapter: Nabu::Adapters::Tls
   axes: [sinitic]

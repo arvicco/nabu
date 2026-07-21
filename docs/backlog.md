@@ -10532,7 +10532,7 @@ RADKFILE; nk2028 phonetic series) + ask.bunkankun.org (catalog shape,
 license, fetch) + the Jisho 棄-page benchmark (display-note inventory).
 Output: ratified source list + option grammar for P37-4.
 
-## P37-1 · KR5 Daozang witness-overlay parser  [tier: fable] [status: dispatched 2026-07-20] [deps: —]
+## P37-1 · KR5 Daozang witness-overlay parser  [tier: fable] [status: done 2026-07-20] [deps: —]
 Per the P33-1 characterization: overlay repos need `<md:>` milestones
 + witness-scheme pb anchors + @fw running headers. Overlay extension
 (loud on anything new), KR5 joins `classes:`, censuses + fixtures per
