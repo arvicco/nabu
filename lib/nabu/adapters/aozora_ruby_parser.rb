@@ -149,13 +149,35 @@ module Nabu
 
       # The zip holds exactly one .txt (name unpredictable); anything else is
       # upstream damage this parser must not guess around.
+      #
+      # MEMBER NAMES ARE JUNK-BYTES-IN-THE-WILD (incident P38-i1, the live
+      # first sync): the owner's canonical holds zips whose member names are
+      # invalid in UTF-8 AND in CP932 (51135_ruby_65180.zip's member reads
+      # ken\xFCfekito_… — the regression fixture), and an encoding-aware
+      # String#split on the -Z1 listing raised ArgumentError, which escaped
+      # parse and ABORTED the whole 17.5k-doc sync. So: the listing is
+      # forced to BINARY and matched byte-wise (/…/n) — member names are
+      # NEVER decoded, never NFC'd (the NFC boundary is for text, not for
+      # upstream filename bytes). The normal single-member zip extracts
+      # positionally (`unzip -p <zip>`, no member argument), so the junk
+      # name is never even spoken; only a multi-member zip addresses its
+      # one .txt by byte-preserved name. And every failure on this path —
+      # junk listing bytes, a corrupt zip (upstream ships at least two with
+      # no central directory), a wrong member count — is a PER-DOCUMENT
+      # defect: ParseError → loud quarantine, sync continues (the adapter
+      # error contract; an escaping ArgumentError violated it).
       def read_zip_member(zip_path)
-        members = Shell.run("unzip", "-Z1", zip_path).split("\n")
-        texts = members.grep(/\.txt\z/i)
-        raise ParseError, "#{zip_path}: expected exactly one .txt member, found #{texts.inspect}" if texts.size != 1
+        members = Shell.run("unzip", "-Z1", zip_path).force_encoding(Encoding::BINARY).split("\n")
+        texts = members.grep(/\.txt\z/in)
+        if texts.size != 1
+          raise ParseError,
+                "#{zip_path}: expected exactly one .txt member, found #{texts.size} of #{members.size} member(s)"
+        end
+
+        return Shell.run("unzip", "-p", zip_path) if members.size == 1
 
         Shell.run("unzip", "-p", zip_path, texts.first)
-      rescue Shell::Error => e
+      rescue Shell::Error, ArgumentError, EncodingError => e
         raise ParseError, "#{zip_path}: unreadable zip (#{e.message})"
       end
 

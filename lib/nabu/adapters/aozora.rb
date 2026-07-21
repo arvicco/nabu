@@ -237,13 +237,17 @@ module Nabu
       end
 
       def unzip_index(zip)
-        members = Shell.run("unzip", "-Z1", zip).split("\n").grep(/\.csv\z/i)
+        # Listing handled as BINARY, matched byte-wise \u2014 the P38-i1 rule
+        # (member names are junk-bytes-in-the-wild; never decode them). The
+        # index member is ASCII today, but an ArgumentError here would abort
+        # the sync at discover, so the same discipline applies.
+        members = Shell.run("unzip", "-Z1", zip).force_encoding(Encoding::BINARY).split("\n").grep(/\.csv\z/in)
         unless members.size == 1
           raise Nabu::FetchError, "#{manifest.id}: expected one CSV in #{zip}, found #{members.inspect}"
         end
 
         Shell.run("unzip", "-p", zip, members.first).force_encoding(Encoding::UTF_8).delete_prefix("\uFEFF")
-      rescue Shell::Error => e
+      rescue Shell::Error, ArgumentError, EncodingError => e
         raise Nabu::FetchError, "#{manifest.id}: unreadable index zip #{zip} (#{e.message})"
       end
 

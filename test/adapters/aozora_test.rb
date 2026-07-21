@@ -5,20 +5,25 @@ require "tmpdir"
 require "fileutils"
 
 # Aozora Bunko adapter tests (P38-3, first of the aozora-ruby family).
-# Fixtures are two REAL upstream work zips (Irving trans.: 驛傳馬車 056078,
-# old kanji/kana + gaiji; ウェストミンスター寺院 059898, ruby-dense) plus the
-# index CSV trimmed to their person-work rows AND the in-copyright work
-# 054333 — whose zip is deliberately absent: D38-a says discovery excludes
-# in-copyright works BEFORE any file access, and this suite pins exactly
-# that.
+# Fixtures are three REAL upstream work zips (Irving trans.: 驛傳馬車 056078,
+# old kanji/kana + gaiji; ウェストミンスター寺院 059898, ruby-dense; and the
+# P38-i1 regression exemplar 検疫と荷物検査 051135, whose zip member name is
+# invalid in UTF-8 AND CP932) plus the index CSV trimmed to their person-work
+# rows AND the in-copyright work 054333 — whose zip is deliberately absent:
+# D38-a says discovery excludes in-copyright works BEFORE any file access,
+# and this suite pins exactly that. A documented 4 KB trim of upstream's
+# genuinely corrupt 56151_ruby_60063.zip (no central directory) pins the
+# quarantine-not-abort error contract.
 class AozoraTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
 
   FIXTURES = Nabu::TestSupport.fixtures("aozora")
 
+  URN_51135 = "urn:nabu:aozora:051135"
   URN_56078 = "urn:nabu:aozora:056078"
   URN_59898 = "urn:nabu:aozora:059898"
+  ALL_URNS = [URN_51135, URN_56078, URN_59898].freeze # discover order (work-id sorted)
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -50,7 +55,7 @@ class AozoraTest < Minitest::Test
 
   def test_discover_yields_pd_works_with_text_deduped_by_work_id
     refs = Nabu::Adapters::Aozora.new.discover(FIXTURES).to_a
-    assert_equal [URN_56078, URN_59898], refs.map(&:id)
+    assert_equal ALL_URNS, refs.map(&:id)
     refs.each do |ref|
       assert_equal "aozora", ref.source_id
       assert File.absolute_path?(ref.path), "path must be absolute: #{ref.path.inspect}"
@@ -79,7 +84,12 @@ class AozoraTest < Minitest::Test
            "in-copyright work 054333 must never be discovered (D38-a)"
     skips = adapter.discovery_skips(FIXTURES)
     assert_equal 1, skips.skipped_by_rule, "the excluded in-copyright work is censused"
-    assert_predicate skips, :clean?
+    # The corrupt-zip fixture (56151_ruby_60063.zip, P38-i1) has no index
+    # row — upstream re-proofed the work, so the live index points at
+    # …_70005.zip — which makes it a REAL stranded-zip exemplar for the
+    # unrecognized lane: loudly censused, never silently ignored.
+    assert_equal 1, skips.unrecognized
+    assert_match(/56151_ruby_60063\.zip/, skips.notes.join)
   end
 
   def test_discover_reads_the_index_from_the_upstream_zip_form_too
@@ -93,7 +103,7 @@ class AozoraTest < Minitest::Test
                         File.join(staging, "list_person_all_extended_utf8.csv"))
       end
       refs = Nabu::Adapters::Aozora.new.discover(root).to_a
-      assert_equal [URN_56078, URN_59898], refs.map(&:id)
+      assert_equal ALL_URNS, refs.map(&:id)
     end
   end
 
@@ -111,9 +121,12 @@ class AozoraTest < Minitest::Test
       FileUtils.mkdir_p(stray)
       File.write(File.join(stray, "773_ruby_5968.zip"), "stub")
       skips = Nabu::Adapters::Aozora.new.discovery_skips(root)
-      assert_equal 1, skips.unrecognized
+      # 2 = the added stub + the corrupt row-less fixture zip copied along
+      # (56151_ruby_60063.zip, the P38-i1 stranded exemplar).
+      assert_equal 2, skips.unrecognized
       refute_predicate skips, :clean?
       assert_match(/773_ruby_5968\.zip/, skips.notes.join)
+      assert_match(/56151_ruby_60063\.zip/, skips.notes.join)
     end
   end
 
@@ -128,6 +141,41 @@ class AozoraTest < Minitest::Test
       error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
       assert_match(/missing from the sparse checkout/, error.message)
     end
+  end
+
+  # --- parse: the P38-i1 incident regressions ---------------------------------
+
+  # THE ENCODING REGRESSION (incident P38-i1): 51135_ruby_65180.zip is a
+  # real, whole upstream zip whose single member is named
+  # ken\xFCfekito_nimotsu_kensa.txt — 0xFC is invalid in UTF-8 AND CP932.
+  # Pre-fix, String#split on the `unzip -Z1` listing raised ArgumentError
+  # and killed the whole sync at document ~9,471. This test feeds those real
+  # listing bytes through the real path: the work must parse SUCCESSFULLY
+  # (binary-safe member handling; the junk name is never decoded — the
+  # single-member zip extracts positionally, name unspoken).
+  def test_a_zip_with_a_non_utf8_member_name_parses_successfully
+    document = parse(URN_51135)
+    assert_equal "検疫と荷物検査", document.title
+    assert_equal 9, document.size, "9 non-blank body lines, none command-only"
+    first = document.passages.first
+    assert_includes first.text, "ゴールデンゲートを過ぎてから"
+    assert_includes first.annotations["ruby"], { "base" => "午後", "reading" => "ごゞ" }
+    assert_includes first.annotations["ruby"], { "base" => "時", "reading" => "じ" }, "the ｜-scoped 三｜時《じ》"
+  end
+
+  # THE ERROR-CONTRACT REGRESSION (incident P38-i1): upstream ships
+  # genuinely corrupt zips (this fixture is a documented 4 KB trim of the
+  # real 549 KB 56151_ruby_60063.zip — "central directory not found" either
+  # way). Any per-document zip failure must be ParseError (loud quarantine,
+  # sync continues), never an escaping Shell::Error/ArgumentError that
+  # aborts a 17.5k-doc sync.
+  def test_a_corrupt_zip_quarantines_with_parse_error_never_aborts
+    corrupt = File.join(FIXTURES, "cards", "001562", "files", "56151_ruby_60063.zip")
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::AozoraRubyParser.new.parse(corrupt, urn: "urn:nabu:aozora:056151")
+    end
+    assert_match(/56151_ruby_60063\.zip/, error.message)
+    assert_match(/unreadable zip/, error.message)
   end
 
   # --- parse: structure --------------------------------------------------------
@@ -317,7 +365,7 @@ class AozoraTest < Minitest::Test
     source = aozora_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 2, first.added
+    assert_equal 3, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]
@@ -353,7 +401,9 @@ class AozoraTest < Minitest::Test
       # And the materialized tree discovers PD works only, from the zipped
       # index — even though the in-copyright STUB zip sits on disk, it is
       # never opened (it is not even a valid zip).
-      assert_equal [URN_56078, URN_59898], adapter.discover(workdir).to_a.map(&:id)
+      # 051135 is discovered from the index too (its zip is not in this
+      # rig — discovery is index-driven and never opens files).
+      assert_equal ALL_URNS, adapter.discover(workdir).to_a.map(&:id)
     end
   end
 
