@@ -52,11 +52,22 @@ module Nabu
       def initialize(text:, applied:, gaiji: nil) = super
     end
 
-    # The gaiji outcome of one render (P37-3): how many `&KR\d+;` refs the
-    # reading mode turned into a real resolved glyph vs. left as the ⬚
-    # placeholder box. Summed across passages by the CLI for the honesty
-    # footer; never a label in +applied+ (a Set would drop the count).
-    GaijiTally = Data.define(:resolved, :unresolved)
+    # The gaiji outcome of one render: the per-RUNG tally of the display ladder
+    # (P38-2). Each `&KR\d+;` ref resolves at exactly one of four descending
+    # rungs — FAITHFUL real glyph, IDS composition, marked SUBSTITUTE, or the ⬚
+    # placeholder box — and this counts how many landed on each. Summed across
+    # passages by the CLI for the honesty footer; never a label in +applied+ (a
+    # Set would drop the counts). +resolved+/+unresolved+ preserve the P37-3
+    # placeholder-mode vocabulary (placeholder mode only ever touches the
+    # faithful + placeholder rungs, so resolved == faithful there).
+    GaijiTally = Data.define(:faithful, :ids, :substitute, :placeholder) do
+      def initialize(faithful: 0, ids: 0, substitute: 0, placeholder: 0) = super
+
+      # P37-3 back-compat: anything that became a real surface (faithful glyph,
+      # IDS composition, or substitute) vs. the ⬚ box left behind.
+      def resolved = faithful + ids + substitute
+      def unresolved = placeholder
+    end
 
     # A named codepoint set. +codepoints+ is an array of Integer/Range;
     # +replacement+ is what each stripped codepoint becomes — "" for combining
@@ -160,20 +171,43 @@ module Nabu
     QERE_SETTINGS = %w[qere ketiv both].freeze
     QERE_LABELS = { "qere" => "qere", "both" => "ketiv+qere" }.freeze
 
-    # Gaiji (P37-3; kanripo). The mandoku parser keeps not-yet-encoded
+    # Gaiji (P37-3/P38-2; kanripo). The mandoku parser keeps not-yet-encoded
     # characters as `&KR\d+;` references verbatim in the stored text. In
-    # `reading` mode, a source configured `gaiji: placeholder` swaps each such
-    # ref for either its RESOLVED glyph (when the KR-Gaiji charlist gives a
-    # single real Unicode codepoint — the faithful subset in
-    # config/gaiji/<source>.tsv) or the ⬚ placeholder box (U+2B1A) otherwise —
-    # never a fake glyph. `gaiji: refs` (and every non-reading mode) keeps the
-    # refs verbatim; the diplomatic view is the byte-honest counterpart. cbeta
-    # is a documented NON-entry: its `<g>` fallback text is already the stored
-    # reading surface (parser resolves it at parse time), so there is nothing
-    # to display-transform.
+    # `reading` mode the source's `gaiji:` policy resolves each ref per
+    # character down a ladder of descending fidelity:
+    #
+    #   `gaiji: ladder` (P38-2, the four-rung ladder — kanripo's shipped policy):
+    #     1. FAITHFUL   — a real assigned codepoint (config/gaiji/<source>.tsv),
+    #                     rendered UNMARKED (it IS the character).
+    #     2. IDS        — an Ideographic Description Sequence
+    #                     (<source>-ids.tsv, e.g. ⿰氵丐), rendered inline. This
+    #                     lane is empty for kanripo today (its sole composition
+    #                     resolved to an encoded glyph → faithful) but the rung
+    #                     is live for the Aozora source (P38-3).
+    #     3. SUBSTITUTE — a lossy standard-char read-through
+    #                     (<source>-substitutes.tsv), rendered VISIBLY MARKED in
+    #                     ⌈…⌉ so a stand-in can never be quoted unaware.
+    #     4. ⬚ placeholder (U+2B1A) — last resort, never a fake glyph.
+    #
+    #   `gaiji: placeholder` (P37-3, preserved as config): rungs 1 + 4 ONLY —
+    #     faithful glyph or the ⬚ box, the IDS/substitute lanes never consulted.
+    #
+    # `gaiji: refs` (and every non-reading mode) keeps the refs verbatim; the
+    # diplomatic view is the byte-honest counterpart. cbeta is a documented
+    # NON-entry: its `<g>` fallback text is already the stored reading surface
+    # (parser resolves it at parse time), so there is nothing to
+    # display-transform.
+    #
+    # The SUBSTITUTE mark ⌈…⌉ (U+2308 LEFT CEILING / U+2309 RIGHT CEILING) is
+    # chosen to be UNCLAIMED by every other display convention — erasures ⟦…⟧,
+    # lacuna […], surplus {…}, sigla ⸀⸂⸃, the ⬚ placeholder, the IDS operators
+    # ⿰–⿻ — so it can never be confused with an editorial bracket, and
+    # terminal-friendly (BMP, present in monospace/Noto Sans Mono).
     GAIJI_REF = /&(KR\d+);/
     GAIJI_PLACEHOLDER = "\u{2B1A}" # ⬚ DOTTED SQUARE
-    GAIJI_SETTINGS = %w[placeholder refs].freeze
+    GAIJI_SUBSTITUTE_OPEN = "\u{2308}"  # ⌈ LEFT CEILING
+    GAIJI_SUBSTITUTE_CLOSE = "\u{2309}" # ⌉ RIGHT CEILING
+    GAIJI_SETTINGS = %w[ladder placeholder refs].freeze
 
     # The applied-labels edition transforms can emit — the footer separates
     # these ("apparatus simplified: …") from the mark-class strip vocabulary.
@@ -189,9 +223,11 @@ module Nabu
 
     # The per-render edition context: the source's conventions plus the
     # passage's stored annotations (the qere word hashes ride there) and the
-    # source's gaiji resolution map (P37-3; empty for non-gaiji sources).
-    Edition = Data.define(:policy, :annotations, :gaiji_map) do
-      def initialize(policy:, annotations:, gaiji_map: {}) = super
+    # source's three gaiji ladder lanes (P37-3/P38-2; all empty for non-gaiji
+    # sources). +gaiji_map+ is the faithful lane; +gaiji_ids+ the IDS lane;
+    # +gaiji_substitutes+ the substitute lane — consulted in that order.
+    Edition = Data.define(:policy, :annotations, :gaiji_map, :gaiji_ids, :gaiji_substitutes) do
+      def initialize(policy:, annotations:, gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {}) = super
     end
 
     # The applied-label for isolate wrapping (footer vocabulary), and the two
@@ -350,9 +386,10 @@ module Nabu
       # P27-0 mode and caller is untouched by their absence. Grapheme spacing
       # (P27-2) applies after the mode render when policy and mode allow.
       def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {},
-                 gaiji_map: {})
+                 gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {})
         policy = policies[Normalize.primary_subtag(language)]
-        edition = edition_context(mode, source, annotations, source_policies, gaiji_map)
+        edition = edition_context(mode, source, annotations, source_policies,
+                                  gaiji_map, gaiji_ids, gaiji_substitutes)
         return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
 
         policy ||= Policy.new(language: language)
@@ -465,28 +502,24 @@ module Nabu
       # sequential index scan is exact and an identical earlier word can
       # never be mis-targeted. "both" renders "ketiv [qere]". Display-time
       # only; without annotations the stored ketiv stands.
-      # Resolve/placehold the `&KR\d+;` gaiji refs in +text+ (P37-3), returning
-      # [rendered, GaijiTally]. Only fires when the source policy is
-      # `gaiji: placeholder`; otherwise the refs stay verbatim and the tally is
-      # zero. A ref whose id is in the edition's gaiji_map becomes its real
-      # glyph (resolved); every other `&KR…;` ref becomes the ⬚ placeholder
-      # (unresolved). Pure codepoint substitution — safe on NFC-exempt text.
+      # Resolve the `&KR\d+;` gaiji refs in +text+ down the display ladder
+      # (P38-2), returning [rendered, GaijiTally]. Fires for `gaiji: ladder`
+      # (all four rungs) and `gaiji: placeholder` (rungs 1 + 4 only — the
+      # IDS/substitute lanes are skipped); otherwise the refs stay verbatim and
+      # the tally is empty. Each ref resolves at the FIRST rung that has it:
+      #   1. faithful glyph  (gaiji_map)          — rendered unmarked
+      #   2. IDS composition (gaiji_ids)          — rendered inline [ladder only]
+      #   3. substitute glyph (gaiji_substitutes) — MARKED ⌈…⌉  [ladder only]
+      #   4. ⬚ placeholder                        — last resort
+      # Pure codepoint substitution — safe on NFC-exempt text.
       def apply_gaiji(text, edition)
-        return [text, GaijiTally.new(resolved: 0, unresolved: 0)] unless edition.policy.gaiji == "placeholder"
+        setting = edition.policy.gaiji
+        return [text, GaijiTally.new] unless %w[ladder placeholder].include?(setting)
 
-        resolved = 0
-        unresolved = 0
-        out = text.gsub(GAIJI_REF) do
-          glyph = edition.gaiji_map[Regexp.last_match(1)]
-          if glyph
-            resolved += 1
-            glyph
-          else
-            unresolved += 1
-            GAIJI_PLACEHOLDER
-          end
-        end
-        [out, GaijiTally.new(resolved: resolved, unresolved: unresolved)]
+        ladder = setting == "ladder"
+        counts = { faithful: 0, ids: 0, substitute: 0, placeholder: 0 }
+        out = text.gsub(GAIJI_REF) { resolve_gaiji_ref(Regexp.last_match(1), edition, ladder, counts) }
+        [out, GaijiTally.new(**counts)]
       end
 
       def apply_qere(text, edition)
@@ -498,6 +531,26 @@ module Nabu
       end
 
       private
+
+      # One ref's descent down the ladder (P38-2): the first rung that holds it
+      # wins. Bumps the matching rung's counter and returns the surface. The
+      # IDS and substitute rungs are ladder-only; placeholder mode falls
+      # straight from faithful to the ⬚ box.
+      def resolve_gaiji_ref(id, edition, ladder, counts)
+        if (glyph = edition.gaiji_map[id])
+          counts[:faithful] += 1
+          glyph
+        elsif ladder && (seq = edition.gaiji_ids[id])
+          counts[:ids] += 1
+          seq
+        elsif ladder && (sub = edition.gaiji_substitutes[id])
+          counts[:substitute] += 1
+          "#{GAIJI_SUBSTITUTE_OPEN}#{sub}#{GAIJI_SUBSTITUTE_CLOSE}"
+        else
+          counts[:placeholder] += 1
+          GAIJI_PLACEHOLDER
+        end
+      end
 
       def substitute_qere(text, tokens, setting)
         out = +""
@@ -530,11 +583,13 @@ module Nabu
         reading.empty? ? nil : reading
       end
 
-      def edition_context(mode, source, annotations, source_policies, gaiji_map = {})
+      def edition_context(mode, source, annotations, source_policies,
+                          gaiji_map = {}, gaiji_ids = {}, gaiji_substitutes = {})
         return nil unless source && mode.respond_to?(:render_edition)
 
         policy = source_policies[source]
-        policy && Edition.new(policy: policy, annotations: annotations, gaiji_map: gaiji_map)
+        policy && Edition.new(policy: policy, annotations: annotations, gaiji_map: gaiji_map,
+                              gaiji_ids: gaiji_ids, gaiji_substitutes: gaiji_substitutes)
       end
 
       # Strip the zero-width noise (ANSI SGR + bidi isolates) before measuring.
