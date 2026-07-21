@@ -10682,7 +10682,7 @@ Unihan; occurrence-weighted coverage report before/after (col 2 =
 occurrence counts), census-stamped per §6b. Acceptance: tables +
 counts, suite green.
 
-## P38-2 · The display ladder  [tier: opus] [status: ready] [deps: P38-1]
+## P38-2 · The display ladder  [tier: opus] [status: dispatched] [deps: P38-1]
 Reading-mode render: faithful glyph → IDS → marked substitute
 (visibly bracketed, distinct from edh erasure ⟦…⟧) → ⬚ + counted
 footer. display.yml grammar `gaiji: ladder` (`placeholder` stays
@@ -10691,7 +10691,7 @@ tests per rung incl. footer counts; docs/display.md CJK font-install
 section (Jigmo, Plangothic, BabelStone Han). Acceptance: golden
 renders exercising all four rungs; conformance suite green.
 
-## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: ready] [deps: P38-0, D38-a]
+## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: dispatched — fixtures+jis0213 asset pre-committed 94c7a0f] [deps: P38-0, D38-a]
 New parser family: Shift_JIS→UTF-8 NFC at the boundary; ruby
 (furigana) as annotation layer, never inline text; gaiji resolved at
 parse time — JIS X 0213 → real codepoint, component description →
