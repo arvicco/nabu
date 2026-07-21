@@ -10761,6 +10761,22 @@ census read after a clean pass.
 #    but reads as an upstream-activity claim; rename live→auto, keep
 #    manual with an honest legend on every surface, frozen stays,
 #    local DROPPED (redundant with kind: shelf). Owner leaned rename.
+#    OWNER OUTPUT SPEC (verbatim, 2026-07-22) — grouped by type
+#    (modules, shelves, sources), compact, no noise-OK, errors inline:
+#      local-notes         -     shelf   up=local     notes=2   2026-07-21 18:02 (+0 ~0 -0 !0) <errors if any>
+#      edh                 on(f) source  up=frozen    docs=81881 pass=406306 2026-07-21 17:58 (+0 ~0 -0 !2) <errors if any>
+#      liv                 on(m) source  up=?(2d)      entries=305 2026-07-21 17:59 (+0 ~0 -0 !0) <errors if any>
+#      kr-gaiji            -     module  up=module  2026-07-21 20:13 (+0 ~0 -0 !0)  <errors if any>
+#      perseus-greek       on(a) source  up=ok(2d)   docs=1418 pass=394706 2026-07-21 17:15 (+0 ~0 -0 !1) <errors if any>
+#    Decode: col2 = enabled+cadence fused (on(a)/on(m)/on(f); "-" for
+#    kinds where enablement is moot; off(x) for disabled sources);
+#    up= freshness (local/frozen/module structural; ok(Nd) probed-good
+#    N ago; ?(Nd) unprobed manual upstream, age of last contact);
+#    holdings label per content kind (docs+pass / entries / notes);
+#    then last-sync stamp + delta (+added ~updated -withdrawn !errored)
+#    + inline errors. Packet pins the residual semantics (off rows,
+#    probe source for ok/?, label vocabulary) in its spec — no further
+#    rulings needed.
 # 2. FOLD-DIGEST GRANULARITY (journaled 2026-07-21): per-language fold
 #    digests + language-scoped fold-module seam so a jpn-only fold
 #    change stops dirtying all sources (the P38 all-dirty event).
