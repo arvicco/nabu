@@ -609,7 +609,15 @@ module Nabu
       Full-text search over every live passage, bm25-ranked. Matching is
       diacritic- and case-insensitive on BOTH sides: μηνιν finds μῆνιν,
       ΜΗΝΙΝ finds both — type without accents, breathings, or iota
-      subscripts and still hit the polytonic editions.
+      subscripts and still hit the polytonic editions. The fold also matches
+      modern Japanese reading habits: 学 finds 學, 弁 finds 辨/瓣/辯.
+
+      EXACT (--exact): glyph-literal match — the query must appear in the
+      passage's stored text exactly as typed (NFC-normalized, but nothing
+      else: no diacritic strip, no case fold, no reform fold). Use it to tell a
+      literal 弁 apart from the default's 弁/辨/瓣/辯. It runs the normal folded
+      search for candidates, then keeps only glyph-literal hits — so it does
+      not combine with --fuzzy/--near/--lemma/--morph or the character filters.
 
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
@@ -806,6 +814,9 @@ module Nabu
                        desc: "With --lemma: gold (verified) annotations only — exclude silver " \
                              "(automatic) lemmatization and equivalence (scholar-curated " \
                              "Classical-Latin equivalents on non-Latin passages)"
+    option :exact, type: :boolean, default: false,
+                   desc: "Glyph-literal match; the default fold matches modern reading habits " \
+                         "(学 finds 學, 弁 finds 辨/瓣/辯) — --exact does not"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -823,6 +834,14 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if options[:exact] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph])
+        raise Thor::Error, "search: --exact is glyph-literal substring matching over the plain " \
+                           "text query — it does not combine with --fuzzy/--near/--lemma/--morph"
+      end
+      if options[:exact] && char_filter_options?
+        raise Thor::Error, "search: --exact is a word-level glyph-literal filter — it does not " \
+                           "combine with the character-structure filters (--radical/--strokes/--char-component)"
       end
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -859,9 +878,9 @@ module Nabu
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
-                                    loans: loans)
+                                    loans: loans, exact: options[:exact])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
-                                    incomplete: searcher.incomplete_hint)
+                                    incomplete: searcher.incomplete_hint, exact: options[:exact])
       print_display_footer
     ensure
       catalog&.disconnect
@@ -2319,11 +2338,14 @@ module Nabu
       # can apply the per-source convention rules and the ketiv/qere choice;
       # everywhere else the language-level policies alone apply.
       def display_text(text, language, source: nil, annotations: nil)
+        @display_gaiji_ladder = true if source && display_source_policies[source]&.gaiji == "ladder"
         rendered = Nabu::Display.render(text.to_s, language: language,
                                                    mode: display_mode, policies: display_policies,
                                                    source: source, annotations: annotations,
                                                    source_policies: display_source_policies,
-                                                   gaiji_map: gaiji_map_for(source))
+                                                   gaiji_map: gaiji_map_for(source),
+                                                   gaiji_ids: gaiji_ids_for(source),
+                                                   gaiji_substitutes: gaiji_substitutes_for(source))
         display_applied.merge(rendered.applied)
         record_gaiji(rendered.gaiji)
         rendered.text
@@ -2333,28 +2355,38 @@ module Nabu
         @display_applied ||= Set.new
       end
 
-      # The source's curated gaiji resolution map (P37-3), memoized per source:
-      # config/gaiji/<source>.tsv (only kanripo ships one today). A source with
-      # no file gets an empty map — reading mode then placeholder-only, and the
-      # non-show call sites (no source) never load a map at all.
-      def gaiji_map_for(source)
+      # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
+      # source: config/gaiji/<source>.tsv (faithful), <source>-ids.tsv (IDS)
+      # and <source>-substitutes.tsv (substitutes) — only kanripo ships them
+      # today. A missing file is an empty map (that rung degrades to the next),
+      # and the non-show call sites (no source) never load a map at all.
+      def gaiji_map_for(source) = gaiji_lane(source, "")
+
+      def gaiji_ids_for(source) = gaiji_lane(source, "-ids")
+
+      def gaiji_substitutes_for(source) = gaiji_lane(source, "-substitutes")
+
+      def gaiji_lane(source, suffix)
         return {} unless source
 
-        (@gaiji_maps ||= {})[source] ||=
-          Nabu::Display.load_gaiji_map(File.join(Nabu::Config.load.gaiji_dir, "#{source}.tsv"))
+        (@gaiji_lanes ||= {})[[source, suffix]] ||=
+          Nabu::Display.load_gaiji_map(File.join(Nabu::Config.load.gaiji_dir, "#{source}#{suffix}.tsv"))
       end
 
-      # Running [resolved, unresolved] gaiji tallies for the once-per-invocation
-      # footer (summed across every passage a show-family command renders).
+      # Running per-rung gaiji tallies for the once-per-invocation footer
+      # ([faithful, ids, substitute, placeholder], summed across every passage a
+      # show-family command renders).
       def display_gaiji
-        @display_gaiji ||= [0, 0]
+        @display_gaiji ||= [0, 0, 0, 0]
       end
 
       def record_gaiji(tally)
         return unless tally
 
-        display_gaiji[0] += tally.resolved
-        display_gaiji[1] += tally.unresolved
+        display_gaiji[0] += tally.faithful
+        display_gaiji[1] += tally.ids
+        display_gaiji[2] += tally.substitute
+        display_gaiji[3] += tally.placeholder
       end
 
       # Per-token language coloring (P27-2): the single-passage show view —
@@ -2394,9 +2426,8 @@ module Nabu
       # spacing); the escape hatch names diplomatic when edition transforms
       # applied, else full.
       def print_display_footer
-        resolved, unresolved = display_gaiji
-        gaiji = resolved.positive? || unresolved.positive?
-        return if display_applied.empty? && !gaiji
+        gaiji_text = gaiji_clause(*display_gaiji)
+        return if display_applied.empty? && gaiji_text.nil?
 
         labels = display_applied.to_a
         edition = Nabu::Display::EDITION_LABELS & labels
@@ -2406,11 +2437,11 @@ module Nabu
         strips = labels - colors - edition - ["spacing", Nabu::Display::ISOLATES]
         parts << "#{strips.join(', ')} stripped" unless strips.empty?
         parts << "apparatus simplified: #{edition.join(', ')}" unless edition.empty?
-        parts << gaiji_clause(resolved, unresolved) if gaiji
+        parts << gaiji_text if gaiji_text
         parts << "spacing" if labels.include?("spacing")
         parts.concat(colors)
         parts << Nabu::Display::ISOLATES if labels.include?(Nabu::Display::ISOLATES)
-        say "display: #{parts.join(' · ')} (#{display_footer_hint(edition, gaiji)})"
+        say "display: #{parts.join(' · ')} (#{display_footer_hint(edition, !gaiji_text.nil?)})"
       end
 
       # The escape-hatch hint: diplomatic when any edition-level transform ran
@@ -2423,14 +2454,34 @@ module Nabu
         "--display full shows all marks"
       end
 
-      # The gaiji footer clause (P37-3): unresolved refs became ⬚ placeholders,
-      # resolved ones became real glyphs — say both honestly.
-      def gaiji_clause(resolved, unresolved)
+      # The gaiji footer clause, per rung. Returns nil when there is nothing to
+      # announce. Two shapes, honest to the policy:
+      #   ladder (P38-2)     — FAITHFUL is silent (it IS the character); the
+      #                        lossy rungs (substitutes, IDS compositions) and
+      #                        the ⬚ placeholders DO get announced ("never
+      #                        silent"). An all-faithful render says nothing.
+      #   placeholder (P37-3) — the preserved rungs-1+4 vocabulary: unresolved
+      #                        (⬚) refs and how many resolved to a real glyph.
+      def gaiji_clause(faithful, ids, substitute, placeholder)
+        return ladder_gaiji_clause(ids, substitute, placeholder) if @display_gaiji_ladder
+
+        placeholder_gaiji_clause(faithful, placeholder)
+      end
+
+      def ladder_gaiji_clause(ids, substitute, placeholder)
+        bits = []
+        bits << "#{substitute} substituted" if substitute.positive?
+        bits << "#{ids} composed" if ids.positive?
+        bits << "#{placeholder} unresolved gaiji" if placeholder.positive?
+        bits.empty? ? nil : bits.join(", ")
+      end
+
+      def placeholder_gaiji_clause(resolved, unresolved)
         if unresolved.positive? && resolved.positive?
           "#{unresolved} unresolved gaiji (#{resolved} resolved)"
         elsif unresolved.positive?
           "#{unresolved} unresolved gaiji"
-        else
+        elsif resolved.positive?
           "#{resolved} gaiji resolved"
         end
       end
@@ -3554,9 +3605,16 @@ module Nabu
       # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
       # printed whenever present, so a filter-emptied page never masquerades
       # as a complete answer.
-      def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil)
+      def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
+                               exact: false)
         if results.empty?
           say "no matches"
+          # Empty-under-filter honesty (P35): --exact suppressed the folded
+          # candidates, so a "no matches" here must name the filter it applied.
+          if exact
+            say "note: --exact matched glyph-literally (the default fold would also find " \
+                "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
+          end
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -3566,7 +3624,8 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
+            "(#{'glyph-exact; ' if exact}highlights are diacritic-folded)" \
+            "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
       end
 

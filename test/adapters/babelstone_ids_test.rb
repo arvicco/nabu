@@ -142,12 +142,12 @@ class BabelstoneIdsTest < Minitest::Test
     assert_equal "urn:nabu:dict:babelstone-ids:U+68C4", qi[:urn]
   end
 
-  def test_registry_row_exists_disabled_with_manual_sync_policy
+  def test_registry_row_exists_enabled_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["babelstone-ids"]
     refute_nil entry, "config/sources.yml must register babelstone-ids"
     assert_equal Nabu::Adapters::BabelstoneIds, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired first sync (house rule)"
+    assert entry.enabled, "owner-fired first sync verified + flipped 2026-07-21"
     assert_equal "manual", entry.sync_policy
   end
 end

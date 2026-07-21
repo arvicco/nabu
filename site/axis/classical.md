@@ -13,7 +13,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | enabled · live | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | enabled · live | 534 docs / 391,785 passages |

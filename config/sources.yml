@@ -1727,7 +1727,7 @@ hdic:
 babelstone-ids:
   adapter: Nabu::Adapters::BabelstoneIds
   axes: [sinitic]
-  enabled: false   # P37-4: enable only after the owner-fired first sync
+  enabled: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync babelstone-ids — one 3.1 MB
                    # UTF-8 file GET, 97,680 entries — then eyeball
                    # nabu char 棄 and nabu show urn:nabu:dict:babelstone-ids:U+68C4,
@@ -1745,7 +1745,7 @@ babelstone-ids:
 kradfile:
   adapter: Nabu::Adapters::Kradfile
   axes: [japonic]
-  enabled: false   # P37-4: enable only after the owner-fired first sync
+  enabled: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync kradfile — one ~46 KB gz
                    # GET, 6,355 kanji — then eyeball nabu char 棄's component
                    # index and search --char-component 木, flip).
@@ -1958,6 +1958,12 @@ tls:
   # CC BY-SA 4.0 (LICENSE.md, sha256-identical in tls-texts + tls-data;
   # both README badges say CC BY 4.0 — recorded discrepancy, LICENSE
   # governs). Upstream is a live eXist-db working repo → manual.
+  sync_policy: manual
+
+aozora:
+  adapter: Nabu::Adapters::Aozora
+  axes: [japonic]
+  enabled: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

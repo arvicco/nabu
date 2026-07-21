@@ -10626,3 +10626,166 @@ docs sources; pages committed (the static-site discipline); drift
 check in the suite pinning the 18 pages' member lists to the registry
 (the docs/axes.md precedent). Curated prose lives in a per-axis
 fragments file the generator merges — hand-edited, never overwritten.
+
+## D37 rulings (owner, 2026-07-21, post-gate)
+- D37-a (gaiji substitute lane): SUPERSEDED by the display-ladder
+  ruling — per-character ladder: real codepoint → IDS composition →
+  MARKED substitute (never silent) → ⬚ + counted footer as true last
+  resort; plus the CJK font-install note in docs/display.md.
+  Implementation = P38-1/P38-2 (plan: .docs/p38-japanese-plan.md).
+- D37-b (contentless FTS5 implementation): DEFERRED — "index rework
+  we can do other time." Stays journaled as a future-phase candidate
+  with the P37-7 design note as its spec.
+- P38 direction (owner): the Japanese phase — Aozora Bunko + the
+  gaiji display ladder as the phase essence.
+
+# Phase 38 — the Japanese phase: Aozora Bunko + the gaiji display ladder (approved 2026-07-21: all five packets; D38-a Aozora scope ruled post-survey)
+
+Source of truth: .docs/p38-japanese-plan.md (orchestrator holds it).
+Ground truth censused 2026-07-21 from held canonical/kr-gaiji
+charlist: 5,254 refs — 982 direct glyph (shipped 972), 707
+substitute-only, 1 composition, 3,564 image-only tail. Ladder target:
+faithful+marked-substitute ≈ ~88% of occurrences visible (vs 36%
+faithful today). Hard fence binds every packet: no main-checkout
+db/ or canonical/ writes; canonical reads via absolute path only.
+
+## P38-0 · Aozora Bunko survey  [tier: survey/network] [status: done 2026-07-21 — survey delivered (.docs/surveys/aozora-survey.md), no repo diff by design] [deps: —]
+FINDINGS: 17,831 works / 17,676 with text / text = Shift_JIS(CP932)
+zips inside a 22.8 GB repo of which text is only ~210 MB zipped
+(~0.7 GB raw). License: 17,343 PD (作品著作権フラグ=なし) vs 488
+in-copyright (354 with text) — per-work flag in the 55-column index
+CSV, which also carries orthography class, 底本 colophon, and
+per-file URLs+encodings. Gaiji: 3 classes — JIS X 0213 kuten
+(mechanical→Unicode), explicit U+XXXX (direct), component-description
+only (→ IDS lane / sentinel). Fetch: sparse partial clone
+(--filter=blob:none + sparse-checkout on cards/*/files/*_{ruby,txt}_*.zip
++ index) through GitFetch — needs a GitFetch sparse capability
+(P38-3 seam); canonical = the zips, adapter unzips on read.
+Orthography census: 10,956 新字新仮名 · 4,569 新字旧仮名 · 2,184
+旧字旧仮名 · 101 旧字新仮名 · 21 その他 (incl. kanbun); classical
+tail thin and mostly modern critical editions (Kojiki = Takeda 校註).
+Survey rec for D38-a: PD-text-only (~17.5k works, single license
+class); in-copyright 488 deferred to per-work opt-in.
+Upstream shape (aozorabunko GitHub mirror: size, layout, index CSV —
+NO full clone; API/raw reads only), per-work license census (PD vs
+CC), the Aozora format spec (ruby grammar; gaiji notation classes:
+JIS X 0213 refs / component descriptions / image-only), fetch
+strategy + volume, scope options. Feeds D38-a + the P38-3 parser
+spec. Delivered via report (survey doc is orchestrator-held).
+
+## P38-1 · Gaiji ladder tables  [tier: opus] [status: done 2026-07-21 — merged e3dc9d7; HEADLINE: 547 PUA rows purged from the shipped faithful table (P37-3 bug, independently verified); lanes 427 faithful / 562 substitute / 0 IDS (kanripo); occurrence coverage 36.55% + 45.25% = 81.80%, ⬚ 18.20%; owner glance at gate — display changes for 547 refs, strictly more honest] [deps: —]
+From held charlist: reconcile 982 direct-glyph refs vs shipped 972
+(`?`-uncertainty policy stated in table header); substitute table
+(707 refs) as its OWN config/gaiji/ lane, never merged with faithful;
+the lone composition → IDS; verify faithful codepoints against held
+Unihan; occurrence-weighted coverage report before/after (col 2 =
+occurrence counts), census-stamped per §6b. Acceptance: tables +
+counts, suite green.
+
+## P38-2 · The display ladder  [tier: opus] [status: done 2026-07-21 — merged 17bb70b; `gaiji: ladder` shipped as kanripo policy; substitute mark ⌈…⌉ (U+2308/09, collision-surveyed); placeholder mode preserved as config; suite 5,079 green] [deps: P38-1]
+Reading-mode render: faithful glyph → IDS → marked substitute
+(visibly bracketed, distinct from edh erasure ⟦…⟧) → ⬚ + counted
+footer. display.yml grammar `gaiji: ladder` (`placeholder` stays
+valid = rungs 1+4, preserving P37-3 as config). Render-conformance
+tests per rung incl. footer counts; docs/display.md CJK font-install
+section (Jigmo, Plangothic, BabelStone Han). Acceptance: golden
+renders exercising all four rungs; conformance suite green.
+
+## P38-3 · Aozora adapter  [tier: fable — first-of-family parser] [status: done 2026-07-21 — merged 04f1f00; GitFetch needed NO change (P26-0 sparse: takes glob cones — 2 new pin tests); suite 5,115 green. JOURNALED: attic-rediscovery gap (index-driven discovery can't rediscover atticked works — future design); license_class mapped to `open` (no public_domain enum; vulgate precedent — owner may want a distinct class, gate flag); ~5 UTF-8-text works skip-by-rule; first-sync watch: unknown-command census, gaiji_unresolved (旧字-heavy), ruby orphans, delimiter-structure quarantines] [deps: P38-0, D38-a]
+New parser family: Shift_JIS→UTF-8 NFC at the boundary; ruby
+(furigana) as annotation layer, never inline text; gaiji resolved at
+parse time — JIS X 0213 → real codepoint, component description →
+IDS, unresolvable → loud ref for the display ladder. Per-work
+license rows; language jpn; japonic axis; conformance suite + real
+trimmed fixtures (one ruby-dense, one gaiji-bearing);
+enabled:false until owner-fired first sync verifies.
+
+## P38-4 · Japanese char-desk closure  [tier: opus] [status: done 2026-07-21 — merged; fold GO: 173 kyūjitai↔shinjitai pairs from held Unihan kJinmeiyoKanji (Nabu::Jpn, rake fold:jpn, hani-composed: Jpn.fold("国")==Hani.fold("國")=="國"; merges refused, 0 found); char card cross-references old/new forms; japonic fragment + conventions §9 refreshed; suite 5,137 green] [deps: P38-3]
+kyūjitai↔shinjitai fold: survey held Unihan/KANJIDIC variant fields —
+config-only lane (hani-fold mold) if the data supports; else journal
+with the census. Char card jpn corpus counts; japonic axis page +
+docs refresh; gate news post rides.
+
+## P38-i1 · Aozora first-sync crash (incident, live 2026-07-21)  [status: done — merged; fix 20a7521, worklog entry has the full account]
+Crash at doc ~9,471: real zips carry junk-byte member filenames
+(neither UTF-8 nor CP932) — unzip -Z1 listing decode raised, and the
+unrescued ArgumentError ABORTED the sync (ParseError contract
+violation). Also ≥2 genuinely corrupt upstream zips found in the live
+canonical. Fix: binary-safe member handling (never decode names),
+ParseError wrap on the zip-read path, real regression fixtures from
+the live canonical (offender whole + corrupt trim). 613-quarantine
+census read after a clean pass.
+
+## D38 decision items
+- P38-r1 DONE 2026-07-21 (merged; rider commit 79553a5): 744 fold entries = 173 jinmeiyō + 341 kanjidic 1:1 + 79 admitted merges/185 olds; jis212 refused-and-proved (宋 misread pin); intersection jōyō signal; stroke-count discriminator keeps Chinese simplifications (弃/笔) from becoming fold canonicals; NEW/OLD char-card cross-ref stays jinmeiyō-only (honesty); search --exact live (candidates-then-verify, loud refusals, empty-page honesty). Suite 5,147 green post-merge; fold equalities + Hani-lane distinctness + --exact verified live by orchestrator.
+- D38-b RULED (owner, 2026-07-21): jōyō-filtered extension, NOW as
+  rider P38-r1 (not P39) — "THIS is japonic-focused Phase after all";
+  the owner's pending full rebuild amortizes the fold-change
+  re-derive. AMENDED same day: merges ADMITTED ("match modern reading
+  habits by default — as long as there is an option to look for EXACT
+  match along with it") → named admitted-merges census list
+  (reversible), merge entries fold to Hani.fold(shinjitai) (1:1 pairs
+  keep Hani.fold(old); lzh lane untouched), and `search --exact`
+  ships in the rider (folded-FTS candidates + glyph-literal
+  post-filter on stored text; loud refusal on unsupported paths;
+  empty-result honesty). Original item: The shipped
+  fold covers ONLY the 173 jinmeiyō-listed old-forms — the one clean
+  1:1 signal held Unihan provides. The famous high-frequency reform
+  pairs (學/学, 體/体, 醫/医, 觀/観 …) are NOT jinmeiyō-listed and stay
+  literal: a search for 学 does not reach 學 in kyūjitai works.
+  Extension would mine KANJIDIC2's kuten variants, which are
+  one-to-many (學→{学,斈}) and need a disambiguation policy (plausible
+  rule: fold only pairs whose target is jōyō-listed) — a policy
+  invention the mold forbids without an owner ruling. Options:
+  (1) ship as-is, journal the gap; (2) rule the jōyō-filtered
+  KANJIDIC2 extension for a P38 rider or P39. Recommendation: (2) —
+  the gap sits exactly on the desk's main use case.
+- D38-a (owner, 2026-07-21): RULED — Option 1, PD text only:
+  every work with 作品著作権フラグ=なし and a text file (~17,488
+  works, ~0.7 GB raw, single license_class public_domain with 底本
+  colophon attribution). The 488 in-copyright works are excluded from
+  discovery (skip, not quarantine) and remain per-work opt-in
+  candidates for a later phase. No orthography cut — the 旧字 slice
+  stays a curated view idea, not an ingest boundary.
+
+# ── P39 candidates (journaled at the P38 gate) ─────────────────────
+#
+# 1. REGISTRY SEMANTICS (owner-raised 2026-07-21/22, design agreed in
+#    chat — the P39 opener): (a) kind: source | shelf | module — the
+#    86-row registry conflates true upstream sources with local-*
+#    gateway shelves and feature modules (kr-gaiji/bridging); list/
+#    status group by kind, modules behind --all, sync on a module
+#    prints its nature, censuses become "80 sources + 4 shelves + 2
+#    modules" everywhere (README/02-sources/axis pages — §6b honesty).
+#    (b) sync vocabulary: sync_policy gates ONLY sync --all membership
+#    but reads as an upstream-activity claim; rename live→auto, keep
+#    manual with an honest legend on every surface, frozen stays,
+#    local DROPPED (redundant with kind: shelf). Owner leaned rename.
+#    OWNER OUTPUT SPEC (verbatim, 2026-07-22) — grouped by type
+#    (modules, shelves, sources), compact, no noise-OK, errors inline:
+#      local-notes         -     shelf   up=local     notes=2   2026-07-21 18:02 (+0 ~0 -0 !0) <errors if any>
+#      edh                 on(f) source  up=frozen    docs=81881 pass=406306 2026-07-21 17:58 (+0 ~0 -0 !2) <errors if any>
+#      liv                 on(m) source  up=?(2d)      entries=305 2026-07-21 17:59 (+0 ~0 -0 !0) <errors if any>
+#      kr-gaiji            -     module  up=module  2026-07-21 20:13 (+0 ~0 -0 !0)  <errors if any>
+#      perseus-greek       on(a) source  up=ok(2d)   docs=1418 pass=394706 2026-07-21 17:15 (+0 ~0 -0 !1) <errors if any>
+#    Decode: col2 = enabled+cadence fused (on(a)/on(m)/on(f); "-" for
+#    kinds where enablement is moot; off(x) for disabled sources);
+#    up= freshness (local/frozen/module structural; ok(Nd) probed-good
+#    N ago; ?(Nd) unprobed manual upstream, age of last contact);
+#    holdings label per content kind (docs+pass / entries / notes);
+#    then last-sync stamp + delta (+added ~updated -withdrawn !errored)
+#    + inline errors. Packet pins the residual semantics (off rows,
+#    probe source for ok/?, label vocabulary) in its spec — no further
+#    rulings needed.
+# 2. FOLD-DIGEST GRANULARITY (journaled 2026-07-21): per-language fold
+#    digests + language-scoped fold-module seam so a jpn-only fold
+#    change stops dirtying all sources (the P38 all-dirty event).
+# 3. jpn fold coverage watch: NEW/OLD char-card cross-ref stays
+#    jinmeiyō-only; 碕/嵜 ambiguity refusals; merge list reversible.
+# 4. Aozora quarantine-census triage (~1.5k gap classes: index↔tree
+#    re-proof drift, delimiter-less legacy, UTF-8 five, corrupt zips)
+#    + attic-rediscovery design + the display-ladder aozora wiring
+#    (aozora-ids lane for description-only gaiji).
+# 5. Carried: contentless-FTS5 implementation (P37-7 note), Aozora
+#    in-copyright per-work opt-ins, Bunkankun watch, KR2p,
+#    MAX_LEMMA_FORMS=400 watch, KR2o0001/KR3l0002 duplicate anchors.

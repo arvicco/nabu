@@ -10,6 +10,7 @@ require "unicode_normalize/normalize"
 require_relative "deva"
 require_relative "cyrl"
 require_relative "hani"
+require_relative "jpn"
 
 module Nabu
   # Text normalization at the adapter boundary. Nabu stores text as UTF-8 NFC
@@ -169,10 +170,20 @@ module Nabu
     HAN_FOLD = ->(str) { Hani.fold(str) }
     private_constant :HAN_FOLD
 
+    # jpn (P38-4): the Japanese kyūjitai↔shinjitai reform fold. Old and new
+    # forms collapse to the shared traditional skeleton hani already assigns
+    # (Nabu::Jpn composes through Hani.fold), so 國/国, 廣/広, 圓/円 index and
+    # query as one — and land on the SAME skeleton as the lzh/och Han fold
+    # rather than fighting it. NOT the whole hani table: only the 173
+    # Unicode-declared jinmeiyō reform pairs; Chinese-specific merges stay out.
+    JPN_FOLD = ->(str) { Jpn.fold(str) }
+    private_constant :JPN_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
       "lzh" => HAN_FOLD,
       "och" => HAN_FOLD,
+      "jpn" => JPN_FOLD,
       "cop" => ->(str) { str.delete("⳿") },
       "lat" => ->(str) { str.tr("vj", "ui") },
       "akk" => CUNEIFORM_FOLD,
