@@ -5646,7 +5646,9 @@ module Nabu
 
         selected = report.added + report.updated + report.skipped
         skipped = report.skipped_by_rule + discovery.skipped_by_rule
-        unrecognized = report.errored + discovery.unrecognized
+        # A collided document (P39-4) was discovered but rejected keep-first, so
+        # it belongs in the loud not-ingested bucket, never among the selected.
+        unrecognized = report.errored + report.collided + discovery.unrecognized
         say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
             "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
         discovery.notes.each { |note| say("  ! #{note}", :yellow) }
@@ -5658,7 +5660,14 @@ module Nabu
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
+          "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}"
+      end
+
+      # P39-4: the within-pass collision tail — silent at zero (house
+      # compact-zero rule; collisions are pathological), loud when one bit.
+      def format_collided(report)
+        report.collided.positive? ? "  !#{report.collided} collision" : ""
       end
 
       # P26-5: syncs index incrementally, so the count is the SOURCE's live
@@ -5800,7 +5809,8 @@ module Nabu
 
       def format_report(label, report)
         "#{label.ljust(24)} +#{report.added} added  ~#{report.updated} updated  " \
-          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored"
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
+          "#{format_collided(report)}"
       end
 
       def total_report(result)
@@ -5808,7 +5818,8 @@ module Nabu
         Nabu::Store::LoadReport.new(
           added: reports.sum(&:added), updated: reports.sum(&:updated),
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
-          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule)
+          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule),
+          collided: reports.sum(&:collided)
         )
       end
 
