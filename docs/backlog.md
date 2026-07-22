@@ -10863,3 +10863,21 @@ aozora gaiji: ladder; resolvable census.
 
 ## P39-s1 · Germanic axis scout  [tier: survey/network] [status: done 2026-07-22 — survey delivered (.docs/surveys/germanic-survey.md); headline: 2 new parser families unlock 4 languages — IcePaHC config-only (CC BY-SA), Menotec ON+Edda (PROIEL family, nc), Penn family = YCOE 1.5M OE prose (nc) + HeliPaD Old Saxon (CC-BY); DDD CorA family = whole diachronic German lane (ReM CC BY-SA confirmed); Rundata runic ODbL dual-axis; PPCME2 blocked-license; OFris/ODu blocked-format (inquiry)]
 ## P39-s2 · Latin→Romance scout  [tier: survey/network] [status: done 2026-07-22 — survey delivered (.docs/surveys/latin-romance-survey.md); headline: Romance end completely empty + no romance axis exists; UD pack = 4 rungs config-only (LLCT charters CC BY-SA!); openMGH CC BY 4.0 = medieval-Latin bulk prize; digilibLT CIRCSE; BFM 6.45M words Etalab-open; bridge (REW PD-but-OCR / DÉRom / FEW) = R&D track; OVI/COM blocked]
+
+# ── Long-term journal: ATTIC REVISION/REDESIGN (D39-a ruling, owner 2026-07-22) ──
+# Ruled: Option C (withdrawal-as-designed) FOR NOW; the redesign is a
+# standing future item with two owner-set requirements:
+# 1. REMOVAL-CAUSE TAXONOMY: distinguish extrinsic/copyright removals
+#    from error-correction/replacement/reorganization churn. Today the
+#    attic records only that+when a file vanished (FETCH_HEAD sha),
+#    never why — the taxonomy likely needs upstream commit-message
+#    heuristics + an owner-annotation lane.
+# 2. ACCESSIBLE **AND SEARCHABLE**: honesty check 2026-07-22 — only
+#    half-true today. Withdrawn works: text retained, list --withdrawn
+#    + show reach them, but ALL query paths filter withdrawn:false.
+#    Redesign scope: an explicit withdrawn search scope (never
+#    default-on), and the FTS index question it drags in (withdrawn
+#    passages currently in or out of passages_fts? — verify then).
+# Phase-sized when picked up; not before a concrete need or the next
+# storage phase (contentless-FTS5 would touch the same index seams —
+# natural pairing).
