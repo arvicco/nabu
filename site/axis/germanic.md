@@ -20,6 +20,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
+| `menotec` | texts | nc | not enabled | not synced yet |
 | `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
 | `rem` | texts | attribution | not enabled | nothing held yet |

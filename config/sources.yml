@@ -184,6 +184,27 @@ iswoc:
   # license_watch candidate (P16-5, owner decision — README-licensed repo):
   # license_watch: https://raw.githubusercontent.com/iswoc/iswoc-treebank/master/README.md
 
+menotec:
+  adapter: Nabu::Adapters::Menotec
+  axes: [germanic]
+  enabled: false   # awaiting the owner-fired first sync + eyeball
+  # P40-2: Menotec (Old Norwegian treebanks + the Poetic Edda / Codex Regius),
+  # gold PROIEL-scheme morphology + dependency syntax. Served ONLY through the
+  # CLARINO INESS portal's ephemeral-session REST API (clarino.uib.no/iness/rest)
+  # — NOT the proiel/proiel-treebank GitHub repo — so all fetching is the
+  # session-based Nabu::InessFetch (get-session -> list-resources -> per-treebank
+  # get-treebank-documents -> per-document get-sentences; the export is a
+  # blank-line-separated stream of per-sentence PROIEL-XML fragments parsed by
+  # the sibling MenotecStreamParser). One treebank = one document
+  # (urn:nabu:menotec:<treebank>), passages key on sentence/@id; language `non`
+  # for all 7 treebanks incl. the Edda (Old Icelandic under the treebank's own
+  # tag). INESS gives no commit sha: the fetch pin is an aggregate content sha,
+  # the ledger records the session date + resource metadata. CC BY-NC-SA 4.0
+  # (nc). `sync_policy: manual` — session-API waves are owner-fired. First sync:
+  # `bin/nabu sync menotec`, eyeball urn:nabu:menotec:non-pamphilus-dep +
+  # urn:nabu:menotec:non-edda-regius-dep + 5 random passages, then flip enabled.
+  sync_policy: manual
+
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
   axes: [epigraphy]
