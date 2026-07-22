@@ -42,6 +42,7 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `classical-chinese-kyoto/lzh_kyoto-ud-test-head50.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-test.conllu` | 2,698,869 | 22,472 | 50 |
 | `classical-chinese-kyoto/lzh_kyoto-ud-dev-slices.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-dev.conllu` | 3,032,014 | 9,831 | 18 |
 | `classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu` | `UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu` | 59,420 | 29,817 | 50 |
+| `icelandic-icepahc/is_icepahc-ud-dev-head50.conllu` | `UD_Icelandic-IcePaHC/master/is_icepahc-ud-dev.conllu` | 11,860,801 | 49,397 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -203,6 +204,24 @@ mis-lists under train; the data is authoritative) and `KR2e0003_029`
 The full-split id census (all three splits, 2026-07-20) lives in
 `Nabu::KyotoKanripoCrosswalk`'s class note.
 
+### Icelandic IcePaHC trim note (P40-g, the Germanic phase)
+
+`icelandic-icepahc/is_icepahc-ud-dev-head50.conllu` is the plain **first 50
+complete sentence blocks** of `is_icepahc-ud-dev.conllu` (retrieved 2026-07-22
+from `master`; upstream file sha256 at retrieval
+`1ea62344c94791c91f974bc243fab0b08a2c20febafa0b2a5146c9ad342ef68d`). The **dev**
+split was chosen over test only because both are ~11.9 MB and dev sorts first;
+the treebank is a rule-based UD conversion of the Icelandic Parsed Historical
+Corpus (IcePaHC), spanning Old Norse (12th c.) to Modern Icelandic. Upstream
+dev has 4,866 blocks; **221 multiword-token range lines file-wide, exactly 1
+inside the head-50** (block 30, `1-2 láttu` — an enclitic `lát`+`þú`), and **no
+empty nodes** — so the Latin-ITTB MWT machinery is exercised without any append.
+Comment lines are per-sentence `# sent_id` (`<year>.<TEXT>.<GENRE>,<n>.<n>`,
+e.g. `1250.THETUBROT.NAR-SAG,1.1`), `# X_ID`, and `# text`. The LEMMA (col 3)
+column is fully populated; XPOS carries the IcePaHC/Penn constituency tags
+(`ADV`, `PRO-N`, `VBDI`), MISC an `IFD_tag=` field (the Icelandic Frequency
+Dictionary tag). Language tag `is`.
+
 ### Latin-ITTB multiword-token (MWT) rule
 
 The plan called for the first 50 blocks **plus** every sentence block anywhere in
@@ -321,6 +340,17 @@ adapter test even though no extra append was needed.
   `README.md` machine-readable metadata AGREES: `License: CC BY-SA 4.0` —
   consistent, no discrepancy. → license class `attribution` via the same
   P10-4 per-document `license_override`.
+- **UD_Icelandic-IcePaHC** — **CC BY-SA 4.0** (verified 2026-07-22, the P40-g
+  license gate). `LICENSE.txt`, quoted verbatim and in its entirety:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+  and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`. Consistent.
+  → license class `attribution` via the P10-4 per-document `license_override`
+  (the birchbark/RNC/DipWBG/Hittite mechanics exactly); the `ud` source class
+  stays `nc`.
 
 All three OES licenses were confirmed BEFORE the fixtures were committed (packet
 gate: had any said anything other than CC BY-SA 4.0 the treebank would have been
