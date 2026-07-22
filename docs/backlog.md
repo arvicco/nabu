@@ -10914,3 +10914,13 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 # (בְּרֵאשִׁית) hits, but the exemption exists because divergent orders
 # exist. Fix shape: NFC both sides AT MATCH TIME only (storage
 # untouched). Rider-sized; pair with the proximity stored-highlighter.
+
+# Rider candidate (owner, 2026-07-22): --word flag for search —
+# word-exact matching alongside --exact (glyph-exact is substring: ἦ
+# also finds ἦμαρ). Composes with --exact (word-and-glyph exact) and
+# plain search (word-bounded fold match). Boundary definition per
+# script needs care: whitespace/punct for alphabetic scripts; CJK has
+# no word boundaries — flag refuses or degrades honestly there
+# (spaceless runs = one FTS token already). Pair with the proximity
+# stored-highlighter + NFC-exempt match riders (one search-polish
+# rider bundle).
