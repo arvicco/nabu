@@ -154,6 +154,29 @@ class DisplayTest < Minitest::Test
     refute_includes render(ZOGR, "chu").text, RLI
   end
 
+  # P41-3: Arabic/Persian join the RTL isolate path (the hbo/arc machinery,
+  # reused not duplicated). The lines are real OpenITI fixture bytes (Hafiz
+  # PDL00074 ghazal 3; AbuTalib Diwan JK007501) — the fixture census found
+  # NO tashkeel and no mark classes to strip, so the policy is isolates-only
+  # and the rendered run must be the stored bytes, wrapped and nothing else.
+  HAFIZ_LINE = "به دعا آمده‌ام هم به دعا دست بر آر"
+  DIWAN_LINE = "أيا أخوينا عبد شمس ونوفلا"
+
+  def test_ara_and_fas_runs_are_wrapped_in_rtl_isolates
+    [[DIWAN_LINE, "ara"], [HAFIZ_LINE, "fas"]].each do |text, lang|
+      rendered = render(text, lang)
+      assert rendered.text.start_with?(RLI), "#{lang} policy sets isolates: true"
+      assert rendered.text.end_with?(PDI)
+      assert_includes rendered.applied, Nabu::Display::ISOLATES
+      assert_equal text, unwrap(rendered.text), "#{lang} default mode strips nothing — censused no mark classes"
+    end
+  end
+
+  def test_ara_and_fas_full_mode_is_byte_identical
+    assert_equal DIWAN_LINE, render(DIWAN_LINE, "ara", mode: "full").text
+    assert_equal HAFIZ_LINE, render(HAFIZ_LINE, "fas", mode: "full").text
+  end
+
   # -- East-Asian display width (P35-7) — the one column-math seam ----------
   #
   # Real Han from the kanripo fixture (KR1h0004 Lunyu): 其為人也 etc. Fullwidth
