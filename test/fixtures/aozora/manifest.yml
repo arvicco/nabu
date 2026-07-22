@@ -52,3 +52,28 @@ files:
       signature not found"); must QUARANTINE with ParseError, never abort. NB the live index row for
       work 056151 now points at 56151_ruby_70005.zip (upstream re-proof), so this zip is also the
       real stranded-zip exemplar for the unrecognized discovery census — no index row added for it
+  # --- P39-2 no-legend legacy shape (copied whole from the owner's live
+  # canonical; both formerly quarantined "no legend delimiter", both recover) ---
+  # They live under legacy/, outside cards/*/files/, so the discovery-skip
+  # census (which globs cards/*/files/*.zip) is unaffected; the legacy tests
+  # parse them directly by path.
+  - path: legacy/53411_txt_43155.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical; the no-ruby _txt_ variant (1,185 of the 1,191
+      first-sync quarantines) carries no 55-hyphen legend block — title/byline, blank, body, 底本
+    canonical: canonical/aozora/cards/000081/files/53411_txt_43155.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/000081/files/53411_txt_43155.zip
+    copied: 2026-07-22
+    whole: true
+    trim: none (看痾, Miyazawa Kenji — PD; 512 B, 4 verse body lines + 底本 colophon)
+  - path: legacy/4356_ruby_7914.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical; a _ruby_-named work that still ships no legend
+      block (5 of the 6 legacy _ruby_ cases) — proves the filename does not imply the legend shape
+    canonical: canonical/aozora/cards/000035/files/4356_ruby_7914.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/000035/files/4356_ruby_7914.zip
+    copied: 2026-07-22
+    whole: true
+    trim: none (五所川原, Dazai Osamu — PD; 1.4 KB, 3 body paragraphs + 底本 colophon)
