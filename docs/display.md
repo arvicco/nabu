@@ -189,7 +189,7 @@ actually carry, and what `reading` does about it:
 | `erasures` | `⟦abc⟧` — EDH damnatio memoriae, RIIG/Ogham `<del>` | `keep` \| `unwrap` | `keep` — an erasure is content; unwrap drops only the brackets, never the text |
 | `surplus` | `{abc}` — letters carved in error (RIIG) | `keep` \| `unwrap` | `keep` — unwrapping would present a misspelling as fluent text without its marker |
 | `sigla` | `⸀ ⸂ ⸃` — SBLGNT's apparatus cross-references | `strip` \| `keep` | sblgnt → `strip` (⸁ and ⸄–⸇ censused ×0, not in the set) |
-| `gaiji` | `&KR\d+;` — kanripo's not-yet-encoded-character refs (P38-2) | `ladder` \| `placeholder` \| `refs` | kanripo → `ladder` (faithful glyph → IDS → marked `⌈substitute⌉` → ⬚; refs kept verbatim under diplomatic) |
+| `gaiji` | not-yet-encoded-character sentinels — kanripo `&KR\d+;` (P38-2), aozora `※［＃…］` (P39-5) | `ladder` \| `placeholder` \| `refs` | kanripo → `ladder` (faithful glyph → IDS → marked `⌈substitute⌉` → ⬚); aozora → `ladder` (IDS-only lane → ⬚); refs kept verbatim under diplomatic |
 
 **Gaiji (kanripo, P38-2) — the display ladder.** The mandoku parser keeps
 kanripo's not-yet-encoded characters as `&KR\d+;` references verbatim in the
@@ -236,6 +236,44 @@ display: 1 substituted, 1 unresolved gaiji (--display diplomatic shows the gaiji
 `gaiji: placeholder` (the P37-3 behavior, preserved as config) is **rungs 1 + 4
 only** — faithful glyph or the ⬚ box, with the IDS and substitute lanes never
 consulted; its footer keeps the older `N unresolved gaiji (M resolved)` shape.
+
+**Gaiji (aozora, P39-5) — the ladder's second CJK source, the IDS rung live.**
+The aozora-ruby parser resolves standard gaiji at parse time (JIS kuten, `U+…`)
+but keeps *component-description-only* gaiji (survey §4c class-(c)) as a loud
+verbatim sentinel `※［＃…］` in the stored text — the aozora analogue of
+kanripo's `&KR\d+;`. `aozora: { gaiji: ladder }` runs the **same four-rung
+ladder**, keyed per-source through `Nabu::Display::GAIJI_SENTINELS`: the source
+slug selects (a) the sentinel pattern and (b) the lane KEY. For aozora the key
+is the **component formula** — the leading `「…」` group, exactly the parser's
+stored gaiji `desc` — so the per-book page/line locator trailing the notation
+(`、8-11`) never fragments the lane.
+
+aozora ships **only the IDS lane** (`config/gaiji/aozora-ids.tsv`); with no
+faithful or substitute lane file its refs land on **rung 2** (a derived
+`⿰`/`⿱`) or **rung 4** (the ⬚ box) — the generic ladder skips the empty lanes.
+The lane is **generated** by `rake gaiji:aozora_ids` from a held, checked-in
+census of the corpus's composition descriptions
+(`config/gaiji/aozora-descriptions.tsv`, snapshotted read-only from the
+parse-time annotations) via a **conservative mechanical grammar**
+(`Nabu::Ops::AozoraIdsBuilder`): a single `＋` between two literal CJK
+ideographs → `⿰`, a single `／` → `⿱`; **everything else refuses** and stays
+the loud sentinel (kana radical-names `にんべん＋巨`, subtraction `旗－其＋冉`,
+parenthesised/nested `（禾＋尤）／上／日`, multi-operator `筮／八／口`). Of 582
+distinct composition descriptions the grammar derives **244** (46.2% of their
+occurrences); the honest majority stays refused.
+
+**A derived `⿰AB` is a STRUCTURAL claim, not an identity claim.** It says "this
+glyph is A-left, B-right" and renders on the IDS rung — which is honest about
+being a *description*, never a real codepoint. That is why the bar is
+mechanical-only and *when in doubt, refuse*: kana radical-name → component-glyph
+resolution (`にんべん` → `亻`) and arithmetic on components would be guesses, so
+they are journaled leaves, not derivations.
+
+```
+$ bin/nabu show <an aozora passage> --display reading
+水⿰口斗流と⬚人
+display: 1 composed, 1 unresolved gaiji (--display diplomatic shows the gaiji refs)
+```
 
 Three shelves deliberately have **no** entry:
 

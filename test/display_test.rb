@@ -962,3 +962,84 @@ class DisplayGaijiLadderTest < Minitest::Test
     assert_nil faithful["KR4710"], "the rescued ref is NOT in the faithful lane"
   end
 end
+
+# The aozora arm of the SAME four-rung ladder (P39-5). aozora keeps class-(c)
+# component-description gaiji as a loud ※［＃…］ sentinel in text (the aozora-ruby
+# parser, P38-3); the render path resolves it through the source-keyed sentinel
+# registry (Nabu::Display::GAIJI_SENTINELS["aozora"]). aozora ships ONLY the IDS
+# lane, so its refs land on rung 2 (a derived ⿰/⿱) or rung 4 (the ⬚ box); the
+# generic ladder handles the absent faithful/substitute lanes gracefully. Every
+# kanripo ladder test above stays byte-green — the kanripo pattern is untouched.
+class DisplayAozoraGaijiTest < Minitest::Test
+  PLACEHOLDER = "\u{2B1A}" # ⬚
+
+  # Real corpus descriptions (see config/gaiji/aozora-ids.tsv): 口＋斗 ⇒ ⿰口斗 is
+  # derivable; にんべん＋巨 (kana radical name) is refused ⇒ the ⬚ box. The lane
+  # key is the FORMULA, so the trailing per-book locator (、8-11) is ignored.
+  IDS = { "口＋斗" => "⿰口斗", "魚＋昜" => "⿰魚昜" }.freeze
+
+  def aozora(text, gaiji_ids: IDS)
+    Dir.mktmpdir("nabu-aozora") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  aozora: { gaiji: ladder }\n")
+      sp = Nabu::Display.load_source_policies(path)
+      Nabu::Display.render(text, language: "jpn", mode: Nabu::Display.mode("reading"),
+                                 policies: {}, source: "aozora", source_policies: sp,
+                                 gaiji_ids: gaiji_ids)
+    end
+  end
+
+  def test_derived_ids_notation_renders_inline_on_rung_two
+    rendered = aozora("水※［＃「口＋斗」、8-11］流")
+    assert_equal "水⿰口斗流", rendered.text, "the ※［＃…］ sentinel resolves to its IDS composition"
+    assert_equal 1, rendered.gaiji.ids
+    refute_includes rendered.text, "※", "no raw sentinel survives reading mode"
+  end
+
+  def test_the_page_locator_never_fragments_the_lane
+    # The SAME formula on a different page (、27-5) resolves identically — the
+    # locator is not part of the key.
+    assert_equal "⿰口斗", aozora("※［＃「口＋斗」、27-5］").text
+  end
+
+  def test_refused_description_falls_to_the_placeholder_box
+    rendered = aozora("※［＃「にんべん＋巨」、317-下-12］")
+    assert_equal PLACEHOLDER, rendered.text, "a non-derivable formula is the ⬚ box, never a guess"
+    assert_equal 1, rendered.gaiji.placeholder
+    assert_equal 0, rendered.gaiji.ids
+  end
+
+  def test_a_passage_with_a_derived_and_a_refused_sentinel_tallies_each_rung
+    rendered = aozora("※［＃「魚＋昜」、164-上-21］と※［＃「にんべん＋巨」、317-下-12］の間")
+    assert_equal "⿰魚昜と⬚の間", rendered.text
+    assert_equal 1, rendered.gaiji.ids
+    assert_equal 1, rendered.gaiji.placeholder
+    assert_equal 0, rendered.gaiji.faithful, "aozora ships no faithful lane"
+    assert_equal 0, rendered.gaiji.substitute, "aozora ships no substitute lane"
+  end
+
+  def test_diplomatic_keeps_the_aozora_sentinel_verbatim
+    Dir.mktmpdir("nabu-aozora") do |dir|
+      path = File.join(dir, "display.yml")
+      File.write(path, "sources:\n  aozora: { gaiji: ladder }\n")
+      sp = Nabu::Display.load_source_policies(path)
+      rendered = Nabu::Display.render("※［＃「口＋斗」、8-11］", language: "jpn",
+                                                        mode: Nabu::Display.mode("diplomatic"),
+                                                        policies: {}, source: "aozora",
+                                                        source_policies: sp, gaiji_ids: IDS)
+      assert_equal "※［＃「口＋斗」、8-11］", rendered.text, "the byte-honest view keeps the sentinel"
+      assert_nil rendered.gaiji, "no gaiji transform ran → no tally"
+    end
+  end
+
+  def test_shipped_display_yml_gives_aozora_the_ladder_policy
+    sp = Nabu::Display.load_source_policies(Nabu::Config.load.display_path)
+    assert_equal "ladder", sp["aozora"].gaiji, "P39-5 wired aozora onto the four-rung ladder"
+  end
+
+  def test_end_to_end_against_the_shipped_ids_lane
+    lane = Nabu::Display.load_gaiji_map(File.join(Nabu::Config::PROJECT_ROOT,
+                                                  "config", "gaiji", "aozora-ids.tsv"))
+    assert_equal "⿰口斗", aozora("※［＃「口＋斗」、8-11］", gaiji_ids: lane).text
+  end
+end
