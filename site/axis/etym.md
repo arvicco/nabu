@@ -20,7 +20,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `liv` | dictionary | attribution | enabled · manual | 305 entries |
 | `edl` | dictionary | nc | enabled · manual | 2,860 entries |
 | `starling` | etymological bases | attribution | enabled · manual | 27,397 entries |
-| `sabellic-loans` | dictionary | attribution | enabled · local | 85 entries |
+| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
 
 ## The desk's instruments
 

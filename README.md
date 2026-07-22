@@ -25,12 +25,13 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-20** the shelves hold **751,300 documents / 24,415,015
+As of **2026-07-22** the shelves hold **768,917 documents / 27,595,983
 passages** in nearly a hundred language codes — from proto-cuneiform
-tablets of the late 4th millennium BCE to 19th-century Slovenian. The
-newest and largest arrival is the Chinese library: with Kanripo and CBETA
-loaded, **Literary Chinese is now the biggest language in the corpus at
-13.0 million passages** — the Kanseki Repository of classical Chinese and
+tablets of the late 4th millennium BCE to Meiji-era Japanese. The newest
+arrival is the Japanese reading desk: **Aozora Bunko's 16,004
+public-domain works (3.0 million passages)** beside the Chinese library,
+where **Literary Chinese remains the biggest language in the corpus at
+13.2 million passages** — the Kanseki Repository of classical Chinese and
 the CBETA Buddhist canon, beside the Ancient Near East (the Hittite tablet
 corpus, the CDLI's 353,156-artifact cuneiform catalog, the eBL
 Fragmentarium, a millennium of Syriac, and the Sumerian literary canon).

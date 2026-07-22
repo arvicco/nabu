@@ -81,18 +81,15 @@ nabu show ONCOJ-URN                   # Old Japanese — romanization and origin
   Install the Noto CJK casks plus **Jigmo**, and keep iTerm2's
   ambiguous-width toggle **off**. nabu models CJK cell width, so aligned
   columns stay aligned.
-- **Gaiji (Aozora):** Aozora's not-yet-encoded characters resolve at parse —
-  JIS X 0213 kuten and explicit `U+XXXX` notations map mechanically through
-  `config/jis0213`; component-description-only notations stay verbatim loud
-  sentinels `※［＃…］`. On the render side `--display reading` runs the same
-  four-rung ladder as kanripo (faithful glyph → IDS composition → marked
-  `⌈substitute⌉` → ⬚ box), keyed per-source; `--display diplomatic` keeps the
-  sentinels byte-honest. The **IDS rung, empty for kanripo, is live here**:
-  Aozora ships an IDS-only lane derived by a conservative mechanical grammar
-  (`＋`→`⿰`, `／`→`⿱` between two ideographs; 244 of 582 composition
-  descriptions). A derived `⿰AB` is a **structural claim, not an identity** —
-  it renders on the description-honest IDS rung, and everything the grammar
-  cannot prove refuses to the ⬚ box rather than guess (docs/display.md §1a).
+- **Gaiji (Aozora, once synced):** Aozora's not-yet-encoded characters
+  resolve at parse — JIS X 0213 kuten and explicit `U+XXXX` notations map
+  mechanically through `config/jis0213`; component-description-only
+  notations stay verbatim loud sentinels. On the render side `--display
+  reading` runs the four-rung gaiji ladder (faithful glyph → IDS
+  composition → marked `⌈substitute⌉` → ⬚ box), and `--display diplomatic`
+  keeps the refs byte-honest; the IDS rung, empty for kanripo, is live
+  machinery here since Aozora's gaiji are largely IDS compositions
+  (docs/display.md §1a).
 
 The full guidance, per script, is on the [display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).
 
