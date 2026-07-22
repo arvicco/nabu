@@ -36,7 +36,7 @@ class SourceManifestTest < Minitest::Test
   end
 
   def test_license_class_enum_is_the_architecture_s5_set
-    assert_equal %w[open attribution nc research_private restricted],
+    assert_equal %w[open attribution nc odbl research_private restricted],
                  Nabu::SourceManifest::LICENSE_CLASSES
   end
 

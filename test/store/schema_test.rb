@@ -115,18 +115,20 @@ module Store
       assert_match(/constraint/i, error.message)
     end
 
-    def test_license_class_check_accepts_all_five_values
-      %w[open attribution nc research_private restricted].each_with_index do |lc, i|
+    def test_license_class_check_accepts_all_six_values
+      # odbl joined the enum in migration 018 (P40-6, D40-c: Rundata/SRDB).
+      %w[open attribution nc odbl research_private restricted].each_with_index do |lc, i|
         @db[:sources].insert(slug: "s#{i}", name: "S", adapter_class: "X", license_class: lc)
       end
-      assert_equal 5, @db[:sources].count
+      assert_equal 6, @db[:sources].count
     end
 
     def test_documents_license_override_check_allows_null_and_valid
       source_id = insert_source
       @db[:documents].insert(document_row(source_id).merge(license_override: nil))
       @db[:documents].insert(document_row(source_id, urn: "urn:doc:2").merge(license_override: "nc"))
-      assert_equal 2, @db[:documents].count
+      @db[:documents].insert(document_row(source_id, urn: "urn:doc:3").merge(license_override: "odbl"))
+      assert_equal 3, @db[:documents].count
     end
 
     def test_documents_license_override_check_rejects_bad_value
