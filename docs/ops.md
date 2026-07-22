@@ -886,7 +886,9 @@ automatically; no per-release action.
    commit; the phase's worklog gate line is written (it is the release-notes
    source of record).
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
-   today; commit with the release.
+   today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
+   it feeds provenance `code_version` stamps and fetch User-Agents;
+   commit both with the release.
 3. **Tag**: `git tag -a vX.Y.Z -m "vX.Y.Z — <one-line theme>"` on main;
    `git push origin vX.Y.Z`.
 4. **GitHub release**: `gh release create vX.Y.Z --title "vX.Y.Z — <theme>"
