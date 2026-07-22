@@ -10911,6 +10911,18 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
+# P41 — the Arabic phase (owner-picked 2026-07-22: "A, full scope, display considerations, new arabic(islamic?) axes, whole shebang"; plan: .docs/p41-arabic-plan.md)
+
+## P41-g · OpenITI fixture groundwork + mARkdown census  [tier: opus/network — D41-d gated] [status: blocked: decision-item D41-a..e rulings]
+Goal: format census from real files + 3-4 trimmed fixtures + metadata index + D41-e sizing.
+Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo reshapes P41-1/2.
+
+## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: ready-after-g] [deps: P41-g]
+## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready-after-g] [deps: P41-1]
+## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: ready-after-g] [deps: P41-g]
+## P41-4 · arabic axis + registry + desk + news  [tier: opus] [deps: P41-2]
+## P41-5 · License-inquiry drafts (DASI №41-1 + optional Romance)  [tier: opus] [status: optional]
+
 ## gate40 · [status: done 2026-07-22 — merged 65cf8ec (PR #52); v1.2.0 tagged at acc4c96, GitHub release published, Zenodo DOI auto-minting; D40-e ratified at merge]
 
 ## P40-r2 · --lang is dead on arrival  [tier: fable — orchestrator direct] [status: done 2026-07-22 — code_variants always includes the typed code (catalog stores `is`; 639-1 hop swallowed it) + --lemma lang filter moved INDEX-side (homograph window starvation); owner's runbook repro was the catch; gold now 16.24M in 28 langs (is #4, lzh joins)]
