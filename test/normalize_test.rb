@@ -335,8 +335,9 @@ class NormalizeTest < Minitest::Test
   # query_forms(query) — so a query spelled the way the source spells it
   # always folds (on some variant) to exactly the indexed form.
   def test_query_forms_covers_every_language_rule
-    samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café", "du-un-nu-um{ki}", "ZI₃", "æðele"]
-    languages = %w[grc lat chu orv got san akk sux ang xx]
+    samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café", "du-un-nu-um{ki}", "ZI₃", "æðele",
+               "فى", "می‌دانی"]
+    languages = %w[grc lat chu orv got san akk sux ang ara fas xx]
     samples.each do |sample|
       variants = Nabu::Normalize.query_forms(sample)
       languages.each do |language|
@@ -574,5 +575,142 @@ class NormalizeTest < Minitest::Test
     index = folded.index("說")
     refute_nil index
     assert_equal "説", Nabu::Normalize.nfc(text).chars[map[index]]
+  end
+
+  # -- Arabic & Persian (P41-3, conventions.md §9): the OpenITI fold ---------
+
+  OPENITI_FIXTURES = File.expand_path("fixtures/openiti", __dir__)
+
+  # The hamza-carrying alefs (أ إ آ ؤ ئ) canonically DECOMPOSE (U+0623 → ا +
+  # U+0654 …), so the generic NFD + \p{Mn} strip already folds them to the
+  # bare letter — pinned here because the per-language rule deliberately
+  # leaves them out. Tashkeel (U+064B–0652) and the superscript alef (U+0670)
+  # are Mn and fall to the same strip; the basmala exercises them together
+  # with alef wasla ٱ (U+0671, the one alef with NO decomposition — the rule).
+  # All bare words are real OpenITI fixture surface forms.
+  def test_arabic_hamza_alefs_and_tashkeel_fall_to_the_generic_fold
+    assert_equal "اخري", form("أخرى", "ara") # 0001 Diwan (hamza-alef + maqsura)
+    assert_equal "ابراهيم", form("إبراهيم", "ara") # 0500 metadata
+    assert_equal "اواره", form("آواره", "fas") # Hafiz ghazal 4
+    assert_equal "بسم الله الرحمن الرحيم",
+                 form("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "ara"),
+                 "tashkeel, shadda, superscript alef and wasla all fold away"
+    # the Persian ezafe hamza on final he (بقیهٔ, IbnSina line 33) is Mn too
+    assert_equal "بقيه", form("بقیهٔ", "fas")
+  end
+
+  # THE fixture-measured maqsura ruling (P41-3): the SAME files spell the
+  # same word both ways — فى ×69 vs في ×53 across the four Arabic fixtures
+  # (Shamela's undotted final yeh), and the 0646 metadata spells the author's
+  # own nisba الخونجى ×2 AND الخونجي ×1. Upstream is internally inconsistent,
+  # so ى→ي is mandatory, not optional.
+  def test_arabic_folds_alef_maqsura_to_yeh
+    assert_equal "في", form("فى", "ara")
+    assert_equal form("في", "ara"), form("فى", "ara")
+    assert_equal form("الخونجي", "ara"), form("الخونجى", "ara")
+  end
+
+  # Taa marbuta ة folds to ه (Arabic-search practice, and the cross-language
+  # need: the Persian IbnSina fixture itself writes the Arabic loan وولاة
+  # with ة inside Persian text, where native Persian orthography writes ه).
+  def test_arabic_folds_taa_marbuta_to_ha
+    assert_equal "وكعبه", form("وكعبة", "ara") # 0001 Diwan
+    assert_equal "وولاه", form("وولاة", "fas") # IbnSina, Arabic loan in Persian
+  end
+
+  # Tatweel (U+0640, Lm — untouched by downcase and the Mn strip) is
+  # elongation, never phonemic: dropped entirely (1→0, fold_with_map-safe).
+  # Fixture bytes: the Hijri-year marker هـ in the 0646/0500 metadata.
+  def test_arabic_strips_tatweel
+    assert_equal "646ه", form("646هـ", "ara")
+    folded, map = Nabu::Normalize.fold_with_map("646هـ", language: "ara")
+    assert_equal "646ه", folded
+    assert_equal folded.length, map.length
+  end
+
+  # THE cross-language pair (P41-g census): Persian text carries ONLY farsi
+  # yeh ی (U+06CC) and keheh ک (U+06A9); Arabic text ONLY ي (U+064A) and ك
+  # (U+0643). Both fold to the Arabic skeleton (the lower codepoints), so a
+  # Persian-keyboard query finds Arabic text and vice versa. The four
+  # Persian-only letters پ چ ژ گ have no Arabic counterpart and stay.
+  def test_persian_yeh_and_kaf_fold_to_the_arabic_skeleton
+    assert_equal "يكي", form("یکی", "fas") # Hafiz
+    assert_equal "پايكوب", form("پایکوب", "fas") # Hafiz ghazal 5 — پ stays
+    assert_equal form("يكون", "ara"), form("یکون", "fas"),
+                 "one word, two keyboards, one skeleton"
+  end
+
+  # ZWNJ (U+200C, Cf — untouched by the generic fold) opens to a SPACE, the
+  # cuneiform precedent: each member of a Persian compound becomes its own
+  # searchable token (می‌دانی → مي داني — the stem داني is findable alone),
+  # matching Lucene's PersianCharFilter practice. Trade-off documented in
+  # conventions §9: a fused-typed query (میدانم) does not match — accepted,
+  # the corpus itself writes ZWNJ consistently. Real Hafiz fixture bytes.
+  def test_persian_zwnj_opens_to_a_space
+    assert_equal "مي داني", form("می‌دانی", "fas")
+    assert_equal "نكته گوي", form("نکته‌گوی", "fas")
+  end
+
+  # Arabic-Indic digits (٠١٢٣ U+0660–0669) and extended Arabic-Indic digits
+  # (۰۱۲۳ U+06F0–06F9) are deliberately NOT folded to ASCII: censused ×0
+  # across all six OpenITI fixtures (the footnote digits fused to words —
+  # حديث2 — are already ASCII). Rules are added on evidence, not symmetry.
+  def test_arabic_indic_digits_deliberately_not_folded
+    assert_equal "٥", form("٥", "ara")
+    assert_equal "۵", form("۵", "fas")
+  end
+
+  # The union invariant extends to ara/fas: a query typed on EITHER keyboard
+  # covers both languages' indexed skeletons.
+  def test_query_forms_covers_the_arabic_and_persian_document_forms
+    %w[فى علی می‌دانی نكته وكعبة].each do |query|
+      variants = Nabu::Normalize.query_forms(query)
+      %w[ara fas].each do |language|
+        assert_includes variants, form(query, language),
+                        "query_forms(#{query.inspect}) must cover the #{language} document form"
+      end
+    end
+    # the flagship cross-keyboard round-trips, both directions
+    assert_includes Nabu::Normalize.query_forms("علی"), form("على", "ara"),
+                    "a Persian-typed query reaches the Arabic document form"
+    assert_includes Nabu::Normalize.query_forms("نكته"), form("نکته", "fas"),
+                    "an Arabic-typed query reaches the Persian document form"
+  end
+
+  # fold_with_map equality extends to the ara/fas rule (per-codepoint tr +
+  # 1→0 delete), and a skeleton match points back at the pristine span —
+  # StoredSnippet renders stored bytes under the highlight.
+  def test_fold_with_map_equality_extends_to_arabic_and_persian
+    ["فلک آواره به هر سو کندم می‌دانی", "أبو القاسم حمزة بن يوسف"].each do |text|
+      %w[fas ara].each do |language|
+        folded, map = Nabu::Normalize.fold_with_map(text, language: language)
+        assert_equal Nabu::Normalize.search_form(text, language: language), folded
+        assert_equal folded.length, map.length
+      end
+    end
+  end
+
+  def test_fold_with_map_maps_an_arabic_skeleton_match_back_to_the_pristine_span
+    text = "فلک آواره به هر سو کندم می‌دانی" # Hafiz ghazal 4, stored bytes
+    folded, map = Nabu::Normalize.fold_with_map(text, language: "fas")
+    index = folded.index("كندم")
+    refute_nil index
+    start = map[index]
+    finish = map[index + "كندم".length - 1] + 1
+    assert_equal "کندم", Nabu::Normalize.nfc(text).chars[start...finish].join
+  end
+
+  # P41-g verified all six OpenITI fixtures NFC-stable; pin it, and pin that
+  # ara/fas are NOT on the NFC exemption list (that list is hbo/arc only —
+  # Masoretic mark order, nothing Arabic-script).
+  def test_openiti_fixture_bytes_are_nfc_stable_and_not_nfc_exempt
+    fixtures = Dir[File.join(OPENITI_FIXTURES, "0*")]
+    assert_equal 6, fixtures.length, "the six P41 OpenITI fixtures"
+    fixtures.each do |path|
+      bytes = File.read(path, encoding: "utf-8")
+      assert_equal bytes, Nabu::Normalize.nfc(bytes), "#{File.basename(path)} must be NFC-stable"
+    end
+    refute Nabu::Normalize.nfc_exempt?("ara")
+    refute Nabu::Normalize.nfc_exempt?("fas")
   end
 end
