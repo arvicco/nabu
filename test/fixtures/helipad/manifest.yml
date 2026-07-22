@@ -3,8 +3,10 @@
 #
 # The single fixture is a trim (first 2 whole Penn tree blocks) of the 3.4 MB
 # heliand.psd, so whole: false — a raw GET of the URL returns the FULL file and
-# is fetched for URL-liveness only, never byte-compared. adapter_test is null
-# (no adapter exists yet). Re-apply the README trim after any refresh.
+# is fetched for URL-liveness only, never byte-compared. adapter_test stays
+# null (the aspr rationale): the helipad adapter test asserts trimmed tree/
+# passage counts an untrimmed upstream file would false-fail. Re-apply the
+# README trim after any refresh.
 source: helipad
 adapter_test:
 retrieved: 2026-07-22
