@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "catalog_join"
+require_relative "stored_snippet"
 
 module Nabu
   # Query surface over the derived store (architecture §2: lib/nabu/query/).
@@ -32,13 +33,18 @@ module Nabu
       include CatalogJoin
 
       # One search hit. `text` is the pristine passage text (for display);
-      # `snippet` is the FTS-generated highlight over the FOLDED index form, so
-      # its accents are stripped — it marks WHERE the match is, not how the
-      # source spelled it. `license_class` is the effective class after override.
+      # `snippet` (P39-r3) is a window of that STORED text with the match in
+      # [brackets], built by StoredSnippet — NOT the folded index form, which
+      # renders glyphs the passage never held (学 as 學, だ as た). It marks
+      # WHERE the match is AND how the source spelled it. `license_class` is the
+      # effective class after override.
       Result = Data.define(:urn, :language, :text, :snippet, :document_title, :license_class)
 
-      # Snippet markers and window (FTS5 snippet(): table, column, start, end,
-      # ellipsis, max tokens). column 0 is text_normalized, the only indexed one.
+      # FTS5 snippet() markers and window (table, column, start, end, ellipsis,
+      # max tokens). column 0 is text_normalized, the only indexed one. Search
+      # no longer draws its own highlight from this (StoredSnippet does, over the
+      # pristine text); the constant stays for Proximity, whose two-term NEAR
+      # snippet still rides the folded index form.
       SNIPPET_SQL = "snippet(passages_fts, 0, '[', ']', '…', 10)"
       # FTS5 default relevance rank; lower (more negative) is a better match.
       RANK_SQL = "bm25(passages_fts)"
@@ -49,6 +55,20 @@ module Nabu
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
       # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
       INNER_LIMIT_FACTOR = 10
+
+      # --exact honesty ceiling (P39-r3): the glyph-literal post-filter can
+      # reject an unbounded run of fold candidates (a fold-heavy term with
+      # millions of candidates and zero literal hits), so the paginated exact
+      # scan stops after this many candidates. If the ceiling truncates the scan
+      # before the stream is exhausted and the page is still short, the surface
+      # ANNOUNCES it (the P35 truncation-honesty rule) — it never serves a
+      # clean-looking short page over an abandoned scan. A generous default
+      # (25 pages at the default limit); overridable per call as a test/tuning
+      # seam. Non-exact search never paginates, so this does not touch it.
+      # const: a bounded-work safety valve, not a corpus census — the honesty
+      # hint fires whenever it truncates a real scan, so the value only trades
+      # worst-case latency against how deep a zero-literal query is chased.
+      SCAN_CEILING = 5000
 
       def initialize(catalog:, fulltext:)
         @catalog = catalog
@@ -67,37 +87,19 @@ module Nabu
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil, sources: nil, loans: nil, exact: false)
+              facets: nil, source: nil, sources: nil, loans: nil, exact: false, scan_ceiling: SCAN_CEILING)
         @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn)
-        return [] if hits.empty?
-
-        ordered_ids = hits.map { |row| row.fetch(:passage_id) }
-        snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
-        rows = catalog_rows(ordered_ids, lang: lang, license: license,
-                                         from: from, to: to, place: place, facets: facets, source: source,
-                                         sources: sources, loans: loans)
-               .to_h { |row| [row.fetch(:passage_id), row] }
-
-        # Reassemble in FTS rank order (the catalog query returns no order),
-        # dropping ids filtered out catalog-side. The folded FTS gives
-        # CANDIDATES; --exact (P38-r1) then keeps only passages whose PRISTINE
-        # stored text contains the query glyph-literally — the candidates-then-
-        # verify pattern (the fuzzy/define precedent), no unfolded index needed.
-        candidates = ordered_ids.filter_map { |id| rows[id] }
-        candidates = candidates.select { |row| exact_glyph_match?(row.fetch(:text), query) } if exact
-        page = candidates.first(limit)
-        note_page_completeness(
-          window_exhausted: hits.size >= inner_limit,
-          filters_active: exact || [lang, license, from, to, place, source, loans].compact.any? ||
-            (facets || {}).any? || Array(sources).any?,
-          page_size: page.size, limit: limit
-        )
-        page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
+        filters = { lang: lang, license: license, from: from, to: to, place: place,
+                    facets: facets, source: source, sources: sources, loans: loans }
+        page = if exact
+                 exact_page(variants, query, filters, limit: limit, urn: urn, scan_ceiling: scan_ceiling)
+               else
+                 folded_page(variants, filters, limit: limit, urn: urn)
+               end
+        page.map { |row| build_result(row, query, exact: exact) }
       end
 
       # --exact verification: every whitespace token of the NFC-normalized
@@ -114,6 +116,87 @@ module Nabu
 
       private
 
+      # Non-exact page (the folded FTS path, unchanged semantics): one bounded
+      # inner window, reassembled in FTS rank order after the catalog join drops
+      # filtered rows, trimmed to the page. --limit already means "displayed
+      # hits" here — only catalog-side filters thin the window, and that
+      # thinning is announced by the P35-6 exhausted-window hint.
+      def folded_page(variants, filters, limit:, urn:)
+        inner_limit = limit * INNER_LIMIT_FACTOR
+        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn)
+        return [] if hits.empty?
+
+        ordered_ids = hits.map { |row| row.fetch(:passage_id) }
+        rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
+        page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        note_page_completeness(
+          window_exhausted: hits.size >= inner_limit,
+          filters_active: filters_active?(filters), page_size: page.size, limit: limit
+        )
+        page
+      end
+
+      # --exact page (P39-r3, Defect 1). The glyph-literal post-filter can reject
+      # an unbounded run of fold candidates, so --limit CANNOT mean an internal
+      # candidate-pool size (owner ruling 2026-07-22: "he will understand --limit
+      # as the number of ultimate hits to display"). Instead we PAGINATE the
+      # candidate scan — fetch candidate pages in bm25 order and keep verifying
+      # until +limit+ VERIFIED hits accumulate or the stream is exhausted. A
+      # pathological fold-heavy zero-literal query is bounded by +scan_ceiling+
+      # candidates; a ceiling that truncates the scan before exhaustion arms the
+      # honesty hint (the page never poses as complete over an abandoned scan).
+      def exact_page(variants, query, filters, limit:, urn:, scan_ceiling:)
+        page_size = limit * INNER_LIMIT_FACTOR
+        verified = []
+        offset = 0
+        truncated = false
+        loop do
+          hits = fts_hits_with_literal_fallback(variants, inner_limit: page_size, offset: offset, urn: urn)
+          collect_exact(hits, query, filters, into: verified, limit: limit)
+          break if verified.size >= limit || hits.size < page_size # filled, or stream exhausted
+
+          offset += page_size
+          if offset >= scan_ceiling
+            truncated = true
+            break
+          end
+        end
+        @incomplete_hint = exact_scan_truncated_hint(scan_ceiling) if truncated
+        verified.first(limit)
+      end
+
+      # Verify one candidate page in bm25 order, appending the catalog-visible
+      # rows whose PRISTINE stored text carries the query glyph-literally (the
+      # candidates-then-verify pattern, the fuzzy/define precedent) until the
+      # page limit is reached.
+      def collect_exact(hits, query, filters, into:, limit:)
+        return if hits.empty?
+
+        ordered_ids = hits.map { |row| row.fetch(:passage_id) }
+        rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
+        ordered_ids.each do |id|
+          row = rows[id]
+          next unless row && exact_glyph_match?(row.fetch(:text), query)
+
+          into << row
+          break if into.size >= limit
+        end
+      end
+
+      def filters_active?(filters)
+        %i[lang license from to place source loans].any? { |key| filters[key] } ||
+          (filters[:facets] || {}).any? || Array(filters[:sources]).any?
+      end
+
+      # The --exact scan-ceiling truncation hint (P35 truncation honesty): say
+      # what was hidden. The old INCOMPLETE_PAGE_HINT ("raise --limit to search
+      # deeper") is WRONG under the new --limit semantics and is never emitted on
+      # this path — raising --limit widens the page, it does not deepen the scan.
+      def exact_scan_truncated_hint(scan_ceiling)
+        "scanned the first #{scan_ceiling} fold candidates for glyph-literal matches — " \
+          "later candidates were not checked, so more may exist"
+      end
+
       # The user's text passes through as FTS5 syntax first (power queries —
       # AND/OR/NEAR/"phrases" — keep working verbatim). When FTS5 rejects it
       # (owner report 2026-07-18: `search --help` crashed with a raw fts5
@@ -121,13 +204,13 @@ module Nabu
       # retry ONCE with every token literal-quoted (internal quotes doubled
       # — the escaped form cannot syntax-error), so hyphenated words and
       # option-looking strings just search. Non-fts errors re-raise.
-      def fts_hits_with_literal_fallback(variants, inner_limit:, urn: nil)
-        fts_hits(match_expression(variants), inner_limit: inner_limit, urn: urn)
+      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil)
+        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
-        fts_hits(match_expression(literal), inner_limit: inner_limit, urn: urn)
+        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn)
       end
 
       # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal
@@ -148,28 +231,49 @@ module Nabu
 
       # FTS5 MATCH. The user's text reaches SQL only as a bound parameter in the
       # MATCH fragment (the one raw-SQL exception, per the Indexer class note);
-      # bm25()/snippet() are FTS auxiliary functions with no Sequel dataset API,
-      # so they ride along as literal fragments with no user input.
-      def fts_hits(match, inner_limit:, urn: nil)
+      # bm25() is an FTS auxiliary function with no Sequel dataset API, so it
+      # rides along as a literal fragment with no user input. Only passage_ids
+      # are pulled — the snippet is rebuilt from stored text (StoredSnippet),
+      # never from the folded index column. +offset+ pages the candidate scan
+      # for --exact (bm25 order is stable, so OFFSET paging is deterministic).
+      def fts_hits(match, inner_limit:, offset: 0, urn: nil)
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
         dataset
-          .select(:passage_id, Sequel.lit(SNIPPET_SQL).as(:snippet))
+          .select(:passage_id)
           .order(Sequel.lit(RANK_SQL))
           .limit(inner_limit)
+          .offset(offset)
           .all
       end
 
-      def build_result(row, snippet)
+      # A hit's snippet is a window of its STORED text (StoredSnippet), never the
+      # folded index form. The query's tokens locate the match — its whitespace
+      # tokens for --exact (matching exact_glyph_match?), else the FTS terms with
+      # phrase quotes dropped and a trailing prefix-* stripped.
+      def build_result(row, query, exact:)
+        terms = exact ? query.to_s.split : snippet_terms(query)
         Result.new(
           urn: row.fetch(:urn),
           language: row.fetch(:language),
           text: row.fetch(:text),
-          snippet: snippet,
+          snippet: Nabu::Query::StoredSnippet.build(
+            text: row.fetch(:text), language: row.fetch(:language), terms: terms, exact: exact
+          ),
           document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class)
         )
+      end
+
+      # The query's locatable terms for a folded snippet: drop FTS phrase quotes,
+      # split on whitespace, strip a trailing prefix-* from each token (the KWIC
+      # precedent — the terms are folded per-hit inside StoredSnippet).
+      def snippet_terms(query)
+        query.to_s.tr('"', " ").split(/\s+/).filter_map do |token|
+          stem = token.sub(/\*\z/, "")
+          stem.empty? ? nil : stem
+        end
       end
     end
   end

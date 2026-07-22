@@ -3602,15 +3602,17 @@ module Nabu
         end
       end
 
-      # Render hits: urn + optional [language] header, then the FTS snippet
-      # (diacritic-folded highlight). The footer labels that so nobody reads the
-      # stripped accents in the highlight as corpus truth; active facet filters
-      # (P17-2) are named in one compact footer line — and only then.
-      # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
-      # printed whenever present, so a filter-emptied page never masquerades
-      # as a complete answer.
+      # Render hits: urn + optional [language] header, then the snippet. The
+      # plain/exact search snippet is a window of the STORED text (P39-r3,
+      # StoredSnippet) — text_normalized, the folded skeleton, is NEVER shown
+      # (it rendered 学 as 學 and だ as た). Proximity still rides the FOLDED FTS
+      # snippet (+folded: true+), so the footer labels each path truthfully;
+      # active facet filters (P17-2) are named in one compact footer line — and
+      # only then. +incomplete+ (P35-6): the query layer's honesty hint (the
+      # exhausted-inner-window note, or the --exact scan-ceiling note) — printed
+      # whenever present, so a short page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false)
+                               exact: false, folded: false)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact suppressed the folded
@@ -3628,9 +3630,19 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{'glyph-exact; ' if exact}highlights are diacritic-folded)" \
+            "(#{search_snippet_label(exact: exact, folded: folded)})" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
+      end
+
+      # The footer clause naming what the snippet shows, per path. Proximity's
+      # two-term NEAR snippet is still the folded index form; plain and --exact
+      # search now show the stored text.
+      def search_snippet_label(exact:, folded:)
+        return "highlights are diacritic-folded" if folded
+        return "glyph-exact; snippet shows the text as stored" if exact
+
+        "snippet shows the text as stored; matching is fold-aware"
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc · axis: celtic"
@@ -4390,7 +4402,7 @@ module Nabu
           source: options[:source], sources: axis_slugs, loans: loans_filter
         )
         print_search_results(results, loans: loans_filter, axis: axis_names,
-                                      incomplete: searcher.incomplete_hint)
+                                      incomplete: searcher.incomplete_hint, folded: true)
         print_display_footer
       ensure
         catalog&.disconnect
