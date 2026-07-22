@@ -119,6 +119,31 @@ namespace :fold do
   end
 end
 
+# The Aozora gaiji IDS lane (P39-5). Regenerates config/gaiji/aozora-ids.tsv
+# from the HELD, checked-in composition-description census (NOT canonical, NOT
+# the catalog — a pure function of a small TSV, so it runs anywhere). Rung 2 of
+# the P38-2 display ladder for aozora; full grammar + refusal policy on
+# Nabu::Ops::AozoraIdsBuilder.
+namespace :gaiji do
+  desc "Regenerate config/gaiji/aozora-ids.tsv from config/gaiji/aozora-descriptions.tsv"
+  task :aozora_ids, [:census_path] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    census = args[:census_path] ||
+             File.expand_path("config/gaiji/aozora-descriptions.tsv", __dir__)
+    builder = Nabu::Ops::AozoraIdsBuilder.new(census_path: census)
+    File.write(File.expand_path("config/gaiji/aozora-ids.tsv", __dir__), builder.render)
+    c = builder.census
+    puts "config/gaiji/aozora-ids.tsv regenerated: #{c.derived} IDS entries from " \
+         "#{c.descriptions} composition descriptions"
+    pct = (100.0 * c.derived_occurrences / c.composition_occurrences).round(1)
+    puts "  derived #{c.derived_occurrences}/#{c.composition_occurrences} composition " \
+         "occurrences (#{pct}%)"
+    puts "  refused: #{c.refused.map { |cls, n| "#{n} #{cls}" }.join(', ')}"
+  end
+end
+
 # OWNER-ONLY escape hatch (P39-1): rewrite every derivation stamp against
 # current code WITHOUT re-deriving — for fingerprint FORMULA changes only,
 # valid ONLY immediately after a verified full rebuild on unchanged
