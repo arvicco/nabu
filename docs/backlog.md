@@ -10931,4 +10931,6 @@ survive regeneration.
 # stored-highlighter + NFC-exempt match riders (one search-polish
 # rider bundle).
 
+## P40-f · Focus profile  [tier: opus] [status: queued — dispatches after P40-s merge] [owner-approved: axes AND single sources]
+
 ## P40-w · Search-polish bundle  [tier: opus] [status: done 2026-07-22 — merged 354deb7; --word (CJK refusal, Hangul ok), proximity stored highlighter, NFC-exempt display fix on real WLC bytes]
