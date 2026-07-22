@@ -1,6 +1,6 @@
 ---
 title: "The Germanic phase: from two languages to all three branches"
-date: 2026-07-22 22:00:00 +0000
+date: 2026-07-22 14:00:00 +0000
 description: >-
   Phase 40 widens the Germanicist's desk from Gothic and Old English to
   all three Germanic branches — Old Icelandic, Old Norwegian and the

@@ -206,10 +206,12 @@ Real full syncs (`bin/nabu sync <source>` against complete upstream corpora) rem
 work around it.** A release happens when the owner names a version at a
 gate ("cut 1.2.0 after this merges"); that sign-off is the owner's ONLY
 step. Everything else — the CITATION.cff and `Nabu::VERSION` bumps, the
-release-notes distillation, the news post, the tag, the GitHub release,
-the Zenodo DOI, the post-release journal sync — is the orchestrator's,
-run without handing the owner commands. The mechanical steps live in
-ops §12; this section is the division of labor.
+release-notes distillation, the **site news announcement (obligatory,
+past-dated, verified visible on the live /news/ page — a release is not
+done unannounced)**, the tag, the GitHub release, the Zenodo DOI, the
+post-release journal sync — is the orchestrator's, run without handing
+the owner commands. The mechanical steps live in ops §12; this section
+is the division of labor.
 
 ## 9. Decisions (approved by owner, 2026-07-03)
 

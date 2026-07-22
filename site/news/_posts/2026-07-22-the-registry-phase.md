@@ -1,6 +1,6 @@
 ---
 title: "The registry phase: what a thing is, and what it costs"
-date: 2026-07-22 20:00:00 +0000
+date: 2026-07-22 13:00:00 +0000
 description: >-
   Phase 39 teaches the library to say what each registered thing is —
   source, shelf, or module — makes rebuild stamps language-aware,

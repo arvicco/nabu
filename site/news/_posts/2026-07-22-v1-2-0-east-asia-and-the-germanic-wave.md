@@ -1,6 +1,6 @@
 ---
 title: "v1.2.0 — the East Asian libraries and the Germanic wave"
-date: 2026-07-22 23:30:00 +0000
+date: 2026-07-22 15:15:00 +0000
 description: >-
   The corpus more than doubles between tags: the classical Chinese
   library and the CBETA canon, the Japanese public-domain library, the
