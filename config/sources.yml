@@ -141,6 +141,17 @@ ud:
   # report is the readiness signal to watch) and the ojp label STAYS —
   # ISO 639 has no Late-Middle-Japanese code. At the future gate nabu
   # picks its own stage label (languages.md rule 3), not upstream's ojp.
+  # P40-1 (2026-07-22): TREEBANKS grew to fifteen — icelandic-icepahc
+  # (UD_Icelandic-IcePaHC, a rule-based UD conversion of the Icelandic Parsed
+  # Historical Corpus; language is, the library's first is lane; CC BY-SA 4.0
+  # verbatim → per-document attribution override, source class stays nc).
+  # DIACHRONIC HONESTY: the corpus spans the 12th–21st century (Old Norse
+  # sagas to modern prose) but UD files it under the one modern tag `is` —
+  # the RNC-Middle-Russian-under-orv precedent (P10-2), recorded not hidden.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +1 repo
+  # clone; docs at UD's one-doc-per-treebank-split grain — IcePaHC ships
+  # train/dev/test = +3 docs (~one witness per split of the ~11.9 MB dev &
+  # test halves), is joins the lemma-indexed languages. Budget accordingly.
 
 proiel:
   adapter: Nabu::Adapters::Proiel

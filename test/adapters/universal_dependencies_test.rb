@@ -24,6 +24,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
+    "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
@@ -137,6 +138,22 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "lzh", tuecl[:language]
   end
 
+  # --- registration pin (P40-1) --------------------------------------------
+  #
+  # The one Icelandic treebank — the Germanic axis's IcePaHC entry point
+  # (UD_Icelandic-IcePaHC, a rule-based UD conversion of the Icelandic Parsed
+  # Historical Corpus). DIACHRONIC HONESTY: the corpus spans the 12th to the
+  # 21st century (Old Norse sagas to modern prose), yet UD files it under the
+  # ONE modern ISO 639 tag `is` — the same one-tag-per-treebank practice as
+  # RNC's Middle Russian under `orv` (P10-2), recorded not hidden. No
+  # re-export guard concern: nabu syncs no source IcePaHC converts.
+  def test_treebanks_registers_the_icelandic_icepahc_treebank
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    icepahc = treebanks.fetch("icelandic-icepahc")
+    assert_equal "https://github.com/UniversalDependencies/UD_Icelandic-IcePaHC", icepahc[:repo]
+    assert_equal "is", icepahc[:language]
+  end
+
   # --- per-treebank license override (P10-4; extended P25-2) ---------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
@@ -156,7 +173,12 @@ class UniversalDependenciesTest < Minitest::Test
   # README; LICENSE.txt is authoritative (the Ruthenian NOASSERTION
   # precedent: the in-repo grant governs). TueCL's README agrees with its
   # LICENSE.txt.
+  # P40-1: Icelandic IcePaHC carries the BY-SA 4.0 grant verbatim (LICENSE.txt
+  # + README metadata agree, verified 2026-07-22) → attribution override, the
+  # same mechanics; the diachronic-under-`is` honesty is a language note, not
+  # a license one.
   OVERRIDE_SLUGS = %w[classical-chinese-kyoto classical-chinese-tuecl hittite-hittb
+                      icelandic-icepahc
                       old-east-slavic-birchbark old-east-slavic-rnc
                       old-east-slavic-ruthenian old-irish-dipwbg].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
@@ -203,7 +225,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_fifteen_files_sorted_by_urn
+  def test_discover_finds_exactly_sixteen_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -220,6 +242,7 @@ class UniversalDependenciesTest < Minitest::Test
       "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50" => "got",
       "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50" => "grc",
       "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50" => "hit",
+      "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50" => "is",
       "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt" => "lat",
       "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50" => "lat",
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
@@ -331,6 +354,33 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "北冥有魚", fish.text
   end
 
+  # P40-1 round-trip on the Icelandic IcePaHC fixture (the first-50 dev-split
+  # trim). Census pins (see the fixture README): 50 sentences / 538 word
+  # lines, exactly ONE multiword-token range in the head — `1-2 láttu` →
+  # `lát`+`þú`, sent 1250.THETUBROT.NAR-SAG,39.39, the enclitic imperative —
+  # so the Latin-ITTB essetque MWT machinery is exercised on a Germanic
+  # treebank; no empty nodes. Language `is` (the diachronic-under-one-tag
+  # note lives on the TREEBANKS entry).
+  def test_parse_round_trips_the_icelandic_icepahc_fixture
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    ref = adapter.discover(FIXTURES).find { |r| r.metadata["treebank"] == "icelandic-icepahc" }
+    icepahc = adapter.parse(ref)
+
+    assert_equal "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50", icepahc.urn
+    assert_equal 50, icepahc.size
+    assert_equal "is", icepahc.language
+
+    # The saga opener (Þáttr af Þóri, sent 1250.THETUBROT.NAR-SAG,1.1).
+    opening = icepahc.passages.first
+    assert_equal "#{icepahc.urn}:1250.THETUBROT.NAR-SAG,1.1", opening.urn
+    assert_includes opening.text, "Nú fara fyrst sagði hann"
+
+    # The one MWT sentence of the head-50 (láttu → lát + þú) must parse.
+    mwt = icepahc.passages.find { |p| p.urn.end_with?(":1250.THETUBROT.NAR-SAG,39.39") }
+    refute_nil mwt, "the one MWT sentence of the head-50 must parse"
+    assert_equal "láttu mig heyra það.", mwt.text
+  end
+
   # --- lemma plumbing for the orv treebanks (P10-2) -----------------------
   #
   # The acceptance gate: the CoNLL-U LEMMA column of the Old East Slavic
@@ -430,6 +480,18 @@ class UniversalDependenciesTest < Minitest::Test
     tuecl_row = lemmas.where(language: "lzh", urn: tuecl_urn, lemma_raw: "魚").first
     refute_nil tuecl_row, "expected a passage_lemmas row for the lzh lemma 魚"
     assert_includes tuecl_row[:surface_forms], "魚"
+
+    # P40-1: Icelandic IcePaHC flows through the same unchanged plumbing — `is`
+    # becomes a lemma-indexed language (its first occupant; no other source
+    # mints `is` today). Readable row from the head-50's one MWT sentence
+    # (láttu → lát + þú): the member-token lemma láta "let" (surface lát) —
+    # MWT members index like plain words, the ITTB/Perseus mechanics.
+    assert_operator lemmas.where(language: "is").count, :>, 0,
+                    "the Icelandic treebank must contribute passage_lemmas rows"
+    icepahc_urn = "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50:1250.THETUBROT.NAR-SAG,39.39"
+    icepahc_row = lemmas.where(language: "is", urn: icepahc_urn, lemma_raw: "láta").first
+    refute_nil icepahc_row, "expected a passage_lemmas row for the is lemma láta (MWT member)"
+    assert_includes icepahc_row[:surface_forms], "lát"
   ensure
     fulltext&.disconnect
   end
@@ -519,14 +581,16 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST THREE repos each lose their only
-      # treebank file (3 of #{slugs.size} ingestible files = 21.4% > 20% →
-      # trip; 3 is still the MINIMUM tripping count at fourteen treebanks —
-      # two deletions are 2/#{slugs.size} = 14.3%, below the breaker now that
-      # the set has grown to fourteen with the Classical Chinese pair, P32-0.
-      # Re-derived, not weakened: 3 > 0.2 × 14 = 2.8 still holds).
+      # First repo gains a file; the LAST FOUR repos each lose their only
+      # treebank file (4 of #{slugs.size} ingestible files = 26.7% > 20% →
+      # trip; 4 is now the MINIMUM tripping count at fifteen treebanks —
+      # three deletions are 3/#{slugs.size} = 20.0%, exactly AT the breaker
+      # (the guard trips on strictly greater, `doomed > 0.2 × ingestible`),
+      # so 3 no longer trips now that the set has grown to fifteen with the
+      # Icelandic IcePaHC treebank, P40-1. Re-derived, not weakened:
+      # 4 > 0.2 × 15 = 3.0 holds; 3 > 3.0 does not).
       first = slugs.first
-      doomed = slugs.last(3)
+      doomed = slugs.last(4)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -544,7 +608,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 3"
+      assert_includes report.notes, "atticked 4"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"
