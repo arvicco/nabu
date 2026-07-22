@@ -33,14 +33,14 @@ digits fused to their words.
 
 The scale is the story. The central metadata index lists **14,107 text
 versions / 2.35 billion words**; the first wave takes the primary
-versions and sets the documentary MSS sub-corpus aside, which stages
-**~9,106 texts / ~1.12 billion words** — roughly 8,803 Arabic and 688
-Persian primary versions. Those figures are pre-sync staging, read from
-the index, not from the catalog: the corpus **arrives with the owner's
-first `sync openiti`**, a fetch of a ~5.9 GB release archive plus its
-metadata index, both md5-pinned before a single tree file is written. The
-desk page and the language table say "not synced yet" honestly, and the
-gate refresh will flip them to live counts once the owner runs it.
+versions and sets the documentary MSS sub-corpus aside. The sync ran the
+same evening — a ~5.9 GB release archive plus its metadata index, both
+md5-pinned before a single tree file was written — and landed **9,079
+documents / 34,631,499 passages** (27 malformed upstream files
+quarantined honestly, 0.3%). **The library more than doubled in a day**,
+and Classical Arabic entered as its largest language: 33.3 million
+passages, ahead of Literary Chinese's 13.2 million, with the Persian
+shelf at 1.3 million.
 
 Two mechanisms make the shelf usable the day it lands. The first is the
 **Arabic-script search fold**: Arabic and Persian are written in the same

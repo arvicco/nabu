@@ -63,15 +63,16 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **22 July 2026**, the catalog records **801,175 documents** comprising
-**28,176,484 passages** in 108 language codes — from proto-cuneiform
-tablets of the late fourth millennium BCE to Meiji-era Japanese. Literary
-Chinese is the largest language on the shelves (13.2 million passages —
-the Kanseki Repository and the CBETA Buddhist canon); the newest arrival
-is the Germanic wave of 22 July: the Old Norwegian treebanks and the
-Poetic Edda, the Old Saxon *Heliand*, the Middle High German reference
-corpus, and the runic inscriptions of Scandinavia — a day behind the
-Japanese reading desk (Aozora Bunko, 3.0 million passages). Together with
+As of **22 July 2026**, the catalog records **810,254 documents** comprising
+**62,807,983 passages** in 110 language codes — from proto-cuneiform
+tablets of the late fourth millennium BCE to Meiji-era Japanese. The
+newest arrival more than doubled the library in a single day: the
+Arabic phase — OpenITI, the premodern Islamicate library, with its
+Persian shelf — making **Classical Arabic the largest language on the
+shelves (33.3 million passages)**, ahead of Literary Chinese (13.2
+million), the same day the Germanic wave landed (the Poetic Edda, the
+*Heliand*, Middle High German, the runestones) beside the day-old
+Japanese reading desk. Together with
 **1,310,763 dictionary entries** on the reference shelf and **16.2
 million gold-standard lemma annotations in twenty-eight languages** (a
 further 8.2 million machine-suggested annotations are carried at an
