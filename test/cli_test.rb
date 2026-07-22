@@ -1205,6 +1205,122 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- focus profile (P40-f) -------------------------------------------------
+
+  def write_profile(config, *entries)
+    Nabu::Profile.new(entries).save(config.profile_path)
+  end
+
+  def test_focus_show_none_when_no_profile
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[focus]) }
+      assert_nil status
+      assert_match(/focus: none — showing everything/, out)
+      assert_match(/nabu focus only <axes…> trims this to your desks/, out)
+    end
+  end
+
+  def test_focus_only_add_drop_clear_round_trip
+    with_axis_corpus do |config|
+      out, = with_config(config) { run_cli(%w[focus only slavic lex]) }
+      assert_match(/axes:\s+slavic/, out)
+      assert_match(/sources:\s+lex/, out)
+      assert_equal %w[lex slavic], Nabu::Profile.load(config.profile_path).entries
+
+      with_config(config) { run_cli(%w[focus add reference]) }
+      assert_equal %w[lex reference slavic], Nabu::Profile.load(config.profile_path).entries
+
+      with_config(config) { run_cli(%w[focus drop lex]) }
+      assert_equal %w[reference slavic], Nabu::Profile.load(config.profile_path).entries
+
+      out, = with_config(config) { run_cli(%w[focus clear]) }
+      assert_match(/focus cleared — showing everything/, out)
+      assert_predicate Nabu::Profile.load(config.profile_path), :empty?
+    end
+  end
+
+  def test_focus_only_refuses_an_unknown_name_with_a_suggestion
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[focus only slavc]) }
+      assert_equal 1, status
+      assert_match(/unknown name "slavc"/, err)
+      assert_match(/did you mean slavic/, err)
+      assert_predicate Nabu::Profile.load(config.profile_path), :empty?, "a refused write persists nothing"
+    end
+  end
+
+  def test_focus_drift_in_the_file_warns_and_is_ignored_never_crashes
+    with_axis_corpus do |config|
+      # A hand-edit left a name the registry no longer knows.
+      write_profile(config, "slavic", "ghost")
+      out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status, "drift never crashes the everyday view"
+      assert_match(/ignoring ghost/, err)
+      assert_match(/^library\s/, out, "the known part of the focus still scopes")
+    end
+  end
+
+  def test_status_scopes_to_focus_with_shelves_always_and_an_exact_footer
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # → lex ; library is a shelf (always)
+      out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status
+      assert_match(/^lex\s/, out, "the focused source shows")
+      assert_match(/^library\s/, out, "the owner's shelf always shows")
+      refute_match(/^shelf\s/, out, "an unfocused source is hidden")
+      assert_match(/focused on reference — 1 source hidden \(--all shows them\)/, err)
+    end
+  end
+
+  def test_status_all_overrides_the_focus_profile
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[status --all]) }
+      assert_nil status
+      assert_match(/^shelf\s/, out, "--all reveals the hidden source")
+      refute_match(/focused on/, err, "--all is quiet — nothing hidden")
+    end
+  end
+
+  def test_status_without_a_profile_is_unfiltered_with_a_stderr_hint_only
+    with_axis_corpus do |config|
+      focused_out, err, = with_config(config) { run_cli(%w[status]) }
+      all_out, = with_config(config) { run_cli(%w[status --all]) }
+      assert_equal all_out, focused_out, "an empty profile filters nothing (byte-identical stdout)"
+      assert_match(/nabu focus only <axes…> trims this to your desks/, err, "the hint rides stderr")
+    end
+  end
+
+  def test_status_source_detail_ignores_the_focus_profile
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # hides `shelf`
+      out, _err, status = with_config(config) { run_cli(%w[status shelf]) }
+      assert_nil status
+      assert_match(/^shelf {2}\(/, out, "an explicitly named source shows regardless of focus")
+    end
+  end
+
+  def test_list_census_scopes_to_focus
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[list]) }
+      assert_nil status
+      assert_match(/^lex\s/, out)
+      assert_match(/^library\s/, out)
+      refute_match(/^shelf\s/, out)
+      assert_match(/focused on reference/, err)
+    end
+  end
+
+  def test_health_scopes_to_focus
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, _err, = with_config(config) { run_cli(%w[health]) }
+      assert_match(/^lex\s/, out, "a focused source is checked")
+      refute_match(/^shelf\s+ok/, out, "an unfocused source is not in the check")
+    end
+  end
+
   # -- search/export --source (P22-1) ----------------------------------------
 
   def test_search_source_scopes_and_unknown_source_misses_honestly

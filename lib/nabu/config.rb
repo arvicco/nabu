@@ -20,13 +20,14 @@ module Nabu
     DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
     DEFAULT_ALIGNMENTS_PATH = File.join("config", "alignments.yml")
     DEFAULT_DISPLAY_PATH = File.join("config", "display.yml")
+    DEFAULT_PROFILE_PATH = File.join("config", "profile.yml")
     CATALOG_DB_FILENAME = "catalog.sqlite3"
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
     HISTORY_DB_FILENAME = "history.sqlite3"
     LINKS_DB_FILENAME = "links.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :sources_path, :alignments_path, :display_path,
-                :config_path, :backup_target
+                :profile_path, :config_path, :backup_target
 
     # Build a Config from a YAML file. Relative paths in the file resolve
     # against +root+; absolute paths are used verbatim.
@@ -47,6 +48,7 @@ module Nabu
         sources_path: resolve(paths["sources"], default: DEFAULT_SOURCES_PATH, root: root),
         alignments_path: resolve(paths["alignments"], default: DEFAULT_ALIGNMENTS_PATH, root: root),
         display_path: resolve(paths["display"], default: DEFAULT_DISPLAY_PATH, root: root),
+        profile_path: resolve(paths["profile"], default: DEFAULT_PROFILE_PATH, root: root),
         config_path: path,
         backup_target: resolve_optional(backup["target"], root: root)
       )
@@ -82,12 +84,14 @@ module Nabu
     def initialize(canonical_dir:, db_dir:, sources_path:, config_path:,
                    alignments_path: File.join(File.dirname(sources_path), "alignments.yml"),
                    display_path: File.join(File.dirname(sources_path), "display.yml"),
+                   profile_path: File.join(File.dirname(sources_path), "profile.yml"),
                    backup_target: nil)
       @canonical_dir = canonical_dir
       @db_dir = db_dir
       @sources_path = sources_path
       @alignments_path = alignments_path
       @display_path = display_path
+      @profile_path = profile_path
       @config_path = config_path
       @backup_target = backup_target
     end
