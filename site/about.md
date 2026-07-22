@@ -11,7 +11,10 @@ description: >-
 Nabu is **personal research infrastructure**: one scholar's local library
 of ancient-text corpora, built to serve that scholar's reading and research
 first, and shared because the approach — local, license-honest, citation
-native, rebuildable — may be useful to others. It is a young project:
+native, rebuildable — may be useful to others: the readers it pictures wear
+one of eighteen scholarly hats, the [research desks]({{ '/axis/' | relative_url }})
+from the Classicist to the Assyriologist, each with its own shelves and
+recipes. It is a young project:
 versioned releases begin with v1.0.0 (July 2026), there is no packaged
 gem or versioned API, and command-line flags may still change between
 releases; the documentation aims to be more honest than polished.
