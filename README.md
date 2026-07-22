@@ -25,7 +25,7 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-22** the shelves hold **801,168 documents / 28,046,116
+As of **2026-07-22** the shelves hold **801,175 documents / 28,176,484
 passages** in 108 language codes — from proto-cuneiform tablets of the
 late 4th millennium BCE to Meiji-era Japanese. The newest arrival is the
 **Germanic wave**: the Old Norwegian treebanks and the Poetic Edda
@@ -39,7 +39,7 @@ beside the Ancient Near East (the Hittite tablet corpus, the CDLI's
 353,156-artifact cuneiform catalog, the eBL Fragmentarium, a millennium of
 Syriac, and the Sumerian literary canon).
 Plus **1,310,763 dictionary entries** across fifty-six dictionary shelves
-and **15.0 million gold lemma annotations in 26 languages** (a further
+and **16.2 million gold lemma annotations in 28 languages** (a further
 8.2 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
@@ -266,7 +266,7 @@ abuts Lebanon."
   `ſwert`), and the runestones of Rundata — each inscription with its
   transliteration, Old-West-Norse and runic-Swedish normalisations, and
   English/Swedish translations as `--parallel` lanes.
-- **Linguists & digital humanists.** 15.0M gold lemma rows in 26 languages
+- **Linguists & digital humanists.** 16.2M gold lemma rows in 28 languages
   with morphology facets (`search --lemma cyning --morph case=gen --lang
   ang`), distinctive-vocabulary profiles (`vocab urn:nabu:proiel:cic-off` →
   officium, honestas, decorum), and `export --format jsonl` streaming the
@@ -368,7 +368,7 @@ text, and `links`-wired to the passages its manifest entry names as
 | | |
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--source SLUG` (one shelf) and `--axis NAME[,NAME…]` (a research desk's shelves — the multi-source generalization of `--source`, e.g. `--axis celtic`), both composing with every other filter, `--lemma`/`--near`/`--fuzzy` included, the footer naming the desk; `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. Character-structure filters: Character-structure filters for the Han corpus (kept distinct from text FTS): `--radical N` (KangXi radical, Unihan), `--strokes A-B` (total-stroke range), `--char-component C` (characters containing C — KRADFILE ∪ BabelStone IDS transitive containment) AND together and compose with a text query as character-level filters on Han passages, the footer naming them. |
-| `nabu search --lemma FORM` | Dictionary-form search over 15.0M gold lemma rows in 26 languages (`gmh`/`non`/`osx` joined 2026-07-22) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. Beside gold and the labeled silver shelves, the **equivalence** tier: CEIPoM's scholar-curated Classical-Latin keys on pre-Roman Italy's Oscan/Umbrian/Faliscan passages — `search --lemma precor` reaches the Iguvine Tables' `pesnimu`, every hit tagged `[equivalence]`, never counted as attestation, `--gold-only` excludes. |
+| `nabu search --lemma FORM` | Dictionary-form search over 16.2M gold lemma rows in 28 languages (`gmh`/`non`/`osx` joined 2026-07-22) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. Beside gold and the labeled silver shelves, the **equivalence** tier: CEIPoM's scholar-curated Classical-Latin keys on pre-Roman Italy's Oscan/Umbrian/Faliscan passages — `search --lemma precor` reaches the Iguvine Tables' `pesnimu`, every hit tagged `[equivalence]`, never counted as attestation, `--gold-only` excludes. |
 | `nabu search --loans CODE` | The language-contact facet (Coptic Scriptorium today): keep only passages carrying loanwords from a donor language — `search ⲛⲟⲩⲧⲉ --lang cop --loans grc` (131K+ Greek loan tokens tagged), composing with text, `--lemma`, `--fuzzy`, `--near` and every catalog filter. `nabu list coptic-scriptorium --loans` prints the donor-language census; `--loans grc` enumerates the most loan-saturated documents. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,713,135 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |

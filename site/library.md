@@ -7,10 +7,10 @@ description: >-
   biblical editions, Old English and the Germanic wave, Slavic, and Celtic.
 ---
 
-Live counts as of **22 July 2026**: **801,168 documents / 28,046,116
+Live counts as of **22 July 2026**: **801,175 documents / 28,176,484
 passages** across 82 registered, synced sources, plus **1,310,763
-dictionary entries** on the reference shelf and **15.0 million gold
-lemma annotations in twenty-six languages** (censused 22 July 2026;
+dictionary entries** on the reference shelf and **16.2 million gold
+lemma annotations in twenty-eight languages** (censused 22 July 2026;
 a further 8,244,309 lemma rows in eight languages ride an honestly
 labelled silver tier — machine-suggested or upstream-undisambiguated,
 excluded from gold-only search). The authoritative shelf map, refreshed at every
@@ -296,8 +296,9 @@ the Referenzkorpus Mittelhochdeutsch — 406 manuscripts / 355,449
 diplomatic manuscript lines whose gold annotation makes Middle High
 German the corpus's third-largest lemma pool (2.10 million rows) on day
 one. **East** was already home: Wulfila's Gothic on the PROIEL treebank.
-Old Icelandic (IcePaHC) is configured and arrives with the next
-Universal Dependencies sync.
+Old Icelandic went live with the owner's same-day Universal
+Dependencies sync — 44,029 IcePaHC passages whose 812,484 gold rows
+enter straight at fourth place among the lemma pools.
 
 ## Reference shelf
 

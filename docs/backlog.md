@@ -10909,7 +10909,9 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-r1 · ReM quarantine recovery  [tier: fable — orchestrator direct] [status: done 2026-07-22 — 7b2abc3; all 46 quarantines one class (duplicate folio.line): two-column codices now cite 5ra.1 (cb tracked in CoraTeiParser), entry-wise restarts take the house :b2; +46 docs / 355,449 rem lines / gmh gold 2.10M / corpus gold 15.0M; D40-e minted (68 loaded docs re-minted same-day — gate ratification)]
 
-## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC awaits next owner `sync ud`]
+## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
+
+## P40-r2 · --lang is dead on arrival  [tier: fable — orchestrator direct] [status: done 2026-07-22 — code_variants always includes the typed code (catalog stores `is`; 639-1 hop swallowed it) + --lemma lang filter moved INDEX-side (homograph window starvation); owner's runbook repro was the catch; gold now 16.24M in 28 langs (is #4, lzh joins)]
 Stale Library/Languages/Sources; axis pages with off-desk examples
 (Greek search on the Celtic page); thoughtful page-by-page pass
 against the live catalog, generator/fragments improved so fixes

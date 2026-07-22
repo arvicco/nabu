@@ -17,7 +17,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `riig` | inscriptions | attribution | enabled · manual | 495 docs / 1,357 passages |
 | `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |

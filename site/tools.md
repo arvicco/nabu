@@ -41,9 +41,9 @@ material, and object type, with uncertain upstream attributions preserved
 as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 15.0 million gold lemma annotations in
-twenty-six languages (Middle High German, Old Norse and Old Saxon joined
-on 22 July 2026) — inflection and suppletion included:
+than surface string, over 16.2 million gold lemma annotations in
+twenty-eight languages (Middle High German, Old Norse, Old Saxon, and
+Icelandic joined on 22 July 2026) — inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
