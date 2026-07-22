@@ -35,7 +35,9 @@ module Nabu
     # 4.0 and DipWBG CC BY-SA 4.0 (P25-2), both Perseus treebanks CC BY-NC-SA
     # 2.5 Generic (P31-6), both Classical Chinese treebanks CC BY-SA 4.0 by
     # LICENSE.txt (P32-0 — Kyoto's README metadata says PD, a recorded
-    # discrepancy; LICENSE.txt authoritative). The manifest declares the most
+    # discrepancy; LICENSE.txt authoritative) and Icelandic IcePaHC CC BY-SA
+    # 4.0 (P40-1 — a diachronic 12th–21st c. corpus under UD's one modern `is`
+    # tag, the RNC-under-orv precedent). The manifest declares the most
     # restrictive class present (nc) so query/export filters never over-share.
     class UniversalDependencies < Nabu::Adapter
       # The ancient-language treebanks in scope. key = subdir slug used on disk
@@ -193,6 +195,28 @@ module Nabu
         "classical-chinese-tuecl" => {
           repo: "https://github.com/UniversalDependencies/UD_Classical_Chinese-TueCL",
           language: "lzh", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P40-1 (the Germanic axis, IcePaHC): the one Icelandic treebank in
+        # scope — a rule-based UD conversion of the Icelandic Parsed Historical
+        # Corpus. DIACHRONIC HONESTY, stated not hidden: the corpus spans the
+        # 12th to the 21st century (Old Norse sagas — the head-50 opens with
+        # 1250.THETUBROT — through present-day prose), yet UD files the whole
+        # thing under the ONE modern ISO 639 tag `is`. This is exactly the
+        # RNC-Middle-Russian-under-orv precedent (P10-2): one language tag per
+        # treebank is UD's practice and we carry the tag verbatim, recording
+        # the diachrony here rather than inventing a finer code. Clitic
+        # enclitics arrive as CoNLL-U multiword-token ranges (the head-50
+        # exercises exactly one, `1-2 láttu` → `lát`+`þú`) the parser already
+        # handles (the Latin-ITTB essetque mechanics). Language is.
+        # LICENSE GATE PASSED at fixture time 2026-07-22 (P40-g): LICENSE.txt
+        # is verbatim the BY-SA grant ("The treebank is licensed under the
+        # Creative Commons License Attribution-ShareAlike 4.0 International")
+        # + README metadata `License: CC BY-SA 4.0`, consistent → the P10-4
+        # per-document attribution override, the birchbark/RNC/Hittite
+        # mechanics exactly; the SOURCE class stays nc.
+        "icelandic-icepahc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Icelandic-IcePaHC",
+          language: "is", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 
