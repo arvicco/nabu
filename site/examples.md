@@ -268,3 +268,11 @@ A note on scope: the library today serves the Hebrew Bible and Second
 Temple corpora. Rabbinic literature proper — Mishnah, Talmud, midrash —
 is a planned campaign of its own; the Targum shelf and the Jastrow
 dictionary scans are its first bridgeheads.
+
+## If your field is not here
+
+These walk-throughs sample the disciplines the library serves; they are not
+the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
+covers all eighteen — the Germanicist, the Indologist and the Sinologist among
+those with no walk-through above — each with its own member shelves,
+instruments and CLI recipes.
