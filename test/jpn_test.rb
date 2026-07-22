@@ -112,4 +112,16 @@ class JpnTest < Minitest::Test
     per_char = text.each_char.map { |c| Nabu::Jpn.fold(c) }.join
     assert_equal whole, per_char
   end
+
+  def test_gsub_fold_is_byte_identical_to_the_tr_translation
+    # P39-3 replaced tr(FROM, TO) with gsub(FOLD_RE, TABLE) on the jpn lane
+    # too (aozora folds every passage). The two must be BYTE-identical.
+    from = Nabu::Jpn::FROM
+    to = Nabu::Jpn::TO
+    assert_equal from.tr(from, to), Nabu::Jpn.fold(from), "the whole FROM string"
+    assert_equal to, Nabu::Jpn.fold(from), "…and the whole FROM folds to TO exactly"
+    ["国の廣さと學び", "普通の日本語の文章です。", ""].each do |sample|
+      assert_equal sample.tr(from, to), Nabu::Jpn.fold(sample), "byte-identity on #{sample.inspect}"
+    end
+  end
 end

@@ -5785,12 +5785,13 @@ module Nabu
           say format("  %-#{width}s  %10s  %5.1f%%", label, format_duration(secs), share * 100)
         end
         say "  #{'-' * (width + 20)}"
-        say format("  %-#{width}s  %10s   (of load)", "parse", format_duration(profile.parse_total))
+        say format("  %-#{width}s  %10s   (of load)", "parse (+fold)", format_duration(profile.parse_total))
         say format("  %-#{width}s  %10s   (of load)", "insert", format_duration(profile.insert_total))
         say format("  %-#{width}s  %10s", "load total", format_duration(profile.load_total))
         say format("  %-#{width}s  %10s", "corpus index total", format_duration(profile.index_total))
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
+        say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
       end
 
       # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
