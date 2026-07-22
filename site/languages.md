@@ -6,7 +6,7 @@ description: >-
   dictionaries, and the gold-lemma index, with the code conventions.
 ---
 
-As of **19 July 2026** — a live inventory: every code below appears in the
+As of **22 July 2026** — a live inventory: every code below appears in the
 catalog, the lemma index, or the reference shelf. The maintained original of
 this page is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
@@ -48,7 +48,9 @@ catalog on sync.
 
 | Code | Language | Notes |
 |---|---|---|
-| `grc` | Ancient Greek | The library's largest language by passages — Homer through the papyri to Swete's Septuagint, both Greek New Testaments, and the inscriptional bilinguals, polytonic. |
+| `lzh` | Literary Chinese | The library's largest language by a wide margin (13.2M passages, since the 20 July 2026 syncs): the Kanripo classical library and the CBETA Buddhist canon, with traditional/simplified/variant spellings folded to one search skeleton. |
+| `grc` | Ancient Greek | The largest Western language — Homer through the papyri to Swete's Septuagint, both Greek New Testaments, and the inscriptional bilinguals, polytonic. |
+| `jpn` | Japanese | The Aozora Bunko reading desk (added 21 July 2026): 2.99M passages of public-domain literature, ruby readings as annotations, kyūjitai reachable through the kanji reform fold. |
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria: ORACC's gold-lemmatized corpora (SAA letters, omens, royal inscriptions) plus the CDLI transliteration mass and the eBL Fragmentarium with inline English (grown 19 July 2026). |
 | `eng` | English | The translation layer — Perseus and First1K editions, the WEB Bible, tablet translations; never an original. |
 | `sux` | Sumerian | The language isolate of the earliest written literature — the ETCSL literary canon in two scholarly editions (Oxford's hand-lemmatized composites and ORACC's ePSD2), the Ur III administrative mass, and the great lexical lists (grown 19 July 2026). |
@@ -58,6 +60,10 @@ catalog on sync.
 | `sl` | Slovenian (historical) | Early Modern print (Dalmatin 1584 to 1899) and, by lineage, the ~1000 CE Freising Manuscripts. |
 | `qpc` | Proto-cuneiform | The pre-linguistic administrative tablets of the late fourth millennium BCE — signs before language. |
 | `ang` | Old English | Beowulf and the complete ASPR poetry, plus the ISWOC prose and gospel treebank, ca. 700–1150. |
+| `gmh` | Middle High German | The ReM reference corpus (added 22 July 2026): 360 manually annotated manuscripts, 1050–1350, diplomatic layer stored (the long ſ folds to s) — instantly the corpus's third-largest gold-lemma pool. |
+| `non` / `gmq-pro` | Old Norse / Proto-Norse | Menotec's Old Norwegian treebanks with the Poetic Edda, and Rundata's runic corpus with its Old-West-Norse lane (added 22 July 2026); the urnordisk-dated inscriptions carry the Proto-Norse code. |
+| `osx` | Old Saxon | The *Heliand* (HeliPaD, added 22 July 2026): 3,549 parsed tree blocks with gold form-lemma pairs. |
+| `is` | Icelandic (diachronic) | IcePaHC via Universal Dependencies (added 22 July 2026): the 12th–21st centuries under the one modern tag — 44,029 passages, with the fourth-largest gold-lemma pool. |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts. |
 | `sga` | Old / Early Irish | The Celtic axis's keystone (added 17 July 2026): CorPH's gold-lemmatized texts and gloss corpora, 7th–10th c., plus the two Old Irish UD treebanks — a new gold-lemma language. |
@@ -126,17 +132,19 @@ extracts as of 17 July 2026.</p>
 
 ## Gold-lemma languages
 
-Seventeen languages are searchable by dictionary form (`search --lemma`)
-as of 17 July 2026:
+Twenty-eight languages are searchable by dictionary form (`search --lemma`)
+as of 22 July 2026:
 
-`lat, grc, orv, akk, cop, sl, san, sux, chu, got, ang, xcl, xhu, uga,
-hit, sga, bul`
+`san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
+chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga`
 
-The treebanks, ORACC, goo300k, Coptic Scriptorium, CorPH, and damaskini
-feed these annotations — over 2.85 million rows (the exact count of
-2,852,069 dates from the 14 July census; the Old Irish and Bulgarian
-layers landed on 17 July). Everything else is full-text-searchable but
-not yet lemma-searchable.
+The treebanks, ORACC, goo300k, the DCS, ONCOJ, the Hebrew and Egyptian
+shelves, Coptic Scriptorium, and the Germanic wave feed these
+annotations — **16,240,531 gold rows** (22 July census; Sanskrit and
+Sumerian lead; Middle High German debuted third with the ReM sync and
+Icelandic fourth with IcePaHC, both the same day). A further 8.2 million machine-suggested rows in
+eight languages ride an honestly labelled silver tier. Everything else
+is full-text-searchable but not yet lemma-searchable.
 
 The same languages, grouped by the scholar who reads them rather than by code,
 are the eighteen [research desks]({{ '/axis/' | relative_url }}).

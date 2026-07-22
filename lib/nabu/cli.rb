@@ -340,13 +340,22 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "status", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
+    desc "status [SOURCE]", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
     long_desc <<~HELP, wrap: false
-      The SYNC-STATE view: one row per registered source — enabled, sync
-      policy, the cached upstream-drift verdict (up=), live counts, and the
-      last run's outcome. Its sibling is `nabu list`, the WHAT-IS-HELD view
-      (content census, per-shelf cards, document/entry enumerations): status
-      answers "should I sync?", list answers "what does the library hold?".
+      The SYNC-STATE view. Bare `nabu status` is the COMPACT table (P40-s):
+      one dense row per registered source, grouped by kind — a fused
+      kind/enablement/cadence column, a SILENT liveness cell that speaks only
+      to flag an exception (OLD/DOWN/?REPROBE/UNPROBED), one humanized
+      holdings column, and the last run's stamp + zero-suppressed delta. Its
+      sibling is `nabu list`, the WHAT-IS-HELD view (content census, per-shelf
+      cards): status answers "should I sync?", list answers "what does the
+      library hold?".
+
+      `nabu status SOURCE` is one source's full labeled detail block: kind,
+      enabled, cadence, the liveness verdict (healthy states included), exact
+      thousands-separated counts, license class, the full timestamp/delta, and
+      the last run's status. `nabu status --long` is that extended detail as a
+      labeled table for EVERY row.
 
       --remote probes every upstream first (the same code path as
       `health --remote`, persisting each verdict) and renders the fresh
@@ -354,10 +363,15 @@ module Nabu
     HELP
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
+    option :long, type: :boolean, default: false,
+                  desc: "The full labeled detail (verbose liveness, exact counts, license, full delta) for every row"
     option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
                   desc: "Group the status table under the research axes (config/axes.yml): bare = all in " \
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
-    def status
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: show every row (modules + unfocused sources included)"
+    def status(slug = nil)
+      slug = slug.to_s.strip
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # --remote (P14-12): the one-command informed-update flow — run the live
@@ -367,14 +381,17 @@ module Nabu
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      # --axis (P35-1): the same rows grouped under the research desks.
-      report = if options[:axis]
-                 Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
-                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
-               else
-                 Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-               end
-      say report
+      # `status SOURCE` is the detail block — UNSCOPED (explicit naming is
+      # explicit intent; any source, focused or not). The bare/--long/--axis
+      # tables scope to the focus profile (P40-f).
+      if slug.empty?
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        say status_report(view.registry, db, ledger, slug)
+        print_focus_note(view, view.registry_hidden)
+      else
+        say status_report(registry, db, ledger, slug)
+      end
     ensure
       db&.disconnect
       ledger&.disconnect
@@ -501,6 +518,8 @@ module Nabu
                                             "prose (idempotent; existing dossiers untouched)"
     option :"dry-run", type: :boolean, default: false,
                        desc: "With --export-source-dossiers: report without writing"
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: census every source (--sources map is always whole-library)"
     def list(slug = nil)
       slug = slug.to_s.strip
       validate_list_flags!(slug)
@@ -516,10 +535,20 @@ module Nabu
       query = Nabu::Query::List.new(catalog: catalog)
       if options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        print_census_by_axis(query.census, selected_axes(registry.axes), registry)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        rows = scoped_census(query.census, view)
+        print_census_by_axis(rows, selected_axes(registry.axes), registry)
+        print_focus_note(view, query.census.size - rows.size)
       elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
-      elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
+      elsif slug.empty?
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        rows = scoped_census(query.census, view)
+        print_census(rows, options[:long] ? query.descriptions : nil)
+        print_focus_note(view, query.census.size - rows.size)
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
@@ -594,6 +623,8 @@ module Nabu
                     desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
     option :backfill_pins, type: :boolean, default: false,
                            desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: check every source (modules + unfocused sources included)"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
       # live golden replay). --remote is the P5-3 upstream probe.
@@ -618,6 +649,19 @@ module Nabu
       literal 弁 apart from the default's 弁/辨/瓣/辯. It runs the normal folded
       search for candidates, then keeps only glyph-literal hits — so it does
       not combine with --fuzzy/--near/--lemma/--morph or the character filters.
+
+      WHOLE-WORD (--word): keep only hits where the query lands on a WORD
+      BOUNDARY in the stored text — a fold-aware whole-word match. ἦ finds the
+      standalone particle ἦ but NOT ἦμαρ (the query sits mid-word there); 学
+      still folds to 學 but only as a whole word. A boundary is the start/end
+      of the text or a non-letter (whitespace, punctuation — combining marks
+      are word-internal, so accents never break a word). --word composes with
+      --exact (word-AND-glyph exact: ἦ finds ἦ, not ἦμαρ nor a folded ἠ) and,
+      alone, with the plain fold; it does NOT combine with
+      --fuzzy/--near/--lemma/--morph or the character filters. Spaceless scripts
+      have no word boundaries: --word on a query containing Han or kana is
+      REFUSED (use --exact for glyph-literal matching there). Hangul is
+      space-delimited, so --word treats it like any alphabetic script.
 
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
@@ -674,7 +718,8 @@ module Nabu
       NEAR: --lemma λέγω --near κύριος finds εἶπε near κύριος too), and with
       --lang/--license/--limit. Cross-passage adjacency is OUT — the passage
       is the unit. --morph does not compose with --near (out of scope). Both
-      matched terms are bracketed in the snippet.
+      matched terms are bracketed in the snippet, shown in the stored text
+      (the pristine spelling, not the folded search form).
 
       FUZZY (--fuzzy): substring/fragment search for damaged texts — matches
       the fragment ANYWHERE in a passage, mid-word included, where normal
@@ -817,6 +862,9 @@ module Nabu
     option :exact, type: :boolean, default: false,
                    desc: "Glyph-literal match; the default fold matches modern reading habits " \
                          "(学 finds 學, 弁 finds 辨/瓣/辯) — --exact does not"
+    option :word, type: :boolean, default: false,
+                  desc: "Whole-word match: the query must land on a word boundary in the stored " \
+                        "text (ἦ finds ἦ, not ἦμαρ); refuses spaceless CJK/kana"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -843,6 +891,16 @@ module Nabu
         raise Thor::Error, "search: --exact is a word-level glyph-literal filter — it does not " \
                            "combine with the character-structure filters (--radical/--strokes/--char-component)"
       end
+      if options[:word] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+                            char_filter_options?)
+        raise Thor::Error, "search: --word is a whole-word filter over the plain text query — it " \
+                           "composes only with --exact, not --fuzzy/--near/--lemma/--morph or the " \
+                           "character-structure filters"
+      end
+      if options[:word] && (msg = Nabu::Query::Search.word_refusal_for(query))
+        raise Thor::Error, "search: #{msg}"
+      end
+
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
           raise Thor::Error, "search: the character filters (--radical/--strokes/--char-component) are " \
@@ -878,9 +936,10 @@ module Nabu
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
-                                    loans: loans, exact: options[:exact])
+                                    loans: loans, exact: options[:exact], word: options[:word])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
-                                    incomplete: searcher.incomplete_hint, exact: options[:exact])
+                                    incomplete: searcher.incomplete_hint, exact: options[:exact],
+                                    word: options[:word])
       print_display_footer
     ensure
       catalog&.disconnect
@@ -1916,6 +1975,57 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "focus [only|add|drop|clear] [NAMES…]", "Your research focus: scope status/list/health to a few desks"
+    long_desc <<~HELP, wrap: false
+      The FOCUS PROFILE (config/profile.yml, P40-f) — a personal list of AXIS
+      NAMES and/or SOURCE SLUGS naming what you are working on now. When it is
+      set, the WHOLE-LIBRARY read views scope to it:
+
+        nabu status · nabu list · nabu health   → focused sources only
+
+      Your own shelves (kind: shelf) ALWAYS show; feature modules show only
+      under --all; and --all on any of those commands shows everything. The
+      focused set is (every member of each focused axis) ∪ (each named source).
+
+      DELIBERATELY UNSCOPED, and staying that way:
+        nabu status SOURCE   an explicitly named source — explicit intent —
+                             shows regardless of focus.
+        nabu sync --all      cadence-based: a display preference must never
+                             cause silent staleness. Sync stays library-wide.
+        nabu search          library-wide is the product; a cross-desk hit is
+                             the whole point of the FTS index.
+        nabu list --sources  the one-page onboarding map is the whole library.
+
+      Show / edit:
+        nabu focus                    # show the profile (axes vs sources) + count
+        nabu focus only germanic rem  # replace the profile with these names
+        nabu focus add slavic         # add names (idempotent, sorted)
+        nabu focus drop rem           # remove names
+        nabu focus clear              # remove the profile (back to everything)
+
+      An unknown name on `only`/`add` is refused, naming near-misses. A name in
+      the file that the registry no longer knows (drift after a hand-edit) is
+      warned about and ignored — never fatal. The file is gitignored (personal)
+      and rides `nabu backup` (the config/ tree).
+    HELP
+    def focus(action = nil, *names)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      profile = Nabu::Profile.load(config.profile_path)
+      names = names.map(&:strip).reject(&:empty?)
+      case action.to_s.strip
+      when "" then show_focus(profile, registry)
+      when "only" then write_focus(config, registry, names, verb: :only)
+      when "add" then write_focus(config, registry, profile.entries + names, verb: :add, given: names)
+      when "drop" then drop_focus(config, profile, names)
+      when "clear" then clear_focus(config, profile)
+      else
+        raise Thor::Error, "focus: unknown action #{action.inspect} — use only, add, drop, clear, or no action to show"
+      end
+    rescue Nabu::Focus::UnknownName => e
+      raise Thor::Error, "focus: #{e.message}"
+    end
+
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
     long_desc <<~HELP, wrap: false
       The comparativist's join (P15-3): verses of a registered alignment work
@@ -2680,6 +2790,117 @@ module Nabu
       # unknown name is a clean error naming the known set — the resolution
       # guarantee (an axis name can never collide with a slug, so this is
       # unambiguous). No axes defined at all is its own honest miss.
+      # Route `nabu status` (P40-s): a SOURCE argument renders that one row's
+      # full labeled detail block; --axis groups the compact rows under the
+      # research desks; --long is the extended detail table; bare is the compact
+      # v2 table. An unknown SOURCE names the valid slugs, like `list SOURCE`.
+      def status_report(registry, db, ledger, slug)
+        unless slug.empty?
+          detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: slug)
+          return detail if detail
+
+          raise Thor::Error, "unknown source #{slug.inspect} — known sources: #{registry.slugs.join(', ')}"
+        end
+        if options[:axis]
+          return Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
+                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+        end
+
+        Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
+      end
+
+      # -- focus profile (P40-f) --------------------------------------------
+
+      # The working scope for a read surface: the focus profile resolved
+      # against the registry, honoring --all. The filtered registry it carries
+      # is what status/list/health render instead of the full one.
+      def focus_view(config, registry)
+        Nabu::Focus.view(
+          profile: Nabu::Profile.load(config.profile_path), registry: registry, all: options[:all]
+        )
+      end
+
+      # Drop the census rows the view hides (a shelf/focused source stays, an
+      # unfocused source goes). A pass-through view keeps every row, so the
+      # unfocused census is byte-identical to before.
+      def scoped_census(rows, view)
+        view.active? ? rows.select { |row| view.visible?(row.slug) } : rows
+      end
+
+      # The focus META lines go to STDERR, never stdout: piped output stays
+      # byte-identical to the unfocused table (the regression pin), while the
+      # terminal user still sees the context. With a profile: the footer naming
+      # the focus and the exact hidden count. Without one: the discoverability
+      # hint. Under --all (profile present but overridden): silence.
+      def print_focus_note(view, hidden)
+        if view.active?
+          warn Nabu::Focus.footer_line(view.entries, hidden)
+        elsif view.profile.empty?
+          warn Nabu::Focus.hint_line
+        end
+      end
+
+      # Warn once about names the file carries that the registry no longer
+      # knows (drift after a hand-edit): ignored, never fatal.
+      def warn_focus_drift(view)
+        warn Nabu::Focus.drift_line(view.unknown) unless view.unknown.empty?
+      end
+
+      # `nabu focus` (bare): the profile as stored — axes vs sources
+      # distinguished, drift flagged — and the resolved source count, or the
+      # honest "none — showing everything".
+      def show_focus(profile, registry)
+        if profile.empty?
+          say "focus: none — showing everything"
+          return say(Nabu::Focus.hint_line)
+        end
+
+        resolution = Nabu::Focus.resolve(profile, registry)
+        count = profile.entries.size
+        say "focus (#{count} #{count == 1 ? 'entry' : 'entries'}):"
+        say "  axes:    #{resolution.axes.join(', ')}" unless resolution.axes.empty?
+        say "  sources: #{resolution.sources.join(', ')}" unless resolution.sources.empty?
+        unless resolution.unknown.empty?
+          say "  unknown: #{resolution.unknown.join(', ')} (not a known axis or source — ignored)"
+        end
+        # Modules never show on the scoped surfaces (only under --all), so the
+        # resolved count reflects the sources status/list/health will display.
+        shown = resolution.slugs.count { |slug| !registry[slug]&.feature_module? }
+        say "resolved: #{pluralize(shown, 'source')} in focus " \
+            "(nabu status shows them; --all shows everything)"
+      end
+
+      # `focus only` / `focus add`: validate every WRITTEN name against the
+      # registry (unknown refused, near-misses named), then persist the sorted,
+      # de-duplicated profile. +given+ is the just-typed subset to validate for
+      # `add` (the existing entries are already trusted); +names+ is the full
+      # next entry list.
+      def write_focus(config, registry, names, verb:, given: names)
+        Nabu::Focus.validate_names!(given, registry)
+        profile = Nabu::Profile.new(names).save(config.profile_path)
+        announce_focus(profile, registry, verb)
+      end
+
+      def drop_focus(config, profile, names)
+        Nabu::Profile.new(profile.entries - names).save(config.profile_path)
+        announce_focus(Nabu::Profile.load(config.profile_path),
+                       Nabu::SourceRegistry.load(config.sources_path), :drop)
+      end
+
+      def clear_focus(config, profile)
+        return say("focus: already none — showing everything") if profile.empty?
+
+        Nabu::Profile.new([]).save(config.profile_path)
+        say "focus cleared — showing everything"
+      end
+
+      # After a write, confirm the new state (an empty result reads as cleared).
+      def announce_focus(profile, registry, _verb)
+        return say("focus: none — showing everything") if profile.empty?
+
+        show_focus(profile, registry)
+      end
+
       def selected_axes(axis_registry)
         if axis_registry.empty?
           raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
@@ -3602,23 +3823,28 @@ module Nabu
         end
       end
 
-      # Render hits: urn + optional [language] header, then the FTS snippet
-      # (diacritic-folded highlight). The footer labels that so nobody reads the
-      # stripped accents in the highlight as corpus truth; active facet filters
-      # (P17-2) are named in one compact footer line — and only then.
-      # +incomplete+ (P35-6): the query layer's exhausted-inner-window hint —
-      # printed whenever present, so a filter-emptied page never masquerades
-      # as a complete answer.
+      # Render hits: urn + optional [language] header, then the snippet. Every
+      # path's snippet is a window of the STORED text (P39-r3/P40-w,
+      # StoredSnippet) — text_normalized, the folded skeleton, is NEVER shown (it
+      # rendered 学 as 學 and だ as た). +proximity: true+ marks the two-term NEAR
+      # snippet (both terms bracketed, on the stored glyphs since P40-w); +exact+
+      # / +word+ annotate the glyph-literal / whole-word filters, so the footer
+      # labels each path truthfully. Active facet filters (P17-2) are named in
+      # one compact footer line — and only then. +incomplete+ (P35-6): the query
+      # layer's honesty hint (the exhausted-inner-window note, or the
+      # --exact/--word scan-ceiling note) — printed whenever present, so a short
+      # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false)
+                               exact: false, word: false, proximity: false)
         if results.empty?
           say "no matches"
-          # Empty-under-filter honesty (P35): --exact suppressed the folded
+          # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
           # candidates, so a "no matches" here must name the filter it applied.
           if exact
             say "note: --exact matched glyph-literally (the default fold would also find " \
                 "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
           end
+          say "note: --word required a whole-word match (a fragment inside a longer word does not count)" if word
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -3628,9 +3854,27 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{'glyph-exact; ' if exact}highlights are diacritic-folded)" \
+            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity)})" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
+      end
+
+      # The footer clause naming what the snippet shows, per path. All three
+      # paths now show the STORED text (P40-w carried proximity off the folded
+      # index form); --exact / --word / proximity annotate what the match means.
+      def search_snippet_label(exact:, word: false, proximity: false)
+        return "both terms bracketed; snippet shows the text as stored" if proximity
+
+        stored = "snippet shows the text as stored"
+        # A filtered path (--exact and/or --word) leads with what the match means;
+        # plain search leads with the stored-text promise, then "fold-aware".
+        return "#{stored}; matching is fold-aware" unless exact || word
+
+        mode = if exact && word then "glyph-exact, whole-word"
+               elsif exact then "glyph-exact"
+               else "whole-word, fold-aware"
+               end
+        "#{mode}; #{stored}"
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc · axis: celtic"
@@ -4390,7 +4634,7 @@ module Nabu
           source: options[:source], sources: axis_slugs, loans: loans_filter
         )
         print_search_results(results, loans: loans_filter, axis: axis_names,
-                                      incomplete: searcher.incomplete_hint)
+                                      incomplete: searcher.incomplete_hint, proximity: true)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -5789,7 +6033,8 @@ module Nabu
               "isicily #{result.axes.isicily}, " \
               "open-etruscan #{result.axes.open_etruscan}, " \
               "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
-              "iip #{result.axes.iip}, cdli #{result.axes.cdli})"
+              "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
+              "rundata #{result.axes.rundata})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
@@ -5848,12 +6093,15 @@ module Nabu
       def run_remote_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
         ledger = open_or_create_ledger(config)
         report = Nabu::Health::RemoteProbe.new(
-          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+          registry: view.registry, ledger: ledger, canonical_dir: config.canonical_dir
         ).run(progress: remote_health_ticker)
         $stderr.print("\r\e[K") if $stderr.tty? # clear the ticker before the table
         print_remote_health(report)
+        print_focus_note(view, view.registry_hidden)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
@@ -5933,15 +6181,18 @@ module Nabu
       def run_local_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
         catalog = open_catalog(config)
         fulltext = catalog ? open_fulltext(config) : nil
         ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
-          registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
+          registry: view.registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
           canonical_dir: config.canonical_dir
         ).run
         print_local_health(report)
+        print_focus_note(view, view.registry_hidden)
         raise Thor::Error, local_health_failure(report) if report.any_loud?
       ensure
         catalog&.disconnect

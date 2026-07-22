@@ -270,13 +270,222 @@ module Query
                    "辨 is a merged old form, not the stored glyph — --exact drops it"
     end
 
-    def test_snippet_marks_the_match_in_the_folded_form
+    # -- --exact --limit semantics (P39-r3, Defect 1) -------------------------
+    # Owner ruling 2026-07-22: "he will understand --limit as the number of
+    # ultimate hits to display." The old code fetched limit×10 FOLDED candidates
+    # then post-filtered, so --limit was an internal pool size — a literal hit
+    # ranked past the first pool was invisible. The scan now paginates until
+    # +limit+ VERIFIED hits accumulate.
+
+    # 11 single-glyph 學 passages (fold candidates for 学, but NOT literal 学)
+    # each rank as a 1-token document; one longer passage DOES store a
+    # space-delimited literal 学 and, being many tokens, ranks last (bm25 favors
+    # short docs). With limit 1 the literal hit sits at candidate rank 12, past
+    # the first page-of-10. The old code returned empty; the scan paginates to it.
+    def test_exact_limit_paginates_past_a_full_page_of_rejected_candidates
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Ben", language: "jpn")
+      11.times do |i|
+        make_passage(doc, urn: "urn:d:jp:trad:#{i}", text: "學", sequence: i, language: "jpn")
+      end
+      # 学 is its own token (space-delimited); the extra tokens lengthen the doc
+      # so bm25 ranks it last, beyond the first candidate page.
+      make_passage(doc, urn: "urn:d:jp:lit", text: "学 天 地 人 山 川 海 空 雨 風 火",
+                        sequence: 99, language: "jpn")
+      rebuild!
+
+      assert_equal ["urn:d:jp:lit"], search("学", lang: "jpn", exact: true, limit: 1).map(&:urn),
+                   "the literal hit past the first candidate page is found (was empty pre-P39-r3)"
+    end
+
+    # --limit is a true display cap: more literal matches exist than the limit,
+    # so exactly +limit+ come back.
+    def test_exact_limit_caps_the_displayed_hits
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Ben", language: "jpn")
+      3.times do |i|
+        make_passage(doc, urn: "urn:d:jp:#{i}", text: "学", sequence: i, language: "jpn")
+      end
+      rebuild!
+
+      assert_equal 2, search("学", lang: "jpn", exact: true, limit: 2).size,
+                   "--limit N means up to N displayed hits, not an internal pool size"
+    end
+
+    # The scan-ceiling honesty guard (P35): a fold-heavy query with no literal
+    # hit must terminate AND announce that the scan was truncated.
+    def test_exact_scan_ceiling_truncation_announces_itself
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Ben", language: "jpn")
+      12.times do |i|
+        make_passage(doc, urn: "urn:d:jp:#{i}", text: "學", sequence: i, language: "jpn")
+      end
+      rebuild!
+
+      # ceiling 10 == one page-of-10 for limit 1; page 1 verifies nothing and
+      # the scan stops at the ceiling with candidates still unscanned.
+      results = searcher.run("学", lang: "jpn", exact: true, limit: 1, scan_ceiling: 10)
+      assert_empty results, "no passage stores the literal 学"
+      assert_match(/scanned the first 10 fold candidates/, searcher.incomplete_hint,
+                   "a ceiling-truncated scan announces what it did not check")
+      refute_match(/raise --limit/, searcher.incomplete_hint.to_s,
+                   "the old 'raise --limit to search deeper' note is wrong under the new semantics")
+    end
+
+    # An exact scan that reaches stream exhaustion before the ceiling is an
+    # honest complete answer — no truncation hint.
+    def test_exact_exhausted_scan_carries_no_truncation_hint
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Ben", language: "jpn")
+      make_passage(doc, urn: "urn:d:jp:1", text: "学", sequence: 0, language: "jpn")
+      make_passage(doc, urn: "urn:d:jp:2", text: "學", sequence: 1, language: "jpn")
+      rebuild!
+
+      results = searcher.run("学", lang: "jpn", exact: true, limit: 20, scan_ceiling: 10)
+      assert_equal ["urn:d:jp:1"], results.map(&:urn), "the one literal hit is found"
+      assert_nil searcher.incomplete_hint, "the whole stream was scanned — this page is complete"
+    end
+
+    # P39-r3: the snippet is a window of the STORED text, not the folded index
+    # form. An unaccented query still marks the accented stored spelling — the
+    # fold LOCATES the match (μηνιν → μῆνιν) but never REPLACES the glyphs.
+    def test_snippet_marks_the_match_in_the_stored_text
       doc = make_document(source: @open, urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
       rebuild!
 
       snippet = search("μηνιν").first.snippet
-      assert_includes snippet, "[μηνιν]", "the matched (folded) token is marked"
+      assert_includes snippet, "[μῆνιν]", "the stored (accented) spelling is marked, not the fold"
+      refute_includes snippet, "μηνιν", "the accent-stripped fold form is never shown"
+    end
+
+    # The Japanese defect (P39-r3): the fold's canonical is a traditional or even
+    # archaic skeleton (学→學, だ→た, 一→弌), so the FTS snippet() showed glyphs the
+    # passage never held. The stored-text snippet shows what the source actually
+    # stored, whether the query was folded or --exact.
+    # (Whole-token queries: FTS tokenizes a spaceless CJK/kana run as ONE token,
+    # so the fixtures make the queried glyph its own token — punctuation- or
+    # space-delimited — rather than relying on sub-token matching.)
+    def test_snippet_shows_the_stored_cjk_glyph_not_the_fold_skeleton
+      doc = make_document(source: @open, urn: "urn:d:jp", title: "Rongo", language: "jpn")
+      make_passage(doc, urn: "urn:d:jp:1", text: "学問。天下", sequence: 0, language: "jpn")
+      rebuild!
+
+      folded = search("学問", lang: "jpn").first.snippet
+      assert_includes folded, "[学問]", "the stored shinjitai glyphs are shown"
+      refute_includes folded, "學", "the traditional fold skeleton is never shown"
+
+      exact = search("学問", lang: "jpn", exact: true).first.snippet
+      assert_includes exact, "[学問]", "--exact marks the stored glyphs literally"
+      refute_includes exact, "學"
+    end
+
+    # Kana voicing marks are stripped by the diacritic fold (だ→た, で→て); the
+    # snippet must restore the voiced stored kana.
+    def test_snippet_restores_voiced_kana
+      doc = make_document(source: @open, urn: "urn:d:kana", language: "jpn")
+      make_passage(doc, urn: "urn:d:kana:1", text: "これは だめ", sequence: 0, language: "jpn")
+      rebuild!
+
+      snippet = search("だめ", lang: "jpn").first.snippet
+      assert_includes snippet, "[だめ]", "the voiced kana is shown as stored"
+      refute_includes snippet, "た", "the devoiced fold form is never shown"
+    end
+
+    # The fold's canonical for some CJK is an ARCHAIC z-variant (一→弌); the
+    # stored snippet shows the ordinary stored glyph.
+    def test_snippet_shows_the_stored_glyph_not_the_archaic_canonical
+      doc = make_document(source: @open, urn: "urn:d:ichi", language: "jpn")
+      make_passage(doc, urn: "urn:d:ichi:1", text: "一 二 三", sequence: 0, language: "jpn")
+      rebuild!
+
+      snippet = search("一", lang: "jpn").first.snippet
+      assert_includes snippet, "[一]", "the stored glyph is shown"
+      refute_includes snippet, "弌", "the archaic fold canonical is never shown"
+    end
+
+    # -- --word: whole-word matching (P40-w) ---------------------------------
+
+    # The headline case: --exact is a glyph-literal SUBSTRING, so ἦ finds the ἦ
+    # buried in ἦμαρ; --word bounds it to a whole word. Both passages carry the
+    # glyph ἦ (one standalone, one only inside ἦμαρ — the standalone word there
+    # is ἤ, a DIFFERENT glyph, so it is what pulls the passage into the folded
+    # candidate set), so --exact returns both; --exact --word keeps only the one
+    # where ἦ stands as its own word.
+    def test_word_with_exact_keeps_only_the_whole_word_not_a_fragment
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:whole", text: "ἦ μὲν οὖν", sequence: 0)
+      make_passage(doc, urn: "urn:d:grc:frag", text: "ἦμαρ ἤ", sequence: 1)
+      rebuild!
+
+      assert_equal %w[urn:d:grc:frag urn:d:grc:whole],
+                   search("ἦ", exact: true).map(&:urn).sort,
+                   "--exact is a substring: the glyph ἦ is present in both passages"
+      assert_equal %w[urn:d:grc:whole], search("ἦ", exact: true, word: true).map(&:urn),
+                   "--word drops the passage where ἦ only sits inside ἦμαρ"
+    end
+
+    # Word boundaries are start/end of text and non-letters (whitespace AND
+    # punctuation), by Unicode property — not an ASCII assumption.
+    def test_word_boundary_is_punctuation_or_edge
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:comma", text: "τόδε, ἦ.", sequence: 0) # flanked by space + period
+      make_passage(doc, urn: "urn:d:grc:end", text: "ὅς ἐστιν ἦ", sequence: 1) # at end of text
+      rebuild!
+
+      assert_equal %w[urn:d:grc:comma urn:d:grc:end],
+                   search("ἦ", exact: true, word: true).map(&:urn).sort,
+                   "a whole word ends at punctuation or the edge, not only at whitespace"
+    end
+
+    # --word composes with the plain fold, and a combining mark is word-INTERNAL:
+    # μᾱ́τηρ carries a combining acute (U+0301 on ᾱ that NFC cannot precompose),
+    # yet the unaccented query still lands on it as one whole word, and the
+    # snippet brackets the pristine spelling.
+    def test_word_composes_with_the_fold_over_a_combining_mark_word
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:1", text: "μᾱ́τηρ ἐστίν", sequence: 0)
+      rebuild!
+
+      result = search("ματηρ", word: true).first
+      refute_nil result, "the accent-stripped query finds the combining-mark-bearing word"
+      assert_includes result.snippet, "[μᾱ́τηρ]", "the whole word is bracketed in its stored spelling"
+    end
+
+    # Spaceless scripts have no word boundaries: --word on a Han or kana query is
+    # REFUSED loudly (never silently degraded) — the refusal points at --exact.
+    def test_word_refuses_spaceless_cjk_and_kana
+      msg = "word boundaries are not defined for spaceless CJK text — use --exact for glyph-literal matching"
+      assert_equal msg, Nabu::Query::Search.word_refusal_for("学問"), "Han is refused"
+      assert_equal msg, Nabu::Query::Search.word_refusal_for("だめ"), "kana is refused"
+      assert_nil Nabu::Query::Search.word_refusal_for("λόγος"), "alphabetic Greek is fine"
+      assert_nil Nabu::Query::Search.word_refusal_for("한국어"), "Hangul is space-delimited — allowed"
+
+      error = assert_raises(Nabu::Error) { search("学", word: true) }
+      assert_equal msg, error.message, "run refuses a spaceless --word query at the library boundary"
+    end
+
+    # -- NFC-exempt (hbo/arc) --exact matching, AT MATCH TIME (P40-w item 3) ---
+
+    # Real WLC bytes (Ruth 1:1 בִּימֵי): the dagesh U+05BC precedes the hiriq
+    # U+05B4, which is NOT NFC — canonical order swaps them (Normalize's own
+    # exemption test pins refute unicode_normalized?). hbo is stored byte-
+    # verbatim, so a query typed in canonical order would miss the raw stored
+    # bytes if only the query were NFC-folded. --exact NFCs BOTH sides at match
+    # time, so it finds the passage; storage and the stored-byte snippet are
+    # untouched.
+    def test_exact_matches_nfc_divergent_hbo_mark_order
+      wlc = "בִּימֵי֙" # בִּימֵי, dagesh-before-hiriq (non-NFC)
+      refute wlc.unicode_normalized?(:nfc), "the fixture really is a divergent Masoretic order"
+      doc = make_document(source: @open, urn: "urn:d:hbo", language: "hbo")
+      make_passage(doc, urn: "urn:d:hbo:1", text: wlc, sequence: 0, language: "hbo")
+      rebuild!
+
+      canonical = Nabu::Normalize.nfc(wlc) # a modern query typed in canonical order
+      result = search(canonical, exact: true).first
+      refute_nil result, "NFC-both matching reconciles the divergent mark order at match time"
+      assert_equal "urn:d:hbo:1", result.urn
+      assert_equal wlc, result.text, "storage is untouched — the pristine Masoretic bytes"
+      assert_includes result.snippet, "[#{wlc}]", "the snippet shows the STORED (non-NFC) byte order"
+      refute result.snippet.unicode_normalized?(:nfc), "display is untouched — never NFC-reordered"
     end
 
     def test_language_filter_excludes_other_languages

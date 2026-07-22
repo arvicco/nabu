@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (13): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`
+**Members** (14): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
 
 ### slavic
 
@@ -79,11 +79,11 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 ### germanic
 
-> The Germanicist — Gothic, Old English verse and prose, the northern word-hoard.
+> The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic riding the proiel/ud treebanks.
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (5): `ud`, `proiel`, `iswoc`, `aspr`, `bosworth-toller`
+**Members** (9): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`, `rundata`, `helipad`
 
 ### celtic
 

@@ -12,7 +12,13 @@ module Nabu
     # code should never call it directly.
     module Validation
       # Closed enum, architecture §5. Drives query/export filters downstream.
-      LICENSE_CLASSES = %w[open attribution nc research_private restricted].freeze
+      # `odbl` (P40-6, D40-c): Open Database License 1.0 + DbCL 1.0 — an
+      # attribution/share-alike OPEN DATA grant whose obligations attach to
+      # the database (name it + link it; share-alike on derived databases),
+      # a distinct compliance posture from the per-work CC `attribution`
+      # class. First occupant: Rundata (SRDB). Enum changes ride a schema
+      # migration too (db/migrate/018).
+      LICENSE_CLASSES = %w[open attribution nc odbl research_private restricted].freeze
 
       # Shape check only (BCP-47 primary subtag in ISO-639 form plus optional
       # subtags, e.g. "grc", "chu", "grc-Grek"). Deliberately not a registry

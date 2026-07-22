@@ -38,8 +38,8 @@ walkthrough is [Quickstart]({{ '/quickstart/' | relative_url }}).
 
 Ruby 3.3 or newer, git, and disk space: about 1 GB covers the starter
 shelf (canonical files plus derived databases), while a full library
-build occupied roughly 16 GB canonical plus 7 GB derived SQLite on the
-reference machine as of 2026-07-13 — growth is entirely at your
+build occupied roughly 45 GB canonical plus 43 GB derived SQLite on the
+reference machine as of 2026-07-22 — growth is entirely at your
 discretion, shelf by shelf. There are no cloud requirements at runtime
 and the dependency set is deliberately small. Details and per-shelf
 sizes are on [Quickstart]({{ '/quickstart/' | relative_url }}).
@@ -89,14 +89,17 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 17 July 2026: 172,189 documents and 4,308,814 passages across 38
-registered, synced sources, plus 633,137 dictionary entries and over
-2.85 million gold
-lemma annotations in seventeen languages — classical Greek and Latin,
-papyri, Latin inscriptions, cuneiform, Sanskrit, Coptic, Old English,
-Slavic, Celtic (Early Irish, Gaulish, and ogham, added 17 July 2026),
-biblical editions, and a reference shelf of twenty-seven dictionary
-shelves. The
+As of 22 July 2026: 801,175 documents and 28,176,484 passages across 82
+registered, synced sources, plus 1,310,763 dictionary entries and
+16.2 million gold
+lemma annotations in twenty-eight languages — the classical Chinese
+library and the Buddhist canon (the corpus's largest holdings), classical
+Greek and Latin, papyri, Latin inscriptions, cuneiform and the Ancient
+Near East, Sanskrit and the Pali canon, Hebrew and Aramaic, Egyptian,
+Coptic, Japanese, Old English and the wider Germanic wave (Old Norse,
+Old Saxon, Middle High German, and the runestones, added 22 July 2026),
+Slavic, Celtic, biblical editions, and a reference shelf of fifty-six
+dictionary shelves. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md).

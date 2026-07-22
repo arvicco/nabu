@@ -10892,3 +10892,51 @@ aozora gaiji: ladder; resolvable census.
 # P40 direction still open: Germanic package vs Romance package
 # (.docs/surveys/) vs storage phase (contentless-FTS5 + searchable-
 # withdrawn + attic redesign pairing).
+
+# Phase 40 — the Germanic phase (approved 2026-07-22: full scope; D40-a one axis · D40-b nc ok · D40-c mint odbl · D40-d fetches pre-approved; source of truth .docs/p40-germanic-plan.md)
+
+## P40-0 · Search UX fix (carried P39-r3)  [tier: opus] [status: done 2026-07-22 — merged e1c0f24; owner repro verified live 3/3 hits, real text; Greek accents restored to snippets; JOURNALED: proximity two-term stored highlighter rider]
+## P40-g · Fixture groundwork  [tier: opus/network — D40-d pre-approved] [status: done 2026-07-22 — merged 6af11d4; findings: Menotec INESS-only (session API), Rundata bulk = 47MB sqlite + JSON API + ZERO runic codepoints, YCOE gated (owner fetch per FETCH-GATE.md)]
+Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/rundata; Rundata dump schema documented (feeds P40-6 design); YCOE gating verified (journal owner-fetch if click-through).
+## P40-1 · IcePaHC via ud  [tier: opus] [status: done 2026-07-22 — merged cb06aeb; breaker latent-boundary catch; one stall-resume]
+## P40-2 · Menotec adapter  [tier: opus] [status: done 2026-07-22 — merged 6f186bc]
+## P40-3 · Penn family + HeliPaD  [tier: fable] [status: done 2026-07-22 — merged 016a021; fingerprint constant-poisoning trap found]
+## P40-4 · YCOE — DROPPED (owner ruling 2026-07-22: ignore; OTA gate + nc terms not worth it)
+## P40-5 · CorA family + ReM  [tier: fable] [status: done 2026-07-22 — merged 074006a]
+## P40-6 · Rundata + runic display  [tier: fable] [status: done 2026-07-22 — merged cd862c1; odbl minted, migration 018]
+## P40-7 · Organization + desk refresh  [tier: opus] [status: done 2026-07-22 — merged 0d7f604; germanic persona/desc + axes.md + news post]
+## P40-9 · Docs architecture + site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: done 2026-07-22 — 99bd8f8 (stage 1: where-truth-lives map in maintenance-and-extension §0; README/library/languages/02-sources/quickstart refreshed from the live catalog; three inconsistent gold censuses reconciled; library.md gained the missing Japanese + Germanic sections) + 75d4d53 (stage 2: site index/library/sources/languages/tools/faq/about; +24 sources rows; ODbL attribution; fragments-level fix of the Greek-on-Celtic example and ALL placeholder recipes with live-verified real commands; site:axes regenerated ×19; dossier drift fixed through the gateway). JOURNALED → P41 candidate: ~37 older source dossiers still carry seeded sync-queue debris in their descriptions — one curation sweep wanted]
+
+## P40-r1 · ReM quarantine recovery  [tier: fable — orchestrator direct] [status: done 2026-07-22 — 7b2abc3; all 46 quarantines one class (duplicate folio.line): two-column codices now cite 5ra.1 (cb tracked in CoraTeiParser), entry-wise restarts take the house :b2; +46 docs / 355,449 rem lines / gmh gold 2.10M / corpus gold 15.0M; D40-e minted (68 loaded docs re-minted same-day — gate ratification)]
+
+## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
+
+## P40-r2 · --lang is dead on arrival  [tier: fable — orchestrator direct] [status: done 2026-07-22 — code_variants always includes the typed code (catalog stores `is`; 639-1 hop swallowed it) + --lemma lang filter moved INDEX-side (homograph window starvation); owner's runbook repro was the catch; gold now 16.24M in 28 langs (is #4, lzh joins)]
+Stale Library/Languages/Sources; axis pages with off-desk examples
+(Greek search on the Celtic page); thoughtful page-by-page pass
+against the live catalog, generator/fragments improved so fixes
+survive regeneration.
+
+## P40-8 · License inquiry drafts  [tier: opus] [status: done 2026-07-22 — 5 drafts in .docs/licensing-emails.md; contacts verified-live except INT servicedesk (eyeball first); DISCOVERY: Tarrin Wills heads BOTH Skaldic and ONP — one reply could resolve both]
+
+# Micro-journal (2026-07-22): search --exact vs NFC-exempt languages —
+# hbo/arc storage is deliberately not NFC-normalized; the exact filter
+# NFCs the query then substring-matches stored text, so forms whose
+# Masoretic mark ORDER differs from NFC order can miss. Live spot-check
+# (בְּרֵאשִׁית) hits, but the exemption exists because divergent orders
+# exist. Fix shape: NFC both sides AT MATCH TIME only (storage
+# untouched). Rider-sized; pair with the proximity stored-highlighter.
+
+# Rider candidate (owner, 2026-07-22): --word flag for search —
+# word-exact matching alongside --exact (glyph-exact is substring: ἦ
+# also finds ἦμαρ). Composes with --exact (word-and-glyph exact) and
+# plain search (word-bounded fold match). Boundary definition per
+# script needs care: whitespace/punct for alphabetic scripts; CJK has
+# no word boundaries — flag refuses or degrades honestly there
+# (spaceless runs = one FTS token already). Pair with the proximity
+# stored-highlighter + NFC-exempt match riders (one search-polish
+# rider bundle).
+
+## P40-f · Focus profile  [tier: opus] [status: queued — dispatches after P40-s merge] [owner-approved: axes AND single sources]
+
+## P40-w · Search-polish bundle  [tier: opus] [status: done 2026-07-22 — merged 354deb7; --word (CJK refusal, Hangul ok), proximity stored highlighter, NFC-exempt display fix on real WLC bytes]

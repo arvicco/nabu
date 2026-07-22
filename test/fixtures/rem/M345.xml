@@ -1,0 +1,869 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI version="4.6.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc xml:id="M345">
+      <titleStmt>
+        <title>Augsburger Urkunden</title>
+        <respStmt>
+          <resp>annotation by</resp>
+          <name>Susanne Hahn (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>collation by</resp>
+          <name>(Bochum), Britta Weimann (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>digitization by</resp>
+          <name>(Bochum)</name>
+        </respStmt>
+        <respStmt>
+          <resp>pre-editing by</resp>
+          <name>Susanne Hahn (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>proofreading by</resp>
+          <name>Stefan Müller, Britta Weimann (Bonn)</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition>
+          <name>Version 2.1</name>
+          <idno type="--">--</idno>
+        </edition>
+      </editionStmt>
+      <extent>
+        <measure unit="tokens" quantity="15057">15057 annotated tokens</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>
+          <persName>Adam Roussel</persName>
+          <persName>Thomas Klein</persName>
+          <persName>Stefanie Dipper</persName>
+          <persName>Klaus-Peter Wegera</persName>
+          <persName>Claudia Wich-Reif</persName>
+        </publisher>
+        <date>2024-10-28</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA)</licence>
+        </availability>
+        <idno type="hsc">--</idno>
+        <idno type="ddd">--</idno>
+        <idno type="mwb">--</idno>
+      </publicationStmt>
+      <seriesStmt>
+        <title>MiGraKo</title>
+      </seriesStmt>
+      <notesStmt>
+        <note>-</note>
+      </notesStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier>
+            <repository>Augsburg, Stadtarchiv</repository>
+            <idno>Reichsstadt - Urkundensammlung</idno>
+          </msIdentifier>
+          <physDesc>
+            <p>-</p>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType>Handschrift</objectType>
+                </support>
+                <extent>-</extent>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate unit="century">--</origDate>
+              <origPlace>Augsburg</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+        <bibl>
+          <bibl>"Urkundenbuch der Stadt Augsburg. Hg. v. Christian Meyer, 2 Bde, Augsburg 1874-1878, Nr. 339, 343, 346, 348, 351, 353, 355, 356, 358, 359, 362, 367, 375, 383; Edition für die Urkundennummern 1, 5, 7, 8, 14, 17, 19 fehlt."</bibl>
+          <biblScope>-</biblScope>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <creation>
+        <persName>-</persName>
+        <origPlace>-</origPlace>
+        <origDate unit="century">--</origDate>
+      </creation>
+      <langUsage>
+        <language ident="gmh">mhd</language>
+        <language ident="gmh">oberdeutsch</language>
+        <language ident="gmh">ostoberdeutsch, westoberdeutsch</language>
+        <language ident="gmh">bairisch-ostalemannisch (ostschwäbisch)</language>
+        <language ident="gmh">-</language>
+      </langUsage>
+      <textClass>
+        <keywords>
+          <term type="topic">Recht</term>
+          <term type="text-type">Urkunden</term>
+        </keywords>
+        <classCode scheme="#genres">U</classCode>
+      </textClass>
+      <textDesc>
+        <channel>-</channel>
+        <constitution>-</constitution>
+        <derivation>
+          <title>-</title>
+        </derivation>
+        <domain>-</domain>
+        <factuality>-</factuality>
+        <interaction>-</interaction>
+        <preparedness>-</preparedness>
+        <purpose>-</purpose>
+      </textDesc>
+    </profileDesc>
+    <encodingDesc>
+      <p>Primary line breaks: [Handschrift]</p>
+      <p>Secondary line breaks: -</p>
+      <p>-</p>
+      <classDecl>
+        <taxonomy xml:id="genres">
+          <category xml:id="genres.P">
+            <catDesc>Prosa</catDesc>
+          </category>
+          <category xml:id="genres.V">
+            <catDesc>Vers</catDesc>
+          </category>
+          <category xml:id="genres.U">
+            <catDesc>Urkunde</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <lb n="1" ed="1"/>
+        <w xml:id="t1_m1" norm="ICh" lemma="ich">
+          <hi rend="initial">I</hi>Ch</w>
+        <w xml:id="t2_m1" norm="velrich" lemma="Uolrîch">vͤlrich</w>
+        <w xml:id="t3_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t4_m1" norm="Brugghay" lemma="brukheie" join="right">Brugghay</w>
+        <pc xml:id="t5_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t6_m1" norm="he'n" lemma="hêrrn">he͛n</w>
+        <w xml:id="t7_m1" norm="Dyepoldes" lemma="Dietbaldes">Dyepoldes</w>
+        <w xml:id="t8_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t9_m1" norm="Brugghaien" lemma="brukheien">Brugghaíen</w>
+        <w xml:id="t10_m1" norm="saeligen" lemma="sæligen">ſæligen</w>
+        <w xml:id="t11_m1" norm="Svn" lemma="sun" join="right">Svn</w>
+        <pc xml:id="t12_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t13_m1" norm="burger" lemma="burgær">burger</w>
+        <w xml:id="t14_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t15_m1" norm="auspurch" lemma="Ougesburc">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <w xml:id="t16_m1" norm="Tuon" lemma="tuon">Tuͦn</w>
+        <w xml:id="t17_m1" norm="kunt" lemma="kunt">kunt</w>
+        <w xml:id="t18_m1" norm="allen" lemma="allen">allen</w>
+        <w xml:id="t19_m1" norm="den" lemma="den">den</w>
+        <lb n="2" ed="1"/>
+        <w xml:id="t20_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t21_m1" norm="disen" lemma="disen">díſen</w>
+        <w xml:id="t22_m1" norm="brief" lemma="briev">brief</w>
+        <w xml:id="t23_m1" norm="an" lemma="an" join="right">an</w>
+        <w xml:id="t23_m2" norm="sehent" lemma="sehent" join="both">ſehent</w>
+        <pc xml:id="t24_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t25_m1" norm="oder" lemma="oder">oder</w>
+        <w xml:id="t26_m1" norm="hoerent" lemma="hoerent">hoͤren<unclear>t</unclear>
+        </w>
+        <w xml:id="t27_m1" norm="lesen" lemma="lesen" join="right">leſen</w>
+        <pc xml:id="t28_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t29_m1" norm="Das" lemma="daz">Das</w>
+        <w xml:id="t30_m1" norm="ich" lemma="ich">ich</w>
+        <w xml:id="t31_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t32_m1" norm="verdahtem" lemma="verdâhtem">verdahtem</w>
+        <w xml:id="t33_m1" norm="muot" lemma="muote" join="right">muͦt</w>
+        <pc xml:id="t34_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t35_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t36_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t37_m1" norm="guoter" lemma="guoter">guͦter</w>
+        <w xml:id="t38_m1" norm="vorbetrahtunge" lemma="vorebetrahtunge" join="right">vorbetrahtunge</w>
+        <pc xml:id="t39_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t40_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t41_m1" norm="mit" lemma="mit">mít</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t42_m1" norm="aller" lemma="aller">aller</w>
+        <w xml:id="t43_m1" norm="miner" lemma="mîner">míner</w>
+        <w xml:id="t44_m1" norm="erben" lemma="erben" join="right">erben</w>
+        <pc xml:id="t45_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t46_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t47_m1" norm="friunde" lemma="vriunde">fríunde</w>
+        <w xml:id="t48_m1" norm="Rat" lemma="râte" join="right">Rat</w>
+        <pc xml:id="t49_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t50_m1" norm="gunst" lemma="gunst" join="right">gunſt</w>
+        <pc xml:id="t51_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t52_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t53_m1" norm="guotem" lemma="guotem">guͦtem</w>
+        <w xml:id="t54_m1" norm="willen" lemma="willen" join="right">willen</w>
+        <pc xml:id="t55_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t56_m1" norm="ainen" lemma="einen">aínen</w>
+        <w xml:id="t57_m1" norm="flaekken" lemma="vlecken">flækken</w>
+        <w xml:id="t58_m1" norm="mines" lemma="mînes">mínes</w>
+        <w xml:id="t59_m1" norm="Bavngarten" lemma="boumgarten" join="right">Bavngarten</w>
+        <pc xml:id="t60_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t61_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t62_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t63_m1" norm="naehst" lemma="næhest">næhſt</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t64_m1" norm="stosset" lemma="stoezet" join="right">ſtoſſet</w>
+        <pc xml:id="t65_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t66_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t67_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t68_m1" norm="Gaistlichen" lemma="geistlîchen">Gaiſtlichen</w>
+        <w xml:id="t69_m1" norm="frawen" lemma="vrouwen" join="right">frawen</w>
+        <pc xml:id="t70_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t71_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t72_m1" norm="Saemnvnge" lemma="samenunge" join="right">Sæmnvnge</w>
+        <pc xml:id="t73_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t74_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t75_m1" norm="Sant" lemma="sancte">Sant</w>
+        <w xml:id="t76_m1" norm="Nyclaus" lemma="Niklaus">Nyclaus</w>
+        <w xml:id="t77_m1" norm="hie" lemma="hier">híe</w>
+        <w xml:id="t78_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t79_m1" norm="auspurch" lemma="Ougesburc" join="right">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <pc xml:id="t80_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t81_m1" norm="aigen" lemma="eigen" join="right">aigen</w>
+        <pc xml:id="t82_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t83_m1" norm="da" lemma="dâ">da</w>
+        <w xml:id="t84_m1" norm="si" lemma="si">ſi</w>
+        <w xml:id="t85_m1" norm="selb" lemma="selp">ſelb</w>
+        <w xml:id="t86_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t87_m1" norm="wesen" lemma="wesen">weſen</w>
+        <lb n="5" ed="1"/>
+        <w xml:id="t88_m1" norm="inne" lemma="inne">ínne</w>
+        <w xml:id="t89_m1" norm="sint" lemma="sint" join="right">ſínt</w>
+        <pc xml:id="t90_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t91_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t92_m1" norm="min" lemma="mîn">mín</w>
+        <w xml:id="t93_m1" norm="rehtes" lemma="rehtez">rehtes</w>
+        <w xml:id="t94_m1" norm="aigen" lemma="eigen">aigen</w>
+        <w xml:id="t95_m1" norm="ist" lemma="ist">íſt</w>
+        <w xml:id="t96_m1" norm="gewesen" lemma="gewesen" join="right">geweſen</w>
+        <pc xml:id="t97_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t98_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t99_m1" norm="als" lemma="als">als</w>
+        <w xml:id="t100_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t101_m1" norm="selb" lemma="selp">ſelb</w>
+        <w xml:id="t102_m1" norm="flaekke" lemma="vlecke">flække</w>
+        <w xml:id="t103_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t104_m1" norm="marken" lemma="marken">marken</w>
+        <w xml:id="t105_m1" norm="vs" lemma="ûz">vs</w>
+        <w xml:id="t106_m1" norm="gezaichent" lemma="gezeichent" join="right">gezaichent</w>
+        <pc xml:id="t107_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t108_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t109_m1" norm="gemerket" lemma="gemerket">gemerket</w>
+        <lb n="6" ed="1"/>
+        <w xml:id="t110_m1" norm="ist" lemma="ist" join="right">iſt</w>
+        <pc xml:id="t111_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t112_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t113_m1" norm="rehtem" lemma="rehtem">rehtem</w>
+        <w xml:id="t114_m1" norm="aigen" lemma="eigene">aigen</w>
+        <w xml:id="t115_m1" norm="v'kauft" lemma="verkoufet" join="right">v͛kauft</w>
+        <pc xml:id="t116_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t117_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t118_m1" norm="geben" lemma="gegeben">geben</w>
+        <w xml:id="t119_m1" norm="han" lemma="hân">han</w>
+        <w xml:id="t120_m1" norm="reht" lemma="reht" join="right">reht</w>
+        <pc xml:id="t121_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t122_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t123_m1" norm="redlich" lemma="redelîche" join="right">redlich</w>
+        <pc xml:id="t124_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t125_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t126_m1" norm="vor" lemma="vore" join="right">vor</w>
+        <w xml:id="t126_m2" norm="genanten" lemma="genanten" join="left">genanten</w>
+        <w xml:id="t127_m1" norm="Gaistlichen" lemma="geistlîchen">Gaiſtlichen</w>
+        <w xml:id="t128_m1" norm="frawen" lemma="vrouwen" join="right">frawen</w>
+        <pc xml:id="t129_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t130_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t131_m1" norm="Saemnvnge" lemma="samenunge" join="right">Sæmnvnge</w>
+        <pc xml:id="t132_m1" norm="/" lemma="--" join="left">/</pc>
+        <lb n="7" ed="1"/>
+        <w xml:id="t133_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t134_m1" norm="Sant" lemma="sancte">Sant</w>
+        <w xml:id="t135_m1" norm="Nyclaus" lemma="Niklaus" join="right">Nyclaus</w>
+        <pc xml:id="t136_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t137_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t138_m1" norm="allen" lemma="allen">allen</w>
+        <w xml:id="t139_m1" norm="iren" lemma="iren">íren</w>
+        <w xml:id="t140_m1" norm="Nachkomen" lemma="nâchkomen" join="right">Nachkomen</w>
+        <pc xml:id="t141_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t142_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t143_m1" norm="haben" lemma="habenne" join="right">haben</w>
+        <pc xml:id="t144_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t145_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t146_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t147_m1" norm="niessen" lemma="niezenne">níeſſen</w>
+        <w xml:id="t148_m1" norm="ewiclich" lemma="êwiclîche" join="right">ewíclích</w>
+        <pc xml:id="t149_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t150_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t151_m1" norm="geruewiclich" lemma="geruowiclîche" join="right">geruͤwíclích</w>
+        <pc xml:id="t152_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t153_m1" norm="vmb" lemma="umbe">vmb</w>
+        <lb n="8" ed="1"/>
+        <w xml:id="t154_m1" norm="aht" lemma="ahte">
+          <hi rend="initother">a</hi>ht</w>
+        <w xml:id="t155_m1" norm="pfunt" lemma="pfunt">pfunt</w>
+        <w xml:id="t156_m1" norm="guoter" lemma="guoter" join="right">guͦter</w>
+        <pc xml:id="t157_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t158_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t159_m1" norm="gaeber" lemma="gæber">gæber</w>
+        <w xml:id="t160_m1" norm="auspurg'" lemma="Ougesburgær">
+          <hi rend="initother">a</hi>uſpurg͛</w>
+        <w xml:id="t161_m1" norm="pfenni-g" lemma="pfenninge" join="right">pfennīg</w>
+        <pc xml:id="t162_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t163_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t164_m1" norm="ich" lemma="ich">ích</w>
+        <w xml:id="t165_m1" norm="berait" lemma="bereite">beraít</w>
+        <w xml:id="t166_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t167_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t168_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t169_m1" norm="vmb" lemma="umbe">vmb</w>
+        <w xml:id="t170_m1" norm="enpfangen" lemma="entvangen">enpfangen</w>
+        <w xml:id="t171_m1" norm="han" lemma="hân" join="right">han</w>
+        <pc xml:id="t172_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t173_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t174_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t175_m1" norm="minen" lemma="mînen">mínen</w>
+        <lb n="9" ed="1"/>
+        <w xml:id="t176_m1" norm="nutz" lemma="nutz">nutz</w>
+        <w xml:id="t177_m1" norm="gelaet" lemma="geleit">gelæt</w>
+        <w xml:id="t178_m1" norm="han" lemma="hân" join="right">han</w>
+        <pc xml:id="t179_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t180_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t181_m1" norm="han" lemma="hân">han</w>
+        <w xml:id="t182_m1" norm="ich" lemma="ich">ich</w>
+        <w xml:id="t183_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t184_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t185_m1" norm="selben" lemma="selben">ſelben</w>
+        <w xml:id="t186_m1" norm="flaekken" lemma="vlecken">flækken</w>
+        <w xml:id="t187_m1" norm="mines" lemma="mînes">mínes</w>
+        <w xml:id="t188_m1" norm="vor" lemma="vore" join="right">vor</w>
+        <w xml:id="t188_m2" norm="geschriben" lemma="geschriben" join="left">geſchriben</w>
+        <w xml:id="t189_m1" norm="Bavngartens" lemma="boumgartens" join="right">Bavngartens</w>
+        <pc xml:id="t190_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t191_m1" norm="vf" lemma="ûf">vf</w>
+        <w xml:id="t192_m1" norm="gegeben" lemma="gegeben" join="right">gegeben</w>
+        <pc xml:id="t193_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t194_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t195_m1" norm="han" lemma="hân">han</w>
+        <w xml:id="t196_m1" norm="mich" lemma="mich">mích</w>
+        <lb n="10" ed="1"/>
+        <w xml:id="t197_m1" norm="sin" lemma="sîn">ſín</w>
+        <w xml:id="t198_m1" norm="verzigen" lemma="verzigen">verzigen</w>
+        <w xml:id="t199_m1" norm="fuer" lemma="vüre">fuͤr</w>
+        <w xml:id="t200_m1" norm="mich" lemma="mich" join="right">mích</w>
+        <pc xml:id="t201_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t202_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t203_m1" norm="fuer" lemma="vüre">fuͤr</w>
+        <w xml:id="t204_m1" norm="alle" lemma="alle">alle</w>
+        <w xml:id="t205_m1" norm="min" lemma="mîn">mín</w>
+        <w xml:id="t206_m1" norm="erben" lemma="erben" join="right">erben</w>
+        <pc xml:id="t207_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t208_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t209_m1" norm="Nachkomen" lemma="nâchkomen" join="right">Nachkomen</w>
+        <pc xml:id="t210_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t211_m1" norm="als" lemma="als">als</w>
+        <w xml:id="t212_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t213_m1" norm="sich" lemma="sich">ſích</w>
+        <w xml:id="t214_m1" norm="aigens" lemma="eigenes">
+          <hi rend="initother">a</hi>ígens</w>
+        <w xml:id="t215_m1" norm="durch" lemma="durch">durch</w>
+        <w xml:id="t216_m1" norm="reht" lemma="reht">reht</w>
+        <w xml:id="t217_m1" norm="verzihen" lemma="verzîhen">verzihen</w>
+        <w xml:id="t218_m1" norm="sol" lemma="sol">ſol</w>
+        <lb n="11" ed="1"/>
+        <w xml:id="t219_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t220_m1" norm="als" lemma="als">als</w>
+        <w xml:id="t221_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t222_m1" norm="es" lemma="ez">es</w>
+        <w xml:id="t223_m1" norm="vf" lemma="ûf">vf</w>
+        <w xml:id="t224_m1" norm="geben" lemma="geben">geben</w>
+        <w xml:id="t225_m1" norm="sol" lemma="sol" join="right">ſol</w>
+        <pc xml:id="t226_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t227_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t228_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t229_m1" norm="Stet" lemma="stete">Stet</w>
+        <w xml:id="t230_m1" norm="reht" lemma="rehte">reht</w>
+        <w xml:id="t231_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t232_m1" norm="auspurch" lemma="Ougesburc" join="right">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <pc xml:id="t233_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t234_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t235_m1" norm="also" lemma="alsô">alſo</w>
+        <w xml:id="t236_m1" norm="sol" lemma="sol">ſol</w>
+        <w xml:id="t237_m1" norm="ich" lemma="ich">ích</w>
+        <w xml:id="t238_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t239_m1" norm="vor" lemma="vore" join="right">vor</w>
+        <w xml:id="t239_m2" norm="genanten" lemma="genanten" join="left">genanten</w>
+        <w xml:id="t240_m1" norm="Gaistlichen" lemma="geistlîchen">Gaiſtlichen</w>
+        <lb n="12" ed="1"/>
+        <w xml:id="t241_m1" norm="frawen" lemma="vrouwen" join="right">frawen</w>
+        <pc xml:id="t242_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t243_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t244_m1" norm="vor" lemma="vore" join="right">vor</w>
+        <w xml:id="t244_m2" norm="geschriben" lemma="geschriben" join="left">geſchríben</w>
+        <w xml:id="t245_m1" norm="flaekken" lemma="vlecken">flækken</w>
+        <w xml:id="t246_m1" norm="mins" lemma="mînes">míns</w>
+        <w xml:id="t247_m1" norm="Bavngarten" lemma="boumgarten">Bavngarten</w>
+        <w xml:id="t248_m1" norm="staeten" lemma="stæten" join="right">ſtæten</w>
+        <pc xml:id="t249_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t250_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t251_m1" norm="vertigen" lemma="vertigen" join="right">vertigen</w>
+        <pc xml:id="t252_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t253_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t254_m1" norm="sol" lemma="sol">ſol</w>
+        <w xml:id="t255_m1" norm="sin" lemma="sîn" join="right">ſín</w>
+        <pc xml:id="t256_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t257_m1" norm="ir" lemma="ire">ír</w>
+        <w xml:id="t258_m1" norm="rehter" lemma="rehter">rehter</w>
+        <w xml:id="t259_m1" norm="Gewer" lemma="gewer">Gewer</w>
+        <lb n="13" ed="1"/>
+        <w xml:id="t260_m1" norm="sin" lemma="sîn" join="right">ſín</w>
+        <pc xml:id="t261_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t262_m1" norm="fuer" lemma="vüre">fuͤr</w>
+        <w xml:id="t263_m1" norm="alle" lemma="alle">alle</w>
+        <w xml:id="t264_m1" norm="ansprach" lemma="anesprâche" join="right">anſprach</w>
+        <pc xml:id="t265_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t266_m1" norm="als" lemma="als">als</w>
+        <w xml:id="t267_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t268_m1" norm="aigen" lemma="eigen">aigen</w>
+        <w xml:id="t269_m1" norm="durch" lemma="durch">durch</w>
+        <w xml:id="t270_m1" norm="reht" lemma="reht">reht</w>
+        <w xml:id="t271_m1" norm="staeten" lemma="stæten" join="right">ſtæten</w>
+        <pc xml:id="t272_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t273_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t274_m1" norm="vertigen" lemma="vertigen">vertígen</w>
+        <w xml:id="t275_m1" norm="sol" lemma="sol">ſol</w>
+        <w xml:id="t276_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t277_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t278_m1" norm="Stet" lemma="stete">Stet</w>
+        <w xml:id="t279_m1" norm="reht" lemma="rehte">reht</w>
+        <w xml:id="t280_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t281_m1" norm="auspurch" lemma="Ougesburc">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <lb n="14" ed="1"/>
+        <w xml:id="t282_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t283_m1" norm="wuerde" lemma="würde">wuͤrde</w>
+        <w xml:id="t284_m1" norm="er" lemma="er">er</w>
+        <w xml:id="t285_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t286_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t287_m1" norm="iemen" lemma="iemanne">iemen</w>
+        <w xml:id="t288_m1" norm="anspraech" lemma="anespræche">anſpræch</w>
+        <w xml:id="t289_m1" norm="mit" lemma="mit">mit</w>
+        <w xml:id="t290_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t291_m1" norm="rehten" lemma="rehten" join="right">rehten</w>
+        <pc xml:id="t292_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t293_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t294_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t295_m1" norm="zilen" lemma="zilen" join="right">zílen</w>
+        <pc xml:id="t296_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t297_m1" norm="als" lemma="als">als</w>
+        <w xml:id="t298_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t299_m1" norm="aigen" lemma="eigen">aigen</w>
+        <w xml:id="t300_m1" norm="durch" lemma="durch">durch</w>
+        <w xml:id="t301_m1" norm="reht" lemma="reht">reht</w>
+        <w xml:id="t302_m1" norm="staeten" lemma="stæten" join="right">ſtæten</w>
+        <pc xml:id="t303_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t304_m1" norm="vnd" lemma="und">vnd</w>
+        <lb n="15" ed="1"/>
+        <w xml:id="t305_m1" norm="vertigen" lemma="vertigen">vertigen</w>
+        <w xml:id="t306_m1" norm="sol" lemma="sol">ſol</w>
+        <w xml:id="t307_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t308_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t309_m1" norm="Stet" lemma="stete">Stet</w>
+        <w xml:id="t310_m1" norm="reht" lemma="rehte">reht</w>
+        <w xml:id="t311_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t312_m1" norm="auspurch" lemma="Ougesburc" join="right">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <pc xml:id="t313_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t314_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t315_m1" norm="selben" lemma="selben">ſelben</w>
+        <w xml:id="t316_m1" norm="ansprach" lemma="anesprâche">anſprach</w>
+        <w xml:id="t317_m1" norm="suelen" lemma="sülen" join="right">ſuͤlen</w>
+        <pc xml:id="t318_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t319_m1" norm="ich" lemma="ich" join="right">ích</w>
+        <pc xml:id="t320_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t321_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t322_m1" norm="min" lemma="mîn">mín</w>
+        <w xml:id="t323_m1" norm="erben" lemma="erben">erben</w>
+        <w xml:id="t324_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t325_m1" norm="verrihten" lemma="verrihten" join="right">verríhten</w>
+        <pc xml:id="t326_m1" norm="/" lemma="--" join="left">/</pc>
+        <lb n="16" ed="1"/>
+        <w xml:id="t327_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t328_m1" norm="entloesen" lemma="entloesen">entloͤſen</w>
+        <w xml:id="t329_m1" norm="ane" lemma="âne">ane</w>
+        <w xml:id="t330_m1" norm="allen" lemma="allen">allen</w>
+        <w xml:id="t331_m1" norm="iren" lemma="iren">iren</w>
+        <w xml:id="t332_m1" norm="schaden" lemma="schaden" join="right">ſchaden</w>
+        <pc xml:id="t333_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t334_m1" norm="Taeten" lemma="tæten">Tæten</w>
+        <w xml:id="t335_m1" norm="wir" lemma="wir">wír</w>
+        <w xml:id="t336_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t337_m1" norm="niht" lemma="niht" join="right">níht</w>
+        <pc xml:id="t338_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t339_m1" norm="swas" lemma="swaz">ſwas</w>
+        <w xml:id="t340_m1" norm="si" lemma="si">ſi</w>
+        <w xml:id="t341_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t342_m1" norm="selben" lemma="selben">ſelben</w>
+        <w xml:id="t343_m1" norm="ansprach" lemma="anesprâche" join="right">anſprach</w>
+        <pc xml:id="t344_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t345_m1" norm="denne" lemma="denne">denne</w>
+        <w xml:id="t346_m1" norm="schaden" lemma="schaden">ſchaden</w>
+        <w xml:id="t347_m1" norm="nement" lemma="nement">nement</w>
+        <lb n="17" ed="1"/>
+        <w xml:id="t348_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t349_m1" norm="suelen" lemma="sülen">ſuͤlen</w>
+        <w xml:id="t350_m1" norm="wir" lemma="wir">wír</w>
+        <w xml:id="t351_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t352_m1" norm="gar" lemma="gar" join="right">gar</w>
+        <pc xml:id="t353_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t354_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t355_m1" norm="gaenczlich" lemma="genzlîche">gænczlich</w>
+        <w xml:id="t356_m1" norm="ab" lemma="ab" join="right">ab</w>
+        <w xml:id="t356_m2" norm="tuon" lemma="tuon" join="both">tuͦn</w>
+        <pc xml:id="t357_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t358_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t359_m1" norm="gelten" lemma="gelten" join="right">gelten</w>
+        <pc xml:id="t360_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t361_m1" norm="ane" lemma="âne">ane</w>
+        <w xml:id="t362_m1" norm="allen" lemma="allen">allen</w>
+        <w xml:id="t363_m1" norm="krieg" lemma="kriec" join="right">kríeg</w>
+        <pc xml:id="t364_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t365_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t366_m1" norm="ane" lemma="âne">ane</w>
+        <w xml:id="t367_m1" norm="alle" lemma="alle">alle</w>
+        <w xml:id="t368_m1" norm="widerrede" lemma="widerrede" join="right">wider<space quantity="1" unit="chars"/>rede</w>
+        <pc xml:id="t369_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t370_m1" norm="Daz" lemma="daz">Daz</w>
+        <lb n="18" ed="1"/>
+        <w xml:id="t371_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t372_m1" norm="also" lemma="alsô">alſo</w>
+        <w xml:id="t373_m1" norm="staet" lemma="stæte">ſtæt</w>
+        <w xml:id="t374_m1" norm="belib" lemma="belîbe" join="right">belib</w>
+        <pc xml:id="t375_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t376_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t377_m1" norm="vnzerbrochen" lemma="unzerbrochen">vnzerbrochen</w>
+        <w xml:id="t378_m1" norm="Dar" lemma="dâr">Dar</w>
+        <w xml:id="t379_m1" norm="vmb" lemma="umbe">vmb</w>
+        <w xml:id="t380_m1" norm="gib" lemma="gibe">gib</w>
+        <w xml:id="t381_m1" norm="ich" lemma="ich">ich</w>
+        <w xml:id="t382_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t383_m1" norm="disen" lemma="disen">diſen</w>
+        <w xml:id="t384_m1" norm="brief" lemma="briev">brief</w>
+        <w xml:id="t385_m1" norm="versigelten" lemma="versigelten" join="right">verſigelten</w>
+        <pc xml:id="t386_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t387_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t388_m1" norm="geuestnet" lemma="gevestenet">geueſtnet</w>
+        <w xml:id="t389_m1" norm="mit" lemma="mit">mít</w>
+        <lb n="19" ed="1"/>
+        <w xml:id="t390_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t391_m1" norm="Stet" lemma="stete">Stet</w>
+        <w xml:id="t392_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t393_m1" norm="auspurch" lemma="Ougesburc">
+          <hi rend="initother">a</hi>uſpurch</w>
+        <w xml:id="t394_m1" norm="Insigel" lemma="insigel" join="right">Inſigel</w>
+        <pc xml:id="t395_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t396_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t397_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t398_m1" norm="minem" lemma="mînem">mínem</w>
+        <w xml:id="t399_m1" norm="Insigel" lemma="insigel">Inſigel</w>
+        <w xml:id="t400_m1" norm="div" lemma="diu">dív</w>
+        <w xml:id="t401_m1" norm="baydiv" lemma="beidiu">baydív</w>
+        <w xml:id="t402_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t403_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t404_m1" norm="hangent" lemma="hangent">hang<space quantity="1" unit="chars"/>ent</w>
+        <w xml:id="t405_m1" norm="Des" lemma="des">Des</w>
+        <w xml:id="t406_m1" norm="sint" lemma="sint">ſínt</w>
+        <w xml:id="t407_m1" norm="geziug" lemma="geziuge">gezíug</w>
+        <lb n="20" ed="1"/>
+        <w xml:id="t408_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t409_m1" norm="velrich" lemma="Uolrîch">vͤlrich</w>
+        <w xml:id="t410_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t411_m1" norm="Rauenspurg'" lemma="Ravenesburgær" join="right">Rauenſpurg͛</w>
+        <pc xml:id="t412_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t413_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t414_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t415_m1" norm="Chuonrat" lemma="Kuonrât">Chuͦnrat</w>
+        <w xml:id="t416_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t417_m1" norm="Gollenhou'" lemma="Gollenhovær" join="right">Gollenhou͛</w>
+        <pc xml:id="t418_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t419_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t420_m1" norm="do" lemma="dô">do</w>
+        <w xml:id="t421_m1" norm="Burg'maister" lemma="burgermeister">Burg͛maiſter</w>
+        <w xml:id="t422_m1" norm="waren" lemma="wâren" join="right">waren</w>
+        <pc xml:id="t423_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t424_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t425_m1" norm="Hainrich" lemma="Heinrîch">Haínrich</w>
+        <w xml:id="t426_m1" norm="der" lemma="der">der</w>
+        <lb n="21" ed="1"/>
+        <w xml:id="t427_m1" norm="Portner" lemma="portenær">Portner</w>
+        <w xml:id="t428_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t429_m1" norm="hainrich" lemma="Heinrîch">haínrích</w>
+        <w xml:id="t430_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t431_m1" norm="Stolczhirs" lemma="Stolzhirz" join="right">Stolczhirs</w>
+        <pc xml:id="t432_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t433_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t434_m1" norm="Chuonrat" lemma="Kuonrât">Chuͦnrat</w>
+        <w xml:id="t435_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t436_m1" norm="Lang" lemma="lanc" join="right">Lang</w>
+        <pc xml:id="t437_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t438_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t439_m1" norm="Chuonrat" lemma="Kuonrât">Chuͦnrat</w>
+        <w xml:id="t440_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t441_m1" norm="klokker" lemma="Klockær" join="right">klokker</w>
+        <pc xml:id="t442_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t443_m1" norm="her" lemma="hêrr">her</w>
+        <w xml:id="t444_m1" norm="Chuonrat" lemma="Kuonrât">Chuͦnrat</w>
+        <lb n="22" ed="1"/>
+        <w xml:id="t445_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t446_m1" norm="waelser" lemma="Welsær" join="right">wælſer</w>
+        <pc xml:id="t447_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t448_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t449_m1" norm="ander" lemma="ander">ander</w>
+        <w xml:id="t450_m1" norm="gnuog" lemma="genuoc" join="right">gnuͦg</w>
+        <pc xml:id="t451_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t452_m1" norm="Der" lemma="der">Der</w>
+        <w xml:id="t453_m1" norm="brief" lemma="briev">brief</w>
+        <w xml:id="t454_m1" norm="ist" lemma="ist">íſt</w>
+        <w xml:id="t455_m1" norm="geben" lemma="gegeben" join="right">geben</w>
+        <pc xml:id="t456_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t457_m1" norm="do" lemma="dô">do</w>
+        <w xml:id="t458_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t459_m1" norm="zalt" lemma="zalte">zalt</w>
+        <w xml:id="t460_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t461_m1" norm="Christes" lemma="Kristes">Chriſtes</w>
+        <w xml:id="t462_m1" norm="gebuort" lemma="geburt">gebuͦrt</w>
+        <w xml:id="t463_m1" norm="Drivzehen" lemma="driuzehen">Drívzehen</w>
+        <lb n="23" ed="1"/>
+        <w xml:id="t464_m1" norm="Hundert" lemma="hundert">Hundert</w>
+        <w xml:id="t465_m1" norm="Iar" lemma="jâr" join="right">Iar</w>
+        <pc xml:id="t466_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t467_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t468_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t469_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t470_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t471_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t472_m1" norm="Sehsten" lemma="sehsten">Sehſten</w>
+        <w xml:id="t473_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t474_m1" norm="drissigostem" lemma="drîzigestem">driſſigoſtem</w>
+        <w xml:id="t475_m1" norm="Iar" lemma="jâr" join="right">Iar</w>
+        <pc xml:id="t476_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t477_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t478_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t479_m1" norm="naehsten" lemma="næhesten">næhſten</w>
+        <w xml:id="t480_m1" norm="tag" lemma="tage">tag</w>
+        <w xml:id="t481_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t482_m1" norm="sant" lemma="sancte">ſant</w>
+        <w xml:id="t483_m1" norm="Valentins" lemma="Valentînes">Valen⸗tíns</w>
+        <lb n="24" ed="1"/>
+        <w xml:id="t484_m1" norm="tag" lemma="tage">tag</w>
+        <lb n="1" ed="1"/>
+        <w xml:id="t485_m1" norm="ICh" lemma="ich">
+          <hi rend="initial">I</hi>Ch</w>
+        <w xml:id="t486_m1" norm="Iohans" lemma="Johannes">Iohans</w>
+        <w xml:id="t487_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t488_m1" norm="Truchsaesse" lemma="truhtsæze" join="right">Truchſæſſe</w>
+        <pc xml:id="t489_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t490_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t491_m1" norm="walpurg" lemma="Walburc">walpurg</w>
+        <w xml:id="t492_m1" norm="Lantvogt" lemma="lantvoget">Lantvogt</w>
+        <w xml:id="t493_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t494_m1" norm="Obe'n" lemma="obern">Obe͛n</w>
+        <w xml:id="t495_m1" norm="Swaben" lemma="Swâben" join="right">Swaben</w>
+        <pc xml:id="t496_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t497_m1" norm="vergich" lemma="verjihe">vergích</w>
+        <w xml:id="t498_m1" norm="offenlich" lemma="offenlîche">offenlich</w>
+        <w xml:id="t499_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t500_m1" norm="disem" lemma="disem">diſem</w>
+        <w xml:id="t501_m1" norm="brief" lemma="brieve" join="right">brief</w>
+        <pc xml:id="t502_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t503_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t504_m1" norm="tvon" lemma="tuon">tvͦn</w>
+        <w xml:id="t505_m1" norm="kunt" lemma="kunt">kunt</w>
+        <w xml:id="t506_m1" norm="allen" lemma="allen">allen</w>
+        <lb n="2" ed="1"/>
+        <w xml:id="t507_m1" norm="den" lemma="den" join="right">den</w>
+        <pc xml:id="t508_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t509_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t510_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t511_m1" norm="sehent" lemma="sehent" join="right">ſehent</w>
+        <pc xml:id="t512_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t513_m1" norm="oder" lemma="oder">oder</w>
+        <w xml:id="t514_m1" norm="hoerent" lemma="hoerent">hoͤrent</w>
+        <w xml:id="t515_m1" norm="lesen" lemma="lesen" join="right">leſen</w>
+        <pc xml:id="t516_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t517_m1" norm="Daz" lemma="daz">Daz</w>
+        <w xml:id="t518_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t519_m1" norm="Erbern" lemma="êrbærn">Erbern</w>
+        <w xml:id="t520_m1" norm="Wisen" lemma="wîsen">Wiſen</w>
+        <w xml:id="t521_m1" norm="Luet" lemma="liute" join="right">Luͤt</w>
+        <pc xml:id="t522_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t523_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t524_m1" norm="Ratgeben" lemma="râtgeben" join="right">Ratgeben</w>
+        <pc xml:id="t525_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t526_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t527_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t528_m1" norm="Gemain" lemma="gemeine" join="right">Gemaín</w>
+        <pc xml:id="t529_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t530_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t531_m1" norm="Stat" lemma="stat">Stat</w>
+        <w xml:id="t532_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t533_m1" norm="Auspurch" lemma="Ougesburc">Auſpurch</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t534_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t535_m1" norm="geltes" lemma="geltes" join="right">geltes</w>
+        <pc xml:id="t536_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t537_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t538_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t539_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t540_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t541_m1" norm="Steten" lemma="steten">Steten</w>
+        <w xml:id="t542_m1" norm="gemainlich" lemma="gemeinlîche" join="right">gemaínlích</w>
+        <pc xml:id="t543_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t544_m1" norm="die" lemma="die">díe</w>
+        <w xml:id="t545_m1" norm="vor" lemma="vore">vor</w>
+        <w xml:id="t546_m1" norm="Merspurch" lemma="Mersburc">Merſpurch</w>
+        <w xml:id="t547_m1" norm="lagen" lemma="lâgen" join="right">lagen</w>
+        <pc xml:id="t548_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t549_m1" norm="vf" lemma="ûf">vf</w>
+        <w xml:id="t550_m1" norm="gelaet" lemma="geleit">gelæt</w>
+        <w xml:id="t551_m1" norm="wart" lemma="wart" join="right">wart</w>
+        <pc xml:id="t552_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t553_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t554_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t555_m1" norm="Cost" lemma="kost" join="right">Coſt</w>
+        <pc xml:id="t556_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t557_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t558_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t559_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t560_m1" norm="buwe" lemma="bûwe">buwe</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t561_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t562_m1" norm="vor" lemma="vore">vor</w>
+        <w xml:id="t563_m1" norm="Merspurch" lemma="Mersburc">Merſpurch</w>
+        <w xml:id="t564_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t565_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t566_m1" norm="Riches" lemma="rîches">Riches</w>
+        <w xml:id="t567_m1" norm="dienst" lemma="dieneste" join="right">dienſt</w>
+        <pc xml:id="t568_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t569_m1" norm="geschahe" lemma="geschach" join="right">geſchahe</w>
+        <pc xml:id="t570_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t571_m1" norm="Hauptguotz" lemma="houbetguotes" join="right">Hauptguͦtz</w>
+        <pc xml:id="t572_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t573_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t574_m1" norm="schadens" lemma="schadens">ſchadens</w>
+        <w xml:id="t575_m1" norm="mich" lemma="mich">mích</w>
+        <w xml:id="t576_m1" norm="gar" lemma="gar" join="right">gar</w>
+        <pc xml:id="t577_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t578_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t579_m1" norm="gaentzlich" lemma="genzlîche">gæntzlich</w>
+        <w xml:id="t580_m1" norm="verriht" lemma="verriht" join="right">verriht</w>
+        <pc xml:id="t581_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t582_m1" norm="vnd" lemma="und">vnd</w>
+        <lb n="5" ed="1"/>
+        <w xml:id="t583_m1" norm="gewert" lemma="gewert">gewert</w>
+        <w xml:id="t584_m1" norm="havnt" lemma="hânt" join="right">havnt</w>
+        <pc xml:id="t585_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t586_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t587_m1" norm="sag" lemma="sage">ſag</w>
+        <w xml:id="t588_m1" norm="si" lemma="si" join="right">ſi</w>
+        <pc xml:id="t589_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t590_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t591_m1" norm="ir" lemma="ire">ír</w>
+        <w xml:id="t592_m1" norm="Nachkomen" lemma="nâchkomen" join="right">Nachkomen</w>
+        <pc xml:id="t593_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t594_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t595_m1" norm="selben" lemma="selben">ſelben</w>
+        <w xml:id="t596_m1" norm="geltes" lemma="geltes" join="right">geltes</w>
+        <pc xml:id="t597_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t598_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t599_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t600_m1" norm="schadens" lemma="schadens" join="right">ſchadens</w>
+        <pc xml:id="t601_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t602_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t603_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t604_m1" norm="vf" lemma="ûf">vf</w>
+        <w xml:id="t605_m1" norm="gegangen" lemma="gegangen">gegangen</w>
+        <w xml:id="t606_m1" norm="was" lemma="was" join="right">was</w>
+        <pc xml:id="t607_m1" norm="/" lemma="--" join="left">/</pc>
+        <lb n="6" ed="1"/>
+        <w xml:id="t608_m1" norm="fuerbas" lemma="vürebaz">fuͤrbas</w>
+        <w xml:id="t609_m1" norm="ledig" lemma="ledic" join="right">ledíg</w>
+        <pc xml:id="t610_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t611_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t612_m1" norm="los" lemma="lôs" join="right">los</w>
+        <pc xml:id="t613_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t614_m1" norm="fuer" lemma="vüre">fuͤr</w>
+        <w xml:id="t615_m1" norm="mich" lemma="mich" join="right">mích</w>
+        <pc xml:id="t616_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t617_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t618_m1" norm="fuer" lemma="vüre">fuͤr</w>
+        <w xml:id="t619_m1" norm="alle" lemma="alle">alle</w>
+        <w xml:id="t620_m1" norm="min" lemma="mîn">mín</w>
+        <w xml:id="t621_m1" norm="erben" lemma="erben" join="right">erben</w>
+        <pc xml:id="t622_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t623_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t624_m1" norm="des" lemma="des">des</w>
+        <w xml:id="t625_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t626_m1" norm="ainem" lemma="einem">aínem</w>
+        <w xml:id="t627_m1" norm="warn" lemma="wârn">warn</w>
+        <w xml:id="t628_m1" norm="vrchvende" lemma="urkünde" join="right">vrchvͤnde</w>
+        <pc xml:id="t629_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t630_m1" norm="gib" lemma="gibe">gib</w>
+        <w xml:id="t631_m1" norm="ich" lemma="ich">ich</w>
+        <w xml:id="t632_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t633_m1" norm="disen" lemma="disen">diſen</w>
+        <lb n="7" ed="1"/>
+        <w xml:id="t634_m1" norm="brief" lemma="briev">brief</w>
+        <w xml:id="t635_m1" norm="versigelten" lemma="versigelten">verſigelten</w>
+        <w xml:id="t636_m1" norm="mit" lemma="mit">mít</w>
+        <w xml:id="t637_m1" norm="minem" lemma="mînem">mínem</w>
+        <w xml:id="t638_m1" norm="Insigel" lemma="insigel" join="right">Inſigel</w>
+        <pc xml:id="t639_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t640_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t641_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t642_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t643_m1" norm="hanget" lemma="hanget">hanget</w>
+        <w xml:id="t644_m1" norm="Der" lemma="der">Der</w>
+        <w xml:id="t645_m1" norm="gegeben" lemma="gegeben">gegeben</w>
+        <w xml:id="t646_m1" norm="ist" lemma="ist" join="right">iſt</w>
+        <pc xml:id="t647_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t648_m1" norm="do" lemma="dô">do</w>
+        <w xml:id="t649_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t650_m1" norm="zalt" lemma="zalte">zalt</w>
+        <w xml:id="t651_m1" norm="von" lemma="von">von</w>
+        <w xml:id="t652_m1" norm="Cristes" lemma="Kristes">Criſtes</w>
+        <w xml:id="t653_m1" norm="gebuert" lemma="gebürte">ge⸗buͤrt</w>
+        <lb n="8" ed="1"/>
+        <w xml:id="t654_m1" norm="Drivzehen" lemma="driuzehen">Drívzehen</w>
+        <w xml:id="t655_m1" norm="Hvndert" lemma="hundert">Hvndert</w>
+        <w xml:id="t656_m1" norm="Iar" lemma="jâr" join="right">Iar</w>
+        <pc xml:id="t657_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t658_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t659_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t660_m1" norm="nach" lemma="nâch">nach</w>
+        <w xml:id="t661_m1" norm="in" lemma="in">ín</w>
+        <w xml:id="t662_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t663_m1" norm="Sehsten" lemma="sehsten" join="right">Sehſten</w>
+        <pc xml:id="t664_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t665_m1" norm="vnd" lemma="und">vnd</w>
+        <w xml:id="t666_m1" norm="Drissigosten" lemma="drîzigesten">Driſſigoſten</w>
+        <w xml:id="t667_m1" norm="Iar" lemma="jâr" join="right">Iar</w>
+        <pc xml:id="t668_m1" norm="/" lemma="--" join="left">/</pc>
+        <w xml:id="t669_m1" norm="an" lemma="an">an</w>
+        <w xml:id="t670_m1" norm="dem" lemma="dem">dem</w>
+        <w xml:id="t671_m1" norm="Palemabent" lemma="palmeâbende">Palem<space quantity="1" unit="chars"/>abent</w>
+        </ab>
+    </body>
+  </text>
+</TEI>

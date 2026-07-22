@@ -27,12 +27,12 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `unihan` | dictionary | open | enabled · manual | 102,998 entries |
-| `edrdg` | dictionary | attribution | enabled · manual | 231,106 entries |
+| `edrdg` | dictionary | attribution | enabled · manual | 231,129 entries |
 | `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
 | `kradfile` | dictionary | attribution | enabled · manual | 6,355 entries |
 | `oncoj` | annotated corpus | attribution | enabled · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | enabled · frozen | 5,869 entries |
-| `aozora` | texts | open | enabled · manual | 16,004 docs / 2,975,682 passages |
+| `aozora` | texts | open | enabled · manual | 17,195 docs / 2,991,807 passages |
 
 ## The desk's instruments
 
@@ -72,7 +72,8 @@ nabu search 学                         # folds to 學 (and 弁 finds 辨/瓣/�
 nabu search 弁 --exact                 # the glyph-literal escape hatch — only the stored 弁, not the merged olds
 nabu search --char-component 木 --strokes 8-12  # KRADFILE component containment on the Han corpus
 nabu search --radical 75 --axis japonic  # the KangXi-radical filter
-nabu show ONCOJ-URN                   # Old Japanese — romanization and original layers per ONCOJ's design
+nabu show urn:nabu:oncoj:MYS.1.1      # Man'yōshū 1.1 — romanization layer per ONCOJ's design
+nabu search 吾輩は猫である --lang jpn        # Sōseki's opening line, top hit on the Aozora reading shelf
 ```
 
 
@@ -83,7 +84,7 @@ nabu show ONCOJ-URN                   # Old Japanese — romanization and origin
   Install the Noto CJK casks plus **Jigmo**, and keep iTerm2's
   ambiguous-width toggle **off**. nabu models CJK cell width, so aligned
   columns stay aligned.
-- **Gaiji (Aozora, once synced):** Aozora's not-yet-encoded characters
+- **Gaiji (Aozora):** Aozora's not-yet-encoded characters
   resolve at parse — JIS X 0213 kuten and explicit `U+XXXX` notations map
   mechanically through `config/jis0213`; component-description-only
   notations stay verbatim loud sentinels. On the render side `--display

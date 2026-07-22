@@ -141,6 +141,17 @@ ud:
   # report is the readiness signal to watch) and the ojp label STAYS —
   # ISO 639 has no Late-Middle-Japanese code. At the future gate nabu
   # picks its own stage label (languages.md rule 3), not upstream's ojp.
+  # P40-1 (2026-07-22): TREEBANKS grew to fifteen — icelandic-icepahc
+  # (UD_Icelandic-IcePaHC, a rule-based UD conversion of the Icelandic Parsed
+  # Historical Corpus; language is, the library's first is lane; CC BY-SA 4.0
+  # verbatim → per-document attribution override, source class stays nc).
+  # DIACHRONIC HONESTY: the corpus spans the 12th–21st century (Old Norse
+  # sagas to modern prose) but UD files it under the one modern tag `is` —
+  # the RNC-Middle-Russian-under-orv precedent (P10-2), recorded not hidden.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +1 repo
+  # clone; docs at UD's one-doc-per-treebank-split grain — IcePaHC ships
+  # train/dev/test = +3 docs (~one witness per split of the ~11.9 MB dev &
+  # test halves), is joins the lemma-indexed languages. Budget accordingly.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -172,6 +183,27 @@ iswoc:
   sync_policy: frozen
   # license_watch candidate (P16-5, owner decision — README-licensed repo):
   # license_watch: https://raw.githubusercontent.com/iswoc/iswoc-treebank/master/README.md
+
+menotec:
+  adapter: Nabu::Adapters::Menotec
+  axes: [germanic]
+  enabled: true    # P40: first sync verified 2026-07-22 (7 treebanks / 20,308 sentences), owner-flipped
+  # P40-2: Menotec (Old Norwegian treebanks + the Poetic Edda / Codex Regius),
+  # gold PROIEL-scheme morphology + dependency syntax. Served ONLY through the
+  # CLARINO INESS portal's ephemeral-session REST API (clarino.uib.no/iness/rest)
+  # — NOT the proiel/proiel-treebank GitHub repo — so all fetching is the
+  # session-based Nabu::InessFetch (get-session -> list-resources -> per-treebank
+  # get-treebank-documents -> per-document get-sentences; the export is a
+  # blank-line-separated stream of per-sentence PROIEL-XML fragments parsed by
+  # the sibling MenotecStreamParser). One treebank = one document
+  # (urn:nabu:menotec:<treebank>), passages key on sentence/@id; language `non`
+  # for all 7 treebanks incl. the Edda (Old Icelandic under the treebank's own
+  # tag). INESS gives no commit sha: the fetch pin is an aggregate content sha,
+  # the ledger records the session date + resource metadata. CC BY-NC-SA 4.0
+  # (nc). `sync_policy: manual` — session-API waves are owner-fired. First sync:
+  # `bin/nabu sync menotec`, eyeball urn:nabu:menotec:non-pamphilus-dep +
+  # urn:nabu:menotec:non-edda-regius-dep + 5 random passages, then flip enabled.
+  sync_policy: manual
 
 papyri-ddbdp:
   adapter: Nabu::Adapters::Papyri
@@ -1983,6 +2015,71 @@ aozora:
   adapter: Nabu::Adapters::Aozora
   axes: [japonic]
   enabled: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
+  sync_policy: manual
+
+# P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
+# ~2M word forms of manually annotated MHG — the first cora-tei registrant
+# (ReA/ReN ride the family when their license replies land, backlog
+# №40-1/№40-2). One immutable Zenodo artifact (record 13982324,
+# ReM-v2.1_tei.zip, hard sha256 pin — the iecor mold) → manual. CC BY-SA
+# 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
+# re-verifies per file and quarantines drift).
+rem:
+  adapter: Nabu::Adapters::Rem
+  axes: [germanic]
+  enabled: true    # P40: first sync verified 2026-07-22 (360 docs / 290,242 passages; 46 quarantined — gate-eyeball triage), owner-flipped
+
+rundata:
+  adapter: Nabu::Adapters::Rundata
+  axes: [germanic, epigraphy]
+  siblings: ["-(fvn|rsv|eng|swe)"]  # P40-6: the closed lane-tail set — signum slugs never end in these
+  translations: true  # the -eng/-swe translation lanes (fvn/rsv normalisations are layers, always minted)
+  license_watch: https://www.runforum.nordiska.uu.se/en/srd/
+  enabled: true    # P40: first sync verified 2026-07-22 (30,643 lane-docs from ~6.8K inscriptions), owner-flipped
+                   # (~45 MB runes.<hash>.sqlite3 off rundata.info), eyeball
+                   # nabu show urn:nabu:rundata:u-344 (Yttergärde: "in ulfr
+                   # hafiR o| |onklati…") beside its -fvn/-eng siblings,
+                   # urn:nabu:rundata:n-kj101 (Eggja, gmq-pro) and 5 random
+                   # inscriptions, then flip. Expect ~6,800 inscriptions ×
+                   # up to 5 lanes. BEFORE flipping: re-confirm the ODbL
+                   # grant on the Uppsala page (license_watch above) —
+                   # D40-c caveat, owner decision.
+  # Rundata — the Scandinavian Runic-text Database (SRDB / Samnordisk
+  # runtextdatabas, Uppsala), via Rundata-net (rundata.info): ~6,800 runic
+  # inscriptions. Document = inscription (signum identity, Django-slugify
+  # urns agreeing with upstream's canonical_slug); the Latin
+  # TRANSLITERATION is the bare-urn primary (notation legend is content —
+  # zero runic Unicode upstream, none invented), fvn/rsv normalisations +
+  # eng/swe translations as suffix siblings. Language: non, except
+  # urnordisk-dated inscriptions (dating "U …") → gmq-pro (the
+  # wiktionary-recon proto-language code convention; no ISO code exists).
+  # LICENSE odbl (D40-c RULED): ODbL 1.0 (database) + DbCL 1.0 (contents),
+  # verbatim grant + the required "based on the Scandinavian Runic-text
+  # Database" attribution in the manifest credit line. CAVEAT: the grant
+  # is authoritative from Uppsala's runforum page; rundata.info itself
+  # states only GPLv3 for its own source code — re-confirm before
+  # enabling (owner). Fetch scrapes the app page for the hash-versioned
+  # artifact URL; a new hash lands BESIDE the old file (never-delete),
+  # .rundata-fetch.json points at the current one. Live upstream
+  # (artifact Last-Modified 2026-07-12) → re-syncs owner-fired.
+helipad:
+  adapter: Nabu::Adapters::Helipad
+  axes: [germanic]
+  enabled: true    # P40: first sync verified 2026-07-22 (1 doc / 3,549 passages — the fixture-predicted count exactly), owner-flipped
+                   # bin/nabu sync helipad, expect 1 document / 3,549 passages, eyeball
+                   # `nabu show urn:nabu:helipad:OSHeliandC:1.1-5` + 5 random, then flip)
+  # HeliPaD — the Heliand Parsed Database (Walkden): the Old Saxon Heliand
+  # (~46K words, MS C) syntactically parsed in Penn labeled bracketing, with
+  # gold form-lemma pairs, ^-separated morphology on the tags, and metre/
+  # codicology as in-tree CODE markers (<R_n> verse lines, <C> caesurae,
+  # <F_n> fitts). First composition of the penn-psd family (YCOE/IcePaHC
+  # siblings planned). One document, one passage per tree block
+  # (urn:nabu:helipad:OSHeliandC:<n>.<lines>); language osx (NEW — no
+  # code-level registry row needed; dossiers are owner-authored).
+  # CC BY 4.0 (Zenodo record 4395040 license field; no in-file header) →
+  # attribution. Single-file FileFetch of the Zenodo v0.9 artifact,
+  # sha256-pinned in the adapter — the deposit is versioned-immutable, a
+  # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

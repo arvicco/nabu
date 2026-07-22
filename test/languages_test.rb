@@ -56,9 +56,23 @@ class LanguagesTest < Minitest::Test
   end
 
   def test_code_variants_accepts_the_common_two_letter_spellings
-    assert_equal %w[deu ger], Nabu::Languages.code_variants("de").sort
-    assert_equal %w[fra fre], Nabu::Languages.code_variants("fr").sort
-    assert_equal ["eng"], Nabu::Languages.code_variants("en")
+    assert_equal %w[de deu ger], Nabu::Languages.code_variants("de").sort
+    assert_equal %w[fr fra fre], Nabu::Languages.code_variants("fr").sort
+    assert_equal %w[en eng], Nabu::Languages.code_variants("en").sort
+  end
+
+  # P40-r2 (live gate-runbook catch, 2026-07-22): the catalog STORES
+  # Icelandic as the modern two-letter tag "is" (IcePaHC, rule 3 of
+  # languages.md), but the 639-1 convenience hop swallowed the typed code
+  # before variant expansion — --lang is filtered on ('ice','isl') and
+  # matched NOTHING on every read surface. The typed code is always a
+  # member of its own equivalence set ("itself included", as this
+  # function's contract always said).
+  def test_code_variants_always_includes_the_typed_code_itself
+    assert_equal %w[ice is isl], Nabu::Languages.code_variants("is").sort,
+                 "the catalog's own stored tag must survive the 639-1 hop"
+    assert_includes Nabu::Languages.code_variants("en"), "en",
+                    "legacy 'en' strays stay reachable while standardizing on eng"
   end
 
   def test_code_variants_passes_unknown_codes_through_untouched

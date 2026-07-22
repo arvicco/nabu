@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The single fixture is a trim (first 2 whole Penn tree blocks) of the 3.4 MB
+# heliand.psd, so whole: false — a raw GET of the URL returns the FULL file and
+# is fetched for URL-liveness only, never byte-compared. adapter_test stays
+# null (the aspr rationale): the helipad adapter test asserts trimmed tree/
+# passage counts an untrimmed upstream file would false-fail. Re-apply the
+# README trim after any refresh.
+source: helipad
+adapter_test:
+retrieved: 2026-07-22
+files:
+  - path: heliand-head.psd
+    url: https://zenodo.org/api/records/4395040/files/heliand.psd/content
+    whole: false
+    trim: first 2 complete Penn tree blocks of heliand.psd (OSHeliandC.1.1-5, OSHeliandC.2.5-9; 3,549 trees upstream; parenthesis-balanced, no mid-tree cut; P40-g) (3,524,675 B -> 5,809 B)

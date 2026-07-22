@@ -17,7 +17,7 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
 
 ## The desk's instruments
@@ -41,9 +41,9 @@ nabu sync hittite                 # sync the desk's enabled members
 This desk's own surfaces:
 
 ```
-nabu search --lemma --lang hit --axis hittite WORD  # the gold UD Hittite morphology
+nabu search --lemma kuiš --lang hit --axis hittite  # the gold UD Hittite morphology (kuiš "who", clause by clause)
 nabu search --century -13 --axis hittite  # the tablets by date, where dated
-nabu search --axis hittite WORD       # a query across TLHdig and the treebank
+nabu search ḫatti --axis hittite      # a query across TLHdig and the treebank — Ḫatti on the tablets
 ```
 
 

@@ -19,8 +19,9 @@ library takes five steps; the starter shelf below was measured at about
   but no other platform is exercised.
 - **Disk**: about 1 GB for the starter shelf (canonical files plus the
   derived databases). A full library build currently occupies roughly
-  16 GB canonical + 7 GB derived SQLite on the reference machine
-  (2026-07-13) — growth is entirely at your discretion, shelf by shelf.
+  45 GB canonical + 43 GB derived SQLite on the reference machine
+  (2026-07-22; the Chinese, Japanese, and Germanic libraries dominate) —
+  growth is entirely at your discretion, shelf by shelf.
 
 ## 1. Clone
 

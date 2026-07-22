@@ -1,0 +1,40 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Each fixture is one WHOLE inscription record from the rundata.info JSON API
+# (https://rundata.info/api/inscription/<signum>). whole: false because the
+# endpoint is a JSON rendering of a live, actively-maintained SRDB row (not a
+# byte-canonical upstream file), so it is fetched for URL-liveness only, never
+# byte-compared. The real bulk dump is the 47 MB client-side SQLite database
+# (runes.<hash>.sqlite3) documented in the README — too big to commit.
+source: rundata
+adapter_test: test/adapters/rundata_test.rb
+retrieved: 2026-07-22
+files:
+  - path: U_344.json
+    url: https://rundata.info/api/inscription/U%20344
+    whole: false
+    trim: whole API record for signum U 344 (Yttergärde, Uppland; Viking Age); JSON rendering of the SRDB row, kept complete; P40-g
+  - path: DR_42.json
+    url: https://rundata.info/api/inscription/DR%2042
+    whole: false
+    trim: whole API record for signum DR 42 (Jelling 2, Denmark — Harald Bluetooth); JSON rendering of the SRDB row, kept complete; P40-g
+  - path: N_KJ101.json
+    url: https://rundata.info/api/inscription/N%20KJ101
+    whole: false
+    trim: whole API record for signum N KJ101 (Eggja, Norway — Older Futhark); JSON rendering of the SRDB row, kept complete; P40-g
+  - path: Og_136.json
+    url: https://rundata.info/api/inscription/%C3%96g%20136
+    whole: false
+    trim: whole API record for signum Ög 136 (Rök, Östergötland — kortkvist, the longest inscription); JSON rendering of the SRDB row, kept complete; P40-g
+  - path: runes-trim.sqlite3
+    refetchable: false
+    provenance: local-trim
+    reason: schema-preserving 4-inscription trim (U 344, DR 42, N KJ101, Og 136) of the
+      real 45 MB runes.234feed5f77e.sqlite3 web artifact (fetched 2026-07-22, D40-d) —
+      full DDL incl. views copied, rows filtered by signature/meta relations, small
+      reference tables whole; the all_data view returns the 4 records on the trim
+    upstream: https://rundata.info/static/runes/runes.234feed5f77e.sqlite3
+    copied: 2026-07-22
+    whole: false
+    trim: 45 MB -> 248 KB, 4 inscriptions, schema+views intact

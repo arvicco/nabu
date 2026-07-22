@@ -1,0 +1,59 @@
+# text = Bekki breiða,
+# sent_id = 3586
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="144889" status="reviewed" presentation-before=" "> 
+ <token id="1852297" form="Bekki" citation-part="Alvíssmál 1" lemma="bekkr" part-of-speech="Nb" morphology="-p---ma-si" head-id="1852298" relation="obj" presentation-after=" " foreign-ids="island-id=19992"/> 
+ <token id="1852298" form="breiða" citation-part="Alvíssmál 1" lemma="breiða" part-of-speech="V-" morphology="--pna----i" relation="pred" presentation-after=", " foreign-ids="island-id=28339"/> 
+</sentence>
+
+# text = nú skal brúðr með mér heim í sinni snúaz!
+# sent_id = 3587
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="144890" status="reviewed"> 
+ <token id="1852299" form="nú" citation-part="Alvíssmál 1" lemma="nú" part-of-speech="Df" morphology="-------p-i" head-id="1852307" relation="adv" presentation-after=" " foreign-ids="island-id=19994"/> 
+ <token id="1852300" form="skal" citation-part="Alvíssmál 1" lemma="skulu" part-of-speech="V-" morphology="3spia----i" head-id="1852307" relation="aux" presentation-after=" " foreign-ids="island-id=19995"/> 
+ <token id="1852301" form="brúðr" citation-part="Alvíssmál 1" lemma="brúðr" part-of-speech="Nb" morphology="-s---fn-wi" head-id="1852307" relation="sub" presentation-after=" " foreign-ids="island-id=19996"/> 
+ <token id="1852302" form="með" citation-part="Alvíssmál 1" lemma="með" part-of-speech="R-" morphology="---------n" head-id="1852307" relation="adv" presentation-after=" " foreign-ids="island-id=19997"/> 
+ <token id="1852303" form="mér" citation-part="Alvíssmál 1" lemma="ek" part-of-speech="Pp" morphology="------d--i" head-id="1852302" relation="obl" presentation-after=" " foreign-ids="island-id=19998"/> 
+ <token id="1852304" form="heim" citation-part="Alvíssmál 1" lemma="heim" part-of-speech="Df" morphology="-------p-i" head-id="1852307" relation="obl" presentation-after=" " foreign-ids="island-id=19999"/> 
+ <token id="1852305" form="í" citation-part="Alvíssmál 1" lemma="í" part-of-speech="R-" morphology="---------n" head-id="1852307" relation="adv" presentation-after=" " foreign-ids="island-id=20000"/> 
+ <token id="1852306" form="sinni" citation-part="Alvíssmál 1" lemma="sinni" part-of-speech="Nb" morphology="-s---nd-si" head-id="1852305" relation="obl" presentation-after=" " foreign-ids="island-id=20001"/> 
+ <token id="1852307" form="snúaz" citation-part="Alvíssmál 1" lemma="snúa" part-of-speech="V-" morphology="--pnm----i" relation="pred" presentation-after="! " foreign-ids="island-id=20002"/> 
+</sentence>
+
+# text = Hratað um mægi mun hverjum þikkja,
+# sent_id = 3588
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="144891" status="reviewed"> 
+ <token id="1852308" form="Hratað" citation-part="Alvíssmál 1" lemma="hrata" part-of-speech="V-" morphology="-supann-si" head-id="1852313" relation="xobj" presentation-after=" " foreign-ids="island-id=20004"> 
+  <slash target-id="1852313" relation="xsub"/> 
+ </token> 
+ <token id="1852309" form="um" citation-part="Alvíssmál 1" lemma="um" part-of-speech="R-" morphology="---------n" head-id="1852308" relation="adv" presentation-after=" " foreign-ids="island-id=20005"/> 
+ <token id="1852310" form="mægi" citation-part="Alvíssmál 1" lemma="mǽgi" part-of-speech="Nb" morphology="-s---na-si" head-id="1852309" relation="obl" presentation-after=" " foreign-ids="island-id=20006"/> 
+ <token id="1852311" form="mun" citation-part="Alvíssmál 1" lemma="munu" part-of-speech="V-" morphology="3spia----i" head-id="1852313" relation="aux" presentation-after=" " foreign-ids="island-id=20007"/> 
+ <token id="1852312" form="hverjum" citation-part="Alvíssmál 1" lemma="hverr" part-of-speech="Px" morphology="-s---md--i" head-id="1852313" relation="obl" presentation-after=" " foreign-ids="island-id=20008"/> 
+ <token id="1852313" form="þikkja" citation-part="Alvíssmál 1" lemma="þykkja" part-of-speech="V-" morphology="--pna----i" relation="pred" presentation-after=", " foreign-ids="island-id=20009"/> 
+</sentence>
+
+# text = heima skal at hvíld nema!
+# sent_id = 3589
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="144892" status="reviewed" presentation-after=" "> 
+ <token id="1852314" form="heima" citation-part="Alvíssmál 1" lemma="heima" part-of-speech="Df" morphology="-------p-i" head-id="1852318" relation="adv" presentation-after=" " foreign-ids="island-id=20010"/> 
+ <token id="1852315" form="skal" citation-part="Alvíssmál 1" lemma="skulu" part-of-speech="V-" morphology="3spia----i" head-id="1852318" relation="aux" presentation-after=" " foreign-ids="island-id=22032"/> 
+ <token id="1852316" form="at" citation-part="Alvíssmál 1" lemma="-at" part-of-speech="Df" morphology="---------n" head-id="1852318" relation="aux" presentation-after=" " foreign-ids="island-id=20011"/> 
+ <token id="1852317" form="hvíld" citation-part="Alvíssmál 1" lemma="hvíld" part-of-speech="Nb" morphology="-s---fa-si" head-id="1852318" relation="obj" presentation-after=" " foreign-ids="island-id=20012"/> 
+ <token id="1852318" form="nema" citation-part="Alvíssmál 1" lemma="nema" part-of-speech="V-" morphology="--pna----i" relation="pred" presentation-after="! " foreign-ids="island-id=20013"/> 
+</sentence>
+
+# text = Hvað er það fira?
+# sent_id = 3590
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="144893" status="reviewed" presentation-before=" "> 
+ <token id="1852319" form="Hvað" citation-part="Alvíssmál 2" lemma="hvat" part-of-speech="Pi" morphology="-s----n--i" head-id="1852320" relation="xobj" presentation-after=" " foreign-ids="island-id=20015"> 
+  <slash target-id="1852321" relation="xsub"/> 
+ </token> 
+ <token id="1852320" form="er" citation-part="Alvíssmál 2" lemma="vera" part-of-speech="V-" morphology="3spia----i" relation="pred" presentation-after=" " foreign-ids="island-id=20016"/> 
+ <token id="1852321" form="það" citation-part="Alvíssmál 2" lemma="sá" part-of-speech="Pd" morphology="-s---nn--i" head-id="1852320" relation="sub" presentation-after=" " foreign-ids="island-id=20017"/> 
+ <token id="1852322" form="fira" citation-part="Alvíssmál 2" lemma="firar" part-of-speech="Nb" morphology="-p---mg-si" head-id="1852319" relation="atr" presentation-after="? " foreign-ids="island-id=20018"/> 
+</sentence>
