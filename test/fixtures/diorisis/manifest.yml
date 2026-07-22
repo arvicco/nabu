@@ -27,3 +27,19 @@ files:
     url: https://ndownloader.figshare.com/files/11296247
     whole: false
     trim: teiHeader + sentences 1-2 + appended closers (114,702 B -> 8,031 B) — the PINNED-AS-EXCLUDED Rahlfs-lineage file (tlgAuthor 0527; 02-sources row 44)
+  # The P39-4 collision trio: three DISTINCT Diodorus volumes upstream all
+  # numbered tlgAuthor 0060 / tlgId 001 (whole-corpus census 2026-07-22). A
+  # bare tlgAuthor:tlgId is not unique — the adapter disambiguates the group by
+  # a title slug; these fixtures pin that and the loader's ~0-updated invariant.
+  - path: "Diodorus Siculus (0060) - Bibliotheca Historica, Books I-V (001).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: teiHeader + sentences 1-2 + appended closers (29,728,147 B -> 12,207 B); recipe in README.md
+  - path: "Diodorus Siculus (0060) - Bibliotheca Historica, Books XI-XVII (001).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: teiHeader + sentences 1-2 + appended closers (44,141,034 B -> 21,540 B); recipe in README.md
+  - path: "Diodorus Siculus (0060) - Bibliotheca Historica, Books XVIII-XX (001).xml"
+    url: https://ndownloader.figshare.com/files/11296247
+    whole: false
+    trim: teiHeader + sentences 1-2 + appended closers (18,998,915 B -> 18,775 B); recipe in README.md
