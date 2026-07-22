@@ -5,15 +5,26 @@ description: >-
   The Germanicist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Germanicist — Gothic, Old English verse and prose, the northern word-hoard.
+> The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, Gothic riding the proiel/ud treebanks, and Middle High German manuscripts (ReM).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+
+The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
+gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
+prose), the Old Saxon *Heliand* (HeliPaD), and Middle High German (the ReM
+manuscripts). **North** arrives in force: Old Icelandic through IcePaHC — a
+rule-based UD conversion of the Icelandic Parsed Historical Corpus, filed
+under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
+Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
+inscriptions of Rundata. All five new shelves are adapter-ready with their
+first sync owner-scheduled, so their holdings below read "not synced yet"
+until the owner fires them.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
@@ -31,11 +42,26 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 
 - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks)
   and ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark).
+  The P40 Germanic wave stages the next joiners — is (IcePaHC's first
+  Icelandic lemma lane), non (Menotec's PROIEL-scheme Old Norwegian and the
+  Edda), osx (HeliPaD's gold form-lemma Heliand) and gmh (ReM) — each
+  adapter-ready, first sync owner-pending, uncounted until it lands.
 - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
   æ/þ/ð to find æþele).
 - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC
   West-Saxon Gospel of Mark). The Gothic × OCS `cognates` join is strongest
   from this desk.
+- **The runic five-lane design (Rundata):** each inscription is one
+  document keyed on its signum (`urn:nabu:rundata:u-344`); the bare urn is
+  the scholarly Latin transliteration (the notation legend is content, never
+  stripped), and up to four sibling lanes — `-fvn`/`-rsv` normalisations,
+  `-eng`/`-swe` translations — ride beside it, reached with `show
+  --parallel`.
+- **The timeline desk:** Rundata is the germanic desk's first dated lane —
+  the RundataDates extractor puts each inscription's SRDB year envelope and
+  find-spot on the calendar, so `--from/--to`, `--century` and `--place`
+  scope the runestones once synced. (gmq-pro tags the urnordisk-dated
+  inscriptions — Proto-Norse, for which no ISO code exists.)
 
 ## Working the germanic desk
 
@@ -52,19 +78,33 @@ This desk's own surfaces:
 
 ```
 nabu show urn:nabu:aspr:A4.1:1        # Beowulf, line 1
-nabu cognates "LUKE 14.34" --langs got,chu  # salt ~ соль meeting at PIE *sḗh₂l in the salt saying
-nabu cognates nt --langs got,chu      # the whole New Testament, Gothic against Old Church Slavonic
+nabu show urn:nabu:rundata:u-344 --parallel  # the Yttergärde runestone beside its normalisation and translation lanes
+nabu show urn:nabu:menotec:non-edda-regius-dep  # the Poetic Edda, Codex Regius (Menotec)
+nabu search --word cyning --lang ang  # whole-word match on an Old English form (ASPR/ISWOC)
+nabu search liudi --lang osx --axis germanic  # the Old Saxon Heliand text (HeliPaD)
+nabu search --lemma láta --lang is --axis germanic  # the IcePaHC Old Icelandic lemma lane
 nabu define aethele --lang ang        # Bosworth-Toller, with the æ/þ/ð fold
-nabu search --lemma cyning --morph case=gen --lang ang  # a morphology facet over the UD/PROIEL feature vocabulary
 nabu formulas urn:nabu:aspr:A4.1      # the Old English poetic formulas of Beowulf
 ```
-
 
 ## Terminal setup
 
 - **Gothic (got):** nabu does nothing; install `font-noto-sans-gothic`.
 - **Old English (ang):** Latin script with æ/þ/ð — any extended-Latin font
   (Noto Sans Mono covers it); no install needed.
+- **Old Icelandic / Old Norwegian (is/non):** IcePaHC and Menotec store the
+  text in Latin script (þ/ð/æ/ǫ) — the terminal default suffices, no install.
+- **Old Saxon (osx):** the HeliPaD Heliand is Latin-script Penn bracketing
+  (uu for w); nothing to install.
+- **Middle High German (gmh):** ReM's diplomatic transcription keeps the
+  long ſ (U+017F) and combining editorial marks — any Unicode font renders
+  them (Noto Sans Mono); nabu's search fold maps ſ→s, so you need not type it.
+- **Runic (Rundata):** the transliteration IS the text — a scholarly Latin
+  transliteration with zero runic codepoints stored, so no runic font is
+  needed; the notation legend (`§A`/`§B` sides, `|` boundaries, a leading `"`
+  marking a name) is content and never stripped, and the normalisation and
+  translation lanes are sibling documents reached with `show --parallel`
+  (docs/display.md §4).
 
 The full guidance, per script, is on the [display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).
 

@@ -153,31 +153,74 @@ slavic:
       combining range in the terminal's non-ASCII slot.
 
 germanic:
+  blurb: |
+    The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
+    gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
+    prose), the Old Saxon *Heliand* (HeliPaD), and Middle High German (the ReM
+    manuscripts). **North** arrives in force: Old Icelandic through IcePaHC — a
+    rule-based UD conversion of the Icelandic Parsed Historical Corpus, filed
+    under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
+    Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
+    inscriptions of Rundata. All five new shelves are adapter-ready with their
+    first sync owner-scheduled, so their holdings below read "not synced yet"
+    until the owner fires them.
   instruments: |
     - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks)
       and ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark).
+      The P40 Germanic wave stages the next joiners — is (IcePaHC's first
+      Icelandic lemma lane), non (Menotec's PROIEL-scheme Old Norwegian and the
+      Edda), osx (HeliPaD's gold form-lemma Heliand) and gmh (ReM) — each
+      adapter-ready, first sync owner-pending, uncounted until it lands.
     - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
       æ/þ/ð to find æþele).
     - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC
       West-Saxon Gospel of Mark). The Gothic × OCS `cognates` join is strongest
       from this desk.
+    - **The runic five-lane design (Rundata):** each inscription is one
+      document keyed on its signum (`urn:nabu:rundata:u-344`); the bare urn is
+      the scholarly Latin transliteration (the notation legend is content, never
+      stripped), and up to four sibling lanes — `-fvn`/`-rsv` normalisations,
+      `-eng`/`-swe` translations — ride beside it, reached with `show
+      --parallel`.
+    - **The timeline desk:** Rundata is the germanic desk's first dated lane —
+      the RundataDates extractor puts each inscription's SRDB year envelope and
+      find-spot on the calendar, so `--from/--to`, `--century` and `--place`
+      scope the runestones once synced. (gmq-pro tags the urnordisk-dated
+      inscriptions — Proto-Norse, for which no ISO code exists.)
   recipes:
     - cmd: 'nabu show urn:nabu:aspr:A4.1:1'
       note: Beowulf, line 1
-    - cmd: 'nabu cognates "LUKE 14.34" --langs got,chu'
-      note: salt ~ соль meeting at PIE *sḗh₂l in the salt saying
-    - cmd: 'nabu cognates nt --langs got,chu'
-      note: the whole New Testament, Gothic against Old Church Slavonic
+    - cmd: 'nabu show urn:nabu:rundata:u-344 --parallel'
+      note: the Yttergärde runestone beside its normalisation and translation lanes
+    - cmd: 'nabu show urn:nabu:menotec:non-edda-regius-dep'
+      note: the Poetic Edda, Codex Regius (Menotec)
+    - cmd: 'nabu search --word cyning --lang ang'
+      note: whole-word match on an Old English form (ASPR/ISWOC)
+    - cmd: 'nabu search liudi --lang osx --axis germanic'
+      note: the Old Saxon Heliand text (HeliPaD)
+    - cmd: 'nabu search --lemma láta --lang is --axis germanic'
+      note: the IcePaHC Old Icelandic lemma lane
     - cmd: 'nabu define aethele --lang ang'
       note: Bosworth-Toller, with the æ/þ/ð fold
-    - cmd: 'nabu search --lemma cyning --morph case=gen --lang ang'
-      note: a morphology facet over the UD/PROIEL feature vocabulary
     - cmd: 'nabu formulas urn:nabu:aspr:A4.1'
       note: the Old English poetic formulas of Beowulf
   display: |
     - **Gothic (got):** nabu does nothing; install `font-noto-sans-gothic`.
     - **Old English (ang):** Latin script with æ/þ/ð — any extended-Latin font
       (Noto Sans Mono covers it); no install needed.
+    - **Old Icelandic / Old Norwegian (is/non):** IcePaHC and Menotec store the
+      text in Latin script (þ/ð/æ/ǫ) — the terminal default suffices, no install.
+    - **Old Saxon (osx):** the HeliPaD Heliand is Latin-script Penn bracketing
+      (uu for w); nothing to install.
+    - **Middle High German (gmh):** ReM's diplomatic transcription keeps the
+      long ſ (U+017F) and combining editorial marks — any Unicode font renders
+      them (Noto Sans Mono); nabu's search fold maps ſ→s, so you need not type it.
+    - **Runic (Rundata):** the transliteration IS the text — a scholarly Latin
+      transliteration with zero runic codepoints stored, so no runic font is
+      needed; the notation legend (`§A`/`§B` sides, `|` boundaries, a leading `"`
+      marking a name) is content and never stripped, and the normalisation and
+      translation lanes are sibling documents reached with `show --parallel`
+      (docs/display.md §4).
 
 celtic:
   instruments: |
