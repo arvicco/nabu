@@ -166,6 +166,14 @@ namespace :stamps do
   end
 end
 
+# The short handle (owner request 2026-07-22). Same task, same attestation
+# guard — the friction lives in the ARGUMENT (a claim you must be able to
+# make truthfully), not the task name.
+desc "Short alias for stamps:rebless (owner-only; requires attestation)"
+task :bless, [:attestation] do |_task, args|
+  Rake::Task["stamps:rebless"].invoke(args[:attestation])
+end
+
 # Gate rider (P24-0, site/MAINTENANCE.md standing duty): flag drift between
 # the canonical/local-source dossier descriptions and the public map
 # (docs/library.md; site/library.md is its printed copy, covered
