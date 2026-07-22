@@ -39,9 +39,37 @@ figshare's own published `computed_md5` at download — and
   exclusion stays test-pinned. Note its `location` attributes are EMPTY —
   upstream ships the LXX without citations.
 
+## The collision trio (P39-4)
+
+Three files whose in-file identity blocks all declare `tlgAuthor` **0060**,
+`tlgId` **001** — genuinely distinct Diodorus Siculus volumes upstream numbered
+the same work (whole-corpus census 2026-07-22 found exactly two such collision
+groups: this trio and Aristotle 0086:029 Economics/Oeconomica II). A bare
+`tlgAuthor:tlgId` minted the same urn three times, and the last file parsed
+silently won (glob-order-dependent — the owner's from-scratch rebuild reported
+`diorisis ~3 updated`, impossible in a clean db). The adapter now disambiguates
+a colliding group by a slug of each work's title, so all three mint distinct,
+stable urns while every non-colliding work keeps its bare base urn byte-for-byte:
+
+- `Diodorus Siculus (0060) - Bibliotheca Historica, Books I-V (001).xml`
+  → `urn:nabu:diorisis:0060:001:bibliotheca-historica-books-i-v`
+- `Diodorus Siculus (0060) - Bibliotheca Historica, Books XI-XVII (001).xml`
+  → `urn:nabu:diorisis:0060:001:bibliotheca-historica-books-xi-xvii`
+- `Diodorus Siculus (0060) - Bibliotheca Historica, Books XVIII-XX (001).xml`
+  → `urn:nabu:diorisis:0060:001:bibliotheca-historica-books-xviii-xx`
+
+Each is teiHeader + sentences 1–2 + appended closers (the house trim below).
+They pin the disambiguation, the urn-stability of the untouched works, and the
+loader's from-scratch `~0 updated` / `0 collided` invariant.
+
 ## Re-trim procedure
 
 Download the zip, verify the md5 above, unzip, then for the trimmed files:
 
     awk '/<sentence id="4" /{exit} {print}' <upstream>.xml > fixture.xml   # Thucydides (id="3" for Abdias)
+    printf '    </body>\n  </text>\n</TEI.2>\n' >> fixture.xml
+
+The three Diodorus collision fixtures cut at `id="3"` (sentences 1–2):
+
+    awk '/<sentence id="3" /{exit} {print}' <upstream>.xml > fixture.xml
     printf '    </body>\n  </text>\n</TEI.2>\n' >> fixture.xml

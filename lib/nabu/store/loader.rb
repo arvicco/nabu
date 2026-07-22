@@ -14,8 +14,16 @@ module Nabu
     # ORACC catalog-only skeleton with no transcribed lines): honest catalog-
     # only skips, NOT quarantines (+errored+). Defaults to 0 so every existing
     # construction and stored count stays valid.
-    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule) do
-      def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0)
+    # +collided+ (P39-4) counts documents REJECTED by the within-pass collision
+    # seam: a urn re-encountered in the SAME load pass with DIFFERENT content
+    # than the file that first minted it that pass. Deterministic keep-first
+    # (never last-writer), journaled "collision" and surfaced loudly (`!N
+    # collision`). Distinct from +errored+ (a parse quarantine) and from a
+    # legitimate across-run revision (a urn seen for the FIRST time this pass
+    # whose stored row simply changed). Defaults to 0 so every existing
+    # construction and stored count stays valid.
+    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule, :collided) do
+      def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0)
         super
       end
     end
@@ -29,6 +37,13 @@ module Nabu
     #   skipped entirely (no writes at all, so loading a corpus twice leaves
     #   rows byte-identical). Same urn, different sha → fields updated,
     #   revision += 1, provenance "revised" journaling {old_sha, new_sha}.
+    # - Within-pass collision seam (P39-4): the "different sha → revise" rule
+    #   above means a legitimate ACROSS-RUN update. When TWO files in a SINGLE
+    #   load pass claim one urn with different content, revising would be
+    #   silent last-writer-wins (glob-order-dependent, revision inflation). So a
+    #   urn re-encountered in the same pass is kept-first: identical content is
+    #   an idempotent skip, different content is a COLLISION — journaled loudly
+    #   and counted (LoadReport#collided), the first file's content preserved.
     # - Nothing is ever hard-deleted. A full load (full: true) asserts batch
     #   completeness: this source's documents absent from the batch are marked
     #   withdrawn (+ provenance); partial loads never infer deletions. Within
@@ -160,6 +175,10 @@ module Nabu
       def run(full:, on_document: nil)
         counts = Hash.new(0)
         seen_urns = Set.new
+        # P39-4: urns this pass has already PERSISTED a document for (insert,
+        # revise or skip). A re-encounter of one is a within-pass collision, not
+        # an across-run revision — the sole discriminator between the two.
+        pass_urns = Set.new
         processed = 0
         tick = lambda do
           processed += 1
@@ -174,7 +193,7 @@ module Nabu
         buffer = []
         buffered_rows = 0
         flush = lambda do
-          flush_batch(buffer, counts, tick)
+          flush_batch(buffer, counts, tick, pass_urns)
           buffered_rows = 0
         end
         process = lambda do |document, retained = nil|
@@ -186,7 +205,7 @@ module Nabu
             buffered_rows += document.size
             flush.call if buffer.size >= @tx_batch || buffered_rows >= @tx_batch_rows
           else
-            load_document(document, counts, retained)
+            load_document(document, counts, retained, pass_urns: pass_urns)
             tick.call
           end
         end
@@ -220,7 +239,7 @@ module Nabu
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
           withdrawn: counts[:withdrawn], errored: counts[:errored],
-          skipped_by_rule: counts[:skipped_by_rule]
+          skipped_by_rule: counts[:skipped_by_rule], collided: counts[:collided]
         )
       end
 
@@ -229,13 +248,13 @@ module Nabu
       # is timed as this source's :insert (one measure, not per document — the
       # savepoint path deliberately does not re-time, so nothing double-counts).
       # A no-op when the buffer is empty; clears it either way.
-      def flush_batch(buffer, counts, tick)
+      def flush_batch(buffer, counts, tick, pass_urns)
         return if buffer.empty?
 
         time_insert do
           @db.transaction do
             buffer.each do |document, retained|
-              load_document(document, counts, retained, savepoint: true)
+              load_document(document, counts, retained, savepoint: true, pass_urns: pass_urns)
               tick.call
             end
           end
@@ -250,8 +269,8 @@ module Nabu
       # moves on. Only the top-level (sync) path times itself as :insert — in a
       # batch the enclosing #flush_batch already does. +retained+ is nil for live
       # documents, or the "retired" provenance params for attic rediscoveries.
-      def load_document(document, counts, retained = nil, savepoint: false)
-        txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained) } }
+      def load_document(document, counts, retained = nil, pass_urns:, savepoint: false)
+        txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained, pass_urns) } }
         outcome = savepoint ? txn.call : time_insert(&txn)
         counts[outcome] += 1
       rescue Sequel::DatabaseError => e
@@ -259,12 +278,28 @@ module Nabu
         journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
       end
 
-      def upsert_document(document, retained)
+      def upsert_document(document, retained, pass_urns)
         passages = document.passages
         passage_shas = passages.to_h { |passage| [passage.urn, ContentHash.passage(passage)] }
         doc_sha = ContentHash.document(document, passage_shas.values)
 
         row = Document.first(source_id: @source.id, urn: document.urn)
+
+        # P39-4 within-pass collision seam. A urn ALREADY persisted this pass and
+        # re-encountered is two canonical files claiming one urn: identical
+        # content is a harmless duplicate (idempotent skip); DIFFERENT content is
+        # a collision — keep the first file's content deterministically, reject
+        # this one loudly, NEVER last-writer-wins (which the plain upsert below
+        # would silently do, minting a spurious revision). A urn seen for the
+        # first time this pass falls through to the normal revise/insert path, so
+        # a legitimate across-run update is untouched.
+        if pass_urns.include?(document.urn)
+          return :skipped if row && row.content_sha256 == doc_sha
+
+          return collide(document, row, doc_sha)
+        end
+        pass_urns.add(document.urn)
+
         return insert_document(document, passage_shas, doc_sha, retained) if row.nil?
 
         if row.content_sha256 == doc_sha
@@ -279,6 +314,20 @@ module Nabu
           revise_document(row, document, passage_shas, doc_sha, retained)
         end
         :updated
+      end
+
+      # P39-4: journal a within-pass collision loudly and keep the first writer.
+      # The stored row (which the first file wrote this pass, or a pre-existing
+      # row it matched) is LEFT UNTOUCHED; only a provenance breadcrumb is
+      # written, naming both shas so the rejected duplicate is auditable. Catalog
+      # provenance, not the durable ledger — like a quarantine, it is a
+      # rebuild-visible event, not a content transition of a served row.
+      def collide(document, row, rejected_sha)
+        journal(
+          event: "collision", document_id: row&.id,
+          params: { "urn" => document.urn, "kept_sha" => row&.content_sha256, "rejected_sha" => rejected_sha }
+        )
+        :collided
       end
 
       # Same-content path: bring documents.license_override into line with what
