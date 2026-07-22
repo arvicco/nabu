@@ -1,0 +1,88 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema is documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# OpenITI mARkdown text files live in the OpenITI/RELEASE GitHub repo under a
+# flat per-author tree: data/<AuthorURI>/<AuthorURI.BookURI>/<versionUri[.ext]>.
+# The version file has NO extension when "completed/plain", or a status
+# extension (.mARkdown, .completed, .inProgress). A raw GET of the file's path
+# on the `master` branch returns the FULL upstream file; five of the six texts
+# here are documented body TRIMS (whole: false, fetched for URL-liveness only),
+# and the one tiny hadith is kept byte-for-byte (whole: true). mARkdown is
+# plaintext with NO closing tags, so a trim is a clean truncation at a line
+# boundary (header kept intact through the metadata splitter); nothing appended.
+#
+# `master` is a MOVING ref (it advances each release); these files are from
+# release 2025.1.9 (Zenodo DOI 10.5281/zenodo.17767721, 2025-12-30). The
+# central metadata TSV is a Zenodo artifact; the .sample.tsv here is a trim of
+# it (header row + the six fixture books + a stratified assortment).
+#
+# trim: values use YAML folded block scalars (>-) so colons/quotes/hashes in the
+# prose stay literal.
+source: openiti
+# No adapter exists yet (P41 groundwork packet). adapter_test stays null: it is
+# only set for dirs whose fixtures are ALL whole:true, and five here are trims.
+adapter_test: null
+retrieved: 2026-07-22
+files:
+  - path: 0390AbuFarajCukbari.Hadith.ShamAY0032805-ara1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0390AbuFarajCukbari/0390AbuFarajCukbari.Hadith/0390AbuFarajCukbari.Hadith.ShamAY0032805-ara1
+    whole: true
+    trim: >-
+      none (kept byte-for-byte, 3,872 B / 69 lines — one of the smallest complete
+      texts in the corpus, a 2-hadith juz'; Shamela-legacy META vocabulary;
+      PRESERVES the real leading U+FEFF BOM byte). ara1. P41-g
+  - path: 0001AbuTalibCabdManaf.Diwan.JK007501-ara1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0001AbuTalibCabdManaf/0001AbuTalibCabdManaf.Diwan/0001AbuTalibCabdManaf.Diwan.JK007501-ara1
+    whole: false
+    trim: >-
+      body trim — header (magic value + numbered-KITAB META block) kept through
+      the metadata splitter, body truncated after line 73 keeping several poems;
+      ARABIC POETRY exemplar using the LEGACY hemistich notation
+      "hash % hemi1 % hemi2 % verse-no" (NOT the %~% form), with inline
+      PageVNNPNNN markers and inline meter notes (al-bahr). Full file
+      62,524 B / 695 lines, 6,323 tok. P41-g
+  - path: 0500Anonymous.ZiyadatMakhtutatTarikhJurjan.Shamela0011077BK2-ara1.mARkdown
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0500Anonymous/0500Anonymous.ZiyadatMakhtutatTarikhJurjan/0500Anonymous.ZiyadatMakhtutatTarikhJurjan.Shamela0011077BK2-ara1.mARkdown
+    whole: false
+    trim: >-
+      body trim — header kept through the metadata splitter, body truncated after
+      line 130 keeping the first-level "### |" header and several second-level
+      "### ||" section headers; ARABIC HISTORY/biography exemplar, carries the
+      .mARkdown status extension, PageVNNPNNN + msNN milestones. Full file
+      24,246 B / 338 lines, 2,474 tok. P41-g
+  - path: 0646IbnNamawarKhunaji.JumalFiMantiq.JK010719-ara1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0646IbnNamawarKhunaji/0646IbnNamawarKhunaji.JumalFiMantiq/0646IbnNamawarKhunaji.JumalFiMantiq.JK010719-ara1
+    whole: false
+    trim: >-
+      body trim — header (numbered-KITAB META) kept through the metadata splitter,
+      body truncated after line 70; ARABIC FALSAFA/logic prose (Khunaji, Jumal fi
+      l-mantiq), paragraph "hash"/"~~" wrapping, inline "msNN" milestone and
+      inline folio notes (73 wajh / 73 zahr). Full file 23,847 B / 240 lines,
+      2,182 tok. P41-g
+  - path: 0792Hafiz.Muntasab.PDL00074-per1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0792Hafiz/0792Hafiz.Muntasab/0792Hafiz.Muntasab.PDL00074-per1
+    whole: false
+    trim: >-
+      body trim — header (minimal PDL/Ganjoor META: title/ed_info/url) kept
+      through the metadata splitter, body truncated after line 45; PERSIAN POETRY
+      (Hafiz) exemplar using the "%~%" hemistich notation,
+      "hash verse-no hemi1 %~% hemi2" with "~~" wrap and 2-digit PageV01PNN.
+      Persian orthography (ya U+06CC, kaf U+06A9, peh/tcheh/jeh/gaf). Full file
+      21,310 B / 266 lines, 2,700 tok. P41-g
+  - path: 0428IbnSina.RisalaJudiya.AOCP202502141162-per1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0428IbnSina/0428IbnSina.RisalaJudiya/0428IbnSina.RisalaJudiya.AOCP202502141162-per1
+    whole: false
+    trim: >-
+      body trim — header (eScriptorium/Kraken OCR META vocabulary) kept through
+      the metadata splitter, body truncated after line 45; PERSIAN PROSE (Ibn
+      Sina, Risala Judiya), an OCR-pipeline text carrying inline image tags
+      "hash ![...](....jpg)", standalone PageVNNPNNN, and inline footnote-digit
+      artifacts. Full file 34,847 B / 503 lines, 3,693 tok. P41-g
+  - path: OpenITI_metadata_2025-1-9.sample.tsv
+    url: https://zenodo.org/records/17767721/files/OpenITI_metadata_2025-1-9.tsv
+    whole: false
+    trim: >-
+      stratified trim of the central metadata index — header row + the six fixture
+      books' rows + an assortment (~290 rows: every-50th Arabic, a spread of
+      Persian, some MSS) to exercise index-driven discovery. Full upstream TSV
+      12,092,756 B / 14,108 lines (md5 cb2226f64264efa964df9ef659d40199). P41-g
