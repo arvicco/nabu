@@ -10904,8 +10904,12 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 ## P40-4 · YCOE — DROPPED (owner ruling 2026-07-22: ignore; OTA gate + nc terms not worth it)
 ## P40-5 · CorA family + ReM  [tier: fable] [status: done 2026-07-22 — merged 074006a]
 ## P40-6 · Rundata + runic display  [tier: fable] [status: done 2026-07-22 — merged cd862c1; odbl minted, migration 018]
-## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
-## P40-9 · Docs architecture + site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: scheduled — phase end; TWO STAGES: source-of-truth map + authoritative-surface fixes first, site rebuilt ON it second]
+## P40-7 · Organization + desk refresh  [tier: opus] [status: done 2026-07-22 — merged 0d7f604; germanic persona/desc + axes.md + news post]
+## P40-9 · Docs architecture + site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: done 2026-07-22 — 99bd8f8 (stage 1: where-truth-lives map in maintenance-and-extension §0; README/library/languages/02-sources/quickstart refreshed from the live catalog; three inconsistent gold censuses reconciled; library.md gained the missing Japanese + Germanic sections) + 75d4d53 (stage 2: site index/library/sources/languages/tools/faq/about; +24 sources rows; ODbL attribution; fragments-level fix of the Greek-on-Celtic example and ALL placeholder recipes with live-verified real commands; site:axes regenerated ×19; dossier drift fixed through the gateway). JOURNALED → P41 candidate: ~37 older source dossiers still carry seeded sync-queue debris in their descriptions — one curation sweep wanted]
+
+## P40-r1 · ReM quarantine recovery  [tier: fable — orchestrator direct] [status: done 2026-07-22 — 7b2abc3; all 46 quarantines one class (duplicate folio.line): two-column codices now cite 5ra.1 (cb tracked in CoraTeiParser), entry-wise restarts take the house :b2; +46 docs / 355,449 rem lines / gmh gold 2.10M / corpus gold 15.0M; D40-e minted (68 loaded docs re-minted same-day — gate ratification)]
+
+## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC awaits next owner `sync ud`]
 Stale Library/Languages/Sources; axis pages with off-desk examples
 (Greek search on the Celtic page); thoughtful page-by-page pass
 against the live catalog, generator/fragments improved so fixes

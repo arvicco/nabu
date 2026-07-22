@@ -53,8 +53,13 @@ them once synced, with the urnordisk inscriptions tagged `gmq-pro`
 (Proto-Norse — no ISO code exists). Its open-data licence, ODbL, is a new
 class the store learned this phase.
 
-All five shelves are adapter-ready with their first sync owner-scheduled;
-the holdings on the desk page read "not synced yet" until then. The
-numbers as of 2026-07-22 are the fixtures' and the database's own —
-HeliPaD's single 3,549-passage *Heliand*, Rundata's ~6,800 inscriptions —
-not projections; the real counts land the day the owner fires each sync.
+Four of the five went live the same day, on owner-verified first syncs
+(22 July 2026): Menotec's seven treebanks and the Edda at 20,308
+sentences; the *Heliand* at exactly the 3,549 tree blocks the fixture
+predicted; ReM at 406 manuscripts and 355,449 diplomatic lines — making
+Middle High German the corpus's third-largest gold-lemma pool (2.10
+million rows) on day one, after a same-day fix taught the citation
+scheme about two-column codices (folio 5r, column a, line 1 is
+`5ra.1`); and Rundata at 30,643 lane-documents across its five text
+lanes. Old Icelandic arrives with the next Universal Dependencies sync.
+The desk page's holdings are read live from the catalog, dated.
