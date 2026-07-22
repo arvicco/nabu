@@ -12,7 +12,7 @@ module Nabu
     # language_records (content_kind :language → Store::LanguageDossierLoader).
     # An ordinary source in every pipeline sense — registry entry, discovery
     # accounting, quarantine on malformed dossiers, attic rediscovery,
-    # rebuild — with `sync_policy: local`: no upstream, no network; #fetch is
+    # rebuild — with `kind: shelf`: no upstream, no network; #fetch is
     # LocalFetch (re-scan + per-file sha pins), and programmatic accretion
     # goes through Nabu::LanguageShelf, the local shelf's fetch analogue.
     #

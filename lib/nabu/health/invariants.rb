@@ -277,15 +277,17 @@ module Nabu
       end
 
       # The per-file integrity check the LocalFetch pins exist for: every
-      # ledger pin of a local-policy source ("local:<relpath>" → sha256 at
-      # last scan) is held against the canonical tree. A pinned file that is
+      # "local:<relpath>" → sha256 ledger pin (a kind: shelf memory shelf, or a
+      # vendored no-git source like sabellic-loans — P39-0) is held against the
+      # canonical tree. A source with no such pins yields nothing. A pinned file
+      # that is
       # neither live nor in the attic VANISHED (loud — restore from backup,
       # or move to .attic/ to retire deliberately); a live file whose bytes
       # changed since the last scan is STALE derivation, not corruption —
       # owner edits are the shelf's whole point — so it reads soft, naming
       # the re-scan that re-derives and re-pins.
       def local_shelf_integrity(entry)
-        return [] unless entry.sync_policy == "local" && @canonical_dir && table?(@ledger, :pins)
+        return [] unless @canonical_dir && table?(@ledger, :pins)
 
         vanished, changed = partition_local_pins(entry.slug)
         findings = []

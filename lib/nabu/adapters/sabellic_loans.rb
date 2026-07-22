@@ -97,6 +97,12 @@ module Nabu
         MANIFEST
       end
 
+      # No git upstream (P39-0): config/sabellic_loans.yml IS the vendored
+      # artifact and the manifest url is the en.wiktionary PROVENANCE page, not
+      # a repo. Declaring [] keeps the remote probe from ls-remoting it — the
+      # frozen source reads as vendored (alive by its canonical tree) instead.
+      def self.upstream_repo_urls = []
+
       def self.content_kind = :dictionary
 
       def self.language_notes = LANGUAGE_NOTES

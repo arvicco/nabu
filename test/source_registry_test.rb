@@ -28,14 +28,16 @@ class SourceRegistryTest < Minitest::Test
       perseus-greek:
         adapter: Nabu::Adapters::Perseus
         enabled: true
-        sync_policy: live
+        sync_policy: auto
     YAML
 
     entry = registry["perseus-greek"]
     assert_equal "perseus-greek", entry.slug
     assert_equal "Nabu::Adapters::Perseus", entry.adapter_class_name
     assert entry.enabled
-    assert_equal "live", entry.sync_policy
+    assert_equal "auto", entry.sync_policy
+    assert_equal "source", entry.kind, "kind defaults to source"
+    assert_predicate entry, :source?
     assert_equal %w[perseus-greek], registry.slugs
     assert_equal 1, registry.size
     refute_predicate registry, :empty?
@@ -91,15 +93,75 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/slug/, error.message)
   end
 
-  # P19-1: the fourth vocabulary word — a shelf with no upstream at all.
-  def test_sync_policy_local_is_accepted
+  # P39-0: the `local` sync_policy is GONE — a no-upstream shelf is kind: shelf,
+  # which implies the local fetch strategy and declares no sync_policy.
+  def test_sync_policy_local_is_rejected
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        local-language:
+          adapter: Nabu::Adapters::LocalLanguage
+          kind: shelf
+          enabled: true
+          sync_policy: local
+      YAML
+    end
+    assert_match(/local-language/, error.message)
+    assert_match(/local fetch strategy|drop sync_policy/, error.message)
+  end
+
+  # P39-0: kind: shelf parses, reads shelf?, and (with no sync_policy) the
+  # internal default is manual — never rendered or swept for a shelf.
+  def test_kind_shelf_parses_and_forbids_sync_policy
     registry = load_registry(<<~YAML)
       local-language:
         adapter: Nabu::Adapters::LocalLanguage
+        kind: shelf
         enabled: true
-        sync_policy: local
     YAML
-    assert_equal "local", registry["local-language"].sync_policy
+    entry = registry["local-language"]
+    assert_equal "shelf", entry.kind
+    assert_predicate entry, :shelf?
+    refute_predicate entry, :source?
+  end
+
+  # P39-0: a kind: module mints no catalog rows, so it MUST be enabled: false.
+  def test_kind_module_must_be_disabled
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        kr-gaiji:
+          adapter: Nabu::Adapters::KrGaiji
+          kind: module
+          enabled: true
+          sync_policy: manual
+      YAML
+    end
+    assert_match(/kr-gaiji/, error.message)
+    assert_match(/module.*enabled: false|mints no catalog rows/, error.message)
+  end
+
+  def test_kind_module_parses_when_disabled
+    registry = load_registry(<<~YAML)
+      kr-gaiji:
+        adapter: Nabu::Adapters::KrGaiji
+        kind: module
+        enabled: false
+        sync_policy: manual
+    YAML
+    entry = registry["kr-gaiji"]
+    assert_equal "module", entry.kind
+    assert_predicate entry, :feature_module?
+  end
+
+  def test_unknown_kind_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        my-src:
+          adapter: A
+          kind: widget
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/kind must be one of/, error.message)
   end
 
   def test_bad_sync_policy_raises_naming_the_slug

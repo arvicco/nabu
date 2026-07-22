@@ -234,10 +234,15 @@ module Nabu
       # The coarse content kind from the adapter (dictionary/passages/local
       # shelves), refined by a curated per-slug override (treebank,
       # feature-module, inscriptions…) where the coarse kind under-describes.
+      # A kind: module row is machinery, never a peer corpus (P39-0): it reads
+      # "feature module" so `content_kind :passages` never renders it as
+      # "texts" (a curated override — e.g. bridging's "crosswalk module" — is
+      # more specific and still wins).
       def holds_label(slug, entry)
         override = kinds_overrides[slug]
         return override if override
         return "corpus" unless entry
+        return "feature module" if entry.feature_module?
 
         case entry.adapter_class.content_kind
         when :dictionary then "dictionary"

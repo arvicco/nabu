@@ -12,7 +12,7 @@ module Nabu
     # canonical/local-library/<collection>/ with one manifest.yml per
     # collection as the source of record. An ordinary source in every
     # pipeline sense (registry entry, discovery census, quarantine, attic,
-    # rebuild) with `sync_policy: local`: no upstream, no network; #fetch is
+    # rebuild) with `kind: shelf`: no upstream, no network; #fetch is
     # LocalFetch (re-scan + per-file sha pins). Unlike the dossier shelf
     # this one mints DOCUMENTS + PASSAGES, so the full adapter conformance
     # suite applies.
@@ -86,8 +86,8 @@ module Nabu
 
       def self.manifest = MANIFEST
 
-      # No upstream to probe: sync_policy local short-circuits the remote
-      # probe to the "local" verdict (P19-1 machinery).
+      # No upstream to probe: kind: shelf short-circuits the remote
+      # probe to the "local" verdict (P19-1/P39-0 machinery).
       def self.upstream_repo_urls = []
 
       # The manifests' related: urns feed kind=reference edges into the
