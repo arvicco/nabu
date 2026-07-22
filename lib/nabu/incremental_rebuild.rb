@@ -36,8 +36,9 @@ module Nabu
     Clean = Data.define(:slug, :stamp_short)
 
     # One source's dry-run verdict: state :clean | :dirty | :skip, +reason+
-    # the drift component for :dirty (:canonical/:parser/:fold/:config/
-    # :migration/:unstamped/:weak_identity) or :no_canonical for :skip.
+    # the drift component for :dirty (:canonical/:parser/:config/:migration/
+    # :unstamped/:weak_identity, or — P39-1, a String because it names files —
+    # "fold(<module>, ...)") or :no_canonical for :skip.
     Verdict = Data.define(:slug, :state, :reason, :stamp_short) do
       def initialize(slug:, state:, reason: nil, stamp_short: nil)
         super
@@ -85,13 +86,20 @@ module Nabu
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
           next
         end
-        fingerprint = fingerprints.for_source(entry)
+        fingerprint = fingerprint_for(db, entry)
         if fingerprint.drift_against(Store::DerivationStamp.fetch(db, entry.slug)).nil?
           cleans << Clean.new(slug: entry.slug, stamp_short: fingerprint.short)
           next
         end
         progress&.stage(entry.slug)
         outcomes << replay(db, ledger, entry, progress)
+        # P39-1: re-scope the fold digest AGAINST THE POST-REPLAY CENSUS
+        # before stamping. The pre-replay fingerprint's fold set describes
+        # the rows a dirty canonical/parser just replaced — stamping it could
+        # miss a language the replay introduced (silent under-rebuild).
+        fingerprint = fingerprint.with(
+          fold_digest: DerivationFingerprint.fold_digest(Store::DerivationStamp.derived_languages(db, entry.slug))
+        )
         Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
         indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
       end
@@ -130,11 +138,23 @@ module Nabu
     def verdict_for(db, entry)
       return Verdict.new(slug: entry.slug, state: :skip, reason: :no_canonical) unless replayable?(entry)
 
-      fingerprint = fingerprints.for_source(entry)
-      drift = fingerprint.drift_against(Store::DerivationStamp.fetch(db, entry.slug))
+      fingerprint = fingerprint_for(db, entry)
+      stamp = Store::DerivationStamp.fetch(db, entry.slug)
+      drift = fingerprint.drift_against(stamp)
       return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drift.nil?
 
+      # A fold drift names the changed file(s) — the owner reads these lines.
+      drift = "fold(#{fingerprint.fold_blame(stamp).join(', ')})" if drift == :fold
       Verdict.new(slug: entry.slug, state: :dirty, reason: drift)
+    end
+
+    # The current fingerprint, its fold digest scoped by the catalog's own
+    # language census for the source (P39-1). Honest at verdict time because
+    # a clean canonical+parser implies re-derivation would mint the same
+    # language set the census reads; when they are NOT clean the source is
+    # dirty through those components regardless of the fold set.
+    def fingerprint_for(db, entry)
+      fingerprints.for_source(entry, languages: Store::DerivationStamp.derived_languages(db, entry.slug))
     end
 
     def with_readonly_catalog
