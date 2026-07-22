@@ -25,6 +25,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
 | `rem` | texts | attribution | not enabled | nothing held yet |
 | `rundata` | inscriptions | odbl | not enabled | not synced yet |
+| `helipad` | treebank | attribution | not enabled | not synced yet |
 
 ## The desk's instruments
 

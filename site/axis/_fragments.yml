@@ -30,6 +30,7 @@ kinds:
   # treebanks (annotated dependency corpora — content_kind :passages)
   ud: treebank
   proiel: treebank
+  helipad: treebank
   torot: treebank
   dcs: treebank
   oncoj: annotated corpus
