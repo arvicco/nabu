@@ -10921,7 +10921,7 @@ Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo resh
 ## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready — D41-e RULED primary+all-Persian 2026-07-22; Zenodo zip canonical, discovery-side scoping] [deps: P41-1]
 ## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: ready-after-g] [deps: P41-g]
 ## P41-4 · arabic axis + registry + desk + news  [tier: opus] [deps: P41-2]
-## P41-5 · License-inquiry drafts (DASI №41-1 + optional Romance)  [tier: opus] [status: optional]
+## P41-5 · License-inquiry drafts  [tier: orchestrator] [status: done 2026-07-22 — №41-1 DASI / №41-2 MPCD / №41-3 TITUS-Avestan / №41-4 CEToM / №41-5 DĀMOS drafted in full, contacts researched (two bot-walled, browser-reveal noted); owner sends]
 
 ## gate40 · [status: done 2026-07-22 — merged 65cf8ec (PR #52); v1.2.0 tagged at acc4c96, GitHub release published, Zenodo DOI auto-minting; D40-e ratified at merge]
 
