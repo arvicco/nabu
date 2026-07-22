@@ -22,9 +22,21 @@ The acquisition flow, **anonymous — no login required** (userId came back
 `null`; the CC BY-NC-SA licence is a portal label, not a download gate for
 these dependency treebanks):
 
-1. `command=get-session` → a `sessionId` (ephemeral; expires).
-2. `command=list-resources&details=true&project=iness` → the corpus list. The
-   **Menotec collection has 7 dependency treebanks** (all `language: non`,
+1. `command=get-session` → `{"sessionId": "<digits>"}` (ephemeral; expires).
+   Envelope **evidenced** by a live capture 2026-07-22 (P40-i1), e.g.
+   `{"sessionId": "261731751530541"}`.
+2. `command=list-resources&details=true&project=iness` → the corpus list.
+   Envelope **evidenced** by a real capture (see
+   `iness-list-resources-trim.json` below; captured 2026-07-22 at the
+   **P40-i1 incident** — the fetch tests' original reconstructed envelope
+   keyed entries on `"id"`, but upstream keys them on **`"name"`**, and the
+   owner's first live sync failed on exactly that divergence). Top-level keys
+   `resources` / `languages` / `collections`; each of the 589 `resources`
+   entries is shaped
+   `{"name": …, "printName": …, "type": …, "languages": [...],
+   "languageNames": [...], "collections": [...], "size": N, "license": {…}, …}`
+   (no `"id"` field at all). The
+   **Menotec collection has 7 dependency treebanks** (all `languages: ["non"]`,
    `type: dependency`):
    `non-edda-regius-dep` (Poetic Edda / Codex Regius, 3665 sentences),
    `non-homiliebok-dep` (Old Norwegian Homily Book, 3833),
@@ -34,7 +46,10 @@ these dependency treebanks):
    `non-pamphilus-dep` (Pamphilus, 434 — the smallest),
    `non-strengleikar-dep` (Strengleikar, 2490).
 3. `command=get-treebank-documents&type=dependency&treebank=<id>` → the document
-   list (the treebank's chapters / poems).
+   list (the treebank's chapters / poems). Envelope **still
+   reconstructed-from-flow** (no captured body); the fetcher's shape errors
+   therefore dump the actual top-level keys + a truncated sample, so a live
+   divergence here diagnoses itself from the error text (the P40-i1 lesson).
 4. `command=get-sentences&mode=text&download-mode=tiger-xml&type=dependency&treebank=<id>&document-id=<doc>`
    → the annotated text. Despite `download-mode=tiger-xml`, the payload
    (`sentences.data`) is **native PROIEL XML** (see below).
@@ -50,6 +65,7 @@ get-sentences flow**, not a static fetch.
 |---|---|---|---|
 | `non-pamphilus-dep/ch1-head5.xml` | 6,332 | `non-pamphilus-dep`, document "Ch. 1" (65 sentence blocks in the full document) | first **5 sentence blocks**, whole blocks, in document order |
 | `non-edda-regius-dep/alvissmal-head5.xml` | 6,325 | `non-edda-regius-dep`, document "Alvíssmál" (80 sentence blocks in the full poem) | first **5 sentence blocks**, whole blocks, in document order |
+| `iness-list-resources-trim.json` | 5,712 | the REAL anonymous `list-resources&details=true` response (P40-i1 capture, 2026-07-22) | of 589 resources kept 9 entries **verbatim** (all 7 Menotec + `deu-pargram` (lfg) + `ang-aels-dep` (ISWOC dependency) as non-Menotec probes) + the first 2 and the `non`/`Menotec` entries of `languages`/`collections`; all three top-level keys and every kept object structurally intact; 258 KB → 5,712 B |
 
 **Canonical layout (P40-2 decision).** The adapter treats **one treebank = one nabu
 document** (the treebank-global `sentence/@id` keys the passages, so a treebank's
