@@ -10824,7 +10824,7 @@ sync --all = source∧auto; module sync prints nature; censuses become
 80+4+2 everywhere; axis-generator grouping rides or journals (gate
 docs pass; hand-edit precedent in catalog-less worktrees).
 
-## P39-1 · Fold-digest granularity  [tier: fable — fingerprint semantics] [status: dispatched] [deps: —]
+## P39-1 · Fold-digest granularity  [tier: fable — fingerprint semantics] [status: done 2026-07-22 — merged; language-scoped fold digests via catalog census; rake stamps:rebless attestation-gated] [deps: —]
 Fold modules leave shared core → language-scoped fold digest
 (lzh/och→hani; jpn→jpn+hani); normalize.rb stays global; dirty-MORE
 asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
@@ -10835,13 +10835,13 @@ Classify live 1,191 by stored reason; recover mechanical classes
 (census-backed only); attic-rediscovery design; perseus-latin 27
 baseline check.
 
-## P39-3 · Load-cost pair  [tier: opus] [status: dispatched] [deps: —]
+## P39-3 · Load-cost pair  [tier: opus] [status: done 2026-07-22 — merged; ZipReader 146x at fixture scale; CBETA ROOT CAUSE: String#tr per-call table rebuild → gsub precompiled 325x, byte-identical] [deps: —]
 In-repo single-member zip reader (stdlib zlib, binary-name
 discipline, byte-identical vs unzip -p across all fixture zips) +
 cbeta derive-stage attribution incl. fixture-scale fold on/off
 measurement. Live confirmation owner-fired.
 
-## P39-4 · Diorisis URN collision  [tier: opus] [status: dispatched] [deps: —]
+## P39-4 · Diorisis URN collision  [tier: opus] [status: done 2026-07-22 — merged; distinct-works diagnosis → adapter disambiguation (5 URNs) + loud within-pass collision loader invariant] [deps: —]
 Within-pass URN re-encounter with different content = loud collision
 (quarantine later file + journal), revise-on-resync untouched; real
 trimmed fixtures from the actual colliding files; upstream cause
@@ -10851,3 +10851,6 @@ reported.
 Structured component descriptions → aozora IDS lane (conservative
 grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
 aozora gaiji: ladder; resolvable census.
+
+## P39-s1 · Germanic axis scout  [tier: survey/network] [status: dispatched 2026-07-22 — owner-requested]
+## P39-s2 · Latin→Romance scout  [tier: survey/network] [status: dispatched 2026-07-22 — owner-requested]
