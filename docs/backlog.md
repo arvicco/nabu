@@ -10911,6 +10911,8 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
+## P41-r1 · Recipe honesty: term-less filtered search never existed  [status: done 2026-07-22 — six recipes + README/tools composed with live-verified queries; riders journaled: term-less filtered-browse mode, catalog-side filter window starvation (P40-r2 genus)]
+
 # P41 — the Arabic phase (owner-picked 2026-07-22: "A, full scope, display considerations, new arabic(islamic?) axes, whole shebang"; plan: .docs/p41-arabic-plan.md)
 
 ## P41-g · OpenITI fixture groundwork + mARkdown census  [tier: opus/network — D41-d gated] [status: done 2026-07-22 — merged 7444280; findings in plan doc; D41-e evidence awaiting owner ruling]
