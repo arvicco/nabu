@@ -368,6 +368,8 @@ module Nabu
     option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
                   desc: "Group the status table under the research axes (config/axes.yml): bare = all in " \
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: show every row (modules + unfocused sources included)"
     def status(slug = nil)
       slug = slug.to_s.strip
       config = Nabu::Config.load
@@ -379,8 +381,17 @@ module Nabu
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      report = status_report(registry, db, ledger, slug)
-      say report
+      # `status SOURCE` is the detail block — UNSCOPED (explicit naming is
+      # explicit intent; any source, focused or not). The bare/--long/--axis
+      # tables scope to the focus profile (P40-f).
+      if slug.empty?
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        say status_report(view.registry, db, ledger, slug)
+        print_focus_note(view, view.registry_hidden)
+      else
+        say status_report(registry, db, ledger, slug)
+      end
     ensure
       db&.disconnect
       ledger&.disconnect
@@ -507,6 +518,8 @@ module Nabu
                                             "prose (idempotent; existing dossiers untouched)"
     option :"dry-run", type: :boolean, default: false,
                        desc: "With --export-source-dossiers: report without writing"
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: census every source (--sources map is always whole-library)"
     def list(slug = nil)
       slug = slug.to_s.strip
       validate_list_flags!(slug)
@@ -522,10 +535,20 @@ module Nabu
       query = Nabu::Query::List.new(catalog: catalog)
       if options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        print_census_by_axis(query.census, selected_axes(registry.axes), registry)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        rows = scoped_census(query.census, view)
+        print_census_by_axis(rows, selected_axes(registry.axes), registry)
+        print_focus_note(view, query.census.size - rows.size)
       elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
-      elsif slug.empty? then print_census(query.census, options[:long] ? query.descriptions : nil)
+      elsif slug.empty?
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
+        rows = scoped_census(query.census, view)
+        print_census(rows, options[:long] ? query.descriptions : nil)
+        print_focus_note(view, query.census.size - rows.size)
       elsif options[:documents]
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
@@ -600,6 +623,8 @@ module Nabu
                     desc: "Probe every registered upstream (git ls-remote + license drift); no cloning, no corpus fetch"
     option :backfill_pins, type: :boolean, default: false,
                            desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
+    option :all, type: :boolean, default: false,
+                 desc: "Ignore the focus profile: check every source (modules + unfocused sources included)"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
       # live golden replay). --remote is the P5-3 upstream probe.
@@ -1950,6 +1975,57 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "focus [only|add|drop|clear] [NAMES…]", "Your research focus: scope status/list/health to a few desks"
+    long_desc <<~HELP, wrap: false
+      The FOCUS PROFILE (config/profile.yml, P40-f) — a personal list of AXIS
+      NAMES and/or SOURCE SLUGS naming what you are working on now. When it is
+      set, the WHOLE-LIBRARY read views scope to it:
+
+        nabu status · nabu list · nabu health   → focused sources only
+
+      Your own shelves (kind: shelf) ALWAYS show; feature modules show only
+      under --all; and --all on any of those commands shows everything. The
+      focused set is (every member of each focused axis) ∪ (each named source).
+
+      DELIBERATELY UNSCOPED, and staying that way:
+        nabu status SOURCE   an explicitly named source — explicit intent —
+                             shows regardless of focus.
+        nabu sync --all      cadence-based: a display preference must never
+                             cause silent staleness. Sync stays library-wide.
+        nabu search          library-wide is the product; a cross-desk hit is
+                             the whole point of the FTS index.
+        nabu list --sources  the one-page onboarding map is the whole library.
+
+      Show / edit:
+        nabu focus                    # show the profile (axes vs sources) + count
+        nabu focus only germanic rem  # replace the profile with these names
+        nabu focus add slavic         # add names (idempotent, sorted)
+        nabu focus drop rem           # remove names
+        nabu focus clear              # remove the profile (back to everything)
+
+      An unknown name on `only`/`add` is refused, naming near-misses. A name in
+      the file that the registry no longer knows (drift after a hand-edit) is
+      warned about and ignored — never fatal. The file is gitignored (personal)
+      and rides `nabu backup` (the config/ tree).
+    HELP
+    def focus(action = nil, *names)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      profile = Nabu::Profile.load(config.profile_path)
+      names = names.map(&:strip).reject(&:empty?)
+      case action.to_s.strip
+      when "" then show_focus(profile, registry)
+      when "only" then write_focus(config, registry, names, verb: :only)
+      when "add" then write_focus(config, registry, profile.entries + names, verb: :add, given: names)
+      when "drop" then drop_focus(config, profile, names)
+      when "clear" then clear_focus(config, profile)
+      else
+        raise Thor::Error, "focus: unknown action #{action.inspect} — use only, add, drop, clear, or no action to show"
+      end
+    rescue Nabu::Focus::UnknownName => e
+      raise Thor::Error, "focus: #{e.message}"
+    end
+
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
     long_desc <<~HELP, wrap: false
       The comparativist's join (P15-3): verses of a registered alignment work
@@ -2731,6 +2807,98 @@ module Nabu
         end
 
         Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
+      end
+
+      # -- focus profile (P40-f) --------------------------------------------
+
+      # The working scope for a read surface: the focus profile resolved
+      # against the registry, honoring --all. The filtered registry it carries
+      # is what status/list/health render instead of the full one.
+      def focus_view(config, registry)
+        Nabu::Focus.view(
+          profile: Nabu::Profile.load(config.profile_path), registry: registry, all: options[:all]
+        )
+      end
+
+      # Drop the census rows the view hides (a shelf/focused source stays, an
+      # unfocused source goes). A pass-through view keeps every row, so the
+      # unfocused census is byte-identical to before.
+      def scoped_census(rows, view)
+        view.active? ? rows.select { |row| view.visible?(row.slug) } : rows
+      end
+
+      # The focus META lines go to STDERR, never stdout: piped output stays
+      # byte-identical to the unfocused table (the regression pin), while the
+      # terminal user still sees the context. With a profile: the footer naming
+      # the focus and the exact hidden count. Without one: the discoverability
+      # hint. Under --all (profile present but overridden): silence.
+      def print_focus_note(view, hidden)
+        if view.active?
+          warn Nabu::Focus.footer_line(view.entries, hidden)
+        elsif view.profile.empty?
+          warn Nabu::Focus.hint_line
+        end
+      end
+
+      # Warn once about names the file carries that the registry no longer
+      # knows (drift after a hand-edit): ignored, never fatal.
+      def warn_focus_drift(view)
+        warn Nabu::Focus.drift_line(view.unknown) unless view.unknown.empty?
+      end
+
+      # `nabu focus` (bare): the profile as stored — axes vs sources
+      # distinguished, drift flagged — and the resolved source count, or the
+      # honest "none — showing everything".
+      def show_focus(profile, registry)
+        if profile.empty?
+          say "focus: none — showing everything"
+          return say(Nabu::Focus.hint_line)
+        end
+
+        resolution = Nabu::Focus.resolve(profile, registry)
+        count = profile.entries.size
+        say "focus (#{count} #{count == 1 ? 'entry' : 'entries'}):"
+        say "  axes:    #{resolution.axes.join(', ')}" unless resolution.axes.empty?
+        say "  sources: #{resolution.sources.join(', ')}" unless resolution.sources.empty?
+        unless resolution.unknown.empty?
+          say "  unknown: #{resolution.unknown.join(', ')} (not a known axis or source — ignored)"
+        end
+        # Modules never show on the scoped surfaces (only under --all), so the
+        # resolved count reflects the sources status/list/health will display.
+        shown = resolution.slugs.count { |slug| !registry[slug]&.feature_module? }
+        say "resolved: #{pluralize(shown, 'source')} in focus " \
+            "(nabu status shows them; --all shows everything)"
+      end
+
+      # `focus only` / `focus add`: validate every WRITTEN name against the
+      # registry (unknown refused, near-misses named), then persist the sorted,
+      # de-duplicated profile. +given+ is the just-typed subset to validate for
+      # `add` (the existing entries are already trusted); +names+ is the full
+      # next entry list.
+      def write_focus(config, registry, names, verb:, given: names)
+        Nabu::Focus.validate_names!(given, registry)
+        profile = Nabu::Profile.new(names).save(config.profile_path)
+        announce_focus(profile, registry, verb)
+      end
+
+      def drop_focus(config, profile, names)
+        Nabu::Profile.new(profile.entries - names).save(config.profile_path)
+        announce_focus(Nabu::Profile.load(config.profile_path),
+                       Nabu::SourceRegistry.load(config.sources_path), :drop)
+      end
+
+      def clear_focus(config, profile)
+        return say("focus: already none — showing everything") if profile.empty?
+
+        Nabu::Profile.new([]).save(config.profile_path)
+        say "focus cleared — showing everything"
+      end
+
+      # After a write, confirm the new state (an empty result reads as cleared).
+      def announce_focus(profile, registry, _verb)
+        return say("focus: none — showing everything") if profile.empty?
+
+        show_focus(profile, registry)
       end
 
       def selected_axes(axis_registry)
@@ -5925,12 +6093,15 @@ module Nabu
       def run_remote_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
         ledger = open_or_create_ledger(config)
         report = Nabu::Health::RemoteProbe.new(
-          registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
+          registry: view.registry, ledger: ledger, canonical_dir: config.canonical_dir
         ).run(progress: remote_health_ticker)
         $stderr.print("\r\e[K") if $stderr.tty? # clear the ticker before the table
         print_remote_health(report)
+        print_focus_note(view, view.registry_hidden)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
@@ -6010,15 +6181,18 @@ module Nabu
       def run_local_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
+        view = focus_view(config, registry)
+        warn_focus_drift(view)
         catalog = open_catalog(config)
         fulltext = catalog ? open_fulltext(config) : nil
         ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
-          registry: registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
+          registry: view.registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
           canonical_dir: config.canonical_dir
         ).run
         print_local_health(report)
+        print_focus_note(view, view.registry_hidden)
         raise Thor::Error, local_health_failure(report) if report.any_loud?
       ensure
         catalog&.disconnect
