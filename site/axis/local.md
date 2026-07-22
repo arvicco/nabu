@@ -15,10 +15,10 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `local-language` | language dossiers | open | enabled · local | 214 dossiers |
-| `local-library` | texts | research_private | enabled · local | 20 docs / 8,725 passages |
-| `local-notes` | owner notes | open | enabled · local | nothing held yet |
-| `local-source` | source records | open | enabled · local | 79 dossiers |
+| `local-language` | language dossiers | open | enabled · manual | 214 dossiers |
+| `local-library` | texts | research_private | enabled · manual | 20 docs / 8,725 passages |
+| `local-notes` | owner notes | open | enabled · manual | nothing held yet |
+| `local-source` | source records | open | enabled · manual | 79 dossiers |
 
 ## The desk's instruments
 
