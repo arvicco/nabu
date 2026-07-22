@@ -7,9 +7,8 @@
 # byte-canonical upstream file), so it is fetched for URL-liveness only, never
 # byte-compared. The real bulk dump is the 47 MB client-side SQLite database
 # (runes.<hash>.sqlite3) documented in the README — too big to commit.
-# adapter_test is null (no adapter exists yet).
 source: rundata
-adapter_test:
+adapter_test: test/adapters/rundata_test.rb
 retrieved: 2026-07-22
 files:
   - path: U_344.json
