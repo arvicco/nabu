@@ -340,13 +340,22 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "status", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
+    desc "status [SOURCE]", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
     long_desc <<~HELP, wrap: false
-      The SYNC-STATE view: one row per registered source — enabled, sync
-      policy, the cached upstream-drift verdict (up=), live counts, and the
-      last run's outcome. Its sibling is `nabu list`, the WHAT-IS-HELD view
-      (content census, per-shelf cards, document/entry enumerations): status
-      answers "should I sync?", list answers "what does the library hold?".
+      The SYNC-STATE view. Bare `nabu status` is the COMPACT table (P40-s):
+      one dense row per registered source, grouped by kind — a fused
+      kind/enablement/cadence column, a SILENT liveness cell that speaks only
+      to flag an exception (OLD/DOWN/?REPROBE/UNPROBED), one humanized
+      holdings column, and the last run's stamp + zero-suppressed delta. Its
+      sibling is `nabu list`, the WHAT-IS-HELD view (content census, per-shelf
+      cards): status answers "should I sync?", list answers "what does the
+      library hold?".
+
+      `nabu status SOURCE` is one source's full labeled detail block: kind,
+      enabled, cadence, the liveness verdict (healthy states included), exact
+      thousands-separated counts, license class, the full timestamp/delta, and
+      the last run's status. `nabu status --long` is that extended detail as a
+      labeled table for EVERY row.
 
       --remote probes every upstream first (the same code path as
       `health --remote`, persisting each verdict) and renders the fresh
@@ -354,10 +363,13 @@ module Nabu
     HELP
     option :remote, type: :boolean, default: false,
                     desc: "Probe every upstream first (same as health --remote), persist, then show fresh drift"
+    option :long, type: :boolean, default: false,
+                  desc: "The full labeled detail (verbose liveness, exact counts, license, full delta) for every row"
     option :axis, type: :string, banner: "[NAME[,NAME…]]", lazy_default: "",
                   desc: "Group the status table under the research axes (config/axes.yml): bare = all in " \
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
-    def status
+    def status(slug = nil)
+      slug = slug.to_s.strip
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # --remote (P14-12): the one-command informed-update flow — run the live
@@ -367,13 +379,7 @@ module Nabu
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
       db = open_catalog(config)
-      # --axis (P35-1): the same rows grouped under the research desks.
-      report = if options[:axis]
-                 Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
-                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
-               else
-                 Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-               end
+      report = status_report(registry, db, ledger, slug)
       say report
     ensure
       db&.disconnect
@@ -2708,6 +2714,25 @@ module Nabu
       # unknown name is a clean error naming the known set — the resolution
       # guarantee (an axis name can never collide with a slug, so this is
       # unambiguous). No axes defined at all is its own honest miss.
+      # Route `nabu status` (P40-s): a SOURCE argument renders that one row's
+      # full labeled detail block; --axis groups the compact rows under the
+      # research desks; --long is the extended detail table; bare is the compact
+      # v2 table. An unknown SOURCE names the valid slugs, like `list SOURCE`.
+      def status_report(registry, db, ledger, slug)
+        unless slug.empty?
+          detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: slug)
+          return detail if detail
+
+          raise Thor::Error, "unknown source #{slug.inspect} — known sources: #{registry.slugs.join(', ')}"
+        end
+        if options[:axis]
+          return Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
+                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+        end
+
+        Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
+      end
+
       def selected_axes(axis_registry)
         if axis_registry.empty?
           raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
