@@ -9,6 +9,8 @@ description: >-
 
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
@@ -18,7 +20,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `isicily` | inscriptions | attribution | enabled · manual | 6,664 docs / 16,996 passages |
 | `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
-| `sabellic-loans` | dictionary | attribution | enabled · local | 85 entries |
+| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
 | `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
 | `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |
 | `larth-etp` | dictionary | attribution | enabled · manual | 1,122 entries |

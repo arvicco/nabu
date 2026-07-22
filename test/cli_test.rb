@@ -1089,7 +1089,7 @@ class CLITest < Minitest::Test
         library:
           adapter: TestAdapter
           enabled: true
-          sync_policy: local
+          kind: shelf
       YAML
       out, _err, status = with_config(config) { run_cli(%w[list --sources]) }
       assert_nil status
@@ -1592,7 +1592,7 @@ class CLITest < Minitest::Test
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
           enabled: true
-          sync_policy: local
+          kind: shelf
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -1912,11 +1912,11 @@ class CLITest < Minitest::Test
         local-library:
           adapter: Nabu::Adapters::LocalLibrary
           enabled: true
-          sync_policy: local
+          kind: shelf
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
           enabled: true
-          sync_policy: local
+          kind: shelf
       YAML
       path = File.join(root, "sources.yml")
       File.write(path, sources)
@@ -2151,7 +2151,7 @@ class CLITest < Minitest::Test
         local-notes:
           adapter: Nabu::Adapters::LocalNotes
           enabled: true
-          sync_policy: local
+          kind: shelf
       YAML
       path = File.join(root, "sources.yml")
       File.write(path, sources)
@@ -2417,7 +2417,9 @@ class CLITest < Minitest::Test
       assert File.exist?(config.history_path), "the first sync creates the ledger"
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      assert_match(/corpus.*last \d{4}-\d{2}-\d{2} \d{2}:\d{2} ok \(\+2 ~0 -0 !0\)/, out)
+      # P39-0 compact: on(a) source, bare stamp + delta (no "last "/"ok").
+      assert_match(/corpus\s+on\(a\)\s+source\s+up=\S+\s+docs=2 pass=3/, out)
+      assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+2 ~0 -0 !0\)/, out)
     end
   end
 
@@ -2445,7 +2447,7 @@ class CLITest < Minitest::Test
       assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
       # The member row is the SAME status line (state, policy, up=, counts),
       # merely indented under its axis; lex serves slavic AND reference.
-      assert_match(/^  lex\s+on\s+frozen\s+up=frozen\s+docs=0 pass=0/, out)
+      assert_match(/^  lex\s+on\(f\)\s+source\s+up=frozen\s+docs=0 pass=0/, out)
       assert_operator out.index("  lex", out.index("slavic — ")), :<, out.index("reference — ")
       assert_operator out.index("  lex", out.index("reference — ")), :>, out.index("reference — ")
     end
@@ -2578,9 +2580,10 @@ class CLITest < Minitest::Test
     with_sync_env(enabled: true) do |config|
       with_config(config) { run_cli(%w[sync corpus --parse-only]) }
 
-      # Bare status before any probe: the upstream is genuinely unknown.
+      # Bare status before any probe: drift is unknown (?), but P39-0 shows the
+      # age of the last successful sync (last contact) — here 0d, just synced.
       before, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\?\(unprobed\)/, before)
+      assert_match(/corpus.*up=\?\(0d\)/, before)
 
       # --remote probes inline and writes the cache.
       out, _err, status = with_config(config) do
@@ -4753,7 +4756,7 @@ class CLITest < Minitest::Test
         library:
           adapter: TestAdapter
           enabled: true
-          sync_policy: local
+          kind: shelf
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -4803,7 +4806,7 @@ class CLITest < Minitest::Test
         library:
           adapter: TestAdapter
           enabled: true
-          sync_policy: local
+          kind: shelf
           axes: [slavic]
       YAML
       config = Nabu::Config.new(
@@ -5317,7 +5320,7 @@ class CLITest < Minitest::Test
       File.write(File.join(corpus, "kwic.txt"),
                  "KWIC\nalpha μῆνιν beta gamma\ndelta μηνιτισι epsilon\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: live\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -5339,7 +5342,7 @@ class CLITest < Minitest::Test
                    treebank)
       sources = File.join(root, "sources.yml")
       File.write(sources, "ud:\n  adapter: Nabu::Adapters::UniversalDependencies\n  " \
-                          "enabled: true\n  sync_policy: live\n")
+                          "enabled: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -5729,7 +5732,7 @@ class CLITest < Minitest::Test
       File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: #{enabled}\n  sync_policy: live\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: #{enabled}\n  sync_policy: auto\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -5759,7 +5762,7 @@ class CLITest < Minitest::Test
         File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
         File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
         sources << "#{slug}:\n  adapter: TestAdapter\n  enabled: #{spec[:enabled]}\n  " \
-                   "sync_policy: live\n  axes: [#{spec[:axes].join(', ')}]\n"
+                   "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n"
       end
       File.write(File.join(root, "axes.yml"), <<~YAML)
         alpha:

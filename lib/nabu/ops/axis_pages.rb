@@ -108,7 +108,7 @@ module Nabu
           > #{axis.persona}
 
           #{axis.desc}
-          #{blurb_block(axis)}## The shelves
+          #{blurb_block(axis)}#{quickstart_pointer}## The shelves
 
           #{shelves_intro(members)}
 
@@ -165,7 +165,7 @@ module Nabu
           page, where the member shelves, live holdings, instruments, CLI recipes
           and terminal setup live.
 
-          ## The eighteen desks
+          #{quickstart_pointer}## The eighteen desks
 
           #{index_entries}
 
@@ -204,6 +204,16 @@ module Nabu
           .gsub(/\s+/, " ")
       end
 
+      # The single reverse-funnel line every desk page and the /axis/ index
+      # carry, in a consistent slot (right before the first section heading):
+      # a newcomer's onward path back to the Quickstart. Verbatim and
+      # identical across all pages (P39-r2), so the hand-applied committed
+      # pages and a future `rake site:axes` regen stay byte-consistent.
+      def quickstart_pointer
+        "New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) " \
+          "sets up the library in minutes.\n\n"
+      end
+
       def blurb_block(axis)
         blurb = fragment(axis.name)["blurb"]
         blurb ? "\n#{blurb.strip}\n\n" : "\n"
@@ -234,10 +244,15 @@ module Nabu
       # The coarse content kind from the adapter (dictionary/passages/local
       # shelves), refined by a curated per-slug override (treebank,
       # feature-module, inscriptions…) where the coarse kind under-describes.
+      # A kind: module row is machinery, never a peer corpus (P39-0): it reads
+      # "feature module" so `content_kind :passages` never renders it as
+      # "texts" (a curated override — e.g. bridging's "crosswalk module" — is
+      # more specific and still wins).
       def holds_label(slug, entry)
         override = kinds_overrides[slug]
         return override if override
         return "corpus" unless entry
+        return "feature module" if entry.feature_module?
 
         case entry.adapter_class.content_kind
         when :dictionary then "dictionary"

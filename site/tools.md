@@ -340,3 +340,9 @@ database from canonical data, proven byte-identical by test; and
 `nabu backup` copies everything non-derivable to external storage, with a
 rehearsed restore drill. These are documented in the repository's
 [operations runbook](https://github.com/arvicco/nabu/blob/main/docs/ops.md).
+
+These instruments read best in use. The
+[Examples]({{ '/examples/' | relative_url }}) put them in the hands of a
+classicist, a papyrologist, an assyriologist and others — real sessions, end
+to end — and each [research desk]({{ '/axis/' | relative_url }}) then gathers
+the commands, shelves and terminal setup for one field.

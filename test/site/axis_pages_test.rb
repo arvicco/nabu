@@ -19,6 +19,12 @@ class AxisPagesTest < Minitest::Test
   ROOT = Nabu::Config::PROJECT_ROOT
   AXIS_DIR = File.join(ROOT, "site", "axis")
 
+  # The reverse-funnel pointer (P39-r2): one verbatim, identical line on every
+  # desk page and the /axis/ index, sending a newcomer back to the Quickstart.
+  QUICKSTART_POINTER =
+    "New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) " \
+    "sets up the library in minutes."
+
   def registry
     @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
   end
@@ -89,6 +95,20 @@ class AxisPagesTest < Minitest::Test
                  "site/axis/*.md must be exactly the registry's axes plus index — run `rake site:axes`"
   end
 
+  # The Quickstart pointer rides every desk page, ahead of the shelves table
+  # (so it never displaces the registry-pinned desc line above it).
+  def test_each_page_carries_the_quickstart_pointer_before_the_shelves
+    axes.each_axis do |axis|
+      body = body(axis.name)
+      assert_includes body, QUICKSTART_POINTER,
+                      "#{axis.name}: the page must carry the Quickstart pointer (regenerate with `rake site:axes`)"
+      pointer_at = body.index(QUICKSTART_POINTER)
+      shelves_at = body.index("## The shelves")
+      assert pointer_at < shelves_at,
+             "#{axis.name}: the Quickstart pointer must sit before the '## The shelves' heading"
+    end
+  end
+
   # ---- the /axis/ index (the site rendition of docs/axes.md) --------------
 
   def index_body
@@ -108,6 +128,14 @@ class AxisPagesTest < Minitest::Test
     page_names = index_blocks.map { |name, _| name.strip }
     assert_equal axes.each_axis.map(&:name), page_names,
                  "the /axis/ index desk headings must be exactly the AxisRegistry names, in ratified order"
+  end
+
+  def test_index_carries_the_quickstart_pointer_before_the_desk_list
+    body = index_body
+    assert_includes body, QUICKSTART_POINTER,
+                    "the /axis/ index must carry the Quickstart pointer (regenerate with `rake site:axes`)"
+    assert body.index(QUICKSTART_POINTER) < body.index("## The eighteen desks"),
+           "the /axis/ index pointer must sit before the '## The eighteen desks' heading"
   end
 
   def test_index_pins_each_persona_verbatim_and_links_the_page

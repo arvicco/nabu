@@ -10814,3 +10814,70 @@ census read after a clean pass.
 # AOZORA QUARANTINE TRIAGE: 1,191 (6.9%) — classify by error message
 #   (index-vs-tree re-proof drift / delimiter-less legacy / UTF-8 five
 #   / corrupt zips) — already a P39 candidate, counts now live.
+
+# Phase 39 — the registry & aftercare phase (approved 2026-07-22: all six packets; source of truth .docs/p39-registry-aftercare-plan.md)
+
+## P39-0 · Registry semantics  [tier: opus] [status: done 2026-07-22 — merged cc26cee; 78+4+2=84 real rows; live→auto trio; sabellic-loans→frozen wrinkle; live smoke: perseus BEHIND surfaced day one] [deps: —]
+kind: source|shelf|module + sync auto|manual|frozen (live→auto,
+local dropped) + the owner output format verbatim (journal above);
+sync --all = source∧auto; module sync prints nature; censuses become
+80+4+2 everywhere; axis-generator grouping rides or journals (gate
+docs pass; hand-edit precedent in catalog-less worktrees).
+
+## P39-1 · Fold-digest granularity  [tier: fable — fingerprint semantics] [status: done 2026-07-22 — merged; language-scoped fold digests via catalog census; rake stamps:rebless attestation-gated] [deps: —]
+Fold modules leave shared core → language-scoped fold digest
+(lzh/och→hani; jpn→jpn+hani); normalize.rb stays global; dirty-MORE
+asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
+(attestation flag) so the formula change skips a forced full rebuild.
+
+## P39-2 · Aozora quarantine triage  [tier: opus] [status: done 2026-07-22 — merged 46a2b3e; ONE class (no-legend legacy txt kind), 1,191/1,191 recovered at prototype scale; hash-drift/UTF-8/corrupt = 0 live; attic answer = accept-as-designed (Option C, owner ratification at gate); perseus-latin 27 = longstanding upstream TEI (ISO-entity journal)] [deps: P39-3]
+
+## P39-r2 · Site journey pass  [tier: opus] [status: done 2026-07-22 — merged 8815049; persona funnel + action calls; rake bless alias + ops §8b rake reference rode the merge] [deps: —, owner-requested at the gate]
+
+## P39-r1 · Bare-kuten named-symbol resolution  [tier: opus] [status: done 2026-07-22 — merged 84db148; 16,137/19,094 occurrences (85%) resolve, 0 table failures; disjointness pinned] [deps: P39-2, P39-5]
+KUTEN_GAIJI misses named symbols with bare men-ku-ten (二の字点、1-2-22 —
+no 第N水準 prefix): 16,148/19,094 unresolved occurrences (85%). Widen
+the notation grammar to accept bare-kuten where the code resolves via
+config/jis0213 — resolved char INTO text (upstream identity claim, the
+existing kuten precedent); unresolvable stays sentinel; census pins.
+Classify live 1,191 by stored reason; recover mechanical classes
+(census-backed only); attic-rediscovery design; perseus-latin 27
+baseline check.
+
+## P39-3 · Load-cost pair  [tier: opus] [status: done 2026-07-22 — merged; ZipReader 146x at fixture scale; CBETA ROOT CAUSE: String#tr per-call table rebuild → gsub precompiled 325x, byte-identical] [deps: —]
+In-repo single-member zip reader (stdlib zlib, binary-name
+discipline, byte-identical vs unzip -p across all fixture zips) +
+cbeta derive-stage attribution incl. fixture-scale fold on/off
+measurement. Live confirmation owner-fired.
+
+## P39-4 · Diorisis URN collision  [tier: opus] [status: done 2026-07-22 — merged; distinct-works diagnosis → adapter disambiguation (5 URNs) + loud within-pass collision loader invariant] [deps: —]
+Within-pass URN re-encounter with different content = loud collision
+(quarantine later file + journal), revise-on-resync untouched; real
+trimmed fixtures from the actual colliding files; upstream cause
+reported.
+
+## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: done 2026-07-22 — merged 359c477; 244 IDS derived (46.2% of composition occurrences); RIDER FLAGGED: bare-kuten named symbols = 85% of unresolved occurrences, parse-time widening → P39-r1 after P39-2] [deps: P39-3]
+Structured component descriptions → aozora IDS lane (conservative
+grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
+aozora gaiji: ladder; resolvable census.
+
+## P39-s1 · Germanic axis scout  [tier: survey/network] [status: done 2026-07-22 — survey delivered (.docs/surveys/germanic-survey.md); headline: 2 new parser families unlock 4 languages — IcePaHC config-only (CC BY-SA), Menotec ON+Edda (PROIEL family, nc), Penn family = YCOE 1.5M OE prose (nc) + HeliPaD Old Saxon (CC-BY); DDD CorA family = whole diachronic German lane (ReM CC BY-SA confirmed); Rundata runic ODbL dual-axis; PPCME2 blocked-license; OFris/ODu blocked-format (inquiry)]
+## P39-s2 · Latin→Romance scout  [tier: survey/network] [status: done 2026-07-22 — survey delivered (.docs/surveys/latin-romance-survey.md); headline: Romance end completely empty + no romance axis exists; UD pack = 4 rungs config-only (LLCT charters CC BY-SA!); openMGH CC BY 4.0 = medieval-Latin bulk prize; digilibLT CIRCSE; BFM 6.45M words Etalab-open; bridge (REW PD-but-OCR / DÉRom / FEW) = R&D track; OVI/COM blocked]
+
+# ── Long-term journal: ATTIC REVISION/REDESIGN (D39-a ruling, owner 2026-07-22) ──
+# Ruled: Option C (withdrawal-as-designed) FOR NOW; the redesign is a
+# standing future item with two owner-set requirements:
+# 1. REMOVAL-CAUSE TAXONOMY: distinguish extrinsic/copyright removals
+#    from error-correction/replacement/reorganization churn. Today the
+#    attic records only that+when a file vanished (FETCH_HEAD sha),
+#    never why — the taxonomy likely needs upstream commit-message
+#    heuristics + an owner-annotation lane.
+# 2. ACCESSIBLE **AND SEARCHABLE**: honesty check 2026-07-22 — only
+#    half-true today. Withdrawn works: text retained, list --withdrawn
+#    + show reach them, but ALL query paths filter withdrawn:false.
+#    Redesign scope: an explicit withdrawn search scope (never
+#    default-on), and the FTS index question it drags in (withdrawn
+#    passages currently in or out of passages_fts? — verify then).
+# Phase-sized when picked up; not before a concrete need or the next
+# storage phase (contentless-FTS5 would touch the same index seams —
+# natural pairing).

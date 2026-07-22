@@ -119,6 +119,61 @@ namespace :fold do
   end
 end
 
+# The Aozora gaiji IDS lane (P39-5). Regenerates config/gaiji/aozora-ids.tsv
+# from the HELD, checked-in composition-description census (NOT canonical, NOT
+# the catalog — a pure function of a small TSV, so it runs anywhere). Rung 2 of
+# the P38-2 display ladder for aozora; full grammar + refusal policy on
+# Nabu::Ops::AozoraIdsBuilder.
+namespace :gaiji do
+  desc "Regenerate config/gaiji/aozora-ids.tsv from config/gaiji/aozora-descriptions.tsv"
+  task :aozora_ids, [:census_path] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    census = args[:census_path] ||
+             File.expand_path("config/gaiji/aozora-descriptions.tsv", __dir__)
+    builder = Nabu::Ops::AozoraIdsBuilder.new(census_path: census)
+    File.write(File.expand_path("config/gaiji/aozora-ids.tsv", __dir__), builder.render)
+    c = builder.census
+    puts "config/gaiji/aozora-ids.tsv regenerated: #{c.derived} IDS entries from " \
+         "#{c.descriptions} composition descriptions"
+    pct = (100.0 * c.derived_occurrences / c.composition_occurrences).round(1)
+    puts "  derived #{c.derived_occurrences}/#{c.composition_occurrences} composition " \
+         "occurrences (#{pct}%)"
+    puts "  refused: #{c.refused.map { |cls, n| "#{n} #{cls}" }.join(', ')}"
+  end
+end
+
+# OWNER-ONLY escape hatch (P39-1): rewrite every derivation stamp against
+# current code WITHOUT re-deriving — for fingerprint FORMULA changes only,
+# valid ONLY immediately after a verified full rebuild on unchanged
+# canonical. Misuse = silent under-derivation (the refusal message and
+# Nabu::Ops::StampRebless spell it out; docs/ops.md "Derivation stamps").
+namespace :stamps do
+  desc "Rebless derivation stamps against current code (owner-only; requires attestation)"
+  task :rebless, [:attestation] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    begin
+      Nabu::Ops::StampRebless.new(config: config, registry: registry)
+                             .run(attestation: args[:attestation])
+    rescue Nabu::Error => e
+      abort e.message
+    end
+  end
+end
+
+# The short handle (owner request 2026-07-22). Same task, same attestation
+# guard — the friction lives in the ARGUMENT (a claim you must be able to
+# make truthfully), not the task name.
+desc "Short alias for stamps:rebless (owner-only; requires attestation)"
+task :bless, [:attestation] do |_task, args|
+  Rake::Task["stamps:rebless"].invoke(args[:attestation])
+end
+
 # Gate rider (P24-0, site/MAINTENANCE.md standing duty): flag drift between
 # the canonical/local-source dossier descriptions and the public map
 # (docs/library.md; site/library.md is its printed copy, covered

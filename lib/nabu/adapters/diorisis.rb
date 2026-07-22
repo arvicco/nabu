@@ -193,18 +193,46 @@ module Nabu
         [base, attic_notes(fetch.atticked)].compact.join("; ")
       end
 
+      # The urn is <prefix><tlgAuthor>:<tlgId>, but upstream REUSES a tlgId
+      # across genuinely distinct works: the whole-corpus census (2026-07-22,
+      # P39-4) found two collision groups — Diodorus Siculus 0060:001 split
+      # into three book-range volumes (Books I-V / XI-XVII / XVIII-XX) and
+      # Aristotle 0086:029 shipped twice (Economics / Oeconomica II). All five
+      # are distinct texts (distinct titles, sizes, bodies), not duplicates, so
+      # a bare tlgAuthor:tlgId is NOT unique and the last file parsed silently
+      # overwrote its siblings (glob-order-dependent; owner rebuild saw
+      # `~3 updated` on a from-scratch load — the same urn minted three times).
+      # Fix: a base shared by more than one file is disambiguated by a slug of
+      # its work title. SINGLETONS keep the bare base urn BYTE-IDENTICAL — only
+      # a colliding group shifts — so the 815 non-colliding works never re-mint.
+      # A residual same-title collision (none in the frozen v1 corpus) is left
+      # for the loader's collision seam (P39-4) to flag loudly, never resolved
+      # by a filesystem artifact.
       def document_refs(workdir)
-        corpus_files(workdir).filter_map do |path|
+        entries = corpus_files(workdir).filter_map do |path|
           header = header(path)
           next if lxx?(header)
 
-          Nabu::DocumentRef.new(
-            source_id: manifest.id,
-            id: "#{URN_PREFIX}#{header.fetch('tlg_author')}:#{header.fetch('tlg_id')}",
-            path: File.expand_path(path),
-            metadata: header
-          )
-        end.sort_by(&:id)
+          [File.expand_path(path), header]
+        end
+        disambiguate(entries).sort_by(&:id)
+      end
+
+      def disambiguate(entries)
+        entries.group_by { |_path, header| base_urn(header) }.flat_map do |base, group|
+          group.map do |path, header|
+            id = group.size == 1 ? base : "#{base}:#{title_slug(header)}"
+            Nabu::DocumentRef.new(source_id: manifest.id, id: id, path: path, metadata: header)
+          end
+        end
+      end
+
+      def base_urn(header)
+        "#{URN_PREFIX}#{header.fetch('tlg_author')}:#{header.fetch('tlg_id')}"
+      end
+
+      def title_slug(header)
+        header["title"].to_s.downcase.gsub(/[^a-z0-9]+/, "-").gsub(/\A-+|-+\z/, "")
       end
 
       # The zip unpacks flat: 820 XML files at the workdir root (the fixture

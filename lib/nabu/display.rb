@@ -209,6 +209,37 @@ module Nabu
     GAIJI_SUBSTITUTE_CLOSE = "\u{2309}" # ⌉ RIGHT CEILING
     GAIJI_SETTINGS = %w[ladder placeholder refs].freeze
 
+    # == Per-source gaiji sentinels (P38-2 kanripo, P39-5 aozora)
+    #
+    # Each gaiji source keeps its not-yet-encoded characters as a VERBATIM
+    # in-text SENTINEL; this registry tells the render path, per source slug,
+    # (a) the +pattern+ that FINDS a sentinel (its group 1 is the raw payload)
+    # and (b) the +key+ proc that derives the LANE KEY from that payload. The
+    # ladder machinery (faithful/ids/substitute lanes, the four rungs) is
+    # otherwise entirely generic — only these two source facts differ.
+    #
+    #   kanripo — the mandoku `&KR\d+;` reference; key = the KR id verbatim.
+    #   aozora  — the `※［＃…］` notation the aozora-ruby parser leaves for a
+    #             class-(c) component-description gaiji; key = the component
+    #             FORMULA (the leading 「…」 group — EXACTLY the parser's stored
+    #             gaiji "desc"), so the per-book page/line locator that trails
+    #             the notation never fragments the lane. aozora ships only the
+    #             IDS lane (config/gaiji/aozora-ids.tsv); with no faithful or
+    #             substitute lane file its refs resolve on rungs 2 + 4 (IDS
+    #             composition or the ⬚ box) — the generic ladder handles the
+    #             empty lanes gracefully.
+    #
+    # A `gaiji:`-configured source with no sentinel entry is a no-op (the refs
+    # stay verbatim) — never a crash.
+    GaijiSentinel = Data.define(:pattern, :key)
+    AOZORA_GAIJI_NOTATION = /※［＃([^］]*)］/
+    AOZORA_GAIJI_DESC = /\A「(?<d>[^」]*)」/
+    GAIJI_SENTINELS = {
+      "kanripo" => GaijiSentinel.new(pattern: GAIJI_REF, key: ->(payload) { payload }),
+      "aozora" => GaijiSentinel.new(pattern: AOZORA_GAIJI_NOTATION,
+                                    key: ->(payload) { payload[AOZORA_GAIJI_DESC, :d] || payload })
+    }.freeze
+
     # The applied-labels edition transforms can emit — the footer separates
     # these ("apparatus simplified: …") from the mark-class strip vocabulary.
     EDITION_LABELS = (EDITION_RULES.keys + QERE_LABELS.values).freeze
@@ -516,9 +547,14 @@ module Nabu
         setting = edition.policy.gaiji
         return [text, GaijiTally.new] unless %w[ladder placeholder].include?(setting)
 
+        sentinel = GAIJI_SENTINELS[edition.policy.slug]
+        return [text, GaijiTally.new] unless sentinel
+
         ladder = setting == "ladder"
         counts = { faithful: 0, ids: 0, substitute: 0, placeholder: 0 }
-        out = text.gsub(GAIJI_REF) { resolve_gaiji_ref(Regexp.last_match(1), edition, ladder, counts) }
+        out = text.gsub(sentinel.pattern) do
+          resolve_gaiji_ref(sentinel.key.call(Regexp.last_match(1)), edition, ladder, counts)
+        end
         [out, GaijiTally.new(**counts)]
       end
 

@@ -234,10 +234,23 @@ module Nabu
 
     TABLE = FROM.each_char.zip(TO.each_char).to_h.freeze
 
+    # A character class of every foldable codepoint, compiled ONCE at load.
+    FOLD_RE = /[#{Regexp.escape(FROM)}]/
+
     # Per-codepoint 1→1 fold (fold_with_map-safe: folding a string
     # char-by-char equals folding it whole).
+    #
+    # gsub(FOLD_RE, TABLE), NOT tr(FROM, TO): String#tr on a multibyte
+    # from/to rebuilds an internal translation table from the 6050-char FROM
+    # on EVERY call, so a 20-char passage paid a 6050-entry setup — the
+    # measured cbeta rebuild hotspot (P39-3: ~97% of a passage's search-form
+    # cost, ~33× the rest). The regexp and TABLE hash are built once; gsub
+    # scans with the compiled class (C-level) and only hash-looks-up the
+    # matches, so untouched text — the common case, cbeta stores traditional
+    # forms already on the TO side — costs a single linear scan. Byte-
+    # identical to tr because TABLE is dup-free and each key maps to one char.
     def self.fold(str)
-      str.tr(FROM, TO)
+      str.gsub(FOLD_RE, TABLE)
     end
   end
 end

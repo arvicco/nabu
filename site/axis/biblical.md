@@ -9,6 +9,8 @@ description: >-
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
