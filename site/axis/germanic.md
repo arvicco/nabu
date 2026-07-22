@@ -7,13 +7,13 @@ description: >-
 
 > The Germanicist — Gothic, Old English verse and prose, the northern word-hoard.
 
-Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic riding the proiel/ud treebanks.
+Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, Gothic riding the proiel/ud treebanks, and Middle High German manuscripts (ReM).
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
@@ -22,6 +22,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
 | `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
+| `rem` | texts | attribution | not enabled | nothing held yet |
 
 ## The desk's instruments
 
