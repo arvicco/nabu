@@ -21,7 +21,13 @@ module Nabu
     # MANUSCRIPT LINE — the corpus's primary layout unit (encodingDesc:
     # "Primary line breaks: Handschrift"; <lb ed="1"/> under <pb ed="1"/>) —
     # cited urn:nabu:rem:<textid>:<page>.<line> (…:m058:100v.5, the folio +
-    # line a manuscript is actually cited by). Minting is frozen once used.
+    # line a manuscript is actually cited by). Two-column codices (<cb
+    # ed="1">) restart line numbers per column, so the column joins the
+    # folio (…:m242:5ra.1 — P40-r1; the 46 first-sync quarantines were all
+    # duplicate folio.line refs from this shape); residual collisions take
+    # the house :b2 positional disambiguator. Minting is frozen once used —
+    # column-less documents keep byte-identical refs, and no quarantined
+    # document had ever loaded.
     #
     # == The two token layers (owner doctrine: canonical means canonical)
     #
@@ -212,16 +218,33 @@ module Nabu
         }.compact
       end
 
+      # Ref = <folio><column>.<line> (m242:5ra.1 — two-column codices restart
+      # line numbers per column, so the cb @n joins the folio; column-less
+      # files keep their byte-identical <folio>.<line> refs). Any REMAINING
+      # collision (censused: M345-type entry-wise restarts with no upstream
+      # container element) takes the house :b2 positional disambiguator
+      # (the DdbdpParser/ORACC precedent) — never quarantine, never merge.
+      # P40-r1: the 46 first-sync quarantines were all one failure class,
+      # duplicate folio.line refs; none of those documents ever loaded, so
+      # no frozen minting is disturbed.
       def append_lines(document, body, document_ref)
+        seen = Hash.new(0)
         body.lines.each do |line|
           annotations = { "tokens" => line.tokens }
           annotations["edition_lines"] = line.edition_lines unless line.edition_lines.empty?
           document << Nabu::Passage.new(
-            urn: "#{document_ref.id}:#{[line.page, line.n].compact.join('.')}",
+            urn: "#{document_ref.id}:#{line_ref(line, seen)}",
             language: LANGUAGE, text: Normalize.nfc(line.text),
             annotations: annotations, sequence: document.size
           )
         end
+      end
+
+      def line_ref(line, seen)
+        folio = [line.page, line.column].compact.join
+        ref = [(folio unless folio.empty?), line.n].compact.join(".")
+        count = (seen[ref] += 1)
+        count == 1 ? ref : "#{ref}:b#{count}"
       end
 
       def verify_pin!(fetch)

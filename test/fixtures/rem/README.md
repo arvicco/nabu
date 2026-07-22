@@ -29,6 +29,19 @@ these `whole: false` (fetched for URL-liveness only, never byte-compared); the
 `trim:` note records that the member itself is uncut. Re-extract from the zip
 after any refresh.
 
+## The P40-r1 collision exemplars (structural trims)
+
+The 46 first-sync quarantines (2026-07-22) were all one failure class —
+duplicate `<folio>.<line>` passage refs — in two censused shapes, each
+pinned by a **structurally trimmed** exemplar (teiHeader byte-for-byte,
+body cut at a marker boundary, closing tags appended; well-formedness
+verified):
+
+| File | Bytes | Text | Shape |
+|---|---|---|---|
+| `M242.xml` | 44,148 | *Wiener Notker* | **Two-column codex**: `<cb n="a"/"b" ed="1">` restarts line numbers per column (1,863 collisions in the full file) → the column joins the folio in the ref (`5ra.1`/`5rb.1`). Cut before the third primary `<pb>`. |
+| `M345.xml` | 51,528 | *Augsburger Urkunden* | **Entry-wise restarts**: `<lb n="1" ed="1">` recurs with NO container element (calendar-style entries) → residual collisions take the house `:b2` positional disambiguator. Cut before the third restart, keeping two colliding runs. |
+
 ## Structure notes (for the P40-5 parser)
 
 - TEI P5 `version="4.6.0"`, namespace `http://www.tei-c.org/ns/1.0`; a full

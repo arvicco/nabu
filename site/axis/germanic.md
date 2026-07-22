@@ -34,7 +34,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
 | `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
-| `rem` | texts | attribution | enabled · manual | 360 docs / 290,242 passages |
+| `rem` | texts | attribution | enabled · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | enabled · manual | 1 docs / 3,549 passages |
 
@@ -42,7 +42,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
   ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and
-  — live since the 2026-07-22 wave — gmh (ReM's 1.71M rows, instantly the
+  — live since the 2026-07-22 wave — gmh (ReM's 2.10M rows, instantly the
   corpus's third-largest gold pool), non (Menotec's PROIEL-scheme Old
   Norwegian and the Edda, 258K) and osx (HeliPaD's gold form-lemma
   Heliand). One lane is still staged: is (IcePaHC's first Icelandic lemma

@@ -20,6 +20,8 @@ class RemTest < Minitest::Test
   DOC_URNS = %w[
     urn:nabu:rem:m058
     urn:nabu:rem:m218b
+    urn:nabu:rem:m242
+    urn:nabu:rem:m345
   ].freeze
 
   def conformance_adapter
@@ -99,6 +101,26 @@ class RemTest < Minitest::Test
     grimme = line.annotations["tokens"].find { |t| t["lemma"] == "grimme" }
     assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme" },
                  grimme)
+  end
+
+  def test_column_broken_lines_cite_folio_column_line
+    document = parse_urn("urn:nabu:rem:m242")
+    refs = document.map { |p| p.urn.split(":").last }
+    assert_includes refs, "5ra.1"
+    assert_includes refs, "5rb.1",
+                    "two-column codices cite folio+column (5ra/5rb) — line numbers restart per column"
+    refute_includes refs, "5r.1", "the bare folio ref would collide between the columns"
+    assert_equal refs.size, refs.uniq.size
+  end
+
+  def test_line_number_restarts_take_the_positional_disambiguator
+    document = parse_urn("urn:nabu:rem:m345")
+    refs = document.map { |p| p.urn.split("urn:nabu:rem:m345:").last }
+    assert_includes refs, "1"
+    assert_includes refs, "1:b2",
+                    "M345's per-entry line restarts (no upstream container) take the " \
+                    "house :b2 positional disambiguator — never quarantine, never merge"
+    assert_equal refs.size, refs.uniq.size, "every passage urn in the document is unique"
   end
 
   def test_edition_lineation_rides_passage_annotations
