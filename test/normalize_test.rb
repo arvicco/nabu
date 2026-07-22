@@ -204,6 +204,18 @@ class NormalizeTest < Minitest::Test
     assert_equal "studente", form("študente", "sl")
   end
 
+  def test_middle_high_german_folds_long_s_to_s
+    # P40-5 (the sl precedent, ReM fixture census): the ReM diplomatic layer
+    # writes long ſ throughout, and plain downcase leaves U+017F alone. All
+    # words are real M058/M218B surface forms; the combining letters above
+    # (uͦ = u + U+0366) fall to the generic Mn strip.
+    assert_equal "stet", form("ſtet", "gmh")
+    assert_equal "sin", form("ſin", "gmh")
+    assert_equal "ersterben", form("erſterben", "gmh")
+    assert_equal "muzic", form("muͦzic", "gmh")
+    assert_equal "grinme", form("grínme", "gmh")
+  end
+
   def test_reconstruction_shelves_fold_modifier_letters_to_ascii
     # P14-10 (conventions.md §9): the phonetic superscripts ʰ (U+02B0) → h and
     # ʷ (U+02B7) → w — the ONLY Unicode modifier letters (Lm) in the three
