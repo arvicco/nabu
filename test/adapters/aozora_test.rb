@@ -178,6 +178,73 @@ class AozoraTest < Minitest::Test
     assert_match(/unreadable zip/, error.message)
   end
 
+  # --- parse: the no-legend legacy shape (P39-2 quarantine recovery) -----------
+
+  # The first full sync quarantined 1,191 works, ALL "no legend delimiter":
+  # 1,185 no-ruby _txt_ works + 6 legacy _ruby_ works that carry no 55-hyphen
+  # legend block (there is no markup to explain). Censused shape: title/byline,
+  # blank line, body, 底本 colophon. These two fixtures are REAL, WHOLE upstream
+  # zips from the owner's canonical (retrieved 2026-07-22), both formerly
+  # quarantined, both recover here. See test/fixtures/aozora/README.md.
+  LEGACY_TXT = "legacy/53411_txt_43155.zip"  # 看痾, 宮沢賢治 (no-ruby _txt_ variant)
+  LEGACY_RUBY = "legacy/4356_ruby_7914.zip"  # 五所川原, 太宰治 (_ruby_-named, no legend)
+
+  def test_no_legend_txt_variant_parses_via_the_legacy_shape
+    document = parse_zip(LEGACY_TXT, "urn:nabu:aozora:053411")
+    assert_equal "看痾", document.title, "line 0 is the title even with no legend delimiter"
+    assert_equal ["宮沢賢治"], document.metadata["header"], "the byline rides header metadata"
+    assert_equal "no_legend", document.metadata["parser_shape"], "the widened path is stamped, never silent"
+    assert_equal 4, document.size, "4 verse body lines mint passages; blanks and colophon do not"
+    assert_equal "七月はさやに来れど", document.passages.first.text
+    assert_equal "「新修宮沢賢治全集　第六巻」筑摩書房", document.metadata["teihon"]
+    document.each do |passage|
+      refute_includes passage.text, "底本", "colophon lines never leak into passages"
+    end
+  end
+
+  def test_no_legend_ruby_variant_parses_via_the_legacy_shape
+    document = parse_zip(LEGACY_RUBY, "urn:nabu:aozora:004356")
+    assert_equal "五所川原", document.title
+    assert_equal ["太宰治"], document.metadata["header"]
+    assert_equal "no_legend", document.metadata["parser_shape"]
+    assert_equal 3, document.size, "3 body paragraphs mint passages"
+    assert_includes document.passages.first.text, "叔母が五所川原にゐるので"
+    assert_equal "「太宰治全集　10」筑摩書房", document.metadata["teihon"]
+    assert_equal "砂場清隆", document.metadata["inputter"]
+  end
+
+  # The fence: a decoded file with no blank line separating a header from a
+  # body is genuinely structureless — it stays quarantined (never guessed at).
+  def test_a_structureless_file_still_quarantines
+    Dir.mktmpdir do |dir|
+      txt = File.join(dir, "junk.txt")
+      File.write(txt, "只有一行文字並無空行".encode(Encoding::Windows_31J), mode: "wb")
+      zip = File.join(dir, "900002_txt_1.zip")
+      Nabu::Shell.run("zip", "-q", "-j", zip, txt)
+      error = assert_raises(Nabu::ParseError) do
+        Nabu::Adapters::AozoraRubyParser.new.parse(zip, urn: "urn:nabu:aozora:900002")
+      end
+      assert_match(%r{no header/body separation}, error.message)
+    end
+  end
+
+  # --- parse: index-declared encoding (P39-2) ---------------------------------
+
+  # CP932 is the near-universal encoding, but the index self-declares per file
+  # (テキストファイル符号化方式). When it says UTF-8, the parser must honor it,
+  # not force CP932. (The 5 UTF-8 works upstream are all in-copyright + off-repo
+  # so never discovered today; this pins the honest seam, not a live case.)
+  def test_index_declared_utf8_encoding_is_honored
+    document = parse_rig("　これはユニコードの本文である。\n", encoding: Encoding::UTF_8, file_encoding: "UTF-8")
+    assert_equal "　これはユニコードの本文である。", document.passages.first.text
+  end
+
+  # Absent/blank declaration falls back to CP932 (the upstream default).
+  def test_absent_encoding_declaration_defaults_to_cp932
+    document = parse_rig("　通常のＣＰ９３２本文。\n")
+    assert_equal "　通常のＣＰ９３２本文。", document.passages.first.text
+  end
+
   # --- parse: structure --------------------------------------------------------
 
   def test_56078_parses_header_body_colophon
@@ -433,6 +500,13 @@ class AozoraTest < Minitest::Test
     adapter.parse(ref)
   end
 
+  # Parse a real fixture zip directly (bypassing index discovery — the legacy
+  # fixtures live under legacy/, outside cards/*/files/, so they never disturb
+  # the discovery-skip census the cards/ fixtures pin).
+  def parse_zip(relative, urn)
+    Nabu::Adapters::AozoraRubyParser.new.parse(File.join(FIXTURES, relative), urn: urn)
+  end
+
   def find_passage(document, snippet)
     passage = document.find { |p| p.text.include?(snippet) }
     refute_nil passage, "no passage contains #{snippet.inspect}"
@@ -444,7 +518,7 @@ class AozoraTest < Minitest::Test
   # zipped like upstream. Used ONLY for shapes the two PD fixture works do
   # not carry (gaiji classes b/c, unknown commands, heading references) —
   # with the survey's verbatim upstream examples, never invented notation.
-  def parse_rig(body)
+  def parse_rig(body, encoding: Encoding::Windows_31J, file_encoding: nil)
     Dir.mktmpdir do |dir|
       txt = File.join(dir, "rig_no_sakuhin.txt")
       content = <<~TEXT
@@ -464,11 +538,13 @@ class AozoraTest < Minitest::Test
         入力：試驗
         校正：試驗
       TEXT
-      File.write(txt, content.encode(Encoding::Windows_31J), mode: "wb")
+      File.write(txt, content.encode(encoding), mode: "wb")
       zip = File.join(dir, "900001_ruby_1.zip")
       Nabu::Shell.run("zip", "-q", "-j", zip, txt)
+      metadata = { "work_id" => "900001" }
+      metadata["file_encoding"] = file_encoding if file_encoding
       Nabu::Adapters::AozoraRubyParser.new.parse(
-        zip, urn: "urn:nabu:aozora:900001", metadata: { "work_id" => "900001" }
+        zip, urn: "urn:nabu:aozora:900001", metadata: metadata
       )
     end
   end
