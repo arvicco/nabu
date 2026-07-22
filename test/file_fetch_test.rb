@@ -55,6 +55,23 @@ class FileFetchTest < Minitest::Test
     downloading.each { |line| assert line.end_with?("\n"), "synthetic fetch lines self-terminate: #{line.inspect}" }
   end
 
+  def test_prepare_exposes_the_body_md5_beside_the_sha256_pin
+    # P41-2: OpenITI's Zenodo artifacts publish md5 (not sha256) checksums;
+    # the adapter verifies its hard md5 pin between prepare! and complete!.
+    body = "<TEI>alpha</TEI>"
+    stub_file(body)
+    fetch = Nabu::FileFetch.new(url: URL, dir: @dir, filename: FILENAME, attic_dir: @attic)
+    fetch.prepare!
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5
+    fetch.complete!
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    replay = Nabu::FileFetch.new(url: URL, dir: @dir, filename: FILENAME, attic_dir: @attic)
+    replay.prepare!
+    assert_nil replay.md5, "no body on 304 → no md5; callers skip the pin check"
+  end
+
   def test_fresh_fetch_writes_the_file_and_pins_the_body_sha256
     stub_file("<TEI>alpha</TEI>")
     result = sync!
