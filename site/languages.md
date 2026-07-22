@@ -63,6 +63,7 @@ catalog on sync.
 | `gmh` | Middle High German | The ReM reference corpus (added 22 July 2026): 360 manually annotated manuscripts, 1050–1350, diplomatic layer stored (the long ſ folds to s) — instantly the corpus's third-largest gold-lemma pool. |
 | `non` / `gmq-pro` | Old Norse / Proto-Norse | Menotec's Old Norwegian treebanks with the Poetic Edda, and Rundata's runic corpus with its Old-West-Norse lane (added 22 July 2026); the urnordisk-dated inscriptions carry the Proto-Norse code. |
 | `osx` | Old Saxon | The *Heliand* (HeliPaD, added 22 July 2026): 3,549 parsed tree blocks with gold form-lemma pairs. |
+| `is` | Icelandic (diachronic) | IcePaHC via Universal Dependencies (added 22 July 2026): the 12th–21st centuries under the one modern tag — 44,029 passages, with the fourth-largest gold-lemma pool. |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts. |
 | `sga` | Old / Early Irish | The Celtic axis's keystone (added 17 July 2026): CorPH's gold-lemmatized texts and gloss corpora, 7th–10th c., plus the two Old Irish UD treebanks — a new gold-lemma language. |
@@ -131,17 +132,17 @@ extracts as of 17 July 2026.</p>
 
 ## Gold-lemma languages
 
-Twenty-six languages are searchable by dictionary form (`search --lemma`)
+Twenty-eight languages are searchable by dictionary form (`search --lemma`)
 as of 22 July 2026:
 
-`san, sux, gmh, egy, lat, grc, orv, akk, hbo, non, cop, sl, chu, ojp,
-sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga`
+`san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
+chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga`
 
 The treebanks, ORACC, goo300k, the DCS, ONCOJ, the Hebrew and Egyptian
 shelves, Coptic Scriptorium, and the Germanic wave feed these
-annotations — **15,000,556 gold rows** (22 July census; Sanskrit and
-Sumerian lead, and Middle High German debuted third at 2.10 million rows
-with the ReM sync). A further 8.2 million machine-suggested rows in
+annotations — **16,240,531 gold rows** (22 July census; Sanskrit and
+Sumerian lead; Middle High German debuted third with the ReM sync and
+Icelandic fourth with IcePaHC, both the same day). A further 8.2 million machine-suggested rows in
 eight languages ride an honestly labelled silver tier. Everything else
 is full-text-searchable but not yet lemma-searchable.
 

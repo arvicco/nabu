@@ -17,8 +17,7 @@ rule-based UD conversion of the Icelandic Parsed Historical Corpus, filed
 under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
 Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
 inscriptions of Rundata. The wave went live 2026-07-22 with the
-owner-verified first syncs — Menotec, HeliPaD, ReM and Rundata all hold
-their corpora below; IcePaHC alone still waits on the next `sync ud`.
+owner-verified first syncs — all five shelves hold their corpora below.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
@@ -28,7 +27,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
 | `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
@@ -45,8 +44,8 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
   — live since the 2026-07-22 wave — gmh (ReM's 2.10M rows, instantly the
   corpus's third-largest gold pool), non (Menotec's PROIEL-scheme Old
   Norwegian and the Edda, 258K) and osx (HeliPaD's gold form-lemma
-  Heliand). One lane is still staged: is (IcePaHC's first Icelandic lemma
-  lane) arrives at the next `sync ud`.
+  Heliand) and is (IcePaHC via the ud sync — 812K rows, straight in at
+  #4 of all the gold pools: the deepest North Germanic lemma lane).
 - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
   æ/þ/ð to find æþele).
 - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC

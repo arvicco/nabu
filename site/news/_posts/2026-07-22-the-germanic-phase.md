@@ -61,5 +61,6 @@ Middle High German the corpus's third-largest gold-lemma pool (2.10
 million rows) on day one, after a same-day fix taught the citation
 scheme about two-column codices (folio 5r, column a, line 1 is
 `5ra.1`); and Rundata at 30,643 lane-documents across its five text
-lanes. Old Icelandic arrives with the next Universal Dependencies sync.
+lanes. Old Icelandic followed the same day via the Universal Dependencies
+sync — straight in at fourth place among the gold-lemma pools.
 The desk page's holdings are read live from the catalog, dated.

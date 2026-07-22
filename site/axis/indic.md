@@ -17,7 +17,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `gretil` | texts | nc | enabled · manual | 780 docs / 703,068 passages |
 | `mw` | dictionary | nc | enabled · manual | 193,890 entries |
 | `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |

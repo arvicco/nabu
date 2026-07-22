@@ -96,7 +96,8 @@ module Nabu
         end
 
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = lemma_hits(variants, inner_limit: inner_limit, urn: urn, gold_only: gold_only)
+        hits = lemma_hits(variants, inner_limit: inner_limit, urn: urn, gold_only: gold_only,
+                                    lang: lang)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -232,9 +233,16 @@ module Nabu
       # FTS, no raw SQL. Distinct on passage_id: a passage row per folded
       # lemma means one passage could match twice only if two distinct folded
       # lemmas both sit in the variant set (contrived, but dedup is one line).
-      def lemma_hits(variants, inner_limit:, urn: nil, gold_only: false)
+      # +lang+ narrows INDEX-side (P40-r2): the lemma index carries each
+      # row's language, and a windowed catalog-side language filter starves
+      # on cross-language homographs (the live case: Sanskrit latā's
+      # hundreds of rows sort before every Icelandic láta row, so
+      # `--lemma láta --lang is` returned an empty page at any realistic
+      # --limit). License/withdrawn stay catalog-side visibility checks.
+      def lemma_hits(variants, inner_limit:, urn: nil, gold_only: false, lang: nil)
         dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants)
         dataset = dataset.where(urn: urn) if urn
+        dataset = dataset.where(language: Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(tier: Store::Indexer::GOLD_TIER) if gold_only && tier_column?
         columns = %i[passage_id lemma_raw surface_forms]
         columns << :tier if tier_column?
