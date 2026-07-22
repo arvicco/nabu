@@ -48,6 +48,34 @@ class OpenitiTest < Minitest::Test
     build_workdir(@workdir, FIXTURE_FILES)
   end
 
+  # P41-i1 (live first-sync incident, 2026-07-22): the release zip roots at
+  # `data/` ITSELF, so ZipFetch's single-top-dir collapse leaves the
+  # per-author tree at the workdir root — every verbatim local_path join
+  # (data/<author>/…) then missed, quarantining all 9,106 in-scope docs and
+  # counting every real file unrecognized. Discovery must resolve BOTH
+  # layouts: verbatim when workdir/data exists, first-component-stripped
+  # when collapsed.
+  def test_discover_resolves_the_collapsed_data_root_layout
+    Dir.mktmpdir("openiti-collapsed") do |dir|
+      rows = rows_for(FIXTURE_FILES)
+      write_tsv(dir, rows)
+      rows.each do |row|
+        collapsed = row[15].split("/", 2).last
+        target = File.join(dir, collapsed)
+        FileUtils.mkdir_p(File.dirname(target))
+        FileUtils.cp(File.join(FIXTURES, File.basename(row[15])), target)
+      end
+
+      refs = Nabu::Adapters::Openiti.new.discover(dir).to_a
+      assert_equal DOC_URNS, refs.map(&:id).sort
+      assert(refs.all? { |ref| File.exist?(ref.path) },
+             "every ref path must resolve on the collapsed layout")
+      skips = Nabu::Adapters::Openiti.new.discovery_skips(dir)
+      assert_equal 0, skips.unrecognized,
+                   "real version files must be accounted, not counted as strays"
+    end
+  end
+
   def teardown
     FileUtils.remove_entry(@workdir)
     super

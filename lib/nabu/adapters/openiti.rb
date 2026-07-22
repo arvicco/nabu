@@ -162,6 +162,18 @@ module Nabu
 
       # +zip_md5+/+tsv_md5+ override the release pins (tests; the owner's
       # re-pin drill on a new Zenodo release).
+      # The two legal on-disk layouts (P41-i1): TSV-verbatim (data/<author>/…
+      # under the workdir) vs the collapsed per-author root ZipFetch leaves
+      # when the zip's single top dir IS data/. Probed once per walk.
+      def collapsed_layout?(workdir)
+        !File.directory?(File.join(workdir, "data"))
+      end
+
+      def resolved_path(workdir, local_path, strip:)
+        relative = strip ? local_path.split("/", 2).last : local_path
+        File.expand_path(File.join(workdir, relative))
+      end
+
       def initialize(zip_md5: RELEASE_ZIP_MD5, tsv_md5: RELEASE_TSV_MD5)
         super()
         @zip_md5 = zip_md5
@@ -169,19 +181,28 @@ module Nabu
       end
 
       # One DocumentRef per in-scope TSV row (status pri, not MSS), sorted by
-      # version URI. Paths are minted from local_path, never probed — a
-      # missing file is loud at parse, not a silent discovery gap. No TSV
+      # version URI. Paths are minted from local_path, never probed per-row —
+      # a missing file is loud at parse, not a silent discovery gap. No TSV
       # (the day-one pre-fetch state, and the attic) yields nothing.
+      #
+      # P41-i1 (the live first sync, 2026-07-22): the release zip roots at
+      # `data/` itself, so ZipFetch's single-top-dir collapse leaves the
+      # per-author tree at the workdir ROOT — the TSV's verbatim
+      # data/<author>/… paths then miss everything (9,106/9,106 quarantined,
+      # exactly the flagged watch item). local_path now resolves against the
+      # layout actually on disk: verbatim when workdir/data exists, first
+      # component stripped when collapsed. One probe per walk, never per row.
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
+        strip = collapsed_layout?(workdir)
         index_rows(workdir).each do |row|
           next unless in_scope?(row)
 
           yield Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
             id: "#{URN_PREFIX}#{row[:version_uri]}",
-            path: File.expand_path(File.join(workdir, row[:local_path])),
+            path: resolved_path(workdir, row[:local_path], strip: strip),
             metadata: ref_metadata(row)
           )
         end
@@ -192,7 +213,8 @@ module Nabu
       # unrecognized — loud. Sidecar .yml files are accounted by rule.
       def discovery_skips(workdir)
         rows = index_rows(workdir)
-        accounted = rows.to_set { |row| File.expand_path(File.join(workdir, row[:local_path])) }
+        strip = collapsed_layout?(workdir)
+        accounted = rows.to_set { |row| resolved_path(workdir, row[:local_path], strip: strip) }
         strays = version_files(workdir).reject { |path| accounted.include?(path) }
         Nabu::Adapter::DiscoverySkips.new(
           skipped_by_rule: rows.count { |row| !in_scope?(row) },
