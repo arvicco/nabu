@@ -48,8 +48,19 @@ get-sentences flow**, not a static fetch.
 
 | File | Bytes | Treebank / document | Trim |
 |---|---|---|---|
-| `non-pamphilus-dep-ch1-head5.xml` | 6,332 | `non-pamphilus-dep`, document "Ch. 1" (65 sentence blocks in the full document) | first **5 sentence blocks**, whole blocks, in document order |
-| `non-edda-regius-dep-alvissmal-head5.xml` | 6,325 | `non-edda-regius-dep`, document "Alvíssmál" (80 sentence blocks in the full poem) | first **5 sentence blocks**, whole blocks, in document order |
+| `non-pamphilus-dep/ch1-head5.xml` | 6,332 | `non-pamphilus-dep`, document "Ch. 1" (65 sentence blocks in the full document) | first **5 sentence blocks**, whole blocks, in document order |
+| `non-edda-regius-dep/alvissmal-head5.xml` | 6,325 | `non-edda-regius-dep`, document "Alvíssmál" (80 sentence blocks in the full poem) | first **5 sentence blocks**, whole blocks, in document order |
+
+**Canonical layout (P40-2 decision).** The adapter treats **one treebank = one nabu
+document** (the treebank-global `sentence/@id` keys the passages, so a treebank's
+sentences are unique across its several upstream documents — Alvíssmál's blocks
+start at `sent_id 3586`, continuing the Edda's earlier poems). `Nabu::InessFetch`
+writes each upstream get-sentences export verbatim to
+`canonical/menotec/<treebank>/<document>.xml`, so the fixture mirrors that shape:
+one `<treebank>/` subdirectory per treebank, holding its document file(s). Here
+each fixture treebank carries a single (trimmed) document; a real sync writes many
+`<document>.xml` files per treebank subdir. `discover` yields one ref per treebank
+subdirectory; `parse` reads every `*.xml` under it, in filename order.
 
 Retrieved 2026-07-22 from INESS. The full per-document exports (119,901 B and
 195,397 B) were held in a scratch dir and are **not** committed.

@@ -12,7 +12,7 @@ source: menotec
 adapter_test:
 retrieved: 2026-07-22
 files:
-  - path: non-pamphilus-dep-ch1-head5.xml
+  - path: non-pamphilus-dep/ch1-head5.xml
     refetchable: false
     provenance: iness-api
     whole: false
@@ -22,7 +22,7 @@ files:
       the first 5 of 65 sentence blocks. The endpoint requires an ephemeral
       session-id (command=get-session), so no static raw GET reproduces it.
     trim: first 5 sentence blocks (per-sentence PROIEL-XML fragments) of the Pamphilus "Ch. 1" export; 119,901 B -> 6,332 B
-  - path: non-edda-regius-dep-alvissmal-head5.xml
+  - path: non-edda-regius-dep/alvissmal-head5.xml
     refetchable: false
     provenance: iness-api
     whole: false
