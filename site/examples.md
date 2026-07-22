@@ -7,7 +7,7 @@ description: >-
   biblical studies.
 ---
 
-Six short walk-throughs, one per discipline, using real commands and output
+Ten short walk-throughs, one per discipline, using real commands and output
 from live runs of 11–12 July 2026. Nothing below is a mock-up; trims are
 marked with ellipses. Each discipline is also a **research desk** — one of
 the eighteen [research axes]({{ '/axis/' | relative_url }}), where that

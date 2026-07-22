@@ -19,7 +19,7 @@ papyri, cuneiform, Sanskrit, Old English, the Slavic canon, and more —
 built for scholars who want to hold their sources rather than query a
 service. It is a command-line pipeline and database, not a website or a
 reading application. What it is and why it exists is set out on
-[About]({{ '/about/' | relative_url }}); worked walk-throughs for six
+[About]({{ '/about/' | relative_url }}); worked walk-throughs for ten
 scholarly personas are on [Examples]({{ '/examples/' | relative_url }}).
 
 ### How do I try it in minutes?
