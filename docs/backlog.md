@@ -10898,10 +10898,10 @@ aozora gaiji: ladder; resolvable census.
 ## P40-0 · Search UX fix (carried P39-r3)  [tier: opus] [status: done 2026-07-22 — merged e1c0f24; owner repro verified live 3/3 hits, real text; Greek accents restored to snippets; JOURNALED: proximity two-term stored highlighter rider]
 ## P40-g · Fixture groundwork  [tier: opus/network — D40-d pre-approved] [status: done 2026-07-22 — merged 6af11d4; findings: Menotec INESS-only (session API), Rundata bulk = 47MB sqlite + JSON API + ZERO runic codepoints, YCOE gated (owner fetch per FETCH-GATE.md)]
 Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/rundata; Rundata dump schema documented (feeds P40-6 design); YCOE gating verified (journal owner-fetch if click-through).
-## P40-1 · IcePaHC via ud  [tier: opus] [status: ready] [deps: P40-g]
+## P40-1 · IcePaHC via ud  [tier: opus] [status: done 2026-07-22 — merged cb06aeb; breaker latent-boundary catch; one stall-resume]
 ## P40-2 · Menotec adapter  [tier: opus] [status: ready] [deps: P40-g]
 ## P40-3 · Penn family + HeliPaD  [tier: fable] [status: ready] [deps: P40-g]
-## P40-4 · YCOE on Penn family  [tier: opus] [status: ready] [deps: P40-3]
+## P40-4 · YCOE — DROPPED (owner ruling 2026-07-22: ignore; OTA gate + nc terms not worth it)
 ## P40-5 · CorA family + ReM  [tier: fable] [status: ready] [deps: P40-g]
 ## P40-6 · Rundata + runic display  [tier: fable] [status: ready] [deps: P40-g schema sample]
 ## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
@@ -10930,3 +10930,5 @@ survive regeneration.
 # (spaceless runs = one FTS token already). Pair with the proximity
 # stored-highlighter + NFC-exempt match riders (one search-polish
 # rider bundle).
+
+## P40-w · Search-polish bundle  [tier: opus] [status: done 2026-07-22 — merged 354deb7; --word (CJK refusal, Hangul ok), proximity stored highlighter, NFC-exempt display fix on real WLC bytes]
