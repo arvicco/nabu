@@ -10817,7 +10817,7 @@ census read after a clean pass.
 
 # Phase 39 — the registry & aftercare phase (approved 2026-07-22: all six packets; source of truth .docs/p39-registry-aftercare-plan.md)
 
-## P39-0 · Registry semantics  [tier: opus] [status: dispatched] [deps: —]
+## P39-0 · Registry semantics  [tier: opus] [status: done 2026-07-22 — merged cc26cee; 78+4+2=84 real rows; live→auto trio; sabellic-loans→frozen wrinkle; live smoke: perseus BEHIND surfaced day one] [deps: —]
 kind: source|shelf|module + sync auto|manual|frozen (live→auto,
 local dropped) + the owner output format verbatim (journal above);
 sync --all = source∧auto; module sync prints nature; censuses become
@@ -10830,7 +10830,7 @@ Fold modules leave shared core → language-scoped fold digest
 asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
 (attestation flag) so the formula change skips a forced full rebuild.
 
-## P39-2 · Aozora quarantine triage  [tier: opus] [status: ready — wave 2, after P39-3] [deps: P39-3]
+## P39-2 · Aozora quarantine triage  [tier: opus] [status: dispatched — wave 2] [deps: P39-3]
 Classify live 1,191 by stored reason; recover mechanical classes
 (census-backed only); attic-rediscovery design; perseus-latin 27
 baseline check.
@@ -10847,7 +10847,7 @@ Within-pass URN re-encounter with different content = loud collision
 trimmed fixtures from the actual colliding files; upstream cause
 reported.
 
-## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: ready — wave 2, after P39-3] [deps: P39-3]
+## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: dispatched — wave 2] [deps: P39-3]
 Structured component descriptions → aozora IDS lane (conservative
 grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
 aozora gaiji: ladder; resolvable census.
