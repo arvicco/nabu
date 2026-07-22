@@ -10814,3 +10814,40 @@ census read after a clean pass.
 # AOZORA QUARANTINE TRIAGE: 1,191 (6.9%) — classify by error message
 #   (index-vs-tree re-proof drift / delimiter-less legacy / UTF-8 five
 #   / corrupt zips) — already a P39 candidate, counts now live.
+
+# Phase 39 — the registry & aftercare phase (approved 2026-07-22: all six packets; source of truth .docs/p39-registry-aftercare-plan.md)
+
+## P39-0 · Registry semantics  [tier: opus] [status: dispatched] [deps: —]
+kind: source|shelf|module + sync auto|manual|frozen (live→auto,
+local dropped) + the owner output format verbatim (journal above);
+sync --all = source∧auto; module sync prints nature; censuses become
+80+4+2 everywhere; axis-generator grouping rides or journals (gate
+docs pass; hand-edit precedent in catalog-less worktrees).
+
+## P39-1 · Fold-digest granularity  [tier: fable — fingerprint semantics] [status: dispatched] [deps: —]
+Fold modules leave shared core → language-scoped fold digest
+(lzh/och→hani; jpn→jpn+hani); normalize.rb stays global; dirty-MORE
+asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
+(attestation flag) so the formula change skips a forced full rebuild.
+
+## P39-2 · Aozora quarantine triage  [tier: opus] [status: ready — wave 2, after P39-3] [deps: P39-3]
+Classify live 1,191 by stored reason; recover mechanical classes
+(census-backed only); attic-rediscovery design; perseus-latin 27
+baseline check.
+
+## P39-3 · Load-cost pair  [tier: opus] [status: dispatched] [deps: —]
+In-repo single-member zip reader (stdlib zlib, binary-name
+discipline, byte-identical vs unzip -p across all fixture zips) +
+cbeta derive-stage attribution incl. fixture-scale fold on/off
+measurement. Live confirmation owner-fired.
+
+## P39-4 · Diorisis URN collision  [tier: opus] [status: dispatched] [deps: —]
+Within-pass URN re-encounter with different content = loud collision
+(quarantine later file + journal), revise-on-resync untouched; real
+trimmed fixtures from the actual colliding files; upstream cause
+reported.
+
+## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: ready — wave 2, after P39-3] [deps: P39-3]
+Structured component descriptions → aozora IDS lane (conservative
+grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
+aozora gaiji: ladder; resolvable census.
