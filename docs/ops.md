@@ -896,10 +896,16 @@ automatically; no per-release action.
    distilled to prose: what shipped, honest numbers with as-of dates, the
    owner-queue caveats. (This is the step that triggers the Zenodo DOI once
    the repo is linked.)
-5. **News entry**: add `site/news/_posts/YYYY-MM-DD-vX-Y-Z-<slug>.md` — the
-   same distillation, academic register, numbers dated (contract:
-   site/MAINTENANCE.md). The Atom feed (`/feed.xml`) carries it to
-   aggregators automatically on deploy.
+5. **News entry — OBLIGATORY, and verified live** (owner ruling
+   2026-07-22 after v1.2.0 shipped unannounced): add
+   `site/news/_posts/YYYY-MM-DD-vX-Y-Z-<slug>.md` — the same
+   distillation, academic register, numbers dated (contract:
+   site/MAINTENANCE.md). The post's `date:` MUST be in the past at
+   commit time — Jekyll silently drops future-dated posts
+   (`test/site/news_posts_test.rb` fails the gate on one). The step is
+   complete only when the item is VISIBLE on the deployed `/news/`
+   page — check the live URL after the Pages deploy, not the repo. The
+   Atom feed (`/feed.xml`) carries it to aggregators on the same deploy.
 6. **DOI badge** (first release only, after Zenodo mints): copy the
    concept-DOI badge into README and the site About page.
 
