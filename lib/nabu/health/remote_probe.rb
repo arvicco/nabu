@@ -313,7 +313,7 @@ module Nabu
       private_constant :RepoProbe
 
       def probe_source(entry)
-        return probe_local_source(entry) if entry.sync_policy == "local"
+        return probe_local_source(entry) if entry.shelf?
 
         case entry.adapter_class.remote_probe_strategy
         when :http_zip then probe_http_source(entry)
@@ -321,8 +321,10 @@ module Nabu
         end
       end
 
-      # A local-policy shelf (P19-1) has NO upstream: nothing to ls-remote,
-      # HEAD, or GET — the probe touches no network at all. Liveness is the
+      # A kind: shelf memory shelf (P19-1/P39-0) has NO upstream: nothing to
+      # ls-remote, HEAD, or GET — the probe touches no network at all. A
+      # vendored no-git source (sabellic-loans) shares this treatment via the
+      # empty-upstream fallback below. Liveness is the
       # canonical tree itself (missing/empty → :gone, the restore-from-backup
       # signal); drift short-circuits to the frozen-style :local verdict (no
       # upstream can move); license reads :unchecked naming the shelf — the
@@ -359,16 +361,20 @@ module Nabu
         )
       end
 
-      # A non-local-policy entry whose adapter declares no upstream repos is a
-      # registration bug (the P24-1 local-notes slip: a local shelf missing
-      # `sync_policy: local` falls through to this probe). Degrade to an
-      # honest broken row naming the likely cause — never crash the command.
+      # A kind: source that declares no git upstream. If a canonical tree is
+      # present it is a VENDORED / no-network source (P39-0, sabellic-loans:
+      # the committed word-list IS the artifact, refreshed by a repo edit) —
+      # read it like a local shelf (alive by its tree, drift :local). With no
+      # tree it is a genuine registration gap: degrade to an honest broken row
+      # naming the cause, never crash the command.
       def no_upstream_health(entry)
+        return probe_local_source(entry) if canonical_tree?(entry.slug)
+
         SourceHealth.new(
           slug: entry.slug, enabled: entry.enabled, upstream: "(none declared)",
           liveness: Liveness.new(
             status: :gone,
-            detail: "no upstream repos declared — local shelf missing sync_policy: local?"
+            detail: "no upstream repos declared — registration gap?"
           ),
           drift: :unknown, drift_detail: nil,
           license: unchecked("no upstream to read")

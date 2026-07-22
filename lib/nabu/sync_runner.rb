@@ -10,9 +10,10 @@ module Nabu
   #
   # `sync <slug>` is EXPLICIT and unconditional: an operator asking for a source
   # by name gets it, disabled or not (explicit beats config). `sync --all` is
-  # the unattended path and respects the registry strictly: only ENABLED sources
-  # with sync_policy "live" run — "manual" and "frozen" are excluded by design
-  # (docs/maintenance-and-extension.md §2), and one source's failure never stops
+  # the unattended path and respects the registry strictly: only ENABLED
+  # kind: source rows with sync_policy "auto" run — "manual" and "frozen"
+  # sources, and every shelf/module, are excluded by design (P39-0,
+  # docs/maintenance-and-extension.md §2), and one source's failure never stops
   # the others.
   #
   # == The circuit breakers (architecture §8, relocated in P5-2)
@@ -98,7 +99,7 @@ module Nabu
       sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
     end
 
-    # Sync every ENABLED, sync_policy "live" source. Returns { slug => Outcome |
+    # Sync every ENABLED kind: source with sync_policy "auto". Returns { slug => Outcome |
     # Nabu::Error }: a source that raises is captured in the hash so the batch
     # runs to completion (one failure never stops the others).
     def sync_all(parse_only: false, force: false, progress: nil)
@@ -116,7 +117,11 @@ module Nabu
     private
 
     def live_enabled
-      @registry.each_source.select { |entry| entry.enabled && entry.sync_policy == "live" }
+      # `sync --all` sweeps only kind: source rows on the `auto` cadence
+      # (P39-0): shelves are local (no network) and modules mint no catalog
+      # rows, so neither belongs in the unattended batch, and `manual`/`frozen`
+      # sources are owner-fired by name.
+      @registry.each_source.select { |entry| entry.source? && entry.enabled && entry.sync_policy == "auto" }
     end
 
     def sync_entry(entry, parse_only:, force:, progress:)

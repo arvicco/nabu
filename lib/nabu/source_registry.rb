@@ -17,14 +17,28 @@ module Nabu
   # history (last_sync_*). #sync_source! reconciles the two, writing metadata
   # + enabled into the sources row while preserving db-owned state.
   class SourceRegistry
-    # Closed set (docs/maintenance-and-extension.md §2): live syncs in `--all`,
-    # manual never does, frozen is a one-shot dead-project snapshot, and
-    # local (P19-1, architecture §16) has NO upstream at all — no network,
-    # ever; sync re-scans the canonical tree (LocalFetch), the drift probe
-    # short-circuits to a frozen-style "local" verdict, and the license comes
-    # from the shelf's own manifest/data, never from a fetched file.
-    SYNC_POLICIES = %w[live manual frozen local].freeze
+    # Closed set (docs/maintenance-and-extension.md §2), the honest CADENCE
+    # vocabulary (P39-0): `auto` is swept by `sync --all` (the perseus/first1k
+    # pair — continuously-updated upstreams); `manual` is owner-fired by name
+    # (size/pacing — the upstream may be very much alive, we just pull it on
+    # purpose); `frozen` is a dead-project / immutable snapshot. The old `live`
+    # value became `auto`; the old `local` value is GONE — a no-upstream shelf
+    # is now `kind: shelf` (below), which IMPLIES the local fetch strategy.
+    SYNC_POLICIES = %w[auto manual frozen].freeze
     DEFAULT_SYNC_POLICY = "manual"
+
+    # The registry KINDS (P39-0): what a row IS. The 84-row registry conflated
+    # three natures under one `sync_policy` key; kind separates them.
+    #   source (default, may be omitted) — a text/reference corpus that mints
+    #     catalog rows and declares a sync_policy cadence.
+    #   shelf — an owner-authored, gateway-written local MEMORY shelf (the four
+    #     local-* rows): no network, the local fetch strategy, up=local. kind
+    #     IMPLIES the local fetch, so a shelf row declares NO sync_policy.
+    #   module — MACHINERY only (kr-gaiji, bridging): a sanctioned fetch that
+    #     mints ZERO catalog rows, so there is nothing to serve or enable
+    #     (enabled: false is required) and nothing for `sync --all` to sweep.
+    KINDS = %w[source shelf module].freeze
+    DEFAULT_KIND = "source"
 
     # The `siblings:` marker for the CTS dotted-version form (P34-0): the
     # source mints urn:cts documents whose editions share a work prefix and
@@ -87,13 +101,24 @@ module Nabu
     # axis name may never equal a source slug (the resolution guarantee for
     # `nabu sync <axis>` / `list --axis`, P35-1/2). [] only in bootstrap/
     # test mode (no axes.yml beside the sources file).
-    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :translations,
+    # +kind+ (P39-0): the row's nature (KINDS; default source). shelf/module
+    # carry a sync_policy internally only for uniform construction — it is
+    # never rendered or swept for them (enablement + cadence are moot; the
+    # up= column reads structurally as local/module).
+    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes) do
-      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, translations: false,
-                     license_watch: nil, fuzzy_index: false, lemma_tier: DEFAULT_LEMMA_TIER,
-                     classes: nil, siblings: nil, axes: [])
+      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
+                     translations: false, license_watch: nil, fuzzy_index: false,
+                     lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [])
         super
       end
+
+      # kind predicates (P39-0). shelf? drives the local fetch strategy (no
+      # network, up=local) at the probe, status, and health-integrity seams;
+      # feature_module? is machinery-only (up=module, no holdings, no sweep).
+      def shelf? = kind == "shelf"
+      def feature_module? = kind == "module"
+      def source? = kind == "source"
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -194,9 +219,13 @@ module Nabu
         raise ValidationError, "source #{slug.inspect}: adapter must be a class-name String, got #{adapter.inspect}"
       end
 
+      kind = kind!(slug, config)
+      enabled = enabled!(slug, config)
+      kind_invariants!(slug, config, kind: kind, enabled: enabled)
+
       Entry.new(
         slug: slug, adapter_class_name: adapter,
-        enabled: enabled!(slug, config), sync_policy: sync_policy!(slug, config),
+        enabled: enabled, sync_policy: sync_policy!(slug, config), kind: kind,
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
@@ -319,6 +348,32 @@ module Nabu
             "source #{slug.inspect}: sync_policy must be one of #{SYNC_POLICIES.join(', ')}, got #{policy.inspect}"
     end
     private_class_method :sync_policy!
+
+    # The row's nature (P39-0): source (default) | shelf | module.
+    def self.kind!(slug, config)
+      kind = config.fetch("kind", DEFAULT_KIND)
+      return kind if KINDS.include?(kind)
+
+      raise ValidationError,
+            "source #{slug.inspect}: kind must be one of #{KINDS.join(', ')}, got #{kind.inspect}"
+    end
+    private_class_method :kind!
+
+    # Cross-field kind invariants (P39-0): a shelf declares NO sync_policy (its
+    # local fetch strategy is implied by kind), and a module mints no catalog
+    # rows so there is nothing to enable.
+    def self.kind_invariants!(slug, config, kind:, enabled:)
+      if kind == "shelf" && config.key?("sync_policy")
+        raise ValidationError,
+              "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
+              "drop sync_policy (kind implies it)"
+      end
+      return unless kind == "module" && enabled
+
+      raise ValidationError,
+            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be enabled: false"
+    end
+    private_class_method :kind_invariants!
 
     # The research-axes definitions this registry was validated against
     # (AxisRegistry; empty in bootstrap/test mode). P35-1/2 render from it.

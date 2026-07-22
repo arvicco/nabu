@@ -65,13 +65,13 @@ class StatusReportTest < Minitest::Test
       fake-src:
         adapter: StatusReportTest::FakeAdapter
         enabled: true
-        sync_policy: live
+        sync_policy: auto
     YAML
 
     out = Nabu::StatusReport.render(registry: registry, db: nil, ledger: nil)
     assert_match(/fake-src/, out)
-    assert_match(/\bon\b/, out)
-    assert_match(/live/, out)
+    assert_match(/on\(a\)/, out)
+    assert_match(/source/, out)
     assert_match(/no database \(run nabu sync\)/, out)
   end
 
@@ -82,7 +82,7 @@ class StatusReportTest < Minitest::Test
       fake-src:
         adapter: StatusReportTest::FakeAdapter
         enabled: true
-        sync_policy: live
+        sync_policy: auto
       never-src:
         adapter: StatusReportTest::FakeAdapter
     YAML
@@ -98,14 +98,14 @@ class StatusReportTest < Minitest::Test
     lines = out.lines.map(&:chomp)
 
     fake = lines.grep(/fake-src/).first
-    assert_match(/\bon\b/, fake)
-    assert_match(/live/, fake)
+    assert_match(/on\(a\)\s+source/, fake)
     assert_match(/docs=1 pass=2/, fake)
-    assert_match(/last \d{4}-\d{2}-\d{2} \d{2}:\d{2} ok \(\+1 ~0 -0 !0\)/, fake)
+    # Compact (P39-0): no "last "/"ok" tokens — bare stamp + delta.
+    assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+1 ~0 -0 !0\)/, fake)
+    refute_match(/\bok\b/, fake, "the noise-OK token is gone on a succeeded run")
 
     never = lines.grep(/never-src/).first
-    assert_match(/\boff\b/, never)
-    assert_match(/manual/, never)
+    assert_match(/off\(m\)\s+source/, never)
     assert_match(/never synced/, never)
   end
 
@@ -129,7 +129,7 @@ class StatusReportTest < Minitest::Test
         enabled: true
     YAML
     out = Nabu::StatusReport.render(registry: flipped, db: db, ledger: ledger_test_db)
-    assert_match(/fake-src\s+on\b/, out, "a registry enabled: true must show on, stale db row or not")
+    assert_match(/fake-src\s+on\(m\)/, out, "a registry enabled: true must show on, stale db row or not")
 
     # And the reverse: flipped OFF in the registry, db row still on.
     Nabu::Store::Source.first(slug: "fake-src").update(enabled: true)
@@ -139,7 +139,7 @@ class StatusReportTest < Minitest::Test
         enabled: false
     YAML
     out = Nabu::StatusReport.render(registry: unflipped, db: db, ledger: ledger_test_db)
-    assert_match(/fake-src\s+off\b/, out)
+    assert_match(/fake-src\s+off\(m\)/, out)
   end
 
   def test_withdrawn_rows_excluded_from_counts
@@ -182,7 +182,7 @@ class StatusReportTest < Minitest::Test
       fake-dict:
         adapter: StatusReportTest::FakeDictAdapter
         enabled: true
-        sync_policy: live
+        sync_policy: auto
     YAML
     source = registry["fake-dict"].sync_source!(db)
     dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: "lsj",
@@ -202,7 +202,7 @@ class StatusReportTest < Minitest::Test
     )
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/fake-dict\s+on\s+live\s+up=\S+\s+entries=3/, out)
+    assert_match(/fake-dict\s+on\(a\)\s+source\s+up=\S+\s+entries=3/, out)
     refute_match(/fake-dict.*docs=/, out)
   end
 
@@ -231,7 +231,7 @@ class StatusReportTest < Minitest::Test
     end
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/bosworth-toller\s+off\s+manual\s+up=\S+\s+entries=2/, out)
+    assert_match(/bosworth-toller\s+off\(m\)\s+source\s+up=\S+\s+entries=2/, out)
     refute_match(/bosworth-toller.*docs=/, out)
   end
 
@@ -274,13 +274,13 @@ class StatusReportTest < Minitest::Test
     registry["fake-src"].sync_source!(db)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/fake-src\s+off\s+manual\s+up=\?\(unprobed\)/, out)
+    assert_match(/fake-src\s+off\(m\)\s+source\s+up=\?\(unprobed\)/, out)
   end
 
   # A fresh CURRENT probe reads quiet: up=ok(Nd), age always shown.
   def test_upstream_current_recent_renders_ok_with_age
     out = render_with_probe(drift: "current", checked_at: Time.now - (2 * 86_400))
-    assert_match(/fake-src\s+off\s+manual\s+up=ok\(2d\)/, out)
+    assert_match(/fake-src\s+off\(m\)\s+source\s+up=ok\(2d\)/, out)
   end
 
   # BEHIND is the loud signal — the whole point of the feature.
@@ -327,7 +327,7 @@ class StatusReportTest < Minitest::Test
                               drift: "behind", license: "unchanged", detail: nil)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/frozen-src\s+off\s+frozen\s+up=frozen/, out)
+    assert_match(/frozen-src\s+off\(f\)\s+source\s+up=frozen/, out)
     refute_match(/BEHIND/, out)
   end
 
@@ -349,8 +349,8 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       local-language:
         adapter: StatusReportTest::LanguageFakeAdapter
+        kind: shelf
         enabled: true
-        sync_policy: local
     YAML
     registry["local-language"].sync_source!(db)
     db[:language_records].insert(lang_code: "chu", kind: "name", body: "OCS", source: "dossier")
@@ -358,9 +358,10 @@ class StatusReportTest < Minitest::Test
                               drift: "behind", license: "unchanged", detail: nil)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/local-language\s+on\s+local\s+up=local\s+records=1/, out)
+    # kind: shelf → enablement moot ("-"), kind column "shelf", up=local (by kind).
+    assert_match(/local-language\s+-\s+shelf\s+up=local\s+records=1/, out)
     refute_match(/docs=0/, out, "records, never a misleading docs/pass zero")
-    refute_match(/BEHIND/, out, "policy wins over any cache row")
+    refute_match(/BEHIND/, out, "kind: shelf wins over any cache row")
   end
 
   # P24-1: the owner-notes shelf's content is per-urn notes — the same
@@ -381,16 +382,79 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       local-notes:
         adapter: StatusReportTest::NotesFakeAdapter
+        kind: shelf
         enabled: true
-        sync_policy: local
     YAML
     registry["local-notes"].sync_source!(db)
     db[:urn_notes].insert(urn: "urn:nabu:ccmh:mar:mt", note: "collate first", topic: "notes",
                           added: "2026-07-16", provenance: "local-notes/notes.yml")
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(/local-notes\s+on\s+local\s+up=local\s+notes=1/, out)
+    assert_match(/local-notes\s+-\s+shelf\s+up=local\s+notes=1/, out)
     refute_match(/docs=0/, out, "notes, never a misleading docs/pass zero")
+  end
+
+  # -- P39-0: kind grouping, module rows, last-contact age --------------------
+
+  # Rows are GROUPED BY KIND — modules, then shelves, then sources — with
+  # global column widths so alignment holds across the groups.
+  def test_rows_grouped_by_kind_modules_shelves_sources
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      zsrc:
+        adapter: StatusReportTest::FakeAdapter
+        enabled: true
+        sync_policy: auto
+      ashelf:
+        adapter: StatusReportTest::LanguageFakeAdapter
+        kind: shelf
+        enabled: true
+      amod:
+        adapter: StatusReportTest::FakeAdapter
+        kind: module
+        enabled: false
+        sync_policy: manual
+    YAML
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
+    slugs = out.lines.map { |line| line[/^\S+/] }
+    assert_equal %w[amod ashelf zsrc], slugs, "modules, then shelves, then sources"
+  end
+
+  # A kind: module reads up=module, "-" enablement, and NO holdings column
+  # (it mints no catalog rows).
+  def test_module_row_has_up_module_and_no_holdings
+    db = store_test_db
+    registry = load_registry(<<~YAML)
+      amod:
+        adapter: StatusReportTest::FakeAdapter
+        kind: module
+        enabled: false
+        sync_policy: manual
+    YAML
+    registry["amod"].sync_source!(db)
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
+    assert_match(/amod\s+-\s+module\s+up=module\s+never synced/, out)
+    refute_match(/docs=/, out, "a module mints no catalog rows — no holdings label")
+  end
+
+  # An unprobed source with a last successful sync shows the age of that last
+  # contact — up=?(Nd) — real data, never the bare "unprobed".
+  def test_unprobed_but_synced_shows_last_contact_age
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    source = registry["fake-src"].sync_source!(db)
+    Nabu::Store::Run.create(
+      source_slug: source.slug, kind: "sync",
+      started_at: Time.now - (5 * 86_400), finished_at: Time.now - (5 * 86_400),
+      status: "succeeded", added: 0, updated: 0, withdrawn_count: 0, errored: 0
+    )
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/up=\?\(5d\)/, out)
+    refute_match(/unprobed/, out)
   end
 
   # A ledger that predates the source_probes table (a read-only status before

@@ -14,7 +14,7 @@ module Nabu
   # - A source whose canonical dir is missing or empty was never synced, so
   #   there is nothing local to replay: it is SKIPPED (a note, not an error, and
   #   no run row) rather than fetched.
-  # - sync_policy (live/manual/frozen) is irrelevant to rebuild: policies gate
+  # - sync_policy (auto/manual/frozen) is irrelevant to rebuild: policies gate
   #   network syncs, and rebuild does no network. We replay whatever is local.
   # - Disabled sources ARE replayed when their canonical dir exists: the data is
   #   already local and licensed, and `enabled` gates *future* syncs, not replay

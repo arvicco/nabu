@@ -287,10 +287,12 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Celtic | CorPH Early Irish (gold-lemmatized: Annals of Ulster, the great gloss corpora), RIIG Gaulish inscriptions (with French siblings), the Ogham in 3D stones (real Ogham codepoints + transliteration layers) | 1,387 / 20,318 | CC BY / MIT (ogham `nc` pending clarification) |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik (`nabu define` / `etym`) | 633,137 entries | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-Of the **86 registered sources, 83 are enabled and synced** (held:
-the `babelstone-ids`/`kradfile` character-reference shelves awaiting
-their post-sync flip, and the `kr-gaiji` feature module, permanently
-registry-only) — `aozora` joined 2026-07-21 with its first sync
+The registry holds **78 sources + 4 local shelves + 2 feature modules**
+(the kind-split census, 2026-07-22 — `sources.yml` distinguishes what a
+row IS: a corpus that mints catalog rows, an owner-authored local memory
+shelf, or machinery like `kr-gaiji`/`bridging` that fetches reference
+data but mints nothing to serve). All 78 sources are enabled —
+`aozora` joined 2026-07-21 with its first sync
 (16,004 public-domain works, 2.98M passages) — the upstream corpora
 plus four local shelves (the language
 dossiers and source dossiers live, the owner's library shelf holding its

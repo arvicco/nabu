@@ -293,7 +293,7 @@ class InvariantsTest < Minitest::Test
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
 
   def local_entry
-    entry("local-language", adapter: "Nabu::Adapters::LocalLanguage").with(sync_policy: "local")
+    entry("local-language", adapter: "Nabu::Adapters::LocalLanguage").with(kind: "shelf")
   end
 
   def local_invariants(root)
