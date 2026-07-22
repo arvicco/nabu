@@ -9,6 +9,12 @@ description: >-
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3).
 
+The corpus is staged, not synced: OpenITI's ~9,106 primary texts /
+~1.12 B words arrive with the owner's first `nabu sync openiti` (the
+fetch is a ~5.9 GB release zip plus its metadata index, md5-pinned
+before any tree mutation), after which the holdings below fill in
+live.
+
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
@@ -18,8 +24,6 @@ The single shelf below answers this desk. Holdings are read live from the catalo
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
 | `openiti` | texts | nc | not enabled | not synced yet |
-
-The corpus is staged, not synced: OpenITI's ~9,106 primary texts / ~1.12 B words arrive with the owner's first `nabu sync openiti` (the fetch is a ~5.9 GB release zip plus its metadata index, md5-pinned before any tree mutation), after which the holdings above fill in live.
 
 ## The desk's instruments
 
@@ -58,10 +62,11 @@ This desk's own surfaces:
 
 ```
 nabu show urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1  # Ḥāfiẓ's Muntasab — Persian verse in the %~% hemistich notation
-nabu search الله --lang ara  # Allāh across the Arabic hadith, dīwān and falsafa shelves
-nabu search دانی --lang fas  # the cross-keyboard ی/ي fold — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
+nabu search الله --lang ara           # Allāh across the Arabic hadith, dīwān and falsafa shelves
+nabu search دانی --lang fas           # the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
 nabu search --from 1300 --to 1400 --axis arabic  # the AH death-year timeline — Ḥāfiẓ (d. AH 792 = 1390 CE) lands in this window
 ```
+
 
 ## Terminal setup
 

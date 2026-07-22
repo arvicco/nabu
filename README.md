@@ -305,11 +305,13 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **82 sources + 4 local shelves + 2 feature modules**
+The registry holds **83 sources + 4 local shelves + 2 feature modules**
 (the kind-split census, 2026-07-22 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `kr-gaiji`/`bridging` that fetches reference
-data but mints nothing to serve). All 82 sources are enabled —
+data but mints nothing to serve). 82 of the 83 are enabled — `openiti`,
+the staged Arabic phase, awaits its owner-fired first sync (~9,106
+primary texts / ~1.12 B words) —
 the **Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
 2026-07-22 with their owner-verified first syncs, a day after `aozora`
 (16,004 public-domain works, 2.98M passages) — the upstream corpora
