@@ -10892,3 +10892,17 @@ aozora gaiji: ladder; resolvable census.
 # P40 direction still open: Germanic package vs Romance package
 # (.docs/surveys/) vs storage phase (contentless-FTS5 + searchable-
 # withdrawn + attic redesign pairing).
+
+# Phase 40 — the Germanic phase (approved 2026-07-22: full scope; D40-a one axis · D40-b nc ok · D40-c mint odbl · D40-d fetches pre-approved; source of truth .docs/p40-germanic-plan.md)
+
+## P40-0 · Search UX fix (carried P39-r3)  [tier: opus] [status: agent in flight — lands here]
+## P40-g · Fixture groundwork  [tier: opus/network — D40-d pre-approved] [status: dispatched]
+Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/rundata; Rundata dump schema documented (feeds P40-6 design); YCOE gating verified (journal owner-fetch if click-through).
+## P40-1 · IcePaHC via ud  [tier: opus] [status: ready] [deps: P40-g]
+## P40-2 · Menotec adapter  [tier: opus] [status: ready] [deps: P40-g]
+## P40-3 · Penn family + HeliPaD  [tier: fable] [status: ready] [deps: P40-g]
+## P40-4 · YCOE on Penn family  [tier: opus] [status: ready] [deps: P40-3]
+## P40-5 · CorA family + ReM  [tier: fable] [status: ready] [deps: P40-g]
+## P40-6 · Rundata + runic display  [tier: fable] [status: ready] [deps: P40-g schema sample]
+## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
+## P40-8 · License inquiry drafts  [tier: opus] [status: dispatched — report-only]
