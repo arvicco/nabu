@@ -108,7 +108,7 @@ module Nabu
           > #{axis.persona}
 
           #{axis.desc}
-          #{blurb_block(axis)}## The shelves
+          #{blurb_block(axis)}#{quickstart_pointer}## The shelves
 
           #{shelves_intro(members)}
 
@@ -165,7 +165,7 @@ module Nabu
           page, where the member shelves, live holdings, instruments, CLI recipes
           and terminal setup live.
 
-          ## The eighteen desks
+          #{quickstart_pointer}## The eighteen desks
 
           #{index_entries}
 
@@ -202,6 +202,16 @@ module Nabu
       def description_line(axis)
         "#{persona_lead(axis)}'s desk: its shelves, instruments, CLI recipes and terminal setup."
           .gsub(/\s+/, " ")
+      end
+
+      # The single reverse-funnel line every desk page and the /axis/ index
+      # carry, in a consistent slot (right before the first section heading):
+      # a newcomer's onward path back to the Quickstart. Verbatim and
+      # identical across all pages (P39-r2), so the hand-applied committed
+      # pages and a future `rake site:axes` regen stay byte-consistent.
+      def quickstart_pointer
+        "New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) " \
+          "sets up the library in minutes.\n\n"
       end
 
       def blurb_block(axis)

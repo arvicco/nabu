@@ -9,6 +9,8 @@ description: >-
 
 The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.

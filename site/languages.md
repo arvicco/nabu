@@ -137,3 +137,6 @@ feed these annotations — over 2.85 million rows (the exact count of
 2,852,069 dates from the 14 July census; the Old Irish and Bulgarian
 layers landed on 17 July). Everything else is full-text-searchable but
 not yet lemma-searchable.
+
+The same languages, grouped by the scholar who reads them rather than by code,
+are the eighteen [research desks]({{ '/axis/' | relative_url }}).
