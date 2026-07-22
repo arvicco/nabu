@@ -105,6 +105,17 @@ module Nabu
       KUTEN_GAIJI = /\A(?<desc>.+)、第\d水準(?<men>\d+)-(?<ku>\d+)-(?<ten>\d+)(?:、(?<loc>.*))?\z/
       UNICODE_GAIJI = /\A(?<desc>.+)、[Uu]\+(?<hex>\h{4,6})(?:、(?<loc>.*))?\z/
 
+      # BARE men-ku-ten (P39-r1): `…、men-ku-ten[、loc]` with NO 第N水準 level
+      # prefix. 85% of the unresolved-gaiji pool (16,137 live occurrences, e.g.
+      # ※［＃二の字点、1-2-22］) state the JIS X 0213 plane-row-cell identity
+      # directly — the same identity claim as the prefixed form, so it resolves
+      # into the text identically; the level word 第N水準 was only documentation.
+      # men is [12] (JIS X 0213 has exactly two planes): the fence that stops a
+      # page locator from being read as a codepoint — 305-11 has two groups (not
+      # three) and a three-group locator would need men>2. Jis0213.resolve is
+      # the final guard: an unmapped cell stays the loud sentinel, never a guess.
+      BARE_KUTEN = /\A(?<desc>.+)、(?<men>[12])-(?<ku>\d+)-(?<ten>\d+)(?:、(?<loc>.*))?\z/
+
       # The KNOWN formatting-command vocabulary (survey §4d census + the two
       # fixture works). N admits ASCII, fullwidth and kanji numerals.
       N = /[0-9０-９一二三四五六七八九十]+/
@@ -333,7 +344,7 @@ module Nabu
       # character for classes (a)/(b), the verbatim notation sentinel
       # otherwise (never a guess, never a silent drop).
       def consume_gaiji(state, annotations, body)
-        if (match = KUTEN_GAIJI.match(body))
+        if (match = kuten_match(body))
           char = Jis0213.resolve(plane: match[:men].to_i, row: match[:ku].to_i, cell: match[:ten].to_i)
           if char
             return resolved_gaiji(annotations, match, char,
@@ -344,6 +355,13 @@ module Nabu
           return resolved_gaiji(annotations, match, char, "codepoint" => "U+#{match[:hex].upcase}")
         end
         unresolved_gaiji(state, annotations, body)
+      end
+
+      # The prefixed 第N水準 form and the bare men-ku-ten form (P39-r1) are the
+      # same identity claim; try the prefixed grammar first so its 第N水準 token
+      # is never left dangling in a bare match's desc.
+      def kuten_match(body)
+        KUTEN_GAIJI.match(body) || BARE_KUTEN.match(body)
       end
 
       def resolved_gaiji(annotations, match, char, identity)

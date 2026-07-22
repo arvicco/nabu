@@ -377,6 +377,81 @@ class AozoraTest < Minitest::Test
     assert_equal 1, document.metadata["gaiji_unresolved"]
   end
 
+  # P39-r1: the BARE men-ku-ten form ※［＃<name>、N-N-N［、loc］］ carries the
+  # SAME JIS X 0213 identity as the prefixed 第N水準 form — upstream states the
+  # plane-row-cell directly and the 第N水準 level word is documentation. The
+  # live census (2026-07-22) is 16,137 such occurrences, 85% of the unresolved
+  # pool; every one resolves through the shipped table. So the bare form
+  # resolves into the text exactly like the prefixed form. Notations below are
+  # the census's own top glyphs, never invented.
+  def test_bare_kuten_gaiji_resolves_into_the_text
+    document = parse_rig("　これは※［＃二の字点、1-2-22］の記号。\n")
+    passage = document.passages.first
+    refute_includes passage.text, "※［＃", "the bare-kuten notation resolves, leaving no sentinel"
+    assert_includes passage.text, "〻", "1-2-22 → 〻 (U+303B) goes into the text"
+    entry = passage.annotations["gaiji"].first
+    assert_equal({ "class" => "kuten", "desc" => "二の字点", "kuten" => "1-2-22", "char" => "〻" }, entry)
+    assert_equal 0, document.metadata.fetch("gaiji_unresolved", 0)
+  end
+
+  # The name may itself wrap 「…」 and a page locator may trail the code — both
+  # ride through. And a plane-2 identity resolves too: 「宀／成」、2-8-2 is a
+  # composition-STYLE name that nonetheless carries a real men-ku-ten, so the
+  # identity claim wins (the ／ is only documentation, U+5BAC 宬 the truth).
+  def test_bare_kuten_with_bracketed_name_locator_and_plane_two
+    document = parse_rig(<<~BODY)
+      　終わり※［＃終わり二重括弧、1-2-55、279-2］の記号。
+      　これは※［＃「宀／成」、2-8-2、199-10］の字。
+    BODY
+    first, second = document.passages
+    assert_includes first.text, [0xFF60].pack("U*"), "1-2-55 → ｠"
+    entry = first.annotations["gaiji"].first
+    assert_equal "kuten", entry["class"]
+    assert_equal "279-2", entry["loc"]
+    assert_includes second.text, "宬", "plane-2 2-8-2 → 宬 (U+5BAC)"
+    assert_equal "宀／成", second.annotations["gaiji"].first["desc"]
+    assert_equal 0, document.metadata.fetch("gaiji_unresolved", 0)
+  end
+
+  # A bare code the table cannot map is NEVER guessed — it falls to the same
+  # loud sentinel as an unmapped prefixed code (the resolve() guard, mirroring
+  # test_unmapped_kuten_...; ku 99 is out of the 1..94 range, so the cell is
+  # unmapped and the notation stays verbatim).
+  def test_unmapped_bare_kuten_falls_back_to_the_sentinel
+    notation = "※［＃感嘆符二つ、1-99-99］"
+    document = parse_rig("　例の#{notation}の字。\n")
+    passage = document.passages.first
+    assert_includes passage.text, notation
+    assert_equal "unresolved", passage.annotations["gaiji"].first["class"]
+    assert_equal 1, document.metadata["gaiji_unresolved"]
+  end
+
+  # DISJOINTNESS 1 — the P39-5 component-description lane is untouched: a
+  # composition formula whose trailing token is a PAGE locator (two numeric
+  # groups, 305-11) is NOT a men-ku-ten (three groups), so it never resolves
+  # and stays the loud verbatim sentinel. (「木／喬」 is a live census desc.)
+  def test_component_description_with_page_locator_is_not_read_as_kuten
+    notation = "※［＃「木／喬」、305-11］"
+    document = parse_rig("　その#{notation}の木。\n")
+    passage = document.passages.first
+    assert_includes passage.text, notation, "a 2-group page locator never resolves as a codepoint"
+    entry = passage.annotations["gaiji"].first
+    assert_equal "unresolved", entry["class"]
+    assert_equal "木／喬", entry["desc"]
+    assert_equal 1, document.metadata["gaiji_unresolved"]
+  end
+
+  # DISJOINTNESS 2 — a formatting command ［＃…］ (no ※) never enters the gaiji
+  # grammar: the ※ gate (GAIJI scanned before COMMAND) means the widened bare-
+  # kuten rule cannot swallow a bracket command.
+  def test_formatting_command_is_not_swallowed_by_bare_kuten
+    document = parse_rig("　本文［＃ここから２字下げ］の段落。\n")
+    passage = document.passages.first
+    assert_equal "　本文の段落。", passage.text
+    assert_nil passage.annotations["gaiji"], "no ［＃…］-without-※ ever becomes a gaiji"
+    assert_includes passage.annotations["commands"], "ここから２字下げ"
+  end
+
   # --- parse: formatting commands ---------------------------------------------
 
   def test_formatting_commands_never_reach_passage_text
