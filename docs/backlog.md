@@ -10895,7 +10895,7 @@ aozora gaiji: ladder; resolvable census.
 
 # Phase 40 — the Germanic phase (approved 2026-07-22: full scope; D40-a one axis · D40-b nc ok · D40-c mint odbl · D40-d fetches pre-approved; source of truth .docs/p40-germanic-plan.md)
 
-## P40-0 · Search UX fix (carried P39-r3)  [tier: opus] [status: agent in flight — lands here]
+## P40-0 · Search UX fix (carried P39-r3)  [tier: opus] [status: done 2026-07-22 — merged e1c0f24; owner repro verified live 3/3 hits, real text; Greek accents restored to snippets; JOURNALED: proximity two-term stored highlighter rider]
 ## P40-g · Fixture groundwork  [tier: opus/network — D40-d pre-approved] [status: dispatched]
 Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/rundata; Rundata dump schema documented (feeds P40-6 design); YCOE gating verified (journal owner-fetch if click-through).
 ## P40-1 · IcePaHC via ud  [tier: opus] [status: ready] [deps: P40-g]
