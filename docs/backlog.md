@@ -10852,5 +10852,5 @@ Structured component descriptions → aozora IDS lane (conservative
 grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
 aozora gaiji: ladder; resolvable census.
 
-## P39-s1 · Germanic axis scout  [tier: survey/network] [status: dispatched 2026-07-22 — owner-requested]
+## P39-s1 · Germanic axis scout  [tier: survey/network] [status: done 2026-07-22 — survey delivered (.docs/surveys/germanic-survey.md); headline: 2 new parser families unlock 4 languages — IcePaHC config-only (CC BY-SA), Menotec ON+Edda (PROIEL family, nc), Penn family = YCOE 1.5M OE prose (nc) + HeliPaD Old Saxon (CC-BY); DDD CorA family = whole diachronic German lane (ReM CC BY-SA confirmed); Rundata runic ODbL dual-axis; PPCME2 blocked-license; OFris/ODu blocked-format (inquiry)]
 ## P39-s2 · Latin→Romance scout  [tier: survey/network] [status: dispatched 2026-07-22 — owner-requested]
