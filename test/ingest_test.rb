@@ -409,7 +409,7 @@ class IngestTest < Minitest::Test
       license_label = labels.find { |l| l.start_with?("license_class") }
       assert_match(/default research_private = never served or redistributed/, license_label,
                    "the shelf's license doctrine is STATED at the prompt")
-      assert_match(/open, attribution, nc, research_private, restricted/, license_label)
+      assert_match(/open, attribution, nc, odbl, research_private, restricted/, license_label)
       assert_equal "Manuel du vieux slave", ask.asked.first.last, "candidates arrive as prompt defaults"
       entry = Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first
       assert_equal %w[grammar ocs], entry.tags, "typed comma lists split"
@@ -452,7 +452,7 @@ class IngestTest < Minitest::Test
     with_rig(resolver: resolver) do |engine, shelf, root|
       outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
       assert_equal :added, outcome.status
-      assert_match(/license_class must be one of open, attribution, nc, research_private, restricted/,
+      assert_match(/license_class must be one of open, attribution, nc, odbl, research_private, restricted/,
                    warnings.first)
       assert_equal "open", Nabu::LibraryManifest.load(shelf.manifest_path("inbox")).entries.first.license_class
     end
@@ -483,7 +483,7 @@ class IngestTest < Minitest::Test
     with_rig(overrides: { "license_class" => "public-domainish" }) do |engine, shelf, root|
       outcome = engine.add_files([write_pdf(root, "vaillant-1950-manuel.pdf")]).first
       assert_equal :failed, outcome.status
-      assert_match(/license_class must be one of open, attribution, nc, research_private, restricted/,
+      assert_match(/license_class must be one of open, attribution, nc, odbl, research_private, restricted/,
                    outcome.message)
       refute Dir.exist?(shelf.dir)
     end
