@@ -40,13 +40,10 @@ module Nabu
       # effective class after override.
       Result = Data.define(:urn, :language, :text, :snippet, :document_title, :license_class)
 
-      # FTS5 snippet() markers and window (table, column, start, end, ellipsis,
-      # max tokens). column 0 is text_normalized, the only indexed one. Search
-      # no longer draws its own highlight from this (StoredSnippet does, over the
-      # pristine text); the constant stays for Proximity, whose two-term NEAR
-      # snippet still rides the folded index form.
-      SNIPPET_SQL = "snippet(passages_fts, 0, '[', ']', '…', 10)"
       # FTS5 default relevance rank; lower (more negative) is a better match.
+      # (The old SNIPPET_SQL fragment is gone: neither plain search nor proximity
+      # draws its highlight from the folded index column any more — both rebuild
+      # the snippet from the pristine stored text via StoredSnippet, P40-w.)
       RANK_SQL = "bm25(passages_fts)"
 
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
@@ -70,6 +67,24 @@ module Nabu
       # worst-case latency against how deep a zero-literal query is chased.
       SCAN_CEILING = 5000
 
+      # --word (P40-w) has no honest meaning over the corpus's SPACELESS scripts:
+      # Han ideographs and Japanese kana run without word delimiters, so there is
+      # no boundary to bound a match on. A query carrying any such glyph is
+      # REFUSED loudly rather than silently degraded — the user is pointed at
+      # --exact, the glyph-literal escape hatch that IS defined there. (Hangul is
+      # space-delimited in modern usage, so it is NOT spaceless — --word treats
+      # it as any alphabetic script.)
+      SPACELESS_WORD_SCRIPTS = /[\p{Han}\p{Hiragana}\p{Katakana}]/
+      WORD_REFUSAL = "word boundaries are not defined for spaceless CJK text — " \
+                     "use --exact for glyph-literal matching"
+
+      # The refusal message for a --word +query+ that carries a spaceless-script
+      # glyph, or nil when --word is honest for it. Shared by the CLI (a clean
+      # Thor::Error before any DB work) and Search#run (the library guard).
+      def self.word_refusal_for(query)
+        query.to_s.match?(SPACELESS_WORD_SCRIPTS) ? WORD_REFUSAL : nil
+      end
+
       def initialize(catalog:, fulltext:)
         @catalog = catalog
         @fulltext = fulltext
@@ -87,19 +102,23 @@ module Nabu
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil, sources: nil, loans: nil, exact: false, scan_ceiling: SCAN_CEILING)
+              facets: nil, source: nil, sources: nil, loans: nil, exact: false, word: false,
+              scan_ceiling: SCAN_CEILING)
         @incomplete_hint = nil
+        raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
+
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         filters = { lang: lang, license: license, from: from, to: to, place: place,
                     facets: facets, source: source, sources: sources, loans: loans }
-        page = if exact
-                 exact_page(variants, query, filters, limit: limit, urn: urn, scan_ceiling: scan_ceiling)
+        page = if exact || word
+                 verified_page(variants, query, filters, limit: limit, urn: urn,
+                                                         scan_ceiling: scan_ceiling, exact: exact, word: word)
                else
                  folded_page(variants, filters, limit: limit, urn: urn)
                end
-        page.map { |row| build_result(row, query, exact: exact) }
+        page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
       # --exact verification: every whitespace token of the NFC-normalized
@@ -109,6 +128,12 @@ module Nabu
       # else: no diacritic strip, no case fold, no reform fold. This is what
       # tells 弁 (the folded default, which also finds 辨/瓣/辯) apart from a
       # literal 弁.
+      #
+      # Both sides are NFC-normalized AT MATCH TIME (P40-w item 3): hbo/arc are
+      # stored byte-verbatim in Masoretic mark order, which can diverge from NFC,
+      # so a query typed in canonical order would miss the raw stored bytes if
+      # only the query were folded. Normalizing the haystack too reconciles the
+      # order without touching storage (or the snippet's stored-byte display).
       def exact_glyph_match?(text, query)
         haystack = Nabu::Normalize.nfc(text.to_s)
         Nabu::Normalize.nfc(query.to_s).split.all? { |token| haystack.include?(token) }
@@ -136,23 +161,24 @@ module Nabu
         page
       end
 
-      # --exact page (P39-r3, Defect 1). The glyph-literal post-filter can reject
-      # an unbounded run of fold candidates, so --limit CANNOT mean an internal
-      # candidate-pool size (owner ruling 2026-07-22: "he will understand --limit
-      # as the number of ultimate hits to display"). Instead we PAGINATE the
-      # candidate scan — fetch candidate pages in bm25 order and keep verifying
-      # until +limit+ VERIFIED hits accumulate or the stream is exhausted. A
-      # pathological fold-heavy zero-literal query is bounded by +scan_ceiling+
-      # candidates; a ceiling that truncates the scan before exhaustion arms the
-      # honesty hint (the page never poses as complete over an abandoned scan).
-      def exact_page(variants, query, filters, limit:, urn:, scan_ceiling:)
+      # --exact / --word paginated page (P39-r3 Defect 1, extended P40-w). A
+      # glyph-literal OR whole-word post-filter can reject an unbounded run of
+      # fold candidates, so --limit CANNOT mean an internal candidate-pool size
+      # (owner ruling 2026-07-22: "he will understand --limit as the number of
+      # ultimate hits to display"). Instead we PAGINATE the candidate scan —
+      # fetch candidate pages in bm25 order and keep verifying until +limit+
+      # VERIFIED hits accumulate or the stream is exhausted. A pathological
+      # fold-heavy zero-match query is bounded by +scan_ceiling+ candidates; a
+      # ceiling that truncates the scan before exhaustion arms the honesty hint
+      # (the page never poses as complete over an abandoned scan).
+      def verified_page(variants, query, filters, limit:, urn:, scan_ceiling:, exact:, word:)
         page_size = limit * INNER_LIMIT_FACTOR
         verified = []
         offset = 0
         truncated = false
         loop do
           hits = fts_hits_with_literal_fallback(variants, inner_limit: page_size, offset: offset, urn: urn)
-          collect_exact(hits, query, filters, into: verified, limit: limit)
+          collect_verified(hits, query, filters, into: verified, limit: limit, exact: exact, word: word)
           break if verified.size >= limit || hits.size < page_size # filled, or stream exhausted
 
           offset += page_size
@@ -161,26 +187,48 @@ module Nabu
             break
           end
         end
-        @incomplete_hint = exact_scan_truncated_hint(scan_ceiling) if truncated
+        @incomplete_hint = scan_truncated_hint(scan_ceiling, exact: exact, word: word) if truncated
         verified.first(limit)
       end
 
       # Verify one candidate page in bm25 order, appending the catalog-visible
-      # rows whose PRISTINE stored text carries the query glyph-literally (the
+      # rows whose PRISTINE stored text passes the active post-filter (the
       # candidates-then-verify pattern, the fuzzy/define precedent) until the
       # page limit is reached.
-      def collect_exact(hits, query, filters, into:, limit:)
+      def collect_verified(hits, query, filters, into:, limit:, exact:, word:)
         return if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
         ordered_ids.each do |id|
           row = rows[id]
-          next unless row && exact_glyph_match?(row.fetch(:text), query)
+          next unless row && verified_hit?(row, query, exact: exact, word: word)
 
           into << row
           break if into.size >= limit
         end
+      end
+
+      # A candidate passes when it carries the query glyph-literally (--exact),
+      # as a whole word (--word), or both (the word filter enforces the glyph
+      # literality on the exact path via StoredSnippet.word_match?(exact: true)).
+      def verified_hit?(row, query, exact:, word:)
+        if word
+          Nabu::Query::StoredSnippet.word_match?(
+            text: row.fetch(:text), language: row.fetch(:language),
+            terms: word_terms(query, exact: exact), exact: exact
+          )
+        else
+          exact_glyph_match?(row.fetch(:text), query)
+        end
+      end
+
+      # The query's locator tokens for the word filter / snippet: the raw
+      # whitespace tokens for --exact (glyph-literal, matching exact_glyph_match?),
+      # else the folded snippet terms (phrase quotes dropped, trailing prefix-*
+      # stripped).
+      def word_terms(query, exact:)
+        exact ? query.to_s.split : snippet_terms(query)
       end
 
       def filters_active?(filters)
@@ -188,12 +236,17 @@ module Nabu
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 
-      # The --exact scan-ceiling truncation hint (P35 truncation honesty): say
-      # what was hidden. The old INCOMPLETE_PAGE_HINT ("raise --limit to search
-      # deeper") is WRONG under the new --limit semantics and is never emitted on
-      # this path — raising --limit widens the page, it does not deepen the scan.
-      def exact_scan_truncated_hint(scan_ceiling)
-        "scanned the first #{scan_ceiling} fold candidates for glyph-literal matches — " \
+      # The --exact/--word scan-ceiling truncation hint (P35 truncation honesty):
+      # say what was hidden, naming the active filter. The old INCOMPLETE_PAGE_HINT
+      # ("raise --limit to search deeper") is WRONG under the new --limit semantics
+      # and is never emitted on this path — raising --limit widens the page, it
+      # does not deepen the scan.
+      def scan_truncated_hint(scan_ceiling, exact:, word:)
+        kind = if exact && word then "whole-word glyph-literal"
+               elsif exact then "glyph-literal"
+               else "whole-word"
+               end
+        "scanned the first #{scan_ceiling} fold candidates for #{kind} matches — " \
           "later candidates were not checked, so more may exist"
       end
 
@@ -252,14 +305,14 @@ module Nabu
       # folded index form. The query's tokens locate the match — its whitespace
       # tokens for --exact (matching exact_glyph_match?), else the FTS terms with
       # phrase quotes dropped and a trailing prefix-* stripped.
-      def build_result(row, query, exact:)
-        terms = exact ? query.to_s.split : snippet_terms(query)
+      def build_result(row, query, exact:, word:)
+        terms = word_terms(query, exact: exact)
         Result.new(
           urn: row.fetch(:urn),
           language: row.fetch(:language),
           text: row.fetch(:text),
           snippet: Nabu::Query::StoredSnippet.build(
-            text: row.fetch(:text), language: row.fetch(:language), terms: terms, exact: exact
+            text: row.fetch(:text), language: row.fetch(:language), terms: terms, exact: exact, word: word
           ),
           document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class)

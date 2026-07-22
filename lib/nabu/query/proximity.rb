@@ -3,6 +3,7 @@
 require_relative "../normalize"
 require_relative "catalog_join"
 require_relative "search"
+require_relative "stored_snippet"
 
 module Nabu
   module Query
@@ -122,8 +123,13 @@ module Nabu
         match = near_match(anchor, near_variants, window.to_i)
         inner_limit = limit * Search::INNER_LIMIT_FACTOR
         hits = fts_hits(match, inner_limit: inner_limit)
+        # The two locator sides for the STORED two-term snippet (P40-w): the near
+        # term, and the anchor as the reader spelled it — its pristine query for a
+        # text anchor, its attested folded surface forms for a lemma anchor.
+        anchor_terms = lemma ? anchor : [query]
         results = assemble(hits, lang: lang, license: license, limit: limit, inner_limit: inner_limit,
-                                 source: source, sources: sources, loans: loans)
+                                 source: source, sources: sources, loans: loans,
+                                 anchor_terms: anchor_terms, near_terms: [near])
         announce_expansion_clip
         results
       end
@@ -194,13 +200,15 @@ module Nabu
         %("#{text.gsub('"', '""')}")
       end
 
-      # The FTS MATCH — identical machinery to Search#fts_hits (same snippet and
-      # bm25 fragments, same bound-parameter discipline: the built match is the
-      # one raw-SQL fragment, carrying no user text except folded variants).
+      # The FTS MATCH — identical machinery to Search#fts_hits (same bm25
+      # fragment, same bound-parameter discipline: the built match is the one
+      # raw-SQL fragment, carrying no user text except folded variants). Only
+      # passage_ids are pulled; the snippet is rebuilt from STORED text
+      # (StoredSnippet, P40-w), never from the folded index column.
       def fts_hits(match, inner_limit:)
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", match))
-          .select(:passage_id, Sequel.lit(Search::SNIPPET_SQL).as(:snippet))
+          .select(:passage_id)
           .order(Sequel.lit(Search::RANK_SQL))
           .limit(inner_limit)
           .all
@@ -209,11 +217,11 @@ module Nabu
       # Reassemble in FTS rank order after the catalog join drops filtered rows,
       # then trim to the page — the Search#run tail verbatim (including the
       # exhausted-inner-window completeness note).
-      def assemble(hits, lang:, license:, limit:, inner_limit:, source: nil, sources: nil, loans: nil)
+      def assemble(hits, lang:, license:, limit:, inner_limit:, anchor_terms:, near_terms:,
+                   source: nil, sources: nil, loans: nil)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
-        snippets = hits.to_h { |row| [row.fetch(:passage_id), row.fetch(:snippet)] }
         rows = catalog_rows(ordered_ids, lang: lang, license: license, source: source, sources: sources,
                                          loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
@@ -223,15 +231,23 @@ module Nabu
           filters_active: [lang, license, source, loans].compact.any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
-        page.map { |row| build_result(row, snippets.fetch(row.fetch(:passage_id))) }
+        page.map { |row| build_result(row, anchor_terms: anchor_terms, near_terms: near_terms) }
       end
 
-      def build_result(row, snippet)
+      # Both matched terms bracketed in a window of the STORED text (P40-w): the
+      # two-term contract carried off the folded FTS snippet onto the pristine
+      # glyphs. StoredSnippet locates each side by folding it the way the passage
+      # was folded, then maps the span back — so an unaccented query still marks
+      # the polytonic spelling, and CJK/kana show the stored glyphs.
+      def build_result(row, anchor_terms:, near_terms:)
         Search::Result.new(
           urn: row.fetch(:urn),
           language: row.fetch(:language),
           text: row.fetch(:text),
-          snippet: snippet,
+          snippet: Nabu::Query::StoredSnippet.build_proximity(
+            text: row.fetch(:text), language: row.fetch(:language),
+            anchor_terms: anchor_terms, near_terms: near_terms
+          ),
           document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class)
         )
