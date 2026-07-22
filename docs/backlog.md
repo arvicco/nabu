@@ -10832,6 +10832,8 @@ asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
 
 ## P39-2 · Aozora quarantine triage  [tier: opus] [status: done 2026-07-22 — merged 46a2b3e; ONE class (no-legend legacy txt kind), 1,191/1,191 recovered at prototype scale; hash-drift/UTF-8/corrupt = 0 live; attic answer = accept-as-designed (Option C, owner ratification at gate); perseus-latin 27 = longstanding upstream TEI (ISO-entity journal)] [deps: P39-3]
 
+## P39-r2 · Site journey pass  [tier: opus] [status: done 2026-07-22 — merged 8815049; persona funnel + action calls; rake bless alias + ops §8b rake reference rode the merge] [deps: —, owner-requested at the gate]
+
 ## P39-r1 · Bare-kuten named-symbol resolution  [tier: opus] [status: done 2026-07-22 — merged 84db148; 16,137/19,094 occurrences (85%) resolve, 0 table failures; disjointness pinned] [deps: P39-2, P39-5]
 KUTEN_GAIJI misses named symbols with bare men-ku-ten (二の字点、1-2-22 —
 no 第N水準 prefix): 16,148/19,094 unresolved occurrences (85%). Widen
