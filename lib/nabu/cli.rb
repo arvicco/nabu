@@ -619,6 +619,19 @@ module Nabu
       search for candidates, then keeps only glyph-literal hits — so it does
       not combine with --fuzzy/--near/--lemma/--morph or the character filters.
 
+      WHOLE-WORD (--word): keep only hits where the query lands on a WORD
+      BOUNDARY in the stored text — a fold-aware whole-word match. ἦ finds the
+      standalone particle ἦ but NOT ἦμαρ (the query sits mid-word there); 学
+      still folds to 學 but only as a whole word. A boundary is the start/end
+      of the text or a non-letter (whitespace, punctuation — combining marks
+      are word-internal, so accents never break a word). --word composes with
+      --exact (word-AND-glyph exact: ἦ finds ἦ, not ἦμαρ nor a folded ἠ) and,
+      alone, with the plain fold; it does NOT combine with
+      --fuzzy/--near/--lemma/--morph or the character filters. Spaceless scripts
+      have no word boundaries: --word on a query containing Han or kana is
+      REFUSED (use --exact for glyph-literal matching there). Hangul is
+      space-delimited, so --word treats it like any alphabetic script.
+
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
         '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
@@ -674,7 +687,8 @@ module Nabu
       NEAR: --lemma λέγω --near κύριος finds εἶπε near κύριος too), and with
       --lang/--license/--limit. Cross-passage adjacency is OUT — the passage
       is the unit. --morph does not compose with --near (out of scope). Both
-      matched terms are bracketed in the snippet.
+      matched terms are bracketed in the snippet, shown in the stored text
+      (the pristine spelling, not the folded search form).
 
       FUZZY (--fuzzy): substring/fragment search for damaged texts — matches
       the fragment ANYWHERE in a passage, mid-word included, where normal
@@ -817,6 +831,9 @@ module Nabu
     option :exact, type: :boolean, default: false,
                    desc: "Glyph-literal match; the default fold matches modern reading habits " \
                          "(学 finds 學, 弁 finds 辨/瓣/辯) — --exact does not"
+    option :word, type: :boolean, default: false,
+                  desc: "Whole-word match: the query must land on a word boundary in the stored " \
+                        "text (ἦ finds ἦ, not ἦμαρ); refuses spaceless CJK/kana"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -843,6 +860,16 @@ module Nabu
         raise Thor::Error, "search: --exact is a word-level glyph-literal filter — it does not " \
                            "combine with the character-structure filters (--radical/--strokes/--char-component)"
       end
+      if options[:word] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+                            char_filter_options?)
+        raise Thor::Error, "search: --word is a whole-word filter over the plain text query — it " \
+                           "composes only with --exact, not --fuzzy/--near/--lemma/--morph or the " \
+                           "character-structure filters"
+      end
+      if options[:word] && (msg = Nabu::Query::Search.word_refusal_for(query))
+        raise Thor::Error, "search: #{msg}"
+      end
+
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
           raise Thor::Error, "search: the character filters (--radical/--strokes/--char-component) are " \
@@ -878,9 +905,10 @@ module Nabu
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
-                                    loans: loans, exact: options[:exact])
+                                    loans: loans, exact: options[:exact], word: options[:word])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
-                                    incomplete: searcher.incomplete_hint, exact: options[:exact])
+                                    incomplete: searcher.incomplete_hint, exact: options[:exact],
+                                    word: options[:word])
       print_display_footer
     ensure
       catalog&.disconnect
@@ -3602,25 +3630,28 @@ module Nabu
         end
       end
 
-      # Render hits: urn + optional [language] header, then the snippet. The
-      # plain/exact search snippet is a window of the STORED text (P39-r3,
-      # StoredSnippet) — text_normalized, the folded skeleton, is NEVER shown
-      # (it rendered 学 as 學 and だ as た). Proximity still rides the FOLDED FTS
-      # snippet (+folded: true+), so the footer labels each path truthfully;
-      # active facet filters (P17-2) are named in one compact footer line — and
-      # only then. +incomplete+ (P35-6): the query layer's honesty hint (the
-      # exhausted-inner-window note, or the --exact scan-ceiling note) — printed
-      # whenever present, so a short page never masquerades as a complete answer.
+      # Render hits: urn + optional [language] header, then the snippet. Every
+      # path's snippet is a window of the STORED text (P39-r3/P40-w,
+      # StoredSnippet) — text_normalized, the folded skeleton, is NEVER shown (it
+      # rendered 学 as 學 and だ as た). +proximity: true+ marks the two-term NEAR
+      # snippet (both terms bracketed, on the stored glyphs since P40-w); +exact+
+      # / +word+ annotate the glyph-literal / whole-word filters, so the footer
+      # labels each path truthfully. Active facet filters (P17-2) are named in
+      # one compact footer line — and only then. +incomplete+ (P35-6): the query
+      # layer's honesty hint (the exhausted-inner-window note, or the
+      # --exact/--word scan-ceiling note) — printed whenever present, so a short
+      # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false, folded: false)
+                               exact: false, word: false, proximity: false)
         if results.empty?
           say "no matches"
-          # Empty-under-filter honesty (P35): --exact suppressed the folded
+          # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
           # candidates, so a "no matches" here must name the filter it applied.
           if exact
             say "note: --exact matched glyph-literally (the default fold would also find " \
                 "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
           end
+          say "note: --word required a whole-word match (a fragment inside a longer word does not count)" if word
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -3630,19 +3661,27 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{search_snippet_label(exact: exact, folded: folded)})" \
+            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity)})" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
       end
 
-      # The footer clause naming what the snippet shows, per path. Proximity's
-      # two-term NEAR snippet is still the folded index form; plain and --exact
-      # search now show the stored text.
-      def search_snippet_label(exact:, folded:)
-        return "highlights are diacritic-folded" if folded
-        return "glyph-exact; snippet shows the text as stored" if exact
+      # The footer clause naming what the snippet shows, per path. All three
+      # paths now show the STORED text (P40-w carried proximity off the folded
+      # index form); --exact / --word / proximity annotate what the match means.
+      def search_snippet_label(exact:, word: false, proximity: false)
+        return "both terms bracketed; snippet shows the text as stored" if proximity
 
-        "snippet shows the text as stored; matching is fold-aware"
+        stored = "snippet shows the text as stored"
+        # A filtered path (--exact and/or --word) leads with what the match means;
+        # plain search leads with the stored-text promise, then "fold-aware".
+        return "#{stored}; matching is fold-aware" unless exact || word
+
+        mode = if exact && word then "glyph-exact, whole-word"
+               elsif exact then "glyph-exact"
+               else "whole-word, fold-aware"
+               end
+        "#{mode}; #{stored}"
       end
 
       # " · facets: genre=epitaph province=pannonia% · loans: grc · axis: celtic"
@@ -4402,7 +4441,7 @@ module Nabu
           source: options[:source], sources: axis_slugs, loans: loans_filter
         )
         print_search_results(results, loans: loans_filter, axis: axis_names,
-                                      incomplete: searcher.incomplete_hint, folded: true)
+                                      incomplete: searcher.incomplete_hint, proximity: true)
         print_display_footer
       ensure
         catalog&.disconnect

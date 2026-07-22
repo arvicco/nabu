@@ -402,6 +402,92 @@ module Query
       refute_includes snippet, "弌", "the archaic fold canonical is never shown"
     end
 
+    # -- --word: whole-word matching (P40-w) ---------------------------------
+
+    # The headline case: --exact is a glyph-literal SUBSTRING, so ἦ finds the ἦ
+    # buried in ἦμαρ; --word bounds it to a whole word. Both passages carry the
+    # glyph ἦ (one standalone, one only inside ἦμαρ — the standalone word there
+    # is ἤ, a DIFFERENT glyph, so it is what pulls the passage into the folded
+    # candidate set), so --exact returns both; --exact --word keeps only the one
+    # where ἦ stands as its own word.
+    def test_word_with_exact_keeps_only_the_whole_word_not_a_fragment
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:whole", text: "ἦ μὲν οὖν", sequence: 0)
+      make_passage(doc, urn: "urn:d:grc:frag", text: "ἦμαρ ἤ", sequence: 1)
+      rebuild!
+
+      assert_equal %w[urn:d:grc:frag urn:d:grc:whole],
+                   search("ἦ", exact: true).map(&:urn).sort,
+                   "--exact is a substring: the glyph ἦ is present in both passages"
+      assert_equal %w[urn:d:grc:whole], search("ἦ", exact: true, word: true).map(&:urn),
+                   "--word drops the passage where ἦ only sits inside ἦμαρ"
+    end
+
+    # Word boundaries are start/end of text and non-letters (whitespace AND
+    # punctuation), by Unicode property — not an ASCII assumption.
+    def test_word_boundary_is_punctuation_or_edge
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:comma", text: "τόδε, ἦ.", sequence: 0) # flanked by space + period
+      make_passage(doc, urn: "urn:d:grc:end", text: "ὅς ἐστιν ἦ", sequence: 1) # at end of text
+      rebuild!
+
+      assert_equal %w[urn:d:grc:comma urn:d:grc:end],
+                   search("ἦ", exact: true, word: true).map(&:urn).sort,
+                   "a whole word ends at punctuation or the edge, not only at whitespace"
+    end
+
+    # --word composes with the plain fold, and a combining mark is word-INTERNAL:
+    # μᾱ́τηρ carries a combining acute (U+0301 on ᾱ that NFC cannot precompose),
+    # yet the unaccented query still lands on it as one whole word, and the
+    # snippet brackets the pristine spelling.
+    def test_word_composes_with_the_fold_over_a_combining_mark_word
+      doc = make_document(source: @open, urn: "urn:d:grc")
+      make_passage(doc, urn: "urn:d:grc:1", text: "μᾱ́τηρ ἐστίν", sequence: 0)
+      rebuild!
+
+      result = search("ματηρ", word: true).first
+      refute_nil result, "the accent-stripped query finds the combining-mark-bearing word"
+      assert_includes result.snippet, "[μᾱ́τηρ]", "the whole word is bracketed in its stored spelling"
+    end
+
+    # Spaceless scripts have no word boundaries: --word on a Han or kana query is
+    # REFUSED loudly (never silently degraded) — the refusal points at --exact.
+    def test_word_refuses_spaceless_cjk_and_kana
+      msg = "word boundaries are not defined for spaceless CJK text — use --exact for glyph-literal matching"
+      assert_equal msg, Nabu::Query::Search.word_refusal_for("学問"), "Han is refused"
+      assert_equal msg, Nabu::Query::Search.word_refusal_for("だめ"), "kana is refused"
+      assert_nil Nabu::Query::Search.word_refusal_for("λόγος"), "alphabetic Greek is fine"
+      assert_nil Nabu::Query::Search.word_refusal_for("한국어"), "Hangul is space-delimited — allowed"
+
+      error = assert_raises(Nabu::Error) { search("学", word: true) }
+      assert_equal msg, error.message, "run refuses a spaceless --word query at the library boundary"
+    end
+
+    # -- NFC-exempt (hbo/arc) --exact matching, AT MATCH TIME (P40-w item 3) ---
+
+    # Real WLC bytes (Ruth 1:1 בִּימֵי): the dagesh U+05BC precedes the hiriq
+    # U+05B4, which is NOT NFC — canonical order swaps them (Normalize's own
+    # exemption test pins refute unicode_normalized?). hbo is stored byte-
+    # verbatim, so a query typed in canonical order would miss the raw stored
+    # bytes if only the query were NFC-folded. --exact NFCs BOTH sides at match
+    # time, so it finds the passage; storage and the stored-byte snippet are
+    # untouched.
+    def test_exact_matches_nfc_divergent_hbo_mark_order
+      wlc = "בִּימֵי֙" # בִּימֵי, dagesh-before-hiriq (non-NFC)
+      refute wlc.unicode_normalized?(:nfc), "the fixture really is a divergent Masoretic order"
+      doc = make_document(source: @open, urn: "urn:d:hbo", language: "hbo")
+      make_passage(doc, urn: "urn:d:hbo:1", text: wlc, sequence: 0, language: "hbo")
+      rebuild!
+
+      canonical = Nabu::Normalize.nfc(wlc) # a modern query typed in canonical order
+      result = search(canonical, exact: true).first
+      refute_nil result, "NFC-both matching reconciles the divergent mark order at match time"
+      assert_equal "urn:d:hbo:1", result.urn
+      assert_equal wlc, result.text, "storage is untouched — the pristine Masoretic bytes"
+      assert_includes result.snippet, "[#{wlc}]", "the snippet shows the STORED (non-NFC) byte order"
+      refute result.snippet.unicode_normalized?(:nfc), "display is untouched — never NFC-reordered"
+    end
+
     def test_language_filter_excludes_other_languages
       grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
       make_passage(grc, urn: "urn:d:grc:1", text: "aurora", sequence: 0, language: "grc")

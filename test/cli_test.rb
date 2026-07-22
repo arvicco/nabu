@@ -2666,6 +2666,51 @@ class CLITest < Minitest::Test
     assert_match(/--exact.*does not combine/i, err)
   end
 
+  # -- search --word (P40-w): whole-word matching ---------------------------
+
+  def test_search_help_documents_the_word_flag_with_the_hemar_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--word/, out, "the whole-word flag is documented")
+    assert_match(/ἦμαρ/, out, "the help gives the ἦ/ἦμαρ boundary example")
+  end
+
+  # A whole-word hit renders the stored snippet and a footer naming the fold-
+  # aware whole-word mode (the corpus stores μῆνιν as its own passage/word).
+  def test_search_word_matches_a_whole_word
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν --word]) }
+      assert_nil status, "a successful --word search exits 0"
+      assert_match(/\[μῆνιν\]/, out, "the whole word is bracketed in its stored spelling")
+      assert_match(/whole-word, fold-aware; snippet shows the text as stored/, out,
+                   "the footer names the whole-word, fold-aware, stored-text path")
+    end
+  end
+
+  # Spaceless CJK/kana have no word boundaries — --word refuses loudly, before
+  # any DB work, and points at --exact.
+  def test_search_word_refuses_spaceless_cjk
+    _out, err, status = run_cli(%w[search 学問 --word])
+    assert_equal 1, status, "a refused --word query is an error exit"
+    assert_match(/word boundaries are not defined for spaceless CJK text/, err)
+    assert_match(/use --exact for glyph-literal matching/, err)
+  end
+
+  def test_search_word_does_not_compose_with_near
+    _out, err, status = run_cli(%w[search λόγος --near θεός --word])
+    assert_equal 1, status
+    assert_match(/--word.*composes only with --exact/i, err)
+  end
+
+  # Empty-under-filter honesty (P35): a --word miss names the whole-word filter.
+  def test_search_word_empty_result_explains_the_filter
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search 한국어 --word]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/--word required a whole-word match/, out, "the empty page names the --word filter")
+    end
+  end
+
   # -- the no-silent-script-miss hints (P27-2) -------------------------------
 
   def test_search_glagolitic_zero_hit_prints_the_cross_script_hint
@@ -3064,15 +3109,17 @@ class CLITest < Minitest::Test
   # -- search --near (P14-8 proximity) -------------------------------------
 
   # Real UD grc sentence 64498: … ὁ κῆρυξ(7) καὶ(8) εἶπας(9) … — κῆρυξ and
-  # εἶπας sit a word apart. --window 1 admits them, both folded terms
-  # bracketed; --window 0 (adjacency) does not.
+  # εἶπας sit a word apart. --window 1 admits them, both terms bracketed in the
+  # STORED (accented) spelling (P40-w: proximity left the folded FTS snippet).
   def test_search_near_within_window_hits_with_both_terms_highlighted
     with_treebank_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 1]) }
       assert_nil status, "a successful proximity search exits 0"
       assert_match(/:64498 \[grc\]/, out)
-      assert_match(/\[κηρυξ\]/, out, "the anchor term is highlighted")
-      assert_match(/\[ειπασ\]/, out, "the near term is highlighted too")
+      assert_match(/\[κῆρυξ\]/, out, "the anchor term is highlighted as stored")
+      assert_match(/\[εἶπας\]/, out, "the near term is highlighted too, as stored")
+      assert_match(/both terms bracketed; snippet shows the text as stored/, out,
+                   "the footer names the stored two-term snippet")
     end
   end
 
