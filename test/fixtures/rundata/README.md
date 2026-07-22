@@ -181,9 +181,11 @@ Verbatim, from Uppsala runforum (`https://www.runforum.nordiska.uu.se/en/srd/`):
 
 Attribution requirement (verbatim): *"When quoting or re-using information from
 the Scandinavian Runic-text Database, you are required to refer to the database
-by naming it and linking to its web site."* → license_class **`attribution`**
-(ODbL is a share-alike/attribution open-data licence; treat as attribution-
-class, honour the naming+link requirement).
+by naming it and linking to its web site."* → license_class **`odbl`**
+(D40-c RULED, superseding this census's provisional attribution-class call:
+ODbL/DbCL obligations attach to the DATABASE — name + link + share-alike on
+derived databases — a distinct compliance posture, minted as its own class in
+P40-6; the naming+link requirement rides the manifest credit line).
 
 **Caveat, reported honestly:** `rundata.info` (Rundata-net) itself states only
 **GPLv3 for its own source code** (`github.com/Snorresk/rundata-net`, `LICENSE`,

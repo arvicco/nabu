@@ -2028,6 +2028,40 @@ rem:
   adapter: Nabu::Adapters::Rem
   axes: [germanic]
   enabled: false   # awaiting the owner-fired first real sync (checklist §6)
+
+rundata:
+  adapter: Nabu::Adapters::Rundata
+  axes: [germanic, epigraphy]
+  siblings: ["-(fvn|rsv|eng|swe)"]  # P40-6: the closed lane-tail set — signum slugs never end in these
+  translations: true  # the -eng/-swe translation lanes (fvn/rsv normalisations are layers, always minted)
+  license_watch: https://www.runforum.nordiska.uu.se/en/srd/
+  enabled: false   # CLAUDE.md checklist §6 — owner-fired first sync
+                   # (~45 MB runes.<hash>.sqlite3 off rundata.info), eyeball
+                   # nabu show urn:nabu:rundata:u-344 (Yttergärde: "in ulfr
+                   # hafiR o| |onklati…") beside its -fvn/-eng siblings,
+                   # urn:nabu:rundata:n-kj101 (Eggja, gmq-pro) and 5 random
+                   # inscriptions, then flip. Expect ~6,800 inscriptions ×
+                   # up to 5 lanes. BEFORE flipping: re-confirm the ODbL
+                   # grant on the Uppsala page (license_watch above) —
+                   # D40-c caveat, owner decision.
+  # Rundata — the Scandinavian Runic-text Database (SRDB / Samnordisk
+  # runtextdatabas, Uppsala), via Rundata-net (rundata.info): ~6,800 runic
+  # inscriptions. Document = inscription (signum identity, Django-slugify
+  # urns agreeing with upstream's canonical_slug); the Latin
+  # TRANSLITERATION is the bare-urn primary (notation legend is content —
+  # zero runic Unicode upstream, none invented), fvn/rsv normalisations +
+  # eng/swe translations as suffix siblings. Language: non, except
+  # urnordisk-dated inscriptions (dating "U …") → gmq-pro (the
+  # wiktionary-recon proto-language code convention; no ISO code exists).
+  # LICENSE odbl (D40-c RULED): ODbL 1.0 (database) + DbCL 1.0 (contents),
+  # verbatim grant + the required "based on the Scandinavian Runic-text
+  # Database" attribution in the manifest credit line. CAVEAT: the grant
+  # is authoritative from Uppsala's runforum page; rundata.info itself
+  # states only GPLv3 for its own source code — re-confirm before
+  # enabling (owner). Fetch scrapes the app page for the hash-versioned
+  # artifact URL; a new hash lands BESIDE the old file (never-delete),
+  # .rundata-fetch.json points at the current one. Live upstream
+  # (artifact Last-Modified 2026-07-12) → re-syncs owner-fired.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
@@ -30,6 +30,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
 | `tir` | inscriptions | nc | enabled · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
+| `rundata` | inscriptions | odbl | not enabled | not synced yet |
 
 ## The desk's instruments
 
