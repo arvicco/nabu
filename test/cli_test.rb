@@ -2608,7 +2608,7 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search μηνιν]) }
       assert_nil status, "a successful search exits 0"
       assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
-      assert_match(/\[μηνιν\]/, out, "the folded match is highlighted")
+      assert_match(/\[μῆνιν\]/, out, "the match is highlighted in the STORED (accented) spelling (P39-r3)")
       assert_match(/1 hit\b/, out)
     end
   end
@@ -2629,7 +2629,22 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search μῆνιν --exact]) }
       assert_nil status, "a successful --exact search exits 0"
       assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
-      assert_match(/glyph-exact/, out, "the footer names the glyph-exact mode")
+      assert_match(/glyph-exact; snippet shows the text as stored/, out,
+                   "the footer names the glyph-exact mode and the stored-text snippet")
+    end
+  end
+
+  # P39-r3 Defect 2: the snippet renders the STORED glyph, never the folded
+  # skeleton (学 was showing as 學, the fold canonical). Also pins the plain
+  # (non-exact) footer wording, which no longer claims folded highlights.
+  def test_search_snippet_shows_stored_cjk_glyph_and_footer_wording
+    with_config_jpn_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search 学問 --lang jpn]) }
+      assert_nil status
+      assert_match(/\[学問\]/, out, "the snippet shows the stored shinjitai glyphs")
+      refute_match(/學/, out, "the traditional fold skeleton is never shown to the user")
+      assert_match(/snippet shows the text as stored; matching is fold-aware/, out,
+                   "the footer states what is true, not the old diacritic-folded claim")
     end
   end
 
@@ -4695,6 +4710,40 @@ class CLITest < Minitest::Test
                                      license_class: "open", enabled: true)
       seed_parallels_passage(catalog, src, "urn:h:od", "urn:h:od:1.1", anchor)
       seed_parallels_passage(catalog, src, "urn:q:full", "urn:q:full:1", quoter)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A one-passage Japanese corpus (P39-r3): "学問。天下" — the shinjitai 学 folds
+  # to the traditional skeleton 學 in the index, so the pre-P39-r3 folded snippet
+  # showed 學 the passage never held. Built and indexed through the real Indexer.
+  def with_config_jpn_corpus
+    Dir.mktmpdir("nabu-cli-jpn") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "jp", name: "Kanbun", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      doc_id = catalog[:documents].insert(
+        source_id: src, urn: "urn:jp:d", title: "Rongo", language: "jpn",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "urn:jp:d:1", sequence: 0, language: "jpn",
+        text: "学問。天下", text_normalized: Nabu::Normalize.search_form("学問。天下", language: "jpn"),
+        content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+      )
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
       fulltext.disconnect
