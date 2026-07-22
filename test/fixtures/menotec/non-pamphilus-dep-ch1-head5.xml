@@ -1,0 +1,67 @@
+# text = EC EM SÆRÐR.
+# sent_id = 1
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="198377" status="reviewed" presentation-before="[Pamphilus:] "> 
+ <token id="2321895" form="EC" lemma="ek" part-of-speech="Pp" morphology="------n--i" head-id="2321896" relation="sub" presentation-after=" " foreign-ids="menota-id=w00001"/> 
+ <token id="2321896" form="EM" lemma="vera" part-of-speech="V-" morphology="1spia----i" relation="pred" presentation-after=" " foreign-ids="menota-id=w00002"/> 
+ <token id="2321897" form="SÆRÐR" lemma="sǽra" part-of-speech="V-" morphology="-supamn-si" head-id="2321896" relation="xobj" presentation-after=". " foreign-ids="menota-id=w00003"> 
+  <slash target-id="2321895" relation="xsub"/> 
+ </token> 
+</sentence>
+
+# text = oc ber ec gaflak undir hiarta mínu.
+# sent_id = 2
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="198378" status="reviewed"> 
+ <token id="2321898" form="oc" lemma="ok" part-of-speech="C-" morphology="---------n" head-id="2321899" relation="aux" presentation-after=" " foreign-ids="menota-id=w00004"/> 
+ <token id="2321899" form="ber" lemma="bera" part-of-speech="V-" morphology="1spia----i" relation="pred" presentation-after=" " foreign-ids="menota-id=w00005"/> 
+ <token id="2321900" form="ec" lemma="ek" part-of-speech="Pp" morphology="------n--i" head-id="2321899" relation="sub" presentation-after=" " foreign-ids="menota-id=w00006"/> 
+ <token id="2321901" form="gaflak" lemma="gaflak" part-of-speech="Nb" morphology="-s---na-si" head-id="2321899" relation="obj" presentation-after=" " foreign-ids="menota-id=w00007"/> 
+ <token id="2321902" form="undir" lemma="undir" part-of-speech="R-" morphology="---------n" head-id="2321899" relation="adv" presentation-after=" " foreign-ids="menota-id=w00008"/> 
+ <token id="2321903" form="hiarta" lemma="hjarta" part-of-speech="Nb" morphology="-s---nd-si" head-id="2321902" relation="obl" presentation-after=" " foreign-ids="menota-id=w00009"/> 
+ <token id="2321904" form="mínu" lemma="minn" part-of-speech="Ps" morphology="-s---nd--i" head-id="2321903" relation="atr" presentation-after=". " foreign-ids="menota-id=w00010"/> 
+</sentence>
+
+# text = sár oc harmr vex mer iafnan.
+# sent_id = 3
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="198379" status="reviewed"> 
+ <token id="2321905" form="sár" lemma="sár" part-of-speech="Nb" morphology="-s---nn-si" head-id="2321906" relation="sub" presentation-after=" " foreign-ids="menota-id=w00011"/> 
+ <token id="2321906" form="oc" lemma="ok" part-of-speech="C-" morphology="---------n" head-id="2321908" relation="sub" presentation-after=" " foreign-ids="menota-id=w00012"/> 
+ <token id="2321907" form="harmr" lemma="harmr" part-of-speech="Nb" morphology="-s---mn-si" head-id="2321906" relation="sub" presentation-after=" " foreign-ids="menota-id=w00013"/> 
+ <token id="2321908" form="vex" lemma="vaxa" part-of-speech="V-" morphology="3spia----i" relation="pred" presentation-after=" " foreign-ids="menota-id=w00014"/> 
+ <token id="2321909" form="mer" lemma="ek" part-of-speech="Pp" morphology="------d--i" head-id="2321908" relation="obl" presentation-after=" " foreign-ids="menota-id=w00015"/> 
+ <token id="2321910" form="iafnan" lemma="jafnan" part-of-speech="Df" morphology="---------n" head-id="2321908" relation="adv" presentation-after=". " foreign-ids="menota-id=w00016"/> 
+</sentence>
+
+# text = oc æi dirfumz ec at segia nafn hogguanda
+# sent_id = 4
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="198380" status="reviewed"> 
+ <token id="2321911" form="oc" lemma="ok" part-of-speech="C-" morphology="---------n" head-id="2321913" relation="aux" presentation-after=" " foreign-ids="menota-id=w00017"/> 
+ <token id="2321912" form="æi" lemma="ei" part-of-speech="Df" morphology="---------n" head-id="2321913" relation="aux" presentation-after=" " foreign-ids="menota-id=w00018"/> 
+ <token id="2321913" form="dirfumz" lemma="dirfa" part-of-speech="V-" morphology="1spim----i" relation="pred" presentation-after=" " foreign-ids="menota-id=w00019"/> 
+ <token id="2321914" form="ec" lemma="ek" part-of-speech="Pp" morphology="------n--i" head-id="2321913" relation="sub" presentation-after=" " foreign-ids="menota-id=w00020"/> 
+ <token id="2321915" form="at" lemma="at" part-of-speech="N-" morphology="---------n" head-id="2321916" relation="aux" presentation-after=" " foreign-ids="menota-id=w00021"/> 
+ <token id="2321916" form="segia" lemma="segja" part-of-speech="V-" morphology="--pna----i" head-id="2321913" relation="xobj" presentation-after=" " foreign-ids="menota-id=w00022"> 
+  <slash target-id="2321914" relation="xsub"/> 
+ </token> 
+ <token id="2321917" form="nafn" lemma="nafn" part-of-speech="Nb" morphology="-s---na-si" head-id="2321916" relation="obj" presentation-after=" " foreign-ids="menota-id=w00023"/> 
+ <token id="2321918" form="hogguanda" lemma="hǫggvandi" part-of-speech="Nb" morphology="-s---mg-si" head-id="2321917" relation="atr" presentation-after=" " foreign-ids="menota-id=w00024"/> 
+</sentence>
+
+# text = oc æi lætr sialft sár synaz.
+# sent_id = 5
+<?xml version="1.0" encoding="UTF-8"?>
+<sentence id="198381" status="reviewed"> 
+ <token id="2321919" form="oc" lemma="ok" part-of-speech="C-" morphology="---------n" head-id="2321921" relation="aux" presentation-after=" " foreign-ids="menota-id=w00025"/> 
+ <token id="2321920" form="æi" lemma="ei" part-of-speech="Df" morphology="---------n" head-id="2321921" relation="aux" presentation-after=" " foreign-ids="menota-id=w00026"/> 
+ <token id="2321921" form="lætr" lemma="láta" part-of-speech="V-" morphology="3spia----i" relation="pred" presentation-after=" " foreign-ids="menota-id=w00027"/> 
+ <token id="2321922" form="sialft" lemma="sjalfr" part-of-speech="A-" morphology="-s---nnpsi" head-id="2321921" relation="xadv" presentation-after=" " foreign-ids="menota-id=w00028"> 
+  <slash target-id="2321923" relation="xsub"/> 
+ </token> 
+ <token id="2321923" form="sár" lemma="sár" part-of-speech="Nb" morphology="-s---nn-si" head-id="2321921" relation="sub" presentation-after=" " foreign-ids="menota-id=w00029"/> 
+ <token id="2321924" form="synaz" lemma="sýna" part-of-speech="V-" morphology="--pnm----i" head-id="2321921" relation="xobj" presentation-after=". " foreign-ids="menota-id=w00030"> 
+  <slash target-id="2321923" relation="xsub"/> 
+ </token> 
+</sentence>
