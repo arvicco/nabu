@@ -50,8 +50,9 @@ extracts) is **filled** — 160 name records, feeding the inline
    (`sla-pro`, `ine-pro`, `gem-pro`) — non-ISO, kept because they join
    directly against the upstream descendants data (conventions §4).
 5. **Search folding is per-language** (conventions §9): the code picks the
-   rule — `grc` final-sigma, `lat` u/v–i/j, `ang` æ→ae/þ,ð→th, `sl` ſ→s,
-   `akk`/`sux` determinative stripping, generic diacritic folding
+   rule — `grc` final-sigma, `lat` u/v–i/j, `ang` æ→ae/þ,ð→th,
+   `sl`/`gmh` ſ→s (Slovenian and the ReM Middle High German diplomatic
+   text), `akk`/`sux` determinative stripping, generic diacritic folding
    elsewhere. Where a source's language differs from a tool's expectation,
    the per-document override records reality (P10-4).
 
@@ -82,6 +83,7 @@ extracts) is **filled** — 160 name records, feeding the inline
 | `ang` | Old English | Beowulf and the complete ASPR poetry plus the ISWOC prose/gospel treebank, ca. 700–1150. |
 | `sga` / `mga` | Old & Middle Irish | The CorPH Palaeohibernicum and the Ogham corpus — the Celtic axis, gold-lemmatized in CorPH. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
+| `non` / `is` / `osx` / `gmh` / `gmq-pro` | Old Norse / Icelandic / Old Saxon / Middle High German / Proto-Norse | The P40 Germanic wave, **adapters ready, first sync owner-pending** (no counts yet): Menotec's Old Norwegian treebanks and the Poetic Edda of Codex Regius (`non`), IcePaHC's diachronic Icelandic via UD (`is` — the 12th–21st c. under the one modern tag, the `orv`/Middle-Russian precedent of rule 3), the Old Saxon *Heliand* (`osx`, HeliPaD), the Middle High German ReM manuscripts (`gmh`), and Rundata's urnordisk runic inscriptions (`gmq-pro`, the wiktionary-recon proto-code convention of rule 4 — no ISO code exists). |
 | `xcl` / `xhu` / `uga` / `elx` / `peo` | Classical Armenian / Hurrian / Ugaritic / Elamite / Old Persian | The 5th-century Armenian NT plus lexical-list and inscriptional traces from the cuneiform and Achaemenid shelves — small but gold-lemmatized. |
 | `ett` / `osc` / `xlu` / `xtg` / `xfa` / `xve` / `scx` / `xly` / `xpu` / `xrr` | Etruscan / Oscan / Luwian / …the pre-Roman epigraphic long tail | The Italic, Anatolian, and Mediterranean inscription corpora (OpenEtruscan, CEIPoM, ItAnt, LexLep, TIR, I.Sicily) — dozens of languages, mostly script-tagged (`-Grek`/`-Latn`/`-Ital`), many at a few hundred passages each. |
 | `eng` / `en` / `ger` / `deu` / `ita` / `pol` / `fra` | Modern translation tags | The facing-translation layer (Perseus/First1K, WEB/Vulgate, SuttaCentral, Freising) — never originals; `en`/`deu` are legacy strays standardizing on `eng`/`ger`. |
@@ -134,7 +136,12 @@ machine-suggested rows in 8 languages (chiefly Greek/Diorisis 7.54M and
 Hittite/TLHdig), always labelled. Everything else is full-text-searchable
 but not lemma-searchable (yet — see improvements §3.1 for the cluster
 plan to project lemmas onto the rest). The newest gold joiner is **`ojp`
-as #23** (Old Japanese, 123,002 rows from ONCOJ).
+as #23** (Old Japanese, 123,002 rows from ONCOJ). The **P40 Germanic
+adapters stage the next gold lanes** — `is` (IcePaHC's first Icelandic
+lemma lane), `non` (Menotec's PROIEL-scheme Old Norwegian and the Edda),
+`osx` (HeliPaD's gold form-lemma *Heliand*) and `gmh` (ReM) — each
+adapter-ready with its first sync owner-pending; none is counted here
+until it lands.
 
 ---
 

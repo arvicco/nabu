@@ -28,8 +28,8 @@ slavic:
   desc: "Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane, Balkan damaskini, and the Church Slavonic dictionary shelves."
 
 germanic:
-  persona: "The Germanicist — Gothic, Old English verse and prose, the northern word-hoard."
-  desc: "Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, Gothic riding the proiel/ud treebanks, and Middle High German manuscripts (ReM)."
+  persona: "The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches."
+  desc: "Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy)."
 
 celtic:
   persona: "The Celticist — from Lepontic stones to the Old Irish glossators."
