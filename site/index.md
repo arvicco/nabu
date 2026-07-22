@@ -15,7 +15,9 @@ with its Targums and Peshitta, the Hittite tablet corpus, the universal
 CDLI catalog of cuneiform, the Ugaritic tablets, a millennium of Syriac,
 the inscriptions of pre-Roman Italy and Sicily, the New
 Testament in up to fifteen parallel witnesses, the
-complete corpus of Old English poetry — into a single library on the
+complete corpus of Old English poetry, the classical Chinese library with
+the Buddhist canon, the Japanese public-domain library, and the
+runestones of Scandinavia — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is
 searchable by word or by dictionary lemma, citable to the exact verse or
 tablet line, explicit about every text's license, and rebuildable from its
@@ -39,7 +41,7 @@ Find yours:
 - **[The Classicist]({{ '/axis/classical/' | relative_url }})** — Greek and Latin letters read whole, Homer to the late grammarians.
 - **[The Papyrologist-Epigraphist]({{ '/axis/epigraphy/' | relative_url }})** — reads what survives on stone, sherd, papyrus and tablet, lacunae and all.
 - **[The Slavicist]({{ '/axis/slavic/' | relative_url }})** — Cyril and Methodius to the damaskini, canon to vernacular.
-- **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic, Old English verse and prose, the northern word-hoard.
+- **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 - **[The Celticist]({{ '/axis/celtic/' | relative_url }})** — from Lepontic stones to the Old Irish glossators.
 - **[The Italicist]({{ '/axis/italic/' | relative_url }})** — the languages of pre-Roman Italy, Oscan to Etruscan to Raetic.
 - **[The Comparative Indo-Europeanist]({{ '/axis/etym/' | relative_url }})** — laryngeals, reflex chains, the long descent of words.
@@ -61,17 +63,19 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **19 July 2026**, the catalog records **737,299 documents** comprising
-**11,357,320 passages** in nearly a hundred language codes — from
-proto-cuneiform tablets of the late fourth millennium BCE to
-nineteenth-century Slovenian, with the Ancient Near East the newest
-arrival: the Hittite corpus, the CDLI catalog of over 350,000 cuneiform
-artifacts, the eBL Fragmentarium, Ugaritic, Syriac, and the Sumerian
-literary canon in two scholarly editions — together with **711,376
-dictionary entries** on the reference shelf and over **12.4 million
-gold-standard lemma annotations in twenty-two languages** (a further 8.0
-million machine-suggested annotations are carried at an honestly labelled
-silver tier). All figures on this site are read
+As of **22 July 2026**, the catalog records **801,122 documents** comprising
+**27,978,978 passages** in 108 language codes — from proto-cuneiform
+tablets of the late fourth millennium BCE to Meiji-era Japanese. Literary
+Chinese is the largest language on the shelves (13.2 million passages —
+the Kanseki Repository and the CBETA Buddhist canon); the newest arrival
+is the Germanic wave of 22 July: the Old Norwegian treebanks and the
+Poetic Edda, the Old Saxon *Heliand*, the Middle High German reference
+corpus, and the runic inscriptions of Scandinavia — a day behind the
+Japanese reading desk (Aozora Bunko, 3.0 million passages). Together with
+**1,310,763 dictionary entries** on the reference shelf and **14.6
+million gold-standard lemma annotations in twenty-six languages** (a
+further 8.2 million machine-suggested annotations are carried at an
+honestly labelled silver tier). All figures on this site are read
 from the live catalog, never estimated, and carry the date on which they
 were read.
 

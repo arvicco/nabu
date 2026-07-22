@@ -49,9 +49,9 @@ This desk's own surfaces:
 ```
 nabu define amsa                      # Monier-Williams, with GRETIL-resolved citations
 nabu search धर्मन् --lang san         # the cross-script fold — Devanagari finds the IAST dharman
-nabu show GRETIL-URN --display translit  # Devanagari rendered to IAST (IAST shelves pass through)
-nabu search --lemma --lang san --morph case=loc --axis indic WORD  # Vedic UD / DCS gold morphology
-nabu vocab GRETIL-URN                 # distinctive vocabulary of a text or commentary layer
+nabu show urn:nabu:gretil:sa_rAmAyaNa --display translit  # the Rāmāyaṇa in IAST (Devanagari shelves render to IAST; IAST passes through)
+nabu search --lemma deva --lang san --morph case=loc --axis indic  # DCS gold morphology — deva, locative attestations only
+nabu vocab urn:nabu:dcs:143:1067      # distinctive vocabulary of a Rāmāyaṇa book (DCS gold lemmas)
 ```
 
 

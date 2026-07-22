@@ -21,7 +21,8 @@
 # Registry changes are pinned by test/site/axis_pages_test.rb; this curated
 # prose is not (it is the human layer). Keep every recipe a REAL command.
 # Honesty guards this file lives by: --loans is coptic-scriptorium-only;
-# --fuzzy indexes only papyri-ddbdp + edh + oracc; there is no `nabu
+# --fuzzy indexes only papyri-ddbdp + edh + oracc + open-etruscan; there is
+# no `nabu
 # timeline` (the timeline surface is --from/--to/--century/--place and
 # `vocab --by-century`); display.md names no cuneiform, hieroglyph, or
 # dedicated Syriac font, so this file names none.
@@ -97,8 +98,9 @@ epigraphy:
       and Raetic (TIR) editions, ogham stones, Hittite tablets (TLHdig), and
       the Levant (IIP).
     - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
-      shelves — **papyri-ddbdp, EDH and ORACC**. The other epigraphic shelves
-      (RIIG, ogham, ItAnt…) are searched with plain `search --axis epigraphy`.
+      shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
+      epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
+      plain `search --axis epigraphy`.
     - **The timeline desk:** 163,821 documents carry a date or place, so
       `--from/--to`, `--century` and `--place` scope the stones and sherds by
       when and where. EDH's genre facets (`--type/--province/--material`) live.
@@ -161,16 +163,17 @@ germanic:
     rule-based UD conversion of the Icelandic Parsed Historical Corpus, filed
     under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
     Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
-    inscriptions of Rundata. All five new shelves are adapter-ready with their
-    first sync owner-scheduled, so their holdings below read "not synced yet"
-    until the owner fires them.
+    inscriptions of Rundata. The wave went live 2026-07-22 with the
+    owner-verified first syncs — Menotec, HeliPaD, ReM and Rundata all hold
+    their corpora below; IcePaHC alone still waits on the next `sync ud`.
   instruments: |
-    - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks)
-      and ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark).
-      The P40 Germanic wave stages the next joiners — is (IcePaHC's first
-      Icelandic lemma lane), non (Menotec's PROIEL-scheme Old Norwegian and the
-      Edda), osx (HeliPaD's gold form-lemma Heliand) and gmh (ReM) — each
-      adapter-ready, first sync owner-pending, uncounted until it lands.
+    - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
+      ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and
+      — live since the 2026-07-22 wave — gmh (ReM's 1.71M rows, instantly the
+      corpus's third-largest gold pool), non (Menotec's PROIEL-scheme Old
+      Norwegian and the Edda, 258K) and osx (HeliPaD's gold form-lemma
+      Heliand). One lane is still staged: is (IcePaHC's first Icelandic lemma
+      lane) arrives at the next `sync ud`.
     - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
       æ/þ/ð to find æþele).
     - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC
@@ -185,8 +188,8 @@ germanic:
     - **The timeline desk:** Rundata is the germanic desk's first dated lane —
       the RundataDates extractor puts each inscription's SRDB year envelope and
       find-spot on the calendar, so `--from/--to`, `--century` and `--place`
-      scope the runestones once synced. (gmq-pro tags the urnordisk-dated
-      inscriptions — Proto-Norse, for which no ISO code exists.)
+      scope the runestones. (gmq-pro tags the urnordisk-dated inscriptions —
+      Proto-Norse, for which no ISO code exists.)
   recipes:
     - cmd: 'nabu show urn:nabu:aspr:A4.1:1'
       note: Beowulf, line 1
@@ -198,8 +201,8 @@ germanic:
       note: whole-word match on an Old English form (ASPR/ISWOC)
     - cmd: 'nabu search liudi --lang osx --axis germanic'
       note: the Old Saxon Heliand text (HeliPaD)
-    - cmd: 'nabu search --lemma láta --lang is --axis germanic'
-      note: the IcePaHC Old Icelandic lemma lane
+    - cmd: 'nabu search --lemma konungr --lang non --axis germanic'
+      note: the Menotec gold lemma lane — kings across the Edda and the sagas
     - cmd: 'nabu define aethele --lang ang'
       note: Bosworth-Toller, with the æ/þ/ð fold
     - cmd: 'nabu formulas urn:nabu:aspr:A4.1'
@@ -228,20 +231,20 @@ celtic:
       the Milan / St Gall / Würzburg glosses, plus the Old Irish UD treebanks).
     - **Epigraphy:** RIIG (Gaulish), ogham (Primitive Irish), Lexicon
       Leponticum and its word shelf (Lepontic).
-    - **Etymology:** the kaikki attested-Celtic extracts on `wiktionary-recon`;
-      `nabu etym` walks the Proto-Celtic chains, `nabu define *root` scopes to
-      the reconstruction shelves.
+    - **Etymology:** the kaikki attested-Celtic extracts on `wiktionary-recon`
+      carry the Proto-Celtic ancestry on the dictionary card — `nabu define rí
+      --lang sga` names *rīxs and *h₃rḗǵs. (There is no Proto-Celtic
+      reconstruction shelf yet, so `nabu etym`'s crosswalk ascent is thin from
+      this desk — the cards are the richer walk.)
   recipes:
     - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
       note: an ogham stone beside its transliteration sibling
-    - cmd: 'nabu search μηνιν --axis celtic'
-      note: a query scoped to just the Celticist's shelves
-    - cmd: 'nabu search --lemma --lang sga --axis celtic WORD'
-      note: CorPH's gold Early Irish, by dictionary form
-    - cmd: 'nabu etym LEMMA'
-      note: the wiktionary-recon Proto-Celtic reflex chain
-    - cmd: 'nabu define *root'
-      note: the reconstruction shelves, with reflexes
+    - cmd: 'nabu search túath --axis celtic'
+      note: a query scoped to just the Celticist's shelves — túath in the glosses
+    - cmd: 'nabu search --lemma rí --lang sga --axis celtic'
+      note: CorPH's gold Early Irish by dictionary form — every king in the Annals
+    - cmd: 'nabu define rí --lang sga'
+      note: the Old Irish card, with its Proto-Celtic *rīxs ancestry
   display: |
     - **Ogham (pgl):** nabu spaces the letters with U+1680 so the stemline
       reads continuously; install `font-noto-sans-ogham`.
@@ -268,8 +271,8 @@ italic:
       note: the Sabellic-loan etymon chain (Old Italic headwords)
     - cmd: 'nabu search --century -3 --axis italic'
       note: the pre-Roman inscriptions, where dated
-    - cmd: 'nabu define *root'
-      note: Proto-Italic reconstructions on the etym shelves
+    - cmd: 'nabu define "*deiwos"'
+      note: a Proto-Italic reconstruction, with its attested reflexes
   display: |
     - **Old Italic (osc/xum):** the inscription text is stored in Latin
       transliteration (the language tags, e.g. `osc-Ital-x-oscetr`, name the
@@ -359,8 +362,8 @@ hebrew:
       note: the Masoretic text beside the LXX and the versions
     - cmd: 'nabu show urn:nabu:oshb:gen:1.1 --display translit'
       note: SBL-style LTR romanization for a bidi-less terminal
-    - cmd: 'nabu define LEMMA'
-      note: SDBH and the Hebrew lexicon
+    - cmd: 'nabu define אור --lang hbo'
+      note: Brown-Driver-Briggs on the Hebrew lexicon shelf
   display: |
     - **Hebrew and Aramaic (hbo/arc):** cantillation stripped, points and maqaf
       kept, runs wrapped in RTL isolates. The terminal owns the bidi: the
@@ -400,12 +403,12 @@ hittite:
       Luwian, Hattic and Hurrian) and the UD Hittite treebank (gold `hit`).
     - No dictionary shelf or alignment work rides this desk yet.
   recipes:
-    - cmd: 'nabu search --lemma --lang hit --axis hittite WORD'
-      note: the gold UD Hittite morphology
+    - cmd: 'nabu search --lemma kuiš --lang hit --axis hittite'
+      note: the gold UD Hittite morphology (kuiš "who", clause by clause)
     - cmd: 'nabu search --century -13 --axis hittite'
       note: the tablets by date, where dated
-    - cmd: 'nabu search --axis hittite WORD'
-      note: a query across TLHdig and the treebank
+    - cmd: 'nabu search ḫatti --axis hittite'
+      note: a query across TLHdig and the treebank — Ḫatti on the tablets
   display: |
     - **TLHdig tablets** are stored in Latin transliteration, so no cuneiform
       font is needed. No RTL or CJK concerns. Note: TLHdig is not in the
@@ -428,10 +431,10 @@ cuneiform:
       note: Akkadian beside its running English translation
     - cmd: 'nabu search --century -7 --axis cuneiform'
       note: the 7th-century-BCE Assyrian letters, by regnal date
-    - cmd: 'nabu search --fuzzy FRAGMENT --axis cuneiform'
-      note: trigram fragment search over the ORACC tablets
-    - cmd: 'nabu search --lemma --lang akk --axis cuneiform WORD'
-      note: the gold ORACC Akkadian lemmatization
+    - cmd: 'nabu search --fuzzy "a-na LUGAL" --axis cuneiform'
+      note: trigram fragment search — "to the king", straight off the tablet
+    - cmd: 'nabu search --lemma šarru --lang akk --axis cuneiform'
+      note: the gold ORACC Akkadian lemmatization — šarru behind every LUGAL
   display: |
     - ORACC, CDLI and ETCSL text is stored in **Latin transliteration**
       (subscript indices, `{d}`-style determinatives) — display.md ships no
@@ -476,12 +479,12 @@ indic:
       note: Monier-Williams, with GRETIL-resolved citations
     - cmd: 'nabu search धर्मन् --lang san'
       note: the cross-script fold — Devanagari finds the IAST dharman
-    - cmd: 'nabu show GRETIL-URN --display translit'
-      note: Devanagari rendered to IAST (IAST shelves pass through)
-    - cmd: 'nabu search --lemma --lang san --morph case=loc --axis indic WORD'
-      note: Vedic UD / DCS gold morphology
-    - cmd: 'nabu vocab GRETIL-URN'
-      note: distinctive vocabulary of a text or commentary layer
+    - cmd: 'nabu show urn:nabu:gretil:sa_rAmAyaNa --display translit'
+      note: the Rāmāyaṇa in IAST (Devanagari shelves render to IAST; IAST passes through)
+    - cmd: 'nabu search --lemma deva --lang san --morph case=loc --axis indic'
+      note: DCS gold morphology — deva, locative attestations only
+    - cmd: 'nabu vocab urn:nabu:dcs:143:1067'
+      note: distinctive vocabulary of a Rāmāyaṇa book (DCS gold lemmas)
   display: |
     - **Devanagari (san):** nabu strips Vedic accents when present (IAST is left
       untouched); `--display translit` renders to IAST via `Nabu::Deva`. A
@@ -497,16 +500,16 @@ buddhist:
     - Monier-Williams is reachable through the Indic overlap; no alignment work
       rides this desk.
   recipes:
-    - cmd: 'nabu search --axis buddhist WORD'
+    - cmd: 'nabu search dharma --axis buddhist'
       note: one query across the Pali, Sanskrit and Chinese canons
     - cmd: 'nabu search dukkha --lang pli --axis buddhist'
       note: the Pali canon
-    - cmd: 'nabu search --lang lzh --axis buddhist WORD'
-      note: CBETA's Literary Chinese
-    - cmd: 'nabu parallels CBETA-OR-SUTTACENTRAL-URN'
-      note: reception and echo across the canon
-    - cmd: 'nabu vocab GRETIL-URN'
-      note: a Buddhist text's vocabulary profile
+    - cmd: 'nabu search 涅槃 --lang lzh --axis buddhist'
+      note: CBETA's Literary Chinese — nirvāṇa in the Taishō
+    - cmd: 'nabu parallels urn:nabu:suttacentral:an1.11-20:an1.11:1.1'
+      note: reception and echo across the canon — the AN refrain found in SN
+    - cmd: 'nabu formulas urn:nabu:suttacentral:an1 --lang pli'
+      note: the repeated formulas of the Aṅguttara, mined from the Pali lane
   display: |
     - **Sanskrit / Pali (IAST):** **Noto Sans Mono**; Devanagari needs a
       conjunct-capable fallback (system default is fine).
@@ -582,15 +585,17 @@ japonic:
       note: KRADFILE component containment on the Han corpus
     - cmd: 'nabu search --radical 75 --axis japonic'
       note: the KangXi-radical filter
-    - cmd: 'nabu show ONCOJ-URN'
-      note: Old Japanese — romanization and original layers per ONCOJ's design
+    - cmd: 'nabu show urn:nabu:oncoj:MYS.1.1'
+      note: Man'yōshū 1.1 — romanization layer per ONCOJ's design
+    - cmd: 'nabu search 吾輩は猫である --lang jpn'
+      note: Sōseki's opening line, top hit on the Aozora reading shelf
   display: |
     - **Kana / kanji (ojp):** ONCOJ carries romanization and original layers by
       its own design (man'yōgana rides the annotations, not the romanized KWIC).
       Install the Noto CJK casks plus **Jigmo**, and keep iTerm2's
       ambiguous-width toggle **off**. nabu models CJK cell width, so aligned
       columns stay aligned.
-    - **Gaiji (Aozora, once synced):** Aozora's not-yet-encoded characters
+    - **Gaiji (Aozora):** Aozora's not-yet-encoded characters
       resolve at parse — JIS X 0213 kuten and explicit `U+XXXX` notations map
       mechanically through `config/jis0213`; component-description-only
       notations stay verbatim loud sentinels. On the render side `--display

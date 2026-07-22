@@ -36,7 +36,7 @@ Three convictions, stated plainly:
 2. **Citations are the unit of scholarship.** A search result that cannot
    be cited to a verse, a folio line, or a tablet surface is a curiosity.
    Everything in Nabu resolves to a stable URN.
-3. **License terms are data.** Aggregating more than two dozen sources under a dozen
+3. **License terms are data.** Aggregating more than eighty sources under a dozen
    different licenses is workable only if every text's terms are recorded
    per document and consulted mechanically — especially once AI tools can
    quote from the collection.
