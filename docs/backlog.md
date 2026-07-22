@@ -10920,7 +10920,7 @@ Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo resh
 ## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: done 2026-07-22 — merged b36bfd6; end-of-page retro-assignment semantics; five fixture catches; census keys enumerated for the adapter]
 ## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: done 2026-07-22 — merged 5564340+b2dc180+dd46244; first wave ≈ 9,106 docs (MSS∩pri resolved), ~5,001 censused skips; streamed md5-pinned fetch; zip-nesting watch item for first sync]
 ## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: done 2026-07-22 — merged c923a21+f26675d; ara/fas shared fold, evidence-ruled; P41-2 MUST mint ara/fas not per; riders journaled: romanization mode, tashkeel display class, digit fold]
-## P41-4 · arabic axis + registry + desk + news  [tier: opus] [status: ready — P41-2 merged; minimal axis stub exists, build out persona/fragments/dossiers/news] [deps: P41-2]
+## P41-4 · arabic axis + registry + desk + news  [tier: opus] [status: done 2026-07-22 — merged f4e9a6f + completion dcde669; desk live at /axis/arabic/, dossiers installed, site:check clean]
 ## P41-5 · License-inquiry drafts  [tier: orchestrator] [status: done 2026-07-22 — №41-1 DASI / №41-2 MPCD / №41-3 TITUS-Avestan / №41-4 CEToM / №41-5 DĀMOS drafted in full, contacts researched (two bot-walled, browser-reveal noted); owner sends]
 
 ## gate40 · [status: done 2026-07-22 — merged 65cf8ec (PR #52); v1.2.0 tagged at acc4c96, GitHub release published, Zenodo DOI auto-minting; D40-e ratified at merge]
