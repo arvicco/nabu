@@ -4,10 +4,10 @@
 # Both fixtures are whole zip MEMBERS extracted from ReM-v2.1_tei.zip (27 MB).
 # A raw GET of the url returns the ZIP, not the member file, so whole: false —
 # fetched for URL-liveness only, never byte-compared (the member is itself
-# uncut, per the trim note). adapter_test is null (no adapter exists yet).
+# uncut, per the trim note).
 # Re-extract tei/M058.xml and tei/M218B.xml from the zip after any refresh.
 source: rem
-adapter_test:
+adapter_test: test/adapters/rem_test.rb
 retrieved: 2026-07-22
 files:
   - path: M058.xml
