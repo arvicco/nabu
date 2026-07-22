@@ -4,10 +4,23 @@
 #
 #   <slug>:
 #     adapter: Nabu::Adapters::Perseus   # adapter class name (resolved lazily)
+#     kind: source                       # source (default, omit) | shelf | module
+#                                        #   (P39-0) — what the row IS. shelf =
+#                                        #   the four local-* memory shelves
+#                                        #   (local fetch, no network, up=local,
+#                                        #   NO sync_policy). module = machinery
+#                                        #   (kr-gaiji/bridging): sanctioned
+#                                        #   fetch, zero catalog rows, MUST be
+#                                        #   enabled: false.
 #     enabled: false                     # THIS FILE is authoritative — flips
 #                                        #   here reach the db on any
 #                                        #   sync/rebuild/health reconcile
-#     sync_policy: live                  # live | manual | frozen (default: manual)
+#     sync_policy: auto                  # auto | manual | frozen (default:
+#                                        #   manual). auto = swept by sync --all;
+#                                        #   manual = owner-fired by name
+#                                        #   (upstream may be very much alive);
+#                                        #   frozen = immutable snapshot. Omit
+#                                        #   on kind: shelf rows (kind implies it).
 #     translations: true                 # ALSO ingest parallel translations
 #                                        #   (perseus-eng*) as aligned documents
 #                                        #   (P7-4; default false — original-only)
@@ -42,7 +55,7 @@ perseus-greek:
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
   enabled: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
-  sync_policy: live
+  sync_policy: auto   # P39-0: was `live` — swept by sync --all (PerseusDL updates continuously)
   # P7-4, owner-approved strategic review: ingest the English editions already
   # in the cloned repo as aligned parallel documents (highest perseus-eng<n>
   # per work, language eng, CC BY-SA unchanged). Recovery: parse-only resync.
@@ -53,7 +66,7 @@ perseus-latin:
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
   enabled: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
-  sync_policy: live   # same as its greekLit sibling: PerseusDL updates continuously
+  sync_policy: auto   # P39-0 (was `live`): same as its greekLit sibling — PerseusDL updates continuously
   translations: true  # owner 2026-07-07: aligned English editions, same mechanism as perseus-greek (P7-4)
 
 first1k-greek:
@@ -61,7 +74,7 @@ first1k-greek:
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
-  sync_policy: live
+  sync_policy: auto   # P39-0: was `live` — swept by sync --all (OGL/First1K updates continuously)
   # P9-1, owner-directed 2026-07-08 (Phase 9): ingest the ~45 English editions
   # already in the cloned repo as aligned parallel documents (highest -eng<n>
   # per work, language eng, CC BY-SA unchanged; same mechanism as perseus-greek
@@ -571,6 +584,7 @@ sl-lexica:
 
 local-language:
   adapter: Nabu::Adapters::LocalLanguage
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
   axes: [local]
   enabled: true    # P19-1: enabled by DEFAULT, deliberately -- the checklist's
                    # "enabled: false until first real sync" guards network cost
@@ -582,12 +596,12 @@ local-language:
                    # `bin/nabu sync local-language`.
   # The canonical-memory shelf (architecture §16): canonical/local-language/
   # <code>.md dossiers, owner-edited + accreted through Nabu::LanguageShelf.
-  # local = no upstream, no network; sync re-scans the tree (LocalFetch,
+  # kind: shelf = no upstream, no network; sync re-scans the tree (LocalFetch,
   # per-file sha pins); the drift probe reads "local".
-  sync_policy: local
 
 local-library:
   adapter: Nabu::Adapters::LocalLibrary
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
   axes: [local]
   enabled: true    # P19-4: enabled by DEFAULT — the P19-1 argument verbatim:
                    # the checklist's "enabled: false until first real sync"
@@ -607,10 +621,10 @@ local-library:
   # research_private by DEFAULT (MCP-excluded, never redistributed) with
   # per-entry manifest overrides; manifests' related: urns feed
   # kind=reference edges into the links journal at every sync.
-  sync_policy: local
 
 local-notes:
   adapter: Nabu::Adapters::LocalNotes
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
   axes: [local]
   enabled: true    # P24-1: enabled by DEFAULT -- the P19-1 local-shelf argument
                    # verbatim: the checklist's "enabled: false until first real
@@ -628,10 +642,8 @@ local-notes:
   # scholia of one's own, one YAML list per topic file, indexed into the
   # derived urn_notes and rendered on show/define/links (MCP serves notes by
   # default, withheld wherever the target document is withheld).
-  sync_policy: local   # P31 rider fix: was missing (unlike the three sibling
-                       # shelves), so the manual default routed this
-                       # upstream-less shelf at the git probe and crashed
-                       # `health --remote` (owner report 2026-07-19).
+  # (P39-0: kind: shelf replaces the P31 sync_policy: local rider — kind now
+  # routes this upstream-less shelf at the local probe, never the git one.)
 
 riig:
   adapter: Nabu::Adapters::Riig
@@ -756,11 +768,17 @@ sabellic-loans:
   # derived supersets 48/11/26), etyma from each entry's own {{bor}}/
   # {{der}} template, Old Italic script verbatim. CC BY-SA + GFDL →
   # attribution. No upstream, no network: en.wiktionary is the cited
-  # provenance, re-curation is a repo change — sync_policy local.
-  sync_policy: local
+  # provenance, re-curation is a repo change.
+  # P39-0: a real kind: source (mints 85 dictionary entries), but with NO live
+  # upstream — the vendored config/sabellic_loans.yml IS the immutable artifact,
+  # refreshed only by a repo edit. That is `frozen` (was `local`, now gone). The
+  # adapter declares no git repo (upstream_repo_urls = []), so the remote probe
+  # reads it as vendored, never ls-remotes the provenance page.
+  sync_policy: frozen
 
 local-source:
   adapter: Nabu::Adapters::LocalSource
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
   axes: [local]
   enabled: true    # P24-0: enabled by DEFAULT — the P19-1 local-language
                    # argument verbatim: the checklist's "enabled: false until
@@ -774,11 +792,10 @@ local-source:
   # The third canonical-memory shelf (architecture §16): canonical/
   # local-source/<slug>.md dossiers — one per REGISTERED SOURCE (what each
   # shelf holds: description/themes/key_works + owner prose + accretion
-  # sections), owner-edited + accreted through Nabu::SourceShelf. local =
+  # sections), owner-edited + accreted through Nabu::SourceShelf. kind: shelf =
   # no upstream, no network; sync re-scans the tree (LocalFetch, per-file
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
-  sync_policy: local
 
 corph:
   adapter: Nabu::Adapters::Corph
@@ -943,6 +960,7 @@ bhsa:
 
 bridging:
   adapter: Nabu::Adapters::Bridging
+  kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
   # P35-0: the feature module rides its host bhsa's desks (D35 spec: hebrew+biblical)
   axes: [biblical, hebrew]
   enabled: false   # PERMANENTLY false — a feature module, not a text source:
@@ -1902,6 +1920,7 @@ kanripo:
 
 kr-gaiji:
   adapter: Nabu::Adapters::KrGaiji
+  kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
   axes: [sinitic]
   enabled: false   # PERMANENTLY false — a feature module, not a text source
                    # (the P34-1 bridging precedent): discover mints no
@@ -1971,4 +1990,4 @@ aozora:
 # <slug>:
 #   adapter: Nabu::Adapters::SomeAdapter
 #   enabled: false
-#   sync_policy: live
+#   sync_policy: manual   # auto | manual | frozen (omit on kind: shelf rows)

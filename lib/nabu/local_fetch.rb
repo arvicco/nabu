@@ -4,7 +4,7 @@ require "digest"
 require "json"
 
 module Nabu
-  # The NO-NETWORK fetch strategy behind `sync_policy: local` sources (P19-1,
+  # The NO-NETWORK fetch strategy behind `kind: shelf` rows (P19-1/P39-0,
   # architecture §16) — GitFetch/ZipFetch/FileFetch's sibling for shelves
   # whose "upstream" is the owner (or a sanctioned agent path) placing files
   # under canonical/<slug>/ directly. Sync = re-scan the tree; there is

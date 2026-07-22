@@ -489,7 +489,7 @@ class SyncRunnerTest < Minitest::Test
   # (the CLI omits the fragment). No fulltext file may even be created.
   def test_index_inert_shelf_syncs_perform_no_index_work
     [NotesShelf, LanguageShelfSrc, SourceShelfSrc].each do |klass|
-      runner = make_runner(registry(entry(klass.slug, klass, enabled: true, sync_policy: "local")))
+      runner = make_runner(registry(entry(klass.slug, klass, enabled: true, kind: "shelf")))
       outcome = forbidding_index_work { runner.sync(klass.slug) }
       refute outcome.aborted?
       assert_nil outcome.indexed, "#{klass.slug}: an inert sync carries no index count"
@@ -627,28 +627,30 @@ class SyncRunnerTest < Minitest::Test
 
   # --- sync_all policy filtering ------------------------------------------
 
-  def test_sync_all_runs_only_enabled_live_sources
+  def test_sync_all_runs_only_enabled_auto_sources
     [LiveEnabled, LiveDisabled, ManualSrc, FrozenSrc].each(&:reset!)
     reg = registry(
-      entry("live-enabled",  LiveEnabled,  enabled: true,  sync_policy: "live"),
-      entry("live-disabled", LiveDisabled, enabled: false, sync_policy: "live"),
+      entry("auto-enabled",  LiveEnabled,  enabled: true,  sync_policy: "auto"),
+      entry("auto-disabled", LiveDisabled, enabled: false, sync_policy: "auto"),
       entry("manual-src",    ManualSrc,    enabled: true,  sync_policy: "manual"),
-      entry("frozen-src",    FrozenSrc,    enabled: true,  sync_policy: "frozen")
+      entry("frozen-src",    FrozenSrc,    enabled: true,  sync_policy: "frozen"),
+      # P39-0: an auto-cadence SHELF/MODULE is still excluded — only kind: source sweeps.
+      entry("auto-shelf",    ManualSrc,    enabled: true,  sync_policy: "auto", kind: "shelf")
     )
 
     results = make_runner(reg).sync_all
-    assert_equal %w[live-enabled], results.keys
+    assert_equal %w[auto-enabled], results.keys
     assert_equal 1, LiveEnabled.fetches
     assert_equal 0, LiveDisabled.fetches, "disabled source skipped in --all"
-    assert_equal 0, ManualSrc.fetches,    "manual policy excluded from --all"
+    assert_equal 0, ManualSrc.fetches,    "manual policy (and the shelf) excluded from --all"
     assert_equal 0, FrozenSrc.fetches,    "frozen policy excluded from --all"
   end
 
   def test_sync_all_isolates_one_sources_failure
     [FailingLive, OkLive].each(&:reset!)
     reg = registry(
-      entry("failing-live", FailingLive, enabled: true, sync_policy: "live"),
-      entry("ok-live",      OkLive,      enabled: true, sync_policy: "live")
+      entry("failing-live", FailingLive, enabled: true, sync_policy: "auto"),
+      entry("ok-live",      OkLive,      enabled: true, sync_policy: "auto")
     )
 
     results = make_runner(reg).sync_all
@@ -662,7 +664,7 @@ class SyncRunnerTest < Minitest::Test
 
   def test_sync_refreshes_reference_edges_for_a_reference_edges_source
     BreakerAdapter.reset!(urns: ["urn:cts:test:w1"])
-    runner = make_runner(registry(entry("refsrc", ReferenceAdapter, enabled: true, sync_policy: "local"),
+    runner = make_runner(registry(entry("refsrc", ReferenceAdapter, enabled: true, sync_policy: "manual"),
                                   entry("breaker", BreakerAdapter, enabled: true)))
 
     outcome = runner.sync("refsrc")
@@ -703,9 +705,9 @@ class SyncRunnerTest < Minitest::Test
     Nabu::SourceRegistry.new(entries)
   end
 
-  def entry(slug, klass, enabled:, sync_policy: "live")
+  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source")
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy
+      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind
     )
   end
 

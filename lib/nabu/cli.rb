@@ -77,7 +77,7 @@ module Nabu
         nabu sync --all
     HELP
     option :all, type: :boolean, default: false,
-                 desc: "Sync every enabled source with sync_policy: live"
+                 desc: "Sync every enabled kind: source with sync_policy: auto"
     option :axis, type: :string, banner: "NAME[,NAME...]",
                   desc: "Sync the enabled members of one or more research axes (config/axes.yml), " \
                         "grouped; disabled members are skipped by name (an axis is not an explicit request)"
@@ -2857,11 +2857,15 @@ module Nabu
       end
 
       # Registry facts on the header line; a catalog source missing from the
-      # registry is abnormal and reads loudly.
+      # registry is abnormal and reads loudly. Kind-aware (P39-0): a shelf reads
+      # local memory, a module reads machinery — neither has a cadence or an
+      # enablement to show.
       def registry_fragment(entry)
         return " · NOT IN REGISTRY" if entry.nil?
+        return " · shelf · local memory" if entry.shelf?
+        return " · module · machinery (no catalog rows)" if entry.feature_module?
 
-        " · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
+        " · source · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
       end
 
       def card_counts(card)
@@ -5299,6 +5303,9 @@ module Nabu
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
+        # P39-0: name a non-source row's nature up front, so an owner who fires
+        # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
+        say kind_nature_note(entry), :yellow if entry && !entry.source?
         say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
@@ -5310,6 +5317,17 @@ module Nabu
         print_sync_warnings(outcome)
         print_citation_coverage(entry, db)
         run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # P39-0: the one-line nature note for a non-source sync target. A module
+      # refreshes reference machinery and mints no catalog rows; a shelf is
+      # gateway-written owner memory re-scanned locally with no network.
+      def kind_nature_note(entry)
+        if entry.feature_module?
+          "#{entry.slug}: feature module — refreshes canonical reference data; mints no catalog rows."
+        else
+          "#{entry.slug}: local memory shelf — gateway-written owner data; sync re-scans canonical (no network)."
+        end
       end
 
       # P18-7, the optional AI-review rider: assemble the JSON brief and pipe
