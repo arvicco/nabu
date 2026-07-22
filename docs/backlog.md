@@ -10830,7 +10830,14 @@ Fold modules leave shared core → language-scoped fold digest
 asymmetry preserved; pins per plan; owner-gated rake stamps:rebless
 (attestation flag) so the formula change skips a forced full rebuild.
 
-## P39-2 · Aozora quarantine triage  [tier: opus] [status: dispatched — wave 2] [deps: P39-3]
+## P39-2 · Aozora quarantine triage  [tier: opus] [status: done 2026-07-22 — merged 46a2b3e; ONE class (no-legend legacy txt kind), 1,191/1,191 recovered at prototype scale; hash-drift/UTF-8/corrupt = 0 live; attic answer = accept-as-designed (Option C, owner ratification at gate); perseus-latin 27 = longstanding upstream TEI (ISO-entity journal)] [deps: P39-3]
+
+## P39-r1 · Bare-kuten named-symbol resolution  [tier: opus] [status: dispatched — rider off the P39-5 flag] [deps: P39-2, P39-5]
+KUTEN_GAIJI misses named symbols with bare men-ku-ten (二の字点、1-2-22 —
+no 第N水準 prefix): 16,148/19,094 unresolved occurrences (85%). Widen
+the notation grammar to accept bare-kuten where the code resolves via
+config/jis0213 — resolved char INTO text (upstream identity claim, the
+existing kuten precedent); unresolvable stays sentinel; census pins.
 Classify live 1,191 by stored reason; recover mechanical classes
 (census-backed only); attic-rediscovery design; perseus-latin 27
 baseline check.
