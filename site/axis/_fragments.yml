@@ -107,12 +107,12 @@ epigraphy:
   recipes:
     - cmd: "nabu search --fuzzy ']ανδρα μοι εν['"
       note: damaged-line substring search, typed straight off the edition
-    - cmd: 'nabu search --type epitaph --province Britannia --material marble'
-      note: EDH genre facets composing together
+    - cmd: 'nabu search manibus --type epitaph --province Britannia'
+      note: EDH genre facets composing with a text query (dis manibus on British epitaphs)
     - cmd: 'nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%'
       note: the Oxyrhynchite strategoi by date and provenance
-    - cmd: 'nabu search --century -3 --axis epigraphy'
-      note: one century's stones (negative = BCE, no year 0)
+    - cmd: 'nabu search "στρατηγ*" --century 2 --axis epigraphy'
+      note: a query scoped to one century (negative = BCE, no year 0)
     - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
       note: an ogham stone beside its transliteration sibling
     - cmd: 'nabu search --lemma precor --axis epigraphy'
@@ -268,8 +268,8 @@ italic:
       note: the CEIPoM equivalence key onto the Iguvine Tables
     - cmd: 'nabu etym rufus'
       note: the Sabellic-loan etymon chain (Old Italic headwords)
-    - cmd: 'nabu search --century -3 --axis italic'
-      note: the pre-Roman inscriptions, where dated
+    - cmd: 'nabu search tular --axis italic'
+      note: the Etruscan boundary stones — tular raśnal
     - cmd: 'nabu define "*deiwos"'
       note: a Proto-Italic reconstruction, with its attested reflexes
   display: |
@@ -429,8 +429,8 @@ arabic:
       note: Allāh across the Arabic hadith, dīwān and falsafa shelves
     - cmd: 'nabu search دانی --lang fas'
       note: the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
-    - cmd: 'nabu search --from 1300 --to 1400 --axis arabic'
-      note: the AH death-year timeline — Ḥāfiẓ (d. AH 792 = 1390 CE) lands in this window
+    - cmd: 'nabu search الله --from 1300 --to 1400 --axis arabic'
+      note: the AH death-year timeline (lights at the owner's next incremental rebuild)
   display: |
     - **Arabic and Persian (ara/fas) are RTL** and reuse the hbo/arc
       machinery: `isolates: true` wrapping, the same modes, the same honesty
@@ -460,8 +460,8 @@ hittite:
   recipes:
     - cmd: 'nabu search --lemma kuiš --lang hit --axis hittite'
       note: the gold UD Hittite morphology (kuiš "who", clause by clause)
-    - cmd: 'nabu search --century -13 --axis hittite'
-      note: the tablets by date, where dated
+    - cmd: 'nabu show --random --source tlhdig'
+      note: pull a random tablet manuscript off the Hittite shelf
     - cmd: 'nabu search ḫatti --axis hittite'
       note: a query across TLHdig and the treebank — Ḫatti on the tablets
   display: |
@@ -484,8 +484,8 @@ cuneiform:
       note: pull a random tablet from the ORACC shelf
     - cmd: 'nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel'
       note: Akkadian beside its running English translation
-    - cmd: 'nabu search --century -7 --axis cuneiform'
-      note: the 7th-century-BCE Assyrian letters, by regnal date
+    - cmd: 'nabu search LUGAL --century -7 --axis cuneiform'
+      note: kings in the 7th-century-BCE tablets, by regnal date
     - cmd: 'nabu search --fuzzy "a-na LUGAL" --axis cuneiform'
       note: trigram fragment search — "to the king", straight off the tablet
     - cmd: 'nabu search --lemma šarru --lang akk --axis cuneiform'

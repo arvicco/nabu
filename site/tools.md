@@ -33,7 +33,7 @@ and the papyri foremost among them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
 
 ```
-$ bin/nabu search --type epitaph --province Britannia --material marble
+$ bin/nabu search manibus --type epitaph --province Britannia
 ```
 
 draws on 256,518 facet rows recording inscription genre, province,
