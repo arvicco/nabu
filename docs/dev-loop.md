@@ -200,6 +200,17 @@ Tests need real trimmed upstream samples. Acquisition is automated but plan-gate
 
 Real full syncs (`bin/nabu sync <source>` against complete upstream corpora) remain human-initiated per CLAUDE.md — they're bulk downloads and eyeball-verification events, not test infrastructure.
 
+## 8b. Releases (owner ruling 2026-07-22)
+
+**The owner decides the release moment — the loop does all the technical
+work around it.** A release happens when the owner names a version at a
+gate ("cut 1.2.0 after this merges"); that sign-off is the owner's ONLY
+step. Everything else — the CITATION.cff and `Nabu::VERSION` bumps, the
+release-notes distillation, the news post, the tag, the GitHub release,
+the Zenodo DOI, the post-release journal sync — is the orchestrator's,
+run without handing the owner commands. The mechanical steps live in
+ops §12; this section is the division of labor.
+
 ## 9. Decisions (approved by owner, 2026-07-03)
 
 1. **Plan approved** with amendments incorporated (§2 only Fable/Opus write code; §6 sandbox-freedom guardrails; §8 plan-gated automated fixture acquisition).
