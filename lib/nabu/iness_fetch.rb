@@ -19,11 +19,16 @@ module Nabu
   # FileFetch/SefariaFetch applies. This class composes the same retention
   # discipline into the documented anonymous flow:
   #
-  #   1. get-session -> a sessionId (ephemeral; threaded into every later call).
-  #   2. list-resources&details=true -> the corpus list. Every CONFIGURED
-  #      treebank must be present (a missing one is a loud Error — the scope
-  #      the adapter declares no longer matches upstream); the matched resource
-  #      metadata (language/type/name) is captured for the ledger.
+  #   1. get-session -> {"sessionId" => "<digits>"} (ephemeral; threaded into
+  #      every later call).
+  #   2. list-resources&details=true -> {"resources" => [...], "languages" =>
+  #      [...], "collections" => [...]}; each resources entry keys on "name"
+  #      (`{"name" => "non-edda-regius-dep", "type" => "dependency",
+  #      "languages" => ["non"], "collections" => ["Menotec"], "size" => N,
+  #      …}`). Every CONFIGURED treebank must be present BY NAME (a missing one
+  #      is a loud Error — the scope the adapter declares no longer matches
+  #      upstream); the matched entry's type/languages/collections/size are
+  #      carried into the ledger truly shaped.
   #   3. per treebank, get-treebank-documents -> its document list (chapters /
   #      poems).
   #   4. per (treebank, document), get-sentences -> the native PROIEL-XML
@@ -51,22 +56,35 @@ module Nabu
   # GitFetch-format manifest (first copy wins; the manifest records the pin the
   # file vanished at).
   #
-  # == Loud on surprises
+  # == Loud on surprises — and self-diagnosing (P40-i1)
   #
   # A missing sessionId, a malformed JSON envelope, a configured treebank
   # absent from list-resources, a document entry without an id, a missing
   # sentences.data payload, any non-200 status — all raise InessFetch::Error
-  # (adapters wrap it in Nabu::FetchError). The only response shapes evidenced
-  # by a captured body are the get-sentences `sentences.data` path and the
-  # list-resources treebank inventory; the get-session / list-resources /
-  # get-treebank-documents envelopes are reconstructed from the flow, so the
-  # fetcher validates every field it reads rather than trusting the shape.
+  # (adapters wrap it in Nabu::FetchError), and every SHAPE error appends the
+  # actual top-level keys + a truncated body sample (#shape_hint), so a live
+  # divergence diagnoses itself from the error text alone. Evidence status:
+  # get-sentences (`sentences.data`), get-session (`sessionId`) and the
+  # list-resources envelope are EVIDENCED by captured real responses (the
+  # list-resources capture landed at the P40-i1 incident, 2026-07-22, after
+  # the original reconstruction guessed an "id" key where upstream sends
+  # "name" — the real trim rides in test/fixtures/menotec/). Only
+  # get-treebank-documents remains reconstructed-from-flow, which is exactly
+  # why its shape errors carry the dump.
   class InessFetch
     # HTTP-level failure or a malformed/inconsistent API response. Adapters
     # wrap it in Nabu::FetchError.
     class Error < Nabu::Error; end
 
     LEDGER_FILE = ".iness-fetch.json"
+
+    # The resource-entry fields carried into the ledger, truly shaped (the
+    # captured envelope: type a string, languages/collections arrays, size a
+    # sentence count).
+    # const: the ledger's metadata field selection (a design choice over the
+    # captured envelope), not a corpus census
+    RESOURCE_METADATA_KEYS = %w[type languages collections size].freeze
+    private_constant :RESOURCE_METADATA_KEYS
 
     # What one completed sync did: the aggregate content pin, the session date
     # (the non-git pin analogue), the treebanks fetched (sorted), how many
@@ -152,29 +170,32 @@ module Nabu
     def fetch_session!
       body = get(command: "get-session")
       id = body["sessionId"]
-      raise Error, "#{@base_url}: get-session returned no sessionId (got #{body.keys.inspect})" unless
-        id.is_a?(String) && !id.empty?
+      return id if id.is_a?(String) && !id.empty?
 
-      id
+      raise Error, "#{@base_url}: get-session returned no sessionId — #{shape_hint(body)}"
     end
 
     # list-resources -> { treebank => resource metadata } for the configured
-    # scope. A configured treebank the portal does not offer is a loud Error.
+    # scope. The captured envelope (P40-i1) keys each resources entry on
+    # "name" — NOT "id", the original reconstruction's wrong guess. A
+    # configured treebank the portal does not offer BY NAME is a loud Error.
     def fetch_resources!(session_id)
       body = get(command: "list-resources", session_id: session_id,
                  extra: { "details" => "true", "project" => "iness" })
       list = body["resources"]
-      raise Error, "#{@base_url}: list-resources carried no resources array" unless list.is_a?(Array)
+      raise Error, "#{@base_url}: list-resources carried no resources array — #{shape_hint(body)}" unless
+        list.is_a?(Array)
 
-      by_id = list.each_with_object({}) { |entry, map| map[entry["id"]] = entry if entry.is_a?(Hash) }
+      by_name = list.each_with_object({}) { |entry, map| map[entry["name"]] = entry if entry.is_a?(Hash) }
       @treebanks.to_h do |treebank|
-        entry = by_id[treebank]
+        entry = by_name[treebank]
         if entry.nil?
           raise Error, "#{@base_url}: configured treebank #{treebank.inspect} is not offered by INESS " \
-                       "(the resource scope no longer matches upstream)"
+                       "(the resource scope no longer matches upstream; matching keys on \"name\" across " \
+                       "#{list.size} resources — #{shape_hint(list.first)})"
         end
 
-        [treebank, entry]
+        [treebank, entry.slice(*RESOURCE_METADATA_KEYS)]
       end
     end
 
@@ -182,14 +203,16 @@ module Nabu
       body = get(command: "get-treebank-documents", session_id: session_id,
                  extra: { "type" => "dependency", "treebank" => treebank })
       list = body["documents"]
-      raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) carried no documents array" unless
-        list.is_a?(Array)
+      unless list.is_a?(Array)
+        raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) carried no documents array — " \
+                     "#{shape_hint(body)}"
+      end
 
       list.map do |entry|
         id = entry.is_a?(Hash) ? entry["id"] : nil
         unless id.is_a?(String) && !id.empty?
-          raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) has a document without an id: " \
-                       "#{entry.inspect}"
+          raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) has a document without an id — " \
+                       "#{shape_hint(entry)}"
         end
 
         id
@@ -201,10 +224,20 @@ module Nabu
                  extra: { "mode" => "text", "download-mode" => "tiger-xml",
                           "type" => "dependency", "treebank" => treebank, "document-id" => document })
       data = body.dig("sentences", "data")
-      raise Error, "#{@base_url}: get-sentences(#{treebank}/#{document}) carried no sentences.data payload" unless
-        data.is_a?(String) && !data.empty?
+      return data if data.is_a?(String) && !data.empty?
 
-      data
+      raise Error, "#{@base_url}: get-sentences(#{treebank}/#{document}) carried no sentences.data " \
+                   "payload — #{shape_hint(body)}"
+    end
+
+    # The P40-i1 self-diagnosis contract: every shape error appends what
+    # upstream ACTUALLY sent — the top-level keys plus a truncated JSON sample
+    # — so the next live envelope divergence (get-treebank-documents is still
+    # reconstructed-from-flow) diagnoses itself from the error text alone.
+    def shape_hint(body)
+      keys = body.is_a?(Hash) ? "keys #{body.keys.inspect}" : body.class.name
+      sample = JSON.generate(body)[0, 300]
+      "actual shape: #{keys}, sample #{sample}"
     end
 
     # -- HTTP ------------------------------------------------------------------
