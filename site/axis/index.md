@@ -56,9 +56,9 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 ### germanic
 
-> The Germanicist — Gothic, Old English verse and prose, the northern word-hoard.
+> The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic riding the proiel/ud treebanks.
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
 [Open the germanic desk]({{ '/axis/germanic/' | relative_url }})
 

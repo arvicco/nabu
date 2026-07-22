@@ -1,0 +1,321 @@
+{
+ "resources": [
+  {
+   "name": "deu-pargram",
+   "printName": "deu-pargram",
+   "type": "lfg",
+   "languages": [
+    "deu"
+   ],
+   "languageNames": [
+    "German"
+   ],
+   "collections": [
+    "ParGram"
+   ],
+   "description": null,
+   "size": 102,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY",
+    "url": "http://creativecommons.org/licenses/by/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 644,
+   "_showDetails": null
+  },
+  {
+   "name": "ang-aels-dep",
+   "printName": "ang-aels-dep",
+   "type": "dependency",
+   "languages": [
+    "ang"
+   ],
+   "languageNames": [
+    "Old English (ca. 450-1100)"
+   ],
+   "collections": [
+    "ISWOC"
+   ],
+   "description": null,
+   "size": 198,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 3022,
+   "_showDetails": null
+  },
+  {
+   "name": "non-edda-regius-dep",
+   "printName": "non-edda-regius-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 3665,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 32222,
+   "_showDetails": null
+  },
+  {
+   "name": "non-homiliebok-dep",
+   "printName": "non-homiliebok-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 3833,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 64606,
+   "_showDetails": null
+  },
+  {
+   "name": "non-konungs-skuggsia-dep",
+   "printName": "non-konungs-skuggsia-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 3059,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 64237,
+   "_showDetails": null
+  },
+  {
+   "name": "non-landslov-holmperg34-dep",
+   "printName": "non-landslov-holmperg34-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 3266,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 58924,
+   "_showDetails": null
+  },
+  {
+   "name": "non-olavssaga-dep",
+   "printName": "non-olavssaga-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 3561,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 41146,
+   "_showDetails": null
+  },
+  {
+   "name": "non-pamphilus-dep",
+   "printName": "non-pamphilus-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 434,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 4312,
+   "_showDetails": null
+  },
+  {
+   "name": "non-strengleikar-dep",
+   "printName": "non-strengleikar-dep",
+   "type": "dependency",
+   "languages": [
+    "non"
+   ],
+   "languageNames": [
+    "Old Norse"
+   ],
+   "collections": [
+    "Menotec"
+   ],
+   "description": null,
+   "size": 2490,
+   "indexed": true,
+   "license": {
+    "name": "CC-BY-NC-SA",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "type": "PUB",
+    "conditionsOfUse": [
+     "BY",
+     "NC",
+     "SA"
+    ],
+    "accepted": false,
+    "canAccept": false
+   },
+   "inactive": false,
+   "wordCount": 38466,
+   "_showDetails": null
+  }
+ ],
+ "languages": [
+  {
+   "iso": "non",
+   "name": "Old Norse",
+   "count": 7
+  },
+  {
+   "iso": "abk",
+   "name": "Abkhazian",
+   "count": 6
+  },
+  {
+   "iso": "afr",
+   "name": "Afrikaans",
+   "count": 10
+  }
+ ],
+ "collections": [
+  {
+   "name": "Menotec",
+   "count": 7
+  },
+  {
+   "name": "Acquis",
+   "count": 7
+  },
+  {
+   "name": "Alpino",
+   "count": 1
+  }
+ ]
+}

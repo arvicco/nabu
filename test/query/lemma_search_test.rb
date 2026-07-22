@@ -469,6 +469,31 @@ module Query
                    "an empty page with matches beyond the window must announce itself"
     end
 
+    # P40-r2 (live gate-runbook catch): cross-language homographs must not
+    # starve the window when --lang is given. The lemma index carries the
+    # language, so the lang filter applies INDEX-side — unlike license,
+    # which stays a catalog-side visibility check behind the honesty hint.
+    # (The live case: Sanskrit latā's hundreds of rows sort before every
+    # Icelandic láta row; a windowed catalog-side lang filter returned an
+    # empty page at any realistic --limit.)
+    def test_lang_filter_applies_index_side_so_homographs_cannot_starve_the_window
+      doc = make_document(urn: "urn:d:a")
+      12.times do |i|
+        make_passage(doc, urn: "urn:d:a:#{i}", text: "lata", sequence: i,
+                          lemmas: [%w[latā latā]])
+      end
+      ice = make_document(urn: "urn:d:z", language: "is")
+      make_passage(ice, urn: "urn:d:z:1", text: "lét hann", sequence: 0,
+                        language: "is", lemmas: [%w[láta lét]])
+      rebuild!
+
+      query = Nabu::Query::LemmaSearch.new(catalog: @catalog, fulltext: @fulltext)
+      results = query.run("láta", lang: "is", limit: 1)
+      assert_equal %w[urn:d:z:1], results.map(&:urn),
+                   "the is row beyond the 10-row window must be reached when lang narrows the index"
+      assert_nil query.incomplete_hint
+    end
+
     def test_unexhausted_window_or_full_page_carries_no_hint
       seed_window_exhausting_lemmas(open_rows: 3)
 

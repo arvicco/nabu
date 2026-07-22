@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both fixtures are whole zip MEMBERS extracted from ReM-v2.1_tei.zip (27 MB).
+# A raw GET of the url returns the ZIP, not the member file, so whole: false —
+# fetched for URL-liveness only, never byte-compared (the member is itself
+# uncut, per the trim note).
+# Re-extract tei/M058.xml and tei/M218B.xml from the zip after any refresh.
+source: rem
+adapter_test: test/adapters/rem_test.rb
+retrieved: 2026-07-22
+files:
+  - path: M058.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content
+    whole: false
+    trim: whole zip member tei/M058.xml (Sangspruchstrophe MF 'Namenlos IV', 23 tokens), kept byte-for-byte uncut; extracted from ReM-v2.1_tei.zip (27,899,230 B); P40-g
+  - path: M218B.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content
+    whole: false
+    trim: whole zip member tei/M218B.xml (St. Galler Schularbeit Exzerpt, 34 tokens), kept byte-for-byte uncut; extracted from ReM-v2.1_tei.zip (27,899,230 B); P40-g
+  - path: M242.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content
+    whole: false
+    trim: structural trim of zip member tei/M242.xml (Wiener Notker, TWO-COLUMN codex — the P40-r1 quarantine exemplar; header byte-for-byte, body cut before the third primary <pb> keeping folio 5r's a/b columns whose line numbers both restart at 1, closing tags appended); P40-r1
+  - path: M345.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content
+    whole: false
+    trim: structural trim of zip member tei/M345.xml (Augsburger Urkunden — the entry-wise lb-restart exemplar with NO container element; header byte-for-byte, body cut before the third <lb n="1" ed="1"> restart keeping two colliding runs, closing tags appended); P40-r1

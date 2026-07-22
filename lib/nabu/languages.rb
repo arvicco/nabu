@@ -58,15 +58,18 @@ module Nabu
       "ka" => "kat", "hy" => "hye"
     }.freeze
 
-    # Every code that means the same language as +code+ (itself included);
-    # unknown codes pass through untouched, nil folds to []. Filters use the
-    # returned array in their WHERE so either spelling lands.
+    # Every code that means the same language as +code+ — the TYPED code
+    # always included (P40-r2: the catalog stores Icelandic as the modern
+    # tag "is"; the 639-1 hop must widen the set, never swallow the code
+    # the rows are actually tagged with). Unknown codes pass through
+    # untouched, nil folds to []. Filters use the returned array in their
+    # WHERE so every spelling lands.
     def self.code_variants(code)
       return [] if code.nil?
 
-      canonical = code.to_s.downcase
-      canonical = ISO_639_1.fetch(canonical, canonical)
-      CODE_VARIANTS.fetch(canonical, [canonical])
+      typed = code.to_s.downcase
+      canonical = ISO_639_1.fetch(typed, typed)
+      [typed] | CODE_VARIANTS.fetch(canonical, [canonical])
     end
 
     Family = Data.define(:code, :name, :context)

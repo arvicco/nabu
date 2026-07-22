@@ -1,16 +1,20 @@
 # The Library — content review
 
-**As of 2026-07-20** (post the settled full rebuild, which loaded the
-Sino and Chinese-library axes; v1.1.0 cut 2026-07-19). Live totals:
-**751,300 documents / 24,415,015 passages and 1,168,775 dictionary
-entries** across the **80 registered sources** (78 enabled). The
-**Kanripo and CBETA syncs are the step change they were promised to be**:
-Literary Chinese (`lzh`) is now the largest language in the library at
-13.0M passages, more than doubling the whole corpus. The reference shelf
-spans **54 dictionary shelves** (§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s,
-§8t). The lemma layer, censused fresh this date: **12,597,062 gold rows
-in 23 languages** plus **8,000,317 silver rows in 8** (the
-CDLI/TLHdig/Diorisis honest tier — machine-suggested or
+**As of 2026-07-22** (post the Japanese reading desk, 2026-07-21, and the
+Germanic wave, 2026-07-22; v1.1.0 cut 2026-07-19). Live totals:
+**801,175 documents / 28,176,484 passages and 1,310,763 dictionary
+entries** across the **88 registry rows** — 82 corpus sources + 4 local
+shelves + 2 feature modules, every corpus source enabled. Literary
+Chinese (`lzh`) remains the largest language at 13.2M passages; Japanese
+(`jpn`, §8v) and Middle High German (`gmh`, §8w) are the newest
+million-passage-scale arrivals. The reference shelf spans **56 dictionary
+shelves** (§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t). The lemma
+layer, censused fresh this date: **16,240,531 gold rows in 28
+languages** — the Germanic wave added `gmh` (2.10M rows, instantly the
+third-largest gold pool), `non`, `osx`, and, with the owner's same-day
+`sync ud`, `is` (IcePaHC, 812K rows, straight in at #4) and `lzh`'s
+first gold lane — plus **8,244,309 silver
+rows in 8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
 upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
 curation and acquisitions — their counts and contents stay out of public
 documentation by rule. The code-per-language map lives in [languages.md](languages.md).
@@ -18,7 +22,7 @@ documentation by rule. The code-per-language map lives in [languages.md](languag
 This is a living document. Numbers are read from the live catalog, not
 estimated — via a `readonly: true` Sequel/sqlite3 session (the WAL-safe
 read-only convention, ops §10; the `sqlite3` CLI now fails to open the
-24 GB catalog, so the Ruby gem is the read path). See §10 for the review
+27 GB catalog, so the Ruby gem is the read path). See §10 for the review
 cadence that keeps it truthful.
 
 ---
@@ -594,6 +598,43 @@ substitute, on the researcher's own disk.
 millennia of use — structure, sound, and attestation on one card; simplified-
 script queries reaching the traditional-script corpus; the Daozang at witness
 page grain beside the Buddhist and Confucian canons.
+
+## 8v. The Japanese reading desk (`aozora`; synced live 2026-07-21)
+
+| | |
+|---|---|
+| **Category** | The Japanese public-domain library: Aozora Bunko's volunteer-digitized corpus — Meiji-and-later literature with a thin classical tail (Kojiki, Tosa Diary, Hōjōki as modern critical editions) |
+| **Language** | Japanese (`jpn`; ~2,285 works preserve kyūjitai 旧字 orthography) |
+| **Size** | **17,195 documents / 2,991,807 passages** (2026-07-22 census; the owner's first sync 2026-07-21 reported 16,004 works). Scope is D38-a: **public-domain text only** — discovery is index-driven, so the 488 in-copyright works are excluded before any file is opened |
+| **Metadata** | Ruby readings (`｜base《reading》`) stripped to an annotation layer; JIS X 0213 gaiji resolved into the text where upstream names a codepoint, censused verbatim sentinels where it doesn't; 底本 colophon (source edition, transcribers) carried as document metadata; formatting commands ride annotations, never text |
+| **License** | Aozora's 取り扱い規準 grant — free redistribution → class `open`; 底本 attribution carried |
+
+**Research uses:** Meiji/Taishō literature searchable beside the classical
+Chinese library it constantly quotes; kyūjitai works reachable from
+modern-form queries (the `jpn` reform fold: 国 finds 國 — conventions §9);
+ruby readings preserved as data for readings research rather than flattened
+into the text.
+
+## 8w. The Germanic wave (`menotec`, `helipad`, `rem`, `rundata` + IcePaHC via `ud`; synced live 2026-07-22)
+
+Four new sources and one config treebank in one phase (P40) — the North
+and continental West Germanic branches joining Gothic (PROIEL) and Old
+English (ASPR, ISWOC, Bosworth-Toller) on the `germanic` desk. All counts
+are the owner-verified first syncs of 2026-07-22.
+
+| | |
+|---|---|
+| **Category** | Old Norwegian treebanks and the Poetic Edda; the Old Saxon *Heliand*; the Middle High German reference corpus; the Scandinavian runic corpus |
+| **Languages** | Old Norse (`non`), Old Saxon (`osx`), Middle High German (`gmh`), Proto-Norse (`gmq-pro` — the Wiktionary proto-code convention; ISO has none), and Old Icelandic (`is`, IcePaHC via the `ud` row — live since the owner's same-day `sync ud`: 44,029 passages, 812K gold rows) |
+| **Size** | `menotec`: **7 treebanks / 20,308 sentences** (Poetic Edda / Codex Regius, the Homily Book, King's Mirror, Landslov, Óláfs saga, Pamphilus, Strengleikar) — gold PROIEL-scheme morphology + syntax, served through the INESS session API. `helipad`: **1 document / 3,549 tree blocks** — the *Heliand* (MS C) with gold form-lemma pairs on every token, Penn-bracketing parsed, metre and codicology preserved. `rem`: **406 texts / 355,449 manuscript lines** of gold-annotated MHG (1050–1350) — `gmh` lands as the corpus's **third-largest gold-lemma pool (2.10M rows)** on day one. The 46 first-sync quarantines (all one class: duplicate folio.line refs in two-column codices and entry-wise restarts) were recovered the same day by the P40-r1 citation fix (`5ra.1` column refs + the `:b2` positional disambiguator). `rundata`: **30,643 lane-documents / 30,641 passages** — ~6,800 runic inscriptions in up to five text lanes each (transliteration primary; Old West Norse and runic-Swedish normalisations; English and Swedish translations); zero runic Unicode upstream — the scholarly transliteration IS the text, damage notation stored verbatim |
+| **Licenses** | menotec CC BY-NC-SA → `nc`; helipad CC BY → `attribution`; rem CC BY-SA → `attribution`; rundata ODbL + DbCL → the new `odbl` class (D40-c) |
+
+**Research uses:** the three Germanic branches on one desk — `align` the
+Gothic and West-Saxon gospels beside the *Heliand* tradition, walk
+`etym`'s `gem-pro`/`gmw-pro` chains down into four new gold-lemmatized
+attested languages, and read the runestones with their normalisation and
+translation lanes via `--parallel`; the runic damage legend is searchable
+as stored.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

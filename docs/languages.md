@@ -1,17 +1,18 @@
 # Languages of the library
 
-**As of 2026-07-20** (post the settled full rebuild — 24,415,015 live
-passages across 80 sources — which loaded the Sino and Chinese-library
-axes; live inventory: every code below appears in the catalog, the lemma
-index, or the reference shelf). This page explains the code system once,
-then lists the significant codes with one sentence each (the corpus now
-carries ~100 passage languages; the long tail of single-inscription
-script variants is folded into grouped rows).
+**As of 2026-07-22** (post the Japanese reading desk and the P40 Germanic
+wave — 28,176,484 live passages across the 88-row registry; live
+inventory: every code below appears in the catalog, the lemma index, or
+the reference shelf). This page explains the code system once, then lists
+the significant codes with one sentence each (the corpus now carries 108
+passage languages; the long tail of single-inscription script variants is
+folded into grouped rows).
 
 **The headline has moved east.** With Kanripo and CBETA loaded, **`lzh`
-(Literary Chinese) is now the library's largest language by a wide
-margin — 13.0M passages**, more than the whole rest of the corpus put
-together; Ancient Greek (`grc`, 1.99M) is now second.
+(Literary Chinese) is the library's largest language by a wide
+margin — 13.2M passages**, nearly the whole rest of the corpus put
+together; Sumerian (`sux`, 3.03M) is second, Japanese (`jpn`, 2.99M — the
+Aozora desk) third, and Ancient Greek (`grc`, 2.01M) leads the West.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
@@ -50,8 +51,9 @@ extracts) is **filled** — 160 name records, feeding the inline
    (`sla-pro`, `ine-pro`, `gem-pro`) — non-ISO, kept because they join
    directly against the upstream descendants data (conventions §4).
 5. **Search folding is per-language** (conventions §9): the code picks the
-   rule — `grc` final-sigma, `lat` u/v–i/j, `ang` æ→ae/þ,ð→th, `sl` ſ→s,
-   `akk`/`sux` determinative stripping, generic diacritic folding
+   rule — `grc` final-sigma, `lat` u/v–i/j, `ang` æ→ae/þ,ð→th,
+   `sl`/`gmh` ſ→s (Slovenian and the ReM Middle High German diplomatic
+   text), `akk`/`sux` determinative stripping, generic diacritic folding
    elsewhere. Where a source's language differs from a tool's expectation,
    the per-document override records reality (P10-4).
 
@@ -82,6 +84,11 @@ extracts) is **filled** — 160 name records, feeding the inline
 | `ang` | Old English | Beowulf and the complete ASPR poetry plus the ISWOC prose/gospel treebank, ca. 700–1150. |
 | `sga` / `mga` | Old & Middle Irish | The CorPH Palaeohibernicum and the Ogham corpus — the Celtic axis, gold-lemmatized in CorPH. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
+| `gmh` | Middle High German | The ReM reference corpus (1050–1350), synced live 2026-07-22: 406 manually annotated texts / 355,449 manuscript lines, diplomatic layer stored (long ſ folds to s — rule 5) — and instantly the corpus's **third-largest gold-lemma pool** (2.10M rows). |
+| `non` / `gmq-pro` | Old Norse / Proto-Norse | The North Germanic lane (synced live 2026-07-22): Menotec's seven Old Norwegian treebanks and the Poetic Edda of Codex Regius (gold PROIEL-scheme morphology), plus Rundata's runic corpus in transliteration with its Old-West-Norse normalisation lane — 39,923 passages; the urnordisk-dated inscriptions carry `gmq-pro` (the wiktionary-recon proto-code convention of rule 4 — no ISO code exists; 822 passages). |
+| `osx` | Old Saxon | The *Heliand* (HeliPaD, synced live 2026-07-22): 3,549 syntactically parsed tree blocks with gold form-lemma pairs — the 9th-century gospel harmony beside its Gothic and Old English gospel cousins. |
+| `is` | Icelandic (diachronic) | IcePaHC via UD, live 2026-07-22 — the 12th–21st c. under the one modern tag (the `orv`/Middle-Russian precedent of rule 3): 44,029 passages whose 812,484 gold rows enter straight at #4 of the lemma pools. |
+| `jpn` | Japanese | The Aozora Bunko reading desk (synced live 2026-07-21): 2.99M passages of Meiji-and-later public-domain literature, ruby readings as annotations, kyūjitai works reachable through the reform fold (rule 5 / conventions §9). |
 | `xcl` / `xhu` / `uga` / `elx` / `peo` | Classical Armenian / Hurrian / Ugaritic / Elamite / Old Persian | The 5th-century Armenian NT plus lexical-list and inscriptional traces from the cuneiform and Achaemenid shelves — small but gold-lemmatized. |
 | `ett` / `osc` / `xlu` / `xtg` / `xfa` / `xve` / `scx` / `xly` / `xpu` / `xrr` | Etruscan / Oscan / Luwian / …the pre-Roman epigraphic long tail | The Italic, Anatolian, and Mediterranean inscription corpora (OpenEtruscan, CEIPoM, ItAnt, LexLep, TIR, I.Sicily) — dozens of languages, mostly script-tagged (`-Grek`/`-Latn`/`-Ital`), many at a few hundred passages each. |
 | `eng` / `en` / `ger` / `deu` / `ita` / `pol` / `fra` | Modern translation tags | The facing-translation layer (Perseus/First1K, WEB/Vulgate, SuttaCentral, Freising) — never originals; `en`/`deu` are legacy strays standardizing on `eng`/`ger`. |
@@ -120,21 +127,25 @@ multi-hop closure and per-edge "(loan)" flags — the Phase-18 trio
 (`iecor`, `liv`, `edl`) synced live 2026-07-14, and the Phase-30–33
 expansion added the StarLing bases, the Hebrew/Egyptian/Slovenian
 desks, and the Sino/Japanese shelves. The table above is representative:
-**54 dictionary shelves** now hold **1,168,775 entries** total —
+**56 dictionary shelves** now hold **1,310,763 entries** total
+(2026-07-22 census) —
 library.md §8c/§8h/§8j/§8k/§8m/§8o/§8q/§8s/§8t enumerate them per phase.)*
 
-## Gold-lemma languages (searchable via `--lemma`, 23 as of today)
+## Gold-lemma languages (searchable via `--lemma`, 28 as of today)
 
-`sux, san, egy, lat, grc, orv, hbo, cop, sl, chu, ojp, akk, sga, got,
-bul, ang, xcl, arc, hit, peo, uga, elx, xhu` — the treebanks, ORACC,
-goo300k, DCS, ONCOJ, the Hebrew/Egyptian shelves, and Coptic Scriptorium
-feed these **12,597,062 gold rows** (ordered above by pool size: `san`
-5.54M and `sux` 2.97M lead). A parallel **silver layer** adds 8,000,317
-machine-suggested rows in 8 languages (chiefly Greek/Diorisis 7.54M and
-Hittite/TLHdig), always labelled. Everything else is full-text-searchable
-but not lemma-searchable (yet — see improvements §3.1 for the cluster
-plan to project lemmas onto the rest). The newest gold joiner is **`ojp`
-as #23** (Old Japanese, 123,002 rows from ONCOJ).
+`san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
+chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga` —
+the treebanks, ORACC, goo300k, DCS, ONCOJ, the Hebrew/Egyptian shelves,
+Coptic Scriptorium, and the P40 Germanic shelves feed these
+**16,240,531 gold rows** (ordered above by pool size: `san` 5.54M and
+`sux` 2.97M lead; **`gmh` debuts third at 2.10M** — the ReM sync of
+2026-07-22 — and the owner's same-day `sync ud` landed `is` at **#4**
+(IcePaHC, 812K) plus `lzh`'s first gold lane (427K), with `non` 258K
+and `osx` 47K in the same wave). A parallel **silver layer** adds
+8,244,309 machine-suggested rows in 8 languages (chiefly Greek/Diorisis
+7.54M and Hittite/TLHdig), always labelled. Everything else is
+full-text-searchable but not lemma-searchable (yet — see improvements
+§3.1 for the cluster plan to project lemmas onto the rest).
 
 ---
 

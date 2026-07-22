@@ -1,0 +1,51 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Menotec (Old Norwegian / Old Norse, PROIEL XML) is served ONLY through the
+# INESS portal's session-based REST API (clarino.uib.no/iness/rest) — NOT the
+# proiel/proiel-treebank GitHub repo. The download URL carries an ephemeral
+# session-id, so a raw GET cannot reproduce these bytes: both entries are
+# refetchable: false (provenance iness-api). The P40-2 adapter re-acquires
+# them via the get-session -> get-treebank-documents -> get-sentences flow
+# (Nabu::InessFetch). adapter_test stays null: no static raw GET reproduces
+# any of these bytes, so `rake fixtures:check` has nothing to re-fetch (the
+# iswoc/kanripo posture).
+source: menotec
+adapter_test:
+retrieved: 2026-07-22
+files:
+  - path: non-pamphilus-dep/ch1-head5.xml
+    refetchable: false
+    provenance: iness-api
+    whole: false
+    reason: >-
+      INESS get-sentences export (command=get-sentences&download-mode=tiger-xml&
+      type=dependency&treebank=non-pamphilus-dep&document-id=Ch.%201), trimmed to
+      the first 5 of 65 sentence blocks. The endpoint requires an ephemeral
+      session-id (command=get-session), so no static raw GET reproduces it.
+    trim: first 5 sentence blocks (per-sentence PROIEL-XML fragments) of the Pamphilus "Ch. 1" export; 119,901 B -> 6,332 B
+  - path: non-edda-regius-dep/alvissmal-head5.xml
+    refetchable: false
+    provenance: iness-api
+    whole: false
+    reason: >-
+      INESS get-sentences export (command=get-sentences&download-mode=tiger-xml&
+      type=dependency&treebank=non-edda-regius-dep&document-id=Alvíssmál), trimmed
+      to the first 5 of 80 sentence blocks. Ephemeral session-id required, as above.
+    trim: first 5 sentence blocks (per-sentence PROIEL-XML fragments) of the Poetic Edda / Codex Regius "Alvíssmál" export; 195,397 B -> 6,325 B
+  - path: iness-list-resources-trim.json
+    refetchable: false
+    provenance: iness-api
+    whole: false
+    reason: >-
+      REAL anonymous list-resources capture (command=list-resources&details=true,
+      retrieved 2026-07-22 at the P40-i1 incident — the original reconstructed
+      test envelope guessed an "id" key where upstream keys entries on "name",
+      and the owner's live sync failed on it). Ephemeral session-id required,
+      so no static raw GET reproduces it.
+    trim: >-
+      of the 589-resource response, kept 9 resource entries VERBATIM (all 7
+      Menotec treebanks + deu-pargram (lfg) + ang-aels-dep (ISWOC dependency) as
+      non-Menotec probes) and the first 2 + the "non"/"Menotec" entries of the
+      languages/collections arrays; all three top-level keys and every kept
+      object structurally intact; 258 KB -> 5,712 B

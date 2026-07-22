@@ -78,3 +78,7 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu
     whole: true
     trim:
+  - path: icelandic-icepahc/is_icepahc-ud-dev-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Icelandic-IcePaHC/master/is_icepahc-ud-dev.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of is_icepahc-ud-dev.conllu (4,866 blocks upstream; 221 MWT range lines file-wide, 1 inside the head — láttu, block 30 — and no empty nodes; Old Norse/Icelandic, P40-g) (11,860,801 B -> 49,397 B)

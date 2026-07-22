@@ -55,12 +55,14 @@ module Nabu
       # period="Unknown" headers — and the year-0 tripwire),
       # and cdli_undated/cdli_invalid (P31-2: catalog rows whose period
       # string carries no year envelope — "uncertain", "fake (modern)" —
-      # and the ascending-range/year-0 tripwire).
+      # and the ascending-range/year-0 tripwire),
+      # and rundata_undated (P40-6: inscriptions with neither a year bound
+      # nor a find-spot — skipped, counted, never guessed).
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
-                            :lexlep, :tir, :iip, :cdli,
+                            :lexlep, :tir, :iip, :cdli, :rundata,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
@@ -68,7 +70,8 @@ module Nabu
                             :isicily_undated, :isicily_invalid,
                             :open_etruscan_undated, :open_etruscan_invalid,
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
-                            :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid) do
+                            :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
+                            :rundata_undated) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -79,13 +82,15 @@ module Nabu
                        lexlep: 0, lexlep_undated: 0, lexlep_invalid: 0,
                        tir: 0, tir_undated: 0, tir_invalid: 0,
                        iip: 0, iip_undated: 0, iip_invalid: 0,
-                       cdli: 0, cdli_undated: 0, cdli_invalid: 0, **)
+                       cdli: 0, cdli_undated: 0, cdli_invalid: 0,
+                       rundata: 0, rundata_undated: 0, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
-            tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli
+            tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
+            rundata
         end
       end
 
@@ -114,6 +119,7 @@ module Nabu
         vienna = ViennaWikiDates.build(catalog: catalog, canonical_dir: canonical_dir)
         iip = IipDates.build(catalog: catalog, canonical_dir: canonical_dir)
         cdli = CdliDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        rundata = RundataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
@@ -138,7 +144,8 @@ module Nabu
                     tir_undated: vienna[:tir][:undated], tir_invalid: vienna[:tir][:invalid],
                     iip: iip[:documents], iip_undated: iip[:undated], iip_invalid: iip[:invalid],
                     cdli: cdli[:documents], cdli_undated: cdli[:undated],
-                    cdli_invalid: cdli[:invalid])
+                    cdli_invalid: cdli[:invalid],
+                    rundata: rundata[:documents], rundata_undated: rundata[:undated])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -299,3 +306,4 @@ require_relative "timeline_builder/open_etruscan_dates"
 require_relative "timeline_builder/vienna_wiki_dates"
 require_relative "timeline_builder/iip_dates"
 require_relative "timeline_builder/cdli_dates"
+require_relative "timeline_builder/rundata_dates"

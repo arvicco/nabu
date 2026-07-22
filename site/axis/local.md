@@ -20,7 +20,7 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 | `local-language` | language dossiers | open | enabled · manual | 214 dossiers |
 | `local-library` | texts | research_private | enabled · manual | 20 docs / 8,725 passages |
 | `local-notes` | owner notes | open | enabled · manual | nothing held yet |
-| `local-source` | source records | open | enabled · manual | 79 dossiers |
+| `local-source` | source records | open | enabled · manual | 88 dossiers |
 
 ## The desk's instruments
 

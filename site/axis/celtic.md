@@ -17,7 +17,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `riig` | inscriptions | attribution | enabled · manual | 495 docs / 1,357 passages |
 | `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
@@ -31,9 +31,11 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
   the Milan / St Gall / Würzburg glosses, plus the Old Irish UD treebanks).
 - **Epigraphy:** RIIG (Gaulish), ogham (Primitive Irish), Lexicon
   Leponticum and its word shelf (Lepontic).
-- **Etymology:** the kaikki attested-Celtic extracts on `wiktionary-recon`;
-  `nabu etym` walks the Proto-Celtic chains, `nabu define *root` scopes to
-  the reconstruction shelves.
+- **Etymology:** the kaikki attested-Celtic extracts on `wiktionary-recon`
+  carry the Proto-Celtic ancestry on the dictionary card — `nabu define rí
+  --lang sga` names *rīxs and *h₃rḗǵs. (There is no Proto-Celtic
+  reconstruction shelf yet, so `nabu etym`'s crosswalk ascent is thin from
+  this desk — the cards are the richer walk.)
 
 ## Working the celtic desk
 
@@ -50,10 +52,9 @@ This desk's own surfaces:
 
 ```
 nabu show urn:nabu:ogham:e-dev-001 --parallel  # an ogham stone beside its transliteration sibling
-nabu search μηνιν --axis celtic       # a query scoped to just the Celticist's shelves
-nabu search --lemma --lang sga --axis celtic WORD  # CorPH's gold Early Irish, by dictionary form
-nabu etym LEMMA                       # the wiktionary-recon Proto-Celtic reflex chain
-nabu define *root                     # the reconstruction shelves, with reflexes
+nabu search túath --axis celtic       # a query scoped to just the Celticist's shelves — túath in the glosses
+nabu search --lemma rí --lang sga --axis celtic  # CorPH's gold Early Irish by dictionary form — every king in the Annals
+nabu define rí --lang sga             # the Old Irish card, with its Proto-Celtic *rīxs ancestry
 ```
 
 

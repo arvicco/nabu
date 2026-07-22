@@ -54,7 +54,7 @@ nabu show urn:nabu:oshb:gen:1.1       # Genesis 1.1 in pointed Masoretic Hebrew
 nabu show urn:nabu:oshb:ruth:1.8 --display reading  # qere resolved and cantillation stripped together
 nabu align "GEN 1.1"                  # the Masoretic text beside the LXX and the versions
 nabu show urn:nabu:oshb:gen:1.1 --display translit  # SBL-style LTR romanization for a bidi-less terminal
-nabu define LEMMA                     # SDBH and the Hebrew lexicon
+nabu define אור --lang hbo            # Brown-Driver-Briggs on the Hebrew lexicon shelf
 ```
 
 

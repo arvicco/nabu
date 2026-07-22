@@ -3,6 +3,9 @@
 /db/*.sqlite3-*
 /vectors.sqlite3
 
+# Personal research focus (nabu focus) — owner interest, not a publication
+/config/profile.yml
+
 # Local canonical corpus & downloaded sources (large, often licensed)
 /canonical/
 /tmp/

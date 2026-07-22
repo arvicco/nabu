@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI version="4.6.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc xml:id="M218B">
+      <titleStmt>
+        <title>St. Galler Schularbeit, Exzerpt</title>
+        <respStmt>
+          <resp>annotation by</resp>
+          <name>Thomas Klein (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>collation by</resp>
+          <name>Projektgruppe Bonn</name>
+        </respStmt>
+        <respStmt>
+          <resp>digitization by</resp>
+          <name>Thomas Klein (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>pre-editing by</resp>
+          <name>Thomas Klein (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>proofreading by</resp>
+          <name>Thomas Klein (Bonn)</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition>
+          <name>Version 2.1</name>
+          <idno type="--">--</idno>
+        </edition>
+      </editionStmt>
+      <extent>
+        <measure unit="tokens" quantity="34">34 annotated tokens</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>
+          <persName>Adam Roussel</persName>
+          <persName>Thomas Klein</persName>
+          <persName>Stefanie Dipper</persName>
+          <persName>Klaus-Peter Wegera</persName>
+          <persName>Claudia Wich-Reif</persName>
+        </publisher>
+        <date>2024-10-28</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA)</licence>
+        </availability>
+        <idno type="hsc">--</idno>
+        <idno type="ddd">--</idno>
+        <idno type="mwb">--</idno>
+      </publicationStmt>
+      <seriesStmt>
+        <title>ReM I</title>
+      </seriesStmt>
+      <notesStmt>
+        <note>-</note>
+      </notesStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier>
+            <repository>Zürich, Zentralbibl.</repository>
+            <idno>Cod. C 129</idno>
+          </msIdentifier>
+          <physDesc>
+            <p>-</p>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType>Handschrift</objectType>
+                </support>
+                <extent>96v</extent>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate unit="century">--</origDate>
+              <origPlace>-</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+        <bibl>
+          <bibl>Elias von Steinmeyer (Hg.), Die kleineren althochdeutschen Sprachdenkmäler, Berlin 1916, Nr. 26</bibl>
+          <biblScope>-</biblScope>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <creation>
+        <persName>-</persName>
+        <origPlace>-</origPlace>
+        <origDate unit="century">--</origDate>
+      </creation>
+      <langUsage>
+        <language ident="gmh">mhd</language>
+        <language ident="gmh">oberdeutsch</language>
+        <language ident="gmh">westoberdeutsch</language>
+        <language ident="gmh">alemannisch</language>
+        <language ident="gmh">-</language>
+      </langUsage>
+      <textClass>
+        <keywords>
+          <term type="topic">Wissen(-schaft)</term>
+          <term type="text-type">Schulübersetzung</term>
+        </keywords>
+        <classCode scheme="#genres">P</classCode>
+      </textClass>
+      <textDesc>
+        <channel>-</channel>
+        <constitution>-</constitution>
+        <derivation>
+          <title>latein</title>
+        </derivation>
+        <domain>-</domain>
+        <factuality>-</factuality>
+        <interaction>-</interaction>
+        <preparedness>-</preparedness>
+        <purpose>-</purpose>
+      </textDesc>
+    </profileDesc>
+    <encodingDesc>
+      <p>Primary line breaks: Handschrift</p>
+      <p>Secondary line breaks: Edition [Textnummer+Zeile]</p>
+      <p>-</p>
+      <classDecl>
+        <taxonomy xml:id="genres">
+          <category xml:id="genres.P">
+            <catDesc>Prosa</catDesc>
+          </category>
+          <category xml:id="genres.V">
+            <catDesc>Vers</catDesc>
+          </category>
+          <category xml:id="genres.U">
+            <catDesc>Urkunde</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="96v" ed="1"/>
+        <lb n="1" ed="1"/>
+        <lb n="06" ed="2"/>
+        <w xml:id="t1_m1" norm="Fides" lemma="--">Fídeſ</w>
+        <w xml:id="t2_m1" norm="est" lemma="--">eſt</w>
+        <w xml:id="t3_m1" norm="sperandaru-" lemma="--">ſperandarū</w>
+        <w xml:id="t4_m1" norm="substantia" lemma="--">ſubſtantia</w>
+        <w xml:id="t5_m1" norm="reru-" lemma="--" join="right">rerū</w>
+        <pc xml:id="t6_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t7_m1" norm="argum-tu-" lemma="--">argum̄tū</w>
+        <w xml:id="t8_m1" norm="n-" lemma="--">n̄</w>
+        <w xml:id="t9_m1" norm="apparentu-" lemma="--" join="right">apparentū</w>
+        <pc xml:id="t10_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="2" ed="1"/>
+        <lb n="07" ed="2"/>
+        <w xml:id="t11_m1" norm="Tiu" lemma="diu">Tiu</w>
+        <w xml:id="t12_m1" norm="gelouba" lemma="geloube">gelóuba</w>
+        <w xml:id="t13_m1" norm="ist" lemma="ist">íſt</w>
+        <w xml:id="t14_m1" norm="ter" lemma="der">ter</w>
+        <w xml:id="t15_m1" norm="habit" lemma="habet">hábit</w>
+        <w xml:id="t16_m1" norm="unde" lemma="unde">únde</w>
+        <w xml:id="t17_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t18_m1" norm="fant" lemma="pfant">fánt</w>
+        <w xml:id="t19_m1" norm="tero" lemma="dere">téro</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t20_m1" norm="dingo" lemma="dinge">díngo</w>
+        <w xml:id="t21_m1" norm="que" lemma="--">quę</w>
+        <lb n="08" ed="2"/>
+        <w xml:id="t22_m1" norm="sperantur" lemma="--" join="right">ſperantur</w>
+        <pc xml:id="t23_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t24_m1" norm="taz" lemma="daz">taz</w>
+        <w xml:id="t25_m1" norm="chid" lemma="quît">chîd</w>
+        <w xml:id="t26_m1" norm="tero" lemma="dere">téro</w>
+        <w xml:id="t27_m1" norm="man" lemma="man">man</w>
+        <w xml:id="t28_m1" norm="gedingit" lemma="gedinget" join="right">gedíngit</w>
+        <pc xml:id="t29_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="4" ed="1"/>
+        <w xml:id="t30_m1" norm="unde" lemma="unde">únde</w>
+        <w xml:id="t31_m1" norm="geuuisheit" lemma="gewisheit">ge<space quantity="1" unit="chars"/>uuíſhéit</w>
+        <w xml:id="t32_m1" norm="tero" lemma="dere">téro</w>
+        <w xml:id="t33_m1" norm="noh" lemma="noch">nóh</w>
+        <lb n="09" ed="2"/>
+        <w xml:id="t34_m1" norm="urougon;" lemma="uröugen">úr<space quantity="1" unit="chars"/>óugôn;</w>
+      </ab>
+    </body>
+  </text>
+</TEI>

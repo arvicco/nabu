@@ -1205,6 +1205,122 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- focus profile (P40-f) -------------------------------------------------
+
+  def write_profile(config, *entries)
+    Nabu::Profile.new(entries).save(config.profile_path)
+  end
+
+  def test_focus_show_none_when_no_profile
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[focus]) }
+      assert_nil status
+      assert_match(/focus: none — showing everything/, out)
+      assert_match(/nabu focus only <axes…> trims this to your desks/, out)
+    end
+  end
+
+  def test_focus_only_add_drop_clear_round_trip
+    with_axis_corpus do |config|
+      out, = with_config(config) { run_cli(%w[focus only slavic lex]) }
+      assert_match(/axes:\s+slavic/, out)
+      assert_match(/sources:\s+lex/, out)
+      assert_equal %w[lex slavic], Nabu::Profile.load(config.profile_path).entries
+
+      with_config(config) { run_cli(%w[focus add reference]) }
+      assert_equal %w[lex reference slavic], Nabu::Profile.load(config.profile_path).entries
+
+      with_config(config) { run_cli(%w[focus drop lex]) }
+      assert_equal %w[reference slavic], Nabu::Profile.load(config.profile_path).entries
+
+      out, = with_config(config) { run_cli(%w[focus clear]) }
+      assert_match(/focus cleared — showing everything/, out)
+      assert_predicate Nabu::Profile.load(config.profile_path), :empty?
+    end
+  end
+
+  def test_focus_only_refuses_an_unknown_name_with_a_suggestion
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[focus only slavc]) }
+      assert_equal 1, status
+      assert_match(/unknown name "slavc"/, err)
+      assert_match(/did you mean slavic/, err)
+      assert_predicate Nabu::Profile.load(config.profile_path), :empty?, "a refused write persists nothing"
+    end
+  end
+
+  def test_focus_drift_in_the_file_warns_and_is_ignored_never_crashes
+    with_axis_corpus do |config|
+      # A hand-edit left a name the registry no longer knows.
+      write_profile(config, "slavic", "ghost")
+      out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status, "drift never crashes the everyday view"
+      assert_match(/ignoring ghost/, err)
+      assert_match(/^library\s/, out, "the known part of the focus still scopes")
+    end
+  end
+
+  def test_status_scopes_to_focus_with_shelves_always_and_an_exact_footer
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # → lex ; library is a shelf (always)
+      out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status
+      assert_match(/^lex\s/, out, "the focused source shows")
+      assert_match(/^library\s/, out, "the owner's shelf always shows")
+      refute_match(/^shelf\s/, out, "an unfocused source is hidden")
+      assert_match(/focused on reference — 1 source hidden \(--all shows them\)/, err)
+    end
+  end
+
+  def test_status_all_overrides_the_focus_profile
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[status --all]) }
+      assert_nil status
+      assert_match(/^shelf\s/, out, "--all reveals the hidden source")
+      refute_match(/focused on/, err, "--all is quiet — nothing hidden")
+    end
+  end
+
+  def test_status_without_a_profile_is_unfiltered_with_a_stderr_hint_only
+    with_axis_corpus do |config|
+      focused_out, err, = with_config(config) { run_cli(%w[status]) }
+      all_out, = with_config(config) { run_cli(%w[status --all]) }
+      assert_equal all_out, focused_out, "an empty profile filters nothing (byte-identical stdout)"
+      assert_match(/nabu focus only <axes…> trims this to your desks/, err, "the hint rides stderr")
+    end
+  end
+
+  def test_status_source_detail_ignores_the_focus_profile
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # hides `shelf`
+      out, _err, status = with_config(config) { run_cli(%w[status shelf]) }
+      assert_nil status
+      assert_match(/^shelf {2}\(/, out, "an explicitly named source shows regardless of focus")
+    end
+  end
+
+  def test_list_census_scopes_to_focus
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[list]) }
+      assert_nil status
+      assert_match(/^lex\s/, out)
+      assert_match(/^library\s/, out)
+      refute_match(/^shelf\s/, out)
+      assert_match(/focused on reference/, err)
+    end
+  end
+
+  def test_health_scopes_to_focus
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, _err, = with_config(config) { run_cli(%w[health]) }
+      assert_match(/^lex\s/, out, "a focused source is checked")
+      refute_match(/^shelf\s+ok/, out, "an unfocused source is not in the check")
+    end
+  end
+
   # -- search/export --source (P22-1) ----------------------------------------
 
   def test_search_source_scopes_and_unknown_source_misses_honestly
@@ -2417,9 +2533,10 @@ class CLITest < Minitest::Test
       assert File.exist?(config.history_path), "the first sync creates the ledger"
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      # P39-0 compact: on(a) source, bare stamp + delta (no "last "/"ok").
-      assert_match(/corpus\s+on\(a\)\s+source\s+up=\S+\s+docs=2 pass=3/, out)
-      assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+2 ~0 -0 !0\)/, out)
+      # P40-s compact v2: enabled auto → bare `a`; UNPROBED (synced, no probe);
+      # fused humanized holdings 2/3; MM-DD HH:MM stamp + zero-suppressed +2.
+      assert_match(%r{corpus\s+a\s+UNPROBED\s+2/3}, out)
+      assert_match(/\d{2}-\d{2} \d{2}:\d{2} \+2\b/, out)
     end
   end
 
@@ -2432,7 +2549,7 @@ class CLITest < Minitest::Test
 
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      assert_match(/corpus.*docs=2.*no run history/, out)
+      assert_match(%r{corpus.*2/3.*no run history}, out)
     end
   end
 
@@ -2445,9 +2562,10 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_equal(1, out.lines.count { |line| line.include?("a source appears under every desk") })
       assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
-      # The member row is the SAME status line (state, policy, up=, counts),
-      # merely indented under its axis; lex serves slavic AND reference.
-      assert_match(/^  lex\s+on\(f\)\s+source\s+up=frozen\s+docs=0 pass=0/, out)
+      # The member row is the SAME compact v2 status line (col2, liveness,
+      # holdings), merely indented under its axis; lex serves slavic AND
+      # reference. Enabled frozen → bare `f`, frozen is silent, holdings 0/0.
+      assert_match(%r{^  lex\s+f\s+0/0}, out)
       assert_operator out.index("  lex", out.index("slavic — ")), :<, out.index("reference — ")
       assert_operator out.index("  lex", out.index("reference — ")), :>, out.index("reference — ")
     end
@@ -2580,21 +2698,23 @@ class CLITest < Minitest::Test
     with_sync_env(enabled: true) do |config|
       with_config(config) { run_cli(%w[sync corpus --parse-only]) }
 
-      # Bare status before any probe: drift is unknown (?), but P39-0 shows the
-      # age of the last successful sync (last contact) — here 0d, just synced.
+      # Bare compact status before any probe: never probed → the UNPROBED mark.
+      # The detail view (status corpus) keeps the last-contact age — up=?(0d).
       before, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\?\(0d\)/, before)
+      assert_match(/corpus.*UNPROBED/, before)
+      before_detail, = with_config(config) { run_cli(%w[status corpus]) }
+      assert_match(/liveness:\s+up=\?\(0d\)/, before_detail)
 
       # --remote probes inline and writes the cache.
-      out, _err, status = with_config(config) do
+      _out, _err, status = with_config(config) do
         with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[status --remote]) }
       end
       assert_nil status
-      assert_match(/corpus.*up=\S+\(0d\)/, out, "a freshly probed verdict (age 0d)")
 
-      # The verdict persists: a subsequent bare status reads it from the cache.
-      after, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\S+\(0d\)/, after)
+      # The verdict persists: a subsequent status detail reads it from the
+      # cache — a freshly probed verdict at age 0d.
+      after_detail, = with_config(config) { run_cli(%w[status corpus]) }
+      assert_match(/liveness:\s+up=\S*\(0d\)/, after_detail, "a freshly probed verdict (age 0d)")
     end
   end
 
@@ -2608,7 +2728,7 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search μηνιν]) }
       assert_nil status, "a successful search exits 0"
       assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
-      assert_match(/\[μηνιν\]/, out, "the folded match is highlighted")
+      assert_match(/\[μῆνιν\]/, out, "the match is highlighted in the STORED (accented) spelling (P39-r3)")
       assert_match(/1 hit\b/, out)
     end
   end
@@ -2629,7 +2749,22 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search μῆνιν --exact]) }
       assert_nil status, "a successful --exact search exits 0"
       assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
-      assert_match(/glyph-exact/, out, "the footer names the glyph-exact mode")
+      assert_match(/glyph-exact; snippet shows the text as stored/, out,
+                   "the footer names the glyph-exact mode and the stored-text snippet")
+    end
+  end
+
+  # P39-r3 Defect 2: the snippet renders the STORED glyph, never the folded
+  # skeleton (学 was showing as 學, the fold canonical). Also pins the plain
+  # (non-exact) footer wording, which no longer claims folded highlights.
+  def test_search_snippet_shows_stored_cjk_glyph_and_footer_wording
+    with_config_jpn_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search 学問 --lang jpn]) }
+      assert_nil status
+      assert_match(/\[学問\]/, out, "the snippet shows the stored shinjitai glyphs")
+      refute_match(/學/, out, "the traditional fold skeleton is never shown to the user")
+      assert_match(/snippet shows the text as stored; matching is fold-aware/, out,
+                   "the footer states what is true, not the old diacritic-folded claim")
     end
   end
 
@@ -2649,6 +2784,51 @@ class CLITest < Minitest::Test
     _out, err, status = run_cli(%w[search --exact --lemma λέγω μηνιν])
     assert_equal 1, status
     assert_match(/--exact.*does not combine/i, err)
+  end
+
+  # -- search --word (P40-w): whole-word matching ---------------------------
+
+  def test_search_help_documents_the_word_flag_with_the_hemar_example
+    out, _err, _status = run_cli(%w[help search])
+    assert_match(/--word/, out, "the whole-word flag is documented")
+    assert_match(/ἦμαρ/, out, "the help gives the ἦ/ἦμαρ boundary example")
+  end
+
+  # A whole-word hit renders the stored snippet and a footer naming the fold-
+  # aware whole-word mode (the corpus stores μῆνιν as its own passage/word).
+  def test_search_word_matches_a_whole_word
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search μηνιν --word]) }
+      assert_nil status, "a successful --word search exits 0"
+      assert_match(/\[μῆνιν\]/, out, "the whole word is bracketed in its stored spelling")
+      assert_match(/whole-word, fold-aware; snippet shows the text as stored/, out,
+                   "the footer names the whole-word, fold-aware, stored-text path")
+    end
+  end
+
+  # Spaceless CJK/kana have no word boundaries — --word refuses loudly, before
+  # any DB work, and points at --exact.
+  def test_search_word_refuses_spaceless_cjk
+    _out, err, status = run_cli(%w[search 学問 --word])
+    assert_equal 1, status, "a refused --word query is an error exit"
+    assert_match(/word boundaries are not defined for spaceless CJK text/, err)
+    assert_match(/use --exact for glyph-literal matching/, err)
+  end
+
+  def test_search_word_does_not_compose_with_near
+    _out, err, status = run_cli(%w[search λόγος --near θεός --word])
+    assert_equal 1, status
+    assert_match(/--word.*composes only with --exact/i, err)
+  end
+
+  # Empty-under-filter honesty (P35): a --word miss names the whole-word filter.
+  def test_search_word_empty_result_explains_the_filter
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search 한국어 --word]) }
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/--word required a whole-word match/, out, "the empty page names the --word filter")
+    end
   end
 
   # -- the no-silent-script-miss hints (P27-2) -------------------------------
@@ -3049,15 +3229,17 @@ class CLITest < Minitest::Test
   # -- search --near (P14-8 proximity) -------------------------------------
 
   # Real UD grc sentence 64498: … ὁ κῆρυξ(7) καὶ(8) εἶπας(9) … — κῆρυξ and
-  # εἶπας sit a word apart. --window 1 admits them, both folded terms
-  # bracketed; --window 0 (adjacency) does not.
+  # εἶπας sit a word apart. --window 1 admits them, both terms bracketed in the
+  # STORED (accented) spelling (P40-w: proximity left the folded FTS snippet).
   def test_search_near_within_window_hits_with_both_terms_highlighted
     with_treebank_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search κῆρυξ --near εἶπας --window 1]) }
       assert_nil status, "a successful proximity search exits 0"
       assert_match(/:64498 \[grc\]/, out)
-      assert_match(/\[κηρυξ\]/, out, "the anchor term is highlighted")
-      assert_match(/\[ειπασ\]/, out, "the near term is highlighted too")
+      assert_match(/\[κῆρυξ\]/, out, "the anchor term is highlighted as stored")
+      assert_match(/\[εἶπας\]/, out, "the near term is highlighted too, as stored")
+      assert_match(/both terms bracketed; snippet shows the text as stored/, out,
+                   "the footer names the stored two-term snippet")
     end
   end
 
@@ -4695,6 +4877,40 @@ class CLITest < Minitest::Test
                                      license_class: "open", enabled: true)
       seed_parallels_passage(catalog, src, "urn:h:od", "urn:h:od:1.1", anchor)
       seed_parallels_passage(catalog, src, "urn:q:full", "urn:q:full:1", quoter)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A one-passage Japanese corpus (P39-r3): "学問。天下" — the shinjitai 学 folds
+  # to the traditional skeleton 學 in the index, so the pre-P39-r3 folded snippet
+  # showed 學 the passage never held. Built and indexed through the real Indexer.
+  def with_config_jpn_corpus
+    Dir.mktmpdir("nabu-cli-jpn") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "jp", name: "Kanbun", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      doc_id = catalog[:documents].insert(
+        source_id: src, urn: "urn:jp:d", title: "Rongo", language: "jpn",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+      catalog[:passages].insert(
+        document_id: doc_id, urn: "urn:jp:d:1", sequence: 0, language: "jpn",
+        text: "学問。天下", text_normalized: Nabu::Normalize.search_form("学問。天下", language: "jpn"),
+        content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+      )
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
       fulltext.disconnect

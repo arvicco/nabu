@@ -41,9 +41,9 @@ material, and object type, with uncertain upstream attributions preserved
 as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over more than 2.85 million gold lemma annotations in
-seventeen languages (Old Irish and Bulgarian joined on 17 July 2026) —
-inflection and suppletion included:
+than surface string, over 16.2 million gold lemma annotations in
+twenty-eight languages (Middle High German, Old Norse, Old Saxon, and
+Icelandic joined on 22 July 2026) — inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
@@ -149,9 +149,10 @@ never captive to its own tooling.
 ## The reference desk
 
 **Dictionary lookup** (`nabu define LEMMA`) queries the reference shelf
-(LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, the
-reconstruction dictionaries, and — since 17 July 2026 — Vasmer and the
-other StarLing bases and the Slovenian historical dictionaries), with the
+(fifty-six shelves as of 22 July 2026: LSJ, Lewis &amp; Short,
+Bosworth-Toller, Monier-Williams, the reconstruction dictionaries, the
+StarLing bases with Vasmer, the Slovenian historical dictionaries, the
+Hebrew and Egyptian lexica, and the Sino-Japanese desk), with the
 entry's citations resolved to live
 passages in the local catalog:
 

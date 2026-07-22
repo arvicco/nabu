@@ -3,15 +3,15 @@ title: The Library
 permalink: /library/
 description: >-
   The collections of the Nabu library: classical Greek and Latin, papyri,
-  Sanskrit, cuneiform, treebanks, biblical editions, Old English, Slavic,
-  and Celtic.
+  Sanskrit, cuneiform, the Chinese and Japanese libraries, treebanks,
+  biblical editions, Old English and the Germanic wave, Slavic, and Celtic.
 ---
 
-Live counts as of **19 July 2026**: **737,299 documents / 11,357,320
-passages** across 69 registered, synced sources, plus **711,376
-dictionary entries** on the reference shelf and over **12.4 million gold
-lemma annotations in twenty-two languages** (censused 19 July 2026;
-a further 8,000,317 lemma rows in eight languages ride an honestly
+Live counts as of **22 July 2026**: **801,175 documents / 28,176,484
+passages** across 82 registered, synced sources, plus **1,310,763
+dictionary entries** on the reference shelf and **16.2 million gold
+lemma annotations in twenty-eight languages** (censused 22 July 2026;
+a further 8,244,309 lemma rows in eight languages ride an honestly
 labelled silver tier — machine-suggested or upstream-undisambiguated,
 excluded from gold-only search). The authoritative shelf map, refreshed at every
 development gate, is
@@ -38,7 +38,15 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek New Testament, World English Bible | — | 184 / 81,372 | PD / CC BY |
 | Old English poetry | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | 349 / 30,550 | CC BY-SA |
 | Slavic &amp; Slovenian | CCMH OCS gospel codices, the Freising Manuscripts, goo300k and IMP Early Modern Slovenian, the damaskini Balkan Slavic witnesses | c. 1000 – 1899 | 839 / 456,189 | CC BY (Freising BY-ND) |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the five StarLing bases (Pokorny, PIET, Vasmer, Germanic, Baltic), and three Slovenian historical dictionaries | — | 633,137 entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
+| Chinese libraries | Kanripo (KR1 classics – KR5 Daoist canon) and the CBETA Buddhist canon (Taishō + Xuzangjing) — Literary Chinese, the corpus's largest language | Zhou – Qing | 8,707 / 13,185,500 | CC BY-SA / CC BY-NC-SA |
+| Japanese | Aozora Bunko, the public-domain library (ruby-annotated; kyūjitai reachable through the reform fold), beside ONCOJ's gold-morphology Old Japanese (4,991 / 33,192) | 7th c. – 20th c. CE | 17,195 / 2,991,807 | open (PD grant) / CC BY |
+| Germanic wave | Menotec Old Norwegian treebanks + the Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German, the Rundata runic corpus in five text lanes | c. 200 – 1350 CE | 31,057 / 409,947 | nc / CC BY / CC BY-SA / ODbL |
+| Ancient Near East | TLHdig Hittite, the CDLI catalog, eBL Fragmentarium, Ugaritic (CUC), Peshitta and the Syriac corpus, ETCSL Sumerian literature | late 4th mill. BCE – 13th c. CE | 401,681 / 3,131,072 | CC BY / CC0 / NC per source |
+| Hebrew &amp; Aramaic | OSHB and BHSA Masoretic text, the Dead Sea Scrolls, the Sefaria Targums | c. 1000 BCE – 10th c. CE | 1,182 / 156,416 | CC BY / NC per source |
+| Egyptian | The TLA sentence corpora (AES + Late Egyptian/Demotic), gold-lemmatized | late 4th mill. – 1st c. BCE | 26,015 / 236,404 | CC BY-SA |
+| Pre-Roman Italy &amp; Sicily | CEIPoM, ItAnt, the Etruscan editions, TIR, Lexicon Leponticum, I.Sicily | 7th c. BCE – Roman | 20,625 / 32,633 | CC BY per source |
+| Indic expansion | SARIT, SuttaCentral (the segmented Pali canon with aligned English), the gold-lemmatized DCS | Veda – early modern | 28,167 / 1,796,344 | CC BY / CC BY-SA / NC per source |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the five StarLing bases (Pokorny, PIET, Vasmer, Germanic, Baltic), three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, and the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun) | — | 1,310,763 entries / 56 shelves | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
 
@@ -246,10 +254,56 @@ St. Petka* — each paired with a full English sibling translation, with
 the corpus's own norm and origin classifications carried as document
 facets.
 
+## The Chinese libraries
+
+The step change of 20 July 2026: the Kanseki Repository (Kyoto's
+premodern-Chinese library, KR1 classics through the KR5 Daoist canon)
+and the CBETA Buddhist canon (Taishō and Xuzangjing in TEI) together
+hold **13.2 million passages of Literary Chinese** — the library's
+largest language, nearly as much text as everything else combined. The
+Thesaurus Linguae Sericae adds sense-level attributions into the
+classics, and the character instruments (Unihan, the BabelStone IDS
+decompositions, Baxter-Sagart Old Chinese, the Guangyun rime dictionary,
+the Heian-period HDIC dictionaries) feed the `nabu char` card — a Han
+character answered across four millennia of structure, sound, and
+attestation. Traditional, simplified, and z-variant spellings fold to
+one search skeleton, so a modern-script query reaches the
+traditional-script corpus.
+
+## The Japanese reading desk
+
+Aozora Bunko — the volunteer-transcribed Japanese public-domain library —
+joined on 21 July 2026: **2,991,807 passages** of Meiji-and-later
+literature with a thin classical tail, ruby readings preserved as
+annotations rather than flattened into the text, and the ~2,285 works in
+kyūjitai orthography reachable from modern-form queries through the
+kanji reform fold (国 finds 國). Only copyright-expired works are
+ingested — the in-copyright remainder is excluded before a single file
+is opened. Beside it sit ONCOJ's gold-morphology Old Japanese
+(the Man'yōshū-era corpus) and the EDRDG dictionaries.
+
+## The Germanic wave
+
+The wave of 22 July 2026 completes the desk across all three branches.
+**North**: Menotec's seven Old Norwegian treebanks with the Poetic Edda
+of Codex Regius (20,308 gold-annotated sentences), and Rundata — the
+Scandinavian runic corpus, ~6,800 inscriptions in up to five text lanes
+each (scholarly transliteration primary, Old-West-Norse and
+runic-Swedish normalisations, English and Swedish translations), the
+damage notation stored verbatim as content. **West**: the Old Saxon
+*Heliand* parsed to the token with gold form-lemma pairs (HeliPaD), and
+the Referenzkorpus Mittelhochdeutsch — 406 manuscripts / 355,449
+diplomatic manuscript lines whose gold annotation makes Middle High
+German the corpus's third-largest lemma pool (2.10 million rows) on day
+one. **East** was already home: Wulfila's Gothic on the PROIEL treebank.
+Old Icelandic went live with the owner's same-day Universal
+Dependencies sync — 44,029 IcePaHC passages whose 812,484 gold rows
+enter straight at fourth place among the lemma pools.
+
 ## Reference shelf
 
-Thirty-nine dictionary shelves as structured data rather than page
-images — 711,376 entries as of 19 July 2026.
+Fifty-six dictionary shelves as structured data rather than page
+images — 1,310,763 entries as of 22 July 2026.
 Liddell-Scott-Jones (116,497 entries), Lewis &amp; Short (51,636),
 Bosworth-Toller (62,815), the Monier-Williams Sanskrit-English dictionary
 (193,890, synchronized 13 July 2026, with transliteration-tolerant lookup
@@ -280,7 +334,14 @@ Germanic and Baltic databases. The Slovenian historical dictionary shelf
 Slovene-German dictionary of 1894–95, the lexicon of Janez Svetokriški's
 Baroque sermons, and the complete word inventory of sixteenth-century
 Slovenian print — closing the gold-lemma-to-dictionary loop for
-Slovenian as LSJ closes it for Greek. Dictionary
+Slovenian as LSJ closes it for Greek. The expansions of 18–21 July 2026
+added the Hebrew desk (the augmented-Strong lexicon, the BDB outline,
+and the UBS Semantic Dictionary of Biblical Hebrew), the Egyptian
+dictionary chain (the TLA Wortliste and the Comprehensive Coptic
+Lexicon), and the Sino-Japanese desk — Unihan's 65,092 codepoint
+records, KANJIDIC2 and JMdict, the Heian-period HDIC dictionaries, the
+Guangyun rime dictionary, and the ONCOJ Old Japanese lexicon.
+Dictionary
 citations are resolved to live passages where the cited work is held: the
 LSJ entry for μῆνις points at *Iliad* 1.1 as a resolvable URN, not a
 printed abbreviation.

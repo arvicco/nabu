@@ -52,8 +52,8 @@ This desk's own surfaces:
 nabu show --random --source oracc     # pull a random tablet from the ORACC shelf
 nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel  # Akkadian beside its running English translation
 nabu search --century -7 --axis cuneiform  # the 7th-century-BCE Assyrian letters, by regnal date
-nabu search --fuzzy FRAGMENT --axis cuneiform  # trigram fragment search over the ORACC tablets
-nabu search --lemma --lang akk --axis cuneiform WORD  # the gold ORACC Akkadian lemmatization
+nabu search --fuzzy "a-na LUGAL" --axis cuneiform  # trigram fragment search — "to the king", straight off the tablet
+nabu search --lemma šarru --lang akk --axis cuneiform  # the gold ORACC Akkadian lemmatization — šarru behind every LUGAL
 ```
 
 

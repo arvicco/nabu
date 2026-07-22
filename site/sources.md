@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 58 sources below are synced and live as of 19 July 2026. Grouped by the
+All 82 sources below are synced and live as of 22 July 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -121,6 +121,27 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `dss` | [ETCBC dss](https://github.com/ETCBC/dss) (Abegg/Bowley/Cook) | The Dead Sea Scrolls: 1,001 scrolls, 500,995 words, biblical and non-biblical, with text-critical flags intact (synchronized 18 July 2026) | CC BY-NC 4.0 (Abegg's grant) |
 | `iip` | [Inscriptions of Israel/Palestine](https://github.com/Brown-University-Library/iip-texts) (Brown) | 5,499 inscriptions, Hebrew/Aramaic/Greek/Latin, ~500 BCE–640 CE (synchronized 18 July 2026) | CC BY-NC 4.0 |
 
+| `kanripo` | [Kanseki Repository 漢籍リポジトリ](https://github.com/kanripo) (Wittern, Kyoto) | The classical Chinese library — KR1 classics through KR5 Daoist canon; with CBETA it makes Literary Chinese the corpus's largest language (synchronized 20 July 2026) | CC BY-SA 4.0 (org-level grant) |
+| `cbeta` | [CBETA](https://www.cbeta.org/) (cbeta-org/xml-p5) | The Chinese Buddhist canon: Taishō + Xuzangjing in TEI P5 (synchronized 20 July 2026) | CC BY-NC-SA 4.0 |
+| `tls` | [Thesaurus Linguae Sericae](https://hxwd.org/) (tls-kr/tls-data) | Concept and word nets over classical Chinese with sense-level attributions into the classics (synchronized 20 July 2026) | CC BY-SA 4.0 |
+| `unihan` | [Unihan](https://www.unicode.org/reports/tr38/) — the Unicode Han Database | 65,092 Han codepoint records: radicals, strokes, variants, readings (synchronized 20 July 2026) | Unicode License V3 |
+| `tshet-uinh` | [tshet-uinh-data](https://github.com/nk2028/tshet-uinh-data) (nk2028) | The 廣韻 Guangyun critical edition — Qieyun-system Middle Chinese phonology (synchronized 19 July 2026) | CC0 1.0 |
+| `baxter-sagart` | [Baxter-Sagart Old Chinese](https://github.com/yawnoc/baxter-sagart-old-chinese) | The Baxter &amp; Sagart 2014 Old Chinese reconstruction | CC BY 4.0 (the authors' grant) |
+| `hdic` | [HDIC](https://github.com/shikeda/HDIC) | The Heian-period hanzi dictionaries: Yuanben/Songben Yupian, Tenrei Banshō Meigi, Shinsen Jikyō | CC BY-SA 4.0 |
+| `edrdg`, `kradfile` | [EDRDG](https://www.edrdg.org/) (Breen) | JMdict and KANJIDIC2, plus the KRADFILE kanji→component index | CC BY-SA 4.0 |
+| `babelstone-ids` | [BabelStone IDS](https://www.babelstone.co.uk/CJK/IDS.TXT) (Andrew West) | Ideographic Description Sequences for 97,680 CJK characters | Public-domain dedication |
+| `oncoj`, `oncoj-lexicon` | [ONCOJ](https://oncoj.ninjal.ac.jp/) (Oxford-NINJAL) | The Corpus of Old Japanese — gold-morphology Man'yōshū-era verse — and its lexicon (synchronized 20 July 2026) | CC BY 4.0 (annotation; the texts are ancient) |
+| `aozora` | [Aozora Bunko 青空文庫](https://www.aozora.gr.jp/) | The Japanese public-domain library: 16,004 works, ruby-annotated — in-copyright works excluded before discovery (synchronized 21 July 2026) | Public domain (取り扱い規準 grant) |
+
+| `menotec` | [Menotec, via CLARINO INESS](https://clarino.uib.no/iness) (Bergen/Oslo) | Seven Old Norwegian treebanks and the Poetic Edda of Codex Regius, gold PROIEL-scheme annotation (synchronized 22 July 2026) | CC BY-NC-SA 4.0 |
+| `helipad` | [HeliPaD](https://zenodo.org/records/4395040) (Walkden) | The Old Saxon *Heliand*, syntactically parsed with gold form-lemma pairs (synchronized 22 July 2026) | CC BY 4.0 |
+| `rem` | [Referenzkorpus Mittelhochdeutsch](https://zenodo.org/records/13982324) (Bochum/Bonn) | 360 gold-annotated Middle High German texts, 1050–1350, diplomatic layer preserved (synchronized 22 July 2026) | CC BY-SA 4.0 |
+| `rundata` | [Samnordisk runtextdatabas / Rundata](https://www.runforum.nordiska.uu.se/srd/) (Uppsala, via rundata.info) | ~6,800 Scandinavian runic inscriptions in up to five text lanes: transliteration, Old-West-Norse and runic-Swedish normalisations, English and Swedish translations (synchronized 22 July 2026) | ODbL 1.0 + DbCL 1.0 — *based on the Scandinavian Runic-text Database* |
+
+Two further registry rows are **feature modules**, not corpora — `bridging`
+(the OSHB↔BHSA crosswalk) and `kr-gaiji` (the Kanripo gaiji map): they fetch
+reference data but mint no documents of their own.
+
 ## The local shelves
 
 Four further registered sources hold no upstream at all — they are the
@@ -166,7 +187,18 @@ Cuneiform Digital Library Initiative; the electronic Babylonian Library
 at LMU Munich; the ETCBC at the Vrije Universiteit Amsterdam, whose
 text-fabric editions carry the BHSA, the Scrolls and the Peshitta; the
 CACCHT project in Copenhagen; the Srophé / Digital Syriac Corpus
-editors; and the ETCSL project at Oxford with the Oxford Text Archive. Users of
+editors; the ETCSL project at Oxford with the Oxford Text Archive; the
+Kanseki Repository (Christian Wittern) and CBETA; the Thesaurus Linguae
+Sericae editors; the Unicode Consortium's Unihan database; the nk2028
+group's Qieyun-system edition; William Baxter and Laurent Sagart; the
+HDIC project; the Electronic Dictionary Research and Development Group
+(James Breen); Andrew West's BabelStone; the Oxford-NINJAL Corpus of Old
+Japanese; the volunteer transcribers of Aozora Bunko; the Menotec project
+and the CLARINO INESS infrastructure at Bergen; George Walkden's HeliPaD;
+the Referenzkorpus Mittelhochdeutsch teams at Bochum and Bonn; and
+Uppsala University's Samnordisk runtextdatabas — this library is *based
+on the Scandinavian Runic-text Database*, as its Open Database License
+asks to be said. Users of
 this software are bound by, and should credit, these upstream projects
 under their respective terms.
 

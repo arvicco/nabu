@@ -20,11 +20,11 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `perseus-greek` | texts | attribution | enabled · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | enabled · auto | 534 docs / 391,785 passages |
 | `first1k-greek` | texts | attribution | enabled · auto | 1,129 docs / 256,480 passages |
-| `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
+| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | enabled · manual | 168,133 entries |
 | `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
-| `diorisis` | texts | attribution | enabled · manual | 764 docs / 502,865 passages |
+| `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
 
 ## The desk's instruments
 

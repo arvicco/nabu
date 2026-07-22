@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
@@ -30,6 +30,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
 | `tir` | inscriptions | nc | enabled · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
+| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
 
 ## The desk's instruments
 
@@ -39,8 +40,9 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
   and Raetic (TIR) editions, ogham stones, Hittite tablets (TLHdig), and
   the Levant (IIP).
 - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
-  shelves — **papyri-ddbdp, EDH and ORACC**. The other epigraphic shelves
-  (RIIG, ogham, ItAnt…) are searched with plain `search --axis epigraphy`.
+  shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
+  epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
+  plain `search --axis epigraphy`.
 - **The timeline desk:** 163,821 documents carry a date or place, so
   `--from/--to`, `--century` and `--place` scope the stones and sherds by
   when and where. EDH's genre facets (`--type/--province/--material`) live.
