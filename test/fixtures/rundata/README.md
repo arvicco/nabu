@@ -192,3 +192,14 @@ ODbL/DbCL grant above is the authoritative SRDB (Uppsala) licence — confirmed
 against the Uppsala runforum and Wikipedia's Scandinavian Runic-text Database
 article. The owner should re-confirm the ODbL grant at the point of a real
 sync / before flipping the adapter to `enabled: true`.
+
+## The SQLite trim (orchestrator, 2026-07-22)
+
+`runes-trim.sqlite3` — a schema-preserving trim of the REAL 45 MB
+browser artifact (`runes.234feed5f77e.sqlite3`, the actual bulk file
+P40-6 ingests as canonical): full DDL including the `all_data` view,
+rows for the same four inscriptions as the JSON fixtures, small
+reference tables (cross_forms, material_types, nameusage) whole.
+The view machinery verified working on the trim (all_data → 4 rows).
+The parser develops against this; the owner-fired real sync fetches
+the full artifact.
