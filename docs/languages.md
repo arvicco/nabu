@@ -78,6 +78,8 @@ extracts) is **filled** — 160 name records, feeding the inline
 | `hbo` | Biblical Hebrew | The Masoretic shelves — OSHB Westminster Leningrad, the BHSA/ETCBC treebank, the Dead Sea Scrolls — gold-lemmatized, NFC-exempt (0.09M passages). |
 | `xeb` | Eblaite | The eBL/Ebla East-Semitic lexical material from the cuneiform fragment shelves (0.05M passages). |
 | `arc` | Aramaic / Targumic | The Sefaria Targum shelf, DSS Aramaic, and cuneiform-shelf traces — now 0.05M passages, gold-lemmatized where the Targums carry it. |
+| `ara` | Arabic | Premodern & early-modern literary Arabic — the OpenITI corpus (hadith, history and biography, law, falsafa, the dīwāns): **staged — arrives at the owner's first `sync openiti`** (~8,803 primary versions / ~1.08 B words), unannotated (no gold lemmas), cross-searchable with Persian under the P41-3 Arabic-script fold. |
+| `fas` | Persian | The Persian shelf of OpenITI (Ḥāfiẓ's verse, Ibn Sīnā's prose), minted from the `-per*` URI suffix — never `per`, so the fold keys on it: **staged — arrives at the owner's first `sync openiti`** (~688 primary versions / ~38.7M words), folded to the same Arabic-script skeleton as ara (ی/ي, ک/ک — P41-3). |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts (incl. Assemanianus and Savvina kniga). |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `ojp` | Old Japanese | The Oxford-NINJAL Corpus of Old Japanese (ONCOJ) — gold-morphology Man'yōshū-era verse, gold-lemma language #23 (123,002 rows). |
