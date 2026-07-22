@@ -236,7 +236,7 @@ class VerifyTest < Minitest::Test
       local-language:
         adapter: Nabu::Adapters::LocalLanguage
         enabled: true
-        sync_policy: local
+        kind: shelf
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("local-language"), File.join(@canonical, "local-language"))
     Nabu::Rebuild.new(config: config, registry: registry).run
@@ -278,7 +278,7 @@ class VerifyTest < Minitest::Test
       local-notes:
         adapter: Nabu::Adapters::LocalNotes
         enabled: true
-        sync_policy: local
+        kind: shelf
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("local-notes"), File.join(@canonical, "local-notes"))
     FileUtils.rm(File.join(@canonical, "local-notes", "broken.yml.quarantine"))

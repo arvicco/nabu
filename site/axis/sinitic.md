@@ -25,7 +25,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `babelstone-ids` | dictionary | open | enabled · manual | 97,680 entries |
 | `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
 | `kanripo` | texts | attribution | enabled · manual | 5,028 docs / 4,436,181 passages |
-| `kr-gaiji` | texts | attribution | not enabled | nothing held yet |
+| `kr-gaiji` | feature module | attribution | not enabled | nothing held yet |
 | `tls` | dictionary | attribution | enabled · manual | 23,179 entries |
 
 ## The desk's instruments

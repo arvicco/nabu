@@ -155,13 +155,13 @@ module Nabu
         TrendRules.withdrawal_creep(shed: shed_count(source), total: total_count(source))
       end
 
-      # Only enabled, live-policy sources are held to the cadence; manual/frozen
-      # sources are expected to sit still (maintenance §2). +finished_at+ is the
-      # latest successful SYNC run's timestamp from the ledger — unlike
+      # Only enabled, auto-cadence sources are held to the cadence; manual/frozen
+      # sources are expected to sit still (P39-0, maintenance §2). +finished_at+
+      # is the latest successful SYNC run's timestamp from the ledger — unlike
       # sources.last_sync_at it survives rebuilds, so a rebuild neither hides
       # nor causes staleness.
       def stale_finding(entry, finished_at)
-        return nil unless entry.enabled && entry.sync_policy == "live"
+        return nil unless entry.enabled && entry.sync_policy == "auto"
 
         TrendRules.stale_source(last_sync_at: finished_at, now: @now)
       end
